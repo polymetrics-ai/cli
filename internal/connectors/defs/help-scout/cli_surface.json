@@ -159,12 +159,60 @@
       ]
     }
   ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Help Scout request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum bounded direct-read response bytes."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive reverse-ETL writes."
+    }
+  ],
   "commands": [
     {
       "path": "api get v3 conversations conversationid",
       "summary": "Documented GET /v3/conversations/{conversationId} (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
         "pm help-scout api get v3 conversations conversationid --help"
       ],
@@ -184,6 +232,7 @@
       "summary": "Documented GET /v3/conversations/{conversationId}/threads (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
         "pm help-scout api get v3 conversations conversationid threads --help"
       ],
@@ -203,6 +252,7 @@
       "summary": "Documented GET /v3/customers (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
         "pm help-scout api get v3 customers --help"
       ],
@@ -222,6 +272,7 @@
       "summary": "Documented GET /v3/system-users (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
         "pm help-scout api get v3 system-users --help"
       ],
@@ -241,6 +292,7 @@
       "summary": "Documented GET /v3/system-users/{systemUserId} (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
         "pm help-scout api get v3 system-users systemuserid --help"
       ],
@@ -338,10 +390,21 @@
       "path": "create-address plan",
       "summary": "Create Address.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create address apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-address plan --preview --json"
       ],
       "api_surface": [
         {
@@ -350,17 +413,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Address.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-chat-handle plan",
       "summary": "Create Chat Handle.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_chat_handle",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create chat handle apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-chat-handle plan --preview --json"
       ],
       "api_surface": [
         {
@@ -369,17 +442,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Chat Handle.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-chat-thread plan",
       "summary": "Create Chat Thread.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_chat_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create chat thread apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-chat-thread plan --preview --json"
       ],
       "api_surface": [
         {
@@ -388,8 +471,7 @@
         }
       ],
       "risk": "Help Scout mutation: Create Chat Thread.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-conversation plan",
@@ -397,8 +479,9 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
-        "pm help-scout create conversation apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-conversation plan --preview --json"
       ],
       "api_surface": [
         {
@@ -407,7 +490,7 @@
         }
       ],
       "risk": "Help Scout mutation: Create Conversation.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-customer plan",
@@ -415,8 +498,9 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
-        "pm help-scout create customer apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-customer plan --preview --json"
       ],
       "api_surface": [
         {
@@ -425,7 +509,7 @@
         }
       ],
       "risk": "Help Scout mutation: Create Customer.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-customer-property-definition plan",
@@ -433,8 +517,9 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_customer_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
-        "pm help-scout create customer property definition apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-customer-property-definition plan --preview --json"
       ],
       "api_surface": [
         {
@@ -443,16 +528,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Customer Property Definition.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-customer-thread plan",
       "summary": "Create Customer Thread.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_customer_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create customer thread apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-customer-thread plan --preview --json"
       ],
       "api_surface": [
         {
@@ -461,17 +557,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Customer Thread.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-email plan",
       "summary": "Create Email.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create email apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-email plan --preview --json"
       ],
       "api_surface": [
         {
@@ -480,17 +586,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Email.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-note plan",
       "summary": "Create Note.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_note",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create note apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-note plan --preview --json"
       ],
       "api_surface": [
         {
@@ -499,8 +615,7 @@
         }
       ],
       "risk": "Help Scout mutation: Create Note.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-organization plan",
@@ -508,8 +623,9 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_organization",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
-        "pm help-scout create organization apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-organization plan --preview --json"
       ],
       "api_surface": [
         {
@@ -518,7 +634,7 @@
         }
       ],
       "risk": "Help Scout mutation: Create Organization.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-organization-property-definition plan",
@@ -526,8 +642,9 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_organization_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
-        "pm help-scout create organization property definition apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-organization-property-definition plan --preview --json"
       ],
       "api_surface": [
         {
@@ -536,16 +653,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Organization Property Definition.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-phone plan",
       "summary": "Create Phone.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create phone apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-phone plan --preview --json"
       ],
       "api_surface": [
         {
@@ -554,17 +682,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Phone.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-phone-thread plan",
       "summary": "Create Phone Thread.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_phone_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create phone thread apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-phone-thread plan --preview --json"
       ],
       "api_surface": [
         {
@@ -573,17 +711,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Phone Thread.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-reply-thread plan",
       "summary": "Create Reply Thread.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_reply_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create reply thread apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-reply-thread plan --preview --json"
       ],
       "api_surface": [
         {
@@ -592,17 +740,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Reply Thread.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-saved-reply plan",
       "summary": "Create Saved Reply.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_saved_reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailbox id the mutation targets.",
+          "maps_to": "record.mailboxId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create saved reply apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-saved-reply plan --preview --json"
       ],
       "api_surface": [
         {
@@ -611,17 +769,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Saved Reply.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-social-profile plan",
       "summary": "Create Social Profile.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_social_profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create social profile apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-social-profile plan --preview --json"
       ],
       "api_surface": [
         {
@@ -630,8 +798,7 @@
         }
       ],
       "risk": "Help Scout mutation: Create Social Profile.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-user plan",
@@ -639,8 +806,9 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_user",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
-        "pm help-scout create user apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-user plan --preview --json"
       ],
       "api_surface": [
         {
@@ -649,7 +817,7 @@
         }
       ],
       "risk": "Help Scout mutation: Create User.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-webhook plan",
@@ -657,8 +825,9 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
       "examples": [
-        "pm help-scout create webhook apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-webhook plan --preview --json"
       ],
       "api_surface": [
         {
@@ -667,16 +836,27 @@
         }
       ],
       "risk": "Help Scout mutation: Create Webhook.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-website plan",
       "summary": "Create Website.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout create website apply --plan \u003cplan-name\u003e"
+        "pm help-scout create-website plan --preview --json"
       ],
       "api_surface": [
         {
@@ -685,8 +865,7 @@
         }
       ],
       "risk": "Help Scout mutation: Create Website.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "customer-properties list",
@@ -861,10 +1040,21 @@
       "path": "delete-address plan",
       "summary": "Delete Address.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete address apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-address plan --preview --json"
       ],
       "api_surface": [
         {
@@ -873,17 +1063,35 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Address.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-attachment plan",
       "summary": "Delete Attachment.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_attachment",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "attachment-id",
+          "type": "string",
+          "summary": "Help Scout attachment id the mutation targets.",
+          "maps_to": "record.attachmentId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete attachment apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-attachment plan --preview --json"
       ],
       "api_surface": [
         {
@@ -892,17 +1100,35 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Attachment.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-chat-handle plan",
       "summary": "Delete Chat Handle.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_chat_handle",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "chat-id",
+          "type": "string",
+          "summary": "Help Scout chat id the mutation targets.",
+          "maps_to": "record.chatId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete chat handle apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-chat-handle plan --preview --json"
       ],
       "api_surface": [
         {
@@ -911,17 +1137,27 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Chat Handle.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-conversation plan",
       "summary": "Delete Conversation.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete conversation apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-conversation plan --preview --json"
       ],
       "api_surface": [
         {
@@ -930,17 +1166,37 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Conversation.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-customer plan",
       "summary": "Delete Customer. Hard-deletes the customer, their microsurvey responses and every conversation they participated in, in compliance with GDPR erasure. There is no undo. Pass async=true to run it asynchronously (202 Accepted instead of 204 No Content), which is the only form that works for a customer with more than 100 conversations.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "async",
+          "type": "enum",
+          "summary": "Run the deletion asynchronously (202 Accepted). Required for a customer with more than 100 conversations.",
+          "values": [
+            "true",
+            "false"
+          ],
+          "maps_to": "record.async"
+        }
+      ],
       "examples": [
-        "pm help-scout delete customer apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-customer plan --preview --json"
       ],
       "api_surface": [
         {
@@ -949,17 +1205,27 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Customer. Hard-deletes the customer, their microsurvey responses and every conversation they participated in, in compliance with GDPR erasure. There is no undo. Pass async=true to run it asynchronously (202 Accepted instead of 204 No Content), which is the only form that works for a customer with more than 100 conversations.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-customer-property-definition plan",
       "summary": "Delete Customer Property Definition.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_customer_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Help Scout slug the mutation targets.",
+          "maps_to": "record.slug",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete customer property definition apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-customer-property-definition plan --preview --json"
       ],
       "api_surface": [
         {
@@ -968,17 +1234,35 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Customer Property Definition.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-email plan",
       "summary": "Delete Email.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "email-id",
+          "type": "string",
+          "summary": "Help Scout email id the mutation targets.",
+          "maps_to": "record.emailId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete email apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-email plan --preview --json"
       ],
       "api_surface": [
         {
@@ -987,17 +1271,27 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Email.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-organization-by-id plan",
       "summary": "Delete Organization by ID.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_organization_by_id",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organization id the mutation targets.",
+          "maps_to": "record.organizationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete organization by id apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-organization-by-id plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1006,17 +1300,27 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Organization by ID.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-organization-property-definition plan",
       "summary": "Delete Organization Property Definition.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_organization_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Help Scout slug the mutation targets.",
+          "maps_to": "record.slug",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete organization property definition apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-organization-property-definition plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1025,17 +1329,35 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Organization Property Definition.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-phone plan",
       "summary": "Delete Phone.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "phone-id",
+          "type": "string",
+          "summary": "Help Scout phone id the mutation targets.",
+          "maps_to": "record.phoneId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete phone apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-phone plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1044,17 +1366,35 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Phone.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-saved-reply plan",
       "summary": "Delete Saved Reply.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_saved_reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailbox id the mutation targets.",
+          "maps_to": "record.mailboxId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "saved-reply-id",
+          "type": "string",
+          "summary": "Help Scout saved reply id the mutation targets.",
+          "maps_to": "record.savedReplyId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete saved reply apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-saved-reply plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1063,17 +1403,27 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Saved Reply.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-snooze plan",
       "summary": "Delete Snooze.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_snooze",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete snooze apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-snooze plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1082,17 +1432,35 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Snooze.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-social-profile plan",
       "summary": "Delete Social Profile.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_social_profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "social-profile-id",
+          "type": "string",
+          "summary": "Help Scout social profile id the mutation targets.",
+          "maps_to": "record.socialProfileId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete social profile apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-social-profile plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1101,17 +1469,35 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Social Profile.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-thread-schedule plan",
       "summary": "Delete Thread Schedule.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_thread_schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout thread id the mutation targets.",
+          "maps_to": "record.threadId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete thread schedule apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-thread-schedule plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1120,17 +1506,27 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Thread Schedule.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-user plan",
       "summary": "Delete User.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_user",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Help Scout user id the mutation targets.",
+          "maps_to": "record.userId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete user apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-user plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1139,17 +1535,27 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete User.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-webhook plan",
       "summary": "Delete Webhook.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "webhook-id",
+          "type": "string",
+          "summary": "Help Scout webhook id the mutation targets.",
+          "maps_to": "record.webhookId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete webhook apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-webhook plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1158,17 +1564,35 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Webhook.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "delete-website plan",
       "summary": "Delete Website.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "delete_website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Help Scout website id the mutation targets.",
+          "maps_to": "record.websiteId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout delete website apply --plan \u003cplan-name\u003e"
+        "pm help-scout delete-website plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1177,8 +1601,7 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Delete Website.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "direct all-channels-volumes-by-channel",
@@ -2417,10 +2840,21 @@
       "path": "overwrite-customer plan",
       "summary": "Overwrite Customer.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "overwrite_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout overwrite customer apply --plan \u003cplan-name\u003e"
+        "pm help-scout overwrite-customer plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2429,17 +2863,35 @@
         }
       ],
       "risk": "Help Scout mutation: Overwrite Customer.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "publish-thread-schedule plan",
       "summary": "Publish Thread Schedule.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "publish_thread_schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout thread id the mutation targets.",
+          "maps_to": "record.threadId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout publish thread schedule apply --plan \u003cplan-name\u003e"
+        "pm help-scout publish-thread-schedule plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2448,17 +2900,35 @@
         }
       ],
       "risk": "Help Scout mutation: Publish Thread Schedule.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "remove-organization-property-value plan",
       "summary": "Remove Organization Property Value.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "remove_organization_property_value",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organization id the mutation targets.",
+          "maps_to": "record.organizationId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Help Scout slug the mutation targets.",
+          "maps_to": "record.slug",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout remove organization property value apply --plan \u003cplan-name\u003e"
+        "pm help-scout remove-organization-property-value plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2467,17 +2937,27 @@
         }
       ],
       "risk": "Destructive Help Scout mutation: Remove Organization Property Value.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute. This action is destructive and additionally requires a typed confirmation."
     },
     {
       "path": "run-manual-workflows plan",
       "summary": "Run Manual Workflows.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "run_manual_workflows",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "summary": "Help Scout workflow id the mutation targets.",
+          "maps_to": "record.workflowId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout run manual workflows apply --plan \u003cplan-name\u003e"
+        "pm help-scout run-manual-workflows plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2486,17 +2966,35 @@
         }
       ],
       "risk": "Help Scout mutation: Run Manual Workflows.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "set-organization-property-value plan",
       "summary": "Set Organization Property Value.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "set_organization_property_value",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organization id the mutation targets.",
+          "maps_to": "record.organizationId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Help Scout slug the mutation targets.",
+          "maps_to": "record.slug",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout set organization property value apply --plan \u003cplan-name\u003e"
+        "pm help-scout set-organization-property-value plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2505,17 +3003,27 @@
         }
       ],
       "risk": "Help Scout mutation: Set Organization Property Value.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "set-user-status plan",
       "summary": "Set user status.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "set_user_status",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Help Scout user id the mutation targets.",
+          "maps_to": "record.userId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout set user status apply --plan \u003cplan-name\u003e"
+        "pm help-scout set-user-status plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2524,8 +3032,7 @@
         }
       ],
       "risk": "Help Scout mutation: Set user status.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "tags list",
@@ -2592,10 +3099,21 @@
       "path": "update-address plan",
       "summary": "Update Address.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update address apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-address plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2604,17 +3122,35 @@
         }
       ],
       "risk": "Help Scout mutation: Update Address.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-chat-handles plan",
       "summary": "Update Chat Handles.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_chat_handles",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "chat-id",
+          "type": "string",
+          "summary": "Help Scout chat id the mutation targets.",
+          "maps_to": "record.chatId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update chat handles apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-chat-handles plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2623,17 +3159,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Chat Handles.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-conversation plan",
       "summary": "Update Conversation.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update conversation apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-conversation plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2642,17 +3188,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Conversation.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-conversation-reassignment-configuration plan",
       "summary": "Update Conversation Reassignment configuration.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_conversation_reassignment_configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Help Scout user id the mutation targets.",
+          "maps_to": "record.userId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update conversation reassignment configuration apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-conversation-reassignment-configuration plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2661,17 +3217,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Conversation Reassignment configuration.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-custom-fields plan",
       "summary": "Update Custom Fields.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_custom_fields",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update custom fields apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-custom-fields plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2680,17 +3246,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Custom Fields.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-customer plan",
       "summary": "Update Customer.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update customer apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-customer plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2699,17 +3275,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Customer.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-customer-properties plan",
       "summary": "Update Customer Properties.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_customer_properties",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update customer properties apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-customer-properties plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2718,17 +3304,35 @@
         }
       ],
       "risk": "Help Scout mutation: Update Customer Properties.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-email plan",
       "summary": "Update Email.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "email-id",
+          "type": "string",
+          "summary": "Help Scout email id the mutation targets.",
+          "maps_to": "record.emailId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update email apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-email plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2737,17 +3341,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Email.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-organization plan",
       "summary": "Update Organization.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_organization",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organization id the mutation targets.",
+          "maps_to": "record.organizationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update organization apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-organization plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2756,17 +3370,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Organization.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-organization-property-definition plan",
       "summary": "Update Organization Property Definition.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_organization_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Help Scout slug the mutation targets.",
+          "maps_to": "record.slug",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update organization property definition apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-organization-property-definition plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2775,17 +3399,35 @@
         }
       ],
       "risk": "Help Scout mutation: Update Organization Property Definition.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-phone plan",
       "summary": "Update Phone.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "phone-id",
+          "type": "string",
+          "summary": "Help Scout phone id the mutation targets.",
+          "maps_to": "record.phoneId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update phone apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-phone plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2794,17 +3436,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Phone.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-routing-configuration plan",
       "summary": "Update Routing configuration.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_routing_configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailbox id the mutation targets.",
+          "maps_to": "record.mailboxId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update routing configuration apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-routing-configuration plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2813,17 +3465,35 @@
         }
       ],
       "risk": "Help Scout mutation: Update Routing configuration.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-saved-reply plan",
       "summary": "Update Saved Reply.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_saved_reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailbox id the mutation targets.",
+          "maps_to": "record.mailboxId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "saved-reply-id",
+          "type": "string",
+          "summary": "Help Scout saved reply id the mutation targets.",
+          "maps_to": "record.savedReplyId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update saved reply apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-saved-reply plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2832,17 +3502,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Saved Reply.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-snooze plan",
       "summary": "Update Snooze.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_snooze",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update snooze apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-snooze plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2851,17 +3531,35 @@
         }
       ],
       "risk": "Help Scout mutation: Update Snooze.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-social-profile plan",
       "summary": "Update Social Profile.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_social_profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "social-profile-id",
+          "type": "string",
+          "summary": "Help Scout social profile id the mutation targets.",
+          "maps_to": "record.socialProfileId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update social profile apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-social-profile plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2870,17 +3568,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Social Profile.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-tags plan",
       "summary": "Update Tags.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_tags",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update tags apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-tags plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2889,17 +3597,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Tags.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-team-members plan",
       "summary": "Update Team Members.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_team_members",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "string",
+          "summary": "Help Scout team id the mutation targets.",
+          "maps_to": "record.teamId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update team members apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-team-members plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2908,17 +3626,35 @@
         }
       ],
       "risk": "Help Scout mutation: Update Team Members.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-thread plan",
       "summary": "Update Thread.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout thread id the mutation targets.",
+          "maps_to": "record.threadId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update thread apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-thread plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2927,17 +3663,35 @@
         }
       ],
       "risk": "Help Scout mutation: Update Thread.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-thread-schedule plan",
       "summary": "Update Thread Schedule.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_thread_schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout thread id the mutation targets.",
+          "maps_to": "record.threadId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update thread schedule apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-thread-schedule plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2946,17 +3700,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Thread Schedule.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-webhook plan",
       "summary": "Update Webhook.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "webhook-id",
+          "type": "string",
+          "summary": "Help Scout webhook id the mutation targets.",
+          "maps_to": "record.webhookId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update webhook apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-webhook plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2965,17 +3729,35 @@
         }
       ],
       "risk": "Help Scout mutation: Update Webhook.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-website plan",
       "summary": "Update Website.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer id the mutation targets.",
+          "maps_to": "record.customerId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Help Scout website id the mutation targets.",
+          "maps_to": "record.websiteId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update website apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-website plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2984,17 +3766,27 @@
         }
       ],
       "risk": "Help Scout mutation: Update Website.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-workflow-status plan",
       "summary": "Update workflow status.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "update_workflow_status",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "summary": "Help Scout workflow id the mutation targets.",
+          "maps_to": "record.workflowId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout update workflow status apply --plan \u003cplan-name\u003e"
+        "pm help-scout update-workflow-status plan --preview --json"
       ],
       "api_surface": [
         {
@@ -3003,17 +3795,35 @@
         }
       ],
       "risk": "Help Scout mutation: Update workflow status.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "upload-attachment plan",
       "summary": "Upload Attachment.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "upload_attachment",
+      "source_url": "https://developer.helpscout.com/mailbox-api/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation id the mutation targets.",
+          "maps_to": "record.conversationId",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout thread id the mutation targets.",
+          "maps_to": "record.threadId",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "examples": [
-        "pm help-scout upload attachment apply --plan \u003cplan-name\u003e"
+        "pm help-scout upload-attachment plan --preview --json"
       ],
       "api_surface": [
         {
@@ -3022,8 +3832,7 @@
         }
       ],
       "risk": "Help Scout mutation: Upload Attachment.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "users list",

@@ -3119,6 +3119,11 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 			// not re-derive that contract from a record schema and silently break
 			// a working command such as --receipt-handle.
 			command = existing
+			flags, err := materializedRetainedWriteFlags(action, command.Flags)
+			if err != nil {
+				return engine.CLISurface{}, fmt.Errorf("write action %q retained flags: %w", action.Name, err)
+			}
+			command.Flags = flags
 			command.APISurface = refs
 			if command.SourceURL == "" {
 				command.SourceURL = candidate.Artifact.URL
@@ -3208,12 +3213,20 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 	if len(writePaths) > 0 {
 		groups = append(groups, engine.CLICommandGroup{ID: "write", Title: "Reverse ETL writes", Commands: writePaths})
 	}
-	return engine.CLISurface{
+	cli := engine.CLISurface{
 		Tagline:  fmt.Sprintf("Run %s's declared streams and reverse-ETL actions.", bundle.Metadata.DisplayName),
 		Usage:    fmt.Sprintf("pm %s <command> [flags]", bundle.Name),
 		Groups:   groups,
 		Commands: commands,
-	}, nil
+	}
+	if bundle.CLISurface != nil {
+		// Global flags are part of the existing connector command contract. In
+		// particular, the CLI uses them to distinguish a passive namespace-help
+		// invocation from an attempted command, so replacing the surface must not
+		// silently make --preview=false or another established global flag invalid.
+		cli.GlobalFlags = append([]engine.CLIFlag(nil), bundle.CLISurface.GlobalFlags...)
+	}
+	return cli, nil
 }
 
 // materializedExistingActionCommands keeps registered stream and reverse-ETL
@@ -3373,6 +3386,46 @@ func materializedWriteFlags(action engine.WriteAction) ([]engine.CLIFlag, bool, 
 		flags = append(flags, flag)
 	}
 	return flags, true, nil
+}
+
+// materializedRetainedWriteFlags keeps an established command's accepted flag
+// names and optional compatibility fields stable, while still marking every
+// schema-required scalar field as required. A materialization must never turn
+// --receipt-handle back into --receipt_handle, but it also must not claim that
+// a provider-required field is optional merely because older CLI metadata did
+// not carry the derived Required bit.
+func materializedRetainedWriteFlags(action engine.WriteAction, existing []engine.CLIFlag) ([]engine.CLIFlag, error) {
+	derived, representable, err := materializedWriteFlags(action)
+	if err != nil {
+		return nil, err
+	}
+	if !representable {
+		return append([]engine.CLIFlag(nil), existing...), nil
+	}
+	requiredByMapping := make(map[string]bool, len(derived))
+	for _, flag := range derived {
+		if flag.Required && flag.MapsTo != "" {
+			requiredByMapping[flag.MapsTo] = true
+		}
+	}
+	retained := append([]engine.CLIFlag(nil), existing...)
+	seenMappings := make(map[string]bool, len(retained))
+	for index := range retained {
+		mapping := retained[index].MapsTo
+		if mapping == "" {
+			continue
+		}
+		seenMappings[mapping] = true
+		if requiredByMapping[mapping] {
+			retained[index].Required = true
+		}
+	}
+	for _, flag := range derived {
+		if !seenMappings[flag.MapsTo] {
+			retained = append(retained, flag)
+		}
+	}
+	return retained, nil
 }
 
 func materializedRedactFields(existing, declared []string) []string {

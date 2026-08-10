@@ -598,10 +598,57 @@
         "api post v1 treasury outbound-transfers outbound-transfer cancel",
         "api post v1 webhook-endpoints",
         "api post v1 webhook-endpoints webhook-endpoint",
-        "create customer apply",
-        "delete customer apply",
-        "update customer apply"
+        "customers create",
+        "customers delete",
+        "customers update"
       ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Stripe request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Credential name alias used only when --credential is omitted; does not resolve pm connections."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records to emit from stream commands."
+    },
+    {
+      "name": "plan",
+      "type": "string",
+      "summary": "Execute an approved reverse-ETL plan by id."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive reverse-ETL writes."
     }
   ],
   "commands": [
@@ -12227,13 +12274,14 @@
     },
     {
       "path": "charges list",
-      "summary": "Run the charges ETL stream",
+      "summary": "Read Stripe charges through the declared ETL stream.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "charges",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "source_cli_path": "GET /v1/charges",
+      "source_url": "https://stripe.com/docs/api/charges/list",
       "examples": [
-        "pm stripe charges list --json"
+        "pm stripe charges list --credential stripe-prod --limit 25 --json"
       ],
       "api_surface": [
         {
@@ -12243,14 +12291,45 @@
       ]
     },
     {
-      "path": "create customer apply",
-      "summary": "Plan and execute the create customer reverse-ETL action",
+      "path": "customers create",
+      "summary": "Plan creation of a Stripe customer through reverse ETL.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_customer",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "source_cli_path": "POST /v1/customers",
+      "source_url": "https://stripe.com/docs/api/customers/create",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Customer email address.",
+          "maps_to": "record.email",
+          "allow_empty": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Customer display name.",
+          "maps_to": "record.name",
+          "allow_empty": false
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Customer description.",
+          "maps_to": "record.description",
+          "allow_empty": false
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "Customer phone number.",
+          "maps_to": "record.phone",
+          "allow_empty": false
+        }
+      ],
       "examples": [
-        "pm stripe create customer apply --plan \u003cplan-name\u003e"
+        "pm stripe customers create --credential stripe-prod --email fixture@example.com --name 'Fixture Customer' --preview --json"
       ],
       "api_surface": [
         {
@@ -12258,18 +12337,52 @@
           "path": "/v1/customers"
         }
       ],
-      "risk": "external mutation; approval required",
-      "approval": "requires plan, preview, approval, and execute"
+      "risk": "Creates customer data in Stripe; requires reverse ETL plan, preview, explicit approval, then execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token."
+    },
+    {
+      "path": "customers delete",
+      "summary": "Plan deletion of a Stripe customer with typed destructive confirmation and customer ID redaction.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_customer",
+      "source_cli_path": "DELETE /v1/customers/{customer}",
+      "source_url": "https://stripe.com/docs/api/customers/delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Stripe customer ID to delete.",
+          "maps_to": "record.id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm stripe customers delete --credential stripe-prod --id cus_fixture_delete_1 --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/customers/{customer}"
+        }
+      ],
+      "redact_fields": [
+        "id"
+      ],
+      "risk": "Destructive Stripe customer deletion; redacts the customer ID from previews and write errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge."
     },
     {
       "path": "customers list",
-      "summary": "Run the customers ETL stream",
+      "summary": "Read Stripe customers through the declared ETL stream.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "customers",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "source_cli_path": "GET /v1/customers",
+      "source_url": "https://stripe.com/docs/api/customers/list",
       "examples": [
-        "pm stripe customers list --json"
+        "pm stripe customers list --credential stripe-prod --limit 25 --json"
       ],
       "api_surface": [
         {
@@ -12279,42 +12392,73 @@
       ]
     },
     {
-      "path": "delete customer apply",
-      "summary": "Plan and execute the delete customer reverse-ETL action",
+      "path": "customers update",
+      "summary": "Plan an update to a Stripe customer through reverse ETL.",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "write": "delete_customer",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "write": "update_customer",
+      "source_cli_path": "POST /v1/customers/{customer}",
+      "source_url": "https://stripe.com/docs/api/customers/update",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "Stripe customer ID to update.",
           "maps_to": "record.id",
+          "allow_empty": false,
           "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Customer email address.",
+          "maps_to": "record.email",
+          "allow_empty": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Customer display name.",
+          "maps_to": "record.name",
+          "allow_empty": false
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Customer description.",
+          "maps_to": "record.description",
+          "allow_empty": false
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "Customer phone number.",
+          "maps_to": "record.phone",
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm stripe delete customer apply --plan \u003cplan-name\u003e"
+        "pm stripe customers update --credential stripe-prod --id cus_fixture_1 --email updated-fixture@example.com --preview --json"
       ],
       "api_surface": [
         {
-          "method": "DELETE",
+          "method": "POST",
           "path": "/v1/customers/{customer}"
         }
       ],
-      "risk": "destructive external mutation; deletes a Stripe customer; reverse ETL approval and typed destructive confirmation required",
-      "approval": "requires plan, preview, approval, and execute"
+      "risk": "Mutates customer data in Stripe; requires reverse ETL plan, preview, explicit approval, then execute.",
+      "approval": "Plan first, inspect preview output, then run only with the generated approval token."
     },
     {
       "path": "invoices list",
-      "summary": "Run the invoices ETL stream",
+      "summary": "Read Stripe invoices through the declared ETL stream.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "invoices",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "source_cli_path": "GET /v1/invoices",
+      "source_url": "https://stripe.com/docs/api/invoices/list",
       "examples": [
-        "pm stripe invoices list --json"
+        "pm stripe invoices list --credential stripe-prod --limit 25 --json"
       ],
       "api_surface": [
         {
@@ -12325,13 +12469,14 @@
     },
     {
       "path": "products list",
-      "summary": "Run the products ETL stream",
+      "summary": "Read Stripe products through the declared ETL stream.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "products",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "source_cli_path": "GET /v1/products",
+      "source_url": "https://stripe.com/docs/api/products/list",
       "examples": [
-        "pm stripe products list --json"
+        "pm stripe products list --credential stripe-prod --limit 25 --json"
       ],
       "api_surface": [
         {
@@ -12342,13 +12487,14 @@
     },
     {
       "path": "subscriptions list",
-      "summary": "Run the subscriptions ETL stream",
+      "summary": "Read Stripe subscriptions through the declared ETL stream.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "subscriptions",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "source_cli_path": "GET /v1/subscriptions",
+      "source_url": "https://stripe.com/docs/api/subscriptions/list",
       "examples": [
-        "pm stripe subscriptions list --json"
+        "pm stripe subscriptions list --credential stripe-prod --limit 25 --json"
       ],
       "api_surface": [
         {
@@ -12356,34 +12502,6 @@
           "path": "/v1/subscriptions"
         }
       ]
-    },
-    {
-      "path": "update customer apply",
-      "summary": "Plan and execute the update customer reverse-ETL action",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_customer",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Required id record field.",
-          "maps_to": "record.id",
-          "required": true
-        }
-      ],
-      "examples": [
-        "pm stripe update customer apply --plan \u003cplan-name\u003e"
-      ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v1/customers/{customer}"
-        }
-      ],
-      "risk": "external mutation; approval required",
-      "approval": "requires plan, preview, approval, and execute"
     }
   ]
 }

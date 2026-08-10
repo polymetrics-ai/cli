@@ -1240,7 +1240,16 @@
         "email_template_selection",
         "modern_email_template",
         "multi_recipient_email_tickets",
-        "rich_content_in_emails"
+        "rich_content_in_emails",
+        "settings.email.accept_wildcard_emails",
+        "settings.email.email_sender_authentication",
+        "settings.email.email_sender_authentication_profile",
+        "settings.email.email_status",
+        "settings.email.email_template_photos",
+        "settings.email.email_template_selection",
+        "settings.email.modern_email_template",
+        "settings.email.multi_recipient_email_tickets",
+        "settings.email.rich_content_in_emails"
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
@@ -1433,16 +1442,16 @@
           "type": "string",
           "summary": "Required request field message.",
           "maps_to": "record.message",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "subject",
           "type": "string",
           "summary": "Required request field subject.",
           "maps_to": "record.subject",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "ticket-id",
@@ -1504,8 +1513,8 @@
           "type": "string",
           "summary": "Path parameter attachment_id for PUT /api/v2/attachments/{attachment_id}.",
           "maps_to": "record.attachment_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "malware-access-override",
@@ -1903,6 +1912,7 @@
         }
       ],
       "redact_fields": [
+        "brand.signature_template",
         "signature_template"
       ],
       "risk": "high",
@@ -1939,8 +1949,8 @@
           "type": "string",
           "summary": "Path parameter brand_id for PUT /api/v2/brands/{brand_id}.",
           "maps_to": "record.brand_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "active",
@@ -2016,6 +2026,7 @@
         }
       ],
       "redact_fields": [
+        "brand.signature_template",
         "signature_template"
       ],
       "risk": "high",
@@ -2401,6 +2412,10 @@
         "assignee_email",
         "email",
         "phone_name",
+        "ticket.assignee_email",
+        "ticket.tpe_voice_comment.phone_name",
+        "ticket.tpe_voice_comment.voicemail",
+        "ticket.tpe_voice_comment.voicemail_requested_at",
         "user_email",
         "voicemail",
         "voicemail_requested_at"
@@ -2657,8 +2672,8 @@
           "type": "string",
           "summary": "Path parameter custom_object_key for POST /api/v2/custom_objects/{custom_object_key}/access_rules.",
           "maps_to": "record.custom_object_key",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "description",
@@ -2715,16 +2730,16 @@
           "type": "string",
           "summary": "Path parameter custom_object_key for PATCH /api/v2/custom_objects/{custom_object_key}/access_rules/{id}.",
           "maps_to": "record.custom_object_key",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "id",
           "type": "string",
           "summary": "Path parameter id for PATCH /api/v2/custom_objects/{custom_object_key}/access_rules/{id}.",
           "maps_to": "record.id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "description",
@@ -2815,8 +2830,8 @@
           "type": "string",
           "summary": "Path parameter custom_object_key for POST /api/v2/custom_objects/{custom_object_key}/fields.",
           "maps_to": "record.custom_object_key",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "active",
@@ -3081,8 +3096,8 @@
           "type": "string",
           "summary": "Path parameter custom_object_key for POST /api/v2/custom_objects/{custom_object_key}/jobs.",
           "maps_to": "record.custom_object_key",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "action",
@@ -3161,16 +3176,70 @@
       "write": "update_permission_policy",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "flags": [
-        { "name": "custom-object-key", "type": "string", "summary": "Required custom_object_key path parameter.", "maps_to": "record.custom_object_key", "required": true, "allow_empty": false },
-        { "name": "policy-id", "type": "string", "summary": "Required permission-policy id path parameter.", "maps_to": "record.id", "required": true, "allow_empty": false },
-        { "name": "create-allowed", "type": "boolean", "summary": "Optional policy.records.create.allowed request field.", "maps_to": "record.policy.records.create.allowed" },
-        { "name": "create-rule-id", "type": "integer", "summary": "Optional policy.records.create.rule_id request field.", "maps_to": "record.policy.records.create.rule_id" },
-        { "name": "read-allowed", "type": "boolean", "summary": "Optional policy.records.read.allowed request field.", "maps_to": "record.policy.records.read.allowed" },
-        { "name": "read-rule-id", "type": "integer", "summary": "Optional policy.records.read.rule_id request field.", "maps_to": "record.policy.records.read.rule_id" },
-        { "name": "update-allowed", "type": "boolean", "summary": "Optional policy.records.update.allowed request field.", "maps_to": "record.policy.records.update.allowed" },
-        { "name": "update-rule-id", "type": "integer", "summary": "Optional policy.records.update.rule_id request field.", "maps_to": "record.policy.records.update.rule_id" },
-        { "name": "delete-allowed", "type": "boolean", "summary": "Optional policy.records.delete.allowed request field.", "maps_to": "record.policy.records.delete.allowed" },
-        { "name": "delete-rule-id", "type": "integer", "summary": "Optional policy.records.delete.rule_id request field.", "maps_to": "record.policy.records.delete.rule_id" }
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Required custom_object_key path parameter.",
+          "maps_to": "record.custom_object_key",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "policy-id",
+          "type": "string",
+          "summary": "Required permission-policy id path parameter.",
+          "maps_to": "record.id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "create-allowed",
+          "type": "boolean",
+          "summary": "Optional policy.records.create.allowed request field.",
+          "maps_to": "record.policy.records.create.allowed"
+        },
+        {
+          "name": "create-rule-id",
+          "type": "integer",
+          "summary": "Optional policy.records.create.rule_id request field.",
+          "maps_to": "record.policy.records.create.rule_id"
+        },
+        {
+          "name": "read-allowed",
+          "type": "boolean",
+          "summary": "Optional policy.records.read.allowed request field.",
+          "maps_to": "record.policy.records.read.allowed"
+        },
+        {
+          "name": "read-rule-id",
+          "type": "integer",
+          "summary": "Optional policy.records.read.rule_id request field.",
+          "maps_to": "record.policy.records.read.rule_id"
+        },
+        {
+          "name": "update-allowed",
+          "type": "boolean",
+          "summary": "Optional policy.records.update.allowed request field.",
+          "maps_to": "record.policy.records.update.allowed"
+        },
+        {
+          "name": "update-rule-id",
+          "type": "integer",
+          "summary": "Optional policy.records.update.rule_id request field.",
+          "maps_to": "record.policy.records.update.rule_id"
+        },
+        {
+          "name": "delete-allowed",
+          "type": "boolean",
+          "summary": "Optional policy.records.delete.allowed request field.",
+          "maps_to": "record.policy.records.delete.allowed"
+        },
+        {
+          "name": "delete-rule-id",
+          "type": "integer",
+          "summary": "Optional policy.records.delete.rule_id request field.",
+          "maps_to": "record.policy.records.delete.rule_id"
+        }
       ],
       "api_surface": [
         {
@@ -3212,8 +3281,8 @@
           "type": "string",
           "summary": "Path parameter custom_object_key for POST /api/v2/custom_objects/{custom_object_key}/records.",
           "maps_to": "record.custom_object_key",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "external-id",
@@ -3246,8 +3315,8 @@
           "type": "string",
           "summary": "Path parameter custom_object_key for PATCH /api/v2/custom_objects/{custom_object_key}/records.",
           "maps_to": "record.custom_object_key",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "external-id",
@@ -3382,24 +3451,24 @@
           "type": "string",
           "summary": "Path parameter custom_object_key for PUT /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}.",
           "maps_to": "record.custom_object_key",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "record-id",
           "type": "string",
           "summary": "Path parameter record_id for PUT /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}.",
           "maps_to": "record.record_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "id",
           "type": "string",
           "summary": "Path parameter id for PUT /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}.",
           "maps_to": "record.id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "malware-access-override",
@@ -3552,8 +3621,8 @@
           "type": "string",
           "summary": "Path parameter custom_object_key for POST /api/v2/custom_objects/{custom_object_key}/triggers.",
           "maps_to": "record.custom_object_key",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "field",
@@ -3636,16 +3705,16 @@
           "type": "string",
           "summary": "Path parameter custom_object_key for PUT /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}.",
           "maps_to": "record.custom_object_key",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "trigger-id",
           "type": "string",
           "summary": "Path parameter trigger_id for PUT /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}.",
           "maps_to": "record.trigger_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "field",
@@ -3796,8 +3865,8 @@
           "type": "string",
           "summary": "Path parameter custom_object_key for PUT /api/v2/custom_objects/{custom_object_key}/triggers/update_many.",
           "maps_to": "record.custom_object_key",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "active",
@@ -3943,7 +4012,8 @@
           "type": "string",
           "summary": "Optional request field ids.",
           "maps_to": "record.ids",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4063,8 +4133,8 @@
           "type": "string",
           "summary": "Path parameter custom_status_id for PUT /api/v2/custom_statuses/{custom_status_id}.",
           "maps_to": "record.custom_status_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "active",
@@ -4141,8 +4211,8 @@
           "type": "string",
           "summary": "Path parameter custom_status_id for POST /api/v2/custom_statuses/{custom_status_id}/ticket_form_statuses.",
           "maps_to": "record.custom_status_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "ticket-form-id",
@@ -4390,8 +4460,8 @@
           "type": "string",
           "summary": "Path parameter deletion_schedule_id for PUT /api/v2/deletion_schedules/{deletion_schedule_id}.",
           "maps_to": "record.deletion_schedule_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "active",
@@ -5933,8 +6003,8 @@
           "type": "string",
           "summary": "Path parameter asset_type_id for POST /api/v2/it_asset_management/asset_types/{asset_type_id}/fields.",
           "maps_to": "record.asset_type_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "active",
@@ -6613,8 +6683,8 @@
           "type": "string",
           "summary": "Path parameter status_id for PATCH /api/v2/it_asset_management/statuses/{status_id}.",
           "maps_to": "record.status_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "category",
@@ -8662,10 +8732,39 @@
       "write": "bulk_set_agent_attribute_values_job",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "flags": [
-        { "name": "action", "type": "enum", "values": ["upsert", "update", "delete"], "summary": "Required job.action request field.", "maps_to": "record.job.action", "required": true },
-        { "name": "attribute-id", "type": "string", "summary": "Optional job.attributes.attribute_values.0.attribute_id request field.", "maps_to": "record.job.attributes.attribute_values.0.attribute_id", "allow_empty": false },
-        { "name": "attribute-name", "type": "string", "summary": "Optional job.attributes.attribute_values.0.name request field.", "maps_to": "record.job.attributes.attribute_values.0.name", "allow_empty": false },
-        { "name": "agent-id", "type": "integer", "summary": "Required first job.items agent id; reverse-ETL records can carry the full typed items array.", "maps_to": "record.job.items.0", "required": true }
+        {
+          "name": "action",
+          "type": "enum",
+          "summary": "Required job.action request field.",
+          "values": [
+            "upsert",
+            "update",
+            "delete"
+          ],
+          "maps_to": "record.job.action",
+          "required": true
+        },
+        {
+          "name": "attribute-id",
+          "type": "string",
+          "summary": "Optional job.attributes.attribute_values.0.attribute_id request field.",
+          "maps_to": "record.job.attributes.attribute_values.0.attribute_id",
+          "allow_empty": false
+        },
+        {
+          "name": "attribute-name",
+          "type": "string",
+          "summary": "Optional job.attributes.attribute_values.0.name request field.",
+          "maps_to": "record.job.attributes.attribute_values.0.name",
+          "allow_empty": false
+        },
+        {
+          "name": "agent-id",
+          "type": "integer",
+          "summary": "Required first job.items agent id; reverse-ETL records can carry the full typed items array.",
+          "maps_to": "record.job.items.0",
+          "required": true
+        }
       ],
       "api_surface": [
         {
@@ -8979,24 +9078,24 @@
           "type": "string",
           "summary": "Required request field name.",
           "maps_to": "record.name",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "query",
           "type": "string",
           "summary": "Required request field query.",
           "maps_to": "record.query",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "type",
           "type": "string",
           "summary": "Required request field type.",
           "maps_to": "record.type",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "filters",
@@ -9029,32 +9128,32 @@
           "type": "string",
           "summary": "Path parameter id for PUT /api/v2/saved_searches/{id}.",
           "maps_to": "record.id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "name",
           "type": "string",
           "summary": "Required request field name.",
           "maps_to": "record.name",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "query",
           "type": "string",
           "summary": "Required request field query.",
           "maps_to": "record.query",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "type",
           "type": "string",
           "summary": "Required request field type.",
           "maps_to": "record.type",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "filters",
@@ -9494,6 +9593,7 @@
         }
       ],
       "redact_fields": [
+        "author.email",
         "email"
       ],
       "risk": "high",
@@ -9805,8 +9905,8 @@
           "type": "string",
           "summary": "Path parameter task_list_template_id for PUT /api/v2/task_list_templates/{task_list_template_id}.",
           "maps_to": "record.task_list_template_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "description",
@@ -10245,8 +10345,8 @@
           "type": "string",
           "summary": "Path parameter ticket_form_id for POST /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses.",
           "maps_to": "record.ticket_form_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "custom-status-id",
@@ -10279,8 +10379,8 @@
           "type": "string",
           "summary": "Path parameter ticket_form_id for PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses.",
           "maps_to": "record.ticket_form_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "-destroy",
@@ -10343,16 +10443,16 @@
           "type": "string",
           "summary": "Path parameter ticket_form_id for PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}.",
           "maps_to": "record.ticket_form_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "ticket-form-status-id",
           "type": "string",
           "summary": "Path parameter ticket_form_status_id for PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}.",
           "maps_to": "record.ticket_form_status_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "-destroy",
@@ -10942,8 +11042,8 @@
           "type": "string",
           "summary": "Path parameter ticket_id for POST /api/v2/tickets/{ticket_id}/task_lists.",
           "maps_to": "record.ticket_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "task-list-template-id",
@@ -11346,8 +11446,8 @@
           "type": "string",
           "summary": "Path parameter trigger_category_id for PATCH /api/v2/trigger_categories/{trigger_category_id}.",
           "maps_to": "record.trigger_category_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "name",
@@ -11915,8 +12015,8 @@
           "type": "string",
           "summary": "Path parameter user_id for POST /api/v2/users/{user_id}/group_memberships.",
           "maps_to": "record.user_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "group-id",
@@ -12759,18 +12859,87 @@
       "write": "create_many_users",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "flags": [
-        { "name": "name", "type": "string", "summary": "Required users.0.name field.", "maps_to": "record.users.0.name", "required": true, "allow_empty": false },
-        { "name": "email", "type": "string", "summary": "Optional users.0.email field.", "maps_to": "record.users.0.email", "allow_empty": false },
-        { "name": "external-id", "type": "string", "summary": "Optional users.0.external_id field.", "maps_to": "record.users.0.external_id", "allow_empty": false },
-        { "name": "role", "type": "string", "summary": "Optional users.0.role field.", "maps_to": "record.users.0.role", "allow_empty": false },
-        { "name": "alias", "type": "string", "summary": "Optional users.0.alias field.", "maps_to": "record.users.0.alias", "allow_empty": false },
-        { "name": "details", "type": "string", "summary": "Optional users.0.details field.", "maps_to": "record.users.0.details", "allow_empty": false },
-        { "name": "phone", "type": "string", "summary": "Optional users.0.phone field.", "maps_to": "record.users.0.phone", "allow_empty": false },
-        { "name": "organization-id", "type": "integer", "summary": "Optional users.0.organization_id field.", "maps_to": "record.users.0.organization_id" },
-        { "name": "default-group-id", "type": "integer", "summary": "Optional users.0.default_group_id field.", "maps_to": "record.users.0.default_group_id" },
-        { "name": "locale", "type": "string", "summary": "Optional users.0.locale field.", "maps_to": "record.users.0.locale", "allow_empty": false },
-        { "name": "suspended", "type": "boolean", "summary": "Optional users.0.suspended field.", "maps_to": "record.users.0.suspended" },
-        { "name": "tags", "type": "string_array", "summary": "Optional users.0.tags field.", "maps_to": "record.users.0.tags" }
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required users.0.name field.",
+          "maps_to": "record.users.0.name",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Optional users.0.email field.",
+          "maps_to": "record.users.0.email",
+          "allow_empty": false
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "Optional users.0.external_id field.",
+          "maps_to": "record.users.0.external_id",
+          "allow_empty": false
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Optional users.0.role field.",
+          "maps_to": "record.users.0.role",
+          "allow_empty": false
+        },
+        {
+          "name": "alias",
+          "type": "string",
+          "summary": "Optional users.0.alias field.",
+          "maps_to": "record.users.0.alias",
+          "allow_empty": false
+        },
+        {
+          "name": "details",
+          "type": "string",
+          "summary": "Optional users.0.details field.",
+          "maps_to": "record.users.0.details",
+          "allow_empty": false
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "Optional users.0.phone field.",
+          "maps_to": "record.users.0.phone",
+          "allow_empty": false
+        },
+        {
+          "name": "organization-id",
+          "type": "integer",
+          "summary": "Optional users.0.organization_id field.",
+          "maps_to": "record.users.0.organization_id"
+        },
+        {
+          "name": "default-group-id",
+          "type": "integer",
+          "summary": "Optional users.0.default_group_id field.",
+          "maps_to": "record.users.0.default_group_id"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "summary": "Optional users.0.locale field.",
+          "maps_to": "record.users.0.locale",
+          "allow_empty": false
+        },
+        {
+          "name": "suspended",
+          "type": "boolean",
+          "summary": "Optional users.0.suspended field.",
+          "maps_to": "record.users.0.suspended"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Optional users.0.tags field.",
+          "maps_to": "record.users.0.tags"
+        }
       ],
       "api_surface": [
         {
@@ -12811,18 +12980,86 @@
       "write": "create_or_update_many_users",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "flags": [
-        { "name": "external-id", "type": "string", "summary": "Optional users.0.external_id merge key; id or email are also accepted by the OAS merge arm.", "maps_to": "record.users.0.external_id", "allow_empty": false },
-        { "name": "name", "type": "string", "summary": "Optional users.0.name field.", "maps_to": "record.users.0.name", "allow_empty": false },
-        { "name": "email", "type": "string", "summary": "Optional users.0.email field.", "maps_to": "record.users.0.email", "allow_empty": false },
-        { "name": "user-id", "type": "integer", "summary": "Optional users.0.id field.", "maps_to": "record.users.0.id" },
-        { "name": "role", "type": "string", "summary": "Optional users.0.role field.", "maps_to": "record.users.0.role", "allow_empty": false },
-        { "name": "alias", "type": "string", "summary": "Optional users.0.alias field.", "maps_to": "record.users.0.alias", "allow_empty": false },
-        { "name": "details", "type": "string", "summary": "Optional users.0.details field.", "maps_to": "record.users.0.details", "allow_empty": false },
-        { "name": "phone", "type": "string", "summary": "Optional users.0.phone field.", "maps_to": "record.users.0.phone", "allow_empty": false },
-        { "name": "organization-id", "type": "integer", "summary": "Optional users.0.organization_id field.", "maps_to": "record.users.0.organization_id" },
-        { "name": "locale", "type": "string", "summary": "Optional users.0.locale field.", "maps_to": "record.users.0.locale", "allow_empty": false },
-        { "name": "suspended", "type": "boolean", "summary": "Optional users.0.suspended field.", "maps_to": "record.users.0.suspended" },
-        { "name": "tags", "type": "string_array", "summary": "Optional users.0.tags field.", "maps_to": "record.users.0.tags" }
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "Optional users.0.external_id merge key; id or email are also accepted by the OAS merge arm.",
+          "maps_to": "record.users.0.external_id",
+          "allow_empty": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional users.0.name field.",
+          "maps_to": "record.users.0.name",
+          "allow_empty": false
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Optional users.0.email field.",
+          "maps_to": "record.users.0.email",
+          "allow_empty": false
+        },
+        {
+          "name": "user-id",
+          "type": "integer",
+          "summary": "Optional users.0.id field.",
+          "maps_to": "record.users.0.id"
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Optional users.0.role field.",
+          "maps_to": "record.users.0.role",
+          "allow_empty": false
+        },
+        {
+          "name": "alias",
+          "type": "string",
+          "summary": "Optional users.0.alias field.",
+          "maps_to": "record.users.0.alias",
+          "allow_empty": false
+        },
+        {
+          "name": "details",
+          "type": "string",
+          "summary": "Optional users.0.details field.",
+          "maps_to": "record.users.0.details",
+          "allow_empty": false
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "Optional users.0.phone field.",
+          "maps_to": "record.users.0.phone",
+          "allow_empty": false
+        },
+        {
+          "name": "organization-id",
+          "type": "integer",
+          "summary": "Optional users.0.organization_id field.",
+          "maps_to": "record.users.0.organization_id"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "summary": "Optional users.0.locale field.",
+          "maps_to": "record.users.0.locale",
+          "allow_empty": false
+        },
+        {
+          "name": "suspended",
+          "type": "boolean",
+          "summary": "Optional users.0.suspended field.",
+          "maps_to": "record.users.0.suspended"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Optional users.0.tags field.",
+          "maps_to": "record.users.0.tags"
+        }
       ],
       "api_surface": [
         {
@@ -13052,14 +13289,61 @@
       "write": "request_user_create",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "flags": [
-        { "name": "name", "type": "string", "summary": "Required user.name field.", "maps_to": "record.user.name", "required": true, "allow_empty": false },
-        { "name": "email", "type": "string", "summary": "Optional user.email field.", "maps_to": "record.user.email", "allow_empty": false },
-        { "name": "external-id", "type": "string", "summary": "Optional user.external_id field.", "maps_to": "record.user.external_id", "allow_empty": false },
-        { "name": "role", "type": "string", "summary": "Optional user.role field.", "maps_to": "record.user.role", "allow_empty": false },
-        { "name": "phone", "type": "string", "summary": "Optional user.phone field.", "maps_to": "record.user.phone", "allow_empty": false },
-        { "name": "organization-id", "type": "integer", "summary": "Optional user.organization_id field.", "maps_to": "record.user.organization_id" },
-        { "name": "locale", "type": "string", "summary": "Optional user.locale field.", "maps_to": "record.user.locale", "allow_empty": false },
-        { "name": "tags", "type": "string_array", "summary": "Optional user.tags field.", "maps_to": "record.user.tags" }
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required user.name field.",
+          "maps_to": "record.user.name",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Optional user.email field.",
+          "maps_to": "record.user.email",
+          "allow_empty": false
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "Optional user.external_id field.",
+          "maps_to": "record.user.external_id",
+          "allow_empty": false
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Optional user.role field.",
+          "maps_to": "record.user.role",
+          "allow_empty": false
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "Optional user.phone field.",
+          "maps_to": "record.user.phone",
+          "allow_empty": false
+        },
+        {
+          "name": "organization-id",
+          "type": "integer",
+          "summary": "Optional user.organization_id field.",
+          "maps_to": "record.user.organization_id"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "summary": "Optional user.locale field.",
+          "maps_to": "record.user.locale",
+          "allow_empty": false
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Optional user.tags field.",
+          "maps_to": "record.user.tags"
+        }
       ],
       "api_surface": [
         {
@@ -13486,8 +13770,8 @@
           "type": "string",
           "summary": "Path parameter workspace_id for PUT /api/v2/workspaces/{workspace_id}.",
           "maps_to": "record.workspace_id",
-          "required": true,
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "description",

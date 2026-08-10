@@ -84,6 +84,58 @@
       ]
     }
   ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Gong request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum PM ETL records to emit; does not control Gong page size or total provider-side results."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum direct-read response bytes; typed operations are capped at 16 MiB and each operation may declare a lower limit."
+    },
+    {
+      "name": "plan",
+      "type": "string",
+      "summary": "Execute an approved reverse-ETL plan by id."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive reverse-ETL writes."
+    }
+  ],
   "commands": [
     {
       "path": "call-outcomes list",
@@ -449,13 +501,15 @@
           "name": "id",
           "type": "string",
           "summary": "Gong call ID whose media should be uploaded.",
-          "maps_to": "record.id"
+          "maps_to": "record.id",
+          "required": true
         },
         {
           "name": "media-file-path",
           "type": "string",
           "summary": "Project-relative media file path to upload.",
-          "maps_to": "record.media_file_path"
+          "maps_to": "record.media_file_path",
+          "required": true
         }
       ],
       "api_surface": [
@@ -652,13 +706,15 @@
           "name": "clientRequestId",
           "type": "string",
           "summary": "clientRequestId value",
-          "maps_to": "record.clientRequestId"
+          "maps_to": "record.clientRequestId",
+          "required": true
         },
         {
           "name": "integrationId",
           "type": "string",
           "summary": "integrationId value",
-          "maps_to": "record.integrationId"
+          "maps_to": "record.integrationId",
+          "required": true
         }
       ],
       "api_surface": [
@@ -700,13 +756,15 @@
           "name": "name",
           "type": "string",
           "summary": "The name of the integration",
-          "maps_to": "record.name"
+          "maps_to": "record.name",
+          "required": true
         },
         {
           "name": "ownerEmail",
           "type": "string",
           "summary": "Email address of the person responsible for the integration",
-          "maps_to": "record.ownerEmail"
+          "maps_to": "record.ownerEmail",
+          "required": true
         }
       ],
       "api_surface": [
@@ -762,7 +820,8 @@
           "name": "data-file-path",
           "type": "string",
           "summary": "Project-relative CRM data file path to upload.",
-          "maps_to": "record.data_file_path"
+          "maps_to": "record.data_file_path",
+          "required": true
         }
       ],
       "api_surface": [
@@ -847,31 +906,36 @@
           "name": "contentId",
           "type": "string",
           "summary": "The id of the content that was shared in the reporting system.",
-          "maps_to": "record.contentId"
+          "maps_to": "record.contentId",
+          "required": true
         },
         {
           "name": "contentTitle",
           "type": "string",
           "summary": "Human readable title of the content.",
-          "maps_to": "record.contentTitle"
+          "maps_to": "record.contentTitle",
+          "required": true
         },
         {
           "name": "contentUrl",
           "type": "string",
           "summary": "The url of the content that was shared in the reporting system. This is the url that is was accessed by the viewer.",
-          "maps_to": "record.contentUrl"
+          "maps_to": "record.contentUrl",
+          "required": true
         },
         {
           "name": "eventTimestamp",
           "type": "string",
           "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
-          "maps_to": "record.eventTimestamp"
+          "maps_to": "record.eventTimestamp",
+          "required": true
         },
         {
           "name": "reportingSystem",
           "type": "string",
           "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
-          "maps_to": "record.reportingSystem"
+          "maps_to": "record.reportingSystem",
+          "required": true
         }
       ],
       "api_surface": [
@@ -896,31 +960,36 @@
           "name": "contentId",
           "type": "string",
           "summary": "The id of the content that was viewed in the reporting system.",
-          "maps_to": "record.contentId"
+          "maps_to": "record.contentId",
+          "required": true
         },
         {
           "name": "contentTitle",
           "type": "string",
           "summary": "Human readable title of the content.",
-          "maps_to": "record.contentTitle"
+          "maps_to": "record.contentTitle",
+          "required": true
         },
         {
           "name": "contentUrl",
           "type": "string",
           "summary": "The url of the content that was viewed in the reporting system. This is the url that is was accessed by the viewer.",
-          "maps_to": "record.contentUrl"
+          "maps_to": "record.contentUrl",
+          "required": true
         },
         {
           "name": "eventTimestamp",
           "type": "string",
           "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
-          "maps_to": "record.eventTimestamp"
+          "maps_to": "record.eventTimestamp",
+          "required": true
         },
         {
           "name": "reportingSystem",
           "type": "string",
           "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
-          "maps_to": "record.reportingSystem"
+          "maps_to": "record.reportingSystem",
+          "required": true
         }
       ],
       "api_surface": [
@@ -945,13 +1014,15 @@
           "name": "eventTimestamp",
           "type": "string",
           "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
-          "maps_to": "record.eventTimestamp"
+          "maps_to": "record.eventTimestamp",
+          "required": true
         },
         {
           "name": "reportingSystem",
           "type": "string",
           "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
-          "maps_to": "record.reportingSystem"
+          "maps_to": "record.reportingSystem",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1187,19 +1258,22 @@
           "name": "crmProspectsIds",
           "type": "string_array",
           "summary": "The CRM IDs of the contact or lead that should be assigned to a flow.",
-          "maps_to": "record.crmProspectsIds"
+          "maps_to": "record.crmProspectsIds",
+          "required": true
         },
         {
           "name": "flowId",
           "type": "string",
           "summary": "The Engage Flow ID to assign the contacts to.",
-          "maps_to": "record.flowId"
+          "maps_to": "record.flowId",
+          "required": true
         },
         {
           "name": "flowInstanceOwnerEmail",
           "type": "string",
           "summary": "The email of the Gong user who owns the flow to-dos.",
-          "maps_to": "record.flowInstanceOwnerEmail"
+          "maps_to": "record.flowInstanceOwnerEmail",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1224,19 +1298,22 @@
           "name": "crmProspectsIds",
           "type": "string_array",
           "summary": "The CRM IDs of the contact or lead that should be assigned to a flow.",
-          "maps_to": "record.crmProspectsIds"
+          "maps_to": "record.crmProspectsIds",
+          "required": true
         },
         {
           "name": "flowId",
           "type": "string",
           "summary": "The Engage Flow ID to assign the contacts to.",
-          "maps_to": "record.flowId"
+          "maps_to": "record.flowId",
+          "required": true
         },
         {
           "name": "flowInstanceOwnerEmail",
           "type": "string",
           "summary": "The email of the Gong user who owns the flow to-dos.",
-          "maps_to": "record.flowInstanceOwnerEmail"
+          "maps_to": "record.flowInstanceOwnerEmail",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1298,7 +1375,8 @@
           "name": "crmProspectId",
           "type": "string",
           "summary": "The CRM ID of the prospect to unassign.",
-          "maps_to": "record.crmProspectId"
+          "maps_to": "record.crmProspectId",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1323,7 +1401,8 @@
           "name": "flowInstanceIds",
           "type": "string_array",
           "summary": "The unique identifiers of the flows that prospects should be removed from.",
-          "maps_to": "record.flowInstanceIds"
+          "maps_to": "record.flowInstanceIds",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1521,7 +1600,8 @@
           "name": "meetingId",
           "type": "string",
           "summary": "meetingId value",
-          "maps_to": "record.meetingId"
+          "maps_to": "record.meetingId",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1621,7 +1701,8 @@
           "name": "workspaceId",
           "type": "string",
           "summary": "workspaceId value",
-          "maps_to": "record.workspaceId"
+          "maps_to": "record.workspaceId",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1671,7 +1752,8 @@
           "name": "profileId",
           "type": "string",
           "summary": "profileId value",
-          "maps_to": "record.profileId"
+          "maps_to": "record.profileId",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1738,7 +1820,8 @@
           "name": "emailAddress",
           "type": "string",
           "summary": "emailAddress value",
-          "maps_to": "record.emailAddress"
+          "maps_to": "record.emailAddress",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1763,7 +1846,8 @@
           "name": "phoneNumber",
           "type": "string",
           "summary": "phoneNumber value",
-          "maps_to": "record.phoneNumber"
+          "maps_to": "record.phoneNumber",
+          "required": true
         }
       ],
       "api_surface": [
@@ -2214,13 +2298,15 @@
           "name": "targetId",
           "type": "string",
           "summary": "Unique identifier for the target (up to 20 digits). Retrieve this value using the List targets API.",
-          "maps_to": "record.targetId"
+          "maps_to": "record.targetId",
+          "required": true
         },
         {
           "name": "workspaceId",
           "type": "string",
           "summary": "The ID of the workspace the target belongs to. You can retrieve workspace IDs using the Workspaces API.",
-          "maps_to": "record.workspaceId"
+          "maps_to": "record.workspaceId",
+          "required": true
         },
         {
           "name": "validate-only",
@@ -2232,7 +2318,8 @@
           "name": "assignments-file-path",
           "type": "string",
           "summary": "Project-relative target assignments CSV file path to upload.",
-          "maps_to": "record.assignments_file_path"
+          "maps_to": "record.assignments_file_path",
+          "required": true
         }
       ],
       "api_surface": [
@@ -2313,13 +2400,15 @@
           "name": "taskId",
           "type": "string",
           "summary": "taskId value",
-          "maps_to": "record.taskId"
+          "maps_to": "record.taskId",
+          "required": true
         },
         {
           "name": "userId",
           "type": "string",
           "summary": "The id of the Gong user who owns the task",
-          "maps_to": "record.userId"
+          "maps_to": "record.userId",
+          "required": true
         }
       ],
       "api_surface": [

@@ -250,3 +250,46 @@
   and action fields. The focused generator test, both original connector regressions, a
   552-bundle read-only audit, and generated-surface checks must pass. No test, cap, provider check,
   or credential requirement is weakened.
+
+## Full audited-corpus command-surface regeneration (2026-08-10)
+
+- **Red:** the post-fix 552-bundle audit still finds 270 renamed established flags in six
+  connector surfaces and 146 commands whose matching write action declares one or more absent
+  redactions. Those results prove that correcting the two visible artifacts alone does not close
+  the generator defect.
+- **Green:** exercise the same materializer regression against preserved pre-sweep command
+  contracts and current operation inventories for every audited connector. Re-run the complete
+  audit after generated output replacement and require `flag_spelling_regressions=0` and
+  `declared_redaction_gaps=0`; then require `surface-sync --check`, connector validation, and
+  focused runtime/help regressions to pass. No public flag spelling, example, approval contract,
+  or declared secret redaction may be dropped.
+
+## Registry cache after 552-bundle growth
+
+- **Red:** hosted Verify reports `internal/cli` timing out at 20 minutes while
+  `TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked` is still executing. Each
+  `cli.Run` rebuilds and reparses the immutable embedded definition corpus, so the test's
+  legitimate 37-command coverage becomes proportional to the full corpus on every invocation.
+- **Green target:** a `bundleCache` test will prove one loader call and independent returned slice
+  headers; `bundleregistry.New` will use that cache while retaining a fresh registry map and fresh
+  engine connector wrappers for each call. The full command matrix remains intact.
+
+## Derived GitLab and root-manual expectations
+
+- **Red:** once the CLI suite completes under the preserved 20-minute timeout, the GitLab test
+  expects only four rows while the cited generated API surface contains 1,745; the root-manual
+  golden similarly contains the pre-sweep connector catalog.
+- **Green target:** retain the four exact executable stream assertions; require every remaining
+  GitLab row to be a one-endpoint, operation-backed `not_implemented` command and derive the
+  total from `api_surface.json`. Regenerate `golden_transcripts.json` with
+  `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1`, then inspect the resulting generated diff.
+
+## Connector-wide global-flag contract retention (2026-08-10)
+
+- **GLOBAL-FLAGS-CORPUS — Red:** after the first full regeneration, an `f96a47e80` comparison
+  found eleven established `global_flags` arrays removed from materialized surfaces. The original
+  focused contract test did not cover connector-wide flags.
+- **Green:** `materializeCLISurface` copies `bundle.CLISurface.GlobalFlags`; the focused generator
+  test asserts the retained flags; and a generator-driven re-materialization of all eleven
+  affected connectors brings the baseline global-flag comparison to zero without weakening the
+  flag-spelling or redaction audits.

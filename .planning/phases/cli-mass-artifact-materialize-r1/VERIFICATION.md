@@ -125,3 +125,36 @@ across six other connectors / 414 missing field pairs. Six gaps are materializat
 Support five); and 52 Xero commands have no comparable pre-sweep command for attribution. Those
 unrelated surfaces remain untouched pending captain sequencing. The next hosted PR matrix remains
 pending.
+
+## Full audited-corpus command-surface regeneration (2026-08-10)
+
+The repaired materializer regenerated the thirteen initially affected source bundles with zero
+drops, and a separate Gong source recovery regenerated its preserved global flags. A subsequent
+baseline audit found eleven more existing connector-wide flag contracts removed by the same
+surface replacement. The generator now copies `GlobalFlags`; a second generator run materialized
+all eleven affected bundles with zero drops from their preserved `f96a47e80` CLI contracts and
+current endpoint inventories. No `cli_surface.json` was patched by hand.
+
+The final read-only 552-bundle audits report exactly:
+
+- `flag_spelling_regressions flags=0 actions=0 connectors=0`
+- `declared_redaction_gaps fields=0 commands=0 connectors=0`
+- `global_flag_contract_differences connectors=0`
+
+`connectorgen surface-sync --check` scans all 552 connectors with zero corrections, and the
+website data generator has been rerun from the final bundle set. Remaining local and hosted gates
+are recorded as they complete; no credentialed provider check is part of this static repair.
+
+## Final local command-contract verification (2026-08-10)
+
+The repaired generator suite passes (`go test -timeout 20m -count=1 ./cmd/connectorgen`), as do
+the engine, bundle-registry, commandrunner, lint, vet, docs, smoke, release-workflow,
+agent-contract, GSD-evidence, and clean 552-connector boundary gates. The full
+`go test -timeout 20m -count=1 ./internal/cli` package completes in `557.489s`, preserving the
+20-minute limit rather than loosening it. Website typecheck, lint, unit tests (80), script tests
+(25), and production build are green after regenerating its data.
+
+The final `make certify-timing` run completes in `104.664s` test elapsed / `122.651s` wall time,
+within the approved 8-minute cap, and retains its full fixed topology: 25/25 harness calls and
+92/92 real CLI invocations. Hosted PR checks remain the final independent confirmation after the
+commit and push.

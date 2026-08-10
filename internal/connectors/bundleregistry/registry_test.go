@@ -36,6 +36,30 @@ func TestRegistryDirectWriteMetadataUsesEmbeddedOperationSurface(t *testing.T) {
 	}
 }
 
+func TestBundleCacheLoadsOnceAndCopiesResultSlice(t *testing.T) {
+	loads := 0
+	cache := bundleCache{loader: func(fs.FS) ([]engine.Bundle, error) {
+		loads++
+		return []engine.Bundle{{Name: "acme"}}, nil
+	}}
+
+	first, err := cache.load(defs.FS)
+	if err != nil {
+		t.Fatalf("first cache load: %v", err)
+	}
+	first[0].Name = "mutated"
+	second, err := cache.load(defs.FS)
+	if err != nil {
+		t.Fatalf("second cache load: %v", err)
+	}
+	if loads != 1 {
+		t.Fatalf("loader calls = %d, want 1", loads)
+	}
+	if got := second[0].Name; got != "acme" {
+		t.Fatalf("second result name = %q, want cached slice isolation", got)
+	}
+}
+
 func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	bundles, err := engine.LoadAll(defs.FS)
 	if err != nil {

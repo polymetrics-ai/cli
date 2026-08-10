@@ -289,8 +289,6 @@
         "api put workspaces workspace projects project-key default-reviewers selected-user",
         "api put workspaces workspace projects project-key permissions-config groups group-slug",
         "api put workspaces workspace projects project-key permissions-config users selected-user-id",
-        "create repositories workspace repo slug apply",
-        "delete repositories workspace repo slug apply",
         "delete repositories workspace repo slug branch restrictions id apply",
         "delete repositories workspace repo slug commit commit approve apply",
         "delete repositories workspace repo slug commit commit comments comment id apply",
@@ -342,8 +340,47 @@
         "delete workspaces workspace projects project key default reviewers selected user apply",
         "delete workspaces workspace projects project key deploy keys key id apply",
         "delete workspaces workspace projects project key permissions config groups group slug apply",
-        "delete workspaces workspace projects project key permissions config users selected user id apply"
+        "delete workspaces workspace projects project key permissions config users selected user id apply",
+        "repositories create",
+        "repositories delete"
       ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for Bitbucket requests."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write without executing it."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation for destructive reverse-ETL writes."
     }
   ],
   "commands": [
@@ -3028,83 +3065,6 @@
       "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "create repositories workspace repo slug apply",
-      "summary": "Plan and execute the create repositories workspace repo slug reverse-ETL action",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_repositories_workspace_repo_slug",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "flags": [
-        {
-          "name": "repo_slug",
-          "type": "string",
-          "summary": "Required repo slug record field.",
-          "maps_to": "record.repo_slug",
-          "required": true
-        },
-        {
-          "name": "scm",
-          "type": "string",
-          "summary": "Required scm record field.",
-          "maps_to": "record.scm",
-          "required": true
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Required workspace record field.",
-          "maps_to": "record.workspace",
-          "required": true
-        }
-      ],
-      "examples": [
-        "pm bitbucket create repositories workspace repo slug apply --plan \u003cplan-name\u003e"
-      ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/repositories/{workspace}/{repo_slug}"
-        }
-      ],
-      "risk": "POST /repositories/{workspace}/{repo_slug} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.",
-      "approval": "requires plan, preview, approval, and execute"
-    },
-    {
-      "path": "delete repositories workspace repo slug apply",
-      "summary": "Plan and execute the delete repositories workspace repo slug reverse-ETL action",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_repositories_workspace_repo_slug",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "flags": [
-        {
-          "name": "repo_slug",
-          "type": "string",
-          "summary": "Required repo slug record field.",
-          "maps_to": "record.repo_slug",
-          "required": true
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Required workspace record field.",
-          "maps_to": "record.workspace",
-          "required": true
-        }
-      ],
-      "examples": [
-        "pm bitbucket delete repositories workspace repo slug apply --plan \u003cplan-name\u003e"
-      ],
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/repositories/{workspace}/{repo_slug}"
-        }
-      ],
-      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
-      "approval": "requires plan, preview, approval, and execute"
-    },
-    {
       "path": "delete repositories workspace repo slug branch restrictions id apply",
       "summary": "Plan and execute the delete repositories workspace repo slug branch restrictions id reverse-ETL action",
       "intent": "reverse_etl",
@@ -4921,14 +4881,100 @@
       ]
     },
     {
+      "path": "repositories create",
+      "summary": "Create or initialize a Bitbucket repository through typed reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_repositories_workspace_repo_slug",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "flags": [
+        {
+          "name": "workspace",
+          "type": "string",
+          "summary": "Workspace slug or UUID.",
+          "maps_to": "record.workspace",
+          "required": true
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "summary": "Repository slug to create.",
+          "maps_to": "record.repo_slug",
+          "required": true
+        },
+        {
+          "name": "scm",
+          "type": "enum",
+          "summary": "Repository SCM type.",
+          "values": [
+            "git"
+          ],
+          "maps_to": "record.scm",
+          "required": true
+        },
+        {
+          "name": "private",
+          "type": "boolean",
+          "summary": "Whether the repository is private.",
+          "maps_to": "record.is_private"
+        }
+      ],
+      "examples": [
+        "pm bitbucket repositories create --workspace \u003cworkspace\u003e --repo-slug \u003cslug\u003e --scm git --preview"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}"
+        }
+      ],
+      "risk": "Creates a Bitbucket repository; reverse ETL plan, preview, explicit approval, execute are required.",
+      "approval": "Requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute."
+    },
+    {
+      "path": "repositories delete",
+      "summary": "Delete a Bitbucket repository through a destructive typed reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "flags": [
+        {
+          "name": "workspace",
+          "type": "string",
+          "summary": "Workspace slug or UUID.",
+          "maps_to": "record.workspace",
+          "required": true
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "summary": "Repository slug to delete.",
+          "maps_to": "record.repo_slug",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bitbucket repositories delete --workspace \u003cworkspace\u003e --repo-slug \u003cslug\u003e --confirm destructive --preview"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}"
+        }
+      ],
+      "risk": "Permanently deletes a Bitbucket repository; action has confirm: destructive.",
+      "approval": "Requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute plus typed destructive confirmation."
+    },
+    {
       "path": "repositories list",
-      "summary": "Run the repositories ETL stream",
+      "summary": "List public Bitbucket repositories as paginated ETL records.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "repositories",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "examples": [
-        "pm bitbucket repositories list --json"
+        "pm bitbucket repositories list --json --limit 100"
       ],
       "api_surface": [
         {

@@ -121,12 +121,60 @@
       ]
     }
   ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Lever request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum bounded direct-read response bytes."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive reverse-ETL writes."
+    }
+  ],
   "commands": [
     {
       "path": "api delete opportunities opportunity files file",
       "summary": "Documented DELETE /opportunities/{opportunity}/files/{file} (not implemented)",
       "intent": "binary_download",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api delete opportunities opportunity files file --help"
       ],
@@ -146,6 +194,7 @@
       "summary": "Documented DELETE /opportunities/{opportunity}/interviews/{interview} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api delete opportunities opportunity interviews interview --help"
       ],
@@ -165,6 +214,7 @@
       "summary": "Documented DELETE /opportunities/{opportunity}/panels/{panel} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api delete opportunities opportunity panels panel --help"
       ],
@@ -184,6 +234,7 @@
       "summary": "Documented DELETE /webhooks/{webhookId} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api delete webhooks webhookid --help"
       ],
@@ -203,6 +254,7 @@
       "summary": "Documented GET /opportunities/{opportunity}/files (not implemented)",
       "intent": "binary_download",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api get opportunities opportunity files --help"
       ],
@@ -222,6 +274,7 @@
       "summary": "Documented GET /opportunities/{opportunity}/files/{file} (not implemented)",
       "intent": "binary_download",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api get opportunities opportunity files file --help"
       ],
@@ -241,6 +294,7 @@
       "summary": "Documented GET /opportunities/{opportunity}/files/{file}/download (not implemented)",
       "intent": "binary_download",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api get opportunities opportunity files file download --help"
       ],
@@ -260,6 +314,7 @@
       "summary": "Documented GET /opportunities/{opportunity}/offers/{offer}/download (not implemented)",
       "intent": "binary_download",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api get opportunities opportunity offers offer download --help"
       ],
@@ -279,6 +334,7 @@
       "summary": "Documented GET /opportunities/{opportunity}/resumes (not implemented)",
       "intent": "binary_download",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api get opportunities opportunity resumes --help"
       ],
@@ -298,6 +354,7 @@
       "summary": "Documented GET /opportunities/{opportunity}/resumes/{resume} (not implemented)",
       "intent": "binary_download",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api get opportunities opportunity resumes resume --help"
       ],
@@ -317,6 +374,7 @@
       "summary": "Documented GET /opportunities/{opportunity}/resumes/{resume}/download (not implemented)",
       "intent": "binary_download",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api get opportunities opportunity resumes resume download --help"
       ],
@@ -336,6 +394,7 @@
       "summary": "Documented GET /v1/eeo/responses (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api get v1 eeo responses --help"
       ],
@@ -355,6 +414,7 @@
       "summary": "Documented GET /webhooks (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api get webhooks --help"
       ],
@@ -374,6 +434,7 @@
       "summary": "Documented POST /opportunities (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities --help"
       ],
@@ -393,6 +454,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/addLinks (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity addlinks --help"
       ],
@@ -412,6 +474,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/addSources (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity addsources --help"
       ],
@@ -431,6 +494,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/addTags (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity addtags --help"
       ],
@@ -450,6 +514,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/feedback (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity feedback --help"
       ],
@@ -469,6 +534,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/files (not implemented)",
       "intent": "binary_download",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity files --help"
       ],
@@ -488,6 +554,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/forms (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity forms --help"
       ],
@@ -507,6 +574,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/interviews (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity interviews --help"
       ],
@@ -526,6 +594,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/notes (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity notes --help"
       ],
@@ -545,6 +614,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/panels (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity panels --help"
       ],
@@ -564,6 +634,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/removeLinks (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity removelinks --help"
       ],
@@ -583,6 +654,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/removeSources (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity removesources --help"
       ],
@@ -602,6 +674,7 @@
       "summary": "Documented POST /opportunities/{opportunity}/removeTags (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post opportunities opportunity removetags --help"
       ],
@@ -621,6 +694,7 @@
       "summary": "Documented POST /postings (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post postings --help"
       ],
@@ -640,6 +714,7 @@
       "summary": "Documented POST /postings/{posting} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post postings posting --help"
       ],
@@ -659,6 +734,7 @@
       "summary": "Documented POST /postings/{posting}/apply (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post postings posting apply --help"
       ],
@@ -678,6 +754,7 @@
       "summary": "Documented POST /requisition_fields (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post requisition-fields --help"
       ],
@@ -697,6 +774,7 @@
       "summary": "Documented POST /requisition_fields/{requisition_field}/options (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post requisition-fields requisition-field options --help"
       ],
@@ -716,6 +794,7 @@
       "summary": "Documented POST /requisitions (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post requisitions --help"
       ],
@@ -735,6 +814,7 @@
       "summary": "Documented POST /uploads (not implemented)",
       "intent": "binary_download",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post uploads --help"
       ],
@@ -754,6 +834,7 @@
       "summary": "Documented POST /users (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post users --help"
       ],
@@ -773,6 +854,7 @@
       "summary": "Documented POST /webhooks (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api post webhooks --help"
       ],
@@ -792,6 +874,7 @@
       "summary": "Documented PUT /contacts/{contact} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put contacts contact --help"
       ],
@@ -811,6 +894,7 @@
       "summary": "Documented PUT /opportunities/{opportunity}/archived (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put opportunities opportunity archived --help"
       ],
@@ -830,6 +914,7 @@
       "summary": "Documented PUT /opportunities/{opportunity}/interviews/{interview} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put opportunities opportunity interviews interview --help"
       ],
@@ -849,6 +934,7 @@
       "summary": "Documented PUT /opportunities/{opportunity}/notes/{note} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put opportunities opportunity notes note --help"
       ],
@@ -868,6 +954,7 @@
       "summary": "Documented PUT /opportunities/{opportunity}/panels/{panel} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put opportunities opportunity panels panel --help"
       ],
@@ -887,6 +974,7 @@
       "summary": "Documented PUT /opportunities/{opportunity}/stage (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put opportunities opportunity stage --help"
       ],
@@ -906,6 +994,7 @@
       "summary": "Documented PUT /requisition_fields/{requisition_field} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put requisition-fields requisition-field --help"
       ],
@@ -925,6 +1014,7 @@
       "summary": "Documented PUT /requisition_fields/{requisition_field}/options (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put requisition-fields requisition-field options --help"
       ],
@@ -944,6 +1034,7 @@
       "summary": "Documented PUT /requisitions/{requisition} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put requisitions requisition --help"
       ],
@@ -963,6 +1054,7 @@
       "summary": "Documented PUT /users/{user} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put users user --help"
       ],
@@ -982,6 +1074,7 @@
       "summary": "Documented PUT /webhooks/ (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring api put webhooks --help"
       ],
@@ -1002,6 +1095,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "applications",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring applications list --json --limit 25"
       ],
@@ -1018,6 +1112,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "archive_reasons",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring archive-reasons list --json --limit 25"
       ],
@@ -1034,6 +1129,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "audit_events",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring audit-events list --json --limit 25"
       ],
@@ -1048,10 +1144,75 @@
       "path": "create-feedback-template plan",
       "summary": "Creates a feedback template.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_feedback_template",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "flags": [
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Lever text value.",
+          "maps_to": "record.text",
+          "allow_empty": false
+        },
+        {
+          "name": "instructions",
+          "type": "string",
+          "summary": "Lever instructions value.",
+          "maps_to": "record.instructions",
+          "allow_empty": false
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "summary": "Lever group value.",
+          "maps_to": "record.group",
+          "allow_empty": false
+        },
+        {
+          "name": "field-id",
+          "type": "string",
+          "summary": "Identifier for the first template field.",
+          "maps_to": "record.fields.0.id",
+          "allow_empty": false
+        },
+        {
+          "name": "field-type",
+          "type": "string",
+          "summary": "Type for the first template field.",
+          "maps_to": "record.fields.0.type",
+          "allow_empty": false
+        },
+        {
+          "name": "field-text",
+          "type": "string",
+          "summary": "Text label for the first template field.",
+          "maps_to": "record.fields.0.text",
+          "allow_empty": false
+        },
+        {
+          "name": "field-required",
+          "type": "boolean",
+          "summary": "Whether the first template field is required.",
+          "maps_to": "record.fields.0.required"
+        },
+        {
+          "name": "field-description",
+          "type": "string",
+          "summary": "Description for the first template field.",
+          "maps_to": "record.fields.0.description",
+          "allow_empty": false
+        },
+        {
+          "name": "field-prompt",
+          "type": "string",
+          "summary": "Prompt for the first template field.",
+          "maps_to": "record.fields.0.prompt",
+          "allow_empty": false
+        }
+      ],
       "examples": [
-        "pm lever-hiring create feedback template apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring create-feedback-template plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1060,17 +1221,87 @@
         }
       ],
       "risk": "Creates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "create-form-template plan",
       "summary": "Creates a profile form template.",
       "intent": "reverse_etl",
-      "availability": "not_implemented",
+      "availability": "implemented",
       "write": "create_form_template",
+      "source_url": "https://hire.lever.co/developer/documentation",
+      "flags": [
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Lever text value.",
+          "maps_to": "record.text",
+          "allow_empty": false
+        },
+        {
+          "name": "instructions",
+          "type": "string",
+          "summary": "Lever instructions value.",
+          "maps_to": "record.instructions",
+          "allow_empty": false
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "summary": "Lever group value.",
+          "maps_to": "record.group",
+          "allow_empty": false
+        },
+        {
+          "name": "secretbydefault",
+          "type": "boolean",
+          "summary": "Lever secretByDefault value.",
+          "maps_to": "record.secretByDefault"
+        },
+        {
+          "name": "field-id",
+          "type": "string",
+          "summary": "Identifier for the first template field.",
+          "maps_to": "record.fields.0.id",
+          "allow_empty": false
+        },
+        {
+          "name": "field-type",
+          "type": "string",
+          "summary": "Type for the first template field.",
+          "maps_to": "record.fields.0.type",
+          "allow_empty": false
+        },
+        {
+          "name": "field-text",
+          "type": "string",
+          "summary": "Text label for the first template field.",
+          "maps_to": "record.fields.0.text",
+          "allow_empty": false
+        },
+        {
+          "name": "field-required",
+          "type": "boolean",
+          "summary": "Whether the first template field is required.",
+          "maps_to": "record.fields.0.required"
+        },
+        {
+          "name": "field-description",
+          "type": "string",
+          "summary": "Description for the first template field.",
+          "maps_to": "record.fields.0.description",
+          "allow_empty": false
+        },
+        {
+          "name": "field-prompt",
+          "type": "string",
+          "summary": "Prompt for the first template field.",
+          "maps_to": "record.fields.0.prompt",
+          "allow_empty": false
+        }
+      ],
       "examples": [
-        "pm lever-hiring create form template apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring create-form-template plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1079,8 +1310,7 @@
         }
       ],
       "risk": "Creates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute",
-      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "deactivate-user plan",
@@ -1088,17 +1318,19 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "deactivate_user",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
         {
           "name": "user",
           "type": "string",
-          "summary": "Required user record field.",
+          "summary": "Lever user value.",
           "maps_to": "record.user",
+          "allow_empty": false,
           "required": true
         }
       ],
       "examples": [
-        "pm lever-hiring deactivate user apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring deactivate-user plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1107,7 +1339,7 @@
         }
       ],
       "risk": "Deactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "delete-feedback plan",
@@ -1115,24 +1347,27 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_feedback",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
-        {
-          "name": "feedback",
-          "type": "string",
-          "summary": "Required feedback record field.",
-          "maps_to": "record.feedback",
-          "required": true
-        },
         {
           "name": "opportunity",
           "type": "string",
-          "summary": "Required opportunity record field.",
+          "summary": "Lever opportunity value.",
           "maps_to": "record.opportunity",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "feedback",
+          "type": "string",
+          "summary": "Lever feedback value.",
+          "maps_to": "record.feedback",
+          "allow_empty": false,
           "required": true
         }
       ],
       "examples": [
-        "pm lever-hiring delete feedback apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring delete-feedback plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1141,7 +1376,7 @@
         }
       ],
       "risk": "Deletes a feedback form from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "delete-feedback-template plan",
@@ -1149,17 +1384,19 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_feedback_template",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
         {
-          "name": "feedback_template",
+          "name": "feedback-template",
           "type": "string",
-          "summary": "Required feedback template record field.",
+          "summary": "Lever feedback_template value.",
           "maps_to": "record.feedback_template",
+          "allow_empty": false,
           "required": true
         }
       ],
       "examples": [
-        "pm lever-hiring delete feedback template apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring delete-feedback-template plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1168,7 +1405,7 @@
         }
       ],
       "risk": "Deletes a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "delete-form-template plan",
@@ -1176,17 +1413,19 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_form_template",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
         {
-          "name": "form_template",
+          "name": "form-template",
           "type": "string",
-          "summary": "Required form template record field.",
+          "summary": "Lever form_template value.",
           "maps_to": "record.form_template",
+          "allow_empty": false,
           "required": true
         }
       ],
       "examples": [
-        "pm lever-hiring delete form template apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring delete-form-template plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1195,7 +1434,7 @@
         }
       ],
       "risk": "Deletes a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "delete-note plan",
@@ -1203,24 +1442,27 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_note",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
-        {
-          "name": "noteId",
-          "type": "string",
-          "summary": "Required noteId record field.",
-          "maps_to": "record.noteId",
-          "required": true
-        },
         {
           "name": "opportunity",
           "type": "string",
-          "summary": "Required opportunity record field.",
+          "summary": "Lever opportunity value.",
           "maps_to": "record.opportunity",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "noteid",
+          "type": "string",
+          "summary": "Lever noteId value.",
+          "maps_to": "record.noteId",
+          "allow_empty": false,
           "required": true
         }
       ],
       "examples": [
-        "pm lever-hiring delete note apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring delete-note plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1229,7 +1471,7 @@
         }
       ],
       "risk": "Deletes a note from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "delete-requisition plan",
@@ -1237,17 +1479,19 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_requisition",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
         {
           "name": "requisition",
           "type": "string",
-          "summary": "Required requisition record field.",
+          "summary": "Lever requisition value.",
           "maps_to": "record.requisition",
+          "allow_empty": false,
           "required": true
         }
       ],
       "examples": [
-        "pm lever-hiring delete requisition apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring delete-requisition plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1256,7 +1500,7 @@
         }
       ],
       "risk": "Deletes a requisition. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "delete-requisition-field plan",
@@ -1264,17 +1508,19 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_requisition_field",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
         {
-          "name": "requisition_field",
+          "name": "requisition-field",
           "type": "string",
-          "summary": "Required requisition field record field.",
+          "summary": "Lever requisition_field value.",
           "maps_to": "record.requisition_field",
+          "allow_empty": false,
           "required": true
         }
       ],
       "examples": [
-        "pm lever-hiring delete requisition field apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring delete-requisition-field plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1283,7 +1529,7 @@
         }
       ],
       "risk": "Deletes a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "delete-requisition-field-options plan",
@@ -1291,17 +1537,19 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_requisition_field_options",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
         {
-          "name": "requisition_field",
+          "name": "requisition-field",
           "type": "string",
-          "summary": "Required requisition field record field.",
+          "summary": "Lever requisition_field value.",
           "maps_to": "record.requisition_field",
+          "allow_empty": false,
           "required": true
         }
       ],
       "examples": [
-        "pm lever-hiring delete requisition field options apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring delete-requisition-field-options plan --preview --json"
       ],
       "api_surface": [
         {
@@ -1310,7 +1558,7 @@
         }
       ],
       "risk": "Deletes dropdown options for a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "deleted-applications list",
@@ -1318,6 +1566,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "deleted_applications",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring deleted-applications list --json --limit 25"
       ],
@@ -1334,6 +1583,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "deleted_opportunities",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring deleted-opportunities list --json --limit 25"
       ],
@@ -1350,6 +1600,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "deleted_postings",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring deleted-postings list --json --limit 25"
       ],
@@ -1943,6 +2194,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "disposition_stages",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring disposition-stages list --json --limit 25"
       ],
@@ -1959,6 +2211,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "feedback_templates",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring feedback-templates list --json --limit 25"
       ],
@@ -1975,6 +2228,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "form_templates",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring form-templates list --json --limit 25"
       ],
@@ -1991,6 +2245,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opportunities",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring opportunities list --json --limit 25"
       ],
@@ -2007,6 +2262,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opportunity_feedback",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring opportunity-feedback list --json --limit 25"
       ],
@@ -2023,6 +2279,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opportunity_file_actions",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring opportunity-file-actions list --json --limit 25"
       ],
@@ -2039,6 +2296,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opportunity_forms",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring opportunity-forms list --json --limit 25"
       ],
@@ -2055,6 +2313,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opportunity_interviews",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring opportunity-interviews list --json --limit 25"
       ],
@@ -2071,6 +2330,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opportunity_notes",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring opportunity-notes list --json --limit 25"
       ],
@@ -2087,6 +2347,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opportunity_offers",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring opportunity-offers list --json --limit 25"
       ],
@@ -2103,6 +2364,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opportunity_panels",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring opportunity-panels list --json --limit 25"
       ],
@@ -2119,6 +2381,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opportunity_referrals",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring opportunity-referrals list --json --limit 25"
       ],
@@ -2135,6 +2398,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "posting_users",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring posting-users list --json --limit 25"
       ],
@@ -2151,6 +2415,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "postings",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring postings list --json --limit 25"
       ],
@@ -2167,17 +2432,19 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "reactivate_user",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
         {
           "name": "user",
           "type": "string",
-          "summary": "Required user record field.",
+          "summary": "Lever user value.",
           "maps_to": "record.user",
+          "allow_empty": false,
           "required": true
         }
       ],
       "examples": [
-        "pm lever-hiring reactivate user apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring reactivate-user plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2186,7 +2453,7 @@
         }
       ],
       "risk": "Reactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "requisition-fields list",
@@ -2194,6 +2461,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "requisition_fields",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring requisition-fields list --json --limit 25"
       ],
@@ -2210,6 +2478,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "requisitions",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring requisitions list --json --limit 25"
       ],
@@ -2226,6 +2495,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "sources",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring sources list --json --limit 25"
       ],
@@ -2242,6 +2512,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "stages",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring stages list --json --limit 25"
       ],
@@ -2258,24 +2529,47 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_feedback",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
-        {
-          "name": "feedback",
-          "type": "string",
-          "summary": "Required feedback record field.",
-          "maps_to": "record.feedback",
-          "required": true
-        },
         {
           "name": "opportunity",
           "type": "string",
-          "summary": "Required opportunity record field.",
+          "summary": "Lever opportunity value.",
           "maps_to": "record.opportunity",
+          "allow_empty": false,
           "required": true
+        },
+        {
+          "name": "feedback",
+          "type": "string",
+          "summary": "Lever feedback value.",
+          "maps_to": "record.feedback",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "completedat",
+          "type": "integer",
+          "summary": "Lever completedAt value.",
+          "maps_to": "record.completedAt"
+        },
+        {
+          "name": "fieldvalue-id",
+          "type": "string",
+          "summary": "Feedback field identifier for the first field value.",
+          "maps_to": "record.fieldValues.0.id",
+          "allow_empty": false
+        },
+        {
+          "name": "fieldvalue-value",
+          "type": "string",
+          "summary": "Feedback value for the first field value.",
+          "maps_to": "record.fieldValues.0.value",
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm lever-hiring update feedback apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring update-feedback plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2284,7 +2578,7 @@
         }
       ],
       "risk": "Updates a feedback form for an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-feedback-template plan",
@@ -2292,17 +2586,81 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_feedback_template",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
         {
-          "name": "feedback_template",
+          "name": "feedback-template",
           "type": "string",
-          "summary": "Required feedback template record field.",
+          "summary": "Lever feedback_template value.",
           "maps_to": "record.feedback_template",
+          "allow_empty": false,
           "required": true
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Lever text value.",
+          "maps_to": "record.text",
+          "allow_empty": false
+        },
+        {
+          "name": "instructions",
+          "type": "string",
+          "summary": "Lever instructions value.",
+          "maps_to": "record.instructions",
+          "allow_empty": false
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "summary": "Lever group value.",
+          "maps_to": "record.group",
+          "allow_empty": false
+        },
+        {
+          "name": "field-id",
+          "type": "string",
+          "summary": "Identifier for the first template field.",
+          "maps_to": "record.fields.0.id",
+          "allow_empty": false
+        },
+        {
+          "name": "field-type",
+          "type": "string",
+          "summary": "Type for the first template field.",
+          "maps_to": "record.fields.0.type",
+          "allow_empty": false
+        },
+        {
+          "name": "field-text",
+          "type": "string",
+          "summary": "Text label for the first template field.",
+          "maps_to": "record.fields.0.text",
+          "allow_empty": false
+        },
+        {
+          "name": "field-required",
+          "type": "boolean",
+          "summary": "Whether the first template field is required.",
+          "maps_to": "record.fields.0.required"
+        },
+        {
+          "name": "field-description",
+          "type": "string",
+          "summary": "Description for the first template field.",
+          "maps_to": "record.fields.0.description",
+          "allow_empty": false
+        },
+        {
+          "name": "field-prompt",
+          "type": "string",
+          "summary": "Prompt for the first template field.",
+          "maps_to": "record.fields.0.prompt",
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm lever-hiring update feedback template apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring update-feedback-template plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2311,7 +2669,7 @@
         }
       ],
       "risk": "Updates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "update-form-template plan",
@@ -2319,17 +2677,87 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_form_template",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "flags": [
         {
-          "name": "form_template",
+          "name": "form-template",
           "type": "string",
-          "summary": "Required form template record field.",
+          "summary": "Lever form_template value.",
           "maps_to": "record.form_template",
+          "allow_empty": false,
           "required": true
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Lever text value.",
+          "maps_to": "record.text",
+          "allow_empty": false
+        },
+        {
+          "name": "instructions",
+          "type": "string",
+          "summary": "Lever instructions value.",
+          "maps_to": "record.instructions",
+          "allow_empty": false
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "summary": "Lever group value.",
+          "maps_to": "record.group",
+          "allow_empty": false
+        },
+        {
+          "name": "secretbydefault",
+          "type": "boolean",
+          "summary": "Lever secretByDefault value.",
+          "maps_to": "record.secretByDefault"
+        },
+        {
+          "name": "field-id",
+          "type": "string",
+          "summary": "Identifier for the first template field.",
+          "maps_to": "record.fields.0.id",
+          "allow_empty": false
+        },
+        {
+          "name": "field-type",
+          "type": "string",
+          "summary": "Type for the first template field.",
+          "maps_to": "record.fields.0.type",
+          "allow_empty": false
+        },
+        {
+          "name": "field-text",
+          "type": "string",
+          "summary": "Text label for the first template field.",
+          "maps_to": "record.fields.0.text",
+          "allow_empty": false
+        },
+        {
+          "name": "field-required",
+          "type": "boolean",
+          "summary": "Whether the first template field is required.",
+          "maps_to": "record.fields.0.required"
+        },
+        {
+          "name": "field-description",
+          "type": "string",
+          "summary": "Description for the first template field.",
+          "maps_to": "record.fields.0.description",
+          "allow_empty": false
+        },
+        {
+          "name": "field-prompt",
+          "type": "string",
+          "summary": "Prompt for the first template field.",
+          "maps_to": "record.fields.0.prompt",
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm lever-hiring update form template apply --plan \u003cplan-name\u003e"
+        "pm lever-hiring update-form-template plan --preview --json"
       ],
       "api_surface": [
         {
@@ -2338,7 +2766,7 @@
         }
       ],
       "risk": "Updates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute."
     },
     {
       "path": "users list",
@@ -2346,6 +2774,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "users",
+      "source_url": "https://hire.lever.co/developer/documentation",
       "examples": [
         "pm lever-hiring users list --json --limit 25"
       ],

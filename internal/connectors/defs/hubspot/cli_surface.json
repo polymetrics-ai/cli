@@ -3141,6 +3141,26 @@
       ]
     }
   ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential profile name; never pass secret values as flags.",
+      "maps_to": "config.credential",
+      "allow_empty": false
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records or items to request when a future typed command supports pagination.",
+      "maps_to": "query.limit"
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Render machine-readable output for future implemented commands."
+    }
+  ],
   "commands": [
     {
       "path": "api delete app-webhooks 2025-09 appid settings",

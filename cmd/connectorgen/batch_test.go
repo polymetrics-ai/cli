@@ -1881,19 +1881,25 @@ func TestMaterializeCLISurfacePreservesExistingWriteContractAndPropagatesRedacti
 			}`),
 			RedactFields: []string{"action_secret", "receipt_handle"},
 		}},
-		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
-			Path:         "message change-visibility",
-			Intent:       "reverse_etl",
-			Availability: "implemented",
-			Write:        "change_visibility",
-			Flags: []engine.CLIFlag{
-				{Name: "receipt-handle", Type: "string", MapsTo: "record.receipt_handle", Required: true},
-				{Name: "visibility-timeout", Type: "integer", MapsTo: "record.visibility_timeout", Required: true},
-				{Name: "legacy-only", Type: "string", MapsTo: "record.legacy_only"},
+		CLISurface: &engine.CLISurface{
+			GlobalFlags: []engine.CLIFlag{
+				{Name: "limit", Type: "integer", Summary: "Cap emitted records."},
+				{Name: "preview", Type: "boolean", Summary: "Preview without mutating."},
 			},
-			RedactFields: []string{"existing_secret", "receipt_handle"},
-			Examples:     []string{"pm acme message change-visibility --receipt-handle receipt --visibility-timeout 30 --legacy-only value --preview"},
-		}}},
+			Commands: []engine.CLICommand{{
+				Path:         "message change-visibility",
+				Intent:       "reverse_etl",
+				Availability: "implemented",
+				Write:        "change_visibility",
+				Flags: []engine.CLIFlag{
+					{Name: "receipt-handle", Type: "string", MapsTo: "record.receipt_handle", Required: true},
+					{Name: "visibility-timeout", Type: "integer", MapsTo: "record.visibility_timeout", Required: true},
+					{Name: "legacy-only", Type: "string", MapsTo: "record.legacy_only"},
+				},
+				RedactFields: []string{"existing_secret", "receipt_handle"},
+				Examples:     []string{"pm acme message change-visibility --receipt-handle receipt --visibility-timeout 30 --legacy-only value --preview"},
+			}},
+		},
 	}
 	surface := engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
 		Method:    http.MethodPost,
@@ -1924,6 +1930,36 @@ func TestMaterializeCLISurfacePreservesExistingWriteContractAndPropagatesRedacti
 	}
 	if got, want := command.Examples, []string{"pm acme message change-visibility --receipt-handle receipt --visibility-timeout 30 --legacy-only value --preview"}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("command examples = %v, want retained runnable example %v", got, want)
+	}
+	if got, want := cli.GlobalFlags, []engine.CLIFlag{
+		{Name: "limit", Type: "integer", Summary: "Cap emitted records."},
+		{Name: "preview", Type: "boolean", Summary: "Preview without mutating."},
+	}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("global flags = %+v, want retained connector contract %+v", got, want)
+	}
+}
+
+func TestMaterializeRetainedWriteFlagsKeepsSpellingAndCompletesRequiredBinding(t *testing.T) {
+	action := engine.WriteAction{
+		Name: "change_visibility",
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["receipt_handle"],
+			"properties": {"receipt_handle": {"type": "string"}}
+		}`),
+	}
+	flags, err := materializedRetainedWriteFlags(action, []engine.CLIFlag{
+		{Name: "receipt-handle", Type: "string", MapsTo: "record.receipt_handle"},
+		{Name: "legacy-only", Type: "string", MapsTo: "record.legacy_only"},
+	})
+	if err != nil {
+		t.Fatalf("materializedRetainedWriteFlags: %v", err)
+	}
+	if got, want := flags, []engine.CLIFlag{
+		{Name: "receipt-handle", Type: "string", MapsTo: "record.receipt_handle", Required: true},
+		{Name: "legacy-only", Type: "string", MapsTo: "record.legacy_only"},
+	}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("retained flags = %+v, want preserved spelling plus required binding %+v", got, want)
 	}
 }
 

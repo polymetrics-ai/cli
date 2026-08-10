@@ -178,3 +178,84 @@ isolated GSD roles are unavailable in this single-worker recovery lane. Required
 `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`,
 `golang-safety`, `golang-documentation`, `golang-design-patterns`, and
 `golang-structs-interfaces`.
+
+## Full audited-corpus command-surface regeneration (2026-08-10)
+
+**Superseding captain decision:** the earlier two-connector artifact scope is expanded to every
+finding in the post-fix audit. Seven observed established-command flag regressions and seven
+observed one-sided redaction gaps are not shippable: the former can break an already working
+command and the latter can expose a field declared secret. The generated output is not patched
+by hand.
+
+**Red:** the 552-bundle audit reports six remaining connectors with 270 established flag spelling
+changes across 196 reverse-ETL commands (Bitbucket, Chatwoot, Freshchat, Gorgias, Jira, and Lever
+Hiring), plus six remaining connector families with action redactions absent from 146 generated
+commands (Freshchat, Mailchimp, Recurly, Stripe, Xero, and Zendesk Support). The named Amazon SQS
+and Google Search Console cases are already covered by the same generator regression.
+
+**Green plan:** retain the full pre-sweep command contract only where a command existed before
+materialization; use the current endpoint/operation inventory for its refreshed references; and
+run the repaired materializer to regenerate every affected CLI surface. For a newly materialized
+command, derive its flags normally but always union `WriteAction.RedactFields` into the command.
+Regenerate the complete affected corpus through `connectorgen`, run the baseline-contract and
+write-redaction audits across all 552 bundles, and require both counts to be zero. Then run
+surface-sync, focused command/connector tests, validation, and the relevant verify gates before
+pushing. The GSD lifecycle remains the documented inline/manual fallback; required skills remain
+the Go CLI/testing/security set listed above.
+
+## Verify CLI registry reuse after corpus growth (2026-08-10)
+
+The hosted Verify log establishes a real post-sweep gate failure: `internal/cli` exceeded its
+20-minute package timeout while the Bahmni command matrix repeatedly constructed the complete
+552-bundle registry. The matrix is a useful end-to-end contract; weakening it or raising its
+timeout would conceal the same production startup cost for every connector invocation.
+
+**Red:** `TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked` reconstructs the
+immutable embedded registry for every help and preflight invocation, and the hosted full package
+times out with the test still active. The definitions are embedded and validated once per process,
+so this repeated parsing has no semantic benefit.
+
+**Green plan:** cache only the loaded immutable bundle slice inside `bundleregistry`, while still
+constructing a fresh `connectors.Registry` and fresh engine connector wrappers for each caller.
+The cache test must prove the loader runs once and that callers receive independent slice headers;
+the existing registry and CLI matrix tests then prove native overlays and command behavior remain
+unchanged. Run the focused registry/CLI tests, then the full CLI package and hosted Verify. This
+is an inline/manual GSD fallback under the existing lifecycle and uses `golang-how-to`,
+`golang-cli`, `golang-testing`, `golang-performance`, `golang-safety`, and
+`golang-structs-interfaces`.
+
+## Derived full-surface CLI expectations (2026-08-10)
+
+The now-completing CLI package exposes two stale derived expectations rather than a runtime
+failure. The exact four GitLab ETL streams remain executable, while the 1,741 other cited
+provider endpoints are deliberately visible as `not_implemented` operation rows. The root manual
+golden likewise predates the 552-connector catalog.
+
+**Red:** `TestGitLabCommandSurfaceAdvertisesOnlyCitedReadCommands` asserts a total command count
+of four despite `api_surface.json` containing 1,745 cited endpoints (four stream-backed plus
+1,741 honest operation rows). `TestGoldenTranscripts` reports the old limited connector catalog
+instead of the generated 552-connector root manual.
+
+**Green plan:** retain exact assertions for the four executable GitLab streams and prove every
+remaining command is a one-endpoint, operation-backed, `not_implemented` row; derive the total
+from the API surface rather than hand-maintaining a magic count. Regenerate the golden transcript
+with its documented test writer, inspect the generated diff, then rerun the focused tests and the
+full CLI package. This follows the same inline/manual GSD fallback and uses `golang-cli`,
+`golang-testing`, `golang-documentation`, and `golang-safety`.
+
+## Connector-wide global-flag contract preservation (2026-08-10)
+
+The regenerated whole-corpus comparison against `f96a47e80` revealed eleven additional existing
+surfaces whose `global_flags` arrays had been removed by the same replacement path: Bitbucket,
+Freshchat, GitLab, Gmail, Google Search Console, Help Scout, HubSpot, Jira, Lever Hiring, Stripe,
+and Xero. These are public namespace/help contracts, including credential, output, paging, and
+reverse-ETL controls.
+
+**Red:** `materializeCLISurface` reconstructs a new surface without copying
+`bundle.CLISurface.GlobalFlags`, so any materialization silently erases those accepted flags.
+
+**Green plan:** retain a copied global-flag slice whenever a source CLI surface exists; extend the
+focused materializer regression to assert it; regenerate each affected surface through
+`connectorgen batch materialize` from the preserved pre-sweep source contract and current endpoint
+inventory. A complete `f96a47e80` comparison must report zero global-flag differences alongside
+the required zero spelling and redaction counts.

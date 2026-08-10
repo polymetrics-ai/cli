@@ -39,3 +39,25 @@ surface. This covers flag spelling, optional fields, examples, approval metadata
 rather than addressing only the two visible artifacts. A read-only corpus audit must report any
 remaining spelling or redaction drift before merge; it does not authorize mutating those other
 connectors in this narrow repair.
+
+## Full audited-corpus regeneration decision (2026-08-10)
+
+The captain superseded the narrow-repair boundary after the audit established six further
+flag-contract regressions and six further action-to-command redaction gaps. The generator is now
+the only authorized repair point: regenerate every affected command surface from its preserved
+pre-sweep command contract where one exists, refresh provider references from the current bundle,
+and union every declared write-action redaction. Do not hand-edit the fourteen observed artifact
+instances or accept any remaining audit finding. Completion requires both whole-corpus counts to
+be exactly zero: changed established flag spellings and action redactions absent from their
+matching command surfaces.
+
+## Complete existing command-contract preservation (2026-08-10)
+
+The post-regeneration comparison against the accepted `f96a47e80` baseline exposed a third
+instance of the same materializer loss: eleven existing connector surfaces had their complete
+`global_flags` contract removed. These flags include credential, output, pagination, and
+reverse-ETL approval controls, so leaving them absent would violate the standing no-regression
+constraint even though the requested two audits were already clean. The decision is fixed: use
+the repaired generator with the preserved pre-sweep command surface for all eleven, then replace
+only its generated output. Completion requires three zero-count audits: flag spelling,
+write-action redaction propagation, and baseline global-flag contract equality.

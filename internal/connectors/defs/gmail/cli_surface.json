@@ -94,12 +94,30 @@
       ]
     }
   ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Gmail request."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum direct-read response bytes."
+    }
+  ],
   "commands": [
     {
       "path": "api delete users userid settings cse identities cseemailaddress",
       "summary": "Documented DELETE /users/{userId}/settings/cse/identities/{cseEmailAddress} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api delete users userid settings cse identities cseemailaddress --help"
       ],
@@ -119,6 +137,7 @@
       "summary": "Documented GET /users/{userId}/settings/cse/identities (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api get users userid settings cse identities --help"
       ],
@@ -138,6 +157,7 @@
       "summary": "Documented GET /users/{userId}/settings/cse/identities/{cseEmailAddress} (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api get users userid settings cse identities cseemailaddress --help"
       ],
@@ -157,6 +177,7 @@
       "summary": "Documented GET /users/{userId}/settings/cse/keypairs (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api get users userid settings cse keypairs --help"
       ],
@@ -176,6 +197,7 @@
       "summary": "Documented GET /users/{userId}/settings/cse/keypairs/{keyPairId} (not implemented)",
       "intent": "direct_read",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api get users userid settings cse keypairs keypairid --help"
       ],
@@ -195,6 +217,7 @@
       "summary": "Documented PATCH /users/{userId}/settings/cse/identities/{emailAddress} (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api patch users userid settings cse identities emailaddress --help"
       ],
@@ -214,6 +237,7 @@
       "summary": "Documented POST /users/{userId}/messages/batchDelete (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api post users userid messages batchdelete --help"
       ],
@@ -233,6 +257,7 @@
       "summary": "Documented POST /users/{userId}/messages/batchModify (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api post users userid messages batchmodify --help"
       ],
@@ -252,6 +277,7 @@
       "summary": "Documented POST /users/{userId}/settings/cse/identities (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api post users userid settings cse identities --help"
       ],
@@ -271,6 +297,7 @@
       "summary": "Documented POST /users/{userId}/settings/cse/keypairs (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api post users userid settings cse keypairs --help"
       ],
@@ -290,6 +317,7 @@
       "summary": "Documented POST /users/{userId}/settings/cse/keypairs/{keyPairId}:disable (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api post users userid settings cse keypairs keypairid disable --help"
       ],
@@ -309,6 +337,7 @@
       "summary": "Documented POST /users/{userId}/settings/cse/keypairs/{keyPairId}:enable (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api post users userid settings cse keypairs keypairid enable --help"
       ],
@@ -328,6 +357,7 @@
       "summary": "Documented POST /users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate (not implemented)",
       "intent": "direct_write",
       "availability": "not_implemented",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail api post users userid settings cse keypairs keypairid obliterate --help"
       ],
@@ -348,6 +378,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "delegates",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail delegates list --json --limit 25"
       ],
@@ -364,6 +395,7 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "create_draft",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "api_surface": [
         {
           "method": "POST",
@@ -380,17 +412,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_draft",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail delete draft apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -399,7 +429,7 @@
         }
       ],
       "risk": "permanently deletes a draft; irreversible",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "drafts get",
@@ -432,6 +462,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "drafts",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail drafts list --json --limit 25"
       ],
@@ -448,17 +479,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "send_draft",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "The draft ID to send (Gmail's drafts.send accepts { \"id\": \"\u003cdraftId\u003e\" } as its full request body).",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail send draft apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -467,7 +496,7 @@
         }
       ],
       "risk": "sends a real outbound email from an existing draft on behalf of the mailbox owner; irreversible once delivered",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "drafts update",
@@ -475,6 +504,7 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "update_draft",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
@@ -499,6 +529,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "filters",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail filters list --json --limit 25"
       ],
@@ -515,6 +546,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "forwarding_addresses",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail forwarding-addresses list --json --limit 25"
       ],
@@ -531,6 +563,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "history",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail history list --json --limit 25"
       ],
@@ -547,17 +580,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_label",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "name",
           "type": "string",
-          "summary": "Required name record field.",
+          "summary": "name value",
           "maps_to": "record.name",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail create label apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -566,7 +597,7 @@
         }
       ],
       "risk": "creates a new custom label visible in the mailbox owner's label list",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "labels delete",
@@ -574,17 +605,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_label",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail delete label apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -593,7 +622,7 @@
         }
       ],
       "risk": "removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "labels get",
@@ -626,6 +655,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "labels",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail labels list --json --limit 25"
       ],
@@ -642,17 +672,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "patch_label",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail patch label apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -661,7 +689,7 @@
         }
       ],
       "risk": "partially updates an existing label's fields, leaving unset fields unchanged",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "labels update",
@@ -669,24 +697,22 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_label",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         },
         {
           "name": "name",
           "type": "string",
-          "summary": "Required name record field.",
+          "summary": "name value",
           "maps_to": "record.name",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail update label apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -695,7 +721,7 @@
         }
       ],
       "risk": "replaces the full definition of an existing label (name/visibility/color); a system label's name cannot actually be changed by Gmail even though the request is accepted",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "messages attachments download",
@@ -735,17 +761,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_message",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail delete message apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -754,7 +778,7 @@
         }
       ],
       "risk": "permanently deletes a message immediately, bypassing Trash; irreversible",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute; destructive confirmation required"
     },
     {
       "path": "messages get",
@@ -787,17 +811,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "import_message",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "raw",
           "type": "string",
-          "summary": "Required raw record field.",
+          "summary": "Entire RFC 2822 message, base64url-encoded.",
           "maps_to": "record.raw",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail import message apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -806,7 +828,7 @@
         }
       ],
       "risk": "imports a message into the mailbox from an external mail migration source, bypassing spam classification by default",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "messages insert",
@@ -814,17 +836,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "insert_message",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "raw",
           "type": "string",
-          "summary": "Required raw record field.",
+          "summary": "Entire RFC 2822 message, base64url-encoded.",
           "maps_to": "record.raw",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail insert message apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -833,7 +853,7 @@
         }
       ],
       "risk": "inserts a message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still a real, visible mailbox mutation",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "messages list",
@@ -841,6 +861,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "messages",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail messages list --json --limit 25"
       ],
@@ -857,17 +878,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "modify_message",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail modify message apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -876,7 +895,7 @@
         }
       ],
       "risk": "changes label state on an existing message (e.g. moving in/out of INBOX/TRASH/UNREAD), visible to the mailbox owner",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "messages send",
@@ -884,17 +903,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "send_message",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "raw",
           "type": "string",
-          "summary": "Required raw record field.",
+          "summary": "Entire RFC 2822 message, base64url-encoded, including headers and MIME body.",
           "maps_to": "record.raw",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail send message apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -903,7 +920,7 @@
         }
       ],
       "risk": "sends a real outbound email on behalf of the mailbox owner; irreversible once delivered",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "messages trash",
@@ -911,17 +928,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "trash_message",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail trash message apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -930,7 +945,7 @@
         }
       ],
       "risk": "moves a message to Trash; auto-purged by Gmail after 30 days",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "messages untrash",
@@ -938,17 +953,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "untrash_message",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail untrash message apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -957,7 +970,7 @@
         }
       ],
       "risk": "restores a trashed message back to its prior labels",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "profile list",
@@ -965,6 +978,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "profile",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail profile list --json --limit 25"
       ],
@@ -981,6 +995,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "send_as",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail send-as list --json --limit 25"
       ],
@@ -1014,17 +1029,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_auto_forwarding",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "enabled",
           "type": "boolean",
-          "summary": "Required enabled record field.",
+          "summary": "enabled value",
           "maps_to": "record.enabled",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail update auto forwarding apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1033,7 +1046,7 @@
         }
       ],
       "risk": "changes the account-wide auto-forwarding singleton; when enabled, silently copies all future incoming mail to an external address",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings delegates create",
@@ -1041,17 +1054,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_delegate",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "delegateEmail",
           "type": "string",
-          "summary": "Required delegateEmail record field.",
+          "summary": "delegateEmail value",
           "maps_to": "record.delegateEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail create delegate apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1060,7 +1071,7 @@
         }
       ],
       "risk": "grants another account read/send/delete access to this mailbox (Google Workspace accounts only); a significant access-control change",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings delegates delete",
@@ -1068,17 +1079,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_delegate",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "delegateEmail",
           "type": "string",
-          "summary": "Required delegateEmail record field.",
+          "summary": "delegateEmail value",
           "maps_to": "record.delegateEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail delete delegate apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1087,7 +1096,7 @@
         }
       ],
       "risk": "revokes another account's delegated access to this mailbox",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings delegates get",
@@ -1120,6 +1129,7 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "create_filter",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "api_surface": [
         {
           "method": "POST",
@@ -1136,17 +1146,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_filter",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail delete filter apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1155,7 +1163,7 @@
         }
       ],
       "risk": "removes an existing mail filter; future messages stop being auto-actioned by it",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings filters get",
@@ -1188,17 +1196,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_forwarding_address",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "forwardingEmail",
           "type": "string",
-          "summary": "Required forwardingEmail record field.",
+          "summary": "forwardingEmail value",
           "maps_to": "record.forwardingEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail create forwarding address apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1207,7 +1213,7 @@
         }
       ],
       "risk": "proposes a new external forwarding address; Google emails a verification link before it can be used by update_auto_forwarding",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings forwarding-addresses delete",
@@ -1215,17 +1221,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_forwarding_address",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "forwardingEmail",
           "type": "string",
-          "summary": "Required forwardingEmail record field.",
+          "summary": "forwardingEmail value",
           "maps_to": "record.forwardingEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail delete forwarding address apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1234,7 +1238,7 @@
         }
       ],
       "risk": "removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings forwarding-addresses get",
@@ -1284,9 +1288,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_imap",
-      "examples": [
-        "pm gmail update imap apply --plan \u003cplan-name\u003e"
-      ],
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "api_surface": [
         {
           "method": "PUT",
@@ -1294,7 +1296,7 @@
         }
       ],
       "risk": "changes the account-wide IMAP-access singleton; disabling breaks any external IMAP client currently connected",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings language get",
@@ -1319,17 +1321,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_language",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "displayLanguage",
           "type": "string",
-          "summary": "Required displayLanguage record field.",
+          "summary": "displayLanguage value",
           "maps_to": "record.displayLanguage",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail update language apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1338,7 +1338,7 @@
         }
       ],
       "risk": "changes the Gmail web interface display language for the account",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings pop get",
@@ -1363,9 +1363,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_pop",
-      "examples": [
-        "pm gmail update pop apply --plan \u003cplan-name\u003e"
-      ],
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "api_surface": [
         {
           "method": "PUT",
@@ -1373,7 +1371,7 @@
         }
       ],
       "risk": "changes the account-wide POP-access singleton, including what happens to mail after it is fetched via POP",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings send-as create",
@@ -1381,17 +1379,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_send_as",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "sendAsEmail",
           "type": "string",
-          "summary": "Required sendAsEmail record field.",
+          "summary": "sendAsEmail value",
           "maps_to": "record.sendAsEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail create send as apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1400,7 +1396,7 @@
         }
       ],
       "risk": "adds a new custom From: alias; Google emails a verification link to the new address before it can send mail",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings send-as delete",
@@ -1408,17 +1404,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_send_as",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "sendAsEmail",
           "type": "string",
-          "summary": "Required sendAsEmail record field.",
+          "summary": "sendAsEmail value",
           "maps_to": "record.sendAsEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail delete send as apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1427,7 +1421,7 @@
         }
       ],
       "risk": "removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request)",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings send-as get",
@@ -1460,17 +1454,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "patch_send_as",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "sendAsEmail",
           "type": "string",
-          "summary": "Required sendAsEmail record field.",
+          "summary": "sendAsEmail value",
           "maps_to": "record.sendAsEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail patch send as apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1479,7 +1471,7 @@
         }
       ],
       "risk": "partially updates an existing send-as alias, leaving unset fields unchanged",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings send-as smime delete",
@@ -1487,24 +1479,22 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_smime_info",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         },
         {
           "name": "sendAsEmail",
           "type": "string",
-          "summary": "Required sendAsEmail record field.",
+          "summary": "sendAsEmail value",
           "maps_to": "record.sendAsEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail delete smime info apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1513,7 +1503,7 @@
         }
       ],
       "risk": "high: delete_smime_info",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute; destructive confirmation required"
     },
     {
       "path": "settings send-as smime get",
@@ -1552,17 +1542,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "insert_smime_info",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "sendAsEmail",
           "type": "string",
-          "summary": "Required sendAsEmail record field.",
+          "summary": "sendAsEmail value",
           "maps_to": "record.sendAsEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail insert smime info apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1571,7 +1559,7 @@
         }
       ],
       "risk": "high: insert_smime_info",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings send-as smime list",
@@ -1604,24 +1592,22 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "set_default_smime_info",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         },
         {
           "name": "sendAsEmail",
           "type": "string",
-          "summary": "Required sendAsEmail record field.",
+          "summary": "sendAsEmail value",
           "maps_to": "record.sendAsEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail set default smime info apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1630,7 +1616,7 @@
         }
       ],
       "risk": "high: set_default_smime_info",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings send-as update",
@@ -1638,17 +1624,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_send_as",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "sendAsEmail",
           "type": "string",
-          "summary": "Required sendAsEmail record field.",
+          "summary": "sendAsEmail value",
           "maps_to": "record.sendAsEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail update send as apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1657,7 +1641,7 @@
         }
       ],
       "risk": "replaces the full send-as alias configuration, including which alias is the account default",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings send-as verify",
@@ -1665,17 +1649,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "verify_send_as",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "sendAsEmail",
           "type": "string",
-          "summary": "Required sendAsEmail record field.",
+          "summary": "sendAsEmail value",
           "maps_to": "record.sendAsEmail",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail verify send as apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1684,7 +1666,7 @@
         }
       ],
       "risk": "re-sends the verification email for a pending custom From: alias",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "settings vacation get",
@@ -1709,9 +1691,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_vacation",
-      "examples": [
-        "pm gmail update vacation apply --plan \u003cplan-name\u003e"
-      ],
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "api_surface": [
         {
           "method": "PUT",
@@ -1719,7 +1699,7 @@
         }
       ],
       "risk": "changes the account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the configured message",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "threads delete",
@@ -1727,17 +1707,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_thread",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail delete thread apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1746,7 +1724,7 @@
         }
       ],
       "risk": "permanently deletes every message in a thread immediately, bypassing Trash; irreversible",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute; destructive confirmation required"
     },
     {
       "path": "threads get",
@@ -1779,6 +1757,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "threads",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "examples": [
         "pm gmail threads list --json --limit 25"
       ],
@@ -1795,17 +1774,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "modify_thread",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail modify thread apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1814,7 +1791,7 @@
         }
       ],
       "risk": "changes label state on every message in an existing thread",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "threads trash",
@@ -1822,17 +1799,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "trash_thread",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail trash thread apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1841,7 +1816,7 @@
         }
       ],
       "risk": "moves an entire thread to Trash; auto-purged by Gmail after 30 days",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "threads untrash",
@@ -1849,17 +1824,15 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "untrash_thread",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Required id record field.",
+          "summary": "id value",
           "maps_to": "record.id",
           "required": true
         }
-      ],
-      "examples": [
-        "pm gmail untrash thread apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
@@ -1868,7 +1841,7 @@
         }
       ],
       "risk": "restores a trashed thread back to its prior labels",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "watch start",
@@ -1876,9 +1849,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "watch_mailbox",
-      "examples": [
-        "pm gmail watch mailbox apply --plan \u003cplan-name\u003e"
-      ],
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "api_surface": [
         {
           "method": "POST",
@@ -1886,7 +1857,7 @@
         }
       ],
       "risk": "high: watch_mailbox",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     },
     {
       "path": "watch stop",
@@ -1894,9 +1865,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "stop_mailbox_watch",
-      "examples": [
-        "pm gmail stop mailbox watch apply --plan \u003cplan-name\u003e"
-      ],
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "api_surface": [
         {
           "method": "POST",
@@ -1904,7 +1873,7 @@
         }
       ],
       "risk": "high: stop_mailbox_watch",
-      "approval": "requires plan, preview, approval, and execute"
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute"
     }
   ]
 }

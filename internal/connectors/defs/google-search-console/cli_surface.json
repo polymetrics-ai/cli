@@ -8,14 +8,14 @@
       "commands": [
         "direct mobile-friendly-test run",
         "direct url-inspection inspect",
-        "search analytics by country list",
-        "search analytics by date list",
-        "search analytics by device list",
-        "search analytics by page list",
-        "search analytics by query list",
-        "site details list",
-        "sitemap details list",
+        "search-analytics by-country",
+        "search-analytics by-date",
+        "search-analytics by-device",
+        "search-analytics by-page",
+        "search-analytics by-query",
+        "sitemaps get",
         "sitemaps list",
+        "sites get",
         "sites list"
       ]
     },
@@ -28,6 +28,58 @@
         "sites add",
         "sites delete"
       ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Google Search Console request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum PM ETL records to emit; does not control Search Console rowLimit."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum direct-read response bytes; typed operations are capped at 16 MiB and each Google Search Console operation declares a lower limit."
+    },
+    {
+      "name": "plan",
+      "type": "string",
+      "summary": "Execute an approved reverse-ETL plan by id."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive reverse-ETL writes."
     }
   ],
   "commands": [
@@ -118,14 +170,14 @@
       "risk": "low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL-shaped fields"
     },
     {
-      "path": "search analytics by country list",
-      "summary": "Run the search analytics by country ETL stream",
+      "path": "search-analytics by-country",
+      "summary": "Read Search Analytics rows grouped by date and country.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_country",
       "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "examples": [
-        "pm google-search-console search analytics by country list --json"
+        "pm google-search-console search-analytics by-country --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
       ],
       "api_surface": [
         {
@@ -135,14 +187,14 @@
       ]
     },
     {
-      "path": "search analytics by date list",
-      "summary": "Run the search analytics by date ETL stream",
+      "path": "search-analytics by-date",
+      "summary": "Read Search Analytics rows grouped by date.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_date",
       "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "examples": [
-        "pm google-search-console search analytics by date list --json"
+        "pm google-search-console search-analytics by-date --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
       ],
       "api_surface": [
         {
@@ -152,14 +204,14 @@
       ]
     },
     {
-      "path": "search analytics by device list",
-      "summary": "Run the search analytics by device ETL stream",
+      "path": "search-analytics by-device",
+      "summary": "Read Search Analytics rows grouped by date and device.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_device",
       "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "examples": [
-        "pm google-search-console search analytics by device list --json"
+        "pm google-search-console search-analytics by-device --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
       ],
       "api_surface": [
         {
@@ -169,14 +221,14 @@
       ]
     },
     {
-      "path": "search analytics by page list",
-      "summary": "Run the search analytics by page ETL stream",
+      "path": "search-analytics by-page",
+      "summary": "Read Search Analytics rows grouped by date and page.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_page",
       "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "examples": [
-        "pm google-search-console search analytics by page list --json"
+        "pm google-search-console search-analytics by-page --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
       ],
       "api_surface": [
         {
@@ -186,53 +238,19 @@
       ]
     },
     {
-      "path": "search analytics by query list",
-      "summary": "Run the search analytics by query ETL stream",
+      "path": "search-analytics by-query",
+      "summary": "Read Search Analytics rows grouped by date and query.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_query",
       "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "examples": [
-        "pm google-search-console search analytics by query list --json"
+        "pm google-search-console search-analytics by-query --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
       ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query"
-        }
-      ]
-    },
-    {
-      "path": "site details list",
-      "summary": "Run the site details ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "site_details",
-      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
-      "examples": [
-        "pm google-search-console site details list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/webmasters/v3/sites/{siteUrl}"
-        }
-      ]
-    },
-    {
-      "path": "sitemap details list",
-      "summary": "Run the sitemap details ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "sitemap_details",
-      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
-      "examples": [
-        "pm google-search-console sitemap details list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"
         }
       ]
     },
@@ -242,28 +260,25 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_sitemap",
+      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "site-url",
           "type": "string",
           "summary": "Search Console site property URL or sc-domain property.",
           "maps_to": "record.site_url",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "feedpath",
           "type": "string",
           "summary": "Sitemap feed URL/path to delete.",
           "maps_to": "record.feedpath",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
-      "redact_fields": [
-        "feedpath",
-        "site_url"
-      ],
-      "risk": "high: deletes a sitemap from a Search Console site property; requires reverse ETL plan, approval, and destructive confirmation",
-      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e typed destructive confirmation -\u003e execute. Missing provider records are idempotent for HTTP 404.",
       "examples": [
         "pm google-search-console sitemaps delete --credential gsc-prod --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"
       ],
@@ -273,17 +288,39 @@
           "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"
         }
       ],
-      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1"
+      "redact_fields": [
+        "feedpath",
+        "site_url"
+      ],
+      "risk": "high: deletes a sitemap from a Search Console site property; requires reverse ETL plan, approval, and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e typed destructive confirmation -\u003e execute. Missing provider records are idempotent for HTTP 404."
+    },
+    {
+      "path": "sitemaps get",
+      "summary": "Read one sitemap entry for a Search Console site property.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sitemap_details",
+      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-search-console sitemaps get --credential gsc-prod --config site_url=https://example.com/ --config feedpath=https://example.com/sitemap.xml --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"
+        }
+      ]
     },
     {
       "path": "sitemaps list",
-      "summary": "Run the sitemaps ETL stream",
+      "summary": "List sitemap entries for configured Search Console site properties.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "sitemaps",
       "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "examples": [
-        "pm google-search-console sitemaps list --json"
+        "pm google-search-console sitemaps list --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
       ],
       "api_surface": [
         {
@@ -298,28 +335,25 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "submit_sitemap",
+      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "site-url",
           "type": "string",
           "summary": "Search Console site property URL or sc-domain property.",
           "maps_to": "record.site_url",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "feedpath",
           "type": "string",
           "summary": "Sitemap feed URL/path to submit.",
           "maps_to": "record.feedpath",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
-      "redact_fields": [
-        "feedpath",
-        "site_url"
-      ],
-      "risk": "medium: submits a sitemap URL for a Search Console site property; requires reverse ETL plan and approval",
-      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. No raw HTTP body is accepted; the record must match writes.json.",
       "examples": [
         "pm google-search-console sitemaps submit --credential gsc-prod --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"
       ],
@@ -329,7 +363,12 @@
           "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"
         }
       ],
-      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1"
+      "redact_fields": [
+        "feedpath",
+        "site_url"
+      ],
+      "risk": "medium: submits a sitemap URL for a Search Console site property; requires reverse ETL plan and approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. No raw HTTP body is accepted; the record must match writes.json."
     },
     {
       "path": "sites add",
@@ -337,20 +376,17 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_site",
+      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "site-url",
           "type": "string",
           "summary": "Search Console site property URL or sc-domain property.",
           "maps_to": "record.site_url",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
-      "redact_fields": [
-        "site_url"
-      ],
-      "risk": "medium: adds a site property to the authenticated Search Console account; requires reverse ETL plan and approval",
-      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. No raw HTTP body is accepted; the record must match writes.json.",
       "examples": [
         "pm google-search-console sites add --credential gsc-prod --site-url https://example.com/ --preview --json"
       ],
@@ -360,7 +396,11 @@
           "path": "/webmasters/v3/sites/{siteUrl}"
         }
       ],
-      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1"
+      "redact_fields": [
+        "site_url"
+      ],
+      "risk": "medium: adds a site property to the authenticated Search Console account; requires reverse ETL plan and approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. No raw HTTP body is accepted; the record must match writes.json."
     },
     {
       "path": "sites delete",
@@ -368,20 +408,17 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_site",
+      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "flags": [
         {
           "name": "site-url",
           "type": "string",
           "summary": "Search Console site property URL or sc-domain property.",
           "maps_to": "record.site_url",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
-      "redact_fields": [
-        "site_url"
-      ],
-      "risk": "high: removes a site property from the authenticated Search Console account; requires reverse ETL plan, approval, and destructive confirmation",
-      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e typed destructive confirmation -\u003e execute. Missing provider records are idempotent for HTTP 404.",
       "examples": [
         "pm google-search-console sites delete --credential gsc-prod --site-url https://example.com/ --preview --json"
       ],
@@ -391,17 +428,38 @@
           "path": "/webmasters/v3/sites/{siteUrl}"
         }
       ],
-      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1"
+      "redact_fields": [
+        "site_url"
+      ],
+      "risk": "high: removes a site property from the authenticated Search Console account; requires reverse ETL plan, approval, and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e typed destructive confirmation -\u003e execute. Missing provider records are idempotent for HTTP 404."
+    },
+    {
+      "path": "sites get",
+      "summary": "Read one verified Search Console site property as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "site_details",
+      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-search-console sites get --credential gsc-prod --config site_url=https://example.com/ --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webmasters/v3/sites/{siteUrl}"
+        }
+      ]
     },
     {
       "path": "sites list",
-      "summary": "Run the sites ETL stream",
+      "summary": "List verified Search Console site properties as ETL records.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "sites",
       "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
       "examples": [
-        "pm google-search-console sites list --json"
+        "pm google-search-console sites list --credential gsc-prod --json --limit 25"
       ],
       "api_surface": [
         {

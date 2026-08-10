@@ -6,9 +6,6 @@
       "id": "read",
       "title": "Read streams",
       "commands": [
-        "account attachments list",
-        "account list",
-        "accounts list",
         "api get accounts accountid attachments attachmentid",
         "api get accounts accountid attachments filename",
         "api get banktransactions banktransactionid attachments attachmentid",
@@ -35,13 +32,8 @@
         "api get receipts receiptid attachments filename",
         "api get repeatinginvoices repeatinginvoiceid attachments attachmentid",
         "api get repeatinginvoices repeatinginvoiceid attachments filename",
-        "bank transaction attachments list",
-        "bank transaction list",
-        "bank transactions history list",
-        "bank transactions list",
         "bank transfer attachments list",
         "bank transfer history list",
-        "bank transfer list",
         "bank transfers list",
         "batch payment history list",
         "batch payment list",
@@ -58,7 +50,6 @@
         "contact groups list",
         "contact history list",
         "contact list",
-        "contacts list",
         "credit note attachments list",
         "credit note history list",
         "credit note list",
@@ -71,10 +62,8 @@
         "invoice history list",
         "invoice list",
         "invoice reminders list",
-        "invoices list",
         "item history list",
         "item list",
-        "items list",
         "journal by number list",
         "journal list",
         "journals list",
@@ -94,7 +83,6 @@
         "payment history list",
         "payment list",
         "payment services list",
-        "payments list",
         "prepayment history list",
         "prepayment list",
         "prepayments list",
@@ -126,6 +114,18 @@
         "report ten ninety nine list",
         "report trial balance list",
         "reports list list",
+        "streams account",
+        "streams account_attachments",
+        "streams accounts",
+        "streams bank_transaction",
+        "streams bank_transaction_attachments",
+        "streams bank_transactions",
+        "streams bank_transactions_history",
+        "streams bank_transfer",
+        "streams contacts",
+        "streams invoices",
+        "streams items",
+        "streams payments",
         "tax rate by tax type list",
         "tax rates list",
         "tracking categories list",
@@ -250,58 +250,24 @@
       ]
     }
   ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Named Xero credential; secrets are loaded from the credential store and never from prompt text."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Clamp direct-read response size; report reads are capped by the operation definition."
+    }
+  ],
   "commands": [
-    {
-      "path": "account attachments list",
-      "summary": "Run the account attachments ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "account_attachments",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero account attachments list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/Accounts/{AccountID}/Attachments"
-        }
-      ]
-    },
-    {
-      "path": "account list",
-      "summary": "Run the account ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "account",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero account list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/Accounts/{AccountID}"
-        }
-      ]
-    },
-    {
-      "path": "accounts list",
-      "summary": "Run the accounts ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "accounts",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero accounts list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/Accounts"
-        }
-      ]
-    },
     {
       "path": "api get accounts accountid attachments attachmentid",
       "summary": "Documented GET /Accounts/{AccountID}/Attachments/{AttachmentID} (not implemented)",
@@ -1263,74 +1229,6 @@
       "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "bank transaction attachments list",
-      "summary": "Run the bank transaction attachments ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "bank_transaction_attachments",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero bank transaction attachments list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/BankTransactions/{BankTransactionID}/Attachments"
-        }
-      ]
-    },
-    {
-      "path": "bank transaction list",
-      "summary": "Run the bank transaction ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "bank_transaction",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero bank transaction list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/BankTransactions/{BankTransactionID}"
-        }
-      ]
-    },
-    {
-      "path": "bank transactions history list",
-      "summary": "Run the bank transactions history ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "bank_transactions_history",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero bank transactions history list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/BankTransactions/{BankTransactionID}/History"
-        }
-      ]
-    },
-    {
-      "path": "bank transactions list",
-      "summary": "Run the bank transactions ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "bank_transactions",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero bank transactions list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/BankTransactions"
-        }
-      ]
-    },
-    {
       "path": "bank transfer attachments list",
       "summary": "Run the bank transfer attachments ETL stream",
       "intent": "etl",
@@ -1361,23 +1259,6 @@
         {
           "method": "GET",
           "path": "/BankTransfers/{BankTransferID}/History"
-        }
-      ]
-    },
-    {
-      "path": "bank transfer list",
-      "summary": "Run the bank transfer ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "bank_transfer",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero bank transfer list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/BankTransfers/{BankTransferID}"
         }
       ]
     },
@@ -1654,23 +1535,6 @@
       ]
     },
     {
-      "path": "contacts list",
-      "summary": "Run the contacts ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "contacts",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero contacts list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/Contacts"
-        }
-      ]
-    },
-    {
       "path": "create account apply",
       "summary": "Plan and execute the create account reverse-ETL action",
       "intent": "reverse_etl",
@@ -1704,6 +1568,9 @@
           "method": "PUT",
           "path": "/BankTransactions/{BankTransactionID}/History"
         }
+      ],
+      "redact_fields": [
+        "bank_transaction_id"
       ],
       "risk": "creates Xero bank transaction history record resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -1763,6 +1630,9 @@
           "path": "/BankTransfers/{BankTransferID}/History"
         }
       ],
+      "redact_fields": [
+        "bank_transfer_id"
+      ],
       "risk": "creates Xero bank transfer history record resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
       "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
@@ -1802,6 +1672,9 @@
           "path": "/BatchPayments/{BatchPaymentID}/History"
         }
       ],
+      "redact_fields": [
+        "batch_payment_id"
+      ],
       "risk": "creates Xero batch payment history record resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
       "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
@@ -1830,6 +1703,9 @@
           "method": "POST",
           "path": "/BrandingThemes/{BrandingThemeID}/PaymentServices"
         }
+      ],
+      "redact_fields": [
+        "branding_theme_id"
       ],
       "risk": "creates Xero branding theme payment services resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -1878,6 +1754,9 @@
           "path": "/ContactGroups/{ContactGroupID}/Contacts"
         }
       ],
+      "redact_fields": [
+        "contact_group_id"
+      ],
       "risk": "creates Xero contact group contacts resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -1896,6 +1775,9 @@
           "method": "PUT",
           "path": "/Contacts/{ContactID}/History"
         }
+      ],
+      "redact_fields": [
+        "contact_id"
       ],
       "risk": "creates Xero contact history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -1945,6 +1827,9 @@
           "path": "/CreditNotes/{CreditNoteID}/Allocations"
         }
       ],
+      "redact_fields": [
+        "credit_note_id"
+      ],
       "risk": "creates Xero credit note allocation resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -1963,6 +1848,9 @@
           "method": "PUT",
           "path": "/CreditNotes/{CreditNoteID}/History"
         }
+      ],
+      "redact_fields": [
+        "credit_note_id"
       ],
       "risk": "creates Xero credit note history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -2022,6 +1910,9 @@
           "path": "/ExpenseClaims/{ExpenseClaimID}/History"
         }
       ],
+      "redact_fields": [
+        "expense_claim_id"
+      ],
       "risk": "creates Xero expense claim history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
       "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
@@ -2061,6 +1952,9 @@
           "path": "/Invoices/{InvoiceID}/History"
         }
       ],
+      "redact_fields": [
+        "invoice_id"
+      ],
       "risk": "creates Xero invoice history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
       "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
@@ -2099,6 +1993,9 @@
           "method": "PUT",
           "path": "/Items/{ItemID}/History"
         }
+      ],
+      "redact_fields": [
+        "item_id"
       ],
       "risk": "creates Xero item history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -2158,6 +2055,9 @@
           "path": "/ManualJournals/{ManualJournalID}/History"
         }
       ],
+      "redact_fields": [
+        "manual_journal_id"
+      ],
       "risk": "creates Xero manual journal history record resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
       "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
@@ -2206,6 +2106,9 @@
           "path": "/Overpayments/{OverpaymentID}/Allocations"
         }
       ],
+      "redact_fields": [
+        "overpayment_id"
+      ],
       "risk": "creates Xero overpayment allocations resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -2224,6 +2127,9 @@
           "method": "PUT",
           "path": "/Overpayments/{OverpaymentID}/History"
         }
+      ],
+      "redact_fields": [
+        "overpayment_id"
       ],
       "risk": "creates Xero overpayment history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -2263,6 +2169,9 @@
           "method": "PUT",
           "path": "/Payments/{PaymentID}/History"
         }
+      ],
+      "redact_fields": [
+        "payment_id"
       ],
       "risk": "creates Xero payment history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -2331,6 +2240,9 @@
           "path": "/Prepayments/{PrepaymentID}/Allocations"
         }
       ],
+      "redact_fields": [
+        "prepayment_id"
+      ],
       "risk": "creates Xero prepayment allocations resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -2349,6 +2261,9 @@
           "method": "PUT",
           "path": "/Prepayments/{PrepaymentID}/History"
         }
+      ],
+      "redact_fields": [
+        "prepayment_id"
       ],
       "risk": "creates Xero prepayment history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -2369,6 +2284,9 @@
           "method": "PUT",
           "path": "/PurchaseOrders/{PurchaseOrderID}/History"
         }
+      ],
+      "redact_fields": [
+        "purchase_order_id"
       ],
       "risk": "creates Xero purchase order history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -2408,6 +2326,9 @@
           "method": "PUT",
           "path": "/Quotes/{QuoteID}/History"
         }
+      ],
+      "redact_fields": [
+        "quote_id"
       ],
       "risk": "creates Xero quote history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -2467,6 +2388,9 @@
           "path": "/Receipts/{ReceiptID}/History"
         }
       ],
+      "redact_fields": [
+        "receipt_id"
+      ],
       "risk": "creates Xero receipt history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
       "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
@@ -2486,6 +2410,9 @@
           "method": "PUT",
           "path": "/RepeatingInvoices/{RepeatingInvoiceID}/History"
         }
+      ],
+      "redact_fields": [
+        "repeating_invoice_id"
       ],
       "risk": "creates Xero repeating invoice history resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -2572,6 +2499,9 @@
           "method": "PUT",
           "path": "/TrackingCategories/{TrackingCategoryID}/Options"
         }
+      ],
+      "redact_fields": [
+        "tracking_category_id"
       ],
       "risk": "creates Xero tracking options resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -2686,6 +2616,9 @@
           "path": "/Accounts/{AccountID}"
         }
       ],
+      "redact_fields": [
+        "account_id"
+      ],
       "risk": "deletes Xero account resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -2720,6 +2653,9 @@
           "method": "POST",
           "path": "/BankTransfers/{BankTransferID}"
         }
+      ],
+      "redact_fields": [
+        "bank_transfer_id"
       ],
       "risk": "Destructive Xero Accounting API action: sets a bank transfer to DELETED; reverse ETL must preview the resolved bank_transfer_id and require explicit approval before execute.",
       "approval": "requires plan, preview, approval, and execute"
@@ -2780,6 +2716,9 @@
           "path": "/BatchPayments/{BatchPaymentID}"
         }
       ],
+      "redact_fields": [
+        "batch_payment_id"
+      ],
       "risk": "deletes Xero batch payment by url param resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
       "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
@@ -2816,6 +2755,10 @@
           "path": "/ContactGroups/{ContactGroupID}/Contacts/{ContactID}"
         }
       ],
+      "redact_fields": [
+        "contact_group_id",
+        "contact_id"
+      ],
       "risk": "deletes Xero contact group contact resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -2843,6 +2786,9 @@
           "method": "DELETE",
           "path": "/ContactGroups/{ContactGroupID}/Contacts"
         }
+      ],
+      "redact_fields": [
+        "contact_group_id"
       ],
       "risk": "deletes Xero contact group contacts resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -2879,6 +2825,10 @@
           "path": "/CreditNotes/{CreditNoteID}/Allocations/{AllocationID}"
         }
       ],
+      "redact_fields": [
+        "allocation_id",
+        "credit_note_id"
+      ],
       "risk": "deletes Xero credit note allocations resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -2907,6 +2857,9 @@
           "path": "/Items/{ItemID}"
         }
       ],
+      "redact_fields": [
+        "item_id"
+      ],
       "risk": "deletes Xero item resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -2934,6 +2887,9 @@
           "method": "DELETE",
           "path": "/LinkedTransactions/{LinkedTransactionID}"
         }
+      ],
+      "redact_fields": [
+        "linked_transaction_id"
       ],
       "risk": "deletes Xero linked transaction resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -2970,6 +2926,10 @@
           "path": "/Overpayments/{OverpaymentID}/Allocations/{AllocationID}"
         }
       ],
+      "redact_fields": [
+        "allocation_id",
+        "overpayment_id"
+      ],
       "risk": "deletes Xero overpayment allocations resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -2988,6 +2948,9 @@
           "method": "POST",
           "path": "/Payments/{PaymentID}"
         }
+      ],
+      "redact_fields": [
+        "payment_id"
       ],
       "risk": "deletes Xero payment resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute",
@@ -3025,6 +2988,10 @@
           "path": "/Prepayments/{PrepaymentID}/Allocations/{AllocationID}"
         }
       ],
+      "redact_fields": [
+        "allocation_id",
+        "prepayment_id"
+      ],
       "risk": "deletes Xero prepayment allocations resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -3052,6 +3019,9 @@
           "method": "DELETE",
           "path": "/TrackingCategories/{TrackingCategoryID}"
         }
+      ],
+      "redact_fields": [
+        "tracking_category_id"
       ],
       "risk": "deletes Xero tracking category resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -3088,6 +3058,10 @@
           "path": "/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}"
         }
       ],
+      "redact_fields": [
+        "tracking_category_id",
+        "tracking_option_id"
+      ],
       "risk": "deletes Xero tracking options resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -3115,6 +3089,9 @@
           "method": "POST",
           "path": "/Invoices/{InvoiceID}/Email"
         }
+      ],
+      "redact_fields": [
+        "invoice_id"
       ],
       "risk": "executes Xero email invoice resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -3239,23 +3216,6 @@
       ]
     },
     {
-      "path": "invoices list",
-      "summary": "Run the invoices ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "invoices",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero invoices list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/Invoices"
-        }
-      ]
-    },
-    {
       "path": "item history list",
       "summary": "Run the item history ETL stream",
       "intent": "etl",
@@ -3286,23 +3246,6 @@
         {
           "method": "GET",
           "path": "/Items/{ItemID}"
-        }
-      ]
-    },
-    {
-      "path": "items list",
-      "summary": "Run the items ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "items",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero items list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/Items"
         }
       ]
     },
@@ -3626,23 +3569,6 @@
         {
           "method": "GET",
           "path": "/PaymentServices"
-        }
-      ]
-    },
-    {
-      "path": "payments list",
-      "summary": "Run the payments ETL stream",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "payments",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "examples": [
-        "pm xero payments list --json"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/Payments"
         }
       ]
     },
@@ -4193,6 +4119,210 @@
       "approval": "requires plan, preview, approval, and execute"
     },
     {
+      "path": "streams account",
+      "summary": "Read the Xero `account` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams account --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Accounts/{AccountID}"
+        }
+      ]
+    },
+    {
+      "path": "streams account_attachments",
+      "summary": "Read the Xero `account_attachments` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_attachments",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams account_attachments --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Accounts/{AccountID}/Attachments"
+        }
+      ]
+    },
+    {
+      "path": "streams accounts",
+      "summary": "Read the Xero `accounts` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams accounts --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Accounts"
+        }
+      ]
+    },
+    {
+      "path": "streams bank_transaction",
+      "summary": "Read the Xero `bank_transaction` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_transaction",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams bank_transaction --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/BankTransactions/{BankTransactionID}"
+        }
+      ]
+    },
+    {
+      "path": "streams bank_transaction_attachments",
+      "summary": "Read the Xero `bank_transaction_attachments` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_transaction_attachments",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams bank_transaction_attachments --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/BankTransactions/{BankTransactionID}/Attachments"
+        }
+      ]
+    },
+    {
+      "path": "streams bank_transactions",
+      "summary": "Read the Xero `bank_transactions` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_transactions",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams bank_transactions --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/BankTransactions"
+        }
+      ]
+    },
+    {
+      "path": "streams bank_transactions_history",
+      "summary": "Read the Xero `bank_transactions_history` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_transactions_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams bank_transactions_history --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/BankTransactions/{BankTransactionID}/History"
+        }
+      ]
+    },
+    {
+      "path": "streams bank_transfer",
+      "summary": "Read the Xero `bank_transfer` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_transfer",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams bank_transfer --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/BankTransfers/{BankTransferID}"
+        }
+      ]
+    },
+    {
+      "path": "streams contacts",
+      "summary": "Read the Xero `contacts` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams contacts --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Contacts"
+        }
+      ]
+    },
+    {
+      "path": "streams invoices",
+      "summary": "Read the Xero `invoices` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams invoices --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Invoices"
+        }
+      ]
+    },
+    {
+      "path": "streams items",
+      "summary": "Read the Xero `items` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "items",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams items --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Items"
+        }
+      ]
+    },
+    {
+      "path": "streams payments",
+      "summary": "Read the Xero `payments` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payments",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "examples": [
+        "pm connectors command xero streams payments --credential xero-local --limit 100 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Payments"
+        }
+      ]
+    },
+    {
       "path": "tax rate by tax type list",
       "summary": "Run the tax rate by tax type ETL stream",
       "intent": "etl",
@@ -4285,6 +4415,9 @@
           "path": "/Accounts/{AccountID}"
         }
       ],
+      "redact_fields": [
+        "account_id"
+      ],
       "risk": "mutates Xero account resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -4312,6 +4445,9 @@
           "method": "POST",
           "path": "/BankTransactions/{BankTransactionID}"
         }
+      ],
+      "redact_fields": [
+        "bank_transaction_id"
       ],
       "risk": "mutates Xero bank transaction resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -4341,6 +4477,9 @@
           "path": "/Contacts/{ContactID}"
         }
       ],
+      "redact_fields": [
+        "contact_id"
+      ],
       "risk": "mutates Xero contact resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -4368,6 +4507,9 @@
           "method": "POST",
           "path": "/ContactGroups/{ContactGroupID}"
         }
+      ],
+      "redact_fields": [
+        "contact_group_id"
       ],
       "risk": "mutates Xero contact group resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -4397,6 +4539,9 @@
           "path": "/CreditNotes/{CreditNoteID}"
         }
       ],
+      "redact_fields": [
+        "credit_note_id"
+      ],
       "risk": "mutates Xero credit note resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -4424,6 +4569,9 @@
           "method": "POST",
           "path": "/ExpenseClaims/{ExpenseClaimID}"
         }
+      ],
+      "redact_fields": [
+        "expense_claim_id"
       ],
       "risk": "mutates Xero expense claim resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -4453,6 +4601,9 @@
           "path": "/Invoices/{InvoiceID}"
         }
       ],
+      "redact_fields": [
+        "invoice_id"
+      ],
       "risk": "mutates Xero invoice resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -4480,6 +4631,9 @@
           "method": "POST",
           "path": "/Items/{ItemID}"
         }
+      ],
+      "redact_fields": [
+        "item_id"
       ],
       "risk": "mutates Xero item resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -4509,6 +4663,9 @@
           "path": "/LinkedTransactions/{LinkedTransactionID}"
         }
       ],
+      "redact_fields": [
+        "linked_transaction_id"
+      ],
       "risk": "mutates Xero linked transaction resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -4536,6 +4693,9 @@
           "method": "POST",
           "path": "/ManualJournals/{ManualJournalID}"
         }
+      ],
+      "redact_fields": [
+        "manual_journal_id"
       ],
       "risk": "mutates Xero manual journal resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -4565,6 +4725,9 @@
           "path": "/PurchaseOrders/{PurchaseOrderID}"
         }
       ],
+      "redact_fields": [
+        "purchase_order_id"
+      ],
       "risk": "mutates Xero purchase order resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -4592,6 +4755,9 @@
           "method": "POST",
           "path": "/Quotes/{QuoteID}"
         }
+      ],
+      "redact_fields": [
+        "quote_id"
       ],
       "risk": "mutates Xero quote resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -4621,6 +4787,9 @@
           "path": "/Receipts/{ReceiptID}"
         }
       ],
+      "redact_fields": [
+        "receipt_id"
+      ],
       "risk": "mutates Xero receipt resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -4648,6 +4817,9 @@
           "method": "POST",
           "path": "/RepeatingInvoices/{RepeatingInvoiceID}"
         }
+      ],
+      "redact_fields": [
+        "repeating_invoice_id"
       ],
       "risk": "mutates Xero repeating invoice resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
@@ -4696,6 +4868,9 @@
           "path": "/TrackingCategories/{TrackingCategoryID}"
         }
       ],
+      "redact_fields": [
+        "tracking_category_id"
+      ],
       "risk": "mutates Xero tracking category resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
     },
@@ -4730,6 +4905,10 @@
           "method": "POST",
           "path": "/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}"
         }
+      ],
+      "redact_fields": [
+        "tracking_category_id",
+        "tracking_option_id"
       ],
       "risk": "mutates Xero tracking options resources in the connected tenant; approval required",
       "approval": "requires plan, preview, approval, and execute"
