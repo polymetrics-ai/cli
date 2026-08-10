@@ -269,7 +269,7 @@ func (h *Hooks) MapWriteRecord(action engine.WriteAction, rec connectors.Record)
 }
 
 func pinRepoArchived(rec connectors.Record, archived bool) connectors.Record {
-	pinned := make(connectors.Record, len(rec)+1)
+	pinned := make(connectors.Record, len(rec))
 	for key, value := range rec {
 		pinned[key] = value
 	}

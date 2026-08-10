@@ -2843,3 +2843,65 @@ test now derives its endpoint denominator from the pinned REST count plus the ex
 rows, requires every endpoint to be covered and no blocker models/statuses, and pins the
 source-derived coverage/write-action totals above. This strengthens the test: regenerating a
 partially covered surface cannot silently retain the former 77 blocked rows.
+
+---
+
+## Cycle 36 — CI repair: bounded registry initialization and safe archive copy
+
+**Delivery context:** scoped no-mistakes CI repair under the outer executor; no pipeline command
+was invoked from this phase. Required skills used: `golang-how-to`, `golang-troubleshooting`,
+`golang-continuous-integration`, `golang-cli`, `golang-testing`, `golang-error-handling`,
+`golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`,
+`golang-performance`, `golang-benchmark`, and `golang-lint`.
+
+**Red — the verify suite exhausted its per-package 20-minute deadline.** CI timed out
+`internal/cli` at `1200.055s` while `TestGitHubDestructiveCommandRequiresTypedConfirmation`
+was constructing an app registry. The stack reached `bundleregistry.New -> engine.LoadAll ->
+loadStreamSchemas -> CompileSchema`: every in-process `cli.Run` reparsed all embedded connector
+bundles. The GitHub parity bundle makes that repeated immutable work large enough to exceed the
+deadline. The first cache regression test also failed to compile before the production seam was
+added:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/bundleregistry \
+    -run '^TestLoadDefinitionsCachesEmbeddedBundleSnapshot$'
+registry_test.go:40:16: undefined: loadDefinitions
+registry_test.go:44:17: undefined: loadDefinitions
+FAIL  polymetrics.ai/internal/connectors/bundleregistry [build failed]
+```
+
+**Red — CodeQL reported a high severity allocation-overflow path.** The annotation identified
+`make(connectors.Record, len(rec)+1)` in `pinRepoArchived`: even though ordinary records are
+bounded in practice, the size arithmetic is unnecessary and can overflow before allocation.
+
+**Green — cache only immutable definitions, never caller registry state.**
+`bundleregistry.loadDefinitions` uses `sync.Once` to compile `defs.FS` once per process.
+`bundleregistry.New` still creates a fresh registry, fresh engine connectors, and fresh hook
+instances on every call, so app/test callers may register custom connectors without sharing
+mutable registry maps. The archive helper now allocates with `len(rec)` and lets normal map growth
+add the pinned field, preserving the non-mutating record contract without overflow arithmetic.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/bundleregistry \
+    -run '^TestLoadDefinitionsCachesEmbeddedBundleSnapshot$'
+ok   polymetrics.ai/internal/connectors/bundleregistry  2.064s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/hooks/github \
+    -run '^(TestMapWriteRecord_ArchiveRepoPinsArchivedTrue|TestMapWriteRecord_UnarchiveRepoPinsArchivedFalse|TestMapWriteRecord_DoesNotMutateCallerRecord)$'
+ok   polymetrics.ai/internal/connectors/hooks/github  0.432s
+
+$ go test -count=1 -timeout 20m ./internal/cli \
+    -run '^TestGitHubDestructiveCommandRequiresTypedConfirmation$'
+ok   polymetrics.ai/internal/cli  6.499s
+
+$ go test -count=1 -timeout 20m ./internal/cli
+ok   polymetrics.ai/internal/cli
+
+$ go test -race -count=1 -timeout 20m ./internal/connectors/bundleregistry
+ok   polymetrics.ai/internal/connectors/bundleregistry
+
+$ go vet ./internal/connectors/bundleregistry ./internal/connectors/hooks/github
+
+$ golangci-lint run ./internal/connectors/bundleregistry ./internal/connectors/hooks/github
+0 issues.
+```

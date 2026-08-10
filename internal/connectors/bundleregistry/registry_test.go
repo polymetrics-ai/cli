@@ -36,6 +36,23 @@ func TestRegistryDirectWriteMetadataUsesEmbeddedOperationSurface(t *testing.T) {
 	}
 }
 
+func TestLoadDefinitionsCachesEmbeddedBundleSnapshot(t *testing.T) {
+	first, err := loadDefinitions()
+	if err != nil {
+		t.Fatalf("first loadDefinitions() error = %v", err)
+	}
+	second, err := loadDefinitions()
+	if err != nil {
+		t.Fatalf("second loadDefinitions() error = %v", err)
+	}
+	if len(first) == 0 || len(second) == 0 {
+		t.Fatalf("loadDefinitions() returned empty bundles: first=%d second=%d", len(first), len(second))
+	}
+	if &first[0] != &second[0] {
+		t.Fatal("loadDefinitions() returned a separately compiled bundle snapshot")
+	}
+}
+
 func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	bundles, err := engine.LoadAll(defs.FS)
 	if err != nil {

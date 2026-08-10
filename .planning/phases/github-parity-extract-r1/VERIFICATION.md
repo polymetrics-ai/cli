@@ -523,3 +523,22 @@ go run ./cmd/connectorgen boundary . --json                                   cl
 bash scripts/verify-gsd-workflow                                             exit 0
 go build -o /tmp/pm-github-parity-final ./cmd/pm                               ok
 ```
+
+## CI repair verification — bundle-load cache and CodeQL allocation guard
+
+CI reported an `internal/cli` 20-minute timeout caused by repeated immutable bundle compilation,
+plus CodeQL's allocation-overflow annotation on GitHub's archive-record copy. The repair caches
+only the compiled embedded definition snapshot; every `bundleregistry.New` call still returns a
+fresh mutable registry with fresh connectors and hooks. The map copy no longer uses `len(rec)+1`.
+
+Local scoped checks completed successfully:
+
+```text
+go test -count=1 -timeout 20m ./internal/connectors/bundleregistry -run '^TestLoadDefinitionsCachesEmbeddedBundleSnapshot$'
+go test -count=1 -timeout 20m ./internal/connectors/hooks/github -run '^(TestMapWriteRecord_ArchiveRepoPinsArchivedTrue|TestMapWriteRecord_UnarchiveRepoPinsArchivedFalse|TestMapWriteRecord_DoesNotMutateCallerRecord)$'
+go test -count=1 -timeout 20m ./internal/cli -run '^TestGitHubDestructiveCommandRequiresTypedConfirmation$'
+go test -count=1 -timeout 20m ./internal/cli
+go test -race -count=1 -timeout 20m ./internal/connectors/bundleregistry
+go vet ./internal/connectors/bundleregistry ./internal/connectors/hooks/github
+golangci-lint run ./internal/connectors/bundleregistry ./internal/connectors/hooks/github
+```
