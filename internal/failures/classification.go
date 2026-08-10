@@ -215,7 +215,7 @@ func (c Classification) MarshalJSON() ([]byte, error) {
 		Domain:       c.domain,
 		Code:         c.code,
 		Message:      c.message,
-		FieldPath:    c.fieldPath,
+		FieldPath:    jsonPointer(c.fieldPath),
 		DispatchKind: c.dispatchKind,
 		References:   c.references,
 	})
@@ -247,7 +247,7 @@ func (c *Classification) UnmarshalJSON(raw []byte) error {
 		Domain:       wire.Domain,
 		Code:         wire.Code,
 		Message:      wire.Message,
-		FieldPath:    wire.FieldPath,
+		FieldPath:    string(wire.FieldPath),
 		DispatchKind: wire.DispatchKind,
 		References:   wire.References,
 	}, nil)
@@ -262,9 +262,28 @@ type classificationJSON struct {
 	Domain       Domain       `json:"domain"`
 	Code         string       `json:"code"`
 	Message      string       `json:"message"`
-	FieldPath    string       `json:"field_path,omitempty"`
+	FieldPath    jsonPointer  `json:"field_path,omitempty"`
 	DispatchKind DispatchKind `json:"dispatch_kind,omitempty"`
 	References   []Reference  `json:"references,omitempty"`
+}
+
+type jsonPointer string
+
+func (pointer *jsonPointer) UnmarshalJSON(raw []byte) error {
+	raw = bytes.TrimSpace(raw)
+	if bytes.Equal(raw, []byte("null")) {
+		*pointer = ""
+		return nil
+	}
+	if err := validateJSONPointerSurrogateEscapes(raw); err != nil {
+		return err
+	}
+	var value string
+	if err := json.Unmarshal(raw, &value); err != nil {
+		return err
+	}
+	*pointer = jsonPointer(value)
+	return nil
 }
 
 func normalizeInput(input Input) (Input, error) {
@@ -373,6 +392,57 @@ func validateJSONPointer(pointer string) error {
 		i++
 	}
 	return nil
+}
+
+func validateJSONPointerSurrogateEscapes(raw []byte) error {
+	if len(raw) < 2 || raw[0] != '"' || raw[len(raw)-1] != '"' {
+		return nil
+	}
+	for i := 1; i < len(raw)-1; {
+		if raw[i] != '\\' {
+			i++
+			continue
+		}
+		codeUnit, ok := jsonUTF16Escape(raw, i)
+		if !ok {
+			i += 2
+			continue
+		}
+		if codeUnit >= 0xD800 && codeUnit <= 0xDBFF {
+			following, ok := jsonUTF16Escape(raw, i+6)
+			if !ok || following < 0xDC00 || following > 0xDFFF {
+				return fmt.Errorf("failure field path has an unpaired UTF-16 surrogate escape")
+			}
+			i += 12
+			continue
+		}
+		if codeUnit >= 0xDC00 && codeUnit <= 0xDFFF {
+			return fmt.Errorf("failure field path has an unpaired UTF-16 surrogate escape")
+		}
+		i += 6
+	}
+	return nil
+}
+
+func jsonUTF16Escape(raw []byte, start int) (uint16, bool) {
+	if start+6 > len(raw) || raw[start] != '\\' || raw[start+1] != 'u' {
+		return 0, false
+	}
+	var value uint16
+	for _, character := range raw[start+2 : start+6] {
+		value <<= 4
+		switch {
+		case character >= '0' && character <= '9':
+			value += uint16(character - '0')
+		case character >= 'a' && character <= 'f':
+			value += uint16(character-'a') + 10
+		case character >= 'A' && character <= 'F':
+			value += uint16(character-'A') + 10
+		default:
+			return 0, false
+		}
+	}
+	return value, true
 }
 
 func cloneReferences(references []Reference) []Reference {
