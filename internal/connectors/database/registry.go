@@ -68,14 +68,7 @@ func newDatabaseNativeAdmission(leg databaseWarehouseLeg, admission synccontract
 	}
 	descriptor := admission.NativeSyncExecutorDescriptor()
 	evidence := admission.NativeSyncConformanceEvidence()
-	contract := synccontract.NativeCommandContract{
-		ContractVersion: synccontract.NativeCommandContractVersion,
-		Protocol:        descriptor.Protocol,
-		Command:         descriptor.Command,
-		Executor:        descriptor.Executor,
-		Modes:           append([]synccontract.Mode(nil), descriptor.Modes...),
-		Conformance:     cloneConformanceEvidence(evidence),
-	}
+	contract := databaseNativeCommandContract(descriptor, evidence)
 	if err := contract.Validate(); err != nil {
 		return DatabaseNativeAdmission{}, err
 	}
@@ -92,6 +85,10 @@ func (a DatabaseNativeAdmission) NativeSyncExecutorDescriptor() synccontract.Nat
 
 func (a DatabaseNativeAdmission) NativeSyncConformanceEvidence() synccontract.ConformanceEvidence {
 	return cloneConformanceEvidence(a.evidence)
+}
+
+func (a DatabaseNativeAdmission) nativeCommandContract() synccontract.NativeCommandContract {
+	return databaseNativeCommandContract(a.descriptor, a.evidence)
 }
 
 func (a DatabaseNativeAdmission) matches(leg databaseWarehouseLeg, contract synccontract.NativeCommandContract) error {
@@ -113,6 +110,17 @@ func cloneConformanceEvidence(evidence synccontract.ConformanceEvidence) synccon
 	return clone
 }
 
+func databaseNativeCommandContract(descriptor synccontract.NativeSyncExecutorDescriptor, evidence synccontract.ConformanceEvidence) synccontract.NativeCommandContract {
+	return synccontract.NativeCommandContract{
+		ContractVersion: synccontract.NativeCommandContractVersion,
+		Protocol:        descriptor.Protocol,
+		Command:         descriptor.Command,
+		Executor:        descriptor.Executor,
+		Modes:           append([]synccontract.Mode(nil), descriptor.Modes...),
+		Conformance:     cloneConformanceEvidence(evidence),
+	}
+}
+
 var (
 	// ErrDriverNotRegistered prevents a definition declaration from becoming an
 	// operation merely because its JSON is syntactically valid.
@@ -122,7 +130,8 @@ var (
 	ErrNativeDriverAdmissionRequired = errors.New("database driver requires matching native executor admission")
 	// ErrNativeDriverAdmissionMismatch prevents one native admission descriptor
 	// from being treated as a different database warehouse leg.
-	ErrNativeDriverAdmissionMismatch = errors.New("database driver lacks a matching native executor admission")
+	ErrNativeDriverAdmissionMismatch    = errors.New("database driver lacks a matching native executor admission")
+	ErrNativeDriverAdmissionLegConflict = errors.New("database driver reuses one native executor admission across warehouse legs")
 	// ErrDriverModeNotDeclared prevents a driver from using a closed sync mode
 	// that its own database.json has not explicitly declared. An empty mode list
 	// admits no operation, even if an object has matching native evidence.
@@ -159,6 +168,11 @@ func (r *DriverRegistry) Register(driver Driver) error {
 	descriptor := driver.DatabaseDriverDescriptor()
 	if err := descriptor.validate(); err != nil {
 		return err
+	}
+	if admitted, ok := driver.(NativeAdmittedDriver); ok && !isNilNativeAdmittedDriver(admitted) {
+		if err := validateDatabaseNativeAdmissionLegs(admitted.DatabaseNativeAdmissions()); err != nil {
+			return err
+		}
 	}
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -256,12 +270,32 @@ func definitionAdmitsModes(declared, requested []synccontract.Mode) bool {
 }
 
 func validateDriverNativeAdmission(driver NativeAdmittedDriver, leg databaseWarehouseLeg, contract synccontract.NativeCommandContract) error {
-	for _, admission := range driver.DatabaseNativeAdmissions() {
+	admissions := driver.DatabaseNativeAdmissions()
+	if err := validateDatabaseNativeAdmissionLegs(admissions); err != nil {
+		return err
+	}
+	for _, admission := range admissions {
 		if err := admission.matches(leg, contract); err == nil {
 			return nil
 		}
 	}
 	return ErrNativeDriverAdmissionMismatch
+}
+
+func validateDatabaseNativeAdmissionLegs(admissions []DatabaseNativeAdmission) error {
+	for index, admission := range admissions {
+		for _, previous := range admissions[:index] {
+			if admission.leg == previous.leg || !sameDatabaseNativeAdmissionContract(admission, previous) {
+				continue
+			}
+			return ErrNativeDriverAdmissionLegConflict
+		}
+	}
+	return nil
+}
+
+func sameDatabaseNativeAdmissionContract(left, right DatabaseNativeAdmission) bool {
+	return synccontract.ValidateNativeAdmission(left, right.nativeCommandContract()) == nil
 }
 
 func isNilDriver(driver Driver) bool {
