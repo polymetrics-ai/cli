@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 	"testing/fstest"
+	"time"
 
 	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/synccontract"
@@ -585,6 +586,17 @@ func TestDatabaseLoadAndReadPlanHonorCancellation(t *testing.T) {
 	}
 }
 
+func TestDatabaseLoadChecksCancellationBeforeReturningProjection(t *testing.T) {
+	ctx := &cancelOnErrCallContext{cancelAt: 4, done: make(chan struct{})}
+	definition, err := database.Load(ctx, fstest.MapFS{"database.json": &fstest.MapFile{Data: []byte(validDefinitionJSON)}})
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("Load() error = %v, want context.Canceled", err)
+	}
+	if definition.SchemaVersion() != 0 {
+		t.Fatalf("Load() definition schema version = %d, want zero projection after cancellation", definition.SchemaVersion())
+	}
+}
+
 func TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs(t *testing.T) {
 	sourceIdentity := database.ConnectionIdentity{
 		WorkspaceID:  "workspace-1",
@@ -952,6 +964,31 @@ func (d nativeAdmission) NativeSyncConformanceEvidence() synccontract.Conformanc
 func cloneDatabaseNativeAdmissions(admissions []database.DatabaseNativeAdmission) []database.DatabaseNativeAdmission {
 	return append([]database.DatabaseNativeAdmission(nil), admissions...)
 }
+
+type cancelOnErrCallContext struct {
+	cancelAt int
+	errCalls int
+	done     chan struct{}
+}
+
+func (c *cancelOnErrCallContext) Deadline() (time.Time, bool) { return time.Time{}, false }
+
+func (c *cancelOnErrCallContext) Done() <-chan struct{} { return c.done }
+
+func (c *cancelOnErrCallContext) Err() error {
+	c.errCalls++
+	if c.errCalls < c.cancelAt {
+		return nil
+	}
+	select {
+	case <-c.done:
+	default:
+		close(c.done)
+	}
+	return context.Canceled
+}
+
+func (*cancelOnErrCallContext) Value(any) any { return nil }
 
 func postgresDriverDescriptor() database.DriverDescriptor {
 	return database.DriverDescriptor{ID: "postgres", Protocol: "postgres-wire", APIVersion: 1}
