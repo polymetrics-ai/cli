@@ -14,7 +14,8 @@ Owned paths are only:
 
 Out of scope:
 
-- production or test implementation for #3856, #3857, #3858, #3859, #3864, or PostgreSQL;
+- production or test implementation for #3856, #3857, #3858, #3859, #3864, or PostgreSQL, and
+  documentation delivery for #3860;
 - `cmd/`, `internal/`, connector definitions, generated files, credentials, provider calls, and
   runtime services;
 - certification, executable product behavior, child integration, or any merge;
@@ -54,12 +55,13 @@ artifacts and does not describe or alter product behavior.
 | 2 | #3857 | Declarative polling descriptor and real transport preflight | #3856; reviewed #3864 generic seam | Must consume, not duplicate, #3864 transport registration/preflight; must not advertise polling as public CDC. |
 | 3a | #3858 | Page-safe polling source executor through the #3864 source port | #3857 | May run in parallel with #3859 only after #3857 lands. Reuse #3880 mechanics without claiming #3880 completed it. |
 | 3b | #3859 | Native apply strategies through the #3864 destination port | #3857 | May run in parallel with #3858 only after #3857 lands. Shared mode semantics stay out of PostgreSQL-specific work. |
+| 4 | #3860 | Truthful polling-watermark eligibility and limitation documentation | #3856–#3859 | Follows completion of all four core children; it is not a parallel lane in the core implementation DAG. |
 
 ## Parent topology ledger
 
 | Item | Required state |
 | --- | --- |
-| Primary issue | #3855; retain existing children #3856–#3859 and create none. |
+| Primary issue | #3855; retain existing children #3856–#3860 and create none. |
 | Parent branch | `feat/3855-polling-apply-foundations`, created from current `origin/feat/3862-any-to-any-transport` head `30b2fb4aeb121641b6158903fe1d3b54668599a6`. |
 | Initial PR | One draft PR only; base `feat/3862-any-to-any-transport`, head `feat/3855-polling-apply-foundations`. |
 | Temporary-base meaning | Dependency-only; it never authorizes #3855 integration into #3862. |
@@ -70,8 +72,8 @@ artifacts and does not describe or alter product behavior.
 ## Plan checkpoints
 
 1. **RED — absent parent surface:** establish the pre-seed absence of the requested local branch
-   and durable current parent acceptance ledger; preserve the GitHub rate-limit result rather than
-   replacing it with an assumption.
+   and durable current parent acceptance ledger; preserve the live absence of a draft PR rather
+   than replacing it with an assumption.
 2. **GREEN — bounded seed:** create this phase ledger on the named branch from the verified remote
    head, with exact child order, scope fence, and reuse classification.
 3. **GREEN — local topology validation:** verify tracked paths, content invariants, formatting/check

@@ -21,8 +21,9 @@ The only permitted child order is:
 #3856 -> #3857 -> (#3858 || #3859)
 ```
 
-All four existing child issues remain open. This scaffold neither implements them nor treats a
-historical parent-scoped change as their completion.
+All five existing child issues remain open. #3860 is a follow-on documentation child: it depends
+on #3856–#3859 and is not a parallel implementation lane in the core DAG above. This scaffold
+neither implements any child nor treats a historical parent-scoped change as their completion.
 
 ## Reuse ruling
 
@@ -33,8 +34,8 @@ cherry-picked or reimplemented. The topology report remains the source for its r
 ## Scope fence
 
 This phase may add only the bounded parent planning/acceptance ledger and the associated draft PR.
-It must not implement #3856–#3859, #3864, PostgreSQL, connector runtime behavior, or a product
-capability claim. No `cmd/` or `internal/` path is in scope.
+It must not implement #3856–#3859, #3860 documentation, #3864, PostgreSQL, connector runtime
+behavior, or a product capability claim. No `cmd/` or `internal/` path is in scope.
 
 ## Discussion record
 
@@ -47,7 +48,6 @@ to #3857 planning; this parent scaffold does not resolve it or claim executable 
 
 ## Live GitHub note
 
-`gh-axi` live issue/PR reads were attempted before mutation and returned `RATE_LIMITED`. No raw
-GitHub CLI, alternate identity, or auth-scope change was used. The supplied current topology report
-and locally verified remote refs are recorded provisionally; final live PR validation is retried
-through `gh-axi` after local gates.
+The recovered `gh-axi` live check finds five open children (#3856–#3860) and no PR with head
+`feat/3855-polling-apply-foundations`. No raw GitHub CLI, alternate identity, or auth-scope change
+is used. Creating and inspecting the required draft remains an external PR-phase transition.
