@@ -136,13 +136,16 @@ removal) additionally require typed destructive confirmation.
 - Repositories: `repository create`, `repository immutable-tags update`,
   `repository immutable-tags verify` (direct read), `repository group assign`.
 - Personal access tokens: `access-tokens list`/`get` (direct read), `access-tokens create` (the
-  provider may return the raw token once in the create response; runtime output remains unchanged
-  and must be handled as secret material), `access-tokens update`, `access-tokens delete`
+  provider may return the raw token once; runtime discards it by default. Add `--show-token` only
+  to the approved execution to print it immediately, deliberately exposing it in terminal or JSON
+  output where it cannot be redacted; it is never retained in plan/run history/state), `access-tokens update`, `access-tokens delete`
   (destructive).
 - Organization access tokens: `org access-tokens list`/`get` (direct read), `org access-tokens
-  create` (runtime output remains unchanged, including a returned raw token; `resources`, the
-  token's repo/org scope grants, is a nested array of objects with no typed scalar leaf and is not
-  flag-mapped — supply it via a reverse-ETL source record), `org access-tokens update`, `org
+  create` (the provider may return a raw token once; runtime discards it by default. Add
+  `--show-token` only to the approved execution to print it immediately, deliberately exposing it
+  in terminal or JSON output where it cannot be redacted; it is never retained in plan/run
+  history/state. `resources`, the token's repo/org scope grants, is a nested array of objects with
+  no typed scalar leaf and is not flag-mapped — supply it via a reverse-ETL source record), `org access-tokens update`, `org
   access-tokens delete` (destructive).
 - Audit logs: `audit-logs list`, `audit-logs actions list` (both direct reads).
 - Authentication: `auth token create`, `auth login create`, and `auth 2fa-login create` are

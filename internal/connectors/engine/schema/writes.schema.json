@@ -107,6 +107,7 @@
           },
           "risk": { "type": "string" },
           "batchable": { "type": "boolean", "default": true },
+          "response_sensitive": { "type": "boolean" },
           "confirm": { "type": "string", "enum": ["", "destructive"] },
           "confirmation": {
             "type": "object",

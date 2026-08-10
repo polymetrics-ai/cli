@@ -488,10 +488,11 @@ type WriteAction struct {
 	// mark every hand-constructed WriteAction as non-batchable. nil means the
 	// bundle did not declare it, which is the permissive default every shipped
 	// action relies on. Read it through IsBatchable, never directly.
-	Batchable    *bool             `json:"batchable,omitempty"`
-	Confirm      string            `json:"confirm,omitempty"` // legacy: "" | "destructive"
-	Confirmation *ConfirmationSpec `json:"confirmation,omitempty"`
-	Hook         string            `json:"hook,omitempty"`
+	Batchable         *bool             `json:"batchable,omitempty"`
+	ResponseSensitive bool              `json:"response_sensitive,omitempty"`
+	Confirm           string            `json:"confirm,omitempty"` // legacy: "" | "destructive"
+	Confirmation      *ConfirmationSpec `json:"confirmation,omitempty"`
+	Hook              string            `json:"hook,omitempty"`
 }
 
 // ConfirmationSpec is the closed, declarative confirmation policy shared by

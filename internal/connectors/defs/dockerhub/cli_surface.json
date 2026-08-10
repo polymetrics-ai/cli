@@ -118,7 +118,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_access_token",
-      "risk": "high: creates a live Docker Hub credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval",
+      "risk": "high: creates a live Docker Hub credential; provider response is discarded by default and may be revealed only with explicit one-time terminal output; requires reverse ETL approval",
       "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
       "flags": [
         {
@@ -153,7 +153,7 @@
       "examples": [
         "pm dockerhub access-tokens create --token-label \"ci token\" --scopes \"repo:read\" --json"
       ],
-      "notes": "The provider can return the raw token value once in the create response. The approved runtime returns that response unchanged; handle its output as secret material."
+      "notes": "The provider can return the raw token value once in the create response. The approved runtime discards it by default. Add --show-token only to the approved execution (--plan <id> --approve <token>) to print it immediately; this deliberately exposes it in terminal or JSON output and cannot be redacted. It is never retained in plan, run history, or state."
     },
     {
       "path": "access-tokens delete",
@@ -939,7 +939,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_org_access_token",
-      "risk": "high: creates a live Docker Hub organization credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval",
+      "risk": "high: creates a live Docker Hub organization credential; provider response is discarded by default and may be revealed only with explicit one-time terminal output; requires reverse ETL approval",
       "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
       "flags": [
         {
@@ -980,7 +980,7 @@
       "examples": [
         "pm dockerhub org access-tokens create --name \"myorg\" --label \"ci token\" --json"
       ],
-      "notes": "`resources` (the token's repo/org scope grants) is a required-for-meaningful-use array of objects with no typed scalar leaf, so it is not flag-mapped here; supply it via a reverse-ETL source record instead. The provider can return the raw token value once in the create response; the approved runtime returns that response unchanged, so handle its output as secret material."
+      "notes": "`resources` (the token's repo/org scope grants) is a required-for-meaningful-use array of objects with no typed scalar leaf, so it is not flag-mapped here; supply it via a reverse-ETL source record instead. The provider can return the raw token value once in the create response. The approved runtime discards it by default. Add --show-token only to the approved execution (--plan <id> --approve <token>) to print it immediately; this deliberately exposes it in terminal or JSON output and cannot be redacted. It is never retained in plan, run history, or state."
     },
     {
       "path": "org access-tokens delete",

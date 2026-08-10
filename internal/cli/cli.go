@@ -1332,7 +1332,7 @@ func connectorCommandFlags(values map[string][]string) map[string][]string {
 	commandFlags := map[string][]string{}
 	for name, entries := range values {
 		switch name {
-		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name", "dest-root", "file-name", "from-env", "value-stdin":
+		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name", "dest-root", "file-name", "from-env", "value-stdin", "show-token":
 			continue
 		default:
 			commandFlags[name] = append([]string(nil), entries...)
@@ -1683,6 +1683,9 @@ func connectorCommandPage(flags parsedFlags) (int, string, error) {
 }
 
 func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, credential string, config map[string]string, path []string, commandFlags map[string][]string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+	if truthyFlag(flags.first("show-token")) {
+		return usageErrorf("--show-token is only valid with --plan and --approve")
+	}
 	preview := truthyFlag(flags.first("preview"))
 	plan, writePreview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
 		Name:       flags.first("plan-name"),
@@ -1724,6 +1727,7 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 	planID := strings.TrimSpace(flags.first("plan"))
 	approvalToken := strings.TrimSpace(flags.first("approve"))
 	preview := truthyFlag(flags.first("preview"))
+	showToken := truthyFlag(flags.first("show-token"))
 	plan, err := connectorCommandPlanForPath(a, planID, connectorName, path)
 	if err != nil {
 		return err
@@ -1747,17 +1751,29 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 	if err != nil {
 		return err
 	}
+	if showToken {
+		if approvalToken == "" {
+			return usageErrorf("--show-token requires --approve for the approved execution")
+		}
+		if err := validateDockerHubTokenOutputPlan(plan); err != nil {
+			return err
+		}
+	}
 	if approvalToken != "" {
 		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation, WithheldFlags: resolvedFlags})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation, WithheldFlags: resolvedFlags, RevealSensitiveResponse: showToken})
 		if err != nil {
 			return err
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
+			env := envelope{"kind": "ReverseRun", "run": run}
+			if showToken {
+				env["response"] = run.SensitiveWriteResponse
+			}
+			return writeJSON(stdout, env)
 		}
 		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
 		if run.OperationDirectWrite != nil {
@@ -1766,6 +1782,11 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 				return marshalErr
 			}
 			_, _ = fmt.Fprintln(stdout, string(body))
+		}
+		if showToken {
+			if err := writeSensitiveWriteResponse(stdout, run.SensitiveWriteResponse); err != nil {
+				return err
+			}
 		}
 		return nil
 	}
@@ -1817,6 +1838,22 @@ func connectorCommandBlockedError(err error) error {
 		message:  err.Error(),
 		err:      err,
 	}
+}
+
+func validateDockerHubTokenOutputPlan(plan app.ReversePlan) error {
+	if plan.DestinationConnector != "dockerhub" || (plan.Action != "create_access_token" && plan.Action != "create_org_access_token") {
+		return usageErrorf("--show-token is only available for Docker Hub access-token create plans")
+	}
+	return nil
+}
+
+func writeSensitiveWriteResponse(stdout io.Writer, response any) error {
+	body, err := json.MarshalIndent(response, "", "  ")
+	if err != nil {
+		return err
+	}
+	_, _ = fmt.Fprintln(stdout, string(body))
+	return nil
 }
 
 func truthyFlag(raw string) bool {
@@ -2082,18 +2119,33 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if err != nil {
 			return err
 		}
+		showToken := truthyFlag(flags.first("show-token"))
+		if showToken {
+			if err := validateDockerHubTokenOutputPlan(plan); err != nil {
+				return err
+			}
+		}
 		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation, WithheldFlags: resolvedFlags})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation, WithheldFlags: resolvedFlags, RevealSensitiveResponse: showToken})
 		if err != nil {
 			return err
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
+			env := envelope{"kind": "ReverseRun", "run": run}
+			if showToken {
+				env["response"] = run.SensitiveWriteResponse
+			}
+			return writeJSON(stdout, env)
 		}
 		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
+		if showToken {
+			if err := writeSensitiveWriteResponse(stdout, run.SensitiveWriteResponse); err != nil {
+				return err
+			}
+		}
 		return nil
 	case "status":
 		if len(args) < 2 {

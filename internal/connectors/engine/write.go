@@ -152,7 +152,13 @@ func (e *writeActionRedactedError) Unwrap() error {
 }
 
 func redactWriteActionError(err error, action WriteAction, rec connectors.Record) error {
-	if err == nil || len(action.RedactFields) == 0 {
+	if err == nil {
+		return err
+	}
+	if action.ResponseSensitive {
+		return errors.New("engine: sensitive write action failed")
+	}
+	if len(action.RedactFields) == 0 {
 		return err
 	}
 	values := writeActionRedactionValues(action, rec)
@@ -287,6 +293,18 @@ func joinURL(base, path string) string {
 // RecordsWritten; the loop stops immediately rather than continuing best-
 // effort.
 func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WriteResult, error) {
+	action, err := findWriteAction(b, req.Action)
+	if err != nil {
+		return connectors.WriteResult{RecordsFailed: len(records)}, err
+	}
+	if req.CaptureSensitiveResponse {
+		if !action.ResponseSensitive {
+			return connectors.WriteResult{RecordsFailed: len(records)}, fmt.Errorf("engine: write action %q does not support sensitive response capture", action.Name)
+		}
+		if len(records) != 1 {
+			return connectors.WriteResult{RecordsFailed: len(records)}, errors.New("engine: sensitive write response capture requires exactly one record")
+		}
+	}
 	prepared, err := prepareDeclarativeWrite(ctx, b, req, records, h)
 	if err != nil {
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
@@ -295,11 +313,6 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 	if err != nil {
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
-	action, err := findWriteAction(b, req.Action)
-	if err != nil {
-		return connectors.WriteResult{RecordsFailed: len(records)}, err
-	}
-
 	var result connectors.WriteResult
 	err = ExecutePreparedWrite(ctx, prepared, req.Approval, preview.Digest, func(executeCtx context.Context) error {
 		var executeErr error
@@ -334,12 +347,14 @@ func applyWriteRecordHook(h Hooks, action WriteAction, records []connectors.Reco
 	return mapped, nil
 }
 
+const maxSensitiveWriteResponseBytes = 1 << 20
+
 func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WriteResult, error) {
 	cfg := materializeConfigDefaults(b, req.Config)
 
 	rt, err := newRuntime(ctx, b, cfg, h)
 	if err != nil {
-		return connectors.WriteResult{RecordsFailed: len(records)}, err
+		return connectors.WriteResult{RecordsFailed: len(records)}, redactWriteActionError(err, action, nil)
 	}
 	result := connectors.WriteResult{}
 	for i, rec := range records {
@@ -365,7 +380,13 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			result.RecordsFailed = len(records) - result.RecordsWritten
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, rec)}
 		}
-		if err := executeWriteRecord(ctx, b, action, pinned[0], i, cfg, rt); err != nil {
+		var response *connsdk.Response
+		if req.CaptureSensitiveResponse {
+			response, err = executeWriteRecordWithResponse(ctx, b, action, pinned[0], i, cfg, rt, maxSensitiveWriteResponseBytes)
+		} else {
+			err = executeWriteRecord(ctx, b, action, pinned[0], i, cfg, rt)
+		}
+		if err != nil {
 			if isMissingOkDelete(action, err) {
 				result.RecordsWritten++
 				continue
@@ -373,6 +394,18 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			result.RecordsFailed = len(records) - result.RecordsWritten
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Class: class, Hint: hint, Err: redactWriteActionError(err, action, rec)}
+		}
+		if response != nil {
+			if len(response.Body) > maxSensitiveWriteResponseBytes {
+				result.RecordsFailed = len(records) - result.RecordsWritten
+				return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: errors.New("engine: sensitive write response exceeds limit")}
+			}
+			body, err := decodeDirectReadBody(response.Body, maxSensitiveWriteResponseBytes)
+			if err != nil {
+				result.RecordsFailed = len(records) - result.RecordsWritten
+				return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: errors.New("engine: sensitive write response is not valid JSON")}
+			}
+			result.SensitiveResponse = &connectors.SensitiveWriteResponse{Body: body}
 		}
 		result.RecordsWritten++
 	}
@@ -382,11 +415,16 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 // executeWriteRecord performs the single HTTP request for one record: builds
 // the path from path_fields, the body per body_type, and issues Do/DoForm.
 func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime) error {
+	_, err := executeWriteRecordWithResponse(ctx, b, action, rec, recordIndex, cfg, rt, 0)
+	return err
+}
+
+func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime, maxResponseBytes int) (*connsdk.Response, error) {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(rec)}
 
 	path, err := InterpolatePath(action.Path, vars)
 	if err != nil {
-		return fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
+		return nil, fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
 	}
 	method := methodOrDefault(action.Method)
 
@@ -397,66 +435,86 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	// branch passed before write-action query support existed.
 	query, err := buildWriteQuery(action, vars)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	requesterForAction, err := rt.requesterFor(method, action.Path)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	requester, err := writeRequester(requesterForAction, action)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	switch bodyTypeOf(action) {
 	case "form":
 		form := buildForm(rec, action.PathFields)
-		_, err := requester.DoForm(ctx, method, path, query, form)
-		return err
+		if maxResponseBytes > 0 {
+			return requester.DoFormLimited(ctx, method, path, query, form, maxResponseBytes)
+		}
+		return requester.DoForm(ctx, method, path, query, form)
 	case "graphql":
 		payload, err := buildGraphQLPayload(action.GraphQL, vars)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		resp, err := requester.Do(ctx, method, path, query, payload)
+		var resp *connsdk.Response
+		if maxResponseBytes > 0 {
+			resp, err = requester.DoLimited(ctx, method, path, query, payload, maxResponseBytes)
+		} else {
+			resp, err = requester.Do(ctx, method, path, query, payload)
+		}
 		if err != nil {
-			return err
+			return nil, err
 		}
-		return graphQLErrors(resp.Body)
+		if err := graphQLErrors(resp.Body); err != nil {
+			return nil, err
+		}
+		return resp, nil
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {
-			_, err := requester.Do(ctx, method, path, query, nil)
-			return err
+			if maxResponseBytes > 0 {
+				return requester.DoLimited(ctx, method, path, query, nil, maxResponseBytes)
+			}
+			return requester.Do(ctx, method, path, query, nil)
 		}
-		_, err := requester.Do(ctx, method, path, query, body)
-		return err
+		if maxResponseBytes > 0 {
+			return requester.DoLimited(ctx, method, path, query, body, maxResponseBytes)
+		}
+		return requester.Do(ctx, method, path, query, body)
 	case "json_array":
 		payload, err := buildJSONArrayPayload(action, rec)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		_, err = requester.Do(ctx, method, path, query, payload)
-		return err
+		if maxResponseBytes > 0 {
+			return requester.DoLimited(ctx, method, path, query, payload, maxResponseBytes)
+		}
+		return requester.Do(ctx, method, path, query, payload)
 	case "multipart":
 		root, err := openMultipartRoot(cfg.ProjectDir)
 		if err != nil {
-			return fmt.Errorf("engine: write action %q: %w", action.Name, err)
+			return nil, fmt.Errorf("engine: write action %q: %w", action.Name, err)
 		}
 		defer func() { _ = root.Close() }()
 		form, err := buildMultipartPayload(action, rec, recordIndex, cfg, root)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		_, err = requester.DoMultipart(ctx, method, path, query, form)
-		return err
+		if maxResponseBytes > 0 {
+			return requester.DoMultipartLimited(ctx, method, path, query, form, maxResponseBytes)
+		}
+		return requester.DoMultipart(ctx, method, path, query, form)
 	case "base64_upload":
 		payload, err := buildBase64UploadPayload(action, rec, recordIndex, cfg)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		_, err = requester.Do(ctx, method, path, query, payload)
-		return err
+		if maxResponseBytes > 0 {
+			return requester.DoLimited(ctx, method, path, query, payload, maxResponseBytes)
+		}
+		return requester.Do(ctx, method, path, query, payload)
 	default: // "json" (default)
 		var body map[string]any
 		if len(action.BodyFields) > 0 {
@@ -466,7 +524,7 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		}
 		body, err = applyDynamicFields(action, rec, body)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		var payload any
 		if len(body) > 0 || action.BodyRequired {
@@ -477,10 +535,12 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		}
 		contentType, err := writeActionContentType(action)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		_, err = requester.DoWithContentType(ctx, method, path, query, payload, contentType)
-		return err
+		if maxResponseBytes > 0 {
+			return requester.DoWithContentTypeLimited(ctx, method, path, query, payload, contentType, maxResponseBytes)
+		}
+		return requester.DoWithContentType(ctx, method, path, query, payload, contentType)
 	}
 }
 

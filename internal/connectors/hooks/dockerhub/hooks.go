@@ -183,6 +183,9 @@ func dockerHubLoginURL(tokenURL string, cfg connectors.RuntimeConfig) (string, e
 }
 
 func (h *Hooks) PreflightRuntimeConfig(cfg connectors.RuntimeConfig) error {
+	if strings.TrimSpace(cfg.Config["auth_url"]) == "" {
+		return errors.New("dockerhub auth: auth_url is required")
+	}
 	_, err := dockerHubLoginURL("", cfg)
 	return err
 }
@@ -262,7 +265,7 @@ func validateHTTPSURL(raw, field string) error {
 		return fmt.Errorf("dockerhub auth: %s is invalid", field)
 	}
 	if parsed.Scheme != "https" {
-		return fmt.Errorf("dockerhub auth: %s must use https, got %q", field, parsed.Scheme)
+		return fmt.Errorf("dockerhub auth: %s must use https", field)
 	}
 	if parsed.Host == "" {
 		return fmt.Errorf("dockerhub auth: %s must include a host", field)

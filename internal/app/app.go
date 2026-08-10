@@ -548,6 +548,11 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	if err := connectors.ValidateConfiguration(connector, req.Config); err != nil {
 		return CredentialMeta{}, fmt.Errorf("credential configuration: %w", err)
 	}
+	if preflighter, ok := connector.(connectors.RuntimeConfigPreflighter); ok {
+		if err := preflighter.PreflightRuntimeConfig(connectors.RuntimeConfig{Config: cloneStringMap(req.Config)}); err != nil {
+			return CredentialMeta{}, fmt.Errorf("credential configuration: %w", err)
+		}
+	}
 	if err := a.vault.Put(ctx, id, req.Secrets); err != nil {
 		return CredentialMeta{}, err
 	}
@@ -2194,6 +2199,9 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	if err != nil {
 		return ReverseRun{}, err
 	}
+	if err := validateSensitiveWriteResponseRequest(writer, plan.Action, req.RevealSensitiveResponse); err != nil {
+		return ReverseRun{}, err
+	}
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mappedForHash)
 	if err != nil {
 		return ReverseRun{}, err
@@ -2208,7 +2216,7 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	}
 	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
 	mapped := mapReverseRecords(records, plan.Mappings)
-	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime}
+	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime, CaptureSensitiveResponse: req.RevealSensitiveResponse}
 	preview, err := a.validateDestructivePreview(ctx, writer, plan, writeRequest, mapped)
 	if err != nil {
 		return ReverseRun{}, err
@@ -2258,6 +2266,14 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	if err != nil {
 		return ReverseRun{}, err
 	}
+	if plan.ConnectorCommandOperation != "" && req.RevealSensitiveResponse {
+		return ReverseRun{}, errors.New("sensitive response delivery is only supported for write actions")
+	}
+	if plan.ConnectorCommandOperation == "" {
+		if err := validateSensitiveWriteResponseRequest(writer, plan.Action, req.RevealSensitiveResponse); err != nil {
+			return ReverseRun{}, err
+		}
+	}
 	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, record)
 	if err != nil {
 		return ReverseRun{}, err
@@ -2279,7 +2295,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 		return ReverseRun{}, err
 	}
 	records := []connectors.Record{record}
-	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime}
+	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime, CaptureSensitiveResponse: req.RevealSensitiveResponse}
 	preview, err := a.validateDestructivePreview(ctx, writer, plan, writeRequest, records)
 	if err != nil {
 		return ReverseRun{}, err
@@ -2340,6 +2356,17 @@ func validateOperationDirectWritePreview(ctx context.Context, writer connectors.
 		return connectors.WritePreview{}, fmt.Errorf("reverse plan %q no longer matches its approved preview", plan.ID)
 	}
 	return preview, nil
+}
+
+func validateSensitiveWriteResponseRequest(writer connectors.Connector, action string, reveal bool) error {
+	if !reveal {
+		return nil
+	}
+	preflighter, ok := writer.(connectors.SensitiveWriteResponsePreflighter)
+	if !ok {
+		return fmt.Errorf("connector %q does not support sensitive response capture", writer.Name())
+	}
+	return preflighter.PreflightSensitiveWriteResponse(action)
 }
 
 func (a *App) loadReversePlan(id string) (ReversePlan, error) {
@@ -2445,9 +2472,17 @@ func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
 }
 
 func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
+	if result.SensitiveResponse != nil {
+		run.SensitiveWriteResponse = result.SensitiveResponse.Body
+	}
 	return a.finishReverseWriteWithErrorText(planID, run, result, staged, writeErr, func(err error) string {
 		return safety.RedactErrorText(err.Error())
-	}, nil)
+	}, stripSensitiveWriteResponse)
+}
+
+func stripSensitiveWriteResponse(run ReverseRun) ReverseRun {
+	run.SensitiveWriteResponse = nil
+	return run
 }
 
 func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {

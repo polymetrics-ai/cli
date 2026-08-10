@@ -1297,3 +1297,31 @@ and golang-testing; the outer executor retains GSD lifecycle ownership.
 ```text
 go test -timeout 20m ./internal/app ./internal/connectors/engine ./internal/connectors/hooks/dockerhub -run '^(TestDockerHubStoredPATAuthURLRejectedBeforePlanPersistence|TestValidateHTTPSURLRejectsMalformedInputWithoutEchoingIt)$' -count=1
 ```
+
+## Review repair — Docker Hub token response disclosure and auth admission (2026-08-10)
+
+Manual-GSD fallback: this is a gate-owned no-mistakes review step. The outer executor owns the
+active lifecycle, so this repair records Red/Green evidence here and does not invoke pipeline
+control commands.
+
+Red: a valid trusted-auth URL with URL userinfo could pass credential admission and enter plaintext
+credential metadata before Docker Hub's runtime hook refused it. An explicit empty auth URL could
+also form a stored-PAT plan. Finally, declarative access-token creation discarded the one-time
+provider response while the Docker Hub surface claimed it was returned.
+
+Green: credential admission now runs the Docker Hub runtime-config preflight before vault/state
+writes, explicit empty auth URLs fail before either plan path can persist, and every auth-URL
+rejection is field-only. Docker Hub access-token creation now discards provider tokens by default
+and returns them only with the documented `--show-token` opt-in on an approved execution; successful
+and failed response-sensitive writes are omitted from persistence and errors. Focused verification
+is recorded after this review round.
+
+This gate-owned review uses golang-how-to, golang-cli, golang-design-patterns,
+golang-structs-interfaces, golang-security, golang-safety, golang-error-handling, golang-lint,
+golang-testing, and golang-documentation, plus CLI help/docs/website parity guidance. The outer
+executor retains GSD lifecycle ownership.
+
+```text
+go test -timeout 20m ./internal/app ./internal/cli ./internal/connectors/engine ./internal/connectors/hooks/dockerhub ./internal/connectors/defs/dockerhub -run '^(TestDockerHubCredentialAdmissionRejectsAuthURLUserinfoBeforePersistence|TestDockerHubStoredPATAuthURLRejectedBeforePlanPersistence|TestDockerHubAccessTokenOutputRequiresExplicitShowToken|TestDockerHubAccessTokenHelpDocumentsExplicitResponseDisclosure|TestWriteCapturesSensitiveResponseOnlyWhenRequested|TestWriteRedactsResponseSensitiveProviderFailure|TestValidateHTTPSURLRejectsMalformedInputWithoutEchoingIt|TestValidateHTTPSURLRejectsSchemeWithoutEchoingIt)$' -count=1
+exit 0
+```

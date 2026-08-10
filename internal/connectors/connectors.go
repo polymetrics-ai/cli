@@ -260,6 +260,10 @@ type RuntimeConfigPreflighter interface {
 	PreflightRuntimeConfig(RuntimeConfig) error
 }
 
+type SensitiveWriteResponsePreflighter interface {
+	PreflightSensitiveWriteResponse(action string) error
+}
+
 // PayloadApprovalKey identifies a file field within an approved write batch.
 func PayloadApprovalKey(recordIndex int, field string) string {
 	return fmt.Sprintf("%d:%s", recordIndex, field)
@@ -640,13 +644,14 @@ func legacyBareConnectorName(name string) string {
 }
 
 type WriteRequest struct {
-	Stream     string
-	Table      string
-	Action     string
-	Overwrite  bool
-	Config     RuntimeConfig
-	PrimaryKey []string
-	Approval   *WriteApprovalEvidence
+	Stream                   string
+	Table                    string
+	Action                   string
+	Overwrite                bool
+	Config                   RuntimeConfig
+	PrimaryKey               []string
+	Approval                 *WriteApprovalEvidence
+	CaptureSensitiveResponse bool
 }
 
 // ConfirmationKind is the closed runtime vocabulary for an explicit write
@@ -675,8 +680,13 @@ func ParseWriteConfirmation(raw string) (WriteConfirmation, error) {
 }
 
 type WriteResult struct {
-	RecordsWritten int `json:"records_written"`
-	RecordsFailed  int `json:"records_failed"`
+	RecordsWritten    int                     `json:"records_written"`
+	RecordsFailed     int                     `json:"records_failed"`
+	SensitiveResponse *SensitiveWriteResponse `json:"-"`
+}
+
+type SensitiveWriteResponse struct {
+	Body any `json:"-"`
 }
 
 type QueryRequest struct {

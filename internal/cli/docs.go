@@ -741,7 +741,7 @@ USAGE
   pm reverse plan <name> --source-table <table> [--connection name] --destination connector:credential --map source:dest [--json]
   pm reverse preview <plan-id> [--<withheld-flag> <value>...]
     [--from-env <env-only-flag>=ENV]... [--json]
-  pm reverse run <plan-id> --approve <token> [--confirm <challenge>]
+  pm reverse run <plan-id> --approve <token> [--confirm <challenge>] [--show-token]
     [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
   pm reverse status <run-id> [--json]
 
@@ -843,6 +843,10 @@ COMMANDS
     same re-supply form: --from-env <flag>=ENV for an env_only field, or
     --<flag> <value> otherwise. A failed dispatch is recorded; pm does not
     automatically retry a failed dispatch.
+    For a Docker Hub access-token create plan, --show-token prints the one-time
+    provider response immediately after a successful approved execution. This
+    deliberately exposes the token in terminal or JSON output and cannot be
+    redacted; it is never retained in plan, run history, or state.
 
   status
     Show a completed or failed reverse ETL run by run ID.
@@ -861,6 +865,9 @@ FLAGS
                                the flag is connector-owned, never persisted
   --from-env flag=ENV          re-supply a declared env_only field from ENV;
                                its value never enters argv or project state
+  --show-token                 print a Docker Hub access-token response only
+                               immediately after approved execution; terminal
+                               and JSON output cannot be redacted
   --json                       render machine-readable JSON
   --root path                  project root containing .polymetrics
 

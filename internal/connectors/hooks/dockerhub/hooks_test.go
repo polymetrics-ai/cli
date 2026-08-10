@@ -397,6 +397,20 @@ func TestValidateHTTPSURLRejectsMalformedInputWithoutEchoingIt(t *testing.T) {
 	}
 }
 
+func TestValidateHTTPSURLRejectsSchemeWithoutEchoingIt(t *testing.T) {
+	const unsupported = "fixture-scheme://auth.example.invalid/v2"
+	err := validateHTTPSURL(unsupported, "auth_url")
+	if err == nil {
+		t.Fatal("validateHTTPSURL() error = nil, want scheme rejection")
+	}
+	if got, want := err.Error(), "dockerhub auth: auth_url must use https"; got != want {
+		t.Fatalf("validateHTTPSURL() error = %q, want %q", got, want)
+	}
+	if strings.Contains(err.Error(), "fixture-scheme") || strings.Contains(err.Error(), unsupported) {
+		t.Fatalf("validateHTTPSURL() exposed URL component: %q", err)
+	}
+}
+
 func TestAuthenticator_TokenURLUnparseableIsError(t *testing.T) {
 	cfg := baseCfg()
 	h := New().(*Hooks)

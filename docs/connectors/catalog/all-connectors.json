@@ -36799,6 +36799,12 @@
           "default": "https://hub.docker.com/v2",
           "description": "Docker Hub registry API base URL override for tests or self-hosted proxies."
         },
+        "auth_url": {
+          "type": "string",
+          "format": "uri",
+          "default": "https://hub.docker.com/v2",
+          "description": "Docker Hub authentication API base URL. It is intentionally independent of base_url so a data API proxy cannot receive Docker Hub credential-exchange requests; the connector normalizes POST /v2/users/login beneath this base, including proxies whose prefix does not end in /v2. It must be an HTTPS URL without URL userinfo, query, or fragment components. Override only for a trusted HTTPS test or self-hosted authentication proxy."
+        },
         "page_size": {
           "type": "integer",
           "default": 100,
@@ -36913,7 +36919,7 @@
         "kind": "create",
         "method": "POST",
         "path": "/access-tokens",
-        "risk": "high: creates a live Docker Hub credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval"
+        "risk": "high: creates a live Docker Hub credential; provider response is discarded by default and may be revealed only with explicit one-time terminal output; requires reverse ETL approval"
       },
       {
         "name": "update_access_token",
@@ -36935,7 +36941,7 @@
         "kind": "create",
         "method": "POST",
         "path": "/orgs/{{ record.name }}/access-tokens",
-        "risk": "high: creates a live Docker Hub organization credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval"
+        "risk": "high: creates a live Docker Hub organization credential; provider response is discarded by default and may be revealed only with explicit one-time terminal output; requires reverse ETL approval"
       },
       {
         "name": "update_org_access_token",

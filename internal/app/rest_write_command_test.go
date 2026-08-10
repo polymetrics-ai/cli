@@ -510,6 +510,49 @@ func TestDockerHubAuthLoginRejectsUserinfoBeforeUnpreviewedPlanPersistence(t *te
 	}
 }
 
+func TestDockerHubCredentialAdmissionRejectsAuthURLUserinfoBeforePersistence(t *testing.T) {
+	ctx := context.Background()
+	const userinfoMarker = "fixture-proxy-secret"
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	statePath := filepath.Join(a.ProjectDir(), "state", "state.json")
+	before, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state before rejected credential: %v", err)
+	}
+	_, err = a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "dockerhub-unsafe-auth-url",
+		Connector: "dockerhub",
+		Config: map[string]string{
+			"namespace": "fixture",
+			"base_url":  "https://data.example.invalid/v2",
+			"auth_url":  "https://fixture-user:" + userinfoMarker + "@auth.example.invalid/v2",
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "URL userinfo") {
+		t.Fatalf("AddCredential() error = %v, want userinfo rejection", err)
+	}
+	if strings.Contains(err.Error(), userinfoMarker) {
+		t.Fatalf("AddCredential() exposed auth URL userinfo: %q", err)
+	}
+	if credentials := a.ListCredentials(); len(credentials) != 0 {
+		t.Fatalf("rejected credential persisted metadata %#v", credentials)
+	}
+	after, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state after rejected credential: %v", err)
+	}
+	if string(after) != string(before) {
+		t.Fatal("rejected credential mutated project state")
+	}
+}
+
 func TestDockerHubStoredPATAuthURLRejectedBeforePlanPersistence(t *testing.T) {
 	ctx := context.Background()
 	newApp := func(t *testing.T) (*app.App, string, string, *int) {
@@ -544,7 +587,7 @@ func TestDockerHubStoredPATAuthURLRejectedBeforePlanPersistence(t *testing.T) {
 		authURL := "https://fixture-user:fixture-value@" + strings.TrimPrefix(authServer.URL, "https://") + "/v2"
 		return a, root, authURL, &authCalls
 	}
-	assertRejected := func(t *testing.T, a *app.App, authCalls *int, invoke func() error) {
+	assertRejected := func(t *testing.T, a *app.App, authCalls *int, wantError, forbidden string, invoke func() error) {
 		t.Helper()
 		statePath := filepath.Join(a.ProjectDir(), "state", "state.json")
 		before, err := os.ReadFile(statePath)
@@ -552,10 +595,10 @@ func TestDockerHubStoredPATAuthURLRejectedBeforePlanPersistence(t *testing.T) {
 			t.Fatalf("read state before rejected plan: %v", err)
 		}
 		err = invoke()
-		if err == nil || !strings.Contains(err.Error(), "must not include URL userinfo") {
-			t.Fatalf("plan error = %v, want userinfo rejection", err)
+		if err == nil || !strings.Contains(err.Error(), wantError) {
+			t.Fatalf("plan error = %v, want rejection %q", err, wantError)
 		}
-		if strings.Contains(err.Error(), "fixture-value") {
+		if forbidden != "" && strings.Contains(err.Error(), forbidden) {
 			t.Fatalf("plan error exposed URL userinfo: %q", err)
 		}
 		if *authCalls != 0 {
@@ -575,7 +618,7 @@ func TestDockerHubStoredPATAuthURLRejectedBeforePlanPersistence(t *testing.T) {
 
 	t.Run("connector command", func(t *testing.T) {
 		a, _, authURL, authCalls := newApp(t)
-		assertRejected(t, a, authCalls, func() error {
+		assertRejected(t, a, authCalls, "must not include URL userinfo", "fixture-value", func() error {
 			_, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
 				Connector:  "dockerhub",
 				Credential: "dockerhub-stored-pat-plan-preflight",
@@ -593,13 +636,48 @@ func TestDockerHubStoredPATAuthURLRejectedBeforePlanPersistence(t *testing.T) {
 	t.Run("generic reverse etl", func(t *testing.T) {
 		a, root, authURL, authCalls := newApp(t)
 		seedWarehouseTableRows(t, root, "dockerhub_plan_rows", `{"name":"fixture-repository","namespace":"fixture"}`)
-		assertRejected(t, a, authCalls, func() error {
+		assertRejected(t, a, authCalls, "must not include URL userinfo", "fixture-value", func() error {
 			_, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 				Name:                  "dockerhub_stored_pat_auth_url",
 				SourceTable:           "dockerhub_plan_rows",
 				DestinationConnector:  "dockerhub",
 				DestinationCredential: "dockerhub-stored-pat-plan-preflight",
 				DestinationConfig:     map[string]string{"auth_url": authURL},
+				Action:                "create_repository",
+				Mappings:              map[string]string{"name": "name", "namespace": "namespace"},
+				Limit:                 1,
+			})
+			return err
+		})
+	})
+
+	t.Run("connector command empty auth URL", func(t *testing.T) {
+		a, _, _, authCalls := newApp(t)
+		assertRejected(t, a, authCalls, "auth_url is required", "", func() error {
+			_, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+				Connector:  "dockerhub",
+				Credential: "dockerhub-stored-pat-plan-preflight",
+				Path:       []string{"repository", "create"},
+				Config:     map[string]string{"auth_url": ""},
+				Flags: map[string][]string{
+					"name":      {"fixture-repository"},
+					"namespace": {"fixture"},
+				},
+			})
+			return err
+		})
+	})
+
+	t.Run("generic reverse etl empty auth URL", func(t *testing.T) {
+		a, root, _, authCalls := newApp(t)
+		seedWarehouseTableRows(t, root, "dockerhub_empty_auth_url_rows", `{"name":"fixture-repository","namespace":"fixture"}`)
+		assertRejected(t, a, authCalls, "auth_url is required", "", func() error {
+			_, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+				Name:                  "dockerhub_empty_auth_url",
+				SourceTable:           "dockerhub_empty_auth_url_rows",
+				DestinationConnector:  "dockerhub",
+				DestinationCredential: "dockerhub-stored-pat-plan-preflight",
+				DestinationConfig:     map[string]string{"auth_url": ""},
 				Action:                "create_repository",
 				Mappings:              map[string]string{"name": "name", "namespace": "namespace"},
 				Limit:                 1,

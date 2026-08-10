@@ -116,6 +116,81 @@ func TestWriteRejectsDestructiveActionWithoutTypedApprovalEvidence(t *testing.T)
 	}
 }
 
+func TestWriteCapturesSensitiveResponseOnlyWhenRequested(t *testing.T) {
+	const token = "fixture-issued-token"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/access-tokens" {
+			t.Fatalf("request = %s %s, want POST /access-tokens", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"token":"` + token + `"}`))
+	}))
+	t.Cleanup(srv.Close)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:              "create_access_token",
+		Kind:              "create",
+		Method:            http.MethodPost,
+		Path:              "/access-tokens",
+		ResponseSensitive: true,
+	})
+	records := []connectors.Record{{"label": "fixture"}}
+
+	defaultResult, err := Write(context.Background(), b, connectors.WriteRequest{Action: "create_access_token"}, records, nil)
+	if err != nil {
+		t.Fatalf("Write() default response handling: %v", err)
+	}
+	if defaultResult.SensitiveResponse != nil {
+		t.Fatalf("default Write() retained sensitive response %#v", defaultResult.SensitiveResponse)
+	}
+
+	capturedResult, err := Write(context.Background(), b, connectors.WriteRequest{Action: "create_access_token", CaptureSensitiveResponse: true}, records, nil)
+	if err != nil {
+		t.Fatalf("Write() captured response: %v", err)
+	}
+	if capturedResult.SensitiveResponse == nil {
+		t.Fatal("captured Write() did not retain the immediate sensitive response")
+	}
+	body, ok := capturedResult.SensitiveResponse.Body.(map[string]any)
+	if !ok || body["token"] != token {
+		t.Fatalf("captured response = %#v, want token body", capturedResult.SensitiveResponse.Body)
+	}
+	serialized, err := json.Marshal(capturedResult)
+	if err != nil {
+		t.Fatalf("marshal captured result: %v", err)
+	}
+	if strings.Contains(string(serialized), token) {
+		t.Fatal("serialized write result retained the sensitive response")
+	}
+}
+
+func TestWriteRedactsResponseSensitiveProviderFailure(t *testing.T) {
+	const providerMarker = "fixture-sensitive-provider-body"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(`{"token":"` + providerMarker + `"}`))
+	}))
+	t.Cleanup(srv.Close)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:              "create_access_token",
+		Kind:              "create",
+		Method:            http.MethodPost,
+		Path:              "/access-tokens",
+		ResponseSensitive: true,
+	})
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "create_access_token", CaptureSensitiveResponse: true}, []connectors.Record{{"label": "fixture"}}, nil)
+	if err == nil {
+		t.Fatal("Write() error = nil, want provider failure")
+	}
+	if strings.Contains(err.Error(), providerMarker) || strings.Contains(err.Error(), "token") {
+		t.Fatalf("Write() exposed response-sensitive provider error: %q", err)
+	}
+	if result.SensitiveResponse != nil {
+		t.Fatalf("Write() retained a failed sensitive response %#v", result.SensitiveResponse)
+	}
+}
+
 func TestApprovedDestructiveWriteRefusesRedirectToUnapprovedTarget(t *testing.T) {
 	approvedCalls := 0
 	unapprovedCalls := 0

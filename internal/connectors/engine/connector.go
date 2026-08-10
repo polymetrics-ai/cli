@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -183,6 +184,17 @@ func (c *Connector) PreflightRuntimeConfig(cfg connectors.RuntimeConfig) error {
 		return nil
 	}
 	return preflighter.PreflightRuntimeConfig(materializeConfigDefaults(c.bundle, cfg))
+}
+
+func (c *Connector) PreflightSensitiveWriteResponse(name string) error {
+	action, err := findWriteAction(c.bundle, name)
+	if err != nil {
+		return err
+	}
+	if !action.ResponseSensitive {
+		return fmt.Errorf("engine: write action %q does not support sensitive response capture", name)
+	}
+	return nil
 }
 
 // OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by

@@ -162,7 +162,8 @@
         },
         "additionalProperties": false
       },
-      "risk": "high: creates a live Docker Hub credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval"
+      "response_sensitive": true,
+      "risk": "high: creates a live Docker Hub credential; provider response is discarded by default and may be revealed only with explicit one-time terminal output; requires reverse ETL approval"
     },
     {
       "name": "update_access_token",
@@ -265,7 +266,8 @@
         },
         "additionalProperties": false
       },
-      "risk": "high: creates a live Docker Hub organization credential; provider response is returned unchanged and can include a raw token; requires reverse ETL approval",
+      "response_sensitive": true,
+      "risk": "high: creates a live Docker Hub organization credential; provider response is discarded by default and may be revealed only with explicit one-time terminal output; requires reverse ETL approval",
       "path_fields": [
         "name"
       ]
