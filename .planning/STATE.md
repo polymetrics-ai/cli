@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-08-08T17:12:46.261Z"
-last_activity: 2026-07-08 — Runtime/RLM/Pi-agent/website integration knowledge added to GSD, agents, and non-phase planning docs; guidance now preserves Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, and website stack details without making runtime checks mandatory.
+last_updated: "2026-08-10T21:55:05.713Z"
+last_activity: 2026-08-10
 progress:
   total_phases: 113
   completed_phases: 0
@@ -84,3 +84,4 @@ These are quick-map inputs only; authoritative counts require Phase 1 inventory 
 ### Roadmap Evolution
 
 - Phase 600 added: issue #3984: standalone generated capability and pair-flow certification foundation
+- Phase 601 added: Issue #3754 shared rate coordinator foundation

@@ -9,3 +9,13 @@ Current connector delivery follows the
 [connector delivery canon](../docs/connector-canon/INDEX.md), the binding
 captain rulings, and the issue-first lifecycle in `AGENTS.md`. PostgreSQL parity
 is #3972; certification matrix work is #3984; canon maintenance is #3985.
+
+### Phase 601: Issue #3754 shared rate coordinator
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 600
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 601 to break down)
