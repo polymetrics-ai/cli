@@ -128,6 +128,17 @@ func graphQLMutationWithSensitiveInput(baseURL string) Bundle {
 	return bundle
 }
 
+func TestOperationDirectWriteMetadataUsesGraphQLResponseCap(t *testing.T) {
+	bundle := graphQLOperationBundle("http://127.0.0.1", "graphql_mutation")
+	metadata, err := OperationDirectWriteMetadata(bundle, "acme.widgets.mutation")
+	if err != nil {
+		t.Fatalf("OperationDirectWriteMetadata: %v", err)
+	}
+	if metadata.MaxRequestBytes != bundle.Operations[0].GraphQL.MaxBytes {
+		t.Fatalf("MaxRequestBytes = %d, want %d", metadata.MaxRequestBytes, bundle.Operations[0].GraphQL.MaxBytes)
+	}
+}
+
 // A structured CLI value is safe for a fixed GraphQL operation only when the
 // declaration's own closed variables schema admits that exact top-level
 // variable as an object or array.  This is intentionally a narrower question

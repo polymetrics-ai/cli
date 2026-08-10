@@ -266,6 +266,13 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 	if target.RequiresApproval() {
 		confirmation = string(connectors.ConfirmationKindDestructive)
 	}
+	var maxBytes int
+	switch op.Kind {
+	case "rest_write":
+		maxBytes = op.REST.MaxBytes
+	case "graphql_mutation":
+		maxBytes = op.GraphQL.MaxBytes
+	}
 	return connectors.OperationDirectWriteMetadata{
 		Operation:             op.ID,
 		MutationClass:         op.MutationClass,
@@ -274,7 +281,7 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 		ConfirmationChallenge: confirmation,
 		OutputPolicy:          op.OutputPolicy,
 		Batchable:             op.IsBatchable(),
-		MaxRequestBytes:       clampOperationDirectWriteMaxBytes(op.REST.MaxBytes),
+		MaxRequestBytes:       clampOperationDirectWriteMaxBytes(maxBytes),
 		PayloadFileFields:     operationDirectWritePayloadFileFields(op),
 		RedactFields:          operationDirectWriteRedactFields(op),
 	}, nil
