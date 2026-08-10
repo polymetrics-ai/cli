@@ -9,6 +9,19 @@ GitHub-owned definitions/generator/hooks/tests. The one shared production adjust
 provider-neutral safe handling of slash-bearing `ref` path variables. Fixture replay and preflight remain supporting evidence; terminal live
 records are limited to `PROVEN`, `UNTESTABLE` with a concrete reason, or `FAILED`.
 
+## Current-ref — merged GitHub surface
+
+**Measurement:** 2026-08-10 at ref `9cc25b5c47c01277d77e2b8dcfef08801e8ad0c7`, derived from
+the checked-in GitHub source bundles and generated ledgers.
+
+- 1,571 commands: 1,521 implemented, 23 unsupported-local, and 27 unsupported-api; zero
+  partial, planned, or `unsafe_or_disallowed` commands.
+- 1,225 / 1,225 endpoints covered with zero blocked; 37 streams, 607 write actions, and 768
+  operations.
+
+The frozen checkpoints below remain historical records preserved at base ref
+`4df0b0416e46958d9acb1b02708464570c070e0f` on 2026-08-10.
+
 ## Scope
 
 - Generate `.planning/phases/github-parity-extract-r1/OPERATION-PROOF-LEDGER.json` and
@@ -33,7 +46,7 @@ records are limited to `PROVEN`, `UNTESTABLE` with a concrete reason, or `FAILED
    is unbound, a generic-only surface member lacks an exercise route, or a shared generated delta
    is not GitHub-only.
 2. **Green — source-derived ledgers.** The generator/validator writes the two JSON ledgers and
-   reports exact 1,225 endpoint, 37 stream, 607 write-action, 768 operation, and 1,571 command
+   reports exact 1,224 endpoint, 37 stream, 574 write-action, 377 operation, and 1,179 command
    source counts without hand-maintained counts.
 3. **Red — current-head binary proof.** A regression fixture with an unknown command and a blocked
    command must fail the sweep contract; the real sweep then records every final command and its
