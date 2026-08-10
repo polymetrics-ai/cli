@@ -54,5 +54,12 @@
   "websocket_schema_green": "2026-08-10: TestBundleLoadAcceptsClosedWebSocketSessionContract passes on the consumer base",
   "green": "22 commands declared and runtime-preflight reachable: 12 rest reads, 9 plan/preview/approval-gated rest writes, and 1 fixed Live Scribe websocket session; all 22 matching api_surface rows reconciled to coverage",
   "verification": "pass: Zoom bundle/engine/connectorgen scoped suites, full connector validation, generated surface checks, freshly built binary 22/22 route sweep, docs/site generators and typecheck, vet/build/tidy/docs/smoke/lint/contract/boundary/release gates",
-  "review": "manual inline code-review completed; no unresolved critical, warning, security, source-parity, generated-file, or endpoint-ledger-locality finding"
+  "review": "manual inline code-review completed; no unresolved critical, warning, security, source-parity, generated-file, or endpoint-ledger-locality finding",
+  "handoff": {
+    "consumer_pr": "https://github.com/polymetrics-ai/cli/pull/3966",
+    "consumer_base": "feat/3963-zoom-websocket-session-foundation@dee258307",
+    "parent_pr": "https://github.com/polymetrics-ai/cli/pull/3951",
+    "state": "PR #3966 is open; CI and automatic review are pending. Do not merge it directly; retain the stack through #3965 and the human-gated parent PR.",
+    "next": "After this stack is integrated, select the next provider-owned Zoom category from #3915. Re-fetch that category's live provider artifact and do not import the 426-sweep generated Zoom surface."
+  }
 }
