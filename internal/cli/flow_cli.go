@@ -287,7 +287,7 @@ func (n *noopAppAdapter) ETLRun(_ context.Context, _ string, _ []string) (flow.E
 func (n *noopAppAdapter) QuerySQL(_ context.Context, _, _ string, _ int) ([]map[string]any, error) {
 	return nil, nil
 }
-func (n *noopAppAdapter) QueryTable(_ context.Context, _, _ string, _ int) ([]map[string]any, error) {
+func (n *noopAppAdapter) ReadActionSource(_ context.Context, _, _ string) ([]map[string]any, error) {
 	return nil, nil
 }
 func (n *noopAppAdapter) RLMRun(_ context.Context, _ flow.RLMRunRequest) (flow.RLMResult, error) {
@@ -321,8 +321,8 @@ func (a *appFlowAdapter) QuerySQL(ctx context.Context, sql, connection string, l
 	return recordsToFlowRows(records), nil
 }
 
-func (a *appFlowAdapter) QueryTable(ctx context.Context, table, connection string, limit int) ([]map[string]any, error) {
-	records, err := a.app.QueryTable(ctx, app.QueryTableRequest{Table: table, Connection: connection, Limit: limit})
+func (a *appFlowAdapter) ReadActionSource(ctx context.Context, table, connection string) ([]map[string]any, error) {
+	records, err := a.app.ReadActionSource(ctx, app.ActionSourceReadRequest{Table: table, Connection: connection})
 	if err != nil {
 		return nil, err
 	}

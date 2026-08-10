@@ -8,7 +8,8 @@ push, draft PR, and CI observation remain.
 1. Query manifests use the existing `connection` field to scope every bare
    DuckDB warehouse view to one owner.
 2. Action manifests use `action_cfg.source_connection`; action source rows use
-   `QueryTableRequest.Connection` before the existing local action runner.
+   the action-specific uncapped `ActionSourceReadRequest.Connection` before
+   the existing local action runner.
 3. `_unattributed` selects root-owned tables only. Omitted duplicate sources
    fail with `*warehouse.AmbiguousTableError`, decorated only with a manifest
    field that flow users can supply.
@@ -23,6 +24,7 @@ push, draft PR, and CI observation remain.
 coverage:
   automated:
     - focused real-Parquet flow query/action tests for separate acme/globex rows
+    - correction regression for 101 selected action rows and failed-checkpoint safety
     - ambiguity and root-owned selector tests
     - manifest JSON and action-runner identity tests
     - app/flow/CLI package tests and app/flow race tests
@@ -39,4 +41,4 @@ coverage:
   provider call was added.
 - Both temporary proof roots were moved to Trash and their original paths were
   verified absent.
-- Correction rounds: **0 / 5**.
+- Correction rounds: **1 / 5**.

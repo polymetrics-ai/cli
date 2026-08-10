@@ -37,7 +37,7 @@ type RLMRunRequest struct {
 type AppAdapter interface {
 	ETLRun(ctx context.Context, connectionID string, streams []string) (ETLResult, error)
 	QuerySQL(ctx context.Context, sql, connection string, limit int) ([]map[string]any, error)
-	QueryTable(ctx context.Context, table, connection string, limit int) ([]map[string]any, error)
+	ReadActionSource(ctx context.Context, table, connection string) ([]map[string]any, error)
 	RLMRun(ctx context.Context, req RLMRunRequest) (RLMResult, error)
 }
 
@@ -235,7 +235,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			// Fetch source records from the warehouse for this action step.
 			var sourceRecords []map[string]any
 			if s.ActionCfg != nil && s.ActionCfg.SourceTable != "" {
-				sourceRecords, stepErr = e.App.QueryTable(ctx, s.ActionCfg.SourceTable, s.ActionCfg.SourceConnection, 0)
+				sourceRecords, stepErr = e.App.ReadActionSource(ctx, s.ActionCfg.SourceTable, s.ActionCfg.SourceConnection)
 				stepErr = withFlowSourceReadRemedy(s, stepErr)
 				if stepErr != nil {
 					break

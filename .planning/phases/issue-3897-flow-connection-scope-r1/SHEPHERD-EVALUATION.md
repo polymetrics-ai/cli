@@ -16,5 +16,5 @@ ran.
 | Scope fence | PASS | Local capture runner only; no provider or reverse lifecycle code changed. |
 | Public contract | PASS | Runtime manual, docs, website, generated docs, and golden transcripts agree. |
 
-No issue defect was found during this evaluation; correction rounds remain
-**0 / 5**.
+Correction 1 / 5 found and fixed a capped action-source read during review.
+The 101-row local regression now passes without provider mutation.

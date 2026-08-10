@@ -25,7 +25,7 @@ Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
 ## Scope
 
 1. Add optional connection selectors to flow query and action source reads.
-2. Thread selectors into the real Parquet/DuckDB and `QueryTableRequest`
+2. Thread selectors into the real Parquet/DuckDB and action-source read
    paths; do not select by SQL string interpolation.
 3. Preserve a typed ambiguity refusal for omitted selectors, with advice that
    names only a manifest field available to the caller.
@@ -99,7 +99,7 @@ CLI flag.
 
 **Result:** GREEN. Both fields survive JSON marshal/parse. Query forwards its
 connection to the DuckDB request and action forwards its source connection to
-`QueryTableRequest` before passing the unchanged `FlowStep` to the existing
+`ActionSourceReadRequest` before passing the unchanged `FlowStep` to the existing
 action-runner boundary. This path owns no separate preview or digest; #3994
 continues to own that later lifecycle.
 

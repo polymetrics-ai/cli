@@ -470,7 +470,7 @@ func (s *stubApp) QuerySQL(_ context.Context, sql, connection string, _ int) ([]
 	return nil, nil
 }
 
-func (s *stubApp) QueryTable(_ context.Context, table, connection string, _ int) ([]map[string]any, error) {
+func (s *stubApp) ReadActionSource(_ context.Context, table, connection string) ([]map[string]any, error) {
 	s.mu.Lock()
 	s.calls = append(s.calls, table)
 	s.tableConnections = append(s.tableConnections, connection)
@@ -632,7 +632,7 @@ func (s *stepCallTracker) QuerySQL(_ context.Context, sql, _ string, _ int) ([]m
 	return nil, err
 }
 
-func (s *stepCallTracker) QueryTable(_ context.Context, table, _ string, _ int) ([]map[string]any, error) {
+func (s *stepCallTracker) ReadActionSource(_ context.Context, table, _ string) ([]map[string]any, error) {
 	s.mu.Lock()
 	s.order = append(s.order, table)
 	err := s.fail[table]

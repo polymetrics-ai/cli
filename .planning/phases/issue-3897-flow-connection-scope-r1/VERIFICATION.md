@@ -1,7 +1,7 @@
 # #3897 Verification Checklist
 
-**Status:** Local GREEN verification complete; pending no-mistakes and
-external delivery gates
+**Status:** Local GREEN verification complete with correction 1 / 5; pending
+no-mistakes and external delivery gates.
 
 ## Required acceptance evidence
 
@@ -14,7 +14,8 @@ external delivery gates
 - [x] Explicit query selector returns only the selected owner’s rows through
   Parquet/DuckDB.
 - [x] Explicit action source selector returns only the selected owner’s rows
-  through `QueryTableRequest.Connection` and reaches the action stub only.
+  through `ActionSourceReadRequest.Connection` and reaches the action stub
+  only.
 - [x] Omitted selector yields `*warehouse.AmbiguousTableError`; its remedy
   names no nonexistent CLI flag.
 - [x] `_unattributed` reads only root-owned tables.
@@ -22,6 +23,13 @@ external delivery gates
 - [x] No action/provider mutation occurs during tests.
 - [x] Fresh binary local proof validates returned row IDs, not exit status.
 - [x] Temporary project roots are removed and verified absent.
+- [x] Correction 1 RED: a connection-selected action source with 101 rows
+  reaches only 100 rows through the public `QueryTable(..., Limit: 0)` default.
+- [x] Correction 1 preserves the public `QueryTable(..., Limit: 0)` 100-row
+  default in the same real-Parquet fixture.
+- [x] Correction 1 GREEN: the action-only uncapped read delivers all 101
+  selected rows, retains owner isolation, and records no success checkpoint
+  when the local runner returns an error.
 
 ## GSD/manual lifecycle record
 
@@ -52,3 +60,14 @@ Record each result and SHA in `RUN-STATE.json` after execution.
 - Fresh-binary proof recorded in `traces/binary-flow-proof.txt`; its original
   temporary root was moved to the platform Trash and its original path tested
   absent. The smoke temporary root received the same cleanup.
+
+## Correction 1 command record
+
+- RED (exit 1): `go test -v -timeout 20m ./internal/cli -run
+  '^TestFlowActionSourceReadsAllSelectedConnectionRows$' -count=1`; both action
+  dispatch subtests reported 100 records where 101 selected `acme` rows were
+  required.
+- GREEN (exit 0): `go test -v -timeout 20m ./internal/app ./internal/flow
+  ./internal/cli -run
+  '^(TestEnginePassesManifestSourceConnectionSelectors|TestFlowSourceConnectionSelectorsReadOnlyOwningRows|TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed|TestFlowActionSourceReadsAllSelectedConnectionRows)$'
+  -count=1` passed.

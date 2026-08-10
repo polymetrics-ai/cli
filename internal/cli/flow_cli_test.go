@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -440,6 +441,117 @@ func TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed(t *te
 	})
 }
 
+func TestFlowActionSourceReadsAllSelectedConnectionRows(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowScopedWarehouseApp(t, ctx)
+
+	var acme app.Connection
+	for _, connection := range a.ListConnections() {
+		if connection.Name == "acme" {
+			acme = connection
+			break
+		}
+	}
+	require.NotEmpty(t, acme.ID)
+	warehouseDir := filepath.Join(a.ProjectDir(), "warehouse")
+	location, err := warehouse.LocationFor(warehouseDir, "flow_scope", "warehouse", acme.ID, acme.Name)
+	require.NoError(t, err)
+	path, err := location.TablePath("records")
+	require.NoError(t, err)
+
+	wantIDs := make([]string, 101)
+	rows := make([]warehouse.Row, len(wantIDs))
+	for i := range rows {
+		wantIDs[i] = fmt.Sprintf("acme-%03d", i)
+		rows[i] = warehouse.Row{
+			"id":         wantIDs[i],
+			"updated_at": "2026-08-11T00:00:00Z",
+		}
+	}
+	require.NoError(t, warehouse.WriteTable(ctx, path, rows))
+
+	publicRows, err := a.QueryTable(ctx, app.QueryTableRequest{Table: "records", Connection: "acme", Limit: 0})
+	require.NoError(t, err)
+	require.Len(t, publicRows, 100)
+
+	manifest := func(name string) flow.FlowManifest {
+		return flow.FlowManifest{
+			Version: 1,
+			Name:    name,
+			Steps: []flow.FlowStep{{
+				ID:   "act-on-records",
+				Kind: flow.KindAction,
+				ActionCfg: &flow.ActionConfig{
+					SourceTable:           "records",
+					SourceConnection:      "acme",
+					DestinationConnector:  "future-connector",
+					DestinationCredential: "future-credential",
+					Action:                "create",
+					Mappings:              map[string]string{"id": "external_id"},
+				},
+				In:  []string{},
+				Out: []string{},
+			}},
+		}
+	}
+	assertSelectedRows := func(t *testing.T, records []map[string]any) {
+		t.Helper()
+		require.Len(t, records, len(wantIDs))
+		seen := make(map[string]struct{}, len(records))
+		for _, record := range records {
+			id, ok := record["id"].(string)
+			require.Truef(t, ok, "record id = %#v", record["id"])
+			seen[id] = struct{}{}
+		}
+		for _, wantID := range wantIDs {
+			_, ok := seen[wantID]
+			assert.Truef(t, ok, "action records do not include %q", wantID)
+		}
+		_, includesGlobex := seen["globex-1"]
+		assert.False(t, includesGlobex)
+	}
+
+	t.Run("success dispatches every selected row", func(t *testing.T) {
+		checkpoints := &flow.FileCheckpointStore{Dir: t.TempDir()}
+		runner := &captureFlowActionRunner{}
+		engine := &flow.Engine{
+			Manifest:     manifest("all-selected-action-success"),
+			App:          &appFlowAdapter{app: a},
+			ActionRunner: runner,
+			Checkpoint:   checkpoints,
+			LockDir:      t.TempDir(),
+		}
+
+		result, err := engine.Run(ctx, flow.RunOptions{ApprovalToken: "test-only"})
+		require.NoError(t, err)
+		assert.Equal(t, "ok", result.Status)
+		assertSelectedRows(t, runner.records)
+		status, err := checkpoints.Get("all-selected-action-success", "act-on-records")
+		require.NoError(t, err)
+		assert.Equal(t, "success", status)
+	})
+
+	t.Run("failed dispatch leaves no success checkpoint", func(t *testing.T) {
+		checkpoints := &flow.FileCheckpointStore{Dir: t.TempDir()}
+		runner := &captureFlowActionRunner{err: errors.New("local action dispatch failed")}
+		engine := &flow.Engine{
+			Manifest:     manifest("all-selected-action-failure"),
+			App:          &appFlowAdapter{app: a},
+			ActionRunner: runner,
+			Checkpoint:   checkpoints,
+			LockDir:      t.TempDir(),
+		}
+
+		result, err := engine.Run(ctx, flow.RunOptions{ApprovalToken: "test-only"})
+		require.Error(t, err)
+		assert.Equal(t, "failed", result.Status)
+		assertSelectedRows(t, runner.records)
+		status, err := checkpoints.Get("all-selected-action-failure", "act-on-records")
+		require.NoError(t, err)
+		assert.Empty(t, status)
+	})
+}
+
 type recordingFlowAppAdapter struct {
 	app                 *app.App
 	lastRows            []map[string]any
@@ -461,8 +573,8 @@ func (a *recordingFlowAppAdapter) QuerySQL(ctx context.Context, sql, connection 
 	return a.lastRows, nil
 }
 
-func (a *recordingFlowAppAdapter) QueryTable(ctx context.Context, table, connection string, limit int) ([]map[string]any, error) {
-	records, err := a.app.QueryTable(ctx, app.QueryTableRequest{Table: table, Connection: connection, Limit: limit})
+func (a *recordingFlowAppAdapter) ReadActionSource(ctx context.Context, table, connection string) ([]map[string]any, error) {
+	records, err := a.app.ReadActionSource(ctx, app.ActionSourceReadRequest{Table: table, Connection: connection})
 	if err != nil {
 		return nil, err
 	}
@@ -487,12 +599,16 @@ type captureFlowActionRunner struct {
 	records []map[string]any
 	step    flow.FlowStep
 	calls   int
+	err     error
 }
 
 func (r *captureFlowActionRunner) ExecuteStep(_ context.Context, step flow.FlowStep, records []map[string]any, _ string, _ string) (flow.ActionResult, error) {
 	r.calls++
 	r.step = step
 	r.records = append([]map[string]any(nil), records...)
+	if r.err != nil {
+		return flow.ActionResult{RecordsAttempted: len(records)}, r.err
+	}
 	return flow.ActionResult{RecordsAttempted: len(records), RecordsSucceeded: len(records)}, nil
 }
 
