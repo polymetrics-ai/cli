@@ -20,8 +20,9 @@
 
 ## Result
 
-The seed is bounded to planning artifacts. It preserves `#3856 -> #3857 -> (#3858 || #3859)`, uses
-the exact temporary #3862 base and final #4015 retarget rule, records #3880 as partial reuse only,
-and does not claim certification or executable product behavior. The remaining external GitHub
-validation is explicitly pending because `gh-axi` returned `RATE_LIMITED`; it is not treated as a
-passing review or an authorization to merge.
+The seed is bounded to planning artifacts. It preserves `#3856 -> #3857 -> (#3858 || #3859)`,
+records #3860 as a follow-on documentation child, uses the exact temporary #3862 base and final
+#4015 retarget rule, records #3880 as partial reuse only, and does not claim certification or
+executable product behavior. The remaining external GitHub validation is explicitly pending until
+the outer PR phase creates and inspects the draft; it is not treated as a passing review or an
+authorization to merge.
