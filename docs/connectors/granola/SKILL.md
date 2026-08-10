@@ -54,6 +54,23 @@ Reads Granola meeting notes metadata and full note detail (summary, owner, atten
 - read risk: external Granola API read of meeting notes metadata
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Granola's declared streams and reverse-ETL actions.
+- Usage: pm granola <command> [flags]
+- Read streams
+- Reverse ETL writes
+- Other Commands
+  - api delete v1 webhook-endpoints - Documented DELETE /v1/webhook-endpoints (not implemented) [intent=direct_write availability=not_implemented operation=granola.delete.v1-webhook-endpoints]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+  - api delete v1 webhook-endpoints webhook-endpoint-id - Documented DELETE /v1/webhook-endpoints/{webhook_endpoint_id} (not implemented) [intent=direct_write availability=not_implemented operation=granola.delete.v1-webhook-endpoints-webhook-endpoint-id]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+  - api get v1 folders - Documented GET /v1/folders (not implemented) [intent=direct_read availability=not_implemented operation=granola.get.v1-folders]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: low; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get v1 notes note-id - Documented GET /v1/notes/{note_id} (not implemented) [intent=direct_read availability=not_implemented operation=granola.get.v1-notes-note-id]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: low; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get v1 webhook-endpoints - Documented GET /v1/webhook-endpoints (not implemented) [intent=direct_read availability=not_implemented operation=granola.get.v1-webhook-endpoints]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: low; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api patch v1 webhook-endpoints webhook-endpoint-id - Documented PATCH /v1/webhook-endpoints/{webhook_endpoint_id} (not implemented) [intent=direct_write availability=not_implemented operation=granola.patch.v1-webhook-endpoints-webhook-endpoint-id]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+  - api post v1 webhook-endpoints - Documented POST /v1/webhook-endpoints (not implemented) [intent=direct_write availability=not_implemented operation=granola.post.v1-webhook-endpoints]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+  - detailed notes list - Run the detailed notes ETL stream [intent=etl availability=implemented stream=detailed_notes]; notes: discrepancy=present-in-surface-absent-from-artifact
+  - notes list - Run the notes ETL stream [intent=etl availability=implemented stream=notes]
+
 ## Commands
 
 ### Inspect as a manual

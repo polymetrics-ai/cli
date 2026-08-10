@@ -52,7 +52,7 @@ func parseBatchGoogleDiscoveryArtifact(raw []byte, source batchArtifactSource) (
 		return batchArtifactInventory{}, err
 	}
 	if len(endpoints) == 0 {
-		return batchArtifactInventory{}, fmt.Errorf("Google Discovery artifact has no HTTP methods")
+		return batchArtifactInventory{}, fmt.Errorf("google Discovery artifact has no HTTP methods")
 	}
 	sort.Slice(endpoints, func(i, j int) bool {
 		if endpoints[i].Path != endpoints[j].Path {
@@ -85,11 +85,11 @@ func appendBatchGoogleDiscoveryMethods(endpoints *[]batchArtifactEndpoint, metho
 		method := methods[name]
 		httpMethod, ok := batchArtifactHTTPMethodForPathItemKey(strings.ToLower(strings.TrimSpace(method.HTTPMethod)))
 		if !ok {
-			return fmt.Errorf("Google Discovery method %q has unsupported HTTP method %q", firstNonEmpty(method.ID, name), method.HTTPMethod)
+			return fmt.Errorf("google Discovery method %q has unsupported HTTP method %q", firstNonEmpty(method.ID, name), method.HTTPMethod)
 		}
 		path, err := normalizeBatchGoogleDiscoveryPath(firstNonEmpty(method.Path, method.FlatPath))
 		if err != nil {
-			return fmt.Errorf("Google Discovery method %q: %w", firstNonEmpty(method.ID, name), err)
+			return fmt.Errorf("google Discovery method %q: %w", firstNonEmpty(method.ID, name), err)
 		}
 		summary := strings.TrimSpace(method.Description)
 		if summary == "" {

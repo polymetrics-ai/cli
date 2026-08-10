@@ -63,6 +63,24 @@ SECURITY
   approval: none; read-only source connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Google Forms's declared streams and reverse-ETL actions.
+  Usage: pm google-forms <command> [flags]
+  Read streams
+  Reverse ETL writes
+  Other Commands
+    api delete forms formid watches watchid - Documented DELETE /forms/{formId}/watches/{watchId} (not implemented) [intent=direct_write availability=not_implemented operation=google-forms.delete.forms-formid-watches-watchid]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    api get forms formid responses responseid - Documented GET /forms/{formId}/responses/{responseId} (not implemented) [intent=direct_read availability=not_implemented operation=google-forms.get.forms-formid-responses-responseid]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get forms formid watches - Documented GET /forms/{formId}/watches (not implemented) [intent=direct_read availability=not_implemented operation=google-forms.get.forms-formid-watches]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api post forms - Documented POST /forms (not implemented) [intent=direct_write availability=not_implemented operation=google-forms.post.forms]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    api post forms formid batchupdate - Documented POST /forms/{formId}:batchUpdate (not implemented) [intent=direct_write availability=not_implemented operation=google-forms.post.forms-formid-batchupdate]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    api post forms formid watches - Documented POST /forms/{formId}/watches (not implemented) [intent=direct_write availability=not_implemented operation=google-forms.post.forms-formid-watches]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    api post v1 forms formid setpublishsettings - Documented POST /v1/forms/{formId}:setPublishSettings (not implemented) [intent=direct_write availability=not_implemented operation=google-forms.post.v1-forms-formid-setpublishsettings]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    api post v1 forms formid watches watchid renew - Documented POST /v1/forms/{formId}/watches/{watchId}:renew (not implemented) [intent=direct_write availability=not_implemented operation=google-forms.post.v1-forms-formid-watches-watchid-renew]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    form items list - Run the form items ETL stream [intent=etl availability=implemented stream=form_items]
+    forms list - Run the forms ETL stream [intent=etl availability=implemented stream=forms]
+    responses list - Run the responses ETL stream [intent=etl availability=implemented stream=responses]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect google-forms

@@ -56,6 +56,24 @@ SECURITY
   read risk: external aviationstack API read of flight and aviation reference data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Aviationstack's declared streams and reverse-ETL actions.
+  Usage: pm aviationstack <command> [flags]
+  Read streams
+  Other Commands
+    airlines list - Run the airlines ETL stream [intent=etl availability=implemented stream=airlines]
+    airplanes list - Run the airplanes ETL stream [intent=etl availability=implemented stream=airplanes]
+    airports list - Run the airports ETL stream [intent=etl availability=implemented stream=airports]
+    api get v1 aircraft-types - Documented GET /v1/aircraft_types (not implemented) [intent=direct_read availability=not_implemented operation=aviationstack.get.v1-aircraft-types]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get v1 cities - Documented GET /v1/cities (not implemented) [intent=direct_read availability=not_implemented operation=aviationstack.get.v1-cities]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get v1 flightsfuture - Documented GET /v1/flightsFuture (not implemented) [intent=direct_read availability=not_implemented operation=aviationstack.get.v1-flightsfuture]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get v1 historical - Documented GET /v1/historical (not implemented) [intent=direct_read availability=not_implemented operation=aviationstack.get.v1-historical]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get v1 routes - Documented GET /v1/routes (not implemented) [intent=direct_read availability=not_implemented operation=aviationstack.get.v1-routes]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get v1 taxes - Documented GET /v1/taxes (not implemented) [intent=direct_read availability=not_implemented operation=aviationstack.get.v1-taxes]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get v1 timetable - Documented GET /v1/timetable (not implemented) [intent=direct_read availability=not_implemented operation=aviationstack.get.v1-timetable]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    countries list - Run the countries ETL stream [intent=etl availability=implemented stream=countries]
+    flights list - Run the flights ETL stream [intent=etl availability=implemented stream=flights]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect aviationstack

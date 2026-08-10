@@ -53,6 +53,17 @@ Reads web and Reddit search results from a SearXNG metasearch instance's JSON AP
 - approval: none; read-only public search API
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run SearXNG's declared streams and reverse-ETL actions.
+- Usage: pm searxng <command> [flags]
+- Read streams
+- Other Commands
+  - api get config - Documented GET /config (not implemented) [intent=direct_read availability=not_implemented operation=searxng.get.config]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get healthz - Documented GET /healthz (not implemented) [intent=direct_read availability=not_implemented operation=searxng.get.healthz]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - reddit list - Run the reddit ETL stream [intent=etl availability=implemented stream=reddit]
+  - search list - Run the search ETL stream [intent=etl availability=implemented stream=search]
+
 ## Commands
 
 ### Inspect as a manual

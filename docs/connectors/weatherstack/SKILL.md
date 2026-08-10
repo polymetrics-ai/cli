@@ -68,6 +68,18 @@ Reads current, historical, forecast, marine, and location-autocomplete weather d
 - approval: none; read-only public weather data connector
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Weatherstack's declared streams and reverse-ETL actions.
+- Usage: pm weatherstack <command> [flags]
+- Read streams
+- Other Commands
+  - autocomplete list - Run the autocomplete ETL stream [intent=etl availability=implemented stream=autocomplete]
+  - current list - Run the current ETL stream [intent=etl availability=implemented stream=current]
+  - forecast list - Run the forecast ETL stream [intent=etl availability=implemented stream=forecast]
+  - historical list - Run the historical ETL stream [intent=etl availability=implemented stream=historical]
+  - marine list - Run the marine ETL stream [intent=etl availability=implemented stream=marine]
+
 ## Commands
 
 ### Inspect as a manual

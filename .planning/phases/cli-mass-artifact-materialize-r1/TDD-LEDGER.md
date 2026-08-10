@@ -180,3 +180,8 @@
 
 - Red: the real binary returns `unknown command` with exit 2 for the seven materialized hook-backed connectors `apify-dataset`, `basecamp`, `copper`, `google-classroom`, `google-pagespeed-insights`, `metabase`, and `rootly`, despite their `cli_surface.json` declarations containing 3, 3, 5, 5, 1, 5, and 3 implemented ETL commands respectively (25 total). The promoted-native registry overlay is the only shared path for all seven.
 - Green: `TestPromotedNativeConnectorCommandSurfacesRemainReachable` in `internal/cli/cli_test.go` runs each bare namespace and one implemented command-help route without credentials or provider I/O, requiring exit 0 plus the expected command-surface/manual details. The implementation forwards the bundle-owned `CommandSurface` from `internal/connectors/native/nativeset/promoted.go`; it leaves the native `Check`/`Read` delegation and every materialized JSON declaration unchanged.
+
+## Xero binary versus direct-read operation accounting
+
+- Red: `TestXeroOperationsLedgerMetrics` expected 118 operations by counting the 26 binary-download rows a second time as `rest_read`, while the materialized v2 catalog correctly held 92 operations.
+- Green: the regression now asserts the distinct category partition — 26 `binary_download`, 22 `rest_read`, 22 `file_upload`, and 22 `rest_write` operations — so binary, direct-read, and direct-write classifications cannot be conflated.

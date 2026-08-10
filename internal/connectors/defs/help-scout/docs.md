@@ -3,10 +3,10 @@
 Reads and writes the documented Help Scout Mailbox API v2 surface using OAuth2 client-credentials
 authentication.
 
-Current official operation ledger: 144 documented HTTP operations (79 GET, 21 POST, 20 PUT, 18
-DELETE, 6 PATCH). Implemented rows: 139 = 24 stream-backed reads + 49 bounded direct reads + 65
-typed writes + 1 binary download. Blocked/planned rows: 5. Certified rows: 0 (fixture-only; no live
-provider calls were made).
+`api_surface.json` owns the source-backed operation ledger, while `cli_surface.json` owns each
+command's availability. The bundle contains stream-backed reads, bounded direct and binary reads,
+and typed reverse-ETL actions; use runtime help or `cli_surface.json` to determine which command
+paths are currently executable. Certification is fixture-only; no live provider calls were made.
 
 Readable streams: `conversations`, `conversations_threads`, `customer_properties`, `customers`,
 `customers_chats`, `customers_emails`, `customers_phones`, `customers_social_profiles`,
@@ -83,9 +83,10 @@ carries the matching required flag: `conversations_threads` uses `config.convers
 
 ## Write actions & risks
 
-The connector declares 65 typed write actions (21 POST creates, 20 PUT and 6 PATCH updates, 18
-DELETE removals) across conversations, threads, customers and their email/phone/chat/social/website
-contact records, organizations, users, teams, tags, webhooks, and workflows.
+The connector declares typed write actions across conversations, threads, customers and their
+email/phone/chat/social/website contact records, organizations, users, teams, tags, webhooks, and
+workflows. `writes.json` owns those declarations; `cli_surface.json` records whether each action
+has an executable command path.
 
 Writes are only available through reverse ETL plan -> preview -> explicit approval -> execute. The
 18 DELETE actions are gated as destructive and additionally require a typed confirmation; they
@@ -107,8 +108,6 @@ mailbox, team, tag, webhook, workflow, and user data.
 ## Known limits
 
 - Batch defaults: read_page_size=50.
-- API coverage includes 24 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are blocked in the
-  operation ledger as direct_read=5.
+- `api_surface.json` is the authoritative per-endpoint coverage and blocked-operation ledger.
 - Fixture-only evidence: no live Help Scout credentials, provider calls, provider writes, or
   certification run were used.
