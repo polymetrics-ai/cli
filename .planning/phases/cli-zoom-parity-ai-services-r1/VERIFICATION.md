@@ -22,7 +22,8 @@
   closed operations schema loader regression is green.
 - [x] A freshly built binary reached `pm help zoom`, bare `pm zoom`, bare `pm zoom ai-services`,
   and all 22 exact `pm zoom ai-services … --help` routes. The main-rebase exit behavior was used;
-  no unknown command can pass this check at exit 0.
+  no unknown command can pass this check at exit 0. The same 22/22 + 3/3 sweep was repeated after
+  rebasing the consumer onto foundation `dee258307` with main `f96a47e80` as an ancestor.
 - [x] `surface-sync --check`, scoped `surface-reconcile --check`, full connector validation,
   generated docs/manual/site output, Zoom-only endpoint-ledger delta, and website catalog locality
   are verified. Generated files were regenerated, not hand-merged.

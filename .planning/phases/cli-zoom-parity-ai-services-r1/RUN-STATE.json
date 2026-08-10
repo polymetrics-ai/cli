@@ -50,6 +50,7 @@
   "foundation": "green on this consumer base: #3963 closed standard-library WebSocket session foundation accepts the fixed property; stacked PR #3965 remains the separate shared-runtime delivery record",
   "foundation_issue": 3963,
   "foundation_pr_base": "fm/cli-zoom-full-parity-r1",
+  "rebase": "2026-08-10: consumer rebased onto foundation dee258307; origin/main f96a47e80 is an ancestor; rebuilt binary re-gate passed 22/22 command routes and 3/3 namespace/help paths",
   "websocket_schema_green": "2026-08-10: TestBundleLoadAcceptsClosedWebSocketSessionContract passes on the consumer base",
   "green": "22 commands declared and runtime-preflight reachable: 12 rest reads, 9 plan/preview/approval-gated rest writes, and 1 fixed Live Scribe websocket session; all 22 matching api_surface rows reconciled to coverage",
   "verification": "pass: Zoom bundle/engine/connectorgen scoped suites, full connector validation, generated surface checks, freshly built binary 22/22 route sweep, docs/site generators and typecheck, vet/build/tidy/docs/smoke/lint/contract/boundary/release gates",

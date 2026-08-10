@@ -199,3 +199,22 @@ The loopback read test covers the twelve GETs and asserts that only imported `st
 three `DELETE` cancellations through plan → preview → single-use approval → execute; each delete
 requires destructive confirmation and returns HTTP 204 with no invented body. All test values are
 synthetic, and response token fields are asserted redacted.
+
+## Main-rebase binary re-gate — captured 2026-08-10
+
+The consumer was rebased onto refreshed foundation `dee258307`; current main
+`f96a47e80` is an ancestor of the resulting consumer head. A new `pm` binary was built from that
+rebased head and every route was executed again, in bounded output batches, with the current
+non-zero unknown-command behavior active:
+
+```text
+batch 1 reachability=6/6
+batch 2 reachability=6/6
+batch 3 reachability=6/6
+batch 4 reachability=4/4; namespace/help=3/3
+```
+
+The 22 entries are the exact `ai-services` Scribe, Summarizer, and Translator paths named in the
+RED contract; the three additional paths are `pm zoom`, `pm zoom ai-services`, and `pm help zoom`.
+The rebased targeted Zoom tests and closed-schema loader test are green. The temporary binary was
+moved to the system Trash after verification and is not part of the change set.
