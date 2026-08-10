@@ -135,6 +135,11 @@ function kinds, zero capability-complete connectors, and zero finally certified
 connectors. All live-tested totals are zero because this change runs no provider
 and accepts no invented evidence.
 
+GitHub's declared `operation:graphql_query` now correctly reports one
+implemented cell through the bounded GraphQL direct-read executor. Its declared
+`operation:local_git` remains one applicable but unimplemented cell. Neither
+has fixture or live proof, so neither changes the zero-certification baseline.
+
 The four flow-kind totals are 309,136 exact pairs each. Their applicable /
 implemented / complete counts are:
 

@@ -99,6 +99,29 @@ func TestCertificationMatrixRecognizesEngineCapabilityMethods(t *testing.T) {
 	}
 }
 
+func TestCertificationMatrixDistinguishesGitHubGraphQLAndLocalGitExecutors(t *testing.T) {
+	matrix := certificationMatrixForTest(t)
+
+	for _, tc := range []struct {
+		kind            string
+		wantImplemented bool
+	}{
+		{kind: "operation:graphql_query", wantImplemented: true},
+		{kind: "operation:local_git", wantImplemented: false},
+	} {
+		cell, ok := capabilityCellFor(matrix, "github", tc.kind)
+		if !ok {
+			t.Fatalf("github %s cell missing", tc.kind)
+		}
+		if !cell.Applicable || !cell.Declared {
+			t.Fatalf("github %s cell = %+v, want applicable declared operation", tc.kind, cell)
+		}
+		if cell.Implemented != tc.wantImplemented {
+			t.Errorf("github %s implemented = %t, want %t", tc.kind, cell.Implemented, tc.wantImplemented)
+		}
+	}
+}
+
 func TestCertificationApplicableCellWithoutLiveEvidencePreventsCompletion(t *testing.T) {
 	cell := certificationCell{
 		FunctionKind:  "capability:read",

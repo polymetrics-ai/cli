@@ -9,6 +9,9 @@
       contracts; a new source kind appears as a matrix row.
 - [x] Every registry/bundle connector has every function-kind row.
 - [x] PostgreSQL and MySQL write rows report `implemented=false`.
+- [x] GitHub `operation:graphql_query` reports `implemented=true` through the
+      GraphQL direct-read executor, while GitHub `operation:local_git` remains
+      an applicable `implemented=false` cell.
 - [x] Applicable cells without accepted live evidence cannot complete a
       connector.
 - [x] Every non-applicable cell has a non-generic code and explanation.

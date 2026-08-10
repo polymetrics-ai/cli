@@ -164,7 +164,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 // and output policy. It shares operationDirectReadSpec with execution and is
 // deliberately no-network: preflight must be safe to run across every bundle.
 //
-// pmcert:executes rest_read,provider_search
+// pmcert:executes rest_read,provider_search,graphql_query
 func PreflightOperationDirectRead(b Bundle, operation, method, endpointPath string, maxBytes int, outputPolicy string) error {
 	op, err := operationDirectReadSpec(b, operation)
 	if err != nil {

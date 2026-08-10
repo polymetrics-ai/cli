@@ -80,7 +80,8 @@
       "id": "operation:graphql_query",
       "category": "operation",
       "name": "graphql_query",
-      "discovery_source": "internal/connectors/engine/bundle.go:2084"
+      "discovery_source": "internal/connectors/engine/bundle.go:2084",
+      "executor_source": "internal/connectors/engine/direct_read.go:168"
     },
     {
       "id": "operation:local_file",
@@ -55969,7 +55970,7 @@
           "function_kind": "operation:graphql_query",
           "applicable": true,
           "declared": true,
-          "implemented": false,
+          "implemented": true,
           "fixture_tested": false,
           "live_tested": false,
           "fixture_evidence": [],
@@ -173750,7 +173751,7 @@
         "connectors": 556,
         "applicable": 1,
         "declared": 1,
-        "implemented": 0,
+        "implemented": 1,
         "fixture_tested": 0,
         "live_tested": 0,
         "complete": 0
