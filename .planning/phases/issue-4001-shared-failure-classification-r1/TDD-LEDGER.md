@@ -9,7 +9,7 @@
 | R5 | Exact path | A field path is absent or an arbitrary unsafe string, including invalid UTF-8 from direct input or JSON decoding. | JSON Pointer validation accepts escaped pointers and rejects malformed or invalid UTF-8 values before or during JSON decoding. |
 | R6 | Database configuration consumer | The generic validation boundary cannot preserve a typed non-retryable configuration failure. | Focused `internal/connectors` test observes the exact classification and its cause unchanged. |
 | R7 | Engine configuration consumer | Schema constraints produce only text errors. | Focused engine test observes configuration domain, code, exact field path, and private cause. |
-| R8 | Engine dispatch consumer | Commandrunner has no common carrier for #3991's result. | `BlockedCommandError` carries and unwraps every valid dispatch classification. |
+| R8 | Engine dispatch consumer | Commandrunner has no common carrier for #3991's result, or an absent optional classification appears as a typed error. | `BlockedCommandError` carries and unwraps every valid dispatch classification while an absent classification unwraps to nil. |
 | R9 | Certification consumer | Certification must invent a local untestable-reason enum or serialize a cause. | `CapabilityResult.untestable_reason` uses the common JSON object and omits cause text. |
 
 ## Red command
@@ -33,5 +33,5 @@ go build ./cmd/pm
 
 `internal/failures/classification_test.go` proves R1-R5, including invalid UTF-8 JSON Pointer rejection at both construction and raw JSON decoding boundaries. The generic configuration boundary test
 proves R6 without changing the in-flight PostgreSQL driver. Engine validation proves R7, the
-commandrunner carrier proves R8, and certification report JSON proves R9. The second green run
+commandrunner carrier proves R8, including the absent-classification nil boundary, and certification report JSON proves R9. The second green run
 also pins unknown domain/dispatch JSON rejection and RFC 6901 escaping for declaration keys.

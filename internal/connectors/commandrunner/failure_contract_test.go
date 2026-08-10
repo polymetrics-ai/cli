@@ -39,3 +39,11 @@ func TestBlockedCommandErrorCarriesEverySharedDispatchClassification(t *testing.
 		})
 	}
 }
+
+func TestBlockedCommandErrorWithoutClassificationDoesNotUnwrap(t *testing.T) {
+	blocked := &BlockedCommandError{Command: "issues list"}
+	var classification *failures.Classification
+	if errors.As(blocked, &classification) {
+		t.Fatalf("errors.As() classification = %v, want no classification", classification)
+	}
+}

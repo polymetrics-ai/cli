@@ -32,5 +32,6 @@ review was completed inline over the nine source and test files listed in `SUMMA
 
 - Fixed: JSON Pointer validation now rejects invalid UTF-8 at both construction and raw JSON decode
   boundaries before a classification can serialize it differently from its in-memory value.
+- Fixed: an optional command-routing classification now unwraps to a true nil error when absent.
 
 No open critical, warning, or informational findings remain.
