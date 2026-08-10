@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - name: Checkout release calculation history
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -54,7 +54,7 @@ jobs:
 
       - name: Create GitHub release from release PR
         id: release
-        uses: googleapis/release-please-action@v5
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
@@ -99,13 +99,13 @@ jobs:
             runner: ubuntu-24.04-arm
     steps:
       - name: Checkout candidate
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
           go-version: '1.25.12'
           cache: true
@@ -119,7 +119,7 @@ jobs:
           go build -trimpath -ldflags "-s -w" -o "binaries/linux_${{ matrix.goarch }}/pm" ./cmd/pm
 
       - name: Upload binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: package-check_linux_${{ matrix.goarch }}
           path: binaries/linux_${{ matrix.goarch }}/pm
@@ -134,7 +134,7 @@ jobs:
 
     steps:
       - name: Checkout candidate
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -143,7 +143,7 @@ jobs:
         run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
 
       - name: Download natively built binaries
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           pattern: package-check_*
           path: binaries
@@ -159,7 +159,7 @@ jobs:
           ls -R binaries
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
           go-version: '1.25.12'
           cache: true
@@ -189,7 +189,7 @@ jobs:
             --targets linux/amd64,linux/arm64
 
       - name: Set up QEMU for Linux package tests
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
         with:
           platforms: arm64
 
@@ -233,14 +233,14 @@ jobs:
 
     steps:
       - name: Checkout release tag
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
           fetch-depth: 0
           persist-credentials: false
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
           go-version: '1.25.12'
           cache: true
@@ -266,7 +266,7 @@ jobs:
           "binaries/${GOOS}_${GOARCH}/$binary" version || true
 
       - name: Upload binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: release_${{ matrix.goos }}_${{ matrix.goarch }}
           path: binaries/${{ matrix.goos }}_${{ matrix.goarch }}/*
@@ -301,7 +301,7 @@ jobs:
 
     steps:
       - name: Checkout release tag
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
           fetch-depth: 0
@@ -313,7 +313,7 @@ jobs:
           sudo apt-get install -y rpm
 
       - name: Install cosign
-        uses: sigstore/cosign-installer@v3
+        uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # v3
 
       - name: Resolve release metadata
         id: release-metadata
@@ -412,14 +412,14 @@ jobs:
 
       - name: Set up Go
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
           go-version: '1.25.12'
           cache: true
 
       - name: Download natively built release binaries
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           pattern: release_*
           path: release-binaries
@@ -467,7 +467,7 @@ jobs:
 
       - name: Set up QEMU for Linux package tests
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
         with:
           platforms: arm64
 
@@ -477,7 +477,7 @@ jobs:
 
       - name: Generate GitHub SLSA provenance attestations
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
-        uses: actions/attest@v4
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
         with:
           subject-path: |
             dist/pm_*.tar.gz
@@ -561,7 +561,7 @@ jobs:
 
     steps:
       - name: Checkout trusted notification helper
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.workflow_sha }}
           persist-credentials: false

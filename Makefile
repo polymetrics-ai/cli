@@ -10,7 +10,7 @@ export GOTOOLCHAIN ?= auto
 # produces a pm that can read or write a warehouse table.
 export CGO_ENABLED ?= 1
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary certify-timing github-parity-artifacts-check
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build pinned-build-dependencies-check release-workflow-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary certify-timing github-parity-artifacts-check
 
 # Packages covered by `lint` include declarative connector and canonical agent-contract tooling.
 # Paths are filtered to existing directories so optional local trees do not hard-fail
@@ -117,7 +117,10 @@ github-parity-artifacts-check:
 connector-boundary:
 	go run ./cmd/connectorgen boundary . --json
 
-release-workflow-check:
+pinned-build-dependencies-check:
+	./scripts/tests/pinned-build-dependencies.sh
+
+release-workflow-check: pinned-build-dependencies-check
 	./scripts/tests/homebrew-release-notify.sh
 	./scripts/tests/release-target-parity.sh
 

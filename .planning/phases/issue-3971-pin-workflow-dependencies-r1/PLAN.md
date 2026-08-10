@@ -5,7 +5,7 @@
 - Parent issue supplied by the task: `#3971` (GitHub parity).
 - Security alert in scope: code-scanning alert `#135`, `PinnedDependenciesID` / OpenSSF Scorecard `Pinned-Dependencies`.
 - Branch: `fm/cli-pin-workflow-dependencies-r1`.
-- Intended child issue: create only after local work is complete, because the authenticated GitHub API is currently rate-limited.
+- Child issue: [#3986](https://github.com/polymetrics-ai/cli/issues/3986), created after local work and attached to parent #3971 after duplicate searches returned no equivalent issue.
 
 ## GSD / TDD path
 
@@ -60,5 +60,5 @@ Out of scope:
 - Every audited external action uses a 40-character SHA with a trailing version comment.
 - Every audited literal build image uses a `sha256` manifest digest while retaining its readable tag.
 - No pinned SHA/digest differs from the value resolved from its original mutable ref at research time.
-- The regression gate fails on a synthetic/mutable reference and passes on the production workflows.
+- The regression gate fails on the recorded mutable baseline and passes on the production workflows.
 - Alert #135 and the remaining four open alerts are checked and reported after the GitHub API quota permits a final REST read; no closure is claimed without evidence.
