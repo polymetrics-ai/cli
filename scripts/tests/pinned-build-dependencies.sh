@@ -26,9 +26,36 @@ def each_mapping_entry(node, &block)
   end
 end
 
+def collect_anchors(node, anchors = {})
+  if !node.is_a?(Psych::Nodes::Alias) && node.respond_to?(:anchor) && node.anchor
+    anchors[node.anchor] = node
+  end
+
+  case node
+  when Psych::Nodes::Mapping, Psych::Nodes::Sequence, Psych::Nodes::Document, Psych::Nodes::Stream
+    node.children.each { |child| collect_anchors(child, anchors) }
+  end
+
+  anchors
+end
+
+def resolve_alias(node, anchors)
+  seen = {}
+  while node.is_a?(Psych::Nodes::Alias)
+    return nil if seen[node.anchor]
+
+    seen[node.anchor] = true
+    node = anchors[node.anchor]
+    return nil unless node
+  end
+
+  node
+end
+
 Dir[workflow_glob].sort.each do |path|
   lines = File.readlines(path, chomp: true)
   workflow = Psych.parse_file(path)
+  anchors = collect_anchors(workflow)
   relative_path = Pathname.new(path).relative_path_from(root)
 
   each_mapping_entry(workflow) do |key, value|
@@ -58,9 +85,19 @@ Dir[workflow_glob].sort.each do |path|
         errors << "#{relative_path}:#{line_number}: action must retain its version in a trailing '# v…' comment: #{ref}"
       end
     when "image"
-      next unless value.is_a?(Psych::Nodes::Scalar)
+      if value.is_a?(Psych::Nodes::Alias)
+        image_node = resolve_alias(value, anchors)
+        unless image_node.is_a?(Psych::Nodes::Scalar)
+          errors << "#{relative_path}:#{value.start_line + 1}: workflow image alias must resolve to a scalar"
+          next
+        end
+      else
+        next unless value.is_a?(Psych::Nodes::Scalar)
 
-      image = value.value.strip
+        image_node = value
+      end
+
+      image = image_node.value.strip
       next if image.empty? || image.start_with?("${{")
       unless image_digest.match?(image)
         errors << "#{relative_path}:#{value.start_line + 1}: literal workflow image must use a sha256 digest: #{image}"
