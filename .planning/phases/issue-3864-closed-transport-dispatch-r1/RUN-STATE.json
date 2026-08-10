@@ -8,11 +8,12 @@
     "reason": "issue key is not a numbered roadmap phase and canonical contract forbids role spawning",
     "discuss_phase": "completed",
     "plan_phase_tdd": "completed",
-    "execute_phase": "in_progress",
-    "verify_work": "pending",
-    "code_review": "pending"
+    "execute_phase": "completed",
+    "verify_work": "completed_manual_fallback",
+    "code_review": "completed_manual_fallback"
   },
-  "correction_rounds": 0,
+  "correction_rounds": 2,
+  "correction_issues": [4021, 4023],
   "conformance": "external verifier required; self-asserted evidence is not admitted",
-  "supervisor_compatible_evidence": "pending"
+  "supervisor_compatible_evidence": "local evidence recorded in SUPERVISOR-EVIDENCE.md; child delivery pipeline pending"
 }

@@ -20,6 +20,7 @@ import (
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/synctransport"
 	"polymetrics.ai/internal/vault"
 	"polymetrics.ai/internal/warehouse"
 )
@@ -32,16 +33,18 @@ const (
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
 type App struct {
-	root       string
-	projectDir string
-	statePath  string
-	store      statestore.JSONStore[state]
-	state      state
-	vault      *vault.Vault
-	approval   *projectWriteApprovalAuthority
-	registry   *connectors.Registry
-	sqlEngine  sqlQueryEngine
-	catalogs   catalogStorage
+	root           string
+	projectDir     string
+	statePath      string
+	store          statestore.JSONStore[state]
+	state          state
+	vault          *vault.Vault
+	approval       *projectWriteApprovalAuthority
+	registry       *connectors.Registry
+	transports     *synctransport.Registry
+	transportStage synctransport.WarehouseStage
+	sqlEngine      sqlQueryEngine
+	catalogs       catalogStorage
 }
 
 // sqlQueryEngine is the backend for App.QuerySQL. DuckDB is the only
@@ -164,6 +167,7 @@ func Open(root string) (*App, error) {
 		vault:      v,
 		approval:   approval,
 		registry:   bundleregistry.New(),
+		transports: synctransport.NewRegistry(nil),
 		catalogs:   newCatalogStorage(projectDir),
 	}
 	a.sqlEngine = newSQLEngine(a)
@@ -1043,22 +1047,10 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err := ValidateStreamSyncConfig(stream); err != nil {
 		return a.failRun(runID, err)
 	}
-	if mode.IsContractMode() {
-		return a.failRun(runID, &synccontract.ModeNotExecutableError{
-			Mode:   mode.ContractMode,
-			Reason: "no matching native executor has completed the shared conformance corpus",
-		})
-	}
 	source, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
 	if err != nil {
 		return a.failRun(runID, err)
 	}
-	catalog, err := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
-	if err != nil {
-		return a.failRun(runID, err)
-	}
-	sourceRuntime.ResolvedCatalog = &catalog
-	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
 		return a.failRun(runID, err)
@@ -1067,6 +1059,25 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if batchSize <= 0 {
 		batchSize = 1000
 	}
+	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
+	if hasDeclaredSyncTransport(source, destination) {
+		result, err := a.runTransportETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, mode, batchSize)
+		if err != nil {
+			return a.failRun(runID, err)
+		}
+		return a.completeRun(runID, result)
+	}
+	if mode.IsContractMode() {
+		return a.failRun(runID, &synccontract.ModeNotExecutableError{
+			Mode:   mode.ContractMode,
+			Reason: "no matching closed source/destination transport has completed externally verified conformance",
+		})
+	}
+	catalog, err := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
+	if err != nil {
+		return a.failRun(runID, err)
+	}
+	sourceRuntime.ResolvedCatalog = &catalog
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
 		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)

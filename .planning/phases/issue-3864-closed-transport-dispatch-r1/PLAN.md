@@ -48,17 +48,21 @@ Wire an app-local transport registry/orchestrator. Move canonical-mode admission
 source/destination resolution and route a connection only if it has transport descriptor(s);
 the registry rejects incomplete sides before `Read`. Preserve legacy routes when both sides
 have no descriptor. The new path accepts declared strategy output rather than the legacy
-`upsert` writer and preserves provider record maps. Add descriptor-derived JSON/manual
-inspection; absent descriptors are explicit unsupported roles.
+`upsert` writer and preserves provider record maps. Add descriptor-derived JSON inspection
+with explicit unsupported roles and a manual projection when a descriptor is declared.
 
 ## Task 5 — verify and review
 
 Run targeted package tests, `-race`, cancellation test, `internal/app`, `internal/cli`,
 static/build and connector preflight/help checks. Run the non-`go test ./...` `make verify`
 components individually. Complete manual `verify-work`, any `--gaps` loop, code review,
-and `no-mistakes axi run --intent ... --skip=push,pr,ci` without `--yes`. At most five
-combined correction rounds. Only then push and open a child PR to
-`feat/3862-any-to-any-transport`.
+and the complete child `no-mistakes axi run --intent ...` pipeline through push, child PR,
+and CI without `--yes`. Configure/review its topology before it mutates GitHub: it must use
+the existing child branch and create at most one conventional-commit child PR with base
+`feat/3862-any-to-any-transport`; it must never make a second parent/default-branch PR or
+merge any PR. Before invoking the pipeline, set this child branch's GitHub merge-base to
+`feat/3862-any-to-any-transport`, verify the branch still tracks that parent, and include
+the same base constraint in the no-mistakes intent. At most five combined correction rounds.
 
 ## Foundation-check disposition
 
@@ -69,3 +73,19 @@ combined correction rounds. Only then push and open a child PR to
 | Real warehouse/apply legs | No provider/database implementation changed | Not implemented; owned elsewhere |
 | Reverse delivery | No change; plan → preview → approval → execute remains | Not claimed |
 | Certification | No live call or certification metadata changed | Not claimed |
+
+## Correction log
+
+1. **#4021 — authored invalid descriptor fallback (loop 1/5).** An inline review
+   found that an empty authored `SyncTransportDescriptor` was treated as absent
+   because app dispatch looked only for individual roles. The recorded RED test
+   reproduced the legacy/no-descriptor fallback. The correction routes any
+   authored descriptor into closed preflight, preserves #3810 semantics, and
+   remains inside this child branch; its correction commit must reference
+   `Refs #4021`, `Refs #3864`, and `Refs #3862`.
+2. **#4023 — normalized generic executor identifiers (loop 2/5).** A distinct
+   inline review found that `generic-http` bypassed the same generic-executor
+   rejection applied to `generic_http`. Its RED/GREEN test stays exclusively in
+   `internal/connectors`; #4021 remains scoped to app routing. This correction
+   normalizes hyphen spelling before closed generic-identifier rejection and its
+   correction commit must reference `Refs #4023`, `Refs #3864`, and `Refs #3862`.

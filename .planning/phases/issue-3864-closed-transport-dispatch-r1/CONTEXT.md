@@ -4,7 +4,7 @@
 **Parent:** [#3862](https://github.com/polymetrics-ai/cli/issues/3862) / draft [PR #4019](https://github.com/polymetrics-ai/cli/pull/4019)  
 **Child branch:** `feat/3864-closed-transport-dispatch`  
 **Base:** `origin/feat/3862-any-to-any-transport`  
-**Status:** active manual-GSD fallback; production edits have not begun.
+**Status:** active manual-GSD fallback; implementation and local verification are in progress.
 
 ## Lifecycle fallback
 
@@ -62,10 +62,11 @@ waiver.
    advances a candidate checkpoint only through
    `synccontract.CommitAfterDownstreamAcknowledgement` after the destination's
    durable acknowledgement.
-7. Inspection is metadata-only. `pm connectors inspect <name> --json` and the
-   rendered manual show source/destination eligibility from a valid descriptor;
-   missing descriptors are explicitly `unsupported`. The docs say this is not a
-   claim that a transport has passed conformance or is certified.
+7. Inspection is metadata-only. `pm connectors inspect <name> --json` always
+   projects source/destination eligibility and reports missing descriptors as
+   `unsupported`; a rendered connector manual adds the declared-role projection
+   when a descriptor exists. The help and website docs say this is not a claim
+   that a transport has passed conformance or is certified.
 
 ## Explicit non-goals
 
@@ -85,4 +86,9 @@ waiver.
 `golang-concurrency`, `golang-database`, `golang-lint`, `golang-naming`,
 `golang-code-style`, `github-issue-first-delivery`, `gsd-discuss-phase`,
 `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, `gsd-code-review`, and
-`no-mistakes`.
+`no-mistakes`. The user corrected the final gate: run its complete child pipeline through
+push, child PR, and CI (no `--skip=push,pr,ci`), never use `--yes`, never create a second
+parent/default-branch PR, and never merge. The user also split review corrections: #4021 owns
+only app's empty-authored-descriptor fallback (loop 1/5); #4023 owns only normalized generic
+executor identifiers (loop 2/5). Both retain their recorded RED/GREEN evidence and references
+to #3862.

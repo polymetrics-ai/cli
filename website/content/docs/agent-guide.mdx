@@ -115,6 +115,15 @@ pm connectors list --all --json
 
 For human-readable connector pages with per-connector guides, visit [/docs/connectors](/docs/connectors). Each page documents declared capabilities, ETL streams, write actions, and the generated bundle notes for that connector.
 
+## Connector transport eligibility
+
+`pm connectors inspect <slug> --json` includes `sync_transport.source` and
+`sync_transport.destination`. `unsupported` means that connector has not
+declared the corresponding closed transport role. `declared` is metadata only:
+the runtime must still pass its closed executor, mode, acknowledgement, and
+external-conformance preflight before any sync starts. Inspection does not read
+credentials and a declared role is not a certification claim.
+
 ## Generating connector skills
 
 pm can generate connector-specific skill files for Claude Code and other agent runtimes:
