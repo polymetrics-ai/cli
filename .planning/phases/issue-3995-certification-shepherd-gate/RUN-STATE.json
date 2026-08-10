@@ -1,0 +1,31 @@
+{
+  "issue": 3995,
+  "parent_issue": 3988,
+  "phase": "issue-3995-certification-shepherd-gate",
+  "branch": "feat/3995-certification-shepherd-gate",
+  "parent_branch": "feat/3988-github-certification",
+  "parent_pr": 4018,
+  "mode": "inline_manual_gsd_fallback",
+  "fallback_reason": "gsd-sdk has no registered official numbered phase for issue-3995-certification-shepherd-gate",
+  "stages": {
+    "discuss_phase": "recorded",
+    "plan_phase_tdd": "recorded",
+    "execute_phase": "pending_red",
+    "verify_work": "pending",
+    "code_review": "pending"
+  },
+  "correction_rounds": 0,
+  "dependencies": {
+    "3984": {
+      "status": "merged",
+      "commit": "815dc1ab65380e03f6e0c078ba36030baaec21ea"
+    },
+    "3985": {
+      "status": "concrete_canon_merged_issue_formally_open",
+      "commit": "da7747a796049601a179a97c025bfb05f011f1e8"
+    },
+    "3989": {
+      "status": "proof_schema_integration_pending_fail_closed"
+    }
+  }
+}
