@@ -1,5 +1,12 @@
 # Code review — Issue #3974: typed database connector foundation
 
+## Captain amendment status
+
+The original review predates the captain's warehouse-mediation ruling. This
+review is reopened for the amended `warehouse` and `database` seam; its final
+verdict is pending refreshed scope, security, and type-boundary review after
+the amended gates complete.
+
 ## Method
 
 `scripts/gsd prompt code-review 3974 --auto` was generated and reviewed. Its
@@ -26,8 +33,9 @@ Reviewed the changed foundation files for:
 | R3 | pass | The PostgreSQL declaration remains non-executing and metadata still reports `write=false`, `cdc=false`. | Confirmed by `database_driver_test.go` and `database_definition_test.go`. |
 | R4 | pass | Admission remains fail-closed: declaration, registry identity, protocol/API match, and shared evidence must all agree; a stored admission without `RunNativeSync` cannot source-dispatch. | Confirmed by focused database and synccontract tests. |
 
-## Verdict
+## Original-slice verdict
 
-No unresolved critical, warning, security, or scope findings remain. The
-isolated CLI regression suite and every required broad static/build gate passed
-after the resolved hygiene refinements.
+No unresolved critical, warning, security, or scope findings remained in the
+original F1 slice. The isolated CLI regression suite and every required broad
+static/build gate passed after the resolved hygiene refinements. The amendment
+must receive its own final verdict before this file is handed off.
