@@ -73,7 +73,10 @@ go build ./cmd/pm
 
 ## Correction rounds
 
-0 / 5 used. A round is counted only when a GSD verifier, equivalent Shepherd
-evidence, code review, CI, or no-mistakes finding causes production/test code
-to change. A newly discovered gate defect requires a #3754 sub-issue before a
-code change.
+2 / 5 used. Inline code review first removed unused legacy compatibility hooks
+that created a second raw policy-ID keyed set beside the leased
+fingerprint/scope path, then resolved new-code-only UDS cleanup/static lint
+findings. The direct-registry behavior and scoped lint were re-tested. #4025
+is a separately owned planning-tool traceability sub-issue, not a coordinator
+correction round. A newly discovered gate defect still requires a #3754
+sub-issue before a code change.

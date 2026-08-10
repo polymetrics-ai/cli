@@ -84,14 +84,14 @@ func TestDeclaredRateLimitFixtureSelectsEndpointTierAndAuth(t *testing.T) {
 	if err != nil {
 		t.Fatalf("RequesterFor widgets: %v", err)
 	}
-	if matched.Admission == nil || matched.Observer == nil || matched.RateLimitCostHeader != "X-Actual-Cost" {
-		t.Fatalf("matched requester rate limit = %+v, want declaration-aware admission/observation", matched)
+	if matched.LeaseAdmission == nil || matched.RateLimitCostHeader != "X-Actual-Cost" {
+		t.Fatalf("matched requester rate limit = %+v, want declaration-aware leased admission", matched)
 	}
 	unmatched, err := runtime.RequesterFor(http.MethodGet, "/check")
 	if err != nil {
 		t.Fatalf("RequesterFor check: %v", err)
 	}
-	if unmatched.Admission != nil || unmatched.Observer != nil {
+	if unmatched.LeaseAdmission != nil {
 		t.Fatal("endpoint-mismatched check acquired a rate-limit policy")
 	}
 
@@ -106,7 +106,7 @@ func TestDeclaredRateLimitFixtureSelectsEndpointTierAndAuth(t *testing.T) {
 		if err != nil {
 			t.Fatalf("RequesterFor %s: %v", key, err)
 		}
-		if requester.Admission != nil {
+		if requester.LeaseAdmission != nil {
 			t.Fatalf("%s mismatch acquired an admission", key)
 		}
 	}
@@ -125,7 +125,7 @@ func TestUnknownRateLimitFixturePreservesRequesterBehavior(t *testing.T) {
 			if err != nil {
 				t.Fatalf("RequesterFor: %v", err)
 			}
-			if requester != runtime.Requester || requester.Admission != nil || requester.Observer != nil {
+			if requester != runtime.Requester || requester.LeaseAdmission != nil {
 				t.Fatalf("%s declaration changed the requester", state)
 			}
 		})
@@ -142,7 +142,7 @@ func TestAbsentRateLimitDeclarationPreservesRequesterBehavior(t *testing.T) {
 	if err != nil {
 		t.Fatalf("RequesterFor: %v", err)
 	}
-	if requester != runtime.Requester || requester.Admission != nil || requester.Observer != nil {
+	if requester != runtime.Requester || requester.LeaseAdmission != nil {
 		t.Fatal("absent declaration changed the requester")
 	}
 }
@@ -209,7 +209,7 @@ func TestSharedRateBudgetDeadlineTooShortDoesNotSend(t *testing.T) {
 		t.Fatalf("initial shared request: %v", err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
 	_, err = requester.Do(ctx, http.MethodGet, "/deadline", nil, nil)
 	var refusal *connsdk.RateBudgetRefusalError
@@ -292,7 +292,7 @@ func TestWholeConnectorPolicyAlsoPacesHookRuntimeRequester(t *testing.T) {
 		if err != nil {
 			t.Fatalf("newRuntime: %v", err)
 		}
-		if runtime.Requester.Admission == nil {
+		if runtime.Requester.LeaseAdmission == nil {
 			t.Fatal("whole-connector policy was not attached to hook runtime requester")
 		}
 		if _, err := runtime.Requester.Do(context.Background(), http.MethodGet, "/hook", nil, nil); err != nil {

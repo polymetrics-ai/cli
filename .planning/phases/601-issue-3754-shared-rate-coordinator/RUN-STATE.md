@@ -1,8 +1,8 @@
 ---
 phase: 601
-status: executing
+status: reviewed
 execution: inline_manual_fallback
-correction_rounds: 0
+correction_rounds: 2
 ---
 
 # Phase 601 run state
@@ -13,12 +13,13 @@ contract forbids replacing its worker lane with GSD role spawns. The complete
 Sol report and local source were used as research and pattern evidence.
 
 The mandatory RED checkpoint is committed as `238096c17` and recorded from
-its actual compile boundary in `TDD-LEDGER.md`. GREEN now includes the real
-eight-helper UDS proof, all six named contracts, race coverage, targeted vet
-and build, and the scoped connector/agent/docs/release gates. The next state
-is inline `verify-work`, then code review, equivalent #3995 supervisor
-evidence, and child no-mistakes/PR gates. Correction count remains zero and
-may not exceed five.
+its actual compile boundary in `TDD-LEDGER.md`. GREEN and inline `verify-work`
+passed with the real eight-helper UDS proof, all six named contracts, race
+coverage, targeted vet/build, and scoped connector/agent/docs/release gates.
+Inline deep code review found and fixed a redundant compatibility-state bridge
+and new-code lint cleanup; `601-REVIEW.md` records both dispositions. The next
+state is equivalent #3995 supervisor evidence, terminal no-mistakes, child PR,
+and CI. Correction count is two and may not exceed five.
 
 ## Planning-state gate defect
 

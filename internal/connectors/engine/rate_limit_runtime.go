@@ -163,19 +163,11 @@ func (r *rateLimitResolver) withResolvedPolicies(base *connsdk.Requester, matche
 		},
 		sleep: r.sleep,
 	}
-	// Preserve the existing local seam for callers and tests that inspect it.
-	// Requester gives LeaseAdmission precedence, so these compatibility hooks do
-	// not double-charge a batch or apply observations twice.
-	if r.registry != nil {
-		clone.Admission = resolvedRateLimitAdmission(matched)
-		clone.Observer = resolvedRateLimitObserver(matched)
-	}
 	clone.RateLimitCostHeader = costHeader
 	return &clone
 }
 
 type resolvedRateLimitPolicy struct {
-	limiter     *coordination.RateLimiter
 	reservation connsdk.ReservationPolicy
 	costHeader  string
 }
@@ -214,9 +206,6 @@ func (r *rateLimitResolver) resolve(policy connsdk.RateLimitPolicy) (resolvedRat
 			Budgets: policy.Budgets,
 		},
 		costHeader: costHeader,
-	}
-	if r.registry != nil {
-		resolved.limiter = r.registry.Limiter(coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}, policy.Budgets)
 	}
 	return resolved, nil
 }
@@ -272,25 +261,6 @@ func rateLimitSelectorValueMatches(values []string, value string) bool {
 		}
 	}
 	return false
-}
-
-type resolvedRateLimitAdmission []resolvedRateLimitPolicy
-
-func (a resolvedRateLimitAdmission) Admit(ctx context.Context, request connsdk.RateLimitRequest) error {
-	for _, policy := range a {
-		if err := policy.limiter.Admit(ctx, request); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-type resolvedRateLimitObserver []resolvedRateLimitPolicy
-
-func (o resolvedRateLimitObserver) Observe(ctx context.Context, observation connsdk.RateLimitObservation) {
-	for _, policy := range o {
-		policy.limiter.Observe(ctx, observation)
-	}
 }
 
 func resolvedReservationPolicies(policies []resolvedRateLimitPolicy) []connsdk.ReservationPolicy {

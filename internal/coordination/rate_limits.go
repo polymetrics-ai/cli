@@ -235,6 +235,9 @@ func (r *RateLimitRegistry) Decide(ctx context.Context, batch connsdk.Reservatio
 
 	r.mu.Lock()
 	defer r.mu.Unlock()
+	if err := ctx.Err(); err != nil {
+		return connsdk.AdmissionDecision{}, err
+	}
 	now := r.clock.Now()
 	r.expireLeasesLocked(now)
 
@@ -314,6 +317,12 @@ func (r *RateLimitRegistry) Decide(ctx context.Context, batch connsdk.Reservatio
 		}
 		return connsdk.AdmissionDecision{}, err
 	}
+	if err := ctx.Err(); err != nil {
+		for i := len(entries) - 1; i >= 0; i-- {
+			entries[i].set.mu.Unlock()
+		}
+		return connsdk.AdmissionDecision{}, err
+	}
 	sets := make([]*rateLimitSet, 0, len(entries))
 	for i := range entries {
 		if entries[i].new {
@@ -352,7 +361,8 @@ func (r *RateLimitRegistry) Finish(_ context.Context, lease connsdk.RateBudgetLe
 	}
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	r.expireLeasesLocked(r.clock.Now())
+	now := r.clock.Now()
+	r.expireLeasesLocked(now)
 	record, ok := r.leases[lease]
 	if !ok {
 		return nil
@@ -362,7 +372,7 @@ func (r *RateLimitRegistry) Finish(_ context.Context, lease connsdk.RateBudgetLe
 		return nil
 	}
 	for _, set := range record.sets {
-		set.observe(r.clock.Now(), observation)
+		set.observe(now, observation)
 	}
 	return nil
 }

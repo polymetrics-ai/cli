@@ -119,21 +119,21 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 			if err != nil {
 				t.Fatalf("RequesterFor: %v", err)
 			}
-			if requester.Admission == nil || requester.Observer == nil {
-				t.Fatalf("policy %q did not attach admission and observation hooks", want.id)
+			if requester.LeaseAdmission == nil {
+				t.Fatalf("policy %q did not attach a leased admission hook", want.id)
 			}
 			graphqlRequester, err := runtime.RequesterFor(http.MethodPost, "/graphql")
 			if err != nil {
 				t.Fatalf("RequesterFor GraphQL: %v", err)
 			}
-			if graphqlRequester.Admission != nil || graphqlRequester.Observer != nil {
+			if graphqlRequester.LeaseAdmission != nil {
 				t.Fatalf("policy %q applied REST rate-limit accounting to GitHub GraphQL", want.id)
 			}
 			defaultRequester, err := resolver.defaultRequester(&connsdk.Requester{})
 			if err != nil {
 				t.Fatalf("defaultRequester: %v", err)
 			}
-			if defaultRequester.Admission != nil || defaultRequester.Observer != nil {
+			if defaultRequester.LeaseAdmission != nil {
 				t.Fatalf("policy %q attached path-aware REST accounting to the hook runtime requester", want.id)
 			}
 		})
@@ -148,7 +148,7 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 	if err != nil {
 		t.Fatalf("RequesterFor unmatched auth type: %v", err)
 	}
-	if requester.Admission != nil || requester.Observer != nil {
+	if requester.LeaseAdmission != nil {
 		t.Fatal("unmatched GitHub auth type acquired a rate-limit policy")
 	}
 }

@@ -303,7 +303,7 @@ func (r *Requester) admit(ctx context.Context, method string, attempt int) error
 
 func (r *Requester) observeRateLimit(ctx context.Context, status int, header http.Header, attempt int) RateLimitObservation {
 	observation, ok := rateLimitObservation(status, header, attempt, r.now(), r.RateLimitCostHeader)
-	if ok && r.Observer != nil && r.LeaseAdmission == nil {
+	if ok && r.Observer != nil {
 		r.Observer.Observe(ctx, observation)
 	}
 	return observation
@@ -328,6 +328,9 @@ func (r *Requester) admitRequesterSend(ctx context.Context, method string, reque
 		lease, err := r.LeaseAdmission.Admit(ctx, request)
 		if err != nil {
 			return &rateLimitAdmissionError{err: err}
+		}
+		if lease == "" {
+			return &rateLimitAdmissionError{err: errors.New("rate-budget admission returned an empty lease")}
 		}
 		leases.add(lease)
 	} else if err := r.admit(ctx, method, nextAttempt); err != nil {

@@ -1,7 +1,7 @@
 # Phase 601 verification checklist — #3754
 
-**Status:** `verify-work` passed inline; code review and terminal PR gates
-remain pending.
+**Status:** `verify-work` and inline deep code review passed; terminal PR
+gates remain pending.
 
 ## Required behavior
 
@@ -34,7 +34,8 @@ remain pending.
 - [x] `scripts/verify-gsd-workflow` against the parent base after production
       evidence lands.
 - [x] Generated inline `verify-work` with coverage-aware UAT evidence.
-- [ ] Generated inline `code-review`, #3995 equivalent bounded
+- [x] Generated inline `code-review` with one resolved warning.
+- [ ] #3995 equivalent bounded
       supervisor evidence, and terminal child no-mistakes gate.
 
 ## Executed verification
@@ -49,6 +50,7 @@ go test -count=1 -timeout 20m ./internal/connectors/engine
 go test -race -count=1 -timeout 20m ./internal/coordination
 go vet ./internal/coordination ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors
 go build ./cmd/pm
+golangci-lint run --new-from-rev=origin/docs/4015-connector-release-certification ./internal/coordination/... ./internal/connectors/connsdk/... ./internal/connectors/engine/...
 make tidy-check
 make lint
 make docs-check

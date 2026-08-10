@@ -133,11 +133,8 @@ func StartUnixRateBudgetCoordinator(ctx context.Context, options UnixRateBudgetC
 		return nil, nil, &SharedCoordinatorError{reason: sharedCoordinatorUnavailable}
 	}
 	owner := &UnixRateBudgetCoordinatorOwner{
-		listener: listener,
-		coordinator: NewRateBudgetCoordinator(nil, RateBudgetCoordinatorOptions{
-			MaxInFlight: options.MaxInFlight,
-			LeaseTTL:    options.LeaseTTL,
-		}),
+		listener:    listener,
+		coordinator: NewRateBudgetCoordinator(nil, RateBudgetCoordinatorOptions(options)),
 		runDir:      runDir,
 		socketPath:  socketPath,
 		epoch:       epoch,
@@ -221,7 +218,7 @@ func (o *UnixRateBudgetCoordinatorOwner) accept() {
 
 func (o *UnixRateBudgetCoordinatorOwner) handle(conn *net.UnixConn) {
 	defer o.wg.Done()
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 	defer func() {
 		o.mu.Lock()
 		delete(o.connections, conn)
@@ -331,7 +328,7 @@ func (c *UnixRateBudgetCoordinatorClient) exchange(ctx context.Context, request 
 		}
 		return unixRateBudgetResponse{}, &SharedCoordinatorError{reason: sharedCoordinatorUnavailable}
 	}
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 	deadline := time.Now().Add(unixRateBudgetRequestTimeout)
 	if callerDeadline, ok := ctx.Deadline(); ok && callerDeadline.Before(deadline) {
 		deadline = callerDeadline

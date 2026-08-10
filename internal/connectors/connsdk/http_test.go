@@ -310,6 +310,29 @@ func TestRequesterLeaseAdmissionFinishesIndeterminateTransportSend(t *testing.T)
 	}
 }
 
+func TestRequesterLeaseAdmissionRejectsEmptyLeaseBeforeSend(t *testing.T) {
+	var hits int32
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		atomic.AddInt32(&hits, 1)
+	}))
+	defer srv.Close()
+	r := &Requester{
+		BaseURL: srv.URL,
+		LeaseAdmission: rateLimitLeaseAdmissionFunc{
+			admit: func(context.Context, RateLimitRequest) (RateBudgetLease, error) {
+				return "", nil
+			},
+			finish: func(context.Context, RateBudgetLease, CompletionObservation) error { return nil },
+		},
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/lease", nil, nil); err == nil {
+		t.Fatal("Do accepted an empty leased admission")
+	}
+	if got := atomic.LoadInt32(&hits); got != 0 {
+		t.Fatalf("server hits = %d, want 0", got)
+	}
+}
+
 func TestRequesterFallbackRetryUsesBoundedFullJitter(t *testing.T) {
 	var calls int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

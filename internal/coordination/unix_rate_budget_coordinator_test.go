@@ -157,7 +157,7 @@ func runRateBudgetHelpers(t *testing.T, cfg rateBudgetHelperConfig) []string {
 	if err != nil {
 		t.Fatalf("create helper result pipe: %v", err)
 	}
-	defer resultReader.Close()
+	defer func() { _ = resultReader.Close() }()
 
 	const helpers = 8
 	type helperProcess struct {
@@ -247,8 +247,8 @@ func TestUnixRateBudgetCoordinatorHelper(t *testing.T) {
 	if start == nil || result == nil {
 		t.Fatal("helper file descriptors are unavailable")
 	}
-	defer start.Close()
-	defer result.Close()
+	defer func() { _ = start.Close() }()
+	defer func() { _ = result.Close() }()
 	var gate [1]byte
 	if _, err := io.ReadFull(start, gate[:]); err != nil {
 		t.Fatal("helper did not receive release signal")
