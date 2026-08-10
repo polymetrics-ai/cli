@@ -44,6 +44,11 @@ func RenderBlock(contract *Contract, role string) ([]byte, error) {
 	fmt.Fprintln(&output, "- Mark the parent ready only when:")
 	writeBullets(&output, contract.Tracker.ReadyWhen)
 	fmt.Fprintf(&output, "- Final merge: %s\n\n", contract.Tracker.FinalMerge)
+	gate, err := RenderCertificationGateIO(contract)
+	if err != nil {
+		return nil, err
+	}
+	output.Write(gate)
 
 	fmt.Fprintln(&output, "## Installed GSD lifecycle")
 	fmt.Fprintln(&output)
@@ -115,6 +120,11 @@ func RenderProjection(contract *Contract, target ProjectionTarget) ([]byte, erro
 			return nil, fmt.Errorf("canonical contract: Claude harness policy is missing")
 		}
 		return renderClaudeProjection(contract, target, policy)
+	case opencodeMarkdownYAMLFrontmatter:
+		if target.Harness != "opencode" {
+			return nil, fmt.Errorf("canonical contract: OpenCode frontmatter render mode requires the OpenCode harness")
+		}
+		return renderOpenCodeProjection(contract, target)
 	case "full":
 		if target.Harness != "pi" {
 			return nil, fmt.Errorf("canonical contract: full render mode requires the Pi harness")

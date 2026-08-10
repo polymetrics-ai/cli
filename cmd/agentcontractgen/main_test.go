@@ -30,7 +30,7 @@ func TestRunCheckAndRender(t *testing.T) {
 			name:       "render connector",
 			args:       []string{"render", "--root", root, "--role", "pm-connector-worker"},
 			wantCode:   0,
-			wantOutput: "source_policy_map",
+			wantOutput: "Connector certification Shepherd gate",
 		},
 		{
 			name:       "unknown role",

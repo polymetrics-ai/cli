@@ -99,6 +99,16 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 			if err := validateClaudeFrontmatter(frontmatter, target, policy); err != nil {
 				return fmt.Errorf("check projection %s: %w", target.Path, err)
 			}
+		case opencodeMarkdownYAMLFrontmatter:
+			expected = normalizeClaudeProjection(expected)
+			actual = normalizeClaudeProjection(content)
+			frontmatter, err := parseOpenCodeFrontmatter(actual)
+			if err != nil {
+				return fmt.Errorf("check projection %s: %w", target.Path, err)
+			}
+			if err := validateOpenCodeFrontmatter(frontmatter, target, contract.OpenCode); err != nil {
+				return fmt.Errorf("check projection %s: %w", target.Path, err)
+			}
 		case "full":
 			if err := CheckProjection(expected, content); err != nil {
 				return fmt.Errorf("check projection %s: %w", target.Path, err)
@@ -250,7 +260,7 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 			if !target.Required {
 				continue
 			}
-			if target.RenderMode == claudeMarkdownYAMLFrontmatter {
+			if target.RenderMode == claudeMarkdownYAMLFrontmatter || target.RenderMode == opencodeMarkdownYAMLFrontmatter {
 				expected = normalizeClaudeProjection(expected)
 			}
 			if err := ensureProjectionDirectory(projectionRoot, filepath.Dir(path)); err != nil {
@@ -277,6 +287,12 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 			next = append(next, block...)
 			next = append(next, content[end:]...)
 		case claudeMarkdownYAMLFrontmatter:
+			expected = normalizeClaudeProjection(expected)
+			if bytes.Equal(normalizeClaudeProjection(content), expected) {
+				continue
+			}
+			next = expected
+		case opencodeMarkdownYAMLFrontmatter:
 			expected = normalizeClaudeProjection(expected)
 			if bytes.Equal(normalizeClaudeProjection(content), expected) {
 				continue
@@ -368,7 +384,7 @@ func ensureProjectionDirectory(root *os.Root, directory string) error {
 }
 
 func readProjection(root *os.Root, target ProjectionTarget, path string) ([]byte, error) {
-	if err := validateProjectionReadPath(root, path, target.RenderMode == "full"); err != nil {
+	if err := validateProjectionReadPath(root, path, target.RenderMode == "full" || target.RenderMode == opencodeMarkdownYAMLFrontmatter); err != nil {
 		return nil, err
 	}
 	return root.ReadFile(path)

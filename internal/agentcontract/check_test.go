@@ -58,8 +58,8 @@ func TestProjectionDriftCheckAndSync(t *testing.T) {
 	if err != nil {
 		t.Fatalf("SyncProjections creates required projections: %v", err)
 	}
-	if updated != 6 {
-		t.Fatalf("SyncProjections created %d projections, want 6", updated)
+	if updated != 8 {
+		t.Fatalf("SyncProjections created %d projections, want 8", updated)
 	}
 	if err := CheckProjections(root, contract); err != nil {
 		t.Fatalf("matching projections failed: %v", err)
@@ -188,8 +188,8 @@ func TestSyncCreatesRequiredPiProjections(t *testing.T) {
 	if err != nil {
 		t.Fatalf("SyncProjections must create required Pi projections: %v", err)
 	}
-	if updated != 6 {
-		t.Fatalf("SyncProjections created %d required projections, want 6", updated)
+	if updated != 8 {
+		t.Fatalf("SyncProjections created %d required projections, want 8", updated)
 	}
 	if err := CheckProjections(root, contract); err != nil {
 		t.Fatalf("created Pi projections must pass drift check: %v", err)
@@ -211,7 +211,7 @@ func TestSyncCreatesRequiredPiProjections(t *testing.T) {
 func TestPiProjectionRejectsWholeFileDrift(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	root := t.TempDir()
-	if updated, err := SyncProjections(root, contract); err != nil || updated != 6 {
+	if updated, err := SyncProjections(root, contract); err != nil || updated != 8 {
 		t.Fatalf("create required projections: updated=%d err=%v", updated, err)
 	}
 
@@ -298,8 +298,8 @@ func TestClaudeProjectionCanonicalRepeatedCRIsStable(t *testing.T) {
 	if err != nil {
 		t.Fatalf("SyncProjections creates normalized Claude projections: %v", err)
 	}
-	if updated != 6 {
-		t.Fatalf("SyncProjections created %d normalized harness projections, want 6", updated)
+	if updated != 8 {
+		t.Fatalf("SyncProjections created %d normalized harness projections, want 8", updated)
 	}
 	if err := CheckProjections(root, contract); err != nil {
 		t.Fatalf("CheckProjections rejected normalized canonical CRLF: %v", err)
@@ -360,7 +360,7 @@ func TestFullProjectionIORejectsInRootSymlinks(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			root := t.TempDir()
-			if updated, err := SyncProjections(root, contract); err != nil || updated != 6 {
+			if updated, err := SyncProjections(root, contract); err != nil || updated != 8 {
 				t.Fatalf("create required harness projections: updated=%d err=%v", updated, err)
 			}
 			targetPath := filepath.Join(root, filepath.FromSlash(target.Path))
@@ -505,8 +505,8 @@ func TestRequiredPiProjectionsCannotBeAbsent(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if updated != 6 {
-		t.Fatalf("SyncProjections updated %d files, want six required harness projections", updated)
+	if updated != 8 {
+		t.Fatalf("SyncProjections updated %d files, want eight required harness projections", updated)
 	}
 	for _, target := range contract.Projections {
 		if target.Harness != "pi" {
@@ -593,8 +593,8 @@ func TestCodexProjectionDriftRejectsDelegationRegression(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if updated != 6 {
-		t.Fatalf("SyncProjections created %d projections, want 6", updated)
+	if updated != 8 {
+		t.Fatalf("SyncProjections created %d projections, want 8", updated)
 	}
 
 	var target ProjectionTarget
