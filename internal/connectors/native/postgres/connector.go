@@ -85,7 +85,7 @@ func New() Connector {
 // Metadata returns PostgreSQL connector metadata.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, supports cursor-incremental reads, and consumes logical-replication CDC through source-bound durable LSN checkpoints. Read-only source."
+	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads. Read-only source."
 	m.Capabilities.CDC = c.hasImplementedChangefeed()
 	return m
 }

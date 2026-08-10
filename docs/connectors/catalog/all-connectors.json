@@ -115025,7 +115025,7 @@
   {
     "name": "postgres",
     "display_name": "PostgreSQL",
-    "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, supports cursor-incremental reads on a configurable cursor column, and consumes logical-replication CDC with source-bound durable LSN checkpoints. Read-only source.",
+    "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source.",
     "integration_type": "database",
     "release_stage": "ga",
     "capabilities": {
@@ -115033,40 +115033,17 @@
       "catalog": true,
       "read": true,
       "write": false,
-      "query": false,
-      "cdc": true
+      "query": false
     },
     "changefeed": {
-      "status": "implemented",
+      "status": "planned",
       "mechanism": "logical_replication",
       "source": {
         "artifact_url": "https://www.postgresql.org/docs/current/logicaldecoding-explanation.html",
         "artifact_version": "18",
         "retrieved_at": "2026-08-06"
       },
-      "executor": {
-        "kind": "native",
-        "id": "postgres_logical_replication"
-      },
-      "checkpoint": {
-        "kind": "lsn",
-        "keys": [
-          "lsn"
-        ],
-        "commit_after": "downstream_ack",
-        "on_invalid": "resnapshot_required"
-      },
-      "delivery": {
-        "ordering": "source_transaction_order",
-        "duplicates": "at_least_once",
-        "deletes": "tombstone",
-        "dedupe_key": [
-          "lsn"
-        ]
-      },
-      "streams": [
-        "runtime_catalog"
-      ]
+      "reason": "Requires bounded crash-recoverable streamed transaction staging before execution."
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -115117,7 +115094,7 @@
         },
         "cdc_publication": {
           "type": "string",
-          "description": "Existing PostgreSQL publication used for logical-replication CDC. Required only for CDC; it must include the selected table, publish insert, update, and delete changes, and exclude truncate changes."
+          "description": "Existing PostgreSQL publication reserved for the planned logical-replication CDC executor; change capture is not currently executable."
         },
         "cursor_field": {
           "type": "string",

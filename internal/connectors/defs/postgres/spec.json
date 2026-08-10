@@ -36,7 +36,7 @@
     },
     "cdc_publication": {
       "type": "string",
-      "description": "Existing PostgreSQL publication used for logical-replication CDC. Required only for CDC; it must include the selected table, publish insert, update, and delete changes, and exclude truncate changes."
+      "description": "Existing PostgreSQL publication reserved for the planned logical-replication CDC executor; change capture is not currently executable."
     },
     "cursor_field": {
       "type": "string",

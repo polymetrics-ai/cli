@@ -7,7 +7,7 @@ description: PostgreSQL connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, supports cursor-incremental reads, and consumes logical-replication CDC through source-bound durable LSN checkpoints. Read-only source.
+Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads. Read-only source.
 
 ## Icon
 
@@ -19,7 +19,7 @@ Reads PostgreSQL tables: discovers schemas/columns from information_schema, snap
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false cdc=true
+- check=true catalog=true read=true write=false query=false
 - Integration type: database
 
 ## Authentication

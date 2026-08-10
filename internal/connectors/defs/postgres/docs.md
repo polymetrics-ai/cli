@@ -1,9 +1,7 @@
 # Overview
 
 Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and
-supports cursor-incremental reads on a configurable cursor column, and consumes change events
-through PostgreSQL logical replication. CDC uses a connector-owned, source-bound replication slot
-and commits an LSN only after validated durable downstream acknowledgement, so restart delivery is at-least-once.
+supports cursor-incremental reads on a configurable cursor column.
 
 This connector discovers available streams and schemas from the configured service at runtime.
 
@@ -15,9 +13,8 @@ Connection fields:
 
 - `cursor_field` (optional, string); Optional column name used for incremental reads (rows with
   cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).
-- `cdc_publication` (optional, string); Existing PostgreSQL publication used for logical-
-  replication CDC. Required only for CDC; it must include the selected table, publish insert, update,
-  and delete changes, and exclude truncate changes.
+- `cdc_publication` (optional, string); Existing PostgreSQL publication reserved for the planned
+  logical-replication CDC executor; change capture is not currently executable.
 - `database` (required, string); Database name to connect to.
 - `host` (required, string); Bare hostname or IP of the PostgreSQL server (no scheme, path, or
   credentials - a URL-shaped value is rejected).
@@ -46,18 +43,5 @@ This connector is read-only. Read behavior: low.
 ## Known limits
 
 - Schemas and stream availability depend on the configured service at runtime.
-- CDC requires a real PostgreSQL source with `wal_level=logical`, a role permitted to use logical
-  replication, and an existing `cdc_publication` that contains the selected table.
-- CDC requires publications to include `INSERT`, `UPDATE`, and `DELETE`, exclude `TRUNCATE`, and use
-  selected relations without descendant tables.
-- CDC rejects `publish_via_partition_root` because the native decoder is bound to the selected
-  table.
-- CDC rejects publication row filters and column lists so every selected-table change is available to
-  the native decoder.
-- CDC fingerprints the publication and selected relation; changing either requires rebootstrap before
-  another LSN can be committed.
-- CDC rejects updates that change replica-identity fields and updates from `REPLICA IDENTITY FULL`
-  tables.
-- CDC slots are derived from the PostgreSQL system identity, database, and fully qualified stream;
-  teardown drops only that inactive connector-owned slot. Do not delete a slot while another CDC
-  reader is active.
+- Logical-replication CDC is not executable until it has bounded crash-recoverable streamed
+  transaction staging.

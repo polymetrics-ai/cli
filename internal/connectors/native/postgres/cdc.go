@@ -17,30 +17,27 @@ import (
 
 var _ connectors.ChangefeedExecutor = Connector{}
 
+var errCDCTransactionStageUnavailable = fmt.Errorf("%w: PostgreSQL CDC requires bounded streamed transaction staging", connectors.ErrUnsupportedOperation)
+
 // ChangefeedExecutorDescriptor is the runtime half of the PostgreSQL bundle's
 // logical-replication declaration. The existing capability projection compares
 // it exactly with changefeed.json before advertising CDC.
 func (c Connector) ChangefeedExecutorDescriptor() connectors.ChangefeedExecutorDescriptor {
 	return connectors.ChangefeedExecutorDescriptor{
-		Status:    connectors.ChangefeedStatusImplemented,
+		Status:    connectors.ChangefeedStatusPlanned,
 		Mechanism: connectors.ChangefeedMechanismLogicalReplication,
-		Executor:  connectors.ChangefeedExecutorRef{Kind: "native", ID: cdcExecutorID},
-		Checkpoint: connectors.ChangefeedCheckpoint{
-			Kind:        "lsn",
-			Keys:        []string{"lsn"},
-			CommitAfter: "downstream_ack",
-			OnInvalid:   "resnapshot_required",
-		},
 	}
 }
 
-// ReadCDC consumes one PostgreSQL logical-replication stream until ctx is
-// cancelled. Every transaction's events must be accepted before its full,
-// source-bound checkpoint is durably committed; only then does the connector
-// acknowledge the LSN to PostgreSQL. That order intentionally yields
-// at-least-once replay instead of a skipped transaction after a crash.
+func requireCDCTransactionStage() error {
+	return errCDCTransactionStageUnavailable
+}
+
 func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
 	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if err := requireCDCTransactionStage(); err != nil {
 		return err
 	}
 	if err := requireRealCDCSource(req.Config); err != nil {

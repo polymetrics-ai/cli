@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector postgres [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, supports cursor-incremental reads, and consumes logical-replication CDC through source-bound durable LSN checkpoints. Read-only source.
+  Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads. Read-only source.
 
 ICON
   id: postgresql
@@ -20,7 +20,7 @@ ICON
   review_url: https://www.postgresql.org/docs/current/
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false cdc=true
+  check=true catalog=true read=true write=false query=false
   Integration type: database
 
 AUTHENTICATION
