@@ -49,8 +49,9 @@ commits, default/detached heads, or any non-fast-forward update.
    `prepare-commit-msg` records the current parent before Git clears that state
    and clears stale records on ordinary commits. `post-commit` consumes a matching
    record before using the same helper in both parent and detached child paths.
-3. Select the branch remote, then `remote.pushDefault`, then an existing `origin`.
-   Resolve Git's common directory, then resolve the local log below
+3. Select `branch.<name>.pushRemote`, then `remote.pushDefault`, then
+   `branch.<name>.remote`, falling back to an existing `origin` only when none
+   is configured. Resolve Git's common directory, then resolve the local log below
    `pm-autopush/` with `GIT_DIR=<common-dir> git rev-parse --git-path`. The
    timestamp itself is a blob behind a shared `refs/pm-autopush/<branch>` ref;
    `git update-ref` compare-and-swap atomically records an eligible attempt across
@@ -64,8 +65,9 @@ commits, default/detached heads, or any non-fast-forward update.
    adds one short line to the per-branch local log; the parent hook exits zero in
    every path.
 5. The harness uses temporary bare remotes and hook wrappers to prove stale and
-   pushurl-specific default refusal, concurrent linked-worktree compare-and-swap
-   from an expired rate timestamp, delayed children during and after a manual merge, clean squash,
+   pushurl-specific default refusal, branch-specific/global/tracking push-target
+   precedence, concurrent linked-worktree compare-and-swap from an expired rate
+   timestamp, delayed children during and after a manual merge, clean squash,
    cherry-pick, and revert completions, a real two-commit rebase, expiry behavior,
    commit non-blocking behavior, and a genuine non-fast-forward rejection without
    force.

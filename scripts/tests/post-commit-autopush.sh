@@ -293,6 +293,70 @@ test_pushurl_default_refusal() {
   [ "$default_before" = "$default_after" ] || fail "default pushurl was pushed"
 }
 
+test_push_target_precedence() {
+  case_dir="$TMP_DIR/push-target-precedence"
+  upstream_remote="$case_dir/upstream.git"
+  default_push_remote="$case_dir/default-push.git"
+  branch_push_remote="$case_dir/branch-push.git"
+  mkdir -p "$case_dir"
+  new_repo "$case_dir"
+  git init --bare -q -b main "$upstream_remote"
+  git init --bare -q -b main "$default_push_remote"
+  git init --bare -q -b main "$branch_push_remote"
+  git -C "$TEST_REPO" remote add upstream "$upstream_remote"
+  git -C "$TEST_REPO" remote add push-default "$default_push_remote"
+  git -C "$TEST_REPO" remote add branch-push "$branch_push_remote"
+  git -C "$TEST_REPO" push -q upstream main
+  git -C "$TEST_REPO" push -q push-default main
+  git -C "$TEST_REPO" push -q branch-push main
+  git -C "$TEST_REPO" checkout -qb feature
+  git -C "$TEST_REPO" config branch.feature.remote upstream
+  git -C "$TEST_REPO" config remote.pushDefault push-default
+  git -C "$TEST_REPO" config branch.feature.pushRemote branch-push
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  : > "$CURRENT_HOOK_LOG"
+
+  record_change "$TEST_REPO" branch-push-remote
+  if ! run_hooked git -C "$TEST_REPO" commit -qm "test: branch push remote precedence"; then
+    fail "branch push remote commit should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  branch_push_sha="$(git -C "$TEST_REPO" rev-parse HEAD)"
+  wait_for_ref "$branch_push_remote" refs/heads/feature "$branch_push_sha"
+  if git --git-dir="$default_push_remote" rev-parse --verify -q refs/heads/feature >/dev/null; then
+    fail "remote.pushDefault won over branch push remote"
+  fi
+  if git --git-dir="$upstream_remote" rev-parse --verify -q refs/heads/feature >/dev/null; then
+    fail "tracking remote won over branch push remote"
+  fi
+
+  set_rate_timestamp "$TEST_REPO" feature "$(( $(date +%s) - 601 ))"
+  git -C "$TEST_REPO" config --unset branch.feature.pushRemote
+  record_change "$TEST_REPO" default-push-remote
+  if ! run_hooked git -C "$TEST_REPO" commit -qm "test: default push remote precedence"; then
+    fail "default push remote commit should succeed"
+  fi
+  default_push_sha="$(git -C "$TEST_REPO" rev-parse HEAD)"
+  wait_for_ref "$default_push_remote" refs/heads/feature "$default_push_sha"
+  branch_push_actual="$(git --git-dir="$branch_push_remote" rev-parse refs/heads/feature)"
+  [ "$branch_push_actual" = "$branch_push_sha" ] || fail "branch push remote advanced after removal"
+  if git --git-dir="$upstream_remote" rev-parse --verify -q refs/heads/feature >/dev/null; then
+    fail "tracking remote won over remote.pushDefault"
+  fi
+
+  set_rate_timestamp "$TEST_REPO" feature "$(( $(date +%s) - 601 ))"
+  git -C "$TEST_REPO" config --unset remote.pushDefault
+  record_change "$TEST_REPO" tracking-remote
+  if ! run_hooked git -C "$TEST_REPO" commit -qm "test: tracking remote fallback"; then
+    fail "tracking remote commit should succeed"
+  fi
+  tracking_sha="$(git -C "$TEST_REPO" rev-parse HEAD)"
+  wait_for_ref "$upstream_remote" refs/heads/feature "$tracking_sha"
+  default_push_actual="$(git --git-dir="$default_push_remote" rev-parse refs/heads/feature)"
+  [ "$default_push_actual" = "$default_push_sha" ] || fail "remote.pushDefault advanced after removal"
+}
+
 test_detached_head_refusal() {
   case_dir="$TMP_DIR/detached"
   mkdir -p "$case_dir"
@@ -781,6 +845,7 @@ test_rejected_push_is_swallowed_without_force() {
 test_default_branch_refusal
 test_stale_remote_default_refusal
 test_pushurl_default_refusal
+test_push_target_precedence
 test_detached_head_refusal
 test_opt_out
 test_rate_limit_and_detached_push

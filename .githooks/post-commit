@@ -24,12 +24,13 @@ pm_autopush_operation_in_progress && exit 0
 branch="$(git symbolic-ref --quiet --short HEAD 2>/dev/null)" || exit 0
 [ "$branch" = "main" ] && exit 0
 
-remote="$(git config --get "branch.$branch.remote" 2>/dev/null || :)"
-case "$remote" in
-  ""|".")
-    remote="$(git config --get remote.pushDefault 2>/dev/null || :)"
-    ;;
-esac
+remote="$(git config --get "branch.$branch.pushRemote" 2>/dev/null || :)"
+if [ -z "$remote" ]; then
+  remote="$(git config --get remote.pushDefault 2>/dev/null || :)"
+fi
+if [ -z "$remote" ]; then
+  remote="$(git config --get "branch.$branch.remote" 2>/dev/null || :)"
+fi
 if [ -z "$remote" ]; then
   if git remote get-url origin >/dev/null 2>&1; then
     remote="origin"

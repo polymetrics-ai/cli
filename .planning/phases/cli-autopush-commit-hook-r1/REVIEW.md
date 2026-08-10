@@ -48,8 +48,12 @@ shellcheck passed.
 - R9 was legitimate: stale hard-link recovery could unlink a newer live lease
   after an earlier stale observation. A compare-and-swap update of the shared
   timestamp ref makes the rate decision linearizable without stale takeover.
+- R10 was legitimate: the parent chose a tracking remote before Git's explicit
+  push destination settings. It now resolves branch-specific, global, and
+  tracking remotes in Git's push precedence order.
 
 The focused executable harness covers each follow-up, including clean squash,
 cherry-pick, and revert paths, concurrent expired-rate compare-and-swap, delayed
-children during and after a manual merge, and mixed safe/default push URLs,
-alongside the original non-force rejection and detached-push behavior.
+children during and after a manual merge, mixed safe/default push URLs, and
+branch-specific/global/tracking remote selection, alongside the original
+non-force rejection and detached-push behavior.
