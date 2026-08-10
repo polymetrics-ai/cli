@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "issue": 3993,
+  "connector": "github",
+  "state": "planning",
+  "gsd": {
+    "requested": [
+      "scripts/gsd prompt discuss-phase 3993 --auto",
+      "scripts/gsd prompt plan-phase 3993 --tdd --skip-research",
+      "scripts/gsd prompt execute-phase 3993 --interactive",
+      "scripts/gsd prompt verify-work 3993 --auto",
+      "scripts/gsd prompt code-review 3993 --depth=standard"
+    ],
+    "execution": "inline_manual",
+    "fallback_reason": "issue number 3993 is not a roadmap phase and dispatch forbids role spawning"
+  },
+  "boundary": {
+    "allowed_owner": "Polymetrics-Cert",
+    "protected_owner": "polymetrics-ai"
+  },
+  "outbound_dependency": [3994, 3992]
+}
