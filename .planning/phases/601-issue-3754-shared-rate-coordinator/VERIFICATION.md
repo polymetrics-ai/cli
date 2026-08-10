@@ -1,7 +1,7 @@
 # Phase 601 verification checklist — #3754
 
-**Status:** `verify-work` and inline deep code review passed; terminal PR
-gates remain pending.
+**Status:** `verify-work`, inline deep code review, and bounded supervisor
+evidence passed; terminal PR gates remain pending.
 
 ## Required behavior
 
@@ -35,8 +35,8 @@ gates remain pending.
       evidence lands.
 - [x] Generated inline `verify-work` with coverage-aware UAT evidence.
 - [x] Generated inline `code-review` with one resolved warning.
-- [ ] #3995 equivalent bounded
-      supervisor evidence, and terminal child no-mistakes gate.
+- [x] #3995-compatible bounded supervisor evidence.
+- [ ] Terminal child no-mistakes gate.
 
 ## Executed verification
 

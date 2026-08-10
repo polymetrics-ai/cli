@@ -1,6 +1,6 @@
 ---
 phase: 601
-status: reviewed
+status: supervised
 execution: inline_manual_fallback
 correction_rounds: 2
 ---
@@ -17,9 +17,11 @@ its actual compile boundary in `TDD-LEDGER.md`. GREEN and inline `verify-work`
 passed with the real eight-helper UDS proof, all six named contracts, race
 coverage, targeted vet/build, and scoped connector/agent/docs/release gates.
 Inline deep code review found and fixed a redundant compatibility-state bridge
-and new-code lint cleanup; `601-REVIEW.md` records both dispositions. The next
-state is equivalent #3995 supervisor evidence, terminal no-mistakes, child PR,
-and CI. Correction count is two and may not exceed five.
+and new-code lint cleanup; `601-REVIEW.md` records both dispositions. The
+bounded #3995-compatible manual supervisor evidence in `601-SHEPHERD.md`
+reconstructed the committed trace and returned `PROCEED`. The next state is the
+terminal no-mistakes pipeline, child PR, and CI. Correction count is two and
+may not exceed five.
 
 ## Planning-state gate defect
 
