@@ -20,6 +20,10 @@ const CLEANUP_STRATEGIES = new Set([
   "neutralize_and_retain",
   "explicit_retention_required",
 ]);
+const LIFECYCLE_STATUSES = new Set([
+  "ready_for_provider_result",
+  "requires_typed_lifecycle",
+]);
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(SCRIPT_DIR, "..");
 const SURFACE_PATH = path.join(ROOT, "internal/connectors/defs/github/cli_surface.json");
@@ -114,20 +118,19 @@ function isWrite(command) {
   return command.intent === "reverse_etl" || command.intent === "direct_write";
 }
 
-function cleanupPlan(command, commands) {
+function cleanupPlan(command) {
   if (!isWrite(command)) return { command: null, strategy: "not_applicable" };
-  if (command.path === "issue create") {
-    const closeIssue = commands.find((item) => item.path === "issue close" && item.availability === "implemented");
-    if (!closeIssue) throw new Error("issue create requires implemented issue close neutralization");
-    return { command: closeIssue.path, strategy: "neutralize_and_retain" };
-  }
-  const namespace = String(command.path || "").split(" ")[0];
-  const deleteCandidates = commands
-    .filter((item) => isWrite(item) && item.availability === "implemented" && /\bdelete\b/u.test(String(item.path || "")))
-    .sort((left, right) => String(left.path).localeCompare(String(right.path)));
-  const sameNamespace = deleteCandidates.find((item) => String(item.path).startsWith(`${namespace} `));
-  if (sameNamespace) return { command: sameNamespace.path, strategy: "delete" };
   return { command: null, strategy: "explicit_retention_required" };
+}
+
+function lifecyclePlan(command) {
+  if (!isWrite(command)) {
+    return { status: "ready_for_provider_result", reason: null };
+  }
+  return {
+    status: "requires_typed_lifecycle",
+    reason: "No typed fixture, resource-specific read-back, and inverse cleanup contract is declared for this write; it remains untestable.",
+  };
 }
 
 function setupPM(cohort) {
@@ -143,12 +146,12 @@ function setupPM(cohort) {
   return ["pm github repo view --credential {{credential_name}} --root {{project_root}} --json"];
 }
 
-function assertionPM(command, classification) {
+function assertionPM(command, classification, lifecycle) {
+  if (lifecycle.status !== "ready_for_provider_result") {
+    return null;
+  }
   if (classification.cohort === "github_app_installation") {
     return "pm github apps get-authenticated --credential {{credential_name}} --root {{project_root}} --json";
-  }
-  if (isWrite(command)) {
-    return "pm github repo view --credential {{credential_name}} --root {{project_root}} --json";
   }
   return `pm github ${command.path} {{assertion_flags}} --credential {{credential_name}} --root {{project_root}} --json`;
 }
@@ -161,7 +164,7 @@ function residualState(command, cleanup) {
   if (cleanup.strategy === "neutralize_and_retain") {
     return "Independent PM read-back must show the fixture neutralized; the append-only cleanup ledger must retain it with the reason deletion is unavailable.";
   }
-  return "Independent PM read-back must show the run-owned fixture absent, neutralized, or explicitly retained with a reason.";
+  return "No generic read-back or cleanup assertion is valid: this write remains untestable until a typed fixture lifecycle is declared.";
 }
 
 function earliestDivergence(baselineReason, classification) {
@@ -177,15 +180,18 @@ function earliestDivergence(baselineReason, classification) {
   return "The command remains in the current surface; generate a run-bound input and require its real provider result/read-back rather than relying on the historical classification.";
 }
 
-function rowFor({ command, caseItem, commands, index }) {
+function rowFor({ command, caseItem, index }) {
   const classification = classifyLabCohort(command);
   const api = firstAPI(command);
-  const cleanup = cleanupPlan(command, commands);
+  const cleanup = cleanupPlan(command);
+  const lifecycle = lifecyclePlan(command);
   const destructive = isWrite(command) && (/\bdelete\b/u.test(command.path) || command.risk === "destructive");
   const baselineReason = typeof caseItem?.untestable_reason === "string"
     ? caseItem.untestable_reason
     : "not pre-skipped in the frozen case ledger; current surface membership is the source of truth";
-  const testPM = `pm github ${command.path} {{command_flags}} --credential {{credential_name}} --root {{project_root}} --json`;
+  const testPM = lifecycle.status === "ready_for_provider_result"
+    ? `pm github ${command.path} {{command_flags}} --credential {{credential_name}} --root {{project_root}} --json`
+    : null;
   const cleanupPM = cleanup.command
     ? `pm github ${cleanup.command} {{cleanup_flags}} --credential {{credential_name}} --root {{project_root}} --json`
     : null;
@@ -202,9 +208,11 @@ function rowFor({ command, caseItem, commands, index }) {
     plan_feature: classification.plan_feature,
     setup_pm: setupPM(classification.cohort),
     test_pm: testPM,
-    assert_pm: assertionPM(command, classification),
+    assert_pm: assertionPM(command, classification, lifecycle),
     cleanup_pm: cleanupPM,
     cleanup_strategy: cleanup.strategy,
+    lifecycle_status: lifecycle.status,
+    ...(lifecycle.reason ? { lifecycle_reason: lifecycle.reason } : {}),
     destructive_acknowledgement: destructive
       ? "required: use the connector-provided typed destructive confirmation after preview"
       : "not required by the current command contract; reverse-ETL approval still applies to writes",
@@ -242,7 +250,7 @@ export function buildLabManifest({ surface, cases }) {
     .filter((command) => command.availability === "implemented")
     .sort((left, right) => String(left.path).localeCompare(String(right.path)));
   const rows = implemented.map((command, index) =>
-    rowFor({ command, caseItem: baselineByCommand.get(command.path), commands: surface.commands, index }),
+    rowFor({ command, caseItem: baselineByCommand.get(command.path), index }),
   );
   const classTally = Object.fromEntries(COHORTS.map((cohort) => [cohort, 0]));
   for (const row of rows) classTally[row.cohort] += 1;
@@ -258,7 +266,8 @@ export function buildLabManifest({ surface, cases }) {
     },
     policy: {
       provider_lifecycle: "pm_github_only",
-      live_terminal_policy: "provider result required; no pre-skip is proof",
+      live_terminal_policy: "provider result is required for executable rows; untyped writes are withheld rather than counted as proof",
+      write_lifecycle_policy: "a write requires a typed fixture, resource-specific read-back, and inverse cleanup contract before dispatch",
       classes: COHORTS,
     },
     class_tally: classTally,
@@ -278,6 +287,7 @@ export function validateLabManifest({ manifest, surface, cases }) {
   }
   const seenCommands = new Set();
   const seenCaseIDs = new Set();
+  const expectedByCommand = new Map(expected.rows.map((row) => [row.command, row]));
   const tally = Object.fromEntries(COHORTS.map((cohort) => [cohort, 0]));
   for (const row of manifest.rows) {
     if (!isPlainObject(row)) throw new Error("lab manifest row must be an object");
@@ -287,15 +297,29 @@ export function validateLabManifest({ manifest, surface, cases }) {
     if (seenCommands.has(command) || seenCaseIDs.has(caseID)) throw new Error("lab manifest duplicates command or case_id");
     seenCommands.add(command);
     seenCaseIDs.add(caseID);
+    const expectedRow = expectedByCommand.get(command);
+    if (!expectedRow) throw new Error(`lab manifest row ${JSON.stringify(command)} is not in the current implemented surface`);
     if (!COHORTS.includes(row.cohort)) throw new Error(`lab manifest row ${JSON.stringify(command)} has unknown cohort`);
     tally[row.cohort] += 1;
     if (!Array.isArray(row.setup_pm) || row.setup_pm.length === 0) {
       throw new Error(`lab manifest row ${JSON.stringify(command)} needs PM setup commands`);
     }
     row.setup_pm.forEach(assertPMOnly);
-    assertPMOnly(row.test_pm);
-    assertPMOnly(row.assert_pm);
-    if (row.cleanup_pm !== null) assertPMOnly(row.cleanup_pm);
+    if (!LIFECYCLE_STATUSES.has(row.lifecycle_status) || row.lifecycle_status !== expectedRow.lifecycle_status) {
+      throw new Error(`lab manifest row ${JSON.stringify(command)} has an invalid lifecycle status`);
+    }
+    if (row.lifecycle_status === "requires_typed_lifecycle") {
+      if (row.test_pm !== null || row.assert_pm !== null || row.cleanup_pm !== null || row.cleanup_strategy !== "explicit_retention_required") {
+        throw new Error(`lab manifest row ${JSON.stringify(command)} may not invent a generic write lifecycle`);
+      }
+      if (typeof row.lifecycle_reason !== "string" || row.lifecycle_reason.trim() === "") {
+        throw new Error(`lab manifest row ${JSON.stringify(command)} requires a typed-lifecycle reason`);
+      }
+    } else {
+      assertPMOnly(row.test_pm);
+      assertPMOnly(row.assert_pm);
+      if (row.cleanup_pm !== null) assertPMOnly(row.cleanup_pm);
+    }
     if (!CLEANUP_STRATEGIES.has(row.cleanup_strategy)) {
       throw new Error(`lab manifest row ${JSON.stringify(command)} has an invalid cleanup_strategy`);
     }

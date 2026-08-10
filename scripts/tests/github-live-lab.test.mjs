@@ -105,19 +105,42 @@ test("derives every current implemented command into mutually exclusive run-owne
     assert.equal(typeof row.residual_state_check, "string");
     assert.equal(typeof row.earliest_divergence, "string");
     assert.equal(typeof row.cleanup_strategy, "string");
+    assert.equal(typeof row.lifecycle_status, "string");
     assert.equal(Array.isArray(row.setup_pm), true);
-    assert.match(row.test_pm, /^pm github /);
-    assert.match(row.assert_pm, /^pm github /);
+    if (row.lifecycle_status === "requires_typed_lifecycle") {
+      assert.equal(row.test_pm, null);
+      assert.equal(row.assert_pm, null);
+      assert.equal(row.cleanup_pm, null);
+      assert.equal(row.cleanup_strategy, "explicit_retention_required");
+      assert.match(row.lifecycle_reason || "", /typed fixture.*read-back.*inverse cleanup/i);
+    } else {
+      assert.match(row.test_pm, /^pm github /);
+      assert.match(row.assert_pm, /^pm github /);
+    }
     assert.equal(row.cleanup_pm === null || row.cleanup_pm.startsWith("pm github "), true);
     assert.equal(row.cohort in manifest.class_tally, true);
     assert.equal(/(?:^|\s)(?:gh|curl)(?:\s|$)|https?:\/\/|browser/i.test(JSON.stringify(row)), false);
   }
 
   assert.doesNotThrow(() => validateLabManifest({ manifest, surface, cases }));
+  assert.equal(
+    await readFile(path.join(phaseDir, "GITHUB-LIVE-LAB-MANIFEST.json"), "utf8"),
+    `${JSON.stringify(manifest, null, 2)}\n`,
+  );
 
-  const issueCreate = manifest.rows.find((row) => row.command === "issue create");
-  assert.equal(issueCreate?.cleanup_strategy, "neutralize_and_retain");
-  assert.match(issueCreate?.cleanup_pm || "", /^pm github issue close /);
+  const writes = manifest.rows.filter((row) => row.intent === "reverse_etl" || row.intent === "direct_write");
+  assert.ok(writes.length > 0);
+  assert.equal(writes.every((row) => row.lifecycle_status === "requires_typed_lifecycle"), true);
+  assert.equal(writes.every((row) => row.cleanup_strategy === "explicit_retention_required"), true);
+  assert.equal(writes.every((row) => row.assert_pm === null && row.cleanup_pm === null), true);
+
+  const fabricated = JSON.parse(JSON.stringify(manifest));
+  const fabricatedWrite = fabricated.rows.find((row) => row.intent === "reverse_etl" || row.intent === "direct_write");
+  fabricatedWrite.test_pm = "pm github orgs attestations delete-by-attestation-ids {{cleanup_flags}} --credential {{credential_name}} --root {{project_root}} --json";
+  assert.throws(
+    () => validateLabManifest({ manifest: fabricated, surface, cases }),
+    /may not invent a generic write lifecycle/i,
+  );
 });
 
 test("classifies run-owned repository, organization, App, and feature-entitlement rows by provider requirement", () => {

@@ -15,6 +15,7 @@ import {
   runProcess,
   validateProofRecords,
 } from "../github-live-proof-sweep.mjs";
+import { buildCases, resolveLiveBoundary } from "../github-live-cases.mjs";
 
 const fixtureSurface = {
   commands: [
@@ -171,7 +172,36 @@ test("redacts raw subprocess output before it can become a report record", () =>
   });
 });
 
-test("rejects a write case that overrides the dedicated repository owner before starting pm", async () => {
+test("redacts every config value by key before it can enter a proof record", () => {
+  const record = redactForReport({
+    command: "repo view",
+    state: "failed",
+    invocation: [
+      "pm",
+      "github",
+      "repo",
+      "view",
+      "--config",
+      "private_key=synthetic-private-material",
+      "--config=base_url=https://synthetic.invalid",
+    ],
+    reason: "the synthetic command was rejected before a provider request",
+  });
+
+  assert.deepEqual(record.invocation, [
+    "pm",
+    "github",
+    "repo",
+    "view",
+    "--config",
+    "private_key=<redacted>",
+    "--config=base_url=<redacted>",
+  ]);
+  assert.equal(JSON.stringify(record).includes("synthetic-private-material"), false);
+  assert.equal(JSON.stringify(record).includes("https://synthetic.invalid"), false);
+});
+
+test("rejects untyped target, transport, secret, and lifecycle case inputs before starting pm", async () => {
   const temp = await mkdtemp(path.join(os.tmpdir(), "github-live-proof-case-"));
   try {
     const marker = path.join(temp, "pm-was-started");
@@ -186,77 +216,88 @@ test("rejects a write case that overrides the dedicated repository owner before 
       "utf8",
     );
     await chmod(fakePM, 0o755);
-    await writeFile(
-      boundaryPath,
-      JSON.stringify({
-        schema_version: 1,
-        run_id: "github-live-proof-sweep-test",
-        default_deny: true,
-        protected_owners: ["polymetrics-ai"],
-        protected_repositories: [{ owner_slug: "polymetrics-ai", repo_slug: "cli" }],
-        working_repositories: [{ owner_slug: "polymetrics-ai", repo_slug: "cli" }],
-        allowed_targets: [
-          {
-            key: "organization",
-            resource_type: "organization",
-            org_slug: "polymetrics-cert",
-            org_id: "O_certification",
-            run_owned: true,
-          },
-          {
-            key: "repository",
-            resource_type: "repository",
-            owner_slug: "polymetrics-cert",
-            owner_id: "O_certification",
-            repo_slug: "pm-live-lab-test",
-            repo_id: "R_certification",
-            run_owned: true,
-          },
-        ],
-      }),
-      "utf8",
-    );
+    const boundary = {
+      schema_version: 1,
+      run_id: "github-live-proof-sweep-test",
+      default_deny: true,
+      protected_owners: ["polymetrics-ai"],
+      protected_repositories: [{ owner_slug: "polymetrics-ai", repo_slug: "cli" }],
+      working_repositories: [{ owner_slug: "polymetrics-ai", repo_slug: "cli" }],
+      allowed_targets: [
+        {
+          key: "organization",
+          resource_type: "organization",
+          org_slug: "polymetrics-cert",
+          org_id: "O_certification",
+          run_owned: true,
+        },
+        {
+          key: "repository",
+          resource_type: "repository",
+          owner_slug: "polymetrics-cert",
+          owner_id: "O_certification",
+          repo_slug: "pm-live-lab-test",
+          repo_id: "R_certification",
+          run_owned: true,
+        },
+      ],
+    };
+    await writeFile(boundaryPath, JSON.stringify(boundary), "utf8");
 
     const surface = JSON.parse(await (await import("node:fs/promises")).readFile(
       path.join(path.dirname(fileURLToPath(import.meta.url)), "../../internal/connectors/defs/github/cli_surface.json"),
       "utf8",
     ));
-    const baseCases = surface.commands
-      .filter((command) => command.availability === "implemented")
-      .map((command) => ({
-        command: command.path,
-        untestable_reason:
-          "requires a deliberately prepared live GitHub resource not created by this isolated test fixture",
-      }));
+    const baseCases = buildCases(surface, resolveLiveBoundary(boundary));
     const runner = path.join(path.dirname(fileURLToPath(import.meta.url)), "../github-live-proof-sweep.mjs");
-    for (const args of [
-      ["--owner", "outside-the-dedicated-repository"],
-      ["--repo=outside-the-dedicated-repository"],
-      [
-        "--config",
-        "owner=outside-the-dedicated-repository",
-        "--config",
-        "repo=outside-the-dedicated-repository",
-      ],
-    ]) {
-      const cases = baseCases.map((item) => ({ ...item }));
-      const target = cases.find((item) => item.command === "repos create-using-template");
-      target.untestable_reason = undefined;
-      target.args = args;
-      target.readback = { command: "repo view", args: [] };
+    const attempts = [
+      {
+        command: "orgs update",
+        args: ["--org", "outside-the-run-owned-organization"],
+        expected: /remains untestable/i,
+      },
+      {
+        command: "orgs delete",
+        args: ["--org=outside-the-run-owned-organization"],
+        expected: /remains untestable/i,
+      },
+      {
+        command: "orgs list-members",
+        args: ["--org", "outside-the-run-owned-organization"],
+        expected: /source-derived command descriptor and run-owned boundary/i,
+      },
+      {
+        command: "repo view",
+        args: ["--config=base_url=https://synthetic.invalid"],
+        expected: /may not override connector configuration/i,
+      },
+      {
+        command: "orgs update",
+        args: ["--config", "private_key=synthetic-private-material"],
+        expected: /secret --config key/i,
+        absent: "synthetic-private-material",
+      },
+      {
+        command: "repo view",
+        args: ["--plan=existing-plan"],
+        expected: /lifecycle or credential flags/i,
+      },
+      {
+        command: "orgs update",
+        args: ["--org", "polymetrics-cert"],
+        readback: { command: "repo view", args: ["--approve=existing-grant"] },
+        expected: /lifecycle or credential flags/i,
+      },
+    ];
+    for (const attempt of attempts) {
+      const cases = JSON.parse(JSON.stringify(baseCases));
+      const target = cases.cases.find((item) => item.command === attempt.command);
+      delete target.untestable_reason;
+      target.args = attempt.args;
+      if (attempt.readback) target.readback = attempt.readback;
       await writeFile(
         casesPath,
-        JSON.stringify({
-          connector: "github",
-          test_repository: {
-            owner: "polymetrics-cert",
-            repo: "pm-live-lab-test",
-            owner_id: "O_certification",
-            repo_id: "R_certification",
-            organization_id: "O_certification",
-          },
-          cases,
-        }),
+        JSON.stringify(cases),
         "utf8",
       );
 
@@ -278,46 +319,11 @@ test("rejects a write case that overrides the dedicated repository owner before 
       );
 
       assert.notEqual(result.status, 0);
-      assert.match(`${result.stdout}\n${result.stderr}`, /dedicated repository|--config (owner|repo)/i);
+      const output = `${result.stdout}\n${result.stderr}`;
+      assert.match(output, attempt.expected);
+      if (attempt.absent) assert.equal(output.includes(attempt.absent), false);
       assert.equal(existsSync(marker), false, "case validation must finish before pm starts");
     }
-
-    const cases = baseCases.map((item) => ({ ...item }));
-    const target = cases.find((item) => item.command === "repos create-using-template");
-    target.untestable_reason = undefined;
-    target.args = ["--owner", "polymetrics-cert", "--repo", "pm-live-lab-test"];
-    await writeFile(
-      casesPath,
-      JSON.stringify({
-        connector: "github",
-        test_repository: {
-          owner: "polymetrics-cert",
-          repo: "pm-live-lab-test",
-          owner_id: "O_certification",
-          repo_id: "R_certification",
-          organization_id: "O_certification",
-        },
-        cases,
-      }),
-      "utf8",
-    );
-    const result = spawnSync(
-      process.execPath,
-      [
-        runner,
-        "--pm", fakePM,
-        "--root", root,
-        "--credential", "github-live-proof",
-        "--boundary", boundaryPath,
-        "--cases", casesPath,
-        "--report", reportPath,
-        "--execute-writes",
-      ],
-      { encoding: "utf8" },
-    );
-    assert.notEqual(result.status, 0);
-    assert.match(`${result.stdout}\n${result.stderr}`, /requires an independent readback/i);
-    assert.equal(existsSync(marker), false, "write cases without a read-back must fail before pm starts");
   } finally {
     await rm(temp, { recursive: true, force: true });
   }

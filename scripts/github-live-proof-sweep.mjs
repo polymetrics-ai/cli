@@ -7,7 +7,7 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 
-import { resolveLiveBoundary } from "./github-live-cases.mjs";
+import { buildCases, resolveLiveBoundary } from "./github-live-cases.mjs";
 
 const CONNECTOR = "github";
 const TERMINAL_STATES = new Set(["proven", "untestable", "failed"]);
@@ -23,16 +23,29 @@ const FORBIDDEN_RECORD_FIELDS = new Set([
   "grant",
 ]);
 const SENSITIVE_ARGUMENT_NAMES = new Set([
+  "access-token",
   "approve",
   "authorization",
   "client-secret",
+  "encrypted-value",
   "key",
   "password",
   "private-key",
+  "private-key-base64",
   "secret",
   "token",
   "value",
 ]);
+const LIFECYCLE_ARGUMENT_NAMES = new Set([
+  "approve",
+  "confirm",
+  "connection",
+  "credential",
+  "plan",
+  "preview",
+  "root",
+]);
+const SENSITIVE_CONFIG_KEY = /(?:^|[-_])(?:approval|authorization|credential|grant|password|private[-_]?key|secret|token|value)(?:$|[-_])/iu;
 const TOKEN_PATTERNS = [
   /\bgh[pousr]_[A-Za-z0-9_-]+\b/gi,
   /\bgithub_pat_[A-Za-z0-9_-]+\b/gi,
@@ -70,12 +83,46 @@ export function enumerateImplementedCommands(surface) {
   return [...unique].sort((left, right) => left.localeCompare(right));
 }
 
+function normalizeArgumentName(value) {
+  return String(value || "").trim().toLowerCase().replaceAll("_", "-");
+}
+
+function isSensitiveArgumentName(value) {
+  return SENSITIVE_ARGUMENT_NAMES.has(normalizeArgumentName(value));
+}
+
+function isSensitiveConfigKey(value) {
+  return SENSITIVE_CONFIG_KEY.test(normalizeArgumentName(value));
+}
+
+function splitLongFlag(argument) {
+  const text = String(argument);
+  if (!text.startsWith("--") || text === "--") return null;
+  const body = text.slice(2);
+  const equals = body.indexOf("=");
+  const rawName = equals === -1 ? body : body.slice(0, equals);
+  return {
+    rawName,
+    name: normalizeArgumentName(rawName),
+    hasValue: equals !== -1,
+    value: equals === -1 ? undefined : body.slice(equals + 1),
+  };
+}
+
 function redactText(value) {
   let out = String(value ?? "");
   for (const pattern of TOKEN_PATTERNS) {
     out = out.replace(pattern, "<redacted>");
   }
   return out;
+}
+
+function redactConfigValue(value) {
+  const raw = String(value ?? "");
+  const separator = raw.indexOf("=");
+  if (separator < 1) return "<redacted>";
+  const key = raw.slice(0, separator);
+  return `${redactText(key)}=<redacted>`;
 }
 
 function hasTokenShapedValue(value) {
@@ -92,7 +139,8 @@ function redactInvocation(invocation) {
   }
   const out = [];
   let redactNext = false;
-  for (const rawArgument of invocation) {
+  for (let index = 0; index < invocation.length; index += 1) {
+    const rawArgument = invocation[index];
     const argument = String(rawArgument);
     if (redactNext) {
       out.push("<redacted>");
@@ -103,15 +151,30 @@ function redactInvocation(invocation) {
       out.push(redactText(argument));
       continue;
     }
-    const withoutPrefix = argument.slice(2);
-    const equals = withoutPrefix.indexOf("=");
-    const name = (equals === -1 ? withoutPrefix : withoutPrefix.slice(0, equals)).toLowerCase();
-    if (SENSITIVE_ARGUMENT_NAMES.has(name)) {
-      if (equals === -1) {
+    const flag = splitLongFlag(argument);
+    if (!flag) {
+      out.push(redactText(argument));
+      continue;
+    }
+    if (flag.name === "config") {
+      if (!flag.hasValue) {
+        out.push(argument);
+        const next = invocation[index + 1];
+        if (next !== undefined && !String(next).startsWith("--")) {
+          out.push(redactConfigValue(next));
+          index += 1;
+        }
+      } else {
+        out.push(`--config=${redactConfigValue(flag.value)}`);
+      }
+      continue;
+    }
+    if (isSensitiveArgumentName(flag.name)) {
+      if (!flag.hasValue) {
         out.push(argument);
         redactNext = true;
       } else {
-        out.push(`--${name}=<redacted>`);
+        out.push(`--${flag.name}=<redacted>`);
       }
       continue;
     }
@@ -332,7 +395,7 @@ function requireStringMap(value, name) {
     if (typeof item !== "string" && typeof item !== "number") {
       throw new Error(`${name}.${key} must be a scalar`);
     }
-    if (SENSITIVE_ARGUMENT_NAMES.has(key.toLowerCase())) {
+    if (isSensitiveConfigKey(key)) {
       throw new Error(`${name}.${key} may not carry a credential or grant`);
     }
     out[key] = String(item);
@@ -340,70 +403,131 @@ function requireStringMap(value, name) {
   return out;
 }
 
-function flagValues(args, name) {
-  const flag = `--${name}`;
-  const values = [];
+function parseCaseArguments(args, label) {
+  if (!Array.isArray(args) || args.some((argument) => typeof argument !== "string")) {
+    throw new Error(`${label} requires string args`);
+  }
+  const parsed = [];
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
-    if (argument === flag) {
+    if (/\r|\n|\0/u.test(argument)) {
+      throw new Error(`${label} may not contain control characters`);
+    }
+    const flag = splitLongFlag(argument);
+    if (!flag || !/^[a-z][a-z0-9_-]*$/iu.test(flag.rawName)) {
+      throw new Error(`${label} must use named long flags`);
+    }
+    if (!flag.hasValue) {
       const value = args[index + 1];
-      if (!value || value.startsWith("--")) {
-        throw new Error(`${flag} requires a value in a live proof case`);
+      if (typeof value === "string" && !value.startsWith("--")) {
+        if (/\r|\n|\0/u.test(value)) {
+          throw new Error(`${label} may not contain control characters`);
+        }
+        parsed.push({ ...flag, hasValue: true, value });
+        index += 1;
+        continue;
       }
-      values.push(value);
-      index += 1;
+      parsed.push(flag);
       continue;
     }
-    if (argument.startsWith(`${flag}=`)) {
-      const value = argument.slice(flag.length + 1);
-      if (!value) {
-        throw new Error(`${flag} requires a value in a live proof case`);
+    parsed.push(flag);
+  }
+  return parsed;
+}
+
+function validateConfigOverride(value, label) {
+  const separator = String(value || "").indexOf("=");
+  if (separator < 1) {
+    throw new Error(`${label} --config requires key=value`);
+  }
+  const key = String(value).slice(0, separator).trim();
+  if (isSensitiveConfigKey(key)) {
+    throw new Error(`${label} may not carry a secret --config key`);
+  }
+  throw new Error(`${label} may not override connector configuration`);
+}
+
+function validateFlagValue(flag, value, label) {
+  if (value === "") {
+    throw new Error(`${label} requires a non-empty flag value`);
+  }
+  if (flag.type === "boolean" && value !== "true" && value !== "false") {
+    throw new Error(`${label} requires a boolean flag value`);
+  }
+  if (flag.type === "integer" && !/^-?\d+$/u.test(value)) {
+    throw new Error(`${label} requires an integer flag value`);
+  }
+  if (flag.type === "enum" && (!Array.isArray(flag.values) || !flag.values.includes(value))) {
+    throw new Error(`${label} requires a declared enum flag value`);
+  }
+  if (flag.type === "json") {
+    try {
+      JSON.parse(value);
+    } catch {
+      throw new Error(`${label} requires JSON flag value`);
+    }
+  }
+}
+
+function validateTypedCaseArguments(args, surfaceCommand, label) {
+  const declarations = new Map(
+    (surfaceCommand.flags || []).map((flag) => [normalizeArgumentName(flag.name), flag]),
+  );
+  for (const argument of parseCaseArguments(args, label)) {
+    if (LIFECYCLE_ARGUMENT_NAMES.has(argument.name)) {
+      throw new Error(`${label} may not override lifecycle or credential flags`);
+    }
+    if (argument.name === "config") {
+      validateConfigOverride(argument.value, label);
+    }
+    const declaration = declarations.get(argument.name);
+    if (!declaration) {
+      throw new Error(`${label} uses a flag not declared by the GitHub command surface`);
+    }
+    if (!argument.hasValue) {
+      if (declaration.type !== "boolean") {
+        throw new Error(`${label} requires a value for --${declaration.name}`);
       }
-      values.push(value);
+      continue;
     }
-  }
-  return values;
-}
-
-function configValues(args, name) {
-  const values = [];
-  for (const raw of flagValues(args, "config")) {
-    const separator = raw.indexOf("=");
-    if (separator < 1) continue;
-    if (raw.slice(0, separator).trim().toLowerCase() === name) {
-      values.push(raw.slice(separator + 1));
-    }
-  }
-  return values;
-}
-
-function validateWriteRepositoryTarget(command, args, owner, repo) {
-  const scopes = [
-    ["--owner", flagValues(args, "owner"), owner],
-    ["--repo", flagValues(args, "repo"), repo],
-    ["--repo-owner", flagValues(args, "repo-owner"), owner],
-    ["--repo-name", flagValues(args, "repo-name"), repo],
-    ["--repository", flagValues(args, "repository"), `${owner}/${repo}`],
-    ["--config owner", configValues(args, "owner"), owner],
-    ["--config repo", configValues(args, "repo"), repo],
-    ["--config repo-owner", configValues(args, "repo-owner"), owner],
-    ["--config repo-name", configValues(args, "repo-name"), repo],
-    ["--config repository", configValues(args, "repository"), `${owner}/${repo}`],
-  ];
-  for (const [label, values, expected] of scopes) {
-    for (const actual of values) {
-      if (actual.toLowerCase() !== expected.toLowerCase()) {
-        throw new Error(
-          `write case ${JSON.stringify(command)} may not override the dedicated repository ${label}`,
-        );
-      }
-    }
+    validateFlagValue(declaration, argument.value, `${label} --${declaration.name}`);
   }
 }
 
-function validateCaseFile(caseFile, expected, boundary, surfaceCommands) {
+function validateSourceDerivedArguments(args, expectedArgs, surfaceCommand, label) {
+  validateTypedCaseArguments(args, surfaceCommand, label);
+  if (JSON.stringify(args) !== JSON.stringify(expectedArgs)) {
+    throw new Error(`${label} must exactly match the source-derived command descriptor and run-owned boundary`);
+  }
+}
+
+function validateReadback(readback, command, expected, surfaceCommands) {
+  if (!readback || typeof readback !== "object" || Array.isArray(readback)) {
+    throw new Error(`readback for ${JSON.stringify(command)} must be an object`);
+  }
+  if (Object.keys(readback).some((key) => key !== "command" && key !== "args")) {
+    throw new Error(`readback for ${JSON.stringify(command)} has unsupported fields`);
+  }
+  const readbackCommand = String(readback.command || "").trim();
+  const readbackSurfaceCommand = surfaceCommands.get(readbackCommand);
+  if (!readbackSurfaceCommand || !expected.includes(readbackCommand)) {
+    throw new Error(`readback for ${JSON.stringify(command)} names an unknown implemented command`);
+  }
+  if (readbackSurfaceCommand.intent === "reverse_etl" || readbackSurfaceCommand.intent === "direct_write") {
+    throw new Error(`readback for ${JSON.stringify(command)} may not invoke another write`);
+  }
+  validateTypedCaseArguments(readback.args, readbackSurfaceCommand, `readback for ${JSON.stringify(command)}`);
+}
+
+function validateCaseFile(caseFile, boundary, surface) {
+  const expected = enumerateImplementedCommands(surface);
+  const canonical = buildCases(surface, boundary);
+  const surfaceCommands = new Map(surface.commands.map((command) => [command.path, command]));
   if (!caseFile || caseFile.connector !== CONNECTOR) {
     throw new Error("live proof cases must be explicitly GitHub-only");
+  }
+  if (caseFile.schema_version !== canonical.schema_version || caseFile.source !== canonical.source) {
+    throw new Error("live proof cases must be generated from the current GitHub command surface");
   }
   const repository = caseFile.test_repository;
   if (
@@ -420,6 +544,10 @@ function validateCaseFile(caseFile, expected, boundary, surfaceCommands) {
     throw new Error("case file must contain a cases array");
   }
   const context = requireStringMap(caseFile.context || {}, "context");
+  if (JSON.stringify(context) !== JSON.stringify(canonical.context)) {
+    throw new Error("case file context must exactly match the immutable run-owned boundary");
+  }
+  const canonicalByCommand = new Map(canonical.cases.map((item) => [item.command, item]));
   const commands = new Map();
   for (const item of caseFile.cases) {
     if (!item || typeof item !== "object" || Array.isArray(item)) {
@@ -432,69 +560,36 @@ function validateCaseFile(caseFile, expected, boundary, surfaceCommands) {
     if (commands.has(command)) {
       throw new Error(`duplicate live proof case for ${JSON.stringify(command)}`);
     }
-    const hasUntestableReason = typeof item.untestable_reason === "string";
-    if (hasUntestableReason && !concreteReason(item.untestable_reason)) {
-      throw new Error(`untestable case for ${JSON.stringify(command)} requires a concrete reason`);
+    if (Object.keys(item).some((key) => !["command", "args", "readback", "untestable_reason"].includes(key))) {
+      throw new Error(`case ${JSON.stringify(command)} has unsupported fields`);
     }
-    if (!hasUntestableReason) {
-      if (!Array.isArray(item.args) || item.args.some((argument) => typeof argument !== "string")) {
-        throw new Error(`executable case for ${JSON.stringify(command)} requires string args`);
+    const sourceCase = canonicalByCommand.get(command);
+    const surfaceCommand = surfaceCommands.get(command);
+    if (!sourceCase || !surfaceCommand) {
+      throw new Error(`case ${JSON.stringify(command)} is missing its source command descriptor`);
+    }
+    if (item.readback !== undefined) {
+      validateReadback(item.readback, command, expected, surfaceCommands);
+      throw new Error(`case ${JSON.stringify(command)} does not declare a typed read-back lifecycle`);
+    }
+    if (sourceCase.untestable_reason !== undefined) {
+      if (item.args !== undefined) {
+        validateTypedCaseArguments(item.args, surfaceCommand, `case ${JSON.stringify(command)}`);
+        throw new Error(`case ${JSON.stringify(command)} remains untestable without a typed fixture lifecycle`);
       }
-      for (const argument of item.args) {
-        if (argument === "--credential" || argument === "--connection" || argument === "--root" || argument === "--approve" || argument === "--plan" || argument === "--confirm") {
-          throw new Error(`case ${JSON.stringify(command)} may not override lifecycle or credential flags`);
-        }
+      if (item.untestable_reason !== sourceCase.untestable_reason) {
+        throw new Error(`case ${JSON.stringify(command)} must retain its source-derived untestable reason`);
       }
-      const surfaceCommand = surfaceCommands.get(command);
-      const isWrite = surfaceCommand?.intent === "reverse_etl" || surfaceCommand?.intent === "direct_write";
-      if (isWrite) {
-        validateWriteRepositoryTarget(
-          command,
-          interpolateArguments(item.args, {
-            ...context,
-            test_owner: boundary.owner,
-            test_repo: boundary.repo,
-            test_repository: `${boundary.owner}/${boundary.repo}`,
-          }),
-          boundary.owner,
-          boundary.repo,
-        );
+    } else {
+      if (item.untestable_reason !== undefined) {
+        throw new Error(`case ${JSON.stringify(command)} may not replace an executable source-derived case with an untestable reason`);
       }
-      if (isWrite && item.readback === undefined) {
-        throw new Error(`write case for ${JSON.stringify(command)} requires an independent readback`);
-      }
-      if (item.readback !== undefined) {
-        if (!item.readback || typeof item.readback !== "object" || Array.isArray(item.readback)) {
-          throw new Error(`readback for ${JSON.stringify(command)} must be an object`);
-        }
-        const readbackCommand = String(item.readback.command || "").trim();
-        const readbackSurfaceCommand = surfaceCommands.get(readbackCommand);
-        if (!readbackSurfaceCommand || !expected.includes(readbackCommand)) {
-          throw new Error(`readback for ${JSON.stringify(command)} names an unknown implemented command`);
-        }
-        if (readbackSurfaceCommand.intent === "reverse_etl" || readbackSurfaceCommand.intent === "direct_write") {
-          throw new Error(`readback for ${JSON.stringify(command)} may not invoke another write`);
-        }
-        if (!Array.isArray(item.readback.args) || item.readback.args.some((argument) => typeof argument !== "string")) {
-          throw new Error(`readback for ${JSON.stringify(command)} requires string args`);
-        }
-        for (const argument of item.readback.args) {
-          if (["--credential", "--connection", "--root", "--approve", "--plan", "--confirm"].includes(argument)) {
-            throw new Error(`readback for ${JSON.stringify(command)} may not override lifecycle or credential flags`);
-          }
-        }
-        validateWriteRepositoryTarget(
-          `${command} readback`,
-          interpolateArguments(item.readback.args, {
-            ...context,
-            test_owner: boundary.owner,
-            test_repo: boundary.repo,
-            test_repository: `${boundary.owner}/${boundary.repo}`,
-          }),
-          boundary.owner,
-          boundary.repo,
-        );
-      }
+      validateSourceDerivedArguments(
+        item.args,
+        sourceCase.args,
+        surfaceCommand,
+        `case ${JSON.stringify(command)}`,
+      );
     }
     commands.set(command, item);
   }
@@ -503,7 +598,7 @@ function validateCaseFile(caseFile, expected, boundary, surfaceCommands) {
     throw new Error(`case file is incomplete; missing case for ${JSON.stringify(missing)}`);
   }
   return {
-    context,
+    context: canonical.context,
     cases: commands,
   };
 }
@@ -755,7 +850,7 @@ async function executeLive(options) {
   const caseBytes = await readFile(casesPath);
   const expected = enumerateImplementedCommands(surface);
   const surfaceCommands = new Map(surface.commands.map((command) => [command.path, command]));
-  const cases = validateCaseFile(await loadJSON(casesPath), expected, boundary, surfaceCommands);
+  const cases = validateCaseFile(await loadJSON(casesPath), boundary, surface);
   await validateCredentialScope(binary, root, credential, owner, repo, REPOSITORY_ROOT);
 
   const records = [];
