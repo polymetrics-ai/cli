@@ -509,6 +509,7 @@ func validateDefinitionJSONValue(decoder *json.Decoder, schema *definitionSchema
 	if token == nil {
 		return &definitionPathError{path: path, reason: "null is not permitted"}
 	}
+	offset := decoder.InputOffset()
 
 	switch schema.valueType {
 	case "object":
@@ -522,7 +523,7 @@ func validateDefinitionJSONValue(decoder *json.Decoder, schema *definitionSchema
 	default:
 		return &definitionPathError{path: path, reason: "closed schema is invalid"}
 	}
-	*positions = append(*positions, definitionJSONPathPosition{path: path, offset: decoder.InputOffset()})
+	*positions = append(*positions, definitionJSONPathPosition{path: path, offset: offset})
 	return nil
 }
 
