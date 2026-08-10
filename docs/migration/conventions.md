@@ -980,7 +980,8 @@ must carry an HTTPS provider artifact URL without userinfo, query parameters, or
 query-style fragment parameters (an ordinary documentation anchor fragment is allowed) and an ISO
 `retrieved_at` date. Every file starts with `schema_version: 1`; `version` is optional
 context, not a substitute for a retrieval date. Model the provider shape rather than flattening it
-to requests per minute: selectors can target an endpoint, tier, and auth type; budgets label their
+to requests per minute: selectors can target an endpoint, tier, and auth type, and exclude exact
+declared endpoints; budgets label their
 `burst` or `sustained` dimension, `requests` or `points` unit, and fixed/sliding-window or
 token/leaky-bucket replenishment model. Cost-weighted APIs can declare a default cost and the
 provider response header that reports cost. A policy may name at most one actual-cost header;
@@ -999,11 +1000,13 @@ logs, events, or persisted state. A subject kind outside this vocabulary is refu
 
 For each outbound engine request, the runtime resolves every matching declared policy and admits all
 of their budgets before the logical requester send. `all` matches the whole HTTP connector; an
-endpoint selector matches its declared method/path pair; optional `tiers` and `auth_types` match the
-non-secret `config.tier` and `config.auth_type` values as additional AND conditions. Check requests,
-stream pages (including pagination), direct and operation direct reads, declarative and operation
-writes (form, JSON, and multipart), binary downloads, and whole-connector hook requester access all
-use this same requester admission path.
+endpoint selector matches its declared method/path pair; `exclude_endpoints` removes exact declared
+method/path pairs; optional `tiers` and `auth_types` match the non-secret `config.tier` and
+`config.auth_type` values as additional AND conditions. Check requests, stream pages (including
+pagination), direct and operation direct reads, declarative and operation writes (form, JSON, and
+multipart), and binary downloads use this same requester admission path. A selector with
+`exclude_endpoints` is not attached to a whole-connector hook requester because that requester has
+no declared path to evaluate.
 The process-local registry enforces each declared burst/sustained request/point budget with its
 fixed-window, sliding-window, token-bucket, or leaky-bucket model. A declared actual-cost response
 header tightens a point budget when it reports a higher cost; it never credits capacity from a lower

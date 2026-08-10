@@ -31,18 +31,19 @@ const (
 )
 
 type preparedOperationDirectWrite struct {
-	op          OperationSpec
-	cfg         connectors.RuntimeConfig
-	method      string
-	path        string
-	requestPath string
-	query       url.Values
-	body        map[string]any
-	form        url.Values
-	format      string
-	policy      string
-	maxBytes    int
-	prepared    PreparedWrite
+	op              OperationSpec
+	cfg             connectors.RuntimeConfig
+	method          string
+	path            string
+	requestPath     string
+	query           url.Values
+	body            map[string]any
+	form            url.Values
+	format          string
+	policy          string
+	maxBytes        int
+	redactionValues []string
+	prepared        PreparedWrite
 }
 
 type operationDirectWriteError struct {
@@ -128,7 +129,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := operationDirectWriteErrorText(err, prepared.op.Kind == "graphql_mutation")
+			message := operationDirectWriteErrorText(err, prepared.op.Kind == "graphql_mutation", prepared.redactionValues)
 			if hint != "" {
 				message += ": " + hint
 			}
@@ -146,7 +147,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response: " + parseErr.Error(), cause: parseErr}
 			}
 			if len(metadata.Errors) != 0 {
-				return &operationDirectWriteError{operation: prepared.op.ID, message: "graphql errors: " + graphQLErrorSummary(metadata)}
+				return &operationDirectWriteError{operation: prepared.op.ID, message: "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), true, prepared.redactionValues)}
 			}
 			if data == nil {
 				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response has no data"}
@@ -194,7 +195,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 // diagnostics, but a fixed GraphQL mutation must redact its HTTP error body:
 // unlike a successful GraphQL response it has no errors[] envelope sanitizer
 // and can otherwise echo a caller value in its raw provider body.
-func operationDirectWriteErrorText(err error, redact bool) string {
+func operationDirectWriteErrorText(err error, redact bool, values []string) string {
 	var output string
 	var httpErr *connsdk.HTTPError
 	if errors.As(err, &httpErr) {
@@ -206,10 +207,14 @@ func operationDirectWriteErrorText(err error, redact bool) string {
 	} else {
 		output = err.Error()
 	}
-	if redact {
-		return safety.RedactErrorText(output)
+	return redactOperationDirectWriteErrorText(output, redact, values)
+}
+
+func redactOperationDirectWriteErrorText(text string, redact bool, values []string) string {
+	if !redact && len(values) == 0 {
+		return text
 	}
-	return output
+	return safety.RedactErrorText(redactWriteLiterals(text, values))
 }
 
 // OperationDirectWriteMetadata returns the closed plan-safe summary for one
@@ -281,6 +286,17 @@ func operationDirectWriteRedactFields(op OperationSpec) []string {
 		return nil
 	}
 	return append([]string(nil), op.SensitivePolicy.RedactFields...)
+}
+
+func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) []string {
+	if op.SensitivePolicy == nil || len(op.SensitivePolicy.RedactFields) == 0 {
+		return nil
+	}
+	fields := make([]string, 0, len(op.SensitivePolicy.RedactFields))
+	for _, field := range op.SensitivePolicy.RedactFields {
+		fields = append(fields, strings.TrimPrefix(strings.TrimSpace(field), "body."))
+	}
+	return writeActionRedactionValues(WriteAction{RedactFields: fields}, connectors.Record(body))
 }
 
 // operationDirectWritePayloadFileFields keeps multipart file identity
@@ -425,18 +441,19 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		}},
 	}
 	return preparedOperationDirectWrite{
-		op:          op,
-		cfg:         cfg,
-		method:      method,
-		path:        resolvedPath,
-		requestPath: requestPath,
-		query:       query,
-		body:        body,
-		form:        form,
-		format:      format,
-		policy:      policy,
-		maxBytes:    maxBytes,
-		prepared:    prepared,
+		op:              op,
+		cfg:             cfg,
+		method:          method,
+		path:            resolvedPath,
+		requestPath:     requestPath,
+		query:           query,
+		body:            body,
+		form:            form,
+		format:          format,
+		policy:          policy,
+		maxBytes:        maxBytes,
+		redactionValues: operationDirectWriteRedactionValues(op, body),
+		prepared:        prepared,
 	}, nil
 }
 
@@ -507,16 +524,17 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		}},
 	}
 	return preparedOperationDirectWrite{
-		op:          op,
-		cfg:         cfg,
-		method:      method,
-		path:        op.GraphQL.Path,
-		requestPath: requestPath,
-		body:        payload,
-		format:      "graphql",
-		policy:      policy,
-		maxBytes:    maxBytes,
-		prepared:    prepared,
+		op:              op,
+		cfg:             cfg,
+		method:          method,
+		path:            op.GraphQL.Path,
+		requestPath:     requestPath,
+		body:            payload,
+		format:          "graphql",
+		policy:          policy,
+		maxBytes:        maxBytes,
+		redactionValues: operationDirectWriteRedactionValues(op, variables),
+		prepared:        prepared,
 	}, nil
 }
 

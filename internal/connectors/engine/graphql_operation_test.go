@@ -105,6 +105,29 @@ func graphQLOperationBundle(baseURL, kind string) Bundle {
 	}
 }
 
+func graphQLMutationWithSensitiveInput(baseURL string) Bundle {
+	bundle := graphQLOperationBundle(baseURL, "graphql_mutation")
+	op := &bundle.Operations[0]
+	op.GraphQL.Document = "mutation DeleteWidget($input: DeleteWidgetInput!) { deleteWidget(input: $input) { deletedId } }"
+	op.GraphQL.VariablesSchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["input"],
+		"properties":{
+			"input":{
+				"type":"object",
+				"additionalProperties":false,
+				"required":["githubPat"],
+				"properties":{"githubPat":{"type":"string"}}
+			}
+		}
+	}`)
+	op.SensitivePolicy = &SensitivePolicySpec{InputMode: "env", RedactFields: []string{"body.input"}, Transform: "none", ApprovalMode: "typed_confirmation"}
+	op.SecretSensitive = true
+	op.MutationClass = "secret"
+	return bundle
+}
+
 // A structured CLI value is safe for a fixed GraphQL operation only when the
 // declaration's own closed variables schema admits that exact top-level
 // variable as an object or array.  This is intentionally a narrower question
@@ -459,6 +482,66 @@ func TestOperationDirectWriteRedactsGraphQLHTTPErrorBody(t *testing.T) {
 	}
 	if calls != 1 {
 		t.Fatalf("GraphQL HTTP error calls = %d, want exactly one approved request", calls)
+	}
+}
+
+func TestOperationDirectWriteRedactsDeclaredGraphQLInputFromProviderErrors(t *testing.T) {
+	const sensitiveValue = "provider-echoed-github-pat"
+	for _, tt := range []struct {
+		name       string
+		statusCode int
+		body       string
+	}{
+		{
+			name:       "graphql errors",
+			statusCode: http.StatusOK,
+			body:       `{"data":null,"errors":[{"message":"invalid githubPat ` + sensitiveValue + `"}]}`,
+		},
+		{
+			name:       "non JSON HTTP error",
+			statusCode: http.StatusBadRequest,
+			body:       "invalid githubPat " + sensitiveValue,
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				calls++
+				w.WriteHeader(tt.statusCode)
+				_, _ = w.Write([]byte(tt.body))
+			}))
+			defer server.Close()
+
+			bundle := graphQLMutationWithSensitiveInput(server.URL)
+			req := connectors.OperationDirectWriteRequest{
+				Operation: "acme.widgets.mutation",
+				Config: connectors.RuntimeConfig{
+					CredentialRevision:  "fixture-credential-revision",
+					ConfigurationDigest: "fixture-configuration-digest",
+					WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+				},
+				Body: map[string]any{"input": map[string]any{"githubPat": sensitiveValue}},
+			}
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			req.PreviewDigest = preview.Digest
+			req.Approval = approvedEvidenceForPreview(t, preview)
+			_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+			if err == nil {
+				t.Fatal("OperationDirectWrite error = nil, want provider failure")
+			}
+			if strings.Contains(err.Error(), sensitiveValue) {
+				t.Fatalf("OperationDirectWrite leaked a declared sensitive input: %v", err)
+			}
+			if !strings.Contains(err.Error(), "redacted") {
+				t.Fatalf("OperationDirectWrite error = %v, want redaction marker", err)
+			}
+			if calls != 1 {
+				t.Fatalf("provider error calls = %d, want exactly one approved request", calls)
+			}
+		})
 	}
 }
 

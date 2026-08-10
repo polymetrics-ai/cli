@@ -1362,6 +1362,21 @@ func resolveConnectorCommandEnvironmentOnlyFlags(surface *connectors.CommandSurf
 	return resolved, nil
 }
 
+func resolveReversePlanEnvironmentOnlyFlags(plan app.ReversePlan, values map[string][]string) (map[string][]string, error) {
+	if plan.ConnectorCommand == "" {
+		return values, nil
+	}
+	connector, ok := appRegistry().Get(plan.DestinationConnector)
+	if !ok {
+		return nil, fmt.Errorf("unknown connector %q", plan.DestinationConnector)
+	}
+	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || surfaceProvider.CommandSurface() == nil {
+		return nil, fmt.Errorf("connector %q has no command surface", plan.DestinationConnector)
+	}
+	return resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), plan.ConnectorCommandPath, values)
+}
+
 func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
 	for _, name := range []string{"plan", "approve", "confirm"} {
 		if _, ok := flags.values[name]; !ok {
@@ -1767,9 +1782,14 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if err != nil {
 			return err
 		}
+		flags := parseFlags(args[2:])
+		resolvedFlags, err := resolveReversePlanEnvironmentOnlyFlags(plan, flags.values)
+		if err != nil {
+			return err
+		}
 		var writePreview *connectors.WritePreview
 		if plan.ConnectorCommand != "" || plan.ConfirmationPolicy.Kind != "" || plan.ConfirmationChallenge != "" {
-			previewedPlan, preview, err := a.PreviewReversePlan(ctx, args[1], parseFlags(args[2:]).values)
+			previewedPlan, preview, err := a.PreviewReversePlan(ctx, args[1], resolvedFlags)
 			if err != nil {
 				return err
 			}
@@ -1799,11 +1819,19 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			return errUsage
 		}
 		flags := parseFlags(args[2:])
+		plan, err := a.GetReversePlan(args[1])
+		if err != nil {
+			return err
+		}
+		resolvedFlags, err := resolveReversePlanEnvironmentOnlyFlags(plan, flags.values)
+		if err != nil {
+			return err
+		}
 		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation, WithheldFlags: flags.values})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation, WithheldFlags: resolvedFlags})
 		if err != nil {
 			return err
 		}

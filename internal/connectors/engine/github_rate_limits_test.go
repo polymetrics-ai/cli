@@ -99,6 +99,9 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 			if !containsRateLimitName(policy.Selector.AuthTypes, want.authType) {
 				t.Fatalf("policy %q auth types = %v, want %q", want.id, policy.Selector.AuthTypes, want.authType)
 			}
+			if !rateLimitEndpointMatches(policy.Selector.ExcludeEndpoints, http.MethodPost, "/graphql") {
+				t.Fatalf("policy %q does not exclude GitHub GraphQL traffic", want.id)
+			}
 			if !hasFixedRequestBudget(policy, want.primaryLimit, 3600) {
 				t.Fatalf("policy %q does not declare a %d-request/hour primary budget", want.id, want.primaryLimit)
 			}
@@ -119,12 +122,19 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 			if requester.Admission == nil || requester.Observer == nil {
 				t.Fatalf("policy %q did not attach admission and observation hooks", want.id)
 			}
+			graphqlRequester, err := runtime.RequesterFor(http.MethodPost, "/graphql")
+			if err != nil {
+				t.Fatalf("RequesterFor GraphQL: %v", err)
+			}
+			if graphqlRequester.Admission != nil || graphqlRequester.Observer != nil {
+				t.Fatalf("policy %q applied REST rate-limit accounting to GitHub GraphQL", want.id)
+			}
 			defaultRequester, err := resolver.defaultRequester(&connsdk.Requester{})
 			if err != nil {
 				t.Fatalf("defaultRequester: %v", err)
 			}
-			if defaultRequester.Admission == nil || defaultRequester.Observer == nil {
-				t.Fatalf("policy %q did not attach hooks to the hook runtime requester", want.id)
+			if defaultRequester.Admission != nil || defaultRequester.Observer != nil {
+				t.Fatalf("policy %q attached path-aware REST accounting to the hook runtime requester", want.id)
 			}
 		})
 	}

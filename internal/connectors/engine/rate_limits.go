@@ -176,27 +176,37 @@ func hasCredentialLikeRateLimitFragment(rawFragment string) bool {
 
 func validateRateLimitSelector(selector connsdk.RateLimitSelector) error {
 	if selector.All {
-		if len(selector.Endpoints) != 0 || len(selector.Tiers) != 0 || len(selector.AuthTypes) != 0 {
-			return fmt.Errorf("all cannot be combined with endpoints, tiers, or auth_types")
+		if len(selector.Endpoints) != 0 || len(selector.ExcludeEndpoints) != 0 || len(selector.Tiers) != 0 || len(selector.AuthTypes) != 0 {
+			return fmt.Errorf("all cannot be combined with endpoints, exclude_endpoints, tiers, or auth_types")
 		}
 		return nil
 	}
 	if len(selector.Endpoints) == 0 && len(selector.Tiers) == 0 && len(selector.AuthTypes) == 0 {
 		return fmt.Errorf("must select all or at least one endpoint, tier, or auth type")
 	}
-	for i, endpoint := range selector.Endpoints {
-		if !validRateLimitMethod(endpoint.Method) {
-			return fmt.Errorf("endpoints[%d].method %q is not an HTTP method", i, endpoint.Method)
-		}
-		path := strings.TrimSpace(endpoint.Path)
-		if path != endpoint.Path || !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") || strings.ContainsAny(path, "\r\n?#") {
-			return fmt.Errorf("endpoints[%d].path must be a rooted connector-relative path", i)
-		}
+	if err := validateRateLimitEndpoints("endpoints", selector.Endpoints); err != nil {
+		return err
+	}
+	if err := validateRateLimitEndpoints("exclude_endpoints", selector.ExcludeEndpoints); err != nil {
+		return err
 	}
 	if err := validateRateLimitNames("tiers", selector.Tiers); err != nil {
 		return err
 	}
 	return validateRateLimitNames("auth_types", selector.AuthTypes)
+}
+
+func validateRateLimitEndpoints(field string, endpoints []connsdk.RateLimitEndpointSelector) error {
+	for i, endpoint := range endpoints {
+		if !validRateLimitMethod(endpoint.Method) {
+			return fmt.Errorf("%s[%d].method %q is not an HTTP method", field, i, endpoint.Method)
+		}
+		path := strings.TrimSpace(endpoint.Path)
+		if path != endpoint.Path || !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") || strings.ContainsAny(path, "\r\n?#") {
+			return fmt.Errorf("%s[%d].path must be a rooted connector-relative path", field, i)
+		}
+	}
+	return nil
 }
 
 func validateRateLimitNames(field string, values []string) error {
@@ -369,12 +379,31 @@ func rateLimitSelectorsOverlap(left, right connsdk.RateLimitSelector) bool {
 }
 
 func rateLimitEndpointSelectorsOverlap(left, right connsdk.RateLimitSelector) bool {
-	if left.All || right.All || len(left.Endpoints) == 0 || len(right.Endpoints) == 0 {
+	if len(left.Endpoints) == 0 && len(right.Endpoints) == 0 {
 		return true
 	}
+	if len(left.Endpoints) == 0 {
+		for _, endpoint := range right.Endpoints {
+			if !rateLimitEndpointMatches(left.ExcludeEndpoints, endpoint.Method, endpoint.Path) && !rateLimitEndpointMatches(right.ExcludeEndpoints, endpoint.Method, endpoint.Path) {
+				return true
+			}
+		}
+		return false
+	}
+	if len(right.Endpoints) == 0 {
+		for _, endpoint := range left.Endpoints {
+			if !rateLimitEndpointMatches(left.ExcludeEndpoints, endpoint.Method, endpoint.Path) && !rateLimitEndpointMatches(right.ExcludeEndpoints, endpoint.Method, endpoint.Path) {
+				return true
+			}
+		}
+		return false
+	}
 	for _, leftEndpoint := range left.Endpoints {
+		if rateLimitEndpointMatches(left.ExcludeEndpoints, leftEndpoint.Method, leftEndpoint.Path) {
+			continue
+		}
 		for _, rightEndpoint := range right.Endpoints {
-			if leftEndpoint.Method == rightEndpoint.Method && leftEndpoint.Path == rightEndpoint.Path {
+			if leftEndpoint.Method == rightEndpoint.Method && leftEndpoint.Path == rightEndpoint.Path && !rateLimitEndpointMatches(right.ExcludeEndpoints, rightEndpoint.Method, rightEndpoint.Path) {
 				return true
 			}
 		}

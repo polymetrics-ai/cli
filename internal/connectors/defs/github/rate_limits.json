@@ -9,7 +9,10 @@
         "retrieved_at": "2026-08-08"
       },
       "selector": {
-        "auth_types": ["token", "oauth"]
+        "auth_types": ["token", "oauth"],
+        "exclude_endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
       },
       "scope": {
         "subject_kind": "account",
@@ -42,7 +45,10 @@
         "retrieved_at": "2026-08-08"
       },
       "selector": {
-        "auth_types": ["github_app"]
+        "auth_types": ["github_app"],
+        "exclude_endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
       },
       "scope": {
         "subject_kind": "installation",
@@ -75,7 +81,10 @@
         "retrieved_at": "2026-08-08"
       },
       "selector": {
-        "auth_types": ["github_token"]
+        "auth_types": ["github_token"],
+        "exclude_endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
       },
       "scope": {
         "subject_kind": "endpoint",
@@ -108,7 +117,10 @@
         "retrieved_at": "2026-08-08"
       },
       "selector": {
-        "auth_types": ["public", "none", "anonymous", "unauthenticated"]
+        "auth_types": ["public", "none", "anonymous", "unauthenticated"],
+        "exclude_endpoints": [
+          {"method": "POST", "path": "/graphql"}
+        ]
       },
       "scope": {
         "subject_kind": "ip",

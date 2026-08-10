@@ -45,10 +45,11 @@ type RateLimitSource struct {
 // explicit whole-connector selector and cannot be combined with a narrower
 // selector dimension.
 type RateLimitSelector struct {
-	All       bool                        `json:"all,omitempty"`
-	Endpoints []RateLimitEndpointSelector `json:"endpoints,omitempty"`
-	Tiers     []string                    `json:"tiers,omitempty"`
-	AuthTypes []string                    `json:"auth_types,omitempty"`
+	All              bool                        `json:"all,omitempty"`
+	Endpoints        []RateLimitEndpointSelector `json:"endpoints,omitempty"`
+	ExcludeEndpoints []RateLimitEndpointSelector `json:"exclude_endpoints,omitempty"`
+	Tiers            []string                    `json:"tiers,omitempty"`
+	AuthTypes        []string                    `json:"auth_types,omitempty"`
 }
 
 // RateLimitEndpointSelector is a provider endpoint selector. Path is a

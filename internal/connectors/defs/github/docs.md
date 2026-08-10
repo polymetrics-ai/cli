@@ -106,11 +106,13 @@ explicit non-secret account, installation, repository, or IP subject and is proj
 coordination identity before it reaches the local registry.
 
 GitHub also documents a 900-point-per-minute REST secondary ceiling, with most writes costing five
-points and some endpoint costs unpublished. The declaration therefore charges every request five
-points against that budget. This is deliberately conservative for reads and keeps client traffic
+points and some endpoint costs unpublished. The declaration therefore charges every REST request
+five points against that budget. This is deliberately conservative for reads and keeps client traffic
 below the provider's per-endpoint limit rather than pretending the bundle can know unpublished
-endpoint costs. GitHub response `x-ratelimit-*` and `retry-after` values further tighten, never
-expand, the declared ceiling.
+endpoint costs. `POST /graphql` is excluded because its returned `rateLimit.cost` metadata is not
+limiter accounting; it remains unpaced until a cited GraphQL-specific policy can account for it.
+GitHub response `x-ratelimit-*` and `retry-after` values further tighten, never expand, the declared
+REST ceiling.
 
 ## Connector command writes
 
