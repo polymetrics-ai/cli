@@ -118,16 +118,17 @@ func (r SourceRef) Identity() ConnectionIdentity { return r.identity }
 // Relation returns the structured source relation.
 func (r SourceRef) Relation() RelationRef { return r.relation }
 
-// TargetRef pins a target owner triple and logical managed relation. F2 adds
-// the ownership assertion/provisioning state machine; this value does not
-// claim that a target exists or has been asserted.
+// TargetRef pins the destination connection identity and logical relation. It
+// is not a managed-target owner: F2 derives that owner from the source-owned
+// warehouse artifact, then adds the in-database assertion/provisioning state
+// machine. This value does not claim that a target exists or has been asserted.
 type TargetRef struct {
 	identity ConnectionIdentity
 	relation RelationRef
 }
 
-// NewTargetRef creates a typed target reference without any DDL or ownership
-// side effect.
+// NewTargetRef creates a typed destination connection reference without any
+// DDL or ownership side effect.
 func NewTargetRef(identity ConnectionIdentity, relation RelationRef) (TargetRef, error) {
 	if err := validateDatabaseConnectionIdentity(identity); err != nil {
 		return TargetRef{}, err
@@ -145,7 +146,7 @@ func (r TargetRef) validate() error {
 	return r.relation.validate()
 }
 
-// Identity returns the target's complete opaque owner triple.
+// Identity returns the target database connection's complete opaque identity.
 func (r TargetRef) Identity() ConnectionIdentity { return r.identity }
 
 // Relation returns the structured logical target relation.
@@ -191,8 +192,9 @@ func (r WarehouseInboundRef) Source() SourceRef { return r.source }
 func (r WarehouseInboundRef) Warehouse() warehouse.ArtifactRef { return r.warehouse }
 
 // WarehouseOutboundRef is the database-specific apply side of the shared
-// warehouse mediator: it receives rows from one warehouse artifact and names
-// one database target. It deliberately has no source.
+// warehouse mediator: it receives rows from one source-owned warehouse
+// artifact and names one database target connection. It deliberately has no
+// source reference; source ownership remains on the artifact.
 type WarehouseOutboundRef struct {
 	warehouse warehouse.ArtifactRef
 	target    TargetRef

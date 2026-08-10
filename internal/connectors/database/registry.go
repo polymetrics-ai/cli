@@ -29,13 +29,15 @@ func (d DriverDescriptor) declaration() DriverDeclaration {
 
 func (d DriverDescriptor) validate() error { return d.declaration().validate() }
 
-// NativeAdmittedDriver joins a registered database driver to the shared #3810
-// descriptor/evidence admission contract. It deliberately does not require a
+// NativeAdmittedDriver joins a registered database driver to one or more
+// shared #3810 descriptor/evidence admissions. Each returned admission is one
+// concrete native leg, so a source-to-warehouse descriptor cannot also stand
+// in for a warehouse-to-target descriptor. It deliberately does not require a
 // source RunNativeSync method; source dispatch remains consumer-owned in
 // synccontract.NativeSyncExecutor.
 type NativeAdmittedDriver interface {
 	Driver
-	synccontract.NativeExecutorAdmission
+	DatabaseNativeAdmissions() []synccontract.NativeExecutorAdmission
 }
 
 var (
@@ -45,6 +47,9 @@ var (
 	// ErrNativeDriverAdmissionRequired prevents a descriptor-only reference
 	// driver from being used as an admitted database operation.
 	ErrNativeDriverAdmissionRequired = errors.New("database driver requires matching native executor admission")
+	// ErrNativeDriverAdmissionMismatch prevents one native admission descriptor
+	// from being treated as a different database warehouse leg.
+	ErrNativeDriverAdmissionMismatch = errors.New("database driver lacks a matching native executor admission")
 	// ErrDriverModeNotDeclared prevents a driver from using a closed sync mode
 	// that its own database.json has not explicitly declared. An empty mode list
 	// admits no operation, even if an object has matching native evidence.
@@ -151,7 +156,7 @@ func (r *DriverRegistry) Admit(ctx context.Context, definition Definition, comma
 	if !definitionAdmitsModes(definition.AdmittedModes(), contract.Modes) {
 		return nil, ErrDriverModeNotDeclared
 	}
-	if err := synccontract.ValidateNativeAdmission(admitted, contract); err != nil {
+	if err := validateDriverNativeAdmission(admitted, contract); err != nil {
 		return nil, err
 	}
 	if err := ctx.Err(); err != nil {
@@ -176,12 +181,28 @@ func definitionAdmitsModes(declared, requested []synccontract.Mode) bool {
 	return true
 }
 
+func validateDriverNativeAdmission(driver NativeAdmittedDriver, contract synccontract.NativeCommandContract) error {
+	for _, admission := range driver.DatabaseNativeAdmissions() {
+		if isNilNativeAdmission(admission) {
+			continue
+		}
+		if err := synccontract.ValidateNativeAdmission(admission, contract); err == nil {
+			return nil
+		}
+	}
+	return ErrNativeDriverAdmissionMismatch
+}
+
 func isNilDriver(driver Driver) bool {
 	return isNilInterface(driver)
 }
 
 func isNilNativeAdmittedDriver(driver NativeAdmittedDriver) bool {
 	return isNilInterface(driver)
+}
+
+func isNilNativeAdmission(admission synccontract.NativeExecutorAdmission) bool {
+	return isNilInterface(admission)
 }
 
 func isNilInterface(value any) bool {

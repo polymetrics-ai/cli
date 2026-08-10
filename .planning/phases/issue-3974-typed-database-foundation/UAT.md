@@ -22,6 +22,7 @@ declared in `SUMMARY.md`.
 | Closed type planning, structured identity/catalog/read plan, bounded resources, cancellation | `internal/connectors/database/database_test.go` | pass |
 | Shared descriptor/evidence admission separated from source execution | `internal/synccontract/native_admission_test.go` | pass |
 | PostgreSQL reference seam and capability non-promotion | `internal/connectors/native/postgres/database_driver_test.go`, `internal/connectors/engine/database_definition_test.go` | pass |
+| Warehouse-mediated database legs, shared owner identity, distinct native admissions, and MySQL layer-two seam | `internal/warehouse/artifact_test.go`, `internal/connectors/database/database_test.go`, `traces/warehouse-layer-green-run.txt` | pass |
 | Adjacent CLI behavior remains intact | `go test -timeout 20m ./internal/cli -count=1` | pass |
 | Static, generator, docs, boundary, smoke, and release gates | commands recorded in `VERIFICATION.md` | pass |
 
@@ -33,7 +34,8 @@ human judgment is required for this slice.
 
 ## Amendment status
 
-The captain's warehouse-mediation change reopens automated verification for
-the shared artifact/owner identity and the isolated inbound/outbound database
-legs. The original UAT result remains valid for its original scope; this file
-is finalized only after the amendment's focused and repository gates pass.
+The captain's warehouse-mediation change is verified. The artifact/owner
+identity remains connector-agnostic; a database command receives exactly one
+warehouse-mediated leg; a separate native descriptor is required for each leg;
+and the MySQL type-level proof touches no shared or PostgreSQL code. Focused,
+race, CLI, and repository gates passed.

@@ -2,10 +2,9 @@
 
 ## Captain amendment status
 
-The original review predates the captain's warehouse-mediation ruling. This
-review is reopened for the amended `warehouse` and `database` seam; its final
-verdict is pending refreshed scope, security, and type-boundary review after
-the amended gates complete.
+The original review predates the captain's warehouse-mediation ruling. The
+amended `warehouse` and `database` seam has now received a refreshed scope,
+security, and type-boundary review after its local gates passed.
 
 ## Method
 
@@ -23,6 +22,8 @@ Reviewed the changed foundation files for:
 - cross-package admission semantics so source execution is not implied by a
   database target admission; and
 - PostgreSQL bundle/reference seam compatibility with the existing engine.
+- warehouse mediation shape: a connector can name only one of its own legs,
+  and a single native descriptor cannot stand in for both directions.
 
 ## Findings and disposition
 
@@ -32,10 +33,12 @@ Reviewed the changed foundation files for:
 | R2 | pass | No executable SQL, generic query/REST-write path, target DDL, write session, receipt/acknowledgement, CDC implementation, or mode enum was introduced. | Confirmed by source review and the final scope scan. |
 | R3 | pass | The PostgreSQL declaration remains non-executing and metadata still reports `write=false`, `cdc=false`. | Confirmed by `database_driver_test.go` and `database_definition_test.go`. |
 | R4 | pass | Admission remains fail-closed: declaration, registry identity, protocol/API match, and shared evidence must all agree; a stored admission without `RunNativeSync` cannot source-dispatch. | Confirmed by focused database and synccontract tests. |
+| R5 | pass | The original singular driver admission shape would have encouraged one descriptor to claim both source-to-warehouse and warehouse-to-target work. | Replaced with separate `DatabaseNativeAdmissions`; the registry requires an exact per-leg descriptor, and an inbound-only fixture is refused for an outbound command. |
+| R6 | pass | Layer one must not acquire PostgreSQL/MySQL mechanics. | `go list -deps` confirms `internal/warehouse` and `internal/connectors/database` import neither native database driver; the MySQL type-level proof changes no shared package. |
 
-## Original-slice verdict
+## Final verdict
 
-No unresolved critical, warning, security, or scope findings remained in the
-original F1 slice. The isolated CLI regression suite and every required broad
-static/build gate passed after the resolved hygiene refinements. The amendment
-must receive its own final verdict before this file is handed off.
+No unresolved critical, warning, security, or scope findings remain in the F1
+slice or captain amendment. The isolated CLI regression suite, focused/race
+tests, and every required broad static/build gate passed after the resolved
+per-leg-admission refinement.

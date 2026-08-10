@@ -382,14 +382,8 @@ func TestStructuredCatalogIdentityAndReadPlanAreStable(t *testing.T) {
 
 func TestDriverAdmissionRequiresRegisteredCompatibleNativeAdmission(t *testing.T) {
 	definition := loadTestDefinition(t, definitionWithAdmittedMode(validDefinitionJSON))
-	contract := synccontract.NativeCommandContract{
-		ContractVersion: synccontract.NativeCommandContractVersion,
-		Protocol:        "postgres-wire",
-		Command:         "managed-table-apply",
-		Executor:        synccontract.ExecutorReference{Kind: "native", ID: "postgres-managed-table-v1"},
-		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
-		Conformance:     synccontract.RequiredConformanceEvidence(),
-	}
+	// This fixture is admission-only; it is not a published PostgreSQL command.
+	contract := nativeContract("postgres-wire", "fixture-postgres-admission", "fixture-postgres-admission-v1")
 	inbound := testInboundCommand(t, contract)
 
 	registry, err := database.NewDriverRegistry(declaredDriver{descriptor: postgresDriverDescriptor()})
@@ -402,13 +396,7 @@ func TestDriverAdmissionRequiresRegisteredCompatibleNativeAdmission(t *testing.T
 
 	admitted := admittedDriver{
 		declaredDriver: declaredDriver{descriptor: postgresDriverDescriptor()},
-		native: synccontract.NativeSyncExecutorDescriptor{
-			Protocol: contract.Protocol,
-			Command:  contract.Command,
-			Executor: contract.Executor,
-			Modes:    contract.Modes,
-		},
-		evidence: synccontract.RequiredConformanceEvidence(),
+		admissions:     []synccontract.NativeExecutorAdmission{nativeAdmissionFor(contract)},
 	}
 	registry, err = database.NewDriverRegistry(admitted)
 	if err != nil {
@@ -497,19 +485,13 @@ func TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs(t *testing.
 		t.Fatal("NewArtifactRef() accepted an unsafe warehouse table component")
 	}
 
-	contract := synccontract.NativeCommandContract{
-		ContractVersion: synccontract.NativeCommandContractVersion,
-		Protocol:        "postgres-wire",
-		Command:         "managed-table-apply",
-		Executor:        synccontract.ExecutorReference{Kind: "native", ID: "postgres-managed-table-v1"},
-		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
-		Conformance:     synccontract.RequiredConformanceEvidence(),
-	}
-	inbound, err := database.NewDatabaseInboundCommand(inboundRef, contract)
+	inboundContract := nativeContract("postgres-wire", "fixture-postgres-source-to-warehouse", "fixture-postgres-source-to-warehouse-v1")
+	inbound, err := database.NewDatabaseInboundCommand(inboundRef, inboundContract)
 	if err != nil {
 		t.Fatal(err)
 	}
-	outbound, err := database.NewDatabaseOutboundCommand(outboundRef, contract)
+	outboundContract := nativeContract("postgres-wire", "fixture-postgres-warehouse-to-target", "fixture-postgres-warehouse-to-target-v1")
+	outbound, err := database.NewDatabaseOutboundCommand(outboundRef, outboundContract)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -522,13 +504,10 @@ func TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs(t *testing.
 	))
 	admitted := admittedDriver{
 		declaredDriver: declaredDriver{descriptor: postgresDriverDescriptor()},
-		native: synccontract.NativeSyncExecutorDescriptor{
-			Protocol: contract.Protocol,
-			Command:  contract.Command,
-			Executor: contract.Executor,
-			Modes:    contract.Modes,
+		admissions: []synccontract.NativeExecutorAdmission{
+			nativeAdmissionFor(inboundContract),
+			nativeAdmissionFor(outboundContract),
 		},
-		evidence: synccontract.RequiredConformanceEvidence(),
 	}
 	registry, err := database.NewDriverRegistry(admitted)
 	if err != nil {
@@ -539,6 +518,16 @@ func TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs(t *testing.
 	}
 	if _, err := registry.Admit(context.Background(), definition, outbound); err != nil {
 		t.Fatalf("warehouse outbound admission error = %v", err)
+	}
+	inboundOnly, err := database.NewDriverRegistry(admittedDriver{
+		declaredDriver: declaredDriver{descriptor: postgresDriverDescriptor()},
+		admissions:     []synccontract.NativeExecutorAdmission{nativeAdmissionFor(inboundContract)},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := inboundOnly.Admit(context.Background(), definition, outbound); !errors.Is(err, database.ErrNativeDriverAdmissionMismatch) {
+		t.Fatalf("outbound admission through an inbound descriptor error = %v, want ErrNativeDriverAdmissionMismatch", err)
 	}
 	mutatedContract := inbound.Contract()
 	mutatedContract.Modes[0] = synccontract.ModeFullOverwrite
@@ -554,10 +543,15 @@ func TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact(t *testing
 	var _ database.Driver = mysqlLayerTwo{}
 	var _ database.NativeAdmittedDriver = mysqlLayerTwo{}
 
-	identity := database.ConnectionIdentity{
+	sourceIdentity := database.ConnectionIdentity{
 		WorkspaceID:  "workspace-1",
 		ConnectorID:  "mysql",
-		ConnectionID: "mysql-connection",
+		ConnectionID: "mysql-source-connection",
+	}
+	targetIdentity := database.ConnectionIdentity{
+		WorkspaceID:  "workspace-1",
+		ConnectorID:  "mysql",
+		ConnectionID: "mysql-target-connection",
 	}
 	relation := database.RelationRef{
 		Schema: database.SchemaRef{
@@ -566,15 +560,15 @@ func TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact(t *testing
 		},
 		Name: "widgets",
 	}
-	source, err := database.NewSourceRef(identity, relation)
+	source, err := database.NewSourceRef(sourceIdentity, relation)
 	if err != nil {
 		t.Fatal(err)
 	}
-	target, err := database.NewTargetRef(identity, relation)
+	target, err := database.NewTargetRef(targetIdentity, relation)
 	if err != nil {
 		t.Fatal(err)
 	}
-	artifact, err := warehouse.NewArtifactRef(identity, "widgets")
+	artifact, err := warehouse.NewArtifactRef(sourceIdentity, "widgets")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -586,37 +580,31 @@ func TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact(t *testing
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got := inboundRef.Warehouse().Identity(); !got.SameIdentity(identity) {
-		t.Fatalf("MySQL inbound warehouse identity = %#v, want %#v", got, identity)
+	if got := inboundRef.Warehouse().Identity(); !got.SameIdentity(sourceIdentity) {
+		t.Fatalf("MySQL inbound warehouse identity = %#v, want %#v", got, sourceIdentity)
 	}
-	if got := outboundRef.Warehouse().Identity(); !got.SameIdentity(identity) {
-		t.Fatalf("MySQL outbound warehouse identity = %#v, want %#v", got, identity)
+	if got := outboundRef.Warehouse().Identity(); !got.SameIdentity(sourceIdentity) {
+		t.Fatalf("MySQL outbound warehouse identity = %#v, want %#v", got, sourceIdentity)
+	}
+	if got := outboundRef.Target().Identity(); !got.SameIdentity(targetIdentity) {
+		t.Fatalf("MySQL outbound target identity = %#v, want %#v", got, targetIdentity)
 	}
 
-	contract := synccontract.NativeCommandContract{
-		ContractVersion: synccontract.NativeCommandContractVersion,
-		Protocol:        "mysql-wire",
-		Command:         "managed-table-apply",
-		Executor:        synccontract.ExecutorReference{Kind: "native", ID: "mysql-managed-table-v1"},
-		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
-		Conformance:     synccontract.RequiredConformanceEvidence(),
-	}
-	inbound, err := database.NewDatabaseInboundCommand(inboundRef, contract)
+	inboundContract := nativeContract("mysql-wire", "fixture-mysql-source-to-warehouse", "fixture-mysql-source-to-warehouse-v1")
+	inbound, err := database.NewDatabaseInboundCommand(inboundRef, inboundContract)
 	if err != nil {
 		t.Fatal(err)
 	}
-	outbound, err := database.NewDatabaseOutboundCommand(outboundRef, contract)
+	outboundContract := nativeContract("mysql-wire", "fixture-mysql-warehouse-to-target", "fixture-mysql-warehouse-to-target-v1")
+	outbound, err := database.NewDatabaseOutboundCommand(outboundRef, outboundContract)
 	if err != nil {
 		t.Fatal(err)
 	}
 	mysql := mysqlLayerTwo{
-		native: synccontract.NativeSyncExecutorDescriptor{
-			Protocol: contract.Protocol,
-			Command:  contract.Command,
-			Executor: contract.Executor,
-			Modes:    contract.Modes,
+		admissions: []synccontract.NativeExecutorAdmission{
+			nativeAdmissionFor(inboundContract),
+			nativeAdmissionFor(outboundContract),
 		},
-		evidence: synccontract.RequiredConformanceEvidence(),
 	}
 	registry, err := database.NewDriverRegistry(mysql)
 	if err != nil {
@@ -631,21 +619,18 @@ func TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact(t *testing
 	}
 }
 
+// mysqlLayerTwo is a test-only layer-two proof. It declares no production
+// connector capability or executable MySQL operation.
 type mysqlLayerTwo struct {
-	native   synccontract.NativeSyncExecutorDescriptor
-	evidence synccontract.ConformanceEvidence
+	admissions []synccontract.NativeExecutorAdmission
 }
 
 func (mysqlLayerTwo) DatabaseDriverDescriptor() database.DriverDescriptor {
 	return database.DriverDescriptor{ID: "mysql", Protocol: "mysql-wire", APIVersion: 1}
 }
 
-func (d mysqlLayerTwo) NativeSyncExecutorDescriptor() synccontract.NativeSyncExecutorDescriptor {
-	return d.native
-}
-
-func (d mysqlLayerTwo) NativeSyncConformanceEvidence() synccontract.ConformanceEvidence {
-	return d.evidence
+func (d mysqlLayerTwo) DatabaseNativeAdmissions() []synccontract.NativeExecutorAdmission {
+	return cloneNativeAdmissions(d.admissions)
 }
 
 func loadTestDefinition(t *testing.T, document string) database.Definition {
@@ -704,22 +689,59 @@ func (d declaredDriver) DatabaseDriverDescriptor() database.DriverDescriptor { r
 
 type admittedDriver struct {
 	declaredDriver
+	admissions []synccontract.NativeExecutorAdmission
+}
+
+func (d admittedDriver) DatabaseNativeAdmissions() []synccontract.NativeExecutorAdmission {
+	return cloneNativeAdmissions(d.admissions)
+}
+
+type nativeAdmission struct {
 	native   synccontract.NativeSyncExecutorDescriptor
 	evidence synccontract.ConformanceEvidence
 }
 
-func (d admittedDriver) NativeSyncExecutorDescriptor() synccontract.NativeSyncExecutorDescriptor {
+func nativeContract(protocol, command, executorID string) synccontract.NativeCommandContract {
+	return synccontract.NativeCommandContract{
+		ContractVersion: synccontract.NativeCommandContractVersion,
+		Protocol:        protocol,
+		Command:         command,
+		Executor:        synccontract.ExecutorReference{Kind: "native", ID: executorID},
+		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
+		Conformance:     synccontract.RequiredConformanceEvidence(),
+	}
+}
+
+func nativeAdmissionFor(contract synccontract.NativeCommandContract) nativeAdmission {
+	return nativeAdmission{
+		native: synccontract.NativeSyncExecutorDescriptor{
+			Protocol: contract.Protocol,
+			Command:  contract.Command,
+			Executor: contract.Executor,
+			Modes:    append([]synccontract.Mode(nil), contract.Modes...),
+		},
+		evidence: contract.Conformance,
+	}
+}
+
+func (d nativeAdmission) NativeSyncExecutorDescriptor() synccontract.NativeSyncExecutorDescriptor {
 	return d.native
 }
 
-func (d admittedDriver) NativeSyncConformanceEvidence() synccontract.ConformanceEvidence {
+func (d nativeAdmission) NativeSyncConformanceEvidence() synccontract.ConformanceEvidence {
 	return d.evidence
+}
+
+func cloneNativeAdmissions(admissions []synccontract.NativeExecutorAdmission) []synccontract.NativeExecutorAdmission {
+	return append([]synccontract.NativeExecutorAdmission(nil), admissions...)
 }
 
 func postgresDriverDescriptor() database.DriverDescriptor {
 	return database.DriverDescriptor{ID: "postgres", Protocol: "postgres-wire", APIVersion: 1}
 }
 
+// mysqlDefinitionJSON is a test-only strict-definition fixture. It is not a
+// production MySQL manifest or capability declaration.
 const mysqlDefinitionJSON = `{
   "schema_version": 1,
   "driver": {"id": "mysql", "protocol": "mysql-wire", "api_version": 1},
