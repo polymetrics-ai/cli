@@ -6,6 +6,9 @@ if [ -n "${PM_NO_AUTOPUSH:-}" ]; then
   exit 0
 fi
 
+hook_dir="$(CDPATH='' cd "$(dirname "$0")" 2>/dev/null && pwd)" || exit 0
+# shellcheck disable=SC1091
+. "$hook_dir/pm-autopush-operation-state" 2>/dev/null || exit 0
 scheduled_oid="$(git rev-parse --verify HEAD 2>/dev/null)" || exit 0
 worktree_git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)" || exit 0
 operation_file="$worktree_git_dir/pm-autopush-operation"
@@ -16,20 +19,7 @@ if [ -f "$operation_file" ]; then
   [ "$operation_parent" = "$commit_parent" ] && exit 0
 fi
 
-# Rebase (and git am) can replay a long series of commits. Check Git's own
-# state paths rather than assuming that .git is a directory in this worktree.
-for operation_path in \
-  rebase-merge \
-  rebase-apply \
-  MERGE_HEAD \
-  CHERRY_PICK_HEAD \
-  REVERT_HEAD \
-  BISECT_LOG; do
-  resolved_operation_path="$(git rev-parse --git-path "$operation_path" 2>/dev/null)" || exit 0
-  if [ -f "$resolved_operation_path" ] || [ -d "$resolved_operation_path" ]; then
-    exit 0
-  fi
-done
+pm_autopush_operation_in_progress && exit 0
 
 branch="$(git symbolic-ref --quiet --short HEAD 2>/dev/null)" || exit 0
 [ "$branch" = "main" ] && exit 0
@@ -73,16 +63,51 @@ case "$now" in
   ""|*[!0-9]*) exit 0 ;;
 esac
 
-lease_dir="$state_file.lock"
-if ! mkdir "$lease_dir" 2>/dev/null; then
+lease_file="$state_file.lock"
+lease_owner_file="$state_file.lease.$$.${now}"
+if ! (set -C; : > "$lease_owner_file") 2>/dev/null; then
   exit 0
+fi
+if ! printf '%s %s\n' "$$" "$now" > "$lease_owner_file" 2>/dev/null; then
+  rm -f "$lease_owner_file" 2>/dev/null || :
+  exit 0
+fi
+if ! ln "$lease_owner_file" "$lease_file" 2>/dev/null; then
+  lease_pid=""
+  lease_created=""
+  lease_extra=""
+  IFS=' ' read -r lease_pid lease_created lease_extra < "$lease_file" 2>/dev/null || :
+  lease_valid=1
+  case "$lease_pid" in
+    ""|0|*[!0-9]*) lease_valid=0 ;;
+  esac
+  case "$lease_created" in
+    ""|*[!0-9]*) lease_valid=0 ;;
+  esac
+  [ -n "$lease_extra" ] && lease_valid=0
+  if [ "$lease_valid" -eq 1 ] &&
+    [ "$lease_created" -le "$now" ] &&
+    [ $((now - lease_created)) -ge 600 ] &&
+    ! kill -0 "$lease_pid" 2>/dev/null; then
+    rm -f "$lease_file" 2>/dev/null || :
+  fi
+  if ! ln "$lease_owner_file" "$lease_file" 2>/dev/null; then
+    rm -f "$lease_owner_file" 2>/dev/null || :
+    exit 0
+  fi
+fi
+if rm -f "$lease_owner_file" 2>/dev/null; then
+  lease_owner_file=""
 fi
 state_temp=""
 trap '
   if [ -n "$state_temp" ]; then
     rm -f "$state_temp" 2>/dev/null || :
   fi
-  rmdir "$lease_dir" 2>/dev/null || :
+  rm -f "$lease_file" 2>/dev/null || :
+  if [ -n "$lease_owner_file" ]; then
+    rm -f "$lease_owner_file" 2>/dev/null || :
+  fi
 ' 0
 trap 'exit 0' 1 2 15
 
@@ -102,7 +127,7 @@ state_temp="$state_file.$$.tmp"
 printf '%s\n' "$now" > "$state_temp" 2>/dev/null || exit 0
 mv -f "$state_temp" "$state_file" 2>/dev/null || exit 0
 state_temp=""
-if ! rmdir "$lease_dir" 2>/dev/null; then
+if ! rm -f "$lease_file" 2>/dev/null; then
   exit 0
 fi
 trap - 0 1 2 15
@@ -112,22 +137,9 @@ trap - 0 1 2 15
 # hook returns successfully even if nohup itself cannot be started.
 # shellcheck disable=SC2016 # The child receives its remote, branch, and log path as positional arguments.
 nohup sh -c '
-  operation_in_progress() {
-    for operation_path in \
-      rebase-merge \
-      rebase-apply \
-      MERGE_HEAD \
-      CHERRY_PICK_HEAD \
-      REVERT_HEAD \
-      BISECT_LOG; do
-      resolved_operation_path="$(git rev-parse --git-path "$operation_path" 2>/dev/null)" || return 0
-      if [ -f "$resolved_operation_path" ] || [ -d "$resolved_operation_path" ]; then
-        return 0
-      fi
-    done
-    return 1
-  }
-  if operation_in_progress; then
+  # shellcheck disable=SC1091
+  . "$5" 2>/dev/null || exit 0
+  if pm_autopush_operation_in_progress; then
     printf "%s\n" "pm autopush: operation in progress for $2 (ignored)" >> "$3"
     exit 0
   fi
@@ -156,7 +168,7 @@ nohup sh -c '
   done <<EOF
 $push_urls
 EOF
-  if operation_in_progress; then
+  if pm_autopush_operation_in_progress; then
     printf "%s\n" "pm autopush: operation in progress for $2 (ignored)" >> "$3"
     exit 0
   fi
@@ -169,6 +181,6 @@ EOF
     exit 0
   fi
   printf "%s\n" "pm autopush: push failed for $2 (ignored)" >> "$3"
-' pm-autopush "$remote" "$branch" "$status_file" "$scheduled_oid" </dev/null >/dev/null 2>&1 &
+' pm-autopush "$remote" "$branch" "$status_file" "$scheduled_oid" "$hook_dir/pm-autopush-operation-state" </dev/null >/dev/null 2>&1 &
 
 exit 0

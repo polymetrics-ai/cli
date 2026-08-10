@@ -1,0 +1,18 @@
+pm_autopush_operation_in_progress() {
+  for operation_path in \
+    rebase-merge \
+    rebase-apply \
+    sequencer \
+    MERGE_HEAD \
+    CHERRY_PICK_HEAD \
+    REVERT_HEAD \
+    BISECT_LOG \
+    SQUASH_MSG \
+    MERGE_MSG; do
+    resolved_operation_path="$(git rev-parse --git-path "$operation_path" 2>/dev/null)" || return 0
+    if [ -f "$resolved_operation_path" ] || [ -d "$resolved_operation_path" ]; then
+      return 0
+    fi
+  done
+  return 1
+}

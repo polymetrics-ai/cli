@@ -1,25 +1,13 @@
 #!/usr/bin/env sh
 
+hook_dir="$(CDPATH='' cd "$(dirname "$0")" 2>/dev/null && pwd)" || exit 0
+# shellcheck disable=SC1091
+. "$hook_dir/pm-autopush-operation-state" 2>/dev/null || exit 0
 worktree_git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)" || exit 0
 operation_file="$worktree_git_dir/pm-autopush-operation"
 operation_dir="$(dirname "$operation_file")" || exit 0
-operation_active=0
 
-for operation_path in \
-  rebase-merge \
-  rebase-apply \
-  MERGE_HEAD \
-  CHERRY_PICK_HEAD \
-  REVERT_HEAD \
-  BISECT_LOG; do
-  resolved_operation_path="$(git rev-parse --git-path "$operation_path" 2>/dev/null)" || exit 0
-  if [ -f "$resolved_operation_path" ] || [ -d "$resolved_operation_path" ]; then
-    operation_active=1
-    break
-  fi
-done
-
-if [ "$operation_active" -eq 0 ]; then
+if ! pm_autopush_operation_in_progress; then
   rm -f "$operation_file" 2>/dev/null || :
   exit 0
 fi

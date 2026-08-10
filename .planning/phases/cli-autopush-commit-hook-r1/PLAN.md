@@ -22,7 +22,8 @@ commits, default/detached heads, or any non-fast-forward update.
 
 ## Allowed implementation scope
 
-- `.githooks/post-commit` — POSIX `sh` hook only.
+- `.githooks/post-commit`, `.githooks/prepare-commit-msg`, and
+  `.githooks/pm-autopush-operation-state` — POSIX `sh` hook support only.
 - `scripts/tests/post-commit-autopush.sh` — local-Git executable acceptance
   harness only.
 - `docs/GUIDE.md` — opt-in and opt-out documentation beside the existing hook
@@ -43,17 +44,17 @@ commits, default/detached heads, or any non-fast-forward update.
    the branch is `main`/a locally known remote default branch. The detached child
    resolves every effective push URL's live symbolic `HEAD` and refuses an unknown
    or matching default before it can push.
-2. `prepare-commit-msg` resolves each Git operation marker with `git rev-parse
-   --git-path` before Git clears it, records the current parent in worktree-local
-   Git state, and clears stale records on ordinary commits. `post-commit` consumes
-   a matching record before also checking active `rebase-merge`, `rebase-apply`,
-   `MERGE_HEAD`, `CHERRY_PICK_HEAD`, `REVERT_HEAD`, and `BISECT_LOG` paths.
+2. A shared sourced helper resolves every Git operation path with `git rev-parse
+   --git-path`, including sequencer, squash, and merge message state.
+   `prepare-commit-msg` records the current parent before Git clears that state
+   and clears stale records on ordinary commits. `post-commit` consumes a matching
+   record before using the same helper in both parent and detached child paths.
 3. Select the branch remote, then `remote.pushDefault`, then an existing `origin`.
    Resolve Git's common directory, then resolve rate-limit state below
    `pm-autopush/` with `GIT_DIR=<common-dir> git rev-parse --git-path`. An atomic
-   sibling lock protects the timestamp decision and replacement across linked
-   worktrees; a branch timestamp younger than 600 seconds (or from the future)
-   skips the attempt.
+   hard-link lease carries an owner PID and creation time before acquisition, so a
+   dead owner can be reclaimed after the 600-second window without reopening the
+   linked-worktree race; a younger or future timestamp skips the attempt.
 4. Persist the attempt timestamp before scheduling the child with the current HEAD
    OID. The child re-resolves Git operation state, then only sends that OID after
    confirming the branch still names it, using `git push -- <remote>
@@ -63,10 +64,11 @@ commits, default/detached heads, or any non-fast-forward update.
    adds one short line to the per-branch local log; the parent hook exits zero in
    every path.
 5. The harness uses temporary bare remotes and hook wrappers to prove stale and
-   pushurl-specific default refusal, concurrent linked-worktree leasing, delayed
-   children during and after a manual merge, real manual merge/cherry-pick/revert
-   completions, a real two-commit rebase, expiry behavior, commit non-blocking
-   behavior, and a genuine non-fast-forward rejection without force.
+   pushurl-specific default refusal, concurrent linked-worktree leasing and stale
+   lease recovery, delayed children during and after a manual merge, clean squash,
+   cherry-pick, and revert completions, a real two-commit rebase, expiry behavior,
+   commit non-blocking behavior, and a genuine non-fast-forward rejection without
+   force.
 
 ## TDD task sequence
 

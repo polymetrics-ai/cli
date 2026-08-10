@@ -10,6 +10,8 @@ shellcheck passed.
 ## Scope reviewed
 
 - `.githooks/post-commit`
+- `.githooks/prepare-commit-msg`
+- `.githooks/pm-autopush-operation-state`
 - `scripts/tests/post-commit-autopush.sh`
 - `docs/GUIDE.md`
 - the companion GSD evidence
@@ -36,7 +38,15 @@ shellcheck passed.
   that differ from the fetch URL checked by `ls-remote`. The child now resolves
   and checks the live default of every effective push URL before it invokes the
   named remote.
+- R6 and R7 were legitimate: clean squash, cherry-pick, and revert paths can
+  rely on `SQUASH_MSG` or `MERGE_MSG` after their `*_HEAD` markers are absent.
+  A shared Git-path helper now covers those paths in prepare, parent, and child
+  checks, preventing future operation-list drift.
+- R8 was legitimate: a process killed after acquiring the old directory lock
+  could block that branch permanently. The lease is now an atomic hard link to
+  prewritten owner metadata; a dead owner is reclaimed only after the rate window.
 
-The focused executable harness covers each follow-up, including delayed children
-during and after a manual merge plus mixed safe/default push URLs, alongside the
-original non-force rejection and detached-push behavior.
+The focused executable harness covers each follow-up, including clean squash,
+cherry-pick, and revert paths, dead-lease recovery, delayed children during and
+after a manual merge, and mixed safe/default push URLs, alongside the original
+non-force rejection and detached-push behavior.

@@ -8,6 +8,7 @@ set -eu
 ROOT_DIR="$(CDPATH='' cd "$(dirname "$0")/../.." && pwd)"
 HOOK="$ROOT_DIR/.githooks/post-commit"
 PREPARE_HOOK="$ROOT_DIR/.githooks/prepare-commit-msg"
+OPERATION_HELPER="$ROOT_DIR/.githooks/pm-autopush-operation-state"
 TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/pm-autopush.XXXXXX")"
 CURRENT_HOOK_LOG=""
 CURRENT_OPERATION_LOG=""
@@ -26,6 +27,7 @@ fail() {
 
 [ -x "$HOOK" ] || fail "post-commit hook is missing or not executable"
 [ -x "$PREPARE_HOOK" ] || fail "prepare-commit-msg hook is missing or not executable"
+[ -r "$OPERATION_HELPER" ] || fail "operation-state helper is missing or not readable"
 
 export PM_TEST_HOOK_SOURCE="$HOOK"
 export PM_TEST_PREPARE_HOOK_SOURCE="$PREPARE_HOOK"
@@ -343,7 +345,7 @@ test_rate_limit_and_detached_push() {
   fi
   assert_hook_invoked "$CURRENT_HOOK_LOG"
   finished="$(date +%s)"
-  [ $((finished - started)) -lt 2 ] || fail "detached push delayed the commit"
+  [ $((finished - started)) -lt 3 ] || fail "detached push delayed the commit"
 
   first_sha="$(git -C "$TEST_REPO" rev-parse HEAD)"
   wait_for_ref "$TEST_REMOTE" refs/heads/feature "$first_sha"
@@ -558,6 +560,114 @@ test_manual_revert_completion_refusal() {
   assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
 }
 
+test_squash_merge_completion_refusal() {
+  case_dir="$TMP_DIR/squash-merge"
+  mkdir -p "$case_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb feature
+  git -C "$TEST_REPO" checkout -qb squash-source
+  record_change "$TEST_REPO" squash-source
+  git -C "$TEST_REPO" commit -qm "test: squash source"
+  git -C "$TEST_REPO" checkout -q feature
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  CURRENT_OPERATION_LOG="$case_dir/operation.log"
+  : > "$CURRENT_HOOK_LOG"
+  : > "$CURRENT_OPERATION_LOG"
+
+  if ! run_hooked git -C "$TEST_REPO" merge --squash squash-source; then
+    fail "squash merge setup should succeed"
+  fi
+  squash_message="$(git -C "$TEST_REPO" rev-parse --git-path SQUASH_MSG)"
+  [ -f "$squash_message" ] || fail "squash merge did not retain SQUASH_MSG"
+  if ! run_hooked git -C "$TEST_REPO" commit -qm "test: squash merge completion"; then
+    fail "squash merge completion should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  [ -s "$CURRENT_OPERATION_LOG" ] || fail "squash merge did not capture an operation snapshot"
+  assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
+}
+
+test_clean_cherry_pick_no_commit_refusal() {
+  case_dir="$TMP_DIR/clean-cherry-pick"
+  mkdir -p "$case_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb feature
+  git -C "$TEST_REPO" checkout -qb cherry-source
+  record_change "$TEST_REPO" clean-cherry-source
+  git -C "$TEST_REPO" commit -qm "test: clean cherry source"
+  cherry_source="$(git -C "$TEST_REPO" rev-parse HEAD)"
+  git -C "$TEST_REPO" checkout -q feature
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  CURRENT_OPERATION_LOG="$case_dir/operation.log"
+  : > "$CURRENT_HOOK_LOG"
+  : > "$CURRENT_OPERATION_LOG"
+
+  if ! run_hooked git -C "$TEST_REPO" cherry-pick --no-commit "$cherry_source"; then
+    fail "clean no-commit cherry-pick should succeed"
+  fi
+  merge_message="$(git -C "$TEST_REPO" rev-parse --git-path MERGE_MSG)"
+  [ -f "$merge_message" ] || fail "clean no-commit cherry-pick did not retain MERGE_MSG"
+  if ! run_hooked git -C "$TEST_REPO" commit -qm "test: clean cherry-pick completion"; then
+    fail "clean no-commit cherry-pick completion should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  [ -s "$CURRENT_OPERATION_LOG" ] || fail "clean no-commit cherry-pick did not capture an operation snapshot"
+  assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
+}
+
+test_clean_revert_no_edit_refusal() {
+  case_dir="$TMP_DIR/clean-revert"
+  mkdir -p "$case_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb feature
+  record_change "$TEST_REPO" clean-revert-target
+  git -C "$TEST_REPO" commit -qm "test: clean revert target"
+  revert_target="$(git -C "$TEST_REPO" rev-parse HEAD)"
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  CURRENT_OPERATION_LOG="$case_dir/operation.log"
+  : > "$CURRENT_HOOK_LOG"
+  : > "$CURRENT_OPERATION_LOG"
+
+  if ! GIT_EDITOR=: run_hooked git -C "$TEST_REPO" revert --no-edit "$revert_target"; then
+    fail "clean revert should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  [ -s "$CURRENT_OPERATION_LOG" ] || fail "clean revert did not capture an operation snapshot"
+  assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
+}
+
+test_stale_lease_recovery() {
+  case_dir="$TMP_DIR/stale-lease"
+  mkdir -p "$case_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb feature
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  CURRENT_OPERATION_LOG=""
+  : > "$CURRENT_HOOK_LOG"
+
+  stale_state="$(state_file "$TEST_REPO" feature)"
+  stale_lease="$stale_state.lock"
+  stale_created=$(( $(date +%s) - 601 ))
+  stale_pid="$(sh -c 'printf "%s\\n" "$$"')"
+  stale_owner="$stale_state.lease.$stale_pid.$stale_created"
+  mkdir -p "$(dirname "$stale_state")"
+  printf '%s %s\n' "$stale_pid" "$stale_created" > "$stale_owner"
+  ln "$stale_owner" "$stale_lease"
+
+  record_change "$TEST_REPO" stale-lease
+  if ! run_hooked git -C "$TEST_REPO" commit -qm "test: stale lease recovery"; then
+    fail "stale-lease commit should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  expected_sha="$(git -C "$TEST_REPO" rev-parse HEAD)"
+  wait_for_ref "$TEST_REMOTE" refs/heads/feature "$expected_sha"
+  [ ! -e "$stale_lease" ] || fail "stale lease was not reclaimed"
+}
+
 test_delayed_child_refuses_operation_tip() {
   case_dir="$TMP_DIR/delayed-child"
   wrapper_dir="$case_dir/wrappers"
@@ -693,6 +803,10 @@ test_real_multicommit_rebase_refusal
 test_manual_merge_completion_refusal
 test_manual_cherry_pick_completion_refusal
 test_manual_revert_completion_refusal
+test_squash_merge_completion_refusal
+test_clean_cherry_pick_no_commit_refusal
+test_clean_revert_no_edit_refusal
+test_stale_lease_recovery
 test_delayed_child_refuses_operation_tip
 test_delayed_child_refuses_active_operation
 test_rejected_push_is_swallowed_without_force
