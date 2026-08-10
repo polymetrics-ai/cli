@@ -1,0 +1,20 @@
+{
+  "issue": 4001,
+  "phase": "shared-failure-classification-r1",
+  "gsd_mode": "manual-inline-fallback",
+  "status": "verified",
+  "skills": [
+    "golang-how-to",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing"
+  ],
+  "tdd": {
+    "red": "recorded",
+    "green": "passed"
+  },
+  "review": "manual-inline-clean"
+}

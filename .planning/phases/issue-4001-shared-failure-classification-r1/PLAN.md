@@ -1,0 +1,59 @@
+# PLAN — Issue 4001: shared connector failure classification contract
+
+## Goal
+
+Provide one typed, dependency-free failure vocabulary that database validation, engine dispatch,
+and certification can share without parsing error text or serializing sensitive internal causes.
+
+## Allowed scope
+
+- `internal/failures/**` — the sole contract owner and tests.
+- `internal/connectors/configuration_validation*_test.go` — generic native/configuration
+  compatibility guard only; no PostgreSQL driver edits.
+- `internal/connectors/engine/configuration_validation*.go` — classify existing declarative
+  configuration failures with exact JSON-Pointer paths.
+- `internal/connectors/commandrunner/runner.go` plus focused test — carry the common dispatch
+  classification through an existing blocked-command error without implementing #3991 analysis.
+- `internal/connectors/certify/report.go` plus focused test — expose an optional structured
+  `untestable_reason` field for certification output.
+- `.planning/phases/issue-4001-shared-failure-classification-r1/**` — required evidence.
+
+## Explicit exclusions
+
+- No PostgreSQL driver, database execution, write-session, workset, receipt, CDC, API operation,
+  provider budget, call-graph analysis, generated baseline, credential, CLI, docs, or website work.
+- No new dependencies and no credentials or provider calls.
+- No change to `synccontract.RecoveryOutcome`; it remains a CDC resume/rebootstrap contract.
+
+## Design
+
+`internal/failures.Classification` is an `error` with constructor-validated, closed domain and
+dispatch codes. It exposes stable JSON through explicit marshal/unmarshal methods, verifies all
+codes and JSON-Pointer paths, defensively copies references, and refuses control characters or
+unbounded reference text. `Error` exposes only the user message. `Unwrap` and `Cause` retain the
+internal Go cause in memory but exclude it from JSON. `Retryable` returns true only for the
+`transient` domain.
+
+Engine configuration validation converts its existing format/enum/pattern failures to this typed
+form without changing the human-readable text. `BlockedCommandError` gains optional classification
+transport so #3991 can attach its concrete dispatch findings later. Certification's
+`CapabilityResult.UntestableReason` uses the same type; its future matrix producer can emit the
+stable object without another local enum.
+
+## TDD sequence
+
+1. **Red:** Add the contract and consumer tests before the new package or wiring exists. Record the
+   focused failing command output.
+2. **Green:** Implement the dependency-free classification package and its tests.
+3. **Green:** Adapt declarative configuration validation, blocked command transport, and
+   certification report serialization; preserve existing user-facing configuration text.
+4. **Regression:** Run focused contract, configuration, commandrunner, and certification tests;
+   then formatting, vet/build, and the non-suite repository gates required by `AGENTS.md`.
+5. **Verify/review:** Complete the issue verification checklist and a manual cross-file review.
+
+## Consumer evidence
+
+- Generic configuration validation models the future database foundation and demonstrates typed,
+  non-retryable field-scoped propagation.
+- Commandrunner demonstrates engine-dispatch carriage for each closed dispatch kind.
+- Certification serializes `untestable_reason` without the private cause.
