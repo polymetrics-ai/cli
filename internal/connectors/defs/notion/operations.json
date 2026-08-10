@@ -252,8 +252,8 @@
       "rest": {
         "method": "POST",
         "path": "/v1/data_sources/{data_source_id}/query",
-        "content_type": "application/json",
         "max_bytes": 1048576,
+        "content_type": "application/json",
         "body_schema": {
           "type": "object",
           "properties": {
@@ -301,8 +301,8 @@
       "rest": {
         "method": "POST",
         "path": "/v1/blocks/meeting_notes/query",
-        "content_type": "application/json",
         "max_bytes": 1048576,
+        "content_type": "application/json",
         "body_schema": {
           "type": "object",
           "properties": {
@@ -339,117 +339,6 @@
       "file": {
         "direction": "upload",
         "max_bytes": 20971520
-      }
-    },
-    {
-      "id": "notion.get.v1-databases",
-      "kind": "rest_read",
-      "summary": "GET /v1/databases",
-      "description": "Legacy 'List databases' endpoint, documented only under the reference nav's explicit 'Databases (deprecated)' group and absent from the current OpenAPI document. Superseded by POST /v1/search, which this bundle implements as the databases stream. Source: https://developers.notion.com/reference/get-databases",
-      "source_url": "https://developers.notion.com/reference/intro",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/v1/databases",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "notion.post.v1-databases-database-id-query",
-      "kind": "rest_write",
-      "summary": "POST /v1/databases/{database_id}/query",
-      "description": "Legacy 'Query a database' endpoint, documented only under the reference nav's explicit 'Databases (deprecated)' group and absent from the current OpenAPI document. Superseded by POST /v1/data_sources/{data_source_id}/query, which this bundle implements as the data-source query direct read. Source: https://developers.notion.com/reference/post-database-query",
-      "source_url": "https://developers.notion.com/reference/intro",
-      "risk": "low",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v1/databases/{database_id}/query",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "notion.post.v1-file-uploads-file-upload-id-send",
-      "kind": "rest_write",
-      "summary": "POST /v1/file_uploads/{file_upload_id}/send",
-      "description": "Notion multipart file upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner can bind provider paths to approved payload digests without adding connector-local runtime code.",
-      "source_url": "https://developers.notion.com/reference/intro",
-      "risk": "high",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v1/file_uploads/{file_upload_id}/send",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "notion.post.v1-oauth-introspect",
-      "kind": "rest_write",
-      "summary": "POST /v1/oauth/introspect",
-      "description": "OAuth token introspection reports the caller credential's active status, scope and issue time. Its response is entirely token-derived, so it is never rendered. Source: https://developers.notion.com/reference/introspect-token",
-      "source_url": "https://developers.notion.com/reference/intro",
-      "risk": "high",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v1/oauth/introspect",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "notion.post.v1-oauth-revoke",
-      "kind": "rest_write",
-      "summary": "POST /v1/oauth/revoke",
-      "description": "OAuth token revocation is credential lifecycle, not provider data, and is handled by pm credentials rather than a connector command. Source: https://developers.notion.com/reference/revoke-token",
-      "source_url": "https://developers.notion.com/reference/intro",
-      "risk": "high",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v1/oauth/revoke",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "notion.post.v1-oauth-token",
-      "kind": "rest_write",
-      "summary": "POST /v1/oauth/token",
-      "description": "OAuth token issuance/refresh mints a caller credential rather than moving provider data. Exposing it as a CLI command would emit a token-derived value, which this repository forbids outright. Source: https://developers.notion.com/reference/create-a-token",
-      "source_url": "https://developers.notion.com/reference/intro",
-      "risk": "high",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v1/oauth/token",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "notion.post.v1-search",
-      "kind": "rest_write",
-      "summary": "POST /v1/search",
-      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
-      "source_url": "https://developers.notion.com/reference/intro",
-      "risk": "high",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/v1/search",
-        "max_bytes": 16777216
       }
     }
   ]

@@ -3026,6 +3026,7 @@ func TestBatchMaterializePluralOnlyWriteCoverage(t *testing.T) {
 	}`)}
 	writeBatchBundle(t, sourceDefsRoot, fsys)
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	setBatchManifestOperationCounts(t, manifestPath, 3, 1, 2)
 	artifactDir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
 		"openapi": "3.0.0",

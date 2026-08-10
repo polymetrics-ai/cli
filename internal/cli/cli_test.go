@@ -161,7 +161,7 @@ func TestDynamicConnectorDeepHelpPathsResolveOrReportUsage(t *testing.T) {
 		if !strings.Contains(stdout.String(), "pm gong calls - Gong calls commands") {
 			t.Fatalf("valid group help missing group manual:\n%s", stdout.String())
 		}
-		})
+	})
 }
 
 func TestPromotedNativeConnectorCommandSurfacesRemainReachable(t *testing.T) {

@@ -1019,52 +1019,6 @@
         "path": "/verified-domains/{domain_name}",
         "max_bytes": 1048576
       }
-    },
-    {
-      "id": "mailchimp.get.operation",
-      "kind": "rest_read",
-      "summary": "GET /",
-      "description": "Provider metadata/health endpoint; `pm connectors inspect` and `pm etl check` cover local discovery/health without exposing this as a data operation.",
-      "source_url": "https://us20.api.mailchimp.com/schema/3.0/Swagger.json",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "mailchimp.post.batches",
-      "kind": "rest_write",
-      "summary": "POST /batches",
-      "description": "Mailchimp batch creation accepts arbitrary method/path/body operations; exposing it would be a generic HTTP write passthrough, which AGENTS.md forbids.",
-      "source_url": "https://us20.api.mailchimp.com/schema/3.0/Swagger.json",
-      "risk": "high",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/batches",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "mailchimp.get.ping",
-      "kind": "rest_read",
-      "summary": "GET /ping",
-      "description": "Provider metadata/health endpoint; `pm connectors inspect` and `pm etl check` cover local discovery/health without exposing this as a data operation.",
-      "source_url": "https://us20.api.mailchimp.com/schema/3.0/Swagger.json",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/ping",
-        "max_bytes": 16777216
-      }
     }
   ]
 }

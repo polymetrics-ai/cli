@@ -26,8 +26,8 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		t.Fatalf("unmarshal github api_surface.json: %v", err)
 	}
 
-	if surface.OperationLedgerVersion != 2 {
-		t.Fatalf("operation_ledger_version = %d, want 2", surface.OperationLedgerVersion)
+	if surface.OperationLedgerVersion != 1 {
+		t.Fatalf("operation_ledger_version = %d, want 1", surface.OperationLedgerVersion)
 	}
 
 	totalByMethod := map[string]int{}
@@ -68,25 +68,25 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		}
 	}
 
-	if len(surface.Endpoints) != 1228 {
-		t.Fatalf("endpoints = %d, want 1228", len(surface.Endpoints))
+	if len(surface.Endpoints) != 509 {
+		t.Fatalf("endpoints = %d, want 509", len(surface.Endpoints))
 	}
 	if covered != 440 {
 		t.Fatalf("covered endpoints = %d, want 440", covered)
 	}
-	if operations != 788 {
-		t.Fatalf("operation endpoints = %d, want 788 documented unsupported operations", operations)
+	if operations != 69 {
+		t.Fatalf("operation endpoints = %d, want 69 (only duplicate/deprecated/disallowed remain unconverted)", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
 	}
 	assertStringIntMap(t, "totalByMethod", totalByMethod, map[string]int{
-		"DELETE":  187,
-		"GET":     636,
+		"DELETE":  72,
+		"GET":     259,
 		"GRAPHQL": 4,
-		"PATCH":   74,
-		"POST":    193,
-		"PUT":     134,
+		"PATCH":   36,
+		"POST":    91,
+		"PUT":     47,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
 		"DELETE":  67,
@@ -97,25 +97,22 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"PUT":     45,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
-		"DELETE": 120,
-		"GET":    431,
-		"PATCH":  40,
-		"POST":   108,
-		"PUT":    89,
+		"DELETE": 5,
+		"GET":    54,
+		"PATCH":  2,
+		"POST":   6,
+		"PUT":    2,
 	})
 	assertStringIntMap(t, "models", models, map[string]int{
-		"deprecated":         1,
-		"destructive_action": 115,
-		"direct_read":        377,
-		"disallowed":         228,
-		"duplicate":          67,
+		"disallowed": 1,
+		"duplicate":  67,
+		"deprecated": 1,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"high": 342,
-		"low":  446,
+		"low": 69,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 788,
+		"blocked": 69,
 	})
 }
 

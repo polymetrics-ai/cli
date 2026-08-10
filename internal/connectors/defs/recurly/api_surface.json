@@ -1,32 +1,27 @@
 {
-  "api": "Recurly API v2021-02-25; provider artifact version: v2021-02-25",
+  "api": "Recurly API v2021-02-25",
   "docs": "https://recurly.com/developers/api/v2021-02-25/",
-  "reviewed_at": "2026-08-09",
-  "operation_ledger_version": 2,
-  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 197 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official openapi artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: official OpenAPI v2021-02-25 operation parity for issues #3183-#3190; 197 operations partitioned once",
-  "artifacts": [
-    {
-      "id": "recurly-artifact-2026-08-09",
-      "url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-      "kind": "openapi",
-      "version": "v2021-02-25",
-      "retrieved_at": "2026-08-09",
-      "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1"
-    }
-  ],
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "official OpenAPI v2021-02-25 operation parity for issues #3183-#3190; 197 operations partitioned once",
   "endpoints": [
     {
       "method": "GET",
+      "path": "/sites",
+      "covered_by": {
+        "stream": "list_sites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sites/{site_id}",
+      "covered_by": {
+        "stream": "get_site"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/accounts",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts]"
-      },
       "covered_by": {
         "stream": "accounts"
       }
@@ -34,15 +29,6 @@
     {
       "method": "POST",
       "path": "/accounts",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts]"
-      },
       "covered_by": {
         "write": "create_account"
       }
@@ -50,15 +36,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}]"
-      },
       "covered_by": {
         "stream": "get_account"
       }
@@ -66,15 +43,6 @@
     {
       "method": "PUT",
       "path": "/accounts/{account_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /accounts/{account_id}]"
-      },
       "covered_by": {
         "write": "update_account"
       }
@@ -82,47 +50,20 @@
     {
       "method": "DELETE",
       "path": "/accounts/{account_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /accounts/{account_id}]"
-      },
       "covered_by": {
         "write": "deactivate_account"
       }
     },
     {
-      "method": "GET",
-      "path": "/accounts/{account_id}/accounts",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/accounts]"
-      },
+      "method": "PUT",
+      "path": "/accounts/{account_id}/redact",
       "covered_by": {
-        "stream": "list_child_accounts"
+        "write": "redact_account"
       }
     },
     {
       "method": "GET",
       "path": "/accounts/{account_id}/acquisition",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/acquisition]"
-      },
       "covered_by": {
         "stream": "get_account_acquisition"
       }
@@ -130,15 +71,6 @@
     {
       "method": "PUT",
       "path": "/accounts/{account_id}/acquisition",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /accounts/{account_id}/acquisition]"
-      },
       "covered_by": {
         "write": "update_account_acquisition"
       }
@@ -146,31 +78,20 @@
     {
       "method": "DELETE",
       "path": "/accounts/{account_id}/acquisition",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /accounts/{account_id}/acquisition]"
-      },
       "covered_by": {
         "write": "remove_account_acquisition"
       }
     },
     {
+      "method": "PUT",
+      "path": "/accounts/{account_id}/reactivate",
+      "covered_by": {
+        "write": "reactivate_account"
+      }
+    },
+    {
       "method": "GET",
       "path": "/accounts/{account_id}/balance",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/balance]"
-      },
       "covered_by": {
         "stream": "get_account_balance"
       }
@@ -178,15 +99,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/billing_info",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/billing_info]"
-      },
       "covered_by": {
         "stream": "get_billing_info"
       }
@@ -194,15 +106,6 @@
     {
       "method": "PUT",
       "path": "/accounts/{account_id}/billing_info",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /accounts/{account_id}/billing_info]"
-      },
       "covered_by": {
         "write": "update_billing_info"
       }
@@ -210,15 +113,6 @@
     {
       "method": "DELETE",
       "path": "/accounts/{account_id}/billing_info",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /accounts/{account_id}/billing_info]"
-      },
       "covered_by": {
         "write": "remove_billing_info"
       }
@@ -226,15 +120,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/billing_info/verify",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/billing_info/verify]"
-      },
       "covered_by": {
         "write": "verify_billing_info"
       }
@@ -242,15 +127,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/billing_info/verify_cvv",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/billing_info/verify_cvv]"
-      },
       "covered_by": {
         "write": "verify_billing_info_cvv"
       }
@@ -258,15 +134,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/billing_infos",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/billing_infos]"
-      },
       "covered_by": {
         "stream": "list_billing_infos"
       }
@@ -274,15 +141,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/billing_infos",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/billing_infos]"
-      },
       "covered_by": {
         "write": "create_billing_info"
       }
@@ -290,15 +148,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/billing_infos/{billing_info_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/billing_infos/{billing_info_id}]"
-      },
       "covered_by": {
         "stream": "get_a_billing_info"
       }
@@ -306,15 +155,6 @@
     {
       "method": "PUT",
       "path": "/accounts/{account_id}/billing_infos/{billing_info_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /accounts/{account_id}/billing_infos/{billing_info_id}]"
-      },
       "covered_by": {
         "write": "update_a_billing_info"
       }
@@ -322,15 +162,6 @@
     {
       "method": "DELETE",
       "path": "/accounts/{account_id}/billing_infos/{billing_info_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /accounts/{account_id}/billing_infos/{billing_info_id}]"
-      },
       "covered_by": {
         "write": "remove_a_billing_info"
       }
@@ -338,15 +169,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/billing_infos/{billing_info_id}/verify",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/billing_infos/{billing_info_id}/verify]"
-      },
       "covered_by": {
         "write": "verify_billing_infos"
       }
@@ -354,15 +176,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/billing_infos/{billing_info_id}/verify_cvv",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/billing_infos/{billing_info_id}/verify_cvv]"
-      },
       "covered_by": {
         "write": "verify_billing_infos_cvv"
       }
@@ -370,15 +183,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/coupon_redemptions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/coupon_redemptions]"
-      },
       "covered_by": {
         "stream": "list_account_coupon_redemptions"
       }
@@ -386,15 +190,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/coupon_redemptions/active",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/coupon_redemptions/active]"
-      },
       "covered_by": {
         "stream": "list_active_coupon_redemptions"
       }
@@ -402,15 +197,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/coupon_redemptions/active",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/coupon_redemptions/active]"
-      },
       "covered_by": {
         "write": "create_coupon_redemption"
       }
@@ -418,15 +204,6 @@
     {
       "method": "DELETE",
       "path": "/accounts/{account_id}/coupon_redemptions/active",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /accounts/{account_id}/coupon_redemptions/active]"
-      },
       "covered_by": {
         "write": "remove_coupon_redemption"
       }
@@ -434,15 +211,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/coupon_redemptions/{coupon_redemption_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/coupon_redemptions/{coupon_redemption_id}]"
-      },
       "covered_by": {
         "stream": "get_coupon_redemption"
       }
@@ -450,15 +218,6 @@
     {
       "method": "DELETE",
       "path": "/accounts/{account_id}/coupon_redemptions/{coupon_redemption_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /accounts/{account_id}/coupon_redemptions/{coupon_redemption_id}]"
-      },
       "covered_by": {
         "write": "remove_coupon_redemption_by_id"
       }
@@ -466,47 +225,13 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/credit_payments",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/credit_payments]"
-      },
       "covered_by": {
         "stream": "list_account_credit_payments"
       }
     },
     {
       "method": "GET",
-      "path": "/accounts/{account_id}/entitlements",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/entitlements]"
-      },
-      "covered_by": {
-        "stream": "list_entitlements"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/accounts/{account_id}/external_accounts",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/external_accounts]"
-      },
       "covered_by": {
         "stream": "list_account_external_account"
       }
@@ -514,15 +239,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/external_accounts",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/external_accounts]"
-      },
       "covered_by": {
         "write": "create_account_external_account"
       }
@@ -530,15 +246,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/external_accounts/{external_account_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/external_accounts/{external_account_id}]"
-      },
       "covered_by": {
         "stream": "get_account_external_account"
       }
@@ -546,15 +253,6 @@
     {
       "method": "PUT",
       "path": "/accounts/{account_id}/external_accounts/{external_account_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /accounts/{account_id}/external_accounts/{external_account_id}]"
-      },
       "covered_by": {
         "write": "update_account_external_account"
       }
@@ -562,15 +260,6 @@
     {
       "method": "DELETE",
       "path": "/accounts/{account_id}/external_accounts/{external_account_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /accounts/{account_id}/external_accounts/{external_account_id}]"
-      },
       "covered_by": {
         "write": "delete_account_external_account"
       }
@@ -578,47 +267,13 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/external_invoices",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/external_invoices]"
-      },
       "covered_by": {
         "stream": "list_account_external_invoices"
       }
     },
     {
       "method": "GET",
-      "path": "/accounts/{account_id}/external_subscriptions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/external_subscriptions]"
-      },
-      "covered_by": {
-        "stream": "list_account_external_subscriptions"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/accounts/{account_id}/invoices",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/invoices]"
-      },
       "covered_by": {
         "stream": "list_account_invoices"
       }
@@ -626,15 +281,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/invoices",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/invoices]"
-      },
       "covered_by": {
         "write": "create_invoice"
       }
@@ -642,15 +288,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/invoices/preview",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/invoices/preview]"
-      },
       "covered_by": {
         "direct_read": "invoices preview"
       }
@@ -658,15 +295,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/line_items",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/line_items]"
-      },
       "covered_by": {
         "stream": "list_account_line_items"
       }
@@ -674,15 +302,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/line_items",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/line_items]"
-      },
       "covered_by": {
         "write": "create_line_item"
       }
@@ -690,15 +309,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/notes",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/notes]"
-      },
       "covered_by": {
         "stream": "list_account_notes"
       }
@@ -706,15 +316,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/notes",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/notes]"
-      },
       "covered_by": {
         "write": "create_account_note"
       }
@@ -722,15 +323,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/notes/{account_note_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/notes/{account_note_id}]"
-      },
       "covered_by": {
         "stream": "get_account_note"
       }
@@ -738,63 +330,13 @@
     {
       "method": "DELETE",
       "path": "/accounts/{account_id}/notes/{account_note_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /accounts/{account_id}/notes/{account_note_id}]"
-      },
       "covered_by": {
         "write": "remove_account_note"
       }
     },
     {
-      "method": "PUT",
-      "path": "/accounts/{account_id}/reactivate",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /accounts/{account_id}/reactivate]"
-      },
-      "covered_by": {
-        "write": "reactivate_account"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/accounts/{account_id}/redact",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /accounts/{account_id}/redact]"
-      },
-      "covered_by": {
-        "write": "redact_account"
-      }
-    },
-    {
       "method": "GET",
       "path": "/accounts/{account_id}/shipping_addresses",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/shipping_addresses]"
-      },
       "covered_by": {
         "stream": "list_shipping_addresses"
       }
@@ -802,15 +344,6 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/shipping_addresses",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /accounts/{account_id}/shipping_addresses]"
-      },
       "covered_by": {
         "write": "create_shipping_address"
       }
@@ -818,15 +351,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/shipping_addresses/{shipping_address_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/shipping_addresses/{shipping_address_id}]"
-      },
       "covered_by": {
         "stream": "get_shipping_address"
       }
@@ -834,15 +358,6 @@
     {
       "method": "PUT",
       "path": "/accounts/{account_id}/shipping_addresses/{shipping_address_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /accounts/{account_id}/shipping_addresses/{shipping_address_id}]"
-      },
       "covered_by": {
         "write": "update_shipping_address"
       }
@@ -850,15 +365,6 @@
     {
       "method": "DELETE",
       "path": "/accounts/{account_id}/shipping_addresses/{shipping_address_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /accounts/{account_id}/shipping_addresses/{shipping_address_id}]"
-      },
       "covered_by": {
         "write": "remove_shipping_address"
       }
@@ -866,15 +372,6 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/subscriptions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/subscriptions]"
-      },
       "covered_by": {
         "stream": "list_account_subscriptions"
       }
@@ -882,127 +379,27 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/transactions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /accounts/{account_id}/transactions]"
-      },
       "covered_by": {
         "stream": "list_account_transactions"
       }
     },
     {
       "method": "GET",
+      "path": "/accounts/{account_id}/accounts",
+      "covered_by": {
+        "stream": "list_child_accounts"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/acquisitions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /acquisitions]"
-      },
       "covered_by": {
         "stream": "list_account_acquisition"
       }
     },
     {
       "method": "GET",
-      "path": "/add_ons",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /add_ons]"
-      },
-      "covered_by": {
-        "stream": "list_add_ons"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/add_ons/{add_on_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /add_ons/{add_on_id}]"
-      },
-      "covered_by": {
-        "stream": "get_add_on"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/business_entities",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /business_entities]"
-      },
-      "covered_by": {
-        "stream": "list_business_entities"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/business_entities/{business_entity_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /business_entities/{business_entity_id}]"
-      },
-      "covered_by": {
-        "stream": "get_business_entity"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/business_entities/{business_entity_id}/invoices",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /business_entities/{business_entity_id}/invoices]"
-      },
-      "covered_by": {
-        "stream": "list_business_entity_invoices"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/coupons",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /coupons]"
-      },
       "covered_by": {
         "stream": "list_coupons"
       }
@@ -1010,15 +407,6 @@
     {
       "method": "POST",
       "path": "/coupons",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /coupons]"
-      },
       "covered_by": {
         "write": "create_coupon"
       }
@@ -1026,15 +414,6 @@
     {
       "method": "GET",
       "path": "/coupons/{coupon_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /coupons/{coupon_id}]"
-      },
       "covered_by": {
         "stream": "get_coupon"
       }
@@ -1042,15 +421,6 @@
     {
       "method": "PUT",
       "path": "/coupons/{coupon_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /coupons/{coupon_id}]"
-      },
       "covered_by": {
         "write": "update_coupon"
       }
@@ -1058,15 +428,6 @@
     {
       "method": "DELETE",
       "path": "/coupons/{coupon_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /coupons/{coupon_id}]"
-      },
       "covered_by": {
         "write": "deactivate_coupon"
       }
@@ -1074,15 +435,6 @@
     {
       "method": "POST",
       "path": "/coupons/{coupon_id}/generate",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /coupons/{coupon_id}/generate]"
-      },
       "covered_by": {
         "write": "generate_unique_coupon_codes"
       }
@@ -1090,15 +442,6 @@
     {
       "method": "POST",
       "path": "/coupons/{coupon_id}/generate_sync",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /coupons/{coupon_id}/generate_sync]"
-      },
       "covered_by": {
         "write": "generate_unique_coupon_codes_sync"
       }
@@ -1106,15 +449,6 @@
     {
       "method": "PUT",
       "path": "/coupons/{coupon_id}/restore",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /coupons/{coupon_id}/restore]"
-      },
       "covered_by": {
         "write": "restore_coupon"
       }
@@ -1122,15 +456,6 @@
     {
       "method": "GET",
       "path": "/coupons/{coupon_id}/unique_coupon_codes",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /coupons/{coupon_id}/unique_coupon_codes]"
-      },
       "covered_by": {
         "stream": "list_unique_coupon_codes"
       }
@@ -1138,15 +463,6 @@
     {
       "method": "GET",
       "path": "/credit_payments",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /credit_payments]"
-      },
       "covered_by": {
         "stream": "list_credit_payments"
       }
@@ -1154,15 +470,6 @@
     {
       "method": "GET",
       "path": "/credit_payments/{credit_payment_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /credit_payments/{credit_payment_id}]"
-      },
       "covered_by": {
         "stream": "get_credit_payment"
       }
@@ -1170,15 +477,6 @@
     {
       "method": "GET",
       "path": "/custom_field_definitions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /custom_field_definitions]"
-      },
       "covered_by": {
         "stream": "list_custom_field_definitions"
       }
@@ -1186,451 +484,27 @@
     {
       "method": "GET",
       "path": "/custom_field_definitions/{custom_field_definition_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /custom_field_definitions/{custom_field_definition_id}]"
-      },
       "covered_by": {
         "stream": "get_custom_field_definition"
       }
     },
     {
-      "method": "GET",
-      "path": "/dunning_campaigns",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /dunning_campaigns]"
-      },
-      "covered_by": {
-        "stream": "list_dunning_campaigns"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/dunning_campaigns/{dunning_campaign_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /dunning_campaigns/{dunning_campaign_id}]"
-      },
-      "covered_by": {
-        "stream": "get_dunning_campaign"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/dunning_campaigns/{dunning_campaign_id}/bulk_update",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /dunning_campaigns/{dunning_campaign_id}/bulk_update]"
-      },
-      "covered_by": {
-        "write": "put_dunning_campaign_bulk_update"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/export_dates",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /export_dates]"
-      },
-      "covered_by": {
-        "direct_reads": [
-          "export dates get"
-        ]
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/export_dates/{export_date}/export_files",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /export_dates/{export_date}/export_files]"
-      },
-      "covered_by": {
-        "direct_reads": [
-          "export files get"
-        ]
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_invoices",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_invoices]"
-      },
-      "covered_by": {
-        "stream": "list_external_invoices"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_invoices/{external_invoice_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_invoices/{external_invoice_id}]"
-      },
-      "covered_by": {
-        "stream": "show_external_invoice"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_products",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_products]"
-      },
-      "covered_by": {
-        "stream": "list_external_products"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/external_products",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /external_products]"
-      },
-      "covered_by": {
-        "write": "create_external_product"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_products/{external_product_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_products/{external_product_id}]"
-      },
-      "covered_by": {
-        "stream": "get_external_product"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/external_products/{external_product_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /external_products/{external_product_id}]"
-      },
-      "covered_by": {
-        "write": "update_external_product"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/external_products/{external_product_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /external_products/{external_product_id}]"
-      },
-      "covered_by": {
-        "write": "deactivate_external_products"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_products/{external_product_id}/external_product_references",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_products/{external_product_id}/external_product_references]"
-      },
-      "covered_by": {
-        "stream": "list_external_product_external_product_references"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/external_products/{external_product_id}/external_product_references",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /external_products/{external_product_id}/external_product_references]"
-      },
-      "covered_by": {
-        "write": "create_external_product_external_product_reference"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_products/{external_product_id}/external_product_references/{external_product_reference_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_products/{external_product_id}/external_product_references/{external_product_reference_id}]"
-      },
-      "covered_by": {
-        "stream": "get_external_product_external_product_reference"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/external_products/{external_product_id}/external_product_references/{external_product_reference_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /external_products/{external_product_id}/external_product_references/{external_product_reference_id}]"
-      },
-      "covered_by": {
-        "write": "deactivate_external_product_external_product_reference"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_subscriptions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_subscriptions]"
-      },
-      "covered_by": {
-        "stream": "list_external_subscriptions"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/external_subscriptions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /external_subscriptions]"
-      },
-      "covered_by": {
-        "write": "create_external_subscription"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_subscriptions/{external_subscription_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_subscriptions/{external_subscription_id}]"
-      },
-      "covered_by": {
-        "stream": "get_external_subscription"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/external_subscriptions/{external_subscription_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /external_subscriptions/{external_subscription_id}]"
-      },
-      "covered_by": {
-        "write": "put_external_subscription"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_subscriptions/{external_subscription_id}/external_invoices",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_subscriptions/{external_subscription_id}/external_invoices]"
-      },
-      "covered_by": {
-        "stream": "list_external_subscription_external_invoices"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/external_subscriptions/{external_subscription_id}/external_invoices",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /external_subscriptions/{external_subscription_id}/external_invoices]"
-      },
-      "covered_by": {
-        "write": "create_external_invoice"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_subscriptions/{external_subscription_id}/external_payment_phases",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_subscriptions/{external_subscription_id}/external_payment_phases]"
-      },
-      "covered_by": {
-        "stream": "list_external_subscription_external_payment_phases"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/external_subscriptions/{external_subscription_id}/external_payment_phases/{external_payment_phase_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /external_subscriptions/{external_subscription_id}/external_payment_phases/{external_payment_phase_id}]"
-      },
-      "covered_by": {
-        "stream": "get_external_subscription_external_payment_phase"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/general_ledger_accounts",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /general_ledger_accounts]"
-      },
-      "covered_by": {
-        "stream": "list_general_ledger_accounts"
-      }
-    },
-    {
       "method": "POST",
       "path": "/general_ledger_accounts",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /general_ledger_accounts]"
-      },
       "covered_by": {
         "write": "create_general_ledger_account"
       }
     },
     {
       "method": "GET",
+      "path": "/general_ledger_accounts",
+      "covered_by": {
+        "stream": "list_general_ledger_accounts"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/general_ledger_accounts/{general_ledger_account_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /general_ledger_accounts/{general_ledger_account_id}]"
-      },
       "covered_by": {
         "stream": "get_general_ledger_account"
       }
@@ -1638,191 +512,223 @@
     {
       "method": "PUT",
       "path": "/general_ledger_accounts/{general_ledger_account_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /general_ledger_accounts/{general_ledger_account_id}]"
-      },
       "covered_by": {
         "write": "update_general_ledger_account"
       }
     },
     {
       "method": "GET",
-      "path": "/gift_cards",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /gift_cards]"
-      },
+      "path": "/performance_obligations/{performance_obligation_id}",
       "covered_by": {
-        "stream": "list_gift_cards"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/gift_cards",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /gift_cards]"
-      },
-      "covered_by": {
-        "write": "create_gift_card"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/gift_cards/preview",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /gift_cards/preview]"
-      },
-      "covered_by": {
-        "direct_read": "gift cards preview"
+        "stream": "get_performance_obligation"
       }
     },
     {
       "method": "GET",
-      "path": "/gift_cards/{gift_card_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /gift_cards/{gift_card_id}]"
-      },
+      "path": "/performance_obligations",
       "covered_by": {
-        "stream": "get_gift_card"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/gift_cards/{redemption_code}/redeem",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /gift_cards/{redemption_code}/redeem]"
-      },
-      "covered_by": {
-        "write": "redeem_gift_card"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/invoice_templates",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /invoice_templates]"
-      },
-      "covered_by": {
-        "stream": "list_invoice_templates"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/invoice_templates/{invoice_template_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /invoice_templates/{invoice_template_id}]"
-      },
-      "covered_by": {
-        "stream": "get_invoice_template"
+        "stream": "get_performance_obligations"
       }
     },
     {
       "method": "GET",
       "path": "/invoice_templates/{invoice_template_id}/accounts",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /invoice_templates/{invoice_template_id}/accounts]"
-      },
       "covered_by": {
         "stream": "list_invoice_template_accounts"
       }
     },
     {
       "method": "GET",
+      "path": "/items",
+      "covered_by": {
+        "stream": "list_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items",
+      "covered_by": {
+        "write": "create_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items/{item_id}",
+      "covered_by": {
+        "stream": "get_item"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/items/{item_id}",
+      "covered_by": {
+        "write": "update_item"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/items/{item_id}",
+      "covered_by": {
+        "write": "deactivate_item"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/items/{item_id}/reactivate",
+      "covered_by": {
+        "write": "reactivate_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/measured_units",
+      "covered_by": {
+        "stream": "list_measured_unit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/measured_units",
+      "covered_by": {
+        "write": "create_measured_unit"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/measured_units/{measured_unit_id}",
+      "covered_by": {
+        "stream": "get_measured_unit"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/measured_units/{measured_unit_id}",
+      "covered_by": {
+        "write": "update_measured_unit"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/measured_units/{measured_unit_id}",
+      "covered_by": {
+        "write": "remove_measured_unit"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_products",
+      "covered_by": {
+        "stream": "list_external_products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/external_products",
+      "covered_by": {
+        "write": "create_external_product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_products/{external_product_id}",
+      "covered_by": {
+        "stream": "get_external_product"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/external_products/{external_product_id}",
+      "covered_by": {
+        "write": "update_external_product"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/external_products/{external_product_id}",
+      "covered_by": {
+        "write": "deactivate_external_products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_products/{external_product_id}/external_product_references",
+      "covered_by": {
+        "stream": "list_external_product_external_product_references"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/external_products/{external_product_id}/external_product_references",
+      "covered_by": {
+        "write": "create_external_product_external_product_reference"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_products/{external_product_id}/external_product_references/{external_product_reference_id}",
+      "covered_by": {
+        "stream": "get_external_product_external_product_reference"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/external_products/{external_product_id}/external_product_references/{external_product_reference_id}",
+      "covered_by": {
+        "write": "deactivate_external_product_external_product_reference"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/external_subscriptions",
+      "covered_by": {
+        "write": "create_external_subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_subscriptions",
+      "covered_by": {
+        "stream": "list_external_subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_subscriptions/{external_subscription_id}",
+      "covered_by": {
+        "stream": "get_external_subscription"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/external_subscriptions/{external_subscription_id}",
+      "covered_by": {
+        "write": "put_external_subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_subscriptions/{external_subscription_id}/external_invoices",
+      "covered_by": {
+        "stream": "list_external_subscription_external_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/external_subscriptions/{external_subscription_id}/external_invoices",
+      "covered_by": {
+        "write": "create_external_invoice"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/invoices",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /invoices]"
-      },
       "covered_by": {
         "stream": "invoices"
       }
     },
     {
-      "method": "POST",
-      "path": "/invoices/recovery",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /invoices/recovery]"
-      },
-      "covered_by": {
-        "write": "create_invoice_retry"
-      }
-    },
-    {
       "method": "GET",
       "path": "/invoices/{invoice_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /invoices/{invoice_id}]"
-      },
       "covered_by": {
         "stream": "get_invoice"
       }
@@ -1830,15 +736,6 @@
     {
       "method": "PUT",
       "path": "/invoices/{invoice_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /invoices/{invoice_id}]"
-      },
       "covered_by": {
         "write": "update_invoice"
       }
@@ -1846,15 +743,6 @@
     {
       "method": "GET",
       "path": "/invoices/{invoice_id}.pdf",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /invoices/{invoice_id}.pdf]"
-      },
       "covered_by": {
         "direct_reads": [
           "invoice pdf get"
@@ -1864,15 +752,6 @@
     {
       "method": "PUT",
       "path": "/invoices/{invoice_id}/apply_credit_balance",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /invoices/{invoice_id}/apply_credit_balance]"
-      },
       "covered_by": {
         "write": "apply_credit_balance"
       }
@@ -1880,63 +759,13 @@
     {
       "method": "PUT",
       "path": "/invoices/{invoice_id}/collect",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /invoices/{invoice_id}/collect]"
-      },
       "covered_by": {
         "write": "collect_invoice"
       }
     },
     {
-      "method": "GET",
-      "path": "/invoices/{invoice_id}/coupon_redemptions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /invoices/{invoice_id}/coupon_redemptions]"
-      },
-      "covered_by": {
-        "stream": "list_invoice_coupon_redemptions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/invoices/{invoice_id}/line_items",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /invoices/{invoice_id}/line_items]"
-      },
-      "covered_by": {
-        "stream": "list_invoice_line_items"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/invoices/{invoice_id}/mark_failed",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /invoices/{invoice_id}/mark_failed]"
-      },
       "covered_by": {
         "write": "mark_invoice_failed"
       }
@@ -1944,207 +773,69 @@
     {
       "method": "PUT",
       "path": "/invoices/{invoice_id}/mark_successful",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /invoices/{invoice_id}/mark_successful]"
-      },
       "covered_by": {
         "write": "mark_invoice_successful"
       }
     },
     {
-      "method": "POST",
-      "path": "/invoices/{invoice_id}/refund",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /invoices/{invoice_id}/refund]"
-      },
-      "covered_by": {
-        "write": "refund_invoice"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/invoices/{invoice_id}/related_invoices",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /invoices/{invoice_id}/related_invoices]"
-      },
-      "covered_by": {
-        "stream": "list_related_invoices"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/invoices/{invoice_id}/reopen",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /invoices/{invoice_id}/reopen]"
-      },
       "covered_by": {
         "write": "reopen_invoice"
       }
     },
     {
-      "method": "POST",
-      "path": "/invoices/{invoice_id}/transactions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /invoices/{invoice_id}/transactions]"
-      },
-      "covered_by": {
-        "write": "record_external_transaction"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/invoices/{invoice_id}/void",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /invoices/{invoice_id}/void]"
-      },
       "covered_by": {
         "write": "void_invoice"
       }
     },
     {
-      "method": "GET",
-      "path": "/items",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /items]"
-      },
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/transactions",
       "covered_by": {
-        "stream": "list_items"
+        "write": "record_external_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/line_items",
+      "covered_by": {
+        "stream": "list_invoice_line_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/coupon_redemptions",
+      "covered_by": {
+        "stream": "list_invoice_coupon_redemptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}/related_invoices",
+      "covered_by": {
+        "stream": "list_related_invoices"
       }
     },
     {
       "method": "POST",
-      "path": "/items",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /items]"
-      },
+      "path": "/invoices/{invoice_id}/refund",
       "covered_by": {
-        "write": "create_item"
+        "write": "refund_invoice"
       }
     },
     {
-      "method": "GET",
-      "path": "/items/{item_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /items/{item_id}]"
-      },
+      "method": "POST",
+      "path": "/invoices/recovery",
       "covered_by": {
-        "stream": "get_item"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/items/{item_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /items/{item_id}]"
-      },
-      "covered_by": {
-        "write": "update_item"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/items/{item_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /items/{item_id}]"
-      },
-      "covered_by": {
-        "write": "deactivate_item"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/items/{item_id}/reactivate",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /items/{item_id}/reactivate]"
-      },
-      "covered_by": {
-        "write": "reactivate_item"
+        "write": "create_invoice_retry"
       }
     },
     {
       "method": "GET",
       "path": "/line_items",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /line_items]"
-      },
       "covered_by": {
         "stream": "list_line_items"
       }
@@ -2152,15 +843,6 @@
     {
       "method": "GET",
       "path": "/line_items/{line_item_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /line_items/{line_item_id}]"
-      },
       "covered_by": {
         "stream": "get_line_item"
       }
@@ -2168,143 +850,13 @@
     {
       "method": "DELETE",
       "path": "/line_items/{line_item_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /line_items/{line_item_id}]"
-      },
       "covered_by": {
         "write": "remove_line_item"
       }
     },
     {
       "method": "GET",
-      "path": "/measured_units",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /measured_units]"
-      },
-      "covered_by": {
-        "stream": "list_measured_unit"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/measured_units",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /measured_units]"
-      },
-      "covered_by": {
-        "write": "create_measured_unit"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/measured_units/{measured_unit_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /measured_units/{measured_unit_id}]"
-      },
-      "covered_by": {
-        "stream": "get_measured_unit"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/measured_units/{measured_unit_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /measured_units/{measured_unit_id}]"
-      },
-      "covered_by": {
-        "write": "update_measured_unit"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/measured_units/{measured_unit_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /measured_units/{measured_unit_id}]"
-      },
-      "covered_by": {
-        "write": "remove_measured_unit"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/performance_obligations",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /performance_obligations]"
-      },
-      "covered_by": {
-        "stream": "get_performance_obligations"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/performance_obligations/{performance_obligation_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /performance_obligations/{performance_obligation_id}]"
-      },
-      "covered_by": {
-        "stream": "get_performance_obligation"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/plans",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /plans]"
-      },
       "covered_by": {
         "stream": "plans"
       }
@@ -2312,15 +864,6 @@
     {
       "method": "POST",
       "path": "/plans",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /plans]"
-      },
       "covered_by": {
         "write": "create_plan"
       }
@@ -2328,15 +871,6 @@
     {
       "method": "GET",
       "path": "/plans/{plan_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /plans/{plan_id}]"
-      },
       "covered_by": {
         "stream": "get_plan"
       }
@@ -2344,15 +878,6 @@
     {
       "method": "PUT",
       "path": "/plans/{plan_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /plans/{plan_id}]"
-      },
       "covered_by": {
         "write": "update_plan"
       }
@@ -2360,15 +885,6 @@
     {
       "method": "DELETE",
       "path": "/plans/{plan_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /plans/{plan_id}]"
-      },
       "covered_by": {
         "write": "remove_plan"
       }
@@ -2376,15 +892,6 @@
     {
       "method": "GET",
       "path": "/plans/{plan_id}/add_ons",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /plans/{plan_id}/add_ons]"
-      },
       "covered_by": {
         "stream": "list_plan_add_ons"
       }
@@ -2392,15 +899,6 @@
     {
       "method": "POST",
       "path": "/plans/{plan_id}/add_ons",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /plans/{plan_id}/add_ons]"
-      },
       "covered_by": {
         "write": "create_plan_add_on"
       }
@@ -2408,15 +906,6 @@
     {
       "method": "GET",
       "path": "/plans/{plan_id}/add_ons/{add_on_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /plans/{plan_id}/add_ons/{add_on_id}]"
-      },
       "covered_by": {
         "stream": "get_plan_add_on"
       }
@@ -2424,15 +913,6 @@
     {
       "method": "PUT",
       "path": "/plans/{plan_id}/add_ons/{add_on_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /plans/{plan_id}/add_ons/{add_on_id}]"
-      },
       "covered_by": {
         "write": "update_plan_add_on"
       }
@@ -2440,15 +920,6 @@
     {
       "method": "DELETE",
       "path": "/plans/{plan_id}/add_ons/{add_on_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /plans/{plan_id}/add_ons/{add_on_id}]"
-      },
       "covered_by": {
         "write": "remove_plan_add_on"
       }
@@ -2456,15 +927,6 @@
     {
       "method": "GET",
       "path": "/price_segments",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /price_segments]"
-      },
       "covered_by": {
         "stream": "list_price_segments"
       }
@@ -2472,127 +934,27 @@
     {
       "method": "GET",
       "path": "/price_segments/{price_segment_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /price_segments/{price_segment_id}]"
-      },
       "covered_by": {
         "stream": "get_price_segment"
       }
     },
     {
-      "method": "POST",
-      "path": "/purchases",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /purchases]"
-      },
+      "method": "GET",
+      "path": "/add_ons",
       "covered_by": {
-        "write": "create_purchase"
+        "stream": "list_add_ons"
       }
     },
     {
-      "method": "POST",
-      "path": "/purchases/authorize",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /purchases/authorize]"
-      },
+      "method": "GET",
+      "path": "/add_ons/{add_on_id}",
       "covered_by": {
-        "write": "create_authorize_purchase"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/purchases/pending",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /purchases/pending]"
-      },
-      "covered_by": {
-        "write": "create_pending_purchase"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/purchases/preview",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /purchases/preview]"
-      },
-      "covered_by": {
-        "direct_read": "purchases preview"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/purchases/{transaction_id}/cancel/",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /purchases/{transaction_id}/cancel/]"
-      },
-      "covered_by": {
-        "write": "cancel_purchase"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/purchases/{transaction_id}/capture",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /purchases/{transaction_id}/capture]"
-      },
-      "covered_by": {
-        "write": "create_capture_purchase"
+        "stream": "get_add_on"
       }
     },
     {
       "method": "GET",
       "path": "/shipping_methods",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /shipping_methods]"
-      },
       "covered_by": {
         "stream": "list_shipping_methods"
       }
@@ -2600,15 +962,6 @@
     {
       "method": "POST",
       "path": "/shipping_methods",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /shipping_methods]"
-      },
       "covered_by": {
         "write": "create_shipping_method"
       }
@@ -2616,15 +969,6 @@
     {
       "method": "GET",
       "path": "/shipping_methods/{shipping_method_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /shipping_methods/{shipping_method_id}]"
-      },
       "covered_by": {
         "stream": "get_shipping_method"
       }
@@ -2632,15 +976,6 @@
     {
       "method": "PUT",
       "path": "/shipping_methods/{shipping_method_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /shipping_methods/{shipping_method_id}]"
-      },
       "covered_by": {
         "write": "update_shipping_method"
       }
@@ -2648,63 +983,13 @@
     {
       "method": "DELETE",
       "path": "/shipping_methods/{shipping_method_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /shipping_methods/{shipping_method_id}]"
-      },
       "covered_by": {
         "write": "deactivate_shipping_method"
       }
     },
     {
       "method": "GET",
-      "path": "/sites",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /sites]"
-      },
-      "covered_by": {
-        "stream": "list_sites"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/sites/{site_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /sites/{site_id}]"
-      },
-      "covered_by": {
-        "stream": "get_site"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/subscriptions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /subscriptions]"
-      },
       "covered_by": {
         "stream": "subscriptions"
       }
@@ -2712,15 +997,6 @@
     {
       "method": "POST",
       "path": "/subscriptions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /subscriptions]"
-      },
       "covered_by": {
         "write": "create_subscription"
       }
@@ -2728,15 +1004,6 @@
     {
       "method": "GET",
       "path": "/subscriptions/{subscription_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /subscriptions/{subscription_id}]"
-      },
       "covered_by": {
         "stream": "get_subscription"
       }
@@ -2744,15 +1011,6 @@
     {
       "method": "PUT",
       "path": "/subscriptions/{subscription_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /subscriptions/{subscription_id}]"
-      },
       "covered_by": {
         "write": "update_subscription"
       }
@@ -2760,79 +1018,55 @@
     {
       "method": "DELETE",
       "path": "/subscriptions/{subscription_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /subscriptions/{subscription_id}]"
-      },
       "covered_by": {
         "write": "terminate_subscription"
       }
     },
     {
-      "method": "GET",
-      "path": "/subscriptions/{subscription_id}/add_ons/{add_on_id}/usage",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /subscriptions/{subscription_id}/add_ons/{add_on_id}/usage]"
-      },
-      "covered_by": {
-        "stream": "list_usage"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/subscriptions/{subscription_id}/add_ons/{add_on_id}/usage",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /subscriptions/{subscription_id}/add_ons/{add_on_id}/usage]"
-      },
-      "covered_by": {
-        "write": "create_usage"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/subscriptions/{subscription_id}/cancel",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /subscriptions/{subscription_id}/cancel]"
-      },
       "covered_by": {
         "write": "cancel_subscription"
       }
     },
     {
+      "method": "PUT",
+      "path": "/subscriptions/{subscription_id}/reactivate",
+      "covered_by": {
+        "write": "reactivate_subscription"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/subscriptions/{subscription_id}/pause",
+      "covered_by": {
+        "write": "pause_subscription"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/subscriptions/{subscription_id}/resume",
+      "covered_by": {
+        "write": "resume_subscription"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/subscriptions/{subscription_id}/convert_trial",
+      "covered_by": {
+        "write": "convert_trial"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions/{subscription_id}/preview_renewal",
+      "covered_by": {
+        "direct_read": "subscriptions preview renewal"
+      }
+    },
+    {
       "method": "GET",
       "path": "/subscriptions/{subscription_id}/change",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /subscriptions/{subscription_id}/change]"
-      },
       "covered_by": {
         "stream": "get_subscription_change"
       }
@@ -2840,15 +1074,6 @@
     {
       "method": "POST",
       "path": "/subscriptions/{subscription_id}/change",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /subscriptions/{subscription_id}/change]"
-      },
       "covered_by": {
         "write": "create_subscription_change"
       }
@@ -2856,15 +1081,6 @@
     {
       "method": "DELETE",
       "path": "/subscriptions/{subscription_id}/change",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /subscriptions/{subscription_id}/change]"
-      },
       "covered_by": {
         "write": "remove_subscription_change"
       }
@@ -2872,95 +1088,13 @@
     {
       "method": "POST",
       "path": "/subscriptions/{subscription_id}/change/preview",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[POST /subscriptions/{subscription_id}/change/preview]"
-      },
       "covered_by": {
         "direct_read": "subscriptions preview change"
       }
     },
     {
-      "method": "PUT",
-      "path": "/subscriptions/{subscription_id}/convert_trial",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /subscriptions/{subscription_id}/convert_trial]"
-      },
-      "covered_by": {
-        "write": "convert_trial"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/subscriptions/{subscription_id}/coupon_redemptions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /subscriptions/{subscription_id}/coupon_redemptions]"
-      },
-      "covered_by": {
-        "stream": "list_subscription_coupon_redemptions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/subscriptions/{subscription_id}/coupon_redemptions/{coupon_redemption_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /subscriptions/{subscription_id}/coupon_redemptions/{coupon_redemption_id}]"
-      },
-      "covered_by": {
-        "stream": "get_subscription_coupon_redemption"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/subscriptions/{subscription_id}/coupon_redemptions/{coupon_redemption_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /subscriptions/{subscription_id}/coupon_redemptions/{coupon_redemption_id}]"
-      },
-      "covered_by": {
-        "write": "remove_subscription_coupon_redemption"
-      }
-    },
-    {
       "method": "GET",
       "path": "/subscriptions/{subscription_id}/invoices",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /subscriptions/{subscription_id}/invoices]"
-      },
       "covered_by": {
         "stream": "list_subscription_invoices"
       }
@@ -2968,175 +1102,48 @@
     {
       "method": "GET",
       "path": "/subscriptions/{subscription_id}/line_items",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /subscriptions/{subscription_id}/line_items]"
-      },
       "covered_by": {
         "stream": "list_subscription_line_items"
       }
     },
     {
-      "method": "PUT",
-      "path": "/subscriptions/{subscription_id}/pause",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /subscriptions/{subscription_id}/pause]"
-      },
+      "method": "GET",
+      "path": "/subscriptions/{subscription_id}/coupon_redemptions",
       "covered_by": {
-        "write": "pause_subscription"
+        "stream": "list_subscription_coupon_redemptions"
       }
     },
     {
       "method": "GET",
-      "path": "/subscriptions/{subscription_id}/preview_renewal",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /subscriptions/{subscription_id}/preview_renewal]"
-      },
+      "path": "/subscriptions/{subscription_id}/coupon_redemptions/{coupon_redemption_id}",
       "covered_by": {
-        "direct_read": "subscriptions preview renewal"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/subscriptions/{subscription_id}/reactivate",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /subscriptions/{subscription_id}/reactivate]"
-      },
-      "covered_by": {
-        "write": "reactivate_subscription"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/subscriptions/{subscription_id}/resume",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /subscriptions/{subscription_id}/resume]"
-      },
-      "covered_by": {
-        "write": "resume_subscription"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/transactions",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /transactions]"
-      },
-      "covered_by": {
-        "stream": "transactions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/transactions/{transaction_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /transactions/{transaction_id}]"
-      },
-      "covered_by": {
-        "stream": "get_transaction"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/unique_coupon_codes/{unique_coupon_code_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /unique_coupon_codes/{unique_coupon_code_id}]"
-      },
-      "covered_by": {
-        "stream": "get_unique_coupon_code"
+        "stream": "get_subscription_coupon_redemption"
       }
     },
     {
       "method": "DELETE",
-      "path": "/unique_coupon_codes/{unique_coupon_code_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /unique_coupon_codes/{unique_coupon_code_id}]"
-      },
+      "path": "/subscriptions/{subscription_id}/coupon_redemptions/{coupon_redemption_id}",
       "covered_by": {
-        "write": "deactivate_unique_coupon_code"
+        "write": "remove_subscription_coupon_redemption"
       }
     },
     {
-      "method": "PUT",
-      "path": "/unique_coupon_codes/{unique_coupon_code_id}/restore",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /unique_coupon_codes/{unique_coupon_code_id}/restore]"
-      },
+      "method": "GET",
+      "path": "/subscriptions/{subscription_id}/add_ons/{add_on_id}/usage",
       "covered_by": {
-        "write": "reactivate_unique_coupon_code"
+        "stream": "list_usage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/add_ons/{add_on_id}/usage",
+      "covered_by": {
+        "write": "create_usage"
       }
     },
     {
       "method": "GET",
       "path": "/usage/{usage_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[GET /usage/{usage_id}]"
-      },
       "covered_by": {
         "stream": "get_usage"
       }
@@ -3144,15 +1151,6 @@
     {
       "method": "PUT",
       "path": "/usage/{usage_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[PUT /usage/{usage_id}]"
-      },
       "covered_by": {
         "write": "update_usage"
       }
@@ -3160,17 +1158,236 @@
     {
       "method": "DELETE",
       "path": "/usage/{usage_id}",
-      "provenance": {
-        "artifact": "recurly-artifact-2026-08-09",
-        "source_url": "https://raw.githubusercontent.com/recurly/recurly-client-go/v3-v2021-02-25/openapi/api.yaml",
-        "source_kind": "openapi",
-        "version": "v2021-02-25",
-        "retrieved_at": "2026-08-09",
-        "sha256": "bb45eb583334f9d30a2a31d109d33ce9ee3dafa850b634301d3017865130f0c1",
-        "coordinate": "existing-complete-surface[DELETE /usage/{usage_id}]"
-      },
       "covered_by": {
         "write": "remove_usage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions",
+      "covered_by": {
+        "stream": "transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions/{transaction_id}",
+      "covered_by": {
+        "stream": "get_transaction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/unique_coupon_codes/{unique_coupon_code_id}",
+      "covered_by": {
+        "stream": "get_unique_coupon_code"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/unique_coupon_codes/{unique_coupon_code_id}",
+      "covered_by": {
+        "write": "deactivate_unique_coupon_code"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/unique_coupon_codes/{unique_coupon_code_id}/restore",
+      "covered_by": {
+        "write": "reactivate_unique_coupon_code"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchases",
+      "covered_by": {
+        "write": "create_purchase"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchases/preview",
+      "covered_by": {
+        "direct_read": "purchases preview"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchases/pending",
+      "covered_by": {
+        "write": "create_pending_purchase"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchases/authorize",
+      "covered_by": {
+        "write": "create_authorize_purchase"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchases/{transaction_id}/capture",
+      "covered_by": {
+        "write": "create_capture_purchase"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/purchases/{transaction_id}/cancel/",
+      "covered_by": {
+        "write": "cancel_purchase"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export_dates",
+      "covered_by": {
+        "direct_reads": [
+          "export dates get"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export_dates/{export_date}/export_files",
+      "covered_by": {
+        "direct_reads": [
+          "export files get"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dunning_campaigns",
+      "covered_by": {
+        "stream": "list_dunning_campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dunning_campaigns/{dunning_campaign_id}",
+      "covered_by": {
+        "stream": "get_dunning_campaign"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/dunning_campaigns/{dunning_campaign_id}/bulk_update",
+      "covered_by": {
+        "write": "put_dunning_campaign_bulk_update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoice_templates",
+      "covered_by": {
+        "stream": "list_invoice_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoice_templates/{invoice_template_id}",
+      "covered_by": {
+        "stream": "get_invoice_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_invoices",
+      "covered_by": {
+        "stream": "list_external_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_invoices/{external_invoice_id}",
+      "covered_by": {
+        "stream": "show_external_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_subscriptions/{external_subscription_id}/external_payment_phases",
+      "covered_by": {
+        "stream": "list_external_subscription_external_payment_phases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external_subscriptions/{external_subscription_id}/external_payment_phases/{external_payment_phase_id}",
+      "covered_by": {
+        "stream": "get_external_subscription_external_payment_phase"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/entitlements",
+      "covered_by": {
+        "stream": "list_entitlements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/external_subscriptions",
+      "covered_by": {
+        "stream": "list_account_external_subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_entities/{business_entity_id}",
+      "covered_by": {
+        "stream": "get_business_entity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_entities",
+      "covered_by": {
+        "stream": "list_business_entities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gift_cards",
+      "covered_by": {
+        "stream": "list_gift_cards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gift_cards",
+      "covered_by": {
+        "write": "create_gift_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gift_cards/{gift_card_id}",
+      "covered_by": {
+        "stream": "get_gift_card"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gift_cards/preview",
+      "covered_by": {
+        "direct_read": "gift cards preview"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gift_cards/{redemption_code}/redeem",
+      "covered_by": {
+        "write": "redeem_gift_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_entities/{business_entity_id}/invoices",
+      "covered_by": {
+        "stream": "list_business_entity_invoices"
       }
     }
   ]

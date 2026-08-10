@@ -35,6 +35,14 @@ SECURITY
   approval: external mutations require preview and approval
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Google PageSpeed Insights's declared streams and reverse-ETL actions.
+  Usage: pm google-pagespeed-insights <command> [flags]
+  Read streams
+  Other Commands
+    api get pagespeedonline v5 runpagespeed - Documented GET /pagespeedonline/v5/runPagespeed (not implemented) [intent=direct_read availability=not_implemented operation=google-pagespeed-insights.get.pagespeedonline-v5-runpagespeed]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: low; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    pagespeed reports list - Run the pagespeed reports ETL stream [intent=etl availability=implemented stream=pagespeed_reports]; notes: discrepancy=present-in-surface-absent-from-artifact
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect google-pagespeed-insights
