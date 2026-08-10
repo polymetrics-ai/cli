@@ -411,4 +411,8 @@ git config core.hooksPath .githooks
 The hook and CI both route through the same docs/icon validation path, so a connector cannot
 ship without icon metadata, a local SVG asset, generated docs, and safe SVG content.
 
+For an explicit, periodic safety net that reports or publishes only settled,
+clean feature-branch commits, see [Unpushed-work safety net](unpushed-work-safety-net.md).
+It is not a hook and does not set `core.hooksPath`.
+
 Open a PR — and thank you. 🙌

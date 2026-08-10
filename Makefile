@@ -10,7 +10,7 @@ export GOTOOLCHAIN ?= auto
 # produces a pm that can read or write a warehouse table.
 export CGO_ENABLED ?= 1
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary certify-timing
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check unpushed-work-safety-net-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary certify-timing
 
 # Packages covered by `lint` include declarative connector and canonical agent-contract tooling.
 # Paths are filtered to existing directories so optional local trees do not hard-fail
@@ -112,7 +112,10 @@ release-workflow-check:
 	./scripts/tests/homebrew-release-notify.sh
 	./scripts/tests/release-target-parity.sh
 
-verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check
+unpushed-work-safety-net-check:
+	python3 scripts/tests/unpushed-work-safety-net_test.py
+
+verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check unpushed-work-safety-net-check
 
 # Opt-in local gate that overlaps independent read/build checks after the
 # mutating fmt/tidy steps. CI keeps using serial `verify` for stable logs.

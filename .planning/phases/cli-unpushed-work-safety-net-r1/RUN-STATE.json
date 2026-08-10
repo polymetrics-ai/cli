@@ -1,0 +1,31 @@
+{
+  "phase": "cli-unpushed-work-safety-net-r1",
+  "state": "verified-awaiting-commit",
+  "branch": "fm/cli-unpushed-work-safety-net-r1",
+  "gsd": {
+    "mode": "inline_manual",
+    "reason": "Canonical single-worker contract prohibits spawning roles in this isolated task worktree.",
+    "commands": [
+      "scripts/gsd doctor",
+      "scripts/gsd sources discuss-phase",
+      "scripts/gsd sources plan-phase",
+      "scripts/gsd sources execute-phase",
+      "scripts/gsd sources verify-work",
+      "scripts/gsd sources code-review",
+      "scripts/gsd prompt discuss-phase cli-unpushed-work-safety-net-r1 --auto",
+      "scripts/gsd prompt plan-phase cli-unpushed-work-safety-net-r1 --tdd --skip-research",
+      "scripts/gsd prompt execute-phase cli-unpushed-work-safety-net-r1 --no-cross-ai",
+      "scripts/gsd prompt verify-work cli-unpushed-work-safety-net-r1 --auto",
+      "scripts/gsd prompt code-review cli-unpushed-work-safety-net-r1"
+    ]
+  },
+  "skills": [
+    "no-mistakes",
+    "gsd-discuss-phase",
+    "gsd-plan-phase",
+    "gsd-execute-phase",
+    "gsd-verify-work",
+    "gsd-code-review"
+  ],
+  "next": "commit the reviewed, verified safety net; firstmate owns the subsequent no-mistakes PR gate"
+}
