@@ -91,6 +91,14 @@ func (a DatabaseNativeAdmission) nativeCommandContract() synccontract.NativeComm
 	return databaseNativeCommandContract(a.descriptor, a.evidence)
 }
 
+func (a DatabaseNativeAdmission) clone() DatabaseNativeAdmission {
+	return DatabaseNativeAdmission{
+		descriptor: cloneNativeExecutorDescriptor(a.descriptor),
+		evidence:   cloneConformanceEvidence(a.evidence),
+		leg:        a.leg,
+	}
+}
+
 func (a DatabaseNativeAdmission) matches(leg databaseWarehouseLeg, contract synccontract.NativeCommandContract) error {
 	if a.leg != leg {
 		return ErrNativeDriverAdmissionMismatch
@@ -107,6 +115,14 @@ func cloneNativeExecutorDescriptor(descriptor synccontract.NativeSyncExecutorDes
 func cloneConformanceEvidence(evidence synccontract.ConformanceEvidence) synccontract.ConformanceEvidence {
 	clone := evidence
 	clone.FixtureIDs = append([]string(nil), evidence.FixtureIDs...)
+	return clone
+}
+
+func cloneDatabaseNativeAdmissions(admissions []DatabaseNativeAdmission) []DatabaseNativeAdmission {
+	clone := make([]DatabaseNativeAdmission, len(admissions))
+	for index := range admissions {
+		clone[index] = admissions[index].clone()
+	}
 	return clone
 }
 
@@ -142,13 +158,17 @@ var (
 // Its lock protects registration and concurrent resolution; it stores neither
 // credentials nor mutable definition projections.
 type DriverRegistry struct {
-	mu      sync.RWMutex
-	drivers map[string]Driver
+	mu               sync.RWMutex
+	drivers          map[string]Driver
+	nativeAdmissions map[string][]DatabaseNativeAdmission
 }
 
 // NewDriverRegistry creates a registry and validates every supplied driver.
 func NewDriverRegistry(drivers ...Driver) (*DriverRegistry, error) {
-	registry := &DriverRegistry{drivers: make(map[string]Driver)}
+	registry := &DriverRegistry{
+		drivers:          make(map[string]Driver),
+		nativeAdmissions: make(map[string][]DatabaseNativeAdmission),
+	}
 	for _, driver := range drivers {
 		if err := registry.Register(driver); err != nil {
 			return nil, err
@@ -169,8 +189,10 @@ func (r *DriverRegistry) Register(driver Driver) error {
 	if err := descriptor.validate(); err != nil {
 		return err
 	}
+	var admissions []DatabaseNativeAdmission
 	if admitted, ok := driver.(NativeAdmittedDriver); ok && !isNilNativeAdmittedDriver(admitted) {
-		if err := validateDatabaseNativeAdmissionLegs(admitted.DatabaseNativeAdmissions()); err != nil {
+		admissions = cloneDatabaseNativeAdmissions(admitted.DatabaseNativeAdmissions())
+		if err := validateDatabaseNativeAdmissionLegs(admissions); err != nil {
 			return err
 		}
 	}
@@ -179,10 +201,19 @@ func (r *DriverRegistry) Register(driver Driver) error {
 	if r.drivers == nil {
 		r.drivers = make(map[string]Driver)
 	}
+	if r.nativeAdmissions == nil {
+		r.nativeAdmissions = make(map[string][]DatabaseNativeAdmission)
+	}
 	if _, exists := r.drivers[descriptor.ID]; exists {
 		return errors.New("database driver is already registered")
 	}
+	if err := validateRegisteredDatabaseNativeAdmissionLegs(admissions, r.nativeAdmissions); err != nil {
+		return err
+	}
 	r.drivers[descriptor.ID] = driver
+	if len(admissions) > 0 {
+		r.nativeAdmissions[descriptor.ID] = admissions
+	}
 	return nil
 }
 
@@ -244,7 +275,7 @@ func (r *DriverRegistry) Admit(ctx context.Context, definition Definition, comma
 	if !definitionAdmitsModes(definition.AdmittedModes(), contract.Modes) {
 		return nil, ErrDriverModeNotDeclared
 	}
-	if err := validateDriverNativeAdmission(admitted, leg, contract); err != nil {
+	if err := validateDriverNativeAdmission(r.registeredNativeAdmissions(definition.Driver().ID), leg, contract); err != nil {
 		return nil, err
 	}
 	if err := ctx.Err(); err != nil {
@@ -269,8 +300,14 @@ func definitionAdmitsModes(declared, requested []synccontract.Mode) bool {
 	return true
 }
 
-func validateDriverNativeAdmission(driver NativeAdmittedDriver, leg databaseWarehouseLeg, contract synccontract.NativeCommandContract) error {
-	admissions := driver.DatabaseNativeAdmissions()
+func (r *DriverRegistry) registeredNativeAdmissions(driverID string) []DatabaseNativeAdmission {
+	r.mu.RLock()
+	admissions := cloneDatabaseNativeAdmissions(r.nativeAdmissions[driverID])
+	r.mu.RUnlock()
+	return admissions
+}
+
+func validateDriverNativeAdmission(admissions []DatabaseNativeAdmission, leg databaseWarehouseLeg, contract synccontract.NativeCommandContract) error {
 	if err := validateDatabaseNativeAdmissionLegs(admissions); err != nil {
 		return err
 	}
@@ -285,13 +322,30 @@ func validateDriverNativeAdmission(driver NativeAdmittedDriver, leg databaseWare
 func validateDatabaseNativeAdmissionLegs(admissions []DatabaseNativeAdmission) error {
 	for index, admission := range admissions {
 		for _, previous := range admissions[:index] {
-			if admission.leg == previous.leg || !sameDatabaseNativeAdmissionContract(admission, previous) {
+			if !databaseNativeAdmissionLegsConflict(admission, previous) {
 				continue
 			}
 			return ErrNativeDriverAdmissionLegConflict
 		}
 	}
 	return nil
+}
+
+func validateRegisteredDatabaseNativeAdmissionLegs(admissions []DatabaseNativeAdmission, registered map[string][]DatabaseNativeAdmission) error {
+	for _, existingAdmissions := range registered {
+		for _, admission := range admissions {
+			for _, existing := range existingAdmissions {
+				if databaseNativeAdmissionLegsConflict(admission, existing) {
+					return ErrNativeDriverAdmissionLegConflict
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func databaseNativeAdmissionLegsConflict(left, right DatabaseNativeAdmission) bool {
+	return left.leg != right.leg && sameDatabaseNativeAdmissionContract(left, right)
 }
 
 func sameDatabaseNativeAdmissionContract(left, right DatabaseNativeAdmission) bool {
