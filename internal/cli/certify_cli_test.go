@@ -155,7 +155,7 @@ func countCertifyReportStages(report certify.Report, name string) int {
 // also works and reports PASS.
 func TestCertifyCLISingleConnectorTextMode(t *testing.T) {
 	stdout := renderCertifyReportText(completeCertifyReport())
-	if !strings.Contains(stdout, "Certification: sample [PASS]") {
+	if !strings.Contains(stdout, "Legacy certification run: sample [PASS]") || !strings.Contains(stdout, "does not set the generated connector certification status") {
 		t.Errorf("stdout missing human-readable PASS summary: %s", stdout)
 	}
 }

@@ -446,7 +446,7 @@ func TestConnectorInspectHumanShowsManualNotRawJSON(t *testing.T) {
 	if strings.HasPrefix(strings.TrimSpace(out), "{") {
 		t.Fatalf("human connector inspect returned raw JSON:\n%s", out)
 	}
-	for _, want := range []string{"NAME", "SYNOPSIS", "AUTHENTICATION", "ETL STREAMS", "REVERSE ETL ACTIONS", "AGENT WORKFLOW"} {
+	for _, want := range []string{"NAME", "SYNOPSIS", "AUTHENTICATION", "ETL STREAMS", "REVERSE ETL ACTIONS", "AGENT WORKFLOW", "CERTIFICATION", "COMMUNITY BUILD, UNCERTIFIED"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("human connector manual missing %q:\n%s", want, out)
 		}

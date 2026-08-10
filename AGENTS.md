@@ -431,6 +431,14 @@ POLYMETRICS_INTEGRATION=1 go test ./...
 scripts/runtime.sh down
 ```
 
+## Claude Code compatibility
+
+- AGENTS.md is the cross-agent source of truth. Keep Claude Code and other
+  agents aligned here rather than maintaining duplicate instruction files.
+- Keep reusable agent contracts, workflows, and YAML role specifications under
+  .agents/. Update those shared files when a workflow changes instead of
+  copying long rules into compatibility instructions.
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.

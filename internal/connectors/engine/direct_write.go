@@ -75,6 +75,8 @@ func PreviewOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 // authorizes it. It never retries: operation declarations carry no idempotency
 // proof in this executor, so both transient retries and the requester's
 // auth-refresh retry are off.
+//
+// pmcert:executes rest_write,graphql_mutation
 func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.OperationDirectWriteRequest, h Hooks) (connectors.OperationDirectWriteResult, error) {
 	prepared, err := prepareOperationDirectWrite(ctx, b, req, h)
 	if err != nil {
