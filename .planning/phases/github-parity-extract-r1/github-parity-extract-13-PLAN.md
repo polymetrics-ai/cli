@@ -38,7 +38,7 @@ read-back gates are green for each affected slice.
 ## Reconciled source facts at plan start
 
 The captain's historical REST proof ledger remains a valid preserved artifact but is not the
-current all-source denominator:
+plan-start all-source denominator:
 
 | artifact | mechanically derived fact |
 | --- | --- |
@@ -51,6 +51,15 @@ The stated historical `143` is `1224 - 1081`; it is not a mutually exclusive cur
 partition (`45 + 37 + 8 = 90`).  This plan therefore makes every closure claim from generated,
 source-derived ledgers rather than preserving a contradictory hand count.  The first executable
 test locks this reconciliation and fails on any unresolved current classification.
+
+## Current-ref — merged GitHub surface
+
+The authoritative source-derived count and its provenance are in
+[VERIFICATION.md](VERIFICATION.md). This plan does not duplicate that generated-surface
+measurement.
+
+The plan-start table remains historical evidence preserved at base ref
+`4df0b0416e46958d9acb1b02708464570c070e0f` on 2026-08-10.
 
 ## Scope and safety boundary
 

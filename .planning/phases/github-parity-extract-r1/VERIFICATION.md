@@ -455,9 +455,13 @@ connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 fie
 $ go build ./cmd/pm
 ```
 
-## Exhaustive recovery verification — frozen 1,224-operation inventory
+## Exhaustive recovery verification — historical 1,224-endpoint / 377-operation inventory
 
-The final proof slice derives its inventory from the current GitHub bundle rather than inheriting
+**Historical measurement:** this checkpoint is preserved at base ref
+`4df0b0416e46958d9acb1b02708464570c070e0f`, recorded on 2026-08-10. Its credentialed live
+report was measured at 2026-08-08T22:27:16.716Z and does not certify the current-ref surface.
+
+The final proof slice derived its inventory from the then-current GitHub bundle rather than inheriting
 historical sweep counts:
 
 ```text
@@ -467,7 +471,7 @@ streams=37 write_actions=574 operations=377 commands=1179
 generic_streams=23 generic_write_actions=38
 ```
 
-`COMMAND-REACHABILITY.json` records a freshly built current-head binary and exact rendered command
+`COMMAND-REACHABILITY.json` records a freshly built then-current binary and exact rendered command
 help for all `1179/1179` commands. It does not store subprocess output. The per-availability
 breakdown is 1081 implemented, 37 partial, 5 unsafe/disallowed, 21 unsupported-local, 8 planned,
 and 27 unsupported-api, all with zero unreachable names.
@@ -484,10 +488,11 @@ and an independent non-secret scope does not inherit the wait.
 
 The approved credentialed live runner was completed against the pinned private repository using
 the final rebuilt binary. `LIVE-PROOF-REPORT.json` is `status=credentialed_live`, contains one
-terminal record for every implemented command, and is tied to the current binary and case-file
-hashes: `proven=124`, `untestable=957`, `failed=0`. Validation confirmed exact command-set equality,
-no forbidden report fields, and no credential-shaped text. The 957 UNTESTABLE rows have concrete
-target-state, permission-scope, or safety reasons; no FAILED row is being relabelled.
+terminal record for each of the 1,081 implemented commands in this historical snapshot, and is
+tied to its historical binary and case-file hashes: `proven=124`, `untestable=957`, `failed=0`.
+Validation confirmed exact command-set equality, no forbidden report fields, and no
+credential-shaped text. The 957 UNTESTABLE rows have concrete target-state, permission-scope, or
+safety reasons; no FAILED row is being relabelled.
 
 `LIVE-RATE-LIMIT-PROOF.json` records the proven live `rate-limit get` response, zero observed HTTP
 429s across the bounded credentialed workload, preserved headroom, and the existing deterministic
@@ -497,6 +502,20 @@ reversible archive and issue lock/state writes were read back and restored.
 The shared operation endpoint ledger, website catalogs, and golden transcript diffs were audited
 after regeneration; their changed connector scope is GitHub only. The generated GitHub write paths
 were normalized to the engine interpolation dialect by the generator, not hand-edited.
+
+## Current-ref — merged GitHub surface
+
+**Authoritative measurement:** 2026-08-10 at ref `9cc25b5c47c01277d77e2b8dcfef08801e8ad0c7`,
+derived from the checked-in GitHub source bundles: `cli_surface.json`, `api_surface.json`,
+`streams.json`, `writes.json`, and `operations.json`.
+
+- 1,571 commands: 1,521 implemented, 23 unsupported-local, and 27 unsupported-api; zero
+  partial, planned, or `unsafe_or_disallowed` commands.
+- 1,225 / 1,225 endpoints covered with zero blocked; 37 streams, 607 write actions, and 768
+  operations.
+
+No current deterministic-provider or credentialed-live execution proof is implied by this
+source-derived reference; the preceding executions retain their historical measurements.
 
 ## Final current-head repair gates
 

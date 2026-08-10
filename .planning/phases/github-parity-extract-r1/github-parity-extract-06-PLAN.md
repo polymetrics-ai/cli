@@ -9,6 +9,15 @@ GitHub-owned definitions/generator/hooks/tests. The one shared production adjust
 provider-neutral safe handling of slash-bearing `ref` path variables. Fixture replay and preflight remain supporting evidence; terminal live
 records are limited to `PROVEN`, `UNTESTABLE` with a concrete reason, or `FAILED`.
 
+## Current-ref — merged GitHub surface
+
+The authoritative source-derived count and its provenance are in
+[VERIFICATION.md](VERIFICATION.md). This frozen plan does not duplicate that
+generated-surface measurement.
+
+The frozen checkpoints below remain historical records preserved at base ref
+`4df0b0416e46958d9acb1b02708464570c070e0f` on 2026-08-10.
+
 ## Scope
 
 - Generate `.planning/phases/github-parity-extract-r1/OPERATION-PROOF-LEDGER.json` and

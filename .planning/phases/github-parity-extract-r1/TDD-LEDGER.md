@@ -5,6 +5,18 @@ current `main` rather than inheriting it; the second is the captain's unblock or
 
 ---
 
+## Current-ref — merged GitHub surface
+
+The authoritative source-derived count and its provenance are in
+[VERIFICATION.md](VERIFICATION.md). This red/green ledger does not duplicate that
+generated-surface measurement.
+
+The red/green checkpoints below are historical records preserved at base ref
+`4df0b0416e46958d9acb1b02708464570c070e0f` on 2026-08-10. Their then-current transcripts,
+including Cycle 16 and Cycle 33, are not rewritten with these current-ref totals.
+
+---
+
 ## Cycle 1 — github's documented REST surface is incomplete on `main`
 
 **Red** — observed after cherry-picking only the surface test (`6511a8a45`), before any

@@ -4,8 +4,19 @@ Extract GitHub's documented-operation parity from the paused
 `fm/cli-top50-sweep-resume2-r1` work and land it as a separate PR. This PR is not the
 consolidated sweep PR and does not merge anything into `main`.
 
-The task brief supplied no issue number; the complete GSD/no-mistakes delivery record is included
-under `.planning/phases/github-parity-extract-r1/`.
+Refs #3971.
+
+The complete GSD/no-mistakes delivery record is included under
+`.planning/phases/github-parity-extract-r1/`.
+
+## Current-ref — merged GitHub surface
+
+The authoritative source-derived count and its provenance are in
+[VERIFICATION.md](VERIFICATION.md). This PR body does not duplicate that generated-surface
+measurement.
+
+The historical execution evidence below remains tied to its original checkpoint and does not
+assert current-ref execution coverage.
 
 ## What Changed
 
@@ -17,9 +28,8 @@ under `.planning/phases/github-parity-extract-r1/`.
 - Regenerated the operation/command proof ledgers, GitHub generated surface artifacts, golden
   transcripts, and website/catalog artifacts through their owning generators. No generated file
   was hand-merged.
-- Added exhaustive source accounting and deterministic provider-double evidence:
-  1,224 endpoints (1,220 REST + 4 GraphQL), 1,147 covered, 77 blocked, 37 streams, 574 write
-  actions, 377 operations, and 1,179 CLI commands.
+- Added exhaustive source accounting and deterministic provider-double evidence, with current
+  source totals kept distinct from retained historical execution totals.
 - Kept the exhaustive provider-double implementation in test-only scope and verified the
   connector-boundary scanner remains clean; no GitHub-specific shared production policy was added.
 - Added current-head binary dispatch evidence for every command and explicit generic routes for
@@ -27,7 +37,7 @@ under `.planning/phases/github-parity-extract-r1/`.
 - Added a GitHub-specific proof of the existing rate-limit admission/observation path; no second
   limiter or credential-derived coordination key was introduced.
 
-## Safety classification
+## Historical safety classification
 
 `repo create` is `implemented` as an approval-gated reverse-ETL write. Creating a private test
 repository is a bounded, reversible state-creation operation and is no less defensible than the
@@ -42,7 +52,12 @@ executor. The approved live target already existed and was required to be retain
 create` was not executed in the live sweep; its classification remains implemented and
 approval-gated.
 
-## Evidence
+## Historical evidence
+
+These checkpoint results are preserved as recorded at base ref
+`4df0b0416e46958d9acb1b02708464570c070e0f` on 2026-08-10. The credentialed live report was
+measured at 2026-08-08T22:27:16.716Z; neither it nor the provider-double report certifies the
+current-ref surface above.
 
 | Evidence | Result |
 | --- | --- |
@@ -51,15 +66,14 @@ approval-gated.
 | Deterministic provider double | 37 streams + 574 writes + 377 operations; 985 exercised, 3 concrete untestable, 0 failed |
 | Generic ETL/reverse-ETL routes | 23 / 23 streams and 38 / 38 write actions exercised through the generic engine routes |
 | Limiter proof | 2 same-scope requests, 1 local 60-second wait, 0 provider 429s; independent scope adds 0 waits |
-| Current-head credentialed live proof | 124 / 1,081 proven; 957 terminally `UNTESTABLE` with concrete target, permission, or safety reasons; 0 `FAILED` |
+| Credentialed live proof (2026-08-08) | 124 / 1,081 proven; 957 terminally `UNTESTABLE` with concrete target, permission, or safety reasons; 0 `FAILED` |
 
-`LIVE-PROOF-REPORT.json` is current-head credentialed acceptance evidence. The run was hard-pinned
+`LIVE-PROOF-REPORT.json` is historical credentialed acceptance evidence. The run was hard-pinned
 to private `karthik-sivadas/pm-live-test-direct-read-20260808081515`, which was retained after
-validation. It records one
-terminal `PROVEN`, `UNTESTABLE`, or `FAILED` result for every implemented command, matches the
-current surface/case/binary hashes, and contains no subprocess output, response body, approval
-grant, credential, or token-derived value. The approved private repository was retained after
-reversible write/readback checks.
+validation. It records one terminal `PROVEN`, `UNTESTABLE`, or `FAILED` result for each of the
+1,081 implemented commands in that snapshot, matches its then-current surface/case/binary hashes,
+and contains no subprocess output, response body, approval grant, credential, or token-derived
+value. The approved private repository was retained after reversible write/readback checks.
 
 ## Generated-artifact boundary
 
