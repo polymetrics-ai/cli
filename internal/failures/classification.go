@@ -351,6 +351,9 @@ func validateSafeText(label, value string, maxBytes int) error {
 }
 
 func validateJSONPointer(pointer string) error {
+	if !utf8.ValidString(pointer) {
+		return fmt.Errorf("failure field path is not valid UTF-8")
+	}
 	if pointer == "" {
 		return nil
 	}

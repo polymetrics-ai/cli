@@ -28,4 +28,9 @@ review was completed inline over the nine source and test files listed in `SUMMA
 - The change neither touches a provider bundle nor adds a PostgreSQL driver, write, CDC, budget, or
   call-graph implementation.
 
-No critical, warning, or informational findings were identified.
+## Follow-up disposition
+
+- Fixed: JSON Pointer validation now rejects invalid UTF-8 before a classification can serialize it
+  differently from its in-memory value; regression coverage exercises the constructor boundary.
+
+No open critical, warning, or informational findings remain.

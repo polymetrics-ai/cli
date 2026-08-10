@@ -78,6 +78,7 @@ func TestClassificationRejectsInvalidStructuredValues(t *testing.T) {
 		{name: "control message", input: Input{Domain: valid.Domain, Code: valid.Code, Message: "bad\nmessage"}},
 		{name: "malformed pointer", input: Input{Domain: valid.Domain, Code: valid.Code, Message: valid.Message, FieldPath: "operations/0"}},
 		{name: "malformed pointer escape", input: Input{Domain: valid.Domain, Code: valid.Code, Message: valid.Message, FieldPath: "/operations/~2"}},
+		{name: "invalid UTF-8 pointer", input: Input{Domain: valid.Domain, Code: valid.Code, Message: valid.Message, FieldPath: "/\xff"}},
 		{name: "unknown dispatch kind", input: Input{Domain: valid.Domain, Code: valid.Code, Message: valid.Message, DispatchKind: DispatchKind("unknown")}},
 		{name: "dispatch kind outside system", input: Input{Domain: DomainConfiguration, Code: valid.Code, Message: valid.Message, DispatchKind: DispatchKindDirectStub}},
 		{name: "unsafe reference", input: Input{Domain: valid.Domain, Code: valid.Code, Message: valid.Message, References: []Reference{{Kind: ReferenceKindSource, Value: "line\nbreak"}}}},
