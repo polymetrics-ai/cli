@@ -1,0 +1,76 @@
+{
+  "phase": "issue-3855-polling-apply-foundations-parent",
+  "issue": 3855,
+  "kind": "planning_only_parent_scaffold",
+  "canonical_state": "parent_draft_pr",
+  "completed_state_evidence": [
+    "job_received",
+    "issue_map"
+  ],
+  "branch": {
+    "head": "feat/3855-polling-apply-foundations",
+    "temporary_base": "feat/3862-any-to-any-transport",
+    "temporary_base_sha": "30b2fb4aeb121641b6158903fe1d3b54668599a6",
+    "relationship": "dependency_only",
+    "final_retarget_base": "docs/4015-connector-release-certification",
+    "retarget_condition": "reviewed transport seam is present on the combined certification branch",
+    "main_target_forbidden": true,
+    "merge_forbidden": true
+  },
+  "children": {
+    "ordered": [3856, 3857],
+    "parallel_after": [3858, 3859]
+  },
+  "reuse": {
+    "pr": 3880,
+    "commit": "dc1a6a7171ca901c8dbaf8cd528f67b18e57d9bb",
+    "classification": "partial_reusable_polling_implementation",
+    "does_not_complete": [3856, 3857, 3858, 3859]
+  },
+  "scope_fence": {
+    "allowed": [
+      ".planning/phases/issue-3855-polling-apply-foundations-parent/**"
+    ],
+    "forbidden": [
+      "cmd/**",
+      "internal/**",
+      "#3856-#3859 implementation",
+      "#3864 implementation",
+      "PostgreSQL implementation",
+      "certification or executable product behavior claims"
+    ]
+  },
+  "gsd": {
+    "adapter": "pi-project-local",
+    "mode": "inline_manual_fallback",
+    "reason": "canonical single-worker contract forbids role spawning",
+    "commands_resolved": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ]
+  },
+  "github_live_verification": {
+    "status": "pending_rate_limit_recovery",
+    "tool": "gh-axi",
+    "observed_error": "RATE_LIMITED",
+    "fallback_used": false
+  },
+  "no_mistakes": {
+    "status": "pending",
+    "argv": [
+      "no-mistakes",
+      "axi",
+      "run",
+      "--intent",
+      "Open the #3855 polling/apply foundations draft parent as a reviewable planning-only stacked scaffold, preserve the #3856 -> #3857 -> (#3858 || #3859) order, record #3880 as partial reuse, use #3862 only as a temporary dependency base, and do not implement product behavior or merge anything.",
+      "--skip=push,pr,ci"
+    ],
+    "forbidden_flags": [
+      "--yes"
+    ]
+  },
+  "correction_count": 0
+}
