@@ -38,6 +38,11 @@ var validSSLModes = map[string]bool{
 	"verify-full": true,
 }
 
+var (
+	errPostgresPasswordAuthenticationRequired = errors.New("postgres password authentication requires secret password")
+	errPostgresAuthenticationModeUnsupported  = errors.New("postgres authentication mode is unsupported")
+)
+
 // libpqSSLMode normalises one accepted spelling to what pgx expects. A libpq
 // name passes through unchanged so existing configuration keeps its exact
 // behaviour, including "allow", which sqltls folds into "preferred" and which
@@ -184,6 +189,9 @@ func resolveConfig(cfg connectors.RuntimeConfig) (connConfig, error) {
 	if host == "" {
 		return connConfig{}, errors.New("postgres connector requires config host")
 	}
+	if strings.HasPrefix(host, "/") {
+		return connConfig{}, fmt.Errorf("%w: peer/socket", errPostgresAuthenticationModeUnsupported)
+	}
 	if err := validateHost(host); err != nil {
 		return connConfig{}, err
 	}
@@ -196,13 +204,16 @@ func resolveConfig(cfg connectors.RuntimeConfig) (connConfig, error) {
 	if username == "" {
 		return connConfig{}, errors.New("postgres connector requires config username")
 	}
+	if err := validateAuthentication(cfg); err != nil {
+		return connConfig{}, err
+	}
 
 	password := ""
 	if cfg.Secrets != nil {
 		password = cfg.Secrets["password"]
 	}
 	if strings.TrimSpace(password) == "" && !fixtureMode(cfg) {
-		return connConfig{}, errors.New("postgres connector requires secret password")
+		return connConfig{}, errPostgresPasswordAuthenticationRequired
 	}
 
 	port := defaultPort
@@ -272,6 +283,24 @@ func fixtureMode(cfg connectors.RuntimeConfig) bool {
 		return false
 	}
 	return strings.EqualFold(strings.TrimSpace(cfg.Config["mode"]), "fixture")
+}
+
+func validateAuthentication(cfg connectors.RuntimeConfig) error {
+	switch strings.ToLower(strings.TrimSpace(cfg.Config["auth_mode"])) {
+	case "", "password":
+	case "peer", "socket", "peer/socket":
+		return fmt.Errorf("%w: peer/socket", errPostgresAuthenticationModeUnsupported)
+	case "client-certificate", "client_certificate", "certificate", "cert":
+		return fmt.Errorf("%w: client-certificate", errPostgresAuthenticationModeUnsupported)
+	default:
+		return errPostgresAuthenticationModeUnsupported
+	}
+	for _, key := range []string{"sslcert", "sslkey", "sslpassword", "client_certificate", "client_key"} {
+		if strings.TrimSpace(cfg.Config[key]) != "" || strings.TrimSpace(cfg.Secrets[key]) != "" {
+			return fmt.Errorf("%w: client-certificate", errPostgresAuthenticationModeUnsupported)
+		}
+	}
+	return nil
 }
 
 // validateIdentifier rejects identifiers that are not a plain

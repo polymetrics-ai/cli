@@ -24,14 +24,17 @@ Reads PostgreSQL tables: discovers schemas/columns from information_schema, snap
 
 ## Authentication
 
-- Use pm credentials add with --from-env or --value-stdin for secret fields.
+- password: Live connections require password authentication; peer/socket and client-certificate modes are unsupported.
+  - config: host, database, username
+  - secrets: password
+  - supports: read=true write=false
 
 ## Configuration
 
 - cdc_publication
 - cursor_field
-- database
-- host
+- database (required)
+- host (required)
 - mode
 - port
 - read_limit
@@ -39,8 +42,8 @@ Reads PostgreSQL tables: discovers schemas/columns from information_schema, snap
 - sslmode
 - sslrootcert
 - sslservername
-- username
-- password (secret)
+- username (required)
+- password (secret) (required when mode is not fixture): Fixture mode does not open a source connection.
 
 ## Security
 

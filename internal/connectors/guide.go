@@ -528,6 +528,8 @@ func configSection(manifest Manifest) GuideSection {
 		line := field.Name + " (secret)"
 		if field.Required {
 			line += " (required)"
+		} else if field.RequiredWhen != "" {
+			line += " (required when " + field.RequiredWhen + ")"
 		}
 		if field.Description != "" {
 			line += ": " + field.Description

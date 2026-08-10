@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"errors"
 	"strings"
 	"testing"
 
@@ -48,6 +49,95 @@ func TestDefinitionAcceptsSharedTransportSecurityVocabulary(t *testing.T) {
 		if err := connectors.ValidateConfiguration(connector, map[string]string{"sslmode": mode}); err != nil {
 			t.Fatalf("definition rejected accepted sslmode %q: %v", mode, err)
 		}
+	}
+}
+
+func TestResolveConfigAuthenticationRequirements(t *testing.T) {
+	base := func() connectors.RuntimeConfig {
+		return connectors.RuntimeConfig{
+			Config: map[string]string{
+				"host":     "postgres.example",
+				"database": "analytics",
+				"username": "reader",
+			},
+			Secrets: map[string]string{"password": t.Name()},
+		}
+	}
+
+	tests := []struct {
+		name    string
+		cfg     connectors.RuntimeConfig
+		wantErr error
+	}{
+		{
+			name: "fixture permits no password",
+			cfg: connectors.RuntimeConfig{Config: map[string]string{
+				"mode":     "fixture",
+				"host":     "postgres.example",
+				"database": "analytics",
+				"username": "reader",
+			}},
+		},
+		{
+			name: "live password mode requires password",
+			cfg: connectors.RuntimeConfig{Config: map[string]string{
+				"host":     "postgres.example",
+				"database": "analytics",
+				"username": "reader",
+			}},
+			wantErr: errPostgresPasswordAuthenticationRequired,
+		},
+		{
+			name: "peer mode is rejected",
+			cfg: func() connectors.RuntimeConfig {
+				cfg := base()
+				cfg.Config["auth_mode"] = "peer"
+				return cfg
+			}(),
+			wantErr: errPostgresAuthenticationModeUnsupported,
+		},
+		{
+			name: "socket host is rejected",
+			cfg: func() connectors.RuntimeConfig {
+				cfg := base()
+				cfg.Config["host"] = "/var/run/postgresql"
+				return cfg
+			}(),
+			wantErr: errPostgresAuthenticationModeUnsupported,
+		},
+		{
+			name: "client certificate is rejected",
+			cfg: func() connectors.RuntimeConfig {
+				cfg := base()
+				cfg.Config["sslcert"] = "/tmp/client.pem"
+				return cfg
+			}(),
+			wantErr: errPostgresAuthenticationModeUnsupported,
+		},
+		{
+			name: "unknown mode is rejected",
+			cfg: func() connectors.RuntimeConfig {
+				cfg := base()
+				cfg.Config["auth_mode"] = "gssapi"
+				return cfg
+			}(),
+			wantErr: errPostgresAuthenticationModeUnsupported,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := resolveConfig(tt.cfg)
+			if tt.wantErr == nil {
+				if err != nil {
+					t.Fatalf("resolveConfig() error = %v, want nil", err)
+				}
+				return
+			}
+			if !errors.Is(err, tt.wantErr) {
+				t.Fatalf("resolveConfig() error = %v, want %v", err, tt.wantErr)
+			}
+		})
 	}
 }
 

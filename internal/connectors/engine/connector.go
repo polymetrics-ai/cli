@@ -327,12 +327,16 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 		for _, key := range b.Spec.SecretKeys() {
 			secretSet[key] = true
 		}
+		requiredSet := map[string]bool{}
+		for _, key := range b.Spec.RequiredKeys() {
+			requiredSet[key] = true
+		}
 		for _, property := range b.Spec.Properties() {
 			if secretSet[property] {
-				secretFields = append(secretFields, connectors.SecretField{Name: property})
+				secretFields = append(secretFields, connectors.SecretField{Name: property, Required: requiredSet[property]})
 				continue
 			}
-			configFields = append(configFields, connectors.ConfigField{Name: property})
+			configFields = append(configFields, connectors.ConfigField{Name: property, Required: requiredSet[property]})
 		}
 	}
 
