@@ -37,8 +37,8 @@ func TestDockerhubPATExchangeUsesDedicatedAuthURL(t *testing.T) {
 
 	var authHits int32
 	authServer := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost || r.URL.Path != "/v2/users/login" {
-			t.Errorf("auth request = %s %s, want POST /v2/users/login", r.Method, r.URL.Path)
+		if r.Method != http.MethodPost || r.URL.Path != "/trusted-auth/v2/users/login" {
+			t.Errorf("auth request = %s %s, want POST /trusted-auth/v2/users/login", r.Method, r.URL.Path)
 		}
 		var body map[string]string
 		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -98,7 +98,7 @@ func TestDockerhubPATExchangeUsesDedicatedAuthURL(t *testing.T) {
 	runtime, err := engine.NewRuntime(context.Background(), bundle, connectors.RuntimeConfig{
 		Config: map[string]string{
 			"base_url":        foreign.URL + "/v2",
-			"auth_url":        authServer.URL + "/v2",
+			"auth_url":        authServer.URL + "/trusted-auth",
 			"docker_username": "fixture-user",
 			"namespace":       "fixture",
 		},

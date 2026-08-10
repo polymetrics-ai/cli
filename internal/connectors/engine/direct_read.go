@@ -780,12 +780,28 @@ func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL, apiRoot string) st
 }
 
 func RequestURLPathForBaseURL(resolvedPath, baseURL, apiRoot string) string {
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL, apiRoot)
-	parsed, err := url.Parse(joinURL(baseURL, requestPath))
-	if err != nil || parsed.Path == "" {
+	parsed, requestPath, err := requestURLForBaseURL(resolvedPath, baseURL, apiRoot)
+	if err != nil || parsed == nil || parsed.Path == "" {
 		return requestPath
 	}
 	return parsed.Path
+}
+
+func RequestURLForBaseURL(resolvedPath, baseURL, apiRoot string) (string, error) {
+	parsed, _, err := requestURLForBaseURL(resolvedPath, baseURL, apiRoot)
+	if err != nil {
+		return "", fmt.Errorf("resolve request URL: %w", err)
+	}
+	if parsed == nil || parsed.Scheme == "" || parsed.Host == "" {
+		return "", errors.New("request base URL is invalid")
+	}
+	return parsed.String(), nil
+}
+
+func requestURLForBaseURL(resolvedPath, baseURL, apiRoot string) (*url.URL, string, error) {
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL, apiRoot)
+	parsed, err := url.Parse(joinURL(baseURL, requestPath))
+	return parsed, requestPath, err
 }
 
 func redactJSONValue(value any) any {

@@ -32,7 +32,7 @@
       "type": "string",
       "format": "uri",
       "default": "https://hub.docker.com/v2",
-      "description": "Docker Hub authentication API base URL. It is intentionally independent of base_url so a data API proxy cannot receive Docker Hub credential-exchange requests; override only for a trusted HTTPS test or self-hosted authentication proxy."
+      "description": "Docker Hub authentication API base URL. It is intentionally independent of base_url so a data API proxy cannot receive Docker Hub credential-exchange requests; the connector normalizes POST /v2/users/login beneath this base, including proxies whose prefix does not end in /v2. Override only for a trusted HTTPS test or self-hosted authentication proxy."
     },
     "page_size": {
       "type": "integer",

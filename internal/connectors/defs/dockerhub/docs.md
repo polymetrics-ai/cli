@@ -72,8 +72,8 @@ Authentication behavior:
   writes) — only the 4 public-read streams and the 3 status-only existence checks are usable.
 - `docker_pat` configured: every non-SCIM request authenticates via a `dockerhub` AuthHook
   (`internal/connectors/hooks/dockerhub`) that exchanges `docker_username`/`docker_pat` for a
-  short-lived session bearer JWT through Docker Hub's own `POST /v2/users/login` at
-  `auth_url/users/login`,
+  short-lived session bearer JWT through Docker Hub's API-root-normalized `POST /v2/users/login`
+  endpoint under the independent `auth_url` base,
   caches it until 60s before the JWT's own `exp` claim (a conservative 4-minute cache is used if
   `exp` cannot be parsed), and sends it as `Authorization: Bearer <jwt>` on every subsequent
   request. The long-lived PAT itself is never sent as a static bearer token and never logged.

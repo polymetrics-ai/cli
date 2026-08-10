@@ -534,7 +534,8 @@ preserves it, and that Docker Hub's custom auth spec built `token_url` by append
 
 Green: `runConnectorCommand` rejects replacement secret-input flags before any plan lookup or
 execution; `ValidateURLPathSegment` rejects both `.` and `..` traversal forms; and Docker Hub
-materializes a separate `auth_url` default of `https://hub.docker.com/v2/users/login`. The
+materializes a separate `auth_url` base default of `https://hub.docker.com/v2`, with PAT login
+resolved to its API-root-normalized `POST /v2/users/login` endpoint. The
 dedicated Docker Hub regression uses separate TLS data and auth servers, proves the configured PAT
 reaches only the explicit `auth_url`, and proves a foreign HTTPS `base_url` receives exactly its
 data request and zero login requests. The focused gate is:
@@ -1035,6 +1036,31 @@ letting Go infer it. The green lint rerun reported zero issues:
 ```text
 make lint
 0 issues.
+```
+
+## Review repair — PAT proxy normalization and bounded login response (2026-08-10)
+
+Red: the stored-PAT hook interpolated `auth_url/users/login` directly, while response-sensitive
+direct authentication writes applied API-root normalization. A trusted authentication proxy whose
+prefix did not already end in `/v2` therefore received the two paths differently. The hook also
+decoded a successful login response straight from the network body, with no response-size bound.
+
+Green: the hook now derives the stored-PAT target through the engine's shared API-root URL
+resolution using only the independent `auth_url`, never the data `base_url`. Its successful login
+response is read at one byte beyond the 1 MiB limit and rejected before JSON decoding if oversized.
+The TLS regression covers an auth proxy prefix without `/v2`, while the focused hook regression
+covers the bounded response. Docker Hub's source docs and generated website connector data describe
+the normalized authentication base; no CLI command, flag, or output surface changed.
+
+This gate-owned review uses golang-how-to, golang-design-patterns,
+golang-structs-interfaces, golang-security, golang-safety, golang-error-handling, golang-lint,
+golang-testing, and golang-documentation; the outer executor retains GSD lifecycle ownership.
+
+```text
+go test -timeout 20m ./internal/connectors/engine ./internal/connectors/hooks/dockerhub ./internal/connectors/defs/dockerhub -run '^(TestRequestURLForBaseURLNormalizesAPIRoot|TestAuthenticator_LoginRequestShape|TestAuthenticator_LoginResponseExceedsLimit|TestAuthenticator_TokenURLRejectsPlainHTTP|TestDockerhubPATExchangeUsesDedicatedAuthURL)$' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/connectors/hooks/dockerhub
+ok   polymetrics.ai/internal/connectors/defs/dockerhub
 ```
 
 ## Review repair — Docker Hub sensitive auth transport and routing (2026-08-10)

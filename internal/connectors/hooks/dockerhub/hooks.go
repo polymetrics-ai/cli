@@ -37,6 +37,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -129,6 +130,10 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 	if err := validateHTTPSURL(tokenURL, "token_url"); err != nil {
 		return nil, err
 	}
+	tokenURL, err = dockerHubLoginURL(tokenURL, cfg)
+	if err != nil {
+		return nil, err
+	}
 	username, err := interpolateRequired(spec.Username, "docker_username", cfg)
 	if err != nil {
 		return nil, err
@@ -152,9 +157,29 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 // under (dockerhub's api_surface.json /v2/scim/2.0/** rows), relative to the
 // Docker Hub API root.
 const (
-	scimAPIPath      = "/scim/2.0/"
-	dockerHubAPIRoot = "/v2"
+	scimAPIPath                  = "/scim/2.0/"
+	dockerHubAPIRoot             = "/v2"
+	dockerHubLoginPath           = dockerHubAPIRoot + "/users/login"
+	maxSessionLoginResponseBytes = 1 << 20
 )
+
+func dockerHubLoginURL(tokenURL string, cfg connectors.RuntimeConfig) (string, error) {
+	authURL := strings.TrimSpace(cfg.Config["auth_url"])
+	if authURL == "" {
+		return tokenURL, nil
+	}
+	if err := validateHTTPSURL(authURL, "auth_url"); err != nil {
+		return "", err
+	}
+	loginURL, err := engine.RequestURLForBaseURL(dockerHubLoginPath, authURL, dockerHubAPIRoot)
+	if err != nil {
+		return "", fmt.Errorf("dockerhub auth: resolve auth_url login target: %w", err)
+	}
+	if err := validateHTTPSURL(loginURL, "auth_url"); err != nil {
+		return "", err
+	}
+	return loginURL, nil
+}
 
 func scimPathPrefixes(cfg connectors.RuntimeConfig) []string {
 	baseURL := strings.TrimSpace(cfg.Config["base_url"])
@@ -323,11 +348,17 @@ func (a *sessionLoginAuth) sessionToken(ctx context.Context) (string, error) {
 		return "", fmt.Errorf("dockerhub auth: login endpoint returned %s", resp.Status)
 	}
 
+	responseBody, err := io.ReadAll(io.LimitReader(resp.Body, maxSessionLoginResponseBytes+1))
+	if err != nil {
+		return "", fmt.Errorf("dockerhub auth: read login response: %w", err)
+	}
+	if len(responseBody) > maxSessionLoginResponseBytes {
+		return "", errors.New("dockerhub auth: login response exceeds 1 MiB limit")
+	}
 	var out struct {
 		Token string `json:"token"`
 	}
-	dec := json.NewDecoder(resp.Body)
-	if err := dec.Decode(&out); err != nil {
+	if err := json.Unmarshal(responseBody, &out); err != nil {
 		return "", fmt.Errorf("dockerhub auth: decode login response: %w", err)
 	}
 	if strings.TrimSpace(out.Token) == "" {

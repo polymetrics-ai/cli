@@ -1438,3 +1438,13 @@ func TestOperationDirectReadProxyBasePathConsumesAPIRootOnce(t *testing.T) {
 		t.Fatalf("OperationDirectRead: %v", err)
 	}
 }
+
+func TestRequestURLForBaseURLNormalizesAPIRoot(t *testing.T) {
+	got, err := RequestURLForBaseURL("/v2/users/login", "https://proxy.example.test/dockerhub", "/v2")
+	if err != nil {
+		t.Fatalf("RequestURLForBaseURL: %v", err)
+	}
+	if want := "https://proxy.example.test/dockerhub/v2/users/login"; got != want {
+		t.Fatalf("RequestURLForBaseURL = %q, want %q", got, want)
+	}
+}

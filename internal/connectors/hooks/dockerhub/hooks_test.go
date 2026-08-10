@@ -298,6 +298,29 @@ func TestAuthenticator_MissingTokenInResponseIsError(t *testing.T) {
 	}
 }
 
+func TestAuthenticator_LoginResponseExceedsLimit(t *testing.T) {
+	srv, client, _ := loginHTTPSServer(t, func(map[string]string) (int, map[string]any) {
+		return http.StatusOK, map[string]any{"token": strings.Repeat("x", maxSessionLoginResponseBytes)}
+	})
+
+	h := newClientHooks(client)
+	auth, err := h.Authenticator(context.Background(), baseCfg(), baseSpec(srv.URL))
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	req, err := http.NewRequest(http.MethodGet, "https://example.invalid/x", nil)
+	if err != nil {
+		t.Fatalf("build request: %v", err)
+	}
+	err = auth.Apply(context.Background(), req)
+	if err == nil || !strings.Contains(err.Error(), "response exceeds 1 MiB") {
+		t.Fatalf("Apply() error = %v, want bounded login response rejection", err)
+	}
+	if got := req.Header.Get("Authorization"); got != "" {
+		t.Fatalf("Authorization = %q after oversized login response, want empty", got)
+	}
+}
+
 func TestAuthenticator_MissingPasswordIsError(t *testing.T) {
 	cfg := baseCfg()
 	delete(cfg.Secrets, "docker_pat")
