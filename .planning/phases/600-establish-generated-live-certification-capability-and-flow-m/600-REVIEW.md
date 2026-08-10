@@ -25,12 +25,16 @@ lane forbids role spawning, so a standard review was performed inline.
 - Rebase integration preserved current main's GraphQL write executor and
   PostgreSQL/MySQL change-capture discovery; regenerated artifacts reflect the
   updated code without inventing fixture or live proof.
+- The GraphQL direct-read branch is explicitly annotated as an executable
+  `graphql_query`; the paired GitHub `local_git` operation has no executor
+  annotation and remains unimplemented.
 
 ## Finding disposition
 
 | Severity | Finding | Disposition |
 |---|---|---|
 | warning | Provider and record-name values were checked for presence but not safety before a proof write. | Fixed: safe-identifier validation and TestCertificationRejectsUnsafeEvidenceIdentifiers. |
+| warning | The source-derived detector omitted the engine's real GraphQL direct-read branch, producing a false `implemented=false` for GitHub `graphql_query`. | Fixed: the direct-read executor annotation names `graphql_query`, and the paired regression proves `local_git` remains false. |
 
 No remaining critical, warning, or info findings were identified. The direct
 unsupported-operation implementation check remains intentionally shallow: the
