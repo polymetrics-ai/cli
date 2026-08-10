@@ -24,13 +24,19 @@
   },
   "children": {
     "ordered": [3856, 3857],
-    "parallel_after": [3858, 3859]
+    "parallel_after": [3858, 3859],
+    "follow_on": {
+      "issue": 3860,
+      "kind": "documentation",
+      "depends_on": [3856, 3857, 3858, 3859],
+      "part_of_core_implementation_dag": false
+    }
   },
   "reuse": {
     "pr": 3880,
     "commit": "dc1a6a7171ca901c8dbaf8cd528f67b18e57d9bb",
     "classification": "partial_reusable_polling_implementation",
-    "does_not_complete": [3856, 3857, 3858, 3859]
+    "does_not_complete": [3856, 3857, 3858, 3859, 3860]
   },
   "scope_fence": {
     "allowed": [
@@ -40,6 +46,7 @@
       "cmd/**",
       "internal/**",
       "#3856-#3859 implementation",
+      "#3860 documentation implementation",
       "#3864 implementation",
       "PostgreSQL implementation",
       "certification or executable product behavior claims"
@@ -58,9 +65,14 @@
     ]
   },
   "github_live_verification": {
-    "status": "pending_rate_limit_recovery",
+    "status": "draft_parent_missing",
     "tool": "gh-axi",
-    "observed_error": "RATE_LIMITED",
+    "draft_parent_query": {
+      "state": "all",
+      "head": "feat/3855-polling-apply-foundations",
+      "count": 0
+    },
+    "child_inventory": [3856, 3857, 3858, 3859, 3860],
     "fallback_used": false
   },
   "no_mistakes": {

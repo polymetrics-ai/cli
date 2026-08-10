@@ -10,8 +10,8 @@
 | Requested branch | `git switch --create feat/3855-polling-apply-foundations refs/remotes/origin/feat/3862-any-to-any-transport` | passed locally |
 | GSD adapter | `scripts/gsd doctor`; required `sources` resolutions; generated lifecycle prompts | passed |
 | Canonical delivery projection | `go run ./cmd/agentcontractgen check` | passed |
-| Parent/child GitHub hierarchy | `gh-axi issue view` / `gh-axi issue subissue list` | pending — API returned `RATE_LIMITED`; no fallback client used |
-| #3880, #4016, #4019 live inspection | `gh-axi pr view` | pending — same rate limit; source report and local refs are provisional evidence |
+| Parent/child GitHub hierarchy | `gh-axi issue view` / `gh-axi issue subissue list` | live check found five open children: #3856–#3860; #3860 follows #3856–#3859 |
+| #3880, #4016, #4019 live inspection | `gh-axi pr view` | pending — independent live PR inspection remains required |
 | Markdown and diff hygiene | `git diff --check`; untracked/staged changed-path assertion | passed — only this phase directory is present |
 | Repository checks | `make tidy-check`; `make docs-check`; `make lint` | passed |
 | no-mistakes | contract argv with `--skip=push,pr,ci`, no `--yes` | pending after commit |
