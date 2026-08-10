@@ -148,5 +148,7 @@ implemented / complete counts are:
 The sync scoreboard is zero complete for all 28 mode × primitive cells. API
 writes are red because the engine refuses an API destination without a durable
 acknowledgement; database writes are red because no database write executor
-exists; PostgreSQL CDC is deliberately fail-closed. Those failures are the
-useful baseline for the PostgreSQL waves, not a reason to omit cells.
+exists. PostgreSQL and MySQL change-capture reads are code-present but have no
+fixture or live proof, so they remain incomplete rather than being silently
+promoted. Those failures are the useful baseline for the PostgreSQL waves, not
+a reason to omit cells.

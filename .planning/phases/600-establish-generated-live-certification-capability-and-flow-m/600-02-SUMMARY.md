@@ -69,6 +69,6 @@ counts. For each non-CDC mode, the repeated row pattern is:
 | database_write_from_warehouse | 4 | 1 | 0 |
 
 For change_capture, only database_read_into_warehouse is applicable (4 /
-declared 0 / implemented 1); the other three primitives are named
+declared 0 / implemented 2); the other three primitives are named
 not-applicable. The red write rows reflect the missing durable API destination
 contract and missing database-write executor, rather than an omitted score.

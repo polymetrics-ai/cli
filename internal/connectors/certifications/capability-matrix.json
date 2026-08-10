@@ -6,131 +6,132 @@
       "id": "capability:catalog",
       "category": "capability",
       "name": "catalog",
-      "discovery_source": "internal/connectors/connectors.go:49"
+      "discovery_source": "internal/connectors/connectors.go:50"
     },
     {
       "id": "capability:cdc",
       "category": "capability",
       "name": "cdc",
-      "discovery_source": "internal/connectors/connectors.go:53"
+      "discovery_source": "internal/connectors/connectors.go:54"
     },
     {
       "id": "capability:check",
       "category": "capability",
       "name": "check",
-      "discovery_source": "internal/connectors/connectors.go:48"
+      "discovery_source": "internal/connectors/connectors.go:49"
     },
     {
       "id": "capability:dynamic_schema",
       "category": "capability",
       "name": "dynamic_schema",
-      "discovery_source": "internal/connectors/engine/bundle.go:90"
+      "discovery_source": "internal/connectors/engine/bundle.go:91"
     },
     {
       "id": "capability:query",
       "category": "capability",
       "name": "query",
-      "discovery_source": "internal/connectors/connectors.go:52"
+      "discovery_source": "internal/connectors/connectors.go:53"
     },
     {
       "id": "capability:read",
       "category": "capability",
       "name": "read",
-      "discovery_source": "internal/connectors/connectors.go:50"
+      "discovery_source": "internal/connectors/connectors.go:51"
     },
     {
       "id": "capability:write",
       "category": "capability",
       "name": "write",
-      "discovery_source": "internal/connectors/connectors.go:51"
+      "discovery_source": "internal/connectors/connectors.go:52"
     },
     {
       "id": "operation:binary_download",
       "category": "operation",
       "name": "binary_download",
-      "discovery_source": "internal/connectors/engine/bundle.go:2018",
+      "discovery_source": "internal/connectors/engine/bundle.go:2088",
       "executor_source": "internal/connectors/engine/binary_read.go:100"
     },
     {
       "id": "operation:browser_open",
       "category": "operation",
       "name": "browser_open",
-      "discovery_source": "internal/connectors/engine/bundle.go:2026"
+      "discovery_source": "internal/connectors/engine/bundle.go:2096"
     },
     {
       "id": "operation:composite",
       "category": "operation",
       "name": "composite",
-      "discovery_source": "internal/connectors/engine/bundle.go:2028"
+      "discovery_source": "internal/connectors/engine/bundle.go:2098"
     },
     {
       "id": "operation:file_upload",
       "category": "operation",
       "name": "file_upload",
-      "discovery_source": "internal/connectors/engine/bundle.go:2020"
+      "discovery_source": "internal/connectors/engine/bundle.go:2090"
     },
     {
       "id": "operation:graphql_mutation",
       "category": "operation",
       "name": "graphql_mutation",
-      "discovery_source": "internal/connectors/engine/bundle.go:2014"
+      "discovery_source": "internal/connectors/engine/bundle.go:2084",
+      "executor_source": "internal/connectors/engine/direct_write.go:80"
     },
     {
       "id": "operation:graphql_query",
       "category": "operation",
       "name": "graphql_query",
-      "discovery_source": "internal/connectors/engine/bundle.go:2014"
+      "discovery_source": "internal/connectors/engine/bundle.go:2084"
     },
     {
       "id": "operation:local_file",
       "category": "operation",
       "name": "local_file",
-      "discovery_source": "internal/connectors/engine/bundle.go:2024"
+      "discovery_source": "internal/connectors/engine/bundle.go:2094"
     },
     {
       "id": "operation:local_git",
       "category": "operation",
       "name": "local_git",
-      "discovery_source": "internal/connectors/engine/bundle.go:2022"
+      "discovery_source": "internal/connectors/engine/bundle.go:2092"
     },
     {
       "id": "operation:provider_search",
       "category": "operation",
       "name": "provider_search",
-      "discovery_source": "internal/connectors/engine/bundle.go:2012",
-      "executor_source": "internal/connectors/engine/direct_read.go:153"
+      "discovery_source": "internal/connectors/engine/bundle.go:2082",
+      "executor_source": "internal/connectors/engine/direct_read.go:168"
     },
     {
       "id": "operation:rest_read",
       "category": "operation",
       "name": "rest_read",
-      "discovery_source": "internal/connectors/engine/bundle.go:2012",
-      "executor_source": "internal/connectors/engine/direct_read.go:153"
+      "discovery_source": "internal/connectors/engine/bundle.go:2082",
+      "executor_source": "internal/connectors/engine/direct_read.go:168"
     },
     {
       "id": "operation:rest_write",
       "category": "operation",
       "name": "rest_write",
-      "discovery_source": "internal/connectors/engine/bundle.go:2012",
-      "executor_source": "internal/connectors/engine/direct_write.go:76"
+      "discovery_source": "internal/connectors/engine/bundle.go:2082",
+      "executor_source": "internal/connectors/engine/direct_write.go:80"
     },
     {
       "id": "operation:stream_etl",
       "category": "operation",
       "name": "stream_etl",
-      "discovery_source": "internal/connectors/engine/bundle.go:2028"
+      "discovery_source": "internal/connectors/engine/bundle.go:2098"
     },
     {
       "id": "operation:xml_export",
       "category": "operation",
       "name": "xml_export",
-      "discovery_source": "internal/connectors/engine/bundle.go:2016"
+      "discovery_source": "internal/connectors/engine/bundle.go:2086"
     },
     {
       "id": "operation:xml_import",
       "category": "operation",
       "name": "xml_import",
-      "discovery_source": "internal/connectors/engine/bundle.go:2016"
+      "discovery_source": "internal/connectors/engine/bundle.go:2086"
     }
   ],
   "connectors": [
@@ -55958,7 +55959,7 @@
           "function_kind": "operation:graphql_mutation",
           "applicable": true,
           "declared": true,
-          "implemented": false,
+          "implemented": true,
           "fixture_tested": false,
           "live_tested": false,
           "fixture_evidence": [],
@@ -114349,7 +114350,7 @@
           "function_kind": "capability:cdc",
           "applicable": true,
           "declared": false,
-          "implemented": false,
+          "implemented": true,
           "fixture_tested": false,
           "live_tested": false,
           "fixture_evidence": [],
@@ -173639,7 +173640,7 @@
         "connectors": 556,
         "applicable": 2,
         "declared": 0,
-        "implemented": 1,
+        "implemented": 2,
         "fixture_tested": 0,
         "live_tested": 0,
         "complete": 0
@@ -173739,7 +173740,7 @@
         "connectors": 556,
         "applicable": 1,
         "declared": 1,
-        "implemented": 0,
+        "implemented": 1,
         "fixture_tested": 0,
         "live_tested": 0,
         "complete": 0

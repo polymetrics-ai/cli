@@ -23,13 +23,13 @@ func TestCertificationDiscoverFunctionKindsFromRuntimeSource(t *testing.T) {
 	}
 
 	want := map[string]bool{
-		"capability:read":           false,
-		"capability:write":          false,
-		"operation:rest_read":       false,
-		"operation:rest_write":      false,
+		"capability:read":            false,
+		"capability:write":           false,
+		"operation:rest_read":        false,
+		"operation:rest_write":       false,
 		"operation:graphql_mutation": false,
-		"operation:binary_download": false,
-		"operation:file_upload":     false,
+		"operation:binary_download":  false,
+		"operation:file_upload":      false,
 	}
 	for _, kind := range kinds {
 		if _, ok := want[kind.ID]; ok {
@@ -50,10 +50,10 @@ func TestCertificationOperationExecutorAnnotationsAreRealPaths(t *testing.T) {
 	}
 
 	wantImplemented := map[string]bool{
-		"operation:rest_read":       false,
-		"operation:rest_write":      false,
+		"operation:rest_read":        false,
+		"operation:rest_write":       false,
 		"operation:graphql_mutation": false,
-		"operation:binary_download": false,
+		"operation:binary_download":  false,
 	}
 	for _, kind := range kinds {
 		if _, ok := wantImplemented[kind.ID]; ok && kind.ExecutorSource != "" {

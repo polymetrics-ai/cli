@@ -35,7 +35,7 @@
     },
     {
       "id": "reverse_etl",
-      "discovery_source": "internal/cli/cli.go:1605"
+      "discovery_source": "internal/cli/cli.go:1723"
     },
     {
       "id": "schedule",
@@ -178734,7 +178734,7 @@
           "primitive": "database_read_into_warehouse",
           "applicable": true,
           "declared": false,
-          "implemented": false,
+          "implemented": true,
           "fixture_tested": false,
           "live_tested": false,
           "fixture_evidence": [],
@@ -302821,7 +302821,7 @@
         "connectors": 556,
         "applicable": 4,
         "declared": 0,
-        "implemented": 1,
+        "implemented": 2,
         "fixture_tested": 0,
         "live_tested": 0,
         "complete": 0

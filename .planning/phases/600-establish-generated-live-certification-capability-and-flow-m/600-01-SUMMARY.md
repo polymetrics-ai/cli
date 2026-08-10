@@ -43,7 +43,7 @@ are zero: no legacy filename was promoted to proof.
 | Function kind | Applicable | Declared | Implemented | Fixture tested | Live tested | Complete |
 |---|---:|---:|---:|---:|---:|---:|
 | capability:catalog | 556 | 556 | 556 | 0 | 0 | 0 |
-| capability:cdc | 2 | 0 | 1 | 0 | 0 | 0 |
+| capability:cdc | 2 | 0 | 2 | 0 | 0 | 0 |
 | capability:check | 556 | 555 | 556 | 463 | 0 | 0 |
 | capability:dynamic_schema | 6 | 6 | 0 | 0 | 0 | 0 |
 | capability:query | 1 | 1 | 0 | 0 | 0 | 0 |
@@ -53,7 +53,7 @@ are zero: no legacy filename was promoted to proof.
 | operation:browser_open | 0 | 0 | 0 | 0 | 0 | 0 |
 | operation:composite | 1 | 1 | 0 | 0 | 0 | 0 |
 | operation:file_upload | 5 | 5 | 0 | 0 | 0 | 0 |
-| operation:graphql_mutation | 1 | 1 | 0 | 0 | 0 | 0 |
+| operation:graphql_mutation | 1 | 1 | 1 | 0 | 0 | 0 |
 | operation:graphql_query | 1 | 1 | 0 | 0 | 0 | 0 |
 | operation:local_file | 0 | 0 | 0 | 0 | 0 | 0 |
 | operation:local_git | 1 | 1 | 0 | 0 | 0 | 0 |
