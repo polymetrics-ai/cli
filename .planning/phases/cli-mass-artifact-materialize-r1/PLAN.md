@@ -115,3 +115,30 @@ correctly identifies the pre-existing production import of `golang.org/x/net/htm
 The only module change retained is that direct/indirect classification in `go.mod`; no module
 version, checksum, or dependency is added. It will be committed with this coherent green slice,
 then Verify is rerun from the committed baseline so `tidy-check` can validate the exact result.
+
+## Certify-timing budget calibration (2026-08-10)
+
+The captain approved a narrow quality-gate calibration for PR #3957 after a controlled
+main-versus-branch measurement. Scope is limited to `CERTIFY_TIMING_MAX_DURATION` in the
+Makefile, the PR body, and this GSD/TDD evidence; no test topology, connector declaration,
+runtime behavior, credentialed check, or no-mistakes gate changes. The 25 real harness calls and
+92 real CLI invocations are unchanged on both revisions.
+
+**Red:** the hosted Verify job reaches the real timing gate and fails at `421.290s` against the
+old `210s` cap. A same-host, precompiled, `-count=1` two-run comparison measures 2,060 versus
+13,534 endpoint-ledger entries (6.57x corpus growth) and 159.268s versus 295.117s mean test
+elapsed time (1.85x). The work grows substantially less than the corpus, so this is not a
+super-linear certify regression to optimize or hide.
+
+**Green plan:** raise only the cap from 3m30s to 8m (+4m30s / 129%). The 8m limit leaves 58.710s
+(13.9%) headroom over the observed hosted run while preserving the unchanged real-invocation
+contract. Run `make certify-timing` from the edited tree, then push and require the hosted Verify
+job to pass. Record the exact 6.57x/1.85x reasoning in the PR body so a future threshold change
+has a reproducible decision record.
+
+The lifecycle remains an inline/manual fallback: `scripts/gsd doctor` plus the resolved
+`discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` prompts
+are used, while compatible isolated GSD roles are unavailable and this lane must not spawn agents.
+Required skills used for this CI/test-performance slice are `golang-how-to`,
+`golang-continuous-integration`, `golang-testing`, and `golang-benchmark`. CLI help/manual/website
+parity is not applicable because no CLI surface, help, docs, or generated catalog changes.

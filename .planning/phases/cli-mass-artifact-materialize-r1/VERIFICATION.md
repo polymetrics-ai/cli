@@ -85,3 +85,14 @@ for Aha, CallRail, and Harvest lacks a coordination identity for their declared 
 the Xero runtime-ledger test expects absent report entries; Google Search Console's redaction test;
 and Amazon SQS's required-flag test. The remediation's script packages pass in that same full run.
 Those failures are recorded rather than changed by this slice.
+
+## Certify-timing budget calibration (2026-08-10)
+
+The approved 8m cap is locally green through the exact Make target:
+`make certify-timing` passes with 292.016s total test elapsed time and 308.762s total wall time.
+Its two targets remain intact: the certification harness reports 29.935s elapsed / 38.394s wall
+and the focused CLI route reports 262.081s elapsed / 270.368s wall. The in-process contracts
+report 25 real harness calls within the 25 ceiling and 92 real CLI invocations at the 92 ceiling.
+The changed bound is justified by the recorded 6.57x endpoint-ledger growth versus 1.85x actual
+test-time growth, not by a change to coverage or invocation topology. Hosted Verify remains the
+final matrix confirmation after the committed push.

@@ -18,3 +18,12 @@ the website generated-catalog search test assert the intended connector is prese
 depending on a stale rank bound. The `data:`/`vbscript:` issue is defense in depth today because
 the same-host and HTTPS gates reject it downstream, but the early filter must still be correctly
 closed. The parked no-mistakes gate is explicitly out of scope for this remediation.
+
+## Certify-timing budget decision (2026-08-10)
+
+The captain approved raising the certify cap only after the requested main-versus-branch
+measurement: the endpoint-ledger corpus grew from 2,060 to 13,534 entries (6.57x), while actual
+certify test elapsed time grew from 159.268s to 295.117s (1.85x). This is strongly sub-linear;
+raising the budget does not conceal a performance regression. The approved bound is 8m rather
+than 3m30s, and the exact figures plus rationale must be included in PR #3957's body. No product
+or connector-runtime decision is open.

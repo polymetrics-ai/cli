@@ -219,3 +219,19 @@
   module requirement, while the committed file marks it indirect. **Green:** retain only tidy's
   direct/indirect classification change, commit it with the loading repair, and rerun Verify from
   that committed baseline; no version or checksum changes are permitted.
+
+## PR #3957 certify-timing cap (2026-08-10)
+
+- **CERTIFY-TIMING-CORPUS-SCALING — Red:** the real hosted `make certify-timing` gate fails at
+  `421.290s` with `certify timing duration budget exceeded: observed 421.290s, allowed 210.000s`.
+  The fixed topology is still 25 real harness calls plus 92 real CLI invocations, so a larger
+  call count is not the cause. A controlled, precompiled, `-count=1` two-run comparison against
+  `main` measures 2,060 versus 13,534 endpoint-ledger entries (6.57x) and 159.268s versus
+  295.117s mean actual test elapsed time (1.85x). The time increase is sub-linear rather than a
+  hidden performance regression.
+- **Green:** set only `CERTIFY_TIMING_MAX_DURATION` from `3m30s` to `8m`; keep both invocation
+  ceilings and every timing target unchanged. `make certify-timing` must complete under the new
+  cap, and the pushed Verify job must pass. The PR body records exactly the 6.57x corpus and 1.85x
+  timing figures, the sub-linear conclusion, and the 8m (+4m30s / 129%) decision. The local
+  capped target passes at 292.016s package elapsed and 308.762s wall time, with 25/25 harness
+  and 92/92 CLI real-invocation contracts intact.
