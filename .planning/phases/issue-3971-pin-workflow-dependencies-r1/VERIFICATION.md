@@ -27,6 +27,11 @@
 - [x] Re-read alert #135 and inventory the other four open alerts after GitHub REST quota permitted: #134 at `verify.yml:81`, #133 at `release.yml:480`, #132 at `release.yml:422`, and #131 at `release.yml:415`; all are the same Scorecard `PinnedDependenciesID` rule and are covered by this same change.
 - [x] State alert closure honestly: #135 remains open on `main` at the pre-change commit `f96a47e801b89f25386c33951a53a93d1a4c7c8d`; it cannot close until this branch is pushed, merged, and Scorecard analyzes the default branch.
 
+## Post-rebase follow-up
+
+- [x] Rebases cleanly onto `origin/main` at `4df0b0416` after resolving the `Makefile` add/add target list by retaining both `github-parity-artifacts-check` and `pinned-build-dependencies-check`.
+- [x] Re-audit catches and fixes the two mutable refs newly introduced by #3970 in `.github/workflows/github-source-drift.yml`; no new Dockerfile or build-image manifest was introduced.
+
 ## Not applicable
 
 - CLI help, manual, and website documentation parity: no CLI surface or user-facing documentation changes.

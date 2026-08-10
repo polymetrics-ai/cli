@@ -6,6 +6,7 @@
 - Pinned `node:26-alpine` in `website/Dockerfile` and `postgres:17-alpine` in the website CI service to their current manifest-list digests.
 - Added `scripts/tests/pinned-build-dependencies.sh` and wired it into `make release-workflow-check` so mutable action/image refs fail locally and in `make verify`.
 - Created child issue [#3986](https://github.com/polymetrics-ai/cli/issues/3986) and attached it to GitHub parity parent #3971 after duplicate searches found no equivalent issue.
+- After #3970 merged, rebased onto current `origin/main` and pinned its newly introduced `github-source-drift.yml` checkout and setup-node actions to the same captured `v7`/`v6` commits.
 
 ## Alert inventory
 
