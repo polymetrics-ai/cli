@@ -81,11 +81,11 @@ the same base constraint in the no-mistakes intent. At most five combined correc
    because app dispatch looked only for individual roles. The recorded RED test
    reproduced the legacy/no-descriptor fallback. The correction routes any
    authored descriptor into closed preflight, preserves #3810 semantics, and
-   remains inside this child branch; its correction commit must reference
-   `Refs #4021`, `Refs #3864`, and `Refs #3862`.
+   remains inside this child branch. Commit `9775f420c` references `Refs #4021`,
+   `Refs #3864`, and `Refs #3862`.
 2. **#4023 — normalized generic executor identifiers (loop 2/5).** A distinct
    inline review found that `generic-http` bypassed the same generic-executor
    rejection applied to `generic_http`. Its RED/GREEN test stays exclusively in
    `internal/connectors`; #4021 remains scoped to app routing. This correction
-   normalizes hyphen spelling before closed generic-identifier rejection and its
-   correction commit must reference `Refs #4023`, `Refs #3864`, and `Refs #3862`.
+   normalizes hyphen spelling before closed generic-identifier rejection. Commit
+   `9775f420c` references `Refs #4023`, `Refs #3864`, and `Refs #3862`.

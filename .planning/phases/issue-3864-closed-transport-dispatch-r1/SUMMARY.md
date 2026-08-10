@@ -59,6 +59,7 @@ coverage:
 - Recorded two independently scoped review corrections: [#4021](https://github.com/polymetrics-ai/cli/issues/4021)
   for empty authored descriptors reaching preflight, and
   [#4023](https://github.com/polymetrics-ai/cli/issues/4023) for normalized generic executor IDs.
+  Commit `9775f420c` carries `Refs #3864`, `Refs #3862`, `Refs #4021`, and `Refs #4023`.
 
 ## Manual-GSD fallback
 
@@ -72,5 +73,5 @@ is in `TDD-LEDGER.md`; local verification is in `VERIFICATION.md`; review dispos
 
 This summary records fake-backed dispatch and local behavior only. It does not assert accepted
 #3810 conformance, a real provider/database leg, live credentials, automatic Shepherd acceptance,
-or certification. The required child delivery pipeline remains pending until the scoped commit,
-push, stacked PR, and CI gates actually complete.
+or certification. The required child delivery pipeline remains pending until the committed child
+branch is pushed, has a stacked PR, and its CI gates actually complete.

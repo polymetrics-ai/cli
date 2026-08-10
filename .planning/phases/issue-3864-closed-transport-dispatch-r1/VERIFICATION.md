@@ -53,8 +53,8 @@ GREEN command evidence is in T11 of `TDD-LEDGER.md`.
 
 Correction loop 2/5 is tracked independently in [#4023](https://github.com/polymetrics-ai/cli/issues/4023):
 the closed descriptor must reject `generic-http` just as it rejects `generic_http`. Its RED and
-GREEN command evidence is in T13 of `TDD-LEDGER.md`. The shared correction commit will reference
-#4021, #4023, #3864, and #3862 while retaining each issue's bounded scope.
+GREEN command evidence is in T13 of `TDD-LEDGER.md`. Shared correction commit `9775f420c`
+references #4021, #4023, #3864, and #3862 while retaining each issue's bounded scope.
 
 This verification can prove only fake-backed dispatch and metadata surfaces. It cannot
 truthfully assert executable #3810 conformance, a real API/database transport, a live

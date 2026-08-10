@@ -20,6 +20,7 @@
 
 ## Remaining delivery evidence
 
-The child correction/implementation commit, complete no-mistakes pipeline, stacked PR creation,
-automated review coverage, and GitHub CI status are still pending. Their actual results must be
-added here and to `VERIFICATION.md` before this work can be reported as checks-green.
+The correction/implementation commit is `9775f420c`. The complete no-mistakes pipeline, stacked
+PR creation, automated review coverage, and GitHub CI status are still pending. Their actual
+results must be added here and to `VERIFICATION.md` before this work can be reported as
+checks-green.
