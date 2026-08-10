@@ -694,6 +694,46 @@ func TestDriverRegistryRejectsSharedNativeContractAcrossWarehouseLegs(t *testing
 	}
 }
 
+func TestDriverRegistryRejectsCrossDriverNativeContractReuse(t *testing.T) {
+	definition := loadTestDefinition(t, definitionWithAdmittedMode(validDefinitionJSON))
+	secondDefinition := loadTestDefinition(t, strings.Replace(
+		definitionWithAdmittedMode(validDefinitionJSON),
+		`"id": "postgres"`,
+		`"id": "second-driver"`,
+		1,
+	))
+	contract := nativeContract("postgres-wire", "fixture-cross-driver-warehouse-leg", "fixture-cross-driver-warehouse-leg-v1")
+	inbound := testInboundCommand(t, contract)
+	outbound := testOutboundCommand(t, contract)
+	registry, err := database.NewDriverRegistry(admittedDriver{
+		declaredDriver: declaredDriver{descriptor: postgresDriverDescriptor()},
+		admissions:     []database.DatabaseNativeAdmission{testInboundNativeAdmission(t, contract)},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := registry.Admit(context.Background(), definition, inbound); err != nil {
+		t.Fatalf("first-driver inbound admission error = %v", err)
+	}
+	if err := registry.Register(admittedDriver{
+		declaredDriver: declaredDriver{descriptor: database.DriverDescriptor{ID: "second-driver", Protocol: "postgres-wire", APIVersion: 1}},
+		admissions:     []database.DatabaseNativeAdmission{testOutboundNativeAdmission(t, contract)},
+	}); !errors.Is(err, database.ErrNativeDriverAdmissionLegConflict) {
+		t.Fatalf("Register(cross-driver shared admission) error = %v, want ErrNativeDriverAdmissionLegConflict", err)
+	}
+	if _, err := registry.Admit(context.Background(), secondDefinition, outbound); !errors.Is(err, database.ErrDriverNotRegistered) {
+		t.Fatalf("second-driver outbound admission after rejected registration error = %v, want ErrDriverNotRegistered", err)
+	}
+
+	distinctContract := nativeContract("postgres-wire", "fixture-distinct-warehouse-leg", "fixture-distinct-warehouse-leg-v1")
+	if err := registry.Register(admittedDriver{
+		declaredDriver: declaredDriver{descriptor: database.DriverDescriptor{ID: "distinct-driver", Protocol: "postgres-wire", APIVersion: 1}},
+		admissions:     []database.DatabaseNativeAdmission{testOutboundNativeAdmission(t, distinctContract)},
+	}); err != nil {
+		t.Fatalf("Register(distinct cross-driver admission) error = %v", err)
+	}
+}
+
 func TestDatabaseLoadAndReadPlanHonorCancellation(t *testing.T) {
 	cancelled, cancel := context.WithCancel(context.Background())
 	cancel()
