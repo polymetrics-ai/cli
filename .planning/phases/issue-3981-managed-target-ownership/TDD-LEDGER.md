@@ -13,7 +13,10 @@
 
 ## Command record
 
-**RED (pending):** `go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'`
+**RED:** `go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'`
+failed to build because the deliberately absent `TargetOwner`, managed-target
+ref/control/schema, plan, observation, and provisioning API were referenced.
+The exact output is retained at `traces/managed-target-provisioning-red.txt`.
 
 **GREEN (pending):** the same focused test, then `-race`, package, affected
 warehouse/synccontract/application/CLI tests, static/build, and individual repository gates.
