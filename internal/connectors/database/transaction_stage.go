@@ -671,6 +671,10 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 		s.mu.Unlock()
 		return TransactionReceipt{}, ErrTransactionStageNotFound
 	}
+	if err := s.missingReservedControlLocked(entry.manifest); err != nil {
+		s.mu.Unlock()
+		return TransactionReceipt{}, err
+	}
 	if entry.status == stageStatusRecoveryHeld {
 		s.mu.Unlock()
 		return TransactionReceipt{}, ErrTransactionStageRecoveryRequired
@@ -834,6 +838,9 @@ func (s *CommittedTransactionStage) AdmitRecoveredTransaction(ctx context.Contex
 	if !exists {
 		return ErrTransactionStageNotFound
 	}
+	if err := s.missingReservedControlLocked(entry.manifest); err != nil {
+		return err
+	}
 	if entry.status == stageStatusSealed {
 		return nil
 	}
@@ -922,10 +929,34 @@ func (s *CommittedTransactionStage) reserveControlLocked(manifest transactionSta
 	return nil
 }
 
+func (s *CommittedTransactionStage) matchingControlLocked(manifest transactionStageManifest) (*transactionStageControl, bool) {
+	control, exists := s.controls[transactionStageControlKey(manifest.TransactionKey, manifest.instanceID())]
+	if !exists || control.transactionKey != manifest.TransactionKey || control.instanceID != manifest.instanceID() {
+		return nil, false
+	}
+	return control, true
+}
+
+func (s *CommittedTransactionStage) hasReservedControlLocked(manifest transactionStageManifest) bool {
+	control, exists := s.matchingControlLocked(manifest)
+	return exists && control.state == transactionStageControlReserved
+}
+
+func (s *CommittedTransactionStage) missingReservedControlLocked(manifest transactionStageManifest) error {
+	if s.hasReservedControlLocked(manifest) {
+		return nil
+	}
+	err := newTransactionStageCleanupError("verify transaction stage control reservation", errors.New("retained transaction stage has no exact reserved control"))
+	if s.cleanupErr == nil {
+		s.cleanupErr = err
+	}
+	return s.cleanupErr
+}
+
 func (s *CommittedTransactionStage) setControlState(manifest transactionStageManifest, state transactionStageControlState) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	if control, exists := s.controls[transactionStageControlKey(manifest.TransactionKey, manifest.instanceID())]; exists {
+	if control, exists := s.matchingControlLocked(manifest); exists {
 		control.state = state
 	}
 }
@@ -1271,6 +1302,14 @@ func (s *CommittedTransactionStage) failAppend(ctx context.Context, key string, 
 
 func (s *CommittedTransactionStage) discardEntry(ctx context.Context, key string, entry *transactionStageEntry, cause error) error {
 	cleanupContext := transactionStageCleanupContext(ctx)
+	if err := s.prepareDiscardControl(entry.manifest); err != nil {
+		s.mu.Lock()
+		if s.entries[key] == entry {
+			entry.status = stageStatusDiscardFailed
+		}
+		s.mu.Unlock()
+		return withTransactionStageCleanupError(cause, err)
+	}
 	intentOutcome, intentErr := s.persistDiscardIntent(cleanupContext, entry.manifest)
 	cleanupOutcome, cleanupErr := s.removeStageDirectoryWithOutcome(key)
 	retirementOutcome := transactionStageDurabilityNotApplied
@@ -1512,10 +1551,81 @@ func (s *CommittedTransactionStage) readManifest(key string) (transactionStageMa
 	return manifest, nil
 }
 
+func (s *CommittedTransactionStage) prepareDiscardControl(manifest transactionStageManifest) error {
+	s.mu.Lock()
+	control, exists := s.matchingControlLocked(manifest)
+	if !exists {
+		err := s.missingReservedControlLocked(manifest)
+		s.mu.Unlock()
+		return err
+	}
+	state := control.state
+	s.mu.Unlock()
+	if state != transactionStageControlTemporary {
+		return nil
+	}
+	if err := s.reconcileDiscardControlTemporary(manifest); err != nil {
+		cleanupErr := newTransactionStageCleanupError("reconcile incomplete discard control temporary", err)
+		s.poisonRoot(cleanupErr)
+		return cleanupErr
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	control, exists = s.matchingControlLocked(manifest)
+	if !exists {
+		return s.missingReservedControlLocked(manifest)
+	}
+	if control.state == transactionStageControlTemporary {
+		control.state = transactionStageControlReserved
+	}
+	return nil
+}
+
+func (s *CommittedTransactionStage) reconcileDiscardControlTemporary(manifest transactionStageManifest) error {
+	entries, err := s.storage.readDir(s.discardsDirectory())
+	if err != nil {
+		return fmt.Errorf("read discard control directory: %w", err)
+	}
+	prefix := ".discard-" + manifest.TransactionKey + "-" + manifest.instanceID() + ".tmp-"
+	var errs []error
+	for _, entry := range entries {
+		name := entry.Name()
+		if !strings.HasPrefix(name, prefix) || !isOwnedTransactionStageDiscardTemporary(name) {
+			continue
+		}
+		if err := s.storage.remove(filepath.Join(s.discardsDirectory(), name)); err != nil && !errors.Is(err, fs.ErrNotExist) {
+			errs = append(errs, fmt.Errorf("remove incomplete discard control %q: %w", name, err))
+		}
+	}
+	if err := s.storage.syncDirectory(s.discardsDirectory()); err != nil {
+		errs = append(errs, fmt.Errorf("sync discard control temporary cleanup: %w", err))
+	}
+	if len(errs) != 0 {
+		return errors.Join(errs...)
+	}
+	return nil
+}
+
 func (s *CommittedTransactionStage) persistDiscardIntent(ctx context.Context, manifest transactionStageManifest) (transactionStageDurabilityOutcome, error) {
 	if err := requireTransactionStageContext(ctx); err != nil {
 		return transactionStageDurabilityNotApplied, err
 	}
+	s.mu.Lock()
+	control, exists := s.matchingControlLocked(manifest)
+	if !exists {
+		err := s.missingReservedControlLocked(manifest)
+		s.mu.Unlock()
+		return transactionStageDurabilityIndeterminate, err
+	}
+	if control.state == transactionStageControlTemporary {
+		err := newTransactionStageCleanupError("persist transaction discard intent", errors.New("discard control temporary cleanup remains incomplete"))
+		if s.cleanupErr == nil {
+			s.cleanupErr = err
+		}
+		s.mu.Unlock()
+		return transactionStageDurabilityIndeterminate, err
+	}
+	s.mu.Unlock()
 	if discarded, err := s.readDiscardIntent(manifest); err != nil {
 		return transactionStageDurabilityIndeterminate, err
 	} else if discarded {
@@ -1551,9 +1661,11 @@ func (s *CommittedTransactionStage) persistDiscardIntent(ctx context.Context, ma
 		s.setControlState(manifest, transactionStageControlReserved)
 		return transactionStageDurabilityNotApplied, errors.New("transaction discard control exceeds maximum encoded size")
 	}
-	outcome, err := s.atomicWriteWithOutcome(ctx, s.discardIntentPath(intent.TransactionKey, intent.InstanceID), payload, false, false, transactionStageDiscardControlTemporaryPattern(intent.TransactionKey, intent.InstanceID))
+	outcome, temporaryUnresolved, err := s.atomicWriteWithOutcome(ctx, s.discardIntentPath(intent.TransactionKey, intent.InstanceID), payload, false, false, transactionStageDiscardControlTemporaryPattern(intent.TransactionKey, intent.InstanceID))
 	if outcome == transactionStageDurabilityNotApplied {
 		s.setControlState(manifest, transactionStageControlReserved)
+	} else if temporaryUnresolved {
+		s.setControlState(manifest, transactionStageControlTemporary)
 	} else {
 		s.setControlState(manifest, transactionStageControlFinal)
 	}
@@ -1562,6 +1674,9 @@ func (s *CommittedTransactionStage) persistDiscardIntent(ctx context.Context, ma
 			return outcome, fmt.Errorf("persist transaction discard intent: %w", err)
 		}
 		return outcome, nil
+	}
+	if outcome != transactionStageDurabilityNotApplied || temporaryUnresolved {
+		return transactionStageDurabilityIndeterminate, fmt.Errorf("reconcile existing transaction discard intent temporary: %w", err)
 	}
 	if discarded, readErr := s.readDiscardIntent(manifest); readErr != nil {
 		return transactionStageDurabilityIndeterminate, readErr
@@ -1714,14 +1829,53 @@ func (s *CommittedTransactionStage) reconcileDiscardControls(ctx context.Context
 			return err
 		}
 	}
-	for _, control := range s.controls {
-		if control.state != transactionStageControlReserved {
-			err := newTransactionStageCleanupError("reconcile discard controls", errors.New("discard control retirement remains incomplete"))
-			s.cleanupErr = err
-			return err
-		}
+	if err := s.reconcileRetainedControlReservationsLocked(); err != nil {
+		s.cleanupErr = err
+		return err
 	}
 	s.cleanupErr = nil
+	return nil
+}
+
+func (s *CommittedTransactionStage) reconcileRetainedControlReservationsLocked() *TransactionStageCleanupError {
+	keys := make([]string, 0, len(s.entries))
+	for key := range s.entries {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		entry := s.entries[key]
+		if _, receiptBacked := s.receipts[key]; receiptBacked {
+			continue
+		}
+		if _, exists := s.matchingControlLocked(entry.manifest); !exists {
+			if err := s.reserveControlLocked(entry.manifest, transactionStageControlReserved); err != nil {
+				return newTransactionStageCleanupError("reserve retained recovered transaction control", err)
+			}
+		}
+		if !s.hasReservedControlLocked(entry.manifest) {
+			return newTransactionStageCleanupError("verify retained recovered transaction control", errors.New("retained receipt-less transaction has no exact reserved control"))
+		}
+	}
+	if int64(len(s.controls)) > s.limits.MaxStagedTransactions {
+		return newTransactionStageCleanupError("verify transaction stage control capacity", &TransactionStageLimitExceeded{
+			Limit:    TransactionStageLimitStagedTransactions,
+			Maximum:  s.limits.MaxStagedTransactions,
+			Observed: int64(len(s.controls)),
+		})
+	}
+	for controlKey, control := range s.controls {
+		if control.state != transactionStageControlReserved {
+			return newTransactionStageCleanupError("reconcile discard controls", errors.New("discard control retirement remains incomplete"))
+		}
+		if controlKey != transactionStageControlKey(control.transactionKey, control.instanceID) {
+			return newTransactionStageCleanupError("verify transaction stage control reservation", errors.New("control key does not match its generation"))
+		}
+		entry, exists := s.entries[control.transactionKey]
+		if !exists || entry.manifest.instanceID() != control.instanceID {
+			return newTransactionStageCleanupError("verify transaction stage control reservation", errors.New("reserved control does not match a retained transaction generation"))
+		}
+	}
 	return nil
 }
 
@@ -1861,73 +2015,102 @@ func sortedTransactionStageDiscardIntents(intents map[string]transactionStageDis
 }
 
 func (s *CommittedTransactionStage) atomicWrite(ctx context.Context, path string, payload []byte, replace bool) error {
-	_, err := s.atomicWriteWithOutcome(ctx, path, payload, replace, true, ".stage.tmp-*")
+	_, _, err := s.atomicWriteWithOutcome(ctx, path, payload, replace, true, ".stage.tmp-*")
 	return err
 }
 
-func (s *CommittedTransactionStage) atomicWriteWithOutcome(ctx context.Context, path string, payload []byte, replace, removeRenamedOnError bool, temporaryPattern string) (outcome transactionStageDurabilityOutcome, err error) {
+func (s *CommittedTransactionStage) atomicWriteWithOutcome(ctx context.Context, path string, payload []byte, replace, removeRenamedOnError bool, temporaryPattern string) (outcome transactionStageDurabilityOutcome, temporaryUnresolved bool, err error) {
 	outcome = transactionStageDurabilityNotApplied
 	if err := requireTransactionStageContext(ctx); err != nil {
-		return outcome, err
+		return outcome, false, err
 	}
 	directory := filepath.Dir(path)
 	if err := s.storage.mkdirAll(directory, 0o700); err != nil {
-		return outcome, fmt.Errorf("create transaction stage state directory: %w", err)
+		return outcome, false, fmt.Errorf("create transaction stage state directory: %w", err)
 	}
 	temporary, err := s.storage.createTemp(directory, temporaryPattern)
 	if err != nil {
-		return outcome, fmt.Errorf("create temporary transaction stage state: %w", err)
+		return outcome, false, fmt.Errorf("create temporary transaction stage state: %w", err)
 	}
 	temporaryPath := temporary.Name()
 	closed := false
 	renamed := false
+	temporaryUnresolved = true
 	defer func() {
-		if !closed {
-			_ = temporary.Close()
+		if err == nil {
+			return
 		}
-		if err != nil {
-			_ = s.storage.remove(temporaryPath)
-			if renamed && removeRenamedOnError {
-				_ = s.storage.remove(path)
-				_ = s.storage.syncDirectory(directory)
+		var cleanupErrs []error
+		if !closed {
+			if closeErr := temporary.Close(); closeErr != nil {
+				cleanupErrs = append(cleanupErrs, fmt.Errorf("close temporary transaction stage state: %w", closeErr))
+			} else {
+				closed = true
 			}
+		}
+		if renamed {
+			temporaryUnresolved = false
+			if removeRenamedOnError {
+				if removeErr := s.storage.remove(path); removeErr != nil && !errors.Is(removeErr, fs.ErrNotExist) {
+					cleanupErrs = append(cleanupErrs, fmt.Errorf("remove renamed transaction stage state: %w", removeErr))
+				}
+				if syncErr := s.storage.syncDirectory(directory); syncErr != nil {
+					cleanupErrs = append(cleanupErrs, fmt.Errorf("sync renamed transaction stage state cleanup: %w", syncErr))
+				}
+			}
+		} else {
+			if removeErr := s.storage.remove(temporaryPath); removeErr != nil && !errors.Is(removeErr, fs.ErrNotExist) {
+				cleanupErrs = append(cleanupErrs, fmt.Errorf("remove temporary transaction stage state: %w", removeErr))
+			}
+			if syncErr := s.storage.syncDirectory(directory); syncErr != nil {
+				cleanupErrs = append(cleanupErrs, fmt.Errorf("sync temporary transaction stage state cleanup: %w", syncErr))
+			}
+			if len(cleanupErrs) == 0 {
+				temporaryUnresolved = false
+			} else {
+				outcome = transactionStageDurabilityIndeterminate
+			}
+		}
+		if len(cleanupErrs) != 0 {
+			err = errors.Join(err, fmt.Errorf("reconcile temporary transaction stage state: %w", errors.Join(cleanupErrs...)))
 		}
 	}()
 	if !replace {
 		if _, readErr := s.storage.readFile(path); readErr == nil {
-			return outcome, ErrTransactionStageAlreadyCommitted
+			return outcome, temporaryUnresolved, ErrTransactionStageAlreadyCommitted
 		} else if !errors.Is(readErr, fs.ErrNotExist) {
-			return outcome, fmt.Errorf("inspect transaction stage state: %w", readErr)
+			return outcome, temporaryUnresolved, fmt.Errorf("inspect transaction stage state: %w", readErr)
 		}
 	}
 	if err := writeTransactionStageBytes(temporary, payload); err != nil {
-		return outcome, fmt.Errorf("write temporary transaction stage state: %w", err)
+		return outcome, temporaryUnresolved, fmt.Errorf("write temporary transaction stage state: %w", err)
 	}
 	if err := requireTransactionStageContext(ctx); err != nil {
-		return outcome, err
+		return outcome, temporaryUnresolved, err
 	}
 	if err := temporary.Sync(); err != nil {
-		return outcome, fmt.Errorf("sync temporary transaction stage state: %w", err)
+		return outcome, temporaryUnresolved, fmt.Errorf("sync temporary transaction stage state: %w", err)
 	}
 	if err := temporary.Close(); err != nil {
-		return outcome, fmt.Errorf("close temporary transaction stage state: %w", err)
+		return outcome, temporaryUnresolved, fmt.Errorf("close temporary transaction stage state: %w", err)
 	}
 	closed = true
 	if err := requireTransactionStageContext(ctx); err != nil {
-		return outcome, err
+		return outcome, temporaryUnresolved, err
 	}
 	if err := s.storage.rename(temporaryPath, path); err != nil {
-		return outcome, fmt.Errorf("rename durable transaction stage state: %w", err)
+		return outcome, temporaryUnresolved, fmt.Errorf("rename durable transaction stage state: %w", err)
 	}
 	renamed = true
+	temporaryUnresolved = false
 	outcome = transactionStageDurabilityIndeterminate
 	if err := requireTransactionStageContext(ctx); err != nil {
-		return outcome, err
+		return outcome, temporaryUnresolved, err
 	}
 	if err := s.storage.syncDirectory(directory); err != nil {
-		return outcome, fmt.Errorf("sync transaction stage state directory: %w", err)
+		return outcome, temporaryUnresolved, fmt.Errorf("sync transaction stage state directory: %w", err)
 	}
-	return transactionStageDurabilityDurable, nil
+	return transactionStageDurabilityDurable, false, nil
 }
 
 func (m transactionStageManifest) validate() error {
