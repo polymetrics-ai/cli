@@ -17,12 +17,12 @@ status: pending
 
 ## Required focused matrix
 
-- [ ] Exact post-checkpoint/pre-completion two-App interleaving.
-- [ ] Returned/durable identity and reopened terminal truth.
+- [x] Exact post-checkpoint/pre-completion two-App interleaving in all seven modes.
+- [x] Returned/durable identity and reopened terminal truth for the all-seven-mode main witness.
 - [ ] Target running/exact-checkpoint eligibility and fail-closed changed/missing/terminal targets.
 - [ ] Winner/acknowledged checkpoint and unrelated state preservation.
 - [ ] Cancellation after acknowledgement.
-- [ ] All seven canonical modes.
+- [x] All seven canonical modes.
 - [ ] Focused race detector.
 - [ ] #4046 typed-conflict and R7/R8 regression suite.
 

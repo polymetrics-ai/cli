@@ -1276,16 +1276,24 @@ func assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t *testing
 
 	close(releaseCompletion)
 	waitForTransportSignal(t, done)
-	if !errors.Is(runErr, errStateRevisionConflict) {
-		t.Fatalf("RunETL() error = %v, want ordinary revision conflict after unrelated post-checkpoint write", runErr)
+	if runErr != nil {
+		t.Fatalf("RunETL() = %v, want acknowledged completion after unrelated post-checkpoint write", runErr)
 	}
 
 	reopened, err := Open(fixture.app.root)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if current := reopened.state.StreamStates[stateKey]; !transportStreamStateEqual(current, acknowledged) {
-		t.Fatalf("acknowledged stream state changed before terminal completion: got %#v, want %#v", current, acknowledged)
+	completedState := reopened.state.StreamStates[stateKey]
+	if completedState.Connection != acknowledged.Connection ||
+		completedState.Stream != acknowledged.Stream ||
+		completedState.GenerationID != acknowledged.GenerationID ||
+		!completedState.UpdatedAt.Equal(acknowledged.UpdatedAt) ||
+		!transportCheckpointEqual(completedState.Checkpoint, acknowledged.Checkpoint) {
+		t.Fatalf("acknowledged checkpoint changed during terminal completion: got %#v, want checkpoint-bearing state %#v", completedState, acknowledged)
+	}
+	if completedState.LastSuccessfulRunID != runID || completedState.RecordsLoaded != 1 {
+		t.Fatalf("completed stream metadata = %#v, want run %q with one loaded record", completedState, runID)
 	}
 	unrelated := reopened.state.StreamStates["unrelated:records"]
 	if unrelated.GenerationID != 8 || unrelated.LastSuccessfulRunID != "unrelated_run" || unrelated.RecordsLoaded != 13 || !unrelated.UpdatedAt.Equal(unrelatedUpdatedAt) {

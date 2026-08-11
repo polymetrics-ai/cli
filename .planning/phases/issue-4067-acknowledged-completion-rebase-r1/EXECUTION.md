@@ -1,6 +1,6 @@
 # #4067 execution record
 
-**Status:** RED recorded — no production mutation has occurred.
+**Status:** GREEN checkpoint recorded — focused expansion remains pending.
 
 ## TDD gate
 
@@ -11,8 +11,8 @@ The first execution action is a behavioral RED in `internal/app` against the rea
 | Checkpoint | Required evidence | Status |
 |---|---|---|
 | Planning | #4067 issue/readback, manual GSD context/plan/TDD ledger, clean rejected baseline custody | Complete before this commit |
-| RED | Focused test, non-zero exit due to durable symptom, test-only commit | Observed; commit pending |
-| GREEN | Minimal completion-boundary implementation and same test passing | Pending |
+| RED | Focused test, non-zero exit due to durable symptom, test-only commit | Committed in `5db500fad` |
+| GREEN | Minimal completion-boundary implementation and same test passing | Observed; commit pending |
 | Focused expansion | all modes, reopen, cancellation, fail-closed eligibility, race, #4046/R7/R8 | Pending |
 | Generated remediation | canonical generator commands and candidate-owned diff only | Pending |
 | Heavy validation | only after required user-facing window notification | Pending |
@@ -25,3 +25,11 @@ The first execution action is a behavioral RED in `internal/app` against the rea
 - Fixture: a source-executor test seam pauses only after the real checkpoint callback has returned. A second App then persists unrelated stream/checkpoint/run data; release lets the original source report exhaustion and reach ordinary `completeRun`.
 - Result: `full_overwrite`, `full_append`, `incremental_append`, `incremental_upsert`, `incremental_dedupe`, `incremental_dedupe_history`, and `change_capture` each retained the acknowledged target stream and unrelated writer first, then failed with `RunETL returned zero run`, durable target status `running`, and a zero terminal timestamp. The test also required `errors.Is(runErr, errStateRevisionConflict)`.
 - Boundary: this checkpoint includes only `internal/app/transport_dispatch_test.go` and planning evidence. `internal/app/app.go` remains untouched until the RED commit is made.
+
+## GREEN — strict acknowledged-target completion
+
+- Command: `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForAllModes$' -v`
+- Exit: `0`
+- Production change: the closed transport `RunETL` branch captures the exact stream state persisted by its own acknowledged checkpoint. On a later whole-state revision mismatch, `completeRun` may use latest locked state only when that exact target stream survives and the target run remains `running`.
+- Result: every canonical mode returned and durably reopened the matching `completed` run. The target checkpoint's connection, stream, generation, timestamp, and opaque checkpoint stayed unchanged; only its own final run metadata advanced. The unrelated stream/checkpoint/run survived unchanged.
+- State-store outcome: the new rebase path returns a terminal identity only after a successful or may-have-committed terminal write; definite non-commit still returns `Run{}`. Focused outcome tests remain pending.

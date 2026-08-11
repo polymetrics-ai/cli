@@ -1065,7 +1065,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		if err != nil {
 			return a.failRun(runID, err)
 		}
-		return a.completeRun(runID, result)
+		return a.completeAcknowledgedTransportRun(runID, result)
 	}
 	if mode.IsContractMode() {
 		return a.failRun(runID, &synccontract.ModeNotExecutableError{
@@ -1235,20 +1235,54 @@ func (a *App) beginRun(run Run) (Run, error) {
 	return run, nil
 }
 
+type acknowledgedTransportCompletion struct {
+	key   string
+	state StreamState
+}
+
+func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecutionResult) (Run, error) {
+	if result.PendingStreamState == nil {
+		return a.completeRun(runID, result)
+	}
+	acknowledged, present := a.state.StreamStates[result.PendingStreamState.Key]
+	if !present {
+		return a.completeRun(runID, result)
+	}
+	return a.completeRunWithAcknowledgedTransportState(runID, result, &acknowledgedTransportCompletion{
+		key:   result.PendingStreamState.Key,
+		state: cloneStreamState(acknowledged),
+	})
+}
+
 func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
+	return a.completeRunWithAcknowledgedTransportState(runID, result, nil)
+}
+
+func (a *App) completeRunWithAcknowledgedTransportState(runID string, result etlExecutionResult, acknowledged *acknowledgedTransportCompletion) (Run, error) {
 	if result.PendingStreamState == nil {
 		return Run{}, errors.New("completed ETL run is missing pending stream state")
 	}
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
-	updated, err := a.updateState(func(current state) (state, error) {
-		if current.Revision != expectedRevision {
+	transitionedInCallback := false
+	updated, persistErr := a.updateState(func(current state) (state, error) {
+		rebased := current.Revision != expectedRevision
+		if rebased && acknowledged == nil {
 			return current, errStateRevisionConflict
+		}
+		if rebased {
+			currentStreamState, present := current.StreamStates[acknowledged.key]
+			if !present || !transportStreamStateEqual(currentStreamState, acknowledged.state) {
+				return current, fmt.Errorf("acknowledged transport stream state changed before completion: %w", errStateRevisionConflict)
+			}
 		}
 		found := false
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
+			}
+			if rebased && current.Runs[i].Status != "running" {
+				return current, fmt.Errorf("acknowledged transport run %q has status %q, want running before completion: %w", runID, current.Runs[i].Status, errStateRevisionConflict)
 			}
 			current.Runs[i].Status = "completed"
 			current.Runs[i].RecordsRead = result.RecordsRead
@@ -1259,6 +1293,7 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
 			current.Runs[i].CompletedAt = completedAt
 			found = true
+			transitionedInCallback = true
 			break
 		}
 		if !found {
@@ -1274,8 +1309,15 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 		current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
 		return current, nil
 	})
-	if err != nil {
-		return Run{}, err
+	if persistErr != nil {
+		if acknowledged != nil && transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
+			for _, run := range updated.Runs {
+				if run.ID == runID {
+					return run, persistErr
+				}
+			}
+		}
+		return Run{}, persistErr
 	}
 	for _, run := range updated.Runs {
 		if run.ID == runID {
