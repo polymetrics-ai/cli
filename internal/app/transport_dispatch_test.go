@@ -660,12 +660,13 @@ func TestFailRunTransportConflictPreservesLatestConcurrentState(t *testing.T) {
 	winnerCheckpoint := appTransportCheckpoint(fixture.source, credential, "records")
 	winnerCheckpoint.Position.Primary = synccontract.OpaqueToken{0xff, 0x00}
 	winnerCheckpoint.Position.TieBreaker = synccontract.OpaqueToken{0xff, 0x00}
+	stateKey := streamStateKey(fixture.connection, "records")
 	unrelatedUpdatedAt := time.Unix(11, 0).UTC()
 	if _, err := writer.updateState(func(current state) (state, error) {
 		if current.StreamStates == nil {
 			current.StreamStates = map[string]StreamState{}
 		}
-		current.StreamStates[streamStateKey(fixture.connection, "records")] = StreamState{
+		current.StreamStates[stateKey] = StreamState{
 			Connection:          fixture.connection,
 			Stream:              "records",
 			Checkpoint:          &winnerCheckpoint,
@@ -673,6 +674,25 @@ func TestFailRunTransportConflictPreservesLatestConcurrentState(t *testing.T) {
 			LastSuccessfulRunID: "run_winner",
 			RecordsLoaded:       1,
 			UpdatedAt:           unrelatedUpdatedAt,
+		}
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	_, conflictErr := fixture.app.updateState(func(current state) (state, error) {
+		if _, present := current.StreamStates[stateKey]; present {
+			return current, errTransportStreamStateConflict
+		}
+		return current, fmt.Errorf("stale conflict fixture did not observe winner stream state")
+	})
+	if !errors.Is(conflictErr, errTransportStreamStateConflict) {
+		t.Fatalf("stale checkpoint update error = %v, want typed transport state conflict", conflictErr)
+	}
+
+	if _, err := writer.updateState(func(current state) (state, error) {
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
 		}
 		current.StreamStates["unrelated:records"] = StreamState{
 			Connection:          "unrelated",
@@ -700,7 +720,7 @@ func TestFailRunTransportConflictPreservesLatestConcurrentState(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	returned, err := fixture.app.failRun(loser.ID, fmt.Errorf("stale checkpoint: %w", errTransportStreamStateConflict))
+	returned, err := fixture.app.failRun(loser.ID, conflictErr)
 	if !errors.Is(err, errTransportStreamStateConflict) {
 		t.Fatalf("failRun() error = %v, want typed transport state conflict", err)
 	}
@@ -712,7 +732,7 @@ func TestFailRunTransportConflictPreservesLatestConcurrentState(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	winner := reopened.state.StreamStates[streamStateKey(fixture.connection, "records")]
+	winner := reopened.state.StreamStates[stateKey]
 	if winner.Checkpoint == nil || !bytes.Equal(winner.Checkpoint.Position.Primary, []byte{0xff, 0x00}) || winner.LastSuccessfulRunID != "run_winner" {
 		t.Fatalf("winner state changed during typed finalization: %#v", winner)
 	}

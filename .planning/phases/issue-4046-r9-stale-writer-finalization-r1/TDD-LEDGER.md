@@ -8,11 +8,11 @@
 |---|---|---|---|---|
 | R9-T1 | A stale CAS loser is observably returned as zero/non-terminal and durably reopened as `running` at the pinned base while winner and unrelated state are preserved. | **Red:** observed with `go test -json -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRun$'` (exit 1): zero returned loser, durable `running` loser, and zero completion timestamp; typed conflict and winner/unrelated assertions passed first. | **Green:** observed with `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRun$' -v` (exit 0): non-zero failed returned run matched durable state and retained the typed conflict. | Green |
 | R9-T2 | Only a typed `errTransportStreamStateConflict` rebases terminalization to current locked state; ordinary failures retain the revision guard. | **Red:** covered by R9-T1's stale revision failure path. | **Green:** `TestFailRunTransportConflictPreservesLatestConcurrentState`, `TestFailRunRetainsRevisionGuardWithoutTransportConflict`, and `TestFailRunTransportConflictRequiresRunningTarget` pass: typed conflict finalizes only its matching running run, ordinary failure retains `errStateRevisionConflict`, and a terminal target is not replaced. | Green |
-| R9-T3 | An unrelated project write between conflict observation and loser terminalization survives unchanged. | **Red:** covered by the pinned R9-T1 state leak. | **Green:** `go test -count=20 -timeout 20m ./internal/app -run '^TestFailRunTransportConflictPreservesLatestConcurrentState$'` exit `0`; unrelated stream/checkpoint/run and winner checkpoint remain unchanged. | Green |
+| R9-T3 | An unrelated project write between conflict observation and loser terminalization survives unchanged. | **Red:** covered by the pinned R9-T1 state leak. | **Green:** `go test -count=20 -timeout 20m ./internal/app -run '^TestFailRunTransportConflictPreservesLatestConcurrentState$'` exit `0`; the stale app first receives the real typed CAS conflict, a second writer then persists unrelated stream/checkpoint/run data, and typed finalization retains it with the winner checkpoint unchanged. | Green |
 | R9-T4 | Restart does not reload a false-running loser. | **Red:** R9-T1's reopen assertion captures the original leak. | **Green:** `go test -count=10 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFailureSurvivesReopen$'` exit `0`. | Green |
 | R9-T5 | Cancellation after acknowledgement does not erase ordering, typed conflict, or terminalization. | **Red:** R9-T1 establishes the common path is broken at the base. | **Green:** `go test -count=10 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesAfterCancellation$'` exit `0`; cancellation occurs after acknowledgement and the typed conflict remains detectable. | Green |
 | R9-T6 | The shared path terminalizes stale losers for every canonical mode. | **Red:** R9-T1 establishes the common path is broken at the base. | **Green:** `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRunForAllModes$' -v` exit `0` for `full_overwrite`, `full_append`, `incremental_append`, `incremental_upsert`, `incremental_dedupe`, `incremental_dedupe_history`, and `change_capture`. | Green |
-| R9-R7/R8 | Resume identity and target-entry CAS continue to reject an invalid/stale checkpoint without overwriting winner state. | **Red:** prior #3864 T20/T21 evidence is linked, not reused as this phase's RED. | **Green:** the exact nine-test R7/R8 suite in `VERIFICATION.md` remains green unchanged. | Planned |
+| R9-R7/R8 | Resume identity and target-entry CAS continue to reject an invalid/stale checkpoint without overwriting winner state. | **Red:** prior #3864 T20/T21 evidence is linked, not reused as this phase's RED. | **Green:** the exact nine-test R7/R8 suite in `VERIFICATION.md` passed unchanged with exit `0`. | Green |
 
 ## TDD gate commitments
 
@@ -40,8 +40,14 @@
 
 ### R9-T2 through R9-T6 Green: focused expansion (after production change)
 
-- `go test -count=20 -timeout 20m ./internal/app -run '^TestFailRunTransportConflictPreservesLatestConcurrentState$'` — exit `0`.
+- `go test -count=20 -timeout 20m ./internal/app -run '^TestFailRunTransportConflictPreservesLatestConcurrentState$'` — exit `0`; the unrelated write is explicitly sequenced after the stale app observes its actual typed CAS conflict and before `failRun` terminalizes the loser.
 - `go test -count=10 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFailureSurvivesReopen$'` — exit `0`.
 - `go test -count=10 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesAfterCancellation$'` — exit `0`.
 - `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRunForAllModes$' -v` — exit `0` for all seven canonical modes.
 - Adjacent focused tests prove ordinary errors still return the revision conflict and a conflict cannot replace a completed target run.
+
+### R9-R7/R8 regression (after production change)
+
+- Command: `go test -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume|TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForAllModes|TestRunETLTransportAdvancesInterimCheckpointAcrossPages|TestRunETLTransportPreservesUnrelatedStateDuringInterimCheckpointCommit|TestRunETLTransportRejectsStaleCheckpointWriter|TestRunETLTransportDistinguishesMissingAndPresentStreamState|TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation|TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails|TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure)$'`
+- Exit: `0`
+- Result: the established identity, source-generation, acknowledgement ordering, target-entry CAS, unrelated-state, cancellation, and state-store-outcome protections remain unchanged.
