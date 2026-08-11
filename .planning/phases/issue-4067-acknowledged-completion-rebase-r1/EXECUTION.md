@@ -1,6 +1,6 @@
 # #4067 execution record
 
-**Status:** local implementation, focused expansion, heavy validation, and manual review completed — fresh no-mistakes, existing-PR delivery, and exact-head CI remain pending.
+**Status:** R2 GREEN is locally observed and this implementation/evidence checkpoint is ready to commit. The r2 race, #4046/R7/R8, affected-package, generator/website, manual GSD verification/review, no-mistakes loop 3/5, existing-PR update, and exact-head CI gates remain pending. No r2 external-check claim is made here.
 
 ## R2 planning and behavioral RED
 
@@ -8,6 +8,20 @@
 - `go test -json -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes$'` exited `1` as required. All seven modes persisted the acknowledged target checkpoint and an unrelated stream/checkpoint/run and made exactly one destination apply, but cancellation after release returned `Run{}` and reopened the original run as `running`.
 - `go test -json -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportAcknowledgedFailurePreservesSourceError|TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes)$'` exited `1` as required. The source sentinel remained detectable but took the same zero-run/durable-running path; all seven missing-target cases left persisted state unchanged but returned plain `run "..." not found` without `errors.Is(err, errStateRevisionConflict)`.
 - The RED commit contains only `internal/app/transport_dispatch_test.go` plus this r2 test evidence. `internal/app/app.go` and `internal/app/transport_dispatch.go` remain untouched until that commit exists.
+
+## R2 GREEN — acknowledged-error finalization and typed missing target
+
+- `runTransportETL` now returns a result witness only after its real committed checkpoint callback has completed. Pre-ack errors retain the zero result and still take ordinary `failRun`.
+- The declared-transport error branch invokes a dedicated finalizer only with that witness. Its latest-state update requires the exact acknowledged stream state and an exact `running` target run, then changes only that run to `failed`; it neither refreshes broad state nor retries checkpoint/source/destination work.
+- `completeRunWithAcknowledgedTransportState` now makes a missing run in an acknowledged rebase a typed `errStateRevisionConflict`. Ordinary missing-run behavior remains unchanged.
+- `go test -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes|TestRunETLTransportAcknowledgedFailurePreservesSourceError|TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes)$' -v` — exit `0`. It covers all seven cancellation and missing-run modes plus the representative source-error path.
+- `go test -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForAllModes|TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges|TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes|TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome|TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes|TestRunETLTransportAcknowledgedFailurePreservesSourceError|TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes)$' -v` — exit `0`. This jointly reruns the prior completion guard, cancellation, all seven r2 interleavings, missing-target typed chain, and existing completion outcome cases.
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome$' -v` — exit `0`. Definite pre-commit failure returns `Run{}` and preserves reopened state; committed unlock and indeterminate directory-sync outcomes return a matching reopened failed run while retaining both the original source sentinel and `CommitOutcomeError`.
+- The only production files in this checkpoint are `internal/app/app.go` and `internal/app/transport_dispatch.go`; the corresponding focused test is `internal/app/transport_dispatch_test.go`. No generator, provider, credential, network, warehouse, container, or external service was used.
+
+## Historical pre-r2 candidate record (not evidence for this correction)
+
+The remaining entries record the earlier #4067 candidate and its two completed no-mistakes runs. They are retained for audit history only. They do not establish local validation, PR state, CI, generated-artifact state, or review coverage for the r2 implementation above.
 
 ## TDD gate
 

@@ -1063,7 +1063,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if hasDeclaredSyncTransport(source, destination) {
 		result, err := a.runTransportETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, mode, batchSize)
 		if err != nil {
-			return a.failRun(runID, err)
+			return a.failAcknowledgedTransportRun(runID, result, err)
 		}
 		return a.completeAcknowledgedTransportRun(runID, result)
 	}
@@ -1258,6 +1258,23 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 	})
 }
 
+// failAcknowledgedTransportRun uses a completed checkpoint only as an
+// eligibility witness for terminal failure. It does not refresh state, retry a
+// checkpoint, or replay destination work.
+func (a *App) failAcknowledgedTransportRun(runID string, result etlExecutionResult, runErr error) (Run, error) {
+	if result.PendingStreamState == nil {
+		return a.failRun(runID, runErr)
+	}
+	acknowledged, present := a.state.StreamStates[result.PendingStreamState.Key]
+	if !present {
+		return a.failRun(runID, runErr)
+	}
+	return a.failRunWithAcknowledgedTransportState(runID, runErr, &acknowledgedTransportCompletion{
+		key:   result.PendingStreamState.Key,
+		state: cloneStreamState(acknowledged),
+	})
+}
+
 func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
 	return a.completeRunWithAcknowledgedTransportState(runID, result, nil)
 }
@@ -1301,6 +1318,9 @@ func (a *App) completeRunWithAcknowledgedTransportState(runID string, result etl
 			break
 		}
 		if !found {
+			if rebased && acknowledged != nil {
+				return current, fmt.Errorf("acknowledged transport run %q not found before completion: %w", runID, errStateRevisionConflict)
+			}
 			return current, fmt.Errorf("run %q not found", runID)
 		}
 		if current.Checkpoints == nil {
@@ -1329,6 +1349,51 @@ func (a *App) completeRunWithAcknowledgedTransportState(runID string, result etl
 		}
 	}
 	return Run{}, fmt.Errorf("completed run %q was not stored", runID)
+}
+
+func (a *App) failRunWithAcknowledgedTransportState(runID string, runErr error, acknowledged *acknowledgedTransportCompletion) (Run, error) {
+	expectedRevision := a.state.Revision
+	completedAt := time.Now().UTC()
+	transitionedInCallback := false
+	updated, persistErr := a.updateState(func(current state) (state, error) {
+		rebased := current.Revision != expectedRevision
+		if rebased {
+			currentStreamState, present := current.StreamStates[acknowledged.key]
+			if !present || !transportStreamStateEqual(currentStreamState, acknowledged.state) {
+				return current, fmt.Errorf("acknowledged transport stream state changed before failure: %w", errStateRevisionConflict)
+			}
+		}
+		for i := range current.Runs {
+			if current.Runs[i].ID != runID {
+				continue
+			}
+			if current.Runs[i].Status != "running" {
+				return current, fmt.Errorf("acknowledged transport run %q has status %q, want running before failure: %w", runID, current.Runs[i].Status, errStateRevisionConflict)
+			}
+			current.Runs[i].Status = "failed"
+			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
+			current.Runs[i].CompletedAt = completedAt
+			transitionedInCallback = true
+			return current, nil
+		}
+		return current, fmt.Errorf("acknowledged transport run %q not found before failure: %w", runID, errStateRevisionConflict)
+	})
+	if persistErr != nil {
+		if transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
+			for _, run := range updated.Runs {
+				if run.ID == runID {
+					return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+				}
+			}
+		}
+		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+	}
+	for _, run := range updated.Runs {
+		if run.ID == runID {
+			return run, runErr
+		}
+	}
+	return Run{}, errors.Join(runErr, fmt.Errorf("failed run %q was not stored", runID))
 }
 
 func (a *App) GetRun(id string) (Run, error) {

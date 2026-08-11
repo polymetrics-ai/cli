@@ -1716,6 +1716,87 @@ func assertAcknowledgedFailureAfterUnrelatedRevision(t *testing.T, paused *pause
 	}
 }
 
+func TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome(t *testing.T) {
+	tests := []struct {
+		name         string
+		configure    func(*App)
+		wantOutcome  statestore.CommitOutcome
+		wantTerminal bool
+	}{
+		{
+			name: "definite pre-commit failure",
+			configure: func(a *App) {
+				a.store.Locker = &appTransportFailAtLockLocker{failAt: 1, err: errTransportFinalStateSave}
+			},
+			wantOutcome: statestore.CommitOutcomeNotCommitted,
+		},
+		{
+			name: "committed unlock failure",
+			configure: func(a *App) {
+				a.store.Locker = &postCommitUnlockFailureLocker{failAt: 1}
+			},
+			wantOutcome:  statestore.CommitOutcomeCommitted,
+			wantTerminal: true,
+		},
+		{
+			name: "indeterminate directory sync failure",
+			configure: func(a *App) {
+				a.store.SyncDirectory = func(string) error {
+					return errTransportFinalizationStateSync
+				}
+			},
+			wantOutcome:  statestore.CommitOutcomeIndeterminate,
+			wantTerminal: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			paused := startPausedAcknowledgedTransportCompletion(t, synccontract.ModeFullAppend, context.Background())
+			paused.fixture.sourceExecutor.errAfterPage = errTransportSourceAfterAcknowledgement
+			unrelated := persistUnrelatedAcknowledgedFailureWrite(t, paused)
+			expected, err := Open(paused.fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			tt.configure(paused.fixture.app)
+			paused.releaseAndWait(t)
+
+			if !errors.Is(paused.err, errTransportSourceAfterAcknowledgement) {
+				t.Fatalf("RunETL() error = %v, want original post-acknowledgement source error", paused.err)
+			}
+			if tt.wantOutcome == statestore.CommitOutcomeNotCommitted {
+				if !errors.Is(paused.err, errTransportFinalStateSave) {
+					t.Fatalf("RunETL() error = %v, want definite failure-finalization persistence error", paused.err)
+				}
+				if !reflect.DeepEqual(paused.returned, Run{}) {
+					t.Fatalf("RunETL() returned %#v, want zero run after definite non-commit", paused.returned)
+				}
+			} else {
+				var outcome *statestore.CommitOutcomeError
+				if !errors.As(paused.err, &outcome) || outcome.Outcome != tt.wantOutcome || !outcome.Outcome.MayHaveCommitted() {
+					t.Fatalf("RunETL() commit outcome = %#v, want %s", outcome, tt.wantOutcome)
+				}
+				if paused.returned.ID != paused.runID || paused.returned.Status != "failed" || paused.returned.CompletedAt.IsZero() {
+					t.Fatalf("RunETL() returned %#v, want durable-consistent failed run", paused.returned)
+				}
+			}
+
+			reopened, err := Open(paused.fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if tt.wantTerminal {
+				assertAcknowledgedFailureAfterUnrelatedRevision(t, paused, unrelated, errTransportSourceAfterAcknowledgement)
+				return
+			}
+			if !reflect.DeepEqual(reopened.state, expected.state) {
+				t.Fatalf("definite failure-finalization non-commit changed durable state: got %#v, want %#v", reopened.state, expected.state)
+			}
+		})
+	}
+}
+
 func TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome(t *testing.T) {
 	tests := []struct {
 		name         string

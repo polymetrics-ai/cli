@@ -91,10 +91,10 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			return nil
 		},
 	})
-	if err != nil {
-		return etlExecutionResult{}, err
-	}
 	if committed == nil || committed.CommittedAt == nil {
+		if err != nil {
+			return etlExecutionResult{}, err
+		}
 		return etlExecutionResult{}, fmt.Errorf("closed transport completed without a durable committed checkpoint")
 	}
 
@@ -117,6 +117,9 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		},
 	}
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+	if err != nil {
+		return result, err
+	}
 	return result, nil
 }
 
