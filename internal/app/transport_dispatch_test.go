@@ -1196,6 +1196,143 @@ func TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure(t *tes
 	assertInterimTransportState(t, reopened, stateKey, "1", 1)
 }
 
+func TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForAllModes(t *testing.T) {
+	for _, mode := range synccontract.AllModes() {
+		t.Run(string(mode), func(t *testing.T) {
+			assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t, mode)
+		})
+	}
+}
+
+func assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t *testing.T, mode synccontract.Mode) {
+	t.Helper()
+	fixture := setupAppTransportFixture(t, mode)
+	checkpointAcknowledged := make(chan struct{})
+	releaseCompletion := make(chan struct{})
+	fixture.sourceExecutor.afterEmit = func() {
+		close(checkpointAcknowledged)
+		<-releaseCompletion
+	}
+
+	done := make(chan struct{})
+	var returned Run
+	var runErr error
+	go func() {
+		returned, runErr = fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+		close(done)
+	}()
+	waitForTransportSignal(t, checkpointAcknowledged)
+
+	stateKey := streamStateKey(fixture.connection, "records")
+	acknowledged, present := fixture.app.state.StreamStates[stateKey]
+	if !present || acknowledged.Checkpoint == nil || acknowledged.Checkpoint.CommittedAt == nil {
+		t.Fatalf("acknowledged transport state = %#v, want durable checkpoint before unrelated write", acknowledged)
+	}
+	var runID string
+	for _, run := range fixture.app.state.Runs {
+		if run.Type == "etl" && run.Connection == fixture.connection && run.Stream == "records" {
+			runID = run.ID
+			break
+		}
+	}
+	if runID == "" {
+		t.Fatal("acknowledged transport run is missing")
+	}
+
+	writer, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	unrelatedUpdatedAt := time.Unix(11, 0).UTC()
+	if _, err := writer.updateState(func(current state) (state, error) {
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
+		}
+		current.StreamStates["unrelated:records"] = StreamState{
+			Connection:          "unrelated",
+			Stream:              "records",
+			GenerationID:        8,
+			LastSuccessfulRunID: "unrelated_run",
+			RecordsLoaded:       13,
+			UpdatedAt:           unrelatedUpdatedAt,
+		}
+		if current.Checkpoints == nil {
+			current.Checkpoints = map[string]map[string]string{}
+		}
+		current.Checkpoints["unrelated_run"] = map[string]string{"cursor": "preserved"}
+		current.Runs = append(current.Runs, Run{
+			ID:          "unrelated_run",
+			Type:        "etl",
+			Connection:  "unrelated",
+			Stream:      "records",
+			Status:      "completed",
+			StartedAt:   unrelatedUpdatedAt.Add(-time.Second),
+			CompletedAt: unrelatedUpdatedAt,
+		})
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	close(releaseCompletion)
+	waitForTransportSignal(t, done)
+	if !errors.Is(runErr, errStateRevisionConflict) {
+		t.Fatalf("RunETL() error = %v, want ordinary revision conflict after unrelated post-checkpoint write", runErr)
+	}
+
+	reopened, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if current := reopened.state.StreamStates[stateKey]; !transportStreamStateEqual(current, acknowledged) {
+		t.Fatalf("acknowledged stream state changed before terminal completion: got %#v, want %#v", current, acknowledged)
+	}
+	unrelated := reopened.state.StreamStates["unrelated:records"]
+	if unrelated.GenerationID != 8 || unrelated.LastSuccessfulRunID != "unrelated_run" || unrelated.RecordsLoaded != 13 || !unrelated.UpdatedAt.Equal(unrelatedUpdatedAt) {
+		t.Fatalf("unrelated stream state changed: %#v", unrelated)
+	}
+	if got := reopened.state.Checkpoints["unrelated_run"]["cursor"]; got != "preserved" {
+		t.Fatalf("unrelated checkpoint = %q, want preserved", got)
+	}
+
+	var durable, unrelatedRun Run
+	for _, run := range reopened.state.Runs {
+		switch run.ID {
+		case runID:
+			durable = run
+		case "unrelated_run":
+			unrelatedRun = run
+		}
+	}
+	if unrelatedRun.Status != "completed" || !unrelatedRun.CompletedAt.Equal(unrelatedUpdatedAt) {
+		t.Fatalf("unrelated run changed: %#v", unrelatedRun)
+	}
+
+	var symptoms []string
+	if returned.ID == "" {
+		symptoms = append(symptoms, "RunETL returned zero run")
+	}
+	if returned.Status != "completed" {
+		symptoms = append(symptoms, fmt.Sprintf("returned run status=%q", returned.Status))
+	}
+	if durable.ID != runID {
+		symptoms = append(symptoms, fmt.Sprintf("durable run ID=%q, want %q", durable.ID, runID))
+	} else {
+		if durable.Status != "completed" {
+			symptoms = append(symptoms, fmt.Sprintf("durable run status=%q", durable.Status))
+		}
+		if durable.CompletedAt.IsZero() {
+			symptoms = append(symptoms, "durable run completion timestamp is zero")
+		}
+		if returned.ID != durable.ID {
+			symptoms = append(symptoms, fmt.Sprintf("returned run ID=%q, durable run ID=%q", returned.ID, durable.ID))
+		}
+	}
+	if len(symptoms) > 0 {
+		t.Fatalf("acknowledged completion leak: %s; durable run=%+v", strings.Join(symptoms, "; "), durable)
+	}
+}
+
 func TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
@@ -1292,6 +1429,7 @@ type appTransportSourceExecutor struct {
 	pages        []synctransport.SourcePage
 	readCalls    int
 	errAfterPage error
+	afterEmit    func()
 }
 
 func (e *appTransportSourceExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -1309,6 +1447,9 @@ func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, _ synctr
 	for _, page := range pages {
 		if err := emit(page); err != nil {
 			return err
+		}
+		if e.afterEmit != nil {
+			e.afterEmit()
 		}
 	}
 	return e.errAfterPage

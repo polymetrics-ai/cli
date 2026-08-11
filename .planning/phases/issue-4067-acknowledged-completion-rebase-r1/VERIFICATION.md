@@ -13,7 +13,7 @@ status: pending
 - [x] Existing branch/PR custody preserved; rejected `883a86cf0040d559edcd4777413d1c2de20cd94a` is an immutable baseline.
 - [x] CodeGraph absence recorded; required skills and GSD/agent-contract checks completed.
 - [x] Named inline/manual GSD problem, context, discussion, TDD plan, execution record, verifier evidence, review, summary, and run-state artifacts exist before code.
-- [ ] Behavioral RED exits non-zero for the durable completion leak before production mutation.
+- [x] Behavioral RED exits non-zero for the durable completion leak before production mutation: all seven canonical modes retained acknowledged/unrelated state first, then observed zero returned run plus durable reopened `running` run.
 
 ## Required focused matrix
 
@@ -34,4 +34,3 @@ status: pending
 - [ ] Manual `verify-work` and `code-review` records contain evidence and every finding disposition.
 - [ ] Fresh #4067 no-mistakes run starts at 0/5 without `--yes`; old run is not queried for control or modified.
 - [ ] Existing draft #4059 is updated normally, stays unmerged, and exact-head CI is green before requesting an independent Sol audit.
-

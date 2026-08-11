@@ -7,7 +7,7 @@
 
 | ID | Requirement | RED command / expected failure | GREEN evidence | Status |
 |---|---|---|---|---|
-| C1 | An acknowledged run interrupted by an unrelated post-checkpoint writer returns zero/non-terminal and is durably `running` after reopen on the rejected baseline. | Focused real two-App test; expected failure observes returned/durable mismatch, not merely an error code. | Pending implementation. | Planned |
+| C1 | An acknowledged run interrupted by an unrelated post-checkpoint writer returns zero/non-terminal and is durably `running` after reopen on the rejected baseline. | **Observed:** `go test -json -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForAllModes$'` exited `1`. Each canonical mode first retained the acknowledged target stream and unrelated writer state, then observed zero returned `Run`, durable `running` target run, and zero completion timestamp. | Pending implementation. | Red observed |
 | C2 | Latest-state completion is eligible only for a matching `running` target run and exact acknowledged target stream. | Target changed, missing, or terminal fixtures must prove no overwrite. | Pending implementation. | Planned |
 | C3 | Eligible completion changes only target terminal fields and its own final metadata; winner/acknowledged checkpoint and unrelated state survive. | Snapshot before/after state around a second unrelated writer. | Pending implementation. | Planned |
 | C4 | Returned run and reopened durable run agree; ordinary revision-conflict/error chain remains detectable; definite/committed/indeterminate persistence outcomes stay truthful. | State-store outcome fixtures fail before rule exists or expose a speculative return. | Pending implementation. | Planned |
@@ -21,4 +21,3 @@
 2. RED — test/evidence only, committed before production mutation; command must exit non-zero for the durable leak.
 3. GREEN — smallest final-completion implementation, passing matching test.
 4. Focused coverage/generator/review fixes only after their corresponding checks pass.
-
