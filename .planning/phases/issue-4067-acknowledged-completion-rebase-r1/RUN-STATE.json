@@ -12,7 +12,8 @@
     "plan_phase_tdd": "completed_manual",
     "execute_phase": "focused_transport_and_generated_outputs_completed",
     "verify_work": "completed_manual_automated_acceptance",
-    "code_review": "completed_manual_standard"
+    "code_review": "completed_manual_standard",
+    "delivery_revalidation": "required_after_no_mistakes_document_scope_cleanup"
   },
   "skills": [
     "golang-how-to",
@@ -36,10 +37,18 @@
   ],
   "correction_ledger": {
     "issue": 4067,
-    "status": "not_started",
-    "budget_used": 0,
+    "status": "one_completed_run_scope_cleanup_pending",
+    "budget_used": 1,
     "budget_max": 5,
-    "forbidden_flag": "--yes"
+    "forbidden_flag": "--yes",
+    "runs": [
+      {
+        "id": "01KZRPD9TSDDBG4F39VENDW9N4",
+        "head": "a17d8db98532c6b2569403f6fec30410acf7104b",
+        "result": "checks-passed",
+        "disposition": "The pipeline unexpectedly opened duplicate PR #4068 despite the stacked-only #4059 contract. #4068 was closed unmerged; the pipeline's unrelated warehouse-architecture document rewrite is reverted in the next committed scope-restoration slice."
+      }
+    ]
   },
   "immutable_old_no_mistakes_run": {
     "id": "01KZQ0C1KEZRHNXX4WJFWXSCFB",

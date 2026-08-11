@@ -47,7 +47,8 @@ status: local_goal_verified
 - [x] Affected tests, lint, vet/build, and individual repository gates pass after the heavy-validation window notification.
 - [x] Manual `verify-work` record and coverage-aware automated UAT contain local evidence.
 - [x] Manual `code-review` record dispositions every finding.
-- [ ] Fresh #4067 no-mistakes run starts at 0/5 without `--yes`; old run is not queried for control or modified.
+- [x] First fresh #4067 no-mistakes run `01KZRPD9TSDDBG4F39VENDW9N4` started at 0/5 without `--yes`, completed review/test/document/lint, and returned `checks-passed`; the old run was not controlled.
+- [ ] Scope-restoration head is revalidated in a second no-mistakes loop with push/PR/CI skipped because the tool cannot retain the required stacked #4059 base and first opened duplicate #4068; normal delivery will then push only the existing branch, update only #4059, and monitor #4059 exact-head CI.
 - [ ] Existing draft #4059 is updated normally, stays unmerged, and exact-head CI is green before requesting an independent Sol audit.
 
 ## Heavy local matrix completed

@@ -39,4 +39,8 @@ findings:
 - A terminal run is returned only on a successful or may-have-committed acknowledged completion write. Definite non-commit returns `Run{}`; the typed `CommitOutcomeError` is preserved.
 - The canonical website and certification outputs were generated, not hand-edited, and the resulting diffs match the two specified Sol F2/F3 freshness defects.
 
-**Review disposition:** clean. Fresh no-mistakes and normal existing-PR delivery remain required.
+**Review disposition:** the `6c2a96d5c` implementation review is clean. Fresh no-mistakes and normal existing-PR delivery remain required.
+
+## Post-review pipeline disposition
+
+Fresh no-mistakes run `01KZRPD9TSDDBG4F39VENDW9N4` returned no review, test, document, or lint finding and `checks-passed`. Its document phase appended a non-behavioral explanatory comment directly above the reviewed completion helper; this is within the same boundary. It also rewrote an unrelated warehouse-architecture document, which is outside #4067. This scope-restoration commit removes only that unrelated documentation rewrite, retaining all prior commits and the relevant comment. The next local no-mistakes pass must review the resulting head before the ordinary stacked #4059 delivery.
