@@ -23,6 +23,7 @@
 The seed is bounded to planning artifacts. It preserves `#3856 -> #3857 -> (#3858 || #3859)`,
 records #3860 as a follow-on documentation child, uses the exact temporary #3862 base and final
 #4015 retarget rule, records #3880 as partial reuse only, and does not claim certification or
-executable product behavior. The remaining external GitHub validation is explicitly pending until
-the outer PR phase creates and inspects the draft; it is not treated as a passing review or an
-authorization to merge.
+executable product behavior. Draft PR #4041 was inspected through `gh-axi` REST as open/draft with
+the exact temporary base and #3855 head. The terminal inherited-document edit was whole-reverted,
+leaving the #4015 architecture blob protected and the net range phase-only. Fresh validation of
+this evidence commit remains pending; the draft is not an authorization to merge.

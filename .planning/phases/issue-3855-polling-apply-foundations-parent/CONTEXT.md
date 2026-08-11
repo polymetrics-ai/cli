@@ -46,8 +46,19 @@ the generated `discuss-phase` workflow is executed inline without reopening thos
 The polling capability-taxonomy conflict identified in the topology report is deliberately deferred
 to #3857 planning; this parent scaffold does not resolve it or claim executable behavior.
 
-## Live GitHub note
+## Scope recovery and live GitHub note
 
-The recovered `gh-axi` live check finds five open children (#3856–#3860) and no PR with head
-`feat/3855-polling-apply-foundations`. No raw GitHub CLI, alternate identity, or auth-scope change
-is used. Creating and inspecting the required draft remains an external PR-phase transition.
+The completed local no-mistakes run `01KZPY9EBYX84WZM11EN1F6C83` accepted the planning scaffold at
+`b2d0f63029a34f8d647e57f34a747ad3983e1578`, then produced terminal commit
+`81f37c2b2cf638bfd6b06b35393256232ea6e23d` with an out-of-scope inherited-document edit. Guarded
+custody recovery retained that commit in ancestry and whole-revert
+`4099335632a79e3c70ce20c004a5f63933171280` restored the accepted tree exactly.
+
+`docs/architecture/github-postgres-warehouse-certification.md` is protected #4015 content. Its
+required temporary-base blob is `889e4eddffabb76aa8be46a934c3e9abe0610f4c`; this phase must not
+edit, remove, reformat, or correct it.
+
+`gh-axi` REST verifies five open children (#3856–#3860) and draft PR #4041, open from
+`feat/3855-polling-apply-foundations` at `4099335632a79e3c70ce20c004a5f63933171280` to temporary
+base `feat/3862-any-to-any-transport`. No raw GitHub CLI, alternate identity, or auth-scope change
+is used. Fresh no-mistakes validation remains pending for this evidence commit.
