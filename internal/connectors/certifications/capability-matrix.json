@@ -24,7 +24,7 @@
       "id": "capability:dynamic_schema",
       "category": "capability",
       "name": "dynamic_schema",
-      "discovery_source": "internal/connectors/engine/bundle.go:91"
+      "discovery_source": "internal/connectors/engine/bundle.go:94"
     },
     {
       "id": "capability:query",
@@ -48,91 +48,91 @@
       "id": "operation:binary_download",
       "category": "operation",
       "name": "binary_download",
-      "discovery_source": "internal/connectors/engine/bundle.go:2089",
+      "discovery_source": "internal/connectors/engine/bundle.go:2112",
       "executor_source": "internal/connectors/engine/binary_read.go:100"
     },
     {
       "id": "operation:browser_open",
       "category": "operation",
       "name": "browser_open",
-      "discovery_source": "internal/connectors/engine/bundle.go:2097"
+      "discovery_source": "internal/connectors/engine/bundle.go:2120"
     },
     {
       "id": "operation:composite",
       "category": "operation",
       "name": "composite",
-      "discovery_source": "internal/connectors/engine/bundle.go:2099"
+      "discovery_source": "internal/connectors/engine/bundle.go:2122"
     },
     {
       "id": "operation:file_upload",
       "category": "operation",
       "name": "file_upload",
-      "discovery_source": "internal/connectors/engine/bundle.go:2091"
+      "discovery_source": "internal/connectors/engine/bundle.go:2114"
     },
     {
       "id": "operation:graphql_mutation",
       "category": "operation",
       "name": "graphql_mutation",
-      "discovery_source": "internal/connectors/engine/bundle.go:2085",
+      "discovery_source": "internal/connectors/engine/bundle.go:2108",
       "executor_source": "internal/connectors/engine/direct_write.go:80"
     },
     {
       "id": "operation:graphql_query",
       "category": "operation",
       "name": "graphql_query",
-      "discovery_source": "internal/connectors/engine/bundle.go:2085",
+      "discovery_source": "internal/connectors/engine/bundle.go:2108",
       "executor_source": "internal/connectors/engine/direct_read.go:168"
     },
     {
       "id": "operation:local_file",
       "category": "operation",
       "name": "local_file",
-      "discovery_source": "internal/connectors/engine/bundle.go:2095"
+      "discovery_source": "internal/connectors/engine/bundle.go:2118"
     },
     {
       "id": "operation:local_git",
       "category": "operation",
       "name": "local_git",
-      "discovery_source": "internal/connectors/engine/bundle.go:2093"
+      "discovery_source": "internal/connectors/engine/bundle.go:2116"
     },
     {
       "id": "operation:provider_search",
       "category": "operation",
       "name": "provider_search",
-      "discovery_source": "internal/connectors/engine/bundle.go:2083",
+      "discovery_source": "internal/connectors/engine/bundle.go:2106",
       "executor_source": "internal/connectors/engine/direct_read.go:168"
     },
     {
       "id": "operation:rest_read",
       "category": "operation",
       "name": "rest_read",
-      "discovery_source": "internal/connectors/engine/bundle.go:2083",
+      "discovery_source": "internal/connectors/engine/bundle.go:2106",
       "executor_source": "internal/connectors/engine/direct_read.go:168"
     },
     {
       "id": "operation:rest_write",
       "category": "operation",
       "name": "rest_write",
-      "discovery_source": "internal/connectors/engine/bundle.go:2083",
+      "discovery_source": "internal/connectors/engine/bundle.go:2106",
       "executor_source": "internal/connectors/engine/direct_write.go:80"
     },
     {
       "id": "operation:stream_etl",
       "category": "operation",
       "name": "stream_etl",
-      "discovery_source": "internal/connectors/engine/bundle.go:2099"
+      "discovery_source": "internal/connectors/engine/bundle.go:2122"
     },
     {
       "id": "operation:xml_export",
       "category": "operation",
       "name": "xml_export",
-      "discovery_source": "internal/connectors/engine/bundle.go:2087"
+      "discovery_source": "internal/connectors/engine/bundle.go:2110"
     },
     {
       "id": "operation:xml_import",
       "category": "operation",
       "name": "xml_import",
-      "discovery_source": "internal/connectors/engine/bundle.go:2087"
+      "discovery_source": "internal/connectors/engine/bundle.go:2110"
     }
   ],
   "connectors": [
