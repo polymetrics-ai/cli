@@ -1,0 +1,59 @@
+{
+  "issue": 4069,
+  "parent_issue": 3897,
+  "specification_owner_issue": 4066,
+  "program_parent_issue": 3988,
+  "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
+  "required_base_branch": "feat/3897-flow-connection-scope-nm",
+  "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
+  "status": "planning_complete_ready_for_strict_red",
+  "correction_budget": {
+    "used_before": 0,
+    "limit": 5,
+    "remaining_before_first_correction": 5,
+    "lineage": "fresh #4069 child; #4066 remains the exhausted specification owner"
+  },
+  "issue_gate": {
+    "parent_and_owner_read": true,
+    "bounded_duplicate_search": "no open issue owned the exact two-unique-case-equivalent-table matrix",
+    "created_issue": 4069,
+    "attached_to_parent": 3897
+  },
+  "manual_gsd_fallback": {
+    "used": true,
+    "reason": "The issue is not an active numbered ROADMAP phase, Pi GSD execution is unavailable in this worker, and the canonical contract forbids role delegation.",
+    "resolved_commands": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ],
+    "inline_execution": true
+  },
+  "skills": [
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-database",
+    "golang-design-patterns",
+    "golang-structs-interfaces"
+  ],
+  "safety": {
+    "credentials_or_secrets": "none used",
+    "provider_or_reverse_etl": "none",
+    "transport_or_production_wiring": "out of scope",
+    "cpu_coordination": "targeted RED/GREEN only before pausing for the transport heavy-test gate"
+  },
+  "results": {
+    "immutable_head_gate": "passed",
+    "no_mistakes_doctor": "passed",
+    "red": "pending",
+    "green": "pending",
+    "targeted_commit": "pending",
+    "cpu_gate": "awaiting targeted correction"
+  }
+}
