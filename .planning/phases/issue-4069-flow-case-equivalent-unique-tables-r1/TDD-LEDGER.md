@@ -6,9 +6,9 @@
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
-| 1. Two exact-unique canonical equivalents | Real Parquet `acme/records` and `globex/RECORDS` cause generic `SELECT 1` to fail while an omitted flow surfaces raw DuckDB duplicate-view text. | Scoped reads return their owner rows, generic `SELECT 1` succeeds, and omitted flow reads return typed `*warehouse.AmbiguousTableError` with the flow `connection` remedy. | RED 2026-08-12 |
-| 2. Existing #4066 boundary | The correction must not alter the existing alias, three-table case-variant, exact ambiguity, action-source, reverse/read, or schedule behavior. | Short focused fence passes before CPU pause; full affected/race selectors run after the transport CPU gate. | PENDING |
-| 3. Refactor | No refactor is accepted before GREEN. | The policy remains snapshot-derived, deterministic, and free of SQL-text filtering or extra inventory scans. | PENDING |
+| 1. Two exact-unique canonical equivalents | Real Parquet `acme/records` and `globex/RECORDS` cause generic `SELECT 1` to fail while an omitted flow surfaces raw DuckDB duplicate-view text. | Scoped reads return their owner rows, generic `SELECT 1` succeeds, and omitted flow reads return typed `*warehouse.AmbiguousTableError` with the flow `connection` remedy. | GREEN 2026-08-12 |
+| 2. Existing #4066 boundary | The correction must not alter the existing alias, three-table case-variant, exact ambiguity, action-source, reverse/read, or schedule behavior. | Short focused fence passes before CPU pause; full affected/race selectors run after the transport CPU gate. | Targeted GREEN; full fence pending CPU gate |
+| 3. Refactor | No refactor is accepted before GREEN. | The policy remains snapshot-derived, deterministic, and free of SQL-text filtering or extra inventory scans. | GREEN review pending CPU gate |
 
 ## RED command
 
@@ -53,3 +53,18 @@ Both omitted-flow forms then failed the typed-error assertion because the same
 raw DuckDB error reached the flow engine instead of an
 `*warehouse.AmbiguousTableError`. The non-secret command record is
 `traces/red-case-equivalent-unique-tables.txt`.
+
+## Recorded GREEN
+
+The exact targeted command passed after the policy began deriving
+case-equivalent exact-name groups from the existing resolver snapshot. The
+fixture retained both selected owner rows, generic `SELECT 1` returned one row,
+and omitted unquoted `records` plus quoted `RECORDS` each returned an error
+chain containing `*warehouse.AmbiguousTableError` for `records` and the flow
+`connection` remedy. The rejected paths returned no flow rows and wrote no
+success checkpoint.
+
+The short #4066 flow matrix, focused app query matrix, and schedule re-entry
+selectors also passed. The full affected-package and race matrix remains
+intentionally deferred to Firstmate's transport CPU gate. The non-secret
+records are in `traces/green-case-equivalent-unique-tables.txt`.

@@ -6,7 +6,7 @@
   "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "required_base_branch": "feat/3897-flow-connection-scope-nm",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "strict_red_recorded_ready_for_green",
+  "status": "targeted_green_committed_awaiting_transport_cpu_gate",
   "correction_budget": {
     "used_before": 0,
     "limit": 5,
@@ -52,8 +52,9 @@
     "immutable_head_gate": "passed",
     "no_mistakes_doctor": "passed",
     "red": "passed: targeted real Parquet/DuckDB test exited 1 with the audited duplicate-view error while selected owner reads passed",
-    "green": "pending",
-    "targeted_commit": "pending",
-    "cpu_gate": "awaiting targeted correction"
+    "green": "passed: selected owner reads, generic SELECT 1, and omitted flow typed ambiguity/remedy pass in the strict target",
+    "targeted_regression_fence": "passed: #4066 flow alias/case/action selectors, focused app query matrix, and schedule re-entry",
+    "targeted_commit": "committed: strict RED, minimum GREEN, and focused evidence",
+    "cpu_gate": "awaiting transport heavy-validation completion"
   }
 }
