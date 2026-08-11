@@ -13,9 +13,9 @@
     "reason": "The current roadmap intentionally has no addressable numbered issue phase and the canonical delivery contract forbids role spawning.",
     "discuss_phase": "completed_auto",
     "plan_phase_tdd": "completed_manual",
-    "execute_phase": "pending",
-    "verify_work": "pending",
-    "code_review": "pending"
+    "execute_phase": "completed_manual",
+    "verify_work": "completed_manual_auto",
+    "code_review": "completed_manual_standard"
   },
   "skills": [
     "golang-how-to",

@@ -1,6 +1,6 @@
 # #4046 R9 verification checklist
 
-**Status:** Behavioral RED observed at the pinned base; production change not started.
+**Status:** Local implementation and ordered matrix passed; manual GSD verify/code-review records are complete; fresh no-mistakes and GitHub delivery remain pending.
 
 ## Safety preconditions
 
@@ -47,31 +47,31 @@
    go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRunForAllModes$' -v
    ```
 
-7. [ ] Race/interleaving:
+7. [x] Race/interleaving (exit `0`, 10 repetitions; no race report):
 
    ```sh
    go test -race -count=10 -timeout 20m ./internal/app -run '^(TestRunETLTransportStaleWriterFinalizesLosingRun|TestFailRunTransportConflictPreservesLatestConcurrentState|TestRunETLTransportStaleWriterFinalizesAfterCancellation)$'
    ```
 
-8. [ ] Existing R7/R8 regression:
+8. [x] Existing R7/R8 regression (exit `0`):
 
    ```sh
    go test -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume|TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForAllModes|TestRunETLTransportAdvancesInterimCheckpointAcrossPages|TestRunETLTransportPreservesUnrelatedStateDuringInterimCheckpointCommit|TestRunETLTransportRejectsStaleCheckpointWriter|TestRunETLTransportDistinguishesMissingAndPresentStreamState|TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation|TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails|TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure)$'
    ```
 
-9. [ ] Affected package:
+9. [x] Affected package (exit `0`):
 
    ```sh
    go test -count=1 -timeout 20m ./internal/app
    ```
 
-10. [ ] Static/build:
+10. [x] Static/build (exit `0`):
 
     ```sh
     go vet ./internal/app/... && go build ./cmd/pm
     ```
 
-11. [ ] Repository gates individually, not monolithically under a per-command timeout:
+11. [x] Repository gates individually, not monolithically under a per-command timeout (all exit `0`):
 
     ```sh
     make tidy-check
@@ -87,12 +87,18 @@
 
 ## Lifecycle and delivery checks
 
-- [ ] Manual `execute-phase` record includes RED → GREEN commits and any deviation.
-- [ ] Manual `verify-work` record includes the completed matrix and truthful non-certification boundary.
-- [ ] Manual `code-review` record dispositions every finding.
+- [x] Manual `execute-phase` record includes RED → GREEN commits and the non-numbered-phase fallback in `SUMMARY.md`.
+- [x] Manual `verify-work` record includes the completed matrix and truthful non-certification boundary in `UAT.md`.
+- [x] Manual `code-review` record dispositions every finding in `REVIEW.md`.
 - [ ] Fresh `no-mistakes axi run --intent <complete R9 intent> --skip=push,pr,ci` is started only after local review; it never uses `--yes` and never controls the old run.
 - [ ] Pushed stacked PR targets `feat/3862-any-to-any-transport`, remains unmerged, and records review/CI status without a closing keyword.
 
 ## Explicitly out of scope
 
 No provider, credential, network, warehouse, container, external service, reverse-ETL execution, generic write surface, or certification operation is evidence for this phase.
+
+## Completed local evidence
+
+- The race command passed with the platform linker warning emitted by the macOS toolchain but no Go race detector or test failure.
+- `go vet ./internal/app/... && go build ./cmd/pm` passed.
+- `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make connector-boundary`, and `make release-workflow-check` each passed individually. The smoke gate used its hermetic temporary sample project only; no live provider, credential, or external service was contacted.
