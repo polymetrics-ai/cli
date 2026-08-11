@@ -30,6 +30,10 @@ receipt-gated commit boundary.
 | T20 | Renamed discard marker | A parent-sync failure removes a newly renamed terminal marker. | The external marker remains observable across restart and recovery removes the matching stage without delivery. |
 | T21 | Indeterminate cleanup | A cleanup parent-sync failure makes discarded work directly recoverable. | The marker remains terminal; restart has no committable stage or receiver call. |
 | T22 | Failed discard intent with durable cleanup | A failed marker write leaves a removed transaction replayable after restart. | Durable stage-directory cleanup leaves no pending transaction or receiver call. |
+| T23 | Bounded discard control | Repeated empty begin/abort leaves final controls outside the payload quota. | One required control slot is reserved per stage instance and released only after final retirement is directory-synced. |
+| T24 | Owned temporary recovery | A crash leaves an owned discard-control temp forever, or cleanup deletes an operator artifact. | Recovery removes only exact regular legacy/new control temps, syncs the directory, and preserves unexpected artifacts fail-closed. |
+| T25 | Final retirement ordering | A final is removed before matching transaction cleanup is durable, or survives a safe restart forever. | A valid final dominates matching recovery, then retires only after transaction cleanup and both directory sync boundaries. |
+| T26 | Cleanup root poison | Failed final/control cleanup permits new begin, append, commit, or recovery admission. | Typed cleanup errors block all delivery-capable operations until cleanup-only reconciliation succeeds. |
 
 ## First RED command
 
@@ -58,7 +62,7 @@ go test -timeout 20m -count=1 ./internal/synccontract ./internal/app
 
 - [x] The named first test passes after durable implementation and reopens the
       root to prove the receipt artifact, not an in-memory value, survives.
-- [x] The package suite covers T1–T22, including abort/quota/cancellation,
+- [x] The package suite covers T1–T26, including abort/quota/cancellation,
       streamed-buffer, recovery, opaque-key, receipt-forgery, and concurrent
       isolation cases.
 - [x] `transaction_stage_fault_test.go` injects begin, chunk, manifest, seal,
@@ -98,12 +102,42 @@ covered by `TestCommittedTransactionStageSaturatesUntrustedRecordQuotaDiagnostic
 | durable | indeterminate | The retained external marker causes recovery cleanup before delivery. | T18 failed cleanup and T21 parent-sync cleanup fault. |
 | indeterminate | indeterminate | A visible renamed marker is retained and dominates recovery; if a crash loses visibility, the bare sealed fallback is held. | T20 marker parent-sync fault. |
 
+### Bounded discard-control matrix
+
+| Control mutation | Generation cleanup | Final retirement | Restart/retry result | Proof |
+|---|---|---|---|---|
+| not-applied | durable | not applicable | No generation remains; the reserved control slot is released. | T22 write failure with durable cleanup. |
+| not-applied | indeterminate | not applicable | Bare sealed residue is recovery-held; the current root is cleanup-poisoned. | T19 dual write/cleanup fault. |
+| durable | durable | durable | Final is removed and `discards/` is synced; the slot is released. | T23 bounded repeated Begin/Abort. |
+| durable | indeterminate | not attempted | Final remains and the root is poisoned until cleanup-only reconciliation. | T21 and T26 transaction cleanup failures. |
+| indeterminate | durable | not attempted | The renamed final remains; the root is poisoned until reconciliation validates and retires it. | T20 parent-sync failure. |
+| durable | durable | not-applied or indeterminate | The root is poisoned; retry scans the validated final before admitting work. | T25 final remove/directory-sync faults. |
+| crash before final rename | not applicable | not applicable | Only exact owned control temporaries are reaped; lookalikes and operator artifacts remain fail-closed. | T24 recovery temp tests. |
+
 Every bare recovered sealed item requires `AdmitRecoveredTransaction` before
 delivery. A discard marker is per stage instance, so retaining old terminal
 evidence cannot discard a later reuse of the same opaque transaction identity.
 
+## Correction #4043 — bounded discard controls
+
+- Red: `traces/discard-control-final-correction-red.txt` records the four
+  deterministic behavioural failures in
+  `TestCommittedTransactionStageDiscardControlRetentionIsBounded`,
+  `TestCommittedTransactionStageRecoveryReapsOnlyOwnedDiscardTemps`,
+  `TestCommittedTransactionStageDiscardRetirementCrashMatrix`, and
+  `TestCommittedTransactionStageDiscardControlCleanupFailurePoisonsRoot`.
+  The pre-fix root retained three final controls under a one-byte payload
+  limit, retained a real pre-rename temporary file after reopen, retained a
+  final after transaction cleanup, and continued admitting work after failed
+  control cleanup.
+- Green: `traces/discard-control-final-correction-green.txt` records the
+  focused matrix, full database package, database race run, and
+  synccontract/app regressions after the bounded one-control-slot admission,
+  exact temporary recovery, durable final retirement, typed root poison, and
+  cleanup-only reconciliation implementation.
+
 ## Refactor condition
 
-Refactor only after all T1–T22 focused tests pass. Re-run every Green command
+Refactor only after all T1–T26 focused tests pass. Re-run every Green command
 after any cleanup. Do not convert a failure into a skipped test, weaker
 assertion, unbounded limit, or generic success result.

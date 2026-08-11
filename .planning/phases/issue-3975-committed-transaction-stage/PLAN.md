@@ -76,6 +76,8 @@ The API must express:
    operator decision required before a recovered sealed item may commit.
 6. startup/recovery exposes sealed no-receipt work as held, removes
    incomplete/orphan temporary state safely, and never directly replays it.
+7. `ReconcileDiscardControls(ctx)` retries only fail-closed discard cleanup;
+   it never admits or delivers staged work.
 
 No API accepts raw source paths or publishes a generic writer. Transaction
 identifiers remain opaque data and are mapped to deterministic safe storage
@@ -108,11 +110,21 @@ restart sealed --verify--> recovery-held --AdmitRecoveredTransaction--> sealed
 - Aborting, quota breaches, cancellation, or any receipt durability failure
   produce no receipt-derived eligibility. Source checkpoint/LSN interaction is
   deliberately outside this package.
-- Terminal discard evidence is a monotonic, per-stage-instance journal outside
-  the transaction directory. Mutation and cleanup outcomes are classified as
-  not-applied, durable, or indeterminate. A renamed journal marker is retained
-  even when its parent sync is indeterminate; if no marker can be observed
-  after a crash, the bare sealed item remains recovery-held rather than replayed.
+- `MaxStagedTransactions` is a required finite control-slot budget independent
+  of `MaxStagedBytes`: a slot is reserved before Begin creates durable state,
+  carried through discard temporary/final control states, and released only
+  after durable control retirement.
+- Terminal discard evidence is per-stage-instance and outside the transaction
+  directory. Mutation and cleanup outcomes are classified as not-applied,
+  durable, or indeterminate. A renamed marker remains intact after a parent
+  sync failure; it is retired only after matching generation cleanup has
+  completed `RemoveAll` plus transactions-directory sync, followed by marker
+  removal plus discards-directory sync.
+- Recovery enumerates and validates controls before admission, removes only
+  owned regular temporary controls, and fails the root closed while preserving
+  corrupt, lookalike, symlink, directory, or unrelated artifacts. A cleanup
+  error blocks Begin, Append, Commit, and recovery admission until the
+  cleanup-only reconciliation succeeds.
 
 ### Receipt and existing sync contract
 
@@ -136,7 +148,7 @@ tombstone/history policy, or sends source feedback.
 | Provider transaction ID → filesystem | Traversal, collision, or control characters redirect storage | Validate non-empty opaque identity; derive stage component from a stable digest; tests use traversal/control-character IDs and prove files stay below the configured root. |
 | Provider chunk → local storage | Unbounded payload exhausts memory/disk or is exposed before commit | Fixed-size stream buffer, exact byte/record/time limits, no public reader until sealed, and quota tests that assert zero publication/eligibility. |
 | Receiver success → source acknowledgement | Caller treats a local stage or ordinary success as durable source progress | Only validated/persisted receipt creates acknowledgement; fake source test proves it cannot acknowledge before receipt durability. |
-| Process crash / filesystem failure | Partial files, stale state, discard intent, or receipt claim becomes misleading | Temp+sync+rename+parent-sync transitions; monotonic external discard markers; recovery removes recorded discards and holds bare sealed items for explicit admission. |
+| Process crash / filesystem failure | Partial files, stale state, discard intent, or receipt claim becomes misleading | Temp+sync+rename+parent-sync transitions; bounded external discard controls; recovery validates controls, retires only after durable generation cleanup, and holds bare sealed items for explicit admission. |
 | Concurrent calls | Data race, out-of-order append, or cross-transaction interference | Per-stage synchronization with no lock held across receiver I/O; race suite and concurrent-order/isolation tests. |
 </threat_model>
 

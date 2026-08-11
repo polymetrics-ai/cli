@@ -24,6 +24,7 @@ func TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt(t *testing.T)
 			MaxTransactionRecords: 10,
 			MaxTransactionAge:     time.Minute,
 			MaxStagedBytes:        1 << 20,
+			MaxStagedTransactions: 16,
 		},
 	})
 	if err != nil {
@@ -271,6 +272,24 @@ func TestCommittedTransactionStageRetainsRecoveredBytesAgainstRootQuota(t *testi
 	assertTransactionStageLimit(t, recovered.AppendChunk(context.Background(), "new", 1, strings.NewReader("x")), TransactionStageLimitStagedBytes)
 	if got := recovered.PendingTransactions(); len(got) != 1 || got[0].TransactionKey == "" {
 		t.Fatalf("PendingTransactions() after root refusal = %#v, want retained sealed transaction", got)
+	}
+}
+
+func TestCommittedTransactionStageBoundsControlSlotsBeforeDurableBegin(t *testing.T) {
+	root := t.TempDir()
+	limits := testTransactionStageLimits()
+	limits.MaxStagedTransactions = 1
+	stage := newTestTransactionStage(t, root, limits)
+	if err := stage.BeginTransaction(context.Background(), "control-slot-first"); err != nil {
+		t.Fatalf("BeginTransaction(first) error = %v", err)
+	}
+	assertTransactionStageLimit(t, stage.BeginTransaction(context.Background(), "control-slot-second"), TransactionStageLimitStagedTransactions)
+	assertPrivateStageCounts(t, root, 1, 0)
+	if err := stage.AbortTransaction(context.Background(), "control-slot-first"); err != nil {
+		t.Fatalf("AbortTransaction(first) error = %v", err)
+	}
+	if err := stage.BeginTransaction(context.Background(), "control-slot-second"); err != nil {
+		t.Fatalf("BeginTransaction(second) after retirement error = %v", err)
 	}
 }
 
@@ -654,6 +673,7 @@ func testTransactionStageLimits() TransactionStageLimits {
 		MaxTransactionRecords: 100,
 		MaxTransactionAge:     time.Minute,
 		MaxStagedBytes:        2 << 20,
+		MaxStagedTransactions: 64,
 	}
 }
 
@@ -677,6 +697,17 @@ func assertTransactionStageLimit(t *testing.T, err error, want TransactionStageL
 	}
 	if limitErr.Limit != want {
 		t.Fatalf("limit error = %#v, want limit %q", limitErr, want)
+	}
+}
+
+func assertTransactionStageCleanupRequired(t *testing.T, err error) {
+	t.Helper()
+	if !errors.Is(err, ErrTransactionStageCleanupRequired) {
+		t.Fatalf("error = %v, want ErrTransactionStageCleanupRequired", err)
+	}
+	var cleanupErr *TransactionStageCleanupError
+	if !errors.As(err, &cleanupErr) {
+		t.Fatalf("error = %v, want *TransactionStageCleanupError", err)
 	}
 }
 
@@ -705,6 +736,23 @@ func assertPrivateStageCounts(t *testing.T, root string, wantTransactions, wantR
 		if len(entries) != check.want {
 			t.Fatalf("private stage entries in %s = %d, want %d (%v)", check.directory, len(entries), check.want, entries)
 		}
+	}
+}
+
+func assertDiscardControlFinalCount(t *testing.T, root string, want int) {
+	t.Helper()
+	entries, err := os.ReadDir(filepath.Join(root, "discards"))
+	if err != nil {
+		t.Fatalf("ReadDir(discards) error = %v", err)
+	}
+	var got int
+	for _, entry := range entries {
+		if strings.HasSuffix(entry.Name(), ".json") {
+			got++
+		}
+	}
+	if got != want {
+		t.Fatalf("discard control finals = %d, want %d (%v)", got, want, entries)
 	}
 }
 

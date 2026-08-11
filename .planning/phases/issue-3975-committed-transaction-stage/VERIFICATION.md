@@ -64,6 +64,23 @@
 - [x] `go test -race -count=1 -timeout 20m ./internal/connectors/database`
 - [x] `go test -count=1 -timeout 20m ./internal/synccontract ./internal/app`
 
+## Correction #4043 bounded discard controls
+
+- [x] Red: `traces/discard-control-final-correction-red.txt` records retained
+      finals under a one-byte payload limit, a surviving real control temp, a
+      surviving final after restart, and unpoisoned delivery operations.
+- [x] Green: `traces/discard-control-final-correction-green.txt` records the
+      focused retention/temp/crash/poison matrix, complete database package,
+      database race run, and synccontract/app regressions.
+- [x] `MaxStagedTransactions` reserves one control slot before durable Begin
+      state, does not draw on payload-byte capacity, and releases only after
+      durable final-control retirement when a final exists.
+- [x] Recovery validates lower-case key-instance final names, reaps only exact
+      regular owned control temps, preserves unexpected artifacts fail-closed,
+      and holds bare sealed work until explicit admission.
+- [x] Typed cleanup errors block Begin, Append, Commit, and recovery admission
+      until cleanup-only reconciliation succeeds.
+
 ## Executed repository gates
 
 - [x] `make tidy-check`

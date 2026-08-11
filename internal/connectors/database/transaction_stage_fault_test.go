@@ -331,15 +331,19 @@ func TestCommittedTransactionStageFailedAppendCleanupStaysTerminalUntilAbortRetr
 	if !fault.fired() {
 		t.Fatal("failed-append cleanup fault was not exercised")
 	}
-	if _, err := stage.CommitTransaction(context.Background(), transactionID, &recordingTransactionReceiver{}); !errors.Is(err, ErrTransactionStageInProgress) {
-		t.Fatalf("CommitTransaction() error = %v, want ErrTransactionStageInProgress", err)
-	}
+	assertTransactionStageCleanupRequired(t, func() error {
+		_, err := stage.CommitTransaction(context.Background(), transactionID, &recordingTransactionReceiver{})
+		return err
+	}())
 	if got := stage.PendingTransactions(); len(got) != 0 {
 		t.Fatalf("PendingTransactions() = %#v, want no terminal failed append", got)
 	}
 	assertPrivateStageCounts(t, root, 1, 0)
 	if err := stage.AbortTransaction(context.Background(), transactionID); err != nil {
 		t.Fatalf("AbortTransaction() retry error = %v", err)
+	}
+	if err := stage.ReconcileDiscardControls(context.Background()); err != nil {
+		t.Fatalf("ReconcileDiscardControls() error = %v", err)
 	}
 	assertPrivateStageCounts(t, root, 0, 0)
 }
@@ -546,8 +550,8 @@ func TestCommittedTransactionStageDiscardIntentParentSyncFailureRetainsExternalM
 	if got := len(receiver.transactions); got != 0 {
 		t.Fatalf("receiver transactions after marker recovery = %d, want 0", got)
 	}
-	if _, err := os.Stat(marker); err != nil {
-		t.Fatalf("Stat(discard intent) after recovery error = %v, want retained marker", err)
+	if _, err := os.Stat(marker); !os.IsNotExist(err) {
+		t.Fatalf("Stat(discard intent) after recovery error = %v, want retired marker", err)
 	}
 }
 
@@ -589,6 +593,289 @@ func TestCommittedTransactionStageDiscardCleanupParentSyncFailureNeverAdmitsReco
 	}
 	if got := len(receiver.transactions); got != 0 {
 		t.Fatalf("receiver transactions after indeterminate cleanup recovery = %d, want 0", got)
+	}
+}
+
+func TestCommittedTransactionStageDiscardControlRetentionIsBounded(t *testing.T) {
+	root := t.TempDir()
+	limits := testTransactionStageLimits()
+	limits.MaxTransactionBytes = 1
+	limits.MaxStagedBytes = 1
+	limits.MaxStagedTransactions = 1
+	stage := newTestTransactionStage(t, root, limits)
+
+	for _, transactionID := range []string{"discard-control-retention-1", "discard-control-retention-2", "discard-control-retention-3"} {
+		if err := stage.BeginTransaction(context.Background(), transactionID); err != nil {
+			t.Fatalf("BeginTransaction(%q) error = %v", transactionID, err)
+		}
+		if err := stage.AbortTransaction(context.Background(), transactionID); err != nil {
+			t.Fatalf("AbortTransaction(%q) error = %v", transactionID, err)
+		}
+	}
+
+	_ = newTestTransactionStage(t, root, limits)
+	assertDiscardControlFinalCount(t, root, 0)
+}
+
+func TestCommittedTransactionStageRecoveryReapsOnlyOwnedDiscardTemps(t *testing.T) {
+	root := t.TempDir()
+	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+	temporary, err := os.CreateTemp(stage.discardsDirectory(), ".stage.tmp-*")
+	if err != nil {
+		t.Fatalf("CreateTemp(discard control) error = %v", err)
+	}
+	temporaryPath := temporary.Name()
+	if err := temporary.Close(); err != nil {
+		t.Fatalf("Close(discard control temporary) error = %v", err)
+	}
+	unrelatedPath := filepath.Join(stage.discardsDirectory(), "operator-note")
+	if err := os.WriteFile(unrelatedPath, []byte("preserve"), 0o600); err != nil {
+		t.Fatalf("WriteFile(unrelated discard artifact) error = %v", err)
+	}
+
+	recovered := newTestTransactionStage(t, root, testTransactionStageLimits())
+	if _, err := os.Stat(temporaryPath); !os.IsNotExist(err) {
+		t.Fatalf("Stat(owned discard temporary) error = %v, want absence", err)
+	}
+	if _, err := os.Stat(unrelatedPath); err != nil {
+		t.Fatalf("Stat(unrelated discard artifact) error = %v, want preserved", err)
+	}
+	assertTransactionStageCleanupRequired(t, recovered.BeginTransaction(context.Background(), "discard-control-unrelated-artifact"))
+	assertTransactionStageCleanupRequired(t, recovered.ReconcileDiscardControls(context.Background()))
+}
+
+func TestCommittedTransactionStageRecoveryPreservesUnexpectedDiscardControls(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		create func(*testing.T, *CommittedTransactionStage) string
+	}{
+		{
+			name: "corrupt final",
+			create: func(t *testing.T, stage *CommittedTransactionStage) string {
+				t.Helper()
+				path := filepath.Join(stage.discardsDirectory(), strings.Repeat("a", transactionStageKeyBytes)+"-"+strings.Repeat("b", transactionStageKeyBytes)+".json")
+				if err := os.WriteFile(path, []byte("not-json"), 0o600); err != nil {
+					t.Fatalf("WriteFile(corrupt final) error = %v", err)
+				}
+				return path
+			},
+		},
+		{
+			name: "oversized final",
+			create: func(t *testing.T, stage *CommittedTransactionStage) string {
+				t.Helper()
+				key := strings.Repeat("a", transactionStageKeyBytes)
+				instanceID := strings.Repeat("b", transactionStageKeyBytes)
+				path := filepath.Join(stage.discardsDirectory(), key+"-"+instanceID+".json")
+				payload := `{"version":1,"transaction_key":"` + key + `","instance_id":"` + instanceID + `","state":"discarded"}` + strings.Repeat(" ", transactionStageDiscardControlMaximumBytes)
+				if err := os.WriteFile(path, []byte(payload), 0o600); err != nil {
+					t.Fatalf("WriteFile(oversized final) error = %v", err)
+				}
+				return path
+			},
+		},
+		{
+			name: "temporary lookalike",
+			create: func(t *testing.T, stage *CommittedTransactionStage) string {
+				t.Helper()
+				path := filepath.Join(stage.discardsDirectory(), ".stage.tmp-12345678901")
+				if err := os.WriteFile(path, []byte("preserve"), 0o600); err != nil {
+					t.Fatalf("WriteFile(temporary lookalike) error = %v", err)
+				}
+				return path
+			},
+		},
+		{
+			name: "directory",
+			create: func(t *testing.T, stage *CommittedTransactionStage) string {
+				t.Helper()
+				path := filepath.Join(stage.discardsDirectory(), "operator-directory")
+				if err := os.Mkdir(path, 0o700); err != nil {
+					t.Fatalf("Mkdir(discard artifact) error = %v", err)
+				}
+				return path
+			},
+		},
+		{
+			name: "symlink",
+			create: func(t *testing.T, stage *CommittedTransactionStage) string {
+				t.Helper()
+				target := filepath.Join(stage.discardsDirectory(), "operator-target")
+				if err := os.WriteFile(target, []byte("preserve"), 0o600); err != nil {
+					t.Fatalf("WriteFile(symlink target) error = %v", err)
+				}
+				path := filepath.Join(stage.discardsDirectory(), "operator-link")
+				if err := os.Symlink(target, path); err != nil {
+					t.Fatalf("Symlink(discard artifact) error = %v", err)
+				}
+				return path
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			root := t.TempDir()
+			stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+			path := tt.create(t, stage)
+			recovered := newTestTransactionStage(t, root, testTransactionStageLimits())
+			assertTransactionStageCleanupRequired(t, recovered.BeginTransaction(context.Background(), "unexpected-discard-artifact"))
+			if _, err := os.Lstat(path); err != nil {
+				t.Fatalf("Lstat(discard artifact) error = %v, want preserved", err)
+			}
+		})
+	}
+}
+
+func TestCommittedTransactionStageDiscardRetirementCrashMatrix(t *testing.T) {
+	root := t.TempDir()
+	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+	const transactionID = "discard-retirement-crash"
+	stageCompleteChunk(t, stage, transactionID)
+	if _, err := stage.CommitTransaction(context.Background(), transactionID, transactionReceiverFunc(func(context.Context, CommittedTransaction) (DownstreamTransactionReceipt, error) {
+		return DownstreamTransactionReceipt{}, errors.New("injected receiver failure")
+	})); err == nil {
+		t.Fatal("CommitTransaction() error = nil, want sealed receipt-less transaction")
+	}
+	key, err := transactionStageKey(transactionID)
+	if err != nil {
+		t.Fatalf("transactionStageKey() error = %v", err)
+	}
+	cleanupFault := &transactionStageFault{
+		operation: "remove_all",
+		match: func(path string) bool {
+			return path == stage.transactionDirectory(key)
+		},
+		err: errors.New("injected discard transaction cleanup failure"),
+	}
+	installTransactionStageFault(stage, cleanupFault)
+	if err := stage.AbortTransaction(context.Background(), transactionID); err == nil {
+		t.Fatal("AbortTransaction() error = nil, want cleanup failure")
+	}
+	if !cleanupFault.fired() {
+		t.Fatal("discard transaction cleanup fault was not exercised")
+	}
+
+	_ = newTestTransactionStage(t, root, testTransactionStageLimits())
+	assertPrivateStageCounts(t, root, 0, 0)
+	assertDiscardControlFinalCount(t, root, 0)
+}
+
+func TestCommittedTransactionStageDiscardFinalRetirementFailuresPoisonRoot(t *testing.T) {
+	for _, tt := range []struct {
+		name      string
+		operation string
+		match     func(*CommittedTransactionStage, string, string) bool
+	}{
+		{
+			name:      "final remove",
+			operation: "remove",
+			match: func(_ *CommittedTransactionStage, marker, path string) bool {
+				return path == marker
+			},
+		},
+		{
+			name:      "final directory sync",
+			operation: "directory_sync",
+			match: func(stage *CommittedTransactionStage, _ string, path string) bool {
+				return path == stage.discardsDirectory()
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			root := t.TempDir()
+			stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+			transactionID := "discard-final-retirement-" + strings.ReplaceAll(tt.name, " ", "-")
+			if err := stage.BeginTransaction(context.Background(), transactionID); err != nil {
+				t.Fatalf("BeginTransaction() error = %v", err)
+			}
+			key, err := transactionStageKey(transactionID)
+			if err != nil {
+				t.Fatalf("transactionStageKey() error = %v", err)
+			}
+			stage.mu.Lock()
+			marker := stage.discardIntentPath(key, stage.entries[key].manifest.instanceID())
+			stage.mu.Unlock()
+			fault := &transactionStageFault{
+				operation: tt.operation,
+				match: func(path string) bool {
+					return tt.match(stage, marker, path)
+				},
+				err: errors.New("injected discard final retirement failure"),
+			}
+			installTransactionStageFault(stage, fault)
+			abortErr := stage.AbortTransaction(context.Background(), transactionID)
+			assertTransactionStageCleanupRequired(t, abortErr)
+			if !fault.fired() {
+				t.Fatal("discard final retirement fault was not exercised")
+			}
+			assertTransactionStageCleanupRequired(t, stage.BeginTransaction(context.Background(), transactionID+"-new"))
+			if err := stage.ReconcileDiscardControls(context.Background()); err != nil {
+				t.Fatalf("ReconcileDiscardControls() error = %v", err)
+			}
+			if _, err := os.Stat(marker); !os.IsNotExist(err) {
+				t.Fatalf("Stat(discard intent) error = %v, want retired marker", err)
+			}
+			if err := stage.BeginTransaction(context.Background(), transactionID+"-new"); err != nil {
+				t.Fatalf("BeginTransaction() after reconciliation error = %v", err)
+			}
+		})
+	}
+}
+
+func TestCommittedTransactionStageDiscardControlCleanupFailurePoisonsRoot(t *testing.T) {
+	root := t.TempDir()
+	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+	const doomedTransactionID = "discard-control-poison-doomed"
+	const committingTransactionID = "discard-control-poison-commit"
+	const recoveredTransactionID = "discard-control-poison-recovered"
+	if err := stage.BeginTransaction(context.Background(), doomedTransactionID); err != nil {
+		t.Fatalf("BeginTransaction(doomed) error = %v", err)
+	}
+	stageCompleteChunk(t, stage, committingTransactionID)
+	stageCompleteChunk(t, stage, recoveredTransactionID)
+	recoveredKey, err := transactionStageKey(recoveredTransactionID)
+	if err != nil {
+		t.Fatalf("transactionStageKey(recovered) error = %v", err)
+	}
+	stage.mu.Lock()
+	stage.entries[recoveredKey].manifest.State = transactionStageStateSealed
+	stage.entries[recoveredKey].status = stageStatusRecoveryHeld
+	stage.mu.Unlock()
+	doomedKey, err := transactionStageKey(doomedTransactionID)
+	if err != nil {
+		t.Fatalf("transactionStageKey(doomed) error = %v", err)
+	}
+	cleanupFault := &transactionStageFault{
+		operation: "remove_all",
+		match: func(path string) bool {
+			return path == stage.transactionDirectory(doomedKey)
+		},
+		err: errors.New("injected discard control cleanup failure"),
+	}
+	installTransactionStageFault(stage, cleanupFault)
+	if err := stage.AbortTransaction(context.Background(), doomedTransactionID); err == nil {
+		t.Fatal("AbortTransaction(doomed) error = nil, want cleanup failure")
+	}
+	if !cleanupFault.fired() {
+		t.Fatal("discard control cleanup fault was not exercised")
+	}
+
+	beginErr := stage.BeginTransaction(context.Background(), "discard-control-poison-new")
+	assertTransactionStageCleanupRequired(t, beginErr)
+	appendErr := stage.AppendChunk(context.Background(), committingTransactionID, 1, strings.NewReader("more"))
+	assertTransactionStageCleanupRequired(t, appendErr)
+	_, commitErr := stage.CommitTransaction(context.Background(), committingTransactionID, &recordingTransactionReceiver{})
+	assertTransactionStageCleanupRequired(t, commitErr)
+	admitErr := stage.AdmitRecoveredTransaction(context.Background(), recoveredTransactionID)
+	assertTransactionStageCleanupRequired(t, admitErr)
+
+	if err := stage.AbortTransaction(context.Background(), doomedTransactionID); err != nil {
+		t.Fatalf("AbortTransaction(doomed) cleanup retry error = %v", err)
+	}
+	if err := stage.ReconcileDiscardControls(context.Background()); err != nil {
+		t.Fatalf("ReconcileDiscardControls() error = %v", err)
+	}
+	if err := stage.BeginTransaction(context.Background(), "discard-control-poison-new"); err != nil {
+		t.Fatalf("BeginTransaction() after reconciliation error = %v", err)
 	}
 }
 
@@ -721,6 +1008,12 @@ func installTransactionStageFaultApplier(stage *CommittedTransactionStage, fault
 		}
 		return base.rename(from, to)
 	}
+	stage.storage.remove = func(path string) error {
+		if err := fault.apply("remove", path); err != nil {
+			return err
+		}
+		return base.remove(path)
+	}
 	stage.storage.removeAll = func(path string) error {
 		if err := fault.apply("remove_all", path); err != nil {
 			return err
@@ -768,7 +1061,7 @@ func isTransactionStageReceiptTemporary(_ *CommittedTransactionStage, _ string, 
 
 func isTransactionStageDiscardControlTemporary(stage *CommittedTransactionStage, key, path string) bool {
 	return isTransactionStageStateTemporary(stage, key, path) ||
-		(strings.Contains(filepath.ToSlash(path), "/discards/") && strings.Contains(filepath.Base(path), ".stage.tmp-"))
+		(strings.Contains(filepath.ToSlash(path), "/discards/") && isOwnedTransactionStageDiscardTemporary(filepath.Base(path)))
 }
 
 func stageCompleteChunk(t *testing.T, stage *CommittedTransactionStage, transactionID string) {
