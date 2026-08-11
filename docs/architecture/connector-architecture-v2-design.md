@@ -592,12 +592,26 @@ or a shared warehouse artifact to a database target. A database command cannot c
 source and target, and native admission/evidence is distinct for each leg. Therefore neither a
 direct connector pair nor a zero-copy route exists in this architecture.
 
-The Wave A declaration and admission seam is non-executing. `database.json` does not register a
-driver, open a connection, perform SQL/DDL, create a write session, persist a receipt/checkpoint,
-or enable CDC/polling; public capabilities remain in `metadata.json`. PostgreSQL is the reference
-seam with `write` and `cdc` still false. A future MySQL implementation supplies its own database
-definition, per-leg admission/evidence, and native extraction or apply mechanics without a shared
-warehouse or PostgreSQL change.
+`database.json` remains a non-executing policy declaration: it does not register a driver, open a
+connection, perform SQL/DDL, create a write session, persist a receipt/checkpoint, or enable
+CDC/polling; public capabilities remain in `metadata.json`.
+
+The shared F2 contract adds driver-neutral managed-target provisioning without changing that
+boundary. A `TargetOwner` derives only from the source-owned `warehouse.ArtifactIdentity`
+(workspace, connector, and connection); its `ManagedTargetRef` derives a namespace from that
+triple and a relation from the triple plus artifact table. Both physical names are opaque,
+deterministic values rather than display or credential text. The durable control record binds that
+owner and ref to the observed native relation identity and the expected schema version/fingerprint.
+
+`CreateOrAssert` accepts only an immutable typed plan carrying the asserted owner. Under a
+target-scoped driver lock, it creates only when both the target and control record are absent. After
+an invoked create, it re-observes before returning, including after a cancellation or driver error.
+An exact record is idempotently asserted; missing, unreadable, foreign, colliding, replaced,
+drifted, or orphaned state is refused. The shared contract neither adopts customer tables nor
+evolves schemas, and it selects no PostgreSQL driver or DDL. PostgreSQL therefore remains the
+reference seam with `write` and `cdc` false. A future MySQL implementation supplies its own
+database definition, per-leg admission/evidence, and native extraction or apply mechanics without
+a shared warehouse or PostgreSQL change.
 
 ## C. Interface, registry, and catalog changes
 
