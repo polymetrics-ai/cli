@@ -28,8 +28,8 @@ status: pending
 
 ## Subsequent gates
 
-- [ ] Canonical website generator/check refreshes `website/lib/docs.generated.ts` only.
-- [ ] Canonical certification generator/check refreshes `internal/connectors/certifications/flow-matrix.json` only.
+- [x] Canonical website generator/check refreshes `website/lib/docs.generated.ts` only; the output contains the candidate-owned transport-eligibility section.
+- [x] Canonical certification generator/check refreshes `internal/connectors/certifications/flow-matrix.json` only; its two discovery-source lines match current `internal/cli/cli.go`.
 - [ ] Affected tests, lint, vet/build, and individual repository gates pass after the heavy-validation window notification.
 - [ ] Manual `verify-work` and `code-review` records contain evidence and every finding disposition.
 - [ ] Fresh #4067 no-mistakes run starts at 0/5 without `--yes`; old run is not queried for control or modified.

@@ -14,7 +14,7 @@ The first execution action is a behavioral RED in `internal/app` against the rea
 | RED | Focused test, non-zero exit due to durable symptom, test-only commit | Committed in `5db500fad` |
 | GREEN | Minimal completion-boundary implementation and same test passing | Committed in `d16767e47` |
 | Focused expansion | all modes, reopen, cancellation, fail-closed eligibility, race, #4046/R7/R8 | Complete; commit pending |
-| Generated remediation | canonical generator commands and candidate-owned diff only | Pending |
+| Generated remediation | canonical generator commands and candidate-owned diff only | Complete; commit pending |
 | Heavy validation | only after required user-facing window notification | Pending |
 | Review/no-mistakes/CI | all findings dispositioned; fresh 0/5 no-mistakes; exact-head CI | Pending |
 
@@ -42,3 +42,9 @@ The first execution action is a behavioral RED in `internal/app` against the rea
 - `go test -count=3 -timeout 20m ./internal/app -run '^(TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForAllModes|TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges|TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes|TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome)$'` — exit `0`.
 - Same focused set under `go test -race -count=3 -timeout 20m` — exit `0`; the macOS linker emitted its known malformed `LC_DYSYMTAB` warning, but Go reported no race or test failure.
 - Exact #4046/R7/R8 focused regression command — exit `0`; source identity, target-entry CAS, stale-writer conflict finalization, cancellation ordering, and state-store outcome protections remain unchanged.
+
+## Generated-artifact remediation — completed by canonical generators
+
+- `cd website && node scripts/gen-docs-data.mjs` and then `pnpm run gen:website-data` — canonical website output refreshed. The full generator left exactly `website/lib/docs.generated.ts` modified; its only content change is the candidate-owned `Connector transport eligibility` section already authored in `website/content/docs/agent-guide.mdx`.
+- `go run ./cmd/connectorgen certification-matrix` followed by `go run ./cmd/connectorgen certification-matrix --check` — exit `0`. The generator changed only `internal/connectors/certifications/flow-matrix.json`, refreshing `internal/cli/cli.go:594 → :600` for ETL and `:1723 → :1729` for reverse ETL, exactly matching Sol F3.
+- No generated file was hand-edited and the combined generator status contains no additional paths.
