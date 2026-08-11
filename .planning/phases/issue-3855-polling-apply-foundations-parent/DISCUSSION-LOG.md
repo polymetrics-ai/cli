@@ -27,7 +27,17 @@ were inspected. The workflow is therefore executed inline and recorded in this p
 - Any #3864 review outcome, child implementation, PostgreSQL behavior, and final #4015 integration
   remain outside this phase.
 
-## External-state exception
+## Resolved external transition and scope recovery
 
-The recovered `gh-axi` read reports no PR with this branch as its head. That is an external
-draft-creation blocker, not a topology assumption or a correction round.
+`gh-axi` REST verifies draft PR #4041 as open with head
+`feat/3855-polling-apply-foundations` and temporary dependency-only base
+`feat/3862-any-to-any-transport`.
+
+The completed local no-mistakes run retained its terminal document commit
+`81f37c2b2cf638bfd6b06b35393256232ea6e23d` in ancestry, then whole-revert
+`4099335632a79e3c70ce20c004a5f63933171280` restored the accepted
+`b2d0f63029a34f8d647e57f34a747ad3983e1578` tree. The out-of-scope inherited #4015 architecture
+file remains protected at blob `889e4eddffabb76aa8be46a934c3e9abe0610f4c`.
+
+This is custody/topology recovery, not a correction round or product implementation. Fresh
+no-mistakes validation is required for the post-evidence SHA.
