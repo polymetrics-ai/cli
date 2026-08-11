@@ -29,8 +29,7 @@ neither implements any child nor treats a historical parent-scoped change as the
 
 Merged PR #3880 / commit `dc1a6a7171ca901c8dbaf8cd528f67b18e57d9bb` is partial reusable
 polling implementation only. It is not closure for #3856, #3857, #3858, or #3859 and must not be
-cherry-picked or reimplemented. The child acceptance ledger in `PLAN.md` is the authoritative
-record of its remaining delivery gaps.
+cherry-picked or reimplemented. The topology report remains the source for its remaining gaps.
 
 ## Scope fence
 
@@ -44,8 +43,8 @@ The supplied brief fixes the branch, temporary base, permanent target, draft sta
 reuse classification, and non-goals. There are no remaining choices needed to create this seed, so
 the generated `discuss-phase` workflow is executed inline without reopening those decisions.
 
-The polling capability-taxonomy decision is deliberately deferred to #3857 planning; this parent
-scaffold does not resolve it or claim executable behavior.
+The polling capability-taxonomy conflict identified in the topology report is deliberately deferred
+to #3857 planning; this parent scaffold does not resolve it or claim executable behavior.
 
 ## Live GitHub note
 
