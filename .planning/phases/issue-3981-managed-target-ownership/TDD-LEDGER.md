@@ -18,5 +18,7 @@ failed to build because the deliberately absent `TargetOwner`, managed-target
 ref/control/schema, plan, observation, and provisioning API were referenced.
 The exact output is retained at `traces/managed-target-provisioning-red.txt`.
 
-**GREEN (pending):** the same focused test, then `-race`, package, affected
-warehouse/synccontract/application/CLI tests, static/build, and individual repository gates.
+**GREEN (focused):** both the focused test and its `-race` run pass; exact
+commands/output are retained in `traces/managed-target-provisioning-green.txt`.
+Broader package, affected, static/build, and individual repository gates remain
+in the verification checklist.

@@ -62,6 +62,9 @@ func TestManagedTargetProvisioningTruthTable(t *testing.T) {
 			t.Fatalf("managed target physical name leaked %q: namespace=%q relation=%q", forbidden, ref.Namespace(), ref.Relation())
 		}
 	}
+	if len(ref.Namespace()) > 63 || len(ref.Relation()) > 63 {
+		t.Fatalf("managed target physical names exceed the conservative 63-byte identifier budget: namespace=%q relation=%q", ref.Namespace(), ref.Relation())
+	}
 	if got := owner.Identity(); !got.SameIdentity(identity) {
 		t.Fatalf("target owner identity = %#v, want source artifact identity %#v", got, identity)
 	}
@@ -115,12 +118,38 @@ func TestManagedTargetProvisioningTruthTable(t *testing.T) {
 			wantCreated:  true,
 		},
 		{
+			name: "occupied namespace without a control record is a collision",
+			observation: database.ManagedTargetObservation{
+				NamespacePresent: true,
+				ControlState:     database.ManagedTargetControlAbsent,
+			},
+			plan:        plan,
+			wantError:   database.ErrManagedTargetNameCollision,
+			wantCreates: 0,
+		},
+		{
 			name:         "first create reasserts exact control state",
 			observation:  database.ManagedTargetObservation{ControlState: database.ManagedTargetControlAbsent},
 			createResult: created,
 			plan:         plan,
 			wantCreates:  1,
 			wantCreated:  true,
+		},
+		{
+			name:        "post-create foreign control record is refused",
+			observation: database.ManagedTargetObservation{ControlState: database.ManagedTargetControlAbsent},
+			createResult: database.ManagedTargetObservation{
+				NamespacePresent: true,
+				RelationPresent:  true,
+				ControlState:     database.ManagedTargetControlPresent,
+				ControlRecord:    foreignControl,
+				NativeIdentity:   native,
+				Schema:           schema,
+			},
+			plan:        plan,
+			wantError:   database.ErrManagedTargetOwnerForeign,
+			wantCreates: 1,
+			wantCreated: true,
 		},
 		{
 			name:        "repeat with correct owner is idempotently asserted",
@@ -226,14 +255,14 @@ func TestManagedTargetProvisioningTruthTable(t *testing.T) {
 			wantCreates: 0,
 		},
 		{
-			name:            "cancelled provisioning fails before mutation",
-			observation:     database.ManagedTargetObservation{ControlState: database.ManagedTargetControlAbsent},
-			createResult:    created,
-			plan:            plan,
-			cancelled:       true,
-			wantError:       context.Canceled,
-			wantCreates:     0,
-			wantCreated:     false,
+			name:         "cancelled provisioning fails before mutation",
+			observation:  database.ManagedTargetObservation{ControlState: database.ManagedTargetControlAbsent},
+			createResult: created,
+			plan:         plan,
+			cancelled:    true,
+			wantError:    context.Canceled,
+			wantCreates:  0,
+			wantCreated:  false,
 		},
 		{
 			name:            "concurrent provisioning creates once then asserts",

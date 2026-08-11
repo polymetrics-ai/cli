@@ -7,8 +7,8 @@ gap/correction loop; no claim of a green result is made before the tests run.
 
 ## Required focused checks
 
-- [ ] `go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'`
-- [ ] `go test -race -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'`
+- [x] `go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'`
+- [x] `go test -race -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'`
 - [ ] `go test -timeout 20m -count=1 ./internal/connectors/database`
 - [ ] `go test -timeout 20m -count=1 ./internal/warehouse`
 - [ ] `go test -timeout 20m -count=1 ./internal/synccontract`
