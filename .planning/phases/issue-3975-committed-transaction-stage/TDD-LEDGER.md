@@ -20,12 +20,16 @@ receipt-gated commit boundary.
 | T10 | Disk full | ENOSPC is masked or yields a deceptive final file/receipt. | Error is wrapped, active temp is removed, receiver/ack stay zero. |
 | T11 | Durable I/O | File sync, rename, or parent directory sync failure becomes success. | Each injected failure blocks final transition and eligible acknowledgement. |
 | T12 | Receiver/receipt failure | Receiver/receipt failure permits eligibility or cleanup as success. | Sealed work stays receipt-less/recoverable; receipt failure leaves no final receipt. |
-| T13 | Restart recovery | Recovery publishes active data or treats sealed/no-receipt data as acknowledged. | Recovery removes incomplete/orphan state, retains resume work, and validates durable receipts. |
-| T14 | Crash boundaries | A crash at any transition leaves misleading residue. | Transition matrix proves only active-cleaned, sealed-resumable, or receipt-valid states; zero temp residue. |
+| T13 | Restart recovery | Recovery publishes active data or treats sealed/no-receipt data as acknowledged. | Recovery removes incomplete/orphan state, holds sealed work for explicit admission, and validates durable receipts. |
+| T14 | Crash boundaries | A crash at any transition leaves misleading residue. | Transition matrix proves only active-cleaned, sealed-recovery-held, or receipt-valid states; zero temp residue. |
 | T15 | Opaque identity/path safety | Transaction ID becomes a path or aliases another ID. | Traversal/control IDs stay inside root and distinct opaque IDs receive distinct stage components. |
 | T16 | Concurrent isolation | Concurrent transactions race or leak chunks/receipts across IDs. | `-race` and isolation/order tests pass with no shared mutable payload. |
 | T17 | Synccontract reuse | Stage introduces a forged acknowledgement/checkpoint envelope. | Returned eligibility adapts to `synccontract.NewDurableDownstreamAcknowledgement`; no duplicate checkpoint/tombstone/history type is added. |
 | T18 | Terminal discard recovery | A failed cleanup followed by restart revives deliberately discarded sealed work. | A faulted cancelled abort persists discard intent; recovery removes it, cannot commit it, and never calls a receiver. |
+| T19 | Indeterminate discard recovery | A discard-control write failure plus cleanup failure replays a sealed transaction after restart. | Recovery holds every bare sealed transaction until explicit admission, so direct commit makes zero receiver, receipt, or acknowledgement calls. |
+| T20 | Renamed discard marker | A parent-sync failure removes a newly renamed terminal marker. | The external marker remains observable across restart and recovery removes the matching stage without delivery. |
+| T21 | Indeterminate cleanup | A cleanup parent-sync failure makes discarded work directly recoverable. | The marker remains terminal; restart has no committable stage or receiver call. |
+| T22 | Failed discard intent with durable cleanup | A failed marker write leaves a removed transaction replayable after restart. | Durable stage-directory cleanup leaves no pending transaction or receiver call. |
 
 ## First RED command
 
@@ -54,7 +58,7 @@ go test -timeout 20m -count=1 ./internal/synccontract ./internal/app
 
 - [x] The named first test passes after durable implementation and reopens the
       root to prove the receipt artifact, not an in-memory value, survives.
-- [x] The package suite covers T1–T17, including abort/quota/cancellation,
+- [x] The package suite covers T1–T22, including abort/quota/cancellation,
       streamed-buffer, recovery, opaque-key, receipt-forgery, and concurrent
       isolation cases.
 - [x] `transaction_stage_fault_test.go` injects begin, chunk, manifest, seal,
@@ -76,8 +80,30 @@ covered by `TestCommittedTransactionStageSaturatesUntrustedRecordQuotaDiagnostic
   after durable discard intent makes recovery remove the transaction before it
   can resume or deliver.
 
+## Correction #4043 — indeterminate discard intent
+
+- Red: `traces/discard-intent-write-and-cleanup-failure-red.txt` records the
+  deterministic dual-failure replay where restart directly delivers the
+  sealed transaction.
+- Green: `traces/discard-intent-write-and-cleanup-failure-green.txt` records
+  the focused package pass after the external marker and recovery-hold
+  transition prevent direct replay.
+
+### Discard durability matrix
+
+| Discard mutation outcome | Cleanup outcome | Crash/restart treatment | Proof |
+|---|---|---|---|
+| not-applied | durable | The transaction directory is absent, so there is nothing to replay. | T22 write fault with successful cleanup. |
+| not-applied | indeterminate | No on-disk distinction is claimed; a surviving bare sealed stage is recovery-held. | T19 dual write/cleanup fault. |
+| durable | indeterminate | The retained external marker causes recovery cleanup before delivery. | T18 failed cleanup and T21 parent-sync cleanup fault. |
+| indeterminate | indeterminate | A visible renamed marker is retained and dominates recovery; if a crash loses visibility, the bare sealed fallback is held. | T20 marker parent-sync fault. |
+
+Every bare recovered sealed item requires `AdmitRecoveredTransaction` before
+delivery. A discard marker is per stage instance, so retaining old terminal
+evidence cannot discard a later reuse of the same opaque transaction identity.
+
 ## Refactor condition
 
-Refactor only after all T1–T17 focused tests pass. Re-run every Green command
+Refactor only after all T1–T22 focused tests pass. Re-run every Green command
 after any cleanup. Do not convert a failure into a skipped test, weaker
 assertion, unbounded limit, or generic success result.

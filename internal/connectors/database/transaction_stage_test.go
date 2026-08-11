@@ -162,6 +162,37 @@ func TestCommittedTransactionStageAbortRemovesPrivateChunks(t *testing.T) {
 	}
 }
 
+func TestCommittedTransactionStageDiscardIntentDoesNotBlockReusedIdentity(t *testing.T) {
+	root := t.TempDir()
+	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+	const transactionID = "discard-then-reuse"
+	stageCompleteChunk(t, stage, transactionID)
+	if err := stage.AbortTransaction(context.Background(), transactionID); err != nil {
+		t.Fatalf("AbortTransaction() error = %v", err)
+	}
+	stageCompleteChunk(t, stage, transactionID)
+	if _, err := stage.CommitTransaction(context.Background(), transactionID, transactionReceiverFunc(func(context.Context, CommittedTransaction) (DownstreamTransactionReceipt, error) {
+		return DownstreamTransactionReceipt{}, errors.New("injected receiver failure")
+	})); err == nil {
+		t.Fatal("CommitTransaction() error = nil, want sealed receipt-less transaction")
+	}
+
+	recovered := newTestTransactionStage(t, root, testTransactionStageLimits())
+	if got := recovered.PendingTransactions(); len(got) != 1 {
+		t.Fatalf("PendingTransactions() after identity reuse = %#v, want one recovery-held transaction", got)
+	}
+	if err := recovered.AdmitRecoveredTransaction(context.Background(), transactionID); err != nil {
+		t.Fatalf("AdmitRecoveredTransaction() error = %v", err)
+	}
+	receiver := &recordingTransactionReceiver{}
+	if _, err := recovered.CommitTransaction(context.Background(), transactionID, receiver); err != nil {
+		t.Fatalf("CommitTransaction() after identity reuse admission error = %v", err)
+	}
+	if got := len(receiver.transactions); got != 1 {
+		t.Fatalf("receiver transactions after identity reuse admission = %d, want 1", got)
+	}
+}
+
 func TestCommittedTransactionStageRejectsQuotasAndLeavesNoResidue(t *testing.T) {
 	t.Run("transaction bytes", func(t *testing.T) {
 		limits := testTransactionStageLimits()
@@ -357,6 +388,15 @@ func TestCommittedTransactionStageRestartRecoveryRetainsOnlySealedReceiptlessWor
 		t.Fatalf("Receipt() before recovered commit error = %v, want unavailable", err)
 	}
 	receiver := &recordingTransactionReceiver{}
+	if _, err := recovered.CommitTransaction(context.Background(), transactionID, receiver); !errors.Is(err, ErrTransactionStageRecoveryRequired) {
+		t.Fatalf("CommitTransaction(recovered) before admission error = %v, want ErrTransactionStageRecoveryRequired", err)
+	}
+	if got := len(receiver.transactions); got != 0 {
+		t.Fatalf("receiver transactions before recovery admission = %d, want 0", got)
+	}
+	if err := recovered.AdmitRecoveredTransaction(context.Background(), transactionID); err != nil {
+		t.Fatalf("AdmitRecoveredTransaction() error = %v", err)
+	}
 	receipt, err := recovered.CommitTransaction(context.Background(), transactionID, receiver)
 	if err != nil {
 		t.Fatalf("CommitTransaction(recovered) error = %v", err)

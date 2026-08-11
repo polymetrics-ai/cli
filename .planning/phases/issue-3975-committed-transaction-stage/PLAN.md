@@ -72,8 +72,10 @@ The API must express:
    returns a receipt-derived acknowledgement eligibility.
 4. `AbortTransaction(ctx, transactionID)` removes staged chunks and leaves no
    visible publication, receipt, or eligibility.
-5. startup/recovery exposes enough information to resume sealed no-receipt
-   work and removes incomplete/orphan temporary state safely.
+5. `AdmitRecoveredTransaction(ctx, transactionID)` is the explicit caller or
+   operator decision required before a recovered sealed item may commit.
+6. startup/recovery exposes sealed no-receipt work as held, removes
+   incomplete/orphan temporary state safely, and never directly replays it.
 
 No API accepts raw source paths or publishes a generic writer. Transaction
 identifiers remain opaque data and are mapped to deterministic safe storage
@@ -84,11 +86,13 @@ components without becoming filesystem paths.
 ```text
 absent --Begin--> active --Append*--> active --Commit seal--> sealed
   ^                   |                  |                      |
-  |                   +--Abort/limit/cancel--> removed           |
+  |                   +--Abort/limit/cancel--> discard journal   |
   |                                                              |
   +--recovery cleanup incomplete <-- receipt durable <-- receiver succeeds
                                                  |
                                                  +--> acknowledgement eligible
+
+restart sealed --verify--> recovery-held --AdmitRecoveredTransaction--> sealed
 ```
 
 - `active` and all append-temporary files are never visible to a receiver.
@@ -97,15 +101,18 @@ absent --Begin--> active --Append*--> active --Commit seal--> sealed
   leaves no partial final chunk.
 - `sealed` is restartable but not acknowledgement-eligible. A crash after
   sealing and before receipt persistence is an at-least-once replay case, not
-  a success claim.
+  a success claim; after restart it is held until explicit admission.
 - A receipt becomes valid only after file write, file sync, atomic rename, and
   required parent-directory sync have succeeded. Only then may the stage make
   a `synccontract.DownstreamAcknowledgement` available to the caller.
 - Aborting, quota breaches, cancellation, or any receipt durability failure
   produce no receipt-derived eligibility. Source checkpoint/LSN interaction is
   deliberately outside this package.
-- Terminal discard intent is durably recorded before cleanup. Recovery removes
-  recorded discards and fails closed if that cleanup cannot complete.
+- Terminal discard evidence is a monotonic, per-stage-instance journal outside
+  the transaction directory. Mutation and cleanup outcomes are classified as
+  not-applied, durable, or indeterminate. A renamed journal marker is retained
+  even when its parent sync is indeterminate; if no marker can be observed
+  after a crash, the bare sealed item remains recovery-held rather than replayed.
 
 ### Receipt and existing sync contract
 
@@ -129,7 +136,7 @@ tombstone/history policy, or sends source feedback.
 | Provider transaction ID → filesystem | Traversal, collision, or control characters redirect storage | Validate non-empty opaque identity; derive stage component from a stable digest; tests use traversal/control-character IDs and prove files stay below the configured root. |
 | Provider chunk → local storage | Unbounded payload exhausts memory/disk or is exposed before commit | Fixed-size stream buffer, exact byte/record/time limits, no public reader until sealed, and quota tests that assert zero publication/eligibility. |
 | Receiver success → source acknowledgement | Caller treats a local stage or ordinary success as durable source progress | Only validated/persisted receipt creates acknowledgement; fake source test proves it cannot acknowledge before receipt durability. |
-| Process crash / filesystem failure | Partial files, stale state, or receipt claim becomes misleading | Temp+sync+rename+parent-sync transitions; injected ENOSPC/fsync/rename/receipt failures; recovery removes incomplete residue and retains only safe sealed replay data. |
+| Process crash / filesystem failure | Partial files, stale state, discard intent, or receipt claim becomes misleading | Temp+sync+rename+parent-sync transitions; monotonic external discard markers; recovery removes recorded discards and holds bare sealed items for explicit admission. |
 | Concurrent calls | Data race, out-of-order append, or cross-transaction interference | Per-stage synchronization with no lock held across receiver I/O; race suite and concurrent-order/isolation tests. |
 </threat_model>
 
@@ -223,8 +230,9 @@ every persistence transition: begin directory creation, append write/file sync/
 rename/parent sync, seal write/sync/rename/parent sync, receiver failure,
 receipt write/file sync/rename/parent sync, and post-receipt cleanup. Add
 restart tests that reopen the same root, discard incomplete/orphan temporary
-stages, report/resume sealed receipt-less work without eligibility, recover a
-valid receipt, and clean post-receipt sealed residue. Refactor the production
+stages, report recovery-held sealed receipt-less work without eligibility,
+require explicit admission before its resume, recover a valid receipt, and
+clean post-receipt sealed residue. Refactor the production
 path only after all tests are green, preserving small interfaces, defensive
 copies, checked errors, and no lock across receiver I/O.
 </action>
@@ -234,8 +242,8 @@ copies, checked errors, and no lock across receiver I/O.
   leave source acknowledgement ineligible and never produce a deceptive final
   receipt.
 - Restart at each named transition yields either no transaction residue for
-  incomplete work, a resumable sealed no-receipt transaction, or a validated
-  durable receipt; no `.tmp`/partial final artifacts remain.
+  incomplete work, a recovery-held sealed no-receipt transaction, or a
+  validated durable receipt; no `.tmp`/partial final artifacts remain.
 - Recovery accounting includes retained sealed bytes so restart cannot bypass
   limits.
 - `go test -race` reports no race and concurrent independent transactions do

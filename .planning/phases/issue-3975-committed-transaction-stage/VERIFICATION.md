@@ -28,12 +28,18 @@
       stage never accumulates the full payload in memory.
 - [x] Cancellation during append and after receiver delivery leaves no final
       chunk, receipt, acknowledgement, or temporary residue.
-- [x] Restart removes active/incomplete/orphan state, retains only sealed
-      receipt-less work for retry, preserves recovered byte accounting, and
-      removes post-receipt residue on recovery.
+- [x] Restart removes active/incomplete/orphan state, holds bare sealed
+      receipt-less work until explicit admission, preserves recovered byte
+      accounting, and removes post-receipt residue on recovery.
 - [x] ENOSPC, write, file-sync, rename, parent-directory-sync, receiver,
       receipt, and cleanup transitions use injected faults. Each failure
       asserts durable artifacts/receipts and reopens the root at the boundary.
+- [x] Dual discard-control write plus cleanup failure reopens only as
+      recovery-held; direct commit performs zero receiver calls and creates no
+      receipt or acknowledgement. Renamed external markers and indeterminate
+      cleanup also remain terminal; failed marker writes with durable cleanup
+      leave no recoverable stage, while explicit admission resumes a valid
+      sealed transaction.
 - [x] A receiver must stream every complete chunk; a false receipt return
       without full consumption is refused. A caller cannot forge receipt-based
       acknowledgement eligibility.
@@ -51,6 +57,12 @@
 - [x] `gofmt -w` changed Go files, `git diff --check`,
       `golangci-lint run ./internal/connectors/database/...`, and `go vet ./...`
 - [x] `go build ./cmd/pm`
+
+## Correction #4043 focused rerun
+
+- [x] `go test -count=1 -timeout 20m ./internal/connectors/database`
+- [x] `go test -race -count=1 -timeout 20m ./internal/connectors/database`
+- [x] `go test -count=1 -timeout 20m ./internal/synccontract ./internal/app`
 
 ## Executed repository gates
 

@@ -390,6 +390,208 @@ func TestCommittedTransactionStageDiscardedSealedStageNeverRecoversOrDelivers(t 
 	assertNoTemporaryStageArtifacts(t, root)
 }
 
+func TestCommittedTransactionStageDiscardIntentWriteFailureAndCleanupFailureHaltsRecovery(t *testing.T) {
+	root := t.TempDir()
+	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+	const transactionID = "discard-intent-write-and-cleanup-failure"
+	stageCompleteChunk(t, stage, transactionID)
+	if _, err := stage.CommitTransaction(context.Background(), transactionID, transactionReceiverFunc(func(context.Context, CommittedTransaction) (DownstreamTransactionReceipt, error) {
+		return DownstreamTransactionReceipt{}, errors.New("injected receiver failure")
+	})); err == nil {
+		t.Fatal("CommitTransaction() error = nil, want sealed receipt-less transaction")
+	}
+	key, err := transactionStageKey(transactionID)
+	if err != nil {
+		t.Fatalf("transactionStageKey() error = %v", err)
+	}
+	writeFault := &transactionStageFault{
+		operation: "write",
+		match: func(path string) bool {
+			return isTransactionStageDiscardControlTemporary(stage, key, path)
+		},
+		err: errors.New("injected discard-control write failure"),
+	}
+	cleanupFault := &transactionStageFault{
+		operation: "remove_all",
+		match: func(path string) bool {
+			return path == stage.transactionDirectory(key)
+		},
+		err: errors.New("injected discard cleanup failure"),
+	}
+	installTransactionStageFaults(stage, writeFault, cleanupFault)
+	if err := stage.AbortTransaction(context.Background(), transactionID); err == nil {
+		t.Fatal("AbortTransaction() error = nil, want discard-control and cleanup failure")
+	}
+	if !writeFault.fired() || !cleanupFault.fired() {
+		t.Fatalf("discard faults fired = (%t, %t), want both", writeFault.fired(), cleanupFault.fired())
+	}
+
+	recovered := newTestTransactionStage(t, root, testTransactionStageLimits())
+	if got := recovered.PendingTransactions(); len(got) != 1 {
+		t.Errorf("PendingTransactions() after dual failure = %#v, want one recovery-held sealed transaction", got)
+	}
+	receiver := &recordingTransactionReceiver{}
+	receipt, commitErr := recovered.CommitTransaction(context.Background(), transactionID, receiver)
+	if !errors.Is(commitErr, ErrTransactionStageRecoveryRequired) {
+		t.Errorf("CommitTransaction() after dual failure error = %v, want ErrTransactionStageRecoveryRequired", commitErr)
+	}
+	if got := len(receiver.transactions); got != 0 {
+		t.Errorf("receiver transactions after dual failure = %d, want 0", got)
+	}
+	if _, err := recovered.Receipt(transactionID); !errors.Is(err, ErrTransactionReceiptUnavailable) {
+		t.Errorf("Receipt() after recovery-held commit error = %v, want unavailable", err)
+	}
+	if _, err := receipt.Acknowledgement(); !errors.Is(err, ErrTransactionReceiptUnavailable) {
+		t.Errorf("receipt acknowledgement after recovery-held commit error = %v, want unavailable", err)
+	}
+}
+
+func TestCommittedTransactionStageDiscardIntentWriteFailureWithDurableCleanupNeverRecovers(t *testing.T) {
+	root := t.TempDir()
+	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+	const transactionID = "discard-intent-write-failure-cleanup-success"
+	stageCompleteChunk(t, stage, transactionID)
+	if _, err := stage.CommitTransaction(context.Background(), transactionID, transactionReceiverFunc(func(context.Context, CommittedTransaction) (DownstreamTransactionReceipt, error) {
+		return DownstreamTransactionReceipt{}, errors.New("injected receiver failure")
+	})); err == nil {
+		t.Fatal("CommitTransaction() error = nil, want sealed receipt-less transaction")
+	}
+	key, err := transactionStageKey(transactionID)
+	if err != nil {
+		t.Fatalf("transactionStageKey() error = %v", err)
+	}
+	writeFault := &transactionStageFault{
+		operation: "write",
+		match: func(path string) bool {
+			return isTransactionStageDiscardControlTemporary(stage, key, path)
+		},
+		err: errors.New("injected discard-control write failure"),
+	}
+	installTransactionStageFault(stage, writeFault)
+	if err := stage.AbortTransaction(context.Background(), transactionID); err == nil {
+		t.Fatal("AbortTransaction() error = nil, want discard-control failure")
+	}
+	if !writeFault.fired() {
+		t.Fatal("discard-control write fault was not exercised")
+	}
+	assertPrivateStageCounts(t, root, 0, 0)
+
+	recovered := newTestTransactionStage(t, root, testTransactionStageLimits())
+	if got := recovered.PendingTransactions(); len(got) != 0 {
+		t.Fatalf("PendingTransactions() after durable cleanup = %#v, want none", got)
+	}
+	receiver := &recordingTransactionReceiver{}
+	if _, err := recovered.CommitTransaction(context.Background(), transactionID, receiver); !errors.Is(err, ErrTransactionStageNotFound) {
+		t.Fatalf("CommitTransaction() after durable cleanup error = %v, want ErrTransactionStageNotFound", err)
+	}
+	if got := len(receiver.transactions); got != 0 {
+		t.Fatalf("receiver transactions after durable cleanup = %d, want 0", got)
+	}
+}
+
+func TestCommittedTransactionStageDiscardIntentParentSyncFailureRetainsExternalMarker(t *testing.T) {
+	root := t.TempDir()
+	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+	const transactionID = "discard-intent-parent-sync-failure"
+	stageCompleteChunk(t, stage, transactionID)
+	if _, err := stage.CommitTransaction(context.Background(), transactionID, transactionReceiverFunc(func(context.Context, CommittedTransaction) (DownstreamTransactionReceipt, error) {
+		return DownstreamTransactionReceipt{}, errors.New("injected receiver failure")
+	})); err == nil {
+		t.Fatal("CommitTransaction() error = nil, want sealed receipt-less transaction")
+	}
+	key, err := transactionStageKey(transactionID)
+	if err != nil {
+		t.Fatalf("transactionStageKey() error = %v", err)
+	}
+	intentSyncFault := &transactionStageFault{
+		operation: "directory_sync",
+		match: func(path string) bool {
+			return path == stage.discardsDirectory()
+		},
+		err: errors.New("injected discard intent parent sync failure"),
+	}
+	cleanupFault := &transactionStageFault{
+		operation: "remove_all",
+		match: func(path string) bool {
+			return path == stage.transactionDirectory(key)
+		},
+		err: errors.New("injected discard cleanup failure"),
+	}
+	installTransactionStageFaults(stage, intentSyncFault, cleanupFault)
+	if err := stage.AbortTransaction(context.Background(), transactionID); err == nil {
+		t.Fatal("AbortTransaction() error = nil, want intent sync and cleanup failure")
+	}
+	if !intentSyncFault.fired() || !cleanupFault.fired() {
+		t.Fatalf("discard faults fired = (%t, %t), want both", intentSyncFault.fired(), cleanupFault.fired())
+	}
+	stage.mu.Lock()
+	entry := stage.entries[key]
+	stage.mu.Unlock()
+	if entry == nil {
+		t.Fatal("discarded entry = nil, want terminal cleanup retry state")
+	}
+	marker := stage.discardIntentPath(key, entry.manifest.instanceID())
+	if _, err := os.Stat(marker); err != nil {
+		t.Fatalf("Stat(discard intent) error = %v, want renamed marker retained", err)
+	}
+
+	recovered := newTestTransactionStage(t, root, testTransactionStageLimits())
+	if got := recovered.PendingTransactions(); len(got) != 0 {
+		t.Fatalf("PendingTransactions() after marker recovery = %#v, want none", got)
+	}
+	receiver := &recordingTransactionReceiver{}
+	if _, err := recovered.CommitTransaction(context.Background(), transactionID, receiver); !errors.Is(err, ErrTransactionStageNotFound) {
+		t.Fatalf("CommitTransaction() after marker recovery error = %v, want ErrTransactionStageNotFound", err)
+	}
+	if got := len(receiver.transactions); got != 0 {
+		t.Fatalf("receiver transactions after marker recovery = %d, want 0", got)
+	}
+	if _, err := os.Stat(marker); err != nil {
+		t.Fatalf("Stat(discard intent) after recovery error = %v, want retained marker", err)
+	}
+}
+
+func TestCommittedTransactionStageDiscardCleanupParentSyncFailureNeverAdmitsRecovery(t *testing.T) {
+	root := t.TempDir()
+	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+	const transactionID = "discard-cleanup-parent-sync-failure"
+	stageCompleteChunk(t, stage, transactionID)
+	if _, err := stage.CommitTransaction(context.Background(), transactionID, transactionReceiverFunc(func(context.Context, CommittedTransaction) (DownstreamTransactionReceipt, error) {
+		return DownstreamTransactionReceipt{}, errors.New("injected receiver failure")
+	})); err == nil {
+		t.Fatal("CommitTransaction() error = nil, want sealed receipt-less transaction")
+	}
+	cleanupSyncFault := &transactionStageFault{
+		operation: "directory_sync",
+		match: func(path string) bool {
+			return path == stage.transactionsDirectory()
+		},
+		err: errors.New("injected discard cleanup parent sync failure"),
+	}
+	installTransactionStageFault(stage, cleanupSyncFault)
+	if err := stage.AbortTransaction(context.Background(), transactionID); err == nil {
+		t.Fatal("AbortTransaction() error = nil, want cleanup parent sync failure")
+	}
+	if !cleanupSyncFault.fired() {
+		t.Fatal("discard cleanup parent sync fault was not exercised")
+	}
+	if got := stage.PendingTransactions(); len(got) != 0 {
+		t.Fatalf("PendingTransactions() after indeterminate cleanup = %#v, want none", got)
+	}
+
+	recovered := newTestTransactionStage(t, root, testTransactionStageLimits())
+	if got := recovered.PendingTransactions(); len(got) != 0 {
+		t.Fatalf("PendingTransactions() after indeterminate cleanup recovery = %#v, want none", got)
+	}
+	receiver := &recordingTransactionReceiver{}
+	if _, err := recovered.CommitTransaction(context.Background(), transactionID, receiver); !errors.Is(err, ErrTransactionStageNotFound) {
+		t.Fatalf("CommitTransaction() after indeterminate cleanup recovery error = %v, want ErrTransactionStageNotFound", err)
+	}
+	if got := len(receiver.transactions); got != 0 {
+		t.Fatalf("receiver transactions after indeterminate cleanup recovery = %d, want 0", got)
+	}
+}
+
 func TestCommittedTransactionStagePostReceiptCleanupFailurePreservesOnlyDurableReceipt(t *testing.T) {
 	root := t.TempDir()
 	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
@@ -447,6 +649,23 @@ type transactionStageFault struct {
 	wasFired  bool
 }
 
+type transactionStageFaultApplier interface {
+	apply(string, string) error
+}
+
+type transactionStageFaultSet struct {
+	faults []*transactionStageFault
+}
+
+func (s transactionStageFaultSet) apply(operation, path string) error {
+	for _, fault := range s.faults {
+		if err := fault.apply(operation, path); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (f *transactionStageFault) apply(operation, path string) error {
 	if f == nil || operation != f.operation || f.match == nil || !f.match(path) {
 		return nil
@@ -471,6 +690,14 @@ func (f *transactionStageFault) fired() bool {
 }
 
 func installTransactionStageFault(stage *CommittedTransactionStage, fault *transactionStageFault) {
+	installTransactionStageFaults(stage, fault)
+}
+
+func installTransactionStageFaults(stage *CommittedTransactionStage, faults ...*transactionStageFault) {
+	installTransactionStageFaultApplier(stage, transactionStageFaultSet{faults: faults})
+}
+
+func installTransactionStageFaultApplier(stage *CommittedTransactionStage, fault transactionStageFaultApplier) {
 	base := stage.storage
 	stage.storage.mkdirAll = func(path string, mode os.FileMode) error {
 		if err := fault.apply("mkdir_all", path); err != nil {
@@ -510,7 +737,7 @@ func installTransactionStageFault(stage *CommittedTransactionStage, fault *trans
 
 type faultedTransactionStageFile struct {
 	transactionStageFile
-	fault *transactionStageFault
+	fault transactionStageFaultApplier
 }
 
 func (f *faultedTransactionStageFile) Write(payload []byte) (int, error) {
@@ -537,6 +764,11 @@ func isTransactionStageStateTemporary(_ *CommittedTransactionStage, _ string, pa
 
 func isTransactionStageReceiptTemporary(_ *CommittedTransactionStage, _ string, path string) bool {
 	return strings.Contains(filepath.ToSlash(path), "/receipts/") && strings.Contains(filepath.Base(path), ".stage.tmp-")
+}
+
+func isTransactionStageDiscardControlTemporary(stage *CommittedTransactionStage, key, path string) bool {
+	return isTransactionStageStateTemporary(stage, key, path) ||
+		(strings.Contains(filepath.ToSlash(path), "/discards/") && strings.Contains(filepath.Base(path), ".stage.tmp-"))
 }
 
 func stageCompleteChunk(t *testing.T, stage *CommittedTransactionStage, transactionID string) {

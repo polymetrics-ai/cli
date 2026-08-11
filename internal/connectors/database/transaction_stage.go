@@ -3,6 +3,7 @@ package database
 import (
 	"bytes"
 	"context"
+	cryptorand "crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
 	"encoding/hex"
@@ -42,6 +43,10 @@ var (
 	// ErrTransactionStageInProgress prevents interleaved transaction
 	// boundaries from making source order ambiguous.
 	ErrTransactionStageInProgress = errors.New("transaction stage operation is already in progress")
+
+	// ErrTransactionStageRecoveryRequired reports sealed work that needs an
+	// explicit recovery admission before it can be delivered.
+	ErrTransactionStageRecoveryRequired = errors.New("transaction stage recovery admission is required")
 
 	// ErrTransactionStageAlreadyCommitted prevents a completed receipt from
 	// being replaced or an opaque transaction identity from being re-used.
@@ -260,6 +265,7 @@ const (
 	stageStatusAppending
 	stageStatusSealing
 	stageStatusSealed
+	stageStatusRecoveryHeld
 	stageStatusCommitting
 	stageStatusDiscarding
 	stageStatusDiscardFailed
@@ -302,6 +308,7 @@ func (d *transactionStageDelivery) complete() bool {
 type transactionStageManifest struct {
 	Version        int                     `json:"version"`
 	TransactionKey string                  `json:"transaction_key"`
+	InstanceID     string                  `json:"instance_id"`
 	State          string                  `json:"state"`
 	CreatedAt      time.Time               `json:"created_at"`
 	Chunks         []transactionStageChunk `json:"chunks"`
@@ -327,6 +334,34 @@ type storedTransactionReceipt struct {
 	Bytes               int64     `json:"bytes"`
 	Records             int64     `json:"records"`
 	ContentDigest       string    `json:"content_digest"`
+}
+
+type transactionStageDiscardIntent struct {
+	Version        int    `json:"version"`
+	TransactionKey string `json:"transaction_key"`
+	InstanceID     string `json:"instance_id"`
+	State          string `json:"state"`
+}
+
+type transactionStageDurabilityOutcome uint8
+
+const (
+	transactionStageDurabilityNotApplied transactionStageDurabilityOutcome = iota
+	transactionStageDurabilityDurable
+	transactionStageDurabilityIndeterminate
+)
+
+func (o transactionStageDurabilityOutcome) String() string {
+	switch o {
+	case transactionStageDurabilityNotApplied:
+		return "not-applied"
+	case transactionStageDurabilityDurable:
+		return "durable"
+	case transactionStageDurabilityIndeterminate:
+		return "indeterminate"
+	default:
+		return "unknown"
+	}
 }
 
 // transactionStageFile is narrow enough to fault-inject write and fsync
@@ -386,8 +421,8 @@ type CommittedTransactionStage struct {
 }
 
 // OpenCommittedTransactionStage opens a private stage and removes only
-// incomplete/orphan data from a prior process. Sealed receipt-less work stays
-// available for an explicit CommitTransaction retry.
+// incomplete/orphan data from a prior process. Bare sealed receipt-less work
+// requires explicit recovery admission before delivery.
 func OpenCommittedTransactionStage(options TransactionStageOptions) (*CommittedTransactionStage, error) {
 	return openCommittedTransactionStage(options, defaultTransactionStageStorage(), func() time.Time {
 		return time.Now().UTC()
@@ -436,9 +471,14 @@ func (s *CommittedTransactionStage) BeginTransaction(ctx context.Context, transa
 	if err != nil {
 		return err
 	}
+	instanceID, err := newTransactionStageInstanceID()
+	if err != nil {
+		return err
+	}
 	manifest := transactionStageManifest{
 		Version:        transactionStageFormatVersion,
 		TransactionKey: key,
+		InstanceID:     instanceID,
 		State:          transactionStageStateActive,
 		CreatedAt:      createdAt,
 		ContentDigest:  transactionDigestSeed(),
@@ -567,6 +607,10 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 		s.mu.Unlock()
 		return TransactionReceipt{}, ErrTransactionStageNotFound
 	}
+	if entry.status == stageStatusRecoveryHeld {
+		s.mu.Unlock()
+		return TransactionReceipt{}, ErrTransactionStageRecoveryRequired
+	}
 	if entry.status != stageStatusActive && entry.status != stageStatusSealed {
 		s.mu.Unlock()
 		return TransactionReceipt{}, ErrTransactionStageInProgress
@@ -694,13 +738,42 @@ func (s *CommittedTransactionStage) AbortTransaction(ctx context.Context, transa
 		s.mu.Unlock()
 		return ErrTransactionStageNotFound
 	}
-	if entry.status != stageStatusActive && entry.status != stageStatusSealed && entry.status != stageStatusDiscardFailed {
+	if entry.status != stageStatusActive && entry.status != stageStatusSealed && entry.status != stageStatusRecoveryHeld && entry.status != stageStatusDiscardFailed {
 		s.mu.Unlock()
 		return ErrTransactionStageInProgress
 	}
 	entry.status = stageStatusDiscarding
 	s.mu.Unlock()
 	return s.discardEntry(ctx, key, entry, nil)
+}
+
+// AdmitRecoveredTransaction permits a verified sealed stage recovered from a
+// prior process to proceed through CommitTransaction.
+func (s *CommittedTransactionStage) AdmitRecoveredTransaction(ctx context.Context, transactionID string) error {
+	if err := requireTransactionStageContext(ctx); err != nil {
+		return err
+	}
+	key, err := transactionStageKey(transactionID)
+	if err != nil {
+		return err
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if _, exists := s.receipts[key]; exists {
+		return ErrTransactionStageAlreadyCommitted
+	}
+	entry, exists := s.entries[key]
+	if !exists {
+		return ErrTransactionStageNotFound
+	}
+	if entry.status == stageStatusSealed {
+		return nil
+	}
+	if entry.status != stageStatusRecoveryHeld {
+		return ErrTransactionStageInProgress
+	}
+	entry.status = stageStatusSealed
+	return nil
 }
 
 // Receipt returns only a receipt that passed the durable receipt transition.
@@ -726,7 +799,7 @@ func (s *CommittedTransactionStage) PendingTransactions() []PendingTransaction {
 	s.mu.Lock()
 	pending := make([]PendingTransaction, 0)
 	for _, entry := range s.entries {
-		if entry.status != stageStatusSealed || entry.manifest.State != transactionStageStateSealed {
+		if (entry.status != stageStatusSealed && entry.status != stageStatusRecoveryHeld) || entry.manifest.State != transactionStageStateSealed {
 			continue
 		}
 		pending = append(pending, PendingTransaction{
@@ -777,13 +850,29 @@ func (s *CommittedTransactionStage) recover() error {
 			}
 			continue
 		}
-		if err != nil || manifest.State != transactionStageStateSealed || s.verifyManifestFiles(context.Background(), manifest) != nil {
+		if err != nil {
 			if removeErr := s.removeStageDirectory(name); removeErr != nil {
 				return fmt.Errorf("clean incomplete transaction stage: %w", removeErr)
 			}
 			continue
 		}
-		s.entries[name] = &transactionStageEntry{manifest: manifest, status: stageStatusSealed}
+		discarded, err := s.readDiscardIntent(manifest)
+		if err != nil {
+			return fmt.Errorf("read transaction discard intent: %w", err)
+		}
+		if discarded {
+			if removeErr := s.removeStageDirectory(name); removeErr != nil {
+				return fmt.Errorf("clean discarded transaction stage: %w", removeErr)
+			}
+			continue
+		}
+		if manifest.State != transactionStageStateSealed || s.verifyManifestFiles(context.Background(), manifest) != nil {
+			if removeErr := s.removeStageDirectory(name); removeErr != nil {
+				return fmt.Errorf("clean incomplete transaction stage: %w", removeErr)
+			}
+			continue
+		}
+		s.entries[name] = &transactionStageEntry{manifest: manifest, status: stageStatusRecoveryHeld}
 		if stagedBytes, withinLimit := transactionStageLimitedAdd(s.stagedBytes, manifest.Bytes, s.limits.MaxStagedBytes); withinLimit {
 			s.stagedBytes = stagedBytes
 		} else {
@@ -821,12 +910,17 @@ func (s *CommittedTransactionStage) recoverReceipts() error {
 }
 
 func (s *CommittedTransactionStage) ensureLayout() error {
-	for _, directory := range []string{s.root, s.transactionsDirectory(), s.receiptsDirectory()} {
+	for _, directory := range []string{s.root, s.transactionsDirectory(), s.receiptsDirectory(), s.discardsDirectory()} {
 		if err := s.storage.mkdirAll(directory, 0o700); err != nil {
 			return fmt.Errorf("create transaction stage directory: %w", err)
 		}
 		if err := s.storage.syncDirectory(directory); err != nil {
 			return fmt.Errorf("sync transaction stage directory: %w", err)
+		}
+		if directory != s.root {
+			if err := s.storage.syncDirectory(s.rootDirectory()); err != nil {
+				return fmt.Errorf("sync transaction stage root: %w", err)
+			}
 		}
 	}
 	return nil
@@ -996,24 +1090,19 @@ func (s *CommittedTransactionStage) failAppend(ctx context.Context, key string, 
 }
 
 func (s *CommittedTransactionStage) discardEntry(ctx context.Context, key string, entry *transactionStageEntry, cause error) error {
-	discarded := cloneTransactionStageManifest(entry.manifest)
-	discarded.State = transactionStageStateDiscarded
-	intentErr := s.writeManifest(transactionStageCleanupContext(ctx), discarded)
-	cleanupErr := s.removeStageDirectory(key)
+	intentOutcome, intentErr := s.persistDiscardIntent(transactionStageCleanupContext(ctx), entry.manifest)
+	cleanupOutcome, cleanupErr := s.removeStageDirectoryWithOutcome(key)
 	s.mu.Lock()
 	if s.entries[key] == entry {
-		if cleanupErr == nil {
+		if cleanupOutcome == transactionStageDurabilityDurable {
 			s.subtractStagedBytesLocked(entry.manifest.Bytes)
 			delete(s.entries, key)
 		} else {
-			if intentErr == nil {
-				entry.manifest = discarded
-			}
 			entry.status = stageStatusDiscardFailed
 		}
 	}
 	s.mu.Unlock()
-	return withTransactionStageCleanupError(cause, errors.Join(intentErr, cleanupErr))
+	return withTransactionStageCleanupError(cause, transactionStageDiscardError(intentOutcome, cleanupOutcome, errors.Join(intentErr, cleanupErr)))
 }
 
 func (s *CommittedTransactionStage) finishCommitAsSealed(key string, entry *transactionStageEntry) {
@@ -1229,17 +1318,91 @@ func (s *CommittedTransactionStage) readManifest(key string) (transactionStageMa
 	return manifest, nil
 }
 
-func (s *CommittedTransactionStage) atomicWrite(ctx context.Context, path string, payload []byte, replace bool) (err error) {
+func (s *CommittedTransactionStage) persistDiscardIntent(ctx context.Context, manifest transactionStageManifest) (transactionStageDurabilityOutcome, error) {
 	if err := requireTransactionStageContext(ctx); err != nil {
-		return err
+		return transactionStageDurabilityNotApplied, err
+	}
+	if discarded, err := s.readDiscardIntent(manifest); err != nil {
+		return transactionStageDurabilityIndeterminate, err
+	} else if discarded {
+		if err := s.storage.syncDirectory(s.rootDirectory()); err != nil {
+			return transactionStageDurabilityIndeterminate, fmt.Errorf("sync transaction stage root: %w", err)
+		}
+		if err := s.storage.syncDirectory(s.discardsDirectory()); err != nil {
+			return transactionStageDurabilityIndeterminate, fmt.Errorf("sync transaction discard directory: %w", err)
+		}
+		return transactionStageDurabilityDurable, nil
+	}
+	if err := s.storage.mkdirAll(s.discardsDirectory(), 0o700); err != nil {
+		return transactionStageDurabilityNotApplied, fmt.Errorf("create transaction discard directory: %w", err)
+	}
+	if err := s.storage.syncDirectory(s.rootDirectory()); err != nil {
+		return transactionStageDurabilityNotApplied, fmt.Errorf("sync transaction stage root: %w", err)
+	}
+	intent := transactionStageDiscardIntent{
+		Version:        transactionStageFormatVersion,
+		TransactionKey: manifest.TransactionKey,
+		InstanceID:     manifest.instanceID(),
+		State:          transactionStageStateDiscarded,
+	}
+	payload, err := json.Marshal(intent)
+	if err != nil {
+		return transactionStageDurabilityNotApplied, fmt.Errorf("encode transaction discard intent: %w", err)
+	}
+	payload = append(payload, '\n')
+	outcome, err := s.atomicWriteWithOutcome(ctx, s.discardIntentPath(intent.TransactionKey, intent.InstanceID), payload, false, false)
+	if !errors.Is(err, ErrTransactionStageAlreadyCommitted) {
+		if err != nil {
+			return outcome, fmt.Errorf("persist transaction discard intent: %w", err)
+		}
+		return outcome, nil
+	}
+	if discarded, readErr := s.readDiscardIntent(manifest); readErr != nil {
+		return transactionStageDurabilityIndeterminate, readErr
+	} else if !discarded {
+		return transactionStageDurabilityIndeterminate, errors.New("transaction discard intent disappeared")
+	}
+	if err := s.storage.syncDirectory(s.discardsDirectory()); err != nil {
+		return transactionStageDurabilityIndeterminate, fmt.Errorf("sync transaction discard directory: %w", err)
+	}
+	return transactionStageDurabilityDurable, nil
+}
+
+func (s *CommittedTransactionStage) readDiscardIntent(manifest transactionStageManifest) (bool, error) {
+	payload, err := s.storage.readFile(s.discardIntentPath(manifest.TransactionKey, manifest.instanceID()))
+	if errors.Is(err, fs.ErrNotExist) {
+		return false, nil
+	}
+	if err != nil {
+		return false, fmt.Errorf("read transaction discard intent: %w", err)
+	}
+	var intent transactionStageDiscardIntent
+	if err := decodeTransactionStageJSON(payload, &intent); err != nil {
+		return false, fmt.Errorf("decode transaction discard intent: %w", err)
+	}
+	if err := intent.validate(manifest); err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (s *CommittedTransactionStage) atomicWrite(ctx context.Context, path string, payload []byte, replace bool) error {
+	_, err := s.atomicWriteWithOutcome(ctx, path, payload, replace, true)
+	return err
+}
+
+func (s *CommittedTransactionStage) atomicWriteWithOutcome(ctx context.Context, path string, payload []byte, replace, removeRenamedOnError bool) (outcome transactionStageDurabilityOutcome, err error) {
+	outcome = transactionStageDurabilityNotApplied
+	if err := requireTransactionStageContext(ctx); err != nil {
+		return outcome, err
 	}
 	directory := filepath.Dir(path)
 	if err := s.storage.mkdirAll(directory, 0o700); err != nil {
-		return fmt.Errorf("create transaction stage state directory: %w", err)
+		return outcome, fmt.Errorf("create transaction stage state directory: %w", err)
 	}
 	temporary, err := s.storage.createTemp(directory, ".stage.tmp-*")
 	if err != nil {
-		return fmt.Errorf("create temporary transaction stage state: %w", err)
+		return outcome, fmt.Errorf("create temporary transaction stage state: %w", err)
 	}
 	temporaryPath := temporary.Name()
 	closed := false
@@ -1250,7 +1413,7 @@ func (s *CommittedTransactionStage) atomicWrite(ctx context.Context, path string
 		}
 		if err != nil {
 			_ = s.storage.remove(temporaryPath)
-			if renamed {
+			if renamed && removeRenamedOnError {
 				_ = s.storage.remove(path)
 				_ = s.storage.syncDirectory(directory)
 			}
@@ -1258,44 +1421,45 @@ func (s *CommittedTransactionStage) atomicWrite(ctx context.Context, path string
 	}()
 	if !replace {
 		if _, readErr := s.storage.readFile(path); readErr == nil {
-			return ErrTransactionStageAlreadyCommitted
+			return outcome, ErrTransactionStageAlreadyCommitted
 		} else if !errors.Is(readErr, fs.ErrNotExist) {
-			return fmt.Errorf("inspect transaction stage state: %w", readErr)
+			return outcome, fmt.Errorf("inspect transaction stage state: %w", readErr)
 		}
 	}
 	if err := writeTransactionStageBytes(temporary, payload); err != nil {
-		return fmt.Errorf("write temporary transaction stage state: %w", err)
+		return outcome, fmt.Errorf("write temporary transaction stage state: %w", err)
 	}
 	if err := requireTransactionStageContext(ctx); err != nil {
-		return err
+		return outcome, err
 	}
 	if err := temporary.Sync(); err != nil {
-		return fmt.Errorf("sync temporary transaction stage state: %w", err)
+		return outcome, fmt.Errorf("sync temporary transaction stage state: %w", err)
 	}
 	if err := temporary.Close(); err != nil {
-		return fmt.Errorf("close temporary transaction stage state: %w", err)
+		return outcome, fmt.Errorf("close temporary transaction stage state: %w", err)
 	}
 	closed = true
 	if err := requireTransactionStageContext(ctx); err != nil {
-		return err
+		return outcome, err
 	}
 	if err := s.storage.rename(temporaryPath, path); err != nil {
-		return fmt.Errorf("rename durable transaction stage state: %w", err)
+		return outcome, fmt.Errorf("rename durable transaction stage state: %w", err)
 	}
 	renamed = true
+	outcome = transactionStageDurabilityIndeterminate
 	if err := requireTransactionStageContext(ctx); err != nil {
-		return err
+		return outcome, err
 	}
 	if err := s.storage.syncDirectory(directory); err != nil {
-		return fmt.Errorf("sync transaction stage state directory: %w", err)
+		return outcome, fmt.Errorf("sync transaction stage state directory: %w", err)
 	}
-	return nil
+	return transactionStageDurabilityDurable, nil
 }
 
 func (m transactionStageManifest) validate() error {
 	if m.Version != transactionStageFormatVersion || !validTransactionStageKey(m.TransactionKey) ||
 		(m.State != transactionStageStateActive && m.State != transactionStageStateSealed && m.State != transactionStageStateDiscarded) || m.CreatedAt.IsZero() ||
-		m.Bytes < 0 || m.Records < 0 || !validTransactionStageDigest(m.ContentDigest) {
+		m.Bytes < 0 || m.Records < 0 || !validTransactionStageDigest(m.ContentDigest) || (m.InstanceID != "" && !validTransactionStageInstanceID(m.InstanceID)) {
 		return errors.New("transaction stage state is invalid")
 	}
 	var bytesTotal, recordsTotal int64
@@ -1315,6 +1479,26 @@ func (m transactionStageManifest) validate() error {
 	return nil
 }
 
+func (m transactionStageManifest) instanceID() string {
+	if m.InstanceID != "" {
+		return m.InstanceID
+	}
+	hash := sha256.New()
+	_, _ = hash.Write([]byte("polymetrics-transaction-stage-instance-v1\x00"))
+	_, _ = hash.Write([]byte(m.TransactionKey))
+	_, _ = hash.Write([]byte("\x00"))
+	_, _ = hash.Write([]byte(m.CreatedAt.UTC().Format(time.RFC3339Nano)))
+	return hex.EncodeToString(hash.Sum(nil))
+}
+
+func (i transactionStageDiscardIntent) validate(manifest transactionStageManifest) error {
+	if i.Version != transactionStageFormatVersion || i.TransactionKey != manifest.TransactionKey || i.InstanceID != manifest.instanceID() ||
+		i.State != transactionStageStateDiscarded || !validTransactionStageKey(i.TransactionKey) || !validTransactionStageInstanceID(i.InstanceID) {
+		return errors.New("transaction discard intent is invalid")
+	}
+	return nil
+}
+
 const (
 	transactionStageStateActive    = "active"
 	transactionStageStateSealed    = "sealed"
@@ -1329,12 +1513,24 @@ func transactionStageKey(transactionID string) (string, error) {
 	return hex.EncodeToString(sum[:]), nil
 }
 
+func newTransactionStageInstanceID() (string, error) {
+	var random [sha256.Size]byte
+	if _, err := cryptorand.Read(random[:]); err != nil {
+		return "", fmt.Errorf("generate transaction stage instance identity: %w", err)
+	}
+	return hex.EncodeToString(random[:]), nil
+}
+
 func validTransactionStageKey(key string) bool {
 	if len(key) != transactionStageKeyBytes {
 		return false
 	}
 	_, err := hex.DecodeString(key)
 	return err == nil
+}
+
+func validTransactionStageInstanceID(instanceID string) bool {
+	return validTransactionStageKey(instanceID)
 }
 
 func validTransactionStageDigest(digest string) bool {
@@ -1479,8 +1675,25 @@ func withTransactionStageCleanupError(cause, cleanupErr error) error {
 	return fmt.Errorf("%w: clean transaction stage: %v", cause, cleanupErr)
 }
 
+func transactionStageDiscardError(intentOutcome, cleanupOutcome transactionStageDurabilityOutcome, err error) error {
+	if err == nil {
+		return nil
+	}
+	return fmt.Errorf("discard transaction stage (%s intent, %s cleanup): %w", intentOutcome, cleanupOutcome, err)
+}
+
 func (s *CommittedTransactionStage) removeStageDirectory(key string) error {
 	return s.removeOrphan(s.transactionDirectory(key), s.transactionsDirectory())
+}
+
+func (s *CommittedTransactionStage) removeStageDirectoryWithOutcome(key string) (transactionStageDurabilityOutcome, error) {
+	if err := s.storage.removeAll(s.transactionDirectory(key)); err != nil {
+		return transactionStageDurabilityIndeterminate, fmt.Errorf("remove incomplete transaction stage artifact: %w", err)
+	}
+	if err := s.storage.syncDirectory(s.transactionsDirectory()); err != nil {
+		return transactionStageDurabilityIndeterminate, fmt.Errorf("sync transaction stage cleanup: %w", err)
+	}
+	return transactionStageDurabilityDurable, nil
 }
 
 func (s *CommittedTransactionStage) removeOrphan(path, parent string) error {
@@ -1503,6 +1716,10 @@ func (s *CommittedTransactionStage) receiptsDirectory() string {
 	return filepath.Join(s.rootDirectory(), "receipts")
 }
 
+func (s *CommittedTransactionStage) discardsDirectory() string {
+	return filepath.Join(s.rootDirectory(), "discards")
+}
+
 func (s *CommittedTransactionStage) transactionDirectory(key string) string {
 	return filepath.Join(s.transactionsDirectory(), key)
 }
@@ -1521,6 +1738,10 @@ func (s *CommittedTransactionStage) chunkPath(key string, sequence uint64) strin
 
 func (s *CommittedTransactionStage) receiptPath(key string) string {
 	return filepath.Join(s.receiptsDirectory(), key+".json")
+}
+
+func (s *CommittedTransactionStage) discardIntentPath(key, instanceID string) string {
+	return filepath.Join(s.discardsDirectory(), key+"-"+instanceID+".json")
 }
 
 func decodeTransactionStageJSON(payload []byte, target any) error {
