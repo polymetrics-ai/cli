@@ -1,9 +1,9 @@
 # #3864 — Closed source/destination transport dispatch
 
-**Issue:** [#3864](https://github.com/polymetrics-ai/cli/issues/3864)  
-**Parent:** [#3862](https://github.com/polymetrics-ai/cli/issues/3862) / draft [PR #4019](https://github.com/polymetrics-ai/cli/pull/4019)  
-**Child branch:** `feat/3864-closed-transport-dispatch`  
-**Base:** `origin/feat/3862-any-to-any-transport`  
+**Issue:** [#3864](https://github.com/polymetrics-ai/cli/issues/3864)\
+**Parent:** [#3862](https://github.com/polymetrics-ai/cli/issues/3862) / draft [PR #4019](https://github.com/polymetrics-ai/cli/pull/4019)\
+**Child branch:** `feat/3864-closed-transport-dispatch`\
+**Base:** `origin/feat/3862-any-to-any-transport`\
 **Status:** active manual-GSD fallback; correction-loop 5 focused evidence is recorded.
 
 ## Lifecycle fallback
