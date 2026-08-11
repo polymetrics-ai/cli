@@ -441,6 +441,113 @@ func TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed(t *te
 	})
 }
 
+func TestFlowOmittedConnectionRejectsGeneratedOwnerAliases(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowScopedWarehouseApp(t, ctx)
+
+	var globex app.Connection
+	for _, connection := range a.ListConnections() {
+		if connection.Name == "globex" {
+			globex = connection
+			break
+		}
+	}
+	require.NotEmpty(t, globex.ID)
+	alias := "records__" + globex.ID
+
+	assertRejected := func(t *testing.T, name, sql string) {
+		t.Helper()
+		checkpoints := &flow.FileCheckpointStore{Dir: t.TempDir()}
+		adapter := &recordingFlowAppAdapter{app: a}
+		engine := &flow.Engine{
+			Manifest: flow.FlowManifest{
+				Version: 1,
+				Name:    name,
+				Steps: []flow.FlowStep{{
+					ID:   "query-records",
+					Kind: flow.KindQuery,
+					SQL:  sql,
+					In:   []string{},
+					Out:  []string{},
+				}},
+			},
+			App:        adapter,
+			Checkpoint: checkpoints,
+			LockDir:    t.TempDir(),
+		}
+
+		result, err := engine.Run(ctx, flow.RunOptions{})
+		require.Error(t, err)
+		var ambiguous *warehouse.AmbiguousTableError
+		require.Truef(t, errors.As(err, &ambiguous), "error = %T %v", err, err)
+		assert.Equal(t, "records", ambiguous.Table)
+		assert.Contains(t, err.Error(), "set `connection` in flow query step")
+		assert.NotContains(t, err.Error(), "--")
+		assert.Equal(t, "failed", result.Status)
+		require.Len(t, result.Steps, 1)
+		assert.Equal(t, "failed", result.Steps[0].Status)
+		assert.Empty(t, adapter.lastRows)
+		checkpoint, checkpointErr := checkpoints.Get(name, "query-records")
+		require.NoError(t, checkpointErr)
+		assert.Empty(t, checkpoint)
+	}
+
+	t.Run("unquoted generated alias", func(t *testing.T) {
+		assertRejected(t, "unquoted-generated-owner-alias", "SELECT id FROM "+alias)
+	})
+
+	t.Run("quoted generated alias", func(t *testing.T) {
+		assertRejected(t, "quoted-generated-owner-alias", "SELECT id FROM \""+alias+"\"")
+	})
+
+	t.Run("generic query keeps the same alias", func(t *testing.T) {
+		var stdout, stderr bytes.Buffer
+		code := Run([]string{
+			"--root", filepath.Dir(a.ProjectDir()),
+			"--json",
+			"query", "run",
+			"--sql", "SELECT id FROM " + alias,
+		}, &stdout, &stderr)
+		require.Equalf(t, 0, code, "stderr = %s stdout = %s", stderr.String(), stdout.String())
+
+		var result struct {
+			Kind  string           `json:"kind"`
+			Count int              `json:"count"`
+			Rows  []map[string]any `json:"rows"`
+		}
+		require.NoError(t, json.Unmarshal(stdout.Bytes(), &result))
+		assert.Equal(t, "QueryResult", result.Kind)
+		require.Len(t, result.Rows, 1)
+		assert.Equal(t, 1, result.Count)
+		assert.Equal(t, "globex-1", result.Rows[0]["id"])
+	})
+
+	t.Run("select one remains valid", func(t *testing.T) {
+		adapter := &recordingFlowAppAdapter{app: a}
+		engine := &flow.Engine{
+			Manifest: flow.FlowManifest{
+				Version: 1,
+				Name:    "unscoped-select-one",
+				Steps: []flow.FlowStep{{
+					ID:   "query-one",
+					Kind: flow.KindQuery,
+					SQL:  "SELECT 1 AS n",
+					In:   []string{},
+					Out:  []string{},
+				}},
+			},
+			App:     adapter,
+			LockDir: t.TempDir(),
+		}
+
+		result, err := engine.Run(ctx, flow.RunOptions{})
+		require.NoError(t, err)
+		assert.Equal(t, "ok", result.Status)
+		require.Len(t, adapter.lastRows, 1)
+		assert.Equal(t, "1", fmt.Sprint(adapter.lastRows[0]["n"]))
+	})
+}
+
 func TestFlowActionSourceReadsAllSelectedConnectionRows(t *testing.T) {
 	ctx := testCtx(t)
 	a := newFlowScopedWarehouseApp(t, ctx)
@@ -564,7 +671,12 @@ func (a *recordingFlowAppAdapter) ETLRun(_ context.Context, _ string, _ []string
 }
 
 func (a *recordingFlowAppAdapter) QuerySQL(ctx context.Context, sql, connection string, limit int) ([]map[string]any, error) {
-	records, err := a.app.QuerySQL(ctx, app.QuerySQLRequest{SQL: sql, Connection: connection, Limit: limit})
+	records, err := a.app.QuerySQL(ctx, app.QuerySQLRequest{
+		SQL:        sql,
+		Connection: connection,
+		Limit:      limit,
+		Origin:     app.QuerySQLOriginFlow,
+	})
 	if err != nil {
 		return nil, err
 	}

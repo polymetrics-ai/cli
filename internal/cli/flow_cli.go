@@ -314,7 +314,12 @@ func (a *appFlowAdapter) ETLRun(ctx context.Context, connectionID string, stream
 }
 
 func (a *appFlowAdapter) QuerySQL(ctx context.Context, sql, connection string, limit int) ([]map[string]any, error) {
-	records, err := a.app.QuerySQL(ctx, app.QuerySQLRequest{SQL: sql, Connection: connection, Limit: limit})
+	records, err := a.app.QuerySQL(ctx, app.QuerySQLRequest{
+		SQL:        sql,
+		Connection: connection,
+		Limit:      limit,
+		Origin:     app.QuerySQLOriginFlow,
+	})
 	if err != nil {
 		return nil, err
 	}

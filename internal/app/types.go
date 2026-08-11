@@ -169,14 +169,22 @@ type ActionSourceReadRequest struct {
 	Connection string `json:"connection,omitempty"`
 }
 
+type QuerySQLOrigin uint8
+
+const (
+	QuerySQLOriginGeneric QuerySQLOrigin = iota
+	QuerySQLOriginFlow
+)
+
 // QuerySQLRequest describes a read-only analytical query over the local
 // warehouse. Connection scopes every table view available to the query, so a
 // flow or other caller cannot silently resolve a same-named table from another
 // connection. UnattributedConnection selects only root-owned tables.
 type QuerySQLRequest struct {
-	SQL        string `json:"sql"`
-	Connection string `json:"connection,omitempty"`
-	Limit      int    `json:"limit"`
+	SQL        string         `json:"sql"`
+	Connection string         `json:"connection,omitempty"`
+	Limit      int            `json:"limit"`
+	Origin     QuerySQLOrigin `json:"-"`
 }
 
 type PlanReverseETLRequest struct {

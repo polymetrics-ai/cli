@@ -79,14 +79,15 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, req QuerySQLRequest) ([]conn
 	if err != nil {
 		return nil, err
 	}
+	policy := newQueryViewPolicy(req, resolver)
 
-	db, lookupError, err := e.openScopedDuckDB(req.Connection, resolver)
+	db, lookupError, err := e.openScopedDuckDB(req.Connection, resolver, policy)
 	if err != nil {
 		return nil, fmt.Errorf("open duckdb: %w", err)
 	}
 	defer func() { _ = db.Close() }()
 
-	if err := e.registerViews(ctx, db, req.Connection, resolver); err != nil {
+	if err := e.registerViews(ctx, db, req.Connection, resolver, policy); err != nil {
 		return nil, err
 	}
 
@@ -136,6 +137,7 @@ func (e duckdbEngine) registerViews(
 	db *sql.DB,
 	connection string,
 	resolver *warehouse.TableResolver,
+	policy queryViewPolicy,
 ) error {
 	tables := resolver.Tables()
 	byName := make(map[string][]warehouse.Table, len(tables))
@@ -165,8 +167,11 @@ func (e duckdbEngine) registerViews(
 		if !errors.As(findErr, &ambiguous) {
 			continue
 		}
+		if policy.blocksGeneratedAliases(name) {
+			continue
+		}
 		for _, table := range byName[name] {
-			if err := registerWarehouseView(ctx, db, name+"__"+table.Owner.Connection, table); err != nil {
+			if err := registerWarehouseView(ctx, db, generatedOwnerAlias(name, table), table); err != nil {
 				return err
 			}
 		}
@@ -184,6 +189,7 @@ func (e duckdbEngine) tableResolver() (*warehouse.TableResolver, error) {
 func (e duckdbEngine) openScopedDuckDB(
 	connection string,
 	resolver *warehouse.TableResolver,
+	policy queryViewPolicy,
 ) (*sql.DB, func() error, error) {
 	connector, err := duckdb.NewConnector("", nil)
 	if err != nil {
@@ -192,7 +198,7 @@ func (e duckdbEngine) openScopedDuckDB(
 	var lookupMu sync.Mutex
 	var firstLookupErr error
 	duckdb.RegisterReplacementScan(connector, func(tableName string) (string, []any, error) {
-		table, err := resolver.Find(tableName, connection)
+		table, err := policy.find(resolver, tableName, connection)
 		if err != nil {
 			lookupMu.Lock()
 			if firstLookupErr == nil {
@@ -210,6 +216,57 @@ func (e duckdbEngine) openScopedDuckDB(
 		defer lookupMu.Unlock()
 		return firstLookupErr
 	}, nil
+}
+
+type queryViewPolicy struct {
+	ambiguousTables        map[string]struct{}
+	generatedAliasBaseName map[string]string
+}
+
+func newQueryViewPolicy(req QuerySQLRequest, resolver *warehouse.TableResolver) queryViewPolicy {
+	if req.Origin != QuerySQLOriginFlow || req.Connection != "" {
+		return queryViewPolicy{}
+	}
+
+	byName := make(map[string][]warehouse.Table)
+	for _, table := range resolver.Tables() {
+		byName[table.Name] = append(byName[table.Name], table)
+	}
+	policy := queryViewPolicy{
+		ambiguousTables:        make(map[string]struct{}),
+		generatedAliasBaseName: make(map[string]string),
+	}
+	for name, tables := range byName {
+		if _, err := resolver.Find(name, ""); !isAmbiguousTableError(err) {
+			continue
+		}
+		policy.ambiguousTables[name] = struct{}{}
+		for _, table := range tables {
+			policy.generatedAliasBaseName[generatedOwnerAlias(name, table)] = name
+		}
+	}
+	return policy
+}
+
+func isAmbiguousTableError(err error) bool {
+	var ambiguous *warehouse.AmbiguousTableError
+	return errors.As(err, &ambiguous)
+}
+
+func generatedOwnerAlias(name string, table warehouse.Table) string {
+	return name + "__" + table.Owner.Connection
+}
+
+func (p queryViewPolicy) blocksGeneratedAliases(name string) bool {
+	_, ok := p.ambiguousTables[name]
+	return ok
+}
+
+func (p queryViewPolicy) find(resolver *warehouse.TableResolver, tableName, connection string) (warehouse.Table, error) {
+	if baseName, ok := p.generatedAliasBaseName[tableName]; ok {
+		return resolver.Find(baseName, "")
+	}
+	return resolver.Find(tableName, connection)
 }
 
 func registerWarehouseView(ctx context.Context, db *sql.DB, view string, table warehouse.Table) error {
