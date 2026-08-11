@@ -185,3 +185,18 @@ branch, not a code defect. The GSD advance command recomputed aggregate
 phase position; progress, metric, and session mutations returned no-op. The
 phase-specific durable lifecycle state remains in `3993-01-SUMMARY.md`, this
 checklist, and `UAT.md`.
+
+## No-mistakes — local-only stacked-PR disposition
+
+`no-mistakes axi` was inspected on 2026-08-11 without starting a pipeline.
+Its available `axi run` mode accepts only an intent, generic skipped steps, and
+an auto-approval switch, while its normal lifecycle owns push, PR, and CI
+state. It has no mode that can prove it will preserve the existing draft
+stacked PR #4061, its required `feat/3988-github-certification` base, and the
+captain-owned parent integration.
+
+The required no-mistakes stacked-certification resolution report therefore
+applies its direct-existing-PR exception: no pipeline run was started, no
+no-mistakes push/PR/CI action occurred, and all local review, test, lint,
+generator, documentation, and contract gates remain recorded above. This is a
+safety disposition, not a claim that no-mistakes completed a delivery run.
