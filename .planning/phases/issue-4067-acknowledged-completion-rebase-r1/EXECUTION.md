@@ -10,6 +10,12 @@
 - Before asserting the symptom, each subtest proved typed error identity, page-one acknowledgement, winner checkpoint/run preservation, unrelated stream/checkpoint/run preservation, exactly two loser applies, and one winner apply. The rejected behavior then returned `Run{}` and reopened the losing run as durable `running`.
 - This RED checkpoint changes only `internal/app/transport_dispatch_test.go` and this GSD evidence. `internal/app/app.go` and `internal/app/transport_dispatch.go` remain untouched until the RED commit exists.
 
+## R3 GREEN — typed-conflict finalization ordering
+
+- `failAcknowledgedTransportRun` now checks `errors.Is(runErr, errTransportStreamStateConflict)` first and delegates to the existing #4046 `failRun` terminalizer before consulting `result.PendingStreamState` or an old in-memory page-one witness.
+- The change is intentionally one branch in `internal/app/app.go`. Ordinary acknowledged cancellation/source-error handling still enters the r2 exact-stream/running-run finalizer; checkpoint CAS, source identity, destination application, stream winner state, and registration are untouched.
+- The exact C12 selector now exits `0` in all seven modes. The typed conflict remains detectable, page one and the real winner are preserved, unrelated stream/checkpoint/run data survives, the loser applies exactly two pages without replay, and the returned failed loser equals the reopened durable failed record.
+
 ## R2 planning and behavioral RED
 
 - Planning/TDD continuation committed in `c08a5861f` after the complete Sol r2 handoff, live #4067 amendment/readback, GSD prompt resolution, and the documented named-phase manual fallback. No production file changed in that checkpoint.

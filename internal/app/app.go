@@ -1262,6 +1262,9 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 // eligibility witness for terminal failure. It does not refresh state, retry a
 // checkpoint, or replay destination work.
 func (a *App) failAcknowledgedTransportRun(runID string, result etlExecutionResult, runErr error) (Run, error) {
+	if errors.Is(runErr, errTransportStreamStateConflict) {
+		return a.failRun(runID, runErr)
+	}
 	if result.PendingStreamState == nil {
 		return a.failRun(runID, runErr)
 	}
