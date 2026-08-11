@@ -44,3 +44,5 @@ findings:
 ## Post-review pipeline disposition
 
 Fresh no-mistakes run `01KZRPD9TSDDBG4F39VENDW9N4` returned no review, test, document, or lint finding and `checks-passed`. Its document phase appended a non-behavioral explanatory comment directly above the reviewed completion helper; this is within the same boundary. It also rewrote an unrelated warehouse-architecture document, which is outside #4067. This scope-restoration commit removes only that unrelated documentation rewrite, retaining all prior commits and the relevant comment. The next local no-mistakes pass must review the resulting head before the ordinary stacked #4059 delivery.
+
+Second no-mistakes run `01KZRTCV26XT15R2YCV6Y4BGMP` reviewed that scope-restoration head with no finding. Its only recovered document edit normalizes equivalent Markdown hard breaks in pre-existing #3864 planning context; it does not change source, generated output, behavior, or the #4067 scope. The focused-test phase passed independently, and no unresolved review disposition remains.

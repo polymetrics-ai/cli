@@ -48,7 +48,7 @@ status: local_goal_verified
 - [x] Manual `verify-work` record and coverage-aware automated UAT contain local evidence.
 - [x] Manual `code-review` record dispositions every finding.
 - [x] First fresh #4067 no-mistakes run `01KZRPD9TSDDBG4F39VENDW9N4` started at 0/5 without `--yes`, completed review/test/document/lint, and returned `checks-passed`; the old run was not controlled.
-- [ ] Scope-restoration head is revalidated in a second no-mistakes loop with push/PR/CI skipped because the tool cannot retain the required stacked #4059 base and first opened duplicate #4068; normal delivery will then push only the existing branch, update only #4059, and monitor #4059 exact-head CI.
+- [x] Scope-restoration head is revalidated in second no-mistakes run `01KZRTCV26XT15R2YCV6Y4BGMP` (2/5) with push/PR/CI skipped because the tool cannot retain the required stacked #4059 base and first opened duplicate #4068; review, focused persisted-state/race tests, document, and lint passed with no findings.
 - [ ] Existing draft #4059 is updated normally, stays unmerged, and exact-head CI is green before requesting an independent Sol audit.
 
 ## Heavy local matrix completed
@@ -58,3 +58,9 @@ status: local_goal_verified
 - `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make github-parity-artifacts-check`, `make connectorgen-certification-matrix`, `make connector-boundary`, `make connector-canon-check`, and `make release-workflow-check` — each exit `0` individually.
 - `cd website && pnpm typecheck` — exit `0`; `pnpm lint` exits `0` with only existing warnings in unrelated website components.
 - `scripts/verify-gsd-workflow` — exit `0`, recognizing this phase's planning/TDD evidence against `origin/main`.
+
+## No-mistakes delivery record
+
+- `01KZRPD9TSDDBG4F39VENDW9N4` — full first 0/5 run; review/test/document/lint passed and it returned `checks-passed` at `a17d8db98532c6b2569403f6fec30410acf7104b`. Its unsupported default-base PR #4068 was closed unmerged; it did not alter #4059.
+- `01KZRTCV26XT15R2YCV6Y4BGMP` — second 2/5 scope-restoration run; review/test/document/lint passed with no findings and returned `passed` at `cd5c90400c8e2781af59570cd42394e2b5c30162`. Push/PR/CI were deliberately skipped because the tool cannot retain the mandated stacked base. Its guarded `axi sync --recover` returned custody cleanly.
+- Remaining delivery: push only `feat/3864-closed-transport-dispatch-nm5`, update only draft #4059, and monitor #4059's exact-head CI. No merge or certification claim is authorized.
