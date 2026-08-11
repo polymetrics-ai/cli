@@ -172,3 +172,16 @@ The independent unavailable slices remain explicitly blocked: warehouse-to-
 GitHub action flow by #3994/#4059, and real persisted schedule firing by #3992.
 PR #4060 has not been rebased or copied; #4059 transport code has not been
 copied; parked #4062 was not used.
+
+## GSD verify-work — inline `3993 --auto`
+
+`scripts/gsd prompt verify-work 3993 --auto` was generated and the project
+adapter confirmed that the issue phase exists. The inline verifier recorded two
+automated passes (execution-model provenance and built-binary focused gates) and
+one third-party safety block (approved App credential plus immutable boundary).
+No gap plan was created: the block is authority/configuration outside this
+branch, not a code defect. The GSD advance command recomputed aggregate
+`STATE.md` counts but reported that it could not parse this issue-backed legacy
+phase position; progress, metric, and session mutations returned no-op. The
+phase-specific durable lifecycle state remains in `3993-01-SUMMARY.md`, this
+checklist, and `UAT.md`.

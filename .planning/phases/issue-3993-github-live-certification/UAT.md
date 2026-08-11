@@ -1,6 +1,6 @@
 ---
 phase: "3993"
-status: passed_for_harness_slice_certification_not_ready
+status: partial_current_sha_needs_decision
 mode: inline_manual
 ---
 
@@ -37,3 +37,22 @@ GitHub certification remains blocked by a provider-admission solution that
 preserves the barrier semantics (#3990), typed cleanup-safe fixtures for current
 writes, and outbound dependencies #3994 and #3992. No action approval,
 schedule, or shared rate-policy implementation was added in this child.
+
+## Fresh current-SHA auto-verification — lineage 1/5
+
+The captain-authorized `verify-work 3993 --auto` path is executed inline: this
+issue is not an interactive roadmap phase, dispatch prohibits GSD role spawning,
+and the only unavailable observation is an external credential/boundary gate.
+The entries below distinguish automatically observed behavior from a provider
+result rather than asking a human to attest to a secret or external mutation.
+
+| ID | Expected observable result | Evidence | Result |
+| --- | --- | --- | --- |
+| F1 | An external per-operation `pm` runner cannot be accepted as one-process credentialed-live evidence and cannot reach credential/provider dispatch. | Fresh RED then GREEN in `github-live-proof-sweep.test.mjs`; focused suite 15/15. | pass (automated) |
+| F2 | The current built `pm` wires the in-process certify harness and its focused GitHub/Go gates remain green. | SHA-256-bound `./pm`; combined Node suite 51/51; `internal/connectors/certify` and `internal/cli` package tests pass. | pass (automated) |
+| F3 | A current credentialed GitHub read/write/warehouse proof is performed only inside the approved App-owned immutable boundary. | Approved GitHub App credential source and `Polymetrics-Cert` boundary were absent; no provider request began. | blocked (`third-party` safety prerequisite) |
+
+**Fresh result:** partial / `needs-decision`. There is no user-facing action to
+test until an authorized operator supplies the existing approved credential and
+boundary through the sanctioned secret channel. This is not a code gap and does
+not create a GSD gap plan; it is an external safety gate.
