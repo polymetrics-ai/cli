@@ -52,7 +52,7 @@
   "fresh_current_sha_lineage": {
     "used": 1,
     "limit": 5,
-    "status": "needs_decision_no_approved_app_credential_or_boundary",
+    "status": "plan_01_complete_needs_decision_no_approved_app_credential_or_boundary",
     "started_at": "2026-08-11",
     "owner_issue": 3993,
     "pr": 4061,
