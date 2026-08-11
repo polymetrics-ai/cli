@@ -52,3 +52,18 @@ GitHub artifact still returns deterministic `RETRY` with
 `capability/github/capability:check/live_evidence`; a complete producer-valid fixture may return
 `PROCEED`. Correction tracking is split deliberately: #4024 covers proof comparison/fingerprint
 consumption, #4028 invalid artifacts, and #4030 protected transitions.
+
+## Correction round 3
+
+The producer and consumer now import one exact four-kind flow catalog, so a certification artifact
+cannot omit, add, or remap flow coverage. The consumer validates every structurally valid
+live-evidence binding before deriving capability/workflow/sync/flow completion, final connector
+status, and baseline aggregates; report drift halts deterministically. Pointer failures retain a
+trusted cell coordinate and only expose a safe canonical evidence record.
+
+The read-only `agentcontractgen certification-gate` boundary now requires an explicit canonical
+absolute non-symlink root and non-symlink canonical contract for all protected transitions. Missing,
+relative, traversing, or symlinked roots, as well as help, block with an encoded `HALT`; only
+`PROCEED` can exit zero. Focused correction-round verification passed for the complete
+`internal/agentcontract` and `cmd/agentcontractgen` packages, focused certification-generator
+tests/check, projection sync/check, and explicit all-four transition command tests.

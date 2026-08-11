@@ -54,3 +54,24 @@ child-PR publication remain pending.
       run in this review phase.
 - [x] CLI help/manual/website parity is not applicable: this adds a repository-internal
       `agentcontractgen` transition command, not a `pm` command surface.
+
+## Correction round 3 focused evidence
+
+- [x] The shared producer/consumer flow-kind catalog rejects omitted, added, and remapped kinds.
+- [x] Capability/workflow/sync/flow completion reports, status artifacts, and baseline aggregates
+      halt when they disagree with matched evidence.
+- [x] Malformed pointers retain a trusted cell coordinate and only expose a canonical safe record.
+- [x] Every protected transition rejects missing, relative, traversing, symlinked, and
+      symlink-contract roots; `certification-gate --help` emits `HALT` and exits nonzero.
+- [x] Focused package tests, certification-generator checks, projection synchronization/check, and
+      the explicit four-transition command tests pass without provider, credential, evidence
+      creation, network, production mutation, full-suite, lint, CI, PR, or outer-pipeline work.
+
+      ```sh
+      go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen -count=1
+      go test -timeout 20m ./cmd/connectorgen -run '^(TestCertification|TestRunCertification)' -count=1
+      go run ./cmd/agentcontractgen sync --root "$PWD"
+      go run ./cmd/agentcontractgen check --root "$PWD"
+      go run ./cmd/connectorgen certification-matrix --check
+      go test -timeout 20m ./cmd/agentcontractgen -run '^TestRunCertificationGate(BlocksEveryProtectedTransition|RejectsUntrustedRootsForEveryTransition|HelpBlocksWithoutProceedVerdict)$' -count=1
+      ```

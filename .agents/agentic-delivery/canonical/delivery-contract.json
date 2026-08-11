@@ -261,7 +261,7 @@
         "--transition",
         "<transition>"
       ],
-      "instruction": "Run this read-only command at each protected transition. It emits the complete deterministic verdict as JSON, exits zero only for PROCEED, and otherwise preserves RETRY or HALT evidence on stdout while blocking the transition."
+      "instruction": "Run this read-only command at each protected transition with one canonical absolute non-symlink repository root. It emits the complete deterministic verdict as JSON, exits zero only for PROCEED, and otherwise preserves RETRY or HALT evidence on stdout while blocking the transition."
     },
     "inputs": {
       "capability_matrix": "internal/connectors/certifications/capability-matrix.json",

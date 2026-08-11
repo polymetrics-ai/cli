@@ -65,3 +65,23 @@ PASS after correction round 2 of 5. The checked-in GitHub artifact deterministic
 `RETRY` with `capability/github/capability:check/live_evidence`; malformed, escaped, and
 producer-invalid inputs halt, while a complete producer-valid fixture can proceed. Remaining
 validation, branch/PR work, and human gates remain owned by the outer executor.
+
+## Correction round 3 re-review
+
+| ID | Severity | Finding | Disposition | Tracking |
+| --- | --- | --- | --- | --- |
+| C3-1 | error | The consumer accepted a caller-supplied flow-kind inventory, allowing omitted, added, or remapped producer flow kinds to change pair coverage. | Fixed: `connectorgen` and the consumer import one exact four-kind catalog and reject any inventory or mapping drift. | #4028 |
+| C3-2 | error | Completion fields, connector statuses, and baseline aggregates could be forged independently of structurally valid, matched evidence. | Fixed: all completion reports, statuses, and aggregates are recomputed before the target evaluation and any disagreement halts. | #4028 |
+| C3-3 | error | An omitted gate root could select a parent repository and evaluate it instead of failing closed. | Fixed: the transition command accepts only one explicit canonical absolute non-symlink root with a non-symlink contract. | #4030 |
+| C3-4 | error | Invalid live-evidence pointers lost their trustworthy cell/evidence coordinates in a generic matrix halt. | Fixed: malformed pointers halt with their trusted cell ID, a safe record ID only when canonical, and the fixed `invalid_pointer` reason. | #4028 |
+
+Focused correction-round verification passed for `internal/agentcontract`, `cmd/agentcontractgen`,
+certification-generator coverage, projection sync/check, and the four protected command
+transitions. It did not run an outer pipeline phase.
+
+## Current verdict after correction round 3
+
+PASS after correction round 3 of 5. The checked-in GitHub artifact retains deterministic `RETRY`
+with `capability/github/capability:check/live_evidence`; a complete producer-valid fixture
+`PROCEED`s, while malformed, mismatched, and escaped input halts. Remaining delivery phases,
+branch/PR work, and human gates remain owned by the outer executor.

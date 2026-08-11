@@ -15,7 +15,7 @@
 
    ```sh
    go run ./cmd/agentcontractgen certification-gate \
-     --root . \
+     --root "$(pwd -P)" \
      --connector github \
      --transition integrate_sub_pr
    ```
@@ -41,6 +41,10 @@ The evaluator reads only declared generated JSON through a root-bound reader; sy
 non-regular evidence records halt rather than escaping the supplied root. It creates no evidence,
 has no provider action dependency, and does not access a credential or mutate production state. A
 future #3989 proof schema revision must be integrated explicitly; unsupported versions halt closed.
+
+The command requires a canonical absolute root with no symlinked component or contract; omitted,
+relative, traversing, and symlinked roots halt for every protected transition. `--help` is a blocked
+request and emits a JSON `HALT`, so only an encoded `PROCEED` exits zero.
 
 This internal `agentcontractgen` command is not part of the `pm` CLI, so `pm` help/manual/website
 documentation has no new parity surface.

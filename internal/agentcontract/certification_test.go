@@ -46,18 +46,16 @@ func TestEvaluateCertificationGateGitHubBaselineAndGreenFixture(t *testing.T) {
 
 func TestCertificationGateBindingCriteriaYieldExactCellIDs(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
-	for _, criterion := range []string{"declared", "implemented", "fixture_tested", "live_tested", "live_evidence"} {
+	for _, criterion := range []string{"declared", "implemented", "fixture_tested", "live_tested"} {
 		t.Run(criterion, func(t *testing.T) {
 			root := writeGreenCertificationFixture(t)
 			cell := certificationFixtureCapabilityCell(t, root)
-			switch criterion {
-			case "live_evidence":
-				cell[criterion] = []any{}
-				cell["live_tested"] = false
-			default:
-				cell[criterion] = false
+			cell[criterion] = false
+			if criterion == "live_tested" {
+				cell["live_evidence"] = []any{}
 			}
 			writeCertificationFixtureCapabilityCell(t, root, cell)
+			rewriteCertificationFixtureDerivedReports(t, root)
 
 			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
 			if err != nil {
@@ -68,6 +66,136 @@ func TestCertificationGateBindingCriteriaYieldExactCellIDs(t *testing.T) {
 			}
 			want := "capability/github/capability:check/" + criterion
 			assertCertificationFailureID(t, verdict, want)
+		})
+	}
+}
+
+func TestCertificationGateRejectsLiveTestedWithoutEvidenceWithCoordinates(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := writeGreenCertificationFixture(t)
+	cell := certificationFixtureCapabilityCell(t, root)
+	cell["live_tested"] = true
+	cell["live_evidence"] = []any{}
+	writeCertificationFixtureCapabilityCell(t, root, cell)
+
+	verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if verdict.Decision != CertificationGateHalt || len(verdict.Failures) != 1 {
+		t.Fatalf("decision = %#v, want one coordinate-bearing HALT", verdict)
+	}
+	failure := verdict.Failures[0]
+	if failure.ID != "capability/github/capability:check/live_evidence" || failure.CellID != "capability/github/capability:check" || failure.EvidenceID != "" {
+		t.Fatalf("failure coordinates = %#v, want capability live-evidence coordinate", failure)
+	}
+}
+
+func TestCertificationGateRejectsMalformedEvidencePointersWithTrustedCoordinates(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	tests := []struct {
+		name           string
+		mutate         func(map[string]any)
+		wantEvidenceID string
+	}{
+		{
+			name: "unsafe record",
+			mutate: func(pointer map[string]any) {
+				pointer["record"] = "../../outside.json"
+			},
+		},
+		{
+			name: "safe record with invalid identity",
+			mutate: func(pointer map[string]any) {
+				pointer["provider"] = "unsafe provider"
+			},
+			wantEvidenceID: "internal/connectors/certifications/evidence/capability.json",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := writeGreenCertificationFixture(t)
+			matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/capability-matrix.json")
+			pointer := matrix["connectors"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)["live_evidence"].([]any)[0].(map[string]any)
+			test.mutate(pointer)
+			writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/capability-matrix.json", matrix)
+
+			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if verdict.Decision != CertificationGateHalt || len(verdict.Failures) != 1 {
+				t.Fatalf("decision = %#v, want one coordinate-bearing HALT", verdict)
+			}
+			failure := verdict.Failures[0]
+			if failure.ID != "evidence/invalid_pointer" || failure.CellID != "capability/github/capability:check" || failure.EvidenceID != test.wantEvidenceID || failure.Message != "invalid_pointer" {
+				t.Fatalf("failure = %#v, want fixed invalid-pointer coordinates", failure)
+			}
+		})
+	}
+}
+
+func TestCertificationGateRejectsDerivedStatusAndAggregateMismatches(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	tests := []struct {
+		name   string
+		mutate func(*testing.T, string)
+	}{
+		{
+			name: "capability complete",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/capability-matrix.json")
+				matrix["connectors"].([]any)[0].(map[string]any)["capability_complete"] = false
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/capability-matrix.json", matrix)
+			},
+		},
+		{
+			name: "capability baseline",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/capability-matrix.json")
+				matrix["baseline"].(map[string]any)["capability_complete"] = 0
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/capability-matrix.json", matrix)
+			},
+		},
+		{
+			name: "flow baseline",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["baseline"].(map[string]any)["certified"] = 0
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+		},
+		{
+			name: "both reported statuses",
+			mutate: func(t *testing.T, root string) {
+				flow := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				status := flow["connector_statuses"].([]any)[0].(map[string]any)
+				status["certified"] = false
+				status["label"] = "COMMUNITY BUILD, UNCERTIFIED"
+				status["warning"] = "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED."
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", flow)
+
+				artifact := readCertificationFixtureObject(t, root, "internal/connectors/certifications/status.json")
+				status = artifact["connectors"].([]any)[0].(map[string]any)
+				status["certified"] = false
+				status["label"] = "COMMUNITY BUILD, UNCERTIFIED"
+				status["warning"] = "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED."
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/status.json", artifact)
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := writeGreenCertificationFixture(t)
+			test.mutate(t, root)
+
+			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if verdict.Decision != CertificationGateHalt {
+				t.Fatalf("decision = %#v, want HALT for a derived-report mismatch", verdict)
+			}
 		})
 	}
 }
@@ -119,6 +247,7 @@ func TestCertificationGatePreservesCoordinatesAcrossWorkflowSyncAndFlowCells(t *
 		t.Run(test.name, func(t *testing.T) {
 			root := writeGreenCertificationFixture(t)
 			test.mutate(t, root)
+			rewriteCertificationFixtureDerivedReports(t, root)
 			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
 			if err != nil {
 				t.Fatal(err)
@@ -141,6 +270,7 @@ func TestCertificationGateDoesNotPromoteReachabilityOrImplementedWithoutLiveEvid
 	cell["live_tested"] = false
 	cell["live_evidence"] = []any{}
 	writeCertificationFixtureCapabilityCell(t, root, cell)
+	rewriteCertificationFixtureDerivedReports(t, root)
 
 	for _, path := range []string{
 		"internal/connectors/certifications/capability-matrix.json",
@@ -336,7 +466,7 @@ func TestCertificationGateRejectsIncompleteFlowTopology(t *testing.T) {
 			name: "flow pair coverage",
 			mutate: func(t *testing.T, root string) {
 				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
-				matrix["flow_kinds"] = append(matrix["flow_kinds"].([]any), map[string]any{"id": "api_to_database", "source_role": "api_source", "destination_role": "api_destination"})
+				matrix["pair_sets"] = matrix["pair_sets"].([]any)[:3]
 				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
 			},
 		},
@@ -373,6 +503,62 @@ func TestCertificationGateRejectsIncompleteFlowTopology(t *testing.T) {
 			}
 			if verdict.Decision != CertificationGateHalt {
 				t.Fatalf("incomplete topology decision = %#v, want HALT", verdict)
+			}
+		})
+	}
+}
+
+func TestCertificationGateRejectsFlowKindInventoryDrift(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	tests := []struct {
+		name   string
+		mutate func(*testing.T, string)
+	}{
+		{
+			name: "omitted producer kind",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["flow_kinds"] = append([]any{}, matrix["flow_kinds"].([]any)[:3]...)
+				matrix["pair_sets"] = append([]any{}, matrix["pair_sets"].([]any)[:3]...)
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+		},
+		{
+			name: "added producer kind",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["flow_kinds"] = append(matrix["flow_kinds"].([]any), map[string]any{"id": "api_to_api_extra", "source_role": "api_source", "destination_role": "api_destination"})
+				pairSet := matrix["pair_sets"].([]any)[0].(map[string]any)
+				extra := make(map[string]any, len(pairSet))
+				for key, value := range pairSet {
+					extra[key] = value
+				}
+				extra["flow_kind"] = "api_to_api_extra"
+				extra["cell"] = certificationTestNotApplicableCell("unsupported_extra_flow", "fixture does not define the added flow kind")
+				matrix["pair_sets"] = append(matrix["pair_sets"].([]any), extra)
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+		},
+		{
+			name: "remapped producer kind",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["flow_kinds"].([]any)[0].(map[string]any)["source_role"] = "database_source"
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := writeGreenCertificationFixture(t)
+			test.mutate(t, root)
+
+			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if verdict.Decision != CertificationGateHalt {
+				t.Fatalf("decision = %#v, want HALT for flow-kind inventory drift", verdict)
 			}
 		})
 	}
@@ -743,6 +929,55 @@ func writeGreenCertificationFixture(t *testing.T) string {
 	flowCell := certificationTestCell(map[string]any{
 		"live_evidence": []any{certificationTestEvidencePointer(flowEvidence, flowProof)},
 	})
+	flowKinds := []any{
+		map[string]any{"id": "api_to_api", "source_role": "api_source", "destination_role": "api_destination"},
+		map[string]any{"id": "api_to_database", "source_role": "api_source", "destination_role": "database_destination"},
+		map[string]any{"id": "database_to_api", "source_role": "database_source", "destination_role": "api_destination"},
+		map[string]any{"id": "database_to_database", "source_role": "database_source", "destination_role": "database_destination"},
+	}
+	pairSets := []any{
+		map[string]any{
+			"flow_kind": "api_to_api", "mediator": "local_parquet_warehouse", "source_connectors": []any{"github"}, "destination_connectors": []any{"github"}, "cell": flowCell,
+		},
+		map[string]any{
+			"flow_kind": "api_to_database", "mediator": "local_parquet_warehouse", "source_connectors": []any{"github"}, "destination_connectors": []any{"github"},
+			"cell": certificationTestNotApplicableCell("destination_unsupported_database_destination", "destination fixture connector has no database destination"),
+		},
+		map[string]any{
+			"flow_kind": "database_to_api", "mediator": "local_parquet_warehouse", "source_connectors": []any{"github"}, "destination_connectors": []any{"github"},
+			"cell": certificationTestNotApplicableCell("source_unsupported_database_source", "source fixture connector has no database source"),
+		},
+		map[string]any{
+			"flow_kind": "database_to_database", "mediator": "local_parquet_warehouse", "source_connectors": []any{"github"}, "destination_connectors": []any{"github"},
+			"cell": certificationTestNotApplicableCell("source_and_destination_roles_inapplicable", "source database_source and destination database_destination roles are not applicable"),
+		},
+	}
+	capabilityBaseline := map[string]any{
+		"connectors":          1,
+		"capability_complete": 1,
+		"per_kind": []any{map[string]any{
+			"function_kind": "capability:check", "connectors": 1, "applicable": 1, "declared": 1, "implemented": 1, "fixture_tested": 1, "live_tested": 1, "complete": 1,
+		}},
+	}
+	flowBaseline := map[string]any{
+		"connectors": 1,
+		"certified":  1,
+		"workflows": []any{map[string]any{
+			"workflow_kind": "etl", "connectors": 1, "applicable": 1, "declared": 1, "implemented": 1, "fixture_tested": 1, "live_tested": 1, "complete": 1,
+		}},
+		"sync_modes": []any{
+			map[string]any{"sync_mode": "full_overwrite", "primitive": "api_read_into_warehouse", "connectors": 1, "applicable": 1, "declared": 1, "implemented": 1, "fixture_tested": 1, "live_tested": 1, "complete": 1},
+			map[string]any{"sync_mode": "full_overwrite", "primitive": "api_write_from_warehouse", "connectors": 1, "applicable": 1, "declared": 1, "implemented": 1, "fixture_tested": 1, "live_tested": 1, "complete": 1},
+			map[string]any{"sync_mode": "full_overwrite", "primitive": "database_read_into_warehouse", "connectors": 1, "applicable": 1, "declared": 1, "implemented": 1, "fixture_tested": 1, "live_tested": 1, "complete": 1},
+			map[string]any{"sync_mode": "full_overwrite", "primitive": "database_write_from_warehouse", "connectors": 1, "applicable": 1, "declared": 1, "implemented": 1, "fixture_tested": 1, "live_tested": 1, "complete": 1},
+		},
+		"per_kind": []any{
+			map[string]any{"flow_kind": "api_to_api", "pairs": 1, "applicable": 1, "declared": 1, "implemented": 1, "fixture_tested": 1, "live_tested": 1, "complete": 1},
+			map[string]any{"flow_kind": "api_to_database", "pairs": 1, "applicable": 0, "declared": 0, "implemented": 0, "fixture_tested": 0, "live_tested": 0, "complete": 0},
+			map[string]any{"flow_kind": "database_to_api", "pairs": 1, "applicable": 0, "declared": 0, "implemented": 0, "fixture_tested": 0, "live_tested": 0, "complete": 0},
+			map[string]any{"flow_kind": "database_to_database", "pairs": 1, "applicable": 0, "declared": 0, "implemented": 0, "fixture_tested": 0, "live_tested": 0, "complete": 0},
+		},
+	}
 
 	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/capability-matrix.json", map[string]any{
 		"schema_version":    1,
@@ -754,16 +989,14 @@ func writeGreenCertificationFixture(t *testing.T) string {
 			"name": "github", "integration_type": "api", "capability_complete": true, "cells": []any{capabilityCell},
 		}},
 		"legacy_certification_inputs": map[string]any{"ignored": true, "files": []any{}},
-		"baseline":                    map[string]any{"connectors": 1, "capability_complete": 1, "per_kind": []any{}},
+		"baseline":                    capabilityBaseline,
 	})
 	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", map[string]any{
 		"schema_version":    1,
 		"generated_command": certificationGeneratedCommand,
 		"mediator":          "local_parquet_warehouse",
-		"flow_kinds": []any{map[string]any{
-			"id": "api_to_api", "source_role": "api_source", "destination_role": "api_destination",
-		}},
-		"workflow_kinds": []any{map[string]any{"id": "etl", "discovery_source": "test"}},
+		"flow_kinds":        flowKinds,
+		"workflow_kinds":    []any{map[string]any{"id": "etl", "discovery_source": "test"}},
 		"workflows": []any{map[string]any{
 			"connector": "github", "complete": true, "cells": []any{workflowCell},
 		}},
@@ -776,14 +1009,14 @@ func writeGreenCertificationFixture(t *testing.T) string {
 			"connector": "github", "roles": []any{
 				map[string]any{"role": "api_source", "applicable": true, "declared": true, "implemented": true},
 				map[string]any{"role": "api_destination", "applicable": true, "declared": true, "implemented": true},
+				map[string]any{"role": "database_source", "applicable": false, "declared": false, "implemented": false, "not_applicable": map[string]any{"code": "unsupported_database_source", "reason": "fixture connector has no database source"}},
+				map[string]any{"role": "database_destination", "applicable": false, "declared": false, "implemented": false, "not_applicable": map[string]any{"code": "unsupported_database_destination", "reason": "fixture connector has no database destination"}},
 			},
 		}},
-		"pair_sets": []any{map[string]any{
-			"flow_kind": "api_to_api", "mediator": "local_parquet_warehouse", "source_connectors": []any{"github"}, "destination_connectors": []any{"github"}, "cell": flowCell,
-		}},
+		"pair_sets":          pairSets,
 		"pair_overrides":     []any{},
 		"connector_statuses": []any{map[string]any{"connector": "github", "certified": true, "label": "CERTIFIED"}},
-		"baseline":           map[string]any{"connectors": 1, "certified": 1, "workflows": []any{}, "sync_modes": []any{}, "per_kind": []any{}},
+		"baseline":           flowBaseline,
 	})
 	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/status.json", map[string]any{
 		"schema_version":    1,
@@ -802,6 +1035,14 @@ func certificationTestCell(overrides map[string]any) map[string]any {
 		cell[key] = value
 	}
 	return cell
+}
+
+func certificationTestNotApplicableCell(code, reason string) map[string]any {
+	return map[string]any{
+		"applicable": false, "declared": false, "implemented": false, "fixture_tested": false, "live_tested": false,
+		"fixture_evidence": []any{}, "live_evidence": []any{},
+		"not_applicable": map[string]any{"code": code, "reason": reason},
+	}
 }
 
 func certificationTestEvidence(record string, proof map[string]any, scope map[string]any) map[string]any {
@@ -919,6 +1160,49 @@ func writeCertificationFixtureCapabilityCell(t *testing.T, root string, cell map
 	matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/capability-matrix.json")
 	matrix["connectors"].([]any)[0].(map[string]any)["cells"].([]any)[0] = cell
 	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/capability-matrix.json", matrix)
+}
+
+func rewriteCertificationFixtureDerivedReports(t *testing.T, root string) {
+	t.Helper()
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	capabilities, err := loadCapabilityMatrix(root, contract.CertificationGate)
+	if err != nil {
+		t.Fatal(err)
+	}
+	flow, err := loadFlowMatrix(root, contract.CertificationGate)
+	if err != nil {
+		t.Fatal(err)
+	}
+	status, err := loadStatusArtifact(root, contract.CertificationGate)
+	if err != nil {
+		t.Fatal(err)
+	}
+	evidence, err := loadAcceptedCertificationEvidence(root, contract.CertificationGate)
+	if err != nil {
+		t.Fatal(err)
+	}
+	artifacts := certificationArtifacts{capabilities: capabilities, flow: flow, status: status, evidence: evidence}
+	reports := artifacts.deriveReports()
+	for index := range capabilities.Connectors {
+		capabilities.Connectors[index].CapabilityComplete = reports.capabilityComplete[capabilities.Connectors[index].Name]
+	}
+	capabilities.Baseline = reports.capabilityBaseline
+	for index := range flow.Workflows {
+		flow.Workflows[index].Complete = reports.workflowComplete[flow.Workflows[index].Connector]
+	}
+	for index := range flow.SyncModeCells {
+		flow.SyncModeCells[index].Complete = reports.syncModeComplete[flow.SyncModeCells[index].Connector]
+	}
+	for index := range flow.ConnectorStatuses {
+		flow.ConnectorStatuses[index] = reports.statuses[flow.ConnectorStatuses[index].Connector]
+	}
+	flow.Baseline = reports.flowBaseline
+	for index := range status.Connectors {
+		status.Connectors[index] = reports.statuses[status.Connectors[index].Connector]
+	}
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/capability-matrix.json", capabilities)
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", flow)
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/status.json", status)
 }
 
 func readCertificationFixtureObject(t *testing.T, root, relativePath string) map[string]any {

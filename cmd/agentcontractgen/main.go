@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"polymetrics.ai/internal/agentcontract"
 )
@@ -104,7 +105,10 @@ func runCertificationGate(args []string, stdout, stderr io.Writer) int {
 	transition := flags.String("transition", "", "protected transition")
 	if err := flags.Parse(args); err != nil {
 		if errors.Is(err, flag.ErrHelp) {
-			return 0
+			return writeCertificationGateHalt(stdout, stderr, agentcontract.CertificationGateRequest{
+				Connector:  *connector,
+				Transition: *transition,
+			}, "request/help", "request", "certification-gate help does not authorize a protected transition")
 		}
 		return writeCertificationGateHalt(stdout, stderr, agentcontract.CertificationGateRequest{
 			Connector:  *connector,
@@ -118,7 +122,7 @@ func runCertificationGate(args []string, stdout, stderr io.Writer) int {
 		}, "request/decode", "request", "certification-gate accepts no positional arguments")
 	}
 
-	root, err := resolveRoot(*rootFlag)
+	root, err := resolveCertificationGateRoot(*rootFlag)
 	if err != nil {
 		return writeCertificationGateHalt(stdout, stderr, agentcontract.CertificationGateRequest{
 			Connector:  *connector,
@@ -155,6 +159,49 @@ func runCertificationGate(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 	return 0
+}
+
+func resolveCertificationGateRoot(value string) (string, error) {
+	if value == "" {
+		return "", errors.New("certification-gate requires an explicit --root")
+	}
+	if !filepath.IsAbs(value) {
+		return "", errors.New("certification-gate --root must be absolute")
+	}
+	if filepath.Clean(value) != value {
+		return "", errors.New("certification-gate --root must be canonical without traversal")
+	}
+	info, err := os.Lstat(value)
+	if err != nil || info.Mode()&os.ModeSymlink != 0 || !info.IsDir() {
+		return "", errors.New("certification-gate --root must be an existing non-symlink directory")
+	}
+	resolved, err := filepath.EvalSymlinks(value)
+	if err != nil || resolved != value {
+		return "", errors.New("certification-gate --root must not contain symlink components")
+	}
+	if err := validateCertificationGateContractPath(value); err != nil {
+		return "", err
+	}
+	return value, nil
+}
+
+func validateCertificationGateContractPath(root string) error {
+	path := root
+	components := strings.Split(filepath.ToSlash(agentcontract.SourcePath), "/")
+	for index, component := range components {
+		path = filepath.Join(path, component)
+		info, err := os.Lstat(path)
+		if err != nil || info.Mode()&os.ModeSymlink != 0 {
+			return errors.New("certification-gate contract must be a non-symlink regular file below --root")
+		}
+		if index < len(components)-1 && !info.IsDir() {
+			return errors.New("certification-gate contract path has a non-directory ancestor")
+		}
+		if index == len(components)-1 && !info.Mode().IsRegular() {
+			return errors.New("certification-gate contract must be a non-symlink regular file below --root")
+		}
+	}
+	return nil
 }
 
 func writeCertificationGateHalt(stdout, stderr io.Writer, request agentcontract.CertificationGateRequest, id, class, message string) int {

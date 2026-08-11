@@ -17,6 +17,8 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
+	"polymetrics.ai/internal/certificationcatalog"
 )
 
 const (
@@ -152,13 +154,13 @@ func EvaluateCertificationGate(root string, contract *Contract, request Certific
 	}
 
 	if err := validateCapabilityMatrix(capabilities, gate); err != nil {
-		return certificationGateHalt(request, "capability_matrix/invalid", "input", err.Error()), nil
+		return certificationValidationHalt(request, "capability_matrix", err), nil
 	}
 	if err := validateStatusArtifact(status, gate); err != nil {
-		return certificationGateHalt(request, "status/invalid", "input", err.Error()), nil
+		return certificationValidationHalt(request, "status", err), nil
 	}
 	if err := validateFlowMatrix(flow, gate, capabilities, status); err != nil {
-		return certificationGateHalt(request, "flow_matrix/invalid", "input", err.Error()), nil
+		return certificationValidationHalt(request, "flow_matrix", err), nil
 	}
 
 	artifacts := certificationArtifacts{
@@ -166,6 +168,9 @@ func EvaluateCertificationGate(root string, contract *Contract, request Certific
 		flow:         flow,
 		status:       status,
 		evidence:     evidence,
+	}
+	if halt, ok := artifacts.validateDerivedReports(request, gate); ok {
+		return halt, nil
 	}
 	if halt, ok := artifacts.validateConnectorPresence(request.Connector); ok {
 		halt.Connector = request.Connector
@@ -255,6 +260,18 @@ func certificationInputFailureID(input string, err error) string {
 	return "input/" + input + "/decode"
 }
 
+func certificationValidationHalt(request CertificationGateRequest, input string, err error) CertificationGateVerdict {
+	var pointerError *certificationInvalidPointerError
+	if errors.As(err, &pointerError) {
+		return certificationGateHaltAt(request, "evidence/invalid_pointer", "evidence", pointerError.cellID, pointerError.evidenceID, "invalid_pointer")
+	}
+	var cellError *certificationInvalidCellError
+	if errors.As(err, &cellError) {
+		return certificationGateHaltAt(request, cellError.id, "input", cellError.cellID, "", cellError.message)
+	}
+	return certificationGateHalt(request, input+"/invalid", "input", err.Error())
+}
+
 func sortCertificationFailures(failures []CertificationGateFailure) {
 	sort.Slice(failures, func(left, right int) bool {
 		if failures[left].ID != failures[right].ID {
@@ -287,6 +304,424 @@ type certificationArtifacts struct {
 	flow         certificationFlowMatrix
 	status       certificationStatusArtifact
 	evidence     map[string]certificationAcceptedEvidence
+}
+
+type certificationEvidenceCell struct {
+	cellID  string
+	binding certificationEvidenceBinding
+	facts   certificationFacts
+}
+
+type certificationEvidenceBindingError struct {
+	id         string
+	cellID     string
+	evidenceID string
+	message    string
+}
+
+func (err *certificationEvidenceBindingError) Error() string {
+	return err.message
+}
+
+type certificationDerivedReports struct {
+	capabilityComplete map[string]bool
+	workflowComplete   map[string]bool
+	syncModeComplete   map[string]bool
+	flowComplete       map[string]bool
+	statuses           map[string]certificationConnectorStatus
+	capabilityBaseline certificationCapabilityBaseline
+	flowBaseline       certificationFlowBaseline
+}
+
+func (artifacts certificationArtifacts) validateDerivedReports(request CertificationGateRequest, gate ConnectorCertificationGate) (CertificationGateVerdict, bool) {
+	if err := artifacts.validateEvidenceBindings(gate); err != nil {
+		return certificationEvidenceHalt(request, err), true
+	}
+	reports := artifacts.deriveReports()
+	for _, connector := range certificationCapabilityConnectorNames(artifacts.capabilities.Connectors) {
+		capability, _ := findCapabilityConnector(artifacts.capabilities.Connectors, connector)
+		if capability.CapabilityComplete != reports.capabilityComplete[connector] {
+			return certificationGateHaltAt(request, "capability/"+connector+"/capability_complete", "input", "capability/"+connector, "", "capability_complete disagrees with matched evidence"), true
+		}
+		workflow, _ := findWorkflowSet(artifacts.flow.Workflows, connector)
+		if workflow.Complete != reports.workflowComplete[connector] {
+			return certificationGateHaltAt(request, "workflow/"+connector+"/complete", "input", "workflow/"+connector, "", "workflow complete disagrees with matched evidence"), true
+		}
+		syncModes, _ := findSyncSet(artifacts.flow.SyncModeCells, connector)
+		if syncModes.Complete != reports.syncModeComplete[connector] {
+			return certificationGateHaltAt(request, "sync_mode/"+connector+"/complete", "input", "sync_mode/"+connector, "", "sync-mode complete disagrees with matched evidence"), true
+		}
+		expected := reports.statuses[connector]
+		flowStatus, _ := findStatus(artifacts.flow.ConnectorStatuses, connector)
+		if flowStatus != expected {
+			return certificationGateHaltAt(request, "flow_status/"+connector+"/derived_mismatch", "input", "flow_status/"+connector, "", "flow connector status disagrees with matched evidence"), true
+		}
+		status, _ := findStatus(artifacts.status.Connectors, connector)
+		if status != expected {
+			return certificationGateHaltAt(request, "status/"+connector+"/derived_mismatch", "input", "status/"+connector, "", "status artifact disagrees with matched evidence"), true
+		}
+	}
+	if !reflect.DeepEqual(artifacts.capabilities.Baseline, reports.capabilityBaseline) {
+		return certificationGateHalt(request, "capability/baseline/derived_mismatch", "input", "capability baseline disagrees with matched evidence"), true
+	}
+	if !reflect.DeepEqual(artifacts.flow.Baseline, reports.flowBaseline) {
+		return certificationGateHalt(request, "flow/baseline/derived_mismatch", "input", "flow baseline disagrees with matched evidence"), true
+	}
+	return CertificationGateVerdict{}, false
+}
+
+func certificationCapabilityConnectorNames(connectors []certificationCapabilityConnector) []string {
+	names := make([]string, 0, len(connectors))
+	for _, connector := range connectors {
+		names = append(names, connector.Name)
+	}
+	sort.Strings(names)
+	return names
+}
+
+func certificationFlowConnectorNames(roles []certificationConnectorRoles) []string {
+	names := make([]string, 0, len(roles))
+	for _, role := range roles {
+		names = append(names, role.Connector)
+	}
+	sort.Strings(names)
+	return names
+}
+
+func (artifacts certificationArtifacts) validateEvidenceBindings(gate ConnectorCertificationGate) error {
+	cells, err := artifacts.evidenceCells()
+	if err != nil {
+		return err
+	}
+	for _, cell := range cells {
+		if err := artifacts.validateCellEvidence(cell, gate); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (artifacts certificationArtifacts) evidenceCells() ([]certificationEvidenceCell, error) {
+	cells := make([]certificationEvidenceCell, 0)
+	for _, connector := range artifacts.capabilities.Connectors {
+		for _, cell := range connector.Cells {
+			cells = append(cells, certificationEvidenceCell{
+				cellID:  "capability/" + connector.Name + "/" + cell.FunctionKind,
+				binding: certificationEvidenceBinding{Scope: "capability", Connector: connector.Name, FunctionKind: cell.FunctionKind},
+				facts:   cell.certificationFacts,
+			})
+		}
+	}
+	for _, set := range artifacts.flow.Workflows {
+		for _, cell := range set.Cells {
+			cells = append(cells, certificationEvidenceCell{
+				cellID:  "workflow/" + set.Connector + "/" + cell.WorkflowKind,
+				binding: certificationEvidenceBinding{Scope: "workflow", Connector: set.Connector, WorkflowKind: cell.WorkflowKind},
+				facts:   cell.certificationFacts,
+			})
+		}
+	}
+	for _, set := range artifacts.flow.SyncModeCells {
+		for _, cell := range set.Cells {
+			cells = append(cells, certificationEvidenceCell{
+				cellID:  "sync_mode/" + set.Connector + "/" + cell.SyncMode + "/" + cell.Primitive,
+				binding: certificationEvidenceBinding{Scope: "sync_mode", Connector: set.Connector, SyncMode: cell.SyncMode, Primitive: cell.Primitive},
+				facts:   cell.certificationFacts,
+			})
+		}
+	}
+	connectors := certificationFlowConnectorNames(artifacts.flow.ConnectorRoles)
+	for _, kind := range artifacts.flow.FlowKinds {
+		for _, source := range connectors {
+			for _, destination := range connectors {
+				pair, ok := artifacts.flow.resolvedFlowPair(kind.ID, source, destination)
+				if !ok {
+					return nil, errors.New("flow pair is absent during evidence derivation")
+				}
+				cells = append(cells, certificationEvidenceCell{
+					cellID:  "flow/" + kind.ID + "/" + source + "/" + destination,
+					binding: certificationEvidenceBinding{Scope: "flow", Source: source, Destination: destination, FlowKind: kind.ID},
+					facts:   pair.Cell.certificationFacts,
+				})
+			}
+		}
+	}
+	sort.Slice(cells, func(left, right int) bool { return cells[left].cellID < cells[right].cellID })
+	return cells, nil
+}
+
+func (artifacts certificationArtifacts) validateCellEvidence(cell certificationEvidenceCell, gate ConnectorCertificationGate) error {
+	if len(cell.facts.LiveEvidence) == 0 {
+		return nil
+	}
+	seen := make(map[string]bool, len(cell.facts.LiveEvidence))
+	for _, pointer := range cell.facts.LiveEvidence {
+		evidenceID := ""
+		if safeEvidenceRecordPath(pointer.Record, gate.Inputs.EvidenceDirectory) {
+			evidenceID = pointer.Record
+		}
+		if evidenceID == "" || seen[pointer.Record] {
+			return &certificationInvalidPointerError{cellID: cell.cellID, evidenceID: evidenceID}
+		}
+		seen[pointer.Record] = true
+		if err := validateEvidencePointer(pointer, gate); err != nil {
+			return &certificationInvalidPointerError{cellID: cell.cellID, evidenceID: evidenceID}
+		}
+		record, ok := artifacts.evidence[evidenceID]
+		if !ok {
+			return &certificationEvidenceBindingError{id: "evidence/" + evidenceID + "/missing", cellID: cell.cellID, evidenceID: evidenceID, message: "referenced live evidence record is missing"}
+		}
+		if !evidencePointerMatchesRecord(pointer, record) {
+			return &certificationEvidenceBindingError{id: "evidence/" + evidenceID + "/mismatch", cellID: cell.cellID, evidenceID: evidenceID, message: "matrix pointer and accepted evidence record differ"}
+		}
+		if err := cell.binding.matches(record); err != nil {
+			return &certificationEvidenceBindingError{id: "evidence/" + evidenceID + "/binding", cellID: cell.cellID, evidenceID: evidenceID, message: err.Error()}
+		}
+	}
+	return nil
+}
+
+func certificationEvidenceHalt(request CertificationGateRequest, err error) CertificationGateVerdict {
+	var pointerError *certificationInvalidPointerError
+	if errors.As(err, &pointerError) {
+		return certificationGateHaltAt(request, "evidence/invalid_pointer", "evidence", pointerError.cellID, pointerError.evidenceID, "invalid_pointer")
+	}
+	var bindingError *certificationEvidenceBindingError
+	if errors.As(err, &bindingError) {
+		return certificationGateHaltAt(request, bindingError.id, "evidence", bindingError.cellID, bindingError.evidenceID, bindingError.message)
+	}
+	return certificationGateHalt(request, "evidence/invalid", "evidence", "invalid evidence binding")
+}
+
+func (artifacts certificationArtifacts) deriveReports() certificationDerivedReports {
+	reports := certificationDerivedReports{
+		capabilityComplete: make(map[string]bool, len(artifacts.capabilities.Connectors)),
+		workflowComplete:   make(map[string]bool, len(artifacts.flow.Workflows)),
+		syncModeComplete:   make(map[string]bool, len(artifacts.flow.SyncModeCells)),
+		flowComplete:       make(map[string]bool, len(artifacts.flow.ConnectorRoles)),
+		statuses:           make(map[string]certificationConnectorStatus, len(artifacts.capabilities.Connectors)),
+	}
+	for _, connector := range artifacts.capabilities.Connectors {
+		reports.capabilityComplete[connector.Name] = certificationCapabilityCellsComplete(connector.Cells)
+	}
+	for _, set := range artifacts.flow.Workflows {
+		reports.workflowComplete[set.Connector] = certificationWorkflowCellsComplete(set.Cells)
+	}
+	for _, set := range artifacts.flow.SyncModeCells {
+		reports.syncModeComplete[set.Connector] = certificationSyncModeCellsComplete(set.Cells)
+	}
+	for _, connector := range artifacts.flow.ConnectorRoles {
+		reports.flowComplete[connector.Connector] = certificationConnectorFlowComplete(connector.Connector, artifacts.flow)
+	}
+	for _, connector := range artifacts.capabilities.Connectors {
+		certified := reports.capabilityComplete[connector.Name] && reports.workflowComplete[connector.Name] && reports.syncModeComplete[connector.Name] && reports.flowComplete[connector.Name]
+		reports.statuses[connector.Name] = certificationDerivedStatus(connector.Name, certified)
+	}
+	reports.capabilityBaseline = deriveCertificationCapabilityBaseline(artifacts.capabilities, reports.capabilityComplete)
+	reports.flowBaseline = deriveCertificationFlowBaseline(artifacts.flow, reports.statuses)
+	return reports
+}
+
+func certificationCapabilityCellsComplete(cells []certificationCapabilityCell) bool {
+	applicable := 0
+	for _, cell := range cells {
+		if !cell.Applicable {
+			continue
+		}
+		applicable++
+		if !certificationFactsComplete(cell.certificationFacts) {
+			return false
+		}
+	}
+	return applicable != 0
+}
+
+func certificationDerivedStatus(connector string, certified bool) certificationConnectorStatus {
+	status := certificationConnectorStatus{Connector: connector, Certified: certified}
+	if certified {
+		status.Label = "CERTIFIED"
+		return status
+	}
+	status.Label = "COMMUNITY BUILD, UNCERTIFIED"
+	status.Warning = "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED."
+	return status
+}
+
+func deriveCertificationCapabilityBaseline(matrix certificationCapabilityMatrix, complete map[string]bool) certificationCapabilityBaseline {
+	baseline := certificationCapabilityBaseline{
+		Connectors: len(matrix.Connectors),
+		PerKind:    make([]certificationKindBaseline, 0, len(matrix.FunctionKinds)),
+	}
+	for _, connector := range matrix.Connectors {
+		if complete[connector.Name] {
+			baseline.CapabilityComplete++
+		}
+	}
+	for _, kind := range matrix.FunctionKinds {
+		totals := certificationKindBaseline{FunctionKind: kind.ID, Connectors: len(matrix.Connectors)}
+		for _, connector := range matrix.Connectors {
+			for _, cell := range connector.Cells {
+				if cell.FunctionKind != kind.ID || !cell.Applicable {
+					continue
+				}
+				totals.Applicable++
+				if cell.Declared {
+					totals.Declared++
+				}
+				if cell.Implemented {
+					totals.Implemented++
+				}
+				if cell.FixtureTested {
+					totals.FixtureTested++
+				}
+				if cell.LiveTested {
+					totals.LiveTested++
+				}
+				if certificationFactsComplete(cell.certificationFacts) {
+					totals.Complete++
+				}
+			}
+		}
+		baseline.PerKind = append(baseline.PerKind, totals)
+	}
+	return baseline
+}
+
+func deriveCertificationFlowBaseline(matrix certificationFlowMatrix, statuses map[string]certificationConnectorStatus) certificationFlowBaseline {
+	baseline := certificationFlowBaseline{
+		Connectors: len(matrix.ConnectorRoles),
+		Workflows:  deriveCertificationWorkflowBaseline(matrix.Workflows, matrix.WorkflowKinds),
+		SyncModes:  deriveCertificationSyncModeBaseline(matrix.SyncModeCells, matrix.SyncModeKinds, matrix.SyncPrimitives),
+		PerKind:    make([]certificationFlowBaselineKind, 0, len(matrix.FlowKinds)),
+	}
+	connectors := certificationFlowConnectorNames(matrix.ConnectorRoles)
+	for _, kind := range matrix.FlowKinds {
+		totals := certificationFlowBaselineKind{FlowKind: kind.ID}
+		for _, source := range connectors {
+			for _, destination := range connectors {
+				pair, ok := matrix.resolvedFlowPair(kind.ID, source, destination)
+				if !ok {
+					continue
+				}
+				addCertificationFlowCellTotals(&totals, pair.Cell)
+			}
+		}
+		baseline.PerKind = append(baseline.PerKind, totals)
+	}
+	for _, status := range statuses {
+		if status.Certified {
+			baseline.Certified++
+		}
+	}
+	return baseline
+}
+
+func deriveCertificationWorkflowBaseline(sets []certificationWorkflowSet, kinds []certificationWorkflowKind) []certificationWorkflowBaseline {
+	baseline := make([]certificationWorkflowBaseline, 0, len(kinds))
+	for _, kind := range kinds {
+		totals := certificationWorkflowBaseline{WorkflowKind: kind.ID, Connectors: len(sets)}
+		for _, set := range sets {
+			for _, cell := range set.Cells {
+				if cell.WorkflowKind != kind.ID || !cell.Applicable {
+					continue
+				}
+				totals.Applicable++
+				if cell.Declared {
+					totals.Declared++
+				}
+				if cell.Implemented {
+					totals.Implemented++
+				}
+				if cell.FixtureTested {
+					totals.FixtureTested++
+				}
+				if cell.LiveTested {
+					totals.LiveTested++
+				}
+				if certificationFactsComplete(cell.certificationFacts) {
+					totals.Complete++
+				}
+			}
+		}
+		baseline = append(baseline, totals)
+	}
+	return baseline
+}
+
+func deriveCertificationSyncModeBaseline(sets []certificationSyncModeSet, modes []certificationSyncModeKind, primitives []certificationSyncPrimitive) []certificationSyncModeBaseline {
+	baseline := make([]certificationSyncModeBaseline, 0, len(modes)*len(primitives))
+	for _, mode := range modes {
+		for _, primitive := range primitives {
+			totals := certificationSyncModeBaseline{SyncMode: mode.ID, Primitive: primitive.ID, Connectors: len(sets)}
+			for _, set := range sets {
+				for _, cell := range set.Cells {
+					if cell.SyncMode != mode.ID || cell.Primitive != primitive.ID || !cell.Applicable {
+						continue
+					}
+					totals.Applicable++
+					if cell.Declared {
+						totals.Declared++
+					}
+					if cell.Implemented {
+						totals.Implemented++
+					}
+					if cell.FixtureTested {
+						totals.FixtureTested++
+					}
+					if cell.LiveTested {
+						totals.LiveTested++
+					}
+					if certificationFactsComplete(cell.certificationFacts) {
+						totals.Complete++
+					}
+				}
+			}
+			baseline = append(baseline, totals)
+		}
+	}
+	return baseline
+}
+
+func addCertificationFlowCellTotals(totals *certificationFlowBaselineKind, cell certificationFlowCell) {
+	totals.Pairs++
+	if !cell.Applicable {
+		return
+	}
+	totals.Applicable++
+	if cell.Declared {
+		totals.Declared++
+	}
+	if cell.Implemented {
+		totals.Implemented++
+	}
+	if cell.FixtureTested {
+		totals.FixtureTested++
+	}
+	if cell.LiveTested {
+		totals.LiveTested++
+	}
+	if certificationFactsComplete(cell.certificationFacts) {
+		totals.Complete++
+	}
+}
+
+func certificationConnectorFlowComplete(connector string, matrix certificationFlowMatrix) bool {
+	foundApplicable := false
+	for _, kind := range matrix.FlowKinds {
+		for _, roles := range matrix.ConnectorRoles {
+			for _, pairIdentity := range [][2]string{{connector, roles.Connector}, {roles.Connector, connector}} {
+				pair, ok := matrix.resolvedFlowPair(kind.ID, pairIdentity[0], pairIdentity[1])
+				if !ok || !pair.Cell.Applicable {
+					continue
+				}
+				foundApplicable = true
+				if !certificationFactsComplete(pair.Cell.certificationFacts) {
+					return false
+				}
+			}
+		}
+	}
+	return foundApplicable
 }
 
 func (artifacts certificationArtifacts) validateConnectorPresence(connector string) (CertificationGateVerdict, bool) {
@@ -479,26 +914,8 @@ func (artifacts certificationArtifacts) evaluateCell(cellID string, binding cert
 	if len(facts.LiveEvidence) == 0 {
 		return CertificationGateVerdict{}, false
 	}
-
-	seen := make(map[string]bool, len(facts.LiveEvidence))
-	for _, pointer := range facts.LiveEvidence {
-		if pointer.Record == "" || seen[pointer.Record] {
-			return certificationGateHaltAt(CertificationGateRequest{}, cellID+"/live_evidence", "evidence", cellID, pointer.Record, "live evidence pointer is empty or duplicated"), true
-		}
-		seen[pointer.Record] = true
-		record, ok := artifacts.evidence[pointer.Record]
-		if !ok {
-			return certificationGateHaltAt(CertificationGateRequest{}, "evidence/"+pointer.Record+"/missing", "evidence", cellID, pointer.Record, "referenced live evidence record is missing"), true
-		}
-		if err := validateEvidencePointer(pointer, gate); err != nil {
-			return certificationGateHaltAt(CertificationGateRequest{}, "evidence/"+pointer.Record+"/invalid", "evidence", cellID, pointer.Record, err.Error()), true
-		}
-		if !evidencePointerMatchesRecord(pointer, record) {
-			return certificationGateHaltAt(CertificationGateRequest{}, "evidence/"+pointer.Record+"/mismatch", "evidence", cellID, pointer.Record, "matrix pointer and accepted evidence record differ"), true
-		}
-		if err := binding.matches(record); err != nil {
-			return certificationGateHaltAt(CertificationGateRequest{}, "evidence/"+pointer.Record+"/binding", "evidence", cellID, pointer.Record, err.Error()), true
-		}
+	if err := artifacts.validateCellEvidence(certificationEvidenceCell{cellID: cellID, binding: binding, facts: facts}, gate); err != nil {
+		return certificationEvidenceHalt(CertificationGateRequest{}, err), true
 	}
 	return CertificationGateVerdict{}, false
 }
@@ -1033,7 +1450,8 @@ func validateCapabilityMatrix(matrix certificationCapabilityMatrix, gate Connect
 			if !kinds[cell.FunctionKind] || seen[cell.FunctionKind] {
 				return fmt.Errorf("capability connector %q has an unknown or duplicate kind %q", connector.Name, cell.FunctionKind)
 			}
-			if err := validateCertificationFacts(cell.certificationFacts, gate); err != nil {
+			cellID := "capability/" + connector.Name + "/" + cell.FunctionKind
+			if err := validateCertificationFacts(cell.certificationFacts, gate, cellID); err != nil {
 				return fmt.Errorf("capability connector %q kind %q is invalid: %w", connector.Name, cell.FunctionKind, err)
 			}
 			seen[cell.FunctionKind] = true
@@ -1053,6 +1471,9 @@ func validateFlowMatrix(matrix certificationFlowMatrix, gate ConnectorCertificat
 		return errors.New("flow kinds, workflows, sync modes, primitives, sync-mode cells, and connector roles are required")
 	}
 	if err := validateUniqueIDs("flow kind", matrix.FlowKinds, func(kind certificationFlowKind) string { return kind.ID }); err != nil {
+		return err
+	}
+	if err := validateCertificationFlowKindCatalog(matrix.FlowKinds); err != nil {
 		return err
 	}
 	flowKinds := make(map[string]certificationFlowKind, len(matrix.FlowKinds))
@@ -1161,6 +1582,24 @@ func validateFlowMatrix(matrix certificationFlowMatrix, gate ConnectorCertificat
 	return nil
 }
 
+func validateCertificationFlowKindCatalog(kinds []certificationFlowKind) error {
+	expected := certificationcatalog.FlowKinds()
+	if len(kinds) != len(expected) {
+		return fmt.Errorf("flow kind inventory has %d entries, want %d producer-defined kinds", len(kinds), len(expected))
+	}
+	actual := make(map[string]certificationFlowKind, len(kinds))
+	for _, kind := range kinds {
+		actual[kind.ID] = kind
+	}
+	for _, want := range expected {
+		got, ok := actual[want.ID]
+		if !ok || got.SourceRole != want.SourceRole || got.DestinationRole != want.DestinationRole {
+			return fmt.Errorf("flow kind %q is missing or has an invalid producer mapping", want.ID)
+		}
+	}
+	return nil
+}
+
 func validateStatusArtifact(artifact certificationStatusArtifact, gate ConnectorCertificationGate) error {
 	if artifact.SchemaVersion != gate.SchemaVersion {
 		return fmt.Errorf("schema_version %d is unsupported", artifact.SchemaVersion)
@@ -1203,7 +1642,8 @@ func validateWorkflowTopology(sets []certificationWorkflowSet, connectors, kinds
 			if !kinds[cell.WorkflowKind] || seenCells[cell.WorkflowKind] {
 				return fmt.Errorf("workflow connector %q has an unknown or duplicate kind %q", set.Connector, cell.WorkflowKind)
 			}
-			if err := validateCertificationFacts(cell.certificationFacts, gate); err != nil {
+			cellID := "workflow/" + set.Connector + "/" + cell.WorkflowKind
+			if err := validateCertificationFacts(cell.certificationFacts, gate, cellID); err != nil {
 				return fmt.Errorf("workflow connector %q kind %q is invalid: %w", set.Connector, cell.WorkflowKind, err)
 			}
 			seenCells[cell.WorkflowKind] = true
@@ -1238,7 +1678,8 @@ func validateSyncModeTopology(sets []certificationSyncModeSet, connectors, modes
 			if seenCells[key] {
 				return fmt.Errorf("sync-mode connector %q duplicates %q", set.Connector, key)
 			}
-			if err := validateCertificationFacts(cell.certificationFacts, gate); err != nil {
+			cellID := "sync_mode/" + set.Connector + "/" + cell.SyncMode + "/" + cell.Primitive
+			if err := validateCertificationFacts(cell.certificationFacts, gate, cellID); err != nil {
 				return fmt.Errorf("sync-mode connector %q %q is invalid: %w", set.Connector, key, err)
 			}
 			seenCells[key] = true
@@ -1260,7 +1701,8 @@ func validateFlowPairTopology(matrix certificationFlowMatrix, kinds map[string]c
 				return fmt.Errorf("flow pair set names unknown connector %q", connector)
 			}
 		}
-		if err := validateCertificationFacts(set.Cell.certificationFacts, gate); err != nil {
+		cellID := "flow/" + set.FlowKind + "/" + set.SourceConnectors[0] + "/" + set.DestinationConnectors[0]
+		if err := validateCertificationFacts(set.Cell.certificationFacts, gate, cellID); err != nil {
 			return fmt.Errorf("flow pair set %q is invalid: %w", set.FlowKind, err)
 		}
 	}
@@ -1289,7 +1731,11 @@ func validateFlowPairTopology(matrix certificationFlowMatrix, kinds map[string]c
 		if !ok || !base.Cell.Applicable {
 			return errors.New("flow pair override has no default pair")
 		}
-		if err := validateCertificationFacts(override.Cell.certificationFacts, gate); err != nil || !override.Cell.Applicable {
+		cellID := "flow/" + override.FlowKind + "/" + override.Source + "/" + override.Destination
+		if err := validateCertificationFacts(override.Cell.certificationFacts, gate, cellID); err != nil {
+			return fmt.Errorf("flow pair override %q is invalid: %w", key, err)
+		}
+		if !override.Cell.Applicable {
 			return errors.New("flow pair override is invalid")
 		}
 	}
@@ -1315,28 +1761,54 @@ func validateRequiredCertificationSyncPrimitives(primitives map[string]certifica
 	return nil
 }
 
-func validateCertificationFacts(facts certificationFacts, gate ConnectorCertificationGate) error {
+type certificationInvalidPointerError struct {
+	cellID     string
+	evidenceID string
+}
+
+func (err *certificationInvalidPointerError) Error() string {
+	return "invalid_pointer"
+}
+
+type certificationInvalidCellError struct {
+	id      string
+	cellID  string
+	message string
+}
+
+func (err *certificationInvalidCellError) Error() string {
+	return err.message
+}
+
+func validateCertificationFacts(facts certificationFacts, gate ConnectorCertificationGate, cellID string) error {
 	if !facts.Applicable {
 		if facts.NotApplicable == nil || facts.Declared || facts.Implemented || facts.FixtureTested || facts.LiveTested || len(facts.FixtureEvidence) != 0 || len(facts.LiveEvidence) != 0 {
-			return errors.New("non-applicable cell is invalid")
+			return &certificationInvalidCellError{id: cellID + "/not_applicable", cellID: cellID, message: "non-applicable cell is invalid"}
 		}
-		return validateCertificationReason(facts.NotApplicable.Code, facts.NotApplicable.Reason)
+		if err := validateCertificationReason(facts.NotApplicable.Code, facts.NotApplicable.Reason); err != nil {
+			return &certificationInvalidCellError{id: cellID + "/not_applicable", cellID: cellID, message: err.Error()}
+		}
+		return nil
 	}
 	if facts.NotApplicable != nil {
-		return errors.New("applicable cell has a not_applicable reason")
+		return &certificationInvalidCellError{id: cellID + "/not_applicable", cellID: cellID, message: "applicable cell has a not_applicable reason"}
 	}
 	if facts.FixtureTested && len(facts.FixtureEvidence) == 0 {
-		return errors.New("fixture_tested cell requires fixture evidence")
+		return &certificationInvalidCellError{id: cellID + "/fixture_evidence", cellID: cellID, message: "fixture_tested cell requires fixture evidence"}
 	}
 	if facts.LiveTested && len(facts.LiveEvidence) == 0 {
-		return errors.New("live_tested cell requires live evidence")
+		return &certificationInvalidCellError{id: cellID + "/live_evidence", cellID: cellID, message: "live_tested cell requires live evidence"}
 	}
 	if !facts.LiveTested && len(facts.LiveEvidence) != 0 {
-		return errors.New("live evidence requires live_tested=true")
+		return &certificationInvalidCellError{id: cellID + "/live_evidence", cellID: cellID, message: "live evidence requires live_tested=true"}
 	}
 	for _, pointer := range facts.LiveEvidence {
 		if err := validateEvidencePointer(pointer, gate); err != nil {
-			return err
+			evidenceID := ""
+			if safeEvidenceRecordPath(pointer.Record, gate.Inputs.EvidenceDirectory) {
+				evidenceID = pointer.Record
+			}
+			return &certificationInvalidPointerError{cellID: cellID, evidenceID: evidenceID}
 		}
 	}
 	return nil
@@ -1860,6 +2332,19 @@ type certificationFlowPair struct {
 	Source      string
 	Destination string
 	Cell        certificationFlowCell
+}
+
+func (matrix certificationFlowMatrix) resolvedFlowPair(flowKind, source, destination string) (certificationFlowPair, bool) {
+	for _, override := range matrix.PairOverrides {
+		if override.FlowKind == flowKind && override.Source == source && override.Destination == destination {
+			return certificationFlowPair{FlowKind: flowKind, Source: source, Destination: destination, Cell: override.Cell}, true
+		}
+	}
+	set, ok := certificationFlowPairSetFor(matrix.PairSets, flowKind, source, destination)
+	if !ok {
+		return certificationFlowPair{}, false
+	}
+	return certificationFlowPair{FlowKind: flowKind, Source: source, Destination: destination, Cell: set.Cell}, true
 }
 
 func (matrix certificationFlowMatrix) flowPairsForConnector(connector string) ([]certificationFlowPair, error) {

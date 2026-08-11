@@ -16,7 +16,7 @@
     "no_mistakes": "pending",
     "child_pr": "pending"
   },
-  "correction_rounds": 2,
+  "correction_rounds": 3,
   "correction_tracking": {
     "round": 1,
     "maximum_rounds": 5,
@@ -54,6 +54,30 @@
     ],
     "red_tests_authored_before_production_changes": true,
     "focused_verification": "go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen -count=1",
+    "focused_verification_status": "passed",
+    "status": "code_remediated_review_verified_pending_outer_executor"
+  },
+  "correction_round_3": {
+    "round": 3,
+    "maximum_rounds": 5,
+    "children": [
+      {
+        "issue": 4028,
+        "scope": "malformed-pointer coordinates, exact flow-kind inventory, and evidence-derived status"
+      },
+      {
+        "issue": 4030,
+        "scope": "explicit non-symlink certification-gate root and usage boundary"
+      }
+    ],
+    "finding_ids": [
+      "certification-flow-kind-inventory",
+      "certification-status-not-derived",
+      "certification-gate-implicit-root",
+      "certification-malformed-evidence-coordinates"
+    ],
+    "red_tests_authored_before_production_changes": true,
+    "focused_verification": "go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen ./cmd/connectorgen -count=1; go run ./cmd/agentcontractgen sync; go run ./cmd/agentcontractgen check",
     "focused_verification_status": "passed",
     "status": "code_remediated_review_verified_pending_outer_executor"
   },

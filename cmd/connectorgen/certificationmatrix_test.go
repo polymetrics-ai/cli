@@ -8,6 +8,8 @@ import (
 	"strings"
 	"sync"
 	"testing"
+
+	"polymetrics.ai/internal/certificationcatalog"
 )
 
 var certificationMatrixTestCache struct {
@@ -466,6 +468,20 @@ func TestCertificationDiscoversStableWarehouseFacingSyncPrimitives(t *testing.T)
 	for primitive, found := range want {
 		if !found {
 			t.Errorf("discoverSyncPrimitives() omitted %q: %#v", primitive, primitives)
+		}
+	}
+}
+
+func TestCertificationDiscoveredFlowKindsMatchSharedCatalog(t *testing.T) {
+	want := certificationcatalog.FlowKinds()
+	got := discoveredFlowKinds()
+	if len(got) != len(want) {
+		t.Fatalf("discoveredFlowKinds() length = %d, want %d", len(got), len(want))
+	}
+	for index, expected := range want {
+		actual := got[index]
+		if actual.ID != expected.ID || actual.SourceRole != expected.SourceRole || actual.DestinationRole != expected.DestinationRole {
+			t.Fatalf("discoveredFlowKinds()[%d] = %#v, want %#v", index, actual, expected)
 		}
 	}
 }
