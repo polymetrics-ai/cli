@@ -12,7 +12,7 @@ Status: in progress.
 - [x] Green documentation assertion captured: focused PostgreSQL test passed with `$1`/`$2` predicate.
 - [x] Focused PostgreSQL package test, vet, tidy check, lint, docs validation, and hygiene complete.
 - [x] Inline/manual GSD verify and code review complete; no findings.
-- [ ] no-mistakes run complete with `--skip=push,pr,ci` and no `--yes`.
+- [ ] Final no-mistakes run complete with `--skip=push,pr,ci` and no `--yes`.
 - [ ] Child branch pushed and draft PR opened against `docs/4015-connector-release-certification`.
 
 ## Safety confirmation
@@ -20,3 +20,13 @@ Status: in progress.
 No credentials, provider calls, runtime-backed database checks, SQL writes,
 reverse ETL, certification execution, generated broad rewrites, or #3855
 branch changes are in scope.
+
+## Pipeline-scope recovery
+
+The first no-mistakes run (`01KZQ0E0C56MYBS3TKC2VYRTAT`) passed its review,
+test, documentation, and lint steps with push/PR/CI skipped. Its documentation
+agent nevertheless created `524542d2` with an unrelated Parquet-wording edit.
+That edit was outside #4031's scope and was immediately restored with
+`3d5188784` after guarded custody recovery. A final no-mistakes run must now
+validate the scoped net branch; the unrelated wording awaits a separate
+issue-first owner.

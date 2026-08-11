@@ -3,7 +3,7 @@
   "parent_issue": 4015,
   "branch": "fix/4015-postgres-resume-predicate-doc",
   "base": "docs/4015-connector-release-certification",
-  "status": "verified_pending_no_mistakes",
+  "status": "scope_recovered_pending_final_no_mistakes",
   "lifecycle": {
     "adapter_doctor": "passed",
     "sources_resolved": [
@@ -29,6 +29,15 @@
     "inline_verification": "completed",
     "inline_code_review": "completed_no_findings"
   },
+  "no_mistakes_runs": [
+    {
+      "id": "01KZQ0E0C56MYBS3TKC2VYRTAT",
+      "outcome": "passed",
+      "skip": "push,pr,ci",
+      "pipeline_commit": "524542d2",
+      "scope_disposition": "reverted by 3d5188784 because the Parquet-wording change was outside #4031"
+    }
+  ],
   "correction_loops": 1,
   "maximum_correction_loops": 5
 }

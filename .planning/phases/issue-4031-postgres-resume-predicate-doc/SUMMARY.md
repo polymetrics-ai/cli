@@ -30,3 +30,11 @@
 
 All passed. The GSD lifecycle ran through the documented single-worker manual
 fallback because the active issue-first roadmap has no numbered phase #4031.
+
+## Scope recovery
+
+The first `no-mistakes` run passed with push/PR/CI skipped, but its automatic
+documentation phase created an unrelated Parquet-wording commit. The guarded
+pipeline commit is retained in history and immediately reverted so the net PR
+diff remains limited to #4031. A fresh final no-mistakes validation is required
+before push/PR.
