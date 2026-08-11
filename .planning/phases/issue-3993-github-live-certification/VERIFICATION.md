@@ -131,6 +131,10 @@ fixture, or successful exit to a certification claim.
   --check` passed with 308 organization and 33 App-marketplace cases.
 - `go test -timeout 20m ./internal/connectors/certify` passed; `go test
   -timeout 20m ./internal/cli` passed in 157.243 seconds.
+- The final focused GitHub suite passed 51/51. `go test -race -timeout 20m
+  ./internal/connectors/certify` passed in 55.547 seconds; `go run
+  ./cmd/connectorgen certification-matrix --check` and `go run
+  ./cmd/agentcontractgen check` also passed.
 
 ### Honest execution assessment
 
