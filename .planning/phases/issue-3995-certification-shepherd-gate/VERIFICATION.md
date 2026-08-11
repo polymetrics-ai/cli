@@ -95,3 +95,28 @@ child-PR publication remain pending.
       go run ./cmd/agentcontractgen check --root "$PWD"
       git diff --check da7747a796049601a179a97c025bfb05f011f1e8
       ```
+
+## Correction round 5 focused evidence
+
+- [x] Each exact raw flow pair coordinate now halts when its endpoint-role applicability,
+      declared/implemented conjunctions, or derived not-applicable code/reason disagree with its
+      pair facts; fixture/live evidence remains separately validated and overrides retain their
+      correction-round-four immutable-base rule.
+- [x] With `flow_gen.go` intentionally absent, stable catalog code compiled and
+      `agentcontractgen sync` recreated one data-only catalog from `flow-matrix.json`; missing,
+      empty, invalid, duplicate, or externally mutable catalog data fails closed.
+- [x] The intentional canonical root-instruction change had left both deterministic render-hash
+      expectations stale; they were refreshed from the current base and connector renderings
+      before the final focused package run.
+- [x] Focused Green verification passed without full-suite, lint, CI, PR, provider, credential,
+      network, evidence-creation, or outer-pipeline work:
+
+      ```sh
+      go run ./cmd/agentcontractgen sync --root "$PWD"
+      go test -timeout 20m ./internal/certificationcatalog ./internal/agentcontract ./cmd/agentcontractgen -count=1
+      go test -timeout 20m ./cmd/connectorgen -run '^(TestCertification|TestRunCertification)' -count=1
+      go run ./cmd/connectorgen certification-matrix --check
+      go run ./cmd/agentcontractgen check --root "$PWD"
+      git diff --check da7747a796049601a179a97c025bfb05f011f1e8
+      git diff --name-only da7747a796049601a179a97c025bfb05f011f1e8 -- 'cmd/connectorgen/certification*.go'
+      ```

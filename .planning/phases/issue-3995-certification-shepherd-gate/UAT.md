@@ -52,5 +52,11 @@ the consumer catalog from that same matrix. A flow override may change only boun
 immutable fact promotion, safe-missing/mismatched/wrong-coordinate base records, and distinct large
 proof numbers all halt before a transition can proceed.
 
+Each flow pair is also bound to its canonical flow kind’s source and destination roles: changing
+applicability, declared/implemented conjunctions, or the exact derived not-applicable code/reason
+halts at that pair coordinate before evidence or status derivation. The catalog’s stable accessor
+fails closed if generated data is absent, empty, or invalid; running `agentcontractgen sync` restores
+an absent data-only `flow_gen.go` from the producer matrix without changing the producer path.
+
 This internal `agentcontractgen` command is not part of the `pm` CLI, so `pm` help/manual/website
 documentation has no new parity surface.

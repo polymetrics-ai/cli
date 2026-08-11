@@ -100,18 +100,12 @@ func renderCertificationFlowKindCatalog(root string, contract *Contract) ([]byte
 	fmt.Fprintln(&output)
 	fmt.Fprintln(&output, "package certificationcatalog")
 	fmt.Fprintln(&output)
-	fmt.Fprintln(&output, "type FlowKind struct {")
-	fmt.Fprintln(&output, "\tID              string")
-	fmt.Fprintln(&output, "\tSourceRole      string")
-	fmt.Fprintln(&output, "\tDestinationRole string")
-	fmt.Fprintln(&output, "}")
-	fmt.Fprintln(&output)
-	fmt.Fprintln(&output, "func FlowKinds() []FlowKind {")
-	fmt.Fprintln(&output, "\treturn []FlowKind{")
+	fmt.Fprintln(&output, "func init() {")
+	fmt.Fprintln(&output, "\tregisterGeneratedFlowKinds([]FlowKind{")
 	for _, kind := range kinds {
 		fmt.Fprintf(&output, "\t\t{ID: %q, SourceRole: %q, DestinationRole: %q},\n", kind.ID, kind.SourceRole, kind.DestinationRole)
 	}
-	fmt.Fprintln(&output, "\t}")
+	fmt.Fprintln(&output, "\t})")
 	fmt.Fprintln(&output, "}")
 	formatted, err := format.Source(output.Bytes())
 	if err != nil {

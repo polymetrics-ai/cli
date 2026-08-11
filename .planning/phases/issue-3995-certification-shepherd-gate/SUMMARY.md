@@ -76,3 +76,15 @@ generates and verifies an importable flow-kind catalog for the consumer. Flow ov
 all immutable base facts, raw and override evidence bind before resolution, and proof comparisons
 retain JSON numbers without `float64` precision loss. Focused package, producer-matrix, catalog,
 and changed-path checks passed; the GitHub baseline remains the required deterministic `RETRY`.
+
+## Correction round 5
+
+Raw flow pairs now derive their applicability, declared/implemented conjunctions, and exact
+not-applicable code/reason from each canonical flow-kind source/destination role before evidence
+or report processing. Fixture/live evidence remains evidence-only, and the correction-round-four
+override rule remains intact. The catalog type and defensive accessor are stable non-generated
+code; its generated file now contains only data registration, so sync compiles and restores an
+absent catalog from `flow-matrix.json`. Focused Green checks, including an actual missing-file
+bootstrap, the unchanged producer matrix check, catalog check, and empty forbidden-path audit,
+passed while the GitHub baseline retained its deterministic `RETRY`. The prior intentional root
+instruction also required refreshing stale deterministic render-hash test expectations.

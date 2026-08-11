@@ -591,6 +591,74 @@ func TestCertificationGateRejectsImmutableFlowOverridePromotion(t *testing.T) {
 	}
 }
 
+func TestCertificationGateRejectsFlowPairsThatDisagreeWithEndpointRoles(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	tests := []struct {
+		name    string
+		mutate  func(map[string]any)
+		failure string
+		cellID  string
+	}{
+		{
+			name: "applicability",
+			mutate: func(matrix map[string]any) {
+				roles := matrix["connector_roles"].([]any)[0].(map[string]any)["roles"].([]any)
+				apiSource := roles[0].(map[string]any)
+				apiSource["applicable"] = false
+				apiSource["declared"] = false
+				apiSource["implemented"] = false
+				apiSource["not_applicable"] = map[string]any{
+					"code":   "unsupported_api_source",
+					"reason": "fixture connector has no api source",
+				}
+			},
+			failure: "flow/api_to_api/github/github/role_invariant",
+			cellID:  "flow/api_to_api/github/github",
+		},
+		{
+			name: "declared and implemented conjunction",
+			mutate: func(matrix map[string]any) {
+				roles := matrix["connector_roles"].([]any)[0].(map[string]any)["roles"].([]any)
+				roles[0].(map[string]any)["declared"] = false
+				roles[0].(map[string]any)["implemented"] = false
+			},
+			failure: "flow/api_to_api/github/github/role_invariant",
+			cellID:  "flow/api_to_api/github/github",
+		},
+		{
+			name: "not applicable code and reason",
+			mutate: func(matrix map[string]any) {
+				pair := matrix["pair_sets"].([]any)[1].(map[string]any)
+				notApplicable := pair["cell"].(map[string]any)["not_applicable"].(map[string]any)
+				notApplicable["code"] = "destination_other"
+				notApplicable["reason"] = "destination mismatched reason"
+			},
+			failure: "flow/api_to_database/github/github/role_invariant",
+			cellID:  "flow/api_to_database/github/github",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := writeGreenCertificationFixture(t)
+			matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+			test.mutate(matrix)
+			writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+
+			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if verdict.Decision != CertificationGateHalt || len(verdict.Failures) != 1 {
+				t.Fatalf("role/pair invariant verdict = %#v, want one HALT", verdict)
+			}
+			failure := verdict.Failures[0]
+			if failure.ID != test.failure || failure.CellID != test.cellID || failure.EvidenceID != "" {
+				t.Fatalf("role/pair invariant coordinates = %#v", failure)
+			}
+		})
+	}
+}
+
 func TestCertificationGateBindsRawFlowPairSetEvidenceBeforeOverrides(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	const flowCellID = "flow/api_to_api/github/github"

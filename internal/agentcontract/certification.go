@@ -1523,14 +1523,15 @@ func validateFlowMatrix(matrix certificationFlowMatrix, gate ConnectorCertificat
 		return err
 	}
 	connectors := make(map[string]bool, len(matrix.ConnectorRoles))
+	connectorRoles := make(map[string]map[string]certificationFlowRole, len(matrix.ConnectorRoles))
 	for _, declaration := range matrix.ConnectorRoles {
 		connectors[declaration.Connector] = true
-		roles := make(map[string]bool, len(declaration.Roles))
+		roles := make(map[string]certificationFlowRole, len(declaration.Roles))
 		for _, role := range declaration.Roles {
-			if !safeCertificationID(role.Role) || roles[role.Role] {
+			if _, exists := roles[role.Role]; !safeCertificationID(role.Role) || exists {
 				return fmt.Errorf("flow-role connector %q has an unsafe or duplicate role %q", declaration.Connector, role.Role)
 			}
-			roles[role.Role] = true
+			roles[role.Role] = role
 			if !role.Applicable {
 				if role.NotApplicable == nil || role.Declared || role.Implemented {
 					return fmt.Errorf("flow-role connector %q role %q is invalid", declaration.Connector, role.Role)
@@ -1543,10 +1544,14 @@ func validateFlowMatrix(matrix certificationFlowMatrix, gate ConnectorCertificat
 			}
 		}
 		for _, kind := range matrix.FlowKinds {
-			if !roles[kind.SourceRole] || !roles[kind.DestinationRole] {
+			if _, ok := roles[kind.SourceRole]; !ok {
+				return fmt.Errorf("flow-role connector %q omits a required role", declaration.Connector)
+			}
+			if _, ok := roles[kind.DestinationRole]; !ok {
 				return fmt.Errorf("flow-role connector %q omits a required role", declaration.Connector)
 			}
 		}
+		connectorRoles[declaration.Connector] = roles
 	}
 	if err := validateWorkflowTopology(matrix.Workflows, connectors, workflowKinds, gate); err != nil {
 		return err
@@ -1554,7 +1559,7 @@ func validateFlowMatrix(matrix certificationFlowMatrix, gate ConnectorCertificat
 	if err := validateSyncModeTopology(matrix.SyncModeCells, connectors, syncModes, primitiveIDs, gate); err != nil {
 		return err
 	}
-	if err := validateFlowPairTopology(matrix, flowKinds, connectors, gate); err != nil {
+	if err := validateFlowPairTopology(matrix, flowKinds, connectors, connectorRoles, gate); err != nil {
 		return err
 	}
 	if err := validateUniqueIDs("flow status", matrix.ConnectorStatuses, func(status certificationConnectorStatus) string { return status.Connector }); err != nil {
@@ -1586,6 +1591,9 @@ func validateFlowMatrix(matrix certificationFlowMatrix, gate ConnectorCertificat
 
 func validateCertificationFlowKindCatalog(kinds []certificationFlowKind) error {
 	expected := certificationcatalog.FlowKinds()
+	if len(expected) == 0 {
+		return errors.New("generated flow-kind catalog is missing or invalid")
+	}
 	if len(kinds) != len(expected) {
 		return fmt.Errorf("flow kind inventory has %d entries, want %d producer-defined kinds", len(kinds), len(expected))
 	}
@@ -1693,9 +1701,10 @@ func validateSyncModeTopology(sets []certificationSyncModeSet, connectors, modes
 	return nil
 }
 
-func validateFlowPairTopology(matrix certificationFlowMatrix, kinds map[string]certificationFlowKind, connectors map[string]bool, gate ConnectorCertificationGate) error {
+func validateFlowPairTopology(matrix certificationFlowMatrix, kinds map[string]certificationFlowKind, connectors map[string]bool, connectorRoles map[string]map[string]certificationFlowRole, gate ConnectorCertificationGate) error {
 	for _, set := range matrix.PairSets {
-		if _, ok := kinds[set.FlowKind]; !ok || set.Mediator != matrix.Mediator || !sortedUniqueCertificationIDs(set.SourceConnectors) || !sortedUniqueCertificationIDs(set.DestinationConnectors) {
+		kind, ok := kinds[set.FlowKind]
+		if !ok || set.Mediator != matrix.Mediator || !sortedUniqueCertificationIDs(set.SourceConnectors) || !sortedUniqueCertificationIDs(set.DestinationConnectors) {
 			return errors.New("flow pair set is invalid")
 		}
 		for _, connector := range append(append([]string{}, set.SourceConnectors...), set.DestinationConnectors...) {
@@ -1703,9 +1712,24 @@ func validateFlowPairTopology(matrix certificationFlowMatrix, kinds map[string]c
 				return fmt.Errorf("flow pair set names unknown connector %q", connector)
 			}
 		}
-		cellID := "flow/" + set.FlowKind + "/" + set.SourceConnectors[0] + "/" + set.DestinationConnectors[0]
-		if err := validateCertificationFacts(set.Cell.certificationFacts, gate, cellID); err != nil {
-			return fmt.Errorf("flow pair set %q is invalid: %w", set.FlowKind, err)
+		for _, source := range set.SourceConnectors {
+			sourceRole, ok := connectorRoles[source][kind.SourceRole]
+			if !ok {
+				return fmt.Errorf("flow pair set %q source %q omits role %q", set.FlowKind, source, kind.SourceRole)
+			}
+			for _, destination := range set.DestinationConnectors {
+				destinationRole, ok := connectorRoles[destination][kind.DestinationRole]
+				if !ok {
+					return fmt.Errorf("flow pair set %q destination %q omits role %q", set.FlowKind, destination, kind.DestinationRole)
+				}
+				cellID := "flow/" + set.FlowKind + "/" + source + "/" + destination
+				if err := validateCertificationFacts(set.Cell.certificationFacts, gate, cellID); err != nil {
+					return fmt.Errorf("flow pair set %q is invalid: %w", set.FlowKind, err)
+				}
+				if err := validateCertificationFlowPairRoleInvariant(set.Cell.certificationFacts, sourceRole, destinationRole, cellID); err != nil {
+					return err
+				}
+			}
 		}
 	}
 	names := make([]string, 0, len(connectors))
@@ -1745,6 +1769,43 @@ func validateFlowPairTopology(matrix certificationFlowMatrix, kinds map[string]c
 		}
 	}
 	return nil
+}
+
+func validateCertificationFlowPairRoleInvariant(facts certificationFacts, sourceRole, destinationRole certificationFlowRole, cellID string) error {
+	expected := certificationFlowPairRoleFacts(sourceRole, destinationRole)
+	if facts.Applicable == expected.Applicable &&
+		facts.Declared == expected.Declared &&
+		facts.Implemented == expected.Implemented &&
+		reflect.DeepEqual(facts.NotApplicable, expected.NotApplicable) {
+		return nil
+	}
+	return &certificationInvalidCellError{id: cellID + "/role_invariant", cellID: cellID, message: "flow pair cell disagrees with endpoint roles"}
+}
+
+func certificationFlowPairRoleFacts(sourceRole, destinationRole certificationFlowRole) certificationFacts {
+	if !sourceRole.Applicable && !destinationRole.Applicable {
+		return certificationFacts{NotApplicable: &certificationNotApplicableReason{
+			Code:   "source_and_destination_roles_inapplicable",
+			Reason: "source " + sourceRole.Role + " and destination " + destinationRole.Role + " roles are not applicable",
+		}}
+	}
+	if !sourceRole.Applicable {
+		return certificationFacts{NotApplicable: &certificationNotApplicableReason{
+			Code:   "source_" + sourceRole.NotApplicable.Code,
+			Reason: "source " + sourceRole.NotApplicable.Reason,
+		}}
+	}
+	if !destinationRole.Applicable {
+		return certificationFacts{NotApplicable: &certificationNotApplicableReason{
+			Code:   "destination_" + destinationRole.NotApplicable.Code,
+			Reason: "destination " + destinationRole.NotApplicable.Reason,
+		}}
+	}
+	return certificationFacts{
+		Applicable:  true,
+		Declared:    sourceRole.Declared && destinationRole.Declared,
+		Implemented: sourceRole.Implemented && destinationRole.Implemented,
+	}
 }
 
 func sameCertificationFlowOverrideFacts(base, override certificationFacts) bool {

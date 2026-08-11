@@ -103,3 +103,21 @@ No provider, credential, network, evidence-creation, CI, PR, or outer pipeline a
 PASS after correction round 4 of 5. The checked-in GitHub artifact remains deterministic `RETRY`
 with `capability/github/capability:check/live_evidence`; complete valid fixtures proceed; malformed,
 mismatched, escaped, overridden-invalid, and precision-mismatched inputs halt.
+
+## Correction round 5 re-review
+
+| ID | Severity | Finding | Disposition | Tracking |
+| --- | --- | --- | --- | --- |
+| C5-1 | error | A flow pair could remain green after an endpoint role became not-applicable or lost its declared/implemented facts, and a not-applicable code/reason could drift independently. | Fixed: each raw pair coordinate now derives applicability, declared/implemented conjunctions, and the exact not-applicable code/reason from its canonical flow-kind endpoint roles before evidence binding or report derivation. | #4028 |
+| C5-2 | warning | The generated catalog was the only source file defining its package API, so sync could not compile to restore an absent catalog. | Fixed: stable non-generated type/accessor code fails closed for missing, empty, or invalid data; `flow_gen.go` now carries only generated data registration and sync recreated it from the matrix. | #4028 |
+
+The focused Round 5 catalog-bootstrap, consumer, unchanged-producer, projection, and changed-path
+checks passed. No provider, credential, network, evidence-creation, live connector, transport,
+warehouse, delivery-contract, generated worker, CI, PR, or outer pipeline action ran.
+
+## Current verdict after correction round 5
+
+PASS after correction round 5 of 5. The GitHub baseline remains deterministic `RETRY` with
+`capability/github/capability:check/live_evidence`; complete valid fixtures proceed; all reviewed
+role/pair, catalog, malformed, mismatched, escaped, overridden-invalid, and precision-mismatched
+inputs halt deterministically.
