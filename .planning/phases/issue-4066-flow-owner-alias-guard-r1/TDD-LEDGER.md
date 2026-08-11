@@ -1,9 +1,9 @@
 # #4066 TDD Ledger
 
-**Starting head:** `c5b91917e3f5c07a010db2bdf58348cbc73cb9d5`  
-**Collision correction head:** `bda85b778f89f4320760b8d83826ac9d393b0220`  
-**Case-variant correction head:** `08acb08a8521ae7485152092810d4318ced29086`  
-**Bare-name correction head:** `4923b17648575d8947887139bb8058d2a5805a78`  
+**Starting head:** `c5b91917e3f5c07a010db2bdf58348cbc73cb9d5`
+**Collision correction head:** `bda85b778f89f4320760b8d83826ac9d393b0220`
+**Case-variant correction head:** `08acb08a8521ae7485152092810d4318ced29086`
+**Bare-name correction head:** `4923b17648575d8947887139bb8058d2a5805a78`
 **State:** GREEN verified with focused race coverage
 
 | Slice | RED contract | GREEN contract | Result |

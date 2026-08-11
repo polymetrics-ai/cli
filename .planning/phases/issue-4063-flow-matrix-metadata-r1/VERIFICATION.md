@@ -1,6 +1,6 @@
 # #4063 Verification Checklist
 
-**Status:** Focused local gates green; inherited base-range whitespace gate needs disposition
+**Status:** Local verification and no-mistakes green; inherited base-range whitespace gate needs disposition
 
 ## Required local gates
 
@@ -19,10 +19,13 @@
 - [x] scripts/verify-gsd-workflow origin/feat/3988-github-certification
 - [ ] git diff --check 5c92888c996319b41eec6e86ca99fcda4cb365f9
 - [x] Semantic JSON comparison confirms exactly one flow-matrix scalar.
-- [ ] Inline manual-GSD verify-work records no gap.
-- [ ] Inline manual-GSD code review dispositions every finding.
-- [ ] Existing Shepherd/no-mistakes path runs with --skip=push,pr,ci and
-      never discovers or retargets a head-to-main PR.
+- [x] Inline manual-GSD verify-work records no gap; #4066's separately
+      authorized final safety correction has its own verification record.
+- [x] Inline manual-GSD code review dispositions every finding in
+      `.planning/phases/issue-4066-flow-owner-alias-guard-r1/REVIEW.md`.
+- [x] Existing Shepherd/no-mistakes run `01KZR72KN8ZKF8V8M5Q19FPJJ5` passed
+      with push, PR, and CI skipped; it never discovered or retargeted a
+      head-to-main PR.
 
 ## External delivery gates
 

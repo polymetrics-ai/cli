@@ -1,7 +1,7 @@
 # #4066 — Guard generated owner aliases in unscoped flows
 
-**Parent issue:** #3897  
-**Correction:** 5 / 5  
+**Parent issue:** #3897
+**Correction:** 5 / 5
 **Starting head:** `c5b91917e3f5c07a010db2bdf58348cbc73cb9d5`
 **Collision correction head:** `bda85b778f89f4320760b8d83826ac9d393b0220`
 **Case-variant correction head:** `08acb08a8521ae7485152092810d4318ced29086`

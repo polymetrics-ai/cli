@@ -6,7 +6,7 @@
   "branch": "feat/3897-flow-connection-scope-nm",
   "required_base": "feat/3988-github-certification",
   "exact_start_head": "002ddf674a447bf0872486aa979efdaa078f602c",
-  "status": "focused_local_gates_green_pending_inherited_base_range_disposition",
+  "status": "local_verification_and_no_mistakes_green_pending_inherited_base_range_and_external_delivery",
   "correction_budget": {
     "authoritative_source": [
       ".planning/phases/issue-3897-flow-connection-scope-r1/TDD-LEDGER.md",
@@ -59,7 +59,7 @@
     "lint": "passed",
     "gsd_workflow_guard": "passed",
     "base_range_diff_check": "blocked: exact start already fails on seven trailing-whitespace lines in older #3897 planning records from 06fdfe2f94c8093ed9f504b210f1bd3f1ce01163; correction-only range passes",
-    "verification": "pending",
-    "review": "pending"
+    "verification": "passed: manual GSD fallback records no gap; #4066 verification is separately recorded",
+    "review": "passed: no-mistakes final review found no unresolved issue; all #4066 review findings were fixed"
   }
 }
