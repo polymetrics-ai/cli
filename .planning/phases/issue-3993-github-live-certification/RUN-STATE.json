@@ -35,24 +35,30 @@
     "inbound_github_parquet_duckdb_round_trip": true
   },
   "final_gate_corrections": {
-    "used": 1,
+    "used": 4,
     "limit": 5,
-    "issue": 4020,
-    "last": "proof-sweep write target scope now rejects --config owner/repo aliases before child-process launch"
+    "issue": 4039,
+    "last": "canonical classifier artifacts now reject PAT-governance scope, forged tallies, drift, and credential-shaped persisted scalars before dispatch"
   },
-  "measurement": {
+  "current_classifier": {
     "surface_commands": 1521,
-    "attemptable": 665,
-    "blocked": 856,
+    "attemptable": 182,
+    "blocked": 1339,
+    "direct_read": { "attemptable": 169, "blocked": 470 },
+    "movement_from_historical_terminal": { "attemptable": -483, "blocked": 483 }
+  },
+  "historical_terminal_measurement": {
+    "surface_commands": 1521,
     "proven": 0,
     "failed": 665,
+    "untestable": 856,
     "failure_cause": "all reads exceeded the 45000 ms terminal bound",
     "rate_before": { "rest_core_remaining": 15000, "graphql_remaining": 5000 },
     "rate_after": { "rest_core_remaining": 14997, "graphql_remaining": 5000 }
   },
   "remaining_before_certification": [
     "admit the barrier-released provider workload without serializing it or presenting local process saturation as rate policy",
-    "supply cleanup-safe fixtures and independent read-backs for currently blocked mutations",
+    "supply cleanup-safe fixtures and independent read-backs for currently blocked writes",
     "#3994 approved action execution for the warehouse-to-GitHub leg",
     "#3992 real schedule firing for the warehouse-to-GitHub leg"
   ]

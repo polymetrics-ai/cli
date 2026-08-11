@@ -47,11 +47,15 @@ make release-workflow-check
 ## Credentialed result and evidence handling
 
 The App-authenticated fresh binary was exercised only against the immutable
-`Polymetrics-Cert` boundary.  The full one-barrier release records 665 attempted
-operations: 0 proven, 665 terminal-bound failures, and 856 concrete
-untestable rows.  No HTTP status was available for the failures.  Rate snapshots
-immediately around the sweep measured REST core 15,000 → 14,997 and GraphQL
-5,000 → 5,000.
+`Polymetrics-Cert` boundary. The current canonical classifier records 1,521
+commands: 182 attemptable, 1,339 blocked, and 169 / 470 direct reads. Its static
+movement from the separately named historical terminal measurement is -483 / +483.
+No provider command was run for that correction.
+
+The historical full one-barrier release records 665 attempted operations: 0
+proven, 665 terminal-bound failures, and 856 untestable rows. No HTTP status was
+available for the failures. Rate snapshots immediately around that historical
+sweep measured REST core 15,000 → 14,997 and GraphQL 5,000 → 5,000.
 
 The App token itself was not printed or committed.  A single returned-record
 control and a 16-way returned-record control establish that the App path worked;

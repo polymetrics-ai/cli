@@ -17,7 +17,11 @@ import {
   validateProofReport,
   validateProofRecords,
 } from "../github-live-proof-sweep.mjs";
-import { buildCases, resolveLiveBoundary } from "../github-live-cases.mjs";
+import {
+  buildCases,
+  resolveLiveBoundary,
+  validateCanonicalCaseArtifact,
+} from "../github-live-cases.mjs";
 
 const fixtureSurface = {
   commands: [
@@ -378,13 +382,13 @@ test("requires the canonical origin and a fully paginated App installation repos
 test("rejects unsafe boundary and report scalars without retaining their contents", () => {
   const secret = "-----BEGIN PRIVATE KEY-----\nnot-a-key\n-----END PRIVATE KEY-----";
   const report = {
-    schema_version: 1,
+    schema_version: 2,
     connector: "github",
     status: "credentialed_live",
     generated_at: "2026-08-11T00:00:00.000Z",
     surface_sha256: "a".repeat(64),
     binary_sha256: "b".repeat(64),
-    case_file_sha256: "c".repeat(64),
+    case_digest: "c".repeat(64),
     test_repository: "<run-owned-boundary-repository>",
     run_boundary: {
       run_id: secret,
@@ -414,10 +418,119 @@ test("rejects unsafe boundary and report scalars without retaining their content
   assert.ok(rejected instanceof Error);
   assert.equal(rejected.message.includes(secret), false);
   assert.match(rejected.message, /unsafe|report|boundary/i);
+  const safeReport = structuredClone(report);
+  safeReport.run_boundary.run_id = "github-live-proof-safe-run";
   assert.throws(
-    () => validateProofReport({ ...report, unexpected: "field" }, ["repo view"]),
+    () => validateProofReport({ ...safeReport, unexpected: "field" }, ["repo view"]),
     /unsupported field/i,
   );
+});
+
+test("binds ordered case artifacts to the canonical classifier before dispatch", () => {
+  const surface = {
+    commands: [
+      {
+        path: "repo view",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [],
+        api_surface: [{ method: "GET", path: "/repos/{owner}/{repo}" }],
+      },
+      {
+        path: "apps list-repos-accessible-to-installation",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [],
+        api_surface: [{ method: "GET", path: "/installation/repositories" }],
+      },
+    ],
+  };
+  const fixtureBoundary = resolveLiveBoundary({
+    schema_version: 1,
+    run_id: "github-live-proof-canonical-test",
+    default_deny: true,
+    protected_owners: ["polymetrics-ai"],
+    protected_repositories: [{ owner_slug: "polymetrics-ai", repo_slug: "cli" }],
+    working_repositories: [{ owner_slug: "polymetrics-ai", repo_slug: "cli" }],
+    allowed_targets: [
+      { key: "org", resource_type: "organization", org_slug: "polymetrics-cert", org_id: "O_certification", run_owned: true },
+      { key: "repo", resource_type: "repository", owner_slug: "polymetrics-cert", owner_id: "O_certification", repo_slug: "pm-live-lab-proof", repo_id: "R_certification", run_owned: true },
+    ],
+  });
+  const canonical = buildCases(surface, fixtureBoundary);
+
+  assert.doesNotThrow(() => validateCanonicalCaseArtifact({ caseFile: canonical, surface, boundary: fixtureBoundary }));
+  for (const mutate of [
+    (artifact) => artifact.cases.reverse(),
+    (artifact) => artifact.cases.pop(),
+    (artifact) => artifact.cases.push(structuredClone(artifact.cases[0])),
+    (artifact) => { artifact.cases[0].args = ["--owner", "outside-the-boundary"]; },
+    (artifact) => { delete artifact.classification.total; },
+    (artifact) => { artifact.classification.attemptable += 1; },
+    (artifact) => { artifact.measurement.movement.blocked -= 1; },
+    (artifact) => { artifact.measurement.baseline = { attemptable: 665, blocked: 856 }; },
+    (artifact) => { artifact.case_digest = "0".repeat(64); },
+  ]) {
+    const forged = structuredClone(canonical);
+    mutate(forged);
+    assert.throws(
+      () => validateCanonicalCaseArtifact({ caseFile: forged, surface, boundary: fixtureBoundary }),
+      /canonical|classification|digest|movement|unsupported/i,
+    );
+  }
+});
+
+test("rejects compact JOSE, GitHub tokens, encoded private-key armor, and Unicode line separators from reports", () => {
+  const jwt = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnaXRodWItbGl2ZS1wcm9vZiJ9.syntheticSignature";
+  const detachedJWS = "eyJhbGciOiJIUzI1NiJ9..syntheticSignature";
+  const embeddedToken = "prefixghp_synthetic_token_material";
+  const encodedArmor = Buffer.from("-----BEGIN PRIVATE KEY-----\nsynthetic\n-----END PRIVATE KEY-----").toString("base64");
+  const report = {
+    schema_version: 2,
+    connector: "github",
+    status: "credentialed_live",
+    generated_at: "2026-08-11T00:00:00.000Z",
+    surface_sha256: "a".repeat(64),
+    binary_sha256: "b".repeat(64),
+    case_digest: "c".repeat(64),
+    test_repository: "<run-owned-boundary-repository>",
+    run_boundary: {
+      run_id: "github-live-proof-safe-run",
+      owner: "polymetrics-cert",
+      repo: "pm-live-lab-test",
+      owner_id: "O_certification",
+      repo_id: "R_certification",
+      organization_id: "O_certification",
+    },
+    launch: { strategy: "single_barrier_release", operations_released: 0 },
+    implemented_commands: 1,
+    tally: { proven: 0, untestable: 1, failed: 0 },
+    records: [
+      { command: "repo view", state: "untestable", reason: "the immutable boundary fixture is unavailable for this controlled proof" },
+    ],
+  };
+  for (const mutate of [
+    (candidate) => { candidate.run_boundary.run_id = jwt; },
+    (candidate) => { candidate.run_boundary.run_id = detachedJWS; },
+    (candidate) => { candidate.run_boundary.run_id = embeddedToken; },
+    (candidate) => { candidate.records[0].reason = encodedArmor; },
+    (candidate) => { candidate.records[0].reason = "safe\u2028but-persisted"; },
+  ]) {
+    const candidate = structuredClone(report);
+    mutate(candidate);
+    let rejected;
+    try {
+      validateProofReport(candidate, ["repo view"]);
+    } catch (error) {
+      rejected = error;
+    }
+    assert.ok(rejected instanceof Error);
+    assert.equal(rejected.message.includes(jwt), false);
+    assert.equal(rejected.message.includes(detachedJWS), false);
+    assert.equal(rejected.message.includes(embeddedToken), false);
+    assert.equal(rejected.message.includes(encodedArmor), false);
+    assert.match(rejected.message, /unsafe|credential|persisted/i);
+  }
 });
 
 test("rejects untyped target, transport, secret, and lifecycle case inputs before starting pm", async () => {
@@ -473,39 +586,39 @@ test("rejects untyped target, transport, secret, and lifecycle case inputs befor
       {
         command: "orgs update",
         args: ["--org", "outside-the-run-owned-organization"],
-        expected: /remains untestable/i,
+        expected: /canonical classifier artifact/i,
       },
       {
         command: "orgs delete",
         args: ["--org=outside-the-run-owned-organization"],
-        expected: /remains untestable/i,
+        expected: /canonical classifier artifact/i,
       },
       {
         command: "orgs list-members",
         args: ["--org", "outside-the-run-owned-organization"],
-        expected: /source-derived command descriptor and run-owned boundary/i,
+        expected: /canonical classifier artifact/i,
       },
       {
         command: "repo view",
         args: ["--config=base_url=https://synthetic.invalid"],
-        expected: /may not override connector configuration/i,
+        expected: /canonical classifier artifact/i,
       },
       {
         command: "orgs update",
         args: ["--config", "private_key=synthetic-private-material"],
-        expected: /secret --config key/i,
+        expected: /canonical classifier artifact/i,
         absent: "synthetic-private-material",
       },
       {
         command: "repo view",
         args: ["--plan=existing-plan"],
-        expected: /lifecycle or credential flags/i,
+        expected: /canonical classifier artifact/i,
       },
       {
         command: "orgs update",
         args: ["--org", "polymetrics-cert"],
         readback: { command: "repo view", args: ["--approve=existing-grant"] },
-        expected: /lifecycle or credential flags/i,
+        expected: /canonical classifier artifact/i,
       },
       {
         command: "repo view",

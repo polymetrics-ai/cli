@@ -29,7 +29,7 @@ async function main() {
     status: "PROVEN",
     proof_mode: "current_head_credentialed",
     binary_sha256: live.binary_sha256,
-    case_file_sha256: live.case_file_sha256,
+    case_digest: live.case_digest,
     live_command_rows: live.implemented_commands,
     live_proven_rows: live.tally.proven,
     observed_http_429: observed429,

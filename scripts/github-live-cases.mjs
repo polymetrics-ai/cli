@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 
+import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
+import { assertPersistedArtifactSafe, stableJSONString } from "./github-live-artifact-guard.mjs";
 import { validateLabBoundary } from "./github-live-lab.mjs";
 
 const CERTIFICATION_OWNER = "polymetrics-cert";
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(SCRIPT_DIR, "..");
 const SURFACE_PATH = path.join(ROOT, "internal/connectors/defs/github/cli_surface.json");
-const REASON_FAMILIES = Object.freeze([
+export const CASE_REASON_FAMILIES = Object.freeze([
   "mutation_outside_pinned_repo",
   "org_or_enterprise",
   "secret_material",
@@ -20,6 +22,13 @@ const REASON_FAMILIES = Object.freeze([
   "no_cleanup_safe_fixture",
   "other",
 ]);
+export const HISTORICAL_TERMINAL_MEASUREMENT = Object.freeze({
+  total: 1521,
+  proven: 0,
+  failed: 665,
+  untestable: 856,
+  terminal_timeout_ms: 45000,
+});
 const APP_INSTALLATION_REPOSITORY_PREFLIGHT = "apps list-repos-accessible-to-installation";
 
 function parseArgs(args) {
@@ -83,6 +92,27 @@ function exactReadAPI(command) {
   return api;
 }
 
+function normalizedRESTPath(value) {
+  const pathValue = String(value || "").trim().split(/[?#]/u, 1)[0].replace(/\/{2,}/gu, "/").replace(/\/+$/u, "").toLowerCase();
+  return pathValue === "" ? "/" : pathValue;
+}
+
+function canonicalRESTPath(value) {
+  const raw = typeof value === "string" ? value : "";
+  if (raw !== raw.trim() || !raw.startsWith("/") || /[?#\\%]/u.test(raw)) return null;
+  return normalizedRESTPath(raw);
+}
+
+function isOrganizationPATGovernanceRead(command) {
+  const api = exactReadAPI(command);
+  if (!api || api.method !== "GET") return false;
+  const pathValue = normalizedRESTPath(api.path);
+  return pathValue === "/orgs/{org}/personal-access-token-requests" ||
+    pathValue.startsWith("/orgs/{org}/personal-access-token-requests/") ||
+    pathValue === "/orgs/{org}/personal-access-tokens" ||
+    pathValue.startsWith("/orgs/{org}/personal-access-tokens/");
+}
+
 function boundaryRootTargetValues(apiPath, boundary) {
   const roots = [
     ["/repos/{owner}/{repo}", { owner: boundary.owner, repo: boundary.repo }],
@@ -118,28 +148,32 @@ function configResolvedPathNames(apiPath) {
 function hasBoundaryRootTarget(command, boundary) {
   const api = exactReadAPI(command);
   if (!api) return false;
-  const targetValues = boundaryRootTargetValues(api.path, boundary);
+  const apiPath = canonicalRESTPath(api.path);
+  if (!apiPath) return false;
+  const targetValues = boundaryRootTargetValues(apiPath, boundary);
   if (!targetValues) return false;
-  const resolved = configResolvedPathNames(api.path);
+  const resolved = configResolvedPathNames(apiPath);
   for (const flag of command.flags || []) {
-    const target = pathTargetForFlag(flag, api.path);
+    const target = pathTargetForFlag(flag, apiPath);
     if (target) {
       if (!(target in targetValues)) return false;
       resolved.add(target);
     }
   }
-  return pathTemplateNames(api.path).every((name) => name in targetValues && resolved.has(name));
+  return pathTemplateNames(apiPath).every((name) => name in targetValues && resolved.has(name));
 }
 
 function boundaryRootArgs(command, boundary) {
   if (!hasBoundaryRootTarget(command, boundary)) return null;
   const api = exactReadAPI(command);
-  const targetValues = boundaryRootTargetValues(api.path, boundary);
+  const apiPath = canonicalRESTPath(api.path);
+  if (!apiPath) return null;
+  const targetValues = boundaryRootTargetValues(apiPath, boundary);
   const args = [];
   const seen = new Set();
   for (const flag of command.flags || []) {
     const name = String(flag?.name || "");
-    const target = pathTargetForFlag(flag, api.path);
+    const target = pathTargetForFlag(flag, apiPath);
     if (target) {
       if (!(target in targetValues) || !/^[a-z][a-z0-9-]*$/iu.test(name) || seen.has(name)) return null;
       args.push(`--${name}`, targetValues[target]);
@@ -154,12 +188,14 @@ function boundaryRootArgs(command, boundary) {
 function boundaryRootETLArgs(command, boundary) {
   if (!hasBoundaryRootTarget(command, boundary)) return null;
   const api = exactReadAPI(command);
-  const targetValues = boundaryRootTargetValues(api.path, boundary);
+  const apiPath = canonicalRESTPath(api.path);
+  if (!apiPath) return null;
+  const targetValues = boundaryRootTargetValues(apiPath, boundary);
   const args = [];
   const seen = new Set();
   for (const flag of command.flags || []) {
     const name = String(flag?.name || "");
-    const target = pathTargetForFlag(flag, api.path);
+    const target = pathTargetForFlag(flag, apiPath);
     if (target) {
       if (!(target in targetValues) || !/^[a-z][a-z0-9-]*$/iu.test(name) || seen.has(name)) return null;
       args.push(`--${name}`, targetValues[target]);
@@ -189,6 +225,16 @@ function untestableReadCase(command) {
   };
 }
 
+function untestablePATGovernanceCase(command) {
+  return {
+    command: command.path,
+    untestable_reason: reason(
+      command.path,
+      "organization PAT governance is outside the declared live fixture scope and remains untestable",
+    ),
+  };
+}
+
 function isAppInstallationRepositoryPreflight(command) {
   const api = exactReadAPI(command);
   return command?.path === APP_INSTALLATION_REPOSITORY_PREFLIGHT &&
@@ -200,6 +246,9 @@ function isAppInstallationRepositoryPreflight(command) {
 function readCase(command, boundary) {
   if (isAppInstallationRepositoryPreflight(command)) {
     return { command: command.path, args: [] };
+  }
+  if (isOrganizationPATGovernanceRead(command)) {
+    return untestablePATGovernanceCase(command);
   }
   const args = boundaryRootArgs(command, boundary);
   if (args !== null) return { command: command.path, args };
@@ -234,7 +283,7 @@ function reasonFamily(value) {
 }
 
 function tallyCases(cases) {
-  const families = Object.fromEntries(REASON_FAMILIES.map((family) => [family, 0]));
+  const families = Object.fromEntries(CASE_REASON_FAMILIES.map((family) => [family, 0]));
   let attemptable = 0;
   let blocked = 0;
   for (const item of cases) {
@@ -248,6 +297,70 @@ function tallyCases(cases) {
   return { attemptable, blocked, families };
 }
 
+export function deriveCaseClassification(surface, cases) {
+  if (!surface || !Array.isArray(surface.commands) || !Array.isArray(cases)) {
+    throw new Error("case classification requires a GitHub surface and case array");
+  }
+  const intents = new Map(surface.commands.map((command) => [command.path, command.intent]));
+  const directReadCases = cases.filter((item) => intents.get(item.command) === "direct_read");
+  const all = tallyCases(cases);
+  const directRead = tallyCases(directReadCases);
+  return {
+    total: cases.length,
+    ...all,
+    direct_read: {
+      total: directReadCases.length,
+      attemptable: directRead.attemptable,
+      blocked: directRead.blocked,
+    },
+  };
+}
+
+export function canonicalCaseDigest(cases) {
+  if (!Array.isArray(cases)) throw new Error("canonical case digest requires an ordered case array");
+  return createHash("sha256").update(stableJSONString(cases)).digest("hex");
+}
+
+export function deriveHistoricalTerminalMovement(classification) {
+  if (!classification || !Number.isSafeInteger(classification.total) ||
+      !Number.isSafeInteger(classification.attemptable) || !Number.isSafeInteger(classification.blocked)) {
+    throw new Error("historical terminal movement requires a complete current classification");
+  }
+  return {
+    historical_terminal_measurement: { ...HISTORICAL_TERMINAL_MEASUREMENT },
+    current: {
+      total: classification.total,
+      attemptable: classification.attemptable,
+      blocked: classification.blocked,
+    },
+    movement: {
+      total: classification.total - HISTORICAL_TERMINAL_MEASUREMENT.total,
+      attemptable: classification.attemptable - HISTORICAL_TERMINAL_MEASUREMENT.failed,
+      blocked: classification.blocked - HISTORICAL_TERMINAL_MEASUREMENT.untestable,
+    },
+  };
+}
+
+function assertProductionClassification(surface, classification) {
+  const implemented = surface.commands.filter((command) => command.availability === "implemented");
+  if (implemented.length !== HISTORICAL_TERMINAL_MEASUREMENT.total) return;
+  const expected = {
+    total: 1521,
+    attemptable: 182,
+    blocked: 1339,
+    direct_read: { total: 639, attemptable: 169, blocked: 470 },
+  };
+  const actual = {
+    total: classification.total,
+    attemptable: classification.attemptable,
+    blocked: classification.blocked,
+    direct_read: classification.direct_read,
+  };
+  if (stableJSONString(actual) !== stableJSONString(expected)) {
+    throw new Error("current GitHub live classifier no longer matches the reviewed production classification");
+  }
+}
+
 /** Compare actual case classification against the frozen ledger by reason family. */
 export function summarizeCaseMovement({ baselineCases, currentCases }) {
   if (!Array.isArray(baselineCases) || !Array.isArray(currentCases)) {
@@ -256,7 +369,7 @@ export function summarizeCaseMovement({ baselineCases, currentCases }) {
   const baseline = tallyCases(baselineCases);
   const current = tallyCases(currentCases);
   const movement = Object.fromEntries(
-    REASON_FAMILIES.map((family) => [family, current.families[family] - baseline.families[family]]),
+    CASE_REASON_FAMILIES.map((family) => [family, current.families[family] - baseline.families[family]]),
   );
   return { baseline, current, movement };
 }
@@ -266,6 +379,7 @@ function directReadCase(command, boundary) {
 }
 
 function etlCase(command, boundary) {
+  if (isOrganizationPATGovernanceRead(command)) return untestablePATGovernanceCase(command);
   if (!isBoundaryRootETL(command, boundary)) return untestableReadCase(command);
   const args = boundaryRootETLArgs(command, boundary);
   return args === null ? untestableReadCase(command) : { command: command.path, args };
@@ -292,6 +406,7 @@ export function buildCases(surface, boundary) {
   if (!boundary || boundary.owner !== CERTIFICATION_OWNER || !boundary.repo || !boundary.repo_id) {
     throw new Error("buildCases requires the immutable Polymetrics-Cert live boundary");
   }
+  assertPersistedArtifactSafe(boundary, "GitHub live boundary");
   const commands = surface.commands.filter((command) => command.availability === "implemented");
   const cases = commands.map((command) => {
     if (command.intent === "direct_read") return directReadCase(command, boundary);
@@ -303,8 +418,10 @@ export function buildCases(surface, boundary) {
       untestable_reason: reason(command.path, "the command intent has no approved live executor classification in the frozen GitHub inventory"),
     };
   });
+  const classification = deriveCaseClassification(surface, cases);
+  assertProductionClassification(surface, classification);
   return {
-    schema_version: 2,
+    schema_version: 3,
     connector: "github",
     test_repository: {
       owner: boundary.owner,
@@ -320,30 +437,37 @@ export function buildCases(surface, boundary) {
     },
     source: "internal/connectors/defs/github/cli_surface.json",
     cases,
+    case_digest: canonicalCaseDigest(cases),
+    classification,
+    measurement: deriveHistoricalTerminalMovement(classification),
   };
+}
+
+export function validateCanonicalCaseArtifact({ caseFile, surface, boundary }) {
+  assertPersistedArtifactSafe(caseFile, "live proof cases");
+  const canonical = buildCases(surface, boundary);
+  if (stableJSONString(caseFile) !== stableJSONString(canonical)) {
+    throw new Error("live proof cases must exactly match the ordered canonical classifier artifact");
+  }
+  return canonical;
 }
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
-  if (!options.boundary || !options.out) {
-    throw new Error("usage: github-live-cases.mjs --boundary <path> --out <path> [--baseline <frozen-cases-path>]");
+  if (Object.keys(options).some((key) => key !== "boundary" && key !== "out")) {
+    throw new Error("usage: github-live-cases.mjs --boundary <path> --out <path>");
   }
-  const [surface, boundaryFile, baselineFile] = await Promise.all([
+  if (!options.boundary || !options.out) {
+    throw new Error("usage: github-live-cases.mjs --boundary <path> --out <path>");
+  }
+  const [surface, boundaryFile] = await Promise.all([
     readFile(SURFACE_PATH, "utf8"),
     readFile(path.resolve(options.boundary), "utf8"),
-    options.baseline ? readFile(path.resolve(options.baseline), "utf8") : Promise.resolve(null),
   ]);
   const output = path.resolve(options.out);
   const boundary = resolveLiveBoundary(JSON.parse(boundaryFile));
   const result = buildCases(JSON.parse(surface), boundary);
-  if (baselineFile !== null) {
-    const baseline = JSON.parse(baselineFile);
-    result.measurement = summarizeCaseMovement({
-      baselineCases: baseline.cases,
-      currentCases: result.cases,
-    });
-  }
-  result.classification = tallyCases(result.cases);
+  assertPersistedArtifactSafe(result, "live proof cases");
   await writeFile(output, `${JSON.stringify(result, null, 2)}\n`, { mode: 0o600 });
   process.stdout.write(`github live cases: executable=${result.classification.attemptable} untestable=${result.classification.blocked} output=${output}\n`);
 }

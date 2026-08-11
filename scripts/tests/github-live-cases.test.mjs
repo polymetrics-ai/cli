@@ -1,7 +1,17 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
-import { buildCases, resolveLiveBoundary, summarizeCaseMovement } from "../github-live-cases.mjs";
+import {
+  buildCases,
+  canonicalCaseDigest,
+  resolveLiveBoundary,
+  summarizeCaseMovement,
+} from "../github-live-cases.mjs";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 const boundary = {
   schema_version: 1,
@@ -188,6 +198,74 @@ test("permits only boundary-root reads and the installation repository preflight
     assert.match(item.untestable_reason, /immutable.*boundary|typed fixture|targetless/i);
   }
   assert.equal(JSON.stringify(cases).includes("provider-live"), false);
+});
+
+test("keeps normalized GET organization PAT-governance paths untestable", () => {
+  const cases = buildCases({
+    commands: [
+      {
+        path: "orgs list-pat-grant-requests",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [{ name: "org", required: true, type: "string", maps_to: "path.org" }],
+        api_surface: [{ method: "GET", path: "/orgs/{org}/personal-access-token-requests/" }],
+      },
+      {
+        path: "orgs list-pat-grants",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [{ name: "org", required: true, type: "string", maps_to: "path.org" }],
+        api_surface: [{ method: "GET", path: "/orgs/{org}/personal-access-tokens" }],
+      },
+      {
+        path: "orgs list-pat-grants-with-query",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [{ name: "org", required: true, type: "string", maps_to: "path.org" }],
+        api_surface: [{ method: "GET", path: "/orgs/{org}/personal-access-tokens?visibility=all" }],
+      },
+    ],
+  }, resolveLiveBoundary(boundary));
+
+  for (const item of cases.cases) {
+    assert.equal(item.args, undefined);
+    assert.match(item.untestable_reason, /PAT governance|immutable.*boundary|targetless/i);
+  }
+});
+
+test("derives the production classifier, digest, and static terminal movement", async () => {
+  const productionSurface = JSON.parse(await readFile(
+    path.join(root, "internal/connectors/defs/github/cli_surface.json"),
+    "utf8",
+  ));
+  const cases = buildCases(productionSurface, resolveLiveBoundary(boundary));
+
+  assert.deepEqual(
+    {
+      total: cases.classification.total,
+      attemptable: cases.classification.attemptable,
+      blocked: cases.classification.blocked,
+      direct_read: cases.classification.direct_read,
+    },
+    {
+      total: 1521,
+      attemptable: 182,
+      blocked: 1339,
+      direct_read: { total: 639, attemptable: 169, blocked: 470 },
+    },
+  );
+  assert.equal(cases.case_digest, canonicalCaseDigest(cases.cases));
+  assert.deepEqual(cases.measurement, {
+    historical_terminal_measurement: {
+      total: 1521,
+      proven: 0,
+      failed: 665,
+      untestable: 856,
+      terminal_timeout_ms: 45000,
+    },
+    current: { total: 1521, attemptable: 182, blocked: 1339 },
+    movement: { total: 0, attemptable: -483, blocked: 483 },
+  });
 });
 
 test("reports reason-family movement instead of preserving a frozen pre-skip tally", () => {

@@ -7,7 +7,19 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 
-import { buildCases, resolveLiveBoundary } from "./github-live-cases.mjs";
+import {
+  buildCases,
+  CASE_REASON_FAMILIES,
+  HISTORICAL_TERMINAL_MEASUREMENT,
+  resolveLiveBoundary,
+  validateCanonicalCaseArtifact,
+} from "./github-live-cases.mjs";
+import {
+  assertPersistedArtifactSafe,
+  assertSafePersistedScalar,
+  redactPersistedText,
+  stableJSONString,
+} from "./github-live-artifact-guard.mjs";
 
 const CONNECTOR = "github";
 const TERMINAL_STATES = new Set(["proven", "untestable", "failed"]);
@@ -36,29 +48,11 @@ const SENSITIVE_ARGUMENT_NAMES = new Set([
   "token",
   "value",
 ]);
-const LIFECYCLE_ARGUMENT_NAMES = new Set([
-  "approve",
-  "confirm",
-  "connection",
-  "credential",
-  "plan",
-  "preview",
-  "root",
-]);
-const SENSITIVE_CONFIG_KEY = /(?:^|[-_])(?:approval|authorization|credential|grant|password|private[-_]?key|secret|token|value)(?:$|[-_])/iu;
-const TOKEN_PATTERNS = [
-  /\bgh[pousr]_[A-Za-z0-9_-]+\b/gi,
-  /\bgithub_pat_[A-Za-z0-9_-]+\b/gi,
-  /\b(?:bearer|token)\s+[A-Za-z0-9._~+\/-]{12,}\b/gi,
-];
 const OUTPUT_LIMIT_BYTES = 2 * 1024 * 1024;
 const PROCESS_TIMEOUT_MS = 45_000;
 const PROCESS_KILL_GRACE_MS = 1_000;
 const APP_INSTALLATION_REPOSITORY_PREFLIGHT = "apps list-repos-accessible-to-installation";
 const CANONICAL_GITHUB_API_ORIGIN = "https://api.github.com";
-const CONTROL_CHARACTER = /[\u0000-\u001F\u007F]/u;
-const PEM_ARMOR = /-----BEGIN [A-Z0-9][A-Z0-9 -]{0,80}-----/iu;
-const PEM_BLOCK = /-----BEGIN [\s\S]{0,8192}?-----END [^-]{1,80}-----/gu;
 const SAFE_IDENTIFIER = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$/u;
 const GITHUB_SLUG = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,98})$/u;
 const MAX_INSTALLATION_PREFLIGHT_PAGES = 10_000;
@@ -107,10 +101,6 @@ function isSensitiveArgumentName(value) {
   return SENSITIVE_ARGUMENT_NAMES.has(normalizeArgumentName(value));
 }
 
-function isSensitiveConfigKey(value) {
-  return SENSITIVE_CONFIG_KEY.test(normalizeArgumentName(value));
-}
-
 function splitLongFlag(argument) {
   const text = String(argument);
   if (!text.startsWith("--") || text === "--") return null;
@@ -126,12 +116,7 @@ function splitLongFlag(argument) {
 }
 
 function redactText(value) {
-  let out = String(value ?? "");
-  out = out.replace(PEM_BLOCK, "<redacted>");
-  for (const pattern of TOKEN_PATTERNS) {
-    out = out.replace(pattern, "<redacted>");
-  }
-  return out;
+  return redactPersistedText(value);
 }
 
 function redactConfigValue(value) {
@@ -140,14 +125,6 @@ function redactConfigValue(value) {
   if (separator < 1) return "<redacted>";
   const key = raw.slice(0, separator);
   return `${redactText(key)}=<redacted>`;
-}
-
-function hasTokenShapedValue(value) {
-  const text = String(value ?? "");
-  return TOKEN_PATTERNS.some((pattern) => {
-    pattern.lastIndex = 0;
-    return pattern.test(text);
-  });
 }
 
 function isPlainObject(value) {
@@ -168,9 +145,7 @@ function requireSafeText(value, label) {
   if (typeof value !== "string" || value.trim() === "") {
     throw new Error(`${label} must be a non-empty string`);
   }
-  if (CONTROL_CHARACTER.test(value) || PEM_ARMOR.test(value) || hasTokenShapedValue(value)) {
-    throw new Error(`${label} contains unsafe credential-like material`);
-  }
+  assertSafePersistedScalar(value, label);
   return value.trim();
 }
 
@@ -391,12 +366,10 @@ export function validateProofRecords(expectedCommands, records) {
   }
   const byCommand = new Map();
   for (const record of records) {
+    assertPersistedArtifactSafe(record, "proof record");
     const { command, state } = validateProofRecordShape(record);
     if (reportContainsForbiddenField(record)) {
       throw new Error("proof record contains raw execution data");
-    }
-    if (hasTokenShapedValue(JSON.stringify(record))) {
-      throw new Error("proof record contains credential-shaped data");
     }
     if (!expected.has(command)) {
       throw new Error("proof record names an unimplemented or unknown command");
@@ -474,10 +447,11 @@ function validateReportBoundary(value) {
   requireProviderID(boundary.organization_id, "proof report.run_boundary.organization_id");
 }
 
-export function validateProofReport(candidate, expectedCommands) {
+export function validateProofReport(candidate, expectedCommands, { caseDigest } = {}) {
   if (!isPlainObject(candidate)) {
     throw new Error("proof report must be an object");
   }
+  assertPersistedArtifactSafe(candidate, "proof report");
   const status = requireSafeText(candidate.status, "proof report.status");
   const fields = status === "credentialed_live"
     ? new Set([
@@ -487,7 +461,7 @@ export function validateProofReport(candidate, expectedCommands) {
       "generated_at",
       "surface_sha256",
       "binary_sha256",
-      "case_file_sha256",
+      "case_digest",
       "test_repository",
       "run_boundary",
       "launch",
@@ -514,7 +488,7 @@ export function validateProofReport(candidate, expectedCommands) {
     throw new Error("proof report has an unsupported status");
   }
   const report = requireKnownFields(candidate, fields, "proof report");
-  if (report.schema_version !== 1 || requireSafeText(report.connector, "proof report.connector") !== CONNECTOR) {
+  if (report.schema_version !== 2 || requireSafeText(report.connector, "proof report.connector") !== CONNECTOR) {
     throw new Error("proof report must describe the GitHub proof schema");
   }
   const generatedAt = requireSafeText(report.generated_at, "proof report.generated_at");
@@ -534,7 +508,10 @@ export function validateProofReport(candidate, expectedCommands) {
     throw new Error("proof report uses an unsupported test repository projection");
   }
   if (status === "credentialed_live") {
-    requireSHA256(report.case_file_sha256, "proof report.case_file_sha256");
+    const digest = requireSHA256(report.case_digest, "proof report.case_digest");
+    if (caseDigest !== undefined && digest !== caseDigest) {
+      throw new Error("proof report case digest does not match the canonical case artifact");
+    }
     validateReportBoundary(report.run_boundary);
     const launch = requireKnownFields(report.launch, new Set(["strategy", "operations_released"]), "proof report.launch");
     if (requireSafeText(launch.strategy, "proof report.launch.strategy") !== "single_barrier_release") {
@@ -621,33 +598,91 @@ async function loadJSON(file) {
   return JSON.parse(await readFile(file, "utf8"));
 }
 
-const CASE_REASON_FAMILIES = new Set([
-  "mutation_outside_pinned_repo",
-  "org_or_enterprise",
-  "secret_material",
-  "app_auth",
-  "binary_resource",
-  "no_cleanup_safe_fixture",
-  "other",
-]);
-
-function validateCaseTally(value, label, { allowNegative = false } = {}) {
-  const tally = requireKnownFields(value, new Set(["attemptable", "blocked", "families"]), label);
-  const minimum = allowNegative ? Number.MIN_SAFE_INTEGER : 0;
-  for (const key of ["attemptable", "blocked"]) {
-    if (!Number.isSafeInteger(tally[key]) || tally[key] < minimum) {
-      throw new Error(`${label}.${key} must be an integer`);
-    }
+function validateCaseClassification(value) {
+  const classification = requireKnownFields(value, new Set([
+    "total",
+    "attemptable",
+    "blocked",
+    "families",
+    "direct_read",
+  ]), "live proof cases.classification");
+  for (const key of ["total", "attemptable", "blocked"]) {
+    requireNonNegativeInteger(classification[key], `live proof cases.classification.${key}`);
   }
-  const families = requireKnownFields(tally.families, CASE_REASON_FAMILIES, `${label}.families`);
+  if (classification.total !== classification.attemptable + classification.blocked) {
+    throw new Error("live proof cases.classification must account for every case");
+  }
+  const families = requireKnownFields(
+    classification.families,
+    new Set(CASE_REASON_FAMILIES),
+    "live proof cases.classification.families",
+  );
+  let familyTotal = 0;
   for (const family of CASE_REASON_FAMILIES) {
-    if (!Number.isSafeInteger(families[family]) || families[family] < minimum) {
-      throw new Error(`${label}.families must contain integer counts`);
-    }
+    requireNonNegativeInteger(families[family], `live proof cases.classification.families.${family}`);
+    familyTotal += families[family];
+  }
+  if (familyTotal !== classification.blocked) {
+    throw new Error("live proof cases.classification families must account for every blocked case");
+  }
+  const directRead = requireKnownFields(
+    classification.direct_read,
+    new Set(["total", "attemptable", "blocked"]),
+    "live proof cases.classification.direct_read",
+  );
+  for (const key of ["total", "attemptable", "blocked"]) {
+    requireNonNegativeInteger(directRead[key], `live proof cases.classification.direct_read.${key}`);
+  }
+  if (directRead.total !== directRead.attemptable + directRead.blocked) {
+    throw new Error("live proof cases.classification.direct_read must account for every direct read");
+  }
+  return classification;
+}
+
+function validateCaseMeasurement(value, classification) {
+  const measurement = requireKnownFields(value, new Set([
+    "historical_terminal_measurement",
+    "current",
+    "movement",
+  ]), "live proof cases.measurement");
+  const historical = requireKnownFields(
+    measurement.historical_terminal_measurement,
+    new Set(Object.keys(HISTORICAL_TERMINAL_MEASUREMENT)),
+    "live proof cases.measurement.historical_terminal_measurement",
+  );
+  if (stableJSONString(historical) !== stableJSONString(HISTORICAL_TERMINAL_MEASUREMENT)) {
+    throw new Error("live proof cases.measurement must retain the fixed historical terminal measurement");
+  }
+  const current = requireKnownFields(
+    measurement.current,
+    new Set(["total", "attemptable", "blocked"]),
+    "live proof cases.measurement.current",
+  );
+  const expectedCurrent = {
+    total: classification.total,
+    attemptable: classification.attemptable,
+    blocked: classification.blocked,
+  };
+  if (stableJSONString(current) !== stableJSONString(expectedCurrent)) {
+    throw new Error("live proof cases.measurement current tally does not match the classifier");
+  }
+  const movement = requireKnownFields(
+    measurement.movement,
+    new Set(["total", "attemptable", "blocked"]),
+    "live proof cases.measurement.movement",
+  );
+  const expectedMovement = {
+    total: current.total - historical.total,
+    attemptable: current.attemptable - historical.failed,
+    blocked: current.blocked - historical.untestable,
+  };
+  if (stableJSONString(movement) !== stableJSONString(expectedMovement)) {
+    throw new Error("live proof cases.measurement movement does not match the classifier");
   }
 }
 
 function validatePersistedCaseFile(caseFile) {
+  assertPersistedArtifactSafe(caseFile, "live proof cases");
   const source = requireKnownFields(caseFile, new Set([
     "schema_version",
     "connector",
@@ -655,14 +690,18 @@ function validatePersistedCaseFile(caseFile) {
     "context",
     "source",
     "cases",
+    "case_digest",
     "measurement",
     "classification",
   ]), "live proof cases");
-  if (!Number.isSafeInteger(source.schema_version) || source.schema_version < 1) {
-    throw new Error("live proof cases.schema_version must be a positive integer");
+  if (source.schema_version !== 3) {
+    throw new Error("live proof cases.schema_version must be the canonical schema version");
   }
-  requireSafeText(source.connector, "live proof cases.connector");
+  if (requireSafeText(source.connector, "live proof cases.connector") !== CONNECTOR) {
+    throw new Error("live proof cases must be explicitly GitHub-only");
+  }
   requireSafeText(source.source, "live proof cases.source");
+  requireSHA256(source.case_digest, "live proof cases.case_digest");
   const repository = requireKnownFields(source.test_repository, new Set([
     "owner",
     "repo",
@@ -706,232 +745,17 @@ function validatePersistedCaseFile(caseFile) {
       readback.args.forEach((argument, index) => requireSafeText(argument, `live proof case.readback.args[${index}]`));
     }
   }
-  if (source.classification !== undefined) {
-    validateCaseTally(source.classification, "live proof cases.classification");
-  }
-  if (source.measurement !== undefined) {
-    const measurement = requireKnownFields(source.measurement, new Set(["baseline", "current", "movement"]), "live proof cases.measurement");
-    validateCaseTally(measurement.baseline, "live proof cases.measurement.baseline");
-    validateCaseTally(measurement.current, "live proof cases.measurement.current");
-    validateCaseTally(measurement.movement, "live proof cases.measurement.movement", { allowNegative: true });
-  }
-}
-
-function requireStringMap(value, name) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error(`${name} must be an object`);
-  }
-  const out = {};
-  for (const [key, item] of Object.entries(value)) {
-    if (typeof item !== "string" && typeof item !== "number") {
-      throw new Error(`${name}.${key} must be a scalar`);
-    }
-    if (isSensitiveConfigKey(key)) {
-      throw new Error(`${name}.${key} may not carry a credential or grant`);
-    }
-    out[key] = String(item);
-  }
-  return out;
-}
-
-function parseCaseArguments(args, label) {
-  if (!Array.isArray(args) || args.some((argument) => typeof argument !== "string")) {
-    throw new Error(`${label} requires string args`);
-  }
-  const parsed = [];
-  for (let index = 0; index < args.length; index += 1) {
-    const argument = args[index];
-    if (/\r|\n|\0/u.test(argument)) {
-      throw new Error(`${label} may not contain control characters`);
-    }
-    const flag = splitLongFlag(argument);
-    if (!flag || !/^[a-z][a-z0-9_-]*$/iu.test(flag.rawName)) {
-      throw new Error(`${label} must use named long flags`);
-    }
-    if (!flag.hasValue) {
-      const value = args[index + 1];
-      if (typeof value === "string" && !value.startsWith("--")) {
-        if (/\r|\n|\0/u.test(value)) {
-          throw new Error(`${label} may not contain control characters`);
-        }
-        parsed.push({ ...flag, hasValue: true, value });
-        index += 1;
-        continue;
-      }
-      parsed.push(flag);
-      continue;
-    }
-    parsed.push(flag);
-  }
-  return parsed;
-}
-
-function validateConfigOverride(value, label) {
-  const separator = String(value || "").indexOf("=");
-  if (separator < 1) {
-    throw new Error(`${label} --config requires key=value`);
-  }
-  const key = String(value).slice(0, separator).trim();
-  if (isSensitiveConfigKey(key)) {
-    throw new Error(`${label} may not carry a secret --config key`);
-  }
-  throw new Error(`${label} may not override connector configuration`);
-}
-
-function validateFlagValue(flag, value, label) {
-  if (value === "") {
-    throw new Error(`${label} requires a non-empty flag value`);
-  }
-  if (flag.type === "boolean" && value !== "true" && value !== "false") {
-    throw new Error(`${label} requires a boolean flag value`);
-  }
-  if (flag.type === "integer" && !/^-?\d+$/u.test(value)) {
-    throw new Error(`${label} requires an integer flag value`);
-  }
-  if (flag.type === "enum" && (!Array.isArray(flag.values) || !flag.values.includes(value))) {
-    throw new Error(`${label} requires a declared enum flag value`);
-  }
-  if (flag.type === "json") {
-    try {
-      JSON.parse(value);
-    } catch {
-      throw new Error(`${label} requires JSON flag value`);
-    }
-  }
-}
-
-function validateTypedCaseArguments(args, surfaceCommand, label) {
-  const declarations = new Map(
-    (surfaceCommand.flags || []).map((flag) => [normalizeArgumentName(flag.name), flag]),
-  );
-  for (const argument of parseCaseArguments(args, label)) {
-    if (LIFECYCLE_ARGUMENT_NAMES.has(argument.name)) {
-      throw new Error(`${label} may not override lifecycle or credential flags`);
-    }
-    if (argument.name === "config") {
-      validateConfigOverride(argument.value, label);
-    }
-    const declaration = declarations.get(argument.name);
-    if (!declaration) {
-      throw new Error(`${label} uses a flag not declared by the GitHub command surface`);
-    }
-    if (!argument.hasValue) {
-      if (declaration.type !== "boolean") {
-        throw new Error(`${label} requires a value for --${declaration.name}`);
-      }
-      continue;
-    }
-    validateFlagValue(declaration, argument.value, `${label} --${declaration.name}`);
-  }
-}
-
-function validateSourceDerivedArguments(args, expectedArgs, surfaceCommand, label) {
-  validateTypedCaseArguments(args, surfaceCommand, label);
-  if (JSON.stringify(args) !== JSON.stringify(expectedArgs)) {
-    throw new Error(`${label} must exactly match the source-derived command descriptor and run-owned boundary`);
-  }
-}
-
-function validateReadback(readback, command, expected, surfaceCommands) {
-  if (!readback || typeof readback !== "object" || Array.isArray(readback)) {
-    throw new Error(`readback for ${JSON.stringify(command)} must be an object`);
-  }
-  if (Object.keys(readback).some((key) => key !== "command" && key !== "args")) {
-    throw new Error(`readback for ${JSON.stringify(command)} has unsupported fields`);
-  }
-  const readbackCommand = String(readback.command || "").trim();
-  const readbackSurfaceCommand = surfaceCommands.get(readbackCommand);
-  if (!readbackSurfaceCommand || !expected.includes(readbackCommand)) {
-    throw new Error(`readback for ${JSON.stringify(command)} names an unknown implemented command`);
-  }
-  if (readbackSurfaceCommand.intent === "reverse_etl" || readbackSurfaceCommand.intent === "direct_write") {
-    throw new Error(`readback for ${JSON.stringify(command)} may not invoke another write`);
-  }
-  validateTypedCaseArguments(readback.args, readbackSurfaceCommand, `readback for ${JSON.stringify(command)}`);
+  const classification = validateCaseClassification(source.classification);
+  validateCaseMeasurement(source.measurement, classification);
 }
 
 function validateCaseFile(caseFile, boundary, surface) {
   validatePersistedCaseFile(caseFile);
-  const expected = enumerateImplementedCommands(surface);
-  const canonical = buildCases(surface, boundary);
-  const surfaceCommands = new Map(surface.commands.map((command) => [command.path, command]));
-  if (!caseFile || caseFile.connector !== CONNECTOR) {
-    throw new Error("live proof cases must be explicitly GitHub-only");
-  }
-  if (caseFile.schema_version !== canonical.schema_version || caseFile.source !== canonical.source) {
-    throw new Error("live proof cases must be generated from the current GitHub command surface");
-  }
-  const repository = caseFile.test_repository;
-  if (
-    !repository ||
-    repository.owner !== boundary.owner ||
-    repository.repo !== boundary.repo ||
-    repository.owner_id !== boundary.owner_id ||
-    repository.repo_id !== boundary.repo_id ||
-    repository.organization_id !== boundary.organization_id
-  ) {
-    throw new Error("case file test_repository must exactly match the immutable run-owned boundary");
-  }
-  if (!Array.isArray(caseFile.cases)) {
-    throw new Error("case file must contain a cases array");
-  }
-  const context = requireStringMap(caseFile.context || {}, "context");
-  if (JSON.stringify(context) !== JSON.stringify(canonical.context)) {
-    throw new Error("case file context must exactly match the immutable run-owned boundary");
-  }
-  const canonicalByCommand = new Map(canonical.cases.map((item) => [item.command, item]));
-  const commands = new Map();
-  for (const item of caseFile.cases) {
-    if (!item || typeof item !== "object" || Array.isArray(item)) {
-      throw new Error("each live proof case must be an object");
-    }
-    const command = String(item.command || "").trim();
-    if (!expected.includes(command)) {
-      throw new Error(`case names unimplemented or unknown command ${JSON.stringify(command)}`);
-    }
-    if (commands.has(command)) {
-      throw new Error(`duplicate live proof case for ${JSON.stringify(command)}`);
-    }
-    if (Object.keys(item).some((key) => !["command", "args", "readback", "untestable_reason"].includes(key))) {
-      throw new Error(`case ${JSON.stringify(command)} has unsupported fields`);
-    }
-    const sourceCase = canonicalByCommand.get(command);
-    const surfaceCommand = surfaceCommands.get(command);
-    if (!sourceCase || !surfaceCommand) {
-      throw new Error(`case ${JSON.stringify(command)} is missing its source command descriptor`);
-    }
-    if (item.readback !== undefined) {
-      validateReadback(item.readback, command, expected, surfaceCommands);
-      throw new Error(`case ${JSON.stringify(command)} does not declare a typed read-back lifecycle`);
-    }
-    if (sourceCase.untestable_reason !== undefined) {
-      if (item.args !== undefined) {
-        validateTypedCaseArguments(item.args, surfaceCommand, `case ${JSON.stringify(command)}`);
-        throw new Error(`case ${JSON.stringify(command)} remains untestable without a typed fixture lifecycle`);
-      }
-      if (item.untestable_reason !== sourceCase.untestable_reason) {
-        throw new Error(`case ${JSON.stringify(command)} must retain its source-derived untestable reason`);
-      }
-    } else {
-      if (item.untestable_reason !== undefined) {
-        throw new Error(`case ${JSON.stringify(command)} may not replace an executable source-derived case with an untestable reason`);
-      }
-      validateSourceDerivedArguments(
-        item.args,
-        sourceCase.args,
-        surfaceCommand,
-        `case ${JSON.stringify(command)}`,
-      );
-    }
-    commands.set(command, item);
-  }
-  if (commands.size !== expected.length) {
-    const missing = expected.find((command) => !commands.has(command));
-    throw new Error(`case file is incomplete; missing case for ${JSON.stringify(missing)}`);
-  }
+  const canonical = validateCanonicalCaseArtifact({ caseFile, surface, boundary });
   return {
     context: canonical.context,
-    cases: commands,
+    cases: new Map(canonical.cases.map((item) => [item.command, item])),
+    caseDigest: canonical.case_digest,
   };
 }
 
@@ -1393,11 +1217,10 @@ async function executeLive(options) {
   const casesPath = requireSafeText(requiredOption(options, "cases"), "live proof cases path");
   const reportPath = requireSafeText(requiredOption(options, "report"), "live proof report path");
   const surface = await loadJSON(SURFACE_PATH);
-  const binaryBytes = await readFile(binary);
-  const caseBytes = await readFile(casesPath);
   const expected = enumerateImplementedCommands(surface);
   const surfaceCommands = new Map(surface.commands.map((command) => [command.path, command]));
   const cases = validateCaseFile(await loadJSON(casesPath), boundary, surface);
+  const binaryBytes = await readFile(binary);
   const credentialScope = await validateCredentialScope({
     binary,
     root,
@@ -1485,13 +1308,13 @@ async function executeLive(options) {
 
   const tally = validateProofRecords(expected, records);
   const report = {
-    schema_version: 1,
+    schema_version: 2,
     connector: CONNECTOR,
     status: "credentialed_live",
     generated_at: new Date().toISOString(),
     surface_sha256: createHash("sha256").update(JSON.stringify(surface)).digest("hex"),
     binary_sha256: createHash("sha256").update(binaryBytes).digest("hex"),
-    case_file_sha256: createHash("sha256").update(caseBytes).digest("hex"),
+    case_digest: cases.caseDigest,
     test_repository: "<run-owned-boundary-repository>",
     run_boundary: {
       run_id: boundary.run_id,
@@ -1509,7 +1332,7 @@ async function executeLive(options) {
     tally,
     records,
   };
-  validateProofReport(report, expected);
+  validateProofReport(report, expected, { caseDigest: cases.caseDigest });
   await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`, { mode: 0o600 });
   await chmod(reportPath, 0o600);
   process.stdout.write(`${CONNECTOR} live proof: proven=${tally.proven} untestable=${tally.untestable} failed=${tally.failed}\n`);
@@ -1541,7 +1364,7 @@ async function recordExternalBlocker(options) {
   const tally = validateProofRecords(expected, records);
   const binaryBytes = await readFile(binary);
   const report = {
-    schema_version: 1,
+    schema_version: 2,
     connector: CONNECTOR,
     generated_at: new Date().toISOString(),
     status: "external_blocker",

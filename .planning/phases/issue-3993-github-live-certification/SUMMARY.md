@@ -14,33 +14,25 @@
   reports 1,521 rows (900 repository, 308 organization, 33 App/install, 280
   feature/entitlement) and `github-live-bootstrap-probes.mjs --check` passes.
 
-## Reclassified live ledger
+## Current canonical classifier
 
-The fresh immutable-boundary ledger has **665 attemptable** and **856 blocked**
-rows, a movement of **+505 / -505** from the frozen R1 160 / 1,361 result.
-This is a reclassification, not preservation of the frozen pre-skip policy.
+The ordered current classifier contains **1,521** commands: **182 attemptable**
+and **1,339 blocked**. Direct read accounts for **169 attemptable / 470
+blocked** rows. Its digest, totals, and manifest readiness are derived from the
+same case list before a child process, hash, or artifact write can occur.
 
-| Reason family | Frozen R1 blocked | Fresh boundary blocked | Movement |
-| --- | ---: | ---: | ---: |
-| mutation outside pinned repository | 748 | 0 | -748 |
-| organization or enterprise | 175 | 0 | -175 |
-| secret material | 62 | 85 | +23 |
-| App authentication | 23 | 0 | -23 |
-| binary resource | 9 | 4 | -5 |
-| no cleanup-safe fixture | 37 | 767 | +730 |
-| retained historical target (reported separately in R1) | 3 | 0 | -3 |
-| other | 304 | 0 | -304 |
-| **total** | **1,361** | **856** | **-505** |
+The static comparison is **-483 attemptable / +483 blocked** against the
+separately named historical terminal measurement's 665 failed / 856 untestable
+rows. It is not a new provider measurement, and no legacy executable-input
+ledger can override it. The current 1,339 blocked rows include every write
+without a typed fixture, independent read-back, and inverse cleanup contract.
 
-Every family moved.  The 767 cleanup-safe-fixture blocks are a current finding:
-they are no longer falsely attributed to the old pinned repository, but they
-still have no declared fixture/read-back/inverse-cleanup lifecycle.
-
-## Credentialed full-surface result
+## Historical terminal-timeout measurement
 
 The App installation token authenticated successfully and a built `pm` binary
-read back the single run-owned repository before and after the sweep.  The
-whole applicable surface was then released once:
+read back the single run-owned repository before and after the previously
+recorded full-surface sweep. That historical measurement released 665 operations
+once:
 
 - launch: `single_barrier_release`, 665 operations (15 ETL, 639 direct reads,
   11 binary downloads);
@@ -50,8 +42,8 @@ whole applicable surface was then released once:
 - rate snapshots taken immediately around that barrier: REST core 15,000 →
   14,997 (3 consumed); GraphQL 5,000 → 5,000 (0 consumed).
 
-This is not a credential or quota-policy result hidden behind a harness
-pre-skip.  A single App-authenticated `repo view` returned one record, and a
+This historical result is not a credential or quota-policy result hidden behind
+a harness pre-skip. A single App-authenticated `repo view` returned one record, and a
 separate 16-way simultaneous control returned 16 successes.  The 665-child
 all-at-once launch therefore saturated local process admission before the
 provider buckets were meaningfully exercised.  It is a #3993 harness scaling
@@ -89,11 +81,11 @@ sanitization.
 
 ## What remains before certification
 
-- A provider-admission solution must let the 665 barrier-released operations
-  reach GitHub without turning this result into a sequential sweep.  That is
-  separate from the R2 rate telemetry and must not be faked as a quota result.
-- The 767 mutation cases need declared cleanup-safe fixtures and independent
-  provider read-backs before they become attemptable.
+- A provider-admission solution must preserve the single barrier semantics if a
+  future credentialed measurement is deliberately authorized; it must not turn
+  the historical 665-child result into a sequential sweep or a quota claim.
+- The currently blocked cases need declared cleanup-safe fixtures and
+  independent provider read-backs before any write becomes attemptable.
 - The warehouse → GitHub action leg remains blocked by the shared approved
   action path (#3994) and real schedule firing (#3992).  No GitHub-specific
   approval or schedule implementation was added.

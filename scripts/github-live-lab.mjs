@@ -6,6 +6,12 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
+import {
+  assertPersistedArtifactSafe,
+  assertSafePersistedScalar,
+  redactPersistedText,
+} from "./github-live-artifact-guard.mjs";
+
 const SCHEMA_VERSION = 1;
 const RESOURCE_TYPES = new Set(["repository", "organization"]);
 const TERMINAL_STATES = new Set([
@@ -37,13 +43,6 @@ const LEDGER_FIELDS = new Set([
   "note",
 ]);
 const SENSITIVE_KEY = /(?:approval|authorization|credential|grant|password|private[_-]?key|secret|token|value)/i;
-const TOKEN_PATTERNS = [
-  /\bgh[pousr]_[A-Za-z0-9_-]+\b/i,
-  /\bgithub_pat_[A-Za-z0-9_-]+\b/i,
-  /\b(?:bearer|token)\s+[A-Za-z0-9._~+/-]{12,}\b/i,
-];
-const CONTROL_CHARACTER = /[\u0000-\u001F\u007F]/u;
-const PEM_ARMOR = /-----BEGIN [A-Z0-9][A-Z0-9 -]{0,80}-----/iu;
 const SAFE_BOUNDARY_IDENTIFIER = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$/u;
 const GITHUB_SLUG = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,98})$/u;
 const BOUNDARY_FIELDS = new Set([
@@ -60,22 +59,7 @@ const BOUNDARY_FIELDS = new Set([
 const OUTPUT_LIMIT_BYTES = 2 * 1024 * 1024;
 const ISSUE_READBACK_MAX_ATTEMPTS = 6;
 const ISSUE_READBACK_RETRY_DELAY_MS = 1000;
-const ACCOUNT_BOOTSTRAP_PROBES = Object.freeze([
-  Object.freeze({
-    id: "github_app_authentication",
-    command: "apps get-authenticated",
-    method: "GET",
-    path: "/app",
-    credential_requirement: "GitHub App JWT or installation credential",
-  }),
-  Object.freeze({
-    id: "marketplace_user_subscriptions",
-    command: "apps list-subscriptions-for-authenticated-user",
-    method: "GET",
-    path: "/user/marketplace_purchases",
-    credential_requirement: "GitHub Marketplace user entitlement credential",
-  }),
-]);
+const TARGETLESS_ACCOUNT_PROBE_ERROR = "targetless account bootstrap probes are untestable; only the App installation repository preflight may use an installation credential";
 
 function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -97,9 +81,7 @@ function requireSafeString(value, label) {
   if (typeof value !== "string" || value.trim() === "") {
     throw new Error(`${label} must be a non-empty string`);
   }
-  if (CONTROL_CHARACTER.test(value) || PEM_ARMOR.test(value) || TOKEN_PATTERNS.some((pattern) => pattern.test(value))) {
-    throw new Error(`${label} contains unsafe credential-like material`);
-  }
+  assertSafePersistedScalar(value, label);
   return value.trim();
 }
 
@@ -145,6 +127,7 @@ function normalizedSlug(value) {
 }
 
 function ensureNoSensitiveData(value, label = "lab value") {
+  assertPersistedArtifactSafe(value, label);
   if (typeof value === "string") {
     requireSafeString(value, label);
     return;
@@ -469,66 +452,18 @@ export function capturePMErrorEnvelope({ invocation, envelope }) {
   };
 }
 
-/**
- * Account-level bootstrap reads are deliberately not a generic escape hatch:
- * they have no target selector and can address only the two evidence probes
- * named in the PM-only external-cohort plan.
- */
 export function authorizeAccountBootstrapProbe(candidate) {
   const probe = requirePlainObject(candidate, "account bootstrap probe");
   for (const key of Object.keys(probe)) {
     if (key !== "command") throw new Error(`account bootstrap probe forbids ${JSON.stringify(key)}`);
   }
-  const command = requireString(probe.command, "account bootstrap probe.command");
-  const match = ACCOUNT_BOOTSTRAP_PROBES.find((entry) => entry.command === command);
-  if (!match) {
-    throw new Error("account bootstrap probe must be one fixed PM direct read; writes and unlisted commands are not allowed");
-  }
-  return { ...match };
+  requireString(probe.command, "account bootstrap probe.command");
+  throw new Error(TARGETLESS_ACCOUNT_PROBE_ERROR);
 }
 
-/**
- * Parse a fixed account probe invocation. The generated call shape has no
- * `--config`, connection, owner, repository, or provider-target argument.
- */
 export function assertAccountBootstrapProbeInvocation(invocation) {
-  const command = assertPMOnly(invocation);
-  const fields = command.trim().split(/\s+/u);
-  const probe = ACCOUNT_BOOTSTRAP_PROBES.find((entry) => {
-    const prefix = ["pm", "github", ...entry.command.split(" ")];
-    return fields.length >= prefix.length && prefix.every((part, index) => fields[index] === part);
-  });
-  if (!probe) throw new Error("account bootstrap probe invocation must be one fixed PM direct read");
-  const prefixLength = 2 + probe.command.split(" ").length;
-  const values = { credential: [], root: [], json: 0 };
-  for (let index = prefixLength; index < fields.length; index += 1) {
-    const field = fields[index];
-    if (field === "--json" || field === "--json=true") {
-      values.json += 1;
-      continue;
-    }
-    const match = /^--(credential|root)=(.+)$/u.exec(field);
-    if (match) {
-      values[match[1]].push(match[2]);
-      continue;
-    }
-    if (field === "--credential" || field === "--root") {
-      const value = fields[index + 1];
-      if (!value || value.startsWith("--")) {
-        throw new Error(`account bootstrap probe invocation ${field} requires a value`);
-      }
-      values[field.slice(2)].push(value);
-      index += 1;
-      continue;
-    }
-    throw new Error(`account bootstrap probe invocation forbids ${field}; its shape is fixed and targetless`);
-  }
-  if (values.credential.length !== 1 || values.root.length !== 1 || values.json !== 1) {
-    throw new Error("account bootstrap probe invocation requires exactly one --credential, --root, and --json");
-  }
-  safeCredentialName(values.credential[0]);
-  requireString(values.root[0], "account bootstrap probe root");
-  return command;
+  assertPMOnly(invocation);
+  throw new Error(TARGETLESS_ACCOUNT_PROBE_ERROR);
 }
 
 /**
@@ -1042,7 +977,7 @@ function scopedWriteArguments(args) {
     if (separator < 1) throw new Error("--config requires key=value in a planned PM write");
     const key = raw.slice(0, separator).trim();
     const value = raw.slice(separator + 1);
-    if (SENSITIVE_KEY.test(key)) throw new Error(`planned PM write config ${JSON.stringify(key)} is sensitive`);
+    if (SENSITIVE_KEY.test(key)) throw new Error("planned PM write configuration is sensitive");
     const values = config.get(key) || [];
     values.push(value);
     config.set(key, values);
@@ -1083,8 +1018,7 @@ function assertRepositoryWriteScope(target, args) {
 
 function redactText(value) {
   let text = String(value ?? "");
-  for (const pattern of TOKEN_PATTERNS) text = text.replace(pattern, "<redacted>");
-  return text;
+  return redactPersistedText(text);
 }
 
 async function runPMProcess(binary, args) {
@@ -1123,60 +1057,8 @@ function normalizeProcessResult(result, step) {
   return result;
 }
 
-function providerStatusFromProcess(result) {
-  const match = /\b(?:http|status)\s+(\d{3})\b/iu.exec(`${result.stdout}\n${result.stderr}`);
-  return match ? Number(match[1]) : undefined;
-}
-
-function accountProbeOutcome(status) {
-  if (status === 401 || status === 403) return "credential_or_entitlement_rejected";
-  if (status === 404) return "resource_or_entitlement_rejected";
-  if (Number.isInteger(status) && status >= 400) return "provider_rejected";
-  return "success";
-}
-
-/**
- * Execute one of the fixed account-level PM reads and return only a sanitized
- * outcome. Provider response bodies, stderr, credential names, and target data
- * remain process-local so this cannot become an account data collector.
- */
-export async function runPMAccountBootstrapProbe({ binary, root, credentialName, probe, run }) {
-  const definition = authorizeAccountBootstrapProbe(probe);
-  const pmBinary = requireString(binary, "PM binary");
-  const projectRoot = requireString(root, "PM project root");
-  const credential = safeCredentialName(credentialName);
-  const processArgs = ["github", ...definition.command.split(" "), "--credential", credential, "--root", projectRoot, "--json"];
-  assertAccountBootstrapProbeInvocation(["pm", ...processArgs].join(" "));
-  const runner = run || ((argsForProcess) => runPMProcess(pmBinary, argsForProcess));
-  if (typeof runner !== "function") throw new Error("PM account bootstrap probe executor must be a function");
-  const result = await runner(processArgs);
-  if (!isPlainObject(result) || typeof result.code !== "number" || typeof result.stdout !== "string" || typeof result.stderr !== "string") {
-    throw new Error("PM account bootstrap probe executor returned an invalid result");
-  }
-  if (result.overflow === true) throw new Error("PM account bootstrap probe exceeded bounded output");
-  const status = providerStatusFromProcess(result);
-  if (result.code !== 0) {
-    return {
-      command: definition.command,
-      outcome: status === undefined ? "pm_failure_without_safe_provider_status" : accountProbeOutcome(status),
-      ...(status === undefined ? {} : { http_status: status }),
-    };
-  }
-  let envelope;
-  try {
-    envelope = JSON.parse(result.stdout);
-  } catch {
-    throw new Error("PM account bootstrap probe did not produce machine-readable JSON");
-  }
-  if (!isPlainObject(envelope) || envelope.connector !== "github" || envelope.command !== definition.command) {
-    throw new Error("PM account bootstrap probe response does not identify the requested GitHub command");
-  }
-  const envelopeStatus = Number.isInteger(envelope.status) ? envelope.status : undefined;
-  return {
-    command: definition.command,
-    outcome: accountProbeOutcome(envelopeStatus),
-    ...(envelopeStatus === undefined ? {} : { http_status: envelopeStatus }),
-  };
+export async function runPMAccountBootstrapProbe({ probe }) {
+  authorizeAccountBootstrapProbe(probe);
 }
 
 function planIdentity(stdout) {

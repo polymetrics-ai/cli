@@ -106,13 +106,18 @@ test("derives every current implemented command into mutually exclusive run-owne
     assert.equal(typeof row.earliest_divergence, "string");
     assert.equal(typeof row.cleanup_strategy, "string");
     assert.equal(typeof row.lifecycle_status, "string");
-    assert.equal(Array.isArray(row.setup_pm), true);
+    assert.equal(row.setup_pm, null);
     if (row.lifecycle_status === "requires_typed_lifecycle") {
       assert.equal(row.test_pm, null);
       assert.equal(row.assert_pm, null);
       assert.equal(row.cleanup_pm, null);
       assert.equal(row.cleanup_strategy, "explicit_retention_required");
-      assert.match(row.lifecycle_reason || "", /typed fixture.*read-back.*inverse cleanup/i);
+      assert.match(row.lifecycle_reason || "", /fixture.*read-back.*inverse.cleanup/i);
+    } else if (row.lifecycle_status === "untestable") {
+      assert.equal(row.test_pm, null);
+      assert.equal(row.assert_pm, null);
+      assert.equal(row.cleanup_pm, null);
+      assert.match(row.lifecycle_reason || "", /untestable|boundary|fixture|scope|secret material|credential-safety/i);
     } else {
       assert.match(row.test_pm, /^pm github /);
       assert.match(row.assert_pm, /^pm github /);
@@ -130,7 +135,7 @@ test("derives every current implemented command into mutually exclusive run-owne
 
   const writes = manifest.rows.filter((row) => row.intent === "reverse_etl" || row.intent === "direct_write");
   assert.ok(writes.length > 0);
-  assert.equal(writes.every((row) => row.lifecycle_status === "requires_typed_lifecycle"), true);
+  assert.equal(writes.every((row) => ["requires_typed_lifecycle", "untestable"].includes(row.lifecycle_status)), true);
   assert.equal(writes.every((row) => row.cleanup_strategy === "explicit_retention_required"), true);
   assert.equal(writes.every((row) => row.assert_pm === null && row.cleanup_pm === null), true);
 
@@ -139,7 +144,7 @@ test("derives every current implemented command into mutually exclusive run-owne
   fabricatedWrite.test_pm = "pm github orgs attestations delete-by-attestation-ids {{cleanup_flags}} --credential {{credential_name}} --root {{project_root}} --json";
   assert.throws(
     () => validateLabManifest({ manifest: fabricated, surface, cases }),
-    /may not invent a generic write lifecycle/i,
+    /canonical classifier-derived artifact/i,
   );
 });
 
@@ -160,6 +165,29 @@ test("classifies run-owned repository, organization, App, and feature-entitlemen
     classifyLabCohort({ path: "codespaces create", intent: "direct_write", api_surface: [{ method: "POST", path: "/user/codespaces" }] }).cohort,
     "feature_or_entitlement",
   );
+});
+
+test("derives manifest readiness from the canonical case classifier", async () => {
+  const [surface, cases] = await Promise.all([
+    loadJSON("internal/connectors/defs/github/cli_surface.json"),
+    loadJSON(".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json"),
+  ]);
+  const manifest = buildLabManifest({ surface, cases });
+  const rows = new Map(manifest.rows.map((row) => [row.command, row]));
+
+  for (const command of ["apps get-authenticated", "rate-limit get"]) {
+    const row = rows.get(command);
+    assert.equal(row?.lifecycle_status, "untestable");
+    assert.equal(row?.setup_pm, null);
+    assert.equal(row?.test_pm, null);
+    assert.equal(row?.assert_pm, null);
+  }
+  const preflight = rows.get("apps list-repos-accessible-to-installation");
+  assert.equal(preflight?.lifecycle_status, "ready_for_provider_result");
+  assert.equal(preflight?.setup_pm, null);
+  assert.match(preflight?.test_pm || "", /apps list-repos-accessible-to-installation/);
+  assert.equal(typeof manifest.source.canonical_case_digest, "string");
+  assert.equal(manifest.source.current_classification.attemptable, 182);
 });
 
 test("lab boundary default-denies protected, working, unresolved, ambiguous, and slug-ID-mismatched writes", () => {
@@ -1135,24 +1163,20 @@ test("lab terminal accounting requires exactly one safe terminal result per exec
   );
 });
 
-test("external bootstrap probes are fixed PM direct reads and reject writes or repository selectors before dispatch", async () => {
-  assert.deepEqual(
-    authorizeAccountBootstrapProbe({ command: "apps get-authenticated" }),
-    {
-      id: "github_app_authentication",
-      command: "apps get-authenticated",
-      method: "GET",
-      path: "/app",
-      credential_requirement: "GitHub App JWT or installation credential",
-    },
-  );
-  assert.throws(
-    () => authorizeAccountBootstrapProbe({ command: "apps create-from-manifest" }),
-    /bootstrap probe|direct read|not allowed/i,
-  );
+test("targetless account bootstrap probes remain untestable before dispatch", async () => {
+  for (const command of [
+    "apps get-authenticated",
+    "apps list-subscriptions-for-authenticated-user",
+    "apps create-from-manifest",
+  ]) {
+    assert.throws(
+      () => authorizeAccountBootstrapProbe({ command }),
+      /targetless|untestable|installation repository preflight/i,
+    );
+  }
   assert.throws(
     () => assertAccountBootstrapProbeInvocation("pm github apps get-authenticated --credential lab-credential --config owner=lab-owner --root /tmp/lab --json"),
-    /forbids|fixed|bootstrap/i,
+    /targetless|untestable|installation repository preflight/i,
   );
 
   let started = false;
@@ -1164,26 +1188,26 @@ test("external bootstrap probes are fixed PM direct reads and reject writes or r
       probe: { command: "apps create-from-manifest" },
       run: async () => {
         started = true;
-        throw new Error("a write must never reach the PM process");
+        throw new Error("a targetless command must never reach the PM process");
       },
     }),
-    /bootstrap probe|direct read|not allowed/i,
+    /targetless|untestable|installation repository preflight/i,
   );
   assert.equal(started, false);
 
-  const rejected = await runPMAccountBootstrapProbe({
-    binary: "pm",
-    root: "/tmp/github-live-lab-root",
-    credentialName: "lab-credential",
-    probe: { command: "apps get-authenticated" },
-    run: async () => ({ code: 1, stdout: "", stderr: "provider status 401" }),
-  });
-  assert.deepEqual(rejected, {
-    command: "apps get-authenticated",
-    outcome: "credential_or_entitlement_rejected",
-    http_status: 401,
-  });
-  assert.equal(JSON.stringify(rejected).includes("provider status"), false);
+  await assert.rejects(
+    runPMAccountBootstrapProbe({
+      binary: "pm",
+      root: "/tmp/github-live-lab-root",
+      credentialName: "lab-credential",
+      probe: { command: "apps get-authenticated" },
+      run: async () => {
+        started = true;
+      },
+    }),
+    /targetless|untestable|installation repository preflight/i,
+  );
+  assert.equal(started, false);
 });
 
 test("source-derived bootstrap probe inventory proves the organization/App surface boundary and affected case counts", async () => {
@@ -1218,22 +1242,7 @@ test("source-derived bootstrap probe inventory proves the organization/App surfa
     code_issuer_commands: [],
     result: "pm_surface_missing_manifest_code_issuer",
   });
-  assert.deepEqual(inventory.account_probes, [
-    {
-      id: "github_app_authentication",
-      command: "apps get-authenticated",
-      method: "GET",
-      path: "/app",
-      credential_requirement: "GitHub App JWT or installation credential",
-    },
-    {
-      id: "marketplace_user_subscriptions",
-      command: "apps list-subscriptions-for-authenticated-user",
-      method: "GET",
-      path: "/user/marketplace_purchases",
-      credential_requirement: "GitHub Marketplace user entitlement credential",
-    },
-  ]);
+  assert.deepEqual(inventory.account_probes, []);
   assert.doesNotThrow(() => validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest }));
 });
 

@@ -6,18 +6,12 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
-import { authorizeAccountBootstrapProbe } from "./github-live-lab.mjs";
-
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(SCRIPT_DIR, "..");
 const SURFACE_PATH = path.join(ROOT, "internal/connectors/defs/github/cli_surface.json");
 const API_SURFACE_PATH = path.join(ROOT, "internal/connectors/defs/github/api_surface.json");
 const MANIFEST_PATH = path.join(ROOT, ".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-MANIFEST.json");
 const DEFAULT_OUTPUT = path.join(ROOT, ".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOOTSTRAP-PROBES.json");
-const ACCOUNT_PROBE_COMMANDS = Object.freeze([
-  "apps get-authenticated",
-  "apps list-subscriptions-for-authenticated-user",
-]);
 
 function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -91,15 +85,6 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
   const appCodeIssuers = manifestCodeIssuerCommands(surface);
   if (appCodeIssuers.length !== 0) throw new Error("GitHub App bootstrap audit found an unreviewed PM manifest-code issuer");
 
-  const probes = ACCOUNT_PROBE_COMMANDS.map((command) => authorizeAccountBootstrapProbe({ command }));
-  for (const probe of probes) {
-    const current = requireCommand(surface, probe.command);
-    if (current.intent !== "direct_read" || current.availability !== "implemented") {
-      throw new Error(`${JSON.stringify(probe.command)} must remain an implemented direct read`);
-    }
-    exactAPI(current, probe.method, probe.path);
-  }
-
   const documentedOrgCreateEndpoints = apiSurface.endpoints
     .filter((endpoint) => endpoint?.method === "POST" && (endpoint.path === "/user/orgs" || endpoint.path === "/organizations"))
     .map((endpoint) => ({ method: endpoint.method, path: endpoint.path }));
@@ -108,7 +93,7 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
   }
 
   return {
-    schema_version: 2,
+    schema_version: 3,
     connector: "github",
     source: {
       cli_surface: {
@@ -126,7 +111,7 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
     },
     policy: {
       provider_operations: "pm_github_only",
-      account_probes: "fixed_targetless_direct_reads",
+      account_probes: "none; targetless direct reads remain untestable outside the credential-bound installation repository preflight",
       organization_delete: "not_invoked_without_run_owned_immutable_target_and_cleanup_provenance",
     },
     organization: {
@@ -151,13 +136,13 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
       code_issuer_commands: appCodeIssuers,
       result: "pm_surface_missing_manifest_code_issuer",
     },
-    account_probes: probes,
+    account_probes: [],
   };
 }
 
 /** Fail closed if a checked-in probe inventory drifts from its source artifacts. */
 export function validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest }) {
-  if (!isPlainObject(inventory) || inventory.schema_version !== 2 || inventory.connector !== "github") {
+  if (!isPlainObject(inventory) || inventory.schema_version !== 3 || inventory.connector !== "github") {
     throw new Error("bootstrap probe inventory must be a schema-versioned GitHub artifact");
   }
   const expected = buildBootstrapProbeInventory({ surface, apiSurface, manifest });
