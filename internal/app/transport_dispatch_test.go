@@ -1524,6 +1524,198 @@ func TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes(t *te
 	}
 }
 
+func TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes(t *testing.T) {
+	for _, mode := range synccontract.AllModes() {
+		t.Run(string(mode), func(t *testing.T) {
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+			paused := startPausedAcknowledgedTransportCompletion(t, mode, ctx)
+			unrelated := persistUnrelatedAcknowledgedFailureWrite(t, paused)
+			cancel()
+			if !errors.Is(ctx.Err(), context.Canceled) {
+				t.Fatalf("context error = %v, want cancellation after unrelated post-acknowledgement revision", ctx.Err())
+			}
+			paused.releaseAndWait(t)
+			assertAcknowledgedFailureAfterUnrelatedRevision(t, paused, unrelated, context.Canceled)
+		})
+	}
+}
+
+func TestRunETLTransportAcknowledgedFailurePreservesSourceError(t *testing.T) {
+	paused := startPausedAcknowledgedTransportCompletion(t, synccontract.ModeFullAppend, context.Background())
+	paused.fixture.sourceExecutor.errAfterPage = errTransportSourceAfterAcknowledgement
+	unrelated := persistUnrelatedAcknowledgedFailureWrite(t, paused)
+	paused.releaseAndWait(t)
+	assertAcknowledgedFailureAfterUnrelatedRevision(t, paused, unrelated, errTransportSourceAfterAcknowledgement)
+}
+
+func TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes(t *testing.T) {
+	for _, mode := range synccontract.AllModes() {
+		t.Run(string(mode), func(t *testing.T) {
+			paused := startPausedAcknowledgedTransportCompletion(t, mode, context.Background())
+			writer, err := Open(paused.fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			removed := false
+			if _, err := writer.updateState(func(current state) (state, error) {
+				runs := make([]Run, 0, len(current.Runs))
+				for _, run := range current.Runs {
+					if run.ID == paused.runID {
+						removed = true
+						continue
+					}
+					runs = append(runs, run)
+				}
+				current.Runs = runs
+				return current, nil
+			}); err != nil {
+				t.Fatal(err)
+			}
+			if !removed {
+				t.Fatalf("target run %q was not removed before acknowledged completion", paused.runID)
+			}
+			expected := writer.state
+
+			paused.releaseAndWait(t)
+			if paused.fixture.destinationExecutor.applyCalls != 1 {
+				t.Fatalf("destination apply calls = %d, want exactly one acknowledged apply", paused.fixture.destinationExecutor.applyCalls)
+			}
+			reopened, err := Open(paused.fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(reopened.state.Checkpoints) != 0 || len(expected.Checkpoints) != 0 {
+				t.Fatalf("missing target run changed checkpoints: got %#v, want %#v", reopened.state.Checkpoints, expected.Checkpoints)
+			}
+			actual := reopened.state
+			actual.Checkpoints = nil
+			expected.Checkpoints = nil
+			if !reflect.DeepEqual(actual, expected) {
+				t.Fatalf("missing target run mutated reopened state: got %#v, want %#v", actual, expected)
+			}
+			if !errors.Is(paused.err, errStateRevisionConflict) {
+				t.Fatalf("RunETL() error = %v, want typed acknowledged revision conflict after missing target run", paused.err)
+			}
+			if !reflect.DeepEqual(paused.returned, Run{}) {
+				t.Fatalf("RunETL() returned %#v, want zero run after missing target run", paused.returned)
+			}
+		})
+	}
+}
+
+type unrelatedAcknowledgedFailureWrite struct {
+	stateKey   string
+	runID      string
+	stream     StreamState
+	checkpoint map[string]string
+	run        Run
+}
+
+func persistUnrelatedAcknowledgedFailureWrite(t *testing.T, paused *pausedAcknowledgedTransportCompletion) unrelatedAcknowledgedFailureWrite {
+	t.Helper()
+	updatedAt := time.Unix(41, 0).UTC()
+	unrelated := unrelatedAcknowledgedFailureWrite{
+		stateKey: "unrelated:records",
+		runID:    "unrelated_failure_run",
+		stream: StreamState{
+			Connection:          "unrelated",
+			Stream:              "records",
+			GenerationID:        17,
+			LastSuccessfulRunID: "unrelated_failure_run",
+			RecordsLoaded:       29,
+			UpdatedAt:           updatedAt,
+		},
+		checkpoint: map[string]string{"cursor": "unrelated-preserved"},
+		run: Run{
+			ID:          "unrelated_failure_run",
+			Type:        "etl",
+			Connection:  "unrelated",
+			Stream:      "records",
+			Status:      "completed",
+			StartedAt:   updatedAt.Add(-time.Second),
+			CompletedAt: updatedAt,
+		},
+	}
+	writer, err := Open(paused.fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := writer.updateState(func(current state) (state, error) {
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
+		}
+		current.StreamStates[unrelated.stateKey] = cloneStreamState(unrelated.stream)
+		if current.Checkpoints == nil {
+			current.Checkpoints = map[string]map[string]string{}
+		}
+		current.Checkpoints[unrelated.runID] = cloneStringMap(unrelated.checkpoint)
+		current.Runs = append(current.Runs, unrelated.run)
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	return unrelated
+}
+
+func assertAcknowledgedFailureAfterUnrelatedRevision(t *testing.T, paused *pausedAcknowledgedTransportCompletion, unrelated unrelatedAcknowledgedFailureWrite, wantErr error) {
+	t.Helper()
+	if !errors.Is(paused.err, wantErr) {
+		t.Fatalf("RunETL() error = %v, want original post-acknowledgement error %v", paused.err, wantErr)
+	}
+	if paused.fixture.destinationExecutor.applyCalls != 1 {
+		t.Fatalf("destination apply calls = %d, want exactly one acknowledged apply", paused.fixture.destinationExecutor.applyCalls)
+	}
+
+	reopened, err := Open(paused.fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if current, present := reopened.state.StreamStates[paused.stateKey]; !present || !transportStreamStateEqual(current, paused.acknowledged) {
+		t.Fatalf("acknowledged checkpoint changed during post-acknowledgement error: got %#v, want %#v", current, paused.acknowledged)
+	}
+	if current, present := reopened.state.StreamStates[unrelated.stateKey]; !present || !transportStreamStateEqual(current, unrelated.stream) {
+		t.Fatalf("unrelated stream state changed during post-acknowledgement error: got %#v, want %#v", current, unrelated.stream)
+	}
+	if got := reopened.state.Checkpoints[unrelated.runID]; !reflect.DeepEqual(got, unrelated.checkpoint) {
+		t.Fatalf("unrelated checkpoint changed during post-acknowledgement error: got %#v, want %#v", got, unrelated.checkpoint)
+	}
+
+	var durable, durableUnrelated Run
+	for _, run := range reopened.state.Runs {
+		switch run.ID {
+		case paused.runID:
+			durable = run
+		case unrelated.runID:
+			durableUnrelated = run
+		}
+	}
+	if !reflect.DeepEqual(durableUnrelated, unrelated.run) {
+		t.Fatalf("unrelated run changed during post-acknowledgement error: got %#v, want %#v", durableUnrelated, unrelated.run)
+	}
+
+	var symptoms []string
+	if paused.returned.ID != paused.runID {
+		symptoms = append(symptoms, fmt.Sprintf("returned run ID=%q, want %q", paused.returned.ID, paused.runID))
+	}
+	if paused.returned.Status != "failed" || paused.returned.CompletedAt.IsZero() {
+		symptoms = append(symptoms, fmt.Sprintf("returned run=%+v, want failed terminal run", paused.returned))
+	}
+	if durable.ID != paused.runID {
+		symptoms = append(symptoms, fmt.Sprintf("durable run ID=%q, want %q", durable.ID, paused.runID))
+	} else {
+		if durable.Status != "failed" || durable.CompletedAt.IsZero() || durable.Error == "" {
+			symptoms = append(symptoms, fmt.Sprintf("durable run=%+v, want failed terminal run", durable))
+		}
+		if paused.returned.ID != durable.ID || paused.returned.Status != durable.Status || !paused.returned.CompletedAt.Equal(durable.CompletedAt) {
+			symptoms = append(symptoms, fmt.Sprintf("returned run=%+v, durable run=%+v", paused.returned, durable))
+		}
+	}
+	if len(symptoms) > 0 {
+		t.Fatalf("acknowledged failure finalization leak: %s", strings.Join(symptoms, "; "))
+	}
+}
+
 func TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome(t *testing.T) {
 	tests := []struct {
 		name         string

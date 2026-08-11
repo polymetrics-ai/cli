@@ -2,6 +2,13 @@
 
 **Status:** local implementation, focused expansion, heavy validation, and manual review completed — fresh no-mistakes, existing-PR delivery, and exact-head CI remain pending.
 
+## R2 planning and behavioral RED
+
+- Planning/TDD continuation committed in `c08a5861f` after the complete Sol r2 handoff, live #4067 amendment/readback, GSD prompt resolution, and the documented named-phase manual fallback. No production file changed in that checkpoint.
+- `go test -json -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes$'` exited `1` as required. All seven modes persisted the acknowledged target checkpoint and an unrelated stream/checkpoint/run and made exactly one destination apply, but cancellation after release returned `Run{}` and reopened the original run as `running`.
+- `go test -json -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportAcknowledgedFailurePreservesSourceError|TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes)$'` exited `1` as required. The source sentinel remained detectable but took the same zero-run/durable-running path; all seven missing-target cases left persisted state unchanged but returned plain `run "..." not found` without `errors.Is(err, errStateRevisionConflict)`.
+- The RED commit contains only `internal/app/transport_dispatch_test.go` plus this r2 test evidence. `internal/app/app.go` and `internal/app/transport_dispatch.go` remain untouched until that commit exists.
+
 ## TDD gate
 
 The first execution action is a behavioral RED in `internal/app` against the real persisted JSON state path. It must demonstrate the Sol F1 durable `running` leak and zero/non-terminal returned run after an acknowledged checkpoint and an unrelated post-checkpoint writer. No `internal/` production file may change until that RED command and the test-only commit are recorded below.
