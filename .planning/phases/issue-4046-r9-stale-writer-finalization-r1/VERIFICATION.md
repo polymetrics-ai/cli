@@ -99,6 +99,14 @@ No provider, credential, network, warehouse, container, external service, revers
 
 ## Completed local evidence
 
+- Review-fix focused verification (exit `0`):
+
+  ```sh
+  go test -race -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportStaleWriterDoesNotReportUncommittedFinalization|TestFailRunTransportConflictRequiresRunningTarget|TestFailRunTransportConflictReturnsMayHaveCommittedFinalization)$'
+  ```
+
+  It proves a real stale CAS does not return a speculative failed run after a definite pre-rename state failure, retains the typed conflict, leaves the durable loser `running` after reopen, preserves winner/unrelated state, and still returns terminal runs for committed and indeterminate outcomes.
+
 - The race command passed with the platform linker warning emitted by the macOS toolchain but no Go race detector or test failure.
 - `go vet ./internal/app/... && go build ./cmd/pm` passed.
 - `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make connector-boundary`, and `make release-workflow-check` each passed individually. The smoke gate used its hermetic temporary sample project only; no live provider, credential, or external service was contacted.

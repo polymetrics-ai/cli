@@ -53,7 +53,7 @@ coverage:
 ## Delivered
 
 - `App.failRun` now recognizes only `errTransportStreamStateConflict` through `errors.Is` and, for that typed error alone, finalizes the matching current `running` run under the JSON-store lock.
-- The terminalization changes only that run to `failed`, retains redaction and a completion timestamp, and returns the matching committed run while preserving the typed error chain.
+- The terminalization changes only that run to `failed`, retains redaction and a completion timestamp, and returns it only after a successful or may-have-committed state outcome; a definite pre-rename persistence failure returns `Run{}` while preserving the typed error chain.
 - The ordinary whole-state revision guard remains in place for every non-conflict failure. A conflict cannot replace a missing or already terminal target run.
 - No checkpoint retry, checkpoint overwrite, stale-state assignment, `transport_dispatch.go` behavior, source identity, or R7/R8 per-stream CAS behavior changed.
 

@@ -21,6 +21,7 @@ Manual standard-depth inline review is the documented fallback because the non-n
 
 No unresolved Critical, Warning, or Info findings remain.
 
+- **Resolved during review fix:** a definite pre-rename JSON-store failure returns the callback's speculative state, so typed stale-conflict finalization now returns that run only if the callback observed an already-terminal target or the store reports a committed/indeterminate transitioned outcome. The focused real-CAS regression proves a non-committed transition returns `Run{}` and leaves the durable loser `running` without changing winner or unrelated state; companion tests retain the terminal-target and committed/indeterminate cases.
 - **Resolved during review:** the first focused concurrent-writer test had the winner and unrelated mutation in one writer update. It was strengthened in `8841ddbd0` to observe the real typed CAS conflict from the stale app, then persist unrelated state in a second writer update before `failRun`; the repeated focused and race checks passed afterward.
 - The typed exception is anchored to the private transport conflict sentinel through `errors.Is`; unrelated failure paths retain the exact revision comparison and cannot become a generic last-writer-wins refresh.
 - The typed path receives the current state only while the JSON-store lock is held, changes only the matching generated run ID, and requires its status to remain `running`. It does not touch `StreamStates`, project checkpoints, winner data, or unrelated runs.

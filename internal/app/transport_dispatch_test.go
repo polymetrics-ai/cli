@@ -5,6 +5,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -121,6 +124,7 @@ var (
 	errTransportSourceAfterAcknowledgement = errors.New("source failed after acknowledged page")
 	errTransportFinalStateSave             = errors.New("final transport state save failed")
 	errTransportCheckpointState            = errors.New("checkpoint state directory sync failed")
+	errTransportFinalizationStateSync      = errors.New("finalization state directory sync failed")
 )
 
 func TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume(t *testing.T) {
@@ -449,6 +453,166 @@ func TestRunETLTransportRejectsStaleCheckpointWriter(t *testing.T) {
 
 func TestRunETLTransportStaleWriterFinalizesLosingRun(t *testing.T) {
 	assertRunETLTransportStaleWriterFinalization(t, synccontract.ModeFullAppend, false)
+}
+
+func TestRunETLTransportStaleWriterDoesNotReportUncommittedFinalization(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	fixture.sourceExecutor.page.CandidateCheckpoint.Position.Primary = synccontract.OpaqueToken{0xff}
+	fixture.sourceExecutor.page.CandidateCheckpoint.Position.TieBreaker = synccontract.OpaqueToken{0xff}
+	acknowledgementReached := make(chan struct{})
+	releaseAcknowledgement := make(chan struct{})
+	fixture.destinationExecutor.afterApply = func() {
+		close(acknowledgementReached)
+		<-releaseAcknowledgement
+	}
+
+	stateDir := filepath.Dir(fixture.app.statePath)
+	stateDirInfo, err := os.Stat(stateDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	locker := &appTransportPreRenamePersistenceFailureLocker{
+		directory:   stateDir,
+		restoreMode: stateDirInfo.Mode().Perm(),
+		failAt:      3,
+	}
+	fixture.app.store.Locker = locker
+	t.Cleanup(func() {
+		if err := os.Chmod(stateDir, stateDirInfo.Mode().Perm()); err != nil {
+			t.Errorf("restore state directory mode: %v", err)
+		}
+	})
+
+	done := make(chan struct{})
+	var losingRun Run
+	var losingErr error
+	go func() {
+		losingRun, losingErr = fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+		close(done)
+	}()
+	waitForTransportSignal(t, acknowledgementReached)
+
+	var losingRunID string
+	for _, run := range fixture.app.state.Runs {
+		if run.Type == "etl" && run.Connection == fixture.connection && run.Stream == "records" {
+			losingRunID = run.ID
+			break
+		}
+	}
+	if losingRunID == "" {
+		t.Fatal("losing run was not persisted before acknowledgement")
+	}
+
+	winner, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	unrelatedUpdatedAt := time.Unix(11, 0).UTC()
+	if _, err := winner.updateState(func(current state) (state, error) {
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
+		}
+		current.StreamStates["unrelated:records"] = StreamState{
+			Connection:          "unrelated",
+			Stream:              "records",
+			GenerationID:        8,
+			LastSuccessfulRunID: "unrelated_run",
+			RecordsLoaded:       13,
+			UpdatedAt:           unrelatedUpdatedAt,
+		}
+		if current.Checkpoints == nil {
+			current.Checkpoints = map[string]map[string]string{}
+		}
+		current.Checkpoints["unrelated_run"] = map[string]string{"cursor": "preserved"}
+		current.Runs = append(current.Runs, Run{
+			ID:          "unrelated_run",
+			Type:        "etl",
+			Connection:  "unrelated",
+			Stream:      "records",
+			Status:      "completed",
+			StartedAt:   unrelatedUpdatedAt.Add(-time.Second),
+			CompletedAt: unrelatedUpdatedAt,
+		})
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	credential, ok := winner.findCredential("source")
+	if !ok {
+		t.Fatal("winner app has no source credential")
+	}
+	winnerCheckpoint := appTransportCheckpoint(fixture.source, credential, "records")
+	winnerCheckpoint.Position.Primary = synccontract.OpaqueToken{0xff, 0x00}
+	winnerCheckpoint.Position.TieBreaker = synccontract.OpaqueToken{0xff, 0x00}
+	winnerSource := &appTransportSourceExecutor{
+		reference: fixture.sourceExecutor.reference,
+		page: synctransport.SourcePage{
+			Records:             []connectors.Record{{"id": "winner"}},
+			CandidateCheckpoint: winnerCheckpoint,
+		},
+	}
+	winnerDestination := &appTransportDestinationExecutor{reference: fixture.destinationExecutor.reference, sink: fixture.destination.Name()}
+	fixture.configureRuntime(t, winner, winnerSource, winnerDestination)
+	winnerRun, err := winner.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+	if err != nil {
+		t.Fatalf("winner RunETL() = %v", err)
+	}
+	if winnerRun.Status != "completed" {
+		t.Fatalf("winner run status = %q, want completed", winnerRun.Status)
+	}
+
+	close(releaseAcknowledgement)
+	waitForTransportSignal(t, done)
+	if locker.calls != 3 {
+		t.Fatalf("state lock calls = %d, want three calls through finalization", locker.calls)
+	}
+	if !errors.Is(losingErr, errTransportStreamStateConflict) {
+		t.Fatalf("losing RunETL() error = %v, want typed stale stream-state rejection", losingErr)
+	}
+	if outcome := statestore.CommitOutcomeForError(losingErr); outcome != statestore.CommitOutcomeNotCommitted {
+		t.Fatalf("finalization commit outcome = %s, want not committed", outcome)
+	}
+	if !strings.Contains(losingErr.Error(), "create temporary state file") {
+		t.Fatalf("losing RunETL() error = %v, want pre-rename state persistence failure", losingErr)
+	}
+	if !reflect.DeepEqual(losingRun, Run{}) {
+		t.Fatalf("RunETL() returned %#v, want zero Run after uncommitted finalization", losingRun)
+	}
+
+	reopened, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	stateKey := streamStateKey(fixture.connection, "records")
+	streamState := reopened.state.StreamStates[stateKey]
+	if streamState.Checkpoint == nil || !bytes.Equal(streamState.Checkpoint.Position.Primary, []byte{0xff, 0x00}) {
+		t.Fatalf("winner checkpoint was overwritten: %#v", streamState.Checkpoint)
+	}
+	if streamState.LastSuccessfulRunID != winnerRun.ID {
+		t.Fatalf("winner run identity = %q, want %q", streamState.LastSuccessfulRunID, winnerRun.ID)
+	}
+	unrelated := reopened.state.StreamStates["unrelated:records"]
+	if unrelated.GenerationID != 8 || unrelated.LastSuccessfulRunID != "unrelated_run" || unrelated.RecordsLoaded != 13 || !unrelated.UpdatedAt.Equal(unrelatedUpdatedAt) {
+		t.Fatalf("unrelated stream state changed: %#v", unrelated)
+	}
+	if got := reopened.state.Checkpoints["unrelated_run"]["cursor"]; got != "preserved" {
+		t.Fatalf("unrelated project checkpoint = %q, want preserved", got)
+	}
+	var durableLoser, unrelatedRun Run
+	for _, run := range reopened.state.Runs {
+		switch run.ID {
+		case losingRunID:
+			durableLoser = run
+		case "unrelated_run":
+			unrelatedRun = run
+		}
+	}
+	if durableLoser.ID != losingRunID || durableLoser.Status != "running" || !durableLoser.CompletedAt.IsZero() {
+		t.Fatalf("durable losing run = %#v, want running unfinalized run", durableLoser)
+	}
+	if unrelatedRun.Status != "completed" || !unrelatedRun.CompletedAt.Equal(unrelatedUpdatedAt) {
+		t.Fatalf("unrelated run changed: %#v", unrelatedRun)
+	}
 }
 
 func assertRunETLTransportStaleWriterFinalization(t *testing.T, mode synccontract.Mode, cancelAfterAcknowledgement bool) {
@@ -847,6 +1011,76 @@ func TestFailRunTransportConflictRequiresRunningTarget(t *testing.T) {
 		}
 	}
 	t.Fatalf("terminal run %q was not retained", terminal.ID)
+}
+
+func TestFailRunTransportConflictReturnsMayHaveCommittedFinalization(t *testing.T) {
+	tests := []struct {
+		name        string
+		configure   func(*App)
+		wantOutcome statestore.CommitOutcome
+	}{
+		{
+			name: "committed unlock failure",
+			configure: func(a *App) {
+				a.store.Locker = &postCommitUnlockFailureLocker{failAt: 1}
+			},
+			wantOutcome: statestore.CommitOutcomeCommitted,
+		},
+		{
+			name: "indeterminate directory sync failure",
+			configure: func(a *App) {
+				a.store.SyncDirectory = func(string) error {
+					return errTransportFinalizationStateSync
+				}
+			},
+			wantOutcome: statestore.CommitOutcomeIndeterminate,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+			loser := Run{
+				ID:         "run_loser",
+				Type:       "etl",
+				Connection: fixture.connection,
+				Stream:     "records",
+				Status:     "running",
+				StartedAt:  time.Unix(10, 0).UTC(),
+			}
+			if _, err := fixture.app.beginRun(loser); err != nil {
+				t.Fatal(err)
+			}
+			tt.configure(fixture.app)
+
+			returned, err := fixture.app.failRun(loser.ID, fmt.Errorf("stale checkpoint: %w", errTransportStreamStateConflict))
+			if !errors.Is(err, errTransportStreamStateConflict) {
+				t.Fatalf("failRun() error = %v, want typed transport state conflict", err)
+			}
+			var outcome *statestore.CommitOutcomeError
+			if !errors.As(err, &outcome) || outcome.Outcome != tt.wantOutcome || !outcome.Outcome.MayHaveCommitted() {
+				t.Fatalf("failRun() commit outcome = %#v, want %s", outcome, tt.wantOutcome)
+			}
+			if returned.ID != loser.ID || returned.Status != "failed" || returned.CompletedAt.IsZero() {
+				t.Fatalf("failRun() returned %#v, want terminal loser", returned)
+			}
+
+			reopened, err := Open(fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, run := range reopened.state.Runs {
+				if run.ID != loser.ID {
+					continue
+				}
+				if run.Status != "failed" || run.CompletedAt.IsZero() {
+					t.Fatalf("durable loser = %#v, want terminal run", run)
+				}
+				return
+			}
+			t.Fatalf("durable loser %q was not retained", loser.ID)
+		})
+	}
 }
 
 func TestRunETLTransportDistinguishesMissingAndPresentStreamState(t *testing.T) {
@@ -1318,6 +1552,26 @@ func (l *appTransportFailAtLockLocker) Lock() (func() error, error) {
 		return nil, l.err
 	}
 	return func() error { return nil }, nil
+}
+
+type appTransportPreRenamePersistenceFailureLocker struct {
+	calls       int
+	failAt      int
+	directory   string
+	restoreMode os.FileMode
+}
+
+func (l *appTransportPreRenamePersistenceFailureLocker) Lock() (func() error, error) {
+	l.calls++
+	if l.calls != l.failAt {
+		return func() error { return nil }, nil
+	}
+	if err := os.Chmod(l.directory, 0o500); err != nil {
+		return nil, err
+	}
+	return func() error {
+		return os.Chmod(l.directory, l.restoreMode)
+	}, nil
 }
 
 func appTransportCheckpoint(source connectors.Connector, credential CredentialMeta, stream string) synccontract.CheckpointEnvelope {

@@ -12,6 +12,7 @@
 | R9-T4 | Restart does not reload a false-running loser. | **Red:** R9-T1's reopen assertion captures the original leak. | **Green:** `go test -count=10 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFailureSurvivesReopen$'` exit `0`. | Green |
 | R9-T5 | Cancellation after acknowledgement does not erase ordering, typed conflict, or terminalization. | **Red:** R9-T1 establishes the common path is broken at the base. | **Green:** `go test -count=10 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesAfterCancellation$'` exit `0`; cancellation occurs after acknowledgement and the typed conflict remains detectable. | Green |
 | R9-T6 | The shared path terminalizes stale losers for every canonical mode. | **Red:** R9-T1 establishes the common path is broken at the base. | **Green:** `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRunForAllModes$' -v` exit `0` for `full_overwrite`, `full_append`, `incremental_append`, `incremental_upsert`, `incremental_dedupe`, `incremental_dedupe_history`, and `change_capture`. | Green |
+| R9-T7 | A definite pre-rename finalization failure never reports a speculative terminal loser, while committed and indeterminate outcomes do. | **Red:** review traced `JSONStore.Update` returning callback-mutated `next` when `saveNoLock` fails before rename; the prior typed-conflict branch returned that speculative run. | **Green:** focused race-enabled app tests prove a real stale CAS returns zero with the durable loser still `running`, and committed/indeterminate finalizations return the terminal loser. | Green |
 | R9-R7/R8 | Resume identity and target-entry CAS continue to reject an invalid/stale checkpoint without overwriting winner state. | **Red:** prior #3864 T20/T21 evidence is linked, not reused as this phase's RED. | **Green:** the exact nine-test R7/R8 suite in `VERIFICATION.md` passed unchanged with exit `0`. | Green |
 
 ## TDD gate commitments
@@ -51,3 +52,9 @@
 - Command: `go test -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume|TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForAllModes|TestRunETLTransportAdvancesInterimCheckpointAcrossPages|TestRunETLTransportPreservesUnrelatedStateDuringInterimCheckpointCommit|TestRunETLTransportRejectsStaleCheckpointWriter|TestRunETLTransportDistinguishesMissingAndPresentStreamState|TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation|TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails|TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure)$'`
 - Exit: `0`
 - Result: the established identity, source-generation, acknowledgement ordering, target-entry CAS, unrelated-state, cancellation, and state-store-outcome protections remain unchanged.
+
+### R9-T7 Green: finalization commit-outcome truth
+
+- Command: `go test -race -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportStaleWriterDoesNotReportUncommittedFinalization|TestFailRunTransportConflictRequiresRunningTarget|TestFailRunTransportConflictReturnsMayHaveCommittedFinalization)$'`
+- Exit: `0`
+- Result: a real two-app stale CAS followed by a pre-rename temporary-file creation failure returns `Run{}` and reopens the loser as `running`; the winner and unrelated stream/checkpoint/run remain unchanged, while committed and indeterminate finalization outcomes return a terminal loser and preserve the typed conflict chain.
