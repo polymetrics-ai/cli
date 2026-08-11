@@ -42,9 +42,11 @@ documented manual-GSD fallback. It does not omit planning, verification, or revi
 Loaded skills:
 
 - `github-issue-first-delivery` for issue/PR topology and issue-first linkage;
-- `no-mistakes` for the required local gate.
+- `no-mistakes` for the required local gate;
 - `golang-documentation` for bounded phase-evidence accuracy; it does not authorize edits to
   inherited #4015 architecture content.
+- `golang-how-to` and `golang-lint` for the scoped documentation/lint review; no Go source path is
+  in scope for static analysis.
 
 No Go implementation, CLI, connector-runtime, website, or design skill applies: this seed changes
 only planning artifacts and does not describe or alter product behavior.
@@ -68,7 +70,7 @@ only planning artifacts and does not describe or alter product behavior.
 | Initial PR | One draft PR only; base `feat/3862-any-to-any-transport`, head `feat/3855-polling-apply-foundations`. |
 | Temporary-base meaning | Dependency-only; it never authorizes #3855 integration into #3862. |
 | Retarget rule | Before final parent integration, retarget to `docs/4015-connector-release-certification` after the reviewed transport seam is present there. |
-| Merge rule | No merge and never `main`; final integration remains human-gated. |
+| Merge rule | Never merge into the temporary #3862 base or `main`; after retargeting, final integration remains human-gated. |
 | Historical reuse | #3880 / `dc1a6a7171ca901c8dbaf8cd528f67b18e57d9bb` is partial reusable polling implementation, not closure for any child. |
 
 ## Plan checkpoints
