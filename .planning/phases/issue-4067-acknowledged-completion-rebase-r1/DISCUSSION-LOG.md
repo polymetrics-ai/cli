@@ -57,3 +57,17 @@
 ## Deferred ideas
 
 None. Generic state refresh, checkpoint/CAS redesign, #4046 behavior changes, provider work, generated-artifact expansion, and merge remain out of scope.
+
+## R3 Sol-audit continuation
+
+**Mode:** `discuss-phase --auto` inline/manual continuation. The r3 audit, amended #4067 issue, and updated loop-4 directive resolve the material choices; named-phase lookup remains absent and the custody contract forbids lifecycle-role spawning.
+
+| Area | Options considered | Selected |
+|---|---|---|
+| Typed second-page conflict | Revalidate the stale page-one witness; send only the typed conflict to #4046 `failRun`. | Direct typed-conflict delegation before witness lookup. |
+| State mutation | Retry or overwrite the losing checkpoint; terminalize only the matching losing run through the existing typed-conflict path. | Existing #4046 terminalization only. |
+| RED evidence | Single-page error assertion; two-page persisted all-mode witness with a real winner, reopen, and apply counts. | Deterministic two-page all-seven witness. |
+| Connector evidence | Treat a provider smoke as proof of core correctness; separate current-branch definition/preflight/inspection evidence from deterministic core proof. | Separate core and existing-connector gates. |
+| Credentialed smoke | Request/copy a token or invent a run; use only an already-approved secret channel and bounded read-only operation. | Conditional sanctioned-channel smoke only. |
+
+**Decision:** preserve r2 behavior for ordinary post-ack errors, preserve #4046's typed-conflict-only exception, and make no production-wiring or certification claim when transport roles are not registered at this branch.

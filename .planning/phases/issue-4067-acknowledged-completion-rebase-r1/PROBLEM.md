@@ -38,6 +38,12 @@ The r2 Sol audit rejected candidate `3f84693bfbc128523a66e22653db7227fb9c0869` f
 
 The repair must retain a witness only after a durable acknowledgement, terminalize the exact still-running target run only after matching its acknowledged stream, preserve the original post-ack error, and make the missing target typed. It must not make ordinary `failRun` stale-state tolerant.
 
+## R3 two-page typed-conflict defect
+
+The r3 Sol audit then exercised two pages rather than a post-ack cancellation or ordinary source error. Page one durably acknowledged. A second App advanced the same stream to a winner checkpoint. The original App still applied page two, and its checkpoint CAS correctly returned `errTransportStreamStateConflict`. `runTransportETL` retained the page-one result, but `failAcknowledgedTransportRun` consulted the stale page-one witness first; its exact-stream guard rejected the winner before the existing #4046 typed-conflict `failRun` terminalizer could record the losing run. The observable result was a typed conflict plus `Run{}` and a durably reopened loser still `running`.
+
+The required repair is ordering only: send that typed error directly to `failRun` before any acknowledged-witness lookup. This leaves r2's ordinary post-ack error guard and #4046's typed-conflict-only boundary intact. It never overwrites the winner, retries the checkpoint, replays either page, or turns #4067 into production transport wiring.
+
 ## Scope
 
 - `internal/app` final-completion logic and focused package-local tests.

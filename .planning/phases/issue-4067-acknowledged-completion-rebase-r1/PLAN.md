@@ -24,9 +24,13 @@ The issue phase is absent from the archived numeric roadmap and role spawning is
 
 On the r2 continuation, the `discuss-phase --auto` and `plan-phase --tdd` prompts were resolved again after #4067 was amended and the complete Sol r2 handoff was read. Both official phase lookups report `phase_found: false` for this named issue phase; the documented inline/manual fallback therefore updates this existing phase directory rather than spawning a role or creating a numeric-roadmap phase.
 
+On the r3 continuation, the same five generated prompts were resolved after the complete Sol r3 report, current loop-4 directive, and live #4067 amendment/readback. This workspace is not a Pi runtime and the named phase is not a numeric roadmap phase; role spawning is forbidden in this custody lane. The lifecycle therefore remains an inline/manual fallback with the same required discussion, plan/TDD, execution, verify-work, and review evidence.
+
 ## Required skills
 
 `golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-context`, `golang-concurrency`, `golang-safety`, `golang-security`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-cli`, `github-issue-first-delivery`, `gsd-discuss-phase`, `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, `gsd-code-review`, and `no-mistakes`.
+
+The r3 continuation additionally loaded `golang-code-style` and `golang-lint`; no CLI command, help, public documentation, connector definition, or generated surface is planned to change, so CLI/help parity work is explicitly not applicable to the production slice.
 
 ## Objective
 
@@ -67,6 +71,21 @@ Make an acknowledged transport run complete truthfully despite an unrelated post
 4. In `completeRunWithAcknowledgedTransportState`, wrap a missing target run as `errStateRevisionConflict` only when the rebase is an acknowledged rebase; preserve ordinary missing-run behavior elsewhere.
 5. Do not alter `failRun`, checkpoint CAS, destination apply, #4046 typed-conflict terminalization, or source identity. Re-run the exact RED commands to GREEN before broader coverage.
 
+## R3 RED — stale second-page writer after an earlier acknowledgement
+
+1. Add `TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForAllModes` to `internal/app/transport_dispatch_test.go` using the existing real JSON-state fixture and all seven `synccontract.AllModes()` values.
+2. Configure a two-page loser. Pause only after its first real checkpoint callback returns; use a separately opened App to persist unrelated state and run a real one-page winner that advances the same target stream.
+3. Release the loser. It must apply its second page exactly once and then receive `errTransportStreamStateConflict` from the existing per-stream CAS. Before production mutation, the test must expose the durable symptom: typed error but `Run{}` returned and a reopened loser still `running`.
+4. In every subtest, assert page-one acknowledgement, winner checkpoint/run identity, unrelated stream/checkpoint/run preservation, exactly two loser applies (and one winner apply), non-overwrite, no retry/replay, and a truthful returned/reopened failed loser as the intended green contract.
+5. Run the selector with a 20-minute timeout. Its RED must fail on the observable zero-run/durable-running condition, never compilation or an error-string-only assertion. Commit test and ledger evidence before `internal/app/app.go` changes.
+
+## R3 GREEN — typed-conflict-only finalization ordering
+
+1. At the beginning of `failAcknowledgedTransportRun`, route `errors.Is(runErr, errTransportStreamStateConflict)` directly to `a.failRun(runID, runErr)` before examining `result.PendingStreamState` or `a.state`.
+2. Change no other production behavior: ordinary acknowledged cancellation/source-error handling retains the r2 exact stream and running-run guard; #4046 remains the sole typed-conflict latest-state terminalization owner.
+3. Re-run the identical all-seven witness green, proving the returned failure, reopened durable failure, typed error preservation, winner/unrelated preservation, and two loser applies.
+4. Do not retry/overwrite a checkpoint, replay destination work, introduce a state refresh, touch R7/R8, or expand production registration.
+
 ## Focused proof expansion
 
 - Run/reopen proof in all seven modes.
@@ -77,6 +96,9 @@ Make an acknowledged transport run complete truthfully despite an unrelated post
 - Existing #4046 typed-conflict tests and R7/R8 identity/CAS suite must remain green.
 - Run focused interleaving tests under `-race` before heavier validation.
 - Repeat the r2 all-mode cancellation/unrelated, source-error, and missing-run selectors under `-race`; assert `applyCalls == 1` in every witness.
+- Repeat the new r3 two-page all-mode selector at least three times normally and at least three times under `-race`; its loser-specific `applyCalls == 2` is the no-replay assertion.
+- Treat deterministic core proof as primary. Separately build the real binary, run current GitHub definition/hook tests and command-runner runtime-preflight tests, inspect current production registration, and use only any repository-owned bounded GitHub harness valid at this branch.
+- A credentialed GitHub smoke is conditional on an already-approved secret channel. It is bounded and read-only only; no token is copied to a command line, file, output, or evidence. Absence of that channel is a recorded limitation, not an excuse to fabricate an integration result.
 
 ## Generated-artifact remediation
 
@@ -89,13 +111,12 @@ Use their documented check commands after generation. Inspect the resulting diff
 
 ## Ordered validation and delivery
 
-1. Focused r2 RED → matching GREEN → repeat/interleaving/reopen/cancellation/source-error/missing-run/all-seven-mode/race/R7-R8 tests.
+1. Focused r3 planning → behavioral RED commit → matching GREEN → repeat/interleaving/reopen/cancellation/source-error/missing-run/all-seven-mode/race/R7-R8 tests.
 2. Before resource-heavy full repository validation, report exactly: `working: transport focused gates green; requesting heavy validation window`.
 3. Run GSD verifier, lint, generator checks, affected package tests, vet/build, and the required individual repository gates.
 4. Run manual GSD code review and disposition every finding.
-5. Confirm no active competing no-mistakes run, then use only loop 3/5, 4/5, or 5/5 for #4067 without `--yes`; follow every synchronous return. Do not touch the immutable old run.
-6. If the current no-mistakes help lacks a safe existing-stacked-PR route, run its local validation with push/PR/CI skipped and stop for Firstmate before any push or PR mutation. Otherwise update only draft #4059 through the documented safe existing-PR route. Do not merge, retarget, force-push, or open another PR.
-7. Wait for exact-head CI. On all green, report the immutable candidate SHA and request a fresh independent Sol audit.
+5. Confirm no active run on this branch, then use only loop 4/5 for #4067 without `--yes`; follow every synchronous return. Do not touch the immutable old run or an unrelated branch run.
+6. Current no-mistakes help lacks a safe existing-stacked-PR route. Use local validation with push/PR/CI skipped; also skip document rather than retaining another unrelated architecture rewrite. Stop for Firstmate after the clean submitted local head. Do not merge, retarget, force-push, push, or open another PR.
 
 ## Success criteria
 
@@ -106,3 +127,4 @@ Use their documented check commands after generation. Inspect the resulting diff
 - Generated outputs are canonical-generator-only; no separate issue is created for them.
 - Fresh no-mistakes ledger remains at most 5 loops; #4059 stays draft and unmerged.
 - R2 post-ack cancellation after an unrelated revision and representative source error both return matching failed runs while preserving original error identity and exact current state; missing exact target run returns `Run{}` with `errStateRevisionConflict` detectable.
+- R3 two-page stale-page conflict returns the matching durable failed loser in all modes while preserving the typed error, winner checkpoint, unrelated state, and exactly two loser applies; current GitHub/registration evidence is reported honestly without treating a provider smoke as core proof or expanding #4059 production scope.

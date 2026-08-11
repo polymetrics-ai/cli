@@ -9,12 +9,12 @@
   "lifecycle": {
     "mode": "inline_manual_gsd_fallback",
     "reason": "The custom issue phase is absent from the archived numeric roadmap and repository custody forbids lifecycle-role spawning.",
-    "discuss_phase": "r2_completed_auto_manual_fallback",
-    "plan_phase_tdd": "r2_planning_checkpoint_committed_before_red",
-    "execute_phase": "r2_manual_execution_complete",
-    "verify_work": "r2_manual_goal_backward_verification_complete",
-    "code_review": "r2_manual_standard_review_complete",
-    "delivery_revalidation": "r2_loop_3_passed_scope_restoration_pending_firstmate_direction"
+    "discuss_phase": "r3_auto_manual_fallback_planned",
+    "plan_phase_tdd": "r3_planning_checkpoint_pending_commit_before_red",
+    "execute_phase": "r3_pending_tdd_red",
+    "verify_work": "r3_pending",
+    "code_review": "r3_pending",
+    "delivery_revalidation": "r3_loop_4_local_only_pending"
   },
   "skills": [
     "golang-how-to",
@@ -26,6 +26,8 @@
     "golang-security",
     "golang-design-patterns",
     "golang-structs-interfaces",
+    "golang-code-style",
+    "golang-lint",
     "golang-documentation",
     "golang-cli",
     "github-issue-first-delivery",
@@ -38,7 +40,7 @@
   ],
   "correction_ledger": {
     "issue": 4067,
-    "status": "three_completed_runs_r2_scope_restored_pending_firstmate_direction",
+    "status": "three_completed_runs_r2_scope_restored_r3_loop_4_pending",
     "budget_used": 3,
     "budget_max": 5,
     "forbidden_flag": "--yes",
@@ -73,6 +75,8 @@
   "scope": {
     "production_boundary": "transport successful completion and narrow error finalization after an acknowledged checkpoint",
     "focused_tests": "internal/app package-local persisted-state transport tests",
+    "existing_connector_evidence": "real pm build, current GitHub definition/hook and command-runner preflight tests, inspection, and only a valid branch-owned bounded harness; any sanctioned credentialed smoke is read-only and conditional",
+    "registration_limit": "Do not claim GitHub/PostgreSQL source or destination transport registration, a live warehouse round trip, or certification unless current inspection proves it; #4015 production wiring remains out of scope.",
     "generated_only_via_canonical_generators": [
       "website/lib/docs.generated.ts",
       "internal/connectors/certifications/flow-matrix.json"
