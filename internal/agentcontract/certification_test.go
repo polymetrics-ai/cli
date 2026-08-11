@@ -564,6 +564,127 @@ func TestCertificationGateRejectsFlowKindInventoryDrift(t *testing.T) {
 	}
 }
 
+func TestCertificationGateRejectsImmutableFlowOverridePromotion(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := writeGreenCertificationFixture(t)
+	matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+	baseCell := matrix["pair_sets"].([]any)[0].(map[string]any)["cell"].(map[string]any)
+	overrideCell := cloneCertificationFixtureObject(t, baseCell)
+	baseCell["declared"] = false
+	baseCell["implemented"] = false
+	baseCell["fixture_tested"] = false
+	baseCell["fixture_evidence"] = []any{}
+	baseCell["live_tested"] = false
+	baseCell["live_evidence"] = []any{}
+	matrix["pair_overrides"] = []any{map[string]any{
+		"flow_kind": "api_to_api", "source": "github", "destination": "github", "mediator": "local_parquet_warehouse", "cell": overrideCell,
+	}}
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+	rewriteCertificationFixtureDerivedReports(t, root)
+
+	verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if verdict.Decision != CertificationGateHalt {
+		t.Fatalf("immutable flow override promotion decision = %#v, want HALT", verdict)
+	}
+}
+
+func TestCertificationGateBindsRawFlowPairSetEvidenceBeforeOverrides(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	const flowCellID = "flow/api_to_api/github/github"
+	tests := []struct {
+		name       string
+		mutate     func(*testing.T, string, map[string]any)
+		failureID  string
+		evidenceID string
+	}{
+		{
+			name: "safe missing base record",
+			mutate: func(_ *testing.T, _ string, pointer map[string]any) {
+				pointer["record"] = "internal/connectors/certifications/evidence/missing-flow.json"
+			},
+			failureID:  "evidence/internal/connectors/certifications/evidence/missing-flow.json/missing",
+			evidenceID: "internal/connectors/certifications/evidence/missing-flow.json",
+		},
+		{
+			name: "mismatched base record",
+			mutate: func(_ *testing.T, _ string, pointer map[string]any) {
+				pointer["run_id"] = "mismatched-run"
+			},
+			failureID:  "evidence/internal/connectors/certifications/evidence/flow.json/mismatch",
+			evidenceID: "internal/connectors/certifications/evidence/flow.json",
+		},
+		{
+			name: "wrong-coordinate base record",
+			mutate: func(t *testing.T, root string, pointer map[string]any) {
+				record := readCertificationFixtureObject(t, root, "internal/connectors/certifications/evidence/flow.json")
+				record["destination"] = "other"
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/evidence/wrong-flow.json", record)
+				pointer["record"] = "internal/connectors/certifications/evidence/wrong-flow.json"
+			},
+			failureID:  "evidence/internal/connectors/certifications/evidence/wrong-flow.json/binding",
+			evidenceID: "internal/connectors/certifications/evidence/wrong-flow.json",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := writeGreenCertificationFixture(t)
+			matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+			baseCell := matrix["pair_sets"].([]any)[0].(map[string]any)["cell"].(map[string]any)
+			overrideCell := cloneCertificationFixtureObject(t, baseCell)
+			matrix["pair_overrides"] = []any{map[string]any{
+				"flow_kind": "api_to_api", "source": "github", "destination": "github", "mediator": "local_parquet_warehouse", "cell": overrideCell,
+			}}
+			pointer := baseCell["live_evidence"].([]any)[0].(map[string]any)
+			test.mutate(t, root, pointer)
+			writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+
+			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if verdict.Decision != CertificationGateHalt || len(verdict.Failures) != 1 {
+				t.Fatalf("raw base evidence verdict = %#v, want one HALT", verdict)
+			}
+			failure := verdict.Failures[0]
+			if failure.ID != test.failureID || failure.CellID != flowCellID || failure.EvidenceID != test.evidenceID {
+				t.Fatalf("failure coordinates = %#v, want id=%q cell=%q evidence=%q", failure, test.failureID, flowCellID, test.evidenceID)
+			}
+		})
+	}
+}
+
+func TestCertificationGateRejectsDistinctLargeProofNumbers(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := writeGreenCertificationFixture(t)
+	matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/capability-matrix.json")
+	pointer := matrix["connectors"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)["live_evidence"].([]any)[0].(map[string]any)
+	pointerProof := pointer["proof"].(map[string]any)
+	pointerBody := pointerProof["http_exchanges"].([]any)[0].(map[string]any)["request"].(map[string]any)["body"].(map[string]any)
+	pointerBody["original_bytes"] = int64(9007199254740992)
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/capability-matrix.json", matrix)
+
+	evidence := readCertificationFixtureObject(t, root, "internal/connectors/certifications/evidence/capability.json")
+	evidenceProof := evidence["proof"].(map[string]any)
+	evidenceBody := evidenceProof["http_exchanges"].([]any)[0].(map[string]any)["request"].(map[string]any)["body"].(map[string]any)
+	evidenceBody["original_bytes"] = int64(9007199254740993)
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/evidence/capability.json", evidence)
+
+	verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if verdict.Decision != CertificationGateHalt || len(verdict.Failures) != 1 {
+		t.Fatalf("large proof number mismatch verdict = %#v, want one HALT", verdict)
+	}
+	failure := verdict.Failures[0]
+	if failure.ID != "evidence/internal/connectors/certifications/evidence/capability.json/mismatch" || failure.CellID != "capability/github/capability:check" || failure.EvidenceID != "internal/connectors/certifications/evidence/capability.json" {
+		t.Fatalf("large proof number mismatch coordinates = %#v", failure)
+	}
+}
+
 func TestCertificationGateRejectsEscapedOrNonRegularInputs(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	tests := []struct {
@@ -1043,6 +1164,19 @@ func certificationTestNotApplicableCell(code, reason string) map[string]any {
 		"fixture_evidence": []any{}, "live_evidence": []any{},
 		"not_applicable": map[string]any{"code": code, "reason": reason},
 	}
+}
+
+func cloneCertificationFixtureObject(t *testing.T, value map[string]any) map[string]any {
+	t.Helper()
+	raw, err := json.Marshal(value)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var copy map[string]any
+	if err := json.Unmarshal(raw, &copy); err != nil {
+		t.Fatal(err)
+	}
+	return copy
 }
 
 func certificationTestEvidence(record string, proof map[string]any, scope map[string]any) map[string]any {

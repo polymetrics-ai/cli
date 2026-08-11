@@ -49,6 +49,51 @@ func TestCheckProjectionRejectsDivergence(t *testing.T) {
 	}
 }
 
+func TestCertificationFlowKindCatalogSyncAndCheck(t *testing.T) {
+	repository := repositoryRoot(t)
+	contract := loadRepositoryContract(t, repository)
+	root := t.TempDir()
+	flowMatrixPath := filepath.Join(repository, filepath.FromSlash(contract.CertificationGate.Inputs.FlowMatrix))
+	flowMatrix, err := os.ReadFile(flowMatrixPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fixtureFlowMatrixPath := filepath.Join(root, filepath.FromSlash(contract.CertificationGate.Inputs.FlowMatrix))
+	if err := os.MkdirAll(filepath.Dir(fixtureFlowMatrixPath), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(fixtureFlowMatrixPath, flowMatrix, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	updated, err := SyncCertificationFlowKindCatalog(root, contract)
+	if err != nil {
+		t.Fatalf("SyncCertificationFlowKindCatalog: %v", err)
+	}
+	if updated != 1 {
+		t.Fatalf("SyncCertificationFlowKindCatalog updated %d files, want 1", updated)
+	}
+	if err := CheckCertificationFlowKindCatalog(root, contract); err != nil {
+		t.Fatalf("CheckCertificationFlowKindCatalog: %v", err)
+	}
+
+	catalogPath := filepath.Join(root, filepath.FromSlash(certificationFlowKindCatalogPath))
+	catalog, err := os.ReadFile(catalogPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(catalogPath, append(catalog, '\n'), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := CheckCertificationFlowKindCatalog(root, contract); err == nil {
+		t.Fatal("CheckCertificationFlowKindCatalog accepted a drifted generated catalog")
+	}
+	updated, err = SyncCertificationFlowKindCatalog(root, contract)
+	if err != nil || updated != 1 {
+		t.Fatalf("SyncCertificationFlowKindCatalog repairs drift: updated=%d err=%v", updated, err)
+	}
+}
+
 func TestProjectionDriftCheckAndSync(t *testing.T) {
 	repository := repositoryRoot(t)
 	contract := loadRepositoryContract(t, repository)

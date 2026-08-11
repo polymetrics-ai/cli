@@ -13,7 +13,6 @@ import (
 	"sort"
 	"strings"
 
-	"polymetrics.ai/internal/certificationcatalog"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -227,16 +226,12 @@ type resolvedFlowPair struct {
 }
 
 func discoveredFlowKinds() []flowKind {
-	catalog := certificationcatalog.FlowKinds()
-	kinds := make([]flowKind, len(catalog))
-	for index, kind := range catalog {
-		kinds[index] = flowKind{
-			ID:              kind.ID,
-			SourceRole:      kind.SourceRole,
-			DestinationRole: kind.DestinationRole,
-		}
+	return []flowKind{
+		{ID: "api_to_api", SourceRole: "api_source", DestinationRole: "api_destination"},
+		{ID: "api_to_database", SourceRole: "api_source", DestinationRole: "database_destination"},
+		{ID: "database_to_api", SourceRole: "database_source", DestinationRole: "api_destination"},
+		{ID: "database_to_database", SourceRole: "database_source", DestinationRole: "database_destination"},
 	}
-	return kinds
 }
 
 func discoverWorkflowKinds(repoRoot string) ([]workflowKind, error) {

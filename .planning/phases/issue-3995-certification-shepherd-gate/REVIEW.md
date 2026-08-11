@@ -85,3 +85,21 @@ PASS after correction round 3 of 5. The checked-in GitHub artifact retains deter
 with `capability/github/capability:check/live_evidence`; a complete producer-valid fixture
 `PROCEED`s, while malformed, mismatched, and escaped input halts. Remaining delivery phases,
 branch/PR work, and human gates remain owned by the outer executor.
+
+## Correction round 4 re-review
+
+| ID | Severity | Finding | Disposition | Tracking |
+| --- | --- | --- | --- | --- |
+| C4-1 | error | Round three directly changed `cmd/connectorgen/certification*.go`, violating the forbidden-path constraint. | Fixed: the producer path is restored unchanged; an `agentcontractgen`-generated catalog now projects `flow-matrix.json` for the consumer, and sync/check detect its drift. | #4028 |
+| C4-2 | error | A flow override could promote immutable producer facts to a green resolved cell. | Fixed: an applicable override must preserve applicable, declared, implemented, fixture, and not-applicable facts; only fully bound live-evidence facts may differ. | #4028 |
+| C4-3 | error | Resolved evidence validation masked raw base pair-set pointers. | Fixed: every raw pair-set cell and each override cell is bound before resolved reports are derived; safe missing, mismatched, and wrong-coordinate records halt with exact coordinates. | #4028 |
+| C4-4 | error | Semantic proof comparison rounded distinct JSON numbers through `float64`. | Fixed: proof decoding uses `UseNumber`, so distinct 64-bit `original_bytes` values halt as a mismatch. | #4024 |
+
+The focused Round 4 package, producer-matrix, catalog sync/check, and changed-path checks passed.
+No provider, credential, network, evidence-creation, CI, PR, or outer pipeline action ran.
+
+## Current verdict after correction round 4
+
+PASS after correction round 4 of 5. The checked-in GitHub artifact remains deterministic `RETRY`
+with `capability/github/capability:check/live_evidence`; complete valid fixtures proceed; malformed,
+mismatched, escaped, overridden-invalid, and precision-mismatched inputs halt.

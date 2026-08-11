@@ -82,12 +82,17 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 			_, _ = fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
 			return 1
 		}
+		catalogUpdated, err := agentcontract.SyncCertificationFlowKindCatalog(root, contract)
+		if err != nil {
+			_, _ = fmt.Fprintf(stderr, "agentcontractgen: sync failed: %v\n", err)
+			return 1
+		}
 		updated, err := agentcontract.SyncProjections(root, contract)
 		if err != nil {
 			_, _ = fmt.Fprintf(stderr, "agentcontractgen: sync failed: %v\n", err)
 			return 1
 		}
-		_, _ = fmt.Fprintf(stdout, "agentcontractgen: synchronized %d registered projection(s)\n", updated)
+		_, _ = fmt.Fprintf(stdout, "agentcontractgen: synchronized %d registered projection(s) and %d certification flow-kind catalog(s)\n", updated, catalogUpdated)
 		return 0
 
 	default:

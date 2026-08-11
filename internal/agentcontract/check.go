@@ -20,6 +20,9 @@ func CheckRoot(ctx context.Context, root string) error {
 	if err != nil {
 		return err
 	}
+	if err := CheckCertificationFlowKindCatalog(root, contract); err != nil {
+		return err
+	}
 	if err := CheckGSDCommands(ctx, root, contract.GSD.Commands); err != nil {
 		return err
 	}

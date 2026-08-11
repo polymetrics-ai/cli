@@ -46,5 +46,11 @@ The command requires a canonical absolute root with no symlinked component or co
 relative, traversing, and symlinked roots halt for every protected transition. `--help` is a blocked
 request and emits a JSON `HALT`, so only an encoded `PROCEED` exits zero.
 
+`go run ./cmd/connectorgen certification-matrix --check` confirms the unchanged producer remains
+bound to `flow-matrix.json`; `go run ./cmd/agentcontractgen sync` and `check` generate and verify
+the consumer catalog from that same matrix. A flow override may change only bound live evidence:
+immutable fact promotion, safe-missing/mismatched/wrong-coordinate base records, and distinct large
+proof numbers all halt before a transition can proceed.
+
 This internal `agentcontractgen` command is not part of the `pm` CLI, so `pm` help/manual/website
 documentation has no new parity surface.

@@ -430,23 +430,25 @@ func (artifacts certificationArtifacts) evidenceCells() ([]certificationEvidence
 			})
 		}
 	}
-	connectors := certificationFlowConnectorNames(artifacts.flow.ConnectorRoles)
-	for _, kind := range artifacts.flow.FlowKinds {
-		for _, source := range connectors {
-			for _, destination := range connectors {
-				pair, ok := artifacts.flow.resolvedFlowPair(kind.ID, source, destination)
-				if !ok {
-					return nil, errors.New("flow pair is absent during evidence derivation")
-				}
+	for _, set := range artifacts.flow.PairSets {
+		for _, source := range set.SourceConnectors {
+			for _, destination := range set.DestinationConnectors {
 				cells = append(cells, certificationEvidenceCell{
-					cellID:  "flow/" + kind.ID + "/" + source + "/" + destination,
-					binding: certificationEvidenceBinding{Scope: "flow", Source: source, Destination: destination, FlowKind: kind.ID},
-					facts:   pair.Cell.certificationFacts,
+					cellID:  "flow/" + set.FlowKind + "/" + source + "/" + destination,
+					binding: certificationEvidenceBinding{Scope: "flow", Source: source, Destination: destination, FlowKind: set.FlowKind},
+					facts:   set.Cell.certificationFacts,
 				})
 			}
 		}
 	}
-	sort.Slice(cells, func(left, right int) bool { return cells[left].cellID < cells[right].cellID })
+	for _, override := range artifacts.flow.PairOverrides {
+		cells = append(cells, certificationEvidenceCell{
+			cellID:  "flow/" + override.FlowKind + "/" + override.Source + "/" + override.Destination,
+			binding: certificationEvidenceBinding{Scope: "flow", Source: override.Source, Destination: override.Destination, FlowKind: override.FlowKind},
+			facts:   override.Cell.certificationFacts,
+		})
+	}
+	sort.SliceStable(cells, func(left, right int) bool { return cells[left].cellID < cells[right].cellID })
 	return cells, nil
 }
 
@@ -1738,8 +1740,20 @@ func validateFlowPairTopology(matrix certificationFlowMatrix, kinds map[string]c
 		if !override.Cell.Applicable {
 			return errors.New("flow pair override is invalid")
 		}
+		if !sameCertificationFlowOverrideFacts(base.Cell.certificationFacts, override.Cell.certificationFacts) {
+			return &certificationInvalidCellError{id: cellID + "/override_immutable", cellID: cellID, message: "flow pair override changes immutable facts"}
+		}
 	}
 	return nil
+}
+
+func sameCertificationFlowOverrideFacts(base, override certificationFacts) bool {
+	return base.Applicable == override.Applicable &&
+		base.Declared == override.Declared &&
+		base.Implemented == override.Implemented &&
+		base.FixtureTested == override.FixtureTested &&
+		slices.Equal(base.FixtureEvidence, override.FixtureEvidence) &&
+		reflect.DeepEqual(base.NotApplicable, override.NotApplicable)
 }
 
 func validateRequiredCertificationSyncPrimitives(primitives map[string]certificationSyncPrimitive) error {
@@ -2236,8 +2250,16 @@ func certificationProofValue(proof certificationEvidenceProof) (any, error) {
 	if err != nil {
 		return nil, err
 	}
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
 	var value any
-	if err := decodeCertificationJSON(raw, &value); err != nil {
+	if err := decoder.Decode(&value); err != nil {
+		return nil, err
+	}
+	if err := decoder.Decode(&struct{}{}); err != io.EOF {
+		if err == nil {
+			return nil, errors.New("multiple JSON values")
+		}
 		return nil, err
 	}
 	return value, nil

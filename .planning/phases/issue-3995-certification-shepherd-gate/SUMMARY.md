@@ -67,3 +67,12 @@ relative, traversing, or symlinked roots, as well as help, block with an encoded
 `PROCEED` can exit zero. Focused correction-round verification passed for the complete
 `internal/agentcontract` and `cmd/agentcontractgen` packages, focused certification-generator
 tests/check, projection sync/check, and explicit all-four transition command tests.
+
+## Correction round 4
+
+The forbidden round-three direct dependency from `cmd/connectorgen/certification*.go` was removed.
+The unchanged producer remains the source of `flow-matrix.json`; `agentcontractgen sync/check`
+generates and verifies an importable flow-kind catalog for the consumer. Flow overrides preserve
+all immutable base facts, raw and override evidence bind before resolution, and proof comparisons
+retain JSON numbers without `float64` precision loss. Focused package, producer-matrix, catalog,
+and changed-path checks passed; the GitHub baseline remains the required deterministic `RETRY`.

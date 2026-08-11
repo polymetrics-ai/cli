@@ -75,3 +75,23 @@ child-PR publication remain pending.
       go run ./cmd/connectorgen certification-matrix --check
       go test -timeout 20m ./cmd/agentcontractgen -run '^TestRunCertificationGate(BlocksEveryProtectedTransition|RejectsUntrustedRootsForEveryTransition|HelpBlocksWithoutProceedVerdict)$' -count=1
       ```
+
+## Correction round 4 focused evidence
+
+- [x] No `cmd/connectorgen/certification*.go` path differs from the base; the unchanged producer
+      remains checked against `flow-matrix.json` by `connectorgen certification-matrix --check`.
+- [x] `agentcontractgen sync/check` generates and verifies the importable consumer flow-kind
+      catalog directly from that matrix, with no hand-maintained duplicate inventory.
+- [x] Overrides cannot promote immutable facts, every raw and override pointer is bound before
+      report derivation, and exact large JSON-number mismatches halt.
+- [x] Focused Green verification passed without full-suite, lint, CI, PR, provider, credential,
+      network, evidence-creation, or outer-pipeline work:
+
+      ```sh
+      go run ./cmd/agentcontractgen sync --root "$PWD"
+      go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen -count=1
+      go test -timeout 20m ./cmd/connectorgen -run '^(TestCertification|TestRunCertification)' -count=1
+      go run ./cmd/connectorgen certification-matrix --check
+      go run ./cmd/agentcontractgen check --root "$PWD"
+      git diff --check da7747a796049601a179a97c025bfb05f011f1e8
+      ```

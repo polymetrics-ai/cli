@@ -16,7 +16,7 @@
     "no_mistakes": "pending",
     "child_pr": "pending"
   },
-  "correction_rounds": 3,
+  "correction_rounds": 4,
   "correction_tracking": {
     "round": 1,
     "maximum_rounds": 5,
@@ -79,6 +79,31 @@
     "red_tests_authored_before_production_changes": true,
     "focused_verification": "go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen ./cmd/connectorgen -count=1; go run ./cmd/agentcontractgen sync; go run ./cmd/agentcontractgen check",
     "focused_verification_status": "passed",
+    "status": "code_remediated_review_verified_pending_outer_executor"
+  },
+  "correction_round_4": {
+    "round": 4,
+    "maximum_rounds": 5,
+    "children": [
+      {
+        "issue": 4028,
+        "scope": "immutable flow overrides and raw pair-set evidence binding"
+      },
+      {
+        "issue": 4024,
+        "scope": "precision-preserving semantic proof comparison"
+      }
+    ],
+    "finding_ids": [
+      "certification-forbidden-connectorgen-path",
+      "certification-flow-override-static-promotion",
+      "certification-flow-overridden-base-evidence-unbound",
+      "certification-proof-number-precision"
+    ],
+    "red_tests_authored_before_production_changes": true,
+    "focused_verification": "go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen -count=1; go test -timeout 20m ./cmd/connectorgen -run '^(TestCertification|TestRunCertification)' -count=1; go run ./cmd/connectorgen certification-matrix --check; go run ./cmd/agentcontractgen sync --root $PWD; go run ./cmd/agentcontractgen check --root $PWD; git diff --check da7747a796049601a179a97c025bfb05f011f1e8",
+    "focused_verification_status": "passed",
+    "changed_path_audit": "no cmd/connectorgen/certification*.go path differs from base",
     "status": "code_remediated_review_verified_pending_outer_executor"
   },
   "workflow_recovery": {
