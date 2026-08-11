@@ -41,7 +41,9 @@ PostgreSQL source ----+
                    GitHub Connector.Write        PostgreSQL Connector.Write
 ```
 
-DuckDB is the common materialization and query engine. The durable warehouse is a connection-owned JSONL WAL plus one derived Parquet file for each table.
+DuckDB is the common materialization and query engine. The local warehouse materialization contract
+is owned by the [`pm etl` reference](../cli/etl.md): a connection-owned JSONL WAL plus one derived
+Parquet file for each table.
 
 ## Responsibility boundaries
 
@@ -55,7 +57,11 @@ The shared engine owns canonical mode admission, checkpoint and resume behavior,
 
 ### Warehouse
 
-The warehouse owns the connection-scoped JSONL WAL, fsync before acknowledgement, DuckDB transformation and validation, one derived Parquet table file, atomic file replacement, row counts and content hashes, durable receipts, and readback for outbound plans.
+The warehouse owns the connection-scoped durable materialization boundary, fsync before
+acknowledgement, DuckDB transformation and validation, row counts and content hashes, durable
+receipts, and readback for outbound plans. Its storage format is owned by the
+[`pm etl` reference](../cli/etl.md): a JSONL WAL plus one derived Parquet table file with atomic
+file replacement.
 
 GitHub and PostgreSQL must not define their own meanings for overwrite, dedupe, upsert, or history.
 
@@ -66,14 +72,14 @@ GitHub and PostgreSQL must not define their own meanings for overwrite, dedupe, 
 3. Append the batch to the WAL and record its immutable workset identity.
 4. Fsync the WAL.
 5. Apply the selected canonical sync mode using DuckDB.
-6. Materialize the resulting single Parquet table file and atomically replace the prior file.
+6. Complete the canonical warehouse materialization by atomically replacing the resulting single Parquet table file.
 7. Write a warehouse receipt containing the connector, stream, sync mode, run and workset IDs, input/output counts, schema hash, content hash, and candidate checkpoint.
 8. Read the Parquet result back through DuckDB and validate it.
 9. Advance the source checkpoint only after the receipt and readback succeed.
 
 ## Warehouse-to-connector transaction
 
-1. Pin an immutable warehouse workset and reopen its connection-owned Parquet table.
+1. Pin the selected immutable warehouse workset and reopen its connection-owned Parquet table.
 2. Query it through DuckDB.
 3. Normalize the exact destination operations.
 4. Hash the complete plan.
@@ -92,8 +98,8 @@ This ordering ensures that checkpoints never advance ahead of durable data or de
 
 | Canonical mode | Shared warehouse behavior |
 | --- | --- |
-| `full_overwrite` | Build and validate one staged Parquet file, then atomically replace the active table file. |
-| `full_append` | Append the complete new snapshot to the WAL, rebuild the active table file from that WAL, then atomically replace it. |
+| `full_overwrite` | Use the canonical full-overwrite warehouse materialization: build and validate one staged Parquet file, then atomically replace the active table file. |
+| `full_append` | Use the canonical full-append warehouse materialization: append the complete new snapshot to the WAL, rebuild the active table file from that WAL, then atomically replace it. |
 | `incremental_append` | Append only records after the exact checkpoint and make replay idempotent through workset identity. |
 | `incremental_upsert` | Partition by primary key and retain the latest cursor/version, including tombstone behavior. |
 | `incremental_dedupe` | Fold input to one current non-deleted record per primary key. |
@@ -130,7 +136,14 @@ Also prove a consistent snapshot boundary, schema drift handling, bounded reads,
 
 ### Warehouse to PostgreSQL
 
-Implement a managed-target driver with strict ownership boundaries. It must pin the DuckDB workset, open a PostgreSQL delivery session, load an owned staging table, validate row counts and hashes, apply append/upsert/overwrite/dedupe in one transaction, store a remote receipt keyed by workset and plan hash, commit, read the target back, and only then advance the delivery checkpoint. Replaying the same workset must return the existing receipt or reproduce the same result without duplicate rows.
+F2 supplies the driver-neutral ownership and provisioning contract described in the
+[warehouse-mediation architecture](connector-architecture-v2-design.md#b71-database-warehouse-mediation);
+it does not provide a PostgreSQL driver, DDL, or write session. The future managed-target driver
+must pin the DuckDB workset, open a PostgreSQL delivery session, load an owned staging table,
+validate row counts and hashes, apply append/upsert/overwrite/dedupe in one transaction, store a
+remote receipt keyed by workset and plan hash, commit, read the target back, and only then advance
+the delivery checkpoint. Replaying the same workset must return the existing receipt or reproduce
+the same result without duplicate rows.
 
 ## Mode applicability
 
