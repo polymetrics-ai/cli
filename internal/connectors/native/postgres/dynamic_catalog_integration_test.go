@@ -33,6 +33,9 @@ const (
 	postgresCatalogAlphaSchema           = "catalog_alpha"
 	postgresCatalogBetaSchema            = "catalog_beta"
 	postgresCatalogUnsupportedSchema     = "catalog_unsupported"
+	postgresCatalogEmptySchema           = "catalog_empty"
+	postgresCatalogPrivilegesSchema      = "catalog_privileges"
+	postgresCatalogLimitedUser           = "pm_catalog_limited"
 )
 
 // TestPostgresDynamicTypedCatalogUsesLiveMetadata is deliberately a live
@@ -115,10 +118,37 @@ func TestPostgresDynamicTypedCatalogUsesLiveMetadata(t *testing.T) {
 	}
 	assertLegacyStream(t, legacy, postgresCatalogAlphaSchema+".accounts")
 
+	emptyConfig := postgresCatalogConfig(t, endpoint, postgresCatalogEmptySchema)
+	if _, err := connector.TypedCatalog(ctx, emptyConfig); !errors.Is(err, native.ErrUnsupportedCatalogShape) {
+		t.Fatal("PostgreSQL typed catalog did not fail closed for an eligible zero-column relation")
+	}
+	if _, err := connector.Catalog(ctx, emptyConfig); !errors.Is(err, native.ErrUnsupportedCatalogShape) {
+		t.Fatal("PostgreSQL compatibility catalog silently omitted an eligible zero-column relation")
+	}
+
+	limitedConfig := postgresCatalogLimitedConfig(t, endpoint, postgresCatalogPrivilegesSchema)
+	limited, err := connector.TypedCatalog(ctx, limitedConfig)
+	if err != nil {
+		t.Fatal("PostgreSQL typed catalog did not honor least-privilege discovery")
+	}
+	if len(limited.Relations()) != 1 {
+		t.Fatal("PostgreSQL typed catalog exposed inaccessible relations")
+	}
+	limitedVisible := catalogRelation(t, limited, postgresCatalogPrivilegesSchema, "visible")
+	assertTypedColumn(t, limitedVisible, "id", 1, false, "int4", nil, database.LogicalSignedInteger, 32, 0, 0, false)
+	assertCatalogOmitsRelation(t, limited, postgresCatalogPrivilegesSchema, "hidden")
+
 	unsupportedConfig := postgresCatalogConfig(t, endpoint, postgresCatalogUnsupportedSchema)
 	if _, err := connector.TypedCatalog(ctx, unsupportedConfig); !errors.Is(err, native.ErrUnsupportedCatalogShape) {
 		t.Fatal("PostgreSQL typed catalog did not reject an unsupported native type")
 	}
+}
+
+func postgresCatalogLimitedConfig(t *testing.T, endpoint dbtest.Endpoint, schema string) connectors.RuntimeConfig {
+	t.Helper()
+	config := postgresCatalogConfig(t, endpoint, schema)
+	config.Config["username"] = postgresCatalogLimitedUser
+	return config
 }
 
 func postgresCatalogConfig(t *testing.T, endpoint dbtest.Endpoint, schema string) connectors.RuntimeConfig {
@@ -182,6 +212,16 @@ func seedPostgresCatalogs(t *testing.T, ctx context.Context, source *pgx.Conn) {
 		"CREATE SCHEMA catalog_unsupported",
 		"CREATE TYPE catalog_unsupported.mood AS ENUM ('calm', 'storm')",
 		"CREATE TABLE catalog_unsupported.events (id integer PRIMARY KEY, mood catalog_unsupported.mood NOT NULL)",
+		"CREATE SCHEMA catalog_empty",
+		"CREATE TABLE catalog_empty.visible (id integer PRIMARY KEY)",
+		"CREATE TABLE catalog_empty.empty ()",
+		"CREATE SCHEMA catalog_privileges",
+		"CREATE TABLE catalog_privileges.visible (id integer PRIMARY KEY)",
+		"CREATE TYPE catalog_privileges.hidden_kind AS ENUM ('hidden')",
+		"CREATE TABLE catalog_privileges.hidden (id integer PRIMARY KEY, kind catalog_privileges.hidden_kind NOT NULL)",
+		"CREATE ROLE pm_catalog_limited LOGIN",
+		"GRANT USAGE ON SCHEMA catalog_privileges TO pm_catalog_limited",
+		"GRANT SELECT ON TABLE catalog_privileges.visible TO pm_catalog_limited",
 	}
 	for _, statement := range statements {
 		if _, err := source.Exec(ctx, statement); err != nil {

@@ -5,6 +5,9 @@ import (
 	"errors"
 	"strings"
 	"testing"
+	"time"
+
+	"github.com/jackc/pgx/v5"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/database"
@@ -104,6 +107,88 @@ func TestTypedCatalogHonorsCancelledContextBeforeConfiguration(t *testing.T) {
 	cancel()
 	if _, err := New().TypedCatalog(ctx, connectors.RuntimeConfig{}); !errors.Is(err, context.Canceled) {
 		t.Fatal("typed PostgreSQL catalog ignored a cancelled context")
+	}
+}
+
+func TestTypedCatalogResourcePolicyEnforcesDeclaredBounds(t *testing.T) {
+	policy := New().databaseDefinition.Resources()
+	resources, err := newTypedCatalogResources(policy)
+	if err != nil {
+		t.Fatalf("newTypedCatalogResources() error = %v", err)
+	}
+	if resources.poolSize != int32(policy.Pool.Default) {
+		t.Fatalf("catalog pool size = %d, want declared default %d", resources.poolSize, policy.Pool.Default)
+	}
+
+	conn, err := resolveConfig(connectors.RuntimeConfig{
+		Config: map[string]string{
+			"host":     "postgres.example",
+			"database": "analytics",
+			"username": "reader",
+			"sslmode":  "disable",
+		},
+		Secrets: map[string]string{"password": t.Name()},
+	})
+	if err != nil {
+		t.Fatalf("resolveConfig() error = %v", err)
+	}
+	poolConfig, err := conn.typedCatalogPoolConfig(resources)
+	if err != nil {
+		t.Fatalf("typedCatalogPoolConfig() error = %v", err)
+	}
+	if poolConfig.MaxConns != int32(policy.Pool.Default) {
+		t.Fatalf("catalog pool max connections = %d, want %d", poolConfig.MaxConns, policy.Pool.Default)
+	}
+	if poolConfig.ConnConfig.ConnectTimeout != policy.ConnectTimeout {
+		t.Fatalf("catalog connect timeout = %s, want %s", poolConfig.ConnConfig.ConnectTimeout, policy.ConnectTimeout)
+	}
+
+	before := time.Now()
+	operationCtx, cancel, err := resources.operationContext(context.Background())
+	if err != nil {
+		t.Fatalf("operationContext() error = %v", err)
+	}
+	defer cancel()
+	deadline, ok := operationCtx.Deadline()
+	if !ok || deadline.Before(before.Add(policy.OperationTimeout-time.Second)) || deadline.After(before.Add(policy.OperationTimeout+time.Second)) {
+		t.Fatal("catalog operation context did not retain the declared bounded timeout")
+	}
+
+	atMaximum := policy
+	atMaximum.Pool.Default = atMaximum.Pool.Maximum
+	maximumResources, err := newTypedCatalogResources(atMaximum)
+	if err != nil {
+		t.Fatalf("newTypedCatalogResources(maximum pool) error = %v", err)
+	}
+	maximumConfig, err := conn.typedCatalogPoolConfig(maximumResources)
+	if err != nil || maximumConfig.MaxConns != int32(atMaximum.Pool.Maximum) {
+		t.Fatal("catalog resource policy did not accept its declared pool boundary")
+	}
+
+	overPool := policy
+	overPool.Pool.Default = overPool.Pool.Maximum + 1
+	if _, err := newTypedCatalogResources(overPool); !errors.Is(err, errCatalogResourcePolicy) {
+		t.Fatalf("over-bound catalog pool policy error = %v, want typed refusal", err)
+	}
+	overOperation := policy
+	overOperation.OperationTimeout = time.Hour + time.Nanosecond
+	if _, err := newTypedCatalogResources(overOperation); !errors.Is(err, errCatalogResourcePolicy) {
+		t.Fatalf("over-bound catalog operation policy error = %v, want typed refusal", err)
+	}
+}
+
+func TestTypedCatalogQueriesRequireSelectPrivilege(t *testing.T) {
+	for _, query := range []string{typedCatalogRelationsSQL, typedCatalogColumnsSQL, typedCatalogKeysSQL} {
+		if !strings.Contains(query, "pg_catalog.has_table_privilege(c.oid, 'SELECT')") {
+			t.Fatal("typed catalog query did not limit discovery to relations with SELECT privilege")
+		}
+	}
+}
+
+func TestTypedCatalogSnapshotIsReadOnlyRepeatableRead(t *testing.T) {
+	options := typedCatalogTransactionOptions()
+	if options.IsoLevel != pgx.RepeatableRead || options.AccessMode != pgx.ReadOnly {
+		t.Fatal("typed catalog did not require one read-only repeatable-read snapshot")
 	}
 }
 
