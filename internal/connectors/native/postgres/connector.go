@@ -13,7 +13,7 @@
 // connectors.Connector directly: Check/Catalog/Read/Write are hand-written
 // Go, not derived from streams.json (there is none — this is a
 // capabilities.dynamic_schema bundle, since a database's tables are
-// discovered at runtime from information_schema, not declared ahead of
+// discovered at runtime from PostgreSQL's system catalogs, not declared ahead of
 // time). It still ships a defs bundle
 // (internal/connectors/defs/postgres/{metadata.json,spec.json,
 // api_surface.json,database.json,docs.md}) so identity/spec/docs stay uniform
@@ -28,8 +28,9 @@
 // Capabilities:
 //   - Check:   pgxpool connect + ping using host/port/database/username/
 //     sslmode and the password secret (connection.go/cataloger.go).
-//   - Catalog: discover tables and columns from information_schema and map
-//     each PostgreSQL data_type to a coarse Field type (cataloger.go).
+//   - Catalog: discover configured-schema base tables, ordered columns, keys,
+//     and supported native/logical types from pg_catalog (typed_catalog.go),
+//     then derive the legacy Field projection only for compatibility.
 //   - Read:    snapshot SELECT over a stream, with optional
 //     cursor-incremental filtering on a configurable cursor column
 //     (reader.go; see StatefulReader below).
@@ -56,6 +57,7 @@ import (
 	"context"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
@@ -68,6 +70,12 @@ import (
 // not declared in a streams.json.
 type Connector struct {
 	engine.Base
+
+	// databaseDefinition is the immutable #4034 database.json projection loaded
+	// with the same embedded bundle that supplies Base. Catalog discovery uses it
+	// directly so native/logical typing cannot become a second, disconnected
+	// PostgreSQL model.
+	databaseDefinition database.Definition
 }
 
 // New returns the PostgreSQL connector as a connectors.Connector, loading
@@ -81,7 +89,10 @@ func New() Connector {
 	if err != nil {
 		panic("native/postgres: failed to load defs/postgres bundle: " + err.Error())
 	}
-	return Connector{Base: engine.NewBase(b)}
+	if b.Database == nil {
+		panic("native/postgres: defs/postgres bundle is missing database.json")
+	}
+	return Connector{Base: engine.NewBase(b), databaseDefinition: *b.Database}
 }
 
 // Metadata overrides engine.Base's bundle-synthesized Metadata with the
@@ -92,7 +103,7 @@ func New() Connector {
 // Description/DisplayName wording, never capability semantics.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads. Read-only source."
+	m.Description = "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, and supports cursor-incremental reads. Read-only source."
 	// The bundle declares this too, but pin the native override to the same
 	// fail-closed state so this connector cannot accidentally advertise CDC
 	// while the executor remains unavailable.

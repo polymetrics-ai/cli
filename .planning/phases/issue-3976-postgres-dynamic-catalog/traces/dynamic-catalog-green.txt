@@ -1,0 +1,15 @@
+Command:
+
+go test -tags=databaseintegration -timeout 20m -count=1 ./internal/connectors/native/postgres -run '^TestPostgresDynamicTypedCatalogUsesLiveMetadata$' -v
+
+Result after implementation:
+
+=== RUN   TestPostgresDynamicTypedCatalogUsesLiveMetadata
+    dynamic_catalog_integration_test.go:45: database integration skipped: set POLYMETRICS_DATABASE_INTEGRATION=1 to run the PostgreSQL Podman proof
+--- SKIP: TestPostgresDynamicTypedCatalogUsesLiveMetadata (0.00s)
+PASS
+ok  	polymetrics.ai/internal/connectors/native/postgres	0.717s
+
+The regression now compiles against TypedCatalog and the named unsupported
+shape error. It did not start a container because the required direct local
+Podman endpoint and opt-in are absent; this is not a claim of live success.

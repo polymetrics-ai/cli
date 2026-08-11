@@ -176,6 +176,7 @@ func seedPostgresCatalogs(t *testing.T, ctx context.Context, source *pgx.Conn) {
 		"CREATE SCHEMA catalog_alpha",
 		"CREATE TABLE catalog_alpha.accounts (account_id bigint NOT NULL, total numeric(12,2) NOT NULL, occurred_at timestamptz(3) NOT NULL, body jsonb, PRIMARY KEY (account_id))",
 		"CREATE TABLE catalog_alpha.audit (event_id uuid NOT NULL, body jsonb NOT NULL, PRIMARY KEY (event_id))",
+		"CREATE VIEW catalog_alpha.accounts_view AS SELECT account_id FROM catalog_alpha.accounts",
 		"CREATE SCHEMA catalog_beta",
 		"CREATE TABLE catalog_beta.accounts (tenant_id integer NOT NULL, record_id integer NOT NULL, label varchar(42), occurred_at timestamp(3), PRIMARY KEY (tenant_id, record_id), UNIQUE (label))",
 		"CREATE SCHEMA catalog_unsupported",
@@ -202,10 +203,14 @@ func assertCatalogMatchesInformationSchema(t *testing.T, ctx context.Context, so
 		t.Fatal("typed PostgreSQL catalog did not retain the configured database identity")
 	}
 	rows, err := source.Query(ctx, `
-SELECT table_name, column_name, ordinal_position, is_nullable
-FROM information_schema.columns
-WHERE table_schema = $1
-ORDER BY table_name, ordinal_position`, schema)
+	SELECT columns.table_name, columns.column_name, columns.ordinal_position, columns.is_nullable
+FROM information_schema.columns AS columns
+JOIN information_schema.tables AS tables
+  ON tables.table_schema = columns.table_schema
+ AND tables.table_name = columns.table_name
+WHERE columns.table_schema = $1
+  AND tables.table_type = 'BASE TABLE'
+ORDER BY columns.table_name, columns.ordinal_position`, schema)
 	if err != nil {
 		t.Fatal("could not inspect PostgreSQL information_schema column metadata")
 	}
@@ -323,6 +328,7 @@ func assertAlphaTypedCatalog(t *testing.T, catalog database.Catalog) {
 
 	audit := catalogRelation(t, catalog, postgresCatalogAlphaSchema, "audit")
 	assertTypedColumn(t, audit, "event_id", 1, false, "uuid", nil, database.LogicalUUID, 0, 0, 0, false)
+	assertCatalogOmitsRelation(t, catalog, postgresCatalogAlphaSchema, "accounts_view")
 }
 
 func assertBetaTypedCatalog(t *testing.T, catalog database.Catalog) {
@@ -345,6 +351,15 @@ func catalogRelation(t *testing.T, catalog database.Catalog, schema, name string
 	}
 	t.Fatal("typed PostgreSQL catalog omitted an expected live relation")
 	return database.Relation{}
+}
+
+func assertCatalogOmitsRelation(t *testing.T, catalog database.Catalog, schema, name string) {
+	t.Helper()
+	for _, relation := range catalog.Relations() {
+		if relation.Ref.Schema.Name == schema && relation.Ref.Name == name {
+			t.Fatal("typed PostgreSQL catalog included a non-base relation")
+		}
+	}
 }
 
 func assertTypedColumn(t *testing.T, relation database.Relation, name string, ordinal int, nullable bool, nativeName string, modifiers []string, kind database.LogicalKind, bits uint8, precision, scale uint16, withTimezone bool) {
@@ -382,9 +397,13 @@ func assertKey(t *testing.T, relation database.Relation, name string, kind datab
 func assertLegacyStream(t *testing.T, catalog connectors.Catalog, name string) {
 	t.Helper()
 	for _, stream := range catalog.Streams {
-		if stream.Name == name {
-			return
+		if stream.Name != name {
+			continue
 		}
+		if strings.Join(stream.PrimaryKey, ",") != "account_id" || len(stream.Fields) != 4 || strings.Join([]string{stream.Fields[0].Type, stream.Fields[1].Type, stream.Fields[2].Type, stream.Fields[3].Type}, ",") != "integer,number,timestamp,object" {
+			t.Fatal("compatibility PostgreSQL catalog did not project the typed live relation")
+		}
+		return
 	}
 	t.Fatal("compatibility PostgreSQL catalog omitted its typed live relation")
 }

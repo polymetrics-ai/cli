@@ -41,9 +41,12 @@ Refs #3972
 
 ## Verification
 
-Pending implementation. The completed record will include RED/GREEN/REFACTOR
-evidence, focused and live PostgreSQL oracle tests, race/vet/build/repository
-gates, and no-mistakes result.
+RED is committed in `db7e06d36`. Focused PostgreSQL, database-foundation, and
+engine tests plus the PostgreSQL race test are green. The opt-in real Podman
+test compiles and skips visibly because no direct local endpoint or explicit
+integration opt-in is configured; this PR does not claim that live proof until
+one is available. The completed record will include final build/repository
+gates and no-mistakes results.
 
 ## Automated Review
 

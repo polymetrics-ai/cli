@@ -33,5 +33,18 @@ go test -timeout 20m -count=1 ./internal/connectors/native/postgres
 go test -race -timeout 20m -count=1 ./internal/connectors/native/postgres
 ```
 
-The exact live-harness command and independent-oracle assertions will be added
-with the test. Broader checks and their outcomes belong in `VERIFICATION.md`.
+GREEN proof so far:
+
+- `go test -timeout 20m -count=1 ./internal/connectors/native/postgres` — pass.
+- `go test -race -timeout 20m -count=1 ./internal/connectors/native/postgres` — pass.
+- `go vet ./internal/connectors/native/postgres` — pass.
+- `go test -timeout 20m -count=1 ./internal/connectors/database` and
+  `./internal/connectors/engine` — pass.
+- The exact live-harness regression now compiles and invokes its required
+  independent `information_schema` oracle, but skips before container startup:
+  this worker has no `POLYMETRICS_DATABASE_INTEGRATION=1` opt-in or explicit
+  `POLYMETRICS_PODMAN_ENDPOINT`. No live result is claimed until that direct
+  local target is provided. Its exact post-implementation output is retained in
+  `traces/dynamic-catalog-green.txt`.
+
+Broader checks and their outcomes belong in `VERIFICATION.md`.

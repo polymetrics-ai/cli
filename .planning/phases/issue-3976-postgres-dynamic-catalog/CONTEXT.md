@@ -75,3 +75,10 @@ history rewrite. Draft child PR #4065 targets exactly
 
 No credentialed configuration, raw DSN, raw SQL surface, or generic database
 write capability is introduced by this plan.
+
+The implementation scan found only these static PostgreSQL shapes: the
+existing `mode=fixture` catalog and test-only schema-creation/oracle SQL. Live
+`Catalog()` now projects one `TypedCatalog()` result and has no hard-coded
+table or field list. Existing CDC test setup and the unchanged unsupported
+`Write` method remain outside this child; no #3980/#3982/#3983/#3987 path was
+changed.

@@ -1,6 +1,6 @@
 # Overview
 
-Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and
+Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, and
 supports cursor-incremental reads on a configurable cursor column. PostgreSQL logical-replication
 change capture is deliberately planned, not executable: it requires PostgreSQL 14+ `pgoutput`
 protocol-v2 streaming, a bounded crash-recoverable per-transaction stage, `StreamAbort` discard,
