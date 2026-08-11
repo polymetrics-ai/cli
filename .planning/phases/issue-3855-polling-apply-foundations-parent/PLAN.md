@@ -43,9 +43,11 @@ Loaded skills:
 
 - `github-issue-first-delivery` for issue/PR topology and issue-first linkage;
 - `no-mistakes` for the required local gate.
+- `golang-documentation` for bounded phase-evidence accuracy; it does not authorize edits to
+  inherited #4015 architecture content.
 
-No Go, CLI, connector-runtime, website, or design skill applies: this seed changes only planning
-artifacts and does not describe or alter product behavior.
+No Go implementation, CLI, connector-runtime, website, or design skill applies: this seed changes
+only planning artifacts and does not describe or alter product behavior.
 
 ## Child acceptance ledger
 

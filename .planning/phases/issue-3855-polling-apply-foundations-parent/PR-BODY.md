@@ -40,8 +40,10 @@ reusable polling implementation. It does not complete or close #3856, #3857, #38
 ## Parent orchestration
 
 - State ledger: `.planning/phases/issue-3855-polling-apply-foundations-parent/`
-- Current canonical state: `issue_map`
-- Next state: `parent_draft_pr` after live draft PR creation and inspection evidence is recorded.
+- Current canonical state: `parent_draft_pr`
+- Verified draft: #4041 is open and draft with base `feat/3862-any-to-any-transport` and head
+  `feat/3855-polling-apply-foundations` at `4099335632a79e3c70ce20c004a5f63933171280`.
+- Next state: `map_wave_phase`; child implementation remains pending.
 - Worker mode: single-worker inline/manual GSD fallback; no roles were spawned.
 - Integration/merge: prohibited in this scaffold; final parent integration remains human-gated.
 
@@ -49,8 +51,11 @@ reusable polling implementation. It does not complete or close #3856, #3857, #38
 
 - GSD adapter and canonical delivery projection passed before the seed.
 - This diff is planning-only; no `cmd/` or `internal/` path is changed.
-- Remaining local gates, no-mistakes, and live `gh-axi` PR validation are recorded in the phase
-  ledger and will be updated before the draft PR is opened.
+- The terminal document commit from no-mistakes run `01KZPY9EBYX84WZM11EN1F6C83` was retained in
+  ancestry and whole-reverted; the accepted tree and protected #4015 architecture blob were
+  restored exactly.
+- Fresh no-mistakes validation is pending for this phase-only evidence commit. It must not alter
+  `docs/architecture/github-postgres-warehouse-certification.md`.
 
 ## Automated review
 
