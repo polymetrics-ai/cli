@@ -29,6 +29,15 @@ Rebase only final completion onto latest locked state when both conditions hold:
 
 The rebase may mutate only that run's terminal fields and that run's final stream/run metadata. It must preserve all winner and unrelated state, never replay destination work, never overwrite a checkpoint, never become a generic last-writer-wins refresh, preserve committed/indeterminate/definite-not-committed outcome truth, and retain the detectable error chain.
 
+## R2 post-acknowledgement error and missing-run defects
+
+The r2 Sol audit rejected candidate `3f84693bfbc128523a66e22653db7227fb9c0869` for two further manifestations at the same acknowledged boundary.
+
+1. `runTransportETL` receives a non-zero orchestrator result plus cancellation or a source error after the checkpoint callback has persisted. It returns `etlExecutionResult{}` with that error, so `RunETL` calls ordinary `failRun`. If a second App has already committed unrelated state, ordinary whole-state revision protection rejects the stale failure write: the returned run is zero and the durable run remains `running`.
+2. In an acknowledged latest-state completion rebase, an exact target run removed by the second App falls through to plain `run not found`. That error is not detectable as `errStateRevisionConflict` even though the operation must fail closed with no mutation.
+
+The repair must retain a witness only after a durable acknowledgement, terminalize the exact still-running target run only after matching its acknowledged stream, preserve the original post-ack error, and make the missing target typed. It must not make ordinary `failRun` stale-state tolerant.
+
 ## Scope
 
 - `internal/app` final-completion logic and focused package-local tests.

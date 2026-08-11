@@ -41,6 +41,19 @@
 | `website/lib/docs.generated.ts` | Regenerate only with its canonical generator. |
 | `internal/connectors/certifications/flow-matrix.json` | Regenerate only with its canonical certification-matrix generator. |
 
+## R2 Sol-audit continuation
+
+**Mode:** `discuss-phase --auto` inline/manual continuation. The complete Sol r2 handoff and the amended #4067 acceptance contract lock the decisions; the official numeric-phase lookup reports `phase_found: false`, so no lifecycle role may be spawned in this custody lane.
+
+| Area | Options considered | Selected |
+|---|---|---|
+| Post-ack error result | Discard the result and use ordinary `failRun`; retain a post-ack witness only for guarded failure finalization. | Retain only the acknowledged witness. |
+| Failure rebase scope | Generic stale-state refresh; exact stream/run guarded failure finalizer. | Exact acknowledged stream plus still-running run only. |
+| Missing target run | Return ordinary `run not found`; return typed revision conflict with no mutation. | Typed revision conflict and `Run{}`. |
+| RED evidence | Error-code-only tests; persisted two-App all-mode witnesses with reopen and apply-count assertions. | Persisted all-mode witnesses. |
+
+**Decision:** F1 and F2 are a narrow continuation of #4067. Preserve #4046, R7/R8, the winner checkpoint, unrelated state, and the existing #4059-only delivery lane.
+
 ## Deferred ideas
 
-None. Generic state refresh, checkpoint/CAS redesign, #4046 behavior changes, provider work, and merge remain out of scope.
+None. Generic state refresh, checkpoint/CAS redesign, #4046 behavior changes, provider work, generated-artifact expansion, and merge remain out of scope.

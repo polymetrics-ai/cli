@@ -1,7 +1,7 @@
 # #4067 — acknowledged transport completion rebase context
 
 **Gathered:** 2026-08-11
-**Status:** Ready for TDD planning and execution
+**Status:** R2 continuation ready for TDD RED
 **Issue:** [#4067](https://github.com/polymetrics-ai/cli/issues/4067)
 **Existing branch / PR:** `feat/3864-closed-transport-dispatch-nm5` / [#4059](https://github.com/polymetrics-ai/cli/pull/4059)
 
@@ -11,7 +11,7 @@ The GSD adapter and canonical contract were validated with `scripts/gsd doctor`,
 
 ## Phase boundary
 
-Repair only the successful terminal-completion aftermath of an already acknowledged transport checkpoint. A final completion may observe latest locked state only when the generated target run is still `running` and that target stream still exactly matches the checkpoint this run acknowledged. It may change only the target run's terminal fields and its own final stream/run metadata.
+Repair only the terminal aftermath of an already acknowledged transport checkpoint. Successful completion and post-acknowledgement error finalization may observe latest locked state only when the generated target run is still `running` and that target stream still exactly matches the checkpoint this run acknowledged. Completion may change only its target run's terminal fields and own final stream/run metadata; error finalization may change only the target run's failed terminal fields.
 
 The solution must preserve unrelated fields and concurrent writers, never replay destination apply, never retry or overwrite a checkpoint, never use a generic refresh/last-writer-wins path, and retain definite-not-committed, committed, and indeterminate state-store truth plus the original detectable error chain.
 
@@ -24,6 +24,10 @@ The solution must preserve unrelated fields and concurrent writers, never replay
 - **D-05:** Coverage must drive the exact post-checkpoint/pre-completion interleaving through `full_overwrite`, `full_append`, `incremental_append`, `incremental_upsert`, `incremental_dedupe`, `incremental_dedupe_history`, and `change_capture`, plus restart/reopen, cancellation after acknowledgement, race, and R7/R8 regression.
 - **D-06:** Generated artifacts are regenerated only through their canonical generators: `website/lib/docs.generated.ts` and `internal/connectors/certifications/flow-matrix.json`. No generated output is hand-edited.
 - **D-07:** Fresh #4067 correction budget is 0/5. Do not start or compete with a no-mistakes run until focused/local gates and review are complete; never use `--yes`; never control old run `01KZQ0C1KEZRHNXX4WJFWXSCFB`.
+- **D-08 (r2):** Acknowledgement is a durable witness even when the orchestrator subsequently returns an error. `runTransportETL` must preserve that witness only for post-ack errors so a dedicated, narrow failure finalizer can terminalize the exact still-running run after an unrelated revision. It must preserve the original cancellation or source-error chain and never broaden ordinary `failRun`.
+- **D-09 (r2):** An acknowledged rebase that cannot find its exact target run is a fail-closed revision conflict, not an ordinary `run not found`. It returns `Run{}` and leaves reopened state unchanged.
+- **D-10 (r2):** The behavioral RED is table-driven across all seven modes. Each post-ack cancellation case persists an unrelated write before release and proves one apply, preserved acknowledged/unrelated state, original error identity, and matching returned/reopened failed run. A representative post-ack source-error case follows the same path; missing-run coverage independently proves the typed chain in all modes.
+- **D-11 (r2):** Two correction loops have already been consumed. Only loops 3/5 through 5/5 are available, all without `--yes`; #4059 remains the sole draft stacked PR and #4068 remains closed/unmerged.
 
 ## Canonical references
 
@@ -31,6 +35,8 @@ The solution must preserve unrelated fields and concurrent writers, never replay
 - `/Users/karthiksivadas/karthik-agent-workspace/data/cli-transport-3864-final-sol-audit-r1/report.md` — F1 ordinary final-completion CAS witness and F2/F3 generated-drift findings.
 - `/Users/karthiksivadas/karthik-agent-workspace/data/cli-transport-3864-scope-gate-sol-r1/report.md` — candidate-scope disposition.
 - `/Users/karthiksivadas/karthik-agent-workspace/data/cli-transport-3864-r9-audit-r1/report.md` — #4046/R7/R8 causal boundary.
+- `/Users/karthiksivadas/karthik-agent-workspace/data/cli-transport-3864-r9-audit-r1/sol-audit-r2-correction-handoff.md` — controlling r2 F1/F2 correction route.
+- `/Users/karthiksivadas/karthik-agent-workspace/data/cli-transport-4067-final-sol-audit-r2/report.md` — independent F1/F2 witness, call path, and evidence-truth findings.
 - `.planning/phases/issue-4046-r9-stale-writer-finalization-r1/CONTEXT.md` and `TDD-LEDGER.md` — typed-conflict-only boundary to preserve.
 - `.planning/phases/issue-3864-closed-transport-dispatch-r1/CONTEXT.md`, `TDD-LEDGER.md`, and `VERIFICATION.md` — established transport and R7/R8 proof.
 - `internal/app/app.go` and `internal/app/transport_dispatch.go` — finalization and acknowledged-checkpoint boundary.
@@ -40,7 +46,7 @@ The solution must preserve unrelated fields and concurrent writers, never replay
 
 ## Expected code shape (to validate before GREEN)
 
-The Sol evidence locates the stale whole-state guard at normal `completeRun` finalization. Source inspection must identify the smallest way to bind final completion to the exact acknowledged checkpoint without changing `runTransportETL` CAS behavior. No design may introduce a generic App-wide state refresh or change the #4046 typed failure path.
+The r2 Sol evidence locates the stale whole-state guard on the post-error `failRun` path after `runTransportETL` discards its acknowledged witness, and it locates an untyped missing-run branch in `completeRunWithAcknowledgedTransportState`. Source inspection confirms the smallest repair: preserve a post-ack result across the orchestrator error; use a narrow acknowledged-failure finalizer guarded by the exact stream witness and `running` target; and wrap a missing rebased target in `errStateRevisionConflict`. No design may introduce a generic App-wide state refresh or change the #4046 typed failure path.
 
 ## Explicit non-goals
 

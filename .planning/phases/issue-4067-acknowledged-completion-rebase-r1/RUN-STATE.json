@@ -4,16 +4,17 @@
   "branch": "feat/3864-closed-transport-dispatch-nm5",
   "existing_pr": 4059,
   "pr_base": "feat/3862-any-to-any-transport",
-  "rejected_candidate": "883a86cf0040d559edcd4777413d1c2de20cd94a",
+  "rejected_candidate": "3f84693bfbc128523a66e22653db7227fb9c0869",
+  "prior_rejected_candidate": "883a86cf0040d559edcd4777413d1c2de20cd94a",
   "lifecycle": {
     "mode": "inline_manual_gsd_fallback",
     "reason": "The custom issue phase is absent from the archived numeric roadmap and repository custody forbids lifecycle-role spawning.",
-    "discuss_phase": "completed_auto",
-    "plan_phase_tdd": "completed_manual",
-    "execute_phase": "focused_transport_and_generated_outputs_completed",
-    "verify_work": "completed_manual_automated_acceptance",
-    "code_review": "completed_manual_standard",
-    "delivery_revalidation": "completed_local_no_mistakes_with_stacked_delivery_manual"
+    "discuss_phase": "r2_completed_auto_manual_fallback",
+    "plan_phase_tdd": "r2_planning_checkpoint_committed_before_red",
+    "execute_phase": "r2_red_pending",
+    "verify_work": "r2_pending",
+    "code_review": "r2_pending",
+    "delivery_revalidation": "r2_pending_existing_pr_only"
   },
   "skills": [
     "golang-how-to",
@@ -37,7 +38,7 @@
   ],
   "correction_ledger": {
     "issue": 4067,
-    "status": "two_completed_runs_existing_pr_delivery_pending",
+    "status": "two_completed_runs_r2_red_pending",
     "budget_used": 2,
     "budget_max": 5,
     "forbidden_flag": "--yes",
@@ -62,7 +63,7 @@
     "policy": "never run, respond, sync, abort, rerun, recover, or otherwise control"
   },
   "scope": {
-    "production_boundary": "transport final completion after an acknowledged checkpoint",
+    "production_boundary": "transport successful completion and narrow error finalization after an acknowledged checkpoint",
     "focused_tests": "internal/app package-local persisted-state transport tests",
     "generated_only_via_canonical_generators": [
       "website/lib/docs.generated.ts",

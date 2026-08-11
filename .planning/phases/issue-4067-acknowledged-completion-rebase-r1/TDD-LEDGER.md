@@ -2,7 +2,7 @@
 
 **Issue:** #4067
 **Starting candidate:** `883a86cf0040d559edcd4777413d1c2de20cd94a` (immutable rejected baseline)
-**Correction ledger:** 0/5 before no-mistakes begins
+**Correction ledger:** 2/5 consumed by prior #4067 delivery validation; r2 may use only loops 3/5 through 5/5, never `--yes`.
 **Safety:** local fake-backed JSON-state tests only; no provider, credential, network, warehouse, container, or external service.
 
 | ID | Requirement | RED command / expected failure | GREEN evidence | Status |
@@ -14,10 +14,12 @@
 | C5 | Cancellation after acknowledgement and before completion remains truthful. | Deterministic cancellation fixture. | `TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes` exits `0`: each mode retains the acknowledged checkpoint, returns/durably stores a failed run, and retains `errors.Is(err, context.Canceled)`. | Green |
 | C6 | Same interleaving is correct in all canonical modes. | Table-driven `full_overwrite`, `full_append`, `incremental_append`, `incremental_upsert`, `incremental_dedupe`, `incremental_dedupe_history`, `change_capture`. | C1/C5 cover every listed mode; focused set passes repeated normal and race runs. | Green |
 | C7 | #4046 typed-conflict-only behavior and R7/R8 per-stream CAS/source identity remain unchanged. | Existing focused regression commands. | Exact R7/R8 plus #4046-focused command exits `0`; the #4046 failure path remains separate from normal completion. | Green |
+| C8 | After acknowledgement, an unrelated persisted revision plus cancellation leaves the rejected r2 candidate with a zero returned run and a durable `running` record; GREEN returns a matching durable failed run while retaining `context.Canceled`, one apply, and exact acknowledged/unrelated state. | `go test -json -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes$'` must fail for the observed durable-running/zero-run symptom, not compilation. | Pending r2 RED. | Planned |
+| C9 | A representative post-ack source error follows the same guarded finalizer, preserving the source sentinel chain and one apply; a missing exact target run in every mode returns `Run{}` with `errStateRevisionConflict` detectable and no state mutation. | `go test -json -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportAcknowledgedFailurePreservesSourceError|TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes)$'` must fail because the current candidate loses the witness or returns untyped `run not found`. | Pending r2 RED. | Planned |
 
 ## Commit gates
 
-1. Planning evidence — this commit; no production paths.
-2. RED — test/evidence only, committed before production mutation; command must exit non-zero for the durable leak.
-3. GREEN — smallest final-completion implementation, passing matching test.
-4. Focused coverage/generator/review fixes only after their corresponding checks pass.
+1. R2 planning evidence — this commit; no production paths.
+2. R2 RED — test/evidence only, committed before production mutation; C8/C9 commands must exit non-zero for the durable symptom and missing typed chain.
+3. R2 GREEN — smallest acknowledged-error implementation, passing the matching C8/C9 commands.
+4. Focused coverage/review fixes only after their corresponding checks pass; generated artifacts remain out of the r2 production scope.

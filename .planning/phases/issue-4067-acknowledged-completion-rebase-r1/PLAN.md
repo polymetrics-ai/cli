@@ -10,6 +10,7 @@ type: tdd
 **Parent chain:** #3864 → #3862 → #4015
 **Stacked PR:** #4059 → `feat/3862-any-to-any-transport`
 **Starting rejected candidate (preserved):** `883a86cf0040d559edcd4777413d1c2de20cd94a`
+**R2 rejected candidate (preserved):** `3f84693bfbc128523a66e22653db7227fb9c0869`
 
 ## Manual GSD lifecycle
 
@@ -20,6 +21,8 @@ The issue phase is absent from the archived numeric roadmap and role spawning is
 3. `scripts/gsd prompt execute-phase issue-4067-acknowledged-completion-rebase-r1` — execution record and RED/GREEN commits in `EXECUTION.md`.
 4. `scripts/gsd prompt verify-work issue-4067-acknowledged-completion-rebase-r1` — goal-backward verifier evidence in `VERIFICATION.md` and `UAT.md`.
 5. `scripts/gsd prompt code-review issue-4067-acknowledged-completion-rebase-r1` — finding dispositions in `REVIEW.md`.
+
+On the r2 continuation, the `discuss-phase --auto` and `plan-phase --tdd` prompts were resolved again after #4067 was amended and the complete Sol r2 handoff was read. Both official phase lookups report `phase_found: false` for this named issue phase; the documented inline/manual fallback therefore updates this existing phase directory rather than spawning a role or creating a numeric-roadmap phase.
 
 ## Required skills
 
@@ -48,6 +51,22 @@ Make an acknowledged transport run complete truthfully despite an unrelated post
 6. Do not modify checkpoint CAS/retry or destination-apply behavior. If a minimal metadata propagation is demonstrably required, keep it transport-finalization-local and prove it does not change R7/R8 semantics.
 7. Re-run the RED test to green and commit the smallest coherent implementation and evidence update.
 
+## R2 RED — post-acknowledgement error finalization and missing target
+
+1. Before a production edit, add a persisted two-App all-seven-mode test that pauses after the real checkpoint callback, lets a second App persist only an unrelated stream/checkpoint/run, cancels the source context, and releases the source.
+2. The RED must fail by observing the actual durable symptom: `RunETL` returns `Run{}` while `errors.Is(err, context.Canceled)` remains true and reopen finds the original run still `running`. Before asserting that symptom, prove the acknowledged target stream and unrelated write are preserved and the destination applied exactly once.
+3. Add one representative post-ack source-error witness with the same unrelated revision, preserving a sentinel error identity, one apply, exact state preservation, returned/reopened failed-run identity, and no replay.
+4. Add an independent all-seven-mode completion witness that removes the exact target run after acknowledgement. It must initially fail because the current error does not satisfy `errors.Is(err, errStateRevisionConflict)`; it also proves `Run{}`, one apply, and unchanged reopened state.
+5. Commit the behavioral RED and its ledger evidence before touching `internal/app/app.go` or `internal/app/transport_dispatch.go`.
+
+## R2 GREEN — smallest acknowledged-error repair
+
+1. In `runTransportETL`, preserve a non-zero `etlExecutionResult` only if a real durable checkpoint acknowledgement exists before the orchestrator returns its error; pre-ack failures still return zero result.
+2. In the declared-transport `RunETL` error branch, use a dedicated acknowledged-failure finalizer only when that result carries the post-ack witness. All other errors continue through unmodified ordinary `failRun`.
+3. The dedicated finalizer reads locked current state through the existing state update path and mutates only the matching target run to `failed` when the current run is still `running` and the current stream exactly equals the captured acknowledged witness. It retains the acknowledged stream/checkpoint and every unrelated entry, returns the original error chain, and honors definite/committed/indeterminate outcomes without speculative runs.
+4. In `completeRunWithAcknowledgedTransportState`, wrap a missing target run as `errStateRevisionConflict` only when the rebase is an acknowledged rebase; preserve ordinary missing-run behavior elsewhere.
+5. Do not alter `failRun`, checkpoint CAS, destination apply, #4046 typed-conflict terminalization, or source identity. Re-run the exact RED commands to GREEN before broader coverage.
+
 ## Focused proof expansion
 
 - Run/reopen proof in all seven modes.
@@ -57,6 +76,7 @@ Make an acknowledged transport run complete truthfully despite an unrelated post
 - Returned run must match reopened durable terminal run and error chain must remain detectable.
 - Existing #4046 typed-conflict tests and R7/R8 identity/CAS suite must remain green.
 - Run focused interleaving tests under `-race` before heavier validation.
+- Repeat the r2 all-mode cancellation/unrelated, source-error, and missing-run selectors under `-race`; assert `applyCalls == 1` in every witness.
 
 ## Generated-artifact remediation
 
@@ -69,12 +89,12 @@ Use their documented check commands after generation. Inspect the resulting diff
 
 ## Ordered validation and delivery
 
-1. Focused RED → matching GREEN → repeat/interleaving/reopen/cancellation/all-seven-mode/race/R7-R8 tests.
+1. Focused r2 RED → matching GREEN → repeat/interleaving/reopen/cancellation/source-error/missing-run/all-seven-mode/race/R7-R8 tests.
 2. Before resource-heavy full repository validation, report exactly: `working: transport focused gates green; requesting heavy validation window`.
 3. Run GSD verifier, lint, generator checks, affected package tests, vet/build, and the required individual repository gates.
 4. Run manual GSD code review and disposition every finding.
-5. Confirm no active competing no-mistakes run, then start a fresh #4067 0/5 run without `--yes`; follow every synchronous return. Do not touch the immutable old run.
-6. Push only the existing branch normally and update only draft #4059. Do not merge, retarget, force-push, or open another PR.
+5. Confirm no active competing no-mistakes run, then use only loop 3/5, 4/5, or 5/5 for #4067 without `--yes`; follow every synchronous return. Do not touch the immutable old run.
+6. If the current no-mistakes help lacks a safe existing-stacked-PR route, run its local validation with push/PR/CI skipped and stop for Firstmate before any push or PR mutation. Otherwise update only draft #4059 through the documented safe existing-PR route. Do not merge, retarget, force-push, or open another PR.
 7. Wait for exact-head CI. On all green, report the immutable candidate SHA and request a fresh independent Sol audit.
 
 ## Success criteria
@@ -85,3 +105,4 @@ Use their documented check commands after generation. Inspect the resulting diff
 - All seven modes, cancellation, restart/reopen, race, #4046, and R7/R8 focused evidence pass.
 - Generated outputs are canonical-generator-only; no separate issue is created for them.
 - Fresh no-mistakes ledger remains at most 5 loops; #4059 stays draft and unmerged.
+- R2 post-ack cancellation after an unrelated revision and representative source error both return matching failed runs while preserving original error identity and exact current state; missing exact target run returns `Run{}` with `errStateRevisionConflict` detectable.
