@@ -3,7 +3,7 @@
 **Mode:** Manual deep review via the resolved `code-review` GSD prompt under
 the documented inline/manual-GSD fallback.
 
-**Result:** PASS — correction 2 / 5 verified locally.
+**Result:** PASS — correction 3 / 5 verified locally.
 
 ## Reviewed risks
 
@@ -19,6 +19,8 @@ the documented inline/manual-GSD fallback.
   `*warehouse.FaultError` when damaged ownership records hide a duplicate.
 - Parsed DuckDB replacement scans retain typed errors for quoted legal table
   names without SQL-name regex parsing.
+- A query reuses one immutable warehouse inventory across all bare views and
+  replacement scans, rather than rescanning per table name.
 - Action source identity reaches the current runner boundary without adding
   dispatch, provider writes, or a new approval lifecycle.
 
@@ -49,6 +51,18 @@ with `%w`. Focused app verification proves hidden-owner `FaultError`, selected
 healthy and unrelated reads, `_unattributed`, legal quoted names, omitted
 typed ambiguity, aggregate reads, and cancellation. Fixtures only write local
 warehouse data; no provider mutation or reverse-ETL behavior changed.
+
+## Correction 3 disposition — #4040
+
+R5 was legitimate: every bare view called `warehouse.FindTable`, which rescans
+the full warehouse inventory. The correction extracts the same fail-closed
+rules into `warehouse.TableResolver`, retains `FindTable` as its compatibility
+wrapper, and builds one immutable resolver at `QuerySQL` entry. The resolver is
+passed unchanged into view registration and the DuckDB replacement callback,
+so typed `FaultError` and `AmbiguousTableError` behavior remains attached to
+the same inventory. The RED two-table query built three snapshots; the focused
+race matrix proves one snapshot for multi-table and replacement-scan paths,
+alongside the inherited flow and warehouse behavior matrix.
 
 ## Baseline observations
 

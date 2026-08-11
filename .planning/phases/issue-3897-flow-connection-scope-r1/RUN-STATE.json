@@ -3,7 +3,7 @@
   "parent_issue": 3988,
   "branch": "feat/3897-flow-connection-scope",
   "base": "feat/3988-github-certification",
-  "status": "correction_2_focused_verification_complete_pending_no_mistakes",
+  "status": "correction_3_focused_verification_complete_pending_no_mistakes",
   "manual_gsd_fallback": {
     "used": true,
     "reason": "The active ROADMAP.md intentionally has no numbered phases and directs issue work to .planning/phases/<issue-or-phase>/; GSD phase-op cannot register issue-3897-flow-connection-scope-r1.",
@@ -23,6 +23,10 @@
     "golang-database",
     "golang-documentation",
     "golang-lint",
+    "golang-performance",
+    "golang-benchmark",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
     "no-mistakes"
   ],
   "tdd": {
@@ -32,9 +36,11 @@
     "correction_1_red": "TestFlowActionSourceReadsAllSelectedConnectionRows failed as expected: a 101-row selected acme source reached the action runner as 100 rows because public QueryTable treats Limit 0 as its 100-row default.",
     "correction_1_green": "focused app/flow/CLI verification passed: ReadActionSource delivered all 101 selected rows to successful and failed local runners, public QueryTable Limit 0 remained 100, and the failed runner recorded no success checkpoint",
     "correction_2_red": "TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision failed as expected: after a competing records owner record became unreadable, unscoped QuerySQL returned the healthy acme row instead of an undecided typed FaultError.",
-    "correction_2_green": "focused app verification passed: FindTable decides bare views, parsed replacement scans preserve the first original typed lookup error, hidden-owner collisions return FaultError, legal quoted names retain selected scope and omitted AmbiguousTableError, and local fixtures make no provider mutation"
+    "correction_2_green": "focused app verification passed: FindTable decides bare views, parsed replacement scans preserve the first original typed lookup error, hidden-owner collisions return FaultError, legal quoted names retain selected scope and omitted AmbiguousTableError, and local fixtures make no provider mutation",
+    "correction_3_red": "TestQuerySQLReusesOneWarehouseResolverPerQuery failed as expected: a selected two-table query built three resolver snapshots because view discovery and each bare view lookup separately scanned the warehouse.",
+    "correction_3_green": "focused race verification passed: one immutable TableResolver snapshot serves multi-table view registration and replacement-scan lookups while preserving typed faults, ambiguity, selected and unattributed reads, legal quoted names, action-source evidence, aggregates, and cancellation"
   },
-  "correction_rounds": 2,
+  "correction_rounds": 3,
   "verification": [
     "go test -timeout 20m ./internal/cli -run focused flow source selector tests -count=1",
     "go test -timeout 20m ./internal/app -run focused scoped-query/cancellation tests -count=1",
@@ -51,7 +57,9 @@
     "RED: go test -v -timeout 20m ./internal/cli -run ^TestFlowActionSourceReadsAllSelectedConnectionRows$ -count=1 (expected exit 1; action runner received 100 instead of 101 selected rows)",
     "GREEN: go test -v -timeout 20m ./internal/app ./internal/flow ./internal/cli -run ^(TestEnginePassesManifestSourceConnectionSelectors|TestFlowSourceConnectionSelectorsReadOnlyOwningRows|TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed|TestFlowActionSourceReadsAllSelectedConnectionRows)$ -count=1 (exit 0)",
     "RED: go test -v -timeout 20m ./internal/app -run ^TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision$ -count=1 (expected exit 1; unscoped query returned nil rather than FaultError)",
-    "GREEN: go test -v -timeout 20m ./internal/app -run ^(TestQuerySQLScopesConnectionOwnedAndUnattributedViews|TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept|TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision|TestQuerySQLBindsQuotedConnectionScopedWarehouseNames|TestWarehouseQueryIdentifierQuotingAndIdentityValidation|TestQuerySQLAggregatesOverParquetTables|TestQuerySQLHonorsCanceledContext)$ -count=1 (exit 0)"
+    "GREEN: go test -v -timeout 20m ./internal/app -run ^(TestQuerySQLScopesConnectionOwnedAndUnattributedViews|TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept|TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision|TestQuerySQLBindsQuotedConnectionScopedWarehouseNames|TestWarehouseQueryIdentifierQuotingAndIdentityValidation|TestQuerySQLAggregatesOverParquetTables|TestQuerySQLHonorsCanceledContext)$ -count=1 (exit 0)",
+    "RED: go test -json -timeout 20m ./internal/app -run ^TestQuerySQLReusesOneWarehouseResolverPerQuery$ -count=1 (expected exit 1; two-table query built three resolver snapshots)",
+    "GREEN: go test -race -json -p=1 -timeout 20m ./internal/app ./internal/flow ./internal/cli ./internal/warehouse -run focused correction-3 R1/R3/R4/aggregate/cancellation/warehouse matrix -count=1 (exit 0; outer static/lint gates remain pending)"
   ],
   "cleanup": {
     "temporary_roots": [

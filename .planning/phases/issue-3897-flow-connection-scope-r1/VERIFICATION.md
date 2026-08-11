@@ -1,6 +1,6 @@
 # #3897 Verification Checklist
 
-**Status:** Local GREEN verification complete with correction 2 / 5; pending
+**Status:** Local GREEN verification complete with correction 3 / 5; pending
 no-mistakes and external delivery gates.
 
 ## Required acceptance evidence
@@ -40,6 +40,16 @@ no-mistakes and external delivery gates.
 - [x] Correction 2 GREEN: DuckDB identifier quoting and warehouse identity
   rejection prevent identifier/path interpolation from accepting adversarial
   names.
+- [x] Correction 3 RED: one multi-table query performed three resolver
+  constructions, each scanning the warehouse inventory.
+- [x] Correction 3 GREEN: one immutable resolver snapshot serves view
+  registration and replacement scans while preserving typed fault and
+  ambiguity behavior.
+- [x] Correction 3 GREEN: the focused race matrix retains all R1 and R3/R4
+  coverage plus real-Parquet aggregate, cancellation, and warehouse snapshot
+  behavior.
+- [ ] Correction 3 static/lint gates remain owned by the outer pipeline and
+  were not run in this review phase.
 
 ## GSD/manual lifecycle record
 
@@ -89,4 +99,14 @@ Record each result and SHA in `RUN-STATE.json` after execution.
   the unscoped query returned nil rather than a typed ownership fault.
 - GREEN (exit 0): `go test -v -timeout 20m ./internal/app -run
   '^(TestQuerySQLScopesConnectionOwnedAndUnattributedViews|TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept|TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision|TestQuerySQLBindsQuotedConnectionScopedWarehouseNames|TestWarehouseQueryIdentifierQuotingAndIdentityValidation|TestQuerySQLAggregatesOverParquetTables|TestQuerySQLHonorsCanceledContext)$'
+  -count=1` passed.
+
+## Correction 3 command record
+
+- RED (exit 1): `go test -json -timeout 20m ./internal/app -run
+  '^TestQuerySQLReusesOneWarehouseResolverPerQuery$' -count=1`; the
+  two-table query built three resolver snapshots.
+- GREEN (exit 0): `go test -race -json -p=1 -timeout 20m ./internal/app
+  ./internal/flow ./internal/cli ./internal/warehouse -run
+  '^(TestEnginePassesManifestSourceConnectionSelectors|TestFlowSourceConnectionSelectorsReadOnlyOwningRows|TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed|TestFlowActionSourceReadsAllSelectedConnectionRows|TestQuerySQLScopesConnectionOwnedAndUnattributedViews|TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept|TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision|TestQuerySQLBindsQuotedConnectionScopedWarehouseNames|TestQuerySQLReusesOneWarehouseResolverPerQuery|TestQuerySQLReusesWarehouseResolverForReplacementScans|TestWarehouseQueryIdentifierQuotingAndIdentityValidation|TestQuerySQLAggregatesOverParquetTables|TestQuerySQLHonorsCanceledContext|TestFindTableReportsAmbiguityInsteadOfPickingAWinner|TestDamagedRecordCannotDecideWhichConnectionAnUnscopedReadReturns)$'
   -count=1` passed.

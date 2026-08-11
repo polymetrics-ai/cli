@@ -1,7 +1,7 @@
 # #3897 TDD Ledger
 
-**Status:** GREEN verified locally; correction 2 / 5 applied; delivery/checkpoint gates pending.
-**Correction rounds:** 2 / 5
+**Status:** GREEN verified locally; correction 3 / 5 applied; delivery/checkpoint gates pending.
+**Correction rounds:** 3 / 5
 
 | Slice | Red evidence | Green evidence | Refactor / result |
 |---|---|---|---|
@@ -11,6 +11,7 @@
 | 4. Public proof | **RED:** before implementation, the first focused flow test could not select either owner. | **GREEN:** a freshly built binary materialized same-named rows, ran a `connection: "acme"` flow query whose SQL fails if the wrong row is visible, and asserted returned `acme`/`globex` query rows. | Runtime help/manual, website docs, and three golden help surfaces document manifest syntax only; no flow CLI flag was added. |
 | 5. Correction 1 — complete action source | **RED 2026-08-11:** `go test -v -timeout 20m ./internal/cli -run '^TestFlowActionSourceReadsAllSelectedConnectionRows$' -count=1` failed: each action runner received 100 rather than 101 selected `acme` rows, while `App.QueryTable(..., Limit: 0)` correctly remained capped at 100. | **GREEN 2026-08-11:** focused app/flow/CLI verification passed; successful and locally failed action attempts each received all 101 selected rows, and only the failed attempt lacked a success checkpoint. | `ActionSourceReadRequest` has no limit; `ReadActionSource` is used only by the flow action adapter, while public `QueryTable` retains its 100-row default. |
 | 6. Correction 2 — fault-aware quoted DuckDB bindings | **RED 2026-08-11:** `go test -v -timeout 20m ./internal/app -run '^TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision$' -count=1` failed because unscoped `records` returned success after a competing owner record became unreadable. | **GREEN 2026-08-11:** focused app verification passes the hidden-owner refusal, selected and `_unattributed` reads, quoted `1orders`/`orders-2026`/`orders.2026` reads, typed omitted ambiguity, aggregate, and cancellation paths. | Bare views use `warehouse.FindTable`; the pinned parsed-table replacement callback preserves the first original typed lookup error, and DuckDB identifiers quote embedded double quotes. |
+| 7. Correction 3 — one resolver per query | **RED 2026-08-11:** `TestQuerySQLReusesOneWarehouseResolverPerQuery` failed with three resolver builds for two selected tables, proving repeated full inventory scans. | **GREEN 2026-08-11:** the focused race matrix passes one-snapshot multi-table and replacement-scan tests together with all R1/R3/R4, aggregate, cancellation, and warehouse fault coverage. | `warehouse.TableResolver` captures immutable tables/faults once, indexes names, and supplies all query view and callback resolution; `FindTable` delegates to the same rules. |
 
 ## Red: required first executable test
 
@@ -88,3 +89,16 @@ bare view after the competing `globex/records` owner record became unreadable.
 `RegisterReplacementScan` callback receives parsed logical table names and
 preserves the first `FaultError` or `AmbiguousTableError` with `%w`. The local
 fixtures write only warehouse Parquet data and do not mutate a provider.
+
+## Correction 3 — #4040 resolver reuse
+
+**RED:** `go test -json -timeout 20m ./internal/app -run
+'^TestQuerySQLReusesOneWarehouseResolverPerQuery$' -count=1` failed with
+`warehouse resolver builds = 3, want one inventory snapshot per query`.
+
+**GREEN:** the focused race matrix passed with one resolver build for a
+two-table query and one resolver build when an omitted duplicate enters the
+replacement scan. The resolver's direct warehouse test retains undecided
+faults, explicit selection, unaffected healthy tables, and immutable snapshot
+visibility; the existing action source, scope, ambiguity, quoted-name,
+aggregate, and cancellation tests remain green.

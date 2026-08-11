@@ -352,6 +352,63 @@ func TestQuerySQLBindsQuotedConnectionScopedWarehouseNames(t *testing.T) {
 	}
 }
 
+func TestQuerySQLReusesOneWarehouseResolverPerQuery(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("query_sql_resolver_snapshot", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "orders", []warehouse.Row{{"id": "order-1"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "customers", []warehouse.Row{{"id": "customer-1"}})
+
+	resolverBuilds := 0
+	engine := duckdbEngine{
+		warehouseDir: warehouseDir,
+		newTableResolver: func(root string) (*warehouse.TableResolver, error) {
+			resolverBuilds++
+			return warehouse.NewTableResolver(root)
+		},
+	}
+	rows, err := engine.QuerySQL(ctx, QuerySQLRequest{
+		SQL:        "SELECT orders.id AS order_id, customers.id AS customer_id FROM orders CROSS JOIN customers",
+		Connection: "acme",
+	})
+	if err != nil {
+		t.Fatalf("QuerySQL(multiple tables) error = %v", err)
+	}
+	if len(rows) != 1 || toComparableString(rows[0]["order_id"]) != "order-1" || toComparableString(rows[0]["customer_id"]) != "customer-1" {
+		t.Fatalf("QuerySQL(multiple tables) rows = %v, want joined acme rows", rows)
+	}
+	if resolverBuilds != 1 {
+		t.Fatalf("warehouse resolver builds = %d, want one inventory snapshot per query", resolverBuilds)
+	}
+}
+
+func TestQuerySQLReusesWarehouseResolverForReplacementScans(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("query_sql_replacement_snapshot", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "shared", []warehouse.Row{{"id": "acme-shared"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "globex", "shared", []warehouse.Row{{"id": "globex-shared"}})
+
+	resolverBuilds := 0
+	engine := duckdbEngine{
+		warehouseDir: warehouseDir,
+		newTableResolver: func(root string) (*warehouse.TableResolver, error) {
+			resolverBuilds++
+			return warehouse.NewTableResolver(root)
+		},
+	}
+	_, err := engine.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM shared"})
+	var ambiguous *warehouse.AmbiguousTableError
+	if !errors.As(err, &ambiguous) {
+		t.Fatalf("QuerySQL(shared) error = %T %v, want *warehouse.AmbiguousTableError", err, err)
+	}
+	if resolverBuilds != 1 {
+		t.Fatalf("warehouse resolver builds = %d, want one inventory snapshot per query", resolverBuilds)
+	}
+}
+
 func TestWarehouseQueryIdentifierQuotingAndIdentityValidation(t *testing.T) {
 	for _, tc := range []struct {
 		name string

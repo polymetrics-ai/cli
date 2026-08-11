@@ -29,7 +29,8 @@ func newSQLEngine(a *App) sqlQueryEngine {
 // an in-memory DuckDB instance. It is stateless: each query opens a fresh
 // connection and registers per-query views over the current warehouse files.
 type duckdbEngine struct {
-	warehouseDir string
+	warehouseDir     string
+	newTableResolver func(string) (*warehouse.TableResolver, error)
 }
 
 func (e duckdbEngine) Name() string { return "duckdb" }
@@ -74,14 +75,18 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, req QuerySQLRequest) ([]conn
 	if err := validateSelectOnly(req.SQL); err != nil {
 		return nil, err
 	}
+	resolver, err := e.tableResolver()
+	if err != nil {
+		return nil, err
+	}
 
-	db, lookupError, err := e.openScopedDuckDB(req.Connection)
+	db, lookupError, err := e.openScopedDuckDB(req.Connection, resolver)
 	if err != nil {
 		return nil, fmt.Errorf("open duckdb: %w", err)
 	}
 	defer db.Close()
 
-	if err := e.registerViews(ctx, db, req.Connection); err != nil {
+	if err := e.registerViews(ctx, db, req.Connection, resolver); err != nil {
 		return nil, err
 	}
 
@@ -126,11 +131,13 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, req QuerySQLRequest) ([]conn
 	return out, nil
 }
 
-func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB, connection string) error {
-	tables, _, err := warehouse.Tables(e.warehouseDir)
-	if err != nil {
-		return err
-	}
+func (e duckdbEngine) registerViews(
+	ctx context.Context,
+	db *sql.DB,
+	connection string,
+	resolver *warehouse.TableResolver,
+) error {
+	tables := resolver.Tables()
 	byName := make(map[string][]warehouse.Table, len(tables))
 	for _, table := range tables {
 		if !querySelectsConnection(connection, table.Connection) {
@@ -144,7 +151,7 @@ func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB, connection 
 	}
 	sort.Strings(names)
 	for _, name := range names {
-		table, findErr := warehouse.FindTable(e.warehouseDir, name, connection)
+		table, findErr := resolver.Find(name, connection)
 		if findErr == nil {
 			if err := registerWarehouseView(ctx, db, name, table); err != nil {
 				return err
@@ -167,7 +174,17 @@ func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB, connection 
 	return nil
 }
 
-func (e duckdbEngine) openScopedDuckDB(connection string) (*sql.DB, func() error, error) {
+func (e duckdbEngine) tableResolver() (*warehouse.TableResolver, error) {
+	if e.newTableResolver != nil {
+		return e.newTableResolver(e.warehouseDir)
+	}
+	return warehouse.NewTableResolver(e.warehouseDir)
+}
+
+func (e duckdbEngine) openScopedDuckDB(
+	connection string,
+	resolver *warehouse.TableResolver,
+) (*sql.DB, func() error, error) {
 	connector, err := duckdb.NewConnector("", nil)
 	if err != nil {
 		return nil, nil, err
@@ -175,7 +192,7 @@ func (e duckdbEngine) openScopedDuckDB(connection string) (*sql.DB, func() error
 	var lookupMu sync.Mutex
 	var firstLookupErr error
 	duckdb.RegisterReplacementScan(connector, func(tableName string) (string, []any, error) {
-		table, err := warehouse.FindTable(e.warehouseDir, tableName, connection)
+		table, err := resolver.Find(tableName, connection)
 		if err != nil {
 			lookupMu.Lock()
 			if firstLookupErr == nil {

@@ -4,7 +4,7 @@
 **Parent:** #3988  
 **Branch:** `feat/3897-flow-connection-scope` from `feat/3988-github-certification`  
 **PR base:** exactly `feat/3988-github-certification`  
-**Status:** GREEN verified locally through correction 2 / 5 — pending the
+**Status:** GREEN verified locally through correction 3 / 5 — pending the
 required no-mistakes, push, draft-PR, and CI handoff gates
 
 ## Delivery mode
@@ -20,7 +20,8 @@ forbids spawning GSD roles.
 Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-stretchr-testify`, `golang-error-handling`, `golang-security`,
 `golang-safety`, `golang-context`, `golang-database`, `golang-documentation`,
-`golang-lint`, and `no-mistakes`.
+`golang-lint`, `golang-performance`, `golang-benchmark`,
+`golang-design-patterns`, `golang-structs-interfaces`, and `no-mistakes`.
 
 ## Scope
 
@@ -127,6 +128,22 @@ callback retains the first original lookup error and the query wraps it with
 `*warehouse.FaultError`, explicit healthy selection and unrelated tables still
 succeed, quoted legal names bind to their selected owner, and omitted quoted
 duplicates retain `*warehouse.AmbiguousTableError` without provider mutation.
+
+### Correction 3 — #4040 per-query warehouse resolver
+
+**Red:** `TestQuerySQLReusesOneWarehouseResolverPerQuery` builds two selected
+warehouse tables and records three inventory snapshots for one DuckDB query:
+one for view discovery and one fresh scan for each bare view lookup.
+
+**Green:** Extract the fail-closed `FindTable` rules into an immutable
+`warehouse.TableResolver` snapshot, preserve `FindTable` as its one-scan
+compatibility entry point, and pass a single resolver to both view registration
+and the parsed replacement-scan callback.
+
+**Result:** GREEN. The multi-table and replacement-scan regressions each see
+one snapshot while preserving selected, omitted, `_unattributed`, quoted-name,
+fault, and ambiguity behavior; no manifest, provider, reverse-ETL, or public
+table-limit surface changes.
 
 ## Required verification
 
