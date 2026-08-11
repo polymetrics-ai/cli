@@ -177,10 +177,19 @@ func TestTypedCatalogResourcePolicyEnforcesDeclaredBounds(t *testing.T) {
 	}
 }
 
-func TestTypedCatalogQueriesRequireSelectPrivilege(t *testing.T) {
+func TestTypedCatalogQueriesRequireExecutableReadAuthorization(t *testing.T) {
 	for _, query := range []string{typedCatalogRelationsSQL, typedCatalogColumnsSQL, typedCatalogKeysSQL} {
-		if !strings.Contains(query, "pg_catalog.has_table_privilege(c.oid, 'SELECT')") {
-			t.Fatal("typed catalog query did not limit discovery to relations with SELECT privilege")
+		for _, predicate := range []string{
+			"pg_catalog.has_schema_privilege(n.oid, 'USAGE')",
+			"pg_catalog.has_table_privilege(c.oid, 'SELECT')",
+			"OR NOT EXISTS (",
+			"pg_catalog.has_column_privilege(c.oid, readable_attribute.attnum, 'SELECT')",
+			"readable_attribute.attnum > 0",
+			"NOT readable_attribute.attisdropped",
+		} {
+			if !strings.Contains(query, predicate) {
+				t.Fatalf("typed catalog query did not require executable SELECT * authorization: %q", predicate)
+			}
 		}
 	}
 }

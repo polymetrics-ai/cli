@@ -27,6 +27,20 @@ var (
 	errTypedCatalogFixtureMode = errors.New("postgres typed catalog is unavailable in fixture mode")
 )
 
+const typedCatalogReadAuthorizationSQL = `
+  AND pg_catalog.has_schema_privilege(n.oid, 'USAGE')
+  AND (
+    pg_catalog.has_table_privilege(c.oid, 'SELECT')
+    OR NOT EXISTS (
+      SELECT 1
+      FROM pg_catalog.pg_attribute AS readable_attribute
+      WHERE readable_attribute.attrelid = c.oid
+        AND readable_attribute.attnum > 0
+        AND NOT readable_attribute.attisdropped
+        AND NOT pg_catalog.has_column_privilege(c.oid, readable_attribute.attnum, 'SELECT')
+    )
+  )`
+
 const typedCatalogRelationsSQL = `
 SELECT n.nspname,
        c.relname,
@@ -35,8 +49,7 @@ FROM pg_catalog.pg_class AS c
 JOIN pg_catalog.pg_namespace AS n
   ON n.oid = c.relnamespace
 WHERE n.nspname = $1
-  AND c.relkind IN ('r', 'p')
-  AND pg_catalog.has_table_privilege(c.oid, 'SELECT')
+  AND c.relkind IN ('r', 'p')` + typedCatalogReadAuthorizationSQL + `
 ORDER BY n.nspname, c.relname, c.oid`
 
 const typedCatalogColumnsSQL = `
@@ -61,8 +74,7 @@ JOIN pg_catalog.pg_type AS t
 LEFT JOIN pg_catalog.pg_collation AS coll
   ON coll.oid = a.attcollation
 WHERE n.nspname = $1
-  AND c.relkind IN ('r', 'p')
-  AND pg_catalog.has_table_privilege(c.oid, 'SELECT')
+  AND c.relkind IN ('r', 'p')` + typedCatalogReadAuthorizationSQL + `
   AND a.attnum > 0
   AND NOT a.attisdropped
 ORDER BY n.nspname, c.relname, a.attnum`
@@ -86,8 +98,7 @@ JOIN pg_catalog.pg_attribute AS a
   ON a.attrelid = c.oid
  AND a.attnum = key_column.attnum
 WHERE n.nspname = $1
-  AND c.relkind IN ('r', 'p')
-  AND pg_catalog.has_table_privilege(c.oid, 'SELECT')
+  AND c.relkind IN ('r', 'p')` + typedCatalogReadAuthorizationSQL + `
   AND con.contype IN ('p', 'u')
 ORDER BY n.nspname, c.relname, con.conname, key_column.ordinality`
 
