@@ -859,6 +859,86 @@ func TestFlowCaseVariantBareTableAmbiguity(t *testing.T) {
 	}
 }
 
+func TestFlowCaseEquivalentUniqueTablesPreserveGenericSQLAndTypedAmbiguity(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowCaseEquivalentUniqueWarehouseApp(t, ctx)
+
+	for _, test := range []struct {
+		name       string
+		connection string
+		table      string
+		wantID     string
+	}{
+		{name: "acme lower-case table", connection: "acme", table: "records", wantID: "acme-case-unique"},
+		{name: "globex upper-case table", connection: "globex", table: "RECORDS", wantID: "globex-case-unique"},
+	} {
+		t.Run("selected "+test.name, func(t *testing.T) {
+			records, err := a.QuerySQL(ctx, app.QuerySQLRequest{
+				SQL:        "SELECT id FROM " + test.table,
+				Connection: test.connection,
+			})
+			require.NoError(t, err)
+			require.Len(t, records, 1)
+			assert.Equal(t, test.wantID, fmt.Sprint(records[0]["id"]))
+		})
+	}
+
+	t.Run("unrelated generic SQL remains executable", func(t *testing.T) {
+		records, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: "SELECT 1 AS n"})
+		require.NoError(t, err)
+		require.Len(t, records, 1)
+		assert.Equal(t, "1", fmt.Sprint(records[0]["n"]))
+	})
+
+	assertRejected := func(t *testing.T, name, sql string) {
+		t.Helper()
+		checkpoints := &flow.FileCheckpointStore{Dir: t.TempDir()}
+		adapter := &recordingFlowAppAdapter{app: a}
+		engine := &flow.Engine{
+			Manifest: flow.FlowManifest{
+				Version: 1,
+				Name:    name,
+				Steps: []flow.FlowStep{{
+					ID:   "query-records",
+					Kind: flow.KindQuery,
+					SQL:  sql,
+					In:   []string{},
+					Out:  []string{},
+				}},
+			},
+			App:        adapter,
+			Checkpoint: checkpoints,
+			LockDir:    t.TempDir(),
+		}
+
+		result, err := engine.Run(ctx, flow.RunOptions{})
+		require.Error(t, err)
+		var ambiguous *warehouse.AmbiguousTableError
+		require.Truef(t, errors.As(err, &ambiguous), "error = %T %v", err, err)
+		assert.Equal(t, "records", ambiguous.Table)
+		assert.Contains(t, err.Error(), "set `connection` in flow query step")
+		assert.Equal(t, "failed", result.Status)
+		require.Len(t, result.Steps, 1)
+		assert.Equal(t, "failed", result.Steps[0].Status)
+		assert.Empty(t, adapter.lastRows)
+		checkpoint, checkpointErr := checkpoints.Get(name, "query-records")
+		require.NoError(t, checkpointErr)
+		assert.Empty(t, checkpoint)
+	}
+
+	for _, test := range []struct {
+		name string
+		sql  string
+	}{
+		{name: "unquoted lower-case", sql: "SELECT id FROM records"},
+		{name: "quoted upper-case", sql: "SELECT id FROM \"RECORDS\""},
+	} {
+		t.Run("omitted flow "+test.name, func(t *testing.T) {
+			assertRejected(t, "case-equivalent-unique-"+test.name, test.sql)
+		})
+	}
+}
+
 func TestFlowActionSourceReadsAllSelectedConnectionRows(t *testing.T) {
 	ctx := testCtx(t)
 	a := newFlowScopedWarehouseApp(t, ctx)
@@ -1084,6 +1164,68 @@ func newFlowScopedWarehouseApp(t *testing.T, ctx context.Context) *app.App {
 			"updated_at": "2026-08-11T00:00:00Z",
 		}
 		require.NoError(t, warehouse.WriteTable(ctx, path, []warehouse.Row{row}))
+	}
+	return a
+}
+
+func newFlowCaseEquivalentUniqueWarehouseApp(t *testing.T, ctx context.Context) *app.App {
+	t.Helper()
+	root := t.TempDir()
+	initProject(t, root)
+	a, err := app.Open(root)
+	require.NoError(t, err)
+
+	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+	_, err = a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "warehouse-local",
+		Connector: "warehouse",
+		Config:    map[string]string{"path": warehouseDir},
+	})
+	require.NoError(t, err)
+
+	for _, spec := range []struct {
+		name  string
+		table string
+	}{
+		{name: "acme", table: "records"},
+		{name: "globex", table: "RECORDS"},
+	} {
+		_, err := a.CreateConnection(ctx, app.CreateConnectionRequest{
+			Name: spec.name,
+			Source: app.EndpointConfig{
+				Connector:  "warehouse",
+				Credential: "warehouse-local",
+			},
+			Destination: app.EndpointConfig{
+				Connector:  "warehouse",
+				Credential: "warehouse-local",
+			},
+			Streams: map[string]app.StreamConfig{
+				"records": {
+					SyncMode:         "incremental_append_deduped",
+					CursorField:      "updated_at",
+					PrimaryKey:       []string{"id"},
+					DestinationTable: spec.table,
+				},
+			},
+		})
+		require.NoError(t, err)
+	}
+
+	for _, connection := range a.ListConnections() {
+		table, rowID := "records", "acme-case-unique"
+		if connection.Name == "globex" {
+			table, rowID = "RECORDS", "globex-case-unique"
+		}
+		location, err := warehouse.LocationFor(warehouseDir, "flow_scope", "warehouse", connection.ID, connection.Name)
+		require.NoError(t, err)
+		require.NoError(t, location.EnsureOwnership())
+		path, err := location.TablePath(table)
+		require.NoError(t, err)
+		require.NoError(t, warehouse.WriteTable(ctx, path, []warehouse.Row{{
+			"id":         rowID,
+			"updated_at": "2026-08-12T00:00:00Z",
+		}}))
 	}
 	return a
 }

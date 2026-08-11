@@ -6,7 +6,7 @@
   "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "required_base_branch": "feat/3897-flow-connection-scope-nm",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "planning_complete_ready_for_strict_red",
+  "status": "strict_red_recorded_ready_for_green",
   "correction_budget": {
     "used_before": 0,
     "limit": 5,
@@ -51,7 +51,7 @@
   "results": {
     "immutable_head_gate": "passed",
     "no_mistakes_doctor": "passed",
-    "red": "pending",
+    "red": "passed: targeted real Parquet/DuckDB test exited 1 with the audited duplicate-view error while selected owner reads passed",
     "green": "pending",
     "targeted_commit": "pending",
     "cpu_gate": "awaiting targeted correction"

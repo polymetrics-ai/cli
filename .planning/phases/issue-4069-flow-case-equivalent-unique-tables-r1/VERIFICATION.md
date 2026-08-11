@@ -4,9 +4,9 @@
 
 ## Acceptance evidence
 
-- [ ] The RED fixture creates `acme/records` and `globex/RECORDS` with one
+- [x] The RED fixture creates `acme/records` and `globex/RECORDS` with one
       distinct row per exact unique spelling.
-- [ ] Scoped acme and globex reads return only their own records.
+- [x] Scoped acme and globex reads return only their own records.
 - [ ] Generic `SELECT 1` succeeds after GREEN.
 - [ ] Omitted flow bare-name reads contain
       `*warehouse.AmbiguousTableError` and the manifest `connection` remedy.
@@ -30,7 +30,7 @@
 
 ## Targeted pre-pause checks
 
-- [ ] Exact #4069 RED command, recorded as expected failure.
+- [x] Exact #4069 RED command, recorded as expected failure.
 - [ ] Exact #4069 GREEN command.
 - [ ] Short #4066 regression selector.
 - [ ] `gofmt` and `git diff --check` for the child range.

@@ -6,7 +6,7 @@
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
-| 1. Two exact-unique canonical equivalents | Real Parquet `acme/records` and `globex/RECORDS` cause generic `SELECT 1` to fail while an omitted flow surfaces raw DuckDB duplicate-view text. | Scoped reads return their owner rows, generic `SELECT 1` succeeds, and omitted flow reads return typed `*warehouse.AmbiguousTableError` with the flow `connection` remedy. | PENDING |
+| 1. Two exact-unique canonical equivalents | Real Parquet `acme/records` and `globex/RECORDS` cause generic `SELECT 1` to fail while an omitted flow surfaces raw DuckDB duplicate-view text. | Scoped reads return their owner rows, generic `SELECT 1` succeeds, and omitted flow reads return typed `*warehouse.AmbiguousTableError` with the flow `connection` remedy. | RED 2026-08-12 |
 | 2. Existing #4066 boundary | The correction must not alter the existing alias, three-table case-variant, exact ambiguity, action-source, reverse/read, or schedule behavior. | Short focused fence passes before CPU pause; full affected/race selectors run after the transport CPU gate. | PENDING |
 | 3. Refactor | No refactor is accepted before GREEN. | The policy remains snapshot-derived, deterministic, and free of SQL-text filtering or extra inventory scans. | PENDING |
 
@@ -38,3 +38,18 @@ The committed RED must be captured before any production implementation edit.
 The only allowed local state is temporary test-owned Parquet/DuckDB data; no
 credential, provider, reverse-ETL, action dispatch, or transport state is
 created. Trace files contain command/result summaries only and never secrets.
+
+## Recorded RED
+
+At production head `f30dfcefc`, the command exited 1 as required. The selected
+`acme/records` and `globex/RECORDS` subtests both passed and returned only their
+own row. The unrelated generic `SELECT 1` failed before execution with:
+
+```text
+register view "records": Catalog Error: View with name "records" already exists!
+```
+
+Both omitted-flow forms then failed the typed-error assertion because the same
+raw DuckDB error reached the flow engine instead of an
+`*warehouse.AmbiguousTableError`. The non-secret command record is
+`traces/red-case-equivalent-unique-tables.txt`.
