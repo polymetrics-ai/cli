@@ -12,8 +12,8 @@ The first execution action is a behavioral RED in `internal/app` against the rea
 |---|---|---|
 | Planning | #4067 issue/readback, manual GSD context/plan/TDD ledger, clean rejected baseline custody | Complete before this commit |
 | RED | Focused test, non-zero exit due to durable symptom, test-only commit | Committed in `5db500fad` |
-| GREEN | Minimal completion-boundary implementation and same test passing | Observed; commit pending |
-| Focused expansion | all modes, reopen, cancellation, fail-closed eligibility, race, #4046/R7/R8 | Pending |
+| GREEN | Minimal completion-boundary implementation and same test passing | Committed in `d16767e47` |
+| Focused expansion | all modes, reopen, cancellation, fail-closed eligibility, race, #4046/R7/R8 | Complete; commit pending |
 | Generated remediation | canonical generator commands and candidate-owned diff only | Pending |
 | Heavy validation | only after required user-facing window notification | Pending |
 | Review/no-mistakes/CI | all findings dispositioned; fresh 0/5 no-mistakes; exact-head CI | Pending |
@@ -32,4 +32,13 @@ The first execution action is a behavioral RED in `internal/app` against the rea
 - Exit: `0`
 - Production change: the closed transport `RunETL` branch captures the exact stream state persisted by its own acknowledged checkpoint. On a later whole-state revision mismatch, `completeRun` may use latest locked state only when that exact target stream survives and the target run remains `running`.
 - Result: every canonical mode returned and durably reopened the matching `completed` run. The target checkpoint's connection, stream, generation, timestamp, and opaque checkpoint stayed unchanged; only its own final run metadata advanced. The unrelated stream/checkpoint/run survived unchanged.
-- State-store outcome: the new rebase path returns a terminal identity only after a successful or may-have-committed terminal write; definite non-commit still returns `Run{}`. Focused outcome tests remain pending.
+- State-store outcome: the new rebase path returns a terminal identity only after a successful or may-have-committed terminal write; definite non-commit still returns `Run{}`. Focused outcome proof follows below.
+
+## Focused expansion — completed before broader validation
+
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges$' -v` — exit `0`; changed, missing, and terminal target cases return zero with a detectable `errStateRevisionConflict` and do not overwrite current state.
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes$' -v` — exit `0`; cancellation after the real checkpoint callback is observed by every canonical-mode source fixture, preserves the checkpoint, and durably fails the run with `context.Canceled` detectable.
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome$' -v` — exit `0`; definite pre-commit returns `Run{}`/durable `running`, while committed and indeterminate outcomes return a matching terminal record plus commit-outcome error.
+- `go test -count=3 -timeout 20m ./internal/app -run '^(TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForAllModes|TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges|TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes|TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome)$'` — exit `0`.
+- Same focused set under `go test -race -count=3 -timeout 20m` — exit `0`; the macOS linker emitted its known malformed `LC_DYSYMTAB` warning, but Go reported no race or test failure.
+- Exact #4046/R7/R8 focused regression command — exit `0`; source identity, target-entry CAS, stale-writer conflict finalization, cancellation ordering, and state-store outcome protections remain unchanged.

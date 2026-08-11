@@ -19,12 +19,12 @@ status: pending
 
 - [x] Exact post-checkpoint/pre-completion two-App interleaving in all seven modes.
 - [x] Returned/durable identity and reopened terminal truth for the all-seven-mode main witness.
-- [ ] Target running/exact-checkpoint eligibility and fail-closed changed/missing/terminal targets.
-- [ ] Winner/acknowledged checkpoint and unrelated state preservation.
-- [ ] Cancellation after acknowledgement.
+- [x] Target running/exact-checkpoint eligibility and fail-closed changed/missing/terminal targets.
+- [x] Winner/acknowledged checkpoint and unrelated state preservation.
+- [x] Cancellation after acknowledgement in all seven modes.
 - [x] All seven canonical modes.
-- [ ] Focused race detector.
-- [ ] #4046 typed-conflict and R7/R8 regression suite.
+- [x] Focused race detector (`-count=3`; no Go race report).
+- [x] #4046 typed-conflict and R7/R8 regression suite.
 
 ## Subsequent gates
 

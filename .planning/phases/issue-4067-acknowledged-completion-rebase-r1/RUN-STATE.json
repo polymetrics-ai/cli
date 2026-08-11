@@ -10,7 +10,7 @@
     "reason": "The custom issue phase is absent from the archived numeric roadmap and repository custody forbids lifecycle-role spawning.",
     "discuss_phase": "completed_auto",
     "plan_phase_tdd": "completed_manual",
-    "execute_phase": "green_checkpoint_recorded",
+    "execute_phase": "focused_transport_tests_completed",
     "verify_work": "pending",
     "code_review": "pending"
   },

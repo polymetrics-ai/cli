@@ -1341,6 +1341,298 @@ func assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t *testing
 	}
 }
 
+type pausedAcknowledgedTransportCompletion struct {
+	fixture      appTransportFixture
+	stateKey     string
+	acknowledged StreamState
+	runID        string
+	release      chan struct{}
+	done         chan struct{}
+	returned     Run
+	err          error
+}
+
+func startPausedAcknowledgedTransportCompletion(t *testing.T, mode synccontract.Mode, ctx context.Context) *pausedAcknowledgedTransportCompletion {
+	t.Helper()
+	paused := &pausedAcknowledgedTransportCompletion{
+		fixture: setupAppTransportFixture(t, mode),
+		release: make(chan struct{}),
+		done:    make(chan struct{}),
+	}
+	checkpointAcknowledged := make(chan struct{})
+	paused.fixture.sourceExecutor.afterEmit = func() {
+		close(checkpointAcknowledged)
+		<-paused.release
+	}
+	go func() {
+		paused.returned, paused.err = paused.fixture.app.RunETL(ctx, RunETLRequest{Connection: paused.fixture.connection, Stream: "records", BatchSize: 1})
+		close(paused.done)
+	}()
+	waitForTransportSignal(t, checkpointAcknowledged)
+
+	paused.stateKey = streamStateKey(paused.fixture.connection, "records")
+	acknowledged, present := paused.fixture.app.state.StreamStates[paused.stateKey]
+	if !present || acknowledged.Checkpoint == nil || acknowledged.Checkpoint.CommittedAt == nil {
+		t.Fatalf("acknowledged transport state = %#v, want durable checkpoint before completion", acknowledged)
+	}
+	paused.acknowledged = cloneStreamState(acknowledged)
+	for _, run := range paused.fixture.app.state.Runs {
+		if run.Type == "etl" && run.Connection == paused.fixture.connection && run.Stream == "records" {
+			paused.runID = run.ID
+			break
+		}
+	}
+	if paused.runID == "" {
+		t.Fatal("acknowledged transport run is missing")
+	}
+	return paused
+}
+
+func (p *pausedAcknowledgedTransportCompletion) releaseAndWait(t *testing.T) {
+	t.Helper()
+	close(p.release)
+	waitForTransportSignal(t, p.done)
+}
+
+func TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(*state, *pausedAcknowledgedTransportCompletion)
+		assert func(*testing.T, state, *pausedAcknowledgedTransportCompletion)
+	}{
+		{
+			name: "target stream changed",
+			mutate: func(current *state, paused *pausedAcknowledgedTransportCompletion) {
+				changed := cloneStreamState(paused.acknowledged)
+				changed.LastSuccessfulRunID = "concurrent_winner"
+				changed.RecordsLoaded = 42
+				current.StreamStates[paused.stateKey] = changed
+			},
+			assert: func(t *testing.T, reopened state, paused *pausedAcknowledgedTransportCompletion) {
+				t.Helper()
+				got := reopened.StreamStates[paused.stateKey]
+				if got.LastSuccessfulRunID != "concurrent_winner" || got.RecordsLoaded != 42 || transportStreamStateEqual(got, paused.acknowledged) {
+					t.Fatalf("changed target stream was overwritten: %#v", got)
+				}
+			},
+		},
+		{
+			name: "target stream removed",
+			mutate: func(current *state, paused *pausedAcknowledgedTransportCompletion) {
+				delete(current.StreamStates, paused.stateKey)
+			},
+			assert: func(t *testing.T, reopened state, paused *pausedAcknowledgedTransportCompletion) {
+				t.Helper()
+				if _, present := reopened.StreamStates[paused.stateKey]; present {
+					t.Fatalf("removed target stream was recreated: %#v", reopened.StreamStates[paused.stateKey])
+				}
+			},
+		},
+		{
+			name: "target run terminal",
+			mutate: func(current *state, paused *pausedAcknowledgedTransportCompletion) {
+				for i := range current.Runs {
+					if current.Runs[i].ID == paused.runID {
+						current.Runs[i].Status = "completed"
+						current.Runs[i].CompletedAt = time.Unix(12, 0).UTC()
+						return
+					}
+				}
+			},
+			assert: func(t *testing.T, reopened state, paused *pausedAcknowledgedTransportCompletion) {
+				t.Helper()
+				for _, run := range reopened.Runs {
+					if run.ID == paused.runID {
+						if run.Status != "completed" || !run.CompletedAt.Equal(time.Unix(12, 0).UTC()) {
+							t.Fatalf("terminal target run was overwritten: %#v", run)
+						}
+						return
+					}
+				}
+				t.Fatalf("terminal target run %q disappeared", paused.runID)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			paused := startPausedAcknowledgedTransportCompletion(t, synccontract.ModeFullAppend, context.Background())
+			writer, err := Open(paused.fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := writer.updateState(func(current state) (state, error) {
+				tt.mutate(&current, paused)
+				return current, nil
+			}); err != nil {
+				t.Fatal(err)
+			}
+
+			paused.releaseAndWait(t)
+			if !errors.Is(paused.err, errStateRevisionConflict) {
+				t.Fatalf("RunETL() error = %v, want detectable revision conflict", paused.err)
+			}
+			if !reflect.DeepEqual(paused.returned, Run{}) {
+				t.Fatalf("RunETL() returned %#v, want zero run after fail-closed completion", paused.returned)
+			}
+
+			reopened, err := Open(paused.fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			tt.assert(t, reopened.state, paused)
+		})
+	}
+}
+
+func TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes(t *testing.T) {
+	for _, mode := range synccontract.AllModes() {
+		t.Run(string(mode), func(t *testing.T) {
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+			paused := startPausedAcknowledgedTransportCompletion(t, mode, ctx)
+			cancel()
+			if !errors.Is(ctx.Err(), context.Canceled) {
+				t.Fatalf("context error = %v, want cancellation after acknowledged checkpoint", ctx.Err())
+			}
+			paused.releaseAndWait(t)
+			if !errors.Is(paused.err, context.Canceled) {
+				t.Fatalf("RunETL() error = %v, want cancellation after acknowledged checkpoint", paused.err)
+			}
+			if paused.returned.ID != paused.runID || paused.returned.Status != "failed" || paused.returned.CompletedAt.IsZero() {
+				t.Fatalf("RunETL() returned %#v, want failed terminal acknowledged run", paused.returned)
+			}
+
+			reopened, err := Open(paused.fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if current := reopened.state.StreamStates[paused.stateKey]; !transportStreamStateEqual(current, paused.acknowledged) {
+				t.Fatalf("acknowledged checkpoint changed after cancellation: got %#v, want %#v", current, paused.acknowledged)
+			}
+			for _, run := range reopened.state.Runs {
+				if run.ID != paused.runID {
+					continue
+				}
+				if run.Status != "failed" || run.CompletedAt.IsZero() || run.Error == "" {
+					t.Fatalf("durable cancelled run = %#v, want failed terminal record", run)
+				}
+				return
+			}
+			t.Fatalf("durable cancelled run %q was not retained", paused.runID)
+		})
+	}
+}
+
+func TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome(t *testing.T) {
+	tests := []struct {
+		name         string
+		configure    func(*App)
+		wantOutcome  statestore.CommitOutcome
+		wantTerminal bool
+	}{
+		{
+			name: "definite pre-commit failure",
+			configure: func(a *App) {
+				a.store.Locker = &appTransportFailAtLockLocker{failAt: 1, err: errTransportFinalStateSave}
+			},
+			wantOutcome: statestore.CommitOutcomeNotCommitted,
+		},
+		{
+			name: "committed unlock failure",
+			configure: func(a *App) {
+				a.store.Locker = &postCommitUnlockFailureLocker{failAt: 1}
+			},
+			wantOutcome:  statestore.CommitOutcomeCommitted,
+			wantTerminal: true,
+		},
+		{
+			name: "indeterminate directory sync failure",
+			configure: func(a *App) {
+				a.store.SyncDirectory = func(string) error {
+					return errTransportFinalizationStateSync
+				}
+			},
+			wantOutcome:  statestore.CommitOutcomeIndeterminate,
+			wantTerminal: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			paused := startPausedAcknowledgedTransportCompletion(t, synccontract.ModeFullAppend, context.Background())
+			persistUnrelatedCompletionWrite(t, paused)
+			tt.configure(paused.fixture.app)
+			paused.releaseAndWait(t)
+
+			if tt.wantOutcome == statestore.CommitOutcomeNotCommitted {
+				if !errors.Is(paused.err, errTransportFinalStateSave) {
+					t.Fatalf("RunETL() error = %v, want definite completion persistence failure", paused.err)
+				}
+				if !reflect.DeepEqual(paused.returned, Run{}) {
+					t.Fatalf("RunETL() returned %#v, want zero run after definite non-commit", paused.returned)
+				}
+			} else {
+				var outcome *statestore.CommitOutcomeError
+				if !errors.As(paused.err, &outcome) || outcome.Outcome != tt.wantOutcome || !outcome.Outcome.MayHaveCommitted() {
+					t.Fatalf("RunETL() commit outcome = %#v, want %s", outcome, tt.wantOutcome)
+				}
+				if paused.returned.ID != paused.runID || paused.returned.Status != "completed" || paused.returned.CompletedAt.IsZero() {
+					t.Fatalf("RunETL() returned %#v, want durable-consistent completed run", paused.returned)
+				}
+			}
+
+			reopened, err := Open(paused.fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got := reopened.state.Checkpoints["unrelated_run"]["cursor"]; got != "preserved" {
+				t.Fatalf("unrelated checkpoint = %q, want preserved", got)
+			}
+			streamState := reopened.state.StreamStates[paused.stateKey]
+			var durable Run
+			for _, run := range reopened.state.Runs {
+				if run.ID == paused.runID {
+					durable = run
+					break
+				}
+			}
+			if tt.wantTerminal {
+				if durable.Status != "completed" || durable.CompletedAt.IsZero() || paused.returned.ID != durable.ID {
+					t.Fatalf("durable completed run = %#v, want matching terminal result", durable)
+				}
+				if streamState.LastSuccessfulRunID != paused.runID || streamState.RecordsLoaded != 1 || !transportCheckpointEqual(streamState.Checkpoint, paused.acknowledged.Checkpoint) {
+					t.Fatalf("durable completed stream state = %#v, want only final metadata advanced", streamState)
+				}
+			} else {
+				if durable.Status != "running" || !durable.CompletedAt.IsZero() {
+					t.Fatalf("durable run after definite non-commit = %#v, want running", durable)
+				}
+				if !transportStreamStateEqual(streamState, paused.acknowledged) {
+					t.Fatalf("acknowledged stream state changed after definite non-commit: got %#v, want %#v", streamState, paused.acknowledged)
+				}
+			}
+		})
+	}
+}
+
+func persistUnrelatedCompletionWrite(t *testing.T, paused *pausedAcknowledgedTransportCompletion) {
+	t.Helper()
+	writer, err := Open(paused.fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := writer.updateState(func(current state) (state, error) {
+		if current.Checkpoints == nil {
+			current.Checkpoints = map[string]map[string]string{}
+		}
+		current.Checkpoints["unrelated_run"] = map[string]string{"cursor": "preserved"}
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
@@ -1458,6 +1750,9 @@ func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, _ synctr
 		}
 		if e.afterEmit != nil {
 			e.afterEmit()
+		}
+		if err := ctx.Err(); err != nil {
+			return err
 		}
 	}
 	return e.errAfterPage
