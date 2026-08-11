@@ -58,7 +58,8 @@ custody recovery retained that commit in ancestry and whole-revert
 required temporary-base blob is `889e4eddffabb76aa8be46a934c3e9abe0610f4c`; this phase must not
 edit, remove, reformat, or correct it.
 
-`gh-axi` REST verifies five open children (#3856–#3860) and draft PR #4041, open from
-`feat/3855-polling-apply-foundations` at `4099335632a79e3c70ce20c004a5f63933171280` to temporary
-base `feat/3862-any-to-any-transport`. No raw GitHub CLI, alternate identity, or auth-scope change
-is used. Fresh no-mistakes validation remains pending for this evidence commit.
+`gh-axi` REST initially verified five open children (#3856–#3860) and draft PR #4041, open from
+`feat/3855-polling-apply-foundations` to temporary base
+`feat/3862-any-to-any-transport` at recovered head
+`4099335632a79e3c70ce20c004a5f63933171280`. No raw GitHub CLI, alternate identity, or auth-scope
+change is used. Fresh no-mistakes validation will re-inspect the final evidence head.
