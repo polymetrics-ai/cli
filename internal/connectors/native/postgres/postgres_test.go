@@ -133,6 +133,10 @@ func TestCertificationArchitectureUsesExecutablePostgresResumeBindings(t *testin
 		t.Fatalf("ReadFile(%s): %v", docPath, err)
 	}
 	doc := string(raw)
+	const bindingOrder = "bind the prior cursor value as pgx argument 1 (`$1`) and the stable primary-key tie breaker as argument 2 (`$2`)"
+	if !strings.Contains(doc, bindingOrder) {
+		t.Fatalf("certification architecture missing PostgreSQL pgx binding order: %q", bindingOrder)
+	}
 	const want = `WHERE cursor > $1
    OR (cursor = $1 AND primary_key > $2)
 ORDER BY cursor, primary_key`
