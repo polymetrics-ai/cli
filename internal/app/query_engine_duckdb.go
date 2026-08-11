@@ -236,31 +236,38 @@ func newQueryViewPolicy(req QuerySQLRequest, resolver *warehouse.TableResolver) 
 		return queryViewPolicy{}
 	}
 
-	byName := make(map[string][]warehouse.Table)
-	for _, table := range resolver.Tables() {
+	tables := resolver.Tables()
+	byName := make(map[string][]warehouse.Table, len(tables))
+	catalogNames := make(map[string]struct{}, len(tables))
+	for _, table := range tables {
 		byName[table.Name] = append(byName[table.Name], table)
+		catalogNames[duckDBIdentifierKey(table.Name)] = struct{}{}
 	}
 	policy := queryViewPolicy{
 		collidingGeneratedAliases: make(map[string]struct{}),
+	}
+	unscopedFlow := req.Origin == QuerySQLOriginFlow
+	if unscopedFlow {
+		policy.ambiguousTables = make(map[string]struct{})
+		policy.generatedAliasBaseName = make(map[string]string)
 	}
 	for name, tables := range byName {
 		if _, err := resolver.Find(name, ""); !isAmbiguousTableError(err) {
 			continue
 		}
+		if unscopedFlow {
+			policy.ambiguousTables[duckDBIdentifierKey(name)] = struct{}{}
+		}
 		for _, table := range tables {
 			alias := generatedOwnerAlias(name, table)
-			if _, exists := byName[alias]; exists {
-				policy.collidingGeneratedAliases[alias] = struct{}{}
+			aliasKey := duckDBIdentifierKey(alias)
+			if _, exists := catalogNames[aliasKey]; exists {
+				policy.collidingGeneratedAliases[aliasKey] = struct{}{}
 			}
-			if req.Origin != QuerySQLOriginFlow {
+			if !unscopedFlow {
 				continue
 			}
-			if policy.ambiguousTables == nil {
-				policy.ambiguousTables = make(map[string]struct{})
-				policy.generatedAliasBaseName = make(map[string]string)
-			}
-			policy.ambiguousTables[name] = struct{}{}
-			policy.generatedAliasBaseName[alias] = name
+			policy.generatedAliasBaseName[aliasKey] = name
 		}
 	}
 	return policy
@@ -276,25 +283,42 @@ func generatedOwnerAlias(name string, table warehouse.Table) string {
 }
 
 func (p queryViewPolicy) blocksGeneratedAliases(name string) bool {
-	_, ok := p.ambiguousTables[name]
+	_, ok := p.ambiguousTables[duckDBIdentifierKey(name)]
 	return ok
 }
 
 func (p queryViewPolicy) blocksBareView(name string) bool {
-	_, ok := p.generatedAliasBaseName[name]
+	_, ok := p.generatedAliasBaseName[duckDBIdentifierKey(name)]
 	return ok
 }
 
 func (p queryViewPolicy) allowsGeneratedAlias(name string) bool {
-	_, collides := p.collidingGeneratedAliases[name]
+	_, collides := p.collidingGeneratedAliases[duckDBIdentifierKey(name)]
 	return !collides
 }
 
 func (p queryViewPolicy) find(resolver *warehouse.TableResolver, tableName, connection string) (warehouse.Table, error) {
-	if baseName, ok := p.generatedAliasBaseName[tableName]; ok {
+	if baseName, ok := p.generatedAliasBaseName[duckDBIdentifierKey(tableName)]; ok {
 		return resolver.Find(baseName, "")
 	}
 	return resolver.Find(tableName, connection)
+}
+
+func duckDBIdentifierKey(name string) string {
+	for i := 0; i < len(name); i++ {
+		if name[i] < 'A' || name[i] > 'Z' {
+			continue
+		}
+		key := []byte(name)
+		key[i] += 'a' - 'A'
+		for j := i + 1; j < len(key); j++ {
+			if key[j] >= 'A' && key[j] <= 'Z' {
+				key[j] += 'a' - 'A'
+			}
+		}
+		return string(key)
+	}
+	return name
 }
 
 func registerWarehouseView(ctx context.Context, db *sql.DB, view string, table warehouse.Table) error {

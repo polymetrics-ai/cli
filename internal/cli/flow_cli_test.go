@@ -647,6 +647,108 @@ func TestFlowGeneratedOwnerAliasCollision(t *testing.T) {
 	}
 }
 
+func TestFlowGeneratedOwnerAliasCaseVariantCollision(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowScopedWarehouseApp(t, ctx)
+
+	var acme, globex app.Connection
+	for _, connection := range a.ListConnections() {
+		switch connection.Name {
+		case "acme":
+			acme = connection
+		case "globex":
+			globex = connection
+		}
+	}
+	require.NotEmpty(t, acme.ID)
+	require.NotEmpty(t, globex.ID)
+	alias := "records__" + globex.ID
+	caseVariantAlias := strings.ToUpper(alias)
+
+	warehouseDir := filepath.Join(a.ProjectDir(), "warehouse")
+	location, err := warehouse.LocationFor(warehouseDir, "flow_scope", "warehouse", acme.ID, acme.Name)
+	require.NoError(t, err)
+	require.NoError(t, location.EnsureOwnership())
+	path, err := location.TablePath(caseVariantAlias)
+	require.NoError(t, err)
+	require.NoError(t, warehouse.WriteTable(ctx, path, []warehouse.Row{{
+		"id":         "real-case-collision-table",
+		"updated_at": "2026-08-11T00:00:00Z",
+	}}))
+
+	assertRejected := func(t *testing.T, name, sql string) {
+		t.Helper()
+		checkpoints := &flow.FileCheckpointStore{Dir: t.TempDir()}
+		adapter := &recordingFlowAppAdapter{app: a}
+		engine := &flow.Engine{
+			Manifest: flow.FlowManifest{
+				Version: 1,
+				Name:    name,
+				Steps: []flow.FlowStep{{
+					ID:   "query-records",
+					Kind: flow.KindQuery,
+					SQL:  sql,
+					In:   []string{},
+					Out:  []string{},
+				}},
+			},
+			App:        adapter,
+			Checkpoint: checkpoints,
+			LockDir:    t.TempDir(),
+		}
+
+		result, err := engine.Run(ctx, flow.RunOptions{})
+		require.Error(t, err)
+		var ambiguous *warehouse.AmbiguousTableError
+		require.Truef(t, errors.As(err, &ambiguous), "error = %T %v", err, err)
+		assert.Equal(t, "records", ambiguous.Table)
+		assert.Contains(t, err.Error(), "set `connection` in flow query step")
+		assert.Equal(t, "failed", result.Status)
+		require.Len(t, result.Steps, 1)
+		assert.Equal(t, "failed", result.Steps[0].Status)
+		assert.Empty(t, adapter.lastRows)
+		checkpoint, checkpointErr := checkpoints.Get(name, "query-records")
+		require.NoError(t, checkpointErr)
+		assert.Empty(t, checkpoint)
+	}
+
+	for _, test := range []struct {
+		name string
+		sql  string
+	}{
+		{name: "unquoted lowercase", sql: "SELECT id FROM " + alias},
+		{name: "quoted lowercase", sql: "SELECT id FROM \"" + alias + "\""},
+		{name: "unquoted uppercase", sql: "SELECT id FROM " + caseVariantAlias},
+		{name: "quoted uppercase", sql: "SELECT id FROM \"" + caseVariantAlias + "\""},
+	} {
+		t.Run("omitted flow "+test.name, func(t *testing.T) {
+			assertRejected(t, "case-collision-"+test.name, test.sql)
+		})
+
+		t.Run("generic real table "+test.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := Run([]string{
+				"--root", filepath.Dir(a.ProjectDir()),
+				"--json",
+				"query", "run",
+				"--sql", test.sql,
+			}, &stdout, &stderr)
+			require.Equalf(t, 0, code, "stderr = %s stdout = %s", stderr.String(), stdout.String())
+
+			var result struct {
+				Kind  string           `json:"kind"`
+				Count int              `json:"count"`
+				Rows  []map[string]any `json:"rows"`
+			}
+			require.NoError(t, json.Unmarshal(stdout.Bytes(), &result))
+			assert.Equal(t, "QueryResult", result.Kind)
+			require.Len(t, result.Rows, 1)
+			assert.Equal(t, 1, result.Count)
+			assert.Equal(t, "real-case-collision-table", result.Rows[0]["id"])
+		})
+	}
+}
+
 func TestFlowActionSourceReadsAllSelectedConnectionRows(t *testing.T) {
 	ctx := testCtx(t)
 	a := newFlowScopedWarehouseApp(t, ctx)

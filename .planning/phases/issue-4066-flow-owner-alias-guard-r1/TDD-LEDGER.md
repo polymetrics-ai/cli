@@ -2,6 +2,7 @@
 
 **Starting head:** `c5b91917e3f5c07a010db2bdf58348cbc73cb9d5`  
 **Collision correction head:** `bda85b778f89f4320760b8d83826ac9d393b0220`  
+**Case-variant correction head:** `08acb08a8521ae7485152092810d4318ced29086`  
 **State:** GREEN verified with focused race coverage
 
 | Slice | RED contract | GREEN contract | Result |
@@ -10,6 +11,7 @@
 | 2. Generic containment | `pm query run --sql` can currently use the generated alias. | The same generic command still returns the selected owner while only the flow origin is denied. | GREEN 2026-08-11 |
 | 3. Regression fence | Existing flow coverage proves selected, bare ambiguous, `_unattributed`, `SELECT 1`, and action-source behavior. | One focused race run stays green after the structural policy is added. | GREEN 2026-08-11 |
 | 4. Generated-alias collision | A unique real `records__<connection-id>` table is registered as a bare view before the unscoped-flow policy can resolve the identifier to `records`. | Quoted and unquoted omitted-flow queries fail with the typed `records` ambiguity and remedy; generic quoted and unquoted queries return the real table. | GREEN 2026-08-11 |
+| 5. ASCII-equivalent collision | An uppercase real `RECORDS__<CONNECTION-ID>` table misses exact snapshot maps even though DuckDB identifies it as the generated alias. | Quoted and unquoted lowercase and uppercase forms fail closed in omitted flows, while generic query returns the real uppercase table. | GREEN 2026-08-11 |
 
 ## Red command
 
@@ -64,3 +66,30 @@ generic quoted and unquoted queries, rejects those same identifiers in omitted
 flows as a typed `records` ambiguity with the flow remedy, and retains the
 non-colliding generic alias plus the existing scope regression fence. Output is
 recorded in `traces/green-flow-owner-alias-collision.txt`.
+
+## Case-variant RED command
+
+`go test -timeout 20m ./internal/cli -run '^TestFlowGeneratedOwnerAliasCaseVariantCollision$' -count=1`
+
+Expected before the ASCII-key fix: exit 1 because the uppercase real table
+evades the exact collision map for both quoted and unquoted identifier forms.
+
+## Recorded case-variant RED
+
+**2026-08-11:** the case-variant RED command exited 1 at exact production head
+`08acb08a8521ae7485152092810d4318ced29086`. All four omitted-flow forms
+(quoted and unquoted lowercase and uppercase) returned a successful real-table
+result. The matching generic controls each failed with DuckDB's duplicate-view
+error. The non-secret command output is in
+`traces/red-flow-owner-alias-case-collision.txt`.
+
+## Case-variant GREEN command
+
+`go test -race -timeout 20m ./internal/cli -run '^(TestFlowOmittedConnectionRejectsGeneratedOwnerAliases|TestFlowGeneratedOwnerAliasCollision|TestFlowGeneratedOwnerAliasCaseVariantCollision|TestFlowSourceConnectionSelectorsReadOnlyOwningRows|TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed|TestFlowActionSourceReadsAllSelectedConnectionRows)$' -count=1`
+
+**2026-08-11:** PASS. The ASCII-key policy rejects all quoted and unquoted
+lowercase and uppercase collision forms in omitted flows with the typed
+`records` ambiguity and flow remedy. Generic query returns the legitimate real
+uppercase table, while the non-colliding alias and existing flow-scope fence
+remain green. Output is recorded in
+`traces/green-flow-owner-alias-case-collision.txt`.

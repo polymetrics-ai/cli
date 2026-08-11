@@ -27,7 +27,8 @@ edits; the outer executor owns subsequent lifecycle gates.
 
 Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`,
-`golang-database`, `golang-design-patterns`, and `golang-structs-interfaces`.
+`golang-database`, `golang-stretchr-testify`, `golang-design-patterns`, and
+`golang-structs-interfaces`.
 
 ## Slice 1 — RED: omitted flow selector bypasses ambiguity
 
@@ -77,3 +78,17 @@ For generic origin, skip only the generated view that collides and preserve the
 real table. For an unscoped flow, suppress the colliding real bare view and
 route its identifier to the ambiguous base table. Do not reserve names, rename
 tables, or inspect SQL text.
+
+## Slice 5 — RED/GREEN: ASCII-equivalent collisions
+
+Create the same third table with an uppercase `RECORDS__<CONNECTION-ID>` name.
+RED exercises lowercase and uppercase spellings in both quoted and unquoted
+queries. The existing exact-string map lets an omitted flow read the real table
+and makes generic query fail during duplicate view registration.
+
+GREEN canonicalizes only DuckDB identifier keys derived from the immutable
+resolver snapshot and the replacement-scan identifier with DuckDB's documented
+ASCII case equivalence. The stored catalog name remains the exact resolver key,
+so generic query exposes the real uppercase table while unscoped flow resolves
+every case variant to the typed `records` ambiguity. Do not lowercase SQL text
+or catalog table names.

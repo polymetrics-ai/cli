@@ -4,6 +4,7 @@
 **Correction:** 5 / 5  
 **Starting head:** `c5b91917e3f5c07a010db2bdf58348cbc73cb9d5`
 **Collision correction head:** `bda85b778f89f4320760b8d83826ac9d393b0220`
+**Case-variant correction head:** `08acb08a8521ae7485152092810d4318ced29086`
 
 ## Problem
 
@@ -18,6 +19,11 @@ A legitimate catalog table can itself be named
 aliases after `registerViews` has already installed a unique real table as a
 bare view, so an unscoped flow can use that colliding identifier instead of
 getting the required `records` ambiguity.
+
+DuckDB compares quoted and unquoted identifiers with ASCII case equivalence.
+An uppercase real collision therefore evades the exact Go-string collision map,
+allowing the same bypass and generic duplicate-view failure through a different
+spelling of the generated alias.
 
 ## Locked decisions
 
@@ -34,6 +40,9 @@ getting the required `records` ambiguity.
   query exposes the real table and does not register the generated alias.
 - An unscoped flow suppresses a colliding real bare view before registration and
   routes that identifier to the ambiguous base table through the same snapshot.
+- All snapshot-derived DuckDB policy keys use ASCII-only case canonicalization;
+  real catalog names and typed resolver error identities retain their original
+  spelling.
 - Explicit flow connections, bare-name ambiguity, `_unattributed`, `SELECT 1`,
   and action-source reads retain their existing behavior.
 - #4063's discovery metadata correction remains untouched.
@@ -47,4 +56,5 @@ affected source and focused regression.
 
 Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`,
-`golang-database`, `golang-design-patterns`, and `golang-structs-interfaces`.
+`golang-database`, `golang-stretchr-testify`, `golang-design-patterns`, and
+`golang-structs-interfaces`.
