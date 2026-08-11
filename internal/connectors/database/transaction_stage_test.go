@@ -64,14 +64,17 @@ func TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt(t *testing.T)
 	if got, want := receiver.transactions[0].chunks, []string{"first", "second"}; !sameStrings(got, want) {
 		t.Fatalf("receiver chunk order = %q, want %q", got, want)
 	}
-	if receipt.TransactionKey == "" || receipt.ContentDigest == "" {
+	if receipt.TransactionKey() == "" || receipt.ContentDigest() == "" {
 		t.Fatalf("receipt = %#v, want immutable whole-transaction identity and digest", receipt)
+	}
+	if receipt.DownstreamReceiptID() != "receiver-receipt-1" || receipt.Bytes() != int64(len("first")+len("second")) || receipt.Records() != 2 {
+		t.Fatalf("receipt metadata = %#v, want durable whole-transaction metadata", receipt)
 	}
 	acknowledgement, err := receipt.Acknowledgement()
 	if err != nil {
 		t.Fatalf("receipt acknowledgement after commit error = %v", err)
 	}
-	if acknowledgement.Sink != "test-sink" || acknowledgement.AcknowledgedAt.IsZero() {
+	if acknowledgement.Sink != receipt.Sink() || !acknowledgement.AcknowledgedAt.Equal(receipt.DurableAt()) {
 		t.Fatalf("receipt acknowledgement = %#v, want durable test-sink acknowledgement", acknowledgement)
 	}
 	if entries, err := os.ReadDir(filepath.Join(root, "receipts")); err != nil {
@@ -423,15 +426,7 @@ func TestCommittedTransactionStageRejectsReceiverThatDoesNotConsumeWholeTransact
 }
 
 func TestTransactionReceiptCannotForgeAcknowledgementEligibility(t *testing.T) {
-	forged := TransactionReceipt{
-		TransactionKey:      "forged",
-		DownstreamReceiptID: "forged",
-		Sink:                "test-sink",
-		DurableAt:           time.Now().UTC(),
-		Bytes:               1,
-		Records:             1,
-		ContentDigest:       "forged",
-	}
+	forged := TransactionReceipt{}
 	if _, err := forged.Acknowledgement(); !errors.Is(err, ErrTransactionReceiptUnavailable) {
 		t.Fatalf("forged receipt Acknowledgement() error = %v, want ErrTransactionReceiptUnavailable", err)
 	}

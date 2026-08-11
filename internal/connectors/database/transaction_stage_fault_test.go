@@ -308,6 +308,42 @@ func TestCommittedTransactionStageReceiverAndReceiptFaultsRemainReceiptless(t *t
 	}
 }
 
+func TestCommittedTransactionStageFailedAppendCleanupStaysTerminalUntilAbortRetries(t *testing.T) {
+	root := t.TempDir()
+	limits := testTransactionStageLimits()
+	limits.MaxTransactionRecords = 1
+	stage := newTestTransactionStage(t, root, limits)
+	const transactionID = "failed-append-cleanup"
+	stageCompleteChunk(t, stage, transactionID)
+	key, err := transactionStageKey(transactionID)
+	if err != nil {
+		t.Fatalf("transactionStageKey() error = %v", err)
+	}
+	fault := &transactionStageFault{
+		operation: "remove_all",
+		match: func(path string) bool {
+			return path == stage.transactionDirectory(key)
+		},
+		err: errors.New("injected failed-append cleanup failure"),
+	}
+	installTransactionStageFault(stage, fault)
+	assertTransactionStageLimit(t, stage.AppendChunk(context.Background(), transactionID, 1, strings.NewReader("partial")), TransactionStageLimitTransactionRecords)
+	if !fault.fired() {
+		t.Fatal("failed-append cleanup fault was not exercised")
+	}
+	if _, err := stage.CommitTransaction(context.Background(), transactionID, &recordingTransactionReceiver{}); !errors.Is(err, ErrTransactionStageInProgress) {
+		t.Fatalf("CommitTransaction() error = %v, want ErrTransactionStageInProgress", err)
+	}
+	if got := stage.PendingTransactions(); len(got) != 0 {
+		t.Fatalf("PendingTransactions() = %#v, want no terminal failed append", got)
+	}
+	assertPrivateStageCounts(t, root, 1, 0)
+	if err := stage.AbortTransaction(context.Background(), transactionID); err != nil {
+		t.Fatalf("AbortTransaction() retry error = %v", err)
+	}
+	assertPrivateStageCounts(t, root, 0, 0)
+}
+
 func TestCommittedTransactionStagePostReceiptCleanupFailurePreservesOnlyDurableReceipt(t *testing.T) {
 	root := t.TempDir()
 	stage := newTestTransactionStage(t, root, testTransactionStageLimits())

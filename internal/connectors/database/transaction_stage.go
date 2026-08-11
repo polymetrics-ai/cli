@@ -181,28 +181,64 @@ type DurableTransactionReceiver interface {
 }
 
 // TransactionReceipt is immutable receipt evidence for one complete staged
-// transaction. All public fields are scalar values; loading and returning the
-// value copies it, and its private durable marker prevents a caller from
-// forging acknowledgement eligibility with a struct literal.
+// transaction.
 type TransactionReceipt struct {
-	TransactionKey      string
-	DownstreamReceiptID string
-	Sink                string
-	DurableAt           time.Time
-	Bytes               int64
-	Records             int64
-	ContentDigest       string
+	payload transactionReceiptPayload
+}
+
+type transactionReceiptPayload struct {
+	transactionKey      string
+	downstreamReceiptID string
+	sink                string
+	durableAt           time.Time
+	bytes               int64
+	records             int64
+	contentDigest       string
 	durable             bool
 }
+
+func newTransactionReceipt(transactionKey, downstreamReceiptID, sink string, durableAt time.Time, bytes, records int64, contentDigest string) TransactionReceipt {
+	return TransactionReceipt{payload: transactionReceiptPayload{
+		transactionKey:      transactionKey,
+		downstreamReceiptID: downstreamReceiptID,
+		sink:                sink,
+		durableAt:           durableAt.UTC(),
+		bytes:               bytes,
+		records:             records,
+		contentDigest:       contentDigest,
+		durable:             true,
+	}}
+}
+
+// TransactionKey returns the opaque-safe transaction identity.
+func (r TransactionReceipt) TransactionKey() string { return r.payload.transactionKey }
+
+// DownstreamReceiptID returns the receiver's durable receipt identifier.
+func (r TransactionReceipt) DownstreamReceiptID() string { return r.payload.downstreamReceiptID }
+
+// Sink returns the receiver that durably stored the transaction.
+func (r TransactionReceipt) Sink() string { return r.payload.sink }
+
+// DurableAt returns when the receiver made the transaction durable.
+func (r TransactionReceipt) DurableAt() time.Time { return r.payload.durableAt }
+
+// Bytes returns the complete transaction byte count.
+func (r TransactionReceipt) Bytes() int64 { return r.payload.bytes }
+
+// Records returns the complete transaction record count.
+func (r TransactionReceipt) Records() int64 { return r.payload.records }
+
+// ContentDigest returns the complete transaction content digest.
+func (r TransactionReceipt) ContentDigest() string { return r.payload.contentDigest }
 
 // Acknowledgement adapts a persisted durable receipt to the existing sync
 // checkpoint contract. A local stage, receiver call, or manually built value
 // cannot produce this acknowledgement.
 func (r TransactionReceipt) Acknowledgement() (synccontract.DownstreamAcknowledgement, error) {
-	if !r.durable {
+	if !r.payload.durable {
 		return synccontract.DownstreamAcknowledgement{}, ErrTransactionReceiptUnavailable
 	}
-	return synccontract.NewDurableDownstreamAcknowledgement(r.Sink, r.DurableAt)
+	return synccontract.NewDurableDownstreamAcknowledgement(r.payload.sink, r.payload.durableAt)
 }
 
 // PendingTransaction is sealed receipt-less work found in a stage root. It is
@@ -226,6 +262,7 @@ const (
 	stageStatusSealed
 	stageStatusCommitting
 	stageStatusDiscarding
+	stageStatusDiscardFailed
 	stageStatusReceiptPersisted
 )
 
@@ -602,16 +639,15 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 		return TransactionReceipt{}, err
 	}
 
-	receipt := TransactionReceipt{
-		TransactionKey:      manifest.TransactionKey,
-		DownstreamReceiptID: downstreamReceipt.ReceiptID,
-		Sink:                downstreamReceipt.Sink,
-		DurableAt:           downstreamReceipt.DurableAt.UTC(),
-		Bytes:               manifest.Bytes,
-		Records:             manifest.Records,
-		ContentDigest:       manifest.ContentDigest,
-		durable:             true,
-	}
+	receipt := newTransactionReceipt(
+		manifest.TransactionKey,
+		downstreamReceipt.ReceiptID,
+		downstreamReceipt.Sink,
+		downstreamReceipt.DurableAt,
+		manifest.Bytes,
+		manifest.Records,
+		manifest.ContentDigest,
+	)
 	if err := s.persistReceipt(ctx, receipt); err != nil {
 		if ctxErr := ctx.Err(); ctxErr != nil {
 			return TransactionReceipt{}, s.discardEntry(key, entry, ctxErr)
@@ -641,8 +677,8 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 	return receipt, nil
 }
 
-// AbortTransaction removes an active or sealed receipt-less transaction. It
-// deliberately completes cleanup even when the caller's context is cancelled.
+// AbortTransaction removes a receipt-less transaction. It deliberately
+// completes cleanup even when the caller's context is cancelled.
 func (s *CommittedTransactionStage) AbortTransaction(_ context.Context, transactionID string) error {
 	key, err := transactionStageKey(transactionID)
 	if err != nil {
@@ -658,7 +694,7 @@ func (s *CommittedTransactionStage) AbortTransaction(_ context.Context, transact
 		s.mu.Unlock()
 		return ErrTransactionStageNotFound
 	}
-	if entry.status != stageStatusActive && entry.status != stageStatusSealed {
+	if entry.status != stageStatusActive && entry.status != stageStatusSealed && entry.status != stageStatusDiscardFailed {
 		s.mu.Unlock()
 		return ErrTransactionStageInProgress
 	}
@@ -961,7 +997,7 @@ func (s *CommittedTransactionStage) discardEntry(key string, entry *transactionS
 			s.subtractStagedBytesLocked(entry.manifest.Bytes)
 			delete(s.entries, key)
 		} else {
-			entry.status = statusForManifest(entry.manifest)
+			entry.status = stageStatusDiscardFailed
 		}
 	}
 	s.mu.Unlock()
@@ -1083,10 +1119,11 @@ func (s *CommittedTransactionStage) persistReceipt(ctx context.Context, receipt 
 	if err := requireTransactionStageContext(ctx); err != nil {
 		return err
 	}
-	path := s.receiptPath(receipt.TransactionKey)
+	receiptPayload := receipt.payload
+	path := s.receiptPath(receiptPayload.transactionKey)
 	if existing, err := s.storage.readFile(path); err == nil {
 		var stored storedTransactionReceipt
-		if decodeTransactionStageJSON(existing, &stored) == nil && stored.toReceipt(receipt.TransactionKey) == receipt {
+		if decodeTransactionStageJSON(existing, &stored) == nil && stored.toReceipt(receiptPayload.transactionKey) == receipt {
 			return nil
 		}
 		return ErrTransactionStageAlreadyCommitted
@@ -1095,13 +1132,13 @@ func (s *CommittedTransactionStage) persistReceipt(ctx context.Context, receipt 
 	}
 	stored := storedTransactionReceipt{
 		Version:             transactionStageFormatVersion,
-		TransactionKey:      receipt.TransactionKey,
-		DownstreamReceiptID: receipt.DownstreamReceiptID,
-		Sink:                receipt.Sink,
-		DurableAt:           receipt.DurableAt.UTC(),
-		Bytes:               receipt.Bytes,
-		Records:             receipt.Records,
-		ContentDigest:       receipt.ContentDigest,
+		TransactionKey:      receiptPayload.transactionKey,
+		DownstreamReceiptID: receiptPayload.downstreamReceiptID,
+		Sink:                receiptPayload.sink,
+		DurableAt:           receiptPayload.durableAt.UTC(),
+		Bytes:               receiptPayload.bytes,
+		Records:             receiptPayload.records,
+		ContentDigest:       receiptPayload.contentDigest,
 	}
 	payload, err := json.Marshal(stored)
 	if err != nil {
@@ -1124,7 +1161,7 @@ func (s *CommittedTransactionStage) readReceipt(key string) (TransactionReceipt,
 		return TransactionReceipt{}, fmt.Errorf("decode durable transaction receipt: %w", err)
 	}
 	receipt := stored.toReceipt(key)
-	if !receipt.durable {
+	if !receipt.payload.durable {
 		return TransactionReceipt{}, errors.New("durable transaction receipt is invalid")
 	}
 	return receipt, nil
@@ -1136,16 +1173,15 @@ func (r storedTransactionReceipt) toReceipt(expectedKey string) TransactionRecei
 		r.Bytes < 0 || r.Records < 0 || !validTransactionStageDigest(r.ContentDigest) {
 		return TransactionReceipt{}
 	}
-	return TransactionReceipt{
-		TransactionKey:      r.TransactionKey,
-		DownstreamReceiptID: r.DownstreamReceiptID,
-		Sink:                r.Sink,
-		DurableAt:           r.DurableAt.UTC(),
-		Bytes:               r.Bytes,
-		Records:             r.Records,
-		ContentDigest:       r.ContentDigest,
-		durable:             true,
-	}
+	return newTransactionReceipt(
+		r.TransactionKey,
+		r.DownstreamReceiptID,
+		r.Sink,
+		r.DurableAt,
+		r.Bytes,
+		r.Records,
+		r.ContentDigest,
+	)
 }
 
 func (s *CommittedTransactionStage) writeManifest(ctx context.Context, manifest transactionStageManifest) error {
@@ -1411,13 +1447,6 @@ func (s *CommittedTransactionStage) subtractStagedBytesLocked(bytes int64) {
 		return
 	}
 	s.stagedBytes -= bytes
-}
-
-func statusForManifest(manifest transactionStageManifest) transactionStageStatus {
-	if manifest.State == transactionStageStateSealed {
-		return stageStatusSealed
-	}
-	return stageStatusActive
 }
 
 func withTransactionStageCleanupError(cause, cleanupErr error) error {
