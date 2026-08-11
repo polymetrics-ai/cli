@@ -14,7 +14,7 @@
     "execute_phase": "r2_manual_execution_complete",
     "verify_work": "r2_manual_goal_backward_verification_complete",
     "code_review": "r2_manual_standard_review_complete",
-    "delivery_revalidation": "r2_no_mistakes_loop_3_pending_existing_pr_only"
+    "delivery_revalidation": "r2_loop_3_passed_scope_restoration_pending_firstmate_direction"
   },
   "skills": [
     "golang-how-to",
@@ -38,8 +38,8 @@
   ],
   "correction_ledger": {
     "issue": 4067,
-    "status": "two_completed_runs_r2_reviewed_pending_loop_3",
-    "budget_used": 2,
+    "status": "three_completed_runs_r2_scope_restored_pending_firstmate_direction",
+    "budget_used": 3,
     "budget_max": 5,
     "forbidden_flag": "--yes",
     "runs": [
@@ -55,6 +55,14 @@
         "result": "passed",
         "delivery_steps": "push, pr, and ci skipped intentionally",
         "disposition": "Review, focused persisted-state/race regressions, document, and lint completed with no findings. The run preserved a semantically equivalent Markdown-hard-break normalization in existing #3864 planning evidence; custody was returned with no production or behavior change. Manual delivery is required because only #4059 may be updated."
+      },
+      {
+        "id": "01KZS4Y49CT5CBPZ6SEGWR5YWT",
+        "submitted_head": "542cf9fe1c918c60fe77a31b625aa4b9d0155862",
+        "pipeline_head": "c83d148f18b03550f64c1cc516ef28506ca0035d",
+        "result": "passed",
+        "delivery_steps": "push, pr, and ci skipped intentionally",
+        "disposition": "Review, focused persisted-state/race validation, documentation, and lint completed with no unresolved finding. The document phase nevertheless committed an unrelated warehouse-architecture rewrite; required sync recovery returned custody and the following in-scope commit restores that file. No safe existing-#4059 delivery option exists in current no-mistakes help, so stop before any push or PR mutation."
       }
     ]
   },

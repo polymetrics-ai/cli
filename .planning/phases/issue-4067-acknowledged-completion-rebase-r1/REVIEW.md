@@ -38,4 +38,4 @@ findings:
 - A missing target run receives `errStateRevisionConflict` only in the acknowledged rebase branch; the ordinary missing-run behavior is unchanged.
 - #4046's typed-conflict-only terminalization, R7/R8 source identity, and per-stream CAS remain outside the r2 production diff and pass fresh focused regressions.
 
-**Review disposition:** no unresolved critical, warning, or informational finding. Fresh no-mistakes loop 3/5 and the #4059-only delivery route remain required.
+**Review disposition:** no unresolved critical, warning, or informational finding. Fresh local-only no-mistakes loop 3/5 subsequently passed; its unrelated warehouse-documentation commit is cancelled in the scope-restoration follow-up. The #4059-only delivery route still requires Firstmate direction because current tool help has no safe existing-PR option.

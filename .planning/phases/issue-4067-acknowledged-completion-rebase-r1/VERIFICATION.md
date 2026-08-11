@@ -36,6 +36,6 @@ The r2 correction must terminalize only a post-acknowledgement transport error a
 
 - No provider, credential, network, warehouse, container, or external service was used. `make smoke-no-build` was not run because it writes a local warehouse, which the controlling handoff forbids.
 - Website generation was clean in an isolated disposable worktree. Its dependencies were unavailable there, so the active worktree's existing dependencies ran read-only `pnpm run typecheck` and `pnpm run test:scripts`; both passed. The disposable worktree was removed.
-- The fresh no-mistakes correction budget remains 2/5 consumed. Loop 3/5 and any update of the existing draft #4059 are still pending; no PR/CI/merge result is claimed here.
+- Fresh no-mistakes loop 3/5 (`01KZS4Y49CT5CBPZ6SEGWR5YWT`) passed locally without `--yes`: review, focused persisted-state/race validation, documentation, and lint passed; push/PR/CI were skipped because current help has no safe existing-#4059 route. Its document phase produced an unrelated warehouse-architecture commit, which the current scope-restoration commit cancels. The budget is now 3/5 consumed; no PR/CI/merge result is claimed here.
 
-**Local verification result:** all r2 behavioral and local quality truths above are verified. External delivery and independent Sol audit remain intentionally pending.
+**Local verification result:** all r2 behavioral and local quality truths above are verified. After scope restoration, external delivery requires Firstmate direction because the tool cannot safely update only #4059; independent Sol audit remains intentionally pending.

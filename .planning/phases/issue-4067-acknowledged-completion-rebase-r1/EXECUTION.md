@@ -1,6 +1,6 @@
 # #4067 execution record
 
-**Status:** R2 GREEN, focused race, #4046/R7/R8, affected-package, repository, website, and manual GSD verification/review gates are locally complete. Fresh no-mistakes loop 3/5, the existing-#4059-only delivery route, and exact-head CI remain pending. No r2 external-check, certification, or merge claim is made here.
+**Status:** R2 GREEN, focused race, #4046/R7/R8, affected-package, repository, website, manual GSD verification/review, and fresh no-mistakes loop 3/5 are locally complete. The loop's unrelated warehouse-architecture documentation commit is restored in the immediately following scope-restoration commit. Current no-mistakes help has no safe existing-#4059 delivery route, so push/PR/CI and exact-head CI remain pending Firstmate direction. No r2 external-check, certification, or merge claim is made here.
 
 ## R2 planning and behavioral RED
 
@@ -30,6 +30,13 @@
 - In a disposable detached worktree, `pnpm run gen:website-data && git diff --exit-code && git status --short` exits `0`. The detached worktree had no installed packages; an offline frozen install stopped at `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`, so active-worktree read-only `pnpm run typecheck` and `pnpm run test:scripts` supplied the package checks and both exit `0`. The disposable worktree was then removed.
 - `make smoke-no-build` is deliberately not run: it writes a local warehouse and this correction's controlling handoff forbids warehouse mutation. `make verify` is likewise not invoked as one command because the repository instructions require individual gates under the command-timeout environment.
 - Manual `verify-work` and standard-depth `code-review` use the documented named-phase fallback: `gsd-sdk` reports `phase_found: false` for this nonnumeric issue phase and custody forbids lifecycle-role spawning. The current R2 records and review disposition are in `VERIFICATION.md`, `UAT.md`, and `REVIEW.md`.
+
+## R2 no-mistakes correction loop 3/5 — passed locally, scope restored
+
+- Fresh run `01KZS4Y49CT5CBPZ6SEGWR5YWT` started at committed `542cf9fe1c918c60fe77a31b625aa4b9d0155862` without `--yes` and with `--skip=push,pr,ci`, because `axi run --help` exposes no safe route that updates only the required existing stacked PR #4059.
+- Its source review completed low risk with no finding. Its test phase passed the real JSON-store C8/C9/C10/C11 suite, the #4046/R7/R8 selectors, and the focused race selector; it wrote only an external temporary acceptance transcript permitted by the gate. Documentation and lint also completed with no unresolved finding.
+- The document phase nevertheless committed `c83d148f18b03550f64c1cc516ef28506ca0035d`, changing `docs/architecture/github-postgres-warehouse-certification.md`. That warehouse-architecture rewrite is outside #4067 and is restored immediately after required `no-mistakes axi sync --recover`; it is not retained in the final branch diff.
+- The terminal result is `passed`. No push, PR creation/update, CI polling, retarget, close, or merge occurred. With no safe existing-PR delivery mechanism in the current tool, delivery stops here for Firstmate direction.
 
 ## Historical pre-r2 candidate record (not evidence for this correction)
 

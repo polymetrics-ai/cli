@@ -1,7 +1,7 @@
 ---
 phase: issue-4067-acknowledged-completion-rebase-r1
 issue: 4067
-status: r2_local_delivery_pending_no_mistakes
+status: r2_local_validation_passed_pending_firstmate_direction
 ---
 
 # #4067 R2 summary
@@ -12,4 +12,4 @@ The r2 correction preserves a result witness only after the real checkpoint ackn
 
 TDD evidence includes a committed all-seven-mode behavioral RED for both durable symptoms, then green cancellation/source-error/missing-target/outcome tests. Review added direct changed/removed stream and terminal/removed run error-finalization coverage. Focused race, #4046/R7/R8, affected package, vet/build, individual repository gates, and read-only website checks are locally green; `make smoke-no-build` is intentionally omitted because it mutates a warehouse.
 
-The phase uses the documented inline/manual GSD fallback because its named issue phase is absent from the numeric roadmap and this custody lane forbids role spawning. Manual execution, verification, UAT, and code review records are current in this directory. The correction budget has two completed no-mistakes runs; fresh loop 3/5, a safe #4059-only delivery route, exact-head CI, and independent Sol audit remain pending. No certification or merge readiness is implied.
+The phase uses the documented inline/manual GSD fallback because its named issue phase is absent from the numeric roadmap and this custody lane forbids role spawning. Manual execution, verification, UAT, and code review records are current in this directory. Fresh local-only loop 3/5 passed review, targeted persisted-state/race testing, documentation, and lint with push/PR/CI skipped. Its document agent added an unrelated warehouse-architecture rewrite; this scope-restoration follow-up cancels it while retaining the completed run in history. The correction budget is 3/5. Current help has no safe #4059-only delivery route, so Firstmate direction, exact-head CI, and independent Sol audit remain pending. No certification or merge readiness is implied.
