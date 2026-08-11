@@ -61,3 +61,19 @@ Run one focused CLI race test command covering the new alias regression plus
 the existing explicit selector, bare ambiguity, `_unattributed`, `SELECT 1`,
 and action-source cases. Record the result in the ledger after all source
 changes are complete.
+
+## Slice 4 — RED/GREEN: real-table collision remains structurally distinct
+
+Create a third, legitimate Parquet table named
+`records__<globex-connection-id>` while `records` remains owned by both `acme`
+and `globex`. RED drives that identifier through an omitted-connection flow in
+quoted and unquoted forms: the current bare-view registration succeeds against
+the real table instead of returning the `records` ambiguity and remedy. The
+same generic query controls must return the real table in both forms.
+
+GREEN extends the immutable resolver-snapshot policy with generated-alias
+collisions before either bare-view registration or replacement-scan routing.
+For generic origin, skip only the generated view that collides and preserve the
+real table. For an unscoped flow, suppress the colliding real bare view and
+route its identifier to the ambiguous base table. Do not reserve names, rename
+tables, or inspect SQL text.

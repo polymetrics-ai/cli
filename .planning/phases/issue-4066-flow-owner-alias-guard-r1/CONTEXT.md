@@ -3,6 +3,7 @@
 **Parent issue:** #3897  
 **Correction:** 5 / 5  
 **Starting head:** `c5b91917e3f5c07a010db2bdf58348cbc73cb9d5`
+**Collision correction head:** `bda85b778f89f4320760b8d83826ac9d393b0220`
 
 ## Problem
 
@@ -11,6 +12,12 @@ ambiguous. The generic DuckDB query path correctly installs generated
 `<table>__<connection-id>` views for interactive SQL, but a flow query shares
 that path and can name one of those aliases directly. That bypasses the
 resolver's typed ambiguity for the base table.
+
+A legitimate catalog table can itself be named
+`records__<connection-id>`. The original guard only intercepts generated
+aliases after `registerViews` has already installed a unique real table as a
+bare view, so an unscoped flow can use that colliding identifier instead of
+getting the required `records` ambiguity.
 
 ## Locked decisions
 
@@ -22,6 +29,11 @@ resolver's typed ambiguity for the base table.
 - The policy must not inspect, parse, regex-match, or rewrite SQL text.
 - Generic `pm query run --sql` retains generated owner aliases and returns the
   selected owner's rows.
+- Generated aliases are additive generic-query views, not a reserved table
+  namespace. When one equals a real catalog table from the snapshot, generic
+  query exposes the real table and does not register the generated alias.
+- An unscoped flow suppresses a colliding real bare view before registration and
+  routes that identifier to the ambiguous base table through the same snapshot.
 - Explicit flow connections, bare-name ambiguity, `_unattributed`, `SELECT 1`,
   and action-source reads retain their existing behavior.
 - #4063's discovery metadata correction remains untouched.
