@@ -1,0 +1,8 @@
+# T19 RED — discard intent write and cleanup failure
+
+Command:
+go test -count=1 -timeout 20m ./internal/connectors/database -run '^TestCommittedTransactionStageDiscardIntentWriteFailureAndCleanupFailureHaltsRecovery$'
+
+Result: FAIL
+CommitTransaction() after dual failure returned nil, delivered one transaction,
+persisted a receipt, and exposed acknowledgement eligibility after restart.
