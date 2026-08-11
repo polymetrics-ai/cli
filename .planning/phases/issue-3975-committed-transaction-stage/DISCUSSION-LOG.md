@@ -3,10 +3,10 @@
 > Audit trail only. Decisions are captured in `CONTEXT.md`; this log preserves
 > the alternatives considered by the required GSD discussion step.
 
-**Date:** 2026-08-11  
+**Date:** 2026-08-11
 **Mode:** `scripts/gsd prompt discuss-phase 3975 --auto` with documented
 manual inline fallback because #3975 is an issue-specific rather than numbered
-roadmap phase.  
+roadmap phase.
 **Areas discussed:** durability boundary, recovery/cleanup, failure limits,
 test evidence.
 

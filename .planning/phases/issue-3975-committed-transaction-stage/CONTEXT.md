@@ -1,6 +1,6 @@
 # Context — Issue #3975: committed-transaction staging and durable receipts
 
-**Gathered:** 2026-08-11  
+**Gathered:** 2026-08-11
 **Status:** Ready for TDD planning
 
 ## GSD execution note
@@ -186,4 +186,3 @@ replay from the prior durable source position.
 - Immutable Parquet/DuckDB delivery worksets belong to #3980.
 - Snapshot/changefeed bootstrap belongs to #3979.
 - Managed target sessions, commits, and destination DML belong to #3973/#3982.
-

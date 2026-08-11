@@ -2,7 +2,7 @@
 
 **Starting commit:** 6a82f3650ab4be0b511541f91721ce7cefe08762
 **Branch:** fix/4043-postbudget-control-slot-reconciliation
-**Status:** RED checkpoint captured before production edits
+**Status:** RED checkpoint captured; implementation committed, Green execution evidence pending
 
 ## Required skills
 
@@ -42,8 +42,8 @@ assertion is invalid Red evidence.
 
 | Gate | Required assertion | Status |
 |---|---|---|
-| Slice A | One unresolved Temporary retains one slot and blocks delivery; durable removal plus discards sync permits release. | Pending |
-| Slice B | Every retained entry has an exact Reserved control before poison clears; unreserved work cannot reach receiver. | Pending |
+| Slice A | One unresolved Temporary retains one slot and blocks delivery; durable removal plus discards sync permits release. | Implementation committed; evidence pending |
+| Slice B | Every retained entry has an exact Reserved control before poison clears; unreserved work cannot reach receiver. | Implementation committed; evidence pending |
 | Repeat | Focused five tests pass with count 20. | Pending |
 | Race | Focused five tests pass with race and count 10. | Pending |
 | Restart | Cap and temporary crash matrices assert exact artifact and entry/control mapping after reopen. | Pending |
@@ -94,5 +94,6 @@ that the live code does not issue the required `discards/` parent sync.
 
 ### Green
 
-Green: Pending. After both repair slices, this section will contain literal
-focused, repeat, race, restart, valid-path, and package evidence.
+Green implementation: commit `9c3879bd4` contains both repair slices. Literal
+focused, repeat, race, restart, valid-path, and package execution evidence is
+still pending.

@@ -1,6 +1,6 @@
 # Verification - #4043 post-budget control-slot reconciliation
 
-**Status:** Pending implementation
+**Status:** Implementation committed; verification pending
 **Safety boundary:** local t.TempDir, injected filesystem operations, and fake
 receivers only. No PostgreSQL service, Podman, provider, credentials, network,
 warehouse mutation, target DML, or generic SQL.
@@ -56,4 +56,6 @@ make verify as a single short-timeout agent command.
 
 ## Results
 
-Pending.
+Implementation and its focused regressions are committed. This document does
+not assert focused, package, repository, or remote gate results until their
+commands are recorded.

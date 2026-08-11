@@ -1,7 +1,7 @@
 # Issue #4043: Post-budget control-slot reconciliation - Context
 
 **Gathered:** 2026-08-11
-**Status:** Ready for planning
+**Status:** Implementation committed; validation pending
 **Mode:** Inline/manual GSD fallback
 
 ## Phase Boundary
@@ -109,6 +109,6 @@ durable equivalent evidence.
 ## Deferred Ideas
 
 None. PostgreSQL driver, pgoutput, LSN/checkpoint acknowledgement, replication
-slots, target DML, generic SQL, CLI, documentation, connector capability,
+slots, target DML, generic SQL, CLI, public documentation, connector capability,
 provider, credential, network, runtime-service, and warehouse changes are
 outside this phase.

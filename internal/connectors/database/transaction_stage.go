@@ -58,7 +58,8 @@ var (
 	ErrTransactionStageLimitExceeded = errors.New("transaction stage resource limit exceeded")
 
 	// ErrTransactionStageCleanupRequired reports a root whose discard-control
-	// reconciliation did not complete durably.
+	// cleanup or retained-generation reservation reconciliation is incomplete
+	// or indeterminate.
 	ErrTransactionStageCleanupRequired = errors.New("transaction stage cleanup reconciliation is required")
 )
 
@@ -92,8 +93,9 @@ func (e *TransactionStageLimitExceeded) Error() string {
 
 func (e *TransactionStageLimitExceeded) Unwrap() error { return ErrTransactionStageLimitExceeded }
 
-// TransactionStageCleanupError identifies a cleanup transition that remains
-// incomplete or indeterminate and therefore keeps the root fail-closed.
+// TransactionStageCleanupError identifies a cleanup or retained-generation
+// reservation reconciliation that remains incomplete or indeterminate and
+// therefore keeps the root fail-closed.
 type TransactionStageCleanupError struct {
 	Operation string
 	Cause     error
@@ -311,6 +313,9 @@ type transactionStageEntry struct {
 type transactionStageControlState uint8
 
 const (
+	// A control reserves one finite slot for an exact transaction generation.
+	// Temporary and Final states retain that slot while discard artifacts are
+	// reconciled; only Reserved work can be admitted or delivered.
 	transactionStageControlReserved transactionStageControlState = iota
 	transactionStageControlTemporary
 	transactionStageControlFinal
@@ -450,8 +455,10 @@ func defaultTransactionStageStorage() transactionStageStorage {
 }
 
 // CommittedTransactionStage owns private in-progress chunks and durable
-// whole-transaction receipts. It has no database, source checkpoint, or
-// destination-DML authority.
+// whole-transaction receipts. A retained receipt-less generation must hold its
+// exact finite control reservation before admission or receiver delivery; an
+// unreconciled reservation keeps the root fail-closed. It has no database,
+// source checkpoint, or destination-DML authority.
 type CommittedTransactionStage struct {
 	root    string
 	limits  TransactionStageLimits
@@ -469,7 +476,8 @@ type CommittedTransactionStage struct {
 
 // OpenCommittedTransactionStage opens a private stage and removes only
 // incomplete/orphan data from a prior process. Bare sealed receipt-less work
-// requires explicit recovery admission before delivery.
+// requires explicit recovery admission and exact reservation reconciliation
+// before delivery.
 func OpenCommittedTransactionStage(options TransactionStageOptions) (*CommittedTransactionStage, error) {
 	return openCommittedTransactionStage(options, defaultTransactionStageStorage(), func() time.Time {
 		return time.Now().UTC()
@@ -646,8 +654,9 @@ func (s *CommittedTransactionStage) AppendChunk(ctx context.Context, transaction
 }
 
 // CommitTransaction seals private chunks, verifies their complete ordered
-// representation before receiver delivery, and returns eligibility only after
-// its immutable receipt has been durably persisted.
+// representation, requires an exact Reserved control before receiver delivery,
+// and returns eligibility only after its immutable receipt has been durably
+// persisted.
 func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, transactionID string, receiver DurableTransactionReceiver) (TransactionReceipt, error) {
 	if ctx == nil {
 		return TransactionReceipt{}, errors.New("transaction stage context is required")
@@ -817,7 +826,8 @@ func (s *CommittedTransactionStage) AbortTransaction(ctx context.Context, transa
 }
 
 // AdmitRecoveredTransaction permits a verified sealed stage recovered from a
-// prior process to proceed through CommitTransaction.
+// prior process to proceed through CommitTransaction only when its exact
+// Reserved control has been reconciled.
 func (s *CommittedTransactionStage) AdmitRecoveredTransaction(ctx context.Context, transactionID string) error {
 	if err := requireTransactionStageContext(ctx); err != nil {
 		return err
@@ -892,7 +902,8 @@ func (s *CommittedTransactionStage) PendingTransactions() []PendingTransaction {
 	return pending
 }
 
-// ReconcileDiscardControls retries only durable discard-control cleanup. It
+// ReconcileDiscardControls retries durable discard-control cleanup and
+// validates or restores exact reservations for retained receipt-less work. It
 // never admits, appends, or delivers a staged transaction.
 func (s *CommittedTransactionStage) ReconcileDiscardControls(ctx context.Context) error {
 	if ctx == nil {

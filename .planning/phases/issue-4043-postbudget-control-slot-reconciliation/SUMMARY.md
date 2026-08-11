@@ -1,8 +1,8 @@
 # Summary - #4043 post-budget control-slot reconciliation
 
-**Status:** In progress
+**Status:** Implementation committed; validation pending
 
-## Planning checkpoint
+## Implementation checkpoint
 
 - #4043 acceptance addendum was appended as an issue comment and verified
   byte-for-byte against the authoritative report before any project edit.
@@ -12,12 +12,13 @@
   intentionally not a numbered ROADMAP phase, their required single-worker
   manual fallback is documented in CONTEXT.md and RUN-STATE.json.
 - Required skills were loaded and recorded.
-- Production code has not yet been edited.
+- The target implementation closes the two private reconciliation slices in
+  PLAN.md; `transaction_stage.go` owns their live operational contract.
+- Receipt-before-acknowledgement, bare sealed recovery hold, source-agnostic
+  staging, and DuckDB/Parquet mediation remain unchanged.
 
 ## Pending
 
-1. Add and execute the five genuine Red tests.
-2. Implement slice A and slice B.
-3. Record Green, repeat, race, restart, package, and repository gates.
-4. Complete GSD execute/verify/code-review, fresh no-mistakes, PR, CI, and
+1. Record Green, repeat, race, restart, package, and repository gate results.
+2. Complete GSD execute/verify/code-review, fresh no-mistakes, PR, CI, and
    automated-review coverage.
