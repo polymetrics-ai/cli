@@ -92,3 +92,18 @@ ASCII case equivalence. The stored catalog name remains the exact resolver key,
 so generic query exposes the real uppercase table while unscoped flow resolves
 every case variant to the typed `records` ambiguity. Do not lowercase SQL text
 or catalog table names.
+
+## Slice 6 — RED/GREEN: case-equivalent bare-table ambiguity
+
+Create a unique uppercase `RECORDS` table alongside the two owned lowercase
+`records` tables. RED drives quoted and unquoted lowercase and uppercase bare
+identifiers through an omitted flow. The raw-name grouping registers the
+uppercase view, so all forms succeed instead of returning the `records` typed
+ambiguity and remedy. Generic controls must retain access to the uppercase real
+table.
+
+GREEN records canonical bare-name keys only for unscoped flow origin, mapping
+each key back to the original ambiguous resolver name. Suppress bare views for
+that flow policy before registration and resolve replacement scans through the
+stored original name. Keep generic origin, user table spelling, aliases, and
+SQL text untouched.

@@ -226,7 +226,7 @@ func (e duckdbEngine) openScopedDuckDB(
 }
 
 type queryViewPolicy struct {
-	ambiguousTables           map[string]struct{}
+	ambiguousBaseNameByKey    map[string]string
 	generatedAliasBaseName    map[string]string
 	collidingGeneratedAliases map[string]struct{}
 }
@@ -248,7 +248,7 @@ func newQueryViewPolicy(req QuerySQLRequest, resolver *warehouse.TableResolver) 
 	}
 	unscopedFlow := req.Origin == QuerySQLOriginFlow
 	if unscopedFlow {
-		policy.ambiguousTables = make(map[string]struct{})
+		policy.ambiguousBaseNameByKey = make(map[string]string)
 		policy.generatedAliasBaseName = make(map[string]string)
 	}
 	for name, tables := range byName {
@@ -256,7 +256,11 @@ func newQueryViewPolicy(req QuerySQLRequest, resolver *warehouse.TableResolver) 
 			continue
 		}
 		if unscopedFlow {
-			policy.ambiguousTables[duckDBIdentifierKey(name)] = struct{}{}
+			key := duckDBIdentifierKey(name)
+			current, exists := policy.ambiguousBaseNameByKey[key]
+			if !exists || name == key || (current != key && name < current) {
+				policy.ambiguousBaseNameByKey[key] = name
+			}
 		}
 		for _, table := range tables {
 			alias := generatedOwnerAlias(name, table)
@@ -283,12 +287,16 @@ func generatedOwnerAlias(name string, table warehouse.Table) string {
 }
 
 func (p queryViewPolicy) blocksGeneratedAliases(name string) bool {
-	_, ok := p.ambiguousTables[duckDBIdentifierKey(name)]
+	_, ok := p.ambiguousBaseNameByKey[duckDBIdentifierKey(name)]
 	return ok
 }
 
 func (p queryViewPolicy) blocksBareView(name string) bool {
-	_, ok := p.generatedAliasBaseName[duckDBIdentifierKey(name)]
+	key := duckDBIdentifierKey(name)
+	if _, ok := p.ambiguousBaseNameByKey[key]; ok {
+		return true
+	}
+	_, ok := p.generatedAliasBaseName[key]
 	return ok
 }
 
@@ -298,7 +306,11 @@ func (p queryViewPolicy) allowsGeneratedAlias(name string) bool {
 }
 
 func (p queryViewPolicy) find(resolver *warehouse.TableResolver, tableName, connection string) (warehouse.Table, error) {
-	if baseName, ok := p.generatedAliasBaseName[duckDBIdentifierKey(tableName)]; ok {
+	key := duckDBIdentifierKey(tableName)
+	if baseName, ok := p.ambiguousBaseNameByKey[key]; ok {
+		return resolver.Find(baseName, "")
+	}
+	if baseName, ok := p.generatedAliasBaseName[key]; ok {
 		return resolver.Find(baseName, "")
 	}
 	return resolver.Find(tableName, connection)

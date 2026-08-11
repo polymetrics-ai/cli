@@ -5,6 +5,7 @@
 **Starting head:** `c5b91917e3f5c07a010db2bdf58348cbc73cb9d5`
 **Collision correction head:** `bda85b778f89f4320760b8d83826ac9d393b0220`
 **Case-variant correction head:** `08acb08a8521ae7485152092810d4318ced29086`
+**Bare-name correction head:** `4923b17648575d8947887139bb8058d2a5805a78`
 
 ## Problem
 
@@ -25,6 +26,11 @@ An uppercase real collision therefore evades the exact Go-string collision map,
 allowing the same bypass and generic duplicate-view failure through a different
 spelling of the generated alias.
 
+The resolver still groups raw catalog names separately. With ambiguous
+lowercase `records` and a unique uppercase `RECORDS`, an unscoped flow installs
+the uppercase bare view and DuckDB resolves every case spelling through it,
+bypassing the lowercase resolver ambiguity.
+
 ## Locked decisions
 
 - Flow queries with an omitted connection must reject generated owner aliases
@@ -43,6 +49,9 @@ spelling of the generated alias.
 - All snapshot-derived DuckDB policy keys use ASCII-only case canonicalization;
   real catalog names and typed resolver error identities retain their original
   spelling.
+- An unscoped flow also suppresses every canonical bare-name variant of an
+  ambiguous resolver table and maps replacement scanning to that original
+  resolver name.
 - Explicit flow connections, bare-name ambiguity, `_unattributed`, `SELECT 1`,
   and action-source reads retain their existing behavior.
 - #4063's discovery metadata correction remains untouched.

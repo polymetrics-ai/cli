@@ -3,6 +3,7 @@
 **Starting head:** `c5b91917e3f5c07a010db2bdf58348cbc73cb9d5`  
 **Collision correction head:** `bda85b778f89f4320760b8d83826ac9d393b0220`  
 **Case-variant correction head:** `08acb08a8521ae7485152092810d4318ced29086`  
+**Bare-name correction head:** `4923b17648575d8947887139bb8058d2a5805a78`  
 **State:** GREEN verified with focused race coverage
 
 | Slice | RED contract | GREEN contract | Result |
@@ -12,6 +13,7 @@
 | 3. Regression fence | Existing flow coverage proves selected, bare ambiguous, `_unattributed`, `SELECT 1`, and action-source behavior. | One focused race run stays green after the structural policy is added. | GREEN 2026-08-11 |
 | 4. Generated-alias collision | A unique real `records__<connection-id>` table is registered as a bare view before the unscoped-flow policy can resolve the identifier to `records`. | Quoted and unquoted omitted-flow queries fail with the typed `records` ambiguity and remedy; generic quoted and unquoted queries return the real table. | GREEN 2026-08-11 |
 | 5. ASCII-equivalent collision | An uppercase real `RECORDS__<CONNECTION-ID>` table misses exact snapshot maps even though DuckDB identifies it as the generated alias. | Quoted and unquoted lowercase and uppercase forms fail closed in omitted flows, while generic query returns the real uppercase table. | GREEN 2026-08-11 |
+| 6. Case-equivalent bare table | A unique uppercase `RECORDS` table is registered as a bare DuckDB view beside ambiguous lowercase `records` owners. | Quoted and unquoted lowercase and uppercase forms fail closed in omitted flows, while generic query returns the uppercase real table. | GREEN 2026-08-11 |
 
 ## Red command
 
@@ -93,3 +95,28 @@ lowercase and uppercase collision forms in omitted flows with the typed
 uppercase table, while the non-colliding alias and existing flow-scope fence
 remain green. Output is recorded in
 `traces/green-flow-owner-alias-case-collision.txt`.
+
+## Bare-name RED command
+
+`go test -timeout 20m ./internal/cli -run '^TestFlowCaseVariantBareTableAmbiguity$' -count=1`
+
+Expected before the bare-name policy: exit 1 because DuckDB resolves every
+case-equivalent bare identifier to the uppercase real view.
+
+## Recorded bare-name RED
+
+**2026-08-11:** the bare-name RED command exited 1 at exact production head
+`4923b17648575d8947887139bb8058d2a5805a78`. All quoted and unquoted lowercase
+and uppercase omitted-flow forms returned successful reads from the uppercase
+real table. The generic controls remained available. The non-secret command
+output is in `traces/red-flow-bare-name-case-collision.txt`.
+
+## Bare-name GREEN command
+
+`go test -race -timeout 20m ./internal/cli -run '^(TestFlowOmittedConnectionRejectsGeneratedOwnerAliases|TestFlowGeneratedOwnerAliasCollision|TestFlowGeneratedOwnerAliasCaseVariantCollision|TestFlowCaseVariantBareTableAmbiguity|TestFlowSourceConnectionSelectorsReadOnlyOwningRows|TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed|TestFlowActionSourceReadsAllSelectedConnectionRows)$' -count=1`
+
+**2026-08-11:** PASS. The flow-only bare-name policy rejects every quoted and
+unquoted lowercase and uppercase form as the typed `records` ambiguity with the
+existing flow remedy. Generic query retains the uppercase real table, while
+non-colliding aliases and the prior flow-scope regression fence remain green.
+Output is recorded in `traces/green-flow-bare-name-case-collision.txt`.
