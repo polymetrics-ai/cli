@@ -25,7 +25,7 @@ No unresolved Critical, Warning, or Info findings remain.
 - **Resolved during review:** the first focused concurrent-writer test had the winner and unrelated mutation in one writer update. It was strengthened in `8841ddbd0` to observe the real typed CAS conflict from the stale app, then persist unrelated state in a second writer update before `failRun`; the repeated focused and race checks passed afterward.
 - The typed exception is anchored to the private transport conflict sentinel through `errors.Is`; unrelated failure paths retain the exact revision comparison and cannot become a generic last-writer-wins refresh.
 - The typed path receives the current state only while the JSON-store lock is held, changes only the matching generated run ID, and requires its status to remain `running`. It does not touch `StreamStates`, project checkpoints, winner data, or unrelated runs.
-- Error identity is retained on successful finalization and on a persistence/update error through `errors.Join`; a matching latest run is returned for a typed conflict when available.
+- Error identity is retained on successful finalization and on a persistence/update error through `errors.Join`; returned runs follow the commit-outcome truth above and never expose an uncommitted callback state.
 - The tests exercise the original durable symptom, reopen behavior, typed error identity, winner/unrelated retention, a writer after conflict observation, ordinary-error guarding, terminal-target refusal, cancellation after acknowledgement, all seven modes, the race detector, and the unchanged R7/R8 suite.
 - No provider implementation, connector protocol, state-store API, credential surface, warehouse implementation, or external integration changed.
 

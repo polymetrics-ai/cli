@@ -51,7 +51,7 @@ Make a stale transport writer's generated run durably terminal and truthfully re
 2. Preserve the revision equality guard for every non-conflict failure.
 3. For the typed conflict only, operate on the latest `current` state supplied under `JSONStore.Update` and change only the matching `running` run ID to `failed` with redacted error text and a completion timestamp.
 4. Reject a missing or incompatible target status instead of replacing another terminal run.
-5. Preserve the typed conflict through the returned error chain. On a successful write, return the matching committed run; on a persistence failure, return an identifiable latest run when one is available and join the persistence error without discarding the typed conflict.
+5. Preserve the typed conflict through the returned error chain. Follow R9-T7 in `TDD-LEDGER.md`: return a transitioned run only after a successful or may-have-committed write, return `Run{}` after a definite pre-rename persistence failure, and return an already-terminal target unchanged.
 6. Do not change `transport_dispatch.go`, retry a checkpoint, or assign a stale whole state.
 7. Run the same witness green and commit only `app.go` plus the coherent RED/GREEN ledger update as `fix(sync): finalize stale transport writer run`.
 

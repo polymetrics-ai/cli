@@ -34,7 +34,7 @@ Production scope is strictly `internal/app/app.go`. Focused test scope is `inter
 
 - **D-04:** Do not refresh or replace the losing App's whole state, retry the rejected checkpoint write, weaken the R7/R8 resume-identity or stream-entry CAS, or overwrite/merge the winner checkpoint.
 - **D-05:** Winner stream state, unrelated stream state, unrelated checkpoints, credentials, connections, and other runs must carry forward from the latest locked state unchanged.
-- **D-06:** The successful terminal write returns the exact persisted losing `Run`; when a typed-conflict terminalization cannot persist but the returned latest state identifies the run, return that identifiable run with a joined persistence error while preserving `errors.Is(err, errTransportStreamStateConflict)`.
+- **D-06:** The successful terminal write returns the exact persisted losing `Run`. R9-T7 in `TDD-LEDGER.md` owns commit-outcome truth: return a transitioned run only after success or a may-have-committed outcome, and return `Run{}` after a definite pre-rename persistence failure. An already-terminal target may be returned unchanged. Every error path preserves `errors.Is(err, errTransportStreamStateConflict)`.
 
 ### Proof and safety
 

@@ -630,7 +630,7 @@ func assertRunETLTransportStaleWriterFinalization(t *testing.T, mode synccontrac
 	done := make(chan struct{})
 	var losingRun Run
 	var losingErr error
-	var losingCtx context.Context = context.Background()
+	losingCtx := context.Background()
 	var cancel context.CancelFunc
 	if cancelAfterAcknowledgement {
 		losingCtx, cancel = context.WithCancel(context.Background())

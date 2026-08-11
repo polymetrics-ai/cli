@@ -2637,6 +2637,9 @@ func (a *App) findConnectionFold(name string) (Connection, bool) {
 	return Connection{}, false
 }
 
+// failRun keeps persisted run state truthful: the typed transport-conflict path
+// must not return the JSON store's speculative callback state after a definite
+// pre-rename failure.
 func (a *App) failRun(runID string, runErr error) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
