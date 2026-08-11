@@ -80,11 +80,12 @@ package defs
 
 import "embed"
 
-//go:embed operation_endpoint_ledger.json */metadata.json */changefeed.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
+//go:embed operation_endpoint_ledger.json */metadata.json */changefeed.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json */database.json
 var FS embed.FS
 ```
 
-(`changefeed.json`, `writes.json`, `operations.json`, `cli_surface.json`, and `certification.json`
+(`changefeed.json`, `writes.json`, `operations.json`, `cli_surface.json`, `certification.json`, and
+`database.json`
 are optional per connector; the loader tolerates absence. `api_surface.json` and `fixtures/` stay
 on disk for authoring/conformance validation and are not embedded in the production `defs.FS`, which keeps
 tens of megabytes of inert replay JSON out of every shipped binary. The generated root
@@ -378,6 +379,7 @@ type Bundle struct {
     Name     string
     Metadata Metadata          // parsed metadata.json
     Changefeed *connectors.ChangefeedDescriptor // optional changefeed.json
+    Database *database.Definition // optional database.json policy declaration
     RateLimits *connsdk.RateLimits // optional rate_limits.json HTTP pacing policy
     Spec     *Schema           // compiled spec.json; SecretKeys() from x-secret
     HTTP     HTTPBase          // streams.json "base"
@@ -575,8 +577,27 @@ non-REST protocols — postgres/mysql/snowflake/bigquery (SQL + CDC), amazon-sqs
 file/warehouse/outbox/sample built-ins. These implement `connectors.Connector` directly with the
 Ruby component split as the mandated file layout: `connector.go` (entry + registration),
 `connection.go`, `reader.go`, `cataloger.go`, `writer.go`, `cdc.go`. **They still ship a defs
-bundle** (metadata.json, spec.json, schemas/) so identity, catalog, and docs stay uniform; they
-embed `engine.Base` which serves `Definition()`/`Catalog()` from the bundle.
+bundle** (metadata.json, spec.json, schemas/, and `database.json` when it is a native database
+driver) so identity, catalog, and docs stay uniform; they embed `engine.Base` which serves
+`Definition()`/`Catalog()` from the bundle. The database declaration's closed authoring contract
+lives in the [migration conventions](../migration/conventions.md#database-native-policy-declaration-databasejson).
+
+### B.7.1 Database warehouse mediation
+
+Every database connector flow is warehouse-mediated. Layer one remains shared and
+connector-agnostic: it owns the connection-scoped WAL-to-Parquet materialization, warehouse reads,
+and the durable artifact identity of workspace, connector, and connection. Layer two is
+database-specific and can supply exactly one leg: database source to a shared warehouse artifact,
+or a shared warehouse artifact to a database target. A database command cannot contain both a
+source and target, and native admission/evidence is distinct for each leg. Therefore neither a
+direct connector pair nor a zero-copy route exists in this architecture.
+
+The Wave A declaration and admission seam is non-executing. `database.json` does not register a
+driver, open a connection, perform SQL/DDL, create a write session, persist a receipt/checkpoint,
+or enable CDC/polling; public capabilities remain in `metadata.json`. PostgreSQL is the reference
+seam with `write` and `cdc` still false. A future MySQL implementation supplies its own database
+definition, per-leg admission/evidence, and native extraction or apply mechanics without a shared
+warehouse or PostgreSQL change.
 
 ## C. Interface, registry, and catalog changes
 
