@@ -37,8 +37,8 @@ verification, or review.
 
 Required skills: `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-error-handling`, `golang-security`, `golang-safety`,
-`golang-database`, `golang-design-patterns`, and
-`golang-structs-interfaces`.
+`golang-database`, `golang-design-patterns`,
+`golang-structs-interfaces`, and `golang-lint`.
 
 ## Scope
 
@@ -123,4 +123,4 @@ exemption in the PR body.
 1. `docs(4069): plan canonical-equivalent warehouse correction`
 2. `test(4069): reproduce case-equivalent unique warehouse table failure`
 3. `fix(4069): preserve query availability for case-equivalent tables`
-4. `docs(4069): record focused correction evidence`
+4. `docs(4069): record broad correction verification`

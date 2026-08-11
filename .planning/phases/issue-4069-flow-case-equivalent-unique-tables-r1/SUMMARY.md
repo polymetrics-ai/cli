@@ -7,6 +7,13 @@ unrelated generic SQL remains executable, and omitted flows retain the typed
 warehouse ambiguity plus the manifest connection remedy. This phase is
 intentionally separate from #4066's exhausted 5 / 5 correction ledger.
 
-The targeted correction is ready to commit, after which the work deliberately
-pauses for Firstmate's transport CPU gate before broad package/race/repository
-validation, no-mistakes, PR creation, or CI observation.
+After the transport CPU gate cleared, the full affected package suite, focused
+race matrix, formatting/diff scope checks, GSD manual verify/review, vet/lint,
+canonical generators, docs/help checks, and local PR issue guard all passed.
+No provider, credential, transport, production wiring, or public command
+surface changed. The #4069 candidate range is clean; the only wider diff-check
+findings are the seven pre-existing #3897 planning-file hard breaks.
+
+The next deliberately deferred stages are no-mistakes, draft stacked PR
+creation, and exact-head CI, which Firstmate coordinates after transport Sol
+r4. No PR has been created or changed by this phase.

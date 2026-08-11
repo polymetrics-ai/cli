@@ -7,8 +7,8 @@
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
 | 1. Two exact-unique canonical equivalents | Real Parquet `acme/records` and `globex/RECORDS` cause generic `SELECT 1` to fail while an omitted flow surfaces raw DuckDB duplicate-view text. | Scoped reads return their owner rows, generic `SELECT 1` succeeds, and omitted flow reads return typed `*warehouse.AmbiguousTableError` with the flow `connection` remedy. | GREEN 2026-08-12 |
-| 2. Existing #4066 boundary | The correction must not alter the existing alias, three-table case-variant, exact ambiguity, action-source, reverse/read, or schedule behavior. | Short focused fence passes before CPU pause; full affected/race selectors run after the transport CPU gate. | Targeted GREEN; full fence pending CPU gate |
-| 3. Refactor | No refactor is accepted before GREEN. | The policy remains snapshot-derived, deterministic, and free of SQL-text filtering or extra inventory scans. | GREEN review pending CPU gate |
+| 2. Existing #4066 boundary | The correction must not alter the existing alias, three-table case-variant, exact ambiguity, action-source, reverse/read, or schedule behavior. | Targeted pre-pause fence and resumed full affected/race selectors pass after the transport CPU gate. | GREEN 2026-08-12 |
+| 3. Refactor | No refactor is accepted before GREEN. | The policy remains snapshot-derived, deterministic, and free of SQL-text filtering or extra inventory scans. | GREEN review 2026-08-12 |
 
 ## RED command
 
@@ -65,6 +65,9 @@ chain containing `*warehouse.AmbiguousTableError` for `records` and the flow
 success checkpoint.
 
 The short #4066 flow matrix, focused app query matrix, and schedule re-entry
-selectors also passed. The full affected-package and race matrix remains
-intentionally deferred to Firstmate's transport CPU gate. The non-secret
-records are in `traces/green-case-equivalent-unique-tables.txt`.
+selectors also passed before the CPU pause. After the gate cleared,
+`internal/app`, `internal/cli`, `internal/flow`, `internal/warehouse`,
+and `internal/schedule` all passed in full, and the focused
+#3897/#4066/#4069 race matrix passed. The non-secret records are in
+`traces/green-case-equivalent-unique-tables.txt` and
+`traces/resume-broad-verification.txt`.

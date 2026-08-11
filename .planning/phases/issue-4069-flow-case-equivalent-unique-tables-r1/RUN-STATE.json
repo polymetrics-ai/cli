@@ -6,7 +6,7 @@
   "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "required_base_branch": "feat/3897-flow-connection-scope-nm",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "targeted_green_committed_awaiting_transport_cpu_gate",
+  "status": "broad_local_verification_green_pending_firstmate_no_mistakes_and_pr_gate",
   "correction_budget": {
     "used_before": 0,
     "limit": 5,
@@ -40,13 +40,14 @@
     "golang-safety",
     "golang-database",
     "golang-design-patterns",
-    "golang-structs-interfaces"
+    "golang-structs-interfaces",
+    "golang-lint"
   ],
   "safety": {
     "credentials_or_secrets": "none used",
     "provider_or_reverse_etl": "none",
     "transport_or_production_wiring": "out of scope",
-    "cpu_coordination": "targeted RED/GREEN only before pausing for the transport heavy-test gate"
+    "cpu_coordination": "transport heavy-test gate cleared; broad local validation completed before the next deliberate Firstmate gate"
   },
   "results": {
     "immutable_head_gate": "passed",
@@ -55,6 +56,14 @@
     "green": "passed: selected owner reads, generic SELECT 1, and omitted flow typed ambiguity/remedy pass in the strict target",
     "targeted_regression_fence": "passed: #4066 flow alias/case/action selectors, focused app query matrix, and schedule re-entry",
     "targeted_commit": "committed: strict RED, minimum GREEN, and focused evidence",
-    "cpu_gate": "awaiting transport heavy-validation completion"
+    "affected_package_tests": "passed: internal/app, internal/cli, internal/flow, internal/warehouse, and internal/schedule",
+    "focused_race": "passed: #3897/#4066/#4069 query, flow, and warehouse selectors",
+    "local_quality_and_generators": "passed: gofmt, candidate diff check, go vet, make lint, direct app/cli lint, agent contract, connectorgen validate/surface-sync/certification-matrix, and connectorgen package tests",
+    "docs_help_website": "passed: docs validator and pm flow help/namespace checks; website not applicable because no website path changed",
+    "manual_verify_work": "passed: acceptance evidence satisfied with no gap",
+    "manual_code_review": "passed: no unresolved candidate finding",
+    "pr_issue_guard": "passed locally against a prospective draft body with Refs #4069",
+    "inherited_baseline": "seven older #3897 planning-file trailing-whitespace findings remain outside the child range",
+    "next_gate": "paused before no-mistakes, draft PR work, and CI observation for Firstmate transport Sol r4 coordination"
   }
 }
