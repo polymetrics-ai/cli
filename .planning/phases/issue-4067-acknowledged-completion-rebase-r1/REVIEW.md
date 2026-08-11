@@ -1,7 +1,7 @@
 ---
 phase: issue-4067-acknowledged-completion-rebase-r1
 issue: 4067
-status: r2_clean_after_disposition
+status: r3_clean_after_disposition
 depth: standard
 mode: inline_manual_gsd_fallback
 files_reviewed:
@@ -10,7 +10,7 @@ files_reviewed:
   - internal/app/transport_dispatch_test.go
 findings:
   critical: 0
-  warning: 1
+  warning: 0
   info: 0
   unresolved: 0
 ---
@@ -39,3 +39,20 @@ findings:
 - #4046's typed-conflict-only terminalization, R7/R8 source identity, and per-stream CAS remain outside the r2 production diff and pass fresh focused regressions.
 
 **Review disposition:** no unresolved critical, warning, or informational finding. Fresh local-only no-mistakes loop 3/5 subsequently passed; its unrelated warehouse-documentation commit is cancelled in the scope-restoration follow-up. The #4059-only delivery route still requires Firstmate direction because current tool help has no safe existing-PR option.
+
+## R3 code review record
+
+**Review mode:** The resolved official `code-review` prompt still reports this named issue phase as absent from the numeric roadmap, and this custody forbids role spawning. The standard-depth review was therefore completed inline against the r3 committed source range and local evidence. It is neither independent review nor merge authorization.
+
+### Scope and method
+
+- Reviewed `24345ce1a0978a51bcc12b197f8d22c93cba1242..4f00ee8eb34ccf346d56125d6ad21d8031339880`, with particular attention to `RunETL → runTransportETL → failAcknowledgedTransportRun → failRun → updateState`.
+- Checked that the new `errors.Is(errTransportStreamStateConflict)` branch is first, delegates only that typed condition to the established #4046 terminalizer, and leaves the acknowledged-witness finalizer available for every other error.
+- Walked the committed two-App, two-page all-seven regression: page-one durable acknowledgement; unrelated writer; real winner checkpoint/run; stale page-two CAS; returned/reopened failed loser; typed identity; exact winner/unrelated preservation; and two loser applies with no replay.
+- Rechecked the focused normal/race repeats, complete `internal/app`, GitHub definition/preflight/inspection/harness evidence, generator/quality gates, `git diff --check`, and JSON phase-state syntax. The credentialed smoke is intentionally unavailable rather than silently replaced.
+
+### Findings and disposition
+
+No r3 critical, warning, or informational finding. The early branch is neither a generic refresh nor a checkpoint retry: it reaches only #4046's typed-conflict `failRun`, whose callback edits only the target running run in the latest persisted state. The committed regression exercises the old page-one-witness mask directly and proves the direct path returns durable truth without overwriting the winner or unrelated state.
+
+**R3 review disposition:** clean local review. Production registration remains unsupported/uncertified, the conditional credentialed smoke remains unavailable in this custody, and no #4015 wiring, provider, warehouse, or certification work is implied. Local-only no-mistakes loop 4/5 remains the next and final in-scope action before stopping for Firstmate.

@@ -12,8 +12,8 @@
     "discuss_phase": "r3_auto_manual_fallback_planned",
     "plan_phase_tdd": "r3_planning_checkpoint_committed_before_red",
     "execute_phase": "r3_green_committed_pending_expanded_verification",
-    "verify_work": "r3_pending",
-    "code_review": "r3_pending",
+    "verify_work": "r3_local_goal_backward_verification_complete_pending_review",
+    "code_review": "r3_inline_standard_review_complete_no_unresolved_findings",
     "delivery_revalidation": "r3_loop_4_local_only_pending"
   },
   "skills": [
@@ -40,7 +40,7 @@
   ],
   "correction_ledger": {
     "issue": 4067,
-    "status": "three_completed_runs_r2_scope_restored_r3_green_pending_verification",
+    "status": "three_completed_runs_r2_scope_restored_r3_verified_pending_review_loop_4",
     "budget_used": 3,
     "budget_max": 5,
     "forbidden_flag": "--yes",

@@ -1,9 +1,9 @@
 ---
 phase: issue-4067-acknowledged-completion-rebase-r1
 issue: 4067
-status: r2_local_goal_verified
+status: r3_local_goal_verified_pending_review
 mode: inline_manual_gsd_fallback
-verification_date: 2026-08-11
+verification_date: 2026-08-12
 ---
 
 # #4067 R2 goal-backward verification
@@ -39,3 +39,24 @@ The r2 correction must terminalize only a post-acknowledgement transport error a
 - Fresh no-mistakes loop 3/5 (`01KZS4Y49CT5CBPZ6SEGWR5YWT`) passed locally without `--yes`: review, focused persisted-state/race validation, documentation, and lint passed; push/PR/CI were skipped because current help has no safe existing-#4059 route. Its document phase produced an unrelated warehouse-architecture commit, which the current scope-restoration commit cancels. The budget is now 3/5 consumed; no PR/CI/merge result is claimed here.
 
 **Local verification result:** all r2 behavioral and local quality truths above are verified. After scope restoration, external delivery requires Firstmate direction because the tool cannot safely update only #4059; independent Sol audit remains intentionally pending.
+
+## R3 goal-backward verification
+
+The r3 correction must prevent an older acknowledged page-one witness from masking a later typed page-two stream-state conflict. It must use #4046's typed-conflict terminalization only for that error, return a truthful failed loser, and preserve the winner and unrelated state. Deterministic core proof is primary; current connector evidence is a separate, limited gate.
+
+| Goal-backward truth | Result | Direct evidence |
+|---|---|---|
+| A durable first page followed by a real winner and a stale second-page CAS conflict terminalizes the losing run in all seven modes. | Verified | `TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForAllModes` RED exited `1` with typed conflict, `Run{}`, and reopened `running`; the identical GREEN exits `0`. Normal `-count=3` and race `-count=3` both pass. |
+| Typed conflict identity, returned/durable loser identity, winner checkpoint, unrelated state, and no-replay behavior are preserved. | Verified | Every C12 subtest asserts `errors.Is(err, errTransportStreamStateConflict)`, page-one acknowledgement, real winner stream/run, unrelated stream/checkpoint/run, exactly two loser applies, one winner apply, non-zero returned failed loser, and matching reopened failed loser. |
+| #4046/R7/R8 and r2 ordinary acknowledged-error rules remain intact. | Verified | The full focused transport selector and full `internal/app` package pass, covering stale-writer first/multi-page paths, cancellation, R7/R8 resume identity/CAS, interim checkpoints, all seven r2 paths, fail-closed targets, and truthful persistence outcomes. |
+| Existing GitHub connector definition, hook, preflight, binary inspection, and bounded harness still work at this head. | Verified locally | Real binary build/inspection, GitHub hook/engine/command-runner tests, connector/CLI selectors, and `github-live-proof-sweep` harness tests pass. |
+| Current branch provides a registered GitHub/PostgreSQL transport round trip or certification. | Not claimed | Both real binary inspections report source/destination `unsupported` and `COMMUNITY BUILD, UNCERTIFIED`; no production wiring, warehouse round trip, or certification result exists here. |
+| Conditional credentialed bounded GitHub smoke can be run safely. | Unavailable in this custody | No approved credential/name or sanctioned secret channel was supplied. No credential or environment secret was probed, copied, created, or disclosed, and no provider request was made. |
+
+## R3 validation record
+
+- RED commit: `b07795bc2`; GREEN commit: `4f00ee8eb`.
+- `scripts/verify-gsd-workflow 30b2fb4aeb121641b6158903fe1d3b54668599a6 HEAD`, certification-matrix check, canonical website generator clean-diff check, `go vet ./...`, lint, build, and all required individual repository checks pass.
+- `make smoke-no-build` is deliberately excluded because it mutates a warehouse; no other quality gate was weakened.
+
+**R3 local verification result:** all deterministic and repository-local truths in this phase are verified. The production-registration and credentialed-smoke limitations are explicit. Inline GSD code review is complete with no unresolved finding; only local-only no-mistakes loop 4/5 remains. No CI, external certification, PR action, or merge result is implied.
