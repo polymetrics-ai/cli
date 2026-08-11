@@ -76,7 +76,8 @@ No customer target is adopted or evolved.
 
 1. Planning artifacts.
 2. RED test and GREEN contract/state-machine implementation.
-3. Verification/review/no-mistakes corrections, capped at five rounds. A new
-   #3981 child issue is created before fixing any newly discovered gate defect.
+3. Verification/review/no-mistakes corrections, capped at five rounds. #4038
+   is the correction child created before fixing the cross-provisioner locking
+   gap found during required code review.
 4. Push the child branch and open exactly one draft PR to
    `feat/3972-postgres-parity`, never `main`; do not merge.

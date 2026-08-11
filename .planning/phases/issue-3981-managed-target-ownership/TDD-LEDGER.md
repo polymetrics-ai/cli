@@ -8,7 +8,7 @@
 | R4 | Exact repeat admission | Correct owner/control/native/schema state lacks an idempotent assertion path. | A repeat is admitted without a second create. |
 | R5 | Foreign, missing, unreadable, and collision refusal | Foreign/missing/unreadable/colliding observations can be treated as a creatable target. | Each state returns a typed refusal and leaves fake mutation count unchanged. |
 | R6 | Replacement and drift refusal | A changed native identity or schema hash/version can be admitted or evolved. | Moved/replaced and schema-drift table rows return typed refusal without mutation. |
-| R7 | Cancellation and races fail closed | A canceled request or concurrent callers can mutate before an asserted postcondition. | Canceled requests make no create call; concurrent callers serialize and observe exactly one legitimate create. |
+| R7 | Cancellation and races fail closed | A canceled request or concurrent callers can mutate before an asserted postcondition. | Canceled requests make no create call; concurrent callers across two provisioners share the driver's typed target lock and observe exactly one legitimate create. |
 | R8 | Driver-neutral boundary | The shared contract requires a PostgreSQL/SQL implementation. | A pure in-memory fake proves all transitions; no driver, SQL, capability, or CLI files change. |
 
 ## Command record
@@ -22,3 +22,7 @@ The exact output is retained at `traces/managed-target-provisioning-red.txt`.
 commands/output are retained in `traces/managed-target-provisioning-green.txt`.
 Broader package, affected, static/build, and individual repository gates remain
 in the verification checklist.
+
+**Correction 1/5:** #4038 records the cross-provisioner gap found during the
+required review before its fix. `traces/cross-provisioner-lock-red.txt` and
+`traces/cross-provisioner-lock-green.txt` preserve the RED/GREEN evidence.

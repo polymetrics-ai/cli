@@ -291,14 +291,22 @@ func TestManagedTargetProvisioningTruthTable(t *testing.T) {
 
 			if tt.concurrentCalls > 0 {
 				driver.blockCreate()
+				peerProvisioner, err := database.NewManagedTargetProvisioner(driver)
+				if err != nil {
+					t.Fatal(err)
+				}
 				type result struct {
 					control database.ManagedTargetControlRecord
 					err     error
 				}
 				results := make(chan result, tt.concurrentCalls)
 				for index := 0; index < tt.concurrentCalls; index++ {
+					activeProvisioner := provisioner
+					if index%2 != 0 {
+						activeProvisioner = peerProvisioner
+					}
 					go func() {
-						got, provisionErr := provisioner.CreateOrAssert(context.Background(), tt.plan)
+						got, provisionErr := activeProvisioner.CreateOrAssert(context.Background(), tt.plan)
 						results <- result{control: got, err: provisionErr}
 					}()
 				}
@@ -403,23 +411,44 @@ func assertManagedTargetControl(t *testing.T, got, want database.ManagedTargetCo
 }
 
 type managedTargetDriverFake struct {
-	mu                sync.Mutex
-	observation       database.ManagedTargetObservation
-	createResult      database.ManagedTargetObservation
-	createCalls       int
-	createPlans       []database.ManagedTargetProvisioningPlan
-	createOwners      []database.TargetOwner
-	createStarted     chan struct{}
-	createRelease     chan struct{}
-	createStartedOnce sync.Once
+	mu                  sync.Mutex
+	observation         database.ManagedTargetObservation
+	createResult        database.ManagedTargetObservation
+	createCalls         int
+	createPlans         []database.ManagedTargetProvisioningPlan
+	createOwners        []database.TargetOwner
+	targetLock          chan struct{}
+	activeTargetLocks   int
+	mutationWithoutLock bool
+	createStarted       chan struct{}
+	createRelease       chan struct{}
+	createStartedOnce   sync.Once
 }
 
 func newManagedTargetDriverFake(observation, createResult database.ManagedTargetObservation) *managedTargetDriverFake {
-	return &managedTargetDriverFake{
+	driver := &managedTargetDriverFake{
 		observation:   observation,
 		createResult:  createResult,
 		createStarted: make(chan struct{}),
+		targetLock:    make(chan struct{}, 1),
 	}
+	driver.targetLock <- struct{}{}
+	return driver
+}
+
+func (f *managedTargetDriverFake) AcquireManagedTargetLock(ctx context.Context, _ database.ManagedTargetRef) (database.ManagedTargetLock, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	select {
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	case <-f.targetLock:
+	}
+	f.mu.Lock()
+	f.activeTargetLocks++
+	f.mu.Unlock()
+	return &managedTargetDriverFakeLock{driver: f}, nil
 }
 
 func (f *managedTargetDriverFake) ObserveManagedTarget(ctx context.Context, _ database.ManagedTargetRef) (database.ManagedTargetObservation, error) {
@@ -437,6 +466,9 @@ func (f *managedTargetDriverFake) CreateManagedTarget(ctx context.Context, plan 
 	}
 	f.mu.Lock()
 	f.createCalls++
+	if f.activeTargetLocks != 1 {
+		f.mutationWithoutLock = true
+	}
 	f.createPlans = append(f.createPlans, plan)
 	f.createOwners = append(f.createOwners, owner)
 	release := f.createRelease
@@ -479,7 +511,7 @@ func (f *managedTargetDriverFake) createCallCount() int {
 func (f *managedTargetDriverFake) createdWithAssertedOwner(owner database.TargetOwner, ref database.ManagedTargetRef) bool {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	if len(f.createPlans) == 0 || len(f.createPlans) != len(f.createOwners) {
+	if f.mutationWithoutLock || len(f.createPlans) == 0 || len(f.createPlans) != len(f.createOwners) {
 		return false
 	}
 	for index, plan := range f.createPlans {
@@ -491,4 +523,18 @@ func (f *managedTargetDriverFake) createdWithAssertedOwner(owner database.Target
 		}
 	}
 	return true
+}
+
+type managedTargetDriverFakeLock struct {
+	driver *managedTargetDriverFake
+	once   sync.Once
+}
+
+func (l *managedTargetDriverFakeLock) ReleaseManagedTargetLock() {
+	l.once.Do(func() {
+		l.driver.mu.Lock()
+		l.driver.activeTargetLocks--
+		l.driver.mu.Unlock()
+		l.driver.targetLock <- struct{}{}
+	})
 }

@@ -130,12 +130,22 @@ func (p ManagedTargetProvisioningPlan) Target() ManagedTargetRef { return p.targ
 // not repaired or evolved.
 func (p ManagedTargetProvisioningPlan) Schema() ManagedTargetSchema { return p.schema }
 
+// ManagedTargetLock is a target-scoped driver lock acquired before every
+// observation and held through the final assertion. A native implementation
+// uses the database's own cross-process coordination primitive; this contract
+// never substitutes an unscoped process mutex for that proof.
+type ManagedTargetLock interface {
+	ReleaseManagedTargetLock()
+}
+
 // ManagedTargetProvisioningDriver is the small driver-neutral port used by the
-// shared contract. A native driver owns database-specific locking, DDL, and
-// durable control-record storage later; it receives no generic SQL from here.
-// CreateManagedTarget receives both the typed plan and its asserted owner, and
-// callers must re-observe before a create is considered successful.
+// shared contract. A native driver owns target-scoped cross-process locking,
+// database-specific DDL, and durable control-record storage later; it receives
+// no generic SQL from here. CreateManagedTarget receives both the typed plan
+// and its asserted owner, and callers must re-observe before a create is
+// considered successful.
 type ManagedTargetProvisioningDriver interface {
+	AcquireManagedTargetLock(context.Context, ManagedTargetRef) (ManagedTargetLock, error)
 	ObserveManagedTarget(context.Context, ManagedTargetRef) (ManagedTargetObservation, error)
 	CreateManagedTarget(context.Context, ManagedTargetProvisioningPlan, TargetOwner) error
 }
@@ -186,6 +196,11 @@ func (p *ManagedTargetProvisioner) CreateOrAssert(ctx context.Context, plan Mana
 	if err := ctx.Err(); err != nil {
 		return ManagedTargetControlRecord{}, err
 	}
+	targetLock, err := p.acquireDriverLock(ctx, plan.target)
+	if err != nil {
+		return ManagedTargetControlRecord{}, err
+	}
+	defer targetLock.ReleaseManagedTargetLock()
 
 	observation, err := p.observe(ctx, plan.target)
 	if err != nil {
@@ -239,6 +254,27 @@ func (p *ManagedTargetProvisioner) observe(ctx context.Context, target ManagedTa
 		return ManagedTargetObservation{}, err
 	}
 	return observation, nil
+}
+
+func (p *ManagedTargetProvisioner) acquireDriverLock(ctx context.Context, target ManagedTargetRef) (ManagedTargetLock, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	targetLock, err := p.driver.AcquireManagedTargetLock(ctx, target)
+	if err != nil {
+		if contextErr := ctx.Err(); contextErr != nil {
+			return nil, contextErr
+		}
+		return nil, ErrManagedTargetUnverifiable
+	}
+	if isNilInterface(targetLock) {
+		return nil, ErrManagedTargetUnverifiable
+	}
+	if err := ctx.Err(); err != nil {
+		targetLock.ReleaseManagedTargetLock()
+		return nil, err
+	}
+	return targetLock, nil
 }
 
 func assessManagedTargetObservation(plan ManagedTargetProvisioningPlan, observation ManagedTargetObservation) (bool, ManagedTargetControlRecord, error) {
