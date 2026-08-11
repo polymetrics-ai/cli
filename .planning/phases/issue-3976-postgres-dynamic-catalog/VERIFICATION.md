@@ -27,19 +27,19 @@
       compiled and visibly skipped because no explicit direct Podman endpoint
       or `POLYMETRICS_DATABASE_INTEGRATION=1` opt-in is configured
 - [x] `go test -race -timeout 20m ./internal/connectors/native/postgres`
-- [ ] `go test -timeout 20m ./internal/cli -count=1`
-- [ ] `go vet ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make tidy-check`
-- [ ] `make lint`
-- [ ] `make docs-check`
-- [ ] `make smoke-no-build`
-- [ ] `make agent-contract-check`
-- [ ] `make connectorgen-validate`
-- [ ] `make connectorgen-surface-sync`
-- [ ] `make connector-boundary`
-- [ ] `make release-workflow-check`
-- [ ] generated `verify-work` and `code-review` manual-inline records
+- [x] `go test -timeout 20m ./internal/cli -count=1`
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make tidy-check`
+- [x] `make lint`
+- [x] `make docs-check`
+- [x] `make smoke-no-build`
+- [x] `make agent-contract-check`
+- [x] `make connectorgen-validate`
+- [x] `make connectorgen-surface-sync`
+- [x] `make connector-boundary`
+- [x] `make release-workflow-check`
+- [x] generated `verify-work` and `code-review` manual-inline records
 - [ ] no-mistakes child pipeline without `--yes`, maximum five fresh correction
       loops
 
@@ -59,3 +59,14 @@ description changed from `information_schema` to PostgreSQL system-catalog
 discovery, so its defs documentation, generated connector manuals/catalog, and
 website connector data were regenerated. Connector docs validation remains a
 required final gate.
+
+## Final local outcomes
+
+- Focused package run: PostgreSQL, `database`, and `engine` all passed.
+- PostgreSQL race run passed; `internal/cli` passed in 162.331 seconds.
+- `go vet ./...`, `go build ./cmd/pm`, lint, docs, smoke, agent-contract,
+  connector validation/surface sync/boundary, and release-workflow gates passed.
+- The tagged live regression was invoked and skipped visibly before startup:
+  this workspace has neither the explicit opt-in nor an explicit direct local
+  Podman endpoint. It remains a delivery hold for a live-proof claim, not a
+  passing integration result.
