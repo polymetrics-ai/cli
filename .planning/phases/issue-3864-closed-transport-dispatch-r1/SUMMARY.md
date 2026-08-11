@@ -66,7 +66,7 @@ coverage:
 - Added the bounded `App.RunETL` dispatch bridge and metadata-only inspect/help projections.
   No existing connector is promoted to a transport executor, and no provider/database protocol or
   live call is introduced.
-- Recorded four independently scoped review corrections: [#4021](https://github.com/polymetrics-ai/cli/issues/4021)
+- Recorded five independently scoped review corrections: [#4021](https://github.com/polymetrics-ai/cli/issues/4021)
   for empty authored descriptors reaching preflight, and
   [#4023](https://github.com/polymetrics-ai/cli/issues/4023) for normalized generic executor IDs,
   plus [#4029](https://github.com/polymetrics-ai/cli/issues/4029) for declared `none`
@@ -76,7 +76,10 @@ coverage:
   complete-descriptor preflight, [#4048](https://github.com/polymetrics-ai/cli/issues/4048)
   typed-nil verifier closure, [#4047](https://github.com/polymetrics-ai/cli/issues/4047)
   binary record isolation, and #4029 help/manual parity. These corrections stay in the one child;
-  the outer delivery owner will record the correction commit separately.
+  loop 5/5 keeps [#4046](https://github.com/polymetrics-ai/cli/issues/4046) in that same child to
+  validate acknowledgement-stamped checkpoint identity and atomically advance only the expected
+  stream entry, preserving prior completion metadata and rejecting stale writers. The outer
+  delivery owner will record the correction commit separately.
 
 ## Manual-GSD fallback
 

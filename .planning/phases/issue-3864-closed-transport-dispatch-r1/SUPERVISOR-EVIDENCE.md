@@ -3,10 +3,11 @@
 ## What the local evidence establishes
 
 - The TDD ledger records actual RED and GREEN commands for the dispatch, preflight, strategy,
-  acknowledgement, cancellation, race, projection, and four correction regressions. T15 through
-  T19 prove interim checkpoint persistence across all seven modes and state outcomes, independent
+  acknowledgement, cancellation, race, projection, and five correction regressions. T15 through
+  T21 prove interim checkpoint persistence across all seven modes and state outcomes, independent
   inspection with full-descriptor runtime closure, typed-nil verifier rejection, binary isolation,
-  and generated help/manual parity.
+  generated help/manual parity, acknowledgement-time resume identity validation, and per-stream
+  stale-writer closure.
 - Focused affected-package tests, `go vet`, build, individual required `make verify` components,
   connector runtime preflight, boundary validation, diff lint, and a freshly built binary help /
   inspect probe passed before correction loop 3 as recorded in `VERIFICATION.md`; the outer
@@ -27,7 +28,7 @@
 ## Remaining delivery evidence
 
 The original correction/implementation commit is `9775f420c`; the outer delivery owner must
-record the correction-4 commit. The pending child-local gate is
+record the correction-5 commit. The pending child-local gate is
 `no-mistakes axi run --intent <complete issue intent> --skip=push,pr,ci`, never `--yes`. Push,
 stacked sub-PR creation, automated review coverage, and GitHub CI remain outer-owner steps. Their
 actual results must be added here and to `VERIFICATION.md` before this work can be reported as

@@ -41,6 +41,14 @@ No unresolved Critical, Warning, or Info findings remain.
   positions without changing other record value semantics.
 - **#4029 / correction loop 4/5:** the generated CLI manual had policy wording that the canonical
   `connectorsHelp` source lacked. The source, regenerated manual, and golden transcript now agree.
+- **#4046 / correction loop 5/5:** an acknowledgement-stamped checkpoint could bypass the active
+  resume identity, and a stale app instance could overwrite a newer target-stream checkpoint.
+  The callback now validates the stamped envelope before any state mutation, then performs a
+  target-entry compare-and-swap under the JSON-store lock. It retains prior successful-run
+  metadata through interim pages, distinguishes an absent entry from a present zero entry, and
+  compares every opaque checkpoint field as raw bytes. Deterministic tests cover identity and
+  generation rebootstrap, binary multi-page advancement, unrelated updates, stale two-app
+  writes, cancellation, state-save outcomes, and all seven modes.
 
 ## Review checks
 
@@ -52,6 +60,9 @@ No unresolved Critical, Warning, or Info findings remain.
 - The destination receives only the descriptor-resolved strategy. Its acknowledgement is checked
   through `synccontract.CommitAfterDownstreamAcknowledgement`; the app persists an interim active
   stream checkpoint before that callback returns and before a post-acknowledgement cancellation.
+  The interim envelope must match the active source resume expectation, and its state update is a
+  target-stream compare-and-swap rather than a whole-project revision guard or last-writer-wins
+  assignment.
 - Provider record maps and byte values are defensively copied for the warehouse workset. Cancellation
   after stage reaches neither destination apply nor checkpoint commit; cancellation after a durable
   acknowledgement commits the acknowledged page before returning cancellation.

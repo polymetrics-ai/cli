@@ -1,14 +1,14 @@
 # #3864 verification checklist
 
-## Status: correction-loop 4 focused evidence recorded; broader outer gates and child-local delivery gate pending
+## Status: correction-loop 5 focused evidence recorded; broader outer gates and child-local delivery gate pending
 
 - [x] TDD RED outputs are recorded before production code.
-- [x] Correction loops 3 and 4 project valid roles independently in inspection while full
-  descriptors and the existing durable-acknowledgement runtime gate remain closed.
+- [x] Correction loops 3 through 5 retain the closed inspection, descriptor, checkpoint-identity,
+  and durable-acknowledgement runtime boundaries.
 - [ ] The outer executor must rerun the broader post-review package, CLI/help, docs, and
-  delivery gates; this review step intentionally ran only T15–T19's focused regression command.
-- [x] The focused count-one command passed the touched `internal/connectors`,
-  `internal/synctransport`, `internal/app`, and `internal/cli` assertions with `-timeout 20m`.
+  delivery gates; this review step intentionally ran only T15–T21's focused regression commands.
+- [x] The correction-loop 5 focused count-one `internal/app` regression command passed with
+  `-timeout 20m`.
 - [x] Transport package race test and cancellation regression pass.
 - [x] `go vet` and build pass.
 - [x] Required non-suite `make verify` components pass individually.
@@ -27,6 +27,13 @@
 
 ## Local evidence
 
+- Correction loop 5 first recorded distinct RED failures for T20 and T21. Its sole focused GREEN
+  command was `go test -count=1 -timeout 20m ./internal/app -run
+  '^(TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume|TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForAllModes|TestRunETLTransportAdvancesInterimCheckpointAcrossPages|TestRunETLTransportPreservesUnrelatedStateDuringInterimCheckpointCommit|TestRunETLTransportRejectsStaleCheckpointWriter|TestRunETLTransportDistinguishesMissingAndPresentStreamState|TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation|TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails|TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure)$'`.
+  It passed, proving typed rebootstrap before state writes, per-stream compare-and-swap against
+  the prior/last interim entry, raw opaque-byte comparison, metadata preservation, unrelated
+  state preservation, stale-writer rejection, cancellation ordering, state-store outcomes, and
+  all seven modes. Broader post-review gates remain outer-executor work.
 - Correction loop 4 first recorded independent RED failures in T15–T19. Its sole focused GREEN
   command was `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -count=1 -timeout 20m
   ./internal/app ./internal/connectors ./internal/synctransport ./internal/cli -run
@@ -84,6 +91,12 @@ full-validates selected descriptors, [#4048](https://github.com/polymetrics-ai/c
 typed-nil verifiers, [#4047](https://github.com/polymetrics-ai/cli/issues/4047) isolates binary record
 values, and #4029 aligns canonical help and its artifacts. T15–T19 record separate RED/GREEN evidence;
 this is not a PR split and a topology restart is not a product correction loop.
+
+Correction loop 5/5 remains in the same child and under [#4046](https://github.com/polymetrics-ai/cli/issues/4046):
+T20 rejects acknowledgement-stamped checkpoints that do not match the active source identity or
+generation, while T21 prevents stale target-stream state replacement without blocking unrelated
+project updates. Both RED/GREEN records remain in this one child; no extra PR or topology restart
+was created.
 
 This verification can prove only fake-backed dispatch and metadata surfaces. It cannot
 truthfully assert executable #3810 conformance, a real API/database transport, a live

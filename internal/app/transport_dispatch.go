@@ -1,13 +1,18 @@
 package app
 
 import (
+	"bytes"
 	"context"
+	"errors"
 	"fmt"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/synctransport"
 )
+
+var errTransportStreamStateConflict = errors.New("transport stream state changed in another process")
 
 func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	_, sourceDeclared := connectors.SyncTransportDescriptorOf(source)
@@ -26,7 +31,8 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		return etlExecutionResult{}, fmt.Errorf("closed transport registry is unavailable")
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
-	prior := a.state.StreamStates[stateKey]
+	prior, priorPresent := a.state.StreamStates[stateKey]
+	prior = cloneStreamState(prior)
 	if prior.Checkpoint != nil {
 		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
 			return etlExecutionResult{}, err
@@ -37,6 +43,8 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		generationID++
 	}
 
+	expectedState := cloneStreamState(prior)
+	expectedPresent := priorPresent
 	var committed *synccontract.CheckpointEnvelope
 	transportResult, err := synctransport.NewOrchestrator(a.transports).Run(ctx, synctransport.RunRequest{
 		Source:             source,
@@ -54,14 +62,20 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			if interim.CommittedAt == nil {
 				return fmt.Errorf("closed transport committed checkpoint is missing its acknowledgement timestamp")
 			}
-			interimState := StreamState{
-				Connection:   conn.Name,
-				Stream:       streamName,
-				Checkpoint:   &interim,
-				GenerationID: generationID,
-				UpdatedAt:    *interim.CommittedAt,
+			if err := interim.ValidateResume(sourceExpectation); err != nil {
+				return err
 			}
+			interimState := cloneStreamState(expectedState)
+			interimState.Connection = conn.Name
+			interimState.Stream = streamName
+			interimState.Checkpoint = &interim
+			interimState.GenerationID = generationID
+			interimState.UpdatedAt = *interim.CommittedAt
 			if _, err := a.updateState(func(current state) (state, error) {
+				currentState, currentPresent := current.StreamStates[stateKey]
+				if currentPresent != expectedPresent || (currentPresent && !transportStreamStateEqual(currentState, expectedState)) {
+					return current, errTransportStreamStateConflict
+				}
 				if current.StreamStates == nil {
 					current.StreamStates = map[string]StreamState{}
 				}
@@ -70,7 +84,9 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			}); err != nil {
 				return fmt.Errorf("persist acknowledged transport checkpoint: %w", err)
 			}
-			copy := checkpoint.Clone()
+			expectedState = cloneStreamState(interimState)
+			expectedPresent = true
+			copy := interim.Clone()
 			committed = &copy
 			return nil
 		},
@@ -102,4 +118,80 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
 	return result, nil
+}
+
+func transportStreamStateEqual(left, right StreamState) bool {
+	if left.Connection != right.Connection ||
+		left.Stream != right.Stream ||
+		left.GenerationID != right.GenerationID ||
+		left.LastSuccessfulRunID != right.LastSuccessfulRunID ||
+		left.RecordsLoaded != right.RecordsLoaded ||
+		!left.UpdatedAt.Equal(right.UpdatedAt) {
+		return false
+	}
+	return transportCheckpointEqual(left.Checkpoint, right.Checkpoint)
+}
+
+func transportCheckpointEqual(left, right *synccontract.CheckpointEnvelope) bool {
+	if left == nil || right == nil {
+		return left == nil && right == nil
+	}
+	if left.StateVersion != right.StateVersion ||
+		left.Source.Engine != right.Source.Engine ||
+		left.Source.AccountOrCluster != right.Source.AccountOrCluster ||
+		left.Source.ObjectScope != right.Source.ObjectScope ||
+		left.Mechanism != right.Mechanism ||
+		!transportSnapshotBarrierEqual(left.SnapshotBarrier, right.SnapshotBarrier) ||
+		!transportCheckpointPositionEqual(left.Position, right.Position) ||
+		!transportOptionalBoolEqual(left.PositionObserved, right.PositionObserved) ||
+		!transportOpaqueTokenEqual(left.SourceGeneration, right.SourceGeneration) ||
+		left.SchemaVersion != right.SchemaVersion ||
+		left.ProtocolVersion != right.ProtocolVersion ||
+		left.Dedupe.Kind != right.Dedupe.Kind ||
+		!transportOpaqueTokenEqual(left.Dedupe.Value, right.Dedupe.Value) ||
+		left.DedupeWindow.Kind != right.DedupeWindow.Kind ||
+		!transportOpaqueTokenEqual(left.DedupeWindow.Start, right.DedupeWindow.Start) ||
+		!transportOpaqueTokenEqual(left.DedupeWindow.End, right.DedupeWindow.End) ||
+		!left.ObservedAt.Equal(right.ObservedAt) ||
+		!transportOptionalTimeEqual(left.CommittedAt, right.CommittedAt) ||
+		(left.Partitions == nil) != (right.Partitions == nil) ||
+		len(left.Partitions) != len(right.Partitions) {
+		return false
+	}
+	for index := range left.Partitions {
+		if !transportOpaqueTokenEqual(left.Partitions[index].Partition, right.Partitions[index].Partition) ||
+			!transportCheckpointPositionEqual(left.Partitions[index].Position, right.Partitions[index].Position) {
+			return false
+		}
+	}
+	return true
+}
+
+func transportSnapshotBarrierEqual(left, right *synccontract.SnapshotBarrier) bool {
+	if left == nil || right == nil {
+		return left == nil && right == nil
+	}
+	return left.Kind == right.Kind && transportOpaqueTokenEqual(left.Token, right.Token)
+}
+
+func transportCheckpointPositionEqual(left, right synccontract.CheckpointPosition) bool {
+	return transportOpaqueTokenEqual(left.Primary, right.Primary) && transportOpaqueTokenEqual(left.TieBreaker, right.TieBreaker)
+}
+
+func transportOpaqueTokenEqual(left, right synccontract.OpaqueToken) bool {
+	return (left == nil) == (right == nil) && bytes.Equal(left, right)
+}
+
+func transportOptionalBoolEqual(left, right *bool) bool {
+	if left == nil || right == nil {
+		return left == nil && right == nil
+	}
+	return *left == *right
+}
+
+func transportOptionalTimeEqual(left, right *time.Time) bool {
+	if left == nil || right == nil {
+		return left == nil && right == nil
+	}
+	return left.Equal(*right)
 }

@@ -4,7 +4,7 @@
 **Parent:** [#3862](https://github.com/polymetrics-ai/cli/issues/3862) / draft [PR #4019](https://github.com/polymetrics-ai/cli/pull/4019)  
 **Child branch:** `feat/3864-closed-transport-dispatch`  
 **Base:** `origin/feat/3862-any-to-any-transport`  
-**Status:** active manual-GSD fallback; implementation and local verification are in progress.
+**Status:** active manual-GSD fallback; correction-loop 5 focused evidence is recorded.
 
 ## Lifecycle fallback
 
@@ -97,4 +97,6 @@ identifiers (loop 2/5), and #4029 owns the declared `none` acknowledgement proje
 Loop 4/5 retains this one child: #4046 owns acknowledged interim checkpoint persistence, #4045
 owns complete-descriptor runtime validation, #4048 owns typed-nil verifier admission, #4047 owns
 binary record isolation, and #4029 also owns help/manual parity. A topology restart is not a
-product correction loop.
+product correction loop. Loop 5/5 remains under #4046: acknowledgement-stamped checkpoints must
+match the active resume identity before persistence, and only the captured stream entry may advance
+through a compare-and-swap that preserves prior completion metadata and rejects stale writers.

@@ -107,3 +107,11 @@ topology restart is not a product correction round. At most five product correct
    and regenerates help artifacts. It keeps the durable-warehouse execution gate, all
    seven closed modes, fake-only warehouse mediation, and child-local
    `--skip=push,pr,ci` topology intact.
+5. **#4046 — checkpoint identity and stale-writer correction (loop 5/5).**
+   Distinct RED slices showed that an acknowledged checkpoint could be persisted for another
+   credential, stream, or source generation, and that a stale app instance could replace a
+   newer target-stream checkpoint. GREEN validates the stamped envelope against the active
+   resume expectation before any state mutation, then compares only the captured target stream
+   entry under the JSON-store lock. It preserves earlier successful-run metadata during interim
+   persistence, advances its expected entry page by page, retains unrelated project updates,
+   compares opaque bytes exactly, and keeps the fake warehouse-mediated seven-mode boundary.

@@ -13,10 +13,10 @@
     "verify_work": "completed_manual_fallback",
     "code_review": "completed_manual_fallback"
   },
-  "correction_rounds": 4,
+  "correction_rounds": 5,
   "correction_issues": [4021, 4023, 4029, 4045, 4046, 4047, 4048],
   "conformance": "external verifier required; self-asserted evidence is not admitted",
   "delivery_topology": "child-local no-mistakes runs with --skip=push,pr,ci; the outer delivery owner alone handles push, sub-PR, and CI",
   "topology_restart_is_product_correction": false,
-  "supervisor_compatible_evidence": "correction-loop 4 focused RED/GREEN evidence is recorded in TDD-LEDGER.md and SUPERVISOR-EVIDENCE.md; child-local delivery gate pending"
+  "supervisor_compatible_evidence": "correction-loop 5 focused RED/GREEN evidence is recorded in TDD-LEDGER.md and SUPERVISOR-EVIDENCE.md; child-local delivery gate pending"
 }
