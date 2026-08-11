@@ -1,7 +1,7 @@
 # Verification checklist — Issue #3993
 
-Status: harness slice verified inline on 2026-08-11; GitHub certification is
-intentionally not ready.
+Status: historical harness slice remains verified; fresh current-SHA recovery
+is **needs-decision**, not a GitHub certification, as of 2026-08-11.
 
 - [x] Deterministic harness tests show that the supplied `Polymetrics-Cert` boundary controls both emitted cases and classification.
 - [x] Deterministic harness tests show a common barrier release; write cases require an independent read-back before any PM child can start.
@@ -92,3 +92,83 @@ input/output. The three named round-5 RED tests were observed failing before
 production edits, then the focused 50-test GREEN suite passed. This completes
 **5 of 5** permitted correction loops without altering barrier concurrency,
 rate admission, or the measured historical 0/665/856 result.
+
+## Fresh current-SHA recovery — lineage 1/5
+
+This section is the only current-SHA evidence for the captain-authorized fresh
+line. It does not promote any historical provider result, classifier output,
+fixture, or successful exit to a certification claim.
+
+### Build, process, and static evidence
+
+- Local commit at build time: `aeaec4dd18a44db573f69ece9e71b1f80ccd5ea6`.
+- Built binary: `./pm`, SHA-256
+  `c7f9f9c7d070d8c0f6ead322735c5146c33d47fce92a42dc083c8ab6ef554fd4`.
+- `go build -o ./pm ./cmd/pm`, `./pm help connectors`, and
+  `./pm connectors certify --help` all exited successfully.
+- `cmd/pm/main.go` registers `certify.SetCLIRunFunc(cli.Run)` once before the
+  outer `cli.Run`; `internal/connectors/certify/cliharness.go` invokes that
+  function in-process. This proves the available legacy harness execution
+  model is one built `pm` process, not the external Node child-process runner.
+- Current source hashes: `cli_surface.json`
+  `de7c51e24083ed0e886be691b9441efa8f3049fce41bbf9eb8cdcdb67be92c81`,
+  `certification.json`
+  `029261737a4ff74483173f74e06829622ecde6777f1a086a8e149e598d7e5a34`,
+  and `rate_limits.json`
+  `b0748da57a150d31ab944222a40a9ab7b54836cfb741405eea12c5a08f485198`.
+- The current surface declares 1,521 implemented commands (639 direct reads,
+  279 direct writes, 577 reverse-ETL actions). The checked manifest partitions
+  all 1,521 rows into 900 run-owned repository, 308 run-owned organization,
+  33 App-installation, and 280 feature/entitlement cases.
+
+### Focused gates
+
+- Fresh Node RED was observed before the behavior change; the corresponding
+  GREEN proof-sweep suite passed 15/15 and the combined GitHub focused suite
+  passed 51/51.
+- `node scripts/github-live-lab-manifest.mjs --check` passed with the current
+  1,521-row cohort counts; `node scripts/github-live-bootstrap-probes.mjs
+  --check` passed with 308 organization and 33 App-marketplace cases.
+- `go test -timeout 20m ./internal/connectors/certify` passed; `go test
+  -timeout 20m ./internal/cli` passed in 157.243 seconds.
+
+### Honest execution assessment
+
+`pm connectors certify github --full` is a useful in-process legacy harness,
+not the #3993 all-command certification executor. It can exercise catalog
+streams through GitHub → connection-owned Parquet/DuckDB materialization and
+capture-backed destination modes; it has two definition-owned direct-read
+candidates and one binary-download candidate. Its flow is capture-backed
+source → warehouse/query only. Its schedule stage uses an ephemeral crontab
+sentinel and does not prove a persisted schedule firing. It runs only the first
+safe write pairing lifecycle; the `--full` sweep records remaining pairings as
+`untested`, not executed. Therefore it cannot establish #3993's full direct
+provider read/pagination/rate, all-write, warehouse-to-GitHub, authored-action
+flow, or real-schedule acceptance.
+
+The existing external Node sweep is now mechanically fail-closed: its only
+accepted blocker evidence identifies `external_pm_per_operation`; a
+`credentialed_live` record must identify `built_pm_in_process`, and the runner
+rejects before credential/provider dispatch. `single_barrier_release` remains
+topology only, never shared-rate-coordinator evidence.
+
+### Live-safety decision and current result
+
+After the required notice, `working: GitHub focused gates green; requesting
+heavy validation window`, credential inventory found no approved full-parity
+GitHub App secret source in this isolated environment and no initialized local
+project credential state. No secret value was read, printed, fingerprinted, or
+persisted. No `Polymetrics-Cert` immutable run-owned boundary configuration was
+available to verify. Result: **needs-decision**.
+
+No provider request, mutation, plan, preview, approval, execute, read-back,
+or cleanup ran. Accordingly there are no provider resource IDs, no cleanup or
+empty-residue result, no current rate-limit observation, no Parquet/DuckDB row
+count or hash, no connection-owned table, and no flow identity to claim. The
+declared App-installation policy (installation scope, 5,000 requests/hour and
+900 points/60 seconds) is static policy only, not observed admission evidence.
+
+The independent unavailable slices remain explicitly blocked: warehouse-to-
+GitHub action flow by #3994/#4059, and real persisted schedule firing by #3992.
+PR #4060 has not been rebased or copied; #4059 transport code has not been
+copied; parked #4062 was not used.

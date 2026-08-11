@@ -52,7 +52,7 @@
   "fresh_current_sha_lineage": {
     "used": 1,
     "limit": 5,
-    "status": "task_2_green_task_3_pending",
+    "status": "needs_decision_no_approved_app_credential_or_boundary",
     "started_at": "2026-08-11",
     "owner_issue": 3993,
     "pr": 4061,
@@ -63,6 +63,26 @@
     "red_green": {
       "red": "Red: 2026-08-11 focused Node provenance regression exited 1 because execution_model was unsupported rather than validated; config-redaction case passed; no credential, provider, or child process invoked",
       "green": "Green: 2026-08-11 focused Node provenance/redaction suite passed 2/2 and full proof-sweep suite passed 15/15; external model is fail-closed before credential/provider dispatch"
+    },
+    "current_sha_assessment": {
+      "local_head": "aeaec4dd18a44db573f69ece9e71b1f80ccd5ea6",
+      "binary_sha256": "c7f9f9c7d070d8c0f6ead322735c5146c33d47fce92a42dc083c8ab6ef554fd4",
+      "execution_model": "built_pm_in_process",
+      "provider_contact": false,
+      "provider_mutation": false,
+      "credential": {
+        "required_type": "github_app_installation",
+        "availability": "absent",
+        "scope": "unverified",
+        "fingerprint": "not_available"
+      },
+      "boundary": "not_available",
+      "result": "needs-decision",
+      "dependencies": {
+        "warehouse_to_github_flow": [3994, 4059],
+        "real_schedule_firing": [3992],
+        "parent_update_pending": [4060]
+      }
     }
   },
   "current_classifier": {
