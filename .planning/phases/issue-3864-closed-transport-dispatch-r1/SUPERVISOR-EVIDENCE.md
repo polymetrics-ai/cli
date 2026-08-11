@@ -3,12 +3,16 @@
 ## What the local evidence establishes
 
 - The TDD ledger records actual RED and GREEN commands for the dispatch, preflight, strategy,
-  acknowledgement, cancellation, race, projection, and two correction regressions.
+  acknowledgement, cancellation, race, projection, and three correction regressions. T14 proves
+  that inspection preserves a structurally valid declared `acknowledgement: none` destination.
 - Focused affected-package tests, `go vet`, build, individual required `make verify` components,
   connector runtime preflight, boundary validation, diff lint, and a freshly built binary help /
-  inspect probe passed as recorded in `VERIFICATION.md`.
+  inspect probe passed before correction loop 3 as recorded in `VERIFICATION.md`; the outer
+  executor owns their post-review rerun.
 - The transport tests prove only fake-backed API/database family routing through one orchestrator
   and durable-acknowledgement ordering; they do not stand in for a real provider or database leg.
+- The focused correction verification also reran the existing unsafe-acknowledgement preflight
+  case, so the inspection correction did not weaken the runtime durable-warehouse gate.
 
 ## Explicit non-verdicts
 
@@ -20,7 +24,9 @@
 
 ## Remaining delivery evidence
 
-The correction/implementation commit is `9775f420c`. The complete no-mistakes pipeline, stacked
-PR creation, automated review coverage, and GitHub CI status are still pending. Their actual
-results must be added here and to `VERIFICATION.md` before this work can be reported as
-checks-green.
+The original correction/implementation commit is `9775f420c`; the outer delivery owner must
+record the correction-3 commit. The pending child-local gate is
+`no-mistakes axi run --intent <complete issue intent> --skip=push,pr,ci`, never `--yes`. Push,
+stacked sub-PR creation, automated review coverage, and GitHub CI remain outer-owner steps. Their
+actual results must be added here and to `VERIFICATION.md` before this work can be reported as
+checks-green. A topology restart is not a product correction loop.

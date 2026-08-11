@@ -64,9 +64,11 @@ waiver.
    durable acknowledgement.
 7. Inspection is metadata-only. `pm connectors inspect <name> --json` always
    projects source/destination eligibility and reports missing descriptors as
-   `unsupported`; a rendered connector manual adds the declared-role projection
-   when a descriptor exists. The help and website docs say this is not a claim
-   that a transport has passed conformance or is certified.
+   `unsupported`; every structurally valid declared destination remains
+   `declared`, including `acknowledgement: none`. A rendered connector manual adds
+   the declared-role projection when a descriptor exists. The help and website docs
+   say this is not a claim that a transport has passed conformance or is certified.
+   Runtime preflight remains closed unless acknowledgement is `durable_warehouse`.
 
 ## Explicit non-goals
 
@@ -86,9 +88,10 @@ waiver.
 `golang-concurrency`, `golang-database`, `golang-lint`, `golang-naming`,
 `golang-code-style`, `github-issue-first-delivery`, `gsd-discuss-phase`,
 `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, `gsd-code-review`, and
-`no-mistakes`. The user corrected the final gate: run its complete child pipeline through
-push, child PR, and CI (no `--skip=push,pr,ci`), never use `--yes`, never create a second
-parent/default-branch PR, and never merge. The user also split review corrections: #4021 owns
-only app's empty-authored-descriptor fallback (loop 1/5); #4023 owns only normalized generic
-executor identifiers (loop 2/5). Both retain their recorded RED/GREEN evidence and references
-to #3862.
+`no-mistakes`. The canonical child-local gate is `no-mistakes axi run --intent <complete issue
+intent> --skip=push,pr,ci`, never with `--yes`; the outer delivery owner alone handles later
+push, sub-PR creation to `feat/3862-any-to-any-transport`, and CI. It must never create another
+parent/default-branch PR or merge. Product corrections remain in this one child: #4021 owns only
+app's empty-authored-descriptor fallback (loop 1/5), #4023 owns only normalized generic executor
+identifiers (loop 2/5), and #4029 owns the declared `none` acknowledgement projection (loop 3/5).
+A topology restart is not a product correction loop.

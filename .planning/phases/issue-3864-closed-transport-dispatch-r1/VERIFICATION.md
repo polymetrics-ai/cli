@@ -1,8 +1,12 @@
 # #3864 verification checklist
 
-## Status: local gates, manual verify-work, and manual code review recorded; child delivery pipeline pending
+## Status: local gates, manual verify-work, manual code review, and correction-loop 3 focused evidence recorded; child-local delivery gate pending
 
 - [x] TDD RED outputs are recorded before production code.
+- [x] Correction loop 3 projects a valid `acknowledgement: none` destination in
+  inspection while the existing durable-acknowledgement preflight rejection remains green.
+- [ ] The outer executor must rerun the broader post-review package, CLI/help, docs, and
+  delivery gates; this review step intentionally ran only T14's focused regression command.
 - [x] Focused `internal/connectors`, `internal/synctransport`, `internal/app`, and
   `internal/cli` tests pass with `-timeout 20m`.
 - [x] Transport package race test and cancellation regression pass.
@@ -16,14 +20,21 @@
 - [x] Manual `verify-work` outcome (zero automated gaps), code-review findings/dispositions, and
   supervisor-compatible local evidence are recorded in `UAT.md`, `REVIEW.md`, and
   `SUPERVISOR-EVIDENCE.md` using the documented manual-GSD fallback.
-- [ ] Complete child no-mistakes push/PR/CI result (without `--yes`), automated-review coverage,
-  and child-local check state are recorded. Its PR base must be
-  `feat/3862-any-to-any-transport`; it must not merge or create another parent/default PR.
+- [ ] Child-local `no-mistakes axi run --intent <complete issue intent> --skip=push,pr,ci`
+  result (without `--yes`) is recorded. Push, sub-PR creation to
+  `feat/3862-any-to-any-transport`, automated-review coverage, and CI belong to the outer
+  delivery owner; this child must not create another parent/default PR or merge.
 
 ## Local evidence
 
 - `go test -timeout 20m ./internal/connectors ./internal/synctransport`,
   `go test -timeout 20m ./internal/app`, and `go test -timeout 20m ./internal/cli` passed.
+- Review correction #4029 first reproduced the declared-`none` inspection failure with
+  `go test -v -timeout 20m ./internal/connectors -run
+  '^TestSyncTransportEligibilityProjectsDeclaredNoneAcknowledgement$'`. The focused GREEN
+  command `go test -v -timeout 20m ./internal/connectors ./internal/synctransport -run
+  '^(TestSyncTransportEligibilityProjectsDeclaredNoneAcknowledgement|TestPreflightRejectsClosedAdmissionFailuresBeforeSourceRead)$'`
+  passed, covering both projection and the unchanged runtime rejection.
 - `go test -race -timeout 20m ./internal/synctransport -run
   '^(TestRegistryPreflightIsRaceSafeDuringRegistration|TestOrchestratorDispatchesFourClosedPairingsWithoutPairBranches|TestOrchestratorStopsOnCancellationBetweenWarehouseStageAndApply)$'`
   passed.
@@ -55,6 +66,11 @@ Correction loop 2/5 is tracked independently in [#4023](https://github.com/polym
 the closed descriptor must reject `generic-http` just as it rejects `generic_http`. Its RED and
 GREEN command evidence is in T13 of `TDD-LEDGER.md`. Shared correction commit `9775f420c`
 references #4021, #4023, #3864, and #3862 while retaining each issue's bounded scope.
+
+Correction loop 3/5 is tracked in [#4029](https://github.com/polymetrics-ai/cli/issues/4029):
+inspection must report a structurally valid destination `acknowledgement: none` as declared
+without admitting it to runtime execution. T14 records the focused RED/GREEN evidence. It stays
+in this child alongside #4021 and #4023; a topology restart is not a product correction loop.
 
 This verification can prove only fake-backed dispatch and metadata surfaces. It cannot
 truthfully assert executable #3810 conformance, a real API/database transport, a live

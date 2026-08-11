@@ -418,7 +418,7 @@ func SyncTransportEligibilityOf(c Connector) SyncTransportEligibility {
 			Modes:    append([]synccontract.Mode(nil), descriptor.Source.Modes...),
 		}
 	}
-	if descriptor.Destination != nil && descriptor.Destination.Acknowledgement == TransportAcknowledgementDurableWarehouse {
+	if descriptor.Destination != nil {
 		executor := descriptor.Destination.Executor
 		eligibility.Destination = TransportRoleEligibility{
 			Status:          "declared",

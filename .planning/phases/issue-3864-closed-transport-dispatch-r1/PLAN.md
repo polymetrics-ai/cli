@@ -55,14 +55,14 @@ with explicit unsupported roles and a manual projection when a descriptor is dec
 
 Run targeted package tests, `-race`, cancellation test, `internal/app`, `internal/cli`,
 static/build and connector preflight/help checks. Run the non-`go test ./...` `make verify`
-components individually. Complete manual `verify-work`, any `--gaps` loop, code review,
-and the complete child `no-mistakes axi run --intent ...` pipeline through push, child PR,
-and CI without `--yes`. Configure/review its topology before it mutates GitHub: it must use
-the existing child branch and create at most one conventional-commit child PR with base
-`feat/3862-any-to-any-transport`; it must never make a second parent/default-branch PR or
-merge any PR. Before invoking the pipeline, set this child branch's GitHub merge-base to
-`feat/3862-any-to-any-transport`, verify the branch still tracks that parent, and include
-the same base constraint in the no-mistakes intent. At most five combined correction rounds.
+components individually. Complete manual `verify-work`, any `--gaps` loop, and code review.
+The child-local delivery command is `no-mistakes axi run --intent <complete issue intent>
+--skip=push,pr,ci`, never with `--yes`; it deliberately ends before external push, PR, or CI.
+After those child-local gates, the delivery owner may use `gh-axi` to open at most one
+conventional-commit sub-PR from this existing child branch to
+`feat/3862-any-to-any-transport`. The integrated parent, not this child, owns the full
+push/PR/CI pipeline. Never create a second parent/default-branch PR or merge any PR. A
+topology restart is not a product correction round. At most five product correction rounds.
 
 ## Foundation-check disposition
 
@@ -89,3 +89,10 @@ the same base constraint in the no-mistakes intent. At most five combined correc
    `internal/connectors`; #4021 remains scoped to app routing. This correction
    normalizes hyphen spelling before closed generic-identifier rejection. Commit
    `9775f420c` references `Refs #4023`, `Refs #3864`, and `Refs #3862`.
+3. **#4029 — declared `none` acknowledgement inspection (loop 3/5).** Inspection
+   must project every structurally valid declared destination, including
+   `acknowledgement: none`, without treating that metadata as runtime admission.
+   `TestSyncTransportEligibilityProjectsDeclaredNoneAcknowledgement` first failed
+   because that role remained `unsupported`; the projection now includes every
+   structurally valid destination and retains its acknowledgement. Registry.Preflight's
+   `durable_warehouse` execution gate remains unchanged.

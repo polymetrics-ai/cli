@@ -40,6 +40,16 @@ coverage:
         ref: internal/connectors/sync_transport_test.go: TestSyncTransportDescriptorRejectsHyphenatedGenericExecutorReference
         status: pass
     human_judgment: false
+  - id: D5
+    description: Inspection reports every structurally valid destination acknowledgement while runtime preflight remains durable-warehouse-only.
+    verification:
+      - kind: unit
+        ref: internal/connectors/sync_transport_test.go: TestSyncTransportEligibilityProjectsDeclaredNoneAcknowledgement
+        status: pass
+      - kind: unit
+        ref: internal/synctransport/transport_test.go: TestPreflightRejectsClosedAdmissionFailuresBeforeSourceRead
+        status: pass
+    human_judgment: false
 ---
 
 # Summary — #3864 closed transport dispatch
@@ -56,10 +66,14 @@ coverage:
 - Added the bounded `App.RunETL` dispatch bridge and metadata-only inspect/help projections.
   No existing connector is promoted to a transport executor, and no provider/database protocol or
   live call is introduced.
-- Recorded two independently scoped review corrections: [#4021](https://github.com/polymetrics-ai/cli/issues/4021)
+- Recorded three independently scoped review corrections: [#4021](https://github.com/polymetrics-ai/cli/issues/4021)
   for empty authored descriptors reaching preflight, and
-  [#4023](https://github.com/polymetrics-ai/cli/issues/4023) for normalized generic executor IDs.
-  Commit `9775f420c` carries `Refs #3864`, `Refs #3862`, `Refs #4021`, and `Refs #4023`.
+  [#4023](https://github.com/polymetrics-ai/cli/issues/4023) for normalized generic executor IDs,
+  plus [#4029](https://github.com/polymetrics-ai/cli/issues/4029) for declared `none`
+  acknowledgement inspection. The latter preserves honest metadata without relaxing the
+  durable-warehouse runtime gate. The earlier shared commit `9775f420c` carries `Refs #3864`,
+  `Refs #3862`, `Refs #4021`, and `Refs #4023`; the outer delivery owner will record the
+  correction commit separately.
 
 ## Manual-GSD fallback
 
@@ -73,5 +87,6 @@ is in `TDD-LEDGER.md`; local verification is in `VERIFICATION.md`; review dispos
 
 This summary records fake-backed dispatch and local behavior only. It does not assert accepted
 #3810 conformance, a real provider/database leg, live credentials, automatic Shepherd acceptance,
-or certification. The required child delivery pipeline remains pending until the committed child
-branch is pushed, has a stacked PR, and its CI gates actually complete.
+or certification. The required child-local gate remains pending as
+`no-mistakes axi run --intent <complete issue intent> --skip=push,pr,ci`; the outer delivery owner
+alone handles any later push, stacked sub-PR, and CI work.

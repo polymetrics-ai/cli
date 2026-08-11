@@ -19,6 +19,11 @@ No unresolved Critical, Warning, or Info findings remain.
   applied to `generic_http`. A dedicated RED test reproduced it; identifier validation now
   normalizes hyphens before the closed generic check. The correction stays limited to
   `internal/connectors` validation.
+- **#4029 / correction loop 3/5:** the metadata-only eligibility projection accidentally reused
+  the runtime durable-acknowledgement admission condition, hiding a structurally valid
+  `acknowledgement: none` destination. The RED test reproduced the omission; inspection now
+  projects every structurally valid destination and retains its declared acknowledgement. The
+  existing Registry.Preflight rejection of non-durable acknowledgement remains unchanged.
 
 ## Review checks
 
@@ -32,6 +37,7 @@ No unresolved Critical, Warning, or Info findings remain.
 - Provider record maps are defensively copied for the warehouse workset; cancellation after stage
   reaches neither destination apply nor checkpoint commit.
 - The public projections remain metadata-only and explicitly avoid a certification claim. The
-  production verifier remains unavailable by default, so a descriptor cannot self-admit.
+  production verifier remains unavailable by default, so a descriptor cannot self-admit. A valid
+  `acknowledgement: none` is visible in inspection but cannot execute.
 - No file under `internal/synccontract`, provider-specific connector implementation, database
   protocol, or live harness changed.

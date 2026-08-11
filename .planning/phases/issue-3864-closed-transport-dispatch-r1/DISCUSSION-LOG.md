@@ -19,7 +19,7 @@
 | Mode ownership | Accept exactly `synccontract.Mode`; no conversion or second enum. | #3810 is the sole semantic owner. |
 | Apply behavior | Per-mode declared, closed apply strategy selected in preflight before a source read. | Removes new-path hard-coded `upsert` dispatch without inventing generic writes. |
 | Checkpoint | Commit only after a destination returns #3810's opaque durable acknowledgement. | Keeps the durable acknowledgment/checkpoint seam single-sourced. |
-| Public surface | Manual and JSON inspection show descriptor-derived eligibility or explicit unsupported roles. | Read-only inspect must be honest and machine-readable. |
+| Public surface | Manual and JSON inspection show descriptor-derived eligibility or explicit unsupported roles; every structurally valid destination remains declared, including `acknowledgement: none`. | Read-only inspect must be honest and machine-readable without admitting a non-durable destination to runtime. |
 
 ## Open dependency facts recorded, not solved here
 

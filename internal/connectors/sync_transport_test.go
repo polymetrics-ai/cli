@@ -130,6 +130,43 @@ func TestSyncTransportGuideProjectsDeclaredRolesWithoutCertificationClaim(t *tes
 	}
 }
 
+func TestSyncTransportEligibilityProjectsDeclaredNoneAcknowledgement(t *testing.T) {
+	for _, acknowledgement := range []TransportAcknowledgement{
+		TransportAcknowledgementDurableWarehouse,
+		TransportAcknowledgementNone,
+	} {
+		t.Run(string(acknowledgement), func(t *testing.T) {
+			destination := &DestinationTransportDescriptor{
+				Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeDatabase, ID: "fake_database_destination"},
+				EligibleActions: []string{"stage_append"},
+				Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
+				Delivery:        closedTestDeliveryGuarantees(),
+				Conformance:     closedTestConformanceReference(),
+				Acknowledgement: acknowledgement,
+				ApplyStrategies: []DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: "stage_append"}},
+			}
+			connector := &syncTransportGuideConnector{descriptor: &SyncTransportDescriptor{Destination: destination}}
+
+			eligibility := SyncTransportEligibilityOf(connector)
+			if eligibility.Destination.Status != "declared" {
+				t.Fatalf("destination status = %q, want declared", eligibility.Destination.Status)
+			}
+			if eligibility.Destination.Acknowledgement != acknowledgement {
+				t.Fatalf("destination acknowledgement = %q, want %q", eligibility.Destination.Acknowledgement, acknowledgement)
+			}
+			if eligibility.Destination.Executor == nil || *eligibility.Destination.Executor != destination.Executor {
+				t.Fatalf("destination executor = %#v, want %#v", eligibility.Destination.Executor, destination.Executor)
+			}
+			if len(eligibility.Destination.Actions) != 1 || eligibility.Destination.Actions[0] != "stage_append" {
+				t.Fatalf("destination actions = %#v, want [stage_append]", eligibility.Destination.Actions)
+			}
+			if len(eligibility.Destination.ApplyStrategies) != 1 || eligibility.Destination.ApplyStrategies[0] != destination.ApplyStrategies[0] {
+				t.Fatalf("destination apply strategies = %#v, want %#v", eligibility.Destination.ApplyStrategies, destination.ApplyStrategies)
+			}
+		})
+	}
+}
+
 type syncTransportGuideConnector struct {
 	descriptor *SyncTransportDescriptor
 }
