@@ -79,7 +79,8 @@
       "draft": true,
       "base": "feat/3862-any-to-any-transport",
       "head": "feat/3855-polling-apply-foundations",
-      "head_sha": "4099335632a79e3c70ce20c004a5f63933171280",
+      "initial_verified_head_sha": "4099335632a79e3c70ce20c004a5f63933171280",
+      "final_head_reinspection": "pending fresh validation",
       "changed_files": 9
     },
     "child_inventory": [3856, 3857, 3858, 3859, 3860],
