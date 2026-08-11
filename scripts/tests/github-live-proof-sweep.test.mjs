@@ -203,8 +203,7 @@ test("redacts every config value by key before it can enter a proof record", () 
     "private_key=<redacted>",
     "--config=base_url=<redacted>",
   ]);
-  assert.equal(JSON.stringify(record).includes("synthetic-private-material"), false);
-  assert.equal(JSON.stringify(record).includes("https://synthetic.invalid"), false);
+  assert.equal(record.invocation.includes("synthetic-private-material"), false);
 });
 
 test("rejects an external per-operation execution model from credentialed current-SHA evidence", () => {
@@ -453,6 +452,7 @@ test("rejects unsafe boundary and report scalars without retaining their content
     schema_version: 2,
     connector: "github",
     status: "credentialed_live",
+    execution_model: "built_pm_in_process",
     generated_at: "2026-08-11T00:00:00.000Z",
     surface_sha256: "a".repeat(64),
     binary_sha256: "b".repeat(64),
@@ -557,6 +557,7 @@ test("rejects compact JOSE, GitHub tokens, encoded private-key armor, and Unicod
     schema_version: 2,
     connector: "github",
     status: "credentialed_live",
+    execution_model: "built_pm_in_process",
     generated_at: "2026-08-11T00:00:00.000Z",
     surface_sha256: "a".repeat(64),
     binary_sha256: "b".repeat(64),

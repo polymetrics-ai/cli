@@ -8,7 +8,6 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 
 import {
-  buildCases,
   CASE_REASON_FAMILIES,
   HISTORICAL_TERMINAL_MEASUREMENT,
   resolveLiveBoundary,
@@ -53,6 +52,12 @@ const PROCESS_TIMEOUT_MS = 45_000;
 const PROCESS_KILL_GRACE_MS = 1_000;
 const APP_INSTALLATION_REPOSITORY_PREFLIGHT = "apps list-repos-accessible-to-installation";
 const CANONICAL_GITHUB_API_ORIGIN = "https://api.github.com";
+const BUILT_PM_IN_PROCESS = "built_pm_in_process";
+const EXTERNAL_PM_PER_OPERATION = "external_pm_per_operation";
+const EXECUTION_MODELS = new Set([
+  BUILT_PM_IN_PROCESS,
+  EXTERNAL_PM_PER_OPERATION,
+]);
 const SAFE_IDENTIFIER = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$/u;
 const GITHUB_SLUG = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,98})$/u;
 const MAX_INSTALLATION_PREFLIGHT_PAGES = 10_000;
@@ -419,6 +424,20 @@ function requireSHA256(value, label) {
   return digest;
 }
 
+function requireExecutionModel(value, label) {
+  const executionModel = requireSafeText(value, label);
+  if (!EXECUTION_MODELS.has(executionModel)) {
+    throw new Error(`${label} is not a supported execution model`);
+  }
+  return executionModel;
+}
+
+function assertCurrentCertificationExecutionModel(executionModel) {
+  if (executionModel !== BUILT_PM_IN_PROCESS) {
+    throw new Error("credentialed live evidence requires the built_pm_in_process execution model");
+  }
+}
+
 function validateReportTally(value, expectedCount) {
   const tally = requireKnownFields(value, new Set(["proven", "untestable", "failed"]), "proof report.tally");
   for (const key of ["proven", "untestable", "failed"]) {
@@ -462,6 +481,7 @@ export function validateProofReport(candidate, expectedCommands, { caseDigest } 
       "surface_sha256",
       "binary_sha256",
       "case_digest",
+      "execution_model",
       "test_repository",
       "run_boundary",
       "launch",
@@ -477,6 +497,7 @@ export function validateProofReport(candidate, expectedCommands, { caseDigest } 
         "generated_at",
         "surface_sha256",
         "binary_sha256",
+        "execution_model",
         "test_repository",
         "implemented_commands",
         "blocker",
@@ -497,6 +518,7 @@ export function validateProofReport(candidate, expectedCommands, { caseDigest } 
   }
   requireSHA256(report.surface_sha256, "proof report.surface_sha256");
   requireSHA256(report.binary_sha256, "proof report.binary_sha256");
+  const executionModel = requireExecutionModel(report.execution_model, "proof report.execution_model");
   const implementedCommands = requireNonNegativeInteger(report.implemented_commands, "proof report.implemented_commands");
   if (!Array.isArray(expectedCommands) || implementedCommands !== expectedCommands.length) {
     throw new Error("proof report implemented command count does not match the current surface");
@@ -508,6 +530,7 @@ export function validateProofReport(candidate, expectedCommands, { caseDigest } 
     throw new Error("proof report uses an unsupported test repository projection");
   }
   if (status === "credentialed_live") {
+    assertCurrentCertificationExecutionModel(executionModel);
     const digest = requireSHA256(report.case_digest, "proof report.case_digest");
     if (caseDigest !== undefined && digest !== caseDigest) {
       throw new Error("proof report case digest does not match the canonical case artifact");
@@ -519,6 +542,9 @@ export function validateProofReport(candidate, expectedCommands, { caseDigest } 
     }
     requireNonNegativeInteger(launch.operations_released, "proof report.launch.operations_released");
   } else {
+    if (executionModel !== EXTERNAL_PM_PER_OPERATION) {
+      throw new Error("external blocker evidence requires the external_pm_per_operation execution model");
+    }
     const blocker = requireKnownFields(report.blocker, new Set(["code", "message"]), "proof report.blocker");
     const code = requireSafeIdentifier(blocker.code, "proof report.blocker.code");
     if (!(code in EXTERNAL_BLOCKERS) || requireSafeText(blocker.message, "proof report.blocker.message") !== EXTERNAL_BLOCKERS[code]) {
@@ -1220,6 +1246,10 @@ async function executeLive(options) {
   const expected = enumerateImplementedCommands(surface);
   const surfaceCommands = new Map(surface.commands.map((command) => [command.path, command]));
   const cases = validateCaseFile(await loadJSON(casesPath), boundary, surface);
+  // This script launches a child `pm` per operation. It must not touch a
+  // credential or provider while pretending it can produce the in-process
+  // current-certification evidence owned by `pm connectors certify`.
+  assertCurrentCertificationExecutionModel(EXTERNAL_PM_PER_OPERATION);
   const binaryBytes = await readFile(binary);
   const credentialScope = await validateCredentialScope({
     binary,
@@ -1315,6 +1345,7 @@ async function executeLive(options) {
     surface_sha256: createHash("sha256").update(JSON.stringify(surface)).digest("hex"),
     binary_sha256: createHash("sha256").update(binaryBytes).digest("hex"),
     case_digest: cases.caseDigest,
+    execution_model: EXTERNAL_PM_PER_OPERATION,
     test_repository: "<run-owned-boundary-repository>",
     run_boundary: {
       run_id: boundary.run_id,
@@ -1370,6 +1401,7 @@ async function recordExternalBlocker(options) {
     status: "external_blocker",
     surface_sha256: createHash("sha256").update(JSON.stringify(surface)).digest("hex"),
     binary_sha256: createHash("sha256").update(binaryBytes).digest("hex"),
+    execution_model: EXTERNAL_PM_PER_OPERATION,
     test_repository: "<credentialed-live-proof-not-available>",
     implemented_commands: expected.length,
     blocker: {
