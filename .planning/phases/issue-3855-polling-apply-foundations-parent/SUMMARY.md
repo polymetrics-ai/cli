@@ -1,7 +1,7 @@
 ---
 phase: issue-3855-polling-apply-foundations-parent
 issue: 3855
-status: local_seed_validated
+status: draft_parent_verified_pending_fresh_validation
 coverage:
   - id: PARENT-TOPOLOGY
     description: A draft-only #3855 parent records exact branch dependency, child order, scope fence, and historical reuse without claiming product implementation.
@@ -20,5 +20,9 @@ child, the #3880 partial-reuse ruling, and the temporary-base/retarget boundary.
 changes no product behavior and makes no certification or executable-feature claim.
 
 The planning artifact scope, repository documentation/lint gates, and canonical GSD projection are
-green. no-mistakes, push, draft-PR creation, and live PR revalidation remain pending until their
-respective gates complete.
+green. Draft PR #4041 is open with the temporary #3862 base and the restored #3855 head.
+
+The completed local no-mistakes run's out-of-scope terminal document commit remains in ancestry and
+was whole-reverted, restoring the accepted tree and protected #4015 architecture blob exactly.
+Fresh no-mistakes validation remains pending for this recovery/evidence commit; it cannot modify
+any non-phase path.

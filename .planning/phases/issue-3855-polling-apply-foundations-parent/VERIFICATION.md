@@ -11,11 +11,14 @@
 | GSD adapter | `scripts/gsd doctor`; required `sources` resolutions; generated lifecycle prompts | passed |
 | Canonical delivery projection | `go run ./cmd/agentcontractgen check` | passed |
 | Parent/child GitHub hierarchy | `gh-axi issue view` / `gh-axi issue subissue list` | live check found five open children: #3856–#3860; #3860 follows #3856–#3859 |
-| #3880, #4016, #4019 live inspection | `gh-axi pr view` | pending — independent live PR inspection remains required |
-| Markdown and diff hygiene | `git diff --check`; untracked/staged changed-path assertion | passed — only this phase directory is present |
-| Repository checks | `make tidy-check`; `make docs-check`; `make lint` | passed |
-| no-mistakes | contract argv with `--skip=push,pr,ci`, no `--yes` | pending after commit |
-| Draft PR shape | `gh-axi pr create` then `gh-axi pr view` | pending after local gates |
+| #3880, #4016, #4019 live inspection | `gh-axi pr view` | passed during parent topology audit; #3880 remains partial reuse only |
+| Scope recovery | guarded `no-mistakes axi sync --recover`, whole revert, `git diff --exit-code b2d0f630... HEAD`, and ancestry proof | passed — terminal `81f37c2b...` retained in ancestry; `409933563...` restores the accepted tree |
+| Protected inherited blob | `git diff --exit-code` and `git rev-parse <base|HEAD>:docs/architecture/github-postgres-warehouse-certification.md` | passed — both blobs are `889e4eddffabb76aa8be46a934c3e9abe0610f4c` (owner #4015) |
+| Markdown and diff hygiene | `git diff --check` and temporary-base changed-path assertion | passed — exactly the nine phase files are present |
+| Repository checks | `go run ./cmd/agentcontractgen check`; `make tidy-check`; `make docs-check`; `make lint` | passed after whole revert |
+| Prior no-mistakes | `01KZPY9EBYX84WZM11EN1F6C83` with `--skip=push,pr,ci`, no `--yes` | passed; terminal scope expansion was whole-reverted |
+| Draft PR shape | `gh-axi pr create` and REST inspection | passed — #4041 is one open draft with exact temporary base/head and nine files |
+| Fresh no-mistakes | guarded argv with `--skip=push,pr,ci`; document gate not skipped | pending for this evidence commit |
 
 ## GSD verification result
 
