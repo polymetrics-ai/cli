@@ -1,66 +1,41 @@
 ---
 phase: issue-4067-acknowledged-completion-rebase-r1
-status: local_goal_verified
+issue: 4067
+status: r2_local_goal_verified
+mode: inline_manual_gsd_fallback
+verification_date: 2026-08-11
 ---
 
-# #4067 verification checklist
+# #4067 R2 goal-backward verification
 
-**Manual GSD verifier:** completed inline on 2026-08-11 after `scripts/gsd prompt verify-work issue-4067-acknowledged-completion-rebase-r1` resolved the official workflow. The custom issue phase is not a numeric roadmap phase and role spawning is forbidden in this custody lane; `UAT.md` records coverage-aware automated acceptance. This is a local deterministic verification result, not a certification, CI result, live-provider check, or merge authorization.
+**Verifier mode:** The official `verify-work` prompt was resolved, but `gsd-sdk` reports `phase_found: false` for this named issue phase and the repository custody contract forbids lifecycle-role spawning. This is the documented inline/manual fallback, not a lifecycle waiver. It records local deterministic evidence only; it is not certification, CI, live-provider verification, or merge authority.
 
-## Goal-backward result
+## Goal and result
 
-| Truth | Status | Evidence |
+The r2 correction must terminalize only a post-acknowledgement transport error after an unrelated revision, preserve the exact acknowledged/winner and unrelated state, retain the initiating error chain, and make a missing target in an acknowledged completion rebase a typed conflict. It must not broaden #4046's typed-conflict exception or replay any checkpoint/source/destination work.
+
+| Goal-backward truth | Result | Direct evidence |
 |---|---|---|
-| A post-checkpoint unrelated write no longer leaves an acknowledged run durably `running` or returns zero. | Verified | All-seven real JSON-store witness; repeated focused command. |
-| Completion rebases only the exact still-running acknowledged target; changed/missing/terminal targets fail closed. | Verified | `TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges`. |
-| Target checkpoint and unrelated current state are retained while only final run/stream metadata changes. | Verified | all-seven witness plus truthful-outcome fixture. |
-| Return/error outcome matches persistence truth and cancellation remains durable. | Verified | outcome table plus cancellation all-seven test. |
-| #4046/R7/R8 behavior remains preserved. | Verified | exact focused regression command and race run. |
+| F1 cancellation after acknowledgement plus unrelated persisted state returns a matching durable failed run in all seven modes. | Verified | `TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes` — exact selector exits `0`; each witness asserts one apply, `context.Canceled`, exact acknowledged/unrelated preservation, and returned/reopened failed-run identity. |
+| F1 representative source error keeps its original error identity and has the same narrow finalization. | Verified | `TestRunETLTransportAcknowledgedFailurePreservesSourceError` — exact selector exits `0`; source sentinel remains detectable with one apply and matching failed run. |
+| F1 refuses any changed/missing acknowledged stream or terminal/missing target run without mutating latest state. | Verified | `TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges` — exit `0`; four guards return `Run{}` and preserve the latest state while retaining the source error plus `errStateRevisionConflict`. |
+| F1 persistence outcomes are truthful. | Verified | `TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome` — exit `0`; definite non-commit returns `Run{}`, while committed and indeterminate outcomes return the matching durable failed run and retain `CommitOutcomeError`. |
+| F2 missing exact target run in an acknowledged completion rebase is a typed conflict, with zero run and no mutation, in all seven modes. | Verified | `TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes` — exact selector exits `0`; all cases retain `errors.Is(err, errStateRevisionConflict)`, one apply, and unchanged reopened state. |
+| #4046 typed-conflict-only failure finalization and R7/R8 source identity/per-stream CAS are unchanged. | Verified | Fresh #4046 repeated/reopen/cancellation and all-seven selectors, plus the R7/R8 selector, each exit `0`; the focused r2 race selector also includes stale-writer finalization. |
 
-**Score:** 5/5 local observable truths verified.
+## Validation record
 
-## Pre-production gates
+- RED was committed before production mutation in `e522b7bfd`: C8 and C9 real JSON-store selectors exited non-zero because the rejected candidate returned `Run{}` and left the target run durably `running`, or returned an untyped missing-run error.
+- The smallest production implementation was committed in `17d6d2aaa`: it preserves only a confirmed post-acknowledgement witness, invokes a separate exact-stream/still-running failure finalizer, and wraps only an acknowledged-rebase missing target as `errStateRevisionConflict`.
+- Review-driven guard coverage was committed in `e8a541a7`: `TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges` directly covers changed/removed stream and terminal/removed run behavior.
+- `go test -timeout 20m ./internal/app`, `go test -timeout 20m ./internal/synctransport`, `go test -timeout 20m ./internal/connectors/...`, focused `internal/cli`, `go vet ./...`, and `go build ./cmd/pm` each exit `0`.
+- Individual repository gates `tidy-check`, `lint`, `docs-check`, `agent-contract-check`, connector validation/surface/certification/boundary/canon/runtime-preflight gates, release-workflow check, and GitHub-parity-artifacts check each exit `0`.
+- The focused r2 `-race` selector exits `0` with no Go race report. The macOS linker emits its known malformed `LC_DYSYMTAB` warning only.
 
-- [x] Controlling Sol correction directive read completely.
-- [x] #3862 child tree, #3864, #4046, #4059 checks/comments/reviews, and the three Sol/R9 reports read before edits.
-- [x] New child #4067 created, linked under #3864, and read back before production/generated changes.
-- [x] Existing branch/PR custody preserved; rejected `883a86cf0040d559edcd4777413d1c2de20cd94a` is an immutable baseline.
-- [x] CodeGraph absence recorded; required skills and GSD/agent-contract checks completed.
-- [x] Named inline/manual GSD problem, context, discussion, TDD plan, execution record, verifier evidence, review, summary, and run-state artifacts exist before code.
-- [x] Behavioral RED exits non-zero for the durable completion leak before production mutation: all seven canonical modes retained acknowledged/unrelated state first, then observed zero returned run plus durable reopened `running` run.
+## Verification limits and remaining delivery gates
 
-## Required focused matrix
+- No provider, credential, network, warehouse, container, or external service was used. `make smoke-no-build` was not run because it writes a local warehouse, which the controlling handoff forbids.
+- Website generation was clean in an isolated disposable worktree. Its dependencies were unavailable there, so the active worktree's existing dependencies ran read-only `pnpm run typecheck` and `pnpm run test:scripts`; both passed. The disposable worktree was removed.
+- The fresh no-mistakes correction budget remains 2/5 consumed. Loop 3/5 and any update of the existing draft #4059 are still pending; no PR/CI/merge result is claimed here.
 
-- [x] Exact post-checkpoint/pre-completion two-App interleaving in all seven modes.
-- [x] Returned/durable identity and reopened terminal truth for the all-seven-mode main witness.
-- [x] Target running/exact-checkpoint eligibility and fail-closed changed/missing/terminal targets.
-- [x] Winner/acknowledged checkpoint and unrelated state preservation.
-- [x] Cancellation after acknowledgement in all seven modes.
-- [x] All seven canonical modes.
-- [x] Focused race detector (`-count=3`; no Go race report).
-- [x] #4046 typed-conflict and R7/R8 regression suite.
-
-## Subsequent gates
-
-- [x] Canonical website generator/check refreshes `website/lib/docs.generated.ts` only; the output contains the candidate-owned transport-eligibility section.
-- [x] Canonical certification generator/check refreshes `internal/connectors/certifications/flow-matrix.json` only; its two discovery-source lines match current `internal/cli/cli.go`.
-- [x] Affected tests, lint, vet/build, and individual repository gates pass after the heavy-validation window notification.
-- [x] Manual `verify-work` record and coverage-aware automated UAT contain local evidence.
-- [x] Manual `code-review` record dispositions every finding.
-- [x] First fresh #4067 no-mistakes run `01KZRPD9TSDDBG4F39VENDW9N4` started at 0/5 without `--yes`, completed review/test/document/lint, and returned `checks-passed`; the old run was not controlled.
-- [x] Scope-restoration head is revalidated in second no-mistakes run `01KZRTCV26XT15R2YCV6Y4BGMP` (2/5) with push/PR/CI skipped because the tool cannot retain the required stacked #4059 base and first opened duplicate #4068; review, focused persisted-state/race tests, document, and lint passed with no findings.
-- [ ] Existing draft #4059 is updated normally, stays unmerged, and exact-head CI is green before requesting an independent Sol audit.
-
-## Heavy local matrix completed
-
-- `go test -count=1 -timeout 20m ./internal/app` — exit `0`.
-- `go vet ./internal/app/...` and `go build ./cmd/pm` — exit `0`.
-- `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make github-parity-artifacts-check`, `make connectorgen-certification-matrix`, `make connector-boundary`, `make connector-canon-check`, and `make release-workflow-check` — each exit `0` individually.
-- `cd website && pnpm typecheck` — exit `0`; `pnpm lint` exits `0` with only existing warnings in unrelated website components.
-- `scripts/verify-gsd-workflow` — exit `0`, recognizing this phase's planning/TDD evidence against `origin/main`.
-
-## No-mistakes delivery record
-
-- `01KZRPD9TSDDBG4F39VENDW9N4` — full first 0/5 run; review/test/document/lint passed and it returned `checks-passed` at `a17d8db98532c6b2569403f6fec30410acf7104b`. Its unsupported default-base PR #4068 was closed unmerged; it did not alter #4059.
-- `01KZRTCV26XT15R2YCV6Y4BGMP` — second 2/5 scope-restoration run; review/test/document/lint passed with no findings and returned `passed` at `cd5c90400c8e2781af59570cd42394e2b5c30162`. Push/PR/CI were deliberately skipped because the tool cannot retain the mandated stacked base. Its guarded `axi sync --recover` returned custody cleanly.
-- Remaining delivery: push only `feat/3864-closed-transport-dispatch-nm5`, update only draft #4059, and monitor #4059's exact-head CI. No merge or certification claim is authorized.
+**Local verification result:** all r2 behavioral and local quality truths above are verified. External delivery and independent Sol audit remain intentionally pending.

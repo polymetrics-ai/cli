@@ -11,10 +11,10 @@
     "reason": "The custom issue phase is absent from the archived numeric roadmap and repository custody forbids lifecycle-role spawning.",
     "discuss_phase": "r2_completed_auto_manual_fallback",
     "plan_phase_tdd": "r2_planning_checkpoint_committed_before_red",
-    "execute_phase": "r2_green_local_focused_pending_commit",
-    "verify_work": "r2_pending",
-    "code_review": "r2_pending",
-    "delivery_revalidation": "r2_pending_existing_pr_only"
+    "execute_phase": "r2_manual_execution_complete",
+    "verify_work": "r2_manual_goal_backward_verification_complete",
+    "code_review": "r2_manual_standard_review_complete",
+    "delivery_revalidation": "r2_no_mistakes_loop_3_pending_existing_pr_only"
   },
   "skills": [
     "golang-how-to",
@@ -38,7 +38,7 @@
   ],
   "correction_ledger": {
     "issue": 4067,
-    "status": "two_completed_runs_r2_green_pending_loop_3",
+    "status": "two_completed_runs_r2_reviewed_pending_loop_3",
     "budget_used": 2,
     "budget_max": 5,
     "forbidden_flag": "--yes",

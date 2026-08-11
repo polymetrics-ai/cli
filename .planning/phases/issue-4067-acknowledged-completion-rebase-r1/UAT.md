@@ -1,53 +1,29 @@
 ---
-status: complete
 phase: issue-4067-acknowledged-completion-rebase-r1
-source: SUMMARY.md
-started: 2026-08-11T15:11:03Z
-updated: 2026-08-11T15:11:03Z
+status: r2_local_automated_acceptance_complete
 mode: coverage-aware automated acceptance under documented inline/manual GSD fallback
+updated: 2026-08-11
 ---
 
-## Current Test
+# #4067 R2 automated acceptance record
 
-[testing complete]
+The issue has deterministic persisted-state acceptance criteria, so the named-phase manual GSD fallback uses the real JSON-store tests below rather than fabricating a human product-judgment session. This is local behavioral acceptance evidence, not certification, external CI, or merge readiness.
 
-## Tests
-
-### 1. Acknowledged completion survives an unrelated writer
-
-expected: Each canonical sync mode returns a non-zero completed run that matches the reopened durable run after another App writes unrelated state after checkpoint acknowledgement.
-result: pass
-source: automated — `TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForAllModes`, repeated focused command, and `-race` run
-
-### 2. Completion does not overwrite a changed target
-
-expected: A changed, removed, or already terminal target stream/run is left untouched and reports a detectable ordinary revision conflict rather than applying a generic rebase.
-result: pass
-source: automated — `TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges`
-
-### 3. Cancellation and persistence outcomes remain truthful
-
-expected: Cancellation after checkpoint acknowledgement preserves the checkpoint and durably fails the run; definite non-commit returns zero while committed/indeterminate terminal writes return durable-consistent completed runs.
-result: pass
-source: automated — `TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes` and `TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome`
-
-### 4. Established stale-writer protections remain intact
-
-expected: #4046's typed conflict finalization, R7/R8 source identity and per-stream CAS retain their prior behavior.
-result: pass
-source: automated — exact focused #4046/R7/R8 regression command
+| Acceptance check | Expected result | Automated result |
+|---|---|---|
+| Post-ack cancellation after an unrelated revision | Each of seven sync modes applies once, preserves the acknowledged stream and unrelated stream/checkpoint/run, returns the durable failed run, and preserves `context.Canceled`. | Pass — `TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes`. |
+| Representative post-ack source error | One apply, preserved winner/unrelated state, matching failed run, and source sentinel stays detectable. | Pass — `TestRunETLTransportAcknowledgedFailurePreservesSourceError`. |
+| Failure finalizer guard | Changed/removed stream and terminal/removed exact run fail closed: zero run, latest state unchanged, original source error plus typed conflict. | Pass — `TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges`. |
+| Missing target completion contract | Each of seven modes returns zero, applies once, preserves reopened state, and exposes `errStateRevisionConflict`. | Pass — `TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes`. |
+| Persistence truth and prior boundary | Definite/non-committed, committed, and indeterminate failure outcomes are truthful; #4046/R7/R8 regressions remain green. | Pass — outcome test, #4046/R7/R8 selectors, and focused `-race` selector. |
 
 ## Summary
 
-total: 4
-passed: 4
+total: 5
+passed: 5
 issues: 0
 pending: 0
 skipped: 0
 blocked: 0
 
-## Gaps
-
-[none]
-
-No human product-judgment checkpoint is required: every deliverable is deterministic and covered by package-local fake-backed tests. This UAT is not certification and does not attest to any live provider, credential, production warehouse, container, external service, CI result, or merge readiness.
+No live provider, credential, warehouse, container, external service, or human merge judgment was exercised. Fresh no-mistakes delivery, exact-head CI, and the required independent Sol audit remain outside this local acceptance result.

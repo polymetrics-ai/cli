@@ -1,6 +1,6 @@
 # #4067 execution record
 
-**Status:** R2 GREEN is locally observed and this implementation/evidence checkpoint is ready to commit. The r2 race, #4046/R7/R8, affected-package, generator/website, manual GSD verification/review, no-mistakes loop 3/5, existing-PR update, and exact-head CI gates remain pending. No r2 external-check claim is made here.
+**Status:** R2 GREEN, focused race, #4046/R7/R8, affected-package, repository, website, and manual GSD verification/review gates are locally complete. Fresh no-mistakes loop 3/5, the existing-#4059-only delivery route, and exact-head CI remain pending. No r2 external-check, certification, or merge claim is made here.
 
 ## R2 planning and behavioral RED
 
@@ -18,6 +18,18 @@
 - `go test -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForAllModes|TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges|TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes|TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome|TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes|TestRunETLTransportAcknowledgedFailurePreservesSourceError|TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes)$' -v` — exit `0`. This jointly reruns the prior completion guard, cancellation, all seven r2 interleavings, missing-target typed chain, and existing completion outcome cases.
 - `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome$' -v` — exit `0`. Definite pre-commit failure returns `Run{}` and preserves reopened state; committed unlock and indeterminate directory-sync outcomes return a matching reopened failed run while retaining both the original source sentinel and `CommitOutcomeError`.
 - The only production files in this checkpoint are `internal/app/app.go` and `internal/app/transport_dispatch.go`; the corresponding focused test is `internal/app/transport_dispatch_test.go`. No generator, provider, credential, network, warehouse, container, or external service was used.
+
+## R2 focused and heavy local validation
+
+- `go test -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes|TestRunETLTransportAcknowledgedFailurePreservesSourceError|TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes)$' -v` — exit `0`.
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome$' -v` and `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges$' -v` — exit `0`.
+- The combined all-seven completion/cancellation/error/missing-target suite, the R7/R8 selector, the #4046 repeated/reopen/cancellation selector, and the #4046 all-seven stale-writer selector each exit `0`.
+- `go test -race -count=1 -timeout 20m ./internal/app -run '^(TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes|TestRunETLTransportAcknowledgedFailurePreservesSourceError|TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges|TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes|TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome|TestRunETLTransportStaleWriterFinalizesLosingRun)$'` — exit `0`; the macOS linker emitted its known malformed `LC_DYSYMTAB` warning, and Go reported no race.
+- `go test -timeout 20m ./internal/app`, `go test -timeout 20m ./internal/synctransport`, `go test -timeout 20m ./internal/connectors/...`, the focused `internal/cli` command-surface selector, `go vet ./...`, and `go build ./cmd/pm` — each exit `0`.
+- Individual repository gates `make tidy-check`, `make lint`, `make docs-check`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make connectorgen-certification-matrix`, `make connector-boundary`, `make release-workflow-check`, `make github-parity-artifacts-check`, `make connector-canon-check`, and `make connector-runtime-preflight` — each exit `0`.
+- In a disposable detached worktree, `pnpm run gen:website-data && git diff --exit-code && git status --short` exits `0`. The detached worktree had no installed packages; an offline frozen install stopped at `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`, so active-worktree read-only `pnpm run typecheck` and `pnpm run test:scripts` supplied the package checks and both exit `0`. The disposable worktree was then removed.
+- `make smoke-no-build` is deliberately not run: it writes a local warehouse and this correction's controlling handoff forbids warehouse mutation. `make verify` is likewise not invoked as one command because the repository instructions require individual gates under the command-timeout environment.
+- Manual `verify-work` and standard-depth `code-review` use the documented named-phase fallback: `gsd-sdk` reports `phase_found: false` for this nonnumeric issue phase and custody forbids lifecycle-role spawning. The current R2 records and review disposition are in `VERIFICATION.md`, `UAT.md`, and `REVIEW.md`.
 
 ## Historical pre-r2 candidate record (not evidence for this correction)
 
