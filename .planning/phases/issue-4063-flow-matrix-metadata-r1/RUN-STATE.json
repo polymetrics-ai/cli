@@ -1,0 +1,57 @@
+{
+  "issue": 4063,
+  "parent_issue": 3897,
+  "program_parent_issue": 3988,
+  "pull_request": 4060,
+  "branch": "feat/3897-flow-connection-scope-nm",
+  "required_base": "feat/3988-github-certification",
+  "exact_start_head": "002ddf674a447bf0872486aa979efdaa078f602c",
+  "status": "red_captured_pending_generated_green",
+  "correction_budget": {
+    "authoritative_source": [
+      ".planning/phases/issue-3897-flow-connection-scope-r1/TDD-LEDGER.md",
+      ".planning/phases/issue-3897-flow-connection-scope-r1/RUN-STATE.json"
+    ],
+    "used_before": 3,
+    "reserved_this_issue": 4,
+    "limit": 5,
+    "remaining_after_this_issue": 1
+  },
+  "manual_gsd_fallback": {
+    "used": true,
+    "reason": "The active ROADMAP.md is an archive entry with no numbered issue phase; gsd-sdk phase-op and init.plan-phase both return phase_found=false for issue-4063-flow-matrix-metadata-r1.",
+    "adapter_verified": true,
+    "inline_execution": true,
+    "delegation": "forbidden by canonical single-worker delivery contract"
+  },
+  "skills": [
+    "github-issue-first-delivery",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-lint",
+    "gsd-discuss-phase",
+    "gsd-plan-phase",
+    "gsd-execute-phase",
+    "gsd-verify-work",
+    "gsd-code-review"
+  ],
+  "safety": {
+    "credentials_or_secrets": "none used",
+    "provider_or_reverse_etl": "none",
+    "generated_writer": "go run ./cmd/connectorgen certification-matrix only",
+    "no_mistakes_delivery_stages": "must be skipped: push,pr,ci"
+  },
+  "results": {
+    "issue_gate": "passed",
+    "pr_draft_transition": "passed",
+    "exact_head_checkout": "passed",
+    "red": "passed: exact-head certification-matrix --check exited 1 for flow-matrix.json drift",
+    "green": "pending",
+    "verification": "pending",
+    "review": "pending"
+  }
+}
