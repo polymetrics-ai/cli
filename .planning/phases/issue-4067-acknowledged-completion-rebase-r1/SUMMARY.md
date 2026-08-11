@@ -1,6 +1,44 @@
 ---
 phase: issue-4067-acknowledged-completion-rebase-r1
 status: focused_verified
+coverage:
+  - id: D1
+    description: An acknowledged transport run completes after an unrelated writer without replaying work, and the returned completed run matches the durable reopened run.
+    verification:
+      - kind: unit
+        ref: "internal/app/transport_dispatch_test.go: TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForAllModes"
+        status: pass
+      - kind: unit
+        ref: go test -count=3 -timeout 20m ./internal/app focused completion set
+        status: pass
+    human_judgment: false
+  - id: D2
+    description: A changed, missing, or terminal target cannot be overwritten; its ordinary revision-conflict error remains detectable.
+    verification:
+      - kind: unit
+        ref: "internal/app/transport_dispatch_test.go: TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges"
+        status: pass
+    human_judgment: false
+  - id: D3
+    description: Cancellation and state-store outcomes remain truthful across the acknowledged-checkpoint boundary.
+    verification:
+      - kind: unit
+        ref: "internal/app/transport_dispatch_test.go: TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes"
+        status: pass
+      - kind: unit
+        ref: "internal/app/transport_dispatch_test.go: TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome"
+        status: pass
+    human_judgment: false
+  - id: D4
+    description: #4046 typed-conflict finalization and R7/R8 source identity/per-stream CAS are unchanged.
+    verification:
+      - kind: unit
+        ref: internal/app transport R7/R8 and #4046 focused regression command
+        status: pass
+      - kind: unit
+        ref: go test -race -count=3 -timeout 20m ./internal/app focused completion set
+        status: pass
+    human_judgment: false
 ---
 
 # #4067 summary

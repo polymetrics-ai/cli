@@ -11,7 +11,7 @@
     "discuss_phase": "completed_auto",
     "plan_phase_tdd": "completed_manual",
     "execute_phase": "focused_transport_and_generated_outputs_completed",
-    "verify_work": "pending",
+    "verify_work": "completed_manual_automated_acceptance",
     "code_review": "pending"
   },
   "skills": [
