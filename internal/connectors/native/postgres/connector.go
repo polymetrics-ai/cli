@@ -16,8 +16,10 @@
 // discovered at runtime from information_schema, not declared ahead of
 // time). It still ships a defs bundle
 // (internal/connectors/defs/postgres/{metadata.json,spec.json,
-// api_surface.json,docs.md}) so identity/spec/docs stay uniform with every
-// other connector, and it embeds engine.Base — built from that bundle at
+// api_surface.json,database.json,docs.md}) so identity/spec/docs stay uniform
+// with every other connector. database.json is a typed policy declaration
+// only: it does not register a driver or promote write/CDC capability. The
+// connector embeds engine.Base — built from that bundle at
 // construction — purely to serve Name()/Metadata()/Definition() (design
 // §B.7: "they embed engine.Base which serves Definition() ... from the
 // bundle"; Base does NOT provide Check/Catalog/Read/Write, which remain
