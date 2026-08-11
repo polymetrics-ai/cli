@@ -279,6 +279,99 @@ func TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept(t *testing.T) {
 	}
 }
 
+func TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("query_sql_unreadable_owner", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "records", []warehouse.Row{{"id": "acme-record"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "globex", "records", []warehouse.Row{{"id": "globex-record"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "unrelated", []warehouse.Row{{"id": "acme-unrelated"}})
+
+	globex, err := a.warehouseLocation(warehouseDir, mustFindConnection(t, a, "globex"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(globex.OwnerPath(), []byte("{"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM records"})
+	var faulted *warehouse.FaultError
+	if !errors.As(err, &faulted) {
+		t.Fatalf("QuerySQL(unscoped records) error = %T %v, want *warehouse.FaultError", err, err)
+	}
+	if !faulted.Undecided {
+		t.Fatalf("QuerySQL(unscoped records) fault = %#v, want an undecided owner collision", faulted)
+	}
+
+	rows, err := a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM records", Connection: "acme"})
+	if err != nil {
+		t.Fatalf("QuerySQL(acme records) error = %v", err)
+	}
+	if len(rows) != 1 || toComparableString(rows[0]["id"]) != "acme-record" {
+		t.Fatalf("QuerySQL(acme records) rows = %v, want only acme-record", rows)
+	}
+
+	rows, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM unrelated"})
+	if err != nil {
+		t.Fatalf("QuerySQL(unrelated) error = %v", err)
+	}
+	if len(rows) != 1 || toComparableString(rows[0]["id"]) != "acme-unrelated" {
+		t.Fatalf("QuerySQL(unrelated) rows = %v, want only acme-unrelated", rows)
+	}
+}
+
+func TestQuerySQLBindsQuotedConnectionScopedWarehouseNames(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("quoted_warehouse_tables", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	for _, table := range []string{"1orders", "orders-2026", "orders.2026"} {
+		writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", table, []warehouse.Row{{"id": "acme-" + table}})
+		writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "globex", table, []warehouse.Row{{"id": "globex-" + table}})
+	}
+
+	for _, table := range []string{"1orders", "orders-2026", "orders.2026"} {
+		t.Run(table, func(t *testing.T) {
+			query := fmt.Sprintf("SELECT id FROM %s", quoteDuckDBIdentifier(table))
+			rows, err := a.QuerySQL(ctx, QuerySQLRequest{SQL: query, Connection: "acme"})
+			if err != nil {
+				t.Fatalf("QuerySQL(selected %q) error = %v", table, err)
+			}
+			if len(rows) != 1 || toComparableString(rows[0]["id"]) != "acme-"+table {
+				t.Fatalf("QuerySQL(selected %q) rows = %v, want only acme row", table, rows)
+			}
+
+			_, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: query})
+			var ambiguous *warehouse.AmbiguousTableError
+			if !errors.As(err, &ambiguous) {
+				t.Fatalf("QuerySQL(unscoped %q) error = %T %v, want *warehouse.AmbiguousTableError", table, err, err)
+			}
+		})
+	}
+}
+
+func TestWarehouseQueryIdentifierQuotingAndIdentityValidation(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		want string
+	}{
+		{name: "orders", want: `"orders"`},
+		{name: `orders"2026`, want: `"orders""2026"`},
+		{name: `"; select * from records`, want: `"""; select * from records"`},
+	} {
+		if got := quoteDuckDBIdentifier(tc.name); got != tc.want {
+			t.Fatalf("quoteDuckDBIdentifier(%q) = %q, want %q", tc.name, got, tc.want)
+		}
+	}
+	for _, name := range []string{"", ".", "../records", `orders"2026`, "orders;drop", "orders records"} {
+		if warehouse.SafePathPart(name) {
+			t.Fatalf("SafePathPart(%q) = true, want unsafe identity rejected", name)
+		}
+	}
+}
+
 // TestSyncRefusesWhenAnotherConnectionOwnsTheDirectory keeps the ownership
 // assertion honest independently of directory nesting: if a connection ever
 // resolves to a directory another connection owns, the run fails loudly rather
@@ -671,4 +764,22 @@ func setupTwoConnectionWarehouseApp(t *testing.T, source *scriptedSyncSource, mo
 		}
 	}
 	return a, warehouseDir
+}
+
+func writeConnectionWarehouseTable(t *testing.T, ctx context.Context, a *App, warehouseDir, connection, table string, rows []warehouse.Row) {
+	t.Helper()
+	location, err := a.warehouseLocation(warehouseDir, mustFindConnection(t, a, connection))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := location.EnsureOwnership(); err != nil {
+		t.Fatal(err)
+	}
+	path, err := location.TablePath(table)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := warehouse.WriteTable(ctx, path, rows); err != nil {
+		t.Fatal(err)
+	}
 }

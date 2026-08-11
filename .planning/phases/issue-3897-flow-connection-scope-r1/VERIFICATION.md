@@ -1,6 +1,6 @@
 # #3897 Verification Checklist
 
-**Status:** Local GREEN verification complete with correction 1 / 5; pending
+**Status:** Local GREEN verification complete with correction 2 / 5; pending
 no-mistakes and external delivery gates.
 
 ## Required acceptance evidence
@@ -30,6 +30,16 @@ no-mistakes and external delivery gates.
 - [x] Correction 1 GREEN: the action-only uncapped read delivers all 101
   selected rows, retains owner isolation, and records no success checkpoint
   when the local runner returns an error.
+- [x] Correction 2 RED: an unscoped healthy `records` view incorrectly
+  succeeded after another owner of `records` became unreadable.
+- [x] Correction 2 GREEN: unscoped hidden-owner collisions retain
+  `*warehouse.FaultError`; explicit healthy and unrelated reads still work.
+- [x] Correction 2 GREEN: quoted selected and omitted duplicate reads retain
+  connection scope and `*warehouse.AmbiguousTableError` for `1orders`,
+  `orders-2026`, and `orders.2026`.
+- [x] Correction 2 GREEN: DuckDB identifier quoting and warehouse identity
+  rejection prevent identifier/path interpolation from accepting adversarial
+  names.
 
 ## GSD/manual lifecycle record
 
@@ -70,4 +80,13 @@ Record each result and SHA in `RUN-STATE.json` after execution.
 - GREEN (exit 0): `go test -v -timeout 20m ./internal/app ./internal/flow
   ./internal/cli -run
   '^(TestEnginePassesManifestSourceConnectionSelectors|TestFlowSourceConnectionSelectorsReadOnlyOwningRows|TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed|TestFlowActionSourceReadsAllSelectedConnectionRows)$'
+  -count=1` passed.
+
+## Correction 2 command record
+
+- RED (exit 1): `go test -v -timeout 20m ./internal/app -run
+  '^TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision$' -count=1`;
+  the unscoped query returned nil rather than a typed ownership fault.
+- GREEN (exit 0): `go test -v -timeout 20m ./internal/app -run
+  '^(TestQuerySQLScopesConnectionOwnedAndUnattributedViews|TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept|TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision|TestQuerySQLBindsQuotedConnectionScopedWarehouseNames|TestWarehouseQueryIdentifierQuotingAndIdentityValidation|TestQuerySQLAggregatesOverParquetTables|TestQuerySQLHonorsCanceledContext)$'
   -count=1` passed.

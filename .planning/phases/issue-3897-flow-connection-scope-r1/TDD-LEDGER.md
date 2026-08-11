@@ -1,7 +1,7 @@
 # #3897 TDD Ledger
 
-**Status:** GREEN verified locally; correction 1 / 5 applied; delivery/checkpoint gates pending.
-**Correction rounds:** 1 / 5
+**Status:** GREEN verified locally; correction 2 / 5 applied; delivery/checkpoint gates pending.
+**Correction rounds:** 2 / 5
 
 | Slice | Red evidence | Green evidence | Refactor / result |
 |---|---|---|---|
@@ -10,6 +10,7 @@
 | 3. Serialization/action boundary | **RED:** the initial manifest had no action source selector to parse, serialize, or preserve at the runner boundary. | **GREEN:** focused CLI and flow-engine tests JSON round-trip both fields, assert the selected request connection, and assert the local action runner receives `SourceConnection`. | No preview/digest exists in this flow path; #3994 owns later action lifecycle work. |
 | 4. Public proof | **RED:** before implementation, the first focused flow test could not select either owner. | **GREEN:** a freshly built binary materialized same-named rows, ran a `connection: "acme"` flow query whose SQL fails if the wrong row is visible, and asserted returned `acme`/`globex` query rows. | Runtime help/manual, website docs, and three golden help surfaces document manifest syntax only; no flow CLI flag was added. |
 | 5. Correction 1 — complete action source | **RED 2026-08-11:** `go test -v -timeout 20m ./internal/cli -run '^TestFlowActionSourceReadsAllSelectedConnectionRows$' -count=1` failed: each action runner received 100 rather than 101 selected `acme` rows, while `App.QueryTable(..., Limit: 0)` correctly remained capped at 100. | **GREEN 2026-08-11:** focused app/flow/CLI verification passed; successful and locally failed action attempts each received all 101 selected rows, and only the failed attempt lacked a success checkpoint. | `ActionSourceReadRequest` has no limit; `ReadActionSource` is used only by the flow action adapter, while public `QueryTable` retains its 100-row default. |
+| 6. Correction 2 — fault-aware quoted DuckDB bindings | **RED 2026-08-11:** `go test -v -timeout 20m ./internal/app -run '^TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision$' -count=1` failed because unscoped `records` returned success after a competing owner record became unreadable. | **GREEN 2026-08-11:** focused app verification passes the hidden-owner refusal, selected and `_unattributed` reads, quoted `1orders`/`orders-2026`/`orders.2026` reads, typed omitted ambiguity, aggregate, and cancellation paths. | Bare views use `warehouse.FindTable`; the pinned parsed-table replacement callback preserves the first original typed lookup error, and DuckDB identifiers quote embedded double quotes. |
 
 ## Red: required first executable test
 
@@ -74,3 +75,16 @@ same fixture.
 '^(TestEnginePassesManifestSourceConnectionSelectors|TestFlowSourceConnectionSelectorsReadOnlyOwningRows|TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed|TestFlowActionSourceReadsAllSelectedConnectionRows)$'
 -count=1` passed. It compiles the new app/flow contracts, preserves the
 existing selection/ambiguity/root tests, and proves both 101-row action paths.
+
+## Correction 2 — #4037 DuckDB warehouse binding
+
+**RED:** `TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision`
+failed with a nil error because the healthy `acme/records` subset established a
+bare view after the competing `globex/records` owner record became unreadable.
+
+**GREEN:** `go test -v -timeout 20m ./internal/app -run
+'^(TestQuerySQLScopesConnectionOwnedAndUnattributedViews|TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept|TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision|TestQuerySQLBindsQuotedConnectionScopedWarehouseNames|TestWarehouseQueryIdentifierQuotingAndIdentityValidation|TestQuerySQLAggregatesOverParquetTables|TestQuerySQLHonorsCanceledContext)$'
+-count=1` passed. `FindTable` now decides all bare views, while the pinned
+`RegisterReplacementScan` callback receives parsed logical table names and
+preserves the first `FaultError` or `AmbiguousTableError` with `%w`. The local
+fixtures write only warehouse Parquet data and do not mutate a provider.

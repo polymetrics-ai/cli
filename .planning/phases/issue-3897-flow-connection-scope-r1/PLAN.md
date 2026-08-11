@@ -4,8 +4,8 @@
 **Parent:** #3988  
 **Branch:** `feat/3897-flow-connection-scope` from `feat/3988-github-certification`  
 **PR base:** exactly `feat/3988-github-certification`  
-**Status:** GREEN verified locally — pending the required no-mistakes, push,
-draft-PR, and CI handoff gates
+**Status:** GREEN verified locally through correction 2 / 5 — pending the
+required no-mistakes, push, draft-PR, and CI handoff gates
 
 ## Delivery mode
 
@@ -19,8 +19,8 @@ forbids spawning GSD roles.
 
 Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-stretchr-testify`, `golang-error-handling`, `golang-security`,
-`golang-safety`, `golang-context`, `golang-documentation`, `golang-lint`, and
-`no-mistakes`.
+`golang-safety`, `golang-context`, `golang-database`, `golang-documentation`,
+`golang-lint`, and `no-mistakes`.
 
 ## Scope
 
@@ -109,6 +109,24 @@ Update `docs/cli/flow.md`, relevant website flow docs, runtime help, and golden
 output only if they describe the selector grammar. Build a fresh binary and
 run a local flow query fixture that returns only the requested owner’s rows.
 Remove the temporary project root and assert it no longer exists.
+
+### Correction 2 — #4037 fault-aware DuckDB table binding
+
+**Red:** `TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision`
+materializes healthy `acme/records`, corrupts a second owner's `records`
+record, and proves that the prior healthy-only view scan returned the acme row
+instead of the original typed undecided ownership fault.
+
+**Green:** Make `warehouse.FindTable` decide every bare view and install the
+pinned DuckDB replacement scan callback for parsed unresolved table names. The
+callback retains the first original lookup error and the query wraps it with
+`%w`; quoted selected and omitted duplicate reads cover `1orders`,
+`orders-2026`, and `orders.2026`.
+
+**Result:** GREEN. The hidden-owner collision returns
+`*warehouse.FaultError`, explicit healthy selection and unrelated tables still
+succeed, quoted legal names bind to their selected owner, and omitted quoted
+duplicates retain `*warehouse.AmbiguousTableError` without provider mutation.
 
 ## Required verification
 

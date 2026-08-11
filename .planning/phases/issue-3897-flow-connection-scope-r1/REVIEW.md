@@ -3,7 +3,7 @@
 **Mode:** Manual deep review via the resolved `code-review` GSD prompt under
 the documented inline/manual-GSD fallback.
 
-**Result:** PASS — correction 1 / 5 verified locally.
+**Result:** PASS — correction 2 / 5 verified locally.
 
 ## Reviewed risks
 
@@ -15,6 +15,10 @@ the documented inline/manual-GSD fallback.
 - `_unattributed` bypasses the connection registry deliberately and filters to
   root ownership only.
 - Error wrapping preserves `errors.As` for `*warehouse.AmbiguousTableError`.
+- Fault-aware bare binding preserves `errors.As` for
+  `*warehouse.FaultError` when damaged ownership records hide a duplicate.
+- Parsed DuckDB replacement scans retain typed errors for quoted legal table
+  names without SQL-name regex parsing.
 - Action source identity reaches the current runner boundary without adding
   dispatch, provider writes, or a new approval lifecycle.
 
@@ -31,6 +35,20 @@ The new real-Parquet regression uses 101 selected rows and a local failed
 runner to prove no success checkpoint is written on a failed complete dispatch.
 Focused app/flow/CLI verification passed with all 101 selected rows at both
 local runner boundaries.
+
+## Correction 2 disposition — #4037
+
+R3 and R4 were legitimate one-layer binding defects. `registerViews` used the
+healthy `warehouse.Tables` subset to decide bare-view uniqueness, so a damaged
+owner record could hide a competing table and permit an unscoped read. Its
+missing-table regex also excluded legal warehouse names that require quoted
+DuckDB identifiers. The correction asks `warehouse.FindTable` before every
+bare view, quotes identifiers by doubling embedded quotes, and uses the pinned
+replacement-scan table-name callback to retain the first original lookup error
+with `%w`. Focused app verification proves hidden-owner `FaultError`, selected
+healthy and unrelated reads, `_unattributed`, legal quoted names, omitted
+typed ambiguity, aggregate reads, and cancellation. Fixtures only write local
+warehouse data; no provider mutation or reverse-ETL behavior changed.
 
 ## Baseline observations
 
