@@ -1,8 +1,8 @@
 # #4067 — acknowledged transport completion rebase
 
-**Primary issue:** [#4067](https://github.com/polymetrics-ai/cli/issues/4067)  
-**Parent chain:** #3864 → #3862 → #4015  
-**Existing stacked PR:** [#4059](https://github.com/polymetrics-ai/cli/pull/4059)  
+**Primary issue:** [#4067](https://github.com/polymetrics-ai/cli/issues/4067)
+**Parent chain:** #3864 → #3862 → #4015
+**Existing stacked PR:** [#4059](https://github.com/polymetrics-ai/cli/pull/4059)
 **Rejected immutable candidate:** `883a86cf0040d559edcd4777413d1c2de20cd94a`
 
 ## Problem
@@ -38,4 +38,3 @@ The rebase may mutate only that run's terminal fields and that run's final strea
 ## Non-scope
 
 - #4046 typed stale-writer failure finalization, R7/R8 stream-entry CAS, source identity, checkpoint writes, destination replay, provider/credential/network/warehouse/container/external-service work, and merge authority.
-

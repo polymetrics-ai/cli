@@ -1,8 +1,8 @@
 # #4067 TDD ledger — acknowledged transport completion rebase
 
-**Issue:** #4067  
-**Starting candidate:** `883a86cf0040d559edcd4777413d1c2de20cd94a` (immutable rejected baseline)  
-**Correction ledger:** 0/5 before no-mistakes begins  
+**Issue:** #4067
+**Starting candidate:** `883a86cf0040d559edcd4777413d1c2de20cd94a` (immutable rejected baseline)
+**Correction ledger:** 0/5 before no-mistakes begins
 **Safety:** local fake-backed JSON-state tests only; no provider, credential, network, warehouse, container, or external service.
 
 | ID | Requirement | RED command / expected failure | GREEN evidence | Status |

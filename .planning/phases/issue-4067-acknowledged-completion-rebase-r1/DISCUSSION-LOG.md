@@ -2,8 +2,8 @@
 
 > Audit trail only. Execution uses `CONTEXT.md` and `PLAN.md`.
 
-**Date:** 2026-08-11  
-**Mode:** `discuss-phase --auto` inline/manual fallback  
+**Date:** 2026-08-11
+**Mode:** `discuss-phase --auto` inline/manual fallback
 **Reason:** the Sol audit and controlling correction directive have already decided every material product and safety choice.
 
 ## Completion eligibility
@@ -44,4 +44,3 @@
 ## Deferred ideas
 
 None. Generic state refresh, checkpoint/CAS redesign, #4046 behavior changes, provider work, and merge remain out of scope.
-

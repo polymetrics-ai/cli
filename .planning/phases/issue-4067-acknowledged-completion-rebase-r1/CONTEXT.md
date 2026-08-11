@@ -1,8 +1,8 @@
 # #4067 — acknowledged transport completion rebase context
 
-**Gathered:** 2026-08-11  
-**Status:** Ready for TDD planning and execution  
-**Issue:** [#4067](https://github.com/polymetrics-ai/cli/issues/4067)  
+**Gathered:** 2026-08-11
+**Status:** Ready for TDD planning and execution
+**Issue:** [#4067](https://github.com/polymetrics-ai/cli/issues/4067)
 **Existing branch / PR:** `feat/3864-closed-transport-dispatch-nm5` / [#4059](https://github.com/polymetrics-ai/cli/pull/4059)
 
 ## Lifecycle fallback
@@ -45,4 +45,3 @@ The Sol evidence locates the stale whole-state guard at normal `completeRun` fin
 ## Explicit non-goals
 
 No provider, credential, network, warehouse, container, external service, live certification, no-mistakes takeover, PR retarget, force-push, or merge is authorized.
-

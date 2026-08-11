@@ -1,6 +1,6 @@
 # #4067 execution record
 
-**Status:** GREEN checkpoint recorded — focused expansion remains pending.
+**Status:** local implementation, focused expansion, heavy validation, and manual review completed — fresh no-mistakes, existing-PR delivery, and exact-head CI remain pending.
 
 ## TDD gate
 
@@ -13,10 +13,10 @@ The first execution action is a behavioral RED in `internal/app` against the rea
 | Planning | #4067 issue/readback, manual GSD context/plan/TDD ledger, clean rejected baseline custody | Complete before this commit |
 | RED | Focused test, non-zero exit due to durable symptom, test-only commit | Committed in `5db500fad` |
 | GREEN | Minimal completion-boundary implementation and same test passing | Committed in `d16767e47` |
-| Focused expansion | all modes, reopen, cancellation, fail-closed eligibility, race, #4046/R7/R8 | Complete; commit pending |
-| Generated remediation | canonical generator commands and candidate-owned diff only | Complete; commit pending |
-| Heavy validation | only after required user-facing window notification | Pending |
-| Review/no-mistakes/CI | all findings dispositioned; fresh 0/5 no-mistakes; exact-head CI | Pending |
+| Focused expansion | all modes, reopen, cancellation, fail-closed eligibility, race, #4046/R7/R8 | Complete in `ce15f07e1` |
+| Generated remediation | canonical generator commands and candidate-owned diff only | Complete in `291c3449c` |
+| Heavy validation | only after required user-facing window notification | Complete; commands recorded in `VERIFICATION.md` |
+| Review/no-mistakes/CI | all findings dispositioned; fresh 0/5 no-mistakes; exact-head CI | Review complete; no-mistakes/CI pending |
 
 ## RED — all-seven-mode acknowledged-completion leak
 

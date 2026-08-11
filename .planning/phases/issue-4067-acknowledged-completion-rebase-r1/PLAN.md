@@ -6,9 +6,9 @@ type: tdd
 
 # #4067 — acknowledged transport completion rebase plan
 
-**Issue:** [#4067](https://github.com/polymetrics-ai/cli/issues/4067)  
-**Parent chain:** #3864 → #3862 → #4015  
-**Stacked PR:** #4059 → `feat/3862-any-to-any-transport`  
+**Issue:** [#4067](https://github.com/polymetrics-ai/cli/issues/4067)
+**Parent chain:** #3864 → #3862 → #4015
+**Stacked PR:** #4059 → `feat/3862-any-to-any-transport`
 **Starting rejected candidate (preserved):** `883a86cf0040d559edcd4777413d1c2de20cd94a`
 
 ## Manual GSD lifecycle
@@ -85,4 +85,3 @@ Use their documented check commands after generation. Inspect the resulting diff
 - All seven modes, cancellation, restart/reopen, race, #4046, and R7/R8 focused evidence pass.
 - Generated outputs are canonical-generator-only; no separate issue is created for them.
 - Fresh no-mistakes ledger remains at most 5 loops; #4059 stays draft and unmerged.
-
