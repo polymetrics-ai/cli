@@ -160,6 +160,10 @@ type QueryTableRequest struct {
 	Limit      int    `json:"limit"`
 }
 
+// ActionSourceReadRequest identifies the warehouse table an action step reads.
+// Connection selects one owner's materialization; the `_unattributed` sentinel
+// selects a root-owned table. An empty selector preserves typed ambiguity when
+// several owners materialize the same name.
 type ActionSourceReadRequest struct {
 	Table      string `json:"table"`
 	Connection string `json:"connection,omitempty"`
