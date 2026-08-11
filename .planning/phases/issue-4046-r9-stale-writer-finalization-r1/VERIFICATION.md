@@ -21,7 +21,7 @@
 
    Observed as `go test -json ...` with exit `1`: the typed conflict remained detectable, winner/unrelated preservation assertions passed, and the test reported a zero returned loser plus a durable reopened `running` loser.
 
-2. [ ] Matching narrow GREEN: same command, passing.
+2. [x] Matching narrow GREEN: same command, passing (exit `0`); returned and reopened losing runs match, are terminal `failed`, and retain the typed conflict.
 
 3. [ ] Intervening unrelated writer:
 

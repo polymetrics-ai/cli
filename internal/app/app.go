@@ -2640,13 +2640,17 @@ func (a *App) findConnectionFold(name string) (Connection, bool) {
 func (a *App) failRun(runID string, runErr error) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
+	transportStateConflict := errors.Is(runErr, errTransportStreamStateConflict)
 	updated, persistErr := a.updateState(func(current state) (state, error) {
-		if current.Revision != expectedRevision {
+		if !transportStateConflict && current.Revision != expectedRevision {
 			return current, errStateRevisionConflict
 		}
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
+			}
+			if transportStateConflict && current.Runs[i].Status != "running" {
+				return current, fmt.Errorf("transport conflict run %q has status %q, want running before finalization", runID, current.Runs[i].Status)
 			}
 			current.Runs[i].Status = "failed"
 			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
@@ -2656,6 +2660,13 @@ func (a *App) failRun(runID string, runErr error) (Run, error) {
 		return current, fmt.Errorf("run %q not found", runID)
 	})
 	if persistErr != nil {
+		if transportStateConflict {
+			for _, run := range updated.Runs {
+				if run.ID == runID {
+					return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+				}
+			}
+		}
 		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 	}
 	for _, run := range updated.Runs {

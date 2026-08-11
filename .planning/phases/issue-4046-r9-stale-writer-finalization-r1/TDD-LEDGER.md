@@ -6,7 +6,7 @@
 
 | ID | Requirement | Red | Green | Status |
 |---|---|---|---|---|
-| R9-T1 | A stale CAS loser is observably returned as zero/non-terminal and durably reopened as `running` at the pinned base while winner and unrelated state are preserved. | **Red:** observed with `go test -json -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRun$'` (exit 1): zero returned loser, durable `running` loser, and zero completion timestamp; typed conflict and winner/unrelated assertions passed first. | **Green:** same command must return a non-zero `failed` run matching durable state and retain `errors.Is(err, errTransportStreamStateConflict)`. | Red observed |
+| R9-T1 | A stale CAS loser is observably returned as zero/non-terminal and durably reopened as `running` at the pinned base while winner and unrelated state are preserved. | **Red:** observed with `go test -json -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRun$'` (exit 1): zero returned loser, durable `running` loser, and zero completion timestamp; typed conflict and winner/unrelated assertions passed first. | **Green:** observed with `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRun$' -v` (exit 0): non-zero failed returned run matched durable state and retained the typed conflict. | Green |
 | R9-T2 | Only a typed `errTransportStreamStateConflict` rebases terminalization to current locked state; ordinary failures retain the revision guard. | **Red:** covered by R9-T1's stale revision failure path. | **Green:** focused test asserts the matching running run is changed, and non-conflict behavior remains guarded. | Planned |
 | R9-T3 | An unrelated project write between conflict observation and loser terminalization survives unchanged. | **Red:** planned `go test -count=20 -timeout 20m ./internal/app -run '^TestFailRunTransportConflictPreservesLatestConcurrentState$'`. | **Green:** same command passes repeatedly, including unrelated stream/checkpoint/run values. | Planned |
 | R9-T4 | Restart does not reload a false-running loser. | **Red:** R9-T1's reopen assertion captures the original leak. | **Green:** `go test -count=10 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFailureSurvivesReopen$'` passes. | Planned |
@@ -30,3 +30,10 @@
 - Observed failure: `RunETL returned zero losing Run`; returned status was empty; reopened durable loser was `running` with a zero completion timestamp; the durable ID was `run_94e7f2d8862e3416` while the returned ID was empty.
 - The test had already proved `errors.Is(losingErr, errTransportStreamStateConflict)`, retained the winner checkpoint/run identity, and retained the unrelated stream/checkpoint before it emitted the aggregate durable-symptom failure.
 - This is test and evidence only; `internal/app/app.go` remains unchanged at this checkpoint.
+
+### R9-T1 Green: typed-conflict-only terminalization
+
+- Command: `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRun$' -v`
+- Exit: `0`
+- Result: the matching returned/durable loser run is non-zero and `failed`; its completion timestamp is non-zero; `errors.Is(losingErr, errTransportStreamStateConflict)` remains true; winner stream state and unrelated state remain unchanged after reopen.
+- Production change: `failRun` bypasses the stale whole-state revision guard only for the typed transport stream-state conflict, requires the matching current run to still be `running`, and otherwise retains the existing revision-conflict behavior.
