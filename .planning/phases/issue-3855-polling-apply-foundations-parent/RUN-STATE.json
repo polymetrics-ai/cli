@@ -17,10 +17,12 @@
     "temporary_base": "feat/3862-any-to-any-transport",
     "temporary_base_sha": "30b2fb4aeb121641b6158903fe1d3b54668599a6",
     "relationship": "dependency_only",
+    "temporary_base_merge_forbidden": true,
     "final_retarget_base": "docs/4015-connector-release-certification",
     "retarget_condition": "reviewed transport seam is present on the combined certification branch",
     "main_target_forbidden": true,
-    "merge_forbidden": true
+    "main_merge_forbidden": true,
+    "final_integration_human_gated": true
   },
   "children": {
     "ordered": [3856, 3857],
