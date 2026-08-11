@@ -104,6 +104,8 @@ absent --Begin--> active --Append*--> active --Commit seal--> sealed
 - Aborting, quota breaches, cancellation, or any receipt durability failure
   produce no receipt-derived eligibility. Source checkpoint/LSN interaction is
   deliberately outside this package.
+- Terminal discard intent is durably recorded before cleanup. Recovery removes
+  recorded discards and fails closed if that cleanup cannot complete.
 
 ### Receipt and existing sync contract
 

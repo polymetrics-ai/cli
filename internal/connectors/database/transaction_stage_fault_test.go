@@ -344,6 +344,52 @@ func TestCommittedTransactionStageFailedAppendCleanupStaysTerminalUntilAbortRetr
 	assertPrivateStageCounts(t, root, 0, 0)
 }
 
+func TestCommittedTransactionStageDiscardedSealedStageNeverRecoversOrDelivers(t *testing.T) {
+	root := t.TempDir()
+	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+	const transactionID = "discarded-sealed-recovery"
+	stageCompleteChunk(t, stage, transactionID)
+	if _, err := stage.CommitTransaction(context.Background(), transactionID, transactionReceiverFunc(func(context.Context, CommittedTransaction) (DownstreamTransactionReceipt, error) {
+		return DownstreamTransactionReceipt{}, errors.New("injected receiver failure")
+	})); err == nil {
+		t.Fatal("CommitTransaction() error = nil, want sealed receipt-less transaction")
+	}
+	key, err := transactionStageKey(transactionID)
+	if err != nil {
+		t.Fatalf("transactionStageKey() error = %v", err)
+	}
+	fault := &transactionStageFault{
+		operation: "remove_all",
+		match: func(path string) bool {
+			return path == stage.transactionDirectory(key)
+		},
+		err: errors.New("injected sealed-discard cleanup failure"),
+	}
+	installTransactionStageFault(stage, fault)
+	abortCtx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if err := stage.AbortTransaction(abortCtx, transactionID); err == nil {
+		t.Fatal("AbortTransaction() error = nil, want cleanup failure")
+	}
+	if !fault.fired() {
+		t.Fatal("sealed-discard cleanup fault was not exercised")
+	}
+
+	recovered := newTestTransactionStage(t, root, testTransactionStageLimits())
+	if got := recovered.PendingTransactions(); len(got) != 0 {
+		t.Fatalf("PendingTransactions() after discarded recovery = %#v, want none", got)
+	}
+	receiver := &recordingTransactionReceiver{}
+	if _, err := recovered.CommitTransaction(context.Background(), transactionID, receiver); !errors.Is(err, ErrTransactionStageNotFound) {
+		t.Fatalf("CommitTransaction() after discarded recovery error = %v, want ErrTransactionStageNotFound", err)
+	}
+	if got := len(receiver.transactions); got != 0 {
+		t.Fatalf("receiver transactions after discarded recovery = %d, want 0", got)
+	}
+	assertPrivateStageCounts(t, root, 0, 0)
+	assertNoTemporaryStageArtifacts(t, root)
+}
+
 func TestCommittedTransactionStagePostReceiptCleanupFailurePreservesOnlyDurableReceipt(t *testing.T) {
 	root := t.TempDir()
 	stage := newTestTransactionStage(t, root, testTransactionStageLimits())

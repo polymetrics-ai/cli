@@ -25,6 +25,7 @@ receipt-gated commit boundary.
 | T15 | Opaque identity/path safety | Transaction ID becomes a path or aliases another ID. | Traversal/control IDs stay inside root and distinct opaque IDs receive distinct stage components. |
 | T16 | Concurrent isolation | Concurrent transactions race or leak chunks/receipts across IDs. | `-race` and isolation/order tests pass with no shared mutable payload. |
 | T17 | Synccontract reuse | Stage introduces a forged acknowledgement/checkpoint envelope. | Returned eligibility adapts to `synccontract.NewDurableDownstreamAcknowledgement`; no duplicate checkpoint/tombstone/history type is added. |
+| T18 | Terminal discard recovery | A failed cleanup followed by restart revives deliberately discarded sealed work. | A faulted cancelled abort persists discard intent; recovery removes it, cannot commit it, and never calls a receiver. |
 
 ## First RED command
 
@@ -65,6 +66,15 @@ The sole implementation-review correction is bounded/saturating quota
 arithmetic for extreme untrusted record counts. It is a source hardening
 correction inside #3975, not a newly discovered repository-gate defect, and is
 covered by `TestCommittedTransactionStageSaturatesUntrustedRecordQuotaDiagnostics`.
+
+## Correction #4043 — discarded sealed recovery
+
+- Red: `traces/discarded-sealed-recovery-red.txt` records the focused test
+  failure where a restart exposed a failed-cleanup sealed transaction as
+  pending.
+- Green: `traces/discarded-sealed-recovery-green.txt` records the focused pass
+  after durable discard intent makes recovery remove the transaction before it
+  can resume or deliver.
 
 ## Refactor condition
 

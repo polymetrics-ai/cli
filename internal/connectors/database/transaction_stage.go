@@ -503,13 +503,13 @@ func (s *CommittedTransactionStage) AppendChunk(ctx context.Context, transaction
 	if err := s.ageLimitExceeded(entry.manifest); err != nil {
 		entry.status = stageStatusAppending
 		s.mu.Unlock()
-		return s.failAppend(key, entry, 0, err)
+		return s.failAppend(ctx, key, entry, 0, err)
 	}
 	observedRecords, withinRecordLimit := transactionStageLimitedAdd(entry.manifest.Records, records, s.limits.MaxTransactionRecords)
 	if !withinRecordLimit {
 		entry.status = stageStatusAppending
 		s.mu.Unlock()
-		return s.failAppend(key, entry, 0, &TransactionStageLimitExceeded{
+		return s.failAppend(ctx, key, entry, 0, &TransactionStageLimitExceeded{
 			Limit:    TransactionStageLimitTransactionRecords,
 			Maximum:  s.limits.MaxTransactionRecords,
 			Observed: transactionStageSaturatingAdd(entry.manifest.Records, records),
@@ -521,7 +521,7 @@ func (s *CommittedTransactionStage) AppendChunk(ctx context.Context, transaction
 
 	chunk, reserved, err := s.writeChunk(ctx, key, manifest, records, reader)
 	if err != nil {
-		return s.failAppend(key, entry, reserved, err)
+		return s.failAppend(ctx, key, entry, reserved, err)
 	}
 	next := cloneTransactionStageManifest(manifest)
 	next.Chunks = append(next.Chunks, chunk)
@@ -529,13 +529,13 @@ func (s *CommittedTransactionStage) AppendChunk(ctx context.Context, transaction
 	next.Records = observedRecords
 	next.ContentDigest = nextTransactionDigest(next.ContentDigest, chunk)
 	if err := s.writeManifest(ctx, next); err != nil {
-		return s.failAppend(key, entry, reserved, err)
+		return s.failAppend(ctx, key, entry, reserved, err)
 	}
 
 	s.mu.Lock()
 	if s.entries[key] != entry || entry.status != stageStatusAppending {
 		s.mu.Unlock()
-		return s.failAppend(key, entry, reserved, ErrTransactionStageInProgress)
+		return s.failAppend(ctx, key, entry, reserved, ErrTransactionStageInProgress)
 	}
 	s.releaseReservationLocked(reserved)
 	s.stagedBytes += chunk.Bytes
@@ -574,12 +574,12 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 	if err := ctx.Err(); err != nil {
 		entry.status = stageStatusDiscarding
 		s.mu.Unlock()
-		return TransactionReceipt{}, s.discardEntry(key, entry, err)
+		return TransactionReceipt{}, s.discardEntry(ctx, key, entry, err)
 	}
 	if err := s.ageLimitExceeded(entry.manifest); err != nil {
 		entry.status = stageStatusDiscarding
 		s.mu.Unlock()
-		return TransactionReceipt{}, s.discardEntry(key, entry, err)
+		return TransactionReceipt{}, s.discardEntry(ctx, key, entry, err)
 	}
 	if receiver == nil {
 		s.mu.Unlock()
@@ -598,12 +598,12 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 	if needsSeal {
 		manifest.State = transactionStageStateSealed
 		if err := s.writeManifest(ctx, manifest); err != nil {
-			return TransactionReceipt{}, s.discardEntry(key, entry, err)
+			return TransactionReceipt{}, s.discardEntry(ctx, key, entry, err)
 		}
 		s.mu.Lock()
 		if s.entries[key] != entry || entry.status != stageStatusSealing {
 			s.mu.Unlock()
-			return TransactionReceipt{}, s.discardEntry(key, entry, ErrTransactionStageInProgress)
+			return TransactionReceipt{}, s.discardEntry(ctx, key, entry, ErrTransactionStageInProgress)
 		}
 		entry.manifest = cloneTransactionStageManifest(manifest)
 		entry.status = stageStatusCommitting
@@ -612,7 +612,7 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 
 	if err := s.verifyManifestFiles(ctx, manifest); err != nil {
 		if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
-			return TransactionReceipt{}, s.discardEntry(key, entry, err)
+			return TransactionReceipt{}, s.discardEntry(ctx, key, entry, err)
 		}
 		s.finishCommitAsSealed(key, entry)
 		return TransactionReceipt{}, fmt.Errorf("verify sealed transaction stage: %w", err)
@@ -622,7 +622,7 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 	downstreamReceipt, err := receiver.ReceiveCommittedTransaction(ctx, s.committedTransaction(manifest, delivery))
 	if err != nil {
 		if ctxErr := ctx.Err(); ctxErr != nil {
-			return TransactionReceipt{}, s.discardEntry(key, entry, ctxErr)
+			return TransactionReceipt{}, s.discardEntry(ctx, key, entry, ctxErr)
 		}
 		s.finishCommitAsSealed(key, entry)
 		return TransactionReceipt{}, fmt.Errorf("receive committed transaction: %w", err)
@@ -632,7 +632,7 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 		return TransactionReceipt{}, errors.New("durable transaction receiver did not consume the complete transaction")
 	}
 	if err := ctx.Err(); err != nil {
-		return TransactionReceipt{}, s.discardEntry(key, entry, err)
+		return TransactionReceipt{}, s.discardEntry(ctx, key, entry, err)
 	}
 	if err := downstreamReceipt.validate(); err != nil {
 		s.finishCommitAsSealed(key, entry)
@@ -650,7 +650,7 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 	)
 	if err := s.persistReceipt(ctx, receipt); err != nil {
 		if ctxErr := ctx.Err(); ctxErr != nil {
-			return TransactionReceipt{}, s.discardEntry(key, entry, ctxErr)
+			return TransactionReceipt{}, s.discardEntry(ctx, key, entry, ctxErr)
 		}
 		s.finishCommitAsSealed(key, entry)
 		return TransactionReceipt{}, err
@@ -679,7 +679,7 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 
 // AbortTransaction removes a receipt-less transaction. It deliberately
 // completes cleanup even when the caller's context is cancelled.
-func (s *CommittedTransactionStage) AbortTransaction(_ context.Context, transactionID string) error {
+func (s *CommittedTransactionStage) AbortTransaction(ctx context.Context, transactionID string) error {
 	key, err := transactionStageKey(transactionID)
 	if err != nil {
 		return err
@@ -700,7 +700,7 @@ func (s *CommittedTransactionStage) AbortTransaction(_ context.Context, transact
 	}
 	entry.status = stageStatusDiscarding
 	s.mu.Unlock()
-	return s.discardEntry(key, entry, nil)
+	return s.discardEntry(ctx, key, entry, nil)
 }
 
 // Receipt returns only a receipt that passed the durable receipt transition.
@@ -771,6 +771,12 @@ func (s *CommittedTransactionStage) recover() error {
 			continue
 		}
 		manifest, err := s.readManifest(name)
+		if err == nil && manifest.State == transactionStageStateDiscarded {
+			if removeErr := s.removeStageDirectory(name); removeErr != nil {
+				return fmt.Errorf("clean discarded transaction stage: %w", removeErr)
+			}
+			continue
+		}
 		if err != nil || manifest.State != transactionStageStateSealed || s.verifyManifestFiles(context.Background(), manifest) != nil {
 			if removeErr := s.removeStageDirectory(name); removeErr != nil {
 				return fmt.Errorf("clean incomplete transaction stage: %w", removeErr)
@@ -979,17 +985,20 @@ func (s *CommittedTransactionStage) reserveBytes(bytes int64) error {
 	return nil
 }
 
-func (s *CommittedTransactionStage) failAppend(key string, entry *transactionStageEntry, reserved int64, cause error) error {
+func (s *CommittedTransactionStage) failAppend(ctx context.Context, key string, entry *transactionStageEntry, reserved int64, cause error) error {
 	s.mu.Lock()
 	s.releaseReservationLocked(reserved)
 	if s.entries[key] == entry {
 		entry.status = stageStatusDiscarding
 	}
 	s.mu.Unlock()
-	return s.discardEntry(key, entry, cause)
+	return s.discardEntry(ctx, key, entry, cause)
 }
 
-func (s *CommittedTransactionStage) discardEntry(key string, entry *transactionStageEntry, cause error) error {
+func (s *CommittedTransactionStage) discardEntry(ctx context.Context, key string, entry *transactionStageEntry, cause error) error {
+	discarded := cloneTransactionStageManifest(entry.manifest)
+	discarded.State = transactionStageStateDiscarded
+	intentErr := s.writeManifest(transactionStageCleanupContext(ctx), discarded)
 	cleanupErr := s.removeStageDirectory(key)
 	s.mu.Lock()
 	if s.entries[key] == entry {
@@ -997,11 +1006,14 @@ func (s *CommittedTransactionStage) discardEntry(key string, entry *transactionS
 			s.subtractStagedBytesLocked(entry.manifest.Bytes)
 			delete(s.entries, key)
 		} else {
+			if intentErr == nil {
+				entry.manifest = discarded
+			}
 			entry.status = stageStatusDiscardFailed
 		}
 	}
 	s.mu.Unlock()
-	return withTransactionStageCleanupError(cause, cleanupErr)
+	return withTransactionStageCleanupError(cause, errors.Join(intentErr, cleanupErr))
 }
 
 func (s *CommittedTransactionStage) finishCommitAsSealed(key string, entry *transactionStageEntry) {
@@ -1282,7 +1294,7 @@ func (s *CommittedTransactionStage) atomicWrite(ctx context.Context, path string
 
 func (m transactionStageManifest) validate() error {
 	if m.Version != transactionStageFormatVersion || !validTransactionStageKey(m.TransactionKey) ||
-		(m.State != transactionStageStateActive && m.State != transactionStageStateSealed) || m.CreatedAt.IsZero() ||
+		(m.State != transactionStageStateActive && m.State != transactionStageStateSealed && m.State != transactionStageStateDiscarded) || m.CreatedAt.IsZero() ||
 		m.Bytes < 0 || m.Records < 0 || !validTransactionStageDigest(m.ContentDigest) {
 		return errors.New("transaction stage state is invalid")
 	}
@@ -1304,8 +1316,9 @@ func (m transactionStageManifest) validate() error {
 }
 
 const (
-	transactionStageStateActive = "active"
-	transactionStageStateSealed = "sealed"
+	transactionStageStateActive    = "active"
+	transactionStageStateSealed    = "sealed"
+	transactionStageStateDiscarded = "discarded"
 )
 
 func transactionStageKey(transactionID string) (string, error) {
@@ -1363,6 +1376,13 @@ func requireTransactionStageContext(ctx context.Context) error {
 		return errors.New("transaction stage context is required")
 	}
 	return ctx.Err()
+}
+
+func transactionStageCleanupContext(ctx context.Context) context.Context {
+	if ctx == nil {
+		return context.Background()
+	}
+	return context.WithoutCancel(ctx)
 }
 
 func (s *CommittedTransactionStage) currentTime() (time.Time, error) {
