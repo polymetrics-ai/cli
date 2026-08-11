@@ -1549,6 +1549,96 @@ func TestRunETLTransportAcknowledgedFailurePreservesSourceError(t *testing.T) {
 	assertAcknowledgedFailureAfterUnrelatedRevision(t, paused, unrelated, errTransportSourceAfterAcknowledgement)
 }
 
+func TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(*state, *pausedAcknowledgedTransportCompletion)
+	}{
+		{
+			name: "target stream changed",
+			mutate: func(current *state, paused *pausedAcknowledgedTransportCompletion) {
+				changed := cloneStreamState(paused.acknowledged)
+				changed.LastSuccessfulRunID = "concurrent_winner"
+				changed.RecordsLoaded = 42
+				current.StreamStates[paused.stateKey] = changed
+			},
+		},
+		{
+			name: "target stream removed",
+			mutate: func(current *state, paused *pausedAcknowledgedTransportCompletion) {
+				delete(current.StreamStates, paused.stateKey)
+			},
+		},
+		{
+			name: "target run terminal",
+			mutate: func(current *state, paused *pausedAcknowledgedTransportCompletion) {
+				for i := range current.Runs {
+					if current.Runs[i].ID == paused.runID {
+						current.Runs[i].Status = "completed"
+						current.Runs[i].CompletedAt = time.Unix(43, 0).UTC()
+						return
+					}
+				}
+			},
+		},
+		{
+			name: "target run removed",
+			mutate: func(current *state, paused *pausedAcknowledgedTransportCompletion) {
+				runs := make([]Run, 0, len(current.Runs))
+				for _, run := range current.Runs {
+					if run.ID != paused.runID {
+						runs = append(runs, run)
+					}
+				}
+				current.Runs = runs
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			paused := startPausedAcknowledgedTransportCompletion(t, synccontract.ModeFullAppend, context.Background())
+			paused.fixture.sourceExecutor.errAfterPage = errTransportSourceAfterAcknowledgement
+			writer, err := Open(paused.fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := writer.updateState(func(current state) (state, error) {
+				tt.mutate(&current, paused)
+				return current, nil
+			}); err != nil {
+				t.Fatal(err)
+			}
+			expected := writer.state
+
+			paused.releaseAndWait(t)
+			if paused.fixture.destinationExecutor.applyCalls != 1 {
+				t.Fatalf("destination apply calls = %d, want exactly one acknowledged apply", paused.fixture.destinationExecutor.applyCalls)
+			}
+			if !errors.Is(paused.err, errTransportSourceAfterAcknowledgement) || !errors.Is(paused.err, errStateRevisionConflict) {
+				t.Fatalf("RunETL() error = %v, want original source error and typed revision conflict", paused.err)
+			}
+			if !reflect.DeepEqual(paused.returned, Run{}) {
+				t.Fatalf("RunETL() returned %#v, want zero run after fail-closed acknowledged failure", paused.returned)
+			}
+
+			reopened, err := Open(paused.fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(reopened.state.Checkpoints) != 0 || len(expected.Checkpoints) != 0 {
+				t.Fatalf("fail-closed acknowledged failure changed checkpoints: got %#v, want %#v", reopened.state.Checkpoints, expected.Checkpoints)
+			}
+			actual := reopened.state
+			actual.Checkpoints = nil
+			expected.Checkpoints = nil
+			if !reflect.DeepEqual(actual, expected) {
+				t.Fatalf("fail-closed acknowledged failure mutated latest state: got %#v, want %#v", actual, expected)
+			}
+		})
+	}
+}
+
 func TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes(t *testing.T) {
 	for _, mode := range synccontract.AllModes() {
 		t.Run(string(mode), func(t *testing.T) {
