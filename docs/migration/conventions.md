@@ -132,6 +132,11 @@ polling declaration, generic operation, or capability claim in it. `metadata.jso
 only public capability owner. A syntactically valid declaration neither registers a driver nor
 admits execution; its exact driver identity and matching native evidence are required separately.
 
+Managed-target owners, refs, control records, and provisioning plans are runtime values, not
+`database.json` fields. They derive from the source-owned warehouse artifact and must never encode
+an author-supplied target name or control record; their execution contract is owned by the
+[warehouse-mediation architecture](../architecture/connector-architecture-v2-design.md#b71-database-warehouse-mediation).
+
 The database layer has no direct connector-pair or zero-copy command. Its source-to-warehouse and
 warehouse-to-target admissions are separate legs; see the
 [warehouse-mediation architecture](../architecture/connector-architecture-v2-design.md#b71-database-warehouse-mediation)
