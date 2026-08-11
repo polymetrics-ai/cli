@@ -41,3 +41,14 @@ Not applicable: this change alters certification tooling and evidence, not the u
 - Final-gate verification/review additionally used `golang-lint`,
   `github-issue-first-delivery`, and `no-mistakes`.
 - Manual inline GSD lifecycle because role spawning is prohibited by the dispatch.
+
+## Fresh current-SHA delivery lineage (captain-authorized 1/5)
+
+This historical plan and its completed correction ledger are preserved as the
+record of the prior measurement. On 2026-08-11, the captain authorized a
+separate fresh delivery lineage capped at five loops for current-SHA live
+closure. Its context and TDD plan are `3993-CONTEXT.md` and `3993-01-PLAN.md`;
+it begins at **1/5**, not correction 6. The new line uses the built in-process
+certification path as the only candidate for shared-rate-coordinator evidence,
+treats the external per-operation Node runner as non-equivalent, and records
+#4059/#3994/#3992 dependencies without modifying their code.

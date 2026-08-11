@@ -18,3 +18,15 @@
 `1/#4020 -> 2/#4022 -> 3/#4027 -> 4/#4039 -> 5/#4050` is complete after
 the focused GREEN suite. The historical terminal measurement remains 0 proven /
 665 failed / 856 untestable at 45,000 ms; it is not a current certification.
+
+## Fresh current-SHA lineage (captain-authorized 1/5)
+
+This section is deliberately separate from the completed correction history.
+The fresh line is governed by `3993-01-PLAN.md`; it must record a new executable
+RED result before each new behavior change and its corresponding GREEN result
+afterwards. It cannot reuse historical tests or results as its RED/GREEN proof.
+
+| Fresh slice | Red evidence | Green evidence | Notes |
+| --- | --- | --- | --- |
+| One-process provenance and exact-head scan repair | Pending: add and run the execution-model regression before changing `github-live-proof-sweep.mjs`. | Pending | Fresh lineage **1/5**; the external-process runner cannot certify shared in-process coordination. |
+| Bounded built-binary live closure | Pending only after focused gates, approved App credential inventory, and explicit heavy-validation-window announcement. | Pending | Missing safe authority is `needs-decision`, never a synthetic pass. |
