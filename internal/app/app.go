@@ -1240,6 +1240,10 @@ type acknowledgedTransportCompletion struct {
 	state StreamState
 }
 
+// completeAcknowledgedTransportRun carries the state this App persisted for
+// the closed transport checkpoint. It is an eligibility witness, not a refresh:
+// a stale finalization may rebase only while the latest stream state still
+// matches it and the target run remains running.
 func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecutionResult) (Run, error) {
 	if result.PendingStreamState == nil {
 		return a.completeRun(runID, result)
