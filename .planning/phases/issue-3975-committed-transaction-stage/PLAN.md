@@ -252,12 +252,14 @@ changes are needed.
 
 1. `docs(3975): capture transaction-stage context` — completed prior to code.
 2. `docs(3975): plan committed transaction stage` — plan/TDD/verification
-   checkpoint; push to the child branch.
+   checkpoint; pushed before implementation began.
 3. `test(3975): add receipt-gated transaction-stage red test` — first named
    RED evidence captured before behavioral implementation; push once the red
    evidence and planning files are coherent.
 4. `feat(3975): stage committed transactions with durable receipts` — GREEN
-   implementation plus focused/race evidence.
+   implementation plus focused/race evidence. Per the user-directed audit
+   hold after `2afa128e`, keep this and all later local commits unpushed until
+   verify/review, Shepherd-compatible evidence, and no-mistakes are complete.
 5. `refactor(3975): harden transaction-stage recovery` — only if cleanup is
    warranted after green, followed by review/no-mistakes fixes as needed.
 

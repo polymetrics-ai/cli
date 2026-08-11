@@ -1,81 +1,93 @@
 # Verification checklist — Issue #3975: committed-transaction staging and durable receipts
 
-**Status:** Planned — evidence pending execution
+**Status:** Local verification complete; no-mistakes and remote delivery hold pending.
 
-## Scope and dependency proof
+## Scope and topology proof
 
-- [x] #3975 issue is open, uniquely mapped to this child branch, and has no
-      existing child PR/branch to duplicate.
-- [x] #3974 is present at `be561871e` in
-      `origin/feat/3972-postgres-parity`; child branch starts at that ref.
-- [x] Parent PR #4017 exists as a draft and child base is exactly
-      `feat/3972-postgres-parity`.
-- [ ] Diff stays within `internal/connectors/database/**` and this phase's
-      planning evidence; no PostgreSQL/CDC/app/warehouse/CLI behavior change.
+- [x] #3975 is implemented only in `internal/connectors/database/**` plus
+      issue-local GSD evidence. No PostgreSQL decoder/CDC, LSN acknowledgement,
+      poller, target/DML, generic SQL, CLI, warehouse, docs, or capability
+      promotion changed.
+- [x] #3974 is an ancestor of this child through
+      `be561871e6bb7d1a5b54d7687743ef8396a2cafe`.
+- [x] The immutable audit checkpoint is
+      `2afa128e5a9844863c7b33d4ca52dacb867398ed`; it was not rewritten or
+      force-pushed. The user directed no subsequent push or PR action before
+      final local gates.
 
 ## Required behaviour proof
 
-- [ ] `TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt` has a
-      captured behavioural RED run and a subsequent GREEN run.
-- [ ] Chunk invisibility before commit, atomic in-order whole-transaction
-      publication, and one immutable receipt are covered by assertions.
-- [ ] Abort, missing/duplicate boundaries, independent transaction isolation,
-      and zero-residue active cleanup are covered.
-- [ ] Byte, record, and time limits return named
-      `TransactionStageLimitExceeded`, publish nothing, and expose no
+- [x] `TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt` has a
+      retained behavioural RED trace and a GREEN/reopen proof: chunks remain
+      private until commit, stream in append order once, and only a persisted
+      receipt exposes `synccontract.DownstreamAcknowledgement` eligibility.
+- [x] Abort deletes active chunks and supports clean identity reuse. Quota
+      refusals name `TransactionStageLimitExceeded` for byte, record, age, and
+      retained-root byte limits, publish nothing, and leave no final artifact.
+- [x] Fixed 32 KiB copying is exercised with a larger controlled reader; the
+      stage never accumulates the full payload in memory.
+- [x] Cancellation during append and after receiver delivery leaves no final
+      chunk, receipt, acknowledgement, or temporary residue.
+- [x] Restart removes active/incomplete/orphan state, retains only sealed
+      receipt-less work for retry, preserves recovered byte accounting, and
+      removes post-receipt residue on recovery.
+- [x] ENOSPC, write, file-sync, rename, parent-directory-sync, receiver,
+      receipt, and cleanup transitions use injected faults. Each failure
+      asserts durable artifacts/receipts and reopens the root at the boundary.
+- [x] A receiver must stream every complete chunk; a false receipt return
+      without full consumption is refused. A caller cannot forge receipt-based
       acknowledgement eligibility.
-- [ ] Bounded-memory streaming is proven with a controlled large reader rather
-      than a whole-payload in-memory test fixture.
-- [ ] Receipt-before-acknowledgement is proven through a fake source/consumer
-      and a persisted receipt artifact, not a return code.
-- [ ] Disk-full, write/fsync/rename/parent-sync, receiver, receipt, and
-      cancellation failures leave no deceptive final receipt/eligibility.
-- [ ] Every crash boundary restarts into only safe states and cleans incomplete
-      stage/orphan temporary residue.
-- [ ] Recovered accounting prevents a restart from bypassing stage limits.
+- [x] Opaque transaction identities are hashed before filesystem use; traversal
+      and control-character values remain root-contained and distinct.
 
-## Focused checks
+## Executed focused/static checks
 
-- [ ] `go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt$'`
-- [ ] `go test -timeout 20m -count=1 ./internal/connectors/database`
-- [ ] `go test -timeout 20m -race -count=1 ./internal/connectors/database`
-- [ ] `go test -timeout 20m -count=1 ./internal/synccontract ./internal/app`
-- [ ] `go vet ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] direct changed-package `golangci-lint` or repository `make lint`
+- [x] `go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt$'`
+- [x] `go test -timeout 20m -count=1 ./internal/connectors/database -run 'Cancellation|Fault|RestartRecovery|RecoveryCleans'`
+- [x] `go test -timeout 20m -count=1 ./internal/connectors/database`
+- [x] `go test -timeout 20m -race -count=1 ./internal/connectors/database`
+- [x] `go test -timeout 20m -count=1 ./internal/synccontract`
+- [x] `go test -timeout 20m -count=1 ./internal/app`
+- [x] `gofmt -w` changed Go files, `git diff --check`,
+      `golangci-lint run ./internal/connectors/database/...`, and `go vet ./...`
+- [x] `go build ./cmd/pm`
 
-## Repository gates
+## Executed repository gates
 
-- [ ] `make tidy-check`
-- [ ] `make lint`
-- [ ] `make docs-check`
-- [ ] `make smoke-no-build`
-- [ ] `make agent-contract-check`
-- [ ] `make connectorgen-validate`
-- [ ] `make connectorgen-surface-sync`
-- [ ] `make connector-boundary`
-- [ ] `make release-workflow-check`
-- [ ] `make verify` is attempted only if the harness can give the full suite
-      its required time; otherwise individual gates above plus CI are recorded.
+- [x] `make tidy-check`
+- [x] `make lint`
+- [x] `make docs-check`
+- [x] `make smoke-no-build`
+- [x] `make agent-contract-check`
+- [x] `make connectorgen-validate`
+- [x] `make connectorgen-surface-sync`
+- [x] `make connector-boundary`
+- [x] `make release-workflow-check`
 
-## Delivery and review gates
+`make verify` is intentionally not invoked as one command in the per-command
+timeout harness. Its documented component gates are listed above; CI remains
+the full-suite authority.
 
-- [ ] Generated `execute-phase`, `verify-work`, and `code-review` prompts are
-      recorded with the manual inline fallback.
-- [ ] Manual GSD verification/UAT, gaps loop if needed, and code-review
-      dispositions are completed.
-- [ ] Bounded #3995-compatible Shepherd evidence is recorded; no automatic
-      Shepherd verdict is claimed while #3995 is outside the parent ancestry.
-- [ ] `no-mistakes axi run` executes the canonical child command without
-      `--yes`; every gate is individually dispositioned.
-- [ ] Child branch is pushed and one draft PR targets
-      `feat/3972-postgres-parity` with Refs #3975/#3972/#2986/#2988.
-- [ ] CI and the stacked automated-review route are recorded; no child merge is
-      performed.
+## GSD/manual delivery gates
+
+- [x] Adapter prompts for `discuss-phase`, `plan-phase --tdd`, `execute-phase`,
+      `verify-work`, and `code-review` were resolved. #3975 is not a numbered
+      roadmap phase, and the canonical single-worker contract prohibits GSD
+      role spawning, so this is an explicit manual inline fallback.
+- [x] Inline UAT is recorded in `UAT.md`; the code-review disposition is in
+      `REVIEW.md`; no human-judgment UI/provider mutation is in scope.
+- [x] Bounded #3995-compatible Shepherd evidence is in
+      `SHEPHERD-COMPATIBILITY.{md,json}` and does not claim an automatic
+      approval.
+- [ ] Canonical child no-mistakes run is pending on the local implementation
+      commit, without `--yes` and with push/PR/CI explicitly skipped by the
+      child contract.
+- [ ] No push, PR creation, remote CI observation, automated-review request,
+      or merge is permitted until the user-directed hold is lifted after the
+      no-mistakes result.
 
 ## Deliberate non-applicability
 
-No public CLI command, flag, output, connector manifest, help/manual, website
-page, credentialed check, or live database interaction changes. CLI/docs/site
-parity and Podman/database integration are not applicable; PostgreSQL remains
-fail-closed and is covered by the final scope scan.
+No public CLI command/flag/help/manual/website or connector surface changed.
+No credentialed, live-database, Podman, PostgreSQL wire, source checkpoint, or
+destination interaction is applicable to this private source-agnostic stage.

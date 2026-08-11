@@ -49,6 +49,23 @@ go test -timeout 20m -race -count=1 ./internal/connectors/database
 go test -timeout 20m -count=1 ./internal/synccontract ./internal/app
 ```
 
+## Executed Green evidence
+
+- [x] The named first test passes after durable implementation and reopens the
+      root to prove the receipt artifact, not an in-memory value, survives.
+- [x] The package suite covers T1–T17, including abort/quota/cancellation,
+      streamed-buffer, recovery, opaque-key, receipt-forgery, and concurrent
+      isolation cases.
+- [x] `transaction_stage_fault_test.go` injects begin, chunk, manifest, seal,
+      receiver, receipt, and post-receipt-cleanup faults; every failed crash
+      boundary is reopened and shown to have only a safe state.
+- [x] Package `-race`, `internal/synccontract`, and `internal/app` checks pass.
+
+The sole implementation-review correction is bounded/saturating quota
+arithmetic for extreme untrusted record counts. It is a source hardening
+correction inside #3975, not a newly discovered repository-gate defect, and is
+covered by `TestCommittedTransactionStageSaturatesUntrustedRecordQuotaDiagnostics`.
+
 ## Refactor condition
 
 Refactor only after all T1–T17 focused tests pass. Re-run every Green command
