@@ -31,7 +31,7 @@
     },
     {
       "id": "flow_authoring",
-      "discovery_source": "internal/cli/flow_cli.go:20"
+      "discovery_source": "internal/cli/flow_cli.go:21"
     },
     {
       "id": "reverse_etl",
