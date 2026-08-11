@@ -1,24 +1,24 @@
 # #4063 Verification Checklist
 
-**Status:** Planned
+**Status:** Focused local gates green; inherited base-range whitespace gate needs disposition
 
 ## Required local gates
 
 - [x] RED: go run ./cmd/connectorgen certification-matrix --check exited 1
       before the generator ran at exact starting HEAD.
-- [ ] go test -timeout 20m ./cmd/connectorgen -run
+- [x] go test -timeout 20m ./cmd/connectorgen -run
       '^(TestCertificationDiscoverFunctionKindsFromRuntimeSource|TestCertificationGeneratedArtifactDriftFails)$'
       -count=1
-- [ ] go test -timeout 20m ./cmd/connectorgen -count=1
-- [ ] go test -timeout 20m ./internal/flow ./internal/app ./internal/warehouse
+- [x] go test -timeout 20m ./cmd/connectorgen -count=1
+- [x] go test -timeout 20m ./internal/flow ./internal/app ./internal/warehouse
       ./internal/cli -count=1
-- [ ] go run ./cmd/connectorgen certification-matrix --check
-- [ ] go vet ./cmd/connectorgen ./internal/flow ./internal/app
+- [x] go run ./cmd/connectorgen certification-matrix --check
+- [x] go vet ./cmd/connectorgen ./internal/flow ./internal/app
       ./internal/warehouse ./internal/cli
-- [ ] make lint
-- [ ] scripts/verify-gsd-workflow origin/feat/3988-github-certification
+- [x] make lint
+- [x] scripts/verify-gsd-workflow origin/feat/3988-github-certification
 - [ ] git diff --check 5c92888c996319b41eec6e86ca99fcda4cb365f9
-- [ ] Semantic JSON comparison confirms exactly one flow-matrix scalar.
+- [x] Semantic JSON comparison confirms exactly one flow-matrix scalar.
 - [ ] Inline manual-GSD verify-work records no gap.
 - [ ] Inline manual-GSD code review dispositions every finding.
 - [ ] Existing Shepherd/no-mistakes path runs with --skip=push,pr,ci and
@@ -36,3 +36,13 @@
 
 No CLI command surface, help text, manual, website documentation, connector
 definition, provider interaction, credential, or runtime behavior changes.
+
+## Inherited base-range formatting finding
+
+The required base-range command fails at exact starting head as well as the
+current correction head, solely on seven Markdown hard-break whitespace lines
+in the older #3897 planning records. They were introduced by
+06fdfe2f94c8093ed9f504b210f1bd3f1ce01163, before this correction's exact
+start. `git diff --check 002ddf674a447bf0872486aa979efdaa078f602c HEAD`
+passes. The correction does not edit those pre-existing records; a scope
+decision is required before changing them.
