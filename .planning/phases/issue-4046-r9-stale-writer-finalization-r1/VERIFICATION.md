@@ -23,25 +23,25 @@
 
 2. [x] Matching narrow GREEN: same command, passing (exit `0`); returned and reopened losing runs match, are terminal `failed`, and retain the typed conflict.
 
-3. [ ] Intervening unrelated writer:
+3. [x] Intervening unrelated writer (exit `0`, 20 repetitions; preserves winner and unrelated stream/checkpoint/run):
 
    ```sh
    go test -count=20 -timeout 20m ./internal/app -run '^TestFailRunTransportConflictPreservesLatestConcurrentState$'
    ```
 
-4. [ ] Restart truth:
+4. [x] Restart truth (exit `0`, 10 repetitions):
 
    ```sh
    go test -count=10 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFailureSurvivesReopen$'
    ```
 
-5. [ ] Cancellation:
+5. [x] Cancellation (exit `0`, 10 repetitions; cancellation is issued after acknowledgement, and the typed conflict remains detectable):
 
    ```sh
    go test -count=10 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesAfterCancellation$'
    ```
 
-6. [ ] All seven modes:
+6. [x] All seven modes (exit `0`: `full_overwrite`, `full_append`, `incremental_append`, `incremental_upsert`, `incremental_dedupe`, `incremental_dedupe_history`, `change_capture`):
 
    ```sh
    go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRunForAllModes$' -v

@@ -448,7 +448,12 @@ func TestRunETLTransportRejectsStaleCheckpointWriter(t *testing.T) {
 }
 
 func TestRunETLTransportStaleWriterFinalizesLosingRun(t *testing.T) {
-	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	assertRunETLTransportStaleWriterFinalization(t, synccontract.ModeFullAppend, false)
+}
+
+func assertRunETLTransportStaleWriterFinalization(t *testing.T, mode synccontract.Mode, cancelAfterAcknowledgement bool) {
+	t.Helper()
+	fixture := setupAppTransportFixture(t, mode)
 	fixture.sourceExecutor.page.CandidateCheckpoint.Position.Primary = synccontract.OpaqueToken{0xff}
 	fixture.sourceExecutor.page.CandidateCheckpoint.Position.TieBreaker = synccontract.OpaqueToken{0xff}
 	acknowledgementReached := make(chan struct{})
@@ -461,8 +466,14 @@ func TestRunETLTransportStaleWriterFinalizesLosingRun(t *testing.T) {
 	done := make(chan struct{})
 	var losingRun Run
 	var losingErr error
+	var losingCtx context.Context = context.Background()
+	var cancel context.CancelFunc
+	if cancelAfterAcknowledgement {
+		losingCtx, cancel = context.WithCancel(context.Background())
+		defer cancel()
+	}
 	go func() {
-		losingRun, losingErr = fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+		losingRun, losingErr = fixture.app.RunETL(losingCtx, RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
 		close(done)
 	}()
 	waitForTransportSignal(t, acknowledgementReached)
@@ -488,6 +499,15 @@ func TestRunETLTransportStaleWriterFinalizesLosingRun(t *testing.T) {
 			current.Checkpoints = map[string]map[string]string{}
 		}
 		current.Checkpoints["unrelated_run"] = map[string]string{"cursor": "preserved"}
+		current.Runs = append(current.Runs, Run{
+			ID:          "unrelated_run",
+			Type:        "etl",
+			Connection:  "unrelated",
+			Stream:      "records",
+			Status:      "completed",
+			StartedAt:   unrelatedUpdatedAt.Add(-time.Second),
+			CompletedAt: unrelatedUpdatedAt,
+		})
 		return current, nil
 	}); err != nil {
 		t.Fatal(err)
@@ -516,6 +536,12 @@ func TestRunETLTransportStaleWriterFinalizesLosingRun(t *testing.T) {
 		t.Fatalf("winner run status = %q, want completed", winnerRun.Status)
 	}
 
+	if cancel != nil {
+		cancel()
+		if !errors.Is(losingCtx.Err(), context.Canceled) {
+			t.Fatalf("losing context error = %v, want cancellation after acknowledgement", losingCtx.Err())
+		}
+	}
 	close(releaseAcknowledgement)
 	waitForTransportSignal(t, done)
 	if !errors.Is(losingErr, errTransportStreamStateConflict) {
@@ -539,6 +565,16 @@ func TestRunETLTransportStaleWriterFinalizesLosingRun(t *testing.T) {
 	}
 	if got := reopened.state.Checkpoints["unrelated_run"]["cursor"]; got != "preserved" {
 		t.Fatalf("unrelated project checkpoint = %q, want preserved", got)
+	}
+	var unrelatedRun Run
+	for _, run := range reopened.state.Runs {
+		if run.ID == "unrelated_run" {
+			unrelatedRun = run
+			break
+		}
+	}
+	if unrelatedRun.Status != "completed" || !unrelatedRun.CompletedAt.Equal(unrelatedUpdatedAt) {
+		t.Fatalf("unrelated run changed: %#v", unrelatedRun)
 	}
 
 	var durableLoser Run
@@ -573,6 +609,224 @@ func TestRunETLTransportStaleWriterFinalizesLosingRun(t *testing.T) {
 	if len(symptoms) > 0 {
 		t.Fatalf("stale writer finalization leak: %s; durable loser=%+v", strings.Join(symptoms, "; "), durableLoser)
 	}
+}
+
+func TestRunETLTransportStaleWriterFailureSurvivesReopen(t *testing.T) {
+	assertRunETLTransportStaleWriterFinalization(t, synccontract.ModeFullAppend, false)
+}
+
+func TestRunETLTransportStaleWriterFinalizesAfterCancellation(t *testing.T) {
+	assertRunETLTransportStaleWriterFinalization(t, synccontract.ModeFullAppend, true)
+}
+
+func TestRunETLTransportStaleWriterFinalizesLosingRunForAllModes(t *testing.T) {
+	for _, mode := range []synccontract.Mode{
+		synccontract.ModeFullOverwrite,
+		synccontract.ModeFullAppend,
+		synccontract.ModeIncrementalAppend,
+		synccontract.ModeIncrementalUpsert,
+		synccontract.ModeIncrementalDedupe,
+		synccontract.ModeIncrementalDedupeHistory,
+		synccontract.ModeChangeCapture,
+	} {
+		t.Run(string(mode), func(t *testing.T) {
+			assertRunETLTransportStaleWriterFinalization(t, mode, false)
+		})
+	}
+}
+
+func TestFailRunTransportConflictPreservesLatestConcurrentState(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	loser := Run{
+		ID:         "run_loser",
+		Type:       "etl",
+		Connection: fixture.connection,
+		Stream:     "records",
+		Status:     "running",
+		StartedAt:  time.Unix(10, 0).UTC(),
+	}
+	if _, err := fixture.app.beginRun(loser); err != nil {
+		t.Fatal(err)
+	}
+
+	writer, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	credential, ok := writer.findCredential("source")
+	if !ok {
+		t.Fatal("writer app has no source credential")
+	}
+	winnerCheckpoint := appTransportCheckpoint(fixture.source, credential, "records")
+	winnerCheckpoint.Position.Primary = synccontract.OpaqueToken{0xff, 0x00}
+	winnerCheckpoint.Position.TieBreaker = synccontract.OpaqueToken{0xff, 0x00}
+	unrelatedUpdatedAt := time.Unix(11, 0).UTC()
+	if _, err := writer.updateState(func(current state) (state, error) {
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
+		}
+		current.StreamStates[streamStateKey(fixture.connection, "records")] = StreamState{
+			Connection:          fixture.connection,
+			Stream:              "records",
+			Checkpoint:          &winnerCheckpoint,
+			GenerationID:        1,
+			LastSuccessfulRunID: "run_winner",
+			RecordsLoaded:       1,
+			UpdatedAt:           unrelatedUpdatedAt,
+		}
+		current.StreamStates["unrelated:records"] = StreamState{
+			Connection:          "unrelated",
+			Stream:              "records",
+			GenerationID:        8,
+			LastSuccessfulRunID: "unrelated_run",
+			RecordsLoaded:       13,
+			UpdatedAt:           unrelatedUpdatedAt,
+		}
+		if current.Checkpoints == nil {
+			current.Checkpoints = map[string]map[string]string{}
+		}
+		current.Checkpoints["unrelated_run"] = map[string]string{"cursor": "preserved"}
+		current.Runs = append(current.Runs, Run{
+			ID:          "unrelated_run",
+			Type:        "etl",
+			Connection:  "unrelated",
+			Stream:      "records",
+			Status:      "completed",
+			StartedAt:   unrelatedUpdatedAt.Add(-time.Second),
+			CompletedAt: unrelatedUpdatedAt,
+		})
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	returned, err := fixture.app.failRun(loser.ID, fmt.Errorf("stale checkpoint: %w", errTransportStreamStateConflict))
+	if !errors.Is(err, errTransportStreamStateConflict) {
+		t.Fatalf("failRun() error = %v, want typed transport state conflict", err)
+	}
+	if returned.ID != loser.ID || returned.Status != "failed" || returned.CompletedAt.IsZero() {
+		t.Fatalf("failRun() returned %#v, want terminal loser", returned)
+	}
+
+	reopened, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	winner := reopened.state.StreamStates[streamStateKey(fixture.connection, "records")]
+	if winner.Checkpoint == nil || !bytes.Equal(winner.Checkpoint.Position.Primary, []byte{0xff, 0x00}) || winner.LastSuccessfulRunID != "run_winner" {
+		t.Fatalf("winner state changed during typed finalization: %#v", winner)
+	}
+	unrelated := reopened.state.StreamStates["unrelated:records"]
+	if unrelated.GenerationID != 8 || unrelated.LastSuccessfulRunID != "unrelated_run" || unrelated.RecordsLoaded != 13 || !unrelated.UpdatedAt.Equal(unrelatedUpdatedAt) {
+		t.Fatalf("unrelated stream state changed: %#v", unrelated)
+	}
+	if got := reopened.state.Checkpoints["unrelated_run"]["cursor"]; got != "preserved" {
+		t.Fatalf("unrelated checkpoint = %q, want preserved", got)
+	}
+	var durableLoser, unrelatedRun Run
+	for _, run := range reopened.state.Runs {
+		switch run.ID {
+		case loser.ID:
+			durableLoser = run
+		case "unrelated_run":
+			unrelatedRun = run
+		}
+	}
+	if durableLoser.ID != loser.ID || durableLoser.Status != "failed" || durableLoser.CompletedAt.IsZero() {
+		t.Fatalf("durable loser = %#v, want failed terminal run", durableLoser)
+	}
+	if unrelatedRun.Status != "completed" || !unrelatedRun.CompletedAt.Equal(unrelatedUpdatedAt) {
+		t.Fatalf("unrelated run changed: %#v", unrelatedRun)
+	}
+}
+
+func TestFailRunRetainsRevisionGuardWithoutTransportConflict(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	loser := Run{
+		ID:         "run_loser",
+		Type:       "etl",
+		Connection: fixture.connection,
+		Stream:     "records",
+		Status:     "running",
+		StartedAt:  time.Unix(10, 0).UTC(),
+	}
+	if _, err := fixture.app.beginRun(loser); err != nil {
+		t.Fatal(err)
+	}
+	writer, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := writer.updateState(func(current state) (state, error) {
+		if current.Checkpoints == nil {
+			current.Checkpoints = map[string]map[string]string{}
+		}
+		current.Checkpoints["unrelated_run"] = map[string]string{"cursor": "preserved"}
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	returned, err := fixture.app.failRun(loser.ID, errors.New("ordinary ETL failure"))
+	if !errors.Is(err, errStateRevisionConflict) {
+		t.Fatalf("failRun() error = %v, want revision conflict for ordinary failure", err)
+	}
+	if returned.ID != "" {
+		t.Fatalf("failRun() returned %#v, want no rebase for ordinary failure", returned)
+	}
+	reopened, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := reopened.state.Checkpoints["unrelated_run"]["cursor"]; got != "preserved" {
+		t.Fatalf("ordinary failure overwrote unrelated checkpoint = %q", got)
+	}
+	for _, run := range reopened.state.Runs {
+		if run.ID == loser.ID {
+			if run.Status != "running" || !run.CompletedAt.IsZero() {
+				t.Fatalf("ordinary failure bypassed revision guard: %#v", run)
+			}
+			return
+		}
+	}
+	t.Fatalf("ordinary failure lost original run %q", loser.ID)
+}
+
+func TestFailRunTransportConflictRequiresRunningTarget(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	terminal := Run{
+		ID:          "run_terminal",
+		Type:        "etl",
+		Connection:  fixture.connection,
+		Stream:      "records",
+		Status:      "completed",
+		StartedAt:   time.Unix(10, 0).UTC(),
+		CompletedAt: time.Unix(11, 0).UTC(),
+	}
+	if _, err := fixture.app.beginRun(terminal); err != nil {
+		t.Fatal(err)
+	}
+
+	returned, err := fixture.app.failRun(terminal.ID, fmt.Errorf("stale checkpoint: %w", errTransportStreamStateConflict))
+	if !errors.Is(err, errTransportStreamStateConflict) {
+		t.Fatalf("failRun() error = %v, want typed transport state conflict", err)
+	}
+	if returned.ID != terminal.ID || returned.Status != "completed" || !returned.CompletedAt.Equal(terminal.CompletedAt) {
+		t.Fatalf("failRun() replaced terminal run: %#v", returned)
+	}
+	reopened, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, run := range reopened.state.Runs {
+		if run.ID == terminal.ID {
+			if run.Status != "completed" || !run.CompletedAt.Equal(terminal.CompletedAt) {
+				t.Fatalf("durable terminal run was replaced: %#v", run)
+			}
+			return
+		}
+	}
+	t.Fatalf("terminal run %q was not retained", terminal.ID)
 }
 
 func TestRunETLTransportDistinguishesMissingAndPresentStreamState(t *testing.T) {
