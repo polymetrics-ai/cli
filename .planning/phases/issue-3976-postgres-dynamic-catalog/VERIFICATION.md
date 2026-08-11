@@ -2,6 +2,9 @@
 
 ## Acceptance proof
 
+- [x] RED: `dynamic_catalog_integration_test.go` was committed before
+      production implementation and its exact expected compiler failure is in
+      `traces/dynamic-catalog-red.txt`.
 - [ ] Live typed catalog discovery proves two distinct PostgreSQL schema
       fixtures yield different correct catalogs by independent `pg_catalog`
       oracle inspection.
@@ -41,7 +44,9 @@
 
 ## Delivery holds
 
-- [ ] Correctly stacked draft child PR exists with `Refs #3976` and `Refs #3972`.
+- [x] Correctly stacked draft child PR #4065 exists with `Refs #3976` and
+      `Refs #3972`, targets `feat/3972-postgres-parity`, and has been safely
+      merged onto #4064 head `c2e013324` without force/discard.
 - [ ] Parent integration remains held until corrected #4058 is green and merged.
 - [ ] Automated review coverage is recorded and every actionable finding is
       dispositioned before parent-branch integration.

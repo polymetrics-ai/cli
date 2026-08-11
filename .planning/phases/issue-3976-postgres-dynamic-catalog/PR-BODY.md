@@ -16,6 +16,9 @@ Refs #3972
 - Parent branch: `feat/3972-postgres-parity`
 - PR base branch: `feat/3972-postgres-parity`
 - Sub-issue: #3976
+- Child PR: #4065
+- Parent synchronization: safely merged #4064 parent head `c2e013324` in
+  `25bda3e73`; no force push or discarded work
 
 ## Parent Orchestration
 

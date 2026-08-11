@@ -15,6 +15,8 @@ foundation rather than leave a disconnected descriptor model.
 - Generated and executed inline/manual planning prompts:
   `scripts/gsd prompt discuss-phase issue-3976-postgres-dynamic-catalog` and
   `scripts/gsd prompt plan-phase issue-3976-postgres-dynamic-catalog --tdd`.
+- Generated the inline/manual `execute-phase` prompt before entering the RED
+  slice: `scripts/gsd prompt execute-phase issue-3976-postgres-dynamic-catalog`.
 - `go run ./cmd/agentcontractgen check` passed.
 - Manual inline fallback is required because this issue is not a numbered
   roadmap phase and the canonical contract permits exactly one worker; it does
@@ -90,8 +92,8 @@ foundation rather than leave a disconnected descriptor model.
 
 ## Required proof
 
-- Independent `pg_catalog` queries are the live-test oracle, not an expected
-  `Catalog()` object constructed by the code under test.
+- Independent PostgreSQL catalog queries are the live-test oracle, not an
+  expected `Catalog()` object constructed by the code under test.
 - Two schemas in one local PostgreSQL database differ materially (relations,
   column ordinals/nullability, ordered composite keys, and native/logical type
   details) and produce different stable discovered catalogs without code/config
@@ -116,7 +118,8 @@ shows a user-facing PostgreSQL catalog output change.
 
 - Parent issue/branch/PR: #3972, `feat/3972-postgres-parity`, #4017.
 - Child branch: `feat/3976-postgres-dynamic-catalog`, based on current
-  `origin/feat/3972-postgres-parity` at `bfc6e96fd`.
-- One draft child PR must target exactly `feat/3972-postgres-parity` and use
-  `Refs #3976` plus `Refs #3972`. It must not target `main` or duplicate an
-  existing #3976 PR.
+  `origin/feat/3972-postgres-parity` at #4064 head `c2e013324`, retained by
+  non-destructive merge commit `25bda3e73`.
+- Draft child PR #4065 targets exactly `feat/3972-postgres-parity` and uses
+  `Refs #3976` plus `Refs #3972`. It does not target `main` and is the only
+  #3976 child PR.

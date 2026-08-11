@@ -35,8 +35,8 @@
   contracts.
 - Parent #3972; #3976; adjacent #3975, #3980, #3982, #3977; ownership neighbors
   #3983 and #3987; shared polling dependency #3858; parent PR #4017.
-- Merged typed-foundation PR #4034, merged managed-target-state PR #4057, and
-  open correction PR #4058.
+- Merged typed-foundation PR #4034, merged managed-target-state PR #4057,
+  merged parent advance #4064, and open correction PR #4058.
 - `/Users/karthiksivadas/karthik-agent-workspace/data/cli-postgres-dynamic-schema-parity-audit-r1/report.md`.
 
 ## GSD / worker fallback
@@ -54,6 +54,14 @@ manual inline GSD fallback.
 `golang-security`, `golang-safety`, `golang-design-patterns`,
 `golang-structs-interfaces`, `golang-context`, `golang-lint`,
 `github-issue-first-delivery`, and `no-mistakes`.
+
+## Parent-head synchronization
+
+Before the first implementation slice, the child was safely merged onto the
+new parent head from #4064: `c2e013324`. The child merge commit is
+`25bda3e73`; it preserves the existing planning work and uses no force push or
+history rewrite. Draft child PR #4065 targets exactly
+`feat/3972-postgres-parity`, so #3976 remains the next child after #4064.
 
 ## Static-surface ownership audit
 
