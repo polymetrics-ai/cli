@@ -41,7 +41,7 @@ PostgreSQL source ----+
                    GitHub Connector.Write        PostgreSQL Connector.Write
 ```
 
-DuckDB is the common materialization and query engine. The durable warehouse is a connection-owned JSONL WAL plus versioned Parquet generations.
+DuckDB is the common materialization and query engine. The durable warehouse is a connection-owned JSONL WAL plus derived single-file Parquet tables; an immutable input manifest/digest identifies a pinned workset.
 
 ## Responsibility boundaries
 
@@ -55,7 +55,7 @@ The shared engine owns canonical mode admission, checkpoint and resume behavior,
 
 ### Warehouse
 
-The warehouse owns the connection-scoped JSONL WAL, fsync before acknowledgement, DuckDB transformation and validation, Parquet generation, atomic generation replacement, row counts and content hashes, durable receipts, and readback for outbound plans.
+The warehouse owns the connection-scoped JSONL WAL, fsync before acknowledgement, DuckDB transformation and validation, single-file Parquet table materialization with atomic replacement, row counts and content hashes, durable receipts, and readback for outbound plans.
 
 GitHub and PostgreSQL must not define their own meanings for overwrite, dedupe, upsert, or history.
 
@@ -66,14 +66,14 @@ GitHub and PostgreSQL must not define their own meanings for overwrite, dedupe, 
 3. Write the batch to an immutable WAL/workset.
 4. Fsync the WAL.
 5. Apply the selected canonical sync mode using DuckDB.
-6. Publish the resulting Parquet generation atomically.
+6. Atomically replace the resulting single-file Parquet table.
 7. Write a warehouse receipt containing the connector, stream, sync mode, run and workset IDs, input/output counts, schema hash, content hash, and candidate checkpoint.
 8. Read the Parquet result back through DuckDB and validate it.
 9. Advance the source checkpoint only after the receipt and readback succeed.
 
 ## Warehouse-to-connector transaction
 
-1. Pin an immutable warehouse generation/workset.
+1. Pin an immutable warehouse workset/input manifest and its materialized Parquet table.
 2. Query it through DuckDB.
 3. Normalize the exact destination operations.
 4. Hash the complete plan.
@@ -92,8 +92,8 @@ This ordering ensures that checkpoints never advance ahead of durable data or de
 
 | Canonical mode | Shared warehouse behavior |
 | --- | --- |
-| `full_overwrite` | Build and validate a new Parquet generation in staging, then atomically replace the active generation. |
-| `full_append` | Combine the existing generation and complete new snapshot into a new atomic generation. |
+| `full_overwrite` | Build and validate a replacement single-file Parquet table in staging, then atomically replace the active table. |
+| `full_append` | Materialize one replacement Parquet table from the WAL after combining the existing data and complete new snapshot. |
 | `incremental_append` | Append only records after the exact checkpoint and make replay idempotent through workset identity. |
 | `incremental_upsert` | Partition by primary key and retain the latest cursor/version, including tombstone behavior. |
 | `incremental_dedupe` | Fold input to one current non-deleted record per primary key. |
