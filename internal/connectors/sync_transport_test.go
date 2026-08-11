@@ -167,6 +167,63 @@ func TestSyncTransportEligibilityProjectsDeclaredNoneAcknowledgement(t *testing.
 	}
 }
 
+func TestSyncTransportEligibilityProjectsValidRolesIndependently(t *testing.T) {
+	validSource := func() *SourceTransportDescriptor {
+		return &SourceTransportDescriptor{
+			Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeAPI, ID: "fake_api_source"},
+			EligibleStreams: []string{"records"},
+			Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
+			Delivery:        closedTestDeliveryGuarantees(),
+			Conformance:     closedTestConformanceReference(),
+		}
+	}
+	validDestination := func() *DestinationTransportDescriptor {
+		return &DestinationTransportDescriptor{
+			Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeDatabase, ID: "fake_database_destination"},
+			EligibleActions: []string{"stage_append"},
+			Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
+			Delivery:        closedTestDeliveryGuarantees(),
+			Conformance:     closedTestConformanceReference(),
+			Acknowledgement: TransportAcknowledgementNone,
+			ApplyStrategies: []DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: "stage_append"}},
+		}
+	}
+
+	t.Run("valid destination survives invalid source", func(t *testing.T) {
+		source := validSource()
+		source.Modes = nil
+		connector := &syncTransportGuideConnector{descriptor: &SyncTransportDescriptor{
+			Source:      source,
+			Destination: validDestination(),
+		}}
+
+		eligibility := SyncTransportEligibilityOf(connector)
+		if eligibility.Source.Status != "unsupported" {
+			t.Fatalf("source status = %q, want unsupported", eligibility.Source.Status)
+		}
+		if eligibility.Destination.Status != "declared" || eligibility.Destination.Acknowledgement != TransportAcknowledgementNone {
+			t.Fatalf("destination eligibility = %#v, want declared acknowledgement none", eligibility.Destination)
+		}
+	})
+
+	t.Run("valid source survives invalid destination", func(t *testing.T) {
+		destination := validDestination()
+		destination.ApplyStrategies = nil
+		connector := &syncTransportGuideConnector{descriptor: &SyncTransportDescriptor{
+			Source:      validSource(),
+			Destination: destination,
+		}}
+
+		eligibility := SyncTransportEligibilityOf(connector)
+		if eligibility.Destination.Status != "unsupported" {
+			t.Fatalf("destination status = %q, want unsupported", eligibility.Destination.Status)
+		}
+		if eligibility.Source.Status != "declared" || eligibility.Source.Executor == nil {
+			t.Fatalf("source eligibility = %#v, want declared source", eligibility.Source)
+		}
+	})
+}
+
 type syncTransportGuideConnector struct {
 	descriptor *SyncTransportDescriptor
 }

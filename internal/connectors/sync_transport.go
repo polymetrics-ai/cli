@@ -406,10 +406,10 @@ func SyncTransportEligibilityOf(c Connector) SyncTransportEligibility {
 		Destination: TransportRoleEligibility{Status: "unsupported"},
 	}
 	descriptor, ok := SyncTransportDescriptorOf(c)
-	if !ok || descriptor.Validate() != nil {
+	if !ok {
 		return eligibility
 	}
-	if descriptor.Source != nil {
+	if descriptor.Source != nil && descriptor.Source.Validate() == nil {
 		executor := descriptor.Source.Executor
 		eligibility.Source = TransportRoleEligibility{
 			Status:   "declared",
@@ -418,7 +418,7 @@ func SyncTransportEligibilityOf(c Connector) SyncTransportEligibility {
 			Modes:    append([]synccontract.Mode(nil), descriptor.Source.Modes...),
 		}
 	}
-	if descriptor.Destination != nil {
+	if descriptor.Destination != nil && descriptor.Destination.Validate() == nil {
 		executor := descriptor.Destination.Executor
 		eligibility.Destination = TransportRoleEligibility{
 			Status:          "declared",

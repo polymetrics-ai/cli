@@ -105,9 +105,6 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		if err != nil {
 			return fmt.Errorf("apply destination transport: %w", err)
 		}
-		if err := ctx.Err(); err != nil {
-			return err
-		}
 		if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
 			if acknowledgement.Sink != request.Destination.Name() {
 				return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, request.Destination.Name())
@@ -125,6 +122,9 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		result.RecordsApplied += len(staged.Records)
 		result.Pages++
 		result.CommittedCheckpoint = &committed
+		if err := ctx.Err(); err != nil {
+			return err
+		}
 		return nil
 	})
 	if err != nil {

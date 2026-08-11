@@ -20,7 +20,7 @@ type Registry struct {
 }
 
 func NewRegistry(verifier ConformanceVerifier) *Registry {
-	if verifier == nil {
+	if isNilInterface(verifier) {
 		verifier = unavailableConformanceVerifier{}
 	}
 	return &Registry{
@@ -97,20 +97,22 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 		return ResolvedTransport{}, err
 	}
 
-	sourceDescriptor, ok := connectors.SourceTransportDescriptorOf(request.Source)
-	if !ok {
+	sourceTransport, ok := connectors.SyncTransportDescriptorOf(request.Source)
+	if !ok || sourceTransport.Source == nil {
 		return ResolvedTransport{}, fmt.Errorf("source connector %q has no declared source transport", request.Source.Name())
 	}
-	destinationDescriptor, ok := connectors.DestinationTransportDescriptorOf(request.Destination)
-	if !ok {
-		return ResolvedTransport{}, fmt.Errorf("destination connector %q has no declared destination transport", request.Destination.Name())
-	}
-	if err := sourceDescriptor.Validate(); err != nil {
+	if err := sourceTransport.Validate(); err != nil {
 		return ResolvedTransport{}, fmt.Errorf("source transport descriptor: %w", err)
 	}
-	if err := destinationDescriptor.Validate(); err != nil {
+	sourceDescriptor := sourceTransport.Source
+	destinationTransport, ok := connectors.SyncTransportDescriptorOf(request.Destination)
+	if !ok || destinationTransport.Destination == nil {
+		return ResolvedTransport{}, fmt.Errorf("destination connector %q has no declared destination transport", request.Destination.Name())
+	}
+	if err := destinationTransport.Validate(); err != nil {
 		return ResolvedTransport{}, fmt.Errorf("destination transport descriptor: %w", err)
 	}
+	destinationDescriptor := destinationTransport.Destination
 	if err := connectors.ValidateTransportExecutorFamily(request.Source.Metadata().IntegrationType, sourceDescriptor.Executor); err != nil {
 		return ResolvedTransport{}, err
 	}
@@ -151,7 +153,7 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 	if destination.TransportExecutorReference() != destinationDescriptor.Executor {
 		return ResolvedTransport{}, fmt.Errorf("registered destination transport executor does not match destination descriptor")
 	}
-	if verifier == nil {
+	if isNilInterface(verifier) {
 		return ResolvedTransport{}, fmt.Errorf("external transport conformance verification is unavailable")
 	}
 	if err := verifier.VerifyTransportConformance(ConformanceVerification{

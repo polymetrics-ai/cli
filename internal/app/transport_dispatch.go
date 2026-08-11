@@ -50,6 +50,26 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		Checkpoint:         prior.Checkpoint,
 		Stage:              a.transportStage,
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
+			interim := checkpoint.Clone()
+			if interim.CommittedAt == nil {
+				return fmt.Errorf("closed transport committed checkpoint is missing its acknowledgement timestamp")
+			}
+			interimState := StreamState{
+				Connection:   conn.Name,
+				Stream:       streamName,
+				Checkpoint:   &interim,
+				GenerationID: generationID,
+				UpdatedAt:    *interim.CommittedAt,
+			}
+			if _, err := a.updateState(func(current state) (state, error) {
+				if current.StreamStates == nil {
+					current.StreamStates = map[string]StreamState{}
+				}
+				current.StreamStates[stateKey] = cloneStreamState(interimState)
+				return current, nil
+			}); err != nil {
+				return fmt.Errorf("persist acknowledged transport checkpoint: %w", err)
+			}
 			copy := checkpoint.Clone()
 			committed = &copy
 			return nil

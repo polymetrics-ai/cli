@@ -3,6 +3,7 @@ package cli_test
 import (
 	"bytes"
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/cli"
@@ -30,5 +31,22 @@ func TestConnectorInspectProjectsUnsupportedSyncTransport(t *testing.T) {
 	}
 	if response.SyncTransport.Source.Status != "unsupported" || response.SyncTransport.Destination.Status != "unsupported" {
 		t.Fatalf("sync transport eligibility = %#v, want unsupported source and destination", response.SyncTransport)
+	}
+}
+
+func TestConnectorsHelpExplainsDeclaredNoneInspectionPolicy(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"help", "connectors"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(help connectors) code = %d stderr = %s", code, stderr.String())
+	}
+	for _, want := range []string{
+		"acknowledgement=none remains declared",
+		"only durable_warehouse can execute",
+		"externally verified conformance",
+	} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Fatalf("connector help missing %q:\n%s", want, stdout.String())
+		}
 	}
 }

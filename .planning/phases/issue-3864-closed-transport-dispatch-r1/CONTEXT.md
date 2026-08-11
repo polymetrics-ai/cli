@@ -94,4 +94,7 @@ push, sub-PR creation to `feat/3862-any-to-any-transport`, and CI. It must never
 parent/default-branch PR or merge. Product corrections remain in this one child: #4021 owns only
 app's empty-authored-descriptor fallback (loop 1/5), #4023 owns only normalized generic executor
 identifiers (loop 2/5), and #4029 owns the declared `none` acknowledgement projection (loop 3/5).
-A topology restart is not a product correction loop.
+Loop 4/5 retains this one child: #4046 owns acknowledged interim checkpoint persistence, #4045
+owns complete-descriptor runtime validation, #4048 owns typed-nil verifier admission, #4047 owns
+binary record isolation, and #4029 also owns help/manual parity. A topology restart is not a
+product correction loop.

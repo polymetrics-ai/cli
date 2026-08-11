@@ -319,8 +319,11 @@ DESCRIPTION
   warning only; the connector remains reachable.
 
   JSON inspection also projects the closed sync_transport source and
-  destination eligibility. A declared role still requires runtime preflight
-  and externally verified conformance; it is not a certification claim.
+  destination eligibility. A structurally valid destination that declares
+  acknowledgement=none remains declared so inspection reports that policy, but
+  runtime preflight refuses it; only durable_warehouse can execute. A declared
+  role still requires externally verified conformance; it is not a certification
+  claim.
 
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy

@@ -275,6 +275,8 @@ func cloneRecordValue(value any) any {
 			clone[index] = cloneRecord(nested)
 		}
 		return clone
+	case []byte:
+		return append([]byte(nil), typed...)
 	default:
 		return value
 	}

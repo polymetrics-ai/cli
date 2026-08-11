@@ -96,3 +96,14 @@ topology restart is not a product correction round. At most five product correct
    because that role remained `unsupported`; the projection now includes every
    structurally valid destination and retains its acknowledgement. Registry.Preflight's
    `durable_warehouse` execution gate remains unchanged.
+4. **#4046, #4045, #4048, #4047, and #4029 — review correction (loop 4/5).**
+   RED slices established that an acknowledged page was not persisted before source
+   failure, cancellation, or final-state saving returned; full endpoint descriptors
+   were not fail-closed when inspection projected a valid sibling; typed-nil verifier
+   invocation could panic; binary records aliased provider data; and `connectorsHelp`
+   drifted from its generated manual. GREEN persists only the active stream's interim
+   checkpoint and generation before the callback returns, full-validates each selected
+   descriptor before role access, fails typed nil closed, copies byte backing storage,
+   and regenerates help artifacts. It keeps the durable-warehouse execution gate, all
+   seven closed modes, fake-only warehouse mediation, and child-local
+   `--skip=push,pr,ci` topology intact.

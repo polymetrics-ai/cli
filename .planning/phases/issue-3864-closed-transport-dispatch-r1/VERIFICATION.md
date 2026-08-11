@@ -1,14 +1,14 @@
 # #3864 verification checklist
 
-## Status: local gates, manual verify-work, manual code review, and correction-loop 3 focused evidence recorded; child-local delivery gate pending
+## Status: correction-loop 4 focused evidence recorded; broader outer gates and child-local delivery gate pending
 
 - [x] TDD RED outputs are recorded before production code.
-- [x] Correction loop 3 projects a valid `acknowledgement: none` destination in
-  inspection while the existing durable-acknowledgement preflight rejection remains green.
+- [x] Correction loops 3 and 4 project valid roles independently in inspection while full
+  descriptors and the existing durable-acknowledgement runtime gate remain closed.
 - [ ] The outer executor must rerun the broader post-review package, CLI/help, docs, and
-  delivery gates; this review step intentionally ran only T14's focused regression command.
-- [x] Focused `internal/connectors`, `internal/synctransport`, `internal/app`, and
-  `internal/cli` tests pass with `-timeout 20m`.
+  delivery gates; this review step intentionally ran only T15–T19's focused regression command.
+- [x] The focused count-one command passed the touched `internal/connectors`,
+  `internal/synctransport`, `internal/app`, and `internal/cli` assertions with `-timeout 20m`.
 - [x] Transport package race test and cancellation regression pass.
 - [x] `go vet` and build pass.
 - [x] Required non-suite `make verify` components pass individually.
@@ -27,6 +27,12 @@
 
 ## Local evidence
 
+- Correction loop 4 first recorded independent RED failures in T15–T19. Its sole focused GREEN
+  command was `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -count=1 -timeout 20m
+  ./internal/app ./internal/connectors ./internal/synctransport ./internal/cli -run
+  '^(TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForAllModes|TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation|TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails|TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure|TestSyncTransportEligibilityProjectsDeclaredNoneAcknowledgement|TestSyncTransportEligibilityProjectsValidRolesIndependently|TestPreflightRejectsClosedAdmissionFailuresBeforeSourceRead|TestOrchestratorRejectsInvalidSiblingDescriptorBeforeProviderAccess|TestNewRegistryFailsClosedForTypedNilConformanceVerifier|TestCloneRecordCopiesBinaryValuesAtEveryNestingLevel|TestOrchestratorCommitsAcknowledgedPageBeforeReturningCancellation|TestConnectorsHelpExplainsDeclaredNoneInspectionPolicy|TestGoldenDocsGenerateMatchesTrackedCLIManuals|TestGoldenTranscripts|TestConnectorInspectProjectsUnsupportedSyncTransport)$'`.
+  It passed after regenerating `docs/cli` and the transcript fixture, covering all seven mode
+  checkpoint cases, both descriptor roles, typed nil, byte isolation, runtime help, and docs goldens.
 - `go test -timeout 20m ./internal/connectors ./internal/synctransport`,
   `go test -timeout 20m ./internal/app`, and `go test -timeout 20m ./internal/cli` passed.
 - Review correction #4029 first reproduced the declared-`none` inspection failure with
@@ -71,6 +77,13 @@ Correction loop 3/5 is tracked in [#4029](https://github.com/polymetrics-ai/cli/
 inspection must report a structurally valid destination `acknowledgement: none` as declared
 without admitting it to runtime execution. T14 records the focused RED/GREEN evidence. It stays
 in this child alongside #4021 and #4023; a topology restart is not a product correction loop.
+
+Correction loop 4/5 remains in the same child: [#4046](https://github.com/polymetrics-ai/cli/issues/4046)
+persists acknowledged active-stream checkpoints, [#4045](https://github.com/polymetrics-ai/cli/issues/4045)
+full-validates selected descriptors, [#4048](https://github.com/polymetrics-ai/cli/issues/4048) rejects
+typed-nil verifiers, [#4047](https://github.com/polymetrics-ai/cli/issues/4047) isolates binary record
+values, and #4029 aligns canonical help and its artifacts. T15–T19 record separate RED/GREEN evidence;
+this is not a PR split and a topology restart is not a product correction loop.
 
 This verification can prove only fake-backed dispatch and metadata surfaces. It cannot
 truthfully assert executable #3810 conformance, a real API/database transport, a live

@@ -91,6 +91,69 @@ func TestPreflightRejectsClosedAdmissionFailuresBeforeSourceRead(t *testing.T) {
 	}
 }
 
+func TestOrchestratorRejectsInvalidSiblingDescriptorBeforeProviderAccess(t *testing.T) {
+	for _, tt := range []struct {
+		name    string
+		prepare func(*testTransportPair)
+		want    string
+	}{
+		{
+			name: "source connector invalid destination sibling",
+			prepare: func(pair *testTransportPair) {
+				pair.source.descriptor.Destination = &connectors.DestinationTransportDescriptor{}
+			},
+			want: "source transport descriptor",
+		},
+		{
+			name: "destination connector invalid source sibling",
+			prepare: func(pair *testTransportPair) {
+				pair.destination.descriptor.Source = &connectors.SourceTransportDescriptor{}
+			},
+			want: "destination transport descriptor",
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			pair := newTestTransportPair("api", "database")
+			tt.prepare(pair)
+			registry := NewRegistry(pair.verifier)
+			registerTransportPair(t, registry, pair)
+
+			_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+				Source:      pair.source,
+				Destination: pair.destination,
+				Stream:      "records",
+				Mode:        synccontract.ModeFullAppend,
+				BatchSize:   10,
+				Stage:       &testWarehouseStage{},
+				Commit:      func(synccontract.CheckpointEnvelope) error { return nil },
+			})
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Run() error = %v, want %q", err, tt.want)
+			}
+			if pair.sourceExecutor.readCalls != 0 || pair.destinationExecutor.planCalls != 0 || pair.destinationExecutor.applyCalls != 0 {
+				t.Fatalf("provider calls source/plan/apply = %d/%d/%d, want zero before descriptor rejection", pair.sourceExecutor.readCalls, pair.destinationExecutor.planCalls, pair.destinationExecutor.applyCalls)
+			}
+		})
+	}
+}
+
+func TestNewRegistryFailsClosedForTypedNilConformanceVerifier(t *testing.T) {
+	var verifier *typedNilConformanceVerifier
+	pair := newTestTransportPair("api", "database")
+	registry := NewRegistry(verifier)
+	registerTransportPair(t, registry, pair)
+
+	_, err := registry.Preflight(PreflightRequest{
+		Source:      pair.source,
+		Destination: pair.destination,
+		Stream:      "records",
+		Mode:        synccontract.ModeFullAppend,
+	})
+	if err == nil || !strings.Contains(err.Error(), "external transport conformance verification is unavailable") {
+		t.Fatalf("Preflight() error = %v, want unavailable verifier", err)
+	}
+}
+
 func TestRegistryPreflightIsRaceSafeDuringRegistration(t *testing.T) {
 	pair := newTestTransportPair("api", "database")
 	registry := NewRegistry(pair.verifier)
@@ -208,6 +271,26 @@ func TestOrchestratorCommitsOnlyAfterDurableAcknowledgement(t *testing.T) {
 	}
 }
 
+func TestCloneRecordCopiesBinaryValuesAtEveryNestingLevel(t *testing.T) {
+	scalar := []byte{0x01}
+	nested := []byte{0x02}
+	list := []byte{0x03}
+	original := connectors.Record{
+		"scalar": scalar,
+		"nested": map[string]any{"binary": nested},
+		"list":   []any{list},
+	}
+
+	clone := cloneRecord(original)
+	clone["scalar"].([]byte)[0] = 0x11
+	clone["nested"].(map[string]any)["binary"].([]byte)[0] = 0x12
+	clone["list"].([]any)[0].([]byte)[0] = 0x13
+
+	if scalar[0] != 0x01 || nested[0] != 0x02 || list[0] != 0x03 {
+		t.Fatalf("clone mutated provider binary values: scalar=%x nested=%x list=%x", scalar, nested, list)
+	}
+}
+
 func TestOrchestratorStagesDeepCopyOfProviderRecords(t *testing.T) {
 	pair := newTestTransportPair("api", "database")
 	originalNested := map[string]any{"provider": "untouched"}
@@ -249,6 +332,30 @@ func TestOrchestratorStopsOnCancellationBetweenWarehouseStageAndApply(t *testing
 	}
 	if pair.destinationExecutor.applyCalls != 0 || commits != 0 {
 		t.Fatalf("apply/commits = %d/%d, want zero after cancellation", pair.destinationExecutor.applyCalls, commits)
+	}
+}
+
+func TestOrchestratorCommitsAcknowledgedPageBeforeReturningCancellation(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	ctx, cancel := context.WithCancel(context.Background())
+	pair.destinationExecutor.afterApply = cancel
+	commits := 0
+
+	_, err := NewOrchestrator(registry).Run(ctx, RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+		BatchSize: 10, Stage: &testWarehouseStage{},
+		Commit: func(synccontract.CheckpointEnvelope) error {
+			commits++
+			return nil
+		},
+	})
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("Run() error = %v, want cancellation", err)
+	}
+	if pair.destinationExecutor.applyCalls != 1 || commits != 1 {
+		t.Fatalf("apply/commits = %d/%d, want acknowledged page committed before cancellation", pair.destinationExecutor.applyCalls, commits)
 	}
 }
 
@@ -364,6 +471,7 @@ type testDestinationExecutor struct {
 	sink               string
 	acknowledgement    synccontract.DownstreamAcknowledgement
 	acknowledgementSet bool
+	afterApply         func()
 	planCalls          int
 	applyCalls         int
 	lastPlan           DestinationPlanRequest
@@ -379,10 +487,20 @@ func (e *testDestinationExecutor) PlanDestination(_ context.Context, request Des
 }
 func (e *testDestinationExecutor) ApplyDestination(_ context.Context, _ DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
 	e.applyCalls++
+	var acknowledgement synccontract.DownstreamAcknowledgement
 	if e.acknowledgementSet {
-		return e.acknowledgement, nil
+		acknowledgement = e.acknowledgement
+	} else {
+		var err error
+		acknowledgement, err = synccontract.NewDurableDownstreamAcknowledgement(e.sink, time.Now().UTC())
+		if err != nil {
+			return synccontract.DownstreamAcknowledgement{}, err
+		}
 	}
-	return synccontract.NewDurableDownstreamAcknowledgement(e.sink, time.Now().UTC())
+	if e.afterApply != nil {
+		e.afterApply()
+	}
+	return acknowledgement, nil
 }
 
 type testWarehouseStage struct {
@@ -429,6 +547,12 @@ type rejectingConformanceVerifier struct{ err error }
 
 func (v rejectingConformanceVerifier) VerifyTransportConformance(ConformanceVerification) error {
 	return v.err
+}
+
+type typedNilConformanceVerifier struct{}
+
+func (*typedNilConformanceVerifier) VerifyTransportConformance(ConformanceVerification) error {
+	panic("typed nil conformance verifier must not be invoked")
 }
 
 func testCheckpoint(engine string) synccontract.CheckpointEnvelope {
