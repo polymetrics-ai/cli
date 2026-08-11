@@ -207,6 +207,74 @@ test("redacts every config value by key before it can enter a proof record", () 
   assert.equal(JSON.stringify(record).includes("https://synthetic.invalid"), false);
 });
 
+test("rejects an external per-operation execution model from credentialed current-SHA evidence", () => {
+  const externalRunnerReport = {
+    schema_version: 2,
+    connector: "github",
+    status: "credentialed_live",
+    execution_model: "external_pm_per_operation",
+    generated_at: "2026-08-11T00:00:00.000Z",
+    surface_sha256: "a".repeat(64),
+    binary_sha256: "b".repeat(64),
+    case_digest: "c".repeat(64),
+    test_repository: "<run-owned-boundary-repository>",
+    run_boundary: {
+      run_id: "github-live-proof-safe-run",
+      owner: "polymetrics-cert",
+      repo: "pm-live-lab-test",
+      owner_id: "O_certification",
+      repo_id: "R_certification",
+      organization_id: "O_certification",
+    },
+    launch: { strategy: "single_barrier_release", operations_released: 0 },
+    implemented_commands: 1,
+    tally: { proven: 0, untestable: 1, failed: 0 },
+    records: [
+      {
+        command: "repo view",
+        state: "untestable",
+        reason: "the immutable boundary fixture is unavailable for this controlled proof",
+      },
+    ],
+  };
+
+  assert.throws(
+    () => validateProofReport(externalRunnerReport, ["repo view"]),
+    /credentialed live evidence requires the built_pm_in_process execution model/i,
+  );
+
+  const externalBlocker = {
+    schema_version: 2,
+    connector: "github",
+    status: "external_blocker",
+    execution_model: "external_pm_per_operation",
+    generated_at: "2026-08-11T00:00:00.000Z",
+    surface_sha256: "a".repeat(64),
+    binary_sha256: "b".repeat(64),
+    test_repository: "<credentialed-live-proof-not-available>",
+    implemented_commands: 1,
+    blocker: {
+      code: "app_installation_credential_unavailable",
+      message: "The captain-authorized GitHub App installation credential is unavailable to this proof runner.",
+    },
+    tally: { proven: 0, untestable: 1, failed: 0 },
+    records: [
+      {
+        command: "repo view",
+        state: "untestable",
+        reason: "the captain-authorized GitHub App installation credential is unavailable to this proof runner.",
+      },
+    ],
+  };
+  assert.doesNotThrow(() => validateProofReport(externalBlocker, ["repo view"]));
+
+  externalBlocker.execution_model = "built_pm_in_process";
+  assert.throws(
+    () => validateProofReport(externalBlocker, ["repo view"]),
+    /external blocker evidence requires the external_pm_per_operation execution model/i,
+  );
+});
+
 test("requires the canonical origin and a fully paginated App installation repository identity", async () => {
   const temp = await mkdtemp(path.join(os.tmpdir(), "github-live-proof-preflight-"));
   try {
