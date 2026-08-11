@@ -3,7 +3,8 @@
 Manual inline GSD TDD execution. Tests must assert durable artifacts and state
 facts, never just an exit code. The first executable RED output is retained
 under `traces/red-committed-transaction-stage.txt` before GREEN behavior is
-committed.
+committed. It ran on this child branch and failed behaviorally at the absent
+receipt-gated commit boundary.
 
 | ID | Guarantee | RED assertion | GREEN proof |
 |---|---|---|---|
@@ -36,6 +37,9 @@ go test -timeout 20m -count=1 ./internal/connectors/database \
 transaction behavior before its GREEN implementation. A compile-only failure is
 not accepted as final RED evidence; introduce the minimal declarations needed
 to execute the test, then preserve the behavioral failing output.
+
+**Recorded RED:** PASS — the exact command failed at
+`CommitTransaction() error = committed transaction staging is not implemented`.
 
 ## Green commands
 
