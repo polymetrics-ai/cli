@@ -1,13 +1,14 @@
 # Overview
 
-Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, and
-supports cursor-incremental reads on a configurable cursor column. PostgreSQL logical-replication
+Reads PostgreSQL tables from a dynamically discovered catalog, snapshots tables, and supports
+cursor-incremental reads on a configurable cursor column. PostgreSQL logical-replication
 change capture is deliberately planned, not executable: it requires PostgreSQL 14+ `pgoutput`
 protocol-v2 streaming, a bounded crash-recoverable per-transaction stage, `StreamAbort` discard,
 a named `TransactionStageLimitExceeded` outcome with no source acknowledgement, and a durable
 receipt for the complete transaction before any source LSN acknowledgement.
 
-This connector discovers available streams and schemas from the configured service at runtime.
+Stream availability is discovered at runtime; see [Streams notes](#streams-notes) for the configured
+schema's scope and permission rules.
 
 This connector is read-only; no write actions are declared.
 
@@ -69,8 +70,17 @@ implementation for this service.
 
 ## Streams notes
 
-The connector discovers catalogs and records directly from the configured service instead of using
-fixed stream declarations.
+The connector discovers its catalog from PostgreSQL system catalogs on the configured service rather
+than using fixed stream declarations. Discovery is limited to ordinary and partitioned base tables in the one
+configured `schema` (default `public`); views and all other relation kinds are excluded.
+
+The configured role must have `USAGE` on that schema and either table-level `SELECT` or `SELECT`
+on every non-dropped column. Relations that do not meet those permissions are omitted. If no eligible
+relation remains, catalog discovery returns an error rather than advertising an unreadable stream.
+
+Catalog discovery preserves only lossless typed metadata. For an otherwise eligible relation, an
+unsupported relation shape, identifier, or PostgreSQL type shape fails the catalog request instead of
+being coerced to a generic field type or returned as a partial catalog.
 
 ## Write actions & risks
 
@@ -78,7 +88,6 @@ This connector is read-only. Read behavior: low.
 
 ## Known limits
 
-- Schemas and stream availability depend on the configured service at runtime.
 - Logical-replication CDC is planned and fails closed before opening a replication connection,
   creating/reusing a slot, consuming WAL, or advancing a checkpoint. It will not be advertised
   until PostgreSQL 14+ `pgoutput` protocol-v2 streaming can stage each transaction privately under
