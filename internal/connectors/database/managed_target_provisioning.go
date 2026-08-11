@@ -216,20 +216,29 @@ func (p *ManagedTargetProvisioner) CreateOrAssert(ctx context.Context, plan Mana
 	if err := ctx.Err(); err != nil {
 		return ManagedTargetControlRecord{}, err
 	}
-	if err := p.driver.CreateManagedTarget(ctx, plan, plan.owner); err != nil {
+	createErr := p.driver.CreateManagedTarget(ctx, plan, plan.owner)
+	record, reassertErr := p.reassertAfterCreate(ctx, plan)
+	if reassertErr != nil {
+		return ManagedTargetControlRecord{}, reassertErr
+	}
+	if createErr != nil {
 		if contextErr := ctx.Err(); contextErr != nil {
 			return ManagedTargetControlRecord{}, contextErr
 		}
 		return ManagedTargetControlRecord{}, ErrManagedTargetProvisioning
 	}
-	if err := ctx.Err(); err != nil {
-		return ManagedTargetControlRecord{}, err
+	if contextErr := ctx.Err(); contextErr != nil {
+		return ManagedTargetControlRecord{}, contextErr
 	}
-	observation, err = p.observe(ctx, plan.target)
+	return record, nil
+}
+
+func (p *ManagedTargetProvisioner) reassertAfterCreate(ctx context.Context, plan ManagedTargetProvisioningPlan) (ManagedTargetControlRecord, error) {
+	observation, err := p.observe(context.WithoutCancel(ctx), plan.target)
 	if err != nil {
 		return ManagedTargetControlRecord{}, err
 	}
-	create, record, err = assessManagedTargetObservation(plan, observation)
+	create, record, err := assessManagedTargetObservation(plan, observation)
 	if err != nil {
 		return ManagedTargetControlRecord{}, err
 	}

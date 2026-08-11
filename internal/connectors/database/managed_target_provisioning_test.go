@@ -377,6 +377,82 @@ func TestManagedTargetProvisioningTruthTable(t *testing.T) {
 			t.Fatalf("create calls after locked cancellation = %d, want 1", got)
 		}
 	})
+
+	t.Run("post-create outcomes are reasserted under the target lock", func(t *testing.T) {
+		foreignCreated := database.ManagedTargetObservation{
+			NamespacePresent: true,
+			RelationPresent:  true,
+			ControlState:     database.ManagedTargetControlPresent,
+			ControlRecord:    foreignControl,
+			NativeIdentity:   native,
+			Schema:           schema,
+		}
+		tests := []struct {
+			name                string
+			createResult        database.ManagedTargetObservation
+			createErr           error
+			cancelAfterMutation bool
+			wantError           error
+		}{
+			{
+				name:                "cancellation after a committed create is reasserted before returning",
+				createResult:        created,
+				cancelAfterMutation: true,
+				wantError:           context.Canceled,
+			},
+			{
+				name:         "driver error after a committed create is reasserted before returning",
+				createResult: created,
+				createErr:    errors.New("fake post-mutation create failure"),
+				wantError:    database.ErrManagedTargetProvisioning,
+			},
+			{
+				name:                "cancellation after a foreign mutation returns the ownership classification",
+				createResult:        foreignCreated,
+				cancelAfterMutation: true,
+				wantError:           database.ErrManagedTargetOwnerForeign,
+			},
+			{
+				name:         "driver error after a foreign mutation returns the ownership classification",
+				createResult: foreignCreated,
+				createErr:    errors.New("fake post-mutation create failure"),
+				wantError:    database.ErrManagedTargetOwnerForeign,
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				driver := newManagedTargetDriverFake(
+					database.ManagedTargetObservation{ControlState: database.ManagedTargetControlAbsent},
+					tt.createResult,
+				)
+				provisioner, err := database.NewManagedTargetProvisioner(driver)
+				if err != nil {
+					t.Fatal(err)
+				}
+				ctx, cancel := context.WithCancel(context.Background())
+				defer cancel()
+				driver.configureCreateOutcome(tt.createErr, func() {
+					if tt.cancelAfterMutation {
+						cancel()
+					}
+				})
+
+				if _, err := provisioner.CreateOrAssert(ctx, plan); !errors.Is(err, tt.wantError) {
+					t.Fatalf("CreateOrAssert() error = %v, want %v", err, tt.wantError)
+				}
+				if got := driver.createCallCount(); got != 1 {
+					t.Fatalf("create calls = %d, want 1", got)
+				}
+				if got := driver.observeCallCount(); got != 2 {
+					t.Fatalf("observations after a create invocation = %d, want 2", got)
+				}
+				if !driver.observationsHeldTargetLock() {
+					t.Fatal("a managed target observation ran without the target lock")
+				}
+			})
+		}
+	})
 }
 
 func testManagedTargetSchema(t *testing.T, version uint, marker byte) database.ManagedTargetSchema {
@@ -420,9 +496,13 @@ type managedTargetDriverFake struct {
 	targetLock          chan struct{}
 	activeTargetLocks   int
 	mutationWithoutLock bool
+	observeCalls        int
+	observationNoLock   bool
 	createStarted       chan struct{}
 	createRelease       chan struct{}
 	createStartedOnce   sync.Once
+	createAfterMutation func()
+	createAfterError    error
 }
 
 func newManagedTargetDriverFake(observation, createResult database.ManagedTargetObservation) *managedTargetDriverFake {
@@ -457,6 +537,10 @@ func (f *managedTargetDriverFake) ObserveManagedTarget(ctx context.Context, _ da
 	}
 	f.mu.Lock()
 	defer f.mu.Unlock()
+	f.observeCalls++
+	if f.activeTargetLocks != 1 {
+		f.observationNoLock = true
+	}
 	return f.observation, nil
 }
 
@@ -483,8 +567,13 @@ func (f *managedTargetDriverFake) CreateManagedTarget(ctx context.Context, plan 
 	}
 	f.mu.Lock()
 	f.observation = f.createResult
+	afterMutation := f.createAfterMutation
+	afterError := f.createAfterError
 	f.mu.Unlock()
-	return nil
+	if afterMutation != nil {
+		afterMutation()
+	}
+	return afterError
 }
 
 func (f *managedTargetDriverFake) blockCreate() {
@@ -502,10 +591,29 @@ func (f *managedTargetDriverFake) releaseCreate() {
 	}
 }
 
+func (f *managedTargetDriverFake) configureCreateOutcome(afterError error, afterMutation func()) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.createAfterMutation = afterMutation
+	f.createAfterError = afterError
+}
+
 func (f *managedTargetDriverFake) createCallCount() int {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 	return f.createCalls
+}
+
+func (f *managedTargetDriverFake) observeCallCount() int {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	return f.observeCalls
+}
+
+func (f *managedTargetDriverFake) observationsHeldTargetLock() bool {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	return !f.observationNoLock
 }
 
 func (f *managedTargetDriverFake) createdWithAssertedOwner(owner database.TargetOwner, ref database.ManagedTargetRef) bool {

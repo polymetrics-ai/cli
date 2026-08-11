@@ -8,7 +8,7 @@
 | R4 | Exact repeat admission | Correct owner/control/native/schema state lacks an idempotent assertion path. | A repeat is admitted without a second create. |
 | R5 | Foreign, missing, unreadable, and collision refusal | Foreign/missing/unreadable/colliding observations can be treated as a creatable target. | Each state returns a typed refusal and leaves fake mutation count unchanged. |
 | R6 | Replacement and drift refusal | A changed native identity or schema hash/version can be admitted or evolved. | Moved/replaced and schema-drift table rows return typed refusal without mutation. |
-| R7 | Cancellation and races fail closed | A canceled request or concurrent callers can mutate before an asserted postcondition. | Canceled requests make no create call; concurrent callers across two provisioners share the driver's typed target lock and observe exactly one legitimate create. |
+| R7 | Cancellation and races fail closed | **Red:** An invoked create can return after cancellation or an error without a final owner/native/schema assertion. | **Green:** Every invoked create is re-observed through a cancellation-independent context while the typed target lock remains held; exact state is admitted, unsafe state wins over cancellation/driver errors, and concurrent callers across two provisioners observe one legitimate create. |
 | R8 | Driver-neutral boundary | The shared contract requires a PostgreSQL/SQL implementation. | A pure in-memory fake proves all transitions; no driver, SQL, capability, or CLI files change. |
 
 ## Command record
@@ -26,3 +26,8 @@ in the verification checklist.
 **Correction 1/5:** #4038 records the cross-provisioner gap found during the
 required review before its fix. `traces/cross-provisioner-lock-red.txt` and
 `traces/cross-provisioner-lock-green.txt` preserve the RED/GREEN evidence.
+
+**Correction 2/5 (#4044):**
+**Red:** Review finding R1 traced cancellation and driver-error exits after an
+invoked create that skipped the required final observation.
+**Green:** `go test -race -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'` passed, including committed-create cancellation/error transitions and foreign-state classification.
