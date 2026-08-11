@@ -51,19 +51,23 @@ type RateLimitKey struct {
 	Scope     connectors.RateLimitScopeKey
 }
 
-const maxRateBudgetReservationPolicies = 64
+const (
+	maxRateBudgetReservationPolicies    = 64
+	defaultCompletionObservationHorizon = 2 * time.Minute
+)
 
 // RateLimitRegistry coordinates process-local policy budgets. It is
 // intentionally ephemeral: cross-process coordination remains a separate
 // capability and no local state claims account-wide protection.
 type RateLimitRegistry struct {
-	clock       RateLimitClock
-	mu          sync.Mutex
-	sets        map[RateLimitKey]*rateLimitSet
-	budgetSets  map[rateBudgetKey]rateBudgetSet
-	leases      map[connsdk.RateBudgetLease]rateBudgetLease
-	maxInFlight int
-	leaseTTL    time.Duration
+	clock                        RateLimitClock
+	mu                           sync.Mutex
+	sets                         map[RateLimitKey]*rateLimitSet
+	budgetSets                   map[rateBudgetKey]rateBudgetSet
+	leases                       map[connsdk.RateBudgetLease]rateBudgetLease
+	maxInFlight                  int
+	leaseTTL                     time.Duration
+	completionObservationHorizon time.Duration
 }
 
 // rateBudgetKey is private owner state for the batch seam. It contains only a
@@ -80,6 +84,7 @@ type rateBudgetSet struct {
 }
 
 type rateBudgetLease struct {
+	grantedAt time.Time
 	expiresAt time.Time
 	active    bool
 	sets      []*rateLimitSet
@@ -91,8 +96,9 @@ type rateBudgetLease struct {
 // crashed or disconnected caller remains conservatively charged, but cannot
 // hold the in-flight lease forever.
 type RateBudgetCoordinatorOptions struct {
-	MaxInFlight int
-	LeaseTTL    time.Duration
+	MaxInFlight                  int
+	LeaseTTL                     time.Duration
+	CompletionObservationHorizon time.Duration
 }
 
 // RateBudgetCoordinator is the injectable decision/finish seam used by the
@@ -118,16 +124,20 @@ func newRateLimitRegistry(clock RateLimitClock, options RateBudgetCoordinatorOpt
 	if options.LeaseTTL <= 0 {
 		options.LeaseTTL = 30 * time.Second
 	}
+	if options.CompletionObservationHorizon <= 0 {
+		options.CompletionObservationHorizon = defaultCompletionObservationHorizon
+	}
 	if options.MaxInFlight < 0 {
 		options.MaxInFlight = 0
 	}
 	return &RateLimitRegistry{
-		clock:       clock,
-		sets:        make(map[RateLimitKey]*rateLimitSet),
-		budgetSets:  make(map[rateBudgetKey]rateBudgetSet),
-		leases:      make(map[connsdk.RateBudgetLease]rateBudgetLease),
-		maxInFlight: options.MaxInFlight,
-		leaseTTL:    options.LeaseTTL,
+		clock:                        clock,
+		sets:                         make(map[RateLimitKey]*rateLimitSet),
+		budgetSets:                   make(map[rateBudgetKey]rateBudgetSet),
+		leases:                       make(map[connsdk.RateBudgetLease]rateBudgetLease),
+		maxInFlight:                  options.MaxInFlight,
+		leaseTTL:                     options.LeaseTTL,
+		completionObservationHorizon: options.CompletionObservationHorizon,
 	}
 }
 
@@ -338,6 +348,7 @@ func (r *RateLimitRegistry) Decide(ctx context.Context, batch connsdk.Reservatio
 	}
 	expiresAt := now.Add(r.leaseTTL)
 	r.leases[lease] = rateBudgetLease{
+		grantedAt: now,
 		expiresAt: expiresAt,
 		active:    true,
 		sets:      sets,
@@ -346,9 +357,10 @@ func (r *RateLimitRegistry) Decide(ctx context.Context, batch connsdk.Reservatio
 }
 
 // Finish releases the in-flight lease exactly once and applies only the
-// already-parsed stricter response facts. Expired leases remain finishable for
-// a late response while no longer occupying concurrency; a missing lease is an
-// idempotent no-op and its uncertain consumptive reservation remains charged.
+// already-parsed stricter response facts. Expired leases remain finishable
+// within the completion-observation horizon while no longer occupying
+// concurrency; a missing lease is an idempotent no-op and its uncertain
+// consumptive reservation remains charged.
 func (r *RateLimitRegistry) Finish(_ context.Context, lease connsdk.RateBudgetLease, observation connsdk.CompletionObservation) error {
 	if r == nil || r.clock == nil {
 		return errors.New("rate-budget coordinator is unavailable")
@@ -386,6 +398,10 @@ func (r *RateLimitRegistry) Sleep(ctx context.Context, wait time.Duration) error
 
 func (r *RateLimitRegistry) expireLeasesLocked(now time.Time) {
 	for lease, record := range r.leases {
+		if !record.grantedAt.Add(r.completionObservationHorizon).After(now) {
+			delete(r.leases, lease)
+			continue
+		}
 		if record.active && !record.expiresAt.After(now) {
 			record.active = false
 			r.leases[lease] = record

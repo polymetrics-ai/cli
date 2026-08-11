@@ -27,8 +27,9 @@ const (
 // UnixRateBudgetCoordinatorOptions configures one run-owned owner. It is not
 // a durable provider-budget store and has no cross-host meaning.
 type UnixRateBudgetCoordinatorOptions struct {
-	MaxInFlight int
-	LeaseTTL    time.Duration
+	MaxInFlight                  int
+	LeaseTTL                     time.Duration
+	CompletionObservationHorizon time.Duration
 }
 
 // UnixRateBudgetCoordinatorOwner owns exactly one short-lived Unix-domain

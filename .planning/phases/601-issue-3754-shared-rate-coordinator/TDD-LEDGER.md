@@ -73,10 +73,25 @@ go build ./cmd/pm
 
 ## Correction rounds
 
-2 / 5 used. Inline code review first removed unused legacy compatibility hooks
+4 / 5 used. Inline code review first removed unused legacy compatibility hooks
 that created a second raw policy-ID keyed set beside the leased
 fingerprint/scope path, then resolved new-code-only UDS cleanup/static lint
-findings. The direct-registry behavior and scoped lint were re-tested. #4025
-is a separately owned planning-tool traceability sub-issue, not a coordinator
-correction round. A newly discovered gate defect still requires a #3754
-sub-issue before a code change.
+findings. #4025 is a separately owned planning-tool traceability sub-issue,
+not a coordinator correction round.
+
+Round 3 (#4035) separated concurrency expiry from late-observation retention
+and made a canceled UDS caller interrupt its exchange. Round 4 (#4035) bounds
+an unfinished lease's owner-time completion-observation lifetime at two minutes
+from its grant. The injected-clock RED boundary is exact: before the horizon a
+TTL-expired lease remains finishable and its typed tightening applies; at the
+horizon an old owner retained and applied that observation and retained every
+lost Finish record. GREEN removes the record before Finish lookup at or after
+the horizon, leaves its consumption charged, and holds repeated lost-Finish
+admission scans to one lease record.
+
+```text
+go test -count=1 -timeout 20m ./internal/coordination -run '^(TestRateBudgetLeaseTTLFreesConcurrencyWithoutDroppingLateObservation|TestRateBudgetCompletionObservationHorizonNormalizesAtOwner|TestRateBudgetCompletionObservationHorizonAppliesLateObservationBeforeBoundary|TestRateBudgetCompletionObservationHorizonDropsAtBoundaryWithoutRefund|TestRateBudgetCompletionObservationHorizonBoundsAbandonedLeaseRecordsAndScans|TestUnixRateBudgetCoordinatorClientCancellationInterruptsStalledExchange|TestUnixRateBudgetCoordinatorClientCancellationWinsResponseRace|TestUnixRateBudgetCoordinatorMultiProcessTinyBudget)$'
+```
+
+The focused command passed, including both UDS cancellation regressions and the
+eight-helper control with exactly 3 grants and 5 typed refusals.
