@@ -219,6 +219,13 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
 }
 ```
 
+An `untestable` capability may include `untestable_reason`, an optional serialized
+[`failures.Classification`](../../internal/failures/classification.go). It carries only a safe
+`domain`, `code`, and `message`, plus optional RFC 6901 `field_path`, system-only
+`dispatch_kind`, and identifier `references`; its internal diagnostic cause never serializes.
+`configuration` and `system` classifications are non-retryable, while `transient` is retryable.
+The existing `reason` field remains available for generic explanations.
+
 History appends to `.polymetrics/certifications/history/<connector>/<timestamp>.json`.
 
 With `--full`, `capabilities.surface.provenance` is evidence separate from endpoint coverage and
