@@ -1,6 +1,6 @@
 # #4046 R9 verification checklist
 
-**Status:** Planned — no implementation result recorded yet.
+**Status:** Behavioral RED observed at the pinned base; production change not started.
 
 ## Safety preconditions
 
@@ -9,15 +9,17 @@
 - [x] Branch starts at `e5a55c68003e63860e8213b509a18643d5f4e3d6`.
 - [x] `.codegraph/` is absent; CodeGraph is not available.
 - [x] `scripts/gsd doctor`, required `sources`, and `go run ./cmd/agentcontractgen check` passed.
-- [ ] No production edit occurs before the planning and RED commits.
+- [x] The planning and behavioral RED checkpoints contain no production edit.
 
 ## Ordered local matrix
 
-1. [ ] Behavioral RED (before `internal/app/app.go` changes):
+1. [x] Behavioral RED (before `internal/app/app.go` changes):
 
    ```sh
    go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportStaleWriterFinalizesLosingRun$' -v
    ```
+
+   Observed as `go test -json ...` with exit `1`: the typed conflict remained detectable, winner/unrelated preservation assertions passed, and the test reported a zero returned loser plus a durable reopened `running` loser.
 
 2. [ ] Matching narrow GREEN: same command, passing.
 
