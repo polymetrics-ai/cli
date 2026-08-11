@@ -8,7 +8,7 @@
   "blocked_pipeline_pr": 4058,
   "branch": "fix/4043-postbudget-control-slot-reconciliation",
   "starting_commit": "6a82f3650ab4be0b511541f91721ce7cefe08762",
-  "status": "planning",
+  "status": "red_tests_captured",
   "gsd": {
     "mode": "inline_manual_fallback",
     "reason": "Named issue phase is absent from the numbered ROADMAP.md; scripts/gsd prompt discuss-phase and plan-phase were resolved and followed inline.",

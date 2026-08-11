@@ -2,7 +2,7 @@
 
 **Starting commit:** 6a82f3650ab4be0b511541f91721ce7cefe08762
 **Branch:** fix/4043-postbudget-control-slot-reconciliation
-**Status:** Plan checkpoint committed before production edits
+**Status:** RED checkpoint captured before production edits
 
 ## Required skills
 
@@ -15,11 +15,11 @@ golang-lint; github-issue-first-delivery; no-mistakes.
 
 | Test | Behavioral Red to capture | Status |
 |---|---|---|
-| TestCommittedTransactionStageDiscardControlTempCleanupRetainsSlotUntilReconciled | cap one, write plus temp-remove fault: typed cleanup-required, one retained slot, root poison, Begin blocked, no more than one owned temp. | Pending |
-| TestCommittedTransactionStageDiscardControlTempRemovalRequiresDirectorySync | pre-rename write fault plus successful unlink plus discards sync fault: sync call is observed and release/admission remain blocked. | Pending |
-| TestCommittedTransactionStageRecoveredOverCapacityCannotClearPoisonOrDeliver | cap two creation then cap one recovery: repeated reconcile remains cleanup-required; unreserved work has receiver zero, absent receipt, unavailable ack. | Pending |
-| TestCommittedTransactionStageRecoveredControlReservationRestartMatrix | 1 to 1, 2 to 2, 2 to 1, 2 to 1 to 2, receipt residue, ordering, repeated reopen/reconcile exact mappings. | Pending |
-| TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix | create/write/file-sync/close/rename/remove/temp-sync/stage-remove/stage-sync/final-remove/final-sync durable and indeterminate images. | Pending |
+| TestCommittedTransactionStageDiscardControlTempCleanupRetainsSlotUntilReconciled | cap one, write plus temp-remove fault: typed cleanup-required, one retained slot, root poison, Begin blocked, no more than one owned temp. | RED captured |
+| TestCommittedTransactionStageDiscardControlTempRemovalRequiresDirectorySync | pre-rename write fault plus successful unlink plus discards sync fault: sync call is observed and release/admission remain blocked. | RED captured |
+| TestCommittedTransactionStageRecoveredOverCapacityCannotClearPoisonOrDeliver | cap two creation then cap one recovery: repeated reconcile remains cleanup-required; unreserved work has receiver zero, absent receipt, unavailable ack. | RED captured |
+| TestCommittedTransactionStageRecoveredControlReservationRestartMatrix | 1 to 1, 2 to 2, 2 to 1, 2 to 1 to 2, receipt residue, ordering, repeated reopen/reconcile exact mappings. | RED captured |
+| TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix | create/write/file-sync/close/rename/remove/temp-sync/stage-remove/stage-sync/final-remove/final-sync durable and indeterminate images. | RED captured |
 
 ## Focused command
 
@@ -53,9 +53,44 @@ assertion is invalid Red evidence.
 
 ### Red
 
-Red: Pending. The five named tests will be added and the focused command will
-be run before any production edit. This section will then contain literal
-durable artifact and receiver-boundary failure output.
+Red: `2026-08-11`, before production edits, the five named tests were added
+and this command was run:
+
+```sh
+go test -timeout 20m -count=1 -v ./internal/connectors/database \
+  -run '^(TestCommittedTransactionStageDiscardControlTempCleanupRetainsSlotUntilReconciled|TestCommittedTransactionStageDiscardControlTempRemovalRequiresDirectorySync|TestCommittedTransactionStageRecoveredOverCapacityCannotClearPoisonOrDeliver|TestCommittedTransactionStageRecoveredControlReservationRestartMatrix|TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix)$'
+```
+
+It compiled and failed in 4.438 seconds with the intended durable state-machine
+assertions, not with a missing symbol, skip, or exit-status-only check:
+
+```text
+TestCommittedTransactionStageDiscardControlTempCleanupRetainsSlotUntilReconciled
+  error = discard transaction stage (not-applied intent, durable cleanup,
+  not-applied retirement) ... want ErrTransactionStageCleanupRequired
+
+TestCommittedTransactionStageDiscardControlTempRemovalRequiresDirectorySync
+  error = discard transaction stage (not-applied intent, durable cleanup,
+  not-applied retirement) ... want ErrTransactionStageCleanupRequired
+
+TestCommittedTransactionStageRecoveredOverCapacityCannotClearPoisonOrDeliver
+  error = <nil>, want ErrTransactionStageCleanupRequired
+
+TestCommittedTransactionStageRecoveredControlReservationRestartMatrix/two_to_one
+  error = <nil>, want ErrTransactionStageCleanupRequired
+
+TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_remove
+  error = discard transaction stage (not-applied intent, durable cleanup,
+  not-applied retirement) ... want ErrTransactionStageCleanupRequired
+
+TestCommittedTransactionStageDiscardControlTemporaryCrashMatrix/temporary_parent_sync
+  directory_sync fault was not exercised
+```
+
+The first two failures prove the old pre-rename path can report a clean,
+not-applied control after an attempted temporary cleanup. The latter failures
+prove that recovery clears poison despite an unreserved retained generation and
+that the live code does not issue the required `discards/` parent sync.
 
 ### Green
 
