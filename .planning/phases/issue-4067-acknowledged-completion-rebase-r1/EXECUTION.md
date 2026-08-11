@@ -2,6 +2,14 @@
 
 **Status:** R2 GREEN, focused race, #4046/R7/R8, affected-package, repository, website, manual GSD verification/review, and fresh no-mistakes loop 3/5 are locally complete. The loop's unrelated warehouse-architecture documentation commit is restored in the immediately following scope-restoration commit. Current no-mistakes help has no safe existing-#4059 delivery route, so push/PR/CI and exact-head CI remain pending Firstmate direction. No r2 external-check, certification, or merge claim is made here.
 
+## R3 planning and behavioral RED
+
+- The live #4067 body now carries the Sol r3 all-seven two-page typed-conflict contract and the separate existing-connector verification gate. The complete r3 report and updated loop-4 directive were read before local edits.
+- Planning/TDD evidence was committed in `0d448ea10` after current #4067/#4059 custody verification, full required-skill loading, GSD adapter/command resolution, and the documented named-phase inline/manual fallback. No production file changed in that checkpoint.
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForAllModes$' -v` exited `1` as required. In every canonical mode, a real JSON-store loser durably acknowledged page one; a separately opened App persisted unrelated state and completed a real winner over the same target stream; the loser then applied page two exactly once and received `errTransportStreamStateConflict` from the existing per-stream CAS.
+- Before asserting the symptom, each subtest proved typed error identity, page-one acknowledgement, winner checkpoint/run preservation, unrelated stream/checkpoint/run preservation, exactly two loser applies, and one winner apply. The rejected behavior then returned `Run{}` and reopened the losing run as durable `running`.
+- This RED checkpoint changes only `internal/app/transport_dispatch_test.go` and this GSD evidence. `internal/app/app.go` and `internal/app/transport_dispatch.go` remain untouched until the RED commit exists.
+
 ## R2 planning and behavioral RED
 
 - Planning/TDD continuation committed in `c08a5861f` after the complete Sol r2 handoff, live #4067 amendment/readback, GSD prompt resolution, and the documented named-phase manual fallback. No production file changed in that checkpoint.
