@@ -1,25 +1,30 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "connector": "github",
-  "status": "PROVEN",
-  "proof_mode": "current_head_credentialed",
-  "binary_sha256": "7dcd38628e3a512478298d6d8ac8aa752653c37fe24ed8240a5696e34f3e2ccd",
+  "status": "historical_observation",
+  "proof_mode": "archived_credentialed_observation",
+  "current_certification": {
+    "status": "not_proven",
+    "rate_limit_get": "untestable"
+  },
   "case_file_sha256": "acbbd7668c831a3cbd3dec075ab98230b061c6a7107b993a854b01092f95eb74",
-  "live_command_rows": 1081,
-  "live_proven_rows": 124,
-  "observed_http_429": 0,
-  "headroom_preserved": true,
-  "rate_limit_command": {
-    "command": "rate-limit get",
-    "http_status": 200,
-    "assertion_kind": "direct-read-response",
-    "assertion_matched": true
+  "historical_observation": {
+    "binary_sha256": "7dcd38628e3a512478298d6d8ac8aa752653c37fe24ed8240a5696e34f3e2ccd",
+    "command_rows": 1081,
+    "returned_rows": 124,
+    "observed_http_429": 0,
+    "headroom_preserved": true,
+    "rate_limit_command": {
+      "command": "rate-limit get",
+      "http_status": 200,
+      "assertion_kind": "direct-read-response",
+      "assertion_matched": true
+    }
   },
   "admission_and_scope_unit": {
-    "status": "PROVEN",
     "test": "internal/connectors/engine/github_rate_limits_test.go:TestGitHubRateLimitAdmissionPrecedesProviderAndIsolatesScope",
     "same_scope_waits": 1,
     "independent_scope_waits": 0
   },
-  "interpretation": "The bounded live sweep observed no HTTP 429 and did not intentionally exhaust the provider budget; the unit proof covers admission ordering and same-scope isolation without spending live quota."
+  "interpretation": "Archived observation only; current certification is not proven and rate-limit get remains untestable in the canonical live classifier."
 }

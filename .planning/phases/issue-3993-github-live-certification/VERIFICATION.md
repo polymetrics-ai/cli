@@ -42,7 +42,13 @@ make connectorgen-validate
 make connectorgen-surface-sync
 make connector-boundary
 make release-workflow-check
+node --test --test-name-pattern='retires the legacy rate proof without current certification semantics|rejects an unsafe bootstrap manifest before inventory hashing|rejects unsafe supplied bootstrap inventories before drift validation' scripts/tests/github-live-rate-limit-proof.test.mjs scripts/tests/github-live-lab.test.mjs
+node --test scripts/tests/github-live-cases.test.mjs scripts/tests/github-live-lab.test.mjs scripts/tests/github-live-proof-sweep.test.mjs scripts/tests/github-live-rate-limit-proof.test.mjs
 ```
+
+The named synthetic command intentionally returned three RED failures before
+the production edits. The final focused command passed all 50 tests without a
+credential, provider command, or network test.
 
 ## Credentialed result and evidence handling
 
@@ -77,10 +83,12 @@ fixtures, and outbound #3994/#3992 foundations.
 
 ## Final correction loop
 
-One #3993-local correction was required during final verification ([#4020](https://github.com/polymetrics-ai/cli/issues/4020)): a forged
-write case could previously supply target scope through `--config` rather than
-the literal `--owner`/`--repo` flags. The new regression first demonstrated
-that the old validation reached a fake PM credential inspection; the green
-guard now rejects direct and config owner/repository aliases before a child
-process starts. This consumes **1 of 5** permitted correction loops and does
-not alter barrier concurrency, rate admission, or the measured 0/665 result.
+The completed correction sequence is `1/#4020 -> 2/#4022 -> 3/#4027 ->
+4/#4039 -> 5/#4050`. Round 1 closed the direct/config write-scope escape
+before process launch; round 3 made pre-barrier inputs fail closed; round 4
+bound current artifacts to the canonical classifier; and round 5 retired the
+legacy rate proof's current-certification claim and guarded bootstrap artifact
+input/output. The three named round-5 RED tests were observed failing before
+production edits, then the focused 50-test GREEN suite passed. This completes
+**5 of 5** permitted correction loops without altering barrier concurrency,
+rate admission, or the measured historical 0/665/856 result.

@@ -13,6 +13,18 @@
 - Current manifests are source-derived: `github-live-lab-manifest.mjs --check`
   reports 1,521 rows (900 repository, 308 organization, 33 App/install, 280
   feature/entitlement) and `github-live-bootstrap-probes.mjs --check` passes.
+- The legacy rate-limit artifact is retired to a case-file-bound historical
+  observation. It explicitly says current certification is not proven and
+  `rate-limit get` remains untestable; bootstrap artifacts are guarded before
+  hashing, validation, serialization, and output.
+
+## Final-gate correction history
+
+The completed sequence is `1/#4020 -> 2/#4022 -> 3/#4027 -> 4/#4039 ->
+5/#4050`. Round 5 completed only after its three synthetic RED regressions
+were observed and the focused 50-test GREEN suite passed. None of the five
+corrections changed the historical terminal measurement or implemented
+#3990/#3994/#3992 behavior.
 
 ## Current canonical classifier
 

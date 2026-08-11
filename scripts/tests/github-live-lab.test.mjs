@@ -1246,6 +1246,37 @@ test("source-derived bootstrap probe inventory proves the organization/App surfa
   assert.doesNotThrow(() => validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest }));
 });
 
+test("rejects an unsafe bootstrap manifest before inventory hashing", async () => {
+  const [surface, apiSurface, cases] = await Promise.all([
+    loadJSON("internal/connectors/defs/github/cli_surface.json"),
+    loadJSON("internal/connectors/defs/github/api_surface.json"),
+    loadJSON(".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json"),
+  ]);
+  const manifest = buildLabManifest({ surface, cases });
+  manifest.source.canonical_case_digest = "eyJhbGciOiJub25lIn0.eyJzdWIiOiJmaXh0dXJlIn0.signature";
+
+  assert.throws(
+    () => buildBootstrapProbeInventory({ surface, apiSurface, manifest }),
+    /unsafe credential-like material/i,
+  );
+});
+
+test("rejects unsafe supplied bootstrap inventories before drift validation", async () => {
+  const [surface, apiSurface, cases] = await Promise.all([
+    loadJSON("internal/connectors/defs/github/cli_surface.json"),
+    loadJSON("internal/connectors/defs/github/api_surface.json"),
+    loadJSON(".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json"),
+  ]);
+  const manifest = buildLabManifest({ surface, cases });
+  const inventory = buildBootstrapProbeInventory({ surface, apiSurface, manifest });
+  inventory.policy.account_probes = "eyJhbGciOiJub25lIn0.eyJzdWIiOiJmaXh0dXJlIn0.signature";
+
+  assert.throws(
+    () => validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest }),
+    /unsafe credential-like material/i,
+  );
+});
+
 test("records exact PM-surface and GitHub credential divergences without a provider fallback or retained account data", async () => {
   const divergences = await loadJSON(".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-DIVERGENCES.json");
   assert.equal(divergences.current_run_id, "github-live-lab-20260810-target-rebind");

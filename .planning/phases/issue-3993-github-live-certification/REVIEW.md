@@ -2,7 +2,7 @@
 phase: "3993"
 depth: standard
 mode: inline_manual
-status: clean_after_one_in_scope_correction
+status: clean_after_final_correction_round
 ---
 
 # Code review — Issue #3993 GitHub live certification harness
@@ -48,9 +48,24 @@ review was completed inline after rebase and focused validation.
   and the live temporary directory is absent.
 - Manifest and bootstrap self-checks are generated from the current 1,521-row
   implemented surface rather than the stale 957-row pre-skip ledger.
+- The legacy rate-limit artifact is historical-only, retains its archived
+  case-file binding, and explicitly states that current certification is not
+  proven and `rate-limit get` is untestable.
+- Bootstrap inventory input, completed output, and supplied inventory are
+  guarded for credential-shaped persisted material before hashing, validation,
+  serialization, or output.
+
+## Final-gate correction history
+
+`1/#4020 -> 2/#4022 -> 3/#4027 -> 4/#4039 -> 5/#4050` completed after the
+focused 50-test GREEN suite. Round 5 ([#4050](https://github.com/polymetrics-ai/cli/issues/4050)) retired the legacy
+rate proof's current-certification semantics and guarded the remaining
+bootstrap artifact path. The historical 0/665/856 result remains separate from
+the current 182/1,339 classifier.
 
 ## Verdict
 
-**PASS for the #3993 harness slice.** One local boundary defect was corrected
-in correction loop 1 of 5. GitHub as a provider remains **uncertified** because
-the truthful 0/665 measurement and the external dependencies are unresolved.
+**PASS for the #3993 harness slice.** All five permitted in-scope correction
+loops are recorded complete. GitHub as a provider remains **uncertified**
+because the truthful 0/665 measurement and the external dependencies are
+unresolved.

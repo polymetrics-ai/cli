@@ -6,6 +6,8 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
+import { assertPersistedArtifactSafe } from "./github-live-artifact-guard.mjs";
+
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(SCRIPT_DIR, "..");
 const SURFACE_PATH = path.join(ROOT, "internal/connectors/defs/github/cli_surface.json");
@@ -71,6 +73,7 @@ function manifestCodeIssuerCommands(surface) {
  * it cannot perform a provider call or resolve a production target.
  */
 export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) {
+  assertPersistedArtifactSafe(manifest, "GitHub live lab manifest");
   if (!isPlainObject(apiSurface) || !Array.isArray(apiSurface.endpoints)) {
     throw new Error("GitHub API surface must contain endpoints");
   }
@@ -92,7 +95,7 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
     throw new Error("GitHub API surface unexpectedly documents an unreviewed organization-create endpoint");
   }
 
-  return {
+  const inventory = {
     schema_version: 3,
     connector: "github",
     source: {
@@ -138,10 +141,13 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
     },
     account_probes: [],
   };
+  assertPersistedArtifactSafe(inventory, "GitHub bootstrap probe inventory");
+  return inventory;
 }
 
 /** Fail closed if a checked-in probe inventory drifts from its source artifacts. */
 export function validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest }) {
+  assertPersistedArtifactSafe(inventory, "GitHub bootstrap probe inventory");
   if (!isPlainObject(inventory) || inventory.schema_version !== 3 || inventory.connector !== "github") {
     throw new Error("bootstrap probe inventory must be a schema-versioned GitHub artifact");
   }
@@ -184,6 +190,7 @@ async function main() {
     JSON.parse(await readFile(MANIFEST_PATH, "utf8")),
   ]);
   const inventory = buildBootstrapProbeInventory({ surface, apiSurface, manifest });
+  validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest });
   const content = `${JSON.stringify(inventory, null, 2)}\n`;
   if (options.check) {
     const existing = await readFile(output, "utf8");
