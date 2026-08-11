@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -20,6 +21,21 @@ import (
 type engineRateLimitClock struct {
 	now   time.Time
 	waits []time.Duration
+}
+
+type recordingRateBudgetCoordinator struct {
+	decisions atomic.Int32
+	finishes  atomic.Int32
+}
+
+func (c *recordingRateBudgetCoordinator) Decide(context.Context, connsdk.ReservationBatch) (connsdk.AdmissionDecision, error) {
+	c.decisions.Add(1)
+	return connsdk.AdmissionDecision{Granted: true, Lease: "test-rate-budget-lease"}, nil
+}
+
+func (c *recordingRateBudgetCoordinator) Finish(context.Context, connsdk.RateBudgetLease, connsdk.CompletionObservation) error {
+	c.finishes.Add(1)
+	return nil
 }
 
 func (c *engineRateLimitClock) Now() time.Time { return c.now }
@@ -144,6 +160,65 @@ func TestAbsentRateLimitDeclarationPreservesRequesterBehavior(t *testing.T) {
 	}
 	if requester != runtime.Requester || requester.LeaseAdmission != nil {
 		t.Fatal("absent declaration changed the requester")
+	}
+}
+
+func TestPathAwareHookDefaultRequesterRefusesUnresolvedSendBeforeTransport(t *testing.T) {
+	for _, test := range []struct {
+		name       string
+		exclusions bool
+	}{
+		{name: "endpoint inclusion"},
+		{name: "endpoint exclusion", exclusions: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			var hits atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				hits.Add(1)
+			}))
+			t.Cleanup(server.Close)
+
+			bundle := loadRateLimitFixture(t, "paced")
+			bundle.HTTP.URL = server.URL
+			pathAware := bundle.RateLimits.Policies[0]
+			if test.exclusions {
+				pathAware.Selector.Endpoints = nil
+				pathAware.Selector.ExcludeEndpoints = []connsdk.RateLimitEndpointSelector{{Method: http.MethodPost, Path: "/skip"}}
+			}
+			bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{pathAware, allRateLimitPolicy().Policies[0]}
+
+			coordinator := &recordingRateBudgetCoordinator{}
+			config := rateLimitTestConfig(t)
+			config.RateBudgetBackend = connsdk.RateBudgetBackendRequireShared
+			config.BudgetCoordinator = coordinator
+			runtime, err := newRuntime(context.Background(), bundle, config, nil)
+			if err != nil {
+				t.Fatalf("newRuntime: %v", err)
+			}
+			if runtime.Requester.LeaseAdmission == nil {
+				t.Fatal("path-aware hook requester did not install a pre-transport guard")
+			}
+			_, err = runtime.Requester.Do(context.Background(), http.MethodGet, "/widgets", nil, nil)
+			if err == nil {
+				t.Fatal("unresolved path-aware hook requester sent a transport request")
+			}
+			var refusal *connsdk.RateBudgetRefusalError
+			if errors.As(err, &refusal) && refusal.Reason == connsdk.RateBudgetRefusalSharedCoordinatorUnavailable {
+				t.Fatalf("unresolved route error = %v, want a route guard rather than shared-unavailable refusal", err)
+			}
+			if strings.Contains(err.Error(), "/widgets") || strings.Contains(err.Error(), "/skip") {
+				t.Fatalf("unresolved route error leaked a request path: %v", err)
+			}
+			if got := hits.Load(); got != 0 {
+				t.Fatalf("transport hits = %d, want 0", got)
+			}
+			if got := coordinator.decisions.Load(); got != 0 {
+				t.Fatalf("coordinator decisions = %d, want no partial policy batch", got)
+			}
+			if got := coordinator.finishes.Load(); got != 0 {
+				t.Fatalf("coordinator finishes = %d, want no partial policy finish", got)
+			}
+		})
 	}
 }
 

@@ -4,7 +4,7 @@ command: gsd-code-review 601
 mode: inline_manual_fallback
 depth: deep
 status: passed_after_fix
-correction_rounds: 4
+correction_rounds: 5
 ---
 
 # Phase 601 code review — #3754 shared rate-budget coordinator
@@ -22,6 +22,7 @@ admission/finish, local coordinator state, and the run-owned UDS protocol.
 | R2 | Warning | A stricter new-changes-only lint pass found unchecked close results in the new UDS owner/client and helper process test, plus a staticcheck conversion simplification. | Fixed by explicitly discarding cleanup-only close results and using the direct options conversion. `golangci-lint --new-from-rev=origin/docs/4015-connector-release-certification` passes for coordination, connsdk, and engine. |
 | R3 | Error/Warning | A two-TTL record retirement could drop a normal late stricter observation; a UDS exchange could wait for its five-second deadline after the caller canceled. | Fixed under #4035: expired leases became inactive but finishable for late typed observations, and client cancellation now interrupts socket I/O and wins a response race. |
 | R4 | Warning | The R3 lost-Finish path retained inactive owner records forever, making future admission scans grow with abandoned leases. | Fixed under #4035: one owner-normalized two-minute completion-observation horizon removes a record before lookup at the exact boundary while preserving charged consumption; injected-clock boundary, cleanup, and bounded-scan coverage passes. |
+| R5 | Error/Warning | A config-matching endpoint-sensitive policy could leave a hook requester ungoverned under `require_shared`; an accepted horizon at or below LeaseTTL could delete an unexpired active lease. | Fixed under #4049 and #4035: unresolved default hook requesters now refuse before transport or a partial batch, GitHub hook REST sends resolve their existing declared routes, normalized invalid lifecycle pairs fail before UDS setup, and cleanup never deletes an active lease before expiry. |
 
 ## Review result
 
@@ -32,12 +33,13 @@ and owner loss normalizes to a fail-closed pre-send refusal under
 `require_shared`. Batch state retains only a policy fingerprint, opaque scope,
 typed budgets, opaque lease, and typed completion observation.
 
-The review-triggered source corrections are **4 / 5**. #4025 is not included: it
+The review-triggered source corrections are **5 / 5**. #4025 is not included: it
 remains the separately owned planning-tool traceability issue and caused no
-coordinator source change in this review. Rounds 3 and 4 are the #4035
-late-completion correction sequence; the focused coordinator command passes
-with the existing UDS cancellation cases and the eight-helper 3-grant/5-refusal
-control.
+coordinator source change in this review. Rounds 3 through 5 are the #4035
+late-completion correction sequence, and #4049 owns the R5 require-shared hook
+boundary. The recorded focused contracts pass with both UDS cancellation cases,
+the active-lease cleanup defense, zero-send hook refusals, declaration-resolved
+GitHub physical sends, and the eight-helper 3-grant/5-refusal control.
 
 The whole-package stricter lint command also reports pre-existing findings in
 unrelated connsdk files. Those files were not changed for #3754; the project's

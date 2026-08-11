@@ -104,6 +104,10 @@ func StartUnixRateBudgetCoordinator(ctx context.Context, options UnixRateBudgetC
 	if options.LeaseTTL <= 0 {
 		options.LeaseTTL = 15 * time.Second
 	}
+	coordinator, err := NewRateBudgetCoordinator(nil, RateBudgetCoordinatorOptions(options))
+	if err != nil {
+		return nil, nil, err
+	}
 	runDir, err := os.MkdirTemp("/tmp", "pmrb-")
 	if err != nil {
 		return nil, nil, &SharedCoordinatorError{reason: sharedCoordinatorUnavailable}
@@ -135,7 +139,7 @@ func StartUnixRateBudgetCoordinator(ctx context.Context, options UnixRateBudgetC
 	}
 	owner := &UnixRateBudgetCoordinatorOwner{
 		listener:    listener,
-		coordinator: NewRateBudgetCoordinator(nil, RateBudgetCoordinatorOptions(options)),
+		coordinator: coordinator,
 		runDir:      runDir,
 		socketPath:  socketPath,
 		epoch:       epoch,

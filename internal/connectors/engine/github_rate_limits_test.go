@@ -133,8 +133,8 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 			if err != nil {
 				t.Fatalf("defaultRequester: %v", err)
 			}
-			if defaultRequester.LeaseAdmission != nil {
-				t.Fatalf("policy %q attached path-aware REST accounting to the hook runtime requester", want.id)
+			if _, ok := defaultRequester.LeaseAdmission.(unresolvedRateBudgetAdmission); !ok {
+				t.Fatalf("policy %q hook runtime requester = %T, want unresolved declaration guard", want.id, defaultRequester.LeaseAdmission)
 			}
 		})
 	}

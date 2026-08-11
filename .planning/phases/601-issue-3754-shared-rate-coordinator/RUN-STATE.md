@@ -2,7 +2,7 @@
 phase: 601
 status: supervised
 execution: inline_manual_fallback
-correction_rounds: 4
+correction_rounds: 5
 ---
 
 # Phase 601 run state
@@ -21,11 +21,15 @@ and new-code lint cleanup; `601-REVIEW.md` records both dispositions. The
 bounded #3995-compatible manual supervisor evidence in `601-SHEPHERD.md`
 reconstructed the committed trace and returned `PROCEED`. The next state is the
 terminal no-mistakes pipeline, child PR, and CI. #4035 correction rounds three
-and four preserve late typed observations through a bounded two-minute
-owner-time horizon, reclaim permanently lost Finish records, and propagate UDS
-caller cancellation; their focused injected-clock and eight-helper evidence is
-recorded in `TDD-LEDGER.md` and `601-REVIEW.md`. Correction count is four and
-may not exceed five.
+through five preserve late typed observations through a bounded two-minute
+owner-time horizon, reclaim permanently lost Finish records, propagate UDS
+caller cancellation, reject invalid normalized horizon/TTL pairs before owner
+setup, and retain active leases defensively. #4049 owns the round-five
+require-shared hook correction: unresolved endpoint-sensitive hook requesters
+refuse before transport, while every GitHub WriteHook REST send resolves its
+existing declaration. The focused injected-clock, zero-send, and eight-helper
+evidence is recorded in `TDD-LEDGER.md` and `601-REVIEW.md`. Correction count
+is five and complete.
 
 ## Planning-state gate defect
 

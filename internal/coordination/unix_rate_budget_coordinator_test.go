@@ -150,6 +150,24 @@ func TestUnixRateBudgetCoordinatorClientCancellationWinsResponseRace(t *testing.
 	}
 }
 
+func TestUnixRateBudgetCoordinatorRejectsInvalidLifecycleBeforeListen(t *testing.T) {
+	for _, test := range []struct {
+		name    string
+		options UnixRateBudgetCoordinatorOptions
+	}{
+		{name: "defaulted horizon", options: UnixRateBudgetCoordinatorOptions{LeaseTTL: 3 * time.Minute}},
+		{name: "shorter horizon", options: UnixRateBudgetCoordinatorOptions{LeaseTTL: 3 * time.Minute, CompletionObservationHorizon: 2 * time.Minute}},
+		{name: "equal horizon", options: UnixRateBudgetCoordinatorOptions{LeaseTTL: 3 * time.Minute, CompletionObservationHorizon: 3 * time.Minute}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			owner, client, err := StartUnixRateBudgetCoordinator(context.Background(), test.options)
+			if err == nil || owner != nil || client != nil {
+				t.Fatalf("StartUnixRateBudgetCoordinator = (%v, %v, %v), want nil capabilities and error", owner, client, err)
+			}
+		})
+	}
+}
+
 func TestUnixRateBudgetCoordinatorMultiProcessTinyBudget(t *testing.T) {
 	owner, client, err := StartUnixRateBudgetCoordinator(context.Background(), UnixRateBudgetCoordinatorOptions{
 		MaxInFlight: 8,
@@ -400,7 +418,7 @@ func TestUnixRateBudgetCoordinatorHelper(t *testing.T) {
 			err = client.Finish(ctx, decision.Lease, connsdk.CompletionObservation{Attempted: true})
 		}
 	case "process_local":
-		coordinator := NewRateBudgetCoordinator(nil, RateBudgetCoordinatorOptions{MaxInFlight: 8, LeaseTTL: time.Second})
+		coordinator := newTestRateBudgetCoordinator(t, nil, RateBudgetCoordinatorOptions{MaxInFlight: 8, LeaseTTL: time.Second})
 		decision, err = coordinator.Decide(ctx, batch)
 		if err == nil && decision.Granted {
 			err = coordinator.Finish(ctx, decision.Lease, connsdk.CompletionObservation{Attempted: true})

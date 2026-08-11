@@ -18,6 +18,13 @@ evidence passed; terminal PR gates remain pending.
       indeterminate consumption, and applies only stricter observations.
 - [x] `require_shared` has no local fallback; missing/dead/old/incompatible
       owners refuse before a transport request.
+- [x] A config-matching endpoint-sensitive hook requester refuses before
+      transport until it resolves a declared method/path; GitHub WriteHook REST
+      sends use `Runtime.RequesterFor` and preserve the POST `/graphql`
+      exclusion.
+- [x] Completion-observation lifetime is normalized at the owner, must exceed
+      LeaseTTL before UDS setup, and cannot delete active capacity before lease
+      expiry.
 - [x] Deadline-too-short refusal and owner crash have zero unapproved sends.
 - [x] Eight actual helpers produce shared 3 grants/5 blocks and local 8
       grants; normal close proves zero socket/run-directory residue.
@@ -70,9 +77,23 @@ multi-process test itself asserts the 3/5 shared and 8/0 local outcomes, the
 0700/0600 permission modes, and absence of the owned socket/run directory
 after close; no endpoint or epoch is recorded in this evidence.
 
+## Correction round 5 focused evidence
+
+All commands below exited 0 on 2026-08-11:
+
+```text
+go test -count=1 -timeout 20m ./internal/connectors/hooks/github ./internal/connectors/engine -run '^(TestRequireSharedGitHubWriteHookRefusesWithoutCoordinatorBeforeSend|TestPathAwareHookDefaultRequesterRefusesUnresolvedSendBeforeTransport|TestGitHubWriteHookResolvesEveryPhysicalRESTSend|TestRequireSharedRefusesWithoutCoordinatorBeforeSend|TestGitHubDeclaredRateLimits)$'
+go test -count=1 -timeout 20m ./internal/coordination -run '^(TestRateBudgetObservationCleanupNeverDeletesActiveLease|TestRateBudgetCoordinatorRejectsHorizonNotGreaterThanTTL|TestUnixRateBudgetCoordinatorRejectsInvalidLifecycleBeforeListen|TestRateBudgetLeaseTTLFreesConcurrencyWithoutDroppingLateObservation|TestRateBudgetCompletionObservationHorizonNormalizesAtOwner|TestRateBudgetCompletionObservationHorizonAppliesLateObservationBeforeBoundary|TestRateBudgetCompletionObservationHorizonDropsAtBoundaryWithoutRefund|TestRateBudgetCompletionObservationHorizonBoundsAbandonedLeaseRecordsAndScans|TestUnixRateBudgetCoordinatorClientCancellationInterruptsStalledExchange|TestUnixRateBudgetCoordinatorClientCancellationWinsResponseRace|TestUnixRateBudgetCoordinatorMultiProcessTinyBudget)$'
+go test -race -count=1 -timeout 20m ./internal/coordination
+```
+
+The focused contracts cover #4035 lifecycle validation and active-lease
+retention plus #4049's declaration-resolved GitHub hook sends. They use local
+httptest and UDS fixtures only; no credential or provider call occurs.
+
 ## Explicit non-applicability
 
-No CLI command/flag/help/manual/website output changes, no provider/GraphQL
-code, no connector bundle/generated surface, no external service, and no live
-credentialed check is in this phase. The PR records that scope fence rather
-than claiming parity work that did not apply.
+No CLI command/flag/help/manual/website output changes, no provider policy or
+GraphQL change, no connector bundle/generated surface, no external service,
+and no live credentialed check is in this phase. The PR records that scope
+fence rather than claiming parity work that did not apply.

@@ -8,13 +8,16 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync/atomic"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 	githubhooks "polymetrics.ai/internal/connectors/hooks/github"
 )
@@ -204,7 +207,148 @@ func newWriteCaptureServer(t *testing.T, response map[string]any) (*httptest.Ser
 func newTestRuntime(baseURL string, cfg connectors.RuntimeConfig) *engine.Runtime {
 	return &engine.Runtime{
 		Requester: &connsdk.Requester{BaseURL: baseURL},
-		Config:    cfg,
+		Bundle: &engine.Bundle{Writes: []engine.WriteAction{
+			{Name: "comment_issue", Method: http.MethodPost, Path: "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/comments"},
+			{Name: "update_issue", Method: http.MethodPatch, Path: "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}"},
+			{Name: "request_reviewers", Method: http.MethodPost, Path: "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/requested_reviewers"},
+		}},
+		Config: cfg,
+	}
+}
+
+type hookRateBudgetCoordinator struct {
+	decisions atomic.Int32
+	finishes  atomic.Int32
+}
+
+func (c *hookRateBudgetCoordinator) Decide(context.Context, connsdk.ReservationBatch) (connsdk.AdmissionDecision, error) {
+	c.decisions.Add(1)
+	return connsdk.AdmissionDecision{Granted: true, Lease: "github-hook-test-lease"}, nil
+}
+
+func (c *hookRateBudgetCoordinator) Finish(context.Context, connsdk.RateBudgetLease, connsdk.CompletionObservation) error {
+	c.finishes.Add(1)
+	return nil
+}
+
+func newGitHubSharedRateLimitRuntime(t *testing.T, baseURL string, coordinator connsdk.BudgetCoordinator) (*engine.Runtime, map[string]engine.WriteAction) {
+	t.Helper()
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	bundle.HTTP.URL = baseURL
+	bundle.HTTP.Auth = nil
+	identity, err := connectors.NewCoordinationIdentity([]byte("github-hook-rate-limit-test-salt"), connectors.CredentialBinding{
+		BindingID:      "github-hook-rate-limit-test-binding",
+		ProviderFamily: "github",
+		AuthProfile:    "token",
+	})
+	if err != nil {
+		t.Fatalf("NewCoordinationIdentity: %v", err)
+	}
+	cfg := newRuntimeConfig(baseURL, map[string]string{
+		"auth_type":          "token",
+		"rate_limit_account": "octocat",
+	}, nil)
+	cfg.CoordinationIdentity = identity
+	cfg.RateBudgetBackend = connsdk.RateBudgetBackendRequireShared
+	cfg.BudgetCoordinator = coordinator
+	runtime, err := engine.NewRuntime(context.Background(), bundle, cfg, nil)
+	if err != nil {
+		t.Fatalf("NewRuntime: %v", err)
+	}
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+	return runtime, actions
+}
+
+func requireGitHubWriteAction(t *testing.T, actions map[string]engine.WriteAction, name string) engine.WriteAction {
+	t.Helper()
+	action, ok := actions[name]
+	if !ok {
+		t.Fatalf("github write action %q is absent", name)
+	}
+	return action
+}
+
+func TestRequireSharedGitHubWriteHookRefusesWithoutCoordinatorBeforeSend(t *testing.T) {
+	var hits atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		hits.Add(1)
+	}))
+	t.Cleanup(server.Close)
+
+	runtime, actions := newGitHubSharedRateLimitRuntime(t, server.URL, nil)
+	h := githubhooks.New()
+	handled, err := h.ExecuteWrite(context.Background(), requireGitHubWriteAction(t, actions, "create_label"), connectors.Record{
+		"name":  "bug",
+		"color": "ff0000",
+	}, runtime)
+	if !handled {
+		t.Fatal("ExecuteWrite did not handle create_label")
+	}
+	var refusal *connsdk.RateBudgetRefusalError
+	if !errors.As(err, &refusal) || refusal.Reason != connsdk.RateBudgetRefusalSharedCoordinatorUnavailable {
+		t.Fatalf("missing shared coordinator error = %v, want typed unavailable refusal", err)
+	}
+	if got := hits.Load(); got != 0 {
+		t.Fatalf("transport hits = %d, want 0", got)
+	}
+}
+
+func TestGitHubWriteHookResolvesEveryPhysicalRESTSend(t *testing.T) {
+	var hits atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		hits.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method == http.MethodPost && r.URL.Path == "/repos/octocat/hello-world/pulls" {
+			_, _ = w.Write([]byte(`{"number":301}`))
+			return
+		}
+		_, _ = w.Write([]byte(`{}`))
+	}))
+	t.Cleanup(server.Close)
+
+	coordinator := &hookRateBudgetCoordinator{}
+	runtime, actions := newGitHubSharedRateLimitRuntime(t, server.URL, coordinator)
+	h := githubhooks.New()
+	for _, test := range []struct {
+		name   string
+		action string
+		record connectors.Record
+	}{
+		{name: "close issue", action: "close_issue", record: connectors.Record{"issue_number": 101, "comment": "close"}},
+		{name: "close pull request", action: "close_pull_request", record: connectors.Record{"pull_number": 301, "comment": "close"}},
+		{name: "reopen issue", action: "reopen_issue", record: connectors.Record{"issue_number": 101}},
+		{name: "reopen pull request", action: "reopen_pull_request", record: connectors.Record{"pull_number": 301}},
+		{name: "create pull request", action: "create_pull_request", record: connectors.Record{"head": "feature", "base": "main", "labels": []string{"bug"}, "reviewers": []string{"octocat"}}},
+		{name: "update pull request", action: "update_pull_request", record: connectors.Record{"pull_number": 301, "title": "updated", "labels": []string{"bug"}, "reviewers": []string{"octocat"}}},
+		{name: "create label", action: "create_label", record: connectors.Record{"name": "bug", "color": "ff0000"}},
+		{name: "update label", action: "update_label", record: connectors.Record{"name": "bug", "color": "00ff00"}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			handled, err := h.ExecuteWrite(context.Background(), requireGitHubWriteAction(t, actions, test.action), test.record, runtime)
+			if err != nil {
+				t.Fatalf("ExecuteWrite: %v", err)
+			}
+			if !handled {
+				t.Fatalf("ExecuteWrite did not handle %s", test.action)
+			}
+		})
+	}
+
+	const wantSends = int32(14)
+	if got := hits.Load(); got != wantSends {
+		t.Fatalf("transport sends = %d, want %d", got, wantSends)
+	}
+	if got := coordinator.decisions.Load(); got != wantSends {
+		t.Fatalf("coordinator decisions = %d, want %d", got, wantSends)
+	}
+	if got := coordinator.finishes.Load(); got != wantSends {
+		t.Fatalf("coordinator finishes = %d, want %d", got, wantSends)
 	}
 }
 
@@ -249,7 +393,7 @@ func TestExecuteWrite_CloseIssueWithoutComment(t *testing.T) {
 	cfg := newRuntimeConfig(srv.URL, nil, nil)
 	rt := newTestRuntime(srv.URL, cfg)
 
-	action := engine.WriteAction{Name: "close_issue"}
+	action := engine.WriteAction{Name: "close_issue", Method: http.MethodPatch, Path: "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}"}
 	rec := connectors.Record{"issue_number": 101}
 
 	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
@@ -273,7 +417,7 @@ func TestExecuteWrite_CreatePullRequestWithFollowups(t *testing.T) {
 	cfg := newRuntimeConfig(srv.URL, nil, nil)
 	rt := newTestRuntime(srv.URL, cfg)
 
-	action := engine.WriteAction{Name: "create_pull_request"}
+	action := engine.WriteAction{Name: "create_pull_request", Method: http.MethodPost, Path: "/repos/{{ config.owner }}/{{ config.repo }}/pulls"}
 	rec := connectors.Record{
 		"head": "feature-1", "base": "main", "title": "Fixture PR",
 		"labels": []string{"bug"}, "reviewers": []string{"octocat"},
@@ -309,7 +453,7 @@ func TestExecuteWrite_CreatePullRequestNoFollowups(t *testing.T) {
 	cfg := newRuntimeConfig(srv.URL, nil, nil)
 	rt := newTestRuntime(srv.URL, cfg)
 
-	action := engine.WriteAction{Name: "create_pull_request"}
+	action := engine.WriteAction{Name: "create_pull_request", Method: http.MethodPost, Path: "/repos/{{ config.owner }}/{{ config.repo }}/pulls"}
 	rec := connectors.Record{"head": "feature-1", "base": "main", "title": "Fixture PR"}
 
 	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
@@ -330,7 +474,7 @@ func TestExecuteWrite_UpdatePullRequestWithFollowups(t *testing.T) {
 	cfg := newRuntimeConfig(srv.URL, nil, nil)
 	rt := newTestRuntime(srv.URL, cfg)
 
-	action := engine.WriteAction{Name: "update_pull_request"}
+	action := engine.WriteAction{Name: "update_pull_request", Method: http.MethodPatch, Path: "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}"}
 	rec := connectors.Record{"pull_number": 301, "title": "Updated", "reviewers": []string{"octocat"}}
 
 	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
@@ -412,7 +556,7 @@ func TestExecuteWrite_ClosePullRequestWithComment(t *testing.T) {
 	cfg := newRuntimeConfig(srv.URL, nil, nil)
 	rt := newTestRuntime(srv.URL, cfg)
 
-	action := engine.WriteAction{Name: "close_pull_request"}
+	action := engine.WriteAction{Name: "close_pull_request", Method: http.MethodPatch, Path: "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}"}
 	rec := connectors.Record{"pull_number": 301, "comment": "Closing PR"}
 
 	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
@@ -439,7 +583,7 @@ func TestExecuteWrite_CreateLabelStripsLeadingHash(t *testing.T) {
 	cfg := newRuntimeConfig(srv.URL, nil, nil)
 	rt := newTestRuntime(srv.URL, cfg)
 
-	action := engine.WriteAction{Name: "create_label"}
+	action := engine.WriteAction{Name: "create_label", Method: http.MethodPost, Path: "/repos/{{ config.owner }}/{{ config.repo }}/labels"}
 	rec := connectors.Record{"name": "bug", "color": "#ff0000", "description": "Fixture label"}
 
 	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
@@ -469,7 +613,7 @@ func TestExecuteWrite_CreateLabelMissingColorErrors(t *testing.T) {
 	h := githubhooks.New()
 	rt := newTestRuntime(srv.URL, newRuntimeConfig(srv.URL, nil, nil))
 
-	action := engine.WriteAction{Name: "create_label"}
+	action := engine.WriteAction{Name: "create_label", Method: http.MethodPost, Path: "/repos/{{ config.owner }}/{{ config.repo }}/labels"}
 	rec := connectors.Record{"name": "bug"}
 
 	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
@@ -486,7 +630,7 @@ func TestExecuteWrite_UpdateLabelStripsLeadingHashWhenColorPresent(t *testing.T)
 	h := githubhooks.New()
 	rt := newTestRuntime(srv.URL, newRuntimeConfig(srv.URL, nil, nil))
 
-	action := engine.WriteAction{Name: "update_label"}
+	action := engine.WriteAction{Name: "update_label", Method: http.MethodPatch, Path: "/repos/{{ config.owner }}/{{ config.repo }}/labels/{{ record.name }}"}
 	rec := connectors.Record{"name": "bug", "color": "#00ff00"}
 
 	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
@@ -513,7 +657,7 @@ func TestExecuteWrite_UpdateLabelMissingNameErrors(t *testing.T) {
 	h := githubhooks.New()
 	rt := newTestRuntime(srv.URL, newRuntimeConfig(srv.URL, nil, nil))
 
-	action := engine.WriteAction{Name: "update_label"}
+	action := engine.WriteAction{Name: "update_label", Method: http.MethodPatch, Path: "/repos/{{ config.owner }}/{{ config.repo }}/labels/{{ record.name }}"}
 	rec := connectors.Record{"color": "#00ff00"}
 
 	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)

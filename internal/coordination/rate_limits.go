@@ -53,6 +53,7 @@ type RateLimitKey struct {
 
 const (
 	maxRateBudgetReservationPolicies    = 64
+	defaultRateBudgetLeaseTTL           = 30 * time.Second
 	defaultCompletionObservationHorizon = 2 * time.Minute
 )
 
@@ -114,21 +115,12 @@ var _ connsdk.BudgetCoordinator = (*RateBudgetCoordinator)(nil)
 // NewRateLimitRegistry creates a local registry. A nil clock uses a
 // context-aware wall clock; tests should inject a deterministic clock.
 func NewRateLimitRegistry(clock RateLimitClock) *RateLimitRegistry {
-	return newRateLimitRegistry(clock, RateBudgetCoordinatorOptions{})
+	return newRateLimitRegistry(clock, defaultRateBudgetCoordinatorOptions(RateBudgetCoordinatorOptions{}))
 }
 
 func newRateLimitRegistry(clock RateLimitClock, options RateBudgetCoordinatorOptions) *RateLimitRegistry {
 	if clock == nil {
 		clock = wallRateLimitClock{}
-	}
-	if options.LeaseTTL <= 0 {
-		options.LeaseTTL = 30 * time.Second
-	}
-	if options.CompletionObservationHorizon <= 0 {
-		options.CompletionObservationHorizon = defaultCompletionObservationHorizon
-	}
-	if options.MaxInFlight < 0 {
-		options.MaxInFlight = 0
 	}
 	return &RateLimitRegistry{
 		clock:                        clock,
@@ -141,11 +133,36 @@ func newRateLimitRegistry(clock RateLimitClock, options RateBudgetCoordinatorOpt
 	}
 }
 
+func defaultRateBudgetCoordinatorOptions(options RateBudgetCoordinatorOptions) RateBudgetCoordinatorOptions {
+	if options.LeaseTTL <= 0 {
+		options.LeaseTTL = defaultRateBudgetLeaseTTL
+	}
+	if options.CompletionObservationHorizon <= 0 {
+		options.CompletionObservationHorizon = defaultCompletionObservationHorizon
+	}
+	if options.MaxInFlight < 0 {
+		options.MaxInFlight = 0
+	}
+	return options
+}
+
+func normalizeRateBudgetCoordinatorOptions(options RateBudgetCoordinatorOptions) (RateBudgetCoordinatorOptions, error) {
+	options = defaultRateBudgetCoordinatorOptions(options)
+	if options.CompletionObservationHorizon <= options.LeaseTTL {
+		return RateBudgetCoordinatorOptions{}, errors.New("completion observation horizon must exceed lease ttl")
+	}
+	return options, nil
+}
+
 // NewRateBudgetCoordinator creates a local decision/finish coordinator. It
 // is useful for tests and for an injected same-host owner; callers selecting
 // the ordinary CLI backend continue to use NewRateLimitRegistry.
-func NewRateBudgetCoordinator(clock RateLimitClock, options RateBudgetCoordinatorOptions) *RateBudgetCoordinator {
-	return &RateBudgetCoordinator{registry: newRateLimitRegistry(clock, options)}
+func NewRateBudgetCoordinator(clock RateLimitClock, options RateBudgetCoordinatorOptions) (*RateBudgetCoordinator, error) {
+	normalized, err := normalizeRateBudgetCoordinatorOptions(options)
+	if err != nil {
+		return nil, err
+	}
+	return &RateBudgetCoordinator{registry: newRateLimitRegistry(clock, normalized)}, nil
 }
 
 func (c *RateBudgetCoordinator) Decide(ctx context.Context, batch connsdk.ReservationBatch) (connsdk.AdmissionDecision, error) {
@@ -398,13 +415,15 @@ func (r *RateLimitRegistry) Sleep(ctx context.Context, wait time.Duration) error
 
 func (r *RateLimitRegistry) expireLeasesLocked(now time.Time) {
 	for lease, record := range r.leases {
-		if !record.grantedAt.Add(r.completionObservationHorizon).After(now) {
-			delete(r.leases, lease)
-			continue
-		}
-		if record.active && !record.expiresAt.After(now) {
+		if record.active {
+			if record.expiresAt.After(now) {
+				continue
+			}
 			record.active = false
 			r.leases[lease] = record
+		}
+		if !record.grantedAt.Add(r.completionObservationHorizon).After(now) {
+			delete(r.leases, lease)
 		}
 	}
 }

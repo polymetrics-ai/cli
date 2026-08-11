@@ -40,9 +40,18 @@ func testRateBudgetLeaseCount(t *testing.T, coordinator *RateBudgetCoordinator) 
 	return len(coordinator.registry.leases)
 }
 
+func newTestRateBudgetCoordinator(t *testing.T, clock RateLimitClock, options RateBudgetCoordinatorOptions) *RateBudgetCoordinator {
+	t.Helper()
+	coordinator, err := NewRateBudgetCoordinator(clock, options)
+	if err != nil {
+		t.Fatalf("NewRateBudgetCoordinator: %v", err)
+	}
+	return coordinator
+}
+
 func TestRateBudgetReserveBatchAllOrNothing(t *testing.T) {
 	clock := &fakeRateLimitClock{now: time.Date(2026, 8, 11, 12, 0, 0, 0, time.UTC)}
-	coordinator := NewRateBudgetCoordinator(clock, RateBudgetCoordinatorOptions{
+	coordinator := newTestRateBudgetCoordinator(t, clock, RateBudgetCoordinatorOptions{
 		MaxInFlight: 1,
 		LeaseTTL:    time.Minute,
 	})
@@ -80,7 +89,7 @@ func TestRateBudgetReserveBatchAllOrNothing(t *testing.T) {
 
 func TestRateBudgetFinishIsIdempotentAndReleasesLease(t *testing.T) {
 	clock := &fakeRateLimitClock{now: time.Date(2026, 8, 11, 12, 0, 0, 0, time.UTC)}
-	coordinator := NewRateBudgetCoordinator(clock, RateBudgetCoordinatorOptions{
+	coordinator := newTestRateBudgetCoordinator(t, clock, RateBudgetCoordinatorOptions{
 		MaxInFlight: 1,
 		LeaseTTL:    time.Minute,
 	})
@@ -109,7 +118,7 @@ func TestRateBudgetFinishIsIdempotentAndReleasesLease(t *testing.T) {
 }
 
 func TestRateBudgetRejectsMismatchedRegisteredFingerprint(t *testing.T) {
-	coordinator := NewRateBudgetCoordinator(nil, RateBudgetCoordinatorOptions{LeaseTTL: time.Minute})
+	coordinator := newTestRateBudgetCoordinator(t, nil, RateBudgetCoordinatorOptions{LeaseTTL: time.Minute})
 	policy := testReservationPolicy(t, "core", "opaque-scope-a", 3)
 	initial, err := coordinator.Decide(context.Background(), testReservationBatch(policy))
 	if err != nil || !initial.Granted {
@@ -127,7 +136,7 @@ func TestRateBudgetRejectsMismatchedRegisteredFingerprint(t *testing.T) {
 
 func TestRateBudgetLeaseTTLFreesConcurrencyWithoutDroppingLateObservation(t *testing.T) {
 	clock := &fakeRateLimitClock{now: time.Date(2026, 8, 11, 12, 0, 0, 0, time.UTC)}
-	coordinator := NewRateBudgetCoordinator(clock, RateBudgetCoordinatorOptions{
+	coordinator := newTestRateBudgetCoordinator(t, clock, RateBudgetCoordinatorOptions{
 		MaxInFlight:                  1,
 		LeaseTTL:                     time.Second,
 		CompletionObservationHorizon: 2 * time.Minute,
@@ -162,6 +171,66 @@ func TestRateBudgetLeaseTTLFreesConcurrencyWithoutDroppingLateObservation(t *tes
 	}
 }
 
+func TestRateBudgetObservationCleanupNeverDeletesActiveLease(t *testing.T) {
+	clock := &fakeRateLimitClock{now: time.Date(2026, 8, 11, 12, 0, 0, 0, time.UTC)}
+	coordinator := newTestRateBudgetCoordinator(t, clock, RateBudgetCoordinatorOptions{
+		MaxInFlight:                  1,
+		LeaseTTL:                     3 * time.Minute,
+		CompletionObservationHorizon: 4 * time.Minute,
+	})
+	batch := testReservationBatch(testReservationPolicy(t, "core", "opaque-scope-a", 10))
+	first, err := coordinator.Decide(context.Background(), batch)
+	if err != nil || !first.Granted {
+		t.Fatalf("first decision = %+v, %v", first, err)
+	}
+	coordinator.registry.mu.Lock()
+	coordinator.registry.completionObservationHorizon = 2 * time.Minute
+	coordinator.registry.mu.Unlock()
+	clock.now = clock.now.Add(2 * time.Minute)
+	blocked, err := coordinator.Decide(context.Background(), batch)
+	if err != nil {
+		t.Fatalf("decision at invalid cleanup horizon: %v", err)
+	}
+	if blocked.Granted || blocked.Wait != time.Minute {
+		t.Fatalf("decision at invalid cleanup horizon = %+v, want one-minute concurrency refusal", blocked)
+	}
+	if got := testRateBudgetLeaseCount(t, coordinator); got != 1 {
+		t.Fatalf("lease records at invalid cleanup horizon = %d, want active lease retained", got)
+	}
+}
+
+func TestRateBudgetCoordinatorRejectsHorizonNotGreaterThanTTL(t *testing.T) {
+	for _, test := range []struct {
+		name    string
+		options RateBudgetCoordinatorOptions
+		wantErr bool
+	}{
+		{name: "defaulted horizon", options: RateBudgetCoordinatorOptions{LeaseTTL: 3 * time.Minute}, wantErr: true},
+		{name: "shorter horizon", options: RateBudgetCoordinatorOptions{LeaseTTL: 3 * time.Minute, CompletionObservationHorizon: 2 * time.Minute}, wantErr: true},
+		{name: "equal horizon", options: RateBudgetCoordinatorOptions{LeaseTTL: 3 * time.Minute, CompletionObservationHorizon: 3 * time.Minute}, wantErr: true},
+		{name: "longer horizon", options: RateBudgetCoordinatorOptions{LeaseTTL: 3 * time.Minute, CompletionObservationHorizon: 4 * time.Minute}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			coordinator, err := NewRateBudgetCoordinator(nil, test.options)
+			if test.wantErr {
+				if err == nil || coordinator != nil {
+					t.Fatalf("NewRateBudgetCoordinator = (%v, %v), want nil coordinator and error", coordinator, err)
+				}
+				return
+			}
+			if err != nil || coordinator == nil {
+				t.Fatalf("NewRateBudgetCoordinator = (%v, %v), want configured coordinator", coordinator, err)
+			}
+			if got, want := coordinator.registry.leaseTTL, 3*time.Minute; got != want {
+				t.Fatalf("lease ttl = %s, want %s", got, want)
+			}
+			if got, want := coordinator.registry.completionObservationHorizon, 4*time.Minute; got != want {
+				t.Fatalf("completion observation horizon = %s, want %s", got, want)
+			}
+		})
+	}
+}
+
 func TestRateBudgetCompletionObservationHorizonNormalizesAtOwner(t *testing.T) {
 	for _, test := range []struct {
 		name       string
@@ -173,7 +242,7 @@ func TestRateBudgetCompletionObservationHorizonNormalizesAtOwner(t *testing.T) {
 		{name: "explicit", configured: 3 * time.Minute, want: 3 * time.Minute},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			coordinator := NewRateBudgetCoordinator(nil, RateBudgetCoordinatorOptions{
+			coordinator := newTestRateBudgetCoordinator(t, nil, RateBudgetCoordinatorOptions{
 				CompletionObservationHorizon: test.configured,
 			})
 			if got := coordinator.registry.completionObservationHorizon; got != test.want {
@@ -186,7 +255,7 @@ func TestRateBudgetCompletionObservationHorizonNormalizesAtOwner(t *testing.T) {
 func TestRateBudgetCompletionObservationHorizonAppliesLateObservationBeforeBoundary(t *testing.T) {
 	const horizon = 2 * time.Minute
 	clock := &fakeRateLimitClock{now: time.Date(2026, 8, 11, 12, 0, 0, 0, time.UTC)}
-	coordinator := NewRateBudgetCoordinator(clock, RateBudgetCoordinatorOptions{
+	coordinator := newTestRateBudgetCoordinator(t, clock, RateBudgetCoordinatorOptions{
 		MaxInFlight:                  1,
 		LeaseTTL:                     time.Second,
 		CompletionObservationHorizon: horizon,
@@ -228,7 +297,7 @@ func TestRateBudgetCompletionObservationHorizonAppliesLateObservationBeforeBound
 func TestRateBudgetCompletionObservationHorizonDropsAtBoundaryWithoutRefund(t *testing.T) {
 	const horizon = 2 * time.Minute
 	clock := &fakeRateLimitClock{now: time.Date(2026, 8, 11, 12, 0, 0, 0, time.UTC)}
-	coordinator := NewRateBudgetCoordinator(clock, RateBudgetCoordinatorOptions{
+	coordinator := newTestRateBudgetCoordinator(t, clock, RateBudgetCoordinatorOptions{
 		LeaseTTL:                     time.Second,
 		CompletionObservationHorizon: horizon,
 	})
@@ -274,7 +343,7 @@ func TestRateBudgetCompletionObservationHorizonDropsAtBoundaryWithoutRefund(t *t
 func TestRateBudgetCompletionObservationHorizonBoundsAbandonedLeaseRecordsAndScans(t *testing.T) {
 	const horizon = 2 * time.Minute
 	clock := &fakeRateLimitClock{now: time.Date(2026, 8, 11, 12, 0, 0, 0, time.UTC)}
-	coordinator := NewRateBudgetCoordinator(clock, RateBudgetCoordinatorOptions{
+	coordinator := newTestRateBudgetCoordinator(t, clock, RateBudgetCoordinatorOptions{
 		MaxInFlight:                  1,
 		LeaseTTL:                     time.Second,
 		CompletionObservationHorizon: horizon,

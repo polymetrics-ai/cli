@@ -128,8 +128,15 @@ func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.
 		return base, nil
 	}
 	matched := make([]resolvedRateLimitPolicy, 0, len(r.policies))
+	requiresDeclaredPath := false
 	for _, policy := range r.policies {
-		if len(policy.Selector.Endpoints) != 0 || len(policy.Selector.ExcludeEndpoints) != 0 || !rateLimitSelectorMatches(policy.Selector, "", "", r.config) {
+		if len(policy.Selector.Endpoints) != 0 || len(policy.Selector.ExcludeEndpoints) != 0 {
+			if rateLimitSelectorConfigMatches(policy.Selector, r.config) {
+				requiresDeclaredPath = true
+			}
+			continue
+		}
+		if !rateLimitSelectorMatches(policy.Selector, "", "", r.config) {
 			continue
 		}
 		resolved, err := r.resolve(policy)
@@ -137,6 +144,12 @@ func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.
 			return nil, err
 		}
 		matched = append(matched, resolved)
+	}
+	if requiresDeclaredPath {
+		clone := *base
+		clone.LeaseAdmission = unresolvedRateBudgetAdmission{}
+		clone.RateLimitCostHeader = ""
+		return &clone, nil
 	}
 	if len(matched) == 0 {
 		return base, nil
@@ -239,6 +252,13 @@ func rateLimitSelectorMatches(selector connsdk.RateLimitSelector, method, path s
 	if rateLimitEndpointMatches(selector.ExcludeEndpoints, method, path) {
 		return false
 	}
+	return rateLimitSelectorConfigMatches(selector, cfg)
+}
+
+func rateLimitSelectorConfigMatches(selector connsdk.RateLimitSelector, cfg map[string]string) bool {
+	if selector.All {
+		return true
+	}
 	if len(selector.Tiers) > 0 && !rateLimitSelectorValueMatches(selector.Tiers, cfg["tier"]) {
 		return false
 	}
@@ -282,6 +302,18 @@ type resolvedRateBudgetAdmission struct {
 }
 
 var _ connsdk.RateLimitLeaseAdmission = resolvedRateBudgetAdmission{}
+
+type unresolvedRateBudgetAdmission struct{}
+
+var _ connsdk.RateLimitLeaseAdmission = unresolvedRateBudgetAdmission{}
+
+func (unresolvedRateBudgetAdmission) Admit(context.Context, connsdk.RateLimitRequest) (connsdk.RateBudgetLease, error) {
+	return "", errors.New("rate-limit admission requires a declared request route")
+}
+
+func (unresolvedRateBudgetAdmission) Finish(context.Context, connsdk.RateBudgetLease, connsdk.CompletionObservation) error {
+	return nil
+}
 
 func (a resolvedRateBudgetAdmission) Admit(ctx context.Context, _ connsdk.RateLimitRequest) (connsdk.RateBudgetLease, error) {
 	if a.coordinator == nil {
