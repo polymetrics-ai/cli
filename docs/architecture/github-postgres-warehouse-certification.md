@@ -1,8 +1,5 @@
 # GitHub and PostgreSQL connector release certification through DuckDB/Parquet
 
-> **Status:** Target architecture and release-acceptance plan. This document does not implement or
-> certify connector behavior.
-
 ## Outcome
 
 Implement one shared sync engine around Parquet and embedded DuckDB, with GitHub and PostgreSQL supplying transport-specific adapters. Do not build independent GitHub and PostgreSQL synchronization pipelines.
