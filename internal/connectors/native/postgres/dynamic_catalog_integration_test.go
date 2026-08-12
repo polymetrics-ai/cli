@@ -38,6 +38,7 @@ const (
 	postgresCatalogLimitedUser           = "pm_catalog_limited"
 	postgresCatalogNoUsageSchema         = "catalog_no_usage"
 	postgresCatalogNoUsageUser           = "pm_catalog_no_usage"
+	postgresCatalogSystemSchemaError     = "postgres catalog schema is reserved for PostgreSQL system objects"
 )
 
 // TestPostgresDynamicTypedCatalogUsesLiveMetadata is deliberately a live
@@ -189,10 +190,10 @@ func assertPostgresSystemSchemasAreRejected(t *testing.T, ctx context.Context, c
 	}
 	for _, schema := range schemas {
 		config := postgresCatalogConfig(t, endpoint, schema)
-		if _, err := connector.TypedCatalog(ctx, config); err == nil || !strings.Contains(err.Error(), reservedPostgresCatalogSchemaError) {
+		if _, err := connector.TypedCatalog(ctx, config); err == nil || !strings.Contains(err.Error(), postgresCatalogSystemSchemaError) {
 			t.Fatal("typed PostgreSQL catalog did not reject a system-owned schema before discovery")
 		}
-		if _, err := connector.Catalog(ctx, config); err == nil || !strings.Contains(err.Error(), reservedPostgresCatalogSchemaError) {
+		if _, err := connector.Catalog(ctx, config); err == nil || !strings.Contains(err.Error(), postgresCatalogSystemSchemaError) {
 			t.Fatal("legacy PostgreSQL catalog did not preserve the typed system-schema rejection")
 		}
 	}
