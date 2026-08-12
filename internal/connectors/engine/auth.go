@@ -66,12 +66,6 @@ func authSpecMatches(spec AuthSpec, vars Vars) (bool, error) {
 	return EvalWhen(spec.When, vars)
 }
 
-// buildAuthenticator constructs the connsdk.Authenticator for a matched
-// spec, interpolating every templated field first.
-func buildAuthenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, vars Vars, h Hooks) (connsdk.Authenticator, error) {
-	return buildAuthenticatorWithDeclaredRoute(ctx, cfg, spec, vars, h, nil)
-}
-
 func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, vars Vars, h Hooks, requester DeclaredRouteRequester) (connsdk.Authenticator, error) {
 	switch spec.Mode {
 	case "none":
@@ -267,18 +261,6 @@ func buildOAuth2RefreshToken(cfg connectors.RuntimeConfig, spec AuthSpec, vars V
 	}
 
 	return auth, nil
-}
-
-// buildCustomAuth resolves an AuthHook for spec.Hook via h. A nil Hooks, or
-// a Hooks that does not implement AuthHook, is a typed error naming the
-// missing hook rather than a workaround (per PLAN.md: a needed hook is a
-// blocker, never silently skipped). ctx is the caller's context (F8):
-// AuthHook.Authenticator is invoked with it directly, never
-// context.Background(), so a hook that performs a network call (e.g. a
-// github_app JWT->installation-token exchange) honors the caller's
-// cancellation/deadline.
-func buildCustomAuth(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, h Hooks) (connsdk.Authenticator, error) {
-	return buildCustomAuthWithDeclaredRoute(ctx, cfg, spec, h, nil)
 }
 
 func buildCustomAuthWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, h Hooks, requester DeclaredRouteRequester) (connsdk.Authenticator, error) {

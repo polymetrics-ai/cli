@@ -95,6 +95,11 @@ configured-linter failure; no no-mistakes correction run has started)
   rerun the report-defined broad acceptance matrix. This reserves one fresh
   child correction; it does not interact with no-mistakes or the parked #3754
   lineage.
+- **Green:** removed only the two private wrappers. `GOMAXPROCS=2 go test -p 1
+  -count=1 -timeout 20m ./internal/connectors/engine
+  ./internal/connectors/hooks/github -run
+  '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)'`
+  passed, followed by `make lint` with `0 issues` on 2026-08-12.
 
 ## Deferred Validation Gate
 

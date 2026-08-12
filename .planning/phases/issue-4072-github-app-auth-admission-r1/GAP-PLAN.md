@@ -100,8 +100,9 @@ does not alter `selectAuth`, the declared-route flow, or any runtime behavior.
 
 Adding a test solely to call private dead code would make the lint green by
 retaining the defect. The failing configured linter is therefore the causal
-RED; the GREEN command is `make lint`, followed by the entire report-defined
-acceptance matrix.
+RED. The GREEN passed both `make lint` and the bounded focused auth matrix;
+the entire report-defined acceptance matrix must now be rerun on the corrected
+head.
 
 ## Verification order
 

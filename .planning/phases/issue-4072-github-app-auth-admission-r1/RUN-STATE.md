@@ -27,7 +27,7 @@ no-mistakes correction run started
 | execute GREEN | complete | focused secret-blind transport/coordinator matrix passes; GREEN commit `3f83bf3af` |
 | verify-work | complete (inline automatic fallback) | `UAT.md`, bounded functional/race/vet evidence |
 | code-review | complete (inline manual deep review) | `REVIEW.md` |
-| gap plan / local broad acceptance | correcting (inline manual fallback) | `GAP-PLAN.md`; `make lint` RED at `414228f02` |
+| gap plan / local broad acceptance | rerun pending (inline manual fallback) | correction 1/5 GREEN passes focused auth + `make lint`; rerun `GAP-PLAN.md` matrix |
 | no-mistakes | prepared, held | `NO-MISTAKES-HANDOFF.md`; wait for #3856 heavy validation release |
 
 ## Manual GSD Fallback
@@ -72,6 +72,7 @@ scope.
 
 `make lint` found only two unused private forwarding wrappers in
 `internal/connectors/engine/auth.go`. The causal lint RED is recorded in
-`TDD-LEDGER.md`; correction 1/5 removes those wrappers and reruns the complete
-report-defined matrix. No pipeline, push, PR, UDS, or parked-parent action is
-part of this correction.
+`TDD-LEDGER.md`; correction 1/5 removed them and passed the focused auth matrix
+plus `make lint`. The complete report-defined matrix still reruns before the
+handoff is ready. No pipeline, push, PR, UDS, or parked-parent action is part
+of this correction.
