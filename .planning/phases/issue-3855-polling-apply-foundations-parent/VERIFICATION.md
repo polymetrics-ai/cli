@@ -23,6 +23,9 @@
 | Rebase necessity | `git merge-base --is-ancestor c67f40a5... b61d0fa7...` exited 1; current transport head was absent from #3855 ancestry | passed — refresh required |
 | Preserved parent range | guarded `no-mistakes axi sync --recover`; `git rebase --onto origin/feat/3862-any-to-any-transport 30b2fb4a...`; `git range-diff 30b2fb4a...b61d0fa7... c67f40a5...HEAD` | passed — all eight commits patch-equivalent, no conflicts |
 | Refreshed ancestry and scope | `git merge-base --is-ancestor c67f40a5... HEAD`; `git diff --check`; changed-path assertion | passed — accepted transport head is an ancestor and exactly the nine phase files remain |
+| Causal pre-bridge start | fresh `no-mistakes axi sync --check` returned `custody_returned` / `run_pipeline`; one `axi run --skip=push,pr,ci` | RED observed — internal validation-gate ref `b61d0fa7...` rejected clean `e541170e...` as non-fast-forward before new-run creation or external effect |
+| Audited preserved-history bridge | exact `git merge --no-ff -s ours` command after fixed-SHA rechecks | pending — require unchanged tree, first parent=checkpoint, second parent=`b61d0fa7...`, and remote/preserved/transport ancestry |
+| Post-bridge local no-mistakes | exact Stage-5 argv with `--skip=push,pr,ci`, no `--yes` | pending — every synchronous gate must be owned; no external stage may run |
 
 ## GSD verification result
 
@@ -40,9 +43,12 @@ listed above. A passing documentation check never certifies product behavior.
 - Automated review: this PR must remain draft; review coverage is recorded as pending rather than
   requested while draft.
 
-## Pending final recovery checks
+## Pending audited recovery checks
 
-After committing this evidence-only refresh, rerun the contract-owned no-mistakes local pipeline
-without `--yes`, force-push only with an explicit lease for remote
-`7ea7350b8abc3f99c4831aa63a0373d6f1d70036`, then use `gh-axi` to verify that #4041 remains the
-single open draft with the same named base/head and a final head descended from `c67f40a5...`.
+After committing this bounded gap plan, recheck remote `7ea7350b...`, preserved
+`b61d0fa7...`, transport `c67f40a5...`, and the protected blob. Create only the audited,
+tree-preserving non-force `-s ours` bridge and prove its parents, unchanged tree, and ancestry.
+Then run the contract-owned no-mistakes local pipeline without `--yes` and with
+`--skip=push,pr,ci`. No external push, PR update, or CI action is part of this stage. Any later
+existing-branch update must first prove `7ea7350b...` is an ancestor and use a normal non-force
+push, followed by exact-head CI and live draft/base/head inspection.

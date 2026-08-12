@@ -6,11 +6,12 @@ not product behavior; no production or test code is permitted in this seed.
 | ID | Required condition | Red evidence | Green evidence | Status at seed creation |
 | --- | --- | --- | --- | --- |
 | P1 | Requested parent branch has one precise remote-derived start point | `refs/heads/feat/3855-polling-apply-foundations` and its remote counterpart were absent; the supplied worktree was detached | Branch is created from `origin/feat/3862-any-to-any-transport` at `30b2fb4aeb121641b6158903fe1d3b54668599a6` | green locally |
-| P2 | The parent inventories all children and retains the core DAG | No current parent acceptance ledger bound #3856 → #3857 → (#3858 \|\| #3859) plus the #3860 follow-on | `PLAN.md` names each existing child, prerequisite, parallel boundary, and #3860 follow-on dependency | green locally |
+| P2 | The parent inventories all children and distinguishes graph from programme schedule | No current parent acceptance ledger bound #3856 → #3857 → (#3858 \|\| #3859) plus the #3860 follow-on, while recognizing the active serial #3856 → #3857 → #3858 → #3859 schedule | `PLAN.md` preserves the logical prerequisites and records the active stricter execution order and #3860 follow-on | green locally |
 | P3 | Historical polling work cannot be mistaken for child completion | #3880 could be confused with child implementation because it is parent-scoped | Context, plan, and PR body name `dc1a6a7171ca901c8dbaf8cd528f67b18e57d9bb` as partial reusable work only for every child | green locally |
 | P4 | A draft parent records dependency without unauthorized integration | No current draft parent PR/seed is available to represent the #3862 dependency | Draft PR #4041 is open/draft with the exact #3862 base and #3855 head; the body prohibits merge to #3862 or `main` and requires later retarget | green — fresh post-refresh validation pending |
 | P5 | The scaffold cannot smuggle product work | A parent documentation change could accidentally widen into connector/transport/PostgreSQL code | Whole-revert restored the accepted tree; changed-path and protected-blob checks permit only this phase directory | green — fresh post-refresh validation pending |
 | P6 | Future child #3856 inherits the accepted transport seam | `c67f40a5ff67a131950f3123e70527027dca8493` was not an ancestor of the recovered #3855 head, so the parent still inherited only pre-#4059 transport | `git rebase --onto c67f40a5... 30b2fb4a...` replays all eight parent commits cleanly; `git range-diff` marks each patch-equivalent and `c67f40a5...` becomes an ancestor of the refreshed head | green — fresh post-refresh validation pending |
+| P7 | Fresh no-mistakes custody can accept the refreshed history without content loss | At clean `e541170e...`, the one authorized `axi run --skip=push,pr,ci` was rejected before run creation because the local validation-gate ref at `b61d0fa7...` was non-fast-forward | The audited `-s ours` bridge has an unchanged tree, first parent=checkpoint, second parent=`b61d0fa7...`, and ancestors `7ea7350b...`, `b61d0fa7...`, and `c67f40a5...`; a new local run may then start | red observed; green pending bridge assertions |
 
 ## Execution evidence
 
@@ -33,3 +34,11 @@ protected inherited #4015 architecture blob.
   were rebased onto `c67f40a5...` without conflicts and range-diff proved patch equivalence.
 - **Refactor:** not applicable. The recovery changes only the parent topology/evidence and leaves
   all child and product work untouched.
+
+- **Red:** the fresh pre-bridge `no-mistakes axi run --skip=push,pr,ci` did not create a pipeline
+  run. Its internal gate refused `e541170e...` because the preserved validation ref was
+  `b61d0fa7...`; no external push, PR mutation, CI action, product edit, or correction round was
+  created.
+- **Green:** after this nine-file plan checkpoint, the bridge is permitted only as the specified
+  non-content `--no-ff -s ours` merge with all tree, parent, protected-blob, and ancestry assertions
+  passing. A fresh no-mistakes run remains pending after that proof.

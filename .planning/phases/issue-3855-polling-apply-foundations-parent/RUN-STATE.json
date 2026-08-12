@@ -29,6 +29,8 @@
   "children": {
     "ordered": [3856, 3857],
     "parallel_after": [3858, 3859],
+    "logical_dependency_graph": "#3856 -> #3857 -> (#3858 || #3859)",
+    "active_program_execution_order": [3856, 3857, 3858, 3859],
     "follow_on": {
       "issue": 3860,
       "kind": "documentation",
@@ -85,7 +87,7 @@
       "head": "feat/3855-polling-apply-foundations",
       "initial_verified_head_sha": "4099335632a79e3c70ce20c004a5f63933171280",
       "remote_head_before_topology_refresh": "7ea7350b8abc3f99c4831aa63a0373d6f1d70036",
-      "final_head_reinspection": "pending post-refresh validation and explicit-lease push",
+      "final_head_reinspection": "pending audited non-force bridge, fresh local validation, then a separately authorized normal push",
       "changed_files": 9
     },
     "child_inventory": [3856, 3857, 3858, 3859, 3860],
@@ -109,7 +111,31 @@
     "range_diff": "all eight commits patch-equivalent",
     "conflicts": 0,
     "product_correction_delta": 0,
-    "status": "fresh_local_validation_pending"
+    "status": "audited_bridge_plan_checkpoint_pending"
+  },
+  "audited_preserved_history_bridge": {
+    "status": "planned_after_gap_checkpoint",
+    "causal_red": "At clean e541170eef71f687990684b4f22fa7b21ab5a9fc, one fresh no-mistakes axi run with --skip=push,pr,ci was rejected before run creation because the internal validation-gate ref at b61d0fa7eefc719c39593e44afbcb1b7a3f76613 was non-fast-forward.",
+    "command": "git merge --no-ff -s ours -m 'chore(gsd): reconcile #3855 preserved histories' refs/no-mistakes/recover/01KZQ6D2XW5GNWTRFSVRMYE2FZ",
+    "required_first_parent": "current pre-bridge gap-checkpoint head",
+    "required_second_parent": "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
+    "required_ancestors": [
+      "7ea7350b8abc3f99c4831aa63a0373d6f1d70036",
+      "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
+      "c67f40a5ff67a131950f3123e70527027dca8493"
+    ],
+    "required_tree_relation": "bridge tree byte-identical to first parent",
+    "forbidden": [
+      "ordinary content merge",
+      "conflict resolution",
+      "rebase",
+      "reset",
+      "cherry-pick",
+      "force push",
+      "external push",
+      "PR update",
+      "integration merge"
+    ]
   },
   "no_mistakes": {
     "previous_run": {
@@ -126,13 +152,22 @@
       "preserved_head": "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
       "custody": "returned via no-mistakes axi sync --recover before rebase"
     },
-    "status": "topology_refresh_validation_pending",
+    "argv": [
+    "status": "audited_bridge_then_fresh_validation_pending",
+    "pre_bridge_attempt": {
+      "outcome": "rejected_before_new_run",
+      "head": "e541170eef71f687990684b4f22fa7b21ab5a9fc",
+      "gate_head": "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
+      "reason": "internal validation-gate push rejected non-fast-forward",
+      "external_effects": false
+    },
+    "argv": [
     "argv": [
       "no-mistakes",
       "axi",
       "run",
       "--intent",
-      "Reconcile the existing #3855 polling/apply foundations draft parent with the accepted #4059 transport seam at c67f40a5ff67a131950f3123e70527027dca8493. Preserve the patch-equivalent existing planning-only parent range, keep #3856 -> #3857 -> (#3858 || #3859), retain #3860 as the follow-on documentation child, and record #3880 only as partial reuse. Keep #3862 as the temporary dependency-only base, later retarget directly to docs/4015-connector-release-certification, and never merge into #3862 or main. The allowed PR-relative delta from c67f40a5ff67a131950f3123e70527027dca8493 is exactly the nine existing files under .planning/phases/issue-3855-polling-apply-foundations-parent/. docs/architecture/github-postgres-warehouse-certification.md is inherited #4015 content whose required base blob is 889e4eddffabb76aa8be46a934c3e9abe0610f4c; do not edit, remove, reformat, or auto-correct it. If a finding concerns that path or any non-phase path, report it for its owning issue instead of mutating it. Do not implement or claim product behavior.",
+      "Reconcile existing issue #3855 and draft stacked PR #4041 in place after accepted Transport PR #4059. Preserve exact remote head 7ea7350b8abc3f99c4831aa63a0373d6f1d70036 and exact no-mistakes head b61d0fa7eefc719c39593e44afbcb1b7a3f76613 through the reviewed tree-preserving non-force ancestry bridge, keep current Transport head c67f40a5ff67a131950f3123e70527027dca8493 as an ancestor, and retain the planning-only nine-file scope and correction count 0/5. Use only existing branch feat/3855-polling-apply-foundations and draft PR #4041 with dependency-only base feat/3862-any-to-any-transport. Do not create a PR, target main, retarget, merge, implement #3856, alter protected #4015 content, or drop any pipeline commit.",
       "--skip=push,pr,ci"
     ],
     "forbidden_flags": [

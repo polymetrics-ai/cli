@@ -15,7 +15,7 @@
 
 ## Child order and acceptance boundary
 
-The only permitted child order is:
+The logical issue dependency graph is:
 
 ```text
 #3856 -> #3857 -> (#3858 || #3859)
@@ -24,6 +24,10 @@ The only permitted child order is:
 All five existing child issues remain open. #3860 is a follow-on documentation child: it depends
 on #3856–#3859 and is not a parallel implementation lane in the core DAG above. This scaffold
 neither implements any child nor treats a historical parent-scoped change as their completion.
+
+The active programme deliberately executes the transport-primary wave more strictly than that
+logical graph: `#3856 -> #3857 -> #3858 -> #3859`, with #3860 only after all four. This is an
+execution schedule, not a claim that the existing issue dependencies changed.
 
 ## Reuse ruling
 
@@ -79,3 +83,20 @@ unpublished planning-only head `b61d0fa7eefc719c39593e44afbcb1b7a3f76613`. The s
 patch-equivalent, and the post-rebase PR-relative diff remains only this phase's nine files. This
 is a topology-only recovery: it neither implements a child nor consumes a substantive correction
 round. The PR remains draft, dependency-only, and unmerged.
+
+## Audited preserved-history bridge
+
+The fresh `no-mistakes axi run --skip=push,pr,ci` attempted at clean
+`e541170eef71f687990684b4f22fa7b21ab5a9fc` reproduced the causal topology RED: no-mistakes' local
+validation-gate ref still ends at preserved head
+`b61d0fa7eefc719c39593e44afbcb1b7a3f76613`, so it rejected the refreshed head as non-fast-forward
+before a new pipeline run or external effect existed.
+
+The audited recovery first commits this bounded nine-file GSD gap plan. It then rechecks the fixed
+remote/preserved/transport SHAs and protected blob before creating exactly one non-content merge:
+`git merge --no-ff -s ours -m "chore(gsd): reconcile #3855 preserved histories"
+refs/no-mistakes/recover/01KZQ6D2XW5GNWTRFSVRMYE2FZ`. GREEN requires that merge's first parent to
+be the checkpoint head, its second parent to be `b61d0fa7...`, its tree to equal the checkpoint
+tree byte-for-byte, and `7ea7350b...`, `b61d0fa7...`, and `c67f40a5...` all to be ancestors. No
+ordinary content merge, conflict resolution, rebase, reset, cherry-pick, force operation, external
+push, PR update, or parent merge is allowed in this recovery stage.
