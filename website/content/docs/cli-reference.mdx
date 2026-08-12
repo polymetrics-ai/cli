@@ -204,6 +204,11 @@ display value only — the warehouse keys its directories on a generated identif
 Against the local warehouse destination, `--stream` and `--table` become path components, so each
 accepts only letters, digits, `.`, `-` and `_`. Both are checked when the connection is created,
 because a name the warehouse cannot materialize would otherwise fail every sync of that connection.
+One local-warehouse connection also cannot configure distinct `--table` spellings that differ only
+by ASCII letter case, such as `records` and `RECORDS`: DuckDB treats them as one identifier. New
+connections are rejected before saving. A legacy inventory is preserved when opened but its local
+sync is refused before it changes run or warehouse state; create replacement connections whose
+destination table names differ by more than ASCII letter case.
 
 ### `pm catalog`
 

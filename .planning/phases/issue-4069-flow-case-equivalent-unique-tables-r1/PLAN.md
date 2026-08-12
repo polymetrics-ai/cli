@@ -169,7 +169,7 @@ state/file outcomes rather than relying only on exit status.
    spellings. `Open` must preserve it. Either stream's next ETL must return the
    typed error before `beginRun`, run/stream/checkpoint state, owner record,
    directory, WAL, temporary file, or Parquet file mutation.
-3. `TestSameOwnerCaseEquivalentQuerySQLReturnsTypedErrorForBareAndQuotedReferences`
+3. `TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory`
    covers generic and selected SQL, bare and quoted forms. It expects the new
    type rather than DuckDB `Catalog Error` or a one-owner
    `AmbiguousTableError`, while `SELECT 1` remains green and a real
@@ -218,10 +218,12 @@ focused selectors green.
 ### Slice C1-docs and verification
 
 Document the rejected creation configuration and legacy collision read/recovery
-path in `docs/cli/connections.md`, `docs/cli/query.md`, and
+path through the embedded source `internal/cli/docs.go`, generated
+`docs/cli/connections.md` and `docs/cli/query.md`, the corresponding golden
+transcripts, and `website/content/docs/cli-reference.mdx` plus
 `website/content/docs/query.mdx`. No new command or flag is introduced, so the
-runtime-help wording/golden changes are applicable only if the generated help
-already documents this behavior; run and record `pm connections`,
+runtime-help wording/golden changes are applicable only because the generated
+help already documents this behavior; run and record `pm connections`,
 `pm connections create --help`, `pm query`, `pm query run --help`, manual and
 website checks rather than claiming a blanket exemption.
 
