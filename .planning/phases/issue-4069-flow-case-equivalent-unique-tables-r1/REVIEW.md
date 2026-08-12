@@ -48,3 +48,12 @@ No Critical, Warning, or Info finding was identified in the #4069 range. The
 seven broader git diff --check whitespace reports belong solely to older #3897
 planning files and are recorded as inherited baseline, not suppressed or
 modified by this child.
+
+## Correction 1 / 5 supersession
+
+This prior review applies only to the original cross-owner policy slice. Sol's
+final audit at `d9022359` found the accepted same-owner inventory absent, so
+this PASS is not a disposition of that finding. A new inline GSD code review is
+required after correction 1 GREEN; it must examine the connection invariant,
+legacy pre-mutation fence, typed query/flow boundary, exact physical-read
+behavior, docs parity, and preserved inherited selectors.

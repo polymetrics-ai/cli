@@ -17,3 +17,17 @@ active numbered ROADMAP phase and GSD-role delegation is forbidden.
 
 No product choice remains open: the audit disposition and parent contract fix
 the required behavior.
+
+## Correction 1 / 5 addendum
+
+**Command:** `scripts/gsd prompt discuss-phase issue-4069-flow-case-equivalent-unique-tables-r1`
+**Execution:** inline/manual under the same no-delegation fallback; the prior
+no-mistakes CI monitor reports the branch synchronized and its current help
+permits post-pipeline commits on top of the preserved head.
+
+| Area | Alternatives considered | Selected decision |
+|---|---|---|
+| Same-owner policy | Permit two spellings through a new durable alias/physical-name design, reject the full project at open, or reject new inventory and fence legacy mutation | Accepted option 1: reject new local-warehouse configuration after defaults; preserve legacy state and exact proven reads; block legacy sync before mutation. |
+| SQL error | Reuse one-owner `AmbiguousTableError`, expose DuckDB catalog text, or add a typed same-owner error | Add a dedicated typed error with a truthful exact-read/replacement-connection remedy; do not claim that `connection` can resolve one owner's collision. |
+| Query availability | Refuse all SQL for a legacy collision or suppress only the irreducible identifier bindings | Suppress only the collision's bare/generated bindings so `SELECT 1` and unrelated tables remain executable. |
+| Delivery | Create a new issue/PR or use the existing #4069 correction budget | Use existing #4069, draft #4071, and correction 1 / 5; preserve every prior and pipeline commit. |

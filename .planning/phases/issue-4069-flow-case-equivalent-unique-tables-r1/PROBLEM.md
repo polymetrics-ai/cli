@@ -53,3 +53,25 @@ planning cleanup.
 - `data/cli-github-4060-final-sol-audit-r1/report.md`
 - `data/cli-github-4060-final-sol-audit-r1/case-equivalent-unique-table-disposition.md`
 - `data/cli-connector-release-certification-r1/FINISH-AND-PARALLELIZATION-PLAN.md`
+
+## Correction 1 / 5 — same-owner case-equivalent inventory
+
+Independent Sol audit of exact head
+`d9022359e7b7bc2f7eb262c16177b52010681192` found an omitted partition of
+this issue's warehouse-identifier contract: one local-warehouse connection can
+declare distinct stream destinations `records` and `RECORDS`. DuckDB treats
+them as one identifier, and a case-insensitive filesystem can address one
+Parquet path for both spellings. The previous cross-owner policy correctly does
+not cover that configuration.
+
+The accepted policy is deliberately narrow: reject a newly created
+local-warehouse connection with distinct ASCII-case-equivalent effective
+destination tables after defaults and before save; keep legacy state open and
+unchanged; refuse its next sync before `beginRun`, WAL, checkpoint, owner,
+directory, temporary, or Parquet mutation; and return a new typed same-owner
+collision error only when SQL references the irreducible identifier. Unrelated
+SQL such as `SELECT 1` remains available. Exact direct/action/reverse reads
+remain limited to the physical spelling the resolver can prove exists.
+
+This is correction **1 / 5** in the fresh #4069 lineage, not a new issue and
+not correction 6 on #4066 or #4060.

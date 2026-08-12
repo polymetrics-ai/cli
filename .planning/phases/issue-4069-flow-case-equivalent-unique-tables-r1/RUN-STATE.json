@@ -6,12 +6,13 @@
   "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "required_base_branch": "feat/3897-flow-connection-scope-nm",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "broad_local_verification_green_pending_firstmate_no_mistakes_and_pr_gate",
+  "status": "correction_1_gsd_planned_red_pending",
   "correction_budget": {
     "used_before": 0,
+    "active_correction": 1,
     "limit": 5,
-    "remaining_before_first_correction": 5,
-    "lineage": "fresh #4069 child; #4066 remains the exhausted specification owner"
+    "remaining_after_active_correction": 4,
+    "lineage": "fresh #4069 child; #4066 remains the exhausted specification owner; this is correction 1 of 5"
   },
   "issue_gate": {
     "parent_and_owner_read": true,
@@ -41,7 +42,8 @@
     "golang-database",
     "golang-design-patterns",
     "golang-structs-interfaces",
-    "golang-lint"
+    "golang-lint",
+    "golang-documentation"
   ],
   "safety": {
     "credentials_or_secrets": "none used",
@@ -64,6 +66,21 @@
     "manual_code_review": "passed: no unresolved candidate finding",
     "pr_issue_guard": "passed locally against a prospective draft body with Refs #4069",
     "inherited_baseline": "seven older #3897 planning-file trailing-whitespace findings remain outside the child range",
-    "next_gate": "paused before no-mistakes, draft PR work, and CI observation for Firstmate transport Sol r4 coordination"
+    "next_gate": "committed same-owner RED before production implementation"
+  },
+  "correction_1": {
+    "audit_handoff": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4066-case-equivalent-unique-tables-r1/correction-1-sol-audit-handoff.md",
+    "audit_report": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4071-final-sol-audit-r1/report.md",
+    "audited_head": "d9022359e7b7bc2f7eb262c16177b52010681192",
+    "verdict": "FINDINGS / DO NOT MERGE",
+    "policy": "reject new same-owner ASCII-case-equivalent local-warehouse destination tables; preserve legacy state; fence legacy sync before beginRun; return a typed same-owner SQL collision while unrelated SQL remains available",
+    "no_mistakes_monitor": {
+      "run": "01KZSJG7P7QREZSZ7N52TPBA5F",
+      "status": "running CI monitor",
+      "branch_sync": "synchronized / already_synchronized at d9022359",
+      "follow_up_authority": "version-matched axi help explicitly permits post-pipeline follow-up commits on top of the existing branch"
+    },
+    "red_status": "pending committed RED checkpoint",
+    "docs_parity": "applicable: connection/query manual and website behavior guidance must be updated"
   }
 }

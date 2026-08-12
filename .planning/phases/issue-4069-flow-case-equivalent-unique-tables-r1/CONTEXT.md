@@ -1,7 +1,7 @@
 # #4069 — Context
 
 **Gathered:** 2026-08-12
-**Status:** Ready for strict TDD execution
+**Status:** Correction 1 / 5 planned; strict same-owner RED pending
 **Mode:** Inline/manual GSD fallback in an issue-numbered phase
 
 ## Locked decisions
@@ -57,3 +57,33 @@ Pi workflow directly. The canonical single-worker contract also forbids
 spawning a GSD role. The generated prompts are executed inline: decisions are
 recorded here, the plan and ledger precede production edits, and RED/GREEN,
 verify-work, and code-review evidence will be captured in this phase.
+
+## Correction 1 / 5 locked decisions
+
+- Sol's final audit at `d9022359e7b7bc2f7eb262c16177b52010681192` is a
+  release-blocking acceptance finding. It is owned by #4069's existing fresh
+  lineage and does not authorize another issue, branch, worktree, or PR.
+- Apply the accepted policy from
+  `data/cli-github-4069-same-owner-case-policy-r1/report.md`: reject distinct
+  exact spellings with the same deterministic ASCII DuckDB identifier key
+  within one local-warehouse connection after defaults but before save. An
+  exact duplicate spelling keeps its existing behavior and is not this error.
+- `App.Open` must preserve legacy state without a migration, rename, delete,
+  fold, or fatal project-open rejection. `RunETL` must validate the complete
+  configured local-warehouse inventory before `beginRun`, so a legacy collision
+  cannot create a run, checkpoint, owner record, WAL, temporary file, or
+  Parquet mutation.
+- The query policy must combine the connection's declared effective inventory
+  with one immutable resolver snapshot. It suppresses only a legacy
+  same-owner collision's bare/generated bindings and returns a new typed error
+  for bare or quoted references to that key. It must not parse or rewrite SQL,
+  Unicode-fold, reserve a flat alias namespace, or make unrelated `SELECT 1`
+  fail.
+- A same-owner collision is not `*warehouse.AmbiguousTableError`: choosing the
+  already selected connection cannot resolve it. Its error tells the operator
+  to use an exact physical read where available or create replacement
+  connection(s) whose destination tables differ by more than ASCII letter case.
+- Connection creation and query error behavior are now user-facing. The
+  original docs-N/A disposition is superseded: update connection/query manual
+  and website guidance, then record runtime-help, manual, website, and
+  generated-surface applicability honestly.

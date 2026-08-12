@@ -17,3 +17,13 @@ findings are the seven pre-existing #3897 planning-file hard breaks.
 The next deliberately deferred stages are no-mistakes, draft stacked PR
 creation, and exact-head CI, which Firstmate coordinates after transport Sol
 r4. No PR has been created or changed by this phase.
+
+## Correction 1 / 5 supersession
+
+The independent final Sol audit of the later managed head `d9022359` found a
+same-owner case-equivalent destination inventory not covered by this original
+summary. The earlier cross-owner result remains valid but is insufficient for
+the accepted policy. Correction 1 is now planned with strict committed RED
+pending; no further claim of #4069 completion or merge readiness is valid until
+its new GSD/TDD, local, no-mistakes, exact-head CI, and independent Sol gates
+are complete.

@@ -8,11 +8,18 @@ wave: 1
 branch: fix/4069-flow-case-equivalent-unique-tables-r1
 base_branch: feat/3897-flow-connection-scope-nm
 immutable_start_head: 659efd8a0d69f26b55fcbd3c02150e995c159519
-correction_budget: 0/5
+correction_budget: 1/5
 files_modified:
   - .planning/phases/issue-4069-flow-case-equivalent-unique-tables-r1/
+  - internal/app/app.go
   - internal/app/query_engine_duckdb.go
+  - internal/warehouse/layout.go
+  - internal/cli/docs.go
+  - internal/app/warehouse_connection_isolation_test.go
   - internal/cli/flow_cli_test.go
+  - docs/cli/connections.md
+  - docs/cli/query.md
+  - website/content/docs/query.mdx
 autonomous: true
 ---
 
@@ -38,7 +45,7 @@ verification, or review.
 Required skills: `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-error-handling`, `golang-security`, `golang-safety`,
 `golang-database`, `golang-design-patterns`,
-`golang-structs-interfaces`, and `golang-lint`.
+`golang-structs-interfaces`, `golang-lint`, and `golang-documentation`.
 
 ## Scope
 
@@ -124,3 +131,118 @@ exemption in the PR body.
 2. `test(4069): reproduce case-equivalent unique warehouse table failure`
 3. `fix(4069): preserve query availability for case-equivalent tables`
 4. `docs(4069): record broad correction verification`
+
+## Correction 1 / 5 — same-owner case-equivalent warehouse inventory
+
+### Authority and scope
+
+The independent Sol audit of PR #4071 at
+`d9022359e7b7bc2f7eb262c16177b52010681192` found that the prior GREEN only
+covers cross-owner canonical equivalence. This correction implements accepted
+policy 1 from
+`data/cli-github-4069-same-owner-case-policy-r1/report.md`, under the existing
+#4069 issue and draft #4071. It preserves every prior commit and starts no new
+issue, branch, worktree, PR, or #4066 correction loop.
+
+The active no-mistakes CI monitor was inspected before planning. It reports the
+local branch synchronized with its pipeline head and its version-matched help
+explicitly permits post-pipeline follow-up commits. The monitor remains active
+and is never aborted, restarted, updated, or answered by hand.
+
+### Slice C1-RED — commit the missing same-owner matrix before production code
+
+Add and commit failing tests before editing `internal/app` production code.
+Each typed assertion uses `errors.As`; each mutability assertion records actual
+state/file outcomes rather than relying only on exit status.
+
+1. `TestCreateConnectionRejectsSameOwnerASCIICaseEquivalentDestinationTablesBeforeSave`
+   creates a two-stream local-warehouse request whose effective destinations
+   are `records` and `RECORDS`. It expects a typed same-owner collision after
+   defaults and before ID/save, with connection count, persisted bytes, and
+   revision unchanged. Exact duplicate spelling and non-local destinations
+   remain controls, not accidental new policy.
+2. `TestLegacySameOwnerCaseEquivalentStateLoadsWithoutRewriteAndSyncRefusesBeforeMutation`
+   seeds one persisted owner with distinct stream names and the two destination
+   spellings. `Open` must preserve it. Either stream's next ETL must return the
+   typed error before `beginRun`, run/stream/checkpoint state, owner record,
+   directory, WAL, temporary file, or Parquet file mutation.
+3. `TestSameOwnerCaseEquivalentQuerySQLReturnsTypedErrorForBareAndQuotedReferences`
+   covers generic and selected SQL, bare and quoted forms. It expects the new
+   type rather than DuckDB `Catalog Error` or a one-owner
+   `AmbiguousTableError`, while `SELECT 1` remains green and a real
+   `RECORDS__<owner-id>` table keeps priority over a generated alias.
+4. `TestSameOwnerCaseEquivalentFlowFailsWithoutSuccessCheckpoint` covers
+   unscoped and selected bare/quoted flow queries, returned failure/result,
+   absent success checkpoints, and schedule re-entry through the same flow
+   boundary. Existing cross-owner action/reverse/schedule selectors remain
+   regression controls.
+5. `TestExactTableReadDoesNotAliasMissingCaseVariantOnCaseInsensitiveFilesystem`
+   proves exact `QueryTable`, action, and reverse reads retain only physical
+   spellings the resolver can prove. It materializes one spelling on the host
+   filesystem and refuses the missing case variant without silently mapping it
+   to the survivor.
+
+Commit this RED slice as `test(4069): reproduce same-owner table collision`
+with the `TDD-LEDGER.md` RED command/trace before the implementation commit.
+
+### Slice C1-GREEN — one shared invariant and typed query boundary
+
+Implement the smallest shape that makes the RED matrix green:
+
+1. Keep one shared deterministic ASCII DuckDB identifier-key helper, avoiding
+   Unicode folding or a new alias namespace.
+2. Add one typed same-owner destination-table collision error containing the
+   display connection and sorted exact spellings/stream names but no path,
+   credential, or raw connector data.
+3. Validate a whole local-warehouse connection's effective stream inventory
+   after defaults in `CreateConnection`, before generating an ID or saving.
+   Validate the same configured inventory at the beginning of `RunETL`, before
+   `beginRun`. Leave non-local destinations unchanged.
+4. Preserve legacy `Open`; derive its query policy from declared destinations
+   plus the immutable resolver snapshot. Suppress only the collision's bare and
+   generated bindings, return the typed error through replacement-scan lookup
+   for bare/quoted collision references, and let unrelated SQL initialize.
+5. Preserve exact direct/action/reverse lookup and all inherited #4066/#3897
+   cross-owner, `_unattributed`, generated-alias, selector, and schedule
+   behavior. Do not parse/rewrite SQL, migrate data, reserve aliases, add
+   provider work, transport registration, production wiring, or certification
+   claims.
+
+Commit the minimum GREEN implementation as
+`fix(4069): guard same-owner case-equivalent tables`. Refactor only with all
+focused selectors green.
+
+### Slice C1-docs and verification
+
+Document the rejected creation configuration and legacy collision read/recovery
+path in `docs/cli/connections.md`, `docs/cli/query.md`, and
+`website/content/docs/query.mdx`. No new command or flag is introduced, so the
+runtime-help wording/golden changes are applicable only if the generated help
+already documents this behavior; run and record `pm connections`,
+`pm connections create --help`, `pm query`, `pm query run --help`, manual and
+website checks rather than claiming a blanket exemption.
+
+After GREEN, run targeted tests first, then the affected app/CLI/flow/warehouse
+packages, focused race selectors, `gofmt`, candidate `git diff --check`, vet,
+configured lint, generator/surface-sync/certification checks, docs/help/website
+checks, the PR issue guard, inline `verify-work`, and inline `code-review`.
+Record inherited findings separately. Drive no-mistakes without `--yes` only
+after this correction is committed and local gates are green; preserve #4071 as
+a draft against `feat/3897-flow-connection-scope-nm` and require exact-head CI.
+
+### Correction 1 checkpoint sequence
+
+5. `docs(4069): plan same-owner case-equivalent correction`
+6. `test(4069): reproduce same-owner table collision` (committed RED)
+7. `fix(4069): guard same-owner case-equivalent tables` (minimum GREEN)
+8. `docs(4069): record same-owner correction verification`
+
+The prior four checkpoints remain immutable evidence for the cross-owner
+correction. This is correction 1 / 5 in #4069, leaving four correction loops.
+
+### CLI/docs/website parity supersession
+
+The earlier no-public-surface exemption no longer applies. The change modifies
+creation and SQL error contracts, so connection/query manual and website docs
+are in scope. No connector credential, reverse-ETL execution, or new generic
+write surface is permitted.
