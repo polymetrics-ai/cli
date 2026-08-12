@@ -2,13 +2,15 @@
 
 ## Current target boundary
 
-The passing broad-validation record below applies only to
-`aa4d8c8a9fabfb230c3de44764f13b945814153d`. The current source target
-`cd92037fe8add4b6fc3e09c5b0a7648e5a0ab6c5` changes conformance admission and
-checkpoint provenance; evidence refresh committed at
-`82a95c609e3a62f37041c5503b75b1e18aa6dd1c`. Its focused RED/GREEN evidence is
-recorded in `TDD-LEDGER.md`; the outer validation phase must re-run broad
-validation before this record is used as current-head certification.
+The earlier broad-validation record below applies only to
+`aa4d8c8a9fabfb230c3de44764f13b945814153d`. The exact current-head validation
+target `97d4f49ada7806a4674e8915a52ccee878e76427` differs from the passed
+no-mistakes pipeline head `82a95c609e3a62f37041c5503b75b1e18aa6dd1c` only by
+the required #3856 review-evidence reconciliation. Its source target remains
+`cd92037fe8add4b6fc3e09c5b0a7648e5a0ab6c5`, which changes conformance
+admission and checkpoint provenance. The serial exact-head broad validation
+completed successfully on 2026-08-13; its focused RED/GREEN evidence remains
+in `TDD-LEDGER.md`.
 
 ## Broad validation record
 
@@ -22,7 +24,7 @@ validation before this record is used as current-head certification.
 | Race safety | focused engine `-race` test | pass |
 | Format/vet/build | scoped `gofmt`, `go vet ./...`, `go build ./cmd/pm` | pass |
 | Repository gates | individual AGENTS.md gates | pass; the credential-mutating smoke target is explicitly not applicable |
-| Exact binary | clean child-head `pm` byte count, SHA-256, and applicable no-credential smoke | pass; `148200034` bytes, `cd1744c464daca2c4e73d1eaa8869c3aa85494c895fe3a381fd0876647ede0e5`, `pm help` and bare `pm connectors` pass |
+| Exact binary | clean child-head `pm` byte count, SHA-256, and applicable no-credential smoke | pass at `97d4f49`; `148200034` bytes, `1f6e973cd25bc935c84731e0aafbea6a37840622586da93a906dfe6960232033`, `pm help` and bare `pm connectors` pass |
 | GSD verify/review | generated prompt, durable verification/review report | pass using the documented inline/manual fallback; see `3856-UAT.md` and `REVIEW.md` |
 | Independent audit | required Sol audit after final candidate | pending |
 | no-mistakes | `--skip=push,pr,ci`, no `--yes` | pass at `82a95c60`; review, focused test/race, document, and lint passed while push/PR/CI were intentionally skipped |
@@ -48,14 +50,60 @@ The gate created the no-skip runner transcript and eleven-scenario inventory in
 its required temporary evidence directory. Push, PR, and CI were deliberately
 skipped; no remote branch, PR, or CI state was created by this run.
 
-## Serialized validation hold
+## Exact-head broad revalidation — 2026-08-13
 
-paused: #3856 focused implementation complete; awaiting serialized broad validation gate
+Validation began from clean exact head
+`97d4f49ada7806a4674e8915a52ccee878e76427`. Each command ran one at a time;
+all returned success:
 
-The captain's resume record permits focused implementation and tests only at
-this point. No broad repository suite, race-heavy sweep, no-mistakes run,
-push, PR creation, CI, or merge has been started. The focused GREEN evidence
-and exact commands are recorded in `TDD-LEDGER.md`.
+- `go test -timeout 20m ./internal/connectors/engine -run '^(TestPollingWatermarkConformance|TestBoundedOverlapReferenceLaneDerivesTheOverlapRequest)$' -count=1`
+- `go test -timeout 20m ./internal/connectors/engine -count=1`
+- `go test -timeout 20m ./internal/synccontract -count=1`
+- `go test -timeout 20m ./internal/app -count=1`
+- `go test -timeout 20m ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$' -count=1`
+- `go test -race -timeout 20m ./internal/connectors/engine -run '^(TestPollingWatermarkConformance|TestBoundedOverlapReferenceLaneDerivesTheOverlapRequest)$' -count=1`
+- `gofmt -w internal/connectors/engine/polling_conformance.go internal/connectors/engine/polling_conformance_test.go` (no changes)
+- `git diff --check origin/feat/3855-polling-apply-foundations...HEAD`
+- `go vet ./...`
+- `make tidy-check`
+- `make lint`
+- `go build ./cmd/pm`
+- `./pm help`
+- `./pm connectors`
+- `make docs-check-no-build`
+- `make agent-contract-check`
+- `make connectorgen-validate`
+- `make connectorgen-surface-sync`
+- `make github-parity-artifacts-check`
+- `make connectorgen-certification-matrix`
+- `make connector-boundary`
+- `make connector-canon-check`
+- `make connector-runtime-preflight`
+- `make release-workflow-check`
+- `scripts/verify-gsd-workflow origin/feat/3855-polling-apply-foundations`
+
+The generated `pm` binary is `148200034` bytes with SHA-256
+`1f6e973cd25bc935c84731e0aafbea6a37840622586da93a906dfe6960232033`; both
+applicable no-credential smoke commands above passed. The generic #3810 corpus
+digest remains `7366873f91b326d7c35c15d36af74702fe413b9d62906b3fbc3279016a9efaa1`;
+the separate polling fixture digest is
+`3acf1e9bf13615c5355cc305a705cdcddec5d08ab80ece8024459860bb03e1a4`.
+
+`make smoke-no-build` remains not applicable because it creates local
+credentials and runs sample ETL/reverse-ETL flows, which exceed this
+test/corpus-only child's authorization. No live provider credentials, calls,
+mutations, database integration, public CDC promotion, push, PR, or merge
+occurred during this validation.
+
+## Historical serialized validation hold
+
+Historical state before the 2026-08-13 release: #3856 focused implementation
+complete; awaiting serialized broad validation gate.
+
+At that point, the captain's resume record permitted focused implementation and
+tests only. No broad repository suite, race-heavy sweep, no-mistakes run, push,
+PR creation, CI, or merge had started. The exact-head broad result is recorded
+above; the focused GREEN evidence and exact commands remain in `TDD-LEDGER.md`.
 
 ## Released broad validation
 

@@ -5,7 +5,7 @@
   "branch": "feat/3856-polling-conformance-corpus",
   "base_branch": "feat/3855-polling-apply-foundations",
   "base_sha": "fa5eef681a4b06c09519574326a22683b26bd996",
-  "status": "ready_for_pre_push_report",
+  "status": "broad_validation_green_pre_push_report",
   "adapter": "pi-project-local",
   "runtime_fallback": "inline manual execution of generated GSD prompts; the canonical single-worker contract forbids role spawning",
   "skills": [
@@ -18,7 +18,8 @@
     "golang-safety",
     "golang-context",
     "golang-concurrency",
-    "golang-lint"
+    "golang-lint",
+    "golang-cli"
   ],
   "scope": {
     "allowed": [
@@ -84,6 +85,11 @@
       "note": "no-mistakes review, focused test, document, and lint steps passed; push, PR, and CI were intentionally skipped, then the preserved pipeline head was recovered before evidence reconciliation",
       "no_mistakes_run": "01KZVGR0A7Y9ZQ31HK4AYK9DGX",
       "pipeline_head": "82a95c609e3a62f37041c5503b75b1e18aa6dd1c"
+    },
+    {
+      "status": "validated",
+      "note": "the released serial broad matrix passed at clean exact head 97d4f49; no production defect appeared and no remote action was taken",
+      "validation_head": "97d4f49ada7806a4674e8915a52ccee878e76427"
     }
   ],
   "focused_implementation": {
@@ -190,8 +196,22 @@
     "current_target": {
       "pipeline_head": "82a95c609e3a62f37041c5503b75b1e18aa6dd1c",
       "source_fix_head": "cd92037fe8add4b6fc3e09c5b0a7648e5a0ab6c5",
-      "qualification": "the prior broad record applies to aa4d8c8a9; no-mistakes focused validation passed for the #4075 target, but the required broad current-head validation must be refreshed before push"
+      "validation_head": "97d4f49ada7806a4674e8915a52ccee878e76427",
+      "result": "pass",
+      "qualification": "the required serial broad current-head validation passed: focused/full affected packages, bounded race, vet/lint/build, generated/repository/GSD gates, digest checks, and applicable no-credential binary smoke; no production defect appeared",
+      "binary": {
+        "bytes": 148200034,
+        "sha256": "1f6e973cd25bc935c84731e0aafbea6a37840622586da93a906dfe6960232033",
+        "smoke": [
+          "./pm help (pass)",
+          "./pm connectors (pass)"
+        ]
+      },
+      "corpus_digests": {
+        "polling": "3acf1e9bf13615c5355cc305a705cdcddec5d08ab80ece8024459860bb03e1a4",
+        "generic_3810": "7366873f91b326d7c35c15d36af74702fe413b9d62906b3fbc3279016a9efaa1"
+      }
     }
   },
-  "next": "report recovered #4075/no-mistakes evidence to Firstmate before any push; retain the exact parent base, draft-only topology, and #4072 serialization; refresh broad current-head validation before delivery resumes"
+  "next": "report exact-head broad-validation green evidence to Firstmate before any push; retain the exact parent base, draft-only topology, and #4072 serialization"
 }
