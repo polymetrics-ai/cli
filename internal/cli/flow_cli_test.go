@@ -982,10 +982,6 @@ func TestFlowLegacySameOwnerCaseEquivalentInventoryStopsAtTheTypedBoundary(t *te
 	require.Len(t, rows, 1)
 	assert.Equal(t, "1", fmt.Sprint(rows[0]["n"]))
 
-	type sameOwnerCollision interface {
-		error
-		SameOwnerCaseEquivalentTableCollision()
-	}
 	assertRejected := func(t *testing.T, name, connection, sql string, attempts int) {
 		t.Helper()
 		checkpoints := &flow.FileCheckpointStore{Dir: t.TempDir()}
@@ -1010,7 +1006,7 @@ func TestFlowLegacySameOwnerCaseEquivalentInventoryStopsAtTheTypedBoundary(t *te
 		for attempt := 1; attempt <= attempts; attempt++ {
 			result, runErr := engine.Run(ctx, flow.RunOptions{})
 			require.Error(t, runErr)
-			var collision sameOwnerCollision
+			var collision *warehouse.SameOwnerCaseEquivalentTableError
 			require.Truef(t, errors.As(runErr, &collision), "attempt %d error = %T %v", attempt, runErr, runErr)
 			var ambiguous *warehouse.AmbiguousTableError
 			assert.Falsef(t, errors.As(runErr, &ambiguous), "attempt %d used cross-owner ambiguity: %T %v", attempt, runErr, runErr)
@@ -1019,6 +1015,8 @@ func TestFlowLegacySameOwnerCaseEquivalentInventoryStopsAtTheTypedBoundary(t *te
 			assert.Contains(t, collision.Error(), "RECORDS")
 			assert.NotContains(t, collision.Error(), "set `connection`", "a selector cannot resolve one-owner destinations")
 			assert.NotContains(t, collision.Error(), "Catalog Error")
+			assert.Contains(t, collision.Error(), "exact resolver-visible table spelling")
+			assert.Contains(t, collision.Error(), "replacement connections")
 			assert.Equal(t, "failed", result.Status)
 			require.Len(t, result.Steps, 1)
 			assert.Equal(t, "failed", result.Steps[0].Status)
