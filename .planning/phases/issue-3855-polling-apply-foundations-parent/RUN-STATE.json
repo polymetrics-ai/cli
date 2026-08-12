@@ -111,20 +111,24 @@
     "range_diff": "all eight commits patch-equivalent",
     "conflicts": 0,
     "product_correction_delta": 0,
-    "status": "audited_bridge_plan_checkpoint_pending"
+    "status": "audited_bridge_verified"
   },
   "audited_preserved_history_bridge": {
-    "status": "planned_after_gap_checkpoint",
+    "status": "passed",
     "causal_red": "At clean e541170eef71f687990684b4f22fa7b21ab5a9fc, one fresh no-mistakes axi run with --skip=push,pr,ci was rejected before run creation because the internal validation-gate ref at b61d0fa7eefc719c39593e44afbcb1b7a3f76613 was non-fast-forward.",
     "command": "git merge --no-ff -s ours -m 'chore(gsd): reconcile #3855 preserved histories' refs/no-mistakes/recover/01KZQ6D2XW5GNWTRFSVRMYE2FZ",
-    "required_first_parent": "current pre-bridge gap-checkpoint head",
-    "required_second_parent": "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
-    "required_ancestors": [
+    "gap_checkpoint": "3b6e3e2e5ed5c1ea94b13a04b4e5eb46b8a575bd",
+    "bridge_head": "72a4fc326bbc809670eaf32ad6bacb448260bc1e",
+    "first_parent": "3b6e3e2e5ed5c1ea94b13a04b4e5eb46b8a575bd",
+    "second_parent": "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
+    "ancestors": [
       "7ea7350b8abc3f99c4831aa63a0373d6f1d70036",
       "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
       "c67f40a5ff67a131950f3123e70527027dca8493"
     ],
-    "required_tree_relation": "bridge tree byte-identical to first parent",
+    "tree_relation": "bridge tree byte-identical to first parent",
+    "remote_comparison_left_right": [0, 13],
+    "protected_blob": "889e4eddffabb76aa8be46a934c3e9abe0610f4c",
     "forbidden": [
       "ordinary content merge",
       "conflict resolution",
@@ -152,8 +156,7 @@
       "preserved_head": "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
       "custody": "returned via no-mistakes axi sync --recover before rebase"
     },
-    "argv": [
-    "status": "audited_bridge_then_fresh_validation_pending",
+    "status": "fresh_post_bridge_validation_pending",
     "pre_bridge_attempt": {
       "outcome": "rejected_before_new_run",
       "head": "e541170eef71f687990684b4f22fa7b21ab5a9fc",
@@ -161,7 +164,6 @@
       "reason": "internal validation-gate push rejected non-fast-forward",
       "external_effects": false
     },
-    "argv": [
     "argv": [
       "no-mistakes",
       "axi",
