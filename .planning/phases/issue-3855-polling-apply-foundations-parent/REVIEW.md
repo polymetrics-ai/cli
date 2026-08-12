@@ -27,3 +27,14 @@ executable product behavior. Draft PR #4041 was inspected through `gh-axi` REST 
 the exact temporary base and #3855 head. The terminal inherited-document edit was whole-reverted,
 leaving the #4015 architecture blob protected and the net range phase-only. Fresh validation of
 this evidence commit remains pending; the draft is not an authorization to merge.
+
+## 2026-08-12 topology-refresh review
+
+The fresh parent head `c67f40a5ff67a131950f3123e70527027dca8493` contains accepted transport PR
+#4059 and was absent from the recovered #3855 ancestry. The selected `--onto` rebase uses the exact
+old parent base `30b2fb4aeb121641b6158903fe1d3b54668599a6`; all eight replayed commits are
+patch-equivalent by `git range-diff`, with no conflicts and no paths outside this phase directory.
+This is the smallest safe refresh that makes the accepted seam available to future child #3856.
+
+No product, test, connector, PostgreSQL, or inherited #4015 document path is introduced. Fresh
+no-mistakes and final live PR inspection remain required before the recovery is handed off.

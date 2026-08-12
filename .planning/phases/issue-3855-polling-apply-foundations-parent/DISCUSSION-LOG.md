@@ -41,3 +41,16 @@ file remains protected at blob `889e4eddffabb76aa8be46a934c3e9abe0610f4c`.
 
 This is custody/topology recovery, not a correction round or product implementation. Fresh
 no-mistakes validation is required for the post-evidence SHA.
+
+## Accepted transport-seam recovery decision
+
+The fixed temporary base name did not change, but its accepted head did: transport PR #4059 merged
+into #4019 at `c67f40a5ff67a131950f3123e70527027dca8493`. The previous #3855 history was based on
+`30b2fb4aeb121641b6158903fe1d3b54668599a6`, and `c67f40a5...` was not its ancestor. The required
+answer is therefore a safe rebase of the existing parent history, not a new branch, PR, issue, or
+product change. All eight existing commits replayed cleanly and range-diff as patch-equivalent.
+
+The only fresh decision is mechanical and already fixed by the recovery brief: future #3856 must
+inherit the accepted transport seam. The draft remains on the named temporary branch relationship;
+it does not authorize a merge into #3862 or `main` and does not advance the canonical state beyond
+`parent_draft_pr`.

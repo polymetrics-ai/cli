@@ -15,7 +15,9 @@
   "branch": {
     "head": "feat/3855-polling-apply-foundations",
     "temporary_base": "feat/3862-any-to-any-transport",
-    "temporary_base_sha": "30b2fb4aeb121641b6158903fe1d3b54668599a6",
+    "initial_temporary_base_sha": "30b2fb4aeb121641b6158903fe1d3b54668599a6",
+    "temporary_base_sha": "c67f40a5ff67a131950f3123e70527027dca8493",
+    "accepted_transport_pr": 4059,
     "relationship": "dependency_only",
     "temporary_base_merge_forbidden": true,
     "final_retarget_base": "docs/4015-connector-release-certification",
@@ -82,7 +84,8 @@
       "base": "feat/3862-any-to-any-transport",
       "head": "feat/3855-polling-apply-foundations",
       "initial_verified_head_sha": "4099335632a79e3c70ce20c004a5f63933171280",
-      "final_head_reinspection": "pending fresh validation",
+      "remote_head_before_topology_refresh": "7ea7350b8abc3f99c4831aa63a0373d6f1d70036",
+      "final_head_reinspection": "pending post-refresh validation and explicit-lease push",
       "changed_files": 9
     },
     "child_inventory": [3856, 3857, 3858, 3859, 3860],
@@ -97,6 +100,17 @@
     "tree_restored_to": "b2d0f63029a34f8d647e57f34a747ad3983e1578",
     "product_correction_delta": 0
   },
+  "topology_refresh": {
+    "date": "2026-08-12",
+    "reason": "accepted #4059 transport seam at c67f40a5ff67a131950f3123e70527027dca8493 was not in #3855 ancestry",
+    "prior_local_head_after_guarded_custody_recovery": "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
+    "operation": "git rebase --onto origin/feat/3862-any-to-any-transport 30b2fb4aeb121641b6158903fe1d3b54668599a6",
+    "replayed_commit_count": 8,
+    "range_diff": "all eight commits patch-equivalent",
+    "conflicts": 0,
+    "product_correction_delta": 0,
+    "status": "fresh_local_validation_pending"
+  },
   "no_mistakes": {
     "previous_run": {
       "id": "01KZPY9EBYX84WZM11EN1F6C83",
@@ -105,13 +119,20 @@
       "terminal_head": "81f37c2b2cf638bfd6b06b35393256232ea6e23d",
       "whole_revert_head": "4099335632a79e3c70ce20c004a5f63933171280"
     },
-    "status": "fresh_validation_pending",
+    "prior_recovered_run": {
+      "id": "01KZQ6D2XW5GNWTRFSVRMYE2FZ",
+      "outcome": "passed",
+      "submitted_head": "7ea7350b8abc3f99c4831aa63a0373d6f1d70036",
+      "preserved_head": "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
+      "custody": "returned via no-mistakes axi sync --recover before rebase"
+    },
+    "status": "topology_refresh_validation_pending",
     "argv": [
       "no-mistakes",
       "axi",
       "run",
       "--intent",
-      "Open the #3855 polling/apply foundations draft parent as a reviewable planning-only stacked scaffold. Preserve #3856 -> #3857 -> (#3858 || #3859), keep #3860 as the follow-on documentation child, record #3880 as partial reuse, use #3862 only as the temporary dependency base, later retarget directly to docs/4015-connector-release-certification, and never merge into #3862 or main. The allowed PR-relative delta from 30b2fb4aeb121641b6158903fe1d3b54668599a6 is exactly the nine existing files under .planning/phases/issue-3855-polling-apply-foundations-parent/. docs/architecture/github-postgres-warehouse-certification.md is inherited #4015 content whose required base blob is 889e4eddffabb76aa8be46a934c3e9abe0610f4c; do not edit, remove, reformat, or auto-correct it. If a finding concerns that path or any non-phase path, report it for its owning issue instead of mutating it. Do not implement or claim product behavior.",
+      "Reconcile the existing #3855 polling/apply foundations draft parent with the accepted #4059 transport seam at c67f40a5ff67a131950f3123e70527027dca8493. Preserve the patch-equivalent existing planning-only parent range, keep #3856 -> #3857 -> (#3858 || #3859), retain #3860 as the follow-on documentation child, and record #3880 only as partial reuse. Keep #3862 as the temporary dependency-only base, later retarget directly to docs/4015-connector-release-certification, and never merge into #3862 or main. The allowed PR-relative delta from c67f40a5ff67a131950f3123e70527027dca8493 is exactly the nine existing files under .planning/phases/issue-3855-polling-apply-foundations-parent/. docs/architecture/github-postgres-warehouse-certification.md is inherited #4015 content whose required base blob is 889e4eddffabb76aa8be46a934c3e9abe0610f4c; do not edit, remove, reformat, or auto-correct it. If a finding concerns that path or any non-phase path, report it for its owning issue instead of mutating it. Do not implement or claim product behavior.",
       "--skip=push,pr,ci"
     ],
     "forbidden_flags": [

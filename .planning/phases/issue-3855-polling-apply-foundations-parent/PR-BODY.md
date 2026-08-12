@@ -14,6 +14,9 @@ Refs #3862
 - Current dependency-only base: `feat/3862-any-to-any-transport`
 - Head: `feat/3855-polling-apply-foundations`
 - Required state: draft
+- Accepted transport seam: #4059 is now merged into this base at
+  `c67f40a5ff67a131950f3123e70527027dca8493`; the #3855 planning-only range was safely replayed
+  onto that head so future #3856 work inherits it.
 - Retarget rule: before final parent integration, retarget to
   `docs/4015-connector-release-certification` once the reviewed transport seam is present there.
   This branch must never target or merge to `main`.
@@ -42,7 +45,8 @@ reusable polling implementation. It does not complete or close #3856, #3857, #38
 - State ledger: `.planning/phases/issue-3855-polling-apply-foundations-parent/`
 - Current canonical state: `parent_draft_pr`
 - Verified draft: #4041 is open and draft with base `feat/3862-any-to-any-transport` and head
-  `feat/3855-polling-apply-foundations`; fresh validation will re-inspect its final head SHA.
+  `feat/3855-polling-apply-foundations`; post-refresh validation will re-inspect its final head
+  SHA and ancestry from `c67f40a5...`.
 - Next state: `map_wave_phase`; child implementation remains pending.
 - Worker mode: single-worker inline/manual GSD fallback; no roles were spawned.
 - Integration/merge: prohibited in this scaffold; final parent integration remains human-gated.
@@ -54,8 +58,9 @@ reusable polling implementation. It does not complete or close #3856, #3857, #38
 - The terminal document commit from no-mistakes run `01KZPY9EBYX84WZM11EN1F6C83` was retained in
   ancestry and whole-reverted; the accepted tree and protected #4015 architecture blob were
   restored exactly.
-- Fresh no-mistakes validation is pending for this phase-only evidence commit. It must not alter
-  `docs/architecture/github-postgres-warehouse-certification.md`.
+- The accepted transport refresh replays eight patch-equivalent planning-only commits without a
+  product change. Fresh no-mistakes validation is pending for this evidence commit; it must not
+  alter `docs/architecture/github-postgres-warehouse-certification.md`.
 
 ## Automated review
 
