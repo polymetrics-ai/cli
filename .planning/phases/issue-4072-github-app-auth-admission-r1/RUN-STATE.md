@@ -26,6 +26,8 @@
 | execute GREEN | complete | focused secret-blind transport/coordinator matrix passes; GREEN commit `3f83bf3af` |
 | verify-work | complete (inline automatic fallback) | `UAT.md`, bounded functional/race/vet evidence |
 | code-review | complete (inline manual deep review) | `REVIEW.md` |
+| gap plan / local broad acceptance | in progress (inline manual fallback) | `GAP-PLAN.md` |
+| no-mistakes | prepared, held | `NO-MISTAKES-HANDOFF.md`; wait for #3856 heavy validation release |
 
 ## Manual GSD Fallback
 
@@ -38,8 +40,10 @@ plan, TDD ledger, verification, UAT, summary, and review artifacts.
 ## Guardrails
 
 - Do not use the preserved exhausted no-mistakes run or alter its worktree.
-- Do not run no-mistakes, broad suite, race-heavy sweep, push, PR, merge, or CI
-  until Firstmate explicitly releases the shared #4071 validation gate.
+- Run only the reconciliation report's bounded broad local acceptance matrix;
+  do not run no-mistakes while #3856 is in heavy validation.
+- Do not push, create a PR, merge, or CI-drive until the exact #3754 parent
+  publication decision is authoritative.
 - Do not select a parent PR route; record `needs-decision` at delivery only if
   Firstmate has not supplied an authoritative safe target.
 
@@ -52,3 +56,13 @@ plan, TDD ledger, verification, UAT, summary, and review artifacts.
 - `GOMAXPROCS=2 go test -p 1 -race ./internal/connectors/engine ./internal/connectors/hooks/github -run '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)' -count=1` — pass.
 - `go vet ./internal/connectors/engine ./internal/connectors/hooks/github` — pass.
 - No no-mistakes run, broad suite, race sweep, push, PR, CI, or merge was started.
+
+## Resumed Intake Provenance
+
+The historic phase snapshot SHA-256 remains
+`939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`.
+At broad-validation intake, the current canonical plan file hashes
+`5c7aeeacdb5792ad259abb709f3d732f183f5d19b03db4c9863b3ef566044e06` and
+the current live ledger explicitly releases local #4072 acceptance. The
+reconciliation report's unchanged bounded matrix is the only authorized test
+scope.

@@ -1,7 +1,7 @@
 ---
 phase: issue-4072-github-app-auth-admission-r1
 verified: 2026-08-12T00:00:00Z
-status: focused_verification_complete
+status: broad_validation_planned
 score: 5/5 must-haves verified
 ---
 
@@ -39,9 +39,20 @@ roadmap, and the single-worker contract forbids role spawning, so verify-work
 is recorded as an inline automatic fallback in `UAT.md`. The completed inline
 deep review is recorded in `REVIEW.md`.
 
+## Resumed Broad-Validation Gap
+
+The current live execution ledger explicitly releases **local** #4072
+acceptance while preserving the no-mistakes serialization behind #3856 heavy
+validation. `GAP-PLAN.md` records the report-defined command matrix and
+`NO-MISTAKES-HANDOFF.md` records the prepared-but-held local-only pipeline
+vector. The historical phase snapshot remains
+`939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`; the
+current canonical plan file observed at resumed intake hashes
+`5c7aeeacdb5792ad259abb709f3d732f183f5d19b03db4c9863b3ef566044e06`.
+
 ## Deferred by Firstmate Shared Validation Gate
 
-Repository-wide lint, generator/docs/help/website parity checks, issue guard,
-no-mistakes, full CI, push, PR, and parent-route decision remain deferred to
-Firstmate's shared #4071 validation gate. This is a focused verification report,
-not a substitute for those release gates.
+The report-defined local lint, generator/docs, CLI, build, and workflow checks
+are now planned. No-mistakes, push, PR, CI, parent-route decision, merge, and
+the UDS child remain deferred. This is not a substitute for those release
+gates.
