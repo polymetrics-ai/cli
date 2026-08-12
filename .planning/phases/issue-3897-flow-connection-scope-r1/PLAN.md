@@ -1,9 +1,9 @@
 # #3897 — Connection-scoped flow warehouse reads
 
-**Issue:** #3897  
-**Parent:** #3988  
-**Branch:** `feat/3897-flow-connection-scope` from `feat/3988-github-certification`  
-**PR base:** exactly `feat/3988-github-certification`  
+**Issue:** #3897
+**Parent:** #3988
+**Branch:** `feat/3897-flow-connection-scope` from `feat/3988-github-certification`
+**PR base:** exactly `feat/3988-github-certification`
 **Status:** GREEN verified locally through correction 3 / 5 — pending the
 required no-mistakes, push, draft-PR, and CI handoff gates
 
