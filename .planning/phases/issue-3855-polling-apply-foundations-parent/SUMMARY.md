@@ -1,7 +1,7 @@
 ---
 phase: issue-3855-polling-apply-foundations-parent
 issue: 3855
-status: audited_bridge_plan_checkpoint_pending
+status: audited_bridge_verified_pending_fresh_validation
 coverage:
   - id: PARENT-TOPOLOGY
     description: A draft-only #3855 parent records exact branch dependency, child order, scope fence, and historical reuse without claiming product implementation.
@@ -29,6 +29,8 @@ The completed local no-mistakes run's out-of-scope terminal document commit rema
 was whole-reverted, restoring the accepted tree and protected #4015 architecture blob exactly. The
 fresh pre-bridge no-mistakes start at `e541170e...` reproduced the audited causal RED: its internal
 validation-gate ref at `b61d0fa7...` rejected the refreshed history as non-fast-forward before a
-pipeline run or external effect. The next bounded step is the audited non-force, tree-preserving
-`-s ours` ancestry bridge after fixed-SHA rechecks; its GREEN assertions must pass before another
-fresh local run. The recovery consumes zero substantive correction rounds.
+pipeline run or external effect. The audited tree-preserving `-s ours` bridge passed at
+`72a4fc32...`: its first parent is `3b6e3e2e...`, second parent `b61d0fa7...`, its tree and
+protected blob are unchanged, all required ancestry is present, and remote comparison is `0 13`.
+Fresh local no-mistakes validation remains the next gate. The recovery consumes zero substantive
+correction rounds.

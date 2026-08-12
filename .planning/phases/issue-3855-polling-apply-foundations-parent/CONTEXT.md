@@ -92,11 +92,13 @@ validation-gate ref still ends at preserved head
 `b61d0fa7eefc719c39593e44afbcb1b7a3f76613`, so it rejected the refreshed head as non-fast-forward
 before a new pipeline run or external effect existed.
 
-The audited recovery first commits this bounded nine-file GSD gap plan. It then rechecks the fixed
+The audited recovery first committed bounded nine-file GSD gap checkpoint
+`3b6e3e2e5ed5c1ea94b13a04b4e5eb46b8a575bd`, then rechecked the fixed
 remote/preserved/transport SHAs and protected blob before creating exactly one non-content merge:
 `git merge --no-ff -s ours -m "chore(gsd): reconcile #3855 preserved histories"
-refs/no-mistakes/recover/01KZQ6D2XW5GNWTRFSVRMYE2FZ`. GREEN requires that merge's first parent to
-be the checkpoint head, its second parent to be `b61d0fa7...`, its tree to equal the checkpoint
-tree byte-for-byte, and `7ea7350b...`, `b61d0fa7...`, and `c67f40a5...` all to be ancestors. No
-ordinary content merge, conflict resolution, rebase, reset, cherry-pick, force operation, external
-push, PR update, or parent merge is allowed in this recovery stage.
+refs/no-mistakes/recover/01KZQ6D2XW5GNWTRFSVRMYE2FZ`. GREEN passed at merge
+`72a4fc326bbc809670eaf32ad6bacb448260bc1e`: first parent is the checkpoint, second parent is
+`b61d0fa7...`, its tree is byte-identical to the checkpoint tree, and `7ea7350b...`,
+`b61d0fa7...`, and `c67f40a5...` are all ancestors. The remote comparison is `0 13`; no ordinary
+content merge, conflict resolution, rebase, reset, cherry-pick, force operation, external push, PR
+update, or parent merge occurred.

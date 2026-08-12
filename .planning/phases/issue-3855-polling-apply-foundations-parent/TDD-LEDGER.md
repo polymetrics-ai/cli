@@ -11,7 +11,7 @@ not product behavior; no production or test code is permitted in this seed.
 | P4 | A draft parent records dependency without unauthorized integration | No current draft parent PR/seed is available to represent the #3862 dependency | Draft PR #4041 is open/draft with the exact #3862 base and #3855 head; the body prohibits merge to #3862 or `main` and requires later retarget | green — fresh post-refresh validation pending |
 | P5 | The scaffold cannot smuggle product work | A parent documentation change could accidentally widen into connector/transport/PostgreSQL code | Whole-revert restored the accepted tree; changed-path and protected-blob checks permit only this phase directory | green — fresh post-refresh validation pending |
 | P6 | Future child #3856 inherits the accepted transport seam | `c67f40a5ff67a131950f3123e70527027dca8493` was not an ancestor of the recovered #3855 head, so the parent still inherited only pre-#4059 transport | `git rebase --onto c67f40a5... 30b2fb4a...` replays all eight parent commits cleanly; `git range-diff` marks each patch-equivalent and `c67f40a5...` becomes an ancestor of the refreshed head | green — fresh post-refresh validation pending |
-| P7 | Fresh no-mistakes custody can accept the refreshed history without content loss | At clean `e541170e...`, the one authorized `axi run --skip=push,pr,ci` was rejected before run creation because the local validation-gate ref at `b61d0fa7...` was non-fast-forward | The audited `-s ours` bridge has an unchanged tree, first parent=checkpoint, second parent=`b61d0fa7...`, and ancestors `7ea7350b...`, `b61d0fa7...`, and `c67f40a5...`; a new local run may then start | red observed; green pending bridge assertions |
+| P7 | Fresh no-mistakes custody can accept the refreshed history without content loss | At clean `e541170e...`, the one authorized `axi run --skip=push,pr,ci` was rejected before run creation because the local validation-gate ref at `b61d0fa7...` was non-fast-forward | `72a4fc32...` is a tree-identical `-s ours` bridge with first parent `3b6e3e2e...`, second parent `b61d0fa7...`, required remote/preserved/transport ancestry, and remote comparison `0 13` | green bridge assertions; fresh local run pending |
 
 ## Execution evidence
 
@@ -39,6 +39,5 @@ protected inherited #4015 architecture blob.
   run. Its internal gate refused `e541170e...` because the preserved validation ref was
   `b61d0fa7...`; no external push, PR mutation, CI action, product edit, or correction round was
   created.
-- **Green:** after this nine-file plan checkpoint, the bridge is permitted only as the specified
-  non-content `--no-ff -s ours` merge with all tree, parent, protected-blob, and ancestry assertions
-  passing. A fresh no-mistakes run remains pending after that proof.
+- **Green:** after nine-file checkpoint `3b6e3e2e...`, merge `72a4fc32...` passed all specified
+  tree, parent, protected-blob, and ancestry assertions. A fresh no-mistakes run remains pending.

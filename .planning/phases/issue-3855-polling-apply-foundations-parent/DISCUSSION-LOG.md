@@ -63,9 +63,10 @@ causal RED, not a pipeline outcome: its internal validation-gate branch remained
 `b61d0fa7eefc719c39593e44afbcb1b7a3f76613` and rejected the refreshed branch as non-fast-forward
 before a new run, external push, PR update, or CI action occurred.
 
-The bounded recovery is already decided by the reconciliation audit. After this plan checkpoint,
-recheck every fixed SHA and create only the specified `--no-ff -s ours` merge of the preserved
-recovery ref. The content tree must remain unchanged; its sole purpose is to carry both valid
-ancestries so the validation gate can accept a normal fast-forward relation. Any content difference,
-conflict, changed fixed SHA, non-phase change, protected-blob change, or new synchronous gate stops
-the work. This is neither an ordinary merge nor authorization to merge #4041, #4019, or `main`.
+The bounded recovery is already decided by the reconciliation audit. After checkpoint
+`3b6e3e2e...`, every fixed SHA and the protected blob remained exact, and the specified
+`--no-ff -s ours` merge of the preserved recovery ref produced `72a4fc32...`. Its content tree is
+unchanged, its parents are checkpoint then `b61d0fa7...`, it carries all required ancestry, and its
+remote comparison is `0 13`; its sole purpose is to carry both valid ancestries so the validation
+gate can accept a normal fast-forward relation. This is neither an ordinary merge nor authorization
+to merge #4041, #4019, or `main`. A fresh local pipeline remains the next gate.

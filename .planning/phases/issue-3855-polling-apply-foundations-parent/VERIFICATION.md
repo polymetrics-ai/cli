@@ -24,8 +24,9 @@
 | Preserved parent range | guarded `no-mistakes axi sync --recover`; `git rebase --onto origin/feat/3862-any-to-any-transport 30b2fb4a...`; `git range-diff 30b2fb4a...b61d0fa7... c67f40a5...HEAD` | passed — all eight commits patch-equivalent, no conflicts |
 | Refreshed ancestry and scope | `git merge-base --is-ancestor c67f40a5... HEAD`; `git diff --check`; changed-path assertion | passed — accepted transport head is an ancestor and exactly the nine phase files remain |
 | Causal pre-bridge start | fresh `no-mistakes axi sync --check` returned `custody_returned` / `run_pipeline`; one `axi run --skip=push,pr,ci` | RED observed — internal validation-gate ref `b61d0fa7...` rejected clean `e541170e...` as non-fast-forward before new-run creation or external effect |
-| Audited preserved-history bridge | exact `git merge --no-ff -s ours` command after fixed-SHA rechecks | pending — require unchanged tree, first parent=checkpoint, second parent=`b61d0fa7...`, and remote/preserved/transport ancestry |
+| Audited preserved-history bridge | exact `git merge --no-ff -s ours` command after fixed-SHA rechecks | passed — `72a4fc32...` tree equals `3b6e3e2e...`; parents are checkpoint then `b61d0fa7...`; `7ea7350b...`, `b61d0fa7...`, `c67f40a5...` are ancestors; remote comparison `0 13`; protected blob unchanged |
 | Post-bridge local no-mistakes | exact Stage-5 argv with `--skip=push,pr,ci`, no `--yes` | pending — every synchronous gate must be owned; no external stage may run |
+| Current planning-only local gates | `scripts/gsd` execute/verify/review prompts resolved inline; `go run ./cmd/agentcontractgen check`; `make tidy-check`; `make docs-check`; `make lint` | passed at bridge head — no Go/runtime/product gate is applicable |
 
 ## GSD verification result
 
@@ -45,10 +46,9 @@ listed above. A passing documentation check never certifies product behavior.
 
 ## Pending audited recovery checks
 
-After committing this bounded gap plan, recheck remote `7ea7350b...`, preserved
-`b61d0fa7...`, transport `c67f40a5...`, and the protected blob. Create only the audited,
-tree-preserving non-force `-s ours` bridge and prove its parents, unchanged tree, and ancestry.
-Then run the contract-owned no-mistakes local pipeline without `--yes` and with
+The bounded gap plan and audited tree-preserving non-force `-s ours` bridge now passed every fixed
+SHA, parent, tree, ancestry, protected-blob, scope, and local planning-only gate assertion. Run the
+contract-owned no-mistakes local pipeline without `--yes` and with
 `--skip=push,pr,ci`. No external push, PR update, or CI action is part of this stage. Any later
 existing-branch update must first prove `7ea7350b...` is an ancestor and use a normal non-force
 push, followed by exact-head CI and live draft/base/head inspection.
