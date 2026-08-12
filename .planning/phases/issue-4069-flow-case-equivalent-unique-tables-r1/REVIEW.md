@@ -129,3 +129,48 @@ and its explicit GSD evidence, not a waiver of review.
 - The exact #4071 failure is causally reproduced by generator ownership, not
   suppressed: the committed RED trace names the failing run IDs and the GREEN
   trace proves the scoped correction.
+
+## Correction 2 / 5 inline code review — flow manual generator parity
+
+**Mode:** standard inline GSD `code-review` fallback after resolving the
+project prompt. The existing #4069 phase is not a numbered ROADMAP phase and
+the delivery contract forbids role delegation; the fallback preserves the
+review requirement.
+
+**Result:** PASS — no Critical, Warning, or Info candidate finding.
+
+### Reviewed boundary
+
+- `internal/cli/docs.go` remains the manual authority. The exact three
+  fail-closed owner-selection lines are inserted immediately after the existing
+  omitted-owner refusal in `flowHelp`; no checked-in CLI markdown is used as a
+  source of truth.
+- The one-word `connectionsHelp` repair is causally required by the same golden
+  map iteration and accurately describes `RunETL`'s configured local-warehouse
+  inventory validation before a run begins. It is help-text parity only, not a
+  runtime behavior change.
+- The golden transcript generator changes only the expected flow/connections
+  help, bare-manual, and JSON-manual values. `pm docs generate` reproduces the
+  tracked manuals without a markdown diff, and the website generator has no
+  output dependency on this manual change.
+- The candidate range contains no provider credentials, SQL or warehouse-policy
+  logic, connector metadata, transport wiring, dependency, workflow, PR, or
+  website-source change. The existing #4069 typed ambiguity, generic SQL, and
+  direct-read behavior therefore remain untouched.
+
+### Evidence inspected
+
+- The committed causal RED records both the map-order companion mismatch and
+  the exact `flow.md` CI failure before the authoritative source edit.
+- Focused manual/golden/docs selectors, full `internal/cli`, vet, configured
+  lint, docs/contract/connectorgen checks, no-install website lint/typecheck/
+  unit/script/build, and `scripts/verify-gsd-workflow` pass.
+- The candidate diff from `678e294568a8a010a460ecb05fe11a42e1eb40f2` is
+  clean under `git diff --check`; the 13 Website lint warnings are inherited
+  and outside touched paths.
+
+### Finding disposition
+
+No candidate finding remains. The remaining no-mistakes custody and natural
+exact-head CI are delivery gates, not local review findings; #4071 topology is
+explicitly untouched.

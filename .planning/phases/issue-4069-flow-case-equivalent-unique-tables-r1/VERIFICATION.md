@@ -156,10 +156,29 @@ the causal RED; it must not be rerun remotely.
       focused transcript and manual tests pass.
 - [x] The checked-in website data generator is run twice; its exact scoped
       output or no-change result is recorded without altering website sources.
-- [ ] Focused CLI/manual, relevant Go, docs/generator/lint, and candidate
+- [x] Focused CLI/manual, relevant Go, docs/generator/lint, and candidate
       diff checks pass; inherited findings are separate from candidate output.
-- [ ] Inline/manual GSD verify-work and code-review record no remaining gap.
+- [x] Inline/manual GSD verify-work and code-review record no remaining gap.
 - [ ] One new no-mistakes run without `--yes` records PR/CI as skipped and
       pushes only the existing #4069 branch through supported custody.
 - [ ] Existing draft #4071 naturally reaches green exact-head checks before a
       fresh independent Sol audit; no workflow is rerun manually.
+
+### Correction 2 local/GSD verification
+
+The focused golden/manual selector and full `internal/cli` package passed with
+`-timeout 20m`. `go vet ./...`, direct and configured Go lint, `gofmt`,
+`go build ./cmd/pm`, `make docs-check-no-build`, the agent-contract check, and
+the canonical connector validation/surface-sync checks passed. The checked-in
+website generator was idempotent; Website lint exited 0 with its 13 inherited
+warnings, while typecheck, unit, script, and build checks passed. The candidate
+range from `678e294568a8a010a460ecb05fe11a42e1eb40f2` through the minimum
+GREEN commit changes only the source-owned help string, its golden transcripts,
+and #4069 planning evidence; `git diff --check` is clean.
+
+`scripts/verify-gsd-workflow` passed against `origin/main`, confirming the
+implementation files have #4069 GSD/TDD evidence. The resolved `verify-work`
+and `code-review` prompts were executed inline under the recorded single-worker
+fallback and found no acceptance gap or candidate finding. Exact commands,
+results, generator idempotence, and the separate inherited-warning disposition
+are in `traces/correction-2-flow-manual-broad-verification.txt`.

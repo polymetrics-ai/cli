@@ -417,3 +417,11 @@ credential, transport, or production behavior paths.
 10. `test(4069): reproduce flow manual generator drift` (committed RED)
 11. `fix(4069): generate fail-closed flow manual` (minimum GREEN)
 12. `docs(4069): record flow manual correction verification`
+
+### Correction 2 execution record
+
+The planned checkpoint, causal RED, and minimum GREEN are committed at
+`6a30fa3cf`, `03faea3c0`, and `f9b5654c8` respectively. The final evidence
+checkpoint records the focused/manual, broad local, generator, lint, and
+inline GSD verification before one fresh `no-mistakes` run. It does not alter
+the existing draft #4071 or request a GitHub workflow rerun.

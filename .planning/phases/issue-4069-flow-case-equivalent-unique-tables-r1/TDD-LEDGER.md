@@ -266,3 +266,21 @@ CLI manual files.
 The focused manual/transcript/docs selectors passed, as did direct `pm help
 flow`, bare `pm flow`, and `pm flow --json` inspection. The exact commands and
 scoped diff are in `traces/correction-2-flow-manual-golden-drift-green.txt`.
+
+## Recorded correction 2 broad local/GSD verification
+
+The exact manual golden selector and the full `internal/cli` package pass with
+`-timeout 20m`. `go vet ./...`, `golangci-lint run ./internal/cli`, `make lint`,
+`gofmt`, and `go build ./cmd/pm` pass. The docs validator, agent-contract
+check, connector validator, and canonical surface-sync check pass. Website
+lint exits 0 with 13 inherited warnings in untouched files; its typecheck, 80
+unit tests, 27 script tests, and production build pass without an install or a
+secret. The checked-in website generator is a second clean no-change run.
+
+`git diff --check` for the correction-2 range is clean. The exact range has no
+hand-authored `docs/cli/flow.md` or website source change: it is limited to the
+authoritative help source, regenerated golden transcript values, and GSD/TDD
+evidence. `scripts/verify-gsd-workflow` passes against `origin/main`. The
+manual inline `verify-work` and `code-review` steps pass with no candidate gap
+or finding. Full non-secret command records are in
+`traces/correction-2-flow-manual-broad-verification.txt`.

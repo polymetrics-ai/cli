@@ -70,3 +70,23 @@ is outside this no-install recovery. The next gate is one fresh no-mistakes
 run without `--yes` and with `--skip=pr,ci`; its outcome is local pipeline
 evidence only. Existing draft #4071 topology and natural GitHub exact-head CI
 remain the delivery authority.
+
+## Correction 2 / 5 — authoritative flow manual parity
+
+The existing #4071 Verify failure was reproduced locally before a source edit:
+the generated `flow.md` omitted the three approved fail-closed
+case-equivalent-owner lines because `internal/cli/docs.go:flowHelp` lacked
+them. The same pipeline document commit also left `connectionsHelp` at `its
+local sync` while its tracked generated manual said `any local sync`. The
+correction changes only those authoritative embedded help strings and the
+source-owned golden transcript values; it never hand-edits `docs/cli/flow.md`
+or changes runtime warehouse behavior.
+
+CLI manuals, golden transcript values, and the checked-in website data
+generator were regenerated twice to prove idempotence. Focused/manual and full
+CLI tests, Go quality gates, docs/contract/generator checks, no-install website
+checks, candidate-diff validation, and the inline GSD verify/review fallback
+all pass. The Website lint warnings remain the existing 13 warnings in
+untouched paths. The only remaining delivery step is one fresh no-mistakes run
+with PR and CI explicitly skipped; #4071 remains the sole existing draft
+stacked PR, and its naturally triggered exact-head checks remain authoritative.
