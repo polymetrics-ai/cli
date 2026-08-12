@@ -4,7 +4,9 @@
 
 - An embedded, versioned `v1` polling-watermark corpus with SHA-256 evidence
   and defensive copies, independent from #3810's generic corpus.
-- A reusable registered-lane runner with no fixture, filter, or skip input.
+- A reusable registered-lane runner with no fixture, filter, or skip input;
+  registration fails closed on unsafe descriptor contracts and persisted
+  checkpoints fail closed on incompatible provenance.
 - Eleven mandatory fixtures covering equal-watermark page replay, empty and
   non-advancing pages, raw NULL/precision/coercion policy, unstable keysets,
   bounded overlap/commit lag, source/schema incompatibility, acknowledgement
@@ -19,6 +21,7 @@
 - `00891ab91` — initial corpus and runner (#3856)
 - `3fc992f65` — #4074 bounded-overlap request derivation
 - `aa4d8c8a9` — staticcheck cleanup
+- `cd92037fe` — admission and checkpoint-provenance hardening
 
 ## Scope and exclusions
 

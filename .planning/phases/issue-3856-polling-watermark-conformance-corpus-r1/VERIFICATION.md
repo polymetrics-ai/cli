@@ -1,6 +1,15 @@
 # Verification — #3856 polling conformance corpus
 
-## Planned gates
+## Current target boundary
+
+The passing broad-validation record below applies only to
+`aa4d8c8a9fabfb230c3de44764f13b945814153d`. The current target
+`cd92037fe8add4b6fc3e09c5b0a7648e5a0ab6c5` changes conformance admission and
+checkpoint provenance. Its focused RED/GREEN evidence is recorded in
+`TDD-LEDGER.md`; the outer validation phase must re-run broad validation before
+this record is used as current-head certification.
+
+## Broad validation record
 
 | Area | Command/check | Status |
 | --- | --- | --- |

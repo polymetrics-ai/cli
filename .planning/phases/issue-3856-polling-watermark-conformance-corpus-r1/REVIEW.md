@@ -10,6 +10,7 @@ findings:
   total: 0
 review_mode: inline/manual GSD fallback
 reviewed_source_head: aa4d8c8a9
+follow_up_review_fix_head: cd92037fe
 ---
 
 # Code review — #3856 polling conformance corpus
@@ -49,8 +50,16 @@ rejects a mismatching expectation.
 struct conversion fixed it; this was style-only and does not increment the
 substantive correction count.
 
+## Follow-up review correction
+
+The later review-fix commit `cd92037fe` closes two additional false-
+certification gaps: registration now rejects unsafe descriptor-shaped
+contracts, and persisted checkpoint provenance must match the fixture. The
+focused RED/GREEN record is owned by `TDD-LEDGER.md`; this report's original
+reviewed source head remains `aa4d8c8a9`.
+
 ## Verdict
 
-Clean after the two recorded items. No remaining critical, warning, or info
-finding. This inline GSD review does not replace the required independent Sol
-audit, which remains pending after draft PR creation.
+The original review was clean after the two recorded items. The follow-up
+review fix above is in scope; the required independent Sol audit remains
+pending for the final target.
