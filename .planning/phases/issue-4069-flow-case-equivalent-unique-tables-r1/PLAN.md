@@ -367,11 +367,21 @@ Record the non-secret result in
 golden is the causal regression test; no unrelated test or behavior change is
 needed to make this RED meaningful.
 
+The golden iterates a Go map and stops at the first mismatch. A first local RED
+run therefore reported the companion `connections.md` mismatch introduced by
+the same pipeline-owned document commit: tracked text says `any local sync`
+while `connectionsHelp` still says `its local sync`. A second independent run
+reproduced the exact CI `flow.md` failure above. This is not a new behavior or
+delivery concern: the same generated-manual source must use the already
+tracked, more precise wording so the single golden can become green.
+
 ### C2-GREEN — fix source, never generated markdown
 
 Add the exact three lines to `internal/cli/docs.go`'s `flowHelp`, immediately
-after the existing omitted-owner refusal. Do not edit `docs/cli/flow.md` as a
-source. Then invoke the repository owners in this order:
+after the existing omitted-owner refusal. In the same authoritative source,
+change only the companion `connectionsHelp` phrase from `its local sync` to
+the already tracked `any local sync`. Do not edit either checked-in markdown
+manual as a source. Then invoke the repository owners in this order:
 
 ```text
 go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors

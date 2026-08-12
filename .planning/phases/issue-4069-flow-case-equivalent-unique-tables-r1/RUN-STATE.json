@@ -106,6 +106,7 @@
     "causal_ci_run": 31590254616,
     "red_selector": "go test -timeout 20m ./internal/cli -run '^TestGoldenDocsGenerateMatchesTrackedCLIManuals$' -count=1",
     "source_of_truth": "internal/cli/docs.go:flowHelp",
+    "companion_source_drift": "the same pipeline document commit left connectionsHelp at 'its local sync' while tracked connections.md says 'any local sync'; it is corrected only to restore generated-manual parity",
     "derived_outputs": [
       "docs/cli/flow.md",
       "internal/cli/testdata/golden_transcripts.json",

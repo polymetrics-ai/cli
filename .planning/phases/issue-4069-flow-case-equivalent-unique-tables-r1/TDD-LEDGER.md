@@ -220,7 +220,7 @@ this local gate.
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
-| C2. Authoritative flow manual | Existing `TestGoldenDocsGenerateMatchesTrackedCLIManuals` exits 1 because generated `flow.md` from `flowHelp` omits the approved three-line case-equivalent fail-closed remedy now tracked in `docs/cli/flow.md`. | `flowHelp` produces the exact manual wording; generated CLI markdown and golden transcripts are updated by their owners, and no manual source edit remains. | PLANNED 2026-08-12 |
+| C2. Authoritative flow manual | Existing `TestGoldenDocsGenerateMatchesTrackedCLIManuals` exits 1 because generated `flow.md` from `flowHelp` omits the approved three-line case-equivalent fail-closed remedy now tracked in `docs/cli/flow.md`; map iteration can also expose the same-commit `connectionsHelp` `its`/`any` drift first. | `flowHelp` and the one-word companion `connectionsHelp` source produce the exact tracked manuals; generated CLI markdown and golden transcripts are updated by their owners, and no manual source edit remains. | RED 2026-08-12 |
 | C2. Website generated output | The existing website source/aggregate may be stale after the CLI-manual correction. | Run the checked-in website generator twice; retain only owned output and record a no-change result when CLI manuals are not an input. | PLANNED 2026-08-12 |
 
 ### Correction 2 RED command
@@ -236,9 +236,16 @@ non-secret command result belongs in
 `traces/correction-2-flow-manual-golden-drift-red.txt` before any `flowHelp`
 edit.
 
+The first run also recorded the same pipeline-document commit's one-word
+`connections.md` source drift. Because the test stops at one randomly chosen
+map entry, a second run captured the exact `flow.md` CI failure; both are in
+the causal RED trace. The companion correction stays limited to the embedded
+manual source and does not change runtime behavior.
+
 ### Correction 2 GREEN rule
 
-The only hand-authored behavior text is the existing `flowHelp` source. Use
+The only hand-authored behavior text is the existing `flowHelp`/`connectionsHelp`
+source. Use
 `pm docs generate`, the opt-in golden transcript writer, and
 `website`'s checked-in generator for all derived files. Preserve all prior
 commits and runtime behavior; do not weaken the golden, manually edit
