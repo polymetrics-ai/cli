@@ -6,7 +6,7 @@
   "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "required_base_branch": "feat/3897-flow-connection-scope-nm",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "correction_1_gsd_planned_red_pending",
+  "status": "correction_1_red_committed_green_pending",
   "correction_budget": {
     "used_before": 0,
     "active_correction": 1,
@@ -66,11 +66,12 @@
     "manual_code_review": "passed: no unresolved candidate finding",
     "pr_issue_guard": "passed locally against a prospective draft body with Refs #4069",
     "inherited_baseline": "seven older #3897 planning-file trailing-whitespace findings remain outside the child range",
-    "next_gate": "committed same-owner RED before production implementation"
+    "next_gate": "minimum same-owner GREEN implementation after committed RED"
   },
   "correction_1": {
     "audit_handoff": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4066-case-equivalent-unique-tables-r1/correction-1-sol-audit-handoff.md",
     "audit_report": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4071-final-sol-audit-r1/report.md",
+    "canonical_finish_plan_sha256": "939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408",
     "audited_head": "d9022359e7b7bc2f7eb262c16177b52010681192",
     "verdict": "FINDINGS / DO NOT MERGE",
     "policy": "reject new same-owner ASCII-case-equivalent local-warehouse destination tables; preserve legacy state; fence legacy sync before beginRun; return a typed same-owner SQL collision while unrelated SQL remains available",
@@ -80,7 +81,7 @@
       "branch_sync": "synchronized / already_synchronized at d9022359",
       "follow_up_authority": "version-matched axi help explicitly permits post-pipeline follow-up commits on top of the existing branch"
     },
-    "red_status": "pending committed RED checkpoint",
+    "red_status": "committed: focused app and CLI Parquet/DuckDB RED reproduces creation, pre-mutation, SQL, flow, and schedule-re-entry gaps; exact direct resolver control retained",
     "docs_parity": "applicable: connection/query manual and website behavior guidance must be updated"
   }
 }

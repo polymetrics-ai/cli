@@ -9,6 +9,7 @@ branch: fix/4069-flow-case-equivalent-unique-tables-r1
 base_branch: feat/3897-flow-connection-scope-nm
 immutable_start_head: 659efd8a0d69f26b55fcbd3c02150e995c159519
 correction_budget: 1/5
+canonical_finish_plan_sha256: 939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408
 files_modified:
   - .planning/phases/issue-4069-flow-case-equivalent-unique-tables-r1/
   - internal/app/app.go

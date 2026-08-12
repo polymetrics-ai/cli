@@ -4,6 +4,8 @@
 were used before this correction.
 **Specification owner:** #4066 at its terminal 5 / 5; this is not loop 6
 **Starting head:** `659efd8a0d69f26b55fcbd3c02150e995c159519`
+**Correction-1 canonical finish-plan SHA-256:**
+`939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
@@ -81,20 +83,40 @@ and GREEN rows remain historical evidence and must not be rewritten.
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
-| C1. New connection invariant | One local-warehouse request contains distinct streams whose effective tables are `records` and `RECORDS`; creation currently succeeds or persists. Capture state bytes/count/revision and require `errors.As` to the new type. | Creation rejects after defaults and before ID/save; all captured persisted state remains unchanged. Exact duplicate spelling and non-local destination controls preserve their current behavior. | PLANNED — committed RED required before production edit |
-| C2. Legacy sync fence | A persisted same-owner collision opens unchanged, then its next stream run currently begins/persists a run and can mutate WAL/table state. | Open does not rewrite legacy state; either stream is rejected before `beginRun` and no run/checkpoint/stream/owner/directory/WAL/temp/Parquet state changes. | PLANNED — committed RED required before production edit |
-| C3. SQL policy | Generic/selected bare and quoted collision references currently either bind a survivor or encounter raw registration behavior; a one-owner `AmbiguousTableError` is not a truthful remedy. | A dedicated typed same-owner collision is returned only for the colliding key; `SELECT 1`, unrelated tables, and a real generated-alias collision control remain executable. | PLANNED — committed RED required before production edit |
-| C4. Flow and schedule boundary | Unscoped and selected bare/quoted collision flows can complete or report the wrong error/checkpoint outcome. | Each fails without a success checkpoint, including schedule re-entry; inherited cross-owner flow/action/reverse/schedule behavior remains green. | PLANNED — committed RED required before production edit |
-| C5. Exact physical reads | A case-insensitive physical path can have one surviving spelling even though legacy state declares two. | Direct query, action, and reverse reads use only resolver-proven physical spellings and refuse the missing variant without aliasing it. | PLANNED — committed RED required before production edit |
+| C1. New connection invariant | One local-warehouse request contains distinct streams whose effective tables are `records` and `RECORDS`; creation currently succeeds or persists. Capture state bytes/count/revision and require `errors.As` to the new type. | Creation rejects after defaults and before ID/save; all captured persisted state remains unchanged. Exact duplicate spelling and non-local destination controls preserve their current behavior. | RED recorded 2026-08-12 |
+| C2. Legacy sync fence | A persisted same-owner collision opens unchanged, then its next stream run currently begins/persists a run and can mutate WAL/table state. | Open does not rewrite legacy state; either stream is rejected before `beginRun` and no run/checkpoint/stream/owner/directory/WAL/temp/Parquet state changes. | RED recorded 2026-08-12 |
+| C3. SQL policy | Generic/selected bare and quoted collision references currently either bind a survivor or encounter raw registration behavior; a one-owner `AmbiguousTableError` is not a truthful remedy. | A dedicated typed same-owner collision is returned only for the colliding key; `SELECT 1`, unrelated tables, and a real generated-alias collision control remain executable. | RED recorded 2026-08-12 |
+| C4. Flow and schedule boundary | Unscoped and selected bare/quoted collision flows can complete or report the wrong error/checkpoint outcome. | Each fails without a success checkpoint, including schedule re-entry; inherited cross-owner flow/action/reverse/schedule behavior remains green. | RED recorded 2026-08-12 |
+| C5. Exact physical reads | A case-insensitive physical path can have one surviving spelling even though legacy state declares two. | Direct query, action, and reverse reads use only resolver-proven physical spellings and refuse the missing variant without aliasing it. | RED control passed 2026-08-12 |
 
 ### Correction 1 RED command set
 
-The exact focused command list and failing output will be committed in a new
-non-secret trace before any production implementation commit. It includes the
-five named cases in `PLAN.md`, selected app/CLI/flow/warehouse selectors, and
-the preserved cross-owner/generated-alias controls. RED evidence must use real
-test-owned Parquet/DuckDB state and assert types plus persisted mutation
-boundaries, not merely command status.
+The committed failing command record is
+`traces/correction-1-same-owner-red.txt`. It includes the five named cases in
+`PLAN.md`, selected app/CLI/flow/warehouse selectors, and the preserved
+cross-owner/generated-alias controls. RED evidence uses real test-owned
+Parquet/DuckDB state and asserts types plus persisted mutation boundaries, not
+merely command status.
+
+## Recorded correction 1 RED
+
+At planning checkpoint `465e02911`, with the canonical finish-plan snapshot
+SHA-256 recorded above, these focused commands exited 1 as expected:
+
+```text
+go test -timeout 20m ./internal/app -run 'Test(CreateConnectionRejectsSameOwnerCaseEquivalentDestinationTables|LegacySameOwnerCaseEquivalent)' -count=1
+go test -timeout 20m ./internal/cli -run '^TestFlowLegacySameOwnerCaseEquivalentInventoryStopsAtTheTypedBoundary$' -count=1
+```
+
+The app suite proves the current code accepts a new `records`/`RECORDS`
+inventory, starts a legacy run, and returns nil or an ordinary missing-table
+error for generic, selected, quoted, and generated-alias SQL instead of the
+required typed one-owner collision. The direct resolver-backed query/action/
+reverse physical-spelling control passed. The flow suite proves omitted and
+selected bare/quoted forms currently complete with nil error; its two-attempt
+case is the schedule re-entry regression. Full non-secret output is recorded
+in `traces/correction-1-same-owner-red.txt`. No production file is part of the
+RED checkpoint.
 
 ### Correction 1 GREEN rule
 

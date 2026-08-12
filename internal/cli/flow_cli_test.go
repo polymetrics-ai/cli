@@ -967,6 +967,88 @@ func TestFlowCaseEquivalentUniqueTablesPreserveGenericSQLAndTypedAmbiguity(t *te
 	}
 }
 
+// TestFlowLegacySameOwnerCaseEquivalentInventoryStopsAtTheTypedBoundary
+// covers the old state that #4069 cannot migrate. The owner selection cannot
+// resolve two destinations declared by that same owner, so every SQL spelling
+// must fail truthfully while a query unrelated to warehouse inventory keeps
+// running. Running the same flow again models the scheduler payload, which is
+// simply `pm flow run` re-entering this boundary.
+func TestFlowLegacySameOwnerCaseEquivalentInventoryStopsAtTheTypedBoundary(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowLegacySameOwnerCaseEquivalentWarehouseApp(t, ctx)
+
+	rows, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: "SELECT 1 AS n"})
+	require.NoError(t, err)
+	require.Len(t, rows, 1)
+	assert.Equal(t, "1", fmt.Sprint(rows[0]["n"]))
+
+	type sameOwnerCollision interface {
+		error
+		SameOwnerCaseEquivalentTableCollision()
+	}
+	assertRejected := func(t *testing.T, name, connection, sql string, attempts int) {
+		t.Helper()
+		checkpoints := &flow.FileCheckpointStore{Dir: t.TempDir()}
+		adapter := &recordingFlowAppAdapter{app: a}
+		engine := &flow.Engine{
+			Manifest: flow.FlowManifest{
+				Version: 1,
+				Name:    name,
+				Steps: []flow.FlowStep{{
+					ID:         "query-records",
+					Kind:       flow.KindQuery,
+					Connection: connection,
+					SQL:        sql,
+					In:         []string{},
+					Out:        []string{},
+				}},
+			},
+			App:        adapter,
+			Checkpoint: checkpoints,
+			LockDir:    t.TempDir(),
+		}
+		for attempt := 1; attempt <= attempts; attempt++ {
+			result, runErr := engine.Run(ctx, flow.RunOptions{})
+			require.Error(t, runErr)
+			var collision sameOwnerCollision
+			require.Truef(t, errors.As(runErr, &collision), "attempt %d error = %T %v", attempt, runErr, runErr)
+			var ambiguous *warehouse.AmbiguousTableError
+			assert.Falsef(t, errors.As(runErr, &ambiguous), "attempt %d used cross-owner ambiguity: %T %v", attempt, runErr, runErr)
+			assert.Contains(t, collision.Error(), "acme")
+			assert.Contains(t, collision.Error(), "records")
+			assert.Contains(t, collision.Error(), "RECORDS")
+			assert.NotContains(t, collision.Error(), "set `connection`", "a selector cannot resolve one-owner destinations")
+			assert.NotContains(t, collision.Error(), "Catalog Error")
+			assert.Equal(t, "failed", result.Status)
+			require.Len(t, result.Steps, 1)
+			assert.Equal(t, "failed", result.Steps[0].Status)
+			assert.Empty(t, adapter.lastRows)
+			checkpoint, checkpointErr := checkpoints.Get(name, "query-records")
+			require.NoError(t, checkpointErr)
+			assert.Empty(t, checkpoint, "attempt %d must not create a successful checkpoint", attempt)
+		}
+	}
+
+	for _, tc := range []struct {
+		name       string
+		connection string
+		sql        string
+	}{
+		{name: "omitted bare", sql: "SELECT id FROM records"},
+		{name: "omitted quoted", sql: `SELECT id FROM "RECORDS"`},
+		{name: "selected bare", connection: "acme", sql: "SELECT id FROM records"},
+		{name: "selected quoted", connection: "acme", sql: `SELECT id FROM "RECORDS"`},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			attempts := 1
+			if tc.name == "omitted bare" {
+				attempts = 2 // scheduler re-entry calls the same flow boundary again.
+			}
+			assertRejected(t, "same-owner-"+strings.ReplaceAll(tc.name, " ", "-"), tc.connection, tc.sql, attempts)
+		})
+	}
+}
+
 func TestFlowActionSourceReadsAllSelectedConnectionRows(t *testing.T) {
 	ctx := testCtx(t)
 	a := newFlowScopedWarehouseApp(t, ctx)
@@ -1256,4 +1338,84 @@ func newFlowCaseEquivalentUniqueWarehouseApp(t *testing.T, ctx context.Context) 
 		}}))
 	}
 	return a
+}
+
+// newFlowLegacySameOwnerCaseEquivalentWarehouseApp writes the exact legacy
+// state a pre-admission client could have persisted. It intentionally mutates
+// only a test project state file after creating a valid one-stream connection:
+// the production creation path must reject the second spelling once this
+// correction lands.
+func newFlowLegacySameOwnerCaseEquivalentWarehouseApp(t *testing.T, ctx context.Context) *app.App {
+	t.Helper()
+	root := t.TempDir()
+	initProject(t, root)
+	created, err := app.Open(root)
+	require.NoError(t, err)
+
+	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+	_, err = created.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "warehouse-local",
+		Connector: "warehouse",
+		Config:    map[string]string{"path": warehouseDir},
+	})
+	require.NoError(t, err)
+	connection, err := created.CreateConnection(ctx, app.CreateConnectionRequest{
+		Name: "acme",
+		Source: app.EndpointConfig{
+			Connector:  "warehouse",
+			Credential: "warehouse-local",
+		},
+		Destination: app.EndpointConfig{
+			Connector:  "warehouse",
+			Credential: "warehouse-local",
+		},
+		Streams: map[string]app.StreamConfig{
+			"records": {
+				SyncMode:         "incremental_append_deduped",
+				CursorField:      "updated_at",
+				PrimaryKey:       []string{"id"},
+				DestinationTable: "records",
+			},
+		},
+	})
+	require.NoError(t, err)
+
+	statePath := filepath.Join(root, ".polymetrics", "state", "state.json")
+	raw, err := os.ReadFile(statePath)
+	require.NoError(t, err)
+	var state map[string]any
+	require.NoError(t, json.Unmarshal(raw, &state))
+	workspaceID, ok := state["workspace_id"].(string)
+	require.True(t, ok)
+	connections, ok := state["connections"].([]any)
+	require.Len(t, connections, 1)
+	connectionState, ok := connections[0].(map[string]any)
+	require.True(t, ok)
+	streams, ok := connectionState["streams"].(map[string]any)
+	require.True(t, ok)
+	records, ok := streams["records"].(map[string]any)
+	require.True(t, ok)
+	caseRecords := make(map[string]any, len(records))
+	for key, value := range records {
+		caseRecords[key] = value
+	}
+	caseRecords["destination_table"] = "RECORDS"
+	streams["case-records"] = caseRecords
+	updated, err := json.Marshal(state)
+	require.NoError(t, err)
+	require.NoError(t, os.WriteFile(statePath, updated, 0o600))
+
+	location, err := warehouse.LocationFor(warehouseDir, workspaceID, "warehouse", connection.ID, connection.Name)
+	require.NoError(t, err)
+	require.NoError(t, location.EnsureOwnership())
+	path, err := location.TablePath("records")
+	require.NoError(t, err)
+	require.NoError(t, warehouse.WriteTable(ctx, path, []warehouse.Row{{
+		"id":         "legacy-physical-record",
+		"updated_at": "2026-08-12T00:00:00Z",
+	}}))
+
+	reopened, err := app.Open(root)
+	require.NoError(t, err)
+	return reopened
 }

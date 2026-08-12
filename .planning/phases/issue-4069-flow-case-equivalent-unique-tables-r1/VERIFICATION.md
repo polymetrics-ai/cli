@@ -71,22 +71,28 @@ inherited files are not edited or normalized here.
 
 ## Correction 1 / 5 gate — same-owner case-equivalent inventory
 
-**Status:** RED required; prior local-green record covers only the cross-owner
-matrix and is not acceptance evidence for this correction.
+**Status:** committed RED recorded; prior local-green record covers only the
+cross-owner matrix and is not acceptance evidence for this correction.
 
-- [ ] GSD plan, ledger, run state, and this checklist record correction 1 / 5
+**Canonical finish-plan SHA-256:**
+`939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`
+
+- [x] GSD plan, ledger, run state, and this checklist record correction 1 / 5
       and policy 1 before a production edit.
-- [ ] A committed RED rejects new `records`/`RECORDS` destinations under one
+- [x] A committed RED rejects new `records`/`RECORDS` destinations under one
       local-warehouse connection after defaults and before persisted mutation.
-- [ ] A committed RED loads legacy state unchanged and proves sync refusal
+- [x] A committed RED loads legacy state unchanged and proves sync refusal
       before `beginRun`, run/checkpoint/stream state, owner, directory, WAL,
       temporary, or Parquet mutation.
-- [ ] A committed RED covers generic/selected bare and quoted SQL collision
+- [x] A committed RED covers generic/selected bare and quoted SQL collision
       references with the new typed error, never raw DuckDB catalog text or a
       misleading one-owner ambiguity; generic `SELECT 1` remains executable.
-- [ ] A committed RED covers unscoped/selected flow and schedule re-entry with
+- [x] A committed RED covers unscoped/selected flow and schedule re-entry with
       no success checkpoint, plus exact query/action/reverse refusal for a
       missing physical case variant on the host filesystem.
+- [x] A committed RED retains exact query/action/reverse resolution for only
+      host-resolver-visible physical spellings, and rejects a missing spelling
+      without case aliasing it.
 - [ ] GREEN uses one deterministic ASCII key helper, creation and sync
       inventory validation, declared-inventory plus resolver-snapshot SQL
       policy, and a typed same-owner error without migration, SQL rewriting,
