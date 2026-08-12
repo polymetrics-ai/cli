@@ -132,3 +132,10 @@ ok   polymetrics.ai/internal/connectors/engine
 The lane now derives the lower overlap request with an empty tie breaker,
 requires its timestamp to precede the durable checkpoint, and rejects a corpus
 expectation that does not match that derived request.
+
+### Validation cleanup — staticcheck (non-substantive)
+
+`make lint` reported staticcheck S1016 on the reference factory's equivalent
+struct construction. The factory now uses the direct Go conversion; the focused
+conformance target and a rerun of `make lint` pass. This style-only cleanup does
+not increment the substantive correction count (still 2/5).

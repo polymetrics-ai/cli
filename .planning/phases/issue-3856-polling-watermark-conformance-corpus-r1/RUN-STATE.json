@@ -83,5 +83,8 @@
       "status": "implemented; focused GREEN recorded"
     }
   ],
+  "validation_cleanups": [
+    "make lint staticcheck S1016 in the reference test factory: fixed with a direct equivalent-struct conversion; non-substantive and excluded from the 2/5 correction count"
+  ],
   "next": "complete the released GSD inline verification/review and serialized local validation sequence"
 }

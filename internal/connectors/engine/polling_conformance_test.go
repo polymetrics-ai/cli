@@ -200,7 +200,7 @@ func newReferencePollingWatermarkConformanceRegistration() (PollingWatermarkConf
 }
 
 func (f referencePollingWatermarkConformanceFactory) NewPollingWatermarkConformanceLane(context.Context) (PollingWatermarkConformanceLane, error) {
-	return referencePollingWatermarkConformanceLane{registration: f.registration}, nil
+	return referencePollingWatermarkConformanceLane(f), nil
 }
 
 type referencePollingWatermarkConformanceLane struct {
