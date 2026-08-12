@@ -84,6 +84,49 @@ func TestPollingWatermarkConformanceRegistrationRejectsWrongEvidence(t *testing.
 	}
 }
 
+func TestPollingWatermarkConformanceRegistrationRejectsUnsafeDescriptor(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(*PollingWatermarkConformanceDescriptor)
+	}{
+		{
+			name: "unstable keyset",
+			mutate: func(descriptor *PollingWatermarkConformanceDescriptor) {
+				descriptor.StableKeyset = false
+			},
+		},
+		{
+			name: "lossy cursor policy",
+			mutate: func(descriptor *PollingWatermarkConformanceDescriptor) {
+				descriptor.CursorPolicy = "lossy"
+			},
+		},
+		{
+			name: "unbounded overlap",
+			mutate: func(descriptor *PollingWatermarkConformanceDescriptor) {
+				descriptor.BoundedOverlap = false
+			},
+		},
+		{
+			name: "unbounded commit lag",
+			mutate: func(descriptor *PollingWatermarkConformanceDescriptor) {
+				descriptor.BoundedCommitLag = false
+			},
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			descriptor := referencePollingWatermarkConformanceDescriptor()
+			testCase.mutate(&descriptor)
+			_, err := NewPollingWatermarkConformanceRegistration(descriptor, RequiredPollingWatermarkConformanceEvidence())
+			if !errors.Is(err, ErrPollingWatermarkConformanceUnregistered) {
+				t.Fatalf("NewPollingWatermarkConformanceRegistration error = %v, want unsafe descriptor rejection", err)
+			}
+		})
+	}
+}
+
 func TestPollingWatermarkConformanceFixturesAreDefensiveAndSeparate(t *testing.T) {
 	beforeGeneric := synccontract.RequiredConformanceEvidence()
 	fixtures := PollingWatermarkConformanceFixtures()
@@ -176,6 +219,55 @@ func TestPollingWatermarkConformanceSuiteRejectsCursorPolicyResultMismatch(t *te
 	})
 	if err == nil || !strings.Contains(err.Error(), "cursor sample results") {
 		t.Fatalf("RunPollingWatermarkConformanceSuite error = %v, want raw cursor-policy result rejection", err)
+	}
+}
+
+func TestPollingWatermarkConformanceSuiteRejectsPersistedCheckpointDescriptorMismatch(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(*synccontract.CheckpointEnvelope)
+		want   string
+	}{
+		{
+			name: "source identity",
+			mutate: func(checkpoint *synccontract.CheckpointEnvelope) {
+				checkpoint.Source.AccountOrCluster = "other-fixture-account"
+			},
+			want: "source identity",
+		},
+		{
+			name: "source generation",
+			mutate: func(checkpoint *synccontract.CheckpointEnvelope) {
+				checkpoint.SourceGeneration = synccontract.OpaqueToken("other-generation")
+			},
+			want: "source generation",
+		},
+		{
+			name: "schema fingerprint",
+			mutate: func(checkpoint *synccontract.CheckpointEnvelope) {
+				checkpoint.SchemaVersion = "other-schema"
+			},
+			want: "schema fingerprint",
+		},
+		{
+			name: "mechanism",
+			mutate: func(checkpoint *synccontract.CheckpointEnvelope) {
+				checkpoint.Mechanism = "other-mechanism"
+			},
+			want: "mechanism",
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			_, err := RunPollingWatermarkConformanceSuite(context.Background(), corruptingPollingWatermarkConformanceFactory{
+				target:           "equal-watermark-page-split-recovery",
+				mutateCheckpoint: testCase.mutate,
+			})
+			if err == nil || !strings.Contains(err.Error(), testCase.want) {
+				t.Fatalf("RunPollingWatermarkConformanceSuite error = %v, want persisted checkpoint %s rejection", err, testCase.want)
+			}
+		})
 	}
 }
 
@@ -495,10 +587,7 @@ func pollingWatermarkConformanceResumeFailure(fixture PollingWatermarkConformanc
 	if err != nil {
 		return err
 	}
-	if err := checkpoint.ValidateResume(synccontract.ResumeExpectation{
-		Source:           sourceIdentityFromPollingWatermarkConformanceDescriptor(fixture.Descriptor),
-		SourceGeneration: synccontract.OpaqueToken(fixture.Descriptor.SourceGeneration),
-	}); err != nil {
+	if err := checkpoint.ValidateResume(pollingWatermarkConformanceResumeExpectation(fixture.Descriptor)); err != nil {
 		return err
 	}
 	if checkpoint.SchemaVersion != fixture.Descriptor.SchemaFingerprint {
@@ -615,7 +704,7 @@ func pollingWatermarkConformanceEnvelope(fixture PollingWatermarkConformanceFixt
 	positionObserved := true
 	envelope := synccontract.CheckpointEnvelope{
 		StateVersion: synccontract.StateVersion,
-		Source:       sourceIdentityFromPollingWatermarkConformanceDescriptor(fixture.Descriptor),
+		Source:       pollingWatermarkConformanceSourceIdentity(fixture.Descriptor),
 		Mechanism:    pollingWatermarkConformanceMechanism,
 		SnapshotBarrier: &synccontract.SnapshotBarrier{
 			Kind:  "fixture_snapshot",
@@ -649,14 +738,6 @@ func pollingWatermarkConformanceEnvelope(fixture PollingWatermarkConformanceFixt
 		return synccontract.CheckpointEnvelope{}, err
 	}
 	return envelope, nil
-}
-
-func sourceIdentityFromPollingWatermarkConformanceDescriptor(descriptor PollingWatermarkConformanceDescriptor) synccontract.SourceIdentity {
-	return synccontract.SourceIdentity{
-		Engine:           descriptor.SourceEngine,
-		AccountOrCluster: descriptor.SourceAccount,
-		ObjectScope:      descriptor.SourceScope,
-	}
 }
 
 func positionObservedPointer(value bool) *bool {
@@ -709,6 +790,7 @@ type corruptingPollingWatermarkConformanceFactory struct {
 	target                  string
 	recoveryError           error
 	dropCursorSampleResults bool
+	mutateCheckpoint        func(*synccontract.CheckpointEnvelope)
 }
 
 func (f corruptingPollingWatermarkConformanceFactory) NewPollingWatermarkConformanceLane(ctx context.Context) (PollingWatermarkConformanceLane, error) {
@@ -725,6 +807,7 @@ func (f corruptingPollingWatermarkConformanceFactory) NewPollingWatermarkConform
 		target:                          f.target,
 		recoveryError:                   f.recoveryError,
 		dropCursorSampleResults:         f.dropCursorSampleResults,
+		mutateCheckpoint:                f.mutateCheckpoint,
 	}, nil
 }
 
@@ -733,6 +816,7 @@ type corruptingPollingWatermarkConformanceLane struct {
 	target                  string
 	recoveryError           error
 	dropCursorSampleResults bool
+	mutateCheckpoint        func(*synccontract.CheckpointEnvelope)
 }
 
 func (l corruptingPollingWatermarkConformanceLane) RunPollingWatermarkConformance(ctx context.Context, fixture PollingWatermarkConformanceFixture) (PollingWatermarkConformanceObservation, error) {
@@ -744,6 +828,9 @@ func (l corruptingPollingWatermarkConformanceLane) RunPollingWatermarkConformanc
 		}
 		if l.dropCursorSampleResults {
 			observation.CursorSampleResults = nil
+		}
+		if l.mutateCheckpoint != nil && len(observation.PersistedCheckpoints) > 0 {
+			l.mutateCheckpoint(&observation.PersistedCheckpoints[0])
 		}
 	}
 	return observation, err

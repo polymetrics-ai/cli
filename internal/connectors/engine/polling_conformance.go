@@ -267,7 +267,7 @@ func (r PollingWatermarkConformanceRegistration) validate() error {
 	if !r.registered {
 		return ErrPollingWatermarkConformanceUnregistered
 	}
-	if err := validatePollingWatermarkConformanceDescriptor(r.descriptor); err != nil {
+	if err := validatePollingWatermarkConformanceRegistrationDescriptor(r.descriptor); err != nil {
 		return fmt.Errorf("%w: %v", ErrPollingWatermarkConformanceUnregistered, err)
 	}
 	if !r.evidence.matchesRequired() {
@@ -516,6 +516,40 @@ func validatePollingWatermarkConformanceDescriptor(descriptor PollingWatermarkCo
 	return nil
 }
 
+func validatePollingWatermarkConformanceRegistrationDescriptor(descriptor PollingWatermarkConformanceDescriptor) error {
+	if err := validatePollingWatermarkConformanceDescriptor(descriptor); err != nil {
+		return err
+	}
+	if !descriptor.StableKeyset {
+		return errors.New("stable keyset is required")
+	}
+	if descriptor.CursorPolicy != "lossless" {
+		return fmt.Errorf("cursor policy = %q, want lossless", descriptor.CursorPolicy)
+	}
+	if !descriptor.BoundedOverlap {
+		return errors.New("bounded overlap is required")
+	}
+	if !descriptor.BoundedCommitLag {
+		return errors.New("bounded commit lag is required")
+	}
+	return nil
+}
+
+func pollingWatermarkConformanceSourceIdentity(descriptor PollingWatermarkConformanceDescriptor) synccontract.SourceIdentity {
+	return synccontract.SourceIdentity{
+		Engine:           descriptor.SourceEngine,
+		AccountOrCluster: descriptor.SourceAccount,
+		ObjectScope:      descriptor.SourceScope,
+	}
+}
+
+func pollingWatermarkConformanceResumeExpectation(descriptor PollingWatermarkConformanceDescriptor) synccontract.ResumeExpectation {
+	return synccontract.ResumeExpectation{
+		Source:           pollingWatermarkConformanceSourceIdentity(descriptor),
+		SourceGeneration: synccontract.OpaqueToken(descriptor.SourceGeneration),
+	}
+}
+
 func validatePollingWatermarkConformanceObservation(fixture PollingWatermarkConformanceFixture, observation PollingWatermarkConformanceObservation) error {
 	expected := fixture.Expected
 	if observation.FixtureID != fixture.ID {
@@ -543,11 +577,8 @@ func validatePollingWatermarkConformanceObservation(fixture PollingWatermarkConf
 		return fmt.Errorf("persisted checkpoint count = %d, want %d", len(observation.PersistedCheckpoints), expected.PersistedCheckpointCount)
 	}
 	for index, checkpoint := range observation.PersistedCheckpoints {
-		if err := checkpoint.Validate(); err != nil {
-			return fmt.Errorf("persisted checkpoint is invalid: %w", err)
-		}
-		if checkpoint.CommittedAt == nil {
-			return errors.New("persisted checkpoint lacks downstream-acknowledged committed_at")
+		if err := validatePollingWatermarkConformancePersistedCheckpoint(fixture.Descriptor, checkpoint); err != nil {
+			return fmt.Errorf("persisted checkpoint %d: %w", index, err)
 		}
 		if want := expected.PersistedCheckpointPositions[index]; !reflect.DeepEqual(checkpoint.Position, synccontract.CheckpointPosition{
 			Primary:    synccontract.OpaqueToken(want.Watermark),
@@ -589,6 +620,25 @@ func validatePollingWatermarkConformanceObservation(fixture PollingWatermarkConf
 	}
 	if observation.AdmissionRejected != expected.AdmissionRejected {
 		return fmt.Errorf("admission rejected = %t, want %t", observation.AdmissionRejected, expected.AdmissionRejected)
+	}
+	return nil
+}
+
+func validatePollingWatermarkConformancePersistedCheckpoint(descriptor PollingWatermarkConformanceDescriptor, checkpoint synccontract.CheckpointEnvelope) error {
+	if err := checkpoint.Validate(); err != nil {
+		return fmt.Errorf("is invalid: %w", err)
+	}
+	if checkpoint.CommittedAt == nil {
+		return errors.New("lacks downstream-acknowledged committed_at")
+	}
+	if err := checkpoint.ValidateResume(pollingWatermarkConformanceResumeExpectation(descriptor)); err != nil {
+		return fmt.Errorf("does not resume against the fixture descriptor: %w", err)
+	}
+	if checkpoint.SchemaVersion != descriptor.SchemaFingerprint {
+		return fmt.Errorf("schema fingerprint = %q, want %q", checkpoint.SchemaVersion, descriptor.SchemaFingerprint)
+	}
+	if checkpoint.Mechanism != descriptor.Mechanism {
+		return fmt.Errorf("mechanism = %q, want %q", checkpoint.Mechanism, descriptor.Mechanism)
 	}
 	return nil
 }

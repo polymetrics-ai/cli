@@ -139,3 +139,32 @@ expectation that does not match that derived request.
 struct construction. The factory now uses the direct Go conversion; the focused
 conformance target and a rerun of `make lint` pass. This style-only cleanup does
 not increment the substantive correction count (still 2/5).
+
+### R3 correction loop 3/5 — shared admission and checkpoint provenance
+
+The subsequent review confirmed two shared-runner false-certification gaps: a
+registered lane could declare an unsafe stable-keyset/cursor/overlap/commit-lag
+contract, and a structurally valid persisted envelope could name another
+source, generation, schema fingerprint, or mechanism. Fixture descriptors
+remain permissive enough to model rejected cases; registration is now the
+separate fail-closed safety boundary. Persisted envelopes are checked against
+the fixture descriptor through `ValidateResume`, schema fingerprint, and
+mechanism before their expected position is accepted.
+
+```text
+$ go test -timeout 20m ./internal/connectors/engine -run '^(TestPollingWatermarkConformanceRegistrationRejectsUnsafeDescriptor|TestPollingWatermarkConformanceSuiteRejectsPersistedCheckpointDescriptorMismatch)$' -count=1
+FAIL: unsafe keyset, cursor policy, bounded overlap, and bounded commit lag registrations returned <nil>
+FAIL: source identity, source generation, schema fingerprint, and mechanism checkpoint mutations returned <nil>
+```
+
+After the shared validation corrections:
+
+```text
+$ go test -v -timeout 20m ./internal/connectors/engine -run '^(TestPollingWatermarkConformance.*|TestBoundedOverlapReferenceLaneDerivesTheOverlapRequest)$' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/connectors/engine -count=1
+ok   polymetrics.ai/internal/connectors/engine
+
+$ go vet ./internal/connectors/engine
+```
