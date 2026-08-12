@@ -57,3 +57,58 @@ FAIL
 This RED proves the required reusable factory, corpus evidence, no-skip runner,
 and composite position are absent. No production implementation file existed
 when it was recorded.
+
+### R2/R3 focused GREEN and correction evidence
+
+The embedded `v1` corpus now has eleven immutable fixture IDs, its own
+SHA-256 (`3acf1e9bf13615c5355cc305a705cdcddec5d08ab80ece8024459860bb03e1a4`),
+defensive copies (including raw cursor values), full fixture-owned enumeration,
+and no filter or skip input. It remains separate from the generic #3810 corpus.
+
+Focused RED/GREEN corrections:
+
+```text
+$ go test -timeout 20m ./internal/connectors/engine -run '^TestPollingWatermarkConformanceSuiteNeverRegressesDurableCheckpointForOverlap$' -count=1
+FAIL: bounded overlap regressed durable checkpoint to 2026-08-06T09:59:00Z/late,
+want the prior committed 2026-08-06T10:00:00Z/a
+
+$ go test -timeout 20m ./internal/connectors/engine -run '^TestPollingWatermarkConformanceSuiteNeverRegressesDurableCheckpointForOverlap$' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/connectors/engine -run '^TestPollingWatermarkConformanceSuiteRejectsUntypedRecoveryObservation$' -count=1
+FAIL [build failed]: PollingWatermarkConformanceObservation lacked RecoveryError
+
+$ go test -timeout 20m ./internal/connectors/engine -run '^TestPollingWatermarkConformanceSuiteRejectsUntypedRecoveryObservation$' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/connectors/engine -run '^TestPollingWatermarkConformanceSuiteRejectsCursorPolicyResultMismatch$' -count=1
+FAIL [build failed]: PollingWatermarkConformanceObservation lacked CursorSampleResults
+
+$ go test -timeout 20m ./internal/connectors/engine -run '^TestPollingWatermarkConformanceSuiteRejectsCursorPolicyResultMismatch$' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+```
+
+The GREEN runner checks concrete source requests, raw NULL/precision/coercion
+results, typed rebootstrap recovery, durable checkpoint positions and commits,
+replay state, tombstone/history state, hard-delete invisibility, and admission
+rejection. It uses the merged #3880 lossless scalar and timestamp algorithms
+from tests without changing their history.
+
+Focused results before the serialized validation gate:
+
+```text
+$ go test -timeout 20m ./internal/connectors/engine -run '^TestPollingWatermarkConformance' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/connectors/engine -count=1
+ok   polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/synccontract -run '^TestConformanceFixturesAreVersionedAndDefensivelyCopied$' -count=1
+ok   polymetrics.ai/internal/synccontract
+```
+
+`gh-axi issue subissue list 3856` returned zero existing children. The
+overlap correction stays within the uncommitted primary #3856 scope under the
+resume record's no-new-issue custody rule.
+
+paused: #3856 focused implementation complete; awaiting serialized broad validation gate

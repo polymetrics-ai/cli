@@ -4,9 +4,9 @@
 
 | Area | Command/check | Status |
 | --- | --- | --- |
-| R1 RED/GREEN | focused conformance test before/after implementation | pending |
-| Polling engine | focused and full `internal/connectors/engine` tests | pending |
-| Generic contract non-regression | `internal/synccontract` tests and unchanged `v1.json` digest | pending |
+| R1 RED/GREEN | focused conformance test before/after implementation | focused GREEN recorded; broad validation deferred |
+| Polling engine | focused and full `internal/connectors/engine` tests | focused full engine pass; broad validation deferred |
+| Generic contract non-regression | `internal/synccontract` tests and unchanged `v1.json` digest | focused fixture regression pass; generic corpus untouched |
 | App regression | `go test -timeout 20m ./internal/app -count=1` | pending |
 | Runtime preflight sweep | focused commandrunner test | pending |
 | Race safety | focused engine `-race` test | pending |
@@ -16,6 +16,15 @@
 | GSD verify/review | generated prompt, durable verification/review report | pending |
 | Independent audit | required Sol audit after final candidate | pending |
 | no-mistakes | `--skip=push,pr,ci`, no `--yes` | pending |
+
+## Serialized validation hold
+
+paused: #3856 focused implementation complete; awaiting serialized broad validation gate
+
+The captain's resume record permits focused implementation and tests only at
+this point. No broad repository suite, race-heavy sweep, no-mistakes run,
+push, PR creation, CI, or merge has been started. The focused GREEN evidence
+and exact commands are recorded in `TDD-LEDGER.md`.
 
 ## Explicit exclusions
 

@@ -5,7 +5,7 @@
   "branch": "feat/3856-polling-conformance-corpus",
   "base_branch": "feat/3855-polling-apply-foundations",
   "base_sha": "fa5eef681a4b06c09519574326a22683b26bd996",
-  "status": "red_recorded",
+  "status": "working_broad_validation_and_draft_delivery",
   "adapter": "pi-project-local",
   "runtime_fallback": "inline manual execution of generated GSD prompts; the canonical single-worker contract forbids role spawning",
   "skills": [
@@ -36,7 +36,44 @@
       "live credentials or mutation"
     ]
   },
-  "correction_count": 0,
+  "correction_count": 1,
   "shepherd": "excluded; #3995/#4062 is parked",
-  "next": "implement the minimum embedded corpus and no-skip registered-lane runner"
+  "pause": {
+    "reason": "captain-directed step-by-step hold",
+    "head": "31d169309b76cbd6a47713c31e88f9736797dfbb",
+    "dirty_files": [
+      "M .planning/phases/issue-3856-polling-watermark-conformance-corpus-r1/RUN-STATE.json (captain-directed pause record)",
+      "M internal/connectors/engine/polling_conformance_test.go",
+      "?? internal/connectors/engine/polling_conformance.go",
+      "?? internal/connectors/engine/testdata/polling_watermark_conformance/"
+    ],
+    "stopped_activity": "implementation, tests, validation, planning, no-mistakes, push, PR, and merge"
+  },
+  "status_history": [
+    {
+      "status": "paused",
+      "note": "captain-directed step-by-step hold"
+    },
+    {
+      "status": "paused",
+      "note": "#3856 focused implementation complete; awaiting serialized broad validation gate"
+    },
+    {
+      "status": "working",
+      "note": "#3856 broad validation and draft delivery released after focused engine and generic-corpus checks passed",
+      "event": "working: #3856 broad validation and draft delivery released after focused engine and generic-corpus checks passed"
+    }
+  ],
+  "focused_implementation": {
+    "fixture_version": 1,
+    "fixture_count": 11,
+    "fixture_digest": "3acf1e9bf13615c5355cc305a705cdcddec5d08ab80ece8024459860bb03e1a4",
+    "focused_tests": [
+      "go test -timeout 20m ./internal/connectors/engine -run '^TestPollingWatermarkConformance' -count=1 (pass)",
+      "go test -timeout 20m ./internal/connectors/engine -count=1 (pass)",
+      "go test -timeout 20m ./internal/synccontract -run '^TestConformanceFixturesAreVersionedAndDefensivelyCopied$' -count=1 (pass)"
+    ],
+    "correction": "overlap checkpoint regression prevented; no existing #3856 child owned it, and the resume record forbids creating a new issue"
+  },
+  "next": "paused: #3856 focused implementation complete; awaiting serialized broad validation gate"
 }
