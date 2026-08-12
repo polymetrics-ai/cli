@@ -141,6 +141,24 @@ func TestPollingWatermarkConformanceSuiteNeverRegressesDurableCheckpointForOverl
 	}
 }
 
+func TestBoundedOverlapReferenceLaneDerivesTheOverlapRequest(t *testing.T) {
+	var fixture PollingWatermarkConformanceFixture
+	for _, candidate := range PollingWatermarkConformanceFixtures() {
+		if candidate.ID == "bounded-overlap-and-commit-lag" {
+			fixture = candidate
+			break
+		}
+	}
+	if fixture.ID == "" {
+		t.Fatal("bounded-overlap fixture was not loaded")
+	}
+	fixture.Expected.SourceRequests[0] = fixture.InitialCheckpoint.PollingWatermarkConformancePosition
+
+	if _, err := runBoundedOverlapCommitLag(fixture); err == nil || !strings.Contains(err.Error(), "overlap source request") {
+		t.Fatalf("runBoundedOverlapCommitLag error = %v, want copied expectation rejection", err)
+	}
+}
+
 func TestPollingWatermarkConformanceSuiteRejectsUntypedRecoveryObservation(t *testing.T) {
 	_, err := RunPollingWatermarkConformanceSuite(context.Background(), corruptingPollingWatermarkConformanceFactory{
 		target:        "schema-fingerprint-mismatch-requires-rebootstrap",
@@ -407,15 +425,37 @@ func runBoundedOverlapCommitLag(fixture PollingWatermarkConformanceFixture) (Pol
 	if len(fixture.Pages) != 1 || len(fixture.Pages[0].Records) != 1 || len(fixture.Acknowledgements) != 1 {
 		return PollingWatermarkConformanceObservation{}, errors.New("bounded overlap fixture is incomplete")
 	}
+	overlapRequest, err := boundedOverlapSourceRequest(fixture.InitialCheckpoint.PollingWatermarkConformancePosition, fixture.Pages[0].Records[0])
+	if err != nil {
+		return PollingWatermarkConformanceObservation{}, err
+	}
+	if len(fixture.Expected.SourceRequests) != 1 || fixture.Expected.SourceRequests[0] != overlapRequest {
+		return PollingWatermarkConformanceObservation{}, errors.New("bounded overlap fixture does not declare the derived overlap source request")
+	}
 	checkpoint, persisted, err := persistPollingWatermarkConformanceCheckpoint(fixture, fixture.InitialCheckpoint.PollingWatermarkConformancePosition, fixture.Acknowledgements[0])
 	if err != nil || !persisted {
 		return PollingWatermarkConformanceObservation{}, fmt.Errorf("persist bounded-overlap page: %w", err)
 	}
 	observation := basePollingWatermarkConformanceObservation(fixture)
-	observation.SourceRequests = append([]PollingWatermarkConformancePosition(nil), fixture.Expected.SourceRequests...)
+	observation.SourceRequests = []PollingWatermarkConformancePosition{overlapRequest}
 	observation.StableIdentities = uniquePollingWatermarkConformanceIdentities(fixture.Pages[0].Records)
 	observation.PersistedCheckpoints = []synccontract.CheckpointEnvelope{checkpoint}
 	return observation, nil
+}
+
+func boundedOverlapSourceRequest(durable PollingWatermarkConformancePosition, record PollingWatermarkConformanceRecord) (PollingWatermarkConformancePosition, error) {
+	durableAt, err := time.Parse(time.RFC3339Nano, durable.Watermark)
+	if err != nil {
+		return PollingWatermarkConformancePosition{}, fmt.Errorf("parse durable overlap checkpoint: %w", err)
+	}
+	recordAt, err := time.Parse(time.RFC3339Nano, record.Watermark)
+	if err != nil {
+		return PollingWatermarkConformancePosition{}, fmt.Errorf("parse overlap source record: %w", err)
+	}
+	if !recordAt.Before(durableAt) {
+		return PollingWatermarkConformancePosition{}, errors.New("bounded overlap record must precede the durable checkpoint")
+	}
+	return PollingWatermarkConformancePosition{Watermark: record.Watermark}, nil
 }
 
 func runSourceGenerationMismatch(fixture PollingWatermarkConformanceFixture) (PollingWatermarkConformanceObservation, error) {

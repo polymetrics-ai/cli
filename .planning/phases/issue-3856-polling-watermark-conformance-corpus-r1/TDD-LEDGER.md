@@ -112,3 +112,23 @@ overlap correction stays within the uncommitted primary #3856 scope under the
 resume record's no-new-issue custody rule.
 
 paused: #3856 focused implementation complete; awaiting serialized broad validation gate
+
+### R3 correction loop 2/5 — #4074 bounded-overlap derivation
+
+The released GSD inline code review found that the reference lane copied the
+fixture's expected overlap request instead of deriving it from the durable
+checkpoint and replayed source record. `gh-axi issue subissue list 3856` was
+empty, so the released correction protocol created and linked #4074 before the
+test change.
+
+```text
+$ go test -timeout 20m ./internal/connectors/engine -run '^TestBoundedOverlapReferenceLaneDerivesTheOverlapRequest$' -count=1
+FAIL: runBoundedOverlapCommitLag error = <nil>, want copied expectation rejection
+
+$ go test -timeout 20m ./internal/connectors/engine -run '^TestBoundedOverlapReferenceLaneDerivesTheOverlapRequest$' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+```
+
+The lane now derives the lower overlap request with an empty tie breaker,
+requires its timestamp to precede the durable checkpoint, and rejects a corpus
+expectation that does not match that derived request.

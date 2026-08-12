@@ -36,7 +36,7 @@
       "live credentials or mutation"
     ]
   },
-  "correction_count": 1,
+  "correction_count": 2,
   "shepherd": "excluded; #3995/#4062 is parked",
   "pause": {
     "reason": "captain-directed step-by-step hold",
@@ -75,5 +75,13 @@
     ],
     "correction": "overlap checkpoint regression prevented; no existing #3856 child owned it, and the resume record forbids creating a new issue"
   },
-  "next": "paused: #3856 focused implementation complete; awaiting serialized broad validation gate"
+  "correction_issues": [
+    {
+      "loop": 2,
+      "issue": 4074,
+      "scope": "derive and verify the bounded-overlap source request in the #3856 reference lane",
+      "status": "implemented; focused GREEN recorded"
+    }
+  ],
+  "next": "complete the released GSD inline verification/review and serialized local validation sequence"
 }
