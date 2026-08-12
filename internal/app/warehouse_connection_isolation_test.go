@@ -310,6 +310,7 @@ func TestQuerySQLScopesConnectionOwnedAndUnattributedViews(t *testing.T) {
 			}
 		})
 	}
+
 }
 
 // TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept guards the default
@@ -419,6 +420,7 @@ func TestQuerySQLBindsQuotedConnectionScopedWarehouseNames(t *testing.T) {
 			}
 		})
 	}
+
 }
 
 func TestQuerySQLReusesOneWarehouseResolverPerQuery(t *testing.T) {
@@ -1164,5 +1166,15 @@ func TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory(t *testing.T) {
 				t.Fatalf("SQL collision leaked a DuckDB catalog error: %v", queryErr)
 			}
 		})
+	}
+
+	// The generated alias is not reserved. A resolver-visible real table with
+	// the same DuckDB identifier key must remain the real table, even while the
+	// invalid destination inventory suppresses the invented owner alias.
+	realAlias := "RECORDS__" + acme.ID
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", realAlias, []warehouse.Row{{"id": "real-owner-alias"}})
+	rows, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: `SELECT id FROM "records__` + acme.ID + `"`})
+	if err != nil || len(rows) != 1 || toComparableString(rows[0]["id"]) != "real-owner-alias" {
+		t.Fatalf("QuerySQL(real case-equivalent owner alias) rows=%v error=%v, want resolver-visible real table", rows, err)
 	}
 }
