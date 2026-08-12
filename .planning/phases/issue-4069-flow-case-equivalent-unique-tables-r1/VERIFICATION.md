@@ -77,7 +77,7 @@ inherited files are not edited or normalized here.
 no-mistakes without `--yes`, exact-head CI, and a fresh independent Sol audit.
 
 **Canonical finish-plan SHA-256:**
-`939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`
+`939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`
 
 - [x] GSD plan, ledger, run state, and this checklist record correction 1 / 5
       and policy 1 before a production edit.

@@ -39,7 +39,7 @@ available. Direct query/action/reverse reads stay exact resolver lookups, and
 a real `RECORDS__<owner-id>` table wins over a generated alias.
 
 The exact correction-1 evidence uses canonical finish-plan SHA-256
-`939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408` and is
+`939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408` and is
 recorded in `TDD-LEDGER.md`, `VERIFICATION.md`, `REVIEW.md`, `RUN-STATE.json`,
 and `traces/correction-1-broad-verification.txt`. No provider credential,
 transport registration, production wiring, connector certification claim,

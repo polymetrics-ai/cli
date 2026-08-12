@@ -5,7 +5,7 @@ were used before this correction.
 **Specification owner:** #4066 at its terminal 5 / 5; this is not loop 6
 **Starting head:** `659efd8a0d69f26b55fcbd3c02150e995c159519`
 **Correction-1 canonical finish-plan SHA-256:**
-`939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`
+`939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|

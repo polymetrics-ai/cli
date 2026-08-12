@@ -71,7 +71,7 @@
   "correction_1": {
     "audit_handoff": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4066-case-equivalent-unique-tables-r1/correction-1-sol-audit-handoff.md",
     "audit_report": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4071-final-sol-audit-r1/report.md",
-    "canonical_finish_plan_sha256": "939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408",
+    "canonical_finish_plan_sha256": "939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408",
     "audited_head": "d9022359e7b7bc2f7eb262c16177b52010681192",
     "verdict": "FINDINGS / DO NOT MERGE",
     "policy": "reject new same-owner ASCII-case-equivalent local-warehouse destination tables; preserve legacy state; fence legacy sync before beginRun; return a typed same-owner SQL collision while unrelated SQL remains available",
