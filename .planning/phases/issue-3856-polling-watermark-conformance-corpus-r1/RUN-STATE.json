@@ -73,7 +73,7 @@
       "go test -timeout 20m ./internal/connectors/engine -count=1 (pass)",
       "go test -timeout 20m ./internal/synccontract -run '^TestConformanceFixturesAreVersionedAndDefensivelyCopied$' -count=1 (pass)"
     ],
-    "correction": "overlap checkpoint regression prevented; no existing #3856 child owned it, and the resume record forbids creating a new issue"
+    "correction": "loop 1/5: overlap checkpoint regression prevented during focused implementation; the then-active resume authorization did not permit a correction issue. Broad validation separately recorded the lower-request derivation gap as #4074, loop 2/5."
   },
   "correction_issues": [
     {
@@ -86,5 +86,36 @@
   "validation_cleanups": [
     "make lint staticcheck S1016 in the reference test factory: fixed with a direct equivalent-struct conversion; non-substantive and excluded from the 2/5 correction count"
   ],
-  "next": "complete the released GSD inline verification/review and serialized local validation sequence"
+  "broad_validation": {
+    "implementation_head": "aa4d8c8a9fabfb230c3de44764f13b945814153d",
+    "result": "pass",
+    "gates": [
+      "focused polling conformance",
+      "full internal/connectors/engine",
+      "internal/synccontract",
+      "internal/app",
+      "commandrunner runtime preflight",
+      "focused engine race",
+      "gofmt, diff check, vet, tidy-check, lint",
+      "build, pm help, bare pm connectors",
+      "docs, agent contract, connector and release workflow repository gates",
+      "verify-gsd-workflow"
+    ],
+    "binary": {
+      "bytes": 148200034,
+      "sha256": "cd1744c464daca2c4e73d1eaa8869c3aa85494c895fe3a381fd0876647ede0e5",
+      "smoke": [
+        "./pm help (pass)",
+        "./pm connectors (pass)"
+      ]
+    },
+    "not_applicable": [
+      "make smoke-no-build: creates local credentials and sample ETL/reverse-ETL flows outside test/corpus scope",
+      "live provider credentials, provider calls/mutations, database integration, public CDC promotion"
+    ],
+    "gsd": "verify-work and code-review prompts resolved; inline/manual fallback documented in 3856-UAT.md and REVIEW.md because the canonical single-worker contract forbids role spawning",
+    "shepherd": "excluded; #3995/#4062 remains parked",
+    "serialization": "#4072 remains paused and untouched"
+  },
+  "next": "run no-mistakes with --skip=push,pr,ci, then push and create one draft child PR with explicit base/head if it passes"
 }
