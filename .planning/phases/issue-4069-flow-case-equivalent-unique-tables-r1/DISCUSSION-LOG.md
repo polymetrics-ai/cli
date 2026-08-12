@@ -44,3 +44,16 @@ at `9a5b23fe14aba16d04f55b28ff52be0a5940cb68` before this gap was planned.
 | Ownership | Open a new child/correction loop, edit website source, or correct the existing aggregate | Keep correction 1 / 5 in #4069 and refresh only the aggregate derived from its already-committed source pages. |
 | RED evidence | Treat stale CI as an environment warning or record the exact generator failure | Record the exact #4071 Website CI/CD and Website Data failures before local generation. |
 | Delivery topology | Let no-mistakes create/adopt a PR or preserve the existing stacked draft | Run one fresh no-mistakes pass with `--skip=pr,ci`, then use natural #4071 checks as the only CI authority. |
+
+## Correction 2 / 5 addendum — flow manual golden drift
+
+**Command:** `scripts/gsd prompt plan-phase issue-4069-flow-case-equivalent-unique-tables-r1 --gaps`
+**Execution:** inline/manual under the same no-delegation fallback. The
+captain decision `[key=flow-manual-golden-drift]` fixes the exact failed CI
+contract without broadening behavior or delivery topology.
+
+| Area | Alternatives considered | Selected decision |
+|---|---|---|
+| Correctness boundary | Edit generated markdown, bypass the golden, or make embedded help authoritative | Update only `flowHelp`, then regenerate derived manual/transcript/website output through checked-in generators. |
+| Runtime behavior | Change flow parsing or query policy, or document the already delivered behavior | Preserve all runtime behavior; this correction is help/manual parity only. |
+| CI recovery | Rerun the failed Verify workflow or push a regenerated head naturally | Do not rerun; commit a new generated head, run a fresh local pipeline with PR/CI skipped, then let #4071 trigger checks naturally. |

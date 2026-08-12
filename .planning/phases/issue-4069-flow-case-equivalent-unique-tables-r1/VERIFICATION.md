@@ -141,3 +141,24 @@ exact-head CI, or Sol-audit claim is inferred from either local record.
       only the existing #4069 branch.
 - [ ] Existing #4071 remains the sole open, draft, stacked PR and all natural
       exact-head required checks are green before a fresh independent Sol audit.
+
+## Correction 2 / 5 — flow manual generator parity
+
+**Status:** planned before source edits. The existing #4071 Verify failure is
+the causal RED; it must not be rerun remotely.
+
+- [ ] Exact local `TestGoldenDocsGenerateMatchesTrackedCLIManuals` RED exits 1
+      with `flow.md` drift and is recorded before an embedded-help edit.
+- [ ] `internal/cli/docs.go` is the only hand-authored manual source changed;
+      the three approved lines are generated into `docs/cli/flow.md`.
+- [ ] Golden transcript update path regenerates flow help/bare/JSON artifacts;
+      focused transcript and manual tests pass.
+- [ ] The checked-in website data generator is run twice; its exact scoped
+      output or no-change result is recorded without altering website sources.
+- [ ] Focused CLI/manual, relevant Go, docs/generator/lint, and candidate
+      diff checks pass; inherited findings are separate from candidate output.
+- [ ] Inline/manual GSD verify-work and code-review record no remaining gap.
+- [ ] One new no-mistakes run without `--yes` records PR/CI as skipped and
+      pushes only the existing #4069 branch through supported custody.
+- [ ] Existing draft #4071 naturally reaches green exact-head checks before a
+      fresh independent Sol audit; no workflow is rerun manually.

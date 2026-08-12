@@ -1,7 +1,7 @@
 # #4069 TDD ledger
 
-**Fresh delivery lineage:** correction 1 / 5 is active; 0 / 5 corrections
-were used before this correction.
+**Fresh delivery lineage:** correction 2 / 5 is active; correction 1 / 5 was
+completed before this correction.
 **Specification owner:** #4066 at its terminal 5 / 5; this is not loop 6
 **Starting head:** `659efd8a0d69f26b55fcbd3c02150e995c159519`
 **Correction-1 canonical finish-plan SHA-256:**
@@ -212,3 +212,34 @@ commands, inherited website warnings, and the canonical finish-plan hash are
 recorded in `traces/correction-1-broad-verification.txt`. No no-mistakes,
 push, PR mutation, exact-head CI, or independent Sol audit was started by
 this local gate.
+
+## Correction 2 / 5 — authoritative flow help/manual parity
+
+**Canonical finish-plan SHA-256:**
+`939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`
+
+| Slice | RED contract | GREEN contract | Status |
+|---|---|---|---|
+| C2. Authoritative flow manual | Existing `TestGoldenDocsGenerateMatchesTrackedCLIManuals` exits 1 because generated `flow.md` from `flowHelp` omits the approved three-line case-equivalent fail-closed remedy now tracked in `docs/cli/flow.md`. | `flowHelp` produces the exact manual wording; generated CLI markdown and golden transcripts are updated by their owners, and no manual source edit remains. | PLANNED 2026-08-12 |
+| C2. Website generated output | The existing website source/aggregate may be stale after the CLI-manual correction. | Run the checked-in website generator twice; retain only owned output and record a no-change result when CLI manuals are not an input. | PLANNED 2026-08-12 |
+
+### Correction 2 RED command
+
+```text
+go test -timeout 20m ./internal/cli -run '^TestGoldenDocsGenerateMatchesTrackedCLIManuals$' -count=1
+```
+
+Expected RED: exit 1 with `generated docs drift for flow.md`; the tracked
+manual contains the three case-equivalent fail-closed lines, while the
+authoritative embedded `flowHelp` generation does not. The detailed
+non-secret command result belongs in
+`traces/correction-2-flow-manual-golden-drift-red.txt` before any `flowHelp`
+edit.
+
+### Correction 2 GREEN rule
+
+The only hand-authored behavior text is the existing `flowHelp` source. Use
+`pm docs generate`, the opt-in golden transcript writer, and
+`website`'s checked-in generator for all derived files. Preserve all prior
+commits and runtime behavior; do not weaken the golden, manually edit
+`docs/cli/flow.md`, rerun GitHub CI, or modify #4071 topology.

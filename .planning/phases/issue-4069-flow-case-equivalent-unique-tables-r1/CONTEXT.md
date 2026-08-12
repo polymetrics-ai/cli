@@ -87,3 +87,18 @@ verify-work, and code-review evidence will be captured in this phase.
   original docs-N/A disposition is superseded: update connection/query manual
   and website guidance, then record runtime-help, manual, website, and
   generated-surface applicability honestly.
+
+## Correction 2 / 5 — authoritative flow manual generator
+
+**Command:** `scripts/gsd prompt plan-phase issue-4069-flow-case-equivalent-unique-tables-r1 --gaps`
+**Execution:** inline/manual under the existing no-delegation fallback. The
+captain authorized this correction after exact #4071 head
+`678e294568a8a010a460ecb05fe11a42e1eb40f2` failed the generated-manual
+golden gate.
+
+| Area | Alternatives considered | Selected decision |
+|---|---|---|
+| Source of truth | Keep the manually edited `docs/cli/flow.md`, weaken the golden, or update embedded help | Add the three approved lines to `internal/cli/docs.go`'s `flowHelp`; the checked-in manual remains generator output only. |
+| RED evidence | Treat the CI result as a transient documentation warning or reproduce the same golden assertion | Run `TestGoldenDocsGenerateMatchesTrackedCLIManuals` before the source edit and record its `flow.md` drift exactly. |
+| Dependent artifacts | Hand-edit the tracked manual/transcript/website aggregate or use their owners | Run `pm docs generate`, the golden-transcript update path, and the existing website data generator; retain only their scoped outputs. |
+| Delivery topology | Start another issue/branch/PR or reuse the existing child | Keep #4069/#4071 and correction 2 / 5; no PR metadata or workflow rerun is authorized. |

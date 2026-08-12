@@ -331,3 +331,79 @@ dependency, or runtime code changes, so component-composition and visual-design
 implementation guidance is not applicable. The existing single-worker
 inline/manual GSD fallback remains in force because compatible isolated Pi
 roles are unavailable and delegation is forbidden.
+
+## Correction 2 / 5 — flow manual generator parity gap
+
+### Authority and causal failure
+
+Captain decision `[key=flow-manual-golden-drift]` authorizes correction **2 /
+5** in the existing #4069 lineage. At exact #4071 head
+`678e294568a8a010a460ecb05fe11a42e1eb40f2`, Verify run `31590254616`
+failed `internal/cli.TestGoldenDocsGenerateMatchesTrackedCLIManuals` because
+the three approved fail-closed source-selection lines appeared in
+`docs/cli/flow.md` but not in the authoritative `flowHelp` string. The
+canonical finish-plan digest remains
+`939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`.
+
+### C2-RED — reproduce the real generator ownership failure
+
+Before editing any runtime/help source, run:
+
+```text
+go test -timeout 20m ./internal/cli -run '^TestGoldenDocsGenerateMatchesTrackedCLIManuals$' -count=1
+```
+
+RED is valid only when it exits 1 and reports `generated docs drift for
+flow.md`, with the tracked manual containing exactly these missing lines:
+
+```text
+  A case-equivalent spelling whose owner cannot be decided also fails closed;
+  set "connection" to a known healthy owner rather than relying on an
+  unscoped query.
+```
+
+Record the non-secret result in
+`traces/correction-2-flow-manual-golden-drift-red.txt`. The pre-existing
+golden is the causal regression test; no unrelated test or behavior change is
+needed to make this RED meaningful.
+
+### C2-GREEN — fix source, never generated markdown
+
+Add the exact three lines to `internal/cli/docs.go`'s `flowHelp`, immediately
+after the existing omitted-owner refusal. Do not edit `docs/cli/flow.md` as a
+source. Then invoke the repository owners in this order:
+
+```text
+go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors
+POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1
+cd website && npm run gen:website-data
+```
+
+The CLI generation may change `docs/cli/flow.md` and the transcript generator
+may change `internal/cli/testdata/golden_transcripts.json`. The website
+generator is required to prove whether any existing website aggregate depends
+on this documentation state; it must not cause a hand-authored website source
+change. Stop if the generated diff includes unrelated source, connector,
+credential, transport, or production behavior paths.
+
+### C2 acceptance and verification
+
+1. The exact RED selector fails before `flowHelp` changes and passes after
+   regeneration.
+2. `pm help flow`, bare `pm flow`, and `pm flow --json` carry the same
+   fail-closed wording through regenerated golden transcripts.
+3. `docs/cli/flow.md` is byte-equivalent to `pm docs generate` output; no
+   manual markdown ownership is introduced.
+4. Existing website source continues to describe the accepted policy; run its
+   checked-in data generator and retain only output it owns.
+5. Run focused CLI/manual tests, affected Go tests, docs/generator/lint gates,
+   inline GSD verify-work/code-review, then commit every correction-2
+   artifact. Only then start exactly one fresh no-mistakes run with
+   `--skip=pr,ci`, without `--yes`.
+
+### Correction 2 checkpoint sequence
+
+9. `docs(4069): plan flow manual generator correction`
+10. `test(4069): reproduce flow manual generator drift` (committed RED)
+11. `fix(4069): generate fail-closed flow manual` (minimum GREEN)
+12. `docs(4069): record flow manual correction verification`

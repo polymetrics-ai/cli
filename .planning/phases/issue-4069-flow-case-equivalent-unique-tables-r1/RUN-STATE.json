@@ -6,13 +6,13 @@
   "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "required_base_branch": "feat/3897-flow-connection-scope-nm",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "correction_1_website_generated_data_green_pending_recovery_pipeline",
+  "status": "correction_2_flow_manual_generator_gap_planned",
   "correction_budget": {
-    "used_before": 0,
-    "active_correction": 1,
+    "used_before": 1,
+    "active_correction": 2,
     "limit": 5,
-    "remaining_after_active_correction": 4,
-    "lineage": "fresh #4069 child; #4066 remains the exhausted specification owner; this is correction 1 of 5"
+    "remaining_after_active_correction": 3,
+    "lineage": "fresh #4069 child; #4066 remains the exhausted specification owner; this is correction 2 of 5"
   },
   "issue_gate": {
     "parent_and_owner_read": true,
@@ -67,7 +67,7 @@
     "pr_issue_guard": "passed locally against the live draft PR title and its Refs #4069/#3897 plus parent #4060 linkage",
     "inherited_baseline": "seven older #3897 planning-file trailing-whitespace findings remain outside the child range",
     "website_generated_data_green": "passed: exact one-file aggregate hash, second-generation idempotence, candidate diff check, lint/typecheck/unit/script/build; browser E2E is reserved for natural CI because local browser installation is not authorized",
-    "next_gate": "Commit C1-GD GREEN evidence and website aggregate, then start one fresh no-mistakes run without --yes and with --skip=pr,ci"
+    "next_gate": "Record correction-2 causal RED, update authoritative flowHelp, regenerate derived CLI/website artifacts, complete local GSD verification, then start one fresh no-mistakes run without --yes and with --skip=pr,ci"
   },
   "correction_1": {
     "audit_handoff": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4066-case-equivalent-unique-tables-r1/correction-1-sol-audit-handoff.md",
@@ -97,5 +97,20 @@
       "local_green": "two no-install generator invocations were idempotent; lint/typecheck/unit/script/build passed; 13 untouched lint warnings and non-fatal default-auth build diagnostics remain inherited",
       "no_mistakes": "start one fresh run without --yes and with --skip=pr,ci after committed GREEN"
     }
+  },
+  "correction_2": {
+    "decision_key": "flow-manual-golden-drift",
+    "authorized": true,
+    "canonical_finish_plan_sha256": "939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408",
+    "exact_head": "678e294568a8a010a460ecb05fe11a42e1eb40f2",
+    "causal_ci_run": 31590254616,
+    "red_selector": "go test -timeout 20m ./internal/cli -run '^TestGoldenDocsGenerateMatchesTrackedCLIManuals$' -count=1",
+    "source_of_truth": "internal/cli/docs.go:flowHelp",
+    "derived_outputs": [
+      "docs/cli/flow.md",
+      "internal/cli/testdata/golden_transcripts.json",
+      "website/lib/docs.generated.ts when its checked-in generator produces a change"
+    ],
+    "scope_fences": "no runtime behavior change, manual docs source edit, CI rerun, PR mutation, new issue, or topology change"
   }
 }
