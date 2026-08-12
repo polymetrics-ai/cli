@@ -313,16 +313,13 @@ func newQueryViewPolicy(req QuerySQLRequest, resolver *warehouse.TableResolver) 
 		}
 		canonicalGroups[key] = group
 
-		if !exactAmbiguous {
-			continue
-		}
 		for _, table := range nameTables {
 			alias := generatedOwnerAlias(name, table)
 			aliasKey := duckDBIdentifierKey(alias)
 			if _, exists := catalogNames[aliasKey]; exists {
 				policy.collidingGeneratedAliases[aliasKey] = struct{}{}
 			}
-			if policy.unscopedFlow {
+			if exactAmbiguous && policy.unscopedFlow {
 				policy.generatedAliasBaseName[aliasKey] = name
 			}
 		}

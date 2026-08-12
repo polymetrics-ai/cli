@@ -863,6 +863,25 @@ func TestFlowCaseEquivalentUniqueTablesPreserveGenericSQLAndTypedAmbiguity(t *te
 	ctx := testCtx(t)
 	a := newFlowCaseEquivalentUniqueWarehouseApp(t, ctx)
 
+	var acme app.Connection
+	for _, connection := range a.ListConnections() {
+		if connection.Name == "acme" {
+			acme = connection
+			break
+		}
+	}
+	require.NotEmpty(t, acme.ID)
+	collisionTable := "RECORDS__" + acme.ID
+	warehouseDir := filepath.Join(a.ProjectDir(), "warehouse")
+	location, err := warehouse.LocationFor(warehouseDir, "flow_scope", "warehouse", acme.ID, acme.Name)
+	require.NoError(t, err)
+	path, err := location.TablePath(collisionTable)
+	require.NoError(t, err)
+	require.NoError(t, warehouse.WriteTable(ctx, path, []warehouse.Row{{
+		"id":         "physical-owner-alias-collision",
+		"updated_at": "2026-08-12T00:00:00Z",
+	}}))
+
 	for _, test := range []struct {
 		name       string
 		connection string
@@ -888,6 +907,15 @@ func TestFlowCaseEquivalentUniqueTablesPreserveGenericSQLAndTypedAmbiguity(t *te
 		require.NoError(t, err)
 		require.Len(t, records, 1)
 		assert.Equal(t, "1", fmt.Sprint(records[0]["n"]))
+	})
+
+	t.Run("real case-equivalent owner alias remains queryable", func(t *testing.T) {
+		records, err := a.QuerySQL(ctx, app.QuerySQLRequest{
+			SQL: "SELECT id FROM \"" + collisionTable + "\"",
+		})
+		require.NoError(t, err)
+		require.Len(t, records, 1)
+		assert.Equal(t, "physical-owner-alias-collision", fmt.Sprint(records[0]["id"]))
 	})
 
 	assertRejected := func(t *testing.T, name, sql string) {
