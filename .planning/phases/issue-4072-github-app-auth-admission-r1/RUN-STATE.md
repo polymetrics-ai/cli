@@ -8,7 +8,8 @@
 
 **Recovered base:** `da8a8ff07aaf00e5c7965cd4d1d3c7252017d785`
 
-**Correction ledger:** 0/5 fresh lineage
+**Correction ledger:** 1/5 active — configured-linter RED recorded; no
+no-mistakes correction run started
 
 **Canonical private finish-plan snapshot SHA256:**
 `939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`
@@ -26,7 +27,7 @@
 | execute GREEN | complete | focused secret-blind transport/coordinator matrix passes; GREEN commit `3f83bf3af` |
 | verify-work | complete (inline automatic fallback) | `UAT.md`, bounded functional/race/vet evidence |
 | code-review | complete (inline manual deep review) | `REVIEW.md` |
-| gap plan / local broad acceptance | in progress (inline manual fallback) | `GAP-PLAN.md` |
+| gap plan / local broad acceptance | correcting (inline manual fallback) | `GAP-PLAN.md`; `make lint` RED at `414228f02` |
 | no-mistakes | prepared, held | `NO-MISTAKES-HANDOFF.md`; wait for #3856 heavy validation release |
 
 ## Manual GSD Fallback
@@ -66,3 +67,11 @@ At broad-validation intake, the current canonical plan file hashes
 the current live ledger explicitly releases local #4072 acceptance. The
 reconciliation report's unchanged bounded matrix is the only authorized test
 scope.
+
+## Active correction
+
+`make lint` found only two unused private forwarding wrappers in
+`internal/connectors/engine/auth.go`. The causal lint RED is recorded in
+`TDD-LEDGER.md`; correction 1/5 removes those wrappers and reruns the complete
+report-defined matrix. No pipeline, push, PR, UDS, or parked-parent action is
+part of this correction.

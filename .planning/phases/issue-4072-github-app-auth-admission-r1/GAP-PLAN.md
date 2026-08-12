@@ -44,8 +44,10 @@ single-worker contract forbids planner/executor/verifier/reviewer spawning.
 `scripts/gsd prompt plan-phase ... --gaps` and
 `scripts/gsd prompt execute-phase ... --gaps-only` were resolved and are
 executed inline. This is a documentation-and-validation gap plan, not a new
-behavioral slice, so it adds no RED/GREEN cycle and does not consume the fresh
-0/5 correction budget.
+behavioral slice. The initial evidence-only work added no cycle; the observed
+lint failure below reserves correction **1/5** and uses the linter itself as
+the causal RED because the intended outcome is removal of uncalled private
+declarations, not additional behavior.
 
 ## Tasks
 
@@ -86,6 +88,20 @@ the parked #3754 run.
 - The parent-route block remains explicit: the stale remote #3754 ref and
   absent correct parent draft prevent child push/PR until the captain chooses
   the bounded parent-publication route.
+
+## Correction 1/5 — lint RED
+
+At broad-acceptance head `414228f02`, `make lint` failed with `unused` for
+`buildAuthenticator` at `internal/connectors/engine/auth.go:71` and
+`buildCustomAuth` at `internal/connectors/engine/auth.go:280`. Both are
+private forwarding wrappers introduced alongside the declared-route variants
+and have no callers. The minimal GREEN is to remove those wrappers only; it
+does not alter `selectAuth`, the declared-route flow, or any runtime behavior.
+
+Adding a test solely to call private dead code would make the lint green by
+retaining the defect. The failing configured linter is therefore the causal
+RED; the GREEN command is `make lint`, followed by the entire report-defined
+acceptance matrix.
 
 ## Verification order
 

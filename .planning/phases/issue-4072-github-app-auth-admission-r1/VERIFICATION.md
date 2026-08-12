@@ -1,7 +1,7 @@
 ---
 phase: issue-4072-github-app-auth-admission-r1
 verified: 2026-08-12T00:00:00Z
-status: broad_validation_planned
+status: broad_validation_correcting
 score: 5/5 must-haves verified
 ---
 
@@ -53,6 +53,7 @@ current canonical plan file observed at resumed intake hashes
 ## Deferred by Firstmate Shared Validation Gate
 
 The report-defined local lint, generator/docs, CLI, build, and workflow checks
-are now planned. No-mistakes, push, PR, CI, parent-route decision, merge, and
-the UDS child remain deferred. This is not a substitute for those release
-gates.
+are now planned. `make lint` supplied a causal RED for correction 1/5: the two
+unused private forwarding wrappers in `internal/connectors/engine/auth.go`.
+No-mistakes, push, PR, CI, parent-route decision, merge, and the UDS child
+remain deferred. This is not a substitute for those release gates.

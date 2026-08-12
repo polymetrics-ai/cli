@@ -4,7 +4,8 @@
 
 **Parent:** #3754
 
-**Fresh correction lineage:** **0/5**
+**Fresh correction lineage:** **1/5** (correction 1 reserved for the recorded
+configured-linter failure; no no-mistakes correction run has started)
 
 **Recovered base:** `da8a8ff07aaf00e5c7965cd4d1d3c7252017d785`
 
@@ -77,6 +78,23 @@
 - **Race matrix:** `GOMAXPROCS=2 go test -p 1 -race ./internal/connectors/engine ./internal/connectors/hooks/github -run '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)' -count=1` — pass on 2026-08-12.
 - **Static analysis:** `go vet ./internal/connectors/engine ./internal/connectors/hooks/github` — pass on 2026-08-12.
 - **GSD fallback:** the named issue phase is not present in the numeric roadmap and the canonical single-worker contract disallows role spawning. `scripts/gsd prompt verify-work issue-4072-github-app-auth-admission-r1 --auto` and the equivalent deep `code-review` prompt were resolved; their inline evidence is `UAT.md` and `REVIEW.md`.
+
+## CORRECTION 1/5 — CONFIGURED-LINTER RED
+
+- **Red:** `make lint` at broad-acceptance plan head `414228f02` exited
+  non-zero on 2026-08-12. It reported exactly two `unused` declarations:
+  `buildAuthenticator` (`internal/connectors/engine/auth.go:71`) and
+  `buildCustomAuth` (`internal/connectors/engine/auth.go:280`).
+- **Cause:** both private forwarding wrappers became unreferenced when the
+  declared-route variants replaced their sole call paths.
+- **Why this is the causal RED:** the acceptance condition is removal of dead
+  private source. A test that invokes the wrappers would mask the configured
+  linter finding and retain unnecessary API surface; the failing linter is the
+  executable regression proof.
+- **Green plan:** remove only the two unused wrappers, run `make lint`, then
+  rerun the report-defined broad acceptance matrix. This reserves one fresh
+  child correction; it does not interact with no-mistakes or the parked #3754
+  lineage.
 
 ## Deferred Validation Gate
 
