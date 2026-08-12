@@ -22,7 +22,7 @@
 | Recovery-base gate | complete | branch starts at exact preserved `da8a8ff…` |
 | discuss/context | complete | `CONTEXT.md`, `DISCUSSION-LOG.md` |
 | plan-phase --tdd | complete (manual inline fallback) | `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md` |
-| execute RED | observed, commit pending | causal zero-send test fails with one premature token transport send |
+| execute RED | observed | causal no/lost tests each fail with one premature token transport send; granting case observes zero rate decisions |
 | execute GREEN | pending | no broad validation authorized |
 | verify-work / code-review | deferred | Firstmate shared validation gate |
 

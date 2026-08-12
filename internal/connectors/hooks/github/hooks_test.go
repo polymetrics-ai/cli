@@ -61,16 +61,28 @@ func (t *githubAppAuthRecordingTransport) RoundTrip(*http.Request) (*http.Respon
 	}, nil
 }
 
-func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testing.T) {
-	recordingTransport := &githubAppAuthRecordingTransport{}
-	previousDefaultClient := http.DefaultClient
-	http.DefaultClient = &http.Client{Transport: recordingTransport}
-	t.Cleanup(func() { http.DefaultClient = previousDefaultClient })
+type githubAppAuthAdmissionCoordinator struct {
+	decisions   atomic.Int32
+	finishes    atomic.Int32
+	decision    connsdk.AdmissionDecision
+	decisionErr error
+	batch       connsdk.ReservationBatch
+}
 
-	bundle, err := engine.Load(defs.FS, "github")
-	if err != nil {
-		t.Fatalf("Load(defs.FS, github): %v", err)
-	}
+func (c *githubAppAuthAdmissionCoordinator) Decide(_ context.Context, batch connsdk.ReservationBatch) (connsdk.AdmissionDecision, error) {
+	c.decisions.Add(1)
+	c.batch = batch
+	return c.decision, c.decisionErr
+}
+
+func (c *githubAppAuthAdmissionCoordinator) Finish(context.Context, connsdk.RateBudgetLease, connsdk.CompletionObservation) error {
+	c.finishes.Add(1)
+	return nil
+}
+
+func newGitHubAppAuthAdmissionConfig(t *testing.T, baseURL string, coordinator connsdk.BudgetCoordinator) (connectors.RuntimeConfig, string) {
+	t.Helper()
+	privateKey := testPrivateKeyPEM(t)
 	identity, err := connectors.NewCoordinationIdentity([]byte("github-app-auth-admission-test-salt"), connectors.CredentialBinding{
 		BindingID:      "github-app-auth-admission-test-binding",
 		ProviderFamily: "github",
@@ -79,21 +91,119 @@ func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testin
 	if err != nil {
 		t.Fatalf("NewCoordinationIdentity: %v", err)
 	}
-	cfg := newRuntimeConfig("https://github-app-auth-rate.test", map[string]string{
+	cfg := newRuntimeConfig(baseURL, map[string]string{
 		"app_id":          "4072",
 		"installation_id": "admission-test-installation",
 		"auth_type":       "github_app",
-	}, map[string]string{"private_key": testPrivateKeyPEM(t)})
+	}, map[string]string{"private_key": privateKey})
 	cfg.CoordinationIdentity = identity
 	cfg.RateBudgetBackend = connsdk.RateBudgetBackendRequireShared
+	cfg.BudgetCoordinator = coordinator
+	return cfg, privateKey
+}
 
-	_, err = engine.NewRuntime(context.Background(), bundle, cfg, githubhooks.New())
+func loadGitHubAppAuthAdmissionBundle(t *testing.T) engine.Bundle {
+	t.Helper()
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	return bundle
+}
+
+func reservationBatchContains(batch connsdk.ReservationBatch, value string) bool {
+	for _, policy := range batch.Policies {
+		if strings.Contains(policy.Key.PolicyFingerprint, value) || strings.Contains(policy.Key.Scope, value) {
+			return true
+		}
+	}
+	return false
+}
+
+func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testing.T) {
+	recordingTransport := &githubAppAuthRecordingTransport{}
+	previousDefaultClient := http.DefaultClient
+	http.DefaultClient = &http.Client{Transport: recordingTransport}
+	t.Cleanup(func() { http.DefaultClient = previousDefaultClient })
+
+	bundle := loadGitHubAppAuthAdmissionBundle(t)
+	cfg, _ := newGitHubAppAuthAdmissionConfig(t, "https://github-app-auth-rate.test", nil)
+
+	_, err := engine.NewRuntime(context.Background(), bundle, cfg, githubhooks.New())
 	if got := recordingTransport.sends.Load(); got != 0 {
 		t.Fatalf("physical GitHub App token sends = %d, want 0 before shared admission refusal (NewRuntime error = %v)", got, err)
 	}
 	var refusal *connsdk.RateBudgetRefusalError
 	if !errors.As(err, &refusal) || refusal.Reason != connsdk.RateBudgetRefusalSharedCoordinatorUnavailable {
 		t.Fatalf("NewRuntime error = %v, want typed shared coordinator unavailable refusal", err)
+	}
+}
+
+func TestGitHubAppAuthRateAdmissionLostCoordinatorRefusesBeforeTokenSend(t *testing.T) {
+	recordingTransport := &githubAppAuthRecordingTransport{}
+	previousDefaultClient := http.DefaultClient
+	http.DefaultClient = &http.Client{Transport: recordingTransport}
+	t.Cleanup(func() { http.DefaultClient = previousDefaultClient })
+
+	coordinator := &githubAppAuthAdmissionCoordinator{decisionErr: &connsdk.RateBudgetRefusalError{Reason: connsdk.RateBudgetRefusalSharedCoordinatorUnavailable}}
+	bundle := loadGitHubAppAuthAdmissionBundle(t)
+	cfg, _ := newGitHubAppAuthAdmissionConfig(t, "https://github-app-auth-rate.test", coordinator)
+
+	_, err := engine.NewRuntime(context.Background(), bundle, cfg, githubhooks.New())
+	if got := recordingTransport.sends.Load(); got != 0 {
+		t.Fatalf("physical GitHub App token sends = %d, want 0 after coordinator loss (NewRuntime error = %v)", got, err)
+	}
+	var refusal *connsdk.RateBudgetRefusalError
+	if !errors.As(err, &refusal) || refusal.Reason != connsdk.RateBudgetRefusalSharedCoordinatorUnavailable {
+		t.Fatalf("NewRuntime error = %v, want typed shared coordinator unavailable refusal", err)
+	}
+	if got := coordinator.decisions.Load(); got != 1 {
+		t.Fatalf("lost coordinator decisions = %d, want 1 declared token-route admission", got)
+	}
+	if got := coordinator.finishes.Load(); got != 0 {
+		t.Fatalf("lost coordinator finishes = %d, want 0 for an ungranted token request", got)
+	}
+}
+
+func TestGitHubAppAuthRateAdmissionFinishesOneGrantedTokenSend(t *testing.T) {
+	const mintedToken = "synthetic-installation-token"
+	var sends atomic.Int32
+	var gotMethod, gotPath string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sends.Add(1)
+		gotMethod = r.Method
+		gotPath = r.URL.Path
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		_ = json.NewEncoder(w).Encode(map[string]string{"token": mintedToken})
+	}))
+	t.Cleanup(server.Close)
+
+	coordinator := &githubAppAuthAdmissionCoordinator{decision: connsdk.AdmissionDecision{Granted: true, Lease: "github-app-auth-admission-test-lease"}}
+	bundle := loadGitHubAppAuthAdmissionBundle(t)
+	cfg, privateKey := newGitHubAppAuthAdmissionConfig(t, server.URL, coordinator)
+
+	_, err := engine.NewRuntime(context.Background(), bundle, cfg, githubhooks.New())
+	if err != nil {
+		t.Fatalf("NewRuntime: %v", err)
+	}
+	if got := sends.Load(); got != 1 {
+		t.Fatalf("physical GitHub App token sends = %d, want 1", got)
+	}
+	if got, want := gotMethod, http.MethodPost; got != want {
+		t.Fatalf("installation token method = %q, want %q", got, want)
+	}
+	if got, want := gotPath, "/app/installations/admission-test-installation/access_tokens"; got != want {
+		t.Fatalf("installation token path = %q, want %q", got, want)
+	}
+	if got := coordinator.decisions.Load(); got != 1 {
+		t.Fatalf("granting coordinator decisions = %d, want 1", got)
+	}
+	if got := coordinator.finishes.Load(); got != 1 {
+		t.Fatalf("granting coordinator finishes = %d, want 1", got)
+	}
+	if reservationBatchContains(coordinator.batch, privateKey) || reservationBatchContains(coordinator.batch, mintedToken) {
+		t.Fatal("coordination reservation evidence retained GitHub App credential or installation token material")
 	}
 }
 

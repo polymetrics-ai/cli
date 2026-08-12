@@ -48,7 +48,12 @@
   `http.DefaultClient` token exchange reached the secret-blind recording
   transport before resolver construction, rather than failing to compile or
   failing on test setup.
-- **Commit:** pending RED checkpoint commit.
+- **Expanded RED command:** `go test ./internal/connectors/hooks/github -run '^TestGitHubAppAuthRateAdmission' -count=1`
+- **Expanded observed failures:** 2026-08-12 — no/lost coordinator tests each
+  observed one premature physical token transport send; granting-coordinator
+  test observed zero decisions where one declaration-aware decision is required.
+- **Commit:** `9a44c9163` records the causal no-coordinator RED; expanded
+  no/lost/grant/privacy cases are pending this RED checkpoint commit.
 
 ## GREEN
 
