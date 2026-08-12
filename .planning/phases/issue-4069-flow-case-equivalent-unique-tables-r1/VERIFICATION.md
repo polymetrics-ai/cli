@@ -119,3 +119,20 @@ focused race, quality/generator/release, docs/help/website, local issue-guard,
 and manual GSD verification. It also separates the inherited website lint
 warnings from the candidate result. No no-mistakes, push, PR mutation,
 exact-head CI, or Sol-audit claim is inferred from either local record.
+
+## Authorized recovery gap — Website aggregate parity
+
+- [x] Captain authorization, exact #4071 topology, clean registered worktree,
+      remote `9a5b23fe` custody fast-forward, and ancestry preconditions
+      verified before the recovery mutation.
+- [x] Exact-head Website CI RED recorded from runs `31579519649` and
+      `31579519744`; both regenerate the stale aggregate and reject it as a
+      dirty generated file.
+- [ ] The no-install generator changes only `website/lib/docs.generated.ts` to
+      the audited SHA-256.
+- [ ] A second generator invocation is idempotent; diff scope/check, affected
+      Website checks, and inline/manual GSD verify-work/code-review pass.
+- [ ] One fresh no-mistakes run records PR/CI as explicitly skipped and pushes
+      only the existing #4069 branch.
+- [ ] Existing #4071 remains the sole open, draft, stacked PR and all natural
+      exact-head required checks are green before a fresh independent Sol audit.

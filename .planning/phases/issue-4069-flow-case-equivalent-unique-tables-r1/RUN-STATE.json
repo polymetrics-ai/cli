@@ -6,7 +6,7 @@
   "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "required_base_branch": "feat/3897-flow-connection-scope-nm",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "correction_1_local_gsd_verification_green_pending_firstmate_pipeline_gate",
+  "status": "correction_1_authorized_website_generated_data_gap_red_recorded",
   "correction_budget": {
     "used_before": 0,
     "active_correction": 1,
@@ -66,7 +66,7 @@
     "manual_code_review": "passed: standard inline correction-1 review found no unresolved candidate finding",
     "pr_issue_guard": "passed locally against the live draft PR title and its Refs #4069/#3897 plus parent #4060 linkage",
     "inherited_baseline": "seven older #3897 planning-file trailing-whitespace findings remain outside the child range",
-    "next_gate": "Firstmate-authorized no-mistakes custody without --yes; do not push or mutate PR metadata before that explicit gate"
+    "next_gate": "Run the repository-owned Website generator only after the committed C1-GD RED plan checkpoint, then complete manual GSD verification and one no-mistakes --skip=pr,ci recovery run"
   },
   "correction_1": {
     "audit_handoff": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4066-case-equivalent-unique-tables-r1/correction-1-sol-audit-handoff.md",
@@ -85,6 +85,15 @@
     "targeted_green_status": "passed: C1-C5 focused app/CLI tests plus inherited #4066/#3897 query, flow, alias, selector, and schedule fence",
     "implementation": "one shared ASCII DuckDB key helper; creation admission; credential-free whole local-warehouse inventory preflight before beginRun; declared-inventory plus resolver-snapshot SQL policy; typed warehouse error; exact direct resolver reads unchanged",
     "docs_parity": "passed: embedded CLI help, generated manuals/goldens, docs validator, website docs/typecheck/lint/build recorded in correction-1 broad trace",
-    "broad_verification": "passed: affected packages, focused race, formatting/diff, vet/lint/tidy/build/smoke, generators/surface-sync/certification/release, docs/help/website, issue guard, and manual GSD verify/review; see traces/correction-1-broad-verification.txt"
+    "broad_verification": "passed: affected packages, focused race, formatting/diff, vet/lint/tidy/build/smoke, generators/surface-sync/certification/release, docs/help/website, issue guard, and manual GSD verify/review; see traces/correction-1-broad-verification.txt",
+    "website_generated_data_recovery": {
+      "authorized": true,
+      "kind": "deterministic generated aggregate gap; remains correction 1/5",
+      "precondition_head": "9a5b23fe14aba16d04f55b28ff52be0a5940cb68",
+      "red_runs": [31579519649, 31579519744],
+      "owned_output": "website/lib/docs.generated.ts",
+      "expected_sha256": "38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106",
+      "no_mistakes": "start one fresh run without --yes and with --skip=pr,ci after committed GREEN"
+    }
   }
 }

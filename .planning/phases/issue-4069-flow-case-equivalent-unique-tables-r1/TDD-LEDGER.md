@@ -140,6 +140,38 @@ Broader affected-package, race, GSD review, docs/help/website, generator, and
 issue-guard verification remain required before this correction can be handed
 to no-mistakes.
 
+## Authorized recovery gap — Website generated data
+
+This is a deterministic generated-output gap in correction **1 / 5**, not
+correction 2. The existing RED/GREEN behavior evidence remains intact.
+
+| Slice | RED contract | GREEN contract | Status |
+|---|---|---|---|
+| C1-GD. Website aggregate | Exact #4071 head has four duplicate Website failures because the repository generator writes an uncommitted `website/lib/docs.generated.ts`; no source or runtime behavior is implicated. | The no-install repository generator changes exactly that aggregate to SHA-256 `38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106`; a second invocation is clean and affected checks pass. | RED recorded 2026-08-12 |
+
+### C1-GD recorded RED
+
+At #4071 head `9a5b23fe14aba16d04f55b28ff52be0a5940cb68`, `gh-axi pr checks
+4071` reports `29 passed, 4 failed, 12 skipped, 1 pending, 46 total`. The
+four failures are two `Website checks` and two `Website generated data` jobs.
+Exact `pull_request` run `31579519649` fails `Verify generated website data`;
+run `31579519744` successfully runs the generator and then fails `Check
+generated files`. Both report that `website/lib/docs.generated.ts` is stale.
+The causal, non-secret trace is
+`traces/correction-1-website-generated-data-red.txt`.
+
+### C1-GD GREEN command and boundary
+
+```text
+cd website && npm run gen:website-data
+```
+
+Before committing, inspect `git diff --name-only -- website` and require the
+sole path `website/lib/docs.generated.ts`; require its SHA-256 to equal
+`38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106`.
+Any other changed website path or hash is a stop condition. Do not install
+dependencies, edit source documentation, or modify production behavior.
+
 ## Recorded correction 1 broad verification
 
 The affected `internal/app`, `internal/cli`, `internal/flow`,

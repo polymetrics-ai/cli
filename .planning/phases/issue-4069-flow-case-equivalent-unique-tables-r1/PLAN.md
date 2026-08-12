@@ -23,6 +23,7 @@ files_modified:
   - docs/cli/connections.md
   - docs/cli/query.md
   - website/content/docs/query.mdx
+  - website/lib/docs.generated.ts
 autonomous: true
 ---
 
@@ -265,3 +266,68 @@ The earlier no-public-surface exemption no longer applies. The change modifies
 creation and SQL error contracts, so connection/query manual and website docs
 are in scope. No connector credential, reverse-ETL execution, or new generic
 write surface is permitted.
+
+## Authorized recovery gap — deterministic Website aggregate
+
+### Authority, ownership, and scope
+
+Captain authorization at
+`data/cli-github-4066-case-equivalent-unique-tables-r1/authorized-recovery-2026-08-12.md`
+authorizes this existing correction-1 #4069 phase to recover custody from the
+terminal duplicate-PR monitor and close the generated-data gap. This is not a
+new correction loop: the ledger remains **1 / 5**, #4071 remains the existing
+draft stacked PR, and no issue, branch, PR, or transport work is created.
+
+The only production-adjacent output allowed by this gap is the deterministic
+aggregate `website/lib/docs.generated.ts`. It is derived from the already
+committed #4069 additions in `website/content/docs/query.mdx` and
+`website/content/docs/cli-reference.mdx`; neither source page nor any runtime
+or connector behavior may change. The canonical finish-plan SHA-256 remains
+`939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`.
+
+### C1-GD-RED — exact-head generated-data failure
+
+At canonical #4071 head
+`9a5b23fe14aba16d04f55b28ff52be0a5940cb68`, both `Website CI/CD` run
+`31579519649` and `Website Data` run `31579519744` regenerated
+`website/lib/docs.generated.ts`, then failed because the generated aggregate
+was dirty. The live `gh-axi pr checks 4071` result reports the two duplicate
+`Website checks` and two duplicate `Website generated data` failures; all four
+have the same cause. The non-secret RED trace records the run IDs, steps, and
+expected aggregate hash before the generator is run locally.
+
+### C1-GD-GREEN — one owned, deterministic aggregate
+
+Run only the repository-owned no-install command:
+
+```text
+cd website && npm run gen:website-data
+```
+
+GREEN is valid only when the website-only changed-path set is exactly
+`website/lib/docs.generated.ts` and its SHA-256 is exactly
+`38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106`.
+Then prove a second generator invocation is idempotent, run `git diff --check`,
+the affected website checks, and the documented inline/manual GSD
+`verify-work` and `code-review` fallback. Stage evidence and generated output
+by explicit path only.
+
+### Delivery recovery
+
+After the correction is committed and the worktree is clean, start exactly one
+fresh no-mistakes run without `--yes` and with `--skip=pr,ci`; this preserves
+#4071 topology and avoids the known default-base duplicate-PR defect. PR and
+CI steps must be recorded as skipped, not represented as pipeline-owned green.
+Push only through that run, then monitor natural exact-head GitHub checks on
+existing draft #4071 with `gh-axi`. No GitHub workflow rerun, PR edit, retarget,
+ready-for-review transition, or merge is in scope.
+
+### Required skills and execution mode
+
+This generator-only Website-data correction uses the loaded `no-mistakes`,
+`gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, `gsd-code-review`,
+and `vercel-react-best-practices` guidance. No React component, page, visual,
+dependency, or runtime code changes, so component-composition and visual-design
+implementation guidance is not applicable. The existing single-worker
+inline/manual GSD fallback remains in force because compatible isolated Pi
+roles are unavailable and delegation is forbidden.

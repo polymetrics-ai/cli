@@ -31,3 +31,16 @@ permits post-pipeline commits on top of the preserved head.
 | SQL error | Reuse one-owner `AmbiguousTableError`, expose DuckDB catalog text, or add a typed same-owner error | Add a dedicated typed error with a truthful exact-read/replacement-connection remedy; do not claim that `connection` can resolve one owner's collision. |
 | Query availability | Refuse all SQL for a legacy collision or suppress only the irreducible identifier bindings | Suppress only the collision's bare/generated bindings so `SELECT 1` and unrelated tables remain executable. |
 | Delivery | Create a new issue/PR or use the existing #4069 correction budget | Use existing #4069, draft #4071, and correction 1 / 5; preserve every prior and pipeline commit. |
+
+## Authorized Website generated-data recovery addendum
+
+**Command:** `scripts/gsd prompt plan-phase issue-4069-flow-case-equivalent-unique-tables-r1 --gaps`
+**Execution:** inline/manual under the existing no-delegation fallback. The
+captain-authorized strict fast-forward preserved the completed pipeline chain
+at `9a5b23fe14aba16d04f55b28ff52be0a5940cb68` before this gap was planned.
+
+| Area | Alternatives considered | Selected decision |
+|---|---|---|
+| Ownership | Open a new child/correction loop, edit website source, or correct the existing aggregate | Keep correction 1 / 5 in #4069 and refresh only the aggregate derived from its already-committed source pages. |
+| RED evidence | Treat stale CI as an environment warning or record the exact generator failure | Record the exact #4071 Website CI/CD and Website Data failures before local generation. |
+| Delivery topology | Let no-mistakes create/adopt a PR or preserve the existing stacked draft | Run one fresh no-mistakes pass with `--skip=pr,ci`, then use natural #4071 checks as the only CI authority. |
