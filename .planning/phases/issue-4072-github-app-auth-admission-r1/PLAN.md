@@ -5,14 +5,15 @@ type: tdd
 wave: 1
 depends_on: []
 files_modified:
-  - internal/connectors/connectors.go
   - internal/connectors/engine/read.go
   - internal/connectors/engine/auth.go
   - internal/connectors/engine/hooks.go
   - internal/connectors/hooks/github/hooks.go
-  - internal/connectors/engine/github_app_auth_admission_test.go
   - internal/connectors/hooks/github/hooks_test.go
   - .planning/phases/issue-4072-github-app-auth-admission-r1/TDD-LEDGER.md
+  - .planning/phases/issue-4072-github-app-auth-admission-r1/VERIFICATION.md
+  - .planning/phases/issue-4072-github-app-auth-admission-r1/RUN-STATE.md
+  - .planning/phases/issue-4072-github-app-auth-admission-r1/SUMMARY.md
 autonomous: true
 requirements:
   - ISSUE-4072
@@ -44,7 +45,7 @@ evidence and no secret-bearing coordination data.
 
 <feature>
   <name>GitHub App token exchange uses declared shared rate admission</name>
-  <files>internal/connectors/connectors.go, internal/connectors/engine/read.go, internal/connectors/engine/auth.go, internal/connectors/engine/hooks.go, internal/connectors/hooks/github/hooks.go, internal/connectors/engine/github_app_auth_admission_test.go, internal/connectors/hooks/github/hooks_test.go</files>
+  <files>internal/connectors/engine/read.go, internal/connectors/engine/auth.go, internal/connectors/engine/hooks.go, internal/connectors/hooks/github/hooks.go, internal/connectors/hooks/github/hooks_test.go</files>
   <behavior>
     Cases:
     - GitHub App plus `require_shared` and no coordinator: `NewRuntime` returns
@@ -64,13 +65,13 @@ evidence and no secret-bearing coordination data.
   </behavior>
   <implementation>
     Build `rateLimitResolver` plus a base requester before custom auth. Add a
-    private/narrow engine capability that resolves one declared method/path to a
+    narrow engine-owned capability that resolves one declared method/path to a
     requester and performs one JSON request using an actual path and hook-owned
     headers/body. Deliver it only to auth hooks that opt into the capability;
     do not expose `BudgetCoordinator` or `Runtime`. The GitHub hook replaces
     `http.DefaultClient.Do` with that capability. Allow a non-CLI runtime HTTP
-    client injection only if needed to make the local recording transport
-    deterministic; keep it engine-owned and default-compatible.
+    local test transport injection at the standard HTTP transport boundary
+    only; do not add a runtime-config or CLI surface.
   </implementation>
 </feature>
 

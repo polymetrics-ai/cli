@@ -30,12 +30,12 @@
 
 | ID | Behavior | RED expectation | GREEN expectation | Status |
 |---|---|---|---|---|
-| A1 | no shared coordinator | raw GitHub token POST reaches recording transport before typed refusal | typed `shared_coordinator_unavailable`, zero sends | planned |
-| A2 | lost shared coordinator | raw token POST reaches recording transport before lost-coordinate refusal | typed `shared_coordinator_unavailable`, zero sends | planned |
-| A3 | granting coordinator | no declared route admission for the token POST | one `Decide`, one POST, one `Finish` | planned |
-| A4 | declared-vs-actual path | declaration is not passed to admission seam | declared `POST /app/installations/{installation_id}/access_tokens`; actual escaped installation path sent | planned |
-| A5 | secret boundary | cannot prove coordinator payload absence | reservation/observation/error evidence has no JWT, key, or minted token | planned |
-| A6 | regressions | N/A | bearer, write-hook, ordinary REST, local admission, and GraphQL exclusion remain green | planned |
+| A1 | no shared coordinator | raw GitHub token POST reaches recording transport before typed refusal | typed `shared_coordinator_unavailable`, zero sends | pass |
+| A2 | lost shared coordinator | raw token POST reaches recording transport before lost-coordinate refusal | typed `shared_coordinator_unavailable`, zero sends | pass |
+| A3 | granting coordinator | no declared route admission for the token POST | one `Decide`, one POST, one `Finish` | pass |
+| A4 | declared-vs-actual path | declaration is not passed to admission seam | declared `POST /app/installations/{installation_id}/access_tokens`; actual escaped installation path sent | pass |
+| A5 | secret boundary | cannot prove coordinator payload absence | reservation/observation/error evidence has no JWT, key, or minted token | pass |
+| A6 | regressions | N/A | bearer, write-hook, ordinary REST, local admission, and GraphQL exclusion remain green | pass |
 
 ## RED
 
@@ -52,21 +52,24 @@
 - **Expanded observed failures:** 2026-08-12 — no/lost coordinator tests each
   observed one premature physical token transport send; granting-coordinator
   test observed zero decisions where one declaration-aware decision is required.
-- **Commit:** `9a44c9163` records the causal no-coordinator RED; expanded
-  no/lost/grant/privacy cases are pending this RED checkpoint commit.
+- **Commits:** `9a44c9163` records the causal no-coordinator RED;
+  `3f20bf7ba` records the expanded no/lost/grant/privacy RED matrix.
 
 ## GREEN
 
-- **Planned command:** `go test ./internal/connectors/engine ./internal/connectors/hooks/github -run 'TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubDeclaredRateLimits' -count=1`
+- **Command:** `go test ./internal/connectors/engine ./internal/connectors/hooks/github -run 'TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubDeclaredRateLimits' -count=1`
 - **Expected result:** zero-send missing/lost shared coordinator cases; one
   decision/send/finish granting case; focused regression matrix passes.
-- **Commit:** pending
-- **Observed result:** pending
+- **Observed result:** 2026-08-12 — pass (`engine` and `github` packages).
+  The complete GitHub hook package also passes with
+  `go test ./internal/connectors/hooks/github -count=1`.
+- **Commit:** this focused GREEN commit, `fix(4072): admit GitHub App token minting`.
 
 ## REFACTOR
 
-- **Status:** pending; only if a cleanup is needed after GREEN and the focused
-  matrix remains green.
+- **Status:** complete. The recording transport remains secret-blind while
+  recording the method/path required to prove the engine-managed physical send;
+  no functional refactor followed GREEN.
 
 ## Deferred Validation Gate
 

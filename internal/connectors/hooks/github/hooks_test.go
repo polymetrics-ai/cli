@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"testing"
 
@@ -49,16 +50,38 @@ func newRuntimeConfig(baseURL string, cfgExtra map[string]string, secrets map[st
 // only whether the physical token exchange reached transport, never the JWT,
 // request headers, request body, private key, or returned token.
 type githubAppAuthRecordingTransport struct {
-	sends atomic.Int32
+	sends  atomic.Int32
+	mu     sync.Mutex
+	method string
+	path   string
 }
 
-func (t *githubAppAuthRecordingTransport) RoundTrip(*http.Request) (*http.Response, error) {
+func (t *githubAppAuthRecordingTransport) RoundTrip(request *http.Request) (*http.Response, error) {
 	t.sends.Add(1)
+	t.mu.Lock()
+	t.method = request.Method
+	t.path = request.URL.Path
+	t.mu.Unlock()
 	return &http.Response{
 		StatusCode: http.StatusCreated,
 		Header:     http.Header{"Content-Type": []string{"application/json"}},
 		Body:       io.NopCloser(strings.NewReader(`{"token":"synthetic-installation-token"}`)),
 	}, nil
+}
+
+func (t *githubAppAuthRecordingTransport) recordedRoute() (method, path string) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	return t.method, t.path
+}
+
+func installGitHubAppAuthRecordingTransport(t *testing.T) *githubAppAuthRecordingTransport {
+	t.Helper()
+	transport := &githubAppAuthRecordingTransport{}
+	previousDefaultTransport := http.DefaultTransport
+	http.DefaultTransport = transport
+	t.Cleanup(func() { http.DefaultTransport = previousDefaultTransport })
+	return transport
 }
 
 type githubAppAuthAdmissionCoordinator struct {
@@ -120,11 +143,26 @@ func reservationBatchContains(batch connsdk.ReservationBatch, value string) bool
 	return false
 }
 
+// githubAppDeclaredRouteRecorder proves the hook asks the engine for a
+// declaration-aware route without retaining JWT/header values in test state.
+type githubAppDeclaredRouteRecorder struct {
+	method       string
+	declaredPath string
+	path         string
+	hasBearerJWT bool
+	responseBody []byte
+}
+
+func (r *githubAppDeclaredRouteRecorder) DoJSON(_ context.Context, request engine.DeclaredRouteRequest) (*connsdk.Response, error) {
+	r.method = request.Method
+	r.declaredPath = request.DeclaredPath
+	r.path = request.Path
+	r.hasBearerJWT = strings.HasPrefix(request.Headers["Authorization"], "Bearer ")
+	return &connsdk.Response{Status: http.StatusCreated, Body: r.responseBody}, nil
+}
+
 func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testing.T) {
-	recordingTransport := &githubAppAuthRecordingTransport{}
-	previousDefaultClient := http.DefaultClient
-	http.DefaultClient = &http.Client{Transport: recordingTransport}
-	t.Cleanup(func() { http.DefaultClient = previousDefaultClient })
+	recordingTransport := installGitHubAppAuthRecordingTransport(t)
 
 	bundle := loadGitHubAppAuthAdmissionBundle(t)
 	cfg, _ := newGitHubAppAuthAdmissionConfig(t, "https://github-app-auth-rate.test", nil)
@@ -140,10 +178,7 @@ func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testin
 }
 
 func TestGitHubAppAuthRateAdmissionLostCoordinatorRefusesBeforeTokenSend(t *testing.T) {
-	recordingTransport := &githubAppAuthRecordingTransport{}
-	previousDefaultClient := http.DefaultClient
-	http.DefaultClient = &http.Client{Transport: recordingTransport}
-	t.Cleanup(func() { http.DefaultClient = previousDefaultClient })
+	recordingTransport := installGitHubAppAuthRecordingTransport(t)
 
 	coordinator := &githubAppAuthAdmissionCoordinator{decisionErr: &connsdk.RateBudgetRefusalError{Reason: connsdk.RateBudgetRefusalSharedCoordinatorUnavailable}}
 	bundle := loadGitHubAppAuthAdmissionBundle(t)
@@ -167,29 +202,20 @@ func TestGitHubAppAuthRateAdmissionLostCoordinatorRefusesBeforeTokenSend(t *test
 
 func TestGitHubAppAuthRateAdmissionFinishesOneGrantedTokenSend(t *testing.T) {
 	const mintedToken = "synthetic-installation-token"
-	var sends atomic.Int32
-	var gotMethod, gotPath string
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sends.Add(1)
-		gotMethod = r.Method
-		gotPath = r.URL.Path
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
-		_ = json.NewEncoder(w).Encode(map[string]string{"token": mintedToken})
-	}))
-	t.Cleanup(server.Close)
+	recordingTransport := installGitHubAppAuthRecordingTransport(t)
 
 	coordinator := &githubAppAuthAdmissionCoordinator{decision: connsdk.AdmissionDecision{Granted: true, Lease: "github-app-auth-admission-test-lease"}}
 	bundle := loadGitHubAppAuthAdmissionBundle(t)
-	cfg, privateKey := newGitHubAppAuthAdmissionConfig(t, server.URL, coordinator)
+	cfg, privateKey := newGitHubAppAuthAdmissionConfig(t, "https://github-app-auth-rate.test", coordinator)
 
 	_, err := engine.NewRuntime(context.Background(), bundle, cfg, githubhooks.New())
 	if err != nil {
 		t.Fatalf("NewRuntime: %v", err)
 	}
-	if got := sends.Load(); got != 1 {
+	if got := recordingTransport.sends.Load(); got != 1 {
 		t.Fatalf("physical GitHub App token sends = %d, want 1", got)
 	}
+	gotMethod, gotPath := recordingTransport.recordedRoute()
 	if got, want := gotMethod, http.MethodPost; got != want {
 		t.Fatalf("installation token method = %q, want %q", got, want)
 	}
@@ -207,44 +233,65 @@ func TestGitHubAppAuthRateAdmissionFinishesOneGrantedTokenSend(t *testing.T) {
 	}
 }
 
+func TestGitHubAppAuthRateAdmissionPreservesProcessLocalAdmission(t *testing.T) {
+	recordingTransport := installGitHubAppAuthRecordingTransport(t)
+
+	bundle := loadGitHubAppAuthAdmissionBundle(t)
+	cfg, _ := newGitHubAppAuthAdmissionConfig(t, "https://github-app-auth-rate.test", nil)
+	cfg.RateBudgetBackend = connsdk.RateBudgetBackendProcessLocal
+
+	if _, err := engine.NewRuntime(context.Background(), bundle, cfg, githubhooks.New()); err != nil {
+		t.Fatalf("NewRuntime with process-local admission: %v", err)
+	}
+	if got := recordingTransport.sends.Load(); got != 1 {
+		t.Fatalf("process-local GitHub App token sends = %d, want 1", got)
+	}
+}
+
+func TestAuthenticatorGithubAppRefusesWithoutDeclaredRoute(t *testing.T) {
+	h := githubhooks.New()
+	cfg := newRuntimeConfig("https://example.invalid", map[string]string{
+		"app_id":          "12345",
+		"installation_id": "67890",
+	}, map[string]string{"private_key": testPrivateKeyPEM(t)})
+
+	_, err := h.Authenticator(context.Background(), cfg, engine.AuthSpec{Mode: "custom", Hook: "github"})
+	if err == nil || !strings.Contains(err.Error(), "declared-route admission") {
+		t.Fatalf("Authenticator() error = %v, want refusal without engine declared-route admission", err)
+	}
+}
+
 func TestAuthenticatorGithubApp_MintsInstallationTokenAndSetsBearer(t *testing.T) {
 	pemKey := testPrivateKeyPEM(t)
 	const wantToken = "ghs_installation_fixture_token"
 
-	var gotPath, gotMethod, gotAuthPrefix string
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		gotPath = r.URL.Path
-		gotMethod = r.Method
-		gotAuthPrefix = r.Header.Get("Authorization")
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
-		_ = json.NewEncoder(w).Encode(map[string]string{"token": wantToken})
-	}))
-	defer srv.Close()
-
 	h := githubhooks.New()
-	cfg := newRuntimeConfig(srv.URL, map[string]string{
+	cfg := newRuntimeConfig("https://example.invalid", map[string]string{
 		"app_id":          "12345",
 		"installation_id": "67890",
 	}, map[string]string{"private_key": pemKey})
+	route := &githubAppDeclaredRouteRecorder{responseBody: []byte(`{"token":"` + wantToken + `"}`)}
 
 	spec := engine.AuthSpec{Mode: "custom", Hook: "github"}
-	authenticator, err := h.Authenticator(context.Background(), cfg, spec)
+	authenticator, err := h.AuthenticatorWithDeclaredRoute(context.Background(), cfg, spec, route)
 	if err != nil {
-		t.Fatalf("Authenticator() error = %v", err)
+		t.Fatalf("AuthenticatorWithDeclaredRoute() error = %v", err)
 	}
 	if authenticator == nil {
-		t.Fatal("Authenticator() = nil, want a non-nil connsdk.Authenticator")
+		t.Fatal("AuthenticatorWithDeclaredRoute() = nil, want a non-nil connsdk.Authenticator")
 	}
 
-	if gotMethod != http.MethodPost {
-		t.Fatalf("installation token request method = %q, want POST", gotMethod)
+	if got, want := route.method, http.MethodPost; got != want {
+		t.Fatalf("installation token request method = %q, want %q", got, want)
 	}
-	if gotPath != "/app/installations/67890/access_tokens" {
-		t.Fatalf("installation token request path = %q, want /app/installations/67890/access_tokens", gotPath)
+	if got, want := route.declaredPath, "/app/installations/{installation_id}/access_tokens"; got != want {
+		t.Fatalf("installation token declaration path = %q, want %q", got, want)
 	}
-	if !strings.HasPrefix(gotAuthPrefix, "Bearer ") {
-		t.Fatalf("installation token request Authorization = %q, want a Bearer-prefixed JWT", gotAuthPrefix)
+	if got, want := route.path, "/app/installations/67890/access_tokens"; got != want {
+		t.Fatalf("installation token request path = %q, want %q", got, want)
+	}
+	if !route.hasBearerJWT {
+		t.Fatal("installation token request did not provide a Bearer JWT to the engine-owned route capability")
 	}
 
 	// Apply the returned Authenticator to an outbound request and assert it
@@ -265,27 +312,27 @@ func TestAuthenticatorGithubApp_MintsInstallationTokenAndSetsBearer(t *testing.T
 func TestAuthenticatorGithubApp_MissingAppIDErrors(t *testing.T) {
 	h := githubhooks.New()
 	cfg := newRuntimeConfig("https://example.invalid", map[string]string{"installation_id": "67890"}, map[string]string{"private_key": testPrivateKeyPEM(t)})
-	_, err := h.Authenticator(context.Background(), cfg, engine.AuthSpec{Mode: "custom", Hook: "github"})
+	_, err := h.AuthenticatorWithDeclaredRoute(context.Background(), cfg, engine.AuthSpec{Mode: "custom", Hook: "github"}, &githubAppDeclaredRouteRecorder{})
 	if err == nil {
-		t.Fatal("Authenticator() error = nil, want an error naming the missing app_id")
+		t.Fatal("AuthenticatorWithDeclaredRoute() error = nil, want an error naming the missing app_id")
 	}
 }
 
 func TestAuthenticatorGithubApp_MissingInstallationIDErrors(t *testing.T) {
 	h := githubhooks.New()
 	cfg := newRuntimeConfig("https://example.invalid", map[string]string{"app_id": "12345"}, map[string]string{"private_key": testPrivateKeyPEM(t)})
-	_, err := h.Authenticator(context.Background(), cfg, engine.AuthSpec{Mode: "custom", Hook: "github"})
+	_, err := h.AuthenticatorWithDeclaredRoute(context.Background(), cfg, engine.AuthSpec{Mode: "custom", Hook: "github"}, &githubAppDeclaredRouteRecorder{})
 	if err == nil {
-		t.Fatal("Authenticator() error = nil, want an error naming the missing installation_id")
+		t.Fatal("AuthenticatorWithDeclaredRoute() error = nil, want an error naming the missing installation_id")
 	}
 }
 
 func TestAuthenticatorGithubApp_MissingPrivateKeyErrors(t *testing.T) {
 	h := githubhooks.New()
 	cfg := newRuntimeConfig("https://example.invalid", map[string]string{"app_id": "12345", "installation_id": "67890"}, nil)
-	_, err := h.Authenticator(context.Background(), cfg, engine.AuthSpec{Mode: "custom", Hook: "github"})
+	_, err := h.AuthenticatorWithDeclaredRoute(context.Background(), cfg, engine.AuthSpec{Mode: "custom", Hook: "github"}, &githubAppDeclaredRouteRecorder{})
 	if err == nil {
-		t.Fatal("Authenticator() error = nil, want an error naming the missing private key")
+		t.Fatal("AuthenticatorWithDeclaredRoute() error = nil, want an error naming the missing private key")
 	}
 }
 
@@ -293,22 +340,16 @@ func TestAuthenticatorGithubApp_PrivateKeyBase64Variant(t *testing.T) {
 	pemKey := testPrivateKeyPEM(t)
 	encoded := base64.StdEncoding.EncodeToString([]byte(pemKey))
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
-		_ = json.NewEncoder(w).Encode(map[string]string{"token": "ghs_from_base64_key"})
-	}))
-	defer srv.Close()
-
 	h := githubhooks.New()
-	cfg := newRuntimeConfig(srv.URL, map[string]string{
+	cfg := newRuntimeConfig("https://example.invalid", map[string]string{
 		"app_id":          "12345",
 		"installation_id": "67890",
 	}, map[string]string{"private_key_base64": encoded})
+	route := &githubAppDeclaredRouteRecorder{responseBody: []byte(`{"token":"ghs_from_base64_key"}`)}
 
-	authenticator, err := h.Authenticator(context.Background(), cfg, engine.AuthSpec{Mode: "custom", Hook: "github"})
+	authenticator, err := h.AuthenticatorWithDeclaredRoute(context.Background(), cfg, engine.AuthSpec{Mode: "custom", Hook: "github"}, route)
 	if err != nil {
-		t.Fatalf("Authenticator() error = %v", err)
+		t.Fatalf("AuthenticatorWithDeclaredRoute() error = %v", err)
 	}
 	req, _ := http.NewRequest(http.MethodGet, "https://api.github.com/", nil)
 	if err := authenticator.Apply(context.Background(), req); err != nil {
@@ -321,20 +362,14 @@ func TestAuthenticatorGithubApp_PrivateKeyBase64Variant(t *testing.T) {
 
 func TestAuthenticatorGithubApp_HonorsContextCancellation(t *testing.T) {
 	pemKey := testPrivateKeyPEM(t)
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusCreated)
-		_ = json.NewEncoder(w).Encode(map[string]string{"token": "unused"})
-	}))
-	defer srv.Close()
-
 	h := githubhooks.New()
-	cfg := newRuntimeConfig(srv.URL, map[string]string{"app_id": "1", "installation_id": "2"}, map[string]string{"private_key": pemKey})
+	cfg := newRuntimeConfig("https://example.invalid", map[string]string{"app_id": "1", "installation_id": "2"}, map[string]string{"private_key": pemKey})
 
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
-	_, err := h.Authenticator(ctx, cfg, engine.AuthSpec{Mode: "custom", Hook: "github"})
+	_, err := h.AuthenticatorWithDeclaredRoute(ctx, cfg, engine.AuthSpec{Mode: "custom", Hook: "github"}, &githubAppDeclaredRouteRecorder{})
 	if err == nil {
-		t.Fatal("Authenticator() error = nil for an already-cancelled context, want an error (F8: ctx must be honored, not context.Background())")
+		t.Fatal("AuthenticatorWithDeclaredRoute() error = nil for an already-cancelled context, want an error (F8: ctx must be honored, not context.Background())")
 	}
 }
 

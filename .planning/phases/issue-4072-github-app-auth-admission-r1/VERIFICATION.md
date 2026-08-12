@@ -1,8 +1,8 @@
 ---
 phase: issue-4072-github-app-auth-admission-r1
 verified: 2026-08-12T00:00:00Z
-status: pending_focused_green
-score: 0/5 must-haves verified
+status: focused_green_passed
+score: 5/5 must-haves verified
 ---
 
 # Issue #4072: GitHub App auth admission - Verification Plan
@@ -14,18 +14,19 @@ declared shared/process-local rate boundary as ordinary GitHub REST requests.
 
 | # | Truth | Focused evidence | Status |
 |---|---|---|---|
-| 1 | Missing shared coordinator refuses before token transport | local recording transport + typed error | pending |
-| 2 | Lost shared coordinator refuses before token transport | local fake coordinator + typed error | pending |
-| 3 | One granted token POST has one Decide and one Finish | local recording coordinator/transport | pending |
-| 4 | Admission matches declared token route while sending actual path | captured declaration and request path | pending |
-| 5 | Credentials/tokens do not enter coordinator evidence | captured reservation/observation/error inspection | pending |
+| 1 | Missing shared coordinator refuses before token transport | local recording transport + typed error | pass |
+| 2 | Lost shared coordinator refuses before token transport | local fake coordinator + typed error | pass |
+| 3 | One granted token POST has one Decide and one Finish | local recording coordinator/transport | pass |
+| 4 | Admission matches declared token route while sending actual path | captured declaration and request path | pass |
+| 5 | Credentials/tokens do not enter coordinator evidence | captured reservation/observation/error inspection | pass |
 
 ## Required Focused Checks
 
 | Command | Purpose | Status |
 |---|---|---|
-| `go test ./internal/connectors/engine ./internal/connectors/hooks/github -run 'TestGitHubAppAuthRateAdmission' -count=1` | causal RED then implementation proof | pending |
-| `go test ./internal/connectors/engine ./internal/connectors/hooks/github -run 'TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubDeclaredRateLimits' -count=1` | narrow behavior/regression matrix | pending |
+| `go test ./internal/connectors/hooks/github -run '^TestGitHubAppAuthRateAdmission' -count=1` | causal GREEN proof using secret-blind recording transport | pass |
+| `go test ./internal/connectors/engine ./internal/connectors/hooks/github -run 'TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubDeclaredRateLimits' -count=1` | narrow behavior/regression matrix | pass |
+| `go test ./internal/connectors/hooks/github -count=1` | complete GitHub hook package regression check | pass |
 
 ## Deferred by Firstmate Shared Validation Gate
 

@@ -501,15 +501,27 @@ func materializeConfigDefaults(b Bundle, cfg connectors.RuntimeConfig) connector
 }
 
 // newRuntime builds the shared *Runtime (Requester + Bundle + Config) used
-// by both the declarative path and any dispatched hooks. ctx is threaded
-// into selectAuth (F8) so a "custom" AuthHook's Authenticator resolution
-// (e.g. a network token exchange) honors the caller's context instead of
-// running under context.Background().
+// by both the declarative path and any dispatched hooks. Rate resolution and
+// the base requester are constructed before custom authentication so a
+// network-capable AuthHook can use the same declared admission seam as a
+// normal request. ctx is threaded into auth resolution so custom hooks honor
+// caller cancellation/deadlines instead of running under context.Background().
 func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks) (*Runtime, error) {
 	baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
 	if err != nil {
 		return nil, fmt.Errorf("engine: resolve base url: %w", err)
 	}
+	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
+	if err != nil {
+		return nil, err
+	}
+	requester := &connsdk.Requester{
+		BaseURL:        baseURL,
+		UserAgent:      b.HTTP.UserAgent,
+		DefaultHeaders: headers,
+	}
+	resolver := newRateLimitResolver(b, cfg)
+	authRuntime := &Runtime{baseRequester: requester, rateLimits: resolver}
 
 	// An empty auth list means the bundle declares no authentication scheme at
 	// all (e.g. a fully public API, or a test double) — selectAuth itself
@@ -517,25 +529,12 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	// rather than forcing every caller to declare a trivial "none" rule.
 	var auth connsdk.Authenticator
 	if len(b.HTTP.Auth) > 0 {
-		auth, err = selectAuth(ctx, cfg, b.HTTP.Auth, h)
+		auth, err = selectAuthWithDeclaredRoute(ctx, cfg, b.HTTP.Auth, h, declaredRouteRequester{runtime: authRuntime})
 		if err != nil {
 			return nil, fmt.Errorf("engine: %w", err)
 		}
 	}
-
-	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
-	if err != nil {
-		return nil, err
-	}
-
-	requester := &connsdk.Requester{
-		BaseURL:        baseURL,
-		Auth:           auth,
-		UserAgent:      b.HTTP.UserAgent,
-		DefaultHeaders: headers,
-	}
-
-	resolver := newRateLimitResolver(b, cfg)
+	requester.Auth = auth
 	defaultRequester, err := resolver.defaultRequester(requester)
 	if err != nil {
 		return nil, err

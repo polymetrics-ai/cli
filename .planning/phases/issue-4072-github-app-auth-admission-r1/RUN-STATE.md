@@ -23,7 +23,7 @@
 | discuss/context | complete | `CONTEXT.md`, `DISCUSSION-LOG.md` |
 | plan-phase --tdd | complete (manual inline fallback) | `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md` |
 | execute RED | observed | causal no/lost tests each fail with one premature token transport send; granting case observes zero rate decisions |
-| execute GREEN | pending | no broad validation authorized |
+| execute GREEN | complete | focused secret-blind transport/coordinator matrix passes; GREEN commit is this commit |
 | verify-work / code-review | deferred | Firstmate shared validation gate |
 
 ## Manual GSD Fallback
@@ -41,3 +41,10 @@ plan, TDD ledger, verification, summary, and review artifacts.
   until Firstmate explicitly releases the shared validation gate.
 - Do not select a parent PR route; record `needs-decision` at delivery only if
   Firstmate has not supplied an authoritative safe target.
+
+## Focused GREEN Evidence
+
+- `go test ./internal/connectors/hooks/github -run '^TestGitHubAppAuthRateAdmission' -count=1` — pass.
+- `go test ./internal/connectors/engine ./internal/connectors/hooks/github -run 'TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubDeclaredRateLimits' -count=1` — pass.
+- `go test ./internal/connectors/hooks/github -count=1` — pass.
+- No no-mistakes run, broad suite, race sweep, push, PR, CI, or merge was started.
