@@ -5,7 +5,7 @@
   "branch": "feat/3856-polling-conformance-corpus",
   "base_branch": "feat/3855-polling-apply-foundations",
   "base_sha": "fa5eef681a4b06c09519574326a22683b26bd996",
-  "status": "working_broad_validation_and_draft_delivery",
+  "status": "ready_for_pre_push_report",
   "adapter": "pi-project-local",
   "runtime_fallback": "inline manual execution of generated GSD prompts; the canonical single-worker contract forbids role spawning",
   "skills": [
@@ -36,7 +36,7 @@
       "live credentials or mutation"
     ]
   },
-  "correction_count": 2,
+  "correction_count": 3,
   "shepherd": "excluded; #3995/#4062 is parked",
   "pause": {
     "reason": "captain-directed step-by-step hold",
@@ -62,6 +62,28 @@
       "status": "working",
       "note": "#3856 broad validation and draft delivery released after focused engine and generic-corpus checks passed",
       "event": "working: #3856 broad validation and draft delivery released after focused engine and generic-corpus checks passed"
+    },
+    {
+      "status": "needs-decision",
+      "note": "no-mistakes ask-user gate is parked; await Firstmate relay of the captain's exact decision before any response or further activity",
+      "no_mistakes_run": "01KZVGR0A7Y9ZQ31HK4AYK9DGX",
+      "finding_ids": [
+        "intent-test-corpus-only-scope",
+        "unsafe-lane-admission",
+        "checkpoint-provenance-not-validated"
+      ]
+    },
+    {
+      "status": "working",
+      "note": "captain decision nm-3856-review-gate-01 documented the stacked-base false positive and authorized one clustered #4075 shared-runner correction round",
+      "no_mistakes_run": "01KZVGR0A7Y9ZQ31HK4AYK9DGX",
+      "correction_issue": 4075
+    },
+    {
+      "status": "validated",
+      "note": "no-mistakes review, focused test, document, and lint steps passed; push, PR, and CI were intentionally skipped, then the preserved pipeline head was recovered before evidence reconciliation",
+      "no_mistakes_run": "01KZVGR0A7Y9ZQ31HK4AYK9DGX",
+      "pipeline_head": "82a95c609e3a62f37041c5503b75b1e18aa6dd1c"
     }
   ],
   "focused_implementation": {
@@ -81,8 +103,57 @@
       "issue": 4074,
       "scope": "derive and verify the bounded-overlap source request in the #3856 reference lane",
       "status": "implemented; focused GREEN recorded"
+    },
+    {
+      "loop": 3,
+      "issue": 4075,
+      "finding_ids": [
+        "unsafe-lane-admission",
+        "checkpoint-provenance-not-validated"
+      ],
+      "scope": "fail closed at the shared runner on unsafe lane capabilities and persisted checkpoint provenance",
+      "status": "implemented after two causal REDs; no-mistakes review/test/document/lint passed"
     }
   ],
+  "no_mistakes_review_gate": {
+    "decision_key": "nm-3856-review-gate-01",
+    "run": "01KZVGR0A7Y9ZQ31HK4AYK9DGX",
+    "reviewed_head": "261e24d4e9a9fb94c2909c45627d64cda89f6e86",
+    "stacked_base_scope_false_positive": {
+      "finding": "intent-test-corpus-only-scope",
+      "disposition": "do not fix; inherited parent ancestry was incorrectly included because no-mistakes reviewed from main rather than the stacked PR base",
+      "intended_parent": "origin/feat/3855-polling-apply-foundations@fa5eef681a4b06c09519574326a22683b26bd996",
+      "merge_base": "fa5eef681a4b06c09519574326a22683b26bd996",
+      "child_commit_count": 6,
+      "child_diff_scope": "only #3856 planning evidence and internal/connectors/engine polling conformance corpus/runner/testdata; no internal/synctransport, cmd, or provider source path",
+      "action": "preserve accepted parent ancestry; do not split, rebase, reset, remove, or rewrite it; exclude this finding from the first fix response"
+    },
+    "clustered_round": {
+      "loop": 3,
+      "maximum": 5,
+      "finding_ids": [
+        "unsafe-lane-admission",
+        "checkpoint-provenance-not-validated"
+      ],
+      "status": "captain-authorized for one shared-runner correction after a narrow direct #3856 child and causal RED reproduction"
+    },
+    "result": {
+      "outcome": "passed",
+      "pipeline_head": "82a95c609e3a62f37041c5503b75b1e18aa6dd1c",
+      "steps": {
+        "review": "passed after #4075 fix review",
+        "test": "passed focused runner and targeted race evidence",
+        "document": "passed with refreshed phase evidence and scoped lint clean",
+        "lint": "passed"
+      },
+      "skipped": [
+        "push",
+        "pr",
+        "ci"
+      ],
+      "recovery": "guarded recovery first refused the dirty required status record without changing files or refs; custody then returned with --keep-local and a proven fast-forward recovered exact pipeline head while preserving that record"
+    }
+  },
   "validation_cleanups": [
     "make lint staticcheck S1016 in the reference test factory: fixed with a direct equivalent-struct conversion; non-substantive and excluded from the 2/5 correction count"
   ],
@@ -115,7 +186,12 @@
     ],
     "gsd": "verify-work and code-review prompts resolved; inline/manual fallback documented in 3856-UAT.md and REVIEW.md because the canonical single-worker contract forbids role spawning",
     "shepherd": "excluded; #3995/#4062 remains parked",
-    "serialization": "#4072 remains paused and untouched"
+    "serialization": "#4072 remains paused and untouched",
+    "current_target": {
+      "pipeline_head": "82a95c609e3a62f37041c5503b75b1e18aa6dd1c",
+      "source_fix_head": "cd92037fe8add4b6fc3e09c5b0a7648e5a0ab6c5",
+      "qualification": "the prior broad record applies to aa4d8c8a9; no-mistakes focused validation passed for the #4075 target, but the required broad current-head validation must be refreshed before push"
+    }
   },
-  "next": "run no-mistakes with --skip=push,pr,ci, then push and create one draft child PR with explicit base/head if it passes"
+  "next": "report recovered #4075/no-mistakes evidence to Firstmate before any push; retain the exact parent base, draft-only topology, and #4072 serialization; refresh broad current-head validation before delivery resumes"
 }

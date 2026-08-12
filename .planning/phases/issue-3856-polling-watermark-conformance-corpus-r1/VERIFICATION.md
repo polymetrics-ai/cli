@@ -3,11 +3,12 @@
 ## Current target boundary
 
 The passing broad-validation record below applies only to
-`aa4d8c8a9fabfb230c3de44764f13b945814153d`. The current target
+`aa4d8c8a9fabfb230c3de44764f13b945814153d`. The current source target
 `cd92037fe8add4b6fc3e09c5b0a7648e5a0ab6c5` changes conformance admission and
-checkpoint provenance. Its focused RED/GREEN evidence is recorded in
-`TDD-LEDGER.md`; the outer validation phase must re-run broad validation before
-this record is used as current-head certification.
+checkpoint provenance; evidence refresh committed at
+`82a95c609e3a62f37041c5503b75b1e18aa6dd1c`. Its focused RED/GREEN evidence is
+recorded in `TDD-LEDGER.md`; the outer validation phase must re-run broad
+validation before this record is used as current-head certification.
 
 ## Broad validation record
 
@@ -24,7 +25,28 @@ this record is used as current-head certification.
 | Exact binary | clean child-head `pm` byte count, SHA-256, and applicable no-credential smoke | pass; `148200034` bytes, `cd1744c464daca2c4e73d1eaa8869c3aa85494c895fe3a381fd0876647ede0e5`, `pm help` and bare `pm connectors` pass |
 | GSD verify/review | generated prompt, durable verification/review report | pass using the documented inline/manual fallback; see `3856-UAT.md` and `REVIEW.md` |
 | Independent audit | required Sol audit after final candidate | pending |
-| no-mistakes | `--skip=push,pr,ci`, no `--yes` | pending |
+| no-mistakes | `--skip=push,pr,ci`, no `--yes` | pass at `82a95c60`; review, focused test/race, document, and lint passed while push/PR/CI were intentionally skipped |
+
+## No-mistakes correction evidence
+
+Run `01KZVGR0A7Y9ZQ31HK4AYK9DGX` passed at pipeline head
+`82a95c609e3a62f37041c5503b75b1e18aa6dd1c`. The #4075 causal RED command was:
+
+```text
+$ go test -timeout 20m ./internal/connectors/engine -run '^(TestPollingWatermarkConformanceRegistrationRejectsUnsafeDescriptor|TestPollingWatermarkConformanceSuiteRejectsPersistedCheckpointDescriptorMismatch)$' -count=1
+FAIL: unsafe keyset, cursor policy, bounded overlap, and bounded commit lag registrations returned <nil>
+FAIL: source identity, source generation, schema fingerprint, and mechanism checkpoint mutations returned <nil>
+```
+
+After the shared-runner correction, the gate passed:
+
+- `go test -v -timeout 20m ./internal/connectors/engine -run '^(TestPollingWatermarkConformance.*|TestBoundedOverlapReferenceLaneDerivesTheOverlapRequest)$' -count=1`
+- the same target with `-race`
+- separate polling corpus and generic #3810 SHA-256 evidence; the generic digest remains unchanged
+
+The gate created the no-skip runner transcript and eleven-scenario inventory in
+its required temporary evidence directory. Push, PR, and CI were deliberately
+skipped; no remote branch, PR, or CI state was created by this run.
 
 ## Serialized validation hold
 

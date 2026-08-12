@@ -58,6 +58,16 @@ contracts, and persisted checkpoint provenance must match the fixture. The
 focused RED/GREEN record is owned by `TDD-LEDGER.md`; this report's original
 reviewed source head remains `aa4d8c8a9`.
 
+## Stacked-base scope disposition
+
+`intent-test-corpus-only-scope` was a documented false positive: the initial
+no-mistakes review compared the child to `main` at `da7747a...`, not to the
+stacked parent. At review head `261e24d4e`, the merge base with
+`origin/feat/3855-polling-apply-foundations` was exactly
+`fa5eef681a4b06c09519574326a22683b26bd996`; its six child commits changed
+only #3856 phase evidence and the polling conformance engine/corpus paths.
+No inherited Transport or CLI code was modified, split, rebased, or removed.
+
 ## Verdict
 
 The original review was clean after the two recorded items. The follow-up
