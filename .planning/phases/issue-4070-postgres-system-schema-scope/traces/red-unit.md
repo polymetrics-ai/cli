@@ -1,6 +1,6 @@
 # RED — pre-connection system-schema rejection
 
-**Candidate:** `49a9386d2c629e53594c6bba1dd9a74a05b3bff5` plus the committed-RED test-only work.  
+**Candidate:** `49a9386d2c629e53594c6bba1dd9a74a05b3bff5` plus the committed-RED test-only work.
 **Production code modified:** no.
 
 ## Command

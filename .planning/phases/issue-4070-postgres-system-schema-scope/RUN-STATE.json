@@ -15,7 +15,7 @@
     "fallback": "inline manual GSD phase; issue-specific phase is absent from ROADMAP.md"
   },
   "tdd": {
-    "phase": "green_verified_commit_pending",
+    "phase": "paused_before_no_mistakes",
     "production_code_after_red_commit": true
   },
   "no_mistakes": {
@@ -23,7 +23,8 @@
     "old_run_status": "pipeline_owned and immutable at 5/5; do not respond or sync",
     "new_issue_loop": 0,
     "new_issue_loop_max": 5,
-    "new_run_started": false
+    "new_run_started": false,
+    "pause_reason": "Firstmate requested that the shared daemon remain idle while GitHub run 01KZSJG7P7QREZSZ7N52TPBA5F finishes and the Transport stale gate is resolved."
   },
   "scope": {
     "allow": [

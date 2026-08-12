@@ -1,10 +1,11 @@
 # #4070 plan — reject PostgreSQL system-owned catalog schemas
 
-**Type:** issue-first behavior correction, manual GSD/TDD fallback  
-**Status:** planned; production changes prohibited until the RED commit exists  
-**Issue hierarchy:** #4070 → #3976 → #3972 → #4015  
+**Type:** issue-first behavior correction, manual GSD/TDD fallback
+**Status:** local implementation, verification, and review complete; paused
+before the new #4070 no-mistakes run at Firstmate's request
+**Issue hierarchy:** #4070 → #3976 → #3972 → #4015
 **Candidate:** `49a9386d2c629e53594c6bba1dd9a74a05b3bff5` on
-`fix/4070-postgres-system-schema-scope`  
+`fix/4070-postgres-system-schema-scope`
 **Required draft PR base:** `feat/3976-postgres-dynamic-catalog`
 
 ## Why manual GSD

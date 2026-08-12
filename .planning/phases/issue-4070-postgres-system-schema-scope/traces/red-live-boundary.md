@@ -1,7 +1,7 @@
 # RED — live PostgreSQL temporary-schema boundary
 
-**Candidate:** freshly built `pm` from the unmodified #4070 candidate.  
-**Production code modified:** no.  
+**Candidate:** freshly built `pm` from the unmodified #4070 candidate.
+**Production code modified:** no.
 **Boundary:** a unique run-owned PostgreSQL 12 cluster on loopback only; no
 ambient PostgreSQL environment variables, shared database, raw connection
 string, or secret value was used or recorded.

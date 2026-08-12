@@ -1,9 +1,9 @@
 # Issue #4070 — PostgreSQL system-schema scope
 
-**Date:** 2026-08-12  
-**Issue:** #4070 `fix(postgres): reject system-owned schemas before catalog discovery`  
-**Parents:** #3976 → #3972 → #4015  
-**Branch:** `fix/4070-postgres-system-schema-scope`  
+**Date:** 2026-08-12
+**Issue:** #4070 `fix(postgres): reject system-owned schemas before catalog discovery`
+**Parents:** #3976 → #3972 → #4015
+**Branch:** `fix/4070-postgres-system-schema-scope`
 **Required PR base:** `feat/3976-postgres-dynamic-catalog`
 
 ## Manual GSD fallback

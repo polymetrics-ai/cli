@@ -1,6 +1,6 @@
 # GREEN — live PostgreSQL system-schema scope
 
-**Candidate:** fresh `pm` rebuilt from the guarded #4070 source.  
+**Candidate:** fresh `pm` rebuilt from the guarded #4070 source.
 **Boundary:** the same unique run-owned loopback PostgreSQL fixture used for
 RED, with a newly opened temporary-table session. No ambient PostgreSQL
 credential or shared database was read.

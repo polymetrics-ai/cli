@@ -6,10 +6,10 @@
 | Cycle | State | Evidence required before advancing |
 | --- | --- | --- |
 | RED | complete in `e23a945` / `d890902` | A test-only change proves every reserved schema currently reaches transport/catalog discovery; a fresh run-owned PostgreSQL session proves a held `pg_temp_N` table is accepted by the candidate. See `traces/red-unit.md` and `traces/red-live-boundary.md`. |
-| GREEN | complete; implementation commit pending | The narrow guard returns a named typed scope error before pool creation for every required exact/prefix case; allowed schemas remain live/dynamic. See `traces/green-live-boundary.md`. |
-| Refactor/docs | complete; implementation commit pending | No refactor beyond one narrow helper was needed. Authoritative PostgreSQL docs and derived website catalog data state the same boundary. |
-| Verify/review | blocked on refactor | Focused/unit/live/race/build/vet/lint/docs/generator/diff checks, GSD verification, and deep review are recorded. |
-| No-mistakes | blocked on verification | One new #4070 `axi run` is driven to a terminal ready state, maximum five correction loops, with no out-of-pipeline edits while active. |
+| GREEN | complete in `a571861` | The narrow guard returns a named typed scope error before pool creation for every required exact/prefix case; allowed schemas remain live/dynamic. See `traces/green-live-boundary.md`. |
+| Refactor/docs | complete in `a571861` | No refactor beyond one narrow helper was needed. Authoritative PostgreSQL docs and derived website catalog data state the same boundary. |
+| Verify/review | complete locally | Focused/unit/live/race/build/vet/lint/docs/generator/diff checks, manual GSD verification, and deep review are in `VERIFICATION.md` and `REVIEW.md`. Cleanup proof: `traces/cleanup.md`. |
+| No-mistakes | deliberately paused before start | Firstmate requested the shared daemon remain idle until GitHub run `01KZSJG7P7QREZSZ7N52TPBA5F` clears a Transport stale gate. No new #4070 `axi run`, response, sync, or daemon action has occurred. |
 
 ## Red contract
 
