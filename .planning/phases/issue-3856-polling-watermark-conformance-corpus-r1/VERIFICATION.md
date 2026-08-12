@@ -3,10 +3,13 @@
 ## Current target boundary
 
 The earlier broad-validation record below applies only to
-`aa4d8c8a9fabfb230c3de44764f13b945814153d`. The exact current-head validation
-target `97d4f49ada7806a4674e8915a52ccee878e76427` differs from the passed
-no-mistakes pipeline head `82a95c609e3a62f37041c5503b75b1e18aa6dd1c` only by
-the required #3856 review-evidence reconciliation. Its source target remains
+`aa4d8c8a9fabfb230c3de44764f13b945814153d`. The exact broad-validation target
+was `97d4f49ada7806a4674e8915a52ccee878e76427`; the evidence-only handoff
+commit `a4498eb2dbc5c67dd9049bd9d536d4838a27d510` follows it and changes only
+phase evidence, not the polling corpus or runner. The validation target differs
+from the passed no-mistakes pipeline head
+`82a95c609e3a62f37041c5503b75b1e18aa6dd1c` only by the required #3856
+review-evidence reconciliation. Its source target remains
 `cd92037fe8add4b6fc3e09c5b0a7648e5a0ab6c5`, which changes conformance
 admission and checkpoint provenance. The serial exact-head broad validation
 completed successfully on 2026-08-13; its focused RED/GREEN evidence remains
@@ -108,9 +111,9 @@ above; the focused GREEN evidence and exact commands remain in `TDD-LEDGER.md`.
 ## Released broad validation
 
 The released, implementation-bearing candidate was
-`aa4d8c8a9fabfb230c3de44764f13b945814153d`. The evidence-only commit that
-updates this record does not alter the polling corpus or runner. #4072 remains
-serialized and untouched.
+`aa4d8c8a9fabfb230c3de44764f13b945814153d`. The later evidence-only validation
+record is owned by [Current target boundary](#current-target-boundary). #4072
+remains serialized and untouched.
 
 The following commands completed successfully:
 
