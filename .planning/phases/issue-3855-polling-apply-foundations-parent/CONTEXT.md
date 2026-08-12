@@ -63,3 +63,19 @@ edit, remove, reformat, or correct it.
 `feat/3862-any-to-any-transport` at recovered head
 `4099335632a79e3c70ce20c004a5f63933171280`. No raw GitHub CLI, alternate identity, or auth-scope
 change is used. Fresh no-mistakes validation will re-inspect the final evidence head.
+
+## Accepted transport-seam refresh
+
+On 2026-08-12, the live temporary base advanced from
+`30b2fb4aeb121641b6158903fe1d3b54668599a6` to
+`c67f40a5ff67a131950f3123e70527027dca8493` when transport child PR #4059 merged into PR #4019.
+`git merge-base --is-ancestor c67f40a5... b61d0fa7...` returned false, so leaving this parent on
+the old base would prevent future #3856 work from inheriting the accepted transport seam.
+
+Before the refresh, guarded `no-mistakes axi sync --recover` returned custody of its completed
+unpublished planning-only head `b61d0fa7eefc719c39593e44afbcb1b7a3f76613`. The safe replay
+`git rebase --onto origin/feat/3862-any-to-any-transport 30b2fb4a...` completed without conflicts.
+`git range-diff 30b2fb4a...b61d0fa7... c67f40a5...HEAD` maps all eight parent commits as
+patch-equivalent, and the post-rebase PR-relative diff remains only this phase's nine files. This
+is a topology-only recovery: it neither implements a child nor consumes a substantive correction
+round. The PR remains draft, dependency-only, and unmerged.

@@ -5,7 +5,7 @@
 | Check | Evidence / command | Status |
 | --- | --- | --- |
 | Supplied isolated worktree | `pwd -P` equals `git rev-parse --show-toplevel`; worktree began detached and clean | passed |
-| Current source ref | local `origin/feat/3862-any-to-any-transport` and `git ls-remote` both resolved to `30b2fb4aeb121641b6158903fe1d3b54668599a6` | passed |
+| Initial source ref | local `origin/feat/3862-any-to-any-transport` and `git ls-remote` both resolved to `30b2fb4aeb121641b6158903fe1d3b54668599a6` | passed — historical seed point |
 | Combined branch ref | local `origin/docs/4015-connector-release-certification` and `git ls-remote` both resolved to `5996a8a2a5e99c8aa8eb5a8603ecb1f6bba21f12` | passed |
 | Requested branch | `git switch --create feat/3855-polling-apply-foundations refs/remotes/origin/feat/3862-any-to-any-transport` | passed locally |
 | GSD adapter | `scripts/gsd doctor`; required `sources` resolutions; generated lifecycle prompts | passed |
@@ -19,6 +19,10 @@
 | Prior no-mistakes | `01KZPY9EBYX84WZM11EN1F6C83` with `--skip=push,pr,ci`, no `--yes` | passed; terminal scope expansion was whole-reverted |
 | Draft PR shape | `gh-axi pr create` and REST inspection | passed — #4041 is one open draft with exact temporary base/head and nine files |
 | Fresh no-mistakes | guarded argv with `--skip=push,pr,ci`; document gate not skipped | pending for this evidence commit |
+| Accepted transport head | targeted `git fetch` and `git ls-remote` both resolved `origin/feat/3862-any-to-any-transport` to `c67f40a5ff67a131950f3123e70527027dca8493` (#4059 merged into #4019) | passed |
+| Rebase necessity | `git merge-base --is-ancestor c67f40a5... b61d0fa7...` exited 1; current transport head was absent from #3855 ancestry | passed — refresh required |
+| Preserved parent range | guarded `no-mistakes axi sync --recover`; `git rebase --onto origin/feat/3862-any-to-any-transport 30b2fb4a...`; `git range-diff 30b2fb4a...b61d0fa7... c67f40a5...HEAD` | passed — all eight commits patch-equivalent, no conflicts |
+| Refreshed ancestry and scope | `git merge-base --is-ancestor c67f40a5... HEAD`; `git diff --check`; changed-path assertion | passed — accepted transport head is an ancestor and exactly the nine phase files remain |
 
 ## GSD verification result
 
@@ -35,3 +39,10 @@ listed above. A passing documentation check never certifies product behavior.
   documentation changes.
 - Automated review: this PR must remain draft; review coverage is recorded as pending rather than
   requested while draft.
+
+## Pending final recovery checks
+
+After committing this evidence-only refresh, rerun the contract-owned no-mistakes local pipeline
+without `--yes`, force-push only with an explicit lease for remote
+`7ea7350b8abc3f99c4831aa63a0373d6f1d70036`, then use `gh-axi` to verify that #4041 remains the
+single open draft with the same named base/head and a final head descended from `c67f40a5...`.
