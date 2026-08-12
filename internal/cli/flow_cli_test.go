@@ -1386,6 +1386,7 @@ func newFlowLegacySameOwnerCaseEquivalentWarehouseApp(t *testing.T, ctx context.
 	workspaceID, ok := state["workspace_id"].(string)
 	require.True(t, ok)
 	connections, ok := state["connections"].([]any)
+	require.True(t, ok)
 	require.Len(t, connections, 1)
 	connectionState, ok := connections[0].(map[string]any)
 	require.True(t, ok)
