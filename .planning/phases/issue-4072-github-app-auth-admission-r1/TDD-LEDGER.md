@@ -39,11 +39,16 @@
 
 ## RED
 
-- **Planned command:** `go test ./internal/connectors/engine ./internal/connectors/hooks/github -run 'TestGitHubAppAuthRateAdmission' -count=1`
+- **Command:** `go test ./internal/connectors/hooks/github -run '^TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend$' -count=1`
 - **Expected failure:** test detects at least one physical installation-token POST
   before `require_shared` can return the typed refusal.
-- **Commit:** pending
-- **Observed failure:** pending — do not proceed to GREEN until this is a causal behavioral failure.
+- **Observed failure:** 2026-08-12 — failed causally at recovered base:
+  `physical GitHub App token sends = 1, want 0 before shared admission refusal
+  (NewRuntime error = <nil>)`. The failure is behavioral: the direct
+  `http.DefaultClient` token exchange reached the secret-blind recording
+  transport before resolver construction, rather than failing to compile or
+  failing on test setup.
+- **Commit:** pending RED checkpoint commit.
 
 ## GREEN
 

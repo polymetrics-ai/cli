@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"errors"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -42,6 +43,58 @@ func newRuntimeConfig(baseURL string, cfgExtra map[string]string, secrets map[st
 		cfg[k] = v
 	}
 	return connectors.RuntimeConfig{Config: cfg, Secrets: secrets}
+}
+
+// githubAppAuthRecordingTransport is deliberately secret-blind: it records
+// only whether the physical token exchange reached transport, never the JWT,
+// request headers, request body, private key, or returned token.
+type githubAppAuthRecordingTransport struct {
+	sends atomic.Int32
+}
+
+func (t *githubAppAuthRecordingTransport) RoundTrip(*http.Request) (*http.Response, error) {
+	t.sends.Add(1)
+	return &http.Response{
+		StatusCode: http.StatusCreated,
+		Header:     http.Header{"Content-Type": []string{"application/json"}},
+		Body:       io.NopCloser(strings.NewReader(`{"token":"synthetic-installation-token"}`)),
+	}, nil
+}
+
+func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testing.T) {
+	recordingTransport := &githubAppAuthRecordingTransport{}
+	previousDefaultClient := http.DefaultClient
+	http.DefaultClient = &http.Client{Transport: recordingTransport}
+	t.Cleanup(func() { http.DefaultClient = previousDefaultClient })
+
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	identity, err := connectors.NewCoordinationIdentity([]byte("github-app-auth-admission-test-salt"), connectors.CredentialBinding{
+		BindingID:      "github-app-auth-admission-test-binding",
+		ProviderFamily: "github",
+		AuthProfile:    "github_app",
+	})
+	if err != nil {
+		t.Fatalf("NewCoordinationIdentity: %v", err)
+	}
+	cfg := newRuntimeConfig("https://github-app-auth-rate.test", map[string]string{
+		"app_id":          "4072",
+		"installation_id": "admission-test-installation",
+		"auth_type":       "github_app",
+	}, map[string]string{"private_key": testPrivateKeyPEM(t)})
+	cfg.CoordinationIdentity = identity
+	cfg.RateBudgetBackend = connsdk.RateBudgetBackendRequireShared
+
+	_, err = engine.NewRuntime(context.Background(), bundle, cfg, githubhooks.New())
+	if got := recordingTransport.sends.Load(); got != 0 {
+		t.Fatalf("physical GitHub App token sends = %d, want 0 before shared admission refusal (NewRuntime error = %v)", got, err)
+	}
+	var refusal *connsdk.RateBudgetRefusalError
+	if !errors.As(err, &refusal) || refusal.Reason != connsdk.RateBudgetRefusalSharedCoordinatorUnavailable {
+		t.Fatalf("NewRuntime error = %v, want typed shared coordinator unavailable refusal", err)
+	}
 }
 
 func TestAuthenticatorGithubApp_MintsInstallationTokenAndSetsBearer(t *testing.T) {
