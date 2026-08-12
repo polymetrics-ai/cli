@@ -27,7 +27,7 @@ STREAM AND TABLE NAMES
   One local-warehouse connection cannot configure distinct --table spellings
   that differ only by ASCII letter case, such as records and RECORDS: DuckDB
   treats them as one identifier. Creation refuses that inventory before saving
-  it. A legacy inventory is left unchanged on open, but its local sync refuses
+  it. A legacy inventory is left unchanged on open, but any local sync refuses
   before changing run or warehouse state; create replacement connections whose
   destination table names differ by more than ASCII letter case.
 
