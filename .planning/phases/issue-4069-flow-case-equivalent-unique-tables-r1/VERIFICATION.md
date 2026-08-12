@@ -128,10 +128,15 @@ exact-head CI, or Sol-audit claim is inferred from either local record.
 - [x] Exact-head Website CI RED recorded from runs `31579519649` and
       `31579519744`; both regenerate the stale aggregate and reject it as a
       dirty generated file.
-- [ ] The no-install generator changes only `website/lib/docs.generated.ts` to
+- [x] The no-install generator changes only `website/lib/docs.generated.ts` to
       the audited SHA-256.
-- [ ] A second generator invocation is idempotent; diff scope/check, affected
-      Website checks, and inline/manual GSD verify-work/code-review pass.
+- [x] A second generator invocation is idempotent and candidate diff scope/check
+      pass. Lint (13 inherited warnings), typecheck, unit, script, and build
+      checks pass without dependency installation; browser E2E remains for
+      natural CI because its workflow-owned browser install is out of scope.
+- [x] Inline/manual GSD verify-work and code-review find no candidate gap or
+      finding: deterministic aggregate content is proven by the expected hash,
+      idempotence, source-generator ownership, and affected automated checks.
 - [ ] One fresh no-mistakes run records PR/CI as explicitly skipped and pushes
       only the existing #4069 branch.
 - [ ] Existing #4071 remains the sole open, draft, stacked PR and all natural

@@ -147,7 +147,7 @@ correction 2. The existing RED/GREEN behavior evidence remains intact.
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
-| C1-GD. Website aggregate | Exact #4071 head has four duplicate Website failures because the repository generator writes an uncommitted `website/lib/docs.generated.ts`; no source or runtime behavior is implicated. | The no-install repository generator changes exactly that aggregate to SHA-256 `38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106`; a second invocation is clean and affected checks pass. | RED recorded 2026-08-12 |
+| C1-GD. Website aggregate | Exact #4071 head has four duplicate Website failures because the repository generator writes an uncommitted `website/lib/docs.generated.ts`; no source or runtime behavior is implicated. | The no-install repository generator changes exactly that aggregate to SHA-256 `38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106`; a second invocation is clean and affected checks pass. | GREEN 2026-08-12 |
 
 ### C1-GD recorded RED
 
@@ -171,6 +171,26 @@ sole path `website/lib/docs.generated.ts`; require its SHA-256 to equal
 `38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106`.
 Any other changed website path or hash is a stop condition. Do not install
 dependencies, edit source documentation, or modify production behavior.
+
+### C1-GD recorded GREEN
+
+After the committed RED/GSD plan checkpoint `393b46bdc`, two consecutive
+`cd website && npm run gen:website-data` invocations produced the exact
+expected SHA-256
+`38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106`.
+Both times `git diff --name-only -- website` contained exactly
+`website/lib/docs.generated.ts`; `git diff --check` passed. The output diff is
+the audited two serialized doc-body replacements and no source document,
+runtime, connector, dependency, or configuration path changed.
+
+Affected no-install Website verification passed: ESLint exits 0 with the
+known 13 warnings in untouched files, `npm run typecheck`, 80 unit tests, 27
+script tests, and `npm run build` all pass. The build's existing default-auth
+diagnostic remains non-fatal and does not cause a secret to be supplied.
+Browser E2E is intentionally left to natural GitHub CI because the checked-in
+workflow first installs Playwright Chromium and this recovery forbids installs.
+The non-secret command/result record is
+`traces/correction-1-website-generated-data-green.txt`.
 
 ## Recorded correction 1 broad verification
 

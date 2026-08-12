@@ -50,3 +50,23 @@ The remaining gates are Firstmate-authorized no-mistakes custody without
 `--yes`, a push from the supported pipeline path, exact-head CI, and a fresh
 independent Sol audit. #4071 remains its existing draft child; this summary
 does not claim #4069 completion or merge readiness.
+
+## Authorized Website generated-data recovery
+
+Captain-authorized custody recovery fast-forwarded the registered worktree
+without rewriting from `9bec13be` to the preserved pipeline head `9a5b23fe`.
+The exact #4071 Website CI RED then proved that the already-committed #4069
+website source pages had not refreshed their deterministic aggregate. The
+repository-owned no-install generator changed only
+`website/lib/docs.generated.ts` to SHA-256
+`38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106`; a
+second invocation was idempotent. Lint, typecheck, unit, script, and build
+checks passed with no dependency install, source-doc change, credential, or
+runtime behavior change.
+
+The manual GSD gap verification and review are green. Browser E2E remains for
+the natural exact-head Website workflow because its Playwright browser install
+is outside this no-install recovery. The next gate is one fresh no-mistakes
+run without `--yes` and with `--skip=pr,ci`; its outcome is local pipeline
+evidence only. Existing draft #4071 topology and natural GitHub exact-head CI
+remain the delivery authority.

@@ -6,7 +6,7 @@
   "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "required_base_branch": "feat/3897-flow-connection-scope-nm",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "correction_1_authorized_website_generated_data_gap_red_recorded",
+  "status": "correction_1_website_generated_data_green_pending_recovery_pipeline",
   "correction_budget": {
     "used_before": 0,
     "active_correction": 1,
@@ -66,7 +66,8 @@
     "manual_code_review": "passed: standard inline correction-1 review found no unresolved candidate finding",
     "pr_issue_guard": "passed locally against the live draft PR title and its Refs #4069/#3897 plus parent #4060 linkage",
     "inherited_baseline": "seven older #3897 planning-file trailing-whitespace findings remain outside the child range",
-    "next_gate": "Run the repository-owned Website generator only after the committed C1-GD RED plan checkpoint, then complete manual GSD verification and one no-mistakes --skip=pr,ci recovery run"
+    "website_generated_data_green": "passed: exact one-file aggregate hash, second-generation idempotence, candidate diff check, lint/typecheck/unit/script/build; browser E2E is reserved for natural CI because local browser installation is not authorized",
+    "next_gate": "Commit C1-GD GREEN evidence and website aggregate, then start one fresh no-mistakes run without --yes and with --skip=pr,ci"
   },
   "correction_1": {
     "audit_handoff": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4066-case-equivalent-unique-tables-r1/correction-1-sol-audit-handoff.md",
@@ -93,6 +94,7 @@
       "red_runs": [31579519649, 31579519744],
       "owned_output": "website/lib/docs.generated.ts",
       "expected_sha256": "38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106",
+      "local_green": "two no-install generator invocations were idempotent; lint/typecheck/unit/script/build passed; 13 untouched lint warnings and non-fatal default-auth build diagnostics remain inherited",
       "no_mistakes": "start one fresh run without --yes and with --skip=pr,ci after committed GREEN"
     }
   }

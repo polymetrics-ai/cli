@@ -103,3 +103,29 @@ trailing-whitespace findings remain outside the child range, and are neither
 changed nor used to weaken this correction's gates. The active no-mistakes
 monitor remains untouched; push, PR metadata, exact-head CI, and Sol audit are
 explicitly outside this local review.
+
+## Authorized Website aggregate gap review
+
+**Mode:** standard inline GSD code-review fallback after resolving
+`scripts/gsd prompt code-review issue-4069-flow-case-equivalent-unique-tables-r1`.
+No compatible isolated Pi reviewer is available and the canonical contract
+forbids role delegation; this is a review of one deterministic generated file
+and its explicit GSD evidence, not a waiver of review.
+
+**Result:** PASS — no Critical, Warning, or Info candidate finding.
+
+### Reviewed boundary and evidence
+
+- The only non-evidence change is `website/lib/docs.generated.ts`, produced by
+  the checked-in package generator from pre-existing #4069 source pages. Its
+  SHA-256 exactly matches the independently audited expected output.
+- A second no-install generator run is byte-identical and leaves the same sole
+  changed path; `git diff --check` is clean. No React source, dependency,
+  credential, runtime, connector, workflow, or PR topology path was changed.
+- Website lint exits 0 with the known 13 warnings entirely outside this diff;
+  typecheck, 80 unit tests, 27 script tests, and the production build pass.
+  Browser E2E appropriately remains for GitHub CI because the local recovery
+  does not authorize Playwright installation.
+- The exact #4071 failure is causally reproduced by generator ownership, not
+  suppressed: the committed RED trace names the failing run IDs and the GREEN
+  trace proves the scoped correction.
