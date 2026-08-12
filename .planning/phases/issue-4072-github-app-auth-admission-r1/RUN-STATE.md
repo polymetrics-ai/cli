@@ -11,7 +11,7 @@
 **Correction ledger:** 0/5 fresh lineage
 
 **Canonical private finish-plan snapshot SHA256:**
-`939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`
+`939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`
 
 ## Lifecycle State
 

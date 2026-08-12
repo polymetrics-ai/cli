@@ -46,7 +46,7 @@ exclusion, or any sibling #3754 recovery child.
   only recognizes numeric roadmap phases and the canonical contract forbids
   role spawning in this lane. The lifecycle evidence remains mandatory.
 - **D-08:** The canonical private finish-plan snapshot is
-  `939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`.
+  `939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`.
   Its live-topology update does not alter this child's requirements or DAG.
 </decisions>
 

@@ -152,7 +152,7 @@ evidence and no secret-bearing coordination data.
     <acceptance_criteria>
       - Fresh 0/5 ledger contains causal RED and GREEN evidence.
       - Phase artifacts identify #4072, exact recovered base, and snapshot
-        SHA256 `939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`.
+        SHA256 `939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`.
       - Work stops at Firstmate's shared validation gate.
     </acceptance_criteria>
   </task>
