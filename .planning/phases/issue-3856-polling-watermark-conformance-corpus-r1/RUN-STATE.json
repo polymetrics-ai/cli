@@ -1,0 +1,42 @@
+{
+  "phase": "issue-3856-polling-watermark-conformance-corpus-r1",
+  "issue": 3856,
+  "parent_issue": 3855,
+  "branch": "feat/3856-polling-conformance-corpus",
+  "base_branch": "feat/3855-polling-apply-foundations",
+  "base_sha": "fa5eef681a4b06c09519574326a22683b26bd996",
+  "status": "planned",
+  "adapter": "pi-project-local",
+  "runtime_fallback": "inline manual execution of generated GSD prompts; the canonical single-worker contract forbids role spawning",
+  "skills": [
+    "golang-how-to",
+    "golang-testing",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-context",
+    "golang-concurrency",
+    "golang-lint"
+  ],
+  "scope": {
+    "allowed": [
+      "internal/connectors/engine/polling_conformance.go",
+      "internal/connectors/engine/testdata/polling_watermark_conformance/v1.json",
+      "internal/connectors/engine/polling_conformance_test.go",
+      ".planning/phases/issue-3856-polling-watermark-conformance-corpus-r1/**"
+    ],
+    "forbidden": [
+      "internal/synccontract/testdata/conformance/v1.json",
+      "cmd/**",
+      "connector definitions",
+      "provider code",
+      "public CDC promotion",
+      "live credentials or mutation"
+    ]
+  },
+  "correction_count": 0,
+  "shepherd": "excluded; #3995/#4062 is parked",
+  "next": "record R1 RED before adding the corpus or runner"
+}
