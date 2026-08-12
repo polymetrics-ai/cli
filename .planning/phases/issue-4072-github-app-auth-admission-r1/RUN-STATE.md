@@ -23,8 +23,9 @@
 | discuss/context | complete | `CONTEXT.md`, `DISCUSSION-LOG.md` |
 | plan-phase --tdd | complete (manual inline fallback) | `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md` |
 | execute RED | observed | causal no/lost tests each fail with one premature token transport send; granting case observes zero rate decisions |
-| execute GREEN | complete | focused secret-blind transport/coordinator matrix passes; GREEN commit is this commit |
-| verify-work / code-review | deferred | Firstmate shared validation gate |
+| execute GREEN | complete | focused secret-blind transport/coordinator matrix passes; GREEN commit `3f83bf3af` |
+| verify-work | complete (inline automatic fallback) | `UAT.md`, bounded functional/race/vet evidence |
+| code-review | complete (inline manual deep review) | `REVIEW.md` |
 
 ## Manual GSD Fallback
 
@@ -32,13 +33,13 @@
 `phase_found: false` because project roadmap phases are numeric. The canonical
 delivery contract also disallows spawning the GSD roles for this lane. The
 required lifecycle therefore runs inline with equivalent committed context,
-plan, TDD ledger, verification, summary, and review artifacts.
+plan, TDD ledger, verification, UAT, summary, and review artifacts.
 
 ## Guardrails
 
 - Do not use the preserved exhausted no-mistakes run or alter its worktree.
 - Do not run no-mistakes, broad suite, race-heavy sweep, push, PR, merge, or CI
-  until Firstmate explicitly releases the shared validation gate.
+  until Firstmate explicitly releases the shared #4071 validation gate.
 - Do not select a parent PR route; record `needs-decision` at delivery only if
   Firstmate has not supplied an authoritative safe target.
 
@@ -47,4 +48,7 @@ plan, TDD ledger, verification, summary, and review artifacts.
 - `go test ./internal/connectors/hooks/github -run '^TestGitHubAppAuthRateAdmission' -count=1` — pass.
 - `go test ./internal/connectors/engine ./internal/connectors/hooks/github -run 'TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubDeclaredRateLimits' -count=1` — pass.
 - `go test ./internal/connectors/hooks/github -count=1` — pass.
+- `GOMAXPROCS=2 go test -p 1 ./internal/connectors/engine ./internal/connectors/hooks/github -run '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)' -count=1` — pass.
+- `GOMAXPROCS=2 go test -p 1 -race ./internal/connectors/engine ./internal/connectors/hooks/github -run '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)' -count=1` — pass.
+- `go vet ./internal/connectors/engine ./internal/connectors/hooks/github` — pass.
 - No no-mistakes run, broad suite, race sweep, push, PR, CI, or merge was started.

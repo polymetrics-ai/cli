@@ -71,7 +71,14 @@
   recording the method/path required to prove the engine-managed physical send;
   no functional refactor followed GREEN.
 
+## POST-GREEN BOUNDED VALIDATION
+
+- **Functional matrix:** `GOMAXPROCS=2 go test -p 1 ./internal/connectors/engine ./internal/connectors/hooks/github -run '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)' -count=1` — pass on 2026-08-12.
+- **Race matrix:** `GOMAXPROCS=2 go test -p 1 -race ./internal/connectors/engine ./internal/connectors/hooks/github -run '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)' -count=1` — pass on 2026-08-12.
+- **Static analysis:** `go vet ./internal/connectors/engine ./internal/connectors/hooks/github` — pass on 2026-08-12.
+- **GSD fallback:** the named issue phase is not present in the numeric roadmap and the canonical single-worker contract disallows role spawning. `scripts/gsd prompt verify-work issue-4072-github-app-auth-admission-r1 --auto` and the equivalent deep `code-review` prompt were resolved; their inline evidence is `UAT.md` and `REVIEW.md`.
+
 ## Deferred Validation Gate
 
 No broad suite, race-heavy sweep, no-mistakes, push, PR creation, CI, or merge
-is authorized until Firstmate releases the shared #4069 validation lane.
+is authorized until Firstmate releases the shared #4071 validation lane.

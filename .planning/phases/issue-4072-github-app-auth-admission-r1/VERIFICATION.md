@@ -1,7 +1,7 @@
 ---
 phase: issue-4072-github-app-auth-admission-r1
 verified: 2026-08-12T00:00:00Z
-status: focused_green_passed
+status: focused_verification_complete
 score: 5/5 must-haves verified
 ---
 
@@ -27,9 +27,21 @@ declared shared/process-local rate boundary as ordinary GitHub REST requests.
 | `go test ./internal/connectors/hooks/github -run '^TestGitHubAppAuthRateAdmission' -count=1` | causal GREEN proof using secret-blind recording transport | pass |
 | `go test ./internal/connectors/engine ./internal/connectors/hooks/github -run 'TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubDeclaredRateLimits' -count=1` | narrow behavior/regression matrix | pass |
 | `go test ./internal/connectors/hooks/github -count=1` | complete GitHub hook package regression check | pass |
+| `GOMAXPROCS=2 go test -p 1 ./internal/connectors/engine ./internal/connectors/hooks/github -run '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)' -count=1` | bounded behavior and regression matrix | pass |
+| `GOMAXPROCS=2 go test -p 1 -race ./internal/connectors/engine ./internal/connectors/hooks/github -run '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)' -count=1` | bounded concurrency coverage for the changed engine and hook paths | pass |
+| `go vet ./internal/connectors/engine ./internal/connectors/hooks/github` | package-scoped static analysis | pass |
+
+## Completed GSD Evidence
+
+`scripts/gsd prompt verify-work issue-4072-github-app-auth-admission-r1 --auto`
+was resolved before this check. The named issue phase is outside the numeric
+roadmap, and the single-worker contract forbids role spawning, so verify-work
+is recorded as an inline automatic fallback in `UAT.md`. The completed inline
+deep review is recorded in `REVIEW.md`.
 
 ## Deferred by Firstmate Shared Validation Gate
 
-Focused race coverage, vet/lint, generator/docs/help/website parity checks,
-issue guard, `verify-work`, code review, no-mistakes, full CI, push, PR, and
-parent-route decision are deferred. This is not a passing verification report.
+Repository-wide lint, generator/docs/help/website parity checks, issue guard,
+no-mistakes, full CI, push, PR, and parent-route decision remain deferred to
+Firstmate's shared #4071 validation gate. This is a focused verification report,
+not a substitute for those release gates.
