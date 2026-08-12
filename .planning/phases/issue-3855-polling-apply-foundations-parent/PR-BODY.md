@@ -16,8 +16,8 @@ Refs #3862
 - Required state: draft
 - Accepted transport seam: #4059 is now merged into this base at
   `c67f40a5ff67a131950f3123e70527027dca8493`; the #3855 planning-only range was safely replayed
-  onto that head so future #3856 work inherits it. The audited non-force preserved-history bridge
-  remains pending local validation; it carries ancestry only and must not change the replayed tree.
+  onto that head so future #3856 work inherits it. Audited non-force bridge `72a4fc32...` carries
+  the preserved ancestry only; its tree is identical to checkpoint `3b6e3e2e...`.
 - Retarget rule: before final parent integration, retarget to
   `docs/4015-connector-release-certification` once the reviewed transport seam is present there.
   This branch must never target or merge to `main`.
@@ -62,8 +62,8 @@ reusable polling implementation. It does not complete or close #3856, #3857, #38
   restored exactly.
 - The accepted transport refresh replays eight patch-equivalent planning-only commits without a
   product change. The causal pre-bridge no-mistakes start was rejected by its internal
-  non-fast-forward validation ref before a new run or external effect; the audited `-s ours` bridge
-  is pending and must not alter `docs/architecture/github-postgres-warehouse-certification.md`.
+  non-fast-forward validation ref before a new run or external effect; audited `-s ours` bridge
+  `72a4fc32...` passed its tree, parent, ancestry, and protected-blob assertions.
 - No force push, rebase, reset, cherry-pick, ordinary content merge, external push, PR mutation,
   or integration merge is authorized by this recovery checkpoint.
 

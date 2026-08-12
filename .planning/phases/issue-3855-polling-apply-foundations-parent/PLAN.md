@@ -99,11 +99,11 @@ transport-primary execution schedule is deliberately stricter: `#3856 -> #3857 -
    `e541170e...` was rejected before run creation because its local gate ref at `b61d0fa7...`
    could not fast-forward from the refreshed history. This is causal recovery evidence, not a
    product or correction failure.
-8. **GREEN — non-force preserved-history bridge:** after this GSD checkpoint and rechecking fixed
-   SHAs, create only `git merge --no-ff -s ours -m "chore(gsd): reconcile #3855 preserved
-   histories" refs/no-mistakes/recover/01KZQ6D2XW5GNWTRFSVRMYE2FZ`. Require unchanged tree, first
-   parent=current checkpoint head, second parent=`b61d0fa7...`, and ancestry for
-   `7ea7350b...`, `b61d0fa7...`, and `c67f40a5...`.
+8. **GREEN — non-force preserved-history bridge:** passed. After GSD checkpoint `3b6e3e2e...` and
+   fixed-SHA rechecks, the exact `git merge --no-ff -s ours -m "chore(gsd): reconcile #3855
+   preserved histories" refs/no-mistakes/recover/01KZQ6D2XW5GNWTRFSVRMYE2FZ` produced
+   `72a4fc32...`; tree equality, parent order, protected blob, required ancestry, and remote
+   comparison `0 13` all passed.
 9. **GREEN — post-bridge local custody gate:** run the exact Stage-5 intent with
    `--skip=push,pr,ci`, no `--yes`, and handle every synchronous gate. External push, PR refresh,
    and exact-head CI remain outside this local run and require their own later assertions.

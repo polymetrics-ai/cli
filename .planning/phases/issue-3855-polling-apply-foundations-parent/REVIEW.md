@@ -43,8 +43,8 @@ no-mistakes and final live PR inspection remain required before the recovery is 
 
 The reproduced pre-bridge rejection is a custody topology condition, not a product defect: the
 fresh run could not start because no-mistakes' internal ref remained at `b61d0fa7...` while the
-accepted transport refresh is `e541170e...`. The selected recovery is exactly one non-force
-`--no-ff -s ours` ancestry bridge after fixed-SHA rechecks. It may proceed only if it retains the
-checkpoint tree byte-for-byte, has the prescribed first/second parents, carries remote/preserved/
-transport ancestry, and changes no non-phase or protected inherited path. Post-bridge verification
-and fresh no-mistakes review remain pending; the draft is never an authorization to merge.
+accepted transport refresh is `e541170e...`. The selected one non-force `--no-ff -s ours` bridge
+passed at `72a4fc32...` after fixed-SHA rechecks: it retains checkpoint `3b6e3e2e...` byte-for-byte,
+has the prescribed parents, carries remote/preserved/transport ancestry, and changes no non-phase
+or protected inherited path. The inline GSD verification/review and planning-only local gates also
+passed. Fresh no-mistakes review remains pending; the draft is never an authorization to merge.
