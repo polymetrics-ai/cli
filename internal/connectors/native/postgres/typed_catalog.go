@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -19,6 +20,9 @@ var (
 	// no identifier, configuration, or credential material.
 	ErrUnsupportedCatalogShape = errors.New("postgres catalog contains an unsupported relation, type, or identifier shape")
 	errCatalogResourcePolicy   = errors.New("postgres typed catalog resource policy is invalid")
+	// ErrSystemCatalogSchema reports a configured PostgreSQL-owned namespace.
+	// It deliberately carries no schema, configuration, or credential material.
+	ErrSystemCatalogSchema = errors.New("postgres catalog schema is reserved for PostgreSQL system objects")
 	// ErrNoSupportedRelations means the configured schema contains no base
 	// relation. The legacy Catalog projection can represent that as no streams;
 	// the #4034 Catalog value deliberately requires at least one relation.
@@ -119,6 +123,9 @@ func (c Connector) TypedCatalog(ctx context.Context, cfg connectors.RuntimeConfi
 	if err := validateIdentifier(conn.schema); err != nil {
 		return database.Catalog{}, ErrUnsupportedCatalogShape
 	}
+	if isSystemCatalogSchema(conn.schema) {
+		return database.Catalog{}, ErrSystemCatalogSchema
+	}
 	if err := c.databaseDefinition.Validate(); err != nil {
 		return database.Catalog{}, errors.New("postgres typed catalog definition is unavailable")
 	}
@@ -139,6 +146,15 @@ func (c Connector) TypedCatalog(ctx context.Context, cfg connectors.RuntimeConfi
 	defer pool.Close()
 
 	return discoverTypedCatalog(operationCtx, pool, conn.database, conn.schema, c.databaseDefinition, resources)
+}
+
+func isSystemCatalogSchema(schema string) bool {
+	switch schema {
+	case "pg_catalog", "information_schema", "pg_toast":
+		return true
+	default:
+		return strings.HasPrefix(schema, "pg_toast_") || strings.HasPrefix(schema, "pg_temp_")
+	}
 }
 
 type postgresCatalogColumn struct {

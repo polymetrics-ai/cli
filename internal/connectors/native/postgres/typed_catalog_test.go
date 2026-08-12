@@ -138,7 +138,7 @@ func TestTypedCatalogRejectsReservedConfiguredSchemasBeforeConnect(t *testing.T)
 				},
 				Secrets: map[string]string{"password": t.Name()},
 			})
-			if err == nil || !strings.Contains(err.Error(), reservedPostgresCatalogSchemaError) {
+			if !errors.Is(err, ErrSystemCatalogSchema) || !strings.Contains(err.Error(), reservedPostgresCatalogSchemaError) {
 				t.Fatalf("reserved PostgreSQL schema was not rejected before a connection attempt: %v", err)
 			}
 		})

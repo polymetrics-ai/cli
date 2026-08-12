@@ -55,7 +55,9 @@ Connection fields:
 - `port` (optional, string); TCP port, 1-65535. Defaults to 5432 when omitted.
 - `read_limit` (optional, string); Maximum rows returned per Read snapshot SELECT. Defaults to
   10000; set to 0, all, or unlimited to disable the bound.
-- `schema` (optional, string); PostgreSQL schema to discover tables from. Defaults to public.
+- `schema` (optional, string); PostgreSQL user/application schema to discover tables from. Defaults
+  to public. `pg_catalog`, `information_schema`, `pg_toast`, `pg_toast_*`, and `pg_temp_*` are
+  rejected before a live catalog connection is opened.
 - `sslmode` (optional, string); allowed values `disabled`, `preferred`, `required`, `verify-ca`,
   `verify-identity`, `disable`, `allow`, `prefer`, `require`, `verify-full`, `verify_ca`,
   `verify_identity`; transport security. Defaults to disabled when omitted.
@@ -71,8 +73,10 @@ implementation for this service.
 ## Streams notes
 
 The connector discovers its catalog from PostgreSQL system catalogs on the configured service rather
-than using fixed stream declarations. Discovery is limited to ordinary and partitioned base tables in the one
-configured `schema` (default `public`); views and all other relation kinds are excluded.
+than using fixed stream declarations. Discovery is limited to ordinary and partitioned base tables in one
+allowed user/application `schema` (default `public`); PostgreSQL-owned `pg_catalog`,
+`information_schema`, `pg_toast`, `pg_toast_*`, and `pg_temp_*` schema names are rejected before a
+pool is opened. Views and all other relation kinds are excluded.
 
 The configured role must have `USAGE` on that schema and either table-level `SELECT` or `SELECT`
 on every non-dropped column. Relations that do not meet those permissions are omitted. If no eligible

@@ -190,10 +190,10 @@ func assertPostgresSystemSchemasAreRejected(t *testing.T, ctx context.Context, c
 	}
 	for _, schema := range schemas {
 		config := postgresCatalogConfig(t, endpoint, schema)
-		if _, err := connector.TypedCatalog(ctx, config); err == nil || !strings.Contains(err.Error(), postgresCatalogSystemSchemaError) {
+		if _, err := connector.TypedCatalog(ctx, config); !errors.Is(err, native.ErrSystemCatalogSchema) || !strings.Contains(err.Error(), postgresCatalogSystemSchemaError) {
 			t.Fatal("typed PostgreSQL catalog did not reject a system-owned schema before discovery")
 		}
-		if _, err := connector.Catalog(ctx, config); err == nil || !strings.Contains(err.Error(), postgresCatalogSystemSchemaError) {
+		if _, err := connector.Catalog(ctx, config); !errors.Is(err, native.ErrSystemCatalogSchema) || !strings.Contains(err.Error(), postgresCatalogSystemSchemaError) {
 			t.Fatal("legacy PostgreSQL catalog did not preserve the typed system-schema rejection")
 		}
 	}
