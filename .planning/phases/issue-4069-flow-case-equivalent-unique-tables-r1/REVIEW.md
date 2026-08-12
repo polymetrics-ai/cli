@@ -49,11 +49,57 @@ seven broader git diff --check whitespace reports belong solely to older #3897
 planning files and are recorded as inherited baseline, not suppressed or
 modified by this child.
 
-## Correction 1 / 5 supersession
+## Correction 1 / 5 inline code review
 
-This prior review applies only to the original cross-owner policy slice. Sol's
-final audit at `d9022359` found the accepted same-owner inventory absent, so
-this PASS is not a disposition of that finding. A new inline GSD code review is
-required after correction 1 GREEN; it must examine the connection invariant,
-legacy pre-mutation fence, typed query/flow boundary, exact physical-read
-behavior, docs parity, and preserved inherited selectors.
+**Mode:** standard inline GSD fallback after resolving
+`scripts/gsd sources code-review` and `scripts/gsd prompt code-review`. The
+issue is not a numbered ROADMAP phase and the canonical contract forbids role
+spawning, so the worker performed the required cross-file review itself.
+
+**Result:** PASS — no Critical, Warning, or Info candidate finding.
+
+### Reviewed correction boundary
+
+- `CreateConnection` resolves destination capability, applies stream defaults,
+  and validates the whole local inventory before `prefixedID` or `save`.
+  Exact duplicate spellings and non-local destinations remain controls.
+- `RunETL` evaluates the persisted local-warehouse inventory after the
+  connection/stream lookup but before a run ID and `beginRun`, so legacy state
+  is not migrated yet cannot mutate state or warehouse output through another
+  sync.
+- `QuerySQL` owns an immutable configuration collision snapshot beside the
+  resolver snapshot. The DuckDB policy suppresses only collision base and
+  invented alias bindings; it returns the new typed same-owner error through
+  replacement scans, preserving generic `SELECT 1` and avoiding DuckDB catalog
+  text or a false one-owner `AmbiguousTableError` remedy.
+- A resolver-visible physical alias is checked before invented alias
+  suppression. The direct query/action/reverse paths were deliberately left
+  resolver-exact, with regression tests for a missing case variant on both
+  case-sensitive and case-insensitive host behavior.
+- The helper folds ASCII only, sorts collision data deterministically, copies
+  error slices, keeps the policy private to `App.QuerySQL`, and neither opens a
+  credential nor introduces a provider, transport, SQL-rewrite, or alias
+  reservation surface.
+- Generated CLI manuals/golden transcripts and website docs accurately state
+  the creation refusal and legacy recovery without inventing an edit/delete
+  command or an unusable connection selector.
+
+### Evidence inspected
+
+- Strict committed RED `6e0a4a7cb`, minimum GREEN `06414fa44`, concrete flow
+  type assertion `b182d559e`, and real-alias control `f2eacc769` all precede
+  this review record.
+- Affected app/CLI/flow/warehouse/schedule package tests, focused race,
+  formatting/diff/vet/lint/tidy/build/smoke, canonical generators and release
+  checks, docs/help/website checks, issue guard, and `verify-gsd-workflow`
+  passed; exact commands are in `traces/correction-1-broad-verification.txt`.
+- Website lint's 13 warnings and the local default-auth build diagnostic are
+  outside this correction's changed paths and did not fail typecheck or build.
+
+### Finding disposition
+
+No candidate finding remains. The seven inherited #3897 planning-file
+trailing-whitespace findings remain outside the child range, and are neither
+changed nor used to weaken this correction's gates. The active no-mistakes
+monitor remains untouched; push, PR metadata, exact-head CI, and Sol audit are
+explicitly outside this local review.

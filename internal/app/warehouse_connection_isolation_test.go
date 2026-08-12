@@ -310,7 +310,6 @@ func TestQuerySQLScopesConnectionOwnedAndUnattributedViews(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 // TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept guards the default
@@ -420,7 +419,6 @@ func TestQuerySQLBindsQuotedConnectionScopedWarehouseNames(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 func TestQuerySQLReusesOneWarehouseResolverPerQuery(t *testing.T) {

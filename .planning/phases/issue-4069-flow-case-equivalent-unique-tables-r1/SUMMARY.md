@@ -21,9 +21,32 @@ r4. No PR has been created or changed by this phase.
 ## Correction 1 / 5 supersession
 
 The independent final Sol audit of the later managed head `d9022359` found a
-same-owner case-equivalent destination inventory not covered by this original
-summary. The earlier cross-owner result remains valid but is insufficient for
-the accepted policy. Correction 1 is now planned with strict committed RED
-pending; no further claim of #4069 completion or merge readiness is valid until
-its new GSD/TDD, local, no-mistakes, exact-head CI, and independent Sol gates
-are complete.
+same-owner case-equivalent destination inventory not covered by the original
+cross-owner summary. The earlier result remains valid but is insufficient for
+the accepted policy. Correction 1 therefore committed a strict real
+Parquet/DuckDB RED before production work, then added one shared ASCII
+identifier key, creation-time destination admission, legacy pre-`beginRun`
+fencing, a typed `*warehouse.SameOwnerCaseEquivalentTableError`, and declared
+inventory plus resolver-snapshot SQL policy.
+
+The correction's local/GSD gate is now green. New invalid local-warehouse
+connections reject distinct `records`/`RECORDS` destinations before an ID or
+state save. Existing state opens unchanged, but either stream fails before a
+run, checkpoint, source read, owner directory, WAL, temporary file, or Parquet
+mutation. Generic and selected SQL return the new typed error for bare,
+quoted, and invented alias references while unrelated `SELECT 1` remains
+available. Direct query/action/reverse reads stay exact resolver lookups, and
+a real `RECORDS__<owner-id>` table wins over a generated alias.
+
+The exact correction-1 evidence uses canonical finish-plan SHA-256
+`939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408` and is
+recorded in `TDD-LEDGER.md`, `VERIFICATION.md`, `REVIEW.md`, `RUN-STATE.json`,
+and `traces/correction-1-broad-verification.txt`. No provider credential,
+transport registration, production wiring, connector certification claim,
+no-mistakes action, push, PR mutation, or merge was made during this local
+correction gate.
+
+The remaining gates are Firstmate-authorized no-mistakes custody without
+`--yes`, a push from the supported pipeline path, exact-head CI, and a fresh
+independent Sol audit. #4071 remains its existing draft child; this summary
+does not claim #4069 completion or merge readiness.

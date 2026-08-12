@@ -239,11 +239,25 @@ a draft against `feat/3897-flow-connection-scope-nm` and require exact-head CI.
 
 5. `docs(4069): plan same-owner case-equivalent correction`
 6. `test(4069): reproduce same-owner table collision` (committed RED)
-7. `fix(4069): guard same-owner case-equivalent tables` (minimum GREEN)
+7. `fix(4069): guard same-owner warehouse collisions` (minimum GREEN)
 8. `docs(4069): record same-owner correction verification`
 
 The prior four checkpoints remain immutable evidence for the cross-owner
 correction. This is correction 1 / 5 in #4069, leaving four correction loops.
+
+### Correction 1 execution record
+
+- `465e02911` — correction-1 plan, ledger, run-state, and verification update
+  before production edits.
+- `6e0a4a7cb` — committed strict same-owner RED with real local
+  Parquet/DuckDB state.
+- `06414fa44` — minimum production GREEN.
+- `b182d559e` — concrete flow typed-error assertion.
+- `f2eacc769` — causal real-alias control proving a resolver-visible physical
+  `RECORDS__<owner-id>` table wins over an invented alias.
+- `bb7c2458c` — embedded/generated/website documentation and golden parity.
+- The next commit records broad local/GSD verification only. It does not start
+  no-mistakes, push, mutate draft PR #4071, or claim exact-head CI/Sol audit.
 
 ### CLI/docs/website parity supersession
 

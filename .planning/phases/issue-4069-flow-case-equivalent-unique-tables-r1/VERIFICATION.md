@@ -1,7 +1,8 @@
 # #4069 Verification checklist
 
-**Status:** Local verification green; no-mistakes, draft PR, and CI are
-deliberately pending Firstmate coordination.
+**Status:** Correction 1 local/GSD verification green; the existing draft PR
+is deliberately untouched, and no-mistakes/push/exact-head CI remain pending
+an explicit Firstmate instruction.
 
 ## Acceptance evidence
 
@@ -52,13 +53,14 @@ deliberately pending Firstmate coordination.
 - [ ] `no-mistakes` pipeline without `--yes`, exact-head CI, and draft stacked
       PR verification after Firstmate authorizes the heavy CPU lane.
 
-## Completed local command record
+## Completed local command records
 
-The non-secret command/result record is
-`traces/resume-broad-verification.txt`. It includes all affected package and
-focused race results, direct candidate lint, repository vet/lint, canonical
-checks, docs/help applicability, the GSD workflow check, and the local
-prospective-body PR issue-guard result.
+The historical cross-owner record remains
+`traces/resume-broad-verification.txt`. The active correction's non-secret
+command/result record is `traces/correction-1-broad-verification.txt`; it
+covers affected package and focused-race results, candidate formatting/vet/
+lint/tidy/build/smoke, canonical checks, docs/help/website parity, the GSD
+workflow check, and the local issue-guard result.
 
 ## Inherited baseline
 
@@ -71,8 +73,8 @@ inherited files are not edited or normalized here.
 
 ## Correction 1 / 5 gate — same-owner case-equivalent inventory
 
-**Status:** targeted GREEN recorded; prior local-green record covers only the
-cross-owner matrix and broader correction-1 verification remains pending.
+**Status:** local/GSD verification green; the remaining delivery gates are
+no-mistakes without `--yes`, exact-head CI, and a fresh independent Sol audit.
 
 **Canonical finish-plan SHA-256:**
 `939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`
@@ -98,16 +100,22 @@ cross-owner matrix and broader correction-1 verification remains pending.
       policy, and a typed same-owner error without migration, SQL rewriting,
       Unicode folding, flat alias reservation, provider work, or certification
       claim.
-- [ ] Cross-owner, `_unattributed`, real-table/generated-alias, action,
-      reverse, selector, and schedule controls remain green.
-- [ ] Connection/query docs and website guidance, runtime-help applicability,
+- [x] Cross-owner, `_unattributed`, real-table/generated-alias, action,
+      reverse, selector, and schedule controls remain green. The same-owner
+      real `RECORDS__<owner-id>` control also confirms the real table wins.
+- [x] Connection/query docs and website guidance, runtime-help applicability,
       docs generator/checks, and PR-body parity evidence are recorded.
-- [ ] Inline GSD verify-work and code-review, no-mistakes without `--yes`,
-      exact-head CI, and a fresh Sol audit complete before any integration.
+- [x] Inline GSD verify-work and code-review completed through the documented
+      manual fallback with no candidate gap or finding.
+- [ ] No-mistakes without `--yes`, exact-head CI, and a fresh Sol audit
+      complete before any integration.
 
 ### Targeted GREEN command record
 
 `traces/correction-1-same-owner-green.txt` records the focused C1–C5 suite and
-the existing #4066/#3897 app/flow selector fence. They all passed after the
-minimal implementation. No broad package, race, lint/vet, generator,
-docs/help/website, or PR issue-guard claim is inferred from this targeted pass.
+the existing #4066/#3897 app/flow selector fence. The independent broad record
+is `traces/correction-1-broad-verification.txt`; it covers affected packages,
+focused race, quality/generator/release, docs/help/website, local issue-guard,
+and manual GSD verification. It also separates the inherited website lint
+warnings from the candidate result. No no-mistakes, push, PR mutation,
+exact-head CI, or Sol-audit claim is inferred from either local record.
