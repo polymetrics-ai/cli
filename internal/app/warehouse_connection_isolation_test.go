@@ -1025,6 +1025,51 @@ func TestLegacySameOwnerCaseEquivalentInventorySurvivesOpenAndFailsBeforeMutatio
 	}
 }
 
+func TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("legacy_local_collision_nonlocal_etl", []connectors.Record{{
+		"id": "external", "updated_at": "2026-08-12T00:00:00Z",
+	}})
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	destination := &batchDestination{}
+	a.registry.Register(destination)
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{
+		Name:      "nonlocal-destination",
+		Connector: destination.Name(),
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := a.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "records_to_nonlocal",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "acme-source"},
+		Destination: EndpointConfig{Connector: destination.Name(), Credential: "nonlocal-destination"},
+		Streams: map[string]StreamConfig{
+			"records": {
+				SyncMode:         "full_refresh_overwrite",
+				PrimaryKey:       []string{"id"},
+				DestinationTable: "records",
+			},
+		},
+	}); err != nil {
+		t.Fatal(err)
+	}
+	persistLegacySameOwnerCaseEquivalentInventory(t, a, "acme")
+
+	run, err := a.RunETL(ctx, RunETLRequest{Connection: "records_to_nonlocal", Stream: "records", BatchSize: 1})
+	if err != nil {
+		t.Fatalf("RunETL(non-local) error = %v", err)
+	}
+	if run.RecordsLoaded != 1 {
+		t.Fatalf("non-local RunETL records loaded = %d, want 1", run.RecordsLoaded)
+	}
+	if destination.acknowledgements != 1 {
+		t.Fatalf("non-local destination acknowledgements = %d, want 1", destination.acknowledgements)
+	}
+	if len(source.requests) != 1 {
+		t.Fatalf("non-local RunETL source reads = %d, want 1", len(source.requests))
+	}
+}
+
 // TestLegacySameOwnerCaseEquivalentDirectReadsUseOnlyPhysicalExactNames proves
 // that direct table/action/reverse reads remain resolver-backed. On APFS only
 // one spelling may physically survive; on a case-sensitive filesystem both can

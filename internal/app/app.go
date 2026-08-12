@@ -1084,8 +1084,10 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if !ok {
 		return Run{}, fmt.Errorf("stream %q not configured on connection %q", req.Stream, req.Connection)
 	}
-	if err := a.validateConfiguredLocalWarehouseDestinationTables(); err != nil {
-		return Run{}, err
+	if a.connectionMaterializesLocalWarehouse(conn) {
+		if err := a.validateConfiguredLocalWarehouseDestinationTables(); err != nil {
+			return Run{}, err
+		}
 	}
 	runID, err := prefixedID("run")
 	if err != nil {
