@@ -15,7 +15,7 @@
 | Severity | Finding | Disposition |
 | --- | --- | --- |
 | Critical | none | n/a |
-| Warning | none | n/a |
+| Warning | Historical recovery text prescribed an explicit-lease force push and did not distinguish the active serial programme schedule from the logical issue graph. | Corrected in the bounded nine-file GSD gap checkpoint; no product scope widened. |
 | Info | none | n/a |
 
 ## Result
@@ -38,3 +38,13 @@ This is the smallest safe refresh that makes the accepted seam available to futu
 
 No product, test, connector, PostgreSQL, or inherited #4015 document path is introduced. Fresh
 no-mistakes and final live PR inspection remain required before the recovery is handed off.
+
+## Audited bridge review
+
+The reproduced pre-bridge rejection is a custody topology condition, not a product defect: the
+fresh run could not start because no-mistakes' internal ref remained at `b61d0fa7...` while the
+accepted transport refresh is `e541170e...`. The selected recovery is exactly one non-force
+`--no-ff -s ours` ancestry bridge after fixed-SHA rechecks. It may proceed only if it retains the
+checkpoint tree byte-for-byte, has the prescribed first/second parents, carries remote/preserved/
+transport ancestry, and changes no non-phase or protected inherited path. Post-bridge verification
+and fresh no-mistakes review remain pending; the draft is never an authorization to merge.

@@ -13,8 +13,9 @@ were inspected. The workflow is therefore executed inline and recorded in this p
    created.
 2. The parent starts on `origin/feat/3862-any-to-any-transport`, opens as a draft against that same
    branch, and later retargets only to `docs/4015-connector-release-certification`.
-3. Core delivery order is #3856, then #3857, then #3858 and #3859 in parallel. #3860 is a
-   follow-on documentation child that depends on all four core children.
+3. The logical issue graph permits #3858 and #3859 after #3857; the active programme's stricter
+   execution schedule is #3856, then #3857, then #3858, then #3859. #3860 is a follow-on
+   documentation child that depends on all four core children.
 4. PR #3880 / `dc1a6a7171ca901c8dbaf8cd528f67b18e57d9bb` is recorded as partial reuse, not child
    completion.
 5. The sole deliverable is a reviewable parent seed and acceptance ledger; implementation and
@@ -54,3 +55,17 @@ The only fresh decision is mechanical and already fixed by the recovery brief: f
 inherit the accepted transport seam. The draft remains on the named temporary branch relationship;
 it does not authorize a merge into #3862 or `main` and does not advance the canonical state beyond
 `parent_draft_pr`.
+
+## Audited no-mistakes gate recovery decision
+
+The direct fresh no-mistakes start at `e541170eef71f687990684b4f22fa7b21ab5a9fc` is recorded as
+causal RED, not a pipeline outcome: its internal validation-gate branch remained at preserved
+`b61d0fa7eefc719c39593e44afbcb1b7a3f76613` and rejected the refreshed branch as non-fast-forward
+before a new run, external push, PR update, or CI action occurred.
+
+The bounded recovery is already decided by the reconciliation audit. After this plan checkpoint,
+recheck every fixed SHA and create only the specified `--no-ff -s ours` merge of the preserved
+recovery ref. The content tree must remain unchanged; its sole purpose is to carry both valid
+ancestries so the validation gate can accept a normal fast-forward relation. Any content difference,
+conflict, changed fixed SHA, non-phase change, protected-blob change, or new synchronous gate stops
+the work. This is neither an ordinary merge nor authorization to merge #4041, #4019, or `main`.
