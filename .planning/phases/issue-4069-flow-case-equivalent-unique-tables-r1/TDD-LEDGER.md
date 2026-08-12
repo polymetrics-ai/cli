@@ -220,8 +220,8 @@ this local gate.
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
-| C2. Authoritative flow manual | Existing `TestGoldenDocsGenerateMatchesTrackedCLIManuals` exits 1 because generated `flow.md` from `flowHelp` omits the approved three-line case-equivalent fail-closed remedy now tracked in `docs/cli/flow.md`; map iteration can also expose the same-commit `connectionsHelp` `its`/`any` drift first. | `flowHelp` and the one-word companion `connectionsHelp` source produce the exact tracked manuals; generated CLI markdown and golden transcripts are updated by their owners, and no manual source edit remains. | RED 2026-08-12 |
-| C2. Website generated output | The existing website source/aggregate may be stale after the CLI-manual correction. | Run the checked-in website generator twice; retain only owned output and record a no-change result when CLI manuals are not an input. | PLANNED 2026-08-12 |
+| C2. Authoritative flow manual | Existing `TestGoldenDocsGenerateMatchesTrackedCLIManuals` exits 1 because generated `flow.md` from `flowHelp` omits the approved three-line case-equivalent fail-closed remedy now tracked in `docs/cli/flow.md`; map iteration can also expose the same-commit `connectionsHelp` `its`/`any` drift first. | `flowHelp` and the one-word companion `connectionsHelp` source produce the exact tracked manuals; generated CLI markdown and golden transcripts are updated by their owners, and no manual source edit remains. | GREEN targeted 2026-08-12 |
+| C2. Website generated output | The existing website source/aggregate may be stale after the CLI-manual correction. | Run the checked-in website generator twice; retain only owned output and record a no-change result when CLI manuals are not an input. | GREEN targeted 2026-08-12 |
 
 ### Correction 2 RED command
 
@@ -250,3 +250,19 @@ source. Use
 `website`'s checked-in generator for all derived files. Preserve all prior
 commits and runtime behavior; do not weaken the golden, manually edit
 `docs/cli/flow.md`, rerun GitHub CI, or modify #4071 topology.
+
+## Recorded correction 2 targeted GREEN
+
+`internal/cli/docs.go` now supplies the three approved `flowHelp` lines and
+the same-commit `connectionsHelp` `any local sync` wording. Two invocations of
+`pm docs generate` reproduce the existing tracked CLI manuals without changing
+them, proving those manuals are derived rather than hand-edited in this
+correction. The opt-in transcript generator updated only the six expected
+connection/flow help, bare-manual, and JSON-manual fixture values; its second
+invocation was clean. Two `website` data-generator invocations were clean,
+showing that its existing source/aggregate has no additional dependency on the
+CLI manual files.
+
+The focused manual/transcript/docs selectors passed, as did direct `pm help
+flow`, bare `pm flow`, and `pm flow --json` inspection. The exact commands and
+scoped diff are in `traces/correction-2-flow-manual-golden-drift-green.txt`.

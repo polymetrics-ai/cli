@@ -461,7 +461,7 @@ STREAM AND TABLE NAMES
   One local-warehouse connection cannot configure distinct --table spellings
   that differ only by ASCII letter case, such as records and RECORDS: DuckDB
   treats them as one identifier. Creation refuses that inventory before saving
-  it. A legacy inventory is left unchanged on open, but its local sync refuses
+  it. A legacy inventory is left unchanged on open, but any local sync refuses
   before changing run or warehouse state; create replacement connections whose
   destination table names differ by more than ASCII letter case.
 
@@ -683,6 +683,9 @@ CONNECTION-SCOPED SOURCE READS
   scope its "source_table". Use _unattributed only for a root-level table that
   no connection owns. When same-named tables have several owners, omitting the
   applicable manifest selector refuses the read instead of choosing one.
+  A case-equivalent spelling whose owner cannot be decided also fails closed;
+  set "connection" to a known healthy owner rather than relying on an
+  unscoped query.
 
   Query example:
   {"id":"query-acme","kind":"query","connection":"acme",

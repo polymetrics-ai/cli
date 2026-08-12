@@ -147,14 +147,14 @@ exact-head CI, or Sol-audit claim is inferred from either local record.
 **Status:** planned before source edits. The existing #4071 Verify failure is
 the causal RED; it must not be rerun remotely.
 
-- [ ] Exact local `TestGoldenDocsGenerateMatchesTrackedCLIManuals` RED exits 1
+- [x] Exact local `TestGoldenDocsGenerateMatchesTrackedCLIManuals` RED exits 1
       with `flow.md` drift and is recorded before an embedded-help edit.
-- [ ] `internal/cli/docs.go` is the only hand-authored manual source changed;
+- [x] `internal/cli/docs.go` is the only hand-authored manual source changed;
       the three approved flow lines and same-commit `connectionsHelp` wording
       are generated into their tracked CLI manuals.
-- [ ] Golden transcript update path regenerates flow help/bare/JSON artifacts;
+- [x] Golden transcript update path regenerates flow help/bare/JSON artifacts;
       focused transcript and manual tests pass.
-- [ ] The checked-in website data generator is run twice; its exact scoped
+- [x] The checked-in website data generator is run twice; its exact scoped
       output or no-change result is recorded without altering website sources.
 - [ ] Focused CLI/manual, relevant Go, docs/generator/lint, and candidate
       diff checks pass; inherited findings are separate from candidate output.

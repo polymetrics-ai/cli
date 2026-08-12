@@ -6,7 +6,7 @@
   "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "required_base_branch": "feat/3897-flow-connection-scope-nm",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "correction_2_flow_manual_generator_gap_planned",
+  "status": "correction_2_targeted_green_pending_broad_verification",
   "correction_budget": {
     "used_before": 1,
     "active_correction": 2,
@@ -67,6 +67,7 @@
     "pr_issue_guard": "passed locally against the live draft PR title and its Refs #4069/#3897 plus parent #4060 linkage",
     "inherited_baseline": "seven older #3897 planning-file trailing-whitespace findings remain outside the child range",
     "website_generated_data_green": "passed: exact one-file aggregate hash, second-generation idempotence, candidate diff check, lint/typecheck/unit/script/build; browser E2E is reserved for natural CI because local browser installation is not authorized",
+    "correction_2_targeted_green": "passed: exact flow manual RED was reproduced, flowHelp plus same-commit connectionsHelp source now generate tracked manuals, transcript generator updated six expected entries and is idempotent, website generator is idempotent with no diff",
     "next_gate": "Record correction-2 causal RED, update authoritative flowHelp, regenerate derived CLI/website artifacts, complete local GSD verification, then start one fresh no-mistakes run without --yes and with --skip=pr,ci"
   },
   "correction_1": {
@@ -112,6 +113,7 @@
       "internal/cli/testdata/golden_transcripts.json",
       "website/lib/docs.generated.ts when its checked-in generator produces a change"
     ],
-    "scope_fences": "no runtime behavior change, manual docs source edit, CI rerun, PR mutation, new issue, or topology change"
+    "scope_fences": "no runtime behavior change, manual docs source edit, CI rerun, PR mutation, new issue, or topology change",
+    "targeted_green": "manual golden, transcript, connector-doc generation selectors and direct help/bare/JSON flow checks pass; broader local/GSD verification remains"
   }
 }
