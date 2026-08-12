@@ -69,32 +69,26 @@ func warehouseRowIDs(rows []warehouseTableRow) []string {
 	return ids
 }
 
-// sameOwnerCaseEquivalentTableError is deliberately a test-local behavioural
-// contract for the new warehouse error. Keeping RED compilable before the
-// production type exists lets the test prove errors.As behaviour rather than
-// merely matching a string.
-type sameOwnerCaseEquivalentTableError interface {
-	error
-	SameOwnerCaseEquivalentTableCollision()
-}
-
-func requireSameOwnerCaseEquivalentTableError(t *testing.T, err error) {
+func requireSameOwnerCaseEquivalentTableError(t *testing.T, err error, owner string) {
 	t.Helper()
-	var collision sameOwnerCaseEquivalentTableError
+	var collision *warehouse.SameOwnerCaseEquivalentTableError
 	if !errors.As(err, &collision) {
-		t.Fatalf("error = %T %v, want typed same-owner case-equivalent table collision", err, err)
+		t.Fatalf("error = %T %v, want *warehouse.SameOwnerCaseEquivalentTableError", err, err)
 	}
 	var ambiguous *warehouse.AmbiguousTableError
 	if errors.As(err, &ambiguous) {
 		t.Fatalf("error = %T %v, must not use *warehouse.AmbiguousTableError for one owner", err, err)
 	}
-	for _, want := range []string{"acme", "RECORDS", "records"} {
+	for _, want := range []string{owner, "RECORDS", "records"} {
 		if !strings.Contains(collision.Error(), want) {
 			t.Fatalf("collision error %q does not name %q", collision.Error(), want)
 		}
 	}
 	if strings.Contains(collision.Error(), "acme-token") {
 		t.Fatalf("collision error leaks credential material: %q", collision.Error())
+	}
+	if !strings.Contains(collision.Error(), "exact resolver-visible table spelling") || !strings.Contains(collision.Error(), "replacement connections") {
+		t.Fatalf("collision error %q omits the direct-read/replacement remedy", collision.Error())
 	}
 }
 
@@ -708,13 +702,25 @@ func TestCreateConnectionRejectsSameOwnerCaseEquivalentDestinationTables(t *test
 	if err == nil {
 		t.Fatal("CreateConnection() accepted case-equivalent destination tables for one warehouse owner")
 	}
-	requireSameOwnerCaseEquivalentTableError(t, err)
+	requireSameOwnerCaseEquivalentTableError(t, err, "same-owner-case-rejected")
 	if _, ok := a.findConnection("same-owner-case-rejected"); ok {
 		t.Fatal("rejected connection was stored")
 	}
 
 	if _, err := a.CreateConnection(ctx, request("same-owner-exact-spelling", "records")); err != nil {
 		t.Fatalf("CreateConnection() rejected identical destination spellings: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{
+		Name:      "same-owner-outbox",
+		Connector: "outbox",
+		Config:    map[string]string{"path": filepath.Join(a.ProjectDir(), "outbox")},
+	}); err != nil {
+		t.Fatalf("AddCredential(outbox) error = %v", err)
+	}
+	nonLocal := request("same-owner-nonlocal", "RECORDS")
+	nonLocal.Destination = EndpointConfig{Connector: "outbox", Credential: "same-owner-outbox"}
+	if _, err := a.CreateConnection(ctx, nonLocal); err != nil {
+		t.Fatalf("CreateConnection() rejected non-local destination collision: %v", err)
 	}
 }
 
@@ -1000,7 +1006,7 @@ func TestLegacySameOwnerCaseEquivalentInventorySurvivesOpenAndFailsBeforeMutatio
 	if err == nil {
 		t.Fatal("RunETL() accepted legacy same-owner case-equivalent destination tables")
 	}
-	requireSameOwnerCaseEquivalentTableError(t, err)
+	requireSameOwnerCaseEquivalentTableError(t, err, "acme")
 	afterRun, readErr := os.ReadFile(statePath)
 	if readErr != nil {
 		t.Fatalf("read state after refused run: %v", readErr)
@@ -1153,7 +1159,7 @@ func TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			_, queryErr := a.QuerySQL(ctx, QuerySQLRequest{SQL: tc.sql, Connection: tc.connection})
-			requireSameOwnerCaseEquivalentTableError(t, queryErr)
+			requireSameOwnerCaseEquivalentTableError(t, queryErr, "acme")
 			if strings.Contains(queryErr.Error(), "Catalog Error") || strings.Contains(queryErr.Error(), "duplicate") {
 				t.Fatalf("SQL collision leaked a DuckDB catalog error: %v", queryErr)
 			}

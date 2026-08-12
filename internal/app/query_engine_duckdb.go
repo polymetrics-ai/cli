@@ -248,6 +248,8 @@ type queryViewPolicy struct {
 	caseEquivalentUniqueAmbiguityByKey map[string]tableAmbiguity
 	generatedAliasBaseName             map[string]string
 	collidingGeneratedAliases          map[string]struct{}
+	sameOwnerDestinationCollisionByKey map[string]warehouseDestinationCollision
+	sameOwnerGeneratedAliasByKey       map[string]warehouseDestinationCollision
 	unscopedFlow                       bool
 }
 
@@ -268,22 +270,46 @@ func (a tableAmbiguity) err() error {
 }
 
 func newQueryViewPolicy(req QuerySQLRequest, resolver *warehouse.TableResolver) queryViewPolicy {
-	if req.Connection != "" {
-		return queryViewPolicy{}
-	}
-
 	tables := resolver.Tables()
 	byName := make(map[string][]warehouse.Table, len(tables))
 	catalogNames := make(map[string]struct{}, len(tables))
 	for _, table := range tables {
 		byName[table.Name] = append(byName[table.Name], table)
-		catalogNames[duckDBIdentifierKey(table.Name)] = struct{}{}
+		if querySelectsConnection(req.Connection, table.Connection) {
+			catalogNames[duckDBIdentifierKey(table.Name)] = struct{}{}
+		}
 	}
 	policy := queryViewPolicy{
 		caseEquivalentUniqueAmbiguityByKey: make(map[string]tableAmbiguity),
 		collidingGeneratedAliases:          make(map[string]struct{}),
+		sameOwnerDestinationCollisionByKey: make(map[string]warehouseDestinationCollision),
+		sameOwnerGeneratedAliasByKey:       make(map[string]warehouseDestinationCollision),
 	}
-	policy.unscopedFlow = req.Origin == QuerySQLOriginFlow
+	policy.unscopedFlow = req.Connection == "" && req.Origin == QuerySQLOriginFlow
+	for _, collision := range req.sameOwnerCaseEquivalentDestinationCollisions {
+		if req.Connection != "" && req.Connection != collision.connection {
+			continue
+		}
+		if _, exists := policy.sameOwnerDestinationCollisionByKey[collision.key]; !exists {
+			policy.sameOwnerDestinationCollisionByKey[collision.key] = collision
+		}
+		for _, table := range collision.tables {
+			aliasKey := duckDBIdentifierKey(table + "__" + collision.connectionID)
+			// A resolver-visible real table wins over an invented generated
+			// alias. The snapshot is the authority, not a reserved namespace.
+			if _, exists := catalogNames[aliasKey]; exists {
+				continue
+			}
+			if _, exists := policy.sameOwnerGeneratedAliasByKey[aliasKey]; !exists {
+				policy.sameOwnerGeneratedAliasByKey[aliasKey] = collision
+			}
+		}
+	}
+	// A connection-scoped query still needs the same-owner policy above, but
+	// all existing cross-owner/alias rules remain unscoped-only.
+	if req.Connection != "" {
+		return policy
+	}
 	if policy.unscopedFlow {
 		policy.ambiguousBaseNameByKey = make(map[string]string)
 		policy.generatedAliasBaseName = make(map[string]string)
@@ -370,12 +396,21 @@ func generatedOwnerAlias(name string, table warehouse.Table) string {
 }
 
 func (p queryViewPolicy) blocksGeneratedAliases(name string) bool {
+	if _, ok := p.sameOwnerDestinationCollisionByKey[duckDBIdentifierKey(name)]; ok {
+		return true
+	}
 	_, ok := p.ambiguousBaseNameByKey[duckDBIdentifierKey(name)]
 	return ok
 }
 
 func (p queryViewPolicy) blocksBareView(name string) bool {
 	key := duckDBIdentifierKey(name)
+	if _, ok := p.sameOwnerDestinationCollisionByKey[key]; ok {
+		return true
+	}
+	if _, ok := p.sameOwnerGeneratedAliasByKey[key]; ok {
+		return true
+	}
 	if _, ok := p.ambiguousBaseNameByKey[key]; ok {
 		return true
 	}
@@ -390,17 +425,29 @@ func (p queryViewPolicy) registersCanonicalAliases(name string) bool {
 	if p.unscopedFlow {
 		return false
 	}
+	if _, ok := p.sameOwnerDestinationCollisionByKey[duckDBIdentifierKey(name)]; ok {
+		return false
+	}
 	_, ok := p.caseEquivalentUniqueAmbiguityByKey[duckDBIdentifierKey(name)]
 	return ok
 }
 
 func (p queryViewPolicy) allowsGeneratedAlias(name string) bool {
+	if _, blocked := p.sameOwnerGeneratedAliasByKey[duckDBIdentifierKey(name)]; blocked {
+		return false
+	}
 	_, collides := p.collidingGeneratedAliases[duckDBIdentifierKey(name)]
 	return !collides
 }
 
 func (p queryViewPolicy) find(resolver *warehouse.TableResolver, tableName, connection string) (warehouse.Table, error) {
 	key := duckDBIdentifierKey(tableName)
+	if collision, ok := p.sameOwnerDestinationCollisionByKey[key]; ok {
+		return warehouse.Table{}, collision.err()
+	}
+	if collision, ok := p.sameOwnerGeneratedAliasByKey[key]; ok {
+		return warehouse.Table{}, collision.err()
+	}
 	if baseName, ok := p.ambiguousBaseNameByKey[key]; ok {
 		return resolver.Find(baseName, "")
 	}
@@ -411,23 +458,6 @@ func (p queryViewPolicy) find(resolver *warehouse.TableResolver, tableName, conn
 		return resolver.Find(baseName, "")
 	}
 	return resolver.Find(tableName, connection)
-}
-
-func duckDBIdentifierKey(name string) string {
-	for i := 0; i < len(name); i++ {
-		if name[i] < 'A' || name[i] > 'Z' {
-			continue
-		}
-		key := []byte(name)
-		key[i] += 'a' - 'A'
-		for j := i + 1; j < len(key); j++ {
-			if key[j] >= 'A' && key[j] <= 'Z' {
-				key[j] += 'a' - 'A'
-			}
-		}
-		return string(key)
-	}
-	return name
 }
 
 func registerWarehouseView(ctx context.Context, db *sql.DB, view string, table warehouse.Table) error {

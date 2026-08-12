@@ -6,7 +6,7 @@
   "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "required_base_branch": "feat/3897-flow-connection-scope-nm",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "correction_1_red_committed_green_pending",
+  "status": "correction_1_targeted_green_committed_broad_verification_pending",
   "correction_budget": {
     "used_before": 0,
     "active_correction": 1,
@@ -66,7 +66,7 @@
     "manual_code_review": "passed: no unresolved candidate finding",
     "pr_issue_guard": "passed locally against a prospective draft body with Refs #4069",
     "inherited_baseline": "seven older #3897 planning-file trailing-whitespace findings remain outside the child range",
-    "next_gate": "minimum same-owner GREEN implementation after committed RED"
+    "next_gate": "broad correction-1 local, GSD, docs/help/website, generator, and issue-guard verification"
   },
   "correction_1": {
     "audit_handoff": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4066-case-equivalent-unique-tables-r1/correction-1-sol-audit-handoff.md",
@@ -82,6 +82,8 @@
       "follow_up_authority": "version-matched axi help explicitly permits post-pipeline follow-up commits on top of the existing branch"
     },
     "red_status": "committed: focused app and CLI Parquet/DuckDB RED reproduces creation, pre-mutation, SQL, flow, and schedule-re-entry gaps; exact direct resolver control retained",
+    "targeted_green_status": "passed: C1-C5 focused app/CLI tests plus inherited #4066/#3897 query, flow, alias, selector, and schedule fence",
+    "implementation": "one shared ASCII DuckDB key helper; creation admission; credential-free whole local-warehouse inventory preflight before beginRun; declared-inventory plus resolver-snapshot SQL policy; typed warehouse error; exact direct resolver reads unchanged",
     "docs_parity": "applicable: connection/query manual and website behavior guidance must be updated"
   }
 }

@@ -71,8 +71,8 @@ inherited files are not edited or normalized here.
 
 ## Correction 1 / 5 gate — same-owner case-equivalent inventory
 
-**Status:** committed RED recorded; prior local-green record covers only the
-cross-owner matrix and is not acceptance evidence for this correction.
+**Status:** targeted GREEN recorded; prior local-green record covers only the
+cross-owner matrix and broader correction-1 verification remains pending.
 
 **Canonical finish-plan SHA-256:**
 `939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`
@@ -93,7 +93,7 @@ cross-owner matrix and is not acceptance evidence for this correction.
 - [x] A committed RED retains exact query/action/reverse resolution for only
       host-resolver-visible physical spellings, and rejects a missing spelling
       without case aliasing it.
-- [ ] GREEN uses one deterministic ASCII key helper, creation and sync
+- [x] Targeted GREEN uses one deterministic ASCII key helper, creation and sync
       inventory validation, declared-inventory plus resolver-snapshot SQL
       policy, and a typed same-owner error without migration, SQL rewriting,
       Unicode folding, flat alias reservation, provider work, or certification
@@ -104,3 +104,10 @@ cross-owner matrix and is not acceptance evidence for this correction.
       docs generator/checks, and PR-body parity evidence are recorded.
 - [ ] Inline GSD verify-work and code-review, no-mistakes without `--yes`,
       exact-head CI, and a fresh Sol audit complete before any integration.
+
+### Targeted GREEN command record
+
+`traces/correction-1-same-owner-green.txt` records the focused C1–C5 suite and
+the existing #4066/#3897 app/flow selector fence. They all passed after the
+minimal implementation. No broad package, race, lint/vet, generator,
+docs/help/website, or PR issue-guard claim is inferred from this targeted pass.

@@ -14,6 +14,8 @@ files_modified:
   - .planning/phases/issue-4069-flow-case-equivalent-unique-tables-r1/
   - internal/app/app.go
   - internal/app/query_engine_duckdb.go
+  - internal/app/warehouse_destination_collision.go
+  - internal/app/types.go
   - internal/warehouse/layout.go
   - internal/cli/docs.go
   - internal/app/warehouse_connection_isolation_test.go

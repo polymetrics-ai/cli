@@ -83,11 +83,11 @@ and GREEN rows remain historical evidence and must not be rewritten.
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
-| C1. New connection invariant | One local-warehouse request contains distinct streams whose effective tables are `records` and `RECORDS`; creation currently succeeds or persists. Capture state bytes/count/revision and require `errors.As` to the new type. | Creation rejects after defaults and before ID/save; all captured persisted state remains unchanged. Exact duplicate spelling and non-local destination controls preserve their current behavior. | RED recorded 2026-08-12 |
-| C2. Legacy sync fence | A persisted same-owner collision opens unchanged, then its next stream run currently begins/persists a run and can mutate WAL/table state. | Open does not rewrite legacy state; either stream is rejected before `beginRun` and no run/checkpoint/stream/owner/directory/WAL/temp/Parquet state changes. | RED recorded 2026-08-12 |
-| C3. SQL policy | Generic/selected bare and quoted collision references currently either bind a survivor or encounter raw registration behavior; a one-owner `AmbiguousTableError` is not a truthful remedy. | A dedicated typed same-owner collision is returned only for the colliding key; `SELECT 1`, unrelated tables, and a real generated-alias collision control remain executable. | RED recorded 2026-08-12 |
-| C4. Flow and schedule boundary | Unscoped and selected bare/quoted collision flows can complete or report the wrong error/checkpoint outcome. | Each fails without a success checkpoint, including schedule re-entry; inherited cross-owner flow/action/reverse/schedule behavior remains green. | RED recorded 2026-08-12 |
-| C5. Exact physical reads | A case-insensitive physical path can have one surviving spelling even though legacy state declares two. | Direct query, action, and reverse reads use only resolver-proven physical spellings and refuse the missing variant without aliasing it. | RED control passed 2026-08-12 |
+| C1. New connection invariant | One local-warehouse request contains distinct streams whose effective tables are `records` and `RECORDS`; creation currently succeeds or persists. Capture state bytes/count/revision and require `errors.As` to the new type. | Creation rejects after defaults and before ID/save; all captured persisted state remains unchanged. Exact duplicate spelling and non-local destination controls preserve their current behavior. | Targeted GREEN 2026-08-12 |
+| C2. Legacy sync fence | A persisted same-owner collision opens unchanged, then its next stream run currently begins/persists a run and can mutate WAL/table state. | Open does not rewrite legacy state; either stream is rejected before `beginRun` and no run/checkpoint/stream/owner/directory/WAL/temp/Parquet state changes. | Targeted GREEN 2026-08-12 |
+| C3. SQL policy | Generic/selected bare and quoted collision references currently either bind a survivor or encounter raw registration behavior; a one-owner `AmbiguousTableError` is not a truthful remedy. | A dedicated typed same-owner collision is returned only for the colliding key; `SELECT 1`, unrelated tables, and a real generated-alias collision control remain executable. | Targeted GREEN 2026-08-12 |
+| C4. Flow and schedule boundary | Unscoped and selected bare/quoted collision flows can complete or report the wrong error/checkpoint outcome. | Each fails without a success checkpoint, including schedule re-entry; inherited cross-owner flow/action/reverse/schedule behavior remains green. | Targeted GREEN 2026-08-12 |
+| C5. Exact physical reads | A case-insensitive physical path can have one surviving spelling even though legacy state declares two. | Direct query, action, and reverse reads use only resolver-proven physical spellings and refuse the missing variant without aliasing it. | Targeted GREEN 2026-08-12 |
 
 ### Correction 1 RED command set
 
@@ -124,3 +124,18 @@ GREEN may begin only after the committed RED checkpoint. The implementation
 must share deterministic ASCII identifier-key semantics across creation, legacy
 sync preflight, and query policy; it must not migrate/rewrite data, parse SQL,
 Unicode-fold, reserve flat aliases, access credentials, or claim certification.
+
+## Recorded correction 1 targeted GREEN
+
+The new shared ASCII identifier helper is used by local-warehouse creation,
+credential-free legacy sync preflight, and the per-query DuckDB policy. The
+policy receives the declared local-warehouse collision snapshot beside the
+resolver snapshot; it suppresses only collided bare/generated bindings and
+lets a resolver-visible real alias win. Direct query/action/reverse reads do
+not enter that SQL policy and remain exact resolver lookups.
+
+The focused target plus inherited #4066/#3897 selector fence passed. The
+non-secret command record is `traces/correction-1-same-owner-green.txt`.
+Broader affected-package, race, GSD review, docs/help/website, generator, and
+issue-guard verification remain required before this correction can be handed
+to no-mistakes.
