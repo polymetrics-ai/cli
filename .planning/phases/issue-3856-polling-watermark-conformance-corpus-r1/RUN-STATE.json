@@ -5,7 +5,7 @@
   "branch": "feat/3856-polling-conformance-corpus",
   "base_branch": "feat/3855-polling-apply-foundations",
   "base_sha": "fa5eef681a4b06c09519574326a22683b26bd996",
-  "status": "planned",
+  "status": "red_recorded",
   "adapter": "pi-project-local",
   "runtime_fallback": "inline manual execution of generated GSD prompts; the canonical single-worker contract forbids role spawning",
   "skills": [
@@ -38,5 +38,5 @@
   },
   "correction_count": 0,
   "shepherd": "excluded; #3995/#4062 is parked",
-  "next": "record R1 RED before adding the corpus or runner"
+  "next": "implement the minimum embedded corpus and no-skip registered-lane runner"
 }

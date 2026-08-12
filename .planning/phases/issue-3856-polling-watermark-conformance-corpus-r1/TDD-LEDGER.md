@@ -37,4 +37,23 @@ applicable.
 
 ## Run log
 
-Pending R1 RED. Production implementation files do not exist yet.
+### R1 RED recorded before production edits
+
+The test file existed before `polling_conformance.go`, its embedded corpus, or
+any runner implementation. The first required command failed as intended:
+
+```text
+$ go test -timeout 20m ./internal/connectors/engine -run '^TestPollingWatermarkConformanceSuiteRunsEveryMandatoryFixture$' -count=1
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+internal/connectors/engine/polling_conformance_test.go:15:17: undefined: RunPollingWatermarkConformanceSuite
+internal/connectors/engine/polling_conformance_test.go:17:3: undefined: newReferencePollingWatermarkConformanceLaneFactory
+internal/connectors/engine/polling_conformance_test.go:23:13: undefined: RequiredPollingWatermarkConformanceEvidence
+internal/connectors/engine/polling_conformance_test.go:27:30: undefined: RunPollingWatermarkConformanceSuite
+internal/connectors/engine/polling_conformance_test.go:38:51: undefined: PollingWatermarkConformancePosition
+FAIL    polymetrics.ai/internal/connectors/engine [build failed]
+FAIL
+```
+
+This RED proves the required reusable factory, corpus evidence, no-skip runner,
+and composite position are absent. No production implementation file existed
+when it was recorded.
