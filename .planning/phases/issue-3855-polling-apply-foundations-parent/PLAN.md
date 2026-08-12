@@ -66,7 +66,7 @@ only planning artifacts and does not describe or alter product behavior.
 | Item | Required state |
 | --- | --- |
 | Primary issue | #3855; retain existing children #3856–#3860 and create none. |
-| Parent branch | `feat/3855-polling-apply-foundations`, created from current `origin/feat/3862-any-to-any-transport` head `30b2fb4aeb121641b6158903fe1d3b54668599a6`. |
+| Parent branch | `feat/3855-polling-apply-foundations`, originally seeded from `30b2fb4aeb121641b6158903fe1d3b54668599a6` and safely replayed onto current `origin/feat/3862-any-to-any-transport` head `c67f40a5ff67a131950f3123e70527027dca8493` after accepted transport PR #4059 merged. |
 | Initial PR | One draft PR only; base `feat/3862-any-to-any-transport`, head `feat/3855-polling-apply-foundations`. |
 | Temporary-base meaning | Dependency-only; it never authorizes #3855 integration into #3862. |
 | Retarget rule | Before final parent integration, retarget to `docs/4015-connector-release-certification` after the reviewed transport seam is present there. |
@@ -87,12 +87,18 @@ only planning artifacts and does not describe or alter product behavior.
 5. **GREEN — draft parent PR:** after local gates, push only this branch and use `gh-axi` to create
    exactly one draft PR with the explicit temporary base/head. Re-read live state with `gh-axi` and
    record its exact draft/base/head result.
+6. **RED/GREEN — accepted transport refresh:** prove the accepted parent head
+   `c67f40a5ff67a131950f3123e70527027dca8493` is not an ancestor of the existing #3855 history,
+   then safely replay that exact history onto it. Require `git range-diff` patch equivalence, a
+   planning-only changed-path assertion, and a fresh draft/base/head inspection before a future
+   child may inherit the seam.
 
 ## Refactor policy
 
 There is no code refactor in this phase. If a validation exposes a product defect, search for an
-existing child first and otherwise create a narrowly scoped #3855 child before changing code. A
-pipeline or topology recovery that changes no product code does not consume a correction round.
+existing child first and otherwise create a narrowly scoped #3855 child before changing code. The
+2026-08-12 accepted-transport replay changes no product code and does not consume a correction
+round.
 
 ## Verification plan
 
@@ -103,3 +109,6 @@ pipeline or topology recovery that changes no product code does not consume a co
 - Run the no-mistakes local pipeline using the contract-owned skip vector.
 - Validate the final GitHub object only with `gh-axi`: draft state, exact base/head, one PR, and no
   certification or executable-behavior claim.
+- After a temporary-base advance, prove the remote base SHA, rebase only the existing parent range,
+  compare it with `git range-diff`, and force-push only with an explicit lease for the verified
+  remote #3855 SHA.
