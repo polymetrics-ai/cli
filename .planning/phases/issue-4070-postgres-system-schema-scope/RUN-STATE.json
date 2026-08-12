@@ -15,7 +15,7 @@
     "fallback": "inline manual GSD phase; issue-specific phase is absent from ROADMAP.md"
   },
   "tdd": {
-    "phase": "planned",
+    "phase": "red_complete_commit_pending",
     "production_code_after_red_commit": true
   },
   "no_mistakes": {

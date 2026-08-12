@@ -5,7 +5,7 @@
 
 | Cycle | State | Evidence required before advancing |
 | --- | --- | --- |
-| RED | planned | A committed test-only change proves reserved schemas currently reach the transport/catalog path; a fresh run-owned PostgreSQL session proves a held `pg_temp_N` table is accepted by the candidate. |
+| RED | complete; commit pending | A test-only change proves every reserved schema currently reaches transport/catalog discovery; a fresh run-owned PostgreSQL session proves a held `pg_temp_N` table is accepted by the candidate. See `traces/red-unit.md` and `traces/red-live-boundary.md`. |
 | GREEN | blocked on RED | The narrow guard returns a named typed scope error before pool creation for every required exact/prefix case; allowed schemas remain live/dynamic. |
 | Refactor/docs | blocked on GREEN | Remove duplication only if needed, update authoritative docs and derived data, preserve parameterized catalog SQL and fixture separation. |
 | Verify/review | blocked on refactor | Focused/unit/live/race/build/vet/lint/docs/generator/diff checks, GSD verification, and deep review are recorded. |

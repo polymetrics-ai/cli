@@ -93,6 +93,7 @@ func TestPostgresDynamicTypedCatalogUsesLiveMetadata(t *testing.T) {
 	source := openPostgresCatalogSource(t, ctx, endpoint)
 	defer func() { _ = source.Close(ctx) }()
 	seedPostgresCatalogs(t, ctx, source)
+	assertPostgresSystemSchemasAreRejected(t, ctx, connector, endpoint)
 
 	alpha, err := connector.TypedCatalog(ctx, alphaConfig)
 	if err != nil {
@@ -160,6 +161,40 @@ func TestPostgresDynamicTypedCatalogUsesLiveMetadata(t *testing.T) {
 	unsupportedConfig := postgresCatalogConfig(t, endpoint, postgresCatalogUnsupportedSchema)
 	if _, err := connector.TypedCatalog(ctx, unsupportedConfig); !errors.Is(err, native.ErrUnsupportedCatalogShape) {
 		t.Fatal("PostgreSQL typed catalog did not reject an unsupported native type")
+	}
+}
+
+func assertPostgresSystemSchemasAreRejected(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint) {
+	t.Helper()
+
+	temporarySource := openPostgresCatalogSource(t, ctx, endpoint)
+	defer func() { _ = temporarySource.Close(ctx) }()
+	if _, err := temporarySource.Exec(ctx, "CREATE TEMPORARY TABLE catalog_scope_temp_probe_4070 (probe_id integer PRIMARY KEY, marker text NOT NULL)"); err != nil {
+		t.Fatal("could not create the held PostgreSQL temporary-table scope probe")
+	}
+	var temporarySchema string
+	if err := temporarySource.QueryRow(ctx, "SELECT nspname FROM pg_catalog.pg_namespace WHERE oid = pg_my_temp_schema()").Scan(&temporarySchema); err != nil {
+		t.Fatal("could not identify the held PostgreSQL temporary-table schema")
+	}
+	if !strings.HasPrefix(temporarySchema, "pg_temp_") {
+		t.Fatal("PostgreSQL temporary-table probe did not use a physical pg_temp_N schema")
+	}
+
+	schemas := []string{
+		"pg_catalog",
+		"information_schema",
+		"pg_toast",
+		"pg_toast_4070",
+		temporarySchema,
+	}
+	for _, schema := range schemas {
+		config := postgresCatalogConfig(t, endpoint, schema)
+		if _, err := connector.TypedCatalog(ctx, config); err == nil || !strings.Contains(err.Error(), reservedPostgresCatalogSchemaError) {
+			t.Fatal("typed PostgreSQL catalog did not reject a system-owned schema before discovery")
+		}
+		if _, err := connector.Catalog(ctx, config); err == nil || !strings.Contains(err.Error(), reservedPostgresCatalogSchemaError) {
+			t.Fatal("legacy PostgreSQL catalog did not preserve the typed system-schema rejection")
+		}
 	}
 }
 

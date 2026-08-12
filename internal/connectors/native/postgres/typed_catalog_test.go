@@ -3,6 +3,8 @@ package postgres
 import (
 	"context"
 	"errors"
+	"net"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -12,6 +14,8 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/database"
 )
+
+const reservedPostgresCatalogSchemaError = "postgres catalog schema is reserved for PostgreSQL system objects"
 
 func TestPostgresColumnTypeRetainsSupportedNativeDetails(t *testing.T) {
 	definition := New().databaseDefinition
@@ -99,6 +103,45 @@ func TestTypedCatalogRejectsUnsafeConfiguredSchemaBeforeConnect(t *testing.T) {
 	})
 	if !errors.Is(err, ErrUnsupportedCatalogShape) {
 		t.Fatal("unsafe PostgreSQL schema was not rejected before a connection attempt")
+	}
+}
+
+func TestTypedCatalogRejectsReservedConfiguredSchemasBeforeConnect(t *testing.T) {
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal("could not reserve a loopback port for the pre-connection scope test")
+	}
+	port := strconv.Itoa(listener.Addr().(*net.TCPAddr).Port)
+	if err := listener.Close(); err != nil {
+		t.Fatal("could not release the loopback port for the pre-connection scope test")
+	}
+
+	for _, schema := range []string{
+		"pg_catalog",
+		"information_schema",
+		"pg_toast",
+		"pg_toast_4070",
+		"pg_temp_4070",
+	} {
+		t.Run(schema, func(t *testing.T) {
+			ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+			defer cancel()
+
+			_, err := New().TypedCatalog(ctx, connectors.RuntimeConfig{
+				Config: map[string]string{
+					"host":     "127.0.0.1",
+					"port":     port,
+					"database": "analytics",
+					"username": "reader",
+					"schema":   schema,
+					"sslmode":  "disable",
+				},
+				Secrets: map[string]string{"password": t.Name()},
+			})
+			if err == nil || !strings.Contains(err.Error(), reservedPostgresCatalogSchemaError) {
+				t.Fatalf("reserved PostgreSQL schema was not rejected before a connection attempt: %v", err)
+			}
+		})
 	}
 }
 
