@@ -967,6 +967,85 @@ func TestFlowCaseEquivalentUniqueTablesPreserveGenericSQLAndTypedAmbiguity(t *te
 	}
 }
 
+func TestFlowRefusesCaseEquivalentFaultedOwner(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowCaseEquivalentUniqueWarehouseApp(t, ctx)
+
+	var globex app.Connection
+	for _, connection := range a.ListConnections() {
+		if connection.Name == "globex" {
+			globex = connection
+			break
+		}
+	}
+	require.NotEmpty(t, globex.ID)
+	warehouseDir := filepath.Join(a.ProjectDir(), "warehouse")
+	location, err := warehouse.LocationFor(warehouseDir, "flow_scope", "warehouse", globex.ID, globex.Name)
+	require.NoError(t, err)
+	require.NoError(t, os.WriteFile(location.OwnerPath(), []byte("{"), 0o600))
+
+	direct, err := a.QueryTable(ctx, app.QueryTableRequest{Table: "records", Limit: 1})
+	require.NoError(t, err)
+	require.Len(t, direct, 1)
+	assert.Equal(t, "acme-case-unique", fmt.Sprint(direct[0]["id"]))
+
+	generic, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: "SELECT id FROM records"})
+	require.NoError(t, err)
+	require.Len(t, generic, 1)
+	assert.Equal(t, "acme-case-unique", fmt.Sprint(generic[0]["id"]))
+
+	selected, err := a.QuerySQL(ctx, app.QuerySQLRequest{
+		SQL:        "SELECT id FROM records",
+		Connection: "acme",
+		Origin:     app.QuerySQLOriginFlow,
+	})
+	require.NoError(t, err)
+	require.Len(t, selected, 1)
+	assert.Equal(t, "acme-case-unique", fmt.Sprint(selected[0]["id"]))
+
+	for _, tc := range []struct {
+		name string
+		sql  string
+	}{
+		{name: "lowercase", sql: "SELECT id FROM records"},
+		{name: "quoted uppercase", sql: `SELECT id FROM "RECORDS"`},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			checkpoints := &flow.FileCheckpointStore{Dir: t.TempDir()}
+			adapter := &recordingFlowAppAdapter{app: a}
+			engine := &flow.Engine{
+				Manifest: flow.FlowManifest{
+					Version: 1,
+					Name:    "faulted-case-equivalent-" + tc.name,
+					Steps: []flow.FlowStep{{
+						ID:   "query-records",
+						Kind: flow.KindQuery,
+						SQL:  tc.sql,
+						In:   []string{},
+						Out:  []string{},
+					}},
+				},
+				App:        adapter,
+				Checkpoint: checkpoints,
+				LockDir:    t.TempDir(),
+			}
+
+			result, runErr := engine.Run(ctx, flow.RunOptions{})
+			require.Error(t, runErr)
+			var faulted *warehouse.FaultError
+			require.Truef(t, errors.As(runErr, &faulted), "error = %T %v", runErr, runErr)
+			assert.True(t, faulted.Undecided)
+			assert.Equal(t, "failed", result.Status)
+			require.Len(t, result.Steps, 1)
+			assert.Equal(t, "failed", result.Steps[0].Status)
+			assert.Empty(t, adapter.lastRows)
+			checkpoint, checkpointErr := checkpoints.Get(engine.Manifest.Name, "query-records")
+			require.NoError(t, checkpointErr)
+			assert.Empty(t, checkpoint)
+		})
+	}
+}
+
 // TestFlowLegacySameOwnerCaseEquivalentInventoryStopsAtTheTypedBoundary
 // covers the old state that #4069 cannot migrate. The owner selection cannot
 // resolve two destinations declared by that same owner, so every SQL spelling

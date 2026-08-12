@@ -246,6 +246,7 @@ func (e duckdbEngine) openScopedDuckDB(
 type queryViewPolicy struct {
 	ambiguousBaseNameByKey             map[string]string
 	caseEquivalentUniqueAmbiguityByKey map[string]tableAmbiguity
+	faultedCanonicalTableByKey         map[string]faultedCanonicalTable
 	generatedAliasBaseName             map[string]string
 	collidingGeneratedAliases          map[string]struct{}
 	sameOwnerDestinationCollisionByKey map[string]warehouseDestinationCollision
@@ -267,6 +268,19 @@ func (a tableAmbiguity) err() error {
 		Table:       a.table,
 		Connections: append([]string(nil), a.connections...),
 	}
+}
+
+type faultedCanonicalTable struct {
+	faults []warehouse.Fault
+}
+
+func (f faultedCanonicalTable) err(table string) error {
+	faults := make([]warehouse.Fault, len(f.faults))
+	for i, fault := range f.faults {
+		faults[i] = fault
+		faults[i].Tables = append([]string(nil), fault.Tables...)
+	}
+	return &warehouse.FaultError{Table: table, Faults: faults, Undecided: true}
 }
 
 func newQueryViewPolicy(req QuerySQLRequest, resolver *warehouse.TableResolver) queryViewPolicy {
@@ -356,6 +370,9 @@ func newQueryViewPolicy(req QuerySQLRequest, resolver *warehouse.TableResolver) 
 		}
 		policy.caseEquivalentUniqueAmbiguityByKey[key] = group.ambiguity(key)
 	}
+	if policy.unscopedFlow {
+		policy.faultedCanonicalTableByKey = faultedCanonicalTables(resolver.Faults(), canonicalGroups)
+	}
 	return policy
 }
 
@@ -386,6 +403,40 @@ func (g canonicalTableGroup) ambiguity(key string) tableAmbiguity {
 	return tableAmbiguity{table: table, connections: connections}
 }
 
+func faultedCanonicalTables(faults []warehouse.Fault, groups map[string]canonicalTableGroup) map[string]faultedCanonicalTable {
+	knownNamesByKey := make(map[string]map[string]struct{}, len(groups))
+	for key, group := range groups {
+		names := make(map[string]struct{}, len(group.names))
+		for _, name := range group.names {
+			names[name] = struct{}{}
+		}
+		knownNamesByKey[key] = names
+	}
+
+	out := make(map[string]faultedCanonicalTable)
+	for _, fault := range faults {
+		seenKeys := make(map[string]struct{})
+		for _, name := range fault.Tables {
+			key := duckDBIdentifierKey(name)
+			knownNames, exists := knownNamesByKey[key]
+			if !exists {
+				continue
+			}
+			if _, exact := knownNames[name]; exact {
+				continue
+			}
+			if _, seen := seenKeys[key]; seen {
+				continue
+			}
+			seenKeys[key] = struct{}{}
+			collision := out[key]
+			collision.faults = append(collision.faults, fault)
+			out[key] = collision
+		}
+	}
+	return out
+}
+
 func isAmbiguousTableError(err error) bool {
 	var ambiguous *warehouse.AmbiguousTableError
 	return errors.As(err, &ambiguous)
@@ -406,6 +457,9 @@ func (p queryViewPolicy) blocksGeneratedAliases(name string) bool {
 func (p queryViewPolicy) blocksBareView(name string) bool {
 	key := duckDBIdentifierKey(name)
 	if _, ok := p.sameOwnerDestinationCollisionByKey[key]; ok {
+		return true
+	}
+	if _, ok := p.faultedCanonicalTableByKey[key]; ok {
 		return true
 	}
 	if _, ok := p.sameOwnerGeneratedAliasByKey[key]; ok {
@@ -444,6 +498,9 @@ func (p queryViewPolicy) find(resolver *warehouse.TableResolver, tableName, conn
 	key := duckDBIdentifierKey(tableName)
 	if collision, ok := p.sameOwnerDestinationCollisionByKey[key]; ok {
 		return warehouse.Table{}, collision.err()
+	}
+	if faulted, ok := p.faultedCanonicalTableByKey[key]; ok {
+		return warehouse.Table{}, faulted.err(tableName)
 	}
 	if collision, ok := p.sameOwnerGeneratedAliasByKey[key]; ok {
 		return warehouse.Table{}, collision.err()

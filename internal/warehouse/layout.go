@@ -739,6 +739,14 @@ func (r *TableResolver) Tables() []Table {
 	return append([]Table(nil), r.tables...)
 }
 
+// Faults returns the resolver's captured ownership-record faults.
+func (r *TableResolver) Faults() []Fault {
+	if r == nil {
+		return nil
+	}
+	return cloneFaults(r.faults)
+}
+
 // Find resolves one table within the resolver's captured inventory.
 func (r *TableResolver) Find(table, connection string) (Table, error) {
 	var candidates []Table
