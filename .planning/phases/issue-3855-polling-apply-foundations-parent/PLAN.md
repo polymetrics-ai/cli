@@ -61,6 +61,10 @@ only planning artifacts and does not describe or alter product behavior.
 | 3b | #3859 | Native apply strategies through the #3864 destination port | #3857 | May run in parallel with #3858 only after #3857 lands. Shared mode semantics stay out of PostgreSQL-specific work. |
 | 4 | #3860 | Truthful polling-watermark eligibility and limitation documentation | #3856–#3859 | Follows completion of all four core children; it is not a parallel lane in the core implementation DAG. |
 
+The table preserves the issues' logical dependency graph. The active programme's current,
+transport-primary execution schedule is deliberately stricter: `#3856 -> #3857 -> #3858 -> #3859`;
+#3860 follows all four. No child is implemented by this planning-only recovery.
+
 ## Parent topology ledger
 
 | Item | Required state |
@@ -84,14 +88,25 @@ only planning artifacts and does not describe or alter product behavior.
    hygiene, and canonical GSD projection health without touching product code.
 4. **GREEN — local no-mistakes gate:** run the exact child-style argv with
    `--skip=push,pr,ci`, never `--yes`; own every synchronous decision gate.
-5. **GREEN — draft parent PR:** after local gates, push only this branch and use `gh-axi` to create
-   exactly one draft PR with the explicit temporary base/head. Re-read live state with `gh-axi` and
-   record its exact draft/base/head result.
+5. **GREEN — draft parent PR:** the existing #4041 draft remains the only parent PR with the
+   explicit temporary base/head. Re-read its live shape only after a successful local gate.
 6. **RED/GREEN — accepted transport refresh:** prove the accepted parent head
    `c67f40a5ff67a131950f3123e70527027dca8493` is not an ancestor of the existing #3855 history,
    then safely replay that exact history onto it. Require `git range-diff` patch equivalence, a
    planning-only changed-path assertion, and a fresh draft/base/head inspection before a future
    child may inherit the seam.
+7. **RED — internal validation-gate divergence:** the single fresh no-mistakes start at clean
+   `e541170e...` was rejected before run creation because its local gate ref at `b61d0fa7...`
+   could not fast-forward from the refreshed history. This is causal recovery evidence, not a
+   product or correction failure.
+8. **GREEN — non-force preserved-history bridge:** after this GSD checkpoint and rechecking fixed
+   SHAs, create only `git merge --no-ff -s ours -m "chore(gsd): reconcile #3855 preserved
+   histories" refs/no-mistakes/recover/01KZQ6D2XW5GNWTRFSVRMYE2FZ`. Require unchanged tree, first
+   parent=current checkpoint head, second parent=`b61d0fa7...`, and ancestry for
+   `7ea7350b...`, `b61d0fa7...`, and `c67f40a5...`.
+9. **GREEN — post-bridge local custody gate:** run the exact Stage-5 intent with
+   `--skip=push,pr,ci`, no `--yes`, and handle every synchronous gate. External push, PR refresh,
+   and exact-head CI remain outside this local run and require their own later assertions.
 
 ## Refactor policy
 
@@ -109,6 +124,8 @@ round.
 - Run the no-mistakes local pipeline using the contract-owned skip vector.
 - Validate the final GitHub object only with `gh-axi`: draft state, exact base/head, one PR, and no
   certification or executable-behavior claim.
-- After a temporary-base advance, prove the remote base SHA, rebase only the existing parent range,
-  compare it with `git range-diff`, and force-push only with an explicit lease for the verified
-  remote #3855 SHA.
+- After a temporary-base advance, prove the remote, preserved, and transport SHAs; retain the
+  patch-equivalence evidence; then use the audited tree-preserving, non-force `-s ours` bridge only
+  if its tree/parent/ancestry assertions all pass. Never rebase, reset, cherry-pick, content-merge,
+  or force-push this recovered branch. A later external update, if authorized after local custody,
+  must be a normal fast-forward push of the existing branch followed by exact-head CI.

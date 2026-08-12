@@ -16,7 +16,8 @@ Refs #3862
 - Required state: draft
 - Accepted transport seam: #4059 is now merged into this base at
   `c67f40a5ff67a131950f3123e70527027dca8493`; the #3855 planning-only range was safely replayed
-  onto that head so future #3856 work inherits it.
+  onto that head so future #3856 work inherits it. The audited non-force preserved-history bridge
+  remains pending local validation; it carries ancestry only and must not change the replayed tree.
 - Retarget rule: before final parent integration, retarget to
   `docs/4015-connector-release-certification` once the reviewed transport seam is present there.
   This branch must never target or merge to `main`.
@@ -31,8 +32,9 @@ The temporary base records a dependency only. It does not authorize integrating 
 - #3859 — native apply strategies, after #3857
 - #3860 — polling-watermark eligibility and limitation documentation, after #3856–#3859
 
-The required core implementation order is `#3856 -> #3857 -> (#3858 || #3859)`. #3860 is a
-follow-on documentation child, not a parallel core implementation lane.
+The logical core dependency graph is `#3856 -> #3857 -> (#3858 || #3859)`. The active programme
+executes it more strictly as `#3856 -> #3857 -> #3858 -> #3859`. #3860 is a follow-on documentation
+child, not a parallel core implementation lane.
 
 ## Historical partial reuse
 
@@ -59,8 +61,11 @@ reusable polling implementation. It does not complete or close #3856, #3857, #38
   ancestry and whole-reverted; the accepted tree and protected #4015 architecture blob were
   restored exactly.
 - The accepted transport refresh replays eight patch-equivalent planning-only commits without a
-  product change. Fresh no-mistakes validation is pending for this evidence commit; it must not
-  alter `docs/architecture/github-postgres-warehouse-certification.md`.
+  product change. The causal pre-bridge no-mistakes start was rejected by its internal
+  non-fast-forward validation ref before a new run or external effect; the audited `-s ours` bridge
+  is pending and must not alter `docs/architecture/github-postgres-warehouse-certification.md`.
+- No force push, rebase, reset, cherry-pick, ordinary content merge, external push, PR mutation,
+  or integration merge is authorized by this recovery checkpoint.
 
 ## Automated review
 
