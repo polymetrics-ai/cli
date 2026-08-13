@@ -8,8 +8,8 @@
     "discuss_phase": "completed",
     "plan_phase_tdd": "completed_before_production_edit",
     "execute_phase": "green_implementation_complete_pending_expanded_verification",
-    "verify_work": "scoped_regression_and_runtime_availability_evidence_recorded_pending_review",
-    "code_review": "pending"
+    "verify_work": "completed_with_live_runtime_limitation_recorded",
+    "code_review": "completed_inline_standard_no_unresolved_findings"
   },
   "external_endpoint_verdict": "rejected_out_of_scope_weakened_managed_container_guarantees",
   "live_runtime_evidence": {

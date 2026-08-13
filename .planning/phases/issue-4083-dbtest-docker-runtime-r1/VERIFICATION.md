@@ -23,7 +23,8 @@ Status: planned.
   queried.
 - [x] README/AGENTS guidance checked for exact runtime/environment and safety
   wording.
-- [ ] Inline GSD verify-work and code-review evidence recorded.
+- [x] Inline GSD verify-work and code-review evidence recorded in `UAT.md`,
+  `SUMMARY.md`, and `REVIEW.md`; no unresolved finding.
 - [ ] no-mistakes PR/CI evidence recorded; no merge performed.
 
 ## External-endpoint verdict
