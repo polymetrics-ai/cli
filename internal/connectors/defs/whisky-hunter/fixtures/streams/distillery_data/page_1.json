@@ -1,9 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/api/distilleries_info/" },
-  "response": {
-    "status": 200,
-    "body": [
-      { "slug": "fixture-distillery-one", "name": "Fixture Distillery One", "country": "Scotland" }
-    ]
-  }
-}

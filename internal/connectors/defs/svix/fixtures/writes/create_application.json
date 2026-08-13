@@ -1,7 +1,0 @@
-{
-  "record": { "name": "Fixture Application" },
-  "expect": {
-    "method": "POST",
-    "path": "/app"
-  }
-}

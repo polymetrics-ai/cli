@@ -1,4 +1,0 @@
-{
-  "record": {"calendar_id": "calendar_fixture_1", "text": "Fixture meeting tomorrow at 10am"},
-  "expect": {"method": "POST", "path": "/calendars/calendar_fixture_1/events/quickAdd"}
-}

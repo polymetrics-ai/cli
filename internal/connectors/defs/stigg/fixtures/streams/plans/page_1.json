@@ -1,7 +1,0 @@
-{
-  "data": {
-    "plans": [
-      { "id": "plan_fixture_1", "refId": "starter-monthly-fixture", "displayName": "Starter Monthly Fixture", "status": "ACTIVE" }
-    ]
-  }
-}

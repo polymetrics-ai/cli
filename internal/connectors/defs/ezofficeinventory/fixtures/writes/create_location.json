@@ -1,9 +1,0 @@
-{
-  "record": {
-    "location[name]": "Fixture Warehouse"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/locations.api"
-  }
-}

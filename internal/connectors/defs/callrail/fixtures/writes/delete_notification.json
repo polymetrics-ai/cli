@@ -1,8 +1,0 @@
-{
-  "record": { "id": 1 },
-  "expect": {
-    "method": "DELETE",
-    "path": "/a/synthetic-conformance-value/notifications/1.json"
-  },
-  "response": { "status": 204, "body": {} }
-}

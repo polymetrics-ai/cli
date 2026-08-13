@@ -1,8 +1,0 @@
-{
-  "record": { "groupId": "group_fixture_1", "groupName": "Renamed Group" },
-  "expect": {
-    "method": "PUT",
-    "path": "/v1/contactGroups/update",
-    "body": { "groupName": "Renamed Group" }
-  }
-}

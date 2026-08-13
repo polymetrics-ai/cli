@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/v2/activities", "query": { "pageSize": "synthetic-conformance-value", "after": "31" } },
-  "response": {
-    "status": 200,
-    "body": []
-  }
-}

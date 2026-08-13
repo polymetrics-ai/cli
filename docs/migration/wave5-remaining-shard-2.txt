@@ -1,6 +1,0 @@
-printify
-sap-fieldglass
-surveymonkey
-uptick
-zendesk-support
-zonka-feedback

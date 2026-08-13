@@ -1,9 +1,0 @@
-{
-  "record": {
-    "label": "fixture"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "SQS.RemovePermission"
-  }
-}

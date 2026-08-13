@@ -1,7 +1,0 @@
-{
-  "record": { "id": 200 },
-  "expect": {
-    "method": "DELETE",
-    "path": "/workspaces/synthetic-conformance-value/clients/200"
-  }
-}

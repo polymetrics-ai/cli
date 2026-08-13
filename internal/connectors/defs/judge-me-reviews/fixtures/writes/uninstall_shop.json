@@ -1,7 +1,0 @@
-{
-  "record": {},
-  "expect": {
-    "method": "DELETE",
-    "path": "/shops"
-  }
-}

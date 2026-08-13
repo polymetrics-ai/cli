@@ -1,9 +1,0 @@
-{
-  "record": {
-    "title": "Fixture Dashboard"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/v2/dashboards"
-  }
-}

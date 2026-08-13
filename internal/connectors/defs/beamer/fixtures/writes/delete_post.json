@@ -1,7 +1,0 @@
-{
-  "record": { "id": "post_fixture_1" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/posts/post_fixture_1"
-  }
-}

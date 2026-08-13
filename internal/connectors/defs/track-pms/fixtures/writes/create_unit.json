@@ -1,7 +1,0 @@
-{
-  "record": { "name": "Fixture Unit" },
-  "expect": {
-    "method": "POST",
-    "path": "/pms/units"
-  }
-}

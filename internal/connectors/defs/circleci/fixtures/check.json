@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/me" },
-  "response": {
-    "status": 200,
-    "body": { "id": "user_fixture_1", "login": "fixture-user", "name": "Fixture User" }
-  }
-}

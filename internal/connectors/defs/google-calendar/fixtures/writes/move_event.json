@@ -1,4 +1,0 @@
-{
-  "record": {"calendar_id": "calendar_fixture_1", "event_id": "event_fixture_1", "destination": "destination_fixture_1"},
-  "expect": {"method": "POST", "path": "/calendars/calendar_fixture_1/events/event_fixture_1/move"}
-}

@@ -1,9 +1,0 @@
-{
-  "record": {
-    "handle": "fixture1@example.com"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/api/v1/user/fixture1@example.com"
-  }
-}

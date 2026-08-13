@@ -1,9 +1,0 @@
-{
-  "record": {
-    "type": "deploy-key"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/checkout-key"
-  }
-}

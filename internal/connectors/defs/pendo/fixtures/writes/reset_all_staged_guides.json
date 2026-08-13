@@ -1,7 +1,0 @@
-{
-  "record": {},
-  "expect": {
-    "method": "POST",
-    "path": "/guide/staged/reset"
-  }
-}

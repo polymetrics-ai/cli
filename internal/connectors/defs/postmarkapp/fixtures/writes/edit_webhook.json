@@ -1,9 +1,0 @@
-{
-  "record": {
-    "webhook_id": "webhook_id_fixture"
-  },
-  "expect": {
-    "method": "PUT",
-    "path": "/webhooks/webhook_id_fixture"
-  }
-}

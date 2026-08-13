@@ -1,9 +1,0 @@
-{
-  "record": {
-    "invoice_id": "inv_fixture_1"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/orders"
-  }
-}

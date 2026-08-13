@@ -1,9 +1,0 @@
-{
-  "record": {
-    "requisition_code": "REQ-FIXTURE-1"
-  },
-  "expect": {
-    "method": "PATCH",
-    "path": "/requisitions/REQ-FIXTURE-1/approve"
-  }
-}

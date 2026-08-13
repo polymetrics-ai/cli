@@ -1,4 +1,0 @@
-{
-  "record": {"calendar_id": "calendar_fixture_1", "role": "reader", "scope": {"type": "user", "value": "fixture@example.invalid"}},
-  "expect": {"method": "POST", "path": "/calendars/calendar_fixture_1/acl", "body": {"role": "reader", "scope": {"type": "user", "value": "fixture@example.invalid"}}}
-}

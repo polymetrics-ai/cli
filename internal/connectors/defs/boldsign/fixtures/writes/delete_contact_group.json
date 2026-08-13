@@ -1,8 +1,0 @@
-{
-  "record": { "groupId": "group_fixture_1" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/v1/contactGroups/delete"
-  },
-  "response": { "status": 204, "body": {} }
-}

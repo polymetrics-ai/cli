@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/brands", "query": { "limit": "1" } },
-  "response": {
-    "status": 200,
-    "body": { "data": [], "has_more": false, "cursor": "" }
-  }
-}

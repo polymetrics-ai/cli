@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/profiles" },
-  "response": {
-    "status": 200,
-    "body": { "employees": [] }
-  }
-}

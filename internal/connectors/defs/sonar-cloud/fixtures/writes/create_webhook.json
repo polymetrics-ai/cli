@@ -1,7 +1,0 @@
-{
-  "record": { "name": "fixture webhook", "organization": "fixture-org", "url": "https://example.com/fixture-webhook" },
-  "expect": {
-    "method": "POST",
-    "path": "/api/webhooks/create"
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "record": { "id": "20" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/tasks/20"
-  }
-}

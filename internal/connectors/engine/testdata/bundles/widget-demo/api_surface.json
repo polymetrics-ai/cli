@@ -1,6 +1,0 @@
-{
-  "api": "Widget Demo API v1 (fixture-only, not a real API)",
-  "endpoints": [
-    { "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } }
-  ]
-}

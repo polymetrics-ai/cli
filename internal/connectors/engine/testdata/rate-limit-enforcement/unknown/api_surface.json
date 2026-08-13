@@ -1,1 +1,0 @@
-{"api":"test unknown API","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}}]}

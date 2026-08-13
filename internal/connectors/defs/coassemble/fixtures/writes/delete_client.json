@@ -1,8 +1,0 @@
-{
-  "record": { "clientIdentifier": "fixture-client-1" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/api/v1/headless/client/fixture-client-1"
-  },
-  "response": { "status": 200, "body": true }
-}

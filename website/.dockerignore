@@ -1,9 +1,0 @@
-.next/
-node_modules/
-.source/
-.git/
-*.md
-.env
-.env.*
-Dockerfile
-.dockerignore

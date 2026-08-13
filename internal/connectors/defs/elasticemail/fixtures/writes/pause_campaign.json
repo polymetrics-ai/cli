@@ -1,9 +1,0 @@
-{
-  "record": {
-    "Name": "Fixture Campaign"
-  },
-  "expect": {
-    "method": "PUT",
-    "path": "/campaigns/Fixture Campaign/pause"
-  }
-}

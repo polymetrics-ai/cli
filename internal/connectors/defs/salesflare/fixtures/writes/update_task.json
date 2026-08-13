@@ -1,5 +1,0 @@
-{
-  "record": { "id": 51, "completed": true },
-  "expect": { "method": "PUT", "path": "/tasks/51" },
-  "response": { "status": 200, "body": { "id": 51 } }
-}

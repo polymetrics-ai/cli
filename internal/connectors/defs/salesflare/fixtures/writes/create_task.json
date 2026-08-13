@@ -1,5 +1,0 @@
-{
-  "record": { "name": "Fixture Follow Up", "description": "Call back next week", "account_id": 11 },
-  "expect": { "method": "POST", "path": "/tasks" },
-  "response": { "status": 201, "body": { "id": 51 } }
-}

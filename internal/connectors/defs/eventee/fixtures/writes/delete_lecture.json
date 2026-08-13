@@ -1,5 +1,0 @@
-{
-  "record": { "id": 420 },
-  "expect": { "method": "DELETE", "path": "/lecture/420" },
-  "response": { "status": 204, "body": {} }
-}

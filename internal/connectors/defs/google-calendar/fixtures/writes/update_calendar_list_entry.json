@@ -1,4 +1,0 @@
-{
-  "record": {"calendar_id": "calendar_fixture_1", "summaryOverride": "Updated Fixture Calendar", "selected": true},
-  "expect": {"method": "PUT", "path": "/users/me/calendarList/calendar_fixture_1", "body": {"summaryOverride": "Updated Fixture Calendar", "selected": true}}
-}

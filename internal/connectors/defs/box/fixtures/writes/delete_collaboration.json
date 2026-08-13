@@ -1,8 +1,0 @@
-{
-  "record": { "id": "collaboration_fixture_1" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/collaborations/collaboration_fixture_1"
-  },
-  "response": { "status": 204, "body": {} }
-}

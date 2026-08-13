@@ -1,9 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/v2/policies" },
-  "response": {
-    "status": 200,
-    "body": [
-      { "id": 40, "name": "Fixture Policy", "nodeClass": "WINDOWS_WORKSTATION", "description": "fixture policy" }
-    ]
-  }
-}

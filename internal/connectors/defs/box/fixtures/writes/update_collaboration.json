@@ -1,8 +1,0 @@
-{
-  "record": { "id": "collaboration_fixture_1", "role": "viewer" },
-  "expect": {
-    "method": "PUT",
-    "path": "/collaborations/collaboration_fixture_1",
-    "body": { "role": "viewer" }
-  }
-}

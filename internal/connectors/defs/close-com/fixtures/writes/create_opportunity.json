@@ -1,4 +1,0 @@
-{
-  "record": { "lead_id": "lead_1" },
-  "expect": { "method": "POST", "path": "/opportunity/" }
-}
