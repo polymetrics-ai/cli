@@ -120,6 +120,31 @@ func TestRunETLCanonicalFullAppendUsesRegisteredTransports(t *testing.T) {
 	}
 }
 
+// A DestinationApproval is meaningful only to the exact closed GitHub
+// transport route. App callers must not be able to attach one to an ordinary
+// ETL request and have it silently ignored while legacy execution proceeds.
+func TestRunETLRejectsDestinationApprovalOutsideClosedTransportRoute(t *testing.T) {
+	source := newScriptedSyncSource("approval_guard_source", []connectors.Record{{"id": "1"}})
+	a, connection := setupSyncModeApp(t, source, "full_refresh_overwrite")
+
+	_, err := a.RunETL(context.Background(), RunETLRequest{
+		Connection: connection,
+		Stream:     "records",
+		BatchSize:  1,
+		DestinationApproval: synctransport.DestinationApproval{
+			PlanID:        "rplan_closed_transport_only",
+			ApprovalToken: "test-approval-must-not-reach-legacy-etl",
+			Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+		},
+	})
+	if err == nil {
+		t.Fatal("RunETL() accepted destination approval material on an ordinary ETL route")
+	}
+	if len(source.requests) != 0 {
+		t.Fatalf("ordinary source Read calls = %d, want approval rejected before legacy ETL I/O", len(source.requests))
+	}
+}
+
 var (
 	errTransportSourceAfterAcknowledgement = errors.New("source failed after acknowledged page")
 	errTransportFinalStateSave             = errors.New("final transport state save failed")
