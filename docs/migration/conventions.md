@@ -631,10 +631,13 @@ enforces this) runs from `read.go`'s `newRuntime`, once per `Read`/`Check` call,
 load. `connectorgen validate` does not check pagination specs at all (no field/rule references
 `PaginationSpec` anywhere in `cmd/connectorgen/validate.go`) — a malformed `token_path`+
 `last_record_field` combination passes `connectorgen validate` cleanly and only surfaces the first
-time the stream is actually read. `MaxPages` is a hard request-count cap enforced in `read.go`'s
-`readDeclarative` loop, independent of page fullness, checked *before* issuing the request for
-that page number; `MaxPages <= 0` (absent/zero) is unbounded. Stream-level `pagination` replaces
-the base-level spec **wholesale** (no field-by-field merge) when present.
+time the stream is actually read. `PaginationSpec.MaxPages` is a hard request-count cap enforced
+in `read.go`'s `readDeclarative` loop, independent of page fullness. A positive
+`connectors.ReadRequest.MaxPages` can tighten but never widen that declared cap; `0` leaves the
+declared cap unchanged, and a negative request is rejected. The effective cap is checked *before*
+issuing the request for that page number; when both caps are absent or zero, pagination is
+unbounded. Stream-level `pagination` replaces the base-level spec **wholesale** (no field-by-field
+merge) when present.
 
 **`page_number`'s `start_page` supports an explicit 0-indexed start** (S4 engine mini-wave item 1:
 algolia/auth0/beamer/braze/clickup-api/concord/customerly/dolibarr/harness/hubplanner and more —
@@ -909,9 +912,10 @@ onto that field of every emitted record AFTER projection/`computed_fields`, exac
 sub-sequence — the bundle author never declares it as a `computed_fields` entry themselves.
 Resolution happens ONCE per `Read()` call, before any per-id sub-sequence starts; each id then runs
 the identical declarative request/pagination/incremental/filter/project/computed_fields/hook
-sequence an ordinary (non-fan-out) stream runs — pagination, incremental state, `MaxPages`, and
-rate-limiting are all independent PER id (a fresh paginator + fresh base query per id), never shared
-across the fan-out. `connectorgen validate`'s `checkInterpolations` walks
+sequence an ordinary (non-fan-out) stream runs — pagination, incremental state, the effective page
+cap, and rate-limiting are all independent PER id (a fresh paginator + fresh base query per id),
+never shared across the fan-out. The caller cap also bounds a request-form ID listing.
+`connectorgen validate`'s `checkInterpolations` walks
 `fan_out.ids_from.request.path` with the same `ResolveCheck` coverage `stream.path` gets; `fanout.id`
 is checked against a `knownFanoutKeys` set (mirroring `knownIncrementalKeys`) rather than
 `specKeys`, since it is an engine-provided pseudo-namespace, not a spec.json property.
@@ -939,9 +943,9 @@ connsdk addition — connsdk itself needed no change. No `connectorgen validate`
 templated field on `RecordsSpec` to statically check); the positive-control corpus case
 (`keyed-object-valid`) proves the shape loads and validates cleanly instead.
 
-**`MaxPages` hard cap**: see the pagination table above; this is the only page-count bound the
-engine enforces on the declarative read path (a short/empty final page from the paginator is the
-*other* stop signal, and both must be considered independently when reasoning about termination).
+**Page-count cap**: see the pagination table above. The effective hard cap and the paginator's
+short/empty-page stop signal are independent and must both be considered when reasoning about
+termination.
 
 **`spec.json` `"default"` values ARE now materialized into `RuntimeConfig.Config`** (gap-loop
 cycle-1 item 6, REVIEW-A.md C3 — RESOLVED: previously `default` was accepted-but-only-preserved,

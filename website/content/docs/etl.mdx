@@ -142,9 +142,14 @@ pm etl run --connection transport-demo --stream issues --batch-size 1 \
 
 The forward run remains the normal closed path: GitHub source read, durable
 connection-owned WAL/DuckDB/Parquet stage, independent reopen, typed label
-mutation, independent provider read-back, acknowledgement, then checkpoint.
+mutation and durable acknowledgement, independent provider read-back, then
+checkpoint.
 The raw token is never accepted in argv, environment variables, files, JSON
 output, or persisted project state.
+
+Source selection and independent provider read-back each inspect only the first
+GitHub issues page. If the configured source or target issue is not present,
+the run fails rather than requesting a second page.
 
 Cleanup is separately planned and approved; it cannot reuse the forward token:
 

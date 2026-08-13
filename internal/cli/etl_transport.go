@@ -38,7 +38,12 @@ DESCRIPTION
   Create a plan, preview it in human output to receive one ephemeral approval
   token, then send that token as one bounded line on standard input to pm etl
   run. The forward run remains the ordinary source -> durable warehouse ->
-  reopen -> typed %s mutation -> independent read-back -> checkpoint path.
+  reopen -> typed %s mutation and durable acknowledgement -> independent
+  read-back -> checkpoint path.
+
+  Source selection and independent read-back each inspect only the first GitHub
+  issues page. The transport fails instead of requesting another page when the
+  configured source or target issue is not there.
 
   Cleanup is a separately planned, previewed, one-time approved typed inverse.
   A %s missing-label DELETE accepted by the declared missing_ok_status is a

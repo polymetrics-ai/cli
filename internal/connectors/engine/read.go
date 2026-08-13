@@ -92,10 +92,11 @@ type fanoutContext struct {
 // preliminary paginated request), then runs the ENTIRE declarative
 // request/pagination/incremental/filter/project/computed_fields/hook
 // sequence unchanged, once per id, via readOneSequence. Pagination,
-// incremental state, MaxPages, and rate-limiting are independent PER id
-// sub-sequence — the fan-out itself introduces no shared page-count/cursor
-// state across ids, mirroring how every quarantined connector's own
-// per-parent-id harvest loop behaves.
+// incremental state, the effective page cap, and rate-limiting are independent
+// PER id sub-sequence. The caller cap also bounds a request-form ID listing,
+// but the fan-out itself introduces no shared page-count/cursor state across
+// ids, mirroring how every quarantined connector's own per-parent-id harvest
+// loop behaves.
 func readFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error) error {
 	fo := stream.FanOut
 	ids, err := resolveFanOutIDs(ctx, b, stream, req, rt)

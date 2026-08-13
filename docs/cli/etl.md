@@ -53,9 +53,14 @@ CLOSED GITHUB TRANSPORT
       --approval-plan <plan-id> --approval-token-stdin --confirm destructive
 
   The run keeps the source -> durable warehouse -> reopen -> typed GitHub
-  mutation -> independent read-back -> checkpoint order. Cleanup is a separate
-  typed remove-label plan, preview, and one-time approval. A declared GitHub
-  missing-label DELETE is a successful cleanup; replaying approval is refused.
+  mutation and durable acknowledgement -> independent read-back -> checkpoint
+  order. Cleanup is a separate typed remove-label plan, preview, and one-time
+  approval. A declared GitHub missing-label DELETE is a successful cleanup;
+  replaying approval is refused.
+
+  Source selection and independent read-back each inspect only the first GitHub
+  issues page. The transport fails instead of requesting another page when the
+  configured source or target issue is not there.
 
   Approval tokens are never accepted in argv, environment variables, files,
   JSON output, or persisted project state. Run pm etl transport for the exact
