@@ -2,6 +2,7 @@ package synccontract
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -63,13 +64,27 @@ type NativeSyncResult struct {
 	CandidateCheckpoint *CheckpointEnvelope `json:"candidate_checkpoint,omitempty"`
 }
 
-// NativeSyncExecutor is a named database-protocol implementation whose
-// descriptor and fixture evidence must match its admitted contract.
-type NativeSyncExecutor interface {
+// NativeExecutorAdmission is the descriptor/evidence portion shared by every
+// native source or database-target executor. It intentionally does not imply a
+// source RunNativeSync implementation: target database work has a different
+// typed lifecycle and must not be forced through NativeSyncRequest.
+type NativeExecutorAdmission interface {
 	NativeSyncExecutorDescriptor() NativeSyncExecutorDescriptor
 	NativeSyncConformanceEvidence() ConformanceEvidence
+}
+
+// NativeSyncExecutor is a source-side native implementation. The registry can
+// store the smaller admission interface, but Execute requires this runner at
+// dispatch time.
+type NativeSyncExecutor interface {
+	NativeExecutorAdmission
 	RunNativeSync(context.Context, NativeSyncRequest) (NativeSyncResult, error)
 }
+
+// ErrNativeSyncExecutorRequired identifies an admitted native descriptor that
+// is not a runnable source executor. Database target executors may still use
+// the shared admission evidence through their own typed consumer boundary.
+var ErrNativeSyncExecutorRequired = errors.New("native source execution requires a runnable native sync executor")
 
 // NativeCommandContract is the declarative admission record for a fixed
 // native database operation. It deliberately excludes generic query fields.
@@ -124,13 +139,13 @@ func validateNativeOperation(protocol, command string, executor ExecutorReferenc
 // executors while protecting registry access from concurrent callers.
 type NativeExecutorRegistry struct {
 	mu        sync.RWMutex
-	executors map[ExecutorReference]NativeSyncExecutor
+	executors map[ExecutorReference]NativeExecutorAdmission
 }
 
 // NewNativeExecutorRegistry creates a registry and validates every supplied
 // executor before making it available.
-func NewNativeExecutorRegistry(executors ...NativeSyncExecutor) (*NativeExecutorRegistry, error) {
-	registry := &NativeExecutorRegistry{executors: make(map[ExecutorReference]NativeSyncExecutor)}
+func NewNativeExecutorRegistry(executors ...NativeExecutorAdmission) (*NativeExecutorRegistry, error) {
+	registry := &NativeExecutorRegistry{executors: make(map[ExecutorReference]NativeExecutorAdmission)}
 	for _, executor := range executors {
 		if err := registry.Register(executor); err != nil {
 			return nil, err
@@ -141,12 +156,12 @@ func NewNativeExecutorRegistry(executors ...NativeSyncExecutor) (*NativeExecutor
 
 // Register admits one uniquely named executor only when its descriptor and
 // conformance evidence are complete.
-func (r *NativeExecutorRegistry) Register(executor NativeSyncExecutor) error {
+func (r *NativeExecutorRegistry) Register(executor NativeExecutorAdmission) error {
 	if r == nil {
 		return fmt.Errorf("native executor registry is required")
 	}
-	if isNilNativeSyncExecutor(executor) {
-		return fmt.Errorf("native sync executor is required")
+	if isNilNativeExecutorAdmission(executor) {
+		return fmt.Errorf("native executor admission is required")
 	}
 	descriptor := executor.NativeSyncExecutorDescriptor()
 	if err := descriptor.validate(); err != nil {
@@ -158,7 +173,7 @@ func (r *NativeExecutorRegistry) Register(executor NativeSyncExecutor) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if r.executors == nil {
-		r.executors = make(map[ExecutorReference]NativeSyncExecutor)
+		r.executors = make(map[ExecutorReference]NativeExecutorAdmission)
 	}
 	if _, exists := r.executors[descriptor.Executor]; exists {
 		return fmt.Errorf("native executor %q is already registered", descriptor.Executor.ID)
@@ -167,18 +182,30 @@ func (r *NativeExecutorRegistry) Register(executor NativeSyncExecutor) error {
 	return nil
 }
 
-// Admits reports whether a registered executor exactly matches contract.
+// Admits reports whether a registered descriptor/evidence admission exactly
+// matches contract. It does not imply that the object is a runnable source
+// executor; Execute makes that stronger check at dispatch time.
 func (r *NativeExecutorRegistry) Admits(contract NativeCommandContract) bool {
-	_, err := r.executorFor(contract)
+	_, err := r.admissionFor(contract)
 	return err == nil
 }
 
 // Execute validates admission and resume state before dispatching a defensive
 // copy of request to its matching native executor.
 func (r *NativeExecutorRegistry) Execute(ctx context.Context, contract NativeCommandContract, request NativeSyncRequest) (NativeSyncResult, error) {
-	executor, err := r.executorFor(contract)
+	if ctx == nil {
+		return NativeSyncResult{}, fmt.Errorf("native sync context is required")
+	}
+	if err := ctx.Err(); err != nil {
+		return NativeSyncResult{}, err
+	}
+	admission, err := r.admissionFor(contract)
 	if err != nil {
 		return NativeSyncResult{}, err
+	}
+	executor, ok := admission.(NativeSyncExecutor)
+	if !ok || isNilNativeSyncExecutor(executor) {
+		return NativeSyncResult{}, ErrNativeSyncExecutorRequired
 	}
 	if err := request.Mode.Validate(); err != nil {
 		return NativeSyncResult{}, err
@@ -194,7 +221,7 @@ func (r *NativeExecutorRegistry) Execute(ctx context.Context, contract NativeCom
 	return executor.RunNativeSync(ctx, request.clone())
 }
 
-func (r *NativeExecutorRegistry) executorFor(contract NativeCommandContract) (NativeSyncExecutor, error) {
+func (r *NativeExecutorRegistry) admissionFor(contract NativeCommandContract) (NativeExecutorAdmission, error) {
 	if r == nil {
 		return nil, fmt.Errorf("native executor registry is required")
 	}
@@ -204,21 +231,42 @@ func (r *NativeExecutorRegistry) executorFor(contract NativeCommandContract) (Na
 	r.mu.RLock()
 	executor, ok := r.executors[contract.Executor]
 	r.mu.RUnlock()
-	if !ok || isNilNativeSyncExecutor(executor) {
+	if !ok || isNilNativeExecutorAdmission(executor) {
 		return nil, fmt.Errorf("native executor %q is not registered", contract.Executor.ID)
 	}
-	descriptor := executor.NativeSyncExecutorDescriptor()
-	if descriptor.Protocol != contract.Protocol || descriptor.Command != contract.Command || descriptor.Executor != contract.Executor || !sameModeSet(descriptor.Modes, contract.Modes) {
-		return nil, fmt.Errorf("registered native executor does not match the command contract")
-	}
-	evidence := executor.NativeSyncConformanceEvidence()
-	if !evidence.matchesRequired() || !evidence.equal(contract.Conformance) {
-		return nil, fmt.Errorf("registered native executor lacks matching shared conformance evidence")
+	if err := ValidateNativeAdmission(executor, contract); err != nil {
+		return nil, err
 	}
 	return executor, nil
 }
 
+// ValidateNativeAdmission confirms that a registered native object exactly
+// matches a command's descriptor and required conformance evidence. It is
+// exported so non-source consumers (such as the database driver registry) can
+// use the one #3810 admission rule without reimplementing it.
+func ValidateNativeAdmission(admission NativeExecutorAdmission, contract NativeCommandContract) error {
+	if isNilNativeExecutorAdmission(admission) {
+		return fmt.Errorf("native executor admission is required")
+	}
+	if err := contract.Validate(); err != nil {
+		return err
+	}
+	descriptor := admission.NativeSyncExecutorDescriptor()
+	if descriptor.Protocol != contract.Protocol || descriptor.Command != contract.Command || descriptor.Executor != contract.Executor || !sameModeSet(descriptor.Modes, contract.Modes) {
+		return fmt.Errorf("registered native executor does not match the command contract")
+	}
+	evidence := admission.NativeSyncConformanceEvidence()
+	if !evidence.matchesRequired() || !evidence.equal(contract.Conformance) {
+		return fmt.Errorf("registered native executor lacks matching shared conformance evidence")
+	}
+	return nil
+}
+
 func isNilNativeSyncExecutor(executor NativeSyncExecutor) bool {
+	return isNilNativeExecutorAdmission(executor)
+}
+
+func isNilNativeExecutorAdmission(executor NativeExecutorAdmission) bool {
 	if executor == nil {
 		return true
 	}
