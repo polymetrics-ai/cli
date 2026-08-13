@@ -66,7 +66,7 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 		if len(args) > 2 && r.imagePresent(args[2]) {
 			return "", nil
 		}
-		return "", errPodmanResourceNotFound
+		return "", errContainerResourceNotFound
 	case commandHasPrefix(args, "volume", "inspect"):
 		if r.volumeInspectErr != nil {
 			return "", r.volumeInspectErr
@@ -74,7 +74,7 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 		if r.volumePresent {
 			return "", nil
 		}
-		return "", errPodmanResourceNotFound
+		return "", errContainerResourceNotFound
 	case commandHasPrefix(args, "volume", "create"):
 		r.volumePresent = true
 		return "", r.volumeCreateErr
@@ -87,7 +87,7 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 		if r.containerLive {
 			return "", nil
 		}
-		return "", errPodmanResourceNotFound
+		return "", errContainerResourceNotFound
 	case len(args) > 0 && args[0] == "run":
 		r.containerLive = true
 		return "", r.runErr
@@ -147,6 +147,7 @@ func commandsContain(commands [][]string, prefix ...string) bool {
 func testConfig(runner CommandRunner) Config {
 	return Config{
 		Engine:             "mysql",
+		ContainerRuntime:   RuntimePodman,
 		Image:              "example.invalid/mysql:8.4.11",
 		ContainerPort:      3306,
 		DataVolumePath:     "/var/lib/mysql",
@@ -161,8 +162,47 @@ func testConfig(runner CommandRunner) Config {
 
 func TestNewRequiresAnExplicitContainerRuntime(t *testing.T) {
 	config := testConfig(&scriptedRunner{})
+	config.ContainerRuntime = ""
 	if _, err := New(config); err == nil {
 		t.Fatal("New() accepted a database test configuration without an explicit Docker or Podman runtime")
+	}
+}
+
+func TestNewAcceptsExplicitDockerRuntime(t *testing.T) {
+	config := testConfig(&scriptedRunner{})
+	config.ContainerRuntime = RuntimeDocker
+	if _, err := New(config); err != nil {
+		t.Fatalf("New() rejected an explicit Docker runtime: %v", err)
+	}
+}
+
+func TestNewRejectsUnknownContainerRuntime(t *testing.T) {
+	config := testConfig(&scriptedRunner{})
+	config.ContainerRuntime = "colima"
+	if _, err := New(config); err == nil {
+		t.Fatal("New() accepted an unknown container runtime")
+	}
+}
+
+func TestRuntimeCommandPinsTheConfiguredEndpoint(t *testing.T) {
+	for _, tc := range []struct {
+		runtime Runtime
+		binary  string
+		flag    string
+	}{
+		{runtime: RuntimeDocker, binary: defaultDockerBinary, flag: "--host"},
+		{runtime: RuntimePodman, binary: defaultPodmanBinary, flag: "--url"},
+	} {
+		t.Run(string(tc.runtime), func(t *testing.T) {
+			binary, args := tc.runtime.command(testEndpoint, "info")
+			if binary != tc.binary {
+				t.Fatalf("%s binary = %q, want %q", tc.runtime, binary, tc.binary)
+			}
+			want := []string{tc.flag, testEndpoint, "info"}
+			if !reflect.DeepEqual(args, want) {
+				t.Fatalf("%s arguments = %v, want %v", tc.runtime, args, want)
+			}
+		})
 	}
 }
 
@@ -178,13 +218,16 @@ func TestNewRejectsUnsafeEndpoints(t *testing.T) {
 		{name: "hosted Unix endpoint", endpoint: "unix://localhost/tmp/dbtest.sock"},
 		{name: "newline", endpoint: "unix:///tmp/dbtest.sock\n"},
 	} {
-		t.Run(tc.name, func(t *testing.T) {
-			config := testConfig(&scriptedRunner{})
-			config.ContainerEndpoint = tc.endpoint
-			if _, err := New(config); err == nil {
-				t.Fatal("New() accepted an unsafe or non-local Podman endpoint")
-			}
-		})
+		for _, runtime := range []Runtime{RuntimeDocker, RuntimePodman} {
+			t.Run(string(runtime)+"/"+tc.name, func(t *testing.T) {
+				config := testConfig(&scriptedRunner{})
+				config.ContainerRuntime = runtime
+				config.ContainerEndpoint = tc.endpoint
+				if _, err := New(config); err == nil {
+					t.Fatal("New() accepted an unsafe or non-local container endpoint")
+				}
+			})
+		}
 	}
 }
 
@@ -524,20 +567,20 @@ func TestStartInspectsTheSourceImageOnlyToSizeThePull(t *testing.T) {
 	}
 }
 
-func TestPodmanResourceNotFoundClassifiesOnlyKnownAbsence(t *testing.T) {
+func TestContainerResourceNotFoundClassifiesOnlyKnownAbsence(t *testing.T) {
 	for _, stderr := range []string{
 		`Error: no such container "x"`,
 		`Error: no such volume "x"`,
 		"Error: x: image not known",
 		"Error response from daemon: No such image",
 	} {
-		if !podmanResourceNotFound(&exec.ExitError{Stderr: []byte(stderr)}) {
-			t.Fatalf("podmanResourceNotFound(%q) = false, want recognized absence", stderr)
+		if !containerResourceNotFound(&exec.ExitError{Stderr: []byte(stderr)}) {
+			t.Fatalf("containerResourceNotFound(%q) = false, want recognized absence", stderr)
 		}
 	}
 	for _, stderr := range []string{"Error response from daemon: access denied", "Error: unable to connect to Podman socket"} {
-		if podmanResourceNotFound(&exec.ExitError{Stderr: []byte(stderr)}) {
-			t.Fatalf("podmanResourceNotFound(%q) = true, want indeterminate error", stderr)
+		if containerResourceNotFound(&exec.ExitError{Stderr: []byte(stderr)}) {
+			t.Fatalf("containerResourceNotFound(%q) = true, want indeterminate error", stderr)
 		}
 	}
 }
@@ -904,6 +947,38 @@ func TestTargetCapacityUsesTheProvenStorePath(t *testing.T) {
 	}
 }
 
+func TestStartUsesDockerTargetIdentityAndCapacity(t *testing.T) {
+	runner := &scriptedRunner{infoOutput: "DAEMON:12345\t/var/lib/docker\n"}
+	config := testConfig(runner)
+	config.ContainerRuntime = RuntimeDocker
+	var paths []string
+	config.DiskFreeAt = func(path string) (uint64, error) {
+		paths = append(paths, path)
+		return 1 << 30, nil
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if len(paths) == 0 {
+		t.Fatal("Docker target capacity was never measured")
+	}
+	for _, path := range paths {
+		if path != "/var/lib/docker" {
+			t.Fatalf("Docker capacity path = %q, want the proven image-store path", path)
+		}
+	}
+	if !commandsContain(runner.commands, "info", "--format", RuntimeDocker.infoFormat()) {
+		t.Fatalf("commands = %v, want Docker identity inspection", runner.commands)
+	}
+}
+
 func TestStartUsesPodmanMachineDaemonCapacity(t *testing.T) {
 	runner := &scriptedRunner{infoOutput: "unix:///run/user/1000/podman/podman.sock\t/var/lib/containers/storage\t300\t100\n"}
 	config := testConfig(runner)
@@ -986,12 +1061,27 @@ func TestParseTargetIdentity(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parseTargetIdentity(): %v", err)
 	}
-	if identity.socketPath != "/tmp/dbtest.sock" || identity.graphRoot != "/var/lib/containers/storage" {
+	if identity.targetID != "/tmp/dbtest.sock" || identity.graphRoot != "/var/lib/containers/storage" {
 		t.Fatalf("identity = %+v, want socket and image-store paths", identity)
 	}
 	for _, raw := range []string{"", "/tmp/socket", "/tmp/socket\t../store\t0\t0", "/tmp/socket\t/store\t0\t0\nsecond"} {
 		if _, err := parseTargetIdentity(raw, "/tmp/socket"); err == nil {
 			t.Fatalf("parseTargetIdentity(%q) accepted invalid target evidence", raw)
+		}
+	}
+}
+
+func TestParseDockerTargetIdentity(t *testing.T) {
+	identity, err := parseDockerTargetIdentity("ABCDE:12345\t/var/lib/docker\n")
+	if err != nil {
+		t.Fatalf("parseDockerTargetIdentity(): %v", err)
+	}
+	if identity.targetID != "ABCDE:12345" || identity.graphRoot != "/var/lib/docker" {
+		t.Fatalf("identity = %+v, want Docker daemon ID and image-store path", identity)
+	}
+	for _, raw := range []string{"", "daemon-only", "daemon\t../docker", "daemon\t/var/lib/docker\nsecond", "bad id!\t/var/lib/docker"} {
+		if _, err := parseDockerTargetIdentity(raw); err == nil {
+			t.Fatalf("parseDockerTargetIdentity(%q) accepted invalid target evidence", raw)
 		}
 	}
 }

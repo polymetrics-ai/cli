@@ -1,8 +1,8 @@
-// Package dbtest provides an opt-in, Podman-backed database integration-test
-// harness. It is test support only: callers supply one engine's pinned image
-// and server arguments, while this package owns endpoint scoping, ephemeral
-// resource names, loopback port allocation, disk accounting, and unconditional
-// cleanup.
+// Package dbtest provides an opt-in, Docker- or Podman-backed database
+// integration-test harness. It is test support only: callers supply one
+// engine's pinned image and server arguments, while this package owns runtime
+// selection, endpoint scoping, ephemeral resource names, loopback port
+// allocation, disk accounting, and unconditional cleanup.
 //
 // A second engine is added by supplying another Config, not by copying this
 // file. See mysql_integration_test.go for the reference caller.
@@ -29,10 +29,11 @@ import (
 
 const (
 	defaultPodmanBinary = "podman"
+	defaultDockerBinary = "docker"
 	cleanupTimeout      = 3 * time.Minute
 )
 
-var errPodmanResourceNotFound = errors.New("podman resource not found")
+var errContainerResourceNotFound = errors.New("container resource not found")
 
 // engineSlots serialises engines by default. Parallel database containers
 // multiply peak disk and memory on a host where disk is the binding
@@ -62,9 +63,19 @@ type Endpoint struct {
 	Port int
 }
 
-// CommandRunner runs a Podman subcommand against one explicit endpoint. It
-// exists solely to make resource ownership and cleanup testable without a
-// running container engine.
+// Runtime selects the explicit container client used by a harness.
+type Runtime string
+
+const (
+	// RuntimeDocker runs each command through Docker's explicit --host flag.
+	RuntimeDocker Runtime = "docker"
+	// RuntimePodman runs each command through Podman's explicit --url flag.
+	RuntimePodman Runtime = "podman"
+)
+
+// CommandRunner runs a container-runtime subcommand against one explicit
+// endpoint. It exists solely to make resource ownership and cleanup testable
+// without a running container engine.
 type CommandRunner interface {
 	Run(context.Context, string, ...string) (string, error)
 }
@@ -84,9 +95,13 @@ type Config struct {
 	ContainerPort int
 	// DataVolumePath is the engine's data directory inside the container.
 	DataVolumePath string
-	// ContainerEndpoint is the local Unix Podman API endpoint.
+	// ContainerRuntime is the explicit Docker or Podman client for this run.
+	ContainerRuntime Runtime
+	// ContainerEndpoint is the direct local Unix API endpoint for
+	// ContainerRuntime.
 	ContainerEndpoint string
-	// ContainerArgs are passed to "podman run" before the image reference.
+	// ContainerArgs are passed to the runtime's "run" command before the image
+	// reference.
 	ContainerArgs []string
 	// EngineArgs are passed to the engine process after the image reference.
 	EngineArgs []string
@@ -121,7 +136,8 @@ type Report struct {
 }
 
 type targetIdentity struct {
-	socketPath string
+	runtime    Runtime
+	targetID   string
 	graphRoot  string
 	forwarded  bool
 	daemonFree uint64
@@ -161,6 +177,9 @@ func New(config Config) (*Harness, error) {
 	if strings.TrimSpace(config.Engine) == "" {
 		return nil, errors.New("database test harness requires an engine name")
 	}
+	if !config.ContainerRuntime.valid() {
+		return nil, errors.New("database test harness requires an explicit container runtime: docker or podman")
+	}
 	if !pinnedImage(config.Image) {
 		return nil, errors.New("database test harness requires a safe pinned image tag")
 	}
@@ -170,14 +189,14 @@ func New(config Config) (*Harness, error) {
 	if !filepath.IsAbs(config.DataVolumePath) || strings.ContainsAny(config.DataVolumePath, "\r\n:") {
 		return nil, errors.New("database test harness requires a safe absolute engine data-volume path")
 	}
-	if _, err := podmanEndpointPath(config.ContainerEndpoint); err != nil {
-		return nil, errors.New("database test harness requires an explicit safe local Podman endpoint")
+	if _, err := containerEndpointPath(config.ContainerEndpoint); err != nil {
+		return nil, errors.New("database test harness requires an explicit safe local Docker or Podman endpoint")
 	}
 	if config.ExpectedImageBytes == 0 || config.ExpectedImageBytes > maxExpectedImageBytes {
 		return nil, errors.New("database test harness requires the engine image's approximate size in bytes")
 	}
 	if config.Run == nil {
-		config.Run = podmanRunner{}
+		config.Run = containerRunner{runtime: config.ContainerRuntime}
 	}
 	if config.DiskFreeAt == nil {
 		config.DiskFreeAt = diskFreeAt
@@ -379,17 +398,17 @@ func (h *Harness) Close(_ context.Context) error {
 
 		var errs []error
 		if h.known(func(h *Harness) bool { return h.containerKnown }) {
-			if _, err := h.runOnVerifiedTarget(cleanupCtx, "container", "rm", "--force", h.containerName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
+			if _, err := h.runOnVerifiedTarget(cleanupCtx, "container", "rm", "--force", h.containerName); err != nil && !errors.Is(err, errContainerResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test container: %w", h.config.Engine, err))
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.volumeKnown }) {
-			if _, err := h.runOnVerifiedTarget(cleanupCtx, "volume", "rm", "--force", h.volumeName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
+			if _, err := h.runOnVerifiedTarget(cleanupCtx, "volume", "rm", "--force", h.volumeName); err != nil && !errors.Is(err, errContainerResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test volume: %w", h.config.Engine, err))
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.runImageKnown }) {
-			if _, err := h.runOnVerifiedTarget(cleanupCtx, "image", "rm", h.runImage); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
+			if _, err := h.runOnVerifiedTarget(cleanupCtx, "image", "rm", h.runImage); err != nil && !errors.Is(err, errContainerResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test image: %w", h.config.Engine, err))
 			}
 		}
@@ -431,7 +450,7 @@ func (h *Harness) targetImageStoreFree(ctx context.Context) (uint64, error) {
 	}
 	free, err := h.config.DiskFreeAt(target.graphRoot)
 	if err != nil {
-		return 0, errors.New("target Podman image-store capacity query failed")
+		return 0, errors.New("target container image-store capacity query failed")
 	}
 	return free, nil
 }
@@ -444,38 +463,93 @@ func (h *Harness) runOnVerifiedTarget(ctx context.Context, args ...string) (stri
 }
 
 func (h *Harness) assertTarget(ctx context.Context) (targetIdentity, error) {
-	endpointPath, err := podmanEndpointPath(h.config.ContainerEndpoint)
+	endpointPath, err := containerEndpointPath(h.config.ContainerEndpoint)
 	if err != nil {
 		return targetIdentity{}, err
 	}
-	raw, err := h.config.Run.Run(ctx, h.config.ContainerEndpoint, "info", "--format", "{{.Host.RemoteSocket.Path}}\t{{.Store.GraphRoot}}\t{{.Store.GraphRootAllocated}}\t{{.Store.GraphRootUsed}}")
+	raw, err := h.config.Run.Run(ctx, h.config.ContainerEndpoint, "info", "--format", h.config.ContainerRuntime.infoFormat())
 	if err != nil {
-		return targetIdentity{}, errors.New("target Podman endpoint could not be inspected")
+		return targetIdentity{}, fmt.Errorf("target %s endpoint could not be inspected", h.config.ContainerRuntime)
 	}
-	target, err := parseTargetIdentity(raw, endpointPath)
+	target, err := h.config.ContainerRuntime.parseTargetIdentity(raw, endpointPath)
 	if err != nil {
 		return targetIdentity{}, err
 	}
+	target.runtime = h.config.ContainerRuntime
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	if h.targetKnown && !sameTargetIdentity(h.target, target) {
-		return targetIdentity{}, errors.New("target Podman endpoint identity changed during the test")
+		return targetIdentity{}, errors.New("target container endpoint identity changed during the test")
 	}
 	h.target = target
 	h.targetKnown = true
 	return target, nil
 }
 
-func podmanEndpointPath(raw string) (string, error) {
+func containerEndpointPath(raw string) (string, error) {
 	value := strings.TrimSpace(raw)
 	if value == "" || value != raw || strings.ContainsAny(value, "\r\n\x00") {
-		return "", errors.New("target Podman endpoint is invalid")
+		return "", errors.New("target container endpoint is invalid")
 	}
 	endpoint, err := url.Parse(value)
 	if err != nil || endpoint.Scheme != "unix" || endpoint.Host != "" || endpoint.Opaque != "" || endpoint.RawQuery != "" || endpoint.Fragment != "" || endpoint.User != nil || endpoint.RawPath != "" {
-		return "", errors.New("target Podman endpoint must be a direct local Unix socket")
+		return "", errors.New("target container endpoint must be a direct local Unix socket")
 	}
-	return safePodmanStorePath(endpoint.Path)
+	return safeContainerStorePath(endpoint.Path)
+}
+
+func (runtime Runtime) valid() bool {
+	return runtime == RuntimeDocker || runtime == RuntimePodman
+}
+
+func (runtime Runtime) infoFormat() string {
+	switch runtime {
+	case RuntimeDocker:
+		return "{{.ID}}\t{{.DockerRootDir}}"
+	case RuntimePodman:
+		return "{{.Host.RemoteSocket.Path}}\t{{.Store.GraphRoot}}\t{{.Store.GraphRootAllocated}}\t{{.Store.GraphRootUsed}}"
+	default:
+		return ""
+	}
+}
+
+func (runtime Runtime) parseTargetIdentity(raw, endpointPath string) (targetIdentity, error) {
+	switch runtime {
+	case RuntimeDocker:
+		return parseDockerTargetIdentity(raw)
+	case RuntimePodman:
+		return parseTargetIdentity(raw, endpointPath)
+	default:
+		return targetIdentity{}, errors.New("target container runtime is invalid")
+	}
+}
+
+func parseDockerTargetIdentity(raw string) (targetIdentity, error) {
+	line := strings.TrimSpace(raw)
+	if line == "" || strings.Contains(line, "\n") {
+		return targetIdentity{}, errors.New("target Docker endpoint did not report a daemon identity and locally measurable image-store path")
+	}
+	fields := strings.Split(line, "\t")
+	if len(fields) != 2 || !safeContainerIdentity(fields[0]) {
+		return targetIdentity{}, errors.New("target Docker endpoint did not report a daemon identity and locally measurable image-store path")
+	}
+	graphRoot, err := safeContainerStorePath(fields[1])
+	if err != nil {
+		return targetIdentity{}, errors.New("target Docker image store path is invalid")
+	}
+	return targetIdentity{targetID: fields[0], graphRoot: graphRoot}, nil
+}
+
+func safeContainerIdentity(value string) bool {
+	if value == "" || strings.TrimSpace(value) != value || strings.ContainsAny(value, "\t\r\n\x00") {
+		return false
+	}
+	for _, r := range value {
+		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') && (r < '0' || r > '9') && r != ':' && r != '-' && r != '_' {
+			return false
+		}
+	}
+	return true
 }
 
 func parseTargetIdentity(raw, endpointPath string) (targetIdentity, error) {
@@ -491,12 +565,12 @@ func parseTargetIdentity(raw, endpointPath string) (targetIdentity, error) {
 	if err != nil {
 		return targetIdentity{}, errors.New("target Podman endpoint returned an invalid socket path")
 	}
-	graphRoot, err := safePodmanStorePath(fields[1])
+	graphRoot, err := safeContainerStorePath(fields[1])
 	if err != nil {
 		return targetIdentity{}, errors.New("target Podman image store path is invalid")
 	}
 	if socketPath == endpointPath {
-		return targetIdentity{socketPath: socketPath, graphRoot: graphRoot}, nil
+		return targetIdentity{targetID: socketPath, graphRoot: graphRoot}, nil
 	}
 	if !forwarded {
 		return targetIdentity{}, errors.New("target Podman endpoint identity does not match the configured socket")
@@ -505,11 +579,11 @@ func parseTargetIdentity(raw, endpointPath string) (targetIdentity, error) {
 	if err != nil {
 		return targetIdentity{}, errors.New("target Podman endpoint returned an invalid image-store capacity")
 	}
-	return targetIdentity{socketPath: socketPath, graphRoot: graphRoot, forwarded: true, daemonFree: free}, nil
+	return targetIdentity{targetID: socketPath, graphRoot: graphRoot, forwarded: true, daemonFree: free}, nil
 }
 
 func sameTargetIdentity(left, right targetIdentity) bool {
-	return left.socketPath == right.socketPath && left.graphRoot == right.graphRoot && left.forwarded == right.forwarded
+	return left.runtime == right.runtime && left.targetID == right.targetID && left.graphRoot == right.graphRoot && left.forwarded == right.forwarded
 }
 
 func podmanReportedSocketPath(raw string) (string, bool, error) {
@@ -518,10 +592,10 @@ func podmanReportedSocketPath(raw string) (string, bool, error) {
 		return "", false, errors.New("invalid Podman socket path")
 	}
 	if strings.HasPrefix(value, "unix://") {
-		path, err := podmanEndpointPath(value)
+		path, err := containerEndpointPath(value)
 		return path, true, err
 	}
-	path, err := safePodmanStorePath(value)
+	path, err := safeContainerStorePath(value)
 	return path, false, err
 }
 
@@ -549,14 +623,14 @@ func parsePodmanBytes(raw string) (uint64, error) {
 	return strconv.ParseUint(raw, 10, 64)
 }
 
-func safePodmanStorePath(raw string) (string, error) {
+func safeContainerStorePath(raw string) (string, error) {
 	value := strings.TrimSpace(raw)
 	if !path.IsAbs(value) || path.Clean(value) != value || strings.ContainsAny(value, "\r\n\x00") {
-		return "", errors.New("target Podman image store path is invalid")
+		return "", errors.New("target container image store path is invalid")
 	}
 	for _, r := range value {
 		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') && (r < '0' || r > '9') && r != '/' && r != '.' && r != '-' && r != '_' {
-			return "", errors.New("target Podman image store path is unsafe")
+			return "", errors.New("target container image store path is unsafe")
 		}
 	}
 	return value, nil
@@ -626,7 +700,7 @@ func (h *Harness) resourceAbsent(ctx context.Context, args ...string) (bool, err
 	if err == nil {
 		return false, nil
 	}
-	if errors.Is(err, errPodmanResourceNotFound) {
+	if errors.Is(err, errContainerResourceNotFound) {
 		return true, nil
 	}
 	return false, err
@@ -779,28 +853,41 @@ func closeHarnesses(ctx context.Context, live []*Harness) {
 	wg.Wait()
 }
 
-type podmanRunner struct{}
+type containerRunner struct {
+	runtime Runtime
+}
 
-func (podmanRunner) Run(ctx context.Context, endpoint string, args ...string) (string, error) {
-	command := append([]string{"--url", endpoint}, args...)
-	cmd := exec.CommandContext(ctx, defaultPodmanBinary, command...)
+func (runner containerRunner) Run(ctx context.Context, endpoint string, args ...string) (string, error) {
+	binary, command := runner.runtime.command(endpoint, args...)
+	cmd := exec.CommandContext(ctx, binary, command...)
 	output, err := cmd.Output()
 	if err != nil {
-		if podmanResourceNotFound(err) {
-			return "", fmt.Errorf("%w: podman command failed: %w", errPodmanResourceNotFound, err)
+		if containerResourceNotFound(err) {
+			return "", fmt.Errorf("%w: %s command failed: %w", errContainerResourceNotFound, runner.runtime, err)
 		}
 		// Do not attach command arguments or captured output. Future engine
 		// configurations may contain authentication material and test support
 		// must never turn it into an error/logging channel.
-		return "", fmt.Errorf("podman command failed: %w", err)
+		return "", fmt.Errorf("%s command failed: %w", runner.runtime, err)
 	}
 	return string(output), nil
 }
 
-// podmanResourceNotFound classifies only the absence phrasings Podman emits.
-// "image not known" is Podman's wording where Docker says "no such image";
-// both are accepted so a Docker-compatible endpoint behaves the same.
-func podmanResourceNotFound(err error) bool {
+func (runtime Runtime) command(endpoint string, args ...string) (string, []string) {
+	switch runtime {
+	case RuntimeDocker:
+		return defaultDockerBinary, append([]string{"--host", endpoint}, args...)
+	case RuntimePodman:
+		return defaultPodmanBinary, append([]string{"--url", endpoint}, args...)
+	default:
+		return "", nil
+	}
+}
+
+// containerResourceNotFound classifies only the absence phrasings Docker and
+// Podman emit. It must not turn endpoint, permission, or daemon failures into
+// a harmless absent-resource cleanup result.
+func containerResourceNotFound(err error) bool {
 	var exitErr *exec.ExitError
 	if !errors.As(err, &exitErr) {
 		return false
@@ -825,14 +912,14 @@ func parseMappedPort(raw string, defaultPort int) (int, error) {
 	line := strings.TrimSpace(strings.Split(strings.TrimSpace(raw), "\n")[0])
 	idx := strings.LastIndexByte(line, ':')
 	if idx < 0 || idx == len(line)-1 {
-		return 0, errors.New("podman returned no host port")
+		return 0, errors.New("container runtime returned no host port")
 	}
 	port, err := strconv.Atoi(line[idx+1:])
 	if err != nil || port < 1 || port > 65535 {
-		return 0, errors.New("podman returned an invalid host port")
+		return 0, errors.New("container runtime returned an invalid host port")
 	}
 	if port == defaultPort {
-		return 0, errors.New("podman allocated the database default host port")
+		return 0, errors.New("container runtime allocated the database default host port")
 	}
 	return port, nil
 }

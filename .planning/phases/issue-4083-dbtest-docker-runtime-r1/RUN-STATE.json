@@ -7,13 +7,13 @@
     "reason": "The repository delivery contract forbids spawning lifecycle roles in this worktree.",
     "discuss_phase": "completed",
     "plan_phase_tdd": "completed_before_production_edit",
-    "execute_phase": "pending_red",
-    "verify_work": "pending",
+    "execute_phase": "green_implementation_complete_pending_expanded_verification",
+    "verify_work": "scoped_regression_and_runtime_availability_evidence_recorded_pending_review",
     "code_review": "pending"
   },
   "external_endpoint_verdict": "rejected_out_of_scope_weakened_managed_container_guarantees",
   "live_runtime_evidence": {
-    "docker": "client_present_direct_sockets_unreachable_at_planning_time",
-    "podman": "client_present_no_direct_local_socket_discovered_at_planning_time"
+    "docker": "client_present_explicit_desktop_socket_did_not_report_a_running_daemon_identity",
+    "podman": "client_present_no_direct_local_socket_discovered"
   }
 }

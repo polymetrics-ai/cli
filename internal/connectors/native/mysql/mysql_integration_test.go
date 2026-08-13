@@ -35,7 +35,8 @@ const (
 
 const (
 	envEnabled           = "POLYMETRICS_DATABASE_INTEGRATION"
-	envContainerEndpoint = "POLYMETRICS_PODMAN_ENDPOINT"
+	envContainerRuntime  = "POLYMETRICS_CONTAINER_RUNTIME"
+	envContainerEndpoint = "POLYMETRICS_CONTAINER_ENDPOINT"
 )
 
 var errCollectedCDCEvents = errors.New("test collected required mysql change events")
@@ -44,17 +45,19 @@ func TestMySQLContainerHarness(t *testing.T) {
 	// A skip here is loud on purpose. This test must never report success
 	// without having connected to a real engine.
 	if os.Getenv(envEnabled) != "1" {
-		t.Skipf("database integration skipped: set %s=1 to run the MySQL Podman proof", envEnabled)
+		t.Skipf("database integration skipped: set %s=1 to run the MySQL Docker or Podman proof", envEnabled)
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
 	defer cancel()
 
+	containerRuntime := dbtest.Runtime(strings.TrimSpace(os.Getenv(envContainerRuntime)))
 	containerEndpoint := strings.TrimSpace(os.Getenv(envContainerEndpoint))
-	if containerEndpoint == "" {
-		t.Skipf("database integration skipped: set %s to an explicit local Podman API endpoint", envContainerEndpoint)
+	if containerRuntime == "" || containerEndpoint == "" {
+		t.Fatalf("database integration requires %s=docker or podman and %s=unix:///absolute/path/to/socket; no explicit local container runtime is configured", envContainerRuntime, envContainerEndpoint)
 	}
 	harness, err := dbtest.New(dbtest.Config{
 		Engine:             "mysql",
+		ContainerRuntime:   containerRuntime,
 		Image:              mysqlIntegrationImage,
 		ContainerPort:      3306,
 		DataVolumePath:     "/var/lib/mysql",
@@ -74,7 +77,7 @@ func TestMySQLContainerHarness(t *testing.T) {
 		},
 	})
 	if err != nil {
-		t.Fatal("could not configure the MySQL database test harness")
+		t.Fatalf("could not configure the MySQL database test harness: %v", err)
 	}
 	defer func() {
 		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)

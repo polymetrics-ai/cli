@@ -1,7 +1,7 @@
 # Database container harness maintainer guide
 
 `dbtest` is opt-in test support for native database connectors. Add an engine through `Config`; do
-not copy the harness or add a standalone Podman command path.
+not copy the harness or add a standalone container-runtime command path.
 
 ## Running the MySQL proof
 
@@ -11,23 +11,38 @@ and incremental reads, every TLS mode, and the internal MySQL row-event reader.
 
 ```bash
 POLYMETRICS_DATABASE_INTEGRATION=1 \
-  POLYMETRICS_PODMAN_ENDPOINT=unix:///run/user/1000/podman/podman.sock \
+  POLYMETRICS_CONTAINER_RUNTIME=docker \
+  POLYMETRICS_CONTAINER_ENDPOINT=unix:///var/run/docker.sock \
   go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/mysql
 ```
 
-`POLYMETRICS_PODMAN_ENDPOINT` is a direct local Unix Podman API endpoint. Named connections and
-remote endpoints are refused. Every invocation uses that endpoint directly, so the global Podman
-default is never read or changed.
+Or select Podman explicitly:
+
+```bash
+POLYMETRICS_DATABASE_INTEGRATION=1 \
+  POLYMETRICS_CONTAINER_RUNTIME=podman \
+  POLYMETRICS_CONTAINER_ENDPOINT=unix:///run/user/1000/podman/podman.sock \
+  go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/mysql
+```
+
+`POLYMETRICS_CONTAINER_RUNTIME` must be exactly `docker` or `podman`.
+`POLYMETRICS_CONTAINER_ENDPOINT` must be a direct local Unix API endpoint for that selected
+runtime. Named connections and remote endpoints are refused. Every invocation passes that endpoint
+directly to Docker (`--host`) or Podman (`--url`), so neither global runtime default is read or
+changed. Leaving the opt-in unset skips the test; setting the opt-in without both runtime inputs is
+a test failure, not a skip.
 
 ## Capacity and cleanup
 
-Before startup and before every command directed at the daemon, `dbtest` reads identity and image-store data from
-the selected endpoint. A direct daemon must report the configured socket and a locally measurable
-image-store path. Podman 5.3 machine forwards are also accepted when both sides report safe Unix
-sockets and the daemon reports numeric `GraphRootAllocated`/`GraphRootUsed` capacity; the harness
-uses their difference rather than a host path inside the VM. Any other socket mismatch, remote
-scheme, or unprovable capacity fails before the pull, including when the source image is cached. An
-absent source image needs three times `ExpectedImageBytes` free.
+Before startup and before every command directed at the daemon, `dbtest` reads identity and
+image-store data from the selected endpoint. A direct Docker daemon must report a stable daemon ID
+and a locally measurable `DockerRootDir`; a direct Podman daemon must report the configured socket
+and a locally measurable image-store path. Podman 5.3 machine forwards are also accepted when both
+sides report safe Unix sockets and the daemon reports numeric
+`GraphRootAllocated`/`GraphRootUsed` capacity; the harness uses their difference rather than a host
+path inside the VM. Any other socket mismatch, remote scheme, or unprovable capacity fails before
+the pull, including when the source image is cached. An absent source image needs three times
+`ExpectedImageBytes` free.
 
 The harness owns only its generated container, volume, and run-image reference. The source image is
 always retained. Cleanup is unconditional and idempotent, including failure and interrupt paths, and
@@ -39,8 +54,8 @@ container copy operation, then runs a live `verify-ca` session and checks the se
 
 ## Adding an engine
 
-Define a pinned image, container port, data-volume path, expected image bytes, and direct local
-Podman endpoint plus engine and container arguments in one `Config`. Keep the test tagged
-`databaseintegration`, create a non-default loopback endpoint, seed data that exceeds one page, and
-defer `Close` immediately after `New`. Engines run sequentially unless a bounded
+Define an explicit `ContainerRuntime`, a pinned image, container port, data-volume path, expected
+image bytes, and direct local endpoint plus engine and container arguments in one `Config`. Keep
+the test tagged `databaseintegration`, create a non-default loopback endpoint, seed data that
+exceeds one page, and defer `Close` immediately after `New`. Engines run sequentially unless a bounded
 `SetMaxConcurrentEngines` value is deliberately selected.
