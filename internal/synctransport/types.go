@@ -5,6 +5,8 @@ package synctransport
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -191,20 +193,28 @@ func cloneDestinationPlanRequest(request DestinationPlanRequest) DestinationPlan
 	return clone
 }
 
-func cloneSourcePage(page SourcePage) SourcePage {
+func cloneSourcePage(page SourcePage) (SourcePage, error) {
 	clone := page
-	clone.Records = cloneRecords(page.Records)
+	records, err := cloneRecords(page.Records)
+	if err != nil {
+		return SourcePage{}, fmt.Errorf("clone page records: %w", err)
+	}
+	clone.Records = records
 	clone.Tombstones = cloneTombstones(page.Tombstones)
 	clone.CandidateCheckpoint = page.CandidateCheckpoint.Clone()
-	return clone
+	return clone, nil
 }
 
-func cloneWarehouseWorkset(workset WarehouseWorkset) WarehouseWorkset {
+func cloneWarehouseWorkset(workset WarehouseWorkset) (WarehouseWorkset, error) {
 	clone := workset
-	clone.Records = cloneRecords(workset.Records)
+	records, err := cloneRecords(workset.Records)
+	if err != nil {
+		return WarehouseWorkset{}, fmt.Errorf("clone workset records: %w", err)
+	}
+	clone.Records = records
 	clone.Tombstones = cloneTombstones(workset.Tombstones)
 	clone.CandidateCheckpoint = workset.CandidateCheckpoint.Clone()
-	return clone
+	return clone, nil
 }
 
 func cloneRuntimeConfig(runtime connectors.RuntimeConfig) connectors.RuntimeConfig {
@@ -231,54 +241,78 @@ func cloneStringMap(values map[string]string) map[string]string {
 	return clone
 }
 
-func cloneRecords(records []connectors.Record) []connectors.Record {
+func cloneRecords(records []connectors.Record) ([]connectors.Record, error) {
 	if records == nil {
-		return nil
+		return nil, nil
 	}
 	clone := make([]connectors.Record, len(records))
 	for index, record := range records {
-		clone[index] = cloneRecord(record)
+		clonedRecord, err := cloneRecord(record)
+		if err != nil {
+			return nil, fmt.Errorf("record %d: %w", index, err)
+		}
+		clone[index] = clonedRecord
 	}
-	return clone
+	return clone, nil
 }
 
-// cloneRecord copies the composite JSON-like values that connector records
-// normally contain. A stage or destination therefore cannot mutate a nested
-// provider field through the workset it receives.
-func cloneRecord(record connectors.Record) connectors.Record {
+var errUnsupportedTransportRecordValue = errors.New("unsupported transport record value")
+
+// cloneRecord copies the closed JSON-like record vocabulary accepted by
+// transport. A stage or destination therefore cannot mutate a nested provider
+// field through the workset it receives, and an unrecognized mutable value
+// cannot silently cross either boundary by alias.
+func cloneRecord(record connectors.Record) (connectors.Record, error) {
 	clone := make(connectors.Record, len(record))
 	for key, value := range record {
-		clone[key] = cloneRecordValue(value)
+		clonedValue, err := cloneRecordValue(value)
+		if err != nil {
+			return nil, fmt.Errorf("field %q: %w", key, err)
+		}
+		clone[key] = clonedValue
 	}
-	return clone
+	return clone, nil
 }
 
-func cloneRecordValue(value any) any {
+func cloneRecordValue(value any) (any, error) {
 	switch typed := value.(type) {
 	case connectors.Record:
 		return cloneRecord(typed)
 	case map[string]any:
 		clone := make(map[string]any, len(typed))
 		for key, nested := range typed {
-			clone[key] = cloneRecordValue(nested)
+			clonedValue, err := cloneRecordValue(nested)
+			if err != nil {
+				return nil, fmt.Errorf("map field %q: %w", key, err)
+			}
+			clone[key] = clonedValue
 		}
-		return clone
+		return clone, nil
+	case map[string]string:
+		return cloneStringMap(typed), nil
 	case []any:
 		clone := make([]any, len(typed))
 		for index, nested := range typed {
-			clone[index] = cloneRecordValue(nested)
+			clonedValue, err := cloneRecordValue(nested)
+			if err != nil {
+				return nil, fmt.Errorf("list item %d: %w", index, err)
+			}
+			clone[index] = clonedValue
 		}
-		return clone
+		return clone, nil
 	case []connectors.Record:
-		clone := make([]connectors.Record, len(typed))
-		for index, nested := range typed {
-			clone[index] = cloneRecord(nested)
-		}
-		return clone
+		return cloneRecords(typed)
+	case json.RawMessage:
+		return append(json.RawMessage(nil), typed...), nil
 	case []byte:
-		return append([]byte(nil), typed...)
+		return append([]byte(nil), typed...), nil
+	case nil, bool, string, json.Number,
+		float32, float64,
+		int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64:
+		return value, nil
 	default:
-		return value
+		return nil, fmt.Errorf("%w: %T", errUnsupportedTransportRecordValue, value)
 	}
 }
 
