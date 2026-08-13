@@ -7,10 +7,10 @@
   changing #4047 history.
 - [x] RED test failed for the expected aliasing and unknown-value pass-through behavior; the
   accompanying `test(4077-01)` commit precedes all production code.
-- [ ] `json.RawMessage` and `map[string]string` source storage is independent after stage/destination
-  mutation.
-- [ ] Nested supported combinations and existing mutable containers are preserved.
-- [ ] Unknown mutable values fail closed before boundary crossing.
+- [x] Focused GREEN test proves `json.RawMessage` and `map[string]string` source storage is independent
+  after stage/destination mutation.
+- [x] Focused GREEN test covers nested supported combinations and the existing `[]byte` container path.
+- [x] Focused GREEN test proves unknown mutable values fail closed before boundary crossing.
 - [ ] Checkpoint, acknowledgement, CAS, and all seven canonical modes remain green.
 - [ ] Focused normal/race, relevant broader gates, and real `pm` build are green.
 - [ ] No credentialed provider/database test claimed; why it is inapplicable is recorded.

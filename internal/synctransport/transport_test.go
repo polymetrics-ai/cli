@@ -282,7 +282,10 @@ func TestCloneRecordCopiesBinaryValuesAtEveryNestingLevel(t *testing.T) {
 		"list":   []any{list},
 	}
 
-	clone := cloneRecord(original)
+	clone, err := cloneRecord(original)
+	if err != nil {
+		t.Fatalf("cloneRecord() = %v", err)
+	}
 	clone["scalar"].([]byte)[0] = 0x11
 	clone["nested"].(map[string]any)["binary"].([]byte)[0] = 0x12
 	clone["list"].([]any)[0].([]byte)[0] = 0x13
@@ -315,7 +318,10 @@ func TestCloneRecordCopiesRawMessageAndStringMapValuesAtEveryNestingLevel(t *tes
 		}},
 	}
 
-	clone := cloneRecord(original)
+	clone, err := cloneRecord(original)
+	if err != nil {
+		t.Fatalf("cloneRecord() = %v", err)
+	}
 	clone["raw"].(json.RawMessage)[0] = '['
 	clone["labels"].(map[string]string)["owner"] = "clone"
 	clone["nested"].(map[string]any)["raw"].(json.RawMessage)[0] = '['
@@ -443,8 +449,8 @@ func TestOrchestratorRejectsUnsupportedMutableValuesBeforeBoundaryCrossing(t *te
 				Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
 				BatchSize: 10, Stage: stage, Commit: func(synccontract.CheckpointEnvelope) error { return nil },
 			})
-			if err == nil {
-				t.Fatal("Run() error = nil, want unsupported mutable value rejected")
+			if !errors.Is(err, errUnsupportedTransportRecordValue) {
+				t.Fatalf("Run() error = %v, want unsupported mutable value rejection", err)
 			}
 			if stage.calls != tt.wantStageCalls {
 				t.Fatalf("warehouse stage calls = %d, want %d", stage.calls, tt.wantStageCalls)

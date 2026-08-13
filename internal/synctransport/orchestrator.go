@@ -81,12 +81,16 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		// Retain the source-owned candidate for the final commit. The stage and
 		// destination receive defensive payload copies and cannot replace it.
 		candidate := page.CandidateCheckpoint.Clone()
+		stagePage, err := cloneSourcePage(page)
+		if err != nil {
+			return fmt.Errorf("clone source transport page: %w", err)
+		}
 		staged, err := request.Stage.Stage(ctx, WarehouseStageRequest{
 			SourceName:      request.Source.Name(),
 			DestinationName: request.Destination.Name(),
 			Stream:          request.Stream,
 			Mode:            request.Mode,
-			Page:            cloneSourcePage(page),
+			Page:            stagePage,
 		})
 		if err != nil {
 			return fmt.Errorf("stage transport page: %w", err)
@@ -98,9 +102,13 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			return err
 		}
 
+		destinationWorkset, err := cloneWarehouseWorkset(staged)
+		if err != nil {
+			return fmt.Errorf("clone warehouse transport workset: %w", err)
+		}
 		acknowledgement, err := resolved.Destination.ApplyDestination(ctx, DestinationApplyRequest{
 			Plan:    plan,
-			Workset: cloneWarehouseWorkset(staged),
+			Workset: destinationWorkset,
 		})
 		if err != nil {
 			return fmt.Errorf("apply destination transport: %w", err)
