@@ -1,13 +1,13 @@
 {
   "issue": 4081,
   "phase": "issue-4081-warehouse-mediated-transport-demo-r1",
-  "state": "plan_tdd",
-  "status": "planning_checkpoint",
+  "state": "green_verified",
+  "status": "awaiting_verify_work_and_review",
   "current_combined_head": "e7d2b2963fc1dd164f63b31fccb8a3bab8084bec",
   "required_transport_parent": "aaf288d069adc1b67a09500afcca4be4a6d1bab3",
   "base_branch": "docs/4015-connector-release-certification",
   "future_child_branch": "feat/4081-warehouse-mediated-transport-demo",
-  "correction_loops_used": 0,
+  "correction_loops_used": 3,
   "manual_gsd_fallback": true,
-  "reason": "#4019 squash-merged at the authoritative combined head; #4077 Transport blobs equal accepted source content even though the source commit is not an ancestor"
+  "reason": "closed pre-run approval carrier and durable GitHub walking slice are green in focused and affected-package gates; correction loop 3/5 is the B2 authenticated-forward cleanup repair, with final GSD verification/review, no-mistakes, and draft PR still pending"
 }

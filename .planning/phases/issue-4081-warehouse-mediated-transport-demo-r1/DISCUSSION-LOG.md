@@ -24,3 +24,14 @@ task brief, repository contract, and live topology fix every material choice.
   now linked directly under #4015.
 - Real-provider use is optional and restricted by the task's credential/resource
   boundary; no authorization question is needed for local planning.
+
+## Carrier decision update — 2026-08-13
+
+The later accepted carrier report replaces only the provisional CLI-surface row
+above. The rejected one-shot `pm demo` harness is not made Green. The closed
+operator route is `pm etl transport github-issue-label` for plan, preview, and
+typed cleanup plus the existing `pm etl run` with an exact plan selector,
+one-bounded-line stdin token carrier, and `--confirm destructive`. This is not
+a broad generic namespace: repository, base URL, source/target issue, label,
+action, record, and credentials remain persisted connection/App state. The
+faithful binary harness invokes those commands in separate subprocesses.

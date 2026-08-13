@@ -35,6 +35,17 @@
     "title": {
       "type": "string"
     },
+    "labels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "body": {
       "type": [
         "string",

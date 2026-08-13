@@ -164,6 +164,11 @@ func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, j
 			if len(args) == 0 && isManualCommand(spec.name) {
 				return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
 			}
+			if spec.name == "etl" {
+				if command, ok := etlTransportManualCommand(args); ok {
+					return markCobraLegacyError(writeETLTransportManual(stdout, jsonOut, command))
+				}
+			}
 			return markCobraLegacyError(spec.handler(ctx, root, args, stdout, jsonOut))
 		},
 	}

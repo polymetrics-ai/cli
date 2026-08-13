@@ -32,11 +32,12 @@
    PAT, personal repository, or secret inspection.
 7. #4079's corrected record-isolation parent is a hard dependency. The demo
    must exercise the closed mutable-value boundary without weakening it.
-8. The artifact is a bounded, manually invocable exact-binary test/demo harness
-   with sanitized machine-readable evidence. It does not introduce a new public
-   command unless the resumed base contains an accepted existing certification
-   namespace extension; if it does, CLI help/manual/website parity becomes part
-   of the same TDD slice.
+8. The artifact is a bounded exact-binary faithful-server test plus the accepted
+   closed `pm etl transport github-issue-label` plan/preview/cleanup lifecycle
+   and its narrowly extended approval-carrying `pm etl run`. The carrier accepts
+   only connection, closed plan selector, stdin marker, and typed destructive
+   confirmation; every provider detail stays connection/App-owned. CLI
+   help/manual/website parity is part of the same TDD slice.
 
 ## Base admission
 

@@ -1066,7 +1066,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		batchSize = 1000
 	}
 	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
-	if a.shouldRunTransport(conn, req.Stream, mode, source, destination) {
+	transportRoute := a.shouldRunTransport(conn, req.Stream, mode, source, destination)
+	if !transportRoute && hasDestinationApproval(req.DestinationApproval) {
+		return a.failRun(runID, fmt.Errorf("destination approval is valid only for the closed GitHub issue-label transport route"))
+	}
+	if transportRoute {
 		result, err := a.runTransportETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, mode, batchSize, req.DestinationApproval)
 		if err != nil {
 			return a.failAcknowledgedTransportRun(runID, result, err)
@@ -1094,6 +1098,10 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return a.failRun(runID, err)
 	}
 	return a.completeRun(runID, result)
+}
+
+func hasDestinationApproval(approval synctransport.DestinationApproval) bool {
+	return approval.PlanID != "" || approval.ApprovalToken != "" || approval.Confirmation.Kind != ""
 }
 
 func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {

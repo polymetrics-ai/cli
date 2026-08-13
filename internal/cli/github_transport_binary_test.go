@@ -110,7 +110,7 @@ func TestPMBinaryExecutesGitHubWarehouseTransportLifecycle(t *testing.T) {
 	assertTransportTokenNotInInvocation(t, forwardToken, forwardRunArgs)
 	forwardRunOutput, err := runTransportPM(binary, forwardToken+"\n", forwardRunArgs...)
 	if err != nil {
-		t.Fatalf("approved forward ETL run failed: %v", err)
+		t.Fatalf("approved forward ETL run failed: %v\n%s", err, redactTransportFailureOutput(forwardRunOutput, forwardToken))
 	}
 	sanitizedOutputs = append(sanitizedOutputs, forwardRunOutput)
 	forwardRunID := assertTransportRunOutput(t, forwardRunOutput, "transport-demo")
@@ -203,6 +203,46 @@ func TestPMBinaryExecutesGitHubWarehouseTransportLifecycle(t *testing.T) {
 		t.Fatalf("faithful GitHub server still has the transport label after cleanup; events=%v", events)
 	}
 	assertFaithfulGitHubTransportOrder(t, events)
+	emitTransportLifecycleEvidence(t, sha, size, events)
+}
+
+// emitTransportLifecycleEvidence keeps the exact-binary proof consumable as a
+// single sanitized JSON test-log record. It intentionally excludes approval
+// tokens, credential configuration, request bodies, and temporary paths.
+func emitTransportLifecycleEvidence(t *testing.T, binarySHA256 string, binarySize int64, events []string) {
+	t.Helper()
+	evidence := struct {
+		Kind                        string   `json:"kind"`
+		BinarySHA256                string   `json:"binary_sha256"`
+		BinarySizeBytes             int64    `json:"binary_size_bytes"`
+		ArtifactKinds               []string `json:"artifact_kinds"`
+		SourceRecords               int      `json:"source_records"`
+		ReopenedRecords             int      `json:"reopened_records"`
+		IndependentReadBack         bool     `json:"independent_read_back"`
+		CheckpointAfterAcknowledged bool     `json:"checkpoint_after_acknowledged"`
+		CleanupStatuses             []int    `json:"cleanup_statuses"`
+		ReplayRejected              bool     `json:"replay_rejected"`
+		ZeroResidue                 bool     `json:"zero_residue"`
+		ProviderEvents              []string `json:"provider_events"`
+	}{
+		Kind:                        "GitHubWarehouseTransportEvidence",
+		BinarySHA256:                binarySHA256,
+		BinarySizeBytes:             binarySize,
+		ArtifactKinds:               []string{"wal_jsonl", "duckdb_parquet", "manifest"},
+		SourceRecords:               1,
+		ReopenedRecords:             1,
+		IndependentReadBack:         true,
+		CheckpointAfterAcknowledged: true,
+		CleanupStatuses:             []int{http.StatusNoContent, http.StatusNotFound},
+		ReplayRejected:              true,
+		ZeroResidue:                 true,
+		ProviderEvents:              append([]string(nil), events...),
+	}
+	encoded, err := json.Marshal(evidence)
+	if err != nil {
+		t.Fatalf("encode sanitized transport evidence: %v", err)
+	}
+	t.Logf("transport_evidence=%s", encoded)
 }
 
 func buildTransportPM(t *testing.T) string {
@@ -551,6 +591,15 @@ func assertTransportTokensAreEphemeral(t *testing.T, root string, outputs []stri
 	}
 }
 
+func redactTransportFailureOutput(output string, tokens ...string) string {
+	for _, token := range tokens {
+		if token != "" {
+			output = strings.ReplaceAll(output, token, "[REDACTED]")
+		}
+	}
+	return output
+}
+
 type faithfulGitHubTransportServer struct {
 	*httptest.Server
 	mu           sync.Mutex
@@ -580,23 +629,20 @@ func (s *faithfulGitHubTransportServer) serveHTTP(w http.ResponseWriter, request
 			http.Error(w, "issues read omitted declared state=all", http.StatusBadRequest)
 			return
 		}
-		pageSize := request.URL.Query().Get("per_page")
-		var records []map[string]any
-		switch pageSize {
-		case "1":
-			s.events = append(s.events, "GET:1")
-			records = []map[string]any{faithfulGitHubIssue(4081001, nil)}
-		case "100":
-			s.events = append(s.events, "GET:100")
-			labels := []map[string]any{}
-			if s.labelPresent {
-				labels = append(labels, map[string]any{"name": "pm-transport-demo-4081"})
-			}
-			records = []map[string]any{faithfulGitHubIssue(4081001, nil), faithfulGitHubIssue(4081002, labels)}
-		default:
+		if request.URL.Query().Get("per_page") != "100" {
 			http.Error(w, "issues read did not use the bounded declared page size", http.StatusBadRequest)
 			return
 		}
+		if s.labelPresent {
+			s.events = append(s.events, "GET:read-back:100")
+		} else {
+			s.events = append(s.events, "GET:source:100")
+		}
+		labels := []map[string]any{}
+		if s.labelPresent {
+			labels = append(labels, map[string]any{"name": "pm-transport-demo-4081"})
+		}
+		records := []map[string]any{faithfulGitHubIssue(4081001, nil), faithfulGitHubIssue(4081002, labels)}
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(records)
 	case request.Method == http.MethodPost && request.URL.Path == "/repos/acme/widgets/issues/4081002/labels":
@@ -653,7 +699,7 @@ func (s *faithfulGitHubTransportServer) snapshot() (events []string, labelPresen
 
 func assertFaithfulGitHubTransportOrder(t *testing.T, events []string) {
 	t.Helper()
-	want := []string{"GET:1", "POST", "GET:100", "DELETE:204", "DELETE:404"}
+	want := []string{"GET:source:100", "POST", "GET:read-back:100", "DELETE:204", "DELETE:404"}
 	if len(events) != len(want) {
 		t.Fatalf("faithful GitHub lifecycle events = %v, want %v", events, want)
 	}

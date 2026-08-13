@@ -517,6 +517,10 @@ SYNOPSIS
   pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
   pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json]
   pm etl status <run-id> [--json]
+  pm etl transport github-issue-label plan --connection <name> [--json]
+  pm etl transport github-issue-label preview <plan-id> [--json]
+  pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
+  pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
 DESCRIPTION
   ETL can directly check, catalog, and read enabled connectors by name. The
@@ -544,6 +548,27 @@ DESCRIPTION
   With --runtime, ETL also requires healthy PostgreSQL, DragonflyDB, and Temporal
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
+
+CLOSED GITHUB TRANSPORT
+  The github-issue-label transport is a fixed GitHub issue-to-label walking
+  slice. A saved connection owns the repository, source issue, target issue,
+  label, action, and credential configuration; the command accepts none of
+  those provider details directly.
+
+  Create a closed plan, preview it in human output to obtain an ephemeral
+  approval token, then pass that token only as one bounded stdin line to:
+
+    pm etl run --connection <name> --stream issues --batch-size 1 \
+      --approval-plan <plan-id> --approval-token-stdin --confirm destructive
+
+  The run keeps the source -> durable warehouse -> reopen -> typed GitHub
+  mutation -> independent read-back -> checkpoint order. Cleanup is a separate
+  typed remove-label plan, preview, and one-time approval. A declared GitHub
+  missing-label DELETE is a successful cleanup; replaying approval is refused.
+
+  Approval tokens are never accepted in argv, environment variables, files,
+  JSON output, or persisted project state. Run pm etl transport for the exact
+  closed lifecycle and its stdin-only token rule.
 
 DIRECT CONNECTOR COMMANDS
   check

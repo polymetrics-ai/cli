@@ -2,7 +2,7 @@
 phase: issue-4081-warehouse-mediated-transport-demo-r1
 plan: 01
 type: tdd
-status: ready_for_red
+status: green_pending_verify_review
 ---
 
 # #4081 — construct demonstrable warehouse-mediated Transport
@@ -25,8 +25,9 @@ single-worker contract. Execute the lifecycle inline and record it here:
    → `CONTEXT.md` and `DISCUSSION-LOG.md`.
 2. `scripts/gsd prompt plan-phase issue-4081-warehouse-mediated-transport-demo-r1 --tdd --skip-research --auto`
    → this plan, `TDD-LEDGER.md`, `VERIFICATION.md`, and `CHECKPOINT-PLAN.md`.
-3. With the required base guard recorded below, run `execute-phase`, record RED,
-   GREEN, and REFACTOR commits in `EXECUTION.md`, then run `verify-work` and
+3. With the required base guard recorded below, execute RED → GREEN → refactor
+   inline, recording each committed checkpoint and exact commands in
+   `TDD-LEDGER.md` and `VERIFICATION.md`, then run `verify-work` and
    `code-review`. Use gap planning only for an observed verification gap.
 4. Run the child `no-mistakes axi run` only after the implementation commit;
    do not use `--yes`, do not hand-edit during an active run, and stop at five
@@ -50,6 +51,56 @@ identity instead: all four Transport blobs (`types.go`, `orchestrator.go`,
 counterparts, and the #4077 phase evidence is present in the combined tree.
 The final child branch was created directly from that just-fetched combined head.
 No test or production file precedes this planning checkpoint.
+
+## Frozen smallest design
+
+This is deliberately one closed GitHub `issues` page → GitHub label action
+walking slice. It does not create a reusable connector-to-connector framework
+or declare support for another provider family.
+
+1. `synctransport.WarehouseStage` changes from a source-record handoff to
+   `Stage(context.Context, WarehouseStageRequest) (WarehouseReceipt, error)`
+   plus `Reopen(context.Context, WarehouseReceipt) (WarehouseWorkset, error)`.
+   `WarehouseReceipt` carries only `ID`, `Owner`, `Generation`,
+   `ManifestSHA256`, `ContentSHA256`, and bounded counts. It never carries
+   records or tombstones. `WarehouseWorkset` is reconstructed only by
+   `Reopen`, includes the receipt it came from, and is cloned again before the
+   destination sees it.
+2. The concrete app stage is connection-owned: `WarehouseStageRequest` carries
+   the opaque connection ID and generation, never a caller file path. It writes
+   one run-generated JSONL WAL under the existing owner-scoped location,
+   materializes one DuckDB-written Parquet table, atomically writes a manifest,
+   fsyncs the file/directory chain, and only then returns the receipt. `Reopen`
+   rereads the owner record and manifest and compares owner, generation,
+   manifest hash, WAL/Parquet content hash, and bounded count before reading the
+   Parquet artifact.
+3. The one composition root, `newGitHubWarehouseMediatedTransport`, is called
+   by `App.Open`. It installs a non-nil app stage, a read-only accepted-evidence
+   verifier, and exactly two declarative GitHub registrations:
+   `github_issues_source` and `github_issue_label_destination`. The GitHub
+   definition declares only `issues`/`full_append` for this slice. The verifier
+   accepts the two fixed evidence references from a compiled allow-list; neither
+   descriptor nor executor can self-certify.
+4. The source uses the existing declarative GitHub engine `Read` against one
+   declared bounded `issues` page. It emits only the configured singleton issue
+   into the workset and the reopened singleton is rechecked against that source
+   predicate before the destination can apply. The destination consumes only
+   reopened records. It derives one configured, separate target issue and label
+   through the existing typed
+   `add_issue_labels` plan → preview → approval → execute path; it independently
+   reads back the target with the same declared GitHub reader before returning
+   a durable receipt. `remove_issue_label` uses the same typed path as its
+   inverse and is invoked by the demo cleanup.
+5. `DestinationExecutor.ApplyDestination` returns a typed durable receipt and
+   `ReadBackDestination` verifies it. The orchestrator performs
+   `Stage → Reopen → ApplyDestination → ReadBackDestination → checkpoint CAS`.
+   A destination/read-back error produces no CAS. A CAS error leaves the same
+   receipt and workset artifact intact for deterministic replay.
+
+The test-only faithful GitHub server is the local proof authority. A real
+provider is attempted only after the local proof is green and the normal
+encrypted GitHub App credential boundary resolves without inspection; otherwise
+the harness emits the fixed safe-blocker code before provider I/O.
 
 ## TDD execution slices
 
@@ -102,11 +153,13 @@ No test or production file precedes this planning checkpoint.
 
 ### 4. Exact-binary demo and refactor
 
-- Add one bounded manual harness that builds a fresh `pm`, records tested commit,
-  SHA-256 and byte size, starts a faithful GitHub test server, initializes an
-  isolated project, and drives one read → stage → discard → reopen → typed
-  destination mutation → independent read-back → receipt/CAS → typed inverse
-  → repeat cleanup → zero-residue path.
+- Add one bounded faithful-server integration test that builds a fresh `pm`,
+  records tested commit, SHA-256 and byte size, starts a faithful GitHub test
+  server, initializes an isolated project, and drives the accepted closed
+  plan/preview/stdin-approved `pm etl run` carrier through one read → stage →
+  discard → reopen → typed destination mutation → independent read-back →
+  receipt/CAS → separately planned typed inverse → repeat cleanup → zero-residue
+  path.
 - Emit only sanitized machine-readable facts: binary digest/size, owner/workset
   and Parquet identities/hashes/counts, receipt sequencing, checkpoint outcome,
   and cleanup/read-back result. Do not serialize credential values or raw
@@ -120,12 +173,29 @@ No test or production file precedes this planning checkpoint.
 
 ## CLI help/manual/website parity
 
-The baseline plan uses an internal, manually invocable exact-binary harness and
-does not alter a user-facing PM command. This is intentionally **not applicable**
-unless the resumed base requires a `pm` command/flag to launch the demo. If it
-does, the same slice must add `pm help <topic>`, bare namespace, `--help`,
-`--json`, `docs/cli/**`, website documentation, generated help/manual, and
-associated tests before it can be green.
+The accepted carrier is a visible, closed command family rather than the
+rejected one-shot demo command:
+
+```text
+pm etl transport github-issue-label plan --connection <name> [--json]
+pm etl transport github-issue-label preview <plan-id> [--json]
+pm etl run --connection <name> --stream issues --batch-size 1 \
+  --approval-plan <plan-id> --approval-token-stdin --confirm destructive [--json]
+pm etl transport github-issue-label cleanup plan --connection <name> \
+  --forward-plan <forward-plan-id> [--json]
+pm etl transport github-issue-label cleanup run <plan-id> --connection <name> \
+  --approval-token-stdin --confirm destructive [--json]
+```
+
+Only the connection/App owns repository, base URL, source issue, target issue,
+label, action, record, and credential configuration. The raw one-time token is
+accepted only as one bounded stdin line, never through argv, environment, token
+files, JSON, persisted state, runtime records, logs, or error text. The
+transport namespace and its leaf/cleanup namespace render contextual help before
+`App.Open`; ordinary `pm etl run` rejects non-empty approval material unless the
+resolved persisted route is exactly this closed transport. Runtime help,
+`docs/cli/etl.md`, website ETL/CLI reference pages, JSON/manual goldens, and
+focused parser tests are mandatory Green evidence.
 
 ## Required skills
 
@@ -140,12 +210,16 @@ associated tests before it can be green.
 
 ```text
 go test -timeout 20m ./internal/synctransport
-go test -timeout 20m ./internal/app -run '<#4081 transport constructor and demo selectors>'
-go test -timeout 20m ./internal/warehouse -run '<stage/reopen durability selectors>'
-go test -race -timeout 20m ./internal/synctransport ./internal/app
-go vet ./...
-go build -o <isolated-path>/pm ./cmd/pm
-<isolated-path>/pm <bounded-demo-argv> --json
+go test -timeout 20m ./internal/app
+go test -race -timeout 20m -run '^TestGitHubIssueLabel' ./internal/app
+go test -timeout 20m -run '^TestGithubPullRequestsETLSupportsAllSyncModes$' ./internal/app
+go test -timeout 20m ./internal/connectors/engine
+go test -timeout 20m ./internal/connectors/commandrunner
+go test -timeout 20m ./internal/cli
+go test -timeout 20m -run '^TestPMBinaryExecutesGitHubWarehouseTransportLifecycle$' ./internal/cli
+go vet ./internal/app ./internal/cli ./internal/synctransport ./internal/connectors/engine ./internal/connectors/commandrunner
+go run ./cmd/connectorgen validate internal/connectors/defs/github
+go run ./cmd/connectorgen surface-sync --check
 scripts/verify-gsd-workflow origin/docs/4015-connector-release-certification
 make tidy-check
 make lint
