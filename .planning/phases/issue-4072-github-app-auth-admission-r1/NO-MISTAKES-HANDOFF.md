@@ -7,6 +7,7 @@
 - Recovered base: `da8a8ff07aaf00e5c7965cd4d1d3c7252017d785`
 - Production GREEN: `3f83bf3afc6efa0ebc323e385e4345f588a41db1`
 - Focused verification checkpoint: `72c573bca90f3803ccfe09e914a6bb411c903430`
+- Generated-only acceptance checkpoint: `f52745f269fdf642a3315646b5c5ee798e959135`
 - Fresh child correction budget: **1/5**; correction 1 is the resolved
   configured-linter RED. The inherited generated-only capability-matrix
   synchronization does not consume correction 2/5.
@@ -30,7 +31,9 @@ Do not start the command below until all are freshly true:
 2. The #4072 worktree is clean and contains both preserved commits above.
 3. `no-mistakes axi` / `no-mistakes axi status` show no #4072 run to recover
    or reattach and no structured custody action that changes the branch.
-4. Broad local acceptance recorded by `GAP-PLAN.md` is green.
+4. Broad local acceptance recorded by `GAP-PLAN.md` is green (including the
+   canonical certification-matrix GREEN and released bounded matrix at
+   `f52745f…`).
 
 If a run returns a gate, drive only that fresh #4072 run. Never send a command
 to the parked #3754 run `01KZPZ3VJS7NQJDBNDJVREVPCM`; never edit around an

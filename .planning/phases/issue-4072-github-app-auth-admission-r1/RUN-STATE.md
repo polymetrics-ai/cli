@@ -27,8 +27,8 @@ no-mistakes correction run started
 | execute GREEN | complete | focused secret-blind transport/coordinator matrix passes; GREEN commit `3f83bf3af` |
 | verify-work | complete (inline automatic fallback) | `UAT.md`, bounded functional/race/vet evidence |
 | code-review | complete (inline manual deep review) | `REVIEW.md` |
-| gap plan / generated artifact synchronization | GREEN, acceptance pending (inline manual fallback) | inherited `certification-matrix --check` RED at clean `31be96f…`; canonical generator/check produced only six source-location updates and preserved semantics |
-| no-mistakes | prepared, held | `NO-MISTAKES-HANDOFF.md`; wait for #3856 heavy validation release |
+| gap plan / generated artifact synchronization | complete (inline manual fallback) | canonical generator/check produced only six source-location updates, preserved semantics, and all released bounded local acceptance gates pass at `f52745f…` |
+| no-mistakes | ready, not started | `NO-MISTAKES-HANDOFF.md`; safe local-only vector has no `--yes` and must be driven synchronously |
 
 ## Manual GSD Fallback
 
@@ -41,8 +41,8 @@ plan, TDD ledger, verification, UAT, summary, and review artifacts.
 ## Guardrails
 
 - Do not use the preserved exhausted no-mistakes run or alter its worktree.
-- Run only the reconciliation report's bounded broad local acceptance matrix;
-  do not run no-mistakes while #3856 is in heavy validation.
+- The reconciliation report's bounded local acceptance matrix is complete;
+  run only the fresh #4072 no-mistakes vector, never the parked #3754 run.
 - Do not push, create a PR, merge, or CI-drive until the exact #3754 parent
   publication decision is authoritative.
 - Do not select a parent PR route; record `needs-decision` at delivery only if
@@ -56,7 +56,8 @@ plan, TDD ledger, verification, UAT, summary, and review artifacts.
 - `GOMAXPROCS=2 go test -p 1 ./internal/connectors/engine ./internal/connectors/hooks/github -run '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)' -count=1` — pass.
 - `GOMAXPROCS=2 go test -p 1 -race ./internal/connectors/engine ./internal/connectors/hooks/github -run '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)' -count=1` — pass.
 - `go vet ./internal/connectors/engine ./internal/connectors/hooks/github` — pass.
-- No no-mistakes run, broad suite, race sweep, push, PR, CI, or merge was started.
+- The later released bounded race and local acceptance matrix is recorded
+  below; no no-mistakes run, push, PR, CI, or merge has started.
 
 ## Resumed Intake Provenance
 
@@ -92,3 +93,12 @@ generator then passes its `--check` at the child worktree and produces matrix
 SHA-256 `e63b906cb640b8fb4fc8fd46c1076b77b7dbced7889919d60527f9b4335d520a`.
 The six-line `discovery_source` update does not alter the stripped semantic
 SHA-256 `bc5d14758c26755d83a9dc4dcbb715da31d95f67de38e352bc652b752c0819bc`.
+
+## Released local acceptance
+
+At `f52745f…`, formatting/diff checks, the 20× GitHub App auth selector,
+serial four-package functional test, three-pass focused race test, scoped vet,
+`internal/cli`, real-binary build/smoke, and every report-defined individual
+repository gate passed. The fresh ledger remains **1/5**. The next state is
+only the local no-mistakes vector; no parent ref, PR, external CI, UDS child,
+parked #3754 run, provider call, or merge has been touched.

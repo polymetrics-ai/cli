@@ -178,7 +178,7 @@ head.
 
 ## Verification order
 
-Run no-mistakes, any push, draft PR, CI, or review-service action only after a
-later live release verifies that #3856 is no longer in its heavy validation
-stage and the exact #3754 parent publication decision has been resolved. Those
-conditions are intentionally not inferred from this local plan.
+The later owner release authorizes the fresh #4072 local-only no-mistakes run
+after this complete matrix, without `--yes`. Any push, draft PR, CI, or
+review-service action still requires a fresh exact #3754 parent-route check;
+that topology is not inferred from local success.

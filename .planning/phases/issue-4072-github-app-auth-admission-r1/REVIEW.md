@@ -2,7 +2,7 @@
 status: clean
 phase: "issue-4072-github-app-auth-admission-r1"
 depth: deep
-files_reviewed: 5
+files_reviewed: 6
 findings:
   critical: 0
   warning: 0
@@ -11,6 +11,7 @@ findings:
 reviewer: inline_manual
 base: da8a8ff07aaf00e5c7965cd4d1d3c7252017d785
 green_head: 3f83bf3afc6efa0ebc323e385e4345f588a41db1
+reviewed_head: f52745f269fdf642a3315646b5c5ee798e959135
 ---
 
 # Deep code review — Issue #4072
@@ -57,3 +58,19 @@ go vet ./internal/connectors/engine ./internal/connectors/hooks/github
 All listed commands passed on 2026-08-12. Full repository validation and the
 delivery/review service routes remain intentionally deferred to the shared
 #4071 validation gate.
+
+## Generated-artifact review addendum — 2026-08-13
+
+The requested inline deep review was rerun with the existing five Go files
+plus `internal/connectors/certifications/capability-matrix.json`. No Go source
+or generator file changed after clean `31be96f…`; the post-`31be…` production
+diff contains only the matrix and phase evidence. The matrix diff has exactly
+six additions and six deletions, each an incremented `discovery_source` line
+number. Canonical regeneration/check and the stripped semantic SHA-256
+comparison prove that no capability/category/operation/executor/baseline data
+changed. There is no credential, auth, transport, policy, concurrency, or
+security finding in this generated-only closure.
+
+**Result:** 0 critical, 0 warning, 0 info. The original auth-admission deep
+review remains applicable; the current bounded functional/race/vet/local-gate
+matrix is green. Automated review remains a post-draft-PR exact-head gate.

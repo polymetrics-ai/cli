@@ -2,7 +2,7 @@
 phase: "issue-4072-github-app-auth-admission-r1"
 status: passed
 mode: inline_manual_auto
-verified_at: 2026-08-12
+verified_at: 2026-08-13
 ---
 
 # Verify-work evidence — Issue #4072
@@ -33,3 +33,15 @@ go vet ./internal/connectors/engine ./internal/connectors/hooks/github
 All commands passed. They use local fakes only; no GitHub credentials or
 provider mutations were used. Repository-wide validation and delivery actions
 remain deferred to Firstmate's shared #4071 gate.
+
+## Resumed automatic local UAT — 2026-08-13
+
+The generated-only closure and report-defined local acceptance completed at
+`f52745f269fdf642a3315646b5c5ee798e959135`. The generator check is green;
+the exact six `discovery_source` updates leave the stripped semantic matrix
+hash unchanged. The 20× auth selector, four-package functional matrix,
+three-pass race selector, scoped vet, CLI package, real-binary smoke, and all
+released individual repository gates are green. This adds no human-judgment
+criterion: the observable auth truths above remain fully covered by local,
+secret-blind fakes. No credentialed or provider UAT is applicable to proving a
+pre-send refusal.

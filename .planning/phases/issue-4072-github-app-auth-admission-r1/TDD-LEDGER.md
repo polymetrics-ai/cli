@@ -152,7 +152,46 @@ configured-linter failure; no no-mistakes correction run has started)
   `bba4dea056e18ecc1231fe68cea8321dfc8a53d2b6ce58ac32ca02fa816a7bbf` at
   recovered base, #4072, and #4034 precedent `be561871e6bb7d1a5b54d7687743ef8396a2cafe`.
 
-## Deferred Validation Gate
+## FULL LOCAL ACCEPTANCE — GENERATED GREEN CHECKPOINT `f52745f26`
 
-No broad suite, race-heavy sweep, no-mistakes, push, PR creation, CI, or merge
-is authorized until Firstmate releases the shared #4071 validation lane.
+All commands below passed on 2026-08-13 at generated-only checkpoint
+`f52745f269fdf642a3315646b5c5ee798e959135` before the final evidence-only
+handoff record:
+
+- `test -z "$(gofmt -l ...five changed Go files...)"` and
+  `git diff --check da8a8ff...HEAD` — pass.
+- `go test -count=20 -timeout 20m ./internal/connectors/hooks/github -run
+  '^TestGitHubAppAuthRateAdmission|^TestAuthenticatorGithubAppRefusesWithoutDeclaredRoute$'`
+  — pass in 11.237s.
+- `GOMAXPROCS=2 go test -p 1 -count=1 -timeout 20m
+  ./internal/coordination ./internal/connectors/connsdk
+  ./internal/connectors/engine ./internal/connectors/hooks/github` — pass.
+- `GOMAXPROCS=2 go test -p 1 -race -count=3 -timeout 20m
+  ./internal/connectors/engine ./internal/connectors/hooks/github -run
+  '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)'`
+  — pass (engine 6.287s, GitHub hooks 18.337s).
+- `go vet ./internal/coordination ./internal/connectors/connsdk
+  ./internal/connectors/engine ./internal/connectors/hooks/github` — pass;
+  `go test -count=1 -timeout 20m ./internal/cli` — pass in 159.934s.
+- `go build ./cmd/pm` — pass. The real binary is 148,131,618 bytes (141M),
+  SHA-256 `0329d354f13187317612ff4d6ee162288723ec0838bd4ebd7c042632b2be7db2`.
+  `./pm help connectors`, bare `./pm connectors`, and
+  `./pm connectors inspect github --json` all pass using embedded/local
+  metadata only.
+- Individual repository gates pass: `make tidy-check`, `make lint` (0 issues),
+  `make docs-check`, `make smoke-no-build`, `make agent-contract-check`,
+  `make connectorgen-validate`, `make connectorgen-surface-sync`,
+  `make github-parity-artifacts-check`, `make connectorgen-certification-matrix`,
+  `make connector-runtime-preflight`, `make connector-canon-check`,
+  `make connector-boundary`, and `make release-workflow-check`.
+- `scripts/verify-gsd-workflow da8a8ff07aaf00e5c7965cd4d1d3c7252017d785`
+  — pass. No `go test ./...`, `make verify`, provider call, real credential,
+  parked #3754 operation, push, PR, or merge was used.
+
+## Delivery Gate
+
+The released bounded local/race/generator/build matrix is complete. The next
+authorized validation action is the exact #4072 local-only no-mistakes vector
+from `NO-MISTAKES-HANDOFF.md`, without `--yes`. Push, draft PR, CI, or any
+parent-ref action remain separately blocked until the fresh parent-route gate
+is proven; the parked #3754 run remains out of bounds.

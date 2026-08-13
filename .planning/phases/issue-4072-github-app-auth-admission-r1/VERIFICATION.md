@@ -1,7 +1,7 @@
 ---
 phase: issue-4072-github-app-auth-admission-r1
 verified: 2026-08-12T00:00:00Z
-status: generated_artifact_green_pending_acceptance
+status: local_acceptance_green_pending_no_mistakes
 score: 5/5 must-haves verified
 ---
 
@@ -50,14 +50,14 @@ vector. The historical phase snapshot remains
 current canonical plan file observed at resumed intake hashes
 `5c7aeeacdb5792ad259abb709f3d732f183f5d19b03db4c9863b3ef566044e06`.
 
-## Deferred by Firstmate Shared Validation Gate
+## Delivery boundary
 
-The report-defined local lint, generator/docs, CLI, build, and workflow checks
-are now rerunning after correction 1/5. The causal `make lint` RED found two
-unused private forwarding wrappers in `internal/connectors/engine/auth.go`;
-their minimal deletion passed both the focused auth matrix and `make lint`.
-No-mistakes, push, PR, CI, parent-route decision, merge, and the UDS child
-remain deferred. This is not a substitute for those release gates.
+The report-defined local lint, generator/docs, CLI, build, workflow, and
+bounded race checks are green after correction 1/5. The causal `make lint` RED
+removed only two unused private forwarding wrappers. The next validation gate
+is the fresh #4072 no-mistakes run without `--yes`; push, PR, exact-head CI,
+parent-route decision, merge, and the UDS child remain separately constrained
+by the stacked delivery contract.
 
 ## Generated capability-matrix closure
 
@@ -89,3 +89,25 @@ The #4026/#4034 generator refresh is traceability only. Its PostgreSQL
 ancestry is not imported; the #4072 generator source remains byte-identical
 to the compared precedent. This is an inherited generated-check closure, not
 a new behavior correction: the fresh child ledger stays at 1/5.
+
+## Full bounded local acceptance — 2026-08-13
+
+The complete report-defined local matrix passed at generated-only checkpoint
+`f52745f269fdf642a3315646b5c5ee798e959135`:
+
+| Gate | Result |
+|---|---|
+| format/base diff | Five Go files already gofmt-clean; `git diff --check da8a8ff...HEAD` pass |
+| 20× auth selector | `TestGitHubAppAuthRateAdmission` plus direct-auth refusal pass in 11.237s |
+| bounded functional packages | coordination, connsdk, engine, and GitHub hooks pass serially with `GOMAXPROCS=2 -p 1` |
+| focused race | engine and GitHub hook selector passes three times under `-race` |
+| static/CLI/build | four-package vet, `internal/cli` (159.934s), and `go build ./cmd/pm` pass |
+| real-binary smoke | 148,131,618 byte / 141M binary, SHA-256 `0329d354f13187317612ff4d6ee162288723ec0838bd4ebd7c042632b2be7db2`; help, bare `connectors`, and static GitHub inspection pass |
+| repository gates | tidy, lint (0 issues), docs, local smoke, agent contract, all named generator/parity/preflight/canon/boundary/release checks pass |
+| GSD workflow guard | `scripts/verify-gsd-workflow da8a8ff...` pass |
+
+The `smoke-no-build` test used its local sample fixture and temporary local
+warehouse/outbox only. It did not use a provider credential or send a GitHub
+request. CLI help/manual/website content is unchanged by this child; the
+runtime help/bare namespace/static inspection and docs/generator checks are
+the applicable parity evidence.

@@ -40,9 +40,11 @@ surface changes, generic transport changes, parent completion, and merge.
 ## Testing
 
 Focused local tests, bounded race coverage, and scoped vet are recorded as
-passing in the phase. The report-defined broad local matrix and fresh
-no-mistakes delivery record are intentionally **pending** until the prepared
-handoff is released; do not publish this body before those fields are updated.
+passing in the phase. The report-defined broad local matrix is now green at
+`f52745f…`: 20× auth selector, four-package functional matrix, three-pass
+focused race, vet, `internal/cli`, real-binary build/smoke, and every required
+individual repository gate. The fresh no-mistakes delivery record remains
+**pending**; do not publish this body before it is filled in.
 
 No credentials were inspected and no provider call or mutation was made.
 

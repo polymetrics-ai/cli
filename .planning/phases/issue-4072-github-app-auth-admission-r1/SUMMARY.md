@@ -45,12 +45,13 @@ time: the focused engine/GitHub behavior matrix, the same matrix under
 Inline automatic verify-work and inline deep code-review evidence are recorded
 in `UAT.md` and `REVIEW.md`.
 
-## Deferred Gate
+## Delivery Gate
 
-This focused checkpoint deliberately stops before repository-wide lint,
-generators, docs/help/website parity, issue guard, no-mistakes, push, PR
-creation, CI, or merge. Firstmate owns the shared #4071 validation-gate release
-and the eventual parent PR route.
+The released bounded local checks—lint, generators, docs/help parity evidence,
+issue guard, build, smoke, and focused race coverage—are complete. The fresh
+#4072 no-mistakes run is next; push, PR creation, CI, and parent publication
+still require their own stacked-route checks. No parent branch or parked run
+has been changed.
 
 ## Generated capability-matrix synchronization
 
@@ -72,3 +73,17 @@ base/generated semantic SHA-256
 #4026/#4034 is cited only as the established generator precedent. Its
 PostgreSQL ancestry is not imported; the generator source hash is unchanged
 at `bba4dea056e18ecc1231fe68cea8321dfc8a53d2b6ce58ac32ca02fa816a7bbf`.
+
+## Released local acceptance
+
+At `f52745f…`, the full report-defined bounded matrix passed: format/diff,
+20× GitHub App admission selector, four-package functional test, focused
+three-pass race test, scoped vet, `internal/cli`, real `pm` build, credential-
+safe help/bare-namespace/static-manifest smoke, and each individual local
+repository gate. The built binary is 148,131,618 bytes (141M), SHA-256
+`0329d354f13187317612ff4d6ee162288723ec0838bd4ebd7c042632b2be7db2`.
+
+GSD verify-work and code-review were resolved again inline under the
+single-worker fallback. Both are green with zero new findings. The next
+authorized action is the prepared local no-mistakes run without `--yes`; no
+push, draft PR, CI, or #3754 parent action has occurred.
