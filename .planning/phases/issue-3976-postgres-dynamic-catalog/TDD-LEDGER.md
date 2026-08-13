@@ -46,5 +46,8 @@ GREEN proof so far:
   `POLYMETRICS_PODMAN_ENDPOINT`. No live result is claimed until that direct
   local target is provided. Its exact post-implementation output is retained in
   `traces/dynamic-catalog-green.txt`.
+- Final green gates: focused PostgreSQL/database/engine packages, the
+  PostgreSQL race suite, `internal/cli`, `go vet ./...`, `go build ./cmd/pm`,
+  and every individually invoked repository gate in `VERIFICATION.md` passed.
 
 Broader checks and their outcomes belong in `VERIFICATION.md`.

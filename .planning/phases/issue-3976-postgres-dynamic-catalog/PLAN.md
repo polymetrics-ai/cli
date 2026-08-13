@@ -22,6 +22,17 @@ foundation rather than leave a disconnected descriptor model.
   roadmap phase and the canonical contract permits exactly one worker; it does
   not weaken the TDD, verification, review, or no-mistakes gates.
 
+## Required skills used
+
+- `golang-how-to`, `golang-database`, `golang-testing`, `golang-error-handling`,
+  `golang-security`, `golang-safety`, `golang-design-patterns`,
+  `golang-structs-interfaces`, `golang-context`, and `golang-lint` for the
+  native Go database boundary and its test/review gates.
+- `github-issue-first-delivery` for the stacked issue/PR contract and
+  `no-mistakes` for the post-commit delivery pipeline.
+- `gsd-verify-work` and `gsd-code-review` for the generated-command manual
+  fallbacks recorded in this phase directory.
+
 ## Allowed paths
 
 - `internal/connectors/native/postgres/**` for source configuration,
