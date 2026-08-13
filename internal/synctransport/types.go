@@ -53,6 +53,7 @@ type DestinationExecutor interface {
 	TransportExecutorReference() connectors.TransportExecutorReference
 	PlanDestination(context.Context, DestinationPlanRequest) (DestinationPlan, error)
 	ApplyDestination(context.Context, DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error)
+	ReadBackDestination(context.Context, DestinationReadBackRequest) error
 }
 
 // SourceRequest is the fixed source invocation context. It has no generic
@@ -82,15 +83,56 @@ type SourcePage struct {
 // A real durable implementation belongs to the corresponding warehouse/apply
 // foundation; #3864 exercises this seam only with fakes.
 type WarehouseStage interface {
-	Stage(context.Context, WarehouseStageRequest) (WarehouseWorkset, error)
+	Stage(context.Context, WarehouseStageRequest) (WarehouseReceipt, error)
+	Reopen(context.Context, WarehouseReceipt) (WarehouseWorkset, error)
 }
 
 type WarehouseStageRequest struct {
+	// ConnectionID is the opaque project-owned identity of the connection that
+	// owns the staged artifact. It is not a display name or credential value.
+	ConnectionID string
+	// Generation binds a receipt to the source generation that produced it.
+	Generation      int64
 	SourceName      string
 	DestinationName string
 	Stream          string
 	Mode            synccontract.Mode
 	Page            SourcePage
+}
+
+// WarehouseReceipt is the immutable, record-free identity of a durable staged
+// page. A destination must reopen it through the stage; it must never receive
+// the source-owned page directly.
+type WarehouseReceipt struct {
+	ID             string
+	Owner          string
+	Generation     int64
+	ManifestSHA256 string
+	ContentSHA256  string
+	Records        int
+	Tombstones     int
+}
+
+func (r WarehouseReceipt) Validate() error {
+	if strings.TrimSpace(r.ID) == "" {
+		return fmt.Errorf("warehouse stage returned an empty receipt ID")
+	}
+	if strings.TrimSpace(r.Owner) == "" {
+		return fmt.Errorf("warehouse stage receipt %q has no owner", r.ID)
+	}
+	if r.Generation <= 0 {
+		return fmt.Errorf("warehouse stage receipt %q has invalid generation", r.ID)
+	}
+	if strings.TrimSpace(r.ManifestSHA256) == "" {
+		return fmt.Errorf("warehouse stage receipt %q has no manifest identity", r.ID)
+	}
+	if strings.TrimSpace(r.ContentSHA256) == "" {
+		return fmt.Errorf("warehouse stage receipt %q has no content identity", r.ID)
+	}
+	if r.Records < 0 || r.Tombstones < 0 {
+		return fmt.Errorf("warehouse stage receipt %q has negative bounded counts", r.ID)
+	}
+	return nil
 }
 
 // WarehouseWorkset is stage-owned output. CandidateCheckpoint is included for
@@ -120,6 +162,15 @@ type DestinationApplyRequest struct {
 	Workset WarehouseWorkset
 }
 
+// DestinationReadBackRequest carries the exact durable acknowledgement and
+// reopened workset that the destination must independently verify before the
+// checkpoint CAS is allowed to advance.
+type DestinationReadBackRequest struct {
+	Plan            DestinationPlan
+	Workset         WarehouseWorkset
+	Acknowledgement synccontract.DownstreamAcknowledgement
+}
+
 // PreflightRequest contains only identities and closed declarations needed to
 // prove dispatch. It has no source payload and performs no provider I/O.
 type PreflightRequest struct {
@@ -131,6 +182,8 @@ type PreflightRequest struct {
 
 // RunRequest wires a resolved connection into one shared orchestrator.
 type RunRequest struct {
+	ConnectionID       string
+	Generation         int64
 	Source             connectors.Connector
 	SourceRuntime      connectors.RuntimeConfig
 	Destination        connectors.Connector
@@ -191,6 +244,16 @@ func cloneDestinationPlanRequest(request DestinationPlanRequest) DestinationPlan
 	clone := request
 	clone.Runtime = cloneRuntimeConfig(request.Runtime)
 	return clone
+}
+
+func cloneDestinationReadBackRequest(request DestinationReadBackRequest) (DestinationReadBackRequest, error) {
+	clone := request
+	workset, err := cloneWarehouseWorkset(request.Workset)
+	if err != nil {
+		return DestinationReadBackRequest{}, err
+	}
+	clone.Workset = workset
+	return clone, nil
 }
 
 func cloneSourcePage(page SourcePage) (SourcePage, error) {

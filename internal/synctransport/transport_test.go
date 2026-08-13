@@ -623,10 +623,14 @@ type testDestinationExecutor struct {
 	acknowledgement    synccontract.DownstreamAcknowledgement
 	acknowledgementSet bool
 	afterApply         func()
+	afterReadBack      func()
+	readBackErr        error
 	mutateStringMap    bool
 	planCalls          int
 	applyCalls         int
+	readBackCalls      int
 	lastPlan           DestinationPlanRequest
+	lastReadBack       DestinationReadBackRequest
 }
 
 func (e *testDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -662,6 +666,15 @@ func (e *testDestinationExecutor) ApplyDestination(_ context.Context, request De
 	return acknowledgement, nil
 }
 
+func (e *testDestinationExecutor) ReadBackDestination(_ context.Context, request DestinationReadBackRequest) error {
+	e.readBackCalls++
+	e.lastReadBack = request
+	if e.afterReadBack != nil {
+		e.afterReadBack()
+	}
+	return e.readBackErr
+}
+
 type testWarehouseStage struct {
 	calls                   int
 	lastPage                SourcePage
@@ -669,22 +682,23 @@ type testWarehouseStage struct {
 	mutateNestedPayload     bool
 	mutateRawMessage        bool
 	injectUnsupportedRecord bool
+	worksets                map[string]WarehouseWorkset
 }
 
-func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequest) (WarehouseWorkset, error) {
+func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequest) (WarehouseReceipt, error) {
 	s.calls++
 	s.lastPage = request.Page
 	if s.mutateNestedPayload {
 		nested, ok := request.Page.Records[0]["nested"].(map[string]any)
 		if !ok {
-			return WarehouseWorkset{}, fmt.Errorf("test stage expected nested provider map")
+			return WarehouseReceipt{}, fmt.Errorf("test stage expected nested provider map")
 		}
 		nested["staged"] = true
 	}
 	if s.mutateRawMessage {
 		raw, ok := request.Page.Records[0]["raw"].(json.RawMessage)
 		if !ok {
-			return WarehouseWorkset{}, fmt.Errorf("test stage expected raw message")
+			return WarehouseReceipt{}, fmt.Errorf("test stage expected raw message")
 		}
 		raw[0] = '['
 	}
@@ -694,6 +708,29 @@ func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequ
 	workset := WarehouseWorkset{ID: fmt.Sprintf("stage-%d", s.calls), Records: request.Page.Records, Tombstones: request.Page.Tombstones, CandidateCheckpoint: request.Page.CandidateCheckpoint}
 	if s.injectUnsupportedRecord {
 		workset.Records = []connectors.Record{{"unsupported": map[string]int{"warehouse": 1}}}
+	}
+	if s.worksets == nil {
+		s.worksets = make(map[string]WarehouseWorkset)
+	}
+	s.worksets[workset.ID] = workset
+	return WarehouseReceipt{
+		ID:             workset.ID,
+		Owner:          "test-connection-owner",
+		Generation:     1,
+		ManifestSHA256: "test-manifest",
+		ContentSHA256:  "test-content",
+		Records:        len(workset.Records),
+		Tombstones:     len(workset.Tombstones),
+	}, nil
+}
+
+func (s *testWarehouseStage) Reopen(_ context.Context, receipt WarehouseReceipt) (WarehouseWorkset, error) {
+	if err := receipt.Validate(); err != nil {
+		return WarehouseWorkset{}, err
+	}
+	workset, ok := s.worksets[receipt.ID]
+	if !ok {
+		return WarehouseWorkset{}, fmt.Errorf("test stage receipt %q is unavailable", receipt.ID)
 	}
 	return workset, nil
 }

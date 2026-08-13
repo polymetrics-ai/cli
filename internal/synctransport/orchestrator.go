@@ -85,7 +85,9 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		if err != nil {
 			return fmt.Errorf("clone source transport page: %w", err)
 		}
-		staged, err := request.Stage.Stage(ctx, WarehouseStageRequest{
+		receipt, err := request.Stage.Stage(ctx, WarehouseStageRequest{
+			ConnectionID:    request.ConnectionID,
+			Generation:      request.Generation,
 			SourceName:      request.Source.Name(),
 			DestinationName: request.Destination.Name(),
 			Stream:          request.Stream,
@@ -95,8 +97,18 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		if err != nil {
 			return fmt.Errorf("stage transport page: %w", err)
 		}
+		if err := receipt.Validate(); err != nil {
+			return err
+		}
+		staged, err := request.Stage.Reopen(ctx, receipt)
+		if err != nil {
+			return fmt.Errorf("reopen staged transport receipt: %w", err)
+		}
 		if staged.ID == "" {
-			return fmt.Errorf("warehouse stage returned an empty workset ID")
+			return fmt.Errorf("warehouse stage reopened an empty workset ID")
+		}
+		if staged.ID != receipt.ID {
+			return fmt.Errorf("warehouse stage reopened workset %q for receipt %q", staged.ID, receipt.ID)
 		}
 		if err := ctx.Err(); err != nil {
 			return err
@@ -112,6 +124,17 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		})
 		if err != nil {
 			return fmt.Errorf("apply destination transport: %w", err)
+		}
+		readBackRequest, err := cloneDestinationReadBackRequest(DestinationReadBackRequest{
+			Plan:            plan,
+			Workset:         destinationWorkset,
+			Acknowledgement: acknowledgement,
+		})
+		if err != nil {
+			return fmt.Errorf("clone destination read-back request: %w", err)
+		}
+		if err := resolved.Destination.ReadBackDestination(ctx, readBackRequest); err != nil {
+			return fmt.Errorf("read back destination transport receipt: %w", err)
 		}
 		if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
 			if acknowledgement.Sink != request.Destination.Name() {
