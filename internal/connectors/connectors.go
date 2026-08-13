@@ -279,6 +279,7 @@ type ReadRequest struct {
 	CursorState OpaqueCursorState
 	Query       map[string]string
 	Limit       int
+	MaxPages    int
 }
 
 type DirectReadRequest struct {

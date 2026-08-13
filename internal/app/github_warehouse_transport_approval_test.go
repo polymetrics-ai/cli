@@ -264,6 +264,47 @@ func TestIssueLabelTransportReadBackStopsAfterMatchedFullPage(t *testing.T) {
 	fixture.assertProviderReads(t, 1)
 }
 
+func TestIssueLabelTransportSourceDoesNotReadBeyondFirstPageWhenIssueMissing(t *testing.T) {
+	fixture := newIssueLabelTransportApprovalFixtureWithFirstPageMissingIssues(t)
+	resume := streamResumeExpectation(fixture.sourceConnector, fixture.sourceCredential, fixture.sourceRuntime, "issues")
+	emitted := false
+	err := fixture.sourceExecutor.ReadTransport(context.Background(), synctransport.SourceRequest{
+		Connector: fixture.sourceConnector,
+		Runtime:   fixture.sourceRuntime,
+		Stream:    "issues",
+		Mode:      synccontract.ModeFullAppend,
+		BatchSize: 1,
+		Resume:    resume,
+	}, func(synctransport.SourcePage) error {
+		emitted = true
+		return nil
+	})
+	if err == nil {
+		t.Error("ReadTransport() succeeded after the configured issue was absent from the first page")
+	}
+	if emitted {
+		t.Error("ReadTransport() emitted a source page after the configured issue was absent from the first page")
+	}
+	fixture.assertProviderReads(t, 1)
+}
+
+func TestIssueLabelTransportReadBackDoesNotReadBeyondFirstPageWhenIssueMissing(t *testing.T) {
+	fixture := newIssueLabelTransportApprovalFixtureWithFirstPageMissingIssues(t)
+	err := fixture.executor.ReadBackDestination(context.Background(), synctransport.DestinationReadBackRequest{
+		Plan: synctransport.DestinationPlan{ApplyStrategy: connectors.DestinationApplyStrategy{
+			Mode:     synccontract.ModeFullAppend,
+			Strategy: connectors.ApplyStrategyAppend,
+			Action:   fixture.applyAction,
+		}},
+		Workset: synctransport.WarehouseWorkset{ID: "reopened-workset"},
+		Runtime: fixture.runtime,
+	})
+	if err == nil {
+		t.Error("ReadBackDestination() succeeded after the configured issue was absent from the first page")
+	}
+	fixture.assertProviderReads(t, 1)
+}
+
 type issueLabelTransportApprovalFixture struct {
 	app              *App
 	connection       Connection
@@ -292,6 +333,24 @@ func newIssueLabelTransportApprovalFixtureWithMissingCleanupLabel(t *testing.T) 
 }
 
 func newIssueLabelTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanupStatus int) issueLabelTransportApprovalFixture {
+	return newIssueLabelTransportApprovalFixtureWithIssuePages(t, cleanupStatus, func(page string) []map[string]any {
+		if page != "" && page != "1" {
+			return []map[string]any{}
+		}
+		return issueLabelTransportFullPage(100, 200, "transport-demo")
+	})
+}
+
+func newIssueLabelTransportApprovalFixtureWithFirstPageMissingIssues(t *testing.T) issueLabelTransportApprovalFixture {
+	return newIssueLabelTransportApprovalFixtureWithIssuePages(t, http.StatusNoContent, func(page string) []map[string]any {
+		if page == "2" {
+			return issueLabelTransportFullPage(100, 200, "transport-demo")
+		}
+		return issueLabelTransportFullPage(101, 102, "")
+	})
+}
+
+func newIssueLabelTransportApprovalFixtureWithIssuePages(t *testing.T, cleanupStatus int, issuePage func(string) []map[string]any) issueLabelTransportApprovalFixture {
 	t.Helper()
 	ctx := context.Background()
 	reads := 0
@@ -305,11 +364,7 @@ func newIssueLabelTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanu
 				w.WriteHeader(http.StatusNotFound)
 				return
 			}
-			if page := request.URL.Query().Get("page"); page != "" && page != "1" {
-				_ = json.NewEncoder(w).Encode([]map[string]any{})
-				return
-			}
-			_ = json.NewEncoder(w).Encode(issueLabelTransportFullPage(100, 200, "transport-demo"))
+			writeIssueLabelTransportJSON(t, w, issuePage(request.URL.Query().Get("page")))
 		case http.MethodPost:
 			if request.URL.Path != "/repos/acme/widgets/issues/200/labels" {
 				w.WriteHeader(http.StatusNotFound)
@@ -321,7 +376,7 @@ func newIssueLabelTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanu
 				return
 			}
 			writes++
-			_ = json.NewEncoder(w).Encode([]map[string]any{{"name": "transport-demo"}})
+			writeIssueLabelTransportJSON(t, w, []map[string]any{{"name": "transport-demo"}})
 		case http.MethodDelete:
 			if request.URL.Path != "/repos/acme/widgets/issues/200/labels/transport-demo" {
 				w.WriteHeader(http.StatusNotFound)
@@ -416,6 +471,13 @@ func newIssueLabelTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanu
 		reads:            &reads,
 		writes:           &writes,
 		deletes:          &deletes,
+	}
+}
+
+func writeIssueLabelTransportJSON(t *testing.T, w http.ResponseWriter, value any) {
+	t.Helper()
+	if err := json.NewEncoder(w).Encode(value); err != nil {
+		t.Errorf("encode GitHub transport fixture response: %v", err)
 	}
 }
 

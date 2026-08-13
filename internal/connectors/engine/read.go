@@ -38,6 +38,9 @@ func ReadWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 	if err := ctx.Err(); err != nil {
 		return err
 	}
+	if req.MaxPages < 0 {
+		return fmt.Errorf("engine: max pages must not be negative")
+	}
 
 	stream, err := findStream(b, req.Stream)
 	if err != nil {
@@ -184,13 +187,14 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 		setter.setBaseOrigin(scheme, host)
 	}
 
+	maxPages := effectiveReadMaxPages(specForPaginator.MaxPages, req.MaxPages)
 	var ids []string
 	page := paginator.Start()
 	for pageNum := 0; page != nil; pageNum++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
-		if specForPaginator.MaxPages > 0 && pageNum >= specForPaginator.MaxPages {
+		if maxPages > 0 && pageNum >= maxPages {
 			break
 		}
 
@@ -292,7 +296,7 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		}
 	}
 
-	maxPages := specForPaginator.MaxPages
+	maxPages := effectiveReadMaxPages(specForPaginator.MaxPages, req.MaxPages)
 
 	pathVars := requestVars(req.Config, nil, "")
 	pathVars.FanoutID = fc.id
@@ -414,6 +418,13 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 
 	return nil
+}
+
+func effectiveReadMaxPages(declared, requested int) int {
+	if requested > 0 && (declared == 0 || requested < declared) {
+		return requested
+	}
+	return declared
 }
 
 func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, query map[string]string, page *connsdk.NextPage, pag PaginationSpec, formattedLowerBound string, fc fanoutContext) (any, error) {

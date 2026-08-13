@@ -23,6 +23,7 @@ const (
 	issueLabelTransportSourceIssueConfig = "transport_source_issue_number"
 	issueLabelTransportTargetIssueConfig = "transport_target_issue_number"
 	issueLabelTransportLabelConfig       = "transport_label"
+	issueLabelTransportMaxReadPages      = 1
 )
 
 var (
@@ -340,9 +341,10 @@ func (e *issueLabelSourceExecutor) ReadTransport(ctx context.Context, request sy
 
 	records := make([]connectors.Record, 0, 1)
 	err = e.connector.Read(ctx, connectors.ReadRequest{
-		Stream: "issues",
-		Config: request.Runtime,
-		Limit:  request.BatchSize,
+		Stream:   "issues",
+		Config:   request.Runtime,
+		Limit:    request.BatchSize,
+		MaxPages: issueLabelTransportMaxReadPages,
 	}, func(record connectors.Record) error {
 		number, err := issueNumberFromRecord(record)
 		if err != nil {
@@ -433,9 +435,10 @@ func (e *issueLabelDestinationExecutor) ReadBackDestination(ctx context.Context,
 	}
 	found := false
 	err = e.connector.Read(ctx, connectors.ReadRequest{
-		Stream: "issues",
-		Config: request.Runtime,
-		Limit:  100,
+		Stream:   "issues",
+		Config:   request.Runtime,
+		Limit:    100,
+		MaxPages: issueLabelTransportMaxReadPages,
 	}, func(record connectors.Record) error {
 		number, err := issueNumberFromRecord(record)
 		if err != nil {
