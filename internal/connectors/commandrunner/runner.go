@@ -15,6 +15,7 @@ import (
 	"unicode"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/failures"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -99,6 +100,10 @@ type BlockedCommandError struct {
 	Intent       string
 	Availability string
 	Reason       string
+	// Failure carries a typed, safe classification for a dispatch refusal when
+	// the dispatch layer can identify one. It is optional because many existing
+	// preflight refusals are not one of the closed #3991 dispatch terminals.
+	Failure *failures.Classification
 }
 
 type MinimumFlagError struct {
@@ -118,10 +123,23 @@ func (e *BlockedCommandError) Error() string {
 	if e.Availability != "" {
 		parts = append(parts, "availability="+e.Availability)
 	}
-	if e.Reason != "" {
-		parts = append(parts, e.Reason)
+	reason := e.Reason
+	if reason == "" && e.Failure != nil {
+		reason = e.Failure.Error()
+	}
+	if reason != "" {
+		parts = append(parts, reason)
 	}
 	return strings.Join(parts, ": ")
+}
+
+// Unwrap exposes an optional typed dispatch classification to callers without
+// requiring them to parse the blocked-command text.
+func (e *BlockedCommandError) Unwrap() error {
+	if e == nil || e.Failure == nil {
+		return nil
+	}
+	return e.Failure
 }
 
 func Preflight(connector connectors.Connector, path []string) error {

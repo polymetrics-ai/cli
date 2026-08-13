@@ -1,0 +1,69 @@
+{
+  "issue": 4001,
+  "phase": "shared-failure-classification-r1",
+  "gsd_mode": "manual-inline-fallback",
+  "status": "verified",
+  "skills": [
+    "golang-how-to",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing"
+  ],
+  "tdd": {
+    "red": "recorded",
+    "green": "passed"
+  },
+  "review": "manual-inline-replay-deep-clean",
+  "stacked_delivery": {
+    "date": "2026-08-11",
+    "parent_issue": 4015,
+    "parent_branch": "docs/4015-connector-release-certification",
+    "parent_base": "5996a8a2a5e99c8aa8eb5a8603ecb1f6bba21f12",
+    "parent_pr": 4016,
+    "source_branch": "fm/cli-cert-shared-foundations-r1",
+    "source_head": "d517756f0f9bc0cc41d90b4cf717325328352a3f",
+    "preserved_pr": 4013,
+    "child_branch": "feat/4001-stack-shared-certification-failures",
+    "replay_commits": [
+      "ce8d1334d8b449e2d58d4778a8e86dbc7f3bba6b",
+      "c7a8404356857b977dc6a9b2032ce4ca7ae8297c",
+      "b4270c92fbdb71bb76ff49ea9d7fc6c763179602",
+      "cb7e7f0f4100501d63a01707d698f5614f71de6e",
+      "58ce95b114520d4240b5061a0a8530b20197e241",
+      "28c1f952d6a8337ba5bf96fec1782cb836386e18",
+      "7ee2008271293b6da1827649e985212bc1825324"
+    ],
+    "conflicts": 0,
+    "manual_gsd_fallback": "Issue foundation is not a numbered roadmap phase and the canonical single-worker contract forbids role spawning; generated GSD prompts are executed inline.",
+    "verify_work": "manual-inline-current-base-clean",
+    "code_review": "manual-inline-deep-clean",
+    "correction_loops": 5,
+    "replay_correction_loops": 1,
+    "correction_loop_budget": 5,
+    "remaining_new_production_or_test_corrections": 0,
+    "correction_loop_accounting": "PR #4013's inherited fixes consume 4/5; the typed-nil cause correction adds the one permitted new production/test correction, consuming 5/5 with 0 remaining.",
+    "no_mistakes": {
+      "run": "01KZPSZDQ0VSQZ0Q8RV8K4MJ77",
+      "head": "e133822f9c1e510cbf40110781a93a8103c6cd48",
+      "scope": "workflow_recovery_only",
+      "outcome": "passed",
+      "completed_stages": [
+        "intent",
+        "rebase",
+        "review",
+        "test",
+        "document",
+        "lint"
+      ],
+      "deferred_to_follow_on_full_pipeline": [
+        "push",
+        "pr",
+        "ci"
+      ],
+      "findings": 0
+    }
+  }
+}
