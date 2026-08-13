@@ -1,0 +1,14 @@
+Command:
+
+    go test -count=1 ./cmd/connectorgen -run 'TestCertification(ShardsRoundTripGeneratedMatrices|ScopedGenerationLeavesOtherShardByteIdentical|SourceAnchorsUseSymbols)'
+
+Red result before the generator implementation:
+
+    cmd/connectorgen/certificationmatrix_test.go:452:17: undefined: buildCertificationShards
+    cmd/connectorgen/certificationmatrix_test.go:452:48: undefined: certificationConnectorAllowlist
+    cmd/connectorgen/certificationmatrix_test.go:459:30: undefined: reconstructCertificationMatrices
+    cmd/connectorgen/certificationmatrix_test.go:467:18: undefined: capabilityConnectorByName
+    FAIL    polymetrics.ai/cmd/connectorgen [build failed]
+
+The missing shard API, declared scope, reconstruction, and stable-anchor validator are the expected
+pre-implementation failure.

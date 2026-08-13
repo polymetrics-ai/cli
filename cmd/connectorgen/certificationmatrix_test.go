@@ -447,6 +447,95 @@ func TestCertificationGeneratedArtifactDriftFails(t *testing.T) {
 	}
 }
 
+func TestCertificationShardsRoundTripGeneratedMatrices(t *testing.T) {
+	root := repoRootForCertificationTest(t)
+	shards, err := buildCertificationShards(root, certificationConnectorAllowlist)
+	if err != nil {
+		t.Fatalf("buildCertificationShards() error = %v", err)
+	}
+	if len(shards) != len(certificationConnectorAllowlist) {
+		t.Fatalf("buildCertificationShards() produced %d shards, want %d", len(shards), len(certificationConnectorAllowlist))
+	}
+	capabilities, flows, err := reconstructCertificationMatrices(shards)
+	if err != nil {
+		t.Fatalf("reconstructCertificationMatrices() error = %v", err)
+	}
+	if len(capabilities.Connectors) != len(certificationConnectorAllowlist) || len(flows.ConnectorRoles) != len(certificationConnectorAllowlist) {
+		t.Fatalf("reconstructed scope = capabilities=%d roles=%d, want %d", len(capabilities.Connectors), len(flows.ConnectorRoles), len(certificationConnectorAllowlist))
+	}
+	for _, connector := range certificationConnectorAllowlist {
+		if _, found := capabilityConnectorByName(capabilities, connector); !found {
+			t.Errorf("reconstructed capability matrix omitted %q", connector)
+		}
+	}
+}
+
+func TestCertificationScopedGenerationLeavesOtherShardByteIdentical(t *testing.T) {
+	root := repoRootForCertificationTest(t)
+	shards, err := buildCertificationShards(root, certificationConnectorAllowlist)
+	if err != nil {
+		t.Fatalf("buildCertificationShards() error = %v", err)
+	}
+	payloads := make(map[string][]byte, len(shards))
+	for connector, shard := range shards {
+		payloads[connector], err = marshalGeneratedJSON(shard)
+		if err != nil {
+			t.Fatalf("marshal %q shard: %v", connector, err)
+		}
+	}
+
+	outputRoot := t.TempDir()
+	for connector, payload := range payloads {
+		path := certificationShardPath(outputRoot, connector)
+		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			t.Fatalf("mkdir shard parent: %v", err)
+		}
+		if err := os.WriteFile(path, payload, 0o600); err != nil {
+			t.Fatalf("write initial %q shard: %v", connector, err)
+		}
+	}
+	other := "postgres"
+	before, err := os.ReadFile(certificationShardPath(outputRoot, other))
+	if err != nil {
+		t.Fatalf("read initial %q shard: %v", other, err)
+	}
+	if err := writeCertificationShardScope(outputRoot, payloads, []string{"github"}); err != nil {
+		t.Fatalf("writeCertificationShardScope() error = %v", err)
+	}
+	after, err := os.ReadFile(certificationShardPath(outputRoot, other))
+	if err != nil {
+		t.Fatalf("read final %q shard: %v", other, err)
+	}
+	if !bytes.Equal(before, after) {
+		t.Fatalf("scoped github generation rewrote %q shard", other)
+	}
+}
+
+func TestCertificationSourceAnchorsUseSymbols(t *testing.T) {
+	shards, err := buildCertificationShards(repoRootForCertificationTest(t), certificationConnectorAllowlist)
+	if err != nil {
+		t.Fatalf("buildCertificationShards() error = %v", err)
+	}
+	for connector, shard := range shards {
+		if err := validateCertificationShard(shard); err != nil {
+			t.Fatalf("validate %q shard: %v", connector, err)
+		}
+		for _, kind := range shard.FunctionKinds {
+			for _, anchor := range []string{kind.DiscoverySource, kind.ExecutorSource} {
+				if anchor == "" {
+					continue
+				}
+				if err := validateSymbolSourceAnchor(anchor); err != nil {
+					t.Errorf("%q has invalid source anchor %q: %v", connector, anchor, err)
+				}
+			}
+		}
+	}
+	if err := validateSymbolSourceAnchor("internal/cli/cli.go:603"); err == nil {
+		t.Fatal("numeric source anchor was accepted")
+	}
+}
+
 func TestCertificationDiscoversStableWarehouseFacingSyncPrimitives(t *testing.T) {
 	primitives, err := discoverSyncPrimitives([]matrixConnectorSource{{integrationType: "api"}, {integrationType: "database"}})
 	if err != nil {
