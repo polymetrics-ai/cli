@@ -180,6 +180,9 @@ type DestinationPlan struct {
 type DestinationApplyRequest struct {
 	Plan    DestinationPlan
 	Workset WarehouseWorkset
+	// Runtime is supplied per call so a registered adapter never keeps
+	// credential material after the request returns.
+	Runtime connectors.RuntimeConfig
 }
 
 // DestinationReadBackRequest carries the exact durable acknowledgement and
@@ -189,6 +192,8 @@ type DestinationReadBackRequest struct {
 	Plan            DestinationPlan
 	Workset         WarehouseWorkset
 	Acknowledgement synccontract.DownstreamAcknowledgement
+	// Runtime is the same per-call endpoint configuration used by Apply.
+	Runtime connectors.RuntimeConfig
 }
 
 // PreflightRequest contains only identities and closed declarations needed to
@@ -268,9 +273,21 @@ func cloneDestinationPlanRequest(request DestinationPlanRequest) DestinationPlan
 
 func cloneDestinationReadBackRequest(request DestinationReadBackRequest) (DestinationReadBackRequest, error) {
 	clone := request
+	clone.Runtime = cloneRuntimeConfig(request.Runtime)
 	workset, err := cloneWarehouseWorkset(request.Workset)
 	if err != nil {
 		return DestinationReadBackRequest{}, err
+	}
+	clone.Workset = workset
+	return clone, nil
+}
+
+func cloneDestinationApplyRequest(request DestinationApplyRequest) (DestinationApplyRequest, error) {
+	clone := request
+	clone.Runtime = cloneRuntimeConfig(request.Runtime)
+	workset, err := cloneWarehouseWorkset(request.Workset)
+	if err != nil {
+		return DestinationApplyRequest{}, err
 	}
 	clone.Workset = workset
 	return clone, nil

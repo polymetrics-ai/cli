@@ -118,10 +118,15 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		if err != nil {
 			return fmt.Errorf("clone warehouse transport workset: %w", err)
 		}
-		acknowledgement, err := resolved.Destination.ApplyDestination(ctx, DestinationApplyRequest{
+		destinationApplyRequest, err := cloneDestinationApplyRequest(DestinationApplyRequest{
 			Plan:    plan,
 			Workset: destinationWorkset,
+			Runtime: request.DestinationRuntime,
 		})
+		if err != nil {
+			return fmt.Errorf("clone destination apply request: %w", err)
+		}
+		acknowledgement, err := resolved.Destination.ApplyDestination(ctx, destinationApplyRequest)
 		if err != nil {
 			return fmt.Errorf("apply destination transport: %w", err)
 		}
@@ -129,6 +134,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			Plan:            plan,
 			Workset:         destinationWorkset,
 			Acknowledgement: acknowledgement,
+			Runtime:         request.DestinationRuntime,
 		})
 		if err != nil {
 			return fmt.Errorf("clone destination read-back request: %w", err)
