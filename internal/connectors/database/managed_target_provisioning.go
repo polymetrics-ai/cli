@@ -4,7 +4,10 @@ import (
 	"context"
 	"errors"
 	"sync"
+	"time"
 )
+
+const managedTargetReassertionTimeout = 10 * time.Second
 
 var (
 	// ErrManagedTargetPlanInvalid prevents an untyped or mismatched request from
@@ -234,7 +237,9 @@ func (p *ManagedTargetProvisioner) CreateOrAssert(ctx context.Context, plan Mana
 }
 
 func (p *ManagedTargetProvisioner) reassertAfterCreate(ctx context.Context, plan ManagedTargetProvisioningPlan) (ManagedTargetControlRecord, error) {
-	observation, err := p.observe(context.WithoutCancel(ctx), plan.target)
+	reassertionCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), managedTargetReassertionTimeout)
+	defer cancel()
+	observation, err := p.observe(reassertionCtx, plan.target)
 	if err != nil {
 		return ManagedTargetControlRecord{}, err
 	}

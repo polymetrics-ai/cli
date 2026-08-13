@@ -205,7 +205,7 @@ func (r DownstreamTransactionReceipt) validate() error {
 	if strings.TrimSpace(r.ReceiptID) == "" || strings.TrimSpace(r.Sink) == "" || r.DurableAt.IsZero() {
 		return errors.New("durable downstream transaction receipt is incomplete")
 	}
-	if len(r.ReceiptID) > 1024 || len(r.Sink) > 1024 {
+	if len(r.ReceiptID) > 1024 || len(r.Sink) > 1024 || !utf8.ValidString(r.ReceiptID) || !utf8.ValidString(r.Sink) {
 		return errors.New("durable downstream transaction receipt is invalid")
 	}
 	return nil
@@ -1467,8 +1467,7 @@ func (s *CommittedTransactionStage) persistReceipt(ctx context.Context, receipt 
 	receiptPayload := receipt.payload
 	path := s.receiptPath(receiptPayload.transactionKey)
 	if existing, err := s.storage.readFile(path); err == nil {
-		var stored storedTransactionReceipt
-		if decodeTransactionStageJSON(existing, &stored) == nil && stored.toReceipt(receiptPayload.transactionKey) == receipt {
+		if stored, decodeErr := decodeStoredTransactionReceipt(existing, receiptPayload.transactionKey); decodeErr == nil && stored == receipt {
 			return nil
 		}
 		return ErrTransactionStageAlreadyCommitted
@@ -1501,11 +1500,18 @@ func (s *CommittedTransactionStage) readReceipt(key string) (TransactionReceipt,
 	if err != nil {
 		return TransactionReceipt{}, err
 	}
+	return decodeStoredTransactionReceipt(payload, key)
+}
+
+func decodeStoredTransactionReceipt(payload []byte, expectedKey string) (TransactionReceipt, error) {
+	if !utf8.Valid(payload) {
+		return TransactionReceipt{}, errors.New("durable transaction receipt is invalid")
+	}
 	var stored storedTransactionReceipt
 	if err := decodeTransactionStageJSON(payload, &stored); err != nil {
 		return TransactionReceipt{}, fmt.Errorf("decode durable transaction receipt: %w", err)
 	}
-	receipt := stored.toReceipt(key)
+	receipt := stored.toReceipt(expectedKey)
 	if !receipt.payload.durable {
 		return TransactionReceipt{}, errors.New("durable transaction receipt is invalid")
 	}
@@ -1514,8 +1520,14 @@ func (s *CommittedTransactionStage) readReceipt(key string) (TransactionReceipt,
 
 func (r storedTransactionReceipt) toReceipt(expectedKey string) TransactionReceipt {
 	if r.Version != transactionStageFormatVersion || r.TransactionKey != expectedKey || !validTransactionStageKey(r.TransactionKey) ||
-		strings.TrimSpace(r.DownstreamReceiptID) == "" || strings.TrimSpace(r.Sink) == "" || r.DurableAt.IsZero() ||
 		r.Bytes < 0 || r.Records < 0 || !validTransactionStageDigest(r.ContentDigest) {
+		return TransactionReceipt{}
+	}
+	if err := (DownstreamTransactionReceipt{
+		ReceiptID: r.DownstreamReceiptID,
+		Sink:      r.Sink,
+		DurableAt: r.DurableAt,
+	}).validate(); err != nil {
 		return TransactionReceipt{}
 	}
 	return newTransactionReceipt(

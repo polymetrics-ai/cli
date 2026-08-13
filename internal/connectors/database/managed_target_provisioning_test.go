@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/warehouse"
@@ -453,6 +454,46 @@ func TestManagedTargetProvisioningTruthTable(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("post-create reassertion keeps a bounded independent context", func(t *testing.T) {
+		fake := newManagedTargetDriverFake(
+			database.ManagedTargetObservation{ControlState: database.ManagedTargetControlAbsent},
+			created,
+		)
+		reassertionContexts := make(chan managedTargetReassertionContext, 1)
+		driver := &managedTargetReassertionDriver{
+			managedTargetDriverFake: fake,
+			reassertionContexts:     reassertionContexts,
+		}
+		provisioner, err := database.NewManagedTargetProvisioner(driver)
+		if err != nil {
+			t.Fatal(err)
+		}
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		fake.configureCreateOutcome(nil, cancel)
+
+		if _, err := provisioner.CreateOrAssert(ctx, plan); !errors.Is(err, context.Canceled) {
+			t.Fatalf("CreateOrAssert() error = %v, want context.Canceled", err)
+		}
+		select {
+		case observed := <-reassertionContexts:
+			if observed.err != nil {
+				t.Fatalf("reassertion context error = %v, want nil", observed.err)
+			}
+			if !observed.hasDone {
+				t.Fatal("reassertion context has no cancellation signal")
+			}
+			if !observed.hasDeadline {
+				t.Fatal("reassertion context has no deadline")
+			}
+			if remaining := time.Until(observed.deadline); remaining <= 0 || remaining > time.Minute {
+				t.Fatalf("reassertion deadline remaining = %s, want bounded future deadline", remaining)
+			}
+		case <-time.After(time.Second):
+			t.Fatal("post-create reassertion did not observe its target")
+		}
+	})
 }
 
 func testManagedTargetSchema(t *testing.T, version uint, marker byte) database.ManagedTargetSchema {
@@ -503,6 +544,32 @@ type managedTargetDriverFake struct {
 	createStartedOnce   sync.Once
 	createAfterMutation func()
 	createAfterError    error
+}
+
+type managedTargetReassertionContext struct {
+	deadline    time.Time
+	hasDeadline bool
+	hasDone     bool
+	err         error
+}
+
+type managedTargetReassertionDriver struct {
+	*managedTargetDriverFake
+	reassertionContexts chan<- managedTargetReassertionContext
+}
+
+func (f *managedTargetReassertionDriver) ObserveManagedTarget(ctx context.Context, target database.ManagedTargetRef) (database.ManagedTargetObservation, error) {
+	observation, err := f.managedTargetDriverFake.ObserveManagedTarget(ctx, target)
+	if f.observeCallCount() == 2 && f.reassertionContexts != nil {
+		deadline, hasDeadline := ctx.Deadline()
+		f.reassertionContexts <- managedTargetReassertionContext{
+			deadline:    deadline,
+			hasDeadline: hasDeadline,
+			hasDone:     ctx.Done() != nil,
+			err:         ctx.Err(),
+		}
+	}
+	return observation, err
 }
 
 func newManagedTargetDriverFake(observation, createResult database.ManagedTargetObservation) *managedTargetDriverFake {

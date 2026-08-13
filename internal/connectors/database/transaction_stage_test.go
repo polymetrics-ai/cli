@@ -96,6 +96,111 @@ func TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt(t *testing.T)
 	}
 }
 
+func TestCommittedTransactionStageRejectsNonUTF8DownstreamReceiptIdentities(t *testing.T) {
+	invalidUTF8 := string([]byte{0xff})
+	tests := []struct {
+		name    string
+		receipt DownstreamTransactionReceipt
+	}{
+		{
+			name: "receipt ID",
+			receipt: DownstreamTransactionReceipt{
+				ReceiptID: invalidUTF8,
+				Sink:      "test-sink",
+				DurableAt: time.Now().UTC(),
+			},
+		},
+		{
+			name: "sink",
+			receipt: DownstreamTransactionReceipt{
+				ReceiptID: "test-receipt",
+				Sink:      invalidUTF8,
+				DurableAt: time.Now().UTC(),
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			root := t.TempDir()
+			stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+			const transactionID = "invalid-downstream-receipt"
+			if err := stage.BeginTransaction(context.Background(), transactionID); err != nil {
+				t.Fatalf("BeginTransaction() error = %v", err)
+			}
+			if err := stage.AppendChunk(context.Background(), transactionID, 1, strings.NewReader("payload")); err != nil {
+				t.Fatalf("AppendChunk() error = %v", err)
+			}
+			if _, err := stage.CommitTransaction(context.Background(), transactionID, transactionReceiverFunc(func(ctx context.Context, transaction CommittedTransaction) (DownstreamTransactionReceipt, error) {
+				if err := transaction.StreamChunks(ctx, func(chunk TransactionChunk) error {
+					_, err := io.Copy(io.Discard, chunk.Reader)
+					return err
+				}); err != nil {
+					return DownstreamTransactionReceipt{}, err
+				}
+				return tt.receipt, nil
+			})); err == nil {
+				t.Fatal("CommitTransaction() error = nil, want invalid downstream receipt refusal")
+			}
+			if _, err := stage.Receipt(transactionID); !errors.Is(err, ErrTransactionReceiptUnavailable) {
+				t.Fatalf("Receipt() error = %v, want ErrTransactionReceiptUnavailable", err)
+			}
+			if entries, err := os.ReadDir(filepath.Join(root, "receipts")); err != nil {
+				t.Fatalf("ReadDir(receipts) error = %v", err)
+			} else if len(entries) != 0 {
+				t.Fatalf("receipt artifacts = %d, want 0", len(entries))
+			}
+		})
+	}
+}
+
+func TestCommittedTransactionStageRejectsNonUTF8StoredReceiptIdentities(t *testing.T) {
+	invalidUTF8 := string([]byte{0xff})
+	key, err := transactionStageKey("invalid-stored-receipt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	tests := []struct {
+		name      string
+		receiptID string
+		sink      string
+	}{
+		{name: "receipt ID", receiptID: invalidUTF8, sink: "test-sink"},
+		{name: "sink", receiptID: "test-receipt", sink: invalidUTF8},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			stored := storedTransactionReceipt{
+				Version:             transactionStageFormatVersion,
+				TransactionKey:      key,
+				DownstreamReceiptID: tt.receiptID,
+				Sink:                tt.sink,
+				DurableAt:           time.Now().UTC(),
+				ContentDigest:       key,
+			}
+			if receipt := stored.toReceipt(key); receipt.payload.durable {
+				t.Fatal("stored receipt with invalid UTF-8 is durable")
+			}
+
+			root := t.TempDir()
+			stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+			payload := fmt.Sprintf(`{"version":1,"transaction_key":"%s","downstream_receipt_id":"%s","sink":"%s","durable_at":"2026-01-01T00:00:00Z","bytes":0,"records":0,"content_digest":"%s"}`,
+				key,
+				tt.receiptID,
+				tt.sink,
+				key,
+			)
+			if err := os.WriteFile(stage.receiptPath(key), []byte(payload), 0o600); err != nil {
+				t.Fatalf("WriteFile(receipt) error = %v", err)
+			}
+			if _, err := OpenCommittedTransactionStage(TransactionStageOptions{Root: root, Limits: testTransactionStageLimits()}); err == nil {
+				t.Fatal("OpenCommittedTransactionStage() error = nil, want invalid durable receipt refusal")
+			}
+		})
+	}
+}
+
 type recordedTransaction struct {
 	chunks []string
 }
