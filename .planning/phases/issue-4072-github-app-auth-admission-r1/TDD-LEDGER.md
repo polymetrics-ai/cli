@@ -101,6 +101,57 @@ configured-linter failure; no no-mistakes correction run has started)
   '^(TestGitHubAppAuthRateAdmission|TestAuthenticatorGithubApp|TestRequireSharedGitHubWriteHook|TestGitHubWriteHook|TestGitHubDeclaredRateLimits|TestGitHubRateLimitAdmission)'`
   passed, followed by `make lint` with `0 issues` on 2026-08-12.
 
+## GENERATED ARTIFACT RED/GREEN — INHERITED CAPABILITY-MATRIX DRIFT
+
+- **Ownership and boundary:** #4072 owns this child-local generated-only
+  synchronization because its recovered base already carries the stale source
+  locations. #4026 / merged PostgreSQL PR #4034 is generator precedent only;
+  no #4034 ancestry, generator/source change, or PostgreSQL semantic change is
+  imported.
+- **Red:** at clean head `31be96f69d01a57e89b4a339fc45831297356f4c`,
+  `go run ./cmd/connectorgen certification-matrix --check` exited 1 on
+  2026-08-13 with `generated artifact ... capability-matrix.json has drift`.
+  The identical check fails at recovered base `da8a8ff07aaf00e5c7965cd4d1d3c7252017d785`.
+  This is causal generator evidence, not a lint/test setup failure.
+- **Masking condition:** the tracked base and head artifact bytes are the same
+  (`cecf38c6516844acb9f8c0b0df7bacbd330cbba508ee4cdd5f0ea3269c18614f`),
+  while `bb9fcacbfd1d2c97c4f5e0978ee3eb2cebe4776e` added a `connsdk` import
+  that shifted six `internal/connectors/connectors.go` line numbers without
+  refreshing the matrix.
+- **Green plan:** run only `go run ./cmd/connectorgen certification-matrix`,
+  then the `--check` command. The expected diff is exactly six
+  `discovery_source` values: `capability:catalog`, `capability:cdc`,
+  `capability:check`, `capability:query`, `capability:read`, and
+  `capability:write` move from lines `49–54` to their shifted `50–55`
+  positions. No connector capability, category, operation, executor, or
+  baseline changes.
+- **Expected invariant evidence:** regenerated base/head bytes match at
+  `e63b906cb640b8fb4fc8fd46c1076b77b7dbced7889919d60527f9b4335d520a`;
+  stripping all `discovery_source` fields and canonicalizing JSON produces the
+  unchanged semantic SHA-256
+  `bc5d14758c26755d83a9dc4dcbb715da31d95f67de38e352bc652b752c0819bc`.
+  The generator source hash remains
+  `bba4dea056e18ecc1231fe68cea8321dfc8a53d2b6ce58ac32ca02fa816a7bbf`.
+- **Correction accounting:** this closes inherited generated drift and does
+  not consume correction 2/5. The only substantive correction remains the
+  already-recorded lint fix at 1/5.
+- **Green:** on 2026-08-13, canonical
+  `go run ./cmd/connectorgen certification-matrix` completed with
+  `connectors=556 capability_complete=0 certified=0`; the follow-up
+  `go run ./cmd/connectorgen certification-matrix --check` passed. The actual
+  matrix SHA-256 is
+  `e63b906cb640b8fb4fc8fd46c1076b77b7dbced7889919d60527f9b4335d520a`.
+  `git diff --unified=0` reports exactly six additions and six deletions, all
+  `discovery_source` values: catalog `50→51`, cdc `54→55`, check `49→50`,
+  query `53→54`, read `51→52`, and write `52→53`.
+- **Semantic invariant observed:** base and generated head both canonicalize
+  without `discovery_source` to
+  `bc5d14758c26755d83a9dc4dcbb715da31d95f67de38e352bc652b752c0819bc`.
+  The checked generator is
+  `cmd/connectorgen/certificationmatrix.go`; its SHA-256 remains
+  `bba4dea056e18ecc1231fe68cea8321dfc8a53d2b6ce58ac32ca02fa816a7bbf` at
+  recovered base, #4072, and #4034 precedent `be561871e6bb7d1a5b54d7687743ef8396a2cafe`.
+
 ## Deferred Validation Gate
 
 No broad suite, race-heavy sweep, no-mistakes, push, PR creation, CI, or merge

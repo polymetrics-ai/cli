@@ -7,8 +7,19 @@
 - Recovered base: `da8a8ff07aaf00e5c7965cd4d1d3c7252017d785`
 - Production GREEN: `3f83bf3afc6efa0ebc323e385e4345f588a41db1`
 - Focused verification checkpoint: `72c573bca90f3803ccfe09e914a6bb411c903430`
-- Fresh child correction budget: **0/5**; evidence-only recording does not
-  consume a correction.
+- Fresh child correction budget: **1/5**; correction 1 is the resolved
+  configured-linter RED. The inherited generated-only capability-matrix
+  synchronization does not consume correction 2/5.
+
+## Generated-artifact closure
+
+The pre-generation `certification-matrix --check` RED failed identically at
+recovered base and clean #4072 source. Canonical regeneration plus `--check`
+passed with matrix SHA-256
+`e63b906cb640b8fb4fc8fd46c1076b77b7dbced7889919d60527f9b4335d520a` and a
+six-entry `discovery_source`-only diff. The stripped semantic SHA-256 remains
+`bc5d14758c26755d83a9dc4dcbb715da31d95f67de38e352bc652b752c0819bc`.
+#4026/#4034 is cited as generator precedent only; its ancestry is not used.
 
 ## Release preconditions
 

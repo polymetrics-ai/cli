@@ -5,7 +5,8 @@
 **Parent:** #3754
 **Branch:** `fix/4072-github-app-auth-rate-admission`
 **Recovered base:** `da8a8ff07aaf00e5c7965cd4d1d3c7252017d785`
-**Correction ledger:** fresh 0/5
+**Correction ledger:** 1/5 (configured-linter correction resolved; generated
+artifact synchronization does not consume correction 2/5)
 **Canonical private finish-plan snapshot SHA256:**
 `939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408`
 
@@ -50,3 +51,24 @@ This focused checkpoint deliberately stops before repository-wide lint,
 generators, docs/help/website parity, issue guard, no-mistakes, push, PR
 creation, CI, or merge. Firstmate owns the shared #4071 validation-gate release
 and the eventual parent PR route.
+
+## Generated capability-matrix synchronization
+
+At clean `31be96f…`, the canonical
+`go run ./cmd/connectorgen certification-matrix --check` was the causal
+inherited RED: it failed because `capability-matrix.json` had stale generated
+source locations. The identical tracked artifact and check failure exist at
+recovered base `da8a8ff…`; no #4072 auth behavior caused it.
+
+GREEN ran only the canonical generator and its follow-up check. It reports
+556 connectors with no capability-complete/certified status change. The
+resulting artifact SHA-256 is
+`e63b906cb640b8fb4fc8fd46c1076b77b7dbced7889919d60527f9b4335d520a`;
+the diff is exactly six `discovery_source` line updates for the
+`capability:*` entries. Removing `discovery_source` fields yields the same
+base/generated semantic SHA-256
+`bc5d14758c26755d83a9dc4dcbb715da31d95f67de38e352bc652b752c0819bc`.
+
+#4026/#4034 is cited only as the established generator precedent. Its
+PostgreSQL ancestry is not imported; the generator source hash is unchanged
+at `bba4dea056e18ecc1231fe68cea8321dfc8a53d2b6ce58ac32ca02fa816a7bbf`.

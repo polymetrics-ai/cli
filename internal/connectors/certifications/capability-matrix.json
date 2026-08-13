@@ -6,19 +6,19 @@
       "id": "capability:catalog",
       "category": "capability",
       "name": "catalog",
-      "discovery_source": "internal/connectors/connectors.go:50"
+      "discovery_source": "internal/connectors/connectors.go:51"
     },
     {
       "id": "capability:cdc",
       "category": "capability",
       "name": "cdc",
-      "discovery_source": "internal/connectors/connectors.go:54"
+      "discovery_source": "internal/connectors/connectors.go:55"
     },
     {
       "id": "capability:check",
       "category": "capability",
       "name": "check",
-      "discovery_source": "internal/connectors/connectors.go:49"
+      "discovery_source": "internal/connectors/connectors.go:50"
     },
     {
       "id": "capability:dynamic_schema",
@@ -30,19 +30,19 @@
       "id": "capability:query",
       "category": "capability",
       "name": "query",
-      "discovery_source": "internal/connectors/connectors.go:53"
+      "discovery_source": "internal/connectors/connectors.go:54"
     },
     {
       "id": "capability:read",
       "category": "capability",
       "name": "read",
-      "discovery_source": "internal/connectors/connectors.go:51"
+      "discovery_source": "internal/connectors/connectors.go:52"
     },
     {
       "id": "capability:write",
       "category": "capability",
       "name": "write",
-      "discovery_source": "internal/connectors/connectors.go:52"
+      "discovery_source": "internal/connectors/connectors.go:53"
     },
     {
       "id": "operation:binary_download",

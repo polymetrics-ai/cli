@@ -27,7 +27,7 @@ no-mistakes correction run started
 | execute GREEN | complete | focused secret-blind transport/coordinator matrix passes; GREEN commit `3f83bf3af` |
 | verify-work | complete (inline automatic fallback) | `UAT.md`, bounded functional/race/vet evidence |
 | code-review | complete (inline manual deep review) | `REVIEW.md` |
-| gap plan / local broad acceptance | rerun pending (inline manual fallback) | correction 1/5 GREEN passes focused auth + `make lint`; rerun `GAP-PLAN.md` matrix |
+| gap plan / generated artifact synchronization | GREEN, acceptance pending (inline manual fallback) | inherited `certification-matrix --check` RED at clean `31be96f…`; canonical generator/check produced only six source-location updates and preserved semantics |
 | no-mistakes | prepared, held | `NO-MISTAKES-HANDOFF.md`; wait for #3856 heavy validation release |
 
 ## Manual GSD Fallback
@@ -76,3 +76,19 @@ scope.
 plus `make lint`. The complete report-defined matrix still reruns before the
 handoff is ready. No pipeline, push, PR, UDS, or parked-parent action is part
 of this correction.
+
+## Active generated-only closure
+
+The `certification-matrix --check` failure is inherited from both recovered
+base and #4072 head. It is not a new #4072 behavior defect and does not change
+the existing **1/5** correction accounting. The only permitted production
+artifact action is the canonical generator's six-line `discovery_source`
+synchronization, preserving the known stripped semantic hash
+`bc5d14758c26755d83a9dc4dcbb715da31d95f67de38e352bc652b752c0819bc` and
+recording #4026/#4034 as a non-imported generator precedent.
+
+The recorded RED exits 1 at both recovered base and child source; the canonical
+generator then passes its `--check` at the child worktree and produces matrix
+SHA-256 `e63b906cb640b8fb4fc8fd46c1076b77b7dbced7889919d60527f9b4335d520a`.
+The six-line `discovery_source` update does not alter the stripped semantic
+SHA-256 `bc5d14758c26755d83a9dc4dcbb715da31d95f67de38e352bc652b752c0819bc`.

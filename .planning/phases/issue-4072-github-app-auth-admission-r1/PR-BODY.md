@@ -29,7 +29,9 @@ surface changes, generic transport changes, parent completion, and merge.
   no/lost/grant/privacy matrix).
 - GREEN: `3f83bf3af`.
 - Focused verification/review: `72c573bca`.
-- Fresh correction ledger: 0/5; no correction loop has been consumed.
+- Fresh correction ledger: 1/5; the only consumed correction is the resolved
+  configured-linter RED. The inherited generated-artifact synchronization does
+  not consume correction 2/5.
 - The named issue phase is outside the numeric roadmap and the canonical
   single-worker contract forbids role spawning. GSD discuss/plan/execute,
   gap planning/execution, verify-work, and deep review are therefore recorded
@@ -43,6 +45,21 @@ no-mistakes delivery record are intentionally **pending** until the prepared
 handoff is released; do not publish this body before those fields are updated.
 
 No credentials were inspected and no provider call or mutation was made.
+
+## Generated artifact traceability
+
+- RED: at clean `31be96f…`,
+  `go run ./cmd/connectorgen certification-matrix --check` failed because the
+  tracked capability matrix had inherited drift; recovered base `da8a8ff…`
+  fails identically.
+- GREEN: the canonical generator and its `--check` passed. The resulting
+  matrix SHA-256 is
+  `e63b906cb640b8fb4fc8fd46c1076b77b7dbced7889919d60527f9b4335d520a`.
+  Its diff is six `discovery_source` line updates only; the stripped semantic
+  SHA-256 is unchanged at
+  `bc5d14758c26755d83a9dc4dcbb715da31d95f67de38e352bc652b752c0819bc`.
+- #4026's #4034 delivery is generator precedent only. No PostgreSQL or #4034
+  ancestry is imported, and no generator/source/semantic change is included.
 
 ## Pipeline
 
