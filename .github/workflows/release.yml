@@ -167,19 +167,7 @@ jobs:
       - name: Install nfpm
         run: |
           set -euo pipefail
-          # The public checksum database can occasionally reset its HTTP/2
-          # stream while Go is verifying nfpm. Keep Go's checksum verification
-          # intact and retry the pinned install a bounded number of times.
-          for attempt in 1 2 3; do
-            if go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0; then
-              break
-            fi
-            if [[ "$attempt" -eq 3 ]]; then
-              echo "nfpm install failed after $attempt attempts" >&2
-              exit 1
-            fi
-            sleep "$((attempt * 5))"
-          done
+          go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0
           # setup-go does not add GOPATH/bin to PATH in this repository's jobs —
           # verify.yml does the same thing explicitly for golangci-lint. Without
           # this line the binary exists but is invisible, and the failure only
@@ -453,19 +441,7 @@ jobs:
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
         run: |
           set -euo pipefail
-          # The public checksum database can occasionally reset its HTTP/2
-          # stream while Go is verifying nfpm. Keep Go's checksum verification
-          # intact and retry the pinned install a bounded number of times.
-          for attempt in 1 2 3; do
-            if go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0; then
-              break
-            fi
-            if [[ "$attempt" -eq 3 ]]; then
-              echo "nfpm install failed after $attempt attempts" >&2
-              exit 1
-            fi
-            sleep "$((attempt * 5))"
-          done
+          go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0
           # See the identical step in package-check: GOPATH/bin is not on PATH
           # by default here. A release must not discover that at tag time.
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
