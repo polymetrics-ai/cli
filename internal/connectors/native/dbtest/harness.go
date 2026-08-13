@@ -803,7 +803,7 @@ func waitForInterruptCleanup(signals <-chan os.Signal, done <-chan struct{}) {
 
 // closeLiveHarnesses tears every registered harness down concurrently and
 // returns only once the last one has finished, so nothing can exit while a
-// sibling's Podman removal is still running.
+// sibling's generated-resource cleanup is still running.
 func closeLiveHarnesses(ctx context.Context) {
 	closeHarnesses(ctx, snapshotLiveHarnesses())
 }
