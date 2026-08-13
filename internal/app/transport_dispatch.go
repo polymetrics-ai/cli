@@ -26,7 +26,7 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 // action. Real durable warehouse/apply adapters remain separate foundations;
 // this seam therefore fails closed unless a stage and externally verified
 // transports are registered.
-func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, mode SyncMode, batchSize int, approval synctransport.DestinationApproval) (etlExecutionResult, error) {
 	if a.transports == nil {
 		return etlExecutionResult{}, fmt.Errorf("closed transport registry is unavailable")
 	}
@@ -58,6 +58,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		BatchSize:          batchSize,
 		Resume:             sourceExpectation,
 		Checkpoint:         prior.Checkpoint,
+		Approval:           approval,
 		Stage:              a.transportStage,
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
 			interim := checkpoint.Clone()

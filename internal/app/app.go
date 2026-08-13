@@ -1067,7 +1067,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	}
 	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	if hasDeclaredSyncTransport(source, destination) {
-		result, err := a.runTransportETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, mode, batchSize)
+		result, err := a.runTransportETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, mode, batchSize, req.DestinationApproval)
 		if err != nil {
 			return a.failAcknowledgedTransportRun(runID, result, err)
 		}
@@ -2233,7 +2233,7 @@ func (a *App) confirmationChallengeForPlan(plan ReversePlan) string {
 }
 
 func (a *App) planRequiresPersistedPreview(plan ReversePlan) bool {
-	return plan.ConnectorCommandOperation != "" || a.confirmationChallengeForPlan(plan) != ""
+	return plan.ConnectorCommandOperation != "" || isGitHubIssueLabelTransportMode(plan.Mode) || a.confirmationChallengeForPlan(plan) != ""
 }
 
 func (a *App) validatePlanConfirmation(plan ReversePlan, got connectors.WriteConfirmation) error {
@@ -2739,6 +2739,15 @@ func (a *App) findCredential(name string) (CredentialMeta, bool) {
 func (a *App) findConnection(name string) (Connection, bool) {
 	for _, conn := range a.state.Connections {
 		if conn.Name == name {
+			return conn, true
+		}
+	}
+	return Connection{}, false
+}
+
+func (a *App) findConnectionByID(id string) (Connection, bool) {
+	for _, conn := range a.state.Connections {
+		if conn.ID == id {
 			return conn, true
 		}
 	}

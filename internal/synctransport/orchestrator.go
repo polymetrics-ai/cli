@@ -113,15 +113,17 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-
 		destinationWorkset, err := cloneWarehouseWorkset(staged)
 		if err != nil {
 			return fmt.Errorf("clone warehouse transport workset: %w", err)
 		}
 		destinationApplyRequest, err := cloneDestinationApplyRequest(DestinationApplyRequest{
-			Plan:    plan,
-			Workset: destinationWorkset,
-			Runtime: request.DestinationRuntime,
+			ConnectionID: request.ConnectionID,
+			Plan:         plan,
+			Receipt:      receipt,
+			Workset:      destinationWorkset,
+			Runtime:      request.DestinationRuntime,
+			Approval:     request.Approval,
 		})
 		if err != nil {
 			return fmt.Errorf("clone destination apply request: %w", err)

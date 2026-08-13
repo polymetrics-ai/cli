@@ -129,7 +129,7 @@ func newGitHubWarehouseMediatedTransport(a *App) (*synctransport.Registry, synct
 	if err := registry.RegisterSource(&githubIssuesSourceExecutor{connector: github}); err != nil {
 		return nil, nil, err
 	}
-	if err := registry.RegisterDestination(&githubIssueLabelDestinationExecutor{connector: github}); err != nil {
+	if err := registry.RegisterDestination(&githubIssueLabelDestinationExecutor{app: a, connector: github}); err != nil {
 		return nil, nil, err
 	}
 	return registry, newConnectionWarehouseStage(a), nil
@@ -185,7 +185,7 @@ func (e *githubIssuesSourceExecutor) ReadTransport(ctx context.Context, request 
 		records = append(records, cloned)
 		return nil
 	})
-	if err != nil {
+	if err := connectors.IgnoreReadLimit(err); err != nil {
 		return fmt.Errorf("read configured GitHub issue: %w", err)
 	}
 	if len(records) != 1 {
@@ -198,7 +198,10 @@ func (e *githubIssuesSourceExecutor) ReadTransport(ctx context.Context, request 
 	return emit(synctransport.SourcePage{Records: records, CandidateCheckpoint: candidate})
 }
 
-type githubIssueLabelDestinationExecutor struct{ connector *engine.Connector }
+type githubIssueLabelDestinationExecutor struct {
+	app       *App
+	connector *engine.Connector
+}
 
 func (*githubIssueLabelDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
 	return githubIssueLabelDestinationReference
@@ -224,7 +227,7 @@ func (e *githubIssueLabelDestinationExecutor) PlanDestination(_ context.Context,
 }
 
 func (e *githubIssueLabelDestinationExecutor) ApplyDestination(ctx context.Context, request synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
-	if e == nil || e.connector == nil {
+	if e == nil || e.app == nil || e.connector == nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("GitHub issue-label transport destination is unavailable")
 	}
 	if request.Plan.ApplyStrategy.Action != githubIssueAddLabelAction || request.Plan.ApplyStrategy.Strategy != connectors.ApplyStrategyAppend {
@@ -233,15 +236,7 @@ func (e *githubIssueLabelDestinationExecutor) ApplyDestination(ctx context.Conte
 	if request.Workset.ID == "" || len(request.Workset.Records) != 1 {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("GitHub issue-label destination requires exactly one reopened issue record")
 	}
-	targetIssue, err := githubTransportIssueNumber(request.Runtime.Config, githubTransportTargetIssueConfig)
-	if err != nil {
-		return synccontract.DownstreamAcknowledgement{}, err
-	}
-	label, err := githubTransportLabel(request.Runtime.Config)
-	if err != nil {
-		return synccontract.DownstreamAcknowledgement{}, err
-	}
-	if err := e.writeIssueLabel(ctx, request.Runtime, githubIssueAddLabelAction, targetIssue, label); err != nil {
+	if _, err := e.app.ApplyGitHubIssueLabelTransport(ctx, request.ConnectionID, request.Approval, request.Runtime, request.Receipt, request.Workset); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
 	return synccontract.NewDurableDownstreamAcknowledgement("github", time.Now().UTC())
@@ -266,7 +261,7 @@ func (e *githubIssueLabelDestinationExecutor) ReadBackDestination(ctx context.Co
 	err = e.connector.Read(ctx, connectors.ReadRequest{
 		Stream: "issues",
 		Config: request.Runtime,
-		Limit:  1,
+		Limit:  100,
 	}, func(record connectors.Record) error {
 		number, err := githubIssueNumberFromRecord(record)
 		if err != nil {
@@ -277,48 +272,11 @@ func (e *githubIssueLabelDestinationExecutor) ReadBackDestination(ctx context.Co
 		}
 		return nil
 	})
-	if err != nil {
+	if err := connectors.IgnoreReadLimit(err); err != nil {
 		return fmt.Errorf("independently read back GitHub issue label: %w", err)
 	}
 	if !found {
 		return fmt.Errorf("GitHub issue-label destination read-back did not find label %q on issue %d", label, targetIssue)
-	}
-	return nil
-}
-
-// RemoveIssueLabel is the typed inverse used by the walking demo cleanup.
-// It accepts runtime only for this call and never stores secret/config state.
-func (e *githubIssueLabelDestinationExecutor) RemoveIssueLabel(ctx context.Context, runtime connectors.RuntimeConfig, issueNumber int, label string) error {
-	return e.writeIssueLabel(ctx, runtime, githubIssueRemoveLabelAction, issueNumber, label)
-}
-
-func (e *githubIssueLabelDestinationExecutor) writeIssueLabel(ctx context.Context, runtime connectors.RuntimeConfig, action string, issueNumber int, label string) error {
-	if err := githubTransportRepositoryConfig(runtime.Config); err != nil {
-		return err
-	}
-	if issueNumber <= 0 || strings.TrimSpace(label) == "" {
-		return fmt.Errorf("GitHub issue-label action requires a positive issue number and non-empty label")
-	}
-	record := connectors.Record{"issue_number": issueNumber}
-	switch action {
-	case githubIssueAddLabelAction:
-		record["labels"] = []string{label}
-	case githubIssueRemoveLabelAction:
-		record["name"] = label
-	default:
-		return fmt.Errorf("GitHub issue-label action %q is not declared", action)
-	}
-	result, err := e.connector.Write(ctx, connectors.WriteRequest{
-		Stream: "issues",
-		Table:  "github_transport_issue_label",
-		Action: action,
-		Config: runtime,
-	}, []connectors.Record{record})
-	if err != nil {
-		return fmt.Errorf("execute typed GitHub %s: %w", action, err)
-	}
-	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
-		return fmt.Errorf("typed GitHub %s result written=%d failed=%d, want one durable write", action, result.RecordsWritten, result.RecordsFailed)
 	}
 	return nil
 }

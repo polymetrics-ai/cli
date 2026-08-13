@@ -6,6 +6,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/synctransport"
 )
 
 type AddCredentialRequest struct {
@@ -130,9 +131,10 @@ type catalogReference struct {
 }
 
 type RunETLRequest struct {
-	Connection string `json:"connection"`
-	Stream     string `json:"stream"`
-	BatchSize  int    `json:"batch_size,omitempty"`
+	Connection          string                            `json:"connection"`
+	Stream              string                            `json:"stream"`
+	BatchSize           int                               `json:"batch_size,omitempty"`
+	DestinationApproval synctransport.DestinationApproval `json:"-"`
 }
 
 type Run struct {
@@ -237,8 +239,15 @@ type ReversePlan struct {
 	ApprovalToken       string                         `json:"approval_token,omitempty"`
 	ApprovalConsumedAt  time.Time                      `json:"approval_consumed_at,omitempty"`
 	ApprovalUncertainAt time.Time                      `json:"approval_consumption_uncertain_at,omitempty"`
-	CreatedAt           time.Time                      `json:"created_at"`
-	ExpiresAt           time.Time                      `json:"expires_at"`
+	// TransportConnectionID and TransportBindingSHA256 are only used by the
+	// closed GitHub issue-label walking slice. They bind a pre-run approval to
+	// one connection configuration; neither field is caller-selectable write
+	// input and neither contains an approval token or credential material.
+	TransportConnectionID  string    `json:"transport_connection_id,omitempty"`
+	TransportBindingSHA256 string    `json:"transport_binding_sha256,omitempty"`
+	TransportForwardPlanID string    `json:"transport_forward_plan_id,omitempty"`
+	CreatedAt              time.Time `json:"created_at"`
+	ExpiresAt              time.Time `json:"expires_at"`
 }
 
 type RunReverseETLRequest struct {

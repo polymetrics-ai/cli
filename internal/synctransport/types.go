@@ -177,12 +177,32 @@ type DestinationPlan struct {
 	ApplyStrategy connectors.DestinationApplyStrategy
 }
 
+// DestinationApproval carries only the ephemeral result of a separately
+// prepared PM plan -> preview -> approval lifecycle. It is intentionally
+// non-serializable: warehouse receipts, runtime configuration, destination
+// plans, and evidence artifacts never retain the operator token.
+type DestinationApproval struct {
+	PlanID        string                       `json:"-"`
+	ApprovalToken string                       `json:"-"`
+	Confirmation  connectors.WriteConfirmation `json:"-"`
+}
+
 type DestinationApplyRequest struct {
-	Plan    DestinationPlan
+	// ConnectionID pins this apply to the connection that owns Receipt. The
+	// destination must not infer ownership from caller-supplied paths.
+	ConnectionID string
+	Plan         DestinationPlan
+	// Receipt is the immutable handle that produced Workset. It is passed by
+	// the orchestrator after Reopen, not supplied by a destination caller.
+	Receipt WarehouseReceipt
 	Workset WarehouseWorkset
 	// Runtime is supplied per call so a registered adapter never keeps
 	// credential material after the request returns.
 	Runtime connectors.RuntimeConfig
+	// Approval was obtained before the transport run. The destination may
+	// consume it only after it has validated the independently reopened
+	// workset against the receipt and closed connection mapping.
+	Approval DestinationApproval `json:"-"`
 }
 
 // DestinationReadBackRequest carries the exact durable acknowledgement and
@@ -218,8 +238,11 @@ type RunRequest struct {
 	BatchSize          int
 	Resume             synccontract.ResumeExpectation
 	Checkpoint         *synccontract.CheckpointEnvelope
-	Stage              WarehouseStage
-	Commit             func(synccontract.CheckpointEnvelope) error
+	// Approval is intentionally carried only in memory from App.RunETL to the
+	// destination apply boundary. It is never written into a stage artifact.
+	Approval DestinationApproval `json:"-"`
+	Stage    WarehouseStage
+	Commit   func(synccontract.CheckpointEnvelope) error
 }
 
 type Result struct {
