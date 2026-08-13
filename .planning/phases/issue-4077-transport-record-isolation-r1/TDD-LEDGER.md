@@ -12,7 +12,7 @@
 |---|---|---|
 | Red | Direct and nested `json.RawMessage` / `map[string]string` mutations affect source data; source → stage → destination paths show the same escape. | Failed as expected; recorded by `test(4077-01)` |
 | Green | Explicit clones leave source storage unchanged at every boundary. | Passed focused normal test |
-| Refactor | Preserve existing `[]byte`, `map[string]any`, `[]any`, and `[]connectors.Record` coverage and keep code closed. | Pending |
+| Refactor | Preserve existing `[]byte`, `map[string]any`, `[]any`, and `[]connectors.Record` coverage and keep code closed. | Passed focused, package, race, and all-mode checks |
 
 ## Slice 2 — unknown mutable values
 
@@ -20,7 +20,7 @@
 |---|---|---|
 | Red | Unknown mutable map/slice can currently pass the default clone case by alias. | Failed as expected; source record reached the stage and stage workset reached destination with `map[string]int` |
 | Green | Source-page and stage-workset copies return contextual errors before stage/apply respectively. | Passed focused normal test |
-| Refactor | No reflection-based cloning, no replacement/drop/panic, no widening of provider types. | Pending |
+| Refactor | No reflection-based cloning, no replacement/drop/panic, no widening of provider types. | Passed review and static checks |
 
 ## RED execution evidence
 
@@ -49,11 +49,11 @@ The focused command above passed after the minimal implementation:
 
 ## Regression preservation
 
-- [ ] `[]byte`
-- [ ] `map[string]any`
-- [ ] `[]any`
-- [ ] `[]connectors.Record`
-- [ ] checkpoints and acknowledgements
-- [ ] per-stream CAS
-- [ ] seven canonical sync modes
-- [ ] normal and race package tests
+- [x] `[]byte`
+- [x] `map[string]any`
+- [x] `[]any`
+- [x] `[]connectors.Record`
+- [x] checkpoints and acknowledgements
+- [x] per-stream CAS
+- [x] seven canonical sync modes
+- [x] normal and race package tests

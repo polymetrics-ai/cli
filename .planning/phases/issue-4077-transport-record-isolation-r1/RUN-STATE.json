@@ -6,11 +6,11 @@
   "branch": "fix/4077-transport-record-isolation",
   "lifecycle": "inline_manual_named_phase_fallback",
   "reason": "named follow-on phase is absent from numeric roadmap; compatible isolated Pi roles unavailable and canonical single-worker contract forbids lifecycle-role spawning",
-  "state": "green_complete_verification_pending",
-  "red_commit": "recorded by the current test(4077-01) commit",
-  "green_commit": "recorded by the current fix(4077-01) commit",
-  "verification": "pending",
-  "review": "pending",
+  "state": "local_validation_complete_delivery_decision_pending",
+  "red_commit": "8b0c2cc573edbe5d73bf2add221636288a07207b",
+  "green_commit": "3b250b874c5e67c69da69f1947f6853d00c4d512",
+  "verification": "passed locally; pre-existing agent-contract and release-workflow inventory gates recorded",
+  "review": "clean; no-mistakes review found no remaining reachable alias path",
   "no_mistakes_loops_used": 0,
-  "delivery": "local_only_pending"
+  "delivery": "needs-decision: no-mistakes local-only run passed with push/pr/ci skipped; manual stacked-draft exception is not authorized"
 }
