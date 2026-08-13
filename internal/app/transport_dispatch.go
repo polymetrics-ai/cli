@@ -20,6 +20,26 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	return sourceDeclared || destinationDeclared
 }
 
+// shouldRunTransport keeps the GitHub walking slice opt-in at the persisted
+// connection boundary. Open installs the exact GitHub transport composition so
+// it can be preflighted, but that must not turn every existing GitHub JSON ETL
+// connection into a transport run merely because its connector now advertises
+// the closed descriptor.
+//
+// Other externally declared transport pairs retain the normal descriptor-led
+// dispatch. GitHub participates only when the connection itself satisfies the
+// fixed issues/full_append/source-issue/target-issue/label contract.
+func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMode, source, destination connectors.Connector) bool {
+	if source.Name() != "github" && destination.Name() != "github" {
+		return hasDeclaredSyncTransport(source, destination)
+	}
+	if streamName != "issues" || mode.ContractMode != synccontract.ModeFullAppend {
+		return false
+	}
+	_, err := a.githubIssueLabelTransportConnection(conn.ID)
+	return err == nil
+}
+
 // runTransportETL is the bounded bridge from persisted connection state to
 // the transport-neutral orchestrator. It does not call legacy Connector.Read
 // or Connector.Write, inject provider metadata, or select a generic `upsert`

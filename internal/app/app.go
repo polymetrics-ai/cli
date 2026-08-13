@@ -1066,7 +1066,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		batchSize = 1000
 	}
 	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
-	if hasDeclaredSyncTransport(source, destination) {
+	if a.shouldRunTransport(conn, req.Stream, mode, source, destination) {
 		result, err := a.runTransportETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, mode, batchSize, req.DestinationApproval)
 		if err != nil {
 			return a.failAcknowledgedTransportRun(runID, result, err)
