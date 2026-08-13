@@ -138,9 +138,9 @@ A connector is `CERTIFIED` only if every applicable capability, workflow,
 sync-mode/warehouse-primitive, and source-or-destination flow-pair cell is
 declared, implemented, fixture-tested, and backed by accepted live proof.
 
-## First generated baseline
+## Historical aggregate baseline
 
-The generated baseline is intentionally red: 556 connectors, 21 discovered
+Before connector-local sharding, the aggregate generator's baseline was intentionally red: 556 connectors, 21 discovered
 function kinds, zero capability-complete connectors, and zero finally certified
 connectors. All live-tested totals are zero because this change runs no provider
 and accepts no invented evidence.
@@ -148,9 +148,9 @@ and accepts no invented evidence.
 GitHub's declared `operation:graphql_query` now correctly reports one
 implemented cell through the bounded GraphQL direct-read executor. Its declared
 `operation:local_git` remains one applicable but unimplemented cell. Neither
-has fixture or live proof, so neither changes the zero-certification baseline.
+had fixture or live proof, so neither changed the historical zero-certification baseline.
 
-The four flow-kind totals are 309,136 exact pairs each. Their applicable /
+The historical aggregate flow-kind totals are 309,136 exact pairs each. Their applicable /
 implemented / complete counts are:
 
 | Flow | Applicable | Implemented | Complete |
@@ -160,7 +160,7 @@ implemented / complete counts are:
 | database → API | 2,196 | 0 | 0 |
 | database → database | 16 | 0 | 0 |
 
-The sync scoreboard is zero complete for all 28 mode × primitive cells. API
+The historical aggregate sync scoreboard is zero complete for all 28 mode × primitive cells. API
 writes are red because the engine refuses an API destination without a durable
 acknowledgement; database writes are red because no database write executor
 exists. PostgreSQL and MySQL change-capture reads are code-present but have no

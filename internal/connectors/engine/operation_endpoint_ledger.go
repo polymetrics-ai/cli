@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/fs"
 	"sort"
@@ -48,6 +49,37 @@ func loadOperationEndpointLedgers(fsys fs.FS) (map[string]*operationEndpointLedg
 		ledgers[name] = &operationEndpointLedger{entries: append([]OperationEndpointLedgerEntry(nil), entries...)}
 	}
 	return ledgers, nil
+}
+
+func loadOperationEndpointLedger(fsys fs.FS, name string) (map[string]*operationEndpointLedger, error) {
+	if !fileExists(fsys, RuntimeOperationEndpointLedgerFile) {
+		return nil, nil
+	}
+	raw, err := readFile(fsys, RuntimeOperationEndpointLedgerFile)
+	if err != nil {
+		return nil, err
+	}
+	var source map[string]json.RawMessage
+	if err := strictDecode(raw, &source); err != nil {
+		return nil, fmt.Errorf("%s: %w", RuntimeOperationEndpointLedgerFile, err)
+	}
+	rawEntries, ok := source[name]
+	if !ok {
+		return nil, nil
+	}
+	if !namePattern.MatchString(name) {
+		return nil, fmt.Errorf("%s: invalid connector name %q", RuntimeOperationEndpointLedgerFile, name)
+	}
+	var entries []OperationEndpointLedgerEntry
+	if err := strictDecode(rawEntries, &entries); err != nil {
+		return nil, fmt.Errorf("%s: %w", RuntimeOperationEndpointLedgerFile, err)
+	}
+	if err := validateOperationEndpointLedgerEntries(entries); err != nil {
+		return nil, fmt.Errorf("%s: connector %s: %w", RuntimeOperationEndpointLedgerFile, name, err)
+	}
+	return map[string]*operationEndpointLedger{
+		name: {entries: append([]OperationEndpointLedgerEntry(nil), entries...)},
+	}, nil
 }
 
 func validateOperationEndpointLedgerEntries(entries []OperationEndpointLedgerEntry) error {
