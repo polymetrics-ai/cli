@@ -13,6 +13,8 @@ import (
 	"sort"
 	"strings"
 	"sync"
+
+	"polymetrics.ai/internal/connectors/bundleregistry"
 )
 
 const (
@@ -48,9 +50,10 @@ var embeddedStatuses struct {
 	err    error
 }
 
-// StatusFor returns the generated status for a connector. A malformed or
-// incomplete embedded projection is an explicit error rather than a silent
-// green or an invented fallback status.
+// StatusFor returns a proof-bearing status for an allowlisted connector. A
+// connector outside that explicit certification scope has no pass or fail
+// claim, so it retains the existing visible community-build warning rather
+// than being omitted from inspection.
 func StatusFor(connector string) (Status, error) {
 	embeddedStatuses.once.Do(loadEmbeddedStatuses)
 	if embeddedStatuses.err != nil {
@@ -58,7 +61,14 @@ func StatusFor(connector string) (Status, error) {
 	}
 	status, ok := embeddedStatuses.byName[connector]
 	if !ok {
-		return Status{}, fmt.Errorf("generated certification status omits connector %q", connector)
+		if _, registered := bundleregistry.New().Get(connector); !registered {
+			return Status{}, fmt.Errorf("generated certification status omits connector %q", connector)
+		}
+		return Status{
+			Connector: connector,
+			Label:     uncertifiedLabel,
+			Warning:   uncertifiedWarning,
+		}, nil
 	}
 	return status, nil
 }

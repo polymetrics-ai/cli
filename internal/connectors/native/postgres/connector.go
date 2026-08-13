@@ -68,6 +68,25 @@ type Connector struct {
 	engine.Base
 }
 
+// postgresCapabilityOverride is a declarative capability row. Future native
+// capability lanes add a row rather than interleaving another override in
+// Metadata's composition control flow.
+type postgresCapabilityOverride struct {
+	name   string
+	value  bool
+	target func(*connectors.Capabilities) *bool
+}
+
+var postgresCapabilityOverrides = []postgresCapabilityOverride{
+	{
+		name:  "cdc",
+		value: false,
+		target: func(capabilities *connectors.Capabilities) *bool {
+			return &capabilities.CDC
+		},
+	},
+}
+
 // New returns the PostgreSQL connector as a connectors.Connector, loading
 // its Definition()/Metadata() from the embedded defs/postgres bundle. New
 // panics if the bundle fails to load — the same "build-time guaranteed by
@@ -91,10 +110,9 @@ func New() Connector {
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
 	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads. Read-only source."
-	// The bundle declares this too, but pin the native override to the same
-	// fail-closed state so this connector cannot accidentally advertise CDC
-	// while the executor remains unavailable.
-	m.Capabilities.CDC = false
+	for _, override := range postgresCapabilityOverrides {
+		*override.target(&m.Capabilities) = override.value
+	}
 	return m
 }
 

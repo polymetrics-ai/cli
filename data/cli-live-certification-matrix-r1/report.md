@@ -91,13 +91,23 @@ scalar request and response values, and never relies on a keyword list.
 
 ## Matrix shape
 
-`capability-matrix.json` discovers all capability fields and engine operation
-kinds from source. Every connector gets every row; a direct unsupported method
-such as PostgreSQL/MySQL `Write` is applicable with `implemented=false`, never
-hidden as N/A. A new engine operation kind enters the inventory automatically;
-without an executor annotation it remains honestly unimplemented.
+`cmd/connectorgen/certificationallowlist.go` declares the connectors for which
+this repository currently makes a proof-bearing claim: initially GitHub and
+PostgreSQL. `go run ./cmd/connectorgen certification-matrix --connector <name>`
+generates the one matching, non-embedded
+`internal/connectors/defs/<name>/certification-matrix.json` shard; it does not
+rewrite another connector's shard or the compact runtime status projection.
+`--all` deliberately refreshes all allowlisted shards and that projection, and
+`--check` reconstructs the aggregate view in memory for the drift gate.
 
-`flow-matrix.json` carries the final certification obligations:
+Each shard discovers all capability fields and engine operation kinds from
+source for its connector. A direct unsupported method such as PostgreSQL
+`Write` is applicable with `implemented=false`, never hidden as N/A. A new
+engine operation kind enters the inventory automatically; without an executor
+annotation it remains honestly unimplemented. Source anchors use
+`relative/path.go:Symbol`, never a line number.
+
+Each shard carries its connector's final certification obligations:
 
 - Workflows are source-discovered from real command handlers: `etl`,
   `reverse_etl`, `flow_authoring`, and `schedule`. All applicable workflows
@@ -110,7 +120,7 @@ without an executor annotation it remains honestly unimplemented.
   Every mode/primitive combination has an explicit cell. `change_capture` is
   applicable only to `database_read_into_warehouse`; every other combination
   carries a named machine-readable non-applicability reason.
-- Flows are exact source/destination pairs with mandatory
+- Flows are exact source/destination pairs within the active allowlist with mandatory
   `local_parquet_warehouse` mediation: API→warehouse→API,
   API→warehouse→database, database→warehouse→API, and
   database→warehouse→database. The artifact uses non-overlapping compressed

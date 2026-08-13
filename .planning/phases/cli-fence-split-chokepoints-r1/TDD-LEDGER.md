@@ -2,12 +2,12 @@
 
 | ID | Guarantee | Red evidence | Green proof |
 | --- | --- | --- | --- |
-| R1 | Connector-local certification truth | A GitHub/PostgreSQL shard-reconstruction test cannot compile because no sharding API exists. | The two generated shards reconstruct exactly their former aggregate payload; any baseline is derived in memory rather than committed. |
-| R2 | Stable source anchors | A source-anchor test finds `file:line` anchors in discovered function/workflow inventories. | Every generated Go source anchor is `file:Symbol`; line insertion before an anchor leaves its shard byte-identical. |
-| R3 | Honest scoped drift detection | A changed/missing shard could evade the old aggregate-only checker. | `certification-matrix --check` validates and byte-compares allowlisted shards, so changed source constructs and connector rows fail while non-allowlisted connectors stay silent. |
-| R4 | App split is mechanical | Existing app ETL and Open-path tests are the baseline behavioural contract. | The same tests pass after moving only composition and dispatch blocks to package-local helpers. |
-| R5 | PostgreSQL capability parity | Existing PostgreSQL tests require CDC to remain false. | The table applies the same `CDC=false` override and all native package tests pass. |
-| R6 | Incremental lane isolation | A scoped generator run has no API or rewrites every shard. | Generating GitHub leaves PostgreSQL's committed shard byte-identical, and conversely. |
+| R1 | Connector-local certification truth | A shard-reconstruction test could not compile because no sharding API existed. | Passed: the two shards reconstruct the scoped capability and flow aggregate; baseline is derived in memory. |
+| R2 | Stable source anchors | A source-anchor test found `file:line` anchors. | Passed: every generated Go anchor is `file:Symbol`; a one-line executor insertion left all generated hashes unchanged. |
+| R3 | Honest scoped drift detection | A changed/missing shard could evade the old aggregate-only checker. | Passed: `certification-matrix --check` validates and byte-compares allowlisted shards; non-allowlisted evidence is filtered from scoped generation. |
+| R4 | App split is mechanical | Existing app ETL and Open-path tests are the baseline behavioural contract. | Passed: the same focused app suite passes after moving only composition and mode-dispatch blocks. |
+| R5 | PostgreSQL capability parity | Existing PostgreSQL tests require CDC to remain false. | Passed: the row table applies the same `CDC=false` override and the native package suite passes. |
+| R6 | Incremental lane isolation | A scoped generator run had no API or rewrote every shard. | Passed: the generator core test runs GitHub scope and confirms PostgreSQL plus status are byte-identical. |
 
 ## Red command
 

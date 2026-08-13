@@ -15,7 +15,7 @@ func TestGeneratedStatusMakesUncertifiedConnectorVisible(t *testing.T) {
 	}
 }
 
-func TestGeneratedStatusIncludesEveryConnector(t *testing.T) {
+func TestGeneratedStatusIncludesEveryAllowlistedConnector(t *testing.T) {
 	statuses, err := AllStatuses()
 	if err != nil {
 		t.Fatalf("AllStatuses() error = %v", err)
@@ -23,13 +23,32 @@ func TestGeneratedStatusIncludesEveryConnector(t *testing.T) {
 	if len(statuses) == 0 {
 		t.Fatal("AllStatuses() returned no generated connector statuses")
 	}
-	foundGitHub := false
+	found := map[string]bool{}
 	for _, status := range statuses {
-		if status.Connector == "github" {
-			foundGitHub = true
+		found[status.Connector] = true
+	}
+	for _, connector := range []string{"github", "postgres"} {
+		if !found[connector] {
+			t.Fatalf("AllStatuses() omitted allowlisted connector %q", connector)
 		}
 	}
-	if !foundGitHub {
-		t.Fatal("AllStatuses() omitted github")
+	if len(found) != 2 {
+		t.Fatalf("AllStatuses() returned %d statuses, want the two certification claims", len(found))
+	}
+}
+
+func TestUnallowlistedConnectorHasNoCertificationClaim(t *testing.T) {
+	status, err := StatusFor("mysql")
+	if err != nil {
+		t.Fatalf("StatusFor(mysql) error = %v", err)
+	}
+	if status.Certified || status.Label != uncertifiedLabel || status.Warning != uncertifiedWarning {
+		t.Fatalf("mysql status = %#v, want unchanged visible uncertified warning", status)
+	}
+}
+
+func TestUnknownConnectorStatusRemainsAnError(t *testing.T) {
+	if _, err := StatusFor("not-a-connector"); err == nil {
+		t.Fatal("StatusFor(not-a-connector) error = nil, want omitted-status error")
 	}
 }

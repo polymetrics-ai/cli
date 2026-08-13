@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"sync"
 	"testing"
@@ -468,11 +469,30 @@ func TestCertificationShardsRoundTripGeneratedMatrices(t *testing.T) {
 			t.Errorf("reconstructed capability matrix omitted %q", connector)
 		}
 	}
+	wantCapabilities, err := buildCapabilityMatrixForConnectors(root, certificationConnectorAllowlist)
+	if err != nil {
+		t.Fatalf("buildCapabilityMatrixForConnectors() error = %v", err)
+	}
+	wantFlows, err := buildFlowMatrixForConnectors(root, wantCapabilities, certificationConnectorAllowlist)
+	if err != nil {
+		t.Fatalf("buildFlowMatrixForConnectors() error = %v", err)
+	}
+	// Legacy harness metadata is deliberately not certification data and never
+	// belongs inside a connector shard. The rest must reconstruct precisely.
+	wantCapabilities.LegacyCertificationInputs = capabilities.LegacyCertificationInputs
+	wantCapabilities.GeneratedCommand = capabilities.GeneratedCommand
+	wantFlows.GeneratedCommand = flows.GeneratedCommand
+	if !reflect.DeepEqual(capabilities, wantCapabilities) {
+		t.Fatal("shard union did not reconstruct the GitHub/PostgreSQL capability aggregate")
+	}
+	if !reflect.DeepEqual(flows, wantFlows) {
+		t.Fatal("shard union did not reconstruct the GitHub/PostgreSQL flow aggregate")
+	}
 }
 
 func TestCertificationScopedGenerationLeavesOtherShardByteIdentical(t *testing.T) {
-	root := repoRootForCertificationTest(t)
-	shards, err := buildCertificationShards(root, certificationConnectorAllowlist)
+	sourceRoot := repoRootForCertificationTest(t)
+	shards, err := buildCertificationShards(sourceRoot, certificationConnectorAllowlist)
 	if err != nil {
 		t.Fatalf("buildCertificationShards() error = %v", err)
 	}
@@ -499,8 +519,16 @@ func TestCertificationScopedGenerationLeavesOtherShardByteIdentical(t *testing.T
 	if err != nil {
 		t.Fatalf("read initial %q shard: %v", other, err)
 	}
-	if err := writeCertificationShardScope(outputRoot, payloads, []string{"github"}); err != nil {
-		t.Fatalf("writeCertificationShardScope() error = %v", err)
+	statusPath := filepath.Join(outputRoot, certificationStatusPath)
+	statusBefore := []byte("unchanged shared status projection\n")
+	if err := os.MkdirAll(filepath.Dir(statusPath), 0o755); err != nil {
+		t.Fatalf("mkdir status parent: %v", err)
+	}
+	if err := os.WriteFile(statusPath, statusBefore, 0o600); err != nil {
+		t.Fatalf("write initial status: %v", err)
+	}
+	if _, err := generateCertificationMatrix(sourceRoot, outputRoot, false, false, "github"); err != nil {
+		t.Fatalf("generateCertificationMatrix() error = %v", err)
 	}
 	after, err := os.ReadFile(certificationShardPath(outputRoot, other))
 	if err != nil {
@@ -508,6 +536,54 @@ func TestCertificationScopedGenerationLeavesOtherShardByteIdentical(t *testing.T
 	}
 	if !bytes.Equal(before, after) {
 		t.Fatalf("scoped github generation rewrote %q shard", other)
+	}
+	statusAfter, err := os.ReadFile(statusPath)
+	if err != nil {
+		t.Fatalf("read final status: %v", err)
+	}
+	if !bytes.Equal(statusBefore, statusAfter) {
+		t.Fatal("scoped github generation rewrote the shared status projection")
+	}
+}
+
+func TestCertificationShardDriftFails(t *testing.T) {
+	root := repoRootForCertificationTest(t)
+	shards, err := buildCertificationShards(root, certificationConnectorAllowlist)
+	if err != nil {
+		t.Fatalf("buildCertificationShards() error = %v", err)
+	}
+	payloads, err := marshalCertificationShards(shards)
+	if err != nil {
+		t.Fatalf("marshalCertificationShards() error = %v", err)
+	}
+	outputRoot := t.TempDir()
+	if err := writeCertificationShardScope(outputRoot, payloads, certificationConnectorAllowlist); err != nil {
+		t.Fatalf("writeCertificationShardScope() error = %v", err)
+	}
+	path := certificationShardPath(outputRoot, "github")
+	stale := append([]byte(nil), payloads["github"]...)
+	stale = append([]byte(" "), stale...)
+	if err := os.WriteFile(path, stale, 0o600); err != nil {
+		t.Fatalf("write stale shard: %v", err)
+	}
+	if err := checkCertificationShards(outputRoot, payloads); err == nil {
+		t.Fatal("checkCertificationShards() error = nil, want shard drift failure")
+	}
+}
+
+func TestCertificationScopeIgnoresOtherConnectorClaims(t *testing.T) {
+	scope := []string{"github"}
+	for _, evidence := range []acceptedEvidence{
+		{Scope: evidenceScopeCapability, Connector: "mysql"},
+		{Scope: evidenceScopeWorkflow, Connector: "postgres"},
+		{Scope: evidenceScopeFlow, Source: "github", Destination: "postgres"},
+	} {
+		if acceptedEvidenceWithinScope(evidence, scope) {
+			t.Fatalf("evidence %#v unexpectedly entered github certification scope", evidence)
+		}
+	}
+	if !acceptedEvidenceWithinScope(acceptedEvidence{Scope: evidenceScopeCapability, Connector: "github"}, scope) {
+		t.Fatal("github capability evidence did not enter github certification scope")
 	}
 }
 
@@ -534,13 +610,13 @@ func TestCertificationSourceAnchorsUseSymbols(t *testing.T) {
 	if err := validateSymbolSourceAnchor("internal/cli/cli.go:603"); err == nil {
 		t.Fatal("numeric source anchor was accepted")
 	}
+	if err := validateSymbolSourceAnchor("internal/cli/cli.go:603notasymbol"); err == nil {
+		t.Fatal("non-symbol source anchor was accepted")
+	}
 }
 
 func TestCertificationDiscoversStableWarehouseFacingSyncPrimitives(t *testing.T) {
-	primitives, err := discoverSyncPrimitives([]matrixConnectorSource{{integrationType: "api"}, {integrationType: "database"}})
-	if err != nil {
-		t.Fatalf("discoverSyncPrimitives() error = %v", err)
-	}
+	primitives := discoverSyncPrimitives()
 	want := map[string]bool{
 		"api_read_into_warehouse":       false,
 		"api_write_from_warehouse":      false,

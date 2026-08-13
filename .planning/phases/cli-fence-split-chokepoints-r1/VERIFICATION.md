@@ -2,43 +2,54 @@
 
 ## Behaviour-preservation checks
 
-- [ ] GitHub and PostgreSQL shard union reconstructs their exact old aggregate payload.
-- [ ] A normal scoped generation run leaves the other allowlisted shard byte-identical.
-- [ ] All generated anchors name source symbols and no `:<digits>` source anchor remains.
-- [ ] `connectorgen certification-matrix --check` detects allowlisted shard drift and source
+- [x] GitHub and PostgreSQL shard union reconstructs their exact in-memory aggregate payload.
+- [x] A normal scoped generation run leaves the other allowlisted shard and shared status artifact
+      byte-identical.
+- [x] All generated anchors name source symbols and no `:<digits>` source anchor remains.
+- [x] `connectorgen certification-matrix --check` detects allowlisted shard drift and source
       disappearance while ignoring non-allowlisted certification claims.
-- [ ] A one-line shared-file insertion above an anchor produces zero generated shard changes after
+- [x] A one-line shared-file insertion above an anchor produces zero generated shard changes after
       the refactor (baseline old-matrix diff count is recorded below).
-- [ ] Existing app Open/ETL tests and PostgreSQL metadata/manifest tests pass unchanged.
-- [ ] No capability values, error text, CLI output, or connector definition semantics change.
+- [x] Existing app Open/ETL tests and PostgreSQL metadata/manifest tests pass unchanged.
+- [x] No capability values, error text, CLI output, or connector definition semantics change.
 
 ## Local commands
 
-- [ ] `go test -count=1 ./cmd/connectorgen`
-- [ ] `go test -count=1 ./internal/app`
-- [ ] `go test -count=1 ./internal/connectors/native/postgres`
-- [ ] `go run ./cmd/connectorgen certification-matrix --check`
-- [ ] `go vet ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make tidy-check`
-- [ ] `make lint`
-- [ ] `make docs-check`
-- [ ] `make smoke-no-build`
-- [ ] `make agent-contract-check`
-- [ ] `make connectorgen-validate`
-- [ ] `make connectorgen-surface-sync`
-- [ ] `make connectorgen-certification-matrix`
-- [ ] `make connector-boundary`
-- [ ] `make connector-canon-check`
-- [ ] `make release-workflow-check`
+- [x] `go test -count=1 ./cmd/connectorgen`
+- [x] `go test -count=1 ./internal/app`
+- [x] `go test -count=1 ./internal/connectors/native/postgres`
+- [x] `go test -count=1 ./internal/connectors/certifications`
+- [x] `go run ./cmd/connectorgen certification-matrix --all`
+- [x] `go run ./cmd/connectorgen certification-matrix --check`
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make tidy-check`
+- [x] `make lint`
+- [x] `make docs-check`
+- [x] `make smoke-no-build`
+- [x] `make agent-contract-check`
+- [x] `make connectorgen-validate`
+- [x] `make connectorgen-surface-sync`
+- [x] `make connectorgen-certification-matrix`
+- [x] `make connector-boundary`
+- [x] `make connector-canon-check`
+- [x] `make release-workflow-check`
 - [ ] no-mistakes pipeline returns `checks-passed`.
 
 ## Required report measurements
 
 - Database test package on base: absent (`internal/connectors/database` does not exist on
   `2df18ee`).
-- Old one-line-insertion capability-matrix diff: pending measurement before implementation.
-- Shards produced / largest shard / aggregate consumers / post-change insertion diff: pending final
-  regeneration.
-- Flow equivalent share for GitHub and PostgreSQL, complete 556-connector consumer inventory, and
-  final certification-surface size: pending final regeneration.
+- Old one-line-insertion capability-matrix diff: one changed generated line (`1` addition / `1`
+  deletion) at the moved `binary_download` executor anchor in the shared 6,632,701-byte file.
+- Post-change insertion result: zero generated shard/status changes; the GitHub, PostgreSQL, and
+  status SHA-256 values were identical before and after the inserted source comment.
+- Shards produced: 2. Largest shard: GitHub, 37,118 bytes. PostgreSQL: 30,940 bytes. The compact
+  status projection is 525 bytes; total checked-in certification surface: 68,583 bytes.
+- Aggregate consumers: only `cmd/connectorgen` produced/checked the two retired matrices and the
+  Make target called that generator; runtime `internal/connectors/certifications/status.go` consumes
+  only `status.json`. No website, docs build, or CLI consumer reads either retired aggregate.
+- Flow share: direct GitHub/PostgreSQL flow rows were 23,562 / 10,692,336 bytes (0.22%). The old
+  compressed global pair-set records mentioning either connector occupied 317,373 additional bytes;
+  their non-exclusive union was 340,935 bytes (3.19%), demonstrating why those global sets are now
+  reconstructed in memory rather than committed in either shard.

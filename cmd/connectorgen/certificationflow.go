@@ -260,7 +260,7 @@ func discoverWorkflowKinds(repoRoot string) ([]workflowKind, error) {
 				if !isSafeProofIdentifier(id) {
 					return nil, fmt.Errorf("workflow annotation %q is invalid", id)
 				}
-				source := sourceAt(repoRoot, path, fileSet.Position(function.Pos()).Line)
+				source := sourceSymbol(repoRoot, path, functionSymbol(function))
 				if existing, exists := found[id]; exists {
 					return nil, fmt.Errorf("workflow annotation %q has multiple handlers (%s, %s)", id, existing, source)
 				}
@@ -291,23 +291,9 @@ func discoverSyncModes() []syncModeKind {
 	return out
 }
 
-func discoverSyncPrimitives(sources []matrixConnectorSource) ([]syncPrimitive, error) {
-	integrationTypes := make(map[string]bool)
-	for _, source := range sources {
-		if source.integrationType == "api" || source.integrationType == "database" {
-			integrationTypes[source.integrationType] = true
-		}
-	}
-	// The four warehouse-facing primitives are a product contract, not a
-	// convenience list inferred from whichever connector happens to exist in a
-	// checkout. Confirm the registry still supplies both endpoint classes, then
-	// emit all four so a future deletion cannot silently erase a certification
-	// obligation.
-	for _, integrationType := range []string{"api", "database"} {
-		if !integrationTypes[integrationType] {
-			return nil, fmt.Errorf("connector registry has no %s integration for required warehouse-facing primitives", integrationType)
-		}
-	}
+func discoverSyncPrimitives() []syncPrimitive {
+	// This fixed product contract must not depend on which connector a scoped
+	// generation run happens to load. Connector roles determine applicability.
 	primitives := make([]syncPrimitive, 0, 4)
 	for _, integrationType := range []string{"api", "database"} {
 		for _, capability := range []string{"read", "write"} {
@@ -320,11 +306,11 @@ func discoverSyncPrimitives(sources []matrixConnectorSource) ([]syncPrimitive, e
 				IntegrationType:    integrationType,
 				Capability:         capability,
 				WarehouseDirection: direction,
-				DiscoverySource:    "connector registry integration_type and Capabilities." + goIdentifier(capability),
+				DiscoverySource:    "internal/connectors/connectors.go:Connector.Metadata",
 			})
 		}
 	}
-	return primitives, nil
+	return primitives
 }
 
 func workflowKindsFromDoc(doc *ast.CommentGroup) []string {
@@ -649,16 +635,16 @@ func syncModeCellsComplete(cells []syncModeCertificationCell) bool {
 	return applicable > 0
 }
 
-func buildFlowMatrix(repoRoot string, capabilities capabilityMatrix) (flowMatrix, error) {
-	bundles, err := loadSourceBundles(repoRoot)
+func buildFlowMatrixForConnectors(repoRoot string, capabilities capabilityMatrix, names []string) (flowMatrix, error) {
+	bundles, err := loadSourceBundlesForConnectors(repoRoot, names)
 	if err != nil {
 		return flowMatrix{}, err
 	}
-	sources, err := matrixConnectorSources(bundles)
+	sources, err := matrixConnectorSourcesForNames(bundles, names)
 	if err != nil {
 		return flowMatrix{}, err
 	}
-	evidence, err := loadAcceptedEvidence(repoRoot)
+	evidence, err := loadAcceptedEvidence(repoRoot, names)
 	if err != nil {
 		return flowMatrix{}, err
 	}
@@ -676,10 +662,7 @@ func buildFlowMatrix(repoRoot string, capabilities capabilityMatrix) (flowMatrix
 		return flowMatrix{}, err
 	}
 	syncModes := discoverSyncModes()
-	syncPrimitives, err := discoverSyncPrimitives(sources)
-	if err != nil {
-		return flowMatrix{}, err
-	}
+	syncPrimitives := discoverSyncPrimitives()
 	syncCells, err := buildConnectorSyncModeCells(sources, capabilities, syncModes, syncPrimitives, evidence)
 	if err != nil {
 		return flowMatrix{}, err
@@ -1493,42 +1476,6 @@ func isSortedUnique(values []string) bool {
 	return true
 }
 
-func validateFlowMatrixArtifactFile(path string) error {
-	raw, err := os.ReadFile(path)
-	if err != nil {
-		if errors.Is(err, fs.ErrNotExist) {
-			return fmt.Errorf("generated artifact %q is missing; run `go run ./cmd/connectorgen certification-matrix`", filepath.ToSlash(path))
-		}
-		return fmt.Errorf("read generated artifact %q: %w", filepath.ToSlash(path), err)
-	}
-	if err := validateFlowMatrixArtifactJSON(raw); err != nil {
-		return fmt.Errorf("generated certification artifact %q is invalid: %w", filepath.ToSlash(path), err)
-	}
-	return nil
-}
-
-func validateFlowMatrixArtifactJSON(raw []byte) error {
-	var matrix flowMatrix
-	if err := decodeStrictJSON(raw, &matrix); err != nil {
-		return fmt.Errorf("parse: %w", err)
-	}
-	return validateFlowMatrix(matrix)
-}
-
-func validateCertificationStatusArtifactFile(path string) error {
-	raw, err := os.ReadFile(path)
-	if err != nil {
-		if errors.Is(err, fs.ErrNotExist) {
-			return fmt.Errorf("generated artifact %q is missing; run `go run ./cmd/connectorgen certification-matrix`", filepath.ToSlash(path))
-		}
-		return fmt.Errorf("read generated artifact %q: %w", filepath.ToSlash(path), err)
-	}
-	if err := validateCertificationStatusArtifactJSON(raw); err != nil {
-		return fmt.Errorf("generated certification artifact %q is invalid: %w", filepath.ToSlash(path), err)
-	}
-	return nil
-}
-
 func validateCertificationStatusArtifactJSON(raw []byte) error {
 	var artifact certificationStatusArtifact
 	if err := decodeStrictJSON(raw, &artifact); err != nil {
@@ -1562,23 +1509,6 @@ func checkCertificationStatusGeneratedArtifact(path string, generated []byte) er
 		return fmt.Errorf("generated certification artifact %q is invalid: %w", filepath.ToSlash(path), err)
 	}
 	if !bytes.Equal(existing, generated) {
-		return fmt.Errorf("generated artifact %q has drift; run `go run ./cmd/connectorgen certification-matrix`", filepath.ToSlash(path))
-	}
-	return nil
-}
-
-func checkFlowGeneratedArtifact(path string, generated []byte) error {
-	existing, err := os.ReadFile(path)
-	if err != nil {
-		if errors.Is(err, fs.ErrNotExist) {
-			return fmt.Errorf("generated artifact %q is missing; run `go run ./cmd/connectorgen certification-matrix`", filepath.ToSlash(path))
-		}
-		return fmt.Errorf("read generated artifact %q: %w", filepath.ToSlash(path), err)
-	}
-	if err := validateFlowMatrixArtifactJSON(existing); err != nil {
-		return fmt.Errorf("generated certification artifact %q is invalid: %w", filepath.ToSlash(path), err)
-	}
-	if string(existing) != string(generated) {
 		return fmt.Errorf("generated artifact %q has drift; run `go run ./cmd/connectorgen certification-matrix`", filepath.ToSlash(path))
 	}
 	return nil
