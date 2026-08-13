@@ -20,24 +20,53 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	return sourceDeclared || destinationDeclared
 }
 
-// shouldRunTransport keeps the GitHub walking slice opt-in at the persisted
-// connection boundary. Open installs the exact GitHub transport composition so
-// it can be preflighted, but that must not turn every existing GitHub JSON ETL
-// connection into a transport run merely because its connector now advertises
-// the closed descriptor.
+// shouldRunTransport keeps the closed issue-label walking slice opt-in at the
+// persisted connection boundary. Open installs the exact definition-owned
+// composition so it can be preflighted, but that must not turn every existing
+// JSON ETL connection into a transport run merely because its connector now
+// advertises the closed descriptor.
 //
 // Other externally declared transport pairs retain the normal descriptor-led
-// dispatch. GitHub participates only when the connection itself satisfies the
-// fixed issues/full_append/source-issue/target-issue/label contract.
+// dispatch. The walking slice participates only when the connection itself
+// satisfies its fixed issues/full_append/source-issue/target-issue/label
+// contract.
 func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMode, source, destination connectors.Connector) bool {
-	if source.Name() != "github" && destination.Name() != "github" {
+	sourceIssueLabel := isIssueLabelTransportConnector(source)
+	destinationIssueLabel := isIssueLabelTransportConnector(destination)
+	if sourceIssueLabel || destinationIssueLabel {
+		// The closed composition is a same-definition source/destination pair.
+		// A one-sided descriptor is an ordinary legacy ETL connection, not a
+		// half-transport route; in particular, it must not divert a historical
+		// declarative source into the warehouse destination transport preflight.
+		if !sourceIssueLabel || !destinationIssueLabel {
+			return false
+		}
+	} else {
 		return hasDeclaredSyncTransport(source, destination)
 	}
 	if streamName != "issues" || mode.ContractMode != synccontract.ModeFullAppend {
 		return false
 	}
-	_, err := a.githubIssueLabelTransportConnection(conn.ID)
+	_, err := a.issueLabelTransportConnection(conn.ID)
 	return err == nil
+}
+
+func isIssueLabelTransportConnector(connector connectors.Connector) bool {
+	descriptor, ok := connectors.SyncTransportDescriptorOf(connector)
+	if !ok || descriptor.Source == nil || descriptor.Destination == nil {
+		return false
+	}
+	if descriptor.Source.Executor != issueLabelSourceReference || descriptor.Destination.Executor != issueLabelDestinationReference {
+		return false
+	}
+	if len(descriptor.Source.EligibleStreams) != 1 || descriptor.Source.EligibleStreams[0] != "issues" || len(descriptor.Destination.EligibleActions) != 1 || descriptor.Destination.EligibleActions[0] != issueLabelAddAction {
+		return false
+	}
+	if len(descriptor.Destination.ApplyStrategies) != 1 {
+		return false
+	}
+	strategy := descriptor.Destination.ApplyStrategies[0]
+	return strategy.Mode == synccontract.ModeFullAppend && strategy.Strategy == connectors.ApplyStrategyAppend && strategy.Action == issueLabelAddAction
 }
 
 // runTransportETL is the bounded bridge from persisted connection state to

@@ -16,14 +16,14 @@ import (
 	"testing"
 )
 
-// TestPMBinaryExecutesGitHubWarehouseTransportLifecycle is the executable
+// TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle is the executable
 // proof for #4081. Every lifecycle boundary goes through a separately invoked
 // fresh pm binary: a closed plan and human preview issue an ephemeral token;
 // the ordinary ETL command receives that token on stdin and owns the durable
 // source -> warehouse -> reopen -> provider -> read-back -> checkpoint path.
 // Cleanup has its own closed plan, preview, and one-time approval.
-func TestPMBinaryExecutesGitHubWarehouseTransportLifecycle(t *testing.T) {
-	server := newFaithfulGitHubTransportServer(t)
+func TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle(t *testing.T) {
+	server := newFaithfulIssueLabelTransportServer(t)
 	binary := buildTransportPM(t)
 	sha, size := transportBinaryIdentity(t, binary)
 	t.Logf("fresh pm binary sha256=%s size_bytes=%d", sha, size)
@@ -79,14 +79,14 @@ func TestPMBinaryExecutesGitHubWarehouseTransportLifecycle(t *testing.T) {
 		t.Fatalf("closed GitHub transport plan command failed: %v\n%s", err, forwardPlanOutput)
 	}
 	sanitizedOutputs = append(sanitizedOutputs, forwardPlanOutput)
-	forwardPlanID := assertTransportPlanOutput(t, forwardPlanOutput, "github_issue_label_transport", "add_issue_labels", connectionID, "")
+	forwardPlanID := assertTransportPlanOutput(t, forwardPlanOutput, "issue_label_transport", "add_issue_labels", connectionID, "")
 
 	forwardPreviewJSON := mustRun(
 		"etl", "transport", "github-issue-label", "preview", forwardPlanID,
 		"--root", root,
 		"--json",
 	)
-	assertTransportPreviewOutput(t, forwardPreviewJSON, "github_issue_label_transport", "add_issue_labels", false)
+	assertTransportPreviewOutput(t, forwardPreviewJSON, "issue_label_transport", "add_issue_labels", false)
 	forwardPreviewHuman, err := runTransportPM(binary, "",
 		"etl", "transport", "github-issue-label", "preview", forwardPlanID,
 		"--root", root,
@@ -94,7 +94,7 @@ func TestPMBinaryExecutesGitHubWarehouseTransportLifecycle(t *testing.T) {
 	if err != nil {
 		t.Fatalf("human forward preview failed: %v", err)
 	}
-	forwardToken := assertTransportPreviewOutput(t, forwardPreviewHuman, "github_issue_label_transport", "add_issue_labels", true)
+	forwardToken := assertTransportPreviewOutput(t, forwardPreviewHuman, "issue_label_transport", "add_issue_labels", true)
 
 	forwardRunArgs := []string{
 		"etl", "run",
@@ -124,13 +124,13 @@ func TestPMBinaryExecutesGitHubWarehouseTransportLifecycle(t *testing.T) {
 		"--root", root,
 		"--json",
 	)
-	cleanupPlanID := assertTransportPlanOutput(t, cleanupPlanOutput, "github_issue_label_transport_cleanup", "remove_issue_label", connectionID, forwardPlanID)
+	cleanupPlanID := assertTransportPlanOutput(t, cleanupPlanOutput, "issue_label_transport_cleanup", "remove_issue_label", connectionID, forwardPlanID)
 	cleanupPreviewJSON := mustRun(
 		"etl", "transport", "github-issue-label", "preview", cleanupPlanID,
 		"--root", root,
 		"--json",
 	)
-	assertTransportPreviewOutput(t, cleanupPreviewJSON, "github_issue_label_transport_cleanup", "remove_issue_label", false)
+	assertTransportPreviewOutput(t, cleanupPreviewJSON, "issue_label_transport_cleanup", "remove_issue_label", false)
 	cleanupPreviewHuman, err := runTransportPM(binary, "",
 		"etl", "transport", "github-issue-label", "preview", cleanupPlanID,
 		"--root", root,
@@ -138,7 +138,7 @@ func TestPMBinaryExecutesGitHubWarehouseTransportLifecycle(t *testing.T) {
 	if err != nil {
 		t.Fatalf("human cleanup preview failed: %v", err)
 	}
-	cleanupToken := assertTransportPreviewOutput(t, cleanupPreviewHuman, "github_issue_label_transport_cleanup", "remove_issue_label", true)
+	cleanupToken := assertTransportPreviewOutput(t, cleanupPreviewHuman, "issue_label_transport_cleanup", "remove_issue_label", true)
 
 	cleanupRunArgs := []string{
 		"etl", "transport", "github-issue-label", "cleanup", "run", cleanupPlanID,
@@ -165,7 +165,7 @@ func TestPMBinaryExecutesGitHubWarehouseTransportLifecycle(t *testing.T) {
 		"--root", root,
 		"--json",
 	)
-	missingPlanID := assertTransportPlanOutput(t, missingPlanOutput, "github_issue_label_transport_cleanup", "remove_issue_label", connectionID, forwardPlanID)
+	missingPlanID := assertTransportPlanOutput(t, missingPlanOutput, "issue_label_transport_cleanup", "remove_issue_label", connectionID, forwardPlanID)
 	missingPreviewHuman, err := runTransportPM(binary, "",
 		"etl", "transport", "github-issue-label", "preview", missingPlanID,
 		"--root", root,
@@ -173,7 +173,7 @@ func TestPMBinaryExecutesGitHubWarehouseTransportLifecycle(t *testing.T) {
 	if err != nil {
 		t.Fatalf("human missing-label cleanup preview failed: %v", err)
 	}
-	missingToken := assertTransportPreviewOutput(t, missingPreviewHuman, "github_issue_label_transport_cleanup", "remove_issue_label", true)
+	missingToken := assertTransportPreviewOutput(t, missingPreviewHuman, "issue_label_transport_cleanup", "remove_issue_label", true)
 	missingRunArgs := []string{
 		"etl", "transport", "github-issue-label", "cleanup", "run", missingPlanID,
 		"--connection", "transport-demo",
@@ -202,7 +202,7 @@ func TestPMBinaryExecutesGitHubWarehouseTransportLifecycle(t *testing.T) {
 	if labelPresent {
 		t.Fatalf("faithful GitHub server still has the transport label after cleanup; events=%v", events)
 	}
-	assertFaithfulGitHubTransportOrder(t, events)
+	assertFaithfulIssueLabelTransportOrder(t, events)
 	emitTransportLifecycleEvidence(t, sha, size, events)
 }
 
@@ -225,7 +225,7 @@ func emitTransportLifecycleEvidence(t *testing.T, binarySHA256 string, binarySiz
 		ZeroResidue                 bool     `json:"zero_residue"`
 		ProviderEvents              []string `json:"provider_events"`
 	}{
-		Kind:                        "GitHubWarehouseTransportEvidence",
+		Kind:                        "IssueLabelWarehouseTransportEvidence",
 		BinarySHA256:                binarySHA256,
 		BinarySizeBytes:             binarySize,
 		ArtifactKinds:               []string{"wal_jsonl", "duckdb_parquet", "manifest"},
@@ -600,22 +600,22 @@ func redactTransportFailureOutput(output string, tokens ...string) string {
 	return output
 }
 
-type faithfulGitHubTransportServer struct {
+type faithfulIssueLabelTransportServer struct {
 	*httptest.Server
 	mu           sync.Mutex
 	events       []string
 	labelPresent bool
 }
 
-func newFaithfulGitHubTransportServer(t *testing.T) *faithfulGitHubTransportServer {
+func newFaithfulIssueLabelTransportServer(t *testing.T) *faithfulIssueLabelTransportServer {
 	t.Helper()
-	server := &faithfulGitHubTransportServer{}
+	server := &faithfulIssueLabelTransportServer{}
 	server.Server = httptest.NewServer(http.HandlerFunc(server.serveHTTP))
 	t.Cleanup(server.Close)
 	return server
 }
 
-func (s *faithfulGitHubTransportServer) serveHTTP(w http.ResponseWriter, request *http.Request) {
+func (s *faithfulIssueLabelTransportServer) serveHTTP(w http.ResponseWriter, request *http.Request) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if request.Header.Get("Accept") != "application/vnd.github+json" || request.Header.Get("X-GitHub-Api-Version") != "2026-03-10" || request.Header.Get("User-Agent") != "polymetrics-go-cli" || request.Header.Get("Authorization") != "" {
@@ -642,7 +642,7 @@ func (s *faithfulGitHubTransportServer) serveHTTP(w http.ResponseWriter, request
 		if s.labelPresent {
 			labels = append(labels, map[string]any{"name": "pm-transport-demo-4081"})
 		}
-		records := []map[string]any{faithfulGitHubIssue(4081001, nil), faithfulGitHubIssue(4081002, labels)}
+		records := []map[string]any{faithfulIssue(4081001, nil), faithfulIssue(4081002, labels)}
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(records)
 	case request.Method == http.MethodPost && request.URL.Path == "/repos/acme/widgets/issues/4081002/labels":
@@ -671,7 +671,7 @@ func (s *faithfulGitHubTransportServer) serveHTTP(w http.ResponseWriter, request
 	}
 }
 
-func faithfulGitHubIssue(number int, labels []map[string]any) map[string]any {
+func faithfulIssue(number int, labels []map[string]any) map[string]any {
 	if labels == nil {
 		labels = []map[string]any{}
 	}
@@ -691,13 +691,13 @@ func faithfulGitHubIssue(number int, labels []map[string]any) map[string]any {
 	}
 }
 
-func (s *faithfulGitHubTransportServer) snapshot() (events []string, labelPresent bool) {
+func (s *faithfulIssueLabelTransportServer) snapshot() (events []string, labelPresent bool) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return append([]string(nil), s.events...), s.labelPresent
 }
 
-func assertFaithfulGitHubTransportOrder(t *testing.T, events []string) {
+func assertFaithfulIssueLabelTransportOrder(t *testing.T, events []string) {
 	t.Helper()
 	want := []string{"GET:source:100", "POST", "GET:read-back:100", "DELETE:204", "DELETE:404"}
 	if len(events) != len(want) {

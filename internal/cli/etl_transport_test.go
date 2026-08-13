@@ -175,7 +175,7 @@ func transportPlanForOutputTest() app.ReversePlan {
 	return app.ReversePlan{
 		ID:                     "rplan_transport_output",
 		Status:                 "planned",
-		Mode:                   "github_issue_label_transport",
+		Mode:                   "issue_label_transport",
 		DestinationCredential:  "private-destination-credential",
 		DestinationConfig:      map[string]string{"private": "destination_config"},
 		Action:                 "add_issue_labels",

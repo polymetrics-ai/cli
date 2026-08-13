@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	githubIssueLabelTransportCommand = "github-issue-label"
+	issueLabelTransportCommandSuffix = "-issue-label"
 	maxApprovalTokenStdinBytes       = 4096
 )
 
@@ -23,14 +23,14 @@ const etlTransportHelp = `NAME
   pm etl transport - run closed approval-bound transport lifecycles
 
 SYNOPSIS
-  pm etl transport github-issue-label plan --connection <name> [--json]
-  pm etl transport github-issue-label preview <plan-id> [--json]
+  pm etl transport %s plan --connection <name> [--json]
+  pm etl transport %s preview <plan-id> [--json]
   pm etl run --connection <name> --stream issues --batch-size 1 --approval-plan <plan-id> --approval-token-stdin --confirm destructive [--json]
-  pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
-  pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
+  pm etl transport %s cleanup plan --connection <name> --forward-plan <plan-id> [--json]
+  pm etl transport %s cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
 DESCRIPTION
-  github-issue-label is the one closed GitHub transport walking slice. The
+  %s is the one closed %s transport walking slice. The
   connection owns the repository, source issue, target issue, label, action,
   and credential configuration. This command family accepts none of those as
   command arguments.
@@ -38,10 +38,10 @@ DESCRIPTION
   Create a plan, preview it in human output to receive one ephemeral approval
   token, then send that token as one bounded line on standard input to pm etl
   run. The forward run remains the ordinary source -> durable warehouse ->
-  reopen -> typed GitHub mutation -> independent read-back -> checkpoint path.
+  reopen -> typed %s mutation -> independent read-back -> checkpoint path.
 
   Cleanup is a separately planned, previewed, one-time approved typed inverse.
-  A GitHub missing-label DELETE accepted by the declared missing_ok_status is a
+  A %s missing-label DELETE accepted by the declared missing_ok_status is a
   successful cleanup; replaying a consumed cleanup approval is rejected before
   another provider request.
 
@@ -91,20 +91,22 @@ func runETLTransport(ctx context.Context, a *app.App, args []string, stdout io.W
 	if len(args) == 0 || isOnlyTransportHelp(args) {
 		return writeETLTransportManual(stdout, jsonOut, "etl transport")
 	}
-	if args[0] != githubIssueLabelTransportCommand {
+	connectorName, ok := parseIssueLabelTransportCommand(args[0])
+	if !ok {
 		return usageErrorf("unknown etl transport %q", args[0])
 	}
-	return runGitHubIssueLabelTransport(ctx, a, args[1:], stdout, jsonOut)
+	return runIssueLabelTransport(ctx, a, connectorName, args[1:], stdout, jsonOut)
 }
 
-func runGitHubIssueLabelTransport(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+func runIssueLabelTransport(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
+	command := "etl transport " + issueLabelTransportCommand(connectorName)
 	if len(args) == 0 || isOnlyTransportHelp(args) {
-		return writeETLTransportManual(stdout, jsonOut, "etl transport github-issue-label")
+		return writeETLTransportManual(stdout, jsonOut, command)
 	}
 	switch args[0] {
 	case "plan":
 		if isOnlyTransportHelp(args[1:]) {
-			return writeETLTransportManual(stdout, jsonOut, "etl transport github-issue-label")
+			return writeETLTransportManual(stdout, jsonOut, command)
 		}
 		flags, err := parseStrictTransportFlags(args[1:], map[string]strictTransportFlagSpec{
 			"connection": {},
@@ -112,48 +114,52 @@ func runGitHubIssueLabelTransport(ctx context.Context, a *app.App, args []string
 		if err != nil {
 			return err
 		}
-		connectionID, err := githubIssueLabelTransportConnectionID(a, flags.value("connection"))
+		connectionID, err := issueLabelTransportConnectionID(a, connectorName, flags.value("connection"))
 		if err != nil {
 			return err
 		}
-		plan, err := a.PlanGitHubIssueLabelTransport(ctx, connectionID)
+		plan, err := a.PlanIssueLabelTransport(ctx, connectionID)
 		if err != nil {
 			return err
 		}
 		return writeETLTransportPlan(stdout, jsonOut, plan)
 	case "preview":
 		if len(args) == 3 && isOnlyTransportHelp(args[2:]) {
-			return writeETLTransportManual(stdout, jsonOut, "etl transport github-issue-label")
+			return writeETLTransportManual(stdout, jsonOut, command)
 		}
 		if len(args) != 2 || isOnlyTransportHelp(args[1:]) {
 			if isOnlyTransportHelp(args[1:]) {
-				return writeETLTransportManual(stdout, jsonOut, "etl transport github-issue-label")
+				return writeETLTransportManual(stdout, jsonOut, command)
 			}
 			return errUsage
 		}
 		if err := validateTransportPlanID(args[1]); err != nil {
 			return err
 		}
-		plan, preview, err := a.PreviewGitHubIssueLabelTransport(ctx, args[1])
+		plan, preview, err := a.PreviewIssueLabelTransport(ctx, args[1])
 		if err != nil {
+			return err
+		}
+		if err := issueLabelTransportPlanUsesConnector(a, plan, connectorName); err != nil {
 			return err
 		}
 		return writeETLTransportPreview(stdout, jsonOut, plan, preview)
 	case "cleanup":
-		return runGitHubIssueLabelTransportCleanup(ctx, a, args[1:], stdout, jsonOut)
+		return runIssueLabelTransportCleanup(ctx, a, connectorName, args[1:], stdout, jsonOut)
 	default:
-		return usageErrorf("unknown GitHub issue-label transport command %q", args[0])
+		return usageErrorf("unknown issue-label transport command %q", args[0])
 	}
 }
 
-func runGitHubIssueLabelTransportCleanup(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+func runIssueLabelTransportCleanup(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
+	command := "etl transport " + issueLabelTransportCommand(connectorName)
 	if len(args) == 0 || isOnlyTransportHelp(args) {
-		return writeETLTransportManual(stdout, jsonOut, "etl transport github-issue-label")
+		return writeETLTransportManual(stdout, jsonOut, command)
 	}
 	switch args[0] {
 	case "plan":
 		if isOnlyTransportHelp(args[1:]) {
-			return writeETLTransportManual(stdout, jsonOut, "etl transport github-issue-label")
+			return writeETLTransportManual(stdout, jsonOut, command)
 		}
 		flags, err := parseStrictTransportFlags(args[1:], map[string]strictTransportFlagSpec{
 			"connection":   {},
@@ -162,14 +168,14 @@ func runGitHubIssueLabelTransportCleanup(ctx context.Context, a *app.App, args [
 		if err != nil {
 			return err
 		}
-		connectionID, err := githubIssueLabelTransportConnectionID(a, flags.value("connection"))
+		connectionID, err := issueLabelTransportConnectionID(a, connectorName, flags.value("connection"))
 		if err != nil {
 			return err
 		}
 		if err := validateTransportPlanID(flags.value("forward-plan")); err != nil {
 			return err
 		}
-		plan, err := a.PlanGitHubIssueLabelTransportCleanup(ctx, connectionID, flags.value("forward-plan"))
+		plan, err := a.PlanIssueLabelTransportCleanup(ctx, connectionID, flags.value("forward-plan"))
 		if err != nil {
 			return err
 		}
@@ -177,7 +183,7 @@ func runGitHubIssueLabelTransportCleanup(ctx context.Context, a *app.App, args [
 	case "run":
 		if len(args) < 2 || isOnlyTransportHelp(args[1:]) || isOnlyTransportHelp(args[2:]) {
 			if isOnlyTransportHelp(args[1:]) || isOnlyTransportHelp(args[2:]) {
-				return writeETLTransportManual(stdout, jsonOut, "etl transport github-issue-label")
+				return writeETLTransportManual(stdout, jsonOut, command)
 			}
 			return errUsage
 		}
@@ -192,7 +198,7 @@ func runGitHubIssueLabelTransportCleanup(ctx context.Context, a *app.App, args [
 		if err != nil {
 			return err
 		}
-		connectionID, err := githubIssueLabelTransportConnectionID(a, flags.value("connection"))
+		connectionID, err := issueLabelTransportConnectionID(a, connectorName, flags.value("connection"))
 		if err != nil {
 			return err
 		}
@@ -208,16 +214,16 @@ func runGitHubIssueLabelTransportCleanup(ctx context.Context, a *app.App, args [
 		if err != nil {
 			return err
 		}
-		if plan.Mode != "github_issue_label_transport_cleanup" {
-			return validationErrorf("plan %q is not a GitHub issue-label transport cleanup plan", args[1])
+		if err := issueLabelTransportPlanUsesConnector(a, plan, connectorName); err != nil {
+			return err
 		}
-		result, err := a.ApplyGitHubIssueLabelTransportCleanup(ctx, connectionID, approval)
+		result, err := a.ApplyIssueLabelTransportCleanup(ctx, connectionID, approval)
 		if err != nil {
 			return err
 		}
 		return writeETLTransportCleanupRun(stdout, jsonOut, plan, result)
 	default:
-		return usageErrorf("unknown GitHub issue-label transport cleanup command %q", args[0])
+		return usageErrorf("unknown issue-label transport cleanup command %q", args[0])
 	}
 }
 
@@ -237,19 +243,19 @@ func parseETLRunTransportApproval(args []string, stdin io.Reader) (synctransport
 		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
 	}
 	if flags.value("connection") == "" || flags.value("stream") == "" || flags.value("batch-size") == "" {
-		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved GitHub transport ETL requires --connection, --stream issues, and --batch-size 1")
+		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved issue-label transport ETL requires --connection, --stream issues, and --batch-size 1")
 	}
 	if flags.value("stream") != "issues" {
-		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved GitHub transport ETL requires --stream issues")
+		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved issue-label transport ETL requires --stream issues")
 	}
 	batchSize, err := parseIntFlag("batch-size", flags.value("batch-size"), 0)
 	if err != nil {
 		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
 	}
 	if batchSize != 1 {
-		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved GitHub transport ETL requires --batch-size 1")
+		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved issue-label transport ETL requires --batch-size 1")
 	}
-	if _, err := githubIssueLabelTransportConnectionIDFromName(flags.value("connection")); err != nil {
+	if _, err := issueLabelTransportConnectionIDFromName(flags.value("connection")); err != nil {
 		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
 	}
 	approval, err := approvalFromStrictTransportFlags(flags.value("approval-plan"), flags, false)
@@ -264,7 +270,7 @@ func parseETLRunTransportApproval(args []string, stdin io.Reader) (synctransport
 	return approval, true, flags, nil
 }
 
-func runApprovedGitHubIssueLabelTransportETL(ctx context.Context, a *app.App, flags strictTransportFlags, approval synctransport.DestinationApproval, stdout io.Writer, jsonOut bool) error {
+func runApprovedIssueLabelTransportETL(ctx context.Context, a *app.App, flags strictTransportFlags, approval synctransport.DestinationApproval, stdout io.Writer, jsonOut bool) error {
 	batchSize, err := parseIntFlag("batch-size", flags.value("batch-size"), 0)
 	if err != nil {
 		return err
@@ -291,16 +297,16 @@ func approvalFromStrictTransportFlags(planID string, flags strictTransportFlags,
 	}
 	if flags.value("approval-token-stdin") != "true" || flags.value("confirm") == "" {
 		if cleanup {
-			return synctransport.DestinationApproval{}, validationErrorf("GitHub transport cleanup requires --approval-token-stdin and --confirm destructive")
+			return synctransport.DestinationApproval{}, validationErrorf("issue-label transport cleanup requires --approval-token-stdin and --confirm destructive")
 		}
-		return synctransport.DestinationApproval{}, validationErrorf("approved GitHub transport ETL requires --approval-plan, --approval-token-stdin, and --confirm destructive")
+		return synctransport.DestinationApproval{}, validationErrorf("approved issue-label transport ETL requires --approval-plan, --approval-token-stdin, and --confirm destructive")
 	}
 	confirmation, err := connectors.ParseWriteConfirmation(flags.value("confirm"))
 	if err != nil {
 		return synctransport.DestinationApproval{}, validationErrorf("invalid --confirm: %v", err)
 	}
 	if confirmation.Kind != connectors.ConfirmationKindDestructive {
-		return synctransport.DestinationApproval{}, validationErrorf("GitHub transport requires --confirm destructive")
+		return synctransport.DestinationApproval{}, validationErrorf("issue-label transport requires --confirm destructive")
 	}
 	return synctransport.DestinationApproval{PlanID: planID, Confirmation: confirmation}, nil
 }
@@ -389,19 +395,35 @@ func readApprovalTokenFromStdin(stdin io.Reader) (string, error) {
 	return line, nil
 }
 
-func githubIssueLabelTransportConnectionID(a *app.App, name string) (string, error) {
-	if _, err := githubIssueLabelTransportConnectionIDFromName(name); err != nil {
+func issueLabelTransportConnectionID(a *app.App, connectorName, name string) (string, error) {
+	if _, err := issueLabelTransportConnectionIDFromName(name); err != nil {
 		return "", err
 	}
 	for _, connection := range a.ListConnections() {
 		if connection.Name == name {
+			if connection.Source.Connector != connectorName || connection.Destination.Connector != connectorName {
+				return "", validationErrorf("connection %q does not own the selected issue-label transport command", name)
+			}
 			return connection.ID, nil
 		}
 	}
 	return "", validationErrorf("connection %q not found", name)
 }
 
-func githubIssueLabelTransportConnectionIDFromName(name string) (string, error) {
+func issueLabelTransportPlanUsesConnector(a *app.App, plan app.ReversePlan, connectorName string) error {
+	for _, connection := range a.ListConnections() {
+		if connection.ID != plan.TransportConnectionID {
+			continue
+		}
+		if connection.Source.Connector != connectorName || connection.Destination.Connector != connectorName || plan.DestinationConnector != connectorName {
+			return validationErrorf("transport plan %q does not belong to the selected issue-label transport command", plan.ID)
+		}
+		return nil
+	}
+	return validationErrorf("transport plan %q has no connection-owned command route", plan.ID)
+}
+
+func issueLabelTransportConnectionIDFromName(name string) (string, error) {
 	if strings.TrimSpace(name) == "" {
 		return "", validationErrorf("missing --connection")
 	}
@@ -441,7 +463,7 @@ func writeETLTransportPlan(stdout io.Writer, jsonOut bool, plan app.ReversePlan)
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ETLTransportPlan", "approval_required": true, "plan": safe})
 	}
-	_, _ = fmt.Fprintf(stdout, "GitHub issue-label transport plan %s\n", safe.ID)
+	_, _ = fmt.Fprintf(stdout, "Issue-label transport plan %s\n", safe.ID)
 	_, _ = fmt.Fprintf(stdout, "Mode: %s\nAction: %s\nRecords: %d\n", safe.Mode, safe.Action, safe.RecordCount)
 	_, _ = fmt.Fprintln(stdout, "Preview required before an approval token is issued.")
 	_, err := fmt.Fprintln(stdout, "Confirmation required: --confirm destructive")
@@ -464,10 +486,10 @@ func writeETLTransportPreview(stdout io.Writer, jsonOut bool, plan app.ReversePl
 			"write_preview":         safePreview,
 		})
 	}
-	_, _ = fmt.Fprintf(stdout, "GitHub issue-label transport preview %s\n", safePlan.ID)
+	_, _ = fmt.Fprintf(stdout, "Issue-label transport preview %s\n", safePlan.ID)
 	_, _ = fmt.Fprintf(stdout, "Mode: %s\nAction: %s\nRecords staged: %d\n", safePlan.Mode, safePlan.Action, safePreview.RecordsStaged)
 	if plan.ApprovalToken == "" {
-		return fmt.Errorf("GitHub issue-label transport preview did not issue an approval token")
+		return fmt.Errorf("issue-label transport preview did not issue an approval token")
 	}
 	_, _ = fmt.Fprintf(stdout, "Approval token: %s\n", plan.ApprovalToken)
 	_, err := fmt.Fprintln(stdout, "Confirmation required: --confirm destructive")
@@ -487,16 +509,36 @@ func writeETLTransportCleanupRun(stdout io.Writer, jsonOut bool, plan app.Revers
 			"result":          result,
 		})
 	}
-	_, err := fmt.Fprintf(stdout, "GitHub issue-label transport cleanup %s completed: written=%d failed=%d\n", safe.ID, result.RecordsWritten, result.RecordsFailed)
+	_, err := fmt.Fprintf(stdout, "Issue-label transport cleanup %s completed: written=%d failed=%d\n", safe.ID, result.RecordsWritten, result.RecordsFailed)
 	return err
 }
 
 func writeETLTransportManual(stdout io.Writer, jsonOut bool, command string) error {
-	if jsonOut {
-		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": command, "manual": etlTransportHelp})
+	manual, err := etlTransportManual(command)
+	if err != nil {
+		return err
 	}
-	_, err := fmt.Fprint(stdout, etlTransportHelp)
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": command, "manual": manual})
+	}
+	_, err = fmt.Fprint(stdout, manual)
 	return err
+}
+
+func etlTransportManual(command string) (string, error) {
+	identity, err := app.DefaultIssueLabelTransportIdentity()
+	if err != nil {
+		return "", fmt.Errorf("resolve closed issue-label transport manual: %w", err)
+	}
+	name := issueLabelTransportCommand(identity.ConnectorName)
+	parts := strings.Fields(command)
+	if len(parts) == 3 {
+		name = parts[2]
+	}
+	if name != issueLabelTransportCommand(identity.ConnectorName) {
+		return "", usageErrorf("unknown etl transport %q", name)
+	}
+	return fmt.Sprintf(etlTransportHelp, name, name, name, name, name, identity.DisplayName, identity.DisplayName, identity.DisplayName), nil
 }
 
 func isOnlyTransportHelp(args []string) bool {
@@ -513,26 +555,43 @@ func etlTransportManualCommand(args []string) (string, bool) {
 	if len(args) == 1 || isOnlyTransportHelp(args[1:]) {
 		return "etl transport", true
 	}
-	if args[1] != githubIssueLabelTransportCommand {
+	connectorName, ok := parseIssueLabelTransportCommand(args[1])
+	if !ok {
 		return "", false
 	}
+	command := "etl transport " + issueLabelTransportCommand(connectorName)
 	if len(args) == 2 || isOnlyTransportHelp(args[2:]) {
-		return "etl transport github-issue-label", true
+		return command, true
 	}
 	if len(args) == 3 && args[2] == "cleanup" {
-		return "etl transport github-issue-label", true
+		return command, true
 	}
 	if len(args) == 3 && args[2] == "plan" {
 		return "", false
 	}
 	if len(args) == 4 && (args[2] == "plan" || args[2] == "cleanup") && isHelpArg(args[3]) {
-		return "etl transport github-issue-label", true
+		return command, true
 	}
 	if len(args) >= 4 && args[2] == "preview" && isHelpArg(args[len(args)-1]) {
-		return "etl transport github-issue-label", true
+		return command, true
 	}
 	if len(args) >= 5 && args[2] == "cleanup" && (args[3] == "plan" || args[3] == "run") && isHelpArg(args[len(args)-1]) {
-		return "etl transport github-issue-label", true
+		return command, true
 	}
 	return "", false
+}
+
+func issueLabelTransportCommand(connectorName string) string {
+	return connectorName + issueLabelTransportCommandSuffix
+}
+
+func parseIssueLabelTransportCommand(value string) (string, bool) {
+	identity, err := app.DefaultIssueLabelTransportIdentity()
+	if err != nil || value != issueLabelTransportCommand(identity.ConnectorName) {
+		return "", false
+	}
+	if safety.ValidateIdentifier(identity.ConnectorName, "connector") != nil {
+		return "", false
+	}
+	return identity.ConnectorName, true
 }

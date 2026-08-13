@@ -174,13 +174,37 @@ func Open(root string) (*App, error) {
 	if err := a.load(); err != nil {
 		return nil, err
 	}
-	transports, stage, err := newGitHubWarehouseMediatedTransport(a)
+	transports, stage, err := newIssueLabelWarehouseMediatedTransport(a)
 	if err != nil {
 		return nil, err
 	}
 	a.transports = transports
 	a.transportStage = stage
 	return a, nil
+}
+
+// IssueLabelTransportIdentity exposes the bundle-owned carrier name needed to
+// render the closed transport manual before an App can be opened. It contains
+// presentation metadata only; endpoint, record, credential, and action values
+// remain connection- and definition-owned.
+type IssueLabelTransportIdentity struct {
+	ConnectorName string
+	DisplayName   string
+}
+
+// DefaultIssueLabelTransportIdentity selects the same unique declarative
+// definition as the production composition root. Keeping this lookup here
+// prevents shared CLI code from carrying a provider name or endpoint policy.
+func DefaultIssueLabelTransportIdentity() (IssueLabelTransportIdentity, error) {
+	connector, err := issueLabelTransportEngine(bundleregistry.New())
+	if err != nil {
+		return IssueLabelTransportIdentity{}, err
+	}
+	definition := connector.Definition()
+	if definition.Name != connector.Name() || strings.TrimSpace(definition.DisplayName) == "" {
+		return IssueLabelTransportIdentity{}, fmt.Errorf("closed issue-label transport definition has no stable presentation identity")
+	}
+	return IssueLabelTransportIdentity{ConnectorName: definition.Name, DisplayName: definition.DisplayName}, nil
 }
 
 func (a *App) ProjectDir() string { return a.projectDir }
@@ -1068,7 +1092,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	transportRoute := a.shouldRunTransport(conn, req.Stream, mode, source, destination)
 	if !transportRoute && hasDestinationApproval(req.DestinationApproval) {
-		return a.failRun(runID, fmt.Errorf("destination approval is valid only for the closed GitHub issue-label transport route"))
+		return a.failRun(runID, fmt.Errorf("destination approval is valid only for the closed issue-label transport route"))
 	}
 	if transportRoute {
 		result, err := a.runTransportETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, mode, batchSize, req.DestinationApproval)
@@ -2241,7 +2265,7 @@ func (a *App) confirmationChallengeForPlan(plan ReversePlan) string {
 }
 
 func (a *App) planRequiresPersistedPreview(plan ReversePlan) bool {
-	return plan.ConnectorCommandOperation != "" || isGitHubIssueLabelTransportMode(plan.Mode) || a.confirmationChallengeForPlan(plan) != ""
+	return plan.ConnectorCommandOperation != "" || isIssueLabelTransportMode(plan.Mode) || a.confirmationChallengeForPlan(plan) != ""
 }
 
 func (a *App) validatePlanConfirmation(plan ReversePlan, got connectors.WriteConfirmation) error {

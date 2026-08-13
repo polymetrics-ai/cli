@@ -668,7 +668,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		if approval, transportApproval, strictFlags, err := parseETLRunTransportApproval(args[1:], os.Stdin); err != nil {
 			return err
 		} else if transportApproval {
-			return runApprovedGitHubIssueLabelTransportETL(ctx, a, strictFlags, approval, stdout, jsonOut)
+			return runApprovedIssueLabelTransportETL(ctx, a, strictFlags, approval, stdout, jsonOut)
 		}
 		flags := parseFlags(args[1:])
 		batchSize, err := parseIntFlag("batch-size", flags.first("batch-size"), 0)

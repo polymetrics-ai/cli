@@ -16,7 +16,7 @@ import (
 
 // These tests deliberately name the durable-stage contract that #4081 needs.
 // They are committed RED before its production composition root and adapter.
-func TestOpenInstallsGitHubWarehouseMediatedTransport(t *testing.T) {
+func TestOpenInstallsIssueLabelWarehouseMediatedTransport(t *testing.T) {
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
 		t.Fatal(err)
@@ -43,14 +43,14 @@ func TestOpenInstallsGitHubWarehouseMediatedTransport(t *testing.T) {
 	}
 }
 
-func TestGitHubWarehouseStageReopensDurableReceiptAfterSourceReferencesAreDiscarded(t *testing.T) {
+func TestIssueLabelWarehouseStageReopensDurableReceiptAfterSourceReferencesAreDiscarded(t *testing.T) {
 	ctx := context.Background()
-	fixture := newGitHubWarehouseStageFixture(t)
+	fixture := newIssueLabelWarehouseStageFixture(t)
 	page := synctransport.SourcePage{Records: []connectors.Record{{
 		"id":    "issue-4081-source",
 		"title": "durable GitHub issue fixture",
 	}}}
-	receipt := stageGitHubWarehousePage(t, ctx, fixture, page)
+	receipt := stageIssueLabelWarehousePage(t, ctx, fixture, page)
 
 	// No source-owned page or record remains available to the reopen call.
 	page.Records[0]["title"] = "mutated source alias"
@@ -76,10 +76,10 @@ func TestGitHubWarehouseStageReopensDurableReceiptAfterSourceReferencesAreDiscar
 	}
 }
 
-func TestGitHubWarehouseStageRejectsTamperedReceipt(t *testing.T) {
+func TestIssueLabelWarehouseStageRejectsTamperedReceipt(t *testing.T) {
 	ctx := context.Background()
-	fixture := newGitHubWarehouseStageFixture(t)
-	receipt := stageGitHubWarehousePage(t, ctx, fixture, synctransport.SourcePage{Records: []connectors.Record{{
+	fixture := newIssueLabelWarehouseStageFixture(t)
+	receipt := stageIssueLabelWarehousePage(t, ctx, fixture, synctransport.SourcePage{Records: []connectors.Record{{
 		"id": "issue-4081-tamper",
 	}}})
 
@@ -128,11 +128,11 @@ func TestGitHubWarehouseStageRejectsTamperedReceipt(t *testing.T) {
 	}
 }
 
-func TestGitHubWarehouseStageFreshOpenPreservesImmutableCheckpointAndTombstones(t *testing.T) {
+func TestIssueLabelWarehouseStageFreshOpenPreservesImmutableCheckpointAndTombstones(t *testing.T) {
 	ctx := context.Background()
-	fixture := newGitHubWarehouseStageFixture(t)
-	checkpoint := githubTransportDurabilityCheckpoint()
-	tombstone := githubTransportDurabilityTombstone()
+	fixture := newIssueLabelWarehouseStageFixture(t)
+	checkpoint := issueLabelTransportDurabilityCheckpoint()
+	tombstone := issueLabelTransportDurabilityTombstone()
 	page := synctransport.SourcePage{
 		Records: []connectors.Record{{
 			"id":     "issue-4081-durable",
@@ -142,8 +142,8 @@ func TestGitHubWarehouseStageFreshOpenPreservesImmutableCheckpointAndTombstones(
 		Tombstones:          []synccontract.Tombstone{tombstone},
 		CandidateCheckpoint: checkpoint,
 	}
-	receipt := stageGitHubWarehousePage(t, ctx, fixture, page)
-	emptyReceipt := stageGitHubWarehousePage(t, ctx, fixture, synctransport.SourcePage{
+	receipt := stageIssueLabelWarehousePage(t, ctx, fixture, page)
+	emptyReceipt := stageIssueLabelWarehousePage(t, ctx, fixture, synctransport.SourcePage{
 		Records:             []connectors.Record{{"id": "issue-4081-empty", "number": 101}},
 		Tombstones:          []synccontract.Tombstone{},
 		CandidateCheckpoint: checkpoint,
@@ -217,7 +217,7 @@ func TestGitHubWarehouseStageFreshOpenPreservesImmutableCheckpointAndTombstones(
 	}
 }
 
-func TestGitHubWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload(t *testing.T) {
+func TestIssueLabelWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload(t *testing.T) {
 	ctx := context.Background()
 	for _, tt := range []struct {
 		name string
@@ -228,10 +228,10 @@ func TestGitHubWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload
 		{name: "parquet", path: func(artifact connectionWarehouseStageArtifact) string { return artifact.parquetPath }},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			fixture := newGitHubWarehouseStageFixture(t)
-			receipt := stageGitHubWarehousePage(t, ctx, fixture, synctransport.SourcePage{
+			fixture := newIssueLabelWarehouseStageFixture(t)
+			receipt := stageIssueLabelWarehousePage(t, ctx, fixture, synctransport.SourcePage{
 				Records:             []connectors.Record{{"id": "issue-4081-" + tt.name, "number": 100}},
-				CandidateCheckpoint: githubTransportDurabilityCheckpoint(),
+				CandidateCheckpoint: issueLabelTransportDurabilityCheckpoint(),
 			})
 			stage, ok := fixture.app.transportStage.(*connectionWarehouseStage)
 			if !ok {
@@ -269,7 +269,7 @@ func TestGitHubWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload
 	}
 }
 
-func githubTransportDurabilityCheckpoint() synccontract.CheckpointEnvelope {
+func issueLabelTransportDurabilityCheckpoint() synccontract.CheckpointEnvelope {
 	positionObserved := true
 	return synccontract.CheckpointEnvelope{
 		StateVersion:     synccontract.StateVersion,
@@ -288,7 +288,7 @@ func githubTransportDurabilityCheckpoint() synccontract.CheckpointEnvelope {
 	}
 }
 
-func githubTransportDurabilityTombstone() synccontract.Tombstone {
+func issueLabelTransportDurabilityTombstone() synccontract.Tombstone {
 	return synccontract.Tombstone{
 		Operation:   synccontract.OperationDelete,
 		EventID:     synccontract.OpaqueToken("delete-4081"),
@@ -299,12 +299,12 @@ func githubTransportDurabilityTombstone() synccontract.Tombstone {
 	}
 }
 
-type githubWarehouseStageFixture struct {
+type issueLabelWarehouseStageFixture struct {
 	app          *App
 	connectionID string
 }
 
-func newGitHubWarehouseStageFixture(t *testing.T) githubWarehouseStageFixture {
+func newIssueLabelWarehouseStageFixture(t *testing.T) issueLabelWarehouseStageFixture {
 	t.Helper()
 	ctx := context.Background()
 	root := t.TempDir()
@@ -334,10 +334,10 @@ func newGitHubWarehouseStageFixture(t *testing.T) githubWarehouseStageFixture {
 	if len(a.state.Connections) != 1 || a.state.Connections[0].ID == "" {
 		t.Fatalf("created GitHub connection = %#v, want one connection with an opaque ID", a.state.Connections)
 	}
-	return githubWarehouseStageFixture{app: a, connectionID: a.state.Connections[0].ID}
+	return issueLabelWarehouseStageFixture{app: a, connectionID: a.state.Connections[0].ID}
 }
 
-func stageGitHubWarehousePage(t *testing.T, ctx context.Context, fixture githubWarehouseStageFixture, page synctransport.SourcePage) synctransport.WarehouseReceipt {
+func stageIssueLabelWarehousePage(t *testing.T, ctx context.Context, fixture issueLabelWarehouseStageFixture, page synctransport.SourcePage) synctransport.WarehouseReceipt {
 	t.Helper()
 	receipt, err := fixture.app.transportStage.Stage(ctx, synctransport.WarehouseStageRequest{
 		ConnectionID:    fixture.connectionID,

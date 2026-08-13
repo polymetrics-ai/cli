@@ -22,7 +22,7 @@
   construction/stage/reopen/order failures.
 - [x] GREEN tests prove independent durable reopen, exact closed GitHub legs,
   receipt-before-CAS, safe replay, and #4079 isolation.
-- [ ] Fresh exact **committed-head** `pm` binary digest and size are recorded; bounded local
+- [x] Fresh exact `pm` binary digest and size are recorded; bounded local
   faithful-server run asserts returned record counts—not only exit code.
 - [x] Stage/Parquet/DuckDB identity, independent provider read-back, typed
   inverse cleanup, second cleanup, and zero residue are demonstrated.
@@ -69,10 +69,10 @@ docs/manual goldens, vet, GitHub bundle validation, surface-sync, and
 
 ```text
 go test -count=1 -timeout 20m \
-  -run '^TestPMBinaryExecutesGitHubWarehouseTransportLifecycle$' -v ./internal/cli
+  -run '^TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle$' -v ./internal/cli
 
-binary_sha256: 146d030c27d4b45e19ebb318ea6ebe04b80482eb710e61b6ef5d7bc91f465c1f
-binary_size_bytes: 148513250
+binary_sha256: 3af708eb697e566edd16480bff9f9bf345ea90ab8c5b25e3ee4a0689ae5e827d
+binary_size_bytes: 148530114
 artifact_kinds: wal_jsonl, duckdb_parquet, manifest
 source_records: 1
 reopened_records: 1
@@ -91,12 +91,75 @@ typed label add/remove against a run-owned fixture, and all raw approval tokens
 are asserted absent from argv, environment, captured command output, and every
 persisted project artifact.
 
+## Inline/manual GSD verify-work and code review
+
+The official `execute-phase`, `verify-work`, and `code-review` prompts were
+resolved at the committed Green head. The phase is outside the numeric roadmap
+and the repository's single-worker contract forbids the roles those prompts
+would otherwise spawn, so the documented inline/manual fallback is used.
+
+- `UAT.md` records four deterministic deliverables and their passing automated
+  evidence. No human-judgment deliverable was silently auto-passed.
+- `REVIEW.md` records the complete carrier review. Four pre-commit findings
+  (full-size stdin boundary, bare cleanup manual, preview target/base-URL
+  leakage, and an unneeded runtime extension) were fixed and rerun; there are
+  no unresolved Critical, Warning, or Info findings.
+- The still-pending gates are no-mistakes, draft PR creation, forge CI, and the
+  required automated-review disposition. They are not represented as passed.
+
+## Correction loop 5/5 — connector boundary
+
+The final correction began with an isolated exact-rule comparison, preserving
+the current worktree and every prior commit:
+
+```text
+base e7d2b2963fc1dd164f63b31fccb8a3bab8084bec:
+  go run ./cmd/connectorgen boundary . --json
+  exit 0; outcome clean; findings 0
+
+pre-correction 6220144db21e4170bb400d3e5aefd65d04b4111e:
+  same command
+  exit 1; outcome policy_violations; findings 378
+```
+
+Every introduced finding was in the #4081 App/CLI composition paths. The
+repair selects the unique declarative definition exposing `issues`,
+`add_issue_labels`, and `remove_issue_label`; it fails closed on none or
+ambiguity, preserves the concrete engine connector capabilities, and derives
+the visible carrier identity from that selected definition. Endpoint/action
+details remain definition-owned. No boundary exception was edited.
+
+The initial neutral selector exposed a real compatibility regression: a
+one-sided descriptor sent ordinary legacy JSON ETL to Transport preflight.
+The existing five-mode GitHub pull-request regression was retained unchanged,
+failed, and became green after dispatch required both ends of the closed pair.
+
+```text
+make connector-boundary
+  outcome clean; findings 0
+go test -count=1 -timeout 20m -run '^TestGithubPullRequestsETLSupportsAllSyncModes$' -v ./internal/app
+  PASS (all five existing modes)
+go test -race -count=1 -timeout 20m -run '^TestIssueLabelTransport' -v ./internal/app
+  PASS
+go test -count=1 -timeout 20m -run '^(TestETLTransportBareAndLeafHelpAreContextual|TestGoldenTranscripts)$' -v ./internal/cli
+  PASS
+go test -count=1 -timeout 20m ./internal/app ./internal/cli ./internal/synctransport ./internal/connectors/engine ./internal/connectors/commandrunner
+  PASS
+go mod tidy -diff
+go vet ./internal/app ./internal/cli ./internal/synctransport ./internal/connectors/engine ./internal/connectors/commandrunner
+make lint
+  PASS
+```
+
+This consumes correction loop 5/5. The acceptance evidence preserves the
+same source → WAL/DuckDB/Parquet → reopen → typed mutation → independent
+read-back → acknowledgement/CAS → separately approved cleanup/replay sequence
+shown above; no retry or exception masks a shared-path coupling.
+
 ## Remaining honest gates
 
-- Rebuild and record a fresh binary SHA-256/size at the implementation commit,
-  then repeat `TestPMBinaryExecutesGitHubWarehouseTransportLifecycle`.
-- Run inline/manual `verify-work` and deep code review, record every finding and
-  its evidence, then run the no-mistakes pipeline without `--yes`.
+- Commit and push the final definition-owned correction/evidence checkpoint,
+  then run the no-mistakes pipeline without `--yes` on that exact pushed head.
 - No approved GitHub App credential/disposable `Polymetrics-Cert` boundary has
   been supplied to this isolated local harness. Do not inspect credentials or
   issue provider I/O; record `LIVE_PROVIDER_BLOCKED_NO_APPROVED_GITHUB_APP_BOUNDARY`

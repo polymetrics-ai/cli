@@ -18,14 +18,14 @@ import (
 // pre-run App plan is closed over the connection's configured source predicate
 // and fixed destination record; every apply below receives only a workset that
 // was actually staged and independently reopened from the connection warehouse.
-func TestGitHubIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite(t *testing.T) {
+func TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite(t *testing.T) {
 	tests := []struct {
 		name string
-		run  func(*testing.T, githubTransportApprovalFixture)
+		run  func(*testing.T, issueLabelTransportApprovalFixture)
 	}{
 		{
 			name: "missing pre-run approval",
-			run: func(t *testing.T, fixture githubTransportApprovalFixture) {
+			run: func(t *testing.T, fixture issueLabelTransportApprovalFixture) {
 				receipt, workset := fixture.stageAndReopen(t, fixture.sourceIssue)
 				if err := fixture.apply(t, receipt, workset, synctransport.DestinationApproval{}); err == nil {
 					t.Fatal("ApplyDestination() accepted a missing pre-run approval")
@@ -35,7 +35,7 @@ func TestGitHubIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrRepl
 		},
 		{
 			name: "same target and configuration with different reopened source issue",
-			run: func(t *testing.T, fixture githubTransportApprovalFixture) {
+			run: func(t *testing.T, fixture issueLabelTransportApprovalFixture) {
 				_, approval := fixture.preRunApproval(t)
 				receipt, workset := fixture.stageAndReopen(t, fixture.sourceIssue+1)
 				if err := fixture.apply(t, receipt, workset, approval); err == nil {
@@ -46,7 +46,7 @@ func TestGitHubIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrRepl
 		},
 		{
 			name: "expired pre-run approval",
-			run: func(t *testing.T, fixture githubTransportApprovalFixture) {
+			run: func(t *testing.T, fixture issueLabelTransportApprovalFixture) {
 				plan, approval := fixture.preRunApproval(t)
 				fixture.expirePlanSeal(t, plan.ID)
 				receipt, workset := fixture.stageAndReopen(t, fixture.sourceIssue)
@@ -59,7 +59,7 @@ func TestGitHubIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrRepl
 		},
 		{
 			name: "replayed pre-run approval",
-			run: func(t *testing.T, fixture githubTransportApprovalFixture) {
+			run: func(t *testing.T, fixture issueLabelTransportApprovalFixture) {
 				_, approval := fixture.preRunApproval(t)
 				receipt, workset := fixture.stageAndReopen(t, fixture.sourceIssue)
 				if err := fixture.apply(t, receipt, workset, approval); err != nil {
@@ -76,13 +76,13 @@ func TestGitHubIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrRepl
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.run(t, newGitHubTransportApprovalFixture(t))
+			tt.run(t, newIssueLabelTransportApprovalFixture(t))
 		})
 	}
 }
 
-func TestGitHubIssueLabelTransportCleanupUsesItsOwnDerivedApproval(t *testing.T) {
-	fixture := newGitHubTransportApprovalFixture(t)
+func TestIssueLabelTransportCleanupUsesItsOwnDerivedApproval(t *testing.T) {
+	fixture := newIssueLabelTransportApprovalFixture(t)
 	forwardPlan, forwardApproval := fixture.preRunApproval(t)
 	receipt, workset := fixture.stageAndReopen(t, fixture.sourceIssue)
 	if err := fixture.apply(t, receipt, workset, forwardApproval); err != nil {
@@ -91,27 +91,27 @@ func TestGitHubIssueLabelTransportCleanupUsesItsOwnDerivedApproval(t *testing.T)
 	fixture.assertProviderWrites(t, 1)
 
 	cleanupPlan, cleanupApproval := fixture.preRunCleanupApproval(t, forwardPlan.ID)
-	if cleanupPlan.TransportForwardPlanID != forwardPlan.ID || cleanupPlan.Action != githubIssueRemoveLabelAction {
+	if cleanupPlan.TransportForwardPlanID != forwardPlan.ID || cleanupPlan.Action != issueLabelRemoveAction {
 		t.Fatalf("cleanup plan = %+v, want inverse derived from forward plan %q", cleanupPlan, forwardPlan.ID)
 	}
-	if _, err := fixture.app.ApplyGitHubIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, forwardApproval); err == nil {
+	if _, err := fixture.app.ApplyIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, forwardApproval); err == nil {
 		t.Fatal("cleanup accepted the forward approval token")
 	}
 	fixture.assertProviderDeletes(t, 0)
-	if _, err := fixture.app.ApplyGitHubIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, cleanupApproval); err != nil {
-		t.Fatalf("ApplyGitHubIssueLabelTransportCleanup() = %v", err)
+	if _, err := fixture.app.ApplyIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, cleanupApproval); err != nil {
+		t.Fatalf("ApplyIssueLabelTransportCleanup() = %v", err)
 	}
 	fixture.assertProviderDeletes(t, 1)
-	if _, err := fixture.app.ApplyGitHubIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, cleanupApproval); err == nil {
+	if _, err := fixture.app.ApplyIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, cleanupApproval); err == nil {
 		t.Fatal("cleanup accepted a replayed cleanup approval")
 	}
 	fixture.assertProviderDeletes(t, 1)
 }
 
-func TestGitHubIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete(t *testing.T) {
-	for _, tt := range githubTransportForwardPlanTamperCases() {
+func TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete(t *testing.T) {
+	for _, tt := range issueLabelTransportForwardPlanTamperCases() {
 		t.Run(tt.name, func(t *testing.T) {
-			fixture := newGitHubTransportApprovalFixture(t)
+			fixture := newIssueLabelTransportApprovalFixture(t)
 			forwardPlan, forwardApproval := fixture.preRunApproval(t)
 			receipt, workset := fixture.stageAndReopen(t, fixture.sourceIssue)
 			if err := fixture.apply(t, receipt, workset, forwardApproval); err != nil {
@@ -119,18 +119,18 @@ func TestGitHubIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBefore
 			}
 			fixture.assertProviderWrites(t, 1)
 			tt.mutate(t, fixture, forwardPlan.ID)
-			if _, err := fixture.app.PlanGitHubIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, forwardPlan.ID); err == nil {
-				t.Fatal("PlanGitHubIssueLabelTransportCleanup() accepted a tampered forward plan")
+			if _, err := fixture.app.PlanIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, forwardPlan.ID); err == nil {
+				t.Fatal("PlanIssueLabelTransportCleanup() accepted a tampered forward plan")
 			}
 			fixture.assertProviderDeletes(t, 0)
 		})
 	}
 }
 
-func TestGitHubIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete(t *testing.T) {
-	for _, tt := range githubTransportForwardPlanTamperCases() {
+func TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete(t *testing.T) {
+	for _, tt := range issueLabelTransportForwardPlanTamperCases() {
 		t.Run(tt.name, func(t *testing.T) {
-			fixture := newGitHubTransportApprovalFixture(t)
+			fixture := newIssueLabelTransportApprovalFixture(t)
 			forwardPlan, forwardApproval := fixture.preRunApproval(t)
 			receipt, workset := fixture.stageAndReopen(t, fixture.sourceIssue)
 			if err := fixture.apply(t, receipt, workset, forwardApproval); err != nil {
@@ -138,32 +138,32 @@ func TestGitHubIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforePr
 			}
 			_, cleanupApproval := fixture.preRunCleanupApproval(t, forwardPlan.ID)
 			tt.mutate(t, fixture, forwardPlan.ID)
-			if _, err := fixture.app.ApplyGitHubIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, cleanupApproval); err == nil {
-				t.Fatal("ApplyGitHubIssueLabelTransportCleanup() accepted a tampered forward plan")
+			if _, err := fixture.app.ApplyIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, cleanupApproval); err == nil {
+				t.Fatal("ApplyIssueLabelTransportCleanup() accepted a tampered forward plan")
 			}
 			fixture.assertProviderDeletes(t, 0)
 		})
 	}
 }
 
-func TestGitHubIssueLabelTransportCleanupTreatsMissingLabelAsSuccessfulInverse(t *testing.T) {
-	fixture := newGitHubTransportApprovalFixtureWithMissingCleanupLabel(t)
+func TestIssueLabelTransportCleanupTreatsMissingLabelAsSuccessfulInverse(t *testing.T) {
+	fixture := newIssueLabelTransportApprovalFixtureWithMissingCleanupLabel(t)
 	forwardPlan, forwardApproval := fixture.preRunApproval(t)
 	receipt, workset := fixture.stageAndReopen(t, fixture.sourceIssue)
 	if err := fixture.apply(t, receipt, workset, forwardApproval); err != nil {
 		t.Fatalf("forward ApplyDestination() = %v", err)
 	}
 	cleanupPlan, cleanupApproval := fixture.preRunCleanupApproval(t, forwardPlan.ID)
-	if _, err := fixture.app.ApplyGitHubIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, cleanupApproval); err != nil {
-		t.Fatalf("ApplyGitHubIssueLabelTransportCleanup() = %v, want missing-label success for %q", err, cleanupPlan.ID)
+	if _, err := fixture.app.ApplyIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, cleanupApproval); err != nil {
+		t.Fatalf("ApplyIssueLabelTransportCleanup() = %v, want missing-label success for %q", err, cleanupPlan.ID)
 	}
 	fixture.assertProviderDeletes(t, 1)
 }
 
-type githubTransportApprovalFixture struct {
+type issueLabelTransportApprovalFixture struct {
 	app         *App
 	connection  Connection
-	executor    *githubIssueLabelDestinationExecutor
+	executor    *issueLabelDestinationExecutor
 	runtime     connectors.RuntimeConfig
 	sourceIssue int
 	targetIssue int
@@ -172,15 +172,15 @@ type githubTransportApprovalFixture struct {
 	deletes     *int
 }
 
-func newGitHubTransportApprovalFixture(t *testing.T) githubTransportApprovalFixture {
-	return newGitHubTransportApprovalFixtureWithCleanupStatus(t, http.StatusNoContent)
+func newIssueLabelTransportApprovalFixture(t *testing.T) issueLabelTransportApprovalFixture {
+	return newIssueLabelTransportApprovalFixtureWithCleanupStatus(t, http.StatusNoContent)
 }
 
-func newGitHubTransportApprovalFixtureWithMissingCleanupLabel(t *testing.T) githubTransportApprovalFixture {
-	return newGitHubTransportApprovalFixtureWithCleanupStatus(t, http.StatusNotFound)
+func newIssueLabelTransportApprovalFixtureWithMissingCleanupLabel(t *testing.T) issueLabelTransportApprovalFixture {
+	return newIssueLabelTransportApprovalFixtureWithCleanupStatus(t, http.StatusNotFound)
 }
 
-func newGitHubTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanupStatus int) githubTransportApprovalFixture {
+func newIssueLabelTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanupStatus int) issueLabelTransportApprovalFixture {
 	t.Helper()
 	ctx := context.Background()
 	writes := 0
@@ -247,11 +247,11 @@ func newGitHubTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanupSta
 	connection, err := a.CreateConnection(ctx, CreateConnectionRequest{
 		Name: "github_transport_approval",
 		Source: EndpointConfig{Connector: "github", Credential: "github-transport-local", Config: map[string]string{
-			githubTransportSourceIssueConfig: "100",
+			issueLabelTransportSourceIssueConfig: "100",
 		}},
 		Destination: EndpointConfig{Connector: "github", Credential: "github-transport-local", Config: map[string]string{
-			githubTransportTargetIssueConfig: "200",
-			githubTransportLabelConfig:       "transport-demo",
+			issueLabelTransportTargetIssueConfig: "200",
+			issueLabelTransportLabelConfig:       "transport-demo",
 		}},
 		Streams: map[string]StreamConfig{
 			"issues": {SyncMode: string(synccontract.ModeFullAppend), DestinationTable: "issues"},
@@ -268,14 +268,14 @@ func newGitHubTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanupSta
 	if !ok {
 		t.Fatal("GitHub connector is not registered")
 	}
-	github, ok := registered.(*githubTransportConnector)
+	github, ok := registered.(*issueLabelTransportConnector)
 	if !ok || github.Connector == nil {
 		t.Fatalf("GitHub transport connector = %T, want concrete engine wrapper", registered)
 	}
-	return githubTransportApprovalFixture{
+	return issueLabelTransportApprovalFixture{
 		app:         a,
 		connection:  connection,
-		executor:    &githubIssueLabelDestinationExecutor{app: a, connector: github.Connector},
+		executor:    &issueLabelDestinationExecutor{app: a, connector: github.Connector},
 		runtime:     runtime,
 		sourceIssue: 100,
 		targetIssue: 200,
@@ -285,15 +285,15 @@ func newGitHubTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanupSta
 	}
 }
 
-func (f githubTransportApprovalFixture) preRunApproval(t *testing.T) (ReversePlan, synctransport.DestinationApproval) {
+func (f issueLabelTransportApprovalFixture) preRunApproval(t *testing.T) (ReversePlan, synctransport.DestinationApproval) {
 	t.Helper()
-	plan, err := f.app.PlanGitHubIssueLabelTransport(context.Background(), f.connection.ID)
+	plan, err := f.app.PlanIssueLabelTransport(context.Background(), f.connection.ID)
 	if err != nil {
-		t.Fatalf("PlanGitHubIssueLabelTransport() = %v", err)
+		t.Fatalf("PlanIssueLabelTransport() = %v", err)
 	}
-	plan, preview, err := f.app.PreviewGitHubIssueLabelTransport(context.Background(), plan.ID)
+	plan, preview, err := f.app.PreviewIssueLabelTransport(context.Background(), plan.ID)
 	if err != nil {
-		t.Fatalf("PreviewGitHubIssueLabelTransport() = %v", err)
+		t.Fatalf("PreviewIssueLabelTransport() = %v", err)
 	}
 	if preview.Digest == "" || plan.ApprovalToken == "" || plan.ConfirmationPolicy.Kind != connectors.ConfirmationKindDestructive {
 		t.Fatalf("pre-run GitHub transport approval = plan=%+v preview=%+v, want persisted destructive grant", plan, preview)
@@ -305,15 +305,15 @@ func (f githubTransportApprovalFixture) preRunApproval(t *testing.T) (ReversePla
 	}
 }
 
-func (f githubTransportApprovalFixture) preRunCleanupApproval(t *testing.T, forwardPlanID string) (ReversePlan, synctransport.DestinationApproval) {
+func (f issueLabelTransportApprovalFixture) preRunCleanupApproval(t *testing.T, forwardPlanID string) (ReversePlan, synctransport.DestinationApproval) {
 	t.Helper()
-	plan, err := f.app.PlanGitHubIssueLabelTransportCleanup(context.Background(), f.connection.ID, forwardPlanID)
+	plan, err := f.app.PlanIssueLabelTransportCleanup(context.Background(), f.connection.ID, forwardPlanID)
 	if err != nil {
-		t.Fatalf("PlanGitHubIssueLabelTransportCleanup() = %v", err)
+		t.Fatalf("PlanIssueLabelTransportCleanup() = %v", err)
 	}
-	plan, preview, err := f.app.PreviewGitHubIssueLabelTransport(context.Background(), plan.ID)
+	plan, preview, err := f.app.PreviewIssueLabelTransport(context.Background(), plan.ID)
 	if err != nil {
-		t.Fatalf("PreviewGitHubIssueLabelTransport(cleanup) = %v", err)
+		t.Fatalf("PreviewIssueLabelTransport(cleanup) = %v", err)
 	}
 	if preview.Digest == "" || plan.ApprovalToken == "" || plan.ConfirmationPolicy.Kind != connectors.ConfirmationKindDestructive {
 		t.Fatalf("pre-run GitHub transport cleanup approval = plan=%+v preview=%+v, want persisted destructive grant", plan, preview)
@@ -325,7 +325,7 @@ func (f githubTransportApprovalFixture) preRunCleanupApproval(t *testing.T, forw
 	}
 }
 
-func (f githubTransportApprovalFixture) stageAndReopen(t *testing.T, sourceIssue int) (synctransport.WarehouseReceipt, synctransport.WarehouseWorkset) {
+func (f issueLabelTransportApprovalFixture) stageAndReopen(t *testing.T, sourceIssue int) (synctransport.WarehouseReceipt, synctransport.WarehouseWorkset) {
 	t.Helper()
 	page := synctransport.SourcePage{Records: []connectors.Record{{
 		"id":     "source-issue",
@@ -356,7 +356,7 @@ func (f githubTransportApprovalFixture) stageAndReopen(t *testing.T, sourceIssue
 	return receipt, workset
 }
 
-func (f githubTransportApprovalFixture) expirePlanSeal(t *testing.T, planID string) {
+func (f issueLabelTransportApprovalFixture) expirePlanSeal(t *testing.T, planID string) {
 	t.Helper()
 	found := false
 	for i := range f.app.state.ReversePlans {
@@ -387,7 +387,7 @@ func (f githubTransportApprovalFixture) expirePlanSeal(t *testing.T, planID stri
 	}
 }
 
-func (f githubTransportApprovalFixture) mutateForwardPlan(t *testing.T, planID string, mutate func(*ReversePlan)) {
+func (f issueLabelTransportApprovalFixture) mutateForwardPlan(t *testing.T, planID string, mutate func(*ReversePlan)) {
 	t.Helper()
 	found := false
 	for i := range f.app.state.ReversePlans {
@@ -406,14 +406,14 @@ func (f githubTransportApprovalFixture) mutateForwardPlan(t *testing.T, planID s
 	}
 }
 
-func (f githubTransportApprovalFixture) apply(t *testing.T, receipt synctransport.WarehouseReceipt, workset synctransport.WarehouseWorkset, approval synctransport.DestinationApproval) error {
+func (f issueLabelTransportApprovalFixture) apply(t *testing.T, receipt synctransport.WarehouseReceipt, workset synctransport.WarehouseWorkset, approval synctransport.DestinationApproval) error {
 	t.Helper()
 	acknowledgement, err := f.executor.ApplyDestination(context.Background(), synctransport.DestinationApplyRequest{
 		ConnectionID: f.connection.ID,
 		Plan: synctransport.DestinationPlan{ApplyStrategy: connectors.DestinationApplyStrategy{
 			Mode:     synccontract.ModeFullAppend,
 			Strategy: connectors.ApplyStrategyAppend,
-			Action:   githubIssueAddLabelAction,
+			Action:   issueLabelAddAction,
 		}},
 		Receipt:  receipt,
 		Workset:  workset,
@@ -426,63 +426,63 @@ func (f githubTransportApprovalFixture) apply(t *testing.T, receipt synctranspor
 	return err
 }
 
-func (f githubTransportApprovalFixture) assertProviderWrites(t *testing.T, want int) {
+func (f issueLabelTransportApprovalFixture) assertProviderWrites(t *testing.T, want int) {
 	t.Helper()
 	if got := *f.writes; got != want {
 		t.Fatalf("GitHub label POST calls = %d, want %d", got, want)
 	}
 }
 
-func (f githubTransportApprovalFixture) assertProviderDeletes(t *testing.T, want int) {
+func (f issueLabelTransportApprovalFixture) assertProviderDeletes(t *testing.T, want int) {
 	t.Helper()
 	if got := *f.deletes; got != want {
 		t.Fatalf("GitHub label DELETE calls = %d, want %d", got, want)
 	}
 }
 
-type githubTransportForwardPlanTamperCase struct {
+type issueLabelTransportForwardPlanTamperCase struct {
 	name   string
-	mutate func(*testing.T, githubTransportApprovalFixture, string)
+	mutate func(*testing.T, issueLabelTransportApprovalFixture, string)
 }
 
-func githubTransportForwardPlanTamperCases() []githubTransportForwardPlanTamperCase {
-	return []githubTransportForwardPlanTamperCase{
+func issueLabelTransportForwardPlanTamperCases() []issueLabelTransportForwardPlanTamperCase {
+	return []issueLabelTransportForwardPlanTamperCase{
 		{
 			name: "destination connector",
-			mutate: func(t *testing.T, fixture githubTransportApprovalFixture, planID string) {
+			mutate: func(t *testing.T, fixture issueLabelTransportApprovalFixture, planID string) {
 				fixture.mutateForwardPlan(t, planID, func(plan *ReversePlan) { plan.DestinationConnector = "warehouse" })
 			},
 		},
 		{
 			name: "destination credential",
-			mutate: func(t *testing.T, fixture githubTransportApprovalFixture, planID string) {
+			mutate: func(t *testing.T, fixture issueLabelTransportApprovalFixture, planID string) {
 				fixture.mutateForwardPlan(t, planID, func(plan *ReversePlan) { plan.DestinationCredential = "other-github-credential" })
 			},
 		},
 		{
 			name: "destination config",
-			mutate: func(t *testing.T, fixture githubTransportApprovalFixture, planID string) {
+			mutate: func(t *testing.T, fixture issueLabelTransportApprovalFixture, planID string) {
 				fixture.mutateForwardPlan(t, planID, func(plan *ReversePlan) {
 					plan.DestinationConfig = cloneStringMap(plan.DestinationConfig)
-					plan.DestinationConfig[githubTransportTargetIssueConfig] = "201"
+					plan.DestinationConfig[issueLabelTransportTargetIssueConfig] = "201"
 				})
 			},
 		},
 		{
 			name: "binding",
-			mutate: func(t *testing.T, fixture githubTransportApprovalFixture, planID string) {
+			mutate: func(t *testing.T, fixture issueLabelTransportApprovalFixture, planID string) {
 				fixture.mutateForwardPlan(t, planID, func(plan *ReversePlan) { plan.TransportBindingSHA256 = "tampered-binding" })
 			},
 		},
 		{
 			name: "plan hash",
-			mutate: func(t *testing.T, fixture githubTransportApprovalFixture, planID string) {
+			mutate: func(t *testing.T, fixture issueLabelTransportApprovalFixture, planID string) {
 				fixture.mutateForwardPlan(t, planID, func(plan *ReversePlan) { plan.PlanHash = "tampered-plan-hash" })
 			},
 		},
 		{
 			name: "plan seal",
-			mutate: func(t *testing.T, fixture githubTransportApprovalFixture, planID string) {
+			mutate: func(t *testing.T, fixture issueLabelTransportApprovalFixture, planID string) {
 				fixture.mutateForwardPlan(t, planID, func(plan *ReversePlan) {
 					if plan.PlanSeal == nil {
 						t.Fatal("forward plan has no seal")
