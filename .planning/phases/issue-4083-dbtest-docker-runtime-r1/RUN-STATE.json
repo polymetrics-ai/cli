@@ -1,0 +1,19 @@
+{
+  "issue": 4083,
+  "branch": "fm/cli-dbtest-docker-runtime-r1",
+  "blocks": [3976],
+  "lifecycle": {
+    "mode": "inline_manual_gsd_fallback",
+    "reason": "The repository delivery contract forbids spawning lifecycle roles in this worktree.",
+    "discuss_phase": "completed",
+    "plan_phase_tdd": "completed_before_production_edit",
+    "execute_phase": "pending_red",
+    "verify_work": "pending",
+    "code_review": "pending"
+  },
+  "external_endpoint_verdict": "rejected_out_of_scope_weakened_managed_container_guarantees",
+  "live_runtime_evidence": {
+    "docker": "client_present_direct_sockets_unreachable_at_planning_time",
+    "podman": "client_present_no_direct_local_socket_discovered_at_planning_time"
+  }
+}
