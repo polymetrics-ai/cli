@@ -1064,7 +1064,7 @@ func TestParseTargetIdentity(t *testing.T) {
 	if identity.targetID != "/tmp/dbtest.sock" || identity.graphRoot != "/var/lib/containers/storage" {
 		t.Fatalf("identity = %+v, want socket and image-store paths", identity)
 	}
-	for _, raw := range []string{"", "/tmp/socket", "/tmp/socket\t../store\t0\t0", "/tmp/socket\t/store\t0\t0\nsecond"} {
+	for _, raw := range []string{"", "/tmp/socket", "/tmp/socket\t../store\t0\t0", "/tmp/socket\t/var/lib/containers/storage \t0\t0\n", "/tmp/socket\t/store\t0\t0\nsecond"} {
 		if _, err := parseTargetIdentity(raw, "/tmp/socket"); err == nil {
 			t.Fatalf("parseTargetIdentity(%q) accepted invalid target evidence", raw)
 		}
@@ -1079,7 +1079,7 @@ func TestParseDockerTargetIdentity(t *testing.T) {
 	if identity.targetID != "ABCDE:12345" || identity.graphRoot != "/var/lib/docker" {
 		t.Fatalf("identity = %+v, want Docker daemon ID and image-store path", identity)
 	}
-	for _, raw := range []string{"", "daemon-only", "daemon\t../docker", "daemon\t/var/lib/docker\nsecond", "bad id!\t/var/lib/docker"} {
+	for _, raw := range []string{"", "daemon-only", "daemon\t../docker", "daemon\t/var/lib/docker \n", "daemon\t/var/lib/docker\nsecond", "bad id!\t/var/lib/docker"} {
 		if _, err := parseDockerTargetIdentity(raw); err == nil {
 			t.Fatalf("parseDockerTargetIdentity(%q) accepted invalid target evidence", raw)
 		}

@@ -525,8 +525,8 @@ func (runtime Runtime) parseTargetIdentity(raw, endpointPath string) (targetIden
 }
 
 func parseDockerTargetIdentity(raw string) (targetIdentity, error) {
-	line := strings.TrimSpace(raw)
-	if line == "" || strings.Contains(line, "\n") {
+	line, valid := singleCommandRecord(raw)
+	if !valid {
 		return targetIdentity{}, errors.New("target Docker endpoint did not report a daemon identity and locally measurable image-store path")
 	}
 	fields := strings.Split(line, "\t")
@@ -553,8 +553,8 @@ func safeContainerIdentity(value string) bool {
 }
 
 func parseTargetIdentity(raw, endpointPath string) (targetIdentity, error) {
-	line := strings.TrimSpace(raw)
-	if line == "" || strings.Contains(line, "\n") {
+	line, valid := singleCommandRecord(raw)
+	if !valid {
 		return targetIdentity{}, errors.New("target Podman endpoint returned an invalid identity")
 	}
 	fields := strings.Split(line, "\t")
@@ -623,17 +623,21 @@ func parsePodmanBytes(raw string) (uint64, error) {
 	return strconv.ParseUint(raw, 10, 64)
 }
 
+func singleCommandRecord(raw string) (string, bool) {
+	line := strings.TrimSuffix(raw, "\n")
+	return line, line != "" && !strings.ContainsAny(line, "\r\n")
+}
+
 func safeContainerStorePath(raw string) (string, error) {
-	value := strings.TrimSpace(raw)
-	if !path.IsAbs(value) || path.Clean(value) != value || strings.ContainsAny(value, "\r\n\x00") {
+	if raw == "" || strings.TrimSpace(raw) != raw || !path.IsAbs(raw) || path.Clean(raw) != raw || strings.ContainsAny(raw, "\r\n\x00") {
 		return "", errors.New("target container image store path is invalid")
 	}
-	for _, r := range value {
+	for _, r := range raw {
 		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') && (r < '0' || r > '9') && r != '/' && r != '.' && r != '-' && r != '_' {
 			return "", errors.New("target container image store path is unsafe")
 		}
 	}
-	return value, nil
+	return raw, nil
 }
 
 // Report returns the aggregate disk measurement for this run.
