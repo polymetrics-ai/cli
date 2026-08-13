@@ -5,7 +5,8 @@
 - [ ] Exact accepted parent-head defect reproduced before project code changes.
 - [x] Direct issue #4077 created under #3864; #3864 body visibly records the follow-on without
   changing #4047 history.
-- [ ] RED committed before production code.
+- [x] RED test failed for the expected aliasing and unknown-value pass-through behavior; the
+  accompanying `test(4077-01)` commit precedes all production code.
 - [ ] `json.RawMessage` and `map[string]string` source storage is independent after stage/destination
   mutation.
 - [ ] Nested supported combinations and existing mutable containers are preserved.

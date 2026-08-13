@@ -2,6 +2,7 @@ package synctransport
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"reflect"
@@ -291,6 +292,65 @@ func TestCloneRecordCopiesBinaryValuesAtEveryNestingLevel(t *testing.T) {
 	}
 }
 
+func TestCloneRecordCopiesRawMessageAndStringMapValuesAtEveryNestingLevel(t *testing.T) {
+	raw := json.RawMessage(`{"owner":"source"}`)
+	labels := map[string]string{"owner": "source"}
+	nestedRaw := json.RawMessage(`{"level":"nested"}`)
+	nestedLabels := map[string]string{"level": "nested"}
+	listRaw := json.RawMessage(`{"level":"list"}`)
+	listLabels := map[string]string{"level": "list"}
+	recordRaw := json.RawMessage(`{"level":"record"}`)
+	recordLabels := map[string]string{"level": "record"}
+	original := connectors.Record{
+		"raw":    raw,
+		"labels": labels,
+		"nested": map[string]any{
+			"raw":    nestedRaw,
+			"labels": nestedLabels,
+		},
+		"list": []any{listRaw, listLabels},
+		"records": []connectors.Record{{
+			"raw":    recordRaw,
+			"labels": recordLabels,
+		}},
+	}
+
+	clone := cloneRecord(original)
+	clone["raw"].(json.RawMessage)[0] = '['
+	clone["labels"].(map[string]string)["owner"] = "clone"
+	clone["nested"].(map[string]any)["raw"].(json.RawMessage)[0] = '['
+	clone["nested"].(map[string]any)["labels"].(map[string]string)["level"] = "clone"
+	clone["list"].([]any)[0].(json.RawMessage)[0] = '['
+	clone["list"].([]any)[1].(map[string]string)["level"] = "clone"
+	clone["records"].([]connectors.Record)[0]["raw"].(json.RawMessage)[0] = '['
+	clone["records"].([]connectors.Record)[0]["labels"].(map[string]string)["level"] = "clone"
+
+	if got := string(raw); got != `{"owner":"source"}` {
+		t.Fatalf("direct raw message clone mutated source storage: %q", got)
+	}
+	if got := labels["owner"]; got != "source" {
+		t.Fatalf("direct string map clone mutated source storage: %q", got)
+	}
+	if got := string(nestedRaw); got != `{"level":"nested"}` {
+		t.Fatalf("nested raw message clone mutated source storage: %q", got)
+	}
+	if got := nestedLabels["level"]; got != "nested" {
+		t.Fatalf("nested string map clone mutated source storage: %q", got)
+	}
+	if got := string(listRaw); got != `{"level":"list"}` {
+		t.Fatalf("list raw message clone mutated source storage: %q", got)
+	}
+	if got := listLabels["level"]; got != "list" {
+		t.Fatalf("list string map clone mutated source storage: %q", got)
+	}
+	if got := string(recordRaw); got != `{"level":"record"}` {
+		t.Fatalf("record raw message clone mutated source storage: %q", got)
+	}
+	if got := recordLabels["level"]; got != "record" {
+		t.Fatalf("record string map clone mutated source storage: %q", got)
+	}
+}
+
 func TestOrchestratorStagesDeepCopyOfProviderRecords(t *testing.T) {
 	pair := newTestTransportPair("api", "database")
 	originalNested := map[string]any{"provider": "untouched"}
@@ -308,6 +368,91 @@ func TestOrchestratorStagesDeepCopyOfProviderRecords(t *testing.T) {
 	}
 	if _, mutated := originalNested["staged"]; mutated {
 		t.Fatalf("stage mutated the source provider payload through an aliased nested value: %#v", originalNested)
+	}
+}
+
+func TestOrchestratorProtectsRawMessageAndStringMapFromStageAndDestinationMutation(t *testing.T) {
+	for _, tt := range []struct {
+		name                    string
+		mutateRawMessageInStage bool
+		mutateStringMapInDest   bool
+	}{
+		{name: "warehouse stage mutates raw message", mutateRawMessageInStage: true},
+		{name: "destination mutates string map", mutateStringMapInDest: true},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			pair := newTestTransportPair("api", "database")
+			raw := json.RawMessage(`{"owner":"source"}`)
+			labels := map[string]string{"owner": "source"}
+			pair.sourceExecutor.pages[0].Records[0]["raw"] = raw
+			pair.sourceExecutor.pages[0].Records[0]["labels"] = labels
+			registry := NewRegistry(pair.verifier)
+			registerTransportPair(t, registry, pair)
+			stage := &testWarehouseStage{mutateRawMessage: tt.mutateRawMessageInStage}
+			pair.destinationExecutor.mutateStringMap = tt.mutateStringMapInDest
+
+			_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+				Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+				BatchSize: 10, Stage: stage, Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+			})
+			if err != nil {
+				t.Fatalf("Run() = %v", err)
+			}
+			if got := string(raw); got != `{"owner":"source"}` {
+				t.Fatalf("source raw message after downstream mutation = %q, want untouched", got)
+			}
+			if got := labels["owner"]; got != "source" {
+				t.Fatalf("source string map after downstream mutation = %q, want untouched", got)
+			}
+		})
+	}
+}
+
+func TestOrchestratorRejectsUnsupportedMutableValuesBeforeBoundaryCrossing(t *testing.T) {
+	for _, tt := range []struct {
+		name                 string
+		configure            func(*testTransportPair, *testWarehouseStage)
+		wantStageCalls       int
+		wantDestinationCalls int
+	}{
+		{
+			name: "source record",
+			configure: func(pair *testTransportPair, _ *testWarehouseStage) {
+				pair.sourceExecutor.pages[0].Records[0]["unsupported"] = map[string]int{"source": 1}
+			},
+			wantStageCalls:       0,
+			wantDestinationCalls: 0,
+		},
+		{
+			name: "warehouse workset",
+			configure: func(_ *testTransportPair, stage *testWarehouseStage) {
+				stage.injectUnsupportedRecord = true
+			},
+			wantStageCalls:       1,
+			wantDestinationCalls: 0,
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			pair := newTestTransportPair("api", "database")
+			registry := NewRegistry(pair.verifier)
+			registerTransportPair(t, registry, pair)
+			stage := &testWarehouseStage{}
+			tt.configure(pair, stage)
+
+			_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+				Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+				BatchSize: 10, Stage: stage, Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+			})
+			if err == nil {
+				t.Fatal("Run() error = nil, want unsupported mutable value rejected")
+			}
+			if stage.calls != tt.wantStageCalls {
+				t.Fatalf("warehouse stage calls = %d, want %d", stage.calls, tt.wantStageCalls)
+			}
+			if pair.destinationExecutor.applyCalls != tt.wantDestinationCalls {
+				t.Fatalf("destination apply calls = %d, want %d", pair.destinationExecutor.applyCalls, tt.wantDestinationCalls)
+			}
+		})
 	}
 }
 
@@ -472,6 +617,7 @@ type testDestinationExecutor struct {
 	acknowledgement    synccontract.DownstreamAcknowledgement
 	acknowledgementSet bool
 	afterApply         func()
+	mutateStringMap    bool
 	planCalls          int
 	applyCalls         int
 	lastPlan           DestinationPlanRequest
@@ -485,8 +631,15 @@ func (e *testDestinationExecutor) PlanDestination(_ context.Context, request Des
 	e.lastPlan = request
 	return DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
 }
-func (e *testDestinationExecutor) ApplyDestination(_ context.Context, _ DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
+func (e *testDestinationExecutor) ApplyDestination(_ context.Context, request DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
 	e.applyCalls++
+	if e.mutateStringMap {
+		labels, ok := request.Workset.Records[0]["labels"].(map[string]string)
+		if !ok {
+			return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("test destination expected string map")
+		}
+		labels["owner"] = "destination"
+	}
 	var acknowledgement synccontract.DownstreamAcknowledgement
 	if e.acknowledgementSet {
 		acknowledgement = e.acknowledgement
@@ -504,10 +657,12 @@ func (e *testDestinationExecutor) ApplyDestination(_ context.Context, _ Destinat
 }
 
 type testWarehouseStage struct {
-	calls               int
-	lastPage            SourcePage
-	afterStage          func()
-	mutateNestedPayload bool
+	calls                   int
+	lastPage                SourcePage
+	afterStage              func()
+	mutateNestedPayload     bool
+	mutateRawMessage        bool
+	injectUnsupportedRecord bool
 }
 
 func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequest) (WarehouseWorkset, error) {
@@ -520,10 +675,21 @@ func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequ
 		}
 		nested["staged"] = true
 	}
+	if s.mutateRawMessage {
+		raw, ok := request.Page.Records[0]["raw"].(json.RawMessage)
+		if !ok {
+			return WarehouseWorkset{}, fmt.Errorf("test stage expected raw message")
+		}
+		raw[0] = '['
+	}
 	if s.afterStage != nil {
 		s.afterStage()
 	}
-	return WarehouseWorkset{ID: fmt.Sprintf("stage-%d", s.calls), Records: request.Page.Records, Tombstones: request.Page.Tombstones, CandidateCheckpoint: request.Page.CandidateCheckpoint}, nil
+	workset := WarehouseWorkset{ID: fmt.Sprintf("stage-%d", s.calls), Records: request.Page.Records, Tombstones: request.Page.Tombstones, CandidateCheckpoint: request.Page.CandidateCheckpoint}
+	if s.injectUnsupportedRecord {
+		workset.Records = []connectors.Record{{"unsupported": map[string]int{"warehouse": 1}}}
+	}
+	return workset, nil
 }
 
 type conformanceKey struct {
