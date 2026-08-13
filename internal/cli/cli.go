@@ -252,7 +252,13 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 				return fmt.Errorf("read connector certification status: %w", err)
 			}
 			if jsonOut {
-				response := envelope{"kind": "Connector", "connector": connectors.MetadataOf(c), "manifest": connectors.ManifestOf(c), "certification": status}
+				response := envelope{
+					"kind":           "Connector",
+					"connector":      connectors.MetadataOf(c),
+					"manifest":       connectors.ManifestOf(c),
+					"certification":  status,
+					"sync_transport": connectors.SyncTransportEligibilityOf(c),
+				}
 				if def, ok := connectors.DefinitionOf(c); ok && def.Changefeed != nil {
 					response["changefeed"] = def.Changefeed
 				}

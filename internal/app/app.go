@@ -20,6 +20,7 @@ import (
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/synctransport"
 	"polymetrics.ai/internal/vault"
 	"polymetrics.ai/internal/warehouse"
 )
@@ -32,16 +33,18 @@ const (
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
 type App struct {
-	root       string
-	projectDir string
-	statePath  string
-	store      statestore.JSONStore[state]
-	state      state
-	vault      *vault.Vault
-	approval   *projectWriteApprovalAuthority
-	registry   *connectors.Registry
-	sqlEngine  sqlQueryEngine
-	catalogs   catalogStorage
+	root           string
+	projectDir     string
+	statePath      string
+	store          statestore.JSONStore[state]
+	state          state
+	vault          *vault.Vault
+	approval       *projectWriteApprovalAuthority
+	registry       *connectors.Registry
+	transports     *synctransport.Registry
+	transportStage synctransport.WarehouseStage
+	sqlEngine      sqlQueryEngine
+	catalogs       catalogStorage
 }
 
 // sqlQueryEngine is the backend for App.QuerySQL. DuckDB is the only
@@ -164,6 +167,7 @@ func Open(root string) (*App, error) {
 		vault:      v,
 		approval:   approval,
 		registry:   bundleregistry.New(),
+		transports: synctransport.NewRegistry(nil),
 		catalogs:   newCatalogStorage(projectDir),
 	}
 	a.sqlEngine = newSQLEngine(a)
@@ -1043,22 +1047,10 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err := ValidateStreamSyncConfig(stream); err != nil {
 		return a.failRun(runID, err)
 	}
-	if mode.IsContractMode() {
-		return a.failRun(runID, &synccontract.ModeNotExecutableError{
-			Mode:   mode.ContractMode,
-			Reason: "no matching native executor has completed the shared conformance corpus",
-		})
-	}
 	source, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
 	if err != nil {
 		return a.failRun(runID, err)
 	}
-	catalog, err := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
-	if err != nil {
-		return a.failRun(runID, err)
-	}
-	sourceRuntime.ResolvedCatalog = &catalog
-	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
 		return a.failRun(runID, err)
@@ -1067,6 +1059,25 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if batchSize <= 0 {
 		batchSize = 1000
 	}
+	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
+	if hasDeclaredSyncTransport(source, destination) {
+		result, err := a.runTransportETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, mode, batchSize)
+		if err != nil {
+			return a.failAcknowledgedTransportRun(runID, result, err)
+		}
+		return a.completeAcknowledgedTransportRun(runID, result)
+	}
+	if mode.IsContractMode() {
+		return a.failRun(runID, &synccontract.ModeNotExecutableError{
+			Mode:   mode.ContractMode,
+			Reason: "no matching closed source/destination transport has completed externally verified conformance",
+		})
+	}
+	catalog, err := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
+	if err != nil {
+		return a.failRun(runID, err)
+	}
+	sourceRuntime.ResolvedCatalog = &catalog
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
 		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
@@ -1224,20 +1235,78 @@ func (a *App) beginRun(run Run) (Run, error) {
 	return run, nil
 }
 
+type acknowledgedTransportCompletion struct {
+	key   string
+	state StreamState
+}
+
+// completeAcknowledgedTransportRun carries the state this App persisted for
+// the closed transport checkpoint. It is an eligibility witness, not a refresh:
+// a stale finalization may rebase only while the latest stream state still
+// matches it and the target run remains running.
+func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecutionResult) (Run, error) {
+	if result.PendingStreamState == nil {
+		return a.completeRun(runID, result)
+	}
+	acknowledged, present := a.state.StreamStates[result.PendingStreamState.Key]
+	if !present {
+		return a.completeRun(runID, result)
+	}
+	return a.completeRunWithAcknowledgedTransportState(runID, result, &acknowledgedTransportCompletion{
+		key:   result.PendingStreamState.Key,
+		state: cloneStreamState(acknowledged),
+	})
+}
+
+// failAcknowledgedTransportRun uses a completed checkpoint only as an
+// eligibility witness for terminal failure. It does not refresh state, retry a
+// checkpoint, or replay destination work.
+func (a *App) failAcknowledgedTransportRun(runID string, result etlExecutionResult, runErr error) (Run, error) {
+	if errors.Is(runErr, errTransportStreamStateConflict) {
+		return a.failRun(runID, runErr)
+	}
+	if result.PendingStreamState == nil {
+		return a.failRun(runID, runErr)
+	}
+	acknowledged, present := a.state.StreamStates[result.PendingStreamState.Key]
+	if !present {
+		return a.failRun(runID, runErr)
+	}
+	return a.failRunWithAcknowledgedTransportState(runID, runErr, &acknowledgedTransportCompletion{
+		key:   result.PendingStreamState.Key,
+		state: cloneStreamState(acknowledged),
+	})
+}
+
 func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
+	return a.completeRunWithAcknowledgedTransportState(runID, result, nil)
+}
+
+func (a *App) completeRunWithAcknowledgedTransportState(runID string, result etlExecutionResult, acknowledged *acknowledgedTransportCompletion) (Run, error) {
 	if result.PendingStreamState == nil {
 		return Run{}, errors.New("completed ETL run is missing pending stream state")
 	}
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
-	updated, err := a.updateState(func(current state) (state, error) {
-		if current.Revision != expectedRevision {
+	transitionedInCallback := false
+	updated, persistErr := a.updateState(func(current state) (state, error) {
+		rebased := current.Revision != expectedRevision
+		if rebased && acknowledged == nil {
 			return current, errStateRevisionConflict
+		}
+		if rebased {
+			currentStreamState, present := current.StreamStates[acknowledged.key]
+			if !present || !transportStreamStateEqual(currentStreamState, acknowledged.state) {
+				return current, fmt.Errorf("acknowledged transport stream state changed before completion: %w", errStateRevisionConflict)
+			}
 		}
 		found := false
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
+			}
+			if rebased && current.Runs[i].Status != "running" {
+				return current, fmt.Errorf("acknowledged transport run %q has status %q, want running before completion: %w", runID, current.Runs[i].Status, errStateRevisionConflict)
 			}
 			current.Runs[i].Status = "completed"
 			current.Runs[i].RecordsRead = result.RecordsRead
@@ -1248,9 +1317,13 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
 			current.Runs[i].CompletedAt = completedAt
 			found = true
+			transitionedInCallback = true
 			break
 		}
 		if !found {
+			if rebased && acknowledged != nil {
+				return current, fmt.Errorf("acknowledged transport run %q not found before completion: %w", runID, errStateRevisionConflict)
+			}
 			return current, fmt.Errorf("run %q not found", runID)
 		}
 		if current.Checkpoints == nil {
@@ -1263,8 +1336,15 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 		current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
 		return current, nil
 	})
-	if err != nil {
-		return Run{}, err
+	if persistErr != nil {
+		if acknowledged != nil && transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
+			for _, run := range updated.Runs {
+				if run.ID == runID {
+					return run, persistErr
+				}
+			}
+		}
+		return Run{}, persistErr
 	}
 	for _, run := range updated.Runs {
 		if run.ID == runID {
@@ -1272,6 +1352,51 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 		}
 	}
 	return Run{}, fmt.Errorf("completed run %q was not stored", runID)
+}
+
+func (a *App) failRunWithAcknowledgedTransportState(runID string, runErr error, acknowledged *acknowledgedTransportCompletion) (Run, error) {
+	expectedRevision := a.state.Revision
+	completedAt := time.Now().UTC()
+	transitionedInCallback := false
+	updated, persistErr := a.updateState(func(current state) (state, error) {
+		rebased := current.Revision != expectedRevision
+		if rebased {
+			currentStreamState, present := current.StreamStates[acknowledged.key]
+			if !present || !transportStreamStateEqual(currentStreamState, acknowledged.state) {
+				return current, fmt.Errorf("acknowledged transport stream state changed before failure: %w", errStateRevisionConflict)
+			}
+		}
+		for i := range current.Runs {
+			if current.Runs[i].ID != runID {
+				continue
+			}
+			if current.Runs[i].Status != "running" {
+				return current, fmt.Errorf("acknowledged transport run %q has status %q, want running before failure: %w", runID, current.Runs[i].Status, errStateRevisionConflict)
+			}
+			current.Runs[i].Status = "failed"
+			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
+			current.Runs[i].CompletedAt = completedAt
+			transitionedInCallback = true
+			return current, nil
+		}
+		return current, fmt.Errorf("acknowledged transport run %q not found before failure: %w", runID, errStateRevisionConflict)
+	})
+	if persistErr != nil {
+		if transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
+			for _, run := range updated.Runs {
+				if run.ID == runID {
+					return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+				}
+			}
+		}
+		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+	}
+	for _, run := range updated.Runs {
+		if run.ID == runID {
+			return run, runErr
+		}
+	}
+	return Run{}, errors.Join(runErr, fmt.Errorf("failed run %q was not stored", runID))
 }
 
 func (a *App) GetRun(id string) (Run, error) {
@@ -2626,25 +2751,43 @@ func (a *App) findConnectionFold(name string) (Connection, bool) {
 	return Connection{}, false
 }
 
+// failRun keeps persisted run state truthful: the typed transport-conflict path
+// must not return the JSON store's speculative callback state after a definite
+// pre-rename failure.
 func (a *App) failRun(runID string, runErr error) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
+	transportStateConflict := errors.Is(runErr, errTransportStreamStateConflict)
+	transitionedInCallback := false
+	targetAlreadyTerminal := false
 	updated, persistErr := a.updateState(func(current state) (state, error) {
-		if current.Revision != expectedRevision {
+		if !transportStateConflict && current.Revision != expectedRevision {
 			return current, errStateRevisionConflict
 		}
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
 			}
+			if transportStateConflict && current.Runs[i].Status != "running" {
+				targetAlreadyTerminal = true
+				return current, fmt.Errorf("transport conflict run %q has status %q, want running before finalization", runID, current.Runs[i].Status)
+			}
 			current.Runs[i].Status = "failed"
 			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
 			current.Runs[i].CompletedAt = completedAt
+			transitionedInCallback = true
 			return current, nil
 		}
 		return current, fmt.Errorf("run %q not found", runID)
 	})
 	if persistErr != nil {
+		if transportStateConflict && (targetAlreadyTerminal || (transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr))) {
+			for _, run := range updated.Runs {
+				if run.ID == runID {
+					return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+				}
+			}
+		}
 		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 	}
 	for _, run := range updated.Runs {

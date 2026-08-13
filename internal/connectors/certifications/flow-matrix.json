@@ -27,7 +27,7 @@
   "workflow_kinds": [
     {
       "id": "etl",
-      "discovery_source": "internal/cli/cli.go:594"
+      "discovery_source": "internal/cli/cli.go:600"
     },
     {
       "id": "flow_authoring",
@@ -35,7 +35,7 @@
     },
     {
       "id": "reverse_etl",
-      "discovery_source": "internal/cli/cli.go:1723"
+      "discovery_source": "internal/cli/cli.go:1729"
     },
     {
       "id": "schedule",
