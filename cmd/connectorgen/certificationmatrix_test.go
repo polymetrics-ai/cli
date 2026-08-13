@@ -546,6 +546,33 @@ func TestCertificationScopedGenerationLeavesOtherShardByteIdentical(t *testing.T
 	}
 }
 
+func TestCertificationCheckValidatesCommittedStatusBeforeSourceReconstruction(t *testing.T) {
+	repoRoot := repoRootForCertificationTest(t)
+	shards, err := buildCertificationShards(repoRoot, certificationConnectorAllowlist)
+	if err != nil {
+		t.Fatalf("buildCertificationShards() error = %v", err)
+	}
+	payloads, err := marshalCertificationShards(shards)
+	if err != nil {
+		t.Fatalf("marshalCertificationShards() error = %v", err)
+	}
+	outputRoot := t.TempDir()
+	if err := writeCertificationShardScope(outputRoot, payloads, certificationConnectorAllowlist); err != nil {
+		t.Fatalf("writeCertificationShardScope() error = %v", err)
+	}
+	statusPath := filepath.Join(outputRoot, certificationStatusPath)
+	if err := os.MkdirAll(filepath.Dir(statusPath), 0o755); err != nil {
+		t.Fatalf("mkdir status parent: %v", err)
+	}
+	if err := os.WriteFile(statusPath, []byte("{}\n"), 0o600); err != nil {
+		t.Fatalf("write malformed status: %v", err)
+	}
+	_, err = generateCertificationMatrix(t.TempDir(), outputRoot, true, false, "")
+	if err == nil || !strings.Contains(err.Error(), "generated certification artifact") {
+		t.Fatalf("generateCertificationMatrix() error = %v, want committed status validation", err)
+	}
+}
+
 func TestCertificationShardDriftFails(t *testing.T) {
 	root := repoRootForCertificationTest(t)
 	shards, err := buildCertificationShards(root, certificationConnectorAllowlist)
@@ -571,12 +598,12 @@ func TestCertificationShardDriftFails(t *testing.T) {
 	}
 }
 
-func TestCertificationScopeIgnoresOtherConnectorClaims(t *testing.T) {
+func TestCertificationScopeRetainsSourceOwnedCrossPairClaims(t *testing.T) {
 	scope := []string{"github"}
 	for _, evidence := range []acceptedEvidence{
 		{Scope: evidenceScopeCapability, Connector: "mysql"},
 		{Scope: evidenceScopeWorkflow, Connector: "postgres"},
-		{Scope: evidenceScopeFlow, Source: "github", Destination: "postgres"},
+		{Scope: evidenceScopeFlow, Source: "github", Destination: "mysql"},
 	} {
 		if acceptedEvidenceWithinScope(evidence, scope) {
 			t.Fatalf("evidence %#v unexpectedly entered github certification scope", evidence)
@@ -584,6 +611,9 @@ func TestCertificationScopeIgnoresOtherConnectorClaims(t *testing.T) {
 	}
 	if !acceptedEvidenceWithinScope(acceptedEvidence{Scope: evidenceScopeCapability, Connector: "github"}, scope) {
 		t.Fatal("github capability evidence did not enter github certification scope")
+	}
+	if !acceptedEvidenceWithinScope(acceptedEvidence{Scope: evidenceScopeFlow, Source: "github", Destination: "postgres"}, scope) {
+		t.Fatal("github source-owned cross-pair evidence did not enter github certification scope")
 	}
 }
 
@@ -615,8 +645,22 @@ func TestCertificationSourceAnchorsUseSymbols(t *testing.T) {
 	}
 }
 
+func TestCertificationScopedSourceResolutionUsesTargetConnector(t *testing.T) {
+	bundles, err := loadSourceBundlesForConnectors(repoRootForCertificationTest(t), []string{"github"})
+	if err != nil {
+		t.Fatalf("loadSourceBundlesForConnectors() error = %v", err)
+	}
+	connector, found := scopedMatrixConnector("github", &bundles[0])
+	if !found || !isEngineConnector(connector) {
+		t.Fatalf("scopedMatrixConnector(github) = %T, %t; want engine connector", connector, found)
+	}
+}
+
 func TestCertificationDiscoversStableWarehouseFacingSyncPrimitives(t *testing.T) {
-	primitives := discoverSyncPrimitives()
+	primitives, err := discoverSyncPrimitives(repoRootForCertificationTest(t))
+	if err != nil {
+		t.Fatalf("discoverSyncPrimitives() error = %v", err)
+	}
 	want := map[string]bool{
 		"api_read_into_warehouse":       false,
 		"api_write_from_warehouse":      false,
@@ -632,6 +676,63 @@ func TestCertificationDiscoversStableWarehouseFacingSyncPrimitives(t *testing.T)
 		if !found {
 			t.Errorf("discoverSyncPrimitives() omitted %q: %#v", primitive, primitives)
 		}
+	}
+}
+
+func TestCertificationSyncPrimitiveDiscoveryRequiresMetadataSymbol(t *testing.T) {
+	root := t.TempDir()
+	path := filepath.Join(root, "internal", "connectors", "connectors.go")
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		t.Fatalf("mkdir connector source: %v", err)
+	}
+	if err := os.WriteFile(path, []byte("package connectors\ntype Connector interface { Name() string }\n"), 0o600); err != nil {
+		t.Fatalf("write connector source: %v", err)
+	}
+	if _, err := discoverSyncPrimitives(root); err == nil || !strings.Contains(err.Error(), "Connector.Metadata") {
+		t.Fatalf("discoverSyncPrimitives() error = %v, want missing Connector.Metadata failure", err)
+	}
+}
+
+func TestCertificationShardRequiresDestinationRoleContextForSourceOwnedPair(t *testing.T) {
+	shards, err := buildCertificationShards(repoRootForCertificationTest(t), certificationConnectorAllowlist)
+	if err != nil {
+		t.Fatalf("buildCertificationShards() error = %v", err)
+	}
+	github := shards["github"]
+	postgres := shards["postgres"]
+	sourceRole, found := flowRoleForConnector([]connectorFlowRoles{github.ConnectorRoles}, "github", "api_source")
+	if !found {
+		t.Fatal("github api_source role is missing")
+	}
+	destinationRole, found := flowRoleForConnector([]connectorFlowRoles{postgres.ConnectorRoles}, "postgres", "database_destination")
+	if !found {
+		t.Fatal("postgres database_destination role is missing")
+	}
+	override := flowPairOverride{
+		FlowKind:        "api_to_database",
+		Source:          "github",
+		Destination:     "postgres",
+		Mediator:        localWarehouseMediator,
+		DestinationRole: destinationRole,
+		Cell:            baseFlowCell(sourceRole, destinationRole),
+	}
+	github.PairOverrides = []flowPairOverride{override}
+	if err := validateCertificationShard(github); err != nil {
+		t.Fatalf("validateCertificationShard() error = %v", err)
+	}
+	github.PairOverrides[0].DestinationRole = connectorFlowRole{}
+	if err := validateCertificationShard(github); err == nil {
+		t.Fatal("validateCertificationShard() accepted source-owned pair without destination role context")
+	}
+}
+
+func TestCertificationStatusArtifactRemediationUsesAll(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "status.json")
+	if err := validateCertificationStatusArtifactFile(path); err == nil || !strings.Contains(err.Error(), "certification-matrix --all") {
+		t.Fatalf("validateCertificationStatusArtifactFile() error = %v, want --all remediation", err)
+	}
+	if err := checkCertificationStatusGeneratedArtifact(path, []byte("{}\n")); err == nil || !strings.Contains(err.Error(), "certification-matrix --all") {
+		t.Fatalf("checkCertificationStatusGeneratedArtifact() error = %v, want --all remediation", err)
 	}
 }
 

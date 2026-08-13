@@ -55,13 +55,25 @@ var embeddedStatuses struct {
 // claim, so it retains the existing visible community-build warning rather
 // than being omitted from inspection.
 func StatusFor(connector string) (Status, error) {
+	return statusFor(connector, func() bool {
+		_, registered := bundleregistry.New().Get(connector)
+		return registered
+	})
+}
+
+// StatusForRegistered returns a status using the caller's connector-registration result.
+func StatusForRegistered(connector string, registered bool) (Status, error) {
+	return statusFor(connector, func() bool { return registered })
+}
+
+func statusFor(connector string, isRegistered func() bool) (Status, error) {
 	embeddedStatuses.once.Do(loadEmbeddedStatuses)
 	if embeddedStatuses.err != nil {
 		return Status{}, embeddedStatuses.err
 	}
 	status, ok := embeddedStatuses.byName[connector]
 	if !ok {
-		if _, registered := bundleregistry.New().Get(connector); !registered {
+		if !isRegistered() {
 			return Status{}, fmt.Errorf("generated certification status omits connector %q", connector)
 		}
 		return Status{

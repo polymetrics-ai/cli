@@ -22,6 +22,7 @@ import (
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/conformance"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/connectors/native/nativeset"
 )
 
 const (
@@ -266,7 +267,7 @@ type certificationMatrixGenerationResult struct {
 
 // generateCertificationMatrix is the generator core. Source and output roots
 // are separate so the incremental-output contract is directly testable: a
-// scoped run reads its connector source but writes that shard only.
+// scoped run writes only its requested shard.
 func generateCertificationMatrix(sourceRoot, outputRoot string, check, all bool, connector string) (certificationMatrixGenerationResult, error) {
 	result := certificationMatrixGenerationResult{}
 	statusPath := filepath.Join(outputRoot, certificationStatusPath)
@@ -274,11 +275,20 @@ func generateCertificationMatrix(sourceRoot, outputRoot string, check, all bool,
 		if err := checkRetiredCertificationArtifactsAbsent(outputRoot); err != nil {
 			return result, err
 		}
+		committedShards, err := readCertificationShards(outputRoot)
+		if err != nil {
+			return result, err
+		}
+		if _, _, err := reconstructCertificationMatrices(committedShards); err != nil {
+			return result, fmt.Errorf("reconstruct committed shard union: %w", err)
+		}
+		if err := validateCertificationStatusArtifactFile(statusPath); err != nil {
+			return result, err
+		}
 	}
-	// A normal scoped run reads and writes only its requested connector. The
-	// all-shard sweep is reserved for the deliberate status-projection refresh
-	// and drift gate, so concurrent connector lanes never touch each other's
-	// source or output.
+	// A normal scoped run writes only its requested connector. The all-shard
+	// sweep is reserved for the deliberate status-projection refresh and drift
+	// gate, so concurrent connector lanes never touch each other's output.
 	generationScope := certificationConnectorAllowlist
 	if connector != "" {
 		generationScope = []string{connector}
@@ -344,11 +354,11 @@ func buildCertificationShards(repoRoot string, names []string) (map[string]certi
 	if err := validateCertificationConnectorScope(names); err != nil {
 		return nil, err
 	}
-	capabilities, err := buildCapabilityMatrixForConnectors(repoRoot, names)
+	capabilities, err := buildCapabilityMatrixForConnectors(repoRoot, certificationConnectorAllowlist)
 	if err != nil {
 		return nil, err
 	}
-	flows, err := buildFlowMatrixForConnectors(repoRoot, capabilities, names)
+	flows, err := buildFlowMatrixForConnectors(repoRoot, capabilities, certificationConnectorAllowlist)
 	if err != nil {
 		return nil, err
 	}
@@ -698,9 +708,9 @@ func validateCertificationShard(shard certificationShard) error {
 		return err
 	}
 	seenOverrides := make(map[string]bool, len(shard.PairOverrides))
-	knownFlowKinds := make(map[string]bool, len(shard.FlowKinds))
+	knownFlowKinds := make(map[string]flowKind, len(shard.FlowKinds))
 	for _, kind := range shard.FlowKinds {
-		knownFlowKinds[kind.ID] = true
+		knownFlowKinds[kind.ID] = kind
 	}
 	for _, override := range shard.PairOverrides {
 		key := strings.Join([]string{override.FlowKind, override.Source, override.Destination}, "\x00")
@@ -708,8 +718,23 @@ func validateCertificationShard(shard certificationShard) error {
 			return fmt.Errorf("pair override %q is duplicated", key)
 		}
 		seenOverrides[key] = true
-		if override.Source != shard.Connector.Name || !certificationConnectorAllowed(override.Destination) || !knownFlowKinds[override.FlowKind] || override.Mediator != localWarehouseMediator {
+		kind, known := knownFlowKinds[override.FlowKind]
+		if override.Source != shard.Connector.Name || !certificationConnectorAllowed(override.Destination) || !known || override.Mediator != localWarehouseMediator {
 			return fmt.Errorf("pair override %q has an invalid shard-local identity", key)
+		}
+		if err := validateConnectorFlowRole(override.DestinationRole); err != nil || override.DestinationRole.Role != kind.DestinationRole {
+			return fmt.Errorf("pair override %q has invalid destination role context", key)
+		}
+		sourceRole, found := flowRoleForConnector([]connectorFlowRoles{shard.ConnectorRoles}, shard.Connector.Name, kind.SourceRole)
+		if !found {
+			return fmt.Errorf("pair override %q cannot target an inapplicable source or destination role", key)
+		}
+		base := baseFlowCell(sourceRole, override.DestinationRole)
+		if !base.Applicable {
+			return fmt.Errorf("pair override %q cannot target an inapplicable source or destination role", key)
+		}
+		if !flowCellMatchesRoleBase(override.Cell, base) {
+			return fmt.Errorf("pair override %q facts do not match its source and destination roles", key)
 		}
 		if err := validateFlowCertificationCell(override.Cell); err != nil {
 			return fmt.Errorf("pair override %q: %w", key, err)
@@ -811,13 +836,14 @@ func matrixConnectorSourcesForNames(bundles []engine.Bundle, scope []string) ([]
 		bundleByName[bundles[i].Name] = &bundles[i]
 	}
 
-	registry := bundleregistry.New()
-	names := make(map[string]bool, len(bundleByName)+len(registry.List()))
+	names := make(map[string]bool, len(bundleByName))
+	var registry *connectors.Registry
 	if len(scope) != 0 {
 		for _, name := range scope {
 			names[name] = true
 		}
 	} else {
+		registry = bundleregistry.New()
 		for name := range bundleByName {
 			names[name] = true
 		}
@@ -835,7 +861,13 @@ func matrixConnectorSourcesForNames(bundles []engine.Bundle, scope []string) ([]
 	out := make([]matrixConnectorSource, 0, len(sortedNames))
 	for _, name := range sortedNames {
 		bundle := bundleByName[name]
-		connector, registered := registry.Get(name)
+		var connector connectors.Connector
+		var registered bool
+		if registry != nil {
+			connector, registered = registry.Get(name)
+		} else {
+			connector, registered = scopedMatrixConnector(name, bundle)
+		}
 		integrationType := ""
 		if bundle != nil {
 			integrationType = bundle.Metadata.IntegrationType
@@ -861,6 +893,18 @@ func matrixConnectorSourcesForNames(bundles []engine.Bundle, scope []string) ([]
 		})
 	}
 	return out, nil
+}
+
+func scopedMatrixConnector(name string, bundle *engine.Bundle) (connectors.Connector, bool) {
+	for _, factory := range nativeset.Factories() {
+		if factory.Name == name {
+			return factory.New(), true
+		}
+	}
+	if bundle == nil {
+		return nil, false
+	}
+	return engine.New(*bundle, nil), true
 }
 
 func buildCertificationCell(repoRoot string, source matrixConnectorSource, kind functionKind, evidence []acceptedEvidence) (certificationCell, error) {
@@ -1460,7 +1504,7 @@ func acceptedEvidenceWithinScope(evidence acceptedEvidence, scope []string) bool
 	case evidenceScopeCapability, evidenceScopeWorkflow, evidenceScopeSyncMode:
 		return inScope[evidence.Connector]
 	case evidenceScopeFlow:
-		return inScope[evidence.Source] && inScope[evidence.Destination]
+		return inScope[evidence.Source] && certificationConnectorAllowed(evidence.Destination)
 	default:
 		return false
 	}

@@ -154,11 +154,12 @@ type flowPairSet struct {
 // source/destination pair after a real round trip; it cannot promote a whole
 // product of endpoints by sharing one result.
 type flowPairOverride struct {
-	FlowKind    string                `json:"flow_kind"`
-	Source      string                `json:"source"`
-	Destination string                `json:"destination"`
-	Mediator    string                `json:"mediator"`
-	Cell        flowCertificationCell `json:"cell"`
+	FlowKind        string                `json:"flow_kind"`
+	Source          string                `json:"source"`
+	Destination     string                `json:"destination"`
+	Mediator        string                `json:"mediator"`
+	DestinationRole connectorFlowRole     `json:"destination_role"`
+	Cell            flowCertificationCell `json:"cell"`
 }
 
 type flowKindBaseline struct {
@@ -291,9 +292,11 @@ func discoverSyncModes() []syncModeKind {
 	return out
 }
 
-func discoverSyncPrimitives() []syncPrimitive {
-	// This fixed product contract must not depend on which connector a scoped
-	// generation run happens to load. Connector roles determine applicability.
+func discoverSyncPrimitives(repoRoot string) ([]syncPrimitive, error) {
+	metadataSource, err := connectorMetadataSource(repoRoot)
+	if err != nil {
+		return nil, err
+	}
 	primitives := make([]syncPrimitive, 0, 4)
 	for _, integrationType := range []string{"api", "database"} {
 		for _, capability := range []string{"read", "write"} {
@@ -306,11 +309,62 @@ func discoverSyncPrimitives() []syncPrimitive {
 				IntegrationType:    integrationType,
 				Capability:         capability,
 				WarehouseDirection: direction,
-				DiscoverySource:    "internal/connectors/connectors.go:Connector.Metadata",
+				DiscoverySource:    metadataSource,
 			})
 		}
 	}
-	return primitives
+	return primitives, nil
+}
+
+func connectorMetadataSource(repoRoot string) (string, error) {
+	dir := filepath.Join(repoRoot, "internal", "connectors")
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return "", fmt.Errorf("read connector source directory: %w", err)
+	}
+	found := ""
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".go") || strings.HasSuffix(entry.Name(), "_test.go") {
+			continue
+		}
+		path := filepath.Join(dir, entry.Name())
+		file, err := parser.ParseFile(token.NewFileSet(), path, nil, 0)
+		if err != nil {
+			return "", fmt.Errorf("parse connector source %q: %w", path, err)
+		}
+		for _, decl := range file.Decls {
+			gen, ok := decl.(*ast.GenDecl)
+			if !ok || gen.Tok != token.TYPE {
+				continue
+			}
+			for _, spec := range gen.Specs {
+				typeSpec, ok := spec.(*ast.TypeSpec)
+				if !ok || typeSpec.Name.Name != "Connector" {
+					continue
+				}
+				iface, ok := typeSpec.Type.(*ast.InterfaceType)
+				if !ok {
+					continue
+				}
+				for _, method := range iface.Methods.List {
+					for _, name := range method.Names {
+						if name.Name != "Metadata" {
+							continue
+						}
+						source := sourceSymbol(repoRoot, path, typeSpec.Name.Name+"."+name.Name)
+						if found != "" {
+							return "", fmt.Errorf("connector source declares Connector.Metadata multiple times (%s, %s)", found, source)
+						}
+						found = source
+					}
+				}
+			}
+		}
+	}
+	if found == "" {
+		return "", errors.New("connector source declares no Connector.Metadata method")
+	}
+	return found, nil
 }
 
 func workflowKindsFromDoc(doc *ast.CommentGroup) []string {
@@ -662,7 +716,10 @@ func buildFlowMatrixForConnectors(repoRoot string, capabilities capabilityMatrix
 		return flowMatrix{}, err
 	}
 	syncModes := discoverSyncModes()
-	syncPrimitives := discoverSyncPrimitives()
+	syncPrimitives, err := discoverSyncPrimitives(repoRoot)
+	if err != nil {
+		return flowMatrix{}, err
+	}
 	syncCells, err := buildConnectorSyncModeCells(sources, capabilities, syncModes, syncPrimitives, evidence)
 	if err != nil {
 		return flowMatrix{}, err
@@ -924,9 +981,9 @@ func flowCellComplete(cell flowCertificationCell) bool {
 }
 
 func applyFlowEvidence(matrix *flowMatrix, evidence []acceptedEvidence) error {
-	knownKinds := make(map[string]bool, len(matrix.FlowKinds))
+	knownKinds := make(map[string]flowKind, len(matrix.FlowKinds))
 	for _, kind := range matrix.FlowKinds {
-		knownKinds[kind.ID] = true
+		knownKinds[kind.ID] = kind
 	}
 	knownConnectors := make(map[string]bool, len(matrix.ConnectorRoles))
 	for _, item := range matrix.ConnectorRoles {
@@ -937,7 +994,8 @@ func applyFlowEvidence(matrix *flowMatrix, evidence []acceptedEvidence) error {
 		if item.Scope != evidenceScopeFlow || item.Status != evidenceStatusPassed {
 			continue
 		}
-		if !knownKinds[item.FlowKind] {
+		kind, known := knownKinds[item.FlowKind]
+		if !known {
 			return fmt.Errorf("accepted flow evidence %q names unknown flow kind %q", item.recordPath, item.FlowKind)
 		}
 		if !knownConnectors[item.Source] || !knownConnectors[item.Destination] {
@@ -949,6 +1007,10 @@ func applyFlowEvidence(matrix *flowMatrix, evidence []acceptedEvidence) error {
 		}
 		if !resolved.Cell.Applicable {
 			return fmt.Errorf("accepted flow evidence %q targets non-applicable pair %s -> %s", item.recordPath, item.Source, item.Destination)
+		}
+		destinationRole, found := flowRoleForConnector(matrix.ConnectorRoles, item.Destination, kind.DestinationRole)
+		if !found {
+			return fmt.Errorf("accepted flow evidence %q has no destination role context", item.recordPath)
 		}
 		cell := resolved.Cell
 		pointer := evidencePointer{
@@ -966,11 +1028,12 @@ func applyFlowEvidence(matrix *flowMatrix, evidence []acceptedEvidence) error {
 			return fmt.Errorf("accepted flow evidence %q: %w", item.recordPath, err)
 		}
 		matrix.PairOverrides = upsertFlowPairOverride(matrix.PairOverrides, flowPairOverride{
-			FlowKind:    item.FlowKind,
-			Source:      item.Source,
-			Destination: item.Destination,
-			Mediator:    localWarehouseMediator,
-			Cell:        cell,
+			FlowKind:        item.FlowKind,
+			Source:          item.Source,
+			Destination:     item.Destination,
+			Mediator:        localWarehouseMediator,
+			DestinationRole: destinationRole,
+			Cell:            cell,
 		})
 	}
 	sort.Slice(matrix.PairOverrides, func(i, j int) bool {
@@ -995,6 +1058,34 @@ func upsertFlowPairOverride(overrides []flowPairOverride, next flowPairOverride)
 		}
 	}
 	return append(overrides, next)
+}
+
+func flowRoleForConnector(sets []connectorFlowRoles, connector, role string) (connectorFlowRole, bool) {
+	for _, set := range sets {
+		if set.Connector != connector {
+			continue
+		}
+		for _, candidate := range set.Roles {
+			if candidate.Role == role {
+				return candidate, true
+			}
+		}
+	}
+	return connectorFlowRole{}, false
+}
+
+func connectorFlowRolesEqual(left, right connectorFlowRole) bool {
+	if left.Role != right.Role || left.Applicable != right.Applicable || left.Declared != right.Declared || left.Implemented != right.Implemented {
+		return false
+	}
+	if left.NotApplicable == nil || right.NotApplicable == nil {
+		return left.NotApplicable == nil && right.NotApplicable == nil
+	}
+	return *left.NotApplicable == *right.NotApplicable
+}
+
+func flowCellMatchesRoleBase(cell, base flowCertificationCell) bool {
+	return cell.Applicable == base.Applicable && cell.Declared == base.Declared && cell.Implemented == base.Implemented
 }
 
 func resolveFlowPair(matrix flowMatrix, flowKindID, source, destination string) (resolvedFlowPair, bool) {
@@ -1209,15 +1300,15 @@ func validateFlowMatrix(matrix flowMatrix) error {
 	if matrix.Mediator != localWarehouseMediator {
 		return fmt.Errorf("mediator %q is unsupported", matrix.Mediator)
 	}
-	knownKinds := make(map[string]bool, len(matrix.FlowKinds))
+	knownKinds := make(map[string]flowKind, len(matrix.FlowKinds))
 	for _, kind := range matrix.FlowKinds {
 		if !isSafeProofIdentifier(kind.ID) || !isSafeProofIdentifier(kind.SourceRole) || !isSafeProofIdentifier(kind.DestinationRole) {
 			return errors.New("flow kind is invalid")
 		}
-		if knownKinds[kind.ID] {
+		if _, exists := knownKinds[kind.ID]; exists {
 			return fmt.Errorf("flow kind %q is duplicated", kind.ID)
 		}
-		knownKinds[kind.ID] = true
+		knownKinds[kind.ID] = kind
 	}
 	knownWorkflowKinds := make(map[string]bool, len(matrix.WorkflowKinds))
 	for _, kind := range matrix.WorkflowKinds {
@@ -1281,7 +1372,7 @@ func validateFlowMatrix(matrix flowMatrix) error {
 		return err
 	}
 	for _, set := range matrix.PairSets {
-		if !knownKinds[set.FlowKind] || set.Mediator != localWarehouseMediator {
+		if _, known := knownKinds[set.FlowKind]; !known || set.Mediator != localWarehouseMediator {
 			return errors.New("pair set has an unknown flow kind or mediator")
 		}
 		if len(set.SourceConnectors) == 0 || len(set.DestinationConnectors) == 0 || !isSortedUnique(set.SourceConnectors) || !isSortedUnique(set.DestinationConnectors) {
@@ -1306,12 +1397,23 @@ func validateFlowMatrix(matrix flowMatrix) error {
 			return fmt.Errorf("pair override %q is duplicated", key)
 		}
 		seenOverrides[key] = true
-		if override.Mediator != localWarehouseMediator || !knownKinds[override.FlowKind] || !knownConnectors[override.Source] || !knownConnectors[override.Destination] {
+		kind, known := knownKinds[override.FlowKind]
+		if override.Mediator != localWarehouseMediator || !known || !knownConnectors[override.Source] || !knownConnectors[override.Destination] {
 			return errors.New("pair override identity is invalid")
+		}
+		if err := validateConnectorFlowRole(override.DestinationRole); err != nil || override.DestinationRole.Role != kind.DestinationRole {
+			return errors.New("pair override destination role context is invalid")
+		}
+		destinationRole, found := flowRoleForConnector(matrix.ConnectorRoles, override.Destination, kind.DestinationRole)
+		if !found || !connectorFlowRolesEqual(destinationRole, override.DestinationRole) {
+			return errors.New("pair override destination role context does not match the destination connector")
 		}
 		base, ok := resolveFlowPair(flowMatrix{PairSets: matrix.PairSets}, override.FlowKind, override.Source, override.Destination)
 		if !ok || !base.Cell.Applicable {
 			return errors.New("pair override must target an applicable default pair")
+		}
+		if !flowCellMatchesRoleBase(override.Cell, base.Cell) {
+			return errors.New("pair override facts do not match its source and destination roles")
 		}
 		if err := validateFlowCertificationCell(override.Cell); err != nil {
 			return fmt.Errorf("pair override %q: %w", key, err)
@@ -1497,11 +1599,25 @@ func validateCertificationStatusArtifactJSON(raw []byte) error {
 	return validateConnectorStatuses(artifact.Connectors, known)
 }
 
+func validateCertificationStatusArtifactFile(path string) error {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+			return fmt.Errorf("generated artifact %q is missing; run `go run ./cmd/connectorgen certification-matrix --all`", filepath.ToSlash(path))
+		}
+		return fmt.Errorf("read generated artifact %q: %w", filepath.ToSlash(path), err)
+	}
+	if err := validateCertificationStatusArtifactJSON(raw); err != nil {
+		return fmt.Errorf("generated certification artifact %q is invalid: %w", filepath.ToSlash(path), err)
+	}
+	return nil
+}
+
 func checkCertificationStatusGeneratedArtifact(path string, generated []byte) error {
 	existing, err := os.ReadFile(path)
 	if err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
-			return fmt.Errorf("generated artifact %q is missing; run `go run ./cmd/connectorgen certification-matrix`", filepath.ToSlash(path))
+			return fmt.Errorf("generated artifact %q is missing; run `go run ./cmd/connectorgen certification-matrix --all`", filepath.ToSlash(path))
 		}
 		return fmt.Errorf("read generated artifact %q: %w", filepath.ToSlash(path), err)
 	}
@@ -1509,7 +1625,7 @@ func checkCertificationStatusGeneratedArtifact(path string, generated []byte) er
 		return fmt.Errorf("generated certification artifact %q is invalid: %w", filepath.ToSlash(path), err)
 	}
 	if !bytes.Equal(existing, generated) {
-		return fmt.Errorf("generated artifact %q has drift; run `go run ./cmd/connectorgen certification-matrix`", filepath.ToSlash(path))
+		return fmt.Errorf("generated artifact %q has drift; run `go run ./cmd/connectorgen certification-matrix --all`", filepath.ToSlash(path))
 	}
 	return nil
 }

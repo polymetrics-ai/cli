@@ -38,7 +38,7 @@ func TestGeneratedStatusIncludesEveryAllowlistedConnector(t *testing.T) {
 }
 
 func TestUnallowlistedConnectorHasNoCertificationClaim(t *testing.T) {
-	status, err := StatusFor("mysql")
+	status, err := StatusForRegistered("mysql", true)
 	if err != nil {
 		t.Fatalf("StatusFor(mysql) error = %v", err)
 	}
@@ -48,7 +48,7 @@ func TestUnallowlistedConnectorHasNoCertificationClaim(t *testing.T) {
 }
 
 func TestUnknownConnectorStatusRemainsAnError(t *testing.T) {
-	if _, err := StatusFor("not-a-connector"); err == nil {
-		t.Fatal("StatusFor(not-a-connector) error = nil, want omitted-status error")
+	if _, err := StatusForRegistered("not-a-connector", false); err == nil {
+		t.Fatal("StatusForRegistered(not-a-connector) error = nil, want omitted-status error")
 	}
 }
