@@ -79,11 +79,16 @@ func (s *receiptOrderingWarehouseStage) Stage(_ context.Context, request Warehou
 	*s.order = append(*s.order, "stage")
 	s.page = request.Page
 	return WarehouseReceipt{
-		ID:             "stage-receipt",
-		Owner:          "connection-owner",
-		Generation:     1,
-		ManifestSHA256: "manifest",
-		ContentSHA256:  "content",
+		ID:               "stage-receipt",
+		Owner:            "connection-owner",
+		Generation:       1,
+		Stream:           request.Stream,
+		Mode:             request.Mode,
+		CheckpointSHA256: "checkpoint",
+		TombstonesSHA256: "tombstones",
+		ManifestSHA256:   "manifest",
+		ContentSHA256:    "content",
+		ParquetSHA256:    "parquet",
 	}, nil
 }
 

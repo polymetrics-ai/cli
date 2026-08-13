@@ -714,13 +714,18 @@ func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequ
 	}
 	s.worksets[workset.ID] = workset
 	return WarehouseReceipt{
-		ID:             workset.ID,
-		Owner:          "test-connection-owner",
-		Generation:     1,
-		ManifestSHA256: "test-manifest",
-		ContentSHA256:  "test-content",
-		Records:        len(workset.Records),
-		Tombstones:     len(workset.Tombstones),
+		ID:               workset.ID,
+		Owner:            "test-connection-owner",
+		Generation:       1,
+		Stream:           request.Stream,
+		Mode:             request.Mode,
+		CheckpointSHA256: "test-checkpoint",
+		TombstonesSHA256: "test-tombstones",
+		ManifestSHA256:   "test-manifest",
+		ContentSHA256:    "test-content",
+		ParquetSHA256:    "test-parquet",
+		Records:          len(workset.Records),
+		Tombstones:       len(workset.Tombstones),
 	}, nil
 }
 

@@ -174,6 +174,9 @@ func Open(root string) (*App, error) {
 	if err := a.load(); err != nil {
 		return nil, err
 	}
+	// The durable stage is safe to construct for every project; registrations
+	// remain fail-closed until an explicit transport composition installs them.
+	a.transportStage = newConnectionWarehouseStage(a)
 	return a, nil
 }
 

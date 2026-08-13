@@ -104,13 +104,18 @@ type WarehouseStageRequest struct {
 // page. A destination must reopen it through the stage; it must never receive
 // the source-owned page directly.
 type WarehouseReceipt struct {
-	ID             string
-	Owner          string
-	Generation     int64
-	ManifestSHA256 string
-	ContentSHA256  string
-	Records        int
-	Tombstones     int
+	ID               string
+	Owner            string
+	Generation       int64
+	Stream           string
+	Mode             synccontract.Mode
+	CheckpointSHA256 string
+	TombstonesSHA256 string
+	ManifestSHA256   string
+	ContentSHA256    string
+	ParquetSHA256    string
+	Records          int
+	Tombstones       int
 }
 
 func (r WarehouseReceipt) Validate() error {
@@ -123,11 +128,26 @@ func (r WarehouseReceipt) Validate() error {
 	if r.Generation <= 0 {
 		return fmt.Errorf("warehouse stage receipt %q has invalid generation", r.ID)
 	}
+	if strings.TrimSpace(r.Stream) == "" {
+		return fmt.Errorf("warehouse stage receipt %q has no stream", r.ID)
+	}
+	if err := r.Mode.Validate(); err != nil {
+		return fmt.Errorf("warehouse stage receipt %q mode: %w", r.ID, err)
+	}
+	if strings.TrimSpace(r.CheckpointSHA256) == "" {
+		return fmt.Errorf("warehouse stage receipt %q has no checkpoint identity", r.ID)
+	}
+	if strings.TrimSpace(r.TombstonesSHA256) == "" {
+		return fmt.Errorf("warehouse stage receipt %q has no tombstone identity", r.ID)
+	}
 	if strings.TrimSpace(r.ManifestSHA256) == "" {
 		return fmt.Errorf("warehouse stage receipt %q has no manifest identity", r.ID)
 	}
 	if strings.TrimSpace(r.ContentSHA256) == "" {
 		return fmt.Errorf("warehouse stage receipt %q has no content identity", r.ID)
+	}
+	if strings.TrimSpace(r.ParquetSHA256) == "" {
+		return fmt.Errorf("warehouse stage receipt %q has no parquet identity", r.ID)
 	}
 	if r.Records < 0 || r.Tombstones < 0 {
 		return fmt.Errorf("warehouse stage receipt %q has negative bounded counts", r.ID)

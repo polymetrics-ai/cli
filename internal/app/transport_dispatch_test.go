@@ -2305,12 +2305,13 @@ func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, _ synctr
 }
 
 type appTransportDestinationExecutor struct {
-	reference  connectors.TransportExecutorReference
-	sink       string
-	plan       synctransport.DestinationPlanRequest
-	planCalls  int
-	applyCalls int
-	afterApply func()
+	reference     connectors.TransportExecutorReference
+	sink          string
+	plan          synctransport.DestinationPlanRequest
+	planCalls     int
+	applyCalls    int
+	readBackCalls int
+	afterApply    func()
 }
 
 func (e *appTransportDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -2333,15 +2334,47 @@ func (e *appTransportDestinationExecutor) ApplyDestination(_ context.Context, _ 
 	return acknowledgement, nil
 }
 
+func (e *appTransportDestinationExecutor) ReadBackDestination(_ context.Context, _ synctransport.DestinationReadBackRequest) error {
+	e.readBackCalls++
+	return nil
+}
+
 type appTransportStage struct {
 	calls    int
 	lastPage synctransport.SourcePage
+	worksets map[string]synctransport.WarehouseWorkset
 }
 
-func (s *appTransportStage) Stage(_ context.Context, request synctransport.WarehouseStageRequest) (synctransport.WarehouseWorkset, error) {
+func (s *appTransportStage) Stage(_ context.Context, request synctransport.WarehouseStageRequest) (synctransport.WarehouseReceipt, error) {
 	s.calls++
 	s.lastPage = request.Page
-	return synctransport.WarehouseWorkset{ID: fmt.Sprintf("stage-%d", s.calls), Records: request.Page.Records, Tombstones: request.Page.Tombstones, CandidateCheckpoint: request.Page.CandidateCheckpoint}, nil
+	workset := synctransport.WarehouseWorkset{ID: fmt.Sprintf("stage-%d", s.calls), Records: request.Page.Records, Tombstones: request.Page.Tombstones, CandidateCheckpoint: request.Page.CandidateCheckpoint}
+	if s.worksets == nil {
+		s.worksets = make(map[string]synctransport.WarehouseWorkset)
+	}
+	s.worksets[workset.ID] = workset
+	return synctransport.WarehouseReceipt{
+		ID:               workset.ID,
+		Owner:            "app-test-owner",
+		Generation:       1,
+		Stream:           request.Stream,
+		Mode:             request.Mode,
+		CheckpointSHA256: "app-test-checkpoint",
+		TombstonesSHA256: "app-test-tombstones",
+		ManifestSHA256:   "app-test-manifest",
+		ContentSHA256:    "app-test-content",
+		ParquetSHA256:    "app-test-parquet",
+		Records:          len(workset.Records),
+		Tombstones:       len(workset.Tombstones),
+	}, nil
+}
+
+func (s *appTransportStage) Reopen(_ context.Context, receipt synctransport.WarehouseReceipt) (synctransport.WarehouseWorkset, error) {
+	workset, ok := s.worksets[receipt.ID]
+	if !ok {
+		return synctransport.WarehouseWorkset{}, fmt.Errorf("unknown app test receipt %q", receipt.ID)
+	}
+	return workset, nil
 }
 
 type appTransportConformanceKey struct {

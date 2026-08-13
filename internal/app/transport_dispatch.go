@@ -47,6 +47,8 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	expectedPresent := priorPresent
 	var committed *synccontract.CheckpointEnvelope
 	transportResult, err := synctransport.NewOrchestrator(a.transports).Run(ctx, synctransport.RunRequest{
+		ConnectionID:       conn.ID,
+		Generation:         generationID,
 		Source:             source,
 		SourceRuntime:      sourceRuntime,
 		Destination:        destination,
