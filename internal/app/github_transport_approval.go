@@ -66,14 +66,9 @@ func (a *App) PlanGitHubIssueLabelTransportCleanup(ctx context.Context, connecti
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	forward, err := a.githubIssueLabelTransportForwardPlan(forwardPlanID, conn.ID)
+	forward, endpoint, err := a.authenticatedGitHubIssueLabelTransportForwardPlan(ctx, conn, forwardPlanID)
 	if err != nil {
 		return ReversePlan{}, err
-	}
-	endpoint := EndpointConfig{
-		Connector:  forward.DestinationConnector,
-		Credential: forward.DestinationCredential,
-		Config:     cloneStringMap(forward.DestinationConfig),
 	}
 	return a.planGitHubIssueLabelTransport(ctx, conn, reversePlanModeGitHubIssueLabelTransportCleanup, githubIssueRemoveLabelAction, endpoint, forward.ID)
 }
@@ -177,12 +172,17 @@ func (a *App) PreviewGitHubIssueLabelTransport(ctx context.Context, planID strin
 	if err := a.validateGitHubIssueLabelTransportPlan(plan, conn, plan.Mode, plan.Action, plan.TransportForwardPlanID); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
+	endpoint := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: cloneStringMap(plan.DestinationConfig)}
 	if plan.Mode == reversePlanModeGitHubIssueLabelTransportCleanup {
-		if _, err := a.githubIssueLabelTransportForwardPlan(plan.TransportForwardPlanID, conn.ID); err != nil {
+		_, authenticatedEndpoint, err := a.authenticatedGitHubIssueLabelTransportForwardPlan(ctx, conn, plan.TransportForwardPlanID)
+		if err != nil {
 			return ReversePlan{}, connectors.WritePreview{}, err
 		}
+		if !githubIssueLabelTransportEndpointEqual(endpoint, authenticatedEndpoint) {
+			return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("GitHub transport cleanup plan no longer matches its authenticated forward destination")
+		}
+		endpoint = authenticatedEndpoint
 	}
-	endpoint := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: cloneStringMap(plan.DestinationConfig)}
 	prepared, err := a.prepareGitHubIssueLabelTransportWrite(ctx, endpoint, plan.Action)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
@@ -290,14 +290,13 @@ func (a *App) ApplyGitHubIssueLabelTransportCleanup(ctx context.Context, connect
 	if err := a.validateGitHubIssueLabelTransportPlan(plan, conn, reversePlanModeGitHubIssueLabelTransportCleanup, githubIssueRemoveLabelAction, plan.TransportForwardPlanID); err != nil {
 		return connectors.WriteResult{}, err
 	}
-	forward, err := a.githubIssueLabelTransportForwardPlan(plan.TransportForwardPlanID, conn.ID)
+	forward, endpoint, err := a.authenticatedGitHubIssueLabelTransportForwardPlan(ctx, conn, plan.TransportForwardPlanID)
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
-	if plan.DestinationCredential != forward.DestinationCredential || !githubIssueLabelTransportConfigEqual(plan.DestinationConfig, forward.DestinationConfig) {
-		return connectors.WriteResult{}, fmt.Errorf("GitHub transport cleanup plan no longer matches its forward destination binding")
+	if !githubIssueLabelTransportEndpointEqual(EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: cloneStringMap(plan.DestinationConfig)}, endpoint) {
+		return connectors.WriteResult{}, fmt.Errorf("GitHub transport cleanup plan no longer matches its authenticated forward destination")
 	}
-	endpoint := EndpointConfig{Connector: forward.DestinationConnector, Credential: forward.DestinationCredential, Config: cloneStringMap(forward.DestinationConfig)}
 	prepared, err := a.prepareGitHubIssueLabelTransportWrite(ctx, endpoint, githubIssueRemoveLabelAction)
 	if err != nil {
 		return connectors.WriteResult{}, err
@@ -502,15 +501,37 @@ func (a *App) validateGitHubIssueLabelTransportPlan(plan ReversePlan, conn Conne
 	return nil
 }
 
-func (a *App) githubIssueLabelTransportForwardPlan(id, connectionID string) (ReversePlan, error) {
+func (a *App) authenticatedGitHubIssueLabelTransportForwardPlan(ctx context.Context, conn Connection, id string) (ReversePlan, EndpointConfig, error) {
 	forward, err := a.GetReversePlan(id)
 	if err != nil {
-		return ReversePlan{}, err
+		return ReversePlan{}, EndpointConfig{}, err
 	}
-	if forward.Mode != reversePlanModeGitHubIssueLabelTransport || forward.TransportConnectionID != connectionID || forward.Action != githubIssueAddLabelAction || strings.TrimSpace(forward.TransportBindingSHA256) == "" || forward.Status != "executed" {
-		return ReversePlan{}, fmt.Errorf("GitHub transport cleanup requires an executed forward issue-label plan for connection %q", connectionID)
+	if forward.Mode != reversePlanModeGitHubIssueLabelTransport || forward.TransportConnectionID != conn.ID || forward.Action != githubIssueAddLabelAction || strings.TrimSpace(forward.TransportBindingSHA256) == "" || forward.Status != "executed" {
+		return ReversePlan{}, EndpointConfig{}, fmt.Errorf("GitHub transport cleanup requires an executed forward issue-label plan for connection %q", conn.ID)
 	}
-	return forward, nil
+	if err := a.validateGitHubIssueLabelTransportPlan(forward, conn, reversePlanModeGitHubIssueLabelTransport, githubIssueAddLabelAction, ""); err != nil {
+		return ReversePlan{}, EndpointConfig{}, err
+	}
+	endpoint := EndpointConfig{
+		Connector:  forward.DestinationConnector,
+		Credential: forward.DestinationCredential,
+		Config:     cloneStringMap(forward.DestinationConfig),
+	}
+	prepared, err := a.prepareGitHubIssueLabelTransportWrite(ctx, endpoint, githubIssueAddLabelAction)
+	if err != nil {
+		return ReversePlan{}, EndpointConfig{}, err
+	}
+	if err := a.verifyPlanSealForRuntime(forward, prepared.runtime); err != nil {
+		return ReversePlan{}, EndpointConfig{}, err
+	}
+	binding, err := a.githubIssueLabelTransportBinding(conn, forward.Mode, forward.Action, prepared.runtime, prepared.preview, prepared.runtime.Config, "")
+	if err != nil {
+		return ReversePlan{}, EndpointConfig{}, err
+	}
+	if err := validateGitHubIssueLabelTransportBinding(forward, binding); err != nil {
+		return ReversePlan{}, EndpointConfig{}, err
+	}
+	return forward, endpoint, nil
 }
 
 func validateGitHubIssueLabelTransportWorkset(conn Connection, receipt synctransport.WarehouseReceipt, workset synctransport.WarehouseWorkset) error {
@@ -585,6 +606,12 @@ func githubIssueLabelTransportConfigEqual(left, right map[string]string) bool {
 		}
 	}
 	return true
+}
+
+func githubIssueLabelTransportEndpointEqual(left, right EndpointConfig) bool {
+	return left.Connector == right.Connector &&
+		left.Credential == right.Credential &&
+		githubIssueLabelTransportConfigEqual(left.Config, right.Config)
 }
 
 func (a *App) markGitHubIssueLabelTransportPlanExecuted(planID string) error {
