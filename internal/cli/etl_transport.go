@@ -41,7 +41,7 @@ DESCRIPTION
   reopen -> typed %s mutation and durable acknowledgement -> independent
   read-back -> checkpoint path.
 
-  Source selection and independent read-back each inspect only the first GitHub
+  Source selection and independent read-back each inspect only the first %s
   issues page. The transport fails instead of requesting another page when the
   configured source or target issue is not there.
 
@@ -543,7 +543,7 @@ func etlTransportManual(command string) (string, error) {
 	if name != issueLabelTransportCommand(identity.ConnectorName) {
 		return "", usageErrorf("unknown etl transport %q", name)
 	}
-	return fmt.Sprintf(etlTransportHelp, name, name, name, name, name, identity.DisplayName, identity.DisplayName, identity.DisplayName), nil
+	return fmt.Sprintf(etlTransportHelp, name, name, name, name, name, identity.DisplayName, identity.DisplayName, identity.DisplayName, identity.DisplayName), nil
 }
 
 func isOnlyTransportHelp(args []string) bool {
