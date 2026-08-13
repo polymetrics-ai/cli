@@ -19,7 +19,7 @@ import (
 
 const (
 	statusSchemaVersion    = 1
-	statusGeneratedCommand = "go run ./cmd/connectorgen certification-matrix"
+	statusGeneratedCommand = "go run ./cmd/connectorgen certification-matrix --all"
 	certifiedLabel         = "CERTIFIED"
 	uncertifiedLabel       = "COMMUNITY BUILD, UNCERTIFIED"
 	uncertifiedWarning     = "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED."

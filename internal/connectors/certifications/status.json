@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_command": "go run ./cmd/connectorgen certification-matrix",
+  "generated_command": "go run ./cmd/connectorgen certification-matrix --all",
   "connectors": [
     {
       "connector": "github",

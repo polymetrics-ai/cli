@@ -179,6 +179,13 @@ type acceptedEvidence struct {
 	recordPath string
 }
 
+type acceptedEvidenceScopeIdentity struct {
+	Scope       string `json:"scope"`
+	Connector   string `json:"connector"`
+	Source      string `json:"source"`
+	Destination string `json:"destination"`
+}
+
 type matrixConnectorSource struct {
 	name            string
 	integrationType string
@@ -1472,14 +1479,16 @@ func loadAcceptedEvidence(repoRoot string, scope []string) ([]acceptedEvidence, 
 		if err != nil {
 			return nil, fmt.Errorf("read accepted evidence %q: %w", entry.Name(), err)
 		}
+		var identity acceptedEvidenceScopeIdentity
+		if err := json.Unmarshal(raw, &identity); err != nil {
+			return nil, fmt.Errorf("parse accepted evidence %q: %w", entry.Name(), err)
+		}
+		if len(scope) != 0 && !acceptedEvidenceScopeIdentityWithinScope(identity, scope) {
+			continue
+		}
 		var evidence acceptedEvidence
 		if err := decodeStrictJSON(raw, &evidence); err != nil {
 			return nil, fmt.Errorf("parse accepted evidence %q: %w", entry.Name(), err)
-		}
-		if len(scope) != 0 && !acceptedEvidenceWithinScope(evidence, scope) {
-			// Certification is an explicit claim. Evidence for a connector outside
-			// this invocation's claim scope is neither pass nor failure data here.
-			continue
 		}
 		if err := validateAcceptedEvidence(evidence); err != nil {
 			return nil, fmt.Errorf("accepted evidence %q: %w", entry.Name(), err)
@@ -1496,15 +1505,24 @@ func loadAcceptedEvidence(repoRoot string, scope []string) ([]acceptedEvidence, 
 }
 
 func acceptedEvidenceWithinScope(evidence acceptedEvidence, scope []string) bool {
+	return acceptedEvidenceScopeIdentityWithinScope(acceptedEvidenceScopeIdentity{
+		Scope:       evidence.Scope,
+		Connector:   evidence.Connector,
+		Source:      evidence.Source,
+		Destination: evidence.Destination,
+	}, scope)
+}
+
+func acceptedEvidenceScopeIdentityWithinScope(identity acceptedEvidenceScopeIdentity, scope []string) bool {
 	inScope := make(map[string]bool, len(scope))
 	for _, name := range scope {
 		inScope[name] = true
 	}
-	switch evidence.Scope {
+	switch identity.Scope {
 	case evidenceScopeCapability, evidenceScopeWorkflow, evidenceScopeSyncMode:
-		return inScope[evidence.Connector]
+		return inScope[identity.Connector]
 	case evidenceScopeFlow:
-		return inScope[evidence.Source] && certificationConnectorAllowed(evidence.Destination)
+		return inScope[identity.Source] && certificationConnectorAllowed(identity.Destination)
 	default:
 		return false
 	}

@@ -617,6 +617,30 @@ func TestCertificationScopeRetainsSourceOwnedCrossPairClaims(t *testing.T) {
 	}
 }
 
+func TestCertificationEvidenceScopeFiltersBeforeStrictValidation(t *testing.T) {
+	root := t.TempDir()
+	dir := filepath.Join(root, acceptedEvidenceDirectory)
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		t.Fatalf("mkdir evidence directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "mysql.json"), []byte(`{"scope":"capability","connector":"mysql","unexpected":true}`), 0o600); err != nil {
+		t.Fatalf("write mysql evidence: %v", err)
+	}
+	items, err := loadAcceptedEvidence(root, certificationConnectorAllowlist)
+	if err != nil {
+		t.Fatalf("loadAcceptedEvidence() with malformed nonallowlisted evidence: %v", err)
+	}
+	if len(items) != 0 {
+		t.Fatalf("loadAcceptedEvidence() returned %#v, want no evidence", items)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "github.json"), []byte(`{"scope":"capability","connector":"github","unexpected":true}`), 0o600); err != nil {
+		t.Fatalf("write github evidence: %v", err)
+	}
+	if _, err := loadAcceptedEvidence(root, certificationConnectorAllowlist); err == nil || !strings.Contains(err.Error(), "unknown field") {
+		t.Fatalf("loadAcceptedEvidence() with malformed allowlisted evidence = %v, want strict decoder rejection", err)
+	}
+}
+
 func TestCertificationSourceAnchorsUseSymbols(t *testing.T) {
 	shards, err := buildCertificationShards(repoRootForCertificationTest(t), certificationConnectorAllowlist)
 	if err != nil {
@@ -679,6 +703,41 @@ func TestCertificationDiscoversStableWarehouseFacingSyncPrimitives(t *testing.T)
 	}
 }
 
+func TestCertificationSyncModeDiscoveryUsesAllModesSource(t *testing.T) {
+	root := t.TempDir()
+	path := filepath.Join(root, "internal", "synccontract", "all_modes.go")
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		t.Fatalf("mkdir synccontract source: %v", err)
+	}
+	if err := os.WriteFile(path, []byte("package synccontract\nfunc AllModes() {}\n"), 0o600); err != nil {
+		t.Fatalf("write synccontract source: %v", err)
+	}
+	modes, err := discoverSyncModes(root)
+	if err != nil {
+		t.Fatalf("discoverSyncModes() error = %v", err)
+	}
+	want := "internal/synccontract/all_modes.go:AllModes"
+	for _, mode := range modes {
+		if mode.DiscoverySource != want {
+			t.Fatalf("sync mode %q discovery source = %q, want %q", mode.ID, mode.DiscoverySource, want)
+		}
+	}
+}
+
+func TestCertificationSyncModeDiscoveryRequiresAllModesSymbol(t *testing.T) {
+	root := t.TempDir()
+	path := filepath.Join(root, "internal", "synccontract", "mode.go")
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		t.Fatalf("mkdir synccontract source: %v", err)
+	}
+	if err := os.WriteFile(path, []byte("package synccontract\n"), 0o600); err != nil {
+		t.Fatalf("write synccontract source: %v", err)
+	}
+	if _, err := discoverSyncModes(root); err == nil || !strings.Contains(err.Error(), "AllModes") {
+		t.Fatalf("discoverSyncModes() error = %v, want missing AllModes failure", err)
+	}
+}
+
 func TestCertificationSyncPrimitiveDiscoveryRequiresMetadataSymbol(t *testing.T) {
 	root := t.TempDir()
 	path := filepath.Join(root, "internal", "connectors", "connectors.go")
@@ -733,6 +792,20 @@ func TestCertificationStatusArtifactRemediationUsesAll(t *testing.T) {
 	}
 	if err := checkCertificationStatusGeneratedArtifact(path, []byte("{}\n")); err == nil || !strings.Contains(err.Error(), "certification-matrix --all") {
 		t.Fatalf("checkCertificationStatusGeneratedArtifact() error = %v, want --all remediation", err)
+	}
+}
+
+func TestCertificationStatusArtifactUsesAllGenerator(t *testing.T) {
+	artifact := buildCertificationStatusArtifact(flowMatrix{})
+	if artifact.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix --all" {
+		t.Fatalf("status generated command = %q, want --all", artifact.GeneratedCommand)
+	}
+	raw, err := marshalGeneratedJSON(artifact)
+	if err != nil {
+		t.Fatalf("marshal status artifact: %v", err)
+	}
+	if err := validateCertificationStatusArtifactJSON(raw); err != nil {
+		t.Fatalf("validate status artifact: %v", err)
 	}
 }
 

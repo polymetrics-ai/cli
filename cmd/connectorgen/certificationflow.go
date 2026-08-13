@@ -280,16 +280,54 @@ func discoverWorkflowKinds(repoRoot string) ([]workflowKind, error) {
 	return kinds, nil
 }
 
-func discoverSyncModes() []syncModeKind {
+func discoverSyncModes(repoRoot string) ([]syncModeKind, error) {
+	source, err := syncContractAllModesSource(repoRoot)
+	if err != nil {
+		return nil, err
+	}
 	modes := synccontract.AllModes()
 	out := make([]syncModeKind, 0, len(modes))
 	for _, mode := range modes {
 		out = append(out, syncModeKind{
 			ID:              string(mode),
-			DiscoverySource: "internal/synccontract/mode.go:AllModes",
+			DiscoverySource: source,
 		})
 	}
-	return out
+	return out, nil
+}
+
+func syncContractAllModesSource(repoRoot string) (string, error) {
+	dir := filepath.Join(repoRoot, "internal", "synccontract")
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return "", fmt.Errorf("read synccontract source directory: %w", err)
+	}
+	found := ""
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".go") || strings.HasSuffix(entry.Name(), "_test.go") {
+			continue
+		}
+		path := filepath.Join(dir, entry.Name())
+		file, err := parser.ParseFile(token.NewFileSet(), path, nil, 0)
+		if err != nil {
+			return "", fmt.Errorf("parse synccontract source %q: %w", path, err)
+		}
+		for _, decl := range file.Decls {
+			function, ok := decl.(*ast.FuncDecl)
+			if !ok || function.Recv != nil || function.Name.Name != "AllModes" {
+				continue
+			}
+			source := sourceSymbol(repoRoot, path, functionSymbol(function))
+			if found != "" {
+				return "", fmt.Errorf("synccontract source declares AllModes multiple times (%s, %s)", found, source)
+			}
+			found = source
+		}
+	}
+	if found == "" {
+		return "", errors.New("synccontract source declares no AllModes function")
+	}
+	return found, nil
 }
 
 func discoverSyncPrimitives(repoRoot string) ([]syncPrimitive, error) {
@@ -715,7 +753,10 @@ func buildFlowMatrixForConnectors(repoRoot string, capabilities capabilityMatrix
 	if err != nil {
 		return flowMatrix{}, err
 	}
-	syncModes := discoverSyncModes()
+	syncModes, err := discoverSyncModes(repoRoot)
+	if err != nil {
+		return flowMatrix{}, err
+	}
 	syncPrimitives, err := discoverSyncPrimitives(repoRoot)
 	if err != nil {
 		return flowMatrix{}, err
@@ -759,7 +800,7 @@ func buildCertificationStatusArtifact(matrix flowMatrix) certificationStatusArti
 	statuses := append([]connectorCertificationStatus(nil), matrix.ConnectorStatuses...)
 	return certificationStatusArtifact{
 		SchemaVersion:    certificationSchemaVersion,
-		GeneratedCommand: "go run ./cmd/connectorgen certification-matrix",
+		GeneratedCommand: "go run ./cmd/connectorgen certification-matrix --all",
 		Connectors:       statuses,
 	}
 }
@@ -1586,7 +1627,7 @@ func validateCertificationStatusArtifactJSON(raw []byte) error {
 	if artifact.SchemaVersion != certificationSchemaVersion {
 		return fmt.Errorf("schema_version %d is unsupported", artifact.SchemaVersion)
 	}
-	if artifact.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix" {
+	if artifact.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix --all" {
 		return fmt.Errorf("generated_command %q is unsupported", artifact.GeneratedCommand)
 	}
 	known := make(map[string]bool, len(artifact.Connectors))
