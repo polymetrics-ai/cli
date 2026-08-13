@@ -56,17 +56,25 @@ func isIssueLabelTransportConnector(connector connectors.Connector) bool {
 	if !ok || descriptor.Source == nil || descriptor.Destination == nil {
 		return false
 	}
+	definition, ok := connectors.DefinitionOf(connector)
+	if !ok {
+		return false
+	}
+	contract, err := issueLabelTransportContractForDefinition(definition)
+	if err != nil {
+		return false
+	}
 	if descriptor.Source.Executor != issueLabelSourceReference || descriptor.Destination.Executor != issueLabelDestinationReference {
 		return false
 	}
-	if len(descriptor.Source.EligibleStreams) != 1 || descriptor.Source.EligibleStreams[0] != "issues" || len(descriptor.Destination.EligibleActions) != 1 || descriptor.Destination.EligibleActions[0] != issueLabelAddAction {
+	if len(descriptor.Source.EligibleStreams) != 1 || descriptor.Source.EligibleStreams[0] != contract.stream || len(descriptor.Destination.EligibleActions) != 1 || descriptor.Destination.EligibleActions[0] != contract.apply.name {
 		return false
 	}
 	if len(descriptor.Destination.ApplyStrategies) != 1 {
 		return false
 	}
 	strategy := descriptor.Destination.ApplyStrategies[0]
-	return strategy.Mode == synccontract.ModeFullAppend && strategy.Strategy == connectors.ApplyStrategyAppend && strategy.Action == issueLabelAddAction
+	return strategy.Mode == synccontract.ModeFullAppend && strategy.Strategy == connectors.ApplyStrategyAppend && strategy.Action == contract.apply.name
 }
 
 // runTransportETL is the bounded bridge from persisted connection state to

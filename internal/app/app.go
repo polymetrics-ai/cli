@@ -196,7 +196,7 @@ type IssueLabelTransportIdentity struct {
 // definition as the production composition root. Keeping this lookup here
 // prevents shared CLI code from carrying a provider name or endpoint policy.
 func DefaultIssueLabelTransportIdentity() (IssueLabelTransportIdentity, error) {
-	connector, err := issueLabelTransportEngine(bundleregistry.New())
+	connector, _, err := issueLabelTransportEngine(bundleregistry.New())
 	if err != nil {
 		return IssueLabelTransportIdentity{}, err
 	}

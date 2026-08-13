@@ -55,7 +55,11 @@ func (a *App) PlanIssueLabelTransport(ctx context.Context, connectionID string) 
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	return a.planIssueLabelTransport(ctx, conn, reversePlanModeIssueLabelTransport, issueLabelAddAction, conn.Destination, "")
+	contract, err := a.issueLabelTransportContract(conn)
+	if err != nil {
+		return ReversePlan{}, err
+	}
+	return a.planIssueLabelTransport(ctx, conn, reversePlanModeIssueLabelTransport, contract.apply, conn.Destination, "")
 }
 
 // PlanIssueLabelTransportCleanup derives the only permitted inverse from
@@ -66,14 +70,18 @@ func (a *App) PlanIssueLabelTransportCleanup(ctx context.Context, connectionID, 
 	if err != nil {
 		return ReversePlan{}, err
 	}
+	contract, err := a.issueLabelTransportContract(conn)
+	if err != nil {
+		return ReversePlan{}, err
+	}
 	forward, endpoint, err := a.authenticatedIssueLabelTransportForwardPlan(ctx, conn, forwardPlanID)
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	return a.planIssueLabelTransport(ctx, conn, reversePlanModeIssueLabelTransportCleanup, issueLabelRemoveAction, endpoint, forward.ID)
+	return a.planIssueLabelTransport(ctx, conn, reversePlanModeIssueLabelTransportCleanup, contract.cleanup, endpoint, forward.ID)
 }
 
-func (a *App) planIssueLabelTransport(ctx context.Context, conn Connection, mode, action string, endpoint EndpointConfig, forwardPlanID string) (ReversePlan, error) {
+func (a *App) planIssueLabelTransport(ctx context.Context, conn Connection, mode string, action issueLabelTransportAction, endpoint EndpointConfig, forwardPlanID string) (ReversePlan, error) {
 	if a == nil || a.approval == nil {
 		return ReversePlan{}, fmt.Errorf("closed issue-label transport approval requires an app approval authority")
 	}
@@ -93,9 +101,9 @@ func (a *App) planIssueLabelTransport(ctx context.Context, conn Connection, mode
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	confirmation := a.confirmationPolicyForAction(conn.Destination.Connector, action)
+	confirmation := a.confirmationPolicyForAction(conn.Destination.Connector, action.name)
 	if confirmation.Kind != connectors.ConfirmationKindDestructive {
-		return ReversePlan{}, fmt.Errorf("closed issue-label transport action %q must require destructive confirmation", action)
+		return ReversePlan{}, fmt.Errorf("closed issue-label transport action %q must require destructive confirmation", action.name)
 	}
 	id, err := prefixedID("rplan")
 	if err != nil {
@@ -106,10 +114,10 @@ func (a *App) planIssueLabelTransport(ctx context.Context, conn Connection, mode
 		PlanHash:            planHash,
 		Mode:                mode,
 		Connector:           conn.Destination.Connector,
-		Operation:           action,
+		Operation:           action.name,
 		CredentialRevision:  prepared.runtime.CredentialRevision,
 		ConfigurationDigest: prepared.runtime.ConfigurationDigest,
-		Batchable:           a.actionIsBatchable(conn.Destination.Connector, action),
+		Batchable:           a.actionIsBatchable(conn.Destination.Connector, action.name),
 		Scope:               prepared.runtime.WriteApprovalScope,
 		Confirmation:        confirmation,
 	})
@@ -125,7 +133,7 @@ func (a *App) planIssueLabelTransport(ctx context.Context, conn Connection, mode
 		DestinationConnector:   conn.Destination.Connector,
 		DestinationCredential:  endpoint.Credential,
 		DestinationConfig:      cloneStringMap(endpoint.Config),
-		Action:                 action,
+		Action:                 action.name,
 		Mappings:               map[string]string{},
 		ConfirmationChallenge:  string(confirmation.Kind),
 		ConfirmationPolicy:     confirmation,
@@ -169,7 +177,15 @@ func (a *App) PreviewIssueLabelTransport(ctx context.Context, planID string) (Re
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	if err := a.validateIssueLabelTransportPlan(plan, conn, plan.Mode, plan.Action, plan.TransportForwardPlanID); err != nil {
+	contract, err := a.issueLabelTransportContract(conn)
+	if err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	action, err := contract.actionForMode(plan.Mode)
+	if err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	if err := a.validateIssueLabelTransportPlan(plan, conn, plan.Mode, action, plan.TransportForwardPlanID); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
 	endpoint := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: cloneStringMap(plan.DestinationConfig)}
@@ -183,14 +199,14 @@ func (a *App) PreviewIssueLabelTransport(ctx context.Context, planID string) (Re
 		}
 		endpoint = authenticatedEndpoint
 	}
-	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, endpoint, plan.Action)
+	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, endpoint, action)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
 	if err := a.verifyPlanSealForRuntime(plan, prepared.runtime); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	binding, err := a.issueLabelTransportBinding(conn, plan.Mode, plan.Action, prepared.runtime, prepared.preview, prepared.runtime.Config, plan.TransportForwardPlanID)
+	binding, err := a.issueLabelTransportBinding(conn, plan.Mode, action, prepared.runtime, prepared.preview, prepared.runtime.Config, plan.TransportForwardPlanID)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -219,13 +235,17 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
-	if err := a.validateIssueLabelTransportPlan(plan, conn, reversePlanModeIssueLabelTransport, issueLabelAddAction, ""); err != nil {
+	contract, err := a.issueLabelTransportContract(conn)
+	if err != nil {
+		return connectors.WriteResult{}, err
+	}
+	if err := a.validateIssueLabelTransportPlan(plan, conn, reversePlanModeIssueLabelTransport, contract.apply, ""); err != nil {
 		return connectors.WriteResult{}, err
 	}
 	if err := validateIssueLabelTransportWorkset(conn, receipt, workset); err != nil {
 		return connectors.WriteResult{}, err
 	}
-	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, conn.Destination, issueLabelAddAction)
+	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, conn.Destination, contract.apply)
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
@@ -235,7 +255,7 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 	if err := a.verifyPlanSealForRuntime(plan, prepared.runtime); err != nil {
 		return connectors.WriteResult{}, err
 	}
-	binding, err := a.issueLabelTransportBinding(conn, plan.Mode, plan.Action, prepared.runtime, prepared.preview, prepared.runtime.Config, "")
+	binding, err := a.issueLabelTransportBinding(conn, plan.Mode, contract.apply, prepared.runtime, prepared.preview, prepared.runtime.Config, "")
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
@@ -256,7 +276,7 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 	result, err := prepared.writer.Write(ctx, connectors.WriteRequest{
 		Stream:   "issues",
 		Table:    issueLabelTransportTable,
-		Action:   issueLabelAddAction,
+		Action:   contract.apply.name,
 		Config:   prepared.runtime,
 		Approval: evidence,
 	}, []connectors.Record{prepared.record})
@@ -287,7 +307,11 @@ func (a *App) ApplyIssueLabelTransportCleanup(ctx context.Context, connectionID 
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
-	if err := a.validateIssueLabelTransportPlan(plan, conn, reversePlanModeIssueLabelTransportCleanup, issueLabelRemoveAction, plan.TransportForwardPlanID); err != nil {
+	contract, err := a.issueLabelTransportContract(conn)
+	if err != nil {
+		return connectors.WriteResult{}, err
+	}
+	if err := a.validateIssueLabelTransportPlan(plan, conn, reversePlanModeIssueLabelTransportCleanup, contract.cleanup, plan.TransportForwardPlanID); err != nil {
 		return connectors.WriteResult{}, err
 	}
 	forward, endpoint, err := a.authenticatedIssueLabelTransportForwardPlan(ctx, conn, plan.TransportForwardPlanID)
@@ -297,14 +321,14 @@ func (a *App) ApplyIssueLabelTransportCleanup(ctx context.Context, connectionID 
 	if !issueLabelTransportEndpointEqual(EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: cloneStringMap(plan.DestinationConfig)}, endpoint) {
 		return connectors.WriteResult{}, fmt.Errorf("closed issue-label cleanup plan no longer matches its authenticated forward destination")
 	}
-	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, endpoint, issueLabelRemoveAction)
+	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, endpoint, contract.cleanup)
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
 	if err := a.verifyPlanSealForRuntime(plan, prepared.runtime); err != nil {
 		return connectors.WriteResult{}, err
 	}
-	binding, err := a.issueLabelTransportBinding(conn, plan.Mode, plan.Action, prepared.runtime, prepared.preview, prepared.runtime.Config, forward.ID)
+	binding, err := a.issueLabelTransportBinding(conn, plan.Mode, contract.cleanup, prepared.runtime, prepared.preview, prepared.runtime.Config, forward.ID)
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
@@ -325,7 +349,7 @@ func (a *App) ApplyIssueLabelTransportCleanup(ctx context.Context, connectionID 
 	result, err := prepared.writer.Write(ctx, connectors.WriteRequest{
 		Stream:   "issues",
 		Table:    issueLabelTransportTable,
-		Action:   issueLabelRemoveAction,
+		Action:   contract.cleanup.name,
 		Config:   prepared.runtime,
 		Approval: evidence,
 	}, []connectors.Record{prepared.record})
@@ -341,7 +365,7 @@ func (a *App) ApplyIssueLabelTransportCleanup(ctx context.Context, connectionID 
 	return result, nil
 }
 
-func (a *App) prepareIssueLabelTransportWrite(ctx context.Context, conn Connection, endpoint EndpointConfig, action string) (issueLabelPreparedWrite, error) {
+func (a *App) prepareIssueLabelTransportWrite(ctx context.Context, conn Connection, endpoint EndpointConfig, action issueLabelTransportAction) (issueLabelPreparedWrite, error) {
 	if endpoint.Connector != conn.Destination.Connector {
 		return issueLabelPreparedWrite{}, fmt.Errorf("closed issue-label transport approval requires the connection-owned destination connector")
 	}
@@ -363,11 +387,11 @@ func (a *App) prepareIssueLabelTransportWrite(ctx context.Context, conn Connecti
 	if writer.Name() != conn.Destination.Connector || !writer.Metadata().Capabilities.Write {
 		return issueLabelPreparedWrite{}, fmt.Errorf("closed issue-label transport destination does not expose typed writes")
 	}
-	record, err := issueLabelTransportRecord(action, targetIssue, label)
+	record, err := action.record(targetIssue, label)
 	if err != nil {
 		return issueLabelPreparedWrite{}, err
 	}
-	request := connectors.WriteRequest{Stream: "issues", Table: issueLabelTransportTable, Action: action, Config: runtime}
+	request := connectors.WriteRequest{Stream: "issues", Table: issueLabelTransportTable, Action: action.name, Config: runtime}
 	if validator, ok := writer.(connectors.WriteValidator); ok {
 		if err := validator.ValidateWrite(ctx, request, []connectors.Record{record}); err != nil {
 			return issueLabelPreparedWrite{}, fmt.Errorf("validate closed issue-label transport write: %w", err)
@@ -381,13 +405,13 @@ func (a *App) prepareIssueLabelTransportWrite(ctx context.Context, conn Connecti
 	if err != nil {
 		return issueLabelPreparedWrite{}, fmt.Errorf("prepare closed issue-label transport write: %w", err)
 	}
-	if strings.TrimSpace(preview.Digest) == "" || preview.ApprovalTarget.Connector != conn.Destination.Connector || preview.ApprovalTarget.Operation != action || preview.ApprovalTarget.Confirmation.Kind != connectors.ConfirmationKindDestructive {
-		return issueLabelPreparedWrite{}, fmt.Errorf("closed issue-label transport write preview does not bind a destructive %s target", action)
+	if strings.TrimSpace(preview.Digest) == "" || preview.ApprovalTarget.Connector != conn.Destination.Connector || preview.ApprovalTarget.Operation != action.name || preview.ApprovalTarget.Confirmation.Kind != connectors.ConfirmationKindDestructive {
+		return issueLabelPreparedWrite{}, fmt.Errorf("closed issue-label transport write preview does not bind a destructive %s target", action.name)
 	}
 	return issueLabelPreparedWrite{writer: writer, runtime: runtime, record: record, preview: preview}, nil
 }
 
-func (a *App) issueLabelTransportBinding(conn Connection, mode, action string, runtime connectors.RuntimeConfig, preview connectors.WritePreview, config map[string]string, forwardPlanID string) (issueLabelTransportBinding, error) {
+func (a *App) issueLabelTransportBinding(conn Connection, mode string, action issueLabelTransportAction, runtime connectors.RuntimeConfig, preview connectors.WritePreview, config map[string]string, forwardPlanID string) (issueLabelTransportBinding, error) {
 	targetIssue, err := issueLabelTransportIssueNumber(config, issueLabelTransportTargetIssueConfig)
 	if err != nil {
 		return issueLabelTransportBinding{}, err
@@ -402,7 +426,7 @@ func (a *App) issueLabelTransportBinding(conn Connection, mode, action string, r
 		Stream:              "issues",
 		Mode:                synccontract.ModeFullAppend,
 		Destination:         conn.Destination.Connector,
-		Action:              action,
+		Action:              action.name,
 		TargetIssue:         targetIssue,
 		Labels:              []string{label},
 		CredentialRevision:  runtime.CredentialRevision,
@@ -468,9 +492,7 @@ func (a *App) issueLabelTransportConnection(connectionID string) (Connection, er
 	if conn.Source.Connector == "" || conn.Source.Connector != conn.Destination.Connector {
 		return Connection{}, fmt.Errorf("closed issue-label transport connection %q must use one definition-owned connector as source and destination", conn.ID)
 	}
-	registered, ok := a.registry.Get(conn.Source.Connector)
-	definition, hasDefinition := connectors.DefinitionOf(registered)
-	if !ok || !hasDefinition || !definitionSupportsIssueLabelTransport(definition) {
+	if _, err := a.issueLabelTransportContract(conn); err != nil {
 		return Connection{}, fmt.Errorf("closed issue-label transport connection %q does not select the exact definition-owned issue-label contract", conn.ID)
 	}
 	stream, ok := conn.Streams["issues"]
@@ -496,9 +518,24 @@ func (a *App) issueLabelTransportConnection(connectionID string) (Connection, er
 	return conn, nil
 }
 
-func (a *App) validateIssueLabelTransportPlan(plan ReversePlan, conn Connection, mode, action, forwardPlanID string) error {
-	if plan.Mode != mode || plan.TransportConnectionID != conn.ID || plan.SourceConnection != conn.Name || plan.DestinationConnector != conn.Destination.Connector || plan.Action != action || plan.RecordCount != 1 || plan.ConnectorCommandOperation != "" || len(plan.Mappings) != 0 || plan.TransportForwardPlanID != forwardPlanID || strings.TrimSpace(plan.TransportBindingSHA256) == "" {
-		return fmt.Errorf("closed issue-label transport approval plan does not bind the exact connection-owned %s mutation", action)
+func (a *App) issueLabelTransportContract(conn Connection) (issueLabelTransportContract, error) {
+	if a == nil || a.registry == nil {
+		return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport registry is unavailable")
+	}
+	registered, ok := a.registry.Get(conn.Source.Connector)
+	if !ok {
+		return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport connector %q is unavailable", conn.Source.Connector)
+	}
+	definition, ok := connectors.DefinitionOf(registered)
+	if !ok {
+		return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport connector %q has no definition", conn.Source.Connector)
+	}
+	return issueLabelTransportContractForDefinition(definition)
+}
+
+func (a *App) validateIssueLabelTransportPlan(plan ReversePlan, conn Connection, mode string, action issueLabelTransportAction, forwardPlanID string) error {
+	if plan.Mode != mode || plan.TransportConnectionID != conn.ID || plan.SourceConnection != conn.Name || plan.DestinationConnector != conn.Destination.Connector || plan.Action != action.name || plan.RecordCount != 1 || plan.ConnectorCommandOperation != "" || len(plan.Mappings) != 0 || plan.TransportForwardPlanID != forwardPlanID || strings.TrimSpace(plan.TransportBindingSHA256) == "" {
+		return fmt.Errorf("closed issue-label transport approval plan does not bind the exact connection-owned %s mutation", action.name)
 	}
 	if plan.ConfirmationPolicy.Kind != connectors.ConfirmationKindDestructive || a.confirmationPolicyForPlan(plan).Kind != connectors.ConfirmationKindDestructive {
 		return fmt.Errorf("closed issue-label transport approval plan does not require destructive confirmation")
@@ -507,14 +544,18 @@ func (a *App) validateIssueLabelTransportPlan(plan ReversePlan, conn Connection,
 }
 
 func (a *App) authenticatedIssueLabelTransportForwardPlan(ctx context.Context, conn Connection, id string) (ReversePlan, EndpointConfig, error) {
+	contract, err := a.issueLabelTransportContract(conn)
+	if err != nil {
+		return ReversePlan{}, EndpointConfig{}, err
+	}
 	forward, err := a.GetReversePlan(id)
 	if err != nil {
 		return ReversePlan{}, EndpointConfig{}, err
 	}
-	if forward.Mode != reversePlanModeIssueLabelTransport || forward.TransportConnectionID != conn.ID || forward.Action != issueLabelAddAction || strings.TrimSpace(forward.TransportBindingSHA256) == "" || forward.Status != "executed" {
+	if forward.Mode != reversePlanModeIssueLabelTransport || forward.TransportConnectionID != conn.ID || forward.Action != contract.apply.name || strings.TrimSpace(forward.TransportBindingSHA256) == "" || forward.Status != "executed" {
 		return ReversePlan{}, EndpointConfig{}, fmt.Errorf("closed issue-label cleanup requires an executed forward plan for connection %q", conn.ID)
 	}
-	if err := a.validateIssueLabelTransportPlan(forward, conn, reversePlanModeIssueLabelTransport, issueLabelAddAction, ""); err != nil {
+	if err := a.validateIssueLabelTransportPlan(forward, conn, reversePlanModeIssueLabelTransport, contract.apply, ""); err != nil {
 		return ReversePlan{}, EndpointConfig{}, err
 	}
 	endpoint := EndpointConfig{
@@ -522,14 +563,14 @@ func (a *App) authenticatedIssueLabelTransportForwardPlan(ctx context.Context, c
 		Credential: forward.DestinationCredential,
 		Config:     cloneStringMap(forward.DestinationConfig),
 	}
-	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, endpoint, issueLabelAddAction)
+	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, endpoint, contract.apply)
 	if err != nil {
 		return ReversePlan{}, EndpointConfig{}, err
 	}
 	if err := a.verifyPlanSealForRuntime(forward, prepared.runtime); err != nil {
 		return ReversePlan{}, EndpointConfig{}, err
 	}
-	binding, err := a.issueLabelTransportBinding(conn, forward.Mode, forward.Action, prepared.runtime, prepared.preview, prepared.runtime.Config, "")
+	binding, err := a.issueLabelTransportBinding(conn, forward.Mode, contract.apply, prepared.runtime, prepared.preview, prepared.runtime.Config, "")
 	if err != nil {
 		return ReversePlan{}, EndpointConfig{}, err
 	}
@@ -574,20 +615,6 @@ func issueLabelTransportRuntimeEqual(got, want connectors.RuntimeConfig) bool {
 	return constantTimeStringEqual(got.CredentialRevision, want.CredentialRevision) &&
 		constantTimeStringEqual(got.ConfigurationDigest, want.ConfigurationDigest) &&
 		got.WriteApprovalScope == want.WriteApprovalScope
-}
-
-func issueLabelTransportRecord(action string, issueNumber int, label string) (connectors.Record, error) {
-	if issueNumber <= 0 || strings.TrimSpace(label) == "" {
-		return nil, fmt.Errorf("closed issue-label transport requires a positive issue number and non-empty label")
-	}
-	switch action {
-	case issueLabelAddAction:
-		return connectors.Record{"issue_number": issueNumber, "labels": []string{label}}, nil
-	case issueLabelRemoveAction:
-		return connectors.Record{"issue_number": issueNumber, "name": label}, nil
-	default:
-		return nil, fmt.Errorf("closed issue-label transport action %q is not declared", action)
-	}
 }
 
 func issueLabelTransportPlanName(mode string) string {

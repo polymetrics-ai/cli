@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -91,7 +92,7 @@ func TestIssueLabelTransportCleanupUsesItsOwnDerivedApproval(t *testing.T) {
 	fixture.assertProviderWrites(t, 1)
 
 	cleanupPlan, cleanupApproval := fixture.preRunCleanupApproval(t, forwardPlan.ID)
-	if cleanupPlan.TransportForwardPlanID != forwardPlan.ID || cleanupPlan.Action != issueLabelRemoveAction {
+	if cleanupPlan.TransportForwardPlanID != forwardPlan.ID || cleanupPlan.Action != fixture.cleanupAction {
 		t.Fatalf("cleanup plan = %+v, want inverse derived from forward plan %q", cleanupPlan, forwardPlan.ID)
 	}
 	if _, err := fixture.app.ApplyIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, forwardApproval); err == nil {
@@ -160,16 +161,126 @@ func TestIssueLabelTransportCleanupTreatsMissingLabelAsSuccessfulInverse(t *test
 	fixture.assertProviderDeletes(t, 1)
 }
 
+func TestIssueLabelTransportContractUsesDefinitionOwnedActionBindings(t *testing.T) {
+	definition := connectors.Definition{
+		Streams: []connectors.StreamSummary{{Name: "issues"}},
+		WriteActions: []connectors.WriteActionInfo{
+			{
+				Name:   "attach_ticket_tag",
+				Method: "POST",
+				Path:   "/tickets/{{ record.ticket_id }}/tags",
+				TransportBinding: &connectors.TransportActionBinding{
+					Capability: connectors.TransportCapabilityIssueLabel,
+					Role:       connectors.TransportActionRoleApply,
+					Inputs: []connectors.TransportInputBinding{
+						{Input: connectors.TransportInputTargetIssue, Field: "ticket_id", Shape: connectors.TransportInputShapeScalar},
+						{Input: connectors.TransportInputLabel, Field: "tag_values", Shape: connectors.TransportInputShapeList},
+					},
+				},
+			},
+			{
+				Name:   "detach_ticket_tag",
+				Method: "DELETE",
+				Path:   "/tickets/{{ record.ticket_id }}/tags/{{ record.tag }}",
+				TransportBinding: &connectors.TransportActionBinding{
+					Capability: connectors.TransportCapabilityIssueLabel,
+					Role:       connectors.TransportActionRoleCleanup,
+					Inputs: []connectors.TransportInputBinding{
+						{Input: connectors.TransportInputTargetIssue, Field: "ticket_id", Shape: connectors.TransportInputShapeScalar},
+						{Input: connectors.TransportInputLabel, Field: "tag", Shape: connectors.TransportInputShapeScalar},
+					},
+				},
+			},
+		},
+	}
+
+	contract, err := issueLabelTransportContractForDefinition(definition)
+	if err != nil {
+		t.Fatalf("issueLabelTransportContractForDefinition() = %v", err)
+	}
+	if contract.apply.name != "attach_ticket_tag" || contract.cleanup.name != "detach_ticket_tag" {
+		t.Fatalf("contract actions = apply %q cleanup %q", contract.apply.name, contract.cleanup.name)
+	}
+	applyRecord, err := contract.apply.record(200, "transport-demo")
+	if err != nil {
+		t.Fatalf("apply record = %v", err)
+	}
+	if applyRecord["ticket_id"] != 200 {
+		t.Fatalf("apply record ticket_id = %#v, want 200", applyRecord["ticket_id"])
+	}
+	if got, ok := applyRecord["tag_values"].([]string); !ok || len(got) != 1 || got[0] != "transport-demo" {
+		t.Fatalf("apply record tag_values = %#v, want singleton transport-demo", applyRecord["tag_values"])
+	}
+	cleanupRecord, err := contract.cleanup.record(200, "transport-demo")
+	if err != nil {
+		t.Fatalf("cleanup record = %v", err)
+	}
+	if cleanupRecord["ticket_id"] != 200 || cleanupRecord["tag"] != "transport-demo" {
+		t.Fatalf("cleanup record = %#v, want definition-owned scalar fields", cleanupRecord)
+	}
+}
+
+func TestIssueLabelTransportSourceStopsAfterMatchedFullPage(t *testing.T) {
+	fixture := newIssueLabelTransportApprovalFixture(t)
+	resume := streamResumeExpectation(fixture.sourceConnector, fixture.sourceCredential, fixture.sourceRuntime, "issues")
+	var pages []synctransport.SourcePage
+	err := fixture.sourceExecutor.ReadTransport(context.Background(), synctransport.SourceRequest{
+		Connector: fixture.sourceConnector,
+		Runtime:   fixture.sourceRuntime,
+		Stream:    "issues",
+		Mode:      synccontract.ModeFullAppend,
+		BatchSize: 1,
+		Resume:    resume,
+	}, func(page synctransport.SourcePage) error {
+		pages = append(pages, page)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ReadTransport() = %v", err)
+	}
+	fixture.assertProviderReads(t, 1)
+	if len(pages) != 1 || len(pages[0].Records) != 1 {
+		t.Fatalf("source pages = %#v, want one singleton page", pages)
+	}
+	if number, err := issueNumberFromRecord(pages[0].Records[0]); err != nil || number != fixture.sourceIssue {
+		t.Fatalf("source record number = %d, %v; want %d", number, err, fixture.sourceIssue)
+	}
+}
+
+func TestIssueLabelTransportReadBackStopsAfterMatchedFullPage(t *testing.T) {
+	fixture := newIssueLabelTransportApprovalFixture(t)
+	err := fixture.executor.ReadBackDestination(context.Background(), synctransport.DestinationReadBackRequest{
+		Plan: synctransport.DestinationPlan{ApplyStrategy: connectors.DestinationApplyStrategy{
+			Mode:     synccontract.ModeFullAppend,
+			Strategy: connectors.ApplyStrategyAppend,
+			Action:   fixture.applyAction,
+		}},
+		Workset: synctransport.WarehouseWorkset{ID: "reopened-workset"},
+		Runtime: fixture.runtime,
+	})
+	if err != nil {
+		t.Fatalf("ReadBackDestination() = %v", err)
+	}
+	fixture.assertProviderReads(t, 1)
+}
+
 type issueLabelTransportApprovalFixture struct {
-	app         *App
-	connection  Connection
-	executor    *issueLabelDestinationExecutor
-	runtime     connectors.RuntimeConfig
-	sourceIssue int
-	targetIssue int
-	label       string
-	writes      *int
-	deletes     *int
+	app              *App
+	connection       Connection
+	executor         *issueLabelDestinationExecutor
+	sourceExecutor   *issueLabelSourceExecutor
+	sourceConnector  connectors.Connector
+	sourceCredential CredentialMeta
+	sourceRuntime    connectors.RuntimeConfig
+	runtime          connectors.RuntimeConfig
+	sourceIssue      int
+	targetIssue      int
+	label            string
+	applyAction      string
+	cleanupAction    string
+	reads            *int
+	writes           *int
+	deletes          *int
 }
 
 func newIssueLabelTransportApprovalFixture(t *testing.T) issueLabelTransportApprovalFixture {
@@ -183,10 +294,22 @@ func newIssueLabelTransportApprovalFixtureWithMissingCleanupLabel(t *testing.T) 
 func newIssueLabelTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanupStatus int) issueLabelTransportApprovalFixture {
 	t.Helper()
 	ctx := context.Background()
+	reads := 0
 	writes := 0
 	deletes := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
 		switch request.Method {
+		case http.MethodGet:
+			reads++
+			if request.URL.Path != "/repos/acme/widgets/issues" {
+				w.WriteHeader(http.StatusNotFound)
+				return
+			}
+			if page := request.URL.Query().Get("page"); page != "" && page != "1" {
+				_ = json.NewEncoder(w).Encode([]map[string]any{})
+				return
+			}
+			_ = json.NewEncoder(w).Encode(issueLabelTransportFullPage(100, 200, "transport-demo"))
 		case http.MethodPost:
 			if request.URL.Path != "/repos/acme/widgets/issues/200/labels" {
 				w.WriteHeader(http.StatusNotFound)
@@ -260,6 +383,10 @@ func newIssueLabelTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanu
 	if err != nil {
 		t.Fatal(err)
 	}
+	sourceConnector, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, connection.Source)
+	if err != nil {
+		t.Fatal(err)
+	}
 	_, runtime, err := a.resolveEndpoint(ctx, connection.Destination)
 	if err != nil {
 		t.Fatal(err)
@@ -273,15 +400,22 @@ func newIssueLabelTransportApprovalFixtureWithCleanupStatus(t *testing.T, cleanu
 		t.Fatalf("GitHub transport connector = %T, want concrete engine wrapper", registered)
 	}
 	return issueLabelTransportApprovalFixture{
-		app:         a,
-		connection:  connection,
-		executor:    &issueLabelDestinationExecutor{app: a, connector: github.Connector},
-		runtime:     runtime,
-		sourceIssue: 100,
-		targetIssue: 200,
-		label:       "transport-demo",
-		writes:      &writes,
-		deletes:     &deletes,
+		app:              a,
+		connection:       connection,
+		executor:         &issueLabelDestinationExecutor{app: a, connector: github.Connector, contract: github.contract},
+		sourceExecutor:   &issueLabelSourceExecutor{connector: github.Connector},
+		sourceConnector:  sourceConnector,
+		sourceCredential: sourceCredential,
+		sourceRuntime:    sourceRuntime,
+		runtime:          runtime,
+		sourceIssue:      100,
+		targetIssue:      200,
+		label:            "transport-demo",
+		applyAction:      github.contract.apply.name,
+		cleanupAction:    github.contract.cleanup.name,
+		reads:            &reads,
+		writes:           &writes,
+		deletes:          &deletes,
 	}
 }
 
@@ -413,7 +547,7 @@ func (f issueLabelTransportApprovalFixture) apply(t *testing.T, receipt synctran
 		Plan: synctransport.DestinationPlan{ApplyStrategy: connectors.DestinationApplyStrategy{
 			Mode:     synccontract.ModeFullAppend,
 			Strategy: connectors.ApplyStrategyAppend,
-			Action:   issueLabelAddAction,
+			Action:   f.applyAction,
 		}},
 		Receipt:  receipt,
 		Workset:  workset,
@@ -433,10 +567,46 @@ func (f issueLabelTransportApprovalFixture) assertProviderWrites(t *testing.T, w
 	}
 }
 
+func (f issueLabelTransportApprovalFixture) assertProviderReads(t *testing.T, want int) {
+	t.Helper()
+	if got := *f.reads; got != want {
+		t.Fatalf("GitHub issue GET calls = %d, want %d", got, want)
+	}
+}
+
 func (f issueLabelTransportApprovalFixture) assertProviderDeletes(t *testing.T, want int) {
 	t.Helper()
 	if got := *f.deletes; got != want {
 		t.Fatalf("GitHub label DELETE calls = %d, want %d", got, want)
+	}
+}
+
+func issueLabelTransportFullPage(sourceIssue, targetIssue int, label string) []map[string]any {
+	records := []map[string]any{
+		issueLabelTransportTestIssue(sourceIssue, ""),
+		issueLabelTransportTestIssue(targetIssue, label),
+	}
+	for number := 1; len(records) < 100; number++ {
+		if number == sourceIssue || number == targetIssue {
+			continue
+		}
+		records = append(records, issueLabelTransportTestIssue(number, ""))
+	}
+	return records
+}
+
+func issueLabelTransportTestIssue(number int, label string) map[string]any {
+	labels := []map[string]any{}
+	if label != "" {
+		labels = append(labels, map[string]any{"name": label})
+	}
+	return map[string]any{
+		"id":      number,
+		"node_id": fmt.Sprintf("I_%d", number),
+		"number":  number,
+		"title":   "transport test issue",
+		"state":   "open",
+		"labels":  labels,
 	}
 }
 

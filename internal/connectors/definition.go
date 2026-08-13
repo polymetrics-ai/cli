@@ -37,15 +37,51 @@ type StreamSummary struct {
 
 // WriteActionInfo is one Definition.WriteActions entry.
 type WriteActionInfo struct {
-	Name   string `json:"name"`
-	Kind   string `json:"kind"`
-	Method string `json:"method"`
-	Path   string `json:"path"`
-	Risk   string `json:"risk"`
+	Name             string                  `json:"name"`
+	Kind             string                  `json:"kind"`
+	Method           string                  `json:"method"`
+	Path             string                  `json:"path"`
+	Risk             string                  `json:"risk"`
+	TransportBinding *TransportActionBinding `json:"transport_binding,omitempty"`
 	// Batchable mirrors the bundle's "batchable" declaration; nil means
 	// undeclared and therefore batchable. See WriteActionSpec.IsBatchable.
 	Batchable *bool  `json:"batchable,omitempty"`
 	Confirm   string `json:"confirm,omitempty"`
+}
+
+const (
+	TransportCapabilityIssueLabel = "issue_label"
+	TransportActionRoleApply      = "apply"
+	TransportActionRoleCleanup    = "cleanup"
+	TransportInputTargetIssue     = "target_issue"
+	TransportInputLabel           = "label"
+	TransportInputShapeScalar     = "scalar"
+	TransportInputShapeList       = "singleton_array"
+)
+
+// TransportActionBinding declares how a closed transport capability selects a
+// write action and constructs its provider record.
+type TransportActionBinding struct {
+	Capability string                  `json:"capability"`
+	Role       string                  `json:"role"`
+	Inputs     []TransportInputBinding `json:"inputs"`
+}
+
+// TransportInputBinding maps one typed transport input into an action record.
+type TransportInputBinding struct {
+	Input string `json:"input"`
+	Field string `json:"field"`
+	Shape string `json:"shape"`
+}
+
+// Clone returns an independent copy of b.
+func (b *TransportActionBinding) Clone() *TransportActionBinding {
+	if b == nil {
+		return nil
+	}
+	copied := *b
+	copied.Inputs = append([]TransportInputBinding(nil), b.Inputs...)
+	return &copied
 }
 
 // IsBatchable reports whether the action may run from a bulk reverse ETL plan.
@@ -74,6 +110,7 @@ func DefinitionOf(c Connector) (Definition, bool) {
 	if def.SyncTransport != nil {
 		def.SyncTransport = def.SyncTransport.Clone()
 	}
+	def.WriteActions = cloneWriteActionInfos(def.WriteActions)
 	def.Capabilities.CDC = HasImplementedChangefeed(c, def.Changefeed)
 	def.Icon = MetadataWithIcon(c.Metadata()).Icon
 	return def, true
@@ -116,6 +153,19 @@ func cloneBoolPtr(v *bool) *bool {
 	}
 	copied := *v
 	return &copied
+}
+
+func cloneWriteActionInfos(actions []WriteActionInfo) []WriteActionInfo {
+	if actions == nil {
+		return nil
+	}
+	copied := make([]WriteActionInfo, len(actions))
+	for i, action := range actions {
+		copied[i] = action
+		copied[i].Batchable = cloneBoolPtr(action.Batchable)
+		copied[i].TransportBinding = action.TransportBinding.Clone()
+	}
+	return copied
 }
 
 func writeActionInfosFromManifest(manifest Manifest) []WriteActionInfo {

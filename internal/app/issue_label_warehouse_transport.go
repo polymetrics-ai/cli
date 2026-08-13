@@ -20,8 +20,6 @@ const (
 	issueLabelEvidenceSuite              = "closed_transport_demo"
 	issueLabelSourceEvidenceRun          = "accepted_issue_source"
 	issueLabelDestinationEvidenceRun     = "accepted_issue_label_destination"
-	issueLabelAddAction                  = "add_issue_labels"
-	issueLabelRemoveAction               = "remove_issue_label"
 	issueLabelTransportSourceIssueConfig = "transport_source_issue_number"
 	issueLabelTransportTargetIssueConfig = "transport_target_issue_number"
 	issueLabelTransportLabelConfig       = "transport_label"
@@ -49,19 +47,22 @@ var (
 // issueLabelTransportConnector embeds the concrete declarative connector,
 // preserving every optional engine capability while adding only this walking
 // slice's exact transport descriptor. No generic API transport is exposed.
-type issueLabelTransportConnector struct{ *engine.Connector }
+type issueLabelTransportConnector struct {
+	*engine.Connector
+	contract issueLabelTransportContract
+}
 
 func (c *issueLabelTransportConnector) Definition() connectors.Definition {
 	definition := c.Connector.Definition()
-	definition.SyncTransport = issueLabelTransportDescriptor()
+	definition.SyncTransport = issueLabelTransportDescriptor(c.contract)
 	return definition
 }
 
-func issueLabelTransportDescriptor() *connectors.SyncTransportDescriptor {
+func issueLabelTransportDescriptor(contract issueLabelTransportContract) *connectors.SyncTransportDescriptor {
 	return &connectors.SyncTransportDescriptor{
 		Source: &connectors.SourceTransportDescriptor{
 			Executor:        issueLabelSourceReference,
-			EligibleStreams: []string{"issues"},
+			EligibleStreams: []string{contract.stream},
 			Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 			Delivery: connectors.DeliveryGuarantees{
 				Idempotency: connectors.DeliveryIdempotencyKeyed,
@@ -72,7 +73,7 @@ func issueLabelTransportDescriptor() *connectors.SyncTransportDescriptor {
 		},
 		Destination: &connectors.DestinationTransportDescriptor{
 			Executor:        issueLabelDestinationReference,
-			EligibleActions: []string{issueLabelAddAction},
+			EligibleActions: []string{contract.apply.name},
 			Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 			Delivery: connectors.DeliveryGuarantees{
 				Idempotency: connectors.DeliveryIdempotencyKeyed,
@@ -84,7 +85,7 @@ func issueLabelTransportDescriptor() *connectors.SyncTransportDescriptor {
 			ApplyStrategies: []connectors.DestinationApplyStrategy{{
 				Mode:     synccontract.ModeFullAppend,
 				Strategy: connectors.ApplyStrategyAppend,
-				Action:   issueLabelAddAction,
+				Action:   contract.apply.name,
 			}},
 		},
 	}
@@ -115,18 +116,18 @@ func newIssueLabelWarehouseMediatedTransport(a *App) (*synctransport.Registry, s
 	if a == nil || a.registry == nil {
 		return nil, nil, fmt.Errorf("closed issue-label transport requires an app registry")
 	}
-	connector, err := issueLabelTransportEngine(a.registry)
+	connector, contract, err := issueLabelTransportEngine(a.registry)
 	if err != nil {
 		return nil, nil, err
 	}
-	wrapped := &issueLabelTransportConnector{Connector: connector}
+	wrapped := &issueLabelTransportConnector{Connector: connector, contract: contract}
 	a.registry.Register(wrapped)
 
 	registry := synctransport.NewRegistry(acceptedIssueLabelEvidenceVerifier{connectorName: connector.Name()})
 	if err := registry.RegisterSource(&issueLabelSourceExecutor{connector: connector}); err != nil {
 		return nil, nil, err
 	}
-	if err := registry.RegisterDestination(&issueLabelDestinationExecutor{app: a, connector: connector}); err != nil {
+	if err := registry.RegisterDestination(&issueLabelDestinationExecutor{app: a, connector: connector, contract: contract}); err != nil {
 		return nil, nil, err
 	}
 	return registry, newConnectionWarehouseStage(a), nil
@@ -135,11 +136,12 @@ func newIssueLabelWarehouseMediatedTransport(a *App) (*synctransport.Registry, s
 // issueLabelTransportEngine resolves the exact existing declarative bundle by
 // its closed typed contract. It must remain unique; ambiguity fails closed
 // instead of turning the walking slice into a generic connector transport.
-func issueLabelTransportEngine(registry *connectors.Registry) (*engine.Connector, error) {
+func issueLabelTransportEngine(registry *connectors.Registry) (*engine.Connector, issueLabelTransportContract, error) {
 	if registry == nil {
-		return nil, fmt.Errorf("closed issue-label transport registry is unavailable")
+		return nil, issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport registry is unavailable")
 	}
 	var selected *engine.Connector
+	var selectedContract issueLabelTransportContract
 	for _, metadata := range registry.List() {
 		registered, ok := registry.Get(metadata.Name)
 		if !ok {
@@ -154,21 +156,58 @@ func issueLabelTransportEngine(registry *connectors.Registry) (*engine.Connector
 		default:
 			continue
 		}
-		if !definitionSupportsIssueLabelTransport(candidate.Definition()) {
+		definition := candidate.Definition()
+		contract, err := issueLabelTransportContractForDefinition(definition)
+		if err != nil {
+			if definitionDeclaresIssueLabelTransport(definition) {
+				return nil, issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport definition %q is invalid: %w", candidate.Name(), err)
+			}
 			continue
 		}
 		if selected != nil && selected.Name() != candidate.Name() {
-			return nil, fmt.Errorf("closed issue-label transport contract is ambiguous across declarative connectors")
+			return nil, issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport contract is ambiguous across declarative connectors")
 		}
 		selected = candidate
+		selectedContract = contract
 	}
 	if selected == nil {
-		return nil, fmt.Errorf("closed issue-label transport requires one declarative connector with the exact issue-label actions")
+		return nil, issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport requires one declarative connector with the exact issue-label capability")
 	}
-	return selected, nil
+	return selected, selectedContract, nil
 }
 
-func definitionSupportsIssueLabelTransport(definition connectors.Definition) bool {
+func definitionDeclaresIssueLabelTransport(definition connectors.Definition) bool {
+	for _, action := range definition.WriteActions {
+		if action.TransportBinding != nil && action.TransportBinding.Capability == connectors.TransportCapabilityIssueLabel {
+			return true
+		}
+	}
+	return false
+}
+
+type issueLabelTransportAction struct {
+	name    string
+	binding connectors.TransportActionBinding
+}
+
+type issueLabelTransportContract struct {
+	stream  string
+	apply   issueLabelTransportAction
+	cleanup issueLabelTransportAction
+}
+
+func (c issueLabelTransportContract) actionForMode(mode string) (issueLabelTransportAction, error) {
+	switch mode {
+	case reversePlanModeIssueLabelTransport:
+		return c.apply, nil
+	case reversePlanModeIssueLabelTransportCleanup:
+		return c.cleanup, nil
+	default:
+		return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport has no action for mode %q", mode)
+	}
+}
+
+func issueLabelTransportContractForDefinition(definition connectors.Definition) (issueLabelTransportContract, error) {
 	hasIssues := false
 	for _, stream := range definition.Streams {
 		if stream.Name == "issues" {
@@ -177,18 +216,99 @@ func definitionSupportsIssueLabelTransport(definition connectors.Definition) boo
 		}
 	}
 	if !hasIssues {
-		return false
+		return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport definition has no issues stream")
 	}
-	hasAdd, hasRemove := false, false
+	contract := issueLabelTransportContract{stream: "issues"}
 	for _, action := range definition.WriteActions {
-		switch action.Name {
-		case issueLabelAddAction:
-			hasAdd = true
-		case issueLabelRemoveAction:
-			hasRemove = true
+		if action.TransportBinding == nil || action.TransportBinding.Capability != connectors.TransportCapabilityIssueLabel {
+			continue
+		}
+		bound, err := issueLabelTransportActionFromDefinition(action)
+		if err != nil {
+			return issueLabelTransportContract{}, err
+		}
+		switch bound.binding.Role {
+		case connectors.TransportActionRoleApply:
+			if contract.apply.name != "" {
+				return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport definition declares more than one apply action")
+			}
+			contract.apply = bound
+		case connectors.TransportActionRoleCleanup:
+			if contract.cleanup.name != "" {
+				return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport definition declares more than one cleanup action")
+			}
+			contract.cleanup = bound
+		default:
+			return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport action %q declares an unknown role %q", action.Name, bound.binding.Role)
 		}
 	}
-	return hasAdd && hasRemove
+	if contract.apply.name == "" || contract.cleanup.name == "" {
+		return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport definition requires one apply and one cleanup action")
+	}
+	return contract, nil
+}
+
+func issueLabelTransportActionFromDefinition(action connectors.WriteActionInfo) (issueLabelTransportAction, error) {
+	binding := action.TransportBinding
+	if binding == nil || binding.Capability != connectors.TransportCapabilityIssueLabel || strings.TrimSpace(action.Name) == "" {
+		return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport action is not definition-owned")
+	}
+	if strings.TrimSpace(action.Method) == "" || strings.TrimSpace(action.Path) == "" {
+		return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport action %q has no declared endpoint", action.Name)
+	}
+	if binding.Role != connectors.TransportActionRoleApply && binding.Role != connectors.TransportActionRoleCleanup {
+		return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport action %q declares an unknown role %q", action.Name, binding.Role)
+	}
+	if len(binding.Inputs) != 2 {
+		return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport action %q must bind exactly two typed inputs", action.Name)
+	}
+	seenInputs := make(map[string]bool, len(binding.Inputs))
+	seenFields := make(map[string]bool, len(binding.Inputs))
+	for _, input := range binding.Inputs {
+		if strings.TrimSpace(input.Field) == "" || seenInputs[input.Input] || seenFields[input.Field] {
+			return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport action %q has an invalid input binding", action.Name)
+		}
+		seenInputs[input.Input] = true
+		seenFields[input.Field] = true
+		switch input.Input {
+		case connectors.TransportInputTargetIssue:
+			if input.Shape != connectors.TransportInputShapeScalar {
+				return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport action %q must bind target_issue as a scalar", action.Name)
+			}
+		case connectors.TransportInputLabel:
+			if input.Shape != connectors.TransportInputShapeScalar && input.Shape != connectors.TransportInputShapeList {
+				return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport action %q has an unsupported label shape", action.Name)
+			}
+		default:
+			return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport action %q has an unknown input %q", action.Name, input.Input)
+		}
+	}
+	if !seenInputs[connectors.TransportInputTargetIssue] || !seenInputs[connectors.TransportInputLabel] {
+		return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport action %q must bind target_issue and label", action.Name)
+	}
+	return issueLabelTransportAction{name: action.Name, binding: *binding.Clone()}, nil
+}
+
+func (a issueLabelTransportAction) record(issueNumber int, label string) (connectors.Record, error) {
+	if issueNumber <= 0 || strings.TrimSpace(label) == "" {
+		return nil, fmt.Errorf("closed issue-label transport requires a positive issue number and non-empty label")
+	}
+	record := make(connectors.Record, len(a.binding.Inputs))
+	for _, input := range a.binding.Inputs {
+		switch input.Input {
+		case connectors.TransportInputTargetIssue:
+			record[input.Field] = issueNumber
+		case connectors.TransportInputLabel:
+			if input.Shape == connectors.TransportInputShapeList {
+				record[input.Field] = []string{label}
+			} else {
+				record[input.Field] = label
+			}
+		default:
+			return nil, fmt.Errorf("closed issue-label transport action %q has an unknown input %q", a.name, input.Input)
+		}
+	}
+	return record, nil
 }
 
 type issueLabelSourceExecutor struct{ connector *engine.Connector }
@@ -231,15 +351,12 @@ func (e *issueLabelSourceExecutor) ReadTransport(ctx context.Context, request sy
 		if number != sourceIssue {
 			return nil
 		}
-		if len(records) != 0 {
-			return fmt.Errorf("closed issue-label source found duplicate configured issue %d", sourceIssue)
-		}
 		cloned, err := cloneTransportRecord(record)
 		if err != nil {
 			return err
 		}
 		records = append(records, cloned)
-		return nil
+		return connectors.ErrReadLimitReached
 	})
 	if err := connectors.IgnoreReadLimit(err); err != nil {
 		return fmt.Errorf("read configured issue: %w", err)
@@ -257,6 +374,7 @@ func (e *issueLabelSourceExecutor) ReadTransport(ctx context.Context, request sy
 type issueLabelDestinationExecutor struct {
 	app       *App
 	connector *engine.Connector
+	contract  issueLabelTransportContract
 }
 
 func (*issueLabelDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -267,7 +385,7 @@ func (e *issueLabelDestinationExecutor) PlanDestination(_ context.Context, reque
 	if e == nil || e.connector == nil {
 		return synctransport.DestinationPlan{}, fmt.Errorf("closed issue-label transport destination is unavailable")
 	}
-	if request.Connector == nil || request.Connector.Name() != e.connector.Name() || request.Stream != "issues" || request.Mode != synccontract.ModeFullAppend || request.ApplyStrategy.Action != issueLabelAddAction || request.ApplyStrategy.Strategy != connectors.ApplyStrategyAppend {
+	if request.Connector == nil || request.Connector.Name() != e.connector.Name() || request.Stream != e.contract.stream || request.Mode != synccontract.ModeFullAppend || request.ApplyStrategy.Action != e.contract.apply.name || request.ApplyStrategy.Strategy != connectors.ApplyStrategyAppend {
 		return synctransport.DestinationPlan{}, fmt.Errorf("closed issue-label destination accepts only its issues/add-label contract")
 	}
 	if err := issueLabelTransportRepositoryConfig(request.Runtime.Config); err != nil {
@@ -286,7 +404,7 @@ func (e *issueLabelDestinationExecutor) ApplyDestination(ctx context.Context, re
 	if e == nil || e.app == nil || e.connector == nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("closed issue-label transport destination is unavailable")
 	}
-	if request.Plan.ApplyStrategy.Action != issueLabelAddAction || request.Plan.ApplyStrategy.Strategy != connectors.ApplyStrategyAppend {
+	if request.Plan.ApplyStrategy.Action != e.contract.apply.name || request.Plan.ApplyStrategy.Strategy != connectors.ApplyStrategyAppend {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("closed issue-label destination received an undeclared apply strategy")
 	}
 	if request.Workset.ID == "" || len(request.Workset.Records) != 1 {
@@ -302,7 +420,7 @@ func (e *issueLabelDestinationExecutor) ReadBackDestination(ctx context.Context,
 	if e == nil || e.connector == nil {
 		return fmt.Errorf("closed issue-label transport destination is unavailable")
 	}
-	if request.Plan.ApplyStrategy.Action != issueLabelAddAction || request.Workset.ID == "" {
+	if request.Plan.ApplyStrategy.Action != e.contract.apply.name || request.Workset.ID == "" {
 		return fmt.Errorf("closed issue-label destination read-back received an undeclared receipt")
 	}
 	targetIssue, err := issueLabelTransportIssueNumber(request.Runtime.Config, issueLabelTransportTargetIssueConfig)
@@ -325,6 +443,7 @@ func (e *issueLabelDestinationExecutor) ReadBackDestination(ctx context.Context,
 		}
 		if number == targetIssue {
 			found = issueHasLabel(record, label)
+			return connectors.ErrReadLimitReached
 		}
 		return nil
 	})
