@@ -14,6 +14,8 @@ Allowed paths:
 
 - `internal/connectors/native/dbtest/**`
 - `internal/connectors/native/mysql/mysql_integration_test.go`
+- `go.mod`
+- `.github/workflows/security.yml`
 - `AGENTS.md`
 - `.planning/phases/issue-4083-dbtest-docker-runtime-r1/**`
 
@@ -41,6 +43,10 @@ global Docker/Podman defaults, and any merge.
    with an actionable message naming `docker`, `podman`, and the direct Unix
    endpoint requirement.
 5. Update README and the durable database-harness guidance in `AGENTS.md`.
+6. Remediate the CI-discovered Go standard-library vulnerabilities by moving
+   the module toolchain declaration and active security workflow pins together
+   from Go 1.25.12 to the fixed Go 1.25.13. This is a toolchain patch only:
+   do not add dependencies or change connector behavior.
 
 ## TDD execution
 
@@ -66,12 +72,20 @@ concepts independently of a particular runtime only where that avoids
 duplicating safety logic. Run gofmt and inspect the scoped diff. No connector
 code or standalone command path is permitted.
 
+### CI remediation
+
+Capture the existing Go 1.25.12 `govulncheck` failure first, then change every
+active project/security pin to Go 1.25.13 and rerun the same scan. Historical
+planning evidence remains historical; only the current issue's ledger and
+verification checklist record this repair.
+
 ## Required skills and lifecycle
 
 - `github-issue-first-delivery`
 - `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`
 - `golang-error-handling`, `golang-security`, `golang-safety`
 - `golang-testing`, `golang-context`, `golang-concurrency`, `golang-database`
+- `golang-continuous-integration`, `golang-dependency-management`, `golang-lint`
 - `golang-documentation`, `no-mistakes`
 - `gsd-discuss-phase`, `gsd-plan-phase --tdd`, `gsd-execute-phase`,
   `gsd-verify-work`, `gsd-code-review` (inline/manual fallback; role spawning
@@ -90,3 +104,5 @@ code or standalone command path is permitted.
    required individual repository gates, followed by inline GSD verification
    and review.
 6. Drive no-mistakes without `--yes` to the CI-green PR state; do not merge.
+7. Run the exact CI `govulncheck` command with the fixed Go 1.25.13 toolchain
+   and confirm the module/workflow pins agree.

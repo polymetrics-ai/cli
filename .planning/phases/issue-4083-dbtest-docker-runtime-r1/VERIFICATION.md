@@ -1,6 +1,6 @@
 # Verification — Issue #4083
 
-Status: planned.
+Status: CI remediation passed locally; outer PR/CI gate remains pending.
 
 ## Required evidence
 
@@ -9,6 +9,12 @@ Status: planned.
 - [x] GSD adapter and command sources resolved; inline/manual lifecycle
   fallback recorded because role spawning is forbidden.
 - [x] Required skills loaded.
+- [x] CI remediation red evidence recorded: the exact Go 1.25.12
+  `govulncheck` command found seven reachable standard-library vulnerabilities
+  fixed in Go 1.25.13.
+- [x] CI remediation green evidence: `go.mod`, both security-job setup pins,
+  and the `govulncheck` `GOTOOLCHAIN` pin agree on Go 1.25.13; the exact scan
+  passed with zero reachable vulnerabilities.
 - [x] Red test evidence recorded: focused dbtest selector exited 1 against the
   hard-wired Podman baseline because `New` accepted no explicit runtime.
 - [x] Green focused unit evidence recorded: explicit runtime values, endpoint
