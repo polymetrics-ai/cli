@@ -2,7 +2,7 @@
 
 | Stage | Check | Expected result | Evidence |
 | --- | --- | --- | --- |
-| Red | Focused runtime-selection/explicit-endpoint test | Fails because only a Podman default exists and the Docker runtime is unsupported. | Pending. |
+| Red | `TestNewRequiresAnExplicitContainerRuntime` | Fails because `New` silently accepts the hard-wired Podman default instead of requiring an explicit runtime. | `go test -timeout 20m -run '^TestNewRequiresAnExplicitContainerRuntime$' ./internal/connectors/native/dbtest` exited 1: `New() accepted a database test configuration without an explicit Docker or Podman runtime`. |
 | Green | Same focused test after the runtime abstraction | Passes for explicit Docker and Podman selections while unknown/unsafe input remains refused. | Pending. |
 | Regression | dbtest and MySQL non-live package tests | Pass without a container daemon. | Pending. |
 | Live Docker | Tagged MySQL proof with a direct explicit Docker socket | Passes only if actually observed. | Pending availability check. |

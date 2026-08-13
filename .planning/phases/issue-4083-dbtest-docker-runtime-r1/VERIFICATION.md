@@ -9,7 +9,8 @@ Status: planned.
 - [x] GSD adapter and command sources resolved; inline/manual lifecycle
   fallback recorded because role spawning is forbidden.
 - [x] Required skills loaded.
-- [ ] Red test evidence recorded.
+- [x] Red test evidence recorded: focused dbtest selector exited 1 against the
+  hard-wired Podman baseline because `New` accepted no explicit runtime.
 - [ ] Green focused unit evidence recorded.
 - [ ] dbtest and MySQL non-live package regression evidence recorded.
 - [ ] Docker live proof recorded, or direct local daemon unavailability stated.

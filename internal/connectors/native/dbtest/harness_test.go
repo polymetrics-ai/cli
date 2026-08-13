@@ -159,6 +159,13 @@ func testConfig(runner CommandRunner) Config {
 	}
 }
 
+func TestNewRequiresAnExplicitContainerRuntime(t *testing.T) {
+	config := testConfig(&scriptedRunner{})
+	if _, err := New(config); err == nil {
+		t.Fatal("New() accepted a database test configuration without an explicit Docker or Podman runtime")
+	}
+}
+
 func TestNewRejectsUnsafeEndpoints(t *testing.T) {
 	for _, tc := range []struct {
 		name     string
