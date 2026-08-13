@@ -484,13 +484,14 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 	for _, a := range b.Writes {
 		confirm := confirmationKindForWriteAction(a)
 		writeActions = append(writeActions, connectors.WriteActionInfo{
-			Name:      a.Name,
-			Kind:      a.Kind,
-			Method:    a.Method,
-			Path:      a.Path,
-			Risk:      a.Risk,
-			Batchable: cloneBoolPtr(a.Batchable),
-			Confirm:   confirm,
+			Name:             a.Name,
+			Kind:             a.Kind,
+			Method:           a.Method,
+			Path:             a.Path,
+			Risk:             a.Risk,
+			Batchable:        cloneBoolPtr(a.Batchable),
+			Confirm:          confirm,
+			TransportBinding: a.TransportBinding.Clone(),
 		})
 	}
 

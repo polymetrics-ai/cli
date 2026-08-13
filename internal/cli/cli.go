@@ -131,6 +131,9 @@ func runInit(root string, stdout io.Writer, jsonOut bool) error {
 }
 
 func runHelp(args []string, stdout io.Writer, jsonOut bool) error {
+	if len(args) >= 2 && args[0] == "etl" && args[1] == "transport" {
+		return writeETLTransportManual(stdout, jsonOut, "etl transport")
+	}
 	topic := ""
 	if len(args) > 0 {
 		topic = args[0]
@@ -252,7 +255,13 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 				return fmt.Errorf("read connector certification status: %w", err)
 			}
 			if jsonOut {
-				response := envelope{"kind": "Connector", "connector": connectors.MetadataOf(c), "manifest": connectors.ManifestOf(c), "certification": status}
+				response := envelope{
+					"kind":           "Connector",
+					"connector":      connectors.MetadataOf(c),
+					"manifest":       connectors.ManifestOf(c),
+					"certification":  status,
+					"sync_transport": connectors.SyncTransportEligibilityOf(c),
+				}
 				if def, ok := connectors.DefinitionOf(c); ok && def.Changefeed != nil {
 					response["changefeed"] = def.Changefeed
 				}
@@ -656,6 +665,11 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		}
 		return nil
 	case "run":
+		if approval, transportApproval, strictFlags, err := parseETLRunTransportApproval(args[1:], os.Stdin); err != nil {
+			return err
+		} else if transportApproval {
+			return runApprovedIssueLabelTransportETL(ctx, a, strictFlags, approval, stdout, jsonOut)
+		}
 		flags := parseFlags(args[1:])
 		batchSize, err := parseIntFlag("batch-size", flags.first("batch-size"), 0)
 		if err != nil {
@@ -698,6 +712,8 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		}
 		_, _ = fmt.Fprintf(stdout, "%s\t%s\tread=%d loaded=%d failed=%d\n", run.ID, run.Status, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
 		return nil
+	case "transport":
+		return runETLTransport(ctx, a, args[1:], stdout, jsonOut)
 	default:
 		return errUsage
 	}

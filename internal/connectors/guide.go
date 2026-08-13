@@ -47,6 +47,7 @@ func GuideOf(c Connector) ConnectorGuide {
 	if provider, ok := c.(CommandSurfaceProvider); ok {
 		guide = guideWithCommandSurface(guide, provider.CommandSurface())
 	}
+	guide = guideWithSyncTransport(guide, c)
 	return guideWithIcon(guide, manifest)
 }
 
@@ -70,6 +71,35 @@ func guideWithCommandSurface(guide ConnectorGuide, surface *CommandSurface) Conn
 		}
 	}
 	guide.Sections = append(guide.Sections, commandSurfaceSection(surface))
+	return guide
+}
+
+// guideWithSyncTransport projects only an authored closed transport descriptor.
+// A missing descriptor stays absent from the human manual; JSON inspection
+// still reports both roles as unsupported. This avoids representing ordinary
+// read/write capabilities as a transport declaration.
+func guideWithSyncTransport(guide ConnectorGuide, connector Connector) ConnectorGuide {
+	if _, declared := SyncTransportDescriptorOf(connector); !declared {
+		return guide
+	}
+	for _, section := range guide.Sections {
+		if strings.EqualFold(section.Title, "sync transport") {
+			return guide
+		}
+	}
+	eligibility := SyncTransportEligibilityOf(connector)
+	lines := []string{
+		"Source transport: " + eligibility.Source.Status,
+		"Destination transport: " + eligibility.Destination.Status,
+		"A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.",
+	}
+	if eligibility.Source.Executor != nil {
+		lines = append(lines, "Source executor: "+string(eligibility.Source.Executor.Family)+"/"+eligibility.Source.Executor.ID)
+	}
+	if eligibility.Destination.Executor != nil {
+		lines = append(lines, "Destination executor: "+string(eligibility.Destination.Executor.Family)+"/"+eligibility.Destination.Executor.ID)
+	}
+	guide.Sections = append(guide.Sections, GuideSection{Title: "Sync Transport", Lines: lines})
 	return guide
 }
 

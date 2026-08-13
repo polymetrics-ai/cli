@@ -184,14 +184,14 @@ func TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime
 			connector: "github",
 			field:     "since",
 			value:     "not-a-date-time",
-			want:      []string{"since", `format "date-time"`},
+			want:      []string{"since", `configuration value must use "date-time" format`},
 		},
 		{
 			name:      "date",
 			connector: "google-search-console",
 			field:     "start_date",
 			value:     "2026-02-30",
-			want:      []string{"start_date", `format "date"`},
+			want:      []string{"start_date", `configuration value must use "date" format`},
 		},
 		{
 			name:      "agilecrm pattern",
@@ -212,14 +212,14 @@ func TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime
 			connector: "coin-api",
 			field:     "environment",
 			value:     "preview",
-			want:      []string{"environment", "enum"},
+			want:      []string{"environment", "configuration value must be one of the declared values"},
 		},
 		{
 			name:      "tier three base enum",
 			connector: "postgres",
 			field:     "mode",
 			value:     "preview",
-			want:      []string{"mode", "enum"},
+			want:      []string{"mode", "configuration value must be one of the declared values"},
 		},
 	}
 
