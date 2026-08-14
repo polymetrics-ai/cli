@@ -33,8 +33,8 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 	if rep.Kind != "ConnectorCertification" {
 		t.Errorf("Report.Kind = %q, want ConnectorCertification", rep.Kind)
 	}
-	if rep.SchemaVersion != 1 {
-		t.Errorf("Report.SchemaVersion = %d, want 1", rep.SchemaVersion)
+	if rep.SchemaVersion != certify.CurrentSchemaVersion {
+		t.Errorf("Report.SchemaVersion = %d, want %d", rep.SchemaVersion, certify.CurrentSchemaVersion)
 	}
 	if rep.StartedAt.IsZero() || rep.CompletedAt.IsZero() {
 		t.Errorf("Report timestamps not set: started=%v completed=%v", rep.StartedAt, rep.CompletedAt)
@@ -121,7 +121,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		t.Errorf("etl_full_refresh_overwrite_deduped stage failed: %+v", dedupOverwrite)
 	}
 	frodMode, ok := rep.Capabilities.SyncModes["full_refresh_overwrite_deduped"]
-	if !ok || frodMode.Result != "pass" || frodMode.DataSource != "" || frodMode.Reason != "typed pre-I/O refusal confirmed" {
+	if !ok || frodMode.Result != "pass" || frodMode.DataSource != certify.SyncModeDataSourcePreIORefusal || frodMode.Reason != "typed pre-I/O refusal confirmed" {
 		t.Errorf("SyncModes[full_refresh_overwrite_deduped] = %+v, want typed pre-I/O refusal", frodMode)
 	}
 
@@ -150,7 +150,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		t.Errorf("etl_incremental_append_deduped stage failed: %+v", incDedup)
 	}
 	iadMode, ok := rep.Capabilities.SyncModes["incremental_append_deduped"]
-	if !ok || iadMode.Result != "pass" || iadMode.DataSource != "" || iadMode.Reason != "typed pre-I/O refusal confirmed" {
+	if !ok || iadMode.Result != "pass" || iadMode.DataSource != certify.SyncModeDataSourcePreIORefusal || iadMode.Reason != "typed pre-I/O refusal confirmed" {
 		t.Errorf("SyncModes[incremental_append_deduped] = %+v, want typed pre-I/O refusal", iadMode)
 	}
 

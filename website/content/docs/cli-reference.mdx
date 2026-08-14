@@ -321,7 +321,7 @@ pm perf compare --iterations 25 --runtime --json
 pm perf sync-modes --records 1000 --json
 ```
 
-Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The dependency-free path is the default.
+Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The dependency-free path is the default. `pm perf sync-modes` excludes typed compatibility names that refuse before source I/O.
 
 ```bash
 pm docs generate --dir docs/cli --connectors-dir docs/connectors

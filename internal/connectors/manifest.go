@@ -3,6 +3,8 @@ package connectors
 import (
 	"context"
 	"strings"
+
+	"polymetrics.ai/internal/synccontract"
 )
 
 type ConfigField struct {
@@ -149,13 +151,7 @@ func (r *Registry) ListManifests() []Manifest {
 }
 
 func allSyncModes() []string {
-	return []string{
-		"full_refresh_append",
-		"full_refresh_overwrite",
-		"full_refresh_overwrite_deduped",
-		"incremental_append",
-		"incremental_append_deduped",
-	}
+	return synccontract.PublicModeNames()
 }
 
 func readSourceSyncModes() []string {

@@ -13,9 +13,9 @@ DESCRIPTION
   acquires a Dragonfly lease, appends a PostgreSQL ledger record, and compares
   that path against the dependency-free baseline.
 
-  The sync-modes subcommand runs a synthetic local file-to-warehouse benchmark
-  for every supported ETL sync mode and reports each mode's duration and records
-  per second.
+  The sync-modes subcommand benchmarks local sync modes that materialize without
+  a closed transport. Typed compatibility names that refuse before source I/O
+  are excluded.
 
 SECURITY
   Performance output contains counts and durations only.

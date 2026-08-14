@@ -472,10 +472,11 @@ SYNC MODES
   incremental_append               append records at or after the saved cursor
   incremental_append_deduped       compatibility name for typed incremental_dedupe admission
 
-  Incremental modes require --cursor. Deduped modes require --primary-key. The
-  two deduped compatibility names use their typed contract and refuse before
-  source I/O until a matching transport is admitted. When a connector manifest
-  declares defaults, pm fills them during connection creation.
+  Incremental modes and deduped compatibility names require --cursor. Deduped
+  modes require --primary-key. The two deduped compatibility names use their
+  typed contract and refuse before source I/O until a matching transport is
+  admitted. When a connector manifest declares defaults, pm fills them during
+  connection creation.
 
 SECURITY
   Connections reference credentials by name only.
@@ -630,6 +631,9 @@ SYNC MODES
   incremental_append_deduped
     Compatibility name for typed incremental_dedupe admission. pm refuses
     before source I/O until a matching transport is admitted.
+
+  Incremental modes and deduped compatibility names require --cursor. Deduped
+  modes require --primary-key.
 
 SECURITY
   ETL resolves credentials in memory and stores only credential references.
@@ -1083,9 +1087,9 @@ DESCRIPTION
   acquires a Dragonfly lease, appends a PostgreSQL ledger record, and compares
   that path against the dependency-free baseline.
 
-  The sync-modes subcommand runs a synthetic local file-to-warehouse benchmark
-  for every supported ETL sync mode and reports each mode's duration and records
-  per second.
+  The sync-modes subcommand benchmarks local sync modes that materialize without
+  a closed transport. Typed compatibility names that refuse before source I/O
+  are excluded.
 
 SECURITY
   Performance output contains counts and durations only.

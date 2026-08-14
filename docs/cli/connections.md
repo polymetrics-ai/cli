@@ -31,10 +31,11 @@ SYNC MODES
   incremental_append               append records at or after the saved cursor
   incremental_append_deduped       compatibility name for typed incremental_dedupe admission
 
-  Incremental modes require --cursor. Deduped modes require --primary-key. The
-  two deduped compatibility names use their typed contract and refuse before
-  source I/O until a matching transport is admitted. When a connector manifest
-  declares defaults, pm fills them during connection creation.
+  Incremental modes and deduped compatibility names require --cursor. Deduped
+  modes require --primary-key. The two deduped compatibility names use their
+  typed contract and refuse before source I/O until a matching transport is
+  admitted. When a connector manifest declares defaults, pm fills them during
+  connection creation.
 
 SECURITY
   Connections reference credentials by name only.

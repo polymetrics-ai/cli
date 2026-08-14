@@ -20,7 +20,7 @@ func sampleReport() certify.Report {
 	completed := started.Add(2500 * time.Millisecond)
 	return certify.Report{
 		Kind:          "ConnectorCertification",
-		SchemaVersion: 1,
+		SchemaVersion: certify.CurrentSchemaVersion,
 		Connector:     "sample",
 		PMVersion:     "v0.0.0-test",
 		StartedAt:     started,
@@ -32,7 +32,8 @@ func sampleReport() certify.Report {
 			Catalog: certify.CapabilityResult{Result: "pass", Streams: 1},
 			Read:    certify.CapabilityResult{Result: "pass", Stream: "customers", Records: 3},
 			SyncModes: map[string]certify.SyncModeResult{
-				"full_refresh_append": {Result: "pass", DataSource: "live"},
+				"full_refresh_append":            {Result: "pass", DataSource: certify.SyncModeDataSourceLive},
+				"full_refresh_overwrite_deduped": {Result: "pass", DataSource: certify.SyncModeDataSourcePreIORefusal, Reason: "typed pre-I/O refusal confirmed"},
 			},
 			Resume:          certify.CapabilityResult{Result: "pass"},
 			JSONContract:    certify.CapabilityResult{Result: "pass", StagesChecked: 12},
@@ -104,6 +105,10 @@ func TestReportMarshalRoundTrip(t *testing.T) {
 	if mode.Result != "pass" || mode.DataSource != "live" {
 		t.Errorf("SyncModes[full_refresh_append] = %+v, want {pass live}", mode)
 	}
+	typedMode, ok := got.Capabilities.SyncModes["full_refresh_overwrite_deduped"]
+	if !ok || typedMode.DataSource != certify.SyncModeDataSourcePreIORefusal {
+		t.Errorf("SyncModes[full_refresh_overwrite_deduped] = %+v, want pre-I/O refusal data source", typedMode)
+	}
 	if len(got.Stages) != 1 {
 		t.Fatalf("len(Stages) = %d, want 1", len(got.Stages))
 	}
@@ -147,6 +152,14 @@ func TestReportMarshalJSONShape(t *testing.T) {
 			t.Errorf("capabilities missing key %q: %s", key, string(raw))
 		}
 	}
+	syncModes, ok := caps["sync_modes"].(map[string]any)
+	if !ok {
+		t.Fatalf("capabilities.sync_modes is not an object: %s", string(raw))
+	}
+	typedMode, ok := syncModes["full_refresh_overwrite_deduped"].(map[string]any)
+	if !ok || typedMode["data_source"] != string(certify.SyncModeDataSourcePreIORefusal) {
+		t.Errorf("typed compatibility result = %#v, want data_source=%q", typedMode, certify.SyncModeDataSourcePreIORefusal)
+	}
 
 	// leaks/write_actions/flow/schedule/budget stay empty/absent in wave0
 	// (design §A fields not yet populated); ensure we don't accidentally
@@ -159,6 +172,17 @@ func TestReportMarshalJSONShape(t *testing.T) {
 	}
 	if _, ok := caps["schedule"]; ok {
 		t.Errorf("capabilities.schedule should be absent in wave0, got: %s", string(raw))
+	}
+}
+
+func TestReportSaveRejectsMissingSyncModeDataSource(t *testing.T) {
+	dir := t.TempDir()
+	rep := sampleReport()
+	rep.Capabilities.SyncModes["incremental_append"] = certify.SyncModeResult{Result: "pass"}
+
+	err := rep.Save(dir)
+	if err == nil {
+		t.Fatal("Save() error = nil, want invalid data_source error")
 	}
 }
 

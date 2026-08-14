@@ -121,6 +121,9 @@ SYNC MODES
     Compatibility name for typed incremental_dedupe admission. pm refuses
     before source I/O until a matching transport is admitted.
 
+  Incremental modes and deduped compatibility names require --cursor. Deduped
+  modes require --primary-key.
+
 SECURITY
   ETL resolves credentials in memory and stores only credential references.
 

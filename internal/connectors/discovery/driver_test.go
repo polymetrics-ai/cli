@@ -70,8 +70,29 @@ func TestDriverRetriesRateLimitedDescriptionsAndBuildsSchema(t *testing.T) {
 	if err := json.Unmarshal(stream.Schema, &schema); err != nil {
 		t.Fatalf("schema invalid: %v", err)
 	}
-	if schema["x-primary-key"] == nil || schema["x-cursor-field"] != "created_at" || schema["x-stream_name"] != "contacts" || schema["x-default_sync_mode"] != "incremental_append_deduped" {
+	if schema["x-primary-key"] == nil || schema["x-cursor-field"] != "created_at" || schema["x-stream_name"] != "contacts" || schema["x-default_sync_mode"] != "incremental_append" {
 		t.Fatalf("schema sync contract = %#v", schema)
+	}
+}
+
+func TestDefaultSyncModeNeverSelectsTypedOnlyCompatibilityName(t *testing.T) {
+	tests := []struct {
+		name          string
+		hasPrimaryKey bool
+		hasCursor     bool
+		want          string
+	}{
+		{name: "neither", want: "full_refresh_append"},
+		{name: "primary key only", hasPrimaryKey: true, want: "full_refresh_overwrite"},
+		{name: "cursor only", hasCursor: true, want: "incremental_append"},
+		{name: "both", hasPrimaryKey: true, hasCursor: true, want: "incremental_append"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := defaultSyncMode(tt.hasPrimaryKey, tt.hasCursor); got != tt.want {
+				t.Fatalf("defaultSyncMode(%t, %t) = %q, want %q", tt.hasPrimaryKey, tt.hasCursor, got, tt.want)
+			}
+		})
 	}
 }
 

@@ -33,12 +33,21 @@ type CapabilityResult struct {
 	UntestableReason *failures.Classification `json:"untestable_reason,omitempty"`
 }
 
+// SyncModeDataSource records how certification established a sync-mode result.
+type SyncModeDataSource string
+
+const (
+	SyncModeDataSourceLive         SyncModeDataSource = "live"
+	SyncModeDataSourceCapture      SyncModeDataSource = "capture"
+	SyncModeDataSourcePreIORefusal SyncModeDataSource = "pre_io_refusal"
+)
+
 // SyncModeResult is one row of Capabilities.SyncModes.
 type SyncModeResult struct {
-	Result         string `json:"result"`
-	DataSource     string `json:"data_source"` // "live" | "capture"; empty for a pre-I/O refusal
-	CursorAdvanced bool   `json:"cursor_advanced,omitempty"`
-	Reason         string `json:"reason,omitempty"`
+	Result         string             `json:"result"`
+	DataSource     SyncModeDataSource `json:"data_source"`
+	CursorAdvanced bool               `json:"cursor_advanced,omitempty"`
+	Reason         string             `json:"reason,omitempty"`
 }
 
 // ScheduleResult is Capabilities.Schedule (certification design §A report
@@ -125,6 +134,9 @@ func ExitCodeFor(rep Report) int {
 	return 0
 }
 
+// CurrentSchemaVersion is the report schema written by new certification runs.
+const CurrentSchemaVersion = 2
+
 // Report is the CertificationReport artifact persisted at
 // .polymetrics/certifications/<connector>.json (certification design §A).
 // Budget remains empty/absent until a later certify phase (DATA-MODEL.md
@@ -165,6 +177,9 @@ func (rep *Report) Save(dir string) error {
 	if rep.Connector == "" {
 		return errors.New("certify: report.Connector is required")
 	}
+	if err := rep.validateSyncModeDataSources(); err != nil {
+		return err
+	}
 
 	certDir := filepath.Join(dir, certificationsDirName)
 	if err := os.MkdirAll(certDir, 0o755); err != nil {
@@ -190,6 +205,17 @@ func (rep *Report) Save(dir string) error {
 		return fmt.Errorf("certify: write %s: %w", historyPath, err)
 	}
 
+	return nil
+}
+
+func (rep *Report) validateSyncModeDataSources() error {
+	for mode, result := range rep.Capabilities.SyncModes {
+		switch result.DataSource {
+		case SyncModeDataSourceLive, SyncModeDataSourceCapture, SyncModeDataSourcePreIORefusal:
+		default:
+			return fmt.Errorf("certify: sync mode %q has invalid data_source %q", mode, result.DataSource)
+		}
+	}
 	return nil
 }
 

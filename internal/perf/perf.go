@@ -11,6 +11,7 @@ import (
 	"polymetrics.ai/internal/app"
 	pmruntime "polymetrics.ai/internal/runtime"
 	"polymetrics.ai/internal/runtimecheck"
+	"polymetrics.ai/internal/synccontract"
 )
 
 type CompareRequest struct {
@@ -94,23 +95,16 @@ func CompareSyncModes(ctx context.Context, req SyncModeBenchmarkRequest) (SyncMo
 	if req.Records <= 0 {
 		req.Records = 1000
 	}
-	modes := []string{
-		"full_refresh_append",
-		"full_refresh_overwrite",
-		"full_refresh_overwrite_deduped",
-		"incremental_append",
-		"incremental_append_deduped",
-	}
+	modes := synccontract.MaterializingPublicModeNames()
 	results := make([]SyncModeBenchmarkResult, 0, len(modes))
 	for _, mode := range modes {
 		result := runSyncModeBenchmark(ctx, mode, req.Records)
 		results = append(results, result)
 	}
 	return SyncModeBenchmark{
-		Records: req.Records,
-		Results: results,
-		Explanation: "Synthetic dependency-free benchmark using a local JSONL file source and the local Parquet warehouse destination. " +
-			"Deduped modes include raw history and final materialization cost.",
+		Records:     req.Records,
+		Results:     results,
+		Explanation: "Synthetic dependency-free benchmark using a local JSONL file source and the local Parquet warehouse destination for modes that materialize without a closed transport.",
 	}, nil
 }
 

@@ -221,7 +221,7 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 
 	rep := Report{
 		Kind:          "ConnectorCertification",
-		SchemaVersion: 1,
+		SchemaVersion: CurrentSchemaVersion,
 		Connector:     r.opts.Connector,
 		Mode:          "live",
 		StartedAt:     time.Now().UTC(),
@@ -799,9 +799,9 @@ func stageFullRefreshAppend(rc *runContext, rep *Report) error {
 		rep.Capabilities.Read.Result = "pass"
 		rep.Capabilities.Read.Stream = stream
 		rep.Capabilities.Read.Records = read
-		rep.Capabilities.SyncModes["full_refresh_append"] = SyncModeResult{Result: "pass", DataSource: "live"}
+		rep.Capabilities.SyncModes["full_refresh_append"] = SyncModeResult{Result: "pass", DataSource: SyncModeDataSourceLive}
 		if read <= 0 {
-			rep.Capabilities.SyncModes["full_refresh_append"] = SyncModeResult{Result: "passed_empty", DataSource: "live", Reason: "records_read was 0"}
+			rep.Capabilities.SyncModes["full_refresh_append"] = SyncModeResult{Result: "passed_empty", DataSource: SyncModeDataSourceLive, Reason: "records_read was 0"}
 		}
 		return true, cliInfoFrom(res), ""
 	})
@@ -962,7 +962,7 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 		if secondCount != firstCount {
 			return false, cliInfoFrom(second), fmt.Sprintf("etl_full_refresh_overwrite: row count changed across overwrite runs (want truncate semantics): run1=%d run2=%d", firstCount, secondCount)
 		}
-		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: "capture"}
+		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: SyncModeDataSourceCapture}
 		return true, cliInfoFrom(second), ""
 	})
 	return nil
@@ -1004,7 +1004,7 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 		if passed, errMsg := assertTypedPreIORefusal(rc, "etl_full_refresh_overwrite_deduped", res); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
-		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", Reason: "typed pre-I/O refusal confirmed"}
+		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: SyncModeDataSourcePreIORefusal, Reason: "typed pre-I/O refusal confirmed"}
 		return true, cliInfoFrom(res), ""
 	})
 	return nil
@@ -1054,12 +1054,12 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 		cursor := checkpointString(res.Envelope, "cursor")
 		read1, _ := runInt(res.Envelope, "records_read")
 		if cursor == "" {
-			rep.Capabilities.SyncModes["incremental_append"] = SyncModeResult{Result: "passed_no_cursor", DataSource: "live", Reason: "no cursor recorded on checkpoint"}
+			rep.Capabilities.SyncModes["incremental_append"] = SyncModeResult{Result: "passed_no_cursor", DataSource: SyncModeDataSourceLive, Reason: "no cursor recorded on checkpoint"}
 			return true, cliInfoFrom(res), ""
 		}
 		rc.incrementalRun1Cursor = cursor
 		rc.incrementalRun1Records = read1
-		rep.Capabilities.SyncModes["incremental_append"] = SyncModeResult{Result: "pass", DataSource: "live", CursorAdvanced: true}
+		rep.Capabilities.SyncModes["incremental_append"] = SyncModeResult{Result: "pass", DataSource: SyncModeDataSourceLive, CursorAdvanced: true}
 		return true, cliInfoFrom(res), ""
 	})
 	if !stage.Passed {
@@ -1159,7 +1159,7 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 		if passed, errMsg := assertTypedPreIORefusal(rc, "etl_incremental_append_deduped", res); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
-		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", Reason: "typed pre-I/O refusal confirmed"}
+		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: SyncModeDataSourcePreIORefusal, Reason: "typed pre-I/O refusal confirmed"}
 		return true, cliInfoFrom(res), ""
 	})
 	return nil

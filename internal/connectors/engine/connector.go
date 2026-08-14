@@ -5,42 +5,14 @@ import (
 	"encoding/json"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
-// syncMode name constants mirror internal/app/sync_modes.go's MustSyncModeNames
-// verbatim (design §B.6). engine cannot import internal/app (app already
-// depends on connectors, and PLAN.md forbids editing internal/app/** for this
-// task); these are the same five strings, kept in lockstep by
-// TestDerivedSyncModesTruthTable against the design doc's truth table rather
-// than by a shared import.
-const (
-	syncModeFullRefreshAppend           = "full_refresh_append"
-	syncModeFullRefreshOverwrite        = "full_refresh_overwrite"
-	syncModeFullRefreshOverwriteDeduped = "full_refresh_overwrite_deduped"
-	syncModeIncrementalAppend           = "incremental_append"
-	syncModeIncrementalAppendDeduped    = "incremental_append_deduped"
-)
-
-// DerivedSyncModes returns the sync modes a stream supports, derived from its
-// bundle-declared shape rather than authored anywhere (design §B.6): the two
-// full_refresh modes are always available; the *_deduped variants require
-// x-primary-key; the incremental_* modes require an incremental block.
+// DerivedSyncModes returns sync modes derived from the bundle-declared stream shape.
 func DerivedSyncModes(s StreamSpec, sch *StreamSchema) []string {
-	modes := []string{syncModeFullRefreshAppend, syncModeFullRefreshOverwrite}
-
 	hasPrimaryKey := sch != nil && len(sch.PrimaryKey) > 0
 	hasIncremental := s.Incremental != nil
-
-	if hasPrimaryKey {
-		modes = append(modes, syncModeFullRefreshOverwriteDeduped)
-	}
-	if hasIncremental {
-		modes = append(modes, syncModeIncrementalAppend)
-	}
-	if hasPrimaryKey && hasIncremental {
-		modes = append(modes, syncModeIncrementalAppendDeduped)
-	}
-	return modes
+	return synccontract.SupportedPublicModeNames(hasPrimaryKey, hasIncremental)
 }
 
 // Connector adapts a declarative Bundle (+ optional Tier-2 Hooks) to
@@ -708,14 +680,7 @@ func legacyStreamOf(b Bundle, s StreamSpec) connectors.Stream {
 	return stream
 }
 
-// canonicalModeOrder is internal/app/sync_modes.go's MustSyncModeNames order.
-var canonicalModeOrder = []string{
-	syncModeFullRefreshAppend,
-	syncModeFullRefreshOverwrite,
-	syncModeFullRefreshOverwriteDeduped,
-	syncModeIncrementalAppend,
-	syncModeIncrementalAppendDeduped,
-}
+var canonicalModeOrder = synccontract.PublicModeNames()
 
 // orderCanonicalModes returns the subset of canonicalModeOrder present in
 // modes, in canonical order.
