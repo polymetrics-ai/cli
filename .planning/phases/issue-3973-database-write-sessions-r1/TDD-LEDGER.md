@@ -34,3 +34,12 @@ go test -timeout 20m ./internal/connectors/database/... ./internal/app/...
 **Green:** The fake exposes each observable mutation and the test asserts its
 session count, bounded batches, approval ordering, outcome, receipt, and
 checkpoint eligibility rather than merely checking returned errors.
+
+## Recorded result
+
+- **Red:** `traces/write-session-red.txt` records the missing-session-contract
+  build failure before the production type existed.
+- **Green:** `traces/write-session-green.txt` records the focused normal and
+  race runs after the implementation. The suite observes zero driver/session/
+  ledger calls for refused plans and every required lifecycle counter for
+  successful, rolled-back, and unknown outcomes.
