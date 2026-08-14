@@ -12,6 +12,10 @@ performed inline without spawning incompatible roles.
 - [x] Context cancellation, atomicity, server-time TTL/reset, and all supported declared models are covered.
 - [x] No connector-specific production literal/branch, no production bundle edit, no parking/resumption, and no generic execution surface.
 - [x] Focused package tests, race test, targeted vet/build, formatting, CLI/help/docs/website parity, and individual repository gates pass.
+- [x] CI remediation regenerated the sole stale website artifact after the
+  rate-limit provenance documentation change; local website lint and typecheck
+  pass. The third-party Snyk status was pending with no reported in-diff finding;
+  the repository Security workflow and `govulncheck` passed.
 
 ## Evidence
 
@@ -34,3 +38,6 @@ performed inline without spawning incompatible roles.
 - Issue proof: exact command and verbatim output posted to #3754. No credential was supplied,
   printed, or stored. Provider-specific enforcement remains #3990 because this change deliberately
   does not alter a connector declaration.
+- CI repair: `cd website && pnpm run gen:website-data`, `pnpm run lint`, and
+  `pnpm run typecheck` passed. The two failed GitHub Actions runs identified only
+  `website/lib/docs.generated.ts` as stale.

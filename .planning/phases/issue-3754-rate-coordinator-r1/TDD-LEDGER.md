@@ -11,6 +11,7 @@ GSD prompts are executed inline and this ledger is the durable red/green record.
 | R4 | Require-shared fails closed | Resolver uses local limiter after shared open/ping/admission failure | `errors.As` reaches typed `coordinator_not_configured`; resolver construction fails before requester send | Green |
 | R5 | Scope identity remains secret-free | No cross-registry test proves raw subject/key absence | Actual #3863 opaque key derivation is asserted against subject/binding canaries; public output/errors contain none; no argv/env/file/log/receipt path accepts raw credentials | Green |
 | R6 | Two processes obey one budget when shared is engaged | No cross-process real coordinator test exists | Opt-in Dragonfly test launches two helper processes under one opaque key; exactly one grant succeeds per window | Green |
+| R7 | Website generated data matches the checked-in CLI reference | CI runs `31809146629` and `31809146767` regenerate `website/lib/docs.generated.ts` after the rate-limit provenance addition | Regenerate the one checked-in artifact and re-run generator/lint/typecheck without source or dependency changes | Green |
 
 ## Red command log
 

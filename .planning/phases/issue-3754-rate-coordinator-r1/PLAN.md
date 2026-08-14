@@ -52,6 +52,27 @@ Runtime planning also used `.agents/agentic-delivery/references/runtime-rlm-webs
 3. Green implementation plus local/package verification.
 4. Verification and review-artifact checkpoint only.
 
+## CI-repair addendum — 2026-08-14
+
+- The Website Data and Website CI/CD jobs both reproduced a stale generated-data
+  RED state after the rate-limit provenance paragraph was added to
+  `website/content/docs/cli-reference.mdx`: Actions runs `31809146629` and
+  `31809146767` reported only `M website/lib/docs.generated.ts` after
+  `pnpm run gen:website-data`.
+- GREEN is the repository-prescribed deterministic regeneration of that one
+  artifact, followed by the generator check, website lint, and typecheck. It
+  changes no coordinator behavior, connector declaration, dependency, or live
+  proof comment.
+- The GitHub Security workflow and `govulncheck` passed. At investigation time
+  the third-party `security/snyk (karthik-sivadas)` status was pending and
+  exposed no branch-diff finding, so no speculative dependency or security
+  change is permitted.
+- This CI repair also used `golang-continuous-integration`, `golang-lint`,
+  `vercel-react-best-practices`, and `vercel-composition-patterns`. The
+  repository routing names `frontend-design` and `web-design-guidelines`, but
+  neither is installed in this environment; no React component or design-system
+  code is in scope for this generated-data repair.
+
 ## Safety and exclusions
 
 - No raw credential, secret-derived equality, scope subject, opaque key, binding, approval
