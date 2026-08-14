@@ -23332,9 +23332,13 @@
         "primary_key": [
           "id"
         ],
+        "cursor_field": "updated_at",
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite"
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped",
+          "incremental_append",
+          "incremental_append_deduped"
         ]
       },
       {

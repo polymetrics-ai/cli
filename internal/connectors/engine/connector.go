@@ -13,7 +13,7 @@ func DerivedSyncModes(s StreamSpec, sch *StreamSchema) []string {
 	return synccontract.SupportedPublicModeNames(synccontract.PublicModeCapabilities{
 		HasPrimaryKey:          sch != nil && len(sch.PrimaryKey) > 0,
 		HasCursor:              sch != nil && sch.CursorField != "",
-		HasIncrementalExecutor: s.Incremental != nil,
+		HasIncrementalExecutor: s.Incremental != nil && (s.Incremental.CursorField == "" || (sch != nil && s.Incremental.CursorField == sch.CursorField)),
 	})
 }
 

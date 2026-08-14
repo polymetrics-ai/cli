@@ -11,11 +11,13 @@
 - The existing public compatibility adapters and the closed canonical modes retain their tested parse/runtime behavior. No connector-specific branch or literal was added to shared production code.
 - Help, generated CLI docs, website docs, and generated website documentation data describe the same typed-admission behavior.
 - The shared engine regression remains connector-neutral, while exact generated-content validation now covers connector manuals, skills, index, and catalog output; regenerated capability-flow artifacts passed their drift check without changing the certification report contract or version.
+- Schema-declared cursors and nonempty incremental cursors now agree by validation; the Chargebee `coupons` projection again exposes all five canonical public modes without changing the valid empty-cursor incremental pattern used by other bundles.
 
 ## Evidence reviewed
 
 - `internal/synccontract/public_modes.go`, `internal/app/sync_modes.go`, and their focused regression/control tests.
 - `internal/connectors/certify` stage and scripted-CLI coverage, plus the real CLI certification route test.
 - Generated documentation diffs and the completed command matrix in `VERIFICATION.md`.
+- The focused engine and connectorgen regression tests, Chargebee bundle validation, and generated connector-doc validation after the schema reconciliation.
 
 External pull-request review is intentionally pending: this worker was instructed to stop after the commit, before Firstmate's no-mistakes/PR workflow.

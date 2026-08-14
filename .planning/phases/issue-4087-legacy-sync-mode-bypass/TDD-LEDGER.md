@@ -34,3 +34,8 @@
 
 - **Red:** recorded 2026-08-14 from the PR `govulncheck` job. Its explicit `GOTOOLCHAIN=go1.25.12` selected a runtime with seven reachable standard-library advisories (GO-2026-6218, GO-2026-6091, GO-2026-6090, GO-2026-6089, GO-2026-6088, GO-2026-5972, and GO-2026-5026), each fixed in Go 1.25.13. The job exited 3; neither a dependency upgrade nor a scanner suppression is a correct remediation.
 - **Green:** recorded 2026-08-14. Advanced `go.mod` and every explicit executable workflow pin together to Go 1.25.13, then ran the exact fixed-toolchain command: `GOTOOLCHAIN=go1.25.13 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` reported `No vulnerabilities found.` The repair leaves the Go language directive and dependency graph unchanged.
+
+## Slice 5 — schema cursor capability reconciliation
+
+- **Red:** recorded 2026-08-14. Review found that Chargebee `coupons` declared `incremental.cursor_field: updated_at` without the schema `x-cursor-field`, so the schema-derived catalog omitted the cursor-dependent public modes despite the executable incremental declaration.
+- **Green:** recorded 2026-08-14. Declared the schema cursor, made the generic validator reject a nonempty incremental cursor that disagrees with its schema, and kept valid empty-cursor incremental declarations eligible through their schema cursor. Regenerating connector documentation restored `coupons` to all five canonical public modes in the catalog, manual, and skill output. The focused engine and connectorgen regressions, Chargebee validation, and connector-doc validation passed.

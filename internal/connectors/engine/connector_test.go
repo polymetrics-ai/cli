@@ -334,6 +334,12 @@ func TestDerivedSyncModesTruthTable(t *testing.T) {
 			want:       []string{"full_refresh_append", "full_refresh_overwrite"},
 		},
 		{
+			name:        "incremental cursor without schema cursor stays nonincremental",
+			primaryKey:  "id",
+			incremental: &IncrementalSpec{CursorField: "updated_at"},
+			want:        []string{"full_refresh_append", "full_refresh_overwrite"},
+		},
+		{
 			name:        "primary key and cursor retain full refresh compatibility without incremental executor",
 			primaryKey:  "id",
 			cursorField: "updated_at",
@@ -354,6 +360,25 @@ func TestDerivedSyncModesTruthTable(t *testing.T) {
 			primaryKey:  "id",
 			cursorField: "updated_at",
 			incremental: &IncrementalSpec{CursorField: "updated_at"},
+			want: []string{
+				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+				"incremental_append", "incremental_append_deduped",
+			},
+		},
+		{
+			name:        "mismatched incremental and schema cursors do not advertise incremental modes",
+			primaryKey:  "id",
+			cursorField: "updated_at",
+			incremental: &IncrementalSpec{CursorField: "created_at"},
+			want: []string{
+				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+			},
+		},
+		{
+			name:        "empty incremental cursor retains schema-backed incremental modes",
+			primaryKey:  "id",
+			cursorField: "updated_at",
+			incremental: &IncrementalSpec{},
 			want: []string{
 				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
 				"incremental_append", "incremental_append_deduped",
