@@ -522,6 +522,17 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	if err != nil {
 		return nil, fmt.Errorf("engine: resolve base url: %w", err)
 	}
+	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
+	if err != nil {
+		return nil, err
+	}
+	requester := &connsdk.Requester{
+		BaseURL:        baseURL,
+		UserAgent:      b.HTTP.UserAgent,
+		DefaultHeaders: headers,
+	}
+	resolver := newRateLimitResolverWithContext(ctx, b, cfg)
+	authRuntime := &Runtime{baseRequester: requester, rateLimits: resolver}
 
 	// An empty auth list means the bundle declares no authentication scheme at
 	// all (e.g. a fully public API, or a test double) — selectAuth itself
@@ -529,25 +540,12 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	// rather than forcing every caller to declare a trivial "none" rule.
 	var auth connsdk.Authenticator
 	if len(b.HTTP.Auth) > 0 {
-		auth, err = selectAuth(ctx, cfg, b.HTTP.Auth, h)
+		auth, err = selectAuthWithDeclaredRoute(ctx, cfg, b.HTTP.Auth, h, declaredRouteRequester{runtime: authRuntime})
 		if err != nil {
 			return nil, fmt.Errorf("engine: %w", err)
 		}
 	}
-
-	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
-	if err != nil {
-		return nil, err
-	}
-
-	requester := &connsdk.Requester{
-		BaseURL:        baseURL,
-		Auth:           auth,
-		UserAgent:      b.HTTP.UserAgent,
-		DefaultHeaders: headers,
-	}
-
-	resolver := newRateLimitResolverWithContext(ctx, b, cfg)
+	requester.Auth = auth
 	defaultRequester, err := resolver.defaultRequester(requester)
 	if err != nil {
 		return nil, err

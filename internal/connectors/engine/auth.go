@@ -30,6 +30,13 @@ func authVars(cfg connectors.RuntimeConfig) Vars {
 // Authenticator, never into error messages (mirrors stripe/stripe.go:279 —
 // secrets never read from Config, only Secrets).
 func selectAuth(ctx context.Context, cfg connectors.RuntimeConfig, specs []AuthSpec, h Hooks) (connsdk.Authenticator, error) {
+	return selectAuthWithDeclaredRoute(ctx, cfg, specs, h, nil)
+}
+
+// selectAuthWithDeclaredRoute is selectAuth's runtime-aware counterpart. Only
+// a hook opting into DeclaredRouteAuthHook receives the narrow requester;
+// existing hooks retain their AuthHook contract unchanged.
+func selectAuthWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, specs []AuthSpec, h Hooks, requester DeclaredRouteRequester) (connsdk.Authenticator, error) {
 	if len(specs) == 0 {
 		return nil, fmt.Errorf("select auth: no auth specs declared")
 	}
@@ -44,7 +51,7 @@ func selectAuth(ctx context.Context, cfg connectors.RuntimeConfig, specs []AuthS
 		if !matched {
 			continue
 		}
-		return buildAuthenticator(ctx, cfg, spec, vars, h)
+		return buildAuthenticatorWithDeclaredRoute(ctx, cfg, spec, vars, h, requester)
 	}
 
 	return nil, fmt.Errorf("select auth: no auth spec matched for auth_type %q", cfg.Config["auth_type"])
@@ -62,6 +69,10 @@ func authSpecMatches(spec AuthSpec, vars Vars) (bool, error) {
 // buildAuthenticator constructs the connsdk.Authenticator for a matched
 // spec, interpolating every templated field first.
 func buildAuthenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, vars Vars, h Hooks) (connsdk.Authenticator, error) {
+	return buildAuthenticatorWithDeclaredRoute(ctx, cfg, spec, vars, h, nil)
+}
+
+func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, vars Vars, h Hooks, requester DeclaredRouteRequester) (connsdk.Authenticator, error) {
 	switch spec.Mode {
 	case "none":
 		return connsdk.AuthFunc(func(_ context.Context, _ *http.Request) error { return nil }), nil
@@ -105,7 +116,7 @@ func buildAuthenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec 
 		return buildOAuth2RefreshToken(cfg, spec, vars)
 
 	case "custom":
-		return buildCustomAuth(ctx, cfg, spec, h)
+		return buildCustomAuthWithDeclaredRoute(ctx, cfg, spec, h, requester)
 
 	default:
 		return nil, fmt.Errorf("unknown auth mode %q", spec.Mode)
@@ -267,12 +278,19 @@ func buildOAuth2RefreshToken(cfg connectors.RuntimeConfig, spec AuthSpec, vars V
 // github_app JWT->installation-token exchange) honors the caller's
 // cancellation/deadline.
 func buildCustomAuth(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, h Hooks) (connsdk.Authenticator, error) {
+	return buildCustomAuthWithDeclaredRoute(ctx, cfg, spec, h, nil)
+}
+
+func buildCustomAuthWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, h Hooks, requester DeclaredRouteRequester) (connsdk.Authenticator, error) {
 	if h == nil {
 		return nil, fmt.Errorf("custom auth: hook %q not registered (no hooks provided)", spec.Hook)
 	}
 	authHook, ok := h.(AuthHook)
 	if !ok {
 		return nil, fmt.Errorf("custom auth: hook %q not registered (hooks %q does not implement AuthHook)", spec.Hook, h.ConnectorName())
+	}
+	if declaredRouteHook, ok := h.(DeclaredRouteAuthHook); ok {
+		return declaredRouteHook.AuthenticatorWithDeclaredRoute(ctx, cfg, spec, requester)
 	}
 	return authHook.Authenticator(ctx, cfg, spec)
 }
