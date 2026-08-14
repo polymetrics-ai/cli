@@ -1,8 +1,26 @@
 # PLAN — #3857 declarative polling-watermark preflight
 
+## Task Delivery Header
+
+- Issue: Refs #3857 — declarative polling-watermark preflight (parent #3855)
+- Base branch: `integration/4015-mvp-flat-r1`
+- Merges into: `integration/4015-mvp-flat-r1 → main`
+- Delivery: Pull request open against `integration/4015-mvp-flat-r1` with its checks green; API read-back must confirm that exact base.
+- Working branch: `fm/cli-3857-polling-watermark-preflight-r1`
+- Task: Add the closed, definition-owned native polling watermark and target-apply declarations, a no-I/O runtime `PollingPreflight`, an eligibility projection through that same gate, and the #3810 legacy-name adapter without creating a CDC, REST, engine-specific, source-executor, or target-DML surface.
+- Verification: exact happy/sad/edge fake assertions; engine/connectors/database/synccontract and app tests; `go vet`; build; repository gates; CLI parity probes; review; opened-PR base API read-back and green checks.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Correct implementation admits only registered source/apply executors and then sync can proceed | fake | #3857 owns no driver or source/apply executor and forbids live database calls. A guarded fake increments `reads`, `prepared`, and `emitted` exactly once only after the real preflight result. |
+| Every declaration/runtime misconfiguration is refused before source I/O | fake | The no-live-database rule makes an in-process guarded fake necessary. Every subcase asserts the full refusal text and leaves both `reads` and `prepared` at zero. |
+| Null, empty, precision-boundary, and corpus-admitted types retain/refuse their exact policies | fake | #3856’s immutable corpus is this issue’s executable contract while #3858/#3859 own source/apply execution. The fake exposes a separate empty-page counter, zero emitted records, and exact retained cursor values. |
+| Bundle loading and public definition projection preserve the new declaration without an API/CDC claim | fake | No engine-specific declaration is in scope. A real loader over an in-memory bundle observes the declaration and a defensive-copy mutation; it never performs provider I/O. |
+| The five legacy names use #3810’s compatibility mapping | fake | No public input boundary changes in this issue. A table-driven test reads `synccontract.PublicModes()` and proves each exact existing mapping is reused with no local aliases. |
+
 ## Scope
 
-Add the shared native-database polling declaration, target-apply declaration,
+Add the shared native-database `polling_watermark.json` declaration, target-apply declaration,
 registered executor registry, and no-I/O `PollingPreflight`. The runtime must
 fail closed before source reads when the declaration, runtime executor, mode,
 or immutable corpus registration is wrong.
@@ -11,7 +29,8 @@ Owned paths are limited to the shared database-definition and engine preflight
 seams, their tests, and this issue's delivery evidence. No connector-specific
 directory, native driver, commandrunner REST preflight, changefeed/CDC
 capability derivation, query taxonomy, source transport, target DML, or public
-CLI/docs surface is in scope.
+CLI surface is in scope. The authoring documentation names the new separate file;
+no existing engine declares or embeds it in this shared foundation slice.
 
 ## GSD lifecycle and skills
 
@@ -36,13 +55,16 @@ native polling executor; a catalog object selector; a closed read/paging and
 keyset-predicate dialect; maximum page and request bounds; snapshot/barrier;
 lossless cursor codec/type/precision; the full ordering tuple; mutation,
 commit-order, and bounded-overlap policy; source identity; schema compatibility;
-delete visibility; immutable-corpus evidence; and only #3810 canonical modes.
+delete visibility; and only #3810 canonical modes. The exact registered
+source/apply executors carry the immutable-corpus evidence that the runtime checks.
 
 The paired target declaration names a concrete native apply executor plus its
 bounded batch, staging/replace, stable-key mapping, conditional ordering fence,
 transaction/partial-result, and validity-window policies. A declaration that
 would make a polling scan look like `change_capture`, advertise hard deletes,
-or claim a mode unsupported by either side is refused.
+or claim a mode unsupported by either side is refused. Descriptor modes remain
+canonical `synccontract.Mode` values; the legacy adapter reads #3810's existing
+five-name compatibility table rather than minting a second vocabulary.
 
 ## TDD slices
 

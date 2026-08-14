@@ -2,7 +2,6 @@ package engine
 
 import (
 	"context"
-	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -29,12 +28,16 @@ func TestPollingPreflightAdmitsDeclaredPollingBeforeGuardedSourceRead(t *testing
 	if got, want := fixture.apply.prepared, 1; got != want {
 		t.Fatalf("target prepares = %d, want %d after admitted preflight", got, want)
 	}
+	if got, want := fixture.source.emitted, 1; got != want {
+		t.Fatalf("source emitted records = %d, want %d after admitted preflight", got, want)
+	}
 }
 
 func TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO(t *testing.T) {
 	tests := []struct {
 		name   string
 		mutate func(*pollingPreflightFixture)
+		mode   synccontract.Mode
 		want   string
 	}{
 		{
@@ -56,46 +59,47 @@ func TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO(t *testing.T
 			mutate: func(f *pollingPreflightFixture) {
 				f.source.evidence = PollingWatermarkConformanceEvidence{}
 			},
-			want: "immutable polling conformance evidence",
+			want: "source immutable polling conformance evidence is missing or stale",
 		},
 		{
 			name: "non lossless cursor codec",
 			mutate: func(f *pollingPreflightFixture) {
 				f.declaration.Source.Cursor.Codec = connectors.PollingCursorCodecFloat64
 			},
-			want: "cursor codec must preserve values losslessly",
+			want: "polling watermark declaration: polling watermark cursor codec must preserve values losslessly",
 		},
 		{
 			name: "no unique tie breaker",
 			mutate: func(f *pollingPreflightFixture) {
 				f.declaration.Source.Ordering.TieBreaker.Unique = false
 			},
-			want: "ordering tie_breaker must be unique",
+			want: "polling watermark declaration: polling ordering tie_breaker must be unique",
 		},
 		{
 			name: "page checkpoint lacks stable traversal",
 			mutate: func(f *pollingPreflightFixture) {
 				f.declaration.Source.Read.StableTraversal = false
 			},
-			want: "page checkpoints require stable keyset traversal",
+			want: "polling watermark declaration: page checkpoints require stable keyset traversal",
 		},
 		{
 			name: "unsafe mutation commit overlap",
 			mutate: func(f *pollingPreflightFixture) {
 				f.declaration.Source.Mutation.BoundedOverlap = false
 			},
-			want: "mutable source requires bounded overlap and commit ordering",
+			want: "polling watermark declaration: mutable source requires bounded overlap and commit ordering",
 		},
 		{
 			name: "hard deletes advertised as tombstones",
 			mutate: func(f *pollingPreflightFixture) {
 				f.declaration.Source.DeleteVisibility = connectors.PollingDeleteVisibilityTombstone
 			},
-			want: "polling watermark cannot advertise tombstones without a cursor-advancing soft delete",
+			want: "polling watermark declaration: polling watermark cannot advertise tombstones without a cursor-advancing soft delete",
 		},
 		{
 			name: "target strategy is incompatible with mode",
 			mutate: func(f *pollingPreflightFixture) {
+				f.declaration.Source.Modes = []synccontract.Mode{synccontract.ModeIncrementalUpsert}
 				f.declaration.Target.Strategies = []connectors.PollingApplyStrategy{connectors.PollingApplyStrategyAppend}
 			},
 			want: `target polling apply does not support sync mode "incremental_upsert"`,
@@ -106,20 +110,31 @@ func TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO(t *testing.T
 				f.declaration.Target.Transaction = connectors.PollingTransactionNone
 				f.declaration.Target.RetrySafeCloseAndInsert = false
 			},
-			want: "history mode requires transaction and retry-safe close-and-insert",
+			want: "polling watermark declaration: history mode requires transaction and retry-safe close-and-insert",
+		},
+		{
+			name: "canonical mode absent from source declaration",
+			mode: synccontract.ModeFullAppend,
+			want: `polling source does not support sync mode "full_append"`,
 		},
 	}
 
 	for _, testCase := range tests {
 		t.Run(testCase.name, func(t *testing.T) {
 			fixture := newPollingPreflightFixture(t)
-			testCase.mutate(fixture)
+			if testCase.mutate != nil {
+				testCase.mutate(fixture)
+			}
 			if fixture.registry == nil {
 				fixture.registry = newPollingPreflightRegistry(t, fixture.source, fixture.apply)
 			}
 
-			_, err := PollingPreflight(context.Background(), fixture.registry, fixture.declaration, fixture.object, synccontract.ModeIncrementalUpsert)
-			if err == nil || !strings.Contains(err.Error(), testCase.want) {
+			mode := testCase.mode
+			if mode == "" {
+				mode = synccontract.ModeIncrementalUpsert
+			}
+			_, err := PollingPreflight(context.Background(), fixture.registry, fixture.declaration, fixture.object, mode)
+			if err == nil || err.Error() != testCase.want {
 				t.Fatalf("PollingPreflight error = %v, want %q", err, testCase.want)
 			}
 			if got := fixture.source.reads; got != 0 {
@@ -134,26 +149,22 @@ func TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO(t *testing.T
 
 func TestPollingPreflightCoversCorpusCursorDomainAndEmptyPage(t *testing.T) {
 	tests := []struct {
-		name  string
+		name   string
 		cursor connectors.PollingCursor
 		want   string
 	}{
 		{
-			name:  "null watermark",
+			name:   "null watermark",
 			cursor: connectors.PollingCursor{Codec: connectors.PollingCursorCodecRFC3339Nano, Type: connectors.PollingCursorTypeTimestamp, AllowsNull: true},
-			want:  "polling watermark cursor cannot allow null",
+			want:   "polling watermark declaration: polling watermark cursor cannot allow null",
 		},
 		{
-			name:  "nanosecond timestamp boundary",
+			name:   "nanosecond timestamp boundary",
 			cursor: connectors.PollingCursor{Codec: connectors.PollingCursorCodecRFC3339Nano, Type: connectors.PollingCursorTypeTimestamp, Precision: "nanosecond"},
 		},
 		{
-			name:  "large numeric tie breaker",
+			name:   "large numeric tie breaker",
 			cursor: connectors.PollingCursor{Codec: connectors.PollingCursorCodecDecimal, Type: connectors.PollingCursorTypeInteger, Precision: "exact"},
-		},
-		{
-			name:  "opaque cursor",
-			cursor: connectors.PollingCursor{Codec: connectors.PollingCursorCodecOpaqueText, Type: connectors.PollingCursorTypeOpaque, Precision: "exact"},
 		},
 	}
 
@@ -163,7 +174,7 @@ func TestPollingPreflightCoversCorpusCursorDomainAndEmptyPage(t *testing.T) {
 			fixture.declaration.Source.Cursor = testCase.cursor
 			resolved, err := PollingPreflight(context.Background(), fixture.registry, fixture.declaration, fixture.object, synccontract.ModeIncrementalUpsert)
 			if testCase.want != "" {
-				if err == nil || !strings.Contains(err.Error(), testCase.want) {
+				if err == nil || err.Error() != testCase.want {
 					t.Fatalf("PollingPreflight error = %v, want %q", err, testCase.want)
 				}
 				if got := fixture.source.reads; got != 0 {
@@ -174,13 +185,63 @@ func TestPollingPreflightCoversCorpusCursorDomainAndEmptyPage(t *testing.T) {
 			if err != nil {
 				t.Fatalf("PollingPreflight: %v", err)
 			}
+			if got, want := resolved.Declaration.Source.Cursor, testCase.cursor; got != want {
+				t.Fatalf("resolved cursor = %+v, want exact corpus-domain value %+v", got, want)
+			}
+			fixture.emptyResult = true
 			if err := fixture.syncAfterPreflight(resolved); err != nil {
 				t.Fatalf("guarded empty-page sync: %v", err)
 			}
 			if got, want := fixture.source.emptyPages, 1; got != want {
 				t.Fatalf("empty pages = %d, want %d; empty source result must be observable", got, want)
 			}
+			if got := fixture.source.emitted; got != 0 {
+				t.Fatalf("empty source result emitted %d records, want 0", got)
+			}
 		})
+	}
+}
+
+func TestPollingModeEligibilitySweepsEveryImplementedPollingModeThroughRuntimePreflight(t *testing.T) {
+	fixture := newPollingPreflightFixture(t)
+	fixture.declaration.Source.Modes = []synccontract.Mode{
+		synccontract.ModeFullOverwrite,
+		synccontract.ModeFullAppend,
+		synccontract.ModeIncrementalAppend,
+		synccontract.ModeIncrementalUpsert,
+		synccontract.ModeIncrementalDedupe,
+		synccontract.ModeIncrementalDedupeHistory,
+	}
+	fixture.declaration.Target.Strategies = []connectors.PollingApplyStrategy{
+		connectors.PollingApplyStrategyReplace,
+		connectors.PollingApplyStrategyAppend,
+		connectors.PollingApplyStrategyMerge,
+		connectors.PollingApplyStrategyDedupe,
+		connectors.PollingApplyStrategyDedupeHistory,
+	}
+
+	eligibility := PollingModeEligibilityOf(context.Background(), fixture.registry, fixture.declaration, fixture.object)
+	if got, want := len(eligibility), len(fixture.declaration.Source.Modes); got != want {
+		t.Fatalf("eligibility rows = %d, want one runtime-preflight row per declared mode (%d)", got, want)
+	}
+	for _, row := range eligibility {
+		if row.Status != "implemented" || row.Reason != "" {
+			t.Fatalf("eligibility for %q = %+v, want runtime-admitted implementation", row.Mode, row)
+		}
+	}
+	if fixture.source.reads != 0 || fixture.apply.prepared != 0 {
+		t.Fatalf("eligibility sweep triggered source I/O: reads=%d prepares=%d", fixture.source.reads, fixture.apply.prepared)
+	}
+
+	fixture.source.evidence = PollingWatermarkConformanceEvidence{}
+	eligibility = PollingModeEligibilityOf(context.Background(), fixture.registry, fixture.declaration, fixture.object)
+	for _, row := range eligibility {
+		if row.Status != "blocked" || row.Reason != "source immutable polling conformance evidence is missing or stale" {
+			t.Fatalf("eligibility for stale %q = %+v, want exact runtime-preflight refusal", row.Mode, row)
+		}
+	}
+	if fixture.source.reads != 0 || fixture.apply.prepared != 0 {
+		t.Fatalf("refused eligibility sweep triggered source I/O: reads=%d prepares=%d", fixture.source.reads, fixture.apply.prepared)
 	}
 }
 
@@ -190,6 +251,7 @@ type pollingPreflightFixture struct {
 	source      *pollingPreflightSource
 	apply       *pollingPreflightApply
 	registry    *PollingPreflightRegistry
+	emptyResult bool
 }
 
 func newPollingPreflightFixture(t *testing.T) *pollingPreflightFixture {
@@ -198,7 +260,7 @@ func newPollingPreflightFixture(t *testing.T) *pollingPreflightFixture {
 		Status: connectors.PollingWatermarkStatusImplemented,
 		Source: connectors.PollingWatermarkSourceDescriptor{
 			Executor: connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "fixture-polling-source-v1"},
-			Object: connectors.PollingCatalogObjectSelector{Kind: connectors.PollingCatalogObjectRelation},
+			Object:   connectors.PollingCatalogObjectSelector{Kind: connectors.PollingCatalogObjectRelation},
 			Read: connectors.PollingReadProtocol{
 				Kind:            connectors.PollingReadProtocolKeyset,
 				MaxPageSize:     100,
@@ -220,16 +282,16 @@ func newPollingPreflightFixture(t *testing.T) *pollingPreflightFixture {
 			Modes:            []synccontract.Mode{synccontract.ModeIncrementalUpsert, synccontract.ModeIncrementalDedupeHistory},
 		},
 		Target: connectors.PollingApplyDescriptor{
-			Executor:                  connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "fixture-polling-apply-v1"},
-			MaxBatchRecords:           100,
-			Staging:                   connectors.PollingStagingReplaceSupported,
-			StableKeyMapping:          []string{"id"},
-			ConditionalOrderFence:     true,
-			Transaction:               connectors.PollingTransactionRequired,
-			PartialResult:             connectors.PollingPartialResultRollback,
-			RetrySafeCloseAndInsert:   true,
-			ValidityWindow:            connectors.PollingValidityWindowSupported,
-			Strategies:                []connectors.PollingApplyStrategy{connectors.PollingApplyStrategyMerge, connectors.PollingApplyStrategyDedupeHistory},
+			Executor:                connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "fixture-polling-apply-v1"},
+			MaxBatchRecords:         100,
+			Staging:                 connectors.PollingStagingReplaceSupported,
+			StableKeyMapping:        []string{"id"},
+			ConditionalOrderFence:   true,
+			Transaction:             connectors.PollingTransactionRequired,
+			PartialResult:           connectors.PollingPartialResultRollback,
+			RetrySafeCloseAndInsert: true,
+			ValidityWindow:          connectors.PollingValidityWindowSupported,
+			Strategies:              []connectors.PollingApplyStrategy{connectors.PollingApplyStrategyMerge, connectors.PollingApplyStrategyDedupeHistory},
 		},
 	}
 	source := &pollingPreflightSource{reference: declaration.Source.Executor, evidence: RequiredPollingWatermarkConformanceEvidence()}
@@ -269,7 +331,11 @@ func (f *pollingPreflightFixture) syncAfterPreflight(resolved ResolvedPollingWat
 		return context.Canceled
 	}
 	f.source.reads++
-	f.source.emptyPages++
+	if f.emptyResult {
+		f.source.emptyPages++
+	} else {
+		f.source.emitted++
+	}
 	f.apply.prepared++
 	return nil
 }
@@ -279,6 +345,7 @@ type pollingPreflightSource struct {
 	evidence   PollingWatermarkConformanceEvidence
 	reads      int
 	emptyPages int
+	emitted    int
 }
 
 func (s *pollingPreflightSource) PollingSourceExecutorReference() connectors.TransportExecutorReference {

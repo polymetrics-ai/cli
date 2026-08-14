@@ -525,19 +525,24 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 	if b.Changefeed != nil {
 		changefeed = b.Changefeed.Clone()
 	}
+	var pollingWatermark *connectors.PollingWatermarkDescriptor
+	if b.PollingWatermark != nil {
+		pollingWatermark = b.PollingWatermark.Clone()
+	}
 
 	return connectors.Definition{
-		Name:            b.Metadata.Name,
-		DisplayName:     b.Metadata.DisplayName,
-		Description:     b.Metadata.Description,
-		IntegrationType: b.Metadata.IntegrationType,
-		DocsURL:         b.Metadata.DocsURL,
-		ReleaseStage:    b.Metadata.ReleaseStage,
-		Capabilities:    synthesizeMetadata(b).Capabilities,
-		Changefeed:      changefeed,
-		Spec:            specJSON(b),
-		Streams:         streamSummaries,
-		WriteActions:    writeActions,
+		Name:             b.Metadata.Name,
+		DisplayName:      b.Metadata.DisplayName,
+		Description:      b.Metadata.Description,
+		IntegrationType:  b.Metadata.IntegrationType,
+		DocsURL:          b.Metadata.DocsURL,
+		ReleaseStage:     b.Metadata.ReleaseStage,
+		Capabilities:     synthesizeMetadata(b).Capabilities,
+		Changefeed:       changefeed,
+		PollingWatermark: pollingWatermark,
+		Spec:             specJSON(b),
+		Streams:          streamSummaries,
+		WriteActions:     writeActions,
 		Risk: connectors.RiskSpec{
 			Read:     b.Metadata.Risk.Read,
 			Write:    b.Metadata.Risk.Write,
