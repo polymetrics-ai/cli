@@ -243,7 +243,15 @@ func (a *App) Connector(name string) (connectors.Metadata, error) {
 }
 
 func (a *App) load(persist bool) error {
-	loaded, err := a.store.Load()
+	var (
+		loaded state
+		err    error
+	)
+	if persist {
+		loaded, err = a.store.Load()
+	} else {
+		loaded, err = a.store.LoadReadOnly()
+	}
 	if err != nil {
 		return err
 	}
@@ -614,8 +622,7 @@ func newStateStore(path string) statestore.JSONStore[state] {
 				StreamStates:       map[string]StreamState{},
 			}
 		},
-		Locker:       statestore.DirectoryLock{Path: filepath.Dir(path)},
-		CommitLocker: statestore.FileLock{Path: path + ".lock"},
+		Locker: statestore.FileLock{Path: path + ".lock"},
 	}
 }
 
@@ -2630,7 +2637,7 @@ func validateOperationDirectWritePreview(ctx context.Context, writer connectors.
 }
 
 func (a *App) loadReversePlan(id string) (ReversePlan, error) {
-	loaded, err := a.store.Load()
+	loaded, err := a.store.LoadReadOnly()
 	if err != nil {
 		return ReversePlan{}, err
 	}

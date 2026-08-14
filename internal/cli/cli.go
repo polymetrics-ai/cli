@@ -31,6 +31,19 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	ctx := context.Background()
 	root, jsonOut, cleanArgs := parseGlobal(args)
 	opts := config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}
+	if err := validateRawApprovalCarrierArgs(args); err != nil {
+		jsonError := jsonOut
+		bootstrap, bootstrapErr := config.ResolveBootstrap(opts)
+		if bootstrapErr == nil {
+			jsonError = bootstrap.JSON
+			if !rawApprovalCarrierRoot(bootstrap.Root) {
+				if cfg, loadErr := config.Load(opts); loadErr == nil {
+					jsonError = cfg.JSON
+				}
+			}
+		}
+		return writeError(stdout, stderr, err, jsonError)
+	}
 	bootstrap, err := config.ResolveBootstrap(opts)
 	if err != nil {
 		return writeError(stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
@@ -1503,6 +1516,43 @@ func validateApprovalCarrierBeforeDispatch(args []string) error {
 		return err
 	}
 	return validateReverseApprovalCarrierBeforeDispatch(args)
+}
+
+func validateRawApprovalCarrierArgs(args []string) error {
+	for index, arg := range args {
+		if err := validateRawApprovalCarrierArg(arg, false); err != nil {
+			return err
+		}
+		if arg == "--root" && index+1 < len(args) {
+			if err := validateRawApprovalCarrierArg(args[index+1], true); err != nil {
+				return err
+			}
+		}
+		if strings.HasPrefix(arg, "--root=") {
+			if err := validateRawApprovalCarrierArg(strings.TrimPrefix(arg, "--root="), true); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func validateRawApprovalCarrierArg(arg string, rootValue bool) error {
+	switch {
+	case arg == "--approve" || strings.HasPrefix(arg, "--approve="):
+		return usageErrorf("approval tokens must be supplied with --approval-token-stdin")
+	case strings.HasPrefix(arg, "--approval-token-stdin="):
+		return usageErrorf("--approval-token-stdin must be a bare stdin marker")
+	case rootValue && arg == "--approval-token-stdin":
+		return usageErrorf("--approval-token-stdin must be a bare stdin marker")
+	default:
+		return nil
+	}
+}
+
+func rawApprovalCarrierRoot(root string) bool {
+	return root == "--approve" || strings.HasPrefix(root, "--approve=") ||
+		root == "--approval-token-stdin" || strings.HasPrefix(root, "--approval-token-stdin=")
 }
 
 func validateReverseApprovalCarrierBeforeDispatch(args []string) error {

@@ -79,7 +79,6 @@ type JSONStore[T any] struct {
 	Path          string
 	Initial       func() T
 	Locker        Locker
-	CommitLocker  Locker
 	Redact        func(path []string, value any) any
 	SyncDirectory func(string) error
 }
@@ -91,6 +90,10 @@ func (s JSONStore[T]) Load() (out T, err error) {
 	}
 	defer func() { finishUnlock(unlock, &err, CommitOutcomeNotCommitted) }()
 
+	return s.loadNoLock()
+}
+
+func (s JSONStore[T]) LoadReadOnly() (out T, err error) {
 	return s.loadNoLock()
 }
 
@@ -143,7 +146,7 @@ func (s JSONStore[T]) UpdateAfterPreflight(preflight func(T) error, update func(
 		return out, errors.New("state update function is required")
 	}
 
-	current, err := s.Load()
+	current, err := s.LoadReadOnly()
 	if err != nil {
 		return current, err
 	}
@@ -163,17 +166,6 @@ func (s JSONStore[T]) UpdateAfterPreflight(preflight func(T) error, update func(
 		return current, err
 	}
 	if err := preflight(current); err != nil {
-		return current, err
-	}
-
-	commitUnlock, err := s.lockCommit()
-	if err != nil {
-		return current, err
-	}
-	defer func() { finishUnlock(commitUnlock, &err, outcome) }()
-
-	current, err = s.loadNoLock()
-	if err != nil {
 		return current, err
 	}
 	next, err := update(current)
@@ -293,17 +285,6 @@ func (s JSONStore[T]) lock() (func() error, error) {
 	unlock, err := s.Locker.Lock()
 	if err != nil {
 		return nil, fmt.Errorf("lock state: %w", err)
-	}
-	return unlock, nil
-}
-
-func (s JSONStore[T]) lockCommit() (func() error, error) {
-	if s.CommitLocker == nil {
-		return nil, nil
-	}
-	unlock, err := s.CommitLocker.Lock()
-	if err != nil {
-		return nil, fmt.Errorf("lock state commit: %w", err)
 	}
 	return unlock, nil
 }

@@ -301,6 +301,57 @@ func TestReverseApprovalCarrierRejectionUsesConfiguredJSONOutput(t *testing.T) {
 	}
 }
 
+func TestRawApprovalCarrierRejectionPrecedesGlobalRootDispatch(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		args []string
+		want string
+	}{
+		{
+			name: "separate valued stdin marker",
+			args: []string{"--root", "--approval-token-stdin=carrier-value", "credentials", "list", "--json"},
+			want: "--approval-token-stdin must be a bare stdin marker",
+		},
+		{
+			name: "inline valued stdin marker",
+			args: []string{"--root=--approval-token-stdin=carrier-value", "credentials", "list", "--json"},
+			want: "--approval-token-stdin must be a bare stdin marker",
+		},
+		{
+			name: "inline retired argv carrier",
+			args: []string{"--root=--approve=carrier-value", "credentials", "list", "--json"},
+			want: "approval tokens must be supplied with --approval-token-stdin",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tc.args, &stdout, &stderr)
+			combined := stdout.String() + stderr.String()
+			if code != 2 {
+				t.Fatalf("Run(%v) code = %d, want usage error; stdout=%s stderr=%s", tc.args, code, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(combined, tc.want) {
+				t.Fatalf("Run(%v) output = %q, want %q", tc.args, combined, tc.want)
+			}
+			if strings.Contains(combined, "carrier-value") {
+				t.Fatalf("Run(%v) echoed the approval carrier value: %s", tc.args, combined)
+			}
+			if strings.Contains(combined, "open project") {
+				t.Fatalf("Run(%v) opened a project before rejecting the approval carrier: %s", tc.args, combined)
+			}
+			var result struct {
+				Kind string `json:"kind"`
+			}
+			if err := json.Unmarshal(stdout.Bytes(), &result); err != nil {
+				t.Fatalf("decode JSON error: %v\n%s", err, stdout.String())
+			}
+			if result.Kind != "Error" {
+				t.Fatalf("JSON result kind = %q, want Error\n%s", result.Kind, stdout.String())
+			}
+		})
+	}
+}
+
 func TestReverseApprovalInputRejectsBeforeOpeningLegacyProject(t *testing.T) {
 	t.Run("reverse execution", func(t *testing.T) {
 		root := setupReverseCLIProject(t)

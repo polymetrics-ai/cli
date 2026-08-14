@@ -5,27 +5,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"sync"
-	"syscall"
 )
 
 type FileLock struct {
 	Path string
 }
-
-type DirectoryLock struct {
-	Path string
-}
-
-type directoryLockEntry struct {
-	mu   sync.Mutex
-	refs int
-}
-
-var directoryLockEntries = struct {
-	sync.Mutex
-	entries map[string]*directoryLockEntry
-}{entries: map[string]*directoryLockEntry{}}
 
 // Lock creates Path with O_EXCL and returns an unlock function that removes it.
 func (l FileLock) Lock() (func() error, error) {
@@ -60,64 +44,4 @@ func (l FileLock) Lock() (func() error, error) {
 		}
 		return nil
 	}, nil
-}
-
-func (l DirectoryLock) Lock() (func() error, error) {
-	if l.Path == "" {
-		return nil, errors.New("lock directory is required")
-	}
-	path := filepath.Clean(l.Path)
-	entry := acquireDirectoryLock(path)
-	entry.mu.Lock()
-
-	dir, err := os.Open(path)
-	if err != nil {
-		releaseDirectoryLock(path, entry)
-		return nil, fmt.Errorf("open lock directory: %w", err)
-	}
-	if err := syscall.Flock(int(dir.Fd()), syscall.LOCK_EX); err != nil {
-		_ = dir.Close()
-		releaseDirectoryLock(path, entry)
-		return nil, fmt.Errorf("lock directory: %w", err)
-	}
-
-	released := false
-	return func() error {
-		if released {
-			return nil
-		}
-		released = true
-		unlockErr := syscall.Flock(int(dir.Fd()), syscall.LOCK_UN)
-		closeErr := dir.Close()
-		releaseDirectoryLock(path, entry)
-		if unlockErr != nil {
-			return fmt.Errorf("unlock directory: %w", unlockErr)
-		}
-		if closeErr != nil {
-			return fmt.Errorf("close lock directory: %w", closeErr)
-		}
-		return nil
-	}, nil
-}
-
-func acquireDirectoryLock(path string) *directoryLockEntry {
-	directoryLockEntries.Lock()
-	defer directoryLockEntries.Unlock()
-	entry := directoryLockEntries.entries[path]
-	if entry == nil {
-		entry = &directoryLockEntry{}
-		directoryLockEntries.entries[path] = entry
-	}
-	entry.refs++
-	return entry
-}
-
-func releaseDirectoryLock(path string, entry *directoryLockEntry) {
-	entry.mu.Unlock()
-	directoryLockEntries.Lock()
-	defer directoryLockEntries.Unlock()
-	entry.refs--
-	if entry.refs == 0 {
-		delete(directoryLockEntries.entries, path)
-	}
 }
