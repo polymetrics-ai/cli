@@ -1,0 +1,5 @@
+--- FAIL: TestPostgresDefinitionDeclaresBoundedSnapshotTransportSource (0.01s)
+    transport_source_test.go:18: PostgreSQL definition has no declared source transport
+FAIL
+FAIL	polymetrics.ai/internal/connectors/native/postgres	0.740s
+FAIL
