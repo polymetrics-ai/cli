@@ -831,6 +831,56 @@ func ValidateConnectionName(name string) error {
 	return warehouse.ValidateConnectionName(name)
 }
 
+// connectionMaterializesLocalWarehouse is deliberately credential-free: this
+// admission check must inspect the whole configured inventory before a run
+// begins, without opening a vault entry or contacting a provider. A persisted
+// endpoint normally carries its connector name; the credential metadata is a
+// legacy fallback only and never exposes its value.
+func (a *App) connectionMaterializesLocalWarehouse(connection Connection) bool {
+	connectorName := connection.Destination.Connector
+	if connectorName == "" {
+		if credential, ok := a.findCredential(connection.Destination.Credential); ok {
+			connectorName = credential.Connector
+		}
+	}
+	destination, ok := a.registry.Get(connectorName)
+	if !ok {
+		return false
+	}
+	materializer, ok := destination.(connectors.LocalWarehouseMaterializer)
+	return ok && materializer.MaterializesLocalWarehouse()
+}
+
+func validateSameOwnerCaseEquivalentDestinationTables(connections []Connection) error {
+	collisions := sameOwnerCaseEquivalentDestinationCollisions(connections)
+	if len(collisions) == 0 {
+		return nil
+	}
+	return collisions[0].err()
+}
+
+// validateConfiguredLocalWarehouseDestinationTables checks every configured
+// local-warehouse connection as one immutable inventory. It is called before
+// beginRun, so a persisted legacy collision cannot create a run, checkpoint,
+// owner directory, WAL, temporary file, or Parquet output.
+func (a *App) configuredLocalWarehouseDestinationCollisions() []warehouseDestinationCollision {
+	connections := make([]Connection, 0, len(a.state.Connections))
+	for _, connection := range a.state.Connections {
+		if a.connectionMaterializesLocalWarehouse(connection) {
+			connections = append(connections, connection)
+		}
+	}
+	return sameOwnerCaseEquivalentDestinationCollisions(connections)
+}
+
+func (a *App) validateConfiguredLocalWarehouseDestinationTables() error {
+	collisions := a.configuredLocalWarehouseDestinationCollisions()
+	if len(collisions) == 0 {
+		return nil
+	}
+	return collisions[0].err()
+}
+
 func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest) (Connection, error) {
 	req = cloneCreateConnectionRequest(req)
 	if err := ValidateConnectionName(req.Name); err != nil {
@@ -916,6 +966,14 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		}
 		stream.StreamID = streamID
 		req.Streams[name] = stream
+	}
+	if materializesWarehouse {
+		if err := validateSameOwnerCaseEquivalentDestinationTables([]Connection{{
+			Name:    req.Name,
+			Streams: req.Streams,
+		}}); err != nil {
+			return Connection{}, err
+		}
 	}
 	connectionIDs := make(map[string]struct{}, len(a.state.Connections))
 	for _, connection := range a.state.Connections {
@@ -1108,6 +1166,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	stream, ok := conn.Streams[req.Stream]
 	if !ok {
 		return Run{}, fmt.Errorf("stream %q not configured on connection %q", req.Stream, req.Connection)
+	}
+	if a.connectionMaterializesLocalWarehouse(conn) {
+		if err := a.validateConfiguredLocalWarehouseDestinationTables(); err != nil {
+			return Run{}, err
+		}
 	}
 	runID, err := prefixedID("run")
 	if err != nil {
@@ -1532,6 +1595,7 @@ func (a *App) QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.R
 			return nil, fmt.Errorf("connection %q not found", req.Connection)
 		}
 	}
+	req.sameOwnerCaseEquivalentDestinationCollisions = a.configuredLocalWarehouseDestinationCollisions()
 	return a.sqlEngine.QuerySQL(ctx, req)
 }
 

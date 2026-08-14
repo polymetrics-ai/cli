@@ -19,6 +19,12 @@ DESCRIPTION
   connections can use the same table name without overwriting each other. When
   more than one connection has a table of the requested name, the read is
   refused and lists the owning connections; pass --connection to pick one.
+  A legacy connection that itself configured distinct table spellings differing
+  only by ASCII letter case is different: --connection cannot choose between
+  one owner's destinations, so SQL references are refused. Use --table only
+  with an exact resolver-visible spelling to inspect retained data, or create
+  replacement connections whose destination table names differ by more than
+  ASCII letter case.
   A table at the warehouse root belongs to no connection, because a reverse ETL
   run writing to the warehouse connector produced it rather than a sync, or it
   was seeded by hand. It is listed and selected as _unattributed.
