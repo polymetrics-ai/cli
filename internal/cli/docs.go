@@ -465,6 +465,13 @@ STREAM AND TABLE NAMES
   are checked when the connection is created, because a name the warehouse
   cannot materialize would otherwise fail every sync of that connection.
 
+  One local-warehouse connection cannot configure distinct --table spellings
+  that differ only by ASCII letter case, such as records and RECORDS: DuckDB
+  treats them as one identifier. Creation refuses that inventory before saving
+  it. A legacy inventory is left unchanged on open, but any local sync refuses
+  before changing run or warehouse state; create replacement connections whose
+  destination table names differ by more than ASCII letter case.
+
 SYNC MODES
   full_refresh_append              read all source records and append them
   full_refresh_overwrite           read all source records and replace final output
@@ -660,6 +667,12 @@ DESCRIPTION
   connections can use the same table name without overwriting each other. When
   more than one connection has a table of the requested name, the read is
   refused and lists the owning connections; pass --connection to pick one.
+  A legacy connection that itself configured distinct table spellings differing
+  only by ASCII letter case is different: --connection cannot choose between
+  one owner's destinations, so SQL references are refused. Use --table only
+  with an exact resolver-visible spelling to inspect retained data, or create
+  replacement connections whose destination table names differ by more than
+  ASCII letter case.
   A table at the warehouse root belongs to no connection, because a reverse ETL
   run writing to the warehouse connector produced it rather than a sync, or it
   was seeded by hand. It is listed and selected as _unattributed.
@@ -707,6 +720,9 @@ CONNECTION-SCOPED SOURCE READS
   scope its "source_table". Use _unattributed only for a root-level table that
   no connection owns. When same-named tables have several owners, omitting the
   applicable manifest selector refuses the read instead of choosing one.
+  A case-equivalent spelling whose owner cannot be decided also fails closed;
+  set "connection" to a known healthy owner rather than relying on an
+  unscoped query.
 
   Query example:
   {"id":"query-acme","kind":"query","connection":"acme",
