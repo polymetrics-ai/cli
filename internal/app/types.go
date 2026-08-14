@@ -205,6 +205,33 @@ type QueryTableRequest struct {
 	Limit      int    `json:"limit"`
 }
 
+// ActionSourceReadRequest identifies the warehouse table an action step reads.
+// Connection selects one owner's materialization; the `_unattributed` sentinel
+// selects a root-owned table. An empty selector preserves typed ambiguity when
+// several owners materialize the same name.
+type ActionSourceReadRequest struct {
+	Table      string `json:"table"`
+	Connection string `json:"connection,omitempty"`
+}
+
+type QuerySQLOrigin uint8
+
+const (
+	QuerySQLOriginGeneric QuerySQLOrigin = iota
+	QuerySQLOriginFlow
+)
+
+// QuerySQLRequest describes a read-only analytical query over the local
+// warehouse. Connection scopes every table view available to the query, so a
+// flow or other caller cannot silently resolve a same-named table from another
+// connection. UnattributedConnection selects only root-owned tables.
+type QuerySQLRequest struct {
+	SQL        string         `json:"sql"`
+	Connection string         `json:"connection,omitempty"`
+	Limit      int            `json:"limit"`
+	Origin     QuerySQLOrigin `json:"-"`
+}
+
 type PlanReverseETLRequest struct {
 	Name        string `json:"name"`
 	SourceTable string `json:"source_table"`

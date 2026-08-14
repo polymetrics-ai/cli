@@ -1,0 +1,14 @@
+Command:
+
+go test -race -timeout 20m ./internal/cli -run '^(TestFlowOmittedConnectionRejectsGeneratedOwnerAliases|TestFlowSourceConnectionSelectorsReadOnlyOwningRows|TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed|TestFlowActionSourceReadsAllSelectedConnectionRows)$' -count=1
+
+Result: PASS (exit 0).
+
+Coverage:
+
+- flow omission rejects quoted and unquoted generated owner aliases as a
+  typed ambiguity for `records` with the flow connection remedy;
+- the same alias remains available to generic `pm query run --sql` and returns
+  the globex row;
+- explicit connection, bare-name ambiguity, `_unattributed`, `SELECT 1`, and
+  complete action-source reads remain green under `-race`.

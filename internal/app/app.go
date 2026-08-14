@@ -51,7 +51,7 @@ type App struct {
 // implementation; the seam remains so a query path can be substituted in tests
 // without the engine choice becoming an install-time option.
 type sqlQueryEngine interface {
-	QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error)
+	QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.Record, error)
 	Name() string
 }
 
@@ -1478,11 +1478,19 @@ func (a *App) GetRun(id string) (Run, error) {
 }
 
 func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connectors.Record, error) {
-	if req.Table == "" {
-		return nil, errors.New("table is required")
-	}
 	if req.Limit <= 0 {
 		req.Limit = 100
+	}
+	return a.readWarehouseTable(ctx, req.Table, req.Connection, req.Limit)
+}
+
+func (a *App) ReadActionSource(ctx context.Context, req ActionSourceReadRequest) ([]connectors.Record, error) {
+	return a.readWarehouseTable(ctx, req.Table, req.Connection, 0)
+}
+
+func (a *App) readWarehouseTable(ctx context.Context, table, connection string, limit int) ([]connectors.Record, error) {
+	if table == "" {
+		return nil, errors.New("table is required")
 	}
 	cfg := connectors.RuntimeConfig{
 		ProjectDir: a.projectDir,
@@ -1490,22 +1498,22 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 			"path": a.warehouseRoot(),
 		},
 	}
-	if req.Connection != "" {
+	if connection != "" {
 		// The unattributed selector names the root-level tables no connection
 		// owns, so it deliberately does not resolve through findConnection.
-		if req.Connection != warehouse.UnattributedConnection {
-			if _, ok := a.findConnection(req.Connection); !ok {
-				return nil, fmt.Errorf("connection %q not found", req.Connection)
+		if connection != warehouse.UnattributedConnection {
+			if _, ok := a.findConnection(connection); !ok {
+				return nil, fmt.Errorf("connection %q not found", connection)
 			}
 		}
-		cfg.Config["connection"] = req.Connection
+		cfg.Config["connection"] = connection
 	}
 	warehouseConnector, ok := a.registry.Get("warehouse")
 	if !ok {
 		return nil, errors.New("warehouse connector not registered")
 	}
 	rows := make([]connectors.Record, 0)
-	err := warehouseConnector.Read(ctx, connectors.ReadRequest{Stream: req.Table, Config: cfg, Limit: req.Limit}, connectors.LimitEmitter(req.Limit, func(record connectors.Record) error {
+	err := warehouseConnector.Read(ctx, connectors.ReadRequest{Stream: table, Config: cfg, Limit: limit}, connectors.LimitEmitter(limit, func(record connectors.Record) error {
 		rows = append(rows, record)
 		return nil
 	}))
@@ -1515,8 +1523,16 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 	return rows, nil
 }
 
-func (a *App) QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error) {
-	return a.sqlEngine.QuerySQL(ctx, sql, limit)
+func (a *App) QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.Record, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	if req.Connection != "" && req.Connection != warehouse.UnattributedConnection {
+		if _, ok := a.findConnection(req.Connection); !ok {
+			return nil, fmt.Errorf("connection %q not found", req.Connection)
+		}
+	}
+	return a.sqlEngine.QuerySQL(ctx, req)
 }
 
 // warehouseRoot is this project's local warehouse root.

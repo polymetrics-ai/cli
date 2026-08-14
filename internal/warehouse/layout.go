@@ -679,21 +679,55 @@ func Tables(root string) ([]Table, []Fault, error) {
 	return out, faults, nil
 }
 
-// FindTable resolves one table by name, optionally scoped to a connection
-// display name or to UnattributedConnection for the root-level tables no
-// connection owns. It reports ambiguity rather than picking a winner, and
-// treats a table it cannot see behind a damaged ownership record as ambiguity
-// too.
-func FindTable(root, table, connection string) (Table, error) {
+// TableResolver resolves table names against one warehouse inventory.
+type TableResolver struct {
+	tables        []Table
+	tablesByName  map[string][]Table
+	faults        []Fault
+	faultsByTable map[string][]Fault
+}
+
+// NewTableResolver captures the warehouse inventory used for table lookups.
+func NewTableResolver(root string) (*TableResolver, error) {
 	tables, faults, err := Tables(root)
 	if err != nil {
-		return Table{}, err
+		return nil, err
 	}
-	matches := make([]Table, 0, 1)
-	for _, candidate := range tables {
-		if candidate.Name != table {
-			continue
+	resolver := &TableResolver{
+		tables:        append([]Table(nil), tables...),
+		tablesByName:  make(map[string][]Table, len(tables)),
+		faults:        cloneFaults(faults),
+		faultsByTable: make(map[string][]Fault, len(faults)),
+	}
+	for _, table := range resolver.tables {
+		resolver.tablesByName[table.Name] = append(resolver.tablesByName[table.Name], table)
+	}
+	for _, fault := range resolver.faults {
+		for _, table := range fault.Tables {
+			resolver.faultsByTable[table] = append(resolver.faultsByTable[table], fault)
 		}
+	}
+	return resolver, nil
+}
+
+// Tables returns the resolver's captured healthy tables.
+func (r *TableResolver) Tables() []Table {
+	if r == nil {
+		return nil
+	}
+	return append([]Table(nil), r.tables...)
+}
+
+// Find resolves one table within the resolver's captured inventory.
+func (r *TableResolver) Find(table, connection string) (Table, error) {
+	var candidates []Table
+	var faults []Fault
+	if r != nil {
+		candidates = r.tablesByName[table]
+		faults = r.faults
+	}
+	matches := make([]Table, 0, len(candidates))
+	for _, candidate := range candidates {
 		if !selects(connection, candidate.Connection) {
 			continue
 		}
@@ -701,32 +735,16 @@ func FindTable(root, table, connection string) (Table, error) {
 	}
 	switch len(matches) {
 	case 1:
-		// One match is only an unambiguous answer if nothing could have been
-		// missed. The empty selector means "any connection", so it is decided
-		// by every directory under the root — including one whose ownership
-		// record cannot be read, whose tables Tables() therefore had to drop.
-		// A damaged record that hides a competing candidate would otherwise
-		// silently turn an ambiguous question into one tenant's rows.
-		//
-		// Only the damaged directories that hold a table of this name can be
-		// that candidate, and a table file is named after its table, so this
-		// stays precise: a read that genuinely does not depend on a damaged
-		// directory is still answered. A named connection selector is answered
-		// too, because it says which connection it means, and the unattributed
-		// selector reaches only root-level files, which no connection
-		// directory can hold.
 		if connection == "" {
-			if hidden := faultsHolding(table, faults); len(hidden) > 0 {
-				return Table{}, &FaultError{Table: table, Faults: hidden, Undecided: true}
+			if r != nil {
+				if hidden := r.faultsByTable[table]; len(hidden) > 0 {
+					return Table{}, &FaultError{Table: table, Faults: cloneFaults(hidden), Undecided: true}
+				}
 			}
 		}
 		return matches[0], nil
 	case 0:
-		// A damaged ownership record could be exactly why nothing matched, so
-		// it is reported instead of claiming the table does not exist. Telling
-		// an operator a table is absent while its rows sit on disk is the
-		// silent-absence failure this layout exists to remove.
-		if err := FaultsError(table, faults); err != nil {
+		if err := FaultsError(table, cloneFaults(faults)); err != nil {
 			return Table{}, err
 		}
 		switch connection {
@@ -746,16 +764,26 @@ func FindTable(root, table, connection string) (Table, error) {
 	}
 }
 
-// faultsHolding returns the damaged directories that materialize a table of
-// this name, and so could each be a candidate a lookup cannot see.
-func faultsHolding(table string, faults []Fault) []Fault {
-	hidden := make([]Fault, 0, len(faults))
-	for _, fault := range faults {
-		if fault.Holds(table) {
-			hidden = append(hidden, fault)
-		}
+// FindTable resolves one table by name, optionally scoped to a connection
+// display name or to UnattributedConnection for the root-level tables no
+// connection owns. It reports ambiguity rather than picking a winner, and
+// treats a table it cannot see behind a damaged ownership record as ambiguity
+// too.
+func FindTable(root, table, connection string) (Table, error) {
+	resolver, err := NewTableResolver(root)
+	if err != nil {
+		return Table{}, err
 	}
-	return hidden
+	return resolver.Find(table, connection)
+}
+
+func cloneFaults(faults []Fault) []Fault {
+	cloned := make([]Fault, len(faults))
+	for index, fault := range faults {
+		cloned[index] = fault
+		cloned[index].Tables = append([]string(nil), fault.Tables...)
+	}
+	return cloned
 }
 
 // selects reports whether a requested connection selector matches a candidate
