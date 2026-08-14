@@ -62,6 +62,27 @@ func TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO(t *testing.T
 			want: "source immutable polling conformance evidence is missing or stale",
 		},
 		{
+			name: "registered source reference mismatch",
+			mutate: func(f *pollingPreflightFixture) {
+				f.source.reference.ID = "different-polling-source-v1"
+			},
+			want: "registered source polling executor does not match the declaration",
+		},
+		{
+			name: "registered apply reference mismatch",
+			mutate: func(f *pollingPreflightFixture) {
+				f.apply.reference.ID = "different-polling-apply-v1"
+			},
+			want: "registered target polling executor does not match the declaration",
+		},
+		{
+			name: "target immutable corpus evidence missing",
+			mutate: func(f *pollingPreflightFixture) {
+				f.apply.evidence = PollingWatermarkConformanceEvidence{}
+			},
+			want: "target immutable polling conformance evidence is missing or stale",
+		},
+		{
 			name: "non lossless cursor codec",
 			mutate: func(f *pollingPreflightFixture) {
 				f.declaration.Source.Cursor.Codec = connectors.PollingCursorCodecFloat64
@@ -116,6 +137,13 @@ func TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO(t *testing.T
 			name: "canonical mode absent from source declaration",
 			mode: synccontract.ModeFullAppend,
 			want: `polling source does not support sync mode "full_append"`,
+		},
+		{
+			name: "change capture mode is forbidden",
+			mutate: func(f *pollingPreflightFixture) {
+				f.declaration.Source.Modes = []synccontract.Mode{synccontract.ModeChangeCapture}
+			},
+			want: "polling watermark declaration: polling watermark cannot declare change_capture mode",
 		},
 	}
 
