@@ -109,18 +109,26 @@ func postgresDeleteMappedKeys(ctx context.Context, tx pgx.Tx, qualified string, 
 }
 
 func postgresDeleteKeyValues(ctx context.Context, tx pgx.Tx, qualified string, keys []string, values map[string]any) error {
+	args, predicate, err := postgresKeyValuePredicate(keys, values, 1)
+	if err != nil {
+		return err
+	}
+	_, err = tx.Exec(ctx, "DELETE FROM "+qualified+" WHERE "+predicate, args...)
+	return err
+}
+
+func postgresKeyValuePredicate(keys []string, values map[string]any, firstPlaceholder int) ([]any, string, error) {
 	predicates := make([]string, 0, len(keys))
 	args := make([]any, 0, len(keys))
 	for index, key := range keys {
 		value, exists := values[key]
 		if !exists {
-			return errPostgresWriteValueInvalid
+			return nil, "", errPostgresWriteValueInvalid
 		}
-		predicates = append(predicates, quoteIdentifier(key)+" IS NOT DISTINCT FROM $"+strconv.Itoa(index+1))
+		predicates = append(predicates, quoteIdentifier(key)+" IS NOT DISTINCT FROM $"+strconv.Itoa(firstPlaceholder+index))
 		args = append(args, value)
 	}
-	_, err := tx.Exec(ctx, "DELETE FROM "+qualified+" WHERE "+strings.Join(predicates, " AND "), args...)
-	return err
+	return args, strings.Join(predicates, " AND "), nil
 }
 
 func postgresMappedKeyPredicate(keys []string, mapped connectors.Record, columns []postgresManagedTargetColumn, firstPlaceholder int) ([]any, string, error) {
@@ -156,6 +164,14 @@ func postgresColumnNamesAndPlaceholders(columns []postgresManagedTargetColumn, f
 		placeholders = append(placeholders, "$"+strconv.Itoa(firstPlaceholder+index))
 	}
 	return names, placeholders
+}
+
+func postgresMappedValuePredicate(columns []postgresManagedTargetColumn, firstPlaceholder int) string {
+	predicates := make([]string, 0, len(columns))
+	for index, column := range columns {
+		predicates = append(predicates, quoteIdentifier(column.name)+" IS NOT DISTINCT FROM $"+strconv.Itoa(firstPlaceholder+index))
+	}
+	return strings.Join(predicates, " AND ")
 }
 
 func postgresTombstoneKeyValues(tombstone synccontract.Tombstone, keys []string, columns []postgresManagedTargetColumn) (map[string]any, error) {

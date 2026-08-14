@@ -64,6 +64,78 @@ type DatabaseWriteCapabilities struct {
 	AtomicFullOverwrite bool
 }
 
+// DatabaseWriteHistoryRoute is the sealed source/destination database-driver
+// pair for incremental_dedupe_history. The history product contract admits
+// only PostgreSQL → PostgreSQL, before an executor can perform I/O.
+type DatabaseWriteHistoryRoute struct {
+	Source      DriverDeclaration
+	Destination DriverDeclaration
+}
+
+var postgresHistoryRouteDriver = DriverDeclaration{
+	ID:         "postgres",
+	Protocol:   "postgres-wire",
+	APIVersion: 1,
+}
+
+// DatabaseWriteHistoryRouteReason explains which leg made a history route
+// ineligible. It is intentionally typed so callers can distinguish the three
+// non-PostgreSQL routes without inspecting an error message.
+type DatabaseWriteHistoryRouteReason string
+
+const (
+	DatabaseWriteHistoryRouteSourceUnsupported      DatabaseWriteHistoryRouteReason = "source_unsupported"
+	DatabaseWriteHistoryRouteDestinationUnsupported DatabaseWriteHistoryRouteReason = "destination_unsupported"
+	DatabaseWriteHistoryRouteUnsupported            DatabaseWriteHistoryRouteReason = "source_and_destination_unsupported"
+)
+
+// DatabaseWriteHistoryRouteError is returned before preview/session I/O when
+// a history route is not PostgreSQL → PostgreSQL.
+type DatabaseWriteHistoryRouteError struct {
+	Reason DatabaseWriteHistoryRouteReason
+}
+
+func (e *DatabaseWriteHistoryRouteError) Error() string {
+	if e == nil {
+		return "database history route is unavailable"
+	}
+	switch e.Reason {
+	case DatabaseWriteHistoryRouteSourceUnsupported:
+		return "database history route source does not match the declared managed-target driver"
+	case DatabaseWriteHistoryRouteDestinationUnsupported:
+		return "database history route destination does not match the declared managed-target driver"
+	case DatabaseWriteHistoryRouteUnsupported:
+		return "database history route source and destination do not match the declared managed-target driver"
+	default:
+		return "database history route is unavailable"
+	}
+}
+
+// Unwrap preserves the generic invalid-plan classification for callers that
+// only need to reject an unsafe plan, while errors.As retains the route side.
+func (*DatabaseWriteHistoryRouteError) Unwrap() error { return ErrDatabaseWritePlanInvalid }
+
+func (r DatabaseWriteHistoryRoute) validateFor(driver DriverDeclaration) error {
+	// History has a deliberately narrower product contract than the generic
+	// database write protocol. Keep the fixed PostgreSQL declaration here at
+	// the plan boundary so an unsupported route cannot reach a driver, source,
+	// ledger, or target session.
+	sourceMatches := r.Source.validate() == nil && r.Source == postgresHistoryRouteDriver
+	destinationMatches := r.Destination.validate() == nil && r.Destination == postgresHistoryRouteDriver
+	switch {
+	case sourceMatches && destinationMatches && driver == postgresHistoryRouteDriver:
+		return nil
+	case sourceMatches && destinationMatches:
+		return &DatabaseWriteHistoryRouteError{Reason: DatabaseWriteHistoryRouteUnsupported}
+	case !sourceMatches && !destinationMatches:
+		return &DatabaseWriteHistoryRouteError{Reason: DatabaseWriteHistoryRouteUnsupported}
+	case !sourceMatches:
+		return &DatabaseWriteHistoryRouteError{Reason: DatabaseWriteHistoryRouteSourceUnsupported}
+	default:
+		return &DatabaseWriteHistoryRouteError{Reason: DatabaseWriteHistoryRouteDestinationUnsupported}
+	}
+}
+
 // DatabaseWritePlanRequest contains the only authority accepted for a shared
 // database write. It names neither SQL nor a relation/connection string:
 // control is an asserted managed target and Definition supplies the declared
@@ -79,6 +151,10 @@ type DatabaseWritePlanRequest struct {
 	TombstoneCount int
 	BatchSize      int
 	Destructive    bool
+	// HistoryRoute is required only for incremental_dedupe_history. It seals
+	// the product's PostgreSQL-to-PostgreSQL restriction before any preview,
+	// driver, ledger, source, or target operation can occur.
+	HistoryRoute DatabaseWriteHistoryRoute
 }
 
 // DatabaseWritePlan is an immutable, non-executing target application plan.
@@ -95,6 +171,7 @@ type DatabaseWritePlan struct {
 	tombstoneCount int
 	batchSize      int
 	destructive    bool
+	historyRoute   DatabaseWriteHistoryRoute
 }
 
 // NewDatabaseWritePlan seals a typed target/mode/key/count/effects contract
@@ -109,6 +186,14 @@ func NewDatabaseWritePlan(ctx context.Context, request DatabaseWritePlanRequest)
 	}
 	if err := request.Definition.Validate(); err != nil || request.Control.validate() != nil || request.Mode.Validate() != nil || request.Strategy.Validate() != nil || request.Mapping.validate() != nil {
 		return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
+	}
+	if request.Mode == synccontract.ModeIncrementalDedupeHistory {
+		if err := request.HistoryRoute.validateFor(request.Definition.Driver()); err != nil {
+			return DatabaseWritePlan{}, err
+		}
+		if !databaseWriteHistoryMappingAllowed(request.Mapping) {
+			return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
+		}
 	}
 	if !definitionAdmitsMode(request.Definition.AdmittedModes(), request.Mode) || canonicalDatabaseWriteStrategy(request.Mode) != request.Strategy {
 		return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
@@ -152,6 +237,7 @@ func NewDatabaseWritePlan(ctx context.Context, request DatabaseWritePlanRequest)
 		tombstoneCount: request.TombstoneCount,
 		batchSize:      batchSize,
 		destructive:    request.Destructive,
+		historyRoute:   request.HistoryRoute,
 	}, nil
 }
 
@@ -168,7 +254,16 @@ func (p DatabaseWritePlan) validate() error {
 			return ErrDatabaseWritePlanInvalid
 		}
 	}
+	if p.mode == synccontract.ModeIncrementalDedupeHistory && (p.historyRoute.validateFor(p.driver) != nil || !databaseWriteHistoryMappingAllowed(p.mapping)) {
+		return ErrDatabaseWritePlanInvalid
+	}
 	return nil
+}
+
+func databaseWriteHistoryMappingAllowed(mapping MappingContractV1) bool {
+	return !mapping.HasTarget(synccontract.HistoryValidFromColumn) &&
+		!mapping.HasTarget(synccontract.HistoryValidToColumn) &&
+		!mapping.HasTarget(synccontract.HistoryIsCurrentColumn)
 }
 
 func (p DatabaseWritePlan) matchesDriver(driver DatabaseWriteDriver) bool {
@@ -206,8 +301,12 @@ func (p DatabaseWritePlan) BatchSize() int { return p.batchSize }
 // destructive effect. Only full_overwrite is destructive in this layer.
 func (p DatabaseWritePlan) Destructive() bool { return p.destructive }
 
+// HistoryRoute returns the exact pair sealed into a history plan. For every
+// other mode it is the zero value and carries no execution authority.
+func (p DatabaseWritePlan) HistoryRoute() DatabaseWriteHistoryRoute { return p.historyRoute }
+
 func (p DatabaseWritePlan) matches(other DatabaseWritePlan) bool {
-	if p.driver != other.driver || p.mode != other.mode || p.strategy != other.strategy || p.recordCount != other.recordCount || p.tombstoneCount != other.tombstoneCount || p.batchSize != other.batchSize || p.destructive != other.destructive || len(p.keys) != len(other.keys) || !p.mapping.matches(other.mapping) || !sameManagedTargetControl(p.control, other.control) {
+	if p.driver != other.driver || p.mode != other.mode || p.strategy != other.strategy || p.recordCount != other.recordCount || p.tombstoneCount != other.tombstoneCount || p.batchSize != other.batchSize || p.destructive != other.destructive || p.historyRoute != other.historyRoute || len(p.keys) != len(other.keys) || !p.mapping.matches(other.mapping) || !sameManagedTargetControl(p.control, other.control) {
 		return false
 	}
 	for index := range p.keys {

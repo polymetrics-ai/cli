@@ -2,11 +2,19 @@
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
-| PostgreSQL → PostgreSQL history state | pending live | Query each history row's key, validity window, current/closed state, and soft-delete outcome. |
-| Keyed versions and deterministic late/replay behavior | pending unit + live | Assert exact queried row set and stable receipt/ledger identity after replay. |
-| Restart recovery | pending unit + live | Recreate the controller and assert the durable receipt/ledger and target rows are unchanged. |
-| PostgreSQL-only admission | pending fake | Assert each other route's typed reason plus zero provider/driver/session/ledger/database counters. |
-| Required live harness | pending live | Run the explicit Colima Docker command and record its exact passed output. |
+| PostgreSQL → PostgreSQL history state | passed focused live | Query v1/v2 key, exact close boundary, current state, and the retained soft-deleted v2 row. |
+| Keyed versions and deterministic late/replay behavior | passed focused live | A newly constructed executor replays v1/v2; the query is unchanged and the replay receipt is durably readable. |
+| Restart recovery | passed focused live | Close the first connection, construct a fresh driver/ledger/executor, and query/replay the durable history before close. |
+| PostgreSQL-only admission | passed fake | Three non-PostgreSQL route cells return their typed reason while fake begin/batch/commit/rollback/ledger/mutation counters remain zero. |
+| Required live harness | passed full live | The explicit Colima Docker command passed across the complete PostgreSQL integration package. |
+
+## Completed local gates
+
+- `go test -timeout 20m ./internal/connectors/native/postgres/... ./internal/connectors/database/...`
+- tagged focused and full PostgreSQL dbtest commands recorded under `traces/`
+- `go vet ./...`
+- `make tidy-check`, `make build`, `make docs-check-no-build`, `make smoke-no-build`, and `make lint`
+- `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make connectorgen-certification-matrix`, `make connector-boundary`, `make connector-canon-check`, and `make release-workflow-check`
 
 ## Required commands
 
