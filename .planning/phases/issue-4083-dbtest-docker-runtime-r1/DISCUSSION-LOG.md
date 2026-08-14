@@ -17,7 +17,8 @@
   live attempt. The accepted solution is an explicit, pre-cached, locked-down
   Docker VM capacity probe inside the existing `Config` abstraction; no global
   default or new runtime command path is permitted. The exact MySQL proof then
-  passed. Podman remains unavailable because no VM exposes a direct socket.
+  passed. Podman remains not live-proved because no local Podman VM exposes an
+  explicit direct Unix API socket; no global default was read.
 
 ## Conclusions
 

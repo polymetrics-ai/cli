@@ -33,10 +33,15 @@ Reviewed specifically:
    drops capabilities, sets no-new-privileges and a PID bound, parses only a
    fixed POSIX `df` mount result, and idempotently cleans its unique ephemeral
    probe. A missing or malformed probe remains a pre-mutation refusal.
+7. A pre-existing capacity probe is refused before its name is claimed for
+   cleanup, and the enabled MySQL entrypoint passes raw environment values to
+   the shared validators so whitespace and control characters cannot normalize
+   into an accepted runtime configuration.
 
 ## Evidence
 
-`go test -race -timeout 20m ./internal/connectors/native/dbtest`, scoped vet,
-package tests, tagged skip/fail-closed witnesses, build/docs validation, lint,
-and individual repository contract/generator/boundary/release gates passed as
-recorded in `VERIFICATION.md` and `TDD-LEDGER.md`.
+`go test -tags=databaseintegration -count=1 -timeout 20m -run
+'^(TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe\|TestDockerVMCapacityRefusesAPreexistingProbeWithoutClaimingItsCleanup\|TestDockerVMCapacityRefusesAnUncachedOrMalformedProbe\|TestNewMySQLContainerHarnessConfigurationGuidance)$'
+./internal/connectors/native/dbtest ./internal/connectors/native/mysql` passed;
+the broader existing dbtest evidence is recorded in `VERIFICATION.md` and
+`TDD-LEDGER.md`.

@@ -10,7 +10,7 @@ Status: Docker live proof passed; Podman live proof remains unavailable.
 | Target safety | Docker daemon-ID/data-root and Podman target checks remain fail-closed; Docker VM capacity uses only a pre-cached locked-down probe; dbtest passes under `-race`. | Pass |
 | Maintainer contract | README and `AGENTS.md` document exact variables, endpoint restrictions, resource ownership, and the single `Config` owner. | Pass |
 | Live Docker proof | Exact tagged MySQL proof passed through Colima's explicit Unix socket, including catalog/read/TLS/CDC and cleanup capacity report. | Pass |
-| Live Podman proof | No local Podman VM supplied an explicit direct Unix socket; no global default was queried. | Honest gap |
+| Live Podman proof | No local Podman VM exposed an explicit direct Unix API socket; no global default was read. | Honest gap |
 
 The external PostgreSQL endpoint option remains deliberately unimplemented: it
 would no longer prove the managed image/version/settings/extensions/durability

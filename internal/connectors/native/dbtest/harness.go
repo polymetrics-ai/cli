@@ -487,6 +487,14 @@ func (h *Harness) dockerVMImageStoreFree(ctx context.Context, target targetIdent
 		return 0, errors.New("target Docker image-store capacity requires a pre-cached Docker capacity probe image")
 	}
 
+	probeContainerAbsent, err := h.resourceAbsent(ctx, "container", "inspect", h.capacityProbeName)
+	if err != nil {
+		return 0, errors.New("target Docker capacity probe name could not be inspected")
+	}
+	if !probeContainerAbsent {
+		return 0, errors.New("generated Docker capacity probe already exists")
+	}
+
 	// Claim the transient name before starting the probe. Although --rm removes
 	// a successful probe, Close also attempts its idempotent removal if Docker
 	// reports an error after creating it or the test is interrupted.

@@ -32,6 +32,18 @@ directly to Docker (`--host`) or Podman (`--url`), so neither global runtime def
 changed. Leaving the opt-in unset skips the test; setting the opt-in without both runtime inputs is
 a test failure, not a skip.
 
+## Recorded live evidence
+
+Docker was live-proved through Colima's explicit direct socket with this command:
+
+```bash
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -run '^TestMySQLContainerHarness$' -v ./internal/connectors/native/mysql
+```
+
+It passed catalog discovery, full and incremental reads, TLS, and CDC. Podman remains not
+live-proved because no local Podman VM exposed an explicit direct Unix API socket; no global default
+was read.
+
 ## Capacity and cleanup
 
 Before startup and before every command directed at the daemon, `dbtest` reads identity and

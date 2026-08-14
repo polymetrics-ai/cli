@@ -18,6 +18,7 @@ const testEndpoint = "unix:///tmp/dbtest.sock"
 type scriptedRunner struct {
 	volumePresent       bool
 	containerLive       bool
+	foreignContainers   map[string]bool
 	pullErr             error
 	tagErr              error
 	volumeInspectErr    error
@@ -84,6 +85,9 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 	case commandHasPrefix(args, "container", "inspect"):
 		if r.containerInspectErr != nil {
 			return "", r.containerInspectErr
+		}
+		if len(args) > 2 && r.foreignContainers[args[2]] {
+			return "", nil
 		}
 		if r.containerLive {
 			return "", nil
@@ -1040,6 +1044,37 @@ func TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe(t *testing.T) {
 	}
 	if !commandsContain(runner.commands, "container", "rm", "--force", h.capacityProbeName) {
 		t.Fatalf("commands = %v, want idempotent capacity probe cleanup", runner.commands)
+	}
+}
+
+func TestDockerVMCapacityRefusesAPreexistingProbeWithoutClaimingItsCleanup(t *testing.T) {
+	runner := &scriptedRunner{
+		infoOutput: "DAEMON:12345\t/var/lib/docker\n",
+	}
+	config := testConfig(runner)
+	config.ContainerRuntime = RuntimeDocker
+	config.DockerCapacityProbeImage = "example.invalid/capacity-probe:1.0"
+	runner.setImage(config.DockerCapacityProbeImage, true)
+	config.DiskFreeAt = func(string) (uint64, error) {
+		return 0, errors.New("Docker store belongs to a VM")
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	runner.foreignContainers = map[string]bool{h.capacityProbeName: true}
+
+	if _, err := h.targetImageStoreFree(context.Background()); err == nil || !strings.Contains(err.Error(), "capacity probe already exists") {
+		t.Fatalf("targetImageStoreFree() error = %v, want an existing probe refusal", err)
+	}
+	if h.known(func(h *Harness) bool { return h.capacityProbeKnown }) {
+		t.Fatal("targetImageStoreFree() claimed cleanup ownership of a pre-existing probe")
+	}
+	if err := h.Close(context.Background()); err == nil {
+		t.Fatal("Close() accepted an unproven capacity probe")
+	}
+	if commandsContain(runner.commands, "container", "rm", "--force", h.capacityProbeName) {
+		t.Fatalf("commands = %v, want no removal of a pre-existing capacity probe", runner.commands)
 	}
 }
 

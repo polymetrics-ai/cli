@@ -13,7 +13,7 @@
   },
   "external_endpoint_verdict": "rejected_out_of_scope_weakened_managed_container_guarantees",
   "live_runtime_evidence": {
-    "docker": "client_present_explicit_desktop_socket_did_not_report_a_running_daemon_identity",
-    "podman": "client_present_no_direct_local_socket_discovered"
+    "docker": "live_proved_through_unix:///Users/karthiksivadas/.colima/default/docker.sock: PASS catalog/read/TLS/CDC",
+    "podman": "not_live_proved: no local Podman VM exposed an explicit direct Unix API socket; no global default was read"
   }
 }

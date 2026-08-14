@@ -54,8 +54,8 @@ func TestMySQLContainerHarness(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
 	defer cancel()
 
-	containerRuntime := dbtest.Runtime(strings.TrimSpace(os.Getenv(envContainerRuntime)))
-	containerEndpoint := strings.TrimSpace(os.Getenv(envContainerEndpoint))
+	containerRuntime := dbtest.Runtime(os.Getenv(envContainerRuntime))
+	containerEndpoint := os.Getenv(envContainerEndpoint)
 	harness, err := newMySQLContainerHarness(containerRuntime, containerEndpoint)
 	if err != nil {
 		t.Fatal(err)
@@ -159,6 +159,8 @@ func TestNewMySQLContainerHarnessConfigurationGuidance(t *testing.T) {
 	}{
 		{name: "unknown runtime", runtime: "colima", endpoint: "unix:///tmp/mysql-dbtest.sock", secret: "colima"},
 		{name: "unsafe endpoint", runtime: dbtest.RuntimeDocker, endpoint: "tcp://127.0.0.1:2375", secret: "tcp://127.0.0.1:2375"},
+		{name: "runtime control character", runtime: "docker\t", endpoint: "unix:///tmp/mysql-dbtest.sock", secret: "docker\t"},
+		{name: "endpoint trailing newline", runtime: dbtest.RuntimeDocker, endpoint: "unix:///tmp/mysql-dbtest.sock\n", secret: "unix:///tmp/mysql-dbtest.sock\n"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			harness, err := newMySQLContainerHarness(tc.runtime, tc.endpoint)

@@ -93,7 +93,10 @@ cannot be `stat`ed by the host. The test requires a configured cached probe
 image, exact locked-down `run --rm` capacity arguments, and strict numeric
 POSIX `df -P -B1` parsing. Green is a daemon-side measurement that does not
 pull or retain the probe image, while missing/malformed evidence remains a
-pre-mutation refusal. Re-run the tagged MySQL reference proof through the
+pre-mutation refusal. Inspect the generated probe name and refuse an existing
+container before claiming it for cleanup. Pass enabled MySQL runtime values
+raw to the shared validators so whitespace and control characters remain
+refused. Re-run the tagged MySQL reference proof through the
 explicit Colima socket and record Docker as observed only on a passing result;
 continue to record Podman as unavailable without inspecting its global default.
 
