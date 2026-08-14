@@ -52,10 +52,12 @@ and a measurable `DockerRootDir`; a direct Podman daemon must report the configu
 locally measurable image-store path. When Docker's safe root path is inside a local VM such as
 Colima and is therefore not measurable from the client host, the engine's `Config` may name a
 pinned, pre-cached `DockerCapacityProbeImage`. The harness first proves that image is already
-present, resolves its local immutable image ID (it never pulls it), and runs that ID in an ephemeral,
-no-network, read-only, no-new-privileges POSIX `df -P -B1` probe through the same explicit endpoint.
-A missing probe image, an unmeasurable path without one, or malformed probe output fails before the
-database image is pulled. Podman 5.3 machine
+present, resolves its local immutable image ID (it never pulls it), and runs that ID with
+`--pull=never` in a uniquely named ephemeral probe through the same explicit endpoint. The probe
+has no network, a read-only filesystem, dropped capabilities, no-new-privileges, a PID bound, and a
+read-only bind of the proven daemon root; it accepts only the expected strict two-line POSIX
+`df -P -B1` schema and its numeric `Available` byte count. A missing probe image, an unmeasurable
+path without one, or malformed probe output fails before the database image is pulled. Podman 5.3 machine
 forwards are also accepted when both sides report safe Unix sockets and the daemon reports numeric
 `GraphRootAllocated`/`GraphRootUsed` capacity; the harness uses their difference rather than a host
 path inside the VM. Any other socket mismatch, remote scheme, or unprovable capacity fails before

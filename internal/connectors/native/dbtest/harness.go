@@ -816,9 +816,7 @@ func parseImageID(raw string) (string, bool) {
 }
 
 func safeImageID(value string) bool {
-	if strings.HasPrefix(value, "sha256:") {
-		value = strings.TrimPrefix(value, "sha256:")
-	}
+	value = strings.TrimPrefix(value, "sha256:")
 	return safeContainerID(value)
 }
 

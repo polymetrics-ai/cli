@@ -343,8 +343,9 @@ invocation recipe and environment variables live in
 - A direct local Unix Docker or Podman endpoint is mandatory; named connections
   and remote endpoints are refused. Every runtime invocation uses that endpoint
   explicitly, so neither global default connection is ever read or changed.
-- A harness run owns only its uniquely named database container, volume,
-  run-specific image reference, and (when a Docker VM needs it) its ephemeral
+- A harness run owns only its uniquely named database container, its
+  container-bound anonymous data volume, run-specific image reference, and
+  (when a Docker VM needs it) its ephemeral
   capacity probe. The pulled source/probe images are shared and never removed.
   Target identity and image-store capacity must be proven before every runtime
   command. A Docker VM probe is configured through `dbtest.Config`, must already
