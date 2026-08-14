@@ -289,8 +289,8 @@ or finding. Full non-secret command records are in
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
-| C3. Non-local ETL isolation | With a legacy local-warehouse `records`/`RECORDS` collision present, a distinct non-local connection is rejected before its source or destination executes. | The unrelated non-local ETL loads one record, sends one destination batch, and performs one source read; it never visits the local inventory guard. | RED captured 2026-08-14 |
-| C3. Local invariant control | A legacy local-warehouse collision must still be refused before `beginRun` with its typed same-owner error and no persisted mutation. | The existing C2 legacy sync test remains green without a changed reason or weakened assertion. | PLANNED 2026-08-14 |
+| C3. Non-local ETL isolation | With a legacy local-warehouse `records`/`RECORDS` collision present, a distinct non-local connection is rejected before its source or destination executes. | The unrelated non-local ETL loads one record, sends one destination batch, and performs one source read; it never visits the local inventory guard. | GREEN 2026-08-14 |
+| C3. Local invariant control | A legacy local-warehouse collision must still be refused before `beginRun` with its typed same-owner error and no persisted mutation. | The existing C2 legacy sync test remains green without a changed reason or weakened assertion. | GREEN 2026-08-14 |
 
 ### Correction 3 RED command
 
@@ -326,3 +326,15 @@ worktree is the planning checkpoint). It exited 1: `RunETL(non-local)` was
 rejected by the legacy `acme` `RECORDS`/`records` local-warehouse collision
 before the non-local source or destination could execute. The full non-secret
 output is `traces/correction-3-nonlocal-collision-red.txt`.
+
+### Recorded correction 3 GREEN
+
+Delivery code head `a49ae952d52a6edf9786cc90e02825e2414f5b44` restores the
+selected connection's generic materialization check around the preflight. The
+focused pair passed: the restored false-positive regression loaded one record,
+acknowledged one batch, and made one source read; the existing local
+true-positive still passed its `errors.As` check for
+`*warehouse.SameOwnerCaseEquivalentTableError` before `beginRun` or state
+mutation. The full touched `internal/app` package passed in 98.497 seconds.
+The non-secret command records are
+`traces/correction-3-destination-scoped-collision-green.txt`.
