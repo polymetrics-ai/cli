@@ -5,7 +5,11 @@
 This is a mechanical file-layout change from comparison base
 `integration/4015-mvp-flat-r1` at `5a457970b3bc15343e5ba6b7b4acf48994b63add`.
 No behavior, generated capability output, public connector surface, declaration
-signature, test assertion, or execution order changes.
+signature, or test semantics/assertions change. File splitting may change only
+Go test registration order; that difference is accepted as inert, proven with
+shuffle seeds `408601` and `408602` for both affected packages at base and
+head, and must not be normalized through order-prefixed files or declaration
+reordering.
 
 ## Ownership after the split
 
