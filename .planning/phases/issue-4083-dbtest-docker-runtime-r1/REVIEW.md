@@ -34,14 +34,14 @@ Reviewed specifically:
    fixed POSIX `df` mount result, and idempotently cleans its unique ephemeral
    probe. A missing or malformed probe remains a pre-mutation refusal.
 7. A pre-existing capacity probe is refused before its name is claimed for
-   cleanup, and the enabled MySQL entrypoint passes raw environment values to
-   the shared validators so whitespace and control characters cannot normalize
-   into an accepted runtime configuration.
+   cleanup, and an indeterminate probe is removed only after its per-run Docker
+   ownership label and immutable container ID are re-proven. The enabled MySQL entrypoint passes raw
+   environment values to the shared validators so whitespace and control
+   characters cannot normalize into an accepted runtime configuration.
 
 ## Evidence
 
-`go test -tags=databaseintegration -count=1 -timeout 20m -run
-'^(TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe\|TestDockerVMCapacityRefusesAPreexistingProbeWithoutClaimingItsCleanup\|TestDockerVMCapacityRefusesAnUncachedOrMalformedProbe\|TestNewMySQLContainerHarnessConfigurationGuidance)$'
-./internal/connectors/native/dbtest ./internal/connectors/native/mysql` passed;
-the broader existing dbtest evidence is recorded in `VERIFICATION.md` and
-`TDD-LEDGER.md`.
+`go test -timeout 20m -run
+'^(TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe\|TestDockerVMCapacityRefusesAPreexistingProbeWithoutClaimingItsCleanup\|TestDockerVMCapacityPreservesAProbeCreatedAfterPrecheck\|TestCloseRemovesOnlyLabelOwnedCapacityProbe\|TestDockerVMCapacityRefusesAnUncachedOrMalformedProbe)$'
+./internal/connectors/native/dbtest` passed in 0.350s; the broader existing
+dbtest and MySQL evidence is recorded in `VERIFICATION.md` and `TDD-LEDGER.md`.

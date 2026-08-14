@@ -25,9 +25,11 @@ Docker VM-capacity follow-up.
 - [x] Docker VM capacity red/green evidence recorded: a pre-cached, pinned,
   locked-down daemon-side probe is required when the selected Docker root is
   not measurable from the client host; it is never pulled by `dbtest`.
-- [x] Review follow-up passed: a pre-existing Docker capacity-probe name is
-  refused before cleanup ownership, and raw runtime whitespace/control
-  characters retain the same environment-specific configuration guidance.
+- [x] Review follow-ups passed: a pre-existing Docker capacity-probe name is
+  refused before cleanup ownership; a probe that appears after the name check
+  needs its per-run label and inspected immutable ID before removal; and raw
+  runtime whitespace/control characters retain the same environment-specific
+  configuration guidance.
 - [x] Docker live proof passed through
   `unix:///Users/karthiksivadas/.colima/default/docker.sock`; the exact tagged
   command, PASS output, TLS subtests, and before/after capacity values are in

@@ -155,10 +155,11 @@ type targetIdentity struct {
 type Harness struct {
 	config Config
 
-	containerName     string
-	volumeName        string
-	runImage          string
-	capacityProbeName string
+	containerName      string
+	volumeName         string
+	runImage           string
+	capacityProbeName  string
+	capacityProbeOwner string
 
 	mu                 sync.Mutex
 	endpoint           Endpoint
@@ -218,13 +219,18 @@ func New(config Config) (*Harness, error) {
 	if err != nil {
 		return nil, fmt.Errorf("generate database test resource name: %w", err)
 	}
+	capacityProbeOwner, err := randomSuffix()
+	if err != nil {
+		return nil, fmt.Errorf("generate database test capacity probe owner: %w", err)
+	}
 	prefix := "polymetrics-" + engineSlug(config.Engine) + "-it-" + suffix
 	return &Harness{
-		config:            config,
-		containerName:     prefix,
-		volumeName:        prefix + "-data",
-		runImage:          "localhost/" + prefix + ":run",
-		capacityProbeName: prefix + "-capacity",
+		config:             config,
+		containerName:      prefix,
+		volumeName:         prefix + "-data",
+		runImage:           "localhost/" + prefix + ":run",
+		capacityProbeName:  prefix + "-capacity",
+		capacityProbeOwner: capacityProbeOwner,
 	}, nil
 }
 
@@ -436,7 +442,7 @@ func (h *Harness) Close(_ context.Context) error {
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.capacityProbeKnown }) {
-			if _, err := h.runOnVerifiedTarget(cleanupCtx, "container", "rm", "--force", h.capacityProbeName); err != nil && !errors.Is(err, errContainerResourceNotFound) {
+			if err := h.removeCapacityProbe(cleanupCtx); err != nil {
 				errs = append(errs, fmt.Errorf("remove %s test capacity probe: %w", h.config.Engine, err))
 			}
 		}
@@ -476,7 +482,11 @@ func (h *Harness) targetImageStoreFree(ctx context.Context) (uint64, error) {
 	return 0, errors.New("target container image-store capacity query failed")
 }
 
-const dockerCapacityMountPath = "/polymetrics-image-store"
+const (
+	dockerCapacityMountPath        = "/polymetrics-image-store"
+	dockerCapacityProbeOwnerLabel  = "polymetrics.dbtest.capacity-probe-owner"
+	dockerCapacityProbeOwnerFormat = "{{.Id}}\t{{ index .Config.Labels \"polymetrics.dbtest.capacity-probe-owner\" }}"
+)
 
 func (h *Harness) dockerVMImageStoreFree(ctx context.Context, target targetIdentity) (uint64, error) {
 	probeAbsent, err := h.resourceAbsent(ctx, "image", "inspect", h.config.DockerCapacityProbeImage)
@@ -503,6 +513,7 @@ func (h *Harness) dockerVMImageStoreFree(ctx context.Context, target targetIdent
 	h.mu.Unlock()
 	output, err := h.runOnVerifiedTarget(ctx,
 		"run", "--pull=never", "--rm", "--name", h.capacityProbeName,
+		"--label", dockerCapacityProbeOwnerLabel+"="+h.capacityProbeOwner,
 		"--network", "none", "--read-only", "--cap-drop", "ALL", "--pids-limit", "16",
 		"--security-opt", "no-new-privileges", "--env", "LC_ALL=C",
 		"--mount", "type=bind,src="+target.graphRoot+",dst="+dockerCapacityMountPath+",readonly",
@@ -517,6 +528,26 @@ func (h *Harness) dockerVMImageStoreFree(ctx context.Context, target targetIdent
 		return 0, errors.New("target Docker endpoint returned an invalid Docker image-store capacity")
 	}
 	return free, nil
+}
+
+func (h *Harness) removeCapacityProbe(ctx context.Context) error {
+	output, err := h.runOnVerifiedTarget(ctx,
+		"container", "inspect", "--format", dockerCapacityProbeOwnerFormat, h.capacityProbeName,
+	)
+	if errors.Is(err, errContainerResourceNotFound) {
+		return nil
+	}
+	if err != nil {
+		return fmt.Errorf("inspect generated Docker capacity probe ownership: %w", err)
+	}
+	containerID, owner, valid := parseDockerCapacityProbeOwnership(output)
+	if !valid || owner != h.capacityProbeOwner {
+		return errors.New("generated Docker capacity probe ownership could not be proven")
+	}
+	if _, err := h.runOnVerifiedTarget(ctx, "container", "rm", "--force", containerID); err != nil && !errors.Is(err, errContainerResourceNotFound) {
+		return err
+	}
+	return nil
 }
 
 func (h *Harness) runOnVerifiedTarget(ctx context.Context, args ...string) (string, error) {
@@ -743,6 +774,30 @@ func containsString(values []string, wanted string) bool {
 func singleCommandRecord(raw string) (string, bool) {
 	line := strings.TrimSuffix(raw, "\n")
 	return line, line != "" && !strings.ContainsAny(line, "\r\n")
+}
+
+func parseDockerCapacityProbeOwnership(raw string) (string, string, bool) {
+	line, valid := singleCommandRecord(raw)
+	if !valid {
+		return "", "", false
+	}
+	fields := strings.Split(line, "\t")
+	if len(fields) != 2 || !safeDockerContainerID(fields[0]) {
+		return "", "", false
+	}
+	return fields[0], fields[1], true
+}
+
+func safeDockerContainerID(value string) bool {
+	if len(value) != 64 {
+		return false
+	}
+	for _, r := range value {
+		if (r < '0' || r > '9') && (r < 'a' || r > 'f') {
+			return false
+		}
+	}
+	return true
 }
 
 func safeContainerStorePath(raw string) (string, error) {

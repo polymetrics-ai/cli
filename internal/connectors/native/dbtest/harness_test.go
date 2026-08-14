@@ -15,10 +15,13 @@ import (
 
 const testEndpoint = "unix:///tmp/dbtest.sock"
 
+const scriptedCapacityProbeID = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+
 type scriptedRunner struct {
 	volumePresent       bool
 	containerLive       bool
-	foreignContainers   map[string]bool
+	capacityProbeOwners map[string]string
+	raceForeignProbe    bool
 	pullErr             error
 	tagErr              error
 	volumeInspectErr    error
@@ -86,7 +89,11 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 		if r.containerInspectErr != nil {
 			return "", r.containerInspectErr
 		}
-		if len(args) > 2 && r.foreignContainers[args[2]] {
+		name := args[len(args)-1]
+		if owner, present := r.capacityProbeOwners[name]; present {
+			if _, formatted := commandFlagValue(args, "--format"); formatted {
+				return scriptedCapacityProbeID + "\t" + owner + "\n", nil
+			}
 			return "", nil
 		}
 		if r.containerLive {
@@ -95,11 +102,21 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 		return "", errContainerResourceNotFound
 	case len(args) > 0 && args[0] == "run":
 		if strings.Contains(strings.Join(args, "\x00"), "\x00--entrypoint\x00/bin/df\x00") {
+			if r.raceForeignProbe {
+				if name, present := commandFlagValue(args, "--name"); present {
+					r.setCapacityProbeOwner(name, "foreign")
+				}
+			}
 			return r.capacityOutput, r.runErr
 		}
 		r.containerLive = true
 		return "", r.runErr
 	case commandHasPrefix(args, "container", "rm"):
+		if len(args) > 2 && args[len(args)-1] == scriptedCapacityProbeID {
+			for name := range r.capacityProbeOwners {
+				delete(r.capacityProbeOwners, name)
+			}
+		}
 		r.containerLive = false
 	case len(args) > 0 && args[0] == "port":
 		return "127.0.0.1:43123\n", nil
@@ -139,6 +156,22 @@ func (r *scriptedRunner) setImage(image string, present bool) {
 	delete(r.images, image)
 }
 
+func (r *scriptedRunner) setCapacityProbeOwner(name, owner string) {
+	if r.capacityProbeOwners == nil {
+		r.capacityProbeOwners = make(map[string]string)
+	}
+	r.capacityProbeOwners[name] = owner
+}
+
+func commandFlagValue(args []string, flag string) (string, bool) {
+	for index := 0; index+1 < len(args); index++ {
+		if args[index] == flag {
+			return args[index+1], true
+		}
+	}
+	return "", false
+}
+
 func commandHasPrefix(args []string, prefix ...string) bool {
 	return len(args) >= len(prefix) && reflect.DeepEqual(args[:len(prefix)], prefix)
 }
@@ -150,6 +183,15 @@ func commandsContain(commands [][]string, prefix ...string) bool {
 		}
 	}
 	return false
+}
+
+func commandIndex(commands [][]string, prefix ...string) int {
+	for index, command := range commands {
+		if commandHasPrefix(command, prefix...) {
+			return index
+		}
+	}
+	return -1
 }
 
 func testConfig(runner CommandRunner) Config {
@@ -1031,6 +1073,7 @@ func TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe(t *testing.T) {
 	}
 	if !commandsContain(runner.commands,
 		"run", "--pull=never", "--rm", "--name", h.capacityProbeName,
+		"--label", dockerCapacityProbeOwnerLabel+"="+h.capacityProbeOwner,
 		"--network", "none", "--read-only", "--cap-drop", "ALL", "--pids-limit", "16",
 		"--security-opt", "no-new-privileges", "--env", "LC_ALL=C",
 		"--mount", "type=bind,src=/var/lib/docker,dst=/polymetrics-image-store,readonly",
@@ -1042,8 +1085,11 @@ func TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe(t *testing.T) {
 	if err := h.Close(context.Background()); err != nil {
 		t.Fatalf("Close(): %v", err)
 	}
-	if !commandsContain(runner.commands, "container", "rm", "--force", h.capacityProbeName) {
-		t.Fatalf("commands = %v, want idempotent capacity probe cleanup", runner.commands)
+	if !commandsContain(runner.commands, "container", "inspect", "--format", dockerCapacityProbeOwnerFormat, h.capacityProbeName) {
+		t.Fatalf("commands = %v, want capacity probe ownership cleanup check", runner.commands)
+	}
+	if commandsContain(runner.commands, "container", "rm", "--force") {
+		t.Fatalf("commands = %v, want no removal after the probe self-cleans", runner.commands)
 	}
 }
 
@@ -1062,7 +1108,7 @@ func TestDockerVMCapacityRefusesAPreexistingProbeWithoutClaimingItsCleanup(t *te
 	if err != nil {
 		t.Fatalf("New(): %v", err)
 	}
-	runner.foreignContainers = map[string]bool{h.capacityProbeName: true}
+	runner.setCapacityProbeOwner(h.capacityProbeName, "foreign")
 
 	if _, err := h.targetImageStoreFree(context.Background()); err == nil || !strings.Contains(err.Error(), "capacity probe already exists") {
 		t.Fatalf("targetImageStoreFree() error = %v, want an existing probe refusal", err)
@@ -1073,8 +1119,72 @@ func TestDockerVMCapacityRefusesAPreexistingProbeWithoutClaimingItsCleanup(t *te
 	if err := h.Close(context.Background()); err == nil {
 		t.Fatal("Close() accepted an unproven capacity probe")
 	}
-	if commandsContain(runner.commands, "container", "rm", "--force", h.capacityProbeName) {
+	if commandsContain(runner.commands, "container", "rm", "--force") {
 		t.Fatalf("commands = %v, want no removal of a pre-existing capacity probe", runner.commands)
+	}
+}
+
+func TestDockerVMCapacityPreservesAProbeCreatedAfterPrecheck(t *testing.T) {
+	runner := &scriptedRunner{
+		infoOutput:       "DAEMON:12345\t/var/lib/docker\n",
+		raceForeignProbe: true,
+		runErr:           errors.New("name already in use"),
+	}
+	config := testConfig(runner)
+	config.ContainerRuntime = RuntimeDocker
+	config.DockerCapacityProbeImage = "example.invalid/capacity-probe:1.0"
+	runner.setImage(config.DockerCapacityProbeImage, true)
+	config.DiskFreeAt = func(string) (uint64, error) {
+		return 0, errors.New("Docker store belongs to a VM")
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+
+	if _, err := h.targetImageStoreFree(context.Background()); err == nil || !strings.Contains(err.Error(), "capacity probe failed") {
+		t.Fatalf("targetImageStoreFree() error = %v, want a raced capacity probe failure", err)
+	}
+	if !h.known(func(h *Harness) bool { return h.capacityProbeKnown }) {
+		t.Fatal("targetImageStoreFree() did not arm cleanup for an indeterminate probe creation")
+	}
+	if owner := runner.capacityProbeOwners[h.capacityProbeName]; owner != "foreign" {
+		t.Fatalf("capacity probe owner = %q, want foreign", owner)
+	}
+	if err := h.Close(context.Background()); err == nil || !strings.Contains(err.Error(), "ownership could not be proven") {
+		t.Fatalf("Close() error = %v, want an unproven capacity probe ownership error", err)
+	}
+	if !commandsContain(runner.commands, "container", "inspect", "--format", dockerCapacityProbeOwnerFormat, h.capacityProbeName) {
+		t.Fatalf("commands = %v, want capacity probe ownership inspection", runner.commands)
+	}
+	if commandsContain(runner.commands, "container", "rm", "--force") {
+		t.Fatalf("commands = %v, must not remove a raced foreign capacity probe", runner.commands)
+	}
+}
+
+func TestCloseRemovesOnlyLabelOwnedCapacityProbe(t *testing.T) {
+	runner := &scriptedRunner{infoOutput: "DAEMON:12345\t/var/lib/docker\n"}
+	config := testConfig(runner)
+	config.ContainerRuntime = RuntimeDocker
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	runner.setCapacityProbeOwner(h.capacityProbeName, h.capacityProbeOwner)
+	h.mu.Lock()
+	h.capacityProbeKnown = true
+	h.mu.Unlock()
+
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if _, present := runner.capacityProbeOwners[h.capacityProbeName]; present {
+		t.Fatal("Close() did not remove the harness-owned capacity probe")
+	}
+	inspect := commandIndex(runner.commands, "container", "inspect", "--format", dockerCapacityProbeOwnerFormat, h.capacityProbeName)
+	remove := commandIndex(runner.commands, "container", "rm", "--force", scriptedCapacityProbeID)
+	if inspect < 0 || remove < 0 || inspect > remove {
+		t.Fatalf("commands = %v, want ownership inspection before capacity probe removal", runner.commands)
 	}
 }
 
