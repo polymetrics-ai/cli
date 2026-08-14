@@ -3,6 +3,7 @@
 package engine
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -17,6 +18,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/database"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
@@ -30,6 +32,7 @@ type Bundle struct {
 	Name               string
 	Metadata           Metadata
 	Changefeed         *connectors.ChangefeedDescriptor // changefeed.json; nil when a connector has not been surveyed
+	Database           *database.Definition             // database.json; nil for non-database or unmigrated bundles
 	Spec               *Schema                          // compiled spec.json; SecretKeys() from x-secret
 	RawSpec            json.RawMessage                  // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
 	HTTP               HTTPBase                         // streams.json "base"; zero value when no streams.json
@@ -1266,6 +1269,10 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
+	databaseDefinition, err := loadDatabaseDefinition(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
 
 	spec, rawSpec, err := loadSpec(sub, dirName)
 	if err != nil {
@@ -1328,6 +1335,7 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 		Name:               dirName,
 		Metadata:           metadata,
 		Changefeed:         changefeed,
+		Database:           databaseDefinition,
 		Spec:               spec,
 		RawSpec:            rawSpec,
 		HTTP:               httpBase,
@@ -1437,6 +1445,22 @@ func loadChangefeed(sub fs.FS, dirName string) (*connectors.ChangefeedDescriptor
 		return nil, fmt.Errorf("load bundle %s: changefeed.json: %w", dirName, err)
 	}
 	return changefeed.Clone(), nil
+}
+
+// loadDatabaseDefinition keeps database.json optional for the existing broad
+// connector fleet, while making every present declaration pass through the
+// shared closed loader during normal engine and connectorgen bundle loading.
+// The definition is policy only; this does not register a database driver or
+// promote any connector capability.
+func loadDatabaseDefinition(sub fs.FS, dirName string) (*database.Definition, error) {
+	if !fileExists(sub, "database.json") {
+		return nil, nil
+	}
+	definition, err := database.Load(context.Background(), sub)
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: database.json: %w", dirName, err)
+	}
+	return &definition, nil
 }
 
 // loadSpec returns both the compiled *Schema (used for runtime interpolation
