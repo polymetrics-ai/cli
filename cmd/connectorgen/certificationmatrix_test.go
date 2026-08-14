@@ -641,6 +641,61 @@ func TestCertificationEvidenceScopeFiltersBeforeStrictValidation(t *testing.T) {
 	}
 }
 
+func TestCertificationEvidencePrefilterSkipsOnlyConclusiveNonallowlisted(t *testing.T) {
+	for _, test := range []struct {
+		name     string
+		identity acceptedEvidenceScopeIdentity
+		wantSkip bool
+	}{
+		{
+			name:     "nonallowlisted capability",
+			identity: acceptedEvidenceScopeIdentity{Scope: evidenceScopeCapability, Connector: "mysql"},
+			wantSkip: true,
+		},
+		{
+			name:     "nonallowlisted flow",
+			identity: acceptedEvidenceScopeIdentity{Scope: evidenceScopeFlow, Source: "mysql", Destination: "mariadb"},
+			wantSkip: true,
+		},
+		{
+			name:     "unsupported scope",
+			identity: acceptedEvidenceScopeIdentity{Scope: "unsupported", Connector: "mysql"},
+		},
+		{
+			name:     "missing capability connector",
+			identity: acceptedEvidenceScopeIdentity{Scope: evidenceScopeCapability},
+		},
+		{
+			name:     "allowlisted connector",
+			identity: acceptedEvidenceScopeIdentity{Scope: evidenceScopeCapability, Connector: "github"},
+		},
+		{
+			name:     "allowlisted flow destination",
+			identity: acceptedEvidenceScopeIdentity{Scope: evidenceScopeFlow, Source: "mysql", Destination: "postgres"},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if got := acceptedEvidenceScopeIdentityIsConclusiveNonallowlisted(test.identity); got != test.wantSkip {
+				t.Fatalf("acceptedEvidenceScopeIdentityIsConclusiveNonallowlisted(%#v) = %t, want %t", test.identity, got, test.wantSkip)
+			}
+		})
+	}
+}
+
+func TestCertificationEvidenceUnsupportedAllowlistedScopeReachesStrictValidation(t *testing.T) {
+	root := t.TempDir()
+	dir := filepath.Join(root, acceptedEvidenceDirectory)
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		t.Fatalf("mkdir evidence directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "github.json"), []byte(`{"scope":"unsupported","connector":"github","unexpected":true}`), 0o600); err != nil {
+		t.Fatalf("write github evidence: %v", err)
+	}
+	if _, err := loadAcceptedEvidence(root, certificationConnectorAllowlist); err == nil || !strings.Contains(err.Error(), "unknown field") {
+		t.Fatalf("loadAcceptedEvidence() with malformed unsupported allowlisted evidence = %v, want strict decoder rejection", err)
+	}
+}
+
 func TestCertificationSourceAnchorsUseSymbols(t *testing.T) {
 	shards, err := buildCertificationShards(repoRootForCertificationTest(t), certificationConnectorAllowlist)
 	if err != nil {

@@ -1483,7 +1483,7 @@ func loadAcceptedEvidence(repoRoot string, scope []string) ([]acceptedEvidence, 
 		if err := json.Unmarshal(raw, &identity); err != nil {
 			return nil, fmt.Errorf("parse accepted evidence %q: %w", entry.Name(), err)
 		}
-		if len(scope) != 0 && !acceptedEvidenceScopeIdentityWithinScope(identity, scope) {
+		if len(scope) != 0 && acceptedEvidenceScopeIdentityIsConclusiveNonallowlisted(identity) {
 			continue
 		}
 		var evidence acceptedEvidence
@@ -1492,6 +1492,9 @@ func loadAcceptedEvidence(repoRoot string, scope []string) ([]acceptedEvidence, 
 		}
 		if err := validateAcceptedEvidence(evidence); err != nil {
 			return nil, fmt.Errorf("accepted evidence %q: %w", entry.Name(), err)
+		}
+		if len(scope) != 0 && !acceptedEvidenceWithinScope(evidence, scope) {
+			continue
 		}
 		relative, err := filepath.Rel(repoRoot, path)
 		if err != nil {
@@ -1523,6 +1526,20 @@ func acceptedEvidenceScopeIdentityWithinScope(identity acceptedEvidenceScopeIden
 		return inScope[identity.Connector]
 	case evidenceScopeFlow:
 		return inScope[identity.Source] && certificationConnectorAllowed(identity.Destination)
+	default:
+		return false
+	}
+}
+
+func acceptedEvidenceScopeIdentityIsConclusiveNonallowlisted(identity acceptedEvidenceScopeIdentity) bool {
+	if certificationConnectorAllowed(identity.Connector) || certificationConnectorAllowed(identity.Source) || certificationConnectorAllowed(identity.Destination) {
+		return false
+	}
+	switch identity.Scope {
+	case evidenceScopeCapability, evidenceScopeWorkflow, evidenceScopeSyncMode:
+		return identity.Connector != ""
+	case evidenceScopeFlow:
+		return identity.Source != "" && identity.Destination != ""
 	default:
 		return false
 	}
