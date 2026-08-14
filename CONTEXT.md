@@ -11,7 +11,7 @@ pm connectors inspect <connector> --json
 pm etl run --connection <name> --stream <stream> --batch-size 100 --json
 pm reverse plan <name> ...
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 ## Safety

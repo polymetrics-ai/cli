@@ -147,9 +147,9 @@
       "type": "boolean"
     },
     {
-      "name": "approve",
-      "summary": "Approval token required to execute a reverse-ETL plan.",
-      "type": "string"
+      "name": "approval-token-stdin",
+      "summary": "Read the approval token as one bounded line from standard input.",
+      "type": "boolean"
     },
     {
       "name": "confirm",

@@ -150,7 +150,7 @@ below run-1 checkpoint; in --record mode assert outbound request carried the cur
 etl_incremental_append_deduped (capture) · 11 query_contract.
 
 Write stages: 12 write_plan_preview (text yields plan id + token; `--json` contains NO token) · 13
-write_create (`reverse run --approve`: succeeded=1, failed=0) · 14 write_verify (live read-back
+write_create (`reverse run --approval-token-stdin`: succeeded=1, failed=0) · 14 write_verify (live read-back
 finds tag; else `unverified` warning) · 15 write_cleanup · 16 cleanup_verify (entity gone —
 failure ⇒ `leaked_resource`) · 17 approval_idempotency (consumed plan+token re-run must fail).
 
@@ -306,7 +306,7 @@ actions are never executed live** (`skipped: no cleanup pairing`) unless a conne
 supplies a safe pairing with read-back fields.
 
 **Mechanics per pair** (all via public CLI): write tagged record to local JSONL → file→warehouse
-ETL → `pm reverse plan --limit 1` → token from text output → `preview --json` → `run --approve` →
+ETL → `pm reverse plan --limit 1` → token from text output → `preview --json` → `run --approval-token-stdin` →
 verify → cleanup plan → verify again.
 
 **Write-ahead leak ledger**: before any live write, append `{action, tag, connector, entity_hint,

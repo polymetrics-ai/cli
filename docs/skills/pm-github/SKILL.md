@@ -2571,6 +2571,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 - Global flags:
   - --json (boolean): Write machine-readable JSON output.
   - --connection (string): Use a saved GitHub connector credential and repository scope.: maps_to=connection
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - Core Commands
   - issue list - List issues [intent=etl availability=implemented stream=issues]; flags: --state
   - issue view - View issue details [intent=direct_read availability=implemented operation=github.issues_issue_number]; notes: Compatibility alias of issues view; uses that declaration-owned provider contract.; flags: --issue-number (required), --page, --page-cursor
@@ -4200,7 +4201,7 @@ pm etl run --connection github_prs_to_warehouse --stream pull_requests --batch-s
 ```bash
 pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-token --action create_pull_request --map title:title --map body:body --map head:head --map base:base --map reviewers:reviewers
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 ## Agent Rules

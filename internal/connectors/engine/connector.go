@@ -568,6 +568,13 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			Notes:         cmd.Notes,
 		})
 	}
+	if commandSurfaceHasWriteIntent(out.Commands) {
+		for _, flag := range connectors.ReverseETLApprovalFlags() {
+			if !commandSurfaceHasGlobalFlag(out.GlobalFlags, flag.Name) {
+				out.GlobalFlags = append(out.GlobalFlags, flag)
+			}
+		}
+	}
 	for _, topic := range surface.HelpTopics {
 		out.HelpTopics = append(out.HelpTopics, connectors.CommandSurfaceHelpTopic{
 			Name:    topic.Name,
@@ -575,6 +582,24 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 		})
 	}
 	return out
+}
+
+func commandSurfaceHasWriteIntent(commands []connectors.CommandSurfaceCommand) bool {
+	for _, cmd := range commands {
+		if cmd.Intent == "reverse_etl" || cmd.Intent == "direct_write" {
+			return true
+		}
+	}
+	return false
+}
+
+func commandSurfaceHasGlobalFlag(flags []connectors.CommandSurfaceFlag, name string) bool {
+	for _, flag := range flags {
+		if flag.Name == name {
+			return true
+		}
+	}
+	return false
 }
 
 func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.CommandSurfaceEndpointRef {

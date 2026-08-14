@@ -80,7 +80,7 @@ smoke-no-build:
 	PLAN_ID=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Created reverse plan/ {print $$4}'); \
 	./pm reverse preview "$$PLAN_ID" --root "$$SMOKE_DIR" --json >/dev/null; \
 	APPROVAL=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Approval token:/ {print $$3}'); \
-	./pm reverse run "$$PLAN_ID" --approve "$$APPROVAL" --root "$$SMOKE_DIR" --json >/dev/null; \
+	printf '%s\n' "$$APPROVAL" | ./pm reverse run "$$PLAN_ID" --approval-token-stdin --root "$$SMOKE_DIR" --json >/dev/null; \
 	TABLE=$$(ls "$$SMOKE_DIR"/.polymetrics/warehouse/*/*/*/tables/sample_customers.parquet); \
 	test -s "$$TABLE"; \
 	test -s "$$(dirname "$$(dirname "$$TABLE")")/owner.json"; \

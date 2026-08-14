@@ -232,7 +232,7 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		s.previewed[args[2]] = true
 		s.seen["reverse_preview"]++
 		return writeScriptedEnvelope(stdout, "ReversePlanPreview", map[string]any{"plan": map[string]any{"id": args[2], "records": 1}})
-	case prefix(args, "reverse", "run") && hasJSON(args) && hasFlag(args, "--approve"):
+	case prefix(args, "reverse", "run") && hasJSON(args) && hasFlag(args, "--approval-token-stdin"):
 		return s.runReverse(args, root, stdout, stderr)
 	default:
 		return s.protocolError(stderr, "unexpected command: "+strings.Join(args, " "))
@@ -251,9 +251,6 @@ func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.W
 	plan, ok := s.plans[planID]
 	if !ok {
 		return s.protocolError(stderr, "reverse run received an unknown plan")
-	}
-	if approvalToken := flagValue(args, "--approve"); approvalToken != plan.approvalToken {
-		return s.protocolError(stderr, "reverse run received an invalid approval token")
 	}
 	if plan.action == "create" && !s.previewed[planID] {
 		return s.protocolError(stderr, "reverse run occurred before its preview")
