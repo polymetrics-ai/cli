@@ -1052,6 +1052,7 @@ type CertificationSpec struct {
 type CertificationSourceSpec struct {
 	DefaultStream            string                                       `json:"default_stream,omitempty"`
 	SourceCredentialDefaults map[string]string                            `json:"source_credential_defaults,omitempty"`
+	RequiredCredentialConfig map[string]string                            `json:"required_credential_config,omitempty"`
 	LiveUnavailable          []CertificationLiveUnavailableClassification `json:"live_unavailable,omitempty"`
 }
 
@@ -2592,6 +2593,11 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 	}
 	if name := strings.TrimSpace(certification.Source.DefaultStream); name != "" && !streamNames[name] {
 		return fmt.Errorf("source.default_stream %q does not match a declared stream", name)
+	}
+	for key, value := range certification.Source.RequiredCredentialConfig {
+		if strings.TrimSpace(key) == "" || strings.TrimSpace(value) == "" {
+			return fmt.Errorf("source.required_credential_config must not contain empty keys or values")
+		}
 	}
 	for i, classifier := range certification.Source.LiveUnavailable {
 		if len(classifier.Contains) == 0 {

@@ -33,9 +33,11 @@ DESCRIPTION
   LIMIT COORDINATION. Process-local policies coordinate only requests made by
   this pm process; they make no cross-process claim. Policies explicitly
   declaring require_shared refuse before a request when their optional shared
-  coordinator is unavailable. A connector with both reports policy-scoped
-  coordination. Inspection never exposes a rate scope, coordinator address,
-  or credential.
+  coordinator is unavailable. A connector with both ordinary policies reports
+  policy-scoped coordination. A certification-only require_shared overlay
+  preserves the process-local default label and explicitly states the
+  certification boundary. Inspection never exposes a rate scope, coordinator
+  address, or credential.
 
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
@@ -129,7 +131,10 @@ ACTIONS
     during the staged migration. A complete version-2 ledger reports its ledger
     version, artifact count, endpoint count, and cited endpoint count; invalid
     version-2 provenance fails certification without enabling or changing any
-    connector capability.
+    connector capability. When the connector declares coordinated rate limits,
+    JSON may also contain safe rate_limit_events for attempts, observed resets,
+    waits, and requests stopped before send; the events contain no credentials
+    or rendered rate scopes.
 
 EXAMPLES
   pm connectors

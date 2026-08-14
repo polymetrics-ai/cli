@@ -88,8 +88,13 @@ func (c *Connector) RateLimitCoordination() connectors.RateLimitCoordination {
 	}
 	hasProcessLocal := false
 	hasRequireShared := false
+	hasCertificationOnlyRequireShared := false
 	for _, policy := range c.bundle.RateLimits.Policies {
 		if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
+			if rateLimitPolicyIsCertificationOnly(policy) {
+				hasCertificationOnlyRequireShared = true
+				continue
+			}
 			hasRequireShared = true
 		} else {
 			hasProcessLocal = true
@@ -107,10 +112,30 @@ func (c *Connector) RateLimitCoordination() connectors.RateLimitCoordination {
 			Message: "Shared rate-limit coordination is required; the command refuses before sending a request when the coordinator is unavailable.",
 		}
 	}
+	message := "Process-local rate-limit protection coordinates this pm process only; it is not shared across processes."
+	if hasCertificationOnlyRequireShared {
+		message += " Certification traffic requires shared rate-limit coordination and refuses before sending when the coordinator is unavailable."
+	}
 	return connectors.RateLimitCoordination{
 		Mode:    connectors.RateLimitCoordinationProcessLocal,
-		Message: "Process-local rate-limit protection coordinates this pm process only; it is not shared across processes.",
+		Message: message,
 	}
+}
+
+// rateLimitPolicyIsCertificationOnly reports whether a policy's declared
+// coordination requirement applies only to the certification runner. Connector
+// inspection has no selected credential tier, so it reports ordinary traffic's
+// process-local boundary separately while its message discloses this overlay.
+func rateLimitPolicyIsCertificationOnly(policy connsdk.RateLimitPolicy) bool {
+	if len(policy.Selector.Tiers) == 0 {
+		return false
+	}
+	for _, tier := range policy.Selector.Tiers {
+		if tier != "certification" {
+			return false
+		}
+	}
+	return true
 }
 
 // HasConfigurationConstraints reports whether this bundle declares

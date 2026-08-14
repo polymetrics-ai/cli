@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -22,6 +23,16 @@ var processSharedRateLimitRegistry = struct {
 	mu       sync.RWMutex
 	registry *coordination.SharedRateLimitRegistry
 }{}
+
+var processRateLimitEventSinks = struct {
+	mu    sync.RWMutex
+	sinks map[string]connsdk.RateLimitEventSink
+}{sinks: map[string]connsdk.RateLimitEventSink{}}
+
+var processRateLimitAdmissionTimeouts = struct {
+	mu       sync.RWMutex
+	timeouts map[string]time.Duration
+}{timeouts: map[string]time.Duration{}}
 
 func currentRateLimitRegistry() *coordination.RateLimitRegistry {
 	processRateLimitRegistry.mu.RLock()
@@ -57,6 +68,64 @@ func currentSharedRateLimitRegistry() *coordination.SharedRateLimitRegistry {
 	processSharedRateLimitRegistry.mu.RLock()
 	defer processSharedRateLimitRegistry.mu.RUnlock()
 	return processSharedRateLimitRegistry.registry
+}
+
+// ConfigureRateLimitEventSink attaches a bounded rate-limit event sink to one
+// project-local runtime. The project directory is an engine RuntimeConfig
+// boundary, so concurrent certification runs cannot collect each other's
+// events. The returned cleanup restores the prior registration.
+func ConfigureRateLimitEventSink(projectDir string, sink connsdk.RateLimitEventSink) func() {
+	if projectDir == "" || sink == nil {
+		return func() {}
+	}
+	processRateLimitEventSinks.mu.Lock()
+	previous, hadPrevious := processRateLimitEventSinks.sinks[projectDir]
+	processRateLimitEventSinks.sinks[projectDir] = sink
+	processRateLimitEventSinks.mu.Unlock()
+	return func() {
+		processRateLimitEventSinks.mu.Lock()
+		if hadPrevious {
+			processRateLimitEventSinks.sinks[projectDir] = previous
+		} else {
+			delete(processRateLimitEventSinks.sinks, projectDir)
+		}
+		processRateLimitEventSinks.mu.Unlock()
+	}
+}
+
+func rateLimitEventSinkFor(projectDir string) connsdk.RateLimitEventSink {
+	processRateLimitEventSinks.mu.RLock()
+	defer processRateLimitEventSinks.mu.RUnlock()
+	return processRateLimitEventSinks.sinks[projectDir]
+}
+
+// ConfigureRateLimitAdmissionTimeout bounds individual waits for a project
+// runtime. It is deliberately narrower than a run deadline: normal
+// certification work may continue, but an exhausted provider budget cannot
+// hold the run indefinitely.
+func ConfigureRateLimitAdmissionTimeout(projectDir string, timeout time.Duration) func() {
+	if projectDir == "" || timeout <= 0 {
+		return func() {}
+	}
+	processRateLimitAdmissionTimeouts.mu.Lock()
+	previous, hadPrevious := processRateLimitAdmissionTimeouts.timeouts[projectDir]
+	processRateLimitAdmissionTimeouts.timeouts[projectDir] = timeout
+	processRateLimitAdmissionTimeouts.mu.Unlock()
+	return func() {
+		processRateLimitAdmissionTimeouts.mu.Lock()
+		if hadPrevious {
+			processRateLimitAdmissionTimeouts.timeouts[projectDir] = previous
+		} else {
+			delete(processRateLimitAdmissionTimeouts.timeouts, projectDir)
+		}
+		processRateLimitAdmissionTimeouts.mu.Unlock()
+	}
+}
+
+func rateLimitAdmissionTimeoutFor(projectDir string) time.Duration {
+	processRateLimitAdmissionTimeouts.mu.RLock()
+	defer processRateLimitAdmissionTimeouts.mu.RUnlock()
+	return processRateLimitAdmissionTimeouts.timeouts[projectDir]
 }
 
 func replaceSharedRateLimitRegistryForTest(registry *coordination.SharedRateLimitRegistry) func() {
@@ -218,6 +287,7 @@ type resolvedRateLimitPolicy struct {
 	admission  connsdk.RateLimitAdmission
 	observer   connsdk.RateLimitObserver
 	costHeader string
+	budgets    []connsdk.RateLimitBudget
 }
 
 func (r *rateLimitResolver) resolve(ctx context.Context, policy connsdk.RateLimitPolicy) (resolvedRateLimitPolicy, error) {
@@ -247,13 +317,13 @@ func (r *rateLimitResolver) resolve(ctx context.Context, policy connsdk.RateLimi
 			return resolvedRateLimitPolicy{}, err
 		}
 		limiter := r.sharedRegistry.Limiter(key, policy.Budgets)
-		return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader}, nil
+		return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets}, nil
 	}
 	if r.registry == nil {
 		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q local registry is unavailable", policy.ID)
 	}
 	limiter := r.registry.Limiter(key, policy.Budgets)
-	return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader}, nil
+	return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets}, nil
 }
 
 type endpointRateLimitResolver struct {
@@ -355,7 +425,7 @@ func (r *endpointRateLimitResolver) AdmitRoute(ctx context.Context, route connsd
 	}
 	if len(matched) == 0 {
 		for _, policy := range r.policies {
-			if policy.Coordination != connsdk.RateLimitCoordinationRequireShared {
+			if policy.Coordination != connsdk.RateLimitCoordinationRequireShared || !rateLimitSelectorMatchesNonRoute(policy.Selector, r.resolver.config) {
 				continue
 			}
 			if err := ctx.Err(); err != nil {
@@ -368,6 +438,16 @@ func (r *endpointRateLimitResolver) AdmitRoute(ctx context.Context, route connsd
 		return "", err
 	}
 	return costHeader, nil
+}
+
+// rateLimitSelectorMatchesNonRoute distinguishes a require-shared policy that
+// genuinely selected this credential/tier from one that belongs to another
+// traffic family. A selected policy with no matching endpoint must fail closed;
+// an unrelated GitHub certification overlay must not change ordinary traffic.
+func rateLimitSelectorMatchesNonRoute(selector connsdk.RateLimitSelector, cfg map[string]string) bool {
+	selector.Endpoints = nil
+	selector.ExcludeEndpoints = nil
+	return rateLimitSelectorMatches(selector, "", "", cfg)
 }
 
 func (r *endpointRateLimitResolver) ObserveRoute(ctx context.Context, route connsdk.RateLimitRoute, observation connsdk.RateLimitObservation) {
@@ -490,8 +570,30 @@ type resolvedRateLimitObserver []resolvedRateLimitPolicy
 
 func (o resolvedRateLimitObserver) Observe(ctx context.Context, observation connsdk.RateLimitObservation) {
 	for _, policy := range o {
+		if !rateLimitPolicyAcceptsObservation(policy, observation) {
+			continue
+		}
 		policy.observer.Observe(ctx, observation)
 	}
+}
+
+// rateLimitPolicyAcceptsObservation keeps a GraphQL response's primary
+// rateLimit selection out of the independently declared secondary point
+// budget. GitHub's response body describes the primary cost, remaining, and
+// reset time; applying any of those fields to the secondary policy would
+// invent a provider signal and incorrectly block otherwise available traffic.
+// Header observations retain their foundation behavior because no body family
+// is involved.
+func rateLimitPolicyAcceptsObservation(policy resolvedRateLimitPolicy, observation connsdk.RateLimitObservation) bool {
+	if observation.CostSource != connsdk.RateLimitCostSourceGraphQLRateLimit {
+		return true
+	}
+	for _, budget := range policy.budgets {
+		if budget.Cost != nil && budget.Cost.ResponseBody == string(connsdk.RateLimitCostSourceGraphQLRateLimit) {
+			return true
+		}
+	}
+	return false
 }
 
 // RequesterFor returns a requester governed by declared rate-limit policies.

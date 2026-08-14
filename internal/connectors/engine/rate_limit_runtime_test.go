@@ -309,6 +309,24 @@ func withAllRateLimit(bundle Bundle) Bundle {
 	return bundle
 }
 
+func TestRuntimeAppliesProjectRateLimitAdmissionTimeout(t *testing.T) {
+	cfg := rateLimitTestConfig(t)
+	cfg.ProjectDir = t.TempDir()
+	restore := ConfigureRateLimitAdmissionTimeout(cfg.ProjectDir, 17*time.Millisecond)
+	t.Cleanup(restore)
+
+	runtime, err := newRuntime(context.Background(), withAllRateLimit(Bundle{
+		Name: "deadline-project",
+		HTTP: HTTPBase{URL: "https://example.test"},
+	}), cfg, nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	if got, want := runtime.Requester.RateLimitAdmissionTimeout, 17*time.Millisecond; got != want {
+		t.Fatalf("requester admission timeout = %s, want %s", got, want)
+	}
+}
+
 func requireRateLimitWait(t *testing.T, clock *engineRateLimitClock) {
 	t.Helper()
 	if len(clock.waits) != 1 || clock.waits[0] != time.Second {

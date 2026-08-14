@@ -347,8 +347,8 @@ func validateRateLimitCost(cost *connsdk.RateLimitCost) error {
 	if cost == nil {
 		return nil
 	}
-	if cost.DefaultCost == nil && strings.TrimSpace(cost.ResponseHeader) == "" {
-		return fmt.Errorf("cost must declare default_cost or response_header")
+	if cost.DefaultCost == nil && strings.TrimSpace(cost.ResponseHeader) == "" && strings.TrimSpace(cost.ResponseBody) == "" {
+		return fmt.Errorf("cost must declare default_cost, response_header, or response_body")
 	}
 	if err := requirePositiveRateLimitFloat("cost.default_cost", cost.DefaultCost); err != nil && cost.DefaultCost != nil {
 		return err
@@ -358,6 +358,12 @@ func validateRateLimitCost(cost *connsdk.RateLimitCost) error {
 		if header == "" || header != cost.ResponseHeader || !httpHeaderNamePattern.MatchString(header) {
 			return fmt.Errorf("cost.response_header must be an HTTP field name")
 		}
+	}
+	if cost.ResponseBody != "" && cost.ResponseBody != string(connsdk.RateLimitCostSourceGraphQLRateLimit) {
+		return fmt.Errorf("cost.response_body must be graphql_rate_limit")
+	}
+	if cost.ResponseHeader != "" && cost.ResponseBody != "" {
+		return fmt.Errorf("cost must not combine response_header and response_body")
 	}
 	return nil
 }

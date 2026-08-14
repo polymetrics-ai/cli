@@ -529,6 +529,26 @@ func TestMixedRateLimitPoliciesExposePolicyScopedCoordination(t *testing.T) {
 	}
 }
 
+func TestCertificationOnlyRequireSharedPolicyKeepsDefaultInspectionProcessLocal(t *testing.T) {
+	bundle := withAllRateLimit(Bundle{Name: "certification-overlay", HTTP: HTTPBase{URL: "https://example.test"}})
+	certification := bundle.RateLimits.Policies[0]
+	certification.ID = "certification-shared"
+	certification.Coordination = connsdk.RateLimitCoordinationRequireShared
+	certification.Selector = connsdk.RateLimitSelector{Tiers: []string{"certification"}}
+	bundle.RateLimits.Policies = append(bundle.RateLimits.Policies, certification)
+
+	status, ok := connectors.RateLimitCoordinationOf(New(bundle, nil))
+	if !ok {
+		t.Fatal("certification-only shared policy did not expose rate-limit coordination status")
+	}
+	if got, want := status.Mode, connectors.RateLimitCoordinationProcessLocal; got != want {
+		t.Fatalf("certification-only shared policy inspect mode = %q, want %q", got, want)
+	}
+	if got, want := status.Message, "Process-local rate-limit protection coordinates this pm process only; it is not shared across processes. Certification traffic requires shared rate-limit coordination and refuses before sending when the coordinator is unavailable."; got != want {
+		t.Fatalf("certification-only shared policy inspect message = %q, want %q", got, want)
+	}
+}
+
 func TestUndeclaredRateLimitPolicyHasNoCoordinationProvenance(t *testing.T) {
 	connector := New(Bundle{Name: "undeclared", HTTP: HTTPBase{URL: "https://example.test"}}, nil)
 	if _, ok := connectors.RateLimitCoordinationOf(connector); ok {

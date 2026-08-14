@@ -527,9 +527,11 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 		return nil, err
 	}
 	requester := &connsdk.Requester{
-		BaseURL:        baseURL,
-		UserAgent:      b.HTTP.UserAgent,
-		DefaultHeaders: headers,
+		BaseURL:                   baseURL,
+		UserAgent:                 b.HTTP.UserAgent,
+		DefaultHeaders:            headers,
+		RateLimitEvents:           rateLimitEventSinkFor(cfg.ProjectDir),
+		RateLimitAdmissionTimeout: rateLimitAdmissionTimeoutFor(cfg.ProjectDir),
 	}
 	resolver := newRateLimitResolverWithContext(ctx, b, rateLimitConfigForSelectedAuth(cfg, b.HTTP.Auth, h))
 	authRuntime := &Runtime{baseRequester: requester, rateLimits: resolver}
