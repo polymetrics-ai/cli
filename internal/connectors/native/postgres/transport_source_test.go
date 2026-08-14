@@ -254,8 +254,65 @@ func TestPostgresSnapshotRecordValuesNormalizeTransportVocabulary(t *testing.T) 
 	if err != nil {
 		t.Fatalf("orderValues() error = %v", err)
 	}
-	if got, want := position, []any{uuid}; !reflect.DeepEqual(got, want) {
-		t.Fatalf("orderValues() = %#v, want native key %#v", got, want)
+	if got, want := position, []any{pgtype.UUID{Bytes: uuid, Valid: true}}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("orderValues() = %#v, want PostgreSQL-encodable key %#v", got, want)
+	}
+}
+
+func TestPostgresSnapshotStableKeyPaginationValuesAreTypedOrRefused(t *testing.T) {
+	relation := database.RelationRef{
+		Schema: database.SchemaRef{Catalog: database.CatalogRef{Name: "analytics"}, Name: "public"},
+		Name:   "events",
+	}
+	uuid := [16]byte{0x54, 0x85, 0xb5, 0x8f, 0x40, 0x11, 0x4b, 0xd2, 0x8a, 0x9e, 0xf7, 0x80, 0x1e, 0x12, 0x7a, 0x91}
+
+	for _, test := range []struct {
+		name    string
+		column  database.Column
+		value   any
+		raw     []byte
+		want    any
+		wantErr string
+	}{
+		{
+			name:   "uuid",
+			column: database.Column{Ref: database.ColumnRef{Relation: relation, Name: "event_id"}, Type: database.NewUUID(), Nullable: false, Ordinal: 1},
+			value:  uuid,
+			want:   pgtype.UUID{Bytes: uuid, Valid: true},
+		},
+		{
+			name:   "negative timestamp infinity",
+			column: database.Column{Ref: database.ColumnRef{Relation: relation, Name: "occurred_at"}, Type: mustTransportTimestamp(t, false), Nullable: false, Ordinal: 1},
+			value:  pgtype.NegativeInfinity,
+			want:   pgtype.Timestamp{InfinityModifier: pgtype.NegativeInfinity, Valid: true},
+		},
+		{
+			name:    "json",
+			column:  database.Column{Ref: database.ColumnRef{Relation: relation, Name: "body"}, Type: database.NewJSON(), Nullable: false, Ordinal: 1},
+			value:   map[string]any{"id": int64(1)},
+			raw:     []byte(`{"id":9007199254740993}`),
+			wantErr: "json",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			plan := postgresSnapshotReadPlan{
+				columns: []database.Column{test.column},
+				order:   []database.ColumnRef{test.column.Ref},
+			}
+			got, err := plan.orderValues([]any{test.value}, [][]byte{test.raw})
+			if test.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), test.wantErr) {
+					t.Fatalf("orderValues() error = %v, want named %q refusal", err, test.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("orderValues() error = %v", err)
+			}
+			if want := []any{test.want}; !reflect.DeepEqual(got, want) {
+				t.Fatalf("orderValues() = %#v, want %#v", got, want)
+			}
+		})
 	}
 }
 
@@ -292,15 +349,12 @@ func TestPostgresSnapshotRecordValuesPreserveRawJSON(t *testing.T) {
 	if record["empty_payload"] != nil {
 		t.Fatalf("empty_payload = %#v, want SQL NULL", record["empty_payload"])
 	}
-	position, err := plan.orderValues(
+	_, err = plan.orderValues(
 		[]any{map[string]any{"id": float64(9007199254740992)}, nil, nil},
 		[][]byte{raw, []byte("null"), nil},
 	)
-	if err != nil {
-		t.Fatalf("orderValues() error = %v", err)
-	}
-	if got, want := position, []any{json.RawMessage(`{"id":9007199254740993}`)}; !reflect.DeepEqual(got, want) {
-		t.Fatalf("orderValues() = %#v, want %#v", got, want)
+	if err == nil || !strings.Contains(err.Error(), "json") {
+		t.Fatalf("orderValues() error = %v, want named JSON stable-key refusal", err)
 	}
 }
 
@@ -405,10 +459,30 @@ func TestPostgresSnapshotReadPlanRefusesUnstableOrMissingRelation(t *testing.T) 
 	}
 }
 
-func TestPostgresSnapshotCheckpointDoesNotRequireJSONEncodableKeyValues(t *testing.T) {
-	logical, err := database.NewSignedInteger(64)
+func TestPostgresSnapshotReadPlanRefusesNonEncodableStableKeyBeforeQuery(t *testing.T) {
+	relation := database.RelationRef{
+		Schema: database.SchemaRef{Catalog: database.CatalogRef{Name: "analytics"}, Name: "public"},
+		Name:   "events",
+	}
+	key := database.ColumnRef{Relation: relation, Name: "body"}
+	catalog, err := database.NewCatalog(database.CatalogRef{Name: "analytics"}, []database.Relation{{
+		Ref:            relation,
+		NativeIdentity: database.NativeRelationIdentity{Kind: "oid", Value: "10004"},
+		Columns:        []database.Column{{Ref: key, Type: database.NewJSON(), Nullable: false, Ordinal: 1}},
+		Keys:           []database.Key{{Name: "events_pkey", Kind: database.KeyPrimary, Columns: []database.ColumnRef{key}}},
+	}})
 	if err != nil {
-		t.Fatalf("NewSignedInteger() error = %v", err)
+		t.Fatalf("NewCatalog() error = %v", err)
+	}
+	if _, err := newPostgresSnapshotReadPlan(catalog, relation, 1); err == nil || !strings.Contains(err.Error(), "json") {
+		t.Fatalf("newPostgresSnapshotReadPlan() error = %v, want named JSON stable-key refusal", err)
+	}
+}
+
+func TestPostgresSnapshotCheckpointDoesNotRequireJSONEncodableKeyValues(t *testing.T) {
+	logical, err := database.NewFloat(64)
+	if err != nil {
+		t.Fatalf("NewFloat() error = %v", err)
 	}
 	relationRef := database.RelationRef{
 		Schema: database.SchemaRef{Catalog: database.CatalogRef{Name: "analytics"}, Name: "public"},

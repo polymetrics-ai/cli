@@ -9,6 +9,8 @@
 | R5 | Full modes can emit an unbounded, unordered, loosely typed record set. | Both full modes emit pages bounded by request and definition caps, with catalog-derived projection and stable ordering. |
 | R6 | Output identity/checkpoint can vary or omit schema/source binding. | A valid candidate carries the exact source identity, typed schema fingerprint/barrier, generation, and deterministic dedupe boundary. |
 | R7 | A fake proves only exit status. | A real PostgreSQL 16.10 dbtest logs the emitted rows plus identity/schema/checkpoint values. |
+| R8 | A driver-native UUID cursor or temporal infinity reaches page two as an unencodable value. | The typed-catalog cursor normalizer emits pgx-encodable UUID/date/timestamp values and rejects an unsupported key kind before querying. |
+| R9 | The live proof only covers happy-path scalar rows. | PostgreSQL 16.10 dbtest asserts emitted zone-less timestamp, UUID, exact JSON number, JSON null, `-infinity` timestamp key, and UUID-key page-two values. |
 
 ## RED command
 
@@ -28,6 +30,12 @@ to build with `undefined: RegisterSnapshotTransportSource`, proving that a
 declaration without the PostgreSQL-owned registry adapter cannot resolve a
 source executor.
 
+**Captured RED (cursor normalizer):**
+`TestPostgresSnapshotStableKeyPaginationValuesAreTypedOrRefused` failed with a
+raw `[16]byte` UUID cursor and with no refusal for a JSON stable key. This
+proved that the previous infinity-only conversion still delegated a page-two
+failure to pgx rather than refusing at the typed pagination boundary.
+
 ## GREEN evidence
 
 - `Connector.Definition()` now adds the exact `native_database` descriptor;
@@ -41,9 +49,15 @@ source executor.
 - `TestPostgresSnapshotReadPlanAndCheckpointUseTypedStableIdentity` proves
   selected catalog order, finite parameterized page shape, schema fingerprint,
   source identity, full-snapshot barrier, and deterministic dedupe boundary.
+- `TestPostgresSnapshotStableKeyPaginationValuesAreTypedOrRefused` proves a
+  raw UUID stable key becomes `pgtype.UUID`, a negative timestamp infinity
+  becomes `pgtype.Timestamp`, and a JSON key is refused with its logical kind
+  before a query is constructed.
 - `TestPostgresDynamicTypedCatalogUsesLiveMetadata` passes via Docker against
-  PostgreSQL 16.10 for both `full_append` and `full_overwrite`; the real output
-  is retained in `traces/live-source-green.txt`.
+  PostgreSQL 16.10 for both `full_append` and `full_overwrite`, then pages a
+  `-infinity` timestamp key and a UUID key at batch size one. It asserts the
+  emitted civil timestamp, UUID, exact JSON number, JSON null, and edge-key
+  values; the real output is retained in `traces/live-source-green.txt`.
 
 ## Review regression slice
 

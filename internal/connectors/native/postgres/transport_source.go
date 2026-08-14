@@ -279,6 +279,9 @@ func newPostgresSnapshotReadPlan(catalog database.Catalog, relationRef database.
 		if err != nil {
 			return postgresSnapshotReadPlan{}, err
 		}
+		if err := postgresSnapshotValidatePaginationOrder(order, columns); err != nil {
+			return postgresSnapshotReadPlan{}, err
+		}
 		return postgresSnapshotReadPlan{relation: relation, columns: columns, order: order, pageSize: pageSize, fingerprint: catalog.Fingerprint()}, nil
 	}
 	return postgresSnapshotReadPlan{}, errors.New("postgres snapshot transport source relation is absent from the typed catalog")
@@ -314,6 +317,21 @@ func postgresSnapshotKeyColumnsNonNullable(key database.Key, columns []database.
 		}
 	}
 	return true
+}
+
+func postgresSnapshotValidatePaginationOrder(order []database.ColumnRef, columns []database.Column) error {
+	for _, keyColumn := range order {
+		for _, column := range columns {
+			if column.Ref != keyColumn {
+				continue
+			}
+			if err := postgresSnapshotPaginationLogicalType(column.Type); err != nil {
+				return fmt.Errorf("postgres snapshot transport: stable key %q: %w", keyColumn.Name, err)
+			}
+			break
+		}
+	}
+	return nil
 }
 
 func (p postgresSnapshotReadPlan) readPage(ctx context.Context, tx pgx.Tx, after []any) ([]connectors.Record, []any, error) {
@@ -554,26 +572,127 @@ func (p postgresSnapshotReadPlan) orderValues(values []any, rawValues [][]byte) 
 		if !found || value == nil {
 			return nil, errors.New("postgres snapshot transport: stable key row value is absent")
 		}
-		ordered = append(ordered, postgresSnapshotPaginationValue(column.Type, value))
+		paginationValue, err := postgresSnapshotPaginationValue(column.Type, value)
+		if err != nil {
+			return nil, fmt.Errorf("postgres snapshot transport: normalize stable key %q: %w", orderColumn.Name, err)
+		}
+		ordered = append(ordered, paginationValue)
 	}
 	return ordered, nil
 }
 
-func postgresSnapshotPaginationValue(logical database.LogicalType, value any) any {
-	modifier, ok := value.(pgtype.InfinityModifier)
-	if !ok || (modifier != pgtype.Infinity && modifier != pgtype.NegativeInfinity) {
-		return value
+// postgresSnapshotPaginationValue keeps cursor values in pgx's parameter
+// vocabulary. Record values may deliberately be JSON-safe strings or raw JSON,
+// but the next keyset query needs the original PostgreSQL type. Unknown or
+// non-encodable catalog shapes fail here, before a partially-read page can ask
+// pgx to guess at a driver-native value.
+func postgresSnapshotPaginationValue(logical database.LogicalType, value any) (any, error) {
+	if value == nil {
+		return nil, fmt.Errorf("typed catalog logical type %q has no stable key value", logical.Kind())
+	}
+	if err := postgresSnapshotPaginationLogicalType(logical); err != nil {
+		return nil, err
 	}
 	switch logical.Kind() {
-	case database.LogicalDate:
-		return pgtype.Date{InfinityModifier: modifier, Valid: true}
-	case database.LogicalTimestamp:
-		if logical.WithTimezone() {
-			return pgtype.Timestamptz{InfinityModifier: modifier, Valid: true}
+	case database.LogicalSignedInteger:
+		switch typed := value.(type) {
+		case int16, int32, int64:
+			return typed, nil
 		}
-		return pgtype.Timestamp{InfinityModifier: modifier, Valid: true}
+	case database.LogicalUnsignedInteger:
+		switch typed := value.(type) {
+		case uint8, uint16, uint32, uint64:
+			return typed, nil
+		}
+	case database.LogicalDecimal:
+		if typed, ok := value.(pgtype.Numeric); ok {
+			return typed, nil
+		}
+	case database.LogicalFloat:
+		switch typed := value.(type) {
+		case float32, float64:
+			return typed, nil
+		}
+	case database.LogicalBoolean:
+		if typed, ok := value.(bool); ok {
+			return typed, nil
+		}
+	case database.LogicalString:
+		if typed, ok := value.(string); ok {
+			return typed, nil
+		}
+	case database.LogicalBinary:
+		if typed, ok := value.([]byte); ok {
+			return append([]byte(nil), typed...), nil
+		}
+	case database.LogicalDate:
+		switch typed := value.(type) {
+		case time.Time, pgtype.Date:
+			return typed, nil
+		case pgtype.InfinityModifier:
+			if typed == pgtype.Infinity || typed == pgtype.NegativeInfinity {
+				return pgtype.Date{InfinityModifier: typed, Valid: true}, nil
+			}
+		}
+	case database.LogicalTime:
+		switch typed := value.(type) {
+		case pgtype.Time, string:
+			return typed, nil
+		case []byte:
+			return append([]byte(nil), typed...), nil
+		}
+	case database.LogicalTimestamp:
+		switch typed := value.(type) {
+		case time.Time:
+			return typed, nil
+		case pgtype.InfinityModifier:
+			if typed != pgtype.Infinity && typed != pgtype.NegativeInfinity {
+				break
+			}
+			if logical.WithTimezone() {
+				return pgtype.Timestamptz{InfinityModifier: typed, Valid: true}, nil
+			}
+			return pgtype.Timestamp{InfinityModifier: typed, Valid: true}, nil
+		case pgtype.Timestamp:
+			if !logical.WithTimezone() {
+				return typed, nil
+			}
+		case pgtype.Timestamptz:
+			if logical.WithTimezone() {
+				return typed, nil
+			}
+		}
+	case database.LogicalUUID:
+		switch typed := value.(type) {
+		case [16]byte:
+			return pgtype.UUID{Bytes: typed, Valid: true}, nil
+		case pgtype.UUID:
+			if typed.Valid {
+				return typed, nil
+			}
+		}
 	default:
-		return value
+		return nil, fmt.Errorf("typed catalog logical type %q cannot normalize PostgreSQL stable key value %T", logical.Kind(), value)
+	}
+	return nil, fmt.Errorf("typed catalog logical type %q cannot normalize PostgreSQL stable key value %T", logical.Kind(), value)
+}
+
+func postgresSnapshotPaginationLogicalType(logical database.LogicalType) error {
+	switch logical.Kind() {
+	case database.LogicalSignedInteger,
+		database.LogicalUnsignedInteger,
+		database.LogicalDecimal,
+		database.LogicalFloat,
+		database.LogicalBoolean,
+		database.LogicalString,
+		database.LogicalBinary,
+		database.LogicalDate,
+		database.LogicalTime,
+		database.LogicalTimestamp,
+		database.LogicalUUID:
+		return nil
+	default:
+		return fmt.Errorf("typed catalog logical type %q is not encodable for a PostgreSQL stable key", logical.Kind())
 	}
 }
 

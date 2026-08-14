@@ -7,9 +7,13 @@
 - [x] A missing descriptor refuses before I/O.
 - [x] A wrong executor family refuses before I/O.
 - [x] An unregistered declared executor refuses before I/O.
+- [x] Typed keyset cursors normalize UUID and temporal infinity values for
+      pgx, while unsupported stable-key kinds refuse before the next query.
 - [x] Focused unit and package race checks pass.
 - [x] The PostgreSQL dbtest harness passes against an explicit Docker-or-Podman
-      Unix endpoint and its output shows rows, emitted identity/schema, and checkpoint.
+      Unix endpoint and its output shows rows, emitted identity/schema,
+      checkpoint, civil timestamp, UUID, exact JSON number/null, timestamp
+      infinity, and UUID page-two values.
 - [x] Required individual repository gates pass.
 - [x] Manual inline `verify-work` and `code-review` records are complete.
 
@@ -45,7 +49,9 @@ POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
   ./internal/connectors/native/postgres
 ```
 
-The live run emitted five exact rows in three bounded pages for each full
-mode. Its emitted source identity, typed catalog fingerprint, repeatable-read
-snapshot barrier, and dedupe identity are retained verbatim in
+The live run emitted five exact rows in three bounded pages for each full mode,
+including the UUID, zone-less timestamp, exact JSON number, and JSON null. It
+then read a `-infinity` timestamp primary key and a UUID primary key through
+batch-size-one page two. Each emitted identity, typed catalog fingerprint,
+repeatable-read snapshot barrier, and dedupe identity is retained verbatim in
 `traces/live-source-green.txt`.

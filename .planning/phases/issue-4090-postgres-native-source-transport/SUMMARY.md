@@ -21,7 +21,12 @@ bounded key-ordered reads, and emits a source-bound checkpoint with the typed
 catalog fingerprint and PostgreSQL snapshot barrier.
 
 Focused preflight tests prove missing descriptor, wrong-family, and unregistered
-executor refusal before source I/O. Live PostgreSQL 16.10 dbtest coverage proves
-five rows in three pages for `full_append` and `full_overwrite`, with the
+executor refusal before source I/O. The typed pagination boundary converts
+driver-native UUID and temporal-infinity cursor values into pgx parameters and
+refuses non-encodable logical key kinds before issuing the next query. Live
+PostgreSQL 16.10 dbtest coverage proves five rows in three pages for
+`full_append` and `full_overwrite`, including a UUID, a zone-less timestamp,
+an exact JSON integer beyond the `float64` range, and JSON null. It also proves
+batch-size-one page two for a `-infinity` timestamp key and a UUID key, with
 identity, schema fingerprint, barrier, and dedupe checkpoint emitted by the
 registered source.
