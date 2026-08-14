@@ -10,11 +10,29 @@ import (
 
 // DerivedSyncModes returns sync modes derived from the bundle-declared stream shape.
 func DerivedSyncModes(s StreamSpec, sch *StreamSchema) []string {
+	cursorField := effectiveCursorField(s, sch)
 	return synccontract.SupportedPublicModeNames(synccontract.PublicModeCapabilities{
 		HasPrimaryKey:          sch != nil && len(sch.PrimaryKey) > 0,
-		HasCursor:              sch != nil && sch.CursorField != "",
-		HasIncrementalExecutor: s.Incremental != nil && (s.Incremental.CursorField == "" || (sch != nil && s.Incremental.CursorField == sch.CursorField)),
+		HasCursor:              cursorField != "",
+		HasIncrementalExecutor: hasIncrementalExecutor(s, cursorField),
 	})
+}
+
+func effectiveCursorField(s StreamSpec, sch *StreamSchema) string {
+	if sch != nil && sch.CursorField != "" {
+		return sch.CursorField
+	}
+	if s.Incremental != nil {
+		return s.Incremental.CursorField
+	}
+	return ""
+}
+
+func hasIncrementalExecutor(s StreamSpec, cursorField string) bool {
+	if s.Incremental == nil || cursorField == "" {
+		return false
+	}
+	return s.Incremental.CursorField == "" || s.Incremental.CursorField == cursorField
 }
 
 // Connector adapts a declarative Bundle (+ optional Tier-2 Hooks) to
@@ -448,8 +466,8 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		}
 		if sch != nil {
 			summary.PrimaryKey = sch.PrimaryKey
-			summary.CursorField = sch.CursorField
 		}
+		summary.CursorField = effectiveCursorField(s, sch)
 		streamSummaries = append(streamSummaries, summary)
 	}
 
@@ -660,20 +678,27 @@ func specJSON(b Bundle) []byte {
 func legacyStreamOf(b Bundle, s StreamSpec) connectors.Stream {
 	sch := b.Schemas[s.Name]
 	stream := connectors.Stream{Name: s.Name}
+	cursorField := effectiveCursorField(s, sch)
 	if sch == nil {
+		if cursorField != "" {
+			stream.CursorFields = []string{cursorField}
+		}
 		return stream
 	}
 	if len(sch.Raw) > 0 {
 		projected, err := connectors.StreamFromSchema(s.Name, "", sch.Raw)
 		if err == nil {
+			if cursorField != "" {
+				projected.CursorFields = []string{cursorField}
+			}
 			return projected
 		}
 	}
 	// Hand-assembled test bundles predating raw-schema retention still need a
 	// useful catalog projection. Loaded bundles always take the path above.
 	stream.PrimaryKey = sch.PrimaryKey
-	if sch.CursorField != "" {
-		stream.CursorFields = []string{sch.CursorField}
+	if cursorField != "" {
+		stream.CursorFields = []string{cursorField}
 	}
 	for _, name := range sch.Properties() {
 		stream.Fields = append(stream.Fields, connectors.Field{Name: name})

@@ -541,7 +541,7 @@ func checkPrimaryKeysAndCursors(b engine.Bundle) []Finding {
 					Message: fmt.Sprintf("stream %q incremental.cursor_field %q not found in schema %q properties", s.Name, s.Incremental.CursorField, s.SchemaRef),
 				})
 			}
-			if sch.CursorField != s.Incremental.CursorField {
+			if sch.CursorField != "" && sch.CursorField != s.Incremental.CursorField {
 				findings = append(findings, Finding{
 					Connector: b.Name, File: s.SchemaRef, Rule: ruleIncrementalCursorMismatch,
 					Message: fmt.Sprintf("stream %q incremental.cursor_field %q does not match schema %q x-cursor-field %q", s.Name, s.Incremental.CursorField, s.SchemaRef, sch.CursorField),
