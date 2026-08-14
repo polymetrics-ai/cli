@@ -1,0 +1,15 @@
+{
+  "issue": 4090,
+  "phase": "issue-4090-postgres-native-source-transport",
+  "mode": "manual-inline-gsd-fallback",
+  "status": "planned",
+  "parent_issue": 3972,
+  "parent_branch": "integration/4015-mvp-flat-r1",
+  "child_branch": "fm/cli-4090-native-database-source-r1",
+  "discuss_phase": "recorded",
+  "plan_phase_tdd": "recorded",
+  "execute_phase": "pending-red-test",
+  "verify_work": "pending",
+  "code_review": "pending",
+  "fallback_reason": "Issue phase with a canonical single worker; no compatible role spawning is permitted."
+}
