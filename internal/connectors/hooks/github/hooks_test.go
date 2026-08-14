@@ -8,15 +8,20 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
+	"errors"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync/atomic"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 	githubhooks "polymetrics.ai/internal/connectors/hooks/github"
+	"polymetrics.ai/internal/coordination"
 )
 
 // testPrivateKeyPEM returns a freshly generated (test-only) RSA private key
@@ -39,6 +44,76 @@ func newRuntimeConfig(baseURL string, cfgExtra map[string]string, secrets map[st
 		cfg[k] = v
 	}
 	return connectors.RuntimeConfig{Config: cfg, Secrets: secrets}
+}
+
+// githubAppAuthRecordingTransport proves whether a physical token exchange
+// reached the provider boundary. It deliberately records no headers or body:
+// both contain credential material for the GitHub App flow.
+type githubAppAuthRecordingTransport struct {
+	sends atomic.Int32
+}
+
+func (t *githubAppAuthRecordingTransport) RoundTrip(*http.Request) (*http.Response, error) {
+	t.sends.Add(1)
+	return &http.Response{
+		StatusCode: http.StatusCreated,
+		Header:     http.Header{"Content-Type": []string{"application/json"}},
+		Body:       io.NopCloser(strings.NewReader(`{"token":"synthetic-installation-token"}`)),
+	}, nil
+}
+
+func requireSharedGitHubAppBundle(t *testing.T) engine.Bundle {
+	t.Helper()
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	for i := range bundle.RateLimits.Policies {
+		if bundle.RateLimits.Policies[i].ID == "app-installation" {
+			bundle.RateLimits.Policies[i].Coordination = connsdk.RateLimitCoordinationRequireShared
+			return bundle
+		}
+	}
+	t.Fatal("GitHub app-installation rate policy is absent")
+	return engine.Bundle{}
+}
+
+func githubAppAuthAdmissionConfig(t *testing.T) connectors.RuntimeConfig {
+	t.Helper()
+	identity, err := connectors.NewCoordinationIdentity([]byte("github-app-auth-admission-test-salt"), connectors.CredentialBinding{
+		BindingID:      "github-app-auth-admission-test-binding",
+		ProviderFamily: "github",
+		AuthProfile:    "github_app",
+	})
+	if err != nil {
+		t.Fatalf("NewCoordinationIdentity: %v", err)
+	}
+	cfg := newRuntimeConfig("https://github-app-auth-rate.test", map[string]string{
+		"app_id":          "4072",
+		"installation_id": "admission-test-installation",
+		"auth_type":       "github_app",
+	}, map[string]string{"private_key": testPrivateKeyPEM(t)})
+	cfg.CoordinationIdentity = identity
+	return cfg
+}
+
+func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testing.T) {
+	recordingTransport := &githubAppAuthRecordingTransport{}
+	previousDefaultTransport := http.DefaultTransport
+	http.DefaultTransport = recordingTransport
+	t.Cleanup(func() { http.DefaultTransport = previousDefaultTransport })
+
+	engine.ConfigureSharedRateLimitRegistry(coordination.NewSharedRateLimitRegistry(nil))
+	t.Cleanup(func() { engine.ConfigureSharedRateLimitRegistry(nil) })
+
+	_, err := engine.NewRuntime(context.Background(), requireSharedGitHubAppBundle(t), githubAppAuthAdmissionConfig(t), githubhooks.New())
+	if got := recordingTransport.sends.Load(); got != 0 {
+		t.Fatalf("physical GitHub App token sends = %d, want 0 before shared admission refusal (NewRuntime error = %v)", got, err)
+	}
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(err, &unavailable) {
+		t.Fatalf("NewRuntime error = %T %v, want typed shared coordinator refusal", err, err)
+	}
 }
 
 func TestAuthenticatorGithubApp_MintsInstallationTokenAndSetsBearer(t *testing.T) {

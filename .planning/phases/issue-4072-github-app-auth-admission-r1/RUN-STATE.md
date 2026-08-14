@@ -22,7 +22,7 @@
 | Recovery-base gate | complete | branch rebased to mandated integration base containing #4122 / #3754 |
 | discuss/context | complete | `CONTEXT.md`, `DISCUSSION-LOG.md` |
 | plan-phase --tdd | complete (manual inline fallback) | recovered artifacts reconciled to #4122 / #3754 |
-| execute RED | pending | no production edits before RED commit |
+| execute RED | complete | causal test observed one token POST before shared admission |
 | execute GREEN | pending | no broad validation authorized |
 | verify-work / code-review | deferred | Firstmate shared validation gate |
 

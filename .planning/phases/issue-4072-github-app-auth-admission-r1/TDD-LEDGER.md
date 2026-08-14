@@ -43,8 +43,11 @@
 - **Planned command:** `go test ./internal/connectors/engine ./internal/connectors/hooks/github -run 'TestGitHubAppAuthRateAdmission' -count=1`
 - **Expected failure:** test detects at least one physical installation-token POST
   before `require_shared` can return the typed refusal.
-- **Commit:** pending
-- **Observed failure:** pending — do not proceed to GREEN until this is a causal behavioral failure.
+- **Commit:** pending (recorded with the RED test slice)
+- **Observed failure:** `TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend`
+  observed one physical token POST and `NewRuntime error = <nil>` while the
+  copied GitHub app-installation policy required a missing shared coordinator.
+  This is the intended causal behavioral failure, not a build failure.
 
 ## GREEN
 
