@@ -347,10 +347,9 @@ invocation recipe and environment variables live in
   container-bound anonymous data volume, run-specific image reference, and
   (when a Docker VM needs it) its ephemeral
   capacity probe. The pulled source/probe images are shared and never removed.
-  Target identity and image-store capacity must be proven before every runtime
-  command. A Docker VM probe is configured through `dbtest.Config`, must already
-  be cached, runs through the selected endpoint with no network and read-only
-  privileges, and is never pulled by the harness.
+  Target identity must be proven before every runtime command and image-store
+  capacity before the source-image pull. The maintainer guide owns Docker VM
+  probe configuration and safety details.
   Cleanup is unconditional and idempotent, including failure and
   interrupt paths, and stays armed until the last removal returns; keep engines
   sequential unless bounded parallelism is explicitly opted into.
