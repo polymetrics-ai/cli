@@ -20,6 +20,7 @@
 - `POLYMETRICS_COORDINATION_INTEGRATION=1 go test -tags coordinationintegration -timeout 20m -v ./internal/connectors/engine -run '^TestGitHubCertificationSharedBudgetCoordinatesSeparateProcesses$'` passed: two OS processes shared capacity one, the first sent once, and the second sent zero times.
 - `make lint`, `make docs-check`, `make github-parity-artifacts-check`, `make connector-canon-check`, and `make release-workflow-check` passed.
 - The local `agent-contract-check` sees a pre-existing duplicate project-agent file beneath untracked workspace `.tmp/`; it is not in this branch or an integration CI checkout, so it is recorded as environment noise rather than changed here.
+- PR Verify regression repair: `TestConnectorsInspectLabelsProcessLocalRateLimitProtection` now proves ordinary GitHub inspection remains `process_local` and both JSON and human output disclose certification's fail-closed shared requirement; `TestCertificationOnlyRequireSharedPolicyKeepsDefaultInspectionProcessLocal` separately proves certification-only overlays do not mislabel ordinary traffic as `mixed`.
 
 ## Live evidence rule
 

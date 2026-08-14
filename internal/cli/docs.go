@@ -329,9 +329,11 @@ DESCRIPTION
   LIMIT COORDINATION. Process-local policies coordinate only requests made by
   this pm process; they make no cross-process claim. Policies explicitly
   declaring require_shared refuse before a request when their optional shared
-  coordinator is unavailable. A connector with both reports policy-scoped
-  coordination. Inspection never exposes a rate scope, coordinator address,
-  or credential.
+  coordinator is unavailable. A connector with both ordinary policies reports
+  policy-scoped coordination. A certification-only require_shared overlay
+  preserves the process-local default label and explicitly states the
+  certification boundary. Inspection never exposes a rate scope, coordinator
+  address, or credential.
 
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy

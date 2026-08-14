@@ -14,7 +14,8 @@ func TestConnectorsInspectLabelsProcessLocalRateLimitProtection(t *testing.T) {
 	}
 	var response struct {
 		RateLimitCoordination struct {
-			Mode string `json:"mode"`
+			Mode    string `json:"mode"`
+			Message string `json:"message"`
 		} `json:"rate_limit_coordination"`
 	}
 	if err := json.Unmarshal(stdout.Bytes(), &response); err != nil {
@@ -22,6 +23,9 @@ func TestConnectorsInspectLabelsProcessLocalRateLimitProtection(t *testing.T) {
 	}
 	if response.RateLimitCoordination.Mode != "process_local" {
 		t.Fatal("inspect output did not label process-local rate-limit protection")
+	}
+	if !strings.Contains(response.RateLimitCoordination.Message, "Certification traffic requires shared rate-limit coordination and refuses before sending when the coordinator is unavailable.") {
+		t.Fatal("inspect output did not disclose certification shared rate-limit protection")
 	}
 	if strings.Contains(stdout.String(), "opaque-projection") || strings.Contains(stdout.String(), "binding") {
 		t.Fatal("inspect output exposed protected coordination material")
@@ -34,5 +38,8 @@ func TestConnectorsInspectLabelsProcessLocalRateLimitProtection(t *testing.T) {
 	}
 	if !strings.Contains(stdout.String(), "RATE LIMIT COORDINATION\n  Process-local rate-limit protection coordinates this pm process only; it is not shared across processes.") {
 		t.Fatal("human inspection did not state the process-local rate-limit boundary")
+	}
+	if !strings.Contains(stdout.String(), "Certification traffic requires shared rate-limit coordination and refuses before sending when the coordinator is unavailable.") {
+		t.Fatal("human inspection did not disclose certification shared rate-limit protection")
 	}
 }

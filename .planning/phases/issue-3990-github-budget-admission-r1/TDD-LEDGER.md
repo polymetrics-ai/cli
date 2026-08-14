@@ -38,3 +38,8 @@
 - Green: `TestRequesterRateLimitEventsRecordAttemptAndProviderReset` records an actual pre-send attempt and response reset observation. `TestCertificationRateLimitEventsCarryStage` is the focused report-projection double needed to prove event stage attribution; it asserts the serialized report carries no raw scope or credential material.
 - Green: `TestRuntimeAppliesProjectRateLimitAdmissionTimeout` proves the certification runner's per-project configuration reaches the real engine requester. The runner defaults each admission wait to 30 seconds without imposing a whole-run timeout.
 - Scope resolution: #4136 owns the invalid `sample` sweep target. The certification allowlist permits GitHub and PostgreSQL; this issue's live evidence and real-binary sweep work use GitHub only. A credentialed GitHub write/cleanup sweep remains an operator-authorized follow-up evidence run because this task has neither a sandbox credential nor mutation authorization.
+
+### 2026-08-15 — inspection regression after integration rebase
+
+- Red: protected PR Verify run `31830388406` failed `TestConnectorsInspectLabelsProcessLocalRateLimitProtection`: GitHub's certification-only `require_shared` policies made unconfigured/default inspection report `mixed`, hiding the actual process-local protection for ordinary traffic.
+- Green: a certification-only shared overlay now preserves `process_local` inspection while the safe message explicitly states that certification refuses before send without shared coordination. `TestCertificationOnlyRequireSharedPolicyKeepsDefaultInspectionProcessLocal` proves the distinction; the CLI test verifies both JSON and human output disclose it without protected scope material.
