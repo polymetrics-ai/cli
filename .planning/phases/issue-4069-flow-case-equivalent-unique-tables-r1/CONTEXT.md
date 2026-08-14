@@ -102,3 +102,18 @@ golden gate.
 | RED evidence | Treat the CI result as a transient documentation warning or reproduce the same golden assertion | Run `TestGoldenDocsGenerateMatchesTrackedCLIManuals` before the source edit and record its `flow.md` drift exactly. |
 | Dependent artifacts | Hand-edit the tracked manual/transcript/website aggregate or use their owners | Run `pm docs generate`, the golden-transcript update path, and the existing website data generator; retain only their scoped outputs. |
 | Delivery topology | Start another issue/branch/PR or reuse the existing child | Keep #4069/#4071 and correction 2 / 5; no PR metadata or workflow rerun is authorized. |
+
+## Correction 3 / 5 — destination-scoped legacy collision admission
+
+**Command:** `scripts/gsd prompt discuss-phase
+issue-4069-flow-case-equivalent-unique-tables-r1`
+**Execution:** inline/manual under the existing no-delegation fallback. The
+independent merge report is the finished acceptance evidence for exact #4071
+head `3b75f4a62fd8d743ec883a5b824164374f661857`.
+
+| Area | Alternatives considered | Selected decision |
+|---|---|---|
+| Guard scope | Validate all configured local inventories for every ETL, remove the legacy guard, or scope it to the selected materialization | Preserve the guard only for an ETL whose selected connection materializes the local warehouse. |
+| Architecture | Check connector names or warehouse literals in `RunETL`, or use the generic materialization abstraction | Use the existing credential-free `connectionMaterializesLocalWarehouse` method only. |
+| Regression | Rely on the independent audit or restore its deleted executable control | Restore `TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL`, capture RED on exact source head, then retain it as committed GREEN coverage. |
+| Local safety | Allow the non-local path by weakening all collision validation | Keep the existing true-positive legacy local test and typed pre-mutation refusal unchanged. |

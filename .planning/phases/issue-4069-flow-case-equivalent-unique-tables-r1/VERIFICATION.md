@@ -182,3 +182,26 @@ and `code-review` prompts were executed inline under the recorded single-worker
 fallback and found no acceptance gap or candidate finding. Exact commands,
 results, generator idempotence, and the separate inherited-warning disposition
 are in `traces/correction-2-flow-manual-broad-verification.txt`.
+
+## Correction 3 / 5 — destination-scoped legacy collision admission
+
+**Status:** planned before the regression-test restoration and production edit.
+
+- [ ] Restored non-local ETL regression fails against exact source head
+      `3b75f4a62fd8d743ec883a5b824164374f661857` with the current typed
+      same-owner local-warehouse error before the unrelated source or
+      destination executes.
+- [ ] The production preflight is narrowed only through the existing
+      `connectionMaterializesLocalWarehouse` abstraction; no connector name or
+      warehouse literal is introduced in shared code.
+- [ ] Restored non-local ETL regression passes with one loaded record, one
+      destination acknowledgement, and one source request while the legacy
+      local collision remains present.
+- [ ] Existing local true-positive regression remains a typed
+      `*warehouse.SameOwnerCaseEquivalentTableError` refusal before `beginRun`
+      and state mutation.
+- [ ] Full `internal/app` tests and proportionate quality/build/GSD-workflow
+      gates pass.
+- [ ] Inline/manual `verify-work` and `code-review` record no acceptance gap
+      or unresolved finding.
+- [ ] `RUN-STATE.json` and PR #4071 body name the final committed head.
