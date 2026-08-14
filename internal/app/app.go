@@ -552,6 +552,21 @@ func (a *App) updateState(update func(state) (state, error)) (state, error) {
 	return updated, err
 }
 
+func (a *App) updateStateAfterPreflight(preflight func(state) error, update func(state) (state, error)) (state, error) {
+	updated, err := a.store.UpdateAfterPreflight(preflight, func(current state) (state, error) {
+		next, updateErr := update(current)
+		if updateErr != nil {
+			return current, updateErr
+		}
+		next.Revision = current.Revision + 1
+		return next, nil
+	})
+	if err == nil || stateStoreCommitMayHaveSucceeded(err) {
+		a.state = updated
+	}
+	return updated, err
+}
+
 func stateStoreCommitMayHaveSucceeded(err error) bool {
 	return statestore.CommitOutcomeForError(err).MayHaveCommitted()
 }
@@ -566,7 +581,8 @@ func newStateStore(path string) statestore.JSONStore[state] {
 				StreamStates:       map[string]StreamState{},
 			}
 		},
-		Locker: statestore.DirectoryLock{Path: filepath.Dir(path)},
+		Locker:       statestore.DirectoryLock{Path: filepath.Dir(path)},
+		CommitLocker: statestore.FileLock{Path: path + ".lock"},
 	}
 }
 
@@ -2579,75 +2595,17 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 	now := time.Now().UTC()
 	var consumed ReversePlan
 	var evidence *connectors.WriteApprovalEvidence
-	updated, err := a.updateState(func(current state) (state, error) {
-		for i := range current.ReversePlans {
-			stored := current.ReversePlans[i]
-			if stored.ID != expected.ID {
-				continue
-			}
-			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
-				return current, err
-			}
-			if stored.ApprovalTokenHash == "" {
-				return current, errors.New("reverse plan approval has already been consumed")
-			}
-			if err := a.previewabilityError(stored, now); err != nil {
-				return current, err
-			}
-			if !reversePlanMatchesExpected(stored, expected) {
-				return current, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
-			}
-			if err := a.validatePlanConfirmation(stored, req.Confirmation); err != nil {
-				return current, err
-			}
-			if !constantTimeStringEqual(stored.ApprovalTokenHash, hashString(req.ApprovalToken)) {
-				return current, errors.New("approval token is invalid")
-			}
-			if a.planRequiresPersistedPreview(stored) {
-				if stored.Status != "previewed" || stored.PreviewDigest == "" || stored.PreviewedAt.IsZero() {
-					return current, fmt.Errorf("reverse plan %q must be previewed before approval", stored.ID)
-				}
-				if !constantTimeStringEqual(stored.PreviewDigest, preview.Digest) {
-					return current, fmt.Errorf("reverse plan %q no longer matches its approved preview", stored.ID)
-				}
-			}
-			if a.confirmationPolicyForPlan(stored).Kind != "" {
-				if stored.ApprovalGrant == nil {
-					return current, fmt.Errorf("reverse plan %q has no destructive approval grant", stored.ID)
-				}
-				verified, err := a.approval.VerifyWriteGrant(*stored.ApprovalGrant, connectors.WriteApprovalExpectation{
-					PlanID:        expected.ID,
-					PlanHash:      expected.PlanHash,
-					Mode:          expected.Mode,
-					PreviewDigest: preview.Digest,
-					ApprovalToken: req.ApprovalToken,
-					Target:        preview.ApprovalTarget,
-					Confirmation:  req.Confirmation,
-				}, stored.PlanSeal)
-				if err != nil {
-					return current, err
-				}
-				evidence = verified
-			}
-			normalized, normalizeErr := a.stateForApprovalConsumption(current)
-			if normalizeErr != nil {
-				return current, normalizeErr
-			}
-			current = normalized
-			if i >= len(current.ReversePlans) || current.ReversePlans[i].ID != expected.ID {
-				return current, fmt.Errorf("reverse plan %q changed before approval consumption", expected.ID)
-			}
-			stored = current.ReversePlans[i]
-			stored.Status = reversePlanStatusApprovalConsumptionUncertain
-			stored.ApprovalTokenHash = ""
-			stored.ApprovalGrant = nil
-			stored.ApprovalConsumedAt = now
-			stored.ApprovalUncertainAt = now
-			current.ReversePlans[i] = stored
-			consumed = stored
-			return current, nil
+	updated, err := a.updateStateAfterPreflight(func(current state) error {
+		_, _, _, preflightErr := a.approvalConsumptionState(current, expected, req, preview, now)
+		return preflightErr
+	}, func(current state) (state, error) {
+		next, candidate, candidateEvidence, consumeErr := a.approvalConsumptionState(current, expected, req, preview, now)
+		if consumeErr != nil {
+			return current, consumeErr
 		}
-		return current, fmt.Errorf("reverse plan %q not found", expected.ID)
+		consumed = candidate
+		evidence = candidateEvidence
+		return next, nil
 	})
 	if err != nil {
 		if stateStoreCommitMayHaveSucceeded(err) {
@@ -2661,6 +2619,77 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 	a.deferredState = nil
 	a.deferredStateRevision = 0
 	return evidence, consumed, nil
+}
+
+func (a *App) approvalConsumptionState(current state, expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview, now time.Time) (state, ReversePlan, *connectors.WriteApprovalEvidence, error) {
+	for i := range current.ReversePlans {
+		stored := current.ReversePlans[i]
+		if stored.ID != expected.ID {
+			continue
+		}
+		if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+			return current, ReversePlan{}, nil, err
+		}
+		if stored.ApprovalTokenHash == "" {
+			return current, ReversePlan{}, nil, errors.New("reverse plan approval has already been consumed")
+		}
+		if err := a.previewabilityError(stored, now); err != nil {
+			return current, ReversePlan{}, nil, err
+		}
+		if !reversePlanMatchesExpected(stored, expected) {
+			return current, ReversePlan{}, nil, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
+		}
+		if err := a.validatePlanConfirmation(stored, req.Confirmation); err != nil {
+			return current, ReversePlan{}, nil, err
+		}
+		if !constantTimeStringEqual(stored.ApprovalTokenHash, hashString(req.ApprovalToken)) {
+			return current, ReversePlan{}, nil, errors.New("approval token is invalid")
+		}
+		if a.planRequiresPersistedPreview(stored) {
+			if stored.Status != "previewed" || stored.PreviewDigest == "" || stored.PreviewedAt.IsZero() {
+				return current, ReversePlan{}, nil, fmt.Errorf("reverse plan %q must be previewed before approval", stored.ID)
+			}
+			if !constantTimeStringEqual(stored.PreviewDigest, preview.Digest) {
+				return current, ReversePlan{}, nil, fmt.Errorf("reverse plan %q no longer matches its approved preview", stored.ID)
+			}
+		}
+		var evidence *connectors.WriteApprovalEvidence
+		if a.confirmationPolicyForPlan(stored).Kind != "" {
+			if stored.ApprovalGrant == nil {
+				return current, ReversePlan{}, nil, fmt.Errorf("reverse plan %q has no destructive approval grant", stored.ID)
+			}
+			verified, err := a.approval.VerifyWriteGrant(*stored.ApprovalGrant, connectors.WriteApprovalExpectation{
+				PlanID:        expected.ID,
+				PlanHash:      expected.PlanHash,
+				Mode:          expected.Mode,
+				PreviewDigest: preview.Digest,
+				ApprovalToken: req.ApprovalToken,
+				Target:        preview.ApprovalTarget,
+				Confirmation:  req.Confirmation,
+			}, stored.PlanSeal)
+			if err != nil {
+				return current, ReversePlan{}, nil, err
+			}
+			evidence = verified
+		}
+		normalized, err := a.stateForApprovalConsumption(current)
+		if err != nil {
+			return current, ReversePlan{}, nil, err
+		}
+		current = normalized
+		if i >= len(current.ReversePlans) || current.ReversePlans[i].ID != expected.ID {
+			return current, ReversePlan{}, nil, fmt.Errorf("reverse plan %q changed before approval consumption", expected.ID)
+		}
+		stored = current.ReversePlans[i]
+		stored.Status = reversePlanStatusApprovalConsumptionUncertain
+		stored.ApprovalTokenHash = ""
+		stored.ApprovalGrant = nil
+		stored.ApprovalConsumedAt = now
+		stored.ApprovalUncertainAt = now
+		current.ReversePlans[i] = stored
+		return current, stored, evidence, nil
+	}
+	return current, ReversePlan{}, nil, fmt.Errorf("reverse plan %q not found", expected.ID)
 }
 
 func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
@@ -2730,35 +2759,42 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 
 func (a *App) invalidateReversePlan(expected ReversePlan) error {
 	now := time.Now().UTC()
-	updated, err := a.updateState(func(current state) (state, error) {
-		for i := range current.ReversePlans {
-			stored := current.ReversePlans[i]
-			if stored.ID != expected.ID {
-				continue
-			}
-			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
-				return current, err
-			}
-			if stored.ApprovalTokenHash == "" {
-				return current, errors.New("reverse plan approval has already been consumed")
-			}
-			if !reversePlanMatchesExpected(stored, expected) || !constantTimeStringEqual(stored.ApprovalTokenHash, expected.ApprovalTokenHash) {
-				return current, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
-			}
-			stored.Status = "invalidated"
-			stored.ApprovalTokenHash = ""
-			stored.ApprovalGrant = nil
-			stored.ApprovalConsumedAt = now
-			current.ReversePlans[i] = stored
-			return current, nil
-		}
-		return current, fmt.Errorf("reverse plan %q not found", expected.ID)
+	updated, err := a.updateStateAfterPreflight(func(current state) error {
+		_, preflightErr := invalidateReversePlanState(current, expected, now)
+		return preflightErr
+	}, func(current state) (state, error) {
+		return invalidateReversePlanState(current, expected, now)
 	})
 	if err != nil {
 		return err
 	}
 	a.state = updated
 	return nil
+}
+
+func invalidateReversePlanState(current state, expected ReversePlan, now time.Time) (state, error) {
+	for i := range current.ReversePlans {
+		stored := current.ReversePlans[i]
+		if stored.ID != expected.ID {
+			continue
+		}
+		if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+			return current, err
+		}
+		if stored.ApprovalTokenHash == "" {
+			return current, errors.New("reverse plan approval has already been consumed")
+		}
+		if !reversePlanMatchesExpected(stored, expected) || !constantTimeStringEqual(stored.ApprovalTokenHash, expected.ApprovalTokenHash) {
+			return current, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
+		}
+		stored.Status = "invalidated"
+		stored.ApprovalTokenHash = ""
+		stored.ApprovalGrant = nil
+		stored.ApprovalConsumedAt = now
+		current.ReversePlans[i] = stored
+		return current, nil
+	}
+	return current, fmt.Errorf("reverse plan %q not found", expected.ID)
 }
 
 func constantTimeStringEqual(left, right string) bool {

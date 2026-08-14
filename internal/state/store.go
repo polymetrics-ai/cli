@@ -79,6 +79,7 @@ type JSONStore[T any] struct {
 	Path          string
 	Initial       func() T
 	Locker        Locker
+	CommitLocker  Locker
 	Redact        func(path []string, value any) any
 	SyncDirectory func(string) error
 }
@@ -120,6 +121,58 @@ func (s JSONStore[T]) Update(update func(T) (T, error)) (out T, err error) {
 	defer func() { finishUnlock(unlock, &err, outcome) }()
 
 	current, err := s.loadNoLock()
+	if err != nil {
+		return current, err
+	}
+	next, err := update(current)
+	if err != nil {
+		return current, err
+	}
+	if err := s.saveNoLock(next); err != nil {
+		return next, err
+	}
+	outcome = CommitOutcomeCommitted
+	return next, nil
+}
+
+func (s JSONStore[T]) UpdateAfterPreflight(preflight func(T) error, update func(T) (T, error)) (out T, err error) {
+	if preflight == nil {
+		return out, errors.New("state preflight function is required")
+	}
+	if update == nil {
+		return out, errors.New("state update function is required")
+	}
+
+	current, err := s.Load()
+	if err != nil {
+		return current, err
+	}
+	if err := preflight(current); err != nil {
+		return current, err
+	}
+
+	unlock, err := s.lock()
+	if err != nil {
+		return out, err
+	}
+	outcome := CommitOutcomeNotCommitted
+	defer func() { finishUnlock(unlock, &err, outcome) }()
+
+	current, err = s.loadNoLock()
+	if err != nil {
+		return current, err
+	}
+	if err := preflight(current); err != nil {
+		return current, err
+	}
+
+	commitUnlock, err := s.lockCommit()
+	if err != nil {
+		return current, err
+	}
+	defer func() { finishUnlock(commitUnlock, &err, outcome) }()
+
+	current, err = s.loadNoLock()
 	if err != nil {
 		return current, err
 	}
@@ -240,6 +293,17 @@ func (s JSONStore[T]) lock() (func() error, error) {
 	unlock, err := s.Locker.Lock()
 	if err != nil {
 		return nil, fmt.Errorf("lock state: %w", err)
+	}
+	return unlock, nil
+}
+
+func (s JSONStore[T]) lockCommit() (func() error, error) {
+	if s.CommitLocker == nil {
+		return nil, nil
+	}
+	unlock, err := s.CommitLocker.Lock()
+	if err != nil {
+		return nil, fmt.Errorf("lock state commit: %w", err)
 	}
 	return unlock, nil
 }
