@@ -23,9 +23,9 @@
 ## Planned local gates
 
 - [x] focused PostgreSQL catalog unit tests
-- [ ] opt-in live `dbtest` PostgreSQL catalog tests with independent oracle:
-      compiled and visibly skipped because no explicit direct Podman endpoint
-      or `POLYMETRICS_DATABASE_INTEGRATION=1` opt-in is configured
+- [x] opt-in live `dbtest` PostgreSQL catalog/read test through Docker and
+      Colima's explicit Unix endpoint; its command and verbatim output are in
+      `traces/live-reads-green.txt` and issue #3976
 - [x] `go test -race -timeout 20m ./internal/connectors/native/postgres`
 - [x] `go test -timeout 20m ./internal/cli -count=1`
 - [x] `go vet ./...`
@@ -45,8 +45,9 @@
 
 ## Live-proof resumption
 
-- [x] RED trace proves the new live full/cursor test cannot use the obsolete
-      Podman-only harness wiring.
+- [x] RED trace records the pre-base harness-constructor incompatibility;
+      `traces/live-reads-green.txt` replaces that historical state with the
+      exact passing Docker/Colima command and output.
 - [x] PostgreSQL dbtest uses an explicit `docker` or `podman` direct Unix
       endpoint and a pinned capacity probe, never a global runtime default.
 - [x] A real catalog discovery reports the seeded table's native/logical
@@ -59,9 +60,9 @@
 
 ## Delivery holds
 
-- [x] Correctly stacked draft child PR #4065 exists with `Refs #3976` and
-      `Refs #3972`, targets `feat/3972-postgres-parity`, and has been safely
-      merged onto #4064 head `c2e013324` without force/discard.
+- [x] Draft child PR #4065 exists with `Refs #3976` and `Refs #3972`, targets
+      `integration/4015-mvp-flat-r1`, and includes merge commit `0df3d5d4d`
+      absorbing base head `fbd06e7d7c5c0632182e98cbb3a223ba25b19883`.
 - [ ] Parent integration remains held until corrected #4058 is green and merged.
 - [ ] Automated review coverage is recorded and every actionable finding is
       dispositioned before parent-branch integration.
@@ -80,7 +81,26 @@ required final gate.
 - PostgreSQL race run passed; `internal/cli` passed in 162.331 seconds.
 - `go vet ./...`, `go build ./cmd/pm`, lint, docs, smoke, agent-contract,
   connector validation/surface sync/boundary, and release-workflow gates passed.
-- The tagged live regression was invoked and skipped visibly before startup:
-  this workspace has neither the explicit opt-in nor an explicit direct local
-  Podman endpoint. It remains a delivery hold for a live-proof claim, not a
-  passing integration result.
+- The tagged live regression passed against real PostgreSQL 16.10 through
+  Docker and Colima. It discovered the seeded catalog, returned full IDs
+  `1,2,3,4,5`, and returned only `3,4,5` after cursor `10`.
+
+Command and verbatim output:
+
+```sh
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -run '^TestPostgresDynamicTypedCatalogUsesLiveMetadata$' -v ./internal/connectors/native/postgres
+```
+
+```text
+=== RUN   TestPostgresDynamicTypedCatalogUsesLiveMetadata
+    dynamic_catalog_integration_test.go:90: live PostgreSQL full read read_events: ids=1,2,3,4,5 labels=alpha,bravo,charlie,delta,echo
+    dynamic_catalog_integration_test.go:90: live PostgreSQL cursor read read_events after=10: ids=3,4,5 labels=charlie,delta,echo
+    dynamic_catalog_integration_test.go:90: live PostgreSQL cursor_field absent with stored cursor=12: ids=1,2,3,4,5
+    dynamic_catalog_integration_test.go:90: live PostgreSQL nonexistent cursor column: read rejected
+    dynamic_catalog_integration_test.go:90: live PostgreSQL nullable cursor rows after=1: ids=23; null cursor row omitted
+    dynamic_catalog_integration_test.go:90: live PostgreSQL connection-level cursor_field=sequence: alternate_events rejected because it requires alternate_cursor
+    dynamic_catalog_integration_test.go:76: PostgreSQL database test target image-store free bytes: before=100015849472 after=100015857664
+--- PASS: TestPostgresDynamicTypedCatalogUsesLiveMetadata (5.41s)
+PASS
+ok  	polymetrics.ai/internal/connectors/native/postgres	6.146s
+```

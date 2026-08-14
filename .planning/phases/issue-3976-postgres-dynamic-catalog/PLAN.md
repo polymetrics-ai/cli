@@ -119,11 +119,12 @@ foundation rather than leave a disconnected descriptor model.
 
 Focused unit and live-harness checks will run first, then race, vet, build, and
 individual repository gates listed in `VERIFICATION.md`. The live test uses the
-existing opt-in local `dbtest` Podman contract when a direct local Podman
-endpoint is available; otherwise the skip/failure reason is recorded without
-claiming live proof. This issue does not change a CLI surface, so runtime
-help/manual/website parity is not applicable unless implementation evidence
-shows a user-facing PostgreSQL catalog output change.
+base-owned opt-in `dbtest` runtime contract through Docker and Colima's direct
+Unix endpoint. Its exact command and verbatim real-server output are retained
+in `traces/live-reads-green.txt` and posted on issue #3976. This issue does not
+change a CLI surface, so runtime help/manual/website parity is not applicable
+unless implementation evidence shows a user-facing PostgreSQL catalog output
+change.
 
 ## Branch / PR topology
 
@@ -145,8 +146,9 @@ source/catalog behavior executable through the base-owned Docker-or-Podman
 
 1. **RED:** add an opt-in PostgreSQL Docker-harness assertion that requires an
    explicit runtime/Unix endpoint and observes seeded catalog, full-read, and
-   cursor-read rows. Capture the compile/test failure caused by the pre-base
-   Podman-only harness wiring in a trace.
+   cursor-read rows. Capture the pre-base harness-constructor incompatibility
+   in a trace; it is historical RED evidence, not a claim that live proof is
+   unavailable.
 2. **GREEN:** adopt the base-owned `POLYMETRICS_CONTAINER_RUNTIME` /
    `POLYMETRICS_CONTAINER_ENDPOINT` contract, including the pinned Colima
    capacity probe, then seed deterministic rows and assert returned primary

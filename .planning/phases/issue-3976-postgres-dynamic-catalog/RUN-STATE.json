@@ -2,7 +2,7 @@
   "issue": 3976,
   "phase": "issue-3976-postgres-dynamic-catalog",
   "mode": "manual-inline-gsd-fallback",
-  "status": "verified-live-postgres-proof-pending-commit",
+  "status": "verified-live-postgres-proof-committed",
   "parent_issue": 3972,
   "parent_branch": "feat/3972-postgres-parity",
   "parent_pr": 4017,

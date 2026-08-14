@@ -42,12 +42,11 @@ GREEN proof so far:
 - `go vet ./internal/connectors/native/postgres` — pass.
 - `go test -timeout 20m -count=1 ./internal/connectors/database` and
   `./internal/connectors/engine` — pass.
-- The exact live-harness regression now compiles and invokes its required
-  independent `information_schema` oracle, but skips before container startup:
-  this worker has no `POLYMETRICS_DATABASE_INTEGRATION=1` opt-in or explicit
-  `POLYMETRICS_PODMAN_ENDPOINT`. No live result is claimed until that direct
-  local target is provided. Its exact post-implementation output is retained in
-  `traces/dynamic-catalog-green.txt`.
+- The exact live-harness regression ran against PostgreSQL 16.10 through
+  Docker and Colima's explicit Unix endpoint. It discovered the real seeded
+  catalog, returned full IDs `1,2,3,4,5`, and after cursor `10` returned only
+  `3,4,5`. The command and verbatim output are retained in
+  `traces/live-reads-green.txt` and posted on issue #3976.
 - Final green gates: focused PostgreSQL/database/engine packages, the
   PostgreSQL race suite, `internal/cli`, `go vet ./...`, `go build ./cmd/pm`,
   and every individually invoked repository gate in `VERIFICATION.md` passed.

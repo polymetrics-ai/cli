@@ -52,7 +52,27 @@ database-foundation, engine, and CLI tests, the PostgreSQL race suite, `go vet
 ./...`, build, lint, docs, smoke, contract, connector-generation/boundary, and
 release workflow gates are green. The opt-in real Docker proof through Colima
 discovered the seeded catalog, returned full IDs `1,2,3,4,5`, and returned only
-`3,4,5` after cursor `10`; its exact command and output are posted on #3976.
+`3,4,5` after cursor `10`:
+
+```sh
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -run '^TestPostgresDynamicTypedCatalogUsesLiveMetadata$' -v ./internal/connectors/native/postgres
+```
+
+```text
+=== RUN   TestPostgresDynamicTypedCatalogUsesLiveMetadata
+    dynamic_catalog_integration_test.go:90: live PostgreSQL full read read_events: ids=1,2,3,4,5 labels=alpha,bravo,charlie,delta,echo
+    dynamic_catalog_integration_test.go:90: live PostgreSQL cursor read read_events after=10: ids=3,4,5 labels=charlie,delta,echo
+    dynamic_catalog_integration_test.go:90: live PostgreSQL cursor_field absent with stored cursor=12: ids=1,2,3,4,5
+    dynamic_catalog_integration_test.go:90: live PostgreSQL nonexistent cursor column: read rejected
+    dynamic_catalog_integration_test.go:90: live PostgreSQL nullable cursor rows after=1: ids=23; null cursor row omitted
+    dynamic_catalog_integration_test.go:90: live PostgreSQL connection-level cursor_field=sequence: alternate_events rejected because it requires alternate_cursor
+    dynamic_catalog_integration_test.go:76: PostgreSQL database test target image-store free bytes: before=100015849472 after=100015857664
+--- PASS: TestPostgresDynamicTypedCatalogUsesLiveMetadata (5.41s)
+PASS
+ok  	polymetrics.ai/internal/connectors/native/postgres	6.146s
+```
+
+The full proof is also posted on issue #3976.
 The historical CDC integration test remains an intentional fail-closed skip,
 not claimed coverage. No-mistakes is pending the final evidence commit.
 
