@@ -52,6 +52,13 @@ Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL s
 - approval: none required for read-only sync
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: native_database/postgres_bounded_snapshot
+
 ## Commands
 
 ### Inspect as a manual
