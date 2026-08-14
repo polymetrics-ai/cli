@@ -18,11 +18,15 @@ import (
 )
 
 func validMetadata(name string) string {
+	return metadataWithIntegrationType(name, "api")
+}
+
+func metadataWithIntegrationType(name, integrationType string) string {
 	return `{
 		"name": "` + name + `",
 		"display_name": "Test Connector",
 		"description": "a test connector",
-		"integration_type": "api",
+		"integration_type": "` + integrationType + `",
 		"release_stage": "ga",
 		"capabilities": { "check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false }
 	}`

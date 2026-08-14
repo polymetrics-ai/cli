@@ -1271,7 +1271,7 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
-	pollingWatermark, err := loadPollingWatermark(sub, dirName)
+	pollingWatermark, err := loadPollingWatermark(sub, dirName, metadata)
 	if err != nil {
 		return Bundle{}, err
 	}
@@ -1457,9 +1457,12 @@ func loadChangefeed(sub fs.FS, dirName string) (*connectors.ChangefeedDescriptor
 // loadPollingWatermark reads the optional native database polling declaration.
 // It is a separate file from changefeed.json so a bounded watermark scan does
 // not become a CDC claim or an API-surface command.
-func loadPollingWatermark(sub fs.FS, dirName string) (*connectors.PollingWatermarkDescriptor, error) {
+func loadPollingWatermark(sub fs.FS, dirName string, metadata Metadata) (*connectors.PollingWatermarkDescriptor, error) {
 	if !fileExists(sub, "polling_watermark.json") {
 		return nil, nil
+	}
+	if metadata.IntegrationType != "database" {
+		return nil, fmt.Errorf("load bundle %s: polling_watermark.json requires metadata integration_type %q", dirName, "database")
 	}
 	raw, err := readFile(sub, "polling_watermark.json")
 	if err != nil {
