@@ -1,43 +1,22 @@
-# Issue #4072 Run State
+# Issue #4072 run state
 
-**Phase:** issue-4072-github-app-auth-admission-r1
+**Branch:** `fm/cli-4072-github-app-rate-admission-r1`
 
-**Issue:** #4072 (direct child of #3754)
+**Base:** `integration/4015-mvp-flat-r1` (`7eea99bae`)
 
-**Branch:** `fix/4072-github-app-auth-rate-admission`
-
-**Recovered base:** `7eea99bae` (`integration/4015-mvp-flat-r1`)
-
-**Correction ledger:** 0/5 fresh lineage
-
-**Canonical private finish-plan snapshot SHA256:**
-`939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`
-
-## Lifecycle State
+**Delivery mode:** inline GSD manual fallback for a named issue phase.
 
 | Stage | Status | Evidence |
 |---|---|---|
-| Isolation gate | complete | allocated worktree and repository root match |
-| Issue-first gate | complete | #4072 created and verified direct child of #3754 |
-| Recovery-base gate | complete | branch rebased to mandated integration base containing #4122 / #3754 |
-| discuss/context | complete | `CONTEXT.md`, `DISCUSSION-LOG.md` |
-| plan-phase --tdd | complete (manual inline fallback) | recovered artifacts reconciled to #4122 / #3754 |
-| execute RED | complete | causal test observed one token POST before shared admission |
-| execute GREEN | pending | no broad validation authorized |
-| verify-work / code-review | deferred | Firstmate shared validation gate |
+| isolation and recovery | complete | disposable worktree; preserved implementation reconciled with #4122/#3754 |
+| discuss-phase | complete | `CONTEXT.md`, `DISCUSSION-LOG.md` |
+| plan-phase --tdd | complete | `PLAN.md`, `TDD-LEDGER.md` |
+| execute RED | complete | causal token POST before admission at recovered base |
+| execute GREEN | complete | engine-owned request capability and zero-send assertions |
+| verify-work | complete | `VERIFICATION.md`, `UAT.md`, real Dragonfly two-process proof |
+| code-review | complete | `REVIEW.md`, no actionable findings |
+| no-mistakes / PR / CI | owned by Firstmate | not started by this worker per delivery contract |
 
-## Manual GSD Fallback
-
-`gsd-sdk query init.phase-op issue-4072-github-app-auth-admission-r1` reports
-`phase_found: false` because project roadmap phases are numeric. The canonical
-delivery contract also disallows spawning the GSD roles for this lane. The
-required lifecycle therefore runs inline with equivalent committed context,
-plan, TDD ledger, verification, summary, and review artifacts.
-
-## Guardrails
-
-- Do not use the preserved exhausted no-mistakes run or alter its worktree.
-- Do not run no-mistakes, broad suite, race-heavy sweep, push, PR, merge, or CI
-  until Firstmate explicitly releases the shared validation gate.
-- Do not select a parent PR route; record `needs-decision` at delivery only if
-  Firstmate has not supplied an authoritative safe target.
+The workflow uses an inline fallback because project GSD phases are numeric and
+the active canonical contract forbids role spawning. No broad full-suite run,
+remote mutation, PR, or CI observation is represented as completed here.
