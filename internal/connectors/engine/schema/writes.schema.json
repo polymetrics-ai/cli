@@ -115,6 +115,30 @@
               "kind": { "type": "string", "enum": ["destructive"] }
             }
           },
+          "transport_binding": {
+            "type": "object",
+            "required": ["capability", "role", "inputs"],
+            "additionalProperties": false,
+            "properties": {
+              "capability": { "type": "string", "enum": ["issue_label"] },
+              "role": { "type": "string", "enum": ["apply", "cleanup"] },
+              "inputs": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "object",
+                  "required": ["input", "field", "shape"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "input": { "type": "string", "enum": ["target_issue", "label"] },
+                    "field": { "type": "string", "pattern": ".+" },
+                    "shape": { "type": "string", "enum": ["scalar", "singleton_array"] }
+                  }
+                }
+              }
+            }
+          },
           "hook": { "type": "string" }
         }
       }

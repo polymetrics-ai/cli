@@ -199,12 +199,54 @@ func TestBothConnectionsKeepTheirOwnRowsAndAreReadableByName(t *testing.T) {
 	}
 }
 
-// TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept guards the honesty half
-// for every surface that reads through SQL rather than through a table
-// selector — flow query steps and an action step's source table both reach the
-// warehouse this way, and a flow manifest step carries no connection field.
-// Those surfaces cannot resolve the ambiguity today, so the refusal must not
-// promise a flag they do not have. Naming one would be worse than naming none.
+func TestQuerySQLScopesConnectionOwnedAndUnattributedViews(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("scoped_sql_query", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	source.records = []connectors.Record{{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"}}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+	source.records = []connectors.Record{{"id": "g1", "updated_at": "2026-08-06T00:00:02Z"}}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "globex", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+	if err := warehouse.WriteTable(ctx, filepath.Join(warehouseDir, "records"+warehouse.TableFileExt), []warehouse.Row{{"id": "root-1"}}); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, tc := range []struct {
+		name       string
+		connection string
+		wantID     string
+	}{
+		{name: "acme", connection: "acme", wantID: "a1"},
+		{name: "globex", connection: "globex", wantID: "g1"},
+		{name: "root", connection: warehouse.UnattributedConnection, wantID: "root-1"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			rows, err := a.QuerySQL(ctx, QuerySQLRequest{
+				SQL:        "SELECT id FROM records",
+				Connection: tc.connection,
+			})
+			if err != nil {
+				t.Fatalf("QuerySQL(%q) error = %v", tc.connection, err)
+			}
+			if len(rows) != 1 {
+				t.Fatalf("QuerySQL(%q) rows = %d, want 1: %v", tc.connection, len(rows), rows)
+			}
+			if got := toComparableString(rows[0]["id"]); got != tc.wantID {
+				t.Fatalf("QuerySQL(%q) id = %q, want %q", tc.connection, got, tc.wantID)
+			}
+		})
+	}
+}
+
+// TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept guards the default
+// honesty rule for generic SQL callers: unlike a flow manifest, this method
+// cannot describe which recovery syntax its caller exposes. Flow query and
+// action steps attach a manifest-field remedy at their own boundary.
 func TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("flow_query_ambiguity", nil)
@@ -219,22 +261,170 @@ func TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err := a.QuerySQL(ctx, "SELECT * FROM records", 0)
+	_, err := a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT * FROM records"})
 	if err == nil {
 		t.Fatal("QuerySQL(shared table name) error = nil, want the read refused rather than answered from one tenant")
 	}
 	if strings.Contains(err.Error(), "--") {
 		t.Fatalf("QuerySQL refusal %q names a flag this surface does not accept", err)
 	}
-	if a.QueryEngineName() == "jsonl" {
-		var ambiguous *warehouse.AmbiguousTableError
-		if !errors.As(err, &ambiguous) {
-			t.Fatalf("QuerySQL() error = %T %v, want *warehouse.AmbiguousTableError", err, err)
+	var ambiguous *warehouse.AmbiguousTableError
+	if !errors.As(err, &ambiguous) {
+		t.Fatalf("QuerySQL() error = %T %v, want *warehouse.AmbiguousTableError", err, err)
+	}
+	for _, want := range []string{"acme", "globex"} {
+		if !strings.Contains(ambiguous.Error(), want) {
+			t.Fatalf("ambiguity error %q does not name %q", ambiguous.Error(), want)
 		}
-		for _, want := range []string{"acme", "globex"} {
-			if !strings.Contains(ambiguous.Error(), want) {
-				t.Fatalf("ambiguity error %q does not name %q", ambiguous.Error(), want)
+	}
+}
+
+func TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("query_sql_unreadable_owner", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "records", []warehouse.Row{{"id": "acme-record"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "globex", "records", []warehouse.Row{{"id": "globex-record"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "unrelated", []warehouse.Row{{"id": "acme-unrelated"}})
+
+	globex, err := a.warehouseLocation(warehouseDir, mustFindConnection(t, a, "globex"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(globex.OwnerPath(), []byte("{"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM records"})
+	var faulted *warehouse.FaultError
+	if !errors.As(err, &faulted) {
+		t.Fatalf("QuerySQL(unscoped records) error = %T %v, want *warehouse.FaultError", err, err)
+	}
+	if !faulted.Undecided {
+		t.Fatalf("QuerySQL(unscoped records) fault = %#v, want an undecided owner collision", faulted)
+	}
+
+	rows, err := a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM records", Connection: "acme"})
+	if err != nil {
+		t.Fatalf("QuerySQL(acme records) error = %v", err)
+	}
+	if len(rows) != 1 || toComparableString(rows[0]["id"]) != "acme-record" {
+		t.Fatalf("QuerySQL(acme records) rows = %v, want only acme-record", rows)
+	}
+
+	rows, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM unrelated"})
+	if err != nil {
+		t.Fatalf("QuerySQL(unrelated) error = %v", err)
+	}
+	if len(rows) != 1 || toComparableString(rows[0]["id"]) != "acme-unrelated" {
+		t.Fatalf("QuerySQL(unrelated) rows = %v, want only acme-unrelated", rows)
+	}
+}
+
+func TestQuerySQLBindsQuotedConnectionScopedWarehouseNames(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("quoted_warehouse_tables", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	for _, table := range []string{"1orders", "orders-2026", "orders.2026"} {
+		writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", table, []warehouse.Row{{"id": "acme-" + table}})
+		writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "globex", table, []warehouse.Row{{"id": "globex-" + table}})
+	}
+
+	for _, table := range []string{"1orders", "orders-2026", "orders.2026"} {
+		t.Run(table, func(t *testing.T) {
+			query := fmt.Sprintf("SELECT id FROM %s", quoteDuckDBIdentifier(table))
+			rows, err := a.QuerySQL(ctx, QuerySQLRequest{SQL: query, Connection: "acme"})
+			if err != nil {
+				t.Fatalf("QuerySQL(selected %q) error = %v", table, err)
 			}
+			if len(rows) != 1 || toComparableString(rows[0]["id"]) != "acme-"+table {
+				t.Fatalf("QuerySQL(selected %q) rows = %v, want only acme row", table, rows)
+			}
+
+			_, err = a.QuerySQL(ctx, QuerySQLRequest{SQL: query})
+			var ambiguous *warehouse.AmbiguousTableError
+			if !errors.As(err, &ambiguous) {
+				t.Fatalf("QuerySQL(unscoped %q) error = %T %v, want *warehouse.AmbiguousTableError", table, err, err)
+			}
+		})
+	}
+}
+
+func TestQuerySQLReusesOneWarehouseResolverPerQuery(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("query_sql_resolver_snapshot", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "orders", []warehouse.Row{{"id": "order-1"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "customers", []warehouse.Row{{"id": "customer-1"}})
+
+	resolverBuilds := 0
+	engine := duckdbEngine{
+		warehouseDir: warehouseDir,
+		newTableResolver: func(root string) (*warehouse.TableResolver, error) {
+			resolverBuilds++
+			return warehouse.NewTableResolver(root)
+		},
+	}
+	rows, err := engine.QuerySQL(ctx, QuerySQLRequest{
+		SQL:        "SELECT orders.id AS order_id, customers.id AS customer_id FROM orders CROSS JOIN customers",
+		Connection: "acme",
+	})
+	if err != nil {
+		t.Fatalf("QuerySQL(multiple tables) error = %v", err)
+	}
+	if len(rows) != 1 || toComparableString(rows[0]["order_id"]) != "order-1" || toComparableString(rows[0]["customer_id"]) != "customer-1" {
+		t.Fatalf("QuerySQL(multiple tables) rows = %v, want joined acme rows", rows)
+	}
+	if resolverBuilds != 1 {
+		t.Fatalf("warehouse resolver builds = %d, want one inventory snapshot per query", resolverBuilds)
+	}
+}
+
+func TestQuerySQLReusesWarehouseResolverForReplacementScans(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("query_sql_replacement_snapshot", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "acme", "shared", []warehouse.Row{{"id": "acme-shared"}})
+	writeConnectionWarehouseTable(t, ctx, a, warehouseDir, "globex", "shared", []warehouse.Row{{"id": "globex-shared"}})
+
+	resolverBuilds := 0
+	engine := duckdbEngine{
+		warehouseDir: warehouseDir,
+		newTableResolver: func(root string) (*warehouse.TableResolver, error) {
+			resolverBuilds++
+			return warehouse.NewTableResolver(root)
+		},
+	}
+	_, err := engine.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT id FROM shared"})
+	var ambiguous *warehouse.AmbiguousTableError
+	if !errors.As(err, &ambiguous) {
+		t.Fatalf("QuerySQL(shared) error = %T %v, want *warehouse.AmbiguousTableError", err, err)
+	}
+	if resolverBuilds != 1 {
+		t.Fatalf("warehouse resolver builds = %d, want one inventory snapshot per query", resolverBuilds)
+	}
+}
+
+func TestWarehouseQueryIdentifierQuotingAndIdentityValidation(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		want string
+	}{
+		{name: "orders", want: `"orders"`},
+		{name: `orders"2026`, want: `"orders""2026"`},
+		{name: `"; select * from records`, want: `"""; select * from records"`},
+	} {
+		if got := quoteDuckDBIdentifier(tc.name); got != tc.want {
+			t.Fatalf("quoteDuckDBIdentifier(%q) = %q, want %q", tc.name, got, tc.want)
+		}
+	}
+	for _, name := range []string{"", ".", "../records", `orders"2026`, "orders;drop", "orders records"} {
+		if warehouse.SafePathPart(name) {
+			t.Fatalf("SafePathPart(%q) = true, want unsafe identity rejected", name)
 		}
 	}
 }
@@ -631,4 +821,22 @@ func setupTwoConnectionWarehouseApp(t *testing.T, source *scriptedSyncSource, mo
 		}
 	}
 	return a, warehouseDir
+}
+
+func writeConnectionWarehouseTable(t *testing.T, ctx context.Context, a *App, warehouseDir, connection, table string, rows []warehouse.Row) {
+	t.Helper()
+	location, err := a.warehouseLocation(warehouseDir, mustFindConnection(t, a, connection))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := location.EnsureOwnership(); err != nil {
+		t.Fatal(err)
+	}
+	path, err := location.TablePath(table)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := warehouse.WriteTable(ctx, path, rows); err != nil {
+		t.Fatal(err)
+	}
 }

@@ -60952,7 +60952,24 @@
         "kind": "update",
         "method": "POST",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels",
-        "risk": "adds labels to an issue or pull request without removing existing ones"
+        "risk": "adds labels to an issue or pull request without removing existing ones",
+        "transport_binding": {
+          "capability": "issue_label",
+          "role": "apply",
+          "inputs": [
+            {
+              "input": "target_issue",
+              "field": "issue_number",
+              "shape": "scalar"
+            },
+            {
+              "input": "label",
+              "field": "labels",
+              "shape": "singleton_array"
+            }
+          ]
+        },
+        "confirm": "destructive"
       },
       {
         "name": "remove_issue_label",
@@ -60960,6 +60977,22 @@
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels/{{ record.name }}",
         "risk": "removes a single label from an issue or pull request",
+        "transport_binding": {
+          "capability": "issue_label",
+          "role": "cleanup",
+          "inputs": [
+            {
+              "input": "target_issue",
+              "field": "issue_number",
+              "shape": "scalar"
+            },
+            {
+              "input": "label",
+              "field": "name",
+              "shape": "scalar"
+            }
+          ]
+        },
         "confirm": "destructive"
       },
       {

@@ -47,9 +47,9 @@
 // and Read emits canned rows.
 //
 // NO init()/RegisterFactory call exists in this package
-// in wave0 (enforced by a grep-guard test, postgres_test.go
-// TestNoInitRegistration) — the registration flip that wires native/postgres
-// into the production registry is a wave6 change; wave0 only builds and
+// in wave0 (enforced by capability_surface_test.go's
+// TestNoInitRegistration grep guard) — the registration flip that wires
+// native/postgres into the production registry is a wave6 change; wave0 only builds and
 // tests the package standalone, exactly as instructed.
 package postgres
 
@@ -71,11 +71,30 @@ import (
 type Connector struct {
 	engine.Base
 
-	// databaseDefinition is the immutable #4034 database.json projection loaded
-	// with the same embedded bundle that supplies Base. Catalog discovery uses it
+	// databaseDefinition is the immutable database.json projection loaded with
+	// the same embedded bundle that supplies Base. Catalog discovery uses it
 	// directly so native/logical typing cannot become a second, disconnected
 	// PostgreSQL model.
 	databaseDefinition database.Definition
+}
+
+// postgresCapabilityOverride is a declarative capability row. Future native
+// capability lanes add a row rather than interleaving another override in
+// Metadata's composition control flow.
+type postgresCapabilityOverride struct {
+	name   string
+	value  bool
+	target func(*connectors.Capabilities) *bool
+}
+
+var postgresCapabilityOverrides = []postgresCapabilityOverride{
+	{
+		name:  "cdc",
+		value: false,
+		target: func(capabilities *connectors.Capabilities) *bool {
+			return &capabilities.CDC
+		},
+	},
 }
 
 // New returns the PostgreSQL connector as a connectors.Connector, loading
@@ -97,17 +116,16 @@ func New() Connector {
 
 // Metadata overrides engine.Base's bundle-synthesized Metadata with the
 // legacy-shaped description text, matching the pre-migration
-// connectors.Metadata field-for-field (parity target); Capabilities are
-// still whatever the bundle's metadata.json declares (single source of
-// truth for capability flags), so this override only refines
-// Description/DisplayName wording, never capability semantics.
+// connectors.Metadata field-for-field (parity target). Capabilities remain
+// owned by metadata.json; the current table only repeats its fail-closed CDC
+// value while native CDC execution is unavailable, without promoting or
+// reinterpreting that capability.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
 	m.Description = "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, and supports cursor-incremental reads. Read-only source."
-	// The bundle declares this too, but pin the native override to the same
-	// fail-closed state so this connector cannot accidentally advertise CDC
-	// while the executor remains unavailable.
-	m.Capabilities.CDC = false
+	for _, override := range postgresCapabilityOverrides {
+		*override.target(&m.Capabilities) = override.value
+	}
 	return m
 }
 

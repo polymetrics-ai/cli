@@ -318,6 +318,13 @@ DESCRIPTION
   signal without reading credentials. COMMUNITY BUILD, UNCERTIFIED is a
   warning only; the connector remains reachable.
 
+  JSON inspection also projects the closed sync_transport source and
+  destination eligibility. A structurally valid destination that declares
+  acknowledgement=none remains declared so inspection reports that policy, but
+  runtime preflight refuses it; only durable_warehouse can execute. A declared
+  role still requires externally verified conformance; it is not a certification
+  claim.
+
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
   source-/destination-prefixed names.
@@ -510,6 +517,10 @@ SYNOPSIS
   pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
   pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json]
   pm etl status <run-id> [--json]
+  pm etl transport github-issue-label plan --connection <name> [--json]
+  pm etl transport github-issue-label preview <plan-id> [--json]
+  pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
+  pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
 DESCRIPTION
   ETL can directly check, catalog, and read enabled connectors by name. The
@@ -537,6 +548,32 @@ DESCRIPTION
   With --runtime, ETL also requires healthy PostgreSQL, DragonflyDB, and Temporal
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
+
+CLOSED GITHUB TRANSPORT
+  The github-issue-label transport is a fixed GitHub issue-to-label walking
+  slice. A saved connection owns the repository, source issue, target issue,
+  label, action, and credential configuration; the command accepts none of
+  those provider details directly.
+
+  Create a closed plan, preview it in human output to obtain an ephemeral
+  approval token, then pass that token only as one bounded stdin line to:
+
+    pm etl run --connection <name> --stream issues --batch-size 1 \
+      --approval-plan <plan-id> --approval-token-stdin --confirm destructive
+
+  The run keeps the source -> durable warehouse -> reopen -> typed GitHub
+  mutation and durable acknowledgement -> independent read-back -> checkpoint
+  order. Cleanup is a separate typed remove-label plan, preview, and one-time
+  approval. A declared GitHub missing-label DELETE is a successful cleanup;
+  replaying approval is refused.
+
+  Source selection and independent read-back each inspect only the first GitHub
+  issues page. The transport fails instead of requesting another page when the
+  configured source or target issue is not there.
+
+  Approval tokens are never accepted in argv, environment variables, files,
+  JSON output, or persisted project state. Run pm etl transport for the exact
+  closed lifecycle and its stdin-only token rule.
 
 DIRECT CONNECTOR COMMANDS
   check
@@ -663,6 +700,20 @@ DESCRIPTION
   Flow manifests compose sync, query, rlm, and action steps. Dependencies are
   inferred from in/out warehouse tables. RLM steps reuse pm rlm analyzers and
   may reference a spec path relative to the flow manifest file.
+
+CONNECTION-SCOPED SOURCE READS
+  A query step may set "connection" to scope every warehouse table view used
+  by its SQL. An action step sets "source_connection" inside "action_cfg" to
+  scope its "source_table". Use _unattributed only for a root-level table that
+  no connection owns. When same-named tables have several owners, omitting the
+  applicable manifest selector refuses the read instead of choosing one.
+
+  Query example:
+  {"id":"query-acme","kind":"query","connection":"acme",
+   "sql":"SELECT * FROM records","in":[],"out":[]}
+
+  Action source selector fragment:
+  "action_cfg": {"source_table":"records","source_connection":"acme"}
 
 RLM STEP EXAMPLE
   {
