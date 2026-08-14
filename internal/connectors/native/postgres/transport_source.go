@@ -157,7 +157,7 @@ func (s *SnapshotTransportSource) ReadTransport(ctx context.Context, request syn
 		if err != nil {
 			return err
 		}
-		candidate, err := postgresSnapshotCheckpoint(request.Resume, snapshotToken, plan.fingerprint, page, nextAfter)
+		candidate, err := postgresSnapshotCheckpoint(request.Resume, snapshotToken, plan.fingerprint, page)
 		if err != nil {
 			return err
 		}
@@ -233,7 +233,13 @@ func postgresSnapshotRelationRef(scope string) (database.RelationRef, error) {
 	if len(parts) != 3 {
 		return database.RelationRef{}, errors.New("postgres snapshot transport source scope must be database.schema.relation")
 	}
-	for _, part := range parts {
+	if strings.TrimSpace(parts[0]) == "" {
+		return database.RelationRef{}, errors.New("postgres snapshot transport source scope requires a database")
+	}
+	// The configured database/catalog name is compared as identity only; it is
+	// never rendered into the PostgreSQL query. Schema and relation are the SQL
+	// identifiers and retain the catalog discovery validator's strict grammar.
+	for _, part := range parts[1:] {
 		if err := validateIdentifier(part); err != nil {
 			return database.RelationRef{}, err
 		}
@@ -397,11 +403,11 @@ func (p postgresSnapshotReadPlan) orderValues(values []any) ([]any, error) {
 	return ordered, nil
 }
 
-func postgresSnapshotCheckpoint(resume synccontract.ResumeExpectation, snapshotToken string, fingerprint database.SchemaFingerprint, page int, position []any) (synccontract.CheckpointEnvelope, error) {
+func postgresSnapshotCheckpoint(resume synccontract.ResumeExpectation, snapshotToken string, fingerprint database.SchemaFingerprint, page int) (synccontract.CheckpointEnvelope, error) {
 	if page < 0 || strings.TrimSpace(snapshotToken) == "" || fingerprint.IsZero() {
 		return synccontract.CheckpointEnvelope{}, errors.New("postgres snapshot transport checkpoint inputs are invalid")
 	}
-	identity, err := postgresSnapshotPageIdentity(snapshotToken, fingerprint, resume.Source, page, position)
+	identity, err := postgresSnapshotPageIdentity(snapshotToken, fingerprint, resume.Source, page)
 	if err != nil {
 		return synccontract.CheckpointEnvelope{}, err
 	}
@@ -427,19 +433,17 @@ func postgresSnapshotCheckpoint(resume synccontract.ResumeExpectation, snapshotT
 	return checkpoint, nil
 }
 
-func postgresSnapshotPageIdentity(snapshotToken string, fingerprint database.SchemaFingerprint, source synccontract.SourceIdentity, page int, position []any) (synccontract.OpaqueToken, error) {
+func postgresSnapshotPageIdentity(snapshotToken string, fingerprint database.SchemaFingerprint, source synccontract.SourceIdentity, page int) (synccontract.OpaqueToken, error) {
 	payload, err := json.Marshal(struct {
 		Snapshot string                      `json:"snapshot"`
 		Schema   string                      `json:"schema"`
 		Source   synccontract.SourceIdentity `json:"source"`
 		Page     int                         `json:"page"`
-		Position []any                       `json:"position"`
 	}{
 		Snapshot: snapshotToken,
 		Schema:   fingerprint.String(),
 		Source:   source,
 		Page:     page,
-		Position: position,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("postgres snapshot transport: encode checkpoint identity: %w", err)

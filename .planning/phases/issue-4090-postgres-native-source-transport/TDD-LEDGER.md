@@ -44,3 +44,17 @@ source executor.
 - `TestPostgresDynamicTypedCatalogUsesLiveMetadata` passes via Docker against
   PostgreSQL 16.10 for both `full_append` and `full_overwrite`; the real output
   is retained in `traces/live-source-green.txt`.
+
+## Review regression slice
+
+**Red:** `TestPostgresSnapshotCheckpointDoesNotRequireJSONEncodableKeyValues`
+failed because a valid PostgreSQL floating `NaN` stable-key value reached
+`json: unsupported value: NaN` while constructing a checkpoint dedupe key.
+`TestPostgresSnapshotRelationRefAllowsTypedCatalogDatabaseName` also exposed
+that an identity-only catalog name accepted by `database.Catalog` (`analytics-db`)
+was incorrectly treated as a SQL identifier.
+
+**Green:** checkpoint dedupe now uses the repeatable-read snapshot, typed schema,
+source identity, and bounded page ordinal rather than serializing provider key
+values. The catalog component is compared only as identity; schema and relation
+remain strictly validated before they are quoted into the PostgreSQL query.
