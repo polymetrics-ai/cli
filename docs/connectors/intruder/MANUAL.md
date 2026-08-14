@@ -48,7 +48,7 @@ ETL STREAMS
     fields: age(string), extra_info(object), id(integer), issue_id(string), port(integer), snooze_reason(string), snooze_until(string), snoozed(boolean), target(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Intruder API read of vulnerability issues, issue occurrences, scans, and target data

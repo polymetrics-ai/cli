@@ -43,7 +43,7 @@ ETL STREAMS
     fields: category(string), description(string), id(string), name(string), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external HiBob API read of employee profile and HR metadata

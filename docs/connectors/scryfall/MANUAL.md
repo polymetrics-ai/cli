@@ -39,7 +39,7 @@ ETL STREAMS
     fields: id(string), name(string), set(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: public, credential-free Scryfall API read of card and set data

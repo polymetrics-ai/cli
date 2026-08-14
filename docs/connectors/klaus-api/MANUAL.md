@@ -42,7 +42,7 @@ ETL STREAMS
     fields: archived(boolean), critical(boolean), description(string), groupId(string), groupName(string), groupPosition(integer), id(string), maxRating(integer), name(string), position(integer), rootCauses(array), scorecards(array), weight(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Klaus API read of user and quality-review configuration data

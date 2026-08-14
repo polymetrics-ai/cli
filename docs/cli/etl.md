@@ -122,7 +122,9 @@ SYNC MODES
     before source I/O until a matching transport is admitted.
 
   Incremental modes and deduped compatibility names require --cursor. Deduped
-  modes require --primary-key.
+  modes require --primary-key. Static connector manifests advertise the full
+  deduped compatibility name only with both fields, and incremental modes only
+  with a declared incremental executor.
 
 SECURITY
   ETL resolves credentials in memory and stores only credential references.

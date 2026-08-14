@@ -40,7 +40,7 @@ ETL STREAMS
     fields: connector(string), displayName(string), filterable(boolean), id(string), objectKey(string), searchable(boolean), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external JustSift API read of people directory profiles and field definitions

@@ -58,7 +58,7 @@ ETL STREAMS
     fields: bitly_url(string), content_url(string), embed_url(string), id(string), import_datetime(string), rating(string), slug(string), source(string), source_tld(string), title(string), trending_datetime(string), type(string), url(string), username(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Giphy API read of public media search/trending results

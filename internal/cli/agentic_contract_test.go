@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -122,4 +123,48 @@ func TestSkillsGenerateWritesAgentSkills(t *testing.T) {
 	if strings.Contains(strings.ToLower(text), "ghp_") {
 		t.Fatalf("generated skill appears to contain a GitHub token:\n%s", text)
 	}
+}
+
+func TestSkillsGenerateMatchesTrackedSkills(t *testing.T) {
+	dir := t.TempDir()
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"skills", "generate", "--dir", dir}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(skills generate) code = %d stderr = %s stdout = %s", code, stderr.String(), stdout.String())
+	}
+
+	tracked, err := readSkillTree(filepath.Join("..", "..", "docs", "skills"))
+	if err != nil {
+		t.Fatalf("read tracked skills: %v", err)
+	}
+	generated, err := readSkillTree(dir)
+	if err != nil {
+		t.Fatalf("read generated skills: %v", err)
+	}
+	if !reflect.DeepEqual(generated, tracked) {
+		t.Fatalf("generated skills drift\ntracked=%v\ngenerated=%v", tracked, generated)
+	}
+}
+
+func readSkillTree(root string) (map[string]string, error) {
+	docs := map[string]string{}
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() || filepath.Ext(path) != ".md" {
+			return nil
+		}
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		rel, err := filepath.Rel(root, path)
+		if err != nil {
+			return err
+		}
+		docs[rel] = string(content)
+		return nil
+	})
+	return docs, err
 }

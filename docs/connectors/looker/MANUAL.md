@@ -52,7 +52,7 @@ ETL STREAMS
     fields: folder_id(string), id(string), title(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Looker API read of users, groups, folders, looks, and dashboards

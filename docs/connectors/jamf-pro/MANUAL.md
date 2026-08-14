@@ -49,7 +49,7 @@ ETL STREAMS
     fields: categoryId(string), categoryName(string), id(string), info(string), name(string), notes(string), osRequirements(string), priority(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Jamf Pro API read of MDM configuration data (buildings, departments, categories, scripts)

@@ -47,7 +47,7 @@ ETL STREAMS
     fields: actualReturn(string), actualStart(string), createdAt(string), id(integer), notes(string), percentage(number), reportedReturn(string), reportedStart(string), status(string), updatedAt(string), userId(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external HoorayHR API read of employee, time-off, leave-type, and sick-leave data

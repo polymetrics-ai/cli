@@ -43,7 +43,7 @@ ETL STREAMS
     fields: endDate(string), inspectionAreaId(string), inspectionAreaName(string), inspectionAreaType(string), inspectionCategories(array), orgInspectionAreaRetirementDate(string), status(string), supersededBy(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external CQC Syndication API read of publicly published care provider/location data

@@ -114,7 +114,7 @@ ETL STREAMS
     fields: api_id(string), calendar_api_id(string), calendar_id(string), coordinate(object), cover_url(string), created_at(string), description(string), description_md(string), duration_interval(string), end_at(string), feedback_email(object), geo_address_json(object), geo_latitude(string), geo_longitude(string), id(string), location_type(string), location_visibility(string), managing_calendars(array), meeting_url(string), name(string), platform(string), registration_open(boolean), registration_questions(array), start_at(string), timezone(string), url(string), user_api_id(string), user_id(string), visibility(string), waitlist_status(string), zoom_meeting_url(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_event:

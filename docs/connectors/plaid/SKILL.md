@@ -47,7 +47,7 @@ Reads Plaid institutions and category metadata through read-only POST endpoints.
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

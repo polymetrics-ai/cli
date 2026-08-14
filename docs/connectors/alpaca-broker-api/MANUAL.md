@@ -65,7 +65,7 @@ ETL STREAMS
     fields: account_id(string), date(string), id(string), name(string), sub_type(string), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Alpaca Broker API read of account/asset/market metadata, plus per-account trading positions, orders, watchlists, and document metadata (financial PII adjacent; no document content is downloaded, only listing metadata)

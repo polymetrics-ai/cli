@@ -55,7 +55,7 @@ ETL STREAMS
     fields: email(string), id(integer), name(string), timeFormat(integer), timeZone(string), username(string), weekStart(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_booking:

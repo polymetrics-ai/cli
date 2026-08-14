@@ -48,7 +48,7 @@ ETL STREAMS
     fields: elected_until(string), id(integer), is_core(boolean), name(string), name_with_circle_for_core_roles(string), organization_id(integer), purpose(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external GlassFrog API read of circle, role, person, project, and assignment data

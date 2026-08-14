@@ -52,7 +52,7 @@ ETL STREAMS
     fields: buyer_first_name(string), buyer_last_name(string), checkout_id(integer), comments(string), email(string), event_date(string), event_id(integer), payment_type(string), promo_code(string), tickets_in_transaction(string), title(string), transaction_amount(string), transaction_date(string), transaction_ref(string), transaction_status(string), user_id(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   checkin_attendee:

@@ -46,7 +46,7 @@ ETL STREAMS
     fields: reply_count(integer), subtype(string), team(string), text(string), thread_ts(string), ts(string), type(string), user(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Slack Web API read of workspace members/channels/channel message history

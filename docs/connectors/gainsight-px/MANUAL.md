@@ -48,7 +48,7 @@ ETL STREAMS
     fields: createdBy(string), createdDate(string), description(string), id(string), modifiedBy(string), modifiedDate(string), name(string), priority(string), productId(string), productName(string), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Gainsight PX (aptrinsic) API read of account, user, feature, and segment data

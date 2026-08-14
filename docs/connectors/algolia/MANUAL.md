@@ -62,7 +62,7 @@ ETL STREAMS
     fields: answer(string), answer_code(string), id(string), index(string), ip(string), method(string), nb_api_calls(string), processing_time_ms(string), query_body(string), query_headers(string), query_nb_hits(string), query_params(string), sha1(string), timestamp(string), url(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   update_index_settings:

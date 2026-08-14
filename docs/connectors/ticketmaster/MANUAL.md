@@ -48,7 +48,7 @@ ETL STREAMS
     fields: genre(object), id(string), name(string), segment(object), subGenre(object)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Ticketmaster Discovery API read of public event/venue data

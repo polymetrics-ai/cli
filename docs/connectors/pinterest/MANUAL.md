@@ -54,7 +54,7 @@ ETL STREAMS
     fields: ad_account_id(string), audience_type(string), created_timestamp(integer), id(string), name(string), size(integer), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Pinterest API read of ad account, board, campaign, ad group, and audience data

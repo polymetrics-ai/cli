@@ -46,7 +46,7 @@ ETL STREAMS
     fields: email(string), id(string), name(string), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Zoom API read of user, meeting, and webinar data

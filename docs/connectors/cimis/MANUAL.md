@@ -43,7 +43,7 @@ ETL STREAMS
     fields: ConnectDate(string), DisconnectDate(string), IsActive(string), ZipCode(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external CIMIS API read of public weather station metadata

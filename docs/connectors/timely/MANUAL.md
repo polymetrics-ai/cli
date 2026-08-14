@@ -56,7 +56,7 @@ ETL STREAMS
     fields: color(string), emoji(string), external_id(string), id(integer), name(string), project_ids(array), user_ids(array)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Timely API read of user, project, client, time event/entry, tag, and team data

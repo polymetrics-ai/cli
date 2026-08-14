@@ -53,7 +53,7 @@ ETL STREAMS
     fields: dt(string), lots_count(integer), name(string), slug(string), trading_volume(number), winning_bid_max(number), winning_bid_mean(number), winning_bid_min(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Whisky Hunter API read of public auction and distillery data

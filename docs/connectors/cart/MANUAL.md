@@ -47,7 +47,7 @@ ETL STREAMS
     fields: id(string), product_id(string), quantity(integer), sku(string), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Cart.com API read of order, customer, product, and inventory data

@@ -51,7 +51,7 @@ Declarative Google Ads connector for v22 customer, campaign, ad group, direct-re
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 

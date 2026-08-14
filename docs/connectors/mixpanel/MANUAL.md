@@ -77,7 +77,7 @@ ETL STREAMS
     fields: has_annotations(boolean), id(integer), name(string), project_id(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Mixpanel Query/Application API read of cohort, annotation, profile, saved funnel, event breakdown, and annotation metadata

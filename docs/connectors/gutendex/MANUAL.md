@@ -52,7 +52,7 @@ ETL STREAMS
     fields: bookshelves(string), copyright(boolean), download_count(integer), id(integer), languages(string), media_type(string), subjects(string), title(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external read of the public, unauthenticated Gutendex book catalog

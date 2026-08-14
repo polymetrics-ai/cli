@@ -47,7 +47,7 @@ Reads Trello boards, lists, and checklists through the Trello REST API. Cards an
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

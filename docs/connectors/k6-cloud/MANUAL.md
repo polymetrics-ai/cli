@@ -44,7 +44,7 @@ ETL STREAMS
     fields: created(string), description(string), id(integer), is_default(boolean), name(string), organization_id(integer), updated(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external k6 Cloud API read of organizations, projects, and load tests

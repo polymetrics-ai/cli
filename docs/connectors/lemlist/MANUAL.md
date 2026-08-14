@@ -92,7 +92,7 @@ ETL STREAMS
     fields: crmField(string), label(string), name(string), source(string), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external lemlist API read of campaign, outreach, CRM, inbox metadata, unsubscribe, webhook, and signal-agent data

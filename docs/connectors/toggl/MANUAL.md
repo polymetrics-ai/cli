@@ -58,7 +58,7 @@ ETL STREAMS
     fields: active(boolean), at(string), client_id(integer), client_name(string), estimated_seconds(integer), external_reference(string), id(integer), name(string), project_billable(boolean), project_color(string), project_id(integer), project_is_private(boolean), project_name(string), rate(number), rate_last_updated(string), recurring(boolean), tracked_seconds(integer), user_id(integer), user_name(string), workspace_id(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_time_entry:

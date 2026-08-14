@@ -306,7 +306,7 @@ Reads and writes SurveyMonkey REST v3 and SCIM v2 resources through the document
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 

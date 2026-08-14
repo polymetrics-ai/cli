@@ -51,7 +51,7 @@ ETL STREAMS
     fields: created_at(string), id(integer), last_used_at(string), name(string), type(string), updated_at(string), user_id(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Kisi API read of physical access-control data

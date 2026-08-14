@@ -219,6 +219,48 @@ func TestValidateConnectorDocsRejectsStaleIconMetadata(t *testing.T) {
 	}
 }
 
+func TestValidateConnectorDocsRejectsStaleGeneratedContent(t *testing.T) {
+	dir := t.TempDir()
+	registry := appRegistry()
+	if err := writeConnectorDocs(dir, registry); err != nil {
+		t.Fatalf("write connector docs: %v", err)
+	}
+
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		t.Fatalf("read connector docs: %v", err)
+	}
+	manualPath := ""
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		candidate := filepath.Join(dir, entry.Name(), "MANUAL.md")
+		if _, err := os.Stat(candidate); err == nil {
+			manualPath = candidate
+			break
+		}
+	}
+	if manualPath == "" {
+		t.Fatal("generated connector docs contain no manual")
+	}
+	manual, err := os.ReadFile(manualPath)
+	if err != nil {
+		t.Fatalf("read generated manual: %v", err)
+	}
+	if err := os.WriteFile(manualPath, append(manual, []byte("\nstale\n")...), 0o644); err != nil {
+		t.Fatalf("write stale generated manual: %v", err)
+	}
+
+	err = validateConnectorDocs(dir, registry)
+	if err == nil {
+		t.Fatal("validateConnectorDocs accepted stale generated content")
+	}
+	if !strings.Contains(err.Error(), "manual is stale") {
+		t.Fatalf("validation error = %q, want stale manual error", err)
+	}
+}
+
 func TestGeneratedConnectorIconBlockRequiresExactUniqueHeading(t *testing.T) {
 	tests := []struct {
 		name     string

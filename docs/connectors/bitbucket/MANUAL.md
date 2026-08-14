@@ -481,7 +481,7 @@ ETL STREAMS
     fields: author(string), close_source_branch(string), closed_by(string), comment_count(string), created_on(string), destination(string), draft(string), id(string), links(object), merge_commit(string), name(string), participants(string), queued(string), reason(string), rendered(string), reviewers(string), slug(string), source(string), state(string), summary(string), task_count(string), title(string), type(string), updated_on(string), uuid(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   delete_repositories_workspace_repo_slug:

@@ -52,7 +52,7 @@ ETL STREAMS
     fields: id(string), is_deleted(boolean), last_activity_date(string), report_period(string), used_android_phone(boolean), used_i_os(boolean), used_mac(boolean), used_web(boolean), used_windows_phone(boolean), user_principal_name(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Microsoft Graph API read of tenant users/groups/channels/device-usage data

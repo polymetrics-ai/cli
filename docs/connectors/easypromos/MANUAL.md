@@ -53,7 +53,7 @@ ETL STREAMS
     fields: code(string), created(string), download_url(string), id(string), participation_id(string), prize_type_id(string), prize_type_name(string), redeem_url(string), stage_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Easypromos API read of promotion, user, participation, and prize data

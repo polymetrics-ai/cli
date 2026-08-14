@@ -49,7 +49,7 @@ ETL STREAMS
     fields: condition(string), execErrState(string), folderUID(string), for(string), id(integer), noDataState(string), orgID(integer), ruleGroup(string), title(string), uid(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Grafana instance API read of dashboards, folders, data sources, org users, and alert rules

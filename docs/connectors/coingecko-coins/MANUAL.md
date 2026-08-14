@@ -41,7 +41,7 @@ ETL STREAMS
     fields: base(string), bid_ask_spread_percentage(number), coin_id(string), converted_last(object), converted_volume(object), is_anomaly(boolean), is_stale(boolean), last(number), last_fetch_at(string), last_traded_at(string), market(object), market_identifier(string), target(string), target_coin_id(string), timestamp(string), trade_url(string), trust_score(string), volume(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external CoinGecko public API read of a single coin's metadata/market snapshot

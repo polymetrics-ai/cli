@@ -527,11 +527,13 @@ website claim.
 
 ### B.6 Sync modes — derived, never declared
 
-Per stream: `full_refresh_append` and `full_refresh_overwrite` always; `*_deduped` variants iff
-`x-primary-key` present; `incremental_append[_deduped]` iff `incremental` block present.
-`internal/app/sync_modes.go` unchanged; `ValidateStreamSyncConfig` additionally consults the
-stream's derived mode set. This kills the drift between `Manifest.SyncModes`,
-`catalog_data.json.supported_sync_modes`, and reality.
+Per stream: `full_refresh_append` and `full_refresh_overwrite` always;
+`full_refresh_overwrite_deduped` only when both `x-primary-key` and `x-cursor-field` are present;
+`incremental_append` only when an `incremental` executor and `x-cursor-field` are present; and
+`incremental_append_deduped` only when all three capabilities are present. The public compatibility
+names map to their closed contracts in `internal/synccontract/public_modes.go`; parsing and the
+engine's static projection both consume that connector-neutral authority. This keeps
+`Manifest.SyncModes` and generated catalog/manual surfaces aligned with runtime admission.
 
 ### B.7 Escape hatches — when a connector still needs Go
 

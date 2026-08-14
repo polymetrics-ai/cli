@@ -80,7 +80,7 @@ ETL STREAMS
     fields: date_of_birth(string), date_of_death(string), first_name(string), full_name(string), gender(string), id(integer), imdb_id(string), known_for(array), last_name(string), main_profession(string), place_of_birth(string), relevance_percentile(number), tmdb_id(integer), watchmode_person_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Watchmode API read of public title/streaming-source/person media metadata

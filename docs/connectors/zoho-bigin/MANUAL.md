@@ -77,7 +77,7 @@ ETL STREAMS
     fields: api_name(string), api_supported(boolean), creatable(boolean), deletable(boolean), editable(boolean), id(string), module_name(string), plural_label(string), singular_label(string), viewable(boolean)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_record:

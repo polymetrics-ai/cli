@@ -49,7 +49,7 @@ ETL STREAMS
     fields: dateCreated(string), id(string), name(string), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Guru API read of collections, groups, members, and teams

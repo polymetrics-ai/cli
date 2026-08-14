@@ -49,7 +49,7 @@ ETL STREAMS
     fields: id(string), org_unit_path(string), serial_number(string), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Google Admin SDK Directory API read of user/group/org-unit/device metadata

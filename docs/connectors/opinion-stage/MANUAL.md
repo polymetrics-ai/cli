@@ -42,7 +42,7 @@ ETL STREAMS
     fields: created(string), id(string), item_id(string), kind(string), lead(boolean), modified(string), title(string), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Opinion Stage API read of item directory

@@ -473,9 +473,11 @@ SYNC MODES
   incremental_append_deduped       compatibility name for typed incremental_dedupe admission
 
   Incremental modes and deduped compatibility names require --cursor. Deduped
-  modes require --primary-key. The two deduped compatibility names use their
-  typed contract and refuse before source I/O until a matching transport is
-  admitted. When a connector manifest declares defaults, pm fills them during
+  modes require --primary-key. A static connector manifest advertises the full
+  deduped compatibility name only with both fields, and incremental modes only
+  with a declared incremental executor. The two deduped compatibility names use
+  their typed contract and refuse before source I/O until a matching transport
+  is admitted. When a connector manifest declares defaults, pm fills them during
   connection creation.
 
 SECURITY
@@ -633,7 +635,9 @@ SYNC MODES
     before source I/O until a matching transport is admitted.
 
   Incremental modes and deduped compatibility names require --cursor. Deduped
-  modes require --primary-key.
+  modes require --primary-key. Static connector manifests advertise the full
+  deduped compatibility name only with both fields, and incremental modes only
+  with a declared incremental executor.
 
 SECURITY
   ETL resolves credentials in memory and stores only credential references.

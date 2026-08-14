@@ -55,7 +55,7 @@ ETL STREAMS
     fields: base(string), end_date(string), fluctuation(boolean), rates(object), start_date(string), success(boolean)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external exchangeratesapi.io read of public foreign-exchange rate data

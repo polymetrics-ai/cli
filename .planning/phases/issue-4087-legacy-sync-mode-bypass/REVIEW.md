@@ -10,6 +10,7 @@
 - In an unadmitted source/destination pairing the application returns the typed `ModeNotExecutableError` before a source read. The CLI certification report now treats that deliberate `Error`/exit-1 shape as passing evidence, rather than as an ETL failure.
 - The existing public compatibility adapters and the closed canonical modes retain their tested parse/runtime behavior. No connector-specific branch or literal was added to shared production code.
 - Help, generated CLI docs, website docs, and generated website documentation data describe the same typed-admission behavior.
+- The shared engine regression remains connector-neutral, while exact generated-content validation now covers connector manuals, skills, index, and catalog output; regenerated capability-flow artifacts passed their drift check without changing the certification report contract or version.
 
 ## Evidence reviewed
 

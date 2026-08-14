@@ -72,7 +72,7 @@ ETL STREAMS
     fields: approved_date(string), created_date(string), creator(object), deny_reason(string), end_date(string), hours(string), id(string), person(object), reason(string), start_date(string), status(string), vacation_type(object)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Zenefits account read of people, companies, departments, locations, employments, custom field definitions/values, company and employee bank account details, labor groups, and time-off vacation types/requests

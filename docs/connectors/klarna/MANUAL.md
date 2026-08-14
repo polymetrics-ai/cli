@@ -54,7 +54,7 @@ ETL STREAMS
     fields: currency_code(string), fee_amount(integer), payout_reference(string), return_amount(integer), sale_amount(integer), settlement_amount(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Klarna Settlements API read of payout and transaction data

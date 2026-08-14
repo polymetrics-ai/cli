@@ -175,11 +175,13 @@ not a full override by default.
   (`connectorgen validate`'s `primary_key_missing`/`cursor_field_missing` rules, and
   `conformance`'s static `pk_fields_exist`/`cursor_fields_exist` checks — same underlying
   requirement, two differently-named rule sets — enforce this).
-- **Sync-mode derivation — never declared** (design §B.6): `full_refresh_append`/
-  `full_refresh_overwrite` always apply; `*_deduped` variants apply iff `x-primary-key` is
-  present; `incremental_append[_deduped]` applies iff the stream has an `incremental` block. Do
-  not add a "supported_sync_modes" field anywhere — there isn't one in this dialect; the engine
-  derives it from schema/stream shape at runtime.
+- **Sync-mode derivation — never declared** (design §B.6): `full_refresh_append` and
+  `full_refresh_overwrite` always apply. `full_refresh_overwrite_deduped` requires both
+  `x-primary-key` and `x-cursor-field`; `incremental_append` requires both `x-cursor-field` and an
+  `incremental` executor; `incremental_append_deduped` requires all three. The public compatibility
+  names and their closed contracts are owned by `internal/synccontract/public_modes.go`; do not add
+  a `supported_sync_modes` field anywhere — the engine derives this projection from schema/stream
+  shape at runtime.
 - **`api_surface.json` depth — minimal-honest for wave0/pilot** (DECISIONS.md #4): list every
   implemented stream/write under `covered_by`; everything else is documented as blocked/planned or
   excluded operation-ledger metadata until typed schemas, bounds, fixtures, and safety evidence are

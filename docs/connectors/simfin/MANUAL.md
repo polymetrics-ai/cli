@@ -79,7 +79,7 @@ ETL STREAMS
     fields: changes(array), columns(array), companyId(string), companyName(string), data(array), date(string), filingIdentifier(string), filingType(string), fiscalPeriod(string), fiscalYear(string), id(string), name(string), prices(array), shares(array), simId(string), statements(array), ticker(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external SimFin API read of company, statement, price, share, filing, and change-log data

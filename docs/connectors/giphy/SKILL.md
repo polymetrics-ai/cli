@@ -61,7 +61,7 @@ Reads GIFs, stickers, and clips from the Giphy search and trending REST endpoint
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

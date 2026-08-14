@@ -111,7 +111,7 @@ pm etl status <run-id> --json
 
 Direct `check`, `catalog`, and `read` are useful for connector development and preflight. Configured `run` loads from a connection, adds Polymetrics metadata, and writes to the destination in bounded batches.
 
-Sync modes are configured on `pm connections create`, not on `pm etl run`. Incremental modes and deduped compatibility names require a cursor; deduped modes also require a primary key. The two deduped compatibility names are accepted public inputs but currently refuse before source I/O unless a matching closed transport is admitted.
+Sync modes are configured on `pm connections create`, not on `pm etl run`. Incremental modes and deduped compatibility names require a cursor; deduped modes also require a primary key. A static connector advertises the full deduped compatibility name only with both fields, and advertises incremental modes only with a declared incremental executor. The two deduped compatibility names are accepted public inputs but currently refuse before source I/O unless a matching closed transport is admitted.
 
 ## Query engine
 

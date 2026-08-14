@@ -56,7 +56,7 @@ ETL STREAMS
     fields: active(boolean), balance(number), display_name(string), id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external QuickBooks Online v3 Query API read of customer/invoice/payment/account/vendor entities

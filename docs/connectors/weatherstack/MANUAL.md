@@ -57,7 +57,7 @@ ETL STREAMS
     fields: country(string), lat(string), lon(string), name(string), region(string), timezone_id(string), utc_offset(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Weatherstack API read of public weather data

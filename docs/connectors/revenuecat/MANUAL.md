@@ -187,7 +187,7 @@ ETL STREAMS
     fields: code(string), created_at(string), description(string), name(string), object(string), product_grants(string), project_id(string), state(string), stream(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_project:

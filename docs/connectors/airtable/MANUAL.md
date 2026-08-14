@@ -52,7 +52,7 @@ ETL STREAMS
     fields: author(object), createdTime(string), id(string), lastUpdatedTime(string), parentCommentId(string), record_id(string), text(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_record:

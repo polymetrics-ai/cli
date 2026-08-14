@@ -55,7 +55,7 @@ ETL STREAMS
     fields: ad_id(string), ad_name(string), adset_id(string), adset_name(string), campaign_id(string), campaign_name(string), clicks(string), cpc(string), cpm(string), ctr(string), date_start(string), date_stop(string), frequency(string), id(string), impressions(string), reach(string), spend(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_campaign:

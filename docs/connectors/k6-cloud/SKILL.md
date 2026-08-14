@@ -47,7 +47,7 @@ Reads k6 Cloud organizations, projects, and load tests through the k6 Cloud REST
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 
