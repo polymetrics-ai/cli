@@ -2,7 +2,7 @@
 
 > Audit trail only. `CONTEXT.md` is the implementation input.
 
-**Date:** 2026-08-11  
+**Date:** 2026-08-11
 **Mode:** `scripts/gsd prompt discuss-phase issue-3897-flow-connection-scope-r1 --auto`
 
 ## Decisions supplied by the issue contract

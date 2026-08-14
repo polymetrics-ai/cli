@@ -1,7 +1,7 @@
 # Issue 3981 — managed-target ownership and provisioning: context
 
-**Gathered:** 2026-08-14  
-**Status:** Ready for TDD implementation  
+**Gathered:** 2026-08-14
+**Status:** Ready for TDD implementation
 **Source:** GitHub issue #3981, parent #3972, and `data/cli-reverse-etl-managed-table-design-r1/report.md`.
 
 ## Locked decisions
