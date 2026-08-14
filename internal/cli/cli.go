@@ -838,7 +838,7 @@ func connectorHelpFlagsArePassive(flags parsedFlags, surface *connectors.Command
 			return false
 		}
 	}
-	for _, name := range []string{"plan", "approve", "confirm"} {
+	for _, name := range []string{"plan", "approve", "approval-token-stdin", "confirm"} {
 		if _, ok := flags.values[name]; ok {
 			return false
 		}

@@ -2565,6 +2565,7 @@ COMMAND SURFACE
   Global flags:
     --json (boolean): Write machine-readable JSON output.
     --connection (string): Use a saved GitHub connector credential and repository scope.: maps_to=connection
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   Core Commands
     issue list - List issues [intent=etl availability=implemented stream=issues]; flags: --state
     issue view - View issue details [intent=direct_read availability=implemented operation=github.issues_issue_number]; notes: Compatibility alias of issues view; uses that declaration-owned provider contract.; flags: --issue-number (required), --page, --page-cursor

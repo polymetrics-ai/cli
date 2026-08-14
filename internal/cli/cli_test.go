@@ -209,6 +209,31 @@ func TestDynamicConnectorInvalidFlagOnlyInvocationsAreUsageErrors(t *testing.T) 
 	}
 }
 
+func TestDynamicConnectorValuedApprovalStdinMarkerDoesNotRenderGroupHelp(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"gong", "calls", "--approval-token-stdin=value"}, &stdout, &stderr)
+	if code != 2 {
+		t.Fatalf("Run(gong calls --approval-token-stdin=value) code = %d, want usage error; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String()+stderr.String(), "--approval-token-stdin must be a bare stdin marker") {
+		t.Fatalf("valued approval stdin marker did not return its validation error: stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	if strings.Contains(stdout.String(), "pm gong calls - Gong calls commands") {
+		t.Fatalf("valued approval stdin marker rendered passive group help: stdout=%s", stdout.String())
+	}
+}
+
+func TestDynamicConnectorWriteHelpDocumentsApprovalStdinMarker(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"github", "issue", "close", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(github issue close --help) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "--approval-token-stdin") {
+		t.Fatalf("GitHub write help omitted the approval stdin marker: stdout=%s", stdout.String())
+	}
+}
+
 func TestDynamicConnectorUnknownPathIsUsageError(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"amazon-sqs", "not-a-command", "--json"}, &stdout, &stderr)

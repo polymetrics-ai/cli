@@ -28,6 +28,16 @@ const DIRECT_READ_PAGE_FLAGS = JSON.parse(
   ),
 );
 
+const REVERSE_ETL_APPROVAL_FLAGS = JSON.parse(
+  readFileSync(
+    resolve(
+      dirname(fileURLToPath(import.meta.url)),
+      '../../../internal/connectors/reverse_etl_approval_flags.json',
+    ),
+    'utf8',
+  ),
+);
+
 const keyNames = (keyStyle) => {
   if (keyStyle === 'camel') {
     return {
@@ -76,6 +86,15 @@ function withBinaryDownloadFlags(flags, intent) {
   if (!runtimeFlags) return declared;
   const names = new Set(declared.map((flag) => trim(flag?.name)));
   return [...declared, ...runtimeFlags.filter((flag) => !names.has(flag.name))];
+}
+
+function withReverseETLApprovalFlags(flags, commands) {
+  const declared = Array.isArray(flags) ? flags : [];
+  if (!commands.some((command) => command.intent === 'reverse_etl' || command.intent === 'direct_write')) {
+    return declared;
+  }
+  const names = new Set(declared.map((flag) => trim(flag?.name)));
+  return [...declared, ...REVERSE_ETL_APPROVAL_FLAGS.filter((flag) => !names.has(flag.name))];
 }
 
 export function mapFlags(flags, options = {}) {
@@ -166,7 +185,7 @@ export function mapCLISurface(surface, options = {}) {
         commands: Array.isArray(group.commands) ? group.commands.map((command) => trim(command)).filter(Boolean) : [],
       }))
       .filter((group) => group.id || group.title || group.commands.length > 0),
-    [keys.globalFlags]: mapFlags(surface.global_flags, options),
+    [keys.globalFlags]: mapFlags(withReverseETLApprovalFlags(surface.global_flags, commands), options),
     commands,
     [keys.helpTopics]: (Array.isArray(surface.help_topics) ? surface.help_topics : [])
       .map((topic) => ({

@@ -48,6 +48,7 @@ Discovers each HubSpot account's CRM object/property schema and reads its provid
   - --credential (string): Credential profile name; never pass secret values as flags.: maps_to=config.credential
   - --limit (integer): Maximum records or items to request when a future typed command supports pagination.: maps_to=query.limit
   - --json (boolean): Render machine-readable output for future implemented commands.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - ETL/read operations (planned)
   - etl get-account-info-2025-09-api-usage-daily-private-apps-account-info-2025-09-api-usage-daily-private-apps - Retrieve private app daily API usage [intent=etl availability=planned operation=hubspot.get-_account-info_2025-09_api-usage_daily_private-apps_account-info_2025-09_api-usage_daily_private-apps]; approval: none; risk: low; notes: GET /account-info/2025-09/api-usage/daily/private-apps; fixed HubSpot endpoint metadata only, not a raw API escape hatch.
   - etl get-account-info-2025-09-details-account-info-2025-09-details - Retrieve account details [intent=etl availability=planned operation=hubspot.get-_account-info_2025-09_details_account-info_2025-09_details]; approval: none; risk: low; notes: GET /account-info/2025-09/details; fixed HubSpot endpoint metadata only, not a raw API escape hatch.

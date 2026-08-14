@@ -154,7 +154,7 @@ pm query explain --sql <sql>
 
 pm reverse plan <name>
 pm reverse preview <plan-id>
-pm reverse run <plan-id> --approve <approval-token>
+pm reverse run <plan-id> --approval-token-stdin
 pm reverse status <run-id>
 pm reverse retry <run-id>
 
@@ -920,7 +920,7 @@ Approval token design:
 
 - `pm reverse plan` stores an immutable plan and computes a plan hash.
 - `pm reverse preview` displays the plan summary and, only in interactive human mode, provides the approval challenge.
-- `pm reverse run <plan-id> --approve <token>` verifies that:
+- `pm reverse run <plan-id> --approval-token-stdin` verifies that:
   - The plan has not changed.
   - The token matches the stored challenge.
   - The approver identity or local profile is recorded.
@@ -1421,4 +1421,3 @@ Start implementation with a thin vertical slice:
 6. `pm etl run` into DuckDB for one stream
 
 This proves the monolith shape, terminal credential UX, connector contract, batch pipeline, and CLI docs before reverse ETL adds external write risk.
-

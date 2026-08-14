@@ -39,6 +39,7 @@ const TOKEN_PATTERNS = [
   /\b(?:bearer|token)\s+[A-Za-z0-9._~+\/-]{12,}\b/gi,
 ];
 const OUTPUT_LIMIT_BYTES = 2 * 1024 * 1024;
+const RESERVED_EXECUTION_FLAGS = ["--credential", "--connection", "--root", "--approve", "--approval-token-stdin", "--plan", "--confirm"];
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = path.resolve(SCRIPT_DIR, "..");
 const SURFACE_PATH = path.join(
@@ -177,6 +178,10 @@ function concreteReason(reason) {
     "unsupported",
   ]);
   return !generic.has(normalized.toLowerCase());
+}
+
+function isReservedExecutionFlag(argument) {
+  return RESERVED_EXECUTION_FLAGS.some((flag) => argument === flag || argument.startsWith(`${flag}=`));
 }
 
 function reportContainsForbiddenField(value) {
@@ -386,7 +391,7 @@ function validateCaseFile(caseFile, expected, owner, repo, surfaceCommands) {
         throw new Error(`executable case for ${JSON.stringify(command)} requires string args`);
       }
       for (const argument of item.args) {
-        if (argument === "--credential" || argument === "--connection" || argument === "--root" || argument === "--approve" || argument === "--plan" || argument === "--confirm") {
+        if (isReservedExecutionFlag(argument)) {
           throw new Error(`case ${JSON.stringify(command)} may not override lifecycle or credential flags`);
         }
       }
@@ -421,7 +426,7 @@ function validateCaseFile(caseFile, expected, owner, repo, surfaceCommands) {
           throw new Error(`readback for ${JSON.stringify(command)} requires string args`);
         }
         for (const argument of item.readback.args) {
-          if (["--credential", "--connection", "--root", "--approve", "--plan", "--confirm"].includes(argument)) {
+          if (isReservedExecutionFlag(argument)) {
             throw new Error(`readback for ${JSON.stringify(command)} may not override lifecycle or credential flags`);
           }
         }
@@ -475,9 +480,9 @@ function shellSafeInvocation(command, args, credential, root) {
   ];
 }
 
-function runProcess(binary, args, cwd) {
+function runProcess(binary, args, cwd, stdin = "") {
   return new Promise((resolve, reject) => {
-    const child = spawn(binary, args, { cwd, stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn(binary, args, { cwd, stdio: ["pipe", "pipe", "pipe"] });
     let stdout = "";
     let stderr = "";
     let bytes = 0;
@@ -497,8 +502,10 @@ function runProcess(binary, args, cwd) {
     };
     child.stdout.on("data", (chunk) => consume("stdout", chunk));
     child.stderr.on("data", (chunk) => consume("stderr", chunk));
+    child.stdin.on("error", reject);
     child.on("error", reject);
     child.on("close", (code, signal) => resolve({ code, signal, stdout, stderr, overflow }));
+    child.stdin.end(stdin);
   });
 }
 
@@ -567,7 +574,7 @@ export function assertReadEnvelope(envelope, command) {
   throw new Error(`unexpected non-write result kind ${JSON.stringify(envelope.kind || "")}`);
 }
 
-async function runWriteLifecycle({ binary, root, credential, command, args, readback, cwd }) {
+export async function runWriteLifecycle({ binary, root, credential, command, args, readback, cwd }) {
   const planArgs = [CONNECTOR, ...command.split(" "), ...args, "--credential", credential, "--root", root, "--json"];
   const humanPlanArgs = planArgs.filter((argument) => argument !== "--json");
   const planResult = await runProcess(binary, humanPlanArgs, cwd);
@@ -594,14 +601,13 @@ async function runWriteLifecycle({ binary, root, credential, command, args, read
     ...command.split(" "),
     "--plan",
     planID,
-    "--approve",
-    grant,
+    "--approval-token-stdin",
     ...(challenge ? ["--confirm", challenge] : []),
     "--root",
     root,
     "--json",
   ];
-  const runEnvelope = parseJSONOutput(await runProcess(binary, executeArgs, cwd), "write execution");
+  const runEnvelope = parseJSONOutput(await runProcess(binary, executeArgs, cwd, grant + "\n"), "write execution");
   const run = runEnvelope?.run;
   if (runEnvelope?.kind !== "ReverseRun" || run?.status !== "completed" || run?.records_succeeded !== 1 || run?.records_failed !== 0) {
     throw new Error("write execution did not report one completed provider mutation");

@@ -258,6 +258,7 @@ Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases
   - --credential (string): Credential name to use for the Gmail request.
   - --json (boolean): Emit machine-readable JSON output.
   - --max-bytes (integer): Maximum direct-read response bytes.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - Messages
   - messages list - List Gmail messages as ETL records. [intent=etl availability=implemented stream=messages]
   - messages get - Get a message by id. [intent=direct_read availability=implemented]; risk: bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted; flags: --id, --page, --page-cursor

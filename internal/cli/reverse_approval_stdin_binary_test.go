@@ -238,7 +238,7 @@ func assertReverseApprovalTokenAbsentFromProjectFiles(t *testing.T, root, token 
 		if err != nil {
 			return err
 		}
-		if entry.IsDir() || strings.HasSuffix(path, ".jsonl") {
+		if entry.IsDir() {
 			return nil
 		}
 		contents, err := os.ReadFile(path)

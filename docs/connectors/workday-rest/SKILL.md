@@ -1024,6 +1024,7 @@ Reads and writes the full documented Workday REST surface: 907 operations across
 - Global flags:
   - --json (boolean): Write machine-readable JSON output.
   - --connection (string): Use a saved Workday REST connector credential and tenant.: maps_to=connection
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - Human Capital Management
   - staffing job-changes-get - Retrieves a single change job event instance. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor
   - staffing job-changes-by-id-administrative-list - Retrieves the administrative options for the specified job change ID. [intent=direct_read availability=implemented]; flags: --id (required), --page, --page-cursor

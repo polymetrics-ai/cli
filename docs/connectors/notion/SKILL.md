@@ -183,6 +183,8 @@ Reads and writes Notion pages, databases, data sources, blocks, comments, views,
 - Work with Notion pages, databases, data sources, blocks, comments, views and file uploads from the command line.
 - Usage: pm notion <command> [flags]
 - Source CLI: Notion API (https://developers.notion.com/openapi.json)
+- Global flags:
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - Databases
 - Pages
 - Users

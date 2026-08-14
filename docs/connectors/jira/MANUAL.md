@@ -1346,6 +1346,7 @@ COMMAND SURFACE
   Global flags:
     --json (boolean): Write machine-readable JSON output.
     --connection (string): Use a saved Jira connector credential and site base URL.: maps_to=connection
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   ETL streams
     issues export-archived-issues - Export archived issue(s). [intent=reverse_etl availability=implemented write=issues_export_archived_issues]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Jira PUT on /rest/api/3/issues/archive/export; changes site data.
     issues list - Read Jira issues as ETL records. [intent=etl availability=implemented stream=issues]

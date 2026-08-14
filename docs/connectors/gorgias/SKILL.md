@@ -317,6 +317,8 @@ Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys th
 - Work with Gorgias tickets, customers, messages, users, teams, tags, views, macros, rules, widgets, integrations, jobs and files from the command line.
 - Usage: pm gorgias <command> [flags]
 - Source CLI: Gorgias REST API (https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r)
+- Global flags:
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - Account
 - Custom Fields
 - Customers

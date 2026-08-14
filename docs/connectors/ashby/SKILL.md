@@ -662,6 +662,8 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 - Ashby applicant-tracking connector with typed REST streams, bounded direct reads, and gated reverse-ETL writes.
 - Usage: pm connectors command ashby <command> [flags]
 - Source CLI: Ashby Public API (https://developers.ashbyhq.com/reference)
+- Global flags:
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - ETL streams
 - Bounded direct reads
 - Reverse ETL writes
