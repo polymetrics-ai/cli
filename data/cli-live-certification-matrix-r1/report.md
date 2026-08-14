@@ -123,9 +123,10 @@ Each shard carries its connector's final certification obligations:
 - Flows are exact source/destination pairs within the active allowlist with mandatory
   `local_parquet_warehouse` mediation: API→warehouse→API,
   API→warehouse→database, database→warehouse→API, and
-  database→warehouse→database. The artifact uses non-overlapping compressed
-  pair sets for size, but its resolver proves every exact pair has one cell and
-  evidence overrides apply to one exact pair only. Thus
+  database→warehouse→database. The in-memory aggregate uses non-overlapping
+  compressed pair sets for validation, but no shard stores them; its resolver
+  proves every exact pair has one cell and evidence overrides apply to one exact
+  pair only. Thus
   `github → warehouse → github` is valid and distinct.
 
 Flow proof embeds both independent warehouse and destination readback
@@ -134,7 +135,7 @@ checkpointed, replay identity, and provider idempotency key—with a named
 limitation for every false fact. A working one-shot GitHub reverse mutation can
 therefore remain explicitly non-resumable rather than be advertised as durable.
 
-A connector is `CERTIFIED` only if every applicable capability, workflow,
+An allowlisted connector is `CERTIFIED` only if every applicable capability, workflow,
 sync-mode/warehouse-primitive, and source-or-destination flow-pair cell is
 declared, implemented, fixture-tested, and backed by accepted live proof.
 

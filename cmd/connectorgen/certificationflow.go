@@ -139,8 +139,8 @@ type flowCertificationCell struct {
 	NotApplicable   *notApplicableReason `json:"not_applicable,omitempty"`
 }
 
-// flowPairSet is a compact, non-overlapping set of exact pair cells. The
-// resolver never treats a set as a connector-level status: its source and
+// flowPairSet is an in-memory compact, non-overlapping set of exact pair cells.
+// The resolver never treats a set as a connector-level status: its source and
 // destination membership identify the concrete unit of certification.
 type flowPairSet struct {
 	FlowKind              string                `json:"flow_kind"`
@@ -182,8 +182,8 @@ type flowBaseline struct {
 }
 
 // connectorCertificationStatus is deliberately small and binary. It is the
-// user-facing projection generated from the proof-bearing matrices, not a
-// separate hand-maintained taxonomy.
+// user-facing projection derived from proof-bearing shards through an in-memory
+// aggregate, not a separate hand-maintained taxonomy.
 type connectorCertificationStatus struct {
 	Connector string `json:"connector"`
 	Certified bool   `json:"certified"`
@@ -192,9 +192,9 @@ type connectorCertificationStatus struct {
 }
 
 // certificationStatusArtifact is the small generated projection embedded by
-// pm for point-of-use status. Its source remains the proof-bearing matrices;
-// certification-matrix --check validates this artifact before comparing it to
-// the freshly generated projection.
+// pm for point-of-use status. Its source remains the proof-bearing shards
+// reconstructed in memory; certification-matrix --check validates this artifact
+// before comparing it to the freshly generated projection.
 type certificationStatusArtifact struct {
 	SchemaVersion    int                            `json:"schema_version"`
 	GeneratedCommand string                         `json:"generated_command"`

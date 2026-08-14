@@ -1,7 +1,7 @@
-// Package certifications exposes the generated, proof-bearing connector
-// certification status to pm's user-facing surfaces. It has no dependency on
-// connector execution, so reading a status never reaches credentials or a
-// provider.
+// Package certifications exposes generated proof-bearing certification statuses
+// and community-build warnings to pm's user-facing surfaces. It has no
+// dependency on connector execution, so reading a status never reaches
+// credentials or a provider.
 package certifications
 
 import (
@@ -28,9 +28,9 @@ const (
 //go:embed status.json
 var embeddedStatusJSON []byte
 
-// Status is the deliberately binary quality signal shown at connector
-// inspection. Availability is independent: an uncertified connector remains
-// reachable and receives the plain warning below.
+// Status is the proof-bearing quality signal for an allowlisted connector or
+// the community-build warning shown for one outside that scope. Availability is
+// independent in either case.
 type Status struct {
 	Connector string `json:"connector"`
 	Certified bool   `json:"certified"`
@@ -85,8 +85,8 @@ func statusFor(connector string, isRegistered func() bool) (Status, error) {
 	return status, nil
 }
 
-// AllStatuses returns the stable generated set for catalog or website
-// renderers. Callers receive a copy and cannot mutate the cached record.
+// AllStatuses returns the stable generated allowlist status set for catalog or
+// website renderers. Callers receive a copy and cannot mutate the cached record.
 func AllStatuses() ([]Status, error) {
 	embeddedStatuses.once.Do(loadEmbeddedStatuses)
 	if embeddedStatuses.err != nil {

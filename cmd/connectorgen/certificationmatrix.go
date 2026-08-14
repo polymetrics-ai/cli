@@ -58,9 +58,9 @@ type notApplicableReason struct {
 	Reason string `json:"reason"`
 }
 
-// evidencePointer repeats the accepted record's publishable proof inside the
-// generated matrix. Transcript values are already repository-salted
-// fingerprints, so a matrix can be read and checked without loading an
+// evidencePointer repeats the accepted record's publishable proof inside a
+// generated certification shard. Transcript values are already repository-salted
+// fingerprints, so a shard can be read and checked without loading an
 // untrusted sidecar or ever becoming a credential/provider-data store.
 type evidencePointer struct {
 	Record          string                `json:"record"`
@@ -86,9 +86,9 @@ type certificationCell struct {
 	NotApplicable   *notApplicableReason `json:"not_applicable,omitempty"`
 }
 
-// capabilityConnector is the per-connector portion of the capability matrix.
+// capabilityConnector is the connector-local capability payload.
 // CapabilityComplete intentionally does not claim final connector
-// certification; flow-matrix generation adds pair requirements later.
+// certification; reconstructed flow records add pair requirements later.
 type capabilityConnector struct {
 	Name               string              `json:"name"`
 	IntegrationType    string              `json:"integration_type"`
@@ -123,8 +123,9 @@ type capabilityBaseline struct {
 	PerKind            []kindBaseline `json:"per_kind"`
 }
 
-// capabilityMatrix is the generated artifact. Fields are deliberately slices,
-// not maps, so json.MarshalIndent produces stable, reviewable ordering.
+// capabilityMatrix is the in-memory aggregate view used to assemble and
+// validate connector-local shards. Fields are deliberately slices, not maps,
+// so json.MarshalIndent produces stable, reviewable ordering.
 type capabilityMatrix struct {
 	SchemaVersion             int                          `json:"schema_version"`
 	GeneratedCommand          string                       `json:"generated_command"`
@@ -751,9 +752,9 @@ func validateCertificationShard(shard certificationShard) error {
 }
 
 // buildCapabilityMatrix derives every matrix fact from source, registered
-// runtime types, recorded fixtures, or an accepted evidence record. It is
-// intentionally exported only inside connectorgen to keep the developer tool
-// as the sole owner of its generated artifact format.
+// runtime types, recorded fixtures, or an accepted evidence record. It remains
+// inside connectorgen so the developer tool is the sole owner of the generated
+// shard format.
 func buildCapabilityMatrix(repoRoot string) (capabilityMatrix, error) {
 	return buildCapabilityMatrixForConnectors(repoRoot, nil)
 }
@@ -1189,7 +1190,7 @@ func isEngineConnector(connector connectors.Connector) bool {
 }
 
 // methodDirectlyReturnsUnsupported inspects only the concrete registered
-// method's source. It avoids calling Write/Read while generating a matrix and
+// method's source. It avoids calling Write/Read while generating a shard and
 // therefore cannot accidentally make a network request or mutate a provider.
 func methodDirectlyReturnsUnsupported(repoRoot string, connector connectors.Connector, method string) (bool, error) {
 	typ := reflect.TypeOf(connector)

@@ -49,10 +49,10 @@ literal can otherwise share a `case` clause. Regeneration still fails if the
 underlying construct disappears.
 
 The generator derives its function-kind inventory from the capability contracts
-and engine operation-kind switch, then records one cell per connector and
-function kind. An applicable cell is complete only when its declaration, real
-implementation path, recorded fixture proof, and a passed live-evidence record
-are all present. It follows the registered concrete method to reject direct
+and engine operation-kind switch, then records one cell per allowlisted
+connector and function kind. An applicable cell is complete only when its
+declaration, real implementation path, recorded fixture proof, and a passed
+live-evidence record are all present. It follows the registered concrete method to reject direct
 `ErrUnsupportedOperation` stubs; reachability or a command resolving is never
 evidence of correctness. A connector which exposes a stubbed method without
 declaring that capability remains an applicable `declared=false`,
@@ -81,7 +81,7 @@ that compact status projection.
 2. **`--root` gives full project isolation.** The Makefile `smoke` target already runs an
    end-to-end pipeline in a `mktemp -d` root. Certify uses the same pattern: one ephemeral root per
    connector run.
-3. **Destination sync-mode logic is connector-independent** (`internal/app/app.go` +
+3. **Destination sync-mode logic is connector-independent** (`internal/app/etl_mode_dispatch.go` +
    `internal/app/sync_modes.go`): append/overwrite/dedup semantics live in the app layer against
    the local warehouse, not in any connector.
 4. **`connectors.LiveConformanceProvider` exists with zero implementations** — it is the intended
