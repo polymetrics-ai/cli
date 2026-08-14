@@ -31,9 +31,16 @@ Close only the two non-canonical execution bypasses for the existing public comp
 4. Run focused package tests, formatting, vet, build, and the individual repository verification gates prescribed by `AGENTS.md`.
 4. Complete the inline/manual GSD verification and code review records. Commit the plan checkpoint and the green implementation slice separately.
 
+## Slice 4 — CI standard-library vulnerability repair
+
+1. Record the PR's `govulncheck` red under the explicitly pinned Go 1.25.12 toolchain: the reachable findings are all in the Go standard library and fixed in Go 1.25.13.
+2. Advance the repository `toolchain` directive and every checked-in executable GitHub Actions Go pin together to Go 1.25.13. Do not change the language-version directive, add dependencies, or suppress findings.
+3. Run the exact scanner with `GOTOOLCHAIN=go1.25.13`, then verify module integrity and the affected workflow/configuration diff.
+
 ## Guardrails
 
 - No connector name/literal outside `internal/connectors/defs/<connector>/` is introduced.
 - No credentialed checks, external writes, dependencies, generated-file hand edits, or unrelated documentation churn.
 - The public spellings and their normalized names remain stable.
 - No surrounding ETL/transport refactor.
+- No scanner suppression or mixed Go patch levels across the executable workflows.

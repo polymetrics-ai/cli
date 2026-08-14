@@ -13,6 +13,14 @@ Status: complete (inline/manual GSD fallback)
 - [x] Focused tests, formatting, vet, build, and individual repository gates pass.
 - [x] Inline/manual GSD verify-work and code-review evidence is complete in `REVIEW.md` and `SUMMARY.md`.
 
+## CI vulnerability repair — 2026-08-14
+
+- [x] The supplied failing job was reproduced from its recorded Go 1.25.12 result; all seven reachable findings are standard-library advisories with Go 1.25.13 fixed versions.
+- [x] `GOTOOLCHAIN=go1.25.13 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` — passed: `No vulnerabilities found.`
+- [x] `GOTOOLCHAIN=go1.25.13 go mod verify`; `GOTOOLCHAIN=go1.25.13 go mod tidy`; and `git diff --exit-code -- go.sum` — passed. The only module-file diff is the intended `toolchain go1.25.12` to `go1.25.13` update; `make tidy-check` is intentionally a clean-worktree assertion and therefore reports that pending expected diff before the outer commit phase.
+- [x] `GOTOOLCHAIN=go1.25.13 go test -count=1 -timeout 20m ./internal/app -run '^(TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO|TestCanonicalSyncModesRetainParsedContracts)$'`; `GOTOOLCHAIN=go1.25.13 go test -count=1 -timeout 20m -run '^$' ./cmd/pm`; `go run ./cmd/agentcontractgen check`; `make release-workflow-check`; and `git diff --check` — passed.
+- [x] `git rebase 2df18ee3a083fe507cbe1c07e0270e82c5ab0182` — completed with the branch already up to date. That commit is the exact merge base, so there were no conflict hunks to resolve at the supplied target.
+
 ## Commands passed
 
 - `go test -count=1 -timeout 20m ./internal/app`
