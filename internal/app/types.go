@@ -44,6 +44,54 @@ type ApprovalConsumptionUncertainError struct {
 	err        error
 }
 
+// AuthorizationScopeChangedError reports the exact durable authorization
+// property that differs from the scope approved by the operator. It is typed
+// so callers can require a new plan/preview/proceed without parsing text.
+type AuthorizationScopeChangedError struct {
+	Reference string
+	Property  string
+}
+
+func (e *AuthorizationScopeChangedError) Error() string {
+	if e == nil {
+		return "authorization scope changed"
+	}
+	return fmt.Sprintf("authorization %q scope changed: %s requires re-approval", e.Reference, e.Property)
+}
+
+// AuthorizationRevokedError reports an explicit per-connection authorization
+// revocation before a destination dispatch can occur.
+type AuthorizationRevokedError struct{ Reference string }
+
+func (e *AuthorizationRevokedError) Error() string {
+	if e == nil {
+		return "authorization has been revoked"
+	}
+	return fmt.Sprintf("authorization %q has been revoked", e.Reference)
+}
+
+// AuthorizationExpiredError reports a standing authorization whose approved
+// scope expiry has elapsed before a destination dispatch can occur.
+type AuthorizationExpiredError struct{ Reference string }
+
+func (e *AuthorizationExpiredError) Error() string {
+	if e == nil {
+		return "authorization has expired"
+	}
+	return fmt.Sprintf("authorization %q has expired", e.Reference)
+}
+
+// AuthorizationTokenReplayError reports use of the one-time plan token after
+// it created a durable authorization record.
+type AuthorizationTokenReplayError struct{ Reference string }
+
+func (e *AuthorizationTokenReplayError) Error() string {
+	if e == nil {
+		return "authorization token has already been consumed"
+	}
+	return fmt.Sprintf("authorization token for %q has already been consumed", e.Reference)
+}
+
 func (e *ApprovalConsumptionUncertainError) Error() string {
 	if e == nil {
 		return "reverse plan approval consumption transition is uncertain; create a new reverse plan and obtain a fresh preview and approval before retrying"
@@ -315,6 +363,10 @@ type ReversePlan struct {
 	ApprovalToken       string                         `json:"approval_token,omitempty"`
 	ApprovalConsumedAt  time.Time                      `json:"approval_consumed_at,omitempty"`
 	ApprovalUncertainAt time.Time                      `json:"approval_consumption_uncertain_at,omitempty"`
+	// AuthorizationReference identifies the durable, non-secret scope record
+	// minted by the single-use approval. It is safe to persist in a schedule or
+	// print as a reference; the scope record never carries the token.
+	AuthorizationReference string `json:"authorization_reference,omitempty"`
 	// TransportConnectionID and TransportBindingSHA256 are only used by the
 	// closed GitHub issue-label walking slice. They bind a pre-run approval to
 	// one connection configuration; neither field is caller-selectable write
