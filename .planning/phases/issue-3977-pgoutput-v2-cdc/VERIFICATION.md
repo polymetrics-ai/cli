@@ -1,10 +1,10 @@
 # Verification — #3977 pgoutput v2 CDC
 
-## Pending execution
+## Evidence recorded
 
-- [ ] Red focused test has failed against the planned reader for the intended reason.
-- [ ] Focused PostgreSQL and transaction-stage unit suites pass.
-- [ ] `POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/postgres` passes without a skip.
-- [ ] `go vet` and `go build ./cmd/pm` pass.
-- [ ] `connectorgen validate`, `connectorgen surface-sync --check`, docs, lint, connector boundary, release-workflow, and agent-contract gates pass individually.
-- [ ] Code review findings are recorded and dispositioned.
+- [x] Red focused test failed against the planned reader for the intended missing-machine reason: `traces/red-v2-machine.txt`.
+- [x] Focused PostgreSQL v2/recovery/version tests pass: `traces/green-v2-machine.txt`.
+- [x] The explicit Docker/Colima PostgreSQL `databaseintegration` command passes without a skip: `traces/live-postgres-dbtest.txt`.
+- [x] `go vet ./...` and `go build ./cmd/pm` pass.
+- [x] `tidy-check`, `lint`, docs validation, smoke, agent-contract, connectorgen validation/surface-sync/certification, connector boundary/canon, GitHub parity artifacts, and release-workflow gates pass individually.
+- [x] Local code review recorded with no actionable findings: `REVIEW.md`.

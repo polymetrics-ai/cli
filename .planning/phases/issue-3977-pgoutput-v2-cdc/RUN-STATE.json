@@ -4,8 +4,14 @@
   "branch": "fm/cli-3977-pgoutput-v2-cdc-r1",
   "lifecycle": "inline-manual-gsd-fallback",
   "fallback_reason": "issue 3977 is not a numbered roadmap phase, so the adapter cannot initialise its normal phase artifacts; canonical single-worker policy also forbids role spawning",
-  "status": "red-recorded",
+  "status": "verified-review-complete",
   "red": ["PGC2-1 through PGC2-4: TestPGOutputV2* fails to compile because the v2 transaction machine is absent"],
-  "green": [],
-  "refactor": []
+  "green": [
+    "PGC2-1 through PGC2-4: deterministic v2 frame, ordering, version, and recovery tests pass",
+    "PGC2-5: explicit Docker/Colima PostgreSQL databaseintegration proof passes",
+    "PGC2-6: descriptor, changefeed bundle, and metadata CDC capability are promoted after live proof"
+  ],
+  "refactor": [
+    "replaced retained pgoutput v1 consumption loop with a dedicated v2 staged transaction machine"
+  ]
 }

@@ -1,11 +1,11 @@
 # Overview
 
 Reads PostgreSQL tables from a dynamically discovered catalog, snapshots tables, and supports
-cursor-incremental reads on a configurable cursor column. PostgreSQL logical-replication
-change capture is deliberately planned, not executable: it requires PostgreSQL 14+ `pgoutput`
-protocol-v2 streaming, a bounded crash-recoverable per-transaction stage, `StreamAbort` discard,
-a named `TransactionStageLimitExceeded` outcome with no source acknowledgement, and a durable
-receipt for the complete transaction before any source LSN acknowledgement.
+cursor-incremental reads on a configurable cursor column. PostgreSQL logical-replication change
+capture uses PostgreSQL 14+ `pgoutput` protocol-v2 streaming. It keeps each transaction in a
+bounded crash-recoverable private stage, discards `StreamAbort`, delivers only after
+`StreamCommit`, and persists a whole-transaction durable receipt before checkpointing and
+acknowledging the source LSN.
 
 Stream availability is discovered at runtime; see [Streams notes](#streams-notes) for the configured
 schema's scope and permission rules.
@@ -17,9 +17,8 @@ This connector is read-only; no write actions are declared.
 For warehouse-mediated sync, PostgreSQL provides one closed, live-only bounded
 snapshot source. It accepts the logical `snapshot` stream only for
 `full_append` and `full_overwrite`; it is neither a caller-authored SQL surface
-nor a fallback to the compatibility `Connector.Read` path. Polling,
-incremental modes, and change capture remain separate, non-executable source
-paths.
+nor a fallback to the compatibility `Connector.Read` path. Polling, incremental modes, and
+logical-replication change capture remain distinct source paths.
 
 The source identity must name one `database.schema.relation`. It discovers that
 relation's typed catalog and reads finite pages, ordered by a declared non-null
@@ -64,8 +63,8 @@ Connection fields:
 
 - `cursor_field` (optional, string); Optional column name used for incremental reads (rows with
   cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).
-- `cdc_publication` (optional, string); Reserved for the planned logical-replication change
-  capture path. It is not invoked while CDC is non-executable.
+- `cdc_publication` (optional, string); Publication used by logical-replication CDC. It must
+  include the selected `schema.table` stream. Defaults to `pm_publication`.
 - `database` (required, string); Database name to connect to.
 - `host` (required, string); TCP hostname or IP of the PostgreSQL server (no scheme, path, or
   credentials - a URL-shaped value is rejected). Unix-socket/peer authentication is unsupported.
@@ -112,12 +111,15 @@ This connector is read-only. Read behavior: low.
 
 ## Known limits
 
-- Logical-replication CDC is planned and fails closed before opening a replication connection,
-  creating/reusing a slot, consuming WAL, or advancing a checkpoint. It will not be advertised
-  until PostgreSQL 14+ `pgoutput` protocol-v2 streaming can stage each transaction privately under
-  a hard byte/record quota, discard `StreamAbort`, return a named
-  `TransactionStageLimitExceeded` outcome without acknowledging the source, and acknowledge the
-  source only after a whole-transaction durable downstream receipt.
+- Logical-replication CDC requires PostgreSQL 14+, `wal_level=logical`, a role with
+  `REPLICATION`, positive `max_replication_slots` and `max_wal_senders`, a matching publication,
+  and a stable primary-key replica identity. The slot is source-bound; a missing, incompatible,
+  invalidated, or retention-gapped checkpoint requires explicit rebootstrap rather than a guessed
+  resume.
+- Each streamed transaction is constrained by private byte, record, aggregate-stage, and age
+  limits. `StreamAbort` publishes, checkpoints, and acknowledges nothing. A successful
+  `StreamCommit` emits its ordered transaction, records its complete durable receipt, persists the
+  checkpoint, and only then acknowledges the commit LSN.
 - Cursor or timestamp reconciliation is not a CDC fallback: it cannot faithfully recover hard
   deletes or transaction history. A stage-limit outcome must require explicit retry or connector-
   owned teardown/rebootstrap, with source slot health made visible.

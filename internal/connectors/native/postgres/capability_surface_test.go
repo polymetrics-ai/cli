@@ -25,8 +25,12 @@ func TestNameAndMetadata(t *testing.T) {
 	if caps.Write {
 		t.Fatalf("postgres source connector must be read-only, got Write=true")
 	}
-	if connectors.MetadataOf(c).Capabilities.CDC {
-		t.Fatal("PostgreSQL CDC must remain undiscoverable until streamed staging is available")
+	if !connectors.MetadataOf(c).Capabilities.CDC {
+		t.Fatal("PostgreSQL CDC must be discoverable with the matching pgoutput v2 executor")
+	}
+	definition, ok := connectors.DefinitionOf(c)
+	if !ok || definition.Changefeed == nil || !definition.Capabilities.CDC {
+		t.Fatalf("PostgreSQL definition = %#v, want an executable matching changefeed", definition)
 	}
 }
 
@@ -73,8 +77,8 @@ func TestManifestProjectsBundleCredentials(t *testing.T) {
 	if len(manifest.AuthModes) != 1 || manifest.AuthModes[0].Name != "password" {
 		t.Fatalf("manifest auth modes = %#v, want password authentication", manifest.AuthModes)
 	}
-	if manifest.Metadata.Capabilities.CDC {
-		t.Fatal("PostgreSQL manifest must keep CDC fail-closed")
+	if !manifest.Metadata.Capabilities.CDC {
+		t.Fatal("PostgreSQL manifest must advertise the proven pgoutput v2 capability")
 	}
 }
 

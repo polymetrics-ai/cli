@@ -38,8 +38,7 @@
 //     with the legacy package. Capabilities.Write is false and Write
 //     returns ErrUnsupportedOperation.
 //
-// CDC (change data capture) remains fail-closed until the PostgreSQL 14+
-// streamed-transaction boundary is available (cdc.go).
+// CDC uses PostgreSQL 14+ pgoutput v2 streamed transaction staging (cdc.go).
 //
 // A mode=fixture config (cfg.Config["mode"]=="fixture") short-circuits all
 // network access so the conformance harness and unit tests can run with no
@@ -90,7 +89,7 @@ type postgresCapabilityOverride struct {
 var postgresCapabilityOverrides = []postgresCapabilityOverride{
 	{
 		name:  "cdc",
-		value: false,
+		value: true,
 		target: func(capabilities *connectors.Capabilities) *bool {
 			return &capabilities.CDC
 		},
@@ -117,12 +116,11 @@ func New() Connector {
 // Metadata overrides engine.Base's bundle-synthesized Metadata with the
 // legacy-shaped description text, matching the pre-migration
 // connectors.Metadata field-for-field (parity target). Capabilities remain
-// owned by metadata.json; the current table only repeats its fail-closed CDC
-// value while native CDC execution is unavailable, without promoting or
-// reinterpreting that capability.
+// owned by metadata.json; the current table repeats the proven native CDC
+// capability so this connector's legacy metadata projection stays aligned.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, and supports cursor-incremental reads. Read-only source."
+	m.Description = "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Read-only source."
 	for _, override := range postgresCapabilityOverrides {
 		*override.target(&m.Capabilities) = override.value
 	}

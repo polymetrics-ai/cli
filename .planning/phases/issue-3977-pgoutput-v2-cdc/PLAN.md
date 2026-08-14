@@ -4,7 +4,7 @@
 
 This is an inline/manual-GSD fallback because the active roadmap has no phase `3977`. The following command path was resolved through `scripts/gsd`: `discuss-phase`, `plan-phase 3977 --tdd`, `execute-phase 3977 --interactive`, `verify-work 3977`, and `code-review 3977`. The canonical single-worker contract prohibits role spawning. `scripts/gsd doctor` and `go run ./cmd/agentcontractgen check` pass.
 
-Required skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`, and `golang-database`. The PostgreSQL/dbtest runtime reference was read. No CLI-visible command changes are planned, so help/manual/website parity is not applicable; connector descriptor and bundle metadata remain parity-controlled.
+Required skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`, and `golang-database`. The PostgreSQL/dbtest runtime reference was read. No CLI command changes are planned; the connector manual, catalog, and website-generated connector data are regenerated for the promoted CDC capability.
 
 ## Evidence table
 
