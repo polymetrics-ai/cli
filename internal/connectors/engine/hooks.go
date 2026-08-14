@@ -2,6 +2,8 @@ package engine
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"sync"
 
 	"polymetrics.ai/internal/connectors"
@@ -35,6 +37,73 @@ type Hooks interface {
 // "custom" (e.g. GitHub App JWT->installation-token exchange, AWS SigV4).
 type AuthHook interface {
 	Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec) (connsdk.Authenticator, error)
+}
+
+// DeclaredRouteRequest describes the one JSON request an AuthHook needs to
+// make through the engine. DeclaredPath is the connector declaration; Path is
+// the hook's already-interpolated provider path. It deliberately has no
+// coordinator, URL, query, raw transport, or generic request-writer escape
+// hatch.
+type DeclaredRouteRequest struct {
+	Method       string
+	DeclaredPath string
+	Path         string
+	Headers      map[string]string
+	Body         any
+}
+
+// DeclaredRouteRequester permits a custom AuthHook to make one
+// declaration-aware JSON request. The engine owns its implementation so every
+// request enters the same admission and observation lifecycle as declarative
+// traffic.
+type DeclaredRouteRequester interface {
+	DoJSON(ctx context.Context, request DeclaredRouteRequest) (*connsdk.Response, error)
+}
+
+// DeclaredRouteAuthHook is the optional custom-auth extension for hooks that
+// need a provider request during authenticator construction. AuthHook remains
+// compatible for hooks that derive an authenticator locally.
+type DeclaredRouteAuthHook interface {
+	AuthHook
+	AuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, requester DeclaredRouteRequester) (connsdk.Authenticator, error)
+}
+
+type declaredRouteRequester struct {
+	runtime *Runtime
+}
+
+// DoJSON resolves a declaration before materializing the physical request.
+// Header values are copied into a requester clone and never retained by the
+// runtime, resolver, or coordinator. The actual path is intentionally passed
+// to connsdk.Requester.Do: endpoint policy admission happens at that physical
+// send boundary, including after the #3754 resolved-path change.
+func (r declaredRouteRequester) DoJSON(ctx context.Context, request DeclaredRouteRequest) (*connsdk.Response, error) {
+	if r.runtime == nil {
+		return nil, fmt.Errorf("auth declared route requester is unavailable")
+	}
+	method := strings.ToUpper(strings.TrimSpace(request.Method))
+	declaredPath := strings.TrimSpace(request.DeclaredPath)
+	path := strings.TrimSpace(request.Path)
+	if method == "" || !strings.HasPrefix(declaredPath, "/") {
+		return nil, fmt.Errorf("auth declared route request requires a method and declaration path")
+	}
+	if !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") {
+		return nil, fmt.Errorf("auth declared route request requires a relative absolute path")
+	}
+	requester, err := r.runtime.RequesterFor(method, declaredPath)
+	if err != nil {
+		return nil, err
+	}
+	clone := *requester
+	headers := make(map[string]string, len(requester.DefaultHeaders)+len(request.Headers))
+	for key, value := range requester.DefaultHeaders {
+		headers[key] = value
+	}
+	for key, value := range request.Headers {
+		headers[key] = value
+	}
+	clone.DefaultHeaders = headers
+	return clone.Do(ctx, method, path, nil, request.Body)
 }
 
 // RecordHook post-processes a single record beyond the declarative
