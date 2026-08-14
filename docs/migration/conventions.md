@@ -21,6 +21,7 @@ One directory `internal/connectors/defs/<name>/`, zero Go:
 ```
 metadata.json        # identity + capabilities + risk (engine/bundle.go Metadata)
 changefeed.json      # optional evidence-backed changefeed declaration
+polling_watermark.json # optional native-database polling preflight declaration
 spec.json            # draft-07 connection spec; x-secret marks secret fields
 streams.json         # base HTTP config + streams[] (required unless dynamic_schema)
 writes.json          # actions[] (omit entirely when capabilities.write is false)
@@ -95,7 +96,9 @@ split (design §B.7), each file well under ~400 lines:
 
 Still ship a bundle (`internal/connectors/defs/<name>/{metadata.json,changefeed.json?,spec.json,
 api_surface.json,docs.md}`) so identity/spec/docs stay uniform with every other connector. A
-native database bundle may additionally ship `database.json` as described below;
+native database bundle may additionally ship `database.json` and the separately governed
+`polling_watermark.json` described below; an implemented polling declaration can be admitted only
+when its exact shared source and apply executors are registered.
 `metadata.json` sets
 `capabilities.dynamic_schema: true` and the bundle ships **no `streams.json`** (the loader
 (`bundle.go`'s `loadStreams`) only tolerates a missing `streams.json` when `dynamic_schema` is
@@ -144,6 +147,35 @@ The database layer has no direct connector-pair or zero-copy command. Its source
 warehouse-to-target admissions are separate legs; see the
 [warehouse-mediation architecture](../architecture/connector-architecture-v2-design.md#b71-database-warehouse-mediation)
 for the shared boundary.
+
+#### Native polling-watermark declaration (`polling_watermark.json`)
+
+This optional native-database bundle file is separate from both `database.json` and
+`changefeed.json`. It is a closed, definition-owned admission declaration, not a provider API
+surface or a CDC claim: do not add an `api_surface.json` entry, raw SQL, raw HTTP, shell fragment,
+DSN, credential, target name, or connection state. `engine.Load` validates the structural schema
+at `internal/connectors/engine/schema/polling_watermark.schema.json`; the real no-I/O admission
+rule is `engine.PollingPreflight`, which requires exact registered source and apply executors plus
+the immutable polling conformance evidence before any source read.
+
+Only a bundle with `metadata.json` `integration_type: "database"` may contain this file. Its
+closed statuses are `implemented`, `planned`, and `unsupported`; the latter two require a reason,
+while an implemented declaration must supply the full source and target contracts below. Loading
+an implemented declaration alone does not make it eligible: both exact native-database executors
+must be registered when `PollingPreflight` runs.
+
+Declare only a catalog-discovered relation selector, closed keyset paging and bounds,
+snapshot/barrier, lossless cursor codec/type/precision, complete watermark/tie-breaker ordering,
+mutation and overlap policy, source identity, schema/delete visibility, and #3810 canonical
+`synccontract.Mode` values. The target side declares bounded batch, staging/replace, stable keys,
+ordering fence, transaction/partial-result, validity-window, and closed apply strategies. Hard
+deletes remain invisible unless a cursor-advancing tombstone mapping is declared; polling must
+never advertise `change_capture`.
+
+Use the shared five-name compatibility adapter only at a legacy input boundary; authored
+`polling_watermark.json` values are always canonical modes. No engine bundle declares this file
+yet, so it is deliberately not embedded in `defs.FS`; the first engine-specific declaration must
+add its concrete file and the matching embed pattern in the same owned change.
 
 ### Tier 2 — hooks (bundle + Go escape hatch, target ~8%)
 
@@ -238,7 +270,10 @@ not a full override by default.
   delivery contract. An absent descriptor is unknown and non-capable. The structural schema is
   `internal/connectors/engine/schema/changefeed.schema.json`; runtime semantic checks live on
   `connectors.ChangefeedDescriptor`.
-- **`polling_watermark` is bounded replay, not a hard-delete feed**: an implemented polling
+- **Legacy changefeed `polling_watermark` is bounded replay, not a hard-delete feed**: this
+  existing `changefeed.json` mechanism remains a CDC/changefeed-owner surface. It is not the
+  native-database `polling_watermark.json` preflight declaration above and must not be used to
+  promote a polling scan to `change_capture`. An implemented legacy polling
   declaration uses the fixed executor `{"kind":"engine","id":"polling_watermark"}` and must
   supply `polling_watermark` beside the normal evidence/checkpoint/delivery fields. Its
   `watermark` declares `{kind, path}` where kind is exactly `timestamp`,

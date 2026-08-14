@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "polling_watermark.json",
+  "type": "object",
+  "required": ["status"],
+  "additionalProperties": false,
+  "properties": {
+    "status": {"type": "string"},
+    "reason": {"type": "string"},
+    "source": {
+      "type": "object",
+      "required": ["executor", "object", "read", "snapshot", "cursor", "ordering", "mutation", "identity", "schema_compatibility", "delete_visibility", "modes"],
+      "additionalProperties": false,
+      "properties": {
+        "executor": {
+          "type": "object",
+          "required": ["family", "id"],
+          "additionalProperties": false,
+          "properties": {"family": {"type": "string"}, "id": {"type": "string"}}
+        },
+        "object": {
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {"kind": {"type": "string"}}
+        },
+        "read": {
+          "type": "object",
+          "required": ["kind", "max_page_size", "max_pages", "max_requests", "stable_traversal", "predicate"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"type": "string"},
+            "max_page_size": {"type": "integer"},
+            "max_pages": {"type": "integer"},
+            "max_requests": {"type": "integer"},
+            "stable_traversal": {"type": "boolean"},
+            "predicate": {"type": "string"}
+          }
+        },
+        "snapshot": {
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {"kind": {"type": "string"}}
+        },
+        "cursor": {
+          "type": "object",
+          "required": ["codec", "type", "precision"],
+          "additionalProperties": false,
+          "properties": {
+            "codec": {"type": "string"},
+            "type": {"type": "string"},
+            "precision": {"type": "string"},
+            "allows_null": {"type": "boolean"}
+          }
+        },
+        "ordering": {
+          "type": "object",
+          "required": ["watermark", "tie_breaker"],
+          "additionalProperties": false,
+          "properties": {
+            "watermark": {
+              "type": "object",
+              "required": ["catalog_field", "ascending"],
+              "additionalProperties": false,
+              "properties": {
+                "catalog_field": {"type": "string"},
+                "ascending": {"type": "boolean"},
+                "unique": {"type": "boolean"}
+              }
+            },
+            "tie_breaker": {
+              "type": "object",
+              "required": ["catalog_field", "ascending"],
+              "additionalProperties": false,
+              "properties": {
+                "catalog_field": {"type": "string"},
+                "ascending": {"type": "boolean"},
+                "unique": {"type": "boolean"}
+              }
+            }
+          }
+        },
+        "mutation": {
+          "type": "object",
+          "required": ["mutable", "commit_ordered", "bounded_overlap"],
+          "additionalProperties": false,
+          "properties": {
+            "mutable": {"type": "boolean"},
+            "commit_ordered": {"type": "boolean"},
+            "bounded_overlap": {"type": "boolean"}
+          }
+        },
+        "identity": {
+          "type": "object",
+          "required": ["engine", "account_scope", "object_scope"],
+          "additionalProperties": false,
+          "properties": {
+            "engine": {"type": "string"},
+            "account_scope": {"type": "string"},
+            "object_scope": {"type": "string"}
+          }
+        },
+        "schema_compatibility": {"type": "string"},
+        "delete_visibility": {"type": "string"},
+        "soft_delete_field": {"type": "string"},
+        "soft_delete_advances_cursor": {"type": "boolean"},
+        "modes": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": ["executor", "max_batch_records", "staging", "stable_key_mapping", "conditional_order_fence", "transaction", "partial_result", "retry_safe_close_and_insert", "validity_window", "strategies"],
+      "additionalProperties": false,
+      "properties": {
+        "executor": {
+          "type": "object",
+          "required": ["family", "id"],
+          "additionalProperties": false,
+          "properties": {"family": {"type": "string"}, "id": {"type": "string"}}
+        },
+        "max_batch_records": {"type": "integer"},
+        "staging": {"type": "string"},
+        "stable_key_mapping": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "conditional_order_fence": {"type": "boolean"},
+        "transaction": {"type": "string"},
+        "partial_result": {"type": "string"},
+        "retry_safe_close_and_insert": {"type": "boolean"},
+        "validity_window": {"type": "string"},
+        "strategies": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    }
+  }
+}
