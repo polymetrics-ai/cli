@@ -1,0 +1,17 @@
+{
+  "issue": 3980,
+  "phase": "issue-3980-parquet-delivery-worksets-r1",
+  "mode": "manual-inline-gsd",
+  "status": "planned",
+  "fallback_reason": "canonical single-worker contract forbids spawning GSD roles",
+  "skills": [
+    "golang-how-to",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing",
+    "golang-database"
+  ]
+}
