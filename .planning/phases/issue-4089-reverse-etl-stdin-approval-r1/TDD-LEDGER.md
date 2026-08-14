@@ -22,3 +22,10 @@
 - Green: `go test -count=1 -timeout 20m -run '^(TestCredentialCoordination_EmptyProjectOpenDoesNotRewriteState|TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes)$' -v ./internal/app` passed all eight relevant tests (seven ETL mode subtests plus the empty-project reopen regression), and `go test -count=1 -timeout 20m ./internal/app` passed.
 - Green: `GOTOOLCHAIN=go1.25.13 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` reported `No vulnerabilities found.` The module and every pinned GitHub Actions Go setup now use `1.25.13`.
 - Required skills used for this CI repair: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, and `golang-documentation`.
+
+## Rebased CI continuation — 2026-08-14
+
+- Rebase: rebased the branch cleanly onto `origin/integration/4015-mvp-flat-r1`, the required PR base. The base already carries the Go `1.25.13` scanner remediation, and the branch retains its app-side CI repair.
+- Red: the first rebased `go test -count=1 -timeout 20m ./internal/app` run failed `TestRunReverseETLRecoversCommittedApprovalConsumptionUnlockFailure`. Its `failAt: 2` injector now failed the read-only `UpdateAfterPreflight` unlock, not the later committed update unlock.
+- Green: moved that test's explicit failure point to the third unlock (plan load, preflight read, committed update) so it again proves that a post-commit unlock failure returns `ApprovalConsumptionUncertainError` with a committed outcome and no external write.
+- Green: both uncertainty-recovery selectors pass, the full `internal/app` package passes, the real-process stdin approval selector passes, and `GOTOOLCHAIN=go1.25.13 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` reports no reachable vulnerabilities.

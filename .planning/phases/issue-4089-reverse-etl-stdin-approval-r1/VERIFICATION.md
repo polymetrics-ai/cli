@@ -36,3 +36,13 @@ PASS  make tidy-check, docs-check, agent-contract-check, connectorgen-validate,
       lint, smoke-no-build
 PASS  rg --pcre2 -- '--approve(?=\\s|=|$)' active source/docs/website (only intentional retired-flag regression assertions remain)
 ```
+
+## Rebased CI continuation
+
+```text
+PASS  rebased cleanly onto origin/integration/4015-mvp-flat-r1
+PASS  GOTOOLCHAIN=go1.25.13 go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+PASS  GOTOOLCHAIN=go1.25.13 go test -count=1 -timeout 20m ./internal/app
+PASS  GOTOOLCHAIN=go1.25.13 go test -count=1 -timeout 20m ./internal/cli \
+      -run '^TestReverseETLApprovalUsesBoundedStdin$'
+```
