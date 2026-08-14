@@ -199,15 +199,6 @@ func parseNonNegativeRateLimitHeader(header http.Header, names ...string) (int64
 	return 0, false
 }
 
-// parseRateLimitReset supports RFC 9333's RateLimit-Reset delta-seconds and
-// the widely used X-RateLimit-Reset Unix-seconds convention. Retry-After is
-// handled separately and wins whenever it is present because it is explicit
-// about the immediate retry.
-func parseRateLimitReset(header http.Header, now time.Time) (time.Time, bool) {
-	resetAt, _, ok := parseRateLimitResetWithAbsolute(header, now)
-	return resetAt, ok
-}
-
 func parseRateLimitResetWithAbsolute(header http.Header, now time.Time) (time.Time, bool, bool) {
 	if seconds, ok := parseNonNegativeRateLimitHeader(header, "RateLimit-Reset"); ok {
 		if delay, valid := durationFromSeconds(seconds); valid {

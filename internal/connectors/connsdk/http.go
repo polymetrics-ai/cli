@@ -689,7 +689,7 @@ func snapshotMultipartFile(ctx context.Context, file MultipartFile, maxBytes int
 	if err != nil {
 		return "", 0, nil, "", fmt.Errorf("multipart file %q: %w", file.FieldName, err)
 	}
-	defer source.Close()
+	defer func() { _ = source.Close() }()
 	temp, err := os.CreateTemp("", "polymetrics-upload-*")
 	if err != nil {
 		return "", 0, nil, "", fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
@@ -845,7 +845,7 @@ func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64
 	if err != nil {
 		return 0, err
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 	if maxBytes < 0 {
 		written, err := io.Copy(part, f)
 		return written, err
@@ -924,13 +924,13 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		}
 		req, err := http.NewRequestWithContext(ctx, method, fullURL, reader)
 		if err != nil {
-			cleanupRequestBody(body)
+			_ = cleanupRequestBody(body)
 			return nil, fmt.Errorf("build request: %w", err)
 		}
 		r.applyHeaders(req, body != nil, contentType)
 		if r.Auth != nil {
 			if err := r.Auth.Apply(ctx, req); err != nil {
-				cleanupRequestBody(body)
+				_ = cleanupRequestBody(body)
 				return nil, fmt.Errorf("apply auth: %w", err)
 			}
 		}
@@ -966,12 +966,12 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		observation := r.observeRateLimit(ctx, route, resp.StatusCode, resp.Header, costHeader)
 		bodyErr := cleanupRequestBody(body)
 		if bodyErr != nil {
-			resp.Body.Close()
+			_ = resp.Body.Close()
 			return nil, fmt.Errorf("send request body: %w", bodyErr)
 		}
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
-		resp.Body.Close()
+		_ = resp.Body.Close()
 
 		// A 401 can mean the credential was invalidated out of band (revoked
 		// grant, password change, scope change) rather than that it was never
