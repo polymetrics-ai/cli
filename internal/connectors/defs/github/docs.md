@@ -33,11 +33,11 @@ Service API documentation: https://docs.github.com/en/rest and https://docs.gith
 
 Connection fields:
 
-- `app_id` (optional, string); GitHub App ID for auth_type=github_app.
+- `app_id` (optional, string); GitHub App ID used with an installation ID and private key.
 - `auth_type` (optional, string).
 - `base_url` (optional, string); default `https://api.github.com`; format `uri`; GitHub API base URL
   override for tests or GitHub Enterprise.
-- `installation_id` (optional, string); GitHub App installation ID for auth_type=github_app.
+- `installation_id` (optional, string); GitHub App installation ID.
 - `installation_permissions` (optional, string); Optional JSON object of requested GitHub App
   installation-token permissions.
 - `installation_repositories` (optional, string); Optional comma-separated repository names for a
@@ -45,10 +45,9 @@ Connection fields:
 - `installation_repository_ids` (optional, string); Optional comma-separated repository IDs for a
   restricted installation token.
 - `owner` (required, string); Repository owner (user or organization login).
-- `private_key` (optional, secret, string); GitHub App PEM private key for auth_type=github_app.
-  Never logged.
+- `private_key` (optional, secret, string); GitHub App PEM private key. Never logged.
 - `private_key_base64` (optional, secret, string); Base64-encoded GitHub App PEM private key for
-  auth_type=github_app (alternative to private_key). Never logged.
+  GitHub App authentication (alternative to private_key). Never logged.
 - `public_access` (optional, string); Explicit opt-in for unauthenticated (public) reads. Set to any
   non-empty value (e.g. 'true') to allow reads with no token/app credentials configured.
 - `rate_limit_account` (optional, string); Authenticated GitHub login used only as the non-secret
@@ -73,7 +72,7 @@ Default configuration values: `base_url=https://api.github.com`.
 Authentication behavior:
 
 - Bearer token authentication using `secrets.token` when `{{ secrets.token }}`.
-- Connector-specific authentication when `{{ config.app_id }}`.
+- GitHub App authentication when `{{ config.app_id }}` is selected.
 - No authentication when `{{ config.public_access }}`.
 - No authentication when `{{ config.auth_type in ['public', 'none', 'anonymous', 'unauthenticated']
   }}`.
@@ -87,9 +86,13 @@ Connection checks call GET `/repos/{{ config.owner }}/{{ config.repo }}`.
 `rate_limits.json` declares GitHub's documented primary quotas: 5,000 requests/hour per
 authenticated user, 5,000 requests/hour minimum per GitHub App installation, 1,000
 requests/hour per repository for `GITHUB_TOKEN`, and 60 requests/hour per originating IP for
-unauthenticated traffic. The configured `auth_type` selects the matching policy; its scope is an
-explicit non-secret account, installation, repository, or IP subject and is projected by the
-coordination identity before it reaches the local registry.
+unauthenticated traffic. When `app_id` selects GitHub App authentication, its rate-limit profile is
+`github_app` and uses the installation scope even if `auth_type` is unset. Token, GitHub Actions,
+and public traffic continue to select their policies through the non-secret `auth_type` value. The
+installation-token POST enters the same requester admission boundary as other REST traffic and is
+not automatically retried. Each policy scope is an explicit non-secret account, installation,
+repository, or IP subject projected by the coordination identity before it reaches the local
+registry.
 
 GitHub also documents a 900-point-per-minute REST secondary ceiling, with most writes costing five
 points and some endpoint costs unpublished. The declaration therefore charges every REST request

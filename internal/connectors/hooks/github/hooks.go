@@ -3,7 +3,6 @@
 package github
 
 import (
-	"bytes"
 	"context"
 	"crypto"
 	"crypto/rand"
@@ -39,19 +38,42 @@ func New() *Hooks { return &Hooks{} }
 func (h *Hooks) ConnectorName() string { return "github" }
 
 var (
-	_ engine.Hooks     = (*Hooks)(nil)
-	_ engine.AuthHook  = (*Hooks)(nil)
-	_ engine.WriteHook = (*Hooks)(nil)
+	_ engine.Hooks                    = (*Hooks)(nil)
+	_ engine.AuthHook                 = (*Hooks)(nil)
+	_ engine.DeclaredRouteAuthHook    = (*Hooks)(nil)
+	_ engine.RateLimitAuthProfileHook = (*Hooks)(nil)
+	_ engine.WriteHook                = (*Hooks)(nil)
 )
 
-// Authenticator mints an RS256 JWT (matches legacy's githubAppJWT) and
-// exchanges it for an installation token via POST
-// /app/installations/{id}/access_tokens, returning a Bearer authenticator.
-// ctx is honored (a real network call); uncached, matching legacy's own
-// re-mint-on-every-call behavior.
-func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, _ engine.AuthSpec) (connsdk.Authenticator, error) {
+const githubInstallationTokenDeclaredPath = "/app/installations/{installation_id}/access_tokens"
+
+// Authenticator remains the base AuthHook implementation for compatibility,
+// but deliberately refuses a direct GitHub App exchange. The token request is
+// network-capable and must receive the engine-owned declared-route requester.
+func (h *Hooks) Authenticator(context.Context, connectors.RuntimeConfig, engine.AuthSpec) (connsdk.Authenticator, error) {
+	return nil, errors.New("github_app authentication requires engine declared-route admission")
+}
+
+// RateLimitAuthProfile identifies GitHub App custom authentication for
+// rate-limit selection.
+func (h *Hooks) RateLimitAuthProfile(_ connectors.RuntimeConfig, spec engine.AuthSpec) (string, bool) {
+	if spec.Mode != "custom" || spec.Hook != "github" {
+		return "", false
+	}
+	return "github_app", true
+}
+
+// AuthenticatorWithDeclaredRoute mints an RS256 JWT (matching legacy's
+// githubAppJWT) and exchanges it for an installation token through the
+// declared `POST /app/installations/{installation_id}/access_tokens` route.
+// The actual path contains the escaped configured installation ID; the engine
+// admits that physical path immediately before sending it.
+func (h *Hooks) AuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, _ engine.AuthSpec, requester engine.DeclaredRouteRequester) (connsdk.Authenticator, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
+	}
+	if requester == nil {
+		return nil, errors.New("github_app authentication requires engine declared-route admission")
 	}
 	appID := strings.TrimSpace(cfg.Config["app_id"])
 	if appID == "" {
@@ -70,35 +92,23 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 		return nil, err
 	}
 
-	baseURL := strings.TrimRight(strings.TrimSpace(cfg.Config["base_url"]), "/")
-	if baseURL == "" {
-		baseURL = "https://api.github.com"
-	}
-	endpoint := baseURL + "/app/installations/" + url.PathEscape(installationID) + "/access_tokens"
-	body, err := json.Marshal(installationTokenPayload(cfg))
-	if err != nil {
-		return nil, fmt.Errorf("github_app: encode installation token request: %w", err)
-	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(body))
-	if err != nil {
-		return nil, fmt.Errorf("github_app: build installation token request: %w", err)
-	}
-	req.Header.Set("Authorization", "Bearer "+jwt)
-	req.Header.Set("Accept", "application/vnd.github+json")
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := requester.DoJSON(ctx, engine.DeclaredRouteRequest{
+		Method:       http.MethodPost,
+		DeclaredPath: githubInstallationTokenDeclaredPath,
+		Path:         "/app/installations/" + url.PathEscape(installationID) + "/access_tokens",
+		Headers: map[string]string{
+			"Authorization": "Bearer " + jwt,
+			"Accept":        "application/vnd.github+json",
+		},
+		Body: installationTokenPayload(cfg),
+	})
 	if err != nil {
 		return nil, fmt.Errorf("github_app: exchange installation token: %w", err)
-	}
-	defer func() { _ = resp.Body.Close() }()
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("github_app: installation token exchange returned status %d", resp.StatusCode)
 	}
 	var out struct {
 		Token string `json:"token"`
 	}
-	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+	if err := json.Unmarshal(resp.Body, &out); err != nil {
 		return nil, fmt.Errorf("github_app: decode installation token response: %w", err)
 	}
 	if strings.TrimSpace(out.Token) == "" {
