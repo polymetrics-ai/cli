@@ -1,7 +1,7 @@
 # Issue #3897: Connection-scoped flow warehouse reads — Context
 
-**Gathered:** 2026-08-11  
-**Status:** Ready for TDD planning  
+**Gathered:** 2026-08-11
+**Status:** Ready for TDD planning
 **GSD mode:** Manual issue-phase fallback
 
 ## Phase Boundary

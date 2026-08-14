@@ -5,42 +5,34 @@ import (
 	"encoding/json"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
-// syncMode name constants mirror internal/app/sync_modes.go's MustSyncModeNames
-// verbatim (design §B.6). engine cannot import internal/app (app already
-// depends on connectors, and PLAN.md forbids editing internal/app/** for this
-// task); these are the same five strings, kept in lockstep by
-// TestDerivedSyncModesTruthTable against the design doc's truth table rather
-// than by a shared import.
-const (
-	syncModeFullRefreshAppend           = "full_refresh_append"
-	syncModeFullRefreshOverwrite        = "full_refresh_overwrite"
-	syncModeFullRefreshOverwriteDeduped = "full_refresh_overwrite_deduped"
-	syncModeIncrementalAppend           = "incremental_append"
-	syncModeIncrementalAppendDeduped    = "incremental_append_deduped"
-)
-
-// DerivedSyncModes returns the sync modes a stream supports, derived from its
-// bundle-declared shape rather than authored anywhere (design §B.6): the two
-// full_refresh modes are always available; the *_deduped variants require
-// x-primary-key; the incremental_* modes require an incremental block.
+// DerivedSyncModes returns sync modes derived from the bundle-declared stream shape.
 func DerivedSyncModes(s StreamSpec, sch *StreamSchema) []string {
-	modes := []string{syncModeFullRefreshAppend, syncModeFullRefreshOverwrite}
+	cursorField := effectiveCursorField(s, sch)
+	return synccontract.SupportedPublicModeNames(synccontract.PublicModeCapabilities{
+		HasPrimaryKey:          sch != nil && len(sch.PrimaryKey) > 0,
+		HasCursor:              cursorField != "",
+		HasIncrementalExecutor: hasIncrementalExecutor(s, cursorField),
+	})
+}
 
-	hasPrimaryKey := sch != nil && len(sch.PrimaryKey) > 0
-	hasIncremental := s.Incremental != nil
+func effectiveCursorField(s StreamSpec, sch *StreamSchema) string {
+	if sch != nil && sch.CursorField != "" {
+		return sch.CursorField
+	}
+	if s.Incremental != nil {
+		return s.Incremental.CursorField
+	}
+	return ""
+}
 
-	if hasPrimaryKey {
-		modes = append(modes, syncModeFullRefreshOverwriteDeduped)
+func hasIncrementalExecutor(s StreamSpec, cursorField string) bool {
+	if s.Incremental == nil || cursorField == "" {
+		return false
 	}
-	if hasIncremental {
-		modes = append(modes, syncModeIncrementalAppend)
-	}
-	if hasPrimaryKey && hasIncremental {
-		modes = append(modes, syncModeIncrementalAppendDeduped)
-	}
-	return modes
+	return s.Incremental.CursorField == "" || s.Incremental.CursorField == cursorField
 }
 
 // Connector adapts a declarative Bundle (+ optional Tier-2 Hooks) to
@@ -386,9 +378,8 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			}
 		}
 	}
-	// Preserve the canonical mode ordering (matches
-	// internal/app/sync_modes.go.MustSyncModeNames) rather than
-	// first-seen-per-stream order.
+	// Preserve the shared public mode ordering rather than first-seen-per-stream
+	// order.
 	syncModes = orderCanonicalModes(syncModes)
 
 	for _, a := range b.Writes {
@@ -475,8 +466,8 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		}
 		if sch != nil {
 			summary.PrimaryKey = sch.PrimaryKey
-			summary.CursorField = sch.CursorField
 		}
+		summary.CursorField = effectiveCursorField(s, sch)
 		streamSummaries = append(streamSummaries, summary)
 	}
 
@@ -712,20 +703,27 @@ func specJSON(b Bundle) []byte {
 func legacyStreamOf(b Bundle, s StreamSpec) connectors.Stream {
 	sch := b.Schemas[s.Name]
 	stream := connectors.Stream{Name: s.Name}
+	cursorField := effectiveCursorField(s, sch)
 	if sch == nil {
+		if cursorField != "" {
+			stream.CursorFields = []string{cursorField}
+		}
 		return stream
 	}
 	if len(sch.Raw) > 0 {
 		projected, err := connectors.StreamFromSchema(s.Name, "", sch.Raw)
 		if err == nil {
+			if cursorField != "" {
+				projected.CursorFields = []string{cursorField}
+			}
 			return projected
 		}
 	}
 	// Hand-assembled test bundles predating raw-schema retention still need a
 	// useful catalog projection. Loaded bundles always take the path above.
 	stream.PrimaryKey = sch.PrimaryKey
-	if sch.CursorField != "" {
-		stream.CursorFields = []string{sch.CursorField}
+	if cursorField != "" {
+		stream.CursorFields = []string{cursorField}
 	}
 	for _, name := range sch.Properties() {
 		stream.Fields = append(stream.Fields, connectors.Field{Name: name})
@@ -733,14 +731,7 @@ func legacyStreamOf(b Bundle, s StreamSpec) connectors.Stream {
 	return stream
 }
 
-// canonicalModeOrder is internal/app/sync_modes.go's MustSyncModeNames order.
-var canonicalModeOrder = []string{
-	syncModeFullRefreshAppend,
-	syncModeFullRefreshOverwrite,
-	syncModeFullRefreshOverwriteDeduped,
-	syncModeIncrementalAppend,
-	syncModeIncrementalAppendDeduped,
-}
+var canonicalModeOrder = synccontract.PublicModeNames()
 
 // orderCanonicalModes returns the subset of canonicalModeOrder present in
 // modes, in canonical order.

@@ -646,7 +646,7 @@ ETL STREAMS
     fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_user_notifications_token:

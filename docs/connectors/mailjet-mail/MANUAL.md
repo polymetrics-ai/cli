@@ -51,7 +51,7 @@ ETL STREAMS
     fields: ID(integer), MessageBouncedCount(integer), MessageClickedCount(integer), MessageDeliveredCount(integer), MessageOpenedCount(integer), MessageSentCount(integer), MessageSpamCount(integer), MessageUnsubscribedCount(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Mailjet API read of contact, list, message, campaign, and statistics data

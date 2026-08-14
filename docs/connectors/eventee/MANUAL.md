@@ -69,7 +69,7 @@ ETL STREAMS
     fields: bio(string), company(string), email(string), email_valid(boolean), facebook_link(string), first_name(string), group_id(integer), id(integer), last_name(string), linked_in_link(string), phone(string), photo(string), position(string), send_email(boolean), status(integer), twitter_link(string), web(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   clear_test_content:

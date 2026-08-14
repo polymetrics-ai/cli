@@ -52,7 +52,7 @@ ETL STREAMS
     fields: blogId(string), comments(number), engagement(number), likes(number), publishDate(string), reach(number), shares(number), text(string), url(string), videoId(string), views(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Metricool API read of brand-scoped social analytics for the configured user_id/blog_ids

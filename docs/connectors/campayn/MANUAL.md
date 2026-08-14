@@ -51,7 +51,7 @@ ETL STREAMS
     fields: confirmed(string), email(string), first_name(string), id(string), image_url(string), last_name(string), list_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   add_contact:

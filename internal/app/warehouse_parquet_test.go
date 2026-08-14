@@ -91,7 +91,7 @@ func TestWarehouseMaterializesTablesAsParquet(t *testing.T) {
 		{"id": "r1", "name": "Ada", "status": "active", "updated_at": "2026-08-06T00:00:00Z"},
 		{"id": "r2", "name": "Alan", "status": "churned", "updated_at": "2026-08-06T00:00:01Z"},
 	})
-	a, connection := setupSyncModeApp(t, source, "incremental_append_deduped")
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 10}); err != nil {
 		t.Fatalf("RunETL() error = %v", err)
 	}

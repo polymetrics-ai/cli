@@ -61,7 +61,7 @@ ETL STREAMS
     fields: company(string), date(string), exchange(string), market_cap(number), price_range(string), shares(integer), status(string), symbol(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Finage API read of market data

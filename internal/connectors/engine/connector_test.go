@@ -176,7 +176,6 @@ func TestConnectorManifestSynthesizedFromBundleSpotFields(t *testing.T) {
 	if len(m.Streams[0].CursorFields) != 1 || m.Streams[0].CursorFields[0] != "updated_at" {
 		t.Fatalf("Manifest().Streams[0].CursorFields = %v, want [updated_at]", m.Streams[0].CursorFields)
 	}
-	// PK + no incremental block -> dedup-capable but non-incremental modes only.
 	wantModes := []string{"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped"}
 	assertStringSliceEqual(t, m.SyncModes, wantModes)
 	if m.Risk.Read == "" {
@@ -391,8 +390,23 @@ func TestDerivedSyncModesTruthTable(t *testing.T) {
 			want: []string{"full_refresh_append", "full_refresh_overwrite"},
 		},
 		{
-			name:       "pk only adds dedup modes",
+			name:       "primary key alone does not admit cursor-required compatibility modes",
 			primaryKey: "id",
+			want:       []string{"full_refresh_append", "full_refresh_overwrite"},
+		},
+		{
+			name:        "incremental cursor without schema cursor advertises incremental modes",
+			primaryKey:  "id",
+			incremental: &IncrementalSpec{CursorField: "updated_at"},
+			want: []string{
+				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+				"incremental_append", "incremental_append_deduped",
+			},
+		},
+		{
+			name:        "cursor field without incremental block retains only full refresh modes",
+			primaryKey:  "id",
+			cursorField: "updated_at",
 			want: []string{
 				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
 			},
@@ -410,6 +424,25 @@ func TestDerivedSyncModesTruthTable(t *testing.T) {
 			primaryKey:  "id",
 			cursorField: "updated_at",
 			incremental: &IncrementalSpec{CursorField: "updated_at"},
+			want: []string{
+				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+				"incremental_append", "incremental_append_deduped",
+			},
+		},
+		{
+			name:        "mismatched incremental and schema cursors do not advertise incremental modes",
+			primaryKey:  "id",
+			cursorField: "updated_at",
+			incremental: &IncrementalSpec{CursorField: "created_at"},
+			want: []string{
+				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+			},
+		},
+		{
+			name:        "empty incremental cursor retains schema-backed incremental modes",
+			primaryKey:  "id",
+			cursorField: "updated_at",
+			incremental: &IncrementalSpec{},
 			want: []string{
 				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
 				"incremental_append", "incremental_append_deduped",
@@ -436,6 +469,41 @@ func TestDerivedSyncModesTruthTable(t *testing.T) {
 func TestDerivedSyncModesNilSchemaIsNeitherCase(t *testing.T) {
 	got := DerivedSyncModes(StreamSpec{Name: "widgets"}, nil)
 	assertStringSliceEqual(t, got, []string{"full_refresh_append", "full_refresh_overwrite"})
+}
+
+func TestConnectorIncrementalCursorWithoutSchemaFieldProjectsEffectiveCursor(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	t.Cleanup(srv.Close)
+	b := newConnectorTestBundle(t, srv)
+	b.Streams[0].Incremental = &IncrementalSpec{CursorField: "updated_at"}
+	b.Schemas["widgets"] = widgetsRecordSchema(t, "id", "")
+	b.Schemas["widgets"].Raw = json.RawMessage(`{
+		"type": "object",
+		"x-primary-key": ["id"],
+		"properties": {
+			"id": {"type": "string"},
+			"name": {"type": "string"},
+			"updated_at": {"type": "string"}
+		}
+	}`)
+
+	c := New(b, nil)
+	catalog, err := c.Catalog(context.Background(), connectors.RuntimeConfig{})
+	if err != nil {
+		t.Fatalf("Catalog: %v", err)
+	}
+	if len(catalog.Streams) != 1 || !reflect.DeepEqual(catalog.Streams[0].CursorFields, []string{"updated_at"}) {
+		t.Fatalf("Catalog().Streams = %+v, want incremental cursor projection", catalog.Streams)
+	}
+
+	definition := c.Definition()
+	if len(definition.Streams) != 1 || definition.Streams[0].CursorField != "updated_at" {
+		t.Fatalf("Definition().Streams = %+v, want incremental cursor projection", definition.Streams)
+	}
+	assertStringSliceEqual(t, definition.Streams[0].SyncModes, []string{
+		"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+		"incremental_append", "incremental_append_deduped",
+	})
 }
 
 func assertStringSliceEqual(t *testing.T, got, want []string) {
