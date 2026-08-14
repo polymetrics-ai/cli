@@ -11,6 +11,7 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/rlm"
 )
@@ -283,7 +284,10 @@ type noopAppAdapter struct{}
 func (n *noopAppAdapter) ETLRun(_ context.Context, _ string, _ []string) (flow.ETLResult, error) {
 	return flow.ETLResult{}, nil
 }
-func (n *noopAppAdapter) QuerySQL(_ context.Context, _ string, _ int) ([]map[string]any, error) {
+func (n *noopAppAdapter) QuerySQL(_ context.Context, _, _ string, _ int) ([]map[string]any, error) {
+	return nil, nil
+}
+func (n *noopAppAdapter) ReadActionSource(_ context.Context, _, _ string) ([]map[string]any, error) {
 	return nil, nil
 }
 func (n *noopAppAdapter) RLMRun(_ context.Context, _ flow.RLMRunRequest) (flow.RLMResult, error) {
@@ -309,16 +313,33 @@ func (a *appFlowAdapter) ETLRun(ctx context.Context, connectionID string, stream
 	return result, nil
 }
 
-func (a *appFlowAdapter) QuerySQL(ctx context.Context, sql string, limit int) ([]map[string]any, error) {
-	records, err := a.app.QuerySQL(ctx, sql, limit)
+func (a *appFlowAdapter) QuerySQL(ctx context.Context, sql, connection string, limit int) ([]map[string]any, error) {
+	records, err := a.app.QuerySQL(ctx, app.QuerySQLRequest{
+		SQL:        sql,
+		Connection: connection,
+		Limit:      limit,
+		Origin:     app.QuerySQLOriginFlow,
+	})
 	if err != nil {
 		return nil, err
 	}
+	return recordsToFlowRows(records), nil
+}
+
+func (a *appFlowAdapter) ReadActionSource(ctx context.Context, table, connection string) ([]map[string]any, error) {
+	records, err := a.app.ReadActionSource(ctx, app.ActionSourceReadRequest{Table: table, Connection: connection})
+	if err != nil {
+		return nil, err
+	}
+	return recordsToFlowRows(records), nil
+}
+
+func recordsToFlowRows(records []connectors.Record) []map[string]any {
 	out := make([]map[string]any, len(records))
 	for i, r := range records {
 		out[i] = map[string]any(r)
 	}
-	return out, nil
+	return out
 }
 
 func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (flow.RLMResult, error) {

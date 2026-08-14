@@ -2,10 +2,13 @@ package flow
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"time"
+
+	"polymetrics.ai/internal/warehouse"
 )
 
 // ETLResult is the result of a sync run.
@@ -33,7 +36,8 @@ type RLMRunRequest struct {
 // AppAdapter abstracts the app layer for the engine.
 type AppAdapter interface {
 	ETLRun(ctx context.Context, connectionID string, streams []string) (ETLResult, error)
-	QuerySQL(ctx context.Context, sql string, limit int) ([]map[string]any, error)
+	QuerySQL(ctx context.Context, sql, connection string, limit int) ([]map[string]any, error)
+	ReadActionSource(ctx context.Context, table, connection string) ([]map[string]any, error)
 	RLMRun(ctx context.Context, req RLMRunRequest) (RLMResult, error)
 }
 
@@ -105,8 +109,8 @@ func (e *Engine) acquireLease() error {
 		}
 		return err
 	}
-	defer f.Close()
-	fmt.Fprintf(f, "%d\n", os.Getpid())
+	defer func() { _ = f.Close() }()
+	_, _ = fmt.Fprintf(f, "%d\n", os.Getpid())
 	return nil
 }
 
@@ -210,7 +214,8 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			sr.RecordsRead = etlRes.RecordsRead
 			sr.RecordsWritten = etlRes.RecordsWritten
 		case KindQuery:
-			_, stepErr = e.App.QuerySQL(ctx, s.SQL, 0)
+			_, stepErr = e.App.QuerySQL(ctx, s.SQL, s.Connection, 0)
+			stepErr = withFlowSourceReadRemedy(s, stepErr)
 		case KindRLM:
 			var rlmRes RLMResult
 			rlmRes, stepErr = e.App.RLMRun(ctx, RLMRunRequest{
@@ -230,7 +235,8 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			// Fetch source records from the warehouse for this action step.
 			var sourceRecords []map[string]any
 			if s.ActionCfg != nil && s.ActionCfg.SourceTable != "" {
-				sourceRecords, stepErr = e.App.QuerySQL(ctx, "SELECT * FROM "+s.ActionCfg.SourceTable, 0)
+				sourceRecords, stepErr = e.App.ReadActionSource(ctx, s.ActionCfg.SourceTable, s.ActionCfg.SourceConnection)
+				stepErr = withFlowSourceReadRemedy(s, stepErr)
 				if stepErr != nil {
 					break
 				}
@@ -253,7 +259,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			sr.Error = stepErr.Error()
 			e.appendLedger(ctx, op, "failed", stepErr.Error())
 			result.Steps = append(result.Steps, sr)
-			runErr = fmt.Errorf("%w: step %s: %v", ErrStepFailed, id, stepErr)
+			runErr = fmt.Errorf("%w: step %s: %w", ErrStepFailed, id, stepErr)
 			break
 		}
 
@@ -274,6 +280,22 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 	result.Status = "ok"
 	e.appendLedger(ctx, flowOp, "success", "")
 	return result, nil
+}
+
+// withFlowSourceReadRemedy names a manifest field only after that field exists
+// on the surface that failed. It leaves every non-ambiguity error untouched,
+// including errors that are not caused by a warehouse source read.
+func withFlowSourceReadRemedy(step FlowStep, err error) error {
+	var ambiguous *warehouse.AmbiguousTableError
+	if !errors.As(err, &ambiguous) {
+		return err
+	}
+	if step.Kind == KindAction {
+		return warehouse.WithAmbiguityRemedy(ambiguous,
+			fmt.Sprintf("set `action_cfg.source_connection` in flow action step %q to choose one", step.ID))
+	}
+	return warehouse.WithAmbiguityRemedy(ambiguous,
+		fmt.Sprintf("set `connection` in flow query step %q to choose one", step.ID))
 }
 
 func firstTable(tables []string) string {
