@@ -117,9 +117,7 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 				return err
 			}
 			if approval.supplied {
-				if err := app.PreflightReverseApprovalReplay(root, args[1]); err != nil {
-					return err
-				}
+				return withReverseExecutionApp(root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
 			}
 			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
 		}},

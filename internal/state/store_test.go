@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"sync"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/state"
 )
@@ -287,6 +288,55 @@ func TestFileLockUsesExclusiveLockFile(t *testing.T) {
 	}
 	if err := unlock(); err != nil {
 		t.Fatalf("second unlock() error = %v", err)
+	}
+}
+
+func TestDirectoryLockSerializesWithoutCreatingProjectFiles(t *testing.T) {
+	dir := t.TempDir()
+	lock := state.DirectoryLock{Path: dir}
+	unlock, err := lock.Lock()
+	if err != nil {
+		t.Fatalf("Lock() error = %v", err)
+	}
+
+	second := make(chan error, 1)
+	go func() {
+		secondUnlock, err := lock.Lock()
+		if err == nil {
+			err = secondUnlock()
+		}
+		second <- err
+	}()
+	select {
+	case err := <-second:
+		t.Fatalf("second Lock() completed while held: %v", err)
+	case <-time.After(100 * time.Millisecond):
+	}
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		t.Fatalf("ReadDir() while locked error = %v", err)
+	}
+	if len(entries) != 0 {
+		t.Fatalf("lock created project files: %v", entryNames(entries))
+	}
+
+	if err := unlock(); err != nil {
+		t.Fatalf("unlock() error = %v", err)
+	}
+	select {
+	case err := <-second:
+		if err != nil {
+			t.Fatalf("second Lock() error = %v", err)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("second Lock() did not proceed after unlock")
+	}
+	entries, err = os.ReadDir(dir)
+	if err != nil {
+		t.Fatalf("ReadDir() after unlock error = %v", err)
+	}
+	if len(entries) != 0 {
+		t.Fatalf("lock left project files: %v", entryNames(entries))
 	}
 }
 

@@ -790,9 +790,9 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		return err
 	}
 	if approval.supplied {
-		if err := app.PreflightReverseApprovalReplay(root, flags.first("plan")); err != nil {
-			return err
-		}
+		return withReverseExecutionApp(root, func(a *app.App) error {
+			return runConnectorCommand(ctx, a, connectorName, args, approval, stdout, stderr, jsonOut)
+		})
 	}
 	return withApp(root, func(a *app.App) error {
 		return runConnectorCommand(ctx, a, connectorName, args, approval, stdout, stderr, jsonOut)
@@ -2192,6 +2192,14 @@ func printPerfResult(stdout io.Writer, result perf.Result) {
 
 func withApp(root string, fn func(*app.App) error) error {
 	a, err := app.Open(root)
+	if err != nil {
+		return err
+	}
+	return fn(a)
+}
+
+func withReverseExecutionApp(root string, fn func(*app.App) error) error {
+	a, err := app.OpenForReverseExecution(root)
 	if err != nil {
 		return err
 	}

@@ -93,10 +93,6 @@ func (s JSONStore[T]) Load() (out T, err error) {
 	return s.loadNoLock()
 }
 
-func (s JSONStore[T]) LoadReadOnly() (out T, err error) {
-	return s.loadNoLock()
-}
-
 func (s JSONStore[T]) Save(value T) (err error) {
 	unlock, err := s.lock()
 	if err != nil {

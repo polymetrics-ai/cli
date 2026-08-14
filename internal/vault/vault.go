@@ -47,6 +47,18 @@ func Open(projectDir string) (*Vault, error) {
 	return Init(projectDir)
 }
 
+func OpenReadOnly(projectDir string) (*Vault, error) {
+	dir := filepath.Join(projectDir, "vault")
+	key, err := os.ReadFile(filepath.Join(dir, "key"))
+	if err != nil {
+		return nil, fmt.Errorf("read vault key: %w", err)
+	}
+	if len(key) != 32 {
+		return nil, fmt.Errorf("vault key must be 32 bytes, got %d", len(key))
+	}
+	return &Vault{dir: dir, key: key}, nil
+}
+
 func (v *Vault) Put(ctx context.Context, id string, secret map[string]string) error {
 	if err := ctx.Err(); err != nil {
 		return err

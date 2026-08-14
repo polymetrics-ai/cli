@@ -33,18 +33,21 @@ const (
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
 type App struct {
-	root           string
-	projectDir     string
-	statePath      string
-	store          statestore.JSONStore[state]
-	state          state
-	vault          *vault.Vault
-	approval       *projectWriteApprovalAuthority
-	registry       *connectors.Registry
-	transports     *synctransport.Registry
-	transportStage synctransport.WarehouseStage
-	sqlEngine      sqlQueryEngine
-	catalogs       catalogStorage
+	root                    string
+	projectDir              string
+	statePath               string
+	store                   statestore.JSONStore[state]
+	state                   state
+	deferStateNormalization bool
+	deferredState           *state
+	deferredStateRevision   uint64
+	vault                   *vault.Vault
+	approval                *projectWriteApprovalAuthority
+	registry                *connectors.Registry
+	transports              *synctransport.Registry
+	transportStage          synctransport.WarehouseStage
+	sqlEngine               sqlQueryEngine
+	catalogs                catalogStorage
 }
 
 // sqlQueryEngine is the backend for App.QuerySQL. DuckDB is the only
@@ -139,6 +142,14 @@ func InitProject(root string) error {
 }
 
 func Open(root string) (*App, error) {
+	return open(root, false)
+}
+
+func OpenForReverseExecution(root string) (*App, error) {
+	return open(root, true)
+}
+
+func open(root string, deferNormalization bool) (*App, error) {
 	if root == "" {
 		root = "."
 	}
@@ -150,7 +161,12 @@ func Open(root string) (*App, error) {
 	if !info.IsDir() {
 		return nil, fmt.Errorf("%s is not a directory", projectDir)
 	}
-	v, err := vault.Open(projectDir)
+	var v *vault.Vault
+	if deferNormalization {
+		v, err = vault.OpenReadOnly(projectDir)
+	} else {
+		v, err = vault.Open(projectDir)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -160,18 +176,19 @@ func Open(root string) (*App, error) {
 	}
 	statePath := filepath.Join(projectDir, "state", "state.json")
 	a := &App{
-		root:       root,
-		projectDir: projectDir,
-		statePath:  statePath,
-		store:      newStateStore(statePath),
-		vault:      v,
-		approval:   approval,
-		registry:   bundleregistry.New(),
-		transports: synctransport.NewRegistry(nil),
-		catalogs:   newCatalogStorage(projectDir),
+		root:                    root,
+		projectDir:              projectDir,
+		statePath:               statePath,
+		store:                   newStateStore(statePath),
+		deferStateNormalization: deferNormalization,
+		vault:                   v,
+		approval:                approval,
+		registry:                bundleregistry.New(),
+		transports:              synctransport.NewRegistry(nil),
+		catalogs:                newCatalogStorage(projectDir),
 	}
 	a.sqlEngine = newSQLEngine(a)
-	if err := a.load(); err != nil {
+	if err := a.load(!deferNormalization); err != nil {
 		return nil, err
 	}
 	if err := a.composeTransportRegistry(); err != nil {
@@ -225,39 +242,83 @@ func (a *App) Connector(name string) (connectors.Metadata, error) {
 	return c.Metadata(), nil
 }
 
-func (a *App) load() error {
+func (a *App) load(persist bool) error {
 	loaded, err := a.store.Load()
 	if err != nil {
 		return err
 	}
-	return a.normalizeLoadedState(loaded)
+	if err := a.normalizeLoadedState(loaded, persist); err != nil {
+		return err
+	}
+	a.rememberDeferredState(loaded.Revision)
+	return nil
 }
 
 // normalizeLoadedState applies every compatibility invariant after a state
 // reload. Callers must not assign a store result to a.state directly.
-func (a *App) normalizeLoadedState(loaded state) error {
+func (a *App) normalizeLoadedState(loaded state, persist bool) error {
 	a.state = loaded
+	changed := false
 	if a.state.Checkpoints == nil {
 		a.state.Checkpoints = map[string]map[string]string{}
+		changed = true
 	}
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
+		changed = true
 	}
 	catalogRefsChanged := a.dropInvalidCatalogReferences()
-	a.migrateLegacySyncModeCompatibility()
-	if err := a.migrateCredentialCoordination(); err != nil {
+	compatibilityChanged := a.migrateLegacySyncModeCompatibility()
+	coordinationChanged, err := a.migrateCredentialCoordination()
+	if err != nil {
 		return err
 	}
 	identityChanged, err := a.migrateWarehouseIdentity()
 	if err != nil {
 		return err
 	}
-	if catalogRefsChanged || identityChanged {
+	changed = changed || catalogRefsChanged || compatibilityChanged || coordinationChanged || identityChanged
+	if persist && changed {
 		if err := a.save(); err != nil {
 			return fmt.Errorf("persist project identity: %w", err)
 		}
 	}
 	return nil
+}
+
+func (a *App) rememberDeferredState(revision uint64) {
+	if !a.deferStateNormalization {
+		return
+	}
+	deferred := a.state
+	a.deferredState = &deferred
+	a.deferredStateRevision = revision
+}
+
+func (a *App) stateForApprovalConsumption(current state) (state, error) {
+	if !a.deferStateNormalization {
+		return current, nil
+	}
+	if a.deferredState != nil && current.Revision == a.deferredStateRevision {
+		return cloneState(*a.deferredState)
+	}
+	if err := a.normalizeLoadedState(current, false); err != nil {
+		return state{}, err
+	}
+	a.rememberDeferredState(current.Revision)
+	return cloneState(a.state)
+}
+
+func cloneState(value state) (state, error) {
+	data, err := json.Marshal(value)
+	if err != nil {
+		return state{}, fmt.Errorf("copy state: %w", err)
+	}
+	var copied state
+	if err := json.Unmarshal(data, &copied); err != nil {
+		return state{}, fmt.Errorf("copy state: %w", err)
+	}
+	return copied, nil
 }
 
 // migrateWarehouseIdentity gives a project and its connections the opaque
@@ -305,7 +366,7 @@ func (a *App) dropInvalidCatalogReferences() bool {
 // migrateCredentialCoordination gives pre-#3863 credentials an isolated
 // non-secret binding and declaration defaults. It intentionally never opens
 // the vault: coordination is an explicit relationship, not secret equality.
-func (a *App) migrateCredentialCoordination() error {
+func (a *App) migrateCredentialCoordination() (bool, error) {
 	changed := false
 	if a.state.CredentialBindings == nil {
 		a.state.CredentialBindings = map[string]credentialBindingState{}
@@ -314,7 +375,7 @@ func (a *App) migrateCredentialCoordination() error {
 	if strings.TrimSpace(a.state.CoordinationSalt) == "" {
 		salt, err := newCoordinationSalt()
 		if err != nil {
-			return err
+			return false, err
 		}
 		a.state.CoordinationSalt = salt
 		changed = true
@@ -327,7 +388,7 @@ func (a *App) migrateCredentialCoordination() error {
 			credential.AuthProfile,
 		)
 		if err != nil {
-			return fmt.Errorf("migrate credential coordination metadata: %w", err)
+			return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 		}
 		if credential.ProviderFamily != providerFamily {
 			credential.ProviderFamily = providerFamily
@@ -341,7 +402,7 @@ func (a *App) migrateCredentialCoordination() error {
 		if !ok || strings.TrimSpace(binding.BindingID) == "" {
 			bindingID, err := prefixedID("cbind")
 			if err != nil {
-				return err
+				return false, err
 			}
 			binding = credentialBindingState{BindingID: bindingID}
 			changed = true
@@ -354,21 +415,15 @@ func (a *App) migrateCredentialCoordination() error {
 		}
 		a.state.CredentialBindings[credential.ID] = binding
 		if _, err := a.newCoordinationIdentity(providerFamily, authProfile, binding.BindingID); err != nil {
-			return fmt.Errorf("migrate credential coordination metadata: %w", err)
+			return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 		}
 	}
 	isolationChanged, err := a.isolateUnverifiedCrossConnectorBindings()
 	if err != nil {
-		return fmt.Errorf("migrate credential coordination metadata: %w", err)
+		return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 	}
 	changed = changed || isolationChanged
-	if !changed {
-		return nil
-	}
-	if err := a.save(); err != nil {
-		return fmt.Errorf("persist credential coordination metadata: %w", err)
-	}
-	return nil
+	return changed, nil
 }
 
 func (a *App) isolateUnverifiedCrossConnectorBindings() (bool, error) {
@@ -450,9 +505,9 @@ func (a *App) credentialBindingForCredential(credential CredentialMeta) (credent
 	return binding, nil
 }
 
-func (a *App) migrateLegacySyncModeCompatibility() {
+func (a *App) migrateLegacySyncModeCompatibility() bool {
 	if a.state.SyncModeCompatibilityVersion >= syncModeCompatibilityVersion {
-		return
+		return false
 	}
 	for connectionIndex := range a.state.Connections {
 		for streamName, stream := range a.state.Connections[connectionIndex].Streams {
@@ -463,6 +518,7 @@ func (a *App) migrateLegacySyncModeCompatibility() {
 		}
 	}
 	a.state.SyncModeCompatibilityVersion = syncModeCompatibilityVersion
+	return true
 }
 
 func (a *App) save() error {
@@ -510,7 +566,7 @@ func newStateStore(path string) statestore.JSONStore[state] {
 				StreamStates:       map[string]StreamState{},
 			}
 		},
-		Locker: statestore.FileLock{Path: path + ".lock"},
+		Locker: statestore.DirectoryLock{Path: filepath.Dir(path)},
 	}
 }
 
@@ -2296,14 +2352,14 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
 		return ReverseRun{}, err
 	}
+	if plan.ApprovalTokenHash == "" {
+		return ReverseRun{}, errors.New("reverse plan approval has already been consumed")
+	}
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReverseRun{}, err
 	}
 	if a.planRequiresPersistedPreview(plan) && (plan.Status != "previewed" || plan.PreviewDigest == "" || plan.PreviewedAt.IsZero()) {
 		return ReverseRun{}, fmt.Errorf("reverse plan %q must be previewed before approval", plan.ID)
-	}
-	if plan.ApprovalTokenHash == "" {
-		return ReverseRun{}, errors.New("reverse plan approval has already been consumed")
 	}
 	if !constantTimeStringEqual(hashString(req.ApprovalToken), plan.ApprovalTokenHash) {
 		return ReverseRun{}, errors.New("approval token is invalid")
@@ -2342,7 +2398,9 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 		return ReverseRun{}, err
 	}
 	if planHash != plan.PlanHash {
-		a.invalidateReversePlan(plan.ID)
+		if err := a.invalidateReversePlan(plan); err != nil {
+			return ReverseRun{}, err
+		}
 		return ReverseRun{}, errors.New("reverse plan source rows or payload files changed since approval")
 	}
 	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
@@ -2406,7 +2464,9 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 		return ReverseRun{}, err
 	}
 	if planHash != plan.PlanHash {
-		a.invalidateReversePlan(plan.ID)
+		if err := a.invalidateReversePlan(plan); err != nil {
+			return ReverseRun{}, err
+		}
 		return ReverseRun{}, errors.New("reverse plan command payload changed since approval")
 	}
 	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
@@ -2486,32 +2546,15 @@ func (a *App) loadReversePlan(id string) (ReversePlan, error) {
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	if err := a.normalizeLoadedState(loaded); err != nil {
-		return ReversePlan{}, err
+	if a.deferredState != nil && loaded.Revision == a.deferredStateRevision {
+		a.state = *a.deferredState
+	} else {
+		if err := a.normalizeLoadedState(loaded, false); err != nil {
+			return ReversePlan{}, err
+		}
+		a.rememberDeferredState(loaded.Revision)
 	}
 	return reversePlanFromState(a.state, id)
-}
-
-func PreflightReverseApprovalReplay(root, id string) error {
-	if root == "" {
-		root = "."
-	}
-	statePath := filepath.Join(root, ".polymetrics", "state", "state.json")
-	loaded, err := newStateStore(statePath).LoadReadOnly()
-	if err != nil {
-		return err
-	}
-	plan, err := reversePlanFromState(loaded, id)
-	if err != nil {
-		return err
-	}
-	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
-		return err
-	}
-	if plan.ApprovalTokenHash == "" {
-		return errors.New("reverse plan approval has already been consumed")
-	}
-	return nil
 }
 
 func reversePlanFromState(loaded state, id string) (ReversePlan, error) {
@@ -2521,6 +2564,15 @@ func reversePlanFromState(loaded state, id string) (ReversePlan, error) {
 		}
 	}
 	return ReversePlan{}, fmt.Errorf("reverse plan %q not found", id)
+}
+
+func reversePlanMatchesExpected(stored, expected ReversePlan) bool {
+	return stored.PlanHash == expected.PlanHash &&
+		stored.DestinationConnector == expected.DestinationConnector &&
+		stored.DestinationCredential == expected.DestinationCredential &&
+		stored.Action == expected.Action &&
+		stored.Mode == expected.Mode &&
+		stored.ConnectorCommandOperation == expected.ConnectorCommandOperation
 }
 
 func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview) (*connectors.WriteApprovalEvidence, ReversePlan, error) {
@@ -2536,17 +2588,17 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
 				return current, err
 			}
+			if stored.ApprovalTokenHash == "" {
+				return current, errors.New("reverse plan approval has already been consumed")
+			}
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
 			}
-			if stored.PlanHash != expected.PlanHash || stored.DestinationConnector != expected.DestinationConnector || stored.DestinationCredential != expected.DestinationCredential || stored.Action != expected.Action || stored.Mode != expected.Mode || stored.ConnectorCommandOperation != expected.ConnectorCommandOperation {
+			if !reversePlanMatchesExpected(stored, expected) {
 				return current, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
 			}
 			if err := a.validatePlanConfirmation(stored, req.Confirmation); err != nil {
 				return current, err
-			}
-			if stored.ApprovalTokenHash == "" {
-				return current, errors.New("reverse plan approval has already been consumed")
 			}
 			if !constantTimeStringEqual(stored.ApprovalTokenHash, hashString(req.ApprovalToken)) {
 				return current, errors.New("approval token is invalid")
@@ -2577,6 +2629,15 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 				}
 				evidence = verified
 			}
+			normalized, normalizeErr := a.stateForApprovalConsumption(current)
+			if normalizeErr != nil {
+				return current, normalizeErr
+			}
+			current = normalized
+			if i >= len(current.ReversePlans) || current.ReversePlans[i].ID != expected.ID {
+				return current, fmt.Errorf("reverse plan %q changed before approval consumption", expected.ID)
+			}
+			stored = current.ReversePlans[i]
 			stored.Status = reversePlanStatusApprovalConsumptionUncertain
 			stored.ApprovalTokenHash = ""
 			stored.ApprovalGrant = nil
@@ -2590,11 +2651,15 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 	})
 	if err != nil {
 		if stateStoreCommitMayHaveSucceeded(err) {
+			a.deferredState = nil
+			a.deferredStateRevision = 0
 			return nil, ReversePlan{}, approvalConsumptionUncertainError(consumed, err)
 		}
 		return nil, ReversePlan{}, err
 	}
 	a.state = updated
+	a.deferredState = nil
+	a.deferredStateRevision = 0
 	return evidence, consumed, nil
 }
 
@@ -2663,24 +2728,37 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	return run, nil
 }
 
-func (a *App) invalidateReversePlan(planID string) {
+func (a *App) invalidateReversePlan(expected ReversePlan) error {
 	now := time.Now().UTC()
 	updated, err := a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
-			if current.ReversePlans[i].ID != planID {
+			stored := current.ReversePlans[i]
+			if stored.ID != expected.ID {
 				continue
 			}
-			current.ReversePlans[i].Status = "invalidated"
-			current.ReversePlans[i].ApprovalTokenHash = ""
-			current.ReversePlans[i].ApprovalGrant = nil
-			current.ReversePlans[i].ApprovalConsumedAt = now
-			break
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
+			}
+			if stored.ApprovalTokenHash == "" {
+				return current, errors.New("reverse plan approval has already been consumed")
+			}
+			if !reversePlanMatchesExpected(stored, expected) || !constantTimeStringEqual(stored.ApprovalTokenHash, expected.ApprovalTokenHash) {
+				return current, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
+			}
+			stored.Status = "invalidated"
+			stored.ApprovalTokenHash = ""
+			stored.ApprovalGrant = nil
+			stored.ApprovalConsumedAt = now
+			current.ReversePlans[i] = stored
+			return current, nil
 		}
-		return current, nil
+		return current, fmt.Errorf("reverse plan %q not found", expected.ID)
 	})
-	if err == nil {
-		a.state = updated
+	if err != nil {
+		return err
 	}
+	a.state = updated
+	return nil
 }
 
 func constantTimeStringEqual(left, right string) bool {
