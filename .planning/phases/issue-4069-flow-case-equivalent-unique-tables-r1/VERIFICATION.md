@@ -187,7 +187,7 @@ are in `traces/correction-2-flow-manual-broad-verification.txt`.
 
 **Status:** planned before the regression-test restoration and production edit.
 
-- [ ] Restored non-local ETL regression fails against exact source head
+- [x] Restored non-local ETL regression fails against exact source head
       `3b75f4a62fd8d743ec883a5b824164374f661857` with the current typed
       same-owner local-warehouse error before the unrelated source or
       destination executes.

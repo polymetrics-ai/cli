@@ -289,7 +289,7 @@ or finding. Full non-secret command records are in
 
 | Slice | RED contract | GREEN contract | Status |
 |---|---|---|---|
-| C3. Non-local ETL isolation | With a legacy local-warehouse `records`/`RECORDS` collision present, a distinct non-local connection is rejected before its source or destination executes. | The unrelated non-local ETL loads one record, sends one destination batch, and performs one source read; it never visits the local inventory guard. | PLANNED 2026-08-14 |
+| C3. Non-local ETL isolation | With a legacy local-warehouse `records`/`RECORDS` collision present, a distinct non-local connection is rejected before its source or destination executes. | The unrelated non-local ETL loads one record, sends one destination batch, and performs one source read; it never visits the local inventory guard. | RED captured 2026-08-14 |
 | C3. Local invariant control | A legacy local-warehouse collision must still be refused before `beginRun` with its typed same-owner error and no persisted mutation. | The existing C2 legacy sync test remains green without a changed reason or weakened assertion. | PLANNED 2026-08-14 |
 
 ### Correction 3 RED command
@@ -316,3 +316,13 @@ GREEN requires the non-local false positive to disappear and the true local
 positive to retain the same typed reason and pre-mutation boundary. The guard
 is scoped using the generic materialization interface only; no connector name
 or warehouse literal is permitted.
+
+### Recorded correction 3 RED
+
+After restoring the deleted test, its selector ran against the unchanged
+`RunETL` production source from exact #4071 head
+`3b75f4a62fd8d743ec883a5b824164374f661857` (the only earlier commit in this
+worktree is the planning checkpoint). It exited 1: `RunETL(non-local)` was
+rejected by the legacy `acme` `RECORDS`/`records` local-warehouse collision
+before the non-local source or destination could execute. The full non-secret
+output is `traces/correction-3-nonlocal-collision-red.txt`.
