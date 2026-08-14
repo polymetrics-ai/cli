@@ -1531,11 +1531,11 @@ func validateAcceptedEvidenceScopeIdentityKeys(raw []byte) error {
 		if !ok {
 			return errors.New("accepted evidence object key is not a string")
 		}
-		if acceptedEvidenceScopeIdentityField(field) {
-			if _, found := seen[field]; found {
-				return fmt.Errorf("duplicate accepted evidence identity field %q", field)
+		if canonicalField, identityField := acceptedEvidenceScopeIdentityField(field); identityField {
+			if _, found := seen[canonicalField]; found {
+				return fmt.Errorf("duplicate accepted evidence identity field %q", canonicalField)
 			}
-			seen[field] = struct{}{}
+			seen[canonicalField] = struct{}{}
 		}
 		var value json.RawMessage
 		if err := decoder.Decode(&value); err != nil {
@@ -1546,13 +1546,13 @@ func validateAcceptedEvidenceScopeIdentityKeys(raw []byte) error {
 	return err
 }
 
-func acceptedEvidenceScopeIdentityField(field string) bool {
-	switch field {
-	case "scope", "connector", "source", "destination":
-		return true
-	default:
-		return false
+func acceptedEvidenceScopeIdentityField(field string) (string, bool) {
+	for _, identityField := range []string{"scope", "connector", "source", "destination"} {
+		if bytes.EqualFold([]byte(field), []byte(identityField)) {
+			return identityField, true
+		}
 	}
+	return "", false
 }
 
 func acceptedEvidenceWithinScope(evidence acceptedEvidence, scope []string) bool {

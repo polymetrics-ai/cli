@@ -708,6 +708,26 @@ func TestCertificationEvidencePrefilterRejectsDuplicateIdentityKeys(t *testing.T
 			field:    "destination",
 			evidence: `{"scope":"flow","source":"mysql","destination":"github","destination":"mariadb","unexpected":true}`,
 		},
+		{
+			name:     "case variant scope",
+			field:    "scope",
+			evidence: `{"Scope":"unsupported","scope":"capability","connector":"mysql","unexpected":true}`,
+		},
+		{
+			name:     "case variant connector",
+			field:    "connector",
+			evidence: `{"scope":"capability","Connector":"github","connector":"mysql","unexpected":true}`,
+		},
+		{
+			name:     "case variant source",
+			field:    "source",
+			evidence: `{"scope":"flow","Source":"github","source":"mysql","destination":"mariadb","unexpected":true}`,
+		},
+		{
+			name:     "case variant destination",
+			field:    "destination",
+			evidence: `{"scope":"flow","source":"mysql","Destination":"github","destination":"mariadb","unexpected":true}`,
+		},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			root := t.TempDir()
