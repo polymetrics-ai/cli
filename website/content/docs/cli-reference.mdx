@@ -204,6 +204,9 @@ display value only — the warehouse keys its directories on a generated identif
 Against the local warehouse destination, `--stream` and `--table` become path components, so each
 accepts only letters, digits, `.`, `-` and `_`. Both are checked when the connection is created,
 because a name the warehouse cannot materialize would otherwise fail every sync of that connection.
+The [connection manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/connections.md)
+owns the local-warehouse destination-table rule and recovery for invalid legacy
+inventories.
 
 ### `pm catalog`
 
@@ -312,7 +315,9 @@ pm schedule remove nightly --crontab --json
 
 Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. Schedules install named flows into the local scheduler backend.
 
-When more than one connection materializes a source table name, scope a flow query step with its manifest `"connection"` field and an action source with `"action_cfg": { "source_connection": "..." }`. Use `"_unattributed"` only for a root-owned table. An omitted selector refuses an ambiguous read; there is no flow CLI flag that changes this.
+The [`pm flow` CLI manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/flow.md)
+owns flow source selection and its fail-closed rules. There is no flow CLI flag
+that changes them.
 
 ## Operational commands
 

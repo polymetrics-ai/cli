@@ -1,0 +1,9 @@
+{
+  "phase": "issue-4086-postgres-fence-split-r1",
+  "issue": 4086,
+  "base": "integration/4015-mvp-flat-r1",
+  "base_sha": "5a457970b3bc15343e5ba6b7b4acf48994b63add",
+  "workflow": "manual-inline-gsd",
+  "state": "verified",
+  "reason": "Issue is not a numbered roadmap phase and task prohibits role spawning."
+}
