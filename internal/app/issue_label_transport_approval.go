@@ -312,9 +312,9 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 		if err := validateIssueLabelTransportApproval(approval); err != nil {
 			return connectors.WriteResult{}, err
 		}
-		authorization, err := newAuthorizationRecord(scope, time.Now().UTC())
-		if err != nil {
-			return connectors.WriteResult{}, err
+		authorization, authorizationErr := newAuthorizationRecord(scope, time.Now().UTC())
+		if authorizationErr != nil {
+			return connectors.WriteResult{}, authorizationErr
 		}
 		evidence, _, err = a.consumePlanApproval(plan, RunReverseETLRequest{
 			PlanID:        approval.PlanID,

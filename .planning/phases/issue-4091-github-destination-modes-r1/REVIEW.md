@@ -12,7 +12,7 @@
 
 ## Result
 
-No Critical, Warning, or Info findings remain.
+CodeQL reported one actionable error-propagation finding in the first-use authorization branch: `consumePlanApproval` assigned its error to an inner shadow. Commit `fix(github): propagate transport approval consumption errors` replaces that shadow with `authorizationErr`, leaving the outer `err` to be checked before the writer. No findings remain after the fix.
 
 The review specifically confirmed that a later non-additive run re-derives the durable scope before creating the writer evidence; any changed configuration or revoked record returns before the provider writer is called. The writer's declaration-owned action remains the `WriteAction` used by its approval gate, while the canonical sync mode remains separately bound in `EnabledOperations`; this preserves both gate compatibility and mode-specific authorization identity.
 
