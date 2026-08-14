@@ -62,7 +62,7 @@ proceed and is deliberately not consulted on the authorized repeat path.
 3. **Green:** Wire the first atomic plan consumption to record creation and the
    token-less repeat path to pre-dispatch record validation.
 4. **Regression:** Format, run targeted and required package tests, vet/build,
-   repository gates, and the no-mistakes delivery pipeline.
+   repository gates, then rely on protected-branch CI for delivery checks.
 5. **Verify/review:** Complete the verification checklist and manual deep
    cross-file review. Run GSD verify-work and code-review as the documented
    manual-inline fallback.

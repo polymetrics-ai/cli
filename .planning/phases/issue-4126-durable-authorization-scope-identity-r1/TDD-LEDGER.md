@@ -9,6 +9,7 @@
 | R5 | Revocable/expiring authority | Revoked or expired records can dispatch or collapse into a text-only reason. | Each durable-state case returns its distinct typed reason and its own loopback provider counter remains unchanged. |
 | R6 | Exactly-once bootstrap | The original token can create more than one standing authorization or send. | Replay yields `AuthorizationTokenReplayError`; the loopback send count and record count remain unchanged. |
 | R7 | No material leak | Record serialization can include a token, secret, raw credential, or raw destination config. | State and marshaled record assertions exclude the actual fixture secret/token while the safe opaque reference and digest remain. |
+| R8 | Replay is observable as caller validation | A consumed durable authorization token is returned as `internal_error`, obscuring replay protection from scripts and monitoring. | The real JSON reverse CLI replay returns category `validation`, code `validation_error`, and validation exit code 3 while preserving the no-state-write refusal proof. |
 
 ## Red command
 

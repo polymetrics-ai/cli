@@ -20,3 +20,8 @@ added.
 Local verification is recorded in `VERIFICATION.md`. Delivery pushes this
 stacked branch and explicitly opens its PR against
 `integration/4015-mvp-flat-r1`; the API-reported base must be verified.
+
+CI additionally exposed that the new typed token-replay refusal reached the
+generic CLI error fallback. It is now explicitly classified as caller
+validation (`validation_error`, exit 3), retaining the existing no-state-write
+replay proof rather than accepting `internal_error`.
