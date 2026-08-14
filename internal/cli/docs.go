@@ -727,7 +727,7 @@ const flowHelp = `NAME
 SYNOPSIS
   pm flow plan --file flow.json [--json]
   pm flow preview --file flow.json [--json]
-  pm flow run --file flow.json [--force] [--json]
+  pm flow run --file flow.json [--authorization <auth-ref>] [--force] [--json]
   pm flow status <name> [--flows-dir .polymetrics/flows] [--json]
   pm flow list [--flows-dir .polymetrics/flows] [--json]
 
@@ -753,6 +753,17 @@ CONNECTION-SCOPED SOURCE READS
   Action source selector fragment:
   "action_cfg": {"source_table":"records","source_connection":"acme"}
 
+ACTION EXECUTION
+  An action uses the selected warehouse rows and the destination connector's
+  typed ValidateWrite and Write methods; it never accepts a raw URL, generic
+  HTTP write, SQL write, or operation request. Before run, create and
+  consume the matching reverse-ETL plan → preview → approval lifecycle. Put
+  its durable authorization_reference in action_cfg or pass --authorization.
+  The action_cfg must also name destination_table and read_back_stream. A run
+  re-derives its content-free authorization scope before any provider request,
+  reads the target stream back, and persists an opaque receipt before the
+  action checkpoint can be marked successful.
+
 RLM STEP EXAMPLE
   {
     "id": "score",
@@ -765,7 +776,8 @@ RLM STEP EXAMPLE
 
 SECURITY
   Read-only sync, query, and rlm steps run through existing app primitives.
-  Action steps remain approval-gated.
+  Action steps require a durable, revocable authorization reference. A changed,
+  expired, or revoked scope stops before connector validation or write.
 
 EXIT STATUS
   0 success

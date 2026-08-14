@@ -387,6 +387,53 @@ type RunReverseETLRequest struct {
 	WithheldFlags map[string][]string `json:"-"`
 }
 
+// FlowActionExecutionRequest is the fully resolved, connector-backed action
+// request emitted by a flow step. Records are supplied by the flow engine only
+// after its connection-scoped source read; they are never persisted here.
+// AuthorizationReference is the durable, content-free record minted by an
+// earlier plan → preview → approval → execute lifecycle.
+type FlowActionExecutionRequest struct {
+	FlowName               string
+	StepID                 string
+	RunID                  string
+	SourceTable            string
+	SourceConnection       string
+	DestinationTable       string
+	DestinationConnector   string
+	DestinationCredential  string
+	DestinationConfig      map[string]string
+	Action                 string
+	Mappings               map[string]string
+	AuthorizationReference string
+	ReadBackStream         string
+	Records                []connectors.Record
+}
+
+// FlowActionExecutionResult contains only observable delivery accounting and
+// an opaque receipt identifier. It deliberately excludes source records,
+// payload content, credentials, and destination configuration.
+type FlowActionExecutionResult struct {
+	RecordsAttempted int
+	RecordsSucceeded int
+	RecordsFailed    int
+	ReceiptID        string
+}
+
+// FlowActionReceipt is durable evidence that a connector acknowledged a flow
+// action and its configured target stream was read back successfully. It is
+// recorded only after both events, so it is safe for flow checkpointing.
+type FlowActionReceipt struct {
+	ID                     string    `json:"id"`
+	RunID                  string    `json:"run_id"`
+	FlowName               string    `json:"flow_name"`
+	StepID                 string    `json:"step_id"`
+	AuthorizationReference string    `json:"authorization_reference"`
+	DestinationConnector   string    `json:"destination_connector"`
+	Action                 string    `json:"action"`
+	AcknowledgedAt         time.Time `json:"acknowledged_at"`
+	ReadBackAt             time.Time `json:"read_back_at"`
+}
+
 type ReverseRun struct {
 	ID               string `json:"id"`
 	PlanID           string `json:"plan_id"`

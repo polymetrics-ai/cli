@@ -42,8 +42,9 @@ func runFlow(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 	}
 }
 
-// parseFlowFlags extracts --file, --force, --flows-dir from args.
-func parseFlowFlags(args []string) (file, flowsDir string, force bool, positional []string) {
+// parseFlowFlags extracts the flow-owned flags without accepting arbitrary
+// destination or request controls.
+func parseFlowFlags(args []string) (file, flowsDir string, force bool, authorization string, positional []string) {
 	for i := 0; i < len(args); i++ {
 		switch args[i] {
 		case "--file":
@@ -58,6 +59,11 @@ func parseFlowFlags(args []string) (file, flowsDir string, force bool, positiona
 			}
 		case "--force":
 			force = true
+		case "--authorization":
+			if i+1 < len(args) {
+				i++
+				authorization = args[i]
+			}
 		default:
 			if !strings.HasPrefix(args[i], "--") {
 				positional = append(positional, args[i])
@@ -103,7 +109,7 @@ func resolveManifestPaths(baseDir string, m *flow.FlowManifest) {
 // flowPlan parses + validates the manifest and prints the DAG order.
 // dryRun=true makes it behave as "preview".
 func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, dryRun bool) error {
-	file, _, _, _ := parseFlowFlags(args)
+	file, _, _, _, _ := parseFlowFlags(args)
 	if file == "" {
 		return usageErrorf("flow plan: --file <path> is required")
 	}
@@ -139,7 +145,7 @@ func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, 
 
 // flowRun executes the flow.
 func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	file, flowsDir, force, positional := parseFlowFlags(args)
+	file, flowsDir, force, authorization, positional := parseFlowFlags(args)
 	if file == "" {
 		if len(positional) == 0 {
 			return usageErrorf("flow run: --file <path> or <flow-name> is required")
@@ -182,6 +188,9 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 		Checkpoint: cs,
 		LockDir:    dir,
 	}
+	if a != nil {
+		e.ActionRunner = &connectorFlowActionRunner{app: a, flowName: m.Name, authorizationReference: authorization}
+	}
 
 	result, err := e.Run(ctx, flow.RunOptions{Force: force})
 	if err != nil {
@@ -197,7 +206,7 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 
 // flowStatus returns last checkpoint info for a named flow.
 func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
-	_, flowsDir, _, positional := parseFlowFlags(args)
+	_, flowsDir, _, _, positional := parseFlowFlags(args)
 	if len(positional) == 0 {
 		return usageErrorf("flow status: flow name required")
 	}
@@ -243,7 +252,7 @@ func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
 
 // flowList lists flow manifest files in the flows directory.
 func flowList(args []string, stdout io.Writer, jsonOut bool) error {
-	_, flowsDir, _, _ := parseFlowFlags(args)
+	_, flowsDir, _, _, _ := parseFlowFlags(args)
 	if flowsDir == "" {
 		flowsDir = ".polymetrics/flows"
 	}

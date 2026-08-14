@@ -316,7 +316,7 @@ RLM agent mode is optional and runtime-backed. It uses Temporal plus a Podman-ma
 ```bash
 pm flow plan --file flow.json --json
 pm flow preview --file flow.json --json
-pm flow run --file flow.json --force --json
+pm flow run --file flow.json --authorization <auth-ref> --force --json
 pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 
@@ -330,7 +330,9 @@ Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps r
 
 The [`pm flow` CLI manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/flow.md)
 owns flow source selection and its fail-closed rules. There is no flow CLI flag
-that changes them.
+that changes them. An action requires its durable authorization reference in
+the manifest or `--authorization`, typed connector validation/write, configured
+target read-back, and a persisted receipt before its checkpoint is successful.
 
 ## Operational commands
 
