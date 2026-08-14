@@ -114,6 +114,11 @@ The contract is intentionally boring:
 - Exit codes separate usage, validation, auth, connector, runtime, policy, and
   internal failures.
 - Reverse ETL is split into `plan`, `preview`, `approve`, and `run`.
+- A reverse approval token travels only through the bare
+  `--approval-token-stdin` marker and one bounded line on standard input; it
+  is never accepted in argv, environment, or project files.
+- During concurrent mixed-version use of one project, a rejected replay can
+  leave a stale state-lock file; the replay remains refused and no write occurs.
 - Secrets are referenced by field name and never printed.
 
 ## Connectors
