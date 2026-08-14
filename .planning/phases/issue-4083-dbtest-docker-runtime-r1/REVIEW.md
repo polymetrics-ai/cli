@@ -42,13 +42,15 @@ Reviewed specifically:
    verified immutable ID before port discovery or file copying, and use that ID
    for cleanup; an indeterminate create re-proves ownership by label before any
    removal, so a raced foreign name remains untouched.
-9. Database volumes carry a per-run owner label that is re-proven before
-   non-force cleanup, so a foreign name or label remains untouched. Generated
-   run-image tags are bound to a verified immutable source image ID; startup
-   uses that ID, and a retagged reference is neither used nor removed.
+9. Database data storage is an anonymous volume bound to the verified immutable
+   container ID and removed only through that container's `--volumes` cleanup;
+   no volume is inspected or removed by name. Generated run-image tags are
+   bound to a verified immutable source image ID; startup uses that ID and the
+   mutable tag is retained rather than being removed without an atomic identity
+   fence.
 
 ## Evidence
 
-`go test -timeout 20m ./internal/connectors/native/dbtest` passed in 0.448s;
+`go test -timeout 20m ./internal/connectors/native/dbtest` passed in 0.459s;
 the broader existing dbtest and MySQL evidence is recorded in
 `VERIFICATION.md` and `TDD-LEDGER.md`.

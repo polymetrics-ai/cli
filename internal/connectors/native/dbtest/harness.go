@@ -150,32 +150,28 @@ type targetIdentity struct {
 	daemonFree uint64
 }
 
-// Harness owns exactly one generated container and one generated named
-// volume. It is not safe to copy after first use.
+// Harness owns exactly one generated container with one anonymous data volume.
+// It is not safe to copy after first use.
 type Harness struct {
 	config Config
 
 	containerName      string
 	containerOwner     string
 	containerID        string
-	volumeName         string
-	volumeOwner        string
 	runImage           string
 	runImageID         string
 	capacityProbeName  string
 	capacityProbeOwner string
 
-	mu                   sync.Mutex
-	endpoint             Endpoint
-	runImageCleanupArmed bool
-	containerKnown       bool
-	volumeCleanupArmed   bool
-	capacityProbeKnown   bool
-	slotHeld             bool
-	closed               bool
-	report               Report
-	target               targetIdentity
-	targetKnown          bool
+	mu                 sync.Mutex
+	endpoint           Endpoint
+	containerKnown     bool
+	capacityProbeKnown bool
+	slotHeld           bool
+	closed             bool
+	report             Report
+	target             targetIdentity
+	targetKnown        bool
 
 	// opMu serialises the create sequence against cleanup so an interrupt
 	// can never remove a resource while the command that creates it is still
@@ -227,10 +223,6 @@ func New(config Config) (*Harness, error) {
 	if err != nil {
 		return nil, fmt.Errorf("generate database test container owner: %w", err)
 	}
-	volumeOwner, err := randomSuffix()
-	if err != nil {
-		return nil, fmt.Errorf("generate database test volume owner: %w", err)
-	}
 	capacityProbeOwner, err := randomSuffix()
 	if err != nil {
 		return nil, fmt.Errorf("generate database test capacity probe owner: %w", err)
@@ -240,8 +232,6 @@ func New(config Config) (*Harness, error) {
 		config:             config,
 		containerName:      prefix,
 		containerOwner:     containerOwner,
-		volumeName:         prefix + "-data",
-		volumeOwner:        volumeOwner,
 		runImage:           "localhost/" + prefix + ":run",
 		capacityProbeName:  prefix + "-capacity",
 		capacityProbeOwner: capacityProbeOwner,
@@ -249,8 +239,8 @@ func New(config Config) (*Harness, error) {
 }
 
 // Start pulls the configured source image, tags it under one generated image
-// reference, creates one named volume, starts one loopback-published
-// container, and returns its dynamically assigned, non-default port. A pull
+// reference, starts one loopback-published container with an anonymous data
+// volume, and returns its dynamically assigned, non-default port. A pull
 // that would have to download the image is refused when the target image store
 // lacks the documented headroom for it. Call Close in a defer immediately after a
 // successful New; Close is also safe after an unsuccessful Start.
@@ -328,15 +318,11 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	if err != nil {
 		return Endpoint{}, fmt.Errorf("inspect %s test image identity: %w", h.config.Engine, err)
 	}
-	// Claim the generated reference before issuing the tag. A tag that returns an
-	// error may still have created the reference, so ownership is claimed
-	// ahead of the command and cleanup tolerates absence.
 	if err := h.abortIfClosed(); err != nil {
 		return Endpoint{}, err
 	}
 	h.mu.Lock()
 	h.runImageID = sourceImageID
-	h.runImageCleanupArmed = true
 	h.mu.Unlock()
 	if _, err := h.runOnVerifiedTarget(ctx, "image", "tag", sourceImageID, h.runImage); err != nil {
 		return Endpoint{}, fmt.Errorf("tag %s test image: %w", h.config.Engine, err)
@@ -349,30 +335,10 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		return Endpoint{}, errors.New("generated database test image does not refer to the configured source image")
 	}
 
-	volumeAbsent, err := h.resourceAbsent(ctx, "volume", "inspect", h.volumeName)
-	if err != nil {
-		return Endpoint{}, fmt.Errorf("inspect %s test volume: %w", h.config.Engine, err)
-	}
-	if !volumeAbsent {
-		return Endpoint{}, errors.New("generated database test volume already exists")
-	}
-	if err := h.abortIfClosed(); err != nil {
-		return Endpoint{}, err
-	}
-	h.mu.Lock()
-	h.volumeCleanupArmed = true
-	h.mu.Unlock()
-	if _, err := h.runOnVerifiedTarget(ctx, "volume", "create", "--label", databaseVolumeOwnerLabel+"="+h.volumeOwner, h.volumeName); err != nil {
-		return Endpoint{}, fmt.Errorf("create %s test volume: %w", h.config.Engine, err)
-	}
-	if err := h.ownedVolume(ctx, h.volumeName, h.volumeOwner); err != nil {
-		return Endpoint{}, fmt.Errorf("inspect generated %s test volume ownership: %w", h.config.Engine, err)
-	}
-
 	args := []string{
 		"run", "--detach",
 		"--name", h.containerName,
-		"--volume", h.volumeName + ":" + h.config.DataVolumePath,
+		"--volume", h.config.DataVolumePath,
 		"--publish", "127.0.0.1::" + strconv.Itoa(h.config.ContainerPort),
 	}
 	args = append(args, h.config.ContainerArgs...)
@@ -424,8 +390,8 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	return endpoint, nil
 }
 
-// Close unconditionally attempts container, volume, and generated-image
-// cleanup in that order. Each later action still runs if an earlier one fails.
+// Close unconditionally attempts harness cleanup. Each later action still runs
+// if an earlier one fails.
 // A tagged test must call this in a defer before assertions, so a failing
 // assertion cannot leak a generated resource.
 func (h *Harness) Close(_ context.Context) error {
@@ -435,7 +401,7 @@ func (h *Harness) Close(_ context.Context) error {
 		// The interrupt registration outlives every removal below. Dropping it
 		// first restored default signal handling for the whole teardown, so a
 		// Ctrl-C between here and the last removal killed the process with this
-		// run's container, volume, and images still on the machine.
+		// run's container and volume still on the machine.
 		defer unregisterInterruptCleanup(h)
 		defer h.releaseSlot()
 		// Refuse further creates, abort any in flight, then wait for the
@@ -457,18 +423,8 @@ func (h *Harness) Close(_ context.Context) error {
 			h.mu.Lock()
 			containerID := h.containerID
 			h.mu.Unlock()
-			if err := h.removeOwnedContainer(cleanupCtx, h.containerName, h.containerOwner, containerID, databaseContainerOwnerFormat); err != nil {
+			if err := h.removeOwnedContainer(cleanupCtx, h.containerName, h.containerOwner, containerID, databaseContainerOwnerFormat, true); err != nil {
 				errs = append(errs, fmt.Errorf("remove %s test container: %w", h.config.Engine, err))
-			}
-		}
-		if h.known(func(h *Harness) bool { return h.volumeCleanupArmed }) {
-			if err := h.removeOwnedVolume(cleanupCtx, h.volumeName, h.volumeOwner); err != nil {
-				errs = append(errs, fmt.Errorf("remove %s test volume: %w", h.config.Engine, err))
-			}
-		}
-		if h.known(func(h *Harness) bool { return h.runImageCleanupArmed }) {
-			if err := h.removeOwnedRunImage(cleanupCtx); err != nil {
-				errs = append(errs, fmt.Errorf("remove %s test image: %w", h.config.Engine, err))
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.targetKnown }) {
@@ -482,7 +438,7 @@ func (h *Harness) Close(_ context.Context) error {
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.capacityProbeKnown }) {
-			if err := h.removeOwnedContainer(cleanupCtx, h.capacityProbeName, h.capacityProbeOwner, "", dockerCapacityProbeOwnerFormat); err != nil {
+			if err := h.removeOwnedContainer(cleanupCtx, h.capacityProbeName, h.capacityProbeOwner, "", dockerCapacityProbeOwnerFormat, false); err != nil {
 				errs = append(errs, fmt.Errorf("remove %s test capacity probe: %w", h.config.Engine, err))
 			}
 		}
@@ -528,8 +484,6 @@ const (
 	dockerCapacityProbeOwnerFormat = "{{.Id}}\t{{ index .Config.Labels \"polymetrics.dbtest.capacity-probe-owner\" }}"
 	databaseContainerOwnerLabel    = "polymetrics.dbtest.container-owner"
 	databaseContainerOwnerFormat   = "{{.Id}}\t{{ index .Config.Labels \"polymetrics.dbtest.container-owner\" }}"
-	databaseVolumeOwnerLabel       = "polymetrics.dbtest.volume-owner"
-	databaseVolumeOwnerFormat      = "{{.Name}}\t{{ index .Labels \"polymetrics.dbtest.volume-owner\" }}"
 	imageIDFormat                  = "{{.Id}}"
 )
 
@@ -589,7 +543,7 @@ func (h *Harness) ownedContainerID(ctx context.Context, name, owner, ownerFormat
 	return containerID, nil
 }
 
-func (h *Harness) removeOwnedContainer(ctx context.Context, name, owner, containerID, ownerFormat string) error {
+func (h *Harness) removeOwnedContainer(ctx context.Context, name, owner, containerID, ownerFormat string, removeAnonymousVolumes bool) error {
 	if containerID == "" {
 		var err error
 		containerID, err = h.ownedContainerID(ctx, name, owner, ownerFormat)
@@ -600,34 +554,12 @@ func (h *Harness) removeOwnedContainer(ctx context.Context, name, owner, contain
 			return err
 		}
 	}
-	if _, err := h.runOnVerifiedTarget(ctx, "container", "rm", "--force", containerID); err != nil && !errors.Is(err, errContainerResourceNotFound) {
-		return err
+	args := []string{"container", "rm", "--force"}
+	if removeAnonymousVolumes {
+		args = append(args, "--volumes")
 	}
-	return nil
-}
-
-func (h *Harness) ownedVolume(ctx context.Context, name, owner string) error {
-	output, err := h.runOnVerifiedTarget(ctx,
-		"volume", "inspect", "--format", databaseVolumeOwnerFormat, name,
-	)
-	if err != nil {
-		return err
-	}
-	reportedName, reportedOwner, valid := parseVolumeOwnership(output)
-	if !valid || reportedName != name || reportedOwner != owner {
-		return errors.New("generated volume ownership could not be proven")
-	}
-	return nil
-}
-
-func (h *Harness) removeOwnedVolume(ctx context.Context, name, owner string) error {
-	if err := h.ownedVolume(ctx, name, owner); err != nil {
-		if errors.Is(err, errContainerResourceNotFound) {
-			return nil
-		}
-		return err
-	}
-	if _, err := h.runOnVerifiedTarget(ctx, "volume", "rm", name); err != nil && !errors.Is(err, errContainerResourceNotFound) {
+	args = append(args, containerID)
+	if _, err := h.runOnVerifiedTarget(ctx, args...); err != nil && !errors.Is(err, errContainerResourceNotFound) {
 		return err
 	}
 	return nil
@@ -643,29 +575,6 @@ func (h *Harness) imageID(ctx context.Context, reference string) (string, error)
 		return "", errors.New("container image identity could not be proven")
 	}
 	return imageID, nil
-}
-
-func (h *Harness) removeOwnedRunImage(ctx context.Context) error {
-	h.mu.Lock()
-	expectedImageID := h.runImageID
-	h.mu.Unlock()
-	if !safeImageID(expectedImageID) {
-		return errors.New("generated test image ownership could not be proven")
-	}
-	imageID, err := h.imageID(ctx, h.runImage)
-	if errors.Is(err, errContainerResourceNotFound) {
-		return nil
-	}
-	if err != nil {
-		return err
-	}
-	if imageID != expectedImageID {
-		return errors.New("generated test image ownership could not be proven")
-	}
-	if _, err := h.runOnVerifiedTarget(ctx, "image", "rm", h.runImage); err != nil && !errors.Is(err, errContainerResourceNotFound) {
-		return err
-	}
-	return nil
 }
 
 func (h *Harness) runOnVerifiedTarget(ctx context.Context, args ...string) (string, error) {
@@ -906,18 +815,6 @@ func parseContainerOwnership(raw string) (string, string, bool) {
 	return fields[0], fields[1], true
 }
 
-func parseVolumeOwnership(raw string) (string, string, bool) {
-	line, valid := singleCommandRecord(raw)
-	if !valid {
-		return "", "", false
-	}
-	fields := strings.Split(line, "\t")
-	if len(fields) != 2 || fields[0] == "" || strings.TrimSpace(fields[0]) != fields[0] || strings.ContainsAny(fields[0], "\t\r\n\x00") {
-		return "", "", false
-	}
-	return fields[0], fields[1], true
-}
-
 func parseImageID(raw string) (string, bool) {
 	line, valid := singleCommandRecord(raw)
 	if !valid {
@@ -1029,8 +926,8 @@ func (h *Harness) resourceAbsent(ctx context.Context, args ...string) (bool, err
 
 // interruptCleanup is the single process-level signal handler. signal.Notify
 // delivers to every registered channel, so a handler per harness let the first
-// finished cleanup call os.Exit while a sibling's container, volume, or image
-// removal was still in flight, leaving those resources behind under the
+// finished cleanup call os.Exit while a sibling's container or volume removal
+// was still in flight, leaving those resources behind under the
 // bounded parallel mode. One registry closes every live harness before the
 // process exits.
 var interruptCleanup = struct {

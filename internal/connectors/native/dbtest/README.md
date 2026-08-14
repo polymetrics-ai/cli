@@ -70,10 +70,13 @@ docker --host unix:///Users/you/.colima/default/docker.sock \
   pull docker.io/library/busybox:1.37.0
 ```
 
-The harness owns only its generated database container, volume, run-image reference, and the
-ephemeral capacity probe when that VM path is selected. The source and probe images are always
-retained. Cleanup is unconditional and idempotent, including failure and interrupt paths, and the
-interrupt handler remains armed until the final generated-resource removal returns.
+The harness owns only its generated database container, its container-bound anonymous data volume,
+run-image reference, and the ephemeral capacity probe when that VM path is selected. The anonymous
+volume is removed through the verified immutable database-container ID with `container rm --volumes`;
+the harness never addresses a volume name. The source and probe images, and the generated run-image
+reference, are retained. Cleanup of container-bound resources is unconditional and idempotent,
+including failure and interrupt paths, and the interrupt handler remains armed until the final
+generated-resource removal returns.
 
 The MySQL TLS proof copies the container-generated CA certificate through the harness's scoped
 container copy operation, then runs a live `verify-ca` session and checks the server's negotiated
