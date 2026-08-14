@@ -192,18 +192,21 @@ func TestDynamicConnectorSharedPassiveFlagRendersHelp(t *testing.T) {
 }
 
 func TestDynamicConnectorInvalidFlagOnlyInvocationsAreUsageErrors(t *testing.T) {
-	for _, args := range [][]string{
-		{"gong", "--bogus"},
-		{"gong", "--plan", "rplan_fixture", "--preview"},
-		{"gong", "--plan="},
-		{"gong", "--approval-token-stdin=value"},
-		{"gong", "--confirm="},
+	for _, tc := range []struct {
+		args []string
+		want string
+	}{
+		{args: []string{"gong", "--bogus"}, want: "missing connector command path"},
+		{args: []string{"gong", "--plan", "rplan_fixture", "--preview"}, want: "missing connector command path"},
+		{args: []string{"gong", "--plan="}, want: "missing connector command path"},
+		{args: []string{"gong", "--approval-token-stdin=value"}, want: "--approval-token-stdin must be a bare stdin marker"},
+		{args: []string{"gong", "--confirm="}, want: "missing connector command path"},
 	} {
-		t.Run(strings.Join(args[1:], "_"), func(t *testing.T) {
+		t.Run(strings.Join(tc.args[1:], "_"), func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
-			code := cli.Run(args, &stdout, &stderr)
-			if code != 2 || !strings.Contains(stdout.String()+stderr.String(), "missing connector command path") {
-				t.Fatalf("Run(%v) code = %d stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+			code := cli.Run(tc.args, &stdout, &stderr)
+			if code != 2 || !strings.Contains(stdout.String()+stderr.String(), tc.want) {
+				t.Fatalf("Run(%v) code = %d stdout=%s stderr=%s", tc.args, code, stdout.String(), stderr.String())
 			}
 		})
 	}
@@ -231,6 +234,43 @@ func TestDynamicConnectorWriteHelpDocumentsApprovalStdinMarker(t *testing.T) {
 	}
 	if !strings.Contains(stdout.String(), "--approval-token-stdin") {
 		t.Fatalf("GitHub write help omitted the approval stdin marker: stdout=%s", stdout.String())
+	}
+}
+
+func TestDynamicConnectorHelpRejectsApprovalCarrierArguments(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		args []string
+		want string
+	}{
+		{
+			name: "valued stdin marker",
+			args: []string{"github", "issue", "close", "--help", "--approval-token-stdin=carrier-value"},
+			want: "--approval-token-stdin must be a bare stdin marker",
+		},
+		{
+			name: "retired argv carrier",
+			args: []string{"github", "issue", "close", "--help", "--approve", "carrier-value"},
+			want: "approval tokens must be supplied with --approval-token-stdin",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tc.args, &stdout, &stderr)
+			out := stdout.String() + stderr.String()
+			if code != 2 {
+				t.Fatalf("Run(%v) code = %d, want usage error; stdout=%s stderr=%s", tc.args, code, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(out, tc.want) {
+				t.Fatalf("Run(%v) output = %q, want %q", tc.args, out, tc.want)
+			}
+			if strings.Contains(out, "carrier-value") {
+				t.Fatalf("Run(%v) echoed the approval carrier value: %s", tc.args, out)
+			}
+			if strings.Contains(stdout.String(), "pm github issue close") {
+				t.Fatalf("Run(%v) rendered help before rejecting the approval carrier: %s", tc.args, stdout.String())
+			}
+		})
 	}
 }
 

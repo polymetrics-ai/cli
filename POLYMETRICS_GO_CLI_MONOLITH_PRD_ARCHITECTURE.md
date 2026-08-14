@@ -159,7 +159,6 @@ pm reverse status <run-id>
 pm reverse retry <run-id>
 
 pm agent plan --request <text-or-json>
-pm agent run <plan-id> --approve <approval-token>
 
 pm help
 pm help <command>

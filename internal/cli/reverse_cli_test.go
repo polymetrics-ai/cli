@@ -120,6 +120,84 @@ func TestReverseETLCLIWorkflowIsScriptableAndApprovalBounded(t *testing.T) {
 	}
 }
 
+func TestReverseETLRejectsApprovalCarriersOutsideRun(t *testing.T) {
+	root := setupReverseCLIProject(t)
+	for _, tc := range []struct {
+		name string
+		args []string
+		want string
+	}{
+		{
+			name: "plan legacy argv carrier",
+			args: []string{
+				"reverse", "plan", "rejected-plan",
+				"--source-table", "sample_customers",
+				"--destination", "outbox:outbox-local",
+				"--map", "id:external_id",
+				"--approve", "carrier-value",
+				"--root", root, "--json",
+			},
+			want: "approval tokens must be supplied with --approval-token-stdin",
+		},
+		{
+			name: "preview valued stdin marker",
+			args: []string{
+				"reverse", "preview", "rplan_missing",
+				"--approval-token-stdin=carrier-value",
+				"--root", root, "--json",
+			},
+			want: "--approval-token-stdin must be a bare stdin marker",
+		},
+		{
+			name: "list bare stdin marker",
+			args: []string{
+				"reverse", "list", "--approval-token-stdin",
+				"--root", root, "--json",
+			},
+			want: "--approval-token-stdin is only valid with reverse run",
+		},
+		{
+			name: "status legacy argv carrier",
+			args: []string{
+				"reverse", "status", "rrun_missing",
+				"--approve", "carrier-value",
+				"--root", root, "--json",
+			},
+			want: "approval tokens must be supplied with --approval-token-stdin",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tc.args, &stdout, &stderr)
+			out := stdout.String() + stderr.String()
+			if code != 2 {
+				t.Fatalf("Run(%v) code = %d, want usage error; stdout=%s stderr=%s", tc.args, code, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(out, tc.want) {
+				t.Fatalf("Run(%v) output = %q, want %q", tc.args, out, tc.want)
+			}
+			if strings.Contains(out, "carrier-value") {
+				t.Fatalf("Run(%v) echoed the approval carrier value: %s", tc.args, out)
+			}
+		})
+	}
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"reverse", "list", "--root", root, "--json"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("reverse list after rejected carriers code = %d stderr = %s", code, stderr.String())
+	}
+	var result struct {
+		Plans []json.RawMessage `json:"plans"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &result); err != nil {
+		t.Fatalf("decode reverse list after rejected carriers: %v\n%s", err, stdout.String())
+	}
+	if len(result.Plans) != 0 {
+		t.Fatalf("rejected approval carrier persisted reverse plans: %s", stdout.String())
+	}
+}
+
 func TestReverseETLToGitHubCreatesPullRequestAfterApproval(t *testing.T) {
 	type seenRequest struct {
 		Method string

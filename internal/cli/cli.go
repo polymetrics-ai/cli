@@ -745,6 +745,9 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		return nil
 	}
 	flags := parseFlags(args)
+	if _, err := validateApprovalTokenCarrierFlags(flags); err != nil {
+		return err
+	}
 	if connectorHelpRequested(args, surface) {
 		helpPath := connectorHelpPath(flags.values["_"])
 		if len(helpPath) > 0 {
@@ -1404,13 +1407,11 @@ func resolveReversePlanEnvironmentOnlyFlags(plan app.ReversePlan, values map[str
 }
 
 func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
-	if _, supplied := flags.values["approve"]; supplied {
-		return usageErrorf("approval tokens must be supplied with --approval-token-stdin")
+	approvalSupplied, err := validateApprovalTokenCarrierFlags(flags)
+	if err != nil {
+		return err
 	}
-	if values, supplied := flags.values["approval-token-stdin"]; supplied {
-		if !flags.isBare("approval-token-stdin") || len(values) != 1 {
-			return usageErrorf("--approval-token-stdin must be a bare stdin marker")
-		}
+	if approvalSupplied {
 		if strings.TrimSpace(flags.first("plan")) == "" {
 			return usageErrorf("--approval-token-stdin requires --plan")
 		}
@@ -1429,25 +1430,47 @@ func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
 	return nil
 }
 
+func validateApprovalTokenCarrierFlags(flags parsedFlags) (bool, error) {
+	if _, supplied := flags.values["approve"]; supplied {
+		return false, usageErrorf("approval tokens must be supplied with --approval-token-stdin")
+	}
+	values, supplied := flags.values["approval-token-stdin"]
+	if !supplied {
+		return false, nil
+	}
+	if !flags.isBare("approval-token-stdin") || len(values) != 1 {
+		return false, usageErrorf("--approval-token-stdin must be a bare stdin marker")
+	}
+	return true, nil
+}
+
 // reverseApprovalTokenFromStdin accepts the only secret-bearing approval
 // carrier shared by reverse-ETL execution paths. The marker is deliberately
 // bare so an approval value can never be parsed from argv.
 func reverseApprovalTokenFromStdin(flags parsedFlags, stdin io.Reader) (string, bool, error) {
-	if _, supplied := flags.values["approve"]; supplied {
-		return "", false, usageErrorf("approval tokens must be supplied with --approval-token-stdin")
+	approvalSupplied, err := validateApprovalTokenCarrierFlags(flags)
+	if err != nil {
+		return "", false, err
 	}
-	values, supplied := flags.values["approval-token-stdin"]
-	if !supplied {
+	if !approvalSupplied {
 		return "", false, nil
-	}
-	if !flags.isBare("approval-token-stdin") || len(values) != 1 {
-		return "", false, usageErrorf("--approval-token-stdin must be a bare stdin marker")
 	}
 	token, err := readApprovalTokenFromStdin(stdin)
 	if err != nil {
 		return "", false, err
 	}
 	return token, true, nil
+}
+
+func validateReverseApprovalCarrierFlags(command string, flags parsedFlags) error {
+	approvalSupplied, err := validateApprovalTokenCarrierFlags(flags)
+	if err != nil {
+		return err
+	}
+	if approvalSupplied && command != "run" {
+		return usageErrorf("--approval-token-stdin is only valid with reverse run")
+	}
+	return nil
 }
 
 // connectorCommandMaxBytes returns what the user asked for, and nothing else.
@@ -1774,6 +1797,9 @@ func writeAgentModeQuery(stdout io.Writer, rows []connectors.Record, mode string
 func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return errUsage
+	}
+	if err := validateReverseApprovalCarrierFlags(args[0], parseFlags(args)); err != nil {
+		return err
 	}
 	switch args[0] {
 	case "list":
