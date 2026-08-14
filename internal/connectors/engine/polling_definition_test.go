@@ -23,6 +23,9 @@ func TestBundleLoadsDefinitionOwnedPollingWatermarkDescriptor(t *testing.T) {
 	if definition.PollingWatermark == nil {
 		t.Fatal("Definition omitted polling watermark declaration")
 	}
+	if definition.Capabilities.CDC {
+		t.Fatal("polling watermark declaration promoted the separate CDC capability")
+	}
 	definition.PollingWatermark.Source.Modes[0] = "changed"
 	if got := bundle.PollingWatermark.Source.Modes[0]; got != "incremental_upsert" {
 		t.Fatalf("definition alias mutated authored descriptor mode = %q", got)
