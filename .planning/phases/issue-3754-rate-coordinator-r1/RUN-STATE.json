@@ -1,0 +1,7 @@
+{
+  "issue": 3754,
+  "state": "verified",
+  "manual_gsd_fallback": "GSD phase 3754 is not registered in ROADMAP.md; prompts are executed inline under the canonical single-worker restriction.",
+  "base": "integration/4015-mvp-flat-r1",
+  "next": "commit implementation and verification/review evidence; await firstmate no-mistakes dispatch"
+}

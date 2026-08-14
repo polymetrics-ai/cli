@@ -547,7 +547,7 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 		DefaultHeaders: headers,
 	}
 
-	resolver := newRateLimitResolver(b, cfg)
+	resolver := newRateLimitResolverWithContext(ctx, b, cfg)
 	defaultRequester, err := resolver.defaultRequester(requester)
 	if err != nil {
 		return nil, err
