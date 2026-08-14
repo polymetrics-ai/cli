@@ -73,6 +73,7 @@ type state struct {
 	ReversePlans       []ReversePlan                     `json:"reverse_plans"`
 	ReverseRuns        []ReverseRun                      `json:"reverse_runs"`
 	Authorizations     []AuthorizationRecord             `json:"authorizations,omitempty"`
+	FlowActionReceipts []FlowActionReceipt               `json:"flow_action_receipts,omitempty"`
 	Checkpoints        map[string]map[string]string      `json:"checkpoints,omitempty"`
 	StreamStates       map[string]StreamState            `json:"stream_states,omitempty"`
 }

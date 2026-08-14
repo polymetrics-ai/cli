@@ -138,7 +138,7 @@ Reverse ETL is deliberately split across plan, preview, approval, and run. Agent
 ```bash
 pm flow plan --file flow.json --json
 pm flow preview --file flow.json --json
-pm flow run --file flow.json --force --json
+pm flow run --file flow.json --authorization <auth-ref> --force --json
 pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 ```
@@ -149,7 +149,10 @@ Flow dependencies are inferred from `in` and `out` warehouse tables. Supported s
 The [`pm flow` CLI manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/flow.md)
 owns source selection, including the manifest selectors and fail-closed handling
 for case-equivalent or undecidable sources. This is manifest syntax, not a flow
-CLI flag.
+CLI flag. Action steps also require a durable authorization reference created
+by the normal reverse-ETL plan → preview → approval lifecycle. They dispatch
+through typed connector validation and write APIs, read the configured target
+stream back, and persist an opaque receipt before checkpointing.
 
 ```json
 {

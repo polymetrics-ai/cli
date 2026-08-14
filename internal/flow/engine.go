@@ -56,11 +56,13 @@ type LedgerRecord struct {
 
 // RunOptions controls how a flow run behaves.
 type RunOptions struct {
-	DryRun        bool
-	Force         bool
-	JSON          bool
-	ApprovalToken string // required when any KindAction step is present
-	PerAction     bool   // each action step gets its own token (future)
+	DryRun bool
+	Force  bool
+	JSON   bool
+	// ApprovalToken is retained for legacy test runners. Connector-backed
+	// actions use a durable authorization reference, not a non-empty string.
+	ApprovalToken string
+	PerAction     bool // each action step gets its own token (future)
 }
 
 // StepResult is the per-step outcome in a RunResult.
@@ -149,19 +151,29 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 		}
 	}
 
-	// Pre-flight: if any action step is present and no token is provided, fail fast.
-	if !opts.DryRun {
-		for _, s := range e.Manifest.Steps {
-			if s.Kind == KindAction && opts.ApprovalToken == "" {
-				return result, ErrApprovalRequired
-			}
-		}
-	}
-
 	// Compute topological order.
 	order, err := BuildDAG(e.Manifest)
 	if err != nil {
 		return result, err
+	}
+	if !opts.DryRun {
+		for _, step := range e.Manifest.Steps {
+			if step.Kind != KindAction {
+				continue
+			}
+			if e.ActionRunner == nil {
+				return result, fmt.Errorf("action step %q: no ActionRunner configured", step.ID)
+			}
+			if preflight, ok := e.ActionRunner.(StepActionPreflight); ok {
+				if err := preflight.PreflightStep(ctx, step, opts.ApprovalToken); err != nil {
+					return result, err
+				}
+				continue
+			}
+			if opts.ApprovalToken == "" {
+				return result, ErrApprovalRequired
+			}
+		}
 	}
 
 	// Build step index.
