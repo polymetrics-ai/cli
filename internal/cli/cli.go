@@ -30,6 +30,9 @@ const maxConnectorCommandLimit = 10000
 func Run(args []string, stdout, stderr io.Writer) int {
 	ctx := context.Background()
 	root, jsonOut, cleanArgs := parseGlobal(args)
+	if err := validateReverseApprovalCarrierBeforeDispatch(cleanArgs); err != nil {
+		return writeError(stdout, stderr, err, jsonOut)
+	}
 	opts := config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}
 	bootstrap, err := config.ResolveBootstrap(opts)
 	if err != nil {
@@ -782,8 +785,12 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		}
 		return err
 	}
+	approval, err := prepareReverseApprovalCarrier(flags, os.Stdin)
+	if err != nil {
+		return err
+	}
 	return withApp(root, func(a *app.App) error {
-		return runConnectorCommand(ctx, a, connectorName, args, stdout, stderr, jsonOut)
+		return runConnectorCommand(ctx, a, connectorName, args, approval, stdout, stderr, jsonOut)
 	})
 }
 
@@ -1175,7 +1182,7 @@ func connectorCommandSuggestion(surface *connectors.CommandSurface, path []strin
 	return ""
 }
 
-func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
+func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, approval reverseApprovalCarrier, stdout, stderr io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
@@ -1208,7 +1215,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		return err
 	}
 	if flags.first("plan") != "" {
-		return runConnectorWriteCommandFromPlan(ctx, a, connectorName, path, flags, stdout, jsonOut)
+		return runConnectorWriteCommandFromPlan(ctx, a, connectorName, path, flags, approval, stdout, jsonOut)
 	}
 
 	connector, cfg, err := a.ResolveConnectorCredential(ctx, connectorName, credential, config)
@@ -1462,6 +1469,19 @@ func reverseApprovalTokenFromStdin(flags parsedFlags, stdin io.Reader) (string, 
 	return token, true, nil
 }
 
+type reverseApprovalCarrier struct {
+	token    string
+	supplied bool
+}
+
+func prepareReverseApprovalCarrier(flags parsedFlags, stdin io.Reader) (reverseApprovalCarrier, error) {
+	token, supplied, err := reverseApprovalTokenFromStdin(flags, stdin)
+	if err != nil {
+		return reverseApprovalCarrier{}, err
+	}
+	return reverseApprovalCarrier{token: token, supplied: supplied}, nil
+}
+
 func validateReverseApprovalCarrierFlags(command string, flags parsedFlags) error {
 	approvalSupplied, err := validateApprovalTokenCarrierFlags(flags)
 	if err != nil {
@@ -1471,6 +1491,50 @@ func validateReverseApprovalCarrierFlags(command string, flags parsedFlags) erro
 		return usageErrorf("--approval-token-stdin is only valid with reverse run")
 	}
 	return nil
+}
+
+func validateReverseApprovalCarrierBeforeDispatch(args []string) error {
+	if len(args) == 0 {
+		return nil
+	}
+	switch args[0] {
+	case "reverse":
+		command := ""
+		if len(args) > 1 {
+			command = args[1]
+		}
+		return validateReverseApprovalCarrierFlags(command, parseFlags(args[1:]))
+	case "help", "man":
+		if len(args) < 2 || args[1] != "reverse" {
+			return nil
+		}
+		return validateReverseApprovalCarrierFlags("", parseFlags(args[2:]))
+	default:
+		return nil
+	}
+}
+
+func prepareReverseRunApproval(args []string, stdin io.Reader) (reverseApprovalCarrier, error) {
+	if len(args) == 0 {
+		return reverseApprovalCarrier{}, errUsage
+	}
+	if err := validateReverseApprovalCarrierFlags(args[0], parseFlags(args)); err != nil {
+		return reverseApprovalCarrier{}, err
+	}
+	if args[0] != "run" {
+		return reverseApprovalCarrier{}, nil
+	}
+	if len(args) < 2 {
+		return reverseApprovalCarrier{}, errUsage
+	}
+	approval, err := prepareReverseApprovalCarrier(parseFlags(args[2:]), stdin)
+	if err != nil {
+		return reverseApprovalCarrier{}, err
+	}
+	if !approval.supplied {
+		return reverseApprovalCarrier{}, usageErrorf("reverse run requires --approval-token-stdin")
+	}
+	return approval, nil
 }
 
 // connectorCommandMaxBytes returns what the user asked for, and nothing else.
@@ -1561,12 +1625,8 @@ func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, cr
 	return nil
 }
 
-func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connectorName string, path []string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connectorName string, path []string, flags parsedFlags, approval reverseApprovalCarrier, stdout io.Writer, jsonOut bool) error {
 	planID := strings.TrimSpace(flags.first("plan"))
-	approvalToken, approvalSupplied, err := reverseApprovalTokenFromStdin(flags, os.Stdin)
-	if err != nil {
-		return err
-	}
 	preview := truthyFlag(flags.first("preview"))
 	plan, err := connectorCommandPlanForPath(a, planID, connectorName, path)
 	if err != nil {
@@ -1584,12 +1644,12 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 	if err != nil {
 		return err
 	}
-	if approvalSupplied {
+	if approval.supplied {
 		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation, WithheldFlags: resolvedFlags})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approval.token, Confirmation: confirmation, WithheldFlags: resolvedFlags})
 		if err != nil {
 			return err
 		}
@@ -1794,7 +1854,7 @@ func writeAgentModeQuery(stdout io.Writer, rows []connectors.Record, mode string
 }
 
 // pmcert:workflow reverse_etl
-func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+func runReverse(ctx context.Context, a *app.App, args []string, approval reverseApprovalCarrier, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return errUsage
 	}
@@ -1907,11 +1967,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			return errUsage
 		}
 		flags := parseFlags(args[2:])
-		approvalToken, approvalSupplied, err := reverseApprovalTokenFromStdin(flags, os.Stdin)
-		if err != nil {
-			return err
-		}
-		if !approvalSupplied {
+		if !approval.supplied {
 			return usageErrorf("reverse run requires --approval-token-stdin")
 		}
 		plan, err := a.GetReversePlan(args[1])
@@ -1926,7 +1982,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: approvalToken, Confirmation: confirmation, WithheldFlags: resolvedFlags})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: approval.token, Confirmation: confirmation, WithheldFlags: resolvedFlags})
 		if err != nil {
 			return err
 		}
