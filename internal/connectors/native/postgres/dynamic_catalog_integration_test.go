@@ -3,7 +3,9 @@
 package postgres_test
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -18,6 +20,8 @@ import (
 	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/connectors/native/dbtest"
 	native "polymetrics.ai/internal/connectors/native/postgres"
+	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/synctransport"
 )
 
 const (
@@ -87,6 +91,7 @@ func TestPostgresDynamicTypedCatalogUsesLiveMetadata(t *testing.T) {
 	source := openPostgresCatalogSource(t, ctx, endpoint)
 	defer func() { _ = source.Close(ctx) }()
 	seedPostgresCatalogs(t, ctx, source)
+	assertPostgresRegisteredSnapshotTransport(t, ctx, connector, endpoint)
 	assertPostgresLiveReads(t, ctx, connector, endpoint)
 	assertPostgresSystemSchemasAreRejected(t, ctx, connector, endpoint)
 
@@ -157,6 +162,316 @@ func TestPostgresDynamicTypedCatalogUsesLiveMetadata(t *testing.T) {
 	if _, err := connector.TypedCatalog(ctx, unsupportedConfig); !errors.Is(err, native.ErrUnsupportedCatalogShape) {
 		t.Fatal("PostgreSQL typed catalog did not reject an unsupported native type")
 	}
+}
+
+// assertPostgresRegisteredSnapshotTransport exercises the definition-selected
+// source through registry preflight before it reaches the live PostgreSQL 16
+// container. Its logs are delivery evidence: rows, source identity, typed
+// schema fingerprint, barrier, and candidate checkpoint all come from the
+// registered executor rather than a connector.Read compatibility path.
+func assertPostgresRegisteredSnapshotTransport(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint) {
+	t.Helper()
+	registry := synctransport.NewRegistry(postgresSnapshotTransportVerifier{})
+	if err := native.RegisterSnapshotTransportSource(registry, connector); err != nil {
+		t.Fatalf("register PostgreSQL snapshot source: %v", err)
+	}
+	destination := postgresSnapshotTransportDestination{}
+	if err := registry.RegisterDestination(postgresSnapshotTransportDestinationExecutor{}); err != nil {
+		t.Fatalf("register PostgreSQL snapshot destination: %v", err)
+	}
+	identity := synccontract.SourceIdentity{
+		Engine:           "postgres",
+		AccountOrCluster: "postgres-catalog-integration",
+		ObjectScope:      postgresCatalogIntegrationDatabase + "." + postgresCatalogAlphaSchema + "." + postgresCatalogReadTable,
+	}
+	for _, mode := range []synccontract.Mode{synccontract.ModeFullAppend, synccontract.ModeFullOverwrite} {
+		resolved, err := registry.Preflight(synctransport.PreflightRequest{
+			Source:      connector,
+			Destination: destination,
+			Stream:      "snapshot",
+			Mode:        mode,
+		})
+		if err != nil {
+			t.Fatalf("preflight registered PostgreSQL snapshot source for %s: %v", mode, err)
+		}
+
+		pages := make([]synctransport.SourcePage, 0, 3)
+		if err := resolved.Source.ReadTransport(ctx, synctransport.SourceRequest{
+			Connector: connector,
+			Runtime:   postgresCatalogConfig(t, endpoint, postgresCatalogAlphaSchema),
+			Stream:    "snapshot",
+			Mode:      mode,
+			BatchSize: 2,
+			Resume: synccontract.ResumeExpectation{
+				Source:           identity,
+				SourceGeneration: synccontract.OpaqueToken("postgres-catalog-integration-v1"),
+			},
+		}, func(page synctransport.SourcePage) error {
+			pages = append(pages, page)
+			return nil
+		}); err != nil {
+			t.Fatalf("read registered PostgreSQL snapshot source for %s: %v", mode, err)
+		}
+		if got, want := len(pages), 3; got != want {
+			t.Fatalf("registered PostgreSQL snapshot %s pages = %d, want %d", mode, got, want)
+		}
+		records := make([]connectors.Record, 0, 5)
+		for index, page := range pages {
+			wantRecords := 2
+			if index == len(pages)-1 {
+				wantRecords = 1
+			}
+			if got := len(page.Records); got != wantRecords {
+				t.Fatalf("registered PostgreSQL snapshot %s page %d records = %d, want %d", mode, index, got, wantRecords)
+			}
+			if err := page.CandidateCheckpoint.Validate(); err != nil {
+				t.Fatalf("registered PostgreSQL snapshot %s page %d checkpoint: %v", mode, index, err)
+			}
+			if page.CandidateCheckpoint.Source != identity || page.CandidateCheckpoint.SchemaVersion == "" || page.CandidateCheckpoint.SnapshotBarrier == nil || len(page.CandidateCheckpoint.SnapshotBarrier.Token) == 0 || page.CandidateCheckpoint.PositionObserved == nil || *page.CandidateCheckpoint.PositionObserved {
+				t.Fatalf("registered PostgreSQL snapshot %s page %d omitted its full-snapshot identity/schema/checkpoint", mode, index)
+			}
+			records = append(records, page.Records...)
+		}
+		assertLiveReadIDs(t, records, []string{"1", "2", "3", "4", "5"})
+		assertPostgresSnapshotTypedValues(t, records)
+		checkpoint := pages[len(pages)-1].CandidateCheckpoint
+		t.Logf(
+			"live registered PostgreSQL snapshot mode=%s: rows=%s pages=%d identity=%s/%s/%s schema=%s checkpoint={mechanism=%s barrier_kind=%s barrier=%s dedupe=%x} emitted={event_uuid=%s civil_timestamp=%s json_number=%s json_null=%s}",
+			mode, liveReadIDs(records), len(pages), checkpoint.Source.Engine, checkpoint.Source.AccountOrCluster, checkpoint.Source.ObjectScope,
+			checkpoint.SchemaVersion, checkpoint.Mechanism, checkpoint.SnapshotBarrier.Kind, checkpoint.SnapshotBarrier.Token, checkpoint.Dedupe.Value,
+			postgresSnapshotRecordString(t, records, "1", "event_uuid"), postgresSnapshotRecordString(t, records, "1", "civil_timestamp"),
+			postgresSnapshotJSONNumber(t, records, "1", "body", "id"), postgresSnapshotRawJSON(t, records, "2", "body"),
+		)
+	}
+	assertPostgresRegisteredSnapshotPaginationEdges(t, ctx, connector, endpoint, registry, destination)
+}
+
+func assertPostgresSnapshotTypedValues(t *testing.T, records []connectors.Record) {
+	t.Helper()
+	if got, want := postgresSnapshotRecordString(t, records, "1", "event_uuid"), "00000000-0000-0000-0000-000000000001"; got != want {
+		t.Fatalf("registered PostgreSQL snapshot event_uuid = %q, want %q", got, want)
+	}
+	if got, want := postgresSnapshotRecordString(t, records, "1", "civil_timestamp"), "2026-08-14T12:34:56.789"; got != want {
+		t.Fatalf("registered PostgreSQL snapshot civil timestamp = %q, want zone-less %q", got, want)
+	}
+	if got, want := postgresSnapshotJSONNumber(t, records, "1", "body", "id"), "9007199254740993"; got != want {
+		t.Fatalf("registered PostgreSQL snapshot JSON number = %q, want exact %q", got, want)
+	}
+	if got, want := postgresSnapshotRawJSON(t, records, "2", "body"), "null"; got != want {
+		t.Fatalf("registered PostgreSQL snapshot JSON null = %q, want %q", got, want)
+	}
+}
+
+func assertPostgresRegisteredSnapshotPaginationEdges(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint, registry *synctransport.Registry, destination postgresSnapshotTransportDestination) {
+	t.Helper()
+	for _, test := range []struct {
+		relation string
+		field    string
+		want     string
+	}{
+		{relation: "timestamp_key_events", field: "occurred_at", want: "-infinity,2026-08-14T12:34:56.789"},
+		{relation: "uuid_key_events", field: "event_id", want: "00000000-0000-0000-0000-000000000101,00000000-0000-0000-0000-000000000102"},
+	} {
+		t.Run(test.relation, func(t *testing.T) {
+			identity := postgresSnapshotIdentity(test.relation)
+			pages, records := readPostgresRegisteredSnapshot(t, ctx, connector, endpoint, registry, destination, identity, 1)
+			if got, want := len(pages), 3; got != want {
+				t.Fatalf("registered PostgreSQL snapshot %s pages = %d, want %d for batch size 1", test.relation, got, want)
+			}
+			if got, want := postgresSnapshotRecordFieldValues(records, test.field), test.want; got != want {
+				t.Fatalf("registered PostgreSQL snapshot %s %s values = %q, want %q", test.relation, test.field, got, want)
+			}
+			checkpoint := pages[len(pages)-1].CandidateCheckpoint
+			t.Logf(
+				"live registered PostgreSQL snapshot edge relation=%s rows=%s pages=%d identity=%s/%s/%s schema=%s checkpoint={mechanism=%s barrier_kind=%s barrier=%s dedupe=%x}",
+				test.relation, postgresSnapshotRecordFieldValues(records, test.field), len(pages), checkpoint.Source.Engine, checkpoint.Source.AccountOrCluster, checkpoint.Source.ObjectScope,
+				checkpoint.SchemaVersion, checkpoint.Mechanism, checkpoint.SnapshotBarrier.Kind, checkpoint.SnapshotBarrier.Token, checkpoint.Dedupe.Value,
+			)
+		})
+	}
+}
+
+func readPostgresRegisteredSnapshot(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint, registry *synctransport.Registry, destination postgresSnapshotTransportDestination, identity synccontract.SourceIdentity, batchSize int) ([]synctransport.SourcePage, []connectors.Record) {
+	t.Helper()
+	resolved, err := registry.Preflight(synctransport.PreflightRequest{
+		Source:      connector,
+		Destination: destination,
+		Stream:      "snapshot",
+		Mode:        synccontract.ModeFullAppend,
+	})
+	if err != nil {
+		t.Fatalf("preflight registered PostgreSQL snapshot source for %s: %v", identity.ObjectScope, err)
+	}
+	pages := make([]synctransport.SourcePage, 0, 3)
+	if err := resolved.Source.ReadTransport(ctx, synctransport.SourceRequest{
+		Connector: connector,
+		Runtime:   postgresCatalogConfig(t, endpoint, postgresCatalogAlphaSchema),
+		Stream:    "snapshot",
+		Mode:      synccontract.ModeFullAppend,
+		BatchSize: batchSize,
+		Resume: synccontract.ResumeExpectation{
+			Source:           identity,
+			SourceGeneration: synccontract.OpaqueToken("postgres-catalog-integration-v1"),
+		},
+	}, func(page synctransport.SourcePage) error {
+		pages = append(pages, page)
+		return nil
+	}); err != nil {
+		t.Fatalf("read registered PostgreSQL snapshot source for %s: %v", identity.ObjectScope, err)
+	}
+	records := make([]connectors.Record, 0, len(pages)*batchSize)
+	for index, page := range pages {
+		if err := page.CandidateCheckpoint.Validate(); err != nil {
+			t.Fatalf("registered PostgreSQL snapshot %s page %d checkpoint: %v", identity.ObjectScope, index, err)
+		}
+		if page.CandidateCheckpoint.Source != identity || page.CandidateCheckpoint.SchemaVersion == "" || page.CandidateCheckpoint.SnapshotBarrier == nil || len(page.CandidateCheckpoint.SnapshotBarrier.Token) == 0 || page.CandidateCheckpoint.PositionObserved == nil || *page.CandidateCheckpoint.PositionObserved {
+			t.Fatalf("registered PostgreSQL snapshot %s page %d omitted its full-snapshot identity/schema/checkpoint", identity.ObjectScope, index)
+		}
+		records = append(records, page.Records...)
+	}
+	return pages, records
+}
+
+func postgresSnapshotIdentity(relation string) synccontract.SourceIdentity {
+	return synccontract.SourceIdentity{
+		Engine:           "postgres",
+		AccountOrCluster: "postgres-catalog-integration",
+		ObjectScope:      postgresCatalogIntegrationDatabase + "." + postgresCatalogAlphaSchema + "." + relation,
+	}
+}
+
+func postgresSnapshotRecordString(t *testing.T, records []connectors.Record, id, field string) string {
+	t.Helper()
+	for _, record := range records {
+		if fmt.Sprint(record["id"]) == id {
+			return fmt.Sprint(record[field])
+		}
+	}
+	t.Fatalf("registered PostgreSQL snapshot omitted row id %s", id)
+	return ""
+}
+
+func postgresSnapshotRawJSON(t *testing.T, records []connectors.Record, id, field string) string {
+	t.Helper()
+	for _, record := range records {
+		if fmt.Sprint(record["id"]) != id {
+			continue
+		}
+		raw, ok := record[field].(json.RawMessage)
+		if !ok {
+			t.Fatalf("registered PostgreSQL snapshot %s row %s = %T, want json.RawMessage", field, id, record[field])
+		}
+		return string(raw)
+	}
+	t.Fatalf("registered PostgreSQL snapshot omitted row id %s", id)
+	return ""
+}
+
+func postgresSnapshotJSONNumber(t *testing.T, records []connectors.Record, id, field, key string) string {
+	t.Helper()
+	raw := postgresSnapshotRawJSON(t, records, id, field)
+	decoder := json.NewDecoder(bytes.NewBufferString(raw))
+	decoder.UseNumber()
+	value := map[string]json.Number{}
+	if err := decoder.Decode(&value); err != nil {
+		t.Fatalf("decode registered PostgreSQL snapshot JSON %s row %s: %v", field, id, err)
+	}
+	return value[key].String()
+}
+
+func postgresSnapshotRecordFieldValues(records []connectors.Record, field string) string {
+	values := make([]string, 0, len(records))
+	for _, record := range records {
+		values = append(values, fmt.Sprint(record[field]))
+	}
+	return strings.Join(values, ",")
+}
+
+var postgresSnapshotTransportDestinationReference = connectors.TransportExecutorReference{
+	Family: connectors.TransportExecutorFamilyNativeDatabase,
+	ID:     "postgres_snapshot_integration_destination",
+}
+
+type postgresSnapshotTransportVerifier struct{}
+
+func (postgresSnapshotTransportVerifier) VerifyTransportConformance(synctransport.ConformanceVerification) error {
+	return nil
+}
+
+// postgresSnapshotTransportDestination is deliberately inert: it exists only
+// to satisfy source-registry preflight in the live source test. It is never
+// invoked as an apply path.
+type postgresSnapshotTransportDestination struct{}
+
+func (postgresSnapshotTransportDestination) Name() string {
+	return "postgres-snapshot-integration-destination"
+}
+
+func (postgresSnapshotTransportDestination) Metadata() connectors.Metadata {
+	return connectors.Metadata{Name: "postgres-snapshot-integration-destination", IntegrationType: "database"}
+}
+
+func (postgresSnapshotTransportDestination) Check(context.Context, connectors.RuntimeConfig) error {
+	return nil
+}
+
+func (postgresSnapshotTransportDestination) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
+	return connectors.Catalog{}, nil
+}
+
+func (postgresSnapshotTransportDestination) Read(context.Context, connectors.ReadRequest, func(connectors.Record) error) error {
+	return nil
+}
+
+func (postgresSnapshotTransportDestination) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
+	return connectors.WriteResult{}, nil
+}
+
+func (postgresSnapshotTransportDestination) Definition() connectors.Definition {
+	return connectors.Definition{
+		Name:            "postgres-snapshot-integration-destination",
+		DisplayName:     "PostgreSQL snapshot integration destination",
+		IntegrationType: "database",
+		SyncTransport: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{
+			Executor:        postgresSnapshotTransportDestinationReference,
+			EligibleActions: []string{"stage_snapshot", "replace_snapshot"},
+			Modes:           []synccontract.Mode{synccontract.ModeFullAppend, synccontract.ModeFullOverwrite},
+			Delivery: connectors.DeliveryGuarantees{
+				Idempotency: connectors.DeliveryIdempotencyAtLeastOnce,
+				Ordering:    connectors.DeliveryOrderingSource,
+				Deletes:     connectors.DeliveryDeletesUnavailable,
+			},
+			Conformance:     connectors.ConformanceEvidenceReference{Suite: "postgres_snapshot_integration", RunID: "source_read_v1"},
+			Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
+			ApplyStrategies: []connectors.DestinationApplyStrategy{{
+				Mode:     synccontract.ModeFullAppend,
+				Strategy: connectors.ApplyStrategyAppend,
+				Action:   "stage_snapshot",
+			}, {
+				Mode:     synccontract.ModeFullOverwrite,
+				Strategy: connectors.ApplyStrategyReplace,
+				Action:   "replace_snapshot",
+			}},
+		}},
+	}
+}
+
+type postgresSnapshotTransportDestinationExecutor struct{}
+
+func (postgresSnapshotTransportDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
+	return postgresSnapshotTransportDestinationReference
+}
+
+func (postgresSnapshotTransportDestinationExecutor) PlanDestination(context.Context, synctransport.DestinationPlanRequest) (synctransport.DestinationPlan, error) {
+	return synctransport.DestinationPlan{}, errors.New("PostgreSQL snapshot integration destination must not plan")
+}
+
+func (postgresSnapshotTransportDestinationExecutor) ApplyDestination(context.Context, synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
+	return synccontract.DownstreamAcknowledgement{}, errors.New("PostgreSQL snapshot integration destination must not apply")
+}
+
+func (postgresSnapshotTransportDestinationExecutor) ReadBackDestination(context.Context, synctransport.DestinationReadBackRequest) error {
+	return errors.New("PostgreSQL snapshot integration destination must not read back")
 }
 
 func newPostgresCatalogContainerHarness(runtime dbtest.Runtime, endpoint string) (*dbtest.Harness, error) {
@@ -280,8 +595,12 @@ func seedPostgresCatalogs(t *testing.T, ctx context.Context, source *pgx.Conn) {
 		"CREATE SCHEMA catalog_alpha",
 		"CREATE TABLE catalog_alpha.accounts (account_id bigint NOT NULL, total numeric(12,2) NOT NULL, occurred_at timestamptz(3) NOT NULL, body jsonb, PRIMARY KEY (account_id))",
 		"CREATE TABLE catalog_alpha.audit (event_id uuid NOT NULL, body jsonb NOT NULL, PRIMARY KEY (event_id))",
-		"CREATE TABLE catalog_alpha.read_events (id bigint NOT NULL, sequence bigint NOT NULL, label text NOT NULL, PRIMARY KEY (id))",
-		"INSERT INTO catalog_alpha.read_events (id, sequence, label) VALUES (1, 10, 'alpha'), (2, 10, 'bravo'), (3, 11, 'charlie'), (4, 12, 'delta'), (5, 12, 'echo')",
+		"CREATE TABLE catalog_alpha.read_events (id bigint NOT NULL, sequence bigint NOT NULL, event_uuid uuid NOT NULL, civil_timestamp timestamp(3) NOT NULL, body jsonb NOT NULL, label text NOT NULL, PRIMARY KEY (id))",
+		"INSERT INTO catalog_alpha.read_events (id, sequence, event_uuid, civil_timestamp, body, label) VALUES (1, 10, '00000000-0000-0000-0000-000000000001', '2026-08-14 12:34:56.789', '{\"id\":9007199254740993}', 'alpha'), (2, 10, '00000000-0000-0000-0000-000000000002', '2026-08-14 12:34:57.789', 'null', 'bravo'), (3, 11, '00000000-0000-0000-0000-000000000003', '2026-08-14 12:34:58.789', '{\"kind\":\"event\"}', 'charlie'), (4, 12, '00000000-0000-0000-0000-000000000004', '2026-08-14 12:34:59.789', '{\"kind\":\"event\"}', 'delta'), (5, 12, '00000000-0000-0000-0000-000000000005', '2026-08-14 12:35:00.789', '{\"kind\":\"event\"}', 'echo')",
+		"CREATE TABLE catalog_alpha.timestamp_key_events (occurred_at timestamp NOT NULL PRIMARY KEY, label text NOT NULL)",
+		"INSERT INTO catalog_alpha.timestamp_key_events (occurred_at, label) VALUES ('-infinity', 'negative-infinity'), ('2026-08-14 12:34:56.789', 'finite')",
+		"CREATE TABLE catalog_alpha.uuid_key_events (event_id uuid NOT NULL PRIMARY KEY, label text NOT NULL)",
+		"INSERT INTO catalog_alpha.uuid_key_events (event_id, label) VALUES ('00000000-0000-0000-0000-000000000101', 'first'), ('00000000-0000-0000-0000-000000000102', 'second')",
 		"CREATE TABLE catalog_alpha.alternate_events (id bigint NOT NULL, alternate_cursor bigint NOT NULL, label text NOT NULL, PRIMARY KEY (id))",
 		"INSERT INTO catalog_alpha.alternate_events (id, alternate_cursor, label) VALUES (11, 100, 'other')",
 		"CREATE TABLE catalog_alpha.nullable_cursor_events (id bigint NOT NULL, cursor_value bigint, label text NOT NULL, PRIMARY KEY (id))",
@@ -409,7 +728,7 @@ func assertLiveReadCatalog(t *testing.T, catalog connectors.Catalog, name string
 		if stream.Name != postgresCatalogAlphaSchema+"."+name {
 			continue
 		}
-		if strings.Join(stream.PrimaryKey, ",") != "id" || len(stream.Fields) != 3 || strings.Join([]string{stream.Fields[0].Type, stream.Fields[1].Type, stream.Fields[2].Type}, ",") != "integer,integer,string" {
+		if strings.Join(stream.PrimaryKey, ",") != "id" || len(stream.Fields) != 6 || strings.Join([]string{stream.Fields[0].Type, stream.Fields[1].Type, stream.Fields[2].Type, stream.Fields[3].Type, stream.Fields[4].Type, stream.Fields[5].Type}, ",") != "integer,integer,string,timestamp,object,string" {
 			t.Fatal("PostgreSQL live catalog did not report the seeded read table's primary key and types")
 		}
 		return
