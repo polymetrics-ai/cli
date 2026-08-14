@@ -176,7 +176,7 @@ func TestConnectorManifestSynthesizedFromBundleSpotFields(t *testing.T) {
 	if len(m.Streams[0].CursorFields) != 1 || m.Streams[0].CursorFields[0] != "updated_at" {
 		t.Fatalf("Manifest().Streams[0].CursorFields = %v, want [updated_at]", m.Streams[0].CursorFields)
 	}
-	wantModes := []string{"full_refresh_append", "full_refresh_overwrite"}
+	wantModes := []string{"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped"}
 	assertStringSliceEqual(t, m.SyncModes, wantModes)
 	if m.Risk.Read == "" {
 		t.Fatalf("Manifest().Risk.Read is empty, want a synthesized risk string")
@@ -332,6 +332,14 @@ func TestDerivedSyncModesTruthTable(t *testing.T) {
 			name:       "primary key alone does not admit cursor-required compatibility modes",
 			primaryKey: "id",
 			want:       []string{"full_refresh_append", "full_refresh_overwrite"},
+		},
+		{
+			name:        "primary key and cursor retain full refresh compatibility without incremental executor",
+			primaryKey:  "id",
+			cursorField: "updated_at",
+			want: []string{
+				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+			},
 		},
 		{
 			name:        "incremental only adds incremental_append (no dedup, no pk)",

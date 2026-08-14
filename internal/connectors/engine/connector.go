@@ -10,9 +10,11 @@ import (
 
 // DerivedSyncModes returns sync modes derived from the bundle-declared stream shape.
 func DerivedSyncModes(s StreamSpec, sch *StreamSchema) []string {
-	hasPrimaryKey := sch != nil && len(sch.PrimaryKey) > 0
-	hasIncremental := s.Incremental != nil
-	return synccontract.SupportedPublicModeNames(hasPrimaryKey, hasIncremental)
+	return synccontract.SupportedPublicModeNames(synccontract.PublicModeCapabilities{
+		HasPrimaryKey:          sch != nil && len(sch.PrimaryKey) > 0,
+		HasCursor:              sch != nil && sch.CursorField != "",
+		HasIncrementalExecutor: s.Incremental != nil,
+	})
 }
 
 // Connector adapts a declarative Bundle (+ optional Tier-2 Hooks) to
@@ -358,9 +360,8 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			}
 		}
 	}
-	// Preserve the canonical mode ordering (matches
-	// internal/app/sync_modes.go.MustSyncModeNames) rather than
-	// first-seen-per-stream order.
+	// Preserve the shared public mode ordering rather than first-seen-per-stream
+	// order.
 	syncModes = orderCanonicalModes(syncModes)
 
 	for _, a := range b.Writes {

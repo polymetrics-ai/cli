@@ -37,11 +37,10 @@ func TestPublicModesResolveCompatibilityNamesToClosedContracts(t *testing.T) {
 
 func TestPublicModeCapabilitiesAndDefaultsUseMaterializingModes(t *testing.T) {
 	tests := []struct {
-		name          string
-		hasPrimaryKey bool
-		hasCursor     bool
-		wantModes     []string
-		wantDefault   string
+		name         string
+		capabilities PublicModeCapabilities
+		wantModes    []string
+		wantDefault  string
 	}{
 		{
 			name:        "neither",
@@ -49,21 +48,28 @@ func TestPublicModeCapabilitiesAndDefaultsUseMaterializingModes(t *testing.T) {
 			wantDefault: "full_refresh_append",
 		},
 		{
-			name:          "primary key only",
-			hasPrimaryKey: true,
-			wantModes:     []string{"full_refresh_append", "full_refresh_overwrite"},
-			wantDefault:   "full_refresh_overwrite",
+			name:         "primary key only",
+			capabilities: PublicModeCapabilities{HasPrimaryKey: true},
+			wantModes:    []string{"full_refresh_append", "full_refresh_overwrite"},
+			wantDefault:  "full_refresh_overwrite",
 		},
 		{
-			name:        "cursor only",
-			hasCursor:   true,
-			wantModes:   []string{"full_refresh_append", "full_refresh_overwrite", "incremental_append"},
-			wantDefault: "incremental_append",
+			name:         "primary key and cursor without incremental executor",
+			capabilities: PublicModeCapabilities{HasPrimaryKey: true, HasCursor: true},
+			wantModes: []string{
+				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
+			},
+			wantDefault: "full_refresh_overwrite",
 		},
 		{
-			name:          "primary key and cursor",
-			hasPrimaryKey: true,
-			hasCursor:     true,
+			name:         "cursor and incremental executor without primary key",
+			capabilities: PublicModeCapabilities{HasCursor: true, HasIncrementalExecutor: true},
+			wantModes:    []string{"full_refresh_append", "full_refresh_overwrite", "incremental_append"},
+			wantDefault:  "incremental_append",
+		},
+		{
+			name:         "all capabilities",
+			capabilities: PublicModeCapabilities{HasPrimaryKey: true, HasCursor: true, HasIncrementalExecutor: true},
 			wantModes: []string{
 				"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped",
 				"incremental_append", "incremental_append_deduped",
@@ -74,11 +80,11 @@ func TestPublicModeCapabilitiesAndDefaultsUseMaterializingModes(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SupportedPublicModeNames(tt.hasPrimaryKey, tt.hasCursor); !reflect.DeepEqual(got, tt.wantModes) {
-				t.Fatalf("SupportedPublicModeNames(%t, %t) = %v, want %v", tt.hasPrimaryKey, tt.hasCursor, got, tt.wantModes)
+			if got := SupportedPublicModeNames(tt.capabilities); !reflect.DeepEqual(got, tt.wantModes) {
+				t.Fatalf("SupportedPublicModeNames(%+v) = %v, want %v", tt.capabilities, got, tt.wantModes)
 			}
-			if got := DefaultPublicModeName(tt.hasPrimaryKey, tt.hasCursor); got != tt.wantDefault {
-				t.Fatalf("DefaultPublicModeName(%t, %t) = %q, want %q", tt.hasPrimaryKey, tt.hasCursor, got, tt.wantDefault)
+			if got := DefaultPublicModeName(tt.capabilities); got != tt.wantDefault {
+				t.Fatalf("DefaultPublicModeName(%+v) = %q, want %q", tt.capabilities, got, tt.wantDefault)
 			}
 		})
 	}

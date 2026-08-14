@@ -5,7 +5,7 @@
 
 ## Reviewed concerns
 
-- The public aliases remain accepted, with their canonical contract decision held only in `internal/app/sync_modes.go`.
+- The public aliases remain accepted, with their canonical contract and generic capability decision held only in `internal/synccontract/public_modes.go`.
 - Normal and persisted-legacy parsing use that same table; both aliases have a non-empty contract and bypass the legacy branch.
 - In an unadmitted source/destination pairing the application returns the typed `ModeNotExecutableError` before a source read. The CLI certification report now treats that deliberate `Error`/exit-1 shape as passing evidence, rather than as an ETL failure.
 - The existing public compatibility adapters and the closed canonical modes retain their tested parse/runtime behavior. No connector-specific branch or literal was added to shared production code.
@@ -13,7 +13,7 @@
 
 ## Evidence reviewed
 
-- `internal/app/sync_modes.go` and its focused regression/control tests.
+- `internal/synccontract/public_modes.go`, `internal/app/sync_modes.go`, and their focused regression/control tests.
 - `internal/connectors/certify` stage and scripted-CLI coverage, plus the real CLI certification route test.
 - Generated documentation diffs and the completed command matrix in `VERIFICATION.md`.
 

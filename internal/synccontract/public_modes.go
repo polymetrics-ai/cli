@@ -5,12 +5,20 @@ import "strings"
 // PublicMode records one accepted public sync-mode spelling and its closed
 // contract counterpart.
 type PublicMode struct {
-	Name               string
-	ContractMode       Mode
-	RequiresCursor     bool
-	RequiresPrimaryKey bool
-	TypedOnly          bool
-	aliases            []string
+	Name                        string
+	ContractMode                Mode
+	RequiresCursor              bool
+	RequiresPrimaryKey          bool
+	RequiresIncrementalExecutor bool
+	TypedOnly                   bool
+	aliases                     []string
+}
+
+// PublicModeCapabilities records the stream facts used to project public modes.
+type PublicModeCapabilities struct {
+	HasPrimaryKey          bool
+	HasCursor              bool
+	HasIncrementalExecutor bool
 }
 
 var publicModes = []PublicMode{
@@ -31,17 +39,19 @@ var publicModes = []PublicMode{
 		aliases:            []string{"full_refresh_overwrite_dedup", "full_refresh_deduped"},
 	},
 	{
-		Name:           "incremental_append",
-		ContractMode:   ModeIncrementalAppend,
-		RequiresCursor: true,
+		Name:                        "incremental_append",
+		ContractMode:                ModeIncrementalAppend,
+		RequiresCursor:              true,
+		RequiresIncrementalExecutor: true,
 	},
 	{
-		Name:               "incremental_append_deduped",
-		ContractMode:       ModeIncrementalDedupe,
-		RequiresCursor:     true,
-		RequiresPrimaryKey: true,
-		TypedOnly:          true,
-		aliases:            []string{"incremental_append_dedup"},
+		Name:                        "incremental_append_deduped",
+		ContractMode:                ModeIncrementalDedupe,
+		RequiresCursor:              true,
+		RequiresPrimaryKey:          true,
+		RequiresIncrementalExecutor: true,
+		TypedOnly:                   true,
+		aliases:                     []string{"incremental_append_dedup"},
 	},
 }
 
@@ -75,14 +85,17 @@ func LookupPublicMode(raw string) (PublicMode, bool) {
 	return PublicMode{}, false
 }
 
-// SupportedPublicModeNames derives accepted public modes from stream shape.
-func SupportedPublicModeNames(hasPrimaryKey, hasCursor bool) []string {
+// SupportedPublicModeNames derives accepted public modes from stream capabilities.
+func SupportedPublicModeNames(capabilities PublicModeCapabilities) []string {
 	names := make([]string, 0, len(publicModes))
 	for _, mode := range publicModes {
-		if mode.RequiresPrimaryKey && !hasPrimaryKey {
+		if mode.RequiresPrimaryKey && !capabilities.HasPrimaryKey {
 			continue
 		}
-		if mode.RequiresCursor && !hasCursor {
+		if mode.RequiresCursor && !capabilities.HasCursor {
+			continue
+		}
+		if mode.RequiresIncrementalExecutor && !capabilities.HasIncrementalExecutor {
 			continue
 		}
 		names = append(names, mode.Name)
@@ -102,12 +115,12 @@ func MaterializingPublicModeNames() []string {
 	return names
 }
 
-// DefaultPublicModeName chooses a materializing default for the discovered stream shape.
-func DefaultPublicModeName(hasPrimaryKey, hasCursor bool) string {
+// DefaultPublicModeName chooses a materializing default for the discovered stream capabilities.
+func DefaultPublicModeName(capabilities PublicModeCapabilities) string {
 	switch {
-	case hasCursor:
+	case capabilities.HasCursor && capabilities.HasIncrementalExecutor:
 		return "incremental_append"
-	case hasPrimaryKey:
+	case capabilities.HasPrimaryKey:
 		return "full_refresh_overwrite"
 	default:
 		return "full_refresh_append"

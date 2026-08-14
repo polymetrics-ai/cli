@@ -408,11 +408,19 @@ func (d *Driver) stream(object Object, fields []Field) (connectors.Stream, error
 }
 
 func supportedSyncModes(hasPrimaryKey, hasCursor bool) []string {
-	return synccontract.SupportedPublicModeNames(hasPrimaryKey, hasCursor)
+	return synccontract.SupportedPublicModeNames(discoveredSyncModeCapabilities(hasPrimaryKey, hasCursor))
 }
 
 func defaultSyncMode(hasPrimaryKey, hasCursor bool) string {
-	return synccontract.DefaultPublicModeName(hasPrimaryKey, hasCursor)
+	return synccontract.DefaultPublicModeName(discoveredSyncModeCapabilities(hasPrimaryKey, hasCursor))
+}
+
+func discoveredSyncModeCapabilities(hasPrimaryKey, hasCursor bool) synccontract.PublicModeCapabilities {
+	return synccontract.PublicModeCapabilities{
+		HasPrimaryKey:          hasPrimaryKey,
+		HasCursor:              hasCursor,
+		HasIncrementalExecutor: hasCursor,
+	}
 }
 
 func (d *Driver) primaryKey(object Object, known map[string]Field) []string {

@@ -17,7 +17,7 @@ Close only the two non-canonical execution bypasses for the existing public comp
 
 ## Slice 2 — single-source generic mapping
 
-1. Replace duplicated normal/persisted-legacy mode construction with one connector-neutral mapping authority in `internal/app/sync_modes.go`.
+1. Replace duplicated normal/persisted-legacy mode construction with one connector-neutral mapping authority in `internal/synccontract/public_modes.go`, consumed by `internal/app/sync_modes.go`.
 2. Set the two deduped legacy aliases to `ModeFullOverwrite` and `ModeIncrementalDedupe`, respectively, and mark only those aliases for typed admission.
 3. Keep the other legacy adapters and all canonical closed mode entries behaviorally identical.
 

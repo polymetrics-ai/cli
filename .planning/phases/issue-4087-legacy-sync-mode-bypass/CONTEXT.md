@@ -13,7 +13,7 @@ The current base has an additional relevant guard: `IsContractMode` also exclude
 - `full_refresh_overwrite_deduped` maps to `synccontract.ModeFullOverwrite`.
 - `incremental_append_deduped` maps to `synccontract.ModeIncrementalDedupe`.
 - Their alternative accepted spellings preserve the same canonical output name and typed mapping.
-- The mode-name-to-contract decision has one connector-neutral authority in `internal/app/sync_modes.go`; persisted and normal parsing consume it.
+- The public mode-name-to-contract and capability decision has one connector-neutral authority in `internal/synccontract/public_modes.go`; persisted and normal parsing consume it through `internal/app/sync_modes.go`.
 - The aliases take the existing typed execution/refusal path. With the ordinary scripted source fixture and no matching transport, that is the existing typed pre-I/O `ModeNotExecutableError`; no source read is allowed first.
 - Existing canonical synccontract mode names retain their current parsed source, destination, contract, and typed-admission behavior.
 

@@ -6,7 +6,7 @@ Status: complete (inline/manual GSD fallback)
 
 - [x] Both aliases resolve to non-empty canonical typed contracts through normal and persisted-legacy parsing.
 - [x] Both aliases return a typed pre-I/O `ModeNotExecutableError`, with no legacy source read.
-- [x] The mapping is single-sourced and connector-neutral.
+- [x] `internal/synccontract/public_modes.go` single-sources the public mapping and generic capability projection without connector-specific behavior.
 - [x] All closed canonical mode names preserve their existing parsed contract/admission behavior.
 - [x] Runtime help, generated CLI docs, website docs, and the certification report agree that the aliases are typed admissions with pre-I/O refusal when no transport is admitted.
 - [x] Focused tests, formatting, vet, build, and individual repository gates pass.
