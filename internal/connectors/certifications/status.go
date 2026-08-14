@@ -50,12 +50,14 @@ var embeddedStatuses struct {
 	err    error
 }
 
-// StatusFor returns the generated proof-bearing status for a connector.
+// StatusFor returns the generated proof-bearing status for an allowlisted connector.
 func StatusFor(connector string) (Status, error) {
 	return statusFor(connector, false)
 }
 
-// StatusForRegistered returns a status using the caller's connector-registration result.
+// StatusForRegistered returns the generated status for an allowlisted connector.
+// For a registered connector outside the certification scope, it returns the
+// community-build warning instead of inventing a certification claim.
 func StatusForRegistered(connector string, registered bool) (Status, error) {
 	return statusFor(connector, registered)
 }

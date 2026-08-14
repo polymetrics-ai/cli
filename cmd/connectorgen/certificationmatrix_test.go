@@ -978,13 +978,13 @@ func copyCertificationCommandFile(t *testing.T, source, destination string, mode
 	if err != nil {
 		t.Fatalf("open command workspace source %q: %v", source, err)
 	}
-	defer in.Close()
+	defer func() { _ = in.Close() }()
 	out, err := os.OpenFile(destination, os.O_WRONLY|os.O_CREATE|os.O_EXCL, mode.Perm())
 	if err != nil {
 		t.Fatalf("create command workspace destination %q: %v", destination, err)
 	}
 	if _, err := io.Copy(out, in); err != nil {
-		out.Close()
+		_ = out.Close()
 		t.Fatalf("copy command workspace file %q: %v", source, err)
 	}
 	if err := out.Close(); err != nil {
