@@ -9,6 +9,7 @@
 | R5 | PostgreSQL capability parity | Existing PostgreSQL tests require CDC to remain false. | Passed: the row table applies the same `CDC=false` override and the native package suite passes. |
 | R6 | Incremental lane isolation | A scoped generator run had no API or rewrote every shard. | Passed: the generator core test runs GitHub scope and confirms PostgreSQL plus status are byte-identical. |
 | R7 | CI boundary and standard-library security | CI rejected the intentional GitHub allowlist literal as shared connector policy, and `govulncheck` found reachable Go 1.25.12 standard-library vulnerabilities. | Passed: the one-match, expiring boundary exception keeps the explicit allowlist reviewable; whole-tree boundary checks are clean and Go 1.25.13 `govulncheck` reports zero reachable vulnerabilities. |
+| R8 | Generator isolation from non-allowlisted runtime ledger entries | `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestCertificationCheckIgnoresMalformedNonAllowlistedRuntimeLedgerEntry$'` failed at `b9e294a2`: its copied real source tree changed only `mysql` in `operation_endpoint_ledger.json` to `[{"unexpected":true}]`, then the real `go run ./cmd/connectorgen certification-matrix --check` panicked through `native/postgres.New()`. | Passed: the same command-level fixture now exits 0 with no stderr after the PostgreSQL matrix source is constructed from the generator's already-scoped bundle. `certification-matrix --check` confirms the committed shards remain byte-identical, and `git diff --exit-code 2df18ee -- internal/connectors/engine/bundle.go` is empty. |
 
 ## Red command
 
@@ -18,3 +19,11 @@ go test -count=1 ./cmd/connectorgen -run 'TestCertification(ShardsRoundTripGener
 
 The pre-implementation failure is retained in `traces/red-run.txt`. The identical focused command
 must pass after implementation.
+
+## R8 red command
+
+The regression runs the command path in an isolated copy of the real generator
+inputs, mutates only the real non-allowlisted `mysql` ledger entry, and runs the
+actual `go run ./cmd/connectorgen certification-matrix --check` command. It failed
+at `b9e294a2` with the documented native PostgreSQL factory panic and passes after
+the generator-only construction change.

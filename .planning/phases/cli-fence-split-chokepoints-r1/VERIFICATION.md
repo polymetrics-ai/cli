@@ -7,7 +7,8 @@
       byte-identical.
 - [x] All generated anchors name source symbols and no `:<digits>` source anchor remains.
 - [x] `connectorgen certification-matrix --check` detects allowlisted shard drift and source
-      disappearance while ignoring non-allowlisted certification claims.
+      disappearance while ignoring non-allowlisted certification claims, including a malformed
+      real `mysql` runtime-ledger record that must not re-enter the native PostgreSQL factory.
 - [x] A one-line shared-file insertion above an anchor produces zero generated shard changes after
       the refactor (baseline old-matrix diff count is recorded below).
 - [x] Existing app Open/ETL tests and PostgreSQL metadata/manifest tests pass unchanged.
@@ -35,6 +36,17 @@
 - [x] `make connector-canon-check`
 - [x] `make release-workflow-check`
 - [ ] no-mistakes pipeline returns `checks-passed`.
+
+## Generator-isolation correction — 2026-08-14
+
+- [x] **Red:** command-level regression reproduces the pre-fix panic by corrupting only the
+      non-allowlisted `mysql` entry in the real generator ledger.
+- [x] **Green:** the same real `certification-matrix --check` path succeeds without a native
+      PostgreSQL factory reload.
+- [x] `git diff --exit-code 2df18ee3a083fe507cbe1c07e0270e82c5ab0182 --
+      internal/connectors/engine/bundle.go` confirms production loader byte identity.
+- [ ] Full `./cmd/connectorgen` and `./internal/connectors/engine` suites pass, followed by the
+      new no-mistakes run to CI green.
 
 ## CI repair — 2026-08-14
 

@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -801,6 +803,40 @@ func TestCertificationScopedSourceResolutionUsesTargetConnector(t *testing.T) {
 	}
 }
 
+func TestCertificationScopedSourceResolutionUsesScopedPostgresBundle(t *testing.T) {
+	bundles, err := loadSourceBundlesForConnectors(repoRootForCertificationTest(t), []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadSourceBundlesForConnectors() error = %v", err)
+	}
+	connector, found := scopedMatrixConnector("postgres", &bundles[0])
+	if !found {
+		t.Fatal("scopedMatrixConnector(postgres) did not find the connector")
+	}
+	postgresConnector, ok := connector.(scopedPostgresMatrixConnector)
+	if !ok {
+		t.Fatalf("scopedMatrixConnector(postgres) = %T, want scopedPostgresMatrixConnector", connector)
+	}
+	method, found := capabilityMethod(postgresConnector, "write")
+	if !found || method != "Write" {
+		t.Fatalf("scopedMatrixConnector(postgres) write method = %q, %t; want Write, true", method, found)
+	}
+	unsupported, err := methodDirectlyReturnsUnsupported(repoRootForCertificationTest(t), postgresConnector, method)
+	if err != nil {
+		t.Fatalf("inspect scoped PostgreSQL Write method: %v", err)
+	}
+	if !unsupported {
+		t.Fatal("scoped PostgreSQL Write does not retain the native unsupported stub")
+	}
+	matrix, err := buildCapabilityMatrixForConnectors(repoRootForCertificationTest(t), certificationConnectorAllowlist)
+	if err != nil {
+		t.Fatalf("buildCapabilityMatrixForConnectors() error = %v", err)
+	}
+	write, found := capabilityCellFor(matrix, "postgres", "capability:write")
+	if !found || write.Implemented {
+		t.Fatalf("scoped PostgreSQL write cell = %#v, %t; want implemented=false, found=true", write, found)
+	}
+}
+
 func TestCertificationScopedSourceResolutionIgnoresUnrelatedRuntimeLedgerEntry(t *testing.T) {
 	defsRoot := filepath.Join(repoRootForCertificationTest(t), "internal", "connectors", "defs")
 	raw, err := os.ReadFile(filepath.Join(defsRoot, engine.RuntimeOperationEndpointLedgerFile))
@@ -826,6 +862,133 @@ func TestCertificationScopedSourceResolutionIgnoresUnrelatedRuntimeLedgerEntry(t
 	}
 	if _, err := engine.Load(scoped, "github"); err != nil {
 		t.Fatalf("generator-scoped Load with malformed unrelated ledger entry: %v", err)
+	}
+}
+
+func TestCertificationCheckIgnoresMalformedNonAllowlistedRuntimeLedgerEntry(t *testing.T) {
+	root := certificationCommandWorkspace(t)
+	ledgerPath := filepath.Join(root, "internal", "connectors", "defs", engine.RuntimeOperationEndpointLedgerFile)
+	raw, err := os.ReadFile(ledgerPath)
+	if err != nil {
+		t.Fatalf("read runtime operation endpoint ledger: %v", err)
+	}
+	var entries map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &entries); err != nil {
+		t.Fatalf("parse runtime operation endpoint ledger: %v", err)
+	}
+	if _, found := entries["mysql"]; !found {
+		t.Fatal("runtime operation endpoint ledger does not contain mysql")
+	}
+	entries["mysql"] = json.RawMessage(`[{"unexpected":true}]`)
+	malformed, err := json.MarshalIndent(entries, "", "  ")
+	if err != nil {
+		t.Fatalf("encode malformed runtime operation endpoint ledger: %v", err)
+	}
+	malformed = append(malformed, '\n')
+	if err := os.Remove(ledgerPath); err != nil {
+		t.Fatalf("unlink copied runtime operation endpoint ledger: %v", err)
+	}
+	if err := os.WriteFile(ledgerPath, malformed, 0o644); err != nil {
+		t.Fatalf("write malformed runtime operation endpoint ledger: %v", err)
+	}
+
+	command := exec.Command("go", "run", "./cmd/connectorgen", "certification-matrix", "--check")
+	command.Dir = root
+	command.Env = append(os.Environ(), "GOCACHE="+t.TempDir())
+	var stdout, stderr bytes.Buffer
+	command.Stdout = &stdout
+	command.Stderr = &stderr
+	if err := command.Run(); err != nil {
+		t.Fatalf("certification-matrix --check with malformed mysql ledger: %v\nstdout:\n%s\nstderr:\n%s", err, stdout.String(), stderr.String())
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("certification-matrix --check stderr = %q, want empty", stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "certification shards are current:") {
+		t.Fatalf("certification-matrix --check stdout = %q, want current-shards confirmation", stdout.String())
+	}
+}
+
+func certificationCommandWorkspace(t *testing.T) string {
+	t.Helper()
+	root := repoRootForCertificationTest(t)
+	workspace := t.TempDir()
+	for _, relative := range []string{"go.mod", "go.sum", "cmd", "internal"} {
+		copyCertificationCommandPath(t, filepath.Join(root, relative), filepath.Join(workspace, relative))
+	}
+	return workspace
+}
+
+func copyCertificationCommandPath(t *testing.T, source, destination string) {
+	t.Helper()
+	info, err := os.Lstat(source)
+	if err != nil {
+		t.Fatalf("inspect command workspace source %q: %v", source, err)
+	}
+	if info.Mode()&os.ModeSymlink != 0 {
+		target, err := os.Readlink(source)
+		if err != nil {
+			t.Fatalf("read command workspace symlink %q: %v", source, err)
+		}
+		if err := os.Symlink(target, destination); err != nil {
+			t.Fatalf("copy command workspace symlink %q: %v", source, err)
+		}
+		return
+	}
+	if !info.IsDir() {
+		copyCertificationCommandFile(t, source, destination, info.Mode())
+		return
+	}
+	if err := filepath.WalkDir(source, func(path string, entry os.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		relative, err := filepath.Rel(source, path)
+		if err != nil {
+			return err
+		}
+		target := filepath.Join(destination, relative)
+		info, err := entry.Info()
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() {
+			return os.MkdirAll(target, info.Mode().Perm())
+		}
+		if entry.Type()&os.ModeSymlink != 0 {
+			link, err := os.Readlink(path)
+			if err != nil {
+				return err
+			}
+			return os.Symlink(link, target)
+		}
+		copyCertificationCommandFile(t, path, target, info.Mode())
+		return nil
+	}); err != nil {
+		t.Fatalf("copy command workspace tree %q: %v", source, err)
+	}
+}
+
+func copyCertificationCommandFile(t *testing.T, source, destination string, mode os.FileMode) {
+	t.Helper()
+	if err := os.Link(source, destination); err == nil {
+		return
+	}
+	in, err := os.Open(source)
+	if err != nil {
+		t.Fatalf("open command workspace source %q: %v", source, err)
+	}
+	defer in.Close()
+	out, err := os.OpenFile(destination, os.O_WRONLY|os.O_CREATE|os.O_EXCL, mode.Perm())
+	if err != nil {
+		t.Fatalf("create command workspace destination %q: %v", destination, err)
+	}
+	if _, err := io.Copy(out, in); err != nil {
+		out.Close()
+		t.Fatalf("copy command workspace file %q: %v", source, err)
+	}
+	if err := out.Close(); err != nil {
+		t.Fatalf("close command workspace destination %q: %v", destination, err)
 	}
 }
 

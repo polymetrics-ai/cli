@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -22,7 +23,6 @@ import (
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/conformance"
 	"polymetrics.ai/internal/connectors/engine"
-	"polymetrics.ai/internal/connectors/native/nativeset"
 )
 
 const (
@@ -193,6 +193,21 @@ type matrixConnectorSource struct {
 	bundle          *engine.Bundle
 	connector       connectors.Connector
 	conformance     *conformance.Report
+}
+
+// scopedPostgresMatrixConnector preserves PostgreSQL's native unsupported
+// Write stub for matrix introspection while sourcing every other method from
+// the bundle the scoped generator has already validated.
+type scopedPostgresMatrixConnector struct {
+	*engine.Connector
+}
+
+func (scopedPostgresMatrixConnector) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
+	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
+}
+
+func (scopedPostgresMatrixConnector) ReadCDC(context.Context, connectors.CDCReadRequest, func(connectors.CDCEvent) error) error {
+	return nil
 }
 
 // runCertificationMatrix implements the source-controlled generation and
@@ -992,13 +1007,16 @@ func matrixConnectorSourcesForNames(bundles []engine.Bundle, scope []string) ([]
 }
 
 func scopedMatrixConnector(name string, bundle *engine.Bundle) (connectors.Connector, bool) {
-	for _, factory := range nativeset.Factories() {
-		if factory.Name == name {
-			return factory.New(), true
-		}
-	}
 	if bundle == nil {
 		return nil, false
+	}
+	if name == "postgres" {
+		// Certification has already loaded this bundle through its scoped ledger
+		// filesystem. Calling the native factory here would reload defs.FS and
+		// make an unrelated, non-allowlisted ledger entry able to break this
+		// generator. Preserve PostgreSQL's native unsupported Write shape while
+		// keeping the source bundle that the scoped generator actually validated.
+		return scopedPostgresMatrixConnector{Connector: engine.New(*bundle, nil)}, true
 	}
 	return engine.New(*bundle, nil), true
 }
@@ -1201,10 +1219,18 @@ func methodDirectlyReturnsUnsupported(repoRoot string, connector connectors.Conn
 		typ = typ.Elem()
 	}
 	const modulePrefix = "polymetrics.ai/"
-	if !strings.HasPrefix(typ.PkgPath(), modulePrefix) {
-		return false, nil
+	var dir string
+	if typ.PkgPath() == "main" {
+		// The scoped PostgreSQL matrix view is generator-local. `go run` records
+		// its runtime type under main, unlike a test build which retains the
+		// module path, so resolve its real source directory explicitly.
+		dir = filepath.Join(repoRoot, "cmd", "connectorgen")
+	} else {
+		if !strings.HasPrefix(typ.PkgPath(), modulePrefix) {
+			return false, nil
+		}
+		dir = filepath.Join(repoRoot, strings.TrimPrefix(typ.PkgPath(), modulePrefix))
 	}
-	dir := filepath.Join(repoRoot, strings.TrimPrefix(typ.PkgPath(), modulePrefix))
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return false, fmt.Errorf("read runtime implementation source %q: %w", dir, err)
