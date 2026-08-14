@@ -19,6 +19,10 @@ func authVars(cfg connectors.RuntimeConfig) Vars {
 	return Vars{Config: cfg.Config, Secrets: cfg.Secrets}
 }
 
+// rateLimitConfigForSelectedAuth gives the resolver a hook-declared, non-secret
+// profile for the first auth spec that will be selected. This lets a custom
+// auth exchange be admitted before it sends its own request without changing
+// the configuration passed to the authenticator.
 func rateLimitConfigForSelectedAuth(cfg connectors.RuntimeConfig, specs []AuthSpec, h Hooks) connectors.RuntimeConfig {
 	profileHook, ok := h.(RateLimitAuthProfileHook)
 	if !ok || len(specs) == 0 {

@@ -99,8 +99,9 @@ func TestGitHubAppAuthRateAdmissionSharedBudgetAcrossProcesses(t *testing.T) {
 	if minted != 1 || blocked != 1 {
 		t.Fatalf("shared GitHub App token budget outcomes minted=%d blocked=%d, want one of each", minted, blocked)
 	}
-	if got := mints.Load(); got != 1 {
-		t.Fatalf("physical GitHub App token sends = %d, want 1 after the shared budget tightened", got)
+	physicalMints := mints.Load()
+	if physicalMints != 1 {
+		t.Fatalf("physical GitHub App token sends = %d, want 1 after the shared budget tightened", physicalMints)
 	}
 	routeMu.Lock()
 	gotRoute := route
@@ -108,6 +109,7 @@ func TestGitHubAppAuthRateAdmissionSharedBudgetAcrossProcesses(t *testing.T) {
 	if want := "/app/installations/" + scope + "/access_tokens"; gotRoute != want {
 		t.Fatalf("minted token route = %q, want %q", gotRoute, want)
 	}
+	t.Logf("shared GitHub App admission: processes=2 minted=%d blocked=%d physical_token_mints=%d route=%q", minted, blocked, physicalMints, gotRoute)
 }
 
 func TestGitHubAppAuthRateAdmissionHelperProcess(t *testing.T) {

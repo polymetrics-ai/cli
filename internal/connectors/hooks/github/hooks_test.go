@@ -135,6 +135,7 @@ func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testin
 	if unavailable.Reason != coordination.SharedRateLimitCoordinatorNotConfigured {
 		t.Fatalf("shared coordinator refusal reason = %q, want %q", unavailable.Reason, coordination.SharedRateLimitCoordinatorNotConfigured)
 	}
+	t.Logf("GitHub App shared admission: coordinator=not_configured physical_token_mints=%d refusal_type=SharedRateLimitUnavailableError reason=%q", recordingTransport.sends.Load(), unavailable.Reason)
 }
 
 func TestGitHubAppAuthRateAdmissionUnreachableSharedRefusesBeforeTokenSend(t *testing.T) {
@@ -161,6 +162,7 @@ func TestGitHubAppAuthRateAdmissionUnreachableSharedRefusesBeforeTokenSend(t *te
 	if unavailable.Reason != coordination.SharedRateLimitCoordinatorUnreachable {
 		t.Fatalf("shared coordinator refusal reason = %q, want %q", unavailable.Reason, coordination.SharedRateLimitCoordinatorUnreachable)
 	}
+	t.Logf("GitHub App shared admission: coordinator=unreachable physical_token_mints=%d refusal_type=SharedRateLimitUnavailableError reason=%q", recordingTransport.sends.Load(), unavailable.Reason)
 }
 
 func TestGitHubAppAuthRateAdmissionDoesNotRetryTokenMint(t *testing.T) {

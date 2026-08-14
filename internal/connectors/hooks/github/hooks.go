@@ -54,6 +54,8 @@ func (h *Hooks) Authenticator(context.Context, connectors.RuntimeConfig, engine.
 	return nil, errors.New("github_app authentication requires engine declared-route admission")
 }
 
+// RateLimitAuthProfile identifies GitHub App custom authentication for
+// rate-limit selection.
 func (h *Hooks) RateLimitAuthProfile(_ connectors.RuntimeConfig, spec engine.AuthSpec) (string, bool) {
 	if spec.Mode != "custom" || spec.Hook != "github" {
 		return "", false

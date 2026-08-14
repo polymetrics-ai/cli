@@ -68,8 +68,10 @@ type DeclaredRouteAuthHook interface {
 	AuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, requester DeclaredRouteRequester) (connsdk.Authenticator, error)
 }
 
-// RateLimitAuthProfileHook reports the declared rate-limit auth profile for a
-// matched authentication spec.
+// RateLimitAuthProfileHook reports the declared non-secret rate-limit profile
+// for a matched authentication spec. The engine asks before constructing the
+// authenticator, so network-capable custom auth is admitted before its own
+// request.
 type RateLimitAuthProfileHook interface {
 	RateLimitAuthProfile(cfg connectors.RuntimeConfig, spec AuthSpec) (string, bool)
 }
@@ -82,7 +84,8 @@ type declaredRouteRequester struct {
 // Header values are copied into a requester clone and never retained by the
 // runtime, resolver, or coordinator. The actual path is intentionally passed
 // to connsdk.Requester.Do: endpoint policy admission happens at that physical
-// send boundary, including after the #3754 resolved-path change.
+// send boundary, including after the #3754 resolved-path change. Automatic
+// retries are disabled so a token exchange does not repeat a quota call.
 func (r declaredRouteRequester) DoJSON(ctx context.Context, request DeclaredRouteRequest) (*connsdk.Response, error) {
 	if r.runtime == nil {
 		return nil, fmt.Errorf("auth declared route requester is unavailable")
