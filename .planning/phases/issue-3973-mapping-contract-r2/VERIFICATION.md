@@ -15,8 +15,8 @@
 - [x] `go test -race -timeout 20m ./internal/connectors/database -run 'Test(MappingContractV1|DatabaseWriteExecutor.*Tombstone)' -count=1`
 - [x] `gofmt -w` for changed Go files
 - [x] `go vet ./internal/connectors/database/... ./internal/synccontract/... ./internal/synctransport/...`
-- [ ] Scoped `make verify` gates listed in `AGENTS.md`
-- [ ] Inline `verify-work` and `code-review`, with any gap evidence recorded
+- [x] Scoped `make verify` gates listed in `AGENTS.md`
+- [x] Inline `verify-work` and `code-review`, with no gap evidence required
 
 ## Deliberately not applicable
 

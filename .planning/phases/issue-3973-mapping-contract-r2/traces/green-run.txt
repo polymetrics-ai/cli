@@ -8,3 +8,14 @@ ok  	polymetrics.ai/internal/connectors/database	1.443s
 
 $ go vet ./internal/connectors/database/... ./internal/synccontract/... ./internal/synctransport/...
 exit 0
+
+Revalidated after the final tombstone-count refusal test and rebase onto
+`1823a9169`:
+
+$ go test -timeout 20m ./internal/connectors/database/... ./internal/synccontract/... ./internal/synctransport/... -count=1
+ok  	polymetrics.ai/internal/connectors/database	8.766s
+ok  	polymetrics.ai/internal/synccontract	0.668s
+ok  	polymetrics.ai/internal/synctransport	1.047s
+
+$ go test -race -timeout 20m ./internal/connectors/database -run 'Test(MappingContractV1|DatabaseWritePlanSealsMapping|DatabaseWriteExecutor.*Tombstone)' -count=1
+ok  	polymetrics.ai/internal/connectors/database	1.467s

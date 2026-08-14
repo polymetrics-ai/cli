@@ -34,4 +34,3 @@
 2. Commit preserved Red test output.
 3. Commit green shared-contract implementation and focused tests.
 4. Commit only verification/review or gap fixes with their green proof.
-

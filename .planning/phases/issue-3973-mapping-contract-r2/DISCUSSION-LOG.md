@@ -16,4 +16,3 @@ gap settle every material decision. No product choice is reopened:
    GSD prompts are executed inline/manual and recorded in this phase directory.
 
 `scripts/gsd prompt discuss-phase 3973` was generated and executed inline.
-

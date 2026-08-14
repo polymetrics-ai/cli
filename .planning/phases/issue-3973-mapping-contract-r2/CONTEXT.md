@@ -27,4 +27,3 @@
 | Type mapping is lossless or rejected | fake | A source `int32` maps to a target `int64` and reverse-projects exactly; narrowing or a value outside its declared source representation is rejected before a target record is produced. A fake is necessary because this layer intentionally has no database engine. |
 | Tombstones are explicit and bounded | fake | A fake target keeps a seeded row when it is absent from an ordinary batch, then removes that row only after a validated explicit tombstone reaches `ApplyWriteBatch`; malformed input and mismatched counts cause zero session mutations. |
 | Typed durable receipt composes with the ledger | fake | The driver returns `DeliveryReceiptV1`; the result exposes it only after the fake ledger records its delivery ID. A ledger-store failure yields no acknowledgement. |
-
