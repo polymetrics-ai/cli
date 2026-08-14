@@ -1,7 +1,7 @@
 {
   "phase": "ci-toolchain-and-branchname-r1",
   "gsd_mode": "manual-inline-fallback",
-  "status": "planned",
+  "status": "verified",
   "skills": [
     "golang-how-to",
     "golang-continuous-integration",
@@ -13,5 +13,5 @@
     "red": "captured",
     "green": "go-1.25.13-validated-before-edit"
   },
-  "review": "pending"
+  "review": "manual-inline-deep-clean"
 }
