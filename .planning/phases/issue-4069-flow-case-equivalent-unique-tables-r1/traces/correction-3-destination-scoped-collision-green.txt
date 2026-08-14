@@ -1,8 +1,9 @@
 # #4069 correction 3 / 5 — destination-scoped collision GREEN
 
 Verified production commit: `a49ae952d52a6edf9786cc90e02825e2414f5b44`
-Delivery head: `5a4f3d23645d3046d02055273fedd9a8b9dd67d1` (GSD evidence only after
-the verified production commit; no Go source changed).
+GSD evidence checkpoint: `5a4f3d23645d3046d02055273fedd9a8b9dd67d1` (evidence
+only after the verified production commit; no Go source changed). Child-PR
+delivery is pending its owning executor, and #4071 remains unchanged.
 
 Focused false-positive and true-positive boundary:
 

@@ -2,11 +2,12 @@
 
 Refs #4069 and Refs #3897.
 
-Deliver the existing #4069 warehouse collision corrections on the current
-stacked draft #4071 without changing its base, state, review readiness, or
-merge status. Preserve generic SQL and the typed same-connection local
-collision boundary. Do not add credentials, connector-specific shared-code
-branches, transport registration, or provider work.
+Deliver the existing #4069 warehouse collision corrections as a child PR from
+`fm/cli-4071-collision-scope-fix-r1` onto
+`fix/4069-flow-case-equivalent-unique-tables-r1`. Preserve generic SQL and the
+typed same-connection local collision boundary. Do not change #4071 or add
+credentials, connector-specific shared-code branches, transport registration,
+or provider work.
 
 ## What Changed
 
@@ -26,7 +27,10 @@ connector name or warehouse literal is introduced in shared code.
 
 ## Testing
 
-Target binary: `5a4f3d23645d3046d02055273fedd9a8b9dd67d1`
+Verified production commit: `a49ae952d52a6edf9786cc90e02825e2414f5b44`
+
+Child PR actual head: pending publication by the delivery owner; at delivery
+end this body and `RUN-STATE.json` must name that PR's actual head SHA.
 
 Red then green:
 
@@ -61,6 +65,7 @@ The inline/manual single-worker fallback resolved and executed the required
 
 ## Delivery Boundary
 
-This PR remains draft and stacked on `feat/3897-flow-connection-scope-nm`.
-It is not retargeted, merged, closed, or marked ready for review. A fresh
-no-mistakes run and natural exact-head checks remain the next delivery gate.
+This child PR is not yet published. Its delivery owner must create it with base
+`fix/4069-flow-case-equivalent-unique-tables-r1` and record its actual head
+SHA at delivery end. PR #4071 must not be retargeted, merged, closed, body
+patched, or marked ready for review.

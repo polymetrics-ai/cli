@@ -185,9 +185,10 @@ are in `traces/correction-2-flow-manual-broad-verification.txt`.
 
 ## Correction 3 / 5 — destination-scoped legacy collision admission
 
-**Status:** local/GSD verification green on delivery head
+**Status:** local/GSD verification green at evidence checkpoint
 `5a4f3d23645d3046d02055273fedd9a8b9dd67d1` (its only addition after the
-verified production commit is this correction's GSD evidence).
+verified production commit is this correction's GSD evidence); child-PR
+delivery remains pending and #4071 is unchanged.
 
 - [x] Restored non-local ETL regression fails against exact source head
       `3b75f4a62fd8d743ec883a5b824164374f661857` with the current typed
@@ -206,5 +207,7 @@ verified production commit is this correction's GSD evidence).
       gates pass.
 - [x] Inline/manual `verify-work` and `code-review` record no acceptance gap
       or unresolved finding.
-- [x] `RUN-STATE.json` and PR #4071 body name delivery code head
-      `5a4f3d23645d3046d02055273fedd9a8b9dd67d1`.
+- [ ] The delivery owner must create the required child PR with base
+      `fix/4069-flow-case-equivalent-unique-tables-r1`, then record its actual
+      head SHA in `RUN-STATE.json` and the published child PR body without
+      changing #4071.
