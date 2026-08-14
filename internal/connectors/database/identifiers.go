@@ -119,9 +119,10 @@ func (r SourceRef) Identity() ConnectionIdentity { return r.identity }
 func (r SourceRef) Relation() RelationRef { return r.relation }
 
 // TargetRef pins the destination connection identity and logical relation. It
-// is not a managed-target owner: F2 derives that owner from the source-owned
-// warehouse artifact, then adds the in-database assertion/provisioning state
-// machine. This value does not claim that a target exists or has been asserted.
+// is not a managed-target owner: the managed-target kernel derives that owner
+// from source-owned warehouse identity and derives the physical relation from
+// the persisted stream ID. This value does not claim that a target exists or
+// has been asserted.
 type TargetRef struct {
 	identity ConnectionIdentity
 	relation RelationRef

@@ -195,6 +195,228 @@ func setupSyncModeAppWithCompatibility(t *testing.T, source connectors.Connector
 	return a, "records_to_warehouse"
 }
 
+func TestStreamIDIsPersistedAndSurvivesStreamRename(t *testing.T) {
+	source := newScriptedSyncSource("stream_identity", nil)
+	a, connectionName := setupSyncModeApp(t, source, "full_refresh_overwrite")
+	connection, ok := a.findConnection(connectionName)
+	if !ok {
+		t.Fatalf("connection %q was not created", connectionName)
+	}
+	stream := connection.Streams["records"]
+	if stream.StreamID == "" {
+		t.Fatal("created stream has no immutable stream ID")
+	}
+	streamID := stream.StreamID
+
+	for index := range a.state.Connections {
+		if a.state.Connections[index].Name != connectionName {
+			continue
+		}
+		stream = a.state.Connections[index].Streams["records"]
+		stream.StreamID = "" // simulate a pre-#3981 persisted stream.
+		a.state.Connections[index].Streams["records"] = stream
+		break
+	}
+	if err := a.save(); err != nil {
+		t.Fatal(err)
+	}
+
+	migrated, err := Open(a.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	connection, ok = migrated.findConnection(connectionName)
+	if !ok {
+		t.Fatalf("migrated connection %q was not found", connectionName)
+	}
+	stream = connection.Streams["records"]
+	if stream.StreamID == "" || stream.StreamID == streamID {
+		t.Fatalf("legacy stream ID migration = %q, want a newly persisted immutable ID", stream.StreamID)
+	}
+	migratedID := stream.StreamID
+
+	for index := range migrated.state.Connections {
+		if migrated.state.Connections[index].Name != connectionName {
+			continue
+		}
+		stream = migrated.state.Connections[index].Streams["records"]
+		delete(migrated.state.Connections[index].Streams, "records")
+		migrated.state.Connections[index].Streams["orders-renamed"] = stream
+		break
+	}
+	if err := migrated.save(); err != nil {
+		t.Fatal(err)
+	}
+
+	reopened, err := Open(migrated.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	connection, ok = reopened.findConnection(connectionName)
+	if !ok {
+		t.Fatalf("renamed connection %q was not found", connectionName)
+	}
+	if got := connection.Streams["orders-renamed"].StreamID; got != migratedID {
+		t.Fatalf("stream ID after rename = %q, want %q", got, migratedID)
+	}
+}
+
+func TestConnectionStreamIdentityDoesNotEscapeAppState(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("stream_identity_boundary", nil)
+	a, _ := setupSyncModeApp(t, source, "full_refresh_overwrite")
+	request := CreateConnectionRequest{
+		Name:        "stream_identity_boundary",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "source"},
+		Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
+		Streams: map[string]StreamConfig{
+			"records": {
+				SyncMode:         "full_refresh_overwrite",
+				CursorField:      "updated_at",
+				PrimaryKey:       []string{"id"},
+				DestinationTable: "stream_identity_boundary",
+			},
+		},
+	}
+
+	created, err := a.CreateConnection(ctx, request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := request.Streams["records"].StreamID; got != "" {
+		t.Fatalf("CreateConnection() assigned caller stream ID %q", got)
+	}
+	streamID := created.Streams["records"].StreamID
+	if streamID == "" {
+		t.Fatal("CreateConnection() returned an empty stream ID")
+	}
+
+	createdStream := created.Streams["records"]
+	createdStream.StreamID = "stream_mutated_return"
+	createdStream.PrimaryKey[0] = "mutated_return"
+	created.Streams["records"] = createdStream
+
+	listed := a.ListConnections()
+	for _, connection := range listed {
+		if connection.Name != request.Name {
+			continue
+		}
+		listedStream := connection.Streams["records"]
+		listedStream.StreamID = "stream_mutated_list"
+		listedStream.PrimaryKey[0] = "mutated_list"
+		connection.Streams["records"] = listedStream
+		break
+	}
+
+	if err := a.save(); err != nil {
+		t.Fatal(err)
+	}
+	reopened, err := Open(a.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	stored, ok := reopened.findConnection(request.Name)
+	if !ok {
+		t.Fatalf("connection %q was not persisted", request.Name)
+	}
+	if got := stored.Streams["records"].StreamID; got != streamID {
+		t.Fatalf("persisted stream ID = %q, want %q", got, streamID)
+	}
+	if got := stored.Streams["records"].PrimaryKey; len(got) != 1 || got[0] != "id" {
+		t.Fatalf("persisted stream primary key = %v, want [id]", got)
+	}
+}
+
+func TestCreateConnectionRejectsCallerAssignedStreamID(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("stream_identity_assigned_input", nil)
+	a, _ := setupSyncModeApp(t, source, "full_refresh_overwrite")
+	request := CreateConnectionRequest{
+		Name:        "stream_identity_assigned_input",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "source"},
+		Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
+		Streams: map[string]StreamConfig{
+			"records": {
+				StreamID:         "stream_caller_assigned",
+				SyncMode:         "full_refresh_overwrite",
+				CursorField:      "updated_at",
+				PrimaryKey:       []string{"id"},
+				DestinationTable: "stream_identity_assigned_input",
+			},
+		},
+	}
+
+	if _, err := a.CreateConnection(ctx, request); err == nil || !strings.Contains(err.Error(), "stream identity is assigned by the application") {
+		t.Fatalf("CreateConnection() error = %v, want caller-assigned stream identity refusal", err)
+	}
+	if got := request.Streams["records"].StreamID; got != "stream_caller_assigned" {
+		t.Fatalf("CreateConnection() changed caller stream ID = %q", got)
+	}
+	if _, found := a.findConnection(request.Name); found {
+		t.Fatal("CreateConnection() persisted a connection after rejecting its caller-assigned stream ID")
+	}
+}
+
+func TestCreateConnectionSaveFailureLeavesRequestStreamIdentityUnchanged(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("stream_identity_retry", nil)
+	a, _ := setupSyncModeApp(t, source, "full_refresh_overwrite")
+	request := CreateConnectionRequest{
+		Name:        "stream_identity_retry",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "source"},
+		Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
+		Streams: map[string]StreamConfig{
+			"records": {
+				SyncMode:         "full_refresh_overwrite",
+				CursorField:      "updated_at",
+				PrimaryKey:       []string{"id"},
+				DestinationTable: "stream_identity_retry",
+			},
+		},
+	}
+
+	a.store.Path = ""
+	if _, err := a.CreateConnection(ctx, request); err == nil {
+		t.Fatal("CreateConnection() error = nil, want persistence failure")
+	}
+	if got := request.Streams["records"].StreamID; got != "" {
+		t.Fatalf("failed CreateConnection() assigned caller stream ID %q", got)
+	}
+
+	retry, err := Open(a.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	retry.registry = a.registry
+	created, err := retry.CreateConnection(ctx, request)
+	if err != nil {
+		t.Fatalf("CreateConnection() retry error = %v", err)
+	}
+	if created.Streams["records"].StreamID == "" {
+		t.Fatal("CreateConnection() retry returned an empty stream ID")
+	}
+}
+
+func TestAllocateUniqueIdentityRetriesCollisions(t *testing.T) {
+	used := map[string]struct{}{"stream_duplicate": {}}
+	generated := []string{"stream_duplicate", "stream_unique"}
+	index := 0
+	identity, err := allocateUniqueIdentity("stream", used, func() (string, error) {
+		identity := generated[index]
+		index++
+		return identity, nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if identity != "stream_unique" || index != 2 {
+		t.Fatalf("allocateUniqueIdentity() = %q after %d attempts, want unique retry", identity, index)
+	}
+	if _, ok := used[identity]; !ok {
+		t.Fatalf("allocated identity %q was not reserved", identity)
+	}
+}
+
 func rowsByID(rows []connectors.Record) map[string]connectors.Record {
 	out := map[string]connectors.Record{}
 	for _, row := range rows {

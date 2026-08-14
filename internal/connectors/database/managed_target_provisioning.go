@@ -13,6 +13,9 @@ var (
 	// ErrManagedTargetOwnerMissing refuses a relation that has no readable typed
 	// ownership assertion; it is never adopted as a managed target.
 	ErrManagedTargetOwnerMissing = errors.New("database managed target ownership record is missing")
+	// ErrManagedTargetNamespaceOwnerMissing refuses an existing namespace until
+	// a durable namespace owner proves it belongs to this source connection.
+	ErrManagedTargetNamespaceOwnerMissing = errors.New("database managed target namespace ownership record is missing")
 	// ErrManagedTargetOwnerUnreadable refuses an owner record that cannot be
 	// proven. Its cause is deliberately not rendered because it may be driver
 	// supplied transport detail.
@@ -20,6 +23,12 @@ var (
 	// ErrManagedTargetOwnerForeign refuses a target asserted for another source
 	// owner, even if it has a familiar physical name.
 	ErrManagedTargetOwnerForeign = errors.New("database managed target is owned by another source")
+	// ErrManagedTargetNamespaceReplaced detects a same-named namespace whose
+	// native identity changed after the ownership record was made.
+	ErrManagedTargetNamespaceReplaced = errors.New("database managed target namespace native identity changed")
+	// ErrManagedTargetMoved refuses a plan or control record that resolves to a
+	// different observed destination database identity.
+	ErrManagedTargetMoved = errors.New("database managed target database identity changed")
 	// ErrManagedTargetNameCollision refuses a same-owner control assertion for a
 	// different target rather than reusing or overwriting it.
 	ErrManagedTargetNameCollision = errors.New("database managed target name collides with another target")
@@ -50,20 +59,66 @@ const (
 	ManagedTargetControlUnreadable
 )
 
+// ManagedTargetNamespaceOwnerState reports whether a driver could read the
+// namespace-level owner record. It is intentionally separate from a
+// per-relation control state: one owned namespace may hold many stream targets.
+type ManagedTargetNamespaceOwnerState uint8
+
+const (
+	ManagedTargetNamespaceOwnerUnknown ManagedTargetNamespaceOwnerState = iota
+	ManagedTargetNamespaceOwnerAbsent
+	ManagedTargetNamespaceOwnerPresent
+	ManagedTargetNamespaceOwnerUnreadable
+)
+
 // ManagedTargetObservation is a driver's non-mutating view of one derived
-// target. A present relation must carry observed native and schema identities;
-// a control record is supplied only when ControlState is Present.
+// target and its destination database. A present namespace carries its native
+// identity and owner state; a present relation carries native and schema
+// identities. Owner and control records are supplied only when their states are
+// Present.
 type ManagedTargetObservation struct {
-	NamespacePresent bool
-	RelationPresent  bool
-	ControlState     ManagedTargetControlState
-	ControlRecord    ManagedTargetControlRecord
-	NativeIdentity   NativeRelationIdentity
-	Schema           ManagedTargetSchema
+	TargetDatabase       TargetDatabaseIdentity
+	NamespacePresent     bool
+	NamespaceNative      NativeNamespaceIdentity
+	NamespaceOwnerState  ManagedTargetNamespaceOwnerState
+	NamespaceOwnerRecord ManagedTargetNamespaceOwnerRecord
+	RelationPresent      bool
+	ControlState         ManagedTargetControlState
+	ControlRecord        ManagedTargetControlRecord
+	NativeIdentity       NativeRelationIdentity
+	Schema               ManagedTargetSchema
 }
 
 func (o ManagedTargetObservation) validate() error {
+	if err := o.TargetDatabase.validate(); err != nil {
+		return ErrManagedTargetUnverifiable
+	}
 	if o.RelationPresent && !o.NamespacePresent {
+		return ErrManagedTargetUnverifiable
+	}
+	if o.NamespacePresent {
+		if err := o.NamespaceNative.validate(); err != nil {
+			return ErrManagedTargetUnverifiable
+		}
+		switch o.NamespaceOwnerState {
+		case ManagedTargetNamespaceOwnerAbsent:
+			if o.NamespaceOwnerRecord != (ManagedTargetNamespaceOwnerRecord{}) {
+				return ErrManagedTargetUnverifiable
+			}
+		case ManagedTargetNamespaceOwnerPresent:
+			if err := o.NamespaceOwnerRecord.validate(); err != nil {
+				return ErrManagedTargetUnverifiable
+			}
+		case ManagedTargetNamespaceOwnerUnreadable:
+			if o.NamespaceOwnerRecord != (ManagedTargetNamespaceOwnerRecord{}) {
+				return ErrManagedTargetUnverifiable
+			}
+		default:
+			return ErrManagedTargetUnverifiable
+		}
+	} else if o.NamespaceNative != (NativeNamespaceIdentity{}) ||
+		o.NamespaceOwnerRecord != (ManagedTargetNamespaceOwnerRecord{}) ||
+		(o.NamespaceOwnerState != ManagedTargetNamespaceOwnerUnknown && o.NamespaceOwnerState != ManagedTargetNamespaceOwnerAbsent) {
 		return ErrManagedTargetUnverifiable
 	}
 	if !o.RelationPresent && (o.NativeIdentity != (NativeRelationIdentity{}) || o.Schema != (ManagedTargetSchema{})) {
@@ -95,18 +150,19 @@ func (o ManagedTargetObservation) validate() error {
 
 // ManagedTargetProvisioningPlan is the immutable, typed authority for a
 // create-or-assert operation. It cannot carry SQL, credentials, a driver,
-// arbitrary target names, or an unasserted owner.
+// arbitrary target names, or an unasserted owner or destination identity.
 type ManagedTargetProvisioningPlan struct {
-	owner  TargetOwner
-	target ManagedTargetRef
-	schema ManagedTargetSchema
+	owner    TargetOwner
+	target   ManagedTargetRef
+	targetDB TargetDatabaseIdentity
+	schema   ManagedTargetSchema
 }
 
 // NewManagedTargetProvisioningPlan validates a mutation authority before any
 // driver is called. The supplied owner must be exactly the owner from which the
 // target was derived.
-func NewManagedTargetProvisioningPlan(owner TargetOwner, target ManagedTargetRef, schema ManagedTargetSchema) (ManagedTargetProvisioningPlan, error) {
-	plan := ManagedTargetProvisioningPlan{owner: owner, target: target, schema: schema}
+func NewManagedTargetProvisioningPlan(owner TargetOwner, target ManagedTargetRef, targetDB TargetDatabaseIdentity, schema ManagedTargetSchema) (ManagedTargetProvisioningPlan, error) {
+	plan := ManagedTargetProvisioningPlan{owner: owner, target: target, targetDB: targetDB, schema: schema}
 	if err := plan.validate(); err != nil {
 		return ManagedTargetProvisioningPlan{}, ErrManagedTargetPlanInvalid
 	}
@@ -114,7 +170,7 @@ func NewManagedTargetProvisioningPlan(owner TargetOwner, target ManagedTargetRef
 }
 
 func (p ManagedTargetProvisioningPlan) validate() error {
-	if err := p.owner.validate(); err != nil || p.target.validate() != nil || !p.owner.sameIdentity(p.target.owner) || p.schema.validate() != nil {
+	if err := p.owner.validate(); err != nil || p.target.validate() != nil || !p.owner.sameIdentity(p.target.owner) || p.targetDB.validate() != nil || p.schema.validate() != nil {
 		return ErrManagedTargetPlanInvalid
 	}
 	return nil
@@ -126,11 +182,15 @@ func (p ManagedTargetProvisioningPlan) Owner() TargetOwner { return p.owner }
 // Target returns the derived target address this plan alone may create/assert.
 func (p ManagedTargetProvisioningPlan) Target() ManagedTargetRef { return p.target }
 
+// TargetDatabase returns the destination database identity this plan may create
+// or assert. It never participates in a physical name.
+func (p ManagedTargetProvisioningPlan) TargetDatabase() TargetDatabaseIdentity { return p.targetDB }
+
 // Schema returns the schema contract this plan asserts. A mismatch is refused,
 // not repaired or evolved.
 func (p ManagedTargetProvisioningPlan) Schema() ManagedTargetSchema { return p.schema }
 
-// ManagedTargetLock is a target-scoped driver lock acquired before every
+// ManagedTargetLock is a namespace-scoped driver lock acquired before every
 // observation and held through the final assertion. A native implementation
 // uses the database's own cross-process coordination primitive; this contract
 // never substitutes an unscoped process mutex for that proof.
@@ -139,7 +199,7 @@ type ManagedTargetLock interface {
 }
 
 // ManagedTargetProvisioningDriver is the small driver-neutral port used by the
-// shared contract. A native driver owns target-scoped cross-process locking,
+// shared contract. A native driver owns namespace-scoped cross-process locking,
 // database-specific DDL, and durable control-record storage later; it receives
 // no generic SQL from here. CreateManagedTarget receives both the typed plan
 // and its asserted owner, and callers must re-observe before a create is
@@ -156,7 +216,7 @@ type managedTargetGate struct {
 }
 
 // ManagedTargetProvisioner serializes create-or-assert per derived physical
-// target and enforces the fail-closed truth table. It stores no credential,
+// namespace and enforces the fail-closed truth table. It stores no credential,
 // display name, or driver observation after a call returns.
 type ManagedTargetProvisioner struct {
 	driver ManagedTargetProvisioningDriver
@@ -175,9 +235,10 @@ func NewManagedTargetProvisioner(driver ManagedTargetProvisioningDriver) (*Manag
 	return &ManagedTargetProvisioner{driver: driver, gates: make(map[string]*managedTargetGate)}, nil
 }
 
-// CreateOrAssert creates a target only from the absent-target/absent-control
-// state. Every other state is asserted exactly or refused. It has no adoption,
-// reconciliation, replacement, or schema-evolution behavior.
+// CreateOrAssert creates only for a missing namespace with no control record,
+// or for an exactly owned namespace whose requested relation and control record
+// are both absent. Every other state is asserted exactly or refused. It has no
+// adoption, reconciliation, replacement, or schema-evolution behavior.
 func (p *ManagedTargetProvisioner) CreateOrAssert(ctx context.Context, plan ManagedTargetProvisioningPlan) (ManagedTargetControlRecord, error) {
 	if ctx == nil {
 		return ManagedTargetControlRecord{}, ErrManagedTargetPlanInvalid
@@ -287,10 +348,39 @@ func (p *ManagedTargetProvisioner) acquireDriverLock(ctx context.Context, target
 }
 
 func assessManagedTargetObservation(plan ManagedTargetProvisioningPlan, observation ManagedTargetObservation) (bool, ManagedTargetControlRecord, error) {
-	if observation.ControlState == ManagedTargetControlUnreadable {
+	if observation.NamespaceOwnerState == ManagedTargetNamespaceOwnerUnreadable || observation.ControlState == ManagedTargetControlUnreadable {
 		return false, ManagedTargetControlRecord{}, ErrManagedTargetOwnerUnreadable
 	}
 	if err := observation.validate(); err != nil {
+		return false, ManagedTargetControlRecord{}, ErrManagedTargetUnverifiable
+	}
+	if !observation.TargetDatabase.sameIdentity(plan.targetDB) {
+		return false, ManagedTargetControlRecord{}, ErrManagedTargetMoved
+	}
+	if !observation.NamespacePresent {
+		if observation.ControlState == ManagedTargetControlPresent {
+			return false, ManagedTargetControlRecord{}, ErrManagedTargetOrphaned
+		}
+		return true, ManagedTargetControlRecord{}, nil
+	}
+	switch observation.NamespaceOwnerState {
+	case ManagedTargetNamespaceOwnerAbsent:
+		return false, ManagedTargetControlRecord{}, ErrManagedTargetNamespaceOwnerMissing
+	case ManagedTargetNamespaceOwnerPresent:
+		namespaceOwner := observation.NamespaceOwnerRecord
+		if !namespaceOwner.owner.sameIdentity(plan.owner) {
+			return false, ManagedTargetControlRecord{}, ErrManagedTargetOwnerForeign
+		}
+		if !namespaceOwner.targetDB.sameIdentity(plan.targetDB) {
+			return false, ManagedTargetControlRecord{}, ErrManagedTargetMoved
+		}
+		if namespaceOwner.namespace != plan.target.namespace {
+			return false, ManagedTargetControlRecord{}, ErrManagedTargetNameCollision
+		}
+		if !namespaceOwner.native.sameIdentity(observation.NamespaceNative) {
+			return false, ManagedTargetControlRecord{}, ErrManagedTargetNamespaceReplaced
+		}
+	default:
 		return false, ManagedTargetControlRecord{}, ErrManagedTargetUnverifiable
 	}
 	if !observation.RelationPresent {
@@ -298,9 +388,6 @@ func assessManagedTargetObservation(plan ManagedTargetProvisioningPlan, observat
 		case ManagedTargetControlPresent:
 			return false, ManagedTargetControlRecord{}, ErrManagedTargetOrphaned
 		case ManagedTargetControlAbsent:
-			if observation.NamespacePresent {
-				return false, ManagedTargetControlRecord{}, ErrManagedTargetNameCollision
-			}
 			return true, ManagedTargetControlRecord{}, nil
 		}
 		return false, ManagedTargetControlRecord{}, ErrManagedTargetUnverifiable
@@ -314,6 +401,9 @@ func assessManagedTargetObservation(plan ManagedTargetProvisioningPlan, observat
 	}
 	if !record.target.sameTarget(plan.target) {
 		return false, ManagedTargetControlRecord{}, ErrManagedTargetNameCollision
+	}
+	if !record.targetDB.sameIdentity(plan.targetDB) {
+		return false, ManagedTargetControlRecord{}, ErrManagedTargetMoved
 	}
 	if !record.schema.sameSchema(plan.schema) || !observation.Schema.sameSchema(record.schema) {
 		return false, ManagedTargetControlRecord{}, ErrManagedTargetSchemaDrift
