@@ -76,6 +76,29 @@ history rewrite. Draft child PR #4065 targets exactly
 No credentialed configuration, raw DSN, raw SQL surface, or generic database
 write capability is introduced by this plan.
 
+## 2026-08-14 live-proof resumption
+
+- The child is now merged onto `integration/4015-mvp-flat-r1` at
+  `fbd06e7d7c5c0632182e98cbb3a223ba25b19883`; its draft PR #4065 already
+  targets that integration branch. The base's Docker/Podman dbtest contract
+  and PostgreSQL CDC containment fence are authoritative.
+- The only live test target is PostgreSQL through the explicit local Docker
+  Unix socket. The test must assert live catalog metadata, a complete bounded
+  full read, a cursor-advanced read, and the exact current behavior of absent,
+  missing, nullable, and connection-level `cursor_field` configuration.
+- `cursor_field` remains an optional connection-level field in this issue.
+  Making it user-supplied and mandatory for a mode that needs it is explicitly
+  deferred to the captain's separate cursor-contract issue; this slice records
+  observations instead of changing that product contract.
+- PostgreSQL logical-replication CDC remains deliberately fail-closed per the
+  merged base's capability fence. The historical CDC integration test's
+  unconditional skip is not live-read evidence and must not be re-enabled by
+  this source-read/catalog child.
+- The legacy scalar reader is not claimed to be #3858's tuple/checkpoint
+  executor. Its live behavior is made observable here; a declaration-selected
+  PostgreSQL #3858 native hook remains a separately reviewable incremental
+  execution slice.
+
 The implementation scan found only these static PostgreSQL shapes: the
 existing `mode=fixture` catalog and test-only schema-creation/oracle SQL. Live
 `Catalog()` now projects one `TypedCatalog()` result and has no hard-coded

@@ -1,0 +1,14 @@
+# RED — 2026-08-14
+
+```text
+# polymetrics.ai/internal/connectors/native/postgres_test [polymetrics.ai/internal/connectors/native/postgres.test]
+internal/connectors/native/postgres/dynamic_catalog_integration_test.go:56:18: undefined: newPostgresCatalogContainerHarness
+internal/connectors/native/postgres/dynamic_catalog_integration_test.go:84:2: undefined: assertPostgresLiveReads
+FAIL	polymetrics.ai/internal/connectors/native/postgres [build failed]
+FAIL
+```
+
+The regression intentionally required the base-owned explicit Docker-or-Podman
+constructor and observable live source-read assertions before the helper and
+assertions existed. It fails before any runtime connection or credential is
+read.

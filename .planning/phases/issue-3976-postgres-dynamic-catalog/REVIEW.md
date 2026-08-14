@@ -44,6 +44,25 @@ active worker, so a reviewer role was not spawned.
 ## Finding disposition
 
 No actionable correctness, security, resource-lifecycle, scope, or code-quality
-finding was identified. The only limitation is the explicitly unverified live
-container proof recorded in `UAT.md`; it is an environment hold, not a code
-review finding or a claimed pass.
+finding was identified in the original catalog slice.
+
+## Live-proof resumption review — 2026-08-14
+
+**Scope:** `internal/connectors/native/postgres/dynamic_catalog_integration_test.go`
+and the #3976 GSD evidence only.
+
+- The test now follows the base-owned explicit Docker-or-Podman dbtest
+  configuration and pins the required Colima capacity probe. It never reads a
+  global container-runtime default.
+- Runtime configuration errors are replaced with stable guidance, so malformed
+  endpoint input is not reflected into a test failure.
+- The live assertions inspect returned catalog/record data, not process exit
+  status. They prove the full and cursor-advanced row sets and explicitly log
+  the four deferred cursor-contract behaviors.
+- Generated test password input stays an in-memory test name under a trust
+  server and is never logged. No production credential, raw query surface,
+  write path, or CDC capability changed.
+- The unconditional historical CDC skip was executed and is correctly recorded
+  as an exclusion, not silently promoted to pass.
+
+**Findings:** critical 0, warning 0, info 0.

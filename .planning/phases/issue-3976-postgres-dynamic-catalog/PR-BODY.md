@@ -12,13 +12,14 @@ Refs #3972
 
 ## Stacked PR
 
-- Parent issue: #3972
-- Parent branch: `feat/3972-postgres-parity`
-- PR base branch: `feat/3972-postgres-parity`
+- Parent issue: #4097
+- Parent branch: `integration/4015-mvp-flat-r1`
+- PR base branch: `integration/4015-mvp-flat-r1`
 - Sub-issue: #3976
 - Child PR: #4065
-- Parent synchronization: safely merged #4064 parent head `c2e013324` in
-  `25bda3e73`; no force push or discarded work
+- Integration synchronization: safely merged base head
+  `fbd06e7d7c5c0632182e98cbb3a223ba25b19883` in `0df3d5d4d`; no force push
+  or discarded work
 
 ## Parent Orchestration
 
@@ -45,19 +46,21 @@ Refs #3972
 
 ## Verification
 
-RED is committed in `db7e06d36`; GREEN is `24d0055f5`. Focused PostgreSQL,
+RED is committed in `db7e06d36`; catalog GREEN is `24d0055f5`; live-read
+RED/GREEN is recorded in `traces/live-reads-{red,green}.txt`. Focused PostgreSQL,
 database-foundation, engine, and CLI tests, the PostgreSQL race suite, `go vet
 ./...`, build, lint, docs, smoke, contract, connector-generation/boundary, and
-release workflow gates are green. The opt-in real Podman test compiles and
-skips visibly because no direct local endpoint or explicit integration opt-in
-is configured; this PR does not claim that live proof until one is available.
-No-mistakes is pending its final evidence-only commit.
+release workflow gates are green. The opt-in real Docker proof through Colima
+discovered the seeded catalog, returned full IDs `1,2,3,4,5`, and returned only
+`3,4,5` after cursor `10`; its exact command and output are posted on #3976.
+The historical CDC integration test remains an intentional fail-closed skip,
+not claimed coverage. No-mistakes is pending the final evidence commit.
 
 ## Automated Review
 
 - Primary route: pending until the child is non-draft and locally green
 - Fallback route: Copilot only if Claude is unavailable and coverage blocks progress
-- PR base/default branch: `feat/3972-postgres-parity` / `main`
+- PR base/default branch: `integration/4015-mvp-flat-r1` / `main`
 - Latest reviewed commit: pending
 - Reviewed range: pending
 - Coverage route: pending

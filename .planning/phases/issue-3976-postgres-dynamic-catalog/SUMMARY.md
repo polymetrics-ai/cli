@@ -1,7 +1,7 @@
 ---
 phase: issue-3976-postgres-dynamic-catalog
 issue: 3976
-status: partial
+status: passed-with-explicit-follow-up-boundary
 coverage:
   - id: D1
     description: The shipping PostgreSQL catalog path derives ordered base relations, columns, nullability, and primary/unique key membership from pg_catalog through the #4034 typed model.
@@ -38,9 +38,8 @@ coverage:
     verification:
       - kind: integration
         ref: TestPostgresDynamicTypedCatalogUsesLiveMetadata with independent information_schema oracle
-        status: unknown
-    human_judgment: true
-    rationale: The live dbtest harness is implemented and invokes cleanly, but this workspace has no explicit direct local Podman endpoint or opt-in; a skipped test cannot establish the live claim.
+        status: pass
+    human_judgment: false
 ---
 
 # Summary — Issue #3976
@@ -55,17 +54,25 @@ nullability, keys, and supported type details.
 
 - RED commit: `db7e06d36`.
 - GREEN implementation commit: `24d0055f5`.
-- Parent synchronization: `25bda3e73` safely merges #4064's parent head
-  `c2e013324`; no history was forced or discarded.
-- Draft stacked child PR: #4065, base `feat/3972-postgres-parity`.
+- Integration synchronization: `0df3d5d4d` safely merges
+  `integration/4015-mvp-flat-r1` at
+  `fbd06e7d7c5c0632182e98cbb3a223ba25b19883`; no history was forced or
+  discarded.
+- Draft child PR: #4065, base `integration/4015-mvp-flat-r1`.
 
 ## Verification result
 
-Automated local coverage is green. The optional live PostgreSQL proof is
-deliberately `unknown` rather than passed: the tagged test skipped before
-container startup because this environment provides neither
-`POLYMETRICS_DATABASE_INTEGRATION=1` nor an explicit
-`POLYMETRICS_PODMAN_ENDPOINT`. `UAT.md` records that limited result.
+Automated local coverage and the opt-in live PostgreSQL source proof are
+green. Through Docker's explicit Colima Unix socket, the dbtest harness
+discovered seeded catalog metadata, returned all five full-read rows, and
+returned only IDs 3–5 after cursor value 10. It also records current absent,
+missing, nullable, and connection-level cursor-field behavior in
+`traces/live-reads-green.txt`. The historical logical-replication test stays
+intentionally skipped/fail-closed and is not claimed as live CDC coverage.
+
+The evidence does not claim that the legacy scalar reader is #3858's
+declaration-selected tuple/checkpoint executor. That execution boundary remains
+an explicit follow-up rather than being hidden by a successful legacy read.
 
 ## Boundary audit
 

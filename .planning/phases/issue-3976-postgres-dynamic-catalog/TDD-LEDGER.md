@@ -10,6 +10,8 @@
 | R6 | Runtime connection | #4034's typed catalog foundation remains descriptor-only while production PostgreSQL `Catalog()` uses a disconnected static/coarse model. | The native runtime calls the typed adapter and any legacy projection derives from its result. |
 | R7 | Scope / safety | System schemas, views, arbitrary SQL, target DDL/write, Parquet materialization, or CDC execution leak into source discovery. | Configured-schema base-table reads only; ownership tests/changed-path audit prove downstream boundaries stayed untouched. |
 | R8 | Resource/cancellation | Queries ignore cancellation, leak rows/pools, or concatenate configured identity into SQL. | `QueryContext`, parameter binding, close/error paths, cancellation tests, and race/vet/lint proof pass. |
+| R9 | Live source reads | A container test can exit successfully without proving catalog, full-read, or cursor-advanced records. | A real PostgreSQL harness seeds distinct rows and asserts catalog details, full primary keys, and the post-cursor primary keys/values. |
+| R10 | Cursor contract observation | An absent, nonexistent, nullable, or connection-level `cursor_field` silently produces an undocumented claim. | The live proof logs and asserts each present behavior without changing the separately deferred product contract. |
 
 ## RED command target
 
@@ -51,3 +53,16 @@ GREEN proof so far:
   and every individually invoked repository gate in `VERIFICATION.md` passed.
 
 Broader checks and their outcomes belong in `VERIFICATION.md`.
+
+## Live-proof resumption red/green
+
+**Red:** `dynamic_catalog_integration_test.go` is extended first to require
+the base-owned explicit Docker/Podman harness constructor and live row
+assertions. Before that constructor is supplied, the databaseintegration
+package must fail to compile; the exact output is retained as
+`traces/live-reads-red.txt`.
+
+**Green:** after adding only the focused test-harness wiring and assertions,
+run the pinned Docker command against Colima. The test must log real catalog,
+full, incremental, and cursor-boundary records; its exact output is retained
+as `traces/live-reads-green.txt` and posted verbatim to issue #3976.

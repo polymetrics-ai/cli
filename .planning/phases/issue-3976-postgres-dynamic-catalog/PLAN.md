@@ -134,3 +134,33 @@ shows a user-facing PostgreSQL catalog output change.
 - Draft child PR #4065 targets exactly `feat/3972-postgres-parity` and uses
   `Refs #3976` plus `Refs #3972`. It does not target `main` and is the only
   #3976 child PR.
+
+## Live-proof resumption slice
+
+The current branch is resumed on `integration/4015-mvp-flat-r1` at
+`fbd06e7d7c5c0632182e98cbb3a223ba25b19883`; PR #4065 now targets that exact
+integration branch. This focused GSD/TDD slice makes the existing PostgreSQL
+source/catalog behavior executable through the base-owned Docker-or-Podman
+`dbtest` harness without widening connector ownership.
+
+1. **RED:** add an opt-in PostgreSQL Docker-harness assertion that requires an
+   explicit runtime/Unix endpoint and observes seeded catalog, full-read, and
+   cursor-read rows. Capture the compile/test failure caused by the pre-base
+   Podman-only harness wiring in a trace.
+2. **GREEN:** adopt the base-owned `POLYMETRICS_CONTAINER_RUNTIME` /
+   `POLYMETRICS_CONTAINER_ENDPOINT` contract, including the pinned Colima
+   capacity probe, then seed deterministic rows and assert returned primary
+   keys and values rather than process status.
+3. **OBSERVE:** run the same live test for no `cursor_field`, a nonexistent
+   cursor column, nullable cursor rows, and two relations with different
+   cursor columns. Log the real outcomes without changing the captain-deferred
+   connection-level cursor product contract.
+4. **EXCLUSION:** do not re-enable the historical logical-replication CDC
+   test. The merged capability fence intentionally returns unsupported and the
+   historical test skips unconditionally; CDC execution is owned elsewhere.
+
+The inline GSD fallback remains required (single canonical worker and no
+numbered roadmap phase). The required skills for this resumption also include
+`golang-concurrency` for context-bound harness cleanup. CLI/docs/website
+parity is not applicable because no command, flag, help, or user-facing
+connector definition changes.

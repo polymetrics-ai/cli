@@ -1,7 +1,7 @@
 ---
 phase: issue-3976-postgres-dynamic-catalog
 issue: 3976
-status: partial
+status: passed-with-explicit-cdc-exclusion
 source: manual-inline verify-work fallback
 ---
 
@@ -20,16 +20,25 @@ canonical delivery contract permits one active worker.
 - **D3 — one typed runtime source of truth:** passed through the compatibility
   projection unit test and connector-boundary gate.
 
-## Conditional live deliverable
+## Live deliverable
 
-- **D4 — two live schemas against an independent server oracle:** not passed.
-  The `databaseintegration` test was invoked and skipped before startup because
-  no explicit local Podman API endpoint or opt-in exists in this workspace.
-  This is recorded as `unknown`, not a false success. The test is ready to run
-  with the project-required direct local endpoint and opt-in.
+- **D4 — live PostgreSQL catalog and source reads:** passed through Docker's
+  explicit Colima Unix socket. The harness independently verified two
+  PostgreSQL schema fixtures, discovered the seeded read table, returned the
+  full IDs `1,2,3,4,5`, and returned only `3,4,5` after cursor `10`.
+- **D5 — current cursor-field semantics:** observed live. No configured
+  `cursor_field` ignores a stored cursor and returns the full set; an unknown
+  column is rejected; a null cursor row is omitted by `>` filtering; and the
+  connection-level `sequence` setting cannot serve a table whose cursor is
+  `alternate_cursor`.
+- **CDC:** the historical logical-replication integration test was invoked and
+  skipped by its unconditional source fence. This is deliberate fail-closed
+  behavior, not a passed integration result and not scope for this source-read
+  child.
 
 ## Result
 
-Three automated deliverables passed; one optional live-infrastructure
-deliverable remains unverified. No user-facing manual interaction is applicable
-to this source-only runtime boundary.
+The dynamic catalog and legacy direct-read deliverables changed in this branch
+are proven locally, including the live dbtest path. CDC execution and the
+declaration-selected #3858 tuple/checkpoint path remain separately owned and
+explicitly unproved.

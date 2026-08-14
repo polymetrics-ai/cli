@@ -43,6 +43,20 @@
 - [ ] no-mistakes child pipeline without `--yes`, maximum five fresh correction
       loops
 
+## Live-proof resumption
+
+- [x] RED trace proves the new live full/cursor test cannot use the obsolete
+      Podman-only harness wiring.
+- [x] PostgreSQL dbtest uses an explicit `docker` or `podman` direct Unix
+      endpoint and a pinned capacity probe, never a global runtime default.
+- [x] A real catalog discovery reports the seeded table's native/logical
+      metadata; a full read returns all asserted rows; a cursor-advanced read
+      returns only its asserted rows.
+- [x] The live proof records the actual no-cursor, nonexistent-column,
+      nullable-cursor, and two-table connection-level cursor outcomes.
+- [x] The historical CDC integration test is recorded as intentionally
+      fail-closed/skipped, not treated as live success or re-enabled.
+
 ## Delivery holds
 
 - [x] Correctly stacked draft child PR #4065 exists with `Refs #3976` and
