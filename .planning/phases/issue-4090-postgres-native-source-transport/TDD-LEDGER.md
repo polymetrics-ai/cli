@@ -22,3 +22,8 @@ the production executor is added.
 **Captured RED:** `go test -timeout 20m -count=1
 ./internal/connectors/native/postgres -run 'TestPostgres.*Transport'` failed
 with `PostgreSQL definition has no declared source transport`.
+
+**Captured RED (registration):** the same focused package test then failed
+to build with `undefined: RegisterSnapshotTransportSource`, proving that a
+declaration without the PostgreSQL-owned registry adapter cannot resolve a
+source executor.

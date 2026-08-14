@@ -1,5 +1,14 @@
 --- FAIL: TestPostgresDefinitionDeclaresBoundedSnapshotTransportSource (0.01s)
     transport_source_test.go:18: PostgreSQL definition has no declared source transport
 FAIL
+
+Registration red — before the PostgreSQL-owned registry adapter:
+
+```text
+# polymetrics.ai/internal/connectors/native/postgres [polymetrics.ai/internal/connectors/native/postgres.test]
+internal/connectors/native/postgres/transport_source_test.go:102:12: undefined: RegisterSnapshotTransportSource
+FAIL	polymetrics.ai/internal/connectors/native/postgres [build failed]
+FAIL
+```
 FAIL	polymetrics.ai/internal/connectors/native/postgres	0.740s
 FAIL
