@@ -5,13 +5,12 @@ type: tdd
 wave: 1
 depends_on: []
 files_modified:
-  - internal/connectors/connectors.go
   - internal/connectors/engine/read.go
   - internal/connectors/engine/auth.go
   - internal/connectors/engine/hooks.go
   - internal/connectors/hooks/github/hooks.go
-  - internal/connectors/engine/github_app_auth_admission_test.go
   - internal/connectors/hooks/github/hooks_test.go
+  - internal/connectors/hooks/github/github_app_rate_admission_integration_test.go
   - .planning/phases/issue-4072-github-app-auth-admission-r1/TDD-LEDGER.md
 autonomous: true
 requirements:
@@ -26,8 +25,10 @@ Purpose: Close the pre-runtime network bypass that lets a GitHub App token POST
 reach a provider before `require_shared` can refuse a missing/lost coordinator.
 
 Output: A narrow engine-owned custom-auth request capability, wired to the
-existing declared GitHub REST policy, with deterministic local RED/GREEN
-evidence and no secret-bearing coordination data.
+existing declared GitHub REST policy. Keep #3754's physical-route Requester
+admission boundary, add deterministic local RED/GREEN evidence, and prove the
+real shared coordinator tightens the budget across two test processes without
+secret-bearing coordination data.
 </objective>
 
 <context>
@@ -44,20 +45,19 @@ evidence and no secret-bearing coordination data.
 
 <feature>
   <name>GitHub App token exchange uses declared shared rate admission</name>
-  <files>internal/connectors/connectors.go, internal/connectors/engine/read.go, internal/connectors/engine/auth.go, internal/connectors/engine/hooks.go, internal/connectors/hooks/github/hooks.go, internal/connectors/engine/github_app_auth_admission_test.go, internal/connectors/hooks/github/hooks_test.go</files>
+  <files>internal/connectors/engine/read.go, internal/connectors/engine/auth.go, internal/connectors/engine/hooks.go, internal/connectors/hooks/github/hooks.go, internal/connectors/hooks/github/hooks_test.go, internal/connectors/hooks/github/github_app_rate_admission_integration_test.go</files>
   <behavior>
     Cases:
     - GitHub App plus `require_shared` and no coordinator: `NewRuntime` returns
-      `*connsdk.RateBudgetRefusalError` with reason
-      `shared_coordinator_unavailable`; recording transport receives zero token
-      POSTs.
-    - A coordinator that becomes unavailable: same typed refusal and zero sends.
-    - A granting fake coordinator: exactly one `Decide`, one physical
-      `POST /app/installations/<escaped-id>/access_tokens`, and one `Finish`.
-    - The request selects declaration `POST
-      /app/installations/{installation_id}/access_tokens`; JWT/key/minted-token
-      material is absent from reservation keys, observations, errors, and test
-      diagnostic evidence.
+      `*coordination.SharedRateLimitUnavailableError`; recording transport
+      receives zero token POSTs.
+    - An unreachable shared registry produces the same typed refusal and zero sends.
+    - Two processes sharing a real Dragonfly one-request budget admit one
+      physical `POST /app/installations/<escaped-id>/access_tokens` and block
+      the other process, proving the shared state tightened.
+    - The hook supplies the declaration path, but #3754 admits the actual
+      escaped installation path at the Requester send boundary; JWT/key/token
+      material is absent from coordination keys, errors, and test diagnostics.
     - Existing bearer auth, declared REST requests, process-local admission,
       GitHub write-hook admission, and `POST /graphql` exclusion retain their
       behavior.
@@ -89,12 +89,12 @@ evidence and no secret-bearing coordination data.
     </read_first>
     <action>
       Add focused local tests that load the real GitHub bundle, select
-      `github_app`, set `RateBudgetBackendRequireShared`, and use a generated
-      test key plus an injected recording transport. Assert absent and lost
-      coordinators return typed `shared_coordinator_unavailable` before runtime
-      construction completes and issue zero token POSTs. Add the granting-case
-      lifecycle/route/privacy assertions. Do not alter production source in
-      this task.
+      `github_app`, copy the app-installation policy with
+      `coordination=require_shared`, and use a generated test key plus an
+      injected recording transport. Assert absent and unreachable shared
+      registries return `*coordination.SharedRateLimitUnavailableError` before
+      runtime construction completes and issue zero token POSTs. Add physical
+      route/privacy assertions. Do not alter production source in this task.
     </action>
     <acceptance_criteria>
       - The focused test fails at the recovered base because the token POST
