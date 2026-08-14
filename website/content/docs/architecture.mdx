@@ -146,6 +146,8 @@ pm flow list --flows-dir .polymetrics/flows --json
 Flow manifests describe ordered ETL and query steps. `plan` and `preview` validate the manifest and DAG. `run` executes supported steps through existing app primitives and checkpoints progress.
 Flow dependencies are inferred from `in` and `out` warehouse tables. Supported step kinds are `sync`, `query`, `rlm`, and approval-gated `action`. RLM steps reuse the same analyzers as `pm rlm run`; a relative `spec` path is resolved from the flow manifest file.
 
+When a table name is materialized by more than one connection, a query step uses its manifest-level `"connection"` selector and an action source uses `"action_cfg": { "source_connection": "..." }`. `"_unattributed"` selects only a root-owned table. Omitting the applicable selector leaves the source read fail-closed as ambiguous; this is manifest syntax, not a flow CLI flag.
+
 ```json
 {
   "id": "score",

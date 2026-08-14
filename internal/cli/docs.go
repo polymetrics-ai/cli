@@ -701,6 +701,20 @@ DESCRIPTION
   inferred from in/out warehouse tables. RLM steps reuse pm rlm analyzers and
   may reference a spec path relative to the flow manifest file.
 
+CONNECTION-SCOPED SOURCE READS
+  A query step may set "connection" to scope every warehouse table view used
+  by its SQL. An action step sets "source_connection" inside "action_cfg" to
+  scope its "source_table". Use _unattributed only for a root-level table that
+  no connection owns. When same-named tables have several owners, omitting the
+  applicable manifest selector refuses the read instead of choosing one.
+
+  Query example:
+  {"id":"query-acme","kind":"query","connection":"acme",
+   "sql":"SELECT * FROM records","in":[],"out":[]}
+
+  Action source selector fragment:
+  "action_cfg": {"source_table":"records","source_connection":"acme"}
+
 RLM STEP EXAMPLE
   {
     "id": "score",
