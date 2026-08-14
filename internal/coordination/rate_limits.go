@@ -163,6 +163,15 @@ func newRateLimitSet(specs []connsdk.RateLimitBudget) *rateLimitSet {
 func (s *rateLimitSet) reserve(now time.Time) (time.Duration, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	wait, err := s.waitLocked(now)
+	if err != nil || wait > 0 {
+		return wait, err
+	}
+	s.consumeLocked(now)
+	return 0, nil
+}
+
+func (s *rateLimitSet) waitLocked(now time.Time) (time.Duration, error) {
 	var wait time.Duration
 	if s.blockedUntil.After(now) {
 		wait = s.blockedUntil.Sub(now)
@@ -179,10 +188,13 @@ func (s *rateLimitSet) reserve(now time.Time) (time.Duration, error) {
 	if wait > 0 {
 		return wait, nil
 	}
+	return 0, nil
+}
+
+func (s *rateLimitSet) consumeLocked(now time.Time) {
 	for _, budget := range s.budgets {
 		budget.consume(now, budget.defaultCost())
 	}
-	return 0, nil
 }
 
 func (s *rateLimitSet) observe(now time.Time, observation connsdk.RateLimitObservation) {

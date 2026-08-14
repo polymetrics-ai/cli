@@ -54,3 +54,9 @@ contract. Help, generated CLI docs, conventions, and the website reference are i
 Live evidence was posted to #3754. It uses the real local Dragonfly service, two child processes,
 and an engine requester test. A credentialed provider call is intentionally deferred to #3990,
 which owns provider-specific rate-limit declarations.
+
+## Correction 3/5 status — #4035
+
+In progress on `fm/cli-4035-late-observation-uds-r1`. This child owns only the late-observation retention and UDS cancellation defects. It does not alter the #3754 optional Dragonfly registry, provider declarations, CLI/docs, #3865 fencing, or #3867 parking/resumption.
+
+GREEN: the run-local reservation coordinator now marks expired leases inactive without deleting their opaque budget mappings, so concurrency is released while a valid later `Finish` can still tighten admission. Its UDS client binds blocked I/O to the caller context and rejects a valid response that arrives after cancellation. Deterministic lease, stalled-I/O, post-cancellation response, race, owner-cleanup, and eight-process tiny-budget evidence passed; no CLI/docs parity work applies because no public command surface changed.

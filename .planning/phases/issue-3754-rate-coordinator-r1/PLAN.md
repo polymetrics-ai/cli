@@ -83,3 +83,32 @@ Runtime planning also used `.agents/agentic-delivery/references/runtime-rlm-webs
 - No generic HTTP, SQL, or shell tool; every connector operation retains the warehouse
   transport boundary.
 - No #3865 fence behavior, #3867 parking/resumption, or #3990 GitHub budget declaration.
+
+## Correction 3/5 — #4035 late observations and UDS cancellation
+
+### Task Delivery Header
+
+- Issue: Closes #4035 — fix(coordination): retain late observations and propagate UDS cancellation.
+- Base branch: `integration/4015-mvp-flat-r1`.
+- Merges into: `integration/4015-mvp-flat-r1 → main`.
+- Delivery: Pull request open against `integration/4015-mvp-flat-r1` with checks green; the API-reported base is read back after opening.
+- Working branch: `fm/cli-4035-late-observation-uds-r1`.
+- Task: Preserve valid late completion observations after the short concurrency lease expires while releasing occupancy promptly; bind UDS request/response I/O to caller cancellation and refuse a response that races after cancellation.
+- Verification: deterministic coordinator and UDS tests, `go test -race -timeout 20m ./internal/coordination/... ./internal/connectors/engine/...`, the focused multi-process tiny-budget test, and the no-mistakes pipeline after commit.
+
+### Evidence Table
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| A late valid `Finish` observation survives beyond the prior retention window | live | A deterministic clock advances three lease TTLs; the expired lease no longer blocks a second admission, then its 429/reset observation makes the next admission return a one-minute wait. |
+| Cancellation interrupts a stalled UDS exchange | fake | A local UDS listener is necessary to deterministically hold the response. The client returns `context.Canceled` promptly after request acceptance, proving the blocked read was interrupted. |
+| A response released after cancellation is never granted | fake | A local UDS listener reads exactly one request, waits for cancellation, then sends a syntactically valid ready/grant response; the caller still receives `context.Canceled`, not a grant. |
+| Shared owner still protects a tiny budget across processes | fake | Test-only helper subprocesses are necessary to prove separate process admission; exactly three grants and five refusals are asserted. |
+
+### GSD/TDD execution record
+
+`scripts/gsd doctor`, all five canonical `sources` resolutions, `go run ./cmd/agentcontractgen check`, and generated prompts for `discuss-phase`, `plan-phase 4035 --tdd`, `execute-phase`, `verify-work`, and `code-review` were run. Issue #4035 is not a numbered roadmap phase and the repository's canonical single-worker contract disallows role spawning, so this append is the inline/manual GSD fallback.
+
+Plan: add the secret-free reservation protocol and a run-local UDS owner/client without changing provider policy, connector declarations, CLI/docs, Dragonfly shared-registry logic, cohort fencing, or parking/resume. The TDD sequence is: write the lease-expiry and cancellation race tests; capture their failing compile/test output; implement minimal in-memory coordinator lifecycle and cancellation-aware UDS exchange; then run the focused race, ownership, cleanup, and multi-process proofs.
+
+Delivery mechanism: when firstmate dispatches no-mistakes, run it with `--skip rebase,pr` because those steps target the repository default `main`. Create this child pull request separately with the explicit base `integration/4015-mvp-flat-r1`, then read the API-reported `.base.ref`; a default-base PR is not acceptable evidence.
