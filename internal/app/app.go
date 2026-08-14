@@ -2489,7 +2489,33 @@ func (a *App) loadReversePlan(id string) (ReversePlan, error) {
 	if err := a.normalizeLoadedState(loaded); err != nil {
 		return ReversePlan{}, err
 	}
-	for _, plan := range a.state.ReversePlans {
+	return reversePlanFromState(a.state, id)
+}
+
+func PreflightReverseApprovalReplay(root, id string) error {
+	if root == "" {
+		root = "."
+	}
+	statePath := filepath.Join(root, ".polymetrics", "state", "state.json")
+	loaded, err := newStateStore(statePath).LoadReadOnly()
+	if err != nil {
+		return err
+	}
+	plan, err := reversePlanFromState(loaded, id)
+	if err != nil {
+		return err
+	}
+	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
+		return err
+	}
+	if plan.ApprovalTokenHash == "" {
+		return errors.New("reverse plan approval has already been consumed")
+	}
+	return nil
+}
+
+func reversePlanFromState(loaded state, id string) (ReversePlan, error) {
+	for _, plan := range loaded.ReversePlans {
 		if plan.ID == id {
 			return plan, nil
 		}

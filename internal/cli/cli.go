@@ -30,9 +30,6 @@ const maxConnectorCommandLimit = 10000
 func Run(args []string, stdout, stderr io.Writer) int {
 	ctx := context.Background()
 	root, jsonOut, cleanArgs := parseGlobal(args)
-	if err := validateReverseApprovalCarrierBeforeDispatch(cleanArgs); err != nil {
-		return writeError(stdout, stderr, err, jsonOut)
-	}
 	opts := config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}
 	bootstrap, err := config.ResolveBootstrap(opts)
 	if err != nil {
@@ -41,6 +38,9 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	cfg, err := config.Load(opts)
 	if err != nil {
 		return writeError(stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
+	}
+	if err := validateApprovalCarrierBeforeDispatch(cleanArgs); err != nil {
+		return writeError(stdout, stderr, err, cfg.JSON)
 	}
 	cmd := newRootCmd(ctx, cfg, stdout, stderr)
 	if err := executeRootCmd(cmd, cleanArgs); err != nil {
@@ -789,6 +789,11 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if err != nil {
 		return err
 	}
+	if approval.supplied {
+		if err := app.PreflightReverseApprovalReplay(root, flags.first("plan")); err != nil {
+			return err
+		}
+	}
 	return withApp(root, func(a *app.App) error {
 		return runConnectorCommand(ctx, a, connectorName, args, approval, stdout, stderr, jsonOut)
 	})
@@ -1491,6 +1496,13 @@ func validateReverseApprovalCarrierFlags(command string, flags parsedFlags) erro
 		return usageErrorf("--approval-token-stdin is only valid with reverse run")
 	}
 	return nil
+}
+
+func validateApprovalCarrierBeforeDispatch(args []string) error {
+	if _, err := validateApprovalTokenCarrierFlags(parseFlags(args)); err != nil {
+		return err
+	}
+	return validateReverseApprovalCarrierBeforeDispatch(args)
 }
 
 func validateReverseApprovalCarrierBeforeDispatch(args []string) error {

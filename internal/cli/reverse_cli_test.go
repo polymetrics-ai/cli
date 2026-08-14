@@ -224,6 +224,16 @@ func TestReverseHelpRejectsApprovalCarriers(t *testing.T) {
 			args: []string{"man", "reverse", "--approve", "carrier-value", "--json"},
 			want: "approval tokens must be supplied with --approval-token-stdin",
 		},
+		{
+			name: "root help retired argv carrier",
+			args: []string{"--help", "--approve", "carrier-value", "--json"},
+			want: "approval tokens must be supplied with --approval-token-stdin",
+		},
+		{
+			name: "connector help alias valued stdin marker",
+			args: []string{"help", "github", "issue", "close", "--approval-token-stdin=carrier-value", "--json"},
+			want: "--approval-token-stdin must be a bare stdin marker",
+		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
@@ -245,10 +255,56 @@ func TestReverseHelpRejectsApprovalCarriers(t *testing.T) {
 	}
 }
 
+func TestReverseApprovalCarrierRejectionUsesConfiguredJSONOutput(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		env      string
+		fromFile bool
+	}{
+		{name: "primary environment", env: "POLYMETRICS_JSON"},
+		{name: "compatibility environment", env: "PM_JSON"},
+		{name: "project configuration", fromFile: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			if tc.env != "" {
+				t.Setenv(tc.env, "true")
+			}
+			if tc.fromFile {
+				configPath := filepath.Join(root, ".polymetrics", "config.yaml")
+				if err := os.MkdirAll(filepath.Dir(configPath), 0o700); err != nil {
+					t.Fatalf("create config directory: %v", err)
+				}
+				if err := os.WriteFile(configPath, []byte("json: true\n"), 0o600); err != nil {
+					t.Fatalf("write config: %v", err)
+				}
+			}
+
+			var stdout, stderr bytes.Buffer
+			code := cli.Run([]string{"--root", root, "--help", "--approve", "carrier-value"}, &stdout, &stderr)
+			if code != 2 {
+				t.Fatalf("Run() code = %d, want usage error; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+			}
+			var result struct {
+				Kind string `json:"kind"`
+			}
+			if err := json.Unmarshal(stdout.Bytes(), &result); err != nil {
+				t.Fatalf("decode JSON error: %v\n%s", err, stdout.String())
+			}
+			if result.Kind != "Error" {
+				t.Fatalf("JSON result kind = %q, want Error\n%s", result.Kind, stdout.String())
+			}
+			if strings.Contains(stdout.String()+stderr.String(), "carrier-value") {
+				t.Fatalf("carrier rejection echoed its value: stdout=%s stderr=%s", stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
 func TestReverseApprovalInputRejectsBeforeOpeningLegacyProject(t *testing.T) {
 	t.Run("reverse execution", func(t *testing.T) {
 		root := setupReverseCLIProject(t)
-		planID := planReverseApprovalInputTest(t, root, "reverse-legacy-state")
+		planID, _ := planReverseApprovalInputTest(t, root, "reverse-legacy-state")
 		state := removeWorkspaceIdentity(t, root)
 
 		var stdout, stderr bytes.Buffer
@@ -299,7 +355,104 @@ func TestReverseApprovalInputRejectsBeforeOpeningLegacyProject(t *testing.T) {
 	})
 }
 
-func planReverseApprovalInputTest(t *testing.T, root, name string) string {
+func TestReverseApprovalReplayRejectsBeforeOpeningLegacyProject(t *testing.T) {
+	t.Run("reverse execution", func(t *testing.T) {
+		root := setupReverseCLIProject(t)
+		planID, token := planReverseApprovalInputTest(t, root, "reverse-replay-state")
+
+		var completedStdout, completedStderr bytes.Buffer
+		code := runCLIWithApprovalStdin(t, []string{
+			"reverse", "run", planID,
+			"--approval-token-stdin",
+			"--root", root,
+			"--json",
+		}, token+"\n", &completedStdout, &completedStderr)
+		if code != 0 {
+			t.Fatalf("reverse run code=%d stdout=%s stderr=%s", code, completedStdout.String(), completedStderr.String())
+		}
+		state := removeWorkspaceIdentity(t, root)
+
+		var stdout, stderr bytes.Buffer
+		code = runCLIWithApprovalStdin(t, []string{
+			"reverse", "run", planID,
+			"--approval-token-stdin",
+			"--root", root,
+			"--json",
+		}, token+"\n", &stdout, &stderr)
+		assertApprovalReplayRefusedWithoutStateWrite(t, code, stdout.String()+stderr.String(), state, root)
+	})
+
+	t.Run("connector execution", func(t *testing.T) {
+		calls := 0
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			calls++
+			if r.Method != http.MethodPatch || r.URL.Path != "/repos/acme/widgets/issues/101" {
+				t.Errorf("request = %s %s, want PATCH /repos/acme/widgets/issues/101", r.Method, r.URL.Path)
+				http.NotFound(w, r)
+				return
+			}
+			_ = json.NewEncoder(w).Encode(map[string]any{"number": 101, "state": "closed"})
+		}))
+		defer server.Close()
+
+		root := t.TempDir()
+		runCLIForReverseTest(t, []string{"init", "--root", root, "--json"})
+		runCLIForReverseTest(t, []string{
+			"credentials", "add", "github-local",
+			"--connector", "github",
+			"--config", "owner=acme",
+			"--config", "repo=widgets",
+			"--config", "public_access=true",
+			"--config", "base_url=" + server.URL,
+			"--root", root,
+			"--json",
+		})
+
+		var planStdout, planStderr bytes.Buffer
+		code := cli.Run([]string{
+			"github", "issue", "close",
+			"--issue-number", "101",
+			"--credential", "github-local",
+			"--root", root,
+		}, &planStdout, &planStderr)
+		if code != 0 {
+			t.Fatalf("github issue close plan code=%d stdout=%s stderr=%s", code, planStdout.String(), planStderr.String())
+		}
+		planID := extractReverseField(t, planStdout.String(), `Created connector command plan (\S+)`)
+		token := extractReverseField(t, planStdout.String(), `Approval token: (\S+)`)
+
+		var completedStdout, completedStderr bytes.Buffer
+		code = runCLIWithApprovalStdin(t, []string{
+			"github", "issue", "close",
+			"--plan", planID,
+			"--approval-token-stdin",
+			"--root", root,
+			"--json",
+		}, token+"\n", &completedStdout, &completedStderr)
+		if code != 0 {
+			t.Fatalf("github issue close code=%d stdout=%s stderr=%s", code, completedStdout.String(), completedStderr.String())
+		}
+		if calls != 1 {
+			t.Fatalf("github issue close calls=%d, want 1", calls)
+		}
+		state := removeWorkspaceIdentity(t, root)
+
+		var stdout, stderr bytes.Buffer
+		code = runCLIWithApprovalStdin(t, []string{
+			"github", "issue", "close",
+			"--plan", planID,
+			"--approval-token-stdin",
+			"--root", root,
+			"--json",
+		}, token+"\n", &stdout, &stderr)
+		assertApprovalReplayRefusedWithoutStateWrite(t, code, stdout.String()+stderr.String(), state, root)
+		if calls != 1 {
+			t.Fatalf("replayed github issue close calls=%d, want 1", calls)
+		}
+	})
+}
+
+func planReverseApprovalInputTest(t *testing.T, root, name string) (string, string) {
 	t.Helper()
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{
@@ -312,7 +465,7 @@ func planReverseApprovalInputTest(t *testing.T, root, name string) string {
 	if code != 0 {
 		t.Fatalf("reverse plan code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
-	return extractReverseField(t, stdout.String(), `Created reverse plan (\S+)`)
+	return extractReverseField(t, stdout.String(), `Created reverse plan (\S+)`), extractReverseField(t, stdout.String(), `Approval token: (\S+)`)
 }
 
 func removeWorkspaceIdentity(t *testing.T, root string) []byte {
@@ -338,9 +491,17 @@ func removeWorkspaceIdentity(t *testing.T, root string) []byte {
 }
 
 func assertApprovalInputRefusedWithoutStateWrite(t *testing.T, code int, output string, wantState []byte, root string) {
+	assertApprovalRefusedWithoutStateWrite(t, code, output, "approval token stdin must contain one bounded line", wantState, root)
+}
+
+func assertApprovalReplayRefusedWithoutStateWrite(t *testing.T, code int, output string, wantState []byte, root string) {
+	assertApprovalRefusedWithoutStateWrite(t, code, output, "reverse plan approval has already been consumed", wantState, root)
+}
+
+func assertApprovalRefusedWithoutStateWrite(t *testing.T, code int, output, want string, wantState []byte, root string) {
 	t.Helper()
-	if code == 0 || !strings.Contains(output, "approval token stdin must contain one bounded line") {
-		t.Fatalf("invalid approval input code=%d output=%s", code, output)
+	if code == 0 || !strings.Contains(output, want) {
+		t.Fatalf("approval rejection code=%d output=%s", code, output)
 	}
 	statePath := filepath.Join(root, ".polymetrics", "state", "state.json")
 	gotState, err := os.ReadFile(statePath)
@@ -348,7 +509,10 @@ func assertApprovalInputRefusedWithoutStateWrite(t *testing.T, code int, output 
 		t.Fatalf("read state after rejected approval: %v", err)
 	}
 	if !bytes.Equal(gotState, wantState) {
-		t.Fatal("rejected approval input opened and rewrote legacy project state")
+		t.Fatal("rejected approval opened and rewrote legacy project state")
+	}
+	if _, err := os.Stat(statePath + ".lock"); err == nil || !os.IsNotExist(err) {
+		t.Fatalf("rejected approval created a state lock: %v", err)
 	}
 }
 

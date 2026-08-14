@@ -116,6 +116,11 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 			if err != nil {
 				return err
 			}
+			if approval.supplied {
+				if err := app.PreflightReverseApprovalReplay(root, args[1]); err != nil {
+					return err
+				}
+			}
 			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
 		}},
 		{name: "agent", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
