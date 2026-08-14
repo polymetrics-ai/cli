@@ -38,10 +38,11 @@ func New() *Hooks { return &Hooks{} }
 func (h *Hooks) ConnectorName() string { return "github" }
 
 var (
-	_ engine.Hooks                 = (*Hooks)(nil)
-	_ engine.AuthHook              = (*Hooks)(nil)
-	_ engine.DeclaredRouteAuthHook = (*Hooks)(nil)
-	_ engine.WriteHook             = (*Hooks)(nil)
+	_ engine.Hooks                    = (*Hooks)(nil)
+	_ engine.AuthHook                 = (*Hooks)(nil)
+	_ engine.DeclaredRouteAuthHook    = (*Hooks)(nil)
+	_ engine.RateLimitAuthProfileHook = (*Hooks)(nil)
+	_ engine.WriteHook                = (*Hooks)(nil)
 )
 
 const githubInstallationTokenDeclaredPath = "/app/installations/{installation_id}/access_tokens"
@@ -51,6 +52,13 @@ const githubInstallationTokenDeclaredPath = "/app/installations/{installation_id
 // network-capable and must receive the engine-owned declared-route requester.
 func (h *Hooks) Authenticator(context.Context, connectors.RuntimeConfig, engine.AuthSpec) (connsdk.Authenticator, error) {
 	return nil, errors.New("github_app authentication requires engine declared-route admission")
+}
+
+func (h *Hooks) RateLimitAuthProfile(_ connectors.RuntimeConfig, spec engine.AuthSpec) (string, bool) {
+	if spec.Mode != "custom" || spec.Hook != "github" {
+		return "", false
+	}
+	return "github_app", true
 }
 
 // AuthenticatorWithDeclaredRoute mints an RS256 JWT (matching legacy's

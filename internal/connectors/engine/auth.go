@@ -19,6 +19,40 @@ func authVars(cfg connectors.RuntimeConfig) Vars {
 	return Vars{Config: cfg.Config, Secrets: cfg.Secrets}
 }
 
+func rateLimitConfigForSelectedAuth(cfg connectors.RuntimeConfig, specs []AuthSpec, h Hooks) connectors.RuntimeConfig {
+	profileHook, ok := h.(RateLimitAuthProfileHook)
+	if !ok || len(specs) == 0 {
+		return cfg
+	}
+
+	vars := authVars(cfg)
+	for _, spec := range specs {
+		matched, err := authSpecMatches(spec, vars)
+		if err != nil {
+			return cfg
+		}
+		if !matched {
+			continue
+		}
+		profile, ok := profileHook.RateLimitAuthProfile(cfg, spec)
+		if !ok {
+			return cfg
+		}
+		profile = strings.TrimSpace(profile)
+		if profile == "" || cfg.Config["auth_type"] == profile {
+			return cfg
+		}
+		normalized := make(map[string]string, len(cfg.Config)+1)
+		for key, value := range cfg.Config {
+			normalized[key] = value
+		}
+		normalized["auth_type"] = profile
+		cfg.Config = normalized
+		return cfg
+	}
+	return cfg
+}
+
 // selectAuth evaluates specs in declared order and returns the
 // connsdk.Authenticator for the first spec whose "when" condition matches
 // (a spec with no "when" always matches). mode "custom" resolves an

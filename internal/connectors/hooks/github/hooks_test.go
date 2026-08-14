@@ -92,7 +92,6 @@ func githubAppAuthAdmissionConfig(t *testing.T) connectors.RuntimeConfig {
 	cfg := newRuntimeConfig("https://github-app-auth-rate.test", map[string]string{
 		"app_id":          "4072",
 		"installation_id": "admission-test-installation",
-		"auth_type":       "github_app",
 	}, map[string]string{"private_key": testPrivateKeyPEM(t)})
 	cfg.CoordinationIdentity = identity
 	return cfg
@@ -133,6 +132,9 @@ func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testin
 	if !errors.As(err, &unavailable) {
 		t.Fatalf("NewRuntime error = %T %v, want typed shared coordinator refusal", err, err)
 	}
+	if unavailable.Reason != coordination.SharedRateLimitCoordinatorNotConfigured {
+		t.Fatalf("shared coordinator refusal reason = %q, want %q", unavailable.Reason, coordination.SharedRateLimitCoordinatorNotConfigured)
+	}
 }
 
 func TestGitHubAppAuthRateAdmissionUnreachableSharedRefusesBeforeTokenSend(t *testing.T) {
@@ -158,6 +160,33 @@ func TestGitHubAppAuthRateAdmissionUnreachableSharedRefusesBeforeTokenSend(t *te
 	}
 	if unavailable.Reason != coordination.SharedRateLimitCoordinatorUnreachable {
 		t.Fatalf("shared coordinator refusal reason = %q, want %q", unavailable.Reason, coordination.SharedRateLimitCoordinatorUnreachable)
+	}
+}
+
+func TestGitHubAppAuthRateAdmissionDoesNotRetryTokenMint(t *testing.T) {
+	var sends atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		sends.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(`{"message":"temporary failure"}`))
+	}))
+	t.Cleanup(server.Close)
+
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	bundle.HTTP.URL = server.URL
+	cfg := githubAppAuthAdmissionConfig(t)
+	cfg.Config["base_url"] = server.URL
+
+	_, err = engine.NewRuntime(context.Background(), bundle, cfg, githubhooks.New())
+	if err == nil {
+		t.Fatal("NewRuntime() error = nil, want failed installation-token mint")
+	}
+	if got := sends.Load(); got != 1 {
+		t.Fatalf("installation-token POST sends = %d, want 1", got)
 	}
 }
 
