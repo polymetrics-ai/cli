@@ -6,7 +6,7 @@
 
 **Branch:** `fix/4072-github-app-auth-rate-admission`
 
-**Recovered base:** `da8a8ff07aaf00e5c7965cd4d1d3c7252017d785`
+**Recovered base:** `7eea99bae` (`integration/4015-mvp-flat-r1`)
 
 **Correction ledger:** 0/5 fresh lineage
 
@@ -19,9 +19,9 @@
 |---|---|---|
 | Isolation gate | complete | allocated worktree and repository root match |
 | Issue-first gate | complete | #4072 created and verified direct child of #3754 |
-| Recovery-base gate | complete | branch starts at exact preserved `da8a8ff…` |
+| Recovery-base gate | complete | branch rebased to mandated integration base containing #4122 / #3754 |
 | discuss/context | complete | `CONTEXT.md`, `DISCUSSION-LOG.md` |
-| plan-phase --tdd | complete (manual inline fallback) | `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md` |
+| plan-phase --tdd | complete (manual inline fallback) | recovered artifacts reconciled to #4122 / #3754 |
 | execute RED | pending | no production edits before RED commit |
 | execute GREEN | pending | no broad validation authorized |
 | verify-work / code-review | deferred | Firstmate shared validation gate |

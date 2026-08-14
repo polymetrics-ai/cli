@@ -6,7 +6,8 @@
 
 **Fresh correction lineage:** **0/5**
 
-**Recovered base:** `da8a8ff07aaf00e5c7965cd4d1d3c7252017d785`
+**Recovered base:** `7eea99bae` (`integration/4015-mvp-flat-r1`, including
+#4122 / #3754's resolved-path Requester admission boundary).
 
 **Canonical private finish-plan snapshot SHA256:**
 `939f14f61defd993f8ad0335a5eb617d97083c9f73a6a75259d0e312ae8f408`
@@ -14,8 +15,8 @@
 **Required skills used:** `golang-how-to`, `golang-design-patterns`,
 `golang-structs-interfaces`, `golang-error-handling`, `golang-security`,
 `golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`,
-`golang-database`, `golang-graphql`, `github-issue-first-delivery`,
-`no-mistakes`, `gsd-discuss-phase`, `gsd-plan-phase`, `gsd-execute-phase`.
+`gsd-discuss-phase`, `gsd-plan-phase`, `gsd-execute-phase`,
+`gsd-verify-work`, `gsd-code-review`.
 
 ## Scope Ledger
 
@@ -30,11 +31,11 @@
 
 | ID | Behavior | RED expectation | GREEN expectation | Status |
 |---|---|---|---|---|
-| A1 | no shared coordinator | raw GitHub token POST reaches recording transport before typed refusal | typed `shared_coordinator_unavailable`, zero sends | planned |
-| A2 | lost shared coordinator | raw token POST reaches recording transport before lost-coordinate refusal | typed `shared_coordinator_unavailable`, zero sends | planned |
-| A3 | granting coordinator | no declared route admission for the token POST | one `Decide`, one POST, one `Finish` | planned |
-| A4 | declared-vs-actual path | declaration is not passed to admission seam | declared `POST /app/installations/{installation_id}/access_tokens`; actual escaped installation path sent | planned |
-| A5 | secret boundary | cannot prove coordinator payload absence | reservation/observation/error evidence has no JWT, key, or minted token | planned |
+| A1 | no shared coordinator | raw GitHub token POST reaches recording transport before typed refusal | typed `SharedRateLimitUnavailableError`, zero sends | planned |
+| A2 | unreachable shared coordinator | raw GitHub token POST reaches recording transport before refusal | typed `SharedRateLimitUnavailableError`, zero sends | planned |
+| A3 | real shared coordinator | no token admission reaches physical send boundary | two processes share one budget: one token POST and one exhausted-budget timeout | planned |
+| A4 | declared-vs-actual path | declaration is not passed to physical send boundary | actual escaped installation path is admitted by `Requester` at send | planned |
+| A5 | secret boundary | cannot prove coordinator payload absence | coordination key/error evidence has no JWT, key, or minted token | planned |
 | A6 | regressions | N/A | bearer, write-hook, ordinary REST, local admission, and GraphQL exclusion remain green | planned |
 
 ## RED
