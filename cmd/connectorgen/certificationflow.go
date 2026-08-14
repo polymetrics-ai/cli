@@ -196,9 +196,10 @@ type connectorCertificationStatus struct {
 // reconstructed in memory; certification-matrix --check validates this artifact
 // before comparing it to the freshly generated projection.
 type certificationStatusArtifact struct {
-	SchemaVersion    int                            `json:"schema_version"`
-	GeneratedCommand string                         `json:"generated_command"`
-	Connectors       []connectorCertificationStatus `json:"connectors"`
+	SchemaVersion      int                            `json:"schema_version"`
+	GeneratedCommand   string                         `json:"generated_command"`
+	CertificationScope []string                       `json:"certification_scope"`
+	Connectors         []connectorCertificationStatus `json:"connectors"`
 }
 
 type flowMatrix struct {
@@ -799,9 +800,10 @@ func buildFlowMatrixForConnectors(repoRoot string, capabilities capabilityMatrix
 func buildCertificationStatusArtifact(matrix flowMatrix) certificationStatusArtifact {
 	statuses := append([]connectorCertificationStatus(nil), matrix.ConnectorStatuses...)
 	return certificationStatusArtifact{
-		SchemaVersion:    certificationSchemaVersion,
-		GeneratedCommand: "go run ./cmd/connectorgen certification-matrix --all",
-		Connectors:       statuses,
+		SchemaVersion:      certificationSchemaVersion,
+		GeneratedCommand:   "go run ./cmd/connectorgen certification-matrix --all",
+		CertificationScope: append([]string(nil), certificationConnectorAllowlist...),
+		Connectors:         statuses,
 	}
 }
 
@@ -1630,14 +1632,25 @@ func validateCertificationStatusArtifactJSON(raw []byte) error {
 	if artifact.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix --all" {
 		return fmt.Errorf("generated_command %q is unsupported", artifact.GeneratedCommand)
 	}
-	known := make(map[string]bool, len(artifact.Connectors))
-	for _, status := range artifact.Connectors {
-		if known[status.Connector] {
-			return fmt.Errorf("connector status %q is duplicated", status.Connector)
-		}
-		known[status.Connector] = true
+	known, err := certificationStatusScope(artifact.CertificationScope)
+	if err != nil {
+		return err
 	}
 	return validateConnectorStatuses(artifact.Connectors, known)
+}
+
+func certificationStatusScope(scope []string) (map[string]bool, error) {
+	if len(scope) != len(certificationConnectorAllowlist) {
+		return nil, errors.New("certification status scope omits one or more allowlisted connectors")
+	}
+	known := make(map[string]bool, len(scope))
+	for index, allowed := range certificationConnectorAllowlist {
+		if scope[index] != allowed {
+			return nil, fmt.Errorf("certification status scope connector %d = %q, want %q", index, scope[index], allowed)
+		}
+		known[allowed] = true
+	}
+	return known, nil
 }
 
 func validateCertificationStatusArtifactFile(path string) error {

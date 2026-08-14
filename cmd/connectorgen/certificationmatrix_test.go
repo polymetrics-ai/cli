@@ -1108,9 +1108,15 @@ func TestCertificationStatusArtifactRemediationUsesAll(t *testing.T) {
 }
 
 func TestCertificationStatusArtifactUsesAllGenerator(t *testing.T) {
-	artifact := buildCertificationStatusArtifact(flowMatrix{})
+	artifact := buildCertificationStatusArtifact(flowMatrix{ConnectorStatuses: []connectorCertificationStatus{
+		{Connector: "github", Label: "COMMUNITY BUILD, UNCERTIFIED", Warning: "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED."},
+		{Connector: "postgres", Label: "COMMUNITY BUILD, UNCERTIFIED", Warning: "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED."},
+	}})
 	if artifact.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix --all" {
 		t.Fatalf("status generated command = %q, want --all", artifact.GeneratedCommand)
+	}
+	if !reflect.DeepEqual(artifact.CertificationScope, certificationConnectorAllowlist) {
+		t.Fatalf("status certification scope = %#v, want %#v", artifact.CertificationScope, certificationConnectorAllowlist)
 	}
 	raw, err := marshalGeneratedJSON(artifact)
 	if err != nil {

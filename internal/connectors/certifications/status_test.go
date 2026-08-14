@@ -1,6 +1,9 @@
 package certifications
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 
 func TestGeneratedStatusMakesUncertifiedConnectorVisible(t *testing.T) {
 	status, err := StatusFor("github")
@@ -34,6 +37,26 @@ func TestGeneratedStatusIncludesEveryAllowlistedConnector(t *testing.T) {
 	}
 	if len(found) != 2 {
 		t.Fatalf("AllStatuses() returned %d statuses, want the two certification claims", len(found))
+	}
+}
+
+func TestGeneratedStatusRejectsMissingScopedConnector(t *testing.T) {
+	artifact := statusArtifact{
+		SchemaVersion:      statusSchemaVersion,
+		GeneratedCommand:   statusGeneratedCommand,
+		CertificationScope: []string{"github", "postgres"},
+		Connectors: []Status{{
+			Connector: "github",
+			Label:     uncertifiedLabel,
+			Warning:   uncertifiedWarning,
+		}},
+	}
+	raw, err := json.Marshal(artifact)
+	if err != nil {
+		t.Fatalf("marshal status artifact: %v", err)
+	}
+	if _, _, err := loadStatusArtifact(raw); err == nil || err.Error() != `generated certification status omits connector "postgres"` {
+		t.Fatalf("loadStatusArtifact() error = %v, want omitted postgres error", err)
 	}
 }
 

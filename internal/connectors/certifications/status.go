@@ -13,8 +13,6 @@ import (
 	"sort"
 	"strings"
 	"sync"
-
-	"polymetrics.ai/internal/connectors/bundleregistry"
 )
 
 const (
@@ -39,41 +37,37 @@ type Status struct {
 }
 
 type statusArtifact struct {
-	SchemaVersion    int      `json:"schema_version"`
-	GeneratedCommand string   `json:"generated_command"`
-	Connectors       []Status `json:"connectors"`
+	SchemaVersion      int      `json:"schema_version"`
+	GeneratedCommand   string   `json:"generated_command"`
+	CertificationScope []string `json:"certification_scope"`
+	Connectors         []Status `json:"connectors"`
 }
 
 var embeddedStatuses struct {
 	once   sync.Once
 	byName map[string]Status
+	scope  map[string]bool
 	err    error
 }
 
-// StatusFor returns a proof-bearing status for an allowlisted connector. A
-// connector outside that explicit certification scope has no pass or fail
-// claim, so it retains the existing visible community-build warning rather
-// than being omitted from inspection.
+// StatusFor returns the generated proof-bearing status for a connector.
 func StatusFor(connector string) (Status, error) {
-	return statusFor(connector, func() bool {
-		_, registered := bundleregistry.New().Get(connector)
-		return registered
-	})
+	return statusFor(connector, false)
 }
 
 // StatusForRegistered returns a status using the caller's connector-registration result.
 func StatusForRegistered(connector string, registered bool) (Status, error) {
-	return statusFor(connector, func() bool { return registered })
+	return statusFor(connector, registered)
 }
 
-func statusFor(connector string, isRegistered func() bool) (Status, error) {
+func statusFor(connector string, registered bool) (Status, error) {
 	embeddedStatuses.once.Do(loadEmbeddedStatuses)
 	if embeddedStatuses.err != nil {
 		return Status{}, embeddedStatuses.err
 	}
 	status, ok := embeddedStatuses.byName[connector]
 	if !ok {
-		if !isRegistered() {
+		if !registered || embeddedStatuses.scope[connector] {
 			return Status{}, fmt.Errorf("generated certification status omits connector %q", connector)
 		}
 		return Status{
@@ -101,41 +95,65 @@ func AllStatuses() ([]Status, error) {
 }
 
 func loadEmbeddedStatuses() {
-	var artifact statusArtifact
-	if err := decodeStatusJSON(embeddedStatusJSON, &artifact); err != nil {
-		embeddedStatuses.err = fmt.Errorf("parse embedded certification status: %w", err)
+	byName, scope, err := loadStatusArtifact(embeddedStatusJSON)
+	if err != nil {
+		embeddedStatuses.err = err
 		return
 	}
+	embeddedStatuses.byName = byName
+	embeddedStatuses.scope = scope
+}
+
+func loadStatusArtifact(raw []byte) (map[string]Status, map[string]bool, error) {
+	var artifact statusArtifact
+	if err := decodeStatusJSON(raw, &artifact); err != nil {
+		return nil, nil, fmt.Errorf("parse embedded certification status: %w", err)
+	}
 	if artifact.SchemaVersion != statusSchemaVersion || artifact.GeneratedCommand != statusGeneratedCommand {
-		embeddedStatuses.err = fmt.Errorf("embedded certification status has unsupported schema or generator")
-		return
+		return nil, nil, fmt.Errorf("embedded certification status has unsupported schema or generator")
 	}
 	byName := make(map[string]Status, len(artifact.Connectors))
 	for _, status := range artifact.Connectors {
 		if strings.TrimSpace(status.Connector) == "" {
-			embeddedStatuses.err = fmt.Errorf("embedded certification status contains an empty connector")
-			return
+			return nil, nil, fmt.Errorf("embedded certification status contains an empty connector")
 		}
 		if _, exists := byName[status.Connector]; exists {
-			embeddedStatuses.err = fmt.Errorf("embedded certification status duplicates connector %q", status.Connector)
-			return
+			return nil, nil, fmt.Errorf("embedded certification status duplicates connector %q", status.Connector)
 		}
 		if status.Certified {
 			if status.Label != certifiedLabel || status.Warning != "" {
-				embeddedStatuses.err = fmt.Errorf("embedded certified status %q is malformed", status.Connector)
-				return
+				return nil, nil, fmt.Errorf("embedded certified status %q is malformed", status.Connector)
 			}
 		} else if status.Label != uncertifiedLabel || status.Warning != uncertifiedWarning {
-			embeddedStatuses.err = fmt.Errorf("embedded uncertified status %q is malformed", status.Connector)
-			return
+			return nil, nil, fmt.Errorf("embedded uncertified status %q is malformed", status.Connector)
 		}
 		byName[status.Connector] = status
 	}
 	if len(byName) == 0 {
-		embeddedStatuses.err = fmt.Errorf("embedded certification status is empty")
-		return
+		return nil, nil, fmt.Errorf("embedded certification status is empty")
 	}
-	embeddedStatuses.byName = byName
+	scope := make(map[string]bool, len(artifact.CertificationScope))
+	for _, connector := range artifact.CertificationScope {
+		if strings.TrimSpace(connector) == "" {
+			return nil, nil, fmt.Errorf("embedded certification status contains an empty scope connector")
+		}
+		if scope[connector] {
+			return nil, nil, fmt.Errorf("embedded certification status duplicates scope connector %q", connector)
+		}
+		scope[connector] = true
+		if _, exists := byName[connector]; !exists {
+			return nil, nil, fmt.Errorf("generated certification status omits connector %q", connector)
+		}
+	}
+	if len(scope) == 0 {
+		return nil, nil, fmt.Errorf("embedded certification status scope is empty")
+	}
+	for _, status := range artifact.Connectors {
+		if !scope[status.Connector] {
+			return nil, nil, fmt.Errorf("embedded certification status scope omits connector %q", status.Connector)
+		}
+	}
+	return byName, scope, nil
 }
 
 func decodeStatusJSON(raw []byte, target any) error {
