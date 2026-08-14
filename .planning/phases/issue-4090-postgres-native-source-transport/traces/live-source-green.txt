@@ -1,0 +1,21 @@
+Command:
+
+```sh
+POLYMETRICS_DATABASE_INTEGRATION=1 \
+POLYMETRICS_CONTAINER_RUNTIME=docker \
+POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
+go test -tags=databaseintegration -timeout 20m -count=1 \
+  -run '^TestPostgresDynamicTypedCatalogUsesLiveMetadata$' -v \
+  ./internal/connectors/native/postgres
+```
+
+Real PostgreSQL 16.10 dbtest output (the local test only prints the opaque
+source identity and generated checkpoint data; it never prints the connection
+password):
+
+```text
+live registered PostgreSQL snapshot mode=full_append: rows=1,2,3,4,5 pages=3 identity=postgres/postgres-catalog-integration/pm_catalog.catalog_alpha.read_events schema=16317d33f27ec99febaa255e70fe3c6a5dbee394593ce0c1954aaa3b5dbcc90b checkpoint={mechanism=postgres_bounded_full_snapshot barrier_kind=postgres_repeatable_read_snapshot barrier=764:764: dedupe=b8fdd6c7bfd8bf3c157c553dab0c24c4d2f4d8ecda43d053929aae7fce427f70}
+live registered PostgreSQL snapshot mode=full_overwrite: rows=1,2,3,4,5 pages=3 identity=postgres/postgres-catalog-integration/pm_catalog.catalog_alpha.read_events schema=16317d33f27ec99febaa255e70fe3c6a5dbee394593ce0c1954aaa3b5dbcc90b checkpoint={mechanism=postgres_bounded_full_snapshot barrier_kind=postgres_repeatable_read_snapshot barrier=764:764: dedupe=b8fdd6c7bfd8bf3c157c553dab0c24c4d2f4d8ecda43d053929aae7fce427f70}
+PASS
+ok  polymetrics.ai/internal/connectors/native/postgres
+```

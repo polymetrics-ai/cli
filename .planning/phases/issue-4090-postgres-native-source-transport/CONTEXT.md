@@ -10,9 +10,10 @@ conformance reference.
 
 ## Fixed decisions
 
-- Reuse `Connector.TypedCatalog`, `database.Catalog`, the native PostgreSQL
-  connection/TLS configuration, and #3974's immutable bounded read-plan
-  primitives. Do not duplicate discovery or type mapping.
+- Reuse `Connector.TypedCatalog` discovery, `database.Catalog`, the native
+  PostgreSQL connection/TLS configuration, and the bounded stable-order
+  constraints established by the database read-plan work. Do not duplicate
+  discovery or type mapping.
 - The adapter is PostgreSQL-only under `internal/connectors/native/postgres/`.
   It accepts only the declared connector, concrete native executor reference,
   full modes, bounded positive batch size, declared relation, and complete
