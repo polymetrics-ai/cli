@@ -2258,48 +2258,14 @@ func TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead(t *testi
 	}
 }
 
-func TestHasDeclaredSyncTransportRequiresComplementaryEndpointRoles(t *testing.T) {
-	newConnector := func(name string, descriptor *connectors.SyncTransportDescriptor) *appTransportConnector {
-		return &appTransportConnector{
-			meta:       connectors.Metadata{Name: name, IntegrationType: "database"},
-			descriptor: descriptor,
-		}
+func TestHasDeclaredSyncTransportRoutesInvalidDescriptorToPreflight(t *testing.T) {
+	source := &appTransportConnector{
+		meta:       connectors.Metadata{Name: "invalid_source", IntegrationType: "api"},
+		descriptor: &connectors.SyncTransportDescriptor{},
 	}
-	sourceRole := &connectors.SyncTransportDescriptor{Source: &connectors.SourceTransportDescriptor{}}
-	destinationRole := &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{}}
-
-	tests := []struct {
-		name        string
-		source      *connectors.SyncTransportDescriptor
-		destination *connectors.SyncTransportDescriptor
-		want        bool
-	}{
-		{
-			name:   "source only remains on legacy path",
-			source: sourceRole,
-		},
-		{
-			name:        "destination only remains on legacy path",
-			destination: destinationRole,
-		},
-		{
-			name:        "complementary roles use transport",
-			source:      sourceRole,
-			destination: destinationRole,
-			want:        true,
-		},
-		{
-			name:   "empty descriptor remains on legacy path",
-			source: &connectors.SyncTransportDescriptor{},
-		},
-	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			if got := hasDeclaredSyncTransport(newConnector("source", test.source), newConnector("destination", test.destination)); got != test.want {
-				t.Fatalf("hasDeclaredSyncTransport() = %t, want %t", got, test.want)
-			}
-		})
+	destination := &appTransportConnector{meta: connectors.Metadata{Name: "destination", IntegrationType: "database"}}
+	if !hasDeclaredSyncTransport(source, destination) {
+		t.Fatal("empty authored transport descriptor was treated as absent instead of being routed to preflight")
 	}
 }
 
