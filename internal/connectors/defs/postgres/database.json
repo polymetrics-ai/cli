@@ -35,5 +35,11 @@
     { "native": { "name": "json" }, "logical": { "kind": "json" } },
     { "native": { "name": "jsonb" }, "logical": { "kind": "json" } }
   ],
-  "admitted_modes": []
+  "admitted_modes": [
+    "full_overwrite",
+    "full_append",
+    "incremental_append",
+    "incremental_upsert",
+    "incremental_dedupe"
+  ]
 }

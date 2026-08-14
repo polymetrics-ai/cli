@@ -1,0 +1,17 @@
+Command:
+
+    go test -timeout 20m -count=1 ./internal/connectors/database -run TestManagedTargetProvisioningPlanCarriesSharedMapping
+
+Observed output before the shared provisioning-plan attachment:
+
+    # polymetrics.ai/internal/connectors/database_test [polymetrics.ai/internal/connectors/database.test]
+    internal/connectors/database/managed_target_provisioning_test.go:693:3: too many arguments in call to database.NewManagedTargetProvisioningPlan
+        have (database.TargetOwner, database.ManagedTargetRef, database.TargetDatabaseIdentity, database.ManagedTargetSchema, database.MappingContractV1)
+        want (database.TargetOwner, database.ManagedTargetRef, database.TargetDatabaseIdentity, database.ManagedTargetSchema)
+    internal/connectors/database/managed_target_provisioning_test.go:698:18: plan.Mapping undefined (type database.ManagedTargetProvisioningPlan has no field or method Mapping)
+    FAIL    polymetrics.ai/internal/connectors/database [build failed]
+    FAIL
+
+This Red test demonstrates why the shared mapping must be carried by the
+existing typed provisioning plan before a native adapter can render first-create
+DDL. It specifically rejects a driver-local mapping side channel.
