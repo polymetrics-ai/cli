@@ -96,6 +96,31 @@ func TestPostgresTransportRegistryPreflightRefusesBeforeSourceIO(t *testing.T) {
 	}
 }
 
+func TestRegisterPostgresSnapshotTransportSourceMakesDefinitionSelectedSourceReachable(t *testing.T) {
+	registry := synctransport.NewRegistry(postgresTransportTestVerifier{})
+	connector := New()
+	if err := RegisterSnapshotTransportSource(registry, connector); err != nil {
+		t.Fatalf("RegisterSnapshotTransportSource() error = %v", err)
+	}
+	destination := newPreflightDestinationConnector()
+	if err := registry.RegisterDestination(&preflightSpyDestinationExecutor{reference: destination.destination.Executor}); err != nil {
+		t.Fatalf("RegisterDestination() error = %v", err)
+	}
+
+	resolved, err := registry.Preflight(synctransport.PreflightRequest{
+		Source:      connector,
+		Destination: destination,
+		Stream:      "snapshot",
+		Mode:        synccontract.ModeFullAppend,
+	})
+	if err != nil {
+		t.Fatalf("Preflight() error = %v", err)
+	}
+	if got := resolved.Source.TransportExecutorReference(); got != (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_bounded_snapshot"}) {
+		t.Fatalf("resolved source executor = %#v", got)
+	}
+}
+
 type preflightSpyConnector struct {
 	descriptor *connectors.SourceTransportDescriptor
 	ioCalls    int
