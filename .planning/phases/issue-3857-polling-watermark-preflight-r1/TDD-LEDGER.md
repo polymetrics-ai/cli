@@ -25,8 +25,25 @@ No test calls a database, uses a credential, or treats a skipped test as proof.
 
 ### Red
 
-Pending. The next implementation action is to add the tests described above
-and run their focused package command before adding production code.
+The complete happy/sad/edge test harness was added before the preflight or
+descriptor types. It is deliberately observable: every refusal asserts the
+specific error plus both source-read and target-prepare counters remain zero;
+the happy and empty-page paths increment their own counters only after a
+resolved preflight result.
+
+```text
+$ go test -count=1 ./internal/connectors/engine -run '^TestPollingPreflight'
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+internal/connectors/engine/polling_preflight_test.go:16:19: undefined: PollingPreflight
+internal/connectors/engine/polling_preflight_test.go:64:52: undefined: connectors.PollingCursorCodecFloat64
+internal/connectors/engine/polling_preflight_test.go:188:26: undefined: connectors.PollingWatermarkDescriptor
+internal/connectors/engine/polling_preflight_test.go:192:15: undefined: PollingPreflightRegistry
+FAIL    polymetrics.ai/internal/connectors/engine [build failed]
+```
+
+The remaining compile errors are deliberately the closed descriptor and
+runtime-preflight APIs this issue introduces; no production source was edited
+before this red run.
 
 ### Green
 
