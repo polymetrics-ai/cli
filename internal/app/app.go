@@ -2368,7 +2368,7 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
 		return ReverseRun{}, err
 	}
-	if plan.ApprovalTokenHash == "" {
+	if plan.Status != "planned" && plan.ApprovalTokenHash == "" {
 		return ReverseRun{}, errors.New("reverse plan approval has already been consumed")
 	}
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
@@ -2376,6 +2376,9 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	}
 	if a.planRequiresPersistedPreview(plan) && (plan.Status != "previewed" || plan.PreviewDigest == "" || plan.PreviewedAt.IsZero()) {
 		return ReverseRun{}, fmt.Errorf("reverse plan %q must be previewed before approval", plan.ID)
+	}
+	if plan.ApprovalTokenHash == "" {
+		return ReverseRun{}, errors.New("reverse plan approval has already been consumed")
 	}
 	if !constantTimeStringEqual(hashString(req.ApprovalToken), plan.ApprovalTokenHash) {
 		return ReverseRun{}, errors.New("approval token is invalid")

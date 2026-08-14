@@ -18,6 +18,7 @@ import (
 // on the stdin channel throughout a real process invocation. The test emits
 // only the checked process command line and sanitized evidence, never a token.
 func TestReverseETLApprovalUsesBoundedStdin(t *testing.T) {
+	t.Setenv("PM_REVERSE_APPROVAL_ENV_PROBE", "visible")
 	binary := buildTransportPM(t)
 	root := setupReverseApprovalStdinProject(t)
 
@@ -44,7 +45,11 @@ func TestReverseETLApprovalUsesBoundedStdin(t *testing.T) {
 
 		commandLine := reverseApprovalProcessCommandLine(t, command.Process.Pid)
 		assertReverseApprovalTokenAbsentFromArgv(t, commandLine, token)
-		assertReverseApprovalTokenAbsentFromEnvironment(t, command.Environ(), token)
+		processEnvironment := reverseApprovalProcessEnvironment(t, command.Process.Pid)
+		if !strings.Contains(processEnvironment, "PM_REVERSE_APPROVAL_ENV_PROBE=visible") {
+			t.Fatal("live reverse process environment was not observable")
+		}
+		assertReverseApprovalTokenAbsentFromEnvironment(t, processEnvironment, token)
 		t.Logf("reverse approval process argv: %s", commandLine)
 
 		if _, err := io.WriteString(stdin, token+"\n"); err != nil {
@@ -191,6 +196,15 @@ func reverseApprovalProcessCommandLine(t *testing.T, pid int) string {
 	return commandLine
 }
 
+func reverseApprovalProcessEnvironment(t *testing.T, pid int) string {
+	t.Helper()
+	output, err := exec.Command("ps", "eww", "-o", "command=", "-p", strconv.Itoa(pid)).Output()
+	if err != nil {
+		t.Fatalf("inspect live reverse process environment: %v", err)
+	}
+	return string(output)
+}
+
 func runReverseApprovalPM(binary, stdin string, args ...string) (string, error) {
 	command := exec.Command(binary, args...)
 	command.Stdin = strings.NewReader(stdin)
@@ -222,12 +236,10 @@ func assertReverseApprovalTokenAbsentFromArgv(t *testing.T, commandLine, token s
 	}
 }
 
-func assertReverseApprovalTokenAbsentFromEnvironment(t *testing.T, environment []string, token string) {
+func assertReverseApprovalTokenAbsentFromEnvironment(t *testing.T, environment, token string) {
 	t.Helper()
-	for _, entry := range environment {
-		if strings.Contains(entry, token) {
-			t.Fatal("approval token appeared in the process environment")
-		}
+	if strings.Contains(environment, token) {
+		t.Fatal("approval token appeared in the live process environment")
 	}
 }
 
