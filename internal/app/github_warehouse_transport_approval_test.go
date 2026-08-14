@@ -82,6 +82,43 @@ func TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPl
 	}
 }
 
+func TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent(t *testing.T) {
+	tests := []struct {
+		name       string
+		mode       synccontract.Mode
+		consentKey string
+	}{
+		{name: "set replace", mode: synccontract.ModeFullOverwrite, consentKey: "transport_allow_set_replace"},
+		{name: "keyed", mode: synccontract.ModeIncrementalUpsert, consentKey: "transport_allow_keyed"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name+" is disabled by default", func(t *testing.T) {
+			fixture := newIssueLabelTransportApprovalFixture(t)
+			fixture.configureMode(t, tt.mode, tt.consentKey, false)
+			if _, err := fixture.app.PlanIssueLabelTransport(context.Background(), fixture.connection.ID); err == nil {
+				t.Fatal("PlanIssueLabelTransport() accepted a non-additive mode without per-connection consent")
+			}
+			fixture.assertProviderWrites(t, 0)
+			fixture.assertProviderSets(t, 0)
+		})
+
+		t.Run(tt.name+" persists a definition-owned replacement plan when enabled", func(t *testing.T) {
+			fixture := newIssueLabelTransportApprovalFixture(t)
+			fixture.configureMode(t, tt.mode, tt.consentKey, true)
+			plan, err := fixture.app.PlanIssueLabelTransport(context.Background(), fixture.connection.ID)
+			if err != nil {
+				t.Fatalf("PlanIssueLabelTransport() = %v", err)
+			}
+			if plan.Action != "set_issue_labels" || plan.TransportBindingSHA256 == "" {
+				t.Fatalf("non-additive plan = %+v, want the definition-owned set_issue_labels action and binding", plan)
+			}
+			fixture.assertProviderWrites(t, 0)
+			fixture.assertProviderSets(t, 0)
+		})
+	}
+}
+
 func TestIssueLabelTransportCleanupUsesItsOwnDerivedApproval(t *testing.T) {
 	fixture := newIssueLabelTransportApprovalFixture(t)
 	forwardPlan, forwardApproval := fixture.preRunApproval(t)
@@ -321,6 +358,7 @@ type issueLabelTransportApprovalFixture struct {
 	cleanupAction    string
 	reads            *int
 	writes           *int
+	sets             *int
 	deletes          *int
 }
 
@@ -355,6 +393,7 @@ func newIssueLabelTransportApprovalFixtureWithIssuePages(t *testing.T, cleanupSt
 	ctx := context.Background()
 	reads := 0
 	writes := 0
+	sets := 0
 	deletes := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
 		switch request.Method {
@@ -376,6 +415,18 @@ func newIssueLabelTransportApprovalFixtureWithIssuePages(t *testing.T, cleanupSt
 				return
 			}
 			writes++
+			writeIssueLabelTransportJSON(t, w, []map[string]any{{"name": "transport-demo"}})
+		case http.MethodPut:
+			if request.URL.Path != "/repos/acme/widgets/issues/200/labels" {
+				w.WriteHeader(http.StatusNotFound)
+				return
+			}
+			var body map[string]any
+			if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+			sets++
 			writeIssueLabelTransportJSON(t, w, []map[string]any{{"name": "transport-demo"}})
 		case http.MethodDelete:
 			if request.URL.Path != "/repos/acme/widgets/issues/200/labels/transport-demo" {
@@ -470,6 +521,7 @@ func newIssueLabelTransportApprovalFixtureWithIssuePages(t *testing.T, cleanupSt
 		cleanupAction:    github.contract.cleanup.name,
 		reads:            &reads,
 		writes:           &writes,
+		sets:             &sets,
 		deletes:          &deletes,
 	}
 }
@@ -626,6 +678,42 @@ func (f issueLabelTransportApprovalFixture) assertProviderWrites(t *testing.T, w
 	t.Helper()
 	if got := *f.writes; got != want {
 		t.Fatalf("GitHub label POST calls = %d, want %d", got, want)
+	}
+}
+
+func (f issueLabelTransportApprovalFixture) assertProviderSets(t *testing.T, want int) {
+	t.Helper()
+	if got := *f.sets; got != want {
+		t.Fatalf("GitHub label PUT calls = %d, want %d", got, want)
+	}
+}
+
+func (f issueLabelTransportApprovalFixture) configureMode(t *testing.T, mode synccontract.Mode, consentKey string, enabled bool) {
+	t.Helper()
+	updated := false
+	for index := range f.app.state.Connections {
+		connection := &f.app.state.Connections[index]
+		if connection.ID != f.connection.ID {
+			continue
+		}
+		connection.Streams = cloneStreamConfigs(connection.Streams)
+		stream := connection.Streams["issues"]
+		stream.SyncMode = string(mode)
+		connection.Streams["issues"] = stream
+		connection.Destination.Config = cloneStringMap(connection.Destination.Config)
+		if enabled {
+			connection.Destination.Config[consentKey] = "true"
+		} else {
+			delete(connection.Destination.Config, consentKey)
+		}
+		updated = true
+		break
+	}
+	if !updated {
+		t.Fatalf("connection %q was not stored", f.connection.ID)
+	}
+	if err := f.app.save(); err != nil {
+		t.Fatal(err)
 	}
 }
 
