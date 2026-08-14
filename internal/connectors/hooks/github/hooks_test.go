@@ -15,6 +15,7 @@ import (
 	"strings"
 	"sync/atomic"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -131,6 +132,32 @@ func TestGitHubAppAuthRateAdmissionRequireSharedRefusesBeforeTokenSend(t *testin
 	var unavailable *coordination.SharedRateLimitUnavailableError
 	if !errors.As(err, &unavailable) {
 		t.Fatalf("NewRuntime error = %T %v, want typed shared coordinator refusal", err, err)
+	}
+}
+
+func TestGitHubAppAuthRateAdmissionUnreachableSharedRefusesBeforeTokenSend(t *testing.T) {
+	recordingTransport := &githubAppAuthRecordingTransport{}
+	previousDefaultTransport := http.DefaultTransport
+	http.DefaultTransport = recordingTransport
+	t.Cleanup(func() { http.DefaultTransport = previousDefaultTransport })
+
+	shared := coordination.OpenSharedRateLimitRegistry("127.0.0.1:1")
+	t.Cleanup(func() { _ = shared.Close() })
+	engine.ConfigureSharedRateLimitRegistry(shared)
+	t.Cleanup(func() { engine.ConfigureSharedRateLimitRegistry(nil) })
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	_, err := engine.NewRuntime(ctx, requireSharedGitHubAppBundle(t), githubAppAuthAdmissionConfig(t), githubhooks.New())
+	if got := recordingTransport.sends.Load(); got != 0 {
+		t.Fatalf("physical GitHub App token sends = %d, want 0 before unreachable shared admission refusal (NewRuntime error = %v)", got, err)
+	}
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(err, &unavailable) {
+		t.Fatalf("NewRuntime error = %T %v, want typed shared coordinator refusal", err, err)
+	}
+	if unavailable.Reason != coordination.SharedRateLimitCoordinatorUnreachable {
+		t.Fatalf("shared coordinator refusal reason = %q, want %q", unavailable.Reason, coordination.SharedRateLimitCoordinatorUnreachable)
 	}
 }
 
