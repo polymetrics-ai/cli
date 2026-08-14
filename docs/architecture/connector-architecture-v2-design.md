@@ -578,9 +578,10 @@ file/warehouse/outbox/sample built-ins. These implement `connectors.Connector` d
 Ruby component split as the mandated file layout: `connector.go` (entry + registration),
 `connection.go`, `reader.go`, `cataloger.go`, `writer.go`, `cdc.go`. **They still ship a defs
 bundle** (metadata.json, spec.json, schemas/, and `database.json` when it is a native database
-driver) so identity, catalog, and docs stay uniform; they embed `engine.Base` which serves
-`Definition()`/`Catalog()` from the bundle. The database declaration's closed authoring contract
-lives in the [migration conventions](../migration/conventions.md#database-native-policy-declaration-databasejson).
+driver) so identity, catalog, and docs stay uniform; they embed `engine.Base`, which supplies
+bundle-derived identity and the base `Definition()`. Native operations remain package-owned. The
+database declaration's closed authoring contract lives in the
+[migration conventions](../migration/conventions.md#database-native-policy-declaration-databasejson).
 
 ### B.7.1 Database warehouse mediation
 
@@ -595,6 +596,13 @@ direct connector pair nor a zero-copy route exists in this architecture.
 `database.json` remains a non-executing policy declaration: it does not register a driver, open a
 connection, perform SQL/DDL, create a write session, persist a receipt/checkpoint, or enable
 CDC/polling; public capabilities remain in `metadata.json`.
+
+Database transport selection is declaration-led. Each declared source or destination role names a
+closed executor reference, and `synctransport.Registry` preflights its descriptor,
+integration-family compatibility, exact registration, and independent conformance before source
+I/O. App composition must not infer or assemble a database source from `Connector.Read` or broad
+capability bits. A connector's own bundle documentation owns its exact streams, modes, and source
+limits.
 
 The shared managed-target ownership kernel adds driver-neutral provisioning without changing that
 boundary. A `TargetOwner` is the source identity triple (workspace, source connector, and source

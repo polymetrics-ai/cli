@@ -100,8 +100,10 @@ native database bundle may additionally ship `database.json` as described below;
 `capabilities.dynamic_schema: true` and the bundle ships **no `streams.json`** (the loader
 (`bundle.go`'s `loadStreams`) only tolerates a missing `streams.json` when `dynamic_schema` is
 true). The package embeds `engine.Base` (via `engine.NewBase(bundle)`) purely to serve
-`Name()`/`Metadata()`/`Definition()`; `engine.Base` does **not** provide
-Check/Catalog/Read/Write — those remain hand-written Go.
+bundle-derived `Name()`/`Metadata()` and the base `Definition()`; `engine.Base` does **not**
+provide Check/Catalog/Read/Write — those remain hand-written Go. A native transport declaration
+extends that base rather than replacing it; its declaration-led registry rule is owned by the
+[database warehouse-mediation architecture](../architecture/connector-architecture-v2-design.md#b71-database-warehouse-mediation).
 
 Worked example — **postgres** (`internal/connectors/native/postgres/` +
 `internal/connectors/defs/postgres/`): `api_surface.json` declares `endpoints: []` with a `scope`
@@ -114,7 +116,9 @@ admission conditions are owned by the [PostgreSQL bundle docs](../../internal/co
 so the capability stays false rather than faking a runnable CDC surface. Its `database.json` is the
 reference strict policy-only declaration described below; it does not register a driver or promote
 a capability. The package has **no `init()`/`RegisterFactory`/
-`RegisterNativeLive` call** in wave0 (registration flip is wave6); a grep-guard test enforces this.
+`RegisterNativeLive` call** in wave0 (the factory-registration flip is wave6); that is distinct
+from its explicit, definition-selected source-transport helper. A grep-guard test enforces the
+factory boundary.
 
 #### Database-native policy declaration (`database.json`)
 

@@ -16,15 +16,12 @@ Once these legs share one contract, the system can compose GitHub to warehouse t
 ## Target architecture
 
 ```text
-GitHub API source ----+
-                      +-- Connector.Read
-PostgreSQL source ----+
-                             |
-                             v
-                    Immutable captured batch
-                  records + schema + checkpoint
-                             |
-                             v
+GitHub API source -- Connector.Read ----+
+                                        +-- Immutable captured batch
+PostgreSQL source -- native source -----+   records + schema + checkpoint
+                     (definition-selected)
+                                        |
+                                        v
                  Parquet/DuckDB sync executor
             WAL -> validate -> materialize -> receipt
                              |
@@ -42,6 +39,11 @@ PostgreSQL source ----+
 ```
 
 DuckDB is the common materialization and query engine. The durable warehouse is a connection-owned JSONL WAL plus one derived Parquet file for each table.
+
+PostgreSQL's native source selection follows the declaration-led registry contract in the
+[connector architecture](connector-architecture-v2-design.md#b71-database-warehouse-mediation),
+not App composition. Its exact snapshot streams, modes, and limits are owned by the
+[PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md).
 
 ## Responsibility boundaries
 
@@ -118,6 +120,11 @@ Flows and schedules must invoke this same connector writer. A schedule stores a 
 
 ### PostgreSQL to warehouse
 
+The current PostgreSQL source leg is a definition-selected bounded snapshot. Its exact streams,
+modes, and checkpoint limits are owned by the
+[PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md). Polling is a separate,
+future transport and is not a fallback for that snapshot.
+
 Polling resume must use an exact composite position `(cursor_value, primary_key)`. For the architecture's composite contract, bind the prior cursor value as pgx argument 1 (`$1`) and the stable primary-key tie breaker as argument 2 (`$2`); the predicate and ordering must handle equal cursor values:
 
 ```sql
@@ -126,7 +133,9 @@ WHERE cursor > $1
 ORDER BY cursor, primary_key
 ```
 
-Also prove a consistent snapshot boundary, schema drift handling, bounded reads, exact restart, transaction-preserving CDC, and a whole-transaction warehouse receipt before LSN acknowledgement.
+Any future polling or CDC source must prove a consistent snapshot boundary, schema drift handling,
+bounded reads, exact restart, transaction-preserving CDC, and a whole-transaction warehouse receipt
+before LSN acknowledgement.
 
 ### Warehouse to PostgreSQL
 
@@ -136,7 +145,12 @@ Implement a managed-target driver with strict ownership boundaries. It must pin 
 
 Certification requires every applicable mode and a typed evidence-bearing outcome for unsupported or non-applicable cells. It must not force unsafe symmetry or infer exact execution from broad `read` or `write` capability flags.
 
-GitHub source to warehouse can support all six non-CDC warehouse modes. PostgreSQL source to warehouse can support those modes plus source CDC. PostgreSQL destination naturally supports overwrite, append, upsert, and dedupe. GitHub full overwrite requires an explicit managed-resource ownership and deletion/archive contract. `change_capture` is a source mode rather than a destination write mode.
+GitHub source to warehouse can support all six non-CDC warehouse modes. Exact PostgreSQL source
+availability is owned by the [PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md);
+its broad `read` capability does not promote polling, incremental modes, or source CDC. PostgreSQL
+destination naturally supports overwrite, append, upsert, and dedupe. GitHub full overwrite requires
+an explicit managed-resource ownership and deletion/archive contract. `change_capture` is a source
+mode rather than a destination write mode.
 
 The current PostgreSQL #3972 contract records destination-side `incremental_dedupe_history` as typed non-executable. Warehouse-side SCD2 history should be implemented for both sources now. Expanding PostgreSQL destination history requires an explicit managed-history-table contract rather than a false certification claim.
 
