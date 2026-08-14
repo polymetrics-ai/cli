@@ -15,9 +15,9 @@ import (
 var errTransportStreamStateConflict = errors.New("transport stream state changed in another process")
 
 func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
-	_, sourceDeclared := connectors.SyncTransportDescriptorOf(source)
-	_, destinationDeclared := connectors.SyncTransportDescriptorOf(destination)
-	return sourceDeclared || destinationDeclared
+	_, sourceDeclared := connectors.SourceTransportDescriptorOf(source)
+	_, destinationDeclared := connectors.DestinationTransportDescriptorOf(destination)
+	return sourceDeclared && destinationDeclared
 }
 
 // shouldRunTransport keeps the closed issue-label walking slice opt-in at the

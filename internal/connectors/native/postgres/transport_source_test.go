@@ -4,9 +4,13 @@ import (
 	"context"
 	"errors"
 	"math"
+	"math/big"
 	"reflect"
 	"strings"
 	"testing"
+	"time"
+
+	"github.com/jackc/pgx/v5/pgtype"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/database"
@@ -193,6 +197,87 @@ func TestPostgresSnapshotReadPlanAndCheckpointUseTypedStableIdentity(t *testing.
 	if !reflect.DeepEqual(first.Dedupe, second.Dedupe) || string(first.DedupeWindow.Start) != "742:742:" || string(first.DedupeWindow.End) != "742:742:" {
 		t.Fatalf("checkpoint dedupe boundary was not deterministic: %#v %#v", first.Dedupe, first.DedupeWindow)
 	}
+}
+
+func TestPostgresSnapshotRecordValuesNormalizeTransportVocabulary(t *testing.T) {
+	relation := database.RelationRef{
+		Schema: database.SchemaRef{Catalog: database.CatalogRef{Name: "analytics"}, Name: "public"},
+		Name:   "events",
+	}
+	uuid := [16]byte{0x54, 0x85, 0xb5, 0x8f, 0x40, 0x11, 0x4b, 0xd2, 0x8a, 0x9e, 0xf7, 0x80, 0x1e, 0x12, 0x7a, 0x91}
+	timestamp := time.Date(2026, time.August, 14, 12, 34, 56, 789000000, time.FixedZone("UTC+5:30", 5*60*60+30*60))
+	date := time.Date(2026, time.August, 14, 0, 0, 0, 0, time.UTC)
+	plan := postgresSnapshotReadPlan{
+		columns: []database.Column{
+			{Ref: database.ColumnRef{Relation: relation, Name: "event_id"}, Type: database.NewUUID()},
+			{Ref: database.ColumnRef{Relation: relation, Name: "occurred_at"}, Type: mustTransportTimestamp(t)},
+			{Ref: database.ColumnRef{Relation: relation, Name: "event_date"}, Type: database.NewDate()},
+			{Ref: database.ColumnRef{Relation: relation, Name: "amount"}, Type: mustTransportDecimal(t)},
+			{Ref: database.ColumnRef{Relation: relation, Name: "opened_at"}, Type: mustTransportTime(t)},
+		},
+		order: []database.ColumnRef{{Relation: relation, Name: "event_id"}},
+	}
+	values := []any{
+		uuid,
+		timestamp,
+		date,
+		pgtype.Numeric{Int: big.NewInt(12345), Exp: -2, Valid: true},
+		pgtype.Time{Microseconds: 12*60*60*1_000_000 + 34*60*1_000_000 + 56*1_000_000 + 789000, Valid: true},
+	}
+
+	record, err := plan.recordForValues(values)
+	if err != nil {
+		t.Fatalf("recordForValues() error = %v", err)
+	}
+	if got, want := record["event_id"], "5485b58f-4011-4bd2-8a9e-f7801e127a91"; got != want {
+		t.Fatalf("event_id = %#v, want %q", got, want)
+	}
+	if got, want := record["occurred_at"], "2026-08-14T12:34:56.789+05:30"; got != want {
+		t.Fatalf("occurred_at = %#v, want %q", got, want)
+	}
+	if got, want := record["event_date"], "2026-08-14"; got != want {
+		t.Fatalf("event_date = %#v, want %q", got, want)
+	}
+	if got, want := record["amount"], "123.45"; got != want {
+		t.Fatalf("amount = %#v, want %q", got, want)
+	}
+	if got, want := record["opened_at"], "12:34:56.789000"; got != want {
+		t.Fatalf("opened_at = %#v, want %q", got, want)
+	}
+	position, err := plan.orderValues(values)
+	if err != nil {
+		t.Fatalf("orderValues() error = %v", err)
+	}
+	if got, want := position, []any{uuid}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("orderValues() = %#v, want native key %#v", got, want)
+	}
+}
+
+func mustTransportDecimal(t *testing.T) database.LogicalType {
+	t.Helper()
+	logical, err := database.NewDecimal(12, 2)
+	if err != nil {
+		t.Fatalf("NewDecimal() error = %v", err)
+	}
+	return logical
+}
+
+func mustTransportTime(t *testing.T) database.LogicalType {
+	t.Helper()
+	logical, err := database.NewTime(6, false)
+	if err != nil {
+		t.Fatalf("NewTime() error = %v", err)
+	}
+	return logical
+}
+
+func mustTransportTimestamp(t *testing.T) database.LogicalType {
+	t.Helper()
+	logical, err := database.NewTimestamp(3, true)
+	if err != nil {
+		t.Fatalf("NewTimestamp() error = %v", err)
+	}
+	return logical
 }
 
 func TestPostgresSnapshotReadPlanRefusesUnstableOrMissingRelation(t *testing.T) {
