@@ -9,6 +9,8 @@ import (
 	"strings"
 	"sync"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 var certificationMatrixTestCache struct {
@@ -796,6 +798,34 @@ func TestCertificationScopedSourceResolutionUsesTargetConnector(t *testing.T) {
 	connector, found := scopedMatrixConnector("github", &bundles[0])
 	if !found || !isEngineConnector(connector) {
 		t.Fatalf("scopedMatrixConnector(github) = %T, %t; want engine connector", connector, found)
+	}
+}
+
+func TestCertificationScopedSourceResolutionIgnoresUnrelatedRuntimeLedgerEntry(t *testing.T) {
+	defsRoot := filepath.Join(repoRootForCertificationTest(t), "internal", "connectors", "defs")
+	raw, err := os.ReadFile(filepath.Join(defsRoot, engine.RuntimeOperationEndpointLedgerFile))
+	if err != nil {
+		t.Fatalf("read runtime operation endpoint ledger: %v", err)
+	}
+	var entries map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &entries); err != nil {
+		t.Fatalf("parse runtime operation endpoint ledger: %v", err)
+	}
+	entries["other"] = json.RawMessage(`[{"unexpected":true}]`)
+	malformed, err := json.Marshal(entries)
+	if err != nil {
+		t.Fatalf("encode malformed runtime operation endpoint ledger: %v", err)
+	}
+	source := certificationRuntimeOperationEndpointLedgerFS{FS: os.DirFS(defsRoot), raw: malformed}
+	if _, err := engine.Load(source, "github"); err == nil || !strings.Contains(err.Error(), "unknown field") {
+		t.Fatalf("runtime Load with malformed unrelated ledger entry = %v, want strict decoder rejection", err)
+	}
+	scoped, err := scopedRuntimeOperationEndpointLedgerForCertification(source, "github")
+	if err != nil {
+		t.Fatalf("scope runtime operation endpoint ledger: %v", err)
+	}
+	if _, err := engine.Load(scoped, "github"); err != nil {
+		t.Fatalf("generator-scoped Load with malformed unrelated ledger entry: %v", err)
 	}
 }
 

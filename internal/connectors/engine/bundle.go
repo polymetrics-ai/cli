@@ -1235,7 +1235,7 @@ func LoadAll(fsys fs.FS) ([]Bundle, error) {
 // Load loads and structurally validates a single bundle directory named
 // dirName at the root of fsys.
 func Load(fsys fs.FS, dirName string) (Bundle, error) {
-	operationEndpointLedgers, err := loadOperationEndpointLedger(fsys, dirName)
+	operationEndpointLedgers, err := loadOperationEndpointLedgers(fsys)
 	if err != nil {
 		return Bundle{}, fmt.Errorf("load runtime operation endpoint ledger: %w", err)
 	}

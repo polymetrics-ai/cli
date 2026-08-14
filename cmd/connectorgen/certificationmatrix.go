@@ -826,15 +826,103 @@ func loadSourceBundlesForConnectors(repoRoot string, names []string) ([]engine.B
 		return loadSourceBundles(repoRoot)
 	}
 	defsRoot := filepath.Join(repoRoot, "internal", "connectors", "defs")
+	sourceFS := os.DirFS(defsRoot)
 	bundles := make([]engine.Bundle, 0, len(names))
 	for _, name := range names {
-		bundle, err := engine.Load(os.DirFS(defsRoot), name)
+		scopedFS, err := scopedRuntimeOperationEndpointLedgerForCertification(sourceFS, name)
+		if err != nil {
+			return nil, fmt.Errorf("scope source connector bundle %q runtime operation endpoint ledger: %w", name, err)
+		}
+		bundle, err := engine.Load(scopedFS, name)
 		if err != nil {
 			return nil, fmt.Errorf("load source connector bundle %q: %w", name, err)
 		}
 		bundles = append(bundles, bundle)
 	}
 	return bundles, nil
+}
+
+// scopedRuntimeOperationEndpointLedgerForCertification presents one connector's
+// generated ledger entry to the certification generator. Runtime loading still
+// validates the complete shipped ledger; this isolated view exists only so a
+// connector-local certification shard is independent of unrelated entries.
+func scopedRuntimeOperationEndpointLedgerForCertification(source fs.FS, connector string) (fs.FS, error) {
+	raw, err := fs.ReadFile(source, engine.RuntimeOperationEndpointLedgerFile)
+	if errors.Is(err, fs.ErrNotExist) {
+		return source, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("read %s: %w", engine.RuntimeOperationEndpointLedgerFile, err)
+	}
+	var entries map[string]json.RawMessage
+	if err := decodeStrictJSON(raw, &entries); err != nil {
+		return nil, fmt.Errorf("parse %s: %w", engine.RuntimeOperationEndpointLedgerFile, err)
+	}
+	scopedEntries := make(map[string]json.RawMessage, 1)
+	if entry, found := entries[connector]; found {
+		scopedEntries[connector] = entry
+	}
+	scopedRaw, err := json.Marshal(scopedEntries)
+	if err != nil {
+		return nil, fmt.Errorf("encode %s: %w", engine.RuntimeOperationEndpointLedgerFile, err)
+	}
+	return certificationRuntimeOperationEndpointLedgerFS{FS: source, raw: scopedRaw}, nil
+}
+
+type certificationRuntimeOperationEndpointLedgerFS struct {
+	fs.FS
+	raw []byte
+}
+
+func (f certificationRuntimeOperationEndpointLedgerFS) Open(name string) (fs.File, error) {
+	if name == engine.RuntimeOperationEndpointLedgerFile {
+		return &certificationRuntimeOperationEndpointLedgerFile{
+			Reader: bytes.NewReader(f.raw),
+			size:   int64(len(f.raw)),
+		}, nil
+	}
+	return f.FS.Open(name)
+}
+
+type certificationRuntimeOperationEndpointLedgerFile struct {
+	*bytes.Reader
+	size int64
+}
+
+func (f *certificationRuntimeOperationEndpointLedgerFile) Close() error {
+	return nil
+}
+
+func (f *certificationRuntimeOperationEndpointLedgerFile) Stat() (fs.FileInfo, error) {
+	return certificationRuntimeOperationEndpointLedgerFileInfo{size: f.size}, nil
+}
+
+type certificationRuntimeOperationEndpointLedgerFileInfo struct {
+	size int64
+}
+
+func (info certificationRuntimeOperationEndpointLedgerFileInfo) Name() string {
+	return engine.RuntimeOperationEndpointLedgerFile
+}
+
+func (info certificationRuntimeOperationEndpointLedgerFileInfo) Size() int64 {
+	return info.size
+}
+
+func (certificationRuntimeOperationEndpointLedgerFileInfo) Mode() fs.FileMode {
+	return 0o444
+}
+
+func (certificationRuntimeOperationEndpointLedgerFileInfo) ModTime() time.Time {
+	return time.Time{}
+}
+
+func (certificationRuntimeOperationEndpointLedgerFileInfo) IsDir() bool {
+	return false
+}
+
+func (certificationRuntimeOperationEndpointLedgerFileInfo) Sys() any {
+	return nil
 }
 
 func matrixConnectorSourcesForNames(bundles []engine.Bundle, scope []string) ([]matrixConnectorSource, error) {

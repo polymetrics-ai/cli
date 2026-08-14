@@ -92,15 +92,15 @@ func TestOperationEndpointLedgerRuntimeProjectionFailsClosed(t *testing.T) {
 	}
 }
 
-func TestOperationEndpointLedgerSingleBundleLoadScopesValidation(t *testing.T) {
+func TestOperationEndpointLedgerSingleBundleLoadValidatesWholeLedger(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys[RuntimeOperationEndpointLedgerFile] = &fstest.MapFile{Data: []byte(`{
   "acme": [],
   "other": [{"unexpected": true}]
 }`)}
 
-	if _, err := Load(fsys, "acme"); err != nil {
-		t.Fatalf("Load with malformed unrelated runtime endpoint ledger entry: %v", err)
+	if _, err := Load(fsys, "acme"); err == nil || !strings.Contains(err.Error(), "unknown field") {
+		t.Fatalf("Load with malformed runtime endpoint ledger entry = %v, want strict decoder rejection", err)
 	}
 	if _, err := LoadAll(fsys); err == nil || !strings.Contains(err.Error(), "unknown field") {
 		t.Fatalf("LoadAll with malformed runtime endpoint ledger entry = %v, want strict decoder rejection", err)
