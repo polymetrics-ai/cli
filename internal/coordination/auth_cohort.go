@@ -44,8 +44,9 @@ type AuthCohortEpoch uint64
 // restart. The key is supplied separately to the store and is an already
 // secret-free connectors.AuthCohortKey.
 type AuthCohortHealth struct {
-	Epoch  AuthCohortEpoch
-	Fenced bool
+	Epoch           AuthCohortEpoch
+	Fenced          bool
+	LastFencedEpoch AuthCohortEpoch
 }
 
 // AuthCohortHealthStore persists only an opaque cohort health record. A
@@ -262,6 +263,7 @@ func (c *AuthCohortCoordinator) Report(admission *AuthCohortAdmission, outcome A
 		return nil
 	}
 	health.Fenced = true
+	health.LastFencedEpoch = health.Epoch
 	if err := c.store.Store(admission.cohort, health); err != nil {
 		c.mu.Unlock()
 		return errAuthCohortHealthStoreUnavailable
@@ -342,7 +344,7 @@ func (c *AuthCohortCoordinator) healthLocked(cohort connectors.AuthCohortKey) (A
 		}
 		return health, nil
 	}
-	if health.Epoch == 0 {
+	if health.Epoch == 0 || health.LastFencedEpoch > health.Epoch || (health.Fenced && health.LastFencedEpoch != health.Epoch) {
 		return AuthCohortHealth{}, errors.New("authentication cohort health state is invalid")
 	}
 	return health, nil

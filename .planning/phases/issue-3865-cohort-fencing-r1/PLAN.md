@@ -17,7 +17,7 @@
 | Only a typed verified invalid-authentication result fences a cohort | fake | A deterministic in-process coordinator is needed because this connector-neutral foundation must not call a provider. The test asserts all non-verified outcomes leave a sibling admission grantable, while the verified outcome changes health to fenced. |
 | Fencing cancels same-cohort siblings and rejects new work without a send | fake | A fake sender increments only after admission. The test waits for the sibling context cancellation, then asserts its post-fence send count is exactly zero and the next cohort admission is refused. |
 | Unrelated cohorts remain healthy | fake | A second opaque cohort exercises the same live coordinator instance; its sender count is exactly one after the first cohort fences. |
-| Repair/test opens a new healthy epoch while stale members remain refused | fake | A deterministic typed repair result is necessary because no provider adapter is in scope. The test observes a strictly larger epoch, asserts an old member cannot admit or send, then records exactly one new-epoch send. |
+| Repair/test opens a new healthy epoch while stale members remain refused and the prior fence remains auditable | fake | A deterministic typed repair result is necessary because no provider adapter is in scope. The test observes a strictly larger epoch, asserts an old member cannot admit or send, verifies the persisted `LastFencedEpoch`, then records exactly one new-epoch send. |
 | Restart and races preserve the fence/epoch contract | fake | An in-memory durable health store models the persistence seam without a project-state or provider write. Under `-race`, a restarted coordinator reloads the fenced health, concurrent admissions after fencing produce zero send increments, and a stale epoch is rejected. |
 
 ## GSD path and fallback
@@ -37,7 +37,7 @@
 1. The coordinator accepts the already-derived `connectors.AuthCohortKey`, never credentials, credential IDs, revisions, provider responses, or raw headers.
 2. Authentication outcomes are a closed typed vocabulary. A plain 401-like status, transport error, timeout, or provider error has no path to mutate health; only the verified-invalid outcome may fence.
 3. Each admitted member receives a derived cancellable context and an epoch. Fencing atomically changes health before cancelling same-epoch members, so a caller checking its admission boundary cannot send after the fence wins.
-4. A verified repair/test is the only transition that creates a new healthy epoch. It cancels old members; their stale epoch cannot be used to admit or report a later outcome.
+4. A verified repair/test is the only transition that creates a new healthy epoch. It cancels old members; their stale epoch cannot be used to admit or report a later outcome. The persisted last-fenced epoch survives repair as secret-free audit evidence.
 5. Health persistence is an injected opaque-key store seam. This task supplies a deterministic in-memory implementation and restart proof only; it does not change `internal/app` state, provider behavior, UDS rate-budget protocol, checkpointing, scheduler behavior, or #3867 rate parking.
 
 ## TDD slices

@@ -6,7 +6,7 @@ Manual-GSD fallback: #3865 is not a numbered roadmap phase. Generated GSD prompt
 | --- | --- | --- | --- | --- |
 | R1 | A closed typed outcome allows only verified invalid authentication to fence | Captured: focused test failed to compile because the outcome and coordinator contracts do not exist | Test proves timeout, transport/provider, unverified, unknown, and unrecognized outcomes leave admission available; verified invalid alone changes health | Green |
 | R2 | Fencing cancels siblings and prevents all later admissions/sends | Captured: member/admission API is absent | Race test waits for cancellation, verifies a post-fence admission failure, and asserts `sends == 0` | Green |
-| R3 | Cohorts isolate and repair starts a new epoch | Captured: epoch/repair APIs are absent | Test asserts other cohort sends once, repaired epoch increases, stale member is rejected without sending, and fresh member sends once; an unverified repair leaves the fence in place | Green |
+| R3 | Cohorts isolate and repair starts a new epoch without losing audit evidence | Captured: epoch/repair APIs are absent | Test asserts other cohort sends once, repaired epoch increases, persisted `LastFencedEpoch` retains the previous epoch, stale member is rejected without sending, and fresh member sends once; an unverified repair leaves the fence in place | Green |
 | R4 | Restart reloads a fence deterministically and concurrent post-fence admission is fail-closed | Captured: opaque health-store persistence/reload seam is absent | Under `-race`, a new coordinator from the same opaque state store accepts zero post-fence admissions/sends and reports the stale epoch error | Green |
 
 ## RED command log — 2026-08-15

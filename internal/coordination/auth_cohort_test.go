@@ -109,7 +109,8 @@ func TestAuthCohortCoordinator_VerifiedFailureCancelsSiblingsAndRejectsNewAdmiss
 }
 
 func TestAuthCohortCoordinator_IsolatesCohortsAndRepairCreatesHealthyEpoch(t *testing.T) {
-	coordinator := NewAuthCohortCoordinator(NewMemoryAuthCohortHealthStore())
+	store := NewMemoryAuthCohortHealthStore()
+	coordinator := NewAuthCohortCoordinator(store)
 	fencedCohort := testAuthCohortKey(t, "fenced")
 	healthyCohort := testAuthCohortKey(t, "healthy")
 
@@ -142,6 +143,16 @@ func TestAuthCohortCoordinator_IsolatesCohortsAndRepairCreatesHealthyEpoch(t *te
 	}
 	if newEpoch <= stale.Epoch() {
 		t.Fatalf("repair epoch = %d, stale member epoch = %d; want observable bump", newEpoch, stale.Epoch())
+	}
+	health, found, err := store.Load(fencedCohort)
+	if err != nil || !found {
+		t.Fatalf("load repaired cohort health = %+v, found=%t, err=%v", health, found, err)
+	}
+	if health.LastFencedEpoch != stale.Epoch() {
+		t.Fatalf("repair lost fenced epoch evidence: got %d, want %d", health.LastFencedEpoch, stale.Epoch())
+	}
+	if health.Fenced {
+		t.Fatal("verified repair left the new epoch fenced")
 	}
 	if err := stale.Check(context.Background()); !errors.Is(err, ErrAuthCohortEpochMismatch) {
 		t.Fatalf("stale member check after repair = %v, want ErrAuthCohortEpochMismatch", err)
