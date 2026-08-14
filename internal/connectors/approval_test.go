@@ -60,6 +60,12 @@ func TestFixtureWriteApprovalGrantCannotBeVerifiedTwice(t *testing.T) {
 	}
 	expected := approvalExpectation(grant, target)
 	copiedAuthority := *authority
+	if err := authority.ValidateWriteGrant(grant, expected); err != nil {
+		t.Fatalf("ValidateWriteGrant(first) error = %v", err)
+	}
+	if err := authority.ValidateWriteGrant(grant, expected); err != nil {
+		t.Fatalf("ValidateWriteGrant(second) error = %v", err)
+	}
 	if _, err := authority.VerifyWriteGrant(grant, expected); err != nil {
 		t.Fatalf("VerifyWriteGrant(first) error = %v", err)
 	}
