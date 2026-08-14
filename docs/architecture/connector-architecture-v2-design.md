@@ -57,6 +57,7 @@ internal/connectors/defs/
   github/
     metadata.json             // identity, capabilities, informational rate-limit metadata, risk
     changefeed.json           // optional evidence-backed changefeed declaration
+    polling_watermark.json    // optional native-database polling preflight declaration
     spec.json                 // connection specification (JSON Schema draft-07)
     streams.json              // declarative read config: base HTTP + streams
     writes.json               // declarative write actions
@@ -84,8 +85,10 @@ import "embed"
 var FS embed.FS
 ```
 
-(`changefeed.json`, `writes.json`, `operations.json`, `cli_surface.json`, and `certification.json`
-are optional per connector; the loader tolerates absence. `api_surface.json` and `fixtures/` stay
+(`changefeed.json`, `polling_watermark.json`, `writes.json`, `operations.json`, `cli_surface.json`,
+and `certification.json` are optional per connector; the loader tolerates absence. No engine
+bundle declares `polling_watermark.json` yet, so its embed pattern is added with the first
+engine-owned declaration rather than as an unmatched `go:embed` glob. `api_surface.json` and `fixtures/` stay
 on disk for authoring/conformance validation and are not embedded in the production `defs.FS`, which keeps
 tens of megabytes of inert replay JSON out of every shipped binary. The generated root
 `operation_endpoint_ledger.json` is the narrow exception for operation-backed direct reads: it embeds only
@@ -378,6 +381,7 @@ type Bundle struct {
     Name     string
     Metadata Metadata          // parsed metadata.json
     Changefeed *connectors.ChangefeedDescriptor // optional changefeed.json
+    PollingWatermark *connectors.PollingWatermarkDescriptor // optional polling_watermark.json
     RateLimits *connsdk.RateLimits // optional rate_limits.json HTTP pacing policy
     Spec     *Schema           // compiled spec.json; SecretKeys() from x-secret
     HTTP     HTTPBase          // streams.json "base"
@@ -575,8 +579,9 @@ non-REST protocols — postgres/mysql/snowflake/bigquery (SQL + CDC), amazon-sqs
 file/warehouse/outbox/sample built-ins. These implement `connectors.Connector` directly with the
 Ruby component split as the mandated file layout: `connector.go` (entry + registration),
 `connection.go`, `reader.go`, `cataloger.go`, `writer.go`, `cdc.go`. **They still ship a defs
-bundle** (metadata.json, spec.json, schemas/, and `database.json` when it is a native database
- driver) so identity, catalog, and docs stay uniform; they embed `engine.Base`, which supplies
+bundle** (metadata.json, spec.json, schemas/, `database.json` when it is a native database driver,
+and the separate `polling_watermark.json` only when it has a registered polling executor) so
+identity, catalog, and docs stay uniform; they embed `engine.Base`, which supplies
  bundle-derived identity and the base `Definition()`. Native operations remain package-owned. The
  database declaration's closed authoring contract lives in the
  [migration conventions](../migration/conventions.md#database-native-policy-declaration-databasejson).
@@ -621,6 +626,7 @@ type Definition struct {
     ReleaseStage    string            `json:"release_stage"`
     Capabilities    Capabilities      `json:"capabilities"`
     Changefeed      *ChangefeedDescriptor `json:"changefeed,omitempty"`
+    PollingWatermark *PollingWatermarkDescriptor `json:"polling_watermark,omitempty"`
     Spec            json.RawMessage   `json:"spec"`
     Streams         []StreamSummary   `json:"streams"`
     WriteActions    []WriteActionInfo `json:"write_actions,omitempty"`
@@ -633,6 +639,10 @@ type Definition struct {
 [connector migration conventions](../migration/conventions.md#2-authoring-rules); its presence
 does not independently advertise `cdc`. Public CDC remains false until an implemented declaration
 matches the registered `ChangefeedExecutor`.
+
+`PollingWatermark` is a distinct native-database admission declaration. It is not a CDC capability
+or REST command: mode eligibility is derived from `engine.PollingPreflight` and exact registered
+source/apply executors, rather than from its presence in a definition.
 
 ### C.2 Registry
 

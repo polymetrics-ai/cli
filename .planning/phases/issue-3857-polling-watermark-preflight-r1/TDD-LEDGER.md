@@ -47,4 +47,28 @@ before this red run.
 
 ### Green
 
-Pending.
+The initial focused runtime and definition-loader green run executed the
+complete no-I/O test matrix, including the all-declared-mode runtime sweep:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^Test(PollingPreflight|PollingModeEligibility|BundleLoadsDefinitionOwnedPollingWatermarkDescriptor|BundleRejectsUnsafePollingWatermarkDefinition)$'
+ok      polymetrics.ai/internal/connectors/engine    0.733s
+```
+
+- Happy: only a `PollingPreflight` result lets the guarded fake increment its
+  source-read, target-prepare, and emitted-record counters to exactly one.
+- Sad: every table row checks its full, specific refusal text; its guarded
+  source-read and target-prepare counters remain exactly zero.
+- Edge: the `null`, empty result, nanosecond timestamp, and exact decimal integer
+  cases are derived from the immutable v1 corpus domain. The
+  accepted cursor is retained byte-for-byte as its typed descriptor value; an
+  empty page increments its own counter while emitting zero records.
+- The sweep calls `PollingPreflight` for all six polling-admissible #3810 modes
+  and then repeats with stale immutable-corpus evidence, proving every row is
+  blocked by that same runtime gate rather than a copied generator rule.
+
+The no-live proof remains intentionally **fake** for each row: #3857 forbids
+live database calls and owns neither a database driver nor the source/apply
+executors (#3858/#3859). The fakes are individually justified above and each
+asserts an observable counter change that a no-op cannot satisfy; no skipped
+test or mere nil error is used as evidence.
