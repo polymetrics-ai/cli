@@ -93,6 +93,18 @@ func TestManagedTargetProvisioningTruthTable(t *testing.T) {
 		t.Fatal(err)
 	}
 	collidingControl := testManagedTargetControl(t, owner, collidingRef, native, schema)
+	secondPlan, err := database.NewManagedTargetProvisioningPlan(owner, collidingRef, schema)
+	if err != nil {
+		t.Fatal(err)
+	}
+	secondCreated := database.ManagedTargetObservation{
+		NamespacePresent: true,
+		RelationPresent:  true,
+		ControlState:     database.ManagedTargetControlPresent,
+		ControlRecord:    collidingControl,
+		NativeIdentity:   native,
+		Schema:           schema,
+	}
 	replacementNative := database.NativeRelationIdentity{Kind: "fixture-native-id", Value: "relation-2"}
 	driftedSchema := testManagedTargetSchema(t, 2, 2)
 
@@ -118,14 +130,18 @@ func TestManagedTargetProvisioningTruthTable(t *testing.T) {
 			wantCreated:  true,
 		},
 		{
-			name: "occupied namespace without a control record is a collision",
+			// A single control record made this state look ambiguous. It is the
+			// certified defect: an owned namespace may legitimately contain a
+			// second stream relation whose per-relation control is absent.
+			name: "owned namespace allows second stream relation",
 			observation: database.ManagedTargetObservation{
 				NamespacePresent: true,
 				ControlState:     database.ManagedTargetControlAbsent,
 			},
-			plan:        plan,
-			wantError:   database.ErrManagedTargetNameCollision,
-			wantCreates: 0,
+			createResult: secondCreated,
+			plan:         secondPlan,
+			wantCreates:  1,
+			wantCreated:  true,
 		},
 		{
 			name:         "first create reasserts exact control state",
@@ -328,14 +344,18 @@ func TestManagedTargetProvisioningTruthTable(t *testing.T) {
 				} else if provisionErr != nil {
 					t.Fatalf("CreateOrAssert() error = %v", provisionErr)
 				} else {
-					assertManagedTargetControl(t, got, control)
+					want := control
+					if tt.plan.Target().Relation() == collidingRef.Relation() {
+						want = collidingControl
+					}
+					assertManagedTargetControl(t, got, want)
 				}
 			}
 
 			if got := driver.createCallCount(); got != tt.wantCreates {
 				t.Fatalf("managed target create calls = %d, want %d", got, tt.wantCreates)
 			}
-			if tt.wantCreated && !driver.createdWithAssertedOwner(owner, ref) {
+				if tt.wantCreated && !driver.createdWithAssertedOwner(tt.plan.Owner(), tt.plan.Target()) {
 				t.Fatal("mutation did not receive the validated typed plan and its asserted owner")
 			}
 		})

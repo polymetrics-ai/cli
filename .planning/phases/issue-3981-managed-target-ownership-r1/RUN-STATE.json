@@ -2,7 +2,7 @@
   "issue": 3981,
   "phase": "issue-3981-managed-target-ownership-r1",
   "lifecycle": "manual-inline-gsd",
-  "state": "planned",
+  "state": "red",
   "fallback": "Issue foundation is not a numbered roadmap phase; compatible isolated GSD roles are unavailable and the canonical contract requires one worker.",
-  "tdd": "pending-red-second-stream"
+  "tdd": "second-stream-red-recorded"
 }

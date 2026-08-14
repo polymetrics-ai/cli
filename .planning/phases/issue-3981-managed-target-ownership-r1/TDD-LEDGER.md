@@ -17,7 +17,7 @@ Manual inline GSD TDD execution. Red and green command output are retained in
 ## Red command
 
 ```sh
-go test ./internal/connectors/database -run 'TestManagedTargetProvisioner/owned_namespace_allows_second_stream_relation' -count=1
+go test ./internal/connectors/database -run 'TestManagedTargetProvisioningTruthTable/owned_namespace_allows_second_stream_relation' -count=1
 ```
 
 On the base this must fail because `assessManagedTargetObservation` returns
