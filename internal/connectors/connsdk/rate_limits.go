@@ -24,12 +24,22 @@ type RateLimits struct {
 
 // RateLimitPolicy is one provider-cited rate-limit contract.
 type RateLimitPolicy struct {
-	ID       string            `json:"id"`
-	Source   RateLimitSource   `json:"source"`
-	Selector RateLimitSelector `json:"selector"`
-	Scope    RateLimitScope    `json:"scope"`
-	Budgets  []RateLimitBudget `json:"budgets"`
+	ID           string                      `json:"id"`
+	Source       RateLimitSource             `json:"source"`
+	Selector     RateLimitSelector           `json:"selector"`
+	Scope        RateLimitScope              `json:"scope"`
+	Coordination RateLimitCoordinationPolicy `json:"coordination,omitempty"`
+	Budgets      []RateLimitBudget           `json:"budgets"`
 }
+
+// RateLimitCoordinationPolicy controls where a declared policy coordinates.
+// The zero value intentionally means process-local protection; shared
+// coordination is never selected by endpoint configuration or inheritance.
+type RateLimitCoordinationPolicy string
+
+const (
+	RateLimitCoordinationRequireShared RateLimitCoordinationPolicy = "require_shared"
+)
 
 // RateLimitSource records the provider artifact from which a policy was
 // authored. RetrievedAt is mandatory so a reviewer can judge freshness even

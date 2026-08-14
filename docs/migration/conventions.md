@@ -1066,6 +1066,17 @@ or absent value. A reset timestamp hard-blocks only after `Retry-After`, a 429, 
 remaining budget; non-exhausted reset metadata only tightens state. #3755 still
 owns operator-visible output; this mechanism does not emit rate-limit events itself.
 
+**Coordination remains process-local unless a policy explicitly says otherwise.** Omit
+`coordination` for dependency-free, per-`pm`-process protection. That is not account-wide or
+cross-process coordination, and connector inspection says so. A provider policy may instead set
+`"coordination": "require_shared"` to use the optional Redis-compatible coordinator. The engine
+then verifies that coordinator before it sends a request and returns a typed unavailable reason if
+it cannot enforce the shared budget; it never falls back to a local limiter. This opt-in is per
+policy only: do not infer it from an endpoint, a runtime address, another policy, a connector, or
+credential configuration. The shared key remains the existing opaque
+`CoordinationIdentity.RateScopeKey` projection; never put a raw subject, binding, credential, or
+coordinator address in a declaration or output.
+
 An absent declaration, `unknown`, `not_applicable`, or a non-matching selector leaves the requester
 unchanged. `streams.json` `base.rate_limit` remains the legacy page-loop limiter: it is neither
 created nor replaced by `rate_limits.json`, and when both apply its old wait runs independently of

@@ -82,15 +82,29 @@ func TestDeclaredRateLimitFixtureSelectsEndpointTierAndAuth(t *testing.T) {
 	if err != nil {
 		t.Fatalf("RequesterFor widgets: %v", err)
 	}
-	if matched.Admission == nil || matched.Observer == nil || matched.RateLimitCostHeader != "X-Actual-Cost" {
-		t.Fatalf("matched requester rate limit = %+v, want declaration-aware admission/observation", matched)
+	if matched.Admission != nil || matched.Observer != nil || matched.RouteRateLimits == nil {
+		t.Fatalf("matched requester rate limit = %+v, want path-aware admission/observation", matched)
+	}
+	costHeader, err := matched.RouteRateLimits.AdmitRoute(context.Background(), connsdk.RateLimitRoute{Method: http.MethodGet, Path: "/widgets", Attempt: 1})
+	if err != nil {
+		t.Fatalf("matched route admission: %v", err)
+	}
+	if got, want := costHeader, "X-Actual-Cost"; got != want {
+		t.Fatalf("matched route cost header = %q, want %q", got, want)
 	}
 	unmatched, err := runtime.RequesterFor(http.MethodGet, "/check")
 	if err != nil {
 		t.Fatalf("RequesterFor check: %v", err)
 	}
-	if unmatched.Admission != nil || unmatched.Observer != nil {
+	if unmatched.Admission != nil || unmatched.Observer != nil || unmatched.RouteRateLimits == nil {
 		t.Fatal("endpoint-mismatched check acquired a rate-limit policy")
+	}
+	costHeader, err = unmatched.RouteRateLimits.AdmitRoute(context.Background(), connsdk.RateLimitRoute{Method: http.MethodGet, Path: "/check", Attempt: 1})
+	if err != nil {
+		t.Fatalf("unmatched route admission: %v", err)
+	}
+	if costHeader != "" {
+		t.Fatalf("unmatched route cost header = %q, want empty", costHeader)
 	}
 
 	for key, value := range map[string]string{"tier": "free", "auth_type": "api_key"} {
@@ -106,6 +120,13 @@ func TestDeclaredRateLimitFixtureSelectsEndpointTierAndAuth(t *testing.T) {
 		}
 		if requester.Admission != nil {
 			t.Fatalf("%s mismatch acquired an admission", key)
+		}
+		costHeader, err := requester.RouteRateLimits.AdmitRoute(context.Background(), connsdk.RateLimitRoute{Method: http.MethodGet, Path: "/widgets", Attempt: 1})
+		if err != nil {
+			t.Fatalf("%s mismatched route admission: %v", key, err)
+		}
+		if costHeader != "" {
+			t.Fatalf("%s mismatch acquired route cost header %q", key, costHeader)
 		}
 	}
 }
@@ -152,8 +173,12 @@ func TestRateLimitResolverRefusesUnsupportedScopeKind(t *testing.T) {
 	if err != nil {
 		t.Fatalf("newRuntime: %v", err)
 	}
-	if _, err := runtime.RequesterFor(http.MethodGet, "/widgets"); err == nil {
-		t.Fatal("RequesterFor accepted an unsupported scope kind")
+	requester, err := runtime.RequesterFor(http.MethodGet, "/widgets")
+	if err != nil {
+		t.Fatalf("RequesterFor: %v", err)
+	}
+	if _, err := requester.RouteRateLimits.AdmitRoute(context.Background(), connsdk.RateLimitRoute{Method: http.MethodGet, Path: "/widgets", Attempt: 1}); err == nil {
+		t.Fatal("route admission accepted an unsupported scope kind")
 	}
 }
 
@@ -164,8 +189,12 @@ func TestRateLimitResolverRefusesMultipleActualCostHeadersPerPolicy(t *testing.T
 	if err != nil {
 		t.Fatalf("newRuntime: %v", err)
 	}
-	if _, err := runtime.RequesterFor(http.MethodGet, "/widgets"); err == nil {
-		t.Fatal("RequesterFor accepted multiple actual-cost headers for one policy")
+	requester, err := runtime.RequesterFor(http.MethodGet, "/widgets")
+	if err != nil {
+		t.Fatalf("RequesterFor: %v", err)
+	}
+	if _, err := requester.RouteRateLimits.AdmitRoute(context.Background(), connsdk.RateLimitRoute{Method: http.MethodGet, Path: "/widgets", Attempt: 1}); err == nil {
+		t.Fatal("route admission accepted multiple actual-cost headers for one policy")
 	}
 }
 
