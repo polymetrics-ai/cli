@@ -32,6 +32,22 @@ files_modified:
 
 # TDD plan: GitHub App token admission
 
+## Task Delivery Header
+
+- Issue: Refs #4072 — gate GitHub App token minting through shared rate admission.
+- Base branch: `integration/4015-mvp-flat-r1`
+- Merges into: `integration/4015-mvp-flat-r1` → `main`
+- Delivery: Pull request open against `integration/4015-mvp-flat-r1` with its checks green; the pull-request base will be read back through `gh-axi api`.
+- Working branch: `fm/cli-4072-github-app-rate-admission-r1`
+- Task: Ensure the GitHub App installation-token POST enters the shared rate-admission path, rejects unavailable required coordination before sending, and preserves #3754 resolved physical-path matching and typed errors.
+- Verification: Focused and full engine/GitHub tests, race detector, vet, build, required repository gates, a real two-process Dragonfly budget proof, no-mistakes pipeline, and GitHub API PR-base read-back.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| GitHub App minting shares the admission path | live | Two independently launched processes contend for one real Dragonfly budget; exactly one token mints, one waits to deadline, and exactly one fixture token POST occurs. |
+| Unavailable required coordination cannot send a token | fake | A recording transport is required to safely prove zero provider sends without real GitHub credentials; it records zero sends while the typed unavailable error is recoverable for both missing and refused local coordinator endpoints. |
+| The PR targets the integration branch | live | After opening, `gh-axi api /repos/polymetrics-ai/cli/pulls/<n> --jq .base.ref` must return exactly `integration/4015-mvp-flat-r1`. |
+
 ## Objective
 
 Route GitHub App's installation-token POST through the landed #3754 requester
