@@ -15,6 +15,8 @@ pull request can drift.
   <!-- Use the exact, existing pull-request target ref in full, for example `integration/4015-mvp-flat-r1`, never an implied or descriptive branch name. -->
 - Merges into:
   <!-- State the final destination and every intermediate branch, for example `integration/4015-mvp-flat-r1 → main`. -->
+- Delivery:
+  <!-- State the concrete completion condition for this task, for example `pull request open against the stated base with its checks green` or `branch committed and ready, no push`; committing locally is not delivery, and verify the pull request exists rather than assuming it. -->
 - Working branch:
   <!-- Use the exact branch this agent creates, for example `fix/certification-schema-version`. -->
 - Task:
@@ -42,6 +44,7 @@ pull request can drift.
 - Issue: Refs #4097 — Production MVP
 - Base branch: integration/4015-mvp-flat-r1
 - Merges into: integration/4015-mvp-flat-r1 → main
+- Delivery: Pull request open against `integration/4015-mvp-flat-r1` with its checks green.
 - Working branch: docs/task-delivery-header
 - Task: Add a reusable task-start header and require agents to declare the exact PR base before implementation; the PR template and agent instructions must point to the same check.
 - Verification: Review the template fields and guidance, run `git diff --check`, and read the opened PR's base from GitHub.
