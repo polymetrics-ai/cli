@@ -596,22 +596,27 @@ direct connector pair nor a zero-copy route exists in this architecture.
 connection, perform SQL/DDL, create a write session, persist a receipt/checkpoint, or enable
 CDC/polling; public capabilities remain in `metadata.json`.
 
-The shared F2 contract adds driver-neutral managed-target provisioning without changing that
-boundary. A `TargetOwner` derives only from the source-owned `warehouse.ArtifactIdentity`
-(workspace, connector, and connection); its `ManagedTargetRef` derives a namespace from that
-triple and a relation from the triple plus artifact table. Both physical names are opaque,
-deterministic values rather than display or credential text. The durable control record binds that
-owner and ref to the observed native relation identity and the expected schema version/fingerprint.
+The shared managed-target ownership kernel adds driver-neutral provisioning without changing that
+boundary. A `TargetOwner` is the source identity triple (workspace, source connector, and source
+connection), so each new connection receives a distinct deterministic namespace while all of an
+existing connection's streams reuse its namespace. A `ManagedTargetRef` retains the warehouse
+artifact as provenance but derives its relation from that owner plus an application-persisted,
+immutable stream ID. Its 63-byte deterministic hashed physical names use only those structural
+identities. Credentials, display/map-key text, and destination tables are excluded; mode, mapping,
+schema, keys, cursor, ordering, and destination database identity are assertion-only contract
+inputs that never move or leak into a physical name.
 
-`CreateOrAssert` accepts only an immutable typed plan carrying the asserted owner. Under a
-target-scoped driver lock, it creates only when both the target and control record are absent. After
-an invoked create, it re-observes before returning, including after a cancellation or driver error.
-An exact record is idempotently asserted; missing, unreadable, foreign, colliding, replaced,
-drifted, or orphaned state is refused. The shared contract neither adopts customer tables nor
-evolves schemas, and it selects no PostgreSQL driver or DDL. PostgreSQL therefore remains the
-reference seam with `write` and `cdc` false. A future MySQL implementation supplies its own
-database definition, per-leg admission/evidence, and native extraction or apply mechanics without
-a shared warehouse or PostgreSQL change.
+Ownership is two-layered. A durable namespace-owner record binds the source owner, target database
+identity, physical namespace, and observed native namespace identity. Each stream relation has its
+own durable control record binding the same owner and target database to the derived ref, observed
+native relation identity, and expected schema version/fingerprint. `CreateOrAssert` accepts only an
+immutable typed plan, holds a namespace-scoped driver lock, and re-observes after an invoked create
+even after cancellation or driver error. It may create when the namespace is absent with no control
+record, or when an exact namespace owner exists and the requested relation/control are both absent;
+the latter admits a second stream without adopting a target. Exact records are idempotently
+asserted. Missing, unreadable, foreign, colliding, moved, replaced, drifted, or orphaned state is
+refused. The shared contract neither adopts customer tables nor evolves schemas; it selects no
+native driver or DDL and implements no delivery sessions or mode application.
 
 ## C. Interface, registry, and catalog changes
 
