@@ -29,7 +29,9 @@ jobs:
       - name: Run govulncheck
         env:
           GOTOOLCHAIN: go1.26.6
-        run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+        run: |
+          test "$(go env GOVERSION)" = "go1.26.6"
+          go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
   codeql:
     name: CodeQL
