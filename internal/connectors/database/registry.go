@@ -40,6 +40,21 @@ type NativeAdmittedDriver interface {
 	DatabaseNativeAdmissions() []DatabaseNativeAdmission
 }
 
+// ResolveWriteDriver resolves the same exact registered definition/driver
+// identity as Resolve, then requires the explicit write-session port. A
+// descriptor alone still grants no write session or receipt authority.
+func (r *DriverRegistry) ResolveWriteDriver(ctx context.Context, definition Definition) (DatabaseWriteDriver, error) {
+	driver, err := r.Resolve(ctx, definition)
+	if err != nil {
+		return nil, err
+	}
+	writeDriver, ok := driver.(DatabaseWriteDriver)
+	if !ok || isNilInterface(writeDriver) {
+		return nil, ErrDatabaseWriteSessionUnavailable
+	}
+	return writeDriver, nil
+}
+
 // DatabaseNativeAdmission binds shared native evidence to one sealed database
 // warehouse leg.
 type DatabaseNativeAdmission struct {
