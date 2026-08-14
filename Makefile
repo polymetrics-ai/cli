@@ -114,8 +114,8 @@ github-parity-artifacts-check:
 	node scripts/gen-github-graphql-parity.mjs --check
 	node scripts/github-combined-operation-ledger.mjs --check
 
-# Fails when the source-derived capability certification baseline drifts.
-# Regenerate with `go run ./cmd/connectorgen certification-matrix`.
+# Fails when the allowlisted connector certification shards drift.
+# Regenerate one connector with `go run ./cmd/connectorgen certification-matrix --connector <name>`.
 connectorgen-certification-matrix:
 	go run ./cmd/connectorgen certification-matrix --check
 
