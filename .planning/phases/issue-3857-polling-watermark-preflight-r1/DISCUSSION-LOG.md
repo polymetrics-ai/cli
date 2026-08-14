@@ -13,10 +13,12 @@
 
 ## Chosen boundaries
 
-1. The declaration is a native-database definition record. It contains only
-   closed enums, catalog-discovered object selectors, bounded numeric limits,
-   and registered executor references. It has no SQL text, HTTP path, shell
-   fragment, caller-selected protocol, or fabricated REST command.
+1. The declaration is a native-database definition record in the optional,
+   separate `polling_watermark.json` file. It contains only closed enums,
+   catalog-discovered object selectors, bounded numeric limits, and registered
+   executor references. It has no SQL text, HTTP path, shell fragment,
+   caller-selected protocol, or fabricated REST command; it never belongs in
+   `database.json` or `changefeed.json`.
 2. `PollingPreflight` is a no-I/O runtime gate. It validates the declaration,
    resolves the exact registered source and apply executors, and checks their
    immutable-corpus registrations before exposing a resolved, immutable result.
