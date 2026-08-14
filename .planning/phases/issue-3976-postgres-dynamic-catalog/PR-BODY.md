@@ -17,9 +17,10 @@ Refs #3972
 - PR base branch: `integration/4015-mvp-flat-r1`
 - Sub-issue: #3976
 - Child PR: #4065
-- Integration synchronization: safely merged base head
-  `fbd06e7d7c5c0632182e98cbb3a223ba25b19883` in `0df3d5d4d`; no force push
-  or discarded work
+- Integration synchronization: merge commit `0df3d5d4d` absorbs base head
+  `fbd06e7d7c5c0632182e98cbb3a223ba25b19883`. A lease-bound restoration moved
+  the remote branch from the cancelled pipeline's stale `c82e17db` head to the
+  verified proof head; no verified work was discarded.
 
 ## Parent Orchestration
 

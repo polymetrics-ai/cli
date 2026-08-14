@@ -128,13 +128,12 @@ change.
 
 ## Branch / PR topology
 
-- Parent issue/branch/PR: #3972, `feat/3972-postgres-parity`, #4017.
-- Child branch: `feat/3976-postgres-dynamic-catalog`, based on current
-  `origin/feat/3972-postgres-parity` at #4064 head `c2e013324`, retained by
-  non-destructive merge commit `25bda3e73`.
-- Draft child PR #4065 targets exactly `feat/3972-postgres-parity` and uses
-  `Refs #3976` plus `Refs #3972`. It does not target `main` and is the only
-  #3976 child PR.
+- Child branch: `feat/3976-postgres-dynamic-catalog`.
+- PR #4065 compares only to `integration/4015-mvp-flat-r1`, never `main`.
+  Base head `fbd06e7d7c5c0632182e98cbb3a223ba25b19883` is retained by merge
+  commit `0df3d5d4d`.
+- The child uses `Refs #3976` plus `Refs #3972`; parent-stack bookkeeping is
+  not a substitute for the PR's explicit integration comparison base.
 
 ## Live-proof resumption slice
 

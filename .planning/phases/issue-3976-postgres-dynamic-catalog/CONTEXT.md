@@ -57,11 +57,10 @@ manual inline GSD fallback.
 
 ## Parent-head synchronization
 
-Before the first implementation slice, the child was safely merged onto the
-new parent head from #4064: `c2e013324`. The child merge commit is
-`25bda3e73`; it preserves the existing planning work and uses no force push or
-history rewrite. Draft child PR #4065 targets exactly
-`feat/3972-postgres-parity`, so #3976 remains the next child after #4064.
+Before the first implementation slice, the child preserved the then-current
+parent-head history from #4064 in merge commit `25bda3e73`. That historical
+topology no longer defines this PR's comparison target: the current target is
+`integration/4015-mvp-flat-r1`, recorded in the live-proof resumption below.
 
 ## Static-surface ownership audit
 

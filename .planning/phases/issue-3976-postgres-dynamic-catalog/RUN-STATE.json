@@ -4,7 +4,7 @@
   "mode": "manual-inline-gsd-fallback",
   "status": "verified-live-postgres-proof-committed",
   "parent_issue": 3972,
-  "parent_branch": "feat/3972-postgres-parity",
+  "parent_branch": "integration/4015-mvp-flat-r1",
   "parent_pr": 4017,
   "child_branch": "feat/3976-postgres-dynamic-catalog",
   "child_pr": 4065,
@@ -16,5 +16,5 @@
   "verify_work": "manual-inline-pass: automated gates and explicit Docker live catalog/read proof passed; historical CDC remains intentionally excluded",
   "code_review": "manual-inline-deep-clean: no actionable findings, including the live-proof resumption slice",
   "integration_hold": "corrected PR #4058 must be green and merged before this child integrates into #4017",
-  "reason": "Issue #3976 is not a numbered roadmap phase and canonical delivery permits one active inline worker; the live Docker proof is the remaining acceptance slice."
+  "reason": "Issue #3976 is not a numbered roadmap phase and canonical delivery permits one active inline worker; the live Docker proof is recorded as completed acceptance evidence."
 }
