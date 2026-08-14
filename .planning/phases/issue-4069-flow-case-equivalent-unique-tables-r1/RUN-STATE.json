@@ -3,7 +3,7 @@
   "parent_issue": 3897,
   "specification_owner_issue": 4066,
   "program_parent_issue": 3988,
-  "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
+  "branch": "fm/cli-4071-collision-scope-fix-r1",
   "required_base_branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
   "status": "correction_3_local_gsd_verification_green_pending_child_pr_delivery",

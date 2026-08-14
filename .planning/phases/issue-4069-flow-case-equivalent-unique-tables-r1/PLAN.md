@@ -478,8 +478,9 @@ open a local warehouse or weaken the local invariant.
    flag, output, help, manual, or website contract, so CLI/docs/website source
    edits are not applicable.
 4. Execute the resolved `verify-work` and `code-review` prompts inline under
-   the existing no-delegation fallback. Record the final committed head in
-   `RUN-STATE.json`, this phase evidence, and the existing PR #4071 body.
+   the existing no-delegation fallback. At delivery end, record the child PR's
+   actual head SHA in `RUN-STATE.json` and the published child PR body; do not
+   mutate #4071.
 
 ### C3 checkpoint sequence
 
