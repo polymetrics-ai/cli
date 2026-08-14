@@ -280,9 +280,9 @@ func (r ManagedTargetNamespaceOwnerRecord) Namespace() string { return r.namespa
 func (r ManagedTargetNamespaceOwnerRecord) NativeIdentity() NativeNamespaceIdentity { return r.native }
 
 // ManagedTargetControlRecord is the durable assertion that a physical target
-// is ours. It binds source-derived ownership, target address, native relation
-// identity, and schema contract together. Its complete equality—not a name
-// match—is required for repeat admission.
+// is ours. It binds source-derived ownership, target address, destination
+// database identity, native relation identity, and schema contract together.
+// Its complete equality—not a name match—is required for repeat admission.
 type ManagedTargetControlRecord struct {
 	owner    TargetOwner
 	target   ManagedTargetRef

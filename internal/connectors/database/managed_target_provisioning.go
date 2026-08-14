@@ -72,8 +72,10 @@ const (
 )
 
 // ManagedTargetObservation is a driver's non-mutating view of one derived
-// target. A present relation must carry observed native and schema identities;
-// a control record is supplied only when ControlState is Present.
+// target and its destination database. A present namespace carries its native
+// identity and owner state; a present relation carries native and schema
+// identities. Owner and control records are supplied only when their states are
+// Present.
 type ManagedTargetObservation struct {
 	TargetDatabase       TargetDatabaseIdentity
 	NamespacePresent     bool
@@ -148,7 +150,7 @@ func (o ManagedTargetObservation) validate() error {
 
 // ManagedTargetProvisioningPlan is the immutable, typed authority for a
 // create-or-assert operation. It cannot carry SQL, credentials, a driver,
-// arbitrary target names, or an unasserted owner.
+// arbitrary target names, or an unasserted owner or destination identity.
 type ManagedTargetProvisioningPlan struct {
 	owner    TargetOwner
 	target   ManagedTargetRef
@@ -233,9 +235,10 @@ func NewManagedTargetProvisioner(driver ManagedTargetProvisioningDriver) (*Manag
 	return &ManagedTargetProvisioner{driver: driver, gates: make(map[string]*managedTargetGate)}, nil
 }
 
-// CreateOrAssert creates a target only from the absent-target/absent-control
-// state. Every other state is asserted exactly or refused. It has no adoption,
-// reconciliation, replacement, or schema-evolution behavior.
+// CreateOrAssert creates only for a missing namespace with no control record,
+// or for an exactly owned namespace whose requested relation and control record
+// are both absent. Every other state is asserted exactly or refused. It has no
+// adoption, reconciliation, replacement, or schema-evolution behavior.
 func (p *ManagedTargetProvisioner) CreateOrAssert(ctx context.Context, plan ManagedTargetProvisioningPlan) (ManagedTargetControlRecord, error) {
 	if ctx == nil {
 		return ManagedTargetControlRecord{}, ErrManagedTargetPlanInvalid

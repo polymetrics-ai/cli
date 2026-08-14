@@ -327,6 +327,36 @@ func TestConnectionStreamIdentityDoesNotEscapeAppState(t *testing.T) {
 	}
 }
 
+func TestCreateConnectionRejectsCallerAssignedStreamID(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("stream_identity_assigned_input", nil)
+	a, _ := setupSyncModeApp(t, source, "full_refresh_overwrite")
+	request := CreateConnectionRequest{
+		Name:        "stream_identity_assigned_input",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "source"},
+		Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
+		Streams: map[string]StreamConfig{
+			"records": {
+				StreamID:         "stream_caller_assigned",
+				SyncMode:         "full_refresh_overwrite",
+				CursorField:      "updated_at",
+				PrimaryKey:       []string{"id"},
+				DestinationTable: "stream_identity_assigned_input",
+			},
+		},
+	}
+
+	if _, err := a.CreateConnection(ctx, request); err == nil || !strings.Contains(err.Error(), "stream identity is assigned by the application") {
+		t.Fatalf("CreateConnection() error = %v, want caller-assigned stream identity refusal", err)
+	}
+	if got := request.Streams["records"].StreamID; got != "stream_caller_assigned" {
+		t.Fatalf("CreateConnection() changed caller stream ID = %q", got)
+	}
+	if _, found := a.findConnection(request.Name); found {
+		t.Fatal("CreateConnection() persisted a connection after rejecting its caller-assigned stream ID")
+	}
+}
+
 func TestCreateConnectionSaveFailureLeavesRequestStreamIdentityUnchanged(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("stream_identity_retry", nil)

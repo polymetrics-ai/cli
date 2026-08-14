@@ -260,10 +260,10 @@ func (a *App) normalizeLoadedState(loaded state) error {
 	return nil
 }
 
-// migrateWarehouseIdentity gives a project and its connections the opaque
-// identifiers that form warehouse path components. They are generated once and
-// persisted, so a connection's directory is stable across runs and independent
-// of its display name.
+// migrateWarehouseIdentity gives a project, its connections, and their streams
+// opaque persisted identifiers. Workspace and connection IDs form stable
+// warehouse path components; stream IDs preserve managed-target identity across
+// map-key, display-name, and destination-table changes.
 func (a *App) migrateWarehouseIdentity() (bool, error) {
 	changed := false
 	if strings.TrimSpace(a.state.WorkspaceID) == "" {
