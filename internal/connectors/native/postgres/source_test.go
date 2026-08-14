@@ -8,9 +8,8 @@ import (
 	native "polymetrics.ai/internal/connectors/native/postgres"
 )
 
-// fixtureConfig is a minimal valid fixture-mode config (mirrors legacy
-// postgres_test.go's fixtureConfig): fixture mode short-circuits all network
-// access so this suite needs no live database.
+// fixtureConfig is a minimal valid fixture-mode config. Fixture mode
+// short-circuits all network access, so this suite needs no live database.
 func fixtureConfig() connectors.RuntimeConfig {
 	return connectors.RuntimeConfig{
 		Config: map[string]string{

@@ -46,9 +46,9 @@
 // and Read emits canned rows.
 //
 // NO init()/RegisterFactory call exists in this package
-// in wave0 (enforced by a grep-guard test, postgres_test.go
-// TestNoInitRegistration) — the registration flip that wires native/postgres
-// into the production registry is a wave6 change; wave0 only builds and
+// in wave0 (enforced by capability_surface_test.go's
+// TestNoInitRegistration grep guard) — the registration flip that wires
+// native/postgres into the production registry is a wave6 change; wave0 only builds and
 // tests the package standalone, exactly as instructed.
 package postgres
 
