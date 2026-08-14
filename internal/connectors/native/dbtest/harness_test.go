@@ -28,6 +28,7 @@ type scriptedRunner struct {
 	infoOutput          string
 	infoOutputs         []string
 	infoCalls           int
+	capacityOutput      string
 	images              map[string]bool
 	commands            [][]string
 	endpoints           []string
@@ -89,6 +90,9 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 		}
 		return "", errContainerResourceNotFound
 	case len(args) > 0 && args[0] == "run":
+		if strings.Contains(strings.Join(args, "\x00"), "\x00--entrypoint\x00/bin/df\x00") {
+			return r.capacityOutput, r.runErr
+		}
 		r.containerLive = true
 		return "", r.runErr
 	case commandHasPrefix(args, "container", "rm"):
@@ -976,6 +980,81 @@ func TestStartUsesDockerTargetIdentityAndCapacity(t *testing.T) {
 	}
 	if !commandsContain(runner.commands, "info", "--format", RuntimeDocker.infoFormat()) {
 		t.Fatalf("commands = %v, want Docker identity inspection", runner.commands)
+	}
+}
+
+func TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe(t *testing.T) {
+	runner := &scriptedRunner{
+		infoOutput:     "DAEMON:12345\t/var/lib/docker\n",
+		capacityOutput: "Avail\n123\n",
+	}
+	config := testConfig(runner)
+	config.ContainerRuntime = RuntimeDocker
+	config.DockerCapacityProbeImage = "example.invalid/capacity-probe:1.0"
+	runner.setImage(config.DockerCapacityProbeImage, true)
+	config.DiskFreeAt = func(string) (uint64, error) {
+		return 0, errors.New("Docker store belongs to a VM")
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+
+	free, err := h.targetImageStoreFree(context.Background())
+	if err != nil {
+		t.Fatalf("targetImageStoreFree(): %v", err)
+	}
+	if free != 123 {
+		t.Fatalf("targetImageStoreFree() = %d, want daemon-side 123", free)
+	}
+	if commandsContain(runner.commands, "pull", config.DockerCapacityProbeImage) {
+		t.Fatalf("commands = %v, must never pull the capacity probe", runner.commands)
+	}
+	if !commandsContain(runner.commands,
+		"run", "--rm", "--name", h.capacityProbeName,
+		"--network", "none", "--read-only", "--cap-drop", "ALL", "--pids-limit", "16",
+		"--mount", "type=bind,src=/var/lib/docker,dst=/polymetrics-image-store,readonly",
+		"--entrypoint", "/bin/df", config.DockerCapacityProbeImage,
+		"-B1", "--output=avail", "/polymetrics-image-store",
+	) {
+		t.Fatalf("commands = %v, want the locked-down daemon capacity probe", runner.commands)
+	}
+}
+
+func TestDockerVMCapacityRefusesAnUncachedOrMalformedProbe(t *testing.T) {
+	for _, tc := range []struct {
+		name            string
+		probeCached     bool
+		capacityOutput  string
+		wantError       string
+	}{
+		{name: "uncached", wantError: "pre-cached Docker capacity probe image"},
+		{name: "malformed output", probeCached: true, capacityOutput: "Avail\nnot-a-number\n", wantError: "invalid Docker image-store capacity"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			runner := &scriptedRunner{
+				infoOutput:     "DAEMON:12345\t/var/lib/docker\n",
+				capacityOutput: tc.capacityOutput,
+			}
+			config := testConfig(runner)
+			config.ContainerRuntime = RuntimeDocker
+			config.DockerCapacityProbeImage = "example.invalid/capacity-probe:1.0"
+			runner.setImage(config.DockerCapacityProbeImage, tc.probeCached)
+			config.DiskFreeAt = func(string) (uint64, error) {
+				return 0, errors.New("Docker store belongs to a VM")
+			}
+			h, err := New(config)
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+
+			if _, err := h.targetImageStoreFree(context.Background()); err == nil || !strings.Contains(err.Error(), tc.wantError) {
+				t.Fatalf("targetImageStoreFree() error = %v, want %q", err, tc.wantError)
+			}
+			if commandsContain(runner.commands, "pull", config.DockerCapacityProbeImage) {
+				t.Fatalf("commands = %v, must never pull the capacity probe", runner.commands)
+			}
+		})
 	}
 }
 

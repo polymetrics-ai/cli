@@ -47,6 +47,13 @@ global Docker/Podman defaults, and any merge.
    the module toolchain declaration and active security workflow pins together
    from Go 1.25.12 to the fixed Go 1.25.13. This is a toolchain patch only:
    do not add dependencies or change connector behavior.
+7. Support a Docker daemon whose reported `DockerRootDir` belongs to a local
+   VM (for example Colima) but cannot be measured from the client host. Only
+   an explicitly configured, pre-cached pinned probe image may be used; the
+   harness must never pull it. Run its `df` probe locked down against the
+   daemon-side store, retain the direct-Unix endpoint and daemon-identity
+   checks, and refuse malformed/unavailable capacity evidence before any
+   database-image mutation.
 
 ## TDD execution
 
@@ -78,6 +85,17 @@ Capture the existing Go 1.25.12 `govulncheck` failure first, then change every
 active project/security pin to Go 1.25.13 and rerun the same scan. Historical
 planning evidence remains historical; only the current issue's ledger and
 verification checklist record this repair.
+
+### Docker VM capacity follow-up
+
+Add a focused failing test for an explicit Docker target whose `DockerRootDir`
+cannot be `stat`ed by the host. The test requires a configured cached probe
+image, exact locked-down `run --rm` capacity arguments, and strict numeric
+`df --output=avail` parsing. Green is a daemon-side measurement that does not
+pull or retain the probe image, while missing/malformed evidence remains a
+pre-mutation refusal. Re-run the tagged MySQL reference proof through the
+explicit Colima socket and record Docker as observed only on a passing result;
+continue to record Podman as unavailable without inspecting its global default.
 
 ## Required skills and lifecycle
 
