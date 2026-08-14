@@ -121,7 +121,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		t.Errorf("etl_full_refresh_overwrite_deduped stage failed: %+v", dedupOverwrite)
 	}
 	frodMode, ok := rep.Capabilities.SyncModes["full_refresh_overwrite_deduped"]
-	if !ok || frodMode.Result != "pass" || frodMode.DataSource != "" || frodMode.Reason != "typed pre-I/O refusal confirmed" {
+	if !ok || frodMode.Result != "pass" || frodMode.DataSource != "pre_io_refusal" || frodMode.Reason != "typed pre-I/O refusal confirmed" {
 		t.Errorf("SyncModes[full_refresh_overwrite_deduped] = %+v, want typed pre-I/O refusal", frodMode)
 	}
 
