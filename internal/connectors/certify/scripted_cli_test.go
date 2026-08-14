@@ -188,28 +188,31 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"steps": []map[string]any{
 			{"id": "cert_sync", "status": "success"}, {"id": "cert_query", "status": "success"},
 		}})
-	case prefix(args, "schedule", "create") && hasJSON(args) && hasFlag(args, "--name") && hasFlag(args, "--cron") && hasFlag(args, "--flow"):
+	case prefix(args, "schedule", "create") && hasJSON(args) && hasFlag(args, "--name") && hasFlag(args, "--cron") && hasFlag(args, "--flow") && hasFlag(args, "--authorization"):
+		if reference := flagValue(args, "--authorization"); reference != "auth_0123456789abcdef" {
+			return s.protocolError(stderr, "schedule create requires the safe certification authorization reference")
+		}
 		s.schedule = flagValue(args, "--name")
 		s.seen["schedule_create"]++
-		return writeScriptedEnvelope(stdout, "Schedule", nil)
+		return writeScriptedEnvelope(stdout, "Schedule", map[string]any{"authorization_reference": "auth_0123456789abcdef"})
 	case exact(args, "schedule", "list", "--json"):
 		if s.schedule == "" {
 			return s.protocolError(stderr, "schedule list ran before schedule create")
 		}
 		s.seen["schedule_list"]++
-		return writeScriptedEnvelope(stdout, "ScheduleList", map[string]any{"schedules": []map[string]any{{"name": s.schedule}}})
+		return writeScriptedEnvelope(stdout, "ScheduleList", map[string]any{"schedules": []map[string]any{{"name": s.schedule, "authorization_reference": "auth_0123456789abcdef"}}})
 	case prefix(args, "schedule", "install") && hasJSON(args) && hasArg(args, "--crontab"):
 		if err := s.writeCrontabSentinel(); err != nil {
 			return s.protocolError(stderr, err.Error())
 		}
 		s.seen["schedule_install"]++
-		return writeScriptedEnvelope(stdout, "ScheduleInstall", map[string]any{"backend": "crontab"})
+		return writeScriptedEnvelope(stdout, "ScheduleInstall", map[string]any{"backend": "crontab", "schedule": map[string]any{"authorization_reference": "auth_0123456789abcdef"}})
 	case prefix(args, "schedule", "remove") && hasJSON(args) && hasArg(args, "--crontab"):
 		if err := s.clearCrontab(); err != nil {
 			return s.protocolError(stderr, err.Error())
 		}
 		s.seen["schedule_remove"]++
-		return writeScriptedEnvelope(stdout, "ScheduleRemove", nil)
+		return writeScriptedEnvelope(stdout, "ScheduleRemove", map[string]any{"authorization_reference": "auth_0123456789abcdef"})
 	case prefix(args, "reverse", "plan") && !hasJSON(args):
 		if !hasFlag(args, "--source-table") || !hasFlag(args, "--destination") || !hasFlag(args, "--action") {
 			return s.protocolError(stderr, "reverse plan requires source table, destination, and action")

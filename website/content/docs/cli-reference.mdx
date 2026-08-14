@@ -100,7 +100,7 @@ schedule:
 | `pm docs` | `pm docs generate`, `pm docs validate` | this page |
 | `pm skills` | `pm skills generate` | [/docs/agent-guide](/docs/agent-guide) |
 | `pm rlm` | `pm rlm run` | [/docs/architecture](/docs/architecture) |
-| `pm schedule` | `pm schedule create`, `pm schedule list`, `pm schedule install`, `pm schedule remove` | [/docs/architecture](/docs/architecture) |
+| `pm schedule` | `pm schedule create`, `pm schedule list`, `pm schedule inspect`, `pm schedule status`, `pm schedule install`, `pm schedule fire`, `pm schedule remove` | [/docs/architecture](/docs/architecture) |
 | `pm worker` | `pm worker serve`, `pm worker status` | [/docs/architecture](/docs/architecture) |
 
 ## Connector command surfaces
@@ -320,13 +320,16 @@ pm flow run --file flow.json --authorization <auth-ref> --force --json
 pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 
-pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --json
+pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --authorization <auth-ref> --json
 pm schedule list --json
+pm schedule inspect nightly --json
+pm schedule status nightly --json
 pm schedule install nightly --crontab --json
+pm schedule fire nightly --authorization <auth-ref> --json
 pm schedule remove nightly --crontab --json
 ```
 
-Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. Schedules install named flows into the local scheduler backend.
+Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. Schedules install named flows into the local scheduler backend, retaining only a durable authorization reference. Each fire re-derives its content-free action scope before a connector request; scope drift, expiry, or revocation stops the run, while ambiguous and rate-limited outcomes park without replay. `inspect` and `status` show the safe reference, terminal status, and receipt identifiers only.
 
 The [`pm flow` CLI manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/flow.md)
 owns flow source selection and its fail-closed rules. There is no flow CLI flag

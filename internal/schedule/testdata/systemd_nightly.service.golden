@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/pm flow run likely-customers --json
+ExecStart=/usr/local/bin/pm schedule fire nightly-leads --authorization auth_0123456789abcdef --json
 
 [Install]
 WantedBy=default.target
