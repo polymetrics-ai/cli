@@ -159,21 +159,23 @@ type Harness struct {
 	containerOwner     string
 	containerID        string
 	volumeName         string
+	volumeOwner        string
 	runImage           string
+	runImageID         string
 	capacityProbeName  string
 	capacityProbeOwner string
 
-	mu                 sync.Mutex
-	endpoint           Endpoint
-	runImageKnown      bool
-	containerKnown     bool
-	volumeKnown        bool
-	capacityProbeKnown bool
-	slotHeld           bool
-	closed             bool
-	report             Report
-	target             targetIdentity
-	targetKnown        bool
+	mu                   sync.Mutex
+	endpoint             Endpoint
+	runImageCleanupArmed bool
+	containerKnown       bool
+	volumeCleanupArmed   bool
+	capacityProbeKnown   bool
+	slotHeld             bool
+	closed               bool
+	report               Report
+	target               targetIdentity
+	targetKnown          bool
 
 	// opMu serialises the create sequence against cleanup so an interrupt
 	// can never remove a resource while the command that creates it is still
@@ -225,6 +227,10 @@ func New(config Config) (*Harness, error) {
 	if err != nil {
 		return nil, fmt.Errorf("generate database test container owner: %w", err)
 	}
+	volumeOwner, err := randomSuffix()
+	if err != nil {
+		return nil, fmt.Errorf("generate database test volume owner: %w", err)
+	}
 	capacityProbeOwner, err := randomSuffix()
 	if err != nil {
 		return nil, fmt.Errorf("generate database test capacity probe owner: %w", err)
@@ -235,6 +241,7 @@ func New(config Config) (*Harness, error) {
 		containerName:      prefix,
 		containerOwner:     containerOwner,
 		volumeName:         prefix + "-data",
+		volumeOwner:        volumeOwner,
 		runImage:           "localhost/" + prefix + ":run",
 		capacityProbeName:  prefix + "-capacity",
 		capacityProbeOwner: capacityProbeOwner,
@@ -317,6 +324,10 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	if _, err := h.runOnVerifiedTarget(ctx, "pull", h.config.Image); err != nil {
 		return Endpoint{}, fmt.Errorf("pull %s test image: %w", h.config.Engine, err)
 	}
+	sourceImageID, err := h.imageID(ctx, h.config.Image)
+	if err != nil {
+		return Endpoint{}, fmt.Errorf("inspect %s test image identity: %w", h.config.Engine, err)
+	}
 	// Claim the generated reference before issuing the tag. A tag that returns an
 	// error may still have created the reference, so ownership is claimed
 	// ahead of the command and cleanup tolerates absence.
@@ -324,10 +335,18 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		return Endpoint{}, err
 	}
 	h.mu.Lock()
-	h.runImageKnown = true
+	h.runImageID = sourceImageID
+	h.runImageCleanupArmed = true
 	h.mu.Unlock()
-	if _, err := h.runOnVerifiedTarget(ctx, "image", "tag", h.config.Image, h.runImage); err != nil {
+	if _, err := h.runOnVerifiedTarget(ctx, "image", "tag", sourceImageID, h.runImage); err != nil {
 		return Endpoint{}, fmt.Errorf("tag %s test image: %w", h.config.Engine, err)
+	}
+	taggedImageID, err := h.imageID(ctx, h.runImage)
+	if err != nil {
+		return Endpoint{}, fmt.Errorf("inspect generated %s test image identity: %w", h.config.Engine, err)
+	}
+	if taggedImageID != sourceImageID {
+		return Endpoint{}, errors.New("generated database test image does not refer to the configured source image")
 	}
 
 	volumeAbsent, err := h.resourceAbsent(ctx, "volume", "inspect", h.volumeName)
@@ -341,10 +360,13 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		return Endpoint{}, err
 	}
 	h.mu.Lock()
-	h.volumeKnown = true
+	h.volumeCleanupArmed = true
 	h.mu.Unlock()
-	if _, err := h.runOnVerifiedTarget(ctx, "volume", "create", h.volumeName); err != nil {
+	if _, err := h.runOnVerifiedTarget(ctx, "volume", "create", "--label", databaseVolumeOwnerLabel+"="+h.volumeOwner, h.volumeName); err != nil {
 		return Endpoint{}, fmt.Errorf("create %s test volume: %w", h.config.Engine, err)
+	}
+	if err := h.ownedVolume(ctx, h.volumeName, h.volumeOwner); err != nil {
+		return Endpoint{}, fmt.Errorf("inspect generated %s test volume ownership: %w", h.config.Engine, err)
 	}
 
 	args := []string{
@@ -355,7 +377,7 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	}
 	args = append(args, h.config.ContainerArgs...)
 	args = append(args, "--label", databaseContainerOwnerLabel+"="+h.containerOwner)
-	args = append(args, h.runImage)
+	args = append(args, sourceImageID)
 	args = append(args, h.config.EngineArgs...)
 	containerAbsent, err := h.resourceAbsent(ctx, "container", "inspect", h.containerName)
 	if err != nil {
@@ -439,13 +461,13 @@ func (h *Harness) Close(_ context.Context) error {
 				errs = append(errs, fmt.Errorf("remove %s test container: %w", h.config.Engine, err))
 			}
 		}
-		if h.known(func(h *Harness) bool { return h.volumeKnown }) {
-			if _, err := h.runOnVerifiedTarget(cleanupCtx, "volume", "rm", "--force", h.volumeName); err != nil && !errors.Is(err, errContainerResourceNotFound) {
+		if h.known(func(h *Harness) bool { return h.volumeCleanupArmed }) {
+			if err := h.removeOwnedVolume(cleanupCtx, h.volumeName, h.volumeOwner); err != nil {
 				errs = append(errs, fmt.Errorf("remove %s test volume: %w", h.config.Engine, err))
 			}
 		}
-		if h.known(func(h *Harness) bool { return h.runImageKnown }) {
-			if _, err := h.runOnVerifiedTarget(cleanupCtx, "image", "rm", h.runImage); err != nil && !errors.Is(err, errContainerResourceNotFound) {
+		if h.known(func(h *Harness) bool { return h.runImageCleanupArmed }) {
+			if err := h.removeOwnedRunImage(cleanupCtx); err != nil {
 				errs = append(errs, fmt.Errorf("remove %s test image: %w", h.config.Engine, err))
 			}
 		}
@@ -506,6 +528,9 @@ const (
 	dockerCapacityProbeOwnerFormat = "{{.Id}}\t{{ index .Config.Labels \"polymetrics.dbtest.capacity-probe-owner\" }}"
 	databaseContainerOwnerLabel    = "polymetrics.dbtest.container-owner"
 	databaseContainerOwnerFormat   = "{{.Id}}\t{{ index .Config.Labels \"polymetrics.dbtest.container-owner\" }}"
+	databaseVolumeOwnerLabel       = "polymetrics.dbtest.volume-owner"
+	databaseVolumeOwnerFormat      = "{{.Name}}\t{{ index .Labels \"polymetrics.dbtest.volume-owner\" }}"
+	imageIDFormat                  = "{{.Id}}"
 )
 
 func (h *Harness) dockerVMImageStoreFree(ctx context.Context, target targetIdentity) (uint64, error) {
@@ -576,6 +601,68 @@ func (h *Harness) removeOwnedContainer(ctx context.Context, name, owner, contain
 		}
 	}
 	if _, err := h.runOnVerifiedTarget(ctx, "container", "rm", "--force", containerID); err != nil && !errors.Is(err, errContainerResourceNotFound) {
+		return err
+	}
+	return nil
+}
+
+func (h *Harness) ownedVolume(ctx context.Context, name, owner string) error {
+	output, err := h.runOnVerifiedTarget(ctx,
+		"volume", "inspect", "--format", databaseVolumeOwnerFormat, name,
+	)
+	if err != nil {
+		return err
+	}
+	reportedName, reportedOwner, valid := parseVolumeOwnership(output)
+	if !valid || reportedName != name || reportedOwner != owner {
+		return errors.New("generated volume ownership could not be proven")
+	}
+	return nil
+}
+
+func (h *Harness) removeOwnedVolume(ctx context.Context, name, owner string) error {
+	if err := h.ownedVolume(ctx, name, owner); err != nil {
+		if errors.Is(err, errContainerResourceNotFound) {
+			return nil
+		}
+		return err
+	}
+	if _, err := h.runOnVerifiedTarget(ctx, "volume", "rm", name); err != nil && !errors.Is(err, errContainerResourceNotFound) {
+		return err
+	}
+	return nil
+}
+
+func (h *Harness) imageID(ctx context.Context, reference string) (string, error) {
+	output, err := h.runOnVerifiedTarget(ctx, "image", "inspect", "--format", imageIDFormat, reference)
+	if err != nil {
+		return "", err
+	}
+	imageID, valid := parseImageID(output)
+	if !valid {
+		return "", errors.New("container image identity could not be proven")
+	}
+	return imageID, nil
+}
+
+func (h *Harness) removeOwnedRunImage(ctx context.Context) error {
+	h.mu.Lock()
+	expectedImageID := h.runImageID
+	h.mu.Unlock()
+	if !safeImageID(expectedImageID) {
+		return errors.New("generated test image ownership could not be proven")
+	}
+	imageID, err := h.imageID(ctx, h.runImage)
+	if errors.Is(err, errContainerResourceNotFound) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	if imageID != expectedImageID {
+		return errors.New("generated test image ownership could not be proven")
+	}
+	if _, err := h.runOnVerifiedTarget(ctx, "image", "rm", h.runImage); err != nil && !errors.Is(err, errContainerResourceNotFound) {
 		return err
 	}
 	return nil
@@ -817,6 +904,33 @@ func parseContainerOwnership(raw string) (string, string, bool) {
 		return "", "", false
 	}
 	return fields[0], fields[1], true
+}
+
+func parseVolumeOwnership(raw string) (string, string, bool) {
+	line, valid := singleCommandRecord(raw)
+	if !valid {
+		return "", "", false
+	}
+	fields := strings.Split(line, "\t")
+	if len(fields) != 2 || fields[0] == "" || strings.TrimSpace(fields[0]) != fields[0] || strings.ContainsAny(fields[0], "\t\r\n\x00") {
+		return "", "", false
+	}
+	return fields[0], fields[1], true
+}
+
+func parseImageID(raw string) (string, bool) {
+	line, valid := singleCommandRecord(raw)
+	if !valid {
+		return "", false
+	}
+	return line, safeImageID(line)
+}
+
+func safeImageID(value string) bool {
+	if strings.HasPrefix(value, "sha256:") {
+		value = strings.TrimPrefix(value, "sha256:")
+	}
+	return safeContainerID(value)
 }
 
 func safeContainerID(value string) bool {

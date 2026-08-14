@@ -42,10 +42,13 @@ Reviewed specifically:
    verified immutable ID before port discovery or file copying, and use that ID
    for cleanup; an indeterminate create re-proves ownership by label before any
    removal, so a raced foreign name remains untouched.
+9. Database volumes carry a per-run owner label that is re-proven before
+   non-force cleanup, so a foreign name or label remains untouched. Generated
+   run-image tags are bound to a verified immutable source image ID; startup
+   uses that ID, and a retagged reference is neither used nor removed.
 
 ## Evidence
 
-`go test -timeout 20m -run
-'^(TestCleanupRemovesOnlyRunOwnedResources\|TestCopyFileFromContainerUsesTheConfiguredEndpoint\|TestStartCleansResourcesAfterIndeterminateEngineOutcomes\|TestStartPreservesAContainerCreatedAfterPrecheck\|TestCloseDuringCreateStillRemovesTheCreatedResource\|TestEveryTargetCommandRechecksTargetIdentity\|TestCleanupFailsClosedWhenTargetIdentityChanges\|TestStartUsesDockerTargetIdentityAndCapacity\|TestStartUsesPodmanMachineDaemonCapacity\|TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe\|TestDockerVMCapacityRefusesAPreexistingProbeWithoutClaimingItsCleanup\|TestDockerVMCapacityPreservesAProbeCreatedAfterPrecheck\|TestCloseRemovesOnlyLabelOwnedCapacityProbe\|TestCloseRemovesOnlyLabelOwnedDatabaseContainer)$'
-./internal/connectors/native/dbtest` passed in 0.499s; the broader existing
-dbtest and MySQL evidence is recorded in `VERIFICATION.md` and `TDD-LEDGER.md`.
+`go test -timeout 20m ./internal/connectors/native/dbtest` passed in 0.448s;
+the broader existing dbtest and MySQL evidence is recorded in
+`VERIFICATION.md` and `TDD-LEDGER.md`.

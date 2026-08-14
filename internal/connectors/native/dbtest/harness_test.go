@@ -18,6 +18,8 @@ const testEndpoint = "unix:///tmp/dbtest.sock"
 const (
 	scriptedCapacityProbeID     = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 	scriptedDatabaseContainerID = "1123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+	scriptedSourceImageID       = "2123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+	scriptedForeignImageID      = "3123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 )
 
 type scriptedRunner struct {
@@ -25,8 +27,11 @@ type scriptedRunner struct {
 	containerLive        bool
 	capacityProbeOwners  map[string]string
 	containerOwners      map[string]string
+	volumeOwners         map[string]string
 	raceForeignProbe     bool
 	raceForeignContainer bool
+	raceForeignVolume    bool
+	raceForeignRunImage  bool
 	pullErr              error
 	tagErr               error
 	volumeInspectErr     error
@@ -39,6 +44,7 @@ type scriptedRunner struct {
 	infoCalls            int
 	capacityOutput       string
 	images               map[string]bool
+	imageIDs             map[string]string
 	commands             [][]string
 	endpoints            []string
 }
@@ -65,7 +71,11 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 		return "", r.pullErr
 	case commandHasPrefix(args, "image", "tag"):
 		if len(args) > 3 {
-			r.setImage(args[3], true)
+			imageID := r.imageID(args[2])
+			if r.raceForeignRunImage {
+				imageID = scriptedForeignImageID
+			}
+			r.setImageWithID(args[3], imageID, true)
 		}
 		return "", r.tagErr
 	case commandHasPrefix(args, "image", "rm"):
@@ -73,7 +83,11 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 			r.setImage(args[2], false)
 		}
 	case commandHasPrefix(args, "image", "inspect"):
-		if len(args) > 2 && r.imagePresent(args[2]) {
+		reference := args[len(args)-1]
+		if r.imagePresent(reference) {
+			if _, formatted := commandFlagValue(args, "--format"); formatted {
+				return r.imageID(reference) + "\n", nil
+			}
 			return "", nil
 		}
 		return "", errContainerResourceNotFound
@@ -81,14 +95,29 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 		if r.volumeInspectErr != nil {
 			return "", r.volumeInspectErr
 		}
+		name := args[len(args)-1]
 		if r.volumePresent {
+			if _, formatted := commandFlagValue(args, "--format"); formatted {
+				return name + "\t" + r.volumeOwners[name] + "\n", nil
+			}
 			return "", nil
 		}
 		return "", errContainerResourceNotFound
 	case commandHasPrefix(args, "volume", "create"):
+		if len(args) > 2 {
+			name := args[len(args)-1]
+			if r.raceForeignVolume {
+				r.setVolumeOwner(name, "foreign")
+			} else if owner, present := commandLabelValue(args, databaseVolumeOwnerLabel); present {
+				r.setVolumeOwner(name, owner)
+			}
+		}
 		r.volumePresent = true
 		return "", r.volumeCreateErr
 	case commandHasPrefix(args, "volume", "rm"):
+		if len(args) > 2 {
+			delete(r.volumeOwners, args[len(args)-1])
+		}
 		r.volumePresent = false
 	case commandHasPrefix(args, "container", "inspect"):
 		if r.containerInspectErr != nil {
@@ -171,14 +200,33 @@ func (r *scriptedRunner) imagePresent(image string) bool {
 }
 
 func (r *scriptedRunner) setImage(image string, present bool) {
+	r.setImageWithID(image, scriptedSourceImageID, present)
+}
+
+func (r *scriptedRunner) setImageWithID(image, imageID string, present bool) {
 	if r.images == nil {
 		r.images = make(map[string]bool)
 	}
+	if r.imageIDs == nil {
+		r.imageIDs = make(map[string]string)
+	}
 	if present {
 		r.images[image] = true
+		r.imageIDs[image] = imageID
 		return
 	}
 	delete(r.images, image)
+	delete(r.imageIDs, image)
+}
+
+func (r *scriptedRunner) imageID(image string) string {
+	if imageID, present := r.imageIDs[image]; present {
+		return imageID
+	}
+	if safeImageID(image) {
+		return image
+	}
+	return scriptedSourceImageID
 }
 
 func (r *scriptedRunner) setCapacityProbeOwner(name, owner string) {
@@ -193,6 +241,13 @@ func (r *scriptedRunner) setContainerOwner(name, owner string) {
 		r.containerOwners = make(map[string]string)
 	}
 	r.containerOwners[name] = owner
+}
+
+func (r *scriptedRunner) setVolumeOwner(name, owner string) {
+	if r.volumeOwners == nil {
+		r.volumeOwners = make(map[string]string)
+	}
+	r.volumeOwners[name] = owner
 }
 
 func commandFlagValue(args []string, flag string) (string, bool) {
@@ -377,6 +432,18 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	if h.containerID != scriptedDatabaseContainerID {
 		t.Fatalf("container ID = %q, want the verified immutable ID", h.containerID)
 	}
+	if h.runImageID != scriptedSourceImageID {
+		t.Fatalf("run image ID = %q, want the verified immutable source ID", h.runImageID)
+	}
+	if !commandsContain(runner.commands, "image", "tag", scriptedSourceImageID, h.runImage) {
+		t.Fatalf("commands = %v, want an immutable source image tag", runner.commands)
+	}
+	if !commandsContain(runner.commands, "volume", "create", "--label", databaseVolumeOwnerLabel+"="+h.volumeOwner, h.volumeName) {
+		t.Fatalf("commands = %v, want normal-volume ownership labeling", runner.commands)
+	}
+	if !commandsContain(runner.commands, "volume", "inspect", "--format", databaseVolumeOwnerFormat, h.volumeName) {
+		t.Fatalf("commands = %v, want normal-volume ownership inspection", runner.commands)
+	}
 	if !commandsContain(runner.commands, "container", "inspect", "--format", databaseContainerOwnerFormat, h.containerName) {
 		t.Fatalf("commands = %v, want normal-container ownership inspection", runner.commands)
 	}
@@ -389,8 +456,20 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	if runner.containerLive {
 		t.Fatal("cleanup retained the generated database container")
 	}
+	if runner.volumePresent {
+		t.Fatal("cleanup retained the generated database volume")
+	}
 	if !commandsContain(runner.commands, "container", "rm", "--force", scriptedDatabaseContainerID) {
 		t.Fatalf("commands = %v, want database-container removal by immutable ID", runner.commands)
+	}
+	if !commandsContain(runner.commands, "volume", "rm", h.volumeName) {
+		t.Fatalf("commands = %v, want database-volume removal after ownership proof", runner.commands)
+	}
+	if commandsContain(runner.commands, "volume", "rm", "--force") {
+		t.Fatalf("commands = %v, want database-volume cleanup without force", runner.commands)
+	}
+	if !commandsContain(runner.commands, "image", "inspect", "--format", imageIDFormat, h.runImage) {
+		t.Fatalf("commands = %v, want run-image ownership inspection", runner.commands)
 	}
 	if runner.imagePresent(h.runImage) {
 		t.Fatalf("images after cleanup = %#v, want the run-generated reference removed", runner.images)
@@ -536,7 +615,7 @@ func TestStartPlacesEngineArgumentsAfterImage(t *testing.T) {
 		}
 		imageIndex, engineArgumentIndex := -1, -1
 		for index, arg := range command {
-			if arg == h.runImage {
+			if arg == h.runImageID {
 				imageIndex = index
 			}
 			if arg == "--server-id=731000" {
@@ -639,6 +718,51 @@ func TestStartCleansResourcesAfterIndeterminateEngineOutcomes(t *testing.T) {
 	}
 }
 
+func TestStartPreservesARunImageRetaggedAfterCreation(t *testing.T) {
+	runner := &scriptedRunner{raceForeignRunImage: true}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil || !strings.Contains(err.Error(), "does not refer to the configured source image") {
+		t.Fatalf("Start() error = %v, want a retagged run-image refusal", err)
+	}
+	if imageID := runner.imageID(h.runImage); imageID != scriptedForeignImageID {
+		t.Fatalf("run image ID = %q, want foreign", imageID)
+	}
+	if !runner.imagePresent(h.runImage) {
+		t.Fatal("Start() removed the retagged foreign run image")
+	}
+	if commandsContain(runner.commands, "image", "rm", h.runImage) {
+		t.Fatalf("commands = %v, must not remove a retagged foreign run image", runner.commands)
+	}
+	if commandsContain(runner.commands, "run") {
+		t.Fatalf("commands = %v, must not start a container from an unproven run image", runner.commands)
+	}
+}
+
+func TestClosePreservesARetaggedRunImage(t *testing.T) {
+	runner := &scriptedRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	runner.setImageWithID(h.runImage, scriptedForeignImageID, true)
+
+	if err := h.Close(context.Background()); err == nil || !strings.Contains(err.Error(), "image ownership could not be proven") {
+		t.Fatalf("Close() error = %v, want an unproven run-image ownership error", err)
+	}
+	if imageID := runner.imageID(h.runImage); imageID != scriptedForeignImageID {
+		t.Fatalf("run image ID = %q, want foreign", imageID)
+	}
+	if commandsContain(runner.commands, "image", "rm", h.runImage) {
+		t.Fatalf("commands = %v, must not remove a retagged foreign run image", runner.commands)
+	}
+}
+
 func TestStartPreservesAContainerCreatedAfterPrecheck(t *testing.T) {
 	runner := &scriptedRunner{
 		raceForeignContainer: true,
@@ -691,7 +815,7 @@ func TestStartReleasesTheEngineSlotOnEveryExitPath(t *testing.T) {
 	}
 }
 
-func TestStartInspectsTheSourceImageOnlyToSizeThePull(t *testing.T) {
+func TestStartUsesAnImmutableSourceImageID(t *testing.T) {
 	runner := &scriptedRunner{}
 	config := testConfig(runner)
 	config.ExpectedImageBytes = 830 << 20
@@ -707,8 +831,8 @@ func TestStartInspectsTheSourceImageOnlyToSizeThePull(t *testing.T) {
 	if err := h.Close(context.Background()); err != nil {
 		t.Fatalf("Close(): %v", err)
 	}
-	if !commandsContain(runner.commands, "pull", config.Image) || !commandsContain(runner.commands, "image", "tag", config.Image, h.runImage) {
-		t.Fatalf("commands = %v, want generated image reference", runner.commands)
+	if !commandsContain(runner.commands, "pull", config.Image) || !commandsContain(runner.commands, "image", "tag", scriptedSourceImageID, h.runImage) {
+		t.Fatalf("commands = %v, want a generated image reference from the immutable source", runner.commands)
 	}
 	if commandsContain(runner.commands, "image", "rm", config.Image) {
 		t.Fatalf("commands = %v, want no source-image removal", runner.commands)
@@ -744,6 +868,83 @@ func TestStartPreservesPreexistingGeneratedVolume(t *testing.T) {
 	}
 	if commandsContain(runner.commands, "volume", "rm") {
 		t.Fatalf("commands = %v, want no removal of a pre-existing volume", runner.commands)
+	}
+}
+
+func TestStartPreservesAVolumeCreatedAfterPrecheck(t *testing.T) {
+	runner := &scriptedRunner{
+		raceForeignVolume: true,
+		volumeCreateErr:   errors.New("volume already exists"),
+	}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil || !strings.Contains(err.Error(), "create mysql test volume") {
+		t.Fatalf("Start() error = %v, want a raced volume creation failure", err)
+	}
+	if owner := runner.volumeOwners[h.volumeName]; owner != "foreign" {
+		t.Fatalf("volume owner = %q, want foreign", owner)
+	}
+	if !runner.volumePresent {
+		t.Fatal("Start() removed the foreign volume created after its name precheck")
+	}
+	if !commandsContain(runner.commands, "volume", "inspect", "--format", databaseVolumeOwnerFormat, h.volumeName) {
+		t.Fatalf("commands = %v, want database-volume ownership inspection", runner.commands)
+	}
+	if commandsContain(runner.commands, "volume", "rm", h.volumeName) {
+		t.Fatalf("commands = %v, must not remove a raced foreign volume", runner.commands)
+	}
+}
+
+func TestCloseRemovesOnlyLabelOwnedDatabaseVolume(t *testing.T) {
+	runner := &scriptedRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	runner.setVolumeOwner(h.volumeName, h.volumeOwner)
+	runner.volumePresent = true
+	h.mu.Lock()
+	h.volumeCleanupArmed = true
+	h.mu.Unlock()
+
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if runner.volumePresent {
+		t.Fatal("Close() did not remove the harness-owned database volume")
+	}
+	inspect := commandIndex(runner.commands, "volume", "inspect", "--format", databaseVolumeOwnerFormat, h.volumeName)
+	remove := commandIndex(runner.commands, "volume", "rm", h.volumeName)
+	if inspect < 0 || remove < 0 || inspect > remove {
+		t.Fatalf("commands = %v, want ownership inspection before database-volume removal", runner.commands)
+	}
+	if commandsContain(runner.commands, "volume", "rm", "--force") {
+		t.Fatalf("commands = %v, want database-volume cleanup without force", runner.commands)
+	}
+}
+
+func TestClosePreservesAVolumeWithForeignOwner(t *testing.T) {
+	runner := &scriptedRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	runner.setVolumeOwner(h.volumeName, "foreign")
+	runner.volumePresent = true
+	h.mu.Lock()
+	h.volumeCleanupArmed = true
+	h.mu.Unlock()
+
+	if err := h.Close(context.Background()); err == nil || !strings.Contains(err.Error(), "volume ownership could not be proven") {
+		t.Fatalf("Close() error = %v, want an unproven volume ownership error", err)
+	}
+	if !runner.volumePresent {
+		t.Fatal("Close() removed a database volume with a foreign owner label")
+	}
+	if commandsContain(runner.commands, "volume", "rm", h.volumeName) {
+		t.Fatalf("commands = %v, must not remove a database volume with a foreign owner label", runner.commands)
 	}
 }
 
@@ -1372,6 +1573,22 @@ func TestParseDockerStoreFree(t *testing.T) {
 	} {
 		if _, err := parseDockerStoreFree(raw); err == nil {
 			t.Fatalf("parseDockerStoreFree(%q) accepted invalid capacity", raw)
+		}
+	}
+}
+
+func TestParseImageID(t *testing.T) {
+	for _, raw := range []string{
+		scriptedSourceImageID + "\n",
+		"sha256:" + scriptedSourceImageID + "\n",
+	} {
+		if imageID, valid := parseImageID(raw); !valid || imageID != strings.TrimSuffix(raw, "\n") {
+			t.Fatalf("parseImageID(%q) = %q, %t, want a valid immutable image ID", raw, imageID, valid)
+		}
+	}
+	for _, raw := range []string{"", "sha256:short\n", scriptedSourceImageID + "\nsecond", "sha512:" + scriptedSourceImageID + "\n"} {
+		if _, valid := parseImageID(raw); valid {
+			t.Fatalf("parseImageID(%q) accepted an invalid image ID", raw)
 		}
 	}
 }
