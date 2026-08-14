@@ -5,6 +5,8 @@ import (
 	"crypto/sha256"
 	"errors"
 	"fmt"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -166,11 +168,12 @@ func (d *DatabaseDriver) ObserveManagedTarget(ctx context.Context, target databa
 	return observation, nil
 }
 
-// CreateManagedTarget deliberately refuses before DDL while the shared mapping
-// contract is absent. Creating a placeholder business relation would make a
-// false schema assertion and force the future mapped writer to auto-evolve it,
-// which both the issue and managed-target contract forbid.
-func (d *DatabaseDriver) CreateManagedTarget(ctx context.Context, _ database.ManagedTargetProvisioningPlan, _ database.TargetOwner) error {
+// CreateManagedTarget creates a mapped target and its private control records
+// in one PostgreSQL transaction. The shared provisioning state machine has
+// already asserted that no target exists, but this driver still derives every
+// identifier from that sealed plan and writes no placeholder relation when its
+// MappingContractV1 is absent or unsupported.
+func (d *DatabaseDriver) CreateManagedTarget(ctx context.Context, plan database.ManagedTargetProvisioningPlan, owner database.TargetOwner) error {
 	if ctx == nil {
 		return errPostgresDatabaseDriverConnectionRequired
 	}
@@ -180,7 +183,241 @@ func (d *DatabaseDriver) CreateManagedTarget(ctx context.Context, _ database.Man
 	if d == nil || d.conn == nil || d.connMu == nil {
 		return errPostgresDatabaseDriverConnectionRequired
 	}
-	return errPostgresTargetLayoutUnavailable
+	if !owner.Identity().SameIdentity(plan.Owner().Identity()) {
+		return errPostgresTargetCreateFailed
+	}
+	mapping, ok := plan.Mapping()
+	if !ok {
+		return errPostgresTargetMappingRequired
+	}
+	columns, err := postgresManagedTargetColumns(mapping)
+	if err != nil {
+		return err
+	}
+
+	d.connMu.Lock()
+	defer d.connMu.Unlock()
+	if err := postgresPreflightDurability(ctx, d.conn); err != nil {
+		return err
+	}
+	targetDatabase, err := d.targetDatabaseIdentity(ctx)
+	if err != nil || targetDatabase.Kind() != plan.TargetDatabase().Kind() || targetDatabase.Value() != plan.TargetDatabase().Value() {
+		return errPostgresTargetCreateFailed
+	}
+	tx, err := d.conn.BeginTx(ctx, pgx.TxOptions{})
+	if err != nil {
+		return errPostgresTargetCreateFailed
+	}
+	defer func() { _ = tx.Rollback(context.WithoutCancel(ctx)) }()
+	if _, err := tx.Exec(ctx, "SET LOCAL synchronous_commit = 'on'"); err != nil {
+		return errPostgresTargetCreateFailed
+	}
+	if err := postgresPreflightDurability(ctx, tx); err != nil {
+		return err
+	}
+	if err := postgresCreateManagedTargetLayout(ctx, tx, plan, columns); err != nil {
+		if contextErr := ctx.Err(); contextErr != nil {
+			return contextErr
+		}
+		return errPostgresTargetCreateFailed
+	}
+	if err := tx.Commit(ctx); err != nil {
+		if contextErr := ctx.Err(); contextErr != nil {
+			return contextErr
+		}
+		return errPostgresTargetCreateFailed
+	}
+	return nil
+}
+
+type postgresManagedTargetColumn struct {
+	name       string
+	typeSQL    string
+	nullable   bool
+	collation  string
+	constraint string
+}
+
+func postgresManagedTargetColumns(mapping database.MappingContractV1) ([]postgresManagedTargetColumn, error) {
+	columns := mapping.Columns()
+	if len(columns) == 0 {
+		return nil, errPostgresTargetMappingRequired
+	}
+	result := make([]postgresManagedTargetColumn, 0, len(columns))
+	for _, column := range columns {
+		typeSQL, constraint, err := postgresManagedTargetType(column.Type.Target())
+		if err != nil || validateIdentifier(column.Target) != nil {
+			return nil, errPostgresTargetTypeUnsupported
+		}
+		result = append(result, postgresManagedTargetColumn{
+			name:       column.Target,
+			typeSQL:    typeSQL,
+			nullable:   column.Nullable,
+			collation:  column.Type.Target().Collation(),
+			constraint: constraint,
+		})
+	}
+	return result, nil
+}
+
+func postgresManagedTargetType(logical database.LogicalType) (string, string, error) {
+	var typeSQL, constraint string
+	switch logical.Kind() {
+	case database.LogicalSignedInteger:
+		switch logical.BitWidth() {
+		case 8:
+			typeSQL, constraint = "SMALLINT", "%s >= -128 AND %s <= 127"
+		case 16:
+			typeSQL = "SMALLINT"
+		case 32:
+			typeSQL = "INTEGER"
+		case 64:
+			typeSQL = "BIGINT"
+		default:
+			return "", "", errPostgresTargetTypeUnsupported
+		}
+	case database.LogicalUnsignedInteger:
+		switch logical.BitWidth() {
+		case 8:
+			typeSQL, constraint = "NUMERIC(3,0)", "%s >= 0 AND %s <= 255"
+		case 16:
+			typeSQL, constraint = "NUMERIC(5,0)", "%s >= 0 AND %s <= 65535"
+		case 32:
+			typeSQL, constraint = "NUMERIC(10,0)", "%s >= 0 AND %s <= 4294967295"
+		case 64:
+			typeSQL, constraint = "NUMERIC(20,0)", "%s >= 0 AND %s <= 18446744073709551615"
+		default:
+			return "", "", errPostgresTargetTypeUnsupported
+		}
+	case database.LogicalDecimal:
+		typeSQL = "NUMERIC(" + strconv.FormatUint(uint64(logical.Precision()), 10) + "," + strconv.FormatUint(uint64(logical.Scale()), 10) + ")"
+	case database.LogicalFloat:
+		switch logical.BitWidth() {
+		case 32:
+			typeSQL = "REAL"
+		case 64:
+			typeSQL = "DOUBLE PRECISION"
+		default:
+			return "", "", errPostgresTargetTypeUnsupported
+		}
+	case database.LogicalBoolean:
+		typeSQL = "BOOLEAN"
+	case database.LogicalString:
+		if logical.MaxLength() == 0 {
+			typeSQL = "TEXT"
+		} else {
+			typeSQL = "VARCHAR(" + strconv.FormatUint(uint64(logical.MaxLength()), 10) + ")"
+		}
+		if logical.Collation() != "" {
+			if validateIdentifier(logical.Collation()) != nil {
+				return "", "", errPostgresTargetTypeUnsupported
+			}
+			typeSQL += " COLLATE " + quoteIdentifier(logical.Collation())
+		}
+	case database.LogicalBinary:
+		typeSQL = "BYTEA"
+	case database.LogicalDate:
+		typeSQL = "DATE"
+	case database.LogicalTime:
+		typeSQL = "TIME(" + strconv.FormatUint(uint64(logical.Precision()), 10) + ")"
+		if logical.WithTimezone() {
+			typeSQL += " WITH TIME ZONE"
+		} else {
+			typeSQL += " WITHOUT TIME ZONE"
+		}
+	case database.LogicalTimestamp:
+		typeSQL = "TIMESTAMP(" + strconv.FormatUint(uint64(logical.Precision()), 10) + ")"
+		if logical.WithTimezone() {
+			typeSQL += " WITH TIME ZONE"
+		} else {
+			typeSQL += " WITHOUT TIME ZONE"
+		}
+	case database.LogicalUUID:
+		typeSQL = "UUID"
+	case database.LogicalJSON:
+		typeSQL = "JSONB"
+	default:
+		return "", "", errPostgresTargetTypeUnsupported
+	}
+	return typeSQL, constraint, nil
+}
+
+func postgresCreateManagedTargetLayout(ctx context.Context, tx pgx.Tx, plan database.ManagedTargetProvisioningPlan, columns []postgresManagedTargetColumn) error {
+	target := plan.Target()
+	namespace := quoteIdentifier(target.Namespace())
+	if _, err := tx.Exec(ctx, "CREATE SCHEMA "+namespace); err != nil {
+		return err
+	}
+	ownerTable := postgresQualifiedControlTable(target.Namespace(), postgresNamespaceOwnerTable)
+	controlTable := postgresQualifiedControlTable(target.Namespace(), postgresTargetControlTable)
+	ledgerTable := postgresQualifiedControlTable(target.Namespace(), postgresDeliveryLedgerTable)
+	if _, err := tx.Exec(ctx, `CREATE TABLE `+ownerTable+` (
+		singleton BOOLEAN PRIMARY KEY DEFAULT TRUE CHECK (singleton),
+		workspace_id TEXT NOT NULL,
+		connector_id TEXT NOT NULL,
+		connection_id TEXT NOT NULL,
+		target_database_oid TEXT NOT NULL,
+		namespace_oid TEXT NOT NULL
+	)`); err != nil {
+		return err
+	}
+	if _, err := tx.Exec(ctx, `CREATE TABLE `+controlTable+` (
+		workspace_id TEXT NOT NULL,
+		connector_id TEXT NOT NULL,
+		connection_id TEXT NOT NULL,
+		stream_id TEXT NOT NULL UNIQUE,
+		relation_name TEXT NOT NULL PRIMARY KEY,
+		target_database_oid TEXT NOT NULL,
+		relation_oid TEXT NOT NULL,
+		schema_version BIGINT NOT NULL CHECK (schema_version > 0),
+		schema_fingerprint BYTEA NOT NULL CHECK (octet_length(schema_fingerprint) = 32)
+	)`); err != nil {
+		return err
+	}
+	if _, err := tx.Exec(ctx, `CREATE TABLE `+ledgerTable+` (
+		stream_id TEXT NOT NULL PRIMARY KEY,
+		relation_name TEXT NOT NULL,
+		target_database_oid TEXT NOT NULL,
+		delivery_id TEXT NOT NULL
+	)`); err != nil {
+		return err
+	}
+	columnDDL := make([]string, 0, len(columns))
+	for _, column := range columns {
+		definition := quoteIdentifier(column.name) + " " + column.typeSQL
+		if !column.nullable {
+			definition += " NOT NULL"
+		}
+		if column.constraint != "" {
+			quoted := quoteIdentifier(column.name)
+			definition += " CHECK (" + fmt.Sprintf(column.constraint, quoted, quoted) + ")"
+		}
+		columnDDL = append(columnDDL, definition)
+	}
+	relationTable := quoteIdentifier(target.Namespace()) + "." + quoteIdentifier(target.Relation())
+	if _, err := tx.Exec(ctx, "CREATE TABLE "+relationTable+" ("+strings.Join(columnDDL, ", ")+")"); err != nil {
+		return err
+	}
+	var namespaceOID, relationOID string
+	if err := tx.QueryRow(ctx, "SELECT oid::text FROM pg_catalog.pg_namespace WHERE nspname = $1", target.Namespace()).Scan(&namespaceOID); err != nil {
+		return err
+	}
+	if err := tx.QueryRow(ctx, `
+		SELECT c.oid::text
+		FROM pg_catalog.pg_class AS c
+		JOIN pg_catalog.pg_namespace AS n ON n.oid = c.relnamespace
+		WHERE n.nspname = $1 AND c.relname = $2 AND c.relkind IN ('r', 'p')`, target.Namespace(), target.Relation()).Scan(&relationOID); err != nil {
+		return err
+	}
+	identity := plan.Owner().Identity()
+	if _, err := tx.Exec(ctx, "INSERT INTO "+ownerTable+" (workspace_id, connector_id, connection_id, target_database_oid, namespace_oid) VALUES ($1, $2, $3, $4, $5)", identity.WorkspaceID, identity.ConnectorID, identity.ConnectionID, plan.TargetDatabase().Value(), namespaceOID); err != nil {
+		return err
+	}
+	fingerprint := plan.Schema().Fingerprint().Bytes()
+	if _, err := tx.Exec(ctx, "INSERT INTO "+controlTable+" (workspace_id, connector_id, connection_id, stream_id, relation_name, target_database_oid, relation_oid, schema_version, schema_fingerprint) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", identity.WorkspaceID, identity.ConnectorID, identity.ConnectionID, target.StreamID(), target.Relation(), plan.TargetDatabase().Value(), relationOID, plan.Schema().Version(), fingerprint); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *DatabaseDriver) targetDatabaseIdentity(ctx context.Context) (database.TargetDatabaseIdentity, error) {

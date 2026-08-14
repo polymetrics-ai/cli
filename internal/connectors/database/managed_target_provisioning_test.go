@@ -666,6 +666,45 @@ func testManagedTargetSchema(t *testing.T, version uint, marker byte) database.M
 	return schema
 }
 
+func TestManagedTargetProvisioningPlanCarriesSharedMapping(t *testing.T) {
+	identity := database.ConnectionIdentity{
+		WorkspaceID:  "workspace-1",
+		ConnectorID:  "postgres",
+		ConnectionID: "source-connection-1",
+	}
+	artifact, err := warehouse.NewArtifactRef(identity, "orders")
+	if err != nil {
+		t.Fatal(err)
+	}
+	owner, err := database.NewTargetOwner(identity)
+	if err != nil {
+		t.Fatal(err)
+	}
+	target, err := database.NewManagedTargetRef(owner, artifact, "stream-orders")
+	if err != nil {
+		t.Fatal(err)
+	}
+	mapping := testDatabaseWriteMapping(t, "source_id", "target_id")
+	plan, err := database.NewManagedTargetProvisioningPlan(
+		owner,
+		target,
+		testTargetDatabase(t, "database-1"),
+		testManagedTargetSchema(t, 1, 1),
+		mapping,
+	)
+	if err != nil {
+		t.Fatalf("NewManagedTargetProvisioningPlan() error = %v", err)
+	}
+	got, ok := plan.Mapping()
+	if !ok {
+		t.Fatal("Mapping() did not preserve the shared DDL mapping")
+	}
+	columns := got.Columns()
+	if len(columns) != 1 || columns[0].Source != "source_id" || columns[0].Target != "target_id" {
+		t.Fatalf("Mapping() columns = %#v, want the sealed shared mapping", columns)
+	}
+}
+
 func testTargetDatabase(t *testing.T, value string) database.TargetDatabaseIdentity {
 	t.Helper()
 	identity, err := database.NewTargetDatabaseIdentity("fixture-target-database", value)

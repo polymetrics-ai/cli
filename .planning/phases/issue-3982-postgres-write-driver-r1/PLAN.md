@@ -70,6 +70,32 @@ later slice to auto-evolve it. The non-mapping work is deliberately retained:
    admission, record application, tombstones, receipts, and `write=false`
    capability behavior unchanged until #3973 is complete.
 
+## Mapping contract landed — resumed execution
+
+PR #4144 completed #3973's missing `MappingContractV1`, explicit
+`TombstoneEnvelope`, and `DeliveryReceiptV1` contracts. The mapping is sealed
+into `DatabaseWritePlan`, but the previously landed provisioning plan cannot
+yet carry the exact mapping that PostgreSQL must render for first-create DDL.
+This issue will make the smallest shared typed attachment: an optional,
+defensively copied `MappingContractV1` on `ManagedTargetProvisioningPlan`.
+The native PostgreSQL adapter will require it for first create, while existing
+mapping-free provisioning callers remain valid and continue to fail closed at
+the native adapter. This keeps all column/type authority in the shared contract
+and avoids a driver-local mapping, placeholder relation, or schema evolution.
+
+The resumed implementation therefore owns:
+
+1. mapped, atomic PostgreSQL namespace/control/relation creation with relation
+   and namespace OIDs re-observed by the existing provisioner;
+2. closed PostgreSQL DDL/value encoding directly from `MappingContractV1`, with
+   unsupported logical shapes and values refusing before mutation;
+3. `DatabaseWriteDriver`/pinned transaction implementation for exactly the
+   five phase-one modes, bounded batches, transactional overwrite, and explicit
+   keyed tombstone deletes; and
+4. live dbtest assertions for created rows/types/control state, all modes,
+   physical absence retention, explicit deletes, rollback, durability and
+   ownership refusals.
+
 ## TDD slices
 
 1. **Red — concrete driver surface.** Add compile-time and real PostgreSQL test coverage for the existing descriptor-only driver to require provisioning, preview, session start, batch application, receipts, and ledger persistence. Preserve `write=false` / legacy `Connector.Write` fence assertions. Capture failing output.
@@ -81,7 +107,11 @@ later slice to auto-evolve it. The non-mapping work is deliberately retained:
 
 ## Guardrails
 
-- Production scope is limited to `internal/connectors/native/postgres/**` plus this issue's planning evidence. If the existing shared contracts prove insufficient, record `needs-decision` instead of editing them.
+- Production scope is limited to `internal/connectors/native/postgres/**`, the
+  corresponding PostgreSQL `database.json` admission/test, the narrow
+  `ManagedTargetProvisioningPlan` mapping attachment required to avoid a
+  driver-local DDL map, and this issue's planning evidence. No unrelated shared
+  write semantics are changed.
 - Use explicit driver-owned constant SQL identifiers only for fixed private control structures; render every derived identifier through a closed quoting helper and bind every value as an argument.
 - No credentials, DSNs, raw records, or server error text enter error messages, plans, traces, or PR body.
 - No new dependencies, generic SQL executor, connector registration, capability flip, schema evolution, unrelated source transport change, or fixes for #4125/#4136/#4090.

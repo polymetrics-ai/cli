@@ -1,0 +1,14 @@
+Command:
+
+    go test -timeout 20m -count=1 ./internal/connectors/native/postgres -run TestPostgresDatabaseDriverReferenceSeam
+
+Observed output before the PostgreSQL session implementation:
+
+    # polymetrics.ai/internal/connectors/native/postgres_test [polymetrics.ai/internal/connectors/native/postgres.test]
+    internal/connectors/native/postgres/database_driver_test.go:14:39: cannot use (*native.DatabaseDriver)(nil) (value of type *postgres.DatabaseDriver) as database.DatabaseWriteDriver value in variable declaration: *postgres.DatabaseDriver does not implement database.DatabaseWriteDriver (missing method BeginDatabaseWrite)
+    FAIL    polymetrics.ai/internal/connectors/native/postgres [build failed]
+    FAIL
+
+The required port assertion fails before production code is added. The Green
+implementation must use the shared write-session, mapping, tombstone, and
+receipt contracts; it must not expose a PostgreSQL-local write API.

@@ -11,6 +11,7 @@ func TestPostgresDatabaseDriverReferenceSeam(t *testing.T) {
 	var _ database.Driver = native.DatabaseDriver{}
 	var _ database.ManagedTargetProvisioningDriver = (*native.DatabaseDriver)(nil)
 	var _ database.ManagedTargetDeliveryLedgerStore = (*native.DatabaseDriver)(nil)
+	var _ database.DatabaseWriteDriver = (*native.DatabaseDriver)(nil)
 
 	descriptor := (native.DatabaseDriver{}).DatabaseDriverDescriptor()
 	if descriptor.ID != "postgres" || descriptor.Protocol != "postgres-wire" || descriptor.APIVersion != 1 {

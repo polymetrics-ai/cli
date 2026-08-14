@@ -156,13 +156,22 @@ type ManagedTargetProvisioningPlan struct {
 	target   ManagedTargetRef
 	targetDB TargetDatabaseIdentity
 	schema   ManagedTargetSchema
+	mapping  *MappingContractV1
 }
 
 // NewManagedTargetProvisioningPlan validates a mutation authority before any
 // driver is called. The supplied owner must be exactly the owner from which the
-// target was derived.
-func NewManagedTargetProvisioningPlan(owner TargetOwner, target ManagedTargetRef, targetDB TargetDatabaseIdentity, schema ManagedTargetSchema) (ManagedTargetProvisioningPlan, error) {
+// target was derived. An optional MappingContractV1 attaches the shared
+// first-create column contract; at most one mapping is accepted.
+func NewManagedTargetProvisioningPlan(owner TargetOwner, target ManagedTargetRef, targetDB TargetDatabaseIdentity, schema ManagedTargetSchema, mapping ...MappingContractV1) (ManagedTargetProvisioningPlan, error) {
+	if len(mapping) > 1 {
+		return ManagedTargetProvisioningPlan{}, ErrManagedTargetPlanInvalid
+	}
 	plan := ManagedTargetProvisioningPlan{owner: owner, target: target, targetDB: targetDB, schema: schema}
+	if len(mapping) == 1 {
+		clone := mapping[0].clone()
+		plan.mapping = &clone
+	}
 	if err := plan.validate(); err != nil {
 		return ManagedTargetProvisioningPlan{}, ErrManagedTargetPlanInvalid
 	}
@@ -170,7 +179,7 @@ func NewManagedTargetProvisioningPlan(owner TargetOwner, target ManagedTargetRef
 }
 
 func (p ManagedTargetProvisioningPlan) validate() error {
-	if err := p.owner.validate(); err != nil || p.target.validate() != nil || !p.owner.sameIdentity(p.target.owner) || p.targetDB.validate() != nil || p.schema.validate() != nil {
+	if err := p.owner.validate(); err != nil || p.target.validate() != nil || !p.owner.sameIdentity(p.target.owner) || p.targetDB.validate() != nil || p.schema.validate() != nil || (p.mapping != nil && p.mapping.validate() != nil) {
 		return ErrManagedTargetPlanInvalid
 	}
 	return nil
@@ -189,6 +198,17 @@ func (p ManagedTargetProvisioningPlan) TargetDatabase() TargetDatabaseIdentity {
 // Schema returns the schema contract this plan asserts. A mismatch is refused,
 // not repaired or evolved.
 func (p ManagedTargetProvisioningPlan) Schema() ManagedTargetSchema { return p.schema }
+
+// Mapping returns the optional sealed target-column contract needed by a
+// native adapter to render a first-create relation. The plan stays valid
+// without a mapping so existing ownership-only callers remain fail-closed at
+// adapters that require concrete business DDL.
+func (p ManagedTargetProvisioningPlan) Mapping() (MappingContractV1, bool) {
+	if p.mapping == nil || p.mapping.validate() != nil {
+		return MappingContractV1{}, false
+	}
+	return p.mapping.clone(), true
+}
 
 // ManagedTargetLock is a namespace-scoped driver lock acquired before every
 // observation and held through the final assertion. A native implementation

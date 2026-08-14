@@ -1,9 +1,11 @@
 package engine
 
 import (
+	"reflect"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/synccontract"
 )
 
 func TestBundleLoadPostgresDatabaseDefinitionWithoutCapabilityPromotion(t *testing.T) {
@@ -17,8 +19,15 @@ func TestBundleLoadPostgresDatabaseDefinitionWithoutCapabilityPromotion(t *testi
 	if got := bundle.Database.Driver(); got.ID != "postgres" || got.Protocol != "postgres-wire" || got.APIVersion != 1 {
 		t.Fatalf("database driver declaration = %#v, want postgres wire API v1", got)
 	}
-	if modes := bundle.Database.AdmittedModes(); len(modes) != 0 {
-		t.Fatalf("database definition admitted modes = %v, want no unimplemented operation claim", modes)
+	wantModes := []synccontract.Mode{
+		synccontract.ModeFullOverwrite,
+		synccontract.ModeFullAppend,
+		synccontract.ModeIncrementalAppend,
+		synccontract.ModeIncrementalUpsert,
+		synccontract.ModeIncrementalDedupe,
+	}
+	if modes := bundle.Database.AdmittedModes(); !reflect.DeepEqual(modes, wantModes) {
+		t.Fatalf("database definition admitted modes = %v, want the five private managed-target modes %v", modes, wantModes)
 	}
 	if bundle.Metadata.Capabilities.Write || bundle.Metadata.Capabilities.CDC {
 		t.Fatalf("PostgreSQL metadata promoted capabilities: %+v", bundle.Metadata.Capabilities)

@@ -1,4 +1,24 @@
-# Review — Issue #3982 partial PostgreSQL provisioning slice
+# Review — Issue #3982 PostgreSQL managed-table write driver
+
+## Mapped write-driver re-review
+
+`scripts/gsd prompt code-review cli-3982-postgres-write-driver-r1` was again
+resolved through the documented inline/manual fallback after #4144 landed. The
+review covered the optional shared mapping attachment, PostgreSQL DDL/type
+renderer, target reassertion, session lock lifetime, each DML mode, tombstone
+decoder, unknown-commit path, definition admission, and tagged dbtest evidence.
+
+| Severity | Finding | Disposition |
+| --- | --- | --- |
+| Critical | None | — |
+| Warning | A target assertion initially compared mapped type/nullability but not a declared string collation. | Fixed: physical target assertion now reads `pg_collation` and refuses a declared-collation mismatch. |
+| Warning | A typed tombstone could encode `null` for a non-null key, turning the delete into a silent no-op. | Fixed: decoder now refuses a null key where the shared mapping says non-null. |
+| Info | PostgreSQL has no native unsigned integer or int8 type. | DDL uses bounded `NUMERIC` / `SMALLINT` checks, mapping values are range checked before binding, and type/value unit tests cover the closed conversion table. |
+
+No unresolved correctness, security, lifecycle, or scope finding remains. The
+private definition admits only the five phase-one modes; public `write=false`,
+legacy `Connector.Write`, registration, generic SQL, and history mode remain
+unchanged.
 
 ## Method
 

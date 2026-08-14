@@ -14,14 +14,15 @@ import (
 var (
 	errPostgresDatabaseDriverConnectionRequired = errors.New("postgres managed target driver requires a pinned connection")
 	errPostgresDurabilityUnsafe                 = errors.New("postgres managed target durability settings are unsafe")
-	errPostgresTargetLayoutUnavailable          = errors.New("postgres managed target layout contract is unavailable")
+	errPostgresTargetMappingRequired            = errors.New("postgres managed target mapping is required")
+	errPostgresTargetTypeUnsupported            = errors.New("postgres managed target type is unsupported")
+	errPostgresTargetCreateFailed               = errors.New("postgres managed target create failed")
 )
 
 // DatabaseDriver is PostgreSQL's compile-time reference seam for the shared
 // typed database foundation. A constructed driver pins one PostgreSQL
-// connection for ownership observation and PostgreSQL advisory locks. It is
-// deliberately not registered and remains unable to begin a mapped write
-// session until #3973 provides the shared MappingContractV1.
+// connection for ownership observation, PostgreSQL advisory locks, and one
+// mapped write session at a time. It is deliberately not registered.
 type DatabaseDriver struct {
 	conn   *pgx.Conn
 	connMu *sync.Mutex
@@ -64,8 +65,16 @@ func (d *DatabaseDriver) PreflightDurability(ctx context.Context) error {
 	}
 	d.connMu.Lock()
 	defer d.connMu.Unlock()
+	return postgresPreflightDurability(ctx, d.conn)
+}
+
+type postgresDurabilityQuerier interface {
+	QueryRow(context.Context, string, ...any) pgx.Row
+}
+
+func postgresPreflightDurability(ctx context.Context, querier postgresDurabilityQuerier) error {
 	var fsync, synchronousCommit string
-	if err := d.conn.QueryRow(ctx, "SELECT current_setting('fsync'), current_setting('synchronous_commit')").Scan(&fsync, &synchronousCommit); err != nil {
+	if err := querier.QueryRow(ctx, "SELECT current_setting('fsync'), current_setting('synchronous_commit')").Scan(&fsync, &synchronousCommit); err != nil {
 		if contextErr := ctx.Err(); contextErr != nil {
 			return contextErr
 		}
