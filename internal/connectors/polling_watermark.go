@@ -221,6 +221,7 @@ const (
 type PollingApplyDescriptor struct {
 	Executor                TransportExecutorReference      `json:"executor"`
 	MaxBatchRecords         int                             `json:"max_batch_records"`
+	MaxBatchBytes           int                             `json:"max_batch_bytes"`
 	Staging                 PollingStagingCapability        `json:"staging"`
 	StableKeyMapping        []string                        `json:"stable_key_mapping"`
 	ConditionalOrderFence   bool                            `json:"conditional_order_fence"`
@@ -394,6 +395,9 @@ func (d PollingApplyDescriptor) validate(sourceModes []synccontract.Mode) error 
 	}
 	if d.MaxBatchRecords <= 0 || d.MaxBatchRecords > 100000 {
 		return fmt.Errorf("target polling apply requires a bounded positive batch size")
+	}
+	if d.MaxBatchBytes <= 0 || d.MaxBatchBytes > 1<<30 {
+		return fmt.Errorf("target polling apply requires a bounded positive byte limit")
 	}
 	if d.Staging != PollingStagingReplaceSupported && d.Staging != PollingStagingReplaceUnsupported {
 		return fmt.Errorf("unsupported polling staging capability %q", d.Staging)

@@ -106,6 +106,7 @@ const validPollingWatermarkDefinitionJSON = `{
   "target": {
     "executor": {"family": "native_database", "id": "acme-polling-apply-v1"},
     "max_batch_records": 100,
+    "max_batch_bytes": 1048576,
     "staging": "staging_replace_supported",
     "stable_key_mapping": ["id"],
     "conditional_order_fence": true,

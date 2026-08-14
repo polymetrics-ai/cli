@@ -20,6 +20,14 @@ POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETR
 The actual failing command output will be retained under `traces/` before any
 production implementation for the added contracts.
 
+**Recorded RED:** `traces/closed-apply-red.txt` captures the absent
+`MaxBatchBytes`, `PollingApplyPage`, `PollingApplyRecord`, and
+`ApplyPollingPage` symbols before implementation.
+
+**Recorded GREEN:** `traces/closed-apply-green.txt` records the focused engine
+pass after the registered, descriptor-bounded dispatch and acknowledgement
+gate were added.
+
 ## Green commands
 
 Use the scoped and live commands in `PLAN.md`; record the exact outcome here

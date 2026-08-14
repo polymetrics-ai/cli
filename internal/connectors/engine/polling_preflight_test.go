@@ -312,6 +312,7 @@ func newPollingPreflightFixture(t *testing.T) *pollingPreflightFixture {
 		Target: connectors.PollingApplyDescriptor{
 			Executor:                connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "fixture-polling-apply-v1"},
 			MaxBatchRecords:         100,
+			MaxBatchBytes:           1 << 20,
 			Staging:                 connectors.PollingStagingReplaceSupported,
 			StableKeyMapping:        []string{"id"},
 			ConditionalOrderFence:   true,
