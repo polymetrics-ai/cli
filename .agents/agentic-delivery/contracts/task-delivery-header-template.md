@@ -21,6 +21,17 @@ pull request can drift.
   <!-- Describe what this agent will build in its own words and list the acceptance criteria that make it done. -->
 - Verification:
   <!-- List the concrete commands, tests, or review evidence that will prove the acceptance criteria. -->
+
+## Evidence Table
+
+<!-- Live evidence against the real connector or implementation is the default when one applies. Add one row for every acceptance criterion; mark it `live` or `fake`, and give every fake its own written reason. Never summarize exceptions as "mocked where needed". -->
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| <criterion> | <live \| fake> | <state change asserted by the live test, or why this individual fake is genuinely necessary> |
+
+## Assertion Rule
+
+<!-- Every live test must assert an observable state change that would be absent if the code did nothing; `no error returned` and `did not panic` are not evidence. -->
 ```
 
 ## Worked Example
@@ -34,7 +45,39 @@ pull request can drift.
 - Working branch: docs/task-delivery-header
 - Task: Add a reusable task-start header and require agents to declare the exact PR base before implementation; the PR template and agent instructions must point to the same check.
 - Verification: Review the template fields and guidance, run `git diff --check`, and read the opened PR's base from GitHub.
+
+## Evidence Table
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| The template declares an exact base branch and landing path | live | A repository-content check reads the actual template and asserts the completed `Base branch` and `Merges into` values are present; without this change, they are absent. |
+| The pull-request template requires API base verification | live | A repository-content check reads the actual PR template and asserts the required base field and API read-back command are present; without this change, they are absent. |
+| Agents must complete the header before work and verify the PR base after opening | live | A repository-content check reads `AGENTS.md` and asserts its pointer requires both actions; without this change, that directive is absent. |
+
+## Assertion Rule
+
+Every live check asserts the required template text exists; a successful command alone is not treated as proof.
 ```
+
+## Evidence Rules
+
+Live evidence against the real connector or real implementation is the default when one applies.
+For every acceptance criterion, the evidence table must contain one row marked `live` or `fake`. A
+fake is an exception: enumerate each one separately and write why it is genuinely necessary. Never
+replace those reasons with a collective statement such as “mocked where needed.”
+
+## The Assertion Rule
+
+Every live test must assert an observable state change that would be absent if the code did
+nothing. “No error returned” and “did not panic” are not evidence.
+
+This is not satisfied merely because a real dependency was used. A shared rate-limit observer once
+ran its Lua script against the real dependency, but that script errored on every call. The feature
+was therefore a no-op, while every test passed because it asserted only that the call did not panic.
+Live tests must assert the effect they claim to cover.
+
+A skipped test reports as a pass: `go test` counts `SKIP` toward success. “Checks green” therefore
+never, by itself, proves live coverage.
 
 ## After Opening the Pull Request
 
