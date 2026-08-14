@@ -1,0 +1,16 @@
+Captain mediation amendment — Red run before per-leg admission support
+
+Command:
+    go test ./internal/connectors/database -run 'Test(WarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs|MySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact)' -count=1
+
+Result:
+    # polymetrics.ai/internal/connectors/database_test [polymetrics.ai/internal/connectors/database.test]
+    internal/connectors/database/database_test.go:540:40: cannot use mysqlLayerTwo{} (value of struct type mysqlLayerTwo) as database.NativeAdmittedDriver value in variable declaration: mysqlLayerTwo does not implement database.NativeAdmittedDriver (missing method NativeSyncConformanceEvidence)
+    FAIL    polymetrics.ai/internal/connectors/database [build failed]
+    FAIL
+
+Interpretation:
+    The original singular NativeAdmittedDriver shape could represent only one
+    native descriptor. The Red test requires separate source-to-warehouse and
+    warehouse-to-target descriptor/evidence admissions without introducing a
+    new mode, executor, or capability.
