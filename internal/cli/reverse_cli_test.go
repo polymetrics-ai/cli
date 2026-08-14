@@ -430,7 +430,7 @@ func TestReverseApprovalReplayRejectsBeforeOpeningLegacyProject(t *testing.T) {
 			"--root", root,
 			"--json",
 		}, token+"\n", &stdout, &stderr)
-		assertApprovalReplayRefusedWithoutStateWrite(t, code, stdout.String()+stderr.String(), state, root)
+		assertAuthorizationTokenReplayRefusedWithoutStateWrite(t, code, stdout.String()+stderr.String(), state, root)
 	})
 
 	t.Run("connector execution", func(t *testing.T) {
@@ -547,6 +547,17 @@ func assertApprovalInputRefusedWithoutStateWrite(t *testing.T, code int, output 
 
 func assertApprovalReplayRefusedWithoutStateWrite(t *testing.T, code int, output string, wantState []byte, root string) {
 	assertApprovalRefusedWithoutStateWrite(t, code, output, "reverse plan approval has already been consumed", wantState, root)
+}
+
+func assertAuthorizationTokenReplayRefusedWithoutStateWrite(t *testing.T, code int, output string, wantState []byte, root string) {
+	t.Helper()
+	assertApprovalRefusedWithoutStateWrite(t, code, output, "authorization token for", wantState, root)
+	if code != 3 {
+		t.Fatalf("authorization token replay exit code = %d, want validation exit code 3", code)
+	}
+	if !strings.Contains(output, `"category": "validation"`) || !strings.Contains(output, `"code": "validation_error"`) {
+		t.Fatalf("authorization token replay was not classified as validation: %s", output)
+	}
 }
 
 func assertApprovalRefusedWithoutStateWrite(t *testing.T, code int, output, want string, wantState []byte, root string) {

@@ -72,6 +72,7 @@ type state struct {
 	Runs               []Run                             `json:"runs"`
 	ReversePlans       []ReversePlan                     `json:"reverse_plans"`
 	ReverseRuns        []ReverseRun                      `json:"reverse_runs"`
+	Authorizations     []AuthorizationRecord             `json:"authorizations,omitempty"`
 	Checkpoints        map[string]map[string]string      `json:"checkpoints,omitempty"`
 	StreamStates       map[string]StreamState            `json:"stream_states,omitempty"`
 }
@@ -2508,6 +2509,15 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
 		return ReverseRun{}, err
 	}
+	if plan.AuthorizationReference != "" {
+		if req.ApprovalToken != "" {
+			return ReverseRun{}, &AuthorizationTokenReplayError{Reference: plan.AuthorizationReference}
+		}
+		if plan.Mode == reversePlanModeConnectorCommand {
+			return ReverseRun{}, &AuthorizationScopeChangedError{Reference: plan.AuthorizationReference, Property: "plan_mode"}
+		}
+		return a.runAuthorizedBulkReversePlan(ctx, plan)
+	}
 	if plan.Status != "planned" && plan.ApprovalTokenHash == "" {
 		return ReverseRun{}, errors.New("reverse plan approval has already been consumed")
 	}
@@ -2536,6 +2546,16 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
 		return ReverseRun{}, err
 	}
+	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}
+	writer, credential, runtime, err := a.resolveEndpointWithCredential(ctx, dest)
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	scope := a.authorizationScopeForReversePlan(plan, credential, runtime)
+	authorization, err := newAuthorizationRecord(scope, time.Now().UTC())
+	if err != nil {
+		return ReverseRun{}, err
+	}
 	// Re-read exactly the records whose mapped payload produced PlanHash. This
 	// keeps the hash check and the dispatched records on the same approved slice.
 	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount)})
@@ -2543,11 +2563,6 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 		return ReverseRun{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
 	}
 	mappedForHash := mapReverseRecords(records, plan.Mappings)
-	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}
-	writer, runtime, err := a.resolveEndpoint(ctx, dest)
-	if err != nil {
-		return ReverseRun{}, err
-	}
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mappedForHash)
 	if err != nil {
 		return ReverseRun{}, err
@@ -2574,11 +2589,54 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 		return ReverseRun{}, err
 	}
 	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: len(mapped), StartedAt: time.Now().UTC()}
-	evidence, _, err := a.consumePlanApproval(plan, req, preview)
+	evidence, _, err := a.consumePlanApproval(plan, req, preview, &authorization)
 	if err != nil {
 		return ReverseRun{}, err
 	}
 	writeRequest.Approval = evidence
+	result, err := writer.Write(ctx, writeRequest, mapped)
+	return a.finishReverseWrite(plan.ID, run, result, len(mapped), err)
+}
+
+// runAuthorizedBulkReversePlan is the standing-authorization path. It
+// re-derives and verifies the content-free scope before it reads the table or
+// reaches a destination connector, then intentionally dispatches current
+// content rather than reusing the old payload-bound PlanHash.
+func (a *App) runAuthorizedBulkReversePlan(ctx context.Context, plan ReversePlan) (ReverseRun, error) {
+	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
+		return ReverseRun{}, err
+	}
+	writer, credential, runtime, err := a.resolveEndpointWithCredential(ctx, EndpointConfig{
+		Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig,
+	})
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	scope := a.authorizationScopeForReversePlan(plan, credential, runtime)
+	if _, err := a.requireAuthorization(plan.AuthorizationReference, scope, time.Now().UTC()); err != nil {
+		return ReverseRun{}, err
+	}
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: 100000})
+	if err != nil {
+		return ReverseRun{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
+	}
+	mapped := mapReverseRecords(records, plan.Mappings)
+	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime}
+	if scope.ConfirmationPolicy.Kind != "" {
+		if _, err := validateAuthorizedDestructivePreview(ctx, writer, writeRequest, mapped); err != nil {
+			return ReverseRun{}, err
+		}
+		evidence, err := durableAuthorizationEvidence(scope)
+		if err != nil {
+			return ReverseRun{}, err
+		}
+		writeRequest.Approval = evidence
+	}
+	runID, err := prefixedID("rrun")
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: len(mapped), StartedAt: time.Now().UTC()}
 	result, err := writer.Write(ctx, writeRequest, mapped)
 	return a.finishReverseWrite(plan.ID, run, result, len(mapped), err)
 }
@@ -2597,6 +2655,18 @@ func (a *App) validateDestructivePreview(ctx context.Context, writer connectors.
 	}
 	if strings.TrimSpace(plan.PreviewDigest) == "" || strings.TrimSpace(preview.Digest) == "" || subtle.ConstantTimeCompare([]byte(plan.PreviewDigest), []byte(preview.Digest)) != 1 {
 		return connectors.WritePreview{}, fmt.Errorf("reverse plan %q no longer matches its approved preview", plan.ID)
+	}
+	return preview, nil
+}
+
+func validateAuthorizedDestructivePreview(ctx context.Context, writer connectors.Connector, request connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
+	dryRunner, ok := writer.(connectors.DryRunWriter)
+	if !ok {
+		return connectors.WritePreview{}, fmt.Errorf("connector %q no longer supports the required destructive preview", writer.Name())
+	}
+	preview, err := dryRunner.DryRunWrite(ctx, request, records)
+	if err != nil {
+		return connectors.WritePreview{}, fmt.Errorf("revalidate durable authorization preview: %w", err)
 	}
 	return preview, nil
 }
@@ -2643,7 +2713,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 		return ReverseRun{}, err
 	}
 	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: len(records), StartedAt: time.Now().UTC()}
-	evidence, _, err := a.consumePlanApproval(plan, req, preview)
+	evidence, _, err := a.consumePlanApproval(plan, req, preview, nil)
 	if err != nil {
 		return ReverseRun{}, err
 	}
@@ -2673,7 +2743,7 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 		return ReverseRun{}, err
 	}
 	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: 1, StartedAt: time.Now().UTC()}
-	evidence, _, err := a.consumePlanApproval(plan, req, preview)
+	evidence, _, err := a.consumePlanApproval(plan, req, preview, nil)
 	if err != nil {
 		return ReverseRun{}, err
 	}
@@ -2734,14 +2804,14 @@ func reversePlanMatchesExpected(stored, expected ReversePlan) bool {
 		stored.ConnectorCommandOperation == expected.ConnectorCommandOperation
 }
 
-func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview) (*connectors.WriteApprovalEvidence, ReversePlan, error) {
+func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview, authorization *AuthorizationRecord) (*connectors.WriteApprovalEvidence, ReversePlan, error) {
 	now := time.Now().UTC()
 	var consumed ReversePlan
 	var evidence *connectors.WriteApprovalEvidence
 	updated, err := a.updateStateAfterPreflight(func(current state) error {
 		return a.validateApprovalConsumptionState(current, expected, req, preview, now)
 	}, func(current state) (state, error) {
-		next, candidate, candidateEvidence, consumeErr := a.approvalConsumptionState(current, expected, req, preview, now)
+		next, candidate, candidateEvidence, consumeErr := a.approvalConsumptionState(current, expected, req, preview, authorization, now)
 		if consumeErr != nil {
 			return current, consumeErr
 		}
@@ -2821,7 +2891,7 @@ func (a *App) approvalConsumptionCandidate(current state, expected ReversePlan, 
 	return 0, ReversePlan{}, fmt.Errorf("reverse plan %q not found", expected.ID)
 }
 
-func (a *App) approvalConsumptionState(current state, expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview, now time.Time) (state, ReversePlan, *connectors.WriteApprovalEvidence, error) {
+func (a *App) approvalConsumptionState(current state, expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview, authorization *AuthorizationRecord, now time.Time) (state, ReversePlan, *connectors.WriteApprovalEvidence, error) {
 	i, stored, err := a.approvalConsumptionCandidate(current, expected, req, preview, now)
 	if err != nil {
 		return current, ReversePlan{}, nil, err
@@ -2856,6 +2926,22 @@ func (a *App) approvalConsumptionState(current state, expected ReversePlan, req 
 	stored.ApprovalGrant = nil
 	stored.ApprovalConsumedAt = now
 	stored.ApprovalUncertainAt = now
+	if authorization != nil {
+		if stored.AuthorizationReference != "" {
+			return current, ReversePlan{}, nil, fmt.Errorf("reverse plan %q already has durable authorization %q", stored.ID, stored.AuthorizationReference)
+		}
+		record := cloneAuthorizationRecord(*authorization)
+		if strings.TrimSpace(record.Reference) == "" || strings.TrimSpace(record.ScopeIdentity) == "" {
+			return current, ReversePlan{}, nil, errors.New("durable authorization record is incomplete")
+		}
+		for _, existing := range current.Authorizations {
+			if existing.Reference == record.Reference {
+				return current, ReversePlan{}, nil, fmt.Errorf("durable authorization %q already exists", record.Reference)
+			}
+		}
+		stored.AuthorizationReference = record.Reference
+		current.Authorizations = append(current.Authorizations, record)
+	}
 	current.ReversePlans[i] = stored
 	return current, stored, evidence, nil
 }

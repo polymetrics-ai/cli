@@ -1,0 +1,7 @@
+CI run 31825569578 failed at `TestReverseApprovalReplayRejectsBeforeOpeningLegacyProject/reverse_execution`.
+
+The durable replay was correctly refused before state write, but its JSON
+envelope reported `category: internal` and `code: internal_error` for
+`authorization token for "auth_…" has already been consumed`. The regression
+test is strengthened to require the caller-facing validation category and code;
+it is not re-baselined to accept the internal error.

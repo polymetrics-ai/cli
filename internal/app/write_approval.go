@@ -32,6 +32,7 @@ type projectWriteApprovalEvidence struct {
 	target        connectors.WriteApprovalTarget
 	previewDigest string
 	expiresAt     time.Time
+	authorization *AuthorizationScope
 	use           *projectWriteApprovalUse
 }
 
@@ -216,6 +217,26 @@ func (e *projectWriteApprovalEvidence) AuthorizeProjectWrite(target connectors.W
 	if e == nil || e.use == nil {
 		return errors.New("consumed project write approval evidence is required")
 	}
+	if e.authorization != nil {
+		scope := e.authorization
+		if target.Scope != connectors.WriteApprovalScopeProject ||
+			target.Operation != scope.WriteAction ||
+			!projectApprovalStringEqual(target.CredentialRevision, scope.DestinationCredentialRevision) ||
+			!projectApprovalStringEqual(target.ConfigurationDigest, scope.DestinationConfigurationDigest) ||
+			target.Confirmation.Kind != scope.ConfirmationPolicy.Kind {
+			return errors.New("durable authorization evidence does not match the prepared write")
+		}
+		if now.UTC().IsZero() {
+			now = time.Now().UTC()
+		}
+		if !now.UTC().Before(scope.ExpiresAt.UTC()) {
+			return errors.New("durable authorization evidence has expired")
+		}
+		if !e.use.consumed.CompareAndSwap(false, true) {
+			return errors.New("durable authorization evidence has already been consumed")
+		}
+		return nil
+	}
 	if target.Scope != connectors.WriteApprovalScopeProject || !sameProjectApprovalTarget(e.target, target) || !projectApprovalStringEqual(e.previewDigest, previewDigest) {
 		return errors.New("write approval evidence does not match the prepared write")
 	}
@@ -229,6 +250,18 @@ func (e *projectWriteApprovalEvidence) AuthorizeProjectWrite(target connectors.W
 		return errors.New("write approval evidence has already been consumed")
 	}
 	return nil
+}
+
+// durableAuthorizationEvidence adapts a pre-validated standing App scope to
+// the closed connector write gate. It carries no token or raw credential and
+// intentionally leaves the per-run preview digest unbound: payload is excluded
+// from durable authorization by contract.
+func durableAuthorizationEvidence(scope AuthorizationScope) (*connectors.WriteApprovalEvidence, error) {
+	canonical := canonicalAuthorizationScope(scope)
+	return connectors.BindProjectWriteApprovalEvidence(&projectWriteApprovalEvidence{
+		authorization: &canonical,
+		use:           &projectWriteApprovalUse{},
+	})
 }
 
 func validateProjectPlanSealRequest(req connectors.WritePlanSealRequest) error {

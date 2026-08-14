@@ -266,7 +266,7 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 		PlanID:        approval.PlanID,
 		ApprovalToken: approval.ApprovalToken,
 		Confirmation:  approval.Confirmation,
-	}, prepared.preview)
+	}, prepared.preview, nil)
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
@@ -339,7 +339,7 @@ func (a *App) ApplyIssueLabelTransportCleanup(ctx context.Context, connectionID 
 		PlanID:        approval.PlanID,
 		ApprovalToken: approval.ApprovalToken,
 		Confirmation:  approval.Confirmation,
-	}, prepared.preview)
+	}, prepared.preview, nil)
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
