@@ -2,6 +2,7 @@ package database_test
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"reflect"
 	"strings"
@@ -130,6 +131,7 @@ func TestDatabaseWriteExecutorBindsEveryApprovalPlanDimensionBeforeMutation(t *t
 		Control:     control,
 		Mode:        synccontract.ModeFullOverwrite,
 		Strategy:    connectors.ApplyStrategyReplace,
+		Mapping:     testDatabaseWriteMapping(t, "id", "id"),
 		RecordCount: 2,
 		BatchSize:   2,
 		Destructive: false,
@@ -182,6 +184,10 @@ func TestDatabaseWriteExecutorConsumesApprovalBeforeOnePinnedBoundedSession(t *t
 	}
 	if ledgerStore.writeCount() != 1 {
 		t.Fatalf("delivery ledger writes = %d, want 1 after confirmed commit", ledgerStore.writeCount())
+	}
+	receipt, ok := result.Receipt()
+	if !ok || receipt.DeliveryID() != "delivery-session-1" || receipt.CommittedAt().IsZero() {
+		t.Fatalf("DeliveryReceiptV1 = (%#v, %t), want committed session evidence after ledger record", receipt, ok)
 	}
 	acknowledgement, err := result.DownstreamAcknowledgement()
 	if err != nil {
@@ -443,11 +449,16 @@ func testDatabaseWriteControl(t *testing.T, table, streamID string, schemaMarker
 
 func testDatabaseWritePlan(t *testing.T, definition database.Definition, control database.ManagedTargetControlRecord, mode synccontract.Mode, strategy connectors.ApplyStrategy, keys []string, records, batchSize int, destructive bool) database.DatabaseWritePlan {
 	t.Helper()
+	mapping := testDatabaseWriteMapping(t, "id", "id")
+	if len(keys) > 0 {
+		mapping = testDatabaseWriteMapping(t, keys[0], keys[0])
+	}
 	plan, err := database.NewDatabaseWritePlan(context.Background(), database.DatabaseWritePlanRequest{
 		Definition:  definition,
 		Control:     control,
 		Mode:        mode,
 		Strategy:    strategy,
+		Mapping:     mapping,
 		Keys:        keys,
 		RecordCount: records,
 		BatchSize:   batchSize,
@@ -457,6 +468,27 @@ func testDatabaseWritePlan(t *testing.T, definition database.Definition, control
 		t.Fatalf("NewDatabaseWritePlan() error = %v", err)
 	}
 	return plan
+}
+
+func testDatabaseWriteMapping(t *testing.T, source, target string) database.MappingContractV1 {
+	t.Helper()
+	logical, err := database.NewSignedInteger(64)
+	if err != nil {
+		t.Fatal(err)
+	}
+	typePlan, err := database.CompileTypePlan(logical, logical)
+	if err != nil {
+		t.Fatal(err)
+	}
+	mapping, err := database.NewMappingContractV1([]database.MappingColumnV1{{
+		Source: source,
+		Target: target,
+		Type:   typePlan,
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return mapping
 }
 
 func testDatabaseWriteRecords(count int) []connectors.Record {
@@ -476,6 +508,7 @@ type databaseWriteDriverFake struct {
 	beginCalls              int
 	batchCalls              int
 	batchSizes              []int
+	targetRows              map[string]bool
 	commitCalls             int
 	rollbackCalls           int
 	publishCalls            int
@@ -516,10 +549,22 @@ func (d *databaseWriteDriverFake) BeginDatabaseWrite(_ context.Context, plan dat
 func (d *databaseWriteDriverFake) ApplyWriteBatch(_ context.Context, batch database.WriteBatch) error {
 	d.batchCalls++
 	records := batch.Records()
-	d.batchSizes = append(d.batchSizes, len(records))
+	tombstones := batch.Tombstones()
+	d.batchSizes = append(d.batchSizes, len(records)+len(tombstones))
 	d.events = append(d.events, "batch")
-	if len(records) == 0 {
-		return errors.New("fake batch must carry records")
+	if len(records)+len(tombstones) == 0 {
+		return errors.New("fake batch must carry records or explicit tombstones")
+	}
+	if d.targetRows != nil {
+		for _, tombstone := range tombstones {
+			var key map[string]string
+			if err := json.Unmarshal(tombstone.Key, &key); err != nil {
+				return err
+			}
+			if id, ok := key["target_id"]; ok {
+				delete(d.targetRows, id)
+			}
+		}
 	}
 	if d.cancelAfterBatch == d.batchCalls && d.cancel != nil {
 		d.cancel()
@@ -536,7 +581,7 @@ func (d *databaseWriteDriverFake) PublishFullOverwrite(context.Context) error {
 	return nil
 }
 
-func (d *databaseWriteDriverFake) CommitWrite(context.Context) (database.CommitOutcome, database.DatabaseWriteReceipt, error) {
+func (d *databaseWriteDriverFake) CommitWrite(context.Context) (database.CommitOutcome, database.DeliveryReceiptV1, error) {
 	d.commitCalls++
 	d.events = append(d.events, "commit")
 	outcome := d.commitOutcome
@@ -544,11 +589,11 @@ func (d *databaseWriteDriverFake) CommitWrite(context.Context) (database.CommitO
 		outcome = database.CommitOutcomeCommitted
 	}
 	if outcome != database.CommitOutcomeCommitted {
-		return outcome, database.DatabaseWriteReceipt{}, d.commitError
+		return outcome, database.DeliveryReceiptV1{}, d.commitError
 	}
-	receipt, err := database.NewDatabaseWriteReceipt(d.plan, "delivery-session-1", time.Date(2026, time.August, 15, 12, 0, 0, 0, time.UTC))
+	receipt, err := database.NewDeliveryReceiptV1(d.plan, "delivery-session-1", time.Date(2026, time.August, 15, 12, 0, 0, 0, time.UTC))
 	if err != nil {
-		return database.CommitOutcomeUnknown, database.DatabaseWriteReceipt{}, err
+		return database.CommitOutcomeUnknown, database.DeliveryReceiptV1{}, err
 	}
 	return outcome, receipt, d.commitError
 }

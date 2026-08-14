@@ -69,28 +69,32 @@ type DatabaseWriteCapabilities struct {
 // control is an asserted managed target and Definition supplies the declared
 // resource bound and admitted closed mode.
 type DatabaseWritePlanRequest struct {
-	Definition  Definition
-	Control     ManagedTargetControlRecord
-	Mode        synccontract.Mode
-	Strategy    connectors.ApplyStrategy
-	Keys        []string
-	RecordCount int
-	BatchSize   int
-	Destructive bool
+	Definition     Definition
+	Control        ManagedTargetControlRecord
+	Mode           synccontract.Mode
+	Strategy       connectors.ApplyStrategy
+	Mapping        MappingContractV1
+	Keys           []string
+	RecordCount    int
+	TombstoneCount int
+	BatchSize      int
+	Destructive    bool
 }
 
 // DatabaseWritePlan is an immutable, non-executing target application plan.
 // Its fields stay private so approval can compare the complete original
 // binding rather than a caller-mutable projection.
 type DatabaseWritePlan struct {
-	driver      DriverDeclaration
-	control     ManagedTargetControlRecord
-	mode        synccontract.Mode
-	strategy    connectors.ApplyStrategy
-	keys        []string
-	recordCount int
-	batchSize   int
-	destructive bool
+	driver         DriverDeclaration
+	control        ManagedTargetControlRecord
+	mode           synccontract.Mode
+	strategy       connectors.ApplyStrategy
+	mapping        MappingContractV1
+	keys           []string
+	recordCount    int
+	tombstoneCount int
+	batchSize      int
+	destructive    bool
 }
 
 // NewDatabaseWritePlan seals a typed target/mode/key/count/effects contract
@@ -103,13 +107,13 @@ func NewDatabaseWritePlan(ctx context.Context, request DatabaseWritePlanRequest)
 	if err := ctx.Err(); err != nil {
 		return DatabaseWritePlan{}, err
 	}
-	if err := request.Definition.Validate(); err != nil || request.Control.validate() != nil || request.Mode.Validate() != nil || request.Strategy.Validate() != nil {
+	if err := request.Definition.Validate(); err != nil || request.Control.validate() != nil || request.Mode.Validate() != nil || request.Strategy.Validate() != nil || request.Mapping.validate() != nil {
 		return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
 	}
 	if !definitionAdmitsMode(request.Definition.AdmittedModes(), request.Mode) || canonicalDatabaseWriteStrategy(request.Mode) != request.Strategy {
 		return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
 	}
-	if request.RecordCount <= 0 {
+	if request.RecordCount < 0 || request.TombstoneCount < 0 || (request.RecordCount == 0 && request.TombstoneCount == 0) {
 		return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
 	}
 	batchSize, err := request.Definition.Resources().EffectiveBatchSize(request.BatchSize)
@@ -123,6 +127,14 @@ func NewDatabaseWritePlan(ctx context.Context, request DatabaseWritePlanRequest)
 	if databaseWriteModeRequiresKeys(request.Mode) != (len(keys) > 0) {
 		return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
 	}
+	for _, key := range keys {
+		if !request.Mapping.HasTarget(key) {
+			return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
+		}
+	}
+	if request.TombstoneCount > 0 && !databaseWriteModeRequiresKeys(request.Mode) {
+		return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
+	}
 	if (request.Mode == synccontract.ModeFullOverwrite) != request.Destructive {
 		return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
 	}
@@ -130,27 +142,29 @@ func NewDatabaseWritePlan(ctx context.Context, request DatabaseWritePlanRequest)
 		return DatabaseWritePlan{}, err
 	}
 	return DatabaseWritePlan{
-		driver:      request.Definition.Driver(),
-		control:     request.Control,
-		mode:        request.Mode,
-		strategy:    request.Strategy,
-		keys:        keys,
-		recordCount: request.RecordCount,
-		batchSize:   batchSize,
-		destructive: request.Destructive,
+		driver:         request.Definition.Driver(),
+		control:        request.Control,
+		mode:           request.Mode,
+		strategy:       request.Strategy,
+		mapping:        request.Mapping.clone(),
+		keys:           keys,
+		recordCount:    request.RecordCount,
+		tombstoneCount: request.TombstoneCount,
+		batchSize:      batchSize,
+		destructive:    request.Destructive,
 	}, nil
 }
 
 func (p DatabaseWritePlan) validate() error {
-	if p.driver.validate() != nil || p.control.validate() != nil || p.mode.Validate() != nil || p.strategy.Validate() != nil || p.recordCount <= 0 || p.batchSize <= 0 || canonicalDatabaseWriteStrategy(p.mode) != p.strategy {
+	if p.driver.validate() != nil || p.control.validate() != nil || p.mode.Validate() != nil || p.strategy.Validate() != nil || p.mapping.validate() != nil || p.recordCount < 0 || p.tombstoneCount < 0 || (p.recordCount == 0 && p.tombstoneCount == 0) || p.batchSize <= 0 || canonicalDatabaseWriteStrategy(p.mode) != p.strategy {
 		return ErrDatabaseWritePlanInvalid
 	}
 	keys, err := normalizeDatabaseWriteKeys(p.keys)
-	if err != nil || len(keys) != len(p.keys) || databaseWriteModeRequiresKeys(p.mode) != (len(keys) > 0) || (p.mode == synccontract.ModeFullOverwrite) != p.destructive {
+	if err != nil || len(keys) != len(p.keys) || databaseWriteModeRequiresKeys(p.mode) != (len(keys) > 0) || (p.mode == synccontract.ModeFullOverwrite) != p.destructive || (p.tombstoneCount > 0 && !databaseWriteModeRequiresKeys(p.mode)) {
 		return ErrDatabaseWritePlanInvalid
 	}
 	for index := range keys {
-		if keys[index] != p.keys[index] {
+		if keys[index] != p.keys[index] || !p.mapping.HasTarget(keys[index]) {
 			return ErrDatabaseWritePlanInvalid
 		}
 	}
@@ -170,11 +184,20 @@ func (p DatabaseWritePlan) Mode() synccontract.Mode { return p.mode }
 // Strategy returns the canonical closed database apply strategy for Mode.
 func (p DatabaseWritePlan) Strategy() connectors.ApplyStrategy { return p.strategy }
 
+// Mapping returns a complete independent source-to-target type mapping. It is
+// distinct from the managed-target fingerprint, which detects drift but does
+// not describe target columns.
+func (p DatabaseWritePlan) Mapping() MappingContractV1 { return p.mapping.clone() }
+
 // Keys returns an independent ordered projection of the stable key mapping.
 func (p DatabaseWritePlan) Keys() []string { return append([]string(nil), p.keys...) }
 
 // RecordCount returns the exact approved bounded workset count.
 func (p DatabaseWritePlan) RecordCount() int { return p.recordCount }
+
+// TombstoneCount returns the exact approved number of explicit delete events.
+// A zero value declares no target delete authority for this plan.
+func (p DatabaseWritePlan) TombstoneCount() int { return p.tombstoneCount }
 
 // BatchSize returns the finite maximum batch size derived from database.json.
 func (p DatabaseWritePlan) BatchSize() int { return p.batchSize }
@@ -184,7 +207,7 @@ func (p DatabaseWritePlan) BatchSize() int { return p.batchSize }
 func (p DatabaseWritePlan) Destructive() bool { return p.destructive }
 
 func (p DatabaseWritePlan) matches(other DatabaseWritePlan) bool {
-	if p.driver != other.driver || p.mode != other.mode || p.strategy != other.strategy || p.recordCount != other.recordCount || p.batchSize != other.batchSize || p.destructive != other.destructive || len(p.keys) != len(other.keys) || !sameManagedTargetControl(p.control, other.control) {
+	if p.driver != other.driver || p.mode != other.mode || p.strategy != other.strategy || p.recordCount != other.recordCount || p.tombstoneCount != other.tombstoneCount || p.batchSize != other.batchSize || p.destructive != other.destructive || len(p.keys) != len(other.keys) || !p.mapping.matches(other.mapping) || !sameManagedTargetControl(p.control, other.control) {
 		return false
 	}
 	for index := range p.keys {
@@ -327,19 +350,27 @@ func (a *DatabaseWriteApproval) Consumed() bool {
 // WriteBatch is an executor-created bounded payload for one pinned session.
 // It provides no caller-selected mode, relation, SQL, or per-record commit.
 type WriteBatch struct {
-	sequence uint64
-	records  []connectors.Record
+	sequence   uint64
+	records    []connectors.Record
+	tombstones []synccontract.Tombstone
 }
 
-func newWriteBatch(sequence uint64, records []connectors.Record) (WriteBatch, error) {
-	if sequence == 0 || len(records) == 0 {
+func newWriteBatch(sequence uint64, records []connectors.Record, tombstones []synccontract.Tombstone) (WriteBatch, error) {
+	if sequence == 0 || (len(records) == 0 && len(tombstones) == 0) {
 		return WriteBatch{}, ErrDatabaseWritePlanInvalid
 	}
-	return WriteBatch{sequence: sequence, records: cloneDatabaseWriteRecords(records)}, nil
+	return WriteBatch{
+		sequence:   sequence,
+		records:    cloneDatabaseWriteRecords(records),
+		tombstones: cloneDatabaseWriteTombstones(tombstones),
+	}, nil
 }
 
 func (b WriteBatch) validate(limit int) error {
-	if b.sequence == 0 || len(b.records) == 0 || len(b.records) > limit {
+	if b.sequence == 0 || (len(b.records) == 0 && len(b.tombstones) == 0) || len(b.records) > limit || len(b.tombstones) > limit || (len(b.records) > 0 && len(b.tombstones) > 0 && len(b.records) > limit-len(b.tombstones)) {
+		return ErrDatabaseWritePlanInvalid
+	}
+	if _, err := NewTombstoneEnvelope(b.tombstones); err != nil {
 		return ErrDatabaseWritePlanInvalid
 	}
 	return nil
@@ -350,6 +381,12 @@ func (b WriteBatch) Sequence() uint64 { return b.sequence }
 
 // Records returns an independent top-level record projection for this call.
 func (b WriteBatch) Records() []connectors.Record { return cloneDatabaseWriteRecords(b.records) }
+
+// Tombstones returns the only explicit delete requests in this bounded batch.
+// It never infers a delete from a missing entry in Records.
+func (b WriteBatch) Tombstones() []synccontract.Tombstone {
+	return cloneDatabaseWriteTombstones(b.tombstones)
+}
 
 func cloneDatabaseWriteRecords(records []connectors.Record) []connectors.Record {
 	clone := make([]connectors.Record, len(records))
@@ -362,27 +399,37 @@ func cloneDatabaseWriteRecords(records []connectors.Record) []connectors.Record 
 	return clone
 }
 
-// DatabaseWriteReceipt is target durability evidence from a confirmed commit.
-// It is plan-bound and becomes checkpoint authority only after the managed
-// target delivery ledger records its opaque delivery identifier.
-type DatabaseWriteReceipt struct {
+// DeliveryReceiptV1 is target durability evidence from a confirmed commit.
+// It is plan-bound and becomes checkpoint authority only after the separate
+// managed-target delivery ledger records its opaque delivery identifier.
+type DeliveryReceiptV1 struct {
 	plan        DatabaseWritePlan
 	delivery    ManagedTargetDeliveryRecord
 	committedAt time.Time
 }
 
-// NewDatabaseWriteReceipt constructs target durability evidence for exactly
-// one sealed plan. Native drivers must call it only after their own transaction
+// NewDeliveryReceiptV1 constructs target durability evidence for exactly one
+// sealed plan. Native drivers must call it only after their own transaction
 // protocol has confirmed durable commit.
-func NewDatabaseWriteReceipt(plan DatabaseWritePlan, deliveryID string, committedAt time.Time) (DatabaseWriteReceipt, error) {
+func NewDeliveryReceiptV1(plan DatabaseWritePlan, deliveryID string, committedAt time.Time) (DeliveryReceiptV1, error) {
 	delivery, err := NewManagedTargetDeliveryRecord(deliveryID)
 	if err != nil || plan.validate() != nil || committedAt.IsZero() {
-		return DatabaseWriteReceipt{}, ErrDatabaseWriteReceiptUnavailable
+		return DeliveryReceiptV1{}, ErrDatabaseWriteReceiptUnavailable
 	}
-	return DatabaseWriteReceipt{plan: plan, delivery: delivery, committedAt: committedAt.UTC()}, nil
+	return DeliveryReceiptV1{plan: plan, delivery: delivery, committedAt: committedAt.UTC()}, nil
 }
 
-func (r DatabaseWriteReceipt) validateFor(plan DatabaseWritePlan) error {
+// DatabaseWriteReceipt is retained as a source-compatible name for the
+// session receipt delivered by #4139. New drivers and consumers use
+// DeliveryReceiptV1 so it cannot be confused with ledger storage.
+type DatabaseWriteReceipt = DeliveryReceiptV1
+
+// NewDatabaseWriteReceipt is a compatibility wrapper for DeliveryReceiptV1.
+func NewDatabaseWriteReceipt(plan DatabaseWritePlan, deliveryID string, committedAt time.Time) (DeliveryReceiptV1, error) {
+	return NewDeliveryReceiptV1(plan, deliveryID, committedAt)
+}
+
+func (r DeliveryReceiptV1) validateFor(plan DatabaseWritePlan) error {
 	if plan.validate() != nil || r.plan.validate() != nil || !r.plan.matches(plan) || r.delivery.validate() != nil || r.committedAt.IsZero() {
 		return ErrDatabaseWriteReceiptUnavailable
 	}
@@ -390,10 +437,10 @@ func (r DatabaseWriteReceipt) validateFor(plan DatabaseWritePlan) error {
 }
 
 // DeliveryID returns the opaque target durable-delivery identifier.
-func (r DatabaseWriteReceipt) DeliveryID() string { return r.delivery.DeliveryID() }
+func (r DeliveryReceiptV1) DeliveryID() string { return r.delivery.DeliveryID() }
 
 // CommittedAt returns the confirmed native commit time in UTC.
-func (r DatabaseWriteReceipt) CommittedAt() time.Time { return r.committedAt }
+func (r DeliveryReceiptV1) CommittedAt() time.Time { return r.committedAt }
 
 // DatabaseWriteDriver is the native-driver port consumed by the shared layer.
 // It has no SQL strings, arbitrary relation, or per-record write operation.
@@ -410,7 +457,7 @@ type DatabaseWriteDriver interface {
 type WriteSession interface {
 	ApplyWriteBatch(context.Context, WriteBatch) error
 	PublishFullOverwrite(context.Context) error
-	CommitWrite(context.Context) (CommitOutcome, DatabaseWriteReceipt, error)
+	CommitWrite(context.Context) (CommitOutcome, DeliveryReceiptV1, error)
 	RollbackWrite(context.Context) error
 }
 
@@ -419,7 +466,7 @@ type WriteSession interface {
 // persisted by the managed-target delivery ledger.
 type DatabaseWriteResult struct {
 	outcome CommitOutcome
-	receipt DatabaseWriteReceipt
+	receipt DeliveryReceiptV1
 	ledger  bool
 }
 
@@ -427,9 +474,9 @@ type DatabaseWriteResult struct {
 func (r DatabaseWriteResult) Outcome() CommitOutcome { return r.outcome }
 
 // Receipt returns durable target evidence only for a confirmed commit.
-func (r DatabaseWriteResult) Receipt() (DatabaseWriteReceipt, bool) {
+func (r DatabaseWriteResult) Receipt() (DeliveryReceiptV1, bool) {
 	if r.outcome != CommitOutcomeCommitted || !r.ledger {
-		return DatabaseWriteReceipt{}, false
+		return DeliveryReceiptV1{}, false
 	}
 	return r.receipt, true
 }
@@ -485,12 +532,24 @@ func (e *DatabaseWriteExecutor) Preview(ctx context.Context, plan DatabaseWriteP
 	return preview, nil
 }
 
-// Execute consumes approval before it opens one session, runs the plan's
-// bounded batches, and records durable target evidence only after confirmed
-// commit. Neither a batch failure/cancellation nor unknown commit can produce
-// a checkpoint acknowledgement.
+// Execute preserves the record-only caller surface delivered by #4139. It
+// creates an empty explicit tombstone envelope, so omitted records remain
+// ordinary absence rather than a hidden delete request. Consumers with
+// explicit tombstones use ExecuteInput.
 func (e *DatabaseWriteExecutor) Execute(ctx context.Context, plan DatabaseWritePlan, approval *DatabaseWriteApproval, records []connectors.Record) (DatabaseWriteResult, error) {
-	if ctx == nil || plan.validate() != nil || e == nil || isNilInterface(e.driver) || !plan.matchesDriver(e.driver) || e.ledger == nil || isNilInterface(e.ledger.store) || len(records) != plan.RecordCount() {
+	input, err := NewDatabaseWriteInput(records, TombstoneEnvelope{})
+	if err != nil {
+		return DatabaseWriteResult{}, ErrDatabaseWritePlanInvalid
+	}
+	return e.ExecuteInput(ctx, plan, approval, input)
+}
+
+// ExecuteInput consumes approval before it opens one session, runs the plan's
+// bounded records and explicit tombstones, and records durable target evidence
+// only after confirmed commit. Neither a batch failure/cancellation nor
+// unknown commit can produce a checkpoint acknowledgement.
+func (e *DatabaseWriteExecutor) ExecuteInput(ctx context.Context, plan DatabaseWritePlan, approval *DatabaseWriteApproval, input DatabaseWriteInput) (DatabaseWriteResult, error) {
+	if ctx == nil || plan.validate() != nil || input.validateFor(plan) != nil || e == nil || isNilInterface(e.driver) || !plan.matchesDriver(e.driver) || e.ledger == nil || isNilInterface(e.ledger.store) {
 		return DatabaseWriteResult{}, ErrDatabaseWritePlanInvalid
 	}
 	if err := ctx.Err(); err != nil {
@@ -521,16 +580,15 @@ func (e *DatabaseWriteExecutor) Execute(ctx context.Context, plan DatabaseWriteP
 		return result, cause
 	}
 
-	for start, sequence := 0, uint64(1); start < len(records); start, sequence = start+plan.BatchSize(), sequence+1 {
+	batches, err := input.batches(plan.BatchSize())
+	if err != nil {
+		return rollback(ErrDatabaseWritePlanInvalid)
+	}
+	for _, batch := range batches {
 		if err := ctx.Err(); err != nil {
 			return rollback(err)
 		}
-		end := start + plan.BatchSize()
-		if end > len(records) {
-			end = len(records)
-		}
-		batch, err := newWriteBatch(sequence, records[start:end])
-		if err != nil || batch.validate(plan.BatchSize()) != nil {
+		if batch.validate(plan.BatchSize()) != nil {
 			return rollback(ErrDatabaseWritePlanInvalid)
 		}
 		if err := session.ApplyWriteBatch(ctx, batch); err != nil {
