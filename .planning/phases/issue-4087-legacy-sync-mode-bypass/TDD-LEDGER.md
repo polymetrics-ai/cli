@@ -49,3 +49,8 @@
 
 - **Red:** review found that `DerivedSyncModes` treated only `x-cursor-field` as a cursor and that the validator rejected a nonempty incremental cursor when the schema omitted that optional extension; the existing truth-table case codified the resulting nonincremental projection.
 - **Green:** recorded 2026-08-14. A shared effective-cursor resolver now projects a schema cursor or a standalone incremental cursor into catalog and definition views, while an explicit schema/incremental conflict remains separately gated. `go test -timeout 20m ./internal/connectors/engine ./cmd/connectorgen -run 'Test(DerivedSyncModesTruthTable|ConnectorIncrementalCursorWithoutSchemaFieldProjectsEffectiveCursor|Validate_RejectsIncrementalCursorSchemaMismatch|Validate_AcceptsIncrementalCursorWithoutSchemaCursor)$'` passed.
+
+## Slice 8 — certification report contract preservation
+
+- **Red:** recorded 2026-08-14. `go test -count=1 -timeout 20m ./internal/connectors/certify -run '^(TestSourceStagesAgainstSample|TestReportSaveAllowsEmptyPreIORefusalDataSource)$'` failed: `Save` rejected the pre-existing empty data source for a typed pre-I/O refusal, while the runner emitted schema version `2` and serialized `pre_io_refusal` for both compatibility aliases. This contradicts the version-1 report contract and the supplied acceptance constraint.
+- **Green:** recorded 2026-08-14. Restored the version-1 report implementation and its unvalidated string data-source field; typed pre-I/O refusals now retain the established empty source with their existing reason instead of adding a new serialized value. The focused certification test passed, as did the exact base comparison for `report.go` and both protected architecture design documents.

@@ -41,7 +41,7 @@ func passingReport(connector string) certify.Report {
 	now := time.Now().UTC()
 	return certify.Report{
 		Kind:          "ConnectorCertification",
-		SchemaVersion: certify.CurrentSchemaVersion,
+		SchemaVersion: 1,
 		Connector:     connector,
 		Mode:          "live",
 		Passed:        true,
@@ -52,7 +52,7 @@ func passingReport(connector string) certify.Report {
 			Catalog: certify.CapabilityResult{Result: "pass", Streams: 1},
 			Read:    certify.CapabilityResult{Result: "pass", Stream: "customers", Records: 3},
 			SyncModes: map[string]certify.SyncModeResult{
-				"full_refresh_append": {Result: "pass", DataSource: certify.SyncModeDataSourceLive},
+				"full_refresh_append": {Result: "pass", DataSource: "live"},
 			},
 			Resume:          certify.CapabilityResult{Result: "pass"},
 			JSONContract:    certify.CapabilityResult{Result: "pass", StagesChecked: 12},

@@ -375,7 +375,7 @@ func completeCertifyReport() certify.Report {
 	startedAt := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
 	return certify.Report{
 		Kind:          "ConnectorCertification",
-		SchemaVersion: certify.CurrentSchemaVersion,
+		SchemaVersion: 1,
 		Connector:     "sample",
 		PMVersion:     "test",
 		StartedAt:     startedAt,
@@ -390,11 +390,11 @@ func completeCertifyReport() certify.Report {
 			JSONContract:    certify.CapabilityResult{Result: "pass", StagesChecked: 21},
 			SecretRedaction: certify.CapabilityResult{Result: "pass"},
 			SyncModes: map[string]certify.SyncModeResult{
-				"full_refresh_append":            {Result: "pass", DataSource: certify.SyncModeDataSourceLive},
-				"full_refresh_overwrite":         {Result: "pass", DataSource: certify.SyncModeDataSourceCapture},
-				"full_refresh_overwrite_deduped": {Result: "pass", DataSource: certify.SyncModeDataSourcePreIORefusal, Reason: "typed pre-I/O refusal confirmed"},
-				"incremental_append":             {Result: "pass", DataSource: certify.SyncModeDataSourceLive, CursorAdvanced: true},
-				"incremental_append_deduped":     {Result: "pass", DataSource: certify.SyncModeDataSourcePreIORefusal, Reason: "typed pre-I/O refusal confirmed"},
+				"full_refresh_append":            {Result: "pass", DataSource: "live"},
+				"full_refresh_overwrite":         {Result: "pass", DataSource: "capture"},
+				"full_refresh_overwrite_deduped": {Result: "pass", Reason: "typed pre-I/O refusal confirmed"},
+				"incremental_append":             {Result: "pass", DataSource: "live", CursorAdvanced: true},
+				"incremental_append_deduped":     {Result: "pass", Reason: "typed pre-I/O refusal confirmed"},
 			},
 			DirectRead: &certify.CapabilityResult{Result: "skipped", Reason: "fixture does not declare a direct read"},
 			Binary:     &certify.CapabilityResult{Result: "skipped", Reason: "fixture does not declare a binary download"},

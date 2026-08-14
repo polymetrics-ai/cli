@@ -20,7 +20,7 @@ func sampleReport() certify.Report {
 	completed := started.Add(2500 * time.Millisecond)
 	return certify.Report{
 		Kind:          "ConnectorCertification",
-		SchemaVersion: certify.CurrentSchemaVersion,
+		SchemaVersion: 1,
 		Connector:     "sample",
 		PMVersion:     "v0.0.0-test",
 		StartedAt:     started,
@@ -32,8 +32,8 @@ func sampleReport() certify.Report {
 			Catalog: certify.CapabilityResult{Result: "pass", Streams: 1},
 			Read:    certify.CapabilityResult{Result: "pass", Stream: "customers", Records: 3},
 			SyncModes: map[string]certify.SyncModeResult{
-				"full_refresh_append":            {Result: "pass", DataSource: certify.SyncModeDataSourceLive},
-				"full_refresh_overwrite_deduped": {Result: "pass", DataSource: certify.SyncModeDataSourcePreIORefusal, Reason: "typed pre-I/O refusal confirmed"},
+				"full_refresh_append":            {Result: "pass", DataSource: "live"},
+				"full_refresh_overwrite_deduped": {Result: "pass", DataSource: "", Reason: "typed pre-I/O refusal confirmed"},
 			},
 			Resume:          certify.CapabilityResult{Result: "pass"},
 			JSONContract:    certify.CapabilityResult{Result: "pass", StagesChecked: 12},
@@ -106,8 +106,8 @@ func TestReportMarshalRoundTrip(t *testing.T) {
 		t.Errorf("SyncModes[full_refresh_append] = %+v, want {pass live}", mode)
 	}
 	typedMode, ok := got.Capabilities.SyncModes["full_refresh_overwrite_deduped"]
-	if !ok || typedMode.DataSource != certify.SyncModeDataSourcePreIORefusal {
-		t.Errorf("SyncModes[full_refresh_overwrite_deduped] = %+v, want pre-I/O refusal data source", typedMode)
+	if !ok || typedMode.DataSource != "" {
+		t.Errorf("SyncModes[full_refresh_overwrite_deduped] = %+v, want an empty pre-I/O refusal data source", typedMode)
 	}
 	if len(got.Stages) != 1 {
 		t.Fatalf("len(Stages) = %d, want 1", len(got.Stages))
@@ -157,8 +157,8 @@ func TestReportMarshalJSONShape(t *testing.T) {
 		t.Fatalf("capabilities.sync_modes is not an object: %s", string(raw))
 	}
 	typedMode, ok := syncModes["full_refresh_overwrite_deduped"].(map[string]any)
-	if !ok || typedMode["data_source"] != string(certify.SyncModeDataSourcePreIORefusal) {
-		t.Errorf("typed compatibility result = %#v, want data_source=%q", typedMode, certify.SyncModeDataSourcePreIORefusal)
+	if !ok || typedMode["data_source"] != "" {
+		t.Errorf("typed compatibility result = %#v, want an empty data_source", typedMode)
 	}
 
 	// leaks/write_actions/flow/schedule/budget stay empty/absent in wave0
@@ -175,14 +175,13 @@ func TestReportMarshalJSONShape(t *testing.T) {
 	}
 }
 
-func TestReportSaveRejectsMissingSyncModeDataSource(t *testing.T) {
+func TestReportSaveAllowsEmptyPreIORefusalDataSource(t *testing.T) {
 	dir := t.TempDir()
 	rep := sampleReport()
 	rep.Capabilities.SyncModes["incremental_append"] = certify.SyncModeResult{Result: "pass"}
 
-	err := rep.Save(dir)
-	if err == nil {
-		t.Fatal("Save() error = nil, want invalid data_source error")
+	if err := rep.Save(dir); err != nil {
+		t.Fatalf("Save() error = %v, want empty pre-I/O refusal data source preserved", err)
 	}
 }
 

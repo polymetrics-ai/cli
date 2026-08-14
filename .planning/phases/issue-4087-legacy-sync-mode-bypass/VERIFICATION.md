@@ -22,6 +22,13 @@ Status: complete (inline/manual GSD fallback)
 - [x] `GOTOOLCHAIN=go1.25.13 go test -count=1 -timeout 20m ./internal/app -run '^(TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO|TestCanonicalSyncModesRetainParsedContracts)$'`; `GOTOOLCHAIN=go1.25.13 go test -count=1 -timeout 20m -run '^$' ./cmd/pm`; `go run ./cmd/agentcontractgen check`; `make release-workflow-check`; and `git diff --check` — passed.
 - [x] `git rebase 2df18ee3a083fe507cbe1c07e0270e82c5ab0182` — completed with the branch already up to date. That commit is the exact merge base, so there were no conflict hunks to resolve at the supplied target.
 
+## Certification report contract correction — 2026-08-14
+
+- [x] The report remains schema version 1 and carries typed pre-I/O refusal evidence through the existing empty `data_source` encoding plus `reason`; no new report value, report type, or validation was introduced.
+- [x] `go test -count=1 -timeout 20m ./internal/connectors/certify -run '^(TestSourceStagesAgainstSample|TestReportSaveAllowsEmptyPreIORefusalDataSource)$'` — passed.
+- [x] `go test -count=1 -timeout 20m ./internal/cli -run '^(TestCertifyCLISingleConnectorTextMode|TestCertifyCLIReportFixtureRendersJSONAndMapsExitCodes|TestCertifyCLISingleConnectorSavesReport)$'` — passed.
+- [x] `git diff --exit-code 2df18ee3a083fe507cbe1c07e0270e82c5ab0182 -- internal/connectors/certify/report.go docs/architecture/connector-architecture-v2-design.md docs/architecture/connector-certification-design.md` — passed.
+
 ## Commands passed
 
 - `go test -count=1 -timeout 20m ./internal/app`

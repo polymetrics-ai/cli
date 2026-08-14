@@ -9,18 +9,15 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > proof.
 
 > **Current certification authority (r1).** The generated proof-bearing
-> connector shards under `internal/connectors/defs/<name>/` supersede the
-> legacy report/cassette material described below for the question “is this
-> connector certified?”. The explicit reviewable allowlist in
-> `cmd/connectorgen/certificationallowlist.go` is initially `github` and
-> `postgres`; every other connector has no pass-or-fail certification claim.
-> `go run ./cmd/connectorgen certification-matrix --check` reads and validates
-> committed proof first, then checks the allowlisted capability, workflow,
-> warehouse-facing sync-mode, and source/destination flow records against code.
-> A passing legacy `pm connectors certify` report cannot change the generated
-> status. `pm connectors inspect <name>` preserves its visible
-> `COMMUNITY BUILD, UNCERTIFIED` warning outside the allowlist; reachability is
-> never gated.
+> artifacts under `internal/connectors/certifications/` supersede the legacy
+> report/cassette material described below for the question “is this connector
+> certified?”. `go run ./cmd/connectorgen certification-matrix --check` reads
+> and validates committed proof first, then checks its capability, workflow,
+> warehouse-facing sync-mode, and source/destination flow matrices against
+> code. A passing legacy `pm connectors certify` report cannot change the
+> generated status. `pm connectors inspect <name>` renders only the binary
+> status derived from those artifacts: `CERTIFIED`, or `COMMUNITY BUILD,
+> UNCERTIFIED`; reachability is never gated.
 >
 > Accepted evidence embeds a publishable transcript with repository-salted HMAC
 > fingerprints substituted before persistence. It is full-parity credential
@@ -32,27 +29,17 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 
 ## Generated certification baseline
 
-`go run ./cmd/connectorgen certification-matrix --connector <name>` produces
-the authoritative, reviewable shard at
-`internal/connectors/defs/<name>/certification-matrix.json`. A normal run
-writes only its requested allowlisted connector's shard; `--all` is the
-deliberate migration/regeneration operation. No aggregate capability or flow
-matrix is checked in. The drift gate reconstructs its aggregate view in memory
-from the shards, and `--check` plus the `connectorgen-certification-matrix`
-Make target fail on allowlisted byte drift.
-
-Shards contain no global baseline, count, or position-dependent data. They
-record Go provenance as `relative/path.go:Symbol`, rather than line numbers;
-fields use `Type.Field`, functions use their declaration identifier, and
-operation switch arms use `expectedOperationBlock(kind=<operation>)` because a
-literal can otherwise share a `case` clause. Regeneration still fails if the
-underlying construct disappears.
+`go run ./cmd/connectorgen certification-matrix` produces the authoritative,
+reviewable capability baseline at
+`internal/connectors/certifications/capability-matrix.json`. It must be
+regenerated from a source checkout; `--check` and the
+`connectorgen-certification-matrix` Make target fail on any byte drift.
 
 The generator derives its function-kind inventory from the capability contracts
-and engine operation-kind switch, then records one cell per allowlisted
-connector and function kind. An applicable cell is complete only when its
-declaration, real implementation path, recorded fixture proof, and a passed
-live-evidence record are all present. It follows the registered concrete method to reject direct
+and engine operation-kind switch, then records one cell per connector and
+function kind. An applicable cell is complete only when its declaration, real
+implementation path, recorded fixture proof, and a passed live-evidence record
+are all present. It follows the registered concrete method to reject direct
 `ErrUnsupportedOperation` stubs; reachability or a command resolving is never
 evidence of correctness. A connector which exposes a stubbed method without
 declaring that capability remains an applicable `declared=false`,
@@ -67,11 +54,9 @@ presence nor their filename can certify a connector. Every non-applicable cell
 has a specific machine-readable code and explanation; generic `n/a` and
 `blocked` labels are invalid.
 
-The generator is developer tooling, but its compact generated status projection
-is embedded in `pm connectors inspect`, which is the point-of-use user warning.
-Capability completion by itself is not a certification claim. The shard is not
-embedded in `defs.FS`: it is proof/build input, while the runtime embeds only
-that compact status projection.
+The generator is developer tooling, but its generated status projection is
+embedded in `pm connectors inspect`, which is the point-of-use user warning.
+Capability completion by itself is not a certification claim.
 
 ## Load-bearing facts (verified in code)
 
@@ -81,7 +66,7 @@ that compact status projection.
 2. **`--root` gives full project isolation.** The Makefile `smoke` target already runs an
    end-to-end pipeline in a `mktemp -d` root. Certify uses the same pattern: one ephemeral root per
    connector run.
-3. **Destination sync-mode logic is connector-independent** (`internal/app/etl_mode_dispatch.go` +
+3. **Destination sync-mode logic is connector-independent** (`internal/app/app.go` +
    `internal/app/sync_modes.go`): append/overwrite/dedup semantics live in the app layer against
    the local warehouse, not in any connector.
 4. **`connectors.LiveConformanceProvider` exists with zero implementations** — it is the intended
@@ -101,15 +86,17 @@ that compact status projection.
    provider-specific defaults, command candidates, record schemas, or write pairings; write
    `record_schema` remains owned by each action in `writes.json`.
 
-## The honest answer: three materializing modes plus two typed compatibility names
+## The honest answer: live-testing all 5 sync modes per connector
 
-The five public names divide into three materializing modes and two typed compatibility names.
-The source axis (full vs incremental+resume) remains connector-specific and must be live-tested for
-pagination, cursors, rate limits, and authentication. Certify covers all five public names, with
-two live API reads (`full_refresh_append` and `incremental_append`, plus a resume re-read), one
-capture replay (`full_refresh_overwrite`), and typed pre-I/O refusal assertions for the two
-deduped compatibility names. Each report entry records `data_source: live | capture |
-pre_io_refusal`. A `--live-all-modes` escape hatch exists.
+Not wrong — mostly redundant, and the redundant part is where cost/flakiness/rate-limit risk live.
+The 5 modes decompose into two axes: **source axis** (full vs incremental+resume — connector-
+specific, MUST be live-tested: pagination, cursors, rate limits, auth) and **destination axis**
+(append/overwrite/dedup — app-layer, connector-independent). Certify covers **all 5 modes per
+connector** but only 2 live API reads (full_refresh_append + incremental_append, plus a resume
+re-read); the 3 destination variants replay the captured JSONL through the real pipeline via the
+built-in `file` connector (still exercising ParseSyncMode, generation IDs, truncation, PK dedup).
+Each mode's report entry records `data_source: live | capture`. A `--live-all-modes` escape hatch
+exists.
 
 Constraints: writes/deletes only via create-then-cleanup with tagged ephemeral records + mandatory
 cleanup verification + orphan sweeper; sandbox strongly recommended (`sandbox: true` in creds file
@@ -157,10 +144,10 @@ Source stages: 0 preflight (registry, secrets present, budget armed) · 1 fixtur
 credentials_add/test (LIVE check via vault) · 4 catalog_live (≥1 stream; PK/cursor recorded) · 5
 etl_full_refresh_append (LIVE; records_read>0 or `passed_empty` warning; output JSONL = capture) ·
 6 etl_full_refresh_overwrite (capture; run twice; truncate semantics via `pm query`) · 7
-etl_full_refresh_overwrite_deduped (typed pre-I/O refusal) · 8 etl_incremental_append
+etl_full_refresh_overwrite_deduped (capture; no duplicate PK tuples) · 8 etl_incremental_append
 (LIVE; cursor set) · 9 resume (LIVE run 2; records_read(run2) ≤ run1; cursor monotonic; no row
 below run-1 checkpoint; in --record mode assert outbound request carried the cursor param) · 10
-etl_incremental_append_deduped (typed pre-I/O refusal) · 11 query_contract.
+etl_incremental_append_deduped (capture) · 11 query_contract.
 
 Write stages: 12 write_plan_preview (text yields plan id + token; `--json` contains NO token) · 13
 write_create (`reverse run --approve`: succeeded=1, failed=0) · 14 write_verify (live read-back
@@ -180,7 +167,7 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
 ```json
 {
   "kind": "ConnectorCertification",
-  "schema_version": 2,
+  "schema_version": 1,
   "connector": "github",
   "pm_version": "v0.x.y",
   "connector_manifest_hash": "sha256:...",
@@ -211,9 +198,9 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
     "sync_modes": {
       "full_refresh_append":            {"result": "pass", "data_source": "live"},
       "full_refresh_overwrite":         {"result": "pass", "data_source": "capture"},
-      "full_refresh_overwrite_deduped": {"result": "pass", "data_source": "pre_io_refusal", "reason": "typed pre-I/O refusal confirmed"},
+      "full_refresh_overwrite_deduped": {"result": "pass", "data_source": "capture"},
       "incremental_append":             {"result": "pass", "data_source": "live", "cursor_advanced": true},
-      "incremental_append_deduped":     {"result": "pass", "data_source": "pre_io_refusal", "reason": "typed pre-I/O refusal confirmed"}
+      "incremental_append_deduped":     {"result": "pass", "data_source": "capture"}
     },
     "resume": {"result": "pass"},
     "write_actions": {
@@ -391,7 +378,7 @@ always-run sweep step, uploads report artifacts; green runs open a PR refreshing
 ## Implementation order
 
 1. `report.go` + `cliharness.go`; prove against `sample` connector end-to-end.
-2. Source stages (5-public-mode matrix, capture replay, typed refusal, resume) against sample/smoke-test/e2e-test +
+2. Source stages (5-mode matrix, capture replay, resume) against sample/smoke-test/e2e-test +
    github/httptest. Prerequisite fix: `--credential` on `pm etl check/read` (or live check
    exclusively via `credentials test`).
 3. Write protocol + ledger + sweeper, GitHub `certification.json` pairings first.
