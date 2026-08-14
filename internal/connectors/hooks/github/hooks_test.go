@@ -97,6 +97,53 @@ func githubAppAuthAdmissionConfig(t *testing.T) connectors.RuntimeConfig {
 	return cfg
 }
 
+func githubWriteHookRateLimitBundle(t *testing.T, baseURL string, requireShared bool) engine.Bundle {
+	t.Helper()
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	bundle.HTTP.URL = baseURL
+	// The write-hook route proof needs no credential or provider call. Keeping
+	// authentication empty lets the test exercise the real declared policy with
+	// a non-secret token profile selected by configuration.
+	bundle.HTTP.Auth = nil
+	for i := range bundle.RateLimits.Policies {
+		if bundle.RateLimits.Policies[i].ID != "authenticated-user" {
+			continue
+		}
+		bundle.RateLimits.Policies[i].Coordination = ""
+		if requireShared {
+			bundle.RateLimits.Policies[i].Coordination = connsdk.RateLimitCoordinationRequireShared
+		}
+		return bundle
+	}
+	t.Fatal("GitHub authenticated-user rate policy is absent")
+	return engine.Bundle{}
+}
+
+func githubWriteHookRateLimitConfig(t *testing.T, baseURL string) connectors.RuntimeConfig {
+	t.Helper()
+	identity, err := connectors.NewCoordinationIdentity([]byte("github-write-hook-route-test-salt"), connectors.CredentialBinding{
+		BindingID:      "github-write-hook-route-test-binding",
+		ProviderFamily: "github",
+		AuthProfile:    "token",
+	})
+	if err != nil {
+		t.Fatalf("NewCoordinationIdentity: %v", err)
+	}
+	return connectors.RuntimeConfig{
+		Config: map[string]string{
+			"auth_type":          "token",
+			"base_url":           baseURL,
+			"owner":              "octocat",
+			"rate_limit_account": "write-hook-rate-test-account",
+			"repo":               "hello-world",
+		},
+		CoordinationIdentity: identity,
+	}
+}
+
 // githubAppDeclaredRouteRecorder proves the hook asks the engine for a
 // declaration-aware route without retaining JWT/header values in test state.
 type githubAppDeclaredRouteRecorder struct {
@@ -593,6 +640,136 @@ func TestExecuteWrite_CreateLabelStripsLeadingHash(t *testing.T) {
 	}
 	if got.Body["description"] != "Fixture label" {
 		t.Fatalf("body description = %#v, want %q", got.Body["description"], "Fixture label")
+	}
+}
+
+func TestGitHubWriteHookCreateLabelUsesDeclaredRouteRequester(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, nil)
+	h := githubhooks.New()
+	rt, err := engine.NewRuntime(context.Background(), githubWriteHookRateLimitBundle(t, srv.URL, false), githubWriteHookRateLimitConfig(t, srv.URL), h)
+	if err != nil {
+		t.Fatalf("NewRuntime: %v", err)
+	}
+
+	handled, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "create_label"}, connectors.Record{"name": "bug", "color": "#ff0000"}, rt)
+	if err != nil {
+		t.Fatalf("ExecuteWrite: %v", err)
+	}
+	if !handled {
+		t.Fatal("ExecuteWrite handled = false, want true for create_label")
+	}
+	if got, want := len(*reqs), 1; got != want {
+		t.Fatalf("declared create_label requests = %d, want %d", got, want)
+	}
+}
+
+func TestGitHubWriteHookFollowupsUseDistinctDeclaredRouteRequesters(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, map[string]any{"number": 301})
+	h := githubhooks.New()
+	rt, err := engine.NewRuntime(context.Background(), githubWriteHookRateLimitBundle(t, srv.URL, false), githubWriteHookRateLimitConfig(t, srv.URL), h)
+	if err != nil {
+		t.Fatalf("NewRuntime: %v", err)
+	}
+
+	handled, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "create_pull_request"}, connectors.Record{
+		"base": "main", "head": "fixture", "labels": []string{"bug"}, "reviewers": []string{"octocat"}, "title": "Fixture PR",
+	}, rt)
+	if err != nil {
+		t.Fatalf("ExecuteWrite: %v", err)
+	}
+	if !handled {
+		t.Fatal("ExecuteWrite handled = false, want true for create_pull_request")
+	}
+	if got, want := len(*reqs), 3; got != want {
+		t.Fatalf("declared create/follow-up requests = %d, want %d", got, want)
+	}
+}
+
+func TestGitHubWriteHookCommentAndFinalStateUseDistinctDeclaredRouteRequesters(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, nil)
+	h := githubhooks.New()
+	rt, err := engine.NewRuntime(context.Background(), githubWriteHookRateLimitBundle(t, srv.URL, false), githubWriteHookRateLimitConfig(t, srv.URL), h)
+	if err != nil {
+		t.Fatalf("NewRuntime: %v", err)
+	}
+
+	handled, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "close_issue"}, connectors.Record{"issue_number": 301, "comment": "close fixture"}, rt)
+	if err != nil {
+		t.Fatalf("ExecuteWrite: %v", err)
+	}
+	if !handled {
+		t.Fatal("ExecuteWrite handled = false, want true for close_issue")
+	}
+	if got, want := len(*reqs), 2; got != want {
+		t.Fatalf("declared comment/final-state requests = %d, want %d", got, want)
+	}
+	if got := (*reqs)[0]; got.Method != http.MethodPost || got.Path != "/repos/octocat/hello-world/issues/301/comments" {
+		t.Fatalf("comment request = %+v, want POST issue comment", got)
+	}
+	if got := (*reqs)[1]; got.Method != http.MethodPatch || got.Path != "/repos/octocat/hello-world/issues/301" {
+		t.Fatalf("final-state request = %+v, want PATCH issue", got)
+	}
+}
+
+func TestGitHubWriteHookAllPhysicalRESTSendsUseDeclaredRouteRequester(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, map[string]any{"number": 301})
+	h := githubhooks.New()
+	for _, tt := range []struct {
+		name      string
+		action    string
+		record    connectors.Record
+		wantSends int
+	}{
+		{name: "create label", action: "create_label", record: connectors.Record{"name": "bug", "color": "#ff0000"}, wantSends: 1},
+		{name: "update label", action: "update_label", record: connectors.Record{"name": "bug", "color": "#00ff00"}, wantSends: 1},
+		{name: "close issue with comment", action: "close_issue", record: connectors.Record{"issue_number": 301, "comment": "close fixture"}, wantSends: 2},
+		{name: "close pull request with comment", action: "close_pull_request", record: connectors.Record{"pull_number": 301, "comment": "close fixture"}, wantSends: 2},
+		{name: "reopen issue", action: "reopen_issue", record: connectors.Record{"issue_number": 301}, wantSends: 1},
+		{name: "reopen pull request", action: "reopen_pull_request", record: connectors.Record{"pull_number": 301}, wantSends: 1},
+		{name: "create pull request followups", action: "create_pull_request", record: connectors.Record{"base": "main", "head": "fixture", "labels": []string{"bug"}, "reviewers": []string{"octocat"}, "title": "Fixture PR"}, wantSends: 3},
+		{name: "update pull request followups", action: "update_pull_request", record: connectors.Record{"pull_number": 301, "labels": []string{"bug"}, "reviewers": []string{"octocat"}, "title": "Fixture PR"}, wantSends: 3},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			*reqs = nil
+			rt, err := engine.NewRuntime(context.Background(), githubWriteHookRateLimitBundle(t, srv.URL, false), githubWriteHookRateLimitConfig(t, srv.URL), h)
+			if err != nil {
+				t.Fatalf("NewRuntime: %v", err)
+			}
+
+			handled, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: tt.action}, tt.record, rt)
+			if err != nil {
+				t.Fatalf("ExecuteWrite: %v", err)
+			}
+			if !handled {
+				t.Fatal("ExecuteWrite handled = false, want true")
+			}
+			if got := len(*reqs); got != tt.wantSends {
+				t.Fatalf("declared route sends = %d, want %d", got, tt.wantSends)
+			}
+		})
+	}
+}
+
+func TestGitHubWriteHookCreateLabelRequireSharedRefusesBeforeTransport(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, nil)
+	engine.ConfigureSharedRateLimitRegistry(nil)
+	t.Cleanup(func() { engine.ConfigureSharedRateLimitRegistry(nil) })
+
+	h := githubhooks.New()
+	rt, err := engine.NewRuntime(context.Background(), githubWriteHookRateLimitBundle(t, srv.URL, true), githubWriteHookRateLimitConfig(t, srv.URL), h)
+	if err != nil {
+		t.Fatalf("NewRuntime: %v", err)
+	}
+	_, err = h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "create_label"}, connectors.Record{"name": "bug", "color": "#ff0000"}, rt)
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(err, &unavailable) {
+		t.Fatalf("create_label require_shared error = %T %v, want typed shared coordinator refusal", err, err)
+	}
+	if got, want := unavailable.Reason, coordination.SharedRateLimitCoordinatorNotConfigured; got != want {
+		t.Fatalf("create_label shared refusal reason = %q, want %q", got, want)
+	}
+	if got := len(*reqs); got != 0 {
+		t.Fatalf("create_label require_shared sends = %d, want 0", got)
 	}
 }
 

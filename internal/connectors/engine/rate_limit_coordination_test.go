@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -106,26 +107,97 @@ func TestEndpointRequireSharedPolicyGatesHookRequesterAtSend(t *testing.T) {
 		t.Fatalf("newRuntime: %v", err)
 	}
 	if _, err := runtime.Requester.Do(context.Background(), http.MethodGet, "/hook/42", nil, nil); err == nil {
-		t.Fatal("endpoint require_shared hook request did not refuse")
-	} else {
-		var unavailable *coordination.SharedRateLimitUnavailableError
-		if !errors.As(err, &unavailable) {
-			t.Fatalf("endpoint require_shared hook error = %T %v, want typed shared-coordinator refusal", err, err)
-		}
+		t.Fatal("default endpoint-policy requester did not refuse an undeclared hook route")
 	}
 	if requests != 0 {
-		t.Fatalf("endpoint require_shared hook request reached the provider %d times", requests)
+		t.Fatalf("default endpoint-policy requester reached the provider %d times", requests)
 	}
-	_, err = runtime.Requester.Do(context.Background(), http.MethodGet, "/unmatched", nil, nil)
+	requester, err := runtime.RequesterFor(http.MethodGet, "/hook/{id}")
+	if err != nil {
+		t.Fatalf("RequesterFor hook route: %v", err)
+	}
+	_, err = requester.Do(context.Background(), http.MethodGet, "/hook/42", nil, nil)
 	var unavailable *coordination.SharedRateLimitUnavailableError
 	if !errors.As(err, &unavailable) {
-		t.Fatalf("unmatched hook request error = %T %v, want typed shared-coordinator refusal", err, err)
-	}
-	if got, want := unavailable.Reason, coordination.SharedRateLimitRouteUnresolved; got != want {
-		t.Fatalf("unmatched hook refusal reason = %q, want %q", got, want)
+		t.Fatalf("declared hook route error = %T %v, want typed shared-coordinator refusal", err, err)
 	}
 	if requests != 0 {
-		t.Fatalf("unmatched hook request reached the provider %d times", requests)
+		t.Fatalf("declared endpoint require_shared requester reached the provider %d times", requests)
+	}
+	if _, err := runtime.Requester.Do(context.Background(), http.MethodGet, "/unmatched", nil, nil); err == nil {
+		t.Fatal("default endpoint-policy requester did not refuse an unresolved route")
+	}
+	if requests != 0 {
+		t.Fatalf("unresolved default hook request reached the provider %d times", requests)
+	}
+}
+
+func TestDefaultRequesterRefusesEndpointPolicyWithoutDeclaredRoute(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := withAllRateLimit(Bundle{Name: "endpoint-default-requester", HTTP: HTTPBase{URL: server.URL}})
+	bundle.RateLimits.Policies[0].Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodPost, Path: "/widgets/{id}"}}}
+	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+
+	_, err = runtime.Requester.Do(context.Background(), http.MethodPost, "/widgets/42", nil, map[string]any{"name": "fixture"})
+	if err == nil {
+		t.Fatal("default endpoint-policy requester sent without a declared route")
+	}
+	if requests != 0 {
+		t.Fatalf("default endpoint-policy requester sends = %d, want 0", requests)
+	}
+}
+
+func TestDefaultRequesterDoesNotPartiallyAdmitMixedEndpointPolicies(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(server.Close)
+
+	clock := &engineRateLimitClock{now: time.Date(2026, 8, 15, 12, 0, 0, 0, time.UTC)}
+	restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
+	t.Cleanup(restore)
+	bundle := withAllRateLimit(Bundle{Name: "mixed-default-requester", HTTP: HTTPBase{URL: server.URL}})
+	endpointPolicy := bundle.RateLimits.Policies[0]
+	endpointPolicy.ID = "widgets-endpoint"
+	endpointPolicy.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodPost, Path: "/widgets/{id}"}}}
+	bundle.RateLimits.Policies = append(bundle.RateLimits.Policies, endpointPolicy)
+	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+
+	if _, err := runtime.Requester.Do(context.Background(), http.MethodPost, "/widgets/42", nil, map[string]any{"name": "fixture"}); err == nil {
+		t.Fatal("default requester sent a mixed-policy endpoint without a declared route")
+	}
+	if requests != 0 {
+		t.Fatalf("mixed-policy default requester sends = %d, want 0", requests)
+	}
+
+	requester, err := runtime.RequesterFor(http.MethodGet, "/read")
+	if err != nil {
+		t.Fatalf("RequesterFor read route: %v", err)
+	}
+	if _, err := requester.Do(context.Background(), http.MethodGet, "/read", nil, nil); err != nil {
+		t.Fatalf("declared default-policy request: %v", err)
+	}
+	if requests != 1 {
+		t.Fatalf("declared default-policy sends = %d, want 1", requests)
+	}
+	if len(clock.waits) != 0 {
+		t.Fatalf("default requester consumed a policy before refusal; waits = %v, want none", clock.waits)
 	}
 }
 
@@ -204,15 +276,20 @@ func TestEndpointRequireSharedPolicyGatesEscapedAndBasePrefixedPathsAtSend(t *te
 		t.Fatalf("newRuntime: %v", err)
 	}
 	for _, tt := range []struct {
-		name   string
-		path   string
-		reason coordination.SharedRateLimitUnavailableReason
+		name         string
+		declaredPath string
+		path         string
+		reason       coordination.SharedRateLimitUnavailableReason
 	}{
-		{name: "escaped", path: "/repos/a%2Fb", reason: coordination.SharedRateLimitCoordinatorNotConfigured},
-		{name: "base prefixed", path: "/api/unbound", reason: coordination.SharedRateLimitRouteUnresolved},
+		{name: "escaped", declaredPath: "/repos/{id}", path: "/repos/a%2Fb", reason: coordination.SharedRateLimitCoordinatorNotConfigured},
+		{name: "base prefixed", declaredPath: "/unbound", path: "/api/unbound", reason: coordination.SharedRateLimitRouteUnresolved},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := runtime.Requester.Do(context.Background(), http.MethodGet, tt.path, nil, nil)
+			requester, err := runtime.RequesterFor(http.MethodGet, tt.declaredPath)
+			if err != nil {
+				t.Fatalf("RequesterFor endpoint route: %v", err)
+			}
+			_, err = requester.Do(context.Background(), http.MethodGet, tt.path, nil, nil)
 			var unavailable *coordination.SharedRateLimitUnavailableError
 			if !errors.As(err, &unavailable) {
 				t.Fatalf("endpoint request %q error = %T %v, want typed shared-coordinator refusal", tt.path, err, err)
@@ -222,7 +299,11 @@ func TestEndpointRequireSharedPolicyGatesEscapedAndBasePrefixedPathsAtSend(t *te
 			}
 		})
 	}
-	_, err = runtime.Requester.Do(context.Background(), http.MethodGet, "/start", nil, nil)
+	requester, err := runtime.RequesterFor(http.MethodGet, "/start")
+	if err != nil {
+		t.Fatalf("RequesterFor redirect source route: %v", err)
+	}
+	_, err = requester.Do(context.Background(), http.MethodGet, "/start", nil, nil)
 	var unavailable *coordination.SharedRateLimitUnavailableError
 	if !errors.As(err, &unavailable) {
 		t.Fatalf("redirected endpoint request error = %T %v, want typed shared-coordinator refusal", err, err)
@@ -414,13 +495,21 @@ func TestMixedRateLimitPoliciesExposePolicyScopedCoordination(t *testing.T) {
 	if err != nil {
 		t.Fatalf("newRuntime: %v", err)
 	}
-	if _, err := runtime.Requester.Do(context.Background(), http.MethodGet, "/items", nil, nil); err != nil {
+	requester, err := runtime.RequesterFor(http.MethodGet, "/items")
+	if err != nil {
+		t.Fatalf("RequesterFor local route: %v", err)
+	}
+	if _, err := requester.Do(context.Background(), http.MethodGet, "/items", nil, nil); err != nil {
 		t.Fatalf("process-local request: %v", err)
 	}
 	if got, want := requests["/items"], 1; got != want {
 		t.Fatalf("process-local request count = %d, want %d", got, want)
 	}
-	_, err = runtime.Requester.Do(context.Background(), http.MethodGet, "/admin", nil, nil)
+	requester, err = runtime.RequesterFor(http.MethodGet, "/admin")
+	if err != nil {
+		t.Fatalf("RequesterFor shared route: %v", err)
+	}
+	_, err = requester.Do(context.Background(), http.MethodGet, "/admin", nil, nil)
 	var unavailable *coordination.SharedRateLimitUnavailableError
 	if !errors.As(err, &unavailable) {
 		t.Fatalf("require_shared request error = %T %v, want typed shared-coordinator refusal", err, err)
