@@ -1,6 +1,6 @@
 # #4089 — TDD ledger
 
-**Status:** green; implementation and focused regression evidence complete.
+**Status:** green; implementation, focused regression, and CI-repair evidence complete.
 
 | Checkpoint | Evidence | Result |
 | --- | --- | --- |
@@ -14,3 +14,11 @@
 
 - Red: observed on 2026-08-14. The fresh binary process argv was recorded without the token; the valid stdin run failed at the unchanged argv-only request construction (exit 1). No production file had changed.
 - Green: observed on 2026-08-14. The same selector exited 0. Its logged live command line was `pm reverse run <plan-id> --approval-token-stdin --root <temp-root> --json`; it contained no token. The test then asserted the token absent from argv, the command environment, durable project files, captured logs, the outbox receipt, and its emitted evidence record, while replay was rejected without another receipt.
+
+## CI repair — 2026-08-14
+
+- Red: `go test -count=1 -run '^TestCredentialCoordination_EmptyProjectOpenDoesNotRewriteState$' -v ./internal/app` reproduced the Verify failure: opening a fresh project changed revision `0` to `1`. CI also showed the same extra revision in the four `TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes` cases.
+- Red: CI `govulncheck` ran the repository-pinned Go `1.25.12` standard library and reported reachable GO-2026-6218, GO-2026-6091, GO-2026-6090, GO-2026-6089, GO-2026-6088, GO-2026-5972, and GO-2026-5026; all list Go `1.25.13` as the fixed version.
+- Green: `go test -count=1 -timeout 20m -run '^(TestCredentialCoordination_EmptyProjectOpenDoesNotRewriteState|TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes)$' -v ./internal/app` passed all eight relevant tests (seven ETL mode subtests plus the empty-project reopen regression), and `go test -count=1 -timeout 20m ./internal/app` passed.
+- Green: `GOTOOLCHAIN=go1.25.13 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` reported `No vulnerabilities found.` The module and every pinned GitHub Actions Go setup now use `1.25.13`.
+- Required skills used for this CI repair: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, and `golang-documentation`.

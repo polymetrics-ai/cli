@@ -259,13 +259,14 @@ func (a *App) load(persist bool) error {
 func (a *App) normalizeLoadedState(loaded state, persist bool) error {
 	a.state = loaded
 	changed := false
+	// Empty maps are omitted from state.json. Initialize their in-memory
+	// defaults for callers, but do not turn an otherwise read-only open into a
+	// revision-changing persistence operation.
 	if a.state.Checkpoints == nil {
 		a.state.Checkpoints = map[string]map[string]string{}
-		changed = true
 	}
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
-		changed = true
 	}
 	catalogRefsChanged := a.dropInvalidCatalogReferences()
 	compatibilityChanged := a.migrateLegacySyncModeCompatibility()
