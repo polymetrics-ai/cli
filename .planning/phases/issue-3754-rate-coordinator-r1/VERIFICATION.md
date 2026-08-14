@@ -14,8 +14,10 @@ performed inline without spawning incompatible roles.
 - [x] Focused package tests, race test, targeted vet/build, formatting, CLI/help/docs/website parity, and individual repository gates pass.
 - [x] CI remediation regenerated the sole stale website artifact after the
   rate-limit provenance documentation change; local website lint and typecheck
-  pass. The third-party Snyk status was pending with no reported in-diff finding;
-  the repository Security workflow and `govulncheck` passed.
+  pass. The third-party Snyk status is an opaque `1 test has failed` baseline:
+  the live integration head and declared comparison base have the identical
+  failure, while this branch has no dependency-manifest delta. The repository
+  Security workflow and `govulncheck` passed.
 
 ## Evidence
 
@@ -41,3 +43,13 @@ performed inline without spawning incompatible roles.
 - CI repair: `cd website && pnpm run gen:website-data`, `pnpm run lint`, and
   `pnpm run typecheck` passed. The two failed GitHub Actions runs identified only
   `website/lib/docs.generated.ts` as stale.
+- Rebase resolution: rebased with preserved merges to the live
+  `integration/4015-mvp-flat-r1` head `71da37e`. Retained its approval-carrier
+  guard and sync-mode derivation while retaining #3754 registry wiring, then
+  passed focused coordination, engine, and CLI tests plus the regenerated-data
+  guard.
+- Snyk disposition: GitHub exposes only `1 test has failed`; the same status is
+  present on `71da37e` and the declared `fbd06e7` base. No dependency manifest
+  differs from the live base, and the linked report requires Snyk sign-in, so
+  this is recorded as an out-of-range baseline failure rather than masked by an
+  unrelated update.

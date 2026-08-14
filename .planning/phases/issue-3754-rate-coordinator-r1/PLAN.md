@@ -63,9 +63,11 @@ Runtime planning also used `.agents/agentic-delivery/references/runtime-rlm-webs
   artifact, followed by the generator check, website lint, and typecheck. It
   changes no coordinator behavior, connector declaration, dependency, or live
   proof comment.
-- The GitHub Security workflow and `govulncheck` passed. At investigation time
-  the third-party `security/snyk (karthik-sivadas)` status was pending and
-  exposed no branch-diff finding, so no speculative dependency or security
+- The GitHub Security workflow and `govulncheck` passed. Snyk subsequently
+  reported its opaque `1 test has failed` status, but the current integration
+  head and the declared `fbd06e7` comparison base report the same failure and
+  this branch has no dependency-manifest delta. The access-controlled report
+  exposes no affected in-diff path, so no speculative dependency or security
   change is permitted.
 - This CI repair also used `golang-continuous-integration`, `golang-lint`,
   `vercel-react-best-practices`, and `vercel-composition-patterns`. The
