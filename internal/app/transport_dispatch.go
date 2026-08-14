@@ -28,8 +28,9 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 //
 // Other externally declared transport pairs retain the normal descriptor-led
 // dispatch. The walking slice participates only when the connection itself
-// satisfies its fixed issues/full_append/source-issue/target-issue/label
-// contract.
+// satisfies its fixed issues/source-issue/target-issue/label contract. The
+// definition selects the allowed destination action for each declared mode;
+// non-additive modes are additionally gated by the persisted connection.
 func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMode, source, destination connectors.Connector) bool {
 	sourceIssueLabel := isIssueLabelTransportConnector(source)
 	destinationIssueLabel := isIssueLabelTransportConnector(destination)
@@ -44,10 +45,18 @@ func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMo
 	} else {
 		return hasDeclaredSyncTransport(source, destination)
 	}
-	if streamName != "issues" || mode.ContractMode != synccontract.ModeFullAppend {
+	if streamName != "issues" {
 		return false
 	}
-	_, err := a.issueLabelTransportConnection(conn.ID)
+	transportConn, err := a.issueLabelTransportConnection(conn.ID)
+	if err != nil {
+		return false
+	}
+	contract, err := a.issueLabelTransportContract(transportConn)
+	if err != nil {
+		return false
+	}
+	_, err = contract.actionForSyncMode(mode.ContractMode)
 	return err == nil
 }
 
@@ -67,14 +76,32 @@ func isIssueLabelTransportConnector(connector connectors.Connector) bool {
 	if descriptor.Source.Executor != issueLabelSourceReference || descriptor.Destination.Executor != issueLabelDestinationReference {
 		return false
 	}
-	if len(descriptor.Source.EligibleStreams) != 1 || descriptor.Source.EligibleStreams[0] != contract.stream || len(descriptor.Destination.EligibleActions) != 1 || descriptor.Destination.EligibleActions[0] != contract.apply.name {
+	if len(descriptor.Source.EligibleStreams) != 1 || descriptor.Source.EligibleStreams[0] != contract.stream {
 		return false
 	}
-	if len(descriptor.Destination.ApplyStrategies) != 1 {
+	wantModes := contract.modes()
+	if len(descriptor.Source.Modes) != len(wantModes) || len(descriptor.Destination.Modes) != len(wantModes) {
 		return false
 	}
-	strategy := descriptor.Destination.ApplyStrategies[0]
-	return strategy.Mode == synccontract.ModeFullAppend && strategy.Strategy == connectors.ApplyStrategyAppend && strategy.Action == contract.apply.name
+	for i, mode := range wantModes {
+		if descriptor.Source.Modes[i] != mode || descriptor.Destination.Modes[i] != mode {
+			return false
+		}
+	}
+	wantActions := contract.destinationActionNames()
+	if len(descriptor.Destination.EligibleActions) != len(wantActions) || len(descriptor.Destination.ApplyStrategies) != len(wantModes) {
+		return false
+	}
+	strategies, err := contract.applyStrategies()
+	if err != nil {
+		return false
+	}
+	for i := range wantActions {
+		if descriptor.Destination.EligibleActions[i] != wantActions[i] || descriptor.Destination.ApplyStrategies[i] != strategies[i] {
+			return false
+		}
+	}
+	return true
 }
 
 // runTransportETL is the bounded bridge from persisted connection state to

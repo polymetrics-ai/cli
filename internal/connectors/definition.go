@@ -1,6 +1,10 @@
 package connectors
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"polymetrics.ai/internal/synccontract"
+)
 
 // Definition is the unified connector descriptor introduced by architecture
 // v2 (design doc §C.1). In wave0 it coexists with Metadata/Manifest, added
@@ -53,6 +57,7 @@ type WriteActionInfo struct {
 const (
 	TransportCapabilityIssueLabel = "issue_label"
 	TransportActionRoleApply      = "apply"
+	TransportActionRoleReplace    = "replace"
 	TransportActionRoleCleanup    = "cleanup"
 	TransportInputTargetIssue     = "target_issue"
 	TransportInputLabel           = "label"
@@ -65,6 +70,7 @@ const (
 type TransportActionBinding struct {
 	Capability string                  `json:"capability"`
 	Role       string                  `json:"role"`
+	Modes      []synccontract.Mode     `json:"modes"`
 	Inputs     []TransportInputBinding `json:"inputs"`
 }
 
@@ -81,6 +87,7 @@ func (b *TransportActionBinding) Clone() *TransportActionBinding {
 		return nil
 	}
 	copied := *b
+	copied.Modes = append([]synccontract.Mode(nil), b.Modes...)
 	copied.Inputs = append([]TransportInputBinding(nil), b.Inputs...)
 	return &copied
 }

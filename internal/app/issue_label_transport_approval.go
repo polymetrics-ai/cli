@@ -40,10 +40,11 @@ type issueLabelTransportBinding struct {
 }
 
 type issueLabelPreparedWrite struct {
-	writer  connectors.Connector
-	runtime connectors.RuntimeConfig
-	record  connectors.Record
-	preview connectors.WritePreview
+	writer     connectors.Connector
+	credential CredentialMeta
+	runtime    connectors.RuntimeConfig
+	record     connectors.Record
+	preview    connectors.WritePreview
 }
 
 // PlanIssueLabelTransport creates the forward half of the explicit PM
@@ -59,7 +60,15 @@ func (a *App) PlanIssueLabelTransport(ctx context.Context, connectionID string) 
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	return a.planIssueLabelTransport(ctx, conn, reversePlanModeIssueLabelTransport, contract.apply, conn.Destination, "")
+	syncMode, err := issueLabelTransportMode(conn)
+	if err != nil {
+		return ReversePlan{}, err
+	}
+	action, err := contract.actionForSyncMode(syncMode)
+	if err != nil {
+		return ReversePlan{}, err
+	}
+	return a.planIssueLabelTransport(ctx, conn, syncMode, reversePlanModeIssueLabelTransport, action, conn.Destination, "")
 }
 
 // PlanIssueLabelTransportCleanup derives the only permitted inverse from
@@ -74,14 +83,21 @@ func (a *App) PlanIssueLabelTransportCleanup(ctx context.Context, connectionID, 
 	if err != nil {
 		return ReversePlan{}, err
 	}
+	syncMode, err := issueLabelTransportMode(conn)
+	if err != nil {
+		return ReversePlan{}, err
+	}
+	if syncMode != synccontract.ModeFullAppend {
+		return ReversePlan{}, fmt.Errorf("closed issue-label transport cleanup is available only for issues/full_append")
+	}
 	forward, endpoint, err := a.authenticatedIssueLabelTransportForwardPlan(ctx, conn, forwardPlanID)
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	return a.planIssueLabelTransport(ctx, conn, reversePlanModeIssueLabelTransportCleanup, contract.cleanup, endpoint, forward.ID)
+	return a.planIssueLabelTransport(ctx, conn, syncMode, reversePlanModeIssueLabelTransportCleanup, contract.cleanup, endpoint, forward.ID)
 }
 
-func (a *App) planIssueLabelTransport(ctx context.Context, conn Connection, mode string, action issueLabelTransportAction, endpoint EndpointConfig, forwardPlanID string) (ReversePlan, error) {
+func (a *App) planIssueLabelTransport(ctx context.Context, conn Connection, syncMode synccontract.Mode, mode string, action issueLabelTransportAction, endpoint EndpointConfig, forwardPlanID string) (ReversePlan, error) {
 	if a == nil || a.approval == nil {
 		return ReversePlan{}, fmt.Errorf("closed issue-label transport approval requires an app approval authority")
 	}
@@ -89,7 +105,7 @@ func (a *App) planIssueLabelTransport(ctx context.Context, conn Connection, mode
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	binding, err := a.issueLabelTransportBinding(conn, mode, action, prepared.runtime, prepared.preview, prepared.runtime.Config, forwardPlanID)
+	binding, err := a.issueLabelTransportBinding(conn, syncMode, mode, action, prepared.runtime, prepared.preview, prepared.runtime.Config, forwardPlanID)
 	if err != nil {
 		return ReversePlan{}, err
 	}
@@ -181,9 +197,21 @@ func (a *App) PreviewIssueLabelTransport(ctx context.Context, planID string) (Re
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	action, err := contract.actionForMode(plan.Mode)
+	syncMode, err := issueLabelTransportMode(conn)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	var action issueLabelTransportAction
+	if plan.Mode == reversePlanModeIssueLabelTransportCleanup {
+		if syncMode != synccontract.ModeFullAppend {
+			return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("closed issue-label transport cleanup is available only for issues/full_append")
+		}
+		action = contract.cleanup
+	} else {
+		action, err = contract.actionForSyncMode(syncMode)
+		if err != nil {
+			return ReversePlan{}, connectors.WritePreview{}, err
+		}
 	}
 	if err := a.validateIssueLabelTransportPlan(plan, conn, plan.Mode, action, plan.TransportForwardPlanID); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
@@ -206,7 +234,7 @@ func (a *App) PreviewIssueLabelTransport(ctx context.Context, planID string) (Re
 	if err := a.verifyPlanSealForRuntime(plan, prepared.runtime); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	binding, err := a.issueLabelTransportBinding(conn, plan.Mode, action, prepared.runtime, prepared.preview, prepared.runtime.Config, plan.TransportForwardPlanID)
+	binding, err := a.issueLabelTransportBinding(conn, syncMode, plan.Mode, action, prepared.runtime, prepared.preview, prepared.runtime.Config, plan.TransportForwardPlanID)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -224,8 +252,8 @@ func (a *App) PreviewIssueLabelTransport(ctx context.Context, planID string) (Re
 // singleton against the pre-run binding before consuming the grant and handing
 // opaque approval evidence to the declarative engine immediately before I/O.
 func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string, approval synctransport.DestinationApproval, runtime connectors.RuntimeConfig, receipt synctransport.WarehouseReceipt, workset synctransport.WarehouseWorkset) (connectors.WriteResult, error) {
-	if err := validateIssueLabelTransportApproval(approval); err != nil {
-		return connectors.WriteResult{}, err
+	if strings.TrimSpace(approval.PlanID) == "" {
+		return connectors.WriteResult{}, fmt.Errorf("closed issue-label transport requires a pre-run plan")
 	}
 	plan, err := a.GetReversePlan(approval.PlanID)
 	if err != nil {
@@ -239,13 +267,21 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
-	if err := a.validateIssueLabelTransportPlan(plan, conn, reversePlanModeIssueLabelTransport, contract.apply, ""); err != nil {
+	syncMode, err := issueLabelTransportMode(conn)
+	if err != nil {
 		return connectors.WriteResult{}, err
 	}
-	if err := validateIssueLabelTransportWorkset(conn, receipt, workset); err != nil {
+	action, err := contract.actionForSyncMode(syncMode)
+	if err != nil {
 		return connectors.WriteResult{}, err
 	}
-	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, conn.Destination, contract.apply)
+	if err := a.validateIssueLabelTransportPlan(plan, conn, reversePlanModeIssueLabelTransport, action, ""); err != nil {
+		return connectors.WriteResult{}, err
+	}
+	if err := validateIssueLabelTransportWorkset(conn, syncMode, receipt, workset); err != nil {
+		return connectors.WriteResult{}, err
+	}
+	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, conn.Destination, action)
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
@@ -255,18 +291,37 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 	if err := a.verifyPlanSealForRuntime(plan, prepared.runtime); err != nil {
 		return connectors.WriteResult{}, err
 	}
-	binding, err := a.issueLabelTransportBinding(conn, plan.Mode, contract.apply, prepared.runtime, prepared.preview, prepared.runtime.Config, "")
+	binding, err := a.issueLabelTransportBinding(conn, syncMode, plan.Mode, action, prepared.runtime, prepared.preview, prepared.runtime.Config, "")
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
 	if err := validateIssueLabelTransportBinding(plan, binding); err != nil {
 		return connectors.WriteResult{}, err
 	}
-	evidence, _, err := a.consumePlanApproval(plan, RunReverseETLRequest{
-		PlanID:        approval.PlanID,
-		ApprovalToken: approval.ApprovalToken,
-		Confirmation:  approval.Confirmation,
-	}, prepared.preview, nil)
+	scope := a.issueLabelTransportAuthorizationScope(conn, syncMode, action, plan, prepared)
+	var evidence *connectors.WriteApprovalEvidence
+	if plan.AuthorizationReference != "" {
+		if strings.TrimSpace(approval.ApprovalToken) != "" {
+			return connectors.WriteResult{}, &AuthorizationTokenReplayError{Reference: plan.AuthorizationReference}
+		}
+		if _, err := a.requireAuthorization(plan.AuthorizationReference, scope, time.Now().UTC()); err != nil {
+			return connectors.WriteResult{}, err
+		}
+		evidence, err = durableAuthorizationEvidence(scope)
+	} else {
+		if err := validateIssueLabelTransportApproval(approval); err != nil {
+			return connectors.WriteResult{}, err
+		}
+		authorization, authorizationErr := newAuthorizationRecord(scope, time.Now().UTC())
+		if authorizationErr != nil {
+			return connectors.WriteResult{}, authorizationErr
+		}
+		evidence, _, err = a.consumePlanApproval(plan, RunReverseETLRequest{
+			PlanID:        approval.PlanID,
+			ApprovalToken: approval.ApprovalToken,
+			Confirmation:  approval.Confirmation,
+		}, prepared.preview, &authorization)
+	}
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
@@ -276,7 +331,7 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 	result, err := prepared.writer.Write(ctx, connectors.WriteRequest{
 		Stream:   "issues",
 		Table:    issueLabelTransportTable,
-		Action:   contract.apply.name,
+		Action:   action.name,
 		Config:   prepared.runtime,
 		Approval: evidence,
 	}, []connectors.Record{prepared.record})
@@ -286,8 +341,13 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
 		return connectors.WriteResult{}, fmt.Errorf("approved issue-label result written=%d failed=%d, want one durable write", result.RecordsWritten, result.RecordsFailed)
 	}
-	if err := a.markIssueLabelTransportPlanExecuted(plan.ID); err != nil {
-		return connectors.WriteResult{}, err
+	// The original plan moves from the consumed approval state to executed only
+	// once. A durable authorization intentionally permits later identical-scope
+	// runs without re-consuming the one-time token or mutating that plan state.
+	if plan.AuthorizationReference == "" {
+		if err := a.markIssueLabelTransportPlanExecuted(plan.ID); err != nil {
+			return connectors.WriteResult{}, err
+		}
 	}
 	return result, nil
 }
@@ -311,6 +371,13 @@ func (a *App) ApplyIssueLabelTransportCleanup(ctx context.Context, connectionID 
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
+	syncMode, err := issueLabelTransportMode(conn)
+	if err != nil {
+		return connectors.WriteResult{}, err
+	}
+	if syncMode != synccontract.ModeFullAppend {
+		return connectors.WriteResult{}, fmt.Errorf("closed issue-label transport cleanup is available only for issues/full_append")
+	}
 	if err := a.validateIssueLabelTransportPlan(plan, conn, reversePlanModeIssueLabelTransportCleanup, contract.cleanup, plan.TransportForwardPlanID); err != nil {
 		return connectors.WriteResult{}, err
 	}
@@ -328,7 +395,7 @@ func (a *App) ApplyIssueLabelTransportCleanup(ctx context.Context, connectionID 
 	if err := a.verifyPlanSealForRuntime(plan, prepared.runtime); err != nil {
 		return connectors.WriteResult{}, err
 	}
-	binding, err := a.issueLabelTransportBinding(conn, plan.Mode, contract.cleanup, prepared.runtime, prepared.preview, prepared.runtime.Config, forward.ID)
+	binding, err := a.issueLabelTransportBinding(conn, syncMode, plan.Mode, contract.cleanup, prepared.runtime, prepared.preview, prepared.runtime.Config, forward.ID)
 	if err != nil {
 		return connectors.WriteResult{}, err
 	}
@@ -369,7 +436,7 @@ func (a *App) prepareIssueLabelTransportWrite(ctx context.Context, conn Connecti
 	if endpoint.Connector != conn.Destination.Connector {
 		return issueLabelPreparedWrite{}, fmt.Errorf("closed issue-label transport approval requires the connection-owned destination connector")
 	}
-	writer, runtime, err := a.resolveEndpoint(ctx, endpoint)
+	writer, credential, runtime, err := a.resolveEndpointWithCredential(ctx, endpoint)
 	if err != nil {
 		return issueLabelPreparedWrite{}, fmt.Errorf("resolve closed issue-label transport destination: %w", err)
 	}
@@ -408,10 +475,10 @@ func (a *App) prepareIssueLabelTransportWrite(ctx context.Context, conn Connecti
 	if strings.TrimSpace(preview.Digest) == "" || preview.ApprovalTarget.Connector != conn.Destination.Connector || preview.ApprovalTarget.Operation != action.name || preview.ApprovalTarget.Confirmation.Kind != connectors.ConfirmationKindDestructive {
 		return issueLabelPreparedWrite{}, fmt.Errorf("closed issue-label transport write preview does not bind a destructive %s target", action.name)
 	}
-	return issueLabelPreparedWrite{writer: writer, runtime: runtime, record: record, preview: preview}, nil
+	return issueLabelPreparedWrite{writer: writer, credential: credential, runtime: runtime, record: record, preview: preview}, nil
 }
 
-func (a *App) issueLabelTransportBinding(conn Connection, mode string, action issueLabelTransportAction, runtime connectors.RuntimeConfig, preview connectors.WritePreview, config map[string]string, forwardPlanID string) (issueLabelTransportBinding, error) {
+func (a *App) issueLabelTransportBinding(conn Connection, syncMode synccontract.Mode, mode string, action issueLabelTransportAction, runtime connectors.RuntimeConfig, preview connectors.WritePreview, config map[string]string, forwardPlanID string) (issueLabelTransportBinding, error) {
 	targetIssue, err := issueLabelTransportIssueNumber(config, issueLabelTransportTargetIssueConfig)
 	if err != nil {
 		return issueLabelTransportBinding{}, err
@@ -424,7 +491,7 @@ func (a *App) issueLabelTransportBinding(conn Connection, mode string, action is
 		Domain:              issueLabelTransportBindingDomain,
 		ConnectionID:        conn.ID,
 		Stream:              "issues",
-		Mode:                synccontract.ModeFullAppend,
+		Mode:                syncMode,
 		Destination:         conn.Destination.Connector,
 		Action:              action.name,
 		TargetIssue:         targetIssue,
@@ -492,19 +559,19 @@ func (a *App) issueLabelTransportConnection(connectionID string) (Connection, er
 	if conn.Source.Connector == "" || conn.Source.Connector != conn.Destination.Connector {
 		return Connection{}, fmt.Errorf("closed issue-label transport connection %q must use one definition-owned connector as source and destination", conn.ID)
 	}
-	if _, err := a.issueLabelTransportContract(conn); err != nil {
+	contract, err := a.issueLabelTransportContract(conn)
+	if err != nil {
 		return Connection{}, fmt.Errorf("closed issue-label transport connection %q does not select the exact definition-owned issue-label contract", conn.ID)
 	}
-	stream, ok := conn.Streams["issues"]
-	if !ok {
-		return Connection{}, fmt.Errorf("closed issue-label transport connection %q has no issues stream", conn.ID)
-	}
-	mode, err := ParseStreamSyncMode(stream)
+	mode, err := issueLabelTransportMode(conn)
 	if err != nil {
 		return Connection{}, err
 	}
-	if mode.ContractMode != synccontract.ModeFullAppend {
-		return Connection{}, fmt.Errorf("closed issue-label transport connection %q must use issues/full_append", conn.ID)
+	if _, err := contract.actionForSyncMode(mode); err != nil {
+		return Connection{}, err
+	}
+	if consent, required := issueLabelTransportConsentConfigForMode(mode); required && !strings.EqualFold(strings.TrimSpace(conn.Destination.Config[consent]), "true") {
+		return Connection{}, fmt.Errorf("closed issue-label transport connection %q requires explicit destination config %s=true for sync mode %q", conn.ID, consent, mode)
 	}
 	if _, err := issueLabelTransportIssueNumber(conn.Source.Config, issueLabelTransportSourceIssueConfig); err != nil {
 		return Connection{}, err
@@ -516,6 +583,32 @@ func (a *App) issueLabelTransportConnection(connectionID string) (Connection, er
 		return Connection{}, err
 	}
 	return conn, nil
+}
+
+func issueLabelTransportMode(conn Connection) (synccontract.Mode, error) {
+	stream, ok := conn.Streams["issues"]
+	if !ok {
+		return "", fmt.Errorf("closed issue-label transport connection %q has no issues stream", conn.ID)
+	}
+	mode, err := ParseStreamSyncMode(stream)
+	if err != nil {
+		return "", err
+	}
+	if mode.ContractMode == "" {
+		return "", fmt.Errorf("closed issue-label transport connection %q has no contract sync mode", conn.ID)
+	}
+	return mode.ContractMode, nil
+}
+
+func issueLabelTransportConsentConfigForMode(mode synccontract.Mode) (string, bool) {
+	switch mode {
+	case synccontract.ModeFullOverwrite:
+		return issueLabelTransportSetReplaceConsentConfig, true
+	case synccontract.ModeIncrementalUpsert:
+		return issueLabelTransportKeyedConsentConfig, true
+	default:
+		return "", false
+	}
 }
 
 func (a *App) issueLabelTransportContract(conn Connection) (issueLabelTransportContract, error) {
@@ -570,7 +663,7 @@ func (a *App) authenticatedIssueLabelTransportForwardPlan(ctx context.Context, c
 	if err := a.verifyPlanSealForRuntime(forward, prepared.runtime); err != nil {
 		return ReversePlan{}, EndpointConfig{}, err
 	}
-	binding, err := a.issueLabelTransportBinding(conn, forward.Mode, contract.apply, prepared.runtime, prepared.preview, prepared.runtime.Config, "")
+	binding, err := a.issueLabelTransportBinding(conn, synccontract.ModeFullAppend, forward.Mode, contract.apply, prepared.runtime, prepared.preview, prepared.runtime.Config, "")
 	if err != nil {
 		return ReversePlan{}, EndpointConfig{}, err
 	}
@@ -580,11 +673,11 @@ func (a *App) authenticatedIssueLabelTransportForwardPlan(ctx context.Context, c
 	return forward, endpoint, nil
 }
 
-func validateIssueLabelTransportWorkset(conn Connection, receipt synctransport.WarehouseReceipt, workset synctransport.WarehouseWorkset) error {
+func validateIssueLabelTransportWorkset(conn Connection, mode synccontract.Mode, receipt synctransport.WarehouseReceipt, workset synctransport.WarehouseWorkset) error {
 	if err := receipt.Validate(); err != nil {
 		return fmt.Errorf("closed issue-label transport receipt: %w", err)
 	}
-	if receipt.Owner != conn.ID || receipt.ID != workset.ID || receipt.Stream != "issues" || receipt.Mode != synccontract.ModeFullAppend || receipt.Records != len(workset.Records) || receipt.Tombstones != len(workset.Tombstones) {
+	if receipt.Owner != conn.ID || receipt.ID != workset.ID || receipt.Stream != "issues" || receipt.Mode != mode || receipt.Records != len(workset.Records) || receipt.Tombstones != len(workset.Tombstones) {
 		return fmt.Errorf("closed issue-label transport receipt does not bind the reopened workset")
 	}
 	if len(workset.Records) != 1 {
@@ -609,6 +702,30 @@ func validateIssueLabelTransportApproval(approval synctransport.DestinationAppro
 		return fmt.Errorf("closed issue-label transport requires a pre-run plan-preview-approved destructive grant")
 	}
 	return nil
+}
+
+func (a *App) issueLabelTransportAuthorizationScope(conn Connection, mode synccontract.Mode, action issueLabelTransportAction, plan ReversePlan, prepared issueLabelPreparedWrite) AuthorizationScope {
+	fieldMappings := make(map[string]string, len(action.binding.Inputs))
+	for _, input := range action.binding.Inputs {
+		fieldMappings[input.Input] = input.Field
+	}
+	return canonicalAuthorizationScope(AuthorizationScope{
+		SourceConnection:              conn.ID,
+		DestinationConnection:         prepared.credential.ID,
+		DestinationCredentialRevision: prepared.runtime.CredentialRevision,
+		StreamTables: []AuthorizationStreamTable{{
+			Stream: "issues", SourceTable: "issues", DestinationTable: issueLabelTransportTable,
+		}},
+		FieldMappings: fieldMappings,
+		// The writer gate compares WriteAction directly to the declaration-owned
+		// operation name. The mode remains independently bound in
+		// EnabledOperations, so set-replace and keyed grants cannot be exchanged.
+		WriteAction:                    action.name,
+		DestinationConfigurationDigest: prepared.runtime.ConfigurationDigest,
+		EnabledOperations:              []string{string(mode), action.name},
+		ConfirmationPolicy:             plan.ConfirmationPolicy,
+		ExpiresAt:                      plan.ExpiresAt,
+	})
 }
 
 func issueLabelTransportRuntimeEqual(got, want connectors.RuntimeConfig) bool {
