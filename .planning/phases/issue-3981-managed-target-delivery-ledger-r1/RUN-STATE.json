@@ -3,7 +3,7 @@
   "phase": "issue-3981-managed-target-delivery-ledger-r1",
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-3981-delivery-ledger-r1",
-  "state": "verification_green_pending_review",
+  "state": "review_green",
   "execution": "inline_manual_gsd_fallback",
   "reason": "Issue foundation is outside numbered roadmap and canonical single-worker contract forbids role spawning.",
   "scope": "driver-neutral durable target delivery ledger only"

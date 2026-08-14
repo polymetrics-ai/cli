@@ -29,7 +29,7 @@
 - [x] `make connectorgen-surface-sync`
 - [x] `make connector-boundary`
 - [x] `make release-workflow-check`
-- [ ] Inline `verify-work` and `code-review`, including any GSD gap evidence.
+- [x] Inline `verify-work` and `code-review`, including any GSD gap evidence.
 
 ## Deliberate not applicable
 
