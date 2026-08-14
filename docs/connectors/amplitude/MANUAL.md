@@ -66,7 +66,7 @@ ETL STREAMS
     fields: classifications(array), description(string), enum_values(array), group_property(string), group_type(string), is_array_type(boolean), is_hidden(boolean), regex(string), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_annotation:

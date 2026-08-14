@@ -35,12 +35,12 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 - installation_permissions
 - installation_repositories
 - installation_repository_ids
-- owner
+- owner (required)
 - public_access
 - rate_limit_account
 - rate_limit_ip
 - rate_limit_repository
-- repo
+- repo (required)
 - since
 - private_key (secret)
 - private_key_base64 (secret)
@@ -55,7 +55,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 - issues:
   - primary key: node_id
   - cursor: updated_at
-  - fields: author_association(string), body(string), closed_at(string), comments(integer), created_at(string), html_url(string), id(integer), locked(boolean), node_id(string), number(integer), repository(string), state(string), state_reason(string), title(string), updated_at(string), url(string), user_id(integer), user_login(string)
+  - fields: author_association(string), body(string), closed_at(string), comments(integer), created_at(string), html_url(string), id(integer), labels(array), locked(boolean), node_id(string), number(integer), repository(string), state(string), state_reason(string), title(string), updated_at(string), url(string), user_id(integer), user_login(string)
 - pull_requests:
   - primary key: node_id
   - cursor: updated_at

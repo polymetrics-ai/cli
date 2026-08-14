@@ -68,7 +68,7 @@ ETL STREAMS
     fields: etag(string), group_id(string), id(string), kind(string), resource_id(string), resource_kind(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_job:

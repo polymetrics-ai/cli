@@ -115,14 +115,14 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		t.Errorf("SyncModes[full_refresh_overwrite] = %+v, want {pass capture}", froMode)
 	}
 
-	// --- stage 7: etl_full_refresh_overwrite_deduped (capture replay, PK dedup) ---
+	// --- stage 7: etl_full_refresh_overwrite_deduped (typed pre-I/O refusal) ---
 	dedupOverwrite := mustStage(t, rep, "etl_full_refresh_overwrite_deduped")
-	if !dedupOverwrite.Passed {
+	if !dedupOverwrite.Passed || dedupOverwrite.CLI.Kind != "Error" || dedupOverwrite.CLI.ExitCode != 1 {
 		t.Errorf("etl_full_refresh_overwrite_deduped stage failed: %+v", dedupOverwrite)
 	}
 	frodMode, ok := rep.Capabilities.SyncModes["full_refresh_overwrite_deduped"]
-	if !ok || frodMode.Result != "pass" || frodMode.DataSource != "capture" {
-		t.Errorf("SyncModes[full_refresh_overwrite_deduped] = %+v, want {pass capture}", frodMode)
+	if !ok || frodMode.Result != "pass" || frodMode.DataSource != "pre_io_refusal" || frodMode.Reason != "typed pre-I/O refusal confirmed" {
+		t.Errorf("SyncModes[full_refresh_overwrite_deduped] = %+v, want typed pre-I/O refusal", frodMode)
 	}
 
 	// --- stage 8: etl_incremental_append (live) ---
@@ -144,14 +144,14 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		t.Errorf("Capabilities.Resume.Result = %q, want pass", rep.Capabilities.Resume.Result)
 	}
 
-	// --- stage 10: etl_incremental_append_deduped (capture replay) ---
+	// --- stage 10: etl_incremental_append_deduped (typed pre-I/O refusal) ---
 	incDedup := mustStage(t, rep, "etl_incremental_append_deduped")
-	if !incDedup.Passed {
+	if !incDedup.Passed || incDedup.CLI.Kind != "Error" || incDedup.CLI.ExitCode != 1 {
 		t.Errorf("etl_incremental_append_deduped stage failed: %+v", incDedup)
 	}
 	iadMode, ok := rep.Capabilities.SyncModes["incremental_append_deduped"]
-	if !ok || iadMode.Result != "pass" || iadMode.DataSource != "capture" {
-		t.Errorf("SyncModes[incremental_append_deduped] = %+v, want {pass capture}", iadMode)
+	if !ok || iadMode.Result != "pass" || iadMode.DataSource != "" || iadMode.Reason != "typed pre-I/O refusal confirmed" {
+		t.Errorf("SyncModes[incremental_append_deduped] = %+v, want typed pre-I/O refusal", iadMode)
 	}
 
 	// --- stage 11: query_contract ---

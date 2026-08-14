@@ -52,7 +52,7 @@ Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf 
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

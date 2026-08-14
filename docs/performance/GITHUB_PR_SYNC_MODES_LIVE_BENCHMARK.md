@@ -2,6 +2,13 @@
 
 Date: 2026-06-25
 
+> Historical measurement: this snapshot predates typed public-compatibility
+> admission. `full_refresh_overwrite_deduped` and
+> `incremental_append_deduped` preserve their old results below only; current
+> builds map them to closed typed contracts and refuse before source I/O until a
+> matching transport is admitted. See [ETL sync modes](../cli/etl.md) for the
+> current contract.
+
 Repository: `rails/rails`
 
 Stream: `github.pull_requests`
@@ -60,4 +67,3 @@ go test ./...
 ```
 
 Result: passed.
-

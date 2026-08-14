@@ -48,7 +48,7 @@ ETL STREAMS
     fields: first_degree_size(integer), org_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external LinkedIn Community Management API read of company page profile and lifetime statistics

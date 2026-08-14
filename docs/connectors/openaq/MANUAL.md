@@ -50,7 +50,7 @@ ETL STREAMS
     fields: id(integer), instruments(array), name(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external OpenAQ API read of public air-quality reference data

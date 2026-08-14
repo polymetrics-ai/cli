@@ -6,10 +6,12 @@ import (
 	"errors"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
 type scriptedSyncSource struct {
@@ -488,7 +490,98 @@ func TestParseSyncModeSeparatesLegacyCompatibilityFromNewNativeAdmission(t *test
 	}
 }
 
-func TestCreateConnectionMarksPublicLegacyModesAsCompatibilityAdapters(t *testing.T) {
+func TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO(t *testing.T) {
+	tests := []struct {
+		name     string
+		mode     string
+		contract synccontract.Mode
+	}{
+		{name: "full overwrite", mode: "full_refresh_overwrite_deduped", contract: synccontract.ModeFullOverwrite},
+		{name: "incremental dedupe", mode: "incremental_append_deduped", contract: synccontract.ModeIncrementalDedupe},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			for _, legacyCompatibility := range []bool{false, true} {
+				t.Run("legacy_compatibility_"+strconv.FormatBool(legacyCompatibility), func(t *testing.T) {
+					parsed, err := ParseStreamSyncMode(StreamConfig{SyncMode: tt.mode, LegacyCompatibility: legacyCompatibility})
+					if err != nil {
+						t.Fatal(err)
+					}
+					if parsed.ContractMode != tt.contract || !parsed.IsContractMode() {
+						t.Fatalf("parsed %q = %+v, want typed %q contract", tt.mode, parsed, tt.contract)
+					}
+
+					source := newScriptedSyncSource("typed_legacy_"+tt.mode+"_"+strconv.FormatBool(legacyCompatibility), nil)
+					a, connection := setupSyncModeAppWithCompatibility(t, source, tt.mode, legacyCompatibility)
+					_, err = a.RunETL(context.Background(), RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
+					var modeErr *synccontract.ModeNotExecutableError
+					if !errors.As(err, &modeErr) || modeErr.Mode != tt.contract {
+						t.Fatalf("RunETL(%q) error = %v, want typed pre-I/O refusal for %q", tt.mode, err, tt.contract)
+					}
+					if len(source.requests) != 0 {
+						t.Fatalf("RunETL(%q) source reads = %d, want typed refusal before I/O", tt.mode, len(source.requests))
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestCanonicalSyncModesRetainParsedContracts(t *testing.T) {
+	tests := []struct {
+		mode                synccontract.Mode
+		source              SourceSyncMode
+		destination         DestinationSyncMode
+		legacyCompatibility bool
+		contractAdmission   bool
+		runtimeTypedRefusal bool
+	}{
+		{mode: synccontract.ModeFullOverwrite, source: SourceSyncFullRefresh, destination: DestinationSyncOverwrite, contractAdmission: true, runtimeTypedRefusal: true},
+		{mode: synccontract.ModeFullAppend, source: SourceSyncFullRefresh, destination: DestinationSyncAppend, contractAdmission: true, runtimeTypedRefusal: true},
+		{mode: synccontract.ModeIncrementalAppend, source: SourceSyncIncremental, destination: DestinationSyncAppend, contractAdmission: true},
+		{mode: synccontract.ModeIncrementalUpsert, source: SourceSyncIncremental, destination: DestinationSyncUpsert, contractAdmission: true, runtimeTypedRefusal: true},
+		{mode: synccontract.ModeIncrementalDedupe, source: SourceSyncIncremental, destination: DestinationSyncAppendDeduped, contractAdmission: true, runtimeTypedRefusal: true},
+		{mode: synccontract.ModeIncrementalDedupeHistory, source: SourceSyncIncremental, destination: DestinationSyncDedupeHistory, contractAdmission: true, runtimeTypedRefusal: true},
+		{mode: synccontract.ModeChangeCapture, source: SourceSyncChangeCapture, destination: DestinationSyncUpsert, contractAdmission: true, runtimeTypedRefusal: true},
+	}
+	for _, tt := range tests {
+		t.Run(string(tt.mode), func(t *testing.T) {
+			parsed, err := ParseSyncMode(string(tt.mode))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if parsed.ContractMode != tt.mode || parsed.Source != tt.source || parsed.Destination != tt.destination || parsed.LegacyCompatibility != tt.legacyCompatibility || parsed.IsContractMode() != tt.contractAdmission {
+				t.Fatalf("ParseSyncMode(%q) = %+v, want unchanged typed canonical mode", tt.mode, parsed)
+			}
+
+			source := newScriptedSyncSource("canonical_"+string(tt.mode), nil)
+			a, connection := setupSyncModeApp(t, source, string(tt.mode))
+			_, err = a.RunETL(context.Background(), RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
+			if !tt.runtimeTypedRefusal {
+				if err != nil {
+					t.Fatalf("RunETL(%q) error = %v, want unchanged legacy-compatible execution", tt.mode, err)
+				}
+				if len(source.requests) == 0 {
+					t.Fatalf("RunETL(%q) made no source read, want unchanged legacy-compatible execution", tt.mode)
+				}
+				return
+			}
+			var modeErr *synccontract.ModeNotExecutableError
+			if !errors.As(err, &modeErr) || modeErr.Mode != tt.mode {
+				t.Fatalf("RunETL(%q) error = %v, want unchanged typed pre-I/O refusal", tt.mode, err)
+			}
+			if len(source.requests) != 0 {
+				t.Fatalf("RunETL(%q) source reads = %d, want no read before typed refusal", tt.mode, len(source.requests))
+			}
+		})
+	}
+}
+
+func TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases(t *testing.T) {
+	typedAliases := map[string]bool{
+		"full_refresh_overwrite_deduped": true,
+		"incremental_append_deduped":     true,
+	}
 	for _, modeName := range MustSyncModeNames() {
 		t.Run(modeName, func(t *testing.T) {
 			source := newScriptedSyncSource("legacy_creation_"+modeName, nil)
@@ -505,8 +598,8 @@ func TestCreateConnectionMarksPublicLegacyModesAsCompatibilityAdapters(t *testin
 			if err != nil {
 				t.Fatal(err)
 			}
-			if parsed.IsContractMode() {
-				t.Fatalf("fresh legacy stream %q became a native contract mode", modeName)
+			if parsed.IsContractMode() != typedAliases[modeName] {
+				t.Fatalf("fresh legacy stream %q typed admission = %v, want %v", modeName, parsed.IsContractMode(), typedAliases[modeName])
 			}
 		})
 	}
@@ -658,98 +751,6 @@ func TestRecordCursorPreservesOpaqueEmptyAndWhitespaceValues(t *testing.T) {
 	}
 	if compareCursor("", "  ") == 0 {
 		t.Fatal("compareCursor() collapsed distinct opaque cursor values")
-	}
-}
-
-func TestIncrementalAppendDedupedMaterializesLatestRows(t *testing.T) {
-	ctx := context.Background()
-	source := newScriptedSyncSource("scripted_incremental_deduped", []connectors.Record{
-		{"id": "a", "name": "Ada", "updated_at": "2026-01-01T00:00:00Z"},
-		{"id": "g", "name": "Grace", "updated_at": "2026-01-02T00:00:00Z"},
-	})
-	a, connection := setupSyncModeApp(t, source, "incremental_append_deduped")
-
-	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 2}); err != nil {
-		t.Fatal(err)
-	}
-	source.records = []connectors.Record{
-		{"id": "a", "name": "Ada latest", "updated_at": "2026-01-03T00:00:00Z"},
-		{"id": "g", "name": "Grace resent", "updated_at": "2026-01-02T00:00:00Z"},
-		{"id": "k", "name": "Katherine", "updated_at": "2026-01-04T00:00:00Z"},
-		{"id": "m", "name": "Margaret deleted", "updated_at": "2026-01-05T00:00:00Z", "_polymetrics_deleted": true},
-	}
-	run, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 2})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if run.Checkpoint["cursor"] != "2026-01-05T00:00:00Z" {
-		t.Fatalf("cursor = %q", run.Checkpoint["cursor"])
-	}
-	rows, err := a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
-	if err != nil {
-		t.Fatal(err)
-	}
-	byID := rowsByID(rows)
-	if len(byID) != 3 {
-		t.Fatalf("deduped rows len = %d, want 3: %+v", len(byID), rows)
-	}
-	if byID["a"]["name"] != "Ada latest" || byID["g"]["name"] != "Grace resent" || byID["k"]["name"] != "Katherine" {
-		t.Fatalf("unexpected deduped rows: %+v", byID)
-	}
-	if _, ok := byID["m"]; ok {
-		t.Fatalf("delete/tombstone row remained in final output: %+v", byID["m"])
-	}
-}
-
-func TestFullRefreshOverwriteDedupedReplacesFinalWithCurrentGeneration(t *testing.T) {
-	ctx := context.Background()
-	source := newScriptedSyncSource("scripted_full_deduped", []connectors.Record{
-		{"id": "a", "name": "Ada old", "updated_at": "2026-01-01T00:00:00Z"},
-		{"id": "a", "name": "Ada latest", "updated_at": "2026-01-03T00:00:00Z"},
-		{"id": "g", "name": "Grace", "updated_at": "2026-01-02T00:00:00Z"},
-	})
-	a, connection := setupSyncModeApp(t, source, "full_refresh_overwrite_deduped")
-
-	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 2}); err != nil {
-		t.Fatal(err)
-	}
-	rows, err := a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
-	if err != nil {
-		t.Fatal(err)
-	}
-	byID := rowsByID(rows)
-	if len(byID) != 2 || byID["a"]["name"] != "Ada latest" || byID["g"]["name"] != "Grace" {
-		t.Fatalf("unexpected first deduped final: %+v", byID)
-	}
-
-	source.records = []connectors.Record{{"id": "k", "name": "Katherine", "updated_at": "2026-01-04T00:00:00Z"}}
-	source.failAfter = 1
-	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err == nil {
-		t.Fatal("RunETL(failing full refresh dedupe) error = nil")
-	}
-	rows, err = a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if got := sortedNames(rows); got != "Ada latest,Grace" {
-		t.Fatalf("rows after failed full refresh dedupe = %s", got)
-	}
-
-	source.failAfter = -1
-	source.records = []connectors.Record{
-		{"id": "a", "name": "Ada current", "updated_at": "2026-01-05T00:00:00Z"},
-		{"id": "a", "name": "Ada stale", "updated_at": "2026-01-04T00:00:00Z"},
-	}
-	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
-		t.Fatal(err)
-	}
-	rows, err = a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
-	if err != nil {
-		t.Fatal(err)
-	}
-	byID = rowsByID(rows)
-	if len(byID) != 1 || byID["a"]["name"] != "Ada current" {
-		t.Fatalf("unexpected current generation final: %+v", byID)
 	}
 }
 
