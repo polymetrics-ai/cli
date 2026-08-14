@@ -235,6 +235,28 @@ func (c connConfig) openPool(ctx context.Context) (*pgxpool.Pool, error) {
 	if err != nil {
 		return nil, err
 	}
+	return openPostgresPool(ctx, poolConfig)
+}
+
+func (c connConfig) typedCatalogPoolConfig(resources typedCatalogResources) (*pgxpool.Config, error) {
+	poolConfig, err := c.poolConfig()
+	if err != nil {
+		return nil, err
+	}
+	poolConfig.MaxConns = resources.poolSize
+	poolConfig.ConnConfig.ConnectTimeout = resources.policy.ConnectTimeout
+	return poolConfig, nil
+}
+
+func (c connConfig) openTypedCatalogPool(ctx context.Context, resources typedCatalogResources) (*pgxpool.Pool, error) {
+	poolConfig, err := c.typedCatalogPoolConfig(resources)
+	if err != nil {
+		return nil, err
+	}
+	return openPostgresPool(ctx, poolConfig)
+}
+
+func openPostgresPool(ctx context.Context, poolConfig *pgxpool.Config) (*pgxpool.Pool, error) {
 	pool, err := pgxpool.NewWithConfig(ctx, poolConfig)
 	if err != nil {
 		// Keep endpoint and credentials out of user-visible errors.
