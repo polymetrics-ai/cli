@@ -8,6 +8,11 @@
 | R4 | Plan/approval binds delete authority | A plan can be approved with one tombstone count and executed with another. | Count mismatch is rejected before `BeginDatabaseWrite`; valid tombstones are bounded alongside records in `WriteBatch`. |
 | R5 | Named durable receipt remains separate from ledger | A committed session receipt can become checkpoint authority without ledger persistence. | `DeliveryReceiptV1` is the session return type; a ledger-store failure leaves `DatabaseWriteResult.Receipt()` unavailable. |
 
+R1–R5 are green in `traces/green-run.txt`. The mapping test asserts the
+projected target value and reverse projection; the tombstone fake asserts its
+seeded row is unchanged by ordinary absence and absent only after the explicit
+envelope arrives.
+
 ## Red command
 
 ```sh
@@ -26,4 +31,3 @@ go test -timeout 20m ./internal/synccontract/... -count=1
 go test -timeout 20m ./internal/synctransport/... -count=1
 go test -race -timeout 20m ./internal/connectors/database -run 'Test(MappingContractV1|DatabaseWriteExecutor.*Tombstone)' -count=1
 ```
-

@@ -98,6 +98,14 @@ func (c MappingContractV1) validate() error {
 	return nil
 }
 
+func (c MappingContractV1) clone() MappingContractV1 {
+	clone := MappingContractV1{version: c.version, columns: make([]MappingColumnV1, len(c.columns))}
+	for index := range c.columns {
+		clone.columns[index] = c.columns[index].clone()
+	}
+	return clone
+}
+
 // Version returns the pinned mapping revision.
 func (c MappingContractV1) Version() uint { return c.version }
 

@@ -1,0 +1,10 @@
+$ go test -timeout 20m ./internal/connectors/database/... ./internal/synccontract/... ./internal/synctransport/... -count=1
+ok  	polymetrics.ai/internal/connectors/database	9.836s
+ok  	polymetrics.ai/internal/synccontract	0.767s
+ok  	polymetrics.ai/internal/synctransport	1.151s
+
+$ go test -race -timeout 20m ./internal/connectors/database -run 'Test(MappingContractV1|DatabaseWriteExecutor.*Tombstone)' -count=1
+ok  	polymetrics.ai/internal/connectors/database	1.443s
+
+$ go vet ./internal/connectors/database/... ./internal/synccontract/... ./internal/synctransport/...
+exit 0
