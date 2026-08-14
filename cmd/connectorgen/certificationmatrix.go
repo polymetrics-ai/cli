@@ -1479,6 +1479,9 @@ func loadAcceptedEvidence(repoRoot string, scope []string) ([]acceptedEvidence, 
 		if err != nil {
 			return nil, fmt.Errorf("read accepted evidence %q: %w", entry.Name(), err)
 		}
+		if err := validateAcceptedEvidenceScopeIdentityKeys(raw); err != nil {
+			return nil, fmt.Errorf("parse accepted evidence %q: %w", entry.Name(), err)
+		}
 		var identity acceptedEvidenceScopeIdentity
 		if err := json.Unmarshal(raw, &identity); err != nil {
 			return nil, fmt.Errorf("parse accepted evidence %q: %w", entry.Name(), err)
@@ -1505,6 +1508,51 @@ func loadAcceptedEvidence(repoRoot string, scope []string) ([]acceptedEvidence, 
 	}
 	sort.Slice(items, func(i, j int) bool { return items[i].recordPath < items[j].recordPath })
 	return items, nil
+}
+
+func validateAcceptedEvidenceScopeIdentityKeys(raw []byte) error {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	token, err := decoder.Token()
+	if err != nil {
+		return err
+	}
+	opening, ok := token.(json.Delim)
+	if !ok || opening != '{' {
+		return nil
+	}
+
+	seen := make(map[string]struct{}, 4)
+	for decoder.More() {
+		token, err := decoder.Token()
+		if err != nil {
+			return err
+		}
+		field, ok := token.(string)
+		if !ok {
+			return errors.New("accepted evidence object key is not a string")
+		}
+		if acceptedEvidenceScopeIdentityField(field) {
+			if _, found := seen[field]; found {
+				return fmt.Errorf("duplicate accepted evidence identity field %q", field)
+			}
+			seen[field] = struct{}{}
+		}
+		var value json.RawMessage
+		if err := decoder.Decode(&value); err != nil {
+			return err
+		}
+	}
+	_, err = decoder.Token()
+	return err
+}
+
+func acceptedEvidenceScopeIdentityField(field string) bool {
+	switch field {
+	case "scope", "connector", "source", "destination":
+		return true
+	default:
+		return false
+	}
 }
 
 func acceptedEvidenceWithinScope(evidence acceptedEvidence, scope []string) bool {

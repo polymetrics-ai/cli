@@ -682,6 +682,50 @@ func TestCertificationEvidencePrefilterSkipsOnlyConclusiveNonallowlisted(t *test
 	}
 }
 
+func TestCertificationEvidencePrefilterRejectsDuplicateIdentityKeys(t *testing.T) {
+	for _, test := range []struct {
+		name     string
+		field    string
+		evidence string
+	}{
+		{
+			name:     "scope",
+			field:    "scope",
+			evidence: `{"scope":"unsupported","scope":"capability","connector":"mysql","unexpected":true}`,
+		},
+		{
+			name:     "connector",
+			field:    "connector",
+			evidence: `{"scope":"capability","connector":"github","connector":"mysql","unexpected":true}`,
+		},
+		{
+			name:     "source",
+			field:    "source",
+			evidence: `{"scope":"flow","source":"github","source":"mysql","destination":"mariadb","unexpected":true}`,
+		},
+		{
+			name:     "destination",
+			field:    "destination",
+			evidence: `{"scope":"flow","source":"mysql","destination":"github","destination":"mariadb","unexpected":true}`,
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			dir := filepath.Join(root, acceptedEvidenceDirectory)
+			if err := os.MkdirAll(dir, 0o755); err != nil {
+				t.Fatalf("mkdir evidence directory: %v", err)
+			}
+			if err := os.WriteFile(filepath.Join(dir, "evidence.json"), []byte(test.evidence), 0o600); err != nil {
+				t.Fatalf("write evidence: %v", err)
+			}
+			_, err := loadAcceptedEvidence(root, certificationConnectorAllowlist)
+			if err == nil || !strings.Contains(err.Error(), `duplicate accepted evidence identity field "`+test.field+`"`) {
+				t.Fatalf("loadAcceptedEvidence() with duplicate %s identity = %v, want duplicate identity rejection", test.field, err)
+			}
+		})
+	}
+}
+
 func TestCertificationEvidenceUnsupportedAllowlistedScopeReachesStrictValidation(t *testing.T) {
 	root := t.TempDir()
 	dir := filepath.Join(root, acceptedEvidenceDirectory)
