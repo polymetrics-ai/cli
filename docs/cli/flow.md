@@ -20,6 +20,9 @@ CONNECTION-SCOPED SOURCE READS
   scope its "source_table". Use _unattributed only for a root-level table that
   no connection owns. When same-named tables have several owners, omitting the
   applicable manifest selector refuses the read instead of choosing one.
+  A case-equivalent spelling whose owner cannot be decided also fails closed;
+  set "connection" to a known healthy owner rather than relying on an
+  unscoped query.
 
   Query example:
   {"id":"query-acme","kind":"query","connection":"acme",

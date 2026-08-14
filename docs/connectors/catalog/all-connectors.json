@@ -124570,7 +124570,7 @@
   {
     "name": "postgres",
     "display_name": "PostgreSQL",
-    "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source.",
+    "description": "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source.",
     "integration_type": "database",
     "release_stage": "ga",
     "capabilities": {
@@ -124649,7 +124649,7 @@
         },
         "schema": {
           "type": "string",
-          "description": "PostgreSQL schema to discover tables from. Defaults to public."
+          "description": "PostgreSQL user/application schema to discover tables from. Defaults to public. pg_catalog, information_schema, pg_toast, pg_toast_*, and pg_temp_* are rejected before a live catalog connection is opened."
         },
         "cdc_publication": {
           "type": "string",
