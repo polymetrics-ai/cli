@@ -6,10 +6,24 @@ This is a mechanical file-layout change from comparison base
 `integration/4015-mvp-flat-r1` at `5a457970b3bc15343e5ba6b7b4acf48994b63add`.
 No behavior, generated capability output, public connector surface, declaration
 signature, or test semantics/assertions change. File splitting may change only
-Go test registration order; that difference is accepted as inert, proven with
-shuffle seeds `408601` and `408602` for both affected packages at base and
-head, and must not be normalized through order-prefixed files or declaration
-reordering.
+Go test registration order; that difference is accepted as inert. The proof
+uses Go's shuffle facility (`-shuffle=on`, reproduced deterministically as
+`-shuffle=N`) at the comparison base and original move head
+`6e31ac1abfc4a46fd1dbbef3ec54086da85b682e`, for both affected packages and
+seeds `408601` and `408602`. It must not be normalized through order-prefixed
+files or declaration reordering.
+
+## Registration-order proof
+
+Each numeric `-shuffle=N` run is Go's reproducible shuffled mode. The recorded
+commands were `go test -count=1 -timeout 20m -shuffle=<seed> <package>`.
+
+| Revision | Seed | `./internal/connectors/database` | `./internal/connectors/native/postgres` |
+| --- | --- | --- | --- |
+| Base `5a457970b3bc15343e5ba6b7b4acf48994b63add` | `408601` | `ok 6.452s` | `ok 0.881s` |
+| Base `5a457970b3bc15343e5ba6b7b4acf48994b63add` | `408602` | `ok 6.229s` | `ok 0.878s` |
+| Original move head `6e31ac1abfc4a46fd1dbbef3ec54086da85b682e` | `408601` | `ok 6.416s` | `ok 0.875s` |
+| Original move head `6e31ac1abfc4a46fd1dbbef3ec54086da85b682e` | `408602` | `ok 6.652s` | `ok 0.870s` |
 
 ## Ownership after the split
 

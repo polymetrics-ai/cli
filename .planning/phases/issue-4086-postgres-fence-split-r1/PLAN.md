@@ -27,6 +27,21 @@
 5. Run focused and complete touched-package tests; prove generated capability
    parity via `connectorgen surface-sync --check` plus a SHA-256 comparison of
    the generated capability ledger before and after.
+6. Prove registration-order changes inert with Go's shuffled test mode at the
+   exact comparison base and original move head, using both affected packages
+   and deterministic seeds `408601` and `408602`.
+
+## Registration-order planning trace
+
+The proof uses Go's `-shuffle=on` facility in deterministic numeric form:
+`go test -count=1 -timeout 20m -shuffle=<seed> <package>`.
+
+| Revision | Seed | `./internal/connectors/database` | `./internal/connectors/native/postgres` |
+| --- | --- | --- | --- |
+| Base `5a457970b3bc15343e5ba6b7b4acf48994b63add` | `408601` | `ok 6.452s` | `ok 0.881s` |
+| Base `5a457970b3bc15343e5ba6b7b4acf48994b63add` | `408602` | `ok 6.229s` | `ok 0.878s` |
+| Original move head `6e31ac1abfc4a46fd1dbbef3ec54086da85b682e` | `408601` | `ok 6.416s` | `ok 0.875s` |
+| Original move head `6e31ac1abfc4a46fd1dbbef3ec54086da85b682e` | `408602` | `ok 6.652s` | `ok 0.870s` |
 
 ## Explicit exclusions
 
