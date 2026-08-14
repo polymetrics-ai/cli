@@ -313,7 +313,7 @@ func stageWriteCreate(rc *runContext, rep *Report) error {
 	}
 
 	stage := recordStage(rc, rep, "write_create", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("reverse", "run", wc.planID, "--approve", wc.approvalToken, "--json")
+		res := rc.runWithStdin(wc.approvalToken+"\n", "reverse", "run", wc.planID, "--approval-token-stdin", "--json")
 		passed, errMsg := assertKind(rc, "write_create", res, "ReverseRun", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
@@ -609,7 +609,7 @@ func stageWriteCleanupSelfTest(rc *runContext, rep *Report, wc *writeContext) bo
 		if planID == "" || token == "" {
 			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id/approval token"
 		}
-		runRes := rc.run("reverse", "run", planID, "--approve", token, "--json")
+		runRes := rc.runWithStdin(token+"\n", "reverse", "run", planID, "--approval-token-stdin", "--json")
 		passed, errMsg := assertKind(rc, "write_cleanup", runRes, "ReverseRun", 0)
 		return passed, cliInfoFrom(runRes), errMsg
 	})
@@ -670,7 +670,7 @@ func stageWriteCleanupLive(rc *runContext, rep *Report, wc *writeContext) bool {
 		if planID == "" || token == "" {
 			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id/approval token"
 		}
-		runRes := rc.run("reverse", "run", planID, "--approve", token, "--json")
+		runRes := rc.runWithStdin(token+"\n", "reverse", "run", planID, "--approval-token-stdin", "--json")
 		passed, errMsg := assertKind(rc, "write_cleanup", runRes, "ReverseRun", 0)
 		return passed, cliInfoFrom(runRes), errMsg
 	})
@@ -797,7 +797,7 @@ func stageApprovalIdempotency(rc *runContext, rep *Report) error {
 	}
 
 	recordStage(rc, rep, "approval_idempotency", tierFor(wc), func() (bool, CLIStageInfo, string) {
-		res := rc.run("reverse", "run", wc.planID, "--approve", wc.approvalToken, "--json")
+		res := rc.runWithStdin(wc.approvalToken+"\n", "reverse", "run", wc.planID, "--approval-token-stdin", "--json")
 		if res.ExitCode == 0 {
 			return false, cliInfoFrom(res), "approval_idempotency: replaying a consumed plan+token succeeded, want rejection"
 		}

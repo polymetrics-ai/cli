@@ -122,7 +122,7 @@ Reads Google Search Console sites, sitemaps, and Search Analytics performance re
   - --max-bytes (integer): Maximum direct-read response bytes; typed operations are capped at 16 MiB and each Google Search Console operation declares a lower limit.
   - --plan (string): Execute an approved reverse-ETL plan by id.
   - --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-  - --approve (string): Approval token required to execute a reverse-ETL plan.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   - --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
 - Sites
   - sites list - List verified Search Console site properties as ETL records. [intent=etl availability=implemented stream=sites]

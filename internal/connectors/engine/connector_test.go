@@ -183,6 +183,67 @@ func TestConnectorManifestSynthesizedFromBundleSpotFields(t *testing.T) {
 	}
 }
 
+func TestCommandSurfaceAddsSharedApprovalStdinMarkerForWrites(t *testing.T) {
+	for _, tc := range []struct {
+		name        string
+		globalFlags []CLIFlag
+		intent      string
+		wantCount   int
+		wantSummary string
+	}{
+		{
+			name:        "reverse ETL derives marker",
+			intent:      "reverse_etl",
+			wantCount:   1,
+			wantSummary: "Read the approval token as one bounded line from standard input.",
+		},
+		{
+			name:      "direct write derives marker",
+			intent:    "direct_write",
+			wantCount: 1,
+		},
+		{
+			name: "declared marker is not duplicated",
+			globalFlags: []CLIFlag{{
+				Name:    "approval-token-stdin",
+				Type:    "boolean",
+				Summary: "bundle declaration",
+			}},
+			intent:      "reverse_etl",
+			wantCount:   1,
+			wantSummary: "bundle declaration",
+		},
+		{
+			name:      "read command has no marker",
+			intent:    "direct_read",
+			wantCount: 0,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			surface := synthesizeCommandSurface(Bundle{CLISurface: &CLISurface{
+				GlobalFlags: tc.globalFlags,
+				Commands:    []CLICommand{{Path: "widgets apply", Intent: tc.intent}},
+			}})
+			if surface == nil {
+				t.Fatal("synthesizeCommandSurface returned nil")
+			}
+			count := 0
+			for _, flag := range surface.GlobalFlags {
+				if flag.Name != "approval-token-stdin" {
+					continue
+				}
+				count++
+				if tc.wantSummary != "" && flag.Summary != tc.wantSummary {
+					t.Fatalf("approval stdin summary = %q, want %q", flag.Summary, tc.wantSummary)
+				}
+			}
+			if count != tc.wantCount {
+				t.Fatalf("approval stdin marker count = %d, want %d", count, tc.wantCount)
+			}
+		})
+	}
+}
+
 // --- Definition() ---
 
 func TestConnectorDefinitionSynthesizedFromBundle(t *testing.T) {

@@ -161,7 +161,16 @@ type runContext struct {
 // rc.run instead of rc.harness.Run directly so finalizeSecretRedaction can
 // see everything a real secret leak could hide in.
 func (rc *runContext) run(args ...string) CLIResult {
-	res := rc.harness.Run(args...)
+	return rc.captureRun(rc.harness.Run(args...))
+}
+
+// runWithStdin uses the real CLI's standard-input channel without adding the
+// data to the argv captured in certification reports.
+func (rc *runContext) runWithStdin(stdin string, args ...string) CLIResult {
+	return rc.captureRun(rc.harness.RunWithStdin(stdin, args...))
+}
+
+func (rc *runContext) captureRun(res CLIResult) CLIResult {
 	stdout := res.Stdout
 	if rc.stdoutLeakSabotage != nil && rc.stdoutLeakSabotage.stage == rc.currentStage {
 		stdout += "\n[sabotage-planted-secret]: " + rc.stdoutLeakSabotage.secret
