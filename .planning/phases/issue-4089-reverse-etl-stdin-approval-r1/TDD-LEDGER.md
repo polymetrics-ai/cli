@@ -29,3 +29,9 @@
 - Red: the first rebased `go test -count=1 -timeout 20m ./internal/app` run failed `TestRunReverseETLRecoversCommittedApprovalConsumptionUnlockFailure`. Its `failAt: 2` injector now failed the read-only `UpdateAfterPreflight` unlock, not the later committed update unlock.
 - Green: moved that test's explicit failure point to the third unlock (plan load, preflight read, committed update) so it again proves that a post-commit unlock failure returns `ApprovalConsumptionUncertainError` with a committed outcome and no external write.
 - Green: both uncertainty-recovery selectors pass, the full `internal/app` package passes, the real-process stdin approval selector passes, and `GOTOOLCHAIN=go1.25.13 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` reports no reachable vulnerabilities.
+
+## Post-merge approval-invalidation repair — 2026-08-14
+
+- Red: after merging `integration/4015-mvp-flat-r1` at `e28152c8466adc184b167746895bcc32bd62f69e`, `go test -count=1 -timeout 20m ./internal/app -run 'TestRunReverseETLRejectsPlanHashMismatchWhenRowsChange|TestMultipartDirectWriteCommandRejectsChangedPayloadBeforeNetwork'` failed. Both validations returned `reverse plan approval has already been consumed` instead of the expected changed-payload refusal.
+- Cause: `invalidateReversePlan` used its state-mutating callback as the `UpdateAfterPreflight` observer. Because `state` contains a slice, that observer cleared the approval hash in the in-memory preflight snapshot before the single atomic update.
+- Green: split `reversePlanInvalidationCandidate` into a pure observer and a single mutation path. The same selector now passes, as do the replay, cross-process atomic-consumption, stale-state, and legacy-lock selectors plus the raw-argv carrier selector in `internal/cli`.

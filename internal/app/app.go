@@ -2928,7 +2928,7 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 func (a *App) invalidateReversePlan(expected ReversePlan) error {
 	now := time.Now().UTC()
 	updated, err := a.updateStateAfterPreflight(func(current state) error {
-		_, preflightErr := invalidateReversePlanState(current, expected, now)
+		_, preflightErr := reversePlanInvalidationCandidate(current, expected)
 		return preflightErr
 	}, func(current state) (state, error) {
 		return invalidateReversePlanState(current, expected, now)
@@ -2940,29 +2940,38 @@ func (a *App) invalidateReversePlan(expected ReversePlan) error {
 	return nil
 }
 
-func invalidateReversePlanState(current state, expected ReversePlan, now time.Time) (state, error) {
+func reversePlanInvalidationCandidate(current state, expected ReversePlan) (int, error) {
 	for i := range current.ReversePlans {
 		stored := current.ReversePlans[i]
 		if stored.ID != expected.ID {
 			continue
 		}
 		if err := approvalConsumptionUncertainError(stored, nil); err != nil {
-			return current, err
+			return 0, err
 		}
 		if stored.ApprovalTokenHash == "" {
-			return current, errors.New("reverse plan approval has already been consumed")
+			return 0, errors.New("reverse plan approval has already been consumed")
 		}
 		if !reversePlanMatchesExpected(stored, expected) || !constantTimeStringEqual(stored.ApprovalTokenHash, expected.ApprovalTokenHash) {
-			return current, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
+			return 0, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
 		}
-		stored.Status = "invalidated"
-		stored.ApprovalTokenHash = ""
-		stored.ApprovalGrant = nil
-		stored.ApprovalConsumedAt = now
-		current.ReversePlans[i] = stored
-		return current, nil
+		return i, nil
 	}
-	return current, fmt.Errorf("reverse plan %q not found", expected.ID)
+	return 0, fmt.Errorf("reverse plan %q not found", expected.ID)
+}
+
+func invalidateReversePlanState(current state, expected ReversePlan, now time.Time) (state, error) {
+	i, err := reversePlanInvalidationCandidate(current, expected)
+	if err != nil {
+		return current, err
+	}
+	stored := current.ReversePlans[i]
+	stored.Status = "invalidated"
+	stored.ApprovalTokenHash = ""
+	stored.ApprovalGrant = nil
+	stored.ApprovalConsumedAt = now
+	current.ReversePlans[i] = stored
+	return current, nil
 }
 
 func constantTimeStringEqual(left, right string) bool {
