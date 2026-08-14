@@ -1667,7 +1667,7 @@ func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, 
 	}
 	var rows []connectors.Record
 	if sql := flags.first("sql"); sql != "" {
-		rows, err = a.QuerySQL(ctx, sql, limit)
+		rows, err = a.QuerySQL(ctx, app.QuerySQLRequest{SQL: sql, Limit: limit})
 		// --connection scopes --table reads only; the SQL path names its table
 		// inside the query, so point at the surface that can resolve it rather
 		// than at a flag that would be ignored here.

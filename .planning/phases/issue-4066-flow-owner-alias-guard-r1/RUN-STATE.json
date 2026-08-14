@@ -1,0 +1,41 @@
+{
+  "issue": 4066,
+  "parent_issue": 3897,
+  "program_parent_issue": 3988,
+  "pull_request": 4060,
+  "branch": "feat/3897-flow-connection-scope-nm",
+  "required_base": "feat/3988-github-certification",
+  "status": "local_verification_green_pending_existing_pr_delivery",
+  "correction_budget": {
+    "used_before": 4,
+    "reserved_this_issue": 5,
+    "limit": 5,
+    "remaining_after_this_issue": 0
+  },
+  "manual_gsd_fallback": {
+    "used": true,
+    "reason": "#4066 is not a numbered active ROADMAP.md phase and the parent single-worker contract forbids role spawning.",
+    "lifecycle": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ]
+  },
+  "no_mistakes": {
+    "run": "01KZR72KN8ZKF8V8M5Q19FPJJ5",
+    "outcome": "passed",
+    "head": "804ca41a6407d4bb7cdaf8141b69d7dc47011048",
+    "skipped_stages": ["push", "pr", "ci"],
+    "custody_returned": true
+  },
+  "results": {
+    "red_green_tdd": "passed",
+    "focused_race_regression": "passed",
+    "manual_verify_work": "passed",
+    "manual_code_review": "passed with all four review findings fixed",
+    "generated_metadata_boundary": "retained: #4063 remains one scalar :20 to :21",
+    "external_delivery": "pending existing PR update and current CI observation"
+  }
+}

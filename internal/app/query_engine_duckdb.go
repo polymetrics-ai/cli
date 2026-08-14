@@ -3,14 +3,16 @@ package app
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
+	"sync"
 
-	_ "github.com/marcboeker/go-duckdb"
+	duckdb "github.com/marcboeker/go-duckdb"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/warehouse"
@@ -27,13 +29,13 @@ func newSQLEngine(a *App) sqlQueryEngine {
 // an in-memory DuckDB instance. It is stateless: each query opens a fresh
 // connection and registers per-query views over the current warehouse files.
 type duckdbEngine struct {
-	warehouseDir string
+	warehouseDir     string
+	newTableResolver func(string) (*warehouse.TableResolver, error)
 }
 
 func (e duckdbEngine) Name() string { return "duckdb" }
 
 var (
-	identRe = regexp.MustCompile(`^[A-Za-z0-9_]+$`)
 	// Statement-leading keywords / tokens that must never appear in a query.
 	forbiddenTokens = []string{
 		"insert", "update", "delete", "drop", "alter", "create",
@@ -69,28 +71,36 @@ func validateSelectOnly(sql string) error {
 	return nil
 }
 
-func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]connectors.Record, error) {
-	if err := validateSelectOnly(query); err != nil {
+func (e duckdbEngine) QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.Record, error) {
+	if err := validateSelectOnly(req.SQL); err != nil {
 		return nil, err
 	}
+	resolver, err := e.tableResolver()
+	if err != nil {
+		return nil, err
+	}
+	policy := newQueryViewPolicy(req, resolver)
 
-	db, err := sql.Open("duckdb", "")
+	db, lookupError, err := e.openScopedDuckDB(req.Connection, resolver, policy)
 	if err != nil {
 		return nil, fmt.Errorf("open duckdb: %w", err)
 	}
 	defer func() { _ = db.Close() }()
 
-	if err := e.registerViews(ctx, db); err != nil {
+	if err := e.registerViews(ctx, db, req.Connection, resolver, policy); err != nil {
 		return nil, err
 	}
 
-	finalSQL := query
-	if limit > 0 && !hasTopLevelLimit(query) {
-		finalSQL = fmt.Sprintf("SELECT * FROM (%s) AS _pm_q LIMIT %d", query, limit)
+	finalSQL := req.SQL
+	if req.Limit > 0 && !hasTopLevelLimit(req.SQL) {
+		finalSQL = fmt.Sprintf("SELECT * FROM (%s) AS _pm_q LIMIT %d", req.SQL, req.Limit)
 	}
 
 	rows, err := db.QueryContext(ctx, finalSQL)
 	if err != nil {
+		if lookupErr := lookupError(); lookupErr != nil {
+			return nil, fmt.Errorf("execute query: %w", lookupErr)
+		}
 		return nil, fmt.Errorf("execute query: %w", err)
 	}
 	defer func() { _ = rows.Close() }()
@@ -122,28 +132,19 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]
 	return out, nil
 }
 
-// registerViews creates one DuckDB view per materialized warehouse table.
-//
-// Tables live inside their owning connection's directory, so the same table
-// name can belong to several connections. A name owned by exactly one
-// connection is registered bare; a name several connections share is
-// registered once per connection as <table>__<connection-id> and never bare,
-// so a query can never silently read one tenant's rows while meaning another's.
-//
-// View names are validated identifiers and file paths are passed as
-// quote-escaped string literals — never via user SQL interpolation.
-func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
-	// A warehouse that does not exist yet has no tables and is not an error.
-	// Faults are deliberately not fatal here: a damaged ownership record costs
-	// its own connection's views, not every other connection's. A query naming
-	// a view that is missing for that reason fails on its own, and the table
-	// read path reports the fault precisely.
-	tables, _, err := warehouse.Tables(e.warehouseDir)
-	if err != nil {
-		return err
-	}
+func (e duckdbEngine) registerViews(
+	ctx context.Context,
+	db *sql.DB,
+	connection string,
+	resolver *warehouse.TableResolver,
+	policy queryViewPolicy,
+) error {
+	tables := resolver.Tables()
 	byName := make(map[string][]warehouse.Table, len(tables))
 	for _, table := range tables {
+		if !querySelectsConnection(connection, table.Connection) {
+			continue
+		}
 		byName[table.Name] = append(byName[table.Name], table)
 	}
 	names := make([]string, 0, len(byName))
@@ -152,32 +153,221 @@ func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
 	}
 	sort.Strings(names)
 	for _, name := range names {
-		owners := byName[name]
-		for _, table := range owners {
-			view := name
-			if len(owners) > 1 {
-				view = name + "__" + table.Owner.Connection
+		if policy.blocksBareView(name) {
+			continue
+		}
+		table, findErr := resolver.Find(name, connection)
+		if findErr == nil {
+			if err := registerWarehouseView(ctx, db, name, table); err != nil {
+				return err
 			}
-			if !identRe.MatchString(view) {
+			continue
+		}
+		if connection != "" {
+			continue
+		}
+		var ambiguous *warehouse.AmbiguousTableError
+		if !errors.As(findErr, &ambiguous) {
+			continue
+		}
+		if policy.blocksGeneratedAliases(name) {
+			continue
+		}
+		for _, table := range byName[name] {
+			alias := generatedOwnerAlias(name, table)
+			if !policy.allowsGeneratedAlias(alias) {
 				continue
 			}
-			info, err := os.Stat(table.Path)
-			if err != nil {
-				return fmt.Errorf("stat %s: %w", table.Path, err)
-			}
-			if info.Size() == 0 {
-				continue
-			}
-			stmt := fmt.Sprintf(
-				`CREATE VIEW "%s" AS SELECT * FROM read_parquet('%s')`,
-				view, warehouse.EscapeSQLLiteral(table.Path),
-			)
-			if _, err := db.ExecContext(ctx, stmt); err != nil {
-				return fmt.Errorf("register view %q: %w", view, err)
+			if err := registerWarehouseView(ctx, db, alias, table); err != nil {
+				return err
 			}
 		}
 	}
 	return nil
+}
+
+func (e duckdbEngine) tableResolver() (*warehouse.TableResolver, error) {
+	if e.newTableResolver != nil {
+		return e.newTableResolver(e.warehouseDir)
+	}
+	return warehouse.NewTableResolver(e.warehouseDir)
+}
+
+func (e duckdbEngine) openScopedDuckDB(
+	connection string,
+	resolver *warehouse.TableResolver,
+	policy queryViewPolicy,
+) (*sql.DB, func() error, error) {
+	connector, err := duckdb.NewConnector("", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	var lookupMu sync.Mutex
+	var firstLookupErr error
+	duckdb.RegisterReplacementScan(connector, func(tableName string) (string, []any, error) {
+		table, err := policy.find(resolver, tableName, connection)
+		if err != nil {
+			lookupMu.Lock()
+			if firstLookupErr == nil {
+				firstLookupErr = err
+			}
+			lookupMu.Unlock()
+			return "", nil, err
+		}
+		return "read_parquet", []any{table.Path}, nil
+	})
+	db := sql.OpenDB(connector)
+	db.SetMaxOpenConns(1)
+	return db, func() error {
+		lookupMu.Lock()
+		defer lookupMu.Unlock()
+		return firstLookupErr
+	}, nil
+}
+
+type queryViewPolicy struct {
+	ambiguousBaseNameByKey    map[string]string
+	generatedAliasBaseName    map[string]string
+	collidingGeneratedAliases map[string]struct{}
+}
+
+func newQueryViewPolicy(req QuerySQLRequest, resolver *warehouse.TableResolver) queryViewPolicy {
+	if req.Connection != "" {
+		return queryViewPolicy{}
+	}
+
+	tables := resolver.Tables()
+	byName := make(map[string][]warehouse.Table, len(tables))
+	catalogNames := make(map[string]struct{}, len(tables))
+	for _, table := range tables {
+		byName[table.Name] = append(byName[table.Name], table)
+		catalogNames[duckDBIdentifierKey(table.Name)] = struct{}{}
+	}
+	policy := queryViewPolicy{
+		collidingGeneratedAliases: make(map[string]struct{}),
+	}
+	unscopedFlow := req.Origin == QuerySQLOriginFlow
+	if unscopedFlow {
+		policy.ambiguousBaseNameByKey = make(map[string]string)
+		policy.generatedAliasBaseName = make(map[string]string)
+	}
+	for name, tables := range byName {
+		if _, err := resolver.Find(name, ""); !isAmbiguousTableError(err) {
+			continue
+		}
+		if unscopedFlow {
+			key := duckDBIdentifierKey(name)
+			current, exists := policy.ambiguousBaseNameByKey[key]
+			if !exists || name == key || (current != key && name < current) {
+				policy.ambiguousBaseNameByKey[key] = name
+			}
+		}
+		for _, table := range tables {
+			alias := generatedOwnerAlias(name, table)
+			aliasKey := duckDBIdentifierKey(alias)
+			if _, exists := catalogNames[aliasKey]; exists {
+				policy.collidingGeneratedAliases[aliasKey] = struct{}{}
+			}
+			if !unscopedFlow {
+				continue
+			}
+			policy.generatedAliasBaseName[aliasKey] = name
+		}
+	}
+	return policy
+}
+
+func isAmbiguousTableError(err error) bool {
+	var ambiguous *warehouse.AmbiguousTableError
+	return errors.As(err, &ambiguous)
+}
+
+func generatedOwnerAlias(name string, table warehouse.Table) string {
+	return name + "__" + table.Owner.Connection
+}
+
+func (p queryViewPolicy) blocksGeneratedAliases(name string) bool {
+	_, ok := p.ambiguousBaseNameByKey[duckDBIdentifierKey(name)]
+	return ok
+}
+
+func (p queryViewPolicy) blocksBareView(name string) bool {
+	key := duckDBIdentifierKey(name)
+	if _, ok := p.ambiguousBaseNameByKey[key]; ok {
+		return true
+	}
+	_, ok := p.generatedAliasBaseName[key]
+	return ok
+}
+
+func (p queryViewPolicy) allowsGeneratedAlias(name string) bool {
+	_, collides := p.collidingGeneratedAliases[duckDBIdentifierKey(name)]
+	return !collides
+}
+
+func (p queryViewPolicy) find(resolver *warehouse.TableResolver, tableName, connection string) (warehouse.Table, error) {
+	key := duckDBIdentifierKey(tableName)
+	if baseName, ok := p.ambiguousBaseNameByKey[key]; ok {
+		return resolver.Find(baseName, "")
+	}
+	if baseName, ok := p.generatedAliasBaseName[key]; ok {
+		return resolver.Find(baseName, "")
+	}
+	return resolver.Find(tableName, connection)
+}
+
+func duckDBIdentifierKey(name string) string {
+	for i := 0; i < len(name); i++ {
+		if name[i] < 'A' || name[i] > 'Z' {
+			continue
+		}
+		key := []byte(name)
+		key[i] += 'a' - 'A'
+		for j := i + 1; j < len(key); j++ {
+			if key[j] >= 'A' && key[j] <= 'Z' {
+				key[j] += 'a' - 'A'
+			}
+		}
+		return string(key)
+	}
+	return name
+}
+
+func registerWarehouseView(ctx context.Context, db *sql.DB, view string, table warehouse.Table) error {
+	info, err := os.Stat(table.Path)
+	if err != nil {
+		return fmt.Errorf("stat %s: %w", table.Path, err)
+	}
+	if info.Size() == 0 {
+		return nil
+	}
+	stmt := fmt.Sprintf(
+		"CREATE VIEW %s AS SELECT * FROM read_parquet('%s')",
+		quoteDuckDBIdentifier(view), warehouse.EscapeSQLLiteral(table.Path),
+	)
+	if _, err := db.ExecContext(ctx, stmt); err != nil {
+		return fmt.Errorf("register view %q: %w", view, err)
+	}
+	return nil
+}
+
+func quoteDuckDBIdentifier(value string) string {
+	return `"` + strings.ReplaceAll(value, `"`, `""`) + `"`
+}
+
+// querySelectsConnection mirrors the warehouse selector contract while
+// registering the views available to one analytical query. The authoritative
+// ownership lookup remains warehouse.FindTable; this filter only prevents a
+// selected query from registering another connection's files in DuckDB.
+func querySelectsConnection(requested, owner string) bool {
+	switch requested {
+	case "":
+		return true
+	case warehouse.UnattributedConnection:
+		return owner == ""
+	default:
+		return owner == requested
+	}
 }
 
 // hasTopLevelLimit reports whether the query already contains a LIMIT clause at
