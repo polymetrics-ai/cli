@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -20,6 +21,7 @@ type SharedRateLimitUnavailableReason string
 const (
 	SharedRateLimitCoordinatorNotConfigured SharedRateLimitUnavailableReason = "coordinator_not_configured"
 	SharedRateLimitCoordinatorUnreachable   SharedRateLimitUnavailableReason = "coordinator_unreachable"
+	SharedRateLimitRouteUnresolved          SharedRateLimitUnavailableReason = "route_unresolved"
 )
 
 // SharedRateLimitUnavailableError means an explicitly require-shared policy
@@ -34,8 +36,13 @@ func (e *SharedRateLimitUnavailableError) Error() string {
 	if e == nil {
 		return "shared rate-limit coordinator is unavailable"
 	}
+	if e.Reason == SharedRateLimitRouteUnresolved {
+		return "shared rate-limit route is unresolved"
+	}
 	return fmt.Sprintf("shared rate-limit coordinator %s is unavailable: %s", e.Component, e.Reason)
 }
+
+var errSharedRateLimitPolicy = errors.New("shared rate-limit policy cannot admit one request")
 
 // SharedRateLimitRegistry coordinates explicitly opted-in policies through a
 // Redis-compatible server. Its state is ephemeral and contains only opaque
@@ -91,6 +98,13 @@ func sharedRateLimitUnavailable(reason SharedRateLimitUnavailableReason) error {
 	return &SharedRateLimitUnavailableError{Component: "dragonfly", Reason: reason}
 }
 
+func sharedRateLimitReserveError(err error) error {
+	if strings.HasPrefix(strings.TrimSpace(err.Error()), "ERR shared rate-limit ") {
+		return errSharedRateLimitPolicy
+	}
+	return sharedRateLimitUnavailable(SharedRateLimitCoordinatorUnreachable)
+}
+
 // Limiter returns a shared limiter for one already-opaque key. The limiter
 // performs availability checks itself as a race-safe second line of defence.
 func (r *SharedRateLimitRegistry) Limiter(key RateLimitKey, budgets []connsdk.RateLimitBudget) *SharedRateLimiter {
@@ -135,7 +149,7 @@ func (l *SharedRateLimiter) Admit(ctx context.Context, _ connsdk.RateLimitReques
 			if err := ctx.Err(); err != nil {
 				return err
 			}
-			return sharedRateLimitUnavailable(SharedRateLimitCoordinatorUnreachable)
+			return sharedRateLimitReserveError(err)
 		}
 		wait, err := sharedRateLimitWait(result)
 		if err != nil {
@@ -257,12 +271,18 @@ func sharedRateLimitBudgetSpecs(budgets []connsdk.RateLimitBudget) ([]sharedRate
 			}
 			spec.Limit = float64(*budget.Limit)
 			spec.Window = int64(*budget.WindowSeconds) * int64(time.Second/time.Millisecond)
+			if spec.Cost > spec.Limit {
+				return nil, errSharedRateLimitPolicy
+			}
 		case connsdk.RateLimitBudgetTokenBucket, connsdk.RateLimitBudgetLeakyBucket:
 			if budget.Capacity == nil || budget.RestorePerSecond == nil || *budget.Capacity <= 0 || *budget.RestorePerSecond <= 0 {
 				return nil, errors.New("shared rate-limit bucket budget is invalid")
 			}
 			spec.Capacity = float64(*budget.Capacity)
 			spec.Restore = *budget.RestorePerSecond / float64(time.Second/time.Millisecond)
+			if spec.Cost > spec.Capacity {
+				return nil, errSharedRateLimitPolicy
+			}
 		default:
 			return nil, fmt.Errorf("shared rate-limit model %q is unsupported", budget.Model)
 		}

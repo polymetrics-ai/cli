@@ -139,8 +139,15 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 		})
 	}
 
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(server.Close)
 	unmatched := &Runtime{
-		baseRequester: &connsdk.Requester{},
+		baseRequester: &connsdk.Requester{BaseURL: server.URL, DisableRetries: true},
 		rateLimits: newRateLimitResolver(bundle, githubRateLimitConfig(t,
 			"unmatched", "rate_limit_account", "octocat")),
 	}
@@ -150,6 +157,12 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 	}
 	if requester.Admission != nil || requester.Observer != nil {
 		t.Fatal("unmatched GitHub auth type acquired a rate-limit policy")
+	}
+	if _, err := requester.Do(context.Background(), http.MethodGet, "/repos/octocat/example", nil, nil); err != nil {
+		t.Fatalf("unmatched local GitHub request: %v", err)
+	}
+	if got, want := requests, 1; got != want {
+		t.Fatalf("unmatched local GitHub request count = %d, want %d", got, want)
 	}
 }
 

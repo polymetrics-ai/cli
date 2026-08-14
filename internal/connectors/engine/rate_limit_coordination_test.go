@@ -116,11 +116,16 @@ func TestEndpointRequireSharedPolicyGatesHookRequesterAtSend(t *testing.T) {
 	if requests != 0 {
 		t.Fatalf("endpoint require_shared hook request reached the provider %d times", requests)
 	}
-	if _, err := runtime.Requester.Do(context.Background(), http.MethodGet, "/unmatched", nil, nil); err != nil {
-		t.Fatalf("unmatched hook request: %v", err)
+	_, err = runtime.Requester.Do(context.Background(), http.MethodGet, "/unmatched", nil, nil)
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(err, &unavailable) {
+		t.Fatalf("unmatched hook request error = %T %v, want typed shared-coordinator refusal", err, err)
 	}
-	if requests != 1 {
-		t.Fatalf("unmatched hook request count = %d, want 1", requests)
+	if got, want := unavailable.Reason, coordination.SharedRateLimitRouteUnresolved; got != want {
+		t.Fatalf("unmatched hook refusal reason = %q, want %q", got, want)
+	}
+	if requests != 0 {
+		t.Fatalf("unmatched hook request reached the provider %d times", requests)
 	}
 }
 
@@ -170,7 +175,7 @@ func TestEndpointRequireSharedPolicyGatesEscapedAndBasePrefixedPathsAtSend(t *te
 		switch r.URL.EscapedPath() {
 		case "/api/start":
 			startRequests++
-			w.Header().Set("Location", "/api/repos/a%2Fb")
+			w.Header().Set("Location", "/api/unbound")
 			w.WriteHeader(http.StatusFound)
 		case "/api/repos/a%2Fb":
 			providerRequests++
@@ -183,8 +188,14 @@ func TestEndpointRequireSharedPolicyGatesEscapedAndBasePrefixedPathsAtSend(t *te
 	t.Cleanup(server.Close)
 
 	bundle := withAllRateLimit(Bundle{Name: "escaped-endpoint-shared-required", HTTP: HTTPBase{URL: server.URL + "/api"}})
-	bundle.RateLimits.Policies[0].Coordination = connsdk.RateLimitCoordinationRequireShared
-	bundle.RateLimits.Policies[0].Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/repos/{id}"}}}
+	shared := bundle.RateLimits.Policies[0]
+	shared.Coordination = connsdk.RateLimitCoordinationRequireShared
+	shared.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/repos/{id}"}}}
+	local := shared
+	local.ID = "start-local"
+	local.Coordination = ""
+	local.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/start"}}}
+	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{local, shared}
 	restore := replaceSharedRateLimitRegistryForTest(nil)
 	t.Cleanup(restore)
 
@@ -192,18 +203,82 @@ func TestEndpointRequireSharedPolicyGatesEscapedAndBasePrefixedPathsAtSend(t *te
 	if err != nil {
 		t.Fatalf("newRuntime: %v", err)
 	}
-	for _, path := range []string{"/repos/a%2Fb", "/start"} {
-		_, err := runtime.Requester.Do(context.Background(), http.MethodGet, path, nil, nil)
-		var unavailable *coordination.SharedRateLimitUnavailableError
-		if !errors.As(err, &unavailable) {
-			t.Fatalf("escaped endpoint request %q error = %T %v, want typed shared-coordinator refusal", path, err, err)
-		}
+	for _, tt := range []struct {
+		name   string
+		path   string
+		reason coordination.SharedRateLimitUnavailableReason
+	}{
+		{name: "escaped", path: "/repos/a%2Fb", reason: coordination.SharedRateLimitCoordinatorNotConfigured},
+		{name: "base prefixed", path: "/api/unbound", reason: coordination.SharedRateLimitRouteUnresolved},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := runtime.Requester.Do(context.Background(), http.MethodGet, tt.path, nil, nil)
+			var unavailable *coordination.SharedRateLimitUnavailableError
+			if !errors.As(err, &unavailable) {
+				t.Fatalf("endpoint request %q error = %T %v, want typed shared-coordinator refusal", tt.path, err, err)
+			}
+			if got, want := unavailable.Reason, tt.reason; got != want {
+				t.Fatalf("endpoint request %q refusal reason = %q, want %q", tt.path, got, want)
+			}
+		})
+	}
+	_, err = runtime.Requester.Do(context.Background(), http.MethodGet, "/start", nil, nil)
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(err, &unavailable) {
+		t.Fatalf("redirected endpoint request error = %T %v, want typed shared-coordinator refusal", err, err)
+	}
+	if got, want := unavailable.Reason, coordination.SharedRateLimitRouteUnresolved; got != want {
+		t.Fatalf("redirected endpoint refusal reason = %q, want %q", got, want)
 	}
 	if startRequests != 1 {
 		t.Fatalf("redirect source request count = %d, want 1", startRequests)
 	}
 	if providerRequests != 0 {
 		t.Fatalf("escaped endpoint request reached the provider %d times", providerRequests)
+	}
+}
+
+func TestResponseFormatErrorPreservesOnlySafeErrorIdentities(t *testing.T) {
+	formatted := formatResponseError("safe formatted response error", &connsdk.HTTPError{Status: http.StatusBadRequest, URL: "https://example.test/graphql", Body: "access_token=must-not-be-exposed"})
+	var httpErr *connsdk.HTTPError
+	if errors.As(formatted, &httpErr) {
+		t.Fatalf("formatted response exposed raw HTTP error body %q", httpErr.Body)
+	}
+
+	shared := &coordination.SharedRateLimitUnavailableError{Component: "dragonfly", Reason: coordination.SharedRateLimitCoordinatorNotConfigured}
+	formatted = formatResponseError("safe formatted response error", shared)
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(formatted, &unavailable) {
+		t.Fatalf("formatted response did not preserve typed shared refusal: %v", formatted)
+	}
+	if unavailable != shared {
+		t.Fatalf("formatted response unavailable error = %p, want %p", unavailable, shared)
+	}
+
+	for _, cause := range []error{context.Canceled, context.DeadlineExceeded} {
+		formatted = formatResponseError("safe formatted response error", cause)
+		if !errors.Is(formatted, cause) {
+			t.Fatalf("formatted response error = %v, want %v identity", formatted, cause)
+		}
+	}
+}
+
+func TestRateLimitDeclarationRejectsPointDefaultCostAboveCapacity(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		budget int
+	}{
+		{name: "window", budget: 0},
+		{name: "bucket", budget: 1},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			bundle := loadRateLimitFixture(t, "paced")
+			cost := 3.0
+			bundle.RateLimits.Policies[0].Budgets[tt.budget].Cost.DefaultCost = &cost
+			if err := validateRateLimits(*bundle.RateLimits, bundle.Spec); err == nil {
+				t.Fatal("rate-limit declaration accepted a default point cost above capacity")
+			}
+		})
 	}
 }
 

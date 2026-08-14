@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/url"
 	"strings"
@@ -224,7 +225,33 @@ type responseFormatError struct {
 
 func (e *responseFormatError) Error() string { return e.message }
 
-func (e *responseFormatError) Unwrap() error { return e.cause }
+func (e *responseFormatError) Is(target error) bool {
+	if e == nil {
+		return false
+	}
+	switch target {
+	case context.Canceled, context.DeadlineExceeded:
+		return errors.Is(e.cause, target)
+	default:
+		return false
+	}
+}
+
+func (e *responseFormatError) As(target any) bool {
+	if e == nil {
+		return false
+	}
+	unavailable, ok := target.(**coordination.SharedRateLimitUnavailableError)
+	if !ok {
+		return false
+	}
+	var cause *coordination.SharedRateLimitUnavailableError
+	if !errors.As(e.cause, &cause) {
+		return false
+	}
+	*unavailable = cause
+	return true
+}
 
 func formatResponseError(message string, cause error) error {
 	return &responseFormatError{message: message, cause: cause}
@@ -239,6 +266,17 @@ func (r *endpointRateLimitResolver) AdmitRoute(ctx context.Context, route connsd
 	matched, costHeader, err := r.resolver.resolvePolicies(ctx, strings.ToUpper(strings.TrimSpace(route.Method)), route.Path, r.policies)
 	if err != nil {
 		return "", err
+	}
+	if len(matched) == 0 {
+		for _, policy := range r.policies {
+			if policy.Coordination != connsdk.RateLimitCoordinationRequireShared {
+				continue
+			}
+			if err := ctx.Err(); err != nil {
+				return "", err
+			}
+			return "", &coordination.SharedRateLimitUnavailableError{Reason: coordination.SharedRateLimitRouteUnresolved}
+		}
 	}
 	if err := resolvedRateLimitAdmission(matched).Admit(ctx, connsdk.RateLimitRequest{Method: route.Method, Attempt: route.Attempt}); err != nil {
 		return "", err

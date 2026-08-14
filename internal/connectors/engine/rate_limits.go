@@ -310,7 +310,23 @@ func validateRateLimitBudget(budget connsdk.RateLimitBudget) error {
 	default:
 		return fmt.Errorf("model must be fixed_window, sliding_window, token_bucket, or leaky_bucket")
 	}
-	return validateRateLimitCost(budget.Cost)
+	if err := validateRateLimitCost(budget.Cost); err != nil {
+		return err
+	}
+	if budget.Unit != connsdk.RateLimitBudgetPoints || budget.Cost == nil || budget.Cost.DefaultCost == nil {
+		return nil
+	}
+	capacity := 0
+	switch budget.Model {
+	case connsdk.RateLimitBudgetFixedWindow, connsdk.RateLimitBudgetSlidingWindow:
+		capacity = *budget.Limit
+	case connsdk.RateLimitBudgetTokenBucket, connsdk.RateLimitBudgetLeakyBucket:
+		capacity = *budget.Capacity
+	}
+	if *budget.Cost.DefaultCost > float64(capacity) {
+		return fmt.Errorf("cost.default_cost must not exceed the declared budget capacity")
+	}
+	return nil
 }
 
 func requirePositiveRateLimitInt(field string, value *int) error {

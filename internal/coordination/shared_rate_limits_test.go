@@ -55,6 +55,35 @@ func TestSharedRateLimitRegistryPreservesCallerCancellation(t *testing.T) {
 	}
 }
 
+func TestSharedRateLimitReservePolicyErrorIsNotCoordinatorUnavailable(t *testing.T) {
+	err := sharedRateLimitReserveError(errors.New("ERR shared rate-limit request cost exceeds declared capacity"))
+	if !errors.Is(err, errSharedRateLimitPolicy) {
+		t.Fatalf("shared reserve policy error = %v, want policy error", err)
+	}
+	var unavailable *SharedRateLimitUnavailableError
+	if errors.As(err, &unavailable) {
+		t.Fatalf("shared reserve policy error returned unavailable reason %q", unavailable.Reason)
+	}
+	if strings.Contains(err.Error(), "ERR") {
+		t.Fatalf("shared reserve policy error exposed Redis detail %q", err)
+	}
+}
+
+func TestSharedRateLimitBudgetSpecsRejectCostAboveCapacity(t *testing.T) {
+	capacity, restore, cost := 1, 1.0, 2.0
+	_, err := sharedRateLimitBudgetSpecs([]connsdk.RateLimitBudget{{
+		Model:            connsdk.RateLimitBudgetTokenBucket,
+		Dimension:        connsdk.RateLimitBudgetSustained,
+		Unit:             connsdk.RateLimitBudgetPoints,
+		Capacity:         &capacity,
+		RestorePerSecond: &restore,
+		Cost:             &connsdk.RateLimitCost{DefaultCost: &cost},
+	}})
+	if !errors.Is(err, errSharedRateLimitPolicy) {
+		t.Fatalf("shared budget specs error = %v, want policy error", err)
+	}
+}
+
 func TestSharedRateLimitObserveScriptArgsMatchScriptContract(t *testing.T) {
 	specs, err := sharedRateLimitBudgetSpecs([]connsdk.RateLimitBudget{fixedRequestBudget(3, 60)})
 	if err != nil {
