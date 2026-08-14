@@ -374,7 +374,7 @@
 - [pokeapi](pokeapi/MANUAL.md): Reads the documented public PokeAPI v2 resource catalog, including list and detail endpoints.
 - [polygon-stock-api](polygon-stock-api/MANUAL.md): Reads Polygon.io stock tickers, dividends, and splits through the Polygon.io reference REST API.
 - [poplar](poplar/MANUAL.md): Reads Poplar campaigns and orders through read-only REST list endpoints.
-- [postgres](postgres/MANUAL.md): Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, and supports cursor-incremental reads. Read-only source.
+- [postgres](postgres/MANUAL.md): Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Read-only source.
 - [posthog](posthog/MANUAL.md): Reads PostHog events and persons for a project via the PostHog REST API. Read-only.
 - [postmarkapp](postmarkapp/MANUAL.md): Reads Postmark server-token API resources including messages, bounces, templates, message streams, stats, webhooks, suppressions, and inbound rules; exposes server-token write actions for sends and resource mutations.
 - [prestashop](prestashop/MANUAL.md): Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API.

@@ -8,7 +8,7 @@ import (
 	"polymetrics.ai/internal/synccontract"
 )
 
-func TestBundleLoadPostgresDatabaseDefinitionWithoutCapabilityPromotion(t *testing.T) {
+func TestBundleLoadPostgresDatabaseDefinitionWithProvenCDCCapability(t *testing.T) {
 	bundle, err := Load(defs.FS, "postgres")
 	if err != nil {
 		t.Fatalf("Load(defs.FS, postgres) error = %v", err)
@@ -29,7 +29,7 @@ func TestBundleLoadPostgresDatabaseDefinitionWithoutCapabilityPromotion(t *testi
 	if modes := bundle.Database.AdmittedModes(); !reflect.DeepEqual(modes, wantModes) {
 		t.Fatalf("database definition admitted modes = %v, want the five private managed-target modes %v", modes, wantModes)
 	}
-	if bundle.Metadata.Capabilities.Write || bundle.Metadata.Capabilities.CDC {
-		t.Fatalf("PostgreSQL metadata promoted capabilities: %+v", bundle.Metadata.Capabilities)
+	if bundle.Metadata.Capabilities.Write || !bundle.Metadata.Capabilities.CDC {
+		t.Fatalf("PostgreSQL metadata capabilities = %+v, want write=false and cdc=true", bundle.Metadata.Capabilities)
 	}
 }

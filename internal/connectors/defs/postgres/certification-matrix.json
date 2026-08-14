@@ -19,7 +19,7 @@
       {
         "function_kind": "capability:cdc",
         "applicable": true,
-        "declared": false,
+        "declared": true,
         "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
@@ -908,7 +908,7 @@
         "sync_mode": "change_capture",
         "primitive": "database_read_into_warehouse",
         "applicable": true,
-        "declared": false,
+        "declared": true,
         "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
