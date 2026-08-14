@@ -185,8 +185,9 @@ are in `traces/correction-2-flow-manual-broad-verification.txt`.
 
 ## Correction 3 / 5 — destination-scoped legacy collision admission
 
-**Status:** local/GSD verification green on delivery code head
-`a49ae952d52a6edf9786cc90e02825e2414f5b44`.
+**Status:** local/GSD verification green on delivery head
+`5a4f3d23645d3046d02055273fedd9a8b9dd67d1` (its only addition after the
+verified production commit is this correction's GSD evidence).
 
 - [x] Restored non-local ETL regression fails against exact source head
       `3b75f4a62fd8d743ec883a5b824164374f661857` with the current typed
@@ -206,4 +207,4 @@ are in `traces/correction-2-flow-manual-broad-verification.txt`.
 - [x] Inline/manual `verify-work` and `code-review` record no acceptance gap
       or unresolved finding.
 - [x] `RUN-STATE.json` and PR #4071 body name delivery code head
-      `a49ae952d52a6edf9786cc90e02825e2414f5b44`.
+      `5a4f3d23645d3046d02055273fedd9a8b9dd67d1`.

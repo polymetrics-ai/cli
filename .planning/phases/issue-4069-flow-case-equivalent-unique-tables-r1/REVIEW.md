@@ -202,9 +202,10 @@ forbids role delegation; this retains the required cross-file review.
 
 ### Evidence inspected
 
-- RED on exact source `3b75f4a62fd8d743ec883a5b824164374f661857` and GREEN
-  on delivery code head `a49ae952d52a6edf9786cc90e02825e2414f5b44` are in the
-  paired correction-3 traces.
+- RED on exact source `3b75f4a62fd8d743ec883a5b824164374f661857`, GREEN on
+  verified production commit `a49ae952d52a6edf9786cc90e02825e2414f5b44`, and
+  delivery head `5a4f3d23645d3046d02055273fedd9a8b9dd67d1` (GSD evidence only)
+  are recorded in the paired correction-3 traces.
 - Focused false-positive/true-positive tests and full `internal/app` passed;
   `go vet`, direct app lint, build, tidy/configured lint, contract,
   surface-sync, release parity, candidate diff check, and

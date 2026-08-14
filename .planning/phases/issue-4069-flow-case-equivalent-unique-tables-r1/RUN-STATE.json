@@ -73,11 +73,11 @@
     "correction_2_manual_verify_work": "passed: resolved verify-work prompt executed inline under the documented single-worker fallback; no acceptance gap",
     "correction_2_manual_code_review": "passed: resolved code-review prompt executed inline under the documented single-worker fallback; no candidate finding",
     "correction_3_red": "passed: restored non-local ETL regression exits 1 on exact source head 3b75f4a62 because the unconditional local-inventory preflight returns the legacy same-owner typed error before source or destination execution",
-    "correction_3_green": "passed on delivery code head a49ae952d52a6edf9786cc90e02825e2414f5b44: the non-local run loads one record, acknowledges one batch, and makes one source request while the local true-positive remains refused before beginRun",
+    "correction_3_green": "passed on verified production commit a49ae952d52a6edf9786cc90e02825e2414f5b44; delivered head 5a4f3d23645d3046d02055273fedd9a8b9dd67d1 adds GSD evidence only, so the non-local run loads one record, acknowledges one batch, and makes one source request while the local true-positive remains refused before beginRun",
     "correction_3_broad_verification": "passed: full internal/app package, gofmt, candidate diff check, go vet, direct internal/app lint, go build ./cmd/pm, tidy, configured lint, release-target parity, agent contract, connectorgen surface-sync, and verify-gsd-workflow",
     "correction_3_manual_verify_work": "passed inline under the documented manual-GSD fallback; all five delivery acceptance items are covered by RED/GREEN, true-positive, package, quality, and exact-head evidence",
     "correction_3_manual_code_review": "passed inline under the documented manual-GSD fallback; the selected-destination guard restores the generic materialization abstraction without connector literals or invariant weakening",
-    "exact_delivered_head": "a49ae952d52a6edf9786cc90e02825e2414f5b44",
+    "exact_delivered_head": "5a4f3d23645d3046d02055273fedd9a8b9dd67d1",
     "pr_4071_body": "updated at delivery end through gh-axi REST PATCH to name exact_delivered_head; no retarget, merge, close, or readiness mutation",
     "next_gate": "Start exactly one fresh no-mistakes run without --yes and with --skip=pr,ci; use only its supported sync action, then observe natural exact-head checks on existing draft #4071"
   },
@@ -132,7 +132,7 @@
   },
   "correction_3": {
     "source_head": "3b75f4a62fd8d743ec883a5b824164374f661857",
-    "exact_delivered_head": "a49ae952d52a6edf9786cc90e02825e2414f5b44",
+    "exact_delivered_head": "5a4f3d23645d3046d02055273fedd9a8b9dd67d1",
     "problem": "the global RunETL legacy local-warehouse inventory preflight denies a non-local ETL when any retained local connection has a same-owner case-equivalent destination collision",
     "implementation": "RunETL calls validateConfiguredLocalWarehouseDestinationTables only when the selected connection satisfies the existing credential-free LocalWarehouseMaterializer abstraction",
     "portability": "no connector name or warehouse literal in shared code; no path outside internal/connectors/defs/<connector>/ contains connector-specific behavior",

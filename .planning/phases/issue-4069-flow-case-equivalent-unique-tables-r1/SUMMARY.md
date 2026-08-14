@@ -96,10 +96,12 @@ stacked PR, and its naturally triggered exact-head checks remain authoritative.
 Exact #4071 head `3b75f4a62fd8d743ec883a5b824164374f661857` had made the
 legacy local-warehouse collision preflight unconditional. The restored
 non-local ETL regression failed there before an unrelated source or destination
-could execute. Delivery code head
+could execute. Verified production commit
 `a49ae952d52a6edf9786cc90e02825e2414f5b44` restores the prior generic
-materialization condition: a non-local ETL now loads its record while an
-unrelated legacy local collision remains present.
+materialization condition; delivery head
+`5a4f3d23645d3046d02055273fedd9a8b9dd67d1` adds its GSD evidence only. A
+non-local ETL now loads its record while an unrelated legacy local collision
+remains present.
 
 The existing local true-positive regression remains green, preserving its
 typed `*warehouse.SameOwnerCaseEquivalentTableError` and pre-`beginRun`

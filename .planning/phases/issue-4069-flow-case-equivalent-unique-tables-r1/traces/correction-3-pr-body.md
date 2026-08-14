@@ -26,7 +26,7 @@ connector name or warehouse literal is introduced in shared code.
 
 ## Testing
 
-Target binary: `a49ae952d52a6edf9786cc90e02825e2414f5b44`
+Target binary: `5a4f3d23645d3046d02055273fedd9a8b9dd67d1`
 
 Red then green:
 

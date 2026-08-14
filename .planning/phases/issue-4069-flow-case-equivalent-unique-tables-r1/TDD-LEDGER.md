@@ -329,10 +329,11 @@ output is `traces/correction-3-nonlocal-collision-red.txt`.
 
 ### Recorded correction 3 GREEN
 
-Delivery code head `a49ae952d52a6edf9786cc90e02825e2414f5b44` restores the
-selected connection's generic materialization check around the preflight. The
-focused pair passed: the restored false-positive regression loaded one record,
-acknowledged one batch, and made one source read; the existing local
+Verified production commit `a49ae952d52a6edf9786cc90e02825e2414f5b44`
+restores the selected connection's generic materialization check around the
+preflight; delivery head `5a4f3d23645d3046d02055273fedd9a8b9dd67d1` adds only
+the resulting GSD evidence. The focused pair passed: the restored false-positive
+regression loaded one record, acknowledged one batch, and made one source read; the existing local
 true-positive still passed its `errors.As` check for
 `*warehouse.SameOwnerCaseEquivalentTableError` before `beginRun` or state
 mutation. The full touched `internal/app` package passed in 98.497 seconds.
