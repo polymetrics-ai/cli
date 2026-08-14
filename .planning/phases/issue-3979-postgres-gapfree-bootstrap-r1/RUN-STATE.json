@@ -1,0 +1,12 @@
+{
+  "issue": 3979,
+  "branch": "fm/cli-3979-gapfree-bootstrap-r1",
+  "base": "integration/4015-mvp-flat-r1",
+  "lifecycle": "inline-manual-gsd-fallback",
+  "stage": "planned",
+  "reason": "gsd-sdk query init.phase-op 3979 reports phase_found=false; the canonical single-worker contract prohibits role spawning.",
+  "red": "pending",
+  "green": "pending",
+  "live": "pending",
+  "review": "pending"
+}
