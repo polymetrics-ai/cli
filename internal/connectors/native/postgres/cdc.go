@@ -79,6 +79,16 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	if err != nil {
 		return err
 	}
+	if bootstrap, ok, err := postgresBootstrapBarrierFromCheckpoint(req.Checkpoint); err != nil {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint bootstrap barrier is invalid")
+	} else if ok {
+		schemaFingerprint, err := postgresCDCSchemaFingerprint(ctx, conn, source, c.databaseDefinition)
+		if err != nil {
+			return err
+		}
+		source.schemaFingerprint = schemaFingerprint
+		source.bootstrap = &bootstrap
+	}
 	if err := validateCDCResume(req.Checkpoint, source); err != nil {
 		return err
 	}
@@ -105,15 +115,8 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 		return err
 	}
 
-	if err := pglogrepl.StartReplication(ctx, replication, source.slotName, start, pglogrepl.StartReplicationOptions{
-		Mode: pglogrepl.LogicalReplication,
-		PluginArgs: []string{
-			"proto_version '2'",
-			"streaming 'on'",
-			"publication_names '" + publication + "'",
-		},
-	}); err != nil {
-		return classifyCDCStartError(req.Checkpoint, err)
+	if err := startPostgresCDCReplication(ctx, replication, source.slotName, start, publication, req.Checkpoint); err != nil {
+		return err
 	}
 
 	return consumePGOutputV2LogicalReplication(ctx, replication, stage, source, snapshotBarrier, start, req, emit)
@@ -142,10 +145,23 @@ func validateCDCResume(checkpoint *synccontract.CheckpointEnvelope, source postg
 	if checkpoint.SchemaVersion != cdcCheckpointSchema || checkpoint.ProtocolVersion != cdcProtocolVersion || checkpoint.SnapshotBarrier == nil || checkpoint.SnapshotBarrier.Kind != cdcSnapshotBarrierKind {
 		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint does not match the PostgreSQL logical replication protocol")
 	}
-	return checkpoint.ValidateResume(synccontract.ResumeExpectation{
+	if err := checkpoint.ValidateResume(synccontract.ResumeExpectation{
 		Source:           source.identity,
 		SourceGeneration: source.generation,
-	})
+	}); err != nil {
+		return err
+	}
+	bootstrap, ok, err := postgresBootstrapBarrierFromCheckpoint(checkpoint)
+	if err != nil {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint bootstrap barrier is invalid")
+	}
+	if !ok {
+		return nil
+	}
+	if bootstrap.SystemID != source.system.SystemID || bootstrap.Timeline != source.system.Timeline || bootstrap.Publication != source.publication || bootstrap.Relation != source.identity.ObjectScope || bootstrap.SchemaFingerprint != source.schemaFingerprint {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeSourceGenerationChanged, "PostgreSQL bootstrap source, publication, or schema no longer matches the durable checkpoint")
+	}
+	return nil
 }
 
 func cdcStartLSN(checkpoint *synccontract.CheckpointEnvelope, retained pglogrepl.LSN) (pglogrepl.LSN, error) {
@@ -169,7 +185,15 @@ func cdcSnapshotBarrier(checkpoint *synccontract.CheckpointEnvelope, fallback pg
 	if checkpoint == nil {
 		return fallback, nil
 	}
-	barrier, err := pglogrepl.ParseLSN(string(checkpoint.SnapshotBarrier.Token))
+	bootstrap, ok, err := postgresBootstrapBarrierFromCheckpoint(checkpoint)
+	if err != nil {
+		return 0, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint bootstrap barrier is invalid")
+	}
+	token := checkpoint.SnapshotBarrier.Token
+	if ok {
+		token = synccontract.OpaqueToken([]byte(bootstrap.InitialLSN))
+	}
+	barrier, err := pglogrepl.ParseLSN(string(token))
 	if err != nil {
 		return 0, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint snapshot barrier is invalid")
 	}
@@ -234,13 +258,17 @@ func postgresCDCCheckpointForLSNs(source postgresCDCSource, barrier, previous, c
 		start = previous
 	}
 	position := endLSN.String()
+	barrierToken := synccontract.OpaqueToken([]byte(barrier.String()))
+	if source.bootstrap != nil {
+		barrierToken = source.bootstrap.token()
+	}
 	return synccontract.CheckpointEnvelope{
 		StateVersion: synccontract.StateVersion,
 		Source:       source.identity,
 		Mechanism:    cdcChangefeedMechanism,
 		SnapshotBarrier: &synccontract.SnapshotBarrier{
 			Kind:  cdcSnapshotBarrierKind,
-			Token: synccontract.OpaqueToken([]byte(barrier.String())),
+			Token: barrierToken,
 		},
 		Position: synccontract.CheckpointPosition{
 			Primary:    synccontract.OpaqueToken([]byte(position)),

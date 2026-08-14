@@ -39,10 +39,13 @@ var (
 )
 
 type postgresCDCSource struct {
-	identity   synccontract.SourceIdentity
-	generation synccontract.OpaqueToken
-	slotName   string
-	system     pglogrepl.IdentifySystemResult
+	identity          synccontract.SourceIdentity
+	generation        synccontract.OpaqueToken
+	slotName          string
+	system            pglogrepl.IdentifySystemResult
+	publication       string
+	schemaFingerprint string
+	bootstrap         *postgresBootstrapBarrier
 }
 
 type postgresReplicationSlot struct {
@@ -178,10 +181,11 @@ func identifyCDCSource(ctx context.Context, replication *pgconn.PgConn, database
 	}
 	generation := synccontract.OpaqueToken([]byte(strconv.FormatInt(int64(system.Timeline), 10) + "\n" + publication))
 	return postgresCDCSource{
-		identity:   identity,
-		generation: generation,
-		slotName:   cdcSlotName(identity),
-		system:     system,
+		identity:    identity,
+		generation:  generation,
+		slotName:    cdcSlotName(identity),
+		system:      system,
+		publication: publication,
 	}, nil
 }
 
