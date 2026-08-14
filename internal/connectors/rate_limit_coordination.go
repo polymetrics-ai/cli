@@ -8,6 +8,7 @@ type RateLimitCoordinationMode string
 const (
 	RateLimitCoordinationProcessLocal  RateLimitCoordinationMode = "process_local"
 	RateLimitCoordinationRequireShared RateLimitCoordinationMode = "require_shared"
+	RateLimitCoordinationMixed         RateLimitCoordinationMode = "mixed"
 )
 
 // RateLimitCoordination describes only the protection a connector declaration

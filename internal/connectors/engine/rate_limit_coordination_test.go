@@ -146,6 +146,50 @@ func TestEndpointRequireSharedPolicyGatesInterpolatedRequesterPathAtSend(t *test
 	}
 }
 
+func TestEndpointRequireSharedPolicyGatesEscapedAndBasePrefixedPathsAtSend(t *testing.T) {
+	startRequests := 0
+	providerRequests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.EscapedPath() {
+		case "/api/start":
+			startRequests++
+			w.Header().Set("Location", "/api/repos/a%2Fb")
+			w.WriteHeader(http.StatusFound)
+		case "/api/repos/a%2Fb":
+			providerRequests++
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"ok":true}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := withAllRateLimit(Bundle{Name: "escaped-endpoint-shared-required", HTTP: HTTPBase{URL: server.URL + "/api"}})
+	bundle.RateLimits.Policies[0].Coordination = connsdk.RateLimitCoordinationRequireShared
+	bundle.RateLimits.Policies[0].Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/repos/{id}"}}}
+	restore := replaceSharedRateLimitRegistryForTest(nil)
+	t.Cleanup(restore)
+
+	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	for _, path := range []string{"/repos/a%2Fb", "/start"} {
+		_, err := runtime.Requester.Do(context.Background(), http.MethodGet, path, nil, nil)
+		var unavailable *coordination.SharedRateLimitUnavailableError
+		if !errors.As(err, &unavailable) {
+			t.Fatalf("escaped endpoint request %q error = %T %v, want typed shared-coordinator refusal", path, err, err)
+		}
+	}
+	if startRequests != 1 {
+		t.Fatalf("redirect source request count = %d, want 1", startRequests)
+	}
+	if providerRequests != 0 {
+		t.Fatalf("escaped endpoint request reached the provider %d times", providerRequests)
+	}
+}
+
 func TestLocalRateLimitPolicyNeverInheritsSharedRequirement(t *testing.T) {
 	bundle := withAllRateLimit(Bundle{Name: "local-default", HTTP: HTTPBase{URL: "https://example.test"}})
 	restore := replaceSharedRateLimitRegistryForTest(nil)
@@ -168,6 +212,57 @@ func TestLocalRateLimitPolicyNeverInheritsSharedRequirement(t *testing.T) {
 	}
 	if got, want := status.Mode, connectors.RateLimitCoordinationProcessLocal; got != want {
 		t.Fatalf("local policy inspect mode = %q, want %q", got, want)
+	}
+}
+
+func TestMixedRateLimitPoliciesExposePolicyScopedCoordination(t *testing.T) {
+	requests := map[string]int{}
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests[r.URL.Path]++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := withAllRateLimit(Bundle{Name: "mixed-rate-limit-coordination", HTTP: HTTPBase{URL: server.URL}})
+	local := bundle.RateLimits.Policies[0]
+	local.ID = "items-local"
+	local.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/items"}}}
+	shared := local
+	shared.ID = "admin-shared"
+	shared.Coordination = connsdk.RateLimitCoordinationRequireShared
+	shared.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/admin"}}}
+	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{local, shared}
+	restore := replaceSharedRateLimitRegistryForTest(nil)
+	t.Cleanup(restore)
+
+	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	if _, err := runtime.Requester.Do(context.Background(), http.MethodGet, "/items", nil, nil); err != nil {
+		t.Fatalf("process-local request: %v", err)
+	}
+	if got, want := requests["/items"], 1; got != want {
+		t.Fatalf("process-local request count = %d, want %d", got, want)
+	}
+	_, err = runtime.Requester.Do(context.Background(), http.MethodGet, "/admin", nil, nil)
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(err, &unavailable) {
+		t.Fatalf("require_shared request error = %T %v, want typed shared-coordinator refusal", err, err)
+	}
+	if got := requests["/admin"]; got != 0 {
+		t.Fatalf("require_shared request reached the provider %d times", got)
+	}
+	status, ok := connectors.RateLimitCoordinationOf(New(bundle, nil))
+	if !ok {
+		t.Fatal("mixed policies did not expose rate-limit coordination status")
+	}
+	if got, want := status.Mode, connectors.RateLimitCoordinationMixed; got != want {
+		t.Fatalf("mixed policy inspect mode = %q, want %q", got, want)
+	}
+	if got, want := status.Message, "Rate-limit coordination is policy-scoped: process-local policies protect this pm process only and are not shared across processes; require_shared policies refuse before sending when the optional coordinator is unavailable."; got != want {
+		t.Fatalf("mixed policy inspect message = %q, want %q", got, want)
 	}
 }
 

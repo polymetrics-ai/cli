@@ -338,9 +338,9 @@ func (e *rateLimitAdmissionError) Unwrap() error {
 	return e.err
 }
 
-func (r *Requester) admitRequesterSend(ctx context.Context, method, path string, requesterAttempt *int, route *RateLimitRoute, costHeader *string) error {
+func (r *Requester) admitRequesterSend(ctx context.Context, req *http.Request, requesterAttempt *int, route *RateLimitRoute, costHeader *string) error {
 	nextAttempt := *requesterAttempt + 1
-	nextRoute := RateLimitRoute{Method: method, Path: path, Attempt: nextAttempt}
+	nextRoute := RateLimitRoute{Method: req.Method, Path: r.rateLimitRoutePath(req.URL), Attempt: nextAttempt}
 	header, err := r.admit(ctx, nextRoute)
 	if err != nil {
 		return &rateLimitAdmissionError{err: err}
@@ -349,6 +349,31 @@ func (r *Requester) admitRequesterSend(ctx context.Context, method, path string,
 	*route = nextRoute
 	*costHeader = header
 	return nil
+}
+
+func (r *Requester) rateLimitRoutePath(requestURL *url.URL) string {
+	if requestURL == nil {
+		return ""
+	}
+	path := requestURL.EscapedPath()
+	if path == "" {
+		path = "/"
+	}
+	base, err := url.Parse(r.BaseURL)
+	if err != nil {
+		return path
+	}
+	basePath := strings.TrimRight(base.EscapedPath(), "/")
+	if basePath == "" {
+		return path
+	}
+	if path == basePath {
+		return "/"
+	}
+	if strings.HasPrefix(path, basePath+"/") {
+		return strings.TrimPrefix(path, basePath)
+	}
+	return path
 }
 
 func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int, route *RateLimitRoute, costHeader *string) *http.Client {
@@ -365,7 +390,7 @@ func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterA
 		} else if len(via) >= maxRedirects {
 			return fmt.Errorf("stopped after %d redirects", maxRedirects)
 		}
-		return r.admitRequesterSend(req.Context(), req.Method, req.URL.Path, requesterAttempt, route, costHeader)
+		return r.admitRequesterSend(req.Context(), req, requesterAttempt, route, costHeader)
 	}
 	return &clone
 }
@@ -912,7 +937,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		if r.DisableRetries {
 			disableTransportReplay(req, strictWrite)
 		}
-		if err := r.admitRequesterSend(ctx, method, path, &requesterAttempt, &route, &costHeader); err != nil {
+		if err := r.admitRequesterSend(ctx, req, &requesterAttempt, &route, &costHeader); err != nil {
 			_ = cleanupRequestBody(body)
 			return nil, err
 		}

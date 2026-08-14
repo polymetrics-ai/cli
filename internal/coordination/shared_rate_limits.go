@@ -180,7 +180,7 @@ func (l *SharedRateLimiter) Observe(ctx context.Context, observation connsdk.Rat
 }
 
 type sharedRateLimitObservation struct {
-	BlockedUntil       int64   `json:"blocked_until"`
+	BlockFor           int64   `json:"block_for_ms"`
 	Limit              float64 `json:"limit"`
 	HasLimit           bool    `json:"has_limit"`
 	Remaining          float64 `json:"remaining"`
@@ -191,6 +191,14 @@ type sharedRateLimitObservation struct {
 }
 
 func sharedRateLimitObservationOf(observation connsdk.RateLimitObservation) sharedRateLimitObservation {
+	observedAt := observation.ObservedAt
+	if observedAt.IsZero() {
+		observedAt = time.Now()
+	}
+	return sharedRateLimitObservationOfAt(observation, observedAt)
+}
+
+func sharedRateLimitObservationOfAt(observation connsdk.RateLimitObservation, observedAt time.Time) sharedRateLimitObservation {
 	shared := sharedRateLimitObservation{
 		Limit:              float64(observation.Limit),
 		HasLimit:           observation.HasLimit,
@@ -201,13 +209,18 @@ func sharedRateLimitObservationOf(observation connsdk.RateLimitObservation) shar
 		HasCost:            observation.HasCost,
 	}
 	if rateLimitObservationBlocksUntilReset(observation) && !observation.ResetAt.IsZero() {
-		shared.BlockedUntil = observation.ResetAt.UTC().UnixMilli()
+		if blockFor := observation.ResetAt.Sub(observedAt); blockFor > 0 {
+			shared.BlockFor = blockFor.Milliseconds()
+			if shared.BlockFor == 0 {
+				shared.BlockFor = 1
+			}
+		}
 	}
 	return shared
 }
 
 func (o sharedRateLimitObservation) relevant() bool {
-	return o.BlockedUntil > 0 || o.HasLimit || o.HasRemaining || o.ForceRemainingZero || o.HasCost
+	return o.BlockFor > 0 || o.HasLimit || o.HasRemaining || o.ForceRemainingZero || o.HasCost
 }
 
 type sharedRateLimitBudget struct {
@@ -353,7 +366,11 @@ for i, spec in ipairs(specs) do
   end
 end
 
-if state.blocked_until and state.blocked_until > now then wait = math.max(wait, state.blocked_until - now) end
+if state.blocked_until and state.blocked_until > now then
+  local blockedTTL = state.blocked_until - now
+  wait = math.max(wait, blockedTTL)
+  ttl = math.max(ttl, blockedTTL)
+end
 if wait > 0 then redis.call('PSETEX', KEYS[1], ttl, cjson.encode(state)); return wait end
 
 for i, spec in ipairs(specs) do
@@ -413,7 +430,10 @@ for i, spec in ipairs(specs) do
   end
 end
 
-if observation.blocked_until > now and ((not state.blocked_until) or observation.blocked_until > state.blocked_until) then state.blocked_until = observation.blocked_until end
+if observation.block_for_ms > 0 then
+  local blockedUntil = now + observation.block_for_ms
+  if (not state.blocked_until) or blockedUntil > state.blocked_until then state.blocked_until = blockedUntil end
+end
 if state.blocked_until and state.blocked_until > now then ttl = math.max(ttl, state.blocked_until - now) end
 redis.call('PSETEX', KEYS[1], ttl, cjson.encode(state))
 return 1

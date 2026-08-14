@@ -299,6 +299,9 @@ func rateLimitEndpointMatches(endpoints []connsdk.RateLimitEndpointSelector, met
 func rateLimitSelectorPath(path string) string {
 	parsed, err := url.Parse(path)
 	if err == nil {
+		if escapedPath := parsed.EscapedPath(); escapedPath != "" {
+			return escapedPath
+		}
 		return parsed.Path
 	}
 	path, _, _ = strings.Cut(path, "?")

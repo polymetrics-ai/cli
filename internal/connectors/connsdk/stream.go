@@ -113,7 +113,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 		if r.DisableRetries {
 			disableTransportReplay(req, strictWrite)
 		}
-		if err := r.admitRequesterSend(ctx, method, path, &requesterAttempt, &route, &costHeader); err != nil {
+		if err := r.admitRequesterSend(ctx, req, &requesterAttempt, &route, &costHeader); err != nil {
 			return nil, err
 		}
 

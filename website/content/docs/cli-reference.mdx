@@ -241,9 +241,10 @@ reachable or a legacy certification filename exists.
 
 For connectors with a declared rate-limit policy, inspection reports rate-limit coordination
 provenance. `process_local` protects requests inside the current `pm` process only; it is not a
-cross-process claim. An explicitly declared `require_shared` policy refuses before sending a request
-if its optional shared coordinator is unavailable. Neither human nor JSON inspection exposes a scope,
-coordinator address, or credential.
+cross-process claim. A policy explicitly declared `require_shared` refuses before sending a request
+if its optional shared coordinator is unavailable. A connector declaring both reports `mixed`
+policy-scoped provenance. Neither human nor JSON inspection exposes a scope, coordinator address, or
+credential.
 
 From a source checkout, `pm connectors certify <connector> --full --json` runs the legacy test
 harness and includes an API-surface

@@ -86,12 +86,25 @@ func (c *Connector) RateLimitCoordination() connectors.RateLimitCoordination {
 	if c == nil || c.bundle.RateLimits == nil || c.bundle.RateLimits.State != connsdk.RateLimitStateDeclared || len(c.bundle.RateLimits.Policies) == 0 {
 		return connectors.RateLimitCoordination{}
 	}
+	hasProcessLocal := false
+	hasRequireShared := false
 	for _, policy := range c.bundle.RateLimits.Policies {
 		if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
-			return connectors.RateLimitCoordination{
-				Mode:    connectors.RateLimitCoordinationRequireShared,
-				Message: "Shared rate-limit coordination is required; the command refuses before sending a request when the coordinator is unavailable.",
-			}
+			hasRequireShared = true
+		} else {
+			hasProcessLocal = true
+		}
+	}
+	if hasRequireShared && hasProcessLocal {
+		return connectors.RateLimitCoordination{
+			Mode:    connectors.RateLimitCoordinationMixed,
+			Message: "Rate-limit coordination is policy-scoped: process-local policies protect this pm process only and are not shared across processes; require_shared policies refuse before sending when the optional coordinator is unavailable.",
+		}
+	}
+	if hasRequireShared {
+		return connectors.RateLimitCoordination{
+			Mode:    connectors.RateLimitCoordinationRequireShared,
+			Message: "Shared rate-limit coordination is required; the command refuses before sending a request when the coordinator is unavailable.",
 		}
 	}
 	return connectors.RateLimitCoordination{

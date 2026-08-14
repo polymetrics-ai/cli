@@ -61,7 +61,7 @@ func TestSharedRateLimitObserveScriptArgsMatchScriptContract(t *testing.T) {
 		t.Fatalf("sharedRateLimitBudgetSpecs: %v", err)
 	}
 	observation := sharedRateLimitObservation{
-		BlockedUntil:       1_786_068_045_000,
+		BlockFor:           60_000,
 		Limit:              2,
 		HasLimit:           true,
 		Remaining:          1,
@@ -101,6 +101,27 @@ func TestSharedRateLimitObserveScriptArgsMatchScriptContract(t *testing.T) {
 	}
 	if got, ok := args[2].(int64); !ok || got != (2*time.Minute).Milliseconds() {
 		t.Fatalf("observe script TTL argument = %T(%v), want milliseconds", args[2], args[2])
+	}
+}
+
+func TestSharedRateLimitObservationUsesRelativeBlockDuration(t *testing.T) {
+	observedAt := time.Date(2026, 8, 14, 12, 0, 0, 0, time.UTC)
+	observation := sharedRateLimitObservationOf(connsdk.RateLimitObservation{
+		Attempted:  true,
+		Status:     http.StatusTooManyRequests,
+		HasReset:   true,
+		ResetAt:    observedAt.Add(time.Minute),
+		ObservedAt: observedAt,
+	})
+	if got, want := observation.BlockFor, int64(time.Minute/time.Millisecond); got != want {
+		t.Fatalf("shared block duration = %dms, want %dms", got, want)
+	}
+	encoded, err := json.Marshal(observation)
+	if err != nil {
+		t.Fatalf("marshal shared observation: %v", err)
+	}
+	if strings.Contains(string(encoded), "blocked_until") {
+		t.Fatalf("shared observation carried a client-clock deadline: %s", encoded)
 	}
 }
 

@@ -30,11 +30,12 @@ DESCRIPTION
   claim.
 
   For connectors with a declared rate-limit policy, inspection reports RATE
-  LIMIT COORDINATION. Process-local protection coordinates only requests made
-  by this pm process; it makes no cross-process claim. A connector explicitly
-  declaring require_shared instead refuses before a request when its optional
-  shared coordinator is unavailable. Inspection never exposes a rate scope,
-  coordinator address, or credential.
+  LIMIT COORDINATION. Process-local policies coordinate only requests made by
+  this pm process; they make no cross-process claim. Policies explicitly
+  declaring require_shared refuse before a request when their optional shared
+  coordinator is unavailable. A connector with both reports policy-scoped
+  coordination. Inspection never exposes a rate scope, coordinator address,
+  or credential.
 
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy

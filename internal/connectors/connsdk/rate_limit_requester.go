@@ -65,10 +65,11 @@ const (
 // (for example, remaining=0 or Retry-After: 0). It deliberately retains no
 // raw response headers, body, URL, or credential-derived data.
 type RateLimitObservation struct {
-	Source    RateLimitObservationSource
-	Status    int
-	Attempt   int // same logical-send count as RateLimitRequest.Attempt
-	Attempted bool
+	Source     RateLimitObservationSource
+	Status     int
+	Attempt    int // same logical-send count as RateLimitRequest.Attempt
+	Attempted  bool
+	ObservedAt time.Time
 
 	RetryAfter    time.Duration
 	HasRetryAfter bool
@@ -123,9 +124,10 @@ func (e *RateLimitError) Unwrap() error {
 // without turning arbitrary headers into event payloads.
 func rateLimitObservation(status int, header http.Header, attempt int, now time.Time, costHeader string) (RateLimitObservation, bool) {
 	observation := RateLimitObservation{
-		Status:    status,
-		Attempt:   attempt,
-		Attempted: true,
+		Status:     status,
+		Attempt:    attempt,
+		Attempted:  true,
+		ObservedAt: now,
 	}
 
 	if delay, resetAt, ok := parseRetryAfterAt(header.Get("Retry-After"), now); ok {
