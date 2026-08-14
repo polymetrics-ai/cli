@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"crypto/sha256"
+	"database/sql/driver"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -11,6 +12,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/database"
@@ -328,12 +330,9 @@ func (p postgresSnapshotReadPlan) readPage(ctx context.Context, tx pgx.Tx, after
 		if err != nil {
 			return nil, nil, fmt.Errorf("postgres snapshot transport: read bounded row: %w", err)
 		}
-		if len(values) != len(p.columns) {
-			return nil, nil, errors.New("postgres snapshot transport: bounded row does not match catalog projection")
-		}
-		record := make(connectors.Record, len(p.columns))
-		for index, column := range p.columns {
-			record[column.Ref.Name] = values[index]
+		record, err := p.recordForValues(values)
+		if err != nil {
+			return nil, nil, err
 		}
 		nextAfter, err = p.orderValues(values)
 		if err != nil {
@@ -345,6 +344,151 @@ func (p postgresSnapshotReadPlan) readPage(ctx context.Context, tx pgx.Tx, after
 		return nil, nil, fmt.Errorf("postgres snapshot transport: iterate bounded page: %w", err)
 	}
 	return records, nextAfter, nil
+}
+
+func (p postgresSnapshotReadPlan) recordForValues(values []any) (connectors.Record, error) {
+	if len(values) != len(p.columns) {
+		return nil, errors.New("postgres snapshot transport: bounded row does not match catalog projection")
+	}
+	record := make(connectors.Record, len(p.columns))
+	for index, column := range p.columns {
+		value, err := postgresSnapshotRecordValue(column.Type, values[index])
+		if err != nil {
+			return nil, fmt.Errorf("postgres snapshot transport: normalize bounded column %q: %w", column.Ref.Name, err)
+		}
+		record[column.Ref.Name] = value
+	}
+	return record, nil
+}
+
+func postgresSnapshotRecordValue(logical database.LogicalType, value any) (any, error) {
+	if value == nil {
+		return nil, nil
+	}
+	switch logical.Kind() {
+	case database.LogicalSignedInteger:
+		switch value.(type) {
+		case int16, int32, int64:
+			return value, nil
+		}
+	case database.LogicalUnsignedInteger:
+		switch value.(type) {
+		case uint8, uint16, uint32, uint64:
+			return value, nil
+		}
+	case database.LogicalFloat:
+		switch value.(type) {
+		case float32, float64:
+			return value, nil
+		}
+	case database.LogicalBoolean:
+		if _, ok := value.(bool); ok {
+			return value, nil
+		}
+	case database.LogicalString:
+		if _, ok := value.(string); ok {
+			return value, nil
+		}
+	case database.LogicalBinary:
+		if bytes, ok := value.([]byte); ok {
+			return append([]byte(nil), bytes...), nil
+		}
+	case database.LogicalDecimal:
+		switch typed := value.(type) {
+		case string:
+			return typed, nil
+		case pgtype.Numeric:
+			return postgresSnapshotValuerString(typed)
+		}
+	case database.LogicalDate:
+		switch typed := value.(type) {
+		case string:
+			return typed, nil
+		case time.Time:
+			return typed.Format(time.DateOnly), nil
+		case pgtype.InfinityModifier:
+			return typed.String(), nil
+		}
+	case database.LogicalTime:
+		switch typed := value.(type) {
+		case string:
+			return typed, nil
+		case []byte:
+			return string(typed), nil
+		case pgtype.Time:
+			return postgresSnapshotValuerString(typed)
+		}
+	case database.LogicalTimestamp:
+		switch typed := value.(type) {
+		case string:
+			return typed, nil
+		case time.Time:
+			return typed.Format(time.RFC3339Nano), nil
+		case pgtype.InfinityModifier:
+			return typed.String(), nil
+		}
+	case database.LogicalUUID:
+		switch typed := value.(type) {
+		case string:
+			return typed, nil
+		case [16]byte:
+			return pgtype.UUID{Bytes: typed, Valid: true}.String(), nil
+		case pgtype.UUID:
+			if !typed.Valid {
+				return nil, nil
+			}
+			return typed.String(), nil
+		}
+	case database.LogicalJSON:
+		if postgresSnapshotJSONValue(value) {
+			return value, nil
+		}
+	default:
+		return nil, fmt.Errorf("unsupported typed catalog logical kind %q", logical.Kind())
+	}
+	return nil, fmt.Errorf("unexpected %T for typed catalog logical kind %q", value, logical.Kind())
+}
+
+func postgresSnapshotValuerString(value interface{ Value() (driver.Value, error) }) (any, error) {
+	text, err := value.Value()
+	if err != nil {
+		return nil, err
+	}
+	if text == nil {
+		return nil, nil
+	}
+	stringValue, ok := text.(string)
+	if !ok {
+		return nil, fmt.Errorf("expected string value, got %T", text)
+	}
+	return stringValue, nil
+}
+
+func postgresSnapshotJSONValue(value any) bool {
+	switch typed := value.(type) {
+	case nil, bool, string, json.Number,
+		float32, float64,
+		int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64,
+		json.RawMessage:
+		return true
+	case map[string]any:
+		for _, nested := range typed {
+			if !postgresSnapshotJSONValue(nested) {
+				return false
+			}
+		}
+		return true
+	case []any:
+		for _, nested := range typed {
+			if !postgresSnapshotJSONValue(nested) {
+				return false
+			}
+		}
+		return true
+	default:
+		return false
+	}
 }
 
 func (p postgresSnapshotReadPlan) query(after []any) string {
