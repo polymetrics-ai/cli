@@ -14,7 +14,7 @@ signature, test assertion, or execution order changes.
 | Source | `internal/connectors/native/postgres/source_test.go`; `internal/connectors/database/source_read_plan_test.go` |
 | Target | `internal/connectors/database/target_admission_test.go` |
 | Mapping | `internal/connectors/database/mapping_definition_test.go` |
-| CDC | `internal/connectors/native/postgres/cdc_test.go` |
+| CDC | `internal/connectors/native/postgres/cdc_capability_fence_test.go` |
 
 `internal/connectors/native/postgres/capability_surface_test.go` is the stable
 connector capability fence. It is deliberately not assigned to an execution

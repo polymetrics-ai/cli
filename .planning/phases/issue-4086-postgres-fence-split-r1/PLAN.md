@@ -16,7 +16,7 @@
 
 1. Split `internal/connectors/native/postgres/postgres_test.go` into a stable
    capability-surface test file and a source test file. Move the existing
-   fail-closed CDC fence into the already CDC-owned `cdc_test.go`.
+   fail-closed CDC fence into the already CDC-owned `cdc_capability_fence_test.go`.
 2. Split `internal/connectors/database/database_test.go` into mapping-definition,
    source-read-plan, and target-admission files, moving the existing test-only
    helpers unchanged to a neutral helper file.

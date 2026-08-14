@@ -8,7 +8,7 @@ test or accepting a behavior change.
 | --- | --- | --- |
 | R1 | Source ownership | The base has source checks in shared `postgres_test.go`; `source_test.go` is absent. | Every source check is moved unchanged to `source_test.go`. |
 | R2 | Capability ownership | The base has metadata/manifest/docs/interface checks in shared `postgres_test.go`; a dedicated capability file is absent. | Those checks are byte-identical in `capability_surface_test.go`. |
-| R3 | CDC ownership | The base keeps one fail-closed CDC check in the shared file. | The check is byte-identical in `cdc_test.go`; no assertion changes. |
+| R3 | CDC ownership | The base keeps one fail-closed CDC check in the shared file. | The check is byte-identical in `cdc_capability_fence_test.go`; no assertion changes. |
 | R4 | Database lane ownership | The base's mapping, source-plan, and target-admission declarations share `database_test.go`. | Each declaration appears exactly once in its lane-owned file, with helpers unchanged. |
 | R5 | Runtime equivalence | Head binary does not exist yet, so base artifacts cannot be compared. | All scoped command stdout/stderr files compare byte-identically. |
 | R6 | Generated parity | Head generated-capability hash does not exist yet. | The generated ledger SHA-256 is identical and `surface-sync --check` passes. |
