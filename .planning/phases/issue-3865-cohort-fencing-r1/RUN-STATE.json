@@ -1,8 +1,8 @@
 {
   "issue": 3865,
-  "state": "red_captured",
+  "state": "implementation_green",
   "base": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-3865-cohort-fencing-r1",
   "manual_gsd_fallback": "Issue is not a numbered roadmap phase; canonical single-worker contract disallows role spawning, so generated prompts execute inline with durable TDD/verification/review evidence.",
-  "next": "implement the minimal healthy/fenced state machine and turn the focused RED coordinator test green"
+  "next": "run broader local verification, execute inline verify-work and code-review, then open the explicit-base pull request"
 }

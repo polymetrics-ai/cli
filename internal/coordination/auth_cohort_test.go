@@ -3,6 +3,7 @@ package coordination
 import (
 	"context"
 	"errors"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -32,14 +33,16 @@ func TestAuthCohortCoordinator_OnlyVerifiedInvalidAuthenticationFences(t *testin
 		{name: "unknown", outcome: AuthenticationOutcomeUnknown},
 		{name: "unverified invalid", outcome: AuthenticationOutcomeUnverifiedInvalid},
 		{name: "transport failure", outcome: AuthenticationOutcomeTransportFailure},
+		{name: "timeout", outcome: AuthenticationOutcomeTimeout},
 		{name: "provider failure", outcome: AuthenticationOutcomeProviderFailure},
 		{name: "verified healthy", outcome: AuthenticationOutcomeVerifiedHealthy},
+		{name: "unrecognized", outcome: AuthenticationOutcome(255)},
 	}
 
 	for _, tt := range outcomes {
 		t.Run(tt.name, func(t *testing.T) {
 			coordinator := NewAuthCohortCoordinator(NewMemoryAuthCohortHealthStore())
-			cohort := testAuthCohortKey(t, "non-fencing-"+tt.name)
+			cohort := testAuthCohortKey(t, "non-fencing-"+strings.ReplaceAll(tt.name, " ", "-"))
 			member, err := coordinator.Admit(context.Background(), cohort)
 			if err != nil {
 				t.Fatalf("initial admission: %v", err)
@@ -159,6 +162,25 @@ func TestAuthCohortCoordinator_IsolatesCohortsAndRepairCreatesHealthyEpoch(t *te
 	freshSends.Add(1)
 	if got := freshSends.Load(); got != 1 {
 		t.Fatalf("fresh epoch sends = %d, want 1", got)
+	}
+}
+
+func TestAuthCohortCoordinator_RepairRequiresVerifiedHealthyOutcome(t *testing.T) {
+	coordinator := NewAuthCohortCoordinator(NewMemoryAuthCohortHealthStore())
+	cohort := testAuthCohortKey(t, "repair-verification")
+	member, err := coordinator.Admit(context.Background(), cohort)
+	if err != nil {
+		t.Fatalf("initial admission: %v", err)
+	}
+	defer member.Release()
+	if err := coordinator.Report(member, AuthenticationOutcomeVerifiedInvalid); err != nil {
+		t.Fatalf("verified fence: %v", err)
+	}
+	if _, err := coordinator.Repair(cohort, AuthenticationOutcomeUnverifiedInvalid); err == nil {
+		t.Fatal("unverified repair outcome reopened a fenced cohort")
+	}
+	if _, err := coordinator.Admit(context.Background(), cohort); !errors.Is(err, ErrAuthCohortFenced) {
+		t.Fatalf("admission after unverified repair = %v, want ErrAuthCohortFenced", err)
 	}
 }
 
