@@ -1,0 +1,8 @@
+{
+  "issue": 4094,
+  "phase": "issue-4094-postgres-incremental-dedupe-history-r1",
+  "status": "planned",
+  "scope": "PostgreSQL-only incremental_dedupe_history managed target",
+  "base": "integration/4015-mvp-flat-r1",
+  "execution": "inline manual GSD fallback: Pi isolated-agent runtime unavailable"
+}
