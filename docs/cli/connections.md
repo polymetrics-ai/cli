@@ -27,13 +27,14 @@ STREAM AND TABLE NAMES
 SYNC MODES
   full_refresh_append              read all source records and append them
   full_refresh_overwrite           read all source records and replace final output
-  full_refresh_overwrite_deduped   replace final output and keep latest row per primary key
+  full_refresh_overwrite_deduped   compatibility name for typed full_overwrite admission
   incremental_append               append records at or after the saved cursor
-  incremental_append_deduped       append raw history and materialize latest row per primary key
+  incremental_append_deduped       compatibility name for typed incremental_dedupe admission
 
-  Incremental modes require --cursor. Deduped modes require --primary-key. When
-  a connector manifest declares defaults, pm fills them during connection
-  creation.
+  Incremental modes require --cursor. Deduped modes require --primary-key. The
+  two deduped compatibility names use their typed contract and refuse before
+  source I/O until a matching transport is admitted. When a connector manifest
+  declares defaults, pm fills them during connection creation.
 
 SECURITY
   Connections reference credentials by name only.

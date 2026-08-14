@@ -187,7 +187,7 @@ pm connections create github_to_warehouse \
   --stream pull_requests \
   --primary-key node_id \
   --cursor updated_at \
-  --sync-mode incremental_append_deduped \
+  --sync-mode incremental_append \
   --table github_pull_requests \
   --json
 

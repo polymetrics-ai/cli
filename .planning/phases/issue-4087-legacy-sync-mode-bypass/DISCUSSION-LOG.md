@@ -14,6 +14,6 @@
 | How is the legacy branch selected? | A missing contract makes `IsContractMode()` false, so `RunETL` proceeds past `app.go:1104` to catalog and legacy ETL. The base also suppresses typed admission for `LegacyCompatibility`; the corrected aliases must not carry that suppression. | `sync_modes.go:142-144`, `app.go:1093-1124` |
 | Which canonical modes represent the aliases? | Full overwrite and incremental dedupe, respectively. | Closed vocabulary in `internal/synccontract/mode.go`; #3810 contract |
 | Is connector-specific code needed? | No. The parser is application-level and must remain connector-neutral. | #4087 portability rule |
-| Do help/docs/generated surfaces need content changes? | No. Public names and their displayed surface remain unchanged. Runtime help, generated-surface drift checks, and focused tests will verify that no artifact is stale. | #4087 acceptance criterion 3 |
+| Do help/docs/generated surfaces need content changes? | Yes. The public names stay unchanged, but their prior descriptions falsely promised legacy dedupe execution. Runtime help, generated CLI docs, and website docs now describe typed admission and pre-I/O refusal until a transport is admitted. | #4087 acceptance criterion 3 |
 
 No product, destructive, dependency, connector-specific, credential, or reverse-ETL decision is required.

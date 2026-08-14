@@ -4,7 +4,7 @@
 
 ## Scope
 
-Close only the two non-canonical execution bypasses for the existing public compatibility names. Do not rename, remove, deprecate, or document new connector-specific behavior.
+Close only the two non-canonical execution bypasses for the existing public compatibility names. Do not rename, remove, deprecate, or document new connector-specific behavior. Correct the generic help and generated documentation that previously described those aliases as legacy dedupe execution.
 
 ## Slice 1 — red contract and execution regression tests
 
@@ -25,14 +25,15 @@ Close only the two non-canonical execution bypasses for the existing public comp
 
 ## Slice 3 — parity and verification
 
-1. Build `pm` and confirm relevant help text still exposes the unchanged compatibility names where the current surface does so.
-2. Run the generated-surface check; regenerate only if its generator reports a changed artifact.
-3. Run focused package tests, formatting, vet, build, and the individual repository verification gates prescribed by `AGENTS.md`.
+1. Build `pm` and confirm relevant help text exposes the unchanged names with their typed-admission behavior.
+2. Regenerate CLI documentation through `pm docs generate`, update the matching website documentation, and run the generated-surface check.
+3. Update the connector certification stage to accept the existing typed pre-I/O refusal, rather than treating only legacy ETL execution as proof.
+4. Run focused package tests, formatting, vet, build, and the individual repository verification gates prescribed by `AGENTS.md`.
 4. Complete the inline/manual GSD verification and code review records. Commit the plan checkpoint and the green implementation slice separately.
 
 ## Guardrails
 
 - No connector name/literal outside `internal/connectors/defs/<connector>/` is introduced.
-- No credentialed checks, external writes, dependencies, generated-file hand edits, or documentation churn.
+- No credentialed checks, external writes, dependencies, generated-file hand edits, or unrelated documentation churn.
 - The public spellings and their normalized names remain stable.
 - No surrounding ETL/transport refactor.

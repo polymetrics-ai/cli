@@ -468,13 +468,14 @@ STREAM AND TABLE NAMES
 SYNC MODES
   full_refresh_append              read all source records and append them
   full_refresh_overwrite           read all source records and replace final output
-  full_refresh_overwrite_deduped   replace final output and keep latest row per primary key
+  full_refresh_overwrite_deduped   compatibility name for typed full_overwrite admission
   incremental_append               append records at or after the saved cursor
-  incremental_append_deduped       append raw history and materialize latest row per primary key
+  incremental_append_deduped       compatibility name for typed incremental_dedupe admission
 
-  Incremental modes require --cursor. Deduped modes require --primary-key. When
-  a connector manifest declares defaults, pm fills them during connection
-  creation.
+  Incremental modes require --cursor. Deduped modes require --primary-key. The
+  two deduped compatibility names use their typed contract and refuse before
+  source I/O until a matching transport is admitted. When a connector manifest
+  declares defaults, pm fills them during connection creation.
 
 SECURITY
   Connections reference credentials by name only.
@@ -619,17 +620,16 @@ SYNC MODES
     replaces the final Parquet table only after the run succeeds.
 
   full_refresh_overwrite_deduped
-    Replaces the write-ahead log with this run's records, dedupes by primary key
-    and cursor, then atomically replaces the final Parquet table.
+    Compatibility name for typed full_overwrite admission. pm refuses before
+    source I/O until a matching transport is admitted.
 
   incremental_append
     Reads records at or after the saved cursor and appends accepted records to
     the write-ahead log. Cursor state advances only after successful writes.
 
   incremental_append_deduped
-    Appends accepted records to the write-ahead log and materializes a final
-    Parquet table with one latest row per primary key. Delete/tombstone records
-    remove the row from final output.
+    Compatibility name for typed incremental_dedupe admission. pm refuses
+    before source I/O until a matching transport is admitted.
 
 SECURITY
   ETL resolves credentials in memory and stores only credential references.

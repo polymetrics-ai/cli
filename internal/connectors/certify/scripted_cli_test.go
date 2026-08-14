@@ -20,16 +20,17 @@ import (
 type scriptedCLI struct {
 	t *testing.T
 
-	root      string
-	calls     [][]string
-	seen      map[string]int
-	plans     map[string]scriptedPlan
-	previewed map[string]bool
-	consumed  map[string]bool
-	replays   map[string]int
-	nextPlan  int
-	schedule  string
-	protocols []string
+	root        string
+	calls       [][]string
+	seen        map[string]int
+	plans       map[string]scriptedPlan
+	previewed   map[string]bool
+	consumed    map[string]bool
+	replays     map[string]int
+	connections map[string]string
+	nextPlan    int
+	schedule    string
+	protocols   []string
 }
 
 type scriptedPlan struct {
@@ -40,13 +41,14 @@ type scriptedPlan struct {
 func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 	t.Helper()
 	return &scriptedCLI{
-		t:         t,
-		seen:      make(map[string]int),
-		plans:     make(map[string]scriptedPlan),
-		previewed: make(map[string]bool),
-		consumed:  make(map[string]bool),
-		replays:   make(map[string]int),
-		protocols: protocols,
+		t:           t,
+		seen:        make(map[string]int),
+		plans:       make(map[string]scriptedPlan),
+		previewed:   make(map[string]bool),
+		consumed:    make(map[string]bool),
+		replays:     make(map[string]int),
+		connections: make(map[string]string),
+		protocols:   protocols,
 	}
 }
 
@@ -133,9 +135,10 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		s.seen["credentials_test"]++
 		return writeScriptedEnvelope(stdout, "CredentialTest", nil)
 	case prefix(args, "connections", "create") && hasJSON(args):
-		if !hasFlag(args, "--source") || !hasFlag(args, "--destination") || !hasFlag(args, "--stream") || !hasFlag(args, "--table") || !hasFlag(args, "--sync-mode") {
+		if len(args) < 3 || !hasFlag(args, "--source") || !hasFlag(args, "--destination") || !hasFlag(args, "--stream") || !hasFlag(args, "--table") || !hasFlag(args, "--sync-mode") {
 			return s.protocolError(stderr, "connections create requires source, destination, stream, table, and sync mode")
 		}
+		s.connections[args[2]] = flagValue(args, "--sync-mode")
 		s.seen["connections_create"]++
 		return writeScriptedEnvelope(stdout, "Connection", nil)
 	case prefix(args, "catalog", "refresh") && hasJSON(args) && hasFlag(args, "--connection"):
@@ -148,6 +151,11 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		})
 	case prefix(args, "etl", "run") && hasJSON(args) && hasFlag(args, "--connection") && hasFlag(args, "--stream"):
 		s.seen["etl_run"]++
+		if isTypedCompatibilityRefusal(s.connections[flagValue(args, "--connection")]) {
+			return writeScriptedEnvelopeWithCode(stdout, "Error", map[string]any{
+				"error": map[string]any{"message": "sync mode is not executable"},
+			}, 1)
+		}
 		return writeScriptedEnvelope(stdout, "ETLRun", map[string]any{"run": map[string]any{
 			"records_read":      2,
 			"records_succeeded": 1,
@@ -229,6 +237,10 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 	default:
 		return s.protocolError(stderr, "unexpected command: "+strings.Join(args, " "))
 	}
+}
+
+func isTypedCompatibilityRefusal(mode string) bool {
+	return mode == "full_refresh_overwrite_deduped" || mode == "incremental_append_deduped"
 }
 
 func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.Writer) int {

@@ -452,13 +452,13 @@ func TestSourceOrderedFullRefreshStartsWithoutResumeAcrossDestinations(t *testin
 	}
 }
 
-func TestSourceOrderedBinaryCursorDedupeRetainsLatestAndResumes(t *testing.T) {
+func TestSourceOrderedBinaryCursorResumesIncrementalAppend(t *testing.T) {
 	ctx := context.Background()
 	source := newOrderedOpaqueCursorSource("dedupe_opaque_cursor", []connectors.Record{
 		{"id": "same", "name": "old", "updated_at": []byte{0x00}},
 		{"id": "same", "name": "latest", "updated_at": []byte{0xff}},
 	})
-	a, connection := setupSyncModeApp(t, source, "incremental_append_deduped")
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
 	stateKey := streamStateKey(connection, "records")
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 10}); err != nil {
 		t.Fatalf("first RunETL(): %v", err)
@@ -468,8 +468,8 @@ func TestSourceOrderedBinaryCursorDedupeRetainsLatestAndResumes(t *testing.T) {
 		t.Fatal(err)
 	}
 	byID := rowsByID(rows)
-	if len(byID) != 1 || byID["same"]["name"] != "latest" {
-		t.Fatalf("first deduped rows = %#v, want latest binary cursor row", rows)
+	if len(rows) != 2 || len(byID) != 1 || byID["same"]["name"] != "latest" {
+		t.Fatalf("first incremental rows = %#v, want both source records and latest map value", rows)
 	}
 	state := a.state.StreamStates[stateKey]
 	if state.Checkpoint == nil || !bytes.Equal(state.Checkpoint.Position.Primary, []byte{0xff}) {
@@ -503,8 +503,8 @@ func TestSourceOrderedBinaryCursorDedupeRetainsLatestAndResumes(t *testing.T) {
 		t.Fatal(err)
 	}
 	byID = rowsByID(rows)
-	if len(byID) != 2 || byID["same"]["name"] != "latest" || byID["later"]["name"] != "later" {
-		t.Fatalf("second deduped rows = %#v, want latest and later", rows)
+	if len(rows) != 3 || len(byID) != 2 || byID["same"]["name"] != "latest" || byID["later"]["name"] != "later" {
+		t.Fatalf("second incremental rows = %#v, want appended latest and later records", rows)
 	}
 	state = a.state.StreamStates[stateKey]
 	if state.Checkpoint == nil || !bytes.Equal(state.Checkpoint.Position.Primary, []byte{0xff, 0x00}) {

@@ -41,37 +41,86 @@ type SyncMode struct {
 
 const syncModeCompatibilityVersion uint = 1
 
+type syncModeDefinition struct {
+	mode                         SyncMode
+	legacyInput                  bool
+	persistedLegacyCompatibility bool
+}
+
+func (d syncModeDefinition) persistedLegacyMode() SyncMode {
+	mode := d.mode
+	mode.LegacyCompatibility = d.persistedLegacyCompatibility
+	return mode
+}
+
+// syncModeDefinitions is the single connector-neutral authority for public
+// sync-mode spellings. A persisted legacy configuration can retain its own
+// compatibility routing only where the definition explicitly permits it.
+var syncModeDefinitions = map[string]syncModeDefinition{
+	"full_refresh_append": {
+		mode:                         SyncMode{Name: "full_refresh_append", Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeFullAppend, LegacyCompatibility: true},
+		legacyInput:                  true,
+		persistedLegacyCompatibility: true,
+	},
+	"full_refresh_overwrite": {
+		mode:                         SyncMode{Name: "full_refresh_overwrite", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite, LegacyCompatibility: true},
+		legacyInput:                  true,
+		persistedLegacyCompatibility: true,
+	},
+	"full_refresh_overwrite_deduped": {
+		mode:        SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped, ContractMode: synccontract.ModeFullOverwrite},
+		legacyInput: true,
+	},
+	"full_refresh_overwrite_dedup": {
+		mode:        SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped, ContractMode: synccontract.ModeFullOverwrite},
+		legacyInput: true,
+	},
+	"full_refresh_deduped": {
+		mode:        SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped, ContractMode: synccontract.ModeFullOverwrite},
+		legacyInput: true,
+	},
+	string(synccontract.ModeFullOverwrite): {
+		mode: SyncMode{Name: string(synccontract.ModeFullOverwrite), Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite},
+	},
+	string(synccontract.ModeFullAppend): {
+		mode: SyncMode{Name: string(synccontract.ModeFullAppend), Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeFullAppend},
+	},
+	"incremental_append": {
+		mode:                         SyncMode{Name: "incremental_append", Source: SourceSyncIncremental, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeIncrementalAppend},
+		legacyInput:                  true,
+		persistedLegacyCompatibility: true,
+	},
+	"incremental_append_deduped": {
+		mode:        SyncMode{Name: "incremental_append_deduped", Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped, ContractMode: synccontract.ModeIncrementalDedupe},
+		legacyInput: true,
+	},
+	"incremental_append_dedup": {
+		mode:        SyncMode{Name: "incremental_append_deduped", Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped, ContractMode: synccontract.ModeIncrementalDedupe},
+		legacyInput: true,
+	},
+	string(synccontract.ModeIncrementalUpsert): {
+		mode: SyncMode{Name: string(synccontract.ModeIncrementalUpsert), Source: SourceSyncIncremental, Destination: DestinationSyncUpsert, ContractMode: synccontract.ModeIncrementalUpsert},
+	},
+	string(synccontract.ModeIncrementalDedupe): {
+		mode: SyncMode{Name: string(synccontract.ModeIncrementalDedupe), Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped, ContractMode: synccontract.ModeIncrementalDedupe},
+	},
+	string(synccontract.ModeIncrementalDedupeHistory): {
+		mode: SyncMode{Name: string(synccontract.ModeIncrementalDedupeHistory), Source: SourceSyncIncremental, Destination: DestinationSyncDedupeHistory, ContractMode: synccontract.ModeIncrementalDedupeHistory},
+	},
+	string(synccontract.ModeChangeCapture): {
+		mode: SyncMode{Name: string(synccontract.ModeChangeCapture), Source: SourceSyncChangeCapture, Destination: DestinationSyncUpsert, ContractMode: synccontract.ModeChangeCapture},
+	},
+}
+
 func ParseSyncMode(raw string) (SyncMode, error) {
 	value := strings.TrimSpace(strings.ToLower(raw))
 	if value == "" {
 		value = DefaultUserFacingSyncMode
 	}
-	switch value {
-	case "full_refresh_append":
-		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeFullAppend, LegacyCompatibility: true}, nil
-	case "full_refresh_overwrite":
-		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite, LegacyCompatibility: true}, nil
-	case "full_refresh_overwrite_deduped", "full_refresh_overwrite_dedup", "full_refresh_deduped":
-		return SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped, LegacyCompatibility: true}, nil
-	case string(synccontract.ModeIncrementalAppend):
-		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeIncrementalAppend}, nil
-	case "incremental_append_deduped", "incremental_append_dedup":
-		return SyncMode{Name: "incremental_append_deduped", Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped, LegacyCompatibility: true}, nil
-	case string(synccontract.ModeFullOverwrite):
-		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite}, nil
-	case string(synccontract.ModeFullAppend):
-		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeFullAppend}, nil
-	case string(synccontract.ModeIncrementalUpsert):
-		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncUpsert, ContractMode: synccontract.ModeIncrementalUpsert}, nil
-	case string(synccontract.ModeIncrementalDedupe):
-		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped, ContractMode: synccontract.ModeIncrementalDedupe}, nil
-	case string(synccontract.ModeIncrementalDedupeHistory):
-		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncDedupeHistory, ContractMode: synccontract.ModeIncrementalDedupeHistory}, nil
-	case string(synccontract.ModeChangeCapture):
-		return SyncMode{Name: value, Source: SourceSyncChangeCapture, Destination: DestinationSyncUpsert, ContractMode: synccontract.ModeChangeCapture}, nil
-	default:
-		return SyncMode{}, fmt.Errorf("unsupported sync mode %q", raw)
+	if definition, ok := syncModeDefinitions[value]; ok {
+		return definition.mode, nil
 	}
+	return SyncMode{}, fmt.Errorf("unsupported sync mode %q", raw)
 }
 
 func ParseStreamSyncMode(stream StreamConfig) (SyncMode, error) {
@@ -86,20 +135,10 @@ func parseLegacySyncMode(raw string) (SyncMode, error) {
 	if value == "" {
 		value = DefaultUserFacingSyncMode
 	}
-	switch value {
-	case "full_refresh_append":
-		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeFullAppend, LegacyCompatibility: true}, nil
-	case "full_refresh_overwrite":
-		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite, LegacyCompatibility: true}, nil
-	case "full_refresh_overwrite_deduped", "full_refresh_overwrite_dedup", "full_refresh_deduped":
-		return SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped, LegacyCompatibility: true}, nil
-	case "incremental_append":
-		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeIncrementalAppend, LegacyCompatibility: true}, nil
-	case "incremental_append_deduped", "incremental_append_dedup":
-		return SyncMode{Name: "incremental_append_deduped", Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped, LegacyCompatibility: true}, nil
-	default:
-		return SyncMode{}, fmt.Errorf("sync mode %q is not an explicit legacy compatibility adapter", raw)
+	if definition, ok := syncModeDefinitions[value]; ok && definition.legacyInput {
+		return definition.persistedLegacyMode(), nil
 	}
+	return SyncMode{}, fmt.Errorf("sync mode %q is not an explicit legacy compatibility adapter", raw)
 }
 
 func isLegacySyncModeName(raw string) bool {

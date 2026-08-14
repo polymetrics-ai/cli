@@ -528,8 +528,10 @@ func TestETLHelpListsAllSyncModes(t *testing.T) {
 		"full_refresh_append",
 		"full_refresh_overwrite",
 		"full_refresh_overwrite_deduped",
+		"Compatibility name for typed full_overwrite admission",
 		"incremental_append",
 		"incremental_append_deduped",
+		"Compatibility name for typed incremental_dedupe admission",
 	} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("etl help missing %q:\n%s", want, out)

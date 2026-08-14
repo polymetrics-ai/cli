@@ -36,7 +36,7 @@ type CapabilityResult struct {
 // SyncModeResult is one row of Capabilities.SyncModes.
 type SyncModeResult struct {
 	Result         string `json:"result"`
-	DataSource     string `json:"data_source"` // "live" | "capture"
+	DataSource     string `json:"data_source"` // "live" | "capture"; empty for a pre-I/O refusal
 	CursorAdvanced bool   `json:"cursor_advanced,omitempty"`
 	Reason         string `json:"reason,omitempty"`
 }
