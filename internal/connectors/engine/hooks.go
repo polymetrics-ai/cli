@@ -68,6 +68,12 @@ type DeclaredRouteAuthHook interface {
 	AuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec, requester DeclaredRouteRequester) (connsdk.Authenticator, error)
 }
 
+// RateLimitAuthProfileHook reports the declared rate-limit auth profile for a
+// matched authentication spec.
+type RateLimitAuthProfileHook interface {
+	RateLimitAuthProfile(cfg connectors.RuntimeConfig, spec AuthSpec) (string, bool)
+}
+
 type declaredRouteRequester struct {
 	runtime *Runtime
 }
@@ -103,6 +109,7 @@ func (r declaredRouteRequester) DoJSON(ctx context.Context, request DeclaredRout
 		headers[key] = value
 	}
 	clone.DefaultHeaders = headers
+	clone.DisableRetries = true
 	return clone.Do(ctx, method, path, nil, request.Body)
 }
 

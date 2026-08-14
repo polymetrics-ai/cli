@@ -531,7 +531,7 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 		UserAgent:      b.HTTP.UserAgent,
 		DefaultHeaders: headers,
 	}
-	resolver := newRateLimitResolverWithContext(ctx, b, cfg)
+	resolver := newRateLimitResolverWithContext(ctx, b, rateLimitConfigForSelectedAuth(cfg, b.HTTP.Auth, h))
 	authRuntime := &Runtime{baseRequester: requester, rateLimits: resolver}
 
 	// An empty auth list means the bundle declares no authentication scheme at
