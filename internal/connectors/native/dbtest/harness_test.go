@@ -15,27 +15,32 @@ import (
 
 const testEndpoint = "unix:///tmp/dbtest.sock"
 
-const scriptedCapacityProbeID = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+const (
+	scriptedCapacityProbeID     = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+	scriptedDatabaseContainerID = "1123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+)
 
 type scriptedRunner struct {
-	volumePresent       bool
-	containerLive       bool
-	capacityProbeOwners map[string]string
-	raceForeignProbe    bool
-	pullErr             error
-	tagErr              error
-	volumeInspectErr    error
-	volumeCreateErr     error
-	containerInspectErr error
-	runErr              error
-	infoErr             error
-	infoOutput          string
-	infoOutputs         []string
-	infoCalls           int
-	capacityOutput      string
-	images              map[string]bool
-	commands            [][]string
-	endpoints           []string
+	volumePresent        bool
+	containerLive        bool
+	capacityProbeOwners  map[string]string
+	containerOwners      map[string]string
+	raceForeignProbe     bool
+	raceForeignContainer bool
+	pullErr              error
+	tagErr               error
+	volumeInspectErr     error
+	volumeCreateErr      error
+	containerInspectErr  error
+	runErr               error
+	infoErr              error
+	infoOutput           string
+	infoOutputs          []string
+	infoCalls            int
+	capacityOutput       string
+	images               map[string]bool
+	commands             [][]string
+	endpoints            []string
 }
 
 type contextAwareRunner struct {
@@ -96,6 +101,12 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 			}
 			return "", nil
 		}
+		if owner, present := r.containerOwners[name]; present {
+			if _, formatted := commandFlagValue(args, "--format"); formatted {
+				return scriptedDatabaseContainerID + "\t" + owner + "\n", nil
+			}
+			return "", nil
+		}
 		if r.containerLive {
 			return "", nil
 		}
@@ -109,15 +120,29 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 			}
 			return r.capacityOutput, r.runErr
 		}
+		if name, present := commandFlagValue(args, "--name"); present {
+			if r.raceForeignContainer {
+				r.setContainerOwner(name, "foreign")
+			} else if owner, present := commandLabelValue(args, databaseContainerOwnerLabel); present {
+				r.setContainerOwner(name, owner)
+			}
+		}
 		r.containerLive = true
 		return "", r.runErr
 	case commandHasPrefix(args, "container", "rm"):
-		if len(args) > 2 && args[len(args)-1] == scriptedCapacityProbeID {
-			for name := range r.capacityProbeOwners {
-				delete(r.capacityProbeOwners, name)
+		if len(args) > 2 {
+			switch args[len(args)-1] {
+			case scriptedCapacityProbeID:
+				for name := range r.capacityProbeOwners {
+					delete(r.capacityProbeOwners, name)
+				}
+			case scriptedDatabaseContainerID:
+				for name := range r.containerOwners {
+					delete(r.containerOwners, name)
+				}
+				r.containerLive = false
 			}
 		}
-		r.containerLive = false
 	case len(args) > 0 && args[0] == "port":
 		return "127.0.0.1:43123\n", nil
 	case len(args) > 0 && args[0] == "info":
@@ -163,10 +188,27 @@ func (r *scriptedRunner) setCapacityProbeOwner(name, owner string) {
 	r.capacityProbeOwners[name] = owner
 }
 
+func (r *scriptedRunner) setContainerOwner(name, owner string) {
+	if r.containerOwners == nil {
+		r.containerOwners = make(map[string]string)
+	}
+	r.containerOwners[name] = owner
+}
+
 func commandFlagValue(args []string, flag string) (string, bool) {
 	for index := 0; index+1 < len(args); index++ {
 		if args[index] == flag {
 			return args[index+1], true
+		}
+	}
+	return "", false
+}
+
+func commandLabelValue(args []string, label string) (string, bool) {
+	prefix := label + "="
+	for index := 0; index+1 < len(args); index++ {
+		if args[index] == "--label" && strings.HasPrefix(args[index+1], prefix) {
+			return strings.TrimPrefix(args[index+1], prefix), true
 		}
 	}
 	return "", false
@@ -332,8 +374,23 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	if !runner.imagePresent(config.Image) || !runner.imagePresent(h.runImage) {
 		t.Fatalf("images after start = %#v, want source and generated references", runner.images)
 	}
+	if h.containerID != scriptedDatabaseContainerID {
+		t.Fatalf("container ID = %q, want the verified immutable ID", h.containerID)
+	}
+	if !commandsContain(runner.commands, "container", "inspect", "--format", databaseContainerOwnerFormat, h.containerName) {
+		t.Fatalf("commands = %v, want normal-container ownership inspection", runner.commands)
+	}
+	if !commandsContain(runner.commands, "port", scriptedDatabaseContainerID, "3306/tcp") {
+		t.Fatalf("commands = %v, want port lookup by immutable container ID", runner.commands)
+	}
 	if err := h.Close(context.Background()); err != nil {
 		t.Fatalf("Close(): %v", err)
+	}
+	if runner.containerLive {
+		t.Fatal("cleanup retained the generated database container")
+	}
+	if !commandsContain(runner.commands, "container", "rm", "--force", scriptedDatabaseContainerID) {
+		t.Fatalf("commands = %v, want database-container removal by immutable ID", runner.commands)
 	}
 	if runner.imagePresent(h.runImage) {
 		t.Fatalf("images after cleanup = %#v, want the run-generated reference removed", runner.images)
@@ -509,7 +566,7 @@ func TestCopyFileFromContainerUsesTheConfiguredEndpoint(t *testing.T) {
 	if err := h.CopyFileFromContainer(context.Background(), "/var/lib/mysql/ca.pem", destination); err != nil {
 		t.Fatalf("CopyFileFromContainer(): %v", err)
 	}
-	if !commandsContain(runner.commands, "cp", h.containerName+":"+"/var/lib/mysql/ca.pem", destination) {
+	if !commandsContain(runner.commands, "cp", h.containerID+":"+"/var/lib/mysql/ca.pem", destination) {
 		t.Fatalf("commands = %v, want scoped container certificate copy", runner.commands)
 	}
 	for _, endpoint := range runner.endpoints {
@@ -579,6 +636,32 @@ func TestStartCleansResourcesAfterIndeterminateEngineOutcomes(t *testing.T) {
 				t.Fatalf("images after cleanup = %#v, want generated reference removed", tc.runner.images)
 			}
 		})
+	}
+}
+
+func TestStartPreservesAContainerCreatedAfterPrecheck(t *testing.T) {
+	runner := &scriptedRunner{
+		raceForeignContainer: true,
+		runErr:               errors.New("name already in use"),
+	}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil || !strings.Contains(err.Error(), "start mysql test container") {
+		t.Fatalf("Start() error = %v, want a raced container creation failure", err)
+	}
+	if owner := runner.containerOwners[h.containerName]; owner != "foreign" {
+		t.Fatalf("container owner = %q, want foreign", owner)
+	}
+	if !runner.containerLive {
+		t.Fatal("Start() removed the foreign container created after its name precheck")
+	}
+	if !commandsContain(runner.commands, "container", "inspect", "--format", databaseContainerOwnerFormat, h.containerName) {
+		t.Fatalf("commands = %v, want normal-container ownership inspection", runner.commands)
+	}
+	if commandsContain(runner.commands, "container", "rm", "--force") {
+		t.Fatalf("commands = %v, must not remove a raced foreign container", runner.commands)
 	}
 }
 
@@ -1185,6 +1268,31 @@ func TestCloseRemovesOnlyLabelOwnedCapacityProbe(t *testing.T) {
 	remove := commandIndex(runner.commands, "container", "rm", "--force", scriptedCapacityProbeID)
 	if inspect < 0 || remove < 0 || inspect > remove {
 		t.Fatalf("commands = %v, want ownership inspection before capacity probe removal", runner.commands)
+	}
+}
+
+func TestCloseRemovesOnlyLabelOwnedDatabaseContainer(t *testing.T) {
+	runner := &scriptedRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	runner.setContainerOwner(h.containerName, h.containerOwner)
+	runner.containerLive = true
+	h.mu.Lock()
+	h.containerKnown = true
+	h.mu.Unlock()
+
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if _, present := runner.containerOwners[h.containerName]; present {
+		t.Fatal("Close() did not remove the harness-owned database container")
+	}
+	inspect := commandIndex(runner.commands, "container", "inspect", "--format", databaseContainerOwnerFormat, h.containerName)
+	remove := commandIndex(runner.commands, "container", "rm", "--force", scriptedDatabaseContainerID)
+	if inspect < 0 || remove < 0 || inspect > remove {
+		t.Fatalf("commands = %v, want ownership inspection before database-container removal", runner.commands)
 	}
 }
 

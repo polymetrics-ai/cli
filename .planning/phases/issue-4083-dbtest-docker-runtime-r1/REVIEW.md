@@ -38,10 +38,14 @@ Reviewed specifically:
    ownership label and immutable container ID are re-proven. The enabled MySQL entrypoint passes raw
    environment values to the shared validators so whitespace and control
    characters cannot normalize into an accepted runtime configuration.
+8. Normal database containers now carry a per-run owner label, establish a
+   verified immutable ID before port discovery or file copying, and use that ID
+   for cleanup; an indeterminate create re-proves ownership by label before any
+   removal, so a raced foreign name remains untouched.
 
 ## Evidence
 
 `go test -timeout 20m -run
-'^(TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe\|TestDockerVMCapacityRefusesAPreexistingProbeWithoutClaimingItsCleanup\|TestDockerVMCapacityPreservesAProbeCreatedAfterPrecheck\|TestCloseRemovesOnlyLabelOwnedCapacityProbe\|TestDockerVMCapacityRefusesAnUncachedOrMalformedProbe)$'
-./internal/connectors/native/dbtest` passed in 0.350s; the broader existing
+'^(TestCleanupRemovesOnlyRunOwnedResources\|TestCopyFileFromContainerUsesTheConfiguredEndpoint\|TestStartCleansResourcesAfterIndeterminateEngineOutcomes\|TestStartPreservesAContainerCreatedAfterPrecheck\|TestCloseDuringCreateStillRemovesTheCreatedResource\|TestEveryTargetCommandRechecksTargetIdentity\|TestCleanupFailsClosedWhenTargetIdentityChanges\|TestStartUsesDockerTargetIdentityAndCapacity\|TestStartUsesPodmanMachineDaemonCapacity\|TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe\|TestDockerVMCapacityRefusesAPreexistingProbeWithoutClaimingItsCleanup\|TestDockerVMCapacityPreservesAProbeCreatedAfterPrecheck\|TestCloseRemovesOnlyLabelOwnedCapacityProbe\|TestCloseRemovesOnlyLabelOwnedDatabaseContainer)$'
+./internal/connectors/native/dbtest` passed in 0.499s; the broader existing
 dbtest and MySQL evidence is recorded in `VERIFICATION.md` and `TDD-LEDGER.md`.

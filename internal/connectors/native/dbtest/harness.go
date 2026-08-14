@@ -156,6 +156,8 @@ type Harness struct {
 	config Config
 
 	containerName      string
+	containerOwner     string
+	containerID        string
 	volumeName         string
 	runImage           string
 	capacityProbeName  string
@@ -219,6 +221,10 @@ func New(config Config) (*Harness, error) {
 	if err != nil {
 		return nil, fmt.Errorf("generate database test resource name: %w", err)
 	}
+	containerOwner, err := randomSuffix()
+	if err != nil {
+		return nil, fmt.Errorf("generate database test container owner: %w", err)
+	}
 	capacityProbeOwner, err := randomSuffix()
 	if err != nil {
 		return nil, fmt.Errorf("generate database test capacity probe owner: %w", err)
@@ -227,6 +233,7 @@ func New(config Config) (*Harness, error) {
 	return &Harness{
 		config:             config,
 		containerName:      prefix,
+		containerOwner:     containerOwner,
 		volumeName:         prefix + "-data",
 		runImage:           "localhost/" + prefix + ":run",
 		capacityProbeName:  prefix + "-capacity",
@@ -347,6 +354,7 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		"--publish", "127.0.0.1::" + strconv.Itoa(h.config.ContainerPort),
 	}
 	args = append(args, h.config.ContainerArgs...)
+	args = append(args, "--label", databaseContainerOwnerLabel+"="+h.containerOwner)
 	args = append(args, h.runImage)
 	args = append(args, h.config.EngineArgs...)
 	containerAbsent, err := h.resourceAbsent(ctx, "container", "inspect", h.containerName)
@@ -365,8 +373,15 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	if _, err := h.runOnVerifiedTarget(ctx, args...); err != nil {
 		return Endpoint{}, fmt.Errorf("start %s test container: %w", h.config.Engine, err)
 	}
+	containerID, err := h.ownedContainerID(ctx, h.containerName, h.containerOwner, databaseContainerOwnerFormat)
+	if err != nil {
+		return Endpoint{}, fmt.Errorf("inspect generated %s test container ownership: %w", h.config.Engine, err)
+	}
+	h.mu.Lock()
+	h.containerID = containerID
+	h.mu.Unlock()
 
-	mapping, err := h.runOnVerifiedTarget(ctx, "port", h.containerName, strconv.Itoa(h.config.ContainerPort)+"/tcp")
+	mapping, err := h.runOnVerifiedTarget(ctx, "port", containerID, strconv.Itoa(h.config.ContainerPort)+"/tcp")
 	if err != nil {
 		return Endpoint{}, fmt.Errorf("discover %s test port: %w", h.config.Engine, err)
 	}
@@ -417,7 +432,10 @@ func (h *Harness) Close(_ context.Context) error {
 
 		var errs []error
 		if h.known(func(h *Harness) bool { return h.containerKnown }) {
-			if _, err := h.runOnVerifiedTarget(cleanupCtx, "container", "rm", "--force", h.containerName); err != nil && !errors.Is(err, errContainerResourceNotFound) {
+			h.mu.Lock()
+			containerID := h.containerID
+			h.mu.Unlock()
+			if err := h.removeOwnedContainer(cleanupCtx, h.containerName, h.containerOwner, containerID, databaseContainerOwnerFormat); err != nil {
 				errs = append(errs, fmt.Errorf("remove %s test container: %w", h.config.Engine, err))
 			}
 		}
@@ -442,7 +460,7 @@ func (h *Harness) Close(_ context.Context) error {
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.capacityProbeKnown }) {
-			if err := h.removeCapacityProbe(cleanupCtx); err != nil {
+			if err := h.removeOwnedContainer(cleanupCtx, h.capacityProbeName, h.capacityProbeOwner, "", dockerCapacityProbeOwnerFormat); err != nil {
 				errs = append(errs, fmt.Errorf("remove %s test capacity probe: %w", h.config.Engine, err))
 			}
 		}
@@ -486,6 +504,8 @@ const (
 	dockerCapacityMountPath        = "/polymetrics-image-store"
 	dockerCapacityProbeOwnerLabel  = "polymetrics.dbtest.capacity-probe-owner"
 	dockerCapacityProbeOwnerFormat = "{{.Id}}\t{{ index .Config.Labels \"polymetrics.dbtest.capacity-probe-owner\" }}"
+	databaseContainerOwnerLabel    = "polymetrics.dbtest.container-owner"
+	databaseContainerOwnerFormat   = "{{.Id}}\t{{ index .Config.Labels \"polymetrics.dbtest.container-owner\" }}"
 )
 
 func (h *Harness) dockerVMImageStoreFree(ctx context.Context, target targetIdentity) (uint64, error) {
@@ -530,19 +550,30 @@ func (h *Harness) dockerVMImageStoreFree(ctx context.Context, target targetIdent
 	return free, nil
 }
 
-func (h *Harness) removeCapacityProbe(ctx context.Context) error {
+func (h *Harness) ownedContainerID(ctx context.Context, name, owner, ownerFormat string) (string, error) {
 	output, err := h.runOnVerifiedTarget(ctx,
-		"container", "inspect", "--format", dockerCapacityProbeOwnerFormat, h.capacityProbeName,
+		"container", "inspect", "--format", ownerFormat, name,
 	)
-	if errors.Is(err, errContainerResourceNotFound) {
-		return nil
-	}
 	if err != nil {
-		return fmt.Errorf("inspect generated Docker capacity probe ownership: %w", err)
+		return "", err
 	}
-	containerID, owner, valid := parseDockerCapacityProbeOwnership(output)
-	if !valid || owner != h.capacityProbeOwner {
-		return errors.New("generated Docker capacity probe ownership could not be proven")
+	containerID, reportedOwner, valid := parseContainerOwnership(output)
+	if !valid || reportedOwner != owner {
+		return "", errors.New("generated container ownership could not be proven")
+	}
+	return containerID, nil
+}
+
+func (h *Harness) removeOwnedContainer(ctx context.Context, name, owner, containerID, ownerFormat string) error {
+	if containerID == "" {
+		var err error
+		containerID, err = h.ownedContainerID(ctx, name, owner, ownerFormat)
+		if errors.Is(err, errContainerResourceNotFound) {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
 	}
 	if _, err := h.runOnVerifiedTarget(ctx, "container", "rm", "--force", containerID); err != nil && !errors.Is(err, errContainerResourceNotFound) {
 		return err
@@ -776,19 +807,19 @@ func singleCommandRecord(raw string) (string, bool) {
 	return line, line != "" && !strings.ContainsAny(line, "\r\n")
 }
 
-func parseDockerCapacityProbeOwnership(raw string) (string, string, bool) {
+func parseContainerOwnership(raw string) (string, string, bool) {
 	line, valid := singleCommandRecord(raw)
 	if !valid {
 		return "", "", false
 	}
 	fields := strings.Split(line, "\t")
-	if len(fields) != 2 || !safeDockerContainerID(fields[0]) {
+	if len(fields) != 2 || !safeContainerID(fields[0]) {
 		return "", "", false
 	}
 	return fields[0], fields[1], true
 }
 
-func safeDockerContainerID(value string) bool {
+func safeContainerID(value string) bool {
 	if len(value) != 64 {
 		return false
 	}
@@ -827,12 +858,12 @@ func (h *Harness) CopyFileFromContainer(ctx context.Context, source, destination
 		return errors.New("database test harness requires a safe absolute destination path")
 	}
 	h.mu.Lock()
-	known, closed, container := h.containerKnown, h.closed, h.containerName
+	known, closed, containerID := h.containerKnown, h.closed, h.containerID
 	h.mu.Unlock()
-	if !known || closed {
+	if !known || closed || containerID == "" {
 		return errors.New("database test harness container is not available")
 	}
-	if _, err := h.runOnVerifiedTarget(ctx, "cp", container+":"+source, destination); err != nil {
+	if _, err := h.runOnVerifiedTarget(ctx, "cp", containerID+":"+source, destination); err != nil {
 		return fmt.Errorf("copy database test container file: %w", err)
 	}
 	return nil
