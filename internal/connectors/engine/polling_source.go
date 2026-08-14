@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"math/big"
 	"sync"
 	"time"
 
@@ -21,10 +20,13 @@ const (
 // PollingSourceRunner is the I/O half of a source that has already passed
 // PollingPreflight. Its request is intentionally catalog-bound and keyset-only:
 // neither definitions nor callers can supply a query, URL, method, or command.
+// The native runner validates cursor precision and strict ordering because the
+// opaque tuple must not be parsed or ordered by the connector-neutral engine.
 type PollingSourceRunner interface {
 	PollingPreflightSourceExecutor
 	PollingSourceRuntimeState(context.Context, connectors.PollingCatalogObject) (PollingSourceRuntimeState, error)
 	FetchPollingSourcePage(context.Context, PollingSourcePageRequest) (PollingSourcePage, error)
+	ValidatePollingSourcePageTraversal(context.Context, *synccontract.CheckpointPosition, PollingSourcePage) error
 }
 
 // PollingSourceRuntimeState is the provider state copied into every candidate
@@ -274,6 +276,9 @@ func (e *PollingSourceExecutor) ReadTransport(ctx context.Context, request synct
 		if budget.usedRequests() == usedBefore {
 			return fmt.Errorf("polling source runner returned without consuming a bounded provider request")
 		}
+		if err := e.runner.ValidatePollingSourcePageTraversal(ctx, clonePollingSourcePosition(after), page.Clone()); err != nil {
+			return fmt.Errorf("validate polling source page traversal: %w", err)
+		}
 		if err := e.validatePage(page, after, pageSize); err != nil {
 			return err
 		}
@@ -363,8 +368,11 @@ func validatePollingSourceRuntimeState(declaration *connectors.PollingWatermarkD
 }
 
 func validatePollingSourceRequestResume(actual, expected synccontract.ResumeExpectation) error {
-	if actual.Source != expected.Source || !bytes.Equal(actual.SourceGeneration, expected.SourceGeneration) {
+	if actual.Source != expected.Source {
 		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeSourceIdentityIncompatible, "polling source request resume expectation does not match preflight source identity")
+	}
+	if !bytes.Equal(actual.SourceGeneration, expected.SourceGeneration) {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeSourceGenerationChanged, "polling source request generation does not match the current native source")
 	}
 	return nil
 }
@@ -437,19 +445,6 @@ func (e *PollingSourceExecutor) validatePage(page PollingSourcePage, after *sync
 func (e *PollingSourceExecutor) validatePosition(position synccontract.CheckpointPosition) error {
 	if len(position.Primary) == 0 || len(position.TieBreaker) == 0 {
 		return fmt.Errorf("watermark and unique tie-breaker checkpoint tokens are required")
-	}
-	switch e.declaration.Source.Cursor.Codec {
-	case connectors.PollingCursorCodecRFC3339Nano:
-		parsed, err := time.Parse(time.RFC3339Nano, string(position.Primary))
-		if err != nil || parsed.UTC().Format(time.RFC3339Nano) != string(position.Primary) {
-			return fmt.Errorf("watermark token is not a canonical RFC3339Nano timestamp")
-		}
-	case connectors.PollingCursorCodecDecimal:
-		if _, ok := new(big.Int).SetString(string(position.Primary), 10); !ok {
-			return fmt.Errorf("watermark token is not an exact decimal integer")
-		}
-	default:
-		return fmt.Errorf("polling source cursor codec %q is not lossless", e.declaration.Source.Cursor.Codec)
 	}
 	return nil
 }

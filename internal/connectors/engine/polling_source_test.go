@@ -144,6 +144,31 @@ func TestPollingSourceExecutorDoesNotAdvanceAnEmptyPage(t *testing.T) {
 	}
 }
 
+func TestPollingSourceExecutorRefusesAnUnbudgetedProviderReadBeforeDelivery(t *testing.T) {
+	source := &pollingSourceFake{
+		reference: pollingSourceReference(), evidence: RequiredPollingWatermarkConformanceEvidence(), state: pollingSourceRuntimeState(), skipBudget: true,
+		pages: []PollingSourcePage{{
+			Items:      []PollingSourceItem{pollingSourceItem("a", "2026-08-06T10:00:00Z", "a")},
+			ObservedAt: time.Date(2026, time.August, 6, 10, 4, 0, 0, time.UTC),
+		}},
+	}
+	executor := newPollingSourceExecutor(t, source)
+	sink := &pollingSourceDurableSink{}
+	store := &pollingSourceCheckpointStore{}
+	if err := executor.ReadTransport(context.Background(), pollingSourceRequest(nil), sink.emit(store)); err == nil {
+		t.Fatal("ReadTransport() error = nil, want unbudgeted provider-read refusal")
+	}
+	if got, want := source.fetches, 1; got != want {
+		t.Fatalf("unbudgeted source fetches = %d, want the one observable attempted provider read", got)
+	}
+	if got := len(sink.identities); got != 0 {
+		t.Fatalf("destination deliveries = %v, want no delivery from an unbudgeted read", sink.identities)
+	}
+	if got := len(store.committed); got != 0 {
+		t.Fatalf("checkpoint commits = %d, want no mutation from an unbudgeted read", got)
+	}
+}
+
 func TestPollingSourceExecutorRefusesUnsafeStateAndPageBeforeCheckpointMutation(t *testing.T) {
 	state := pollingSourceRuntimeState()
 	prior := pollingSourceCommittedCheckpoint(t, state, pollingSourcePosition("2026-08-06T10:00:00Z", "a"))
@@ -153,6 +178,7 @@ func TestPollingSourceExecutorRefusesUnsafeStateAndPageBeforeCheckpointMutation(
 		checkpoint *synccontract.CheckpointEnvelope
 		page       PollingSourcePage
 		wantFetch  int
+		traversal  error
 	}{
 		{
 			name: "schema mismatch", checkpoint: checkpointWithSchema(prior, "other-schema"), wantFetch: 0,
@@ -170,13 +196,19 @@ func TestPollingSourceExecutorRefusesUnsafeStateAndPageBeforeCheckpointMutation(
 			page:      PollingSourcePage{Items: []PollingSourceItem{pollingSourceItem("a", "2026-08-06T10:00:00Z", "a")}, More: true, ObservedAt: time.Date(2026, time.August, 6, 10, 2, 0, 0, time.UTC)},
 			wantFetch: 1,
 		},
+		{
+			name: "native traversal rejects a lower opaque tie breaker", checkpoint: &prior,
+			page:      PollingSourcePage{Items: []PollingSourceItem{pollingSourceItem("lower", "2026-08-06T10:00:00Z", "0")}, ObservedAt: time.Date(2026, time.August, 6, 10, 2, 0, 0, time.UTC)},
+			wantFetch: 1,
+			traversal: errors.New("native keyset traversal did not advance"),
+		},
 	}
 
 	for _, testCase := range tests {
 		t.Run(testCase.name, func(t *testing.T) {
 			source := &pollingSourceFake{
 				reference: pollingSourceReference(), evidence: RequiredPollingWatermarkConformanceEvidence(), state: state,
-				pages: []PollingSourcePage{testCase.page},
+				pages: []PollingSourcePage{testCase.page}, traversalErr: testCase.traversal,
 			}
 			executor := newPollingSourceExecutor(t, source)
 			sink := &pollingSourceDurableSink{}
@@ -187,6 +219,9 @@ func TestPollingSourceExecutorRefusesUnsafeStateAndPageBeforeCheckpointMutation(
 			}
 			if got := source.fetches; got != testCase.wantFetch {
 				t.Fatalf("source fetches = %d, want %d", got, testCase.wantFetch)
+			}
+			if got := source.traversalChecks; got != testCase.wantFetch {
+				t.Fatalf("native traversal checks = %d, want %d after each fetched page", got, testCase.wantFetch)
 			}
 			if got := len(sink.identities); got != 0 {
 				t.Fatalf("destination deliveries = %v, want none after refusal", sink.identities)
@@ -238,12 +273,15 @@ var (
 )
 
 type pollingSourceFake struct {
-	reference connectors.TransportExecutorReference
-	evidence  PollingWatermarkConformanceEvidence
-	state     PollingSourceRuntimeState
-	pages     []PollingSourcePage
-	requests  []synccontract.CheckpointPosition
-	fetches   int
+	reference       connectors.TransportExecutorReference
+	evidence        PollingWatermarkConformanceEvidence
+	state           PollingSourceRuntimeState
+	pages           []PollingSourcePage
+	requests        []synccontract.CheckpointPosition
+	fetches         int
+	skipBudget      bool
+	traversalChecks int
+	traversalErr    error
 }
 
 func (s *pollingSourceFake) PollingSourceExecutorReference() connectors.TransportExecutorReference {
@@ -259,8 +297,10 @@ func (s *pollingSourceFake) PollingSourceRuntimeState(context.Context, connector
 }
 
 func (s *pollingSourceFake) FetchPollingSourcePage(ctx context.Context, request PollingSourcePageRequest) (PollingSourcePage, error) {
-	if err := request.RequestBudget.Consume(ctx); err != nil {
-		return PollingSourcePage{}, err
+	if !s.skipBudget {
+		if err := request.RequestBudget.Consume(ctx); err != nil {
+			return PollingSourcePage{}, err
+		}
 	}
 	s.fetches++
 	if request.After == nil {
@@ -272,6 +312,11 @@ func (s *pollingSourceFake) FetchPollingSourcePage(ctx context.Context, request 
 		return PollingSourcePage{}, errPollingSourceInterrupted
 	}
 	return s.pages[s.fetches-1].Clone(), nil
+}
+
+func (s *pollingSourceFake) ValidatePollingSourcePageTraversal(_ context.Context, _ *synccontract.CheckpointPosition, _ PollingSourcePage) error {
+	s.traversalChecks++
+	return s.traversalErr
 }
 
 type pollingSourceDurableSink struct {

@@ -44,10 +44,10 @@
   malformed/repeated page tuples are refused before the destination or store.
   The real executor also forwards a declared soft-delete as a validated
   tombstone and commits its final page tuple only after that page is durable.
-- Refactor: timestamp tokens require canonical `RFC3339Nano`; decimal tokens
-  are validated by `math/big.Int` without converting the opaque checkpoint
-  bytes. Float/scalar fallbacks, offsets, raw query inputs, and cursor-only
-  resume paths are absent.
+- Refactor: precision and native tuple ordering are validated by the registered
+  native runner before page delivery; the connector-neutral executor only
+  copies or byte-compares opaque tokens. Float/scalar fallbacks, offsets, raw
+  query inputs, and cursor-only resume paths are absent.
 
 ## Status
 
