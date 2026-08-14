@@ -17,7 +17,9 @@ Refs #3972
 - PR base branch: `integration/4015-mvp-flat-r1`
 - Sub-issue: #3976
 - Child PR: #4065
-- Integration synchronization: merge commit `0df3d5d4d` absorbs base head
+- Integration synchronization: merge commit `1dde1b00d7da5a2abb59b202d30a37e2ec9eadab`
+  absorbs current base head `5245b288776a30d808c934c51adc25593ddd5d1d`; the
+  prior merge commit `0df3d5d4d` had absorbed
   `fbd06e7d7c5c0632182e98cbb3a223ba25b19883`. A lease-bound restoration moved
   the remote branch from the cancelled pipeline's stale `c82e17db` head to the
   verified proof head; no verified work was discarded.
