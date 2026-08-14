@@ -6,7 +6,7 @@
   "branch": "fm/cli-4071-collision-scope-fix-r1",
   "required_base_branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "correction_3_local_gsd_verification_green_pending_child_pr_delivery",
+  "status": "correction_3_child_pr_delivery_green_with_docs_only_evidence_tip",
   "correction_budget": {
     "used_before": 2,
     "active_correction": 3,
@@ -75,12 +75,13 @@
     "correction_3_red": "passed: restored non-local ETL regression exits 1 on exact source head 3b75f4a62 because the unconditional local-inventory preflight returns the legacy same-owner typed error before source or destination execution",
     "correction_3_green": "passed on verified production commit a49ae952d52a6edf9786cc90e02825e2414f5b44; GSD evidence checkpoint 5a4f3d23645d3046d02055273fedd9a8b9dd67d1 adds evidence only, so the non-local run loads one record, acknowledges one batch, and makes one source request while the local true-positive remains refused before beginRun",
     "correction_3_broad_verification": "passed: full internal/app package, gofmt, candidate diff check, go vet, direct internal/app lint, go build ./cmd/pm, tidy, configured lint, release-target parity, agent contract, connectorgen surface-sync, and verify-gsd-workflow",
-    "correction_3_manual_verify_work": "passed inline under the documented manual-GSD fallback; RED/GREEN, true-positive, package, and quality acceptance are covered while child-PR delivery remains pending its owning executor",
+    "correction_3_manual_verify_work": "passed inline under the documented manual-GSD fallback; RED/GREEN, true-positive, package, quality, and child-PR delivery acceptance are covered",
     "correction_3_manual_code_review": "passed inline under the documented manual-GSD fallback; the selected-destination guard restores the generic materialization abstraction without connector literals or invariant weakening",
-    "child_pr_actual_head": null,
-    "child_pr_delivery": "pending: the delivery owner must create a child PR from fm/cli-4071-collision-scope-fix-r1 onto fix/4069-flow-case-equivalent-unique-tables-r1 and record that PR's actual head SHA at delivery end",
-    "pr_4071_mutation": "none: #4071 is historical source evidence only and must not be patched, retargeted, merged, closed, or readiness-mutated",
-    "next_gate": "Outer delivery executor creates the required child PR with base fix/4069-flow-case-equivalent-unique-tables-r1, then records its actual head SHA in this state and the published child PR body"
+    "validated_head": "af558aca4c2d77cb66a4329367df5c3b21623775",
+    "validated_head_meaning": "the exact child-PR code head validated by no-mistakes; this RUN-STATE commit is on top of it and contains no behavioural change",
+    "child_pr_delivery": "published: #4101 (https://github.com/polymetrics-ai/cli/pull/4101) from fm/cli-4071-collision-scope-fix-r1 onto fix/4069-flow-case-equivalent-unique-tables-r1",
+    "pr_4071_mutation": "body restored to accuracy only; #4071 was not retargeted, merged, closed, advanced, or readiness-mutated",
+    "next_gate": "completed: publish this documentation-only evidence tip, update #4101's body with both validated_head and final tip, then read back head and base"
   },
   "correction_1": {
     "audit_handoff": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4066-case-equivalent-unique-tables-r1/correction-1-sol-audit-handoff.md",
@@ -133,9 +134,12 @@
   },
   "correction_3": {
     "source_head": "3b75f4a62fd8d743ec883a5b824164374f661857",
-    "child_pr_actual_head": null,
+    "validated_head": "af558aca4c2d77cb66a4329367df5c3b21623775",
+    "validated_head_meaning": "the exact code commit validated by no-mistakes; this evidence record is committed on top of that head with no behavioural change",
+    "child_pr_number": 4101,
+    "child_pr_url": "https://github.com/polymetrics-ai/cli/pull/4101",
     "required_child_base": "fix/4069-flow-case-equivalent-unique-tables-r1",
-    "delivery_status": "pending outer delivery; #4071 must remain unchanged",
+    "delivery_status": "published and CI green; final evidence tip is documentation-only on top of validated_head; #4071 remains unadvanced",
     "problem": "the global RunETL legacy local-warehouse inventory preflight denies a non-local ETL when any retained local connection has a same-owner case-equivalent destination collision",
     "implementation": "RunETL calls validateConfiguredLocalWarehouseDestinationTables only when the selected connection satisfies the existing credential-free LocalWarehouseMaterializer abstraction",
     "portability": "no connector name or warehouse literal in shared code; no path outside internal/connectors/defs/<connector>/ contains connector-specific behavior",
