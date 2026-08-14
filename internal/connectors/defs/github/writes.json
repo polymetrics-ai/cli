@@ -1450,6 +1450,26 @@
       "body_fields": [
         "labels"
       ],
+      "transport_binding": {
+        "capability": "issue_label",
+        "role": "replace",
+        "modes": [
+          "full_overwrite",
+          "incremental_upsert"
+        ],
+        "inputs": [
+          {
+            "input": "target_issue",
+            "field": "issue_number",
+            "shape": "scalar"
+          },
+          {
+            "input": "label",
+            "field": "labels",
+            "shape": "singleton_array"
+          }
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -1468,7 +1488,10 @@
           }
         }
       },
-      "risk": "replaces every label on an issue or pull request, removing any not listed"
+      "risk": "replaces every label on an issue or pull request, removing any not listed",
+      "confirmation": {
+        "kind": "destructive"
+      }
     },
     {
       "name": "add_issue_labels",
@@ -1485,6 +1508,9 @@
       "transport_binding": {
         "capability": "issue_label",
         "role": "apply",
+        "modes": [
+          "full_append"
+        ],
         "inputs": [
           {
             "input": "target_issue",
@@ -1535,6 +1561,9 @@
       "transport_binding": {
         "capability": "issue_label",
         "role": "cleanup",
+        "modes": [
+          "full_append"
+        ],
         "inputs": [
           {
             "input": "target_issue",

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
 // AuthorizationStreamTable names one source stream/table and its destination
@@ -93,6 +94,37 @@ func (a *App) AuthorizationScopeForReversePlan(ctx context.Context, planID strin
 	plan, err := a.loadReversePlan(planID)
 	if err != nil {
 		return AuthorizationScope{}, err
+	}
+	if isIssueLabelTransportMode(plan.Mode) {
+		conn, err := a.issueLabelTransportConnection(plan.TransportConnectionID)
+		if err != nil {
+			return AuthorizationScope{}, err
+		}
+		contract, err := a.issueLabelTransportContract(conn)
+		if err != nil {
+			return AuthorizationScope{}, err
+		}
+		mode, err := issueLabelTransportMode(conn)
+		if err != nil {
+			return AuthorizationScope{}, err
+		}
+		action, err := contract.actionForSyncMode(mode)
+		if err != nil {
+			return AuthorizationScope{}, err
+		}
+		if plan.Mode == reversePlanModeIssueLabelTransportCleanup {
+			if mode != synccontract.ModeFullAppend {
+				return AuthorizationScope{}, errors.New("closed issue-label transport cleanup is available only for issues/full_append")
+			}
+			action = contract.cleanup
+		}
+		prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, EndpointConfig{
+			Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: cloneStringMap(plan.DestinationConfig),
+		}, action)
+		if err != nil {
+			return AuthorizationScope{}, err
+		}
+		return a.issueLabelTransportAuthorizationScope(conn, mode, action, plan, prepared), nil
 	}
 	if plan.Mode == reversePlanModeConnectorCommand {
 		return AuthorizationScope{}, errors.New("connector command plans do not have a source-table authorization scope")

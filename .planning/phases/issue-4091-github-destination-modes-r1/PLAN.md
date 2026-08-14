@@ -2,7 +2,7 @@
 phase: issue-4091-github-destination-modes-r1
 plan: "01"
 type: tdd
-status: in_progress
+status: complete
 base: integration/4015-mvp-flat-r1
 requirements:
   - ISSUE-4091
@@ -19,7 +19,15 @@ required_skills:
   - gsd-execute-phase
   - gsd-verify-work
   - gsd-code-review
-files_modified: []
+files_modified:
+  - internal/app/authorization.go
+  - internal/app/issue_label_transport_approval.go
+  - internal/app/issue_label_warehouse_transport.go
+  - internal/app/transport_dispatch.go
+  - internal/app/github_warehouse_transport_approval_test.go
+  - internal/connectors/definition.go
+  - internal/connectors/defs/github/writes.json
+  - internal/connectors/engine/schema/writes.schema.json
 ---
 
 # TDD plan: GitHub destination modes
@@ -42,7 +50,7 @@ files_modified: []
 1. **Plan checkpoint** — record the issue decisions, the #4132 foundation, required skills, TDD red/green tests, scope guard, and delivery base. Commit and push planning evidence before production edits.
 2. **Red** — add GitHub destination-mode tests that execute a non-additive request against a recorder with opt-in absent/disabled and changed scope. Assert zero sends; verify they fail before implementation.
 3. **Green** — add definition-owned destination-mode declarations and connection configuration. Reuse #4132 scope identity in the GitHub reverse path; mint standing authorization on its one-time proceed, resolve it per later run, and fail before provider sends when absent, disabled, revoked, expired, or changed.
-4. **Proof/refactor** — prove additive, set-replace, and keyed outcomes by reading labels back from the recorder. Run targeted and specified package tests, format, vet, static/generator checks, review, then open the explicit-base PR.
+4. **Proof/refactor** — prove additive, set-replace, and keyed outcomes by reading labels back from the recorder. Run targeted and specified package tests, format, vet, static/generator checks, review, then open the explicit-base PR. **Complete:** the recorder observes exact set replacement plus zero PUTs for replay, revoked authorization, scope drift, and disabled per-connection consent.
 
 ## Safety boundaries
 
