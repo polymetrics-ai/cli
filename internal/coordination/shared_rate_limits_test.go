@@ -2,10 +2,12 @@ package coordination
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
 	"strings"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -50,6 +52,55 @@ func TestSharedRateLimitRegistryPreservesCallerCancellation(t *testing.T) {
 	var unavailable *SharedRateLimitUnavailableError
 	if errors.As(err, &unavailable) {
 		t.Fatalf("cancelled shared availability returned unavailable reason %q", unavailable.Reason)
+	}
+}
+
+func TestSharedRateLimitObserveScriptArgsMatchScriptContract(t *testing.T) {
+	specs, err := sharedRateLimitBudgetSpecs([]connsdk.RateLimitBudget{fixedRequestBudget(3, 60)})
+	if err != nil {
+		t.Fatalf("sharedRateLimitBudgetSpecs: %v", err)
+	}
+	observation := sharedRateLimitObservation{
+		BlockedUntil:       1_786_068_045_000,
+		Limit:              2,
+		HasLimit:           true,
+		Remaining:          1,
+		HasRemaining:       true,
+		ForceRemainingZero: true,
+		Cost:               2,
+		HasCost:            true,
+	}
+	args, err := sharedRateLimitObserveScriptArgs(specs, observation, 2*time.Minute)
+	if err != nil {
+		t.Fatalf("sharedRateLimitObserveScriptArgs: %v", err)
+	}
+	if got, want := len(args), 3; got != want {
+		t.Fatalf("observe script arg count = %d, want %d", got, want)
+	}
+	encodedSpecs, ok := args[0].(string)
+	if !ok {
+		t.Fatalf("observe script specs argument = %T, want string", args[0])
+	}
+	var gotSpecs []sharedRateLimitBudget
+	if err := json.Unmarshal([]byte(encodedSpecs), &gotSpecs); err != nil {
+		t.Fatalf("decode observe script specs: %v", err)
+	}
+	if len(gotSpecs) != len(specs) || gotSpecs[0] != specs[0] {
+		t.Fatalf("observe script specs = %+v, want %+v", gotSpecs, specs)
+	}
+	encodedObservation, ok := args[1].(string)
+	if !ok {
+		t.Fatalf("observe script observation argument = %T, want string", args[1])
+	}
+	var gotObservation sharedRateLimitObservation
+	if err := json.Unmarshal([]byte(encodedObservation), &gotObservation); err != nil {
+		t.Fatalf("decode observe script observation: %v", err)
+	}
+	if gotObservation != observation {
+		t.Fatalf("observe script observation = %+v, want %+v", gotObservation, observation)
+	}
+	if got, ok := args[2].(int64); !ok || got != (2*time.Minute).Milliseconds() {
+		t.Fatalf("observe script TTL argument = %T(%v), want milliseconds", args[2], args[2])
 	}
 }
 

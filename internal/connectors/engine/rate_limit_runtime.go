@@ -104,28 +104,8 @@ func newRateLimitResolverWithContext(ctx context.Context, b Bundle, cfg connecto
 	}
 }
 
-func (r *rateLimitResolver) requesterFor(base *connsdk.Requester, method, path string) (*connsdk.Requester, error) {
-	if r == nil {
-		return base, nil
-	}
-	matched, costHeader, err := r.resolvePolicies(r.ctx, method, path, r.policies)
-	if err != nil {
-		return nil, err
-	}
-	if len(matched) == 0 {
-		if base.RouteRateLimits == nil {
-			return base, nil
-		}
-		clone := *base
-		clone.RouteRateLimits = nil
-		return &clone, nil
-	}
-	clone := *base
-	clone.RouteRateLimits = nil
-	clone.Admission = resolvedRateLimitAdmission(matched)
-	clone.Observer = resolvedRateLimitObserver(matched)
-	clone.RateLimitCostHeader = costHeader
-	return &clone, nil
+func (r *rateLimitResolver) requesterFor(base *connsdk.Requester, _, _ string) (*connsdk.Requester, error) {
+	return r.defaultRequester(base)
 }
 
 func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.Requester, error) {
@@ -380,10 +360,7 @@ func (o resolvedRateLimitObserver) Observe(ctx context.Context, observation conn
 	}
 }
 
-// RequesterFor returns a requester whose next logical requests are governed by
-// every policy matching the declaration-level method and path. The input path
-// is a bundle declaration, never a resolved runtime URL, so no runtime subject
-// is added to the requester admission seam.
+// RequesterFor returns a requester governed by declared rate-limit policies.
 func (rt *Runtime) RequesterFor(method, path string) (*connsdk.Requester, error) {
 	if rt == nil {
 		return nil, fmt.Errorf("engine runtime requester is unavailable")

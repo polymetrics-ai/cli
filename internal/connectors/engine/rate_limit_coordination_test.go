@@ -107,6 +107,45 @@ func TestEndpointRequireSharedPolicyGatesHookRequesterAtSend(t *testing.T) {
 	}
 }
 
+func TestEndpointRequireSharedPolicyGatesInterpolatedRequesterPathAtSend(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := withAllRateLimit(Bundle{Name: "interpolated-endpoint-shared-required", HTTP: HTTPBase{URL: server.URL}})
+	bundle.RateLimits.Policies[0].Coordination = connsdk.RateLimitCoordinationRequireShared
+	bundle.RateLimits.Policies[0].Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/widgets/special"}}}
+	restore := replaceSharedRateLimitRegistryForTest(nil)
+	t.Cleanup(restore)
+
+	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	requester, err := runtime.RequesterFor(http.MethodGet, "/widgets/{id}")
+	if err != nil {
+		t.Fatalf("RequesterFor: %v", err)
+	}
+	if requester.RouteRateLimits == nil {
+		t.Fatal("RequesterFor did not retain endpoint rate-limit resolution")
+	}
+	_, err = requester.Do(context.Background(), http.MethodGet, "/widgets/special", nil, nil)
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(err, &unavailable) {
+		t.Fatalf("interpolated endpoint request error = %T %v, want typed shared-coordinator refusal", err, err)
+	}
+	if got, want := unavailable.Reason, coordination.SharedRateLimitCoordinatorNotConfigured; got != want {
+		t.Fatalf("interpolated endpoint shared refusal reason = %q, want %q", got, want)
+	}
+	if requests != 0 {
+		t.Fatalf("interpolated endpoint request reached the provider %d times", requests)
+	}
+}
+
 func TestLocalRateLimitPolicyNeverInheritsSharedRequirement(t *testing.T) {
 	bundle := withAllRateLimit(Bundle{Name: "local-default", HTTP: HTTPBase{URL: "https://example.test"}})
 	restore := replaceSharedRateLimitRegistryForTest(nil)

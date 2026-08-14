@@ -119,8 +119,8 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 			if err != nil {
 				t.Fatalf("RequesterFor: %v", err)
 			}
-			if requester.Admission == nil || requester.Observer == nil {
-				t.Fatalf("policy %q did not attach admission and observation hooks", want.id)
+			if requester.Admission != nil || requester.Observer != nil || requester.RouteRateLimits == nil {
+				t.Fatalf("policy %q did not attach a path-aware rate-limit resolver", want.id)
 			}
 			graphqlRequester, err := runtime.RequesterFor(http.MethodPost, "/graphql")
 			if err != nil {

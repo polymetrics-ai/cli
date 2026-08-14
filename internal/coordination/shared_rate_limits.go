@@ -171,12 +171,12 @@ func (l *SharedRateLimiter) Observe(ctx context.Context, observation connsdk.Rat
 	if err != nil {
 		return
 	}
-	encoded, err := json.Marshal(sharedObservation)
+	ttl := sharedRateLimitTTL(specs)
+	args, err := sharedRateLimitObserveScriptArgs(specs, sharedObservation, ttl)
 	if err != nil {
 		return
 	}
-	ttl := sharedRateLimitTTL(specs)
-	_, _ = sharedRateLimitObserveScript.Run(ctx, l.registry.dragonfly.client, []string{sharedRateLimitRedisKey(l.key)}, string(encoded), ttl.Milliseconds()).Result()
+	_, _ = sharedRateLimitObserveScript.Run(ctx, l.registry.dragonfly.client, []string{sharedRateLimitRedisKey(l.key)}, args...).Result()
 }
 
 type sharedRateLimitObservation struct {
@@ -267,6 +267,18 @@ func sharedRateLimitTTL(specs []sharedRateLimitBudget) time.Duration {
 		}
 	}
 	return ttl + time.Second
+}
+
+func sharedRateLimitObserveScriptArgs(specs []sharedRateLimitBudget, observation sharedRateLimitObservation, ttl time.Duration) ([]any, error) {
+	encodedSpecs, err := json.Marshal(specs)
+	if err != nil {
+		return nil, err
+	}
+	encodedObservation, err := json.Marshal(observation)
+	if err != nil {
+		return nil, err
+	}
+	return []any{string(encodedSpecs), string(encodedObservation), ttl.Milliseconds()}, nil
 }
 
 func sharedRateLimitWait(result any) (time.Duration, error) {
