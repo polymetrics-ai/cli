@@ -11,7 +11,7 @@
 | Scope revocation fails before provider request | pass | `RevokeAuthorization` causes the subsequent no-token run to return `AuthorizationRevokedError` with no third PUT |
 | Modes are definition-owned and generated surface is current | pass | `go run ./cmd/connectorgen validate` (552 connectors, 0 findings); `go run ./cmd/connectorgen surface-sync --check` |
 | Target packages and repository gates pass | pass | `go test -count=1 -timeout 20m ./internal/app/...`; `go test -count=1 -timeout 20m ./internal/connectors/hooks/github/...`; `go vet ./internal/app/... ./internal/connectors/hooks/github/...`; `go run ./cmd/agentcontractgen check`; `git diff --check` |
-| Explicit PR base read-back matches integration | pending | GitHub API result will be recorded after PR creation |
+| Explicit PR base read-back matches integration | pass | `gh api /repos/polymetrics-ai/cli/pulls/4141 --jq .base.ref` printed `integration/4015-mvp-flat-r1` |
 
 ## Live-evidence gap
 

@@ -16,4 +16,4 @@
 | execute GREEN | complete | definition-owned set-replace/keyed actions, per-connection consent, one-time-to-durable authorization transition, and exact read-back are implemented |
 | verify-work | complete | requested package tests, vet, generator checks, contract check, and zero-send recorder evidence in `VERIFICATION.md` |
 | code-review | complete | inline/manual standard review recorded in `REVIEW.md`; no actionable findings |
-| PR / CI | pending | direct-PR delivery requires an explicit integration-base PR |
+| PR / CI | in progress | PR #4141 is open; API base read-back printed `integration/4015-mvp-flat-r1`; await required CI and automatic review |
