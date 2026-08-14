@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"errors"
+	"math"
 	"reflect"
 	"strings"
 	"testing"
@@ -175,11 +176,11 @@ func TestPostgresSnapshotReadPlanAndCheckpointUseTypedStableIdentity(t *testing.
 		Source:           synccontract.SourceIdentity{Engine: "postgres", AccountOrCluster: "cluster-alpha", ObjectScope: "analytics.public.events"},
 		SourceGeneration: synccontract.OpaqueToken("generation-1"),
 	}
-	first, err := postgresSnapshotCheckpoint(resume, "742:742:", catalog.Fingerprint(), 0, []any{int64(2)})
+	first, err := postgresSnapshotCheckpoint(resume, "742:742:", catalog.Fingerprint(), 0)
 	if err != nil {
 		t.Fatalf("postgresSnapshotCheckpoint() error = %v", err)
 	}
-	second, err := postgresSnapshotCheckpoint(resume, "742:742:", catalog.Fingerprint(), 0, []any{int64(2)})
+	second, err := postgresSnapshotCheckpoint(resume, "742:742:", catalog.Fingerprint(), 0)
 	if err != nil {
 		t.Fatalf("postgresSnapshotCheckpoint() second error = %v", err)
 	}
@@ -219,6 +220,52 @@ func TestPostgresSnapshotReadPlanRefusesUnstableOrMissingRelation(t *testing.T) 
 	missing.Name = "missing"
 	if _, err := newPostgresSnapshotReadPlan(catalog, missing, 1); err == nil || !strings.Contains(err.Error(), "absent from the typed catalog") {
 		t.Fatalf("newPostgresSnapshotReadPlan() missing relation error = %v", err)
+	}
+}
+
+func TestPostgresSnapshotCheckpointDoesNotRequireJSONEncodableKeyValues(t *testing.T) {
+	logical, err := database.NewSignedInteger(64)
+	if err != nil {
+		t.Fatalf("NewSignedInteger() error = %v", err)
+	}
+	relationRef := database.RelationRef{
+		Schema: database.SchemaRef{Catalog: database.CatalogRef{Name: "analytics"}, Name: "public"},
+		Name:   "events",
+	}
+	id := database.ColumnRef{Relation: relationRef, Name: "id"}
+	catalog, err := database.NewCatalog(database.CatalogRef{Name: "analytics"}, []database.Relation{{
+		Ref:            relationRef,
+		NativeIdentity: database.NativeRelationIdentity{Kind: "oid", Value: "10003"},
+		Columns:        []database.Column{{Ref: id, Type: logical, Nullable: false, Ordinal: 1}},
+		Keys:           []database.Key{{Name: "events_pkey", Kind: database.KeyPrimary, Columns: []database.ColumnRef{id}}},
+	}})
+	if err != nil {
+		t.Fatalf("NewCatalog() error = %v", err)
+	}
+	plan, err := newPostgresSnapshotReadPlan(catalog, relationRef, 1)
+	if err != nil {
+		t.Fatalf("newPostgresSnapshotReadPlan() error = %v", err)
+	}
+	position, err := plan.orderValues([]any{math.NaN()})
+	if err != nil || len(position) != 1 || !math.IsNaN(position[0].(float64)) {
+		t.Fatalf("orderValues() = %#v, %v; want valid NaN PostgreSQL key", position, err)
+	}
+	resume := synccontract.ResumeExpectation{
+		Source:           synccontract.SourceIdentity{Engine: "postgres", AccountOrCluster: "cluster-alpha", ObjectScope: "analytics.public.events"},
+		SourceGeneration: synccontract.OpaqueToken("generation-1"),
+	}
+	if _, err := postgresSnapshotCheckpoint(resume, "742:742:", catalog.Fingerprint(), 0); err != nil {
+		t.Fatalf("postgresSnapshotCheckpoint() rejected a valid opaque PostgreSQL key value: %v", err)
+	}
+}
+
+func TestPostgresSnapshotRelationRefAllowsTypedCatalogDatabaseName(t *testing.T) {
+	relation, err := postgresSnapshotRelationRef("analytics-db.public.events")
+	if err != nil {
+		t.Fatalf("postgresSnapshotRelationRef() error = %v", err)
+	}
+	if relation.Schema.Catalog.Name != "analytics-db" || relation.Schema.Name != "public" || relation.Name != "events" {
+		t.Fatalf("postgresSnapshotRelationRef() = %#v, want preserved catalog/schema/relation", relation)
 	}
 }
 
