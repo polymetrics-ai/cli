@@ -1,6 +1,6 @@
 # Issue #3867: rate-limit parking and automatic resumption - Context
 
-**Gathered:** 2026-08-15  
+**Gathered:** 2026-08-15
 **Status:** Ready for planning
 
 <domain>
@@ -144,5 +144,5 @@ validation, and #4090.
 
 ---
 
-*Issue: #3867 rate-limit parking and automatic resumption*  
+*Issue: #3867 rate-limit parking and automatic resumption*
 *Context gathered: 2026-08-15*

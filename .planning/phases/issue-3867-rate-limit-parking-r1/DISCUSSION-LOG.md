@@ -2,8 +2,8 @@
 
 > **Audit trail only.** Decisions are captured in `CONTEXT.md`.
 
-**Date:** 2026-08-15  
-**Issue:** #3867 rate-limit parking and automatic resumption  
+**Date:** 2026-08-15
+**Issue:** #3867 rate-limit parking and automatic resumption
 **Mode:** `scripts/gsd prompt discuss-phase issue-3867-rate-limit-parking-r1 --auto`
 
 The issue supplies unambiguous acceptance criteria and the automated discussion
