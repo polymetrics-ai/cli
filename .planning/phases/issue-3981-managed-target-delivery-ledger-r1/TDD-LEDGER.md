@@ -19,7 +19,7 @@ go test -timeout 20m ./internal/connectors/database -run 'TestManagedTargetDeliv
 
 The base must fail because no `ManagedTargetDeliveryLedger` implementation or
 test exists yet. The exact pre-change command result is retained at
-`traces/ledger-rename-restart-red.txt`.
+`traces/ledger-red.txt`.
 
 ## Green commands
 
@@ -31,4 +31,5 @@ go test -race -timeout 20m ./internal/connectors/database -run 'TestManagedTarge
 
 The green proof must show non-empty observable records after rename/restart,
 separate records for sibling StreamIDs, and zero persistence calls for invalid
-requests.
+requests. The exact focused green output is retained at
+`traces/ledger-green.txt`.

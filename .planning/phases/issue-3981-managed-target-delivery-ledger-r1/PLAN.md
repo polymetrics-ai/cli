@@ -11,8 +11,8 @@
   and review record are the manual fallback evidence.
 - Required skills loaded: `golang-how-to`, `golang-design-patterns`,
   `golang-structs-interfaces`, `golang-error-handling`, `golang-security`,
-  `golang-safety`, `golang-testing`, and `golang-database`. No CLI/docs parity
-  skill is applicable because no CLI-visible surface changes.
+  `golang-safety`, `golang-testing`, `golang-context`, and `golang-database`.
+  No CLI/docs parity skill is applicable because no CLI-visible surface changes.
 
 ## Goal
 

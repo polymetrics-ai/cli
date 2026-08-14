@@ -2,33 +2,33 @@
 
 ## Behavioral proof
 
-- [ ] Ledger identity binds asserted owner, target database, and immutable
+- [x] Ledger identity binds asserted owner, target database, and immutable
       managed-target relation/StreamID only.
-- [ ] A renamed source artifact with the same persisted StreamID resolves the
+- [x] A renamed source artifact with the same persisted StreamID resolves the
       previously recorded target delivery record.
-- [ ] A fresh ledger instance on the same durable-store port resolves that
+- [x] A fresh ledger instance on the same durable-store port resolves that
       same record after restart.
-- [ ] Sibling relations in one owner namespace retain independent records; an
+- [x] Sibling relations in one owner namespace retain independent records; an
       update to one does not alter the other.
-- [ ] Invalid/mismatched typed identity is refused before fake-store mutation.
-- [ ] No transaction spool, source checkpoint, driver/DDL/SQL/mode/CLI code is
+- [x] Invalid/mismatched typed identity is refused before fake-store mutation.
+- [x] No transaction spool, source checkpoint, driver/DDL/SQL/mode/CLI code is
       introduced or repurposed.
 
 ## Local commands
 
-- [ ] `go test -timeout 20m ./internal/connectors/database/... ./internal/app/...`
-- [ ] `go test -race -timeout 20m ./internal/connectors/database -run 'TestManagedTargetDeliveryLedger' -count=1`
-- [ ] `go vet ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make tidy-check`
-- [ ] `make lint`
-- [ ] `make docs-check`
-- [ ] `make smoke-no-build`
-- [ ] `make agent-contract-check`
-- [ ] `make connectorgen-validate`
-- [ ] `make connectorgen-surface-sync`
-- [ ] `make connector-boundary`
-- [ ] `make release-workflow-check`
+- [x] `go test -timeout 20m ./internal/connectors/database/... ./internal/app/...`
+- [x] `go test -race -timeout 20m ./internal/connectors/database -run 'TestManagedTargetDeliveryLedger' -count=1`
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make tidy-check`
+- [x] `make lint`
+- [x] `make docs-check`
+- [x] `make smoke-no-build`
+- [x] `make agent-contract-check`
+- [x] `make connectorgen-validate`
+- [x] `make connectorgen-surface-sync`
+- [x] `make connector-boundary`
+- [x] `make release-workflow-check`
 - [ ] Inline `verify-work` and `code-review`, including any GSD gap evidence.
 
 ## Deliberate not applicable
