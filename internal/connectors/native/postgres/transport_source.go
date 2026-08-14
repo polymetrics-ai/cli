@@ -330,11 +330,12 @@ func (p postgresSnapshotReadPlan) readPage(ctx context.Context, tx pgx.Tx, after
 		if err != nil {
 			return nil, nil, fmt.Errorf("postgres snapshot transport: read bounded row: %w", err)
 		}
-		record, err := p.recordForValues(values)
+		rawValues := rows.RawValues()
+		record, err := p.recordForValues(values, rawValues)
 		if err != nil {
 			return nil, nil, err
 		}
-		nextAfter, err = p.orderValues(values)
+		nextAfter, err = p.orderValues(values, rawValues)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -346,13 +347,24 @@ func (p postgresSnapshotReadPlan) readPage(ctx context.Context, tx pgx.Tx, after
 	return records, nextAfter, nil
 }
 
-func (p postgresSnapshotReadPlan) recordForValues(values []any) (connectors.Record, error) {
+func (p postgresSnapshotReadPlan) recordForValues(values []any, rawValues [][]byte) (connectors.Record, error) {
 	if len(values) != len(p.columns) {
 		return nil, errors.New("postgres snapshot transport: bounded row does not match catalog projection")
 	}
+	if len(rawValues) != len(values) {
+		return nil, errors.New("postgres snapshot transport: bounded raw row does not match catalog projection")
+	}
 	record := make(connectors.Record, len(p.columns))
 	for index, column := range p.columns {
-		value, err := postgresSnapshotRecordValue(column.Type, values[index])
+		var (
+			value any
+			err   error
+		)
+		if column.Type.Kind() == database.LogicalJSON {
+			value, err = postgresSnapshotRawJSONValue(rawValues[index])
+		} else {
+			value, err = postgresSnapshotRecordValue(column.Type, values[index])
+		}
 		if err != nil {
 			return nil, fmt.Errorf("postgres snapshot transport: normalize bounded column %q: %w", column.Ref.Name, err)
 		}
@@ -423,6 +435,9 @@ func postgresSnapshotRecordValue(logical database.LogicalType, value any) (any, 
 		case string:
 			return typed, nil
 		case time.Time:
+			if !logical.WithTimezone() {
+				return typed.Format("2006-01-02T15:04:05.999999999"), nil
+			}
 			return typed.Format(time.RFC3339Nano), nil
 		case pgtype.InfinityModifier:
 			return typed.String(), nil
@@ -438,10 +453,6 @@ func postgresSnapshotRecordValue(logical database.LogicalType, value any) (any, 
 				return nil, nil
 			}
 			return typed.String(), nil
-		}
-	case database.LogicalJSON:
-		if postgresSnapshotJSONValue(value) {
-			return value, nil
 		}
 	default:
 		return nil, fmt.Errorf("unsupported typed catalog logical kind %q", logical.Kind())
@@ -464,31 +475,14 @@ func postgresSnapshotValuerString(value interface{ Value() (driver.Value, error)
 	return stringValue, nil
 }
 
-func postgresSnapshotJSONValue(value any) bool {
-	switch typed := value.(type) {
-	case nil, bool, string, json.Number,
-		float32, float64,
-		int, int8, int16, int32, int64,
-		uint, uint8, uint16, uint32, uint64,
-		json.RawMessage:
-		return true
-	case map[string]any:
-		for _, nested := range typed {
-			if !postgresSnapshotJSONValue(nested) {
-				return false
-			}
-		}
-		return true
-	case []any:
-		for _, nested := range typed {
-			if !postgresSnapshotJSONValue(nested) {
-				return false
-			}
-		}
-		return true
-	default:
-		return false
+func postgresSnapshotRawJSONValue(raw []byte) (any, error) {
+	if raw == nil {
+		return nil, nil
 	}
+	if !json.Valid(raw) {
+		return nil, errors.New("invalid JSON value")
+	}
+	return append(json.RawMessage(nil), raw...), nil
 }
 
 func (p postgresSnapshotReadPlan) query(after []any) string {
@@ -531,20 +525,56 @@ func (p postgresSnapshotReadPlan) queryArguments(after []any) []any {
 	return append(arguments, p.pageSize)
 }
 
-func (p postgresSnapshotReadPlan) orderValues(values []any) ([]any, error) {
+func (p postgresSnapshotReadPlan) orderValues(values []any, rawValues [][]byte) ([]any, error) {
+	if len(values) != len(p.columns) {
+		return nil, errors.New("postgres snapshot transport: bounded row does not match catalog projection")
+	}
+	if len(rawValues) != len(values) {
+		return nil, errors.New("postgres snapshot transport: bounded raw row does not match catalog projection")
+	}
 	valuesByColumn := make(map[string]any, len(p.columns))
+	rawValuesByColumn := make(map[string][]byte, len(p.columns))
+	columnsByName := make(map[string]database.Column, len(p.columns))
 	for index, column := range p.columns {
 		valuesByColumn[column.Ref.Name] = values[index]
+		rawValuesByColumn[column.Ref.Name] = rawValues[index]
+		columnsByName[column.Ref.Name] = column
 	}
 	ordered := make([]any, 0, len(p.order))
 	for _, orderColumn := range p.order {
 		value, found := valuesByColumn[orderColumn.Name]
+		column := columnsByName[orderColumn.Name]
+		if column.Type.Kind() == database.LogicalJSON {
+			var err error
+			value, err = postgresSnapshotRawJSONValue(rawValuesByColumn[orderColumn.Name])
+			if err != nil {
+				return nil, fmt.Errorf("postgres snapshot transport: normalize stable key %q: %w", orderColumn.Name, err)
+			}
+		}
 		if !found || value == nil {
 			return nil, errors.New("postgres snapshot transport: stable key row value is absent")
 		}
-		ordered = append(ordered, value)
+		ordered = append(ordered, postgresSnapshotPaginationValue(column.Type, value))
 	}
 	return ordered, nil
+}
+
+func postgresSnapshotPaginationValue(logical database.LogicalType, value any) any {
+	modifier, ok := value.(pgtype.InfinityModifier)
+	if !ok || (modifier != pgtype.Infinity && modifier != pgtype.NegativeInfinity) {
+		return value
+	}
+	switch logical.Kind() {
+	case database.LogicalDate:
+		return pgtype.Date{InfinityModifier: modifier, Valid: true}
+	case database.LogicalTimestamp:
+		if logical.WithTimezone() {
+			return pgtype.Timestamptz{InfinityModifier: modifier, Valid: true}
+		}
+		return pgtype.Timestamp{InfinityModifier: modifier, Valid: true}
+	default:
+		return value
+	}
 }
 
 func postgresSnapshotCheckpoint(resume synccontract.ResumeExpectation, snapshotToken string, fingerprint database.SchemaFingerprint, page int) (synccontract.CheckpointEnvelope, error) {

@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"math"
 	"math/big"
@@ -210,7 +211,8 @@ func TestPostgresSnapshotRecordValuesNormalizeTransportVocabulary(t *testing.T) 
 	plan := postgresSnapshotReadPlan{
 		columns: []database.Column{
 			{Ref: database.ColumnRef{Relation: relation, Name: "event_id"}, Type: database.NewUUID()},
-			{Ref: database.ColumnRef{Relation: relation, Name: "occurred_at"}, Type: mustTransportTimestamp(t)},
+			{Ref: database.ColumnRef{Relation: relation, Name: "occurred_at"}, Type: mustTransportTimestamp(t, true)},
+			{Ref: database.ColumnRef{Relation: relation, Name: "recorded_at"}, Type: mustTransportTimestamp(t, false)},
 			{Ref: database.ColumnRef{Relation: relation, Name: "event_date"}, Type: database.NewDate()},
 			{Ref: database.ColumnRef{Relation: relation, Name: "amount"}, Type: mustTransportDecimal(t)},
 			{Ref: database.ColumnRef{Relation: relation, Name: "opened_at"}, Type: mustTransportTime(t)},
@@ -220,12 +222,13 @@ func TestPostgresSnapshotRecordValuesNormalizeTransportVocabulary(t *testing.T) 
 	values := []any{
 		uuid,
 		timestamp,
+		time.Date(2026, time.August, 14, 12, 34, 56, 789000000, time.UTC),
 		date,
 		pgtype.Numeric{Int: big.NewInt(12345), Exp: -2, Valid: true},
 		pgtype.Time{Microseconds: 12*60*60*1_000_000 + 34*60*1_000_000 + 56*1_000_000 + 789000, Valid: true},
 	}
 
-	record, err := plan.recordForValues(values)
+	record, err := plan.recordForValues(values, make([][]byte, len(values)))
 	if err != nil {
 		t.Fatalf("recordForValues() error = %v", err)
 	}
@@ -234,6 +237,9 @@ func TestPostgresSnapshotRecordValuesNormalizeTransportVocabulary(t *testing.T) 
 	}
 	if got, want := record["occurred_at"], "2026-08-14T12:34:56.789+05:30"; got != want {
 		t.Fatalf("occurred_at = %#v, want %q", got, want)
+	}
+	if got, want := record["recorded_at"], "2026-08-14T12:34:56.789"; got != want {
+		t.Fatalf("recorded_at = %#v, want %q", got, want)
 	}
 	if got, want := record["event_date"], "2026-08-14"; got != want {
 		t.Fatalf("event_date = %#v, want %q", got, want)
@@ -244,12 +250,103 @@ func TestPostgresSnapshotRecordValuesNormalizeTransportVocabulary(t *testing.T) 
 	if got, want := record["opened_at"], "12:34:56.789000"; got != want {
 		t.Fatalf("opened_at = %#v, want %q", got, want)
 	}
-	position, err := plan.orderValues(values)
+	position, err := plan.orderValues(values, make([][]byte, len(values)))
 	if err != nil {
 		t.Fatalf("orderValues() error = %v", err)
 	}
 	if got, want := position, []any{uuid}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("orderValues() = %#v, want native key %#v", got, want)
+	}
+}
+
+func TestPostgresSnapshotRecordValuesPreserveRawJSON(t *testing.T) {
+	relation := database.RelationRef{
+		Schema: database.SchemaRef{Catalog: database.CatalogRef{Name: "analytics"}, Name: "public"},
+		Name:   "events",
+	}
+	payloadRef := database.ColumnRef{Relation: relation, Name: "payload"}
+	plan := postgresSnapshotReadPlan{columns: []database.Column{
+		{Ref: payloadRef, Type: database.NewJSON()},
+		{Ref: database.ColumnRef{Relation: relation, Name: "null_payload"}, Type: database.NewJSON()},
+		{Ref: database.ColumnRef{Relation: relation, Name: "empty_payload"}, Type: database.NewJSON()},
+	}, order: []database.ColumnRef{payloadRef}}
+	raw := []byte(`{"id":9007199254740993}`)
+	record, err := plan.recordForValues(
+		[]any{map[string]any{"id": float64(9007199254740992)}, nil, nil},
+		[][]byte{raw, []byte("null"), nil},
+	)
+	if err != nil {
+		t.Fatalf("recordForValues() error = %v", err)
+	}
+	payload, ok := record["payload"].(json.RawMessage)
+	if !ok {
+		t.Fatalf("payload type = %T, want json.RawMessage", record["payload"])
+	}
+	if got, want := string(payload), `{"id":9007199254740993}`; got != want {
+		t.Fatalf("payload = %q, want %q", got, want)
+	}
+	nullPayload, ok := record["null_payload"].(json.RawMessage)
+	if !ok || string(nullPayload) != "null" {
+		t.Fatalf("null_payload = %#v, want JSON null", record["null_payload"])
+	}
+	if record["empty_payload"] != nil {
+		t.Fatalf("empty_payload = %#v, want SQL NULL", record["empty_payload"])
+	}
+	position, err := plan.orderValues(
+		[]any{map[string]any{"id": float64(9007199254740992)}, nil, nil},
+		[][]byte{raw, []byte("null"), nil},
+	)
+	if err != nil {
+		t.Fatalf("orderValues() error = %v", err)
+	}
+	if got, want := position, []any{json.RawMessage(`{"id":9007199254740993}`)}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("orderValues() = %#v, want %#v", got, want)
+	}
+}
+
+func TestPostgresSnapshotOrderValuesUseEncodableTemporalInfinities(t *testing.T) {
+	relation := database.RelationRef{
+		Schema: database.SchemaRef{Catalog: database.CatalogRef{Name: "analytics"}, Name: "public"},
+		Name:   "events",
+	}
+	tests := []struct {
+		name    string
+		logical database.LogicalType
+		value   pgtype.InfinityModifier
+		want    any
+	}{
+		{
+			name:    "date",
+			logical: database.NewDate(),
+			value:   pgtype.NegativeInfinity,
+			want:    pgtype.Date{InfinityModifier: pgtype.NegativeInfinity, Valid: true},
+		},
+		{
+			name:    "timestamp",
+			logical: mustTransportTimestamp(t, false),
+			value:   pgtype.Infinity,
+			want:    pgtype.Timestamp{InfinityModifier: pgtype.Infinity, Valid: true},
+		},
+		{
+			name:    "timestamptz",
+			logical: mustTransportTimestamp(t, true),
+			value:   pgtype.NegativeInfinity,
+			want:    pgtype.Timestamptz{InfinityModifier: pgtype.NegativeInfinity, Valid: true},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			column := database.Column{Ref: database.ColumnRef{Relation: relation, Name: "stable_key"}, Type: test.logical}
+			plan := postgresSnapshotReadPlan{columns: []database.Column{column}, order: []database.ColumnRef{column.Ref}}
+			values, err := plan.orderValues([]any{test.value}, make([][]byte, 1))
+			if err != nil {
+				t.Fatalf("orderValues() error = %v", err)
+			}
+			if got, want := values, []any{test.want}; !reflect.DeepEqual(got, want) {
+				t.Fatalf("orderValues() = %#v, want %#v", got, want)
+			}
+		})
 	}
 }
 
@@ -271,9 +368,9 @@ func mustTransportTime(t *testing.T) database.LogicalType {
 	return logical
 }
 
-func mustTransportTimestamp(t *testing.T) database.LogicalType {
+func mustTransportTimestamp(t *testing.T, withTimezone bool) database.LogicalType {
 	t.Helper()
-	logical, err := database.NewTimestamp(3, true)
+	logical, err := database.NewTimestamp(3, withTimezone)
 	if err != nil {
 		t.Fatalf("NewTimestamp() error = %v", err)
 	}
@@ -331,7 +428,7 @@ func TestPostgresSnapshotCheckpointDoesNotRequireJSONEncodableKeyValues(t *testi
 	if err != nil {
 		t.Fatalf("newPostgresSnapshotReadPlan() error = %v", err)
 	}
-	position, err := plan.orderValues([]any{math.NaN()})
+	position, err := plan.orderValues([]any{math.NaN()}, make([][]byte, 1))
 	if err != nil || len(position) != 1 || !math.IsNaN(position[0].(float64)) {
 		t.Fatalf("orderValues() = %#v, %v; want valid NaN PostgreSQL key", position, err)
 	}
