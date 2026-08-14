@@ -575,8 +575,13 @@ non-REST protocols — postgres/mysql/snowflake/bigquery (SQL + CDC), amazon-sqs
 file/warehouse/outbox/sample built-ins. These implement `connectors.Connector` directly with the
 Ruby component split as the mandated file layout: `connector.go` (entry + registration),
 `connection.go`, `reader.go`, `cataloger.go`, `writer.go`, `cdc.go`. **They still ship a defs
-bundle** (metadata.json, spec.json, schemas/) so identity, catalog, and docs stay uniform; they
-embed `engine.Base` which serves `Definition()`/`Catalog()` from the bundle.
+bundle** (metadata.json, spec.json, schemas/, and `database.json` when it is a native database
+ driver) so identity, catalog, and docs stay uniform; they embed `engine.Base`, which supplies
+ bundle-derived identity and the base `Definition()`. Native operations remain package-owned. The
+ database declaration's closed authoring contract lives in the
+ [migration conventions](../migration/conventions.md#database-native-policy-declaration-databasejson).
+PostgreSQL can extend that definition with its registered bounded snapshot source; generic App
+composition must not infer or assemble it from broad capabilities.
 
 ## C. Interface, registry, and catalog changes
 

@@ -50,6 +50,12 @@ SECURITY
   approval: none required for read-only sync
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+SYNC TRANSPORT
+  Source transport: declared
+  Destination transport: unsupported
+  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  Source executor: native_database/postgres_bounded_snapshot
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect postgres
