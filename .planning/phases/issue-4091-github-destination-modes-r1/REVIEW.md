@@ -17,7 +17,7 @@ CodeQL reported one actionable error-propagation finding in the first-use author
 
 The review specifically confirmed that a later non-additive run re-derives the durable scope before creating the writer evidence; any changed configuration or revoked record returns before the provider writer is called. The writer's declaration-owned action remains the `WriteAction` used by its approval gate, while the canonical sync mode remains separately bound in `EnabledOperations`; this preserves both gate compatibility and mode-specific authorization identity.
 
-The golden transcript was regenerated through its test-owned environment switch, never hand-edited. Its decoded GitHub entry adds only the destructive confirmation for the pre-existing `set_issue_labels` action. A SHA-256 comparison proved every non-GitHub entry, including sample, unknown, and unsafe entries, is byte-for-byte unchanged.
+The golden transcript was regenerated through its test-owned environment switch, never hand-edited. After the final rebase, `pm` was rebuilt so the generation used current embedded definitions. Its decoded GitHub entry adds only the destructive confirmation for the pre-existing `set_issue_labels` action. A SHA-256 comparison (`f66292f04a9487bc586aa381c80b156f087fbafd3f9ef6cc38c54124cc202100`) proved every non-GitHub entry, including sample, unknown, and unsafe entries, is byte-for-byte unchanged. The fresh connector catalog generation preserves the corrected GitHub auth/rate-limit description and changes only the #4091 issue-label transport modes, binding, and destructive confirmation.
 
 ## Commands
 

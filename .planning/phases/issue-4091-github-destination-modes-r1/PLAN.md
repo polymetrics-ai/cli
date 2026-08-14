@@ -28,6 +28,7 @@ files_modified:
   - internal/connectors/definition.go
   - internal/connectors/defs/github/writes.json
   - internal/connectors/engine/schema/writes.schema.json
+  - docs/connectors/catalog/all-connectors.json
   - internal/cli/testdata/golden_transcripts.json
 ---
 

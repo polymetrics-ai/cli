@@ -59123,7 +59123,28 @@
         "kind": "update",
         "method": "PUT",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels",
-        "risk": "replaces every label on an issue or pull request, removing any not listed"
+        "risk": "replaces every label on an issue or pull request, removing any not listed",
+        "transport_binding": {
+          "capability": "issue_label",
+          "role": "replace",
+          "modes": [
+            "full_overwrite",
+            "incremental_upsert"
+          ],
+          "inputs": [
+            {
+              "input": "target_issue",
+              "field": "issue_number",
+              "shape": "scalar"
+            },
+            {
+              "input": "label",
+              "field": "labels",
+              "shape": "singleton_array"
+            }
+          ]
+        },
+        "confirm": "destructive"
       },
       {
         "name": "add_issue_labels",
@@ -59134,6 +59155,9 @@
         "transport_binding": {
           "capability": "issue_label",
           "role": "apply",
+          "modes": [
+            "full_append"
+          ],
           "inputs": [
             {
               "input": "target_issue",
@@ -59158,6 +59182,9 @@
         "transport_binding": {
           "capability": "issue_label",
           "role": "cleanup",
+          "modes": [
+            "full_append"
+          ],
           "inputs": [
             {
               "input": "target_issue",
