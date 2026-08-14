@@ -20,6 +20,7 @@ func TestRateLimitRegistryStatusIsExplicitlyProcessLocal(t *testing.T) {
 	if !strings.Contains(status.Message, "process-local") || strings.Contains(status.Message, "cross-process") {
 		t.Fatalf("local registry message = %q, want an honest process-local statement", status.Message)
 	}
+	t.Logf("rate-limit coordination: %s", status.Message)
 }
 
 func TestSharedRateLimitRegistryRefusesWhenCoordinatorIsMissing(t *testing.T) {
@@ -36,16 +37,33 @@ func TestSharedRateLimitRegistryRefusesWhenCoordinatorIsMissing(t *testing.T) {
 	if strings.Contains(err.Error(), string(testRateLimitKey().Scope)) {
 		t.Fatalf("shared unavailable error exposed an opaque scope: %v", err)
 	}
+	t.Logf("require_shared result=refused reason=%s", unavailable.Reason)
 }
 
 func TestSharedRateLimitRedisKeyUsesOnlyOpaqueScope(t *testing.T) {
+	identity, err := connectors.NewCoordinationIdentity([]byte("coordination-test-salt"), connectors.CredentialBinding{
+		BindingID:      "binding-test-only",
+		ProviderFamily: "provider-test-only",
+		AuthProfile:    "profile-test-only",
+	})
+	if err != nil {
+		t.Fatalf("NewCoordinationIdentity: %v", err)
+	}
+	scope, err := identity.RateScopeKey(connectors.RateLimitScope{
+		PolicyID: "core",
+		Kind:     connectors.RateScopeKindAccount,
+		Subject:  "public-account-id",
+	})
+	if err != nil {
+		t.Fatalf("RateScopeKey: %v", err)
+	}
 	key := RateLimitKey{
 		Connector: "paced",
 		PolicyID:  "core",
-		Scope:     connectors.RateLimitScopeKey("opaque-projection-only"),
+		Scope:     scope,
 	}
 	stored := sharedRateLimitRedisKey(key)
-	for _, forbidden := range []string{"public-account-id", "credential", "binding"} {
+	for _, forbidden := range []string{"public-account-id", "binding-test-only", "provider-test-only", "profile-test-only"} {
 		if strings.Contains(stored, forbidden) {
 			t.Fatalf("shared registry key %q exposed protected material %q", stored, forbidden)
 		}

@@ -1,0 +1,160 @@
+//go:build coordinationintegration
+
+package coordination
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"os"
+	"os/exec"
+	"strings"
+	"testing"
+	"time"
+
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
+)
+
+const sharedRateLimitHelperEnv = "POLYMETRICS_COORDINATION_HELPER"
+
+func TestSharedRateLimitCoordinatesSeparateProcesses(t *testing.T) {
+	if os.Getenv("POLYMETRICS_COORDINATION_INTEGRATION") != "1" {
+		t.Skip("set POLYMETRICS_COORDINATION_INTEGRATION=1 with a local Dragonfly endpoint to run")
+	}
+	addr := os.Getenv("POLYMETRICS_DRAGONFLY_ADDR")
+	if addr == "" {
+		addr = "localhost:6379"
+	}
+	dragonfly := OpenDragonfly(addr)
+	t.Cleanup(func() { _ = dragonfly.Close() })
+	if err := dragonfly.Ping(context.Background()); err != nil {
+		t.Fatalf("required local Dragonfly coordinator is unavailable: %v", err)
+	}
+	key := RateLimitKey{Connector: "paced", PolicyID: "shared-window", Scope: connectors.RateLimitScopeKey("integration-opaque-scope")}
+	if err := dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err(); err != nil {
+		t.Fatalf("clear integration rate-limit key: %v", err)
+	}
+	t.Cleanup(func() { _ = dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err() })
+
+	outputs := make(chan string, 2)
+	for range 2 {
+		go func() {
+			child := exec.Command(os.Args[0], "-test.run=^TestSharedRateLimitHelperProcess$", "-test.v")
+			// The helper gets only the opt-in test switch and a non-secret local
+			// coordinator address. It cannot inherit any calling credential env.
+			child.Env = []string{
+				sharedRateLimitHelperEnv + "=1",
+				"POLYMETRICS_DRAGONFLY_ADDR=" + addr,
+			}
+			result, err := child.CombinedOutput()
+			if err != nil {
+				outputs <- fmt.Sprintf("child error: %v: %s", err, result)
+				return
+			}
+			outputs <- string(result)
+		}()
+	}
+
+	granted, blocked := 0, 0
+	for range 2 {
+		result := <-outputs
+		switch {
+		case strings.Contains(result, "shared-rate-limit-result=granted"):
+			granted++
+		case strings.Contains(result, "shared-rate-limit-result=blocked"):
+			blocked++
+		default:
+			t.Fatalf("helper returned an unexpected result: %s", result)
+		}
+	}
+	if granted != 1 || blocked != 1 {
+		t.Fatalf("separate-process shared budget grants=%d blocked=%d, want one of each", granted, blocked)
+	}
+}
+
+func TestSharedRateLimitHonorsEveryDeclaredBudgetModel(t *testing.T) {
+	if os.Getenv("POLYMETRICS_COORDINATION_INTEGRATION") != "1" {
+		t.Skip("set POLYMETRICS_COORDINATION_INTEGRATION=1 with a local Dragonfly endpoint to run")
+	}
+	addr := os.Getenv("POLYMETRICS_DRAGONFLY_ADDR")
+	if addr == "" {
+		addr = "localhost:6379"
+	}
+	dragonfly := OpenDragonfly(addr)
+	t.Cleanup(func() { _ = dragonfly.Close() })
+	if err := dragonfly.Ping(context.Background()); err != nil {
+		t.Fatalf("required local Dragonfly coordinator is unavailable: %v", err)
+	}
+	for _, model := range []connsdk.RateLimitBudgetModel{
+		connsdk.RateLimitBudgetFixedWindow,
+		connsdk.RateLimitBudgetSlidingWindow,
+		connsdk.RateLimitBudgetTokenBucket,
+		connsdk.RateLimitBudgetLeakyBucket,
+	} {
+		t.Run(string(model), func(t *testing.T) {
+			key := RateLimitKey{Connector: "paced", PolicyID: "shared-" + string(model), Scope: connectors.RateLimitScopeKey("integration-opaque-scope")}
+			if err := dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err(); err != nil {
+				t.Fatalf("clear integration rate-limit key: %v", err)
+			}
+			t.Cleanup(func() { _ = dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err() })
+			limiter := NewSharedRateLimitRegistry(dragonfly).Limiter(key, []connsdk.RateLimitBudget{integrationBudget(model)})
+			if err := limiter.Admit(context.Background(), connsdk.RateLimitRequest{Method: "GET", Attempt: 1}); err != nil {
+				t.Fatalf("initial %s admission: %v", model, err)
+			}
+			ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+			defer cancel()
+			if err := limiter.Admit(ctx, connsdk.RateLimitRequest{Method: "GET", Attempt: 2}); !errors.Is(err, context.DeadlineExceeded) {
+				t.Fatalf("second %s admission = %v, want context deadline while shared budget is exhausted", model, err)
+			}
+		})
+	}
+}
+
+func integrationBudget(model connsdk.RateLimitBudgetModel) connsdk.RateLimitBudget {
+	limit, seconds := 1, 10
+	capacity, restore := 1, 0.001
+	b := connsdk.RateLimitBudget{Model: model, Dimension: connsdk.RateLimitBudgetSustained, Unit: connsdk.RateLimitBudgetRequests}
+	switch model {
+	case connsdk.RateLimitBudgetFixedWindow, connsdk.RateLimitBudgetSlidingWindow:
+		b.Limit, b.WindowSeconds = &limit, &seconds
+	case connsdk.RateLimitBudgetTokenBucket, connsdk.RateLimitBudgetLeakyBucket:
+		b.Capacity, b.RestorePerSecond = &capacity, &restore
+	}
+	return b
+}
+
+func TestSharedRateLimitHelperProcess(t *testing.T) {
+	if os.Getenv(sharedRateLimitHelperEnv) != "1" {
+		return
+	}
+	addr := os.Getenv("POLYMETRICS_DRAGONFLY_ADDR")
+	if addr == "" {
+		addr = "localhost:6379"
+	}
+	registry := OpenSharedRateLimitRegistry(addr)
+	defer func() { _ = registry.Close() }()
+	limit, seconds := 1, 10
+	limiter := registry.Limiter(RateLimitKey{
+		Connector: "paced",
+		PolicyID:  "shared-window",
+		Scope:     connectors.RateLimitScopeKey("integration-opaque-scope"),
+	}, []connsdk.RateLimitBudget{{
+		Model:         connsdk.RateLimitBudgetFixedWindow,
+		Dimension:     connsdk.RateLimitBudgetSustained,
+		Unit:          connsdk.RateLimitBudgetRequests,
+		Limit:         &limit,
+		WindowSeconds: &seconds,
+	}})
+	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Millisecond)
+	defer cancel()
+	err := limiter.Admit(ctx, connsdk.RateLimitRequest{Method: "GET", Attempt: 1})
+	switch {
+	case err == nil:
+		fmt.Fprintln(os.Stdout, "shared-rate-limit-result=granted")
+	case errors.Is(err, context.DeadlineExceeded):
+		fmt.Fprintln(os.Stdout, "shared-rate-limit-result=blocked")
+	default:
+		t.Fatalf("shared helper admission: %v", err)
+	}
+}

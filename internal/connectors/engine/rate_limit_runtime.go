@@ -16,6 +16,11 @@ var processRateLimitRegistry = struct {
 	registry *coordination.RateLimitRegistry
 }{registry: coordination.NewRateLimitRegistry(nil)}
 
+var processSharedRateLimitRegistry = struct {
+	mu       sync.RWMutex
+	registry *coordination.SharedRateLimitRegistry
+}{}
+
 func currentRateLimitRegistry() *coordination.RateLimitRegistry {
 	processRateLimitRegistry.mu.RLock()
 	defer processRateLimitRegistry.mu.RUnlock()
@@ -37,29 +42,64 @@ func replaceRateLimitRegistryForTest(registry *coordination.RateLimitRegistry) f
 	}
 }
 
+// ConfigureSharedRateLimitRegistry makes an optional coordinator available to
+// explicitly require-shared policies. Local policies never consult it, so a
+// configured runtime endpoint cannot silently upgrade their enforcement.
+func ConfigureSharedRateLimitRegistry(registry *coordination.SharedRateLimitRegistry) {
+	processSharedRateLimitRegistry.mu.Lock()
+	processSharedRateLimitRegistry.registry = registry
+	processSharedRateLimitRegistry.mu.Unlock()
+}
+
+func currentSharedRateLimitRegistry() *coordination.SharedRateLimitRegistry {
+	processSharedRateLimitRegistry.mu.RLock()
+	defer processSharedRateLimitRegistry.mu.RUnlock()
+	return processSharedRateLimitRegistry.registry
+}
+
+func replaceSharedRateLimitRegistryForTest(registry *coordination.SharedRateLimitRegistry) func() {
+	processSharedRateLimitRegistry.mu.Lock()
+	previous := processSharedRateLimitRegistry.registry
+	processSharedRateLimitRegistry.registry = registry
+	processSharedRateLimitRegistry.mu.Unlock()
+	return func() {
+		processSharedRateLimitRegistry.mu.Lock()
+		processSharedRateLimitRegistry.registry = previous
+		processSharedRateLimitRegistry.mu.Unlock()
+	}
+}
+
 // rateLimitResolver is built once per engine runtime and resolves concrete
 // declared request paths to opaque, shared policy limiters. It keeps only the
 // connector configuration and CoordinationIdentity: never Secrets or a
 // CredentialRevision. Raw scope subjects are passed straight into
 // CoordinationIdentity and never stored in the registry.
 type rateLimitResolver struct {
+	ctx                  context.Context
 	connector            string
 	config               map[string]string
 	coordinationIdentity connectors.CoordinationIdentity
 	policies             []connsdk.RateLimitPolicy
 	registry             *coordination.RateLimitRegistry
+	sharedRegistry       *coordination.SharedRateLimitRegistry
 }
 
 func newRateLimitResolver(b Bundle, cfg connectors.RuntimeConfig) *rateLimitResolver {
+	return newRateLimitResolverWithContext(context.Background(), b, cfg)
+}
+
+func newRateLimitResolverWithContext(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig) *rateLimitResolver {
 	if b.RateLimits == nil || b.RateLimits.State != connsdk.RateLimitStateDeclared || len(b.RateLimits.Policies) == 0 {
 		return nil
 	}
 	return &rateLimitResolver{
+		ctx:                  ctx,
 		connector:            b.Name,
 		config:               cfg.Config,
 		coordinationIdentity: cfg.CoordinationIdentity,
 		policies:             b.RateLimits.Policies,
 		registry:             currentRateLimitRegistry(),
+		sharedRegistry:       currentSharedRateLimitRegistry(),
 	}
 }
 
@@ -139,7 +179,8 @@ func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.
 }
 
 type resolvedRateLimitPolicy struct {
-	limiter    *coordination.RateLimiter
+	admission  connsdk.RateLimitAdmission
+	observer   connsdk.RateLimitObserver
 	costHeader string
 }
 
@@ -160,17 +201,29 @@ func (r *rateLimitResolver) resolve(policy connsdk.RateLimitPolicy) (resolvedRat
 	if err != nil {
 		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q scope identity: %w", policy.ID, err)
 	}
-	if r.registry == nil {
-		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q local registry is unavailable", policy.ID)
-	}
 	costHeader, err := rateLimitCostHeader(policy)
 	if err != nil {
 		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q: %w", policy.ID, err)
 	}
-	return resolvedRateLimitPolicy{
-		limiter:    r.registry.Limiter(coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}, policy.Budgets),
-		costHeader: costHeader,
-	}, nil
+	key := coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}
+	if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
+		if r.sharedRegistry == nil {
+			return resolvedRateLimitPolicy{}, &coordination.SharedRateLimitUnavailableError{
+				Component: "dragonfly",
+				Reason:    coordination.SharedRateLimitCoordinatorNotConfigured,
+			}
+		}
+		if err := r.sharedRegistry.EnsureAvailable(r.ctx); err != nil {
+			return resolvedRateLimitPolicy{}, err
+		}
+		limiter := r.sharedRegistry.Limiter(key, policy.Budgets)
+		return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader}, nil
+	}
+	if r.registry == nil {
+		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q local registry is unavailable", policy.ID)
+	}
+	limiter := r.registry.Limiter(key, policy.Budgets)
+	return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader}, nil
 }
 
 func coordinationRateScopeKind(subject connsdk.RateLimitScopeSubjectKind) (connectors.RateScopeKind, error) {
@@ -230,7 +283,7 @@ type resolvedRateLimitAdmission []resolvedRateLimitPolicy
 
 func (a resolvedRateLimitAdmission) Admit(ctx context.Context, request connsdk.RateLimitRequest) error {
 	for _, policy := range a {
-		if err := policy.limiter.Admit(ctx, request); err != nil {
+		if err := policy.admission.Admit(ctx, request); err != nil {
 			return err
 		}
 	}
@@ -241,7 +294,7 @@ type resolvedRateLimitObserver []resolvedRateLimitPolicy
 
 func (o resolvedRateLimitObserver) Observe(ctx context.Context, observation connsdk.RateLimitObservation) {
 	for _, policy := range o {
-		policy.limiter.Observe(ctx, observation)
+		policy.observer.Observe(ctx, observation)
 	}
 }
 

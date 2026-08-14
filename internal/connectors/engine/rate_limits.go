@@ -93,6 +93,9 @@ func validateRateLimitPolicy(policy connsdk.RateLimitPolicy, spec *Schema) error
 	if err := validateRateLimitScope(policy.Scope, spec); err != nil {
 		return err
 	}
+	if policy.Coordination != "" && policy.Coordination != connsdk.RateLimitCoordinationRequireShared {
+		return fmt.Errorf("coordination must be require_shared when present")
+	}
 	if len(policy.Budgets) == 0 {
 		return fmt.Errorf("budgets must contain at least one provider budget")
 	}

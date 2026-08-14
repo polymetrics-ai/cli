@@ -17,6 +17,8 @@ import (
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/certifications"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/coordination"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
@@ -55,6 +57,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	if err := validateApprovalCarrierBeforeDispatch(cleanArgs); err != nil {
 		return writeError(stdout, stderr, err, cfg.JSON)
 	}
+	engine.ConfigureSharedRateLimitRegistry(coordination.OpenSharedRateLimitRegistry(cfg.Runtime.DragonflyAddr))
 	cmd := newRootCmd(ctx, cfg, stdout, stderr)
 	if err := executeRootCmd(cmd, cleanArgs); err != nil {
 		return writeError(stdout, stderr, mapCobraErr(err), cfg.JSON)
@@ -278,12 +281,18 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 					"certification":  status,
 					"sync_transport": connectors.SyncTransportEligibilityOf(c),
 				}
+				if rateLimits, ok := connectors.RateLimitCoordinationOf(c); ok {
+					response["rate_limit_coordination"] = rateLimits
+				}
 				if def, ok := connectors.DefinitionOf(c); ok && def.Changefeed != nil {
 					response["changefeed"] = def.Changefeed
 				}
 				return writeJSON(stdout, response)
 			}
 			_, _ = fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
+			if rateLimits, ok := connectors.RateLimitCoordinationOf(c); ok {
+				_, _ = fmt.Fprintf(stdout, "\nRATE LIMIT COORDINATION\n  %s\n", rateLimits.Message)
+			}
 			_, _ = fmt.Fprintf(stdout, "\nCERTIFICATION\n  %s\n", status.Label)
 			if status.Warning != "" {
 				_, _ = fmt.Fprintf(stdout, "  %s\n", status.Warning)
