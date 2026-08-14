@@ -30,6 +30,7 @@ type scriptedRunner struct {
 	raceForeignProbe       bool
 	raceForeignContainer   bool
 	raceForeignRunImage    bool
+	retagAfterInspect      string
 	pullErr                error
 	tagErr                 error
 	containerInspectErr    error
@@ -81,8 +82,13 @@ func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string)
 	case commandHasPrefix(args, "image", "inspect"):
 		reference := args[len(args)-1]
 		if r.imagePresent(reference) {
+			imageID := r.imageID(reference)
+			if reference == r.retagAfterInspect {
+				r.retagAfterInspect = ""
+				r.setImageWithID(reference, scriptedForeignImageID, true)
+			}
 			if _, formatted := commandFlagValue(args, "--format"); formatted {
-				return r.imageID(reference) + "\n", nil
+				return imageID + "\n", nil
 			}
 			return "", nil
 		}
@@ -1297,13 +1303,16 @@ func TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe(t *testing.T) {
 	if commandsContain(runner.commands, "pull", config.DockerCapacityProbeImage) {
 		t.Fatalf("commands = %v, must never pull the capacity probe", runner.commands)
 	}
+	if !commandsContain(runner.commands, "image", "inspect", "--format", imageIDFormat, config.DockerCapacityProbeImage) {
+		t.Fatalf("commands = %v, want immutable capacity-probe image inspection", runner.commands)
+	}
 	if !commandsContain(runner.commands,
 		"run", "--pull=never", "--rm", "--name", h.capacityProbeName,
 		"--label", dockerCapacityProbeOwnerLabel+"="+h.capacityProbeOwner,
 		"--network", "none", "--read-only", "--cap-drop", "ALL", "--pids-limit", "16",
 		"--security-opt", "no-new-privileges", "--env", "LC_ALL=C",
 		"--mount", "type=bind,src=/var/lib/docker,dst=/polymetrics-image-store,readonly",
-		"--entrypoint", "/bin/df", config.DockerCapacityProbeImage,
+		"--entrypoint", "/bin/df", scriptedSourceImageID,
 		"-P", "-B1", "/polymetrics-image-store",
 	) {
 		t.Fatalf("commands = %v, want the locked-down daemon capacity probe", runner.commands)
@@ -1316,6 +1325,47 @@ func TestDockerVMCapacityUsesOnlyAPreCachedLockedDownProbe(t *testing.T) {
 	}
 	if commandsContain(runner.commands, "container", "rm", "--force") {
 		t.Fatalf("commands = %v, want no removal after the probe self-cleans", runner.commands)
+	}
+}
+
+func TestDockerVMCapacityUsesProbeImageIDAfterTagChanges(t *testing.T) {
+	runner := &scriptedRunner{
+		infoOutput:     "DAEMON:12345\t/var/lib/docker\n",
+		capacityOutput: "Filesystem 1-blocks Used Available Capacity Mounted on\n/dev/root 1000 800 123 80% /polymetrics-image-store\n",
+	}
+	config := testConfig(runner)
+	config.ContainerRuntime = RuntimeDocker
+	config.DockerCapacityProbeImage = "example.invalid/capacity-probe:1.0"
+	runner.setImage(config.DockerCapacityProbeImage, true)
+	runner.retagAfterInspect = config.DockerCapacityProbeImage
+	config.DiskFreeAt = func(string) (uint64, error) {
+		return 0, errors.New("Docker store belongs to a VM")
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+
+	free, err := h.targetImageStoreFree(context.Background())
+	if err != nil {
+		t.Fatalf("targetImageStoreFree(): %v", err)
+	}
+	if free != 123 {
+		t.Fatalf("targetImageStoreFree() = %d, want daemon-side 123", free)
+	}
+	if imageID := runner.imageID(config.DockerCapacityProbeImage); imageID != scriptedForeignImageID {
+		t.Fatalf("capacity probe tag image ID = %q, want a raced foreign tag", imageID)
+	}
+	if !commandsContain(runner.commands,
+		"run", "--pull=never", "--rm", "--name", h.capacityProbeName,
+		"--label", dockerCapacityProbeOwnerLabel+"="+h.capacityProbeOwner,
+		"--network", "none", "--read-only", "--cap-drop", "ALL", "--pids-limit", "16",
+		"--security-opt", "no-new-privileges", "--env", "LC_ALL=C",
+		"--mount", "type=bind,src=/var/lib/docker,dst=/polymetrics-image-store,readonly",
+		"--entrypoint", "/bin/df", scriptedSourceImageID,
+		"-P", "-B1", "/polymetrics-image-store",
+	) {
+		t.Fatalf("commands = %v, want the cached immutable probe image ID", runner.commands)
 	}
 }
 
@@ -1498,6 +1548,33 @@ func TestStartRefusesDockerVMStoreWithoutAPreCachedProbeBeforeMutating(t *testin
 	}
 }
 
+func TestStartRefusesMalformedDockerVMProbeHeaderBeforeMutating(t *testing.T) {
+	runner := &scriptedRunner{
+		infoOutput:     "DAEMON:12345\t/var/lib/docker\n",
+		capacityOutput: "garbage Available\n/dev/root 1000 800 123 80% /polymetrics-image-store\n",
+	}
+	config := testConfig(runner)
+	config.ContainerRuntime = RuntimeDocker
+	config.DockerCapacityProbeImage = "example.invalid/capacity-probe:1.0"
+	runner.setImage(config.DockerCapacityProbeImage, true)
+	config.DiskFreeAt = func(string) (uint64, error) {
+		return 0, errors.New("Docker store belongs to a VM")
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+
+	if _, err := h.Start(context.Background()); err == nil || !strings.Contains(err.Error(), "capacity cannot be proven") {
+		t.Fatalf("Start() error = %v, want a malformed Docker VM capacity refusal", err)
+	}
+	for _, prefix := range [][]string{{"pull", config.Image}, {"image", "tag"}, {"run", "--detach"}} {
+		if commandsContain(runner.commands, prefix...) {
+			t.Fatalf("commands = %v, want no database-image mutation after malformed capacity evidence", runner.commands)
+		}
+	}
+}
+
 func TestParseDockerStoreFree(t *testing.T) {
 	free, err := parseDockerStoreFree("Filesystem 1-blocks Used Available Capacity Mounted on\n/dev/root 102888095744 1486704640 101384613888 2% /polymetrics-image-store\n")
 	if err != nil {
@@ -1512,6 +1589,9 @@ func TestParseDockerStoreFree(t *testing.T) {
 		"Filesystem 1-blocks Used Available Capacity Mounted on\n/dev/root 1000 800 -1 80% /polymetrics-image-store\n",
 		"Filesystem 1-blocks Used Available Capacity Mounted on\n/dev/root 1000 800 100 80% /other\n",
 		"Other 1-blocks Used Free Capacity Mounted on\n/dev/root 1000 800 100 80% /polymetrics-image-store\n",
+		"garbage Available\n/dev/root 1000 800 100 80% /polymetrics-image-store\n",
+		"Filesystem 1-blocks Used Capacity Available Mounted on\n/dev/root 1000 800 100 80% /polymetrics-image-store\n",
+		"Filesystem 1024-blocks Used Available Capacity Mounted on\n/dev/root 1000 800 100 80% /polymetrics-image-store\n",
 	} {
 		if _, err := parseDockerStoreFree(raw); err == nil {
 			t.Fatalf("parseDockerStoreFree(%q) accepted invalid capacity", raw)

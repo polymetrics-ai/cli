@@ -29,10 +29,11 @@ Reviewed specifically:
 5. No connector production implementation, credentials, dependency, generic
    runtime command path, or external database endpoint entered scope.
 6. The Docker VM capacity fallback remains inside `dbtest.Config`: it requires
-   a pre-cached pinned image, uses `--pull=never`, has no network, is read-only,
-   drops capabilities, sets no-new-privileges and a PID bound, parses only a
-   fixed POSIX `df` mount result, and idempotently cleans its unique ephemeral
-   probe. A missing or malformed probe remains a pre-mutation refusal.
+   a pre-cached pinned image, resolves its immutable local ID before the
+   `--pull=never` run, has no network, is read-only, drops capabilities, sets
+   no-new-privileges and a PID bound, and accepts only the exact `LC_ALL=C`
+   POSIX `df -P -B1` header schema and mount result. A missing or malformed
+   probe remains a pre-mutation refusal.
 7. A pre-existing capacity probe is refused before its name is claimed for
    cleanup, and an indeterminate probe is removed only after its per-run Docker
    ownership label and immutable container ID are re-proven. The enabled MySQL entrypoint passes raw
@@ -51,6 +52,6 @@ Reviewed specifically:
 
 ## Evidence
 
-`go test -timeout 20m ./internal/connectors/native/dbtest` passed in 0.459s;
+`go test -timeout 20m ./internal/connectors/native/dbtest` passed in 0.395s;
 the broader existing dbtest and MySQL evidence is recorded in
 `VERIFICATION.md` and `TDD-LEDGER.md`.

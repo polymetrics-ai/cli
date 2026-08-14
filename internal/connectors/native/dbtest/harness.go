@@ -485,15 +485,16 @@ const (
 	databaseContainerOwnerLabel    = "polymetrics.dbtest.container-owner"
 	databaseContainerOwnerFormat   = "{{.Id}}\t{{ index .Config.Labels \"polymetrics.dbtest.container-owner\" }}"
 	imageIDFormat                  = "{{.Id}}"
+	dockerCapacityHeader           = "Filesystem\t1-blocks\tUsed\tAvailable\tCapacity\tMounted\ton"
 )
 
 func (h *Harness) dockerVMImageStoreFree(ctx context.Context, target targetIdentity) (uint64, error) {
-	probeAbsent, err := h.resourceAbsent(ctx, "image", "inspect", h.config.DockerCapacityProbeImage)
+	probeImageID, err := h.imageID(ctx, h.config.DockerCapacityProbeImage)
+	if errors.Is(err, errContainerResourceNotFound) {
+		return 0, errors.New("target Docker image-store capacity requires a pre-cached Docker capacity probe image")
+	}
 	if err != nil {
 		return 0, errors.New("target Docker capacity probe image could not be inspected")
-	}
-	if probeAbsent {
-		return 0, errors.New("target Docker image-store capacity requires a pre-cached Docker capacity probe image")
 	}
 
 	probeContainerAbsent, err := h.resourceAbsent(ctx, "container", "inspect", h.capacityProbeName)
@@ -516,7 +517,7 @@ func (h *Harness) dockerVMImageStoreFree(ctx context.Context, target targetIdent
 		"--network", "none", "--read-only", "--cap-drop", "ALL", "--pids-limit", "16",
 		"--security-opt", "no-new-privileges", "--env", "LC_ALL=C",
 		"--mount", "type=bind,src="+target.graphRoot+",dst="+dockerCapacityMountPath+",readonly",
-		"--entrypoint", "/bin/df", h.config.DockerCapacityProbeImage,
+		"--entrypoint", "/bin/df", probeImageID,
 		"-P", "-B1", dockerCapacityMountPath,
 	)
 	if err != nil {
@@ -750,7 +751,7 @@ func parseDockerStoreFree(raw string) (uint64, error) {
 		return 0, errors.New("invalid Docker image-store capacity")
 	}
 	lines := strings.Split(strings.TrimSuffix(raw, "\n"), "\n")
-	if len(lines) != 2 || !containsString(strings.Fields(lines[0]), "Available") {
+	if len(lines) != 2 || strings.Join(strings.Fields(lines[0]), "\t") != dockerCapacityHeader {
 		return 0, errors.New("invalid Docker image-store capacity")
 	}
 	fields := strings.Fields(lines[1])
@@ -787,15 +788,6 @@ func parseDockerCapacityBytes(value string) (uint64, error) {
 		}
 	}
 	return strconv.ParseUint(value, 10, 64)
-}
-
-func containsString(values []string, wanted string) bool {
-	for _, value := range values {
-		if value == wanted {
-			return true
-		}
-	}
-	return false
 }
 
 func singleCommandRecord(raw string) (string, bool) {
