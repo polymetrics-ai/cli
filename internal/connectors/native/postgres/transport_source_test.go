@@ -3,10 +3,12 @@ package postgres
 import (
 	"context"
 	"errors"
+	"reflect"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/synctransport"
 )
@@ -38,15 +40,15 @@ func TestPostgresTransportRegistryPreflightRefusesBeforeSourceIO(t *testing.T) {
 		wantSource bool
 	}{
 		{
-			name:    "missing descriptor",
-			source:  newPreflightSpyConnector(nil),
+			name:     "missing descriptor",
+			source:   newPreflightSpyConnector(nil),
 			register: false,
-			wantErr: "has no declared source transport",
+			wantErr:  "has no declared source transport",
 		},
 		{
 			name: "wrong connector family",
 			source: newPreflightSpyConnector(&connectors.SourceTransportDescriptor{
-				Executor: connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeAPI, ID: "postgres_bounded_snapshot"},
+				Executor:        connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeAPI, ID: "postgres_bounded_snapshot"},
 				EligibleStreams: []string{"snapshot"},
 				Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 				Delivery: connectors.DeliveryGuarantees{
@@ -57,7 +59,7 @@ func TestPostgresTransportRegistryPreflightRefusesBeforeSourceIO(t *testing.T) {
 				Conformance: connectors.ConformanceEvidenceReference{Suite: "postgres_snapshot", RunID: "bounded_full_v1"},
 			}),
 			register: true,
-			wantErr: "incompatible with transport executor family",
+			wantErr:  "incompatible with transport executor family",
 		},
 		{
 			name:     "unregistered declared executor",
@@ -119,6 +121,114 @@ func TestRegisterPostgresSnapshotTransportSourceMakesDefinitionSelectedSourceRea
 	if got := resolved.Source.TransportExecutorReference(); got != (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_bounded_snapshot"}) {
 		t.Fatalf("resolved source executor = %#v", got)
 	}
+}
+
+func TestPostgresSnapshotReadPlanAndCheckpointUseTypedStableIdentity(t *testing.T) {
+	logical, err := database.NewSignedInteger(64)
+	if err != nil {
+		t.Fatalf("NewSignedInteger() error = %v", err)
+	}
+	relationRef := database.RelationRef{
+		Schema: database.SchemaRef{Catalog: database.CatalogRef{Name: "analytics"}, Name: "public"},
+		Name:   "events",
+	}
+	id := database.ColumnRef{Relation: relationRef, Name: "id"}
+	sequence := database.ColumnRef{Relation: relationRef, Name: "sequence"}
+	label := database.ColumnRef{Relation: relationRef, Name: "label"}
+	catalog, err := database.NewCatalog(database.CatalogRef{Name: "analytics"}, []database.Relation{{
+		Ref: relationRef,
+		NativeIdentity: database.NativeRelationIdentity{
+			Kind:  "oid",
+			Value: "10001",
+		},
+		Columns: []database.Column{
+			{Ref: label, Type: newTransportTestString(t, 0, ""), Nullable: false, Ordinal: 3},
+			{Ref: sequence, Type: logical, Nullable: false, Ordinal: 2},
+			{Ref: id, Type: logical, Nullable: false, Ordinal: 1},
+		},
+		Keys: []database.Key{{Name: "events_pkey", Kind: database.KeyPrimary, Columns: []database.ColumnRef{id}}, {
+			Name: "events_sequence_key", Kind: database.KeyUnique, Columns: []database.ColumnRef{sequence},
+		}},
+	}})
+	if err != nil {
+		t.Fatalf("NewCatalog() error = %v", err)
+	}
+
+	plan, err := newPostgresSnapshotReadPlan(catalog, relationRef, 2)
+	if err != nil {
+		t.Fatalf("newPostgresSnapshotReadPlan() error = %v", err)
+	}
+	if got, want := []string{plan.columns[0].Ref.Name, plan.columns[1].Ref.Name, plan.columns[2].Ref.Name}, []string{"id", "sequence", "label"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("selected catalog columns = %#v, want %#v", got, want)
+	}
+	if got, want := plan.order, []database.ColumnRef{id}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("stable read order = %#v, want %#v", got, want)
+	}
+	if got, want := plan.query([]any{int64(2)}), `SELECT "id", "sequence", "label" FROM "public"."events" WHERE ("id") > ($1) ORDER BY "id" ASC LIMIT $2`; got != want {
+		t.Fatalf("bounded SQL = %q, want %q", got, want)
+	}
+	if got, want := plan.queryArguments([]any{int64(2)}), []any{int64(2), 2}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("bounded SQL arguments = %#v, want %#v", got, want)
+	}
+
+	resume := synccontract.ResumeExpectation{
+		Source:           synccontract.SourceIdentity{Engine: "postgres", AccountOrCluster: "cluster-alpha", ObjectScope: "analytics.public.events"},
+		SourceGeneration: synccontract.OpaqueToken("generation-1"),
+	}
+	first, err := postgresSnapshotCheckpoint(resume, "742:742:", catalog.Fingerprint(), 0, []any{int64(2)})
+	if err != nil {
+		t.Fatalf("postgresSnapshotCheckpoint() error = %v", err)
+	}
+	second, err := postgresSnapshotCheckpoint(resume, "742:742:", catalog.Fingerprint(), 0, []any{int64(2)})
+	if err != nil {
+		t.Fatalf("postgresSnapshotCheckpoint() second error = %v", err)
+	}
+	if err := first.Validate(); err != nil {
+		t.Fatalf("checkpoint Validate() error = %v", err)
+	}
+	if first.Source != resume.Source || first.SchemaVersion != catalog.Fingerprint().String() || first.SnapshotBarrier == nil || string(first.SnapshotBarrier.Token) != "742:742:" || first.PositionObserved == nil || *first.PositionObserved {
+		t.Fatalf("checkpoint = %#v, want exact full-snapshot identity/schema/barrier", first)
+	}
+	if !reflect.DeepEqual(first.Dedupe, second.Dedupe) || string(first.DedupeWindow.Start) != "742:742:" || string(first.DedupeWindow.End) != "742:742:" {
+		t.Fatalf("checkpoint dedupe boundary was not deterministic: %#v %#v", first.Dedupe, first.DedupeWindow)
+	}
+}
+
+func TestPostgresSnapshotReadPlanRefusesUnstableOrMissingRelation(t *testing.T) {
+	logical, err := database.NewSignedInteger(64)
+	if err != nil {
+		t.Fatalf("NewSignedInteger() error = %v", err)
+	}
+	relationRef := database.RelationRef{
+		Schema: database.SchemaRef{Catalog: database.CatalogRef{Name: "analytics"}, Name: "public"},
+		Name:   "events",
+	}
+	id := database.ColumnRef{Relation: relationRef, Name: "id"}
+	catalog, err := database.NewCatalog(database.CatalogRef{Name: "analytics"}, []database.Relation{{
+		Ref:            relationRef,
+		NativeIdentity: database.NativeRelationIdentity{Kind: "oid", Value: "10002"},
+		Columns:        []database.Column{{Ref: id, Type: logical, Nullable: false, Ordinal: 1}},
+	}})
+	if err != nil {
+		t.Fatalf("NewCatalog() error = %v", err)
+	}
+	if _, err := newPostgresSnapshotReadPlan(catalog, relationRef, 1); err == nil || !strings.Contains(err.Error(), "non-null primary or unique key") {
+		t.Fatalf("newPostgresSnapshotReadPlan() error = %v, want stable-key refusal", err)
+	}
+	missing := relationRef
+	missing.Name = "missing"
+	if _, err := newPostgresSnapshotReadPlan(catalog, missing, 1); err == nil || !strings.Contains(err.Error(), "absent from the typed catalog") {
+		t.Fatalf("newPostgresSnapshotReadPlan() missing relation error = %v", err)
+	}
+}
+
+func newTransportTestString(t *testing.T, maxLength uint32, collation string) database.LogicalType {
+	t.Helper()
+	logical, err := database.NewString(maxLength, collation)
+	if err != nil {
+		t.Fatalf("NewString() error = %v", err)
+	}
+	return logical
 }
 
 type preflightSpyConnector struct {
@@ -213,7 +323,9 @@ func (*preflightDestinationConnector) Metadata() connectors.Metadata {
 	return connectors.Metadata{Name: "postgres-destination", IntegrationType: "database"}
 }
 
-func (*preflightDestinationConnector) Check(context.Context, connectors.RuntimeConfig) error { return nil }
+func (*preflightDestinationConnector) Check(context.Context, connectors.RuntimeConfig) error {
+	return nil
+}
 
 func (*preflightDestinationConnector) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
 	return connectors.Catalog{}, nil

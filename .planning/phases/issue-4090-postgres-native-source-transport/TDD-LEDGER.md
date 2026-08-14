@@ -27,3 +27,20 @@ with `PostgreSQL definition has no declared source transport`.
 to build with `undefined: RegisterSnapshotTransportSource`, proving that a
 declaration without the PostgreSQL-owned registry adapter cannot resolve a
 source executor.
+
+## GREEN evidence
+
+- `Connector.Definition()` now adds the exact `native_database` descriptor;
+  `RegisterSnapshotTransportSource` is a PostgreSQL-local explicit adapter.
+- `transport_source.go` opens a read-only repeatable-read transaction only
+  after request validation, discovers the existing typed catalog in that same
+  transaction, and renders a finite primary/unique-key ordered page query.
+- `TestPostgresTransportRegistryPreflightRefusesBeforeSourceIO` separately
+  proves missing descriptor, wrong family, and unregistered executor errors
+  with a source whose every I/O method increments a counter.
+- `TestPostgresSnapshotReadPlanAndCheckpointUseTypedStableIdentity` proves
+  selected catalog order, finite parameterized page shape, schema fingerprint,
+  source identity, full-snapshot barrier, and deterministic dedupe boundary.
+- `TestPostgresDynamicTypedCatalogUsesLiveMetadata` passes via Docker against
+  PostgreSQL 16.10 for both `full_append` and `full_overwrite`; the real output
+  is retained in `traces/live-source-green.txt`.
