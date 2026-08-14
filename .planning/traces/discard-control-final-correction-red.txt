@@ -1,0 +1,16 @@
+Red: go test -count=1 ./internal/connectors/database -run '^(TestCommittedTransactionStageDiscardControlRetentionIsBounded|TestCommittedTransactionStageRecoveryReapsOnlyOwnedDiscardTemps|TestCommittedTransactionStageDiscardRetirementCrashMatrix|TestCommittedTransactionStageDiscardControlCleanupFailurePoisonsRoot)$'
+
+--- FAIL: TestCommittedTransactionStageDiscardControlRetentionIsBounded
+discard control finals = 3, want 0
+
+--- FAIL: TestCommittedTransactionStageRecoveryReapsOnlyOwnedDiscardTemps
+Stat(owned discard temporary) error = <nil>, want absence
+
+--- FAIL: TestCommittedTransactionStageDiscardRetirementCrashMatrix
+discard control finals = 1, want 0
+
+--- FAIL: TestCommittedTransactionStageDiscardControlCleanupFailurePoisonsRoot
+BeginTransaction() error = nil, want poisoned-root refusal
+AppendChunk() error = nil, want poisoned-root refusal
+CommitTransaction() error = nil, want poisoned-root refusal
+AdmitRecoveredTransaction() error = nil, want poisoned-root refusal
