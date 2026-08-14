@@ -372,7 +372,7 @@ func (p postgresSnapshotReadPlan) query(after []any) string {
 	}
 	builder.WriteString(" ORDER BY ")
 	builder.WriteString(strings.Join(order, ", "))
-	builder.WriteString(fmt.Sprintf(" LIMIT $%d", len(after)+1))
+	fmt.Fprintf(&builder, " LIMIT $%d", len(after)+1)
 	return builder.String()
 }
 
