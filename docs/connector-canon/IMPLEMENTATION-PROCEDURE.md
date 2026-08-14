@@ -155,7 +155,8 @@ infer deletion from an absent record.
    delivery. Exit status alone is not enough for pagination/data-loss cases.
 4. **CDC or database contract:** test the protocol/receipt/acknowledgement and
    quota behavior through the typed framework. For native database live tests,
-   use the reusable `native/dbtest` harness and its explicit Podman opt-in.
+   use the reusable `native/dbtest` harness; its [maintainer guide](../../internal/connectors/native/dbtest/README.md)
+   owns the explicit Docker-or-Podman runtime and direct Unix endpoint contract.
 5. **Docs and surface parity:** regenerate manuals/catalog where needed, check
    `pm help`, bare namespace help, command help, and website/docs validation.
 

@@ -279,6 +279,10 @@ type ReadRequest struct {
 	CursorState OpaqueCursorState
 	Query       map[string]string
 	Limit       int
+	// MaxPages is an optional caller-side request cap. Positive values only
+	// tighten a declared stream limit; zero leaves it unchanged and a negative
+	// value is rejected.
+	MaxPages int
 }
 
 type DirectReadRequest struct {

@@ -2,7 +2,7 @@ module polymetrics.ai
 
 go 1.25.4
 
-toolchain go1.25.12
+toolchain go1.26.6
 
 require (
 	github.com/go-mysql-org/go-mysql v1.16.0

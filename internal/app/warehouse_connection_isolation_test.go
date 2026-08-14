@@ -129,6 +129,11 @@ func persistLegacySameOwnerCaseEquivalentInventory(t *testing.T, a *App, connect
 			t.Fatalf("connection %q has no records stream", connection)
 		}
 		base.DestinationTable = "RECORDS"
+		// A legacy table collision is independent from the structural stream
+		// identity introduced by the current base. Give the copied stream a
+		// distinct persisted identity so Open preserves this inventory instead
+		// of correctly rejecting an unrelated duplicate-identity fixture.
+		base.StreamID = "stream_legacy_case_records"
 		a.state.Connections[index].Streams["case-records"] = base
 		if err := a.save(); err != nil {
 			t.Fatalf("persist legacy same-owner inventory: %v", err)

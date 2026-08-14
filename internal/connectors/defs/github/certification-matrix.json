@@ -1,0 +1,1041 @@
+{
+  "schema_version": 1,
+  "generated_command": "go run ./cmd/connectorgen certification-matrix --connector github",
+  "connector": {
+    "name": "github",
+    "integration_type": "api",
+    "capability_complete": false,
+    "cells": [
+      {
+        "function_kind": "capability:catalog",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "capability:cdc",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "capability_not_exposed",
+          "reason": "connector \"github\" neither declares capability \"cdc\" nor exposes its runtime method"
+        }
+      },
+      {
+        "function_kind": "capability:check",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": true,
+        "live_tested": false,
+        "fixture_evidence": [
+          "internal/connectors/defs/github/fixtures/check.json"
+        ],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "capability:dynamic_schema",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "capability_not_exposed",
+          "reason": "connector \"github\" neither declares capability \"dynamic_schema\" nor exposes its runtime method"
+        }
+      },
+      {
+        "function_kind": "capability:query",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "capability_not_exposed",
+          "reason": "connector \"github\" neither declares capability \"query\" nor exposes its runtime method"
+        }
+      },
+      {
+        "function_kind": "capability:read",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": true,
+        "live_tested": false,
+        "fixture_evidence": [
+          "internal/connectors/defs/github/fixtures/streams/autolinks/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/branches/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/code_scanning_alerts/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/collaborators/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/commit_comments/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/commits/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/contributors/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/dependabot_alerts/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/deploy_keys/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/deployments/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/discussion/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/discussions/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/environments/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/forks/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/invitations/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/issue_comments/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/issue_events/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/issues/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/issues/page_2.json",
+          "internal/connectors/defs/github/fixtures/streams/labels/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/languages/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/milestones/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/project_items/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/projects/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/pull_request_review_comments/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/pull_requests/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/releases/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/repo_rulesets/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/repository/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/secret_scanning_alerts/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/security_advisories/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/stargazers/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/subscribers/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/tags/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/webhooks/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/workflow_artifacts/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/workflow_runs/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/workflows/page_1.json"
+        ],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "capability:write",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "operation:binary_download",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "operation:browser_open",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"github\" does not declare operation kind \"browser_open\""
+        }
+      },
+      {
+        "function_kind": "operation:composite",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"github\" does not declare operation kind \"composite\""
+        }
+      },
+      {
+        "function_kind": "operation:file_upload",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"github\" does not declare operation kind \"file_upload\""
+        }
+      },
+      {
+        "function_kind": "operation:graphql_mutation",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "operation:graphql_query",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "operation:local_file",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"github\" does not declare operation kind \"local_file\""
+        }
+      },
+      {
+        "function_kind": "operation:local_git",
+        "applicable": true,
+        "declared": true,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "operation:provider_search",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"github\" does not declare operation kind \"provider_search\""
+        }
+      },
+      {
+        "function_kind": "operation:rest_read",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "operation:rest_write",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "function_kind": "operation:stream_etl",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"github\" does not declare operation kind \"stream_etl\""
+        }
+      },
+      {
+        "function_kind": "operation:xml_export",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"github\" does not declare operation kind \"xml_export\""
+        }
+      },
+      {
+        "function_kind": "operation:xml_import",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"github\" does not declare operation kind \"xml_import\""
+        }
+      }
+    ]
+  },
+  "function_kinds": [
+    {
+      "id": "capability:catalog",
+      "category": "capability",
+      "name": "catalog",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.Catalog"
+    },
+    {
+      "id": "capability:cdc",
+      "category": "capability",
+      "name": "cdc",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.CDC"
+    },
+    {
+      "id": "capability:check",
+      "category": "capability",
+      "name": "check",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.Check"
+    },
+    {
+      "id": "capability:dynamic_schema",
+      "category": "capability",
+      "name": "dynamic_schema",
+      "discovery_source": "internal/connectors/engine/bundle.go:Capabilities.DynamicSchema"
+    },
+    {
+      "id": "capability:query",
+      "category": "capability",
+      "name": "query",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.Query"
+    },
+    {
+      "id": "capability:read",
+      "category": "capability",
+      "name": "read",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.Read"
+    },
+    {
+      "id": "capability:write",
+      "category": "capability",
+      "name": "write",
+      "discovery_source": "internal/connectors/connectors.go:Capabilities.Write"
+    },
+    {
+      "id": "operation:binary_download",
+      "category": "operation",
+      "name": "binary_download",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=binary_download)",
+      "executor_source": "internal/connectors/engine/binary_read.go:OperationBinaryDownload"
+    },
+    {
+      "id": "operation:browser_open",
+      "category": "operation",
+      "name": "browser_open",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=browser_open)"
+    },
+    {
+      "id": "operation:composite",
+      "category": "operation",
+      "name": "composite",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=composite)"
+    },
+    {
+      "id": "operation:file_upload",
+      "category": "operation",
+      "name": "file_upload",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=file_upload)"
+    },
+    {
+      "id": "operation:graphql_mutation",
+      "category": "operation",
+      "name": "graphql_mutation",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=graphql_mutation)",
+      "executor_source": "internal/connectors/engine/direct_write.go:OperationDirectWrite"
+    },
+    {
+      "id": "operation:graphql_query",
+      "category": "operation",
+      "name": "graphql_query",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=graphql_query)",
+      "executor_source": "internal/connectors/engine/direct_read.go:PreflightOperationDirectRead"
+    },
+    {
+      "id": "operation:local_file",
+      "category": "operation",
+      "name": "local_file",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=local_file)"
+    },
+    {
+      "id": "operation:local_git",
+      "category": "operation",
+      "name": "local_git",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=local_git)"
+    },
+    {
+      "id": "operation:provider_search",
+      "category": "operation",
+      "name": "provider_search",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=provider_search)",
+      "executor_source": "internal/connectors/engine/direct_read.go:PreflightOperationDirectRead"
+    },
+    {
+      "id": "operation:rest_read",
+      "category": "operation",
+      "name": "rest_read",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=rest_read)",
+      "executor_source": "internal/connectors/engine/direct_read.go:PreflightOperationDirectRead"
+    },
+    {
+      "id": "operation:rest_write",
+      "category": "operation",
+      "name": "rest_write",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=rest_write)",
+      "executor_source": "internal/connectors/engine/direct_write.go:OperationDirectWrite"
+    },
+    {
+      "id": "operation:stream_etl",
+      "category": "operation",
+      "name": "stream_etl",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=stream_etl)"
+    },
+    {
+      "id": "operation:xml_export",
+      "category": "operation",
+      "name": "xml_export",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=xml_export)"
+    },
+    {
+      "id": "operation:xml_import",
+      "category": "operation",
+      "name": "xml_import",
+      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=xml_import)"
+    }
+  ],
+  "flow_kinds": [
+    {
+      "id": "api_to_api",
+      "source_role": "api_source",
+      "destination_role": "api_destination"
+    },
+    {
+      "id": "api_to_database",
+      "source_role": "api_source",
+      "destination_role": "database_destination"
+    },
+    {
+      "id": "database_to_api",
+      "source_role": "database_source",
+      "destination_role": "api_destination"
+    },
+    {
+      "id": "database_to_database",
+      "source_role": "database_source",
+      "destination_role": "database_destination"
+    }
+  ],
+  "workflow_kinds": [
+    {
+      "id": "etl",
+      "discovery_source": "internal/cli/cli.go:runETL"
+    },
+    {
+      "id": "flow_authoring",
+      "discovery_source": "internal/cli/flow_cli.go:runFlow"
+    },
+    {
+      "id": "reverse_etl",
+      "discovery_source": "internal/cli/cli.go:runReverse"
+    },
+    {
+      "id": "schedule",
+      "discovery_source": "internal/cli/schedule.go:runSchedule"
+    }
+  ],
+  "workflow": {
+    "connector": "github",
+    "complete": false,
+    "cells": [
+      {
+        "workflow_kind": "etl",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": true,
+        "live_tested": false,
+        "fixture_evidence": [
+          "internal/connectors/defs/github/fixtures/streams/autolinks/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/branches/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/code_scanning_alerts/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/collaborators/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/commit_comments/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/commits/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/contributors/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/dependabot_alerts/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/deploy_keys/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/deployments/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/discussion/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/discussions/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/environments/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/forks/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/invitations/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/issue_comments/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/issue_events/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/issues/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/issues/page_2.json",
+          "internal/connectors/defs/github/fixtures/streams/labels/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/languages/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/milestones/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/project_items/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/projects/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/pull_request_review_comments/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/pull_requests/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/releases/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/repo_rulesets/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/repository/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/secret_scanning_alerts/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/security_advisories/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/stargazers/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/subscribers/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/tags/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/webhooks/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/workflow_artifacts/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/workflow_runs/page_1.json",
+          "internal/connectors/defs/github/fixtures/streams/workflows/page_1.json"
+        ],
+        "live_evidence": []
+      },
+      {
+        "workflow_kind": "flow_authoring",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "workflow_kind": "reverse_etl",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": null,
+        "live_evidence": []
+      },
+      {
+        "workflow_kind": "schedule",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      }
+    ]
+  },
+  "sync_mode_kinds": [
+    {
+      "id": "full_overwrite",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "full_append",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "incremental_append",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "incremental_upsert",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "incremental_dedupe",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "incremental_dedupe_history",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    },
+    {
+      "id": "change_capture",
+      "discovery_source": "internal/synccontract/mode.go:AllModes"
+    }
+  ],
+  "sync_primitives": [
+    {
+      "id": "api_read_into_warehouse",
+      "integration_type": "api",
+      "capability": "read",
+      "warehouse_direction": "into_warehouse",
+      "discovery_source": "internal/connectors/connectors.go:Connector.Metadata"
+    },
+    {
+      "id": "api_write_from_warehouse",
+      "integration_type": "api",
+      "capability": "write",
+      "warehouse_direction": "from_warehouse",
+      "discovery_source": "internal/connectors/connectors.go:Connector.Metadata"
+    },
+    {
+      "id": "database_read_into_warehouse",
+      "integration_type": "database",
+      "capability": "read",
+      "warehouse_direction": "into_warehouse",
+      "discovery_source": "internal/connectors/connectors.go:Connector.Metadata"
+    },
+    {
+      "id": "database_write_from_warehouse",
+      "integration_type": "database",
+      "capability": "write",
+      "warehouse_direction": "from_warehouse",
+      "discovery_source": "internal/connectors/connectors.go:Connector.Metadata"
+    }
+  ],
+  "sync_mode_cells": {
+    "connector": "github",
+    "complete": false,
+    "cells": [
+      {
+        "sync_mode": "full_overwrite",
+        "primitive": "api_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "full_overwrite",
+        "primitive": "api_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "full_overwrite",
+        "primitive": "database_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "full_overwrite",
+        "primitive": "database_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "full_append",
+        "primitive": "api_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "full_append",
+        "primitive": "api_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "full_append",
+        "primitive": "database_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "full_append",
+        "primitive": "database_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_append",
+        "primitive": "api_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "incremental_append",
+        "primitive": "api_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "incremental_append",
+        "primitive": "database_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_append",
+        "primitive": "database_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_upsert",
+        "primitive": "api_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "incremental_upsert",
+        "primitive": "api_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "incremental_upsert",
+        "primitive": "database_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_upsert",
+        "primitive": "database_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_dedupe",
+        "primitive": "api_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "incremental_dedupe",
+        "primitive": "api_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "incremental_dedupe",
+        "primitive": "database_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_dedupe",
+        "primitive": "database_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_dedupe_history",
+        "primitive": "api_read_into_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "incremental_dedupe_history",
+        "primitive": "api_write_from_warehouse",
+        "applicable": true,
+        "declared": true,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": []
+      },
+      {
+        "sync_mode": "incremental_dedupe_history",
+        "primitive": "database_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "incremental_dedupe_history",
+        "primitive": "database_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_write_from_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "change_capture",
+        "primitive": "api_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "change_capture_requires_database_read",
+          "reason": "sync mode \"change_capture\" applies only to the database_read_into_warehouse primitive"
+        }
+      },
+      {
+        "sync_mode": "change_capture",
+        "primitive": "api_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "change_capture_requires_database_read",
+          "reason": "sync mode \"change_capture\" applies only to the database_read_into_warehouse primitive"
+        }
+      },
+      {
+        "sync_mode": "change_capture",
+        "primitive": "database_read_into_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_read_into_warehouse\""
+        }
+      },
+      {
+        "sync_mode": "change_capture",
+        "primitive": "database_write_from_warehouse",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "primitive_requires_database_connector",
+          "reason": "connector \"github\" integration_type \"api\" cannot execute primitive \"database_write_from_warehouse\""
+        }
+      }
+    ]
+  },
+  "connector_roles": {
+    "connector": "github",
+    "roles": [
+      {
+        "role": "api_source",
+        "applicable": true,
+        "declared": true,
+        "implemented": true
+      },
+      {
+        "role": "api_destination",
+        "applicable": true,
+        "declared": true,
+        "implemented": false
+      },
+      {
+        "role": "database_source",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "not_applicable": {
+          "code": "integration_type_not_database",
+          "reason": "connector integration_type \"api\" cannot occupy the database_source role"
+        }
+      },
+      {
+        "role": "database_destination",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "not_applicable": {
+          "code": "integration_type_not_database",
+          "reason": "connector integration_type \"api\" cannot occupy the database_destination role"
+        }
+      }
+    ]
+  },
+  "pair_overrides": []
+}

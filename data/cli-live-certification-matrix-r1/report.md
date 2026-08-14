@@ -91,13 +91,23 @@ scalar request and response values, and never relies on a keyword list.
 
 ## Matrix shape
 
-`capability-matrix.json` discovers all capability fields and engine operation
-kinds from source. Every connector gets every row; a direct unsupported method
-such as PostgreSQL/MySQL `Write` is applicable with `implemented=false`, never
-hidden as N/A. A new engine operation kind enters the inventory automatically;
-without an executor annotation it remains honestly unimplemented.
+`cmd/connectorgen/certificationallowlist.go` declares the connectors for which
+this repository currently makes a proof-bearing claim: initially GitHub and
+PostgreSQL. `go run ./cmd/connectorgen certification-matrix --connector <name>`
+generates the one matching, non-embedded
+`internal/connectors/defs/<name>/certification-matrix.json` shard; it does not
+rewrite another connector's shard or the compact runtime status projection.
+`--all` deliberately refreshes all allowlisted shards and that projection, and
+`--check` reconstructs the aggregate view in memory for the drift gate.
 
-`flow-matrix.json` carries the final certification obligations:
+Each shard discovers all capability fields and engine operation kinds from
+source for its connector. A direct unsupported method such as PostgreSQL
+`Write` is applicable with `implemented=false`, never hidden as N/A. A new
+engine operation kind enters the inventory automatically; without an executor
+annotation it remains honestly unimplemented. Source anchors use
+`relative/path.go:Symbol`, never a line number.
+
+Each shard carries its connector's final certification obligations:
 
 - Workflows are source-discovered from real command handlers: `etl`,
   `reverse_etl`, `flow_authoring`, and `schedule`. All applicable workflows
@@ -110,12 +120,13 @@ without an executor annotation it remains honestly unimplemented.
   Every mode/primitive combination has an explicit cell. `change_capture` is
   applicable only to `database_read_into_warehouse`; every other combination
   carries a named machine-readable non-applicability reason.
-- Flows are exact source/destination pairs with mandatory
+- Flows are exact source/destination pairs within the active allowlist with mandatory
   `local_parquet_warehouse` mediation: API→warehouse→API,
   API→warehouse→database, database→warehouse→API, and
-  database→warehouse→database. The artifact uses non-overlapping compressed
-  pair sets for size, but its resolver proves every exact pair has one cell and
-  evidence overrides apply to one exact pair only. Thus
+  database→warehouse→database. The in-memory aggregate uses non-overlapping
+  compressed pair sets for validation, but no shard stores them; its resolver
+  proves every exact pair has one cell and evidence overrides apply to one exact
+  pair only. Thus
   `github → warehouse → github` is valid and distinct.
 
 Flow proof embeds both independent warehouse and destination readback
@@ -124,13 +135,13 @@ checkpointed, replay identity, and provider idempotency key—with a named
 limitation for every false fact. A working one-shot GitHub reverse mutation can
 therefore remain explicitly non-resumable rather than be advertised as durable.
 
-A connector is `CERTIFIED` only if every applicable capability, workflow,
+An allowlisted connector is `CERTIFIED` only if every applicable capability, workflow,
 sync-mode/warehouse-primitive, and source-or-destination flow-pair cell is
 declared, implemented, fixture-tested, and backed by accepted live proof.
 
-## First generated baseline
+## Historical aggregate baseline
 
-The generated baseline is intentionally red: 556 connectors, 21 discovered
+Before connector-local sharding, the aggregate generator's baseline was intentionally red: 556 connectors, 21 discovered
 function kinds, zero capability-complete connectors, and zero finally certified
 connectors. All live-tested totals are zero because this change runs no provider
 and accepts no invented evidence.
@@ -138,9 +149,9 @@ and accepts no invented evidence.
 GitHub's declared `operation:graphql_query` now correctly reports one
 implemented cell through the bounded GraphQL direct-read executor. Its declared
 `operation:local_git` remains one applicable but unimplemented cell. Neither
-has fixture or live proof, so neither changes the zero-certification baseline.
+had fixture or live proof, so neither changed the historical zero-certification baseline.
 
-The four flow-kind totals are 309,136 exact pairs each. Their applicable /
+The historical aggregate flow-kind totals are 309,136 exact pairs each. Their applicable /
 implemented / complete counts are:
 
 | Flow | Applicable | Implemented | Complete |
@@ -150,7 +161,7 @@ implemented / complete counts are:
 | database → API | 2,196 | 0 | 0 |
 | database → database | 16 | 0 | 0 |
 
-The sync scoreboard is zero complete for all 28 mode × primitive cells. API
+The historical aggregate sync scoreboard is zero complete for all 28 mode × primitive cells. API
 writes are red because the engine refuses an API destination without a durable
 acknowledgement; database writes are red because no database write executor
 exists. PostgreSQL and MySQL change-capture reads are code-present but have no
