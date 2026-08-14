@@ -14,15 +14,12 @@
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
-| First creation and repeat assertion create only an owned target | live | A dbtest PostgreSQL database shows the derived namespace, relation, and control row after first provision; repeating returns the same relation OID/control record without creating an additional relation. |
-| Five allowed modes write exact typed values, composite keys, and atomic overwrites | live | Returned PostgreSQL rows and `COUNT(*)` prove final values/types for `full_overwrite`, `full_append`, `incremental_append`, `incremental_upsert`, and `incremental_dedupe`; a concurrent reader observes either old or full replacement data, never a partial overwrite. |
-| Unowned, foreign, unreadable, colliding, replaced, or schema-drifted targets are refused | live | Each dbtest negative case re-queries relation/control state and proves its pre-existing rows and control records are unchanged. |
-| Unsupported types/values, permission denial, and unsafe durability settings are refused before mutation | live | Each refusal re-queries target and delivery control state and proves zero changed rows/control records; permission and GUC cases use a restricted/live session. |
-| Statement error, batch error, and cancellation roll back the whole transaction | live | Seeded target and ledger state remain unchanged after each forced failure/cancellation; a post-failure row query and control query prove zero partial writes. |
-| A commit disconnect has an unknown outcome and is not retried | fake | A deterministic connection/transaction seam is necessary to fault only the commit acknowledgement boundary; it asserts one commit attempt, no retry/rollback claim, and no receipt/ledger mutation. Live tests cover confirmed commit durability. |
-| Concurrent writers retain owner scope and no partial target provisioning | live | Two concurrent dbtest clients yield one fully asserted target/control pair for the same owner, while cross-owner attempts leave the other owner's namespace/relation/control state absent. |
-| The approved reverse-ETL path reaches PostgreSQL through the typed contract | live | A built `pm` integration test executes the approved path and queries both target rows and the driver-owned control/delivery records. |
-| Capability remains fenced until certification | live | Existing metadata/capability tests observe `write=false` after the driver becomes executable behind the typed contract. |
+| Exact existing target assertion and durable control ledger | live (dbtest; endpoint pending) | Independently seeded PostgreSQL owner/control rows reassert the same relation OID; one ledger store increases its private table count by one and re-reads the identifier. |
+| Foreign/tampered owner, collision, OID replacement, schema drift, and permissions | live (dbtest; endpoint pending) | Each case re-queries namespace/relation OIDs, owner/control values, and ledger count after refusal; no driver mutation is accepted as evidence. |
+| Unsafe durability settings | live (dbtest; endpoint pending) | A session visibly has `synchronous_commit=off`, preflight refuses it, then accepts the restored safe setting. |
+| Private namespace/control DDL and first target creation | held for #3973 mapping | The target relation and its schema fingerprint must commit atomically; no placeholder or PostgreSQL-private mapping is legal. |
+| Five typed modes, tombstones, rollback, and unknown commit | held for #3973 mapping/receipt | A later dbtest suite must assert persisted row/count/receipt outcomes rather than errors alone. |
+| Capability remains fenced until certification | local | Existing metadata/capability tests observe `write=false` after the driver gains mapping-independent ports. |
 
 ## Fixed decisions
 
@@ -31,3 +28,12 @@
 - The driver must retain one session-bound transaction per approved write and must surface only typed shared errors at the boundary.
 - `write` remains `false`; no registration, CLI surface, generic SQL, auto-evolution, physical-absence delete, or `incremental_dedupe_history` may be introduced.
 - The execution is the GSD inline/manual fallback: the canonical worker contract disables role delegation and this issue is not a numbered roadmap phase. This records the generated `scripts/gsd prompt` lifecycle rather than waiving it.
+
+## Resumed partial scope
+
+Firstmate confirmed that #3973 owns the missing `MappingContractV1` and
+`DeliveryReceiptV1` completion lane. Until it lands, this issue proceeds only
+with PostgreSQL-private control storage, advisory locking, durable identity
+observation, fail-closed ownership/OID/schema refusal behavior, and durability
+preflight. It does not infer a record layout, create a placeholder business
+table, admit a write mode, or apply/delete records.

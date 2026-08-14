@@ -47,10 +47,33 @@ Decision options:
 3. narrow #3982 to the PostgreSQL provisioning/control/ledger driver only and
    move typed five-mode writes to the new foundation-dependent issue.
 
+## Decision resolved — partial execution
+
+Firstmate assigned the missing contract back to #3973 as
+`cli-3973-mapping-contract-r2`. This issue may now implement the native
+provisioning and durability half without making a private mapping protocol.
+The provisioning driver must refuse a create that needs a business relation
+layout until the shared mapping contract supplies one; no placeholder relation
+may be persisted because it would either lie about schema identity or force the
+later slice to auto-evolve it. The non-mapping work is deliberately retained:
+
+1. real advisory lock, target database/namespace/relation OID observation, and
+   typed private control-record decoding;
+2. private control-layout decoding and durable ledger storage exercised against
+   independently seeded live state; first-create control DDL remains atomic
+   with the mapping-derived business relation;
+3. foreign/missing/unreadable owner, collision, database replacement, relation
+   OID replacement, and schema-drift refusals with no target/control mutation;
+4. PostgreSQL durability preflight, requiring `fsync=on` and a transaction
+   that can establish `synchronous_commit=on` before a future write session;
+5. compile-time port checks while leaving `DatabaseWriteDriver`, write-mode
+   admission, record application, tombstones, receipts, and `write=false`
+   capability behavior unchanged until #3973 is complete.
+
 ## TDD slices
 
 1. **Red — concrete driver surface.** Add compile-time and real PostgreSQL test coverage for the existing descriptor-only driver to require provisioning, preview, session start, batch application, receipts, and ledger persistence. Preserve `write=false` / legacy `Connector.Write` fence assertions. Capture failing output.
-2. **Green — private ownership and provisioning.** Implement namespace/control/ledger DDL and observation under an advisory lock, with database identity, namespace OID, relation OID, and schema fingerprint. The live truth table must assert state is unchanged for missing/foreign/unreadable ownership, collision, OID replacement, schema drift, and permissions.
+2. **Green — private ownership observation and provisioning port.** Implement advisory locking, independent private-control decoding/ledger storage, database identity, namespace OID, relation OID, and schema fingerprint. First-create DDL remains coupled to the future mapping-derived relation layout, so the live truth table presently seeds its oracle state independently and asserts no driver mutation for foreign/unreadable ownership, collision, OID replacement, schema drift, and permissions.
 3. **Red/green — type mapping and bounded transaction.** Establish a closed logical-type/value encoder and relation DDL from the sealed schema; then implement `PreviewDatabaseWrite` and one pinned session with bounded batch application. Live tests assert exact rows/types and zero mutation on unsupported values.
 4. **Red/green — closed modes and deletion.** Implement canonical `full_overwrite`, `full_append`, `incremental_append`, `incremental_upsert`, and `incremental_dedupe` behavior through that session. `full_overwrite` publishes atomically; keyed tombstones explicitly delete; no dedupe-history or physical-absence deletion is accepted. Test output checks rows and counts.
 5. **Red/green — certainty and durability.** Preflight `fsync` and `synchronous_commit`; test rollback for statement/batch/cancel failures, commit receipt durability, and an explicit unknown-commit outcome with no retry.

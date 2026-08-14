@@ -9,6 +9,8 @@ import (
 
 func TestPostgresDatabaseDriverReferenceSeam(t *testing.T) {
 	var _ database.Driver = native.DatabaseDriver{}
+	var _ database.ManagedTargetProvisioningDriver = (*native.DatabaseDriver)(nil)
+	var _ database.ManagedTargetDeliveryLedgerStore = (*native.DatabaseDriver)(nil)
 
 	descriptor := (native.DatabaseDriver{}).DatabaseDriverDescriptor()
 	if descriptor.ID != "postgres" || descriptor.Protocol != "postgres-wire" || descriptor.APIVersion != 1 {
@@ -18,5 +20,11 @@ func TestPostgresDatabaseDriverReferenceSeam(t *testing.T) {
 	caps := native.New().Metadata().Capabilities
 	if caps.Write || caps.CDC {
 		t.Fatalf("PostgreSQL capabilities = %+v, want write=false and cdc=false during foundation work", caps)
+	}
+}
+
+func TestPostgresDatabaseDriverRequiresPinnedConnection(t *testing.T) {
+	if _, err := native.NewDatabaseDriver(nil); err == nil {
+		t.Fatal("NewDatabaseDriver(nil) succeeded, want a refused unpinned connection")
 	}
 }
