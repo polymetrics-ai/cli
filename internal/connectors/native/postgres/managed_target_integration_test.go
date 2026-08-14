@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
@@ -26,6 +27,215 @@ import (
 )
 
 const postgresManagedTargetRestrictedUser = "pm_managed_target_no_control"
+
+// TestPostgresManagedTargetWorksetDeliveryLive proves the immutable Parquet
+// workset consumer against the managed PostgreSQL driver. It observes target
+// rows after every delivery: source absence retains a prior row while only an
+// explicit tombstone removes it. The mapping deliberately renames source keys
+// to ensure tombstones traverse MappingContractV1 before PostgreSQL applies
+// their target-key predicates.
+func TestPostgresManagedTargetWorksetDeliveryLive(t *testing.T) {
+	if os.Getenv(postgresCatalogIntegrationEnabledEnv) != "1" {
+		t.Skipf("database integration skipped: set %s=1 to run the PostgreSQL Docker or Podman proof", postgresCatalogIntegrationEnabledEnv)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+	harness, err := newPostgresCatalogContainerHarness(
+		dbtest.Runtime(strings.TrimSpace(os.Getenv(postgresCatalogIntegrationRuntimeEnv))),
+		strings.TrimSpace(os.Getenv(postgresCatalogIntegrationEndpointEnv)),
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Error("PostgreSQL database test cleanup failed")
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatal("PostgreSQL database container did not start")
+	}
+	waitForPostgresCatalog(t, ctx, native.New(), postgresCatalogConfig(t, endpoint, postgresCatalogAlphaSchema))
+	source := openPostgresCatalogSource(t, ctx, endpoint)
+	defer func() { _ = source.Close(context.WithoutCancel(ctx)) }()
+	driver, err := native.NewDatabaseDriver(source)
+	if err != nil {
+		t.Fatal("could not construct PostgreSQL managed target driver")
+	}
+	fixture := newPostgresManagedTargetFixture(t, ctx, driver)
+	provisioner, err := database.NewManagedTargetProvisioner(driver)
+	if err != nil {
+		t.Fatal("could not construct managed target provisioner")
+	}
+	control, err := provisioner.CreateOrAssert(ctx, fixture.plan)
+	if err != nil {
+		t.Fatal("could not create PostgreSQL managed workset target")
+	}
+	ledger, err := database.NewManagedTargetDeliveryLedger(driver)
+	if err != nil {
+		t.Fatal("could not construct managed target delivery ledger")
+	}
+	writeExecutor, err := database.NewDatabaseWriteExecutor(driver, ledger)
+	if err != nil {
+		t.Fatal("could not construct PostgreSQL workset write executor")
+	}
+	baselineStore, err := database.NewFileChangeDeliveryBaselineStore(t.TempDir(), 1<<20)
+	if err != nil {
+		t.Fatal("could not construct durable local baseline store")
+	}
+	delivery, err := database.NewChangeDeliveryExecutor(writeExecutor, baselineStore)
+	if err != nil {
+		t.Fatal("could not construct PostgreSQL workset delivery executor")
+	}
+	root := t.TempDir()
+
+	firstSource := []warehouse.Row{
+		{"source_tenant": "north", "source_id": int64(1), "source_value": "old"},
+		{"source_tenant": "retain", "source_id": int64(9), "source_value": "keep"},
+	}
+	emptyBaseline := writePostgresWorksetParquet(t, ctx, root, "empty-baseline", nil)
+	firstWorkset := derivePostgresWorkset(t, ctx, root, control, firstSource, emptyBaseline, nil)
+	firstReceipt := executePostgresWorksetDelivery(t, ctx, delivery, fixture, control, firstWorkset)
+	assertPostgresManagedTargetRows(t, ctx, source, control, []postgresManagedTargetRow{
+		{tenant: "north", id: 1, value: "old"},
+		{tenant: "retain", id: 9, value: "keep"},
+	})
+	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, firstReceipt)
+
+	firstBaseline := lookupPostgresWorksetBaseline(t, ctx, baselineStore, control)
+	secondBaseline := writePostgresWorksetParquet(t, ctx, root, "second-baseline", readPostgresWorksetBaselineRows(t, ctx, firstBaseline))
+	secondSource := []warehouse.Row{
+		{"source_tenant": "north", "source_id": int64(1), "source_value": "updated"},
+		{"source_tenant": "south", "source_id": int64(2), "source_value": "new"},
+	}
+	secondWorkset := derivePostgresWorkset(t, ctx, root, control, secondSource, secondBaseline, nil)
+	secondReceipt := executePostgresWorksetDelivery(t, ctx, delivery, fixture, control, secondWorkset)
+	// retain/9 is physically absent from this projection and baseline delta, but
+	// stays in PostgreSQL because the workset has no explicit tombstone for it.
+	assertPostgresManagedTargetRows(t, ctx, source, control, []postgresManagedTargetRow{
+		{tenant: "north", id: 1, value: "updated"},
+		{tenant: "retain", id: 9, value: "keep"},
+		{tenant: "south", id: 2, value: "new"},
+	})
+	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, secondReceipt)
+
+	secondBaselineRecord := lookupPostgresWorksetBaseline(t, ctx, baselineStore, control)
+	thirdBaseline := writePostgresWorksetParquet(t, ctx, root, "third-baseline", readPostgresWorksetBaselineRows(t, ctx, secondBaselineRecord))
+	deleteRetained := synccontract.Tombstone{
+		Operation:   synccontract.OperationDelete,
+		EventID:     synccontract.OpaqueToken("postgres-workset-delete-retain-9"),
+		Key:         json.RawMessage(`{"source_tenant":"retain","source_id":9}`),
+		DeleteImage: synccontract.DeleteImageKeyOnly,
+		Position: synccontract.CheckpointPosition{
+			Primary:    synccontract.OpaqueToken("00000022"),
+			TieBreaker: synccontract.OpaqueToken("00000001"),
+		},
+	}
+	thirdWorkset := derivePostgresWorkset(t, ctx, root, control, secondSource, thirdBaseline, []synccontract.Tombstone{deleteRetained})
+	thirdReceipt := executePostgresWorksetDelivery(t, ctx, delivery, fixture, control, thirdWorkset)
+	assertPostgresManagedTargetRows(t, ctx, source, control, []postgresManagedTargetRow{
+		{tenant: "north", id: 1, value: "updated"},
+		{tenant: "south", id: 2, value: "new"},
+	})
+	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, thirdReceipt)
+	finalBaseline := lookupPostgresWorksetBaseline(t, ctx, baselineStore, control)
+	if got, want := finalBaseline.WorksetIdentity(), thirdWorkset.Identity(); got != want {
+		t.Fatalf("durable workset baseline identity = %q, want final immutable workset %q", got, want)
+	}
+	if got, want := finalBaseline.DeliveryID(), thirdReceipt.DeliveryID(); got != want {
+		t.Fatalf("durable workset baseline receipt = %q, want PostgreSQL receipt %q", got, want)
+	}
+}
+
+func derivePostgresWorkset(t *testing.T, ctx context.Context, root string, control database.ManagedTargetControlRecord, sourceRows []warehouse.Row, baselinePath string, tombstones []synccontract.Tombstone) database.ChangeDeliveryWorkset {
+	t.Helper()
+	sourcePath := writePostgresWorksetParquet(t, ctx, root, "source", sourceRows)
+	workset, err := database.DeriveChangeDeliveryWorkset(ctx, database.ChangeDeliveryWorksetRequest{
+		Control:          control,
+		Keys:             []string{"source_tenant", "source_id"},
+		SourceParquet:    sourcePath,
+		BaselineParquet:  baselinePath,
+		Tombstones:       tombstones,
+		Root:             root,
+		MaxArtifactBytes: 1 << 20,
+	})
+	if err != nil {
+		t.Fatalf("DeriveChangeDeliveryWorkset() error = %v", err)
+	}
+	return workset
+}
+
+func writePostgresWorksetParquet(t *testing.T, ctx context.Context, root, name string, rows []warehouse.Row) string {
+	t.Helper()
+	path := filepath.Join(root, name+".parquet")
+	if err := warehouse.WriteTable(ctx, path, rows); err != nil {
+		t.Fatalf("write workset Parquet %q: %v", name, err)
+	}
+	return path
+}
+
+func executePostgresWorksetDelivery(t *testing.T, ctx context.Context, delivery *database.ChangeDeliveryExecutor, fixture postgresManagedTargetFixture, control database.ManagedTargetControlRecord, workset database.ChangeDeliveryWorkset) database.DeliveryReceiptV1 {
+	t.Helper()
+	mapping, ok := fixture.plan.Mapping()
+	if !ok {
+		t.Fatal("managed PostgreSQL fixture lost its mapping")
+	}
+	plan, err := database.NewChangeDeliveryPlan(ctx, database.ChangeDeliveryPlanRequest{
+		Definition: postgresManagedTargetWriteDefinition(t),
+		Workset:    workset,
+		Control:    control,
+		Mapping:    mapping,
+		BatchSize:  2,
+	})
+	if err != nil {
+		t.Fatalf("NewChangeDeliveryPlan() error = %v", err)
+	}
+	preview, err := delivery.Preview(ctx, plan)
+	if err != nil {
+		t.Fatalf("ChangeDeliveryExecutor.Preview() error = %v", err)
+	}
+	approval, err := database.NewChangeDeliveryApproval(preview)
+	if err != nil {
+		t.Fatalf("NewChangeDeliveryApproval() error = %v", err)
+	}
+	result, err := delivery.Execute(ctx, plan, approval)
+	if err != nil {
+		t.Fatalf("ChangeDeliveryExecutor.Execute() error = %v", err)
+	}
+	receipt, ok := result.Receipt()
+	if !ok || receipt.DeliveryID() == "" {
+		t.Fatalf("workset delivery did not return receipt after baseline persistence: %#v", result)
+	}
+	return receipt
+}
+
+func lookupPostgresWorksetBaseline(t *testing.T, ctx context.Context, store *database.FileChangeDeliveryBaselineStore, control database.ManagedTargetControlRecord) database.ChangeDeliveryBaseline {
+	t.Helper()
+	key, err := database.NewManagedTargetDeliveryLedgerKey(control)
+	if err != nil {
+		t.Fatal(err)
+	}
+	baseline, found, err := store.Lookup(ctx, key)
+	if err != nil || !found {
+		t.Fatalf("Lookup(workset baseline) = (%#v, %t, %v), want durable candidate", baseline, found, err)
+	}
+	return baseline
+}
+
+func readPostgresWorksetBaselineRows(t *testing.T, ctx context.Context, baseline database.ChangeDeliveryBaseline) []warehouse.Row {
+	t.Helper()
+	var rows []warehouse.Row
+	if err := baseline.ReadCandidateBaseline(ctx, func(row warehouse.Row) error {
+		rows = append(rows, row)
+		return nil
+	}); err != nil {
+		t.Fatalf("ReadCandidateBaseline() error = %v", err)
+	}
+	return rows
+}
 
 // TestPostgresManagedTargetDriverLiveControlAssertions proves PostgreSQL's
 // native identity and control-record observer against a server that it did not
