@@ -80,12 +80,11 @@ package defs
 
 import "embed"
 
-//go:embed operation_endpoint_ledger.json */metadata.json */changefeed.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json */database.json
+//go:embed operation_endpoint_ledger.json */metadata.json */changefeed.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
 var FS embed.FS
 ```
 
-(`changefeed.json`, `writes.json`, `operations.json`, `cli_surface.json`, `certification.json`, and
-`database.json`
+(`changefeed.json`, `writes.json`, `operations.json`, `cli_surface.json`, and `certification.json`
 are optional per connector; the loader tolerates absence. `api_surface.json` and `fixtures/` stay
 on disk for authoring/conformance validation and are not embedded in the production `defs.FS`, which keeps
 tens of megabytes of inert replay JSON out of every shipped binary. The generated root
@@ -379,7 +378,6 @@ type Bundle struct {
     Name     string
     Metadata Metadata          // parsed metadata.json
     Changefeed *connectors.ChangefeedDescriptor // optional changefeed.json
-    Database *database.Definition // optional database.json policy declaration
     RateLimits *connsdk.RateLimits // optional rate_limits.json HTTP pacing policy
     Spec     *Schema           // compiled spec.json; SecretKeys() from x-secret
     HTTP     HTTPBase          // streams.json "base"
@@ -577,46 +575,8 @@ non-REST protocols — postgres/mysql/snowflake/bigquery (SQL + CDC), amazon-sqs
 file/warehouse/outbox/sample built-ins. These implement `connectors.Connector` directly with the
 Ruby component split as the mandated file layout: `connector.go` (entry + registration),
 `connection.go`, `reader.go`, `cataloger.go`, `writer.go`, `cdc.go`. **They still ship a defs
-bundle** (metadata.json, spec.json, schemas/, and `database.json` when it is a native database
-driver) so identity, catalog, and docs stay uniform; they embed `engine.Base` which serves
-`Definition()`/`Catalog()` from the bundle. The database declaration's closed authoring contract
-lives in the [migration conventions](../migration/conventions.md#database-native-policy-declaration-databasejson).
-
-### B.7.1 Database warehouse mediation
-
-Every database connector flow is warehouse-mediated. Layer one remains shared and
-connector-agnostic: it owns the connection-scoped WAL-to-Parquet materialization, warehouse reads,
-and the durable artifact identity of workspace, connector, and connection. Layer two is
-database-specific and can supply exactly one leg: database source to a shared warehouse artifact,
-or a shared warehouse artifact to a database target. A database command cannot contain both a
-source and target, and native admission/evidence is distinct for each leg. Therefore neither a
-direct connector pair nor a zero-copy route exists in this architecture.
-
-`database.json` remains a non-executing policy declaration: it does not register a driver, open a
-connection, perform SQL/DDL, create a write session, persist a receipt/checkpoint, or enable
-CDC/polling; public capabilities remain in `metadata.json`.
-
-The shared managed-target ownership kernel adds driver-neutral provisioning without changing that
-boundary. A `TargetOwner` is the source identity triple (workspace, source connector, and source
-connection), so each new connection receives a distinct deterministic namespace while all of an
-existing connection's streams reuse its namespace. A `ManagedTargetRef` retains the warehouse
-artifact as provenance but derives its relation from that owner plus an application-persisted,
-immutable stream ID. Its 63-byte deterministic hashed physical names use only those structural
-identities. Credentials, display/map-key text, and destination tables are excluded; mode, mapping,
-schema, keys, cursor, ordering, and destination database identity are assertion-only contract
-inputs that never move or leak into a physical name.
-
-Ownership is two-layered. A durable namespace-owner record binds the source owner, target database
-identity, physical namespace, and observed native namespace identity. Each stream relation has its
-own durable control record binding the same owner and target database to the derived ref, observed
-native relation identity, and expected schema version/fingerprint. `CreateOrAssert` accepts only an
-immutable typed plan, holds a namespace-scoped driver lock, and re-observes after an invoked create
-even after cancellation or driver error. It may create when the namespace is absent with no control
-record, or when an exact namespace owner exists and the requested relation/control are both absent;
-the latter admits a second stream without adopting a target. Exact records are idempotently
-asserted. Missing, unreadable, foreign, colliding, moved, replaced, drifted, or orphaned state is
-refused. The shared contract neither adopts customer tables nor evolves schemas; it selects no
-native driver or DDL and implements no delivery sessions or mode application.
+bundle** (metadata.json, spec.json, schemas/) so identity, catalog, and docs stay uniform; they
+embed `engine.Base` which serves `Definition()`/`Catalog()` from the bundle.
 
 ## C. Interface, registry, and catalog changes
 

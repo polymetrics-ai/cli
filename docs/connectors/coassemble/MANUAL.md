@@ -60,7 +60,7 @@ ETL STREAMS
     fields: course_id(string), id(integer), language(string), missingScreens(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   publish_course:

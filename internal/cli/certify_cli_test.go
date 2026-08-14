@@ -392,9 +392,9 @@ func completeCertifyReport() certify.Report {
 			SyncModes: map[string]certify.SyncModeResult{
 				"full_refresh_append":            {Result: "pass", DataSource: "live"},
 				"full_refresh_overwrite":         {Result: "pass", DataSource: "capture"},
-				"full_refresh_overwrite_deduped": {Result: "pass", DataSource: "capture"},
+				"full_refresh_overwrite_deduped": {Result: "pass", Reason: "typed pre-I/O refusal confirmed"},
 				"incremental_append":             {Result: "pass", DataSource: "live", CursorAdvanced: true},
-				"incremental_append_deduped":     {Result: "pass", DataSource: "capture"},
+				"incremental_append_deduped":     {Result: "pass", Reason: "typed pre-I/O refusal confirmed"},
 			},
 			DirectRead: &certify.CapabilityResult{Result: "skipped", Reason: "fixture does not declare a direct read"},
 			Binary:     &certify.CapabilityResult{Result: "skipped", Reason: "fixture does not declare a binary download"},

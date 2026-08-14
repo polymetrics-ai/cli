@@ -44,7 +44,7 @@ ETL STREAMS
     fields: created_at(string), customer_id(integer), id(integer), status(string), updated_at(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Recharge API read of customer, subscription, and order data

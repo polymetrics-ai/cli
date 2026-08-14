@@ -44,7 +44,7 @@ ETL STREAMS
     fields: category(string), confidence(number), image_url(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Imagga API read of account usage data and per-image tags/categories

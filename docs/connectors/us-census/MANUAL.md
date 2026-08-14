@@ -41,7 +41,7 @@ ETL STREAMS
     fields: accessLevel(string), c_dataset(array), c_geographyLink(string), c_isAvailable(boolean), c_variablesLink(string), c_vintage(integer), dataset_path(string), description(string), identifier(string), modified(string), title(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external US Census Bureau API read of a caller-configured dataset endpoint, plus the Bureau's own public dataset catalog (no auth required for the catalog)

@@ -67,7 +67,7 @@ ETL STREAMS
     fields: clientId(string), createdAt(string), discount(number), dueDate(string), id(integer), issueDate(string), publicId(string), reference(string), status(string), tax(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_client:

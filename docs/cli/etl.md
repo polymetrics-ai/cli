@@ -110,17 +110,21 @@ SYNC MODES
     replaces the final Parquet table only after the run succeeds.
 
   full_refresh_overwrite_deduped
-    Replaces the write-ahead log with this run's records, dedupes by primary key
-    and cursor, then atomically replaces the final Parquet table.
+    Compatibility name for typed full_overwrite admission. pm refuses before
+    source I/O until a matching transport is admitted.
 
   incremental_append
     Reads records at or after the saved cursor and appends accepted records to
     the write-ahead log. Cursor state advances only after successful writes.
 
   incremental_append_deduped
-    Appends accepted records to the write-ahead log and materializes a final
-    Parquet table with one latest row per primary key. Delete/tombstone records
-    remove the row from final output.
+    Compatibility name for typed incremental_dedupe admission. pm refuses
+    before source I/O until a matching transport is admitted.
+
+  Incremental modes and deduped compatibility names require --cursor. Deduped
+  modes require --primary-key. Static connector manifests advertise the full
+  deduped compatibility name only with both fields, and incremental modes only
+  with a declared incremental executor.
 
 SECURITY
   ETL resolves credentials in memory and stores only credential references.

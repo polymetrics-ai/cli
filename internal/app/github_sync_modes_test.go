@@ -11,7 +11,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 )
 
-func TestGithubPullRequestsETLSupportsAllSyncModes(t *testing.T) {
+func TestGithubPullRequestsETLSupportsLegacyExecutableModes(t *testing.T) {
 	tests := []struct {
 		name string
 		mode string
@@ -47,19 +47,6 @@ func TestGithubPullRequestsETLSupportsAllSyncModes(t *testing.T) {
 			},
 		},
 		{
-			name: "full refresh overwrite deduped keeps latest duplicate",
-			mode: "full_refresh_overwrite_deduped",
-			run: func(t *testing.T, a *App, connection string, setRecords func([]map[string]any)) {
-				setRecords([]map[string]any{
-					githubPRFixture("PR_1", 1, "first old", "2026-01-01T00:00:00Z"),
-					githubPRFixture("PR_1", 1, "first latest", "2026-01-03T00:00:00Z"),
-					githubPRFixture("PR_2", 2, "second", "2026-01-02T00:00:00Z"),
-				})
-				runGithubETL(t, a, connection)
-				assertGithubRows(t, a, 2, map[string]string{"PR_1": "first latest", "PR_2": "second"})
-			},
-		},
-		{
 			name: "incremental append filters older cursor and appends inclusive cursor",
 			mode: "incremental_append",
 			run: func(t *testing.T, a *App, connection string, setRecords func([]map[string]any)) {
@@ -78,23 +65,6 @@ func TestGithubPullRequestsETLSupportsAllSyncModes(t *testing.T) {
 					t.Fatalf("cursor = %q, want 2026-01-03T00:00:00Z", run.Checkpoint["cursor"])
 				}
 				assertGithubRows(t, a, 4, map[string]string{})
-			},
-		},
-		{
-			name: "incremental append deduped materializes latest PR rows",
-			mode: "incremental_append_deduped",
-			run: func(t *testing.T, a *App, connection string, setRecords func([]map[string]any)) {
-				setRecords([]map[string]any{
-					githubPRFixture("PR_1", 1, "first", "2026-01-01T00:00:00Z"),
-					githubPRFixture("PR_2", 2, "second", "2026-01-02T00:00:00Z"),
-				})
-				runGithubETL(t, a, connection)
-				setRecords([]map[string]any{
-					githubPRFixture("PR_1", 1, "first updated", "2026-01-03T00:00:00Z"),
-					githubPRFixture("PR_3", 3, "third", "2026-01-04T00:00:00Z"),
-				})
-				runGithubETL(t, a, connection)
-				assertGithubRows(t, a, 3, map[string]string{"PR_1": "first updated", "PR_2": "second", "PR_3": "third"})
 			},
 		},
 	}

@@ -463,9 +463,10 @@ The requested names should be product profiles over the canonical modes at
 not be advertised merely because their names exist. Deletes and history-window behavior continue to
 use the existing `synccontract` tombstone/history contract.
 
-The brief uses `incremental_dedup`; the captain ruled that the repository's existing
-`incremental_dedupe` spelling is the only public and persisted spelling. Reject the shorter form at
-input instead of creating an alias. There is one mode name and one contract.
+The brief uses `incremental_dedup`; the captain ruling below retains
+`incremental_dedupe` as the only canonical `synccontract.Mode` spelling. Reject the shorter form
+at input instead of creating an alias. Retained public compatibility inputs are owned separately by
+`internal/synccontract/public_modes.go`.
 
 ## Type mapping: lossless or no write
 
@@ -963,14 +964,16 @@ supersede this ruling.
 **Ruling: Option A.** Revisit Option B only after measuring phase-one cost; never ship a direct path
 without a durable spool.
 
-### 4. Which public spelling should users see? — **resolved by captain**
+### 4. Which canonical spelling should the database contract use? — **resolved by captain**
 
 - **Option A — canonical `incremental_dedupe`.** Matches persisted `synccontract.Mode`.
 - **Option B — accept `incremental_dedup` as an input alias.** Normalize immediately and persist only
   `incremental_dedupe`.
 
-**Ruling: Option A.** `incremental_dedupe` is the sole public and stored spelling. Do not add the
-`incremental_dedup` alias.
+**Ruling: Option A.** `incremental_dedupe` is the sole canonical `synccontract.Mode` spelling. Do
+not add the shorter `incremental_dedup` alias. This does not remove retained legacy-ETL
+compatibility inputs: the connector-neutral `synccontract.PublicModes` authority maps
+`incremental_append_deduped` to `incremental_dedupe` for typed admission.
 
 ### 5. PostgreSQL CDC and `pglogrepl` — **resolved by captain**
 

@@ -510,9 +510,14 @@ func TestPerfSyncModesJSON(t *testing.T) {
 		t.Fatalf("Run(perf sync-modes) code = %d stderr = %s", code, stderr.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{`"kind": "SyncModeBenchmark"`, `"full_refresh_append"`, `"incremental_append_deduped"`} {
+	for _, want := range []string{`"kind": "SyncModeBenchmark"`, `"full_refresh_append"`, `"incremental_append"`} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("json output missing %q:\n%s", want, out)
+		}
+	}
+	for _, forbidden := range []string{`"full_refresh_overwrite_deduped"`, `"incremental_append_deduped"`} {
+		if strings.Contains(out, forbidden) {
+			t.Fatalf("json output contains typed-only compatibility name %q:\n%s", forbidden, out)
 		}
 	}
 }
@@ -528,8 +533,10 @@ func TestETLHelpListsAllSyncModes(t *testing.T) {
 		"full_refresh_append",
 		"full_refresh_overwrite",
 		"full_refresh_overwrite_deduped",
+		"Compatibility name for typed full_overwrite admission",
 		"incremental_append",
 		"incremental_append_deduped",
+		"Compatibility name for typed incremental_dedupe admission",
 	} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("etl help missing %q:\n%s", want, out)
