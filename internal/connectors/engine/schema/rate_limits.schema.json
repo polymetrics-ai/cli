@@ -74,6 +74,10 @@
               "subject_config": { "type": "string" }
             }
           },
+          "coordination": {
+            "type": "string",
+            "enum": ["require_shared"]
+          },
           "budgets": {
             "type": "array",
             "items": {

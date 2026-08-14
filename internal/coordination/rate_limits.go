@@ -54,6 +54,19 @@ type RateLimitRegistry struct {
 	sets  map[RateLimitKey]*rateLimitSet
 }
 
+// RateLimitCoordinationMode describes the enforcement boundary without
+// exposing a scope or account identity.
+type RateLimitCoordinationMode string
+
+const RateLimitCoordinationProcessLocal RateLimitCoordinationMode = "process_local"
+
+// RateLimitCoordinationStatus is safe for ordinary output. It intentionally
+// contains no registry key, subject, binding, endpoint, or credential data.
+type RateLimitCoordinationStatus struct {
+	Mode    RateLimitCoordinationMode
+	Message string
+}
+
 // NewRateLimitRegistry creates a local registry. A nil clock uses a
 // context-aware wall clock; tests should inject a deterministic clock.
 func NewRateLimitRegistry(clock RateLimitClock) *RateLimitRegistry {
@@ -61,6 +74,15 @@ func NewRateLimitRegistry(clock RateLimitClock) *RateLimitRegistry {
 		clock = wallRateLimitClock{}
 	}
 	return &RateLimitRegistry{clock: clock, sets: make(map[RateLimitKey]*rateLimitSet)}
+}
+
+// Status states the exact coordination boundary of the dependency-free
+// registry. Callers must not describe this as account-wide protection.
+func (r *RateLimitRegistry) Status() RateLimitCoordinationStatus {
+	return RateLimitCoordinationStatus{
+		Mode:    RateLimitCoordinationProcessLocal,
+		Message: "process-local rate-limit protection; not shared across processes",
+	}
 }
 
 // Limiter returns the stable local limiter for key. Declaration validation

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -76,6 +77,40 @@ func (c *Connector) Definition() connectors.Definition {
 
 func (c *Connector) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(c.bundle)
+}
+
+// RateLimitCoordination returns the safe declaration-level provenance used by
+// connector inspection. It intentionally does not attempt a coordinator
+// connection or expose any protected scope identity.
+func (c *Connector) RateLimitCoordination() connectors.RateLimitCoordination {
+	if c == nil || c.bundle.RateLimits == nil || c.bundle.RateLimits.State != connsdk.RateLimitStateDeclared || len(c.bundle.RateLimits.Policies) == 0 {
+		return connectors.RateLimitCoordination{}
+	}
+	hasProcessLocal := false
+	hasRequireShared := false
+	for _, policy := range c.bundle.RateLimits.Policies {
+		if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
+			hasRequireShared = true
+		} else {
+			hasProcessLocal = true
+		}
+	}
+	if hasRequireShared && hasProcessLocal {
+		return connectors.RateLimitCoordination{
+			Mode:    connectors.RateLimitCoordinationMixed,
+			Message: "Rate-limit coordination is policy-scoped: process-local policies protect this pm process only and are not shared across processes; require_shared policies refuse before sending when the optional coordinator is unavailable.",
+		}
+	}
+	if hasRequireShared {
+		return connectors.RateLimitCoordination{
+			Mode:    connectors.RateLimitCoordinationRequireShared,
+			Message: "Shared rate-limit coordination is required; the command refuses before sending a request when the coordinator is unavailable.",
+		}
+	}
+	return connectors.RateLimitCoordination{
+		Mode:    connectors.RateLimitCoordinationProcessLocal,
+		Message: "Process-local rate-limit protection coordinates this pm process only; it is not shared across processes.",
+	}
 }
 
 // HasConfigurationConstraints reports whether this bundle declares

@@ -636,7 +636,7 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 		if class != "" {
 			message = class + ": " + message
 		}
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST %s: %s", op.GraphQL.Path, message)
+		return connectors.DirectReadResult{}, formatResponseError(fmt.Sprintf("operation direct read POST %s: %s", op.GraphQL.Path, message), err)
 	}
 	data, metadata, err := graphQLOperationResponse(response.Body, maxBytes)
 	if err != nil {
