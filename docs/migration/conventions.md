@@ -96,8 +96,9 @@ split (design §B.7), each file well under ~400 lines:
 
 Still ship a bundle (`internal/connectors/defs/<name>/{metadata.json,changefeed.json?,spec.json,
 api_surface.json,docs.md}`) so identity/spec/docs stay uniform with every other connector. A
-native database bundle may additionally ship `database.json` and, only when its shared polling
-executor is registered, `polling_watermark.json` as described below;
+native database bundle may additionally ship `database.json` and the separately governed
+`polling_watermark.json` described below; an implemented polling declaration can be admitted only
+when its exact shared source and apply executors are registered.
 `metadata.json` sets
 `capabilities.dynamic_schema: true` and the bundle ships **no `streams.json`** (the loader
 (`bundle.go`'s `loadStreams`) only tolerates a missing `streams.json` when `dynamic_schema` is
@@ -156,6 +157,12 @@ DSN, credential, target name, or connection state. `engine.Load` validates the s
 at `internal/connectors/engine/schema/polling_watermark.schema.json`; the real no-I/O admission
 rule is `engine.PollingPreflight`, which requires exact registered source and apply executors plus
 the immutable polling conformance evidence before any source read.
+
+Only a bundle with `metadata.json` `integration_type: "database"` may contain this file. Its
+closed statuses are `implemented`, `planned`, and `unsupported`; the latter two require a reason,
+while an implemented declaration must supply the full source and target contracts below. Loading
+an implemented declaration alone does not make it eligible: both exact native-database executors
+must be registered when `PollingPreflight` runs.
 
 Declare only a catalog-discovered relation selector, closed keyset paging and bounds,
 snapshot/barrier, lossless cursor codec/type/precision, complete watermark/tie-breaker ordering,
