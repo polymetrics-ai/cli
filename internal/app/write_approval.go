@@ -162,12 +162,12 @@ func (a *projectWriteApprovalAuthority) IssueWriteGrant(req connectors.WriteAppr
 	return a.signer.IssueWriteGrant(req)
 }
 
-func (a *projectWriteApprovalAuthority) VerifyWriteGrant(grant connectors.WriteApprovalGrant, expected connectors.WriteApprovalExpectation, seal *connectors.WritePlanSeal) (*connectors.WriteApprovalEvidence, error) {
+func (a *projectWriteApprovalAuthority) ValidateWriteGrant(grant connectors.WriteApprovalGrant, expected connectors.WriteApprovalExpectation, seal *connectors.WritePlanSeal) error {
 	if a == nil || a.signer == nil {
-		return nil, errors.New("project write approval authority is required")
+		return errors.New("project write approval authority is required")
 	}
 	if seal == nil {
-		return nil, errors.New("authenticated write plan seal is required")
+		return errors.New("authenticated write plan seal is required")
 	}
 	expectedSeal := connectors.WritePlanSealExpectation{
 		PlanID: expected.PlanID, PlanHash: expected.PlanHash, Mode: expected.Mode,
@@ -176,16 +176,30 @@ func (a *projectWriteApprovalAuthority) VerifyWriteGrant(grant connectors.WriteA
 		Batchable: expected.Target.Batchable, Scope: expected.Target.Scope, Confirmation: expected.Confirmation,
 	}
 	if err := a.VerifyWritePlanSeal(*seal, expectedSeal); err != nil {
-		return nil, err
+		return err
 	}
 	if !projectApprovalStringEqual(grant.PlanSealMAC, seal.MAC) {
-		return nil, errors.New("write approval grant does not match the authenticated plan seal")
+		return errors.New("write approval grant does not match the authenticated plan seal")
 	}
-	if _, err := a.signer.VerifyWriteGrant(grant, expected); err != nil {
-		return nil, err
+	if err := a.signer.ValidateWriteGrant(grant, expected); err != nil {
+		return err
 	}
 	if grant.Target.Scope != connectors.WriteApprovalScopeProject {
-		return nil, errors.New("write approval grant is not project-owned")
+		return errors.New("write approval grant is not project-owned")
+	}
+	consumed, err := a.consumed(projectWriteApprovalConsumptionID(grant.PlanID, grant.PlanHash, grant.Mode))
+	if err != nil {
+		return err
+	}
+	if consumed {
+		return connectors.ErrWriteApprovalConsumed
+	}
+	return nil
+}
+
+func (a *projectWriteApprovalAuthority) VerifyWriteGrant(grant connectors.WriteApprovalGrant, expected connectors.WriteApprovalExpectation, seal *connectors.WritePlanSeal) (*connectors.WriteApprovalEvidence, error) {
+	if err := a.ValidateWriteGrant(grant, expected, seal); err != nil {
+		return nil, err
 	}
 	if err := a.consume(projectWriteApprovalConsumptionID(grant.PlanID, grant.PlanHash, grant.Mode), grant.Nonce, grant.MAC, time.Now().UTC()); err != nil {
 		return nil, fmt.Errorf("consume write approval grant: %w", err)

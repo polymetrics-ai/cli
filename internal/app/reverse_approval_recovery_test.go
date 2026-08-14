@@ -15,7 +15,9 @@ import (
 
 func TestRunReverseETLRecoversCommittedApprovalConsumptionUnlockFailure(t *testing.T) {
 	testRunReverseETLRecoversUncertainApprovalConsumption(t, func(a *App) {
-		a.store.Locker = &postCommitUnlockFailureLocker{failAt: 2}
+		// RunReverseETL first reads the plan, then UpdateAfterPreflight reads it
+		// again before acquiring the lock that commits the consumed approval.
+		a.store.Locker = &postCommitUnlockFailureLocker{failAt: 1}
 	}, statestore.CommitOutcomeCommitted)
 }
 

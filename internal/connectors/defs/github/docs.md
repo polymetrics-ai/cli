@@ -106,14 +106,15 @@ Mapped `reverse_etl` commands never mutate GitHub directly from a plain command 
 provider-style command creates a stored reverse plan. Non-destructive plans return an approval
 token immediately; destructive plans return it only after the connector's no-network preview
 succeeds and additionally require `--confirm destructive`. Execution requires the same stored plan
-plus `--approve`; `docs/cli/reverse.md` owns the full lifecycle contract.
+plus the bare `--approval-token-stdin` marker with the token on standard input; `docs/cli/reverse.md`
+owns the full lifecycle contract.
 
 Example:
 
 ```bash
 pm github issue close --issue-number 101 --credential github-token
 pm github issue close --plan <plan-id> --preview --json
-pm github issue close --plan <plan-id> --approve <approval-token> --json
+pm github issue close --plan <plan-id> --approval-token-stdin --json
 ```
 
 JSON plan and preview output omit approval tokens. `docs/cli/reverse.md` owns the command-record

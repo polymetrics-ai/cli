@@ -273,7 +273,7 @@ Queries run on embedded DuckDB over the warehouse's Parquet tables, so read-only
 pm reverse list --json
 pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-local --action create_pull_request --map title:title --map head:head --map base:base --json
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 pm reverse status <run-id> --json
 ```
 

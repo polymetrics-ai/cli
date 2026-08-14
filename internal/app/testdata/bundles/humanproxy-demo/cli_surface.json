@@ -13,7 +13,7 @@
     { "name": "config", "type": "string_array", "summary": "Connector config override as key=value." },
     { "name": "json", "type": "boolean", "summary": "Emit machine-readable JSON output." },
     { "name": "preview", "type": "boolean", "summary": "Preview a reverse-ETL write without executing it." },
-    { "name": "approve", "type": "string", "summary": "Approval token required to execute a reverse-ETL plan." },
+    { "name": "approval-token-stdin", "type": "boolean", "summary": "Read the approval token as one bounded line from standard input." },
     { "name": "confirm", "type": "string", "summary": "Typed confirmation for destructive reverse-ETL writes." }
   ],
   "commands": [
