@@ -300,6 +300,13 @@ func TestLoadReportRoundTrip(t *testing.T) {
 	if !loaded.Passed {
 		t.Errorf("loaded.Passed = false, want true")
 	}
+	loaded.Capabilities.SyncModes["full_refresh_overwrite_deduped"] = certify.SyncModeResult{Result: "pass", DataSource: "pre_io_refusal"}
+	if err := loaded.Save(dir); err != nil {
+		t.Fatalf("Save(pre_io_refusal) error = %v", err)
+	}
+	if _, err := certify.LoadReport(filepath.Join(dir, "certifications", "sample.json")); err != nil {
+		t.Fatalf("LoadReport(pre_io_refusal) error = %v", err)
+	}
 }
 
 func TestLoadReportMissingFile(t *testing.T) {

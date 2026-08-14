@@ -221,7 +221,7 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 
 	rep := Report{
 		Kind:          "ConnectorCertification",
-		SchemaVersion: 1,
+		SchemaVersion: CurrentSchemaVersion,
 		Connector:     r.opts.Connector,
 		Mode:          "live",
 		StartedAt:     time.Now().UTC(),
@@ -1004,7 +1004,7 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 		if passed, errMsg := assertTypedPreIORefusal(rc, "etl_full_refresh_overwrite_deduped", res); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
-		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", Reason: "typed pre-I/O refusal confirmed"}
+		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: "pre_io_refusal", Reason: "typed pre-I/O refusal confirmed"}
 		return true, cliInfoFrom(res), ""
 	})
 	return nil

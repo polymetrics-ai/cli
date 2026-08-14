@@ -18,6 +18,11 @@ import (
 	"polymetrics.ai/internal/failures"
 )
 
+// CurrentSchemaVersion is the report version accepted by the current runtime
+// bundle loader. New optional report values must remain readable at this
+// version until the writer/reader version contract is revised.
+const CurrentSchemaVersion = 1
+
 // CapabilityResult is a single certification entry under Report.Capabilities,
 // per the certification design §A "Report artifact" shape. Not every field
 // applies to every capability, so unused fields are omitted from JSON.
