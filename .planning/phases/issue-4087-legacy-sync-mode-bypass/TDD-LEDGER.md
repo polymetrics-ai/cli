@@ -2,7 +2,7 @@
 
 ## Slice 1 — typed aliases
 
-- **Red:** pending. Add focused parsing and `RunETL` tests for `full_refresh_overwrite_deduped` and `incremental_append_deduped`; on the base they must fail because normal and persisted-legacy parsing leave `ContractMode` empty and legacy ETL reads the source.
+- **Red:** recorded 2026-08-14. Added focused parsing and `RunETL` tests for `full_refresh_overwrite_deduped` and `incremental_append_deduped`; `go test -timeout 20m ./internal/app -run 'Test(DedupedLegacyAliasesUseTypedContractsBeforeSourceIO|CanonicalSyncModesRetainParsedContracts)$'` failed as expected. Both normal and persisted-legacy parsing returned an empty `ContractMode` and `LegacyCompatibility:true`; failures are at `sync_modes_test.go:289` before the typed pre-I/O assertion.
 - **Green:** pending. Centralize mapping and use the closed full-overwrite/incremental-dedupe contracts so each alias returns the existing typed pre-I/O refusal before source I/O when no transport is registered.
 - **Refactor:** pending. Keep the mapping connector-neutral and single-sourced; retain unchanged legacy and canonical behavior under explicit control tests.
 

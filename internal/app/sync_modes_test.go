@@ -6,10 +6,12 @@ import (
 	"errors"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
 type scriptedSyncSource struct {
@@ -263,6 +265,70 @@ func TestParseSyncModeSeparatesLegacyCompatibilityFromNewNativeAdmission(t *test
 	}
 	if contract.ContractMode != "incremental_append" || contract.LegacyCompatibility || !contract.IsContractMode() {
 		t.Fatalf("incremental_append mode = %+v, want native contract admission", contract)
+	}
+}
+
+func TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO(t *testing.T) {
+	tests := []struct {
+		name     string
+		mode     string
+		contract synccontract.Mode
+	}{
+		{name: "full overwrite", mode: "full_refresh_overwrite_deduped", contract: synccontract.ModeFullOverwrite},
+		{name: "incremental dedupe", mode: "incremental_append_deduped", contract: synccontract.ModeIncrementalDedupe},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			for _, legacyCompatibility := range []bool{false, true} {
+				t.Run("legacy_compatibility_"+strconv.FormatBool(legacyCompatibility), func(t *testing.T) {
+					parsed, err := ParseStreamSyncMode(StreamConfig{SyncMode: tt.mode, LegacyCompatibility: legacyCompatibility})
+					if err != nil {
+						t.Fatal(err)
+					}
+					if parsed.ContractMode != tt.contract || !parsed.IsContractMode() {
+						t.Fatalf("parsed %q = %+v, want typed %q contract", tt.mode, parsed, tt.contract)
+					}
+
+					source := newScriptedSyncSource("typed_legacy_"+tt.mode+"_"+strconv.FormatBool(legacyCompatibility), nil)
+					a, connection := setupSyncModeAppWithCompatibility(t, source, tt.mode, legacyCompatibility)
+					_, err = a.RunETL(context.Background(), RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
+					var modeErr *synccontract.ModeNotExecutableError
+					if !errors.As(err, &modeErr) || modeErr.Mode != tt.contract {
+						t.Fatalf("RunETL(%q) error = %v, want typed pre-I/O refusal for %q", tt.mode, err, tt.contract)
+					}
+					if len(source.requests) != 0 {
+						t.Fatalf("RunETL(%q) source reads = %d, want typed refusal before I/O", tt.mode, len(source.requests))
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestCanonicalSyncModesRetainParsedContracts(t *testing.T) {
+	tests := []struct {
+		mode        synccontract.Mode
+		source      SourceSyncMode
+		destination DestinationSyncMode
+	}{
+		{mode: synccontract.ModeFullOverwrite, source: SourceSyncFullRefresh, destination: DestinationSyncOverwrite},
+		{mode: synccontract.ModeFullAppend, source: SourceSyncFullRefresh, destination: DestinationSyncAppend},
+		{mode: synccontract.ModeIncrementalAppend, source: SourceSyncIncremental, destination: DestinationSyncAppend},
+		{mode: synccontract.ModeIncrementalUpsert, source: SourceSyncIncremental, destination: DestinationSyncUpsert},
+		{mode: synccontract.ModeIncrementalDedupe, source: SourceSyncIncremental, destination: DestinationSyncAppendDeduped},
+		{mode: synccontract.ModeIncrementalDedupeHistory, source: SourceSyncIncremental, destination: DestinationSyncDedupeHistory},
+		{mode: synccontract.ModeChangeCapture, source: SourceSyncChangeCapture, destination: DestinationSyncUpsert},
+	}
+	for _, tt := range tests {
+		t.Run(string(tt.mode), func(t *testing.T) {
+			parsed, err := ParseSyncMode(string(tt.mode))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if parsed.ContractMode != tt.mode || parsed.Source != tt.source || parsed.Destination != tt.destination || parsed.LegacyCompatibility || !parsed.IsContractMode() {
+				t.Fatalf("ParseSyncMode(%q) = %+v, want unchanged typed canonical mode", tt.mode, parsed)
+			}
+		})
 	}
 }
 
