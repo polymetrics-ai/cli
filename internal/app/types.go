@@ -230,6 +230,12 @@ type QuerySQLRequest struct {
 	Connection string         `json:"connection,omitempty"`
 	Limit      int            `json:"limit"`
 	Origin     QuerySQLOrigin `json:"-"`
+
+	// sameOwnerCaseEquivalentDestinationCollisions is an App-owned immutable
+	// configuration snapshot. It stays private so callers cannot manufacture a
+	// warehouse policy; QuerySQL adds it beside the resolver snapshot used by
+	// DuckDB for this one request.
+	sameOwnerCaseEquivalentDestinationCollisions []warehouseDestinationCollision
 }
 
 type PlanReverseETLRequest struct {

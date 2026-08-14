@@ -24,6 +24,13 @@ STREAM AND TABLE NAMES
   are checked when the connection is created, because a name the warehouse
   cannot materialize would otherwise fail every sync of that connection.
 
+  One local-warehouse connection cannot configure distinct --table spellings
+  that differ only by ASCII letter case, such as records and RECORDS: DuckDB
+  treats them as one identifier. Creation refuses that inventory before saving
+  it. A legacy inventory is left unchanged on open, but any local sync refuses
+  before changing run or warehouse state; create replacement connections whose
+  destination table names differ by more than ASCII letter case.
+
 SYNC MODES
   full_refresh_append              read all source records and append them
   full_refresh_overwrite           read all source records and replace final output
