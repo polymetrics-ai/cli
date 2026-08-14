@@ -12,6 +12,7 @@ empty implementation cannot satisfy.
 | R4 | Late/replay determinism | The pre-change driver had no history-version comparison or replay behavior. | A fresh executor replays v1/v2 and the queried row set is byte-for-byte stable; its new durable receipt is read back from the ledger. |
 | R5 | Recovery | The pre-change driver had no history state to recover. | The live test closes the initial native connection, builds a fresh driver/ledger/executor, then observes the same durable rows before closing v2. |
 | R6 | Real PostgreSQL write | The pre-change native driver did not admit or write `incremental_dedupe_history`. | Tagged dbtest queries the actual target relation and exact history row states after every write phase. |
+| R7 | Bundle-only widening | `TestBundleLoadPostgresDatabaseDefinitionWithProvenCDCCapability` failed because it encoded the pre-#4094 five-mode PostgreSQL definition. | The PostgreSQL bundle asserts the sixth history mode, while an adjacent synthetic non-PostgreSQL database definition retains exactly the original five modes. Existing R1 proves all other routes refuse before I/O. |
 
 ## Planned red commands
 
@@ -29,3 +30,12 @@ POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETR
 The targeted package command and focused tagged
 `TestPostgresManagedTargetIncrementalDedupeHistoryLive` command passed. The
 final full tagged command is recorded in verification evidence before the PR.
+
+## CI regression green command
+
+```sh
+go test -timeout 20m ./internal/connectors/engine ./internal/connectors/database ./internal/connectors/native/postgres
+```
+
+This passed after the PostgreSQL six-mode expectation and non-PostgreSQL
+five-mode guard were added. No other test or fixture changed.

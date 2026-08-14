@@ -26,6 +26,12 @@ errors before any provider or database I/O.
 5. **Live proof and review.** Run the requested tagged dbtest and query actual
    history rows. Execute targeted unit tests, static gates, GSD verify-work,
    and a focused review before opening the explicit-base PR.
+6. **CI regression gap.** Update the pre-#4094 PostgreSQL bundle expectation
+   from five private modes to the six-mode history contract. In the adjacent
+   engine test, construct a non-PostgreSQL five-mode definition and assert it
+   does not gain history admission. Reuse the existing route-refusal test for
+   all three non-PostgreSQL route cells and its zero-I/O fake counters. Stop if
+   discovery requires any further fixture or test change.
 
 ## Guardrails
 

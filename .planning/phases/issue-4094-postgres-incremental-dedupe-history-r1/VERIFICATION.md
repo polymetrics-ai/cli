@@ -11,6 +11,7 @@
 ## Completed local gates
 
 - `go test -timeout 20m ./internal/connectors/native/postgres/... ./internal/connectors/database/...`
+- `go test -timeout 20m ./internal/connectors/engine ./internal/connectors/database ./internal/connectors/native/postgres` after CI exposed the stale five-mode expectation
 - tagged focused and full PostgreSQL dbtest commands recorded under `traces/`
 - `go vet ./...`
 - `make tidy-check`, `make build`, `make docs-check-no-build`, `make smoke-no-build`, and `make lint`

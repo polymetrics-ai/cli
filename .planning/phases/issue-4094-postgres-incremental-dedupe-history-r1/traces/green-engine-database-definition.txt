@@ -1,0 +1,10 @@
+Green: go test -timeout 20m ./internal/connectors/engine ./internal/connectors/database ./internal/connectors/native/postgres
+Result: PASS
+
+Observable coverage:
+- PostgreSQL's shipped database definition admits exactly the six private
+  managed-target modes, including incremental_dedupe_history;
+- the adjacent MySQL declaration admits only the original five modes;
+- TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation
+  continues to prove source-only, destination-only, and both-leg refusals with
+  zero fake driver/session/ledger/target operations.
