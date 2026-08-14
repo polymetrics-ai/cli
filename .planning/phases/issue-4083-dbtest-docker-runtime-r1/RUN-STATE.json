@@ -1,0 +1,19 @@
+{
+  "issue": 4083,
+  "branch": "fm/cli-dbtest-docker-runtime-r1",
+  "blocks": [3976],
+  "lifecycle": {
+    "mode": "inline_manual_gsd_fallback",
+    "reason": "The repository delivery contract forbids spawning lifecycle roles in this worktree.",
+    "discuss_phase": "completed",
+    "plan_phase_tdd": "completed_before_production_edit",
+    "execute_phase": "green_implementation_complete_pending_expanded_verification",
+    "verify_work": "completed_with_live_runtime_limitation_recorded",
+    "code_review": "completed_inline_standard_no_unresolved_findings"
+  },
+  "external_endpoint_verdict": "rejected_out_of_scope_weakened_managed_container_guarantees",
+  "live_runtime_evidence": {
+    "docker": "live_proved_through_unix:///Users/karthiksivadas/.colima/default/docker.sock: PASS catalog/read/TLS/CDC",
+    "podman": "not_live_proved: no local Podman VM exposed an explicit direct Unix API socket; no global default was read"
+  }
+}
