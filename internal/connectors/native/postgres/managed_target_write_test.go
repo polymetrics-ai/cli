@@ -9,6 +9,12 @@ import (
 	"polymetrics.ai/internal/synccontract"
 )
 
+func TestPostgresHistoryModeRequiresManagedTableLock(t *testing.T) {
+	if !postgresWriteModeRequiresTableLock(synccontract.ModeIncrementalDedupeHistory) {
+		t.Fatal("incremental_dedupe_history did not require the managed-table lock")
+	}
+}
+
 func TestPostgresManagedTargetTypeMappingAndValueEncoding(t *testing.T) {
 	int8Type, err := database.NewSignedInteger(8)
 	if err != nil {
