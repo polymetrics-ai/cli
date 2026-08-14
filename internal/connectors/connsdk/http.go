@@ -1124,12 +1124,13 @@ func responseHTTPError(status int, requestURL string, body []byte, observation R
 		return httpErr
 	}
 	return &RateLimitError{
-		HTTPError:     httpErr,
-		Source:        observation.Source,
-		RetryAfter:    observation.RetryAfter,
-		HasRetryAfter: observation.HasRetryAfter,
-		ResetAt:       observation.ResetAt,
-		HasReset:      observation.HasReset,
+		HTTPError:       httpErr,
+		Source:          observation.Source,
+		RetryAfter:      observation.RetryAfter,
+		HasRetryAfter:   observation.HasRetryAfter,
+		ResetAt:         observation.ResetAt,
+		HasReset:        observation.HasReset,
+		ResetAtAbsolute: observation.ResetAtAbsolute,
 	}
 }
 

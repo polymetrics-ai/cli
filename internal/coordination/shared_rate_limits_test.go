@@ -62,6 +62,7 @@ func TestSharedRateLimitObserveScriptArgsMatchScriptContract(t *testing.T) {
 	}
 	observation := sharedRateLimitObservation{
 		BlockFor:           60_000,
+		AbsoluteResetAt:    1_786_000_000_000,
 		Limit:              2,
 		HasLimit:           true,
 		Remaining:          1,
@@ -122,6 +123,27 @@ func TestSharedRateLimitObservationUsesRelativeBlockDuration(t *testing.T) {
 	}
 	if strings.Contains(string(encoded), "blocked_until") {
 		t.Fatalf("shared observation carried a client-clock deadline: %s", encoded)
+	}
+}
+
+func TestSharedRateLimitObservationPreservesAbsoluteReset(t *testing.T) {
+	resetAt := time.Date(2026, 8, 14, 12, 0, 0, 0, time.UTC)
+	observation := sharedRateLimitObservationOf(connsdk.RateLimitObservation{
+		Attempted:       true,
+		Status:          http.StatusTooManyRequests,
+		HasReset:        true,
+		ResetAt:         resetAt,
+		ResetAtAbsolute: true,
+		ObservedAt:      resetAt.Add(time.Minute),
+	})
+	if got, want := observation.AbsoluteResetAt, resetAt.UnixMilli(); got != want {
+		t.Fatalf("shared absolute reset = %d, want %d", got, want)
+	}
+	if observation.BlockFor != 0 {
+		t.Fatalf("shared absolute reset also carried a relative block = %dms", observation.BlockFor)
+	}
+	if !observation.relevant() {
+		t.Fatal("shared absolute reset was not relevant")
 	}
 }
 

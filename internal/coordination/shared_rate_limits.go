@@ -181,6 +181,7 @@ func (l *SharedRateLimiter) Observe(ctx context.Context, observation connsdk.Rat
 
 type sharedRateLimitObservation struct {
 	BlockFor           int64   `json:"block_for_ms"`
+	AbsoluteResetAt    int64   `json:"absolute_reset_at_ms"`
 	Limit              float64 `json:"limit"`
 	HasLimit           bool    `json:"has_limit"`
 	Remaining          float64 `json:"remaining"`
@@ -209,7 +210,9 @@ func sharedRateLimitObservationOfAt(observation connsdk.RateLimitObservation, ob
 		HasCost:            observation.HasCost,
 	}
 	if rateLimitObservationBlocksUntilReset(observation) && !observation.ResetAt.IsZero() {
-		if blockFor := observation.ResetAt.Sub(observedAt); blockFor > 0 {
+		if observation.ResetAtAbsolute {
+			shared.AbsoluteResetAt = observation.ResetAt.UTC().UnixMilli()
+		} else if blockFor := observation.ResetAt.Sub(observedAt); blockFor > 0 {
 			shared.BlockFor = blockFor.Milliseconds()
 			if shared.BlockFor == 0 {
 				shared.BlockFor = 1
@@ -220,7 +223,7 @@ func sharedRateLimitObservationOfAt(observation connsdk.RateLimitObservation, ob
 }
 
 func (o sharedRateLimitObservation) relevant() bool {
-	return o.BlockFor > 0 || o.HasLimit || o.HasRemaining || o.ForceRemainingZero || o.HasCost
+	return o.BlockFor > 0 || o.AbsoluteResetAt > 0 || o.HasLimit || o.HasRemaining || o.ForceRemainingZero || o.HasCost
 }
 
 type sharedRateLimitBudget struct {
@@ -326,6 +329,17 @@ local state = raw and cjson.decode(raw) or {}
 state.budgets = state.budgets or {}
 local wait = 0
 
+local function preserveDebtTTL()
+  for i, spec in ipairs(specs) do
+    if (spec.model == 'token_bucket' or spec.model == 'leaky_bucket') and spec.restore_per_ms > 0 then
+      local entry = state.budgets[tostring(i)]
+      if entry and entry.tokens and entry.tokens < spec.cost then
+        ttl = math.max(ttl, math.ceil((spec.cost - entry.tokens) / spec.restore_per_ms))
+      end
+    end
+  end
+end
+
 for i, spec in ipairs(specs) do
   local entry = state.budgets[tostring(i)] or {}
   state.budgets[tostring(i)] = entry
@@ -366,9 +380,10 @@ for i, spec in ipairs(specs) do
   end
 end
 
+preserveDebtTTL()
 if state.blocked_until and state.blocked_until > now then
-  local blockedTTL = state.blocked_until - now
-  wait = math.max(wait, blockedTTL)
+	local blockedTTL = state.blocked_until - now
+	wait = math.max(wait, blockedTTL)
   ttl = math.max(ttl, blockedTTL)
 end
 if wait > 0 then redis.call('PSETEX', KEYS[1], ttl, cjson.encode(state)); return wait end
@@ -379,6 +394,7 @@ for i, spec in ipairs(specs) do
   elseif spec.model == 'sliding_window' then table.insert(entry.uses, {at = now, cost = spec.cost})
   else entry.tokens = entry.tokens - spec.cost end
 end
+preserveDebtTTL()
 redis.call('PSETEX', KEYS[1], ttl, cjson.encode(state))
 return 0
 `)
@@ -392,6 +408,17 @@ local ttl = tonumber(ARGV[3])
 local raw = redis.call('GET', KEYS[1])
 local state = raw and cjson.decode(raw) or {budgets = {}}
 state.budgets = state.budgets or {}
+
+local function preserveDebtTTL()
+  for i, spec in ipairs(specs) do
+    if (spec.model == 'token_bucket' or spec.model == 'leaky_bucket') and spec.restore_per_ms > 0 then
+      local entry = state.budgets[tostring(i)]
+      if entry and entry.tokens and entry.tokens < spec.cost then
+        ttl = math.max(ttl, math.ceil((spec.cost - entry.tokens) / spec.restore_per_ms))
+      end
+    end
+  end
+end
 
 for i, spec in ipairs(specs) do
   local entry = state.budgets[tostring(i)] or {}
@@ -430,9 +457,15 @@ for i, spec in ipairs(specs) do
   end
 end
 
+preserveDebtTTL()
+local blockedUntil = nil
 if observation.block_for_ms > 0 then
-  local blockedUntil = now + observation.block_for_ms
-  if (not state.blocked_until) or blockedUntil > state.blocked_until then state.blocked_until = blockedUntil end
+  blockedUntil = now + observation.block_for_ms
+elseif observation.absolute_reset_at_ms and observation.absolute_reset_at_ms > now then
+  blockedUntil = observation.absolute_reset_at_ms
+end
+if blockedUntil and ((not state.blocked_until) or blockedUntil > state.blocked_until) then
+  state.blocked_until = blockedUntil
 end
 if state.blocked_until and state.blocked_until > now then ttl = math.max(ttl, state.blocked_until - now) end
 redis.call('PSETEX', KEYS[1], ttl, cjson.encode(state))

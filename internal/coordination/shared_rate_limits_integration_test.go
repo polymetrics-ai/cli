@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"os/exec"
 	"strings"
@@ -146,6 +147,47 @@ func TestSharedRateLimitObservationDoesNotBlockNonExhaustedReset(t *testing.T) {
 	}
 }
 
+func TestSharedRateLimitUsesCoordinatorTimeForAbsoluteReset(t *testing.T) {
+	if os.Getenv("POLYMETRICS_COORDINATION_INTEGRATION") != "1" {
+		t.Skip("set POLYMETRICS_COORDINATION_INTEGRATION=1 with a local Dragonfly endpoint to run")
+	}
+	addr := os.Getenv("POLYMETRICS_DRAGONFLY_ADDR")
+	if addr == "" {
+		addr = "localhost:6379"
+	}
+	dragonfly := OpenDragonfly(addr)
+	t.Cleanup(func() { _ = dragonfly.Close() })
+	if err := dragonfly.Ping(context.Background()); err != nil {
+		t.Fatalf("required local Dragonfly coordinator is unavailable: %v", err)
+	}
+	key := RateLimitKey{Connector: "paced", PolicyID: "shared-absolute-reset", Scope: connectors.RateLimitScopeKey("integration-opaque-scope")}
+	if err := dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err(); err != nil {
+		t.Fatalf("clear integration rate-limit key: %v", err)
+	}
+	t.Cleanup(func() { _ = dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err() })
+	limiter := NewSharedRateLimitRegistry(dragonfly).Limiter(key, []connsdk.RateLimitBudget{fixedRequestBudget(1, 60)})
+	resetAt := time.Now().Add(4 * time.Second).UTC().Truncate(time.Second)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Retry-After", resetAt.Format(http.TimeFormat))
+		w.WriteHeader(http.StatusTooManyRequests)
+	}))
+	t.Cleanup(server.Close)
+	requester := &connsdk.Requester{
+		BaseURL:        server.URL,
+		DisableRetries: true,
+		Now:            func() time.Time { return resetAt.Add(time.Minute) },
+		Observer:       limiter,
+	}
+	if _, err := requester.Do(context.Background(), http.MethodGet, "/limited", nil, nil); err == nil {
+		t.Fatal("rate-limited requester did not return an error")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
+	if err := limiter.Admit(ctx, connsdk.RateLimitRequest{Method: http.MethodGet, Attempt: 1}); !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("admission under absolute reset = %v, want context deadline", err)
+	}
+}
+
 func TestSharedRateLimitObservationsTightenProviderState(t *testing.T) {
 	if os.Getenv("POLYMETRICS_COORDINATION_INTEGRATION") != "1" {
 		t.Skip("set POLYMETRICS_COORDINATION_INTEGRATION=1 with a local Dragonfly endpoint to run")
@@ -208,6 +250,50 @@ func TestSharedRateLimitObservationsTightenProviderState(t *testing.T) {
 				t.Fatalf("admission after %s observation = %v, want context deadline", tt.name, err)
 			}
 		})
+	}
+}
+
+func TestSharedRateLimitReservationRetainsObservedPointDebt(t *testing.T) {
+	if os.Getenv("POLYMETRICS_COORDINATION_INTEGRATION") != "1" {
+		t.Skip("set POLYMETRICS_COORDINATION_INTEGRATION=1 with a local Dragonfly endpoint to run")
+	}
+	addr := os.Getenv("POLYMETRICS_DRAGONFLY_ADDR")
+	if addr == "" {
+		addr = "localhost:6379"
+	}
+	dragonfly := OpenDragonfly(addr)
+	t.Cleanup(func() { _ = dragonfly.Close() })
+	if err := dragonfly.Ping(context.Background()); err != nil {
+		t.Fatalf("required local Dragonfly coordinator is unavailable: %v", err)
+	}
+	key := RateLimitKey{Connector: "paced", PolicyID: "shared-observed-point-debt", Scope: connectors.RateLimitScopeKey("integration-opaque-scope")}
+	if err := dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err(); err != nil {
+		t.Fatalf("clear integration rate-limit key: %v", err)
+	}
+	t.Cleanup(func() { _ = dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err() })
+	capacity, restore, defaultCost := 1, 1000.0, 1.0
+	limiter := NewSharedRateLimitRegistry(dragonfly).Limiter(key, []connsdk.RateLimitBudget{{
+		Model:            connsdk.RateLimitBudgetTokenBucket,
+		Dimension:        connsdk.RateLimitBudgetSustained,
+		Unit:             connsdk.RateLimitBudgetPoints,
+		Capacity:         &capacity,
+		RestorePerSecond: &restore,
+		Cost:             &connsdk.RateLimitCost{DefaultCost: &defaultCost},
+	}})
+	if err := limiter.Admit(context.Background(), connsdk.RateLimitRequest{Method: http.MethodGet, Attempt: 1}); err != nil {
+		t.Fatalf("initial point-budget admission: %v", err)
+	}
+	limiter.Observe(context.Background(), connsdk.RateLimitObservation{Attempted: true, HasCost: true, Cost: 5000})
+	firstCtx, firstCancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer firstCancel()
+	if err := limiter.Admit(firstCtx, connsdk.RateLimitRequest{Method: http.MethodGet, Attempt: 2}); !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("initial debt admission = %v, want context deadline", err)
+	}
+	time.Sleep(2500 * time.Millisecond)
+	secondCtx, secondCancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer secondCancel()
+	if err := limiter.Admit(secondCtx, connsdk.RateLimitRequest{Method: http.MethodGet, Attempt: 3}); !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("admission after normal budget TTL = %v, want observed debt to remain", err)
 	}
 }
 

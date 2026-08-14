@@ -71,10 +71,11 @@ type RateLimitObservation struct {
 	Attempted  bool
 	ObservedAt time.Time
 
-	RetryAfter    time.Duration
-	HasRetryAfter bool
-	ResetAt       time.Time
-	HasReset      bool
+	RetryAfter      time.Duration
+	HasRetryAfter   bool
+	ResetAt         time.Time
+	HasReset        bool
+	ResetAtAbsolute bool
 
 	Limit        int64
 	HasLimit     bool
@@ -94,12 +95,13 @@ type RateLimitObservation struct {
 // callers that need to make a safe, contextual decision. A zero ResetAt means
 // the provider did not send a parseable reset signal.
 type RateLimitError struct {
-	HTTPError     *HTTPError
-	Source        RateLimitObservationSource
-	RetryAfter    time.Duration
-	HasRetryAfter bool
-	ResetAt       time.Time
-	HasReset      bool
+	HTTPError       *HTTPError
+	Source          RateLimitObservationSource
+	RetryAfter      time.Duration
+	HasRetryAfter   bool
+	ResetAt         time.Time
+	HasReset        bool
+	ResetAtAbsolute bool
 }
 
 func (e *RateLimitError) Error() string {
@@ -130,12 +132,13 @@ func rateLimitObservation(status int, header http.Header, attempt int, now time.
 		ObservedAt: now,
 	}
 
-	if delay, resetAt, ok := parseRetryAfterAt(header.Get("Retry-After"), now); ok {
+	if delay, resetAt, absolute, ok := parseRetryAfterAtWithAbsolute(header.Get("Retry-After"), now); ok {
 		observation.Source = RateLimitObservationSourceRetryAfter
 		observation.RetryAfter = delay
 		observation.HasRetryAfter = true
 		observation.ResetAt = resetAt
 		observation.HasReset = true
+		observation.ResetAtAbsolute = absolute
 	}
 	if limit, ok := parseNonNegativeRateLimitHeader(header, "RateLimit-Limit", "X-RateLimit-Limit", "X-Rate-Limit-Limit"); ok {
 		observation.Limit = limit
@@ -146,9 +149,10 @@ func rateLimitObservation(status int, header http.Header, attempt int, now time.
 		observation.HasRemaining = true
 	}
 	if !observation.HasReset {
-		if resetAt, ok := parseRateLimitReset(header, now); ok {
+		if resetAt, absolute, ok := parseRateLimitResetWithAbsolute(header, now); ok {
 			observation.ResetAt = resetAt
 			observation.HasReset = true
+			observation.ResetAtAbsolute = absolute
 		}
 	}
 	if cost, ok := parsePositiveRateLimitCost(header.Get(costHeader)); ok {
@@ -200,40 +204,50 @@ func parseNonNegativeRateLimitHeader(header http.Header, names ...string) (int64
 // handled separately and wins whenever it is present because it is explicit
 // about the immediate retry.
 func parseRateLimitReset(header http.Header, now time.Time) (time.Time, bool) {
+	resetAt, _, ok := parseRateLimitResetWithAbsolute(header, now)
+	return resetAt, ok
+}
+
+func parseRateLimitResetWithAbsolute(header http.Header, now time.Time) (time.Time, bool, bool) {
 	if seconds, ok := parseNonNegativeRateLimitHeader(header, "RateLimit-Reset"); ok {
 		if delay, valid := durationFromSeconds(seconds); valid {
-			return now.Add(delay), true
+			return now.Add(delay), false, true
 		}
 	}
 	if epoch, ok := parseNonNegativeRateLimitHeader(header, "X-RateLimit-Reset", "X-Rate-Limit-Reset"); ok {
-		return time.Unix(epoch, 0).UTC(), true
+		return time.Unix(epoch, 0).UTC(), true, true
 	}
-	return time.Time{}, false
+	return time.Time{}, false, false
 }
 
 // parseRetryAfterAt parses Retry-After as either delay-seconds or an HTTP
 // date relative to now. It returns the provider reset time alongside the wait
 // duration so callers do not have to parse the header more than once.
 func parseRetryAfterAt(value string, now time.Time) (time.Duration, time.Time, bool) {
+	delay, resetAt, _, ok := parseRetryAfterAtWithAbsolute(value, now)
+	return delay, resetAt, ok
+}
+
+func parseRetryAfterAtWithAbsolute(value string, now time.Time) (time.Duration, time.Time, bool, bool) {
 	value = strings.TrimSpace(value)
 	if value == "" {
-		return 0, time.Time{}, false
+		return 0, time.Time{}, false, false
 	}
 	if seconds, err := strconv.ParseInt(value, 10, 64); err == nil {
 		delay, ok := durationFromSeconds(seconds)
 		if !ok {
-			return 0, time.Time{}, false
+			return 0, time.Time{}, false, false
 		}
-		return delay, now.Add(delay), true
+		return delay, now.Add(delay), false, true
 	}
 	if resetAt, err := http.ParseTime(value); err == nil {
 		delay := resetAt.Sub(now)
 		if delay < 0 {
 			delay = 0
 		}
-		return delay, resetAt, true
+		return delay, resetAt, true, true
 	}
-	return 0, time.Time{}, false
+	return 0, time.Time{}, false, false
 }
 
 func durationFromSeconds(seconds int64) (time.Duration, bool) {
