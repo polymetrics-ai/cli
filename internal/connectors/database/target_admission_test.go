@@ -337,6 +337,3 @@ func TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact(t *testing
 		t.Fatalf("MySQL outbound admission error = %v", err)
 	}
 }
-
-// mysqlLayerTwo is a test-only layer-two proof. It declares no production
-// connector capability or executable MySQL operation.

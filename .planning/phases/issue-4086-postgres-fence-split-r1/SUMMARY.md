@@ -6,8 +6,7 @@ files without changing their declarations or bodies.
 - Source: `native/postgres/source_test.go` and `database/source_read_plan_test.go`.
 - Target: `database/target_admission_test.go`.
 - Mapping: `database/mapping_definition_test.go`.
-- CDC: `native/postgres/cdc_test.go` plus the external capability fence in
-  `native/postgres/cdc_capability_fence_test.go`.
+- CDC: `native/postgres/cdc_capability_fence_test.go`.
 - Stable capability tests: `native/postgres/capability_surface_test.go`.
 
 Base/head `pm` output, the generated capability ledger, focused/full tests,

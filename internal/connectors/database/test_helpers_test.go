@@ -12,6 +12,8 @@ import (
 	"polymetrics.ai/internal/warehouse"
 )
 
+// mysqlLayerTwo is a test-only layer-two proof. It declares no production
+// connector capability or executable MySQL operation.
 type mysqlLayerTwo struct {
 	admissions []database.DatabaseNativeAdmission
 }
