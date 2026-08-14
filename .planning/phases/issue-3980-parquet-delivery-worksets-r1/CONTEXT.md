@@ -28,7 +28,7 @@
 - The workset owns a complete immutable Parquet projection, a keyed insert/update delta, explicit tombstones, and a separately materialized candidate baseline. It accepts a prior baseline as read-only input and never infers deletion from physical absence.
 - The sealed manifest binds delivery-key identity, target schema version/fingerprint, ordered composite key fingerprint, source and baseline content versions, bounded counts, and content hash. Public accessors expose defensive copies or opaque strings only.
 - This slice deliberately performs no target DML, durable receipt persistence, source checkpoint advancement, or baseline promotion. #3983 consumes the candidate only after its target-session receipt; #3979 owns snapshot/bootstrap behavior. The observable safety guarantee here is that derivation cannot advance or overwrite the supplied baseline.
-- Workset artifacts are created in a caller-owned root under a deterministic, identity-safe content address. Existing matching artifacts are reopened only after their manifest and files validate; different schema/key/destination bindings are distinct addresses.
+- Workset artifacts are created in a caller-owned root under a deterministic, identity-safe content address. A request must declare a finite `MaxArtifactBytes` ceiling (at most 1 GiB); every input/output artifact is checked against it, and staging is removed on cancellation/failure. Existing matching artifacts are reopened only after their manifest and files validate; different schema/key/destination bindings are distinct addresses.
 
 ## Required Skills and GSD Fallback
 

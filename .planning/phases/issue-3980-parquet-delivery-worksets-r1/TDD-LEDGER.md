@@ -33,3 +33,19 @@ go test -race -timeout 20m ./internal/connectors/database -run 'TestDeriveChange
 The green proof must report the observable output rows, tombstones, workset
 identity/content hash, immutable source-replacement result, and zero-publish
 refusal paths.
+
+## Completed green proof
+
+- `TestDeriveChangeDeliveryWorksetImmutableIdentity` derives twice from the
+  same real Parquet input and compares identity bytes/content hashes, then
+  changes target/schema/key bindings and mutable provenance separately.
+- `TestDeriveChangeDeliveryWorksetDerivesRealParquetDeltaAndExplicitTombstones`
+  observes three real delta rows (update, insert, type change), excludes an
+  unchanged row, and asserts that only its explicitly supplied tombstone is
+  present.
+- Refusal tests observe zero published child directories and byte-identical
+  input baselines for duplicate/null keys, declared-size overflow, corrupt
+  reuse, and cancellation after staging has begun.
+- `TestDeriveChangeDeliveryWorksetAcceptsWarehouseEmptyParquet` proves the
+  repository's zero-byte empty-Parquet representation remains a zero-row
+  projection/delta/candidate baseline rather than a DuckDB error.

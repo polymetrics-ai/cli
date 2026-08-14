@@ -42,10 +42,13 @@ or display name.
    reject duplicate or null key slots before publish, and emit source rows that
    are absent from the baseline or whose same-key JSON-shaped row is different.
    Never derive a tombstone from a missing source row.
-5. Bound each copy/hash/query stream with fixed buffers, check cancellation
-   before and during each phase, write to a unique temporary directory, and
-   remove it on cancellation/failure. This foundation deliberately does not
-   persist a receipt or promote the candidate baseline.
+5. Require a finite `MaxArtifactBytes` ceiling (up to 1 GiB), check every
+   input/output file against it while copying/hashing, keep copy buffers fixed,
+   check cancellation before and during each phase, write to a unique temporary
+   directory, and remove it on cancellation/failure. The warehouse's documented
+   zero-byte empty-Parquet representation is treated as zero rows rather than
+   passed to DuckDB. This foundation deliberately does not persist a receipt or
+   promote the candidate baseline.
 
 ## TDD slices
 
