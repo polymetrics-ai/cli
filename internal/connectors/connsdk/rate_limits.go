@@ -140,9 +140,12 @@ type RateLimitBudget struct {
 
 // RateLimitCost describes a cost-weighted request budget. DefaultCost applies
 // when the provider gives no per-request observation; ResponseHeader names an
-// optional provider header parsed into a typed scalar. Neither field carries a
-// request value or credential.
+// optional provider header parsed into a typed scalar. ResponseBody is a
+// closed vocabulary for a bounded, provider-declared response selection; it
+// is never a caller-selected JSON path. Neither field carries a request value
+// or credential.
 type RateLimitCost struct {
 	DefaultCost    *float64 `json:"default_cost,omitempty"`
 	ResponseHeader string   `json:"response_header,omitempty"`
+	ResponseBody   string   `json:"response_body,omitempty"`
 }

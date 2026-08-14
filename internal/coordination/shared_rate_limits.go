@@ -203,6 +203,7 @@ type sharedRateLimitObservation struct {
 	ForceRemainingZero bool    `json:"force_remaining_zero"`
 	Cost               float64 `json:"cost"`
 	HasCost            bool    `json:"has_cost"`
+	CostSource         string  `json:"cost_source"`
 }
 
 func sharedRateLimitObservationOf(observation connsdk.RateLimitObservation) sharedRateLimitObservation {
@@ -222,6 +223,7 @@ func sharedRateLimitObservationOfAt(observation connsdk.RateLimitObservation, ob
 		ForceRemainingZero: observation.Status == 429 && !observation.HasReset,
 		Cost:               observation.Cost,
 		HasCost:            observation.HasCost,
+		CostSource:         string(observation.CostSource),
 	}
 	if rateLimitObservationBlocksUntilReset(observation) && !observation.ResetAt.IsZero() {
 		if observation.ResetAtAbsolute {
@@ -241,13 +243,14 @@ func (o sharedRateLimitObservation) relevant() bool {
 }
 
 type sharedRateLimitBudget struct {
-	Model    string  `json:"model"`
-	Unit     string  `json:"unit"`
-	Limit    float64 `json:"limit"`
-	Window   int64   `json:"window_ms"`
-	Capacity float64 `json:"capacity"`
-	Restore  float64 `json:"restore_per_ms"`
-	Cost     float64 `json:"cost"`
+	Model      string  `json:"model"`
+	Unit       string  `json:"unit"`
+	Limit      float64 `json:"limit"`
+	Window     int64   `json:"window_ms"`
+	Capacity   float64 `json:"capacity"`
+	Restore    float64 `json:"restore_per_ms"`
+	Cost       float64 `json:"cost"`
+	CostSource string  `json:"cost_source"`
 }
 
 func sharedRateLimitBudgetSpecs(budgets []connsdk.RateLimitBudget) ([]sharedRateLimitBudget, error) {
@@ -264,6 +267,14 @@ func sharedRateLimitBudgetSpecs(budgets []connsdk.RateLimitBudget) ([]sharedRate
 			return nil, errors.New("shared rate-limit request cost must be positive")
 		}
 		spec := sharedRateLimitBudget{Model: string(budget.Model), Unit: string(budget.Unit), Cost: cost}
+		if budget.Cost != nil {
+			switch {
+			case budget.Cost.ResponseHeader != "":
+				spec.CostSource = string(connsdk.RateLimitCostSourceResponseHeader)
+			case budget.Cost.ResponseBody != "":
+				spec.CostSource = budget.Cost.ResponseBody
+			}
+		}
 		switch budget.Model {
 		case connsdk.RateLimitBudgetFixedWindow, connsdk.RateLimitBudgetSlidingWindow:
 			if budget.Limit == nil || budget.WindowSeconds == nil || *budget.Limit <= 0 || *budget.WindowSeconds <= 0 {
@@ -455,7 +466,7 @@ for i, spec in ipairs(specs) do
     if (not entry.start) or now >= entry.start + spec.window_ms then entry.start = now; entry.used = 0 end
     entry.used = entry.used or 0
     if remaining and limit - remaining > entry.used then entry.used = limit - remaining end
-    if observation.has_cost and spec.unit == 'points' and observation.cost > spec.cost then entry.used = entry.used + observation.cost - spec.cost end
+    if observation.has_cost and spec.unit == 'points' and (not observation.cost_source or observation.cost_source == '' or spec.cost_source == observation.cost_source) and observation.cost > spec.cost then entry.used = entry.used + observation.cost - spec.cost end
   elseif spec.model == 'sliding_window' then
     entry.uses = entry.uses or {}
     local kept, used = {}, 0
@@ -467,13 +478,13 @@ for i, spec in ipairs(specs) do
       table.insert(entry.uses, {at = now, cost = limit - remaining - used})
       used = limit - remaining
     end
-    if observation.has_cost and spec.unit == 'points' and observation.cost > spec.cost then table.insert(entry.uses, {at = now, cost = observation.cost - spec.cost}) end
+    if observation.has_cost and spec.unit == 'points' and (not observation.cost_source or observation.cost_source == '' or spec.cost_source == observation.cost_source) and observation.cost > spec.cost then table.insert(entry.uses, {at = now, cost = observation.cost - spec.cost}) end
   elseif spec.model == 'token_bucket' or spec.model == 'leaky_bucket' then
     if not entry.updated then entry.updated = now; entry.tokens = limit end
     entry.tokens = math.min(limit, entry.tokens + math.max(0, now - entry.updated) * spec.restore_per_ms)
     entry.updated = now
     if remaining and remaining < entry.tokens then entry.tokens = remaining end
-    if observation.has_cost and spec.unit == 'points' and observation.cost > spec.cost then entry.tokens = entry.tokens - (observation.cost - spec.cost) end
+    if observation.has_cost and spec.unit == 'points' and (not observation.cost_source or observation.cost_source == '' or spec.cost_source == observation.cost_source) and observation.cost > spec.cost then entry.tokens = entry.tokens - (observation.cost - spec.cost) end
   end
 end
 

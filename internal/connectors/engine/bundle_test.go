@@ -278,6 +278,9 @@ func TestBundleLoadParsesCertification(t *testing.T) {
 	if got := b.Certification.Source.SourceCredentialDefaults["base_url"]; got != "https://api.example.test" {
 		t.Fatalf("source_credential_defaults.base_url = %q", got)
 	}
+	if b.Certification.Source.RequiredCredentialConfig != nil {
+		t.Fatalf("required_credential_config = %+v, want absent when it was not declared", b.Certification.Source.RequiredCredentialConfig)
+	}
 	if len(b.Certification.DirectReadCandidates) != 1 {
 		t.Fatalf("DirectReadCandidates = %+v", b.Certification.DirectReadCandidates)
 	}
@@ -709,6 +712,9 @@ func TestBundleLoadEmbeddedGitHubCertification(t *testing.T) {
 	}
 	if b.Certification.Source.DefaultStream != "issues" {
 		t.Fatalf("GitHub certification default stream = %q", b.Certification.Source.DefaultStream)
+	}
+	if got := b.Certification.Source.RequiredCredentialConfig["tier"]; got != "certification" {
+		t.Fatalf("GitHub certification required tier = %q, want certification", got)
 	}
 	if len(b.Certification.WritePairings) != 3 {
 		t.Fatalf("GitHub certification write pairings = %d, want 3", len(b.Certification.WritePairings))

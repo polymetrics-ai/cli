@@ -255,6 +255,11 @@ cited endpoint count, and a status. Existing version-1 and pre-ledger inventorie
 Provenance never supplies a `covered_by` binding, enables a command, or sets
 the generated certification quality signal.
 
+For connectors with coordinated provider budgets, the JSON report may include
+`rate_limit_events`. These report safe attempt, wait, reset, and not-sent
+outcomes so a stopped request is distinguishable from a provider response. They
+never include credentials, rendered requests, or rate-scope subjects.
+
 ## Extract, query, and write
 
 ```bash

@@ -425,7 +425,10 @@ ACTIONS
     during the staged migration. A complete version-2 ledger reports its ledger
     version, artifact count, endpoint count, and cited endpoint count; invalid
     version-2 provenance fails certification without enabling or changing any
-    connector capability.
+    connector capability. When the connector declares coordinated rate limits,
+    JSON may also contain safe rate_limit_events for attempts, observed resets,
+    waits, and requests stopped before send; the events contain no credentials
+    or rendered rate scopes.
 
 EXAMPLES
   pm connectors

@@ -5,6 +5,9 @@
     "source_credential_defaults": {
       "base_url": "https://api.github.com"
     },
+    "required_credential_config": {
+      "tier": "certification"
+    },
     "live_unavailable": [
       {
         "kind": "Error",

@@ -213,11 +213,36 @@ func (s *rateLimitSet) observe(now time.Time, observation connsdk.RateLimitObser
 		if observation.Status == 429 && !observation.HasReset {
 			budget.tightenRemaining(now, 0)
 		}
-		if observation.HasCost && budget.spec.Unit == connsdk.RateLimitBudgetPoints {
+		if rateLimitBudgetAcceptsCostObservation(budget.spec, observation) {
 			if extra := observation.Cost - budget.defaultCost(); extra > 0 {
 				budget.consume(now, extra)
 			}
 		}
+	}
+}
+
+// rateLimitBudgetAcceptsCostObservation keeps independent provider resource
+// families independent when a response carries one actual-cost signal. A
+// missing source preserves the foundation's compatibility behavior for older
+// callers and tests that supplied an already-typed cost without a declaration
+// source.
+func rateLimitBudgetAcceptsCostObservation(budget connsdk.RateLimitBudget, observation connsdk.RateLimitObservation) bool {
+	if !observation.HasCost || budget.Unit != connsdk.RateLimitBudgetPoints {
+		return false
+	}
+	if observation.CostSource == "" {
+		return true
+	}
+	if budget.Cost == nil {
+		return false
+	}
+	switch observation.CostSource {
+	case connsdk.RateLimitCostSourceResponseHeader:
+		return budget.Cost.ResponseHeader != ""
+	case connsdk.RateLimitCostSourceGraphQLRateLimit:
+		return budget.Cost.ResponseBody == string(connsdk.RateLimitCostSourceGraphQLRateLimit)
+	default:
+		return false
 	}
 }
 

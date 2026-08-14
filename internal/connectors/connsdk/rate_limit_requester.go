@@ -49,6 +49,38 @@ type RateLimitObserver interface {
 	Observe(ctx context.Context, observation RateLimitObservation)
 }
 
+// RateLimitEventType records one auditable state transition in the request
+// admission path. These values intentionally describe only control-flow: no
+// URL, raw header, response body, credential, or scope identity is retained.
+type RateLimitEventType string
+
+const (
+	RateLimitEventAttempt RateLimitEventType = "attempt"
+	RateLimitEventWait    RateLimitEventType = "wait"
+	RateLimitEventReset   RateLimitEventType = "reset"
+	RateLimitEventNotSent RateLimitEventType = "not_sent"
+)
+
+// RateLimitEvent is the bounded event emitted around an admitted logical
+// requester send. A not_sent event is emitted only when admission prevented a
+// provider send; deadline_cutoff distinguishes a caller deadline from another
+// fail-closed admission refusal.
+type RateLimitEvent struct {
+	Type       RateLimitEventType
+	Method     string
+	Attempt    int
+	DurationMS int64
+	ResetAt    time.Time
+	Reason     string
+}
+
+// RateLimitEventSink receives request-admission events synchronously. It is a
+// reporting seam, not a control seam: a sink cannot change whether the
+// request is admitted or observed.
+type RateLimitEventSink interface {
+	RecordRateLimitEvent(RateLimitEvent)
+}
+
 // RateLimitObservationSource identifies the provider signal that made an
 // observation relevant. A response can carry several parsed fields; Source
 // names the most specific timing/status signal without retaining raw headers.
@@ -57,7 +89,20 @@ type RateLimitObservationSource string
 const (
 	RateLimitObservationSourceRetryAfter RateLimitObservationSource = "retry_after"
 	RateLimitObservationSourceHeaders    RateLimitObservationSource = "response_headers"
+	RateLimitObservationSourceBody       RateLimitObservationSource = "response_body"
 	RateLimitObservationSourceHTTP429    RateLimitObservationSource = "http_429"
+)
+
+// RateLimitCostSource is the declaration-approved provider signal that
+// supplied an actual request cost. It lets a limiter apply the cost only to
+// the independently declared resource family that owns it. In particular,
+// GitHub's GraphQL primary query cost must not be mistaken for its separate
+// secondary point budget.
+type RateLimitCostSource string
+
+const (
+	RateLimitCostSourceResponseHeader   RateLimitCostSource = "response_header"
+	RateLimitCostSourceGraphQLRateLimit RateLimitCostSource = "graphql_rate_limit"
 )
 
 // RateLimitObservation is a typed subset of provider rate-limit response
@@ -83,11 +128,11 @@ type RateLimitObservation struct {
 	HasRemaining bool
 
 	// Cost is the provider-reported cost for a request whose selected policy
-	// declared RateLimitCost.ResponseHeader. It is deliberately scalar and
-	// typed: the requester never retains a response header map or body in the
-	// observation.
-	Cost    float64
-	HasCost bool
+	// declared a matching cost source. It is deliberately scalar and typed: the
+	// requester never retains a response header map or body in the observation.
+	Cost       float64
+	HasCost    bool
+	CostSource RateLimitCostSource
 }
 
 // RateLimitError reports a terminal HTTP 429. It preserves the existing
@@ -158,6 +203,7 @@ func rateLimitObservation(status int, header http.Header, attempt int, now time.
 	if cost, ok := parsePositiveRateLimitCost(header.Get(costHeader)); ok {
 		observation.Cost = cost
 		observation.HasCost = true
+		observation.CostSource = RateLimitCostSourceResponseHeader
 	}
 
 	switch {

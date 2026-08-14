@@ -32,10 +32,11 @@ const maxRedirects = 10
 
 // Response is a captured HTTP response with its body already read.
 type Response struct {
-	Status     int
-	Header     http.Header
-	Body       []byte
-	requestURL string
+	Status         int
+	Header         http.Header
+	Body           []byte
+	requestURL     string
+	rateLimitRoute RateLimitRoute
 }
 
 // HTTPError is returned when a request completes with a 4xx/5xx status after
@@ -187,6 +188,14 @@ type Requester struct {
 	// are never retained.
 	RateLimitCostHeader string
 	RouteRateLimits     RateLimitRouteResolver
+	// RateLimitEvents records bounded admission/observation transitions for a
+	// caller that needs an audit trail (for example, certification). It never
+	// receives raw provider data and cannot influence request control flow.
+	RateLimitEvents RateLimitEventSink
+	// RateLimitAdmissionTimeout bounds one admission wait without shortening
+	// the surrounding request or certification run. A deadline failure is
+	// emitted as a not_sent event and the provider is never contacted.
+	RateLimitAdmissionTimeout time.Duration
 }
 
 func (r *Requester) client() *http.Client {
@@ -316,6 +325,7 @@ func (r *Requester) admit(ctx context.Context, route RateLimitRoute) (string, er
 func (r *Requester) observeRateLimit(ctx context.Context, route RateLimitRoute, status int, header http.Header, costHeader string) RateLimitObservation {
 	observation, ok := rateLimitObservation(status, header, route.Attempt, r.now(), costHeader)
 	if ok {
+		r.emitRateLimitReset(route.Method, observation)
 		if r.Observer != nil {
 			r.Observer.Observe(ctx, observation)
 		}
@@ -324,6 +334,52 @@ func (r *Requester) observeRateLimit(ctx context.Context, route RateLimitRoute, 
 		}
 	}
 	return observation
+}
+
+// ObserveRateLimit records a bounded, declaration-approved response fact
+// discovered after the requester's standard header observation. It preserves
+// the actual admitted route and attempt from Response, so a caller cannot
+// attach an observation to an unsent request or invent a different route.
+//
+// This seam is intentionally narrow: fixed GraphQL operation parsing may pass
+// its rateLimit selection, but arbitrary response-body extraction remains
+// unavailable to connector callers.
+func (r *Requester) ObserveRateLimit(ctx context.Context, response *Response, observation RateLimitObservation) {
+	if r == nil || response == nil || response.rateLimitRoute.Attempt <= 0 {
+		return
+	}
+	observation.Status = response.Status
+	observation.Attempt = response.rateLimitRoute.Attempt
+	observation.Attempted = true
+	if observation.ObservedAt.IsZero() {
+		observation.ObservedAt = r.now()
+	}
+	r.emitRateLimitReset(response.rateLimitRoute.Method, observation)
+	if r.Observer != nil {
+		r.Observer.Observe(ctx, observation)
+	}
+	if r.RouteRateLimits != nil {
+		r.RouteRateLimits.ObserveRoute(ctx, response.rateLimitRoute, observation)
+	}
+}
+
+func (r *Requester) emitRateLimitEvent(event RateLimitEvent) {
+	if r == nil || r.RateLimitEvents == nil {
+		return
+	}
+	r.RateLimitEvents.RecordRateLimitEvent(event)
+}
+
+func (r *Requester) emitRateLimitReset(method string, observation RateLimitObservation) {
+	if !observation.HasReset {
+		return
+	}
+	r.emitRateLimitEvent(RateLimitEvent{
+		Type:    RateLimitEventReset,
+		Method:  method,
+		Attempt: observation.Attempt,
+		ResetAt: observation.ResetAt,
+	})
 }
 
 type rateLimitAdmissionError struct {
@@ -338,17 +394,52 @@ func (e *rateLimitAdmissionError) Unwrap() error {
 	return e.err
 }
 
+const minimumObservableRateLimitWait = time.Millisecond
+
 func (r *Requester) admitRequesterSend(ctx context.Context, req *http.Request, requesterAttempt *int, route *RateLimitRoute, costHeader *string) error {
 	nextAttempt := *requesterAttempt + 1
 	nextRoute := RateLimitRoute{Method: req.Method, Path: r.rateLimitRoutePath(req.URL), Attempt: nextAttempt}
-	header, err := r.admit(ctx, nextRoute)
+	admissionCtx, cancelAdmission := r.rateLimitAdmissionContext(ctx)
+	defer cancelAdmission()
+	started := time.Now()
+	header, err := r.admit(admissionCtx, nextRoute)
+	if elapsed := time.Since(started); elapsed >= minimumObservableRateLimitWait {
+		r.emitRateLimitEvent(RateLimitEvent{
+			Type:       RateLimitEventWait,
+			Method:     nextRoute.Method,
+			Attempt:    nextRoute.Attempt,
+			DurationMS: elapsed.Milliseconds(),
+		})
+	}
 	if err != nil {
+		reason := "admission_refused"
+		if errors.Is(err, context.DeadlineExceeded) {
+			reason = "deadline_cutoff"
+		}
+		r.emitRateLimitEvent(RateLimitEvent{
+			Type:    RateLimitEventNotSent,
+			Method:  nextRoute.Method,
+			Attempt: nextRoute.Attempt,
+			Reason:  reason,
+		})
 		return &rateLimitAdmissionError{err: err}
 	}
 	*requesterAttempt = nextAttempt
 	*route = nextRoute
 	*costHeader = header
+	r.emitRateLimitEvent(RateLimitEvent{
+		Type:    RateLimitEventAttempt,
+		Method:  nextRoute.Method,
+		Attempt: nextRoute.Attempt,
+	})
 	return nil
+}
+
+func (r *Requester) rateLimitAdmissionContext(ctx context.Context) (context.Context, context.CancelFunc) {
+	if r == nil || r.RateLimitAdmissionTimeout <= 0 {
+		return ctx, func() {}
+	}
+	return context.WithTimeout(ctx, r.RateLimitAdmissionTimeout)
 }
 
 func (r *Requester) rateLimitRoutePath(requestURL *url.URL) string {
@@ -377,7 +468,7 @@ func (r *Requester) rateLimitRoutePath(requestURL *url.URL) string {
 }
 
 func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int, route *RateLimitRoute, costHeader *string) *http.Client {
-	if r.Admission == nil && r.Observer == nil && r.RouteRateLimits == nil {
+	if r.Admission == nil && r.Observer == nil && r.RouteRateLimits == nil && r.RateLimitEvents == nil {
 		return client
 	}
 	clone := *client
@@ -1012,7 +1103,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			return nil, responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
 		}
 
-		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL}, nil
+		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}, nil
 	}
 	if lastErr == nil {
 		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)

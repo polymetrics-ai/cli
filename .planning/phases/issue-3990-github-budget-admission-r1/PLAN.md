@@ -8,7 +8,7 @@
 - Delivery: Pull request open against `integration/4015-mvp-flat-r1` with its checks green; read the base back through `gh api /repos/polymetrics-ai/cli/pulls/<n> --jq .base.ref` after opening.
 - Working branch: `fm/cli-3990-github-budget-admission-r1`
 - Task: Add GitHub GraphQL primary/cost policy admission and response observation, require shared coordination for the GitHub certification run, emit bounded provider-budget execution evidence, and prove cross-process enforcement without transmitting or retaining credential values.
-- Verification: Focused engine, coordination, and certification tests; the GitHub multi-process tiny-budget proof; definition validation and surface sync; no-mistakes pipeline through green CI.
+- Verification: Focused engine, coordination, connsdk, certification, and CLI tests; the GitHub multi-process tiny-budget proof; definition validation and surface sync; then the protected integration PR checks (verify, govulncheck, and CodeQL). Captain delivery recovery explicitly excludes `no-mistakes axi run`, because it retargets this stacked branch to `main`.
 
 ## Evidence Table
 
@@ -19,8 +19,8 @@
 | GitHub certification selects `require_shared` and fails closed if the coordinator is unavailable. | live | The certification preflight returns a typed unavailable error and the provider double records zero sends. |
 | REST primary, REST secondary, search/resource, and GraphQL families remain separate policy/budget contracts. | live | Tests select each declared family and assert its own policy ID, scope projection, and resource observation rather than accepting a generic `core` counter. |
 | A tiny shared budget enforces across processes. | live | Two independently started worker processes share one opaque scope: the second reports a refusal/wait and its provider-double send counter remains zero after the first consumes capacity. |
-| Certification writes structured attempt, wait/reset, and not-sent/deadline evidence without raw scopes or provider secrets. | live | A deterministic certification run serializes the named event kinds, excludes raw scope material, and terminates before a deadline-exceeding wait. |
-| Real-binary GitHub sweep leaves its cleanup ledger complete. | fake | Requires real GitHub credentials and provider authorization, neither supplied by this task. The committed proof records the exact authorized command and its required observable outputs for the delivery operator. |
+| Certification writes structured attempt, wait/reset, and not-sent/deadline evidence without raw scopes or provider secrets. | live | An actual requester records an `attempt` plus observed reset, and a deadline-bound admission emits `wait` then `not_sent` while the provider server records zero sends; a focused report-projection double is necessary only to assert stage attribution in the serialized certification report. |
+| GitHub certification sweep is the only eligible real-binary sweep target. | fake | #4136 records that `sample` has no bundle and its sweep target is invalid. A real GitHub write/cleanup sweep needs an operator-owned sandbox credential and authorization, neither supplied here; the required operator evidence is an actual GitHub report with `cleanup_ledger.complete=true` and no leaked resources. |
 
 ## Foundation Check
 
@@ -41,7 +41,7 @@
 ## TDD slices
 
 1. **GraphQL declaration and requester observation.** Red tests prove GraphQL currently has no applicable policy and a returned rate-limit body does not affect the next send. Green: declare policy families and provide the typed GraphQL observation path using actual `cost`, `remaining`, and `resetAt`.
-2. **Shared certification admission and events.** Red tests prove a GitHub certification-selected requester silently remains local or can send after a missing shared coordinator. Green: select `require_shared`, emit structured `attempt`, `wait`/`reset`, and `not_sent` events, and cut off waits beyond the run deadline.
+2. **Shared certification admission and events.** Red tests prove a GitHub certification-selected requester silently remains local or can send after a missing shared coordinator. Green: select `require_shared`, emit structured `attempt`, `wait`/`reset`, and `not_sent` events, and apply a bounded deadline to each admission wait.
 3. **Process boundary proof.** Red integration test starts independent workers with an isolated registry and demonstrates the second would send; green test uses the shared coordinator and proves second-worker zero sends under a deliberately tiny budget.
 4. **Certification/review evidence.** Extend per-resource observation coverage and the binary-sweep ledger contract. The live credentialed sweep remains an operator-authorized evidence command, not an automated credentialed test.
 

@@ -14,6 +14,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // credentialName / warehouseCredentialName / connection names used for every
@@ -139,6 +141,11 @@ type runContext struct {
 	// threading a stage name through every one of the ~20 call sites.
 	currentStage string
 
+	// rateLimitEvents captures the bounded requester admission trail for this
+	// ephemeral certification project. recordStage keeps its stage label in
+	// sync with the CLI work that caused each event.
+	rateLimitEvents *rateLimitEventCollector
+
 	// capturedOutputs accumulates every CLI invocation's raw stdout/stderr
 	// across the whole run, for finalizeSecretRedaction's full-output scan.
 	capturedOutputs []capturedOutput
@@ -194,7 +201,7 @@ type stageFunc func(rc *runContext, rep *Report) error
 // a fresh os.MkdirTemp root, mirroring the Makefile "smoke" target's
 // --root/--json flag pattern (Makefile:41). See stages_source.go doc comment
 // for stage-list scope.
-func (r *Runner) Run(ctx context.Context) (Report, error) {
+func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	if r.opts.Connector == "" {
 		return Report{}, fmt.Errorf("certify: Options.Connector is required")
 	}
@@ -210,6 +217,12 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	if !r.opts.KeepWork {
 		defer func() { _ = os.RemoveAll(root) }()
 	}
+	rateLimitEvents := &rateLimitEventCollector{}
+	removeRateLimitEvents := engine.ConfigureRateLimitEventSink(filepath.Join(root, ".polymetrics"), rateLimitEvents)
+	defer removeRateLimitEvents()
+	removeAdmissionTimeout := engine.ConfigureRateLimitAdmissionTimeout(filepath.Join(root, ".polymetrics"), certificationRateLimitAdmissionTimeout(r.opts))
+	defer removeAdmissionTimeout()
+	defer func() { rep.RateLimitEvents = rateLimitEvents.snapshot() }()
 
 	secretValues := make([]string, 0, len(r.opts.SecretEnv))
 	for _, envName := range r.opts.SecretEnv {
@@ -226,9 +239,10 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 		stdoutLeakSabotage:    r.stdoutLeakSabotage,
 		cleanupVerifySabotage: r.cleanupVerifySabotage,
 		root:                  root,
+		rateLimitEvents:       rateLimitEvents,
 	}
 
-	rep := Report{
+	rep = Report{
 		Kind:          "ConnectorCertification",
 		SchemaVersion: CurrentSchemaVersion,
 		Connector:     r.opts.Connector,
@@ -310,6 +324,13 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	return rep, nil
 }
 
+func certificationRateLimitAdmissionTimeout(opts Options) time.Duration {
+	if opts.RateLimitAdmissionTimeout > 0 {
+		return opts.RateLimitAdmissionTimeout
+	}
+	return defaultCertificationRateLimitAdmissionTimeout
+}
+
 // recordStage runs body, timing it, and appends a StageResult to rep.Stages.
 // body returns (passed, cliInfo, errMessage); tier is the certification-design
 // §"Tiers" table value (0 fixture, 1 replay/capture, 2 live). rc.currentStage
@@ -320,7 +341,15 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 func recordStage(rc *runContext, rep *Report, name string, tier int, run func() (bool, CLIStageInfo, string)) StageResult {
 	prevStage := rc.currentStage
 	rc.currentStage = name
-	defer func() { rc.currentStage = prevStage }()
+	if rc.rateLimitEvents != nil {
+		rc.rateLimitEvents.setStage(name)
+	}
+	defer func() {
+		rc.currentStage = prevStage
+		if rc.rateLimitEvents != nil {
+			rc.rateLimitEvents.setStage(prevStage)
+		}
+	}()
 
 	start := time.Now()
 	passed, cli, errMsg := run()

@@ -177,6 +177,13 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
   "passed": true,
   "leaks": [],
   "budget": {"calls_used": 143, "calls_budget": 500, "rate_limit_rps": 2},
+  "rate_limit_events": [
+    {"type": "attempt", "stage": "catalog_live", "method": "GET"},
+    {"type": "reset", "stage": "catalog_live", "method": "GET", "status_code": 200,
+     "reset_at": "2026-08-14T12:00:00Z"},
+    {"type": "not_sent", "stage": "etl_full_refresh_append", "method": "POST",
+     "reason": "deadline_cutoff"}
+  ],
   "fixture": { "...embedded conformance report...": true },
   "capabilities": {
     "check":   {"live": "pass"},
@@ -218,6 +225,14 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
   ]
 }
 ```
+
+`rate_limit_events` is optional structured execution evidence. It records only the
+stage, HTTP method, outcome, and safe timing/status fields needed to explain
+admission; it never contains a credential, a rendered request, or a rate-scope
+subject. A `not_sent` event proves admission stopped the physical provider
+request. Certification bounds each individual rate-admission wait so a depleted
+shared provider budget becomes an explicit deadline cutoff rather than an
+unbounded run.
 
 An `untestable` capability may include `untestable_reason`, an optional serialized
 [`failures.Classification`](../../internal/failures/classification.go). It carries only a safe

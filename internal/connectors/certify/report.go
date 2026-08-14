@@ -117,6 +117,20 @@ type Leak struct {
 	Reason    string `json:"reason"`
 }
 
+// RateLimitEvent is one bounded audit event from a certification request. It
+// intentionally excludes provider URLs, raw headers/bodies, credential data,
+// and coordination-scope identity; the event is useful to explain admission
+// without creating a second sensitive request log.
+type RateLimitEvent struct {
+	Type       string    `json:"type"`
+	Stage      string    `json:"stage,omitempty"`
+	Method     string    `json:"method,omitempty"`
+	Attempt    int       `json:"attempt,omitempty"`
+	DurationMS int64     `json:"duration_ms,omitempty"`
+	ResetAt    time.Time `json:"reset_at,omitempty"`
+	Reason     string    `json:"reason,omitempty"`
+}
+
 // ExitCodeFor maps a completed Report to the certification design §A exit
 // code convention: 0 pass, 2 certification failures, 3 leaked resources
 // (dominates everything — checked first).
@@ -144,9 +158,10 @@ type Report struct {
 	Mode          string    `json:"mode"`
 	Passed        bool      `json:"passed"`
 
-	Capabilities Capabilities  `json:"capabilities"`
-	Stages       []StageResult `json:"stages"`
-	Leaks        []Leak        `json:"leaks,omitempty"`
+	Capabilities    Capabilities     `json:"capabilities"`
+	Stages          []StageResult    `json:"stages"`
+	Leaks           []Leak           `json:"leaks,omitempty"`
+	RateLimitEvents []RateLimitEvent `json:"rate_limit_events,omitempty"`
 }
 
 // certificationsDirName / historyDirName are the fixed on-disk layout under
