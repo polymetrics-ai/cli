@@ -78,7 +78,7 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]
 	if err != nil {
 		return nil, fmt.Errorf("open duckdb: %w", err)
 	}
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	if err := e.registerViews(ctx, db); err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]
 	if err != nil {
 		return nil, fmt.Errorf("execute query: %w", err)
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }()
 
 	cols, err := rows.Columns()
 	if err != nil {

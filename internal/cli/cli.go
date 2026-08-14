@@ -250,7 +250,7 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 			return err
 		}
 		if c, ok := registry.Get(args[1]); ok {
-			status, err := certifications.StatusFor(args[1])
+			status, err := certifications.StatusForRegistered(args[1], true)
 			if err != nil {
 				return fmt.Errorf("read connector certification status: %w", err)
 			}

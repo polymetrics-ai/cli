@@ -368,6 +368,11 @@ not a full override by default.
   connector-specific cleanup behavior. `internal/connectors/engine/schema/certification.schema.json`
   is the schema source of truth, and `connectorgen validate` scans the raw file for secret-shaped
   literals.
+- **`certification-matrix.json` is generated proof, not harness input**: only a connector named in
+  `cmd/connectorgen/certificationallowlist.go` receives this sibling artifact. Generate one
+  connector with `go run ./cmd/connectorgen certification-matrix --connector <name>`; it writes
+  that shard only. It is not part of `defs.FS`, is never hand-authored, and contains no global
+  baseline or count. Use `--all` only for deliberate regeneration and `--check` for the drift gate.
 
 ## 2.9 Command parameters and paging are DERIVED — never hand-author them
 

@@ -174,12 +174,9 @@ func Open(root string) (*App, error) {
 	if err := a.load(); err != nil {
 		return nil, err
 	}
-	transports, stage, err := newIssueLabelWarehouseMediatedTransport(a)
-	if err != nil {
+	if err := a.composeTransportRegistry(); err != nil {
 		return nil, err
 	}
-	a.transports = transports
-	a.transportStage = stage
 	return a, nil
 }
 
@@ -1090,38 +1087,20 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		batchSize = 1000
 	}
 	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
-	transportRoute := a.shouldRunTransport(conn, req.Stream, mode, source, destination)
-	if !transportRoute && hasDestinationApproval(req.DestinationApproval) {
-		return a.failRun(runID, fmt.Errorf("destination approval is valid only for the closed issue-label transport route"))
-	}
-	if transportRoute {
-		result, err := a.runTransportETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, mode, batchSize, req.DestinationApproval)
-		if err != nil {
-			return a.failAcknowledgedTransportRun(runID, result, err)
-		}
-		return a.completeAcknowledgedTransportRun(runID, result)
-	}
-	if mode.IsContractMode() {
-		return a.failRun(runID, &synccontract.ModeNotExecutableError{
-			Mode:   mode.ContractMode,
-			Reason: "no matching closed source/destination transport has completed externally verified conformance",
-		})
-	}
-	catalog, err := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
-	if err != nil {
-		return a.failRun(runID, err)
-	}
-	sourceRuntime.ResolvedCatalog = &catalog
-	var result etlExecutionResult
-	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
-		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
-	} else {
-		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
-	}
-	if err != nil {
-		return a.failRun(runID, err)
-	}
-	return a.completeRun(runID, result)
+	return a.dispatchETLMode(ctx, etlModeDispatchRequest{
+		runID:               runID,
+		connection:          conn,
+		source:              source,
+		sourceRuntime:       sourceRuntime,
+		destination:         destination,
+		destinationRuntime:  destRuntime,
+		sourceExpectation:   sourceExpectation,
+		streamName:          req.Stream,
+		stream:              stream,
+		mode:                mode,
+		batchSize:           batchSize,
+		destinationApproval: req.DestinationApproval,
+	})
 }
 
 func hasDestinationApproval(approval synctransport.DestinationApproval) bool {
