@@ -28,6 +28,23 @@ absent. The exact pre-change output is recorded as `traces/second-stream-red.txt
 
 ```sh
 go test -timeout 20m ./internal/connectors/database -count=1
-go test -timeout 20m ./internal/app -run 'Test.*StreamID|Test.*ManagedTarget' -count=1
-go test -race -timeout 20m ./internal/connectors/database ./internal/app -run 'TestManagedTarget|Test.*StreamID' -count=1
+go test -timeout 20m ./internal/app -count=1
+go test -race -timeout 20m ./internal/connectors/database -run 'TestManagedTargetProvisioning' -count=1
+go test -race -timeout 20m ./internal/app -run '^Test(StreamIDIsPersistedAndSurvivesStreamRename|AllocateUniqueIdentityRetriesCollisions)$' -count=1
 ```
+
+## Green evidence
+
+The required second-stream command was rerun after the ownership split and
+passed. The two-stream concurrency fake then passed under `-race`, as did the
+persisted-stream-ID migration/rename and generated-ID collision retry tests.
+
+```text
+ok   polymetrics.ai/internal/connectors/database
+ok   polymetrics.ai/internal/app
+```
+
+The green tests prove that a namespace-owner record is asserted before the
+second relation is created, that the two relations differ while their namespace
+does not, and that an unchanged `StreamID` keeps a renamed source artifact at
+the exact same managed address.

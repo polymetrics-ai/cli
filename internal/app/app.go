@@ -274,16 +274,48 @@ func (a *App) migrateWarehouseIdentity() (bool, error) {
 		a.state.WorkspaceID = workspaceID
 		changed = true
 	}
-	for index := range a.state.Connections {
-		if strings.TrimSpace(a.state.Connections[index].ID) != "" {
+	connectionIDs := make(map[string]struct{}, len(a.state.Connections))
+	for _, connection := range a.state.Connections {
+		if strings.TrimSpace(connection.ID) == "" {
 			continue
 		}
-		connectionID, err := prefixedID("conn")
-		if err != nil {
-			return false, err
+		if _, exists := connectionIDs[connection.ID]; exists {
+			return false, errors.New("duplicate persisted connection identity")
 		}
-		a.state.Connections[index].ID = connectionID
-		changed = true
+		connectionIDs[connection.ID] = struct{}{}
+	}
+	for index := range a.state.Connections {
+		connection := &a.state.Connections[index]
+		if strings.TrimSpace(connection.ID) == "" {
+			connectionID, err := allocateUniquePrefixedID("conn", connectionIDs)
+			if err != nil {
+				return false, err
+			}
+			connection.ID = connectionID
+			changed = true
+		}
+		streamIDs := make(map[string]struct{}, len(connection.Streams))
+		for _, stream := range connection.Streams {
+			if strings.TrimSpace(stream.StreamID) == "" {
+				continue
+			}
+			if _, exists := streamIDs[stream.StreamID]; exists {
+				return false, errors.New("duplicate persisted stream identity")
+			}
+			streamIDs[stream.StreamID] = struct{}{}
+		}
+		for name, stream := range connection.Streams {
+			if strings.TrimSpace(stream.StreamID) != "" {
+				continue
+			}
+			streamID, err := allocateUniquePrefixedID("stream", streamIDs)
+			if err != nil {
+				return false, err
+			}
+			stream.StreamID = streamID
+			connection.Streams[name] = stream
+			changed = true
+		}
 	}
 	return changed, nil
 }
@@ -828,7 +860,11 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	if errors.Is(catalogErr, errCatalogStale) {
 		return Connection{}, catalogErr
 	}
+	streamIDs := make(map[string]struct{}, len(req.Streams))
 	for name, stream := range req.Streams {
+		if strings.TrimSpace(stream.StreamID) != "" {
+			return Connection{}, errors.New("stream identity is assigned by the application")
+		}
 		if stream.SyncMode == "" {
 			stream.SyncMode = DefaultUserFacingSyncMode
 		}
@@ -873,9 +909,20 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if err := ValidateStreamSyncConfig(stream); err != nil {
 			return Connection{}, fmt.Errorf("validate stream %q: %w", name, err)
 		}
+		streamID, err := allocateUniquePrefixedID("stream", streamIDs)
+		if err != nil {
+			return Connection{}, err
+		}
+		stream.StreamID = streamID
 		req.Streams[name] = stream
 	}
-	connectionID, err := prefixedID("conn")
+	connectionIDs := make(map[string]struct{}, len(a.state.Connections))
+	for _, connection := range a.state.Connections {
+		if strings.TrimSpace(connection.ID) != "" {
+			connectionIDs[connection.ID] = struct{}{}
+		}
+	}
+	connectionID, err := allocateUniquePrefixedID("conn", connectionIDs)
 	if err != nil {
 		return Connection{}, err
 	}
@@ -2849,6 +2896,28 @@ func prefixedID(prefix string) (string, error) {
 		return "", err
 	}
 	return prefix + "_" + token, nil
+}
+
+func allocateUniquePrefixedID(prefix string, used map[string]struct{}) (string, error) {
+	return allocateUniqueIdentity(prefix, used, func() (string, error) {
+		return prefixedID(prefix)
+	})
+}
+
+func allocateUniqueIdentity(kind string, used map[string]struct{}, generate func() (string, error)) (string, error) {
+	const maxAttempts = 32
+	for attempt := 0; attempt < maxAttempts; attempt++ {
+		identity, err := generate()
+		if err != nil {
+			return "", err
+		}
+		if _, exists := used[identity]; exists {
+			continue
+		}
+		used[identity] = struct{}{}
+		return identity, nil
+	}
+	return "", fmt.Errorf("allocate unique %s identity: too many collisions", kind)
 }
 
 func randomToken(bytes int) (string, error) {

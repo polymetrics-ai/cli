@@ -78,6 +78,10 @@ type EndpointConfig struct {
 }
 
 type StreamConfig struct {
+	// StreamID is allocated and persisted once when the stream is attached to a
+	// connection. It is structural identity for managed destinations; map keys,
+	// display names, and destination tables remain mutable configuration.
+	StreamID            string   `json:"stream_id,omitempty"`
 	SyncMode            string   `json:"sync_mode"`
 	LegacyCompatibility bool     `json:"legacy_compatibility,omitempty"`
 	CursorField         string   `json:"cursor_field,omitempty"`
