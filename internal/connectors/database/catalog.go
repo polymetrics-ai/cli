@@ -19,8 +19,8 @@ const (
 )
 
 // Column captures a relation-bound column's logical type and nullability.
-// Generated/default/identity semantics are deliberately left to a later
-// managed-target contract rather than inferred here.
+// Generated/default/identity semantics are not inferred here and remain
+// outside the managed-target ownership kernel.
 type Column struct {
 	Ref      ColumnRef
 	Type     LogicalType

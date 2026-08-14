@@ -54,7 +54,7 @@ type App struct {
 // implementation; the seam remains so a query path can be substituted in tests
 // without the engine choice becoming an install-time option.
 type sqlQueryEngine interface {
-	QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error)
+	QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.Record, error)
 	Name() string
 }
 
@@ -322,10 +322,10 @@ func cloneState(value state) (state, error) {
 	return copied, nil
 }
 
-// migrateWarehouseIdentity gives a project and its connections the opaque
-// identifiers that form warehouse path components. They are generated once and
-// persisted, so a connection's directory is stable across runs and independent
-// of its display name.
+// migrateWarehouseIdentity gives a project, its connections, and their streams
+// opaque persisted identifiers. Workspace and connection IDs form stable
+// warehouse path components; stream IDs preserve managed-target identity across
+// map-key, display-name, and destination-table changes.
 func (a *App) migrateWarehouseIdentity() (bool, error) {
 	changed := false
 	if strings.TrimSpace(a.state.WorkspaceID) == "" {
@@ -336,16 +336,48 @@ func (a *App) migrateWarehouseIdentity() (bool, error) {
 		a.state.WorkspaceID = workspaceID
 		changed = true
 	}
-	for index := range a.state.Connections {
-		if strings.TrimSpace(a.state.Connections[index].ID) != "" {
+	connectionIDs := make(map[string]struct{}, len(a.state.Connections))
+	for _, connection := range a.state.Connections {
+		if strings.TrimSpace(connection.ID) == "" {
 			continue
 		}
-		connectionID, err := prefixedID("conn")
-		if err != nil {
-			return false, err
+		if _, exists := connectionIDs[connection.ID]; exists {
+			return false, errors.New("duplicate persisted connection identity")
 		}
-		a.state.Connections[index].ID = connectionID
-		changed = true
+		connectionIDs[connection.ID] = struct{}{}
+	}
+	for index := range a.state.Connections {
+		connection := &a.state.Connections[index]
+		if strings.TrimSpace(connection.ID) == "" {
+			connectionID, err := allocateUniquePrefixedID("conn", connectionIDs)
+			if err != nil {
+				return false, err
+			}
+			connection.ID = connectionID
+			changed = true
+		}
+		streamIDs := make(map[string]struct{}, len(connection.Streams))
+		for _, stream := range connection.Streams {
+			if strings.TrimSpace(stream.StreamID) == "" {
+				continue
+			}
+			if _, exists := streamIDs[stream.StreamID]; exists {
+				return false, errors.New("duplicate persisted stream identity")
+			}
+			streamIDs[stream.StreamID] = struct{}{}
+		}
+		for name, stream := range connection.Streams {
+			if strings.TrimSpace(stream.StreamID) != "" {
+				continue
+			}
+			streamID, err := allocateUniquePrefixedID("stream", streamIDs)
+			if err != nil {
+				return false, err
+			}
+			stream.StreamID = streamID
+			connection.Streams[name] = stream
+			changed = true
+		}
 	}
 	return changed, nil
 }
@@ -873,6 +905,7 @@ func ValidateConnectionName(name string) error {
 }
 
 func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest) (Connection, error) {
+	req = cloneCreateConnectionRequest(req)
 	if err := ValidateConnectionName(req.Name); err != nil {
 		return Connection{}, err
 	}
@@ -901,7 +934,11 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	if errors.Is(catalogErr, errCatalogStale) {
 		return Connection{}, catalogErr
 	}
+	streamIDs := make(map[string]struct{}, len(req.Streams))
 	for name, stream := range req.Streams {
+		if strings.TrimSpace(stream.StreamID) != "" {
+			return Connection{}, errors.New("stream identity is assigned by the application")
+		}
 		if stream.SyncMode == "" {
 			stream.SyncMode = DefaultUserFacingSyncMode
 		}
@@ -946,9 +983,20 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if err := ValidateStreamSyncConfig(stream); err != nil {
 			return Connection{}, fmt.Errorf("validate stream %q: %w", name, err)
 		}
+		streamID, err := allocateUniquePrefixedID("stream", streamIDs)
+		if err != nil {
+			return Connection{}, err
+		}
+		stream.StreamID = streamID
 		req.Streams[name] = stream
 	}
-	connectionID, err := prefixedID("conn")
+	connectionIDs := make(map[string]struct{}, len(a.state.Connections))
+	for _, connection := range a.state.Connections {
+		if strings.TrimSpace(connection.ID) != "" {
+			connectionIDs[connection.ID] = struct{}{}
+		}
+	}
+	connectionID, err := allocateUniquePrefixedID("conn", connectionIDs)
 	if err != nil {
 		return Connection{}, err
 	}
@@ -962,15 +1010,19 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		CreatedAt:   now,
 		UpdatedAt:   now,
 	}
-	a.state.Connections = append(a.state.Connections, conn)
+	stored := cloneConnection(conn)
+	a.state.Connections = append(a.state.Connections, stored)
 	if err := a.save(); err != nil {
 		return Connection{}, err
 	}
-	return conn, nil
+	return cloneConnection(stored), nil
 }
 
 func (a *App) ListConnections() []Connection {
-	out := append([]Connection(nil), a.state.Connections...)
+	out := make([]Connection, len(a.state.Connections))
+	for index, connection := range a.state.Connections {
+		out[index] = cloneConnection(connection)
+	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
 }
@@ -1499,11 +1551,19 @@ func (a *App) GetRun(id string) (Run, error) {
 }
 
 func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connectors.Record, error) {
-	if req.Table == "" {
-		return nil, errors.New("table is required")
-	}
 	if req.Limit <= 0 {
 		req.Limit = 100
+	}
+	return a.readWarehouseTable(ctx, req.Table, req.Connection, req.Limit)
+}
+
+func (a *App) ReadActionSource(ctx context.Context, req ActionSourceReadRequest) ([]connectors.Record, error) {
+	return a.readWarehouseTable(ctx, req.Table, req.Connection, 0)
+}
+
+func (a *App) readWarehouseTable(ctx context.Context, table, connection string, limit int) ([]connectors.Record, error) {
+	if table == "" {
+		return nil, errors.New("table is required")
 	}
 	cfg := connectors.RuntimeConfig{
 		ProjectDir: a.projectDir,
@@ -1511,22 +1571,22 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 			"path": a.warehouseRoot(),
 		},
 	}
-	if req.Connection != "" {
+	if connection != "" {
 		// The unattributed selector names the root-level tables no connection
 		// owns, so it deliberately does not resolve through findConnection.
-		if req.Connection != warehouse.UnattributedConnection {
-			if _, ok := a.findConnection(req.Connection); !ok {
-				return nil, fmt.Errorf("connection %q not found", req.Connection)
+		if connection != warehouse.UnattributedConnection {
+			if _, ok := a.findConnection(connection); !ok {
+				return nil, fmt.Errorf("connection %q not found", connection)
 			}
 		}
-		cfg.Config["connection"] = req.Connection
+		cfg.Config["connection"] = connection
 	}
 	warehouseConnector, ok := a.registry.Get("warehouse")
 	if !ok {
 		return nil, errors.New("warehouse connector not registered")
 	}
 	rows := make([]connectors.Record, 0)
-	err := warehouseConnector.Read(ctx, connectors.ReadRequest{Stream: req.Table, Config: cfg, Limit: req.Limit}, connectors.LimitEmitter(req.Limit, func(record connectors.Record) error {
+	err := warehouseConnector.Read(ctx, connectors.ReadRequest{Stream: table, Config: cfg, Limit: limit}, connectors.LimitEmitter(limit, func(record connectors.Record) error {
 		rows = append(rows, record)
 		return nil
 	}))
@@ -1536,8 +1596,16 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 	return rows, nil
 }
 
-func (a *App) QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error) {
-	return a.sqlEngine.QuerySQL(ctx, sql, limit)
+func (a *App) QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.Record, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	if req.Connection != "" && req.Connection != warehouse.UnattributedConnection {
+		if _, ok := a.findConnection(req.Connection); !ok {
+			return nil, fmt.Errorf("connection %q not found", req.Connection)
+		}
+	}
+	return a.sqlEngine.QuerySQL(ctx, req)
 }
 
 // warehouseRoot is this project's local warehouse root.
@@ -2919,7 +2987,7 @@ func (a *App) findCredential(name string) (CredentialMeta, bool) {
 func (a *App) findConnection(name string) (Connection, bool) {
 	for _, conn := range a.state.Connections {
 		if conn.Name == name {
-			return conn, true
+			return cloneConnection(conn), true
 		}
 	}
 	return Connection{}, false
@@ -2928,7 +2996,7 @@ func (a *App) findConnection(name string) (Connection, bool) {
 func (a *App) findConnectionByID(id string) (Connection, bool) {
 	for _, conn := range a.state.Connections {
 		if conn.ID == id {
-			return conn, true
+			return cloneConnection(conn), true
 		}
 	}
 	return Connection{}, false
@@ -2940,7 +3008,7 @@ func (a *App) findConnectionByID(id string) (Connection, bool) {
 func (a *App) findConnectionFold(name string) (Connection, bool) {
 	for _, conn := range a.state.Connections {
 		if strings.EqualFold(conn.Name, name) {
-			return conn, true
+			return cloneConnection(conn), true
 		}
 	}
 	return Connection{}, false
@@ -3018,6 +3086,28 @@ func prefixedID(prefix string) (string, error) {
 		return "", err
 	}
 	return prefix + "_" + token, nil
+}
+
+func allocateUniquePrefixedID(prefix string, used map[string]struct{}) (string, error) {
+	return allocateUniqueIdentity(prefix, used, func() (string, error) {
+		return prefixedID(prefix)
+	})
+}
+
+func allocateUniqueIdentity(kind string, used map[string]struct{}, generate func() (string, error)) (string, error) {
+	const maxAttempts = 32
+	for attempt := 0; attempt < maxAttempts; attempt++ {
+		identity, err := generate()
+		if err != nil {
+			return "", err
+		}
+		if _, exists := used[identity]; exists {
+			continue
+		}
+		used[identity] = struct{}{}
+		return identity, nil
+	}
+	return "", fmt.Errorf("allocate unique %s identity: too many collisions", kind)
 }
 
 func randomToken(bytes int) (string, error) {

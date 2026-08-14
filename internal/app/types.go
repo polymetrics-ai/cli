@@ -78,6 +78,10 @@ type EndpointConfig struct {
 }
 
 type StreamConfig struct {
+	// StreamID is allocated and persisted once when the stream is attached to a
+	// connection. It is structural identity for managed destinations; map keys,
+	// display names, and destination tables remain mutable configuration.
+	StreamID            string   `json:"stream_id,omitempty"`
 	SyncMode            string   `json:"sync_mode"`
 	LegacyCompatibility bool     `json:"legacy_compatibility,omitempty"`
 	CursorField         string   `json:"cursor_field,omitempty"`
@@ -112,6 +116,45 @@ type Connection struct {
 	Streams     map[string]StreamConfig `json:"streams"`
 	CreatedAt   time.Time               `json:"created_at"`
 	UpdatedAt   time.Time               `json:"updated_at"`
+}
+
+func cloneEndpointConfig(config EndpointConfig) EndpointConfig {
+	clone := config
+	clone.Config = cloneStringMap(config.Config)
+	return clone
+}
+
+func cloneStreamConfig(config StreamConfig) StreamConfig {
+	clone := config
+	clone.PrimaryKey = append([]string(nil), config.PrimaryKey...)
+	return clone
+}
+
+func cloneStreamConfigs(configs map[string]StreamConfig) map[string]StreamConfig {
+	if configs == nil {
+		return nil
+	}
+	clone := make(map[string]StreamConfig, len(configs))
+	for name, config := range configs {
+		clone[name] = cloneStreamConfig(config)
+	}
+	return clone
+}
+
+func cloneCreateConnectionRequest(req CreateConnectionRequest) CreateConnectionRequest {
+	clone := req
+	clone.Source = cloneEndpointConfig(req.Source)
+	clone.Destination = cloneEndpointConfig(req.Destination)
+	clone.Streams = cloneStreamConfigs(req.Streams)
+	return clone
+}
+
+func cloneConnection(connection Connection) Connection {
+	clone := connection
+	clone.Source = cloneEndpointConfig(connection.Source)
+	clone.Destination = cloneEndpointConfig(connection.Destination)
+	clone.Streams = cloneStreamConfigs(connection.Streams)
+	return clone
 }
 
 type CatalogSnapshot struct {
@@ -160,6 +203,33 @@ type QueryTableRequest struct {
 	// only when more than one connection materializes the same table name.
 	Connection string `json:"connection,omitempty"`
 	Limit      int    `json:"limit"`
+}
+
+// ActionSourceReadRequest identifies the warehouse table an action step reads.
+// Connection selects one owner's materialization; the `_unattributed` sentinel
+// selects a root-owned table. An empty selector preserves typed ambiguity when
+// several owners materialize the same name.
+type ActionSourceReadRequest struct {
+	Table      string `json:"table"`
+	Connection string `json:"connection,omitempty"`
+}
+
+type QuerySQLOrigin uint8
+
+const (
+	QuerySQLOriginGeneric QuerySQLOrigin = iota
+	QuerySQLOriginFlow
+)
+
+// QuerySQLRequest describes a read-only analytical query over the local
+// warehouse. Connection scopes every table view available to the query, so a
+// flow or other caller cannot silently resolve a same-named table from another
+// connection. UnattributedConnection selects only root-owned tables.
+type QuerySQLRequest struct {
+	SQL        string         `json:"sql"`
+	Connection string         `json:"connection,omitempty"`
+	Limit      int            `json:"limit"`
+	Origin     QuerySQLOrigin `json:"-"`
 }
 
 type PlanReverseETLRequest struct {
