@@ -75,6 +75,6 @@ Loaded skills: `golang-how-to`, `golang-cli`, `golang-testing`,
 
 ## CLI help/docs/website parity
 
-- [ ] `pm schedule`, `pm help schedule`, and `pm schedule --help` render the new action summary.
-- [ ] `docs/cli/schedule.md`, website CLI reference, embedded manual, and generated help transcripts describe safe references and `--json`.
-- [ ] create/list/inspect/status/install/remove/fire output is verified in human and JSON forms.
+- [x] `pm schedule`, `pm help schedule`, and `pm schedule --help` render the new action summary.
+- [x] `docs/cli/schedule.md`, website CLI reference, embedded manual, and generated help transcripts describe safe references and `--json`.
+- [x] create/list/inspect/status/install/remove/fire output is verified in human and JSON forms.

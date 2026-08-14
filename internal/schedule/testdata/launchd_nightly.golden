@@ -7,9 +7,11 @@
 	<key>ProgramArguments</key>
 	<array>
 		<string>/usr/local/bin/pm</string>
-		<string>flow</string>
-		<string>run</string>
-		<string>likely-customers</string>
+		<string>schedule</string>
+		<string>fire</string>
+		<string>nightly-leads</string>
+		<string>--authorization</string>
+		<string>auth_0123456789abcdef</string>
 		<string>--json</string>
 	</array>
 	<key>RunAtLoad</key>

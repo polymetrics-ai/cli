@@ -22,13 +22,17 @@ func scheduleRun(t *testing.T, root string, args ...string) (stdout, stderr stri
 // E-1: pm schedule create --name x --cron "0 2 * * *" --flow y → exit 0, manifest created.
 func TestScheduleCLI_Create(t *testing.T) {
 	root := t.TempDir()
-	_, stderr, code := scheduleRun(t, root, "schedule", "create",
+	stdout, stderr, code := scheduleRun(t, root, "schedule", "create",
 		"--name", "nightly-leads",
 		"--cron", "0 2 * * *",
 		"--flow", "likely-customers",
+		"--authorization", "auth_0123456789abcdef",
 	)
 	if code != 0 {
 		t.Fatalf("create: exit %d, stderr=%q", code, stderr)
+	}
+	if !strings.Contains(stdout, "authorization: auth_0123456789abcdef") || !strings.Contains(stdout, "status: ready") {
+		t.Fatalf("create output = %q, want safe authorization reference and ready status", stdout)
 	}
 }
 
@@ -39,6 +43,7 @@ func TestScheduleCLI_List(t *testing.T) {
 		"--name", "nightly-leads",
 		"--cron", "0 2 * * *",
 		"--flow", "likely-customers",
+		"--authorization", "auth_0123456789abcdef",
 	)
 	if code != 0 {
 		t.Fatal("create failed, cannot test list")
@@ -50,6 +55,9 @@ func TestScheduleCLI_List(t *testing.T) {
 	}
 	var result struct {
 		Schedules []map[string]any `json:"schedules"`
+		Statuses  map[string]struct {
+			Status string `json:"status"`
+		} `json:"statuses"`
 	}
 	if err := json.Unmarshal([]byte(stdout), &result); err != nil {
 		t.Fatalf("list output is not valid JSON: %v\noutput: %s", err, stdout)
@@ -60,6 +68,9 @@ func TestScheduleCLI_List(t *testing.T) {
 	if result.Schedules[0]["name"] != "nightly-leads" {
 		t.Fatalf("unexpected name: %v", result.Schedules[0]["name"])
 	}
+	if result.Schedules[0]["authorization_reference"] != "auth_0123456789abcdef" || result.Statuses["nightly-leads"].Status != "ready" {
+		t.Fatalf("list did not retain safe authorization/status: %+v", result)
+	}
 }
 
 // E-3: pm schedule install x --crontab → crontab line written (dry-run via env).
@@ -69,6 +80,7 @@ func TestScheduleCLI_Install_Crontab(t *testing.T) {
 		"--name", "nightly-leads",
 		"--cron", "0 2 * * *",
 		"--flow", "likely-customers",
+		"--authorization", "auth_0123456789abcdef",
 	)
 	if code != 0 {
 		t.Fatal("create failed, cannot test install")
@@ -78,9 +90,12 @@ func TestScheduleCLI_Install_Crontab(t *testing.T) {
 	tmpCrontab := t.TempDir() + "/crontab"
 	t.Setenv("PM_CRONTAB_FILE", tmpCrontab)
 
-	_, stderr, code := scheduleRun(t, root, "schedule", "install", "nightly-leads", "--crontab")
+	stdout, stderr, code := scheduleRun(t, root, "schedule", "install", "nightly-leads", "--crontab")
 	if code != 0 {
 		t.Fatalf("install: exit %d, stderr=%q", code, stderr)
+	}
+	if !strings.Contains(stdout, "authorization: auth_0123456789abcdef") || !strings.Contains(stdout, "status: ready") {
+		t.Fatalf("install output = %q, want safe authorization reference and ready status", stdout)
 	}
 
 	data, err := os.ReadFile(tmpCrontab)
@@ -88,8 +103,8 @@ func TestScheduleCLI_Install_Crontab(t *testing.T) {
 		t.Fatalf("read redirected crontab: %v", err)
 	}
 	line := string(data)
-	if !strings.Contains(line, "--root "+root+" flow run likely-customers --json") {
-		t.Fatalf("installed crontab line must include --root and named flow, got %q", line)
+	if !strings.Contains(line, "--root "+root+" schedule fire nightly-leads --authorization auth_0123456789abcdef --json") {
+		t.Fatalf("installed crontab line must include --root and safe authorization, got %q", line)
 	}
 }
 
@@ -99,6 +114,7 @@ func TestScheduleCLI_Remove_CleansCrontabInstall(t *testing.T) {
 		"--name", "nightly-leads",
 		"--cron", "0 2 * * *",
 		"--flow", "likely-customers",
+		"--authorization", "auth_0123456789abcdef",
 	)
 	if code != 0 {
 		t.Fatal("create failed, cannot test remove")
@@ -119,9 +135,12 @@ func TestScheduleCLI_Remove_CleansCrontabInstall(t *testing.T) {
 		t.Fatalf("expected crontab sentinel after install, got %q", string(data))
 	}
 
-	_, stderr, code = scheduleRun(t, root, "schedule", "remove", "nightly-leads")
+	stdout, stderr, code := scheduleRun(t, root, "schedule", "remove", "nightly-leads")
 	if code != 0 {
 		t.Fatalf("remove: exit %d, stderr=%q", code, stderr)
+	}
+	if !strings.Contains(stdout, "authorization: auth_0123456789abcdef") || !strings.Contains(stdout, "status: ready") {
+		t.Fatalf("remove output = %q, want safe authorization reference and prior status", stdout)
 	}
 	data, err = os.ReadFile(tmpCrontab)
 	if err != nil {
@@ -139,6 +158,7 @@ func TestScheduleCLI_Remove(t *testing.T) {
 		"--name", "nightly-leads",
 		"--cron", "0 2 * * *",
 		"--flow", "likely-customers",
+		"--authorization", "auth_0123456789abcdef",
 	)
 	if code != 0 {
 		t.Fatal("create failed, cannot test remove")
@@ -168,6 +188,22 @@ func TestScheduleCLI_Create_MissingFlags(t *testing.T) {
 	}
 }
 
+func TestScheduleCLI_CreateRejectsTokenLikeAuthorization(t *testing.T) {
+	root := t.TempDir()
+	_, stderr, code := scheduleRun(t, root, "schedule", "create",
+		"--name", "token-like-reference",
+		"--cron", "0 2 * * *",
+		"--flow", "f",
+		"--authorization", "approval-token-fixture",
+	)
+	if code == 0 {
+		t.Fatal("schedule create accepted token-like authorization material")
+	}
+	if !strings.Contains(stderr, "opaque auth_<id> reference") {
+		t.Fatalf("token-like authorization error = %q, want safe-reference validation", stderr)
+	}
+}
+
 // E-6: pm schedule install unknown → exit 1, "not found" error.
 func TestScheduleCLI_Install_NotFound(t *testing.T) {
 	root := t.TempDir()
@@ -188,6 +224,7 @@ func TestScheduleCLI_Create_InvalidName(t *testing.T) {
 		"--name", "INVALID-NAME",
 		"--cron", "0 2 * * *",
 		"--flow", "f",
+		"--authorization", "auth_0123456789abcdef",
 	)
 	if code == 0 {
 		t.Fatal("expected non-zero exit for invalid name")

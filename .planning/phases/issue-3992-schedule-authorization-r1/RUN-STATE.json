@@ -1,7 +1,7 @@
 {
   "issue": 3992,
   "phase": "issue-3992-schedule-authorization-r1",
-  "state": "planned",
+  "state": "verified",
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-3992-schedule-authorization-r1",
   "gsd_mode": "inline_manual_fallback",
