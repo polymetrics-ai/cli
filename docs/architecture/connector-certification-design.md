@@ -9,18 +9,15 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > proof.
 
 > **Current certification authority (r1).** The generated proof-bearing
-> connector shards under `internal/connectors/defs/<name>/` supersede the
-> legacy report/cassette material described below for the question “is this
-> connector certified?”. The explicit reviewable allowlist in
-> `cmd/connectorgen/certificationallowlist.go` is initially `github` and
-> `postgres`; every other connector has no pass-or-fail certification claim.
-> `go run ./cmd/connectorgen certification-matrix --check` reads and validates
-> committed proof first, then checks the allowlisted capability, workflow,
-> warehouse-facing sync-mode, and source/destination flow records against code.
-> A passing legacy `pm connectors certify` report cannot change the generated
-> status. `pm connectors inspect <name>` preserves its visible
-> `COMMUNITY BUILD, UNCERTIFIED` warning outside the allowlist; reachability is
-> never gated.
+> artifacts under `internal/connectors/certifications/` supersede the legacy
+> report/cassette material described below for the question “is this connector
+> certified?”. `go run ./cmd/connectorgen certification-matrix --check` reads
+> and validates committed proof first, then checks its capability, workflow,
+> warehouse-facing sync-mode, and source/destination flow matrices against
+> code. A passing legacy `pm connectors certify` report cannot change the
+> generated status. `pm connectors inspect <name>` renders only the binary
+> status derived from those artifacts: `CERTIFIED`, or `COMMUNITY BUILD,
+> UNCERTIFIED`; reachability is never gated.
 >
 > Accepted evidence embeds a publishable transcript with repository-salted HMAC
 > fingerprints substituted before persistence. It is full-parity credential
@@ -32,27 +29,17 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 
 ## Generated certification baseline
 
-`go run ./cmd/connectorgen certification-matrix --connector <name>` produces
-the authoritative, reviewable shard at
-`internal/connectors/defs/<name>/certification-matrix.json`. A normal run
-writes only its requested allowlisted connector's shard; `--all` is the
-deliberate migration/regeneration operation. No aggregate capability or flow
-matrix is checked in. The drift gate reconstructs its aggregate view in memory
-from the shards, and `--check` plus the `connectorgen-certification-matrix`
-Make target fail on allowlisted byte drift.
-
-Shards contain no global baseline, count, or position-dependent data. They
-record Go provenance as `relative/path.go:Symbol`, rather than line numbers;
-fields use `Type.Field`, functions use their declaration identifier, and
-operation switch arms use `expectedOperationBlock(kind=<operation>)` because a
-literal can otherwise share a `case` clause. Regeneration still fails if the
-underlying construct disappears.
+`go run ./cmd/connectorgen certification-matrix` produces the authoritative,
+reviewable capability baseline at
+`internal/connectors/certifications/capability-matrix.json`. It must be
+regenerated from a source checkout; `--check` and the
+`connectorgen-certification-matrix` Make target fail on any byte drift.
 
 The generator derives its function-kind inventory from the capability contracts
-and engine operation-kind switch, then records one cell per allowlisted
-connector and function kind. An applicable cell is complete only when its
-declaration, real implementation path, recorded fixture proof, and a passed
-live-evidence record are all present. It follows the registered concrete method to reject direct
+and engine operation-kind switch, then records one cell per connector and
+function kind. An applicable cell is complete only when its declaration, real
+implementation path, recorded fixture proof, and a passed live-evidence record
+are all present. It follows the registered concrete method to reject direct
 `ErrUnsupportedOperation` stubs; reachability or a command resolving is never
 evidence of correctness. A connector which exposes a stubbed method without
 declaring that capability remains an applicable `declared=false`,
@@ -67,11 +54,9 @@ presence nor their filename can certify a connector. Every non-applicable cell
 has a specific machine-readable code and explanation; generic `n/a` and
 `blocked` labels are invalid.
 
-The generator is developer tooling, but its compact generated status projection
-is embedded in `pm connectors inspect`, which is the point-of-use user warning.
-Capability completion by itself is not a certification claim. The shard is not
-embedded in `defs.FS`: it is proof/build input, while the runtime embeds only
-that compact status projection.
+The generator is developer tooling, but its generated status projection is
+embedded in `pm connectors inspect`, which is the point-of-use user warning.
+Capability completion by itself is not a certification claim.
 
 ## Load-bearing facts (verified in code)
 
@@ -81,7 +66,7 @@ that compact status projection.
 2. **`--root` gives full project isolation.** The Makefile `smoke` target already runs an
    end-to-end pipeline in a `mktemp -d` root. Certify uses the same pattern: one ephemeral root per
    connector run.
-3. **Destination sync-mode logic is connector-independent** (`internal/app/etl_mode_dispatch.go` +
+3. **Destination sync-mode logic is connector-independent** (`internal/app/app.go` +
    `internal/app/sync_modes.go`): append/overwrite/dedup semantics live in the app layer against
    the local warehouse, not in any connector.
 4. **`connectors.LiveConformanceProvider` exists with zero implementations** — it is the intended

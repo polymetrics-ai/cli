@@ -50,7 +50,7 @@ ETL STREAMS
     fields: bounced_hard(integer), bounced_soft(integer), campaign_id(string), clicked_total(integer), clicked_unique(integer), complained(integer), id(string), opened_total(integer), opened_unique(integer), sent(integer), unsubscribed(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_list:

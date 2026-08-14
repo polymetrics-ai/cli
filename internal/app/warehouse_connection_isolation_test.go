@@ -145,14 +145,14 @@ func persistLegacySameOwnerCaseEquivalentInventory(t *testing.T, a *App, connect
 
 // TestSecondConnectionDoesNotDestroyFirstConnectionRows is the regression proof
 // for the silent cross-connection data loss: two connections with distinct
-// credentials, both incremental_append_deduped, both materializing a table
+// credentials, both incremental_append, both materializing a table
 // named "records". Before the fix the second sync rebuilt the shared final
 // table from its own raw log and renamed it over the first connection's rows,
 // with no error and exit status 0.
 func TestSecondConnectionDoesNotDestroyFirstConnectionRows(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("multi_tenant_source", nil)
-	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	source.records = []connectors.Record{
 		{"id": "a1", "name": "Acme Ada", "updated_at": "2026-08-06T00:00:00Z"},
@@ -188,9 +188,8 @@ func TestSecondConnectionDoesNotDestroyFirstConnectionRows(t *testing.T) {
 		}
 	}
 
-	// One table file must never hold two connections' rows. Deduped modes lose
-	// data outright; append modes interleave tenants into one table instead.
-	// Both are the same defect, so both are asserted here.
+	// One table file must never hold two connections' rows. Append modes would
+	// interleave tenants into one table, so the files must remain separated.
 	owner := map[string]string{"a1": "acme", "a2": "acme", "g1": "globex"}
 	perFile := map[string]map[string]struct{}{}
 	for _, row := range rows {
@@ -223,7 +222,7 @@ func TestSecondConnectionDoesNotDestroyFirstConnectionRows(t *testing.T) {
 func TestBothConnectionsKeepTheirOwnRowsAndAreReadableByName(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("multi_tenant_readback", nil)
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	source.records = []connectors.Record{
 		{"id": "a1", "name": "Acme Ada", "updated_at": "2026-08-06T00:00:00Z"},
@@ -276,7 +275,7 @@ func TestBothConnectionsKeepTheirOwnRowsAndAreReadableByName(t *testing.T) {
 func TestQuerySQLScopesConnectionOwnedAndUnattributedViews(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("scoped_sql_query", nil)
-	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	source.records = []connectors.Record{{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"}}
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
@@ -324,7 +323,7 @@ func TestQuerySQLScopesConnectionOwnedAndUnattributedViews(t *testing.T) {
 func TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("flow_query_ambiguity", nil)
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	source.records = []connectors.Record{{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"}}
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
@@ -512,7 +511,7 @@ func TestSyncRefusesWhenAnotherConnectionOwnsTheDirectory(t *testing.T) {
 	source := newScriptedSyncSource("ownership_guard", []connectors.Record{
 		{"id": "a1", "name": "Acme Ada", "updated_at": "2026-08-06T00:00:00Z"},
 	})
-	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
 		t.Fatal(err)
 	}
@@ -559,7 +558,7 @@ func TestSyncRefusesLegacyFlatWarehouse(t *testing.T) {
 	source := newScriptedSyncSource("legacy_layout", []connectors.Record{
 		{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"},
 	})
-	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	legacyRaw := filepath.Join(warehouseDir, warehouse.LegacyRawDirName)
 	if err := os.MkdirAll(legacyRaw, 0o700); err != nil {
@@ -595,7 +594,7 @@ func TestSyncRefusesLegacyFlatWarehouse(t *testing.T) {
 func TestCreateConnectionRejectsAmbiguousNames(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("name_validation", nil)
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	request := func(name string) CreateConnectionRequest {
 		return CreateConnectionRequest{
@@ -603,7 +602,7 @@ func TestCreateConnectionRejectsAmbiguousNames(t *testing.T) {
 			Source:      EndpointConfig{Connector: source.Name(), Credential: "acme-source"},
 			Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
 			Streams: map[string]StreamConfig{
-				"records": {SyncMode: "incremental_append_deduped", CursorField: "updated_at", PrimaryKey: []string{"id"}, DestinationTable: "records"},
+				"records": {SyncMode: "incremental_append", CursorField: "updated_at", PrimaryKey: []string{"id"}, DestinationTable: "records"},
 			},
 		}
 	}
@@ -629,7 +628,7 @@ func TestCreateConnectionRejectsAmbiguousNames(t *testing.T) {
 func TestCreateConnectionRejectsStreamAndTableNamesItCouldNeverMaterialize(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("stream_name_validation", nil)
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	request := func(name, stream, table string) CreateConnectionRequest {
 		return CreateConnectionRequest{
@@ -637,7 +636,7 @@ func TestCreateConnectionRejectsStreamAndTableNamesItCouldNeverMaterialize(t *te
 			Source:      EndpointConfig{Connector: source.Name(), Credential: "acme-source"},
 			Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
 			Streams: map[string]StreamConfig{
-				stream: {SyncMode: "incremental_append_deduped", CursorField: "updated_at", PrimaryKey: []string{"id"}, DestinationTable: table},
+				stream: {SyncMode: "incremental_append", CursorField: "updated_at", PrimaryKey: []string{"id"}, DestinationTable: table},
 			},
 		}
 	}
@@ -738,7 +737,7 @@ func TestReversePlanRefusesAnUnwritableWarehouseTableAtPlanTime(t *testing.T) {
 	source := newScriptedSyncSource("reverse_table_validation", []connectors.Record{
 		{"id": "a1", "name": "Acme Ada", "updated_at": "2026-08-06T00:00:00Z"},
 	})
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
 		t.Fatal(err)
 	}
@@ -776,7 +775,7 @@ func TestConnectionIdentityIsOpaqueAndNotDerivedFromNameOrCredential(t *testing.
 	source := newScriptedSyncSource("identity_shape", []connectors.Record{
 		{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"},
 	})
-	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
 		t.Fatal(err)
 	}
@@ -830,7 +829,7 @@ func TestConnectionIdentityIsOpaqueAndNotDerivedFromNameOrCredential(t *testing.
 func TestReversePlanPinsItsSourceConnection(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("reverse_pinning", nil)
-	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 	if _, err := a.AddCredential(ctx, AddCredentialRequest{
 		Name:      "outbox",
 		Connector: "outbox",

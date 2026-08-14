@@ -39,7 +39,7 @@ ETL STREAMS
     fields: alt(string), day(string), img(string), link(string), month(string), news(string), num(number), safe_title(string), title(string), transcript(string), year(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: public XKCD comic metadata read, no credentials involved

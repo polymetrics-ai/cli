@@ -48,7 +48,7 @@ ETL STREAMS
     fields: id(string), name(string), resource_name(string), status(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   move_manager_link_customer_manager_links:

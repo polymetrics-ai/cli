@@ -28,7 +28,7 @@ api_surface.json     # coverage manifest (always required)
 cli_surface.json     # optional provider-style CLI/help metadata
 certification.json   # optional certify metadata: defaults, safe candidates, pairings
 rate_limits.json     # optional provider-cited HTTP pacing policy (see §3)
-schemas/<stream>.json  # one draft-07 schema per stream, x-primary-key/x-cursor-field
+schemas/<stream>.json  # one draft-07 schema per stream, x-primary-key/optional x-cursor-field
 fixtures/
   check.json
   streams/<stream>/page_1.json (page_2.json ... when paginated)
@@ -199,16 +199,20 @@ not a full override by default.
   default; see §3), only declared properties survive; anything legacy emitted that this bundle's
   schema omits is silently dropped from parity. When a legacy field name differs from the raw API
   field (e.g. searxng's `published_date` vs the raw `publishedDate`), add a `computed_fields`
-  rename (§3) — don't just omit it. Every schema declares `x-primary-key` and, when the stream is
-  incremental, `x-cursor-field`; both must name properties that actually exist in that same schema
-  (`connectorgen validate`'s `primary_key_missing`/`cursor_field_missing` rules, and
-  `conformance`'s static `pk_fields_exist`/`cursor_fields_exist` checks — same underlying
-  requirement, two differently-named rule sets — enforce this).
-- **Sync-mode derivation — never declared** (design §B.6): `full_refresh_append`/
-  `full_refresh_overwrite` always apply; `*_deduped` variants apply iff `x-primary-key` is
-  present; `incremental_append[_deduped]` applies iff the stream has an `incremental` block. Do
-  not add a "supported_sync_modes" field anywhere — there isn't one in this dialect; the engine
-  derives it from schema/stream shape at runtime.
+  rename (§3) — don't just omit it. Every declared `x-primary-key`, `x-cursor-field`, and
+  `incremental.cursor_field` must name a property in that stream's schema. `x-cursor-field` is
+  optional: an executable `incremental.cursor_field` supplies the effective cursor when the schema
+  omits it; when both cursor declarations are present, they must agree. `connectorgen validate`
+  and conformance enforce the primary-key and incremental-cursor field checks, and the generator
+  also rejects a mismatch between the two cursor declarations.
+- **Sync-mode derivation — never declared**: `full_refresh_append` and
+  `full_refresh_overwrite` always apply. `full_refresh_overwrite_deduped` requires both
+  `x-primary-key` and an effective cursor (`x-cursor-field`, or an executable
+  `incremental.cursor_field`); `incremental_append` requires an executable `incremental` block and
+  that effective cursor; `incremental_append_deduped` requires all three. The public compatibility
+  names and their closed contracts are owned by `internal/synccontract/public_modes.go`; do not add
+  a `supported_sync_modes` field anywhere — the engine derives this projection from schema/stream
+  shape at runtime.
 - **`api_surface.json` depth — minimal-honest for wave0/pilot** (DECISIONS.md #4): list every
   implemented stream/write under `covered_by`; everything else is documented as blocked/planned or
   excluded operation-ledger metadata until typed schemas, bounds, fixtures, and safety evidence are

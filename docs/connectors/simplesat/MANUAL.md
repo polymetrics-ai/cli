@@ -50,7 +50,7 @@ ETL STREAMS
     fields: answers(array), created(string), customer(object), id(integer), ip_address(string), language(string), modified(string), source(string), survey(object), tags(array), team_members(array), ticket(object)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_or_update_customer:

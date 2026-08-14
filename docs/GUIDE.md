@@ -123,7 +123,7 @@ make verify          # gofmt + go vet + go test ./... + build + end-to-end smoke
 | **Connection** | A configured source → destination pairing with stream/primary-key/cursor/table mapping. |
 | **Catalog** | The set of streams a source exposes (`pm catalog refresh`). |
 | **Warehouse** | Local Parquet tables rebuilt from append-only JSONL write-ahead logs and queried by DuckDB. |
-| **Sync mode** | How a stream is materialized: `full_refresh_overwrite`, `incremental_append`, `incremental_dedupe_history`, `incremental_dedupe_latest_record`. |
+| **Sync mode** | A connection's materialization setting. See [ETL sync modes](cli/etl.md) for accepted names, capability requirements, and typed-compatibility admission. |
 
 ### Adding credentials without leaking secrets
 

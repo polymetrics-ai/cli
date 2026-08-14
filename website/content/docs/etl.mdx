@@ -61,9 +61,11 @@ pm connections create <name> \
 |---|---|---|
 | Full refresh overwrite | `full_refresh_overwrite` | Re-extracts all records and replaces the output table. Default if `--sync-mode` is omitted. |
 | Full refresh append | `full_refresh_append` | Re-extracts all records and appends them to the output table. |
-| Full refresh overwrite deduped | `full_refresh_overwrite_deduped` | Re-extracts and deduplicates by primary key before writing. |
+| Full refresh overwrite deduped | `full_refresh_overwrite_deduped` | Compatibility name for typed `full_overwrite` admission. Without an admitted matching transport, pm refuses before source I/O. |
 | Incremental append | `incremental_append` | Extracts only records newer than the stored cursor value and appends them. |
-| Incremental append deduped | `incremental_append_deduped` | Incremental extraction, deduplicates by primary key before writing. |
+| Incremental append deduped | `incremental_append_deduped` | Compatibility name for typed `incremental_dedupe` admission. Without an admitted matching transport, pm refuses before source I/O. |
+
+Incremental modes and deduped compatibility names require a cursor. Deduped modes also require a primary key. A static connector advertises the full deduped compatibility name only with both fields, and advertises incremental modes only with a declared incremental executor. The two deduped compatibility names remain accepted public inputs, but they are not ordinary local materialization modes.
 
 ## Running an extraction
 

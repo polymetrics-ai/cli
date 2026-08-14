@@ -9,6 +9,14 @@ description: Sample connector knowledge and safe action guide.
 
 Built-in deterministic source connector for local development and tests.
 
+## Icon
+
+- id: pm-sample
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
+
 ## Capabilities
 
 - check=true catalog=true read=true write=false query=false
@@ -74,4 +82,3 @@ pm etl run --connection sample_to_warehouse --stream customers --json
 - Run pm connectors inspect sample before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

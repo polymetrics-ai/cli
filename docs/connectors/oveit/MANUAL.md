@@ -44,7 +44,7 @@ ETL STREAMS
     fields: created_at(string), email(string), id(string), name(string), starts_at(string), status(string), total(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Oveit API read of event, order, and attendee data
