@@ -60,6 +60,9 @@ history.
 
 ## Agent Rules
 
+- Before starting any task, complete the task delivery header in
+  `.agents/agentic-delivery/contracts/task-delivery-header-template.md`; after opening its PR,
+  verify the API-reported base as the template requires.
 - Use `pm help <topic>` before invoking unfamiliar commands.
 - Prefer `--json` for machine-readable output.
 - Never request, print, summarize, or store secret values.

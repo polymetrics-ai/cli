@@ -10,12 +10,14 @@ Closes #
 
 ## Stacked PR
 
-<!-- Fill this when the PR targets a parent branch instead of main. Use Refs, not Closes, for
-sub-PRs into parent branches. Parent PRs into main remain human-gated. -->
+<!-- Record the parent details when the PR targets a parent branch instead of main. Use Refs, not
+Closes, for sub-PRs into parent branches. Parent PRs into main remain human-gated. `PR base branch`
+is required for every PR: it must exactly match the completed task delivery header and be verified
+after opening with `gh api /repos/<owner>/<repo>/pulls/<n> --jq .base.ref`. -->
 
 - Parent issue:
 - Parent branch:
-- PR base branch:
+- PR base branch: <!-- Required; exact ref verified from the API, not an implied branch name. -->
 - Sub-issue:
 
 ## Parent Orchestration
@@ -65,7 +67,7 @@ reason and evidence. Copilot review is not approval. -->
 
 - Primary route:
 - Fallback route:
-- PR base/default branch:
+- Default branch:
 - Latest reviewed commit:
 - Reviewed range:
 - Coverage route:
