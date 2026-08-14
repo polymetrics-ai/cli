@@ -40,7 +40,7 @@
     },
     "schema": {
       "type": "string",
-      "description": "PostgreSQL schema to discover tables from. Defaults to public."
+      "description": "PostgreSQL user/application schema to discover tables from. Defaults to public. pg_catalog, information_schema, pg_toast, pg_toast_*, and pg_temp_* are rejected before a live catalog connection is opened."
     },
     "cdc_publication": {
       "type": "string",
