@@ -395,7 +395,7 @@ Reads implemented Asana project-management streams and executes typed, approval-
   - --max-bytes (integer): Maximum bytes for future direct/binary operations; planned commands declare lower operation caps.
   - --plan (string): Execute an approved reverse-ETL plan by id.
   - --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-  - --approve (string): Approval token required to execute a reverse-ETL plan.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   - --confirm (string): Typed confirmation challenge for destructive/admin reverse-ETL writes.
 - Access requests
   - access-requests get-access-requests - Planned fixed-target Asana read: Get access requests. [intent=etl availability=planned operation=get_access_requests]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.

@@ -231,8 +231,8 @@ pm reverse plan prs_to_github \
 # 2. PREVIEW — see exactly what would be written (no mutation)
 pm reverse preview <plan-id> --json
 
-# 3. EXECUTE — nothing changes until you replay with the approval token
-pm reverse run <plan-id> --approve <approval-token> --json
+# 3. EXECUTE — enter the approval token as one stdin line; nothing changes until then
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 Approval tokens are **single-use and time-bounded**. A `run` without a valid token

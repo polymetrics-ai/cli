@@ -10,7 +10,7 @@ USAGE
   pm reverse plan <name> --source-table <table> [--connection name] --destination connector:credential --map source:dest [--json]
   pm reverse preview <plan-id> [--<withheld-flag> <value>...]
     [--from-env <env-only-flag>=ENV]... [--json]
-  pm reverse run <plan-id> --approve <token> [--confirm <challenge>]
+  pm reverse run <plan-id> --approval-token-stdin [--confirm <challenge>]
     [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
   pm reverse status <run-id> [--json]
 
@@ -105,9 +105,10 @@ COMMANDS
     The error names each missing flag.
 
   run
-    Execute a stored plan only when --approve is supplied with the approval
-    token from human-readable plan or preview output. Destructive plans require
-    a matching persisted preview and the closed --confirm destructive value. A
+    Execute a stored plan only when the bare --approval-token-stdin marker is
+    supplied and standard input contains the approval token as one bounded line
+    from human-readable plan or preview output. Destructive plans require a
+    matching persisted preview and the closed --confirm destructive value. A
     connector-command plan that withheld declared sensitive fields needs the
     same re-supply form: --from-env <flag>=ENV for an env_only field, or
     --<flag> <value> otherwise. A failed dispatch is recorded; pm does not
@@ -124,7 +125,8 @@ FLAGS
   --map source:dest            field mapping, repeatable
   --action action              destination write action; inspect shows names
   --limit n                    maximum source rows to include in the plan
-  --approve token              approval token required by run
+  --approval-token-stdin       read the approval token as one bounded line from
+                               standard input; the marker accepts no value
   --confirm challenge          typed confirmation required by gated plans
   --<withheld-flag> value      re-supply a non-env_only field the plan withheld;
                                the flag is connector-owned, never persisted
@@ -170,14 +172,16 @@ EXAMPLES
   pm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map email:email
   pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-local --action create_pull_request --map title:title --map head:head --map base:base --map reviewers:reviewers
   pm reverse preview rplan_abc123 --json
-  pm reverse run rplan_abc123 --approve <approval-token>
+  pm reverse run rplan_abc123 --approval-token-stdin
   pm reverse status rrun_abc123 --json
 
 SECURITY
-  Execution requires a time-bounded, single-use approval token. Destructive
-  tokens are created only after preview; execution revalidates the preview
-  digest before dispatch. JSON plan and preview output omit tokens so agents
-  cannot silently self-approve external writes. A connector-command plan never
+  Execution requires a time-bounded, single-use approval token on standard
+  input. Destructive tokens are created only after preview; execution revalidates
+  the preview digest before dispatch. JSON plan and preview output omit tokens
+  so agents cannot silently self-approve external writes. The stdin carrier is
+  one bounded line and the token is never accepted through command arguments,
+  environment, or project files. A connector-command plan never
   persists the fields its write action declares in redact_fields, or its
   direct_write operation declares in sensitive_policy.redact_fields; they are
   re-supplied per invocation and are not written back at preview or run. A

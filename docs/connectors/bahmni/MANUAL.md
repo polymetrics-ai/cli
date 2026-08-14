@@ -140,7 +140,7 @@ COMMAND SURFACE
     --max-bytes (integer): Maximum direct-read response bytes; typed operations declare their own lower cap.
     --plan (string): Execute an approved reverse-ETL plan by id.
     --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-    --approve (string): Approval token required to execute a reverse-ETL plan.
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
     --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
   Clinical data
     patients list - List Bahmni/OpenMRS patients as ETL records (requires a patient search term). [intent=etl availability=implemented stream=patients]

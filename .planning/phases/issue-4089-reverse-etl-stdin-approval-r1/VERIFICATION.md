@@ -9,12 +9,30 @@
 
 ## Before completion
 
-- [ ] Red test recorded before production edit.
-- [ ] Both command paths require a bare stdin marker and use the shared carrier.
-- [ ] Empty, oversized, malformed, retired-argv, and replay inputs reject before a write-side effect.
-- [ ] Six independent secret-surface checks pass: argv, environment, files, logs, receipts, and evidence.
-- [ ] Plan → preview → run and exact-once replay behavior remain proven.
-- [ ] Runtime help, CLI manual, generated skills, website source/data, and CLI transcript are updated.
-- [ ] Repository stale-syntax scan finds no retired argv approval examples in active source, docs, website, generated data, or tests.
-- [ ] Targeted package tests, vet, docs, connector boundary, and split local gates are green.
-- [ ] Inline `verify-work` and `code-review` records contain no unresolved finding.
+- [x] Red test recorded before production edit.
+- [x] Both command paths require a bare stdin marker and use the shared carrier.
+- [x] Empty, oversized, malformed, retired-argv, and replay inputs reject before a write-side effect.
+- [x] Six independent secret-surface checks pass: argv, environment, files, logs, receipts, and evidence.
+- [x] Plan → preview → run and exact-once replay behavior remain proven.
+- [x] Runtime help, CLI manual, generated skills, website source/data, and CLI transcript are updated.
+- [x] Repository stale-syntax scan finds no retired argv approval examples in active source, docs, website, generated data, or tests.
+- [x] Targeted package tests, vet, docs, connector boundary, and split local gates are green.
+- [x] Inline `verify-work` and `code-review` records contain no unresolved finding.
+
+## Commands and result
+
+```text
+PASS  go test -timeout 20m ./internal/cli -count=1
+PASS  go test -timeout 20m ./internal/app -count=1
+PASS  go test -timeout 20m ./internal/connectors/certify -count=1
+PASS  go test -timeout 20m ./internal/safety -count=1
+PASS  focused cmd/connectorgen coverage check
+PASS  go vet ./internal/cli ./internal/app ./internal/connectors/certify ./internal/safety ./cmd/connectorgen
+PASS  go build ./cmd/pm
+PASS  pm help reverse; pm reverse; pm reverse --help
+PASS  docs and website generators; website blog catalog test
+PASS  make tidy-check, docs-check, agent-contract-check, connectorgen-validate,
+      connectorgen-surface-sync, connector-boundary, release-workflow-check,
+      lint, smoke-no-build
+PASS  rg --pcre2 -- '--approve(?=\\s|=|$)' active source/docs/website (only intentional retired-flag regression assertions remain)
+```

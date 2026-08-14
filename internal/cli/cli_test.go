@@ -196,7 +196,7 @@ func TestDynamicConnectorInvalidFlagOnlyInvocationsAreUsageErrors(t *testing.T) 
 		{"gong", "--bogus"},
 		{"gong", "--plan", "rplan_fixture", "--preview"},
 		{"gong", "--plan="},
-		{"gong", "--approve="},
+		{"gong", "--approval-token-stdin=value"},
 		{"gong", "--confirm="},
 	} {
 		t.Run(strings.Join(args[1:], "_"), func(t *testing.T) {
@@ -238,7 +238,7 @@ func TestDynamicConnectorUnknownPathIsUsageError(t *testing.T) {
 }
 
 func TestDynamicConnectorEmptyLifecycleFlagsWithCommandAreUsageErrors(t *testing.T) {
-	for _, flag := range []string{"--plan=", "--approve=", "--confirm=", "--plan", "--approve", "--confirm"} {
+	for _, flag := range []string{"--plan=", "--confirm=", "--plan", "--confirm"} {
 		t.Run(flag, func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
 			code := cli.Run([]string{"github", "issue", "create", flag}, &stdout, &stderr)

@@ -165,7 +165,7 @@ pm reverse preview <plan-id> --json
 Run only after you intentionally pass the approval token:
 
 ```bash
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 The outbox connector writes a JSONL receipt under `.polymetrics/outbox/`.

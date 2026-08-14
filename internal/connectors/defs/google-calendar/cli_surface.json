@@ -26,7 +26,7 @@
     {"name": "max-bytes", "type": "integer", "summary": "Maximum direct-read response bytes.", "maps_to": "max_bytes"},
     {"name": "plan", "type": "string", "summary": "Execute an approved reverse-ETL plan by id."},
     {"name": "preview", "type": "boolean", "summary": "Preview a reverse-ETL write command without making a network mutation."},
-    {"name": "approve", "type": "string", "summary": "Approval token required to execute a reverse-ETL plan."},
+    {"name": "approval-token-stdin", "type": "boolean", "summary": "Read the approval token as one bounded line from standard input."},
     {"name": "confirm", "type": "string", "summary": "Typed confirmation challenge for destructive reverse-ETL writes."}
   ],
   "commands": [

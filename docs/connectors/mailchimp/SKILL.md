@@ -1029,7 +1029,7 @@ Reads Mailchimp Marketing API audiences, members, campaigns, reports, automation
   - --max-bytes (integer): Maximum direct-read response bytes; operations are capped by their metadata.
   - --plan (string): Execute an approved reverse-ETL plan by id.
   - --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-  - --approve (string): Approval token required to execute a reverse-ETL plan.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   - --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
 - ETL streams
   - lists list - Get lists info as ETL records. [intent=etl availability=implemented stream=lists]

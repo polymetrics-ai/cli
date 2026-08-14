@@ -40,7 +40,7 @@ func TestSampleOutboxWriteLifecycleAgainstRealCLI(t *testing.T) {
 		}
 	}
 
-	create := mustHarnessKind(t, h, "ReverseRun", "reverse", "run", createPlan, "--approve", createApproval, "--json")
+	create := mustHarnessKindWithStdin(t, h, createApproval+"\n", "ReverseRun", "reverse", "run", createPlan, "--approval-token-stdin", "--json")
 	if run, _ := create.Envelope["run"].(map[string]any); run == nil || run["records_succeeded"] != float64(1) {
 		t.Fatalf("create run = %+v, want one successful record", run)
 	}
@@ -49,12 +49,12 @@ func TestSampleOutboxWriteLifecycleAgainstRealCLI(t *testing.T) {
 	}
 
 	cleanupPlan, cleanupApproval := planOutboxLifecycle(t, h, "delete")
-	mustHarnessKind(t, h, "ReverseRun", "reverse", "run", cleanupPlan, "--approve", cleanupApproval, "--json")
+	mustHarnessKindWithStdin(t, h, cleanupApproval+"\n", "ReverseRun", "reverse", "run", cleanupPlan, "--approval-token-stdin", "--json")
 	if got := outboxActionForTag(t, root, tag); got != "delete" {
 		t.Fatalf("outbox action after cleanup = %q, want delete", got)
 	}
 
-	replay := h.Run("reverse", "run", createPlan, "--approve", createApproval, "--json")
+	replay := h.RunWithStdin(createApproval+"\n", "reverse", "run", createPlan, "--approval-token-stdin", "--json")
 	if replay.ExitCode == 0 || replay.Kind != "Error" {
 		t.Fatalf("replayed approval = exit %d kind %q, want rejected Error", replay.ExitCode, replay.Kind)
 	}
@@ -63,6 +63,15 @@ func TestSampleOutboxWriteLifecycleAgainstRealCLI(t *testing.T) {
 func mustHarnessKind(t *testing.T, h *certify.Harness, kind string, args ...string) certify.CLIResult {
 	t.Helper()
 	res := h.Run(args...)
+	if err := h.MustKind(res, kind, 0); err != nil {
+		t.Fatalf("%s: stdout=%s stderr=%s", err, res.Stdout, res.Stderr)
+	}
+	return res
+}
+
+func mustHarnessKindWithStdin(t *testing.T, h *certify.Harness, stdin, kind string, args ...string) certify.CLIResult {
+	t.Helper()
+	res := h.RunWithStdin(stdin, args...)
 	if err := h.MustKind(res, kind, 0); err != nil {
 		t.Fatalf("%s: stdout=%s stderr=%s", err, res.Stdout, res.Stderr)
 	}

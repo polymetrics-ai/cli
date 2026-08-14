@@ -4,10 +4,14 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/url"
+	"os"
 	"strings"
+	"sync"
+	"syscall"
 )
 
 // cliRunFunc matches internal/cli.Run's signature. certify cannot import
@@ -22,6 +26,12 @@ import (
 type cliRunFunc func(args []string, stdout, stderr io.Writer) int
 
 var cliRun cliRunFunc
+
+// certificationStdinMu protects the process-global os.Stdin while a harness
+// drives the real CLI in-process. Certification stages are sequential, but
+// this also makes a concurrent caller wait rather than receiving another
+// stage's approval input.
+var certificationStdinMu sync.Mutex
 
 // SetCLIRunFunc registers the real internal/cli.Run entrypoint (or a test
 // double) as this package's in-process CLI driver. Production callers
@@ -87,6 +97,43 @@ type CLIResult struct {
 // never called — this is a wiring bug, not a runtime condition callers
 // should handle.
 func (h *Harness) Run(args ...string) CLIResult {
+	return h.run(args...)
+}
+
+// RunWithStdin drives the registered CLI with input available only through
+// standard input. It deliberately keeps stdin out of args, captured command
+// lines, and CLIResult. The real CLI remains responsible for interpreting and
+// bounding the input; this harness only provides the operating-system channel.
+func (h *Harness) RunWithStdin(stdin string, args ...string) CLIResult {
+	certificationStdinMu.Lock()
+	defer certificationStdinMu.Unlock()
+
+	reader, writer, err := os.Pipe()
+	if err != nil {
+		panic(fmt.Sprintf("certify: create stdin pipe: %v", err))
+	}
+	previousStdin := os.Stdin
+	os.Stdin = reader
+	writeDone := make(chan error, 1)
+	go func() {
+		_, writeErr := io.WriteString(writer, stdin)
+		if closeErr := writer.Close(); writeErr == nil {
+			writeErr = closeErr
+		}
+		writeDone <- writeErr
+	}()
+	defer func() {
+		os.Stdin = previousStdin
+		_ = reader.Close()
+		if writeErr := <-writeDone; writeErr != nil && !errors.Is(writeErr, syscall.EPIPE) {
+			panic(fmt.Sprintf("certify: write stdin pipe: %v", writeErr))
+		}
+	}()
+
+	return h.run(args...)
+}
+
+func (h *Harness) run(args ...string) CLIResult {
 	if cliRun == nil {
 		panic("certify: cliRun is nil — call certify.SetCLIRunFunc(cli.Run) before driving the harness (see cmd/pm/main.go)")
 	}

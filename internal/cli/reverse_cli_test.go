@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -71,12 +72,12 @@ func TestReverseETLCLIWorkflowIsScriptableAndApprovalBounded(t *testing.T) {
 	if code == 0 {
 		t.Fatalf("reverse run without approval unexpectedly succeeded: stdout=%s", deniedStdout.String())
 	}
-	if !strings.Contains(deniedStderr.String(), "approval token is invalid") {
+	if !strings.Contains(deniedStderr.String(), "requires --approval-token-stdin") {
 		t.Fatalf("missing approval error: stderr=%s stdout=%s", deniedStderr.String(), deniedStdout.String())
 	}
 
 	var runStdout, runStderr bytes.Buffer
-	code = cli.Run([]string{"reverse", "run", planID, "--approve", token, "--root", root, "--json"}, &runStdout, &runStderr)
+	code = runCLIWithApprovalStdin(t, []string{"reverse", "run", planID, "--approval-token-stdin", "--root", root, "--json"}, token+"\n", &runStdout, &runStderr)
 	if code != 0 {
 		t.Fatalf("reverse run code = %d stderr = %s stdout = %s", code, runStderr.String(), runStdout.String())
 	}
@@ -192,7 +193,7 @@ func TestReverseETLToGitHubCreatesPullRequestAfterApproval(t *testing.T) {
 	token := extractReverseField(t, planStdout.String(), `Approval token: (\S+)`)
 
 	var runStdout, runStderr bytes.Buffer
-	code = cli.Run([]string{"reverse", "run", planID, "--approve", token, "--root", root, "--json"}, &runStdout, &runStderr)
+	code = runCLIWithApprovalStdin(t, []string{"reverse", "run", planID, "--approval-token-stdin", "--root", root, "--json"}, token+"\n", &runStdout, &runStderr)
 	if code != 0 {
 		t.Fatalf("reverse run code = %d stderr = %s stdout = %s", code, runStderr.String(), runStdout.String())
 	}
@@ -322,13 +323,13 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 	}
 
 	var deniedStdout, deniedStderr bytes.Buffer
-	code = cli.Run([]string{
+	code = runCLIWithApprovalStdin(t, []string{
 		"github", "issue", "close",
 		"--plan", planID,
-		"--approve", "wrong-token",
+		"--approval-token-stdin",
 		"--root", root,
 		"--json",
-	}, &deniedStdout, &deniedStderr)
+	}, "wrong-token\n", &deniedStdout, &deniedStderr)
 	if code == 0 || !strings.Contains(deniedStderr.String(), "approval token is invalid") {
 		t.Fatalf("bad approval result code=%d stdout=%s stderr=%s", code, deniedStdout.String(), deniedStderr.String())
 	}
@@ -359,13 +360,13 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 	normalPlanID := extractReverseField(t, normalPlanStdout.String(), `Created reverse plan (\S+)`)
 	normalToken := extractReverseField(t, normalPlanStdout.String(), `Approval token: (\S+)`)
 	var normalRunStdout, normalRunStderr bytes.Buffer
-	code = cli.Run([]string{
+	code = runCLIWithApprovalStdin(t, []string{
 		"github", "issue", "close",
 		"--plan", normalPlanID,
-		"--approve", normalToken,
+		"--approval-token-stdin",
 		"--root", root,
 		"--json",
-	}, &normalRunStdout, &normalRunStderr)
+	}, normalToken+"\n", &normalRunStdout, &normalRunStderr)
 	if code == 0 || !strings.Contains(normalRunStdout.String()+normalRunStderr.String(), "not a connector command plan") {
 		t.Fatalf("normal plan via provider command result code=%d stdout=%s stderr=%s", code, normalRunStdout.String(), normalRunStderr.String())
 	}
@@ -375,13 +376,13 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 	}
 
 	var runStdout, runStderr bytes.Buffer
-	code = cli.Run([]string{
+	code = runCLIWithApprovalStdin(t, []string{
 		"github", "issue", "close",
 		"--plan", planID,
-		"--approve", token,
+		"--approval-token-stdin",
 		"--root", root,
 		"--json",
-	}, &runStdout, &runStderr)
+	}, token+"\n", &runStdout, &runStderr)
 	if code != 0 {
 		t.Fatalf("github issue close run code = %d stderr = %s stdout = %s", code, runStderr.String(), runStdout.String())
 	}
@@ -455,13 +456,13 @@ func TestGitHubDestructiveCommandRequiresTypedConfirmation(t *testing.T) {
 	}
 
 	var deniedStdout, deniedStderr bytes.Buffer
-	code = cli.Run([]string{
+	code = runCLIWithApprovalStdin(t, []string{
 		"github", "repo", "deploy-key", "delete",
 		"--plan", planID,
-		"--approve", token,
+		"--approval-token-stdin",
 		"--root", root,
 		"--json",
-	}, &deniedStdout, &deniedStderr)
+	}, token+"\n", &deniedStdout, &deniedStderr)
 	if code == 0 || !strings.Contains(strings.ToLower(deniedStdout.String()+deniedStderr.String()), "confirmation") {
 		t.Fatalf("missing confirmation result code=%d stdout=%s stderr=%s", code, deniedStdout.String(), deniedStderr.String())
 	}
@@ -470,14 +471,14 @@ func TestGitHubDestructiveCommandRequiresTypedConfirmation(t *testing.T) {
 	}
 
 	var runStdout, runStderr bytes.Buffer
-	code = cli.Run([]string{
+	code = runCLIWithApprovalStdin(t, []string{
 		"github", "repo", "deploy-key", "delete",
 		"--plan", planID,
-		"--approve", token,
+		"--approval-token-stdin",
 		"--confirm", "destructive",
 		"--root", root,
 		"--json",
-	}, &runStdout, &runStderr)
+	}, token+"\n", &runStdout, &runStderr)
 	if code != 0 {
 		t.Fatalf("confirmed destructive run code=%d stdout=%s stderr=%s", code, runStdout.String(), runStderr.String())
 	}
@@ -605,6 +606,28 @@ func runCLIForReverseTest(t *testing.T, args []string) {
 	if code != 0 {
 		t.Fatalf("command %v code = %d stderr = %s stdout = %s", args, code, stderr.String(), stdout.String())
 	}
+}
+
+func runCLIWithApprovalStdin(t *testing.T, args []string, stdin string, stdout, stderr *bytes.Buffer) int {
+	t.Helper()
+	reader, writer, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("create reverse approval stdin pipe: %v", err)
+	}
+	original := os.Stdin
+	os.Stdin = reader
+	defer func() {
+		os.Stdin = original
+		_ = reader.Close()
+	}()
+	if _, err := io.WriteString(writer, stdin); err != nil {
+		_ = writer.Close()
+		t.Fatalf("write reverse approval stdin: %v", err)
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatalf("close reverse approval stdin: %v", err)
+	}
+	return cli.Run(args, stdout, stderr)
 }
 
 func extractReverseField(t *testing.T, text, pattern string) string {

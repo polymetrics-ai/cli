@@ -7,7 +7,7 @@
   "global_flags": [
     { "name": "credential", "type": "string", "summary": "Credential name to use." },
     { "name": "preview", "type": "boolean", "summary": "Preview a write without executing it." },
-    { "name": "approve", "type": "string", "summary": "Single-use approval token." },
+    { "name": "approval-token-stdin", "type": "boolean", "summary": "Read the approval token as one bounded line from standard input." },
     { "name": "confirm", "type": "string", "summary": "Typed destructive confirmation." }
   ],
   "commands": [

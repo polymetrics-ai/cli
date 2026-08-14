@@ -23,7 +23,7 @@ ETL writes:
 ```bash
 pm reverse plan <name> --source-table <table> --destination github:<credential> --action <action> --map <source>:<target>
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 For withheld sensitive fields, including `env_only` values that must be supplied

@@ -176,7 +176,7 @@ func sweepCleanOutboxRecord(h *Harness, status LedgerStatus) (bool, string) {
 	if planID == "" || token == "" {
 		return false, "sweep: could not parse plan id/approval token"
 	}
-	runRes := h.Run("reverse", "run", planID, "--approve", token, "--json")
+	runRes := h.RunWithStdin(token+"\n", "reverse", "run", planID, "--approval-token-stdin", "--json")
 	if runRes.ExitCode != 0 || runRes.Kind != "ReverseRun" {
 		return false, fmt.Sprintf("sweep cleanup run: exit=%d kind=%q", runRes.ExitCode, runRes.Kind)
 	}
@@ -232,7 +232,7 @@ func sweepCleanViaPairing(h *Harness, status LedgerStatus, pairing WritePairing)
 	if planID == "" || token == "" {
 		return false, "sweep: could not parse plan id/approval token"
 	}
-	runRes := h.Run("reverse", "run", planID, "--approve", token, "--json")
+	runRes := h.RunWithStdin(token+"\n", "reverse", "run", planID, "--approval-token-stdin", "--json")
 	if runRes.ExitCode != 0 || runRes.Kind != "ReverseRun" {
 		return false, fmt.Sprintf("sweep cleanup run: exit=%d kind=%q", runRes.ExitCode, runRes.Kind)
 	}

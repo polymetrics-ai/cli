@@ -69,10 +69,20 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	if got, want := len(ops.Operations), 17; got != want {
 		t.Fatalf("operations = %d, want %d", got, want)
 	}
+	approvalStdinDeclared := false
 	for _, flag := range cli.GlobalFlags {
-		if flag.Name == "approve" && flag.Type != "string" {
-			t.Fatalf("global --approve type = %q, want string approval token", flag.Type)
+		if flag.Name == "approve" {
+			t.Fatal("retired global --approve flag is still declared")
 		}
+		if flag.Name == "approval-token-stdin" {
+			approvalStdinDeclared = true
+			if flag.Type != "boolean" {
+				t.Fatalf("global --approval-token-stdin type = %q, want boolean marker", flag.Type)
+			}
+		}
+	}
+	if !approvalStdinDeclared {
+		t.Fatal("global --approval-token-stdin marker is not declared")
 	}
 
 	coverage := map[string]int{}

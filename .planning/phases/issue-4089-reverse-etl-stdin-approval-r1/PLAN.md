@@ -46,7 +46,7 @@ Green: update existing CLI tests to use bounded stdin while retaining their appr
 
 ### Slice 3 — parity and refactor
 
-Green: update `internal/cli/docs.go`, regenerated `docs/cli/**`, generated skills, website source, generated website data, and transcript fixtures so the visible syntax requires the stdin marker and pipe form.
+Green: update `internal/cli/docs.go`, regenerated `docs/cli/**`, generated skills, website source, generated website data, and transcript fixtures so the visible syntax requires the stdin marker and one bounded standard-input line.
 
 Refactor: format the small helper, remove only now-dead argv validation, and run a repository-wide stale-syntax scan plus targeted security review.
 

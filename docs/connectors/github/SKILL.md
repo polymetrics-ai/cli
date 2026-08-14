@@ -4200,7 +4200,7 @@ pm etl run --connection github_prs_to_warehouse --stream pull_requests --batch-s
 ```bash
 pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-token --action create_pull_request --map title:title --map body:body --map head:head --map base:base --map reviewers:reviewers
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 ## Agent Rules

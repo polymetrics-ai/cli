@@ -386,15 +386,21 @@ func readApprovalTokenFromStdin(stdin io.Reader) (string, error) {
 	if err != nil {
 		return "", validationErrorf("read approval token from stdin: %v", err)
 	}
-	if len(contents) == 0 || len(contents) > maxApprovalTokenStdinBytes+2 {
+	if len(contents) == 0 {
 		return "", validationErrorf("approval token stdin must contain one bounded line")
+	}
+	if len(contents) > maxApprovalTokenStdinBytes+2 {
+		return "", validationErrorf("approval token stdin is too large")
 	}
 	line, rest, found := strings.Cut(string(contents), "\n")
 	if !found || rest != "" {
 		return "", validationErrorf("approval token stdin must contain exactly one line")
 	}
 	line = strings.TrimSuffix(line, "\r")
-	if len(line) > maxApprovalTokenStdinBytes || strings.TrimSpace(line) == "" || strings.ContainsAny(line, "\r\n") {
+	if len(line) > maxApprovalTokenStdinBytes {
+		return "", validationErrorf("approval token stdin is too large")
+	}
+	if strings.TrimSpace(line) == "" || strings.ContainsAny(line, "\r\n") {
 		return "", validationErrorf("approval token stdin must contain a non-empty token line")
 	}
 	return line, nil

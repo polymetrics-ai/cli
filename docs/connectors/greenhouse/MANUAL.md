@@ -450,7 +450,7 @@ COMMAND SURFACE
     --limit (integer): Maximum ETL records to emit.
     --max-bytes (integer): Maximum bounded direct-read response bytes.
     --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-    --approve (string): Approval token required to execute a reverse-ETL plan.
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
     --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
   ETL streams
     candidates list - Read Greenhouse List Candidates as ETL records. [intent=etl availability=implemented stream=candidates]

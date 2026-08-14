@@ -127,7 +127,7 @@ DuckDB is embedded in every binary and reads the Parquet tables in-process, so j
 ```bash
 pm reverse plan customers_to_outbox --source-table customers --destination outbox:outbox-local --map id:external_id --json
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json
+pm reverse run <plan-id> --approval-token-stdin --json
 pm reverse status <run-id> --json
 ```
 
