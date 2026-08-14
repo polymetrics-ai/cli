@@ -1,0 +1,12 @@
+{
+  "issue": 3982,
+  "phase": "issue-3982-postgres-write-driver-r1",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-3982-postgres-write-driver-r1",
+  "gsd_mode": "inline-manual-fallback-no-delegation",
+  "state": "planned",
+  "dependencies_confirmed": [
+    "internal/connectors/database/database_write_session.go",
+    "internal/connectors/database/managed_target_delivery_ledger.go"
+  ]
+}
