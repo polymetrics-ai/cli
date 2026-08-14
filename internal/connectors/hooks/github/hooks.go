@@ -222,6 +222,36 @@ var metaFields = []string{"labels", "assignees", "milestone"}
 var reviewerFields = []string{"reviewers", "team_reviewers"}
 var pullCoreFields = []string{"title", "body", "state", "base", "maintainer_can_modify"}
 
+// Every path below is an existing GitHub bundle declaration: action paths for
+// the primary write and api_surface paths for a hook-only follow-up. Keeping
+// the declarations here makes a hook request use the same rate-limit
+// resolution boundary as a declarative request without exposing a generic
+// request escape hatch.
+const (
+	githubIssueDeclaredPath              = "/repos/{owner}/{repo}/issues/{issue_number}"
+	githubIssueCommentDeclaredPath       = "/repos/{owner}/{repo}/issues/{issue_number}/comments"
+	githubLabelDeclaredPath              = "/repos/{owner}/{repo}/labels"
+	githubLabelByNameDeclaredPath        = "/repos/{owner}/{repo}/labels/{name}"
+	githubPullDeclaredPath               = "/repos/{owner}/{repo}/pulls"
+	githubPullByNumberDeclaredPath       = "/repos/{owner}/{repo}/pulls/{pull_number}"
+	githubRequestedReviewersDeclaredPath = "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+)
+
+// githubWriteRequester acquires one declaration-aware requester for exactly
+// one physical GitHub WriteHook send. A compound action intentionally calls it
+// again for every follow-up so each request gets an independent rate-limit
+// admission and completion observation lifecycle.
+func githubWriteRequester(rt *engine.Runtime, method, declaredPath string) (*connsdk.Requester, error) {
+	if rt == nil {
+		return nil, errors.New("github write hook runtime is unavailable")
+	}
+	requester, err := rt.RequesterFor(method, declaredPath)
+	if err != nil {
+		return nil, fmt.Errorf("github write hook resolve %s %s: %w", method, declaredPath, err)
+	}
+	return requester, nil
+}
+
 // ExecuteWrite: 4 compound actions + label color normalization; anything
 // else returns handled=false (declarative fallback).
 func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, error) {
@@ -299,7 +329,11 @@ func createLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record)
 	if v := optionalString(rec, "description"); v != "" {
 		payload["description"] = v
 	}
-	_, err := rt.Requester.Do(ctx, http.MethodPost, repoPath(rt)+"/labels", nil, payload)
+	requester, err := githubWriteRequester(rt, http.MethodPost, githubLabelDeclaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPost, repoPath(rt)+"/labels", nil, payload)
 	return err
 }
 
@@ -318,7 +352,11 @@ func updateLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record)
 		}
 	}
 	path := fmt.Sprintf("%s/labels/%s", repoPath(rt), url.PathEscape(name))
-	_, err := rt.Requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	requester, err := githubWriteRequester(rt, http.MethodPatch, githubLabelByNameDeclaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPatch, path, nil, payload)
 	return err
 }
 
@@ -345,7 +383,15 @@ func closeResource(ctx context.Context, rt *engine.Runtime, resource, numberFiel
 		}
 	}
 	path := fmt.Sprintf("%s/%s/%d", repoPath(rt), resource, number)
-	_, err = rt.Requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	declaredPath, err := githubResourceDeclaredPath(resource)
+	if err != nil {
+		return err
+	}
+	requester, err := githubWriteRequester(rt, http.MethodPatch, declaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPatch, path, nil, payload)
 	return err
 }
 
@@ -360,8 +406,27 @@ func reopenResource(ctx context.Context, rt *engine.Runtime, resource, numberFie
 	}
 	payload := map[string]any{"state": "open"}
 	path := fmt.Sprintf("%s/%s/%d", repoPath(rt), resource, number)
-	_, err = rt.Requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	declaredPath, err := githubResourceDeclaredPath(resource)
+	if err != nil {
+		return err
+	}
+	requester, err := githubWriteRequester(rt, http.MethodPatch, declaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPatch, path, nil, payload)
 	return err
+}
+
+func githubResourceDeclaredPath(resource string) (string, error) {
+	switch resource {
+	case "issues":
+		return githubIssueDeclaredPath, nil
+	case "pulls":
+		return githubPullByNumberDeclaredPath, nil
+	default:
+		return "", fmt.Errorf("github write hook has no declared route for resource %q", resource)
+	}
 }
 
 func createPullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
@@ -372,7 +437,11 @@ func createPullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.R
 			payload[k] = v
 		}
 	}
-	resp, err := rt.Requester.Do(ctx, http.MethodPost, repoPath(rt)+"/pulls", nil, payload)
+	requester, err := githubWriteRequester(rt, http.MethodPost, githubPullDeclaredPath)
+	if err != nil {
+		return err
+	}
+	resp, err := requester.Do(ctx, http.MethodPost, repoPath(rt)+"/pulls", nil, payload)
 	if err != nil {
 		return err
 	}
@@ -392,7 +461,11 @@ func updatePullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.R
 	}
 	if core := selectFields(rec, pullCoreFields); len(core) > 0 {
 		path := fmt.Sprintf("%s/pulls/%d", repoPath(rt), number)
-		if _, err := rt.Requester.Do(ctx, http.MethodPatch, path, nil, core); err != nil {
+		requester, err := githubWriteRequester(rt, http.MethodPatch, githubPullByNumberDeclaredPath)
+		if err != nil {
+			return err
+		}
+		if _, err := requester.Do(ctx, http.MethodPatch, path, nil, core); err != nil {
 			return err
 		}
 	}
@@ -404,7 +477,11 @@ func updatePullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.R
 func pullRequestFollowups(ctx context.Context, rt *engine.Runtime, number int, rec connectors.Record) error {
 	if meta := selectFields(rec, metaFields); len(meta) > 0 {
 		path := fmt.Sprintf("%s/issues/%d", repoPath(rt), number)
-		if _, err := rt.Requester.Do(ctx, http.MethodPatch, path, nil, meta); err != nil {
+		requester, err := githubWriteRequester(rt, http.MethodPatch, githubIssueDeclaredPath)
+		if err != nil {
+			return err
+		}
+		if _, err := requester.Do(ctx, http.MethodPatch, path, nil, meta); err != nil {
 			return err
 		}
 	}
@@ -413,13 +490,24 @@ func pullRequestFollowups(ctx context.Context, rt *engine.Runtime, number int, r
 		return nil
 	}
 	path := fmt.Sprintf("%s/pulls/%d/requested_reviewers", repoPath(rt), number)
-	_, err := rt.Requester.Do(ctx, http.MethodPost, path, nil, reviewers)
+	requester, err := githubWriteRequester(rt, http.MethodPost, githubRequestedReviewersDeclaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPost, path, nil, reviewers)
 	return err
 }
 
 func postComment(ctx context.Context, rt *engine.Runtime, resource string, number int, body string) error {
+	if resource != "issues" {
+		return fmt.Errorf("github write hook has no declared comment route for resource %q", resource)
+	}
 	path := fmt.Sprintf("%s/%s/%d/comments", repoPath(rt), resource, number)
-	_, err := rt.Requester.Do(ctx, http.MethodPost, path, nil, map[string]any{"body": body})
+	requester, err := githubWriteRequester(rt, http.MethodPost, githubIssueCommentDeclaredPath)
+	if err != nil {
+		return err
+	}
+	_, err = requester.Do(ctx, http.MethodPost, path, nil, map[string]any{"body": body})
 	return err
 }
 

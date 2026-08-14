@@ -72,6 +72,73 @@ this connector-neutral foundation intentionally leaves provider policy declarati
 
 Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-safety`, `golang-security`, `golang-context`, `golang-concurrency`, and `golang-testing`.
 
+## Correction 5/5 — #4049 path-aware GitHub WriteHook admission
+
+Manual-GSD fallback: the issue's named phase 601 is not present in this checkout's numerical roadmap. The canonical generated prompts were resolved and executed inline; this existing #3754 ledger records the TDD evidence because it owns the rate-limit coordination contract.
+
+| ID | Requirement | RED evidence to retain | GREEN evidence | Status |
+| --- | --- | --- | --- | --- |
+| C5-R1 | A direct default requester cannot send when a config-matching endpoint-sensitive policy needs a declared route. | The direct default requester POSTs once to the local transport despite no declaration resolution. | It returns a declaration-required refusal and the local transport count is zero. | Green |
+| C5-R2 | GitHub `create_label` and every compound physical follow-up use their declaration-aware requester. | After C5-R1's engine guard, the unmodified hook's direct `rt.Requester.Do` refuses before `create_label` or the first PR request reaches the local capture server. | A table test covers all fourteen physical sends across label, issue/pull state, comments, PR core, metadata, and reviewers; each action has its expected positive local capture count. | Green |
+| C5-R3 | GitHub `create_label` with `require_shared` and no coordinator refuses before transport. | The old direct requester behavior is covered by C5-R1; its policy-aware direct route can otherwise reach the transport without a declaration lease. | `errors.As` reaches the repository's current typed `*coordination.SharedRateLimitUnavailableError` with `coordinator_not_configured`; local transport sends are exactly zero. | Green |
+| C5-R4 | A direct default requester cannot partially admit a mixed default/endpoint policy set. | A default-policy admission could run before a path-sensitive refusal, consuming rate-budget state even though the send is rejected. | The injected clock records no wait/mutation and local transport sends remain zero before a declared ordinary request sends exactly once. | Green |
+
+### RED command — 2026-08-15
+
+```text
+$ go test -count=1 -run 'Test(DefaultRequesterRefusesEndpointPolicyWithoutDeclaredRoute|GitHubWriteHook(CreateLabelUsesDeclaredRouteRequester|FollowupsUseDistinctDeclaredRouteRequesters|CreateLabelRequireSharedRefusesBeforeTransport))' ./internal/connectors/engine ./internal/connectors/hooks/github
+--- FAIL: TestDefaultRequesterRefusesEndpointPolicyWithoutDeclaredRoute (0.00s)
+    rate_limit_coordination_test.go:150: default endpoint-policy requester sent without a declared route
+FAIL    polymetrics.ai/internal/connectors/engine
+ok      polymetrics.ai/internal/connectors/hooks/github
+FAIL
+```
+
+The failure is observable: the test transport received one POST. The hook tests remain green only until the engine guard lands; they then prove that every GitHub hook send must acquire `Runtime.RequesterFor` with its declared route rather than reusing `rt.Requester`.
+
+### C5-R2/C5-R3 RED command — 2026-08-15
+
+```text
+$ go test -count=1 -run 'Test(DefaultRequesterRefusesEndpointPolicyWithoutDeclaredRoute|GitHubWriteHook(CreateLabelUsesDeclaredRouteRequester|FollowupsUseDistinctDeclaredRouteRequesters|CreateLabelRequireSharedRefusesBeforeTransport))' ./internal/connectors/engine ./internal/connectors/hooks/github
+ok      polymetrics.ai/internal/connectors/engine
+--- FAIL: TestGitHubWriteHookCreateLabelUsesDeclaredRouteRequester
+    ExecuteWrite: rate-limit admission: rate-limit policy "authenticated-user" requires a declared method and path
+--- FAIL: TestGitHubWriteHookFollowupsUseDistinctDeclaredRouteRequesters
+    ExecuteWrite: rate-limit admission: rate-limit policy "authenticated-user" requires a declared method and path
+--- FAIL: TestGitHubWriteHookCreateLabelRequireSharedRefusesBeforeTransport
+    create_label require_shared error = *connsdk.rateLimitAdmissionError rate-limit admission: rate-limit policy "authenticated-user" requires a declared method and path, want typed shared coordinator refusal
+FAIL    polymetrics.ai/internal/connectors/hooks/github
+FAIL
+```
+
+The guarded default requester made the old direct-hook implementation fail before any capture-server mutation. The next GREEN slice must replace all nine physical GitHub WriteHook REST sends with an individual `Runtime.RequesterFor` call using its existing bundle declaration.
+
+### GREEN command — 2026-08-15
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine/... ./internal/connectors/hooks/github/...
+ok  \tpolymetrics.ai/internal/connectors/engine
+ok  \tpolymetrics.ai/internal/connectors/hooks/github
+
+$ go test -count=1 -timeout 20m ./internal/coordination/...
+ok  \tpolymetrics.ai/internal/coordination
+ok  \tpolymetrics.ai/internal/coordination/issueguard
+
+$ go test -race -count=1 -timeout 20m ./internal/coordination
+ok  \tpolymetrics.ai/internal/coordination
+```
+
+`TestDefaultRequesterRefusesEndpointPolicyWithoutDeclaredRoute` proves a raw
+default requester cannot reach the local transport. Its mixed-policy companion
+also proves the raw request leaves no injected-clock wait before a declared
+ordinary request sends exactly once. `TestGitHubWriteHookCreateLabelRequireSharedRefusesBeforeTransport`
+proves the actual `create_label` hook returns the typed no-coordinator refusal
+with exactly zero local transport sends. The all-sends route table covers the
+fourteen physical label, state, comment, PR core, issue-metadata, and reviewer
+sends. Existing escaped-path, redirect, cancellation, late-
+observation, cleanup, helper, and process-local controls remain in the scoped
+engine and coordination suites.
+
 ### RED command — 2026-08-14
 
 ```text

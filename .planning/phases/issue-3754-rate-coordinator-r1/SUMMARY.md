@@ -60,3 +60,14 @@ which owns provider-specific rate-limit declarations.
 In progress on `fm/cli-4035-late-observation-uds-r1`. This child owns only the late-observation retention and UDS cancellation defects. It does not alter the #3754 optional Dragonfly registry, provider declarations, CLI/docs, #3865 fencing, or #3867 parking/resumption.
 
 GREEN: the run-local reservation coordinator now marks expired leases inactive without deleting their opaque budget mappings, so concurrency is released while a valid later `Finish` can still tighten admission. Its UDS client binds blocked I/O to the caller context and rejects a valid response that arrives after cancellation. Deterministic lease, stalled-I/O, post-cancellation response, race, owner-cleanup, and eight-process tiny-budget evidence passed; no CLI/docs parity work applies because no public command surface changed.
+
+## Correction 5/5 status — #4049
+
+Implemented a fail-closed default-requester guard for config-matching
+endpoint-sensitive rate-limit policies and routed all GitHub WriteHook REST
+sends through `Runtime.RequesterFor` using existing bundle declaration paths.
+Each compound send obtains its own declaration-aware requester. Deterministic
+local tests prove a raw requester and an unavailable shared coordinator both
+make zero transport sends, while label, PR follow-up, and comment/final-state
+flows retain their expected positive request counts. GitHub policy declarations,
+including the `POST /graphql` exclusion, are unchanged.

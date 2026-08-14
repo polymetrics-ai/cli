@@ -62,3 +62,13 @@ performed inline without spawning incompatible roles.
 - [ ] Required `-race` package checks pass; no-mistakes delivery is deferred until firstmate dispatches it with `--skip rebase,pr`.
 
 Evidence: `TestRateBudgetLeaseTTLFreesConcurrencyWithoutDroppingLateObservation` asserts the live admission transition from grant → post-expiry grant → one-minute refusal after the late observation. `TestUnixRateBudgetCoordinatorClientCancellationInterruptsStalledExchange` asserts the cancelled caller returns promptly; `TestUnixRateBudgetCoordinatorClientCancellationWinsResponseRace` asserts a valid ready response released after cancellation is not returned as a grant. `TestUnixRateBudgetCoordinatorMultiProcessTinyBudget` starts one actual UDS owner and eight test subprocesses, observes exactly three grants and five refusals, then asserts its 0700 run directory and 0600 socket are removed on close.
+
+## Correction 5/5 — #4049 (passed local verification)
+
+- [x] A default requester with a config-matching endpoint-sensitive policy fails before a local transport send; a mixed policy fixture also records no rate-budget mutation before the refusal.
+- [x] A table test proves all fourteen GitHub WriteHook REST sends call `Runtime.RequesterFor` with an existing declaration, including label, comment/final-state, and PR metadata/reviewer follow-ups.
+- [x] The real `create_label` hook under `require_shared` with no coordinator returns an `errors.As`-visible `*coordination.SharedRateLimitUnavailableError` with `coordinator_not_configured` and makes exactly zero local transport sends.
+- [x] GitHub `rate_limits.json` is unchanged; `POST /graphql` remains an untouched declaration exclusion.
+- [x] Focused engine/GitHub-hook tests, full coordination package matrix, coordination race test, scoped vet/build/format/diff checks, and all individual non-monolithic repository gates passed.
+
+Evidence: `go test -count=1 -timeout 20m ./internal/connectors/engine/... ./internal/connectors/hooks/github/...` passed. `go test -count=1 -timeout 20m ./internal/coordination/...` and `go test -race -count=1 -timeout 20m ./internal/coordination` passed. `go vet ./internal/connectors/engine/... ./internal/connectors/hooks/github/... ./internal/coordination/...`, `go build ./cmd/pm`, and `git diff --check` passed. No provider endpoint, credential, or external coordinator was used.

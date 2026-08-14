@@ -84,6 +84,37 @@ Runtime planning also used `.agents/agentic-delivery/references/runtime-rlm-webs
   transport boundary.
 - No #3865 fence behavior, #3867 parking/resumption, or #3990 GitHub budget declaration.
 
+## Correction 5/5 — #4049 path-aware GitHub WriteHook admission
+
+### Task Delivery Header
+
+- Issue: Closes #4049 — fix(engine): fail closed for path-aware GitHub write hooks.
+- Base branch: `integration/4015-mvp-flat-r1`.
+- Merges into: `integration/4015-mvp-flat-r1 → main`.
+- Delivery: Pull request open against `integration/4015-mvp-flat-r1` with its checks green; read the API-reported base after opening.
+- Working branch: `fm/cli-4049-writehook-declared-route-r1`.
+- Task: Route every physical GitHub WriteHook REST request through `Runtime.RequesterFor` using an existing declaration method/path, and refuse direct unresolved default requester use when declared endpoint-sensitive policy requires that resolution.
+- Verification: Capture deterministic RED coverage, then run `go test -timeout 20m ./internal/connectors/engine/... ./internal/connectors/hooks/github/...`, the focused coordinator/race matrix, scoped vet/build/lint/non-test gates, and PR CI.
+
+### Evidence Table
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| The old `create_label` hook bypasses a `require_shared` declared policy | fake | An `httptest` transport is necessary to count the physical local send; RED asserts exactly one send and no refusal before the production fix. |
+| The fixed `create_label` hook fails closed without a shared coordinator | fake | The same injected transport and absent coordinator make the behavior deterministic; GREEN asserts `errors.As` finds the repository's current typed `*coordination.SharedRateLimitUnavailableError` with `coordinator_not_configured` and transport sends remain zero. |
+| Direct unresolved default hook requester use cannot partially admit mixed policies | fake | A resolver/requester fixture is necessary to isolate the send boundary; it asserts no transport send once a matching declared endpoint-sensitive policy requires method/path resolution. |
+| Each physical GitHub WriteHook REST send uses an existing declaration and compound follow-ups have independent lifecycles | fake | A local recorder is necessary to enumerate all fourteen hook sends without providers or credentials. A table test asserts the label, state, comment, PR core, metadata, and reviewer paths all make their expected physical request count under the declaration-aware runtime. |
+| `POST /graphql` and all GitHub policy declarations remain unchanged | live | A byte comparison of the checked-in declaration fixture before/after the focused tests proves the policy file is untouched; the request recorder separately observes no declaration admission for GraphQL. |
+| Existing declarative `require_shared` refusal and coordinator controls remain green | fake | Existing unit/UDS fake fixtures are required to deterministically exercise unavailable coordinator, cancellation, late observation, cleanup, helper, and process-local controls with their established observable grant/refusal counts. |
+
+### GSD/TDD execution record
+
+`scripts/gsd doctor`, all five canonical `sources` resolutions, and `go run ./cmd/agentcontractgen check` passed. Generated prompts for `discuss-phase 601`, `plan-phase 601 --tdd`, `execute-phase 601`, `verify-work 601`, and `code-review 601` were resolved and executed inline. This checkout has no numbered phase 601; the repository's canonical single-worker contract also forbids role spawning, so this #3754 phase directory is the documented manual-GSD fallback.
+
+Required skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-lint`, `golang-context`, and `golang-concurrency`.
+
+Plan: add RED tests before production edits for direct default-requester refusal and GitHub `create_label`'s zero-send shared-coordinator refusal. Then make the minimal engine admission guard, route every GitHub hook physical send via its bundle declaration and per-request lease, capture GREEN results, verify unchanged rate-limit declarations, complete the scoped review, and update the GSD ledger, verification, review, and run-state records.
+
 ## Correction 3/5 — #4035 late observations and UDS cancellation
 
 ### Task Delivery Header

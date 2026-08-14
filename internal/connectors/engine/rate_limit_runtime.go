@@ -105,8 +105,27 @@ func newRateLimitResolverWithContext(ctx context.Context, b Bundle, cfg connecto
 	}
 }
 
-func (r *rateLimitResolver) requesterFor(base *connsdk.Requester, _, _ string) (*connsdk.Requester, error) {
-	return r.defaultRequester(base)
+func (r *rateLimitResolver) requesterFor(base *connsdk.Requester, method, path string) (*connsdk.Requester, error) {
+	requester, err := r.declaredRequester(base)
+	if err != nil || r == nil {
+		return requester, err
+	}
+	_, endpointPolicies := r.partitionPolicies()
+	if len(endpointPolicies) == 0 {
+		return requester, nil
+	}
+	method = strings.ToUpper(strings.TrimSpace(method))
+	path = strings.TrimSpace(path)
+	if method == "" || !strings.HasPrefix(path, "/") {
+		return nil, fmt.Errorf("rate-limit requester requires a declared method and path")
+	}
+	// A hook must opt into this path with its bundle declaration before it can
+	// make an endpoint-sensitive request. The normal resolver remains at the
+	// physical send boundary so redirects and the final escaped path receive
+	// their own admission/observation lifecycle.
+	clone := *requester
+	clone.RouteRateLimits = &endpointRateLimitResolver{resolver: r, policies: endpointPolicies}
+	return &clone, nil
 }
 
 func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.Requester, error) {
@@ -114,22 +133,46 @@ func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.
 		return base, nil
 	}
 	defaultPolicies, endpointPolicies := r.partitionPolicies()
+	if len(endpointPolicies) == 0 {
+		return r.declaredRequester(base)
+	}
+	// Validate any whole-connector policy during runtime construction exactly as
+	// before, but do not attach it to the default requester. connsdk invokes a
+	// requester's generic Admission before its route resolver; attaching it here
+	// would consume a default-policy lease before the endpoint guard could
+	// reject an undeclared route in a mixed policy set.
+	if _, _, err := r.resolvePolicies(r.ctx, "", "", defaultPolicies); err != nil {
+		return nil, err
+	}
+	clone := *base
+	// Runtime.Requester is retained for backwards-compatible whole-connector
+	// policy callers, but it must not become an untracked endpoint-policy
+	// escape hatch for a hook. Only Runtime.RequesterFor replaces this guard
+	// after it receives the bundle-declared method/path.
+	clone.RouteRateLimits = &undeclaredRouteRateLimitGuard{resolver: r, policies: endpointPolicies}
+	return &clone, nil
+}
+
+// declaredRequester attaches whole-connector policies to a requester that has
+// already identified its declaration through Runtime.RequesterFor. Endpoint
+// policies remain at the physical send boundary so redirects and escaped paths
+// receive their own admission and observation lifecycle.
+func (r *rateLimitResolver) declaredRequester(base *connsdk.Requester) (*connsdk.Requester, error) {
+	if r == nil {
+		return base, nil
+	}
+	defaultPolicies, _ := r.partitionPolicies()
 	matched, costHeader, err := r.resolvePolicies(r.ctx, "", "", defaultPolicies)
 	if err != nil {
 		return nil, err
 	}
-	if len(matched) == 0 && len(endpointPolicies) == 0 {
+	if len(matched) == 0 {
 		return base, nil
 	}
 	clone := *base
-	if len(matched) > 0 {
-		clone.Admission = resolvedRateLimitAdmission(matched)
-		clone.Observer = resolvedRateLimitObserver(matched)
-		clone.RateLimitCostHeader = costHeader
-	}
-	if len(endpointPolicies) > 0 {
-		clone.RouteRateLimits = &endpointRateLimitResolver{resolver: r, policies: endpointPolicies}
-	}
+	clone.Admission = resolvedRateLimitAdmission(matched)
+	clone.Observer = resolvedRateLimitObserver(matched)
+	clone.RateLimitCostHeader = costHeader
 	return &clone, nil
 }
 
@@ -218,6 +261,15 @@ type endpointRateLimitResolver struct {
 	policies []connsdk.RateLimitPolicy
 }
 
+// undeclaredRouteRateLimitGuard fails closed when code attempts an
+// endpoint-sensitive request through Runtime.Requester directly. It does not
+// resolve or admit any policy: doing either would let a mixed policy set
+// partially consume a lease before the hook identified its declaration.
+type undeclaredRouteRateLimitGuard struct {
+	resolver *rateLimitResolver
+	policies []connsdk.RateLimitPolicy
+}
+
 type responseFormatError struct {
 	message string
 	cause   error
@@ -258,6 +310,40 @@ func formatResponseError(message string, cause error) error {
 }
 
 var _ connsdk.RateLimitRouteResolver = (*endpointRateLimitResolver)(nil)
+var _ connsdk.RateLimitRouteResolver = (*undeclaredRouteRateLimitGuard)(nil)
+
+func (r *undeclaredRouteRateLimitGuard) AdmitRoute(ctx context.Context, route connsdk.RateLimitRoute) (string, error) {
+	if r == nil || r.resolver == nil {
+		return "", fmt.Errorf("rate-limit route resolver is unavailable")
+	}
+	if err := ctx.Err(); err != nil {
+		return "", err
+	}
+	for _, policy := range r.policies {
+		if rateLimitSelectorRequiresDeclaredRoute(policy.Selector, r.resolver.config) {
+			return "", fmt.Errorf("rate-limit policy %q requires a declared method and path", policy.ID)
+		}
+	}
+	return "", nil
+}
+
+// rateLimitSelectorRequiresDeclaredRoute reports whether selector needs the
+// request method/path to decide whether it applies. Direct Runtime.Requester
+// callers cannot safely make that choice, even if their physical path happens
+// to look like a declared endpoint; Runtime.RequesterFor owns that boundary.
+func rateLimitSelectorRequiresDeclaredRoute(selector connsdk.RateLimitSelector, cfg map[string]string) bool {
+	if len(selector.Endpoints) == 0 && len(selector.ExcludeEndpoints) == 0 {
+		return false
+	}
+	if len(selector.Tiers) > 0 && !rateLimitSelectorValueMatches(selector.Tiers, cfg["tier"]) {
+		return false
+	}
+	return len(selector.AuthTypes) == 0 || rateLimitSelectorValueMatches(selector.AuthTypes, cfg["auth_type"])
+}
+
+func (*undeclaredRouteRateLimitGuard) ObserveRoute(context.Context, connsdk.RateLimitRoute, connsdk.RateLimitObservation) {
+	// No route was admitted, so no observation may be attributed to a policy.
+}
 
 func (r *endpointRateLimitResolver) AdmitRoute(ctx context.Context, route connsdk.RateLimitRoute) (string, error) {
 	if r == nil || r.resolver == nil {
