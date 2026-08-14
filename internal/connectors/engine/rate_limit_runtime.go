@@ -199,12 +199,6 @@ func (r *rateLimitResolver) resolve(ctx context.Context, policy connsdk.RateLimi
 	}
 	key := coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}
 	if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
-		if r.sharedRegistry == nil {
-			return resolvedRateLimitPolicy{}, &coordination.SharedRateLimitUnavailableError{
-				Component: "dragonfly",
-				Reason:    coordination.SharedRateLimitCoordinatorNotConfigured,
-			}
-		}
 		if err := r.sharedRegistry.EnsureAvailable(ctx); err != nil {
 			return resolvedRateLimitPolicy{}, err
 		}
@@ -221,6 +215,19 @@ func (r *rateLimitResolver) resolve(ctx context.Context, policy connsdk.RateLimi
 type endpointRateLimitResolver struct {
 	resolver *rateLimitResolver
 	policies []connsdk.RateLimitPolicy
+}
+
+type responseFormatError struct {
+	message string
+	cause   error
+}
+
+func (e *responseFormatError) Error() string { return e.message }
+
+func (e *responseFormatError) Unwrap() error { return e.cause }
+
+func formatResponseError(message string, cause error) error {
+	return &responseFormatError{message: message, cause: cause}
 }
 
 var _ connsdk.RateLimitRouteResolver = (*endpointRateLimitResolver)(nil)

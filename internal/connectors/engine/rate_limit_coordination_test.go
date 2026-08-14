@@ -69,6 +69,23 @@ func TestRequireSharedRateLimitPolicyRefusesWithoutCoordinator(t *testing.T) {
 	}
 }
 
+func TestRequireSharedRateLimitPolicyPreservesCanceledContext(t *testing.T) {
+	bundle := withAllRateLimit(Bundle{Name: "shared-required-canceled", HTTP: HTTPBase{URL: "https://example.test"}})
+	bundle.RateLimits.Policies[0].Coordination = connsdk.RateLimitCoordinationRequireShared
+	restore := replaceSharedRateLimitRegistryForTest(nil)
+	t.Cleanup(restore)
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	_, err := newRuntime(ctx, bundle, rateLimitTestConfig(t), nil)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("cancelled require_shared runtime error = %v, want context.Canceled", err)
+	}
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if errors.As(err, &unavailable) {
+		t.Fatalf("cancelled require_shared runtime returned unavailable reason %q", unavailable.Reason)
+	}
+}
+
 func TestEndpointRequireSharedPolicyGatesHookRequesterAtSend(t *testing.T) {
 	requests := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
@@ -187,6 +204,88 @@ func TestEndpointRequireSharedPolicyGatesEscapedAndBasePrefixedPathsAtSend(t *te
 	}
 	if providerRequests != 0 {
 		t.Fatalf("escaped endpoint request reached the provider %d times", providerRequests)
+	}
+}
+
+func TestEndpointRequireSharedErrorSurvivesOperationFormatting(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		method string
+		path   string
+		bundle func(string) Bundle
+		run    func(Bundle, connectors.RuntimeConfig) error
+	}{
+		{
+			name:   "direct read",
+			method: http.MethodGet,
+			path:   "/items",
+			bundle: func(baseURL string) Bundle { return directReadBundle(baseURL, http.MethodGet, "/items") },
+			run: func(bundle Bundle, cfg connectors.RuntimeConfig) error {
+				_, err := DirectRead(context.Background(), bundle, connectors.DirectReadRequest{Method: http.MethodGet, Path: "/items", Config: cfg, OutputPolicy: "json_redacted"}, nil)
+				return err
+			},
+		},
+		{
+			name:   "operation direct read",
+			method: http.MethodGet,
+			path:   "/lookup",
+			bundle: func(baseURL string) Bundle {
+				return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/lookup", MaxBytes: 1024}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/lookup", Operation: &SurfaceOperation{Model: "direct_read"}}}}}
+			},
+			run: func(bundle Bundle, cfg connectors.RuntimeConfig) error {
+				_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.lookup", Config: cfg}, nil)
+				return err
+			},
+		},
+		{
+			name:   "graphql direct read",
+			method: http.MethodPost,
+			path:   "/graphql",
+			bundle: func(baseURL string) Bundle { return graphQLOperationBundle(baseURL, "graphql_query") },
+			run: func(bundle Bundle, cfg connectors.RuntimeConfig) error {
+				_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.widgets.query", Config: cfg, Body: map[string]any{"id": "widget-1"}}, nil)
+				return err
+			},
+		},
+		{
+			name:   "binary download",
+			method: http.MethodGet,
+			path:   "/file",
+			bundle: func(baseURL string) Bundle {
+				return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{ID: "acme.file", Kind: "binary_download", Summary: "file", Risk: "low", Approval: "none", Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/file", MaxBytes: 1024}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/file", Operation: &SurfaceOperation{}}}}}
+			},
+			run: func(bundle Bundle, cfg connectors.RuntimeConfig) error {
+				_, err := OperationBinaryDownload(context.Background(), bundle, BinaryDownloadRequest{Operation: "acme.file", Config: cfg, DestRoot: t.TempDir()}, nil)
+				return err
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			requests := 0
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				requests++
+			}))
+			t.Cleanup(server.Close)
+			bundle := withAllRateLimit(tt.bundle(server.URL))
+			policy := &bundle.RateLimits.Policies[0]
+			policy.Coordination = connsdk.RateLimitCoordinationRequireShared
+			policy.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: tt.method, Path: tt.path}}}
+			restore := replaceSharedRateLimitRegistryForTest(nil)
+			t.Cleanup(restore)
+			cfg := rateLimitTestConfig(t)
+			cfg.Config["base_url"] = server.URL
+			err := tt.run(bundle, cfg)
+			var unavailable *coordination.SharedRateLimitUnavailableError
+			if !errors.As(err, &unavailable) {
+				t.Fatalf("formatted require_shared error = %T %v, want typed shared-coordinator refusal", err, err)
+			}
+			if got, want := unavailable.Reason, coordination.SharedRateLimitCoordinatorNotConfigured; got != want {
+				t.Fatalf("formatted require_shared reason = %q, want %q", got, want)
+			}
+			if requests != 0 {
+				t.Fatalf("formatted require_shared request reached the provider %d times", requests)
+			}
+		})
 	}
 }
 
