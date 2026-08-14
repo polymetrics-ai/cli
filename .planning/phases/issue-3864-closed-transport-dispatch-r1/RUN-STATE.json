@@ -1,0 +1,22 @@
+{
+  "issue": 3864,
+  "parent_issue": 3862,
+  "branch": "feat/3864-closed-transport-dispatch",
+  "base": "origin/feat/3862-any-to-any-transport",
+  "implementation_commit": "9775f420c",
+  "lifecycle": {
+    "mode": "manual_gsd_fallback",
+    "reason": "issue key is not a numbered roadmap phase and canonical contract forbids role spawning",
+    "discuss_phase": "completed",
+    "plan_phase_tdd": "completed",
+    "execute_phase": "completed",
+    "verify_work": "completed_manual_fallback",
+    "code_review": "completed_manual_fallback"
+  },
+  "correction_rounds": 5,
+  "correction_issues": [4021, 4023, 4029, 4045, 4046, 4047, 4048],
+  "conformance": "external verifier required; self-asserted evidence is not admitted",
+  "delivery_topology": "child-local no-mistakes runs with --skip=push,pr,ci; the outer delivery owner alone handles push, sub-PR, and CI",
+  "topology_restart_is_product_correction": false,
+  "supervisor_compatible_evidence": "correction-loop 5 focused RED/GREEN evidence is recorded in TDD-LEDGER.md and SUPERVISOR-EVIDENCE.md; child-local delivery gate pending"
+}

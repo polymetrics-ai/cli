@@ -94,7 +94,8 @@ split (design §B.7), each file well under ~400 lines:
   complete — see postgres below).
 
 Still ship a bundle (`internal/connectors/defs/<name>/{metadata.json,changefeed.json?,spec.json,
-api_surface.json,docs.md}`) so identity/spec/docs stay uniform with every other connector;
+api_surface.json,docs.md}`) so identity/spec/docs stay uniform with every other connector. A
+native database bundle may additionally ship `database.json` as described below;
 `metadata.json` sets
 `capabilities.dynamic_schema: true` and the bundle ships **no `streams.json`** (the loader
 (`bundle.go`'s `loadStreams`) only tolerates a missing `streams.json` when `dynamic_schema` is
@@ -110,8 +111,36 @@ short-circuits all network access for credential-free testing (test/conformance-
 only, never set in production); `cdc.go` retains a `pglogrepl`-backed logical-replication
 foundation, but `ReadCDC` fails closed before source contact while its changefeed is planned. Its
 admission conditions are owned by the [PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md),
-so the capability stays false rather than faking a runnable CDC surface. The package has **no `init()`/`RegisterFactory`/
+so the capability stays false rather than faking a runnable CDC surface. Its `database.json` is the
+reference strict policy-only declaration described below; it does not register a driver or promote
+a capability. The package has **no `init()`/`RegisterFactory`/
 `RegisterNativeLive` call** in wave0 (registration flip is wave6); a grep-guard test enforces this.
+
+#### Database-native policy declaration (`database.json`)
+
+Use this optional bundle file only for a native database connector; it remains absent for the
+broad existing fleet and non-database natives. When present, normal `engine.Load` and
+`connectorgen` loading run it through `database.Load`. The versioned, closed schema at
+`internal/connectors/database/schema/database.schema.json` is the authoritative field contract;
+do not copy it into another validator or document variant.
+
+The declaration is limited to a driver identity/protocol/API version, structured catalog and
+identifier policies, finite resource limits, explicit native-to-logical type mappings, and the
+existing closed `synccontract.Mode` vocabulary. It is policy, not connection configuration: never
+put a credential, DSN, raw SQL/query, DDL, session/transaction/receipt/checkpoint state, CDC or
+polling declaration, generic operation, or capability claim in it. `metadata.json` remains the
+only public capability owner. A syntactically valid declaration neither registers a driver nor
+admits execution; its exact driver identity and matching native evidence are required separately.
+
+Managed-target owners, refs, control records, and provisioning plans are runtime values, not
+`database.json` fields. A declaration must never encode an author-supplied target name or control
+record; their ownership and execution contract is owned by the
+[warehouse-mediation architecture](../architecture/connector-architecture-v2-design.md#b71-database-warehouse-mediation).
+
+The database layer has no direct connector-pair or zero-copy command. Its source-to-warehouse and
+warehouse-to-target admissions are separate legs; see the
+[warehouse-mediation architecture](../architecture/connector-architecture-v2-design.md#b71-database-warehouse-mediation)
+for the shared boundary.
 
 ### Tier 2 — hooks (bundle + Go escape hatch, target ~8%)
 
@@ -339,6 +368,11 @@ not a full override by default.
   connector-specific cleanup behavior. `internal/connectors/engine/schema/certification.schema.json`
   is the schema source of truth, and `connectorgen validate` scans the raw file for secret-shaped
   literals.
+- **`certification-matrix.json` is generated proof, not harness input**: only a connector named in
+  `cmd/connectorgen/certificationallowlist.go` receives this sibling artifact. Generate one
+  connector with `go run ./cmd/connectorgen certification-matrix --connector <name>`; it writes
+  that shard only. It is not part of `defs.FS`, is never hand-authored, and contains no global
+  baseline or count. Use `--all` only for deliberate regeneration and `--check` for the drift gate.
 
 ## 2.9 Command parameters and paging are DERIVED — never hand-author them
 
@@ -631,10 +665,13 @@ enforces this) runs from `read.go`'s `newRuntime`, once per `Read`/`Check` call,
 load. `connectorgen validate` does not check pagination specs at all (no field/rule references
 `PaginationSpec` anywhere in `cmd/connectorgen/validate.go`) — a malformed `token_path`+
 `last_record_field` combination passes `connectorgen validate` cleanly and only surfaces the first
-time the stream is actually read. `MaxPages` is a hard request-count cap enforced in `read.go`'s
-`readDeclarative` loop, independent of page fullness, checked *before* issuing the request for
-that page number; `MaxPages <= 0` (absent/zero) is unbounded. Stream-level `pagination` replaces
-the base-level spec **wholesale** (no field-by-field merge) when present.
+time the stream is actually read. `PaginationSpec.MaxPages` is a hard request-count cap enforced
+in `read.go`'s `readDeclarative` loop, independent of page fullness. A positive
+`connectors.ReadRequest.MaxPages` can tighten but never widen that declared cap; `0` leaves the
+declared cap unchanged, and a negative request is rejected. The effective cap is checked *before*
+issuing the request for that page number; when both caps are absent or zero, pagination is
+unbounded. Stream-level `pagination` replaces the base-level spec **wholesale** (no field-by-field
+merge) when present.
 
 **`page_number`'s `start_page` supports an explicit 0-indexed start** (S4 engine mini-wave item 1:
 algolia/auth0/beamer/braze/clickup-api/concord/customerly/dolibarr/harness/hubplanner and more —
@@ -909,9 +946,10 @@ onto that field of every emitted record AFTER projection/`computed_fields`, exac
 sub-sequence — the bundle author never declares it as a `computed_fields` entry themselves.
 Resolution happens ONCE per `Read()` call, before any per-id sub-sequence starts; each id then runs
 the identical declarative request/pagination/incremental/filter/project/computed_fields/hook
-sequence an ordinary (non-fan-out) stream runs — pagination, incremental state, `MaxPages`, and
-rate-limiting are all independent PER id (a fresh paginator + fresh base query per id), never shared
-across the fan-out. `connectorgen validate`'s `checkInterpolations` walks
+sequence an ordinary (non-fan-out) stream runs — pagination, incremental state, the effective page
+cap, and rate-limiting are all independent PER id (a fresh paginator + fresh base query per id),
+never shared across the fan-out. The caller cap also bounds a request-form ID listing.
+`connectorgen validate`'s `checkInterpolations` walks
 `fan_out.ids_from.request.path` with the same `ResolveCheck` coverage `stream.path` gets; `fanout.id`
 is checked against a `knownFanoutKeys` set (mirroring `knownIncrementalKeys`) rather than
 `specKeys`, since it is an engine-provided pseudo-namespace, not a spec.json property.
@@ -939,9 +977,9 @@ connsdk addition — connsdk itself needed no change. No `connectorgen validate`
 templated field on `RecordsSpec` to statically check); the positive-control corpus case
 (`keyed-object-valid`) proves the shape loads and validates cleanly instead.
 
-**`MaxPages` hard cap**: see the pagination table above; this is the only page-count bound the
-engine enforces on the declarative read path (a short/empty final page from the paginator is the
-*other* stop signal, and both must be considered independently when reasoning about termination).
+**Page-count cap**: see the pagination table above. The effective hard cap and the paginator's
+short/empty-page stop signal are independent and must both be considered when reasoning about
+termination.
 
 **`spec.json` `"default"` values ARE now materialized into `RuntimeConfig.Config`** (gap-loop
 cycle-1 item 6, REVIEW-A.md C3 — RESOLVED: previously `default` was accepted-but-only-preserved,

@@ -1,0 +1,7 @@
+# T18 RED — discarded sealed recovery
+
+Command:
+go test -count=1 -timeout 20m ./internal/connectors/database -run '^TestCommittedTransactionStageDiscardedSealedStageNeverRecoversOrDelivers$'
+
+Result: FAIL
+PendingTransactions() after discarded recovery returned the sealed transaction, want none.

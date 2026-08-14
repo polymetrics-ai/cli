@@ -6,6 +6,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/synctransport"
 )
 
 type AddCredentialRequest struct {
@@ -77,6 +78,10 @@ type EndpointConfig struct {
 }
 
 type StreamConfig struct {
+	// StreamID is allocated and persisted once when the stream is attached to a
+	// connection. It is structural identity for managed destinations; map keys,
+	// display names, and destination tables remain mutable configuration.
+	StreamID            string   `json:"stream_id,omitempty"`
 	SyncMode            string   `json:"sync_mode"`
 	LegacyCompatibility bool     `json:"legacy_compatibility,omitempty"`
 	CursorField         string   `json:"cursor_field,omitempty"`
@@ -113,6 +118,45 @@ type Connection struct {
 	UpdatedAt   time.Time               `json:"updated_at"`
 }
 
+func cloneEndpointConfig(config EndpointConfig) EndpointConfig {
+	clone := config
+	clone.Config = cloneStringMap(config.Config)
+	return clone
+}
+
+func cloneStreamConfig(config StreamConfig) StreamConfig {
+	clone := config
+	clone.PrimaryKey = append([]string(nil), config.PrimaryKey...)
+	return clone
+}
+
+func cloneStreamConfigs(configs map[string]StreamConfig) map[string]StreamConfig {
+	if configs == nil {
+		return nil
+	}
+	clone := make(map[string]StreamConfig, len(configs))
+	for name, config := range configs {
+		clone[name] = cloneStreamConfig(config)
+	}
+	return clone
+}
+
+func cloneCreateConnectionRequest(req CreateConnectionRequest) CreateConnectionRequest {
+	clone := req
+	clone.Source = cloneEndpointConfig(req.Source)
+	clone.Destination = cloneEndpointConfig(req.Destination)
+	clone.Streams = cloneStreamConfigs(req.Streams)
+	return clone
+}
+
+func cloneConnection(connection Connection) Connection {
+	clone := connection
+	clone.Source = cloneEndpointConfig(connection.Source)
+	clone.Destination = cloneEndpointConfig(connection.Destination)
+	clone.Streams = cloneStreamConfigs(connection.Streams)
+	return clone
+}
+
 type CatalogSnapshot struct {
 	Connection string             `json:"connection"`
 	Catalog    connectors.Catalog `json:"catalog"`
@@ -130,9 +174,10 @@ type catalogReference struct {
 }
 
 type RunETLRequest struct {
-	Connection string `json:"connection"`
-	Stream     string `json:"stream"`
-	BatchSize  int    `json:"batch_size,omitempty"`
+	Connection          string                            `json:"connection"`
+	Stream              string                            `json:"stream"`
+	BatchSize           int                               `json:"batch_size,omitempty"`
+	DestinationApproval synctransport.DestinationApproval `json:"-"`
 }
 
 type Run struct {
@@ -264,8 +309,15 @@ type ReversePlan struct {
 	ApprovalToken       string                         `json:"approval_token,omitempty"`
 	ApprovalConsumedAt  time.Time                      `json:"approval_consumed_at,omitempty"`
 	ApprovalUncertainAt time.Time                      `json:"approval_consumption_uncertain_at,omitempty"`
-	CreatedAt           time.Time                      `json:"created_at"`
-	ExpiresAt           time.Time                      `json:"expires_at"`
+	// TransportConnectionID and TransportBindingSHA256 are only used by the
+	// closed GitHub issue-label walking slice. They bind a pre-run approval to
+	// one connection configuration; neither field is caller-selectable write
+	// input and neither contains an approval token or credential material.
+	TransportConnectionID  string    `json:"transport_connection_id,omitempty"`
+	TransportBindingSHA256 string    `json:"transport_binding_sha256,omitempty"`
+	TransportForwardPlanID string    `json:"transport_forward_plan_id,omitempty"`
+	CreatedAt              time.Time `json:"created_at"`
+	ExpiresAt              time.Time `json:"expires_at"`
 }
 
 type RunReverseETLRequest struct {

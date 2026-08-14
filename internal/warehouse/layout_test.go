@@ -66,6 +66,39 @@ func TestSafePathPartRejectsRatherThanRewrites(t *testing.T) {
 	}
 }
 
+func TestOwnerIdentityUsesTheSharedArtifactTriple(t *testing.T) {
+	owner := Owner{
+		Workspace:   "ws_1",
+		Connector:   "postgres",
+		Connection:  "conn_1",
+		DisplayName: "before-rename",
+	}
+	want := ArtifactIdentity{
+		WorkspaceID:  "ws_1",
+		ConnectorID:  "postgres",
+		ConnectionID: "conn_1",
+	}
+	if got := owner.Identity(); got != want {
+		t.Fatalf("Owner.Identity() = %#v, want %#v", got, want)
+	}
+
+	renamed := owner
+	renamed.DisplayName = "after-rename"
+	if !owner.SameIdentity(renamed) {
+		t.Fatal("Owner.SameIdentity() treated a display-name change as an ownership change")
+	}
+	differentConnection := owner
+	differentConnection.Connection = "conn_2"
+	if owner.SameIdentity(differentConnection) {
+		t.Fatal("Owner.SameIdentity() accepted a different connection ID")
+	}
+	differentConnector := owner
+	differentConnector.Connector = "mysql"
+	if owner.SameIdentity(differentConnector) {
+		t.Fatal("Owner.SameIdentity() accepted a different connector ID")
+	}
+}
+
 func TestLocationForRejectsUnsafeIdentityComponents(t *testing.T) {
 	root := t.TempDir()
 	cases := []struct {

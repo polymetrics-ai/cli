@@ -1482,6 +1482,22 @@
       "body_fields": [
         "labels"
       ],
+      "transport_binding": {
+        "capability": "issue_label",
+        "role": "apply",
+        "inputs": [
+          {
+            "input": "target_issue",
+            "field": "issue_number",
+            "shape": "scalar"
+          },
+          {
+            "input": "label",
+            "field": "labels",
+            "shape": "singleton_array"
+          }
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -1501,7 +1517,10 @@
           }
         }
       },
-      "risk": "adds labels to an issue or pull request without removing existing ones"
+      "risk": "adds labels to an issue or pull request without removing existing ones",
+      "confirmation": {
+        "kind": "destructive"
+      }
     },
     {
       "name": "remove_issue_label",
@@ -1513,6 +1532,22 @@
         "name"
       ],
       "body_type": "none",
+      "transport_binding": {
+        "capability": "issue_label",
+        "role": "cleanup",
+        "inputs": [
+          {
+            "input": "target_issue",
+            "field": "issue_number",
+            "shape": "scalar"
+          },
+          {
+            "input": "label",
+            "field": "name",
+            "shape": "scalar"
+          }
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
