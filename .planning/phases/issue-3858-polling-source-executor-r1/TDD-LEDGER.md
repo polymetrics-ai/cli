@@ -44,6 +44,9 @@
   malformed/repeated page tuples are refused before the destination or store.
   The real executor also forwards a declared soft-delete as a validated
   tombstone and commits its final page tuple only after that page is durable.
+  A native traversal-validation refusal after a fetched lower opaque
+  tie-breaker records one fetch and zero destination/store mutations; a runner
+  that skips `RequestBudget.Consume` likewise cannot deliver or commit.
 - Refactor: precision and native tuple ordering are validated by the registered
   native runner before page delivery; the connector-neutral executor only
   copies or byte-compares opaque tokens. Float/scalar fallbacks, offsets, raw
