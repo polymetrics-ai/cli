@@ -10,10 +10,17 @@
 
 ## Findings
 
-No actionable findings. The review specifically checked that no failure path can
-acknowledge an un-receipted staged transaction, that an abort cannot reach the
-event/receipt/checkpoint/acknowledgement sequence, and that promotion happens only
-after the recorded live proof.
+The first CI run found two stale promotion-fence assertions outside the native
+package: `internal/cli/changefeed_cli_test.go` still expected PostgreSQL to be
+absent from the CDC catalog, and `internal/connectors/engine/database_definition_test.go`
+still expected `metadata.cdc=false`. Both are part of this capability promotion,
+so they now assert the exact executable descriptor and bundle projection. Their
+focused CLI and engine suites pass locally.
+
+The review also checked that no failure path can acknowledge an un-receipted
+staged transaction, that an abort cannot reach the event/receipt/checkpoint/
+acknowledgement sequence, and that promotion happens only after the recorded live
+proof.
 
 ## Follow-up hardening
 

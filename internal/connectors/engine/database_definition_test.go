@@ -6,7 +6,7 @@ import (
 	"polymetrics.ai/internal/connectors/defs"
 )
 
-func TestBundleLoadPostgresDatabaseDefinitionWithoutCapabilityPromotion(t *testing.T) {
+func TestBundleLoadPostgresDatabaseDefinitionWithProvenCDCCapability(t *testing.T) {
 	bundle, err := Load(defs.FS, "postgres")
 	if err != nil {
 		t.Fatalf("Load(defs.FS, postgres) error = %v", err)
@@ -20,7 +20,7 @@ func TestBundleLoadPostgresDatabaseDefinitionWithoutCapabilityPromotion(t *testi
 	if modes := bundle.Database.AdmittedModes(); len(modes) != 0 {
 		t.Fatalf("database definition admitted modes = %v, want no unimplemented operation claim", modes)
 	}
-	if bundle.Metadata.Capabilities.Write || bundle.Metadata.Capabilities.CDC {
-		t.Fatalf("PostgreSQL metadata promoted capabilities: %+v", bundle.Metadata.Capabilities)
+	if bundle.Metadata.Capabilities.Write || !bundle.Metadata.Capabilities.CDC {
+		t.Fatalf("PostgreSQL metadata capabilities = %+v, want write=false and cdc=true", bundle.Metadata.Capabilities)
 	}
 }
