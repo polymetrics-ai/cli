@@ -36,17 +36,32 @@ a test failure, not a skip.
 
 Before startup and before every command directed at the daemon, `dbtest` reads identity and
 image-store data from the selected endpoint. A direct Docker daemon must report a stable daemon ID
-and a locally measurable `DockerRootDir`; a direct Podman daemon must report the configured socket
-and a locally measurable image-store path. Podman 5.3 machine forwards are also accepted when both
-sides report safe Unix sockets and the daemon reports numeric
+and a measurable `DockerRootDir`; a direct Podman daemon must report the configured socket and a
+locally measurable image-store path. When Docker's safe root path is inside a local VM such as
+Colima and is therefore not measurable from the client host, the engine's `Config` may name a
+pinned, pre-cached `DockerCapacityProbeImage`. The harness first proves that image is already
+present (it never pulls it), then runs an ephemeral, no-network, read-only, no-new-privileges POSIX
+`df -P -B1` probe through the same explicit endpoint. A missing probe image, an unmeasurable path without
+one, or malformed probe output fails before the database image is pulled. Podman 5.3 machine
+forwards are also accepted when both sides report safe Unix sockets and the daemon reports numeric
 `GraphRootAllocated`/`GraphRootUsed` capacity; the harness uses their difference rather than a host
 path inside the VM. Any other socket mismatch, remote scheme, or unprovable capacity fails before
 the pull, including when the source image is cached. An absent source image needs three times
 `ExpectedImageBytes` free.
 
-The harness owns only its generated container, volume, and run-image reference. The source image is
-always retained. Cleanup is unconditional and idempotent, including failure and interrupt paths, and
-the interrupt handler remains armed until the final generated-resource removal returns.
+The MySQL reference config uses `docker.io/library/busybox:1.37.0` as that Docker VM probe. On a
+fresh Colima image, bootstrap that one probe explicitly before running the test; the command remains
+pinned to the same direct Unix endpoint and does not use a Docker default:
+
+```bash
+docker --host unix:///Users/you/.colima/default/docker.sock \
+  pull docker.io/library/busybox:1.37.0
+```
+
+The harness owns only its generated database container, volume, run-image reference, and the
+ephemeral capacity probe when that VM path is selected. The source and probe images are always
+retained. Cleanup is unconditional and idempotent, including failure and interrupt paths, and the
+interrupt handler remains armed until the final generated-resource removal returns.
 
 The MySQL TLS proof copies the container-generated CA certificate through the harness's scoped
 container copy operation, then runs a live `verify-ca` session and checks the server's negotiated

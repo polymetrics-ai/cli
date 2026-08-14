@@ -110,8 +110,15 @@ type Config struct {
 	// measured against; an engine that declares nothing would silently skip
 	// that check. See imagePullFreeSpaceFactor.
 	ExpectedImageBytes uint64
-	Run                CommandRunner
-	DiskFreeAt         func(string) (uint64, error)
+	// DockerCapacityProbeImage is a pre-cached pinned image used only when a
+	// selected Docker daemon reports an image-store path that the client host
+	// cannot measure directly (for example, a local Colima VM). dbtest never
+	// pulls this image: it starts an ephemeral locked-down df probe through the
+	// same configured endpoint. Leave it empty to refuse an unmeasurable Docker
+	// store.
+	DockerCapacityProbeImage string
+	Run                      CommandRunner
+	DiskFreeAt               func(string) (uint64, error)
 }
 
 // imagePullFreeSpaceFactor is the multiple of Config.ExpectedImageBytes that
@@ -148,20 +155,22 @@ type targetIdentity struct {
 type Harness struct {
 	config Config
 
-	containerName string
-	volumeName    string
-	runImage      string
+	containerName     string
+	volumeName        string
+	runImage          string
+	capacityProbeName string
 
-	mu             sync.Mutex
-	endpoint       Endpoint
-	runImageKnown  bool
-	containerKnown bool
-	volumeKnown    bool
-	slotHeld       bool
-	closed         bool
-	report         Report
-	target         targetIdentity
-	targetKnown    bool
+	mu                 sync.Mutex
+	endpoint           Endpoint
+	runImageKnown      bool
+	containerKnown     bool
+	volumeKnown        bool
+	capacityProbeKnown bool
+	slotHeld           bool
+	closed             bool
+	report             Report
+	target             targetIdentity
+	targetKnown        bool
 
 	// opMu serialises the create sequence against cleanup so an interrupt
 	// can never remove a resource while the command that creates it is still
@@ -195,6 +204,9 @@ func New(config Config) (*Harness, error) {
 	if config.ExpectedImageBytes == 0 || config.ExpectedImageBytes > maxExpectedImageBytes {
 		return nil, errors.New("database test harness requires the engine image's approximate size in bytes")
 	}
+	if config.DockerCapacityProbeImage != "" && (!pinnedImage(config.DockerCapacityProbeImage) || strings.TrimSpace(config.DockerCapacityProbeImage) != config.DockerCapacityProbeImage) {
+		return nil, errors.New("database test harness requires a safe pinned Docker capacity probe image")
+	}
 	if config.Run == nil {
 		config.Run = containerRunner{runtime: config.ContainerRuntime}
 	}
@@ -208,10 +220,11 @@ func New(config Config) (*Harness, error) {
 	}
 	prefix := "polymetrics-" + engineSlug(config.Engine) + "-it-" + suffix
 	return &Harness{
-		config:        config,
-		containerName: prefix,
-		volumeName:    prefix + "-data",
-		runImage:      "localhost/" + prefix + ":run",
+		config:            config,
+		containerName:     prefix,
+		volumeName:        prefix + "-data",
+		runImage:          "localhost/" + prefix + ":run",
+		capacityProbeName: prefix + "-capacity",
 	}, nil
 }
 
@@ -422,6 +435,11 @@ func (h *Harness) Close(_ context.Context) error {
 				h.mu.Unlock()
 			}
 		}
+		if h.known(func(h *Harness) bool { return h.capacityProbeKnown }) {
+			if _, err := h.runOnVerifiedTarget(cleanupCtx, "container", "rm", "--force", h.capacityProbeName); err != nil && !errors.Is(err, errContainerResourceNotFound) {
+				errs = append(errs, fmt.Errorf("remove %s test capacity probe: %w", h.config.Engine, err))
+			}
+		}
 		h.closeErr = errors.Join(errs...)
 	})
 	return h.closeErr
@@ -449,8 +467,46 @@ func (h *Harness) targetImageStoreFree(ctx context.Context) (uint64, error) {
 		return target.daemonFree, nil
 	}
 	free, err := h.config.DiskFreeAt(target.graphRoot)
+	if err == nil {
+		return free, nil
+	}
+	if target.runtime == RuntimeDocker && h.config.DockerCapacityProbeImage != "" {
+		return h.dockerVMImageStoreFree(ctx, target)
+	}
+	return 0, errors.New("target container image-store capacity query failed")
+}
+
+const dockerCapacityMountPath = "/polymetrics-image-store"
+
+func (h *Harness) dockerVMImageStoreFree(ctx context.Context, target targetIdentity) (uint64, error) {
+	probeAbsent, err := h.resourceAbsent(ctx, "image", "inspect", h.config.DockerCapacityProbeImage)
 	if err != nil {
-		return 0, errors.New("target container image-store capacity query failed")
+		return 0, errors.New("target Docker capacity probe image could not be inspected")
+	}
+	if probeAbsent {
+		return 0, errors.New("target Docker image-store capacity requires a pre-cached Docker capacity probe image")
+	}
+
+	// Claim the transient name before starting the probe. Although --rm removes
+	// a successful probe, Close also attempts its idempotent removal if Docker
+	// reports an error after creating it or the test is interrupted.
+	h.mu.Lock()
+	h.capacityProbeKnown = true
+	h.mu.Unlock()
+	output, err := h.runOnVerifiedTarget(ctx,
+		"run", "--pull=never", "--rm", "--name", h.capacityProbeName,
+		"--network", "none", "--read-only", "--cap-drop", "ALL", "--pids-limit", "16",
+		"--security-opt", "no-new-privileges", "--env", "LC_ALL=C",
+		"--mount", "type=bind,src="+target.graphRoot+",dst="+dockerCapacityMountPath+",readonly",
+		"--entrypoint", "/bin/df", h.config.DockerCapacityProbeImage,
+		"-P", "-B1", dockerCapacityMountPath,
+	)
+	if err != nil {
+		return 0, errors.New("target Docker image-store capacity probe failed")
+	}
+	free, err := parseDockerStoreFree(output)
+	if err != nil {
+		return 0, errors.New("target Docker endpoint returned an invalid Docker image-store capacity")
 	}
 	return free, nil
 }
@@ -621,6 +677,59 @@ func parsePodmanBytes(raw string) (uint64, error) {
 		}
 	}
 	return strconv.ParseUint(raw, 10, 64)
+}
+
+func parseDockerStoreFree(raw string) (uint64, error) {
+	if strings.ContainsAny(raw, "\r\x00") {
+		return 0, errors.New("invalid Docker image-store capacity")
+	}
+	lines := strings.Split(strings.TrimSuffix(raw, "\n"), "\n")
+	if len(lines) != 2 || !containsString(strings.Fields(lines[0]), "Available") {
+		return 0, errors.New("invalid Docker image-store capacity")
+	}
+	fields := strings.Fields(lines[1])
+	if len(fields) != 6 || fields[5] != dockerCapacityMountPath {
+		return 0, errors.New("invalid Docker image-store capacity")
+	}
+	total, err := parseDockerCapacityBytes(fields[1])
+	if err != nil {
+		return 0, err
+	}
+	used, err := parseDockerCapacityBytes(fields[2])
+	if err != nil {
+		return 0, err
+	}
+	free, err := parseDockerCapacityBytes(fields[3])
+	if err != nil || used > total || free > total || used > total-free {
+		return 0, errors.New("invalid Docker image-store capacity")
+	}
+	capacity := strings.TrimSuffix(fields[4], "%")
+	percent, err := parseDockerCapacityBytes(capacity)
+	if err != nil || !strings.HasSuffix(fields[4], "%") || percent > 100 {
+		return 0, errors.New("invalid Docker image-store capacity")
+	}
+	return free, nil
+}
+
+func parseDockerCapacityBytes(value string) (uint64, error) {
+	if value == "" {
+		return 0, errors.New("invalid Docker image-store capacity")
+	}
+	for _, r := range value {
+		if r < '0' || r > '9' {
+			return 0, errors.New("invalid Docker image-store capacity")
+		}
+	}
+	return strconv.ParseUint(value, 10, 64)
+}
+
+func containsString(values []string, wanted string) bool {
+	for _, value := range values {
+		if value == wanted {
+			return true
+		}
+	}
+	return false
 }
 
 func singleCommandRecord(raw string) (string, bool) {

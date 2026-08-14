@@ -11,6 +11,13 @@
   reachable direct Docker daemon and no discovered direct Podman socket. This
   is an evidence limitation, not permission to make enabled integration tests
   skip.
+- Colima later supplied a reachable direct Docker socket at
+  `unix:///Users/karthiksivadas/.colima/default/docker.sock`. Its daemon root
+  is inside the VM, so the host-path capacity guard correctly refused the first
+  live attempt. The accepted solution is an explicit, pre-cached, locked-down
+  Docker VM capacity probe inside the existing `Config` abstraction; no global
+  default or new runtime command path is permitted. The exact MySQL proof then
+  passed. Podman remains unavailable because no VM exposes a direct socket.
 
 ## Conclusions
 

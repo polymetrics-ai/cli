@@ -127,6 +127,10 @@ func newMySQLContainerHarness(containerRuntime dbtest.Runtime, containerEndpoint
 		DataVolumePath:     "/var/lib/mysql",
 		ContainerEndpoint:  containerEndpoint,
 		ExpectedImageBytes: mysqlIntegrationImageBytes,
+		// Colima and similar local Docker VMs report /var/lib/docker inside
+		// the daemon, not on the client host. dbtest refuses that path unless
+		// this explicitly pre-cached, pinned probe can measure it in-daemon.
+		DockerCapacityProbeImage: "docker.io/library/busybox:1.37.0",
 		ContainerArgs: []string{
 			"--env", "MYSQL_ALLOW_EMPTY_PASSWORD=yes",
 			"--env", "MYSQL_ROOT_HOST=%",

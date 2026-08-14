@@ -91,7 +91,7 @@ verification checklist record this repair.
 Add a focused failing test for an explicit Docker target whose `DockerRootDir`
 cannot be `stat`ed by the host. The test requires a configured cached probe
 image, exact locked-down `run --rm` capacity arguments, and strict numeric
-`df --output=avail` parsing. Green is a daemon-side measurement that does not
+POSIX `df -P -B1` parsing. Green is a daemon-side measurement that does not
 pull or retain the probe image, while missing/malformed evidence remains a
 pre-mutation refusal. Re-run the tagged MySQL reference proof through the
 explicit Colima socket and record Docker as observed only on a passing result;

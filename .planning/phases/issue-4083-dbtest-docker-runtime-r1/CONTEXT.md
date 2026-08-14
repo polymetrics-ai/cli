@@ -25,7 +25,8 @@ Named connections, remote schemes, and implicit/default runtime contexts stay
 refused. Every runtime command receives the configured endpoint explicitly.
 The existing identity and capacity proof remains mandatory: Docker may proceed
 only when its chosen daemon can prove an identity and an image-store free-space
-measurement; a VM/remote-style presentation that cannot prove capacity fails
+measurement. A Docker VM path not visible to the host needs an explicitly
+configured, pre-cached, locked-down daemon-side probe; otherwise it still fails
 closed rather than weakening the pre-pull guard.
 
 ## Lifecycle fallback

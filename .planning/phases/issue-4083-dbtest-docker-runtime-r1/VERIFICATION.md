@@ -1,6 +1,7 @@
 # Verification — Issue #4083
 
-Status: CI remediation passed locally; outer PR/CI gate remains pending.
+Status: Docker live proof passed locally; final PR/CI gate must be rerun for the
+Docker VM-capacity follow-up.
 
 ## Required evidence
 
@@ -21,17 +22,20 @@ Status: CI remediation passed locally; outer PR/CI gate remains pending.
   pinning, shared unsafe-endpoint refusals, Docker identity/capacity proof, and
   Docker parser rejection cases pass.
 - [x] dbtest and MySQL non-live package regression evidence recorded.
-- [x] Docker live proof unavailable: the explicitly supplied direct Docker
-  socket did not report a reachable daemon identity/image-store path; the
-  precise tagged command and failure are in `TDD-LEDGER.md`.
-- [x] Podman live proof unavailable: client installed, but no direct local
-  Podman socket was present in the checked local paths; no global default was
-  queried.
+- [x] Docker VM capacity red/green evidence recorded: a pre-cached, pinned,
+  locked-down daemon-side probe is required when the selected Docker root is
+  not measurable from the client host; it is never pulled by `dbtest`.
+- [x] Docker live proof passed through
+  `unix:///Users/karthiksivadas/.colima/default/docker.sock`; the exact tagged
+  command, PASS output, TLS subtests, and before/after capacity values are in
+  `TDD-LEDGER.md`.
+- [x] Podman live proof remains unavailable: no local Podman VM exposes an
+  explicit direct Unix API endpoint, and no global default was queried.
 - [x] README/AGENTS guidance checked for exact runtime/environment and safety
   wording.
 - [x] Inline GSD verify-work and code-review evidence recorded in `UAT.md`,
   `SUMMARY.md`, and `REVIEW.md`; no unresolved finding.
-- [ ] no-mistakes PR/CI evidence recorded; no merge performed.
+- [ ] no-mistakes final PR/CI evidence recorded; no merge performed.
 
 ## External-endpoint verdict
 

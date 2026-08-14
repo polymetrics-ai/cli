@@ -28,6 +28,11 @@ Reviewed specifically:
    passing skip.
 5. No connector production implementation, credentials, dependency, generic
    runtime command path, or external database endpoint entered scope.
+6. The Docker VM capacity fallback remains inside `dbtest.Config`: it requires
+   a pre-cached pinned image, uses `--pull=never`, has no network, is read-only,
+   drops capabilities, sets no-new-privileges and a PID bound, parses only a
+   fixed POSIX `df` mount result, and idempotently cleans its unique ephemeral
+   probe. A missing or malformed probe remains a pre-mutation refusal.
 
 ## Evidence
 
