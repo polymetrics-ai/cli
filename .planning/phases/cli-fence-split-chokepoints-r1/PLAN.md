@@ -9,9 +9,9 @@
   initialise it. The canonical single-worker contract forbids role spawning. We therefore execute
   the generated workflow requirements inline and retain this plan, TDD ledger, and verification
   checklist as the required manual-GSD fallback evidence.
-- Required skills loaded: `no-mistakes`, `golang-how-to`, `golang-design-patterns`,
-  `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`,
-  `golang-testing`, and `golang-database`.
+- Required skills loaded: `no-mistakes`, `golang-how-to`, `golang-cli`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`,
+  `golang-security`, `golang-safety`, `golang-testing`, `golang-database`, and `golang-lint`.
 
 ## Goal
 

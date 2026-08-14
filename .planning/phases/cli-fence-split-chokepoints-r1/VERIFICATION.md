@@ -36,6 +36,12 @@
 - [x] `make release-workflow-check`
 - [ ] no-mistakes pipeline returns `checks-passed`.
 
+## CI repair — 2026-08-14
+
+- [x] `GOTOOLCHAIN=go1.25.12 go test -count=1 -timeout 20m -run '^TestCurrentRepositoryBaselinePasses$' ./internal/connectors/boundary`
+- [x] `GOTOOLCHAIN=go1.25.12 go run ./cmd/connectorgen boundary . --json`
+- [x] `GOTOOLCHAIN=go1.25.13 go run golang.org/x/vuln/cmd/govulncheck@latest ./...`
+
 ## Required report measurements
 
 - Database test package on base: absent (`internal/connectors/database` does not exist on

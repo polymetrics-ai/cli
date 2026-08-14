@@ -8,6 +8,7 @@
 | R4 | App split is mechanical | Existing app ETL and Open-path tests are the baseline behavioural contract. | Passed: the same focused app suite passes after moving only composition and mode-dispatch blocks. |
 | R5 | PostgreSQL capability parity | Existing PostgreSQL tests require CDC to remain false. | Passed: the row table applies the same `CDC=false` override and the native package suite passes. |
 | R6 | Incremental lane isolation | A scoped generator run had no API or rewrote every shard. | Passed: the generator core test runs GitHub scope and confirms PostgreSQL plus status are byte-identical. |
+| R7 | CI boundary and standard-library security | CI rejected the intentional GitHub allowlist literal as shared connector policy, and `govulncheck` found reachable Go 1.25.12 standard-library vulnerabilities. | Passed: the one-match, expiring boundary exception keeps the explicit allowlist reviewable; whole-tree boundary checks are clean and Go 1.25.13 `govulncheck` reports zero reachable vulnerabilities. |
 
 ## Red command
 
