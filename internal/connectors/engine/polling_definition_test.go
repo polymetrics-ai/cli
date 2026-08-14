@@ -9,7 +9,7 @@ import (
 )
 
 func TestBundleLoadsDefinitionOwnedPollingWatermarkDescriptor(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
+	fsys := pollingWatermarkBundleFS("acme")
 	fsys["acme/polling_watermark.json"] = &fstest.MapFile{Data: []byte(validPollingWatermarkDefinitionJSON)}
 
 	bundle, err := Load(fsys, "acme")
@@ -30,7 +30,7 @@ func TestBundleLoadsDefinitionOwnedPollingWatermarkDescriptor(t *testing.T) {
 }
 
 func TestBundleRejectsUnsafePollingWatermarkDefinition(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
+	fsys := pollingWatermarkBundleFS("acme")
 	invalid := strings.Replace(validPollingWatermarkDefinitionJSON, `"codec": "rfc3339_nano"`, `"codec": "float64"`, 1)
 	fsys["acme/polling_watermark.json"] = &fstest.MapFile{Data: []byte(invalid)}
 
@@ -41,7 +41,7 @@ func TestBundleRejectsUnsafePollingWatermarkDefinition(t *testing.T) {
 }
 
 func TestBundleLoadsNonImplementedPollingWatermarkWithoutExecutionClaim(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
+	fsys := pollingWatermarkBundleFS("acme")
 	fsys["acme/polling_watermark.json"] = &fstest.MapFile{Data: []byte(`{
   "status": "planned",
   "reason": "native polling executor has not been registered"
@@ -54,6 +54,25 @@ func TestBundleLoadsNonImplementedPollingWatermarkWithoutExecutionClaim(t *testi
 	if bundle.PollingWatermark == nil || bundle.PollingWatermark.Status != connectors.PollingWatermarkStatusPlanned {
 		t.Fatalf("planned polling declaration = %+v, want retained non-executable declaration", bundle.PollingWatermark)
 	}
+}
+
+func TestBundleRejectsPollingWatermarkForAPIBundle(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/polling_watermark.json"] = &fstest.MapFile{Data: []byte(validPollingWatermarkDefinitionJSON)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatal("Load succeeded, want API-bundle polling watermark refusal")
+	}
+	if got, want := err.Error(), `load bundle acme: polling_watermark.json requires metadata integration_type "database"`; got != want {
+		t.Fatalf("Load error = %q, want %q", got, want)
+	}
+}
+
+func pollingWatermarkBundleFS(name string) fstest.MapFS {
+	fsys := fullValidBundleFS(name)
+	fsys[name+"/metadata.json"] = &fstest.MapFile{Data: []byte(metadataWithIntegrationType(name, "database"))}
+	return fsys
 }
 
 const validPollingWatermarkDefinitionJSON = `{
