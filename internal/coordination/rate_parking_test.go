@@ -76,14 +76,16 @@ func TestRateParkingCoordinator_PersistsAcrossRestartAndResumesOnlyAfterReset(t 
 	if err := second.Start(context.Background()); err != nil {
 		t.Fatalf("restarted Start() error = %v", err)
 	}
-	secondScheduler.RunThrough(resetAt.Add(-time.Nanosecond))
+	now = resetAt.Add(-time.Nanosecond)
+	secondScheduler.RunThrough(now)
 	if resumes != 0 {
 		t.Fatalf("resumes before reset = %d, want 0", resumes)
 	}
 	if acknowledgedApplies != 1 {
 		t.Fatalf("acknowledged destination applies before reset = %d, want 1", acknowledgedApplies)
 	}
-	secondScheduler.RunThrough(resetAt)
+	now = resetAt
+	secondScheduler.RunThrough(now)
 	if resumes != 1 {
 		t.Fatalf("resumes at reset = %d, want 1", resumes)
 	}
@@ -146,7 +148,8 @@ func TestRateParkingCoordinator_IsolatesScopesAndMakesDuplicateCancellationAndFa
 	if err := coordinator.Cancel(request.RunID); err != nil {
 		t.Fatalf("Cancel() error = %v", err)
 	}
-	scheduler.RunThrough(resetAt)
+	now = resetAt
+	scheduler.RunThrough(now)
 	if resumes != 0 {
 		t.Fatalf("resumes after cancellation = %d, want 0", resumes)
 	}
@@ -163,6 +166,7 @@ func TestRateParkingCoordinator_IsolatesScopesAndMakesDuplicateCancellationAndFa
 	if err := coordinator.Admit(connectors.RateLimitScopeKey("scope-d")); err != nil {
 		t.Fatalf("Admit(unrelated scope) error = %v", err)
 	}
+	now = resetAt
 	scheduler.RunThrough(resetAt)
 	if resumes != 1 {
 		t.Fatalf("failed callback resume attempts = %d, want 1", resumes)
@@ -178,6 +182,49 @@ func TestRateParkingCoordinator_IsolatesScopesAndMakesDuplicateCancellationAndFa
 	event := events.Event(RateLimitEventParked)
 	if event.Reason != string(connsdk.RateLimitObservationSourceHeaders) || !event.ResetAt.Equal(resetAt) {
 		t.Fatalf("park event = %#v, want headers reason and reset %s", event, resetAt)
+	}
+}
+
+func TestRateParkingCoordinator_ConcurrentSameScopeAdmissionHasZeroSends(t *testing.T) {
+	now := time.Date(2026, time.August, 15, 13, 0, 0, 0, time.UTC)
+	store := NewMemoryRateParkingStore()
+	coordinator := NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+		Store:     store,
+		Scheduler: newRateParkingTestScheduler(),
+		Now:       func() time.Time { return now },
+		Resume:    func(context.Context, ParkedRateLimitRun) error { return nil },
+	})
+	if err := coordinator.Start(context.Background()); err != nil {
+		t.Fatalf("Start() error = %v", err)
+	}
+	scope := connectors.RateLimitScopeKey("scope-race")
+	if _, err := coordinator.Park(context.Background(), RateParkingRequest{
+		RunID:      "run-race",
+		Scope:      scope,
+		Checkpoint: testParkedCheckpoint(now),
+		ResetAt:    now.Add(time.Minute),
+		Reason:     connsdk.RateLimitObservationSourceHTTP429,
+	}); err != nil {
+		t.Fatalf("Park() error = %v", err)
+	}
+
+	var sends int
+	var sendsMu sync.Mutex
+	var group sync.WaitGroup
+	for range 64 {
+		group.Add(1)
+		go func() {
+			defer group.Done()
+			if err := coordinator.Admit(scope); err == nil {
+				sendsMu.Lock()
+				sends++
+				sendsMu.Unlock()
+			}
+		}()
+	}
+	group.Wait()
+	if sends != 0 {
+		t.Fatalf("same-scope sends during parked state = %d, want 0", sends)
 	}
 }
 

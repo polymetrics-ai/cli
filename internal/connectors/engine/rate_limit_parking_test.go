@@ -51,6 +51,13 @@ func TestParkRateLimitedRun_RefusesMissingResetAndNonRateErrorsWithoutMutation(t
 			name: "ordinary provider error",
 			err:  errors.New("provider unavailable"),
 		},
+		{
+			name: "rate limit with unknown reason",
+			err: &connsdk.RateLimitError{
+				ResetAt:  checkpoint.ObservedAt.Add(time.Minute),
+				HasReset: true,
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
