@@ -12,6 +12,26 @@ schema's scope and permission rules.
 
 This connector is read-only; no write actions are declared.
 
+## Warehouse snapshot transport
+
+For warehouse-mediated sync, PostgreSQL provides one closed, live-only bounded
+snapshot source. It accepts the logical `snapshot` stream only for
+`full_append` and `full_overwrite`; it is neither a caller-authored SQL surface
+nor a fallback to the compatibility `Connector.Read` path. Polling,
+incremental modes, and change capture remain separate, non-executable source
+paths.
+
+The source identity must name one `database.schema.relation`. It discovers that
+relation's typed catalog and reads finite pages, ordered by a declared non-null
+primary or unique key, in one read-only repeatable-read transaction. Every
+page supplies a candidate checkpoint bound to the source identity, typed-catalog
+schema fingerprint, and PostgreSQL snapshot barrier. A prior full-snapshot
+checkpoint cannot be resumed.
+
+Before any source I/O, transport preflight requires the connector definition to
+name its exact native database executor and the registry to have registered it.
+Generic App composition never infers this source from broad connector capabilities.
+
 ## Auth setup
 
 Configure a TCP `host`, `database`, and `username`. `port` defaults to 5432. Live connections use
