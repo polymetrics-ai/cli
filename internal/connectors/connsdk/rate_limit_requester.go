@@ -22,6 +22,17 @@ type RateLimitRequest struct {
 	Attempt int // one-based logical Requester send
 }
 
+type RateLimitRoute struct {
+	Method  string
+	Path    string
+	Attempt int
+}
+
+type RateLimitRouteResolver interface {
+	AdmitRoute(context.Context, RateLimitRoute) (string, error)
+	ObserveRoute(context.Context, RateLimitRoute, RateLimitObservation)
+}
+
 // RateLimitAdmission gates a logical Requester send. Implementations must honor
 // ctx so a rate-limit wait cannot outlive the caller. An admission error
 // prevents the requester from sending that attempt. A successful call permits

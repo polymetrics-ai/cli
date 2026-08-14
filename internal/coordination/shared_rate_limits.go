@@ -69,13 +69,19 @@ func (r *SharedRateLimitRegistry) Close() error {
 }
 
 // EnsureAvailable verifies the coordinator without exposing transport details
-// in the error path. Engine calls this before building a require-shared
-// requester, so a missing coordinator cannot silently become local admission.
+// in the error path. Engine and the limiter call this before a require-shared
+// request can be sent, so a missing coordinator cannot silently become local admission.
 func (r *SharedRateLimitRegistry) EnsureAvailable(ctx context.Context) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 	if r == nil || r.dragonfly == nil || r.dragonfly.client == nil {
 		return sharedRateLimitUnavailable(SharedRateLimitCoordinatorNotConfigured)
 	}
 	if err := r.dragonfly.Ping(ctx); err != nil {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
 		return sharedRateLimitUnavailable(SharedRateLimitCoordinatorUnreachable)
 	}
 	return nil
@@ -126,6 +132,9 @@ func (l *SharedRateLimiter) Admit(ctx context.Context, _ connsdk.RateLimitReques
 	for {
 		result, err := sharedRateLimitReserveScript.Run(ctx, l.registry.dragonfly.client, []string{sharedRateLimitRedisKey(l.key)}, string(encoded), ttl.Milliseconds()).Result()
 		if err != nil {
+			if err := ctx.Err(); err != nil {
+				return err
+			}
 			return sharedRateLimitUnavailable(SharedRateLimitCoordinatorUnreachable)
 		}
 		wait, err := sharedRateLimitWait(result)
@@ -147,10 +156,12 @@ func (l *SharedRateLimiter) Admit(ctx context.Context, _ connsdk.RateLimitReques
 	}
 }
 
-// Observe propagates only an authoritative provider reset. That fact can make
-// another process slower, never faster; local parking/resume remains #3867.
 func (l *SharedRateLimiter) Observe(ctx context.Context, observation connsdk.RateLimitObservation) {
-	if l == nil || l.registry == nil || !observation.Attempted || !observation.HasReset || observation.ResetAt.IsZero() {
+	if l == nil || l.registry == nil || !observation.Attempted {
+		return
+	}
+	sharedObservation := sharedRateLimitObservationOf(observation)
+	if !sharedObservation.relevant() {
 		return
 	}
 	if l.registry.EnsureAvailable(ctx) != nil {
@@ -160,12 +171,48 @@ func (l *SharedRateLimiter) Observe(ctx context.Context, observation connsdk.Rat
 	if err != nil {
 		return
 	}
+	encoded, err := json.Marshal(sharedObservation)
+	if err != nil {
+		return
+	}
 	ttl := sharedRateLimitTTL(specs)
-	_, _ = sharedRateLimitObserveScript.Run(ctx, l.registry.dragonfly.client, []string{sharedRateLimitRedisKey(l.key)}, observation.ResetAt.UTC().UnixMilli(), ttl.Milliseconds()).Result()
+	_, _ = sharedRateLimitObserveScript.Run(ctx, l.registry.dragonfly.client, []string{sharedRateLimitRedisKey(l.key)}, string(encoded), ttl.Milliseconds()).Result()
+}
+
+type sharedRateLimitObservation struct {
+	BlockedUntil       int64   `json:"blocked_until"`
+	Limit              float64 `json:"limit"`
+	HasLimit           bool    `json:"has_limit"`
+	Remaining          float64 `json:"remaining"`
+	HasRemaining       bool    `json:"has_remaining"`
+	ForceRemainingZero bool    `json:"force_remaining_zero"`
+	Cost               float64 `json:"cost"`
+	HasCost            bool    `json:"has_cost"`
+}
+
+func sharedRateLimitObservationOf(observation connsdk.RateLimitObservation) sharedRateLimitObservation {
+	shared := sharedRateLimitObservation{
+		Limit:              float64(observation.Limit),
+		HasLimit:           observation.HasLimit,
+		Remaining:          float64(observation.Remaining),
+		HasRemaining:       observation.HasRemaining,
+		ForceRemainingZero: observation.Status == 429 && !observation.HasReset,
+		Cost:               observation.Cost,
+		HasCost:            observation.HasCost,
+	}
+	if rateLimitObservationBlocksUntilReset(observation) && !observation.ResetAt.IsZero() {
+		shared.BlockedUntil = observation.ResetAt.UTC().UnixMilli()
+	}
+	return shared
+}
+
+func (o sharedRateLimitObservation) relevant() bool {
+	return o.BlockedUntil > 0 || o.HasLimit || o.HasRemaining || o.ForceRemainingZero || o.HasCost
 }
 
 type sharedRateLimitBudget struct {
 	Model    string  `json:"model"`
+	Unit     string  `json:"unit"`
 	Limit    float64 `json:"limit"`
 	Window   int64   `json:"window_ms"`
 	Capacity float64 `json:"capacity"`
@@ -186,7 +233,7 @@ func sharedRateLimitBudgetSpecs(budgets []connsdk.RateLimitBudget) ([]sharedRate
 		if cost <= 0 {
 			return nil, errors.New("shared rate-limit request cost must be positive")
 		}
-		spec := sharedRateLimitBudget{Model: string(budget.Model), Cost: cost}
+		spec := sharedRateLimitBudget{Model: string(budget.Model), Unit: string(budget.Unit), Cost: cost}
 		switch budget.Model {
 		case connsdk.RateLimitBudgetFixedWindow, connsdk.RateLimitBudgetSlidingWindow:
 			if budget.Limit == nil || budget.WindowSeconds == nil || *budget.Limit <= 0 || *budget.WindowSeconds <= 0 {
@@ -258,30 +305,36 @@ for i, spec in ipairs(specs) do
   local entry = state.budgets[tostring(i)] or {}
   state.budgets[tostring(i)] = entry
   if spec.model == 'fixed_window' then
+    local limit = spec.limit
+    if entry.observed_limit and entry.observed_limit < limit then limit = entry.observed_limit end
     if (not entry.start) or now >= entry.start + spec.window_ms then entry.start = now; entry.used = 0 end
     entry.used = entry.used or 0
-    if spec.cost > spec.limit then return redis.error_reply('ERR shared rate-limit request cost exceeds declared capacity') end
-    if entry.used + spec.cost > spec.limit then wait = math.max(wait, entry.start + spec.window_ms - now) end
+    if spec.cost > limit then return redis.error_reply('ERR shared rate-limit request cost exceeds declared capacity') end
+    if entry.used + spec.cost > limit then wait = math.max(wait, entry.start + spec.window_ms - now) end
   elseif spec.model == 'sliding_window' then
+    local limit = spec.limit
+    if entry.observed_limit and entry.observed_limit < limit then limit = entry.observed_limit end
     entry.uses = entry.uses or {}
     local kept, used = {}, 0
     for _, use in ipairs(entry.uses) do
       if now < use.at + spec.window_ms then table.insert(kept, use); used = used + use.cost end
     end
     entry.uses = kept
-    if spec.cost > spec.limit then return redis.error_reply('ERR shared rate-limit request cost exceeds declared capacity') end
-    if used + spec.cost > spec.limit then
+    if spec.cost > limit then return redis.error_reply('ERR shared rate-limit request cost exceeds declared capacity') end
+    if used + spec.cost > limit then
       local remaining = used
       for _, use in ipairs(kept) do
         remaining = remaining - use.cost
-        if remaining + spec.cost <= spec.limit then wait = math.max(wait, use.at + spec.window_ms - now); break end
+        if remaining + spec.cost <= limit then wait = math.max(wait, use.at + spec.window_ms - now); break end
       end
     end
   elseif spec.model == 'token_bucket' or spec.model == 'leaky_bucket' then
-    if not entry.updated then entry.updated = now; entry.tokens = spec.capacity end
-    entry.tokens = math.min(spec.capacity, entry.tokens + math.max(0, now - entry.updated) * spec.restore_per_ms)
+    local capacity = spec.capacity
+    if entry.observed_limit and entry.observed_limit < capacity then capacity = entry.observed_limit end
+    if not entry.updated then entry.updated = now; entry.tokens = capacity end
+    entry.tokens = math.min(capacity, entry.tokens + math.max(0, now - entry.updated) * spec.restore_per_ms)
     entry.updated = now
-    if spec.cost > spec.capacity then return redis.error_reply('ERR shared rate-limit request cost exceeds declared capacity') end
+    if spec.cost > capacity then return redis.error_reply('ERR shared rate-limit request cost exceeds declared capacity') end
     if entry.tokens < spec.cost then wait = math.max(wait, math.ceil((spec.cost - entry.tokens) / spec.restore_per_ms)) end
   else
     return redis.error_reply('ERR shared rate-limit model is unsupported')
@@ -304,11 +357,51 @@ return 0
 var sharedRateLimitObserveScript = redis.NewScript(`
 local nowParts = redis.call('TIME')
 local now = tonumber(nowParts[1]) * 1000 + math.floor(tonumber(nowParts[2]) / 1000)
-local resetAt = tonumber(ARGV[1])
-local ttl = tonumber(ARGV[2])
+local specs = cjson.decode(ARGV[1])
+local observation = cjson.decode(ARGV[2])
+local ttl = tonumber(ARGV[3])
 local raw = redis.call('GET', KEYS[1])
 local state = raw and cjson.decode(raw) or {budgets = {}}
-if resetAt > now and ((not state.blocked_until) or resetAt > state.blocked_until) then state.blocked_until = resetAt end
+state.budgets = state.budgets or {}
+
+for i, spec in ipairs(specs) do
+  local entry = state.budgets[tostring(i)] or {}
+  state.budgets[tostring(i)] = entry
+  local declared = spec.limit
+  if spec.model == 'token_bucket' or spec.model == 'leaky_bucket' then declared = spec.capacity end
+  if observation.has_limit and observation.limit >= 0 and observation.limit < declared and ((not entry.observed_limit) or observation.limit < entry.observed_limit) then entry.observed_limit = observation.limit end
+  local limit = declared
+  if entry.observed_limit and entry.observed_limit < limit then limit = entry.observed_limit end
+  local remaining = nil
+  if observation.force_remaining_zero then remaining = 0 elseif observation.has_remaining then remaining = observation.remaining end
+
+  if spec.model == 'fixed_window' then
+    if (not entry.start) or now >= entry.start + spec.window_ms then entry.start = now; entry.used = 0 end
+    entry.used = entry.used or 0
+    if remaining and limit - remaining > entry.used then entry.used = limit - remaining end
+    if observation.has_cost and spec.unit == 'points' and observation.cost > spec.cost then entry.used = entry.used + observation.cost - spec.cost end
+  elseif spec.model == 'sliding_window' then
+    entry.uses = entry.uses or {}
+    local kept, used = {}, 0
+    for _, use in ipairs(entry.uses) do
+      if now < use.at + spec.window_ms then table.insert(kept, use); used = used + use.cost end
+    end
+    entry.uses = kept
+    if remaining and limit - remaining > used then
+      table.insert(entry.uses, {at = now, cost = limit - remaining - used})
+      used = limit - remaining
+    end
+    if observation.has_cost and spec.unit == 'points' and observation.cost > spec.cost then table.insert(entry.uses, {at = now, cost = observation.cost - spec.cost}) end
+  elseif spec.model == 'token_bucket' or spec.model == 'leaky_bucket' then
+    if not entry.updated then entry.updated = now; entry.tokens = limit end
+    entry.tokens = math.min(limit, entry.tokens + math.max(0, now - entry.updated) * spec.restore_per_ms)
+    entry.updated = now
+    if remaining and remaining < entry.tokens then entry.tokens = remaining end
+    if observation.has_cost and spec.unit == 'points' and observation.cost > spec.cost then entry.tokens = entry.tokens - (observation.cost - spec.cost) end
+  end
+end
+
+if observation.blocked_until > now and ((not state.blocked_until) or observation.blocked_until > state.blocked_until) then state.blocked_until = observation.blocked_until end
 if state.blocked_until and state.blocked_until > now then ttl = math.max(ttl, state.blocked_until - now) end
 redis.call('PSETEX', KEYS[1], ttl, cjson.encode(state))
 return 1

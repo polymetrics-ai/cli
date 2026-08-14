@@ -31,5 +31,9 @@ func RateLimitCoordinationOf(connector Connector) (RateLimitCoordination, bool) 
 	if !ok {
 		return RateLimitCoordination{}, false
 	}
-	return provider.RateLimitCoordination(), true
+	coordination := provider.RateLimitCoordination()
+	if coordination.Mode == "" {
+		return RateLimitCoordination{}, false
+	}
+	return coordination, true
 }

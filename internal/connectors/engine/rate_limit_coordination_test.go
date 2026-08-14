@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -68,6 +69,44 @@ func TestRequireSharedRateLimitPolicyRefusesWithoutCoordinator(t *testing.T) {
 	}
 }
 
+func TestEndpointRequireSharedPolicyGatesHookRequesterAtSend(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := withAllRateLimit(Bundle{Name: "endpoint-shared-required", HTTP: HTTPBase{URL: server.URL}})
+	bundle.RateLimits.Policies[0].Coordination = connsdk.RateLimitCoordinationRequireShared
+	bundle.RateLimits.Policies[0].Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/hook/{id}"}}}
+	restore := replaceSharedRateLimitRegistryForTest(nil)
+	t.Cleanup(restore)
+
+	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	if _, err := runtime.Requester.Do(context.Background(), http.MethodGet, "/hook/42", nil, nil); err == nil {
+		t.Fatal("endpoint require_shared hook request did not refuse")
+	} else {
+		var unavailable *coordination.SharedRateLimitUnavailableError
+		if !errors.As(err, &unavailable) {
+			t.Fatalf("endpoint require_shared hook error = %T %v, want typed shared-coordinator refusal", err, err)
+		}
+	}
+	if requests != 0 {
+		t.Fatalf("endpoint require_shared hook request reached the provider %d times", requests)
+	}
+	if _, err := runtime.Requester.Do(context.Background(), http.MethodGet, "/unmatched", nil, nil); err != nil {
+		t.Fatalf("unmatched hook request: %v", err)
+	}
+	if requests != 1 {
+		t.Fatalf("unmatched hook request count = %d, want 1", requests)
+	}
+}
+
 func TestLocalRateLimitPolicyNeverInheritsSharedRequirement(t *testing.T) {
 	bundle := withAllRateLimit(Bundle{Name: "local-default", HTTP: HTTPBase{URL: "https://example.test"}})
 	restore := replaceSharedRateLimitRegistryForTest(nil)
@@ -90,5 +129,12 @@ func TestLocalRateLimitPolicyNeverInheritsSharedRequirement(t *testing.T) {
 	}
 	if got, want := status.Mode, connectors.RateLimitCoordinationProcessLocal; got != want {
 		t.Fatalf("local policy inspect mode = %q, want %q", got, want)
+	}
+}
+
+func TestUndeclaredRateLimitPolicyHasNoCoordinationProvenance(t *testing.T) {
+	connector := New(Bundle{Name: "undeclared", HTTP: HTTPBase{URL: "https://example.test"}}, nil)
+	if _, ok := connectors.RateLimitCoordinationOf(connector); ok {
+		t.Fatal("undeclared rate limits exposed process-local coordination provenance")
 	}
 }

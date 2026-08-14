@@ -29,11 +29,12 @@ DESCRIPTION
   role still requires externally verified conformance; it is not a certification
   claim.
 
-  Inspection reports each connector's RATE LIMIT COORDINATION. Process-local
-  protection coordinates only requests made by this pm process; it makes no
-  cross-process claim. A connector explicitly declaring require_shared instead
-  refuses before a request when its optional shared coordinator is unavailable.
-  Inspection never exposes a rate scope, coordinator address, or credential.
+  For connectors with a declared rate-limit policy, inspection reports RATE
+  LIMIT COORDINATION. Process-local protection coordinates only requests made
+  by this pm process; it makes no cross-process claim. A connector explicitly
+  declaring require_shared instead refuses before a request when its optional
+  shared coordinator is unavailable. Inspection never exposes a rate scope,
+  coordinator address, or credential.
 
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
@@ -109,9 +110,9 @@ ACTIONS
   inspect <name>
     Prints a man-style connector manual for a bare connector name. Use --json
     to print structured metadata for agents, including the generated binary
-    certification status and rate-limit coordination provenance. Inspection is
-    metadata-only and does not resolve credentials or expose a rate scope. A
-    connector is either CERTIFIED or COMMUNITY BUILD,
+    certification status and declared rate-limit coordination provenance when
+    applicable. Inspection is metadata-only and does not resolve credentials or
+    expose a rate scope. A connector is either CERTIFIED or COMMUNITY BUILD,
     UNCERTIFIED; the latter remains available with a warning.
 
   help <name>

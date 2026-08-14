@@ -83,13 +83,14 @@ func (c *Connector) CommandSurface() *connectors.CommandSurface {
 // connector inspection. It intentionally does not attempt a coordinator
 // connection or expose any protected scope identity.
 func (c *Connector) RateLimitCoordination() connectors.RateLimitCoordination {
-	if c != nil && c.bundle.RateLimits != nil {
-		for _, policy := range c.bundle.RateLimits.Policies {
-			if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
-				return connectors.RateLimitCoordination{
-					Mode:    connectors.RateLimitCoordinationRequireShared,
-					Message: "Shared rate-limit coordination is required; the command refuses before sending a request when the coordinator is unavailable.",
-				}
+	if c == nil || c.bundle.RateLimits == nil || c.bundle.RateLimits.State != connsdk.RateLimitStateDeclared || len(c.bundle.RateLimits.Policies) == 0 {
+		return connectors.RateLimitCoordination{}
+	}
+	for _, policy := range c.bundle.RateLimits.Policies {
+		if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
+			return connectors.RateLimitCoordination{
+				Mode:    connectors.RateLimitCoordinationRequireShared,
+				Message: "Shared rate-limit coordination is required; the command refuses before sending a request when the coordinator is unavailable.",
 			}
 		}
 	}

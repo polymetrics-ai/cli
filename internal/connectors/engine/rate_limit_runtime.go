@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"strings"
 	"sync"
 
@@ -107,59 +108,74 @@ func (r *rateLimitResolver) requesterFor(base *connsdk.Requester, method, path s
 	if r == nil {
 		return base, nil
 	}
-	matched := make([]resolvedRateLimitPolicy, 0, len(r.policies))
-	for _, policy := range r.policies {
-		if !rateLimitSelectorMatches(policy.Selector, method, path, r.config) {
-			continue
-		}
-		resolved, err := r.resolve(policy)
-		if err != nil {
-			return nil, err
-		}
-		matched = append(matched, resolved)
+	matched, costHeader, err := r.resolvePolicies(r.ctx, method, path, r.policies)
+	if err != nil {
+		return nil, err
 	}
 	if len(matched) == 0 {
-		return base, nil
-	}
-
-	costHeader := ""
-	for _, match := range matched {
-		if match.costHeader == "" {
-			continue
+		if base.RouteRateLimits == nil {
+			return base, nil
 		}
-		if costHeader != "" && !strings.EqualFold(costHeader, match.costHeader) {
-			return nil, fmt.Errorf("rate-limit policies matching %s %s use different actual-cost headers", method, path)
-		}
-		costHeader = match.costHeader
+		clone := *base
+		clone.RouteRateLimits = nil
+		return &clone, nil
 	}
-
 	clone := *base
+	clone.RouteRateLimits = nil
 	clone.Admission = resolvedRateLimitAdmission(matched)
 	clone.Observer = resolvedRateLimitObserver(matched)
 	clone.RateLimitCostHeader = costHeader
 	return &clone, nil
 }
 
-// defaultRequester attaches policies that do not need endpoint matching. Hooks
-// receive Runtime.Requester directly, so whole-connector and tier/auth-only
-// policies must be present there as well as on the concrete declarative paths.
 func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.Requester, error) {
 	if r == nil {
 		return base, nil
 	}
-	matched := make([]resolvedRateLimitPolicy, 0, len(r.policies))
+	defaultPolicies, endpointPolicies := r.partitionPolicies()
+	matched, costHeader, err := r.resolvePolicies(r.ctx, "", "", defaultPolicies)
+	if err != nil {
+		return nil, err
+	}
+	if len(matched) == 0 && len(endpointPolicies) == 0 {
+		return base, nil
+	}
+	clone := *base
+	if len(matched) > 0 {
+		clone.Admission = resolvedRateLimitAdmission(matched)
+		clone.Observer = resolvedRateLimitObserver(matched)
+		clone.RateLimitCostHeader = costHeader
+	}
+	if len(endpointPolicies) > 0 {
+		clone.RouteRateLimits = &endpointRateLimitResolver{resolver: r, policies: endpointPolicies}
+	}
+	return &clone, nil
+}
+
+func (r *rateLimitResolver) partitionPolicies() ([]connsdk.RateLimitPolicy, []connsdk.RateLimitPolicy) {
+	defaultPolicies := make([]connsdk.RateLimitPolicy, 0, len(r.policies))
+	endpointPolicies := make([]connsdk.RateLimitPolicy, 0, len(r.policies))
 	for _, policy := range r.policies {
-		if len(policy.Selector.Endpoints) != 0 || len(policy.Selector.ExcludeEndpoints) != 0 || !rateLimitSelectorMatches(policy.Selector, "", "", r.config) {
+		if len(policy.Selector.Endpoints) != 0 || len(policy.Selector.ExcludeEndpoints) != 0 {
+			endpointPolicies = append(endpointPolicies, policy)
 			continue
 		}
-		resolved, err := r.resolve(policy)
+		defaultPolicies = append(defaultPolicies, policy)
+	}
+	return defaultPolicies, endpointPolicies
+}
+
+func (r *rateLimitResolver) resolvePolicies(ctx context.Context, method, path string, policies []connsdk.RateLimitPolicy) ([]resolvedRateLimitPolicy, string, error) {
+	matched := make([]resolvedRateLimitPolicy, 0, len(policies))
+	for _, policy := range policies {
+		if !rateLimitSelectorMatches(policy.Selector, method, path, r.config) {
+			continue
+		}
+		resolved, err := r.resolve(ctx, policy)
 		if err != nil {
-			return nil, err
+			return nil, "", err
 		}
 		matched = append(matched, resolved)
-	}
-	if len(matched) == 0 {
-		return base, nil
 	}
 	costHeader := ""
 	for _, match := range matched {
@@ -167,15 +183,11 @@ func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.
 			continue
 		}
 		if costHeader != "" && !strings.EqualFold(costHeader, match.costHeader) {
-			return nil, fmt.Errorf("whole-connector rate-limit policies use different actual-cost headers")
+			return nil, "", fmt.Errorf("matching rate-limit policies use different actual-cost headers")
 		}
 		costHeader = match.costHeader
 	}
-	clone := *base
-	clone.Admission = resolvedRateLimitAdmission(matched)
-	clone.Observer = resolvedRateLimitObserver(matched)
-	clone.RateLimitCostHeader = costHeader
-	return &clone, nil
+	return matched, costHeader, nil
 }
 
 type resolvedRateLimitPolicy struct {
@@ -184,7 +196,7 @@ type resolvedRateLimitPolicy struct {
 	costHeader string
 }
 
-func (r *rateLimitResolver) resolve(policy connsdk.RateLimitPolicy) (resolvedRateLimitPolicy, error) {
+func (r *rateLimitResolver) resolve(ctx context.Context, policy connsdk.RateLimitPolicy) (resolvedRateLimitPolicy, error) {
 	kind, err := coordinationRateScopeKind(policy.Scope.SubjectKind)
 	if err != nil {
 		return resolvedRateLimitPolicy{}, err
@@ -213,7 +225,7 @@ func (r *rateLimitResolver) resolve(policy connsdk.RateLimitPolicy) (resolvedRat
 				Reason:    coordination.SharedRateLimitCoordinatorNotConfigured,
 			}
 		}
-		if err := r.sharedRegistry.EnsureAvailable(r.ctx); err != nil {
+		if err := r.sharedRegistry.EnsureAvailable(ctx); err != nil {
 			return resolvedRateLimitPolicy{}, err
 		}
 		limiter := r.sharedRegistry.Limiter(key, policy.Budgets)
@@ -224,6 +236,38 @@ func (r *rateLimitResolver) resolve(policy connsdk.RateLimitPolicy) (resolvedRat
 	}
 	limiter := r.registry.Limiter(key, policy.Budgets)
 	return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader}, nil
+}
+
+type endpointRateLimitResolver struct {
+	resolver *rateLimitResolver
+	policies []connsdk.RateLimitPolicy
+}
+
+var _ connsdk.RateLimitRouteResolver = (*endpointRateLimitResolver)(nil)
+
+func (r *endpointRateLimitResolver) AdmitRoute(ctx context.Context, route connsdk.RateLimitRoute) (string, error) {
+	if r == nil || r.resolver == nil {
+		return "", fmt.Errorf("rate-limit route resolver is unavailable")
+	}
+	matched, costHeader, err := r.resolver.resolvePolicies(ctx, strings.ToUpper(strings.TrimSpace(route.Method)), route.Path, r.policies)
+	if err != nil {
+		return "", err
+	}
+	if err := resolvedRateLimitAdmission(matched).Admit(ctx, connsdk.RateLimitRequest{Method: route.Method, Attempt: route.Attempt}); err != nil {
+		return "", err
+	}
+	return costHeader, nil
+}
+
+func (r *endpointRateLimitResolver) ObserveRoute(ctx context.Context, route connsdk.RateLimitRoute, observation connsdk.RateLimitObservation) {
+	if r == nil || r.resolver == nil {
+		return
+	}
+	matched, _, err := r.resolver.resolvePolicies(ctx, strings.ToUpper(strings.TrimSpace(route.Method)), route.Path, r.policies)
+	if err != nil {
+		return
+	}
+	resolvedRateLimitObserver(matched).Observe(ctx, observation)
 }
 
 func coordinationRateScopeKind(subject connsdk.RateLimitScopeSubjectKind) (connectors.RateScopeKind, error) {
@@ -262,12 +306,50 @@ func rateLimitSelectorMatches(selector connsdk.RateLimitSelector, method, path s
 }
 
 func rateLimitEndpointMatches(endpoints []connsdk.RateLimitEndpointSelector, method, path string) bool {
+	method = strings.ToUpper(strings.TrimSpace(method))
+	path = rateLimitSelectorPath(path)
 	for _, endpoint := range endpoints {
-		if endpoint.Method == method && endpoint.Path == path {
+		if endpoint.Method == method && rateLimitEndpointPathMatches(endpoint.Path, path) {
 			return true
 		}
 	}
 	return false
+}
+
+func rateLimitSelectorPath(path string) string {
+	parsed, err := url.Parse(path)
+	if err == nil {
+		return parsed.Path
+	}
+	path, _, _ = strings.Cut(path, "?")
+	return path
+}
+
+func rateLimitEndpointPathMatches(pattern, path string) bool {
+	if pattern == path {
+		return true
+	}
+	patternParts := strings.Split(pattern, "/")
+	pathParts := strings.Split(path, "/")
+	if len(patternParts) != len(pathParts) {
+		return false
+	}
+	for i, patternPart := range patternParts {
+		if rateLimitEndpointPathParameter(patternPart) {
+			if pathParts[i] != "" {
+				continue
+			}
+			return false
+		}
+		if patternPart != pathParts[i] {
+			return false
+		}
+	}
+	return true
+}
+
+func rateLimitEndpointPathParameter(part string) bool {
+	return len(part) > 2 && strings.HasPrefix(part, "{") && strings.HasSuffix(part, "}") && !strings.ContainsAny(part[1:len(part)-1], "{}")
 }
 
 func rateLimitSelectorValueMatches(values []string, value string) bool {

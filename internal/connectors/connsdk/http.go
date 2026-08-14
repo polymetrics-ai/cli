@@ -186,6 +186,7 @@ type Requester struct {
 	// The parsed scalar is delivered through RateLimitObservation; raw headers
 	// are never retained.
 	RateLimitCostHeader string
+	RouteRateLimits     RateLimitRouteResolver
 }
 
 func (r *Requester) client() *http.Client {
@@ -289,17 +290,38 @@ func (r *Requester) now() time.Time {
 	return time.Now()
 }
 
-func (r *Requester) admit(ctx context.Context, method string, attempt int) error {
-	if r.Admission == nil {
-		return nil
+func (r *Requester) admit(ctx context.Context, route RateLimitRoute) (string, error) {
+	costHeader := r.RateLimitCostHeader
+	if r.Admission != nil {
+		if err := r.Admission.Admit(ctx, RateLimitRequest{Method: route.Method, Attempt: route.Attempt}); err != nil {
+			return "", err
+		}
 	}
-	return r.Admission.Admit(ctx, RateLimitRequest{Method: method, Attempt: attempt})
+	if r.RouteRateLimits == nil {
+		return costHeader, nil
+	}
+	routeCostHeader, err := r.RouteRateLimits.AdmitRoute(ctx, route)
+	if err != nil {
+		return "", err
+	}
+	if routeCostHeader != "" {
+		if costHeader != "" && !strings.EqualFold(costHeader, routeCostHeader) {
+			return "", fmt.Errorf("matching rate-limit policies use different actual-cost headers")
+		}
+		costHeader = routeCostHeader
+	}
+	return costHeader, nil
 }
 
-func (r *Requester) observeRateLimit(ctx context.Context, status int, header http.Header, attempt int) RateLimitObservation {
-	observation, ok := rateLimitObservation(status, header, attempt, r.now(), r.RateLimitCostHeader)
-	if ok && r.Observer != nil {
-		r.Observer.Observe(ctx, observation)
+func (r *Requester) observeRateLimit(ctx context.Context, route RateLimitRoute, status int, header http.Header, costHeader string) RateLimitObservation {
+	observation, ok := rateLimitObservation(status, header, route.Attempt, r.now(), costHeader)
+	if ok {
+		if r.Observer != nil {
+			r.Observer.Observe(ctx, observation)
+		}
+		if r.RouteRateLimits != nil {
+			r.RouteRateLimits.ObserveRoute(ctx, route, observation)
+		}
 	}
 	return observation
 }
@@ -316,17 +338,21 @@ func (e *rateLimitAdmissionError) Unwrap() error {
 	return e.err
 }
 
-func (r *Requester) admitRequesterSend(ctx context.Context, method string, requesterAttempt *int) error {
+func (r *Requester) admitRequesterSend(ctx context.Context, method, path string, requesterAttempt *int, route *RateLimitRoute, costHeader *string) error {
 	nextAttempt := *requesterAttempt + 1
-	if err := r.admit(ctx, method, nextAttempt); err != nil {
+	nextRoute := RateLimitRoute{Method: method, Path: path, Attempt: nextAttempt}
+	header, err := r.admit(ctx, nextRoute)
+	if err != nil {
 		return &rateLimitAdmissionError{err: err}
 	}
 	*requesterAttempt = nextAttempt
+	*route = nextRoute
+	*costHeader = header
 	return nil
 }
 
-func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int) *http.Client {
-	if r.Admission == nil && r.Observer == nil {
+func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int, route *RateLimitRoute, costHeader *string) *http.Client {
+	if r.Admission == nil && r.Observer == nil && r.RouteRateLimits == nil {
 		return client
 	}
 	clone := *client
@@ -339,7 +365,7 @@ func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterA
 		} else if len(via) >= maxRedirects {
 			return fmt.Errorf("stopped after %d redirects", maxRedirects)
 		}
-		return r.admitRequesterSend(req.Context(), req.Method, requesterAttempt)
+		return r.admitRequesterSend(req.Context(), req.Method, req.URL.Path, requesterAttempt, route, costHeader)
 	}
 	return &clone
 }
@@ -848,12 +874,14 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	// returning 401 terminates with that 401 instead of being hammered.
 	reauthAttempted := false
 	requesterAttempt := 0
+	route := RateLimitRoute{}
+	costHeader := ""
 	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
 	baseClient := r.clientFor(ctx)
 	if strictWrite {
 		baseClient = noReplayClient(baseClient)
 	}
-	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt)
+	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt, &route, &costHeader)
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -884,7 +912,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		if r.DisableRetries {
 			disableTransportReplay(req, strictWrite)
 		}
-		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
+		if err := r.admitRequesterSend(ctx, method, path, &requesterAttempt, &route, &costHeader); err != nil {
 			_ = cleanupRequestBody(body)
 			return nil, err
 		}
@@ -910,7 +938,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			}
 			return nil, lastErr
 		}
-		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, requesterAttempt)
+		observation := r.observeRateLimit(ctx, route, resp.StatusCode, resp.Header, costHeader)
 		bodyErr := cleanupRequestBody(body)
 		if bodyErr != nil {
 			resp.Body.Close()

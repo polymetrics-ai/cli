@@ -40,6 +40,19 @@ func TestSharedRateLimitRegistryRefusesWhenCoordinatorIsMissing(t *testing.T) {
 	t.Logf("require_shared result=refused reason=%s", unavailable.Reason)
 }
 
+func TestSharedRateLimitRegistryPreservesCallerCancellation(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	err := NewSharedRateLimitRegistry(nil).EnsureAvailable(ctx)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("cancelled shared availability error = %v, want context.Canceled", err)
+	}
+	var unavailable *SharedRateLimitUnavailableError
+	if errors.As(err, &unavailable) {
+		t.Fatalf("cancelled shared availability returned unavailable reason %q", unavailable.Reason)
+	}
+}
+
 func TestSharedRateLimitRedisKeyUsesOnlyOpaqueScope(t *testing.T) {
 	identity, err := connectors.NewCoordinationIdentity([]byte("coordination-test-salt"), connectors.CredentialBinding{
 		BindingID:      "binding-test-only",

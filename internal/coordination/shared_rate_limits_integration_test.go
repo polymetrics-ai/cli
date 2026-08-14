@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
 	"os/exec"
 	"strings"
@@ -106,6 +107,105 @@ func TestSharedRateLimitHonorsEveryDeclaredBudgetModel(t *testing.T) {
 			defer cancel()
 			if err := limiter.Admit(ctx, connsdk.RateLimitRequest{Method: "GET", Attempt: 2}); !errors.Is(err, context.DeadlineExceeded) {
 				t.Fatalf("second %s admission = %v, want context deadline while shared budget is exhausted", model, err)
+			}
+		})
+	}
+}
+
+func TestSharedRateLimitObservationDoesNotBlockNonExhaustedReset(t *testing.T) {
+	if os.Getenv("POLYMETRICS_COORDINATION_INTEGRATION") != "1" {
+		t.Skip("set POLYMETRICS_COORDINATION_INTEGRATION=1 with a local Dragonfly endpoint to run")
+	}
+	addr := os.Getenv("POLYMETRICS_DRAGONFLY_ADDR")
+	if addr == "" {
+		addr = "localhost:6379"
+	}
+	dragonfly := OpenDragonfly(addr)
+	t.Cleanup(func() { _ = dragonfly.Close() })
+	if err := dragonfly.Ping(context.Background()); err != nil {
+		t.Fatalf("required local Dragonfly coordinator is unavailable: %v", err)
+	}
+	key := RateLimitKey{Connector: "paced", PolicyID: "shared-nonexhausted-reset", Scope: connectors.RateLimitScopeKey("integration-opaque-scope")}
+	if err := dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err(); err != nil {
+		t.Fatalf("clear integration rate-limit key: %v", err)
+	}
+	t.Cleanup(func() { _ = dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err() })
+	limiter := NewSharedRateLimitRegistry(dragonfly).Limiter(key, []connsdk.RateLimitBudget{fixedRequestBudget(100, 60)})
+	limiter.Observe(context.Background(), connsdk.RateLimitObservation{
+		Attempted:    true,
+		Status:       http.StatusOK,
+		HasRemaining: true,
+		Remaining:    99,
+		HasReset:     true,
+		ResetAt:      time.Now().Add(time.Minute),
+	})
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
+	if err := limiter.Admit(ctx, connsdk.RateLimitRequest{Method: http.MethodGet, Attempt: 1}); err != nil {
+		t.Fatalf("non-exhausted reset admission: %v", err)
+	}
+}
+
+func TestSharedRateLimitObservationsTightenProviderState(t *testing.T) {
+	if os.Getenv("POLYMETRICS_COORDINATION_INTEGRATION") != "1" {
+		t.Skip("set POLYMETRICS_COORDINATION_INTEGRATION=1 with a local Dragonfly endpoint to run")
+	}
+	addr := os.Getenv("POLYMETRICS_DRAGONFLY_ADDR")
+	if addr == "" {
+		addr = "localhost:6379"
+	}
+	dragonfly := OpenDragonfly(addr)
+	t.Cleanup(func() { _ = dragonfly.Close() })
+	if err := dragonfly.Ping(context.Background()); err != nil {
+		t.Fatalf("required local Dragonfly coordinator is unavailable: %v", err)
+	}
+
+	for _, tt := range []struct {
+		name        string
+		budget      connsdk.RateLimitBudget
+		before      bool
+		observation connsdk.RateLimitObservation
+	}{
+		{
+			name:        "remaining",
+			budget:      fixedRequestBudget(10, 60),
+			observation: connsdk.RateLimitObservation{Attempted: true, HasRemaining: true, Remaining: 0},
+		},
+		{
+			name:        "limit",
+			budget:      fixedRequestBudget(10, 60),
+			before:      true,
+			observation: connsdk.RateLimitObservation{Attempted: true, HasLimit: true, Limit: 1},
+		},
+		{
+			name:        "actual point cost",
+			budget:      bucketPointBudget(connsdk.RateLimitBudgetTokenBucket, 10, 0.001, 1),
+			before:      true,
+			observation: connsdk.RateLimitObservation{Attempted: true, HasCost: true, Cost: 10},
+		},
+		{
+			name:        "429 without reset",
+			budget:      fixedRequestBudget(10, 60),
+			observation: connsdk.RateLimitObservation{Attempted: true, Status: http.StatusTooManyRequests},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			key := RateLimitKey{Connector: "paced", PolicyID: "shared-observation-" + strings.ReplaceAll(tt.name, " ", "-"), Scope: connectors.RateLimitScopeKey("integration-opaque-scope")}
+			if err := dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err(); err != nil {
+				t.Fatalf("clear integration rate-limit key: %v", err)
+			}
+			t.Cleanup(func() { _ = dragonfly.client.Del(context.Background(), sharedRateLimitRedisKey(key)).Err() })
+			limiter := NewSharedRateLimitRegistry(dragonfly).Limiter(key, []connsdk.RateLimitBudget{tt.budget})
+			if tt.before {
+				if err := limiter.Admit(context.Background(), connsdk.RateLimitRequest{Method: http.MethodGet, Attempt: 1}); err != nil {
+					t.Fatalf("initial admission: %v", err)
+				}
+			}
+			limiter.Observe(context.Background(), tt.observation)
+			ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+			defer cancel()
+			if err := limiter.Admit(ctx, connsdk.RateLimitRequest{Method: http.MethodGet, Attempt: 2}); !errors.Is(err, context.DeadlineExceeded) {
+				t.Fatalf("admission after %s observation = %v, want context deadline", tt.name, err)
 			}
 		})
 	}
