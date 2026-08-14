@@ -201,7 +201,7 @@ func TestBothConnectionsKeepTheirOwnRowsAndAreReadableByName(t *testing.T) {
 func TestQuerySQLScopesConnectionOwnedAndUnattributedViews(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("scoped_sql_query", nil)
-	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append")
 
 	source.records = []connectors.Record{{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"}}
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
