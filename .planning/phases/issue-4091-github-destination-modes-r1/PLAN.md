@@ -28,6 +28,7 @@ files_modified:
   - internal/connectors/definition.go
   - internal/connectors/defs/github/writes.json
   - internal/connectors/engine/schema/writes.schema.json
+  - internal/cli/testdata/golden_transcripts.json
 ---
 
 # TDD plan: GitHub destination modes

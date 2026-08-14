@@ -23,3 +23,11 @@
 `go test -count=1 -timeout 20m ./internal/app -run '^TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite$' -v` passed for set-replace and keyed paths. Its stateful GitHub HTTP recorder starts with `transport-demo` and `legacy`, observes the PUT replacing that set with only `transport-demo`, and serves that exact state to the read-back request. It asserts zero additional PUTs for token replay, revocation, scope drift, and a subsequently disabled per-connection switch.
 
 The inline/manual GSD fallback is deliberate: the generated canonical contract forbids role spawning for this isolated issue lane. The worker executed the generated discuss, plan, verify, and review prompts and recorded the red/green commands and review evidence in this phase directory.
+
+## Generated CLI transcript audit
+
+CI correctly required the `connectors_inspect_github_json` golden output to reflect the changed GitHub definition. It was regenerated only by the sanctioned command:
+
+`POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -count=1 -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -v`
+
+The decoded GitHub JSON diff has one line: `"confirm": "destructive"` was added to the existing `set_issue_labels` action. That line is intentional because #4091 makes set-replace destructive and approval-gated. The SHA-256 of every non-GitHub transcript before and after regeneration was identical (`507d76b118263a29a590159dd617c4dfe2ec9086b7c94c41fc2d861375c4e254`), proving sample, unknown, and unsafe entries did not move.
