@@ -35,6 +35,12 @@ func (d *DatabaseDriver) loadNamespaceOwner(ctx context.Context, target database
 	defer rows.Close()
 	if !rows.Next() {
 		if err := rows.Err(); err != nil {
+			if postgresUndefinedTable(err) {
+				return database.ManagedTargetNamespaceOwnerAbsent, database.ManagedTargetNamespaceOwnerRecord{}, nil
+			}
+			if postgresPermissionDenied(err) {
+				return database.ManagedTargetNamespaceOwnerUnreadable, database.ManagedTargetNamespaceOwnerRecord{}, nil
+			}
 			return database.ManagedTargetNamespaceOwnerUnknown, database.ManagedTargetNamespaceOwnerRecord{}, postgresManagedTargetQueryError(ctx, err)
 		}
 		return database.ManagedTargetNamespaceOwnerAbsent, database.ManagedTargetNamespaceOwnerRecord{}, nil
@@ -44,6 +50,12 @@ func (d *DatabaseDriver) loadNamespaceOwner(ctx context.Context, target database
 		return database.ManagedTargetNamespaceOwnerUnknown, database.ManagedTargetNamespaceOwnerRecord{}, errors.New("postgres managed target namespace owner record is invalid")
 	}
 	if err := rows.Err(); err != nil {
+		if postgresUndefinedTable(err) {
+			return database.ManagedTargetNamespaceOwnerAbsent, database.ManagedTargetNamespaceOwnerRecord{}, nil
+		}
+		if postgresPermissionDenied(err) {
+			return database.ManagedTargetNamespaceOwnerUnreadable, database.ManagedTargetNamespaceOwnerRecord{}, nil
+		}
 		return database.ManagedTargetNamespaceOwnerUnknown, database.ManagedTargetNamespaceOwnerRecord{}, postgresManagedTargetQueryError(ctx, err)
 	}
 	owner, err := postgresOwner(workspaceID, connectorID, connectionID)

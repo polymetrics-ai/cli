@@ -346,9 +346,23 @@ func assertPostgresManagedTargetPermissionRefusal(t *testing.T, ctx context.Cont
 	if err != nil {
 		t.Fatal("could not construct restricted PostgreSQL managed target driver")
 	}
+	var databaseOID, namespaceOID string
+	if err := restricted.QueryRow(ctx, "SELECT oid::text FROM pg_catalog.pg_database WHERE datname = current_database()").Scan(&databaseOID); err != nil || databaseOID == "" {
+		t.Fatal("restricted PostgreSQL session could not observe its destination database identity")
+	}
+	if err := restricted.QueryRow(ctx, "SELECT oid::text FROM pg_catalog.pg_namespace WHERE nspname = $1", fixture.target.Namespace()).Scan(&namespaceOID); err != nil || namespaceOID == "" {
+		t.Fatal("restricted PostgreSQL session could not observe the derived namespace identity")
+	}
 	provisioner, err := database.NewManagedTargetProvisioner(driver)
 	if err != nil {
 		t.Fatal("could not construct restricted PostgreSQL managed target provisioner")
+	}
+	observation, err := driver.ObserveManagedTarget(ctx, fixture.target)
+	if err != nil {
+		t.Fatal("restricted PostgreSQL managed target observation did not reach the private control boundary")
+	}
+	if observation.NamespaceOwnerState != database.ManagedTargetNamespaceOwnerUnreadable || observation.ControlState != database.ManagedTargetControlUnreadable {
+		t.Fatalf("restricted PostgreSQL managed target observation = namespace_owner=%d control=%d, want both unreadable", observation.NamespaceOwnerState, observation.ControlState)
 	}
 	before := observePostgresManagedTargetState(t, ctx, source, fixture.target)
 	if _, err := provisioner.CreateOrAssert(ctx, fixture.plan); !errors.Is(err, database.ErrManagedTargetOwnerUnreadable) {

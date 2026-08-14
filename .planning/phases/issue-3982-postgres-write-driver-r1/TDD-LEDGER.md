@@ -26,4 +26,4 @@ go test -race -timeout 20m -count=1 ./internal/connectors/native/postgres ./inte
 POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=<docker|podman> POLYMETRICS_CONTAINER_ENDPOINT=<direct-unix-socket> go test -tags=databaseintegration -timeout 20m -count=1 -v ./internal/connectors/native/postgres
 ```
 
-Every live proof reads target rows/counts/OIDs/control records after the operation or refusal. A successful command without an observable assertion is not evidence. The current worktree has no explicit direct-local container endpoint, so the tagged test compiles and skips honestly; `traces/provisioning-green.md` records that availability boundary.
+Every live proof reads target rows/counts/OIDs/control records after the operation or refusal. A successful command without an observable assertion is not evidence. The explicit direct-local Docker dbtest proof passed; `traces/provisioning-green.md` records the observable state assertions and the live permission-path defect it found.

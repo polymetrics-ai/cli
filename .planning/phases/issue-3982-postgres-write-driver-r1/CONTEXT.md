@@ -14,9 +14,9 @@
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
-| Exact existing target assertion and durable control ledger | live (dbtest; endpoint pending) | Independently seeded PostgreSQL owner/control rows reassert the same relation OID; one ledger store increases its private table count by one and re-reads the identifier. |
-| Foreign/tampered owner, collision, OID replacement, schema drift, and permissions | live (dbtest; endpoint pending) | Each case re-queries namespace/relation OIDs, owner/control values, and ledger count after refusal; no driver mutation is accepted as evidence. |
-| Unsafe durability settings | live (dbtest; endpoint pending) | A session visibly has `synchronous_commit=off`, preflight refuses it, then accepts the restored safe setting. |
+| Exact existing target assertion and durable control ledger | live | Independently seeded PostgreSQL owner/control rows reassert the same relation OID; one ledger store increases its private table count by one and re-reads the identifier. |
+| Foreign/tampered owner, collision, OID replacement, schema drift, and permissions | live | Each case re-queries namespace/relation OIDs, owner/control values, and ledger count after refusal; no driver mutation is accepted as evidence. |
+| Unsafe durability settings | live | A session visibly has `synchronous_commit=off`, preflight refuses it, then accepts the restored safe setting. |
 | Private namespace/control DDL and first target creation | held for #3973 mapping | The target relation and its schema fingerprint must commit atomically; no placeholder or PostgreSQL-private mapping is legal. |
 | Five typed modes, tombstones, rollback, and unknown commit | held for #3973 mapping/receipt | A later dbtest suite must assert persisted row/count/receipt outcomes rather than errors alone. |
 | Capability remains fenced until certification | local | Existing metadata/capability tests observe `write=false` after the driver gains mapping-independent ports. |
