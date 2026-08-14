@@ -118,6 +118,45 @@ type Connection struct {
 	UpdatedAt   time.Time               `json:"updated_at"`
 }
 
+func cloneEndpointConfig(config EndpointConfig) EndpointConfig {
+	clone := config
+	clone.Config = cloneStringMap(config.Config)
+	return clone
+}
+
+func cloneStreamConfig(config StreamConfig) StreamConfig {
+	clone := config
+	clone.PrimaryKey = append([]string(nil), config.PrimaryKey...)
+	return clone
+}
+
+func cloneStreamConfigs(configs map[string]StreamConfig) map[string]StreamConfig {
+	if configs == nil {
+		return nil
+	}
+	clone := make(map[string]StreamConfig, len(configs))
+	for name, config := range configs {
+		clone[name] = cloneStreamConfig(config)
+	}
+	return clone
+}
+
+func cloneCreateConnectionRequest(req CreateConnectionRequest) CreateConnectionRequest {
+	clone := req
+	clone.Source = cloneEndpointConfig(req.Source)
+	clone.Destination = cloneEndpointConfig(req.Destination)
+	clone.Streams = cloneStreamConfigs(req.Streams)
+	return clone
+}
+
+func cloneConnection(connection Connection) Connection {
+	clone := connection
+	clone.Source = cloneEndpointConfig(connection.Source)
+	clone.Destination = cloneEndpointConfig(connection.Destination)
+	clone.Streams = cloneStreamConfigs(connection.Streams)
+	return clone
+}
+
 type CatalogSnapshot struct {
 	Connection string             `json:"connection"`
 	Catalog    connectors.Catalog `json:"catalog"`

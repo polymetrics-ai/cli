@@ -832,6 +832,7 @@ func ValidateConnectionName(name string) error {
 }
 
 func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest) (Connection, error) {
+	req = cloneCreateConnectionRequest(req)
 	if err := ValidateConnectionName(req.Name); err != nil {
 		return Connection{}, err
 	}
@@ -936,15 +937,19 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		CreatedAt:   now,
 		UpdatedAt:   now,
 	}
-	a.state.Connections = append(a.state.Connections, conn)
+	stored := cloneConnection(conn)
+	a.state.Connections = append(a.state.Connections, stored)
 	if err := a.save(); err != nil {
 		return Connection{}, err
 	}
-	return conn, nil
+	return cloneConnection(stored), nil
 }
 
 func (a *App) ListConnections() []Connection {
-	out := append([]Connection(nil), a.state.Connections...)
+	out := make([]Connection, len(a.state.Connections))
+	for index, connection := range a.state.Connections {
+		out[index] = cloneConnection(connection)
+	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
 }
@@ -2797,7 +2802,7 @@ func (a *App) findCredential(name string) (CredentialMeta, bool) {
 func (a *App) findConnection(name string) (Connection, bool) {
 	for _, conn := range a.state.Connections {
 		if conn.Name == name {
-			return conn, true
+			return cloneConnection(conn), true
 		}
 	}
 	return Connection{}, false
@@ -2806,7 +2811,7 @@ func (a *App) findConnection(name string) (Connection, bool) {
 func (a *App) findConnectionByID(id string) (Connection, bool) {
 	for _, conn := range a.state.Connections {
 		if conn.ID == id {
-			return conn, true
+			return cloneConnection(conn), true
 		}
 	}
 	return Connection{}, false
@@ -2818,7 +2823,7 @@ func (a *App) findConnectionByID(id string) (Connection, bool) {
 func (a *App) findConnectionFold(name string) (Connection, bool) {
 	for _, conn := range a.state.Connections {
 		if strings.EqualFold(conn.Name, name) {
-			return conn, true
+			return cloneConnection(conn), true
 		}
 	}
 	return Connection{}, false
