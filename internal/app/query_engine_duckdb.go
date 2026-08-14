@@ -154,6 +154,11 @@ func (e duckdbEngine) registerViews(
 	sort.Strings(names)
 	for _, name := range names {
 		if policy.blocksBareView(name) {
+			if connection == "" && policy.registersCanonicalAliases(name) {
+				if err := registerGeneratedOwnerAliases(ctx, db, name, byName[name], policy); err != nil {
+					return err
+				}
+			}
 			continue
 		}
 		table, findErr := resolver.Find(name, connection)
@@ -173,14 +178,27 @@ func (e duckdbEngine) registerViews(
 		if policy.blocksGeneratedAliases(name) {
 			continue
 		}
-		for _, table := range byName[name] {
-			alias := generatedOwnerAlias(name, table)
-			if !policy.allowsGeneratedAlias(alias) {
-				continue
-			}
-			if err := registerWarehouseView(ctx, db, alias, table); err != nil {
-				return err
-			}
+		if err := registerGeneratedOwnerAliases(ctx, db, name, byName[name], policy); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func registerGeneratedOwnerAliases(
+	ctx context.Context,
+	db *sql.DB,
+	name string,
+	tables []warehouse.Table,
+	policy queryViewPolicy,
+) error {
+	for _, table := range tables {
+		alias := generatedOwnerAlias(name, table)
+		if !policy.allowsGeneratedAlias(alias) {
+			continue
+		}
+		if err := registerWarehouseView(ctx, db, alias, table); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -226,55 +244,197 @@ func (e duckdbEngine) openScopedDuckDB(
 }
 
 type queryViewPolicy struct {
-	ambiguousBaseNameByKey    map[string]string
-	generatedAliasBaseName    map[string]string
-	collidingGeneratedAliases map[string]struct{}
+	ambiguousBaseNameByKey             map[string]string
+	caseEquivalentUniqueAmbiguityByKey map[string]tableAmbiguity
+	faultedCanonicalTableByKey         map[string]faultedCanonicalTable
+	generatedAliasBaseName             map[string]string
+	collidingGeneratedAliases          map[string]struct{}
+	sameOwnerDestinationCollisionByKey map[string]warehouseDestinationCollision
+	sameOwnerGeneratedAliasByKey       map[string]warehouseDestinationCollision
+	unscopedFlow                       bool
+}
+
+// tableAmbiguity is a canonical DuckDB identifier collision derived from a
+// single immutable resolver snapshot. Its original table spelling and
+// connection list are retained so the flow boundary can still give the caller
+// a typed warehouse error rather than a DuckDB catalog implementation detail.
+type tableAmbiguity struct {
+	table       string
+	connections []string
+}
+
+func (a tableAmbiguity) err() error {
+	return &warehouse.AmbiguousTableError{
+		Table:       a.table,
+		Connections: append([]string(nil), a.connections...),
+	}
+}
+
+type faultedCanonicalTable struct {
+	faults []warehouse.Fault
+}
+
+func (f faultedCanonicalTable) err(table string) error {
+	faults := make([]warehouse.Fault, len(f.faults))
+	for i, fault := range f.faults {
+		faults[i] = fault
+		faults[i].Tables = append([]string(nil), fault.Tables...)
+	}
+	return &warehouse.FaultError{Table: table, Faults: faults, Undecided: true}
 }
 
 func newQueryViewPolicy(req QuerySQLRequest, resolver *warehouse.TableResolver) queryViewPolicy {
-	if req.Connection != "" {
-		return queryViewPolicy{}
-	}
-
 	tables := resolver.Tables()
 	byName := make(map[string][]warehouse.Table, len(tables))
 	catalogNames := make(map[string]struct{}, len(tables))
 	for _, table := range tables {
 		byName[table.Name] = append(byName[table.Name], table)
-		catalogNames[duckDBIdentifierKey(table.Name)] = struct{}{}
+		if querySelectsConnection(req.Connection, table.Connection) {
+			catalogNames[duckDBIdentifierKey(table.Name)] = struct{}{}
+		}
 	}
 	policy := queryViewPolicy{
-		collidingGeneratedAliases: make(map[string]struct{}),
+		caseEquivalentUniqueAmbiguityByKey: make(map[string]tableAmbiguity),
+		collidingGeneratedAliases:          make(map[string]struct{}),
+		sameOwnerDestinationCollisionByKey: make(map[string]warehouseDestinationCollision),
+		sameOwnerGeneratedAliasByKey:       make(map[string]warehouseDestinationCollision),
 	}
-	unscopedFlow := req.Origin == QuerySQLOriginFlow
-	if unscopedFlow {
+	policy.unscopedFlow = req.Connection == "" && req.Origin == QuerySQLOriginFlow
+	for _, collision := range req.sameOwnerCaseEquivalentDestinationCollisions {
+		if req.Connection != "" && req.Connection != collision.connection {
+			continue
+		}
+		if _, exists := policy.sameOwnerDestinationCollisionByKey[collision.key]; !exists {
+			policy.sameOwnerDestinationCollisionByKey[collision.key] = collision
+		}
+		for _, table := range collision.tables {
+			aliasKey := duckDBIdentifierKey(table + "__" + collision.connectionID)
+			// A resolver-visible real table wins over an invented generated
+			// alias. The snapshot is the authority, not a reserved namespace.
+			if _, exists := catalogNames[aliasKey]; exists {
+				continue
+			}
+			if _, exists := policy.sameOwnerGeneratedAliasByKey[aliasKey]; !exists {
+				policy.sameOwnerGeneratedAliasByKey[aliasKey] = collision
+			}
+		}
+	}
+	// A connection-scoped query still needs the same-owner policy above, but
+	// all existing cross-owner/alias rules remain unscoped-only.
+	if req.Connection != "" {
+		return policy
+	}
+	if policy.unscopedFlow {
 		policy.ambiguousBaseNameByKey = make(map[string]string)
 		policy.generatedAliasBaseName = make(map[string]string)
 	}
-	for name, tables := range byName {
-		if _, err := resolver.Find(name, ""); !isAmbiguousTableError(err) {
-			continue
-		}
-		if unscopedFlow {
-			key := duckDBIdentifierKey(name)
-			current, exists := policy.ambiguousBaseNameByKey[key]
-			if !exists || name == key || (current != key && name < current) {
-				policy.ambiguousBaseNameByKey[key] = name
+	names := make([]string, 0, len(byName))
+	for name := range byName {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	canonicalGroups := make(map[string]canonicalTableGroup, len(names))
+	for _, name := range names {
+		nameTables := byName[name]
+		key := duckDBIdentifierKey(name)
+		group := canonicalGroups[key]
+		group.names = append(group.names, name)
+		group.tables = append(group.tables, nameTables...)
+		_, findErr := resolver.Find(name, "")
+		exactAmbiguous := isAmbiguousTableError(findErr)
+		if exactAmbiguous {
+			group.hasExactAmbiguity = true
+			if policy.unscopedFlow {
+				current, exists := policy.ambiguousBaseNameByKey[key]
+				if !exists || name == key || (current != key && name < current) {
+					policy.ambiguousBaseNameByKey[key] = name
+				}
 			}
 		}
-		for _, table := range tables {
+		canonicalGroups[key] = group
+
+		for _, table := range nameTables {
 			alias := generatedOwnerAlias(name, table)
 			aliasKey := duckDBIdentifierKey(alias)
 			if _, exists := catalogNames[aliasKey]; exists {
 				policy.collidingGeneratedAliases[aliasKey] = struct{}{}
 			}
-			if !unscopedFlow {
-				continue
+			if exactAmbiguous && policy.unscopedFlow {
+				policy.generatedAliasBaseName[aliasKey] = name
 			}
-			policy.generatedAliasBaseName[aliasKey] = name
 		}
 	}
+	for key, group := range canonicalGroups {
+		if len(group.names) < 2 || group.hasExactAmbiguity {
+			continue
+		}
+		policy.caseEquivalentUniqueAmbiguityByKey[key] = group.ambiguity(key)
+	}
+	if policy.unscopedFlow {
+		policy.faultedCanonicalTableByKey = faultedCanonicalTables(resolver.Faults(), canonicalGroups)
+	}
 	return policy
+}
+
+type canonicalTableGroup struct {
+	names             []string
+	tables            []warehouse.Table
+	hasExactAmbiguity bool
+}
+
+func (g canonicalTableGroup) ambiguity(key string) tableAmbiguity {
+	table := g.names[0]
+	for _, name := range g.names {
+		if name == key {
+			table = name
+			break
+		}
+	}
+	connections := make([]string, 0, len(g.tables))
+	seenConnections := make(map[string]struct{}, len(g.tables))
+	for _, table := range g.tables {
+		if _, exists := seenConnections[table.Connection]; exists {
+			continue
+		}
+		seenConnections[table.Connection] = struct{}{}
+		connections = append(connections, table.Connection)
+	}
+	sort.Strings(connections)
+	return tableAmbiguity{table: table, connections: connections}
+}
+
+func faultedCanonicalTables(faults []warehouse.Fault, groups map[string]canonicalTableGroup) map[string]faultedCanonicalTable {
+	knownNamesByKey := make(map[string]map[string]struct{}, len(groups))
+	for key, group := range groups {
+		names := make(map[string]struct{}, len(group.names))
+		for _, name := range group.names {
+			names[name] = struct{}{}
+		}
+		knownNamesByKey[key] = names
+	}
+
+	out := make(map[string]faultedCanonicalTable)
+	for _, fault := range faults {
+		seenKeys := make(map[string]struct{})
+		for _, name := range fault.Tables {
+			key := duckDBIdentifierKey(name)
+			knownNames, exists := knownNamesByKey[key]
+			if !exists {
+				continue
+			}
+			if _, exact := knownNames[name]; exact {
+				continue
+			}
+			if _, seen := seenKeys[key]; seen {
+				continue
+			}
+			seenKeys[key] = struct{}{}
+			collision := out[key]
+			collision.faults = append(collision.faults, fault)
+			out[key] = collision
+		}
+	}
+	return out
 }
 
 func isAmbiguousTableError(err error) bool {
@@ -287,50 +447,74 @@ func generatedOwnerAlias(name string, table warehouse.Table) string {
 }
 
 func (p queryViewPolicy) blocksGeneratedAliases(name string) bool {
+	if _, ok := p.sameOwnerDestinationCollisionByKey[duckDBIdentifierKey(name)]; ok {
+		return true
+	}
 	_, ok := p.ambiguousBaseNameByKey[duckDBIdentifierKey(name)]
 	return ok
 }
 
 func (p queryViewPolicy) blocksBareView(name string) bool {
 	key := duckDBIdentifierKey(name)
+	if _, ok := p.sameOwnerDestinationCollisionByKey[key]; ok {
+		return true
+	}
+	if _, ok := p.faultedCanonicalTableByKey[key]; ok {
+		return true
+	}
+	if _, ok := p.sameOwnerGeneratedAliasByKey[key]; ok {
+		return true
+	}
 	if _, ok := p.ambiguousBaseNameByKey[key]; ok {
+		return true
+	}
+	if _, ok := p.caseEquivalentUniqueAmbiguityByKey[key]; ok {
 		return true
 	}
 	_, ok := p.generatedAliasBaseName[key]
 	return ok
 }
 
+func (p queryViewPolicy) registersCanonicalAliases(name string) bool {
+	if p.unscopedFlow {
+		return false
+	}
+	if _, ok := p.sameOwnerDestinationCollisionByKey[duckDBIdentifierKey(name)]; ok {
+		return false
+	}
+	_, ok := p.caseEquivalentUniqueAmbiguityByKey[duckDBIdentifierKey(name)]
+	return ok
+}
+
 func (p queryViewPolicy) allowsGeneratedAlias(name string) bool {
+	if _, blocked := p.sameOwnerGeneratedAliasByKey[duckDBIdentifierKey(name)]; blocked {
+		return false
+	}
 	_, collides := p.collidingGeneratedAliases[duckDBIdentifierKey(name)]
 	return !collides
 }
 
 func (p queryViewPolicy) find(resolver *warehouse.TableResolver, tableName, connection string) (warehouse.Table, error) {
 	key := duckDBIdentifierKey(tableName)
+	if collision, ok := p.sameOwnerDestinationCollisionByKey[key]; ok {
+		return warehouse.Table{}, collision.err()
+	}
+	if faulted, ok := p.faultedCanonicalTableByKey[key]; ok {
+		return warehouse.Table{}, faulted.err(tableName)
+	}
+	if collision, ok := p.sameOwnerGeneratedAliasByKey[key]; ok {
+		return warehouse.Table{}, collision.err()
+	}
 	if baseName, ok := p.ambiguousBaseNameByKey[key]; ok {
 		return resolver.Find(baseName, "")
+	}
+	if ambiguity, ok := p.caseEquivalentUniqueAmbiguityByKey[key]; ok && p.unscopedFlow {
+		return warehouse.Table{}, ambiguity.err()
 	}
 	if baseName, ok := p.generatedAliasBaseName[key]; ok {
 		return resolver.Find(baseName, "")
 	}
 	return resolver.Find(tableName, connection)
-}
-
-func duckDBIdentifierKey(name string) string {
-	for i := 0; i < len(name); i++ {
-		if name[i] < 'A' || name[i] > 'Z' {
-			continue
-		}
-		key := []byte(name)
-		key[i] += 'a' - 'A'
-		for j := i + 1; j < len(key); j++ {
-			if key[j] >= 'A' && key[j] <= 'Z' {
-				key[j] += 'a' - 'A'
-			}
-		}
-		return string(key)
-	}
-	return name
 }
 
 func registerWarehouseView(ctx context.Context, db *sql.DB, view string, table warehouse.Table) error {

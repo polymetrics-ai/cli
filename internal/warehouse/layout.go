@@ -269,6 +269,33 @@ func (e *AmbiguousTableError) Error() string {
 	)
 }
 
+// SameOwnerCaseEquivalentTableError reports an invalid legacy connection
+// inventory whose distinct destination-table spellings resolve to the same
+// DuckDB identifier. A connection selector cannot solve this: both spellings
+// belong to the same owner. It is intentionally separate from
+// AmbiguousTableError, which means several owners can be selected between.
+type SameOwnerCaseEquivalentTableError struct {
+	Connection string
+	Tables     []string
+	Streams    []string
+}
+
+func (e *SameOwnerCaseEquivalentTableError) Error() string {
+	if e == nil {
+		return "local warehouse connection has case-equivalent destination tables"
+	}
+	tables := append([]string(nil), e.Tables...)
+	streams := append([]string(nil), e.Streams...)
+	sort.Strings(tables)
+	sort.Strings(streams)
+	return fmt.Sprintf(
+		"connection %q configures case-equivalent local warehouse destination tables (%s) for streams (%s); "+
+			"DuckDB treats them as one identifier, so a connection selector cannot resolve the collision. "+
+			"Direct reads must use an exact resolver-visible table spelling; create replacement connections with destination table names that differ by more than ASCII letter case",
+		e.Connection, strings.Join(tables, ", "), strings.Join(streams, ", "),
+	)
+}
+
 // WithAmbiguityRemedy tells a table-ambiguity error what the calling surface
 // can actually offer, and returns err untouched when it is not one. Callers use
 // it so the advice matches the command the operator just ran.
@@ -716,6 +743,14 @@ func (r *TableResolver) Tables() []Table {
 		return nil
 	}
 	return append([]Table(nil), r.tables...)
+}
+
+// Faults returns the resolver's captured ownership-record faults.
+func (r *TableResolver) Faults() []Fault {
+	if r == nil {
+		return nil
+	}
+	return cloneFaults(r.faults)
 }
 
 // Find resolves one table within the resolver's captured inventory.
