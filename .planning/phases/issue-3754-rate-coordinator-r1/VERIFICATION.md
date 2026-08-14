@@ -53,3 +53,12 @@ performed inline without spawning incompatible roles.
   differs from the live base, and the linked report requires Snyk sign-in, so
   this is recorded as an out-of-range baseline failure rather than masked by an
   unrelated update.
+
+## Correction 3/5 — #4035 (in progress)
+
+- [x] The late `Finish` observation remains readable and affects an admission after three concurrency lease TTLs, while a second admission proves occupancy was released at one TTL.
+- [x] Caller cancellation interrupts a stalled UDS exchange, and a syntactically valid response deliberately sent after cancellation cannot be observed as a grant.
+- [x] Focused coordinator race/ownership/cleanup and multi-process tiny-budget tests pass.
+- [ ] Required `-race` package checks pass; no-mistakes delivery is deferred until firstmate dispatches it with `--skip rebase,pr`.
+
+Evidence: `TestRateBudgetLeaseTTLFreesConcurrencyWithoutDroppingLateObservation` asserts the live admission transition from grant → post-expiry grant → one-minute refusal after the late observation. `TestUnixRateBudgetCoordinatorClientCancellationInterruptsStalledExchange` asserts the cancelled caller returns promptly; `TestUnixRateBudgetCoordinatorClientCancellationWinsResponseRace` asserts a valid ready response released after cancellation is not returned as a grant. `TestUnixRateBudgetCoordinatorMultiProcessTinyBudget` starts one actual UDS owner and eight test subprocesses, observes exactly three grants and five refusals, then asserts its 0700 run directory and 0600 socket are removed on close.

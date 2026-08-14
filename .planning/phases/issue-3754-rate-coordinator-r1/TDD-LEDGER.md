@@ -62,3 +62,47 @@ The live Dragonfly command and its full verbatim output were posted to issue #37
 processes against one opaque budget (one grant, one context-cancelled block), every declared budget
 model, and a `require_shared` requester admission. No credentialed provider call was run because
 this connector-neutral foundation intentionally leaves provider policy declarations to #3990.
+
+## Correction 3/5 — #4035 (planned)
+
+| ID | RED condition | GREEN contract | Evidence status |
+| --- | --- | --- | --- |
+| C3-R1 | An expired lease is retired after its short retained window, so `Finish` silently drops a valid later 429/reset observation. | Expiry releases only concurrency occupancy. The lease record remains finishable, and a later valid observation tightens the next admission. | **RED captured** |
+| C3-R2 | UDS `exchange` reads with only a static deadline, so cancellation cannot interrupt a stalled peer and a response that arrives in the cancellation race can become a ready/grant result. | A context cancellation advances the connection deadline and the client checks `ctx.Err()` after the response read; no late response reaches `Ready`/`Decide`. | **RED captured** |
+
+Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-safety`, `golang-security`, `golang-context`, `golang-concurrency`, and `golang-testing`.
+
+### RED command — 2026-08-14
+
+```text
+$ go test -count=1 -run 'Test(RateBudgetLeaseTTLFreesConcurrencyWithoutDroppingLateObservation|UnixRateBudgetCoordinatorClientCancellation)' ./internal/coordination
+# polymetrics.ai/internal/coordination [polymetrics.ai/internal/coordination.test]
+internal/coordination/rate_budget_coordinator_test.go:12:85: undefined: connsdk.ReservationPolicy
+internal/coordination/rate_budget_coordinator_test.go:15:22: undefined: RateBudgetPolicyFingerprint
+internal/coordination/rate_budget_coordinator_test.go:27:17: undefined: NewRateBudgetCoordinator
+internal/coordination/unix_rate_budget_coordinator_test.go:61:13: undefined: UnixRateBudgetCoordinatorClient
+FAIL	polymetrics.ai/internal/coordination [build failed]
+FAIL
+```
+
+This is a behavioral RED baseline: neither the lease lifecycle that can retain a completion observation nor the UDS client capable of receiving cancellation exists on the declared integration base.
+
+### GREEN command log — 2026-08-14
+
+```text
+$ go test -count=1 -run 'Test(RateBudgetLeaseTTLFreesConcurrencyWithoutDroppingLateObservation|UnixRateBudgetCoordinatorClientCancellation)' ./internal/coordination
+ok      polymetrics.ai/internal/coordination
+
+$ go test -race -count=1 -timeout 20m ./internal/coordination/... ./internal/connectors/engine/...
+ok      polymetrics.ai/internal/coordination
+ok      polymetrics.ai/internal/coordination/issueguard
+
+$ go test -race -count=1 -timeout 20m ./internal/connectors/engine/... -run 'Test(RequireSharedRateLimitPolicy|EndpointRequireShared|RateLimit)'
+ok      polymetrics.ai/internal/connectors/engine
+
+$ go vet ./internal/coordination/... ./internal/connectors/connsdk ./internal/connectors/engine/...
+$ make lint
+0 issues.
+```
+
+The coordinator test advances the injected clock by three short lease TTLs, proves a second admission is granted (occupancy released), then applies the first lease's late 429/reset `Finish` and observes a one-minute refusal. The UDS tests assert prompt `context.Canceled` during a stalled exchange and when a valid ready response is sent after cancellation. The race command also runs `TestUnixRateBudgetCoordinatorMultiProcessTinyBudget`, whose eight subprocesses assert exactly three grants, five refusals, private socket permissions, and owner cleanup.

@@ -24,3 +24,9 @@ No blocking or warning findings.
 
 Focused package/race tests, live Dragonfly integration proof, vet/build/diff check, CLI parity, and
 all individual repository gates listed in `VERIFICATION.md` passed.
+
+## Correction 3/5 review scope — #4035
+
+Review only the reservation lease lifecycle and the fixed UDS protocol. Required dispositions: no raw scope, endpoint, request, or credential is emitted; no generic RPC is added; expiry frees concurrency but not a valid completion observation; cancellation aborts read/write I/O and wins any post-cancellation response race. Findings outside `internal/coordination/**`, `internal/connectors/connsdk/rate_budget_coordinator.go`, and this correction evidence are `needs-decision` follow-ups, not fixes in this child.
+
+Review completed: no findings. The private protocol has exactly ready, decide, and finish message kinds; the client derives an I/O deadline from the caller context, advances it using `context.AfterFunc`, and checks `ctx.Err()` after reading a response. The only state retained past lease expiry is the opaque lease-to-budget mapping necessary to apply a valid late completion; it no longer occupies a concurrency slot. `go vet`, repository `make lint`, formatting, `git diff --check`, focused engine checks, and the required race checks passed. The known `window_seconds` duration-overflow defect in `internal/coordination/shared_rate_limits.go` was not changed (tracked as #4125).
