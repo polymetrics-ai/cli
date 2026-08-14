@@ -84,8 +84,9 @@ not claimed coverage. No-mistakes is pending the final evidence commit.
 Every GitHub Actions check passed. The external, non-required
 `security/snyk (karthik-sivadas)` status has reported one failed test, but no
 target URL, log, or repository-local configuration is available to inspect or
-reproduce its content. It is not a merge blocker (`mergeable_state=clean`),
-and remains recorded as a known external-service gap rather than a clean result.
+reproduce its content. Under the recorded captain decision, it is not treated
+as a merge blocker and remains a known external-service gap rather than a
+clean result.
 
 ## Automated Review
 
