@@ -4,7 +4,9 @@
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-3982-postgres-write-driver-r1",
   "gsd_mode": "inline-manual-fallback-no-delegation",
-  "state": "planned",
+  "state": "needs-decision",
+  "decision_key": "postgres-write-input-contract",
+  "decision": "The shared plan/session contracts do not carry typed target columns, a mapping contract, or a tombstone envelope; postgres database.json admits no target modes.",
   "dependencies_confirmed": [
     "internal/connectors/database/database_write_session.go",
     "internal/connectors/database/managed_target_delivery_ledger.go"

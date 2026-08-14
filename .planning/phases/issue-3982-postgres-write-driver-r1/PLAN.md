@@ -16,6 +16,37 @@
 | PostgreSQL live harness | `internal/connectors/native/dbtest` | Present; opt-in direct-local endpoint test will exercise state, not only errors. |
 | Capability promotion | #3978 certification | Intentionally absent; `write=false` is preserved. |
 
+## Discovered foundation gap — decision required
+
+The current contract cannot express the input that the required PostgreSQL DDL
+and five keyed modes must prove:
+
+- `DatabaseWritePlan` binds only definition/control/mode/keys/count/batch/effect;
+  it carries no target columns, logical types, mapping contract, or input schema.
+- `ManagedTargetSchema` contains only a version and fingerprint. A fingerprint
+  proves equality after an independently known layout, but cannot render the
+  initial typed relation or encode a record value.
+- `WriteBatch` contains `[]connectors.Record` only. It has no typed tombstone
+  envelope, delete key payload, or managed-row schema; `synccontract.Tombstone`
+  cannot reach `ApplyWriteBatch` through the current port.
+- `defs/postgres/database.json` admits no target modes, so a sealed plan for
+  any requested PostgreSQL mode is refused before a driver can run.
+
+Adding a PostgreSQL-local map-key inference or JSONB fallback would violate the
+issue's exact type-mapping, explicit-tombstone, and shared-contract
+requirements. Adding fields or a second mapping/tombstone protocol in this
+connector lane would be a shared foundation change, which the connector canon
+requires to be split before continuing.
+
+Decision options:
+
+1. deliver/identify the missing shared typed mapping + managed-row/tombstone
+   contract as a foundation issue, then resume #3982 against it;
+2. explicitly authorize that foundation scope to be added here (requiring a
+   scope/ownership exception); or
+3. narrow #3982 to the PostgreSQL provisioning/control/ledger driver only and
+   move typed five-mode writes to the new foundation-dependent issue.
+
 ## TDD slices
 
 1. **Red — concrete driver surface.** Add compile-time and real PostgreSQL test coverage for the existing descriptor-only driver to require provisioning, preview, session start, batch application, receipts, and ledger persistence. Preserve `write=false` / legacy `Connector.Write` fence assertions. Capture failing output.
