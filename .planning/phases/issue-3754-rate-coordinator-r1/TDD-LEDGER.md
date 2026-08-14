@@ -14,5 +14,23 @@ GSD prompts are executed inline and this ledger is the durable red/green record.
 
 ## Red command log
 
-Pending. The exact failing commands and verbatim non-secret output will be appended before their
-corresponding production implementation changes.
+No production code changed before this run.
+
+```text
+$ go test ./internal/coordination ./internal/connectors/engine ./internal/cli -run 'Test(SharedRateLimitRegistry|RateLimitRegistryStatus|RequireSharedRateLimitPolicy|LocalRateLimitPolicy|ConnectorsInspectLabelsProcessLocal)' -count=1
+# polymetrics.ai/internal/coordination [polymetrics.ai/internal/coordination.test]
+internal/coordination/shared_rate_limits_test.go:16:21: registry.Status undefined
+internal/coordination/shared_rate_limits_test.go:26:12: undefined: NewSharedRateLimitRegistry
+internal/coordination/shared_rate_limits_test.go:29:19: undefined: SharedRateLimitUnavailableError
+FAIL    polymetrics.ai/internal/coordination [build failed]
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+... RateLimitPolicy has no field or method Coordination
+... undefined: replaceSharedRateLimitRegistryForTest
+FAIL    polymetrics.ai/internal/connectors/engine [build failed]
+--- FAIL: TestConnectorsInspectLabelsProcessLocalRateLimitProtection
+    inspect output did not label process-local rate-limit protection
+FAIL    polymetrics.ai/internal/cli
+```
+
+This is the intended red baseline: no policy can require shared coordination, no shared registry or
+typed fail-closed result exists, and the binary makes no process-local provenance statement.

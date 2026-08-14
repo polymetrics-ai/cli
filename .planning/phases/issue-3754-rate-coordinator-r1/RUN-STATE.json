@@ -1,7 +1,7 @@
 {
   "issue": 3754,
-  "state": "planned",
+  "state": "red",
   "manual_gsd_fallback": "GSD phase 3754 is not registered in ROADMAP.md; prompts are executed inline under the canonical single-worker restriction.",
   "base": "integration/4015-mvp-flat-r1",
-  "next": "write and run the first focused red tests before production code"
+  "next": "implement the typed policy, local provenance, and optional shared registry"
 }
