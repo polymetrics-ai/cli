@@ -10,7 +10,9 @@ acknowledging the source LSN.
 Stream availability is discovered at runtime; see [Streams notes](#streams-notes) for the configured
 schema's scope and permission rules.
 
-This connector is read-only; no write actions are declared.
+This connector is source-only. Its write capability remains false: the typed PostgreSQL
+managed-target driver is not registered as a production destination, and the compatibility
+`Connector.Write` method remains unsupported.
 
 ## Warehouse snapshot transport
 
@@ -107,10 +109,15 @@ being coerced to a generic field type or returned as a partial catalog.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: low.
+Read behavior: low. No write actions are declared. The private managed-target driver does not
+publish a capability until a production destination declaration and factory make it reachable.
+PostgreSQL exposes no generic SQL write action and cannot write an arbitrary pre-existing target.
 
 ## Known limits
 
+- Provider HTTP rate limiting is not applicable: PostgreSQL uses its native wire protocol and
+  makes no provider HTTP API requests. Native pool, batch, statement, CDC stage, slot, and WAL
+  bounds are enforced by the typed database and changefeed contracts instead.
 - `polling_watermark` is planned, not implemented. It is a bounded keyset poll
   rather than CDC or change capture, and no polling mode can be selected until
   one declared native source/object/destination binding passes runtime
@@ -134,3 +141,5 @@ This connector is read-only. Read behavior: low.
 - Cursor or timestamp reconciliation is not a CDC fallback: it cannot faithfully recover hard
   deletes or transaction history. A stage-limit outcome must require explicit retry or connector-
   owned teardown/rebootstrap, with source slot health made visible.
+- Query remains false. The PostgreSQL protocol is used only by the declared typed source and
+  change-capture contracts; there is no caller-authored SQL query surface.

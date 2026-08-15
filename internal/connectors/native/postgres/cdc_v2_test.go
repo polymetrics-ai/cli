@@ -85,6 +85,85 @@ func TestPGOutputV2StreamCommitReceiptsBeforeCheckpointAndAcknowledgement(t *tes
 	}
 }
 
+func TestPGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint(t *testing.T) {
+	t.Parallel()
+
+	probe := newCDCv2Probe()
+	machine := newTestCDCv2Machine(t, probe)
+	machine.req.TransactionReceiver = cdcTransactionReceiverFunc(func(ctx context.Context, transaction connectors.CDCTransaction) (connectors.CDCTransactionReceipt, error) {
+		probe.order = append(probe.order, "transaction")
+		probe.durableTransactionID = transaction.ID()
+		if transaction.Records() != 1 {
+			return connectors.CDCTransactionReceipt{}, errors.New("transaction receiver observed an incomplete committed transaction")
+		}
+		if err := transaction.StreamEvents(ctx, func(event connectors.CDCEvent) error {
+			probe.events = append(probe.events, event)
+			return nil
+		}); err != nil {
+			return connectors.CDCTransactionReceipt{}, err
+		}
+		return connectors.NewCDCTransactionReceipt("warehouse-receipt", "warehouse:test-connection", time.Now().UTC())
+	})
+
+	const xid = uint32(721)
+	for _, frame := range [][]byte{
+		streamStartFrame(xid, true),
+		streamRelationFrame(xid, relationMessage(testRelationID, "public", "users", testColumn{name: "id", typeID: 23})),
+		streamDMLFrame(xid, insertMessage(testRelationID, textField("18"))),
+		streamStopFrame(),
+	} {
+		if err := machine.Handle(context.Background(), frame, pglogrepl.LSN(0x120)); err != nil {
+			t.Fatalf("Handle(pre-commit frame) error = %v", err)
+		}
+	}
+	probe.transactionID = machine.transactions[xid].id
+	if err := machine.Handle(context.Background(), streamCommitFrame(xid, pglogrepl.LSN(0x130)), pglogrepl.LSN(0x130)); err != nil {
+		t.Fatalf("Handle(StreamCommit) error = %v", err)
+	}
+	if got, want := probe.order, []string{"transaction", "receipt", "checkpoint", "ack"}; !sameStrings(got, want) {
+		t.Fatalf("durable receiver ordering = %#v, want %#v", got, want)
+	}
+	if got := probe.events; len(got) != 1 || got[0].Operation != "insert" || got[0].Record["id"] != 18 {
+		t.Fatalf("durable receiver events = %#v, want one complete committed insert", got)
+	}
+
+	restart := &cdcRestoringReceiver{}
+	restartedMachine := newPGOutputV2TransactionMachine(machine.stage, machine.source, pglogrepl.LSN(0x01), pglogrepl.LSN(0x01), connectors.CDCReadRequest{
+		TransactionReceiver: restart,
+		DurableCheckpointCommitter: cdcCommitterFunc(func(context.Context, synccontract.CheckpointEnvelope) error {
+			restart.order = append(restart.order, "checkpoint")
+			return nil
+		}),
+	}, func(connectors.CDCEvent) error {
+		return errors.New("replayed durable transaction emitted an event")
+	}, func(context.Context, pglogrepl.LSN) error {
+		restart.order = append(restart.order, "ack")
+		return nil
+	}, nil)
+	for _, frame := range [][]byte{
+		streamStartFrame(xid, true),
+		streamRelationFrame(xid, relationMessage(testRelationID, "public", "users", testColumn{name: "id", typeID: 23})),
+		streamDMLFrame(xid, insertMessage(testRelationID, textField("18"))),
+		streamStopFrame(),
+	} {
+		if err := restartedMachine.Handle(context.Background(), frame, pglogrepl.LSN(0x120)); err != nil {
+			t.Fatalf("Handle(replayed pre-commit frame) error = %v", err)
+		}
+	}
+	if err := restartedMachine.Handle(context.Background(), streamCommitFrame(xid, pglogrepl.LSN(0x130)), pglogrepl.LSN(0x130)); err != nil {
+		t.Fatalf("Handle(replayed StreamCommit) error = %v", err)
+	}
+	if got, want := restart.order, []string{"restore", "checkpoint", "ack"}; !sameStrings(got, want) {
+		t.Fatalf("replayed durable receiver ordering = %#v, want %#v", got, want)
+	}
+	if probe.durableTransactionID == "" || probe.durableTransactionID == probe.transactionID {
+		t.Fatalf("durable transaction identity = %q, raw stage lookup identity = %q; want a non-empty opaque stage key", probe.durableTransactionID, probe.transactionID)
+	}
+	if restart.transactionID != probe.durableTransactionID || restart.receiptID != "warehouse-receipt" {
+		t.Fatalf("restored transaction receipt = (%q, %q), want (%q, warehouse-receipt)", restart.transactionID, restart.receiptID, probe.durableTransactionID)
+	}
+}
+
 func TestPGOutputV2NonStreamBeginCommitsOnlyAtCommitBoundary(t *testing.T) {
 	t.Parallel()
 
@@ -175,10 +254,11 @@ func TestCDCTransactionIdentityIncludesWALPosition(t *testing.T) {
 }
 
 type cdcV2Probe struct {
-	order         []string
-	events        []connectors.CDCEvent
-	stage         *database.CommittedTransactionStage
-	transactionID string
+	order                []string
+	events               []connectors.CDCEvent
+	stage                *database.CommittedTransactionStage
+	transactionID        string
+	durableTransactionID string
 }
 
 func newCDCv2Probe() *cdcV2Probe { return &cdcV2Probe{} }
@@ -237,6 +317,29 @@ type cdcStageReceiverFunc func(context.Context, database.CommittedTransaction) (
 
 func (f cdcStageReceiverFunc) ReceiveCommittedTransaction(ctx context.Context, transaction database.CommittedTransaction) (database.DownstreamTransactionReceipt, error) {
 	return f(ctx, transaction)
+}
+
+type cdcTransactionReceiverFunc func(context.Context, connectors.CDCTransaction) (connectors.CDCTransactionReceipt, error)
+
+func (f cdcTransactionReceiverFunc) ReceiveCDCTransaction(ctx context.Context, transaction connectors.CDCTransaction) (connectors.CDCTransactionReceipt, error) {
+	return f(ctx, transaction)
+}
+
+type cdcRestoringReceiver struct {
+	order         []string
+	transactionID string
+	receiptID     string
+}
+
+func (*cdcRestoringReceiver) ReceiveCDCTransaction(context.Context, connectors.CDCTransaction) (connectors.CDCTransactionReceipt, error) {
+	return connectors.CDCTransactionReceipt{}, errors.New("replayed durable transaction was received twice")
+}
+
+func (r *cdcRestoringReceiver) RestoreCDCTransactionReceipt(_ context.Context, transactionID string, receipt connectors.CDCTransactionReceipt) error {
+	r.order = append(r.order, "restore")
+	r.transactionID = transactionID
+	r.receiptID = receipt.ID()
+	return nil
 }
 
 func streamStartFrame(xid uint32, first bool) []byte {

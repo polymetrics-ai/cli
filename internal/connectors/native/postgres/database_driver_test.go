@@ -19,8 +19,8 @@ func TestPostgresDatabaseDriverReferenceSeam(t *testing.T) {
 	}
 
 	caps := native.New().Metadata().Capabilities
-	if caps.Write || !caps.CDC {
-		t.Fatalf("PostgreSQL capabilities = %+v, want write=false and cdc=true after pgoutput v2 proof", caps)
+	if caps.Write || !caps.CDC || caps.Query {
+		t.Fatalf("PostgreSQL capabilities = %+v, want write=false cdc=true query=false until the managed-target driver has production dispatch", caps)
 	}
 }
 

@@ -33,8 +33,8 @@
 //   - Read:    snapshot SELECT over a stream, with optional
 //     cursor-incremental filtering on a configurable cursor column
 //     (reader.go; see StatefulReader below).
-//   - Write:   not implemented; this is a read-only source for wave0 parity
-//     with the legacy package. Capabilities.Write is false and Write
+//   - Write:   not implemented on the production connector path. The typed
+//     DatabaseDriver remains private and unregistered, while Connector.Write
 //     returns ErrUnsupportedOperation.
 //
 // CDC uses PostgreSQL 14+ pgoutput v2 streamed transaction staging (cdc.go).
@@ -119,7 +119,7 @@ func New() Connector {
 // capability so this connector's legacy metadata projection stays aligned.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Read-only source."
+	m.Description = "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Source-only; managed-target writes remain unpublished until a production destination is registered."
 	for _, override := range postgresCapabilityOverrides {
 		*override.target(&m.Capabilities) = override.value
 	}
@@ -144,8 +144,9 @@ func (c Connector) Manifest() connectors.Manifest {
 	return manifest
 }
 
-// Write is unsupported: this is a read-only source connector (wave0 parity
-// with the legacy package; capabilities.write is false).
+// Write stays unsupported because the typed managed-target DatabaseDriver is
+// not registered on the production connector path. The public write capability
+// remains false until a production destination can dispatch this operation.
 func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
 }

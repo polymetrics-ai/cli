@@ -112,10 +112,13 @@ Worked example — **postgres** (`internal/connectors/native/postgres/` +
 prose explaining there is no REST surface to enumerate (schema-valid: no `minItems` on
 `endpoints`); `spec.json` has `password` marked `x-secret` and a `mode: fixture` config value that
 short-circuits all network access for credential-free testing (test/conformance-harness affordance
-only, never set in production); `cdc.go` retains a `pglogrepl`-backed logical-replication
-foundation, but `ReadCDC` fails closed before source contact while its changefeed is planned. Its
-admission conditions are owned by the [PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md),
-so the capability stays false rather than faking a runnable CDC surface. Its `database.json` is the
+only, never set in production). Its published `cdc` capability refers only to the registered
+PostgreSQL 14+ `pgoutput` v2 transaction executor through a connection-owned warehouse receipt.
+`write` remains false because the typed managed-target driver has no production destination
+registration; generic `Connector.Write`, arbitrary SQL, direct connector hops, and query also
+remain unavailable. The exact admission conditions are owned by the
+[PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md).
+Its `database.json` is the
 reference strict policy-only declaration described below; it does not register a driver or promote
 a capability. The package has **no `init()`/`RegisterFactory`/
 `RegisterNativeLive` call** in wave0 (the factory-registration flip is wave6); that is distinct

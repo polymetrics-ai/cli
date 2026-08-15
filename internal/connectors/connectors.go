@@ -693,6 +693,11 @@ type CDCReadRequest struct {
 	Config     RuntimeConfig
 	State      map[string]string
 	Checkpoint *synccontract.CheckpointEnvelope
+	// TransactionReceiver is the production whole-transaction boundary. A
+	// changefeed may call the legacy per-event callback for compatibility only
+	// when this receiver is absent; application dispatch supplies it so a
+	// source cannot mistake callback return for a durable downstream receipt.
+	TransactionReceiver CDCTransactionReceiver
 	// CheckpointCommitter receives the next source state only after its page's
 	// emitted events have been durably accepted by the caller.
 	CheckpointCommitter ChangefeedCheckpointCommitter
@@ -706,6 +711,97 @@ type CDCEvent struct {
 	Operation string `json:"operation"`
 	Record    Record `json:"record"`
 	State     Record `json:"state,omitempty"`
+}
+
+// CDCTransaction is one source-committed transaction whose events can be
+// consumed once with bounded memory. Its identity is opaque-safe and contains
+// no provider transaction value.
+type CDCTransaction struct {
+	id      string
+	records int64
+	stream  func(context.Context, func(CDCEvent) error) error
+}
+
+// NewCDCTransaction constructs a committed transaction around a one-shot
+// event stream. Native changefeeds use it only after their own commit boundary.
+func NewCDCTransaction(id string, records int64, stream func(context.Context, func(CDCEvent) error) error) (CDCTransaction, error) {
+	if strings.TrimSpace(id) == "" || len(id) > 1024 {
+		return CDCTransaction{}, errors.New("CDC transaction identity is invalid")
+	}
+	if records < 0 {
+		return CDCTransaction{}, errors.New("CDC transaction record count cannot be negative")
+	}
+	if stream == nil {
+		return CDCTransaction{}, errors.New("CDC transaction event stream is required")
+	}
+	return CDCTransaction{id: id, records: records, stream: stream}, nil
+}
+
+// ID returns the opaque-safe committed transaction identity.
+func (t CDCTransaction) ID() string { return t.id }
+
+// Records returns the source-declared event count.
+func (t CDCTransaction) Records() int64 { return t.records }
+
+// StreamEvents visits the transaction in source order exactly once.
+func (t CDCTransaction) StreamEvents(ctx context.Context, emit func(CDCEvent) error) error {
+	if ctx == nil {
+		return errors.New("CDC transaction stream context is required")
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if emit == nil || t.stream == nil {
+		return errors.New("CDC transaction event callback is required")
+	}
+	return t.stream(ctx, emit)
+}
+
+// CDCTransactionReceipt is durable downstream evidence for one complete CDC
+// transaction. Its acknowledgement is constructible only through the sync
+// contract's durable acknowledgement constructor.
+type CDCTransactionReceipt struct {
+	id              string
+	acknowledgement synccontract.DownstreamAcknowledgement
+	durable         bool
+}
+
+// NewCDCTransactionReceipt constructs a receipt after the named sink has made
+// the complete transaction durable.
+func NewCDCTransactionReceipt(id, sink string, durableAt time.Time) (CDCTransactionReceipt, error) {
+	if strings.TrimSpace(id) == "" || len(id) > 1024 {
+		return CDCTransactionReceipt{}, errors.New("CDC transaction receipt identity is invalid")
+	}
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(sink, durableAt)
+	if err != nil {
+		return CDCTransactionReceipt{}, err
+	}
+	return CDCTransactionReceipt{id: id, acknowledgement: acknowledgement, durable: true}, nil
+}
+
+// ID returns the receiver-owned durable receipt identity.
+func (r CDCTransactionReceipt) ID() string { return r.id }
+
+// Acknowledgement returns the checkpoint admission produced by this receipt.
+func (r CDCTransactionReceipt) Acknowledgement() (synccontract.DownstreamAcknowledgement, error) {
+	if !r.durable || strings.TrimSpace(r.id) == "" {
+		return synccontract.DownstreamAcknowledgement{}, errors.New("durable CDC transaction receipt is unavailable")
+	}
+	return r.acknowledgement, nil
+}
+
+// CDCTransactionReceiver makes one complete source transaction durable and
+// returns its receipt. It is deliberately separate from CDCReader so a
+// per-event callback cannot be promoted into a durability claim.
+type CDCTransactionReceiver interface {
+	ReceiveCDCTransaction(context.Context, CDCTransaction) (CDCTransactionReceipt, error)
+}
+
+// CDCTransactionReceiptRestorer re-attaches a crash-recovered source-stage
+// receipt to the downstream receiver that originally produced it. A source
+// calls it before retrying the receipt's checkpoint; events are not re-emitted.
+type CDCTransactionReceiptRestorer interface {
+	RestoreCDCTransactionReceipt(context.Context, string, CDCTransactionReceipt) error
 }
 
 type WriteValidator interface {

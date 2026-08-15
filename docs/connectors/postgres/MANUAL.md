@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector postgres [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Read-only source.
+  Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Source-only; managed-target writes remain unpublished until a production destination is registered.
 
 ICON
   id: postgresql
@@ -46,8 +46,8 @@ CONFIGURATION
 
 SECURITY
   read risk: low
-  write risk: n/a (read-only source)
-  approval: none required for read-only sync
+  write risk: n/a (source-only until a production database destination is registered)
+  approval: none required for source-only sync
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 SYNC TRANSPORT

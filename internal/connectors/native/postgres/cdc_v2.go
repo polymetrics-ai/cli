@@ -116,7 +116,7 @@ func newPGOutputV2TransactionMachine(stage *database.CommittedTransactionStage, 
 }
 
 func (m *pgoutputV2TransactionMachine) Handle(ctx context.Context, frame []byte, walStart pglogrepl.LSN) error {
-	if m == nil || m.stage == nil || m.emit == nil || m.acknowledge == nil {
+	if m == nil || m.stage == nil || (m.emit == nil && m.req.TransactionReceiver == nil) || m.acknowledge == nil {
 		return errors.New("postgres CDC v2 transaction machine is unavailable")
 	}
 	if len(frame) == 0 {
@@ -247,8 +247,13 @@ func (m *pgoutputV2TransactionMachine) commit(ctx context.Context, xid uint32, c
 	if endLSN == 0 || commitLSN == 0 {
 		return errors.New("postgres CDC: commit is missing its LSN")
 	}
+	// Observe the source commit before asking the downstream receiver to make
+	// it durable. CommitAfterDownstreamAcknowledgement rejects the inverse
+	// timestamp order because it would claim that downstream durability
+	// preceded the source position being observed.
+	candidate := postgresCDCCheckpointForLSNs(m.source, m.barrier, m.lastDurable, commitLSN, endLSN)
 	if !transaction.replayed {
-		receiver := postgresCDCTransactionReceiver{emit: m.emit}
+		receiver := postgresCDCTransactionReceiver{emit: m.emit, durable: m.req.TransactionReceiver}
 		if _, err := m.stage.CommitTransaction(ctx, transaction.id, receiver); err != nil {
 			return fmt.Errorf("postgres CDC: receive durable transaction: %w", err)
 		}
@@ -258,9 +263,29 @@ func (m *pgoutputV2TransactionMachine) commit(ctx context.Context, xid uint32, c
 		if m.onReceipt != nil {
 			m.onReceipt()
 		}
+	} else if m.req.TransactionReceiver != nil {
+		restorer, ok := m.req.TransactionReceiver.(connectors.CDCTransactionReceiptRestorer)
+		if !ok {
+			return errors.New("postgres CDC: durable transaction receiver cannot restore a staged receipt")
+		}
+		stagedReceipt, err := m.stage.Receipt(transaction.id)
+		if err != nil {
+			return fmt.Errorf("postgres CDC: recover durable transaction receipt: %w", err)
+		}
+		// The original source-observation instant is not a persisted provider
+		// value. The already-durable receipt is a safe upper bound: treating its
+		// time as the recovered observation preserves acknowledgement ordering
+		// without inventing a later observation on process restart.
+		candidate.ObservedAt = stagedReceipt.DurableAt()
+		receipt, err := connectors.NewCDCTransactionReceipt(stagedReceipt.DownstreamReceiptID(), stagedReceipt.Sink(), stagedReceipt.DurableAt())
+		if err != nil {
+			return fmt.Errorf("postgres CDC: recover downstream transaction receipt: %w", err)
+		}
+		if err := restorer.RestoreCDCTransactionReceipt(ctx, stagedReceipt.TransactionKey(), receipt); err != nil {
+			return fmt.Errorf("postgres CDC: restore downstream transaction receipt: %w", err)
+		}
 	}
 
-	candidate := postgresCDCCheckpointForLSNs(m.source, m.barrier, m.lastDurable, commitLSN, endLSN)
 	if err := m.req.DurableCheckpointCommitter.CommitDurableChangefeedCheckpoint(ctx, candidate); err != nil {
 		return fmt.Errorf("postgres CDC: persist durable checkpoint: %w", err)
 	}
@@ -394,13 +419,46 @@ func cdcTransactionID(source postgresCDCSource, xid uint32, transactionLSN pglog
 }
 
 type postgresCDCTransactionReceiver struct {
-	emit func(connectors.CDCEvent) error
+	emit    func(connectors.CDCEvent) error
+	durable connectors.CDCTransactionReceiver
 }
 
 func (r postgresCDCTransactionReceiver) ReceiveCommittedTransaction(ctx context.Context, transaction database.CommittedTransaction) (database.DownstreamTransactionReceipt, error) {
+	if r.durable != nil {
+		committed, err := connectors.NewCDCTransaction(transaction.TransactionKey, transaction.Records, func(streamCtx context.Context, emit func(connectors.CDCEvent) error) error {
+			return streamPostgresCDCTransactionEvents(streamCtx, transaction, emit)
+		})
+		if err != nil {
+			return database.DownstreamTransactionReceipt{}, err
+		}
+		receipt, err := r.durable.ReceiveCDCTransaction(ctx, committed)
+		if err != nil {
+			return database.DownstreamTransactionReceipt{}, err
+		}
+		acknowledgement, err := receipt.Acknowledgement()
+		if err != nil {
+			return database.DownstreamTransactionReceipt{}, err
+		}
+		return database.DownstreamTransactionReceipt{
+			ReceiptID: receipt.ID(),
+			Sink:      acknowledgement.Sink,
+			DurableAt: acknowledgement.AcknowledgedAt,
+		}, nil
+	}
 	if r.emit == nil {
 		return database.DownstreamTransactionReceipt{}, errors.New("postgres CDC event callback is required")
 	}
+	if err := streamPostgresCDCTransactionEvents(ctx, transaction, r.emit); err != nil {
+		return database.DownstreamTransactionReceipt{}, err
+	}
+	return database.DownstreamTransactionReceipt{
+		ReceiptID: "postgres-cdc-" + transaction.ContentDigest,
+		Sink:      cdcTransactionSink,
+		DurableAt: time.Now().UTC(),
+	}, nil
+}
+
+func streamPostgresCDCTransactionEvents(ctx context.Context, transaction database.CommittedTransaction, emit func(connectors.CDCEvent) error) error {
 	var observed int64
 	if err := transaction.StreamChunks(ctx, func(chunk database.TransactionChunk) error {
 		var events []connectors.CDCEvent
@@ -418,21 +476,17 @@ func (r postgresCDCTransactionReceiver) ReceiveCommittedTransaction(ctx context.
 			return errors.New("staged transaction chunk record count does not match its contents")
 		}
 		for _, event := range events {
-			if err := r.emit(event); err != nil {
+			if err := emit(event); err != nil {
 				return err
 			}
 			observed++
 		}
 		return nil
 	}); err != nil {
-		return database.DownstreamTransactionReceipt{}, err
+		return err
 	}
 	if observed != transaction.Records {
-		return database.DownstreamTransactionReceipt{}, errors.New("staged transaction record count does not match its receipt")
+		return errors.New("staged transaction record count does not match its receipt")
 	}
-	return database.DownstreamTransactionReceipt{
-		ReceiptID: "postgres-cdc-" + transaction.ContentDigest,
-		Sink:      cdcTransactionSink,
-		DurableAt: time.Now().UTC(),
-	}, nil
+	return nil
 }
