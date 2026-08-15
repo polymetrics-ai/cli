@@ -21,7 +21,10 @@ import (
 	"time"
 )
 
-const deniedGitHubFlowTokenEnv = "PM_CERT_GITHUB_DENIED_TOKEN"
+const (
+	deniedGitHubFlowTokenEnv     = "PM_CERT_GITHUB_DENIED_TOKEN"
+	liveGitHubCertificationOwner = "Polymetrics-Cert"
+)
 
 type githubFlowRoundTripTarget struct {
 	owner    string
@@ -81,21 +84,24 @@ func TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip(t *testing.T) {
 // flow through a freshly built binary, reads the comment back from GitHub in a
 // separate client, and deletes the repository with a 404 residue assertion.
 func TestLiveFreshBinaryGitHubWarehouseFlowRoundTrip(t *testing.T) {
-	tokenEnv := "PM_CERT_GITHUB_TOKEN"
-	if strings.TrimSpace(os.Getenv(tokenEnv)) == "" {
-		tokenEnv = "GITHUB_TOKEN"
+	tokenEnv := ""
+	for _, candidate := range []string{"PM_CERT_GITHUB_TOKEN", "PM_SCALE_GITHUB_TOKEN", "GITHUB_TOKEN"} {
+		if strings.TrimSpace(os.Getenv(candidate)) != "" {
+			tokenEnv = candidate
+			break
+		}
 	}
-	if strings.TrimSpace(os.Getenv(tokenEnv)) == "" {
-		t.Skip("live GitHub flow proof requires PM_CERT_GITHUB_TOKEN or GITHUB_TOKEN")
+	if tokenEnv == "" {
+		t.Skip("live GitHub flow proof requires PM_CERT_GITHUB_TOKEN, PM_SCALE_GITHUB_TOKEN, or GITHUB_TOKEN")
 	}
 	token := os.Getenv(tokenEnv)
 	client := newLiveGitHubFlowClient(token)
-	owner, err := client.currentLogin(context.Background())
-	if err != nil {
+	if _, err := client.currentLogin(context.Background()); err != nil {
 		t.Fatalf("resolve certification GitHub identity: %v", err)
 	}
+	owner := liveGitHubCertificationOwner
 	repo := "pm-cert-flow-4166-" + randomGitHubFlowSuffix(t)
-	if err := client.createRepository(context.Background(), repo); err != nil {
+	if err := client.createRepository(context.Background(), owner, repo); err != nil {
 		t.Fatalf("create dedicated certification repository: %v", err)
 	}
 	deleted := false
@@ -298,7 +304,7 @@ func executeFreshBinaryGitHubFlowRoundTrip(t *testing.T, target githubFlowRoundT
 	}
 
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), target.token)
-	for _, credentialEnv := range []string{"PM_CERT_GITHUB_TOKEN", "GITHUB_TOKEN"} {
+	for _, credentialEnv := range []string{"PM_CERT_GITHUB_TOKEN", "PM_SCALE_GITHUB_TOKEN", "GITHUB_TOKEN"} {
 		if credential := os.Getenv(credentialEnv); credential != "" && credential != target.token {
 			assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), credential)
 		}
@@ -348,7 +354,7 @@ func runGitHubFlowPM(t *testing.T, binary, stdin string, secrets []string, args 
 		}
 		code = exitErr.ExitCode()
 	}
-	for _, credentialEnv := range []string{"PM_CERT_GITHUB_TOKEN", "GITHUB_TOKEN"} {
+	for _, credentialEnv := range []string{"PM_CERT_GITHUB_TOKEN", "PM_SCALE_GITHUB_TOKEN", "GITHUB_TOKEN"} {
 		if credential := os.Getenv(credentialEnv); credential != "" {
 			secrets = append(secrets, credential)
 		}
@@ -712,8 +718,11 @@ func (c *liveGitHubFlowClient) currentLogin(ctx context.Context) (string, error)
 	return response.Login, nil
 }
 
-func (c *liveGitHubFlowClient) createRepository(ctx context.Context, repo string) error {
-	status, err := c.doJSON(ctx, http.MethodPost, "/user/repos", map[string]any{
+func (c *liveGitHubFlowClient) createRepository(ctx context.Context, owner, repo string) error {
+	if owner != liveGitHubCertificationOwner {
+		return fmt.Errorf("refuse repository creation outside the certification owner")
+	}
+	status, err := c.doJSON(ctx, http.MethodPost, fmt.Sprintf("/orgs/%s/repos", owner), map[string]any{
 		"name": repo, "private": true, "has_issues": true, "auto_init": false,
 	}, nil)
 	if err != nil {
@@ -758,7 +767,7 @@ func (c *liveGitHubFlowClient) issueComments(ctx context.Context, owner, repo st
 }
 
 func (c *liveGitHubFlowClient) deleteRepositoryAndAssertAbsent(ctx context.Context, owner, repo string) error {
-	if strings.TrimSpace(owner) == "" || !strings.HasPrefix(repo, "pm-cert-flow-4166-") || len(strings.TrimPrefix(repo, "pm-cert-flow-4166-")) != 10 {
+	if owner != liveGitHubCertificationOwner || !strings.HasPrefix(repo, "pm-cert-flow-4166-") || len(strings.TrimPrefix(repo, "pm-cert-flow-4166-")) != 10 {
 		return fmt.Errorf("refuse cleanup outside the issue 4166 disposable repository namespace")
 	}
 	status, err := c.doJSON(ctx, http.MethodDelete, fmt.Sprintf("/repos/%s/%s", owner, repo), nil, nil)

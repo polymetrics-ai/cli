@@ -58,7 +58,7 @@ Close or honestly classify the three audited proof gaps without adding product c
 
 **Red**
 
-1. Add credential-gated `TestLiveFreshBinaryGitHubWarehouseFlowRoundTrip` using `PM_CERT_GITHUB_TOKEN`, falling back to `GITHUB_TOKEN` without ever printing the value.
+1. Add credential-gated `TestLiveFreshBinaryGitHubWarehouseFlowRoundTrip` using `PM_CERT_GITHUB_TOKEN`, `PM_SCALE_GITHUB_TOKEN`, or `GITHUB_TOKEN` without ever printing the value.
 2. Build `pm` into a test temp directory. Every product operation after setup runs through that one binary and a fresh project root.
 3. Create a dedicated private GitHub repository and one uniquely titled issue via a bounded test harness. Register the credential from the environment, never argv or a file.
 4. Create a real GitHub→warehouse ETL connection/job for `issues`; run and assert Parquet row count plus advanced checkpoint. Reopen from a separate binary process and independently query the table.
@@ -87,7 +87,7 @@ Close or honestly classify the three audited proof gaps without adding product c
 | Gap 1 focused | `go test -timeout 20m ./internal/connectors/certify -run 'TestFullWriteSweepFailsForDeliberatelyBroken' -count=1` | Both negative controls fail the sabotaged report and intact control passes. |
 | Gap 2 focused | `go test -timeout 20m ./internal/app -run 'TestDeclaredTransportCertificationFailsWhenDeclarationIsMissing' -count=1` and `go test -timeout 20m ./internal/connectors/certify -run 'TestCertificationDeclaredTransportPair' -count=1` | Execution counters/state prove all pair stages; missing declaration and missing registration both fail. |
 | Gap 3 deterministic harness | `go test -timeout 20m ./internal/cli -run 'TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip' -count=1 -v` | Non-live harness behavior and refusal assertions pass. |
-| Gap 3 live | `PM_CERT_GITHUB_TOKEN=<environment> go test -timeout 20m ./internal/cli -run '^TestLiveFreshBinaryGitHubWarehouseFlowRoundTrip$' -count=1 -v` | Fresh binary completes flow, provider read-back, refusals, and zero-residue cleanup. A skip is not green evidence. |
+| Gap 3 live | `PM_SCALE_GITHUB_TOKEN=<environment> GOMAXPROCS=2 go test -p=1 -timeout 20m ./internal/cli -run '^TestLiveFreshBinaryGitHubWarehouseFlowRoundTrip$' -count=1 -v` | Fresh binary completes flow, provider read-back, refusals, and zero-residue cleanup. A skip is not green evidence. |
 | Changed packages | focused `go test -timeout 20m` commands for each changed package, separately | Pass. |
 | Static checks | `gofmt -w` on changed Go files; `go vet` on changed packages; `git diff --check` | Pass. |
 | Derived drift | one-pass repo generators required by changed files, then relevant `make verify` gates individually | Generated tree clean; drift checks pass. |

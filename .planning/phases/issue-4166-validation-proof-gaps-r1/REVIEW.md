@@ -4,7 +4,7 @@
 
 ## Verdict
 
-No open critical or warning findings remain in the validation diff. The mandatory real-GitHub Gap 3 proof is an evidence gap, not a hidden pass: its credential-gated test skips and `SUMMARY.md` marks D4 unknown.
+No open critical or warning findings remain in the validation diff. The mandatory real-GitHub Gap 3 proof passes with independent provider read-back and zero residue.
 
 ## Review scope
 
@@ -19,7 +19,8 @@ No open critical or warning findings remain in the validation diff. The mandator
 2. **Fixed — warning:** the first non-applicable transport test assumed a skipped stage has `Passed=true`; repository convention represents skips as `Passed=false` plus `Error=skipped:` and excludes them when computing the overall verdict. The test now asserts the actual explicit-skip contract.
 3. **Fixed — warning:** local proof-root and live HTTP response cleanup ignored errors. The proof propagates cleanup failure when no earlier error exists; response close is explicitly bounded/ignored after the body is consumed.
 4. **Tracked externally — product defect, no fix here:** provider-verified GitHub 401 is currently classified as typed `internal/internal_error`. The test asserts that observed value, zero provider writes, and unchanged checkpoint with a #4169 comment. Captain assigned the product correction and adjacent HTTP classes to #4169.
-5. **Accepted open evidence:** no certification credential exists in this lane, so the dedicated private-repository live proof did not run. The test owns only `pm-cert-flow-4166-<10 hex>` repositories, cleanup is idempotent, and deletion requires a post-delete 404.
+5. **Closed — live evidence:** the dedicated private-repository proof passes under `Polymetrics-Cert`. The test owns only `pm-cert-flow-4166-<10 hex>` repositories, cleanup is idempotent, and deletion requires a post-delete 404. The pre-existing #3993 repository is not referenced.
+6. **Recorded — runbook drift:** resource-owner labels `polymetrics-cli-cert` and `polymetrics-cli-cert-1` are stale; the live owner is `Polymetrics-Cert`. The first credential remains valid when only its token value is extracted from the labeled line. No credential value is recorded.
 
 ## Security and scope review
 
@@ -31,4 +32,4 @@ No open critical or warning findings remain in the validation diff. The mandator
 
 ## Verification reviewed
 
-Focused Gap 1, Gap 2, App transport, and fresh-binary CLI tests pass. Vet, changed-package lint, build, smoke, docs validation, module tidiness, agent contracts, connector validation/surface sync/certification shards/boundary/canon, GitHub parity, and release workflow gates pass. Aggregate `go test ./...` and `make verify` were intentionally not run under the machine-load constraint; CI owns them.
+Focused Gap 1, Gap 2, App transport, hermetic fresh-binary CLI, and live-GitHub fresh-binary CLI tests pass. Vet, changed-package lint, build, smoke, docs validation, module tidiness, agent contracts, connector validation/surface sync/certification shards/boundary/canon, GitHub parity, and release workflow gates pass. Aggregate `go test ./...` and `make verify` were intentionally not run under the machine-load constraint; CI owns them.

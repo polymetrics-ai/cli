@@ -36,7 +36,7 @@ Every acceptance test contains a negative control. A command exit status, a skip
 - `merge_pull_request` and destructive repository-file deletes are refusal/preview candidates only, never the primary live mutation.
 - Issue #4169 owns the product correction for provider-verified 401/adjacent HTTP error classification. This validation branch asserts the currently observed typed `internal/internal_error`, zero provider writes, and no checkpoint advancement without changing product behavior.
 - The live flow must contain a real sync/ETL step and a real connector-backed action step. Hand-invoked halves do not satisfy Gap 3.
-- At planning time neither `PM_CERT_GITHUB_TOKEN` nor `GITHUB_TOKEN` is present. The live proof therefore remains unproven until the credential-gated command can run; a skip will be reported as an open gap, never as success.
+- At planning time neither `PM_CERT_GITHUB_TOKEN` nor `GITHUB_TOKEN` was present. The captain later authorized a process-local `PM_SCALE_GITHUB_TOKEN` sourced directly from the certification runbook; the live proof passed without retaining its value.
 
 ## Required Skills and Workflow
 

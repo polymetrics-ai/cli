@@ -26,7 +26,7 @@ coverage:
     verification:
       - kind: e2e
         ref: internal/cli/github_flow_roundtrip_test.go — TestLiveFreshBinaryGitHubWarehouseFlowRoundTrip
-        status: unknown
+        status: pass
     human_judgment: false
 ---
 
@@ -34,7 +34,7 @@ coverage:
 
 ## Outcome
 
-Gaps 1 and 2 are closed by fail-sensitive certification proofs. Gap 3 has a green faithful-provider control through a freshly built `pm`, but the mandatory real-GitHub execution remains honestly open because neither `PM_CERT_GITHUB_TOKEN` nor `GITHUB_TOKEN` is present in this lane.
+All three audited gaps are closed by fail-sensitive certification proofs. Gap 3 passed against real GitHub through a freshly built `pm`, a run-owned private repository under `Polymetrics-Cert`, durable Parquet, an independently read provider mutation, and a post-delete 404 zero-residue assertion.
 
 The Gap 3 action is `comment_issue`: the flow extracts issue 1 into durable Parquet, maps its `number` and `title` back to `issue_number` and `body`, and independently reads the new comment from the provider. This is safe and reversible by deleting the dedicated repository, and it proves a same-object GitHub → warehouse → GitHub loop. `merge_pull_request` and `delete_file` are preview/refusal-only cases.
 
@@ -42,8 +42,10 @@ The Gap 3 action is `comment_issue`: the flow extracts issue 1 into durable Parq
 
 - Gap 1: 607 declared actions, 607 real engine preparations, 2 selected live-pair actions, 605 explicit non-live actions, and 3 curated lifecycle pairings. Corrupting either `create_label` or formerly blocked `update_issue` makes the report fail and exit 2.
 - Gap 2: 3 provider reads, 1 provider write, 1 record read/loaded, 1 committed checkpoint, 1 transport manifest, and 1 Parquet artifact. Removing `sync_transport` or every executor factory fails before provider I/O.
-- Gap 3 faithful control: binary SHA-256 `850c2c561463a0786fba0bead83d7e403bac1c47219954edc0bc62f80600f554`, size 151,259,538 bytes; flow sync/action 1 record each; provider comments 1→2; independent warehouse query 1 row; persisted checkpoint and flow receipt; replay, unapproved, and invalid-auth paths add zero comments. The invalid-auth checkpoint remains unchanged.
+- Gap 3 faithful control: binary SHA-256 `0849ee30f2b782684080ac1222837b5c76f19a5c46a5332cc85b36b93bb110c3`, size 151,259,538 bytes; flow sync/action 1 record each; provider comments 1→2; independent warehouse query 1 row; persisted checkpoint and flow receipt; replay, unapproved, and invalid-auth paths add zero comments. The invalid-auth checkpoint remains unchanged.
+- Gap 3 live GitHub: binary SHA-256 `0849ee30f2b782684080ac1222837b5c76f19a5c46a5332cc85b36b93bb110c3`, size 151,259,538 bytes; flow sync/action 1 record each; 2 provider comments after flow; independent warehouse query 1 row; committed checkpoint and flow receipt; replay/unapproved/auth refusals preserve provider state; invalid-auth checkpoint unchanged; repository delete followed by provider 404; `zero_provider_residue=true`.
 - The provider-verified 401 currently returns typed `internal/internal_error`. Issue #4169 owns correcting that product classification and adjacent 403/404/5xx handling; this validation PR records the behavior without fixing it.
+- Runbook finding: the resource-owner labels `polymetrics-cli-cert` and `polymetrics-cli-cert-1` are stale. The live certification organization is `Polymetrics-Cert`; the line-277 token must be extracted from the labeled line as its 93-character token substring. No token value or repository identifier is retained.
 
 ## Declarative-path audit
 
