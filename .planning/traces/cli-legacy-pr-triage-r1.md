@@ -30,7 +30,7 @@
 - Refactor: No opportunistic changes; only conflict reconciliation, named check repair, and invalidated generated artifacts are allowed.
 - Verify: Re-run scoped tests/gates and compare the final branch to BASE; inspect live pull-request API state rather than assuming it.
 - Code review: Review the complete BASE-to-head diff for correctness, security, error handling, test quality, discarded callers, and scope drift before handoff.
-- Skills loaded: `github-issue-first-delivery`, `gsd-discuss-phase`, `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, `gsd-code-review`, `golang-how-to`, `golang-security`, `golang-safety`, `golang-error-handling`, `golang-lint`, and `golang-testing`.
+- Skills loaded: `github-issue-first-delivery`, `gsd-discuss-phase`, `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, `gsd-code-review`, `golang-how-to`, `golang-security`, `golang-safety`, `golang-error-handling`, `golang-lint`, `golang-testing`, and `javascript-testing-patterns`.
 
 ## PR Evidence
 
@@ -86,3 +86,41 @@ Per-file classification and terminal-state observations are appended below in PR
 | ABSENT-ON-BASE | `internal/certificationcatalog/flow_test.go` |
 
 Reconciliation preserves the Shepherd gate while adapting its generated inputs to BASE's definition-owned certification shards. The gate evaluator and certification-catalog producer callers remain present. Verification before push: `go test -timeout 20m ./internal/agentcontract ./internal/certificationcatalog ./cmd/agentcontractgen`; `go vet ./internal/agentcontract ./internal/certificationcatalog ./cmd/agentcontractgen`; `go run ./cmd/agentcontractgen check`; `make agent-contract-check`; `bash scripts/tests/pi-clean-project-agents.sh`; and `go run ./cmd/connectorgen certification-matrix --check` all passed.
+
+### PR #4061 — `test/3993-github-live-roundtrip-nm5`
+
+- Compared refs: BASE `origin/integration/4015-mvp-flat-r1` at `df8a30e2cae823932c17e30d5a2a6e3a623adc8a`; PR head `origin/test/3993-github-live-roundtrip-nm5` at `be579074693253f86f0d50217522f56bab86d000`. Both resolved before comparison.
+- Classification method: complete API-reported file list from `/repos/polymetrics-ai/cli/pulls/4061/files`, followed by per-file object existence checks and `git diff --quiet "BASE:path" "PRHEAD:path"`.
+- Decision: genuine undelivered content. The live artifact guard and three regression-test files are absent from BASE, and every remaining file differs. The existing PR head was reconciled by normal BASE merges without a reset, force push, branch deletion, or protected-branch mutation.
+
+| Classification | File |
+| --- | --- |
+| DIFFERENT-ON-BASE | `.planning/STATE.md` |
+| DIFFERENT-ON-BASE | `.planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOOTSTRAP-PROBES.json` |
+| DIFFERENT-ON-BASE | `.planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-MANIFEST.json` |
+| DIFFERENT-ON-BASE | `.planning/phases/github-parity-extract-r1/LIVE-RATE-LIMIT-PROOF.json` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/3993-01-PLAN.md` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/3993-01-SUMMARY.md` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/3993-CONTEXT.md` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/3993-DISCUSSION-LOG.md` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/PLAN.md` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/REVIEW.md` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/RUN-STATE.json` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/SHEPHERD-COMPAT.md` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/SUMMARY.md` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/TDD-LEDGER.md` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/UAT.md` |
+| ABSENT-ON-BASE | `.planning/phases/issue-3993-github-live-certification/VERIFICATION.md` |
+| ABSENT-ON-BASE | `scripts/github-live-artifact-guard.mjs` |
+| DIFFERENT-ON-BASE | `scripts/github-live-bootstrap-probes.mjs` |
+| DIFFERENT-ON-BASE | `scripts/github-live-cases.mjs` |
+| DIFFERENT-ON-BASE | `scripts/github-live-lab-manifest.mjs` |
+| DIFFERENT-ON-BASE | `scripts/github-live-lab.mjs` |
+| DIFFERENT-ON-BASE | `scripts/github-live-proof-sweep.mjs` |
+| DIFFERENT-ON-BASE | `scripts/github-live-rate-limit-proof.mjs` |
+| ABSENT-ON-BASE | `scripts/tests/github-live-cases.test.mjs` |
+| DIFFERENT-ON-BASE | `scripts/tests/github-live-lab.test.mjs` |
+| DIFFERENT-ON-BASE | `scripts/tests/github-live-proof-sweep.test.mjs` |
+| ABSENT-ON-BASE | `scripts/tests/github-live-rate-limit-proof.test.mjs` |
+
+The two merge conflicts preserved #4061's canonical artifact, bounded-output, timeout, credential-scope, and external-blocker behavior together with BASE's child-stdin approval transport, reserved lifecycle/credential flag validation, and run-owned repository target guard. `runWriteLifecycle` remains called from the live sweep and is also exported for the approval-transport regression. Focused post-resolution verification: `node --test scripts/tests/github-live-proof-sweep.test.mjs` passed 16/16, and `node --test scripts/tests/github-live-cases.test.mjs scripts/tests/github-live-lab.test.mjs scripts/tests/github-live-rate-limit-proof.test.mjs` passed 38/38.

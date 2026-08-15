@@ -6,7 +6,7 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
-import { authorizeAccountBootstrapProbe } from "./github-live-lab.mjs";
+import { assertPersistedArtifactSafe } from "./github-live-artifact-guard.mjs";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(SCRIPT_DIR, "..");
@@ -14,10 +14,6 @@ const SURFACE_PATH = path.join(ROOT, "internal/connectors/defs/github/cli_surfac
 const API_SURFACE_PATH = path.join(ROOT, "internal/connectors/defs/github/api_surface.json");
 const MANIFEST_PATH = path.join(ROOT, ".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-MANIFEST.json");
 const DEFAULT_OUTPUT = path.join(ROOT, ".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOOTSTRAP-PROBES.json");
-const ACCOUNT_PROBE_COMMANDS = Object.freeze([
-  "apps get-authenticated",
-  "apps list-subscriptions-for-authenticated-user",
-]);
 
 function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -72,10 +68,12 @@ function manifestCodeIssuerCommands(surface) {
 
 /**
  * Build a response-body-free map of the exact GitHub PM bootstrap surface.
- * This examines only current-head generated artifacts and the 957-row manifest;
+ * This examines only current-head generated artifacts and the complete
+ * implemented-surface manifest;
  * it cannot perform a provider call or resolve a production target.
  */
 export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) {
+  assertPersistedArtifactSafe(manifest, "GitHub live lab manifest");
   if (!isPlainObject(apiSurface) || !Array.isArray(apiSurface.endpoints)) {
     throw new Error("GitHub API surface must contain endpoints");
   }
@@ -90,15 +88,6 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
   const appCodeIssuers = manifestCodeIssuerCommands(surface);
   if (appCodeIssuers.length !== 0) throw new Error("GitHub App bootstrap audit found an unreviewed PM manifest-code issuer");
 
-  const probes = ACCOUNT_PROBE_COMMANDS.map((command) => authorizeAccountBootstrapProbe({ command }));
-  for (const probe of probes) {
-    const current = requireCommand(surface, probe.command);
-    if (current.intent !== "direct_read" || current.availability !== "implemented") {
-      throw new Error(`${JSON.stringify(probe.command)} must remain an implemented direct read`);
-    }
-    exactAPI(current, probe.method, probe.path);
-  }
-
   const documentedOrgCreateEndpoints = apiSurface.endpoints
     .filter((endpoint) => endpoint?.method === "POST" && (endpoint.path === "/user/orgs" || endpoint.path === "/organizations"))
     .map((endpoint) => ({ method: endpoint.method, path: endpoint.path }));
@@ -106,8 +95,8 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
     throw new Error("GitHub API surface unexpectedly documents an unreviewed organization-create endpoint");
   }
 
-  return {
-    schema_version: 1,
+  const inventory = {
+    schema_version: 3,
     connector: "github",
     source: {
       cli_surface: {
@@ -125,11 +114,11 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
     },
     policy: {
       provider_operations: "pm_github_only",
-      account_probes: "fixed_targetless_direct_reads",
+      account_probes: "none; targetless direct reads remain untestable outside the credential-bound installation repository preflight",
       organization_delete: "not_invoked_without_run_owned_immutable_target_and_cleanup_provenance",
     },
     organization: {
-      affected_case_count: cohortCount(manifest, "sandbox_org_free"),
+      affected_case_count: cohortCount(manifest, "run_owned_organization"),
       create_command: null,
       delete_command: {
         command: orgDelete.path,
@@ -140,7 +129,7 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
       result: "pm_surface_missing_organization_create",
     },
     github_app_manifest: {
-      affected_case_count: cohortCount(manifest, "github_app_or_marketplace"),
+      affected_case_count: cohortCount(manifest, "github_app_installation"),
       conversion_command: {
         command: appConversion.path,
         method: "POST",
@@ -150,13 +139,16 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
       code_issuer_commands: appCodeIssuers,
       result: "pm_surface_missing_manifest_code_issuer",
     },
-    account_probes: probes,
+    account_probes: [],
   };
+  assertPersistedArtifactSafe(inventory, "GitHub bootstrap probe inventory");
+  return inventory;
 }
 
 /** Fail closed if a checked-in probe inventory drifts from its source artifacts. */
 export function validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest }) {
-  if (!isPlainObject(inventory) || inventory.schema_version !== 1 || inventory.connector !== "github") {
+  assertPersistedArtifactSafe(inventory, "GitHub bootstrap probe inventory");
+  if (!isPlainObject(inventory) || inventory.schema_version !== 3 || inventory.connector !== "github") {
     throw new Error("bootstrap probe inventory must be a schema-versioned GitHub artifact");
   }
   const expected = buildBootstrapProbeInventory({ surface, apiSurface, manifest });
@@ -198,6 +190,7 @@ async function main() {
     JSON.parse(await readFile(MANIFEST_PATH, "utf8")),
   ]);
   const inventory = buildBootstrapProbeInventory({ surface, apiSurface, manifest });
+  validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest });
   const content = `${JSON.stringify(inventory, null, 2)}\n`;
   if (options.check) {
     const existing = await readFile(output, "utf8");
