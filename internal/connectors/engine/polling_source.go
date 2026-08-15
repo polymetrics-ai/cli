@@ -211,6 +211,12 @@ func (e *PollingSourceExecutor) TransportExecutorReference() connectors.Transpor
 // applied, read back, and persisted the candidate checkpoint; an error leaves
 // the next request on the prior committed tuple for safe replay.
 func (e *PollingSourceExecutor) ReadTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+	return executeWithAuthCohort(ctx, request.Runtime, func(admitted context.Context) error {
+		return connectors.MarkConnectorAuthenticationFailure(request.Connector, e.readTransport(admitted, request, emit))
+	})
+}
+
+func (e *PollingSourceExecutor) readTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
 	if e == nil || e.declaration == nil || isNilPollingPreflightExecutor(e.runner) {
 		return fmt.Errorf("polling source executor is required")
 	}

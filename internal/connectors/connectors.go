@@ -3,6 +3,7 @@ package connectors
 import (
 	"bufio"
 	"context"
+	"crypto/sha256"
 	"encoding/csv"
 	"encoding/json"
 	"errors"
@@ -22,6 +23,120 @@ import (
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
 var ErrOpaqueCursorOrderUnavailable = errors.New("opaque cursor order is unavailable")
+
+// AuthenticationAdmission is the production request boundary installed by
+// app.Open. Implementations admit against durable cohort health before running
+// operation and persist only explicitly verified authentication failures.
+type AuthenticationAdmission interface {
+	Execute(context.Context, func(context.Context) error) error
+}
+
+// AuthenticationFailureClassifier is implemented by a connector that can
+// prove an error is an authentication failure from its declared provider
+// contract or native protocol code. It must never classify by error text.
+type AuthenticationFailureClassifier interface {
+	AuthenticationFailureVerified(error) bool
+}
+
+// RateParkingAdmission rejects a provider scope while durable parked work is
+// waiting to resume. The scope is already an opaque project-local projection.
+type RateParkingAdmission interface {
+	Admit(RateLimitScopeKey) error
+}
+
+// VerifiedAuthenticationError marks a failure classified by a connector's
+// declared error map or native protocol code. Generic 401s and text matching
+// must never construct this type.
+type VerifiedAuthenticationError struct {
+	Err error
+}
+
+func (e *VerifiedAuthenticationError) Error() string {
+	if e == nil || e.Err == nil {
+		return "verified authentication failure"
+	}
+	return e.Err.Error()
+}
+
+func (e *VerifiedAuthenticationError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.Err
+}
+
+func MarkVerifiedAuthenticationFailure(err error) error {
+	if err == nil {
+		return nil
+	}
+	var verified *VerifiedAuthenticationError
+	if errors.As(err, &verified) {
+		return err
+	}
+	return &VerifiedAuthenticationError{Err: err}
+}
+
+func IsVerifiedAuthenticationFailure(err error) bool {
+	var verified *VerifiedAuthenticationError
+	return errors.As(err, &verified)
+}
+
+// MarkConnectorAuthenticationFailure applies only a connector-owned typed
+// classifier. It lets closed transport executors report through the same
+// production admission runtime as ordinary Connector.Read/Write calls.
+func MarkConnectorAuthenticationFailure(connector Connector, err error) error {
+	if err == nil || IsVerifiedAuthenticationFailure(err) {
+		return err
+	}
+	classifier, ok := connector.(AuthenticationFailureClassifier)
+	if ok && classifier.AuthenticationFailureVerified(err) {
+		return MarkVerifiedAuthenticationFailure(err)
+	}
+	return err
+}
+
+// GroupRateLimitScopeKeys returns one opaque admission key for every policy
+// governing a physical request. One-policy routes preserve their existing key;
+// multi-policy routes use a one-way digest so parking blocks the exact group
+// without exposing any member scope.
+func GroupRateLimitScopeKeys(scopes ...RateLimitScopeKey) (RateLimitScopeKey, error) {
+	if len(scopes) == 0 {
+		return "", errors.New("rate-limit scope group is unavailable")
+	}
+	values := make([]string, len(scopes))
+	for index, scope := range scopes {
+		if scope == "" {
+			return "", errors.New("rate-limit scope group contains an empty scope")
+		}
+		values[index] = string(scope)
+	}
+	sort.Strings(values)
+	values = compactStrings(values)
+	if len(values) == 1 {
+		return RateLimitScopeKey(values[0]), nil
+	}
+	digest := sha256.Sum256([]byte(strings.Join(values, "\x00")))
+	return RateLimitScopeKey(fmt.Sprintf("rl-group-v1-%x", digest[:])), nil
+}
+
+func compactStrings(values []string) []string {
+	if len(values) < 2 {
+		return values
+	}
+	out := values[:1]
+	for _, value := range values[1:] {
+		if value != out[len(out)-1] {
+			out = append(out, value)
+		}
+	}
+	return out
+}
+
+// RateLimitParkingScopeResolver converts a terminal typed rate-limit result
+// into the same opaque scope group used at the physical send admission path.
+type RateLimitParkingScopeResolver interface {
+	RateLimitParkingScope(context.Context, RuntimeConfig, string, error) (RateLimitScopeKey, error)
+}
 
 var defaultRegistryBuilder = struct {
 	mu sync.RWMutex
@@ -254,6 +369,10 @@ type RuntimeConfig struct {
 	// SecretStore, when set, persists a provider-rotated secret back to the
 	// caller's encrypted credential store. Optional; see SecretStore.
 	SecretStore SecretStore `json:"-"`
+	// AuthenticationAdmission and RateParkingAdmission are installed only by
+	// the production composition root. They contain no credential material.
+	AuthenticationAdmission AuthenticationAdmission `json:"-"`
+	RateParkingAdmission    RateParkingAdmission    `json:"-"`
 }
 
 // PayloadApprovalKey identifies a file field within an approved write batch.

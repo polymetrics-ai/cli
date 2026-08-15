@@ -39,6 +39,12 @@ func (c Connector) ChangefeedExecutorDescriptor() connectors.ChangefeedExecutorD
 // It delivers a transaction only after StreamCommit has created a durable
 // downstream receipt, then commits and acknowledges its source position.
 func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
+	return executeWithAuthenticationAdmission(ctx, req.Config, func(admitted context.Context) error {
+		return c.readCDC(admitted, req, emit)
+	})
+}
+
+func (c Connector) readCDC(ctx context.Context, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}

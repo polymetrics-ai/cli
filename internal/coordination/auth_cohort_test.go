@@ -243,3 +243,81 @@ func TestAuthCohortCoordinator_RestartAndRaceNeverAdmitAFencedCohort(t *testing.
 		t.Fatalf("stale pre-restart member = %v, want ErrAuthCohortEpochMismatch", err)
 	}
 }
+
+func TestAuthCohortRuntime_PublishesCurrentOwnershipAndRefusesStaleGeneration(t *testing.T) {
+	store := NewMemoryAuthCohortHealthStore()
+	cohort := testAuthCohortKey(t, "ownership-generation")
+	first := NewAuthCohortCoordinator(store)
+	staleRuntime, err := NewAuthCohortRuntime(context.Background(), first, cohort)
+	if err != nil {
+		t.Fatalf("resolve original ownership: %v", err)
+	}
+	member, err := first.Admit(context.Background(), cohort)
+	if err != nil {
+		t.Fatalf("admit original member: %v", err)
+	}
+	defer member.Release()
+	if err := first.Report(member, AuthenticationOutcomeVerifiedInvalid); err != nil {
+		t.Fatalf("persist original fence: %v", err)
+	}
+
+	restarted := NewAuthCohortCoordinator(store)
+	if _, err := NewAuthCohortRuntime(context.Background(), restarted, cohort); !errors.Is(err, ErrAuthCohortFenced) {
+		t.Fatalf("runtime before repair = %v, want ErrAuthCohortFenced", err)
+	}
+	if _, err := restarted.Repair(cohort, AuthenticationOutcomeVerifiedHealthy); err != nil {
+		t.Fatalf("verified repair: %v", err)
+	}
+	currentRuntime, err := NewAuthCohortRuntime(context.Background(), restarted, cohort)
+	if err != nil {
+		t.Fatalf("resolve repaired ownership: %v", err)
+	}
+	var writes atomic.Int64
+	if err := currentRuntime.Execute(context.Background(), func(context.Context) error {
+		writes.Add(1)
+		return nil
+	}); err != nil {
+		t.Fatalf("current generation execute: %v", err)
+	}
+	if got := writes.Load(); got != 1 {
+		t.Fatalf("current generation writes = %d, want 1", got)
+	}
+	if err := staleRuntime.Execute(context.Background(), func(context.Context) error {
+		writes.Add(1)
+		return nil
+	}); !errors.Is(err, ErrAuthCohortEpochMismatch) {
+		t.Fatalf("stale generation execute = %v, want ErrAuthCohortEpochMismatch", err)
+	}
+	if got := writes.Load(); got != 1 {
+		t.Fatalf("stale generation changed writes = %d, want 1", got)
+	}
+}
+
+func TestAuthCohortRuntime_CancelledAdmissionHasZeroWritesAndNoHealthMutation(t *testing.T) {
+	store := NewMemoryAuthCohortHealthStore()
+	cohort := testAuthCohortKey(t, "cancelled-runtime")
+	coordinator := NewAuthCohortCoordinator(store)
+	runtime, err := NewAuthCohortRuntime(context.Background(), coordinator, cohort)
+	if err != nil {
+		t.Fatal(err)
+	}
+	before, found, err := store.Load(cohort)
+	if err != nil || !found {
+		t.Fatalf("load pre-cancellation health = %+v found=%t err=%v", before, found, err)
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	var writes atomic.Int64
+	if err := runtime.Execute(ctx, func(context.Context) error {
+		writes.Add(1)
+		return nil
+	}); !errors.Is(err, context.Canceled) {
+		t.Fatalf("cancelled runtime = %v, want context.Canceled", err)
+	}
+	if got := writes.Load(); got != 0 {
+		t.Fatalf("cancelled runtime writes = %d, want zero", got)
+	}
+	if after, found, err := store.Load(cohort); err != nil || !found || after != before {
+		t.Fatalf("cancelled runtime health = %+v found=%t err=%v, want unchanged %+v", after, found, err, before)
+	}
+}

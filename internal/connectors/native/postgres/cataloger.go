@@ -11,6 +11,16 @@ import (
 // table/field metadata is always derived from the one typed PostgreSQL catalog
 // result; fixture mode is deliberately the only canned test-only exception.
 func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (connectors.Catalog, error) {
+	var result connectors.Catalog
+	err := executeWithAuthenticationAdmission(ctx, cfg, func(admitted context.Context) error {
+		var err error
+		result, err = c.catalog(admitted, cfg)
+		return err
+	})
+	return result, err
+}
+
+func (c Connector) catalog(ctx context.Context, cfg connectors.RuntimeConfig) (connectors.Catalog, error) {
 	if err := ctx.Err(); err != nil {
 		return connectors.Catalog{}, err
 	}
@@ -23,7 +33,7 @@ func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 		return connectors.Catalog{Connector: c.Name(), Streams: fixtureStreams()}, nil
 	}
 
-	typed, err := c.TypedCatalog(ctx, cfg)
+	typed, err := c.typedCatalog(ctx, cfg)
 	if err != nil {
 		if errors.Is(err, ErrNoSupportedRelations) {
 			return connectors.Catalog{Connector: c.Name(), Streams: []connectors.Stream{}}, nil

@@ -53,6 +53,9 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 	if transportRoute {
 		result, err := a.runTransportETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.streamName, request.mode, request.batchSize, request.destinationApproval)
 		if err != nil {
+			if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, err); handled {
+				return parked, parkErr
+			}
 			return a.failAcknowledgedTransportRun(request.runID, result, err)
 		}
 		return a.completeAcknowledgedTransportRun(request.runID, result)
@@ -79,6 +82,9 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 	}
 	catalog, err := a.catalogForEndpoint(ctx, request.source, request.sourceRuntime, false)
 	if err != nil {
+		if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, err); handled {
+			return parked, parkErr
+		}
 		return a.failRun(request.runID, err)
 	}
 	request.sourceRuntime.ResolvedCatalog = &catalog
@@ -89,6 +95,9 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 		result, err = a.runConnectorETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.streamName, request.stream, request.mode, request.batchSize)
 	}
 	if err != nil {
+		if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, err); handled {
+			return parked, parkErr
+		}
 		return a.failRun(request.runID, err)
 	}
 	return a.completeRun(request.runID, result)

@@ -108,6 +108,12 @@ func (*SnapshotTransportSource) TransportExecutorReference() connectors.Transpor
 // transaction, so the emitted catalog fingerprint, stable key order, rows, and
 // PostgreSQL snapshot token describe the same source observation.
 func (s *SnapshotTransportSource) ReadTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) (err error) {
+	return executeWithAuthenticationAdmission(ctx, request.Runtime, func(admitted context.Context) error {
+		return s.readTransport(admitted, request, emit)
+	})
+}
+
+func (s *SnapshotTransportSource) readTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) (err error) {
 	if ctx == nil {
 		return errors.New("postgres snapshot transport context is required")
 	}

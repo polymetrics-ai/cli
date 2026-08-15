@@ -17,6 +17,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/coordination"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
@@ -49,6 +50,8 @@ type App struct {
 	transportStage          synctransport.WarehouseStage
 	sqlEngine               sqlQueryEngine
 	catalogs                catalogStorage
+	authCohorts             *coordination.AuthCohortCoordinator
+	rateParking             *coordination.RateParkingCoordinator
 }
 
 // sqlQueryEngine is the backend for App.QuerySQL. DuckDB is the only
@@ -200,7 +203,7 @@ func open(root string, deferNormalization bool) (*App, error) {
 		vault:                   v,
 		ephemeralCredentials:    ephemeralCredentials,
 		approval:                approval,
-		registry:                bundleregistry.New(),
+		registry:                connectors.NewRegistry(),
 		transports:              synctransport.NewRegistry(nil),
 		catalogs:                newCatalogStorage(projectDir),
 	}
@@ -208,8 +211,24 @@ func open(root string, deferNormalization bool) (*App, error) {
 	if err := a.load(!deferNormalization); err != nil {
 		return nil, err
 	}
+	authStore, err := coordination.OpenFileAuthCohortHealthStore(filepath.Join(projectDir, "state", "auth-cohorts.json"))
+	if err != nil {
+		return nil, err
+	}
+	a.authCohorts = coordination.NewAuthCohortCoordinator(authStore)
+	parkingStore, err := coordination.OpenFileRateParkingStore(filepath.Join(projectDir, "state", "rate-parking.json"))
+	if err != nil {
+		return nil, err
+	}
+	a.rateParking = coordination.NewRateParkingCoordinator(coordination.RateParkingCoordinatorOptions{
+		Store:  parkingStore,
+		Resume: a.resumeParkedRateLimitRun,
+	})
 	if err := a.composeTransportRegistry(); err != nil {
 		return nil, err
+	}
+	if err := a.rateParking.Start(context.Background()); err != nil {
+		return nil, fmt.Errorf("start durable rate parking: %w", err)
 	}
 	return a, nil
 }
@@ -885,7 +904,8 @@ func (a *App) InspectCredential(name string) (CredentialMeta, error) {
 }
 
 func (a *App) TestCredential(ctx context.Context, name string) (CredentialMeta, error) {
-	cred, runtime, err := a.resolveCredential(ctx, name, nil)
+	repairCtx := context.WithValue(ctx, authRepairContextKey{}, true)
+	cred, runtime, err := a.resolveCredential(repairCtx, name, nil)
 	if err != nil {
 		return CredentialMeta{}, err
 	}
@@ -893,7 +913,19 @@ func (a *App) TestCredential(ctx context.Context, name string) (CredentialMeta, 
 	if !ok {
 		return CredentialMeta{}, fmt.Errorf("connector %q not found", cred.Connector)
 	}
+	cohort := runtime.CoordinationIdentity.AuthCohortKey()
+	// A dedicated test must reach the provider even while ordinary work is
+	// fenced; it is the only production repair path.
+	runtime.AuthenticationAdmission = nil
 	if err := connector.Check(ctx, runtime); err != nil {
+		if connectors.IsVerifiedAuthenticationFailure(err) {
+			if fenceErr := a.authCohorts.Fence(cohort, coordination.AuthenticationOutcomeVerifiedInvalid); fenceErr != nil {
+				return CredentialMeta{}, fenceErr
+			}
+		}
+		return CredentialMeta{}, err
+	}
+	if _, err := a.authCohorts.Repair(cohort, coordination.AuthenticationOutcomeVerifiedHealthy); err != nil {
 		return CredentialMeta{}, err
 	}
 	for i := range a.state.Credentials {
@@ -1302,7 +1334,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		batchSize = 1000
 	}
 	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
-	return a.dispatchETLMode(ctx, etlModeDispatchRequest{
+	dispatchRequest := etlModeDispatchRequest{
 		runID:               runID,
 		connection:          conn,
 		source:              source,
@@ -1315,7 +1347,8 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		mode:                mode,
 		batchSize:           batchSize,
 		destinationApproval: req.DestinationApproval,
-	})
+	}
+	return a.dispatchETLMode(ctx, dispatchRequest)
 }
 
 func hasDestinationApproval(approval synctransport.DestinationApproval) bool {
@@ -3121,6 +3154,16 @@ func (a *App) ResolveConnectorCredential(ctx context.Context, connectorName, cre
 }
 
 func (a *App) resolveCredential(ctx context.Context, name string, overlay map[string]string) (CredentialMeta, connectors.RuntimeConfig, error) {
+	var parkingAdmission connectors.RateParkingAdmission = a.rateParking
+	if isRateParkingResume(ctx) {
+		parkingAdmission = nil
+	}
+	resolveAuthAdmission := func(identity connectors.CoordinationIdentity) (connectors.AuthenticationAdmission, error) {
+		if isAuthRepair(ctx) {
+			return nil, nil
+		}
+		return coordination.NewAuthCohortRuntime(ctx, a.authCohorts, identity.AuthCohortKey())
+	}
 	if a.ephemeralCredentials != nil {
 		credential, secrets, ok := a.ephemeralCredentials.credential(name)
 		if ok {
@@ -3146,15 +3189,21 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 			if err != nil {
 				return CredentialMeta{}, connectors.RuntimeConfig{}, err
 			}
+			authAdmission, err := resolveAuthAdmission(coordinationIdentity)
+			if err != nil {
+				return CredentialMeta{}, connectors.RuntimeConfig{}, err
+			}
 			return credential, connectors.RuntimeConfig{
-				ProjectDir:           a.projectDir,
-				Config:               config,
-				Secrets:              secrets,
-				CoordinationIdentity: coordinationIdentity,
-				CredentialRevision:   credentialRevision,
-				ConfigurationDigest:  configurationDigest,
-				WriteApprovalScope:   connectors.WriteApprovalScopeProject,
-				SecretStore:          ephemeralCertificationSecretStore{},
+				ProjectDir:              a.projectDir,
+				Config:                  config,
+				Secrets:                 secrets,
+				CoordinationIdentity:    coordinationIdentity,
+				CredentialRevision:      credentialRevision,
+				ConfigurationDigest:     configurationDigest,
+				WriteApprovalScope:      connectors.WriteApprovalScopeProject,
+				SecretStore:             ephemeralCertificationSecretStore{},
+				AuthenticationAdmission: authAdmission,
+				RateParkingAdmission:    parkingAdmission,
 			}, nil
 		}
 	}
@@ -3182,6 +3231,10 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 	if err != nil {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
+	authAdmission, err := resolveAuthAdmission(coordinationIdentity)
+	if err != nil {
+		return CredentialMeta{}, connectors.RuntimeConfig{}, err
+	}
 	return cred, connectors.RuntimeConfig{
 		ProjectDir:           a.projectDir,
 		Config:               config,
@@ -3193,7 +3246,9 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 		// Scoped to this credential, so a provider-rotated secret (an OAuth2
 		// refresh token) is written back to the same encrypted vault entry it
 		// was read from, and to no other.
-		SecretStore: a.credentialSecretStore(cred.ID),
+		SecretStore:             a.credentialSecretStore(cred.ID),
+		AuthenticationAdmission: authAdmission,
+		RateParkingAdmission:    parkingAdmission,
 	}, nil
 }
 

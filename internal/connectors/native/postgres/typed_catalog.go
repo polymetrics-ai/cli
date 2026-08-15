@@ -110,6 +110,16 @@ ORDER BY n.nspname, c.relname, con.conname, key_column.ordinality`
 // from pg_catalog and returns #4034's normalized catalog/fingerprint. It is a
 // source discovery operation only: it sends no DDL, writes, or arbitrary SQL.
 func (c Connector) TypedCatalog(ctx context.Context, cfg connectors.RuntimeConfig) (database.Catalog, error) {
+	var result database.Catalog
+	err := executeWithAuthenticationAdmission(ctx, cfg, func(admitted context.Context) error {
+		var err error
+		result, err = c.typedCatalog(admitted, cfg)
+		return err
+	})
+	return result, err
+}
+
+func (c Connector) typedCatalog(ctx context.Context, cfg connectors.RuntimeConfig) (database.Catalog, error) {
 	if err := ctx.Err(); err != nil {
 		return database.Catalog{}, err
 	}

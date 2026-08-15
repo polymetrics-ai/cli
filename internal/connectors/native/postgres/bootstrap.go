@@ -48,6 +48,12 @@ type BootstrapSnapshotPage struct {
 // transaction machine then preserves its existing receipt -> checkpoint ->
 // acknowledgement ordering for every post-barrier transaction.
 func (c Connector) BootstrapCDC(ctx context.Context, request BootstrapCDCRequest, emit func(connectors.CDCEvent) error) error {
+	return executeWithAuthenticationAdmission(ctx, request.Config, func(admitted context.Context) error {
+		return c.bootstrapCDC(admitted, request, emit)
+	})
+}
+
+func (c Connector) bootstrapCDC(ctx context.Context, request BootstrapCDCRequest, emit func(connectors.CDCEvent) error) error {
 	if err := validateBootstrapCDCRequest(ctx, request, emit); err != nil {
 		return err
 	}
