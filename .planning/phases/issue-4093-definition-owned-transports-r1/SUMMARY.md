@@ -12,6 +12,10 @@ snapshot source in `defs/postgres`. Connector-local factory providers keep the
 App composition root free of native connector imports. The old Go-authored
 descriptors and the GitHub registry wrapper are removed.
 
+The bundle embed inventory includes `sync_transport.json`, so these definitions
+are present in `defs.FS` and therefore in the production `pm` binary, rather
+than only on the source filesystem.
+
 The acceptance matrix in VERIFICATION.md records stateful proof for valid
 registration, zero-side-effect refusals, evidence denial before source I/O,
 and the mandated Docker/Colima PostgreSQL integration run.

@@ -10,6 +10,7 @@
 | Destination role rule | The same RED run observed `DestinationTransportDescriptor.Validate() = nil` for `change_capture`; no execution was attempted. | Destination validation rejects it before registration or I/O. | green |
 | PostgreSQL live proof | Existing live native source test exercises current Go-owned descriptor. | Pending the mandated Docker/Colima run against the now definition-owned descriptor and production factory. | planned |
 | Connector boundary repair | PR CI rejected the initial direct `internal/app` import of `native/postgres` as a connector-boundary violation. | `DefinitionFactoriesFromRegistry` gathers connector-provided factories without an App connector import; the production preflight test still resolves PostgreSQL and `go run ./cmd/connectorgen boundary . --json` passes. | green |
+| Embedded definition repair | Full CI RED observed GitHub and PostgreSQL definitions with no transport declaration; the binary route refused the issue-label approval and native PostgreSQL tests found no source descriptor. | `defs.FS` embeds `*/sync_transport.json`; `TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle` and the PostgreSQL definition/registration tests pass, making the roles observable in the production binary. | green |
 
 Every refusal test asserts the relevant side effect count is zero. No test relies
 only on `err != nil` or a lack of panic.

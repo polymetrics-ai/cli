@@ -12,7 +12,8 @@
   `POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker
   POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock
   go test -tags=databaseintegration -count=1 -timeout 20m -v
-  ./internal/connectors/native/postgres`.
+  ./internal/connectors/native/postgres`. The identical live run passed again
+  after correcting the production bundle embed inventory.
 - [x] `go vet ./internal/synctransport/... ./internal/connectors/... ./internal/app`
   and `go build ./cmd/pm` pass.
 - [x] Required non-full-suite repository gates pass individually: `make
@@ -25,6 +26,13 @@
 - [x] The Connector Boundary CI feedback was repaired with connector-local
   provider discovery; `go run ./cmd/connectorgen boundary . --json` passes on
   the repaired commit.
+- [x] Full CI RED exposed omitted embedded transport declarations. The repair
+  adds `*/sync_transport.json` to `defs.FS`; `go test -count=1 -timeout 20m
+  -run TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle
+  ./internal/cli`, the PostgreSQL declaration/registration tests, the full app
+  and required transport/connector package sweeps, `connectorgen validate`,
+  `surface-sync --check`, `connector-boundary`, vet, and CLI build pass after
+  the repair.
 - [x] Inline `verify-work` maps every acceptance criterion to an observable
   passing test or live output below.
 - [x] Inline code review has no unresolved actionable findings; see REVIEW.md.

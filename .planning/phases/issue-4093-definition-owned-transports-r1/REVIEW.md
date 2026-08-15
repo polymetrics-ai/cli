@@ -12,6 +12,9 @@ contract.
   or capability fallback. Connector-local factory providers keep native
   PostgreSQL wiring out of App; provider adapters remain typed
   GitHub/PostgreSQL implementations.
+- The production bundle embed inventory includes `sync_transport.json`; the
+  binary lifecycle test and PostgreSQL definition tests prove the declaration
+  does not disappear between source-tree validation and runtime composition.
 - The production test observes PostgreSQL and both GitHub roles through
   `Preflight`; refusal tests assert zero construction, registry, read, plan,
   and apply state changes.
