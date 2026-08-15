@@ -1,0 +1,18 @@
+{
+  "phase": "issue-4158-mvp-verify-green-r1",
+  "status": "investigating",
+  "base": "integration/4015-mvp-flat-r1",
+  "base_head_at_dispatch": "ef3c71caf",
+  "target_connector": "postgres",
+  "lifecycle": {
+    "discuss_phase": "complete-inline-auto",
+    "plan_phase_tdd": "complete-inline",
+    "execute_phase": "in_progress-inline",
+    "verify_work": "pending-inline-auto",
+    "code_review": "pending-inline-deep"
+  },
+  "tdd": {
+    "red": "pending",
+    "green": "pending"
+  }
+}
