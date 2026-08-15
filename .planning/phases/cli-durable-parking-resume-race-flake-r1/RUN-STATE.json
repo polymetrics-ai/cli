@@ -1,7 +1,7 @@
 {
   "phase": "cli-durable-parking-resume-race-flake-r1",
-  "status": "executing",
-  "current_slice": "red-reproduction-and-causal-trace",
+  "status": "verified",
+  "current_slice": "reviewed-and-ready-to-deliver",
   "gsd_fallback": "inline-manual-single-worker",
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-durable-parking-resume-race-flake-r1"

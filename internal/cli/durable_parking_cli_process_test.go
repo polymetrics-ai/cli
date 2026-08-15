@@ -133,30 +133,32 @@ func TestCLIDurableParkingAdmissionAndResumeAcrossKilledProcess(t *testing.T) {
 		t.Fatal("parked CLI admission wrote the destination table")
 	}
 
-	time.Sleep(4100 * time.Millisecond)
-	resumeCommands := []*exec.Cmd{
-		durableParkingCLICommand(root, server.URL, "resume-race", runID),
-		durableParkingCLICommand(root, server.URL, "resume-race", runID),
-	}
-	for _, command := range resumeCommands {
-		if err := command.Start(); err != nil {
-			t.Fatal("could not start concurrent CLI resume helper")
+	t.Run("edge: concurrent durable reopeners share one resume claim", func(t *testing.T) {
+		time.Sleep(4100 * time.Millisecond)
+		resumeCommands := []*exec.Cmd{
+			durableParkingCLICommand(root, server.URL, "resume-race", runID),
+			durableParkingCLICommand(root, server.URL, "resume-race", runID),
 		}
-	}
-	for _, command := range resumeCommands {
-		if err := command.Wait(); err != nil {
-			t.Fatal("concurrent CLI resume helper failed")
+		for _, command := range resumeCommands {
+			if err := command.Start(); err != nil {
+				t.Fatal("could not start concurrent CLI resume helper")
+			}
 		}
-	}
-	if got := providerSends.Load(); got != 7 {
-		t.Fatalf("CLI provider sends after concurrent resume = %d, want 7 (one claim winner)", got)
-	}
-	if err := durableParkingCLICommand(root, server.URL, "verify-resume", runID).Run(); err != nil {
-		t.Fatal("restarted CLI resume verification failed")
-	}
-	if got := providerSends.Load(); got != 7 {
-		t.Fatalf("CLI provider sends after resumed replay = %d, want 7", got)
-	}
+		for _, command := range resumeCommands {
+			if err := command.Wait(); err != nil {
+				t.Fatal("concurrent CLI resume helper failed")
+			}
+		}
+		if got := providerSends.Load(); got != 7 {
+			t.Fatalf("CLI provider sends after concurrent resume = %d, want 7 (one claim winner)", got)
+		}
+		if err := durableParkingCLICommand(root, server.URL, "verify-resume", runID).Run(); err != nil {
+			t.Fatal("restarted CLI resume verification failed")
+		}
+		if got := providerSends.Load(); got != 7 {
+			t.Fatalf("CLI provider sends after resumed replay = %d, want 7", got)
+		}
+	})
 }
 
 func durableParkingCLICommand(root, serverURL, mode, runID string) *exec.Cmd {
