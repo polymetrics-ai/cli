@@ -6,6 +6,8 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -108,6 +110,14 @@ func (d *DatabaseDriver) BeginDatabaseWrite(ctx context.Context, plan database.D
 		return nil, err
 	}
 	qualified := postgresManagedTargetQualifiedRelation(plan.Control())
+	historyAt := time.Time{}
+	if plan.Mode() == synccontract.ModeIncrementalDedupeHistory {
+		if err := postgresEnsureManagedTargetHistoryLayout(ctx, tx, plan); err != nil {
+			rollback()
+			return nil, errPostgresWriteSessionFailed
+		}
+		historyAt = time.Now().UTC()
+	}
 	if plan.Mode() == synccontract.ModeFullOverwrite {
 		if _, err := tx.Exec(ctx, "TRUNCATE TABLE "+qualified); err != nil {
 			rollback()
@@ -126,6 +136,7 @@ func (d *DatabaseDriver) BeginDatabaseWrite(ctx context.Context, plan database.D
 		columns:   columns,
 		qualified: qualified,
 		release:   release,
+		historyAt: historyAt,
 		nextBatch: 1,
 	}
 	handoff = true // session now owns the exact matching unlock.
@@ -138,6 +149,7 @@ type postgresWriteSession struct {
 	columns   []postgresManagedTargetColumn
 	qualified string
 	release   func()
+	historyAt time.Time
 
 	mu                sync.Mutex
 	closed            bool
@@ -294,6 +306,8 @@ func (s *postgresWriteSession) applyRecord(ctx context.Context, record connector
 			return errPostgresWriteSessionFailed
 		}
 		return nil
+	case synccontract.ModeIncrementalDedupeHistory:
+		return s.applyHistoryRecord(ctx, mapped, args)
 	default:
 		return errPostgresWriteSessionFailed
 	}
@@ -307,7 +321,95 @@ func (s *postgresWriteSession) applyTombstone(ctx context.Context, tombstone syn
 	if err != nil {
 		return errPostgresWriteValueInvalid
 	}
+	if s.plan.Mode() == synccontract.ModeIncrementalDedupeHistory {
+		return s.closeHistoryWindow(ctx, tombstone, keys)
+	}
 	if err := postgresDeleteKeyValues(ctx, s.tx, s.qualified, s.plan.Keys(), keys); err != nil {
+		return errPostgresWriteSessionFailed
+	}
+	return nil
+}
+
+// applyHistoryRecord preserves every observed keyed version. A duplicate or a
+// late replay of an already-observed version is a no-op; it can never reopen a
+// previously closed window. A new version closes the prior current window and
+// inserts the new current row within this same pinned transaction.
+func (s *postgresWriteSession) applyHistoryRecord(ctx context.Context, mapped connectors.Record, args []any) error {
+	if s.historyAt.IsZero() {
+		return errPostgresWriteSessionFailed
+	}
+	exists, err := postgresHistoryVersionExists(ctx, s.tx, s.qualified, s.plan.Keys(), s.columns, mapped, args)
+	if err != nil {
+		return errPostgresWriteSessionFailed
+	}
+	if exists {
+		return nil
+	}
+	keyArgs, keyPredicate, err := postgresMappedKeyPredicate(s.plan.Keys(), mapped, s.columns, 1)
+	if err != nil {
+		return errPostgresWriteSessionFailed
+	}
+	valuePredicate := postgresMappedValuePredicate(s.columns, len(keyArgs)+1)
+	closeArgs := append(append([]any{}, keyArgs...), args...)
+	closeArgs = append(closeArgs, s.historyAt)
+	if _, err := s.tx.Exec(ctx,
+		"UPDATE "+s.qualified+
+			" SET "+quoteIdentifier(synccontract.HistoryValidToColumn)+" = $"+strconv.Itoa(len(closeArgs))+", "+quoteIdentifier(synccontract.HistoryIsCurrentColumn)+" = FALSE"+
+			" WHERE "+keyPredicate+" AND "+quoteIdentifier(synccontract.HistoryIsCurrentColumn)+" AND NOT ("+valuePredicate+")",
+		closeArgs...,
+	); err != nil {
+		return errPostgresWriteSessionFailed
+	}
+	names, placeholders := postgresColumnNamesAndPlaceholders(s.columns, 1)
+	names = append(names,
+		quoteIdentifier(synccontract.HistoryValidFromColumn),
+		quoteIdentifier(synccontract.HistoryValidToColumn),
+		quoteIdentifier(synccontract.HistoryIsCurrentColumn),
+	)
+	placeholders = append(placeholders, "$"+strconv.Itoa(len(args)+1), "NULL", "TRUE")
+	insertArgs := append(append([]any{}, args...), s.historyAt)
+	if _, err := s.tx.Exec(ctx,
+		"INSERT INTO "+s.qualified+" ("+strings.Join(names, ", ")+") VALUES ("+strings.Join(placeholders, ", ")+")",
+		insertArgs...,
+	); err != nil {
+		return errPostgresWriteSessionFailed
+	}
+	return nil
+}
+
+func postgresHistoryVersionExists(ctx context.Context, tx pgx.Tx, qualified string, keys []string, columns []postgresManagedTargetColumn, mapped connectors.Record, args []any) (bool, error) {
+	keyArgs, keyPredicate, err := postgresMappedKeyPredicate(keys, mapped, columns, 1)
+	if err != nil {
+		return false, err
+	}
+	valuePredicate := postgresMappedValuePredicate(columns, len(keyArgs)+1)
+	queryArgs := append(append([]any{}, keyArgs...), args...)
+	var exists bool
+	if err := tx.QueryRow(ctx, "SELECT EXISTS (SELECT 1 FROM "+qualified+" WHERE "+keyPredicate+" AND "+valuePredicate+")", queryArgs...).Scan(&exists); err != nil {
+		return false, err
+	}
+	return exists, nil
+}
+
+func (s *postgresWriteSession) closeHistoryWindow(ctx context.Context, tombstone synccontract.Tombstone, keys map[string]any) error {
+	if s.historyAt.IsZero() {
+		return errPostgresWriteSessionFailed
+	}
+	close, err := synccontract.CloseHistoryWindow(tombstone, s.historyAt)
+	if err != nil || close.Action != synccontract.HistoryDeleteCloseValidityWindow || close.IsCurrent {
+		return errPostgresWriteSessionFailed
+	}
+	args, keyPredicate, err := postgresKeyValuePredicate(s.plan.Keys(), keys, 1)
+	if err != nil {
+		return errPostgresWriteSessionFailed
+	}
+	args = append(args, close.ValidTo, close.IsCurrent)
+	if _, err := s.tx.Exec(ctx,
+		"UPDATE "+s.qualified+
+			" SET "+quoteIdentifier(synccontract.HistoryValidToColumn)+" = $"+strconv.Itoa(len(args)-1)+", "+quoteIdentifier(synccontract.HistoryIsCurrentColumn)+" = $"+strconv.Itoa(len(args))+
+			" WHERE "+keyPredicate+" AND "+quoteIdentifier(synccontract.HistoryIsCurrentColumn),
+		args...,
+	); err != nil {
 		return errPostgresWriteSessionFailed
 	}
 	return nil
@@ -332,7 +434,7 @@ func postgresManagedTargetQualifiedRelation(control database.ManagedTargetContro
 }
 
 func postgresWriteModeRequiresTableLock(mode synccontract.Mode) bool {
-	return mode == synccontract.ModeIncrementalUpsert || mode == synccontract.ModeIncrementalDedupe
+	return mode == synccontract.ModeIncrementalUpsert || mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory
 }
 
 var _ database.DatabaseWriteDriver = (*DatabaseDriver)(nil)

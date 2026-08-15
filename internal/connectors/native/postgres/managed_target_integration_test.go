@@ -150,6 +150,128 @@ func TestPostgresManagedTargetWorksetDeliveryLive(t *testing.T) {
 	}
 }
 
+// TestPostgresManagedTargetIncrementalDedupeHistoryLive proves the only
+// supported history route from its first version through a process restart.
+// It observes the retained closed row, exact validity boundary, replay
+// stability, durable receipt, and soft-delete state rather than treating a
+// successful call as evidence.
+func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
+	if os.Getenv(postgresCatalogIntegrationEnabledEnv) != "1" {
+		t.Skipf("database integration skipped: set %s=1 to run the PostgreSQL Docker or Podman proof", postgresCatalogIntegrationEnabledEnv)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+	harness, err := newPostgresCatalogContainerHarness(
+		dbtest.Runtime(strings.TrimSpace(os.Getenv(postgresCatalogIntegrationRuntimeEnv))),
+		strings.TrimSpace(os.Getenv(postgresCatalogIntegrationEndpointEnv)),
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Error("PostgreSQL database test cleanup failed")
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatal("PostgreSQL database container did not start")
+	}
+	waitForPostgresCatalog(t, ctx, native.New(), postgresCatalogConfig(t, endpoint, postgresCatalogAlphaSchema))
+	source := openPostgresCatalogSource(t, ctx, endpoint)
+	driver, err := native.NewDatabaseDriver(source)
+	if err != nil {
+		t.Fatal("could not construct PostgreSQL history target driver")
+	}
+	fixture := newPostgresManagedTargetFixture(t, ctx, driver)
+	provisioner, err := database.NewManagedTargetProvisioner(driver)
+	if err != nil {
+		t.Fatal("could not construct PostgreSQL history target provisioner")
+	}
+	control, err := provisioner.CreateOrAssert(ctx, fixture.plan)
+	if err != nil {
+		t.Fatal("could not create PostgreSQL history target")
+	}
+	ledger, err := database.NewManagedTargetDeliveryLedger(driver)
+	if err != nil {
+		t.Fatal("could not construct PostgreSQL history delivery ledger")
+	}
+	executor, err := database.NewDatabaseWriteExecutor(driver, ledger)
+	if err != nil {
+		t.Fatal("could not construct PostgreSQL history write executor")
+	}
+	definition := postgresManagedTargetWriteDefinition(t)
+	keys := []string{"tenant", "id"}
+	first := connectors.Record{"source_tenant": "north", "source_id": int64(1), "source_value": "v1"}
+	second := connectors.Record{"source_tenant": "north", "source_id": int64(1), "source_value": "v2"}
+
+	firstPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false)
+	firstReceipt := postgresExecuteManagedTargetWrite(t, ctx, executor, firstPlan, []connectors.Record{first}, database.TombstoneEnvelope{})
+	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, firstReceipt)
+	initialRows := postgresManagedTargetHistoryRows(t, ctx, source, control)
+	if len(initialRows) != 1 || initialRows[0].value != "v1" || !initialRows[0].current || initialRows[0].validTo != nil || initialRows[0].validFrom.IsZero() {
+		t.Fatalf("first history version state = %#v, want one open current v1 row", initialRows)
+	}
+
+	secondPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false)
+	secondReceipt := postgresExecuteManagedTargetWrite(t, ctx, executor, secondPlan, []connectors.Record{second}, database.TombstoneEnvelope{})
+	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, secondReceipt)
+	versionedRows := postgresManagedTargetHistoryRows(t, ctx, source, control)
+	if len(versionedRows) != 2 || versionedRows[0].value != "v1" || versionedRows[0].current || versionedRows[0].validTo == nil || versionedRows[1].value != "v2" || !versionedRows[1].current || versionedRows[1].validTo != nil || !versionedRows[0].validTo.Equal(versionedRows[1].validFrom) {
+		t.Fatalf("version transition rows = %#v, want closed v1 joined exactly to open current v2", versionedRows)
+	}
+
+	// A fresh native connection and executor prove replay/close behavior after
+	// recovery, not merely through the first driver's in-process state.
+	if err := source.Close(context.WithoutCancel(ctx)); err != nil {
+		t.Fatal("could not close initial PostgreSQL history driver connection")
+	}
+	restartedSource := openPostgresCatalogSource(t, ctx, endpoint)
+	defer func() { _ = restartedSource.Close(context.WithoutCancel(ctx)) }()
+	restartedDriver, err := native.NewDatabaseDriver(restartedSource)
+	if err != nil {
+		t.Fatal("could not reconstruct PostgreSQL history target driver")
+	}
+	restartedLedger, err := database.NewManagedTargetDeliveryLedger(restartedDriver)
+	if err != nil {
+		t.Fatal("could not reconstruct PostgreSQL history ledger")
+	}
+	restartedExecutor, err := database.NewDatabaseWriteExecutor(restartedDriver, restartedLedger)
+	if err != nil {
+		t.Fatal("could not reconstruct PostgreSQL history executor")
+	}
+	replayPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 2, 0, false)
+	replayReceipt := postgresExecuteManagedTargetWrite(t, ctx, restartedExecutor, replayPlan, []connectors.Record{first, second}, database.TombstoneEnvelope{})
+	assertPostgresManagedTargetReceiptPersisted(t, ctx, restartedDriver, control, replayReceipt)
+	if got := postgresManagedTargetHistoryRows(t, ctx, restartedSource, control); !samePostgresManagedTargetHistoryRows(got, versionedRows) {
+		t.Fatalf("late/replay delivery changed durable history: got=%#v want=%#v", got, versionedRows)
+	}
+
+	tombstone := synccontract.Tombstone{
+		Operation:   synccontract.OperationDelete,
+		EventID:     synccontract.OpaqueToken("postgres-history-delete-north-1"),
+		Key:         json.RawMessage(`{"tenant":"north","id":1}`),
+		DeleteImage: synccontract.DeleteImageKeyOnly,
+		Position: synccontract.CheckpointPosition{
+			Primary:    synccontract.OpaqueToken("00000051"),
+			TieBreaker: synccontract.OpaqueToken("00000001"),
+		},
+	}
+	envelope, err := database.NewTombstoneEnvelope([]synccontract.Tombstone{tombstone})
+	if err != nil {
+		t.Fatal("could not construct PostgreSQL history soft-delete envelope")
+	}
+	closePlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 0, 1, false)
+	closeReceipt := postgresExecuteManagedTargetWrite(t, ctx, restartedExecutor, closePlan, nil, envelope)
+	assertPostgresManagedTargetReceiptPersisted(t, ctx, restartedDriver, control, closeReceipt)
+	closedRows := postgresManagedTargetHistoryRows(t, ctx, restartedSource, control)
+	if len(closedRows) != 2 || closedRows[0].current || closedRows[0].validTo == nil || closedRows[1].current || closedRows[1].validTo == nil || versionedRows[0].validTo == nil || !closedRows[0].validTo.Equal(*versionedRows[0].validTo) || !closedRows[1].validTo.After(closedRows[1].validFrom) {
+		t.Fatalf("history soft-delete rows = %#v, want both versions retained and v2 validity closed", closedRows)
+	}
+}
+
 func derivePostgresWorkset(t *testing.T, ctx context.Context, root string, control database.ManagedTargetControlRecord, sourceRows []warehouse.Row, baselinePath string, tombstones []synccontract.Tombstone) database.ChangeDeliveryWorkset {
 	t.Helper()
 	sourcePath := writePostgresWorksetParquet(t, ctx, root, "source", sourceRows)
@@ -853,7 +975,7 @@ func postgresManagedTargetWritePlan(t *testing.T, definition database.Definition
 	if !ok {
 		t.Fatal("mapped PostgreSQL target plan lost its shared mapping")
 	}
-	plan, err := database.NewDatabaseWritePlan(context.Background(), database.DatabaseWritePlanRequest{
+	request := database.DatabaseWritePlanRequest{
 		Definition:     definition,
 		Control:        control,
 		Mode:           mode,
@@ -864,7 +986,11 @@ func postgresManagedTargetWritePlan(t *testing.T, definition database.Definition
 		TombstoneCount: tombstones,
 		BatchSize:      2,
 		Destructive:    destructive,
-	})
+	}
+	if mode == synccontract.ModeIncrementalDedupeHistory {
+		request.HistoryRoute = database.DatabaseWriteHistoryRoute{Source: definition.Driver(), Destination: definition.Driver()}
+	}
+	plan, err := database.NewDatabaseWritePlan(context.Background(), request)
 	if err != nil {
 		t.Fatalf("could not create PostgreSQL %s mapped write plan: %v", mode, err)
 	}
@@ -922,6 +1048,15 @@ type postgresManagedTargetRow struct {
 	value  string
 }
 
+type postgresManagedTargetHistoryRow struct {
+	tenant    string
+	id        int64
+	value     string
+	validFrom time.Time
+	validTo   *time.Time
+	current   bool
+}
+
 func postgresManagedTargetRows(t *testing.T, ctx context.Context, source *pgx.Conn, control database.ManagedTargetControlRecord) []postgresManagedTargetRow {
 	t.Helper()
 	rows, err := source.Query(ctx, "SELECT tenant, id, value, pg_typeof(id)::text, pg_typeof(tenant)::text FROM "+postgresManagedTargetQualifiedName(control.Target().Namespace(), control.Target().Relation())+" ORDER BY tenant, id")
@@ -957,6 +1092,52 @@ func samePostgresManagedTargetRows(left, right []postgresManagedTargetRow) bool 
 	}
 	for index := range left {
 		if left[index] != right[index] {
+			return false
+		}
+	}
+	return true
+}
+
+func postgresManagedTargetHistoryRows(t *testing.T, ctx context.Context, source *pgx.Conn, control database.ManagedTargetControlRecord) []postgresManagedTargetHistoryRow {
+	t.Helper()
+	rows, err := source.Query(ctx,
+		"SELECT tenant, id, value, "+
+			postgresManagedTargetQualifiedName("_valid_from")+", "+
+			postgresManagedTargetQualifiedName("_valid_to")+", "+
+			postgresManagedTargetQualifiedName("_is_current")+
+			" FROM "+postgresManagedTargetQualifiedName(control.Target().Namespace(), control.Target().Relation())+
+			" ORDER BY tenant, id, "+postgresManagedTargetQualifiedName("_valid_from")+", value",
+	)
+	if err != nil {
+		t.Fatal("could not read live PostgreSQL managed history rows")
+	}
+	defer rows.Close()
+	result := make([]postgresManagedTargetHistoryRow, 0)
+	for rows.Next() {
+		var row postgresManagedTargetHistoryRow
+		if err := rows.Scan(&row.tenant, &row.id, &row.value, &row.validFrom, &row.validTo, &row.current); err != nil {
+			t.Fatalf("could not scan live PostgreSQL managed history row: %v", err)
+		}
+		result = append(result, row)
+	}
+	if err := rows.Err(); err != nil {
+		t.Fatal("could not finish reading live PostgreSQL managed history rows")
+	}
+	return result
+}
+
+func samePostgresManagedTargetHistoryRows(left, right []postgresManagedTargetHistoryRow) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for index := range left {
+		if left[index].tenant != right[index].tenant || left[index].id != right[index].id || left[index].value != right[index].value || !left[index].validFrom.Equal(right[index].validFrom) || left[index].current != right[index].current {
+			return false
+		}
+		switch {
+		case left[index].validTo == nil && right[index].validTo == nil:
+		case left[index].validTo != nil && right[index].validTo != nil && left[index].validTo.Equal(*right[index].validTo):
+		default:
 			return false
 		}
 	}

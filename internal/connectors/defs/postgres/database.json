@@ -40,6 +40,7 @@
     "full_append",
     "incremental_append",
     "incremental_upsert",
-    "incremental_dedupe"
+    "incremental_dedupe",
+    "incremental_dedupe_history"
   ]
 }

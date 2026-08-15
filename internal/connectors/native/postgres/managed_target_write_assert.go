@@ -7,6 +7,7 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"polymetrics.ai/internal/connectors/database"
+	"polymetrics.ai/internal/synccontract"
 )
 
 func (d *DatabaseDriver) assertManagedTargetForWrite(ctx context.Context, querier postgresManagedTargetQuerier, plan database.DatabaseWritePlan) error {
@@ -36,7 +37,7 @@ func (d *DatabaseDriver) assertManagedTargetForWrite(ctx context.Context, querie
 	if err := postgresAssertTargetControl(ctx, querier, control, relationOID); err != nil {
 		return errPostgresWriteTargetUnverified
 	}
-	return postgresAssertMappedRelation(ctx, querier, target, plan.Mapping())
+	return postgresAssertMappedRelation(ctx, querier, target, plan.Mapping(), plan.Mode() == synccontract.ModeIncrementalDedupeHistory)
 }
 
 type postgresManagedTargetQuerier interface {
@@ -89,7 +90,7 @@ func postgresAssertTargetControl(ctx context.Context, querier postgresManagedTar
 	return nil
 }
 
-func postgresAssertMappedRelation(ctx context.Context, querier postgresManagedTargetQuerier, target database.ManagedTargetRef, mapping database.MappingContractV1) error {
+func postgresAssertMappedRelation(ctx context.Context, querier postgresManagedTargetQuerier, target database.ManagedTargetRef, mapping database.MappingContractV1, allowHistoryColumns bool) error {
 	columns, err := postgresManagedTargetColumns(mapping)
 	if err != nil {
 		return err
@@ -113,6 +114,28 @@ func postgresAssertMappedRelation(ctx context.Context, querier postgresManagedTa
 		var name, typeName, collation string
 		var notNull bool
 		if err := rows.Scan(&name, &notNull, &typeName, &collation); err != nil || name != expected.name || notNull == expected.nullable || (expected.collation != "" && collation != expected.collation) || !postgresEquivalentColumnType(expected.typeSQL, typeName) {
+			return errPostgresWriteTargetUnverified
+		}
+	}
+	if !allowHistoryColumns {
+		if rows.Next() || rows.Err() != nil {
+			return errPostgresWriteTargetUnverified
+		}
+		return nil
+	}
+	for index, expected := range postgresManagedTargetHistoryColumns() {
+		if !rows.Next() {
+			// A newly provisioned managed target has only its mapped business
+			// columns. BeginDatabaseWrite adds the complete history layout inside
+			// its transaction, before the first history row is visible.
+			if index == 0 {
+				return rows.Err()
+			}
+			return errPostgresWriteTargetUnverified
+		}
+		var name, typeName, collation string
+		var notNull bool
+		if err := rows.Scan(&name, &notNull, &typeName, &collation); err != nil || name != expected.name || notNull == expected.nullable || collation != "" || !postgresEquivalentColumnType(expected.typeSQL, typeName) {
 			return errPostgresWriteTargetUnverified
 		}
 	}
