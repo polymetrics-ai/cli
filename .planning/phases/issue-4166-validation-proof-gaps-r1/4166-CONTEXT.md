@@ -32,8 +32,9 @@ Every acceptance test contains a negative control. A command exit status, a skip
 - No credential value, provider rate scope, or secret-derived material may enter stdout, stderr, argv, committed files, or issue/PR text.
 - Only focused package tests run locally; CI owns the full suite.
 - The live target is a dedicated disposable GitHub repository. Production repositories are out of scope.
-- The primary live action must be safe, reversible, and independently readable from GitHub. Labels are preferred because create/read/delete has a curated certification pairing and no issue merge or repository-content deletion is required.
+- The primary live action is `comment_issue`: it maps the extracted issue number/title back onto that same issue, is independently readable, and is fully contained by deleting the dedicated repository. This proves a genuine loop rather than unrelated read/write halves. Label/milestone pairings remain valid alternatives but would not bind as directly to the extracted issue.
 - `merge_pull_request` and destructive repository-file deletes are refusal/preview candidates only, never the primary live mutation.
+- Issue #4169 owns the product correction for provider-verified 401/adjacent HTTP error classification. This validation branch asserts the currently observed typed `internal/internal_error`, zero provider writes, and no checkpoint advancement without changing product behavior.
 - The live flow must contain a real sync/ETL step and a real connector-backed action step. Hand-invoked halves do not satisfy Gap 3.
 - At planning time neither `PM_CERT_GITHUB_TOKEN` nor `GITHUB_TOKEN` is present. The live proof therefore remains unproven until the credential-gated command can run; a skip will be reported as an open gap, never as success.
 

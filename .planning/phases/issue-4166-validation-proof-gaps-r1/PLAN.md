@@ -58,20 +58,20 @@ Close or honestly classify the three audited proof gaps without adding product c
 
 **Red**
 
-1. Add credential-gated `TestGitHubCertificationFlowRoundTripFreshBinary` using `PM_CERT_GITHUB_TOKEN`, falling back to `GITHUB_TOKEN` without ever printing the value.
+1. Add credential-gated `TestLiveFreshBinaryGitHubWarehouseFlowRoundTrip` using `PM_CERT_GITHUB_TOKEN`, falling back to `GITHUB_TOKEN` without ever printing the value.
 2. Build `pm` into a test temp directory. Every product operation after setup runs through that one binary and a fresh project root.
 3. Create a dedicated private GitHub repository and one uniquely titled issue via a bounded test harness. Register the credential from the environment, never argv or a file.
 4. Create a real GitHub→warehouse ETL connection/job for `issues`; run and assert Parquet row count plus advanced checkpoint. Reopen from a separate binary process and independently query the table.
-5. Create/preview/approve/execute a real reverse-ETL `create_milestone` job mapping the extracted issue `title` to milestone `title`; use its durable authorization reference for the flow action. Delete the authorization-seeding milestone before the flow.
-6. Write a flow containing the real sync job followed by a connector-backed action step using `create_milestone`; run the flow through the built binary and assert both steps complete.
-7. Read GitHub independently and assert the exact milestone title created by the flow. Delete it, delete/close setup resources, delete the disposable repository, and assert provider 404/absence as zero residue.
+5. Create/preview/approve/execute a real reverse-ETL `comment_issue` job mapping the extracted issue `number` and `title` to `issue_number` and comment `body`; use its durable authorization reference for the flow action. This action was selected because it closes a genuine same-issue GitHub→warehouse→GitHub loop, duplicate comments are safe inside the disposable repository, and GitHub exposes an independent comment readback.
+6. Write a flow containing the real sync job followed by a connector-backed action step using `comment_issue`; run the flow through the built binary and assert both steps complete and exactly one additional comment appears.
+7. Read GitHub independently and assert the exact comment body created by the flow. Delete the disposable repository and assert provider 404/absence as zero residue.
 8. The test must fail if the flow action is removed, if the independent provider read-back is removed, or if the binary uses a stale/local in-memory value.
 
 **Refusal matrix**
 
 1. Replay an acknowledged authorization/approved item and assert the typed replay refusal plus unchanged provider milestone set.
 2. Expire or withhold the flow authorization/plan and assert the typed expiry/unapproved refusal plus unchanged provider state.
-3. Run with an intentionally invalid authentication value sourced only from a child-only environment variable; assert the typed authentication refusal plus unchanged provider state.
+3. Run with an intentionally invalid authentication value sourced only from a child-only environment variable; assert the currently observed typed `internal/internal_error`, unchanged provider state, and an unchanged checkpoint. Issue #4169 owns correcting the product classification to `auth` and adjacent HTTP classes.
 4. Preview unsafe `merge_pull_request` and repository-file delete paths only; assert no provider mutation.
 
 **Green / evidence**
@@ -85,9 +85,9 @@ Close or honestly classify the three audited proof gaps without adding product c
 | Area | Command | Required result |
 | --- | --- | --- |
 | Gap 1 focused | `go test -timeout 20m ./internal/connectors/certify -run 'TestFullWriteSweepFailsForDeliberatelyBroken' -count=1` | Both negative controls fail the sabotaged report and intact control passes. |
-| Gap 2 focused | `go test -timeout 20m ./internal/app -run 'TestCertificationDeclaredTransportPair' -count=1` | Execution counters/state prove all pair stages; missing registration fails. |
-| Gap 3 deterministic harness | `go test -timeout 20m ./internal/cli -run 'TestGitHubCertificationFlowRoundTrip' -count=1` | Non-live harness behavior and refusal assertions pass. |
-| Gap 3 live | `PM_CERT_GITHUB_TOKEN=<environment> go test -timeout 20m ./internal/cli -run '^TestGitHubCertificationFlowRoundTripFreshBinary$' -count=1 -v` | Fresh binary completes flow, provider read-back, refusals, and zero-residue cleanup. A skip is not green evidence. |
+| Gap 2 focused | `go test -timeout 20m ./internal/app -run 'TestDeclaredTransportCertificationFailsWhenDeclarationIsMissing' -count=1` and `go test -timeout 20m ./internal/connectors/certify -run 'TestCertificationDeclaredTransportPair' -count=1` | Execution counters/state prove all pair stages; missing declaration and missing registration both fail. |
+| Gap 3 deterministic harness | `go test -timeout 20m ./internal/cli -run 'TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip' -count=1 -v` | Non-live harness behavior and refusal assertions pass. |
+| Gap 3 live | `PM_CERT_GITHUB_TOKEN=<environment> go test -timeout 20m ./internal/cli -run '^TestLiveFreshBinaryGitHubWarehouseFlowRoundTrip$' -count=1 -v` | Fresh binary completes flow, provider read-back, refusals, and zero-residue cleanup. A skip is not green evidence. |
 | Changed packages | focused `go test -timeout 20m` commands for each changed package, separately | Pass. |
 | Static checks | `gofmt -w` on changed Go files; `go vet` on changed packages; `git diff --check` | Pass. |
 | Derived drift | one-pass repo generators required by changed files, then relevant `make verify` gates individually | Generated tree clean; drift checks pass. |
@@ -110,4 +110,3 @@ Close or honestly classify the three audited proof gaps without adding product c
 3. Gap 2 RED/GREEN proof.
 4. Gap 3 harness/live evidence or explicit open-gap evidence.
 5. Verification/review artifacts and fixes.
-

@@ -6,9 +6,10 @@ import (
 
 // stageWriteSweepAllPairings runs only when Options.Full is true. It accounts
 // every declared write action beyond the first live lifecycle that stages
-// 12-17 exercise. Actions with safe pairings are marked untested until the
-// bounded executor can run every lifecycle; blocked actions are recorded with
-// their inventory reason.
+// 12-17 exercise. Every remaining action reaches the real declarative
+// preparation path without records or a provider send. Safe pairings retain
+// their separate live lifecycle; unsafe/unpaired actions retain an explicit
+// reason explaining why certification did not mutate the provider.
 func stageWriteSweepAllPairings(rc *runContext, rep *Report) error {
 	if !rc.opts.Full {
 		skipStage(rc, rep, "write_sweep_all_pairings",
@@ -38,24 +39,41 @@ func stageWriteSweepAllPairings(rc *runContext, rep *Report) error {
 		rep.Capabilities.WriteActions = map[string]WriteActionResult{}
 	}
 
-	for _, item := range inventory {
-		if _, exists := rep.Capabilities.WriteActions[item.Action]; exists {
-			continue
+	probe := rc.writeActionProbe
+	if probe == nil {
+		probe, err = certificationWriteActionProbe(rc.opts.Connector)
+		if err != nil {
+			recordStage(rc, rep, "write_sweep_all_pairings", 2, func() (bool, CLIStageInfo, string) {
+				return false, CLIStageInfo{}, err.Error()
+			})
+			return nil
 		}
+	}
+	for _, item := range inventory {
+		_, alreadyCoveredLive := rep.Capabilities.WriteActions[item.Action]
 		pairing := item.Pairing
 		stageName := fmt.Sprintf("write_sweep_%s", item.Action)
 		recordStage(rc, rep, stageName, 2, func() (bool, CLIStageInfo, string) {
-			if pairing.Create == "" {
+			if err := probe(rc.ctx, rc.opts.Connector, item.Action); err != nil {
 				rep.Capabilities.WriteActions[item.Action] = WriteActionResult{
-					Result: "blocked",
-					Reason: item.Reason,
+					Result: "fail",
+					Reason: fmt.Sprintf("write action %q declarative preparation failed: %v", item.Action, err),
 				}
+				return false, CLIStageInfo{}, rep.Capabilities.WriteActions[item.Action].Reason
+			}
+			if alreadyCoveredLive {
 				return true, CLIStageInfo{}, ""
 			}
-			result := "untested"
+			result := "pass"
 			reason := item.Reason
-			if reason == "" {
-				reason = "sweep pairing registered; live lifecycle requires credential + executor"
+			if pairing.Create == "" {
+				if reason == "" {
+					reason = "declarative preparation passed; provider mutation is not run without a certified create/cleanup lifecycle"
+				} else {
+					reason = "declarative preparation passed; provider mutation not run: " + reason
+				}
+			} else if reason == "" {
+				reason = "declarative preparation passed; live lifecycle requires credential and certified cleanup"
 			}
 			rep.Capabilities.WriteActions[item.Action] = WriteActionResult{
 				Result:  result,

@@ -137,6 +137,18 @@ type runContext struct {
 	// write_plan_preview recorded a skip (Options.Write is false).
 	write *writeContext
 
+	// writeActionProbe is a per-run negative-control seam. Production runs use
+	// probeCertificationWriteAction; focused internal tests may replace it to
+	// prove that one broken declaration fails the full certification sweep.
+	// It never executes a provider request.
+	writeActionProbe func(context.Context, string, string) error
+
+	// transportPairProbe exercises one declared source/destination pair through
+	// App's production definition-composition root. The seam exists only so an
+	// inverse test can remove every factory and prove certification then fails
+	// on the real registration error.
+	transportPairProbe func(context.Context, string) (certificationTransportPairProof, error)
+
 	// currentStage names the stage function presently executing, so run()
 	// can tag each captured CLI invocation with its owning stage without
 	// threading a stage name through every one of the ~20 call sites.
@@ -303,6 +315,7 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	}
 	tailStages := []stageFunc{
 		stageSurfaceInventory,
+		stageDeclaredTransportPair,
 		stageDirectReadSweep,
 		stageBinaryDownloadSweep,
 		stageWritePlanPreview,
