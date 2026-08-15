@@ -245,6 +245,7 @@ func (s *connectionWarehouseStage) Reopen(ctx context.Context, receipt synctrans
 	}
 	return synctransport.WarehouseWorkset{
 		ID:                  manifest.ID,
+		SourceParquet:       artifact.parquetPath,
 		Records:             records,
 		Tombstones:          cloneConnectionStageTombstones(manifest.Tombstones),
 		CandidateCheckpoint: manifest.CandidateCheckpoint.Clone(),

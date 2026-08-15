@@ -11,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgx/v5/pgtype"
 
 	"polymetrics.ai/internal/connectors"
@@ -29,11 +30,128 @@ func TestPostgresDefinitionDeclaresBoundedSnapshotTransportSource(t *testing.T) 
 	if descriptor.Executor != wantReference {
 		t.Fatalf("PostgreSQL source executor = %#v, want %#v", descriptor.Executor, wantReference)
 	}
-	if got, want := descriptor.EligibleStreams, []string{"snapshot"}; !sameStrings(got, want) {
+	if got, want := descriptor.EligibleStreams, []string{"*"}; !sameStrings(got, want) {
 		t.Fatalf("PostgreSQL source streams = %#v, want %#v", got, want)
 	}
-	if got, want := descriptor.Modes, []synccontract.Mode{synccontract.ModeFullAppend, synccontract.ModeFullOverwrite}; !sameModes(got, want) {
+	if got, want := descriptor.Modes, []synccontract.Mode{synccontract.ModeFullAppend, synccontract.ModeIncrementalUpsert}; !sameModes(got, want) {
 		t.Fatalf("PostgreSQL source modes = %#v, want %#v", got, want)
+	}
+	if descriptor.Delivery.Deletes != connectors.DeliveryDeletesTombstone {
+		t.Fatalf("PostgreSQL bootstrap source delete delivery = %q, want tombstone", descriptor.Delivery.Deletes)
+	}
+	destination, ok := connectors.DestinationTransportDescriptorOf(connector)
+	if !ok {
+		t.Fatal("PostgreSQL definition has no declared managed destination transport")
+	}
+	wantDestination := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_managed_target"}
+	if destination.Executor != wantDestination {
+		t.Fatalf("PostgreSQL destination executor = %#v, want %#v", destination.Executor, wantDestination)
+	}
+	if got, want := destination.Modes, []synccontract.Mode{
+		synccontract.ModeFullOverwrite,
+		synccontract.ModeFullAppend,
+		synccontract.ModeIncrementalAppend,
+		synccontract.ModeIncrementalUpsert,
+		synccontract.ModeIncrementalDedupe,
+	}; !sameModes(got, want) {
+		t.Fatalf("PostgreSQL destination modes = %#v, want %#v", got, want)
+	}
+	for _, forbidden := range []synccontract.Mode{synccontract.ModeIncrementalDedupeHistory, synccontract.ModeChangeCapture} {
+		for _, advertised := range destination.Modes {
+			if advertised == forbidden {
+				t.Fatalf("PostgreSQL advertised non-executable destination mode %q", forbidden)
+			}
+		}
+	}
+	factories := connector.SyncTransportDefinitionFactories()
+	foundDestination := false
+	for _, factory := range factories {
+		if factory.Reference == wantDestination && factory.BuildDestination != nil {
+			foundDestination = true
+		}
+	}
+	if !foundDestination {
+		t.Fatal("PostgreSQL managed destination has no production definition factory")
+	}
+}
+
+func TestBootstrapTransportCommitterPublishesTransactionsOnlyAtDurableCommit(t *testing.T) {
+	source := postgresCDCSource{
+		identity:   synccontract.SourceIdentity{Engine: "postgres", AccountOrCluster: "system-one:analytics", ObjectScope: "public.events"},
+		generation: synccontract.OpaqueToken("7\npm_events"), publication: "pm_events", schemaFingerprint: "schema-one",
+		system: pglogrepl.IdentifySystemResult{SystemID: "system-one", DBName: "analytics", Timeline: 7},
+	}
+	barrierLSN := pglogrepl.LSN(0x16B6C50)
+	barrier, err := newPostgresBootstrapBarrier(source, barrierLSN)
+	if err != nil {
+		t.Fatal(err)
+	}
+	source.bootstrap = &barrier
+	nativeInitial := postgresCDCCheckpointForLSNs(source, barrierLSN, barrierLSN, barrierLSN, barrierLSN)
+	resume := synccontract.ResumeExpectation{
+		Source:           synccontract.SourceIdentity{Engine: "postgres", AccountOrCluster: "credential-id", ObjectScope: "public.events"},
+		SourceGeneration: synccontract.OpaqueToken("app-generation"),
+	}
+	translatedInitial := bootstrapTransportCheckpoint(nativeInitial, resume)
+	var pages []synctransport.SourcePage
+	committer := &bootstrapTransportCommitter{
+		resume: resume, primaryKey: []string{"id"}, finalSnapshot: &translatedInitial,
+		emit: func(page synctransport.SourcePage) error {
+			pages = append(pages, page)
+			return nil
+		},
+	}
+	if err := committer.CommitDurableChangefeedCheckpoint(context.Background(), nativeInitial); err != nil {
+		t.Fatalf("initial barrier commit = %v", err)
+	}
+	if len(pages) != 0 {
+		t.Fatalf("initial barrier emitted a second snapshot page: %#v", pages)
+	}
+	if err := committer.emitChange(connectors.CDCEvent{Operation: "insert", Record: connectors.Record{"id": int64(1), "value": "inserted"}}); err != nil {
+		t.Fatal(err)
+	}
+	if err := committer.emitChange(connectors.CDCEvent{Operation: "delete", Record: connectors.Record{"id": int64(2)}, State: connectors.Record{"lsn": "0/16B6D00"}}); err != nil {
+		t.Fatal(err)
+	}
+	if len(pages) != 0 {
+		t.Fatal("CDC events reached the transport before their transaction checkpoint commit")
+	}
+	nativeNext := postgresCDCCheckpointForLSNs(source, barrierLSN, barrierLSN, pglogrepl.LSN(0x16B6C80), pglogrepl.LSN(0x16B6D00))
+	if err := committer.CommitDurableChangefeedCheckpoint(context.Background(), nativeNext); err != nil {
+		t.Fatalf("transaction checkpoint commit = %v", err)
+	}
+	if len(pages) != 1 || len(pages[0].Records) != 1 || len(pages[0].Tombstones) != 1 || pages[0].CandidateCheckpoint.Source != resume.Source || string(pages[0].CandidateCheckpoint.SourceGeneration) != string(resume.SourceGeneration) {
+		t.Fatalf("committed CDC transport page = %#v, want one record/tombstone bound to App resume identity", pages)
+	}
+}
+
+func TestNativeBootstrapTransportCheckpointRestoresSealedPostgresIdentity(t *testing.T) {
+	source := postgresCDCSource{
+		identity:   synccontract.SourceIdentity{Engine: "postgres", AccountOrCluster: "system-one:analytics", ObjectScope: "public.events"},
+		generation: synccontract.OpaqueToken("7\npm_events"), publication: "pm_events", schemaFingerprint: "schema-one",
+		system: pglogrepl.IdentifySystemResult{SystemID: "system-one", DBName: "analytics", Timeline: 7},
+	}
+	lsn := pglogrepl.LSN(0x16B6C50)
+	barrier, err := newPostgresBootstrapBarrier(source, lsn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	source.bootstrap = &barrier
+	native := postgresCDCCheckpointForLSNs(source, lsn, lsn, lsn, lsn)
+	appResume := synccontract.ResumeExpectation{
+		Source:           synccontract.SourceIdentity{Engine: "postgres", AccountOrCluster: "credential-id", ObjectScope: "public.events"},
+		SourceGeneration: synccontract.OpaqueToken("app-generation"),
+	}
+	persisted := bootstrapTransportCheckpoint(native, appResume)
+	restored, err := nativeBootstrapTransportCheckpoint(persisted, connectors.RuntimeConfig{
+		Config:  map[string]string{"host": "localhost", "database": "analytics", "username": "pm", "sslmode": "disable"},
+		Secrets: map[string]string{"password": "fixture"},
+	})
+	if err != nil {
+		t.Fatalf("nativeBootstrapTransportCheckpoint() = %v", err)
+	}
+	if restored.Source != source.identity || string(restored.SourceGeneration) != string(source.generation) || string(restored.Position.Primary) != string(native.Position.Primary) {
+		t.Fatalf("restored native checkpoint = %#v, want source/generation/LSN from sealed barrier", restored)
 	}
 }
 
@@ -516,7 +634,7 @@ func TestPostgresSnapshotCheckpointDoesNotRequireJSONEncodableKeyValues(t *testi
 }
 
 func TestPostgresSnapshotRelationRefAllowsTypedCatalogDatabaseName(t *testing.T) {
-	relation, err := postgresSnapshotRelationRef("analytics-db.public.events")
+	relation, err := postgresSnapshotRelationRef("analytics-db.public.events", "analytics-db", "public")
 	if err != nil {
 		t.Fatalf("postgresSnapshotRelationRef() error = %v", err)
 	}

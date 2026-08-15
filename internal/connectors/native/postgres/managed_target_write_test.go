@@ -99,6 +99,15 @@ func TestPostgresManagedTargetTypeMappingAndValueEncoding(t *testing.T) {
 	}
 }
 
+func TestPostgresManagedTargetTypeAssertionSeparatesCollationFromFormatType(t *testing.T) {
+	if got, want := postgresTypeWithoutCollation(`TEXT COLLATE "default"`), "TEXT"; got != want {
+		t.Fatalf("postgresTypeWithoutCollation() = %q, want %q", got, want)
+	}
+	if !postgresEquivalentColumnType(postgresTypeWithoutCollation(`TEXT COLLATE "default"`), "text") {
+		t.Fatal("managed target rejected a text column whose separately asserted collation matched")
+	}
+}
+
 func TestPostgresOrderFenceKeyDigestUsesTypedSQLKeySemantics(t *testing.T) {
 	columns := []postgresManagedTargetColumn{
 		{name: "id", typeSQL: "BIGINT", nullable: false},

@@ -15,6 +15,10 @@ import (
 
 type callerProjectWriteApprovalEvidence struct{}
 
+func (callerProjectWriteApprovalEvidence) ValidateProjectWrite(connectors.WriteApprovalTarget, string, time.Time) error {
+	return nil
+}
+
 func (callerProjectWriteApprovalEvidence) AuthorizeProjectWrite(connectors.WriteApprovalTarget, string, time.Time) error {
 	return nil
 }

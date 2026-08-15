@@ -330,6 +330,11 @@ func mapLogicalValue(value any, source, target LogicalType, requireLossless bool
 			if json.Valid([]byte(typed)) {
 				return typed, nil
 			}
+		default:
+			encoded, err := json.Marshal(typed)
+			if err == nil && json.Valid(encoded) {
+				return json.RawMessage(encoded), nil
+			}
 		}
 	case LogicalArray:
 		values, ok := value.([]any)

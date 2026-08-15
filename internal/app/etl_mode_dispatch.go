@@ -48,10 +48,10 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 	}
 	transportRoute := a.shouldRunTransport(request.connection, request.streamName, request.mode, request.source, request.destination)
 	if !transportRoute && hasDestinationApproval(request.destinationApproval) {
-		return a.failRun(request.runID, fmt.Errorf("destination approval is valid only for the closed issue-label transport route"))
+		return a.failRun(request.runID, fmt.Errorf("destination approval is valid only for a closed definition-selected transport route"))
 	}
 	if transportRoute {
-		result, err := a.runTransportETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.streamName, request.mode, request.batchSize, request.destinationApproval)
+		result, err := a.runTransportETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.streamName, request.stream, request.mode, request.batchSize, request.destinationApproval)
 		if err != nil {
 			if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, err); handled {
 				return parked, parkErr

@@ -39,16 +39,35 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMode, source, destination connectors.Connector) bool {
 	sourceIssueLabel := isIssueLabelTransportConnector(source)
 	destinationIssueLabel := isIssueLabelTransportConnector(destination)
-	if sourceIssueLabel || destinationIssueLabel {
+	if destinationIssueLabel {
 		// The closed composition is a same-definition source/destination pair.
 		// A one-sided descriptor is an ordinary legacy ETL connection, not a
 		// half-transport route; in particular, it must not divert a historical
 		// declarative source into the warehouse destination transport preflight.
-		if !sourceIssueLabel || !destinationIssueLabel {
+		if !sourceIssueLabel {
 			return false
 		}
-	} else {
+	} else if !sourceIssueLabel {
 		return hasDeclaredSyncTransport(source, destination)
+	} else if !hasDeclaredSyncTransport(source, destination) {
+		return false
+	} else {
+		// A definition-selected source may pair with another definition-selected
+		// destination. Its own eligible stream/mode and the destination strategy
+		// remain enforced by registry preflight. Only the semantic managed-target
+		// destination marker admits this cross-definition route, so legacy API-to-
+		// warehouse connections are not diverted from their established ETL path.
+		if a == nil || a.transports == nil {
+			return false
+		}
+		resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+			Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode,
+		})
+		if err != nil {
+			return false
+		}
+		_, managedTarget := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
+		return managedTarget
 	}
 	if streamName != "issues" {
 		return false
@@ -109,15 +128,39 @@ func isIssueLabelTransportConnector(connector connectors.Connector) bool {
 	return true
 }
 
+func validateClosedTransportBatchSize(source, destination connectors.Connector, batchSize int) error {
+	if (isIssueLabelTransportConnector(source) || isIssueLabelTransportConnector(destination)) && batchSize != 1 {
+		return errors.New("closed issue-label transport requires batch size 1")
+	}
+	return nil
+}
+
 // runTransportETL is the bounded bridge from persisted connection state to
 // the transport-neutral orchestrator. It does not call legacy Connector.Read
 // or Connector.Write, inject provider metadata, or select a generic `upsert`
 // action. Real durable warehouse/apply adapters remain separate foundations;
 // this seam therefore fails closed unless a stage and externally verified
 // transports are registered.
-func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, mode SyncMode, batchSize int, approval synctransport.DestinationApproval) (etlExecutionResult, error) {
+func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int, approval synctransport.DestinationApproval) (etlExecutionResult, error) {
 	if a.transports == nil {
 		return etlExecutionResult{}, fmt.Errorf("closed transport registry is unavailable")
+	}
+	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+		Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode,
+	})
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
+	_, requiresManagedTargetApproval := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
+	if err := validateClosedTransportBatchSize(source, destination, batchSize); err != nil {
+		return etlExecutionResult{}, err
+	}
+	if requiresManagedTargetApproval {
+		var err error
+		approval, err = a.authorizePostgresManagedTargetTransport(ctx, conn, streamName, approval, destRuntime)
+		if err != nil {
+			return etlExecutionResult{}, err
+		}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior, priorPresent := a.state.StreamStates[stateKey]
@@ -142,13 +185,20 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		SourceRuntime:      sourceRuntime,
 		Destination:        destination,
 		DestinationRuntime: destRuntime,
-		Stream:             streamName,
-		Mode:               mode.ContractMode,
-		BatchSize:          batchSize,
-		Resume:             sourceExpectation,
-		Checkpoint:         prior.Checkpoint,
-		Approval:           approval,
-		Stage:              a.transportStage,
+		DestinationBinding: synctransport.DestinationBinding{
+			WorkspaceID:       a.state.WorkspaceID,
+			SourceConnectorID: source.Name(),
+			ConnectionID:      conn.ID,
+			StreamID:          stream.StreamID,
+			PrimaryKey:        append([]string(nil), stream.PrimaryKey...),
+		},
+		Stream:     streamName,
+		Mode:       mode.ContractMode,
+		BatchSize:  batchSize,
+		Resume:     sourceExpectation,
+		Checkpoint: prior.Checkpoint,
+		Approval:   approval,
+		Stage:      a.transportStage,
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
 			interim := checkpoint.Clone()
 			if interim.CommittedAt == nil {
@@ -211,6 +261,11 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
 	if err != nil {
 		return result, err
+	}
+	if requiresManagedTargetApproval {
+		if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
+			return result, err
+		}
 	}
 	return result, nil
 }

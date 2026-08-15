@@ -25,6 +25,8 @@ const etlTransportHelp = `NAME
 SYNOPSIS
   pm etl transport %s plan --connection <name> [--json]
   pm etl transport %s preview <plan-id> [--json]
+  pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--json]
+  pm etl transport postgres-managed-target preview <plan-id> [--json]
   pm etl run --connection <name> --stream issues --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
   pm etl transport %s cleanup plan --connection <name> --forward-plan <plan-id> [--json]
   pm etl transport %s cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
@@ -67,6 +69,46 @@ EXIT STATUS
   3 validation error
 `
 
+const postgresManagedTargetTransportHelp = `NAME
+  pm etl transport postgres-managed-target - deliver sealed warehouse worksets to PostgreSQL
+
+SYNOPSIS
+  pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--json]
+  pm etl transport postgres-managed-target preview <plan-id> [--json]
+  pm etl run --connection <name> --stream <stream> --batch-size <n> --approval-plan <plan-id> --approval-token-stdin --confirm destructive [--json]
+
+DESCRIPTION
+  This is a closed definition-selected source-to-PostgreSQL transport, not a
+  generic SQL write surface. The saved connection owns both credentials, the
+  source stream, primary key, mode, and immutable managed destination identity.
+  Planning seals those bindings and the authoritative source schema before
+  source records are read. PostgreSQL sources use their typed relation catalog;
+  declared API sources use their JSON stream schema.
+
+  The approved run reads through the registered source transport, stages
+  bounded pages in the connection-owned warehouse, reopens the sealed Parquet
+  workset, applies it through the managed PostgreSQL target, independently
+  reads back the delivery receipt, and only then advances the source checkpoint.
+
+  An incremental_upsert PostgreSQL source performs a gap-free logical-
+  replication bootstrap when transport_bootstrap=true is set on its credential.
+  After the snapshot barrier is durably delivered, committed pgoutput
+  transactions follow the same warehouse and target acknowledgement path.
+
+SECURITY
+  The approval token is accepted only through --approval-token-stdin. It is
+  single-use and binds the source schema plus both credential revisions. Stale,
+  mismatched, replayed, authentication-refused, or permission-refused runs stop
+  without advancing the checkpoint. PostgreSQL remains write=false in the
+  public connector capability surface; this command does not expose raw SQL.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+  3 validation error
+`
+
 type etlTransportPlanOutput struct {
 	ID            string                       `json:"id"`
 	Status        string                       `json:"status"`
@@ -101,11 +143,52 @@ func runETLTransport(ctx context.Context, a *app.App, args []string, stdout io.W
 	if len(args) == 0 || isOnlyTransportHelp(args) {
 		return writeETLTransportManual(stdout, jsonOut, "etl transport")
 	}
+	if args[0] == "postgres-managed-target" {
+		return runPostgresManagedTargetTransport(ctx, a, args[1:], stdout, jsonOut)
+	}
 	connectorName, ok := parseIssueLabelTransportCommand(args[0])
 	if !ok {
 		return usageErrorf("unknown etl transport %q", args[0])
 	}
 	return runIssueLabelTransport(ctx, a, connectorName, args[1:], stdout, jsonOut)
+}
+
+func runPostgresManagedTargetTransport(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+	if len(args) == 0 || isOnlyTransportHelp(args) {
+		return writeETLTransportManual(stdout, jsonOut, "etl transport postgres-managed-target")
+	}
+	switch args[0] {
+	case "plan":
+		flags, err := parseStrictTransportFlags(args[1:], map[string]strictTransportFlagSpec{"connection": {}, "stream": {}})
+		if err != nil {
+			return err
+		}
+		if _, err := issueLabelTransportConnectionIDFromName(flags.value("connection")); err != nil {
+			return err
+		}
+		if strings.TrimSpace(flags.value("stream")) == "" {
+			return validationErrorf("missing --stream")
+		}
+		plan, err := a.PlanPostgresManagedTargetTransport(ctx, flags.value("connection"), flags.value("stream"))
+		if err != nil {
+			return err
+		}
+		return writeETLTransportPlan(stdout, jsonOut, plan)
+	case "preview":
+		if len(args) != 2 {
+			return errUsage
+		}
+		if err := validateTransportPlanID(args[1]); err != nil {
+			return err
+		}
+		plan, preview, err := a.PreviewPostgresManagedTargetTransport(ctx, args[1])
+		if err != nil {
+			return err
+		}
+		return writeETLTransportPreview(stdout, jsonOut, plan, preview)
+	default:
+		return usageErrorf("unknown PostgreSQL managed target transport command %q", args[0])
+	}
 }
 
 func runIssueLabelTransport(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -253,17 +336,14 @@ func parseETLRunTransportApproval(args []string, stdin io.Reader) (synctransport
 		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
 	}
 	if flags.value("connection") == "" || flags.value("stream") == "" || flags.value("batch-size") == "" {
-		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved issue-label transport ETL requires --connection, --stream issues, and --batch-size 1")
-	}
-	if flags.value("stream") != "issues" {
-		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved issue-label transport ETL requires --stream issues")
+		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved transport ETL requires --connection, --stream, and --batch-size")
 	}
 	batchSize, err := parseIntFlag("batch-size", flags.value("batch-size"), 0)
 	if err != nil {
 		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
 	}
-	if batchSize != 1 {
-		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved issue-label transport ETL requires --batch-size 1")
+	if batchSize <= 0 {
+		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved transport ETL requires a positive --batch-size")
 	}
 	if _, err := issueLabelTransportConnectionIDFromName(flags.value("connection")); err != nil {
 		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
@@ -314,14 +394,14 @@ func approvalFromStrictTransportFlags(planID string, flags strictTransportFlags,
 		if cleanup {
 			return synctransport.DestinationApproval{}, validationErrorf("issue-label transport cleanup requires --approval-token-stdin and --confirm destructive")
 		}
-		return synctransport.DestinationApproval{}, validationErrorf("approved issue-label transport ETL requires --approval-plan and --confirm destructive")
+		return synctransport.DestinationApproval{}, validationErrorf("approved transport ETL requires --approval-plan and --confirm destructive")
 	}
 	confirmation, err := connectors.ParseWriteConfirmation(flags.value("confirm"))
 	if err != nil {
 		return synctransport.DestinationApproval{}, validationErrorf("invalid --confirm: %v", err)
 	}
 	if confirmation.Kind != connectors.ConfirmationKindDestructive {
-		return synctransport.DestinationApproval{}, validationErrorf("issue-label transport requires --confirm destructive")
+		return synctransport.DestinationApproval{}, validationErrorf("approved transport requires --confirm destructive")
 	}
 	return synctransport.DestinationApproval{PlanID: planID, Confirmation: confirmation}, nil
 }
@@ -547,6 +627,9 @@ func writeETLTransportManual(stdout io.Writer, jsonOut bool, command string) err
 }
 
 func etlTransportManual(command string) (string, error) {
+	if command == "etl transport postgres-managed-target" {
+		return postgresManagedTargetTransportHelp, nil
+	}
 	identity, err := app.DefaultIssueLabelTransportIdentity()
 	if err != nil {
 		return "", fmt.Errorf("resolve closed issue-label transport manual: %w", err)
@@ -575,6 +658,19 @@ func etlTransportManualCommand(args []string) (string, bool) {
 	}
 	if len(args) == 1 || isOnlyTransportHelp(args[1:]) {
 		return "etl transport", true
+	}
+	if args[1] == "postgres-managed-target" {
+		command := "etl transport postgres-managed-target"
+		if len(args) == 2 || isOnlyTransportHelp(args[2:]) {
+			return command, true
+		}
+		if len(args) == 4 && (args[2] == "plan" || args[2] == "preview") && isHelpArg(args[3]) {
+			return command, true
+		}
+		if len(args) >= 5 && args[2] == "preview" && isHelpArg(args[len(args)-1]) {
+			return command, true
+		}
+		return "", false
 	}
 	connectorName, ok := parseIssueLabelTransportCommand(args[1])
 	if !ok {

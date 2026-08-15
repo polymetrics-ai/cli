@@ -203,7 +203,7 @@ func (c Connector) readBootstrapSnapshot(ctx context.Context, conn connConfig, s
 	if err := importPostgresSnapshot(operationCtx, tx, exportedSnapshot); err != nil {
 		return postgresCDCSource{}, synccontract.CheckpointEnvelope{}, err
 	}
-	relation, err := postgresSnapshotRelationRef(conn.database + "." + source.identity.ObjectScope)
+	relation, err := postgresSnapshotRelationRef(source.identity.ObjectScope, conn.database, conn.schema)
 	if err != nil {
 		return postgresCDCSource{}, synccontract.CheckpointEnvelope{}, errors.New("postgres bootstrap: source relation is invalid")
 	}
@@ -346,7 +346,7 @@ func postgresCDCSchemaFingerprint(ctx context.Context, conn connConfig, source p
 	if err != nil {
 		return "", fmt.Errorf("postgres CDC: discover schema fingerprint: %w", err)
 	}
-	relation, err := postgresSnapshotRelationRef(conn.database + "." + source.identity.ObjectScope)
+	relation, err := postgresSnapshotRelationRef(source.identity.ObjectScope, conn.database, conn.schema)
 	if err != nil {
 		return "", errors.New("postgres CDC: source relation is invalid")
 	}

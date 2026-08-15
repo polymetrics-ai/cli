@@ -5,16 +5,53 @@
       "family": "native_database",
       "id": "postgres_bounded_snapshot"
     },
-    "eligible_streams": ["snapshot"],
-    "modes": ["full_append", "full_overwrite"],
+    "eligible_streams": ["*"],
+    "modes": ["full_append", "incremental_upsert"],
     "delivery": {
       "idempotency": "at_least_once",
       "ordering": "source_ordered",
-      "deletes": "not_available"
+      "deletes": "tombstone"
     },
     "conformance": {
       "suite": "postgres_snapshot",
-      "run_id": "bounded_full_v1"
+      "run_id": "bounded_full_and_bootstrap_v1"
     }
+  },
+  "destination_transport": {
+    "executor": {
+      "family": "native_database",
+      "id": "postgres_managed_target"
+    },
+    "eligible_actions": [
+      "managed_full_overwrite",
+      "managed_full_append",
+      "managed_incremental_append",
+      "managed_incremental_upsert",
+      "managed_incremental_dedupe"
+    ],
+    "modes": [
+      "full_overwrite",
+      "full_append",
+      "incremental_append",
+      "incremental_upsert",
+      "incremental_dedupe"
+    ],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "tombstone"
+    },
+    "conformance": {
+      "suite": "postgres_managed_target",
+      "run_id": "warehouse_workset_v1"
+    },
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {"mode": "full_overwrite", "strategy": "replace", "action": "managed_full_overwrite"},
+      {"mode": "full_append", "strategy": "append", "action": "managed_full_append"},
+      {"mode": "incremental_append", "strategy": "append", "action": "managed_incremental_append"},
+      {"mode": "incremental_upsert", "strategy": "merge", "action": "managed_incremental_upsert"},
+      {"mode": "incremental_dedupe", "strategy": "dedupe", "action": "managed_incremental_dedupe"}
+    ]
   }
 }

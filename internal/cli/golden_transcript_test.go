@@ -56,8 +56,10 @@ var goldenTranscriptInputs = []struct {
 	{Name: "bare_etl_manual", Args: []string{"etl"}},
 	{Name: "bare_etl_transport_manual", Args: []string{"etl", "transport"}},
 	{Name: "bare_etl_transport_github_issue_label_manual", Args: []string{"etl", "transport", "github-issue-label"}},
+	{Name: "bare_etl_transport_postgres_managed_target_manual", Args: []string{"etl", "transport", "postgres-managed-target"}},
 	{Name: "etl_transport_help_manual", Args: []string{"etl", "transport", "--help"}},
 	{Name: "etl_transport_leaf_help_manual", Args: []string{"etl", "transport", "github-issue-label", "--help"}},
+	{Name: "etl_transport_postgres_leaf_help_manual", Args: []string{"etl", "transport", "postgres-managed-target", "--help"}},
 	{Name: "bare_reverse_manual", Args: []string{"reverse"}},
 	{Name: "bare_connectors_manual", Args: []string{"connectors"}},
 	{Name: "bare_connections_manual", Args: []string{"connections"}},
@@ -148,7 +150,7 @@ func TestGoldenTranscripts(t *testing.T) {
 	if err := json.Unmarshal(content, &transcripts); err != nil {
 		t.Fatalf("parse golden transcripts: %v", err)
 	}
-	if len(transcripts) < 75 || len(transcripts) > 95 {
+	if len(transcripts) < 75 || len(transcripts) > 100 {
 		t.Fatalf("golden transcript count = %d, want about 80", len(transcripts))
 	}
 	assertGoldenInputsMatchFixture(t, transcripts)

@@ -585,6 +585,8 @@ SYNOPSIS
   pm etl transport github-issue-label plan --connection <name> [--json]
   pm etl transport github-issue-label preview <plan-id> [--json]
   pm etl run --connection <name> --stream issues --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
+  pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--json]
+  pm etl transport postgres-managed-target preview <plan-id> [--json]
   pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
   pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
@@ -643,6 +645,35 @@ CLOSED GITHUB TRANSPORT
   Approval tokens are never accepted in argv, environment variables, files,
   JSON output, or persisted project state. Run pm etl transport for the exact
   closed lifecycle and its stdin-only token rule.
+
+CLOSED POSTGRESQL MANAGED-TARGET TRANSPORT
+  postgres-managed-target is a fixed definition-selected source-to-PostgreSQL
+  route, not a generic SQL writer. The saved connection binds both credentials,
+  the source stream and sealed schema, primary key, mode, and immutable managed
+  destination identity. PostgreSQL sources use their typed relation catalog;
+  declared API sources use their authoritative JSON stream schema.
+
+  Create and preview a plan, then pass its one-time token only through stdin to
+  the ordinary ETL run:
+
+    pm etl transport postgres-managed-target plan \
+      --connection <name> --stream <stream> --json
+    pm etl transport postgres-managed-target preview <plan-id>
+    pm etl run --connection <name> --stream <stream> --batch-size 1000 \
+      --approval-plan <plan-id> --approval-token-stdin --confirm destructive
+
+  The registered source stages bounded pages in the connection-owned warehouse.
+  The registered destination reopens the sealed Parquet, derives an immutable
+  workset, applies it through the native managed target, reads the receipt back,
+  and advances the source checkpoint only after durable acknowledgement.
+  With transport_bootstrap=true on an incremental_upsert PostgreSQL source
+  credential, a gap-free snapshot barrier continues into committed pgoutput
+  transactions and resumes from the acknowledged LSN after restart.
+
+  Approval binds the live source schema and both credential revisions. Stale,
+  replayed, authentication-refused, and permission-refused runs stop before a
+  checkpoint advance. The public PostgreSQL connector remains write=false and
+  this route accepts no raw SQL or target identifiers.
 
 DIRECT CONNECTOR COMMANDS
   check

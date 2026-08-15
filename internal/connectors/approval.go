@@ -129,6 +129,7 @@ type fixtureWriteApprovalConsumptions struct {
 }
 
 type projectWriteApprovalEvidence interface {
+	ValidateProjectWrite(WriteApprovalTarget, string, time.Time) error
 	AuthorizeProjectWrite(WriteApprovalTarget, string, time.Time) error
 }
 
@@ -346,12 +347,16 @@ func writeApprovalConsumptionID(grant WriteApprovalGrant) string {
 	return grant.AuthorityID + "\x00" + grant.Nonce + "\x00" + grant.MAC
 }
 
-func (e *WriteApprovalEvidence) Authorize(target WriteApprovalTarget, previewDigest string, now time.Time) error {
+// Validate proves that evidence still matches the prepared write and has not
+// expired. It deliberately does not consume the single-use evidence, allowing
+// a destination to recheck the authorization at each mutation boundary after
+// the orchestrator consumed it during planning.
+func (e *WriteApprovalEvidence) Validate(target WriteApprovalTarget, previewDigest string, now time.Time) error {
 	if e == nil {
 		return errors.New("authenticated write approval evidence is required")
 	}
 	if e.project != nil {
-		return e.project.AuthorizeProjectWrite(target, previewDigest, now)
+		return e.project.ValidateProjectWrite(target, previewDigest, now)
 	}
 	if e.use == nil {
 		return errors.New("authenticated write approval evidence is required")
@@ -367,6 +372,19 @@ func (e *WriteApprovalEvidence) Authorize(target WriteApprovalTarget, previewDig
 	}
 	if !now.UTC().Before(e.expiresAt) {
 		return errors.New("write approval evidence has expired")
+	}
+	return nil
+}
+
+func (e *WriteApprovalEvidence) Authorize(target WriteApprovalTarget, previewDigest string, now time.Time) error {
+	if e == nil {
+		return errors.New("authenticated write approval evidence is required")
+	}
+	if e.project != nil {
+		return e.project.AuthorizeProjectWrite(target, previewDigest, now)
+	}
+	if err := e.Validate(target, previewDigest, now); err != nil {
+		return err
 	}
 	if !e.use.consumed.CompareAndSwap(false, true) {
 		return errors.New("write approval evidence has already been consumed")

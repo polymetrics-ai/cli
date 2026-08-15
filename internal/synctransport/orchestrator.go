@@ -39,9 +39,14 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 	plan, err := resolved.Destination.PlanDestination(ctx, cloneDestinationPlanRequest(DestinationPlanRequest{
 		Connector:     request.Destination,
 		Runtime:       request.DestinationRuntime,
+		Source:        request.Source,
+		SourceRuntime: request.SourceRuntime,
+		Binding:       request.DestinationBinding,
 		Stream:        request.Stream,
 		Mode:          request.Mode,
+		BatchSize:     request.BatchSize,
 		ApplyStrategy: resolved.ApplyStrategy,
+		Approval:      request.Approval,
 	}))
 	if err != nil {
 		return Result{}, fmt.Errorf("plan destination transport: %w", err)
@@ -60,6 +65,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		Stream:     request.Stream,
 		Mode:       request.Mode,
 		BatchSize:  request.BatchSize,
+		PrimaryKey: request.DestinationBinding.PrimaryKey,
 		Resume:     request.Resume,
 		Checkpoint: request.Checkpoint,
 	}), func(page SourcePage) error {
@@ -118,12 +124,18 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			return fmt.Errorf("clone warehouse transport workset: %w", err)
 		}
 		destinationApplyRequest, err := cloneDestinationApplyRequest(DestinationApplyRequest{
-			ConnectionID: request.ConnectionID,
-			Plan:         plan,
-			Receipt:      receipt,
-			Workset:      destinationWorkset,
-			Runtime:      request.DestinationRuntime,
-			Approval:     request.Approval,
+			ConnectionID:  request.ConnectionID,
+			Plan:          plan,
+			Receipt:       receipt,
+			Workset:       destinationWorkset,
+			Runtime:       request.DestinationRuntime,
+			Source:        request.Source,
+			SourceRuntime: request.SourceRuntime,
+			Binding:       request.DestinationBinding,
+			Stream:        request.Stream,
+			Mode:          request.Mode,
+			BatchSize:     request.BatchSize,
+			Approval:      request.Approval,
 		})
 		if err != nil {
 			return fmt.Errorf("clone destination apply request: %w", err)
@@ -137,6 +149,11 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			Workset:         destinationWorkset,
 			Acknowledgement: acknowledgement,
 			Runtime:         request.DestinationRuntime,
+			Source:          request.Source,
+			SourceRuntime:   request.SourceRuntime,
+			Binding:         request.DestinationBinding,
+			Stream:          request.Stream,
+			Mode:            request.Mode,
 		})
 		if err != nil {
 			return fmt.Errorf("clone destination read-back request: %w", err)
@@ -144,13 +161,15 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		if err := resolved.Destination.ReadBackDestination(ctx, readBackRequest); err != nil {
 			return fmt.Errorf("read back destination transport receipt: %w", err)
 		}
-		if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
-			if acknowledgement.Sink != request.Destination.Name() {
-				return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, request.Destination.Name())
+		if !page.DeferCheckpoint {
+			if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
+				if acknowledgement.Sink != request.Destination.Name() {
+					return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, request.Destination.Name())
+				}
+				return request.Commit(checkpoint)
+			}); err != nil {
+				return err
 			}
-			return request.Commit(checkpoint)
-		}); err != nil {
-			return err
 		}
 
 		committed := candidate.Clone()
@@ -160,7 +179,9 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		result.RecordsStaged += len(staged.Records)
 		result.RecordsApplied += len(staged.Records)
 		result.Pages++
-		result.CommittedCheckpoint = &committed
+		if !page.DeferCheckpoint {
+			result.CommittedCheckpoint = &committed
+		}
 		if err := ctx.Err(); err != nil {
 			return err
 		}

@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -30,7 +31,7 @@ const (
 	postgresSnapshotDedupeWindowKind = "postgres_repeatable_read_window"
 	postgresSnapshotSourceEngine     = "postgres"
 	postgresSnapshotConformanceSuite = "postgres_snapshot"
-	postgresSnapshotConformanceRunID = "bounded_full_v1"
+	postgresSnapshotConformanceRunID = "bounded_full_and_bootstrap_v1"
 )
 
 var postgresSnapshotTransportReference = connectors.TransportExecutorReference{
@@ -82,7 +83,7 @@ func SnapshotTransportDefinitionFactory() synctransport.DefinitionFactory {
 // generic production composition. The bundle still decides whether the source
 // role is declared and therefore whether this factory is used.
 func (Connector) SyncTransportDefinitionFactories() []synctransport.DefinitionFactory {
-	return []synctransport.DefinitionFactory{SnapshotTransportDefinitionFactory()}
+	return []synctransport.DefinitionFactory{SnapshotTransportDefinitionFactory(), ManagedTargetTransportDefinitionFactory()}
 }
 
 // RegisterSnapshotTransportSource registers the one executor selected by the
@@ -122,6 +123,9 @@ func (s *SnapshotTransportSource) readTransport(ctx context.Context, request syn
 	}
 	if err := ctx.Err(); err != nil {
 		return err
+	}
+	if request.Mode == synccontract.ModeIncrementalUpsert && strings.EqualFold(strings.TrimSpace(request.Runtime.Config["transport_bootstrap"]), "true") {
+		return s.readBootstrapTransport(ctx, request, emit)
 	}
 
 	conn, relationRef, resources, pageSize, err := s.validateReadRequest(request)
@@ -193,25 +197,147 @@ func (s *SnapshotTransportSource) readTransport(ctx context.Context, request syn
 	}
 }
 
+type bootstrapTransportCommitter struct {
+	resume              synccontract.ResumeExpectation
+	primaryKey          []string
+	emit                func(synctransport.SourcePage) error
+	finalSnapshot       *synccontract.CheckpointEnvelope
+	initialCommitted    bool
+	pendingRecords      []connectors.Record
+	pendingTombstones   []synccontract.Tombstone
+	pendingEventOrdinal uint64
+}
+
+func (c *bootstrapTransportCommitter) CommitDurableChangefeedCheckpoint(ctx context.Context, candidate synccontract.CheckpointEnvelope) error {
+	translated := bootstrapTransportCheckpoint(candidate, c.resume)
+	if err := translated.Validate(); err != nil {
+		return err
+	}
+	if translated.Source != c.resume.Source || string(translated.SourceGeneration) != string(c.resume.SourceGeneration) {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeSourceGenerationChanged, "PostgreSQL bootstrap identity changed before its warehouse checkpoint commit")
+	}
+	if !c.initialCommitted {
+		if c.finalSnapshot == nil || c.finalSnapshot.SnapshotBarrier == nil || translated.SnapshotBarrier == nil || string(c.finalSnapshot.SnapshotBarrier.Token) != string(translated.SnapshotBarrier.Token) {
+			return errors.New("postgres bootstrap final snapshot page was not durably committed")
+		}
+		c.initialCommitted = true
+		return nil
+	}
+	if c.emit == nil {
+		return errors.New("postgres bootstrap transport page receiver is unavailable")
+	}
+	page := synctransport.SourcePage{
+		Records:             append([]connectors.Record(nil), c.pendingRecords...),
+		Tombstones:          append([]synccontract.Tombstone(nil), c.pendingTombstones...),
+		CandidateCheckpoint: translated,
+	}
+	if err := c.emit(page); err != nil {
+		return err
+	}
+	c.pendingRecords = nil
+	c.pendingTombstones = nil
+	c.pendingEventOrdinal = 0
+	return nil
+}
+
+func (s *SnapshotTransportSource) readBootstrapTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+	committer := &bootstrapTransportCommitter{
+		resume: request.Resume, primaryKey: append([]string(nil), request.PrimaryKey...), emit: emit,
+	}
+	if request.Checkpoint != nil {
+		nativeCheckpoint, err := nativeBootstrapTransportCheckpoint(*request.Checkpoint, request.Runtime)
+		if err != nil {
+			return err
+		}
+		committer.initialCommitted = true
+		return s.connector.ReadCDC(ctx, connectors.CDCReadRequest{
+			Stream: request.Stream, Config: request.Runtime, Checkpoint: &nativeCheckpoint,
+			DurableCheckpointCommitter: committer,
+		}, committer.emitChange)
+	}
+	return s.connector.BootstrapCDC(ctx, BootstrapCDCRequest{
+		Stream: request.Stream, Config: request.Runtime, BatchSize: request.BatchSize,
+		DurableCheckpointCommitter: committer,
+		Snapshot: func(_ context.Context, page BootstrapSnapshotPage) error {
+			candidate := bootstrapTransportCheckpoint(page.CandidateCheckpoint, request.Resume)
+			if page.Final {
+				copy := candidate.Clone()
+				committer.finalSnapshot = &copy
+			}
+			return committer.emit(synctransport.SourcePage{
+				Records: page.Records, Tombstones: []synccontract.Tombstone{}, CandidateCheckpoint: candidate,
+				DeferCheckpoint: !page.Final,
+			})
+		},
+	}, committer.emitChange)
+}
+
+func (c *bootstrapTransportCommitter) emitChange(event connectors.CDCEvent) error {
+	c.pendingEventOrdinal++
+	switch event.Operation {
+	case "insert", "update":
+		c.pendingRecords = append(c.pendingRecords, cloneBootstrapRecords([]connectors.Record{event.Record})[0])
+		return nil
+	case "delete":
+		tombstone, err := CDCDeleteTombstone(event, c.primaryKey, c.pendingEventOrdinal)
+		if err != nil {
+			return err
+		}
+		c.pendingTombstones = append(c.pendingTombstones, tombstone)
+		return nil
+	default:
+		return fmt.Errorf("postgres bootstrap transport received unsupported CDC operation %q", event.Operation)
+	}
+}
+
+func nativeBootstrapTransportCheckpoint(checkpoint synccontract.CheckpointEnvelope, runtime connectors.RuntimeConfig) (synccontract.CheckpointEnvelope, error) {
+	barrier, ok, err := postgresBootstrapBarrierFromCheckpoint(&checkpoint)
+	if err != nil || !ok {
+		return synccontract.CheckpointEnvelope{}, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "PostgreSQL transport checkpoint has no valid bootstrap barrier")
+	}
+	resolved, err := resolveConfig(runtime)
+	if err != nil {
+		return synccontract.CheckpointEnvelope{}, err
+	}
+	native := checkpoint.Clone()
+	native.Source = synccontract.SourceIdentity{
+		Engine: "postgres", AccountOrCluster: barrier.SystemID + ":" + resolved.database, ObjectScope: barrier.Relation,
+	}
+	native.SourceGeneration = synccontract.OpaqueToken([]byte(strconv.FormatInt(int64(barrier.Timeline), 10) + "\n" + barrier.Publication))
+	return native, nil
+}
+
+func bootstrapTransportCheckpoint(candidate synccontract.CheckpointEnvelope, resume synccontract.ResumeExpectation) synccontract.CheckpointEnvelope {
+	translated := candidate.Clone()
+	translated.Source = resume.Source
+	translated.SourceGeneration = append(synccontract.OpaqueToken(nil), resume.SourceGeneration...)
+	return translated
+}
+
 func (s *SnapshotTransportSource) validateReadRequest(request synctransport.SourceRequest) (connConfig, database.RelationRef, typedCatalogResources, int, error) {
 	if s == nil {
 		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport source is unavailable")
 	}
-	if request.Connector == nil || request.Connector.Name() != s.connector.Name() || request.Stream != postgresSnapshotTransportStream {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport accepts only its snapshot stream")
+	if request.Connector == nil || request.Connector.Name() != s.connector.Name() || strings.TrimSpace(request.Stream) == "" {
+		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport requires a declared dynamic stream")
 	}
 	descriptor, ok := connectors.SourceTransportDescriptorOf(request.Connector)
 	if !ok || descriptor.Executor != postgresSnapshotTransportReference {
 		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport requires its declared source descriptor")
 	}
-	if request.Mode != synccontract.ModeFullAppend && request.Mode != synccontract.ModeFullOverwrite {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport accepts only full_append or full_overwrite")
+	if request.Mode != synccontract.ModeFullAppend && request.Mode != synccontract.ModeIncrementalUpsert {
+		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres transport accepts only full_append or incremental_upsert")
 	}
 	if request.BatchSize <= 0 {
 		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport requires a positive batch size")
 	}
-	if request.Checkpoint != nil {
+	if request.Checkpoint != nil && request.Mode != synccontract.ModeIncrementalUpsert {
 		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport does not resume a full snapshot checkpoint")
+	}
+	if request.Checkpoint != nil {
+		if err := request.Checkpoint.ValidateResume(request.Resume); err != nil {
+			return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, err
+		}
 	}
 	if err := request.Resume.Source.Validate(); err != nil || len(request.Resume.SourceGeneration) == 0 {
 		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport requires a complete resume identity")
@@ -232,7 +358,7 @@ func (s *SnapshotTransportSource) validateReadRequest(request synctransport.Sour
 	if isSystemCatalogSchema(conn.schema) {
 		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, ErrSystemCatalogSchema
 	}
-	relationRef, err := postgresSnapshotRelationRef(request.Resume.Source.ObjectScope)
+	relationRef, err := postgresSnapshotRelationRef(request.Resume.Source.ObjectScope, conn.database, conn.schema)
 	if err != nil || relationRef.Schema.Catalog.Name != conn.database || relationRef.Schema.Name != conn.schema {
 		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport source identity does not match configured relation")
 	}
@@ -250,10 +376,16 @@ func (s *SnapshotTransportSource) validateReadRequest(request synctransport.Sour
 	return conn, relationRef, resources, pageSize, nil
 }
 
-func postgresSnapshotRelationRef(scope string) (database.RelationRef, error) {
+func postgresSnapshotRelationRef(scope, configuredDatabase, configuredSchema string) (database.RelationRef, error) {
 	parts := strings.Split(scope, ".")
-	if len(parts) != 3 {
-		return database.RelationRef{}, errors.New("postgres snapshot transport source scope must be database.schema.relation")
+	switch len(parts) {
+	case 1:
+		parts = []string{configuredDatabase, configuredSchema, parts[0]}
+	case 2:
+		parts = []string{configuredDatabase, parts[0], parts[1]}
+	case 3:
+	default:
+		return database.RelationRef{}, errors.New("postgres snapshot transport source scope must be relation, schema.relation, or database.schema.relation")
 	}
 	if strings.TrimSpace(parts[0]) == "" {
 		return database.RelationRef{}, errors.New("postgres snapshot transport source scope requires a database")

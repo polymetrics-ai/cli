@@ -193,7 +193,7 @@ func containsMode(modes []synccontract.Mode, want synccontract.Mode) bool {
 
 func containsName(values []string, want string) bool {
 	for _, value := range values {
-		if value == want {
+		if value == want || value == "*" {
 			return true
 		}
 	}

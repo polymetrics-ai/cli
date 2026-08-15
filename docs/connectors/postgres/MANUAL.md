@@ -52,9 +52,10 @@ SECURITY
 
 SYNC TRANSPORT
   Source transport: declared
-  Destination transport: unsupported
+  Destination transport: declared
   A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
   Source executor: native_database/postgres_bounded_snapshot
+  Destination executor: native_database/postgres_managed_target
 
 POLLING WATERMARK
   Status: planned

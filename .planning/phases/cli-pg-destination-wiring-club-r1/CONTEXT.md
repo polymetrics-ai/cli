@@ -25,7 +25,7 @@ The captain explicitly clubs the three issues because they share the one definit
 
 ## Evidence strategy
 
-The live proof launches independent PostgreSQL source and target systems with `internal/connectors/native/dbtest`, creates a project and credentials without exposing secret values, invokes production App/CLI composition (including a built binary), and queries source, target, private control/ledger rows, connection warehouse Parquet/manifests, persisted checkpoints, and slot state. An error or exit code alone never counts as proof.
+The live proof launches independent PostgreSQL source and target systems with `internal/connectors/native/dbtest`, creates a project and credentials without exposing secret values, invokes production App/CLI composition (including a built binary), and queries source, target, private control/ledger rows, connection warehouse Parquet/manifests, persisted checkpoints, and slot state. A second opt-in proof reads a real GitHub issue with a real credential added through `pm credentials add`, then queries the live PostgreSQL row, receipt, artifacts, and checkpoint. An error or exit code alone never counts as proof.
 
 The captain-required edge matrix is part of the TDD ledger and final PR body. Deterministic refusal/failure injection may use narrow fakes only to prove a pre-side-effect boundary; successful PostgreSQL behavior is always observed on the real databases.
 
