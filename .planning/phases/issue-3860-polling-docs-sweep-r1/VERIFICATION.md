@@ -11,7 +11,7 @@
 | Connector validation | `go run ./cmd/connectorgen validate internal/connectors/defs`; `go run ./cmd/connectorgen surface-sync --check`; `go vet ./internal/cli ./internal/connectors/...` | pass — 552 definitions, zero findings; zero surface corrections; vet clean |
 | Live database lane | Supplied `POLYMETRICS_DATABASE_INTEGRATION=1 ... go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/postgres` | waived by supervisor — one attempt timed out before PostgreSQL startup because Docker blocked in `dbtest` image-store validation; independent `docker info` also stalled under machine saturation. No retry authorized. |
 | GSD verification/review | generated execute/verify/review prompts and inline manual source/diff review | pass — no correctness or security findings; incompatible Pi runtime / no delegated roles is recorded in plan |
-| Delivery | rebase, push, PR to exact integration base, API read-back | pending |
+| Delivery | rebased commit `38e46afe1`, pushed task-owned branch, PR [#4157](https://github.com/polymetrics-ai/cli/pull/4157), `gh api /repos/polymetrics-ai/cli/pulls/4157 --jq .base.ref` | pass — API reported `integration/4015-mvp-flat-r1`; CI pending |
 
 ## Safety and scope
 
