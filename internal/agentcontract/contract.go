@@ -16,22 +16,24 @@ import (
 const SourcePath = ".agents/agentic-delivery/canonical/delivery-contract.json"
 
 type Contract struct {
-	SchemaVersion    int                `json:"schema_version"`
-	ContractVersion  string             `json:"contract_version"`
-	SourceID         string             `json:"source_id"`
-	Ownership        Ownership          `json:"ownership"`
-	BaseRole         Role               `json:"base_role"`
-	HarnessPolicies  []HarnessPolicy    `json:"harness_policies"`
-	StateMachine     StateMachine       `json:"state_machine"`
-	ConnectorOverlay ConnectorOverlay   `json:"connector_overlay"`
-	Codex            CodexContract      `json:"codex"`
-	Tracker          TrackerContract    `json:"tracker"`
-	GSD              GSDContract        `json:"gsd"`
-	NoMistakes       NoMistakesContract `json:"no_mistakes"`
-	Authority        AuthorityContract  `json:"authority"`
-	Wayfinder        WayfinderDecision  `json:"wayfinder"`
-	PiHarness        PiHarness          `json:"pi_harness"`
-	Projections      []ProjectionTarget `json:"projections"`
+	SchemaVersion     int                        `json:"schema_version"`
+	ContractVersion   string                     `json:"contract_version"`
+	SourceID          string                     `json:"source_id"`
+	Ownership         Ownership                  `json:"ownership"`
+	BaseRole          Role                       `json:"base_role"`
+	HarnessPolicies   []HarnessPolicy            `json:"harness_policies"`
+	StateMachine      StateMachine               `json:"state_machine"`
+	ConnectorOverlay  ConnectorOverlay           `json:"connector_overlay"`
+	Codex             CodexContract              `json:"codex"`
+	OpenCode          OpenCodeContract           `json:"opencode"`
+	CertificationGate ConnectorCertificationGate `json:"connector_certification_gate"`
+	Tracker           TrackerContract            `json:"tracker"`
+	GSD               GSDContract                `json:"gsd"`
+	NoMistakes        NoMistakesContract         `json:"no_mistakes"`
+	Authority         AuthorityContract          `json:"authority"`
+	Wayfinder         WayfinderDecision          `json:"wayfinder"`
+	PiHarness         PiHarness                  `json:"pi_harness"`
+	Projections       []ProjectionTarget         `json:"projections"`
 }
 
 type Ownership struct {
@@ -111,6 +113,56 @@ type CodexToolAccess struct {
 type CodexDocumentation struct {
 	Subagents    string `json:"subagents"`
 	ConfigBasics string `json:"config_basics"`
+}
+
+// OpenCodeContract records the project-local OpenCode agent shape. The filename is the agent
+// name, so the generated frontmatter intentionally has no independent name field.
+type OpenCodeContract struct {
+	ProjectAgentDirectory string               `json:"project_agent_directory"`
+	FileFormat            string               `json:"file_format"`
+	RequiredFields        []string             `json:"required_fields"`
+	Mode                  string               `json:"mode"`
+	Permissions           []OpenCodePermission `json:"permissions"`
+	Discovery             string               `json:"discovery"`
+	DocumentationURL      string               `json:"documentation_url"`
+	DelegationGuarantee   string               `json:"delegation_guarantee"`
+}
+
+type OpenCodePermission struct {
+	Tool   string `json:"tool"`
+	Access string `json:"access"`
+}
+
+// ConnectorCertificationGate is the canonical, read-only Shepherd boundary for connector
+// lifecycle transitions. Its inputs are generated artifacts, never live-provider actions.
+type ConnectorCertificationGate struct {
+	SchemaVersion                  int                     `json:"schema_version"`
+	Name                           string                  `json:"name"`
+	InputSchemaVersion             int                     `json:"input_schema_version"`
+	VerdictSchemaVersion           int                     `json:"verdict_schema_version"`
+	AcceptedEvidenceSchemaVersion  int                     `json:"accepted_evidence_schema_version"`
+	ProofRedactionStrategy         string                  `json:"proof_redaction_strategy"`
+	ReadOnly                       bool                    `json:"read_only"`
+	GeneratedCommand               string                  `json:"generated_command"`
+	Command                        ExecutableAction        `json:"command"`
+	Inputs                         CertificationGateInputs `json:"inputs"`
+	InputFields                    []string                `json:"input_fields"`
+	VerdictFields                  []string                `json:"verdict_fields"`
+	BindingCriteria                []string                `json:"binding_criteria"`
+	EnforcedTransitions            []string                `json:"enforced_transitions"`
+	Verdicts                       []string                `json:"verdicts"`
+	UnsupportedProofSchemaBehavior string                  `json:"unsupported_proof_schema_behavior"`
+}
+
+// CertificationGateInputs are explicit relative paths carried by the canonical contract and
+// each adapter invocation. Explicit paths prevent an adapter-local default from weakening the
+// source of proof.
+type CertificationGateInputs struct {
+	CertificationShards string `json:"certification_shards,omitempty"`
+	CapabilityMatrix    string `json:"capability_matrix,omitempty"`
+	FlowMatrix          string `json:"flow_matrix,omitempty"`
+	Status              string `json:"status"`
+	EvidenceDirectory   string `json:"evidence_directory"`
 }
 
 type TrackerContract struct {
@@ -239,6 +291,12 @@ func (contract *Contract) Validate() error {
 	if err := contract.Codex.Validate(); err != nil {
 		return err
 	}
+	if err := contract.OpenCode.Validate(); err != nil {
+		return err
+	}
+	if err := contract.CertificationGate.Validate(); err != nil {
+		return err
+	}
 	commands := []string{"discuss-phase", "plan-phase", "execute-phase", "verify-work", "code-review", "ship"}
 	if !slices.Equal(contract.GSD.Commands, commands) || contract.GSD.ShipUsed || strings.TrimSpace(contract.GSD.ShipExclusion) == "" {
 		return fmt.Errorf("canonical contract: GSD lifecycle or ship exclusion is invalid")
@@ -277,6 +335,11 @@ func (contract *Contract) Validate() error {
 	}
 	if !slices.Contains(contract.Tracker.IntegrateWhen, "CI checks pass") {
 		return fmt.Errorf("canonical contract: child integration requires passing CI checks")
+	}
+	const certificationGateTrackerCriterion = "connector certification Shepherd verdict is PROCEED before an in-scope certification transition"
+	if !slices.Contains(contract.Tracker.IntegrateWhen, certificationGateTrackerCriterion) ||
+		!slices.Contains(contract.Tracker.ReadyWhen, certificationGateTrackerCriterion) {
+		return fmt.Errorf("canonical contract: tracker integration and readiness must enforce the certification Shepherd gate")
 	}
 	for _, criterion := range contract.Tracker.IntegrateWhen {
 		if strings.Contains(strings.ToLower(criterion), "infrastructure blocker") {
@@ -326,6 +389,87 @@ func (contract CodexContract) Validate() error {
 	}
 	if contract.Documentation.Subagents != "https://learn.chatgpt.com/docs/agent-configuration/subagents" || contract.Documentation.ConfigBasics != "https://developers.openai.com/codex/config-basic/" {
 		return fmt.Errorf("canonical contract: Codex official documentation URLs are required")
+	}
+	return nil
+}
+
+func (contract OpenCodeContract) Validate() error {
+	wantFields := []string{"description", "mode", "permission"}
+	wantPermissions := []OpenCodePermission{
+		{Tool: "edit", Access: "allow"},
+		{Tool: "bash", Access: "allow"},
+		{Tool: "skill", Access: "deny"},
+		{Tool: "task", Access: "deny"},
+		{Tool: "external_directory", Access: "deny"},
+	}
+	if contract.ProjectAgentDirectory != ".opencode/agents" ||
+		contract.FileFormat != "markdown_yaml_frontmatter" ||
+		!slices.Equal(contract.RequiredFields, wantFields) ||
+		contract.Mode != "subagent" ||
+		!slices.Equal(contract.Permissions, wantPermissions) ||
+		strings.TrimSpace(contract.Discovery) == "" ||
+		contract.DocumentationURL != "https://opencode.ai/docs/agents/" ||
+		strings.TrimSpace(contract.DelegationGuarantee) == "" {
+		return fmt.Errorf("canonical contract: OpenCode project directory, frontmatter, permission, discovery, and delegation policy are invalid")
+	}
+	return nil
+}
+
+func (gate ConnectorCertificationGate) Validate() error {
+	if gate.SchemaVersion != 1 || gate.Name != "connector-certification-shepherd" ||
+		gate.InputSchemaVersion != 1 || gate.VerdictSchemaVersion != 1 ||
+		gate.AcceptedEvidenceSchemaVersion != 1 ||
+		gate.ProofRedactionStrategy != "repository_salted_hmac_sha256_v1" ||
+		!gate.ReadOnly ||
+		gate.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix --check" ||
+		gate.UnsupportedProofSchemaBehavior != "HALT" {
+		return fmt.Errorf("canonical contract: certification Shepherd gate version, source, and read-only policy are invalid")
+	}
+	if err := gate.Inputs.Validate(); err != nil {
+		return err
+	}
+	wantCommand := []string{"go", "run", "./cmd/agentcontractgen", "certification-gate", "--root", "<repository-root>", "--connector", "<connector>", "--transition", "<transition>"}
+	if !slices.Equal(gate.Command.Argv, wantCommand) || strings.TrimSpace(gate.Command.Instruction) == "" {
+		return fmt.Errorf("canonical contract: certification Shepherd gate command is invalid")
+	}
+	wantInputs := []string{"schema_version", "connector", "transition", "inputs.certification_shards", "inputs.status", "inputs.evidence_directory"}
+	if gate.Inputs.CertificationShards == "" {
+		wantInputs = []string{"schema_version", "connector", "transition", "inputs.capability_matrix", "inputs.flow_matrix", "inputs.status", "inputs.evidence_directory"}
+	}
+	wantVerdicts := []string{"schema_version", "connector", "transition", "decision", "failures"}
+	wantCriteria := []string{"declared", "implemented", "fixture_tested", "live_tested", "live_evidence"}
+	wantTransitions := []string{"integrate_sub_pr", "accepted", "ready_parent", "human_ready"}
+	wantVerdictsValues := []string{"PROCEED", "RETRY", "HALT"}
+	if !slices.Equal(gate.InputFields, wantInputs) || !slices.Equal(gate.VerdictFields, wantVerdicts) ||
+		!slices.Equal(gate.BindingCriteria, wantCriteria) || !slices.Equal(gate.EnforcedTransitions, wantTransitions) ||
+		!slices.Equal(gate.Verdicts, wantVerdictsValues) {
+		return fmt.Errorf("canonical contract: certification Shepherd gate input, verdict, binding, or transition policy is invalid")
+	}
+	return nil
+}
+
+func (inputs CertificationGateInputs) Validate() error {
+	sharded := inputs.CertificationShards != ""
+	aggregate := inputs.CapabilityMatrix != "" || inputs.FlowMatrix != ""
+	if sharded == aggregate || aggregate && (inputs.CapabilityMatrix == "" || inputs.FlowMatrix == "") {
+		return fmt.Errorf("canonical contract: certification gate must select exactly one complete generated-input layout")
+	}
+	if inputs.Status == "" || inputs.EvidenceDirectory == "" {
+		return fmt.Errorf("canonical contract: certification gate status and evidence directory are required")
+	}
+	for name, value := range map[string]string{
+		"certification_shards": inputs.CertificationShards,
+		"capability_matrix":    inputs.CapabilityMatrix,
+		"flow_matrix":          inputs.FlowMatrix,
+		"status":               inputs.Status,
+		"evidence_directory":   inputs.EvidenceDirectory,
+	} {
+		if value == "" {
+			continue
+		}
+		if !fs.ValidPath(value) || path.Clean(value) != value || path.IsAbs(value) {
+			return fmt.Errorf("canonical contract: certification gate %s path is not local", name)
+		}
 	}
 	return nil
 }
@@ -435,7 +579,7 @@ type executableField struct {
 }
 
 func (contract *Contract) executableFields() []executableField {
-	fields := make([]executableField, 0, len(contract.GSD.Sequence)+3)
+	fields := make([]executableField, 0, len(contract.GSD.Sequence)+4)
 	for index, invocation := range contract.GSD.Sequence {
 		fields = append(fields, executableField{
 			name: fmt.Sprintf("gsd.sequence[%d]", index),
@@ -443,6 +587,7 @@ func (contract *Contract) executableFields() []executableField {
 		})
 	}
 	return append(fields,
+		executableField{name: "connector_certification_gate.command", argv: contract.CertificationGate.Command.Argv},
 		executableField{name: "no_mistakes.child_command", argv: contract.NoMistakes.ChildCommand.Argv},
 		executableField{name: "no_mistakes.sub_pr_open", argv: contract.NoMistakes.SubPROpen.Argv},
 		executableField{name: "no_mistakes.parent_command", argv: contract.NoMistakes.ParentCommand.Argv},
@@ -505,15 +650,17 @@ func validateProjections(targets []ProjectionTarget) error {
 		required   bool
 	}
 	expected := map[string]projectionExpectation{
-		"claude/pm-delivery-worker":  {path: ".claude/agents/pm-delivery-worker.md", renderMode: "markdown_yaml_frontmatter", required: true},
-		"claude/pm-connector-worker": {path: ".claude/agents/pm-connector-worker.md", renderMode: "markdown_yaml_frontmatter", required: true},
-		"codex/pm-delivery-worker":   {path: ".codex/agents/pm-delivery-worker.toml", renderMode: "standalone_toml", required: true},
-		"codex/pm-connector-worker":  {path: ".codex/agents/pm-connector-worker.toml", renderMode: "standalone_toml", required: true},
-		"pi/pm-delivery-worker":      {path: ".pi/agents/pm-delivery-worker.md", renderMode: "full", required: true},
-		"pi/pm-connector-worker":     {path: ".pi/agents/pm-connector-worker.md", renderMode: "full", required: true},
+		"claude/pm-delivery-worker":    {path: ".claude/agents/pm-delivery-worker.md", renderMode: "markdown_yaml_frontmatter", required: true},
+		"claude/pm-connector-worker":   {path: ".claude/agents/pm-connector-worker.md", renderMode: "markdown_yaml_frontmatter", required: true},
+		"codex/pm-delivery-worker":     {path: ".codex/agents/pm-delivery-worker.toml", renderMode: "standalone_toml", required: true},
+		"codex/pm-connector-worker":    {path: ".codex/agents/pm-connector-worker.toml", renderMode: "standalone_toml", required: true},
+		"pi/pm-delivery-worker":        {path: ".pi/agents/pm-delivery-worker.md", renderMode: "full", required: true},
+		"pi/pm-connector-worker":       {path: ".pi/agents/pm-connector-worker.md", renderMode: "full", required: true},
+		"opencode/pm-delivery-worker":  {path: ".opencode/agents/pm-delivery-worker.md", renderMode: "opencode_markdown_yaml_frontmatter", required: true},
+		"opencode/pm-connector-worker": {path: ".opencode/agents/pm-connector-worker.md", renderMode: "opencode_markdown_yaml_frontmatter", required: true},
 	}
 	if len(targets) != len(expected) {
-		return fmt.Errorf("canonical contract: exactly six harness projection targets are required")
+		return fmt.Errorf("canonical contract: exactly eight harness projection targets are required")
 	}
 	seen := make(map[string]bool, len(targets))
 	for _, target := range targets {

@@ -58,11 +58,25 @@ The `.agents/agentic-delivery/` directory holds shared contracts, conventions, a
 Specialized agent families can live beside it under `.agents/<functional-area>/` while reusing the
 same schema and issue-to-PR contract.
 
-Runtime-specific files, such as `.claude/agents/*.md`, `.codex/agents/*.toml`, and
-`.pi/agents/*.md`, are generated activation adapters. `canonical/delivery-contract.json` is the
-sole owner of each registered target's path, render mode, and requiredness. The checked-in Claude,
-Codex, and Pi adapters are complete required full-file projections. Regenerate them from the
-canonical source; never hand-edit or copy GSD/TDD, review, or human-gate policy into an adapter.
+Runtime-specific files, such as `.claude/agents/*.md`, `.codex/agents/*.toml`, `.pi/agents/*.md`,
+and `.opencode/agents/*.md`, are generated activation adapters. `canonical/delivery-contract.json`
+is the sole owner of each registered target's path, render mode, and requiredness. The checked-in
+Claude, Codex, Pi, and OpenCode adapters are complete required full-file projections. Regenerate
+them from the canonical source; never hand-edit or copy GSD/TDD, review, human-gate, or connector
+certification policy into an adapter.
+
+The same canonical contract also owns the versioned, read-only connector-certification Shepherd
+gate. It consumes only generated certification artifacts and emits `PROCEED`, `RETRY`, or `HALT`
+with stable cell/evidence coordinates before protected connector/parent transitions. Structural
+`agentcontractgen check` validates the contract and registered projections; certification is
+evaluated explicitly at a protected transition, so a baseline with zero certified connectors does
+not make a general contract check red.
+
+At each protected transition, run the canonical command rendered in the registered projection with
+one canonical absolute non-symlink repository root:
+`go run ./cmd/agentcontractgen certification-gate --root <repository-root> --connector <connector>
+--transition <transition>`. It emits the complete verdict as JSON and exits zero only for
+`PROCEED`; `RETRY` and `HALT` preserve their evidence on stdout while blocking the transition.
 
 Codex loads the project-local `.codex` configuration layer only when the repository is trusted.
 The generated Codex workers therefore fail closed for project-local selection in an untrusted
