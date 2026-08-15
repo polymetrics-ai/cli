@@ -54,15 +54,14 @@ SYNC TRANSPORT
   Source transport: declared
   Destination transport: declared
   A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
-  Source executor: native_database/postgres_bounded_snapshot
+  Source executor: native_database/postgres_polling_watermark
   Destination executor: native_database/postgres_managed_target
 
 POLLING WATERMARK
   Status: planned
   Mechanism: polling_watermark is a bounded polling scan, not CDC or change capture.
   Eligibility: each mode remains blocked until runtime preflight validates the selected catalog object and destination binding, registered native executors, and immutable conformance evidence.
-  Reason: no registered native polling source and apply binding has passed object and destination preflight; no polling sync mode is implemented
-  No polling source ordering, checkpoint, snapshot, deletion, or rebootstrap behavior is implemented for this connector while the declaration is non-implemented.
+  Reason: PostgreSQL binds its cursor type, per-stream cursor column, and unique tie-breaker from the live catalog at run time. The static bundle cannot truthfully name those dynamic fields; the live sync transport constructs and preflights the implemented polling declaration.
 
 EXAMPLES
   # Inspect as a manual

@@ -172,8 +172,8 @@ func TestPostgresDynamicTypedCatalogUsesLiveMetadata(t *testing.T) {
 func assertPostgresRegisteredSnapshotTransport(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint) {
 	t.Helper()
 	registry := synctransport.NewRegistry(postgresSnapshotTransportVerifier{})
-	if err := native.RegisterSnapshotTransportSource(registry, connector); err != nil {
-		t.Fatalf("register PostgreSQL snapshot source: %v", err)
+	if err := native.RegisterPollingTransportSource(registry, connector); err != nil {
+		t.Fatalf("register PostgreSQL polling source: %v", err)
 	}
 	destination := postgresSnapshotTransportDestination{}
 	if err := registry.RegisterDestination(postgresSnapshotTransportDestinationExecutor{}); err != nil {
@@ -197,11 +197,13 @@ func assertPostgresRegisteredSnapshotTransport(t *testing.T, ctx context.Context
 
 		pages := make([]synctransport.SourcePage, 0, 3)
 		if err := resolved.Source.ReadTransport(ctx, synctransport.SourceRequest{
-			Connector: connector,
-			Runtime:   postgresCatalogConfig(t, endpoint, postgresCatalogAlphaSchema),
-			Stream:    "snapshot",
-			Mode:      mode,
-			BatchSize: 2,
+			Connector:   connector,
+			Runtime:     postgresCatalogConfig(t, endpoint, postgresCatalogAlphaSchema),
+			Stream:      postgresCatalogReadTable,
+			CursorField: "sequence",
+			PrimaryKey:  []string{"id"},
+			Mode:        mode,
+			BatchSize:   2,
 			Resume: synccontract.ResumeExpectation{
 				Source:           identity,
 				SourceGeneration: synccontract.OpaqueToken("postgres-catalog-integration-v1"),
@@ -227,8 +229,8 @@ func assertPostgresRegisteredSnapshotTransport(t *testing.T, ctx context.Context
 			if err := page.CandidateCheckpoint.Validate(); err != nil {
 				t.Fatalf("registered PostgreSQL snapshot %s page %d checkpoint: %v", mode, index, err)
 			}
-			if page.CandidateCheckpoint.Source != identity || page.CandidateCheckpoint.SchemaVersion == "" || page.CandidateCheckpoint.SnapshotBarrier == nil || len(page.CandidateCheckpoint.SnapshotBarrier.Token) == 0 || page.CandidateCheckpoint.PositionObserved == nil || *page.CandidateCheckpoint.PositionObserved {
-				t.Fatalf("registered PostgreSQL snapshot %s page %d omitted its full-snapshot identity/schema/checkpoint", mode, index)
+			if page.CandidateCheckpoint.Source != identity || page.CandidateCheckpoint.Mechanism != "polling_watermark" || page.CandidateCheckpoint.SchemaVersion == "" || page.CandidateCheckpoint.SnapshotBarrier == nil || len(page.CandidateCheckpoint.SnapshotBarrier.Token) == 0 || page.CandidateCheckpoint.PositionObserved == nil || !*page.CandidateCheckpoint.PositionObserved {
+				t.Fatalf("registered PostgreSQL polling %s page %d omitted its resumable identity/schema/checkpoint", mode, index)
 			}
 			records = append(records, page.Records...)
 		}
@@ -243,7 +245,10 @@ func assertPostgresRegisteredSnapshotTransport(t *testing.T, ctx context.Context
 			postgresSnapshotJSONNumber(t, records, "1", "body", "id"), postgresSnapshotRawJSON(t, records, "2", "body"),
 		)
 	}
-	assertPostgresRegisteredSnapshotPaginationEdges(t, ctx, connector, endpoint, registry, destination)
+	// Single-column timestamp/UUID keys are intentionally excluded here: the
+	// shared source requires a declared, distinct unique tie-breaker. The
+	// PostgreSQL polling fixture above uses the real sequence/id tuple that the
+	// resumable transport contract persists.
 }
 
 func assertPostgresSnapshotTypedValues(t *testing.T, records []connectors.Record) {
@@ -636,15 +641,13 @@ func seedPostgresCatalogs(t *testing.T, ctx context.Context, source *pgx.Conn) {
 	}
 }
 
-// assertPostgresLiveReads proves records observed through Connector.Read,
-// rather than considering a container's exit status evidence. It also locks
-// today's cursor-field behavior for the captain's separate cursor-contract
-// decision without changing that user-facing connection option here.
+// assertPostgresLiveReads proves the settled cursor contract through the
+// definition-selected shared polling source. It intentionally does not use
+// Connector.Read's legacy compatibility reader: #3976 is about the source
+// path that owns resumable ETL checkpoints.
 func assertPostgresLiveReads(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint) {
 	t.Helper()
 	config := postgresCatalogConfig(t, endpoint, postgresCatalogAlphaSchema)
-	config.Config["cursor_field"] = "sequence"
-	config.Config["read_limit"] = "10"
 
 	catalog, err := connector.Catalog(ctx, config)
 	if err != nil {
@@ -652,54 +655,49 @@ func assertPostgresLiveReads(t *testing.T, ctx context.Context, connector native
 	}
 	assertLiveReadCatalog(t, catalog, postgresCatalogReadTable)
 
-	full := collectPostgresRead(t, ctx, connector, connectors.ReadRequest{
-		Stream: postgresCatalogReadTable,
-		Config: config,
-	})
+	full := collectPostgresPollingTransport(t, ctx, connector, config, postgresCatalogReadTable, "sequence", "id", nil)
 	assertLiveReadIDs(t, full, []string{"1", "2", "3", "4", "5"})
-	t.Logf("live PostgreSQL full read %s: ids=%s labels=%s", postgresCatalogReadTable, liveReadIDs(full), liveReadLabels(full))
+	t.Logf("live PostgreSQL polling full read %s: ids=%s labels=%s", postgresCatalogReadTable, liveReadIDs(full), liveReadLabels(full))
 
-	incremental := collectPostgresRead(t, ctx, connector, connectors.ReadRequest{
-		Stream: postgresCatalogReadTable,
-		Config: config,
-		State:  map[string]string{"cursor": "10"},
-	})
-	assertLiveReadIDs(t, incremental, []string{"3", "4", "5"})
-	t.Logf("live PostgreSQL cursor read %s after=10: ids=%s labels=%s", postgresCatalogReadTable, liveReadIDs(incremental), liveReadLabels(incremental))
-
-	noCursorConfig := postgresCatalogConfig(t, endpoint, postgresCatalogAlphaSchema)
-	noCursorConfig.Config["read_limit"] = "10"
-	withoutCursor := collectPostgresRead(t, ctx, connector, connectors.ReadRequest{
-		Stream: postgresCatalogReadTable,
-		Config: noCursorConfig,
-		State:  map[string]string{"cursor": "12"},
-	})
-	assertLiveReadIDSet(t, withoutCursor, []string{"1", "2", "3", "4", "5"})
-	t.Logf("live PostgreSQL cursor_field absent with stored cursor=12: ids=%s", liveReadIDs(withoutCursor))
-
-	missingCursorConfig := config
-	missingCursorConfig.Config = clonePostgresCatalogConfig(config.Config)
-	missingCursorConfig.Config["cursor_field"] = "missing_sequence"
-	if err := connector.Read(ctx, connectors.ReadRequest{Stream: postgresCatalogReadTable, Config: missingCursorConfig}, func(connectors.Record) error { return nil }); err == nil {
-		t.Fatal("PostgreSQL read accepted a nonexistent cursor column")
+	missingCursor := postgresPollingLiveRequest(connector, config, postgresCatalogReadTable, "", "id", nil)
+	if err := native.NewPollingTransportSource(connector).ReadTransport(ctx, missingCursor, func(synctransport.SourcePage) error { return nil }); !errors.Is(err, native.ErrPollingCursorFieldRequired) {
+		t.Fatalf("live PostgreSQL missing stream cursor error = %v, want typed pre-I/O refusal", err)
 	}
-	t.Log("live PostgreSQL nonexistent cursor column: read rejected")
 
-	nullableConfig := postgresCatalogConfig(t, endpoint, postgresCatalogAlphaSchema)
-	nullableConfig.Config["cursor_field"] = "cursor_value"
-	nullableConfig.Config["read_limit"] = "10"
-	nullable := collectPostgresRead(t, ctx, connector, connectors.ReadRequest{
-		Stream: postgresCatalogNullableReadTable,
-		Config: nullableConfig,
-		State:  map[string]string{"cursor": "1"},
-	})
-	assertLiveReadIDs(t, nullable, []string{"23"})
-	t.Logf("live PostgreSQL nullable cursor rows after=1: ids=%s; null cursor row omitted", liveReadIDs(nullable))
-
-	if err := connector.Read(ctx, connectors.ReadRequest{Stream: postgresCatalogAlternateReadTable, Config: config}, func(connectors.Record) error { return nil }); err == nil {
-		t.Fatal("PostgreSQL connection-level cursor_field unexpectedly worked for a table with a different cursor column")
+	missingColumn := postgresPollingLiveRequest(connector, config, postgresCatalogReadTable, "missing_sequence", "id", nil)
+	if err := native.NewPollingTransportSource(connector).ReadTransport(ctx, missingColumn, func(synctransport.SourcePage) error { return nil }); !errors.Is(err, native.ErrPollingCursorFieldNotFound) {
+		t.Fatalf("live PostgreSQL nonexistent stream cursor error = %v, want typed catalog refusal", err)
 	}
-	t.Log("live PostgreSQL connection-level cursor_field=sequence: alternate_events rejected because it requires alternate_cursor")
+
+	nullable := postgresPollingLiveRequest(connector, config, postgresCatalogNullableReadTable, "cursor_value", "id", nil)
+	if err := native.NewPollingTransportSource(connector).ReadTransport(ctx, nullable, func(synctransport.SourcePage) error { return nil }); !errors.Is(err, native.ErrPollingCursorNullable) {
+		t.Fatalf("live PostgreSQL nullable cursor error = %v, want typed no-omission refusal", err)
+	}
+
+	alternate := collectPostgresPollingTransport(t, ctx, connector, config, postgresCatalogAlternateReadTable, "alternate_cursor", "id", nil)
+	assertLiveReadIDs(t, alternate, []string{"11"})
+	t.Log("live PostgreSQL polling uses cursor fields independently per stream; no connection-level cursor leaks across relations")
+}
+
+func collectPostgresPollingTransport(t *testing.T, ctx context.Context, connector native.Connector, config connectors.RuntimeConfig, stream, cursor, primaryKey string, checkpoint *synccontract.CheckpointEnvelope) []connectors.Record {
+	t.Helper()
+	request := postgresPollingLiveRequest(connector, config, stream, cursor, primaryKey, checkpoint)
+	records := make([]connectors.Record, 0)
+	if err := native.NewPollingTransportSource(connector).ReadTransport(ctx, request, func(page synctransport.SourcePage) error {
+		records = append(records, page.Records...)
+		return nil
+	}); err != nil {
+		t.Fatalf("PostgreSQL live polling source read failed: %v", err)
+	}
+	return records
+}
+
+func postgresPollingLiveRequest(connector connectors.Connector, config connectors.RuntimeConfig, stream, cursor, primaryKey string, checkpoint *synccontract.CheckpointEnvelope) synctransport.SourceRequest {
+	return synctransport.SourceRequest{
+		Connector: connector, Runtime: config, Stream: stream, CursorField: cursor, PrimaryKey: []string{primaryKey},
+		Mode: synccontract.ModeIncrementalDedupe, BatchSize: 10, Checkpoint: checkpoint,
+		Resume: synccontract.ResumeExpectation{Source: synccontract.SourceIdentity{Engine: "postgres", AccountOrCluster: "postgres-catalog-integration", ObjectScope: stream}, SourceGeneration: synccontract.OpaqueToken("postgres-catalog-integration-v1")},
+	}
 }
 
 func collectPostgresRead(t *testing.T, ctx context.Context, connector native.Connector, request connectors.ReadRequest) []connectors.Record {

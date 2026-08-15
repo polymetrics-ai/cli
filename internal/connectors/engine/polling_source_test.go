@@ -122,10 +122,10 @@ func TestPollingSourceExecutorReplaysAfterAcknowledgedCheckpointFailure(t *testi
 	}
 }
 
-func TestPollingSourceExecutorDoesNotAdvanceAnEmptyPage(t *testing.T) {
+func TestPollingSourceExecutorCommitsEmptyPageWithoutInventingCursor(t *testing.T) {
 	source := &pollingSourceFake{
 		reference: pollingSourceReference(), evidence: RequiredPollingWatermarkConformanceEvidence(), state: pollingSourceRuntimeState(),
-		pages: []PollingSourcePage{{}},
+		pages: []PollingSourcePage{{ObservedAt: time.Date(2026, time.August, 16, 1, 0, 0, 0, time.UTC)}},
 	}
 	executor := newPollingSourceExecutor(t, source)
 	sink := &pollingSourceDurableSink{}
@@ -139,8 +139,15 @@ func TestPollingSourceExecutorDoesNotAdvanceAnEmptyPage(t *testing.T) {
 	if got := len(sink.identities); got != 0 {
 		t.Fatalf("destination deliveries = %v, want none for an empty page", sink.identities)
 	}
-	if got := len(store.committed); got != 0 {
-		t.Fatalf("checkpoint commits = %d, want no advancement for an empty page", got)
+	if got, want := len(store.committed), 1; got != want {
+		t.Fatalf("empty page checkpoint commits = %d, want %d", got, want)
+	}
+	checkpoint := store.committed[0]
+	if checkpoint.PositionObserved == nil || *checkpoint.PositionObserved {
+		t.Fatalf("empty page position observation = %#v, want explicit false", checkpoint.PositionObserved)
+	}
+	if len(checkpoint.Position.Primary) != 0 || len(checkpoint.Position.TieBreaker) != 0 {
+		t.Fatalf("empty page checkpoint invented cursor position %#v", checkpoint.Position)
 	}
 }
 

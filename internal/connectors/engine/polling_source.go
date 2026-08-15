@@ -13,8 +13,15 @@ import (
 )
 
 const (
-	pollingSourceCheckpointMechanism = "polling_watermark"
-	pollingSourceProtocolVersion     = "polling-source-v1"
+	// PollingSourceCheckpointMechanism and PollingSourceProtocolVersion are
+	// emitted by the shared executor. Catalog-bound native adapters use them
+	// for pre-I/O checkpoint admission, so they cannot drift from what the
+	// executor later validates.
+	PollingSourceCheckpointMechanism = "polling_watermark"
+	PollingSourceProtocolVersion     = "polling-source-v1"
+
+	pollingSourceCheckpointMechanism = PollingSourceCheckpointMechanism
+	pollingSourceProtocolVersion     = PollingSourceProtocolVersion
 )
 
 // PollingSourceRunner is the I/O half of a source that has already passed
@@ -289,6 +296,13 @@ func (e *PollingSourceExecutor) readTransport(ctx context.Context, request synct
 			return err
 		}
 		if len(page.Items) == 0 {
+			candidate, err := e.emptyCandidateForPage(page, state, after)
+			if err != nil {
+				return err
+			}
+			if err := emit(synctransport.SourcePage{CandidateCheckpoint: candidate}); err != nil {
+				return fmt.Errorf("deliver empty polling source page: %w", err)
+			}
 			return nil
 		}
 
@@ -487,6 +501,41 @@ func (e *PollingSourceExecutor) candidateForPage(page PollingSourcePage, state P
 		tombstones = append(tombstones, item.Tombstone.Clone())
 	}
 	return candidate, records, tombstones, nil
+}
+
+// emptyCandidateForPage gives the transport orchestrator a durable
+// observation for a valid zero-row poll. It intentionally preserves the last
+// committed tuple when resuming (or records an explicit unobserved position on
+// a first empty scan), so a zero-row result can complete without inventing or
+// advancing a cursor.
+func (e *PollingSourceExecutor) emptyCandidateForPage(page PollingSourcePage, state PollingSourceRuntimeState, after *synccontract.CheckpointPosition) (synccontract.CheckpointEnvelope, error) {
+	if page.ObservedAt.IsZero() {
+		return synccontract.CheckpointEnvelope{}, fmt.Errorf("polling source empty page observation time is required")
+	}
+	positionObserved := after != nil
+	position := synccontract.CheckpointPosition{}
+	if after != nil {
+		position = after.Clone()
+	}
+	candidate := synccontract.CheckpointEnvelope{
+		StateVersion:     synccontract.StateVersion,
+		Source:           e.sourceExpectation(state).Source,
+		Mechanism:        pollingSourceCheckpointMechanism,
+		SnapshotBarrier:  pollingSourceBarrierPointer(state.SnapshotBarrier),
+		Position:         position,
+		PositionObserved: &positionObserved,
+		Partitions:       clonePollingPartitions(state.Partitions),
+		SourceGeneration: append(synccontract.OpaqueToken(nil), state.SourceGeneration...),
+		SchemaVersion:    state.SchemaVersion,
+		ProtocolVersion:  pollingSourceProtocolVersion,
+		Dedupe:           state.Dedupe.Clone(),
+		DedupeWindow:     state.DedupeWindow.Clone(),
+		ObservedAt:       page.ObservedAt,
+	}
+	if err := candidate.Validate(); err != nil {
+		return synccontract.CheckpointEnvelope{}, fmt.Errorf("polling source empty candidate checkpoint: %w", err)
+	}
+	return candidate, nil
 }
 
 func clonePollingSourcePosition(position *synccontract.CheckpointPosition) *synccontract.CheckpointPosition {

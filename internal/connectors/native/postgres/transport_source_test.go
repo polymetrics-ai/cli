@@ -20,24 +20,31 @@ import (
 	"polymetrics.ai/internal/synctransport"
 )
 
-func TestPostgresDefinitionDeclaresBoundedSnapshotTransportSource(t *testing.T) {
+func TestPostgresDefinitionDeclaresResumablePollingTransportSource(t *testing.T) {
 	connector := New()
 	descriptor, ok := connectors.SourceTransportDescriptorOf(connector)
 	if !ok {
 		t.Fatal("PostgreSQL definition has no declared source transport")
 	}
-	wantReference := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_bounded_snapshot"}
+	wantReference := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_polling_watermark"}
 	if descriptor.Executor != wantReference {
 		t.Fatalf("PostgreSQL source executor = %#v, want %#v", descriptor.Executor, wantReference)
 	}
 	if got, want := descriptor.EligibleStreams, []string{"*"}; !sameStrings(got, want) {
 		t.Fatalf("PostgreSQL source streams = %#v, want %#v", got, want)
 	}
-	if got, want := descriptor.Modes, []synccontract.Mode{synccontract.ModeFullAppend, synccontract.ModeIncrementalUpsert}; !sameModes(got, want) {
+	if got, want := descriptor.Modes, []synccontract.Mode{
+		synccontract.ModeFullOverwrite,
+		synccontract.ModeFullAppend,
+		synccontract.ModeIncrementalAppend,
+		synccontract.ModeIncrementalUpsert,
+		synccontract.ModeIncrementalDedupe,
+		synccontract.ModeIncrementalDedupeHistory,
+	}; !sameModes(got, want) {
 		t.Fatalf("PostgreSQL source modes = %#v, want %#v", got, want)
 	}
-	if descriptor.Delivery.Deletes != connectors.DeliveryDeletesTombstone {
-		t.Fatalf("PostgreSQL bootstrap source delete delivery = %q, want tombstone", descriptor.Delivery.Deletes)
+	if descriptor.Delivery.Deletes != connectors.DeliveryDeletesUnavailable {
+		t.Fatalf("PostgreSQL polling source delete delivery = %q, want hard-delete-invisible", descriptor.Delivery.Deletes)
 	}
 	destination, ok := connectors.DestinationTransportDescriptorOf(connector)
 	if !ok {
@@ -64,11 +71,18 @@ func TestPostgresDefinitionDeclaresBoundedSnapshotTransportSource(t *testing.T) 
 		}
 	}
 	factories := connector.SyncTransportDefinitionFactories()
+	foundSource := false
 	foundDestination := false
 	for _, factory := range factories {
+		if factory.Reference == wantReference && factory.BuildSource != nil {
+			foundSource = true
+		}
 		if factory.Reference == wantDestination && factory.BuildDestination != nil {
 			foundDestination = true
 		}
+	}
+	if !foundSource {
+		t.Fatal("PostgreSQL polling source has no production definition factory")
 	}
 	if !foundDestination {
 		t.Fatal("PostgreSQL managed destination has no production definition factory")
@@ -172,7 +186,7 @@ func TestPostgresTransportRegistryPreflightRefusesBeforeSourceIO(t *testing.T) {
 		{
 			name: "wrong connector family",
 			source: newPreflightSpyConnector(&connectors.SourceTransportDescriptor{
-				Executor:        connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeAPI, ID: "postgres_bounded_snapshot"},
+				Executor:        connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeAPI, ID: "postgres_polling_watermark"},
 				EligibleStreams: []string{"snapshot"},
 				Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 				Delivery: connectors.DeliveryGuarantees{
@@ -222,10 +236,10 @@ func TestPostgresTransportRegistryPreflightRefusesBeforeSourceIO(t *testing.T) {
 	}
 }
 
-func TestRegisterPostgresSnapshotTransportSourceMakesDefinitionSelectedSourceReachable(t *testing.T) {
+func TestRegisterPostgresPollingTransportSourceMakesDefinitionSelectedSourceReachable(t *testing.T) {
 	registry := synctransport.NewRegistry(postgresTransportTestVerifier{})
 	connector := New()
-	if err := RegisterSnapshotTransportSource(registry, connector); err != nil {
+	if err := RegisterPollingTransportSource(registry, connector); err != nil {
 		t.Fatalf("RegisterSnapshotTransportSource() error = %v", err)
 	}
 	destination := newPreflightDestinationConnector()
@@ -242,8 +256,208 @@ func TestRegisterPostgresSnapshotTransportSourceMakesDefinitionSelectedSourceRea
 	if err != nil {
 		t.Fatalf("Preflight() error = %v", err)
 	}
-	if got := resolved.Source.TransportExecutorReference(); got != (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_bounded_snapshot"}) {
+	if got := resolved.Source.TransportExecutorReference(); got != (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_polling_watermark"}) {
 		t.Fatalf("resolved source executor = %#v", got)
+	}
+}
+
+// Happy path: this is the source half used by the shipped transport route,
+// not a hand-assembled engine runner. A durable first fixture page resumes at
+// its complete tuple and returns only the remaining row.
+func TestPostgresPollingTransportResumesFixtureCursor(t *testing.T) {
+	connector := New()
+	source := NewPollingTransportSource(connector)
+	request := postgresPollingFixtureRequest()
+
+	var first synccontract.CheckpointEnvelope
+	errInterrupted := errors.New("stop after durable first page")
+	err := source.ReadTransport(context.Background(), request, func(page synctransport.SourcePage) error {
+		if got, want := len(page.Records), 2; got != want {
+			t.Fatalf("first polling page records = %d, want %d", got, want)
+		}
+		if got, want := page.CandidateCheckpoint.Mechanism, "polling_watermark"; got != want {
+			t.Fatalf("first polling checkpoint mechanism = %q, want %q", got, want)
+		}
+		ack, ackErr := synccontract.NewDurableDownstreamAcknowledgement("fixture-warehouse", page.CandidateCheckpoint.ObservedAt.Add(time.Second))
+		if ackErr != nil {
+			return ackErr
+		}
+		return errors.Join(
+			synccontract.CommitAfterDownstreamAcknowledgement(page.CandidateCheckpoint, ack, func(checkpoint synccontract.CheckpointEnvelope) error {
+				first = checkpoint.Clone()
+				return nil
+			}),
+			errInterrupted,
+		)
+	})
+	if !errors.Is(err, errInterrupted) {
+		t.Fatalf("first polling read error = %v, want durable interruption", err)
+	}
+
+	request.Checkpoint = &first
+	var resumed []connectors.Record
+	if err := source.ReadTransport(context.Background(), request, func(page synctransport.SourcePage) error {
+		resumed = append(resumed, page.Records...)
+		return nil
+	}); err != nil {
+		t.Fatalf("resumed polling read = %v", err)
+	}
+	if got, want := len(resumed), 1; got != want {
+		t.Fatalf("resumed polling records = %#v, want exactly the uncommitted tail", resumed)
+	}
+	if got, want := resumed[0]["id"], 3; got != want {
+		t.Fatalf("resumed polling row id = %#v, want %#v", got, want)
+	}
+}
+
+// Bad path: a cursor-required PostgreSQL mode is rejected before any runtime
+// configuration or provider operation is attempted, so it cannot silently
+// treat an existing checkpoint as an unfiltered full scan.
+func TestPostgresPollingTransportRefusesMissingPerStreamCursorBeforeIO(t *testing.T) {
+	source := NewPollingTransportSource(New())
+	request := postgresPollingFixtureRequest()
+	request.CursorField = ""
+	request.Runtime = connectors.RuntimeConfig{}
+
+	err := source.ReadTransport(context.Background(), request, func(synctransport.SourcePage) error { return nil })
+	if !errors.Is(err, ErrPollingCursorFieldRequired) {
+		t.Fatalf("missing per-stream cursor error = %v, want %v", err, ErrPollingCursorFieldRequired)
+	}
+}
+
+// Edge case: nullable columns cannot form a complete resumable cursor tuple.
+// The catalog planner must refuse them rather than using SQL's NULL ordering
+// to omit those source rows.
+func TestPostgresPollingReadPlanRefusesNullableCursor(t *testing.T) {
+	logical, err := database.NewSignedInteger(64)
+	if err != nil {
+		t.Fatal(err)
+	}
+	relation := database.RelationRef{Schema: database.SchemaRef{Catalog: database.CatalogRef{Name: "analytics"}, Name: "public"}, Name: "events"}
+	id := database.ColumnRef{Relation: relation, Name: "id"}
+	updatedAt := database.ColumnRef{Relation: relation, Name: "updated_at"}
+	catalog, err := database.NewCatalog(database.CatalogRef{Name: "analytics"}, []database.Relation{{
+		Ref:            relation,
+		NativeIdentity: database.NativeRelationIdentity{Kind: "oid", Value: "10001"},
+		Columns: []database.Column{
+			{Ref: id, Type: logical, Nullable: false, Ordinal: 1},
+			{Ref: updatedAt, Type: logical, Nullable: true, Ordinal: 2},
+		},
+		Keys: []database.Key{{Name: "events_pkey", Kind: database.KeyPrimary, Columns: []database.ColumnRef{id}}},
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = newPostgresPollingReadPlan(catalog, relation, "updated_at", []string{"id"}, 2)
+	if !errors.Is(err, ErrPollingCursorNullable) {
+		t.Fatalf("nullable cursor plan error = %v, want %v", err, ErrPollingCursorNullable)
+	}
+}
+
+// Edge case: a persisted checkpoint from a private snapshot protocol must be
+// rejected with the shared typed recovery outcome, never cleared and retried
+// as a new full read.
+func TestPostgresPollingTransportRefusesInvalidCheckpointWithoutRestart(t *testing.T) {
+	source := NewPollingTransportSource(New())
+	request := postgresPollingFixtureRequest()
+	// An invalid checkpoint is rejected before runtime configuration, pool
+	// setup, catalog discovery, or a polling page. The empty config makes that
+	// ordering observable without a live server.
+	request.Runtime = connectors.RuntimeConfig{}
+	observed := true
+	request.Checkpoint = &synccontract.CheckpointEnvelope{
+		StateVersion:     synccontract.StateVersion,
+		Source:           request.Resume.Source,
+		Mechanism:        "postgres_bounded_full_snapshot",
+		SnapshotBarrier:  &synccontract.SnapshotBarrier{Kind: "none", Token: synccontract.OpaqueToken("postgres-polling-v1")},
+		Position:         synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken("2000"), TieBreaker: synccontract.OpaqueToken("2")},
+		PositionObserved: &observed,
+		Partitions:       []synccontract.PartitionState{},
+		SourceGeneration: request.Resume.SourceGeneration,
+		SchemaVersion:    "fixture-postgres-users-v1",
+		ProtocolVersion:  "postgres_snapshot_v1",
+		Dedupe:           synccontract.DedupeIdentity{Kind: "postgres_polling_tuple", Value: synccontract.OpaqueToken("fixture")},
+		DedupeWindow:     synccontract.DedupeWindow{Kind: "postgres_polling_overlap", Start: synccontract.OpaqueToken("fixture"), End: synccontract.OpaqueToken("fixture")},
+		ObservedAt:       time.Date(2026, time.August, 16, 0, 0, 0, 0, time.UTC),
+	}
+	committed := request.Checkpoint.ObservedAt.Add(time.Second)
+	request.Checkpoint.CommittedAt = &committed
+
+	var emitted int
+	err := source.ReadTransport(context.Background(), request, func(synctransport.SourcePage) error {
+		emitted++
+		return nil
+	})
+	var recovery *synccontract.RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeInvalidCheckpoint {
+		t.Fatalf("invalid checkpoint error = %v, want invalid-checkpoint rebootstrap", err)
+	}
+	if emitted != 0 {
+		t.Fatalf("invalid checkpoint emitted %d restarted pages, want 0", emitted)
+	}
+}
+
+// Edge case: a checkpoint whose persisted catalog fingerprint no longer
+// matches the selected stream must not restart at page one. The fixture runner
+// makes the assertion hermetic while retaining shared-executor validation.
+func TestPostgresPollingTransportRefusesStaleSchemaCheckpointBeforePageRead(t *testing.T) {
+	source := NewPollingTransportSource(New())
+	request := postgresPollingFixtureRequest()
+	checkpoint := validPostgresPollingFixtureCheckpoint(t, source, request)
+	checkpoint.SchemaVersion = "stale-postgres-schema"
+	request.Checkpoint = &checkpoint
+
+	emitted := 0
+	err := source.ReadTransport(context.Background(), request, func(synctransport.SourcePage) error {
+		emitted++
+		return nil
+	})
+	var recovery *synccontract.RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeInvalidCheckpoint || !strings.Contains(err.Error(), "schema fingerprint") {
+		t.Fatalf("stale schema checkpoint error = %v, want named invalid-checkpoint rebootstrap", err)
+	}
+	if emitted != 0 {
+		t.Fatalf("stale schema checkpoint emitted %d restarted pages, want 0", emitted)
+	}
+}
+
+func validPostgresPollingFixtureCheckpoint(t *testing.T, source *PollingTransportSource, request synctransport.SourceRequest) synccontract.CheckpointEnvelope {
+	t.Helper()
+	var committed synccontract.CheckpointEnvelope
+	errStop := errors.New("stop after first fixture checkpoint")
+	err := source.ReadTransport(context.Background(), request, func(page synctransport.SourcePage) error {
+		ack, err := synccontract.NewDurableDownstreamAcknowledgement("fixture-warehouse", page.CandidateCheckpoint.ObservedAt.Add(time.Second))
+		if err != nil {
+			return err
+		}
+		if err := synccontract.CommitAfterDownstreamAcknowledgement(page.CandidateCheckpoint, ack, func(checkpoint synccontract.CheckpointEnvelope) error {
+			committed = checkpoint.Clone()
+			return nil
+		}); err != nil {
+			return err
+		}
+		return errStop
+	})
+	if !errors.Is(err, errStop) {
+		t.Fatalf("produce valid fixture polling checkpoint: %v", err)
+	}
+	return committed
+}
+
+func postgresPollingFixtureRequest() synctransport.SourceRequest {
+	return synctransport.SourceRequest{
+		Connector:   New(),
+		Runtime:     connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture", "host": "fixture.internal", "database": "analytics", "username": "reader", "sslmode": "require"}},
+		Stream:      "public.users",
+		CursorField: "updated_at",
+		PrimaryKey:  []string{"id"},
+		Mode:        synccontract.ModeIncrementalAppend,
+		BatchSize:   2,
+		Resume: synccontract.ResumeExpectation{
+			Source:           synccontract.SourceIdentity{Engine: "postgres", AccountOrCluster: "fixture-credential", ObjectScope: "public.users"},
+			SourceGeneration: synccontract.OpaqueToken("fixture-generation"),
+		},
 	}
 }
 
@@ -663,7 +877,7 @@ func newPreflightSpyConnector(descriptor *connectors.SourceTransportDescriptor) 
 
 func postgresTransportTestSourceDescriptor() *connectors.SourceTransportDescriptor {
 	return &connectors.SourceTransportDescriptor{
-		Executor:        connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_bounded_snapshot"},
+		Executor:        connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_polling_watermark"},
 		EligibleStreams: []string{"snapshot"},
 		Modes:           []synccontract.Mode{synccontract.ModeFullAppend, synccontract.ModeFullOverwrite},
 		Delivery: connectors.DeliveryGuarantees{
@@ -671,7 +885,7 @@ func postgresTransportTestSourceDescriptor() *connectors.SourceTransportDescript
 			Ordering:    connectors.DeliveryOrderingSource,
 			Deletes:     connectors.DeliveryDeletesUnavailable,
 		},
-		Conformance: connectors.ConformanceEvidenceReference{Suite: "postgres_snapshot", RunID: "bounded_full_v1"},
+		Conformance: connectors.ConformanceEvidenceReference{Suite: "postgres_polling_watermark", RunID: "shared_source_v1"},
 	}
 }
 

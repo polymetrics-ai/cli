@@ -126,6 +126,12 @@ func (c Connector) Metadata() connectors.Metadata {
 	return m
 }
 
+// HasDynamicPollingWatermark documents that the live sync transport binds its
+// effective polling contract from each stream's typed catalog. The static
+// polling_watermark.json remains planned because it cannot truthfully encode
+// a fixed cursor and tie-breaker for every PostgreSQL relation.
+func (Connector) HasDynamicPollingWatermark() bool { return true }
+
 func (c Connector) Manifest() connectors.Manifest {
 	manifest := c.BundleManifest()
 	for i := range manifest.SecretFields {

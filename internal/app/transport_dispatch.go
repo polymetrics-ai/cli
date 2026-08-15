@@ -200,13 +200,14 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			StreamID:          stream.StreamID,
 			PrimaryKey:        append([]string(nil), stream.PrimaryKey...),
 		},
-		Stream:     streamName,
-		Mode:       mode.ContractMode,
-		BatchSize:  batchSize,
-		Resume:     sourceExpectation,
-		Checkpoint: prior.Checkpoint,
-		Approval:   approval,
-		Stage:      a.transportStage,
+		Stream:      streamName,
+		CursorField: stream.CursorField,
+		Mode:        mode.ContractMode,
+		BatchSize:   batchSize,
+		Resume:      sourceExpectation,
+		Checkpoint:  prior.Checkpoint,
+		Approval:    approval,
+		Stage:       a.transportStage,
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
 			interim := checkpoint.Clone()
 			if interim.CommittedAt == nil {
