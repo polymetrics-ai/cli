@@ -1,7 +1,7 @@
 # Connector action identity, standing job approval, and rate refusal context
 
-**Issues:** #3994, #3992, #4049  
-**Base:** `integration/4015-mvp-flat-r1`  
+**Issues:** #3994, #3992, #4049
+**Base:** `integration/4015-mvp-flat-r1`
 **Mode:** inline/manual GSD fallback; the canonical single-worker contract forbids role spawning.
 
 ## Captain correction applied
@@ -69,4 +69,3 @@ The base publishes PostgreSQL as source-only; #4158 is excluded. Available GitHu
 environment capability is detected without rendering credential values. Where live execution is
 unavailable, the issue/PR evidence names the exact gap and the hermetic production-path proof used
 instead.
-

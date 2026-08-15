@@ -87,4 +87,3 @@
 
 No generic HTTP/SQL/shell writer, raw destination control, new credential carrier, dependency,
 PostgreSQL destination publication, #4125 change, or #4158 change.
-
