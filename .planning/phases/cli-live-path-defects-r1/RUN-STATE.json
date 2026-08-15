@@ -1,0 +1,10 @@
+{
+  "phase": "cli-live-path-defects-r1",
+  "issues": [4119, 4125, 4169],
+  "status": "planned",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-live-path-defects-r1",
+  "manual_gsd_fallback": true,
+  "excluded_issue": 4158,
+  "delivery_mode": "direct_pr_against_integration_base"
+}
