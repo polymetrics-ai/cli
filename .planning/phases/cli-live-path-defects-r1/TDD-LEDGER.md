@@ -23,3 +23,24 @@
 - Manual GSD fallback: prompts resolved and executed inline because no
   compatible isolated GSD worker is available and the task forbids role
   spawning.
+
+### 2026-08-16 — #4119 destination-route regression probe
+
+- Red attempt: the newly added redirect-to-`require_shared` destination probe
+  was run before any production edit and passed on `ef3c71caf`.
+- Evidence: `Requester.admitRequesterSend` already canonicalizes each physical
+  request URL at the send boundary, and its redirect `CheckRedirect` invokes
+  the same admission before the destination can be sent. The new tests prove
+  the previously unexercised different-budget route: a local `/start` may send
+  once, while `/repos/widget` is refused as
+  `SharedRateLimitCoordinatorNotConfigured` and receives zero sends.
+- Happy class: `TestEndpointLocalRateLimitAdmissionAllowsRedirectDestination`
+  asserts the response body and one destination request for local-only traffic.
+- Bad class: `TestEndpointSharedRateLimitAdmissionUsesRedirectDestination`
+  asserts the destination shared typed refusal and zero destination requests.
+- Edge class:
+  `TestEndpointSharedRateLimitAdmissionCanonicalizesBasePrefixedRedirectDestination`
+  asserts the same typed destination refusal for a base-prefixed redirect.
+- Green: the focused engine command passed without a production edit. This is
+  an already-satisfied dispatch condition, recorded explicitly rather than
+  inventing an unnecessary transport change.

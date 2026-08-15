@@ -323,6 +323,152 @@ func TestEndpointRequireSharedPolicyGatesEscapedAndBasePrefixedPathsAtSend(t *te
 	}
 }
 
+func TestEndpointSharedRateLimitAdmissionUsesRedirectDestination(t *testing.T) {
+	var startRequests, destinationRequests int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/start":
+			startRequests++
+			http.Redirect(w, r, "/repos/widget", http.StatusFound)
+		case "/repos/widget":
+			destinationRequests++
+			w.WriteHeader(http.StatusOK)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := withAllRateLimit(Bundle{Name: "redirect-destination-shared", HTTP: HTTPBase{URL: server.URL}})
+	local := bundle.RateLimits.Policies[0]
+	local.ID = "start-local"
+	local.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/start"}}}
+	shared := local
+	shared.ID = "repos-shared"
+	shared.Coordination = connsdk.RateLimitCoordinationRequireShared
+	shared.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/repos/{id}"}}}
+	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{local, shared}
+	restore := replaceSharedRateLimitRegistryForTest(nil)
+	t.Cleanup(restore)
+
+	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	requester, err := runtime.RequesterFor(http.MethodGet, "/start")
+	if err != nil {
+		t.Fatalf("RequesterFor redirect source: %v", err)
+	}
+	_, err = requester.Do(context.Background(), http.MethodGet, "/start", nil, nil)
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(err, &unavailable) {
+		t.Fatalf("redirect request error = %T %v, want destination shared-coordinator refusal", err, err)
+	}
+	if got, want := unavailable.Reason, coordination.SharedRateLimitCoordinatorNotConfigured; got != want {
+		t.Fatalf("redirect destination refusal reason = %q, want %q", got, want)
+	}
+	if got, want := startRequests, 1; got != want {
+		t.Fatalf("redirect source requests = %d, want %d", got, want)
+	}
+	if got, want := destinationRequests, 0; got != want {
+		t.Fatalf("shared redirect destination requests = %d, want %d", got, want)
+	}
+}
+
+func TestEndpointLocalRateLimitAdmissionAllowsRedirectDestination(t *testing.T) {
+	var destinationRequests int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/start":
+			http.Redirect(w, r, "/repos/widget", http.StatusFound)
+		case "/repos/widget":
+			destinationRequests++
+			_, _ = w.Write([]byte(`{"route":"destination"}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := withAllRateLimit(Bundle{Name: "redirect-destination-local", HTTP: HTTPBase{URL: server.URL}})
+	start := bundle.RateLimits.Policies[0]
+	start.ID = "start-local"
+	start.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/start"}}}
+	destination := start
+	destination.ID = "repos-local"
+	destination.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/repos/{id}"}}}
+	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{start, destination}
+	restore := replaceSharedRateLimitRegistryForTest(nil)
+	t.Cleanup(restore)
+
+	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	requester, err := runtime.RequesterFor(http.MethodGet, "/start")
+	if err != nil {
+		t.Fatalf("RequesterFor redirect source: %v", err)
+	}
+	response, err := requester.Do(context.Background(), http.MethodGet, "/start", nil, nil)
+	if err != nil {
+		t.Fatalf("local redirect request: %v", err)
+	}
+	if got, want := string(response.Body), `{"route":"destination"}`; got != want {
+		t.Fatalf("local redirect response = %q, want %q", got, want)
+	}
+	if got, want := destinationRequests, 1; got != want {
+		t.Fatalf("local redirect destination requests = %d, want %d", got, want)
+	}
+}
+
+func TestEndpointSharedRateLimitAdmissionCanonicalizesBasePrefixedRedirectDestination(t *testing.T) {
+	var destinationRequests int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.EscapedPath() {
+		case "/api/start":
+			http.Redirect(w, r, "/api/repos/widget", http.StatusFound)
+		case "/api/repos/widget":
+			destinationRequests++
+			w.WriteHeader(http.StatusOK)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := withAllRateLimit(Bundle{Name: "base-prefixed-redirect-shared", HTTP: HTTPBase{URL: server.URL + "/api"}})
+	local := bundle.RateLimits.Policies[0]
+	local.ID = "start-local"
+	local.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/start"}}}
+	shared := local
+	shared.ID = "repos-shared"
+	shared.Coordination = connsdk.RateLimitCoordinationRequireShared
+	shared.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/repos/{id}"}}}
+	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{local, shared}
+	restore := replaceSharedRateLimitRegistryForTest(nil)
+	t.Cleanup(restore)
+
+	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	requester, err := runtime.RequesterFor(http.MethodGet, "/start")
+	if err != nil {
+		t.Fatalf("RequesterFor redirect source: %v", err)
+	}
+	_, err = requester.Do(context.Background(), http.MethodGet, "/start", nil, nil)
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(err, &unavailable) {
+		t.Fatalf("base-prefixed redirect request error = %T %v, want destination shared-coordinator refusal", err, err)
+	}
+	if got, want := unavailable.Reason, coordination.SharedRateLimitCoordinatorNotConfigured; got != want {
+		t.Fatalf("base-prefixed redirect destination refusal reason = %q, want %q", got, want)
+	}
+	if got, want := destinationRequests, 0; got != want {
+		t.Fatalf("base-prefixed shared redirect destination requests = %d, want %d", got, want)
+	}
+}
+
 func TestResponseFormatErrorPreservesOnlySafeErrorIdentities(t *testing.T) {
 	formatted := formatResponseError("safe formatted response error", &connsdk.HTTPError{Status: http.StatusBadRequest, URL: "https://example.test/graphql", Body: "access_token=must-not-be-exposed"})
 	var httpErr *connsdk.HTTPError
