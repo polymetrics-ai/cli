@@ -89,8 +89,8 @@ Reconciliation preserves the Shepherd gate while adapting its generated inputs t
 
 ### PR #4061 — `test/3993-github-live-roundtrip-nm5`
 
-- Compared refs: BASE `origin/integration/4015-mvp-flat-r1`; PR head `origin/test/3993-github-live-roundtrip-nm5` at `91f6b90508300e0bc3317dd2d219553319c6dfd4`. Both resolved before every comparison.
-- Classification method: complete API-reported file list followed by per-file object existence checks and `git diff --quiet "BASE:path" "PRHEAD:path"`.
+- Compared refs at the original audit: BASE `origin/integration/4015-mvp-flat-r1` at `df8a30e2cae823932c17e30d5a2a6e3a623adc8a`; PR head `origin/test/3993-github-live-roundtrip-nm5` at `be579074693253f86f0d50217522f56bab86d000`. Both resolved before every comparison. The reconciled PR later advanced normally to `91f6b90508300e0bc3317dd2d219553319c6dfd4` before firstmate merged it.
+- Classification method: complete API-reported file list from `/repos/polymetrics-ai/cli/pulls/4061/files`, followed by per-file object existence checks and `git diff --quiet "BASE:path" "PRHEAD:path"`.
 - Decision: genuine undelivered content. The branch was reconciled by a normal merge, preserving BASE's stdin approval and target/reserved-flag guards together with the PR's bounded timeout and canonical live-proof artifacts. The 54 focused Node tests passed; required checks became green and GitHub reported a clean merge state. Firstmate subsequently merged #4061 into BASE.
 
 | Classification | Files |
