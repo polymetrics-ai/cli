@@ -234,7 +234,8 @@ func validatePollingCatalogObject(declaration connectors.PollingWatermarkSourceD
 		}
 		columns[column] = struct{}{}
 	}
-	for _, field := range []string{declaration.Ordering.Watermark.CatalogField, declaration.Ordering.TieBreaker.CatalogField} {
+	orderingFields := append(declaration.Ordering.Watermark.CatalogColumns(), declaration.Ordering.TieBreaker.CatalogColumns()...)
+	for _, field := range orderingFields {
 		if _, found := columns[field]; !found {
 			return fmt.Errorf("discovered polling catalog object lacks ordering column %q", field)
 		}

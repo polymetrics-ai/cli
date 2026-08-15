@@ -92,6 +92,37 @@ func TestPreflightRejectsClosedAdmissionFailuresBeforeSourceRead(t *testing.T) {
 	}
 }
 
+func TestPreflightReturnsTypedSourceStreamIneligibleErrorBeforeExecutorAccess(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	stage := &testWarehouseStage{}
+	commits := 0
+
+	_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source:      pair.source,
+		Destination: pair.destination,
+		Stream:      "not-declared",
+		Mode:        synccontract.ModeFullAppend,
+		BatchSize:   10,
+		Stage:       stage,
+		Commit:      func(synccontract.CheckpointEnvelope) error { commits++; return nil },
+	})
+	var ineligible *SourceStreamIneligibleError
+	if !errors.As(err, &ineligible) {
+		t.Fatalf("Preflight() error = %v, want SourceStreamIneligibleError", err)
+	}
+	if got, want := ineligible.Connector, pair.source.Name(); got != want {
+		t.Fatalf("ineligible connector = %q, want %q", got, want)
+	}
+	if got, want := ineligible.Stream, "not-declared"; got != want {
+		t.Fatalf("ineligible stream = %q, want %q", got, want)
+	}
+	if pair.sourceExecutor.readCalls != 0 || stage.calls != 0 || pair.destinationExecutor.planCalls != 0 || pair.destinationExecutor.applyCalls != 0 || commits != 0 {
+		t.Fatalf("allowlist refusal effects source/stage/plan/apply/checkpoint = %d/%d/%d/%d/%d, want zero", pair.sourceExecutor.readCalls, stage.calls, pair.destinationExecutor.planCalls, pair.destinationExecutor.applyCalls, commits)
+	}
+}
+
 func TestOrchestratorRejectsInvalidSiblingDescriptorBeforeProviderAccess(t *testing.T) {
 	for _, tt := range []struct {
 		name    string
@@ -269,6 +300,45 @@ func TestOrchestratorCommitsOnlyAfterDurableAcknowledgement(t *testing.T) {
 	}
 	if commits != 0 {
 		t.Fatalf("checkpoint commits = %d, want zero before durable acknowledgement", commits)
+	}
+}
+
+func TestOrchestratorAdmitsEmptyResultOnlyFromExplicitSourceMarker(t *testing.T) {
+	for _, testCase := range []struct {
+		name    string
+		marked  bool
+		wantErr bool
+	}{
+		{name: "unmarked source remains refused", wantErr: true},
+		{name: "explicit empty-result source succeeds", marked: true},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			pair := newTestTransportPair("database", "database")
+			pair.sourceExecutor.pages = nil
+			registry := NewRegistry(pair.verifier)
+			if testCase.marked {
+				if err := registry.RegisterSource(&emptyResultTestSource{testSourceExecutor: pair.sourceExecutor}); err != nil {
+					t.Fatal(err)
+				}
+			} else if err := registry.RegisterSource(pair.sourceExecutor); err != nil {
+				t.Fatal(err)
+			}
+			if err := registry.RegisterDestination(pair.destinationExecutor); err != nil {
+				t.Fatal(err)
+			}
+			stage := &testWarehouseStage{}
+			commits := 0
+			result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+				Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+				BatchSize: 10, Stage: stage, Commit: func(synccontract.CheckpointEnvelope) error { commits++; return nil },
+			})
+			if (err != nil) != testCase.wantErr {
+				t.Fatalf("empty source Run() error = %v, wantErr=%t", err, testCase.wantErr)
+			}
+			if stage.calls != 0 || pair.destinationExecutor.applyCalls != 0 || commits != 0 || result.Pages != 0 || result.CommittedCheckpoint != nil {
+				t.Fatalf("empty source effects = stage:%d apply:%d commits:%d result:%+v, want no effects", stage.calls, pair.destinationExecutor.applyCalls, commits, result)
+			}
+		})
 	}
 }
 
@@ -635,6 +705,12 @@ type testSourceExecutor struct {
 	pages     []SourcePage
 	readCalls int
 }
+
+type emptyResultTestSource struct {
+	*testSourceExecutor
+}
+
+func (*emptyResultTestSource) AllowEmptySourceResult() {}
 
 func (e *testSourceExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
 	return e.reference

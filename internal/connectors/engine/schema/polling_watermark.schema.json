@@ -61,20 +61,22 @@
           "properties": {
             "watermark": {
               "type": "object",
-              "required": ["catalog_field", "ascending"],
+              "required": ["ascending"],
               "additionalProperties": false,
               "properties": {
                 "catalog_field": {"type": "string"},
+                "catalog_fields": {"type": "array", "minItems": 1, "items": {"type": "string"}},
                 "ascending": {"type": "boolean"},
                 "unique": {"type": "boolean"}
               }
             },
             "tie_breaker": {
               "type": "object",
-              "required": ["catalog_field", "ascending"],
+              "required": ["ascending"],
               "additionalProperties": false,
               "properties": {
                 "catalog_field": {"type": "string"},
+                "catalog_fields": {"type": "array", "minItems": 1, "items": {"type": "string"}},
                 "ascending": {"type": "boolean"},
                 "unique": {"type": "boolean"}
               }

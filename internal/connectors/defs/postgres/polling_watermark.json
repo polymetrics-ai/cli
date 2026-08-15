@@ -1,4 +1,39 @@
 {
-  "status": "planned",
-  "reason": "no registered native polling source and apply binding has passed object and destination preflight; no polling sync mode is implemented"
+  "status": "implemented",
+  "source": {
+    "executor": {"family": "native_database", "id": "postgres_polling_source_v1"},
+    "object": {"kind": "relation"},
+    "read": {
+      "kind": "keyset",
+      "max_page_size": 10000,
+      "max_pages": 10000,
+      "max_requests": 10000,
+      "stable_traversal": true,
+      "predicate": "lexicographic_tuple"
+    },
+    "snapshot": {"kind": "none"},
+    "cursor": {"codec": "rfc3339_nano", "type": "timestamp", "precision": "nanosecond"},
+    "ordering": {
+      "watermark": {"catalog_field": "dynamic_cursor", "ascending": true},
+      "tie_breaker": {"catalog_field": "dynamic_primary_key", "ascending": true, "unique": true}
+    },
+    "mutation": {"mutable": true, "commit_ordered": true, "bounded_overlap": true},
+    "identity": {"engine": "postgres", "account_scope": "dynamic_account", "object_scope": "dynamic_relation"},
+    "schema_compatibility": "exact_fingerprint",
+    "delete_visibility": "hard_delete_invisible",
+    "modes": ["incremental_upsert"]
+  },
+  "target": {
+    "executor": {"family": "native_database", "id": "postgres_managed_target"},
+    "max_batch_records": 1000,
+    "max_batch_bytes": 67108864,
+    "staging": "staging_replace_supported",
+    "stable_key_mapping": ["dynamic_primary_key"],
+    "conditional_order_fence": true,
+    "transaction": "required",
+    "partial_result": "rollback",
+    "retry_safe_close_and_insert": false,
+    "validity_window": "unsupported",
+    "strategies": ["merge"]
+  }
 }

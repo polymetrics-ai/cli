@@ -172,6 +172,11 @@ type PollingSourceExecutor struct {
 }
 
 var _ synctransport.SourceExecutor = (*PollingSourceExecutor)(nil)
+var _ synctransport.EmptyResultSource = (*PollingSourceExecutor)(nil)
+
+// AllowEmptySourceResult marks an empty keyset page as a successful no-op.
+// No cursor exists to checkpoint, so the orchestrator must not invent one.
+func (*PollingSourceExecutor) AllowEmptySourceResult() {}
 
 // NewPollingSourceExecutor accepts only a successful PollingPreflight result.
 // It deliberately type-asserts the registered preflight executor instead of

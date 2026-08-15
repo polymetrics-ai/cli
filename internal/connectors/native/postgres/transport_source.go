@@ -104,6 +104,11 @@ func (*SnapshotTransportSource) TransportExecutorReference() connectors.Transpor
 	return postgresSnapshotTransportReference
 }
 
+// AllowEmptySourceResult admits an empty relation or an incremental poll with
+// no rows after the acknowledged tuple. Neither case has a new source
+// position, so manufacturing a checkpoint would make resume unsafe.
+func (*SnapshotTransportSource) AllowEmptySourceResult() {}
+
 // ReadTransport executes one exact, bounded full snapshot in a read-only
 // repeatable-read transaction. Catalog discovery and record queries share that
 // transaction, so the emitted catalog fingerprint, stable key order, rows, and
@@ -126,6 +131,9 @@ func (s *SnapshotTransportSource) readTransport(ctx context.Context, request syn
 	}
 	if request.Mode == synccontract.ModeIncrementalUpsert && strings.EqualFold(strings.TrimSpace(request.Runtime.Config["transport_bootstrap"]), "true") {
 		return s.readBootstrapTransport(ctx, request, emit)
+	}
+	if request.Mode == synccontract.ModeIncrementalUpsert && strings.TrimSpace(request.CursorField) != "" {
+		return s.readPollingTransport(ctx, request, emit)
 	}
 
 	conn, relationRef, resources, pageSize, err := s.validateReadRequest(request)

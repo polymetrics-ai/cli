@@ -136,8 +136,8 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	}
 
 	secondRun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-to-postgres", "public.events", 1000).Run
-	if secondRun.RecordsRead != 1001 || secondRun.RecordsLoaded != 1001 || secondRun.Status != "completed" {
-		t.Fatalf("replay PostgreSQL binary run = %#v, want exact completed replay", secondRun)
+	if secondRun.RecordsRead != 0 || secondRun.RecordsLoaded != 0 || secondRun.Status != "completed" {
+		t.Fatalf("acknowledged PostgreSQL polling replay = %#v, want a completed zero-row no-op", secondRun)
 	}
 	_, _, replayCount, replayDelivery := postgresTransportTargetState(t, ctx, target)
 	if replayCount != count || replayDelivery != delivery {
@@ -218,8 +218,9 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	if emptyCounts := postgresTransportBusinessCounts(t, ctx, target); len(emptyCounts) != 2 || emptyCounts[0] != 2 || emptyCounts[1] != 1001 {
 		t.Fatalf("empty PostgreSQL run changed target business rows: %v", emptyCounts)
 	}
-	if emptyStates := postgresTransportStreamStates(t, root); !strings.Contains(emptyStates, "postgres-empty") || !strings.Contains(emptyStates, "public.empty_events") {
-		t.Fatalf("empty PostgreSQL run did not durably advance its checkpoint: %s", emptyStates)
+	emptyState, found := postgresTransportNamedStreamState(t, root, "postgres-empty", "public.empty_events")
+	if !found || emptyState.Checkpoint != nil {
+		t.Fatalf("empty PostgreSQL poll state = (%+v, %t), want a successful run marker without a fabricated checkpoint", emptyState, found)
 	}
 }
 
@@ -371,6 +372,81 @@ func TestPMBinaryExecutesAuthenticatedGitHubWarehousePostgres(t *testing.T) {
 	if after := postgresTransportStreamStates(t, root); after != beforeReplayState {
 		t.Fatalf("consumed replay advanced checkpoint: before=%s after=%s", beforeReplayState, after)
 	}
+}
+
+// TestPMBinaryExecutesAuthenticatedGitHubCommitsWarehousePostgres is the
+// decisive #4171 production proof. It intentionally traverses every declared
+// GitHub page with max_pages=unlimited and counts both durable hops
+// independently; a one-page default would therefore fail far below the
+// 99,345-row certification reference that exposed the admission defect.
+func TestPMBinaryExecutesAuthenticatedGitHubCommitsWarehousePostgres(t *testing.T) {
+	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" || os.Getenv("POLYMETRICS_GITHUB_INTEGRATION") != "1" {
+		t.Skip("authenticated GitHub commits-to-PostgreSQL integration is opt-in")
+	}
+	if os.Getenv("POLYMETRICS_GITHUB_TOKEN") == "" {
+		t.Fatal("POLYMETRICS_GITHUB_INTEGRATION=1 requires POLYMETRICS_GITHUB_TOKEN")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+	harness := newPostgresTransportHarness(t)
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Errorf("close GitHub commits-to-PostgreSQL harness: %v", err)
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatalf("start GitHub commits-to-PostgreSQL harness: %v", err)
+	}
+	admin := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
+	defer func() { _ = admin.Close(context.Background()) }()
+	if _, err := admin.Exec(ctx, "CREATE DATABASE "+postgresTransportTargetDB); err != nil {
+		t.Fatalf("create GitHub commits target database: %v", err)
+	}
+	target := waitForPostgresTransport(t, ctx, endpoint, postgresTransportTargetDB, postgresTransportUser)
+	defer func() { _ = target.Close(context.Background()) }()
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "github-commits-project")
+	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
+	mustPostgresTransportPM(t, binary, "",
+		"credentials", "add", "github-commits-live", "--connector", "github",
+		"--config", "owner=rails", "--config", "repo=rails", "--config", "auth_type=token",
+		"--config", "rate_limit_account=authenticated-commits-transport-proof",
+		"--config", "max_pages=unlimited",
+		"--from-env", "token=POLYMETRICS_GITHUB_TOKEN", "--root", root, "--json")
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
+	mustPostgresTransportPM(t, binary, "",
+		"connections", "create", "github-commits-to-postgres",
+		"--source", "github:github-commits-live", "--destination", "postgres:pg-target",
+		"--stream", "commits", "--sync-mode", "incremental_upsert",
+		"--cursor", "commit_committer_date", "--primary-key", "sha", "--table", "commits",
+		"--root", root, "--json")
+
+	approved := runApprovedPostgresTransportBinary(t, binary, root, "github-commits-to-postgres", "commits", 1000)
+	run := approved.Run
+	if run.Status != "completed" || run.RecordsRead != run.RecordsLoaded {
+		t.Fatalf("authenticated rails/rails commits binary run = %#v, want an exact completed transfer", run)
+	}
+	const priorCertificationRows = 99345
+	if run.RecordsRead < priorCertificationRows {
+		t.Fatalf("authenticated rails/rails commits extracted %d rows, below the 99,345-row defect reference; max_pages=unlimited may not have reached the wire", run.RecordsRead)
+	}
+	assertPostgresTransportWarehouse(t, root)
+	warehouseCount := postgresTransportWarehouseCommitRows(t, root, "rails/rails")
+	if warehouseCount != run.RecordsRead {
+		t.Fatalf("independent rails/rails commits Parquet rows = %d, want all %d extracted rows", warehouseCount, run.RecordsRead)
+	}
+
+	_ = target.Close(context.Background())
+	target = waitForPostgresTransport(t, ctx, endpoint, postgresTransportTargetDB, postgresTransportUser)
+	schema, relation, targetCount, delivery := postgresTransportTargetState(t, ctx, target)
+	if targetCount != run.RecordsRead || delivery == "" {
+		t.Fatalf("GitHub commits managed target = %s.%s rows=%d delivery_present=%t, want all %d extracted rows", schema, relation, targetCount, delivery != "", run.RecordsRead)
+	}
+	t.Logf("observed rails/rails commits with max_pages=unlimited: extracted=%d warehouse_parquet=%d postgres=%d prior_reference=%d", run.RecordsRead, warehouseCount, targetCount, priorCertificationRows)
 }
 
 type postgresTransportRun struct {
@@ -555,6 +631,43 @@ func postgresTransportWarehouseIssueRows(t *testing.T, root, repository string) 
 	return count
 }
 
+func postgresTransportWarehouseCommitRows(t *testing.T, root, repository string) int {
+	t.Helper()
+	var tablePaths []string
+	err := filepath.Walk(filepath.Join(root, ".polymetrics", "warehouse"), func(path string, info os.FileInfo, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if info.IsDir() || filepath.Ext(info.Name()) != ".parquet" || !strings.HasPrefix(info.Name(), "transport-stage_") || filepath.Base(filepath.Dir(path)) != "tables" {
+			return nil
+		}
+		tablePaths = append(tablePaths, path)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("discover connection-owned commits Parquet: %v", err)
+	}
+	if len(tablePaths) == 0 {
+		t.Fatal("connection-owned commits Parquet table was not materialized")
+	}
+	count := 0
+	for _, tablePath := range tablePaths {
+		if err := warehouse.ReadTable(context.Background(), tablePath, func(row warehouse.Row) error {
+			count++
+			if row["repository"] != repository {
+				t.Fatalf("Parquet commit %d repository = %#v, want %q", count, row["repository"], repository)
+			}
+			if sha, ok := row["sha"].(string); !ok || strings.TrimSpace(sha) == "" {
+				t.Fatalf("Parquet commit %d sha = %#v, want non-empty text", count, row["sha"])
+			}
+			return nil
+		}); err != nil {
+			t.Fatalf("independently read connection-owned commits Parquet %q: %v", tablePath, err)
+		}
+	}
+	return count
+}
+
 func runPostgresTransportApproval(binary, root, connection, stream string, batchSize int, approval approvedPostgresTransportRun) (string, error) {
 	return runTransportPM(binary, approval.Token+"\n",
 		"etl", "run", "--connection", connection, "--stream", stream,
@@ -657,6 +770,26 @@ func postgresTransportStreamStates(t *testing.T, root string) string {
 		t.Fatalf("decode project stream states: %v", err)
 	}
 	return string(persisted.StreamStates)
+}
+
+func postgresTransportNamedStreamState(t *testing.T, root, connection, stream string) (pmapp.StreamState, bool) {
+	t.Helper()
+	stateBytes, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read project state: %v", err)
+	}
+	var persisted struct {
+		StreamStates map[string]pmapp.StreamState `json:"stream_states"`
+	}
+	if err := json.Unmarshal(stateBytes, &persisted); err != nil {
+		t.Fatalf("decode project stream states: %v", err)
+	}
+	for _, state := range persisted.StreamStates {
+		if state.Connection == connection && state.Stream == stream {
+			return state, true
+		}
+	}
+	return pmapp.StreamState{}, false
 }
 
 func newPostgresTransportHarness(t *testing.T) *dbtest.Harness {

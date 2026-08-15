@@ -46,6 +46,14 @@ type SourceExecutor interface {
 	ReadTransport(context.Context, SourceRequest, func(SourcePage) error) error
 }
 
+// EmptyResultSource explicitly admits a successful, zero-page read without a
+// fabricated checkpoint. The orchestrator keeps rejecting silent zero-page
+// executors unless the exact registered source implements this marker.
+type EmptyResultSource interface {
+	SourceExecutor
+	AllowEmptySourceResult()
+}
+
 // DestinationExecutor is the narrow destination role. It plans only a
 // descriptor-resolved closed strategy and returns #3810's opaque durable
 // acknowledgement after its warehouse-mediated workset is durable.
@@ -67,14 +75,17 @@ type ManagedTargetApprovalDestination interface {
 // SourceRequest is the fixed source invocation context. It has no generic
 // request URL, SQL text, command, action, or caller-authored payload.
 type SourceRequest struct {
-	Connector  connectors.Connector
-	Runtime    connectors.RuntimeConfig
-	Stream     string
-	Mode       synccontract.Mode
-	BatchSize  int
-	PrimaryKey []string
-	Resume     synccontract.ResumeExpectation
-	Checkpoint *synccontract.CheckpointEnvelope
+	Connector connectors.Connector
+	Runtime   connectors.RuntimeConfig
+	Stream    string
+	// CursorField is the connection-owned stream cursor selected by App. It is
+	// structural read identity, not credential configuration or caller SQL.
+	CursorField string
+	Mode        synccontract.Mode
+	BatchSize   int
+	PrimaryKey  []string
+	Resume      synccontract.ResumeExpectation
+	Checkpoint  *synccontract.CheckpointEnvelope
 }
 
 // SourcePage carries a bounded provider payload separately from #3810's
@@ -281,6 +292,7 @@ type RunRequest struct {
 	DestinationRuntime connectors.RuntimeConfig
 	DestinationBinding DestinationBinding
 	Stream             string
+	CursorField        string
 	Mode               synccontract.Mode
 	BatchSize          int
 	Resume             synccontract.ResumeExpectation

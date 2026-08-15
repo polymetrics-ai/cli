@@ -108,12 +108,25 @@ type PollingCursor struct {
 	AllowsNull bool               `json:"allows_null,omitempty"`
 }
 
-// PollingOrderingField names one discovered catalog column in the complete
-// deterministic keyset order.
+// PollingOrderingField names one discovered catalog column or, for a unique
+// tie breaker, the complete ordered column tuple. Exactly one of CatalogField
+// and CatalogFields is populated.
 type PollingOrderingField struct {
-	CatalogField string `json:"catalog_field"`
-	Ascending    bool   `json:"ascending"`
-	Unique       bool   `json:"unique,omitempty"`
+	CatalogField  string   `json:"catalog_field,omitempty"`
+	CatalogFields []string `json:"catalog_fields,omitempty"`
+	Ascending     bool     `json:"ascending"`
+	Unique        bool     `json:"unique,omitempty"`
+}
+
+// CatalogColumns returns an independent copy of the declared order columns.
+func (f PollingOrderingField) CatalogColumns() []string {
+	if len(f.CatalogFields) > 0 {
+		return append([]string(nil), f.CatalogFields...)
+	}
+	if f.CatalogField == "" {
+		return nil
+	}
+	return []string{f.CatalogField}
 }
 
 // PollingOrderingTuple is the required watermark plus unique tie-breaker
@@ -280,6 +293,8 @@ func LegacyPollingWatermarkMode(raw string) (synccontract.Mode, bool) {
 func (d PollingWatermarkDescriptor) Clone() *PollingWatermarkDescriptor {
 	clone := d
 	clone.Source.Modes = append([]synccontract.Mode(nil), d.Source.Modes...)
+	clone.Source.Ordering.Watermark.CatalogFields = append([]string(nil), d.Source.Ordering.Watermark.CatalogFields...)
+	clone.Source.Ordering.TieBreaker.CatalogFields = append([]string(nil), d.Source.Ordering.TieBreaker.CatalogFields...)
 	clone.Target.StableKeyMapping = append([]string(nil), d.Target.StableKeyMapping...)
 	clone.Target.Strategies = append([]PollingApplyStrategy(nil), d.Target.Strategies...)
 	return &clone
@@ -377,11 +392,18 @@ func (c PollingCursor) validate() error {
 }
 
 func (o PollingOrderingTuple) validate() error {
-	if !validPollingName(o.Watermark.CatalogField) || !validPollingName(o.TieBreaker.CatalogField) {
+	watermark, err := validatePollingOrderingColumns(o.Watermark)
+	if err != nil || len(watermark) != 1 {
 		return fmt.Errorf("polling ordering fields must name discovered catalog columns")
 	}
-	if o.Watermark.CatalogField == o.TieBreaker.CatalogField {
-		return fmt.Errorf("polling ordering watermark and tie_breaker must differ")
+	tieBreaker, err := validatePollingOrderingColumns(o.TieBreaker)
+	if err != nil || len(tieBreaker) == 0 {
+		return fmt.Errorf("polling ordering fields must name discovered catalog columns")
+	}
+	for _, field := range tieBreaker {
+		if field == watermark[0] {
+			return fmt.Errorf("polling ordering watermark and tie_breaker must differ")
+		}
 	}
 	if !o.Watermark.Ascending || !o.TieBreaker.Ascending {
 		return fmt.Errorf("polling ordering tuple must be ascending")
@@ -390,6 +412,24 @@ func (o PollingOrderingTuple) validate() error {
 		return fmt.Errorf("polling ordering tie_breaker must be unique")
 	}
 	return nil
+}
+
+func validatePollingOrderingColumns(field PollingOrderingField) ([]string, error) {
+	if (field.CatalogField == "") == (len(field.CatalogFields) == 0) {
+		return nil, fmt.Errorf("polling ordering field requires exactly one scalar or tuple declaration")
+	}
+	columns := field.CatalogColumns()
+	seen := make(map[string]struct{}, len(columns))
+	for _, column := range columns {
+		if !validPollingName(column) {
+			return nil, fmt.Errorf("polling ordering field names an invalid catalog column")
+		}
+		if _, duplicate := seen[column]; duplicate {
+			return nil, fmt.Errorf("polling ordering field repeats catalog column %q", column)
+		}
+		seen[column] = struct{}{}
+	}
+	return columns, nil
 }
 
 func (d PollingWatermarkSourceDescriptor) validateDeletes() error {

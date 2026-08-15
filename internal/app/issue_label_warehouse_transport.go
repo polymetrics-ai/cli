@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -15,10 +16,11 @@ import (
 )
 
 const (
-	issueLabelSourceExecutorID                 = "issue_label_source"
+	declarativeStreamSourceExecutorID          = "declarative_stream_source"
 	issueLabelDestinationExecutorID            = "issue_label_destination"
-	issueLabelEvidenceSuite                    = "closed_transport_demo"
-	issueLabelSourceEvidenceRun                = "accepted_issue_source"
+	declarativeStreamSourceEvidenceSuite       = "declarative_stream_transport"
+	declarativeStreamSourceEvidenceRun         = "all_executable_streams_v1"
+	issueLabelDestinationEvidenceSuite         = "closed_transport_demo"
 	issueLabelDestinationEvidenceRun           = "accepted_issue_label_destination"
 	issueLabelTransportSourceIssueConfig       = "transport_source_issue_number"
 	issueLabelTransportTargetIssueConfig       = "transport_target_issue_number"
@@ -26,25 +28,25 @@ const (
 	issueLabelTransportSetReplaceConsentConfig = "transport_allow_set_replace"
 	issueLabelTransportKeyedConsentConfig      = "transport_allow_keyed"
 	issueLabelTransportMaxReadPages            = 1
-	issueCollectionTransportMaxReadPages       = 10
 	issueCollectionTransportMaxRecords         = 1000
+	declarativeTransportMaxPagesConfig         = "max_pages"
 )
 
 var (
-	issueLabelSourceReference = connectors.TransportExecutorReference{
+	declarativeStreamSourceReference = connectors.TransportExecutorReference{
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
-		ID:     issueLabelSourceExecutorID,
+		ID:     declarativeStreamSourceExecutorID,
 	}
 	issueLabelDestinationReference = connectors.TransportExecutorReference{
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
 		ID:     issueLabelDestinationExecutorID,
 	}
-	issueLabelSourceEvidence = connectors.ConformanceEvidenceReference{
-		Suite: issueLabelEvidenceSuite,
-		RunID: issueLabelSourceEvidenceRun,
+	declarativeStreamSourceEvidence = connectors.ConformanceEvidenceReference{
+		Suite: declarativeStreamSourceEvidenceSuite,
+		RunID: declarativeStreamSourceEvidenceRun,
 	}
 	issueLabelDestinationEvidence = connectors.ConformanceEvidenceReference{
-		Suite: issueLabelEvidenceSuite,
+		Suite: issueLabelDestinationEvidenceSuite,
 		RunID: issueLabelDestinationEvidenceRun,
 	}
 )
@@ -55,14 +57,14 @@ var (
 func issueLabelTransportDefinitionFactories(a *App) []synctransport.DefinitionFactory {
 	return []synctransport.DefinitionFactory{
 		{
-			Reference:      issueLabelSourceReference,
-			SourceEvidence: issueLabelSourceEvidence,
+			Reference:      declarativeStreamSourceReference,
+			SourceEvidence: declarativeStreamSourceEvidence,
 			BuildSource: func(connector connectors.Connector) (synctransport.SourceExecutor, error) {
-				engineConnector, contract, err := issueLabelTransportConnectorContract(connector)
+				engineConnector, descriptor, err := declarativeStreamTransportConnector(connector)
 				if err != nil {
 					return nil, err
 				}
-				return &issueLabelSourceExecutor{connector: engineConnector, contract: contract}, nil
+				return &declarativeStreamSourceExecutor{connector: engineConnector, descriptor: descriptor}, nil
 			},
 		},
 		{
@@ -80,6 +82,52 @@ func issueLabelTransportDefinitionFactories(a *App) []synctransport.DefinitionFa
 			},
 		},
 	}
+}
+
+func declarativeStreamTransportConnector(connector connectors.Connector) (*engine.Connector, connectors.SourceTransportDescriptor, error) {
+	candidate, ok := connector.(*engine.Connector)
+	if !ok || candidate == nil {
+		return nil, connectors.SourceTransportDescriptor{}, fmt.Errorf("declarative stream transport requires an engine connector")
+	}
+	definition := candidate.Definition()
+	if definition.SyncTransport == nil || definition.SyncTransport.Source == nil {
+		return nil, connectors.SourceTransportDescriptor{}, fmt.Errorf("declarative stream transport requires a source declaration")
+	}
+	descriptor := *definition.SyncTransport.Source
+	if descriptor.Executor != declarativeStreamSourceReference || descriptor.Conformance != declarativeStreamSourceEvidence {
+		return nil, connectors.SourceTransportDescriptor{}, fmt.Errorf("declarative stream transport requires its exact executor and evidence")
+	}
+	if err := validateDeclarativeStreamEligibility(definition.Streams, descriptor.EligibleStreams); err != nil {
+		return nil, connectors.SourceTransportDescriptor{}, err
+	}
+	return candidate, descriptor, nil
+}
+
+func validateDeclarativeStreamEligibility(streams []connectors.StreamSummary, eligible []string) error {
+	if len(streams) == 0 || len(eligible) != len(streams) {
+		return fmt.Errorf("declarative stream transport eligibility must match every executable stream")
+	}
+	want := make(map[string]struct{}, len(streams))
+	for _, stream := range streams {
+		if strings.TrimSpace(stream.Name) == "" {
+			return fmt.Errorf("declarative stream transport contains an unnamed stream")
+		}
+		want[stream.Name] = struct{}{}
+	}
+	seen := make(map[string]struct{}, len(eligible))
+	for _, stream := range eligible {
+		if stream == "*" {
+			return fmt.Errorf("declarative stream transport requires a concrete positive allowlist")
+		}
+		if _, ok := want[stream]; !ok {
+			return fmt.Errorf("declarative stream transport eligibility names unknown stream %q", stream)
+		}
+		if _, duplicate := seen[stream]; duplicate {
+			return fmt.Errorf("declarative stream transport eligibility repeats stream %q", stream)
+		}
+		seen[stream] = struct{}{}
+	}
+	return nil
 }
 
 func issueLabelTransportConnectorContract(connector connectors.Connector) (*engine.Connector, issueLabelTransportContract, error) {
@@ -355,37 +403,53 @@ func (a issueLabelTransportAction) record(issueNumber int, label string) (connec
 	return record, nil
 }
 
-type issueLabelSourceExecutor struct {
-	connector *engine.Connector
-	contract  issueLabelTransportContract
+type declarativeStreamSourceExecutor struct {
+	connector  *engine.Connector
+	descriptor connectors.SourceTransportDescriptor
 }
 
-func (*issueLabelSourceExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
-	return issueLabelSourceReference
+func (*declarativeStreamSourceExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
+	return declarativeStreamSourceReference
 }
 
-func (e *issueLabelSourceExecutor) ReadTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+// AllowEmptySourceResult admits an executable provider collection containing
+// zero records without fabricating an opaque navigation checkpoint.
+func (*declarativeStreamSourceExecutor) AllowEmptySourceResult() {}
+
+func (e *declarativeStreamSourceExecutor) ReadTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
 	if e == nil || e.connector == nil {
-		return fmt.Errorf("closed issue-label transport source is unavailable")
+		return fmt.Errorf("declarative stream transport source is unavailable")
 	}
-	if request.Connector == nil || request.Connector.Name() != e.connector.Name() || request.Stream != e.contract.stream {
-		return fmt.Errorf("closed issue-label transport source received an undeclared connector or stream")
+	if request.Connector == nil || request.Connector.Name() != e.connector.Name() || !transportContainsName(e.descriptor.EligibleStreams, request.Stream) {
+		return fmt.Errorf("declarative stream transport source received an undeclared connector or stream")
 	}
-	if _, err := e.contract.actionForSyncMode(request.Mode); err != nil {
-		return fmt.Errorf("closed issue-label transport source does not support sync mode %q", request.Mode)
+	if !transportContainsMode(e.descriptor.Modes, request.Mode) {
+		return fmt.Errorf("declarative stream transport source does not support sync mode %q", request.Mode)
 	}
-	if request.BatchSize <= 0 {
-		return fmt.Errorf("closed issue-label transport source requires a positive batch size")
+	if request.BatchSize <= 0 || request.BatchSize > issueCollectionTransportMaxRecords {
+		return fmt.Errorf("declarative stream transport batch size must be between 1 and %d", issueCollectionTransportMaxRecords)
 	}
 	if err := request.Resume.Source.Validate(); err != nil || len(request.Resume.SourceGeneration) == 0 {
-		return fmt.Errorf("closed issue-label transport source requires a complete resume identity")
+		return fmt.Errorf("declarative stream transport source requires a complete resume identity")
 	}
-	if err := issueLabelTransportRepositoryConfig(request.Runtime.Config); err != nil {
-		return err
+	if request.Checkpoint != nil {
+		if err := request.Checkpoint.ValidateResume(request.Resume); err != nil {
+			return err
+		}
 	}
 	configuredIssue := strings.TrimSpace(request.Runtime.Config[issueLabelTransportSourceIssueConfig])
+	if configuredIssue != "" && request.Stream != "issues" {
+		return fmt.Errorf("%s is valid only for the issues stream", issueLabelTransportSourceIssueConfig)
+	}
 	if configuredIssue == "" {
-		return e.readIssueCollection(ctx, request, emit)
+		return e.readDeclarativeCollection(ctx, request, emit)
+	}
+	return e.readConfiguredIssue(ctx, request, emit)
+}
+
+func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+	if err := issueLabelTransportRepositoryConfig(request.Runtime.Config); err != nil {
+		return err
 	}
 	if request.BatchSize != 1 {
 		return fmt.Errorf("closed issue-label transport requires batch size 1 when %s is configured", issueLabelTransportSourceIssueConfig)
@@ -429,22 +493,42 @@ func (e *issueLabelSourceExecutor) ReadTransport(ctx context.Context, request sy
 	return emit(synctransport.SourcePage{Records: records, CandidateCheckpoint: candidate})
 }
 
-// readIssueCollection is the bounded API-source half used when the declared
-// issue stream is paired with a managed database target. It buffers one
-// caller-sized page before emitting it, so cancellation or provider failure
-// during collection cannot partially stage a page, write target rows, or
-// advance its checkpoint. The provider request count is independently capped
-// even when the caller supplies an unexpectedly large batch.
-func (e *issueLabelSourceExecutor) readIssueCollection(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
-	if request.BatchSize > issueCollectionTransportMaxRecords {
-		return fmt.Errorf("bounded issue collection batch size must not exceed %d", issueCollectionTransportMaxRecords)
+// readDeclarativeCollection emits bounded transport pages while the engine
+// retains ownership of provider pagination. A persisted candidate is matched
+// and suppressed on resume, so acknowledged pages are not re-delivered even
+// though the provider sequence must be traversed again to recover its position.
+func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+	maxPages, err := declarativeTransportMaxPages(request.Runtime.Config)
+	if err != nil {
+		return err
 	}
 	records := make([]connectors.Record, 0, request.BatchSize)
-	err := e.connector.Read(ctx, connectors.ReadRequest{
-		Stream:   "issues",
+	pageOrdinal := 0
+	waitingForResume := request.Checkpoint != nil
+	emitBatch := func() error {
+		if len(records) == 0 {
+			return nil
+		}
+		pageOrdinal++
+		candidate, err := declarativeTransportCheckpoint(request.Resume, request.Stream, pageOrdinal, records)
+		if err != nil {
+			return err
+		}
+		if waitingForResume {
+			if checkpointPositionEqual(candidate.Position, request.Checkpoint.Position) {
+				waitingForResume = false
+			}
+			records = records[:0]
+			return nil
+		}
+		page := synctransport.SourcePage{Records: append([]connectors.Record(nil), records...), CandidateCheckpoint: candidate}
+		records = records[:0]
+		return emit(page)
+	}
+	err = e.connector.Read(ctx, connectors.ReadRequest{
+		Stream:   request.Stream,
 		Config:   request.Runtime,
-		Limit:    request.BatchSize,
-		MaxPages: issueCollectionTransportMaxReadPages,
+		MaxPages: maxPages,
 	}, func(record connectors.Record) error {
 		cloned, err := cloneTransportRecord(record)
 		if err != nil {
@@ -452,21 +536,61 @@ func (e *issueLabelSourceExecutor) readIssueCollection(ctx context.Context, requ
 		}
 		records = append(records, cloned)
 		if len(records) == request.BatchSize {
-			return connectors.ErrReadLimitReached
+			return emitBatch()
 		}
 		return nil
 	})
-	if err := connectors.IgnoreReadLimit(err); err != nil {
-		return fmt.Errorf("read bounded issue collection: %w", err)
+	if err != nil {
+		return fmt.Errorf("read declarative stream collection: %w", err)
 	}
 	if err := ctx.Err(); err != nil {
 		return err
 	}
-	candidate, err := issueTransportCheckpoint(request.Resume, records)
-	if err != nil {
+	if err := emitBatch(); err != nil {
 		return err
 	}
-	return emit(synctransport.SourcePage{Records: records, CandidateCheckpoint: candidate})
+	if waitingForResume {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "declarative stream resume page is no longer present")
+	}
+	return nil
+}
+
+func declarativeTransportMaxPages(config map[string]string) (int, error) {
+	raw := strings.TrimSpace(config[declarativeTransportMaxPagesConfig])
+	if raw == "" {
+		return 1, nil
+	}
+	switch strings.ToLower(raw) {
+	case "0", "all", "unlimited":
+		return 0, nil
+	}
+	pages, err := strconv.Atoi(raw)
+	if err != nil || pages <= 0 {
+		return 0, fmt.Errorf("%s must be a positive integer, 0, all, or unlimited", declarativeTransportMaxPagesConfig)
+	}
+	return pages, nil
+}
+
+func transportContainsName(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
+}
+
+func transportContainsMode(values []synccontract.Mode, want synccontract.Mode) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
+}
+
+func checkpointPositionEqual(left, right synccontract.CheckpointPosition) bool {
+	return bytes.Equal(left.Primary, right.Primary) && bytes.Equal(left.TieBreaker, right.TieBreaker)
 }
 
 type issueLabelDestinationExecutor struct {
@@ -719,6 +843,43 @@ func issueTransportCheckpoint(resume synccontract.ResumeExpectation, records []c
 		ProtocolVersion:  "engine-read-v1",
 		Dedupe:           synccontract.DedupeIdentity{Kind: "issue_page", Value: append(synccontract.OpaqueToken(nil), token...)},
 		DedupeWindow:     synccontract.DedupeWindow{Kind: "issue_page", Start: append(synccontract.OpaqueToken(nil), token...), End: append(synccontract.OpaqueToken(nil), token...)},
+		ObservedAt:       now,
+	}
+	if err := checkpoint.Validate(); err != nil {
+		return synccontract.CheckpointEnvelope{}, err
+	}
+	return checkpoint, nil
+}
+
+func declarativeTransportCheckpoint(resume synccontract.ResumeExpectation, stream string, ordinal int, records []connectors.Record) (synccontract.CheckpointEnvelope, error) {
+	if ordinal <= 0 {
+		return synccontract.CheckpointEnvelope{}, fmt.Errorf("declarative transport checkpoint ordinal must be positive")
+	}
+	identity, err := hashJSON(struct {
+		Stream  string              `json:"stream"`
+		Ordinal int                 `json:"ordinal"`
+		Records []connectors.Record `json:"records"`
+	}{Stream: stream, Ordinal: ordinal, Records: records})
+	if err != nil {
+		return synccontract.CheckpointEnvelope{}, err
+	}
+	positionObserved := true
+	ordinalToken := synccontract.OpaqueToken([]byte(fmt.Sprintf("%020d", ordinal)))
+	identityToken := synccontract.OpaqueToken([]byte(identity))
+	now := time.Now().UTC()
+	checkpoint := synccontract.CheckpointEnvelope{
+		StateVersion:     synccontract.StateVersion,
+		Source:           resume.Source,
+		Mechanism:        "declarative_stream_engine_read",
+		SnapshotBarrier:  &synccontract.SnapshotBarrier{Kind: "declarative_page", Token: append(synccontract.OpaqueToken(nil), identityToken...)},
+		Position:         synccontract.CheckpointPosition{Primary: append(synccontract.OpaqueToken(nil), ordinalToken...), TieBreaker: append(synccontract.OpaqueToken(nil), identityToken...)},
+		PositionObserved: &positionObserved,
+		Partitions:       []synccontract.PartitionState{},
+		SourceGeneration: append(synccontract.OpaqueToken(nil), resume.SourceGeneration...),
+		SchemaVersion:    "declarative-stream-v1",
+		ProtocolVersion:  "engine-read-v1",
+		Dedupe:           synccontract.DedupeIdentity{Kind: "declarative_page", Value: append(synccontract.OpaqueToken(nil), identityToken...)},
+		DedupeWindow:     synccontract.DedupeWindow{Kind: "declarative_page", Start: append(synccontract.OpaqueToken(nil), identityToken...), End: append(synccontract.OpaqueToken(nil), identityToken...)},
 		ObservedAt:       now,
 	}
 	if err := checkpoint.Validate(); err != nil {

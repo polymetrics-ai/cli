@@ -60,14 +60,15 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 
 	result := Result{}
 	err = resolved.Source.ReadTransport(ctx, cloneSourceRequest(SourceRequest{
-		Connector:  request.Source,
-		Runtime:    request.SourceRuntime,
-		Stream:     request.Stream,
-		Mode:       request.Mode,
-		BatchSize:  request.BatchSize,
-		PrimaryKey: request.DestinationBinding.PrimaryKey,
-		Resume:     request.Resume,
-		Checkpoint: request.Checkpoint,
+		Connector:   request.Source,
+		Runtime:     request.SourceRuntime,
+		Stream:      request.Stream,
+		CursorField: request.CursorField,
+		Mode:        request.Mode,
+		BatchSize:   request.BatchSize,
+		PrimaryKey:  request.DestinationBinding.PrimaryKey,
+		Resume:      request.Resume,
+		Checkpoint:  request.Checkpoint,
 	}), func(page SourcePage) error {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -191,6 +192,11 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		return result, err
 	}
 	if result.CommittedCheckpoint == nil {
+		if result.Pages == 0 {
+			if _, allowed := resolved.Source.(EmptyResultSource); allowed {
+				return result, nil
+			}
+		}
 		return result, fmt.Errorf("source transport completed without a checkpoint candidate")
 	}
 	return result, nil
