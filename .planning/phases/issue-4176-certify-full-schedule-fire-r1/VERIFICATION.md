@@ -11,7 +11,7 @@
 - [x] Affected CLI package passes: `go test -timeout 20m ./internal/cli -count=1` (492.716s).
 - [x] Static, build, derived, and workflow checks pass.
 - [x] Inline verify-work and code review complete.
-- [ ] Pull request open and API-reported base is `integration/4015-mvp-flat-r1`.
+- [x] Pull request [#4178](https://github.com/polymetrics-ai/cli/pull/4178) is open; the GitHub API reports base `integration/4015-mvp-flat-r1` exactly.
 
 ## CLI parity disposition
 
@@ -25,3 +25,4 @@ No command, flag, help text, manual, generated artifact, or website page is inte
 - `gofmt`, `git diff --check`, `go vet ./internal/connectors/certify ./internal/cli`, `go build ./cmd/pm`, `go run ./cmd/agentcontractgen check`, and `scripts/verify-gsd-workflow` passed.
 - `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make connector-boundary`, and `make release-workflow-check` passed.
 - Help/docs parity: `pm help connectors`, `pm connectors`, and `pm connectors certify --help` exit successfully; docs and website already document `connectors certify --full` and `schedule fire`, and no user-facing surface changed.
+- Delivery: pushed commit `36c802df6`; PR #4178 targets `integration/4015-mvp-flat-r1`. The normal trusted-author Claude automatic-review route was triggered on PR creation; no manual duplicate review request was posted.
