@@ -59,6 +59,16 @@ func (e *HTTPError) Error() string {
 	return safety.RedactErrorText(fmt.Sprintf("http %d for %s: %s", e.Status, e.URL, msg))
 }
 
+// CredentialRejectedError is the safe identity of a provider-verified
+// authentication rejection. It carries neither the provider URL nor response
+// body, either of which may contain credential material. Response formatters
+// may preserve this type without exposing the raw HTTPError that proved it.
+type CredentialRejectedError struct{}
+
+func (*CredentialRejectedError) Error() string {
+	return "provider rejected the credential"
+}
+
 // Requester performs JSON HTTP requests with auth, retry, and rate-limit handling.
 // The zero value is usable once Client/BaseURL are set; sensible defaults are
 // applied for the rest on first use.

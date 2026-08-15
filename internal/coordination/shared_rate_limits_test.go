@@ -4,10 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net"
 	"net/http"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -81,6 +85,89 @@ func TestSharedRateLimitBudgetSpecsRejectCostAboveCapacity(t *testing.T) {
 	}})
 	if !errors.Is(err, errSharedRateLimitPolicy) {
 		t.Fatalf("shared budget specs error = %v, want policy error", err)
+	}
+}
+
+func TestSharedRateLimitWindowBoundaryAcceptsMaximum(t *testing.T) {
+	maximum := int(maxSharedRateLimitWindowSeconds)
+	specs, err := sharedRateLimitBudgetSpecs([]connsdk.RateLimitBudget{fixedRequestBudget(1, maximum)})
+	if err != nil {
+		t.Fatalf("maximum shared window specs: %v", err)
+	}
+	if got, want := specs[0].Window, maxSharedRateLimitWindowSeconds*int64(time.Second/time.Millisecond); got != want {
+		t.Fatalf("maximum shared window milliseconds = %d, want %d", got, want)
+	}
+	ttl, err := sharedRateLimitTTL(specs)
+	if err != nil {
+		t.Fatalf("maximum shared window TTL: %v", err)
+	}
+	if got, want := ttl, time.Duration(maxSharedRateLimitWindowSeconds)*time.Second+time.Second; got != want {
+		t.Fatalf("maximum shared window TTL = %s, want %s", got, want)
+	}
+}
+
+func TestSharedRateLimitWindowBoundaryRejectsBadInputBeforeCoordinatorIO(t *testing.T) {
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("listen for coordinator probe: %v", err)
+	}
+	t.Cleanup(func() { _ = listener.Close() })
+	var connections atomic.Int32
+	go func() {
+		for {
+			conn, acceptErr := listener.Accept()
+			if acceptErr != nil {
+				return
+			}
+			connections.Add(1)
+			_ = conn.Close()
+		}
+	}()
+
+	for _, tt := range []struct {
+		name    string
+		seconds int
+		reason  SharedRateLimitWindowErrorReason
+	}{
+		{name: "negative", seconds: -1, reason: SharedRateLimitWindowNonPositive},
+		{name: "one past maximum", seconds: int(maxSharedRateLimitWindowSeconds) + 1, reason: SharedRateLimitWindowTooLarge},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			limiter := NewSharedRateLimitRegistry(&Dragonfly{client: redis.NewClient(&redis.Options{Addr: listener.Addr().String()})}).Limiter(testRateLimitKey(), []connsdk.RateLimitBudget{fixedRequestBudget(1, tt.seconds)})
+			err := limiter.Admit(context.Background(), connsdk.RateLimitRequest{Method: http.MethodGet, Attempt: 1})
+			var windowErr *SharedRateLimitWindowError
+			if !errors.As(err, &windowErr) {
+				t.Fatalf("shared window %d admission error = %T %v, want SharedRateLimitWindowError", tt.seconds, err, err)
+			}
+			if got, want := windowErr.Reason, tt.reason; got != want {
+				t.Fatalf("shared window %d refusal reason = %q, want %q", tt.seconds, got, want)
+			}
+		})
+	}
+	if got := connections.Load(); got != 0 {
+		t.Fatalf("invalid shared windows opened %d coordinator connections, want 0", got)
+	}
+}
+
+func TestSharedRateLimitWindowBoundaryRejectsZeroAndDurationOverflow(t *testing.T) {
+	for _, tt := range []struct {
+		name    string
+		seconds int
+		reason  SharedRateLimitWindowErrorReason
+	}{
+		{name: "zero", seconds: 0, reason: SharedRateLimitWindowNonPositive},
+		{name: "duration overflow", seconds: int(^uint(0) >> 1), reason: SharedRateLimitWindowTooLarge},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := sharedRateLimitBudgetSpecs([]connsdk.RateLimitBudget{fixedRequestBudget(1, tt.seconds)})
+			var windowErr *SharedRateLimitWindowError
+			if !errors.As(err, &windowErr) {
+				t.Fatalf("shared window %d specs error = %T %v, want SharedRateLimitWindowError", tt.seconds, err, err)
+			}
+			if got, want := windowErr.Reason, tt.reason; got != want {
+				t.Fatalf("shared window %d refusal reason = %q, want %q", tt.seconds, got, want)
+			}
+		})
 	}
 }
 

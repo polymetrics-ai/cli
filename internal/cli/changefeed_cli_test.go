@@ -114,7 +114,7 @@ func TestInspectPostgresReportsImplementedChangefeed(t *testing.T) {
 	}
 }
 
-func TestInspectPostgresKeepsPollingWatermarkPlannedUntilPreflightCanBindIt(t *testing.T) {
+func TestInspectPostgresKeepsStaticPollingWatermarkPlannedWhileRuntimeBindsItPerStream(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"connectors", "inspect", "postgres", "--json"}, &stdout, &stderr)
 	if code != 0 {
@@ -144,6 +144,19 @@ func TestInspectPostgresKeepsPollingWatermarkPlannedUntilPreflightCanBindIt(t *t
 	}
 	if bytes.Contains(pollingRaw, []byte(`"implemented"`)) || bytes.Contains(pollingRaw, []byte("change_capture")) {
 		t.Fatalf("postgres polling-watermark inspection fabricated executable CDC semantics: %s", pollingRaw)
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	code = cli.Run([]string{"connectors", "inspect", "postgres"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(connectors inspect postgres) code = %d stderr = %s", code, stderr.String())
+	}
+	if bytes.Contains(stdout.Bytes(), []byte("No polling source ordering, checkpoint, snapshot, deletion, or rebootstrap behavior is implemented")) {
+		t.Fatalf("postgres manual denied its dynamically-bound polling transport: %s", stdout.String())
+	}
+	if !bytes.Contains(stdout.Bytes(), []byte("native_database/postgres_polling_watermark")) {
+		t.Fatalf("postgres manual omitted the production polling executor: %s", stdout.String())
 	}
 
 	stdout.Reset()

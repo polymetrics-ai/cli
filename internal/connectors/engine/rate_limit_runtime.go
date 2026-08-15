@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strings"
 	"sync"
@@ -382,6 +383,13 @@ func (e *responseFormatError) As(target any) bool {
 		return false
 	}
 	switch typed := target.(type) {
+	case **connsdk.CredentialRejectedError:
+		var httpErr *connsdk.HTTPError
+		if !errors.As(e.cause, &httpErr) || httpErr.Status != http.StatusUnauthorized {
+			return false
+		}
+		*typed = &connsdk.CredentialRejectedError{}
+		return true
 	case **coordination.SharedRateLimitUnavailableError:
 		var cause *coordination.SharedRateLimitUnavailableError
 		if !errors.As(e.cause, &cause) {

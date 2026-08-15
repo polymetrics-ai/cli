@@ -1,5 +1,98 @@
 # TDD ledger — Issue #3976: PostgreSQL dynamic typed catalog discovery
 
+## R2 — resumable source reads (active)
+
+| ID | Class | Guarantee | RED assertion | GREEN proof |
+| --- | --- | --- | --- | --- |
+| RR1 | Happy path | PostgreSQL incremental/cursor reads are reached through #3858 rather than a private loop. | The real binary/sync construction path does not produce the shared source executor or resume tuple. | It produces exact records and resumes from the committed tuple through the shared executor. |
+| RR2 | Bad path | A cursor-required stream cannot silently ignore a stored checkpoint. | An unset cursor enters a source session/query or returns all rows. | A typed missing-stream-cursor refusal occurs before source I/O, delivery, or checkpoint mutation. |
+| RR3 | Edge case | Null cursor values cannot silently disappear. | A nullable fixture loses its null-cursor identity under the PostgreSQL source path. | The lossless shared ordering contract returns every identity exactly once, or a typed fail-closed boundary prevents delivery. |
+| RR4 | Bad path | Stale/invalid checkpoints do not restart from page one. | An incompatible checkpoint is refused only after the reader starts, or becomes a full read. | The recovery reason is specific and no source/delivery/checkpoint side effect occurs. |
+| RR5 | Edge case | Cursor selection belongs to a stream, not a connection. | A second relation is bound to the first relation's cursor column. | Each stream binds and validates its own catalog cursor; a mismatched/missing one rejects specifically. |
+
+### R2 RED record — 2026-08-16
+
+The tests were written before the adapter changes in
+`internal/connectors/native/postgres/transport_source_test.go`.
+
+```sh
+go test -timeout 20m ./internal/connectors/native/postgres \
+  -run 'TestPostgres(DefinitionDeclaresResumablePollingTransportSource|PollingTransport|PollingReadPlan)' -count=1
+```
+
+**RED:** build fails because the production source has no
+`NewPollingTransportSource`/`RegisterPollingTransportSource`,
+`synctransport.SourceRequest` carries no per-stream cursor, and there is no
+typed missing/nullable cursor boundary or shared polling read plan. This is
+the expected pre-implementation failure, not a baseline adjustment. The four
+new named tests cover RR1 happy-path resume, RR2 bad-path pre-I/O cursor
+refusal, RR3 nullable-cursor edge, and RR4 invalid-checkpoint edge; the
+definition test is the production-composition reach assertion.
+
+### R2 shared-contract RED record — 2026-08-16
+
+PostgreSQL's real binary route needs a durable zero-row observation on the
+second, resumed fixture run. The existing shared executor returned without
+emitting a candidate page, so the transport had no successful completion
+checkpoint to acknowledge.
+
+```sh
+go test -timeout 20m ./internal/connectors/engine \
+  -run '^TestPollingSourceExecutorCommitsEmptyPageWithoutInventingCursor$' -count=1
+```
+
+**RED:** `commits = 0, want 1`. The test was retained and the shared executor
+now emits one empty candidate without inventing or advancing a tuple. This is
+the narrowly required #3858 foundation split; it preserves an existing tuple
+on resumed scans and marks a first empty scan `position_observed=false`.
+
+### R2 GREEN proof — 2026-08-16
+
+- **RR1 happy path:**
+  `TestPostgresPollingTransportResumesFixtureCursor` and the compiled-binary
+  `TestPMBinaryExecutesPostgresFixturePollingResume` assert three exact rows,
+  the shared `polling_watermark` checkpoint mechanism, then zero records on a
+  resumed run. The latter starts at `pm`'s binary entry point and reaches the
+  definition-selected source factory, App, transport orchestrator, and shared
+  executor; it is not a hand-constructed runner test.
+- **RR2 bad path:**
+  `TestPostgresPollingTransportRefusesMissingPerStreamCursorBeforeIO` asserts
+  `ErrPollingCursorFieldRequired` before configuration, pool, query, delivery,
+  or checkpoint work. The binary bad-path test asserts the distinct live
+  catalog `ErrPollingCursorFieldNotFound` outcome leaves no source page/checkpoint.
+- **RR3 edge:**
+  `TestPostgresPollingReadPlanRefusesNullableCursor` asserts
+  `ErrPollingCursorNullable`; the opt-in live-harness test contains the same
+  seeded nullable-column refusal. Failing closed prevents PostgreSQL's NULL
+  comparison semantics from silently omitting rows.
+- **RR4 edge:**
+  `TestPostgresPollingTransportRefusesInvalidCheckpointWithoutRestart` asserts
+  the shared `RecoveryOutcomeInvalidCheckpoint` rebootstrap reason before
+  runtime configuration; `TestPostgresPollingTransportRefusesStaleSchemaCheckpointBeforePageRead`
+  asserts the live-catalog schema-fingerprint mismatch refuses before a page
+  read. Neither case emits a restarted source page.
+- **RR5 edge:** the runtime adapter receives `CursorField` from each stream's
+  transport request, validates it against that relation's catalog, and the
+  opt-in live test exercises a second relation with `alternate_cursor`.
+
+Focused green commands passed:
+
+```sh
+go test -timeout 20m ./internal/connectors/engine -count=1
+go test -timeout 20m ./internal/connectors/native/postgres -count=1
+go test -race -timeout 20m ./internal/connectors/native/postgres -count=1
+go test -timeout 20m ./internal/app -run 'Test(Open|.*Transport)' -count=1
+go test -timeout 20m ./internal/synctransport -count=1
+go test -v -timeout 20m ./internal/cli -run '^TestPMBinaryExecutesPostgresFixturePollingResume$' -count=1
+go test -v -timeout 20m ./internal/cli -run '^TestPMBinaryRefusesPostgresFixturePollingUnknownStreamCursorBeforePageRead$' -count=1
+go test -tags=databaseintegration -timeout 20m ./internal/connectors/native/postgres -run '^$' -count=1
+go test -tags=databaseintegration -timeout 20m ./internal/cli -run '^$' -count=1
+```
+
+The tagged commands compile the live proof only. Per the task constraint, no
+shared runtime was started or restarted, so the R2 live PostgreSQL execution
+proof is explicitly pending rather than treated as a pass.
+
 | ID | Guarantee | RED assertion | GREEN proof |
 | --- | --- | --- | --- |
 | R1 | Dynamic variation | One static catalog/table/field model cannot satisfy two materially different live PostgreSQL schema fixtures. | Each fixture produces a distinct typed catalog/fingerprint without code or connector-bundle schema edits. |

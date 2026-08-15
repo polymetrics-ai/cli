@@ -1,5 +1,33 @@
 # Verification checklist — Issue #3976
 
+## R2 — resumable source reads (verified locally; live execution pending)
+
+- [x] RR1 happy path: production construction reaches the shared polling executor and
+      asserts exact records plus successful checkpoint resume.
+- [x] RR2 bad path: unset stream cursor returns the named typed refusal before source I/O.
+- [x] RR3 edge: nullable cursor fixture cannot omit a null-cursor record.
+- [x] RR4 edge: stale/invalid resume checkpoint returns its named reason before I/O.
+- [x] RR5 edge: two streams with distinct cursor columns bind independently.
+- [x] The private PostgreSQL paging loop is absent from the source path.
+- [x] Focused PostgreSQL/engine/CLI tests, race where applicable, vet, build, and
+      repository gates pass.
+- [x] Generated `verify-work` / `code-review` manual-inline fallback records contain
+      production reach, red/green, and finding dispositions.
+- [x] Live PostgreSQL dbtest status is explicitly recorded as pending; no shared
+      container runtime is started or restarted for this task.
+
+### R2 local evidence
+
+- Production entry-point: `TestPMBinaryExecutesPostgresFixturePollingResume` produces 3 rows
+  in 2 pages, persists `polling_watermark`, then resumes with 0 rows in 1 acknowledged empty page.
+- Typed pre-I/O refusals: `TestPostgresPollingTransportRefusesMissingPerStreamCursorBeforeIO`,
+  `TestPostgresPollingReadPlanRefusesNullableCursor`,
+  `TestPostgresPollingTransportRefusesInvalidCheckpointWithoutRestart`, and
+  `TestPostgresPollingTransportRefusesStaleSchemaCheckpointBeforePageRead`, and
+  `TestPMBinaryRefusesPostgresFixturePollingUnknownStreamCursorBeforePageRead`.
+- The tagged `databaseintegration` PostgreSQL and CLI packages compile with no tests executed.
+  The live test was not run: the shared container runtime was not started or restarted.
+
 ## Acceptance proof
 
 - [x] RED: `dynamic_catalog_integration_test.go` was committed before

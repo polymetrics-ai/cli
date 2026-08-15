@@ -282,10 +282,10 @@ func executeFreshBinaryGitHubFlowRoundTrip(t *testing.T, target githubFlowRoundT
 	denied := runGitHubFlowPM(t, binary, deniedToken+"\n", []string{target.token, approvalToken, deniedToken},
 		"reverse", "run", deniedPlanID, "--approval-token-stdin", "--root", root, "--json",
 	)
-	// #4169 tracks the product defect that currently classifies this verified
-	// provider 401 as internal instead of auth. This validation branch records
-	// today's typed contract without changing the classification.
-	authRefusalType := assertGitHubFlowTypedRefusal(t, denied, "internal", "internal_error")
+	// A provider-verified 401 is invalid credential input, not an internal
+	// program fault. This real binary path also proves the rejection leaves the
+	// provider and durable checkpoint untouched.
+	authRefusalType := assertGitHubFlowTypedRefusal(t, denied, "auth", "credential_error")
 	assertGitHubFlowProviderCount(t, target.comments, providerCount, "provider authentication refusal")
 	assertGitHubFlowCheckpointUnchanged(t, root, authCheckpointBefore, "provider authentication refusal")
 

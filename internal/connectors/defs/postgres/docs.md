@@ -14,24 +14,35 @@ This connector is source-only. Its write capability remains false: the typed Pos
 managed-target driver is not registered as a production destination, and the compatibility
 `Connector.Write` method remains unsupported.
 
-## Warehouse snapshot transport
+## Warehouse resumable polling transport
 
-For warehouse-mediated sync, PostgreSQL provides one closed, live-only bounded
-snapshot source. It accepts the logical `snapshot` stream only for
-`full_append` and `full_overwrite`; it is neither a caller-authored SQL surface
-nor a fallback to the compatibility `Connector.Read` path. Polling, incremental modes, and
-logical-replication change capture remain distinct source paths.
+For warehouse-mediated sync, PostgreSQL's declared source executor is the
+catalog-bound `postgres_polling_watermark` adapter. It uses the shared polling
+source executor for `full_overwrite`, `full_append`, `incremental_append`,
+`incremental_upsert`, `incremental_dedupe`, and `incremental_dedupe_history`.
+It is neither a caller-authored SQL surface nor a fallback to the compatibility
+`Connector.Read` path.
 
-The source identity must name one `database.schema.relation`. It discovers that
-relation's typed catalog and reads finite pages, ordered by a declared non-null
-primary or unique key, in one read-only repeatable-read transaction. Every
-page supplies a candidate checkpoint bound to the source identity, typed-catalog
-schema fingerprint, and PostgreSQL snapshot barrier. A prior full-snapshot
-checkpoint cannot be resumed.
+The source identity names one `database.schema.relation`. Before opening a
+pool or running a page query, the adapter requires that stream's own non-null
+cursor field and one distinct non-null primary/unique tie-breaker, then validates
+both against the live typed catalog. A connection-level `cursor_field` setting
+does not select a sync stream cursor. PostgreSQL accepts integer and timestamp
+cursors; nullable, unknown, and unsupported cursor columns are refused so a
+stored checkpoint can never silently become an unfiltered scan or omit NULL
+rows.
 
-Before any source I/O, transport preflight requires the connector definition to
-name its exact native database executor and the registry to have registered it.
-Generic App composition never infers this source from broad connector capabilities.
+The shared executor owns keyset paging, watermark checkpoints, durable
+acknowledgement sequencing, and resume validation. Checkpoints are bound to the
+source identity, source generation, live-catalog fingerprint, and no-snapshot
+barrier. An invalid or stale checkpoint requires explicit rebootstrap instead
+of restarting from page one. Hard deletes are not observable through polling.
+
+`polling_watermark.json` remains a planned static declaration only because a
+dynamic PostgreSQL catalog cannot truthfully declare a fixed cursor type,
+cursor column, or tie-breaker. The production transport builds that effective
+implemented declaration per stream after catalog validation and runs the
+shared preflight/conformance contract before source I/O.
 
 ## Auth setup
 
@@ -63,8 +74,9 @@ tries plaintext before TLS, so new portable configurations should use `preferred
 
 Connection fields:
 
-- `cursor_field` (optional, string); Optional column name used for incremental reads (rows with
-  cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).
+- `cursor_field` (optional, string); Legacy compatibility setting for direct incremental reads.
+  Warehouse polling does not use it: every configured stream must provide and validate its own
+  cursor field before source I/O.
 - `cdc_publication` (optional, string); Publication used by logical-replication CDC. It must
   include the selected `schema.table` stream. Defaults to `pm_publication`.
 - `database` (required, string); Database name to connect to.
@@ -118,17 +130,16 @@ PostgreSQL exposes no generic SQL write action and cannot write an arbitrary pre
 - Provider HTTP rate limiting is not applicable: PostgreSQL uses its native wire protocol and
   makes no provider HTTP API requests. Native pool, batch, statement, CDC stage, slot, and WAL
   bounds are enforced by the typed database and changefeed contracts instead.
-- `polling_watermark` is planned, not implemented. It is a bounded keyset poll
-  rather than CDC or change capture, and no polling mode can be selected until
-  one declared native source/object/destination binding passes runtime
-  preflight with registered source and apply executors plus immutable
-  conformance evidence. When such a binding exists, its source order must be a
-  declared watermark plus unique tie-breaker; its checkpoint is committed only
-  after durable downstream acknowledgement, so replay is at least once. A
-  polling source cannot observe a hard delete after the row disappears; a
-  delete-aware history contract needs a declared cursor-advancing soft-delete
-  mapping. Incompatible state, source identity changes, snapshot expiry, and
-  retention failure require explicit rebootstrap, never an automatic full scan.
+- PostgreSQL warehouse polling is implemented through the shared polling source
+  executor. Its source ordering is the live-catalog stream cursor plus a unique
+  tie-breaker; its checkpoint is committed only after durable downstream
+  acknowledgement, so replay is at least once. The static
+  `polling_watermark.json` status stays planned because that file cannot
+  represent a catalog-discovered cursor and tie-breaker. A polling source
+  cannot observe a hard delete after the row disappears; a delete-aware history
+  contract needs a declared cursor-advancing soft-delete mapping. Incompatible
+  state, source identity changes, and schema changes require explicit
+  rebootstrap, never an automatic full scan.
 - Logical-replication CDC requires PostgreSQL 14+, `wal_level=logical`, a role with
   `REPLICATION`, positive `max_replication_slots` and `max_wal_senders`, a matching publication,
   and a stable primary-key replica identity. The slot is source-bound; a missing, incompatible,

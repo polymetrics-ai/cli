@@ -75,14 +75,19 @@ type ManagedTargetApprovalDestination interface {
 // SourceRequest is the fixed source invocation context. It has no generic
 // request URL, SQL text, command, action, or caller-authored payload.
 type SourceRequest struct {
-	Connector  connectors.Connector
-	Runtime    connectors.RuntimeConfig
-	Stream     string
-	Mode       synccontract.Mode
-	BatchSize  int
-	PrimaryKey []string
-	Resume     synccontract.ResumeExpectation
-	Checkpoint *synccontract.CheckpointEnvelope
+	Connector connectors.Connector
+	Runtime   connectors.RuntimeConfig
+	Stream    string
+	// CursorField is the persisted stream-scoped cursor selected during
+	// connection configuration. It is structural source state, never a raw
+	// provider query fragment; native sources validate it against their live
+	// catalog before they construct a page request.
+	CursorField string
+	Mode        synccontract.Mode
+	BatchSize   int
+	PrimaryKey  []string
+	Resume      synccontract.ResumeExpectation
+	Checkpoint  *synccontract.CheckpointEnvelope
 }
 
 // SourcePage carries a bounded provider payload separately from #3810's
@@ -289,6 +294,7 @@ type RunRequest struct {
 	DestinationRuntime connectors.RuntimeConfig
 	DestinationBinding DestinationBinding
 	Stream             string
+	CursorField        string
 	Mode               synccontract.Mode
 	BatchSize          int
 	Resume             synccontract.ResumeExpectation

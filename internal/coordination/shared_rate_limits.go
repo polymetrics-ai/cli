@@ -24,6 +24,36 @@ const (
 	SharedRateLimitRouteUnresolved          SharedRateLimitUnavailableReason = "route_unresolved"
 )
 
+// SharedRateLimitWindowErrorReason distinguishes declaration errors that must
+// be rejected before the limiter can contact the shared coordinator.
+type SharedRateLimitWindowErrorReason string
+
+const (
+	SharedRateLimitWindowNonPositive SharedRateLimitWindowErrorReason = "non_positive"
+	SharedRateLimitWindowTooLarge    SharedRateLimitWindowErrorReason = "too_large"
+)
+
+// A fixed/sliding window needs one additional second of cache lifetime so a
+// coordinator can retain the just-ended window while it evaluates the next
+// request. This is the largest whole-second value for which both the duration
+// and that TTL remain representable by time.Duration.
+const maxSharedRateLimitWindowSeconds int64 = 9_223_372_035
+
+// SharedRateLimitWindowError is the typed outcome for an invalid declared
+// window. Window declarations are non-secret connector metadata, so the value
+// is retained to make a bundle-authoring error actionable.
+type SharedRateLimitWindowError struct {
+	Seconds int64
+	Reason  SharedRateLimitWindowErrorReason
+}
+
+func (e *SharedRateLimitWindowError) Error() string {
+	if e == nil {
+		return "shared rate-limit window is invalid"
+	}
+	return fmt.Sprintf("shared rate-limit window_seconds=%d is invalid: %s", e.Seconds, e.Reason)
+}
+
 // SharedRateLimitUnavailableError means an explicitly require-shared policy
 // cannot be enforced. It deliberately carries only the missing component and
 // reason, never a Redis address, scope, subject, credential, or raw error.
@@ -131,18 +161,21 @@ func (l *SharedRateLimiter) Admit(ctx context.Context, _ connsdk.RateLimitReques
 	if l == nil || l.registry == nil {
 		return sharedRateLimitUnavailable(SharedRateLimitCoordinatorNotConfigured)
 	}
-	if err := l.registry.EnsureAvailable(ctx); err != nil {
-		return err
-	}
 	specs, err := sharedRateLimitBudgetSpecs(l.budgets)
 	if err != nil {
+		return err
+	}
+	ttl, err := sharedRateLimitTTL(specs)
+	if err != nil {
+		return err
+	}
+	if err := l.registry.EnsureAvailable(ctx); err != nil {
 		return err
 	}
 	encoded, err := json.Marshal(specs)
 	if err != nil {
 		return fmt.Errorf("encode shared rate-limit budget: %w", err)
 	}
-	ttl := sharedRateLimitTTL(specs)
 	for {
 		result, err := sharedRateLimitReserveScript.Run(ctx, l.registry.dragonfly.client, []string{sharedRateLimitRedisKey(l.key)}, string(encoded), ttl.Milliseconds()).Result()
 		if err != nil {
@@ -178,14 +211,17 @@ func (l *SharedRateLimiter) Observe(ctx context.Context, observation connsdk.Rat
 	if !sharedObservation.relevant() {
 		return
 	}
-	if l.registry.EnsureAvailable(ctx) != nil {
-		return
-	}
 	specs, err := sharedRateLimitBudgetSpecs(l.budgets)
 	if err != nil {
 		return
 	}
-	ttl := sharedRateLimitTTL(specs)
+	ttl, err := sharedRateLimitTTL(specs)
+	if err != nil {
+		return
+	}
+	if l.registry.EnsureAvailable(ctx) != nil {
+		return
+	}
 	args, err := sharedRateLimitObserveScriptArgs(specs, sharedObservation, ttl)
 	if err != nil {
 		return
@@ -277,8 +313,11 @@ func sharedRateLimitBudgetSpecs(budgets []connsdk.RateLimitBudget) ([]sharedRate
 		}
 		switch budget.Model {
 		case connsdk.RateLimitBudgetFixedWindow, connsdk.RateLimitBudgetSlidingWindow:
-			if budget.Limit == nil || budget.WindowSeconds == nil || *budget.Limit <= 0 || *budget.WindowSeconds <= 0 {
+			if budget.Limit == nil || budget.WindowSeconds == nil || *budget.Limit <= 0 {
 				return nil, errors.New("shared rate-limit window budget is invalid")
+			}
+			if err := validateSharedRateLimitWindowSeconds(*budget.WindowSeconds); err != nil {
+				return nil, err
 			}
 			spec.Limit = float64(*budget.Limit)
 			spec.Window = int64(*budget.WindowSeconds) * int64(time.Second/time.Millisecond)
@@ -302,9 +341,23 @@ func sharedRateLimitBudgetSpecs(budgets []connsdk.RateLimitBudget) ([]sharedRate
 	return out, nil
 }
 
-func sharedRateLimitTTL(specs []sharedRateLimitBudget) time.Duration {
+func validateSharedRateLimitWindowSeconds(seconds int) error {
+	value := int64(seconds)
+	if value <= 0 {
+		return &SharedRateLimitWindowError{Seconds: value, Reason: SharedRateLimitWindowNonPositive}
+	}
+	if value > maxSharedRateLimitWindowSeconds {
+		return &SharedRateLimitWindowError{Seconds: value, Reason: SharedRateLimitWindowTooLarge}
+	}
+	return nil
+}
+
+func sharedRateLimitTTL(specs []sharedRateLimitBudget) (time.Duration, error) {
 	ttl := time.Second
 	for _, spec := range specs {
+		if spec.Window < 0 || spec.Window > maxSharedRateLimitWindowSeconds*int64(time.Second/time.Millisecond) {
+			return 0, &SharedRateLimitWindowError{Seconds: spec.Window / int64(time.Second/time.Millisecond), Reason: SharedRateLimitWindowTooLarge}
+		}
 		candidate := time.Duration(spec.Window) * time.Millisecond
 		if spec.Restore > 0 {
 			candidate = time.Duration(spec.Capacity/spec.Restore) * time.Millisecond
@@ -313,7 +366,10 @@ func sharedRateLimitTTL(specs []sharedRateLimitBudget) time.Duration {
 			ttl = candidate
 		}
 	}
-	return ttl + time.Second
+	if ttl > time.Duration(1<<63-1)-time.Second {
+		return 0, &SharedRateLimitWindowError{Seconds: maxSharedRateLimitWindowSeconds + 1, Reason: SharedRateLimitWindowTooLarge}
+	}
+	return ttl + time.Second, nil
 }
 
 func sharedRateLimitObserveScriptArgs(specs []sharedRateLimitBudget, observation sharedRateLimitObservation, ttl time.Duration) ([]any, error) {

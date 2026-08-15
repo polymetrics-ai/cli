@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -128,6 +129,17 @@ func classifyError(err error) *cliError {
 	var rateBudgetRefusal *connsdk.RateBudgetRefusalError
 	if errors.As(err, &rateBudgetRefusal) {
 		return &cliError{category: categoryPolicy, code: string(rateBudgetRefusal.Code), message: err.Error(), err: err}
+	}
+	var credentialRejected *connsdk.CredentialRejectedError
+	if errors.As(err, &credentialRejected) {
+		return &cliError{category: categoryAuth, code: "credential_error", message: credentialRejected.Error(), err: err}
+	}
+	var providerHTTPError *connsdk.HTTPError
+	if errors.As(err, &providerHTTPError) && providerHTTPError.Status == http.StatusUnauthorized {
+		// A provider-verified 401 means the caller's credential is missing,
+		// revoked, or otherwise unacceptable. Deliberately replace the raw
+		// provider error here: its URL and body can contain credential material.
+		return &cliError{category: categoryAuth, code: "credential_error", message: "provider rejected the credential", err: err}
 	}
 	if errors.Is(err, errUsage) {
 		return &cliError{category: categoryUsage, code: "usage_error", message: errUsage.Error()}
