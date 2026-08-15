@@ -14,7 +14,7 @@
 - [x] Derived artifacts are regenerated in one final pass and drift checks leave only intentional
       committed task changes.
 - [x] Inline `verify-work` and `code-review` complete with no unresolved actionable findings.
-- [ ] PR is open and API reports base `integration/4015-mvp-flat-r1`.
+- [x] PR #4168 is open and the API reports base `integration/4015-mvp-flat-r1`.
 
 ## Production-path evidence
 

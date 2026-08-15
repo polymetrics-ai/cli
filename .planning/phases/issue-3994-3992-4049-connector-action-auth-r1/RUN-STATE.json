@@ -1,7 +1,7 @@
 {
   "issues": [3994, 3992, 4049],
   "phase": "issue-3994-3992-4049-connector-action-auth-r1",
-  "state": "verified_pr_handoff_pending",
+  "state": "complete_pr_open",
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-flow-identity-grant-club-r1",
   "gsd_mode": "inline_manual_fallback",
@@ -9,5 +9,7 @@
   "captain_correction": "Per-fire grants are superseded. Approval belongs to existing jobs; flows and schedules inherit it without tokens or authorization references.",
   "green_evidence": "Focused App/flow/schedule/CLI and rate-budget tests pass, including two fresh cmd/pm binary production-path proofs, selected race coverage, generated-doc parity, and a 552-bundle zero-drift surface check.",
   "review": "Inline manual code-review fallback completed with no unresolved actionable findings.",
-  "live_evidence": "No credential or database-integration environment was available; no secret was requested or printed. Credentialed validation remains owned by issue #4166."
+  "live_evidence": "No credential or database-integration environment was available; no secret was requested or printed. Credentialed validation remains owned by issue #4166.",
+  "pull_request": "https://github.com/polymetrics-ai/cli/pull/4168",
+  "observed_base": "integration/4015-mvp-flat-r1"
 }
