@@ -15,6 +15,8 @@
       committed task changes.
 - [x] Inline `verify-work` and `code-review` complete with no unresolved actionable findings.
 - [x] PR #4168 is open and the API reports base `integration/4015-mvp-flat-r1`.
+- [x] PR #4168 was rebased onto moved base `6b9cfe492`; its failed `certify-timing` job was
+      reproduced locally, corrected in the branch-owned certification harness, and rerun green.
 
 ## Production-path evidence
 
@@ -32,6 +34,25 @@ observes destination read-back, a terminal schedule receipt, and its `pex_` iden
 `TestPMBinaryRefusesRequiredSharedRateBudgetBeforeSend` observes the stable JSON policy code and
 zero HTTP sends from a fresh binary.
 
+The production certification route now also proves the no-carrier contract: `stageScheduleRoundtrip`
+invokes `schedule create` without `--authorization`, rejects authorization/approval/credential
+reference markers in every schedule envelope and installed crontab, verifies the direct rooted
+`flow run` payload, then proves sentinel removal and byte-identical backend restoration.
+
+## PR #4168 verify gap closure
+
+- RED: GitHub run `31886502846` and local
+  `TestCertifyCLISingleConnectorPassExitsZero` failed because certification still supplied
+  `--authorization auth_0123456789abcdef` and demanded `authorization_reference` output.
+- Root cause: the production schedule model had been corrected, but
+  `internal/connectors/certify/stages_glue.go` and its scripted driver retained the superseded
+  schedule-authorization proof. This is branch-owned and unrelated to #4167.
+- GREEN: the exact fresh-binary CLI test passes; the full focused certification package passes;
+  `go run ./cmd/certifytiming --max-duration 3m30s` passes both packages in 33.032s test elapsed
+  (48.458s wall elapsed).
+- Rebase coverage: focused app/flow/schedule/CLI authorization tests, rate-refusal packages, and the
+  prepared-execution race test all pass on base `6b9cfe492`.
+
 ## Live-evidence boundary
 
 No GitHub certification credential or database-integration runtime variable was present. No secret
@@ -43,5 +64,6 @@ coverage. The PostgreSQL destination gaps #4125 and #4158 remain explicitly out 
 
 The final generation pass ran `connectorgen surface-sync`, CLI docs generation, golden transcript
 generation, and website docs generation together. `surface-sync --check` subsequently scanned 552
-bundles with zero changes. CLI docs validation, golden transcript comparison, website generation,
-`gofmt -d`, `git diff --check`, and a clean `git status` confirmed no derived drift.
+bundles with zero changes. CLI docs validation, golden transcript comparison, website docs diff,
+agent-contract projection, GitHub parity, certification matrix, connector boundary/canon, module
+tidy, focused vet/lint, `git diff --check`, and a clean `git status` confirmed no derived drift.

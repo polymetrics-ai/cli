@@ -14,7 +14,13 @@ boundaries, and CLI classification.
 | Rate budgets | Pass | Shared-coordinator absence becomes the SDK refusal type/code before requester transport. |
 | Secret handling | Pass | No approval token/auth carrier in crontab, argv, flow manifest, schedule manifest, fire state, or CLI JSON. |
 | Filesystem safety | Pass | Validated names, atomic temp-file rename, file sync, and parent-directory sync on durable state. |
+| Certification correction | Pass | Scripted driver rejects `--authorization`; production glue scans schedule envelopes/crontab for authority carriers and retains direct-flow and byte-identical cleanup assertions. |
 
 Non-finding: the schedule-to-flow uniqueness check is not a substitute for authority; it only makes
 the direct installed `flow run` association deterministic. The job's standing authorization remains
 the sole approval source.
+
+Corrective review after rebase found no unresolved actionable issue. The raw root check accepts
+shell quoting by matching the rooted path and direct-flow fragments independently; secret-value
+redaction remains covered by the harness-wide live scan, while carrier checks use exact flag/field
+markers to avoid false positives from benign path names.

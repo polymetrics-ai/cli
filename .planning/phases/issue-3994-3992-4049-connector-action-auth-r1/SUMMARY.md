@@ -24,6 +24,9 @@ coverage:
       - kind: unit
         ref: internal/cli/schedule_test.go schedule flow-reference refusal tests
         status: pass
+      - kind: e2e
+        ref: internal/cli/certify_cli_test.go TestCertifyCLISingleConnectorPassExitsZero
+        status: pass
     human_judgment: false
   - id: D3
     description: Required shared rate coordination refuses with the stable SDK type and code before transport.
@@ -53,3 +56,8 @@ rate coordination now exposes `*connsdk.RateBudgetRefusalError` with code
 
 The repo's single-worker contract prohibited role spawning, so discuss, TDD planning, execution,
 verification, and review used the documented inline/manual GSD fallback.
+
+After PR #4168 initially failed `certify-timing`, the branch was rebased onto moved base
+`6b9cfe492`. The branch-owned certification harness was corrected to remove its obsolete schedule
+authorization reference and to assert the no-carrier contract directly. The exact CI test and the
+timing gate now pass locally.

@@ -73,6 +73,9 @@ proofs are included here; #4166 separately owns credentialed live-certification 
 - Focused `internal/app`, `internal/flow`, `internal/schedule`, `internal/cli`, connsdk, engine, and GitHub hook tests pass with `-timeout 20m`.
 - Selected race test `TestAuthorizedFlowActionConcurrentPreparedExecutionHasOneWinner` passes.
 - Fresh-binary installed firing and shared-coordinator refusal tests pass.
+- The previously failing `certify-timing` gate was reproduced after rebasing onto moved base
+  `6b9cfe492`; certification now refuses schedule authority carriers and the exact fresh-binary test
+  plus the timing gate pass locally.
 - CLI help/manual, generated docs, golden transcripts, and website docs are updated.
 - Final one-pass generation completed; `surface-sync --check` scanned 552 bundles with zero drift; changed Go files are gofmt-clean; `git diff --check` and final `git status` are clean.
 

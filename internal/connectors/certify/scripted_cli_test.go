@@ -20,17 +20,18 @@ import (
 type scriptedCLI struct {
 	t *testing.T
 
-	root        string
-	calls       [][]string
-	seen        map[string]int
-	plans       map[string]scriptedPlan
-	previewed   map[string]bool
-	consumed    map[string]bool
-	replays     map[string]int
-	connections map[string]string
-	nextPlan    int
-	schedule    string
-	protocols   []string
+	root         string
+	calls        [][]string
+	seen         map[string]int
+	plans        map[string]scriptedPlan
+	previewed    map[string]bool
+	consumed     map[string]bool
+	replays      map[string]int
+	connections  map[string]string
+	nextPlan     int
+	schedule     string
+	scheduleFlow string
+	protocols    []string
 }
 
 type scriptedPlan struct {
@@ -187,31 +188,32 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"steps": []map[string]any{
 			{"id": "cert_sync", "status": "success"}, {"id": "cert_query", "status": "success"},
 		}})
-	case prefix(args, "schedule", "create") && hasJSON(args) && hasFlag(args, "--name") && hasFlag(args, "--cron") && hasFlag(args, "--flow") && hasFlag(args, "--authorization"):
-		if reference := flagValue(args, "--authorization"); reference != "auth_0123456789abcdef" {
-			return s.protocolError(stderr, "schedule create requires the safe certification authorization reference")
+	case prefix(args, "schedule", "create") && hasJSON(args) && hasFlag(args, "--name") && hasFlag(args, "--cron") && hasFlag(args, "--flow"):
+		if hasFlag(args, "--authorization") {
+			return s.protocolError(stderr, "schedule create must inherit flow approval without an authorization carrier")
 		}
 		s.schedule = flagValue(args, "--name")
+		s.scheduleFlow = flagValue(args, "--flow")
 		s.seen["schedule_create"]++
-		return writeScriptedEnvelope(stdout, "Schedule", map[string]any{"authorization_reference": "auth_0123456789abcdef"})
+		return writeScriptedEnvelope(stdout, "Schedule", map[string]any{"name": s.schedule})
 	case exact(args, "schedule", "list", "--json"):
 		if s.schedule == "" {
 			return s.protocolError(stderr, "schedule list ran before schedule create")
 		}
 		s.seen["schedule_list"]++
-		return writeScriptedEnvelope(stdout, "ScheduleList", map[string]any{"schedules": []map[string]any{{"name": s.schedule, "authorization_reference": "auth_0123456789abcdef"}}})
+		return writeScriptedEnvelope(stdout, "ScheduleList", map[string]any{"schedules": []map[string]any{{"name": s.schedule}}})
 	case prefix(args, "schedule", "install") && hasJSON(args) && hasArg(args, "--crontab"):
 		if err := s.writeCrontabSentinel(); err != nil {
 			return s.protocolError(stderr, err.Error())
 		}
 		s.seen["schedule_install"]++
-		return writeScriptedEnvelope(stdout, "ScheduleInstall", map[string]any{"backend": "crontab", "schedule": map[string]any{"authorization_reference": "auth_0123456789abcdef"}})
+		return writeScriptedEnvelope(stdout, "ScheduleInstall", map[string]any{"backend": "crontab", "schedule": map[string]any{"name": s.schedule}})
 	case prefix(args, "schedule", "remove") && hasJSON(args) && hasArg(args, "--crontab"):
 		if err := s.clearCrontab(); err != nil {
 			return s.protocolError(stderr, err.Error())
 		}
 		s.seen["schedule_remove"]++
-		return writeScriptedEnvelope(stdout, "ScheduleRemove", map[string]any{"authorization_reference": "auth_0123456789abcdef"})
+		return writeScriptedEnvelope(stdout, "ScheduleRemove", map[string]any{"name": s.schedule})
 	case prefix(args, "reverse", "plan") && !hasJSON(args):
 		if !hasFlag(args, "--source-table") || !hasFlag(args, "--destination") || !hasFlag(args, "--action") {
 			return s.protocolError(stderr, "reverse plan requires source table, destination, and action")
@@ -346,10 +348,11 @@ func (s *scriptedCLI) appendOutboxAction(root, action string) error {
 
 func (s *scriptedCLI) writeCrontabSentinel() error {
 	path := os.Getenv("PM_CRONTAB_FILE")
-	if path == "" || s.schedule == "" {
-		return fmt.Errorf("scripted schedule install missing crontab path or schedule name")
+	if path == "" || s.schedule == "" || s.scheduleFlow == "" || s.root == "" {
+		return fmt.Errorf("scripted schedule install missing crontab path, schedule name, flow, or root")
 	}
-	return os.WriteFile(path, []byte("# pm-schedule-"+s.schedule+"\n"), 0o600)
+	line := "0 3 * * *  pm --root " + s.root + " flow run " + s.scheduleFlow + " --json  # pm-schedule-" + s.schedule + "\n"
+	return os.WriteFile(path, []byte(line), 0o600)
 }
 
 func (s *scriptedCLI) clearCrontab() error {
