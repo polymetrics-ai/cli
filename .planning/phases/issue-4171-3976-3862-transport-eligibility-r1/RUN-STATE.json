@@ -1,0 +1,13 @@
+{
+  "issues": [4171, 3976, 3862],
+  "phase": "issue-4171-3976-3862-transport-eligibility-r1",
+  "status": "planned_tdd",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-transport-stream-eligibility-club-r1",
+  "manual_gsd_fallback": true,
+  "delivery_mode": "direct_pr",
+  "red_complete": false,
+  "green_complete": false,
+  "verified": false,
+  "reviewed": false
+}
