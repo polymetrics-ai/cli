@@ -68,7 +68,6 @@ func scriptedProtocols(opts certify.Options) []string {
 		"init",
 		"connectors_list",
 		"connectors_inspect",
-		"credentials_add",
 		"credentials_test",
 		"connections_create",
 		"catalog_refresh",

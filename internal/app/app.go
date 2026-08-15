@@ -42,6 +42,7 @@ type App struct {
 	deferredState           *state
 	deferredStateRevision   uint64
 	vault                   *vault.Vault
+	ephemeralCredentials    *CertificationEphemeralSession
 	approval                *projectWriteApprovalAuthority
 	registry                *connectors.Registry
 	transports              *synctransport.Registry
@@ -108,8 +109,10 @@ func InitProject(root string) error {
 			return fmt.Errorf("create %s: %w", dir, err)
 		}
 	}
-	if _, err := vault.Init(projectDir); err != nil {
-		return err
+	if activeCertificationEphemeralSession(root) == nil {
+		if _, err := vault.Init(projectDir); err != nil {
+			return err
+		}
 	}
 	configPath := filepath.Join(projectDir, "config.yaml")
 	if _, err := os.Stat(configPath); errors.Is(err, os.ErrNotExist) {
@@ -163,18 +166,29 @@ func open(root string, deferNormalization bool) (*App, error) {
 	if !info.IsDir() {
 		return nil, fmt.Errorf("%s is not a directory", projectDir)
 	}
+	ephemeralCredentials := activeCertificationEphemeralSession(root)
 	var v *vault.Vault
-	if deferNormalization {
-		v, err = vault.OpenReadOnly(projectDir)
+	if ephemeralCredentials == nil {
+		if deferNormalization {
+			v, err = vault.OpenReadOnly(projectDir)
+		} else {
+			v, err = vault.Open(projectDir)
+		}
+		if err != nil {
+			return nil, err
+		}
+	}
+	var approval *projectWriteApprovalAuthority
+	if ephemeralCredentials != nil {
+		approval = ephemeralCredentials.writeApproval()
+		if approval == nil {
+			return nil, errors.New("certification ephemeral credential session is closed")
+		}
 	} else {
-		v, err = vault.Open(projectDir)
-	}
-	if err != nil {
-		return nil, err
-	}
-	approval, err := newProjectWriteApprovalAuthority(projectDir)
-	if err != nil {
-		return nil, err
+		approval, err = newProjectWriteApprovalAuthority(projectDir)
+		if err != nil {
+			return nil, err
+		}
 	}
 	statePath := filepath.Join(projectDir, "state", "state.json")
 	a := &App{
@@ -184,6 +198,7 @@ func open(root string, deferNormalization bool) (*App, error) {
 		store:                   newStateStore(statePath),
 		deferStateNormalization: deferNormalization,
 		vault:                   v,
+		ephemeralCredentials:    ephemeralCredentials,
 		approval:                approval,
 		registry:                bundleregistry.New(),
 		transports:              synctransport.NewRegistry(nil),
@@ -629,6 +644,9 @@ func newStateStore(path string) statestore.JSONStore[state] {
 }
 
 func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (CredentialMeta, error) {
+	if a.ephemeralCredentials != nil {
+		return CredentialMeta{}, errors.New("certification ephemeral sessions do not persist credentials")
+	}
 	if strings.TrimSpace(req.Name) == "" {
 		return CredentialMeta{}, errors.New("credential name is required")
 	}
@@ -3103,6 +3121,43 @@ func (a *App) ResolveConnectorCredential(ctx context.Context, connectorName, cre
 }
 
 func (a *App) resolveCredential(ctx context.Context, name string, overlay map[string]string) (CredentialMeta, connectors.RuntimeConfig, error) {
+	if a.ephemeralCredentials != nil {
+		credential, secrets, ok := a.ephemeralCredentials.credential(name)
+		if ok {
+			providerFamily, authProfile, err := credentialCoordinationDeclarations(credential.Connector, "", "")
+			if err != nil {
+				return CredentialMeta{}, connectors.RuntimeConfig{}, err
+			}
+			credential.ProviderFamily = providerFamily
+			credential.AuthProfile = authProfile
+			coordinationIdentity, err := a.newCoordinationIdentity(providerFamily, authProfile, credential.ID)
+			if err != nil {
+				return CredentialMeta{}, connectors.RuntimeConfig{}, err
+			}
+			config := cloneStringMap(credential.Config)
+			for key, value := range overlay {
+				config[key] = value
+			}
+			credentialRevision, err := a.approval.CredentialRevision(credential.ID, secrets)
+			if err != nil {
+				return CredentialMeta{}, connectors.RuntimeConfig{}, err
+			}
+			configurationDigest, err := a.approval.ConfigurationDigest(credential.ID, config)
+			if err != nil {
+				return CredentialMeta{}, connectors.RuntimeConfig{}, err
+			}
+			return credential, connectors.RuntimeConfig{
+				ProjectDir:           a.projectDir,
+				Config:               config,
+				Secrets:              secrets,
+				CoordinationIdentity: coordinationIdentity,
+				CredentialRevision:   credentialRevision,
+				ConfigurationDigest:  configurationDigest,
+				WriteApprovalScope:   connectors.WriteApprovalScopeProject,
+				SecretStore:          ephemeralCertificationSecretStore{},
+			}, nil
+		}
+	}
 	cred, ok := a.findCredential(name)
 	if !ok {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q not found", name)
@@ -3143,6 +3198,11 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 }
 
 func (a *App) findCredential(name string) (CredentialMeta, bool) {
+	if a.ephemeralCredentials != nil {
+		if credential, _, ok := a.ephemeralCredentials.credential(name); ok {
+			return credential, true
+		}
+	}
 	for _, cred := range a.state.Credentials {
 		if cred.Name == name || cred.ID == name {
 			return cred, true

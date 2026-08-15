@@ -33,6 +33,11 @@ type Options struct {
 	// docs/plans/connector-complete-testing-and-mail-setup-plan.md.
 	Full bool
 
+	// ObserveHTTP retains bounded, exact HTTP exchanges in process memory for
+	// an external-binary proof. It is deliberately not a user-facing capture
+	// switch: the CLI enables it only inside a freshly built child process.
+	ObserveHTTP bool
+
 	// RateLimitAdmissionTimeout bounds a single provider-budget wait. A zero
 	// value uses the certification default; it does not shorten normal stages.
 	RateLimitAdmissionTimeout time.Duration
@@ -56,6 +61,7 @@ type Runner struct {
 	stdoutLeakSabotage    *stdoutLeakSabotage
 	cleanupVerifySabotage bool
 	lastWorkdir           string
+	observedHTTP          []ObservedHTTPExchange
 }
 
 // NewRunner constructs a Runner for the given Options. Validation of
@@ -63,4 +69,18 @@ type Runner struct {
 // never fails.
 func NewRunner(o Options) *Runner {
 	return &Runner{opts: o}
+}
+
+// ObservedHTTPExchanges returns the last run's defensive observation snapshot.
+// It contains raw process-memory values and must be passed directly to
+// WriteExternalProof rather than logged or serialized by a caller.
+func (r *Runner) ObservedHTTPExchanges() []ObservedHTTPExchange {
+	if r == nil {
+		return nil
+	}
+	out := make([]ObservedHTTPExchange, len(r.observedHTTP))
+	for index, exchange := range r.observedHTTP {
+		out[index] = cloneObservedHTTPExchange(exchange)
+	}
+	return out
 }

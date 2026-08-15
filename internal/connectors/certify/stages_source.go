@@ -11,10 +11,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 	"time"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -117,6 +117,7 @@ type streamSpec struct {
 type runContext struct {
 	ctx                   context.Context
 	harness               *Harness
+	ephemeralCredentials  *app.CertificationEphemeralSession
 	opts                  Options
 	sabotage              *sabotage
 	stdoutLeakSabotage    *stdoutLeakSabotage
@@ -208,6 +209,17 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	if ctx == nil {
 		return Report{}, fmt.Errorf("certify: nil context")
 	}
+	r.observedHTTP = nil
+	if r.opts.ObserveHTTP {
+		observer, removeObserver, observeErr := installCertificationHTTPObserver(defaultObservedBodyBytes)
+		if observeErr != nil {
+			return Report{}, fmt.Errorf("certify: install external HTTP observer: %w", observeErr)
+		}
+		defer func() {
+			r.observedHTTP = observer.Exchanges()
+			removeObserver()
+		}()
+	}
 
 	root, err := os.MkdirTemp("", "pm-certify-"+r.opts.Connector+"-")
 	if err != nil {
@@ -225,15 +237,35 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	defer func() { rep.RateLimitEvents = rateLimitEvents.snapshot() }()
 
 	secretValues := make([]string, 0, len(r.opts.SecretEnv))
-	for _, envName := range r.opts.SecretEnv {
+	secretFields := make(map[string]string, len(r.opts.SecretEnv))
+	for field, envName := range r.opts.SecretEnv {
 		if v := os.Getenv(envName); v != "" {
 			secretValues = append(secretValues, v)
+			secretFields[field] = v
 		}
 	}
+	ephemeralCredentials, err := app.BeginCertificationEphemeralCredentials(root,
+		app.EphemeralCredential{
+			Name:      sourceCredentialName,
+			Connector: r.opts.Connector,
+			Config:    effectiveCredentialConfig(r.opts.Connector, r.opts.Config),
+			Secrets:   secretFields,
+		},
+		app.EphemeralCredential{
+			Name:      warehouseCredentialName,
+			Connector: "warehouse",
+			Config:    map[string]string{"path": filepath.Join(root, ".polymetrics", "warehouse")},
+		},
+	)
+	if err != nil {
+		return Report{}, fmt.Errorf("certify: begin ephemeral credentials: %w", err)
+	}
+	defer ephemeralCredentials.Close()
 
 	rc := &runContext{
 		ctx:                   ctx,
 		harness:               NewHarness(root, WithSecrets(secretValues...)),
+		ephemeralCredentials:  ephemeralCredentials,
 		opts:                  r.opts,
 		sabotage:              r.sabotage,
 		stdoutLeakSabotage:    r.stdoutLeakSabotage,
@@ -654,30 +686,23 @@ func stageManualJSON(rc *runContext, rep *Report) error {
 
 func stageCredentialsAdd(rc *runContext, rep *Report) error {
 	recordStage(rc, rep, "credentials_add", 2, func() (bool, CLIStageInfo, string) {
-		args := []string{"credentials", "add", sourceCredentialName, "--connector", rc.opts.Connector, "--json"}
-		for field, envName := range rc.opts.SecretEnv {
-			args = append(args, "--from-env", field+"="+envName)
+		if rc.ephemeralCredentials == nil {
+			return false, CLIStageInfo{}, "certification ephemeral credentials are unavailable"
 		}
-		config := effectiveCredentialConfig(rc.opts.Connector, rc.opts.Config)
-		keys := make([]string, 0, len(config))
-		for k := range config {
-			keys = append(keys, k)
+		if !rc.ephemeralCredentials.HasCredential(sourceCredentialName) {
+			return false, CLIStageInfo{}, "source credential was not retained in the ephemeral session"
 		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			args = append(args, "--config", k+"="+config[k])
-		}
-		res := rc.run(args...)
-		passed, errMsg := assertKind(rc, "credentials_add", res, "Credential", 0)
-		return passed, cliInfoFrom(res), errMsg
+		return true, ephemeralCredentialStageInfo(sourceCredentialName), ""
 	})
 
 	recordStage(rc, rep, "warehouse_credentials_add", 2, func() (bool, CLIStageInfo, string) {
-		warehouseDir := filepath.Join(rc.root, ".polymetrics", "warehouse")
-		res := rc.run("credentials", "add", warehouseCredentialName, "--connector", "warehouse",
-			"--config", "path="+warehouseDir, "--json")
-		passed, errMsg := assertKind(rc, "warehouse_credentials_add", res, "Credential", 0)
-		return passed, cliInfoFrom(res), errMsg
+		if rc.ephemeralCredentials == nil {
+			return false, CLIStageInfo{}, "certification ephemeral credentials are unavailable"
+		}
+		if !rc.ephemeralCredentials.HasCredential(warehouseCredentialName) {
+			return false, CLIStageInfo{}, "warehouse credential was not retained in the ephemeral session"
+		}
+		return true, ephemeralCredentialStageInfo(warehouseCredentialName), ""
 	})
 	return nil
 }
@@ -915,19 +940,35 @@ func (rc *runContext) setupCaptureConnection(rep *Report, mode, table string) (b
 	if rc.captureFileRegistered {
 		return true, ""
 	}
-	res := rc.run("credentials", "add", rc.fileCredentialName(), "--connector", "file",
-		"--config", "path="+rc.capturePath, "--json")
-	if passed, errMsg := assertKind(rc, "capture_credentials_add", res, "Credential", 0); !passed {
+	if rc.ephemeralCredentials == nil {
+		return false, "certification ephemeral credentials are unavailable"
+	}
+	if err := rc.ephemeralCredentials.Put(app.EphemeralCredential{
+		Name:      rc.fileCredentialName(),
+		Connector: "file",
+		Config:    map[string]string{"path": rc.capturePath},
+	}); err != nil {
+		return false, fmt.Sprintf("register capture credential: %v", err)
+	}
+	if !rc.ephemeralCredentials.HasCredential(rc.fileCredentialName()) {
 		recordStage(rc, rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
-			return false, cliInfoFrom(res), errMsg
+			return false, CLIStageInfo{}, "capture credential was not retained in the ephemeral session"
 		})
-		return false, errMsg
+		return false, "capture credential was not retained in the ephemeral session"
 	}
 	recordStage(rc, rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
-		return true, cliInfoFrom(res), ""
+		return true, ephemeralCredentialStageInfo(rc.fileCredentialName()), ""
 	})
 	rc.captureFileRegistered = true
 	return true, ""
+}
+
+func ephemeralCredentialStageInfo(name string) CLIStageInfo {
+	return CLIStageInfo{
+		ArgvRedacted: "pm certification ephemeral-credential " + name,
+		ExitCode:     0,
+		Kind:         "Credential",
+	}
 }
 
 func (rc *runContext) createCaptureConnection(rep *Report, stageName, mode, table string) (bool, CLIStageInfo, string) {

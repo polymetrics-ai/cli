@@ -7,7 +7,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
-  pm connectors certify <connector> [--full] [--json]
+  pm connectors certify <connector> [--full] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -143,6 +143,11 @@ ACTIONS
   certify <connector>
     Runs the legacy connector test harness. It does not set the generated
     CERTIFIED status; only proof-bearing certification records can do that.
+    --external-proof is an explicit live HTTPS acceptance mode: it builds a
+    fresh pm child binary, accepts credentials only from --from-env or
+    --value-stdin,
+    and writes a fingerprint-only transcript after a full-parity run. It
+    requires --full-parity and refuses incomplete or truncated exchanges.
     With --full --json from a source checkout,
     the report includes the API-surface inventory and provider-artifact
     provenance evidence separately from endpoint coverage and connector
@@ -164,6 +169,7 @@ EXAMPLES
   pm connectors inspect github
   pm connectors inspect github --json
   pm connectors certify sample --full --json
+  pm connectors certify github --external-proof --full-parity --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem
