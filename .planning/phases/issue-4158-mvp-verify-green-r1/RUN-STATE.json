@@ -1,18 +1,23 @@
 {
   "phase": "issue-4158-mvp-verify-green-r1",
-  "status": "investigating",
+  "status": "needs_decision",
   "base": "integration/4015-mvp-flat-r1",
   "base_head_at_dispatch": "ef3c71caf",
   "target_connector": "postgres",
   "lifecycle": {
     "discuss_phase": "complete-inline-auto",
     "plan_phase_tdd": "complete-inline",
-    "execute_phase": "in_progress-inline",
+    "execute_phase": "blocked-by-product-contract-decision",
     "verify_work": "pending-inline-auto",
     "code_review": "pending-inline-deep"
   },
   "tdd": {
-    "red": "pending",
-    "green": "pending"
+    "red": "external-binary-reproduction-recorded",
+    "green": "job-only-fixture-counterfactual-recorded"
+  },
+  "decision": {
+    "key": "fixture-contract",
+    "question": "Should the #4170 fresh-binary fixture migrate to #4168's job-only approved-reverse-plan flow contract, or should production restore legacy inline action scope compatibility?",
+    "evidence": "TDD-LEDGER.md T1-T5; SUMMARY.md"
   }
 }

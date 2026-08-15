@@ -31,6 +31,15 @@
 
 Not applicable unless investigation changes a public command, flag, output, connector surface, or help topic. The intended admission correction is internal driver behavior only; this exemption will be re-evaluated before PR creation.
 
+## Decision gate reached
+
+No production or fixture change is authorized yet. The external-binary
+acceptance test's inline action configuration conflicts with the job-only
+contract introduced by `#4168`; a one-condition job-reference counterfactual
+passes. Firstmate must decide whether this is a fixture migration or a request
+to restore legacy inline-action compatibility. The latter changes the public
+flow contract and needs a new, non-PostgreSQL target ownership decision.
+
 ## Commit checkpoints
 
 1. Planning artifacts committed before production edits.

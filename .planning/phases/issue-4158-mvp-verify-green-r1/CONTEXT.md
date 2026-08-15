@@ -24,3 +24,27 @@
 2. If the PostgreSQL control test passes on `ef3c71caf`, it cannot support the shared-cause hypothesis; retain it as disconfirming evidence and scope this PR to the binary defect.
 3. If the binary failure remains on the parent of `#4150`, neither `#4150` nor `#4155` introduced it; do not widen their predicate without a different causal path.
 4. If a single route-admission condition flip does not change the observed result, route admission is not the causal divergence.
+
+## Investigation result — decision required
+
+- `TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip` was added by
+  `ef3c71caf` (`#4170`), so the test does not exist at the parent of `#4150` and
+  cannot itself be bisected through `#4150`/`#4155`.
+- `#4150` and `#4155` both predate `5c12fb536` (`#4168`). `#4168` introduced
+  `internal/cli/flow_jobs.go`; its action branch requires a `rplan_…` step
+  `job`, rejects inline action scope, and derives the scope from the approved
+  job. This is the earliest meaningful divergence.
+- The failing `#4170` fixture supplies the now-prohibited inline action scope
+  and no job. The binary refuses it before flow execution with the typed
+  `validation/flow_job_reference_refused` error, reason `malformed`.
+- The fixture has no PostgreSQL endpoint or database-write plan: its only
+  endpoints are GitHub and warehouse. This proves the GitHub failure is
+  independent of #4158's PostgreSQL history-route failure.
+- The live PostgreSQL test is present only with `databaseintegration`; its
+  explicit opt-in and direct local container endpoint are absent in this
+  worktree, so its requested run correctly skipped. That absence is retained
+  as environmental evidence, not classified as a product result.
+
+The counterfactual below proves the fixture/contract discrepancy, but choosing
+whether compatibility must be restored or the fixture should be updated is a
+product decision reserved to firstmate.
