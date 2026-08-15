@@ -2,12 +2,12 @@
 
 ## Task Delivery Header
 
-- Issue: Refs #4158 — restore durable managed-target acknowledgement while preserving non-PostgreSQL history-route refusal; includes the Production MVP fresh-binary GitHub → warehouse failure as the suspected same root cause.
+- Issue: Production MVP fresh-binary GitHub → warehouse blocker; #4158 was investigated as a suspected shared root and proved independent.
 - Base branch: `integration/4015-mvp-flat-r1` at `ef3c71caf`.
 - Merges into: `integration/4015-mvp-flat-r1` → `main`.
 - Working branch: `fm/cli-mvp-verify-green-r1`.
 - Delivery: direct PR to `integration/4015-mvp-flat-r1`; never `main`; API-report the PR base after opening.
-- Target connector: `postgres` managed target. The GitHub binary test is an upstream reproducer only; no GitHub bundle or surface change is in scope unless evidence disproves the shared managed-target route cause.
+- Target connector: job-backed GitHub → warehouse → GitHub flow. No connector bundle or public command surface is changing.
 - GSD mode: `discuss-phase --auto`, `plan-phase --tdd --skip-research`, `execute-phase --interactive`, `verify-work --auto`, and `code-review --depth=deep`, all executed inline because this task forbids role spawning.
 
 ## Locked decisions
@@ -25,7 +25,7 @@
 3. If the binary failure remains on the parent of `#4150`, neither `#4150` nor `#4155` introduced it; do not widen their predicate without a different causal path.
 4. If a single route-admission condition flip does not change the observed result, route admission is not the causal divergence.
 
-## Investigation result — decision required
+## Investigation result — decision resolved
 
 - `TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip` was added by
   `ef3c71caf` (`#4170`), so the test does not exist at the parent of `#4150` and
@@ -45,6 +45,6 @@
   worktree, so its requested run correctly skipped. That absence is retained
   as environmental evidence, not classified as a product result.
 
-The counterfactual below proves the fixture/contract discrepancy, but choosing
-whether compatibility must be restored or the fixture should be updated is a
-product decision reserved to firstmate.
+Firstmate selected fixture migration: the action uses its already approved
+reverse-plan job, while the inline action scope remains refused. This preserves
+the authorization boundary and does not alter the unrelated #4158 route path.

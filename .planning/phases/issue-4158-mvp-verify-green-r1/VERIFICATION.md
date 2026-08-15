@@ -2,9 +2,10 @@
 
 | Requirement | Evidence | Status |
 | --- | --- | --- |
-| Fresh externally built binary completes GitHub → warehouse flow | Original fixture: repeatably fails exit 3. Smallest job-only fixture counterfactual: passes and proves flow receipt / durable warehouse behavior. | Needs authority to select the intended contract |
-| Valid managed-target control path reaches durable acknowledgement | Live PostgreSQL test correctly skipped without its explicit container opt-in; independent issue #4158 requires a separately provisioned lane. | Not established in this worktree |
-| Non-PostgreSQL history route remains typed and pre-I/O | New bad regression; fake driver zero side effects | Pending |
+| Fresh externally built binary completes GitHub → warehouse flow | `TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip`: fresh 152,132,226-byte binary passes in 37.53s; 1 sync, 1 action, 1 warehouse row, durable checkpoint and receipt. | Pass |
+| Valid managed-target control path reaches durable acknowledgement | The tagged PostgreSQL control skipped without its explicit container opt-in; #4158 is independently routed and unmodified by this PR. | Out of scope, evidenced |
+| No approved job reference is typed and pre-I/O | `TestFlowActionWithoutApprovedJobReferenceRefusesBeforeIO`: malformed `*flow.JobReferenceError`, `validation/flow_job_reference_refused`, no saved flow / target event. | Pass |
+| Revoked and stale references are typed and pre-I/O | `TestFlowActionRevokedJobReferenceRefusesBeforeIO` and `TestFlowActionStaleJobReferenceRefusesBeforeIO`: exact unapproved/missing typed reasons and zero target events. | Pass |
 | Causal explanation distinguishes trigger, mask, symptom | `SUMMARY.md` §1–§5 and `TDD-LEDGER.md` T1–T5 | Complete |
 | Smallest counterfactual and falsifier checks are retained | `TDD-LEDGER.md` T3–T4 | Complete |
-| CLI help/docs/website parity | The decision may change the public flow-manifest contract; re-evaluate after authority selects fixture migration or compatibility. | Pending decision |
+| CLI help/docs/website parity | `docs/cli/flow.md` already describes job-backed flows and pre-write refusal. This fixture-only migration changes no command or documentation surface. | Not applicable / confirmed |

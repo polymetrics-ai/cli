@@ -58,13 +58,16 @@ was separately invoked with its build tag but correctly skipped because the
 required explicit container opt-in and endpoint are not available. Its outcome
 is therefore unproven here, but cannot explain this fresh-binary refusal.
 
-## Decision required
+## 6. Decision and completed correction
 
-This lane must not silently update the fixture or weaken its assertion. Firstmate
-must select one:
+Firstmate selected **fixture migration**. `#4170`'s manifest action now uses
+the reverse plan it already created as `job`, and keeps only
+`read_back_stream` in `action_cfg`. The test remains acceptance-shaped: it
+builds a fresh binary and invokes the real CLI flow. No assertion was relaxed.
 
-1. **Fixture migration:** update #4170's manifest to the job-only #4168
-   contract and add its happy/bad/edge tests.
-2. **Compatibility restoration:** change the public flow resolver to accept
-   legacy inline action scope, which needs a new non-PostgreSQL ownership and
-   safety plan.
+The regression contract now has a bad-path test proving inline action scope
+with no approved job is refused before I/O as
+`validation/flow_job_reference_refused`, plus edge tests proving revoked and
+stale job references have their exact typed refusal reasons and zero target
+events. This preserves the deliberate rejection of a non-approved action;
+inline compatibility was not introduced.
