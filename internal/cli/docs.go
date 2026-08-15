@@ -303,7 +303,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
-  pm connectors certify <connector> [--full] [--external-proof --full-parity] [--json]
+  pm connectors certify <connector> [--full] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most

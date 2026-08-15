@@ -481,7 +481,7 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 		"write=true/false",
 		"REVERSE ETL WRITE ACTIONS",
 		"pm connectors catalog --capability write --json",
-		"pm connectors certify <connector> [--full] [--external-proof --full-parity] [--json]",
+		"pm connectors certify <connector> [--full] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
 		"legacy_unverified",
 		"provider-artifact",
 		"provenance evidence",
