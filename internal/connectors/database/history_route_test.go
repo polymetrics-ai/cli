@@ -48,16 +48,16 @@ func TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutatio
 			driver := &databaseWriteDriverFake{atomicOverwrite: true, targetRows: map[string]bool{"retained": true}}
 			executor, ledger := testDatabaseWriteExecutorWithStore(t, driver)
 			_, err := database.NewDatabaseWritePlan(context.Background(), database.DatabaseWritePlanRequest{
-				Definition:     definition,
-				Control:        testDatabaseWriteControl(t, "history_orders", "history-orders", 1),
-				Mode:           synccontract.ModeIncrementalDedupeHistory,
-				Strategy:       connectors.ApplyStrategyDedupeHistory,
-				Mapping:        testDatabaseWriteMapping(t, "source_id", "id"),
-				Keys:           []string{"id"},
-				RecordCount:    1,
-				BatchSize:      1,
-				HistoryRoute:   testCase.route,
-				Destructive:    false,
+				Definition:   definition,
+				Control:      testDatabaseWriteControl(t, "history_orders", "history-orders", 1),
+				Mode:         synccontract.ModeIncrementalDedupeHistory,
+				Strategy:     connectors.ApplyStrategyDedupeHistory,
+				Mapping:      testDatabaseWriteMapping(t, "source_id", "id"),
+				Keys:         []string{"id"},
+				RecordCount:  1,
+				BatchSize:    1,
+				HistoryRoute: testCase.route,
+				Destructive:  false,
 			})
 			var routeErr *database.DatabaseWriteHistoryRouteError
 			if !errors.As(err, &routeErr) || routeErr.Reason != testCase.want {
