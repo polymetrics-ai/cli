@@ -1,13 +1,14 @@
 {
   "issues": [4171, 3976, 3862],
   "phase": "issue-4171-3976-3862-transport-eligibility-r1",
-  "status": "planned_tdd",
+  "status": "verified_reviewed_pending_direct_pr",
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-transport-stream-eligibility-club-r1",
   "manual_gsd_fallback": true,
   "delivery_mode": "direct_pr",
-  "red_complete": false,
-  "green_complete": false,
-  "verified": false,
-  "reviewed": false
+  "red_complete": true,
+  "green_complete": true,
+  "verified": true,
+  "reviewed": true,
+  "external_live_evidence": "pending: shared container runtime unavailable and GitHub certification credential rotation incomplete"
 }

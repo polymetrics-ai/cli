@@ -47,4 +47,3 @@ Every live check must assert a state change that would be absent for a no-op. Ex
 `scripts/gsd doctor`, all lifecycle source resolutions, and `go run ./cmd/agentcontractgen check` passed. `discuss-phase --auto` is executed inline because the user required autonomous work and the canonical single-worker contract forbids lifecycle-role spawning. The generated prompts retain their TDD, verification, and review gates.
 
 Loaded skills: `golang-how-to`, `golang-cli`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`, and `golang-database`, plus `gsd-discuss-phase`, `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, and `gsd-code-review`.
-

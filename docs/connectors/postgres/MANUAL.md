@@ -58,11 +58,9 @@ SYNC TRANSPORT
   Destination executor: native_database/postgres_managed_target
 
 POLLING WATERMARK
-  Status: planned
+  Status: implemented
   Mechanism: polling_watermark is a bounded polling scan, not CDC or change capture.
   Eligibility: each mode remains blocked until runtime preflight validates the selected catalog object and destination binding, registered native executors, and immutable conformance evidence.
-  Reason: no registered native polling source and apply binding has passed object and destination preflight; no polling sync mode is implemented
-  No polling source ordering, checkpoint, snapshot, deletion, or rebootstrap behavior is implemented for this connector while the declaration is non-implemented.
 
 EXAMPLES
   # Inspect as a manual

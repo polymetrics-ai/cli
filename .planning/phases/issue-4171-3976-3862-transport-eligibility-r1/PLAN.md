@@ -153,4 +153,3 @@ verification runs the applicable non-suite make gates individually as required b
 - Every edge named in the brief is assigned to a deterministic test or live check in
   `VERIFICATION.md`.
 - Scope excludes the three prohibited issues and contains no dependency addition.
-

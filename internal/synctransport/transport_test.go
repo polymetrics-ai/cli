@@ -93,33 +93,37 @@ func TestPreflightRejectsClosedAdmissionFailuresBeforeSourceRead(t *testing.T) {
 }
 
 func TestPreflightReturnsTypedSourceStreamIneligibleErrorBeforeExecutorAccess(t *testing.T) {
-	pair := newTestTransportPair("api", "database")
-	registry := NewRegistry(pair.verifier)
-	registerTransportPair(t, registry, pair)
-	stage := &testWarehouseStage{}
-	commits := 0
+	for _, stream := range []string{"not-declared", "ISSUES"} {
+		t.Run(stream, func(t *testing.T) {
+			pair := newTestTransportPair("api", "database")
+			registry := NewRegistry(pair.verifier)
+			registerTransportPair(t, registry, pair)
+			stage := &testWarehouseStage{}
+			commits := 0
 
-	_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
-		Source:      pair.source,
-		Destination: pair.destination,
-		Stream:      "not-declared",
-		Mode:        synccontract.ModeFullAppend,
-		BatchSize:   10,
-		Stage:       stage,
-		Commit:      func(synccontract.CheckpointEnvelope) error { commits++; return nil },
-	})
-	var ineligible *SourceStreamIneligibleError
-	if !errors.As(err, &ineligible) {
-		t.Fatalf("Preflight() error = %v, want SourceStreamIneligibleError", err)
-	}
-	if got, want := ineligible.Connector, pair.source.Name(); got != want {
-		t.Fatalf("ineligible connector = %q, want %q", got, want)
-	}
-	if got, want := ineligible.Stream, "not-declared"; got != want {
-		t.Fatalf("ineligible stream = %q, want %q", got, want)
-	}
-	if pair.sourceExecutor.readCalls != 0 || stage.calls != 0 || pair.destinationExecutor.planCalls != 0 || pair.destinationExecutor.applyCalls != 0 || commits != 0 {
-		t.Fatalf("allowlist refusal effects source/stage/plan/apply/checkpoint = %d/%d/%d/%d/%d, want zero", pair.sourceExecutor.readCalls, stage.calls, pair.destinationExecutor.planCalls, pair.destinationExecutor.applyCalls, commits)
+			_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+				Source:      pair.source,
+				Destination: pair.destination,
+				Stream:      stream,
+				Mode:        synccontract.ModeFullAppend,
+				BatchSize:   10,
+				Stage:       stage,
+				Commit:      func(synccontract.CheckpointEnvelope) error { commits++; return nil },
+			})
+			var ineligible *SourceStreamIneligibleError
+			if !errors.As(err, &ineligible) {
+				t.Fatalf("Preflight() error = %v, want SourceStreamIneligibleError", err)
+			}
+			if got, want := ineligible.Connector, pair.source.Name(); got != want {
+				t.Fatalf("ineligible connector = %q, want %q", got, want)
+			}
+			if got, want := ineligible.Stream, stream; got != want {
+				t.Fatalf("ineligible stream = %q, want %q", got, want)
+			}
+			if pair.sourceExecutor.readCalls != 0 || stage.calls != 0 || pair.destinationExecutor.planCalls != 0 || pair.destinationExecutor.applyCalls != 0 || commits != 0 {
+				t.Fatalf("allowlist refusal effects source/stage/plan/apply/checkpoint = %d/%d/%d/%d/%d, want zero", pair.sourceExecutor.readCalls, stage.calls, pair.destinationExecutor.planCalls, pair.destinationExecutor.applyCalls, commits)
+			}
+		})
 	}
 }
 

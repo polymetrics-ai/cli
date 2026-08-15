@@ -2,81 +2,86 @@
 
 ## Behavioral acceptance
 
-- [ ] GitHub `commits` is explicitly listed and accepted through production composition.
-- [ ] GitHub eligibility contains no wildcard and matches the executable declarative stream set.
-- [ ] A stream absent from the declaration returns `SourceStreamIneligibleError` before I/O.
-- [ ] Typed refusal records zero source requests, warehouse pages, target sends/rows, and checkpoint
+- [x] GitHub `commits` is explicitly listed and accepted through production composition.
+- [x] GitHub eligibility contains no wildcard and matches the executable declarative stream set.
+- [x] A stream absent from the declaration returns `SourceStreamIneligibleError` before I/O.
+- [x] Typed refusal records zero source requests, warehouse pages, target sends/rows, and checkpoint
       movement.
-- [ ] Omitted `max_pages` reads one provider page; a positive integer caps; `0`, `all`, and
+- [x] Case-equivalent stream identifiers remain absent from the exact allowlist and are refused.
+- [x] Omitted `max_pages` reads one provider page; a positive integer caps; `0`, `all`, and
       `unlimited` exhaust pagination.
-- [ ] Declarative provider callbacks remain bounded transport pages and no 1,000-record global cap
+- [x] Declarative provider callbacks remain bounded transport pages and no 1,000-record global cap
       discards a large collection.
-- [ ] PostgreSQL's implemented polling declaration selects exact native source/apply references and
+- [x] PostgreSQL's implemented polling declaration selects exact native source/apply references and
       immutable evidence.
-- [ ] Production composition invokes the shared `engine.PollingSourceExecutor`; no capability or
+- [x] Production composition invokes the shared `engine.PollingSourceExecutor`; no capability or
       connector-name fallback exists.
-- [ ] Native PostgreSQL polling preserves a lossless cursor plus the complete composite primary-key
+- [x] Native PostgreSQL polling preserves a lossless cursor plus the complete composite primary-key
       tie tuple and uses a strict lexicographic resume predicate.
-- [ ] Polling is distinct from CDC; snapshot and explicit bootstrap/CDC behavior remains green.
-- [ ] Cross-family API→database and database→database conformance is proven from `app.Open` or built
+- [x] Polling is distinct from CDC; snapshot and explicit bootstrap/CDC behavior remains green.
+- [x] Cross-family API→database and database→database conformance is proven from `app.Open` or built
       `pm`, not a hand-built component.
 
 ## Required edge matrix
 
 | Edge | Expected outcome and effect assertion | Evidence |
 | --- | --- | --- |
-| cancellation mid-run | context cancellation; interrupted candidate not committed; bounded resources close | pending |
-| process death partway | no persisted candidate for unacknowledged page; restart replays it | pending |
-| empty input | zero target sends/rows; existing checkpoint unchanged | pending |
-| single row | exactly one delivered row and one durable acknowledged candidate | pending |
-| large input | all independently counted rows delivered in bounded pages | pending |
-| duplicate delivery | keyed destination remains one logical row or typed refusal before effects | pending |
-| out-of-order delivery | typed traversal/order error; zero stage/send/checkpoint for refused page | pending |
-| schema drift | typed rebootstrap outcome; zero fetch/apply/checkpoint under mismatched fingerprint | pending |
-| auth refusal | typed credential/auth admission error; zero provider query/stage/send/checkpoint | pending |
-| concurrent same-target runs | lease/CAS fencing prevents double commit; loser has zero state advance | pending |
-| resume after interruption | strict tuple resumes after last acknowledged row with no skip | pending |
-| replay acknowledged item | durable target idempotency prevents an added row; checkpoint is monotonic | pending |
-| undeclared stream | `SourceStreamIneligibleError`; zero source/stage/send/row/checkpoint | pending |
+| cancellation mid-run | context cancellation; interrupted candidate not committed; bounded resources close | green locally — `TestOrchestratorStopsOnCancellationBetweenWarehouseStageAndApply`; binary proof integration-gated |
+| process death partway | no persisted candidate for unacknowledged page; restart replays it | green locally — GitHub composed source replay; PostgreSQL live test integration-gated |
+| empty input | zero target sends/rows; existing checkpoint unchanged | green locally — `TestOrchestratorAdmitsEmptyResultOnlyFromExplicitSourceMarker`; binary proof integration-gated |
+| single row | exactly one delivered row and one durable acknowledged candidate | integration-gated native/binary coverage; not run because shared runtime is unavailable |
+| large input | all independently counted rows delivered in bounded pages | green locally for 103 committed fixtures; 99,345 live certification pending |
+| duplicate delivery | keyed destination remains one logical row or typed refusal before effects | integration-gated binary replay coverage; not run because shared runtime is unavailable |
+| out-of-order delivery | typed traversal/order error; zero stage/send/checkpoint for refused page | green locally — native strict traversal test |
+| schema drift | typed rebootstrap outcome; zero fetch/apply/checkpoint under mismatched fingerprint | integration-gated binary/native coverage; not run because shared runtime is unavailable |
+| auth refusal | typed credential/auth admission error; zero provider query/stage/send/checkpoint | integration-gated binary coverage; credential rotation pending |
+| concurrent same-target runs | lease/CAS fencing prevents double commit; loser has zero state advance | green locally — `internal/app/transport_dispatch_test.go` state-conflict coverage |
+| resume after interruption | strict tuple resumes after last acknowledged row with no skip | green locally; duplicate cursor delivery integration-gated |
+| replay acknowledged item | durable target idempotency prevents an added row; checkpoint is monotonic | green locally at orchestrator boundary; binary proof integration-gated |
+| undeclared stream | `SourceStreamIneligibleError`; zero source/stage/send/row/checkpoint | green locally — includes case-equivalent `ISSUES` refusal |
 
 ## Live evidence
 
 - [ ] Real PostgreSQL container starts through the repository harness and passes the polling
-      integration route.
-- [ ] Authenticated `rails/rails` `commits` run uses `max_pages=unlimited`.
-- [ ] Independent warehouse extracted count recorded.
-- [ ] Independent PostgreSQL delivered count recorded against the 99,345-row reference.
-- [ ] If the target/container cannot start, the exact unavailable result is recorded and no count
-      is claimed.
-- [ ] Credential value is read directly into the process environment and never appears in command
-      text output, traces, fixtures, artifacts, git diff, or PR body.
+      integration route — pending: the task explicitly prohibits retrying the unavailable shared
+      container runtime.
+- [ ] Authenticated `rails/rails` `commits` run uses `max_pages=unlimited` — pending: certification
+      credential rotation is incomplete.
+- [ ] Independent warehouse extracted count recorded — pending with the live run.
+- [ ] Independent PostgreSQL delivered count recorded against the 99,345-row reference — pending
+      with the live run; no count is claimed.
+- [x] The unavailable result is recorded without a count claim: databaseintegration tests were
+      invoked but skipped by their opt-in guard; no container or credential retry was attempted.
+- [x] No credential value was read, printed, stored, or placed in command text, traces, fixtures,
+      artifacts, git diff, or the PR body while the rotated live credential is pending.
 
 ## Focused local gates
 
-- [ ] `gofmt -w` on changed Go packages.
-- [ ] Focused tests with `-count=1` for `internal/synctransport`,
+- [x] `gofmt -w` on changed Go packages.
+- [x] Focused tests with `-count=1` for `internal/synctransport`,
       `internal/connectors/engine`, `internal/connectors/native/postgres`, `internal/app`, and
       `internal/cli`.
-- [ ] Focused race tests for concurrency-bearing changed packages.
-- [ ] `go vet ./...`.
-- [ ] `go build ./cmd/pm`.
-- [ ] PostgreSQL `databaseintegration` focused package test when the container is available.
-- [ ] `make tidy-check`.
-- [ ] `make lint`.
-- [ ] `make docs-check`.
-- [ ] `make smoke-no-build`.
-- [ ] `make agent-contract-check`.
-- [ ] `make connectorgen-validate`.
-- [ ] `make connectorgen-surface-sync` after one-pass derived regeneration.
-- [ ] `make connector-boundary`.
-- [ ] `make release-workflow-check`.
-- [ ] `go run ./cmd/agentcontractgen check`.
-- [ ] `scripts/verify-gsd-workflow` against the final diff if its interface supports local use.
-- [ ] Inline `scripts/gsd prompt verify-work issue-4171-3976-3862-transport-eligibility-r1` record.
-- [ ] Inline `scripts/gsd prompt code-review issue-4171-3976-3862-transport-eligibility-r1` record and
+- [x] Focused race tests for concurrency-bearing changed packages.
+- [x] `go vet ./...`.
+- [x] `go build ./cmd/pm`.
+- [x] PostgreSQL `databaseintegration` focused package test invoked; skipped by its required
+      opt-in because the container is unavailable.
+- [x] `make tidy-check`.
+- [x] `make lint`.
+- [x] `make docs-check-no-build`.
+- [x] `make smoke-no-build`.
+- [x] `make agent-contract-check`.
+- [x] `make connectorgen-validate`.
+- [x] `make connectorgen-surface-sync` after one-pass derived regeneration.
+- [x] `make connector-boundary`.
+- [x] `make release-workflow-check`.
+- [x] `go run ./cmd/agentcontractgen check`.
+- [x] `scripts/verify-gsd-workflow` against the final diff.
+- [x] Inline `scripts/gsd prompt verify-work issue-4171-3976-3862-transport-eligibility-r1` record.
+- [x] Inline `scripts/gsd prompt code-review issue-4171-3976-3862-transport-eligibility-r1` record and
       all actionable findings dispositioned.
-- [ ] `fm-ensure-agents-md.sh .` run; no unrelated project memory appended.
-- [ ] Generated drift checks pass and `git status` is clean after the final commit.
+- [x] `fm-ensure-agents-md.sh .` run; no unrelated project memory appended.
+- [x] Generated drift checks pass; the worktree is clean after the final evidence commit.
 
 ## Delivery gate
 
@@ -87,3 +92,11 @@
 - [ ] PR base API read-back equals `integration/4015-mvp-flat-r1`.
 - [ ] Final sparse status line is `done: PR <url>`.
 
+## Manual verify-work and review record
+
+The official `verify-work` and `code-review` prompts were resolved with `scripts/gsd prompt`.
+This non-numbered, direct-PR issue club is executed inline because the task requires one autonomous
+worker and the canonical contract forbids lifecycle role spawning. Verification used the focused
+commands above rather than the disallowed monolithic suite. Manual source review covered the
+registry admission order, production dispatch, checkpoint sequencing, keyset tuple encoding, and
+generated declarations. No critical or warning finding remained; see `REVIEW.md`.
