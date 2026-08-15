@@ -231,7 +231,9 @@ func (e *LegacyTableFormatError) Error() string {
 }
 
 // AmbiguousTableError reports that more than one connection materializes a
-// table of the same name, so a read must say which one it means.
+// table under one logical identifier, so a read must say which one it means.
+// Warehouse lookups use exact names; DuckDB-backed unscoped flow reads also
+// treat case-equivalent identifiers as one logical table.
 type AmbiguousTableError struct {
 	Table       string
 	Connections []string
