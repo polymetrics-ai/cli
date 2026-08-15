@@ -1,20 +1,20 @@
 {
   "name": "postgres",
   "display_name": "PostgreSQL",
-  "description": "Reads PostgreSQL tables, writes warehouse worksets to owned managed PostgreSQL targets, and supports PostgreSQL 14+ logical-replication CDC. Generic SQL and direct connector writes remain unavailable.",
+  "description": "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Source-only; managed-target writes remain unpublished until a production destination is registered.",
   "integration_type": "database",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": true,
+    "write": false,
     "query": false,
     "cdc": true,
     "dynamic_schema": true
   },
   "risk": {
     "read": "low",
-    "write": "high (owned managed targets only)",
-    "approval": "warehouse workset and managed-target ownership required for writes"
+    "write": "n/a (source-only until a production database destination is registered)",
+    "approval": "none required for source-only sync"
   }
 }

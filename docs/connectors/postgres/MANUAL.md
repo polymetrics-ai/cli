@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector postgres [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads PostgreSQL tables, writes warehouse worksets to owned managed PostgreSQL targets, and supports PostgreSQL 14+ logical-replication CDC. Generic SQL and direct connector writes remain unavailable.
+  Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Source-only; managed-target writes remain unpublished until a production destination is registered.
 
 ICON
   id: postgresql
@@ -20,7 +20,7 @@ ICON
   review_url: https://www.postgresql.org/docs/current/
 
 CAPABILITIES
-  check=true catalog=true read=true write=true query=false
+  check=true catalog=true read=true write=false query=false
   Integration type: database
 
 AUTHENTICATION
@@ -46,8 +46,8 @@ CONFIGURATION
 
 SECURITY
   read risk: low
-  write risk: high (owned managed targets only)
-  approval: warehouse workset and managed-target ownership required for writes
+  write risk: n/a (source-only until a production database destination is registered)
+  approval: none required for source-only sync
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 SYNC TRANSPORT

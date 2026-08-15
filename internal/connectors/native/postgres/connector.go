@@ -33,9 +33,9 @@
 //   - Read:    snapshot SELECT over a stream, with optional
 //     cursor-incremental filtering on a configurable cursor column
 //     (reader.go; see StatefulReader below).
-//   - Write:   typed warehouse-workset delivery through DatabaseDriver to an
-//     exact owned managed target. The generic Connector.Write method remains
-//     unsupported because it would bypass that ownership and receipt contract.
+//   - Write:   not implemented on the production connector path. The typed
+//     DatabaseDriver remains private and unregistered, while Connector.Write
+//     returns ErrUnsupportedOperation.
 //
 // CDC uses PostgreSQL 14+ pgoutput v2 streamed transaction staging (cdc.go).
 //
@@ -87,13 +87,6 @@ type postgresCapabilityOverride struct {
 
 var postgresCapabilityOverrides = []postgresCapabilityOverride{
 	{
-		name:  "write",
-		value: true,
-		target: func(capabilities *connectors.Capabilities) *bool {
-			return &capabilities.Write
-		},
-	},
-	{
 		name:  "cdc",
 		value: true,
 		target: func(capabilities *connectors.Capabilities) *bool {
@@ -126,7 +119,7 @@ func New() Connector {
 // capability so this connector's legacy metadata projection stays aligned.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads PostgreSQL tables, writes warehouse worksets to owned managed PostgreSQL targets, and supports PostgreSQL 14+ logical-replication CDC. Generic SQL and direct connector writes remain unavailable."
+	m.Description = "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Source-only; managed-target writes remain unpublished until a production destination is registered."
 	for _, override := range postgresCapabilityOverrides {
 		*override.target(&m.Capabilities) = override.value
 	}
@@ -151,10 +144,9 @@ func (c Connector) Manifest() connectors.Manifest {
 	return manifest
 }
 
-// Write stays unsupported because PostgreSQL writes require the typed
-// warehouse-workset DatabaseDriver path, including managed-target ownership,
-// schema assertion, delivery ledger, and durable receipt. Publishing the broad
-// write capability does not create a generic SQL or direct-write action.
+// Write stays unsupported because the typed managed-target DatabaseDriver is
+// not registered on the production connector path. The public write capability
+// remains false until a production destination can dispatch this operation.
 func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
 }

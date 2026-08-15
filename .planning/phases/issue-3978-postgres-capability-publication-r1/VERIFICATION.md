@@ -52,10 +52,11 @@ PASS TestPostgresManagedTargetIncrementalDedupeHistoryLive (5.93s)
 ```
 
 The CDC live test observes committed replication events, a persisted checkpoint, and acknowledged
-LSN behavior. The managed-target live tests assert actual PostgreSQL row/workset state and durable
-delivery receipts. #4158's known base-only live control assertion was excluded as required.
+LSN behavior. The managed-target live tests assert private driver behavior only; they do not prove
+a production destination and therefore do not authorize `write=true`. #4158's known base-only live
+control assertion was excluded as required.
 
-## Remaining final gates
+## Pre-CI final gates
 
 All final gates passed:
 
@@ -81,11 +82,12 @@ make -j2 lint docs-check-no-build smoke-no-build agent-contract-check connectorg
 PASS; boundary outcome=clean, checked_files=261, connectors_loaded=552
 ```
 
-The built CLI returned `write=true`, `cdc=true`, `query=false` from
-`pm connectors inspect postgres --json`; capability-filtered catalog queries included PostgreSQL
-for write and CDC and excluded it for query. `pm help connectors`, bare `pm connectors`, and
-`pm connectors --help` all exited successfully. The command/help surface did not move, so golden
-transcripts were not regenerated.
+The built CLI previously exposed the false `write=true` claim. CI certification and a fresh binary
+audit showed that the same inspection payload had `auth_modes.write=false` and
+`sync_transport.destination.status=unsupported`; native `DatabaseDriver` is deliberately
+unregistered and generic `Connector.Write` returns unsupported. The CDC-only correction requires
+`write=false`, `cdc=true`, `query=false`. Issue #3982 owns the production destination declaration
+and factory needed before write can be published.
 
 ## Inline code review
 
@@ -187,3 +189,59 @@ PASS: 552 connectors, 0 findings
 go run ./cmd/connectorgen surface-sync --check
 PASS: 552 connectors, 0 drift
 ```
+
+## CDC-only correction after CI certification failure
+
+CI and the focused local reproduction rejected the attempted `write=true` publication. The red
+evidence is recorded in `traces/red-write-publication-certification.txt`. The production binary
+had no PostgreSQL destination dispatch: inspection reported `auth_modes.write=false` and
+`sync_transport.destination.status=unsupported`, the typed `DatabaseDriver` is deliberately
+unregistered, and generic `Connector.Write` returns `ErrUnsupportedOperation`. Per the capability
+truth rule, this PR now keeps `write=false`; #3982 owns the destination declaration and factory.
+Issue #3978 is therefore only partially delivered by this PR.
+
+After reverting the false write publication, all three CI regressions passed locally:
+
+```text
+go test -timeout 20m ./internal/connectors/engine \
+  -run '^TestBundleLoadPostgresDatabaseDefinitionWithProvenCDCCapability$' -count=1
+PASS
+
+go test -timeout 20m ./cmd/connectorgen \
+  -run 'TestCertification(MatrixRejectsDatabaseWriteStubs|CheckIgnoresMalformedNonAllowlistedRuntimeLedgerEntry|ScopedSourceResolutionUsesScopedPostgresBundle|SyncModeDatabaseWriteStubIsNotImplemented)$' \
+  -count=1
+PASS
+```
+
+Every requested derived surface was regenerated in one pass: `surface-sync`, both certification
+shards/status via `certification-matrix --all`, CLI manuals and connector manuals/skills/catalog,
+golden transcripts, and all website data projections. The full changed-package set passed:
+
+```text
+go test -timeout 20m ./cmd/connectorgen ./internal/connectors/engine \
+  ./internal/connectors/native/postgres ./internal/app ./internal/cli -count=1
+PASS
+```
+
+The same non-test drift and repository gates used by CI passed locally: `gofmt`, `git diff --check`,
+`tidy-check`, `go vet ./...`, `go build ./cmd/pm`, `docs-check-no-build`, `smoke-no-build`, `lint`,
+`agent-contract-check`, `connectorgen-validate`, `connectorgen-surface-sync`,
+`github-parity-artifacts-check`, `connectorgen-certification-matrix`, `connector-boundary`,
+`connector-canon-check`, and `release-workflow-check`. The boundary report was clean across 261
+files and 552 connectors.
+
+Fresh binary inspection after those gates returned exactly:
+
+```json
+{
+  "capabilities": {"check":true,"catalog":true,"read":true,"write":false,"query":false,"cdc":true},
+  "auth_write": false,
+  "destination_status": "unsupported"
+}
+```
+
+`pm help connectors`, bare `pm connectors`, and `pm connectors --help` all exited successfully.
+The regenerated golden transcript test passed without further drift. The CDC production call chain
+remains proven from the built `cmd/pm` entry point through `App.RunETL`, `dispatchETLMode`, and
+`postgres.Connector.ReadCDC` to observable Parquet, checkpoint, receipt, and acknowledged LSN
+state changes.

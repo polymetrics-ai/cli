@@ -10,10 +10,9 @@ acknowledging the source LSN.
 Stream availability is discovered at runtime; see [Streams notes](#streams-notes) for the configured
 schema's scope and permission rules.
 
-The write capability is the typed PostgreSQL managed-target driver. It applies a durable warehouse
-workset only to a target whose private ownership and schema control records match the exact
-connection. It does not expose a generic SQL action, a direct connector-to-connector hop, or the
-compatibility `Connector.Write` method.
+This connector is source-only. Its write capability remains false: the typed PostgreSQL
+managed-target driver is not registered as a production destination, and the compatibility
+`Connector.Write` method remains unsupported.
 
 ## Warehouse snapshot transport
 
@@ -110,11 +109,9 @@ being coerced to a generic field type or returned as a partial catalog.
 
 ## Write actions & risks
 
-Read behavior: low. Write behavior: high and restricted to the typed managed-target path. The
-driver validates the warehouse workset, target owner, namespace, relation, type mapping, mode,
-and delivery ledger before applying a bounded batch. A durable target receipt is required before
-the warehouse delivery checkpoint advances. PostgreSQL exposes no generic SQL write action and
-cannot write an arbitrary pre-existing target.
+Read behavior: low. No write actions are declared. The private managed-target driver does not
+publish a capability until a production destination declaration and factory make it reachable.
+PostgreSQL exposes no generic SQL write action and cannot write an arbitrary pre-existing target.
 
 ## Known limits
 
@@ -144,5 +141,5 @@ cannot write an arbitrary pre-existing target.
 - Cursor or timestamp reconciliation is not a CDC fallback: it cannot faithfully recover hard
   deletes or transaction history. A stage-limit outcome must require explicit retry or connector-
   owned teardown/rebootstrap, with source slot health made visible.
-- Query remains false. The PostgreSQL protocol is used only by the declared typed source,
-  change-capture, and managed-target contracts; there is no caller-authored SQL query surface.
+- Query remains false. The PostgreSQL protocol is used only by the declared typed source and
+  change-capture contracts; there is no caller-authored SQL query surface.
