@@ -94,7 +94,7 @@ schedule:
 | `pm reverse` | `pm reverse list`, `pm reverse plan`, `pm reverse preview`, `pm reverse run`, `pm reverse status` | [/docs/reverse-etl](/docs/reverse-etl) |
 | `pm agent` | `pm agent plan`, `pm agent image build`, `pm agent image pull`, `pm agent image ensure` | [/docs/agent-guide](/docs/agent-guide) |
 | `pm runtime` | `pm runtime doctor` | [/docs/architecture](/docs/architecture) |
-| `pm flow` | `pm flow plan`, `pm flow preview`, `pm flow run`, `pm flow status`, `pm flow list` | [/docs/architecture](/docs/architecture) |
+| `pm flow` | `pm flow create`, `pm flow plan`, `pm flow preview`, `pm flow run`, `pm flow status`, `pm flow list` | [/docs/architecture](/docs/architecture) |
 | `pm extract` | request routing | [/docs/agent-guide](/docs/agent-guide) |
 | `pm perf` | `pm perf compare`, `pm perf sync-modes` | this page |
 | `pm docs` | `pm docs generate`, `pm docs validate` | this page |
@@ -326,32 +326,44 @@ pm worker serve --json
 RLM agent mode is optional and runtime-backed. It uses Temporal plus a Podman-managed agent image; it is not part of the dependency-free quickstart.
 
 ```bash
+pm flow create --file flow.json --json
 pm flow plan --file flow.json --json
 pm flow preview --file flow.json --json
-pm flow run --file flow.json --authorization <auth-ref> --force --json
+pm flow run nightly_leads --force --json
 pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 
-pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --authorization <auth-ref> --json
+pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --json
 pm schedule list --json
 pm schedule inspect nightly --json
 pm schedule status nightly --json
 pm schedule install nightly --crontab --json
-pm schedule fire nightly --authorization <auth-ref> --json
+pm schedule fire nightly --json
 pm schedule remove nightly --crontab --json
 ```
 
-Flows compose ETL, query, RLM, and approval-gated action steps. RLM flow steps reuse the same analyzers as `pm rlm run` and resolve relative `spec` paths from the flow manifest file. Schedules install named flows into the local scheduler backend, retaining only a durable authorization reference. Each fire re-derives its content-free action scope before a connector request; scope drift, expiry, or revocation stops the run, while ambiguous and rate-limited outcomes park without replay. `inspect` and `status` show the safe reference, terminal status, and receipt identifiers only.
+Approve each reverse-ETL job once at connection, schema, preview, mapping,
+destination-action, credential-revision, and confirmation-policy granularity.
+`pm flow create` then composes existing ETL connections and approved reverse-ETL
+jobs; missing, malformed, unrecognised, or unapproved references are refused
+before a flow file is written. RLM flow steps reuse the same analyzers as
+`pm rlm run` and resolve relative `spec` paths from the flow manifest file.
+
+Schedules accept only an existing valid flow. The installed crontab payload is
+exactly `pm --root <root> flow run <name> --json`: it contains no approval token
+or authorization reference. Each unattended firing reloads the jobs and
+revalidates credential revision, manifest/schema, source scope, mappings,
+destination action, confirmation policy, expiry, and revocation. Drift and
+failed, ambiguous, rate-limited, or cleanup-failed writes park or halt without
+automatic replay. `inspect` and `status` show only terminal status, prepared
+execution identities, and opaque receipt IDs.
 
 The [`pm flow` CLI manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/flow.md)
-owns flow source selection and its fail-closed rules. There is no flow CLI flag
-that changes them. An action requires its durable authorization reference in
-the manifest or `--authorization`, typed connector validation/write, configured
-target read-back, and a persisted receipt before its checkpoint is successful.
-
-The [`pm flow` CLI manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/flow.md)
-owns flow source selection and its fail-closed rules. There is no flow CLI flag
-that changes them.
+owns job references and flow source selection. An action derives its standing
+authorization and executable scope from the referenced approved job; flow and
+schedule commands do not accept an authorization carrier. Typed connector
+validation/write, target read-back, a prepared-execution identity, and a
+persisted receipt all precede a successful checkpoint.
 
 ## Operational commands
 

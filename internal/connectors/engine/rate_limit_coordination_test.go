@@ -61,6 +61,10 @@ func TestRequireSharedRateLimitPolicyRefusesWithoutCoordinator(t *testing.T) {
 	t.Cleanup(restore)
 
 	_, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	var refusal *connsdk.RateBudgetRefusalError
+	if !errors.As(err, &refusal) || refusal.Code != connsdk.RateBudgetRefusalSharedCoordinatorUnavailable {
+		t.Fatalf("RequesterFor error = %T %v, want RateBudgetRefusalError/shared_coordinator_unavailable", err, err)
+	}
 	var unavailable *coordination.SharedRateLimitUnavailableError
 	if !errors.As(err, &unavailable) {
 		t.Fatalf("RequesterFor error = %T %v, want typed shared-coordinator refusal", err, err)

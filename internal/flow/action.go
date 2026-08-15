@@ -25,11 +25,12 @@ import (
 
 // ActionResult summarises a single action step execution.
 type ActionResult struct {
-	RecordsAttempted int
-	RecordsSucceeded int
-	RecordsFailed    int
-	DLQPath          string
-	ReceiptIDs       []string
+	RecordsAttempted          int
+	RecordsSucceeded          int
+	RecordsFailed             int
+	DLQPath                   string
+	ReceiptIDs                []string
+	PreparedExecutionIdentity string
 }
 
 // ---------------------------------------------------------------------------

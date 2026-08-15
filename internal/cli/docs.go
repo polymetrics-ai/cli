@@ -808,12 +808,14 @@ EXIT STATUS
 `
 
 const flowHelp = `NAME
-  pm flow - plan, preview, run, list, and inspect multi-step flows
+  pm flow - create and run job-backed multi-step flows
 
 SYNOPSIS
+  pm flow create --file flow.json [--json]
   pm flow plan --file flow.json [--json]
   pm flow preview --file flow.json [--json]
-  pm flow run --file flow.json [--authorization <auth-ref>] [--force] [--json]
+  pm flow run <name> [--force] [--json]
+  pm flow run --file flow.json [--force] [--json]
   pm flow status <name> [--flows-dir .polymetrics/flows] [--json]
   pm flow list [--flows-dir .polymetrics/flows] [--json]
 
@@ -822,12 +824,20 @@ DESCRIPTION
   inferred from in/out warehouse tables. RLM steps reuse pm rlm analyzers and
   may reference a spec path relative to the flow manifest file.
 
+  Create stores a flow only after every external job reference resolves
+  positively. A sync step's job is an existing ETL connection. An action
+  step's job is an existing reverse-ETL plan that has completed its one-time
+  plan → preview → approval → execute lifecycle. Missing, malformed,
+  unrecognised, or unapproved jobs are refused before the flow file is written.
+
 CONNECTION-SCOPED SOURCE READS
   A query step may set "connection" to scope every warehouse table view used
-  by its SQL. An action step sets "source_connection" inside "action_cfg" to
-  scope its "source_table". Use _unattributed only for a root-level table that
+  by its SQL. A sync or action step instead names its existing job. The action
+  source connection, source table, mappings, destination action, credential,
+  and confirmation policy are derived from the approved reverse-ETL job; they
+  cannot be supplied inline. Use _unattributed only for a root-level table that
   no connection owns. When same-named tables have several owners, omitting the
-  applicable manifest selector refuses the read instead of choosing one.
+  applicable selector refuses the read instead of choosing one.
   A case-equivalent spelling whose owner cannot be decided also fails closed;
   set "connection" to a known healthy owner rather than relying on an
   unscoped query.
@@ -836,19 +846,23 @@ CONNECTION-SCOPED SOURCE READS
   {"id":"query-acme","kind":"query","connection":"acme",
    "sql":"SELECT * FROM records","in":[],"out":[]}
 
-  Action source selector fragment:
-  "action_cfg": {"source_table":"records","source_connection":"acme"}
+  Approved action job fragment:
+  {"id":"send","kind":"action","job":"rplan_0123456789abcdef",
+   "action_cfg":{"read_back_stream":"targets"}}
 
 ACTION EXECUTION
   An action uses the selected warehouse rows and the destination connector's
   typed ValidateWrite and Write methods; it never accepts a raw URL, generic
-  HTTP write, SQL write, or operation request. Before run, create and
-  consume the matching reverse-ETL plan → preview → approval lifecycle. Put
-  its durable authorization_reference in action_cfg or pass --authorization.
-  The action_cfg must also name destination_table and read_back_stream. A run
-  re-derives its content-free authorization scope before any provider request,
-  reads the target stream back, and persists an opaque receipt before the
-  action checkpoint can be marked successful.
+  HTTP write, SQL write, or operation request. Approve the reverse-ETL job once
+  at connection, schema, preview, mapping, destination action, credential
+  revision, and confirmation-policy granularity; then reference that job from
+  the flow. No approval token or authorization reference is accepted by flow
+  create or run.
+
+  Every run reloads the job and revalidates that standing authorization before
+  any provider request. It derives a payload-bound prepared-execution identity,
+  validates the target, writes once, reads the target stream back, and persists
+  the safe identity and opaque receipt before the action checkpoint succeeds.
 
 RLM STEP EXAMPLE
   {
@@ -862,8 +876,10 @@ RLM STEP EXAMPLE
 
 SECURITY
   Read-only sync, query, and rlm steps run through existing app primitives.
-  Action steps require a durable, revocable authorization reference. A changed,
-  expired, or revoked scope stops before connector validation or write.
+  Action steps inherit their job's durable, revocable standing authorization.
+  Credential revision, manifest/schema, source scope, mappings, destination
+  action, confirmation policy, expiry, and revocation drift stop before write.
+  Prepared identities are evidence, not secrets or reusable authority.
 
 EXIT STATUS
   0 success
@@ -894,33 +910,38 @@ EXIT STATUS
 `
 
 const scheduleHelp = `NAME
-  pm schedule - manage authorized flow schedules
+  pm schedule - run existing approved-job flows on a local scheduler
 
 SYNOPSIS
-  pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --authorization auth_<opaque-id> [--json]
+  pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads [--json]
   pm schedule list [--json]
   pm schedule inspect nightly [--json]
   pm schedule status nightly [--json]
   pm schedule install nightly [--crontab] [--json]
   pm schedule remove nightly [--crontab] [--json]
-  pm schedule fire nightly --authorization auth_<opaque-id> [--json]
+  pm schedule fire nightly [--json]
 
 DESCRIPTION
-  Schedules bind a cron expression and a named flow to a durable, revocable
-  authorization reference. The selected local scheduler backend invokes
-  schedule fire with that reference. On every firing, pm re-derives the
-  content-free action scope and obtains a run-scoped grant before it sends a
-  connector request. Use inspect or status to view the safe reference and the
-  last fire state. Use --crontab on install or remove to force the crontab
-  backend.
+  Approve each ETL or reverse-ETL job once, compose those existing approved jobs
+  into a stored flow with pm flow create, then schedule that existing flow.
+  Create refuses a missing or invalid flow before writing a schedule. Install
+  revalidates the flow before touching the scheduler backend.
+
+  The selected backend invokes exactly:
+
+    pm --root <root> flow run <name> --json
+
+  No approval token or authorization reference is placed in crontab, argv, a
+  schedule manifest, or schedule JSON. Use inspect or status to view terminal
+  flow status, safe prepared-execution identities, and opaque receipt IDs. Use
+  --crontab on install or remove to force the crontab backend.
 
 SECURITY
-  A manifest, rendered scheduler payload, and fire receipt retain only the
-  opaque authorization reference and safe receipt identifiers; they never
-  retain approval tokens, credentials, payloads, or secret-derived values.
-  Expired, revoked, or scope-changed authorization stops before a provider
-  request. Failed, rate-limited, ambiguous, or cleanup-failed fires park and
-  never replay automatically.
+  Each unattended firing reloads every referenced job and revalidates credential
+  revision, manifest/schema, source scope, mappings, destination action,
+  confirmation policy, expiry, and revocation before a provider request. Any
+  drift refuses and parks the schedule. Failed, rate-limited, ambiguous, or
+  cleanup-failed writes also park or halt and never replay automatically.
 
 EXIT STATUS
   0 success

@@ -762,6 +762,10 @@ func TestGitHubWriteHookCreateLabelRequireSharedRefusesBeforeTransport(t *testin
 	}
 	_, err = h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "create_label"}, connectors.Record{"name": "bug", "color": "#ff0000"}, rt)
 	var unavailable *coordination.SharedRateLimitUnavailableError
+	var refusal *connsdk.RateBudgetRefusalError
+	if !errors.As(err, &refusal) || refusal.Code != connsdk.RateBudgetRefusalSharedCoordinatorUnavailable {
+		t.Fatalf("CreateLabel require_shared error = %T %v, want RateBudgetRefusalError/shared_coordinator_unavailable", err, err)
+	}
 	if !errors.As(err, &unavailable) {
 		t.Fatalf("create_label require_shared error = %T %v, want typed shared coordinator refusal", err, err)
 	}

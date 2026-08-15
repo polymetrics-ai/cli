@@ -1,32 +1,37 @@
 ```
 NAME
-  pm schedule - manage authorized flow schedules
+  pm schedule - run existing approved-job flows on a local scheduler
 
 SYNOPSIS
-  pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --authorization auth_<opaque-id> [--json]
+  pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads [--json]
   pm schedule list [--json]
   pm schedule inspect nightly [--json]
   pm schedule status nightly [--json]
   pm schedule install nightly [--crontab] [--json]
   pm schedule remove nightly [--crontab] [--json]
-  pm schedule fire nightly --authorization auth_<opaque-id> [--json]
+  pm schedule fire nightly [--json]
 
 DESCRIPTION
-  Schedules bind a cron expression and a named flow to a durable, revocable
-  authorization reference. The selected local scheduler backend invokes
-  schedule fire with that reference. On every firing, pm re-derives the
-  content-free action scope and obtains a run-scoped grant before it sends a
-  connector request. Use inspect or status to view the safe reference and the
-  last fire state. Use --crontab on install or remove to force the crontab
-  backend.
+  Approve each ETL or reverse-ETL job once, compose those existing approved jobs
+  into a stored flow with pm flow create, then schedule that existing flow.
+  Create refuses a missing or invalid flow before writing a schedule. Install
+  revalidates the flow before touching the scheduler backend.
+
+  The selected backend invokes exactly:
+
+    pm --root <root> flow run <name> --json
+
+  No approval token or authorization reference is placed in crontab, argv, a
+  schedule manifest, or schedule JSON. Use inspect or status to view terminal
+  flow status, safe prepared-execution identities, and opaque receipt IDs. Use
+  --crontab on install or remove to force the crontab backend.
 
 SECURITY
-  A manifest, rendered scheduler payload, and fire receipt retain only the
-  opaque authorization reference and safe receipt identifiers; they never
-  retain approval tokens, credentials, payloads, or secret-derived values.
-  Expired, revoked, or scope-changed authorization stops before a provider
-  request. Failed, rate-limited, ambiguous, or cleanup-failed fires park and
-  never replay automatically.
+  Each unattended firing reloads every referenced job and revalidates credential
+  revision, manifest/schema, source scope, mappings, destination action,
+  confirmation policy, expiry, and revocation before a provider request. Any
+  drift refuses and parks the schedule. Failed, rate-limited, ambiguous, or
+  cleanup-failed writes also park or halt and never replay automatically.
 
 EXIT STATUS
   0 success

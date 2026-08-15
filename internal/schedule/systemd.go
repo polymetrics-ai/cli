@@ -68,7 +68,7 @@ func renderService(m Manifest, pmBin string) (string, error) {
 	if m.Root != "" {
 		rootArgs = " --root " + shellArg(m.Root)
 	}
-	fmt.Fprintf(&sb, "[Service]\nType=oneshot\nExecStart=%s%s schedule fire %s --authorization %s --json\n\n", shellArg(pmBin), rootArgs, shellArg(m.Name), shellArg(m.AuthorizationReference))
+	fmt.Fprintf(&sb, "[Service]\nType=oneshot\nExecStart=%s%s flow run %s --json\n\n", shellArg(pmBin), rootArgs, shellArg(m.Flow))
 	sb.WriteString("[Install]\nWantedBy=default.target\n")
 	return sb.String(), nil
 }

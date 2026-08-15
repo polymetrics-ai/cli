@@ -67,17 +67,18 @@ type RunOptions struct {
 
 // StepResult is the per-step outcome in a RunResult.
 type StepResult struct {
-	ID             string   `json:"id"`
-	Kind           string   `json:"kind"`
-	Status         string   `json:"status"`
-	RecordsRead    int      `json:"records_read"`
-	RecordsWritten int      `json:"records_written"`
-	RecordsFailed  int      `json:"records_failed,omitempty"`
-	DurationNs     int64    `json:"duration_ns"`
-	Error          string   `json:"error,omitempty"`
-	DLQPath        string   `json:"dlq_path,omitempty"`
-	ReceiptIDs     []string `json:"receipt_ids,omitempty"`
-	SchemaDrift    bool     `json:"schema_drift,omitempty"`
+	ID                        string   `json:"id"`
+	Kind                      string   `json:"kind"`
+	Status                    string   `json:"status"`
+	RecordsRead               int      `json:"records_read"`
+	RecordsWritten            int      `json:"records_written"`
+	RecordsFailed             int      `json:"records_failed,omitempty"`
+	DurationNs                int64    `json:"duration_ns"`
+	Error                     string   `json:"error,omitempty"`
+	DLQPath                   string   `json:"dlq_path,omitempty"`
+	ReceiptIDs                []string `json:"receipt_ids,omitempty"`
+	PreparedExecutionIdentity string   `json:"prepared_execution_identity,omitempty"`
+	SchemaDrift               bool     `json:"schema_drift,omitempty"`
 }
 
 // RunResult is the top-level outcome of Engine.Run.
@@ -262,6 +263,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			sr.RecordsFailed = actionRes.RecordsFailed
 			sr.DLQPath = actionRes.DLQPath
 			sr.ReceiptIDs = append([]string(nil), actionRes.ReceiptIDs...)
+			sr.PreparedExecutionIdentity = actionRes.PreparedExecutionIdentity
 		default:
 			stepErr = fmt.Errorf("%w: %s", ErrUnknownStepKind, s.Kind)
 		}

@@ -28,7 +28,7 @@ func TestFireLeasePersistsTerminalReceiptAndRefusesOverlapOrCrashReplay(t *testi
 	if err != nil {
 		t.Fatalf("LoadFireState: %v", err)
 	}
-	if state.Status != FireStatusSucceeded || state.LastFire.FlowStatus != "ok" || state.LastFire.AuthorizationReference != manifest.AuthorizationReference || len(state.LastFire.ReceiptIDs) != 1 {
+	if state.Status != FireStatusSucceeded || state.LastFire.FlowStatus != "ok" || len(state.LastFire.ReceiptIDs) != 1 {
 		t.Fatalf("terminal fire state = %#v, want successful safe receipt state", state)
 	}
 }

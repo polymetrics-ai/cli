@@ -14,9 +14,9 @@ import (
 // connectorFlowActionRunner is the sole production runner built by flowRun.
 // It has no URL, HTTP client, SQL, or raw operation escape hatch.
 type connectorFlowActionRunner struct {
-	app                    *app.App
-	flowName               string
-	authorizationReference string
+	app            *app.App
+	flowName       string
+	manifestDigest string
 }
 
 var _ flow.StepActionRunner = (*connectorFlowActionRunner)(nil)
@@ -34,13 +34,10 @@ func (r *connectorFlowActionRunner) PreflightStep(ctx context.Context, step flow
 	if action == "" {
 		action = "upsert"
 	}
-	authorization := cfg.AuthorizationReference
-	if authorization == "" {
-		authorization = r.authorizationReference
-	}
 	return r.app.ValidateAuthorizedFlowAction(ctx, app.FlowActionExecutionRequest{
 		FlowName:               r.flowName,
 		StepID:                 step.ID,
+		ManifestDigest:         r.manifestDigest,
 		SourceTable:            cfg.SourceTable,
 		SourceConnection:       cfg.SourceConnection,
 		DestinationTable:       cfg.DestinationTable,
@@ -49,7 +46,7 @@ func (r *connectorFlowActionRunner) PreflightStep(ctx context.Context, step flow
 		DestinationConfig:      cfg.DestinationConfig,
 		Action:                 action,
 		Mappings:               cfg.Mappings,
-		AuthorizationReference: authorization,
+		AuthorizationReference: cfg.AuthorizationReference,
 		ReadBackStream:         cfg.ReadBackStream,
 	})
 }
@@ -66,10 +63,6 @@ func (r *connectorFlowActionRunner) ExecuteStep(ctx context.Context, step flow.F
 	if action == "" {
 		action = "upsert"
 	}
-	authorization := cfg.AuthorizationReference
-	if authorization == "" {
-		authorization = r.authorizationReference
-	}
 	if cfg.DestinationTable == "" {
 		return flow.ActionResult{}, fmt.Errorf("flow action step %q requires action_cfg.destination_table", step.ID)
 	}
@@ -84,6 +77,7 @@ func (r *connectorFlowActionRunner) ExecuteStep(ctx context.Context, step flow.F
 		FlowName:               r.flowName,
 		StepID:                 step.ID,
 		RunID:                  runID,
+		ManifestDigest:         r.manifestDigest,
 		SourceTable:            cfg.SourceTable,
 		SourceConnection:       cfg.SourceConnection,
 		DestinationTable:       cfg.DestinationTable,
@@ -92,12 +86,12 @@ func (r *connectorFlowActionRunner) ExecuteStep(ctx context.Context, step flow.F
 		DestinationConfig:      cfg.DestinationConfig,
 		Action:                 action,
 		Mappings:               cfg.Mappings,
-		AuthorizationReference: authorization,
+		AuthorizationReference: cfg.AuthorizationReference,
 		ReadBackStream:         cfg.ReadBackStream,
 		Records:                connectorRecords,
 	})
 	if err != nil {
-		return flow.ActionResult{RecordsAttempted: result.RecordsAttempted, RecordsSucceeded: result.RecordsSucceeded, RecordsFailed: result.RecordsFailed}, err
+		return flow.ActionResult{RecordsAttempted: result.RecordsAttempted, RecordsSucceeded: result.RecordsSucceeded, RecordsFailed: result.RecordsFailed, PreparedExecutionIdentity: result.PreparedExecutionIdentity}, err
 	}
-	return flow.ActionResult{RecordsAttempted: result.RecordsAttempted, RecordsSucceeded: result.RecordsSucceeded, RecordsFailed: result.RecordsFailed, ReceiptIDs: []string{result.ReceiptID}}, nil
+	return flow.ActionResult{RecordsAttempted: result.RecordsAttempted, RecordsSucceeded: result.RecordsSucceeded, RecordsFailed: result.RecordsFailed, ReceiptIDs: []string{result.ReceiptID}, PreparedExecutionIdentity: result.PreparedExecutionIdentity}, nil
 }

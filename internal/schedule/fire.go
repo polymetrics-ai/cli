@@ -48,13 +48,13 @@ const (
 // messages, credentials, tokens, and raw configuration never cross this
 // storage boundary.
 type FireReceipt struct {
-	FlowName               string         `json:"flow_name"`
-	FlowStatus             string         `json:"flow_status"`
-	AuthorizationReference string         `json:"authorization_reference"`
-	ReceiptIDs             []string       `json:"receipt_ids,omitempty"`
-	StopReason             FireStopReason `json:"stop_reason,omitempty"`
-	StartedAt              time.Time      `json:"started_at"`
-	CompletedAt            time.Time      `json:"completed_at,omitempty"`
+	FlowName                    string         `json:"flow_name"`
+	FlowStatus                  string         `json:"flow_status"`
+	ReceiptIDs                  []string       `json:"receipt_ids,omitempty"`
+	PreparedExecutionIdentities []string       `json:"prepared_execution_identities,omitempty"`
+	StopReason                  FireStopReason `json:"stop_reason,omitempty"`
+	StartedAt                   time.Time      `json:"started_at"`
+	CompletedAt                 time.Time      `json:"completed_at,omitempty"`
 }
 
 // FireState is the persisted, schedule-owned status. Running and parked are
@@ -77,9 +77,6 @@ func BeginFire(root, name string) (*FireLease, error) {
 	manifest, err := Load(root, name)
 	if err != nil {
 		return nil, err
-	}
-	if manifest.AuthorizationReference == "" {
-		return nil, errors.New("schedule authorization reference is required")
 	}
 	state, err := LoadFireState(root, name)
 	if err != nil {
@@ -108,13 +105,22 @@ func BeginFire(root, name string) (*FireLease, error) {
 		_ = os.Remove(fireLockPath(root, name))
 		return nil, err
 	}
+	if err := lock.Sync(); err != nil {
+		_ = lock.Close()
+		_ = os.Remove(fireLockPath(root, name))
+		return nil, err
+	}
 	if err := lock.Close(); err != nil {
+		_ = os.Remove(fireLockPath(root, name))
+		return nil, err
+	}
+	if err := syncScheduleDir(root); err != nil {
 		_ = os.Remove(fireLockPath(root, name))
 		return nil, err
 	}
 
 	state = FireState{Status: FireStatusRunning, LastFire: FireReceipt{
-		FlowName: manifest.Flow, AuthorizationReference: manifest.AuthorizationReference, StartedAt: time.Now().UTC(),
+		FlowName: manifest.Flow, StartedAt: time.Now().UTC(),
 	}}
 	if err := saveFireState(root, name, state); err != nil {
 		_ = os.Remove(fireLockPath(root, name))
@@ -180,7 +186,6 @@ func (l *FireLease) normalizeReceipt(receipt FireReceipt) FireReceipt {
 	if receipt.FlowName == "" {
 		receipt.FlowName = l.manifest.Flow
 	}
-	receipt.AuthorizationReference = l.manifest.AuthorizationReference
 	if receipt.StartedAt.IsZero() {
 		receipt.StartedAt = time.Now().UTC()
 	}
@@ -190,6 +195,7 @@ func (l *FireLease) normalizeReceipt(receipt FireReceipt) FireReceipt {
 	}
 	receipt.CompletedAt = receipt.CompletedAt.UTC()
 	receipt.ReceiptIDs = append([]string(nil), receipt.ReceiptIDs...)
+	receipt.PreparedExecutionIdentities = append([]string(nil), receipt.PreparedExecutionIdentities...)
 	return receipt
 }
 
@@ -211,6 +217,7 @@ func LoadFireState(root, name string) (FireState, error) {
 		state.Status = FireStatusReady
 	}
 	state.LastFire.ReceiptIDs = append([]string(nil), state.LastFire.ReceiptIDs...)
+	state.LastFire.PreparedExecutionIdentities = append([]string(nil), state.LastFire.PreparedExecutionIdentities...)
 	return state, nil
 }
 
@@ -245,5 +252,22 @@ func writeFileAtomic(path string, data []byte, mode os.FileMode) error {
 	if err := tmp.Close(); err != nil {
 		return err
 	}
-	return os.Rename(tmpPath, path)
+	if err := os.Rename(tmpPath, path); err != nil {
+		return err
+	}
+	directory, err := os.Open(dir)
+	if err != nil {
+		return err
+	}
+	defer directory.Close()
+	return directory.Sync()
+}
+
+func syncScheduleDir(root string) error {
+	directory, err := os.Open(schedulesDir(root))
+	if err != nil {
+		return err
+	}
+	defer directory.Close()
+	return directory.Sync()
 }
