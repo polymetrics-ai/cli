@@ -192,6 +192,11 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		return result, err
 	}
 	if result.CommittedCheckpoint == nil {
+		if result.Pages == 0 {
+			if _, allowed := resolved.Source.(EmptyResultSource); allowed {
+				return result, nil
+			}
+		}
 		return result, fmt.Errorf("source transport completed without a checkpoint candidate")
 	}
 	return result, nil

@@ -46,6 +46,14 @@ type SourceExecutor interface {
 	ReadTransport(context.Context, SourceRequest, func(SourcePage) error) error
 }
 
+// EmptyResultSource explicitly admits a successful, zero-page read without a
+// fabricated checkpoint. The orchestrator keeps rejecting silent zero-page
+// executors unless the exact registered source implements this marker.
+type EmptyResultSource interface {
+	SourceExecutor
+	AllowEmptySourceResult()
+}
+
 // DestinationExecutor is the narrow destination role. It plans only a
 // descriptor-resolved closed strategy and returns #3810's opaque durable
 // acknowledgement after its warehouse-mediated workset is durable.

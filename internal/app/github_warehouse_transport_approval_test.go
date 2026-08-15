@@ -420,7 +420,7 @@ func TestIssueLabelTransportSourceStopsAfterMatchedFullPage(t *testing.T) {
 	}
 }
 
-func TestIssueLabelTransportSourceCollectsBoundedBatchForManagedTarget(t *testing.T) {
+func TestDeclarativeTransportSourceEmitsWholeProviderPageInBoundedBatches(t *testing.T) {
 	fixture := newIssueLabelTransportApprovalFixture(t)
 	fixture.sourceRuntime.Config = cloneStringMap(fixture.sourceRuntime.Config)
 	delete(fixture.sourceRuntime.Config, issueLabelTransportSourceIssueConfig)
@@ -441,8 +441,18 @@ func TestIssueLabelTransportSourceCollectsBoundedBatchForManagedTarget(t *testin
 		t.Fatalf("ReadTransport() = %v", err)
 	}
 	fixture.assertProviderReads(t, 1)
-	if len(pages) != 1 || len(pages[0].Records) != 3 {
-		t.Fatalf("collection source pages = %#v, want one three-record bounded page", pages)
+	if got, want := len(pages), 34; got != want {
+		t.Fatalf("collection source pages = %d, want %d bounded pages", got, want)
+	}
+	total := 0
+	for index, page := range pages {
+		if len(page.Records) == 0 || len(page.Records) > 3 {
+			t.Fatalf("collection source page %d records = %d, want 1..3", index, len(page.Records))
+		}
+		total += len(page.Records)
+	}
+	if got, want := total, 100; got != want {
+		t.Fatalf("collection source records = %d, want complete provider page of %d", got, want)
 	}
 	for index, want := range []int{fixture.sourceIssue, fixture.targetIssue, 1} {
 		if number, err := issueNumberFromRecord(pages[0].Records[index]); err != nil || number != want {
@@ -513,7 +523,7 @@ type issueLabelTransportApprovalFixture struct {
 	app              *App
 	connection       Connection
 	executor         *issueLabelDestinationExecutor
-	sourceExecutor   *issueLabelSourceExecutor
+	sourceExecutor   *declarativeStreamSourceExecutor
 	sourceConnector  connectors.Connector
 	sourceCredential CredentialMeta
 	sourceRuntime    connectors.RuntimeConfig
@@ -690,7 +700,7 @@ func newIssueLabelTransportApprovalFixtureWithIssuePages(t *testing.T, cleanupSt
 		app:              a,
 		connection:       connection,
 		executor:         &issueLabelDestinationExecutor{app: a, connector: github, contract: contract},
-		sourceExecutor:   &issueLabelSourceExecutor{connector: github, contract: contract},
+		sourceExecutor:   &declarativeStreamSourceExecutor{connector: github, descriptor: *github.Definition().SyncTransport.Source},
 		sourceConnector:  sourceConnector,
 		sourceCredential: sourceCredential,
 		sourceRuntime:    sourceRuntime,

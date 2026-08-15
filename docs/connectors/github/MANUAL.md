@@ -4154,7 +4154,7 @@ SYNC TRANSPORT
   Source transport: declared
   Destination transport: declared
   A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
-  Source executor: declarative_api/issue_label_source
+  Source executor: declarative_api/declarative_stream_source
   Destination executor: declarative_api/issue_label_destination
 
 EXAMPLES

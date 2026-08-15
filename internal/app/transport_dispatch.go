@@ -37,17 +37,17 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 // definition selects the allowed destination action for each declared mode;
 // non-additive modes are additionally gated by the persisted connection.
 func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMode, source, destination connectors.Connector) bool {
-	sourceIssueLabel := isIssueLabelTransportConnector(source)
+	sourceDeclarative := isDeclarativeStreamTransportConnector(source)
 	destinationIssueLabel := isIssueLabelTransportConnector(destination)
 	if destinationIssueLabel {
 		// The closed composition is a same-definition source/destination pair.
 		// A one-sided descriptor is an ordinary legacy ETL connection, not a
 		// half-transport route; in particular, it must not divert a historical
 		// declarative source into the warehouse destination transport preflight.
-		if !sourceIssueLabel {
+		if !sourceDeclarative || source.Name() != destination.Name() {
 			return false
 		}
-	} else if !sourceIssueLabel {
+	} else if !sourceDeclarative {
 		return hasDeclaredSyncTransport(source, destination)
 	} else if !hasDeclaredSyncTransport(source, destination) {
 		return false
@@ -97,10 +97,7 @@ func isIssueLabelTransportConnector(connector connectors.Connector) bool {
 	if err != nil {
 		return false
 	}
-	if descriptor.Source.Executor != issueLabelSourceReference || descriptor.Destination.Executor != issueLabelDestinationReference {
-		return false
-	}
-	if len(descriptor.Source.EligibleStreams) != 1 || descriptor.Source.EligibleStreams[0] != contract.stream {
+	if !isDeclarativeStreamTransportConnector(connector) || descriptor.Destination.Executor != issueLabelDestinationReference {
 		return false
 	}
 	wantModes := contract.modes()
@@ -128,6 +125,18 @@ func isIssueLabelTransportConnector(connector connectors.Connector) bool {
 	return true
 }
 
+func isDeclarativeStreamTransportConnector(connector connectors.Connector) bool {
+	descriptor, ok := connectors.SyncTransportDescriptorOf(connector)
+	if !ok || descriptor.Source == nil || descriptor.Source.Executor != declarativeStreamSourceReference {
+		return false
+	}
+	definition, ok := connectors.DefinitionOf(connector)
+	if !ok {
+		return false
+	}
+	return validateDeclarativeStreamEligibility(definition.Streams, descriptor.Source.EligibleStreams) == nil
+}
+
 func validateClosedTransportBatchSize(source, destination connectors.Connector, batchSize int) error {
 	// The provider-mutating issue-label destination binds every source record
 	// to one configured target issue and therefore remains singleton-only. The
@@ -137,8 +146,8 @@ func validateClosedTransportBatchSize(source, destination connectors.Connector, 
 	if isIssueLabelTransportConnector(destination) && batchSize != 1 {
 		return errors.New("closed issue-label transport requires batch size 1")
 	}
-	if isIssueLabelTransportConnector(source) && batchSize > issueCollectionTransportMaxRecords {
-		return fmt.Errorf("bounded issue collection batch size must not exceed %d", issueCollectionTransportMaxRecords)
+	if isDeclarativeStreamTransportConnector(source) && batchSize > issueCollectionTransportMaxRecords {
+		return fmt.Errorf("bounded declarative collection batch size must not exceed %d", issueCollectionTransportMaxRecords)
 	}
 	return nil
 }
@@ -245,6 +254,25 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	if committed == nil || committed.CommittedAt == nil {
 		if err != nil {
 			return etlExecutionResult{}, err
+		}
+		if transportResult.Pages == 0 && transportResult.RecordsRead == 0 && transportResult.RecordsApplied == 0 {
+			if requiresManagedTargetApproval {
+				if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
+					return etlExecutionResult{}, err
+				}
+			}
+			updated := cloneStreamState(prior)
+			updated.Connection = conn.Name
+			updated.Stream = streamName
+			updated.GenerationID = generationID
+			updated.LastSuccessfulRunID = runID
+			updated.RecordsLoaded = 0
+			updated.UpdatedAt = time.Now().UTC()
+			result := etlExecutionResult{
+				PendingStreamState: &pendingStreamState{Key: stateKey, State: updated},
+			}
+			result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+			return result, nil
 		}
 		return etlExecutionResult{}, fmt.Errorf("closed transport completed without a durable committed checkpoint")
 	}

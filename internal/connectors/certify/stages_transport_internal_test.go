@@ -36,7 +36,7 @@ func TestCertificationDeclaredTransportPairResolvesAndExecutes(t *testing.T) {
 	if len(report.Stages) != 1 || report.Stages[0].Name != declaredTransportPairStage || !report.Stages[0].Passed {
 		t.Fatalf("registered declared pair stage = %+v, want named pass", report.Stages)
 	}
-	if proof.SourceReference != "issue_label_source" || proof.DestinationReference != "issue_label_destination" {
+	if proof.SourceReference != "declarative_stream_source" || proof.DestinationReference != "issue_label_destination" {
 		t.Fatalf("resolved references = %q -> %q", proof.SourceReference, proof.DestinationReference)
 	}
 	if proof.ProviderReads < 2 || proof.ProviderWrites != 1 {
@@ -86,7 +86,7 @@ func TestCertificationDeclaredTransportPairFailsWhenRegistrationIsMissing(t *tes
 	if len(report.Stages) != 1 || report.Stages[0].Name != declaredTransportPairStage || report.Stages[0].Passed {
 		t.Fatalf("unregistered declared pair stage = %+v, want named failure", report.Stages)
 	}
-	if !strings.Contains(report.Stages[0].Error, `declared source transport executor "issue_label_source" is not registered`) {
+	if !strings.Contains(report.Stages[0].Error, `declared source transport executor "declarative_stream_source" is not registered`) {
 		t.Fatalf("unregistered declared pair error = %q", report.Stages[0].Error)
 	}
 }

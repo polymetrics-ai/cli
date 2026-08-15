@@ -80,6 +80,21 @@ type ResolvedTransport struct {
 	ApplyStrategy         connectors.DestinationApplyStrategy
 }
 
+// SourceStreamIneligibleError reports a positive source allowlist refusal.
+// It is returned before executor lookup or provider access, so callers can
+// distinguish an honest declaration exclusion from a missing implementation.
+type SourceStreamIneligibleError struct {
+	Connector string
+	Stream    string
+}
+
+func (e *SourceStreamIneligibleError) Error() string {
+	if e == nil {
+		return "source transport does not support stream"
+	}
+	return fmt.Sprintf("source transport does not support stream %q", e.Stream)
+}
+
 // Preflight proves that both endpoint descriptors, closed families, exact
 // registrations, mode, strategy, acknowledgement policy, and independent
 // conformance verifier agree before a source executor can read.
@@ -126,7 +141,7 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 		return ResolvedTransport{}, fmt.Errorf("destination transport does not support sync mode %q", request.Mode)
 	}
 	if !containsName(sourceDescriptor.EligibleStreams, request.Stream) {
-		return ResolvedTransport{}, fmt.Errorf("source transport does not support stream %q", request.Stream)
+		return ResolvedTransport{}, &SourceStreamIneligibleError{Connector: request.Source.Name(), Stream: request.Stream}
 	}
 	if destinationDescriptor.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
 		return ResolvedTransport{}, fmt.Errorf("destination transport requires durable warehouse acknowledgement")

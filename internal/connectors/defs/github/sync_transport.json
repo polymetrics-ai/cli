@@ -3,9 +3,47 @@
   "source_transport": {
     "executor": {
       "family": "declarative_api",
-      "id": "issue_label_source"
+      "id": "declarative_stream_source"
     },
-    "eligible_streams": ["issues"],
+    "eligible_streams": [
+      "repository",
+      "issues",
+      "pull_requests",
+      "branches",
+      "commits",
+      "tags",
+      "releases",
+      "labels",
+      "milestones",
+      "issue_comments",
+      "pull_request_review_comments",
+      "collaborators",
+      "contributors",
+      "stargazers",
+      "subscribers",
+      "workflows",
+      "workflow_runs",
+      "workflow_artifacts",
+      "deployments",
+      "commit_comments",
+      "deploy_keys",
+      "webhooks",
+      "environments",
+      "forks",
+      "invitations",
+      "issue_events",
+      "code_scanning_alerts",
+      "dependabot_alerts",
+      "secret_scanning_alerts",
+      "security_advisories",
+      "repo_rulesets",
+      "autolinks",
+      "languages",
+      "projects",
+      "project_items",
+      "discussions",
+      "discussion"
+    ],
     "modes": ["full_overwrite", "full_append", "incremental_upsert"],
     "delivery": {
       "idempotency": "keyed",
@@ -13,8 +51,8 @@
       "deletes": "tombstone"
     },
     "conformance": {
-      "suite": "closed_transport_demo",
-      "run_id": "accepted_issue_source"
+      "suite": "declarative_stream_transport",
+      "run_id": "all_executable_streams_v1"
     }
   },
   "destination_transport": {
