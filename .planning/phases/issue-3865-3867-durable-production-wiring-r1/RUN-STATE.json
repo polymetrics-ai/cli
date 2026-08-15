@@ -1,0 +1,8 @@
+{
+  "phase": "issue-3865-3867-durable-production-wiring-r1",
+  "status": "planned",
+  "current_slice": "A-red-durable-store-contracts",
+  "gsd_fallback": "inline-manual-single-worker",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-durable-store-club-r1"
+}
