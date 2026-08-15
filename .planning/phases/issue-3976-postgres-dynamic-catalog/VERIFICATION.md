@@ -11,7 +11,7 @@
 - [x] The private PostgreSQL paging loop is absent from the source path.
 - [x] Focused PostgreSQL/engine/CLI tests, race where applicable, vet, build, and
       repository gates pass.
-- [ ] Generated `verify-work` / `code-review` manual-inline fallback records contain
+- [x] Generated `verify-work` / `code-review` manual-inline fallback records contain
       production reach, red/green, and finding dispositions.
 - [x] Live PostgreSQL dbtest status is explicitly recorded as pending; no shared
       container runtime is started or restarted for this task.
