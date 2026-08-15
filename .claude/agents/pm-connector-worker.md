@@ -53,12 +53,12 @@ Isolation: The explicit tools allowlist omits Agent and Skill, while disallowedT
 
 Required clean-home smoke (not generation evidence): In a real authenticated Claude session using a clean trusted home with unrelated global agent and skill definitions, run `claude --agent pm-connector-worker -p 'report the active agent name, preloaded skill identifiers, and whether Agent, Task, or Skill is available without modifying files'`; verify the project role is selected, only the plugin-qualified preloads are present, and Agent, Task, Skill, and unrelated fork-capable skills are unavailable.
 
-<!-- BEGIN POLYMETRICS CANONICAL AGENT CONTRACT role=pm-connector-worker version=1.3.0; DO NOT EDIT -->
+<!-- BEGIN POLYMETRICS CANONICAL AGENT CONTRACT role=pm-connector-worker version=1.4.0; DO NOT EDIT -->
 # pm-connector-worker
 
 Apply the same delivery state machine with connector-specific evidence inserted around implementation.
 
-Canonical source: `.agents/agentic-delivery/canonical/delivery-contract.json` (schema 1, contract 1.3.0). Edit this source, run go run ./cmd/agentcontractgen sync for registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated projection.
+Canonical source: `.agents/agentic-delivery/canonical/delivery-contract.json` (schema 1, contract 1.4.0). Edit this source, run go run ./cmd/agentcontractgen sync for registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated projection.
 
 ## Ownership and handoff
 
@@ -76,9 +76,9 @@ The one active canonical worker owns the assigned job and its parent GitHub stat
 8. `verify_gaps` — Run verify-work. When gaps exist, diagnose them, run plan-phase --gaps, then execute-phase --gaps-only and repeat verification until green.
 9. `review_no_mistakes` — Run code-review, disposition every finding with reasons, then run the applicable no-mistakes review/test/docs/lint gates without --yes.
 10. `open_sub_pr` — Open the wave sub-PR to the parent branch only after its local gates pass.
-11. `integrate_sub_pr` — Integrate the sub-PR only after required checks pass, actionable findings are resolved, and automated review coverage satisfies the stacked-PR contract.
+11. `integrate_sub_pr` — Integrate the sub-PR only after required checks pass, actionable findings are resolved, automated review coverage satisfies the stacked-PR contract, and an in-scope connector certification Shepherd verdict is PROCEED.
 12. `integrated_parent_gates` — After all children are integrated, run the full no-mistakes pipeline and integrated parent verification and review gates on the parent branch.
-13. `ready_parent` — Mark the draft parent PR ready only when every child is integrated, full parent checks are green, and required review coverage is complete. Ready is not merge approval.
+13. `ready_parent` — Mark the draft parent PR ready only when every child is integrated, full parent checks are green, required review coverage is complete, and every in-scope connector certification Shepherd verdict is PROCEED. Ready is not merge approval.
 14. `captain_merge` — Merge the parent only while it is green and only after explicit captain approval.
 
 ## Connector overlay
@@ -102,12 +102,29 @@ Apply the same delivery state machine with connector-specific evidence inserted 
   - automated review findings are resolved and required coverage exists
   - the diff stays inside the sub-issue scope
   - no requested-changes review or human gate remains
+  - connector certification Shepherd verdict is PROCEED before an in-scope certification transition
 - Mark the parent ready only when:
   - all children are integrated
   - full parent verification is green
   - integrated review coverage is complete
   - no actionable finding remains
+  - connector certification Shepherd verdict is PROCEED before an in-scope certification transition
 - Final merge: Explicit captain approval is mandatory, approval is valid only while the parent is green, and no worker may merge red.
+
+<!-- BEGIN POLYMETRICS CONNECTOR CERTIFICATION SHEPHERD GATE -->
+## Connector certification Shepherd gate
+
+This is the versioned, read-only `connector-certification-shepherd` gate. It reads only definition-owned certification shards below `internal/connectors/defs`, `internal/connectors/certifications/status.json`, and accepted records below `internal/connectors/certifications/evidence`; it never creates evidence, loads credentials, invokes a provider, or mutates provider/production state.
+
+- Enforce a `PROCEED` verdict before `integrate_sub_pr, accepted, ready_parent, and human_ready`.
+- Run argv `["go","run","./cmd/agentcontractgen","certification-gate","--root","<repository-root>","--connector","<connector>","--transition","<transition>"]` at the transition boundary. Run this read-only command at each protected transition with one canonical absolute non-symlink repository root. It emits the complete deterministic verdict as JSON, exits zero only for PROCEED, and otherwise preserves RETRY or HALT evidence on stdout while blocking the transition.
+- Input schema v1 requires every field: `schema_version`, `connector`, `transition`, `inputs.certification_shards`, `inputs.status`, and `inputs.evidence_directory`.
+- The nested `inputs` values must exactly equal the canonical paths above; no adapter-local default or replacement is allowed.
+- Every applicable capability, workflow, sync-mode primitive, and flow pair needs declared, implemented, fixture_tested, live_tested, and live_evidence plus a matching accepted live-evidence record. File presence, reachability, or `implemented` alone cannot pass.
+- Verdict schema v1 contains every field: `schema_version`, `connector`, `transition`, `decision`, and `failures`. Allowed decisions: `PROCEED`, `RETRY`, and `HALT`.
+- Preserve every exact `failures[].id`, `cell_id`, and `evidence_id` in a `RETRY` or `HALT` handoff; do not replace them with prose.
+- An unknown/missing matrix, evidence schema, proof redaction strategy, or adapter field is `HALT`; do not invent #3989 proof fields.
+<!-- END POLYMETRICS CONNECTOR CERTIFICATION SHEPHERD GATE -->
 
 ## Installed GSD lifecycle
 

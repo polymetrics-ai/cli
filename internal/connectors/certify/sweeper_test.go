@@ -35,7 +35,7 @@ func TestSweeperCleansUnledgeredAgedEntries(t *testing.T) {
 		{"connections", "create", "cert_sweep_seed_conn", "--source", "file:cert-sweep-seed-file", "--destination", "warehouse:cert-sweep-warehouse", "--stream", "cert_sweep_seed", "--primary-key", "tag", "--sync-mode", "full_refresh_overwrite", "--table", "cert_sweep_source", "--json", "--root", root},
 		{"etl", "run", "--connection", "cert_sweep_seed_conn", "--stream", "cert_sweep_seed", "--json", "--root", root},
 		{"reverse", "plan", "cert_write_selftest", "--source-table", "cert_sweep_source", "--destination", "outbox:cert-outbox", "--map", "tag:tag", "--action", "delete", "--root", root},
-		{"reverse", "run", "sweep-plan", "--approve", "sweep-approval", "--json", "--root", root},
+		{"reverse", "run", "sweep-plan", "--approval-token-stdin", "--json", "--root", root},
 	}
 	callIndex := 0
 	certify.SetCLIRunFunc(func(args []string, stdout, _ io.Writer) int {

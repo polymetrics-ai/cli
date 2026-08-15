@@ -57,3 +57,16 @@ contract without broadening behavior or delivery topology.
 | Correctness boundary | Edit generated markdown, bypass the golden, or make embedded help authoritative | Update only `flowHelp`, then regenerate derived manual/transcript/website output through checked-in generators. |
 | Runtime behavior | Change flow parsing or query policy, or document the already delivered behavior | Preserve all runtime behavior; this correction is help/manual parity only. |
 | CI recovery | Rerun the failed Verify workflow or push a regenerated head naturally | Do not rerun; commit a new generated head, run a fresh local pipeline with PR/CI skipped, then let #4071 trigger checks naturally. |
+
+## Correction 3 / 5 addendum — destination-scoped legacy admission
+
+**Command:** `scripts/gsd prompt discuss-phase
+issue-4069-flow-case-equivalent-unique-tables-r1`
+**Execution:** inline/manual; the #4069 phase is not a numbered ROADMAP phase
+and its canonical contract forbids role delegation.
+
+| Area | Alternatives considered | Selected decision |
+|---|---|---|
+| Non-local protection | Preserve the global preflight, remove all legacy collision checks, or condition the guard on the selected destination | Restore destination-scoped admission: a non-local ETL must be unaffected by a legacy local-warehouse collision. |
+| Portability | Test a connector name/warehouse literal, or ask the configured destination whether it materializes locally | Use only the existing `LocalWarehouseMaterializer`-backed abstraction. |
+| Safety control | Trust the old suite, or prove the inverse behavior explicitly | Retain the existing same-connection local typed-error test beside the restored non-local regression. |

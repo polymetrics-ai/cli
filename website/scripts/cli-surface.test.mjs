@@ -26,6 +26,16 @@ const pageFlags = JSON.parse(
   ),
 );
 
+const approvalFlags = JSON.parse(
+  readFileSync(
+    resolve(
+      dirname(fileURLToPath(import.meta.url)),
+      '../../internal/connectors/reverse_etl_approval_flags.json',
+    ),
+    'utf8',
+  ),
+);
+
 const surfaceWith = (command) => ({
   usage: 'pm acme <command>',
   commands: [{ path: 'artifact download', flags: [], ...command }],
@@ -51,6 +61,16 @@ test('other intents are left exactly as the bundle declares them', () => {
     surfaceWith({ intent: 'etl', flags: [{ name: 'issue-id', type: 'string' }] }),
   );
   assert.deepEqual(flagNames(mapped), ['issue-id']);
+});
+
+test('write commands document the shared approval stdin marker exactly once', () => {
+  for (const intent of ['reverse_etl', 'direct_write']) {
+    const once = mapCLISurface(surfaceWith({ intent }));
+    assert.deepEqual(once.global_flags.map((flag) => flag.name), approvalFlags.map((flag) => flag.name));
+
+    const twice = mapCLISurface(once, { keyStyle: 'camel' });
+    assert.deepEqual(twice.globalFlags.map((flag) => flag.name), approvalFlags.map((flag) => flag.name));
+  }
 });
 
 // A direct read returns ONE page, so the website must document how to ask for

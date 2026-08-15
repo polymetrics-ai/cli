@@ -77,7 +77,7 @@ ETL STREAMS
     fields: currency(string), customer_number(integer), date(string), gross_amount(number), net_amount(number), order_number(integer), self(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_customer:

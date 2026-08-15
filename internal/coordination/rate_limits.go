@@ -54,6 +54,19 @@ type RateLimitRegistry struct {
 	sets  map[RateLimitKey]*rateLimitSet
 }
 
+// RateLimitCoordinationMode describes the enforcement boundary without
+// exposing a scope or account identity.
+type RateLimitCoordinationMode string
+
+const RateLimitCoordinationProcessLocal RateLimitCoordinationMode = "process_local"
+
+// RateLimitCoordinationStatus is safe for ordinary output. It intentionally
+// contains no registry key, subject, binding, endpoint, or credential data.
+type RateLimitCoordinationStatus struct {
+	Mode    RateLimitCoordinationMode
+	Message string
+}
+
 // NewRateLimitRegistry creates a local registry. A nil clock uses a
 // context-aware wall clock; tests should inject a deterministic clock.
 func NewRateLimitRegistry(clock RateLimitClock) *RateLimitRegistry {
@@ -61,6 +74,15 @@ func NewRateLimitRegistry(clock RateLimitClock) *RateLimitRegistry {
 		clock = wallRateLimitClock{}
 	}
 	return &RateLimitRegistry{clock: clock, sets: make(map[RateLimitKey]*rateLimitSet)}
+}
+
+// Status states the exact coordination boundary of the dependency-free
+// registry. Callers must not describe this as account-wide protection.
+func (r *RateLimitRegistry) Status() RateLimitCoordinationStatus {
+	return RateLimitCoordinationStatus{
+		Mode:    RateLimitCoordinationProcessLocal,
+		Message: "process-local rate-limit protection; not shared across processes",
+	}
 }
 
 // Limiter returns the stable local limiter for key. Declaration validation
@@ -141,6 +163,15 @@ func newRateLimitSet(specs []connsdk.RateLimitBudget) *rateLimitSet {
 func (s *rateLimitSet) reserve(now time.Time) (time.Duration, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	wait, err := s.waitLocked(now)
+	if err != nil || wait > 0 {
+		return wait, err
+	}
+	s.consumeLocked(now)
+	return 0, nil
+}
+
+func (s *rateLimitSet) waitLocked(now time.Time) (time.Duration, error) {
 	var wait time.Duration
 	if s.blockedUntil.After(now) {
 		wait = s.blockedUntil.Sub(now)
@@ -157,10 +188,13 @@ func (s *rateLimitSet) reserve(now time.Time) (time.Duration, error) {
 	if wait > 0 {
 		return wait, nil
 	}
+	return 0, nil
+}
+
+func (s *rateLimitSet) consumeLocked(now time.Time) {
 	for _, budget := range s.budgets {
 		budget.consume(now, budget.defaultCost())
 	}
-	return 0, nil
 }
 
 func (s *rateLimitSet) observe(now time.Time, observation connsdk.RateLimitObservation) {
@@ -179,11 +213,36 @@ func (s *rateLimitSet) observe(now time.Time, observation connsdk.RateLimitObser
 		if observation.Status == 429 && !observation.HasReset {
 			budget.tightenRemaining(now, 0)
 		}
-		if observation.HasCost && budget.spec.Unit == connsdk.RateLimitBudgetPoints {
+		if rateLimitBudgetAcceptsCostObservation(budget.spec, observation) {
 			if extra := observation.Cost - budget.defaultCost(); extra > 0 {
 				budget.consume(now, extra)
 			}
 		}
+	}
+}
+
+// rateLimitBudgetAcceptsCostObservation keeps independent provider resource
+// families independent when a response carries one actual-cost signal. A
+// missing source preserves the foundation's compatibility behavior for older
+// callers and tests that supplied an already-typed cost without a declaration
+// source.
+func rateLimitBudgetAcceptsCostObservation(budget connsdk.RateLimitBudget, observation connsdk.RateLimitObservation) bool {
+	if !observation.HasCost || budget.Unit != connsdk.RateLimitBudgetPoints {
+		return false
+	}
+	if observation.CostSource == "" {
+		return true
+	}
+	if budget.Cost == nil {
+		return false
+	}
+	switch observation.CostSource {
+	case connsdk.RateLimitCostSourceResponseHeader:
+		return budget.Cost.ResponseHeader != ""
+	case connsdk.RateLimitCostSourceGraphQLRateLimit:
+		return budget.Cost.ResponseBody == string(connsdk.RateLimitCostSourceGraphQLRateLimit)
+	default:
+		return false
 	}
 }
 

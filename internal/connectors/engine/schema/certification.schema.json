@@ -15,6 +15,10 @@
           "type": "object",
           "additionalProperties": true
         },
+        "required_credential_config": {
+          "type": "object",
+          "additionalProperties": true
+        },
         "live_unavailable": {
           "type": "array",
           "items": {

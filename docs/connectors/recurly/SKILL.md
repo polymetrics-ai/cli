@@ -807,6 +807,8 @@ Reads Recurly accounts, subscriptions, invoices, transactions, catalog, usage, e
 - Recurly V3 API connector for accounts, subscriptions, invoices, transactions, catalog, previews, exports, and typed reverse ETL.
 - Usage: pm recurly <command> [flags] --json
 - Source CLI: Recurly API (https://recurly.com/developers/api/spec/v2021-02-25.yaml)
+- Global flags:
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - Sites
 - Site
 - Accounts

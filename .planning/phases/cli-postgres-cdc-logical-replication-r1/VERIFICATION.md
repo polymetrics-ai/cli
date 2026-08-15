@@ -27,11 +27,15 @@
 
 ### Current blocking evidence
 
-- [x] Docker is available through the `colima` context, but no PostgreSQL
-  container was started: the required merged `dbtest` harness only accepts a
-  direct local Podman endpoint and contains no Docker/Colima backend. A
-  hand-authored Docker runner would violate its deterministic ownership and
-  cleanup contract.
+- [x] Historical containment evidence: Docker was available through the
+  `colima` context, but no PostgreSQL container was started because the then
+  merged `dbtest` harness was Podman-only. The #4083 foundation now supplies
+  the explicit Docker-or-Podman direct-local-Unix harness path; its
+  [maintainer guide](../../../internal/connectors/native/dbtest/README.md)
+  owns the current Docker/Colima contract. This removes that foundation gap but
+  does not make any PostgreSQL CDC proof current. A hand-authored Docker runner
+  would still violate the harness's deterministic ownership and cleanup
+  contract.
 - [x] `POLYMETRICS_INTEGRATION=1 go test -count=1 -run
   '^TestHistoricalLogicalReplicationResumesAndCleansSlot$' -v
   ./internal/connectors/native/postgres` executed the named test and it

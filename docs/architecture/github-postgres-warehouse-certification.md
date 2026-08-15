@@ -16,15 +16,12 @@ Once these legs share one contract, the system can compose GitHub to warehouse t
 ## Target architecture
 
 ```text
-GitHub API source ----+
-                      +-- Connector.Read
-PostgreSQL source ----+
-                             |
-                             v
-                    Immutable captured batch
-                  records + schema + checkpoint
-                             |
-                             v
+GitHub API source -- Connector.Read ----+
+                                        +-- Immutable captured batch
+PostgreSQL source -- native source -----+   records + schema + checkpoint
+                     (definition-selected)
+                                        |
+                                        v
                  Parquet/DuckDB sync executor
             WAL -> validate -> materialize -> receipt
                              |
@@ -41,7 +38,11 @@ PostgreSQL source ----+
                    GitHub Connector.Write        PostgreSQL Connector.Write
 ```
 
-DuckDB is the common materialization and query engine. The durable warehouse is a connection-owned JSONL WAL plus versioned Parquet generations.
+DuckDB is the common materialization and query engine. The durable warehouse is a connection-owned JSONL WAL plus one derived Parquet file for each table.
+
+PostgreSQL's native source selection is declaration-led rather than App-composed. Its exact
+snapshot streams, modes, and limits are owned by the
+[PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md).
 
 ## Responsibility boundaries
 
@@ -55,7 +56,7 @@ The shared engine owns canonical mode admission, checkpoint and resume behavior,
 
 ### Warehouse
 
-The warehouse owns the connection-scoped JSONL WAL, fsync before acknowledgement, DuckDB transformation and validation, Parquet generation, atomic generation replacement, row counts and content hashes, durable receipts, and readback for outbound plans.
+The warehouse owns the connection-scoped JSONL WAL, fsync before acknowledgement, DuckDB transformation and validation, one derived Parquet table file, atomic file replacement, row counts and content hashes, durable receipts, and readback for outbound plans.
 
 GitHub and PostgreSQL must not define their own meanings for overwrite, dedupe, upsert, or history.
 
@@ -63,17 +64,17 @@ GitHub and PostgreSQL must not define their own meanings for overwrite, dedupe, 
 
 1. Read a bounded source batch.
 2. Produce a candidate source checkpoint without persisting it.
-3. Write the batch to an immutable WAL/workset.
+3. Append the batch to the WAL and record its immutable workset identity.
 4. Fsync the WAL.
 5. Apply the selected canonical sync mode using DuckDB.
-6. Publish the resulting Parquet generation atomically.
+6. Materialize the resulting single Parquet table file and atomically replace the prior file.
 7. Write a warehouse receipt containing the connector, stream, sync mode, run and workset IDs, input/output counts, schema hash, content hash, and candidate checkpoint.
 8. Read the Parquet result back through DuckDB and validate it.
 9. Advance the source checkpoint only after the receipt and readback succeed.
 
 ## Warehouse-to-connector transaction
 
-1. Pin an immutable warehouse generation/workset.
+1. Pin an immutable warehouse workset and reopen its connection-owned Parquet table.
 2. Query it through DuckDB.
 3. Normalize the exact destination operations.
 4. Hash the complete plan.
@@ -92,8 +93,8 @@ This ordering ensures that checkpoints never advance ahead of durable data or de
 
 | Canonical mode | Shared warehouse behavior |
 | --- | --- |
-| `full_overwrite` | Build and validate a new Parquet generation in staging, then atomically replace the active generation. |
-| `full_append` | Combine the existing generation and complete new snapshot into a new atomic generation. |
+| `full_overwrite` | Build and validate one staged Parquet file, then atomically replace the active table file. |
+| `full_append` | Append the complete new snapshot to the WAL, rebuild the active table file from that WAL, then atomically replace it. |
 | `incremental_append` | Append only records after the exact checkpoint and make replay idempotent through workset identity. |
 | `incremental_upsert` | Partition by primary key and retain the latest cursor/version, including tombstone behavior. |
 | `incremental_dedupe` | Fold input to one current non-deleted record per primary key. |
@@ -118,15 +119,22 @@ Flows and schedules must invoke this same connector writer. A schedule stores a 
 
 ### PostgreSQL to warehouse
 
-Polling resume must use an exact composite position `(cursor_value, primary_key)`. The query predicate and ordering must handle equal cursor values:
+The current PostgreSQL source leg is a definition-selected bounded snapshot. Its exact streams,
+modes, and checkpoint limits are owned by the
+[PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md). Polling is a separate,
+future transport and is not a fallback for that snapshot.
+
+Polling resume must use an exact composite position `(cursor_value, primary_key)`. For the architecture's composite contract, bind the prior cursor value as pgx argument 1 (`$1`) and the stable primary-key tie breaker as argument 2 (`$2`); the predicate and ordering must handle equal cursor values:
 
 ```sql
-WHERE cursor > $cursor
-   OR (cursor = $cursor AND primary_key > $primary_key)
+WHERE cursor > $1
+   OR (cursor = $1 AND primary_key > $2)
 ORDER BY cursor, primary_key
 ```
 
-Also prove a consistent snapshot boundary, schema drift handling, bounded reads, exact restart, transaction-preserving CDC, and a whole-transaction warehouse receipt before LSN acknowledgement.
+Any future polling or CDC source must prove a consistent snapshot boundary, schema drift handling,
+bounded reads, exact restart, transaction-preserving CDC, and a whole-transaction warehouse receipt
+before LSN acknowledgement.
 
 ### Warehouse to PostgreSQL
 
@@ -136,7 +144,12 @@ Implement a managed-target driver with strict ownership boundaries. It must pin 
 
 Certification requires every applicable mode and a typed evidence-bearing outcome for unsupported or non-applicable cells. It must not force unsafe symmetry or infer exact execution from broad `read` or `write` capability flags.
 
-GitHub source to warehouse can support all six non-CDC warehouse modes. PostgreSQL source to warehouse can support those modes plus source CDC. PostgreSQL destination naturally supports overwrite, append, upsert, and dedupe. GitHub full overwrite requires an explicit managed-resource ownership and deletion/archive contract. `change_capture` is a source mode rather than a destination write mode.
+GitHub source to warehouse can support all six non-CDC warehouse modes. Exact PostgreSQL source
+availability is owned by the [PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md);
+its broad `read` capability does not promote polling, incremental modes, or source CDC. PostgreSQL
+destination naturally supports overwrite, append, upsert, and dedupe. GitHub full overwrite requires
+an explicit managed-resource ownership and deletion/archive contract. `change_capture` is a source
+mode rather than a destination write mode.
 
 The current PostgreSQL #3972 contract records destination-side `incremental_dedupe_history` as typed non-executable. Warehouse-side SCD2 history should be implemented for both sources now. Expanding PostgreSQL destination history requires an explicit managed-history-table contract rather than a false certification claim.
 

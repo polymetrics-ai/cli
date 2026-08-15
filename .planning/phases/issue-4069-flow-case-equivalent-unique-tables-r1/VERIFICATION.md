@@ -182,3 +182,32 @@ and `code-review` prompts were executed inline under the recorded single-worker
 fallback and found no acceptance gap or candidate finding. Exact commands,
 results, generator idempotence, and the separate inherited-warning disposition
 are in `traces/correction-2-flow-manual-broad-verification.txt`.
+
+## Correction 3 / 5 — destination-scoped legacy collision admission
+
+**Status:** local/GSD verification green at evidence checkpoint
+`5a4f3d23645d3046d02055273fedd9a8b9dd67d1` (its only addition after the
+verified production commit is this correction's GSD evidence); child-PR
+delivery remains pending and #4071 is unchanged.
+
+- [x] Restored non-local ETL regression fails against exact source head
+      `3b75f4a62fd8d743ec883a5b824164374f661857` with the current typed
+      same-owner local-warehouse error before the unrelated source or
+      destination executes.
+- [x] The production preflight is narrowed only through the existing
+      `connectionMaterializesLocalWarehouse` abstraction; no connector name or
+      warehouse literal is introduced in shared code.
+- [x] Restored non-local ETL regression passes with one loaded record, one
+      destination acknowledgement, and one source request while the legacy
+      local collision remains present.
+- [x] Existing local true-positive regression remains a typed
+      `*warehouse.SameOwnerCaseEquivalentTableError` refusal before `beginRun`
+      and state mutation.
+- [x] Full `internal/app` tests and proportionate quality/build/GSD-workflow
+      gates pass.
+- [x] Inline/manual `verify-work` and `code-review` record no acceptance gap
+      or unresolved finding.
+- [ ] The delivery owner must create the required child PR with base
+      `fix/4069-flow-case-equivalent-unique-tables-r1`, then record its actual
+      head SHA in `RUN-STATE.json` and the published child PR body without
+      changing #4071.

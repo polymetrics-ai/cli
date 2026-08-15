@@ -284,3 +284,59 @@ evidence. `scripts/verify-gsd-workflow` passes against `origin/main`. The
 manual inline `verify-work` and `code-review` steps pass with no candidate gap
 or finding. Full non-secret command records are in
 `traces/correction-2-flow-manual-broad-verification.txt`.
+
+## Correction 3 / 5 — destination-scoped legacy collision admission
+
+| Slice | RED contract | GREEN contract | Status |
+|---|---|---|---|
+| C3. Non-local ETL isolation | With a legacy local-warehouse `records`/`RECORDS` collision present, a distinct non-local connection is rejected before its source or destination executes. | The unrelated non-local ETL loads one record, sends one destination batch, and performs one source read; it never visits the local inventory guard. | GREEN 2026-08-14 |
+| C3. Local invariant control | A legacy local-warehouse collision must still be refused before `beginRun` with its typed same-owner error and no persisted mutation. | The existing C2 legacy sync test remains green without a changed reason or weakened assertion. | GREEN 2026-08-14 |
+
+### Correction 3 RED command
+
+```text
+go test -timeout 20m ./internal/app -run '^TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL$' -count=1 -v
+```
+
+Expected RED against production source exact head
+`3b75f4a62fd8d743ec883a5b824164374f661857`: exit 1 and an error chain
+containing `*warehouse.SameOwnerCaseEquivalentTableError` before the unrelated
+source or destination executes. The test itself is restored from the final
+commit's deletion; no production source is changed until that failure is
+captured.
+
+### Correction 3 GREEN commands
+
+```text
+go test -timeout 20m ./internal/app -run '^(TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL|TestLegacySameOwnerCaseEquivalentInventorySurvivesOpenAndFailsBeforeMutation)$' -count=1 -v
+go test -timeout 20m ./internal/app -count=1
+```
+
+GREEN requires the non-local false positive to disappear and the true local
+positive to retain the same typed reason and pre-mutation boundary. The guard
+is scoped using the generic materialization interface only; no connector name
+or warehouse literal is permitted.
+
+### Recorded correction 3 RED
+
+After restoring the deleted test, its selector ran against the unchanged
+`RunETL` production source from exact #4071 head
+`3b75f4a62fd8d743ec883a5b824164374f661857` (the only earlier commit in this
+worktree is the planning checkpoint). It exited 1: `RunETL(non-local)` was
+rejected by the legacy `acme` `RECORDS`/`records` local-warehouse collision
+before the non-local source or destination could execute. The full non-secret
+output is `traces/correction-3-nonlocal-collision-red.txt`.
+
+### Recorded correction 3 GREEN
+
+Verified production commit `a49ae952d52a6edf9786cc90e02825e2414f5b44`
+restores the selected connection's generic materialization check around the
+preflight; GSD evidence checkpoint `5a4f3d23645d3046d02055273fedd9a8b9dd67d1`
+adds only the resulting evidence. Child-PR delivery remains pending and does
+not change #4071. The focused pair passed: the restored false-positive
+regression loaded one record, acknowledged one batch, and made one source read; the existing local
+true-positive still passed its `errors.As` check for
+`*warehouse.SameOwnerCaseEquivalentTableError` before `beginRun` or state
+mutation. The full touched `internal/app` package passed in 98.497 seconds.
+The non-secret command records are
+`traces/correction-3-destination-scoped-collision-green.txt`.

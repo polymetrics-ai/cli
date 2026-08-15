@@ -56,25 +56,28 @@ type LedgerRecord struct {
 
 // RunOptions controls how a flow run behaves.
 type RunOptions struct {
-	DryRun        bool
-	Force         bool
-	JSON          bool
-	ApprovalToken string // required when any KindAction step is present
-	PerAction     bool   // each action step gets its own token (future)
+	DryRun bool
+	Force  bool
+	JSON   bool
+	// ApprovalToken is retained for legacy test runners. Connector-backed
+	// actions use a durable authorization reference, not a non-empty string.
+	ApprovalToken string
+	PerAction     bool // each action step gets its own token (future)
 }
 
 // StepResult is the per-step outcome in a RunResult.
 type StepResult struct {
-	ID             string `json:"id"`
-	Kind           string `json:"kind"`
-	Status         string `json:"status"`
-	RecordsRead    int    `json:"records_read"`
-	RecordsWritten int    `json:"records_written"`
-	RecordsFailed  int    `json:"records_failed,omitempty"`
-	DurationNs     int64  `json:"duration_ns"`
-	Error          string `json:"error,omitempty"`
-	DLQPath        string `json:"dlq_path,omitempty"`
-	SchemaDrift    bool   `json:"schema_drift,omitempty"`
+	ID             string   `json:"id"`
+	Kind           string   `json:"kind"`
+	Status         string   `json:"status"`
+	RecordsRead    int      `json:"records_read"`
+	RecordsWritten int      `json:"records_written"`
+	RecordsFailed  int      `json:"records_failed,omitempty"`
+	DurationNs     int64    `json:"duration_ns"`
+	Error          string   `json:"error,omitempty"`
+	DLQPath        string   `json:"dlq_path,omitempty"`
+	ReceiptIDs     []string `json:"receipt_ids,omitempty"`
+	SchemaDrift    bool     `json:"schema_drift,omitempty"`
 }
 
 // RunResult is the top-level outcome of Engine.Run.
@@ -149,19 +152,29 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 		}
 	}
 
-	// Pre-flight: if any action step is present and no token is provided, fail fast.
-	if !opts.DryRun {
-		for _, s := range e.Manifest.Steps {
-			if s.Kind == KindAction && opts.ApprovalToken == "" {
-				return result, ErrApprovalRequired
-			}
-		}
-	}
-
 	// Compute topological order.
 	order, err := BuildDAG(e.Manifest)
 	if err != nil {
 		return result, err
+	}
+	if !opts.DryRun {
+		for _, step := range e.Manifest.Steps {
+			if step.Kind != KindAction {
+				continue
+			}
+			if e.ActionRunner == nil {
+				return result, fmt.Errorf("action step %q: no ActionRunner configured", step.ID)
+			}
+			if preflight, ok := e.ActionRunner.(StepActionPreflight); ok {
+				if err := preflight.PreflightStep(ctx, step, opts.ApprovalToken); err != nil {
+					return result, err
+				}
+				continue
+			}
+			if opts.ApprovalToken == "" {
+				return result, ErrApprovalRequired
+			}
+		}
 	}
 
 	// Build step index.
@@ -248,6 +261,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			sr.RecordsWritten = actionRes.RecordsSucceeded
 			sr.RecordsFailed = actionRes.RecordsFailed
 			sr.DLQPath = actionRes.DLQPath
+			sr.ReceiptIDs = append([]string(nil), actionRes.ReceiptIDs...)
 		default:
 			stepErr = fmt.Errorf("%w: %s", ErrUnknownStepKind, s.Kind)
 		}

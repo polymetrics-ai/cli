@@ -74,6 +74,10 @@
               "subject_config": { "type": "string" }
             }
           },
+          "coordination": {
+            "type": "string",
+            "enum": ["require_shared"]
+          },
           "budgets": {
             "type": "array",
             "items": {
@@ -96,7 +100,8 @@
                   "additionalProperties": false,
                   "properties": {
                     "default_cost": { "type": "number" },
-                    "response_header": { "type": "string" }
+                    "response_header": { "type": "string" },
+                    "response_body": { "type": "string", "enum": ["graphql_rate_limit"] }
                   }
                 }
               }

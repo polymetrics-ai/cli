@@ -87,7 +87,7 @@ ETL STREAMS
     fields: billable(integer), clocked(boolean), clocked_offline(boolean), customers_id(integer), duration(integer), hourly_rate(number), id(integer), lumpsum(number), lumpsum_services_amount(number), lumpsum_services_id(integer), lumpsum_services_price(number), offset(integer), projects_id(integer), services_id(integer), texts_id(integer), time_clocked_since(string), time_insert(string), time_last_change(string), time_last_change_worktime(string), time_since(string), time_until(string), type(integer), users_id(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_customer:

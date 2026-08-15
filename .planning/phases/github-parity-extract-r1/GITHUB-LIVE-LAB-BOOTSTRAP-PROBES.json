@@ -1,27 +1,27 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "connector": "github",
   "source": {
     "cli_surface": {
       "path": "internal/connectors/defs/github/cli_surface.json",
-      "sha256": "c6d58c9f6c79e01cacaf9aa8efc41fb35f92445d9a5be6ee2d8a7f40d726c574"
+      "sha256": "9e749d3ec76e9c6bfd233a8e33b556e5a7c86e985179dee0b4d5de78b65ea6d7"
     },
     "api_surface": {
       "path": "internal/connectors/defs/github/api_surface.json",
-      "sha256": "723af7f63a748760f7ef55a38eb8a80e670421c742894c82876b22bdc8733ce9"
+      "sha256": "6eb941614704eed876e976f6b1675e2e2b7c4116d2adf3e1c6bcac8744a0e86c"
     },
     "live_lab_manifest": {
       "path": ".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-MANIFEST.json",
-      "sha256": "cb4fca843671a7a902400124f66d86ab936005c01c237451df36912c19391372"
+      "sha256": "dafba63ecba0cca402fa4f904f2b085e665ecf08dfb969cdfbce958d8aea3e20"
     }
   },
   "policy": {
     "provider_operations": "pm_github_only",
-    "account_probes": "fixed_targetless_direct_reads",
+    "account_probes": "none; targetless direct reads remain untestable outside the credential-bound installation repository preflight",
     "organization_delete": "not_invoked_without_run_owned_immutable_target_and_cleanup_provenance"
   },
   "organization": {
-    "affected_case_count": 291,
+    "affected_case_count": 308,
     "create_command": null,
     "delete_command": {
       "command": "orgs delete",
@@ -44,20 +44,5 @@
     "code_issuer_commands": [],
     "result": "pm_surface_missing_manifest_code_issuer"
   },
-  "account_probes": [
-    {
-      "id": "github_app_authentication",
-      "command": "apps get-authenticated",
-      "method": "GET",
-      "path": "/app",
-      "credential_requirement": "GitHub App JWT or installation credential"
-    },
-    {
-      "id": "marketplace_user_subscriptions",
-      "command": "apps list-subscriptions-for-authenticated-user",
-      "method": "GET",
-      "path": "/user/marketplace_purchases",
-      "credential_requirement": "GitHub Marketplace user entitlement credential"
-    }
-  ]
+  "account_probes": []
 }

@@ -458,7 +458,7 @@ ETL STREAMS
     fields: cast(array), crew(array), first_air_date(string), id(integer), media_type(string), name(string), overview(string), popularity(number), release_date(string), results(object), title(string), vote_average(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external TMDb API read of public catalog, search, account-state, and reference metadata

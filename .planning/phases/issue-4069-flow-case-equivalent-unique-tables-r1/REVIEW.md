@@ -174,3 +174,45 @@ review requirement.
 No candidate finding remains. The remaining no-mistakes custody and natural
 exact-head CI are delivery gates, not local review findings; #4071 topology is
 explicitly untouched.
+
+## Correction 3 / 5 inline code review — destination-scoped admission
+
+**Mode:** standard inline GSD `code-review` fallback after resolving the
+project prompt. The issue is not a numbered ROADMAP phase and its contract
+forbids role delegation; this retains the required cross-file review.
+
+**Result:** PASS — no Critical, Warning, or Info candidate finding.
+
+### Reviewed boundary
+
+- `RunETL` retains the existing whole configured local-inventory check and its
+  pre-`prefixedID`/pre-`beginRun` position, but now invokes it only when the
+  selected connection reports local materialization through the existing
+  credential-free abstraction.
+- `connectionMaterializesLocalWarehouse` remains the sole destination
+  classifier. The correction neither compares a connector name nor introduces
+  a warehouse literal or a connector-specific branch in shared code.
+- The restored regression proves the false positive is removed at the runtime
+  boundary. The existing legacy local test still verifies the true positive's
+  `*warehouse.SameOwnerCaseEquivalentTableError`, typed chain, and zero-run/
+  zero-warehouse-mutation behavior.
+- The changed production branch is small, keeps errors returned rather than
+  logged, and introduces no new input parsing, credential, I/O, concurrency,
+  dependency, or SQL behavior.
+
+### Evidence inspected
+
+- RED on exact source `3b75f4a62fd8d743ec883a5b824164374f661857`, GREEN on
+  verified production commit `a49ae952d52a6edf9786cc90e02825e2414f5b44`, and
+  GSD evidence checkpoint `5a4f3d23645d3046d02055273fedd9a8b9dd67d1` are
+  recorded in the paired correction-3 traces.
+- Focused false-positive/true-positive tests and full `internal/app` passed;
+  `go vet`, direct app lint, build, tidy/configured lint, contract,
+  surface-sync, release parity, candidate diff check, and
+  `verify-gsd-workflow` passed.
+
+### Finding disposition
+
+No production-code finding remains. Child-PR delivery is pending its owning
+executor; #4071 is not body-patched, retargeted, merged, closed, or
+readiness-mutated.

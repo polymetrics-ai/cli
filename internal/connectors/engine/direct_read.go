@@ -141,7 +141,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 			if class != "" {
 				msg = class + ": " + msg
 			}
-			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read %s %s: %s", method, op.REST.Path, msg)
+			return connectors.DirectReadResult{}, formatResponseError(fmt.Sprintf("operation direct read %s %s: %s", method, op.REST.Path, msg), err)
 		}
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read response is not JSON: %w", err)
 	}
@@ -317,7 +317,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 			if class != "" {
 				msg = class + ": " + msg
 			}
-			return connectors.DirectReadResult{}, fmt.Errorf("direct read %s %s: %s", method, req.Path, msg)
+			return connectors.DirectReadResult{}, formatResponseError(fmt.Sprintf("direct read %s %s: %s", method, req.Path, msg), err)
 		}
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read response is not JSON: %w", err)
 	}

@@ -1,0 +1,15 @@
+Command:
+
+    go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt$'
+
+Observed RED result:
+
+    --- FAIL: TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt (0.00s)
+        transaction_stage_test.go:57: CommitTransaction() error = committed transaction staging is not implemented
+    FAIL
+    FAIL    polymetrics.ai/internal/connectors/database    0.417s
+    FAIL
+
+Interpretation: the test compiles and exercises Begin/Append/Commit, but no
+durable receipt-gated commit behavior exists yet. This is the required
+behavioral RED baseline; it is not a skipped test or compile-only failure.

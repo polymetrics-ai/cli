@@ -463,9 +463,10 @@ The requested names should be product profiles over the canonical modes at
 not be advertised merely because their names exist. Deletes and history-window behavior continue to
 use the existing `synccontract` tombstone/history contract.
 
-The brief uses `incremental_dedup`; the captain ruled that the repository's existing
-`incremental_dedupe` spelling is the only public and persisted spelling. Reject the shorter form at
-input instead of creating an alias. There is one mode name and one contract.
+The brief uses `incremental_dedup`; the captain ruling below retains
+`incremental_dedupe` as the only canonical `synccontract.Mode` spelling. Reject the shorter form
+at input instead of creating an alias. Retained public compatibility inputs are owned separately by
+`internal/synccontract/public_modes.go`.
 
 ## Type mapping: lossless or no write
 
@@ -766,7 +767,7 @@ MySQL is valuable precisely because it will expose PostgreSQL assumptions:
    durable, idempotent `provisioning → ready` recovery state rather than pretending PostgreSQL's
    single transactional-DDL boundary is portable.
 5. Run the identical conformance corpus and the existing `native/dbtest` live harness; do not copy
-   the harness (`internal/connectors/native/dbtest/README.md:1-46`).
+   the harness ([maintainer guide](../../internal/connectors/native/dbtest/README.md)).
 6. Add PostgreSQL→MySQL and MySQL→PostgreSQL matrices.
 7. Only then set MySQL write capability true and delete duplicated policy from its native package.
 
@@ -907,8 +908,9 @@ Every driver runs the same fixtures:
 
 ### Live database harness
 
-Use `internal/connectors/native/dbtest`, whose maintainer guide explicitly says to add an engine by
-`Config`, not copy the harness (`README.md:1-46`). Keep integration opt-in, direct-local-Podman-only,
+Use `internal/connectors/native/dbtest`, whose [maintainer guide](../../internal/connectors/native/dbtest/README.md)
+owns the `Config` setup; add an engine without copying the harness. Keep integration opt-in and
+follow that guide's explicit Docker-or-Podman runtime and direct-local-Unix-endpoint contract,
 uniquely owned resources, unconditional cleanup, and sequential engines by default.
 
 For each live write test, query the destination and assert row values/counts. Inject failures before,
@@ -962,14 +964,16 @@ supersede this ruling.
 **Ruling: Option A.** Revisit Option B only after measuring phase-one cost; never ship a direct path
 without a durable spool.
 
-### 4. Which public spelling should users see? — **resolved by captain**
+### 4. Which canonical spelling should the database contract use? — **resolved by captain**
 
 - **Option A — canonical `incremental_dedupe`.** Matches persisted `synccontract.Mode`.
 - **Option B — accept `incremental_dedup` as an input alias.** Normalize immediately and persist only
   `incremental_dedupe`.
 
-**Ruling: Option A.** `incremental_dedupe` is the sole public and stored spelling. Do not add the
-`incremental_dedup` alias.
+**Ruling: Option A.** `incremental_dedupe` is the sole canonical `synccontract.Mode` spelling. Do
+not add the shorter `incremental_dedup` alias. This does not remove retained legacy-ETL
+compatibility inputs: the connector-neutral `synccontract.PublicModes` authority maps
+`incremental_append_deduped` to `incremental_dedupe` for typed admission.
 
 ### 5. PostgreSQL CDC and `pglogrepl` — **resolved by captain**
 
@@ -1109,7 +1113,7 @@ done | sort | uniq -c
 | PostgreSQL CDC remains a stub on inspected `main` | `internal/connectors/native/postgres/cdc.go:10-29` |
 | Approved branch implements pglogrepl CDC | `aeafb4ff0:internal/connectors/native/postgres/cdc.go:18-269`; `cdc_lifecycle.go:21-295` |
 | Approved branch dependency pins | `aeafb4ff0:go.mod:8-9` |
-| Shared database live harness | `internal/connectors/native/dbtest/README.md:1-46` |
+| Shared database live harness | [dbtest maintainer guide](../../internal/connectors/native/dbtest/README.md) |
 | Shared fail-closed TLS vocabulary | `internal/connectors/native/sqltls/sqltls.go:1-8,20-67,69-133` |
 | Acknowledged-before-durable defect class | `/Users/karthiksivadas/karthik-agent-workspace/data/learnings.md:6-38` |
 | Existing ETL system-column enrichment | `internal/app/app.go:1167-1171`; `internal/app/local_warehouse.go:189-193` |
@@ -1320,11 +1324,11 @@ therefore wire the framework-owned sink, and conformance must test the fact behi
 #### 5. Use the current shared database harness
 
 The branch's live test is environment-only (`POLYMETRICS_INTEGRATION`) and predates the current
-Podman harness. Rebase it onto the repository contract:
+explicit-runtime harness contract. Rebase it onto the repository contract:
 
 - add `//go:build databaseintegration`;
-- use `POLYMETRICS_DATABASE_INTEGRATION` and the explicit local
-  `POLYMETRICS_PODMAN_ENDPOINT`;
+- enable and configure it through the [dbtest maintainer guide](../../internal/connectors/native/dbtest/README.md),
+  which owns the explicit Docker-or-Podman runtime and direct local Unix endpoint inputs;
 - configure PostgreSQL through `internal/connectors/native/dbtest.Config`; its existing
   `EngineArgs` supports `-c wal_level=logical`, `-c max_wal_senders=...`, and
   `-c max_replication_slots=...`, so no copied harness is needed;

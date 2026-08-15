@@ -1,0 +1,19 @@
+{
+  "issue": 3989,
+  "state": "reviewed",
+  "mode": "manual-gsd-inline",
+  "manual_fallback_reason": "phase 3989 is absent from the roadmap and this task cannot spawn compatible isolated GSD workers",
+  "commands_resolved": [
+    "discuss-phase 3989 --auto",
+    "plan-phase 3989 --tdd --auto",
+    "execute-phase 3989 --interactive",
+    "verify-work 3989 --auto",
+    "code-review 3989 --depth=standard"
+  ],
+  "verification": {
+    "certify_suite": "passed",
+    "scoped_gates": "passed",
+    "cli_parity": "passed",
+    "live_postgres": "pre-existing #4158 failure recorded out of scope"
+  }
+}

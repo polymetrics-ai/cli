@@ -175,7 +175,7 @@ ETL STREAMS
     fields: course_id(string), created_at(string), description(string), email(string), id(string), items(array), meta(object), name(string), percentage_completed(number), product_id(string), slug(string), title(string), updated_at(string), user_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_bundle_enrollment:

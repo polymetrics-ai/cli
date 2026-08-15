@@ -7,10 +7,13 @@ func TestEffectiveCredentialConfigAddsGitHubBaseURL(t *testing.T) {
 	if got["base_url"] != "https://api.github.com" {
 		t.Fatalf("base_url = %q, want GitHub default", got["base_url"])
 	}
+	if got["tier"] != "certification" {
+		t.Fatalf("tier = %q, want definition-owned certification selector", got["tier"])
+	}
 	got["owner"] = "mutated"
-	orig := map[string]string{"owner": "octo", "base_url": "https://github.example/api"}
+	orig := map[string]string{"owner": "octo", "base_url": "https://github.example/api", "tier": "normal"}
 	got = effectiveCredentialConfig("github", orig)
-	if got["base_url"] != "https://github.example/api" || orig["owner"] != "octo" {
+	if got["base_url"] != "https://github.example/api" || got["tier"] != "certification" || orig["owner"] != "octo" || orig["tier"] != "normal" {
 		t.Fatalf("effective config = %+v orig=%+v", got, orig)
 	}
 	unknown := effectiveCredentialConfig("unknown-certification-connector", nil)

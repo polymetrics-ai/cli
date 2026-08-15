@@ -1478,6 +1478,7 @@ func newFlowLegacySameOwnerCaseEquivalentWarehouseApp(t *testing.T, ctx context.
 		caseRecords[key] = value
 	}
 	caseRecords["destination_table"] = "RECORDS"
+	caseRecords["stream_id"] = "stream_legacy_case_records"
 	streams["case-records"] = caseRecords
 	updated, err := json.Marshal(state)
 	require.NoError(t, err)

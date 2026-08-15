@@ -87,6 +87,27 @@ generator were regenerated twice to prove idempotence. Focused/manual and full
 CLI tests, Go quality gates, docs/contract/generator checks, no-install website
 checks, candidate-diff validation, and the inline GSD verify/review fallback
 all pass. The Website lint warnings remain the existing 13 warnings in
-untouched paths. The only remaining delivery step is one fresh no-mistakes run
-with PR and CI explicitly skipped; #4071 remains the sole existing draft
-stacked PR, and its naturally triggered exact-head checks remain authoritative.
+untouched paths. The only remaining delivery step belongs to the outer delivery
+executor: create this branch's child PR on
+`fix/4069-flow-case-equivalent-unique-tables-r1`, record its actual head SHA,
+and leave #4071 unchanged.
+
+## Correction 3 / 5 — destination-scoped legacy collision admission
+
+Exact #4071 head `3b75f4a62fd8d743ec883a5b824164374f661857` had made the
+legacy local-warehouse collision preflight unconditional. The restored
+non-local ETL regression failed there before an unrelated source or destination
+could execute. Verified production commit
+`a49ae952d52a6edf9786cc90e02825e2414f5b44` restores the prior generic
+materialization condition; GSD evidence checkpoint
+`5a4f3d23645d3046d02055273fedd9a8b9dd67d1` adds its evidence only. A
+non-local ETL now loads its record while an unrelated legacy local collision
+remains present. Child-PR delivery is pending, so no #4071 body was changed.
+
+The existing local true-positive regression remains green, preserving its
+typed `*warehouse.SameOwnerCaseEquivalentTableError` and pre-`beginRun`
+mutation fence. The full `internal/app` package and proportionate quality,
+build, GSD-workflow, contract, generated-surface, and release parity checks
+passed. The correction changes no public CLI surface and adds no
+connector-specific shared behavior. Exact RED/GREEN output and the inline GSD
+verify/review records are under `traces/correction-3-*`.

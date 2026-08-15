@@ -50,7 +50,7 @@ ETL STREAMS
     fields: description(string), identifier(string), name(string), org_identifier(string), project_identifier(string), stage_count(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Harness NextGen platform API read of organization/project/service/connector/pipeline metadata

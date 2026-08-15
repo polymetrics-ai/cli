@@ -93,6 +93,10 @@ func (s JSONStore[T]) Load() (out T, err error) {
 	return s.loadNoLock()
 }
 
+func (s JSONStore[T]) LoadReadOnly() (out T, err error) {
+	return s.loadNoLock()
+}
+
 func (s JSONStore[T]) Save(value T) (err error) {
 	unlock, err := s.lock()
 	if err != nil {
@@ -121,6 +125,47 @@ func (s JSONStore[T]) Update(update func(T) (T, error)) (out T, err error) {
 
 	current, err := s.loadNoLock()
 	if err != nil {
+		return current, err
+	}
+	next, err := update(current)
+	if err != nil {
+		return current, err
+	}
+	if err := s.saveNoLock(next); err != nil {
+		return next, err
+	}
+	outcome = CommitOutcomeCommitted
+	return next, nil
+}
+
+func (s JSONStore[T]) UpdateAfterPreflight(preflight func(T) error, update func(T) (T, error)) (out T, err error) {
+	if preflight == nil {
+		return out, errors.New("state preflight function is required")
+	}
+	if update == nil {
+		return out, errors.New("state update function is required")
+	}
+
+	current, err := s.LoadReadOnly()
+	if err != nil {
+		return current, err
+	}
+	if err := preflight(current); err != nil {
+		return current, err
+	}
+
+	unlock, err := s.lock()
+	if err != nil {
+		return out, err
+	}
+	outcome := CommitOutcomeNotCommitted
+	defer func() { finishUnlock(unlock, &err, outcome) }()
+
+	current, err = s.loadNoLock()
+	if err != nil {
+		return current, err
+	}
+	if err := preflight(current); err != nil {
 		return current, err
 	}
 	next, err := update(current)

@@ -8,7 +8,7 @@ wave: 1
 branch: fix/4069-flow-case-equivalent-unique-tables-r1
 base_branch: feat/3897-flow-connection-scope-nm
 immutable_start_head: 659efd8a0d69f26b55fcbd3c02150e995c159519
-correction_budget: 1/5
+correction_budget: 3/5
 canonical_finish_plan_sha256: 939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408
 files_modified:
   - .planning/phases/issue-4069-flow-case-equivalent-unique-tables-r1/
@@ -425,3 +425,66 @@ The planned checkpoint, causal RED, and minimum GREEN are committed at
 checkpoint records the focused/manual, broad local, generator, lint, and
 inline GSD verification before one fresh `no-mistakes` run. It does not alter
 the existing draft #4071 or request a GitHub workflow rerun.
+
+## Correction 3 / 5 — destination-scoped legacy collision admission
+
+### Authority, decision, and scope
+
+Independent merge verification of exact #4071 head
+`3b75f4a62fd8d743ec883a5b824164374f661857` found that its last commit removed
+the selected-destination condition around the legacy local-warehouse
+collision preflight. That broadens the intended same-connection protection:
+an unrelated non-local ETL is denied by a legacy local-warehouse collision.
+This correction restores the locked C1 rule to leave non-local destinations
+unchanged. It remains correction 3 / 5 in #4069 and does not create, retarget,
+merge, close, or otherwise mutate #4071.
+
+The condition must use the existing credential-free
+`connectionMaterializesLocalWarehouse` materialization abstraction. Do not
+inspect connector names, use a warehouse literal, add connector-specific code
+outside `internal/connectors/defs/<connector>/`, or alter the existing
+same-connection local-warehouse collision invariant.
+
+### C3-RED — restore the deleted non-local execution regression
+
+Restore `TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL` before an
+`internal/app` production edit. It must create an unrelated non-local
+destination, seed a separate legacy local-warehouse `records`/`RECORDS`
+inventory, and require the non-local run to load one record, acknowledge one
+batch, and make one source read. Against exact source head `3b75f4a6`, the
+selector must fail with `*warehouse.SameOwnerCaseEquivalentTableError`; record
+the full non-secret output in `traces/correction-3-nonlocal-collision-red.txt`.
+
+### C3-GREEN — gate only the selected local destination
+
+At the start of `RunETL`, retain
+`validateConfiguredLocalWarehouseDestinationTables` only when the selected
+connection materializes the local warehouse. The local condition must run
+before `prefixedID` and `beginRun`, retaining the existing typed refusal and
+zero-mutation guarantee for a true same-connection local collision. The
+non-local branch must bypass this inventory preflight entirely; it does not
+open a local warehouse or weaken the local invariant.
+
+### C3 acceptance and verification
+
+1. The restored selector is RED on production source exact head `3b75f4a6`
+   and GREEN after the materialization-scoped condition is restored.
+2. `TestLegacySameOwnerCaseEquivalentInventorySurvivesOpenAndFailsBeforeMutation`
+   remains GREEN and its `errors.As` assertion still proves
+   `*warehouse.SameOwnerCaseEquivalentTableError` before any run mutation.
+3. Run the full `internal/app` package, `gofmt`, `git diff --check`, `go vet`,
+   the configured lint scope, `go build ./cmd/pm`, and
+   `scripts/verify-gsd-workflow`. The behavior changes no public command,
+   flag, output, help, manual, or website contract, so CLI/docs/website source
+   edits are not applicable.
+4. Execute the resolved `verify-work` and `code-review` prompts inline under
+   the existing no-delegation fallback. At delivery end, record the child PR's
+   actual head SHA in `RUN-STATE.json` and the published child PR body; do not
+   mutate #4071.
+
+### C3 checkpoint sequence
+
+13. `docs(4069): plan destination-scoped collision correction`
+14. `test(4069): reproduce non-local collision bypass regression` (RED)
+15. `fix(4069): scope legacy collision preflight by destination` (GREEN)
+16. `docs(4069): record destination-scoped collision verification`

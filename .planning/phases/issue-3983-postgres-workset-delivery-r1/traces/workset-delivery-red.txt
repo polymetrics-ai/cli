@@ -1,0 +1,31 @@
+$ go test -timeout 20m ./internal/connectors/database -run 'TestChangeDeliveryPlanSealsWorksetTargetBindings' -count=1
+# polymetrics.ai/internal/connectors/database_test [polymetrics.ai/internal/connectors/database.test]
+internal/connectors/database/workset_delivery_test.go:21:24: undefined: database.NewChangeDeliveryPlan
+internal/connectors/database/workset_delivery_test.go:21:77: undefined: database.ChangeDeliveryPlanRequest
+internal/connectors/database/workset_delivery_test.go:43:20: undefined: database.NewChangeDeliveryPlan
+internal/connectors/database/workset_delivery_test.go:43:73: undefined: database.ChangeDeliveryPlanRequest
+internal/connectors/database/workset_delivery_test.go:50:30: undefined: database.ErrChangeDeliveryPlanInvalid
+FAIL	polymetrics.ai/internal/connectors/database [build failed]
+FAIL
+
+$ go test -timeout 20m ./internal/connectors/database -run 'TestChangeDeliveryPlanSealsWorksetTargetBindings' -count=1
+# polymetrics.ai/internal/connectors/database_test [polymetrics.ai/internal/connectors/database.test]
+internal/connectors/database/workset_delivery_test.go:41:10: plan.PlanHash undefined (type database.ChangeDeliveryPlan has no field or method PlanHash)
+internal/connectors/database/workset_delivery_test.go:65:18: replacedPlan.PlanHash undefined (type database.ChangeDeliveryPlan has no field or method PlanHash)
+internal/connectors/database/workset_delivery_test.go:65:37: plan.PlanHash undefined (type database.ChangeDeliveryPlan has no field or method PlanHash)
+FAIL	polymetrics.ai/internal/connectors/database [build failed]
+FAIL
+
+$ go test -timeout 20m ./internal/connectors/database -run 'TestChangeDeliveryExecutorPersistsCandidateBaselineAfterReceipt' -count=1
+# polymetrics.ai/internal/connectors/database_test [polymetrics.ai/internal/connectors/database.test]
+internal/connectors/database/workset_delivery_test.go:65:25: undefined: database.NewFileChangeDeliveryBaselineStore
+FAIL	polymetrics.ai/internal/connectors/database [build failed]
+FAIL
+
+$ go test -timeout 20m ./internal/connectors/database -run 'TestChangeDeliveryExecutorRefusesStaleWorksetApprovalBeforeSessionMutation' -count=1
+# polymetrics.ai/internal/connectors/database_test [polymetrics.ai/internal/connectors/database.test]
+internal/connectors/database/workset_delivery_test.go:86:28: undefined: database.NewChangeDeliveryExecutor
+internal/connectors/database/workset_delivery_test.go:94:28: undefined: database.NewChangeDeliveryApproval
+internal/connectors/database/workset_delivery_test.go:98:103: undefined: database.ErrChangeDeliveryApprovalInvalid
+FAIL	polymetrics.ai/internal/connectors/database [build failed]
+FAIL

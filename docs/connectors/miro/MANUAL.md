@@ -306,7 +306,7 @@ ETL STREAMS
     fields: id(string), role(object), type(object)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   update_orgs_org_id_teams_team_id_data_classification:

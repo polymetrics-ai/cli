@@ -1,0 +1,7 @@
+[
+  {
+    "name": "approval-token-stdin",
+    "type": "boolean",
+    "summary": "Read the approval token as one bounded line from standard input."
+  }
+]

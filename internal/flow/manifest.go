@@ -26,10 +26,18 @@ type ActionConfig struct {
 	DestinationConnector  string            `json:"destination_connector"`
 	DestinationCredential string            `json:"destination_credential"`
 	DestinationConfig     map[string]string `json:"destination_config,omitempty"`
-	Action                string            `json:"action"` // upsert | create | delete; defaults to "upsert"
-	Mappings              map[string]string `json:"mappings"`
-	MaxRetries            int               `json:"max_retries,omitempty"` // default 3
-	BatchSize             int               `json:"batch_size,omitempty"`  // default 100
+	// DestinationTable is the stable action target bound into authorization.
+	DestinationTable string            `json:"destination_table,omitempty"`
+	Action           string            `json:"action"` // upsert | create | delete; defaults to "upsert"
+	Mappings         map[string]string `json:"mappings"`
+	// AuthorizationReference is the opaque durable scope identity created by a
+	// prior plan → preview → approval → execute lifecycle.
+	AuthorizationReference string `json:"authorization_reference,omitempty"`
+	// ReadBackStream is independently read after acknowledgement and before a
+	// successful action can be checkpointed.
+	ReadBackStream string `json:"read_back_stream,omitempty"`
+	MaxRetries     int    `json:"max_retries,omitempty"` // default 3
+	BatchSize      int    `json:"batch_size,omitempty"`  // default 100
 }
 
 // FlowStep describes a single step in a flow manifest.

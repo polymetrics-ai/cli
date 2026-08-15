@@ -1,0 +1,147 @@
+{
+  "issue": 3995,
+  "parent_issue": 3988,
+  "phase": "issue-3995-certification-shepherd-gate",
+  "branch": "feat/3995-certification-shepherd-gate",
+  "parent_branch": "feat/3988-github-certification",
+  "parent_pr": 4018,
+  "mode": "inline_manual_gsd_fallback",
+  "fallback_reason": "gsd-sdk has no registered official numbered phase for issue-3995-certification-shepherd-gate",
+  "stages": {
+    "discuss_phase": "completed_inline_manual_fallback",
+    "plan_phase_tdd": "completed_inline_manual_fallback",
+    "execute_phase": "completed",
+    "verify_work": "completed_inline_manual_fallback",
+    "code_review": "completed_inline_manual_fallback",
+    "no_mistakes": "pending",
+    "child_pr": "pending"
+  },
+  "correction_rounds": 5,
+  "correction_tracking": {
+    "round": 1,
+    "maximum_rounds": 5,
+    "issue": 4024,
+    "url": "https://github.com/polymetrics-ai/cli/issues/4024",
+    "finding_ids": ["R-1", "R-2"],
+    "remediation_commit": "842f1c271",
+    "verification_commit": "d511186bc",
+    "status": "code_remediated_child_open_pending_pr_review"
+  },
+  "correction_round_2": {
+    "round": 2,
+    "maximum_rounds": 5,
+    "children": [
+      {
+        "issue": 4024,
+        "scope": "empty fingerprint rejection and semantic RawMessage comparison"
+      },
+      {
+        "issue": 4028,
+        "scope": "matrix topology, root confinement, and producer-equivalent delivery limitations"
+      },
+      {
+        "issue": 4030,
+        "scope": "read-only executable certification gate and canonical protected-transition argv"
+      }
+    ],
+    "finding_ids": [
+      "certification-empty-fingerprint",
+      "certification-semantic-json-order",
+      "certification-matrix-coverage",
+      "certification-root-escape",
+      "certification-delivery-guarantee-divergence",
+      "certification-unwired-transition-gate"
+    ],
+    "red_tests_authored_before_production_changes": true,
+    "focused_verification": "go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen -count=1",
+    "focused_verification_status": "passed",
+    "status": "code_remediated_review_verified_pending_outer_executor"
+  },
+  "correction_round_3": {
+    "round": 3,
+    "maximum_rounds": 5,
+    "children": [
+      {
+        "issue": 4028,
+        "scope": "malformed-pointer coordinates, exact flow-kind inventory, and evidence-derived status"
+      },
+      {
+        "issue": 4030,
+        "scope": "explicit non-symlink certification-gate root and usage boundary"
+      }
+    ],
+    "finding_ids": [
+      "certification-flow-kind-inventory",
+      "certification-status-not-derived",
+      "certification-gate-implicit-root",
+      "certification-malformed-evidence-coordinates"
+    ],
+    "red_tests_authored_before_production_changes": true,
+    "focused_verification": "go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen ./cmd/connectorgen -count=1; go run ./cmd/agentcontractgen sync; go run ./cmd/agentcontractgen check",
+    "focused_verification_status": "passed",
+    "status": "code_remediated_review_verified_pending_outer_executor"
+  },
+  "correction_round_4": {
+    "round": 4,
+    "maximum_rounds": 5,
+    "children": [
+      {
+        "issue": 4028,
+        "scope": "immutable flow overrides and raw pair-set evidence binding"
+      },
+      {
+        "issue": 4024,
+        "scope": "precision-preserving semantic proof comparison"
+      }
+    ],
+    "finding_ids": [
+      "certification-forbidden-connectorgen-path",
+      "certification-flow-override-static-promotion",
+      "certification-flow-overridden-base-evidence-unbound",
+      "certification-proof-number-precision"
+    ],
+    "red_tests_authored_before_production_changes": true,
+    "focused_verification": "go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen -count=1; go test -timeout 20m ./cmd/connectorgen -run '^(TestCertification|TestRunCertification)' -count=1; go run ./cmd/connectorgen certification-matrix --check; go run ./cmd/agentcontractgen sync --root $PWD; go run ./cmd/agentcontractgen check --root $PWD; git diff --check da7747a796049601a179a97c025bfb05f011f1e8",
+    "focused_verification_status": "passed",
+    "changed_path_audit": "no cmd/connectorgen/certification*.go path differs from base",
+    "status": "code_remediated_review_verified_pending_outer_executor"
+  },
+  "correction_round_5": {
+    "round": 5,
+    "maximum_rounds": 5,
+    "children": [
+      {
+        "issue": 4028,
+        "scope": "flow-pair endpoint-role invariants and self-bootstrapping generated catalog"
+      }
+    ],
+    "finding_ids": [
+      "certification-flow-role-pair-invariant",
+      "certification-catalog-self-bootstrap"
+    ],
+    "red_tests_authored_before_production_changes": true,
+    "focused_verification": "go run ./cmd/agentcontractgen sync --root $PWD after removing flow_gen.go; go test -timeout 20m ./internal/certificationcatalog ./internal/agentcontract ./cmd/agentcontractgen -count=1; focused unchanged-producer certification tests; certification-matrix --check; agentcontractgen check; changed-path audit",
+    "focused_verification_status": "passed",
+    "catalog_bootstrap": "sync compiled with the generated data file absent and recreated one catalog from flow-matrix.json",
+    "changed_path_audit": "no cmd/connectorgen/certification*.go path differs from base",
+    "status": "code_remediated_review_verified_pending_outer_executor"
+  },
+  "workflow_recovery": {
+    "cancelled_run": "01KZPTX65SYF6JJJK8QH7BWTBA",
+    "classification": "operator_cancelled_not_a_code_gate_failure_or_correction_round",
+    "next_step": "start_one_fresh_full_no_mistakes_run_without_yes"
+  },
+  "dependencies": {
+    "3984": {
+      "status": "merged",
+      "commit": "815dc1ab65380e03f6e0c078ba36030baaec21ea"
+    },
+    "3985": {
+      "status": "concrete_canon_merged_issue_formally_open",
+      "commit": "da7747a796049601a179a97c025bfb05f011f1e8"
+    },
+    "3989": {
+      "status": "proof_schema_integration_pending_fail_closed"
+    }
+  }
+}

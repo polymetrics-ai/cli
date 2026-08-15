@@ -331,6 +331,13 @@ func queryTableExists(rc *runContext, table string) bool {
 // certification run must never touch the operator's actual crontab.
 const scheduleCrontabFileName = "cert-crontab"
 
+// scheduleAuthorizationReference is a syntactically valid opaque reference
+// used only by the legacy non-action schedule round-trip. That stage proves
+// persistence/backend cleanup; the authorized action firing certification is
+// covered by the dedicated schedule-fire fixture. It is never a token,
+// credential, payload, or secret-derived value.
+const scheduleAuthorizationReference = "auth_0123456789abcdef"
+
 // stageScheduleRoundtrip drives stage 19 (design §D): snapshot the
 // (redirected, ephemeral) crontab, create + list + install --crontab, assert
 // the "# pm-schedule-<name>" sentinel is present, remove, assert the
@@ -373,6 +380,7 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 			"--name", name,
 			"--cron", "0 3 * * *",
 			"--flow", rc.flowName(),
+			"--authorization", scheduleAuthorizationReference,
 			"--json")
 		passed, errMsg := assertKind(rc, "schedule_create", res, "Schedule", 0)
 		return passed, cliInfoFrom(res), errMsg
@@ -392,6 +400,9 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 				continue
 			}
 			if n, _ := m["name"].(string); n == name {
+				if reference, _ := m["authorization_reference"].(string); reference != scheduleAuthorizationReference {
+					return false, cliInfoFrom(res), "schedule_list: authorization reference was not preserved"
+				}
 				found = true
 				break
 			}
@@ -411,6 +422,10 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 		if backend, _ := res.Envelope["backend"].(string); backend != "crontab" {
 			return false, cliInfoFrom(res), fmt.Sprintf("schedule_install: backend=%q, want crontab", backend)
 		}
+		manifest, _ := res.Envelope["schedule"].(map[string]any)
+		if reference, _ := manifest["authorization_reference"].(string); reference != scheduleAuthorizationReference {
+			return false, cliInfoFrom(res), "schedule_install: authorization reference was not preserved"
+		}
 		content, err := os.ReadFile(crontabPath)
 		if err != nil {
 			return false, cliInfoFrom(res), fmt.Sprintf("schedule_install: read crontab file: %v", err)
@@ -424,7 +439,13 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 	removeStage := recordStage(rc, rep, "schedule_remove", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("schedule", "remove", name, "--crontab", "--json")
 		passed, errMsg := assertKind(rc, "schedule_remove", res, "ScheduleRemove", 0)
-		return passed, cliInfoFrom(res), errMsg
+		if !passed {
+			return false, cliInfoFrom(res), errMsg
+		}
+		if reference, _ := res.Envelope["authorization_reference"].(string); reference != scheduleAuthorizationReference {
+			return false, cliInfoFrom(res), "schedule_remove: authorization reference was not preserved"
+		}
+		return true, cliInfoFrom(res), ""
 	})
 
 	sentinelAbsent := true

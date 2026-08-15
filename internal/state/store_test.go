@@ -290,6 +290,108 @@ func TestFileLockUsesExclusiveLockFile(t *testing.T) {
 	}
 }
 
+func TestJSONStoreUpdateAfterPreflightRejectsWithoutStateLock(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "state.json")
+	store := state.JSONStore[testConfig]{
+		Path:   path,
+		Locker: state.FileLock{Path: path + ".lock"},
+	}
+	if err := store.Save(testConfig{Name: "active"}); err != nil {
+		t.Fatalf("Save() error = %v", err)
+	}
+	before, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("ReadFile(before) error = %v", err)
+	}
+
+	wantErr := errors.New("approval already consumed")
+	_, err = store.UpdateAfterPreflight(func(testConfig) error {
+		return wantErr
+	}, func(current testConfig) (testConfig, error) {
+		current.Count++
+		return current, nil
+	})
+	if !errors.Is(err, wantErr) {
+		t.Fatalf("UpdateAfterPreflight() error = %v, want %v", err, wantErr)
+	}
+	after, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("ReadFile(after) error = %v", err)
+	}
+	if string(after) != string(before) {
+		t.Fatal("preflight rejection rewrote state")
+	}
+	if _, err := os.Stat(path + ".lock"); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("preflight rejection created a state lock: %v", err)
+	}
+}
+
+func TestJSONStoreUpdateAfterPreflightHonorsLegacyStateLock(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "state.json")
+	legacy := state.JSONStore[testConfig]{
+		Path:   path,
+		Locker: state.FileLock{Path: path + ".lock"},
+	}
+	if err := legacy.Save(testConfig{Name: "active"}); err != nil {
+		t.Fatalf("legacy Save() error = %v", err)
+	}
+
+	entered := make(chan struct{})
+	release := make(chan struct{})
+	legacyResult := make(chan error, 1)
+	go func() {
+		_, err := legacy.Update(func(current testConfig) (testConfig, error) {
+			close(entered)
+			<-release
+			current.Count++
+			return current, nil
+		})
+		legacyResult <- err
+	}()
+	<-entered
+
+	released := false
+	defer func() {
+		if !released {
+			close(release)
+		}
+	}()
+	store := state.JSONStore[testConfig]{
+		Path:   path,
+		Locker: state.FileLock{Path: path + ".lock"},
+	}
+	updated := false
+	_, err := store.UpdateAfterPreflight(func(current testConfig) error {
+		if current.Name != "active" {
+			return errors.New("unexpected state")
+		}
+		return nil
+	}, func(current testConfig) (testConfig, error) {
+		updated = true
+		current.Count++
+		return current, nil
+	})
+	if !errors.Is(err, os.ErrExist) {
+		t.Fatalf("UpdateAfterPreflight() error = %v, want legacy lock conflict", err)
+	}
+	if updated {
+		t.Fatal("update ran while the legacy lock was held")
+	}
+
+	close(release)
+	released = true
+	if err := <-legacyResult; err != nil {
+		t.Fatalf("legacy Update() error = %v", err)
+	}
+	loaded, err := store.Load()
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+	if loaded.Count != 1 {
+		t.Fatalf("Count = %d, want only the legacy update", loaded.Count)
+	}
+}
+
 type fakeLocker struct {
 	mu        sync.Mutex
 	active    int

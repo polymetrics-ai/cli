@@ -7,7 +7,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
-  pm connectors certify <connector> [--full] [--json]
+  pm connectors certify <connector> [--full] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -21,6 +21,42 @@ DESCRIPTION
   STREAMS, REVERSE ETL ACTIONS, and the generated certification quality
   signal without reading credentials. COMMUNITY BUILD, UNCERTIFIED is a
   warning only; the connector remains reachable.
+
+  JSON inspection also projects the closed sync_transport source and
+  destination eligibility. A structurally valid destination that declares
+  acknowledgement=none remains declared so inspection reports that policy, but
+  runtime preflight refuses it; only durable_warehouse can execute. A declared
+  role still requires externally verified conformance; it is not a certification
+  claim.
+
+POLLING-WATERMARK ELIGIBILITY
+  polling_watermark is a bounded polling scan, not CDC or change capture.
+  Its declaration status, where one exists, is separate from the connector's
+  CDC capability. A polling mode is executable only when runtime preflight
+  accepts the specific connector, discovered catalog object, and destination
+  binding after checking the declared native source and apply executors plus
+  immutable conformance evidence. A planned, unsupported, or absent declaration
+  does not implement a polling mode.
+
+  An admitted source uses declared keyset ordering: a watermark and unique
+  tie-breaker are checkpointed only after durable downstream acknowledgement.
+  Delivery is at least once, so the inclusive resume boundary can replay an
+  accepted record. Snapshot barriers are declaration-bound and are never
+  silently replaced by a full scan. Polling cannot observe hard deletes after a
+  row disappears; tombstones require a declared, cursor-advancing soft-delete
+  mapping. State incompatibility, source identity mismatch, snapshot expiry,
+  and retention failure require an explicit rebootstrap; pm never implies an
+  automatic rescan.
+
+  For connectors with a declared rate-limit policy, inspection reports RATE
+  LIMIT COORDINATION. Process-local policies coordinate only requests made by
+  this pm process; they make no cross-process claim. Policies explicitly
+  declaring require_shared refuse before a request when their optional shared
+  coordinator is unavailable. A connector with both ordinary policies reports
+  policy-scoped coordination. A certification-only require_shared overlay
+  preserves the process-local default label and explicitly states the
+  certification boundary. Inspection never exposes a rate scope, coordinator
+  address, or credential.
 
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
@@ -96,8 +132,9 @@ ACTIONS
   inspect <name>
     Prints a man-style connector manual for a bare connector name. Use --json
     to print structured metadata for agents, including the generated binary
-    certification status. Inspection is metadata-only and does not resolve
-    credentials. A connector is either CERTIFIED or COMMUNITY BUILD,
+    certification status and declared rate-limit coordination provenance when
+    applicable. Inspection is metadata-only and does not resolve credentials or
+    expose a rate scope. A connector is either CERTIFIED or COMMUNITY BUILD,
     UNCERTIFIED; the latter remains available with a warning.
 
   help <name>
@@ -106,6 +143,11 @@ ACTIONS
   certify <connector>
     Runs the legacy connector test harness. It does not set the generated
     CERTIFIED status; only proof-bearing certification records can do that.
+    --external-proof is an explicit live HTTPS acceptance mode: it builds a
+    fresh pm child binary, accepts credentials only from --from-env or
+    --value-stdin,
+    and writes a fingerprint-only transcript after a full-parity run. It
+    requires --full-parity and refuses incomplete or truncated exchanges.
     With --full --json from a source checkout,
     the report includes the API-surface inventory and provider-artifact
     provenance evidence separately from endpoint coverage and connector
@@ -113,7 +155,10 @@ ACTIONS
     during the staged migration. A complete version-2 ledger reports its ledger
     version, artifact count, endpoint count, and cited endpoint count; invalid
     version-2 provenance fails certification without enabling or changing any
-    connector capability.
+    connector capability. When the connector declares coordinated rate limits,
+    JSON may also contain safe rate_limit_events for attempts, observed resets,
+    waits, and requests stopped before send; the events contain no credentials
+    or rendered rate scopes.
 
 EXAMPLES
   pm connectors
@@ -124,6 +169,7 @@ EXAMPLES
   pm connectors inspect github
   pm connectors inspect github --json
   pm connectors certify sample --full --json
+  pm connectors certify github --external-proof --full-parity --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem

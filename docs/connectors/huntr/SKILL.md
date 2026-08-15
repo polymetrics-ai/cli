@@ -52,7 +52,7 @@ Reads Huntr organization members, candidates, activities, notes, and actions thr
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

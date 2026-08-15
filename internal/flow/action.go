@@ -37,9 +37,17 @@ type ActionResult struct {
 // ---------------------------------------------------------------------------
 
 // StepActionRunner executes a single action step.
-// Implemented by HTTPActionRunner; stubbed in tests via stubActionRunner.
+// Production uses the connector-backed runner from internal/cli. HTTPActionRunner
+// remains only as a legacy fixture for flow package tests.
 type StepActionRunner interface {
 	ExecuteStep(ctx context.Context, step FlowStep, records []map[string]any, token, runID string) (ActionResult, error)
+}
+
+// StepActionPreflight is implemented by production runners that can verify a
+// durable authorization scope before the flow touches a provider. Legacy test
+// runners without this capability remain subject to Engine's token guard.
+type StepActionPreflight interface {
+	PreflightStep(ctx context.Context, step FlowStep, token string) error
 }
 
 // ---------------------------------------------------------------------------
@@ -54,12 +62,12 @@ type SchemaSnapshot struct {
 }
 
 // ---------------------------------------------------------------------------
-// HTTPActionRunner — concrete implementation of all 7 safety features
+// HTTPActionRunner — legacy test fixture
 // ---------------------------------------------------------------------------
 
-// HTTPActionRunner sends records to an HTTP destination with all safety invariants.
-// The DestURL endpoint must accept a JSON array POST at /write and return a JSON
-// object with "accepted" and optionally "external_ids" fields.
+// HTTPActionRunner sends records to an HTTP destination for legacy flow tests.
+// It is not constructed by the production flow route; connector-backed action
+// delivery is the supported runtime path.
 type HTTPActionRunner struct {
 	FlowName   string
 	StepID     string

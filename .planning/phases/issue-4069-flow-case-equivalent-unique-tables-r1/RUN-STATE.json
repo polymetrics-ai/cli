@@ -3,16 +3,16 @@
   "parent_issue": 3897,
   "specification_owner_issue": 4066,
   "program_parent_issue": 3988,
-  "branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
-  "required_base_branch": "feat/3897-flow-connection-scope-nm",
+  "branch": "fm/cli-4071-collision-scope-fix-r1",
+  "required_base_branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
   "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
-  "status": "correction_2_local_gsd_verification_green_pending_no_mistakes",
+  "status": "correction_3_child_pr_delivery_green_with_docs_only_evidence_tip",
   "correction_budget": {
-    "used_before": 1,
-    "active_correction": 2,
+    "used_before": 2,
+    "active_correction": 3,
     "limit": 5,
-    "remaining_after_active_correction": 3,
-    "lineage": "fresh #4069 child; #4066 remains the exhausted specification owner; this is correction 2 of 5"
+    "remaining_after_active_correction": 2,
+    "lineage": "fresh #4069 child; #4066 remains the exhausted specification owner; this is correction 3 of 5"
   },
   "issue_gate": {
     "parent_and_owner_read": true,
@@ -42,6 +42,7 @@
     "golang-database",
     "golang-design-patterns",
     "golang-structs-interfaces",
+    "golang-code-style",
     "golang-lint",
     "golang-documentation"
   ],
@@ -71,7 +72,16 @@
     "correction_2_broad_verification": "passed: focused and full internal/cli tests, vet/lint/build, docs/contract/connectorgen checks, website lint/typecheck/unit/script/build, candidate diff scope, and verify-gsd-workflow; inherited website warnings are separate",
     "correction_2_manual_verify_work": "passed: resolved verify-work prompt executed inline under the documented single-worker fallback; no acceptance gap",
     "correction_2_manual_code_review": "passed: resolved code-review prompt executed inline under the documented single-worker fallback; no candidate finding",
-    "next_gate": "Start exactly one fresh no-mistakes run without --yes and with --skip=pr,ci; use only its supported sync action, then observe natural exact-head checks on existing draft #4071"
+    "correction_3_red": "passed: restored non-local ETL regression exits 1 on exact source head 3b75f4a62 because the unconditional local-inventory preflight returns the legacy same-owner typed error before source or destination execution",
+    "correction_3_green": "passed on verified production commit a49ae952d52a6edf9786cc90e02825e2414f5b44; GSD evidence checkpoint 5a4f3d23645d3046d02055273fedd9a8b9dd67d1 adds evidence only, so the non-local run loads one record, acknowledges one batch, and makes one source request while the local true-positive remains refused before beginRun",
+    "correction_3_broad_verification": "passed: full internal/app package, gofmt, candidate diff check, go vet, direct internal/app lint, go build ./cmd/pm, tidy, configured lint, release-target parity, agent contract, connectorgen surface-sync, and verify-gsd-workflow",
+    "correction_3_manual_verify_work": "passed inline under the documented manual-GSD fallback; RED/GREEN, true-positive, package, quality, and child-PR delivery acceptance are covered",
+    "correction_3_manual_code_review": "passed inline under the documented manual-GSD fallback; the selected-destination guard restores the generic materialization abstraction without connector literals or invariant weakening",
+    "validated_head": "af558aca4c2d77cb66a4329367df5c3b21623775",
+    "validated_head_meaning": "the exact child-PR code head validated by no-mistakes; this RUN-STATE commit is on top of it and contains no behavioural change",
+    "child_pr_delivery": "published: #4101 (https://github.com/polymetrics-ai/cli/pull/4101) from fm/cli-4071-collision-scope-fix-r1 onto fix/4069-flow-case-equivalent-unique-tables-r1",
+    "pr_4071_mutation": "body restored to accuracy only; #4071 was not retargeted, merged, closed, advanced, or readiness-mutated",
+    "next_gate": "completed: publish this documentation-only evidence tip, update #4101's body with both validated_head and final tip, then read back head and base"
   },
   "correction_1": {
     "audit_handoff": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4066-case-equivalent-unique-tables-r1/correction-1-sol-audit-handoff.md",
@@ -121,5 +131,27 @@
     "broad_verification": "passed: full internal/cli, Go/docs/generator/lint, no-install website checks, candidate diff scope, and repository GSD-workflow verification",
     "manual_verify_work": "passed inline under the documented manual-GSD fallback",
     "manual_code_review": "passed inline under the documented manual-GSD fallback; no candidate finding"
+  },
+  "correction_3": {
+    "source_head": "3b75f4a62fd8d743ec883a5b824164374f661857",
+    "validated_head": "af558aca4c2d77cb66a4329367df5c3b21623775",
+    "validated_head_meaning": "the exact code commit validated by no-mistakes; this evidence record is committed on top of that head with no behavioural change",
+    "child_pr_number": 4101,
+    "child_pr_url": "https://github.com/polymetrics-ai/cli/pull/4101",
+    "required_child_base": "fix/4069-flow-case-equivalent-unique-tables-r1",
+    "delivery_status": "published and CI green; final evidence tip is documentation-only on top of validated_head; #4071 remains unadvanced",
+    "problem": "the global RunETL legacy local-warehouse inventory preflight denies a non-local ETL when any retained local connection has a same-owner case-equivalent destination collision",
+    "implementation": "RunETL calls validateConfiguredLocalWarehouseDestinationTables only when the selected connection satisfies the existing credential-free LocalWarehouseMaterializer abstraction",
+    "portability": "no connector name or warehouse literal in shared code; no path outside internal/connectors/defs/<connector>/ contains connector-specific behavior",
+    "red_selector": "go test -timeout 20m ./internal/app -run '^TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL$' -count=1 -v",
+    "green_selectors": [
+      "go test -timeout 20m ./internal/app -run '^(TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL|TestLegacySameOwnerCaseEquivalentInventorySurvivesOpenAndFailsBeforeMutation)$' -count=1 -v",
+      "go test -timeout 20m ./internal/app -count=1"
+    ],
+    "red_trace": "traces/correction-3-nonlocal-collision-red.txt",
+    "green_trace": "traces/correction-3-destination-scoped-collision-green.txt",
+    "manual_verify_work": "passed inline under the existing no-delegation fallback",
+    "manual_code_review": "passed inline under the existing no-delegation fallback; no candidate finding",
+    "pr_body_trace": "traces/correction-3-pr-body.md"
   }
 }

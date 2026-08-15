@@ -11,9 +11,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 	"time"
+
+	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // credentialName / warehouseCredentialName / connection names used for every
@@ -115,6 +117,7 @@ type streamSpec struct {
 type runContext struct {
 	ctx                   context.Context
 	harness               *Harness
+	ephemeralCredentials  *app.CertificationEphemeralSession
 	opts                  Options
 	sabotage              *sabotage
 	stdoutLeakSabotage    *stdoutLeakSabotage
@@ -139,6 +142,11 @@ type runContext struct {
 	// threading a stage name through every one of the ~20 call sites.
 	currentStage string
 
+	// rateLimitEvents captures the bounded requester admission trail for this
+	// ephemeral certification project. recordStage keeps its stage label in
+	// sync with the CLI work that caused each event.
+	rateLimitEvents *rateLimitEventCollector
+
 	// capturedOutputs accumulates every CLI invocation's raw stdout/stderr
 	// across the whole run, for finalizeSecretRedaction's full-output scan.
 	capturedOutputs []capturedOutput
@@ -161,7 +169,16 @@ type runContext struct {
 // rc.run instead of rc.harness.Run directly so finalizeSecretRedaction can
 // see everything a real secret leak could hide in.
 func (rc *runContext) run(args ...string) CLIResult {
-	res := rc.harness.Run(args...)
+	return rc.captureRun(rc.harness.Run(args...))
+}
+
+// runWithStdin uses the real CLI's standard-input channel without adding the
+// data to the argv captured in certification reports.
+func (rc *runContext) runWithStdin(stdin string, args ...string) CLIResult {
+	return rc.captureRun(rc.harness.RunWithStdin(stdin, args...))
+}
+
+func (rc *runContext) captureRun(res CLIResult) CLIResult {
 	stdout := res.Stdout
 	if rc.stdoutLeakSabotage != nil && rc.stdoutLeakSabotage.stage == rc.currentStage {
 		stdout += "\n[sabotage-planted-secret]: " + rc.stdoutLeakSabotage.secret
@@ -185,12 +202,23 @@ type stageFunc func(rc *runContext, rep *Report) error
 // a fresh os.MkdirTemp root, mirroring the Makefile "smoke" target's
 // --root/--json flag pattern (Makefile:41). See stages_source.go doc comment
 // for stage-list scope.
-func (r *Runner) Run(ctx context.Context) (Report, error) {
+func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	if r.opts.Connector == "" {
 		return Report{}, fmt.Errorf("certify: Options.Connector is required")
 	}
 	if ctx == nil {
 		return Report{}, fmt.Errorf("certify: nil context")
+	}
+	r.observedHTTP = nil
+	if r.opts.ObserveHTTP {
+		observer, removeObserver, observeErr := installCertificationHTTPObserver(defaultObservedBodyBytes)
+		if observeErr != nil {
+			return Report{}, fmt.Errorf("certify: install external HTTP observer: %w", observeErr)
+		}
+		defer func() {
+			r.observedHTTP = observer.Exchanges()
+			removeObserver()
+		}()
 	}
 
 	root, err := os.MkdirTemp("", "pm-certify-"+r.opts.Connector+"-")
@@ -201,27 +229,54 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	if !r.opts.KeepWork {
 		defer func() { _ = os.RemoveAll(root) }()
 	}
+	rateLimitEvents := &rateLimitEventCollector{}
+	removeRateLimitEvents := engine.ConfigureRateLimitEventSink(filepath.Join(root, ".polymetrics"), rateLimitEvents)
+	defer removeRateLimitEvents()
+	removeAdmissionTimeout := engine.ConfigureRateLimitAdmissionTimeout(filepath.Join(root, ".polymetrics"), certificationRateLimitAdmissionTimeout(r.opts))
+	defer removeAdmissionTimeout()
+	defer func() { rep.RateLimitEvents = rateLimitEvents.snapshot() }()
 
 	secretValues := make([]string, 0, len(r.opts.SecretEnv))
-	for _, envName := range r.opts.SecretEnv {
+	secretFields := make(map[string]string, len(r.opts.SecretEnv))
+	for field, envName := range r.opts.SecretEnv {
 		if v := os.Getenv(envName); v != "" {
 			secretValues = append(secretValues, v)
+			secretFields[field] = v
 		}
 	}
+	ephemeralCredentials, err := app.BeginCertificationEphemeralCredentials(root,
+		app.EphemeralCredential{
+			Name:      sourceCredentialName,
+			Connector: r.opts.Connector,
+			Config:    effectiveCredentialConfig(r.opts.Connector, r.opts.Config),
+			Secrets:   secretFields,
+		},
+		app.EphemeralCredential{
+			Name:      warehouseCredentialName,
+			Connector: "warehouse",
+			Config:    map[string]string{"path": filepath.Join(root, ".polymetrics", "warehouse")},
+		},
+	)
+	if err != nil {
+		return Report{}, fmt.Errorf("certify: begin ephemeral credentials: %w", err)
+	}
+	defer ephemeralCredentials.Close()
 
 	rc := &runContext{
 		ctx:                   ctx,
 		harness:               NewHarness(root, WithSecrets(secretValues...)),
+		ephemeralCredentials:  ephemeralCredentials,
 		opts:                  r.opts,
 		sabotage:              r.sabotage,
 		stdoutLeakSabotage:    r.stdoutLeakSabotage,
 		cleanupVerifySabotage: r.cleanupVerifySabotage,
 		root:                  root,
+		rateLimitEvents:       rateLimitEvents,
 	}
 
-	rep := Report{
+	rep = Report{
 		Kind:          "ConnectorCertification",
-		SchemaVersion: 1,
+		SchemaVersion: CurrentSchemaVersion,
 		Connector:     r.opts.Connector,
 		Mode:          "live",
 		StartedAt:     time.Now().UTC(),
@@ -301,6 +356,13 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	return rep, nil
 }
 
+func certificationRateLimitAdmissionTimeout(opts Options) time.Duration {
+	if opts.RateLimitAdmissionTimeout > 0 {
+		return opts.RateLimitAdmissionTimeout
+	}
+	return defaultCertificationRateLimitAdmissionTimeout
+}
+
 // recordStage runs body, timing it, and appends a StageResult to rep.Stages.
 // body returns (passed, cliInfo, errMessage); tier is the certification-design
 // §"Tiers" table value (0 fixture, 1 replay/capture, 2 live). rc.currentStage
@@ -311,7 +373,15 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 func recordStage(rc *runContext, rep *Report, name string, tier int, run func() (bool, CLIStageInfo, string)) StageResult {
 	prevStage := rc.currentStage
 	rc.currentStage = name
-	defer func() { rc.currentStage = prevStage }()
+	if rc.rateLimitEvents != nil {
+		rc.rateLimitEvents.setStage(name)
+	}
+	defer func() {
+		rc.currentStage = prevStage
+		if rc.rateLimitEvents != nil {
+			rc.rateLimitEvents.setStage(prevStage)
+		}
+	}()
 
 	start := time.Now()
 	passed, cli, errMsg := run()
@@ -342,6 +412,24 @@ func assertKind(rc *runContext, stageName string, res CLIResult, wantKind string
 	kind := rc.expectKind(stageName, wantKind)
 	if err := rc.harness.MustKind(res, kind, wantExit); err != nil {
 		return false, err.Error()
+	}
+	return true, ""
+}
+
+// assertTypedPreIORefusal verifies the serialized CLI shape of a typed
+// sync-mode admission refusal. The application tests retain the concrete Go
+// error and no-source-read assertion; certification observes the CLI result.
+func assertTypedPreIORefusal(rc *runContext, stageName string, res CLIResult) (bool, string) {
+	if passed, errMsg := assertKind(rc, stageName, res, "Error", 1); !passed {
+		return false, errMsg
+	}
+	errEnvelope, ok := res.Envelope["error"].(map[string]any)
+	if !ok {
+		return false, "typed sync-mode refusal did not include an error envelope"
+	}
+	message, _ := errEnvelope["message"].(string)
+	if !strings.Contains(message, "is not executable") {
+		return false, fmt.Sprintf("want typed sync-mode refusal, got error message %q", message)
 	}
 	return true, ""
 }
@@ -455,37 +543,6 @@ func queryRowCount(rc *runContext, table string) (int, error) {
 	}
 	count, _ := res.Envelope["count"].(float64)
 	return int(count), nil
-}
-
-// assertNoDuplicatePKs runs `pm query run --table <table> --json` and fails
-// if any "id" value (the certify-fixed primary key field, see
-// createCaptureConnection's --primary-key id) repeats across rows.
-func assertNoDuplicatePKs(rc *runContext, table string) error {
-	res := rc.run("query", "run", "--table", table, "--json")
-	if res.ExitCode != 0 || res.Kind != "QueryResult" {
-		return fmt.Errorf("query --table %s: exit=%d kind=%q", table, res.ExitCode, res.Kind)
-	}
-	rows, _ := res.Envelope["rows"].([]any)
-	seen := map[string]bool{}
-	pk := rc.primaryKey()
-	for _, row := range rows {
-		m, ok := row.(map[string]any)
-		if !ok {
-			continue
-		}
-		id, _ := m[pk].(string)
-		if id == "" && pk != "id" {
-			id, _ = m["id"].(string)
-		}
-		if id == "" {
-			continue
-		}
-		if seen[id] {
-			return fmt.Errorf("duplicate primary key %q found in table %s (dedup failed)", id, table)
-		}
-		seen[id] = true
-	}
-	return nil
 }
 
 func runFullReadSweep(rc *runContext, rep *Report, readStages []stageFunc) error {
@@ -629,30 +686,23 @@ func stageManualJSON(rc *runContext, rep *Report) error {
 
 func stageCredentialsAdd(rc *runContext, rep *Report) error {
 	recordStage(rc, rep, "credentials_add", 2, func() (bool, CLIStageInfo, string) {
-		args := []string{"credentials", "add", sourceCredentialName, "--connector", rc.opts.Connector, "--json"}
-		for field, envName := range rc.opts.SecretEnv {
-			args = append(args, "--from-env", field+"="+envName)
+		if rc.ephemeralCredentials == nil {
+			return false, CLIStageInfo{}, "certification ephemeral credentials are unavailable"
 		}
-		config := effectiveCredentialConfig(rc.opts.Connector, rc.opts.Config)
-		keys := make([]string, 0, len(config))
-		for k := range config {
-			keys = append(keys, k)
+		if !rc.ephemeralCredentials.HasCredential(sourceCredentialName) {
+			return false, CLIStageInfo{}, "source credential was not retained in the ephemeral session"
 		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			args = append(args, "--config", k+"="+config[k])
-		}
-		res := rc.run(args...)
-		passed, errMsg := assertKind(rc, "credentials_add", res, "Credential", 0)
-		return passed, cliInfoFrom(res), errMsg
+		return true, ephemeralCredentialStageInfo(sourceCredentialName), ""
 	})
 
 	recordStage(rc, rep, "warehouse_credentials_add", 2, func() (bool, CLIStageInfo, string) {
-		warehouseDir := filepath.Join(rc.root, ".polymetrics", "warehouse")
-		res := rc.run("credentials", "add", warehouseCredentialName, "--connector", "warehouse",
-			"--config", "path="+warehouseDir, "--json")
-		passed, errMsg := assertKind(rc, "warehouse_credentials_add", res, "Credential", 0)
-		return passed, cliInfoFrom(res), errMsg
+		if rc.ephemeralCredentials == nil {
+			return false, CLIStageInfo{}, "certification ephemeral credentials are unavailable"
+		}
+		if !rc.ephemeralCredentials.HasCredential(warehouseCredentialName) {
+			return false, CLIStageInfo{}, "warehouse credential was not retained in the ephemeral session"
+		}
+		return true, ephemeralCredentialStageInfo(warehouseCredentialName), ""
 	})
 	return nil
 }
@@ -890,19 +940,35 @@ func (rc *runContext) setupCaptureConnection(rep *Report, mode, table string) (b
 	if rc.captureFileRegistered {
 		return true, ""
 	}
-	res := rc.run("credentials", "add", rc.fileCredentialName(), "--connector", "file",
-		"--config", "path="+rc.capturePath, "--json")
-	if passed, errMsg := assertKind(rc, "capture_credentials_add", res, "Credential", 0); !passed {
+	if rc.ephemeralCredentials == nil {
+		return false, "certification ephemeral credentials are unavailable"
+	}
+	if err := rc.ephemeralCredentials.Put(app.EphemeralCredential{
+		Name:      rc.fileCredentialName(),
+		Connector: "file",
+		Config:    map[string]string{"path": rc.capturePath},
+	}); err != nil {
+		return false, fmt.Sprintf("register capture credential: %v", err)
+	}
+	if !rc.ephemeralCredentials.HasCredential(rc.fileCredentialName()) {
 		recordStage(rc, rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
-			return false, cliInfoFrom(res), errMsg
+			return false, CLIStageInfo{}, "capture credential was not retained in the ephemeral session"
 		})
-		return false, errMsg
+		return false, "capture credential was not retained in the ephemeral session"
 	}
 	recordStage(rc, rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
-		return true, cliInfoFrom(res), ""
+		return true, ephemeralCredentialStageInfo(rc.fileCredentialName()), ""
 	})
 	rc.captureFileRegistered = true
 	return true, ""
+}
+
+func ephemeralCredentialStageInfo(name string) CLIStageInfo {
+	return CLIStageInfo{
+		ArgvRedacted: "pm certification ephemeral-credential " + name,
+		ExitCode:     0,
+		Kind:         "Credential",
+	}
 }
 
 func (rc *runContext) createCaptureConnection(rep *Report, stageName, mode, table string) (bool, CLIStageInfo, string) {
@@ -981,7 +1047,7 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 	return nil
 }
 
-// --- stage 7: etl_full_refresh_overwrite_deduped (CAPTURE) ---
+// --- stage 7: etl_full_refresh_overwrite_deduped (typed pre-I/O refusal) ---
 
 func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 	if rc.primaryKey() == "" {
@@ -1014,13 +1080,10 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 
 	recordStage(rc, rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
 		res := rc.run("etl", "run", "--connection", rc.captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
-		if passed, errMsg := assertKind(rc, "etl_full_refresh_overwrite_deduped", res, "ETLRun", 0); !passed {
+		if passed, errMsg := assertTypedPreIORefusal(rc, "etl_full_refresh_overwrite_deduped", res); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
-		if err := assertNoDuplicatePKs(rc, table); err != nil {
-			return false, cliInfoFrom(res), fmt.Sprintf("etl_full_refresh_overwrite_deduped: %v", err)
-		}
-		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: "capture"}
+		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: "pre_io_refusal", Reason: "typed pre-I/O refusal confirmed"}
 		return true, cliInfoFrom(res), ""
 	})
 	return nil
@@ -1141,7 +1204,7 @@ func compareCursorStrings(a, b string) int {
 	}
 }
 
-// --- stage 10: etl_incremental_append_deduped (CAPTURE) ---
+// --- stage 10: etl_incremental_append_deduped (typed pre-I/O refusal) ---
 
 func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 	if rc.primaryKey() == "" {
@@ -1172,13 +1235,10 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 
 	recordStage(rc, rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
 		res := rc.run("etl", "run", "--connection", rc.captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
-		if passed, errMsg := assertKind(rc, "etl_incremental_append_deduped", res, "ETLRun", 0); !passed {
+		if passed, errMsg := assertTypedPreIORefusal(rc, "etl_incremental_append_deduped", res); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
-		if err := assertNoDuplicatePKs(rc, table); err != nil {
-			return false, cliInfoFrom(res), fmt.Sprintf("etl_incremental_append_deduped: %v", err)
-		}
-		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", DataSource: "capture"}
+		rep.Capabilities.SyncModes[mode] = SyncModeResult{Result: "pass", Reason: "typed pre-I/O refusal confirmed"}
 		return true, cliInfoFrom(res), ""
 	})
 	return nil
