@@ -1443,9 +1443,61 @@ func (File) Write(ctx context.Context, req WriteRequest, records []Record) (Writ
 
 type Warehouse struct{}
 
+// LocalWarehouseDestinationTransportReference is the concrete local Parquet
+// materializer. Its declaration lives with the primitive, rather than being
+// inferred from the legacy Connector.Write capability.
+var LocalWarehouseDestinationTransportReference = TransportExecutorReference{
+	Family: TransportExecutorFamilyNativeDatabase,
+	ID:     "local_parquet_warehouse",
+}
+
+// LocalWarehouseDestinationTransportConformance is admitted only by the
+// production composition's matching factory; a descriptor alone cannot admit
+// an unregistered materializer.
+var LocalWarehouseDestinationTransportConformance = ConformanceEvidenceReference{
+	Suite: "local_parquet_warehouse",
+	RunID: "connection_owned_v1",
+}
+
+const localWarehouseDestinationTransportAction = "materialize_local_parquet"
+
 func (Warehouse) Name() string { return "warehouse" }
 
 func (Warehouse) MaterializesLocalWarehouse() bool { return true }
+
+// SyncTransportDescriptor declares the local warehouse's real, closed
+// destination role. It intentionally does not infer that role from Read or
+// Write: the reference-bound production adapter owns the durable application
+// and read-back contract.
+func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
+	return &SyncTransportDescriptor{Destination: &DestinationTransportDescriptor{
+		Executor: LocalWarehouseDestinationTransportReference,
+		EligibleActions: []string{
+			localWarehouseDestinationTransportAction,
+		},
+		Modes: []synccontract.Mode{
+			synccontract.ModeFullOverwrite,
+			synccontract.ModeFullAppend,
+			synccontract.ModeIncrementalUpsert,
+			synccontract.ModeIncrementalDedupe,
+			synccontract.ModeChangeCapture,
+		},
+		Delivery: DeliveryGuarantees{
+			Idempotency: DeliveryIdempotencyKeyed,
+			Ordering:    DeliveryOrderingSource,
+			Deletes:     DeliveryDeletesTombstone,
+		},
+		Conformance:     LocalWarehouseDestinationTransportConformance,
+		Acknowledgement: TransportAcknowledgementDurableWarehouse,
+		ApplyStrategies: []DestinationApplyStrategy{
+			{Mode: synccontract.ModeFullOverwrite, Strategy: ApplyStrategyReplace, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeIncrementalUpsert, Strategy: ApplyStrategyMerge, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeIncrementalDedupe, Strategy: ApplyStrategyDedupe, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeChangeCapture, Strategy: ApplyStrategyChangeApply, Action: localWarehouseDestinationTransportAction},
+		},
+	}}
+}
 
 func (Warehouse) Metadata() Metadata {
 	return Metadata{

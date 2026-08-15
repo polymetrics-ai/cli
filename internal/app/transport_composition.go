@@ -14,6 +14,7 @@ func (a *App) composeTransportRegistry() error {
 		return fmt.Errorf("definition-owned transport composition requires an app registry")
 	}
 	factories := issueLabelTransportDefinitionFactories(a)
+	factories = append(factories, localWarehouseTransportDefinitionFactories(a)...)
 	connectorFactories, err := synctransport.DefinitionFactoriesFromRegistry(a.registry)
 	if err != nil {
 		return err

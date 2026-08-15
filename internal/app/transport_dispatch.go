@@ -17,7 +17,12 @@ var errTransportStreamStateConflict = errors.New("transport stream state changed
 func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	_, sourceDeclared := connectors.SyncTransportDescriptorOf(source)
 	_, destinationDeclared := connectors.SyncTransportDescriptorOf(destination)
-	return sourceDeclared || destinationDeclared
+	// A transport is a closed pair: registry preflight needs a source and a
+	// destination declaration. Requiring both here prevents a newly declared
+	// primitive destination from rerouting an existing legacy source before that
+	// source has declared and registered its own transport role. Invalid
+	// two-sided declarations still reach preflight and fail closed there.
+	return sourceDeclared && destinationDeclared
 }
 
 // shouldRunTransport keeps the closed issue-label walking slice opt-in at the

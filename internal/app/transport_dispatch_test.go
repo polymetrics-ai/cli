@@ -2287,14 +2287,18 @@ func TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead(t *testi
 	}
 }
 
-func TestHasDeclaredSyncTransportRoutesInvalidDescriptorToPreflight(t *testing.T) {
+func TestHasDeclaredSyncTransportRequiresBothEndpoints(t *testing.T) {
 	source := &appTransportConnector{
 		meta:       connectors.Metadata{Name: "invalid_source", IntegrationType: "api"},
 		descriptor: &connectors.SyncTransportDescriptor{},
 	}
 	destination := &appTransportConnector{meta: connectors.Metadata{Name: "destination", IntegrationType: "database"}}
+	if hasDeclaredSyncTransport(source, destination) {
+		t.Fatal("one-sided transport declaration diverted a legacy route to preflight")
+	}
+	destination.descriptor = &connectors.SyncTransportDescriptor{}
 	if !hasDeclaredSyncTransport(source, destination) {
-		t.Fatal("empty authored transport descriptor was treated as absent instead of being routed to preflight")
+		t.Fatal("two-sided malformed transport declaration was treated as a legacy route instead of being routed to preflight")
 	}
 }
 
