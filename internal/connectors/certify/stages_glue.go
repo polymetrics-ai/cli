@@ -107,6 +107,17 @@ func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 		skipStage(rc, rep, "flow_roundtrip", "skipped: no capture available (etl_full_refresh_append did not produce one)")
 		return nil
 	}
+	captureInfo, err := os.Stat(rc.capturePath)
+	if err != nil {
+		recordStage(rc, rep, "flow_roundtrip", 1, func() (bool, CLIStageInfo, string) {
+			return false, CLIStageInfo{}, fmt.Sprintf("flow_roundtrip: inspect capture: %v", err)
+		})
+		return nil
+	}
+	if captureInfo.Size() == 0 {
+		skipStage(rc, rep, "flow_roundtrip", "skipped: live capture is empty (zero records to round-trip)")
+		return nil
+	}
 
 	// setupCaptureConnection's "mode" parameter doubles as a registration key
 	// (it is idempotent per certify run, keyed off rc.captureFileRegistered,

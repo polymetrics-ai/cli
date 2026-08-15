@@ -1247,6 +1247,10 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 // --- stage 11: query_contract ---
 
 func stageQueryContract(rc *runContext, rep *Report) error {
+	if rc.capturePath == "" {
+		skipStage(rc, rep, "query_contract", "skipped: no live capture (etl_full_refresh_append was unavailable)")
+		return nil
+	}
 	table := "cert_live_" + rc.streamName()
 	recordStage(rc, rep, "query_contract", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("query", "run", "--table", table, "--limit", "1", "--json")

@@ -20,11 +20,12 @@ import (
 )
 
 const (
-	externalProofVersion       = 1
-	externalProofFingerprintID = "repository_salted_hmac_sha256_v1"
-	externalProofMarkerPrefix  = "{{pmcertfp:v1:"
-	externalProofMarkerSuffix  = "}}"
-	externalProofMaxExchanges  = 16
+	externalProofVersion               = 1
+	externalProofFingerprintID         = "repository_salted_hmac_sha256_v1"
+	externalProofMarkerPrefix          = "{{pmcertfp:v1:"
+	externalProofMarkerSuffix          = "}}"
+	externalProofMaxExchangesPerTarget = 16
+	externalProofMaxTotalExchanges     = 4096
 )
 
 var externalProofIdentifier = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]*$`)
@@ -200,12 +201,18 @@ func validateExternalProofInput(input ExternalProofInput) ([]string, error) {
 	if len(input.HTTPExchanges) == 0 {
 		return nil, errors.New("external proof requires at least one observed HTTPS exchange")
 	}
-	if len(input.HTTPExchanges) > externalProofMaxExchanges {
-		return nil, fmt.Errorf("external proof observed %d exchanges, exceeding bounded redirect/retry limit %d", len(input.HTTPExchanges), externalProofMaxExchanges)
+	if len(input.HTTPExchanges) > externalProofMaxTotalExchanges {
+		return nil, fmt.Errorf("external proof observed %d exchanges, exceeding bounded whole-surface limit %d", len(input.HTTPExchanges), externalProofMaxTotalExchanges)
 	}
+	exchangesPerTarget := make(map[string]int)
 	for index, exchange := range input.HTTPExchanges {
 		if err := validateObservedProofExchange(exchange); err != nil {
 			return nil, fmt.Errorf("external proof exchange %d: %w", index+1, err)
+		}
+		targetKey := strings.ToUpper(exchange.Request.Method) + "\x00" + exchange.Request.Target
+		exchangesPerTarget[targetKey]++
+		if exchangesPerTarget[targetKey] > externalProofMaxExchangesPerTarget {
+			return nil, fmt.Errorf("external proof observed more than %d exchanges for one request target, exceeding bounded redirect/retry limit", externalProofMaxExchangesPerTarget)
 		}
 	}
 	if err := validateExternalProofFlowRoundTripReferences(input.FlowRoundTripReferences); err != nil {

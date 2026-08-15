@@ -10,6 +10,7 @@ SYNOPSIS
   pm etl status <run-id> [--json]
   pm etl transport github-issue-label plan --connection <name> [--json]
   pm etl transport github-issue-label preview <plan-id> [--json]
+  pm etl run --connection <name> --stream issues --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
   pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
   pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
@@ -54,9 +55,12 @@ CLOSED GITHUB TRANSPORT
 
   The run keeps the source -> durable warehouse -> reopen -> typed GitHub
   mutation and durable acknowledgement -> independent read-back -> checkpoint
-  order. Cleanup is a separate typed remove-label plan, preview, and one-time
-  approval. A declared GitHub missing-label DELETE is a successful cleanup;
-  replaying approval is refused.
+  order. After the first approved non-additive run, later runs with the exact
+  same plan scope use --approval-plan and --confirm destructive without a new
+  --approval-token-stdin. Changed, expired, or revoked scope is refused before
+  a provider write. Cleanup is a separate typed remove-label plan, preview, and
+  one-time approval. A declared GitHub missing-label DELETE is a successful
+  cleanup; replaying approval is refused.
 
   Source selection and independent read-back each inspect only the first GitHub
   issues page. The transport fails instead of requesting another page when the

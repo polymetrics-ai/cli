@@ -3,6 +3,7 @@ package certify_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -237,6 +238,42 @@ func TestWriteExternalProofRefusesExchangesBeyondRedirectRetryBoundWithoutWrites
 	}
 	if _, statErr := os.Stat(filepath.Join(root, ".polymetrics", "certifications")); !os.IsNotExist(statErr) {
 		t.Fatalf("exchange-bound refusal created artifact material: stat error = %v, want not exist", statErr)
+	}
+}
+
+func TestWriteExternalProofAcceptsWholeSurfaceAbovePerRequestRetryBound(t *testing.T) {
+	root := t.TempDir()
+	exchanges := make([]certify.ObservedHTTPExchange, 17)
+	for index := range exchanges {
+		exchanges[index] = certify.ObservedHTTPExchange{
+			Request: certify.ObservedHTTPRequest{
+				Method: http.MethodGet,
+				Target: fmt.Sprintf("https://proof.invalid/surface/%d", index),
+				Body:   certify.ObservedBody{Complete: true},
+			},
+			Response: certify.ObservedHTTPResponse{
+				Status: http.StatusOK,
+				Body:   certify.ObservedBody{Complete: true},
+			},
+		}
+	}
+	proofPath, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+		Connector:               "sample",
+		RunID:                   "whole-surface-3989",
+		BinarySHA256:            strings.Repeat("e", 64),
+		Command:                 []string{"pm", "connectors", "certify", "sample"},
+		ExitCode:                0,
+		Passed:                  true,
+		FullParity:              true,
+		PreparedValues:          []string{"cert-canary"},
+		HTTPExchanges:           exchanges,
+		FlowRoundTripReferences: []string{"flow_plan", "flow_preview", "flow_run", "flow_status"},
+	})
+	if err != nil {
+		t.Fatalf("write whole-surface proof: %v", err)
+	}
+	if _, err := os.Stat(proofPath); err != nil {
+		t.Fatalf("stat whole-surface proof: %v", err)
 	}
 }
 

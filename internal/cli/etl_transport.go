@@ -25,7 +25,7 @@ const etlTransportHelp = `NAME
 SYNOPSIS
   pm etl transport %s plan --connection <name> [--json]
   pm etl transport %s preview <plan-id> [--json]
-  pm etl run --connection <name> --stream issues --batch-size 1 --approval-plan <plan-id> --approval-token-stdin --confirm destructive [--json]
+  pm etl run --connection <name> --stream issues --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
   pm etl transport %s cleanup plan --connection <name> --forward-plan <plan-id> [--json]
   pm etl transport %s cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
@@ -40,6 +40,11 @@ DESCRIPTION
   run. The forward run remains the ordinary source -> durable warehouse ->
   reopen -> typed %s mutation and durable acknowledgement -> independent
   read-back -> checkpoint path.
+
+  A successful non-additive run persists authorization for that exact plan
+  scope. Later identical-scope runs reuse --approval-plan and --confirm
+  destructive without --approval-token-stdin. A changed, expired, or revoked
+  scope is refused before a provider write.
 
   Source selection and independent read-back each inspect only the first %s
   issues page. The transport fails instead of requesting another page when the
@@ -267,11 +272,13 @@ func parseETLRunTransportApproval(args []string, stdin io.Reader) (synctransport
 	if err != nil {
 		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
 	}
-	token, err := readApprovalTokenFromStdin(stdin)
-	if err != nil {
-		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
+	if flags.value("approval-token-stdin") == "true" {
+		token, err := readApprovalTokenFromStdin(stdin)
+		if err != nil {
+			return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
+		}
+		approval.ApprovalToken = token
 	}
-	approval.ApprovalToken = token
 	return approval, true, flags, nil
 }
 
@@ -300,11 +307,14 @@ func approvalFromStrictTransportFlags(planID string, flags strictTransportFlags,
 	if err := validateTransportPlanID(planID); err != nil {
 		return synctransport.DestinationApproval{}, err
 	}
-	if flags.value("approval-token-stdin") != "true" || flags.value("confirm") == "" {
+	if cleanup && flags.value("approval-token-stdin") != "true" {
+		return synctransport.DestinationApproval{}, validationErrorf("issue-label transport cleanup requires --approval-token-stdin and --confirm destructive")
+	}
+	if flags.value("confirm") == "" {
 		if cleanup {
 			return synctransport.DestinationApproval{}, validationErrorf("issue-label transport cleanup requires --approval-token-stdin and --confirm destructive")
 		}
-		return synctransport.DestinationApproval{}, validationErrorf("approved issue-label transport ETL requires --approval-plan, --approval-token-stdin, and --confirm destructive")
+		return synctransport.DestinationApproval{}, validationErrorf("approved issue-label transport ETL requires --approval-plan and --confirm destructive")
 	}
 	confirmation, err := connectors.ParseWriteConfirmation(flags.value("confirm"))
 	if err != nil {
