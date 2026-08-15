@@ -65,12 +65,12 @@ func TestRegisterDeclaredTransportsRefusesBeforeAnyRegistration(t *testing.T) {
 			},
 		},
 		{
-			name: "destination change capture",
+			name: "destination change capture missing closed apply strategy",
 			mutate: func(pair *testTransportPair) {
 				pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeChangeCapture}
 				pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{
 					Mode:     synccontract.ModeChangeCapture,
-					Strategy: connectors.ApplyStrategyChangeApply,
+					Strategy: connectors.ApplyStrategyAppend,
 					Action:   "stage_append",
 				}}
 			},

@@ -58304,8 +58304,8 @@
           "issues"
         ],
         "modes": [
-          "full_append",
           "full_overwrite",
+          "full_append",
           "incremental_upsert"
         ],
         "delivery": {
@@ -58328,8 +58328,8 @@
           "set_issue_labels"
         ],
         "modes": [
-          "full_append",
           "full_overwrite",
+          "full_append",
           "incremental_upsert"
         ],
         "delivery": {
@@ -58344,14 +58344,14 @@
         "acknowledgement": "durable_warehouse",
         "apply_strategies": [
           {
-            "mode": "full_append",
-            "strategy": "append",
-            "action": "add_issue_labels"
-          },
-          {
             "mode": "full_overwrite",
             "strategy": "replace",
             "action": "set_issue_labels"
+          },
+          {
+            "mode": "full_append",
+            "strategy": "append",
+            "action": "add_issue_labels"
           },
           {
             "mode": "incremental_upsert",

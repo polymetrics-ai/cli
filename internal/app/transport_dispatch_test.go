@@ -120,6 +120,35 @@ func TestRunETLCanonicalFullAppendUsesRegisteredTransports(t *testing.T) {
 	}
 }
 
+func TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeChangeCapture)
+
+	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection,
+		Stream:     "records",
+		BatchSize:  1,
+	})
+	if err != nil {
+		t.Fatalf("RunETL() = %v, want declared change_capture transport dispatch", err)
+	}
+	stage, ok := fixture.app.transportStage.(*appTransportStage)
+	if !ok {
+		t.Fatalf("transport stage = %T, want app transport stage", fixture.app.transportStage)
+	}
+	if fixture.sourceExecutor.readCalls != 1 || stage.calls != 1 || fixture.destinationExecutor.planCalls != 1 || fixture.destinationExecutor.applyCalls != 1 {
+		t.Fatalf("change_capture calls source=%d stage=%d plan=%d apply=%d, want one closed transport pass", fixture.sourceExecutor.readCalls, stage.calls, fixture.destinationExecutor.planCalls, fixture.destinationExecutor.applyCalls)
+	}
+	if fixture.destinationExecutor.plan.ApplyStrategy.Mode != synccontract.ModeChangeCapture || fixture.destinationExecutor.plan.ApplyStrategy.Strategy != connectors.ApplyStrategyChangeApply || fixture.destinationExecutor.plan.ApplyStrategy.Action != "stage_change_capture" {
+		t.Fatalf("change_capture destination plan = %+v, want descriptor-declared change_apply/stage_change_capture", fixture.destinationExecutor.plan.ApplyStrategy)
+	}
+	if fixture.source.legacyReadCalls != 0 || fixture.destination.legacyWriteCalls != 0 {
+		t.Fatalf("change_capture legacy calls read=%d write=%d, want closed transport dispatch only", fixture.source.legacyReadCalls, fixture.destination.legacyWriteCalls)
+	}
+	if run.RecordsRead != 1 || run.RecordsLoaded != 1 || run.BatchCount != 1 {
+		t.Fatalf("change_capture run counts = %+v, want one staged/applied page", run)
+	}
+}
+
 // A DestinationApproval is meaningful only to the exact closed GitHub
 // transport route. App callers must not be able to attach one to an ordinary
 // ETL request and have it silently ignored while legacy execution proceeds.

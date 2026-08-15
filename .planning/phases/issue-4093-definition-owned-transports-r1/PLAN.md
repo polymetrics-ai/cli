@@ -29,8 +29,8 @@ declarations and adapters required to exercise them. It deliberately excludes
    destination registration. Add a synthetic second connector to demonstrate
    that the composer requires no App/orchestrator/dispatch edit.
 4. **GREEN loader and role rule:** add `sync_transport.json` schema, loader,
-   bundle field, clone-safe `Definition` projection, and reject destination
-   `change_capture`.
+   bundle field, clone-safe `Definition` projection, and require a destination
+   `change_capture` declaration to bind the closed `change_apply` strategy.
 5. **GREEN production composition:** replace the hard-coded GitHub wrapper
    composition with a declarative factory table; collect connector-local
    factories through a generic provider interface; register actual GitHub
@@ -43,6 +43,10 @@ declarations and adapters required to exercise them. It deliberately excludes
 7. **Verification/review:** run focused/race tests, the required live PostgreSQL
    proof, build/vet and individual repository gates, then inline `verify-work`
    and `code-review`. Rebase immediately before push and open a direct PR.
+8. **CI repair:** preserve legacy GitHub-to-local-warehouse execution by
+   declaring the closed transport modes in the canonical contract order, and
+   correct the destination role rule so a legitimate `change_capture` route
+   reaches its descriptor-owned `change_apply` strategy.
 
 ## Acceptance evidence
 
@@ -52,7 +56,7 @@ declarations and adapters required to exercise them. It deliberately excludes
 | Unknown or malformed declaration fails closed | fake bundle/composer | Loader errors; composer asserts build calls and registry source/destination counts are both zero. |
 | Registration is definition-owned, not connector-name dispatched | fake + production | A synthetic additional declared connector registers from the same composer without App/orchestrator/dispatch modification; real GitHub/PostgreSQL preflight reaches their registered executors. |
 | Evidence admission is external and selected by declaration | fake | Exact factory evidence preflights; altered evidence fails preflight before source read. |
-| Destination cannot claim `change_capture` | fake bundle | Load errors before any registration or I/O. |
+| Destination `change_capture` stays closed | fake bundle + app transport | A `change_apply` declaration reaches destination planning and apply; an `append` declaration fails before any registration or I/O. |
 | PostgreSQL production path remains live | live database | Docker PostgreSQL test emits bounded snapshot rows/pages/checkpoint through the registered native source. |
 
 ## Verification commands
