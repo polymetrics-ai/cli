@@ -117,7 +117,7 @@ Reads and writes the documented Luma public API for events, calendars, guests, c
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 

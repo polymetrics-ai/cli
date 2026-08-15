@@ -148,6 +148,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			if parseErr != nil {
 				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response: " + parseErr.Error(), cause: parseErr}
 			}
+			observeGraphQLRateLimit(requestCtx, &requester, response, data)
 			if len(metadata.Errors) != 0 {
 				return &operationDirectWriteError{operation: prepared.op.ID, message: "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), true, prepared.redactionValues)}
 			}

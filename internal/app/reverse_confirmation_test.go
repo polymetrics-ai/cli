@@ -1,6 +1,7 @@
 package app_test
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -700,6 +701,84 @@ func TestRunReverseETLConsumesBulkApprovalAtomicallyAcrossProcesses(t *testing.T
 	}
 	if successes != 1 || calls.Load() != 1 {
 		t.Fatalf("bulk executions = %d successes, %d requests; want exactly one", successes, calls.Load())
+	}
+}
+
+func TestReverseExecutionOpenDefersLegacyMigrationUntilApprovalConsumption(t *testing.T) {
+	ctx := context.Background()
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	active, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
+	plan, _, err := active.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
+	}
+	root := filepath.Dir(active.ProjectDir())
+	statePath := filepath.Join(active.ProjectDir(), "state", "state.json")
+	contents, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("ReadFile(state) error = %v", err)
+	}
+	var stored map[string]any
+	if err := json.Unmarshal(contents, &stored); err != nil {
+		t.Fatalf("Unmarshal(state) error = %v", err)
+	}
+	delete(stored, "workspace_id")
+	legacy, err := json.Marshal(stored)
+	if err != nil {
+		t.Fatalf("Marshal(legacy state) error = %v", err)
+	}
+	if err := os.WriteFile(statePath, legacy, 0o600); err != nil {
+		t.Fatalf("WriteFile(legacy state) error = %v", err)
+	}
+
+	deferred, err := app.OpenForReverseExecution(root)
+	if err != nil {
+		t.Fatalf("OpenForReverseExecution() error = %v", err)
+	}
+	afterOpen, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("ReadFile(after deferred open) error = %v", err)
+	}
+	if !bytes.Equal(afterOpen, legacy) {
+		t.Fatal("reverse execution open rewrote legacy state before approval consumption")
+	}
+
+	winner, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open(winner) error = %v", err)
+	}
+	if _, err := winner.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}); err != nil {
+		t.Fatalf("RunReverseETL(winner) error = %v", err)
+	}
+	afterWinner, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("ReadFile(after winner) error = %v", err)
+	}
+
+	if _, err := deferred.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}); err == nil || !strings.Contains(err.Error(), "already been consumed") {
+		t.Fatalf("RunReverseETL(replay) error = %v, want consumed approval rejection", err)
+	}
+	afterReplay, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("ReadFile(after replay) error = %v", err)
+	}
+	if !bytes.Equal(afterReplay, afterWinner) {
+		t.Fatal("replayed reverse execution rewrote project state")
+	}
+	if _, err := os.Stat(statePath + ".lock"); err == nil || !os.IsNotExist(err) {
+		t.Fatalf("replayed reverse execution created a state lock file: %v", err)
 	}
 }
 

@@ -47,6 +47,8 @@ func GuideOf(c Connector) ConnectorGuide {
 	if provider, ok := c.(CommandSurfaceProvider); ok {
 		guide = guideWithCommandSurface(guide, provider.CommandSurface())
 	}
+	guide = guideWithSyncTransport(guide, c)
+	guide = guideWithPollingWatermark(guide, c)
 	return guideWithIcon(guide, manifest)
 }
 
@@ -70,6 +72,64 @@ func guideWithCommandSurface(guide ConnectorGuide, surface *CommandSurface) Conn
 		}
 	}
 	guide.Sections = append(guide.Sections, commandSurfaceSection(surface))
+	return guide
+}
+
+// guideWithSyncTransport projects only an authored closed transport descriptor.
+// A missing descriptor stays absent from the human manual; JSON inspection
+// still reports both roles as unsupported. This avoids representing ordinary
+// read/write capabilities as a transport declaration.
+func guideWithSyncTransport(guide ConnectorGuide, connector Connector) ConnectorGuide {
+	if _, declared := SyncTransportDescriptorOf(connector); !declared {
+		return guide
+	}
+	for _, section := range guide.Sections {
+		if strings.EqualFold(section.Title, "sync transport") {
+			return guide
+		}
+	}
+	eligibility := SyncTransportEligibilityOf(connector)
+	lines := []string{
+		"Source transport: " + eligibility.Source.Status,
+		"Destination transport: " + eligibility.Destination.Status,
+		"A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.",
+	}
+	if eligibility.Source.Executor != nil {
+		lines = append(lines, "Source executor: "+string(eligibility.Source.Executor.Family)+"/"+eligibility.Source.Executor.ID)
+	}
+	if eligibility.Destination.Executor != nil {
+		lines = append(lines, "Destination executor: "+string(eligibility.Destination.Executor.Family)+"/"+eligibility.Destination.Executor.ID)
+	}
+	guide.Sections = append(guide.Sections, GuideSection{Title: "Sync Transport", Lines: lines})
+	return guide
+}
+
+// guideWithPollingWatermark exposes only declaration status. Mode execution is
+// intentionally not inferred here: the real preflight also needs the selected
+// catalog object and destination binding, neither of which inspection reads.
+func guideWithPollingWatermark(guide ConnectorGuide, connector Connector) ConnectorGuide {
+	definition, ok := DefinitionOf(connector)
+	if !ok || definition.PollingWatermark == nil {
+		return guide
+	}
+	for _, section := range guide.Sections {
+		if strings.EqualFold(section.Title, "polling watermark") {
+			return guide
+		}
+	}
+	declaration := definition.PollingWatermark
+	lines := []string{
+		"Status: " + string(declaration.Status),
+		"Mechanism: polling_watermark is a bounded polling scan, not CDC or change capture.",
+		"Eligibility: each mode remains blocked until runtime preflight validates the selected catalog object and destination binding, registered native executors, and immutable conformance evidence.",
+	}
+	if declaration.Reason != "" {
+		lines = append(lines, "Reason: "+declaration.Reason)
+	}
+	if declaration.Status != PollingWatermarkStatusImplemented {
+		lines = append(lines, "No polling source ordering, checkpoint, snapshot, deletion, or rebootstrap behavior is implemented for this connector while the declaration is non-implemented.")
+	}
+	guide.Sections = append(guide.Sections, GuideSection{Title: "Polling Watermark", Lines: lines})
 	return guide
 }
 
@@ -694,7 +754,7 @@ func examplesForManifest(manifest Manifest) []GuideExample {
 			GuideExample{Title: "Token credential", Command: "export GITHUB_TOKEN=...\npm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN"},
 			GuideExample{Title: "GitHub App credential", Command: "pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app-private-key.pem"},
 			GuideExample{Title: "Pull request ETL", Command: "pm connections create github_prs_to_warehouse --source github:github-token --destination warehouse:warehouse-local --stream pull_requests --primary-key node_id --cursor updated_at --table github_pull_requests\npm etl run --connection github_prs_to_warehouse --stream pull_requests --batch-size 100 --json"},
-			GuideExample{Title: "Approved pull request creation", Command: "pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-token --action create_pull_request --map title:title --map body:body --map head:head --map base:base --map reviewers:reviewers\npm reverse preview <plan-id> --json\npm reverse run <plan-id> --approve <approval-token> --json"},
+			GuideExample{Title: "Approved pull request creation", Command: "pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-token --action create_pull_request --map title:title --map body:body --map head:head --map base:base --map reviewers:reviewers\npm reverse preview <plan-id> --json\npm reverse run <plan-id> --approval-token-stdin --json"},
 		)
 	case "sample":
 		examples = append(examples, GuideExample{Title: "Sample ETL", Command: "pm credentials add sample-local --connector sample\npm connections create sample_to_warehouse --source sample:sample-local --destination warehouse:warehouse-local --stream customers --primary-key id --cursor updated_at --table sample_customers\npm etl run --connection sample_to_warehouse --stream customers --json"})
@@ -703,7 +763,7 @@ func examplesForManifest(manifest Manifest) []GuideExample {
 	case "warehouse":
 		examples = append(examples, GuideExample{Title: "Warehouse credential", Command: "pm credentials add warehouse-local --connector warehouse --config path=$ROOT/.polymetrics/warehouse\npm query run --table sample_customers --limit 5 --json"})
 	case "outbox":
-		examples = append(examples, GuideExample{Title: "Outbox reverse ETL", Command: "pm credentials add outbox-local --connector outbox --config path=$ROOT/.polymetrics/outbox\npm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map email:email\npm reverse run <plan-id> --approve <approval-token> --json"})
+		examples = append(examples, GuideExample{Title: "Outbox reverse ETL", Command: "pm credentials add outbox-local --connector outbox --config path=$ROOT/.polymetrics/outbox\npm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map email:email\npm reverse run <plan-id> --approval-token-stdin --json"})
 	}
 	return examples
 }

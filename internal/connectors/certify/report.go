@@ -14,11 +14,18 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+
+	"polymetrics.ai/internal/failures"
 )
 
-// CapabilityResult is a single pass/fail/skip entry under Report.Capabilities,
+// CurrentSchemaVersion is the report version accepted by the current runtime
+// bundle loader. New optional report values must remain readable at this
+// version until the writer/reader version contract is revised.
+const CurrentSchemaVersion = 1
+
+// CapabilityResult is a single certification entry under Report.Capabilities,
 // per the certification design §A "Report artifact" shape. Not every field
-// applies to every capability; unused fields are omitted from JSON.
+// applies to every capability, so unused fields are omitted from JSON.
 type CapabilityResult struct {
 	Result        string `json:"result"`
 	Streams       int    `json:"streams,omitempty"`
@@ -26,6 +33,9 @@ type CapabilityResult struct {
 	Records       int    `json:"records,omitempty"`
 	StagesChecked int    `json:"stages_checked,omitempty"`
 	Reason        string `json:"reason,omitempty"`
+	// UntestableReason carries a safe classification when a capability cannot be
+	// exercised. Its JSON representation excludes the internal diagnostic cause.
+	UntestableReason *failures.Classification `json:"untestable_reason,omitempty"`
 }
 
 // SyncModeResult is one row of Capabilities.SyncModes.
@@ -107,6 +117,20 @@ type Leak struct {
 	Reason    string `json:"reason"`
 }
 
+// RateLimitEvent is one bounded audit event from a certification request. It
+// intentionally excludes provider URLs, raw headers/bodies, credential data,
+// and coordination-scope identity; the event is useful to explain admission
+// without creating a second sensitive request log.
+type RateLimitEvent struct {
+	Type       string    `json:"type"`
+	Stage      string    `json:"stage,omitempty"`
+	Method     string    `json:"method,omitempty"`
+	Attempt    int       `json:"attempt,omitempty"`
+	DurationMS int64     `json:"duration_ms,omitempty"`
+	ResetAt    time.Time `json:"reset_at,omitempty"`
+	Reason     string    `json:"reason,omitempty"`
+}
+
 // ExitCodeFor maps a completed Report to the certification design §A exit
 // code convention: 0 pass, 2 certification failures, 3 leaked resources
 // (dominates everything — checked first).
@@ -134,9 +158,10 @@ type Report struct {
 	Mode          string    `json:"mode"`
 	Passed        bool      `json:"passed"`
 
-	Capabilities Capabilities  `json:"capabilities"`
-	Stages       []StageResult `json:"stages"`
-	Leaks        []Leak        `json:"leaks,omitempty"`
+	Capabilities    Capabilities     `json:"capabilities"`
+	Stages          []StageResult    `json:"stages"`
+	Leaks           []Leak           `json:"leaks,omitempty"`
+	RateLimitEvents []RateLimitEvent `json:"rate_limit_events,omitempty"`
 }
 
 // certificationsDirName / historyDirName are the fixed on-disk layout under

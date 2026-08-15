@@ -9,17 +9,23 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"time"
 )
 
 // Manifest is a persisted schedule definition.
 type Manifest struct {
-	Name      string    `json:"name"`
-	Cron      string    `json:"cron"`
-	Flow      string    `json:"flow"`
-	Root      string    `json:"root,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Name string `json:"name"`
+	Cron string `json:"cron"`
+	Flow string `json:"flow"`
+	// AuthorizationReference is the opaque durable scope record required for
+	// every scheduled action firing. It is a reference only: an approval token,
+	// credential, secret, payload, or secret-derived material is never stored
+	// in a schedule manifest.
+	AuthorizationReference string    `json:"authorization_reference"`
+	Root                   string    `json:"root,omitempty"`
+	CreatedAt              time.Time `json:"created_at"`
+	UpdatedAt              time.Time `json:"updated_at"`
 }
 
 // BackendKind identifies which scheduler backend is active.
@@ -39,7 +45,10 @@ type Backend interface {
 	Kind() BackendKind
 }
 
-var validName = regexp.MustCompile(`^[a-z0-9][a-z0-9-]{0,63}$`)
+var (
+	validName                   = regexp.MustCompile(`^[a-z0-9][a-z0-9-]{0,63}$`)
+	validAuthorizationReference = regexp.MustCompile(`^auth_[0-9a-f]{16}$`)
+)
 
 func validateName(name string) error {
 	if name == "" {
@@ -47,6 +56,13 @@ func validateName(name string) error {
 	}
 	if !validName.MatchString(name) {
 		return fmt.Errorf("invalid schedule name %q: must match [a-z0-9][a-z0-9-]*, max 64 chars", name)
+	}
+	return nil
+}
+
+func validateAuthorizationReference(reference string) error {
+	if !validAuthorizationReference.MatchString(reference) {
+		return errors.New("schedule authorization reference must be an opaque auth_<id> reference")
 	}
 	return nil
 }
@@ -59,9 +75,20 @@ func manifestPath(root, name string) string {
 	return filepath.Join(schedulesDir(root), name+".json")
 }
 
+func fireStatePath(root, name string) string {
+	return filepath.Join(schedulesDir(root), name+".fire.json")
+}
+
+func fireLockPath(root, name string) string {
+	return filepath.Join(schedulesDir(root), name+".fire.lock")
+}
+
 // Save writes a manifest to <root>/schedules/<name>.json.
 func Save(root string, m Manifest, allowOverwrite bool) error {
 	if err := validateName(m.Name); err != nil {
+		return err
+	}
+	if err := validateAuthorizationReference(m.AuthorizationReference); err != nil {
 		return err
 	}
 	dir := schedulesDir(root)
@@ -78,7 +105,7 @@ func Save(root string, m Manifest, allowOverwrite bool) error {
 	if err != nil {
 		return fmt.Errorf("schedule: marshal: %w", err)
 	}
-	return os.WriteFile(path, data, 0o644)
+	return writeFileAtomic(path, data, 0o600)
 }
 
 // Load reads a manifest from <root>/schedules/<name>.json.
@@ -90,6 +117,9 @@ func Load(root, name string) (Manifest, error) {
 	var m Manifest
 	if err := json.Unmarshal(data, &m); err != nil {
 		return Manifest{}, fmt.Errorf("schedule: unmarshal: %w", err)
+	}
+	if err := validateAuthorizationReference(m.AuthorizationReference); err != nil {
+		return Manifest{}, fmt.Errorf("schedule: invalid authorization reference: %w", err)
 	}
 	return m, nil
 }
@@ -106,7 +136,10 @@ func List(root string) ([]Manifest, error) {
 	}
 	var manifests []Manifest
 	for _, e := range entries {
-		if e.IsDir() || filepath.Ext(e.Name()) != ".json" {
+		// Fire state is stored next to the manifest. It is intentionally not a
+		// schedule definition and must never appear as a malformed second entry
+		// after the first firing.
+		if e.IsDir() || filepath.Ext(e.Name()) != ".json" || strings.HasSuffix(e.Name(), ".fire.json") {
 			continue
 		}
 		name := e.Name()[:len(e.Name())-5]
@@ -121,8 +154,16 @@ func List(root string) ([]Manifest, error) {
 
 // Delete removes the manifest file for name.
 func Delete(root, name string) error {
+	if _, err := os.Stat(fireLockPath(root, name)); err == nil {
+		return ErrFireInProgress
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
 	err := os.Remove(manifestPath(root, name))
 	if err != nil {
+		return err
+	}
+	if err := os.Remove(fireStatePath(root, name)); err != nil && !errors.Is(err, os.ErrNotExist) {
 		return err
 	}
 	return nil

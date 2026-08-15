@@ -11,6 +11,7 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/rlm"
 )
@@ -41,8 +42,9 @@ func runFlow(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 	}
 }
 
-// parseFlowFlags extracts --file, --force, --flows-dir from args.
-func parseFlowFlags(args []string) (file, flowsDir string, force bool, positional []string) {
+// parseFlowFlags extracts the flow-owned flags without accepting arbitrary
+// destination or request controls.
+func parseFlowFlags(args []string) (file, flowsDir string, force bool, authorization string, positional []string) {
 	for i := 0; i < len(args); i++ {
 		switch args[i] {
 		case "--file":
@@ -57,6 +59,11 @@ func parseFlowFlags(args []string) (file, flowsDir string, force bool, positiona
 			}
 		case "--force":
 			force = true
+		case "--authorization":
+			if i+1 < len(args) {
+				i++
+				authorization = args[i]
+			}
 		default:
 			if !strings.HasPrefix(args[i], "--") {
 				positional = append(positional, args[i])
@@ -102,7 +109,7 @@ func resolveManifestPaths(baseDir string, m *flow.FlowManifest) {
 // flowPlan parses + validates the manifest and prints the DAG order.
 // dryRun=true makes it behave as "preview".
 func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, dryRun bool) error {
-	file, _, _, _ := parseFlowFlags(args)
+	file, _, _, _, _ := parseFlowFlags(args)
 	if file == "" {
 		return usageErrorf("flow plan: --file <path> is required")
 	}
@@ -138,7 +145,7 @@ func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, 
 
 // flowRun executes the flow.
 func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
-	file, flowsDir, force, positional := parseFlowFlags(args)
+	file, flowsDir, force, authorization, positional := parseFlowFlags(args)
 	if file == "" {
 		if len(positional) == 0 {
 			return usageErrorf("flow run: --file <path> or <flow-name> is required")
@@ -181,6 +188,9 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 		Checkpoint: cs,
 		LockDir:    dir,
 	}
+	if a != nil {
+		e.ActionRunner = &connectorFlowActionRunner{app: a, flowName: m.Name, authorizationReference: authorization}
+	}
 
 	result, err := e.Run(ctx, flow.RunOptions{Force: force})
 	if err != nil {
@@ -196,7 +206,7 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 
 // flowStatus returns last checkpoint info for a named flow.
 func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
-	_, flowsDir, _, positional := parseFlowFlags(args)
+	_, flowsDir, _, _, positional := parseFlowFlags(args)
 	if len(positional) == 0 {
 		return usageErrorf("flow status: flow name required")
 	}
@@ -242,7 +252,7 @@ func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
 
 // flowList lists flow manifest files in the flows directory.
 func flowList(args []string, stdout io.Writer, jsonOut bool) error {
-	_, flowsDir, _, _ := parseFlowFlags(args)
+	_, flowsDir, _, _, _ := parseFlowFlags(args)
 	if flowsDir == "" {
 		flowsDir = ".polymetrics/flows"
 	}
@@ -283,7 +293,10 @@ type noopAppAdapter struct{}
 func (n *noopAppAdapter) ETLRun(_ context.Context, _ string, _ []string) (flow.ETLResult, error) {
 	return flow.ETLResult{}, nil
 }
-func (n *noopAppAdapter) QuerySQL(_ context.Context, _ string, _ int) ([]map[string]any, error) {
+func (n *noopAppAdapter) QuerySQL(_ context.Context, _, _ string, _ int) ([]map[string]any, error) {
+	return nil, nil
+}
+func (n *noopAppAdapter) ReadActionSource(_ context.Context, _, _ string) ([]map[string]any, error) {
 	return nil, nil
 }
 func (n *noopAppAdapter) RLMRun(_ context.Context, _ flow.RLMRunRequest) (flow.RLMResult, error) {
@@ -309,16 +322,33 @@ func (a *appFlowAdapter) ETLRun(ctx context.Context, connectionID string, stream
 	return result, nil
 }
 
-func (a *appFlowAdapter) QuerySQL(ctx context.Context, sql string, limit int) ([]map[string]any, error) {
-	records, err := a.app.QuerySQL(ctx, sql, limit)
+func (a *appFlowAdapter) QuerySQL(ctx context.Context, sql, connection string, limit int) ([]map[string]any, error) {
+	records, err := a.app.QuerySQL(ctx, app.QuerySQLRequest{
+		SQL:        sql,
+		Connection: connection,
+		Limit:      limit,
+		Origin:     app.QuerySQLOriginFlow,
+	})
 	if err != nil {
 		return nil, err
 	}
+	return recordsToFlowRows(records), nil
+}
+
+func (a *appFlowAdapter) ReadActionSource(ctx context.Context, table, connection string) ([]map[string]any, error) {
+	records, err := a.app.ReadActionSource(ctx, app.ActionSourceReadRequest{Table: table, Connection: connection})
+	if err != nil {
+		return nil, err
+	}
+	return recordsToFlowRows(records), nil
+}
+
+func recordsToFlowRows(records []connectors.Record) []map[string]any {
 	out := make([]map[string]any, len(records))
 	for i, r := range records {
 		out[i] = map[string]any(r)
 	}
-	return out, nil
+	return out
 }
 
 func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (flow.RLMResult, error) {

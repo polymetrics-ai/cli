@@ -159,6 +159,7 @@ func TestScheduleInstallUsesConfigFileCrontabPath(t *testing.T) {
 		"--name", "nightly-leads",
 		"--cron", "0 2 * * *",
 		"--flow", "likely-customers",
+		"--authorization", "auth_0123456789abcdef",
 	)
 	if code != 0 {
 		t.Fatalf("create: exit %d, stderr=%q", code, stderr)

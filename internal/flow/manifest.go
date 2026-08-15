@@ -18,20 +18,36 @@ const (
 
 // ActionConfig holds the configuration for a step of kind "action".
 type ActionConfig struct {
-	SourceTable           string            `json:"source_table"`
+	SourceTable string `json:"source_table"`
+	// SourceConnection scopes source_table to one connection's warehouse
+	// materialization. _unattributed names a root-owned table. An omitted
+	// selector remains intentionally ambiguous when several owners exist.
+	SourceConnection      string            `json:"source_connection,omitempty"`
 	DestinationConnector  string            `json:"destination_connector"`
 	DestinationCredential string            `json:"destination_credential"`
 	DestinationConfig     map[string]string `json:"destination_config,omitempty"`
-	Action                string            `json:"action"` // upsert | create | delete; defaults to "upsert"
-	Mappings              map[string]string `json:"mappings"`
-	MaxRetries            int               `json:"max_retries,omitempty"` // default 3
-	BatchSize             int               `json:"batch_size,omitempty"`  // default 100
+	// DestinationTable is the stable action target bound into authorization.
+	DestinationTable string            `json:"destination_table,omitempty"`
+	Action           string            `json:"action"` // upsert | create | delete; defaults to "upsert"
+	Mappings         map[string]string `json:"mappings"`
+	// AuthorizationReference is the opaque durable scope identity created by a
+	// prior plan → preview → approval → execute lifecycle.
+	AuthorizationReference string `json:"authorization_reference,omitempty"`
+	// ReadBackStream is independently read after acknowledgement and before a
+	// successful action can be checkpointed.
+	ReadBackStream string `json:"read_back_stream,omitempty"`
+	MaxRetries     int    `json:"max_retries,omitempty"` // default 3
+	BatchSize      int    `json:"batch_size,omitempty"`  // default 100
 }
 
 // FlowStep describes a single step in a flow manifest.
 type FlowStep struct {
-	ID         string        `json:"id"`
-	Kind       StepKind      `json:"kind"`
+	ID   string   `json:"id"`
+	Kind StepKind `json:"kind"`
+	// Connection identifies the sync connection for sync steps and scopes the
+	// source warehouse views for query steps. _unattributed selects root-owned
+	// tables for a query. It remains optional for query steps so an omitted
+	// selector is refused as ambiguous rather than guessed.
 	Connection string        `json:"connection,omitempty"`
 	Streams    []string      `json:"streams,omitempty"`
 	SQL        string        `json:"sql,omitempty"`

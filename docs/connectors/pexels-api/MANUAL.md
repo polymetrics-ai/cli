@@ -61,7 +61,7 @@ ETL STREAMS
     fields: alt(string), collection_id(string), duration(integer), height(integer), id(integer), image(string), photographer(string), photographer_url(string), src(object), type(string), url(string), user(object), video_files(array), video_pictures(array), width(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Pexels API read of photo/video search, curated/popular results, and collection metadata/media; all publicly-licensed stock media, no PII

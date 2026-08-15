@@ -1,7 +1,7 @@
 {
   "name": "postgres",
   "display_name": "PostgreSQL",
-  "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source.",
+  "description": "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Read-only source.",
   "integration_type": "database",
   "release_stage": "ga",
   "capabilities": {
@@ -9,7 +9,7 @@
     "read": true,
     "write": false,
     "query": false,
-    "cdc": false,
+    "cdc": true,
     "dynamic_schema": true
   },
   "risk": {

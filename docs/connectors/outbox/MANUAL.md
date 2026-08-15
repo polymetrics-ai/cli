@@ -49,7 +49,7 @@ EXAMPLES
   # Outbox reverse ETL
   pm credentials add outbox-local --connector outbox --config path=$ROOT/.polymetrics/outbox
   pm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map email:email
-  pm reverse run <plan-id> --approve <approval-token> --json
+  pm reverse run <plan-id> --approval-token-stdin --json
 
 AGENT WORKFLOW
   - Run pm connectors inspect outbox before creating credentials or plans.

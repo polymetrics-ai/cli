@@ -1,0 +1,55 @@
+# #4069 resumed broad local verification — 2026-08-12
+
+Transport's local heavy-validation gate was cleared before this record. All
+commands below ran from the #4069 child branch without credentials, provider
+calls, transport changes, or production warehouse state.
+
+## Affected packages
+
+- PASS go test -timeout 20m ./internal/app -count=1 (70.545s)
+- PASS go test -timeout 20m ./internal/cli -count=1 (165.169s)
+- PASS go test -timeout 20m ./internal/flow -count=1 (0.433s)
+- PASS go test -timeout 20m ./internal/warehouse -count=1 (0.756s)
+- PASS go test -timeout 20m ./internal/schedule -count=1 (0.273s)
+
+## Focused race fence
+
+PASS go test -race -timeout 20m ./internal/app ./internal/cli
+./internal/warehouse -run '^(TestFlowCaseEquivalentUniqueTablesPreserveGenericSQLAndTypedAmbiguity|TestFlowOmittedConnectionRejectsGeneratedOwnerAliases|TestFlowGeneratedOwnerAliasCollision|TestFlowGeneratedOwnerAliasCaseVariantCollision|TestFlowCaseVariantBareTableAmbiguity|TestFlowSourceConnectionSelectorsReadOnlyOwningRows|TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed|TestFlowActionSourceReadsAllSelectedConnectionRows|TestQuerySQLScopesConnectionOwnedAndUnattributedViews|TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept|TestQuerySQLBindsQuotedConnectionScopedWarehouseNames|TestQuerySQLReusesOneWarehouseResolverPerQuery|TestQuerySQLReusesWarehouseResolverForReplacementScans|TestQuerySQLAggregatesOverParquetTables|TestQuerySQLHonorsCanceledContext|TestFindTableReportsAmbiguityInsteadOfPickingAWinner|TestDamagedRecordCannotDecideWhichConnectionAnUnscopedReadReturns)$' -count=1
+
+Results: internal/app 54.789s; internal/cli 79.657s; internal/warehouse
+1.477s.
+
+## Quality and generated surfaces
+
+- PASS gofmt check for internal/app/query_engine_duckdb.go and
+  internal/cli/flow_cli_test.go
+- PASS child diff check from
+  659efd8a0d69f26b55fcbd3c02150e995c159519 to HEAD
+- PASS go vet ./...
+- PASS make lint (0 issues)
+- PASS direct golangci-lint for internal/app and internal/cli (0 issues)
+- PASS agentcontractgen check
+- PASS connectorgen validate (552 connectors, 0 findings)
+- PASS connectorgen surface-sync check (552 scanned; 0 fields filled/corrected)
+- PASS connectorgen certification-matrix check
+  (556 connectors; capability_complete=0; certified=0)
+- PASS connectorgen package tests (28.183s)
+
+## Docs/help and GSD
+
+- PASS make docs-check
+- PASS built pm help flow, pm flow, and pm flow --help
+- PASS verify-gsd-workflow against origin/feat/3897-flow-connection-scope-nm
+- PASS prospective-body PR issue guard with title
+  fix(flow): preserve SQL availability for case-equivalent unique warehouse
+  tables; result: issueguard ok (1 linked issue)
+- Website check: not applicable; the child diff contains no website path.
+
+## Baseline distinction
+
+The #4069 candidate range passes its diff check. The broader historical
+comparison from 5c92888c996319b41eec6e86ca99fcda4cb365f9 reports only seven
+trailing-whitespace lines in the older #3897 CONTEXT, DISCUSSION-LOG, and PLAN
+records. No #4069 path is named; this child does not normalize those inherited
+artifacts.

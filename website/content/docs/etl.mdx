@@ -9,6 +9,7 @@ The `pm etl` command group has two lanes:
 |---|---|---|
 | Direct connector operations | `pm etl check`, `pm etl catalog`, `pm etl read` | Preflight and connector development without creating a connection. |
 | Configured syncs | `pm etl run`, `pm etl status` | Production-style extraction from a saved connection into a local table. |
+| Closed GitHub transport | `pm etl transport github-issue-label`, approved `pm etl run` | One fixed issue-to-label transport through durable warehouse reopen and typed cleanup. |
 
 Connector capabilities are inspectable through `pm connectors inspect`. Use the advertised streams, cursors, and primary keys before creating a long-running extraction.
 
@@ -60,9 +61,32 @@ pm connections create <name> \
 |---|---|---|
 | Full refresh overwrite | `full_refresh_overwrite` | Re-extracts all records and replaces the output table. Default if `--sync-mode` is omitted. |
 | Full refresh append | `full_refresh_append` | Re-extracts all records and appends them to the output table. |
-| Full refresh overwrite deduped | `full_refresh_overwrite_deduped` | Re-extracts and deduplicates by primary key before writing. |
+| Full refresh overwrite deduped | `full_refresh_overwrite_deduped` | Compatibility name for typed `full_overwrite` admission. Without an admitted matching transport, pm refuses before source I/O. |
 | Incremental append | `incremental_append` | Extracts only records newer than the stored cursor value and appends them. |
-| Incremental append deduped | `incremental_append_deduped` | Incremental extraction, deduplicates by primary key before writing. |
+| Incremental append deduped | `incremental_append_deduped` | Compatibility name for typed `incremental_dedupe` admission. Without an admitted matching transport, pm refuses before source I/O. |
+
+Incremental modes and deduped compatibility names require a cursor. Deduped modes also require a primary key. A static connector advertises the full deduped compatibility name only with both fields, and advertises incremental modes only with a declared incremental executor. The two deduped compatibility names remain accepted public inputs, but they are not ordinary local materialization modes.
+
+### Polling-watermark limits and eligibility
+
+`polling_watermark` is a bounded keyset polling mechanism, not CDC or change
+capture. It is never enabled by a connector capability string alone. A mode is
+eligible only after runtime preflight accepts its declared native source,
+discovered catalog object, and destination binding with registered executors and
+current conformance evidence.
+
+An admitted binding orders each page by its declared watermark and unique
+tie-breaker. Its checkpoint advances only after durable downstream
+acknowledgement, so replay is at least once. The declared snapshot barrier is a
+restriction, not permission to replace an invalid state with a full scan. A
+poll cannot observe a hard delete after the row disappears; delete-aware history
+needs a declared cursor-advancing soft-delete mapping. State incompatibility,
+source identity mismatch, snapshot expiration, and retention failures require
+an explicit rebootstrap.
+
+Use `pm connectors inspect <name> --json` and `pm connectors catalog --json`
+to see a connector's declared polling-watermark status. A planned, unsupported,
+or absent declaration is not an executable polling mode.
 
 ## Running an extraction
 
@@ -118,6 +142,54 @@ pm etl run --connection my-github --stream issues --runtime --json
   "runtime_recorded": false
 }
 ```
+
+## Closed GitHub issue-label transport
+
+`github-issue-label` is deliberately a closed walking slice, not a generic
+GitHub writer. Its saved connection owns the repository, source issue, target
+issue, label, action, and credential configuration. The command accepts none
+of those provider details as flags.
+
+Create a plan, preview it in human output, and pass the resulting one-time
+approval token only through standard input to the ordinary ETL run:
+
+```bash
+pm etl transport github-issue-label plan --connection transport-demo --json
+pm etl transport github-issue-label preview <forward-plan-id>
+
+pm etl run --connection transport-demo --stream issues --batch-size 1 \
+  --approval-plan <forward-plan-id> --approval-token-stdin \
+  --confirm destructive --json
+# Paste the previewed token as the one stdin line, press Return, then EOF.
+```
+
+The forward run remains the normal closed path: GitHub source read, durable
+connection-owned WAL/DuckDB/Parquet stage, independent reopen, typed label
+mutation and durable acknowledgement, independent provider read-back, then
+checkpoint.
+The raw token is never accepted in argv, environment variables, files, JSON
+output, or persisted project state.
+
+Source selection and independent provider read-back each inspect only the first
+GitHub issues page. If the configured source or target issue is not present,
+the run fails rather than requesting a second page.
+
+Cleanup is separately planned and approved; it cannot reuse the forward token:
+
+```bash
+pm etl transport github-issue-label cleanup plan \
+  --connection transport-demo --forward-plan <forward-plan-id> --json
+pm etl transport github-issue-label preview <cleanup-plan-id>
+
+pm etl transport github-issue-label cleanup run <cleanup-plan-id> \
+  --connection transport-demo --approval-token-stdin \
+  --confirm destructive --json
+# Paste the previewed cleanup token as the one stdin line, press Return, then EOF.
+```
+
+The cleanup action is the fixed typed `remove_issue_label` inverse. A declared
+GitHub missing-label `404` is accepted as an idempotent cleanup; replaying a
+consumed approval is rejected before another provider request.
 
 ## Checking run status
 

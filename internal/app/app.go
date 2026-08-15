@@ -20,6 +20,7 @@ import (
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/synctransport"
 	"polymetrics.ai/internal/vault"
 	"polymetrics.ai/internal/warehouse"
 )
@@ -32,23 +33,28 @@ const (
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
 type App struct {
-	root       string
-	projectDir string
-	statePath  string
-	store      statestore.JSONStore[state]
-	state      state
-	vault      *vault.Vault
-	approval   *projectWriteApprovalAuthority
-	registry   *connectors.Registry
-	sqlEngine  sqlQueryEngine
-	catalogs   catalogStorage
+	root                    string
+	projectDir              string
+	statePath               string
+	store                   statestore.JSONStore[state]
+	state                   state
+	deferStateNormalization bool
+	deferredState           *state
+	deferredStateRevision   uint64
+	vault                   *vault.Vault
+	approval                *projectWriteApprovalAuthority
+	registry                *connectors.Registry
+	transports              *synctransport.Registry
+	transportStage          synctransport.WarehouseStage
+	sqlEngine               sqlQueryEngine
+	catalogs                catalogStorage
 }
 
 // sqlQueryEngine is the backend for App.QuerySQL. DuckDB is the only
 // implementation; the seam remains so a query path can be substituted in tests
 // without the engine choice becoming an install-time option.
 type sqlQueryEngine interface {
-	QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error)
+	QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.Record, error)
 	Name() string
 }
 
@@ -66,6 +72,8 @@ type state struct {
 	Runs               []Run                             `json:"runs"`
 	ReversePlans       []ReversePlan                     `json:"reverse_plans"`
 	ReverseRuns        []ReverseRun                      `json:"reverse_runs"`
+	Authorizations     []AuthorizationRecord             `json:"authorizations,omitempty"`
+	FlowActionReceipts []FlowActionReceipt               `json:"flow_action_receipts,omitempty"`
 	Checkpoints        map[string]map[string]string      `json:"checkpoints,omitempty"`
 	StreamStates       map[string]StreamState            `json:"stream_states,omitempty"`
 }
@@ -136,6 +144,14 @@ func InitProject(root string) error {
 }
 
 func Open(root string) (*App, error) {
+	return open(root, false)
+}
+
+func OpenForReverseExecution(root string) (*App, error) {
+	return open(root, true)
+}
+
+func open(root string, deferNormalization bool) (*App, error) {
 	if root == "" {
 		root = "."
 	}
@@ -147,7 +163,12 @@ func Open(root string) (*App, error) {
 	if !info.IsDir() {
 		return nil, fmt.Errorf("%s is not a directory", projectDir)
 	}
-	v, err := vault.Open(projectDir)
+	var v *vault.Vault
+	if deferNormalization {
+		v, err = vault.OpenReadOnly(projectDir)
+	} else {
+		v, err = vault.Open(projectDir)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -157,20 +178,49 @@ func Open(root string) (*App, error) {
 	}
 	statePath := filepath.Join(projectDir, "state", "state.json")
 	a := &App{
-		root:       root,
-		projectDir: projectDir,
-		statePath:  statePath,
-		store:      newStateStore(statePath),
-		vault:      v,
-		approval:   approval,
-		registry:   bundleregistry.New(),
-		catalogs:   newCatalogStorage(projectDir),
+		root:                    root,
+		projectDir:              projectDir,
+		statePath:               statePath,
+		store:                   newStateStore(statePath),
+		deferStateNormalization: deferNormalization,
+		vault:                   v,
+		approval:                approval,
+		registry:                bundleregistry.New(),
+		transports:              synctransport.NewRegistry(nil),
+		catalogs:                newCatalogStorage(projectDir),
 	}
 	a.sqlEngine = newSQLEngine(a)
-	if err := a.load(); err != nil {
+	if err := a.load(!deferNormalization); err != nil {
+		return nil, err
+	}
+	if err := a.composeTransportRegistry(); err != nil {
 		return nil, err
 	}
 	return a, nil
+}
+
+// IssueLabelTransportIdentity exposes the bundle-owned carrier name needed to
+// render the closed transport manual before an App can be opened. It contains
+// presentation metadata only; endpoint, record, credential, and action values
+// remain connection- and definition-owned.
+type IssueLabelTransportIdentity struct {
+	ConnectorName string
+	DisplayName   string
+}
+
+// DefaultIssueLabelTransportIdentity selects the same unique declarative
+// definition as the production composition root. Keeping this lookup here
+// prevents shared CLI code from carrying a provider name or endpoint policy.
+func DefaultIssueLabelTransportIdentity() (IssueLabelTransportIdentity, error) {
+	connector, _, err := issueLabelTransportEngine(bundleregistry.New())
+	if err != nil {
+		return IssueLabelTransportIdentity{}, err
+	}
+	definition := connector.Definition()
+	if definition.Name != connector.Name() || strings.TrimSpace(definition.DisplayName) == "" {
+		return IssueLabelTransportIdentity{}, fmt.Errorf("closed issue-label transport definition has no stable presentation identity")
+	}
+	return IssueLabelTransportIdentity{ConnectorName: definition.Name, DisplayName: definition.DisplayName}, nil
 }
 
 func (a *App) ProjectDir() string { return a.projectDir }
@@ -194,18 +244,34 @@ func (a *App) Connector(name string) (connectors.Metadata, error) {
 	return c.Metadata(), nil
 }
 
-func (a *App) load() error {
-	loaded, err := a.store.Load()
+func (a *App) load(persist bool) error {
+	var (
+		loaded state
+		err    error
+	)
+	if persist {
+		loaded, err = a.store.Load()
+	} else {
+		loaded, err = a.store.LoadReadOnly()
+	}
 	if err != nil {
 		return err
 	}
-	return a.normalizeLoadedState(loaded)
+	if err := a.normalizeLoadedState(loaded, persist); err != nil {
+		return err
+	}
+	a.rememberDeferredState(loaded.Revision)
+	return nil
 }
 
 // normalizeLoadedState applies every compatibility invariant after a state
 // reload. Callers must not assign a store result to a.state directly.
-func (a *App) normalizeLoadedState(loaded state) error {
+func (a *App) normalizeLoadedState(loaded state, persist bool) error {
 	a.state = loaded
+	changed := false
+	// Empty maps are omitted from state.json. Initialize their in-memory
+	// defaults for callers, but do not turn an otherwise read-only open into a
+	// revision-changing persistence operation.
 	if a.state.Checkpoints == nil {
 		a.state.Checkpoints = map[string]map[string]string{}
 	}
@@ -213,15 +279,17 @@ func (a *App) normalizeLoadedState(loaded state) error {
 		a.state.StreamStates = map[string]StreamState{}
 	}
 	catalogRefsChanged := a.dropInvalidCatalogReferences()
-	a.migrateLegacySyncModeCompatibility()
-	if err := a.migrateCredentialCoordination(); err != nil {
+	compatibilityChanged := a.migrateLegacySyncModeCompatibility()
+	coordinationChanged, err := a.migrateCredentialCoordination()
+	if err != nil {
 		return err
 	}
 	identityChanged, err := a.migrateWarehouseIdentity()
 	if err != nil {
 		return err
 	}
-	if catalogRefsChanged || identityChanged {
+	changed = changed || catalogRefsChanged || compatibilityChanged || coordinationChanged || identityChanged
+	if persist && changed {
 		if err := a.save(); err != nil {
 			return fmt.Errorf("persist project identity: %w", err)
 		}
@@ -229,10 +297,45 @@ func (a *App) normalizeLoadedState(loaded state) error {
 	return nil
 }
 
-// migrateWarehouseIdentity gives a project and its connections the opaque
-// identifiers that form warehouse path components. They are generated once and
-// persisted, so a connection's directory is stable across runs and independent
-// of its display name.
+func (a *App) rememberDeferredState(revision uint64) {
+	if !a.deferStateNormalization {
+		return
+	}
+	deferred := a.state
+	a.deferredState = &deferred
+	a.deferredStateRevision = revision
+}
+
+func (a *App) stateForApprovalConsumption(current state) (state, error) {
+	if !a.deferStateNormalization {
+		return current, nil
+	}
+	if a.deferredState != nil && current.Revision == a.deferredStateRevision {
+		return cloneState(*a.deferredState)
+	}
+	if err := a.normalizeLoadedState(current, false); err != nil {
+		return state{}, err
+	}
+	a.rememberDeferredState(current.Revision)
+	return cloneState(a.state)
+}
+
+func cloneState(value state) (state, error) {
+	data, err := json.Marshal(value)
+	if err != nil {
+		return state{}, fmt.Errorf("copy state: %w", err)
+	}
+	var copied state
+	if err := json.Unmarshal(data, &copied); err != nil {
+		return state{}, fmt.Errorf("copy state: %w", err)
+	}
+	return copied, nil
+}
+
+// migrateWarehouseIdentity gives a project, its connections, and their streams
+// opaque persisted identifiers. Workspace and connection IDs form stable
+// warehouse path components; stream IDs preserve managed-target identity across
+// map-key, display-name, and destination-table changes.
 func (a *App) migrateWarehouseIdentity() (bool, error) {
 	changed := false
 	if strings.TrimSpace(a.state.WorkspaceID) == "" {
@@ -243,16 +346,48 @@ func (a *App) migrateWarehouseIdentity() (bool, error) {
 		a.state.WorkspaceID = workspaceID
 		changed = true
 	}
-	for index := range a.state.Connections {
-		if strings.TrimSpace(a.state.Connections[index].ID) != "" {
+	connectionIDs := make(map[string]struct{}, len(a.state.Connections))
+	for _, connection := range a.state.Connections {
+		if strings.TrimSpace(connection.ID) == "" {
 			continue
 		}
-		connectionID, err := prefixedID("conn")
-		if err != nil {
-			return false, err
+		if _, exists := connectionIDs[connection.ID]; exists {
+			return false, errors.New("duplicate persisted connection identity")
 		}
-		a.state.Connections[index].ID = connectionID
-		changed = true
+		connectionIDs[connection.ID] = struct{}{}
+	}
+	for index := range a.state.Connections {
+		connection := &a.state.Connections[index]
+		if strings.TrimSpace(connection.ID) == "" {
+			connectionID, err := allocateUniquePrefixedID("conn", connectionIDs)
+			if err != nil {
+				return false, err
+			}
+			connection.ID = connectionID
+			changed = true
+		}
+		streamIDs := make(map[string]struct{}, len(connection.Streams))
+		for _, stream := range connection.Streams {
+			if strings.TrimSpace(stream.StreamID) == "" {
+				continue
+			}
+			if _, exists := streamIDs[stream.StreamID]; exists {
+				return false, errors.New("duplicate persisted stream identity")
+			}
+			streamIDs[stream.StreamID] = struct{}{}
+		}
+		for name, stream := range connection.Streams {
+			if strings.TrimSpace(stream.StreamID) != "" {
+				continue
+			}
+			streamID, err := allocateUniquePrefixedID("stream", streamIDs)
+			if err != nil {
+				return false, err
+			}
+			stream.StreamID = streamID
+			connection.Streams[name] = stream
+			changed = true
+		}
 	}
 	return changed, nil
 }
@@ -274,7 +409,7 @@ func (a *App) dropInvalidCatalogReferences() bool {
 // migrateCredentialCoordination gives pre-#3863 credentials an isolated
 // non-secret binding and declaration defaults. It intentionally never opens
 // the vault: coordination is an explicit relationship, not secret equality.
-func (a *App) migrateCredentialCoordination() error {
+func (a *App) migrateCredentialCoordination() (bool, error) {
 	changed := false
 	if a.state.CredentialBindings == nil {
 		a.state.CredentialBindings = map[string]credentialBindingState{}
@@ -283,7 +418,7 @@ func (a *App) migrateCredentialCoordination() error {
 	if strings.TrimSpace(a.state.CoordinationSalt) == "" {
 		salt, err := newCoordinationSalt()
 		if err != nil {
-			return err
+			return false, err
 		}
 		a.state.CoordinationSalt = salt
 		changed = true
@@ -296,7 +431,7 @@ func (a *App) migrateCredentialCoordination() error {
 			credential.AuthProfile,
 		)
 		if err != nil {
-			return fmt.Errorf("migrate credential coordination metadata: %w", err)
+			return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 		}
 		if credential.ProviderFamily != providerFamily {
 			credential.ProviderFamily = providerFamily
@@ -310,7 +445,7 @@ func (a *App) migrateCredentialCoordination() error {
 		if !ok || strings.TrimSpace(binding.BindingID) == "" {
 			bindingID, err := prefixedID("cbind")
 			if err != nil {
-				return err
+				return false, err
 			}
 			binding = credentialBindingState{BindingID: bindingID}
 			changed = true
@@ -323,21 +458,15 @@ func (a *App) migrateCredentialCoordination() error {
 		}
 		a.state.CredentialBindings[credential.ID] = binding
 		if _, err := a.newCoordinationIdentity(providerFamily, authProfile, binding.BindingID); err != nil {
-			return fmt.Errorf("migrate credential coordination metadata: %w", err)
+			return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 		}
 	}
 	isolationChanged, err := a.isolateUnverifiedCrossConnectorBindings()
 	if err != nil {
-		return fmt.Errorf("migrate credential coordination metadata: %w", err)
+		return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 	}
 	changed = changed || isolationChanged
-	if !changed {
-		return nil
-	}
-	if err := a.save(); err != nil {
-		return fmt.Errorf("persist credential coordination metadata: %w", err)
-	}
-	return nil
+	return changed, nil
 }
 
 func (a *App) isolateUnverifiedCrossConnectorBindings() (bool, error) {
@@ -419,9 +548,9 @@ func (a *App) credentialBindingForCredential(credential CredentialMeta) (credent
 	return binding, nil
 }
 
-func (a *App) migrateLegacySyncModeCompatibility() {
+func (a *App) migrateLegacySyncModeCompatibility() bool {
 	if a.state.SyncModeCompatibilityVersion >= syncModeCompatibilityVersion {
-		return
+		return false
 	}
 	for connectionIndex := range a.state.Connections {
 		for streamName, stream := range a.state.Connections[connectionIndex].Streams {
@@ -432,6 +561,7 @@ func (a *App) migrateLegacySyncModeCompatibility() {
 		}
 	}
 	a.state.SyncModeCompatibilityVersion = syncModeCompatibilityVersion
+	return true
 }
 
 func (a *App) save() error {
@@ -452,6 +582,21 @@ func (a *App) save() error {
 
 func (a *App) updateState(update func(state) (state, error)) (state, error) {
 	updated, err := a.store.Update(func(current state) (state, error) {
+		next, updateErr := update(current)
+		if updateErr != nil {
+			return current, updateErr
+		}
+		next.Revision = current.Revision + 1
+		return next, nil
+	})
+	if err == nil || stateStoreCommitMayHaveSucceeded(err) {
+		a.state = updated
+	}
+	return updated, err
+}
+
+func (a *App) updateStateAfterPreflight(preflight func(state) error, update func(state) (state, error)) (state, error) {
+	updated, err := a.store.UpdateAfterPreflight(preflight, func(current state) (state, error) {
 		next, updateErr := update(current)
 		if updateErr != nil {
 			return current, updateErr
@@ -768,7 +913,58 @@ func ValidateConnectionName(name string) error {
 	return warehouse.ValidateConnectionName(name)
 }
 
+// connectionMaterializesLocalWarehouse is deliberately credential-free: this
+// admission check must inspect the whole configured inventory before a run
+// begins, without opening a vault entry or contacting a provider. A persisted
+// endpoint normally carries its connector name; the credential metadata is a
+// legacy fallback only and never exposes its value.
+func (a *App) connectionMaterializesLocalWarehouse(connection Connection) bool {
+	connectorName := connection.Destination.Connector
+	if connectorName == "" {
+		if credential, ok := a.findCredential(connection.Destination.Credential); ok {
+			connectorName = credential.Connector
+		}
+	}
+	destination, ok := a.registry.Get(connectorName)
+	if !ok {
+		return false
+	}
+	materializer, ok := destination.(connectors.LocalWarehouseMaterializer)
+	return ok && materializer.MaterializesLocalWarehouse()
+}
+
+func validateSameOwnerCaseEquivalentDestinationTables(connections []Connection) error {
+	collisions := sameOwnerCaseEquivalentDestinationCollisions(connections)
+	if len(collisions) == 0 {
+		return nil
+	}
+	return collisions[0].err()
+}
+
+// validateConfiguredLocalWarehouseDestinationTables checks every configured
+// local-warehouse connection as one immutable inventory. It is called before
+// beginRun, so a persisted legacy collision cannot create a run, checkpoint,
+// owner directory, WAL, temporary file, or Parquet output.
+func (a *App) configuredLocalWarehouseDestinationCollisions() []warehouseDestinationCollision {
+	connections := make([]Connection, 0, len(a.state.Connections))
+	for _, connection := range a.state.Connections {
+		if a.connectionMaterializesLocalWarehouse(connection) {
+			connections = append(connections, connection)
+		}
+	}
+	return sameOwnerCaseEquivalentDestinationCollisions(connections)
+}
+
+func (a *App) validateConfiguredLocalWarehouseDestinationTables() error {
+	collisions := a.configuredLocalWarehouseDestinationCollisions()
+	if len(collisions) == 0 {
+		return nil
+	}
+	return collisions[0].err()
+}
+
 func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest) (Connection, error) {
+	req = cloneCreateConnectionRequest(req)
 	if err := ValidateConnectionName(req.Name); err != nil {
 		return Connection{}, err
 	}
@@ -797,7 +993,11 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	if errors.Is(catalogErr, errCatalogStale) {
 		return Connection{}, catalogErr
 	}
+	streamIDs := make(map[string]struct{}, len(req.Streams))
 	for name, stream := range req.Streams {
+		if strings.TrimSpace(stream.StreamID) != "" {
+			return Connection{}, errors.New("stream identity is assigned by the application")
+		}
 		if stream.SyncMode == "" {
 			stream.SyncMode = DefaultUserFacingSyncMode
 		}
@@ -842,9 +1042,28 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if err := ValidateStreamSyncConfig(stream); err != nil {
 			return Connection{}, fmt.Errorf("validate stream %q: %w", name, err)
 		}
+		streamID, err := allocateUniquePrefixedID("stream", streamIDs)
+		if err != nil {
+			return Connection{}, err
+		}
+		stream.StreamID = streamID
 		req.Streams[name] = stream
 	}
-	connectionID, err := prefixedID("conn")
+	if materializesWarehouse {
+		if err := validateSameOwnerCaseEquivalentDestinationTables([]Connection{{
+			Name:    req.Name,
+			Streams: req.Streams,
+		}}); err != nil {
+			return Connection{}, err
+		}
+	}
+	connectionIDs := make(map[string]struct{}, len(a.state.Connections))
+	for _, connection := range a.state.Connections {
+		if strings.TrimSpace(connection.ID) != "" {
+			connectionIDs[connection.ID] = struct{}{}
+		}
+	}
+	connectionID, err := allocateUniquePrefixedID("conn", connectionIDs)
 	if err != nil {
 		return Connection{}, err
 	}
@@ -858,15 +1077,19 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		CreatedAt:   now,
 		UpdatedAt:   now,
 	}
-	a.state.Connections = append(a.state.Connections, conn)
+	stored := cloneConnection(conn)
+	a.state.Connections = append(a.state.Connections, stored)
 	if err := a.save(); err != nil {
 		return Connection{}, err
 	}
-	return conn, nil
+	return cloneConnection(stored), nil
 }
 
 func (a *App) ListConnections() []Connection {
-	out := append([]Connection(nil), a.state.Connections...)
+	out := make([]Connection, len(a.state.Connections))
+	for index, connection := range a.state.Connections {
+		out[index] = cloneConnection(connection)
+	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
 }
@@ -1026,6 +1249,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if !ok {
 		return Run{}, fmt.Errorf("stream %q not configured on connection %q", req.Stream, req.Connection)
 	}
+	if a.connectionMaterializesLocalWarehouse(conn) {
+		if err := a.validateConfiguredLocalWarehouseDestinationTables(); err != nil {
+			return Run{}, err
+		}
+	}
 	runID, err := prefixedID("run")
 	if err != nil {
 		return Run{}, err
@@ -1043,22 +1271,10 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err := ValidateStreamSyncConfig(stream); err != nil {
 		return a.failRun(runID, err)
 	}
-	if mode.IsContractMode() {
-		return a.failRun(runID, &synccontract.ModeNotExecutableError{
-			Mode:   mode.ContractMode,
-			Reason: "no matching native executor has completed the shared conformance corpus",
-		})
-	}
 	source, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
 	if err != nil {
 		return a.failRun(runID, err)
 	}
-	catalog, err := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
-	if err != nil {
-		return a.failRun(runID, err)
-	}
-	sourceRuntime.ResolvedCatalog = &catalog
-	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
 		return a.failRun(runID, err)
@@ -1067,16 +1283,25 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if batchSize <= 0 {
 		batchSize = 1000
 	}
-	var result etlExecutionResult
-	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
-		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
-	} else {
-		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
-	}
-	if err != nil {
-		return a.failRun(runID, err)
-	}
-	return a.completeRun(runID, result)
+	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
+	return a.dispatchETLMode(ctx, etlModeDispatchRequest{
+		runID:               runID,
+		connection:          conn,
+		source:              source,
+		sourceRuntime:       sourceRuntime,
+		destination:         destination,
+		destinationRuntime:  destRuntime,
+		sourceExpectation:   sourceExpectation,
+		streamName:          req.Stream,
+		stream:              stream,
+		mode:                mode,
+		batchSize:           batchSize,
+		destinationApproval: req.DestinationApproval,
+	})
+}
+
+func hasDestinationApproval(approval synctransport.DestinationApproval) bool {
+	return approval.PlanID != "" || approval.ApprovalToken != "" || approval.Confirmation.Kind != ""
 }
 
 func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
@@ -1224,20 +1449,78 @@ func (a *App) beginRun(run Run) (Run, error) {
 	return run, nil
 }
 
+type acknowledgedTransportCompletion struct {
+	key   string
+	state StreamState
+}
+
+// completeAcknowledgedTransportRun carries the state this App persisted for
+// the closed transport checkpoint. It is an eligibility witness, not a refresh:
+// a stale finalization may rebase only while the latest stream state still
+// matches it and the target run remains running.
+func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecutionResult) (Run, error) {
+	if result.PendingStreamState == nil {
+		return a.completeRun(runID, result)
+	}
+	acknowledged, present := a.state.StreamStates[result.PendingStreamState.Key]
+	if !present {
+		return a.completeRun(runID, result)
+	}
+	return a.completeRunWithAcknowledgedTransportState(runID, result, &acknowledgedTransportCompletion{
+		key:   result.PendingStreamState.Key,
+		state: cloneStreamState(acknowledged),
+	})
+}
+
+// failAcknowledgedTransportRun uses a completed checkpoint only as an
+// eligibility witness for terminal failure. It does not refresh state, retry a
+// checkpoint, or replay destination work.
+func (a *App) failAcknowledgedTransportRun(runID string, result etlExecutionResult, runErr error) (Run, error) {
+	if errors.Is(runErr, errTransportStreamStateConflict) {
+		return a.failRun(runID, runErr)
+	}
+	if result.PendingStreamState == nil {
+		return a.failRun(runID, runErr)
+	}
+	acknowledged, present := a.state.StreamStates[result.PendingStreamState.Key]
+	if !present {
+		return a.failRun(runID, runErr)
+	}
+	return a.failRunWithAcknowledgedTransportState(runID, runErr, &acknowledgedTransportCompletion{
+		key:   result.PendingStreamState.Key,
+		state: cloneStreamState(acknowledged),
+	})
+}
+
 func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
+	return a.completeRunWithAcknowledgedTransportState(runID, result, nil)
+}
+
+func (a *App) completeRunWithAcknowledgedTransportState(runID string, result etlExecutionResult, acknowledged *acknowledgedTransportCompletion) (Run, error) {
 	if result.PendingStreamState == nil {
 		return Run{}, errors.New("completed ETL run is missing pending stream state")
 	}
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
-	updated, err := a.updateState(func(current state) (state, error) {
-		if current.Revision != expectedRevision {
+	transitionedInCallback := false
+	updated, persistErr := a.updateState(func(current state) (state, error) {
+		rebased := current.Revision != expectedRevision
+		if rebased && acknowledged == nil {
 			return current, errStateRevisionConflict
+		}
+		if rebased {
+			currentStreamState, present := current.StreamStates[acknowledged.key]
+			if !present || !transportStreamStateEqual(currentStreamState, acknowledged.state) {
+				return current, fmt.Errorf("acknowledged transport stream state changed before completion: %w", errStateRevisionConflict)
+			}
 		}
 		found := false
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
+			}
+			if rebased && current.Runs[i].Status != "running" {
+				return current, fmt.Errorf("acknowledged transport run %q has status %q, want running before completion: %w", runID, current.Runs[i].Status, errStateRevisionConflict)
 			}
 			current.Runs[i].Status = "completed"
 			current.Runs[i].RecordsRead = result.RecordsRead
@@ -1248,9 +1531,13 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
 			current.Runs[i].CompletedAt = completedAt
 			found = true
+			transitionedInCallback = true
 			break
 		}
 		if !found {
+			if rebased && acknowledged != nil {
+				return current, fmt.Errorf("acknowledged transport run %q not found before completion: %w", runID, errStateRevisionConflict)
+			}
 			return current, fmt.Errorf("run %q not found", runID)
 		}
 		if current.Checkpoints == nil {
@@ -1263,8 +1550,15 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 		current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
 		return current, nil
 	})
-	if err != nil {
-		return Run{}, err
+	if persistErr != nil {
+		if acknowledged != nil && transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
+			for _, run := range updated.Runs {
+				if run.ID == runID {
+					return run, persistErr
+				}
+			}
+		}
+		return Run{}, persistErr
 	}
 	for _, run := range updated.Runs {
 		if run.ID == runID {
@@ -1272,6 +1566,51 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 		}
 	}
 	return Run{}, fmt.Errorf("completed run %q was not stored", runID)
+}
+
+func (a *App) failRunWithAcknowledgedTransportState(runID string, runErr error, acknowledged *acknowledgedTransportCompletion) (Run, error) {
+	expectedRevision := a.state.Revision
+	completedAt := time.Now().UTC()
+	transitionedInCallback := false
+	updated, persistErr := a.updateState(func(current state) (state, error) {
+		rebased := current.Revision != expectedRevision
+		if rebased {
+			currentStreamState, present := current.StreamStates[acknowledged.key]
+			if !present || !transportStreamStateEqual(currentStreamState, acknowledged.state) {
+				return current, fmt.Errorf("acknowledged transport stream state changed before failure: %w", errStateRevisionConflict)
+			}
+		}
+		for i := range current.Runs {
+			if current.Runs[i].ID != runID {
+				continue
+			}
+			if current.Runs[i].Status != "running" {
+				return current, fmt.Errorf("acknowledged transport run %q has status %q, want running before failure: %w", runID, current.Runs[i].Status, errStateRevisionConflict)
+			}
+			current.Runs[i].Status = "failed"
+			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
+			current.Runs[i].CompletedAt = completedAt
+			transitionedInCallback = true
+			return current, nil
+		}
+		return current, fmt.Errorf("acknowledged transport run %q not found before failure: %w", runID, errStateRevisionConflict)
+	})
+	if persistErr != nil {
+		if transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
+			for _, run := range updated.Runs {
+				if run.ID == runID {
+					return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+				}
+			}
+		}
+		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+	}
+	for _, run := range updated.Runs {
+		if run.ID == runID {
+			return run, runErr
+		}
+	}
+	return Run{}, errors.Join(runErr, fmt.Errorf("failed run %q was not stored", runID))
 }
 
 func (a *App) GetRun(id string) (Run, error) {
@@ -1284,11 +1623,19 @@ func (a *App) GetRun(id string) (Run, error) {
 }
 
 func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connectors.Record, error) {
-	if req.Table == "" {
-		return nil, errors.New("table is required")
-	}
 	if req.Limit <= 0 {
 		req.Limit = 100
+	}
+	return a.readWarehouseTable(ctx, req.Table, req.Connection, req.Limit)
+}
+
+func (a *App) ReadActionSource(ctx context.Context, req ActionSourceReadRequest) ([]connectors.Record, error) {
+	return a.readWarehouseTable(ctx, req.Table, req.Connection, 0)
+}
+
+func (a *App) readWarehouseTable(ctx context.Context, table, connection string, limit int) ([]connectors.Record, error) {
+	if table == "" {
+		return nil, errors.New("table is required")
 	}
 	cfg := connectors.RuntimeConfig{
 		ProjectDir: a.projectDir,
@@ -1296,22 +1643,22 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 			"path": a.warehouseRoot(),
 		},
 	}
-	if req.Connection != "" {
+	if connection != "" {
 		// The unattributed selector names the root-level tables no connection
 		// owns, so it deliberately does not resolve through findConnection.
-		if req.Connection != warehouse.UnattributedConnection {
-			if _, ok := a.findConnection(req.Connection); !ok {
-				return nil, fmt.Errorf("connection %q not found", req.Connection)
+		if connection != warehouse.UnattributedConnection {
+			if _, ok := a.findConnection(connection); !ok {
+				return nil, fmt.Errorf("connection %q not found", connection)
 			}
 		}
-		cfg.Config["connection"] = req.Connection
+		cfg.Config["connection"] = connection
 	}
 	warehouseConnector, ok := a.registry.Get("warehouse")
 	if !ok {
 		return nil, errors.New("warehouse connector not registered")
 	}
 	rows := make([]connectors.Record, 0)
-	err := warehouseConnector.Read(ctx, connectors.ReadRequest{Stream: req.Table, Config: cfg, Limit: req.Limit}, connectors.LimitEmitter(req.Limit, func(record connectors.Record) error {
+	err := warehouseConnector.Read(ctx, connectors.ReadRequest{Stream: table, Config: cfg, Limit: limit}, connectors.LimitEmitter(limit, func(record connectors.Record) error {
 		rows = append(rows, record)
 		return nil
 	}))
@@ -1321,8 +1668,17 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 	return rows, nil
 }
 
-func (a *App) QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error) {
-	return a.sqlEngine.QuerySQL(ctx, sql, limit)
+func (a *App) QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.Record, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	if req.Connection != "" && req.Connection != warehouse.UnattributedConnection {
+		if _, ok := a.findConnection(req.Connection); !ok {
+			return nil, fmt.Errorf("connection %q not found", req.Connection)
+		}
+	}
+	req.sameOwnerCaseEquivalentDestinationCollisions = a.configuredLocalWarehouseDestinationCollisions()
+	return a.sqlEngine.QuerySQL(ctx, req)
 }
 
 // warehouseRoot is this project's local warehouse root.
@@ -2102,7 +2458,7 @@ func (a *App) confirmationChallengeForPlan(plan ReversePlan) string {
 }
 
 func (a *App) planRequiresPersistedPreview(plan ReversePlan) bool {
-	return plan.ConnectorCommandOperation != "" || a.confirmationChallengeForPlan(plan) != ""
+	return plan.ConnectorCommandOperation != "" || isIssueLabelTransportMode(plan.Mode) || a.confirmationChallengeForPlan(plan) != ""
 }
 
 func (a *App) validatePlanConfirmation(plan ReversePlan, got connectors.WriteConfirmation) error {
@@ -2154,6 +2510,18 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
 		return ReverseRun{}, err
 	}
+	if plan.AuthorizationReference != "" {
+		if req.ApprovalToken != "" {
+			return ReverseRun{}, &AuthorizationTokenReplayError{Reference: plan.AuthorizationReference}
+		}
+		if plan.Mode == reversePlanModeConnectorCommand {
+			return ReverseRun{}, &AuthorizationScopeChangedError{Reference: plan.AuthorizationReference, Property: "plan_mode"}
+		}
+		return a.runAuthorizedBulkReversePlan(ctx, plan)
+	}
+	if plan.Status != "planned" && plan.ApprovalTokenHash == "" {
+		return ReverseRun{}, errors.New("reverse plan approval has already been consumed")
+	}
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReverseRun{}, err
 	}
@@ -2179,6 +2547,16 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
 		return ReverseRun{}, err
 	}
+	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}
+	writer, credential, runtime, err := a.resolveEndpointWithCredential(ctx, dest)
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	scope := a.authorizationScopeForReversePlan(plan, credential, runtime)
+	authorization, err := newAuthorizationRecord(scope, time.Now().UTC())
+	if err != nil {
+		return ReverseRun{}, err
+	}
 	// Re-read exactly the records whose mapped payload produced PlanHash. This
 	// keeps the hash check and the dispatched records on the same approved slice.
 	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount)})
@@ -2186,11 +2564,6 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 		return ReverseRun{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
 	}
 	mappedForHash := mapReverseRecords(records, plan.Mappings)
-	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}
-	writer, runtime, err := a.resolveEndpoint(ctx, dest)
-	if err != nil {
-		return ReverseRun{}, err
-	}
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mappedForHash)
 	if err != nil {
 		return ReverseRun{}, err
@@ -2200,7 +2573,9 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 		return ReverseRun{}, err
 	}
 	if planHash != plan.PlanHash {
-		a.invalidateReversePlan(plan.ID)
+		if err := a.invalidateReversePlan(plan); err != nil {
+			return ReverseRun{}, err
+		}
 		return ReverseRun{}, errors.New("reverse plan source rows or payload files changed since approval")
 	}
 	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
@@ -2215,11 +2590,54 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 		return ReverseRun{}, err
 	}
 	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: len(mapped), StartedAt: time.Now().UTC()}
-	evidence, _, err := a.consumePlanApproval(plan, req, preview)
+	evidence, _, err := a.consumePlanApproval(plan, req, preview, &authorization)
 	if err != nil {
 		return ReverseRun{}, err
 	}
 	writeRequest.Approval = evidence
+	result, err := writer.Write(ctx, writeRequest, mapped)
+	return a.finishReverseWrite(plan.ID, run, result, len(mapped), err)
+}
+
+// runAuthorizedBulkReversePlan is the standing-authorization path. It
+// re-derives and verifies the content-free scope before it reads the table or
+// reaches a destination connector, then intentionally dispatches current
+// content rather than reusing the old payload-bound PlanHash.
+func (a *App) runAuthorizedBulkReversePlan(ctx context.Context, plan ReversePlan) (ReverseRun, error) {
+	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
+		return ReverseRun{}, err
+	}
+	writer, credential, runtime, err := a.resolveEndpointWithCredential(ctx, EndpointConfig{
+		Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig,
+	})
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	scope := a.authorizationScopeForReversePlan(plan, credential, runtime)
+	if _, err := a.requireAuthorization(plan.AuthorizationReference, scope, time.Now().UTC()); err != nil {
+		return ReverseRun{}, err
+	}
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: 100000})
+	if err != nil {
+		return ReverseRun{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
+	}
+	mapped := mapReverseRecords(records, plan.Mappings)
+	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime}
+	if scope.ConfirmationPolicy.Kind != "" {
+		if _, err := validateAuthorizedDestructivePreview(ctx, writer, writeRequest, mapped); err != nil {
+			return ReverseRun{}, err
+		}
+		evidence, err := durableAuthorizationEvidence(scope)
+		if err != nil {
+			return ReverseRun{}, err
+		}
+		writeRequest.Approval = evidence
+	}
+	runID, err := prefixedID("rrun")
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: len(mapped), StartedAt: time.Now().UTC()}
 	result, err := writer.Write(ctx, writeRequest, mapped)
 	return a.finishReverseWrite(plan.ID, run, result, len(mapped), err)
 }
@@ -2238,6 +2656,18 @@ func (a *App) validateDestructivePreview(ctx context.Context, writer connectors.
 	}
 	if strings.TrimSpace(plan.PreviewDigest) == "" || strings.TrimSpace(preview.Digest) == "" || subtle.ConstantTimeCompare([]byte(plan.PreviewDigest), []byte(preview.Digest)) != 1 {
 		return connectors.WritePreview{}, fmt.Errorf("reverse plan %q no longer matches its approved preview", plan.ID)
+	}
+	return preview, nil
+}
+
+func validateAuthorizedDestructivePreview(ctx context.Context, writer connectors.Connector, request connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
+	dryRunner, ok := writer.(connectors.DryRunWriter)
+	if !ok {
+		return connectors.WritePreview{}, fmt.Errorf("connector %q no longer supports the required destructive preview", writer.Name())
+	}
+	preview, err := dryRunner.DryRunWrite(ctx, request, records)
+	if err != nil {
+		return connectors.WritePreview{}, fmt.Errorf("revalidate durable authorization preview: %w", err)
 	}
 	return preview, nil
 }
@@ -2264,7 +2694,9 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 		return ReverseRun{}, err
 	}
 	if planHash != plan.PlanHash {
-		a.invalidateReversePlan(plan.ID)
+		if err := a.invalidateReversePlan(plan); err != nil {
+			return ReverseRun{}, err
+		}
 		return ReverseRun{}, errors.New("reverse plan command payload changed since approval")
 	}
 	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
@@ -2282,7 +2714,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 		return ReverseRun{}, err
 	}
 	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: len(records), StartedAt: time.Now().UTC()}
-	evidence, _, err := a.consumePlanApproval(plan, req, preview)
+	evidence, _, err := a.consumePlanApproval(plan, req, preview, nil)
 	if err != nil {
 		return ReverseRun{}, err
 	}
@@ -2312,7 +2744,7 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 		return ReverseRun{}, err
 	}
 	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: 1, StartedAt: time.Now().UTC()}
-	evidence, _, err := a.consumePlanApproval(plan, req, preview)
+	evidence, _, err := a.consumePlanApproval(plan, req, preview, nil)
 	if err != nil {
 		return ReverseRun{}, err
 	}
@@ -2340,14 +2772,23 @@ func validateOperationDirectWritePreview(ctx context.Context, writer connectors.
 }
 
 func (a *App) loadReversePlan(id string) (ReversePlan, error) {
-	loaded, err := a.store.Load()
+	loaded, err := a.store.LoadReadOnly()
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	if err := a.normalizeLoadedState(loaded); err != nil {
-		return ReversePlan{}, err
+	if a.deferredState != nil && loaded.Revision == a.deferredStateRevision {
+		a.state = *a.deferredState
+	} else {
+		if err := a.normalizeLoadedState(loaded, false); err != nil {
+			return ReversePlan{}, err
+		}
+		a.rememberDeferredState(loaded.Revision)
 	}
-	for _, plan := range a.state.ReversePlans {
+	return reversePlanFromState(a.state, id)
+}
+
+func reversePlanFromState(loaded state, id string) (ReversePlan, error) {
+	for _, plan := range loaded.ReversePlans {
 		if plan.ID == id {
 			return plan, nil
 		}
@@ -2355,79 +2796,155 @@ func (a *App) loadReversePlan(id string) (ReversePlan, error) {
 	return ReversePlan{}, fmt.Errorf("reverse plan %q not found", id)
 }
 
-func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview) (*connectors.WriteApprovalEvidence, ReversePlan, error) {
+func reversePlanMatchesExpected(stored, expected ReversePlan) bool {
+	return stored.PlanHash == expected.PlanHash &&
+		stored.DestinationConnector == expected.DestinationConnector &&
+		stored.DestinationCredential == expected.DestinationCredential &&
+		stored.Action == expected.Action &&
+		stored.Mode == expected.Mode &&
+		stored.ConnectorCommandOperation == expected.ConnectorCommandOperation
+}
+
+func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview, authorization *AuthorizationRecord) (*connectors.WriteApprovalEvidence, ReversePlan, error) {
 	now := time.Now().UTC()
 	var consumed ReversePlan
 	var evidence *connectors.WriteApprovalEvidence
-	updated, err := a.updateState(func(current state) (state, error) {
-		for i := range current.ReversePlans {
-			stored := current.ReversePlans[i]
-			if stored.ID != expected.ID {
-				continue
-			}
-			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
-				return current, err
-			}
-			if err := a.previewabilityError(stored, now); err != nil {
-				return current, err
-			}
-			if stored.PlanHash != expected.PlanHash || stored.DestinationConnector != expected.DestinationConnector || stored.DestinationCredential != expected.DestinationCredential || stored.Action != expected.Action || stored.Mode != expected.Mode || stored.ConnectorCommandOperation != expected.ConnectorCommandOperation {
-				return current, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
-			}
-			if err := a.validatePlanConfirmation(stored, req.Confirmation); err != nil {
-				return current, err
-			}
-			if stored.ApprovalTokenHash == "" {
-				return current, errors.New("reverse plan approval has already been consumed")
-			}
-			if !constantTimeStringEqual(stored.ApprovalTokenHash, hashString(req.ApprovalToken)) {
-				return current, errors.New("approval token is invalid")
-			}
-			if a.planRequiresPersistedPreview(stored) {
-				if stored.Status != "previewed" || stored.PreviewDigest == "" || stored.PreviewedAt.IsZero() {
-					return current, fmt.Errorf("reverse plan %q must be previewed before approval", stored.ID)
-				}
-				if !constantTimeStringEqual(stored.PreviewDigest, preview.Digest) {
-					return current, fmt.Errorf("reverse plan %q no longer matches its approved preview", stored.ID)
-				}
-			}
-			if a.confirmationPolicyForPlan(stored).Kind != "" {
-				if stored.ApprovalGrant == nil {
-					return current, fmt.Errorf("reverse plan %q has no destructive approval grant", stored.ID)
-				}
-				verified, err := a.approval.VerifyWriteGrant(*stored.ApprovalGrant, connectors.WriteApprovalExpectation{
-					PlanID:        expected.ID,
-					PlanHash:      expected.PlanHash,
-					Mode:          expected.Mode,
-					PreviewDigest: preview.Digest,
-					ApprovalToken: req.ApprovalToken,
-					Target:        preview.ApprovalTarget,
-					Confirmation:  req.Confirmation,
-				}, stored.PlanSeal)
-				if err != nil {
-					return current, err
-				}
-				evidence = verified
-			}
-			stored.Status = reversePlanStatusApprovalConsumptionUncertain
-			stored.ApprovalTokenHash = ""
-			stored.ApprovalGrant = nil
-			stored.ApprovalConsumedAt = now
-			stored.ApprovalUncertainAt = now
-			current.ReversePlans[i] = stored
-			consumed = stored
-			return current, nil
+	updated, err := a.updateStateAfterPreflight(func(current state) error {
+		return a.validateApprovalConsumptionState(current, expected, req, preview, now)
+	}, func(current state) (state, error) {
+		next, candidate, candidateEvidence, consumeErr := a.approvalConsumptionState(current, expected, req, preview, authorization, now)
+		if consumeErr != nil {
+			return current, consumeErr
 		}
-		return current, fmt.Errorf("reverse plan %q not found", expected.ID)
+		consumed = candidate
+		evidence = candidateEvidence
+		return next, nil
 	})
 	if err != nil {
 		if stateStoreCommitMayHaveSucceeded(err) {
+			a.deferredState = nil
+			a.deferredStateRevision = 0
 			return nil, ReversePlan{}, approvalConsumptionUncertainError(consumed, err)
 		}
 		return nil, ReversePlan{}, err
 	}
 	a.state = updated
+	a.deferredState = nil
+	a.deferredStateRevision = 0
 	return evidence, consumed, nil
+}
+
+func (a *App) validateApprovalConsumptionState(current state, expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview, now time.Time) error {
+	_, _, err := a.approvalConsumptionCandidate(current, expected, req, preview, now)
+	return err
+}
+
+func (a *App) approvalConsumptionCandidate(current state, expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview, now time.Time) (int, ReversePlan, error) {
+	for i := range current.ReversePlans {
+		stored := current.ReversePlans[i]
+		if stored.ID != expected.ID {
+			continue
+		}
+		if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+			return 0, ReversePlan{}, err
+		}
+		if stored.ApprovalTokenHash == "" {
+			return 0, ReversePlan{}, errors.New("reverse plan approval has already been consumed")
+		}
+		if err := a.previewabilityError(stored, now); err != nil {
+			return 0, ReversePlan{}, err
+		}
+		if !reversePlanMatchesExpected(stored, expected) {
+			return 0, ReversePlan{}, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
+		}
+		if err := a.validatePlanConfirmation(stored, req.Confirmation); err != nil {
+			return 0, ReversePlan{}, err
+		}
+		if !constantTimeStringEqual(stored.ApprovalTokenHash, hashString(req.ApprovalToken)) {
+			return 0, ReversePlan{}, errors.New("approval token is invalid")
+		}
+		if a.planRequiresPersistedPreview(stored) {
+			if stored.Status != "previewed" || stored.PreviewDigest == "" || stored.PreviewedAt.IsZero() {
+				return 0, ReversePlan{}, fmt.Errorf("reverse plan %q must be previewed before approval", stored.ID)
+			}
+			if !constantTimeStringEqual(stored.PreviewDigest, preview.Digest) {
+				return 0, ReversePlan{}, fmt.Errorf("reverse plan %q no longer matches its approved preview", stored.ID)
+			}
+		}
+		if a.confirmationPolicyForPlan(stored).Kind != "" {
+			if stored.ApprovalGrant == nil {
+				return 0, ReversePlan{}, fmt.Errorf("reverse plan %q has no destructive approval grant", stored.ID)
+			}
+			if err := a.approval.ValidateWriteGrant(*stored.ApprovalGrant, connectors.WriteApprovalExpectation{
+				PlanID:        expected.ID,
+				PlanHash:      expected.PlanHash,
+				Mode:          expected.Mode,
+				PreviewDigest: preview.Digest,
+				ApprovalToken: req.ApprovalToken,
+				Target:        preview.ApprovalTarget,
+				Confirmation:  req.Confirmation,
+			}, stored.PlanSeal); err != nil {
+				return 0, ReversePlan{}, err
+			}
+		}
+		return i, stored, nil
+	}
+	return 0, ReversePlan{}, fmt.Errorf("reverse plan %q not found", expected.ID)
+}
+
+func (a *App) approvalConsumptionState(current state, expected ReversePlan, req RunReverseETLRequest, preview connectors.WritePreview, authorization *AuthorizationRecord, now time.Time) (state, ReversePlan, *connectors.WriteApprovalEvidence, error) {
+	i, stored, err := a.approvalConsumptionCandidate(current, expected, req, preview, now)
+	if err != nil {
+		return current, ReversePlan{}, nil, err
+	}
+	var evidence *connectors.WriteApprovalEvidence
+	if a.confirmationPolicyForPlan(stored).Kind != "" {
+		verified, err := a.approval.VerifyWriteGrant(*stored.ApprovalGrant, connectors.WriteApprovalExpectation{
+			PlanID:        expected.ID,
+			PlanHash:      expected.PlanHash,
+			Mode:          expected.Mode,
+			PreviewDigest: preview.Digest,
+			ApprovalToken: req.ApprovalToken,
+			Target:        preview.ApprovalTarget,
+			Confirmation:  req.Confirmation,
+		}, stored.PlanSeal)
+		if err != nil {
+			return current, ReversePlan{}, nil, err
+		}
+		evidence = verified
+	}
+	normalized, err := a.stateForApprovalConsumption(current)
+	if err != nil {
+		return current, ReversePlan{}, nil, err
+	}
+	current = normalized
+	if i >= len(current.ReversePlans) || current.ReversePlans[i].ID != expected.ID {
+		return current, ReversePlan{}, nil, fmt.Errorf("reverse plan %q changed before approval consumption", expected.ID)
+	}
+	stored = current.ReversePlans[i]
+	stored.Status = reversePlanStatusApprovalConsumptionUncertain
+	stored.ApprovalTokenHash = ""
+	stored.ApprovalGrant = nil
+	stored.ApprovalConsumedAt = now
+	stored.ApprovalUncertainAt = now
+	if authorization != nil {
+		if stored.AuthorizationReference != "" {
+			return current, ReversePlan{}, nil, fmt.Errorf("reverse plan %q already has durable authorization %q", stored.ID, stored.AuthorizationReference)
+		}
+		record := cloneAuthorizationRecord(*authorization)
+		if strings.TrimSpace(record.Reference) == "" || strings.TrimSpace(record.ScopeIdentity) == "" {
+			return current, ReversePlan{}, nil, errors.New("durable authorization record is incomplete")
+		}
+		for _, existing := range current.Authorizations {
+			if existing.Reference == record.Reference {
+				return current, ReversePlan{}, nil, fmt.Errorf("durable authorization %q already exists", record.Reference)
+			}
+		}
+		stored.AuthorizationReference = record.Reference
+		current.Authorizations = append(current.Authorizations, record)
+	}
+	current.ReversePlans[i] = stored
+	return current, stored, evidence, nil
 }
 
 func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
@@ -2495,24 +3012,53 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	return run, nil
 }
 
-func (a *App) invalidateReversePlan(planID string) {
+func (a *App) invalidateReversePlan(expected ReversePlan) error {
 	now := time.Now().UTC()
-	updated, err := a.updateState(func(current state) (state, error) {
-		for i := range current.ReversePlans {
-			if current.ReversePlans[i].ID != planID {
-				continue
-			}
-			current.ReversePlans[i].Status = "invalidated"
-			current.ReversePlans[i].ApprovalTokenHash = ""
-			current.ReversePlans[i].ApprovalGrant = nil
-			current.ReversePlans[i].ApprovalConsumedAt = now
-			break
-		}
-		return current, nil
+	updated, err := a.updateStateAfterPreflight(func(current state) error {
+		_, preflightErr := reversePlanInvalidationCandidate(current, expected)
+		return preflightErr
+	}, func(current state) (state, error) {
+		return invalidateReversePlanState(current, expected, now)
 	})
-	if err == nil {
-		a.state = updated
+	if err != nil {
+		return err
 	}
+	a.state = updated
+	return nil
+}
+
+func reversePlanInvalidationCandidate(current state, expected ReversePlan) (int, error) {
+	for i := range current.ReversePlans {
+		stored := current.ReversePlans[i]
+		if stored.ID != expected.ID {
+			continue
+		}
+		if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+			return 0, err
+		}
+		if stored.ApprovalTokenHash == "" {
+			return 0, errors.New("reverse plan approval has already been consumed")
+		}
+		if !reversePlanMatchesExpected(stored, expected) || !constantTimeStringEqual(stored.ApprovalTokenHash, expected.ApprovalTokenHash) {
+			return 0, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
+		}
+		return i, nil
+	}
+	return 0, fmt.Errorf("reverse plan %q not found", expected.ID)
+}
+
+func invalidateReversePlanState(current state, expected ReversePlan, now time.Time) (state, error) {
+	i, err := reversePlanInvalidationCandidate(current, expected)
+	if err != nil {
+		return current, err
+	}
+	stored := current.ReversePlans[i]
+	stored.Status = "invalidated"
+	stored.ApprovalTokenHash = ""
+	stored.ApprovalGrant = nil
+	stored.ApprovalConsumedAt = now
+	current.ReversePlans[i] = stored
+	return current, nil
 }
 
 func constantTimeStringEqual(left, right string) bool {
@@ -2608,7 +3154,16 @@ func (a *App) findCredential(name string) (CredentialMeta, bool) {
 func (a *App) findConnection(name string) (Connection, bool) {
 	for _, conn := range a.state.Connections {
 		if conn.Name == name {
-			return conn, true
+			return cloneConnection(conn), true
+		}
+	}
+	return Connection{}, false
+}
+
+func (a *App) findConnectionByID(id string) (Connection, bool) {
+	for _, conn := range a.state.Connections {
+		if conn.ID == id {
+			return cloneConnection(conn), true
 		}
 	}
 	return Connection{}, false
@@ -2620,31 +3175,49 @@ func (a *App) findConnection(name string) (Connection, bool) {
 func (a *App) findConnectionFold(name string) (Connection, bool) {
 	for _, conn := range a.state.Connections {
 		if strings.EqualFold(conn.Name, name) {
-			return conn, true
+			return cloneConnection(conn), true
 		}
 	}
 	return Connection{}, false
 }
 
+// failRun keeps persisted run state truthful: the typed transport-conflict path
+// must not return the JSON store's speculative callback state after a definite
+// pre-rename failure.
 func (a *App) failRun(runID string, runErr error) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
+	transportStateConflict := errors.Is(runErr, errTransportStreamStateConflict)
+	transitionedInCallback := false
+	targetAlreadyTerminal := false
 	updated, persistErr := a.updateState(func(current state) (state, error) {
-		if current.Revision != expectedRevision {
+		if !transportStateConflict && current.Revision != expectedRevision {
 			return current, errStateRevisionConflict
 		}
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
 			}
+			if transportStateConflict && current.Runs[i].Status != "running" {
+				targetAlreadyTerminal = true
+				return current, fmt.Errorf("transport conflict run %q has status %q, want running before finalization", runID, current.Runs[i].Status)
+			}
 			current.Runs[i].Status = "failed"
 			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
 			current.Runs[i].CompletedAt = completedAt
+			transitionedInCallback = true
 			return current, nil
 		}
 		return current, fmt.Errorf("run %q not found", runID)
 	})
 	if persistErr != nil {
+		if transportStateConflict && (targetAlreadyTerminal || (transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr))) {
+			for _, run := range updated.Runs {
+				if run.ID == runID {
+					return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+				}
+			}
+		}
 		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 	}
 	for _, run := range updated.Runs {
@@ -2680,6 +3253,28 @@ func prefixedID(prefix string) (string, error) {
 		return "", err
 	}
 	return prefix + "_" + token, nil
+}
+
+func allocateUniquePrefixedID(prefix string, used map[string]struct{}) (string, error) {
+	return allocateUniqueIdentity(prefix, used, func() (string, error) {
+		return prefixedID(prefix)
+	})
+}
+
+func allocateUniqueIdentity(kind string, used map[string]struct{}, generate func() (string, error)) (string, error) {
+	const maxAttempts = 32
+	for attempt := 0; attempt < maxAttempts; attempt++ {
+		identity, err := generate()
+		if err != nil {
+			return "", err
+		}
+		if _, exists := used[identity]; exists {
+			continue
+		}
+		used[identity] = struct{}{}
+		return identity, nil
+	}
+	return "", fmt.Errorf("allocate unique %s identity: too many collisions", kind)
 }
 
 func randomToken(bytes int) (string, error) {

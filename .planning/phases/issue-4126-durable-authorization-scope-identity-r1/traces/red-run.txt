@@ -1,0 +1,11 @@
+$ go test -timeout 20m ./internal/app -run 'Test(AuthorizationScope|RunReverseETL.*Authorization)' -count=1
+# polymetrics.ai/internal/app_test [polymetrics.ai/internal/app.test]
+internal/app/authorization_scope_test.go:21:19: a.AuthorizationScopeForReversePlan undefined
+internal/app/authorization_scope_test.go:25:29: undefined: app.AuthorizationScopeIdentity
+internal/app/authorization_scope_test.go:60:14: undefined: app.AuthorizationScope
+internal/app/authorization_scope_test.go:64:23: undefined: app.AuthorizationStreamTable
+FAIL    polymetrics.ai/internal/app [build failed]
+FAIL
+
+This is the expected red result: the durable authorization scope and record
+contract did not yet exist.

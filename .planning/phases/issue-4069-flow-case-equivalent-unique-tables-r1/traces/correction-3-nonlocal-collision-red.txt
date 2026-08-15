@@ -1,0 +1,20 @@
+# #4069 correction 3 / 5 — non-local collision regression RED
+
+Production source was exact #4071 head
+`3b75f4a62fd8d743ec883a5b824164374f661857`; the only local parent commit was
+the planning-only checkpoint. The restored test is the deleted #4071 control.
+
+```text
+$ go test -timeout 20m ./internal/app -run '^TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL$' -count=1 -v
+=== RUN   TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL
+    warehouse_connection_isolation_test.go:1060: RunETL(non-local) error = connection "acme" configures case-equivalent local warehouse destination tables (RECORDS, records) for streams (case-records, records); DuckDB treats them as one identifier, so a connection selector cannot resolve the collision. Direct reads must use an exact resolver-visible table spelling; create replacement connections with destination table names that differ by more than ASCII letter case
+--- FAIL: TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL (1.61s)
+FAIL
+FAIL    polymetrics.ai/internal/app  2.382s
+FAIL
+exit 1
+```
+
+The failure proves the unconditional legacy local-warehouse inventory preflight
+denies an unrelated non-local ETL before it contacts the source or sends to
+the non-local destination.

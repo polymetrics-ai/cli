@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -97,6 +98,13 @@ func classifyError(err error) *cliError {
 	var ce *cliError
 	if errors.As(err, &ce) {
 		return ce
+	}
+	var replay *app.AuthorizationTokenReplayError
+	if errors.As(err, &replay) {
+		// Replaying an approval token is invalid caller input, not an internal
+		// fault. Preserve the typed rejection's redacted message while exposing
+		// the standard validation category/code for scripts and monitoring.
+		return &cliError{category: categoryValidation, code: "validation_error", message: err.Error(), err: err}
 	}
 	if errors.Is(err, errUsage) {
 		return &cliError{category: categoryUsage, code: "usage_error", message: errUsage.Error()}

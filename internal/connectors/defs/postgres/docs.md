@@ -1,15 +1,35 @@
 # Overview
 
-Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and
-supports cursor-incremental reads on a configurable cursor column. PostgreSQL logical-replication
-change capture is deliberately planned, not executable: it requires PostgreSQL 14+ `pgoutput`
-protocol-v2 streaming, a bounded crash-recoverable per-transaction stage, `StreamAbort` discard,
-a named `TransactionStageLimitExceeded` outcome with no source acknowledgement, and a durable
-receipt for the complete transaction before any source LSN acknowledgement.
+Reads PostgreSQL tables from a dynamically discovered catalog, snapshots tables, and supports
+cursor-incremental reads on a configurable cursor column. PostgreSQL logical-replication change
+capture uses PostgreSQL 14+ `pgoutput` protocol-v2 streaming. It keeps each transaction in a
+bounded crash-recoverable private stage, discards `StreamAbort`, delivers only after
+`StreamCommit`, and persists a whole-transaction durable receipt before checkpointing and
+acknowledging the source LSN.
 
-This connector discovers available streams and schemas from the configured service at runtime.
+Stream availability is discovered at runtime; see [Streams notes](#streams-notes) for the configured
+schema's scope and permission rules.
 
 This connector is read-only; no write actions are declared.
+
+## Warehouse snapshot transport
+
+For warehouse-mediated sync, PostgreSQL provides one closed, live-only bounded
+snapshot source. It accepts the logical `snapshot` stream only for
+`full_append` and `full_overwrite`; it is neither a caller-authored SQL surface
+nor a fallback to the compatibility `Connector.Read` path. Polling, incremental modes, and
+logical-replication change capture remain distinct source paths.
+
+The source identity must name one `database.schema.relation`. It discovers that
+relation's typed catalog and reads finite pages, ordered by a declared non-null
+primary or unique key, in one read-only repeatable-read transaction. Every
+page supplies a candidate checkpoint bound to the source identity, typed-catalog
+schema fingerprint, and PostgreSQL snapshot barrier. A prior full-snapshot
+checkpoint cannot be resumed.
+
+Before any source I/O, transport preflight requires the connector definition to
+name its exact native database executor and the registry to have registered it.
+Generic App composition never infers this source from broad connector capabilities.
 
 ## Auth setup
 
@@ -43,8 +63,8 @@ Connection fields:
 
 - `cursor_field` (optional, string); Optional column name used for incremental reads (rows with
   cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).
-- `cdc_publication` (optional, string); Reserved for the planned logical-replication change
-  capture path. It is not invoked while CDC is non-executable.
+- `cdc_publication` (optional, string); Publication used by logical-replication CDC. It must
+  include the selected `schema.table` stream. Defaults to `pm_publication`.
 - `database` (required, string); Database name to connect to.
 - `host` (required, string); TCP hostname or IP of the PostgreSQL server (no scheme, path, or
   credentials - a URL-shaped value is rejected). Unix-socket/peer authentication is unsupported.
@@ -54,7 +74,9 @@ Connection fields:
 - `port` (optional, string); TCP port, 1-65535. Defaults to 5432 when omitted.
 - `read_limit` (optional, string); Maximum rows returned per Read snapshot SELECT. Defaults to
   10000; set to 0, all, or unlimited to disable the bound.
-- `schema` (optional, string); PostgreSQL schema to discover tables from. Defaults to public.
+- `schema` (optional, string); PostgreSQL user/application schema to discover tables from. Defaults
+  to public. `pg_catalog`, `information_schema`, `pg_toast`, `pg_toast_*`, and `pg_temp_*` are
+  rejected before a live catalog connection is opened.
 - `sslmode` (optional, string); allowed values `disabled`, `preferred`, `required`, `verify-ca`,
   `verify-identity`, `disable`, `allow`, `prefer`, `require`, `verify-full`, `verify_ca`,
   `verify_identity`; transport security. Defaults to disabled when omitted.
@@ -69,8 +91,19 @@ implementation for this service.
 
 ## Streams notes
 
-The connector discovers catalogs and records directly from the configured service instead of using
-fixed stream declarations.
+The connector discovers its catalog from PostgreSQL system catalogs on the configured service rather
+than using fixed stream declarations. Discovery is limited to ordinary and partitioned base tables in one
+allowed user/application `schema` (default `public`); PostgreSQL-owned `pg_catalog`,
+`information_schema`, `pg_toast`, `pg_toast_*`, and `pg_temp_*` schema names are rejected before a
+pool is opened. Views and all other relation kinds are excluded.
+
+The configured role must have `USAGE` on that schema and either table-level `SELECT` or `SELECT`
+on every non-dropped column. Relations that do not meet those permissions are omitted. If no eligible
+relation remains, catalog discovery returns an error rather than advertising an unreadable stream.
+
+Catalog discovery preserves only lossless typed metadata. For an otherwise eligible relation, an
+unsupported relation shape, identifier, or PostgreSQL type shape fails the catalog request instead of
+being coerced to a generic field type or returned as a partial catalog.
 
 ## Write actions & risks
 
@@ -78,13 +111,26 @@ This connector is read-only. Read behavior: low.
 
 ## Known limits
 
-- Schemas and stream availability depend on the configured service at runtime.
-- Logical-replication CDC is planned and fails closed before opening a replication connection,
-  creating/reusing a slot, consuming WAL, or advancing a checkpoint. It will not be advertised
-  until PostgreSQL 14+ `pgoutput` protocol-v2 streaming can stage each transaction privately under
-  a hard byte/record quota, discard `StreamAbort`, return a named
-  `TransactionStageLimitExceeded` outcome without acknowledging the source, and acknowledge the
-  source only after a whole-transaction durable downstream receipt.
+- `polling_watermark` is planned, not implemented. It is a bounded keyset poll
+  rather than CDC or change capture, and no polling mode can be selected until
+  one declared native source/object/destination binding passes runtime
+  preflight with registered source and apply executors plus immutable
+  conformance evidence. When such a binding exists, its source order must be a
+  declared watermark plus unique tie-breaker; its checkpoint is committed only
+  after durable downstream acknowledgement, so replay is at least once. A
+  polling source cannot observe a hard delete after the row disappears; a
+  delete-aware history contract needs a declared cursor-advancing soft-delete
+  mapping. Incompatible state, source identity changes, snapshot expiry, and
+  retention failure require explicit rebootstrap, never an automatic full scan.
+- Logical-replication CDC requires PostgreSQL 14+, `wal_level=logical`, a role with
+  `REPLICATION`, positive `max_replication_slots` and `max_wal_senders`, a matching publication,
+  and a stable primary-key replica identity. The slot is source-bound; a missing, incompatible,
+  invalidated, or retention-gapped checkpoint requires explicit rebootstrap rather than a guessed
+  resume.
+- Each streamed transaction is constrained by private byte, record, aggregate-stage, and age
+  limits. `StreamAbort` publishes, checkpoints, and acknowledges nothing. A successful
+  `StreamCommit` emits its ordered transaction, records its complete durable receipt, persists the
+  checkpoint, and only then acknowledges the commit LSN.
 - Cursor or timestamp reconciliation is not a CDC fallback: it cannot faithfully recover hard
   deletes or transaction history. A stage-limit outcome must require explicit retry or connector-
   owned teardown/rebootstrap, with source slot health made visible.

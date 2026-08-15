@@ -54,6 +54,10 @@ var goldenTranscriptInputs = []struct {
 
 	{Name: "bare_credentials_manual", Args: []string{"credentials"}},
 	{Name: "bare_etl_manual", Args: []string{"etl"}},
+	{Name: "bare_etl_transport_manual", Args: []string{"etl", "transport"}},
+	{Name: "bare_etl_transport_github_issue_label_manual", Args: []string{"etl", "transport", "github-issue-label"}},
+	{Name: "etl_transport_help_manual", Args: []string{"etl", "transport", "--help"}},
+	{Name: "etl_transport_leaf_help_manual", Args: []string{"etl", "transport", "github-issue-label", "--help"}},
 	{Name: "bare_reverse_manual", Args: []string{"reverse"}},
 	{Name: "bare_connectors_manual", Args: []string{"connectors"}},
 	{Name: "bare_connections_manual", Args: []string{"connections"}},
@@ -70,6 +74,7 @@ var goldenTranscriptInputs = []struct {
 
 	{Name: "json_credentials_manual", Args: []string{"credentials", "--json"}},
 	{Name: "json_etl_manual", Args: []string{"etl", "--json"}},
+	{Name: "json_etl_transport_manual", Args: []string{"etl", "transport", "--json"}},
 	{Name: "json_reverse_manual", Args: []string{"reverse", "--json"}},
 	{Name: "json_connectors_manual", Args: []string{"connectors", "--json"}},
 	{Name: "json_connections_manual", Args: []string{"connections", "--json"}},

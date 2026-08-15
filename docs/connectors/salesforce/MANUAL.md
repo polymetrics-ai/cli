@@ -47,7 +47,7 @@ ETL STREAMS
     fields: email(string), id(string), last_modified_date(string), name(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Salesforce API read of object metadata, Account, Contact, and Lead records

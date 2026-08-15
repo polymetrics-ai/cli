@@ -65,6 +65,7 @@ ETL STREAMS
     fields: created_at(integer), deleted(boolean), description(string), id(string), name(string), status(string), updated_at(integer)
   coupons:
     primary key: id
+    cursor: updated_at
     fields: apply_on(string), created_at(integer), currency_code(string), deleted(boolean), discount_amount(integer), discount_percentage(number), discount_type(string), duration_type(string), id(string), name(string), redemptions(integer), status(string), updated_at(integer), valid_till(integer)
   coupon_codes:
     primary key: code

@@ -95,7 +95,7 @@ Reads Hubplanner scheduling, project, resource, client, billing, time, vacation,
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
@@ -364,7 +364,7 @@ Reads Hubplanner scheduling, project, resource, client, billing, time, vacation,
   - --limit (integer): Maximum ETL records to emit.
   - --max-bytes (integer): Maximum direct-read response bytes, capped by each typed operation.
   - --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-  - --approve (string): Approval token required to execute a reverse-ETL plan.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   - --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
 - Billing Rates
 - Booking Categories

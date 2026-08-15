@@ -61,7 +61,7 @@ ETL STREAMS
     fields: created(string), creator(integer), id(integer), leader_employee(integer), modified(string), name(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_department:

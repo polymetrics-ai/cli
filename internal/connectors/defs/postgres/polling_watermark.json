@@ -1,0 +1,4 @@
+{
+  "status": "planned",
+  "reason": "no registered native polling source and apply binding has passed object and destination preflight; no polling sync mode is implemented"
+}

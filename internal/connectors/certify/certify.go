@@ -1,5 +1,9 @@
 package certify
 
+import "time"
+
+const defaultCertificationRateLimitAdmissionTimeout = 30 * time.Second
+
 // Options configures a single-connector certification Runner (certification
 // design §A command spec, single-connector subset only — batch/--all,
 // --sweep flags are out of scope here; see credsfile.go for the batch-mode
@@ -28,6 +32,10 @@ type Options struct {
 	// remaining pairings. See
 	// docs/plans/connector-complete-testing-and-mail-setup-plan.md.
 	Full bool
+
+	// RateLimitAdmissionTimeout bounds a single provider-budget wait. A zero
+	// value uses the certification default; it does not shorten normal stages.
+	RateLimitAdmissionTimeout time.Duration
 }
 
 // Runner orchestrates certification stages for exactly one connector,

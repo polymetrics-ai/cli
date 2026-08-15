@@ -1,0 +1,9 @@
+Green: POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v -run '^TestPostgresManagedTargetIncrementalDedupeHistoryLive$' ./internal/connectors/native/postgres
+Result: PASS
+
+Observable coverage:
+- v1 remains as a closed history row when v2 becomes current;
+- the v1 valid_to value equals v2 valid_from;
+- replay after a fresh driver/ledger/executor leaves durable rows unchanged and
+  writes a receipt that the restarted ledger reads back;
+- a tombstone retains both rows and closes the final current window.

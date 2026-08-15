@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "driver": {
+    "id": "postgres",
+    "protocol": "postgres-wire",
+    "api_version": 1
+  },
+  "catalog": {
+    "qualification_order": ["schema", "relation"]
+  },
+  "identifiers": {
+    "quote_style": "double_quote",
+    "case_fold": "lower",
+    "max_bytes": 63
+  },
+  "resources": {
+    "read_page": { "default": 1000, "maximum": 10000 },
+    "write_batch": { "default": 100, "maximum": 1000 },
+    "pool": { "default": 2, "maximum": 8 },
+    "connect_timeout_ms": 10000,
+    "operation_timeout_ms": 300000,
+    "max_parameters": 65535
+  },
+  "type_mappings": [
+    { "native": { "name": "int2" }, "logical": { "kind": "signed_integer", "bits": 16 } },
+    { "native": { "name": "int4" }, "logical": { "kind": "signed_integer", "bits": 32 } },
+    { "native": { "name": "int8" }, "logical": { "kind": "signed_integer", "bits": 64 } },
+    { "native": { "name": "float4" }, "logical": { "kind": "float", "bits": 32 } },
+    { "native": { "name": "float8" }, "logical": { "kind": "float", "bits": 64 } },
+    { "native": { "name": "bool" }, "logical": { "kind": "boolean" } },
+    { "native": { "name": "text" }, "logical": { "kind": "string" } },
+    { "native": { "name": "bytea" }, "logical": { "kind": "binary" } },
+    { "native": { "name": "date" }, "logical": { "kind": "date" } },
+    { "native": { "name": "uuid" }, "logical": { "kind": "uuid" } },
+    { "native": { "name": "json" }, "logical": { "kind": "json" } },
+    { "native": { "name": "jsonb" }, "logical": { "kind": "json" } }
+  ],
+  "admitted_modes": [
+    "full_overwrite",
+    "full_append",
+    "incremental_append",
+    "incremental_upsert",
+    "incremental_dedupe",
+    "incremental_dedupe_history"
+  ]
+}

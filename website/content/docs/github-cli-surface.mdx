@@ -99,7 +99,7 @@ connector-command record handling.
 ```bash
 pm github issue close --issue-number 101 --credential github-token
 pm github issue close --plan <plan-id> --preview --json
-pm github issue close --plan <plan-id> --approve <approval-token> --json
+pm github issue close --plan <plan-id> --approval-token-stdin --json
 ```
 
 Each command needs its own declared input contract; there is no generic raw-input fallback. Sensitive

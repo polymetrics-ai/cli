@@ -49,7 +49,7 @@ ETL STREAMS
     fields: actionType(string), activityId(string), candidateId(string), createdAt(number), date(number), id(string), memberId(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Huntr organization API read of member, candidate, activity, note, and action data

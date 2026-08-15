@@ -7,7 +7,7 @@ description: PostgreSQL connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source.
+Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Read-only source.
 
 ## Icon
 
@@ -51,6 +51,21 @@ Reads PostgreSQL tables: discovers schemas/columns from information_schema, snap
 - write risk: n/a (read-only source)
 - approval: none required for read-only sync
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: native_database/postgres_bounded_snapshot
+
+## Polling Watermark
+
+- Status: planned
+- Mechanism: polling_watermark is a bounded polling scan, not CDC or change capture.
+- Eligibility: each mode remains blocked until runtime preflight validates the selected catalog object and destination binding, registered native executors, and immutable conformance evidence.
+- Reason: no registered native polling source and apply binding has passed object and destination preflight; no polling sync mode is implemented
+- No polling source ordering, checkpoint, snapshot, deletion, or rebootstrap behavior is implemented for this connector while the declaration is non-implemented.
 
 ## Commands
 
