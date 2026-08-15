@@ -26,4 +26,11 @@ The task-delivery-header template named by `AGENTS.md` is absent from this integ
 
 The installed `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` prompts were resolved with `scripts/gsd`; `scripts/gsd doctor` and `go run ./cmd/agentcontractgen check` pass. This issue slug is not a numbered roadmap phase and the canonical contract requires one worker, so the lifecycle runs inline and is recorded in this directory.
 
-Loaded skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-database`, `golang-cli`, `golang-documentation`, and `golang-lint`. The PostgreSQL/runtime and CLI help/docs/website parity references were read.
+Loaded skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-database`, `golang-context`, `golang-concurrency`, `golang-cli`, `golang-documentation`, and `golang-lint`. The PostgreSQL/runtime and CLI help/docs/website parity references were read.
+
+The branch was paused while #4156 landed the shared definition-owned transport declaration and
+`change_capture` route. After rebasing onto base commit `11fd27b4b`, its generic declared transport
+path was preserved as the first dispatch choice. PostgreSQL's separate residual remained: a native
+`ChangefeedExecutor` with no closed source/destination transport still had no production route into
+the connection-owned warehouse. This change closes only that residual and does not modify shared
+transport declaration or validation.

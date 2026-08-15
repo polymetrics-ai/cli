@@ -271,7 +271,7 @@ func (m *pgoutputV2TransactionMachine) commit(ctx context.Context, xid uint32, c
 		if err != nil {
 			return fmt.Errorf("postgres CDC: recover downstream transaction receipt: %w", err)
 		}
-		if err := restorer.RestoreCDCTransactionReceipt(ctx, transaction.id, receipt); err != nil {
+		if err := restorer.RestoreCDCTransactionReceipt(ctx, stagedReceipt.TransactionKey(), receipt); err != nil {
 			return fmt.Errorf("postgres CDC: restore downstream transaction receipt: %w", err)
 		}
 	}
@@ -416,7 +416,7 @@ type postgresCDCTransactionReceiver struct {
 
 func (r postgresCDCTransactionReceiver) ReceiveCommittedTransaction(ctx context.Context, transaction database.CommittedTransaction) (database.DownstreamTransactionReceipt, error) {
 	if r.durable != nil {
-		committed, err := connectors.NewCDCTransaction(transaction.ContentDigest, transaction.Records, func(streamCtx context.Context, emit func(connectors.CDCEvent) error) error {
+		committed, err := connectors.NewCDCTransaction(transaction.TransactionKey, transaction.Records, func(streamCtx context.Context, emit func(connectors.CDCEvent) error) error {
 			return streamPostgresCDCTransactionEvents(streamCtx, transaction, emit)
 		})
 		if err != nil {

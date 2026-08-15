@@ -10,6 +10,9 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 	native "polymetrics.ai/internal/connectors/native/postgres"
 )
 
@@ -31,6 +34,16 @@ func TestNameAndMetadata(t *testing.T) {
 	definition, ok := connectors.DefinitionOf(c)
 	if !ok || definition.Changefeed == nil || !definition.Capabilities.CDC {
 		t.Fatalf("PostgreSQL definition = %#v, want an executable matching changefeed", definition)
+	}
+}
+
+func TestPostgresDeclaresProviderHTTPRateLimitsNotApplicable(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "postgres")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bundle.RateLimits == nil || bundle.RateLimits.State != connsdk.RateLimitStateNotApplicable || bundle.RateLimits.Reason != "PostgreSQL uses its native wire protocol and makes no provider HTTP API requests." {
+		t.Fatalf("PostgreSQL rate limits = %#v, want explicit no-provider-HTTP not_applicable declaration", bundle.RateLimits)
 	}
 }
 

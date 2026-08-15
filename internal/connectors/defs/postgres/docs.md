@@ -118,6 +118,9 @@ cannot write an arbitrary pre-existing target.
 
 ## Known limits
 
+- Provider HTTP rate limiting is not applicable: PostgreSQL uses its native wire protocol and
+  makes no provider HTTP API requests. Native pool, batch, statement, CDC stage, slot, and WAL
+  bounds are enforced by the typed database and changefeed contracts instead.
 - `polling_watermark` is planned, not implemented. It is a bounded keyset poll
   rather than CDC or change capture, and no polling mode can be selected until
   one declared native source/object/destination binding passes runtime

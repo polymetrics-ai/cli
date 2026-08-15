@@ -11,3 +11,17 @@ Rejected alternatives:
 - buffering an arbitrarily large transaction in memory;
 - routing CDC directly into the PostgreSQL managed target;
 - keeping `cdc: true` while `App.RunETL` returns `ModeNotExecutableError`.
+
+## Post-#4156 rebase disposition
+
+#4156 introduced the generic closed transport route for definition-owned declarations. Its
+`change_capture` regression test initially exposed that this branch's native PostgreSQL fallback
+was ordered too early. Dispatch now tries a matching closed transport first and reaches the native
+transaction-aware warehouse receiver only when no such transport matches. Both routes have focused
+green tests. This keeps the shared fix owned by #4156 while preserving the whole-transaction receipt,
+checkpoint, and source-LSN ordering required by PostgreSQL CDC.
+
+The issue also requires an explicit `rate_limits.json`. PostgreSQL has no provider HTTP API, so the
+bundle now declares `state: not_applicable` with that exact reason. This is metadata truth, not a
+claim that native database resources are unbounded; the authored connector docs point to the typed
+pool, batch, statement, CDC-stage, replication-slot, and WAL bounds.

@@ -92,6 +92,7 @@ func TestPGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint(t 
 	machine := newTestCDCv2Machine(t, probe)
 	machine.req.TransactionReceiver = cdcTransactionReceiverFunc(func(ctx context.Context, transaction connectors.CDCTransaction) (connectors.CDCTransactionReceipt, error) {
 		probe.order = append(probe.order, "transaction")
+		probe.durableTransactionID = transaction.ID()
 		if transaction.Records() != 1 {
 			return connectors.CDCTransactionReceipt{}, errors.New("transaction receiver observed an incomplete committed transaction")
 		}
@@ -155,8 +156,11 @@ func TestPGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint(t 
 	if got, want := restart.order, []string{"restore", "checkpoint", "ack"}; !sameStrings(got, want) {
 		t.Fatalf("replayed durable receiver ordering = %#v, want %#v", got, want)
 	}
-	if restart.transactionID != probe.transactionID || restart.receiptID != "warehouse-receipt" {
-		t.Fatalf("restored transaction receipt = (%q, %q), want (%q, warehouse-receipt)", restart.transactionID, restart.receiptID, probe.transactionID)
+	if probe.durableTransactionID == "" || probe.durableTransactionID == probe.transactionID {
+		t.Fatalf("durable transaction identity = %q, raw stage lookup identity = %q; want a non-empty opaque stage key", probe.durableTransactionID, probe.transactionID)
+	}
+	if restart.transactionID != probe.durableTransactionID || restart.receiptID != "warehouse-receipt" {
+		t.Fatalf("restored transaction receipt = (%q, %q), want (%q, warehouse-receipt)", restart.transactionID, restart.receiptID, probe.durableTransactionID)
 	}
 }
 
@@ -250,10 +254,11 @@ func TestCDCTransactionIdentityIncludesWALPosition(t *testing.T) {
 }
 
 type cdcV2Probe struct {
-	order         []string
-	events        []connectors.CDCEvent
-	stage         *database.CommittedTransactionStage
-	transactionID string
+	order                []string
+	events               []connectors.CDCEvent
+	stage                *database.CommittedTransactionStage
+	transactionID        string
+	durableTransactionID string
 }
 
 func newCDCv2Probe() *cdcV2Probe { return &cdcV2Probe{} }

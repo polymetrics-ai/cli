@@ -1,8 +1,8 @@
 {
   "phase": "issue-3978-postgres-capability-publication-r1",
   "mode": "inline-manual-gsd",
-  "status": "executing",
-  "current_slice": "PGCAP-2-green",
+  "status": "ready_for_delivery",
+  "current_slice": "PGCAP-1-through-PGCAP-8-green-and-reviewed",
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-pg-capability-publication-club-r1"
 }
