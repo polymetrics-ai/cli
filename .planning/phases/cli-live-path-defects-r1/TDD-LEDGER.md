@@ -44,3 +44,23 @@
 - Green: the focused engine command passed without a production edit. This is
   an already-satisfied dispatch condition, recorded explicitly rather than
   inventing an unnecessary transport change.
+
+### 2026-08-16 — #4125 shared-window bounds
+
+- Red: `go test -timeout 20m ./internal/coordination -run
+  '^TestSharedRateLimitWindowBoundary'` failed before production edits. The
+  typed window outcome and bounded TTL contract did not exist.
+- Green: `SharedRateLimitWindowError` now distinguishes `non_positive` from
+  `too_large`; validation precedes both duration/TTL conversion and the shared
+  coordinator availability check. The same defensive ordering applies to
+  response observation.
+- Happy class: `TestSharedRateLimitWindowBoundaryAcceptsMaximum` asserts exact
+  milliseconds and TTL at the largest value that still leaves TTL slack.
+- Bad class:
+  `TestSharedRateLimitWindowBoundaryRejectsBadInputBeforeCoordinatorIO` asserts
+  typed negative/one-past-maximum refusals and zero coordinator connections.
+- Edge class:
+  `TestSharedRateLimitWindowBoundaryRejectsZeroAndDurationOverflow` names zero
+  and an `int` maximum that would overflow `time.Duration`; both are typed
+  refusals without a panic or silent clamp.
+- Green command: `go test -timeout 20m ./internal/coordination` passed.
