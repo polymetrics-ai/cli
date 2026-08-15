@@ -3,6 +3,9 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"net/http"
+	"strings"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -156,7 +159,9 @@ func (c *Connector) ValidateConfiguration(config map[string]string) error {
 }
 
 func (c *Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
-	return Check(ctx, c.bundle, cfg, c.hooks)
+	return executeWithAuthCohort(ctx, cfg, func(admitted context.Context) error {
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, Check(admitted, c.bundle, cfg, c.hooks))
+	})
 }
 
 // Catalog derives connectors.Catalog from the bundle's streams and compiled
@@ -174,15 +179,59 @@ func (c *Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (
 }
 
 func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
-	return Read(ctx, c.bundle, req, c.hooks, emit)
+	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, Read(admitted, c.bundle, req, c.hooks, emit))
+	})
+}
+
+// RateLimitParkingScope reproduces the declaration-selected policy group for
+// the failed stream. It accepts only connsdk's typed terminal 429 evidence;
+// generic HTTP or string-shaped errors cannot create durable parking state.
+func (c *Connector) RateLimitParkingScope(ctx context.Context, cfg connectors.RuntimeConfig, stream string, runErr error) (connectors.RateLimitScopeKey, error) {
+	var rateErr *connsdk.RateLimitError
+	if !errors.As(runErr, &rateErr) || rateErr == nil || !rateErr.HasReset || rateErr.ResetAt.IsZero() {
+		return "", errors.New("rate-limit parking scope requires typed reset evidence")
+	}
+	spec, err := findStream(c.bundle, stream)
+	if err != nil {
+		return "", err
+	}
+	method := spec.Method
+	if method == "" {
+		method = "GET"
+	}
+	resolver := newRateLimitResolverWithContext(ctx, c.bundle, cfg)
+	if resolver == nil {
+		return "", errors.New("rate-limit parking scope has no declared policy")
+	}
+	matched, _, err := resolver.resolvePolicies(ctx, method, spec.Path, resolver.policies)
+	if err != nil {
+		return "", err
+	}
+	if len(matched) == 0 || matched[0].parkingScope == "" {
+		return "", errors.New("rate-limit parking scope has no matching declared policy")
+	}
+	return matched[0].parkingScope, nil
 }
 
 func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
-	return DirectRead(ctx, c.bundle, req, c.hooks)
+	var result connectors.DirectReadResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = DirectRead(admitted, c.bundle, req, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
 }
 
 func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
-	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
+	var result connectors.DirectReadResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = OperationDirectRead(admitted, c.bundle, req, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
 }
 
 // PreflightOperationDirectRead proves a command's declared binding can reach
@@ -212,11 +261,23 @@ func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outpu
 }
 
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
-	return PreviewOperationDirectWrite(ctx, c.bundle, req, c.hooks)
+	var result connectors.WritePreview
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = PreviewOperationDirectWrite(admitted, c.bundle, req, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
 }
 
 func (c *Connector) OperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.OperationDirectWriteResult, error) {
-	return OperationDirectWrite(ctx, c.bundle, req, c.hooks)
+	var result connectors.OperationDirectWriteResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = OperationDirectWrite(admitted, c.bundle, req, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
 }
 
 func (c *Connector) OperationDirectWriteMetadata(operation string) (connectors.OperationDirectWriteMetadata, error) {
@@ -228,16 +289,15 @@ func (c *Connector) OperationDirectWriteMetadata(operation string) (connectors.O
 // the executor's own contract; this adapter is the seam that lets a CLI command
 // reach it without the connectors package depending on engine internals.
 func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
-	result, err := OperationBinaryDownload(ctx, c.bundle, BinaryDownloadRequest{
-		Operation:    req.Operation,
-		Config:       req.Config,
-		PathParams:   req.PathParams,
-		Query:        req.Query,
-		MaxBytes:     req.MaxBytes,
-		DestRoot:     req.DestRoot,
-		FileName:     req.FileName,
-		RedactFields: req.RedactFields,
-	}, c.hooks)
+	var result BinaryDownloadResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = OperationBinaryDownload(admitted, c.bundle, BinaryDownloadRequest{
+			Operation: req.Operation, Config: req.Config, PathParams: req.PathParams, Query: req.Query,
+			MaxBytes: req.MaxBytes, DestRoot: req.DestRoot, FileName: req.FileName, RedactFields: req.RedactFields,
+		}, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
 	if err != nil {
 		return connectors.OperationBinaryDownloadResult{}, err
 	}
@@ -251,7 +311,13 @@ func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.
 // InitialState satisfies connectors.StatefulReader by delegating to the
 // package-level engine.InitialState.
 func (c *Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
-	return InitialState(ctx, c.bundle, stream, cfg)
+	var result map[string]string
+	err := executeWithAuthCohort(ctx, cfg, func(admitted context.Context) error {
+		var err error
+		result, err = InitialState(admitted, c.bundle, stream, cfg)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
 }
 
 // Write executes req against the bundle's writes.json actions. A bundle with
@@ -264,7 +330,56 @@ func (c *Connector) Write(ctx context.Context, req connectors.WriteRequest, reco
 	if len(c.bundle.Writes) == 0 {
 		return connectors.WriteResult{RecordsFailed: len(records)}, connectors.ErrUnsupportedOperation
 	}
-	return Write(ctx, c.bundle, req, records, c.hooks)
+	var result connectors.WriteResult
+	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		var err error
+		result, err = Write(admitted, c.bundle, req, records, c.hooks)
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
+	})
+	return result, err
+}
+
+// AuthenticationFailureVerified classifies only errors matched by this
+// connector's declared error map. A generic 401 without a matching declaration
+// is deliberately insufficient.
+func (c *Connector) AuthenticationFailureVerified(err error) bool {
+	if connectors.IsVerifiedAuthenticationFailure(err) {
+		return true
+	}
+	var engineErr *Error
+	return errors.As(err, &engineErr) && (engineErr.Class == "auth_failed" || declaredAuthenticationRuleMatches(c.bundle.HTTP.ErrorMap, engineErr.Err))
+}
+
+func executeWithAuthCohort(ctx context.Context, cfg connectors.RuntimeConfig, operation func(context.Context) error) error {
+	if cfg.AuthenticationAdmission == nil {
+		return operation(ctx)
+	}
+	return cfg.AuthenticationAdmission.Execute(ctx, operation)
+}
+
+func markDeclaredAuthenticationFailure(rules []ErrorRule, err error) error {
+	if err == nil {
+		return nil
+	}
+	var engineErr *Error
+	if errors.As(err, &engineErr) && (engineErr.Class == "auth_failed" || declaredAuthenticationRuleMatches(rules, engineErr.Err)) {
+		return connectors.MarkVerifiedAuthenticationFailure(err)
+	}
+	return err
+}
+
+func declaredAuthenticationRuleMatches(rules []ErrorRule, err error) bool {
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) {
+		return false
+	}
+	for _, rule := range rules {
+		if rule.Status != httpErr.Status || (rule.MatchBody != "" && !strings.Contains(httpErr.Body, rule.MatchBody)) {
+			continue
+		}
+		return rule.Status == http.StatusUnauthorized || rule.Class == "auth_failed"
+	}
+	return false
 }
 
 // ValidateWrite satisfies connectors.WriteValidator.

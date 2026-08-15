@@ -54,7 +54,8 @@ type AuthCohortHealth struct {
 // store; individual coordinator operations are safe for concurrent callers.
 type AuthCohortHealthStore interface {
 	Load(connectors.AuthCohortKey) (AuthCohortHealth, bool, error)
-	Store(connectors.AuthCohortKey, AuthCohortHealth) error
+	Initialize(connectors.AuthCohortKey, AuthCohortHealth) (AuthCohortHealth, error)
+	CompareAndSwap(connectors.AuthCohortKey, AuthCohortHealth, AuthCohortHealth) (bool, error)
 }
 
 // MemoryAuthCohortHealthStore is a race-safe store for one process. It exists
@@ -82,18 +83,39 @@ func (s *MemoryAuthCohortHealthStore) Load(cohort connectors.AuthCohortKey) (Aut
 	return health, ok, nil
 }
 
-// Store replaces one opaque cohort health record.
-func (s *MemoryAuthCohortHealthStore) Store(cohort connectors.AuthCohortKey, health AuthCohortHealth) error {
+// Initialize atomically creates one cohort, returning the extant value when a
+// concurrent coordinator won the race.
+func (s *MemoryAuthCohortHealthStore) Initialize(cohort connectors.AuthCohortKey, health AuthCohortHealth) (AuthCohortHealth, error) {
 	if s == nil {
-		return errAuthCohortHealthStoreUnavailable
+		return AuthCohortHealth{}, errAuthCohortHealthStoreUnavailable
 	}
 	s.mu.Lock()
 	if s.health == nil {
 		s.health = make(map[connectors.AuthCohortKey]AuthCohortHealth)
 	}
+	if existing, found := s.health[cohort]; found {
+		s.mu.Unlock()
+		return existing, nil
+	}
 	s.health[cohort] = health
 	s.mu.Unlock()
-	return nil
+	return health, nil
+}
+
+// CompareAndSwap applies an epoch transition only when the durable value still
+// matches the state on which the coordinator made its decision.
+func (s *MemoryAuthCohortHealthStore) CompareAndSwap(cohort connectors.AuthCohortKey, old, next AuthCohortHealth) (bool, error) {
+	if s == nil {
+		return false, errAuthCohortHealthStoreUnavailable
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	current, found := s.health[cohort]
+	if !found || current != old {
+		return false, nil
+	}
+	s.health[cohort] = next
+	return true, nil
 }
 
 // AuthCohortCoordinator owns active members for one process and persists only
@@ -104,6 +126,49 @@ type AuthCohortCoordinator struct {
 	store   AuthCohortHealthStore
 	nextID  uint64
 	members map[connectors.AuthCohortKey]map[uint64]*AuthCohortAdmission
+}
+
+// AuthCohortRuntime adapts the coordinator to the connector request boundary
+// carried in connectors.RuntimeConfig.
+type AuthCohortRuntime struct {
+	coordinator *AuthCohortCoordinator
+	cohort      connectors.AuthCohortKey
+	epoch       AuthCohortEpoch
+}
+
+// NewAuthCohortRuntime snapshots the current healthy epoch at runtime
+// resolution. The immutable epoch is the caller's ownership token: a runtime
+// resolved before repair cannot silently join the repaired generation later.
+func NewAuthCohortRuntime(ctx context.Context, coordinator *AuthCohortCoordinator, cohort connectors.AuthCohortKey) (*AuthCohortRuntime, error) {
+	if coordinator == nil {
+		return nil, errors.New("authentication cohort coordinator is unavailable")
+	}
+	epoch, err := coordinator.CurrentEpoch(ctx, cohort)
+	if err != nil {
+		return nil, err
+	}
+	return &AuthCohortRuntime{coordinator: coordinator, cohort: cohort, epoch: epoch}, nil
+}
+
+func (r *AuthCohortRuntime) Execute(ctx context.Context, operation func(context.Context) error) error {
+	if r == nil || r.coordinator == nil || operation == nil {
+		return errors.New("authentication cohort runtime is unavailable")
+	}
+	admission, err := r.coordinator.admit(ctx, r.cohort, r.epoch)
+	if err != nil {
+		return err
+	}
+	defer admission.Release()
+	if err := admission.Check(ctx); err != nil {
+		return err
+	}
+	err = operation(admission.Context())
+	if connectors.IsVerifiedAuthenticationFailure(err) {
+		if reportErr := r.coordinator.Report(admission, AuthenticationOutcomeVerifiedInvalid); reportErr != nil && !errors.Is(reportErr, ErrAuthCohortFenced) {
+			return reportErr
+		}
+	}
+	return err
 }
 
 // AuthCohortAdmission is a cancellable in-flight member of one cohort epoch.
@@ -133,6 +198,10 @@ func NewAuthCohortCoordinator(store AuthCohortHealthStore) *AuthCohortCoordinato
 // Admit joins an active cohort epoch after reading persisted health. Fenced or
 // unavailable health refuses before a caller can reach its send boundary.
 func (c *AuthCohortCoordinator) Admit(ctx context.Context, cohort connectors.AuthCohortKey) (*AuthCohortAdmission, error) {
+	return c.admit(ctx, cohort, 0)
+}
+
+func (c *AuthCohortCoordinator) admit(ctx context.Context, cohort connectors.AuthCohortKey, expected AuthCohortEpoch) (*AuthCohortAdmission, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
@@ -152,6 +221,10 @@ func (c *AuthCohortCoordinator) Admit(ctx context.Context, cohort connectors.Aut
 	if health.Fenced {
 		c.mu.Unlock()
 		return nil, ErrAuthCohortFenced
+	}
+	if expected != 0 && health.Epoch != expected {
+		c.mu.Unlock()
+		return nil, ErrAuthCohortEpochMismatch
 	}
 	if err := ctx.Err(); err != nil {
 		c.mu.Unlock()
@@ -177,6 +250,28 @@ func (c *AuthCohortCoordinator) Admit(ctx context.Context, cohort connectors.Aut
 	c.members[cohort][admission.id] = admission
 	c.mu.Unlock()
 	return admission, nil
+}
+
+// CurrentEpoch publishes the durable healthy ownership generation without
+// registering an in-flight member. Fenced health refuses before credentials
+// can reach an ordinary connector operation.
+func (c *AuthCohortCoordinator) CurrentEpoch(ctx context.Context, cohort connectors.AuthCohortKey) (AuthCohortEpoch, error) {
+	if err := ctx.Err(); err != nil {
+		return 0, err
+	}
+	if c == nil || c.store == nil || cohort == "" {
+		return 0, errors.New("authentication cohort coordinator is unavailable")
+	}
+	c.mu.Lock()
+	health, err := c.healthLocked(cohort)
+	c.mu.Unlock()
+	if err != nil {
+		return 0, err
+	}
+	if health.Fenced {
+		return 0, ErrAuthCohortFenced
+	}
+	return health.Epoch, nil
 }
 
 // Context is cancelled when the caller cancels, a verified invalid result
@@ -245,28 +340,35 @@ func (c *AuthCohortCoordinator) Report(admission *AuthCohortAdmission, outcome A
 		c.mu.Unlock()
 		return ErrAuthCohortAdmissionClosed
 	}
-	health, err := c.healthLocked(admission.cohort)
-	if err != nil {
-		c.mu.Unlock()
-		return err
-	}
-	if health.Epoch != admission.epoch {
-		c.mu.Unlock()
-		return ErrAuthCohortEpochMismatch
-	}
-	if health.Fenced {
-		c.mu.Unlock()
-		return ErrAuthCohortFenced
-	}
 	if outcome != AuthenticationOutcomeVerifiedInvalid {
 		c.mu.Unlock()
 		return nil
 	}
-	health.Fenced = true
-	health.LastFencedEpoch = health.Epoch
-	if err := c.store.Store(admission.cohort, health); err != nil {
-		c.mu.Unlock()
-		return errAuthCohortHealthStoreUnavailable
+	for {
+		health, err := c.healthLocked(admission.cohort)
+		if err != nil {
+			c.mu.Unlock()
+			return err
+		}
+		if health.Epoch != admission.epoch {
+			c.mu.Unlock()
+			return ErrAuthCohortEpochMismatch
+		}
+		if health.Fenced {
+			c.mu.Unlock()
+			return ErrAuthCohortFenced
+		}
+		next := health
+		next.Fenced = true
+		next.LastFencedEpoch = health.Epoch
+		swapped, err := c.store.CompareAndSwap(admission.cohort, health, next)
+		if err != nil {
+			c.mu.Unlock()
+			return errAuthCohortHealthStoreUnavailable
+		}
+		if swapped {
+			break
+		}
 	}
 	cancellations := c.cancellationsLocked(admission.cohort)
 	c.mu.Unlock()
@@ -291,27 +393,79 @@ func (c *AuthCohortCoordinator) Repair(cohort connectors.AuthCohortKey, outcome 
 	}
 
 	c.mu.Lock()
-	health, err := c.healthLocked(cohort)
-	if err != nil {
-		c.mu.Unlock()
-		return 0, err
-	}
-	if health.Epoch == ^AuthCohortEpoch(0) {
-		c.mu.Unlock()
-		return 0, errors.New("authentication cohort epochs are exhausted")
-	}
-	health.Epoch++
-	health.Fenced = false
-	if err := c.store.Store(cohort, health); err != nil {
-		c.mu.Unlock()
-		return 0, errAuthCohortHealthStoreUnavailable
+	var repaired AuthCohortHealth
+	for {
+		health, err := c.healthLocked(cohort)
+		if err != nil {
+			c.mu.Unlock()
+			return 0, err
+		}
+		if health.Epoch == ^AuthCohortEpoch(0) {
+			c.mu.Unlock()
+			return 0, errors.New("authentication cohort epochs are exhausted")
+		}
+		repaired = health
+		repaired.Epoch++
+		repaired.Fenced = false
+		swapped, err := c.store.CompareAndSwap(cohort, health, repaired)
+		if err != nil {
+			c.mu.Unlock()
+			return 0, errAuthCohortHealthStoreUnavailable
+		}
+		if swapped {
+			break
+		}
 	}
 	cancellations := c.cancellationsLocked(cohort)
 	c.mu.Unlock()
 	for _, cancel := range cancellations {
 		cancel()
 	}
-	return health.Epoch, nil
+	return repaired.Epoch, nil
+}
+
+// Fence persists a verified invalid result produced by a dedicated credential
+// test path, which deliberately bypasses ordinary admission so it can also
+// test and repair an already fenced cohort.
+func (c *AuthCohortCoordinator) Fence(cohort connectors.AuthCohortKey, outcome AuthenticationOutcome) error {
+	if c == nil || c.store == nil {
+		return errors.New("authentication cohort coordinator is unavailable")
+	}
+	if cohort == "" {
+		return errors.New("authentication cohort is unavailable")
+	}
+	if outcome != AuthenticationOutcomeVerifiedInvalid {
+		return errors.New("authentication cohort fence is not verified")
+	}
+	c.mu.Lock()
+	for {
+		health, err := c.healthLocked(cohort)
+		if err != nil {
+			c.mu.Unlock()
+			return err
+		}
+		if health.Fenced {
+			c.mu.Unlock()
+			return nil
+		}
+		next := health
+		next.Fenced = true
+		next.LastFencedEpoch = health.Epoch
+		swapped, err := c.store.CompareAndSwap(cohort, health, next)
+		if err != nil {
+			c.mu.Unlock()
+			return errAuthCohortHealthStoreUnavailable
+		}
+		if swapped {
+			break
+		}
+	}
+	cancellations := c.cancellationsLocked(cohort)
+	c.mu.Unlock()
+	for _, cancel := range cancellations {
+		cancel()
+	}
+	return nil
 }
 
 // Release removes a member from future cancellation fan-out. It is idempotent
@@ -338,14 +492,13 @@ func (c *AuthCohortCoordinator) healthLocked(cohort connectors.AuthCohortKey) (A
 		return AuthCohortHealth{}, errAuthCohortHealthStoreUnavailable
 	}
 	if !found {
-		health = AuthCohortHealth{Epoch: 1}
-		if err := c.store.Store(cohort, health); err != nil {
+		health, err = c.store.Initialize(cohort, AuthCohortHealth{Epoch: 1})
+		if err != nil {
 			return AuthCohortHealth{}, errAuthCohortHealthStoreUnavailable
 		}
-		return health, nil
 	}
-	if health.Epoch == 0 || health.LastFencedEpoch > health.Epoch || (health.Fenced && health.LastFencedEpoch != health.Epoch) {
-		return AuthCohortHealth{}, errors.New("authentication cohort health state is invalid")
+	if err := validateAuthCohortHealth(health); err != nil {
+		return AuthCohortHealth{}, err
 	}
 	return health, nil
 }

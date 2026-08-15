@@ -153,6 +153,7 @@ type rateLimitResolver struct {
 	policies             []connsdk.RateLimitPolicy
 	registry             *coordination.RateLimitRegistry
 	sharedRegistry       *coordination.SharedRateLimitRegistry
+	parking              connectors.RateParkingAdmission
 }
 
 func newRateLimitResolver(b Bundle, cfg connectors.RuntimeConfig) *rateLimitResolver {
@@ -171,6 +172,7 @@ func newRateLimitResolverWithContext(ctx context.Context, b Bundle, cfg connecto
 		policies:             b.RateLimits.Policies,
 		registry:             currentRateLimitRegistry(),
 		sharedRegistry:       currentSharedRateLimitRegistry(),
+		parking:              cfg.RateParkingAdmission,
 	}
 }
 
@@ -270,6 +272,19 @@ func (r *rateLimitResolver) resolvePolicies(ctx context.Context, method, path st
 		}
 		matched = append(matched, resolved)
 	}
+	if len(matched) > 0 {
+		scopes := make([]connectors.RateLimitScopeKey, 0, len(matched))
+		for _, match := range matched {
+			scopes = append(scopes, match.scope)
+		}
+		group, err := connectors.GroupRateLimitScopeKeys(scopes...)
+		if err != nil {
+			return nil, "", err
+		}
+		for index := range matched {
+			matched[index].parkingScope = group
+		}
+	}
 	costHeader := ""
 	for _, match := range matched {
 		if match.costHeader == "" {
@@ -284,10 +299,13 @@ func (r *rateLimitResolver) resolvePolicies(ctx context.Context, method, path st
 }
 
 type resolvedRateLimitPolicy struct {
-	admission  connsdk.RateLimitAdmission
-	observer   connsdk.RateLimitObserver
-	costHeader string
-	budgets    []connsdk.RateLimitBudget
+	admission    connsdk.RateLimitAdmission
+	observer     connsdk.RateLimitObserver
+	costHeader   string
+	budgets      []connsdk.RateLimitBudget
+	scope        connectors.RateLimitScopeKey
+	parkingScope connectors.RateLimitScopeKey
+	parking      connectors.RateParkingAdmission
 }
 
 func (r *rateLimitResolver) resolve(ctx context.Context, policy connsdk.RateLimitPolicy) (resolvedRateLimitPolicy, error) {
@@ -317,13 +335,13 @@ func (r *rateLimitResolver) resolve(ctx context.Context, policy connsdk.RateLimi
 			return resolvedRateLimitPolicy{}, err
 		}
 		limiter := r.sharedRegistry.Limiter(key, policy.Budgets)
-		return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets}, nil
+		return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets, scope: scope, parking: r.parking}, nil
 	}
 	if r.registry == nil {
 		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q local registry is unavailable", policy.ID)
 	}
 	limiter := r.registry.Limiter(key, policy.Budgets)
-	return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets}, nil
+	return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets, scope: scope, parking: r.parking}, nil
 }
 
 type endpointRateLimitResolver struct {
@@ -558,7 +576,16 @@ func rateLimitSelectorValueMatches(values []string, value string) bool {
 type resolvedRateLimitAdmission []resolvedRateLimitPolicy
 
 func (a resolvedRateLimitAdmission) Admit(ctx context.Context, request connsdk.RateLimitRequest) error {
+	admittedParking := make(map[connectors.RateLimitScopeKey]struct{}, len(a))
 	for _, policy := range a {
+		if policy.parking != nil {
+			if _, done := admittedParking[policy.parkingScope]; !done {
+				if err := policy.parking.Admit(policy.parkingScope); err != nil {
+					return err
+				}
+				admittedParking[policy.parkingScope] = struct{}{}
+			}
+		}
 		if err := policy.admission.Admit(ctx, request); err != nil {
 			return err
 		}

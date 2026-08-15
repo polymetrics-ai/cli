@@ -80,11 +80,19 @@ func TestDurableCoordinationStoresSurviveKilledWriterProcess(t *testing.T) {
 		if run.RunID != "durable-run" {
 			t.Fatalf("resumed run = %q, want durable-run", run.RunID)
 		}
-	case <-time.After(2 * time.Second):
+	case <-time.After(3 * time.Second):
 		t.Fatal("parked run was not resumed by the restarted process")
 	}
-	if runs, err := parkingStore.List(); err != nil || len(runs) != 0 {
-		t.Fatalf("parking store after restart resume = %#v, %v; want empty", runs, err)
+	deadline := time.Now().Add(2 * time.Second)
+	for {
+		runs, listErr := parkingStore.List()
+		if listErr == nil && len(runs) == 0 {
+			break
+		}
+		if time.Now().After(deadline) {
+			t.Fatalf("parking store after restart resume = %#v, %v; want empty", runs, listErr)
+		}
+		time.Sleep(time.Millisecond)
 	}
 }
 
@@ -111,7 +119,7 @@ func runDurableCoordinationWriter(t *testing.T) {
 		t.Fatalf("open parking store: %v", err)
 	}
 	parking := NewRateParkingCoordinator(RateParkingCoordinatorOptions{
-		Store: parkingStore,
+		Store:  parkingStore,
 		Resume: func(context.Context, ParkedRateLimitRun) error { return nil },
 	})
 	if err := parking.Start(context.Background()); err != nil {
@@ -121,7 +129,7 @@ func runDurableCoordinationWriter(t *testing.T) {
 		RunID:      "durable-run",
 		Scope:      connectors.RateLimitScopeKey("durable-scope"),
 		Checkpoint: testParkedCheckpoint(time.Now().UTC().Add(-time.Second)),
-		ResetAt:    time.Now().UTC().Add(-time.Millisecond),
+		ResetAt:    time.Now().UTC().Add(250 * time.Millisecond),
 		Reason:     connsdk.RateLimitObservationSourceRetryAfter,
 	}); err != nil {
 		t.Fatalf("persist parked run: %v", err)

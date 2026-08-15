@@ -2,9 +2,12 @@ package coordination
 
 import (
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"reflect"
+	"sort"
 	"sync"
 	"time"
 
@@ -65,7 +68,12 @@ type RateParkingRequest struct {
 // one coordinator are safe for concurrent callers.
 type RateParkingStore interface {
 	List() ([]ParkedRateLimitRun, error)
-	Store(ParkedRateLimitRun) error
+	Create(ParkedRateLimitRun) (ParkedRateLimitRun, bool, error)
+	HasScope(connectors.RateLimitScopeKey) (bool, error)
+	Claim(runID, owner string, now, until time.Time) (ParkedRateLimitRun, bool, time.Time, error)
+	RenewClaim(runID, owner string, until time.Time) (bool, error)
+	ReleaseClaim(runID, owner string) error
+	Complete(runID, owner string) error
 	Delete(runID string) error
 }
 
@@ -74,12 +82,12 @@ type RateParkingStore interface {
 // implement RateParkingStore without changing coordinator behavior.
 type MemoryRateParkingStore struct {
 	mu   sync.RWMutex
-	runs map[string]ParkedRateLimitRun
+	runs map[string]rateParkingFileRecord
 }
 
 // NewMemoryRateParkingStore returns an empty usable parking store.
 func NewMemoryRateParkingStore() *MemoryRateParkingStore {
-	return &MemoryRateParkingStore{runs: make(map[string]ParkedRateLimitRun)}
+	return &MemoryRateParkingStore{runs: make(map[string]rateParkingFileRecord)}
 }
 
 // List returns defensive copies of all persisted parked runs.
@@ -89,24 +97,111 @@ func (s *MemoryRateParkingStore) List() ([]ParkedRateLimitRun, error) {
 	}
 	s.mu.RLock()
 	runs := make([]ParkedRateLimitRun, 0, len(s.runs))
-	for _, run := range s.runs {
-		runs = append(runs, run.Clone())
+	for _, record := range s.runs {
+		runs = append(runs, record.Run.Clone())
 	}
 	s.mu.RUnlock()
+	sort.Slice(runs, func(i, j int) bool { return runs[i].RunID < runs[j].RunID })
 	return runs, nil
 }
 
-// Store replaces one parked run with a defensive copy.
-func (s *MemoryRateParkingStore) Store(run ParkedRateLimitRun) error {
+func (s *MemoryRateParkingStore) Create(run ParkedRateLimitRun) (ParkedRateLimitRun, bool, error) {
+	if s == nil {
+		return ParkedRateLimitRun{}, false, errRateParkingUnavailable
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.runs == nil {
+		s.runs = make(map[string]rateParkingFileRecord)
+	}
+	if existing, found := s.runs[run.RunID]; found {
+		if !parkedRateLimitRunEqual(existing.Run, run) {
+			return ParkedRateLimitRun{}, false, ErrRateParkingConflict
+		}
+		return existing.Run.Clone(), false, nil
+	}
+	s.runs[run.RunID] = rateParkingFileRecord{Run: run.Clone()}
+	return run.Clone(), true, nil
+}
+
+func (s *MemoryRateParkingStore) HasScope(scope connectors.RateLimitScopeKey) (bool, error) {
+	if s == nil {
+		return false, errRateParkingUnavailable
+	}
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	for _, record := range s.runs {
+		if record.Run.Scope == scope {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func (s *MemoryRateParkingStore) Claim(runID, owner string, now, until time.Time) (ParkedRateLimitRun, bool, time.Time, error) {
+	if s == nil {
+		return ParkedRateLimitRun{}, false, time.Time{}, errRateParkingUnavailable
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	record, found := s.runs[runID]
+	if !found {
+		return ParkedRateLimitRun{}, false, time.Time{}, ErrRateParkingClaimLost
+	}
+	if record.ClaimOwner != "" && record.ClaimOwner != owner && record.ClaimUntil.After(now) {
+		return record.Run.Clone(), false, record.ClaimUntil, nil
+	}
+	record.ClaimOwner = owner
+	record.ClaimUntil = until.UTC()
+	s.runs[runID] = record
+	return record.Run.Clone(), true, time.Time{}, nil
+}
+
+func (s *MemoryRateParkingStore) RenewClaim(runID, owner string, until time.Time) (bool, error) {
+	if s == nil {
+		return false, errRateParkingUnavailable
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	record, found := s.runs[runID]
+	if !found || record.ClaimOwner != owner {
+		return false, nil
+	}
+	record.ClaimUntil = until.UTC()
+	s.runs[runID] = record
+	return true, nil
+}
+
+func (s *MemoryRateParkingStore) ReleaseClaim(runID, owner string) error {
 	if s == nil {
 		return errRateParkingUnavailable
 	}
 	s.mu.Lock()
-	if s.runs == nil {
-		s.runs = make(map[string]ParkedRateLimitRun)
+	defer s.mu.Unlock()
+	record, found := s.runs[runID]
+	if !found {
+		return nil
 	}
-	s.runs[run.RunID] = run.Clone()
-	s.mu.Unlock()
+	if record.ClaimOwner != owner {
+		return ErrRateParkingClaimLost
+	}
+	record.ClaimOwner = ""
+	record.ClaimUntil = time.Time{}
+	s.runs[runID] = record
+	return nil
+}
+
+func (s *MemoryRateParkingStore) Complete(runID, owner string) error {
+	if s == nil {
+		return errRateParkingUnavailable
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	record, found := s.runs[runID]
+	if !found || record.ClaimOwner != owner {
+		return ErrRateParkingClaimLost
+	}
+	delete(s.runs, runID)
 	return nil
 }
 
@@ -172,6 +267,7 @@ type RateParkingCoordinatorOptions struct {
 	Now       func() time.Time
 	Resume    RateParkingResumeFunc
 	Events    RateParkingEventSink
+	ClaimTTL  time.Duration
 }
 
 // RateParkingCoordinator blocks same-scope admission while a persisted run is
@@ -184,6 +280,8 @@ type RateParkingCoordinator struct {
 	now       func() time.Time
 	resume    RateParkingResumeFunc
 	events    RateParkingEventSink
+	owner     string
+	claimTTL  time.Duration
 
 	ctx     context.Context
 	cancel  context.CancelFunc
@@ -205,12 +303,17 @@ func NewRateParkingCoordinator(options RateParkingCoordinatorOptions) *RateParki
 	if options.Now == nil {
 		options.Now = time.Now
 	}
+	if options.ClaimTTL <= 0 {
+		options.ClaimTTL = 30 * time.Second
+	}
 	return &RateParkingCoordinator{
 		store:     options.Store,
 		scheduler: options.Scheduler,
 		now:       options.Now,
 		resume:    options.Resume,
 		events:    options.Events,
+		owner:     newRateParkingOwner(),
+		claimTTL:  options.ClaimTTL,
 		runs:      make(map[string]ParkedRateLimitRun),
 		timers:    make(map[string]RateParkingTimer),
 	}
@@ -249,10 +352,21 @@ func (c *RateParkingCoordinator) Start(ctx context.Context) error {
 		}
 		c.runs[run.RunID] = run.Clone()
 	}
-	for runID := range c.runs {
+	due := make([]string, 0, len(c.runs))
+	for runID, run := range c.runs {
+		if !c.now().Before(run.ResetAt) {
+			due = append(due, runID)
+			continue
+		}
 		c.scheduleLocked(runID)
 	}
 	c.mu.Unlock()
+	// Due work is claimed synchronously during production composition. A
+	// short-lived CLI command therefore cannot exit before crash recovery has
+	// had an opportunity to observe the durable record.
+	for _, runID := range due {
+		c.resumeDue(runID)
+	}
 	return nil
 }
 
@@ -313,11 +427,12 @@ func (c *RateParkingCoordinator) Park(ctx context.Context, request RateParkingRe
 		c.mu.Unlock()
 		return ParkedRateLimitRun{}, errors.New("rate-limited run is already parked with different evidence")
 	}
-	if err := c.store.Store(run); err != nil {
+	persisted, _, err := c.store.Create(run)
+	if err != nil {
 		c.mu.Unlock()
-		return ParkedRateLimitRun{}, errRateParkingUnavailable
+		return ParkedRateLimitRun{}, err
 	}
-	c.runs[run.RunID] = run.Clone()
+	c.runs[run.RunID] = persisted.Clone()
 	c.scheduleLocked(run.RunID)
 	c.mu.Unlock()
 	c.recordEvent(RateParkingEvent{Type: RateLimitEventParked, ResetAt: run.ResetAt, Reason: string(run.Reason)})
@@ -338,10 +453,12 @@ func (c *RateParkingCoordinator) Admit(scope connectors.RateLimitScopeKey) error
 	if !c.started {
 		return errRateParkingNotStarted
 	}
-	for _, run := range c.runs {
-		if run.Scope == scope {
-			return ErrRateLimitParked
-		}
+	parked, err := c.store.HasScope(scope)
+	if err != nil {
+		return errRateParkingUnavailable
+	}
+	if parked {
+		return ErrRateLimitParked
 	}
 	return nil
 }
@@ -404,7 +521,32 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 	resumeCtx := c.ctx
 	c.mu.Unlock()
 
-	if err := c.resume(resumeCtx, run.Clone()); err != nil {
+	claimedRun, claimed, retryAt, err := c.store.Claim(runID, c.owner, c.now(), c.now().Add(c.claimTTL))
+	if err != nil {
+		return
+	}
+	if !claimed {
+		c.mu.Lock()
+		if c.started {
+			c.timers[runID] = c.scheduler.Schedule(retryAt, func() { c.resumeDue(runID) })
+		}
+		c.mu.Unlock()
+		return
+	}
+	run = claimedRun
+	operationCtx, cancelOperation := context.WithCancel(resumeCtx)
+	renewDone := make(chan struct{})
+	renewResult := make(chan bool, 1)
+	go c.renewClaim(operationCtx, runID, renewDone, renewResult, cancelOperation)
+	resumeErr := c.resume(operationCtx, run.Clone())
+	close(renewDone)
+	claimLost := <-renewResult
+	cancelOperation()
+	if claimLost {
+		return
+	}
+	if resumeErr != nil {
+		_ = c.store.ReleaseClaim(runID, c.owner)
 		return
 	}
 
@@ -414,13 +556,47 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 		c.mu.Unlock()
 		return
 	}
-	if err := c.store.Delete(runID); err != nil {
+	if err := c.store.Complete(runID, c.owner); err != nil {
 		c.mu.Unlock()
 		return
 	}
 	delete(c.runs, runID)
 	c.mu.Unlock()
 	c.recordEvent(RateParkingEvent{Type: RateLimitEventResumed, ResetAt: run.ResetAt, Reason: string(run.Reason)})
+}
+
+func (c *RateParkingCoordinator) renewClaim(ctx context.Context, runID string, done <-chan struct{}, result chan<- bool, cancel context.CancelFunc) {
+	interval := c.claimTTL / 3
+	if interval <= 0 {
+		interval = time.Millisecond
+	}
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-done:
+			result <- false
+			return
+		case <-ctx.Done():
+			result <- false
+			return
+		case <-ticker.C:
+			renewed, err := c.store.RenewClaim(runID, c.owner, c.now().Add(c.claimTTL))
+			if err != nil || !renewed {
+				cancel()
+				result <- true
+				return
+			}
+		}
+	}
+}
+
+func newRateParkingOwner() string {
+	var value [16]byte
+	if _, err := rand.Read(value[:]); err == nil {
+		return hex.EncodeToString(value[:])
+	}
+	return fmt.Sprintf("fallback-%d", time.Now().UnixNano())
 }
 
 func (c *RateParkingCoordinator) recordEvent(event RateParkingEvent) {

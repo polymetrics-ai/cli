@@ -634,7 +634,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 	}
 	switch args[0] {
 	case "check":
-		connector, cfg, err := directConnector(a, args[1:])
+		connector, cfg, err := directConnector(ctx, a, args[1:])
 		if err != nil {
 			return err
 		}
@@ -647,7 +647,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		_, _ = fmt.Fprintf(stdout, "Connector %s check ok\n", connector.Name())
 		return nil
 	case "catalog":
-		connector, cfg, err := directConnector(a, args[1:])
+		connector, cfg, err := directConnector(ctx, a, args[1:])
 		if err != nil {
 			return err
 		}
@@ -664,7 +664,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		return nil
 	case "read":
 		flags := parseFlags(args[1:])
-		connector, cfg, err := directConnector(a, args[1:])
+		connector, cfg, err := directConnector(ctx, a, args[1:])
 		if err != nil {
 			return err
 		}
@@ -1822,7 +1822,7 @@ func sameStringSlice(a, b []string) bool {
 	return true
 }
 
-func directConnector(a *app.App, args []string) (connectors.Connector, connectors.RuntimeConfig, error) {
+func directConnector(ctx context.Context, a *app.App, args []string) (connectors.Connector, connectors.RuntimeConfig, error) {
 	flags := parseFlags(args)
 	name := flags.first("connector")
 	if name == "" {
@@ -1841,6 +1841,9 @@ func directConnector(a *app.App, args []string) (connectors.Connector, connector
 	config, err := keyValues(flags.values["config"])
 	if err != nil {
 		return nil, connectors.RuntimeConfig{}, err
+	}
+	if credential := flags.first("credential"); credential != "" {
+		return a.ResolveConnectorCredential(ctx, name, credential, config)
 	}
 	return connector, connectors.RuntimeConfig{
 		ProjectDir: a.ProjectDir(),

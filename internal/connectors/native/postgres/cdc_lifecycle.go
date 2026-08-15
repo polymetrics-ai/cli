@@ -418,6 +418,16 @@ func ensureReplicationSlot(ctx context.Context, replication *pgconn.PgConn, conn
 // for a stream. It is provided for lifecycle inspection and never accepts a
 // caller-selected slot name.
 func (c Connector) CDCSlotName(ctx context.Context, cfg connectors.RuntimeConfig, stream string) (string, error) {
+	var result string
+	err := executeWithAuthenticationAdmission(ctx, cfg, func(admitted context.Context) error {
+		var err error
+		result, err = c.cdcSlotName(admitted, cfg, stream)
+		return err
+	})
+	return result, err
+}
+
+func (c Connector) cdcSlotName(ctx context.Context, cfg connectors.RuntimeConfig, stream string) (string, error) {
 	if err := ctx.Err(); err != nil {
 		return "", err
 	}
@@ -445,6 +455,12 @@ func (c Connector) CDCSlotName(ctx context.Context, cfg connectors.RuntimeConfig
 // is an explicit lifecycle operation so a persistent slot survives a normal
 // process restart yet cannot be accidentally left behind after a teardown.
 func (c Connector) TeardownCDC(ctx context.Context, cfg connectors.RuntimeConfig, stream string) error {
+	return executeWithAuthenticationAdmission(ctx, cfg, func(admitted context.Context) error {
+		return c.teardownCDC(admitted, cfg, stream)
+	})
+}
+
+func (c Connector) teardownCDC(ctx context.Context, cfg connectors.RuntimeConfig, stream string) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
