@@ -15,8 +15,9 @@
 Make the production PostgreSQL source construction path select #3858's shared resumable
 polling source executor. Delete its parallel private paging loop rather than extending it.
 The adapter may map PostgreSQL's typed catalog rows into the shared source seam, but must
-not alter shared executor semantics, bundle schema/generation, arbitrary SQL support,
-CDC, or target writes. A shared-contract gap is a required foundation split.
+not alter bundle schema/generation, arbitrary SQL support, CDC, or target writes. The one
+identified shared-contract gap is a zero-row durable observation: its narrow foundation split
+must be red-tested and preserve the last committed tuple rather than inventing one.
 
 ### TDD slices
 

@@ -36,6 +36,15 @@ type GuideProvider interface {
 	Guide() ConnectorGuide
 }
 
+// DynamicPollingWatermarkProvider marks a native connector whose effective
+// polling declaration is bound from a live catalog. Its static bundle may
+// remain planned when it cannot truthfully name a fixed cursor or tie-breaker;
+// inspection must not then claim that no polling behavior exists at all.
+// Runtime execution still goes through PollingPreflight for every stream.
+type DynamicPollingWatermarkProvider interface {
+	HasDynamicPollingWatermark() bool
+}
+
 func GuideOf(c Connector) ConnectorGuide {
 	manifest := ManifestOf(c)
 	var guide ConnectorGuide
@@ -126,7 +135,8 @@ func guideWithPollingWatermark(guide ConnectorGuide, connector Connector) Connec
 	if declaration.Reason != "" {
 		lines = append(lines, "Reason: "+declaration.Reason)
 	}
-	if declaration.Status != PollingWatermarkStatusImplemented {
+	dynamic, _ := connector.(DynamicPollingWatermarkProvider)
+	if declaration.Status != PollingWatermarkStatusImplemented && (dynamic == nil || !dynamic.HasDynamicPollingWatermark()) {
 		lines = append(lines, "No polling source ordering, checkpoint, snapshot, deletion, or rebootstrap behavior is implemented for this connector while the declaration is non-implemented.")
 	}
 	guide.Sections = append(guide.Sections, GuideSection{Title: "Polling Watermark", Lines: lines})

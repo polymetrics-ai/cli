@@ -41,7 +41,7 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	if err != nil {
 		t.Fatalf("definition-owned PostgreSQL-to-GitHub preflight = %v", err)
 	}
-	if got, want := resolved.Source.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_bounded_snapshot"}); got != want {
+	if got, want := resolved.Source.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_polling_watermark"}); got != want {
 		t.Fatalf("registered source reference = %+v, want %+v", got, want)
 	}
 	if got, want := resolved.Destination.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyDeclarativeAPI, ID: "issue_label_destination"}); got != want {

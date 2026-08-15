@@ -22,7 +22,6 @@ import (
 )
 
 const (
-	postgresSnapshotTransportID      = "postgres_bounded_snapshot"
 	postgresSnapshotTransportStream  = "snapshot"
 	postgresSnapshotCheckpointKind   = "postgres_repeatable_read_snapshot"
 	postgresSnapshotMechanism        = "postgres_bounded_full_snapshot"
@@ -30,14 +29,7 @@ const (
 	postgresSnapshotDedupeKind       = "postgres_snapshot_page"
 	postgresSnapshotDedupeWindowKind = "postgres_repeatable_read_window"
 	postgresSnapshotSourceEngine     = "postgres"
-	postgresSnapshotConformanceSuite = "postgres_snapshot"
-	postgresSnapshotConformanceRunID = "bounded_full_and_bootstrap_v1"
 )
-
-var postgresSnapshotTransportReference = connectors.TransportExecutorReference{
-	Family: connectors.TransportExecutorFamilyNativeDatabase,
-	ID:     postgresSnapshotTransportID,
-}
 
 // SnapshotTransportSource is the PostgreSQL-specific source side of the
 // closed transport contract. It has no generic SQL input: both relation and
@@ -52,149 +44,33 @@ func NewSnapshotTransportSource(connector Connector) *SnapshotTransportSource {
 	return &SnapshotTransportSource{connector: connector}
 }
 
-// SnapshotTransportDefinitionFactory supplies the PostgreSQL-local adapter for
-// the exact executor declared by defs/postgres/sync_transport.json. The
-// conformance reference is an external composition allow-list; constructing a
-// descriptor does not certify itself or register the adapter.
-func SnapshotTransportDefinitionFactory() synctransport.DefinitionFactory {
-	return synctransport.DefinitionFactory{
-		Reference: postgresSnapshotTransportReference,
-		SourceEvidence: connectors.ConformanceEvidenceReference{
-			Suite: postgresSnapshotConformanceSuite,
-			RunID: postgresSnapshotConformanceRunID,
-		},
-		BuildSource: func(connector connectors.Connector) (synctransport.SourceExecutor, error) {
-			switch typed := connector.(type) {
-			case Connector:
-				return NewSnapshotTransportSource(typed), nil
-			case *Connector:
-				if typed == nil {
-					return nil, errors.New("postgres snapshot transport connector is required")
-				}
-				return NewSnapshotTransportSource(*typed), nil
-			default:
-				return nil, errors.New("postgres snapshot transport requires the native postgres connector")
-			}
-		},
-	}
-}
-
 // SyncTransportDefinitionFactories exposes the PostgreSQL-local adapter to
 // generic production composition. The bundle still decides whether the source
 // role is declared and therefore whether this factory is used.
 func (Connector) SyncTransportDefinitionFactories() []synctransport.DefinitionFactory {
-	return []synctransport.DefinitionFactory{SnapshotTransportDefinitionFactory(), ManagedTargetTransportDefinitionFactory()}
+	return []synctransport.DefinitionFactory{PollingTransportDefinitionFactory(), ManagedTargetTransportDefinitionFactory()}
 }
 
-// RegisterSnapshotTransportSource registers the one executor selected by the
-// PostgreSQL Definition. Keeping the adapter in this native package prevents
-// App composition from assembling a connector-specific transport pair.
+// RegisterSnapshotTransportSource is a compatibility shim for the old test
+// helper name. It intentionally registers the shared polling adapter; the
+// former bounded-snapshot page loop is no longer reachable from a registry.
 func RegisterSnapshotTransportSource(registry *synctransport.Registry, connector Connector) error {
-	if registry == nil {
-		return errors.New("postgres snapshot transport registry is required")
-	}
-	descriptor, ok := connectors.SourceTransportDescriptorOf(connector)
-	if !ok || descriptor.Executor != postgresSnapshotTransportReference {
-		return errors.New("postgres snapshot transport definition is unavailable")
-	}
-	return registry.RegisterSource(NewSnapshotTransportSource(connector))
+	return RegisterPollingTransportSource(registry, connector)
 }
 
 func (*SnapshotTransportSource) TransportExecutorReference() connectors.TransportExecutorReference {
-	return postgresSnapshotTransportReference
+	return postgresPollingTransportReference
 }
 
-// ReadTransport executes one exact, bounded full snapshot in a read-only
-// repeatable-read transaction. Catalog discovery and record queries share that
-// transaction, so the emitted catalog fingerprint, stable key order, rows, and
-// PostgreSQL snapshot token describe the same source observation.
+// ReadTransport is retained only for package compatibility. The closed source
+// definition and production App factory select PollingTransportSource; this
+// shim keeps any legacy in-package caller on the same shared executor rather
+// than reopening the private snapshot paging loop.
 func (s *SnapshotTransportSource) ReadTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) (err error) {
-	return executeWithAuthenticationAdmission(ctx, request.Runtime, func(admitted context.Context) error {
-		return s.readTransport(admitted, request, emit)
-	})
-}
-
-func (s *SnapshotTransportSource) readTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) (err error) {
-	if ctx == nil {
-		return errors.New("postgres snapshot transport context is required")
+	if s == nil {
+		return errors.New("postgres snapshot transport source is unavailable")
 	}
-	if emit == nil {
-		return errors.New("postgres snapshot transport emit function is required")
-	}
-	if err := ctx.Err(); err != nil {
-		return err
-	}
-	if request.Mode == synccontract.ModeIncrementalUpsert && strings.EqualFold(strings.TrimSpace(request.Runtime.Config["transport_bootstrap"]), "true") {
-		return s.readBootstrapTransport(ctx, request, emit)
-	}
-
-	conn, relationRef, resources, pageSize, err := s.validateReadRequest(request)
-	if err != nil {
-		return err
-	}
-	operationCtx, cancel, err := resources.operationContext(ctx)
-	if err != nil {
-		return err
-	}
-	defer cancel()
-
-	pool, err := conn.openTypedCatalogPool(operationCtx, resources)
-	if err != nil {
-		return fmt.Errorf("postgres snapshot transport: open pool: %w", err)
-	}
-	defer pool.Close()
-
-	tx, err := pool.BeginTx(operationCtx, typedCatalogTransactionOptions())
-	if err != nil {
-		return fmt.Errorf("postgres snapshot transport: begin snapshot: %w", err)
-	}
-	defer func() {
-		rollbackErr := rollbackTypedCatalogSnapshot(operationCtx, tx, resources)
-		if rollbackErr == nil {
-			return
-		}
-		if err == nil {
-			err = rollbackErr
-			return
-		}
-		err = errors.Join(err, rollbackErr)
-	}()
-
-	var snapshotToken string
-	if err := tx.QueryRow(operationCtx, "SELECT txid_current_snapshot()").Scan(&snapshotToken); err != nil {
-		return fmt.Errorf("postgres snapshot transport: observe snapshot: %w", err)
-	}
-	if strings.TrimSpace(snapshotToken) == "" {
-		return errors.New("postgres snapshot transport: PostgreSQL returned an empty snapshot token")
-	}
-
-	catalog, err := discoverTypedCatalogSnapshot(operationCtx, tx, conn.database, conn.schema, s.connector.databaseDefinition)
-	if err != nil {
-		return fmt.Errorf("postgres snapshot transport: discover typed catalog: %w", err)
-	}
-	plan, err := newPostgresSnapshotReadPlan(catalog, relationRef, pageSize)
-	if err != nil {
-		return err
-	}
-
-	var after []any
-	for page := 0; ; page++ {
-		records, nextAfter, err := plan.readPage(operationCtx, tx, after)
-		if err != nil {
-			return err
-		}
-		candidate, err := postgresSnapshotCheckpoint(request.Resume, snapshotToken, plan.fingerprint, page)
-		if err != nil {
-			return err
-		}
-		if err := emit(synctransport.SourcePage{Records: records, Tombstones: []synccontract.Tombstone{}, CandidateCheckpoint: candidate}); err != nil {
-			return err
-		}
-		if len(records) < plan.pageSize {
-			return nil
-		}
-		after = nextAfter
-	}
+	return NewPollingTransportSource(s.connector).ReadTransport(ctx, request, emit)
 }
 
 type bootstrapTransportCommitter struct {
@@ -312,68 +188,6 @@ func bootstrapTransportCheckpoint(candidate synccontract.CheckpointEnvelope, res
 	translated.Source = resume.Source
 	translated.SourceGeneration = append(synccontract.OpaqueToken(nil), resume.SourceGeneration...)
 	return translated
-}
-
-func (s *SnapshotTransportSource) validateReadRequest(request synctransport.SourceRequest) (connConfig, database.RelationRef, typedCatalogResources, int, error) {
-	if s == nil {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport source is unavailable")
-	}
-	if request.Connector == nil || request.Connector.Name() != s.connector.Name() || strings.TrimSpace(request.Stream) == "" {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport requires a declared dynamic stream")
-	}
-	descriptor, ok := connectors.SourceTransportDescriptorOf(request.Connector)
-	if !ok || descriptor.Executor != postgresSnapshotTransportReference {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport requires its declared source descriptor")
-	}
-	if request.Mode != synccontract.ModeFullAppend && request.Mode != synccontract.ModeIncrementalUpsert {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres transport accepts only full_append or incremental_upsert")
-	}
-	if request.BatchSize <= 0 {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport requires a positive batch size")
-	}
-	if request.Checkpoint != nil && request.Mode != synccontract.ModeIncrementalUpsert {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport does not resume a full snapshot checkpoint")
-	}
-	if request.Checkpoint != nil {
-		if err := request.Checkpoint.ValidateResume(request.Resume); err != nil {
-			return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, err
-		}
-	}
-	if err := request.Resume.Source.Validate(); err != nil || len(request.Resume.SourceGeneration) == 0 {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport requires a complete resume identity")
-	}
-	if request.Resume.Source.Engine != postgresSnapshotSourceEngine {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport source identity engine must be postgres")
-	}
-	if fixtureMode(request.Runtime) {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errTypedCatalogFixtureMode
-	}
-	conn, err := resolveConfig(request.Runtime)
-	if err != nil {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, err
-	}
-	if err := validateIdentifier(conn.schema); err != nil {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, ErrUnsupportedCatalogShape
-	}
-	if isSystemCatalogSchema(conn.schema) {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, ErrSystemCatalogSchema
-	}
-	relationRef, err := postgresSnapshotRelationRef(request.Resume.Source.ObjectScope, conn.database, conn.schema)
-	if err != nil || relationRef.Schema.Catalog.Name != conn.database || relationRef.Schema.Name != conn.schema {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport source identity does not match configured relation")
-	}
-	if err := s.connector.databaseDefinition.Validate(); err != nil {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport definition is unavailable")
-	}
-	resources, err := newTypedCatalogResources(s.connector.databaseDefinition.Resources())
-	if err != nil {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, err
-	}
-	pageSize, err := s.connector.databaseDefinition.Resources().EffectivePageSize(request.BatchSize)
-	if err != nil {
-		return connConfig{}, database.RelationRef{}, typedCatalogResources{}, 0, errors.New("postgres snapshot transport batch size is outside the declared resource bound")
-	}
-	return conn, relationRef, resources, pageSize, nil
 }
 
 func postgresSnapshotRelationRef(scope, configuredDatabase, configuredSchema string) (database.RelationRef, error) {

@@ -121141,29 +121141,33 @@
     },
     "polling_watermark": {
       "status": "planned",
-      "reason": "no registered native polling source and apply binding has passed object and destination preflight; no polling sync mode is implemented"
+      "reason": "PostgreSQL binds its cursor type, per-stream cursor column, and unique tie-breaker from the live catalog at run time. The static bundle cannot truthfully name those dynamic fields; the live sync transport constructs and preflights the implemented polling declaration."
     },
     "sync_transport": {
       "source_transport": {
         "executor": {
           "family": "native_database",
-          "id": "postgres_bounded_snapshot"
+          "id": "postgres_polling_watermark"
         },
         "eligible_streams": [
           "*"
         ],
         "modes": [
+          "full_overwrite",
           "full_append",
-          "incremental_upsert"
+          "incremental_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
         ],
         "delivery": {
           "idempotency": "at_least_once",
           "ordering": "source_ordered",
-          "deletes": "tombstone"
+          "deletes": "not_available"
         },
         "conformance": {
-          "suite": "postgres_snapshot",
-          "run_id": "bounded_full_and_bootstrap_v1"
+          "suite": "postgres_polling_watermark",
+          "run_id": "shared_source_v1"
         }
       },
       "destination_transport": {
