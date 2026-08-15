@@ -204,14 +204,14 @@ func TestBundleLoadSyncTransportProjectsIndependentDefinition(t *testing.T) {
 			"executor": {"family": "native_api", "id": "acme_snapshot_source"},
 			"eligible_streams": ["widgets"],
 			"modes": ["full_append"],
-			"delivery": {"idempotency": "at_least_once", "ordering": "source", "deletes": "unavailable"},
+			"delivery": {"idempotency": "at_least_once", "ordering": "source_ordered", "deletes": "not_available"},
 			"conformance": {"suite": "acme_transport", "run_id": "source_v1"}
 		},
 		"destination_transport": {
 			"executor": {"family": "native_database", "id": "acme_stage_destination"},
 			"eligible_actions": ["stage_append"],
 			"modes": ["full_append"],
-			"delivery": {"idempotency": "keyed", "ordering": "source", "deletes": "unavailable"},
+			"delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
 			"conformance": {"suite": "acme_transport", "run_id": "destination_v1"},
 			"acknowledgement": "durable_warehouse",
 			"apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "stage_append"}]
@@ -245,7 +245,7 @@ func TestBundleLoadSyncTransportRefusesUnknownOrUnsafeDeclarations(t *testing.T)
 			"executor": {"family": "native_database", "id": "acme_stage_destination"},
 			"eligible_actions": ["stage_append"],
 			"modes": ["full_append"],
-			"delivery": {"idempotency": "keyed", "ordering": "source", "deletes": "unavailable"},
+			"delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
 			"conformance": {"suite": "acme_transport", "run_id": "destination_v1"},
 			"acknowledgement": "durable_warehouse",
 			"apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "stage_append"}]

@@ -33,6 +33,7 @@ type Bundle struct {
 	Metadata           Metadata
 	Changefeed         *connectors.ChangefeedDescriptor       // changefeed.json; nil when a connector has not been surveyed
 	PollingWatermark   *connectors.PollingWatermarkDescriptor // polling_watermark.json; nil until a native database declaration exists
+	SyncTransport      *connectors.SyncTransportDescriptor    // sync_transport.json; nil when no closed source/destination role is declared
 	Database           *database.Definition                   // database.json; nil for non-database or unmigrated bundles
 	Spec               *Schema                                // compiled spec.json; SecretKeys() from x-secret
 	RawSpec            json.RawMessage                        // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
@@ -1101,8 +1102,8 @@ type CertificationWritePairing struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, pollingWatermark, spec, streams, writes, apiSurface, operations, cliSurface, certification, rateLimits *Schema
-	err                                                                                                                          error
+	metadata, changefeed, pollingWatermark, syncTransport, spec, streams, writes, apiSurface, operations, cliSurface, certification, rateLimits *Schema
+	err                                                                                                                                         error
 }{}
 
 func init() {
@@ -1120,6 +1121,7 @@ func init() {
 	metaSchemas.metadata = compileMeta(metadataSchemaJSON)
 	metaSchemas.changefeed = compileMeta(changefeedSchemaJSON)
 	metaSchemas.pollingWatermark = compileMeta(pollingWatermarkSchemaJSON)
+	metaSchemas.syncTransport = compileMeta(syncTransportSchemaJSON)
 	metaSchemas.spec = compileMeta(specSchemaJSON)
 	metaSchemas.streams = compileMeta(streamsSchemaJSON)
 	metaSchemas.writes = compileMeta(writesSchemaJSON)
@@ -1276,6 +1278,10 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
+	syncTransport, err := loadSyncTransport(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
 	databaseDefinition, err := loadDatabaseDefinition(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
@@ -1343,6 +1349,7 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 		Metadata:           metadata,
 		Changefeed:         changefeed,
 		PollingWatermark:   pollingWatermark,
+		SyncTransport:      syncTransport,
 		Database:           databaseDefinition,
 		Spec:               spec,
 		RawSpec:            rawSpec,
@@ -1480,6 +1487,41 @@ func loadPollingWatermark(sub fs.FS, dirName string, metadata Metadata) (*connec
 		return nil, fmt.Errorf("load bundle %s: polling_watermark.json: %w", dirName, err)
 	}
 	return declaration.Clone(), nil
+}
+
+// syncTransportDocument is a versioned on-disk declaration. Its strict JSON
+// shape keeps an authored role from becoming executable through an unknown
+// field, while the descriptor's own validation preserves the shared closed
+// transport vocabulary.
+type syncTransportDocument struct {
+	SchemaVersion int                                        `json:"schema_version"`
+	Source        *connectors.SourceTransportDescriptor      `json:"source_transport,omitempty"`
+	Destination   *connectors.DestinationTransportDescriptor `json:"destination_transport,omitempty"`
+}
+
+func loadSyncTransport(sub fs.FS, dirName string) (*connectors.SyncTransportDescriptor, error) {
+	if !fileExists(sub, "sync_transport.json") {
+		return nil, nil
+	}
+	raw, err := readFile(sub, "sync_transport.json")
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.syncTransport.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, fmt.Errorf("load bundle %s: sync_transport.json: %w", dirName, err)
+	}
+	var document syncTransportDocument
+	if err := strictDecode(raw, &document); err != nil {
+		return nil, fmt.Errorf("load bundle %s: sync_transport.json: %w", dirName, err)
+	}
+	if document.SchemaVersion != 1 {
+		return nil, fmt.Errorf("load bundle %s: sync_transport.json: unsupported schema version %d", dirName, document.SchemaVersion)
+	}
+	descriptor := connectors.SyncTransportDescriptor{Source: document.Source, Destination: document.Destination}
+	if err := descriptor.Validate(); err != nil {
+		return nil, fmt.Errorf("load bundle %s: sync_transport.json: %w", dirName, err)
+	}
+	return descriptor.Clone(), nil
 }
 
 // loadDatabaseDefinition keeps database.json optional for the existing broad

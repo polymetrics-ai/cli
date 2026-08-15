@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "issue_label_source"
+    },
+    "eligible_streams": ["issues"],
+    "modes": ["full_append", "full_overwrite", "incremental_upsert"],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "tombstone"
+    },
+    "conformance": {
+      "suite": "closed_transport_demo",
+      "run_id": "accepted_issue_source"
+    }
+  },
+  "destination_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "issue_label_destination"
+    },
+    "eligible_actions": ["add_issue_labels", "set_issue_labels"],
+    "modes": ["full_append", "full_overwrite", "incremental_upsert"],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "closed_transport_demo",
+      "run_id": "accepted_issue_label_destination"
+    },
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {"mode": "full_append", "strategy": "append", "action": "add_issue_labels"},
+      {"mode": "full_overwrite", "strategy": "replace", "action": "set_issue_labels"},
+      {"mode": "incremental_upsert", "strategy": "merge", "action": "set_issue_labels"}
+    ]
+  }
+}

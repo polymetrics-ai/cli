@@ -2,7 +2,7 @@
 phase: issue-4093-definition-owned-transports-r1
 plan: 01
 type: tdd
-status: planned
+status: completed
 ---
 
 # Plan — #4093 definition-owned production transports
@@ -58,11 +58,11 @@ declarations and adapters required to exercise them. It deliberately excludes
 
 ```text
 go test -timeout 20m ./internal/synctransport/... ./internal/connectors/...
-go test -race -timeout 20m ./internal/synctransport ./internal/connectors/engine ./internal/connectors/native/postgres
+go test -race -timeout 20m ./internal/synctransport ./internal/connectors/engine ./internal/connectors ./internal/app
 POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
   POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
   go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/postgres
-go vet ./internal/synctransport/... ./internal/connectors/...
+go vet ./internal/synctransport/... ./internal/connectors/... ./internal/app
 go build ./cmd/pm
 make tidy-check
 make lint

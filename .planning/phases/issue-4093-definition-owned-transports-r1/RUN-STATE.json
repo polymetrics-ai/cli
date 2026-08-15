@@ -3,9 +3,9 @@
   "branch": "fm/cli-4093-transport-registration-r1",
   "base": "integration/4015-mvp-flat-r1",
   "lifecycle": "inline-manual-gsd",
-  "state": "red",
+  "state": "verified",
   "red": true,
-  "green": false,
-  "verified": false,
-  "reviewed": false
+  "green": true,
+  "verified": true,
+  "reviewed": true
 }

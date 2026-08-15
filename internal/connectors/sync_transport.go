@@ -244,6 +244,11 @@ func (d DestinationTransportDescriptor) Validate() error {
 	if err := validateTransportModes(d.Modes); err != nil {
 		return err
 	}
+	for _, mode := range d.Modes {
+		if mode == synccontract.ModeChangeCapture {
+			return fmt.Errorf("destination transport cannot declare change_capture mode")
+		}
+	}
 	if err := d.Delivery.Validate(); err != nil {
 		return err
 	}

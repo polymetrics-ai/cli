@@ -57,7 +57,7 @@ runs inline with durable evidence in this directory.
 
 `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`,
 `golang-naming`, `golang-error-handling`, `golang-safety`, `golang-security`,
-`golang-database`, and `golang-testing`.
+`golang-database`, `golang-testing`, and `golang-documentation`.
 
 CLI help/manual/website parity is not applicable: no command, flag, help text,
 manual, or website surface changes.
