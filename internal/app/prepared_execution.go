@@ -92,9 +92,12 @@ func syncPreparedExecutionDir(dir string) error {
 	if err != nil {
 		return fmt.Errorf("open prepared execution directory: %w", err)
 	}
-	defer directory.Close()
 	if err := directory.Sync(); err != nil {
+		_ = directory.Close()
 		return fmt.Errorf("sync prepared execution directory: %w", err)
+	}
+	if err := directory.Close(); err != nil {
+		return fmt.Errorf("close prepared execution directory: %w", err)
 	}
 	return nil
 }

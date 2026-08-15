@@ -104,6 +104,14 @@ so certification failed while looking for a field that must not exist.
 3. **VERIFY:** rerun the exact CLI test, focused certification tests, and `certify-timing`; then
    regenerate all derived artifacts in one pass and run every applicable drift check to a clean
    worktree before the rebased branch is force-pushed with lease.
+4. **SECOND RED:** the subsequent hosted full suite exposed an in-memory compatibility regression
+   in branch-owned `GetReversePlan`: its new unconditional persisted reload returned
+   `state path is required` before the existing PostgreSQL typed replay refusal. Preserve live
+   reload for every configured production store, while an explicitly in-memory `App` retains the
+   prior state lookup used by isolated policy tests. Prove the typed error and unchanged state.
+5. **LINT GAP:** focused final lint reached the branch-owned prepared-execution durability helper
+   and rejected its ignored directory-close error. Close explicitly after sync, return a typed
+   contextual cleanup error, and keep the original sync error dominant when sync itself fails.
 
 Inline/manual GSD gap fallback is used because this worker has no compatible isolated Pi-agent
 runtime. Required skills remain those listed in the delivery header.

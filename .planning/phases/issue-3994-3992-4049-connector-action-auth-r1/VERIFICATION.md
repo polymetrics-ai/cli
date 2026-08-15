@@ -52,6 +52,15 @@ reference markers in every schedule envelope and installed crontab, verifies the
   (48.458s wall elapsed).
 - Rebase coverage: focused app/flow/schedule/CLI authorization tests, rate-refusal packages, and the
   prepared-execution race test all pass on base `6b9cfe492`.
+- Hosted follow-up: run `31890181420` passed the corrected `Certify harness timing` step, then the
+  full suite exposed a second branch-owned regression: `GetReversePlan` unconditionally reloaded a
+  missing store for an explicitly in-memory PostgreSQL policy fixture. The focused RED reproduced
+  `state path is required`; GREEN restores in-memory lookup only when no store is configured,
+  while persisted production Apps retain live reload. The exact typed-error test, related App
+  authorization tests, and fresh-binary installed-flow proof pass.
+- Focused final lint also exposed an ignored directory-close error in branch-owned prepared-
+  execution durability code. Close is now explicit with sync-error precedence; focused lint is
+  clean.
 
 ## Live-evidence boundary
 

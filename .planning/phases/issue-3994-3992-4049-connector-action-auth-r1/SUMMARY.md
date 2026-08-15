@@ -61,3 +61,9 @@ After PR #4168 initially failed `certify-timing`, the branch was rebased onto mo
 `6b9cfe492`. The branch-owned certification harness was corrected to remove its obsolete schedule
 authorization reference and to assert the no-carrier contract directly. The exact CI test and the
 timing gate now pass locally.
+
+The next hosted full-suite pass confirmed that timing fix, then exposed an in-memory compatibility
+regression in branch-owned live reverse-plan reload. Store-backed production Apps still reload
+durable state; deliberately store-less policy fixtures now retain the prior lookup semantics and
+their typed replay refusal. Final focused lint also closes the prepared-execution directory handle
+explicitly.

@@ -2524,6 +2524,16 @@ func (a *App) validatePlanConfirmation(plan ReversePlan, got connectors.WriteCon
 }
 
 func (a *App) GetReversePlan(id string) (ReversePlan, error) {
+	if a == nil {
+		return ReversePlan{}, errors.New("app is required")
+	}
+	// Production Apps always have a configured store and must reload here so
+	// unattended flows revalidate the latest durable approval. A small set of
+	// isolated policy tests intentionally construct an in-memory App; preserve
+	// their pre-existing lookup semantics without creating a fake state path.
+	if strings.TrimSpace(a.store.Path) == "" {
+		return reversePlanFromState(a.state, id)
+	}
 	return a.loadReversePlan(id)
 }
 

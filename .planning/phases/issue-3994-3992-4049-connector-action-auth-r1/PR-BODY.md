@@ -76,6 +76,9 @@ proofs are included here; #4166 separately owns credentialed live-certification 
 - The previously failing `certify-timing` gate was reproduced after rebasing onto moved base
   `6b9cfe492`; certification now refuses schedule authority carriers and the exact fresh-binary test
   plus the timing gate pass locally.
+- Hosted run `31890181420` confirmed the certification fix, then exposed and drove closure of a
+  branch-owned in-memory `GetReversePlan` compatibility regression; persisted production Apps keep
+  live reload, and the PostgreSQL policy fixture again returns its typed replay error.
 - CLI help/manual, generated docs, golden transcripts, and website docs are updated.
 - Final one-pass generation completed; `surface-sync --check` scanned 552 bundles with zero drift; changed Go files are gofmt-clean; `git diff --check` and final `git status` are clean.
 

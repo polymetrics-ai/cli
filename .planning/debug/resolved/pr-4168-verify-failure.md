@@ -41,19 +41,30 @@ updated: 2026-08-15
 - timestamp: 2026-08-15T14:20:00Z
   observation: corrected scripted glue test, exact fresh-binary CLI test, focused certification
     package, and `certify-timing` all pass; one-pass regeneration and all drift checks are clean
+- timestamp: 2026-08-15T14:47:00Z
+  observation: hosted run 31890181420 passed the corrected certify-timing step, then the full suite
+    exposed `TestPostgresManagedTargetMissingAndConsumedApprovalErrorsAreTyped`: branch-owned
+    `GetReversePlan` returned `state path is required` for an explicitly in-memory App
+- timestamp: 2026-08-15T15:05:00Z
+  observation: the exact PostgreSQL typed-error test, related App authorization tests, installed-
+    flow fresh-binary proof, focused lint, final regeneration, and drift checks all pass
 
 # Eliminated
 
 - The moved PostgreSQL base (#4167) did not cause this failure: the first failing command and all
   failed assertions are in this branch's corrected schedule-authorization proof surface.
 
+The second failure is not eliminated as base-owned: #4168 changed `GetReversePlan` itself, and the
+focused test reproduces the resulting early store-path error.
+
 # Resolution
 
-- root_cause: production removed the superseded per-schedule authorization carrier, but the
-    certification glue and scripted driver still supplied and required it
+- root_cause: first, production removed the superseded per-schedule authorization carrier while
+    certification still required it; second, branch-owned live plan reload was applied
+    unconditionally to explicitly in-memory App fixtures
 - fix: remove the legacy flag/reference; reject authority carriers in scripted scheduling; scan
     real schedule envelopes and crontab output while retaining direct-flow and cleanup assertions
-- verification: exact CI test green; focused certification package green; certify-timing green;
-    rebased task packages/race proof and generated-artifact drift gates green
+- verification: first correction is green in local and hosted certify-timing; second correction and
+    cleanup lint gap are green locally and pending a new hosted verify run
 - files_changed: internal/connectors/certify/stages_glue.go,
-    internal/connectors/certify/scripted_cli_test.go, and GSD evidence
+    internal/connectors/certify/scripted_cli_test.go, internal/app/app.go, and GSD evidence
