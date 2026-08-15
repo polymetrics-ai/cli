@@ -208,7 +208,9 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 	second := connectors.Record{"source_tenant": "north", "source_id": int64(1), "source_value": "v2"}
 
 	firstPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false)
-	firstReceipt := postgresExecuteManagedTargetWrite(t, ctx, executor, firstPlan, []connectors.Record{first}, database.TombstoneEnvelope{})
+	firstReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, firstPlan, []database.OrderedRecord{{
+		Record: first, Position: postgresManagedTargetPosition(1),
+	}}, database.TombstoneEnvelope{})
 	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, firstReceipt)
 	initialRows := postgresManagedTargetHistoryRows(t, ctx, source, control)
 	if len(initialRows) != 1 || initialRows[0].value != "v1" || !initialRows[0].current || initialRows[0].validTo != nil || initialRows[0].validFrom.IsZero() {
@@ -216,7 +218,9 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 	}
 
 	secondPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false)
-	secondReceipt := postgresExecuteManagedTargetWrite(t, ctx, executor, secondPlan, []connectors.Record{second}, database.TombstoneEnvelope{})
+	secondReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, secondPlan, []database.OrderedRecord{{
+		Record: second, Position: postgresManagedTargetPosition(2),
+	}}, database.TombstoneEnvelope{})
 	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, secondReceipt)
 	versionedRows := postgresManagedTargetHistoryRows(t, ctx, source, control)
 	if len(versionedRows) != 2 || versionedRows[0].value != "v1" || versionedRows[0].current || versionedRows[0].validTo == nil || versionedRows[1].value != "v2" || !versionedRows[1].current || versionedRows[1].validTo != nil || !versionedRows[0].validTo.Equal(versionedRows[1].validFrom) {
@@ -243,7 +247,10 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 		t.Fatal("could not reconstruct PostgreSQL history executor")
 	}
 	replayPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 2, 0, false)
-	replayReceipt := postgresExecuteManagedTargetWrite(t, ctx, restartedExecutor, replayPlan, []connectors.Record{first, second}, database.TombstoneEnvelope{})
+	replayReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, restartedExecutor, replayPlan, []database.OrderedRecord{
+		{Record: first, Position: postgresManagedTargetPosition(1)},
+		{Record: second, Position: postgresManagedTargetPosition(2)},
+	}, database.TombstoneEnvelope{})
 	assertPostgresManagedTargetReceiptPersisted(t, ctx, restartedDriver, control, replayReceipt)
 	if got := postgresManagedTargetHistoryRows(t, ctx, restartedSource, control); !samePostgresManagedTargetHistoryRows(got, versionedRows) {
 		t.Fatalf("late/replay delivery changed durable history: got=%#v want=%#v", got, versionedRows)
@@ -264,7 +271,7 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 		t.Fatal("could not construct PostgreSQL history soft-delete envelope")
 	}
 	closePlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 0, 1, false)
-	closeReceipt := postgresExecuteManagedTargetWrite(t, ctx, restartedExecutor, closePlan, nil, envelope)
+	closeReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, restartedExecutor, closePlan, nil, envelope)
 	assertPostgresManagedTargetReceiptPersisted(t, ctx, restartedDriver, control, closeReceipt)
 	closedRows := postgresManagedTargetHistoryRows(t, ctx, restartedSource, control)
 	if len(closedRows) != 2 || closedRows[0].current || closedRows[0].validTo == nil || closedRows[1].current || closedRows[1].validTo == nil || versionedRows[0].validTo == nil || !closedRows[0].validTo.Equal(*versionedRows[0].validTo) || !closedRows[1].validTo.After(closedRows[1].validFrom) {
@@ -1072,7 +1079,7 @@ func postgresManagedTargetWriteDefinition(t *testing.T) database.Definition {
 
 func postgresManagedTargetWritePlan(t *testing.T, definition database.Definition, control database.ManagedTargetControlRecord, fixture postgresManagedTargetFixture, mode synccontract.Mode, strategy connectors.ApplyStrategy, keys []string, records, tombstones int, destructive bool) database.DatabaseWritePlan {
 	t.Helper()
-	return postgresManagedTargetFencedWritePlan(t, definition, control, fixture, mode, strategy, keys, records, tombstones, destructive, false)
+	return postgresManagedTargetFencedWritePlan(t, definition, control, fixture, mode, strategy, keys, records, tombstones, destructive, mode == synccontract.ModeIncrementalDedupeHistory)
 }
 
 func postgresManagedTargetFencedWritePlan(t *testing.T, definition database.Definition, control database.ManagedTargetControlRecord, fixture postgresManagedTargetFixture, mode synccontract.Mode, strategy connectors.ApplyStrategy, keys []string, records, tombstones int, destructive, conditionalOrderFence bool) database.DatabaseWritePlan {
