@@ -189,6 +189,12 @@ func validateExternalProofInput(input ExternalProofInput) ([]string, error) {
 	if len(prepared) == 0 {
 		return nil, errors.New("external proof requires prepared credential values")
 	}
+	if len(ScanForSecrets(strings.Join(input.Command, "\x00"), prepared)) != 0 {
+		return nil, errors.New("external proof refuses credential material in process arguments")
+	}
+	if len(ScanForSecrets(input.Stdout, prepared)) != 0 || len(ScanForSecrets(input.Stderr, prepared)) != 0 {
+		return nil, errors.New("external proof refuses credential material in observed process output")
+	}
 	if len(input.HTTPExchanges) == 0 {
 		return nil, errors.New("external proof requires at least one observed HTTPS exchange")
 	}

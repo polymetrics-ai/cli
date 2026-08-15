@@ -1,10 +1,15 @@
 package cli
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -13,14 +18,32 @@ import (
 	"polymetrics.ai/internal/safety"
 )
 
+const certificationExternalChildEnv = "PM_CERTIFICATION_EXTERNAL_CHILD"
+
 // runCertify dispatches `pm connectors certify ...` (certification design §A
 // command spec): a single connector by name, `--all --credentials-file`
 // batch mode (§B), or `--sweep` orphan cleanup (§C). Purely additive to the
 // existing `connectors` subcommand family in cli.go — no other connectors
 // subcommand's behavior changes.
-func runCertify(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runCertify(ctx context.Context, root string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	positionals := flags.values["_"]
+	if flags.first("external-proof") == "true" && os.Getenv(certificationExternalChildEnv) != "1" {
+		if flags.first("all") == "true" || flags.first("sweep") == "true" || len(positionals) != 1 {
+			return usageErrorf("pm connectors certify --external-proof requires one connector")
+		}
+		opts, err := certifyOptionsFromFlags(positionals[0], flags)
+		if err != nil {
+			return err
+		}
+		if err := rejectCertificationSecretArgv(args, opts); err != nil {
+			return err
+		}
+		if flags.first("full-parity") != "true" {
+			return usageErrorf("pm connectors certify --external-proof requires --full-parity")
+		}
+		return runExternalCertifyChild(ctx, root, args, stdout, stderr)
+	}
 
 	switch {
 	case flags.first("sweep") == "true":
@@ -46,6 +69,19 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 	if err != nil {
 		return err
 	}
+	externalProof := flags.first("external-proof") == "true"
+	if externalProof {
+		if os.Getenv(certificationExternalChildEnv) != "1" {
+			return errors.New("external certification proof must execute in a fresh child process")
+		}
+		if flags.first("full-parity") != "true" {
+			return usageErrorf("pm connectors certify --external-proof requires --full-parity")
+		}
+		if err := rejectCertificationSecretArgv(os.Args[1:], opts); err != nil {
+			return err
+		}
+		opts.ObserveHTTP = true
+	}
 
 	runner := certify.NewRunner(opts)
 	rep, err := runner.Run(ctx)
@@ -57,11 +93,137 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 	saveDir := filepath.Join(root, ".polymetrics")
 	_ = rep.Save(saveDir) // best-effort: a report-persistence failure must not mask the certification result itself.
 
-	if err := writeCertifyReport(stdout, jsonOut, rep); err != nil {
+	var rendered bytes.Buffer
+	if err := writeCertifyReport(&rendered, jsonOut, rep); err != nil {
+		return err
+	}
+	if externalProof {
+		binarySHA256, err := currentBinarySHA256()
+		if err != nil {
+			return err
+		}
+		runID := fmt.Sprintf("external-%d", rep.StartedAt.UTC().UnixNano())
+		if _, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+			Connector:      connector,
+			RunID:          runID,
+			BinarySHA256:   binarySHA256,
+			Command:        append([]string(nil), os.Args...),
+			Stdout:         rendered.String(),
+			ExitCode:       exitCodeForReport(rep),
+			Passed:         rep.Passed,
+			FullParity:     true,
+			PreparedValues: certificationPreparedValues(opts),
+			HTTPExchanges:  runner.ObservedHTTPExchanges(),
+		}); err != nil {
+			return fmt.Errorf("certify external proof: %w", err)
+		}
+	}
+	if _, err := io.Copy(stdout, &rendered); err != nil {
 		return err
 	}
 
 	return exitForReport(rep)
+}
+
+func runExternalCertifyChild(ctx context.Context, root string, args []string, stdout, stderr io.Writer) error {
+	moduleRoot, err := certificationModuleRoot()
+	if err != nil {
+		return err
+	}
+	buildDir, err := os.MkdirTemp("", "pm-certify-external-")
+	if err != nil {
+		return fmt.Errorf("certify external proof: create build directory: %w", err)
+	}
+	defer func() { _ = os.RemoveAll(buildDir) }()
+	binaryPath := filepath.Join(buildDir, "pm")
+	build := exec.CommandContext(ctx, "go", "build", "-o", binaryPath, "./cmd/pm")
+	build.Dir = moduleRoot
+	build.Stderr = &bytes.Buffer{}
+	if err := build.Run(); err != nil {
+		return fmt.Errorf("certify external proof: build fresh pm binary: %w", err)
+	}
+
+	childArgs := append([]string{"connectors", "certify"}, args...)
+	childArgs = append(childArgs, "--root", root)
+	child := exec.CommandContext(ctx, binaryPath, childArgs...)
+	child.Env = append(os.Environ(), certificationExternalChildEnv+"=1")
+	var childStdout, childStderr bytes.Buffer
+	child.Stdout = &childStdout
+	child.Stderr = &childStderr
+	err = child.Run()
+	if _, writeErr := io.Copy(stdout, &childStdout); writeErr != nil {
+		return writeErr
+	}
+	if _, writeErr := io.Copy(stderr, &childStderr); writeErr != nil {
+		return writeErr
+	}
+	if err == nil {
+		return nil
+	}
+	var exitErr *exec.ExitError
+	if errors.As(err, &exitErr) {
+		connector := "unknown"
+		if len(args) > 0 {
+			connector = args[0]
+		}
+		return certifyExitErrorf(exitErr.ExitCode(), "external certification %s: exit %d", connector, exitErr.ExitCode())
+	}
+	return fmt.Errorf("certify external proof: run fresh pm binary: %w", err)
+}
+
+func rejectCertificationSecretArgv(args []string, opts certify.Options) error {
+	prepared := certificationPreparedValues(opts)
+	if len(prepared) == 0 {
+		return nil
+	}
+	if len(certify.ScanForSecrets(strings.Join(args, "\x00"), prepared)) != 0 {
+		return validationErrorf("certification credentials must be supplied through --from-env or stdin, never process arguments")
+	}
+	return nil
+}
+
+func certificationPreparedValues(opts certify.Options) []string {
+	values := make([]string, 0, len(opts.SecretEnv))
+	for _, envName := range opts.SecretEnv {
+		if value := os.Getenv(envName); value != "" {
+			values = append(values, value)
+		}
+	}
+	return values
+}
+
+func certificationModuleRoot() (string, error) {
+	dir, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("certify external proof: determine working directory: %w", err)
+	}
+	for {
+		if _, statErr := os.Stat(filepath.Join(dir, "go.mod")); statErr == nil {
+			return dir, nil
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return "", errors.New("certify external proof: could not find module root to build a fresh pm binary")
+		}
+		dir = parent
+	}
+}
+
+func currentBinarySHA256() (string, error) {
+	path, err := os.Executable()
+	if err != nil {
+		return "", fmt.Errorf("certify external proof: locate current binary: %w", err)
+	}
+	payload, err := os.ReadFile(path)
+	if err != nil {
+		return "", fmt.Errorf("certify external proof: read current binary: %w", err)
+	}
+	sum := sha256.Sum256(payload)
+	return hex.EncodeToString(sum[:]), nil
+}
+
+func exitCodeForReport(rep certify.Report) int {
+	return certify.ExitCodeFor(rep)
 }
 
 // certifyOptionsFromFlags builds certify.Options from `pm connectors certify

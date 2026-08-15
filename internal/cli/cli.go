@@ -211,7 +211,7 @@ func dynamicConnectorWithCommandSurface(name string) (connectors.Connector, bool
 	return connector, true
 }
 
-func runConnectors(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runConnectors(ctx context.Context, root string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
 	registry := appRegistry()
 	if len(args) == 0 {
 		return errUsage
@@ -221,7 +221,7 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 		if len(args) == 2 && isHelpArg(args[1]) {
 			return writeManual("connectors", stdout, jsonOut)
 		}
-		return runCertify(ctx, root, args[1:], stdout, jsonOut)
+		return runCertify(ctx, root, args[1:], stdout, stderr, jsonOut)
 	case "list":
 		flags := parseFlags(args[1:])
 		if flags.first("all") != "" {

@@ -221,18 +221,114 @@ func TestCertifyCLIMissingConnectorArgIsUsageError(t *testing.T) {
 
 func TestCertifyCLIHelpShowsProvenanceContract(t *testing.T) {
 	var stdout bytes.Buffer
-	if err := runConnectors(context.Background(), t.TempDir(), []string{"certify", "--help"}, &stdout, false); err != nil {
+	if err := runConnectors(context.Background(), t.TempDir(), []string{"certify", "--help"}, &stdout, io.Discard, false); err != nil {
 		t.Fatalf("runConnectors(certify --help): %v", err)
 	}
 	for _, want := range []string{
-		"pm connectors certify <connector> [--full] [--json]",
+		"pm connectors certify <connector> [--full] [--external-proof --full-parity] [--json]",
 		"provider-artifact",
 		"provenance evidence",
 		"legacy_unverified",
+		"fresh pm child binary",
 	} {
 		if !strings.Contains(stdout.String(), want) {
 			t.Errorf("stdout missing %q: %s", want, stdout.String())
 		}
+	}
+}
+
+func TestCertifyCLIExternalProofRequiresFullParityBeforeWrites(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("PM_CERTIFY_EXTERNAL_PROOF_CANARY", "cert-canary-argv-3989")
+	var stdout bytes.Buffer
+
+	err := runCertify(context.Background(), root, []string{"sample",
+		"--external-proof", "--from-env", "token=PM_CERTIFY_EXTERNAL_PROOF_CANARY", "--json"}, &stdout, io.Discard, true)
+	if err == nil || !strings.Contains(err.Error(), "requires --full-parity") {
+		t.Fatalf("external-proof refusal = %v, want full-parity requirement", err)
+	}
+	if _, err := os.Stat(filepath.Join(root, ".polymetrics")); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("external-proof refusal created project state: stat error = %v, want not exist", err)
+	}
+}
+
+func TestExternalProofFreshChildRefusesNoHTTPSWithoutArtifact(t *testing.T) {
+	const token = "cert-canary-external-child-3989"
+	root := t.TempDir()
+	t.Setenv("PM_CERTIFY_EXTERNAL_CHILD_CANARY", token)
+	var stdout, stderr bytes.Buffer
+
+	err := runCertify(context.Background(), root, []string{
+		"sample", "--external-proof", "--full-parity", "--from-env", "token=PM_CERTIFY_EXTERNAL_CHILD_CANARY", "--json",
+	}, &stdout, &stderr, true)
+	if err == nil {
+		t.Fatal("external proof without HTTPS exchanges unexpectedly succeeded")
+	}
+	if _, statErr := os.Stat(filepath.Join(root, ".polymetrics", "certifications", "sample.json")); statErr != nil {
+		t.Fatalf("fresh external child did not complete its certification report: %v", statErr)
+	}
+	if _, statErr := os.Stat(filepath.Join(root, ".polymetrics", "certifications", "external-proof")); !errors.Is(statErr, os.ErrNotExist) {
+		t.Fatalf("HTTPS-proof refusal created an artifact directory: stat error = %v, want not exist", statErr)
+	}
+	if bytes.Contains(stdout.Bytes(), []byte(token)) || bytes.Contains(stderr.Bytes(), []byte(token)) {
+		t.Fatal("fresh external child exposed credential material in process output")
+	}
+}
+
+// TestExternalProofGitHubSmoke is deliberately opt-in because it reaches the
+// live GitHub HTTPS API with a full-parity credential. Unlike the in-process
+// fixture tests, it exercises the fresh external binary path and audits every
+// generated project artifact for absence of the credential value.
+func TestExternalProofGitHubSmoke(t *testing.T) {
+	const tokenEnv = "POLYMETRICS_CERTIFY_GITHUB_TOKEN"
+	const ownerEnv = "POLYMETRICS_CERTIFY_GITHUB_OWNER"
+	const repoEnv = "POLYMETRICS_CERTIFY_GITHUB_REPO"
+	for _, name := range []string{tokenEnv, ownerEnv, repoEnv} {
+		if strings.TrimSpace(os.Getenv(name)) == "" {
+			t.Skipf("live external GitHub proof requires %s", name)
+		}
+	}
+	token := os.Getenv(tokenEnv)
+	root := t.TempDir()
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{
+		"--root", root, "connectors", "certify", "github", "--external-proof", "--full-parity", "--json",
+		"--config", "owner=" + os.Getenv(ownerEnv),
+		"--config", "repo=" + os.Getenv(repoEnv),
+		"--config", "auth_type=token",
+		"--from-env", "token=" + tokenEnv,
+	}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("run external GitHub proof exit code = %d", code)
+	}
+	proofs, err := filepath.Glob(filepath.Join(root, ".polymetrics", "certifications", "external-proof", "github", "*.json"))
+	if err != nil || len(proofs) != 1 {
+		t.Fatalf("external proof paths = %v, glob error = %v, want one", proofs, err)
+	}
+	matched, err := certify.VerifyExternalProofTranscript(root, proofs[0], stdout.String(), stderr.String())
+	if err != nil {
+		t.Fatalf("verify external GitHub process transcript: %v", err)
+	}
+	if !matched {
+		t.Fatal("proof did not match the exact external binary stdout")
+	}
+	if _, err := os.Stat(filepath.Join(root, ".polymetrics", "vault")); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("external proof persisted a vault: stat error = %v, want not exist", err)
+	}
+	if err := filepath.WalkDir(filepath.Join(root, ".polymetrics"), func(path string, entry os.DirEntry, walkErr error) error {
+		if walkErr != nil || entry.IsDir() {
+			return walkErr
+		}
+		payload, readErr := os.ReadFile(path)
+		if readErr != nil {
+			return readErr
+		}
+		if bytes.Contains(payload, []byte(token)) {
+			return fmt.Errorf("credential material reached certification artifact")
+		}
+		return nil
+	}); err != nil {
+		t.Fatalf("external proof artifact audit: %v", err)
 	}
 }
 

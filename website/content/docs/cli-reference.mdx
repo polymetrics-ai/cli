@@ -256,6 +256,18 @@ cited endpoint count, and a status. Existing version-1 and pre-ledger inventorie
 Provenance never supplies a `covered_by` binding, enables a command, or sets
 the generated certification quality signal.
 
+For a full-fidelity live HTTPS proof, add `--external-proof --full-parity` and
+supply credentials only with `--from-env` (or stdin where the connector accepts
+it). This source-checkout mode builds a fresh `pm` child binary, keeps the
+credential session in memory, and writes only salted fingerprints of the
+observed process transcript and complete bounded exchanges. It refuses an
+incomplete or truncated exchange before creating a proof artifact.
+
+```bash
+pm connectors certify github --external-proof --full-parity \
+  --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
+```
+
 For connectors with coordinated provider budgets, the JSON report may include
 `rate_limit_events`. These report safe attempt, wait, reset, and not-sent
 outcomes so a stopped request is distinguishable from a provider response. They
