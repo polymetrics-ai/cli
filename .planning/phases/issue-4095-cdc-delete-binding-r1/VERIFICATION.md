@@ -2,10 +2,10 @@
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
-| Explicit CDC delete reaches PostgreSQL history close | pending live | Query the real target’s versions after a CDC-derived tombstone; the latest is retained but closed, never physically removed. |
-| Physical absence is never a deletion instruction | pending live | Query the real non-history target after a projection omits a prior row, then again after its explicit CDC-derived tombstone. |
-| Shared mapping does not accept ambiguous delete keys | pending fake | Unit test verifies exact target-key projection and rejects malformed source tombstones before any write input. |
-| Required package and live harness regression | pending | Run the launch-brief targeted packages and the complete tagged native PostgreSQL dbtest command. |
+| Explicit CDC delete reaches PostgreSQL history close | passed live | `TestPostgresManagedTargetIncrementalDedupeHistoryLive` reads the real target; the current version remains stored with `_is_current=false` and `_valid_to` set after its CDC-derived tombstone. |
+| Physical absence is never a deletion instruction | passed live | `TestPostgresManagedTargetWorksetDeliveryLive` reads the real target after source omission (row retained) and after its explicit CDC-derived tombstone (only that row removed). |
+| Shared mapping does not accept ambiguous delete keys | passed fake | `TestMappingContractV1MapsOnlyDeclaredTombstoneKeys` checks exact source→target keys and refuses missing/extra source fields before any target input. |
+| Required package and live harness regression | passed | The specified package command and complete tagged native PostgreSQL dbtest command passed; retained output summaries are under `traces/`. |
 
 ## Planned non-test gates
 

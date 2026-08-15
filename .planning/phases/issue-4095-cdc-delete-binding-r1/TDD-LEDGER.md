@@ -13,6 +13,14 @@
 `MappingContractV1.MapTombstone` nor `postgres.CDCDeleteTombstone` existed.
 The exact error summary is retained in `traces/red-cdc-delete-binding.txt`.
 
+## Recorded green result
+
+**Green:** `MapTombstone` projects only declared source keys, and
+`CDCDeleteTombstone` derives deterministic explicit source evidence from a
+pgoutput delete. The targeted package command passed; the tagged PostgreSQL
+dbtest then proved R3/R4 against actual target state. See
+`traces/green-targeted.txt` and `traces/green-live-postgres.txt`.
+
 ## Red command
 
 ```sh

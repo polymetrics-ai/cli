@@ -149,6 +149,11 @@ func TestMappingContractV1MapsOnlyDeclaredTombstoneKeys(t *testing.T) {
 			copy.Key = json.RawMessage(`{"source_tenant":"retain","source_id":9,"unexpected":true}`)
 			return copy
 		}(),
+		func() synccontract.Tombstone {
+			copy := source.Clone()
+			copy.Key = json.RawMessage(`{"source_tenant":"retain","source_id":null}`)
+			return copy
+		}(),
 	} {
 		if got, err := mapping.MapTombstone(invalid, []string{"source_tenant", "source_id"}); err == nil || got.Key != nil {
 			t.Fatalf("MapTombstone(%s) = (%#v, %v), want empty projection and refusal", invalid.Key, got, err)

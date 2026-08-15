@@ -1,0 +1,12 @@
+Passed:
+
+    POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/postgres
+
+Focused re-run also passed:
+
+    TestPostgresManagedTargetWorksetDeliveryLive
+    TestPostgresManagedTargetIncrementalDedupeHistoryLive
+
+The first reads actual target rows after source absence and after an explicit
+CDC-derived delete. The second reads actual history rows after a CDC-derived
+delete and finds the current version closed, retained, and non-current.

@@ -1,6 +1,7 @@
 package database
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"math"
@@ -185,7 +186,7 @@ func (c MappingContractV1) MapTombstone(source synccontract.Tombstone, sourceKey
 	targetValues := make(map[string]json.RawMessage, len(keys))
 	for sourceKey := range keys {
 		value, found := sourceValues[sourceKey]
-		if !found || !json.Valid(value) {
+		if !found || !json.Valid(value) || bytes.Equal(bytes.TrimSpace(value), []byte("null")) {
 			return synccontract.Tombstone{}, ErrMappingContractInvalid
 		}
 		targetValues[targetBySource[sourceKey]] = append(json.RawMessage(nil), value...)

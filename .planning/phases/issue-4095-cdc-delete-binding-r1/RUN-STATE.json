@@ -1,7 +1,7 @@
 {
   "issue": 4095,
   "phase": "issue-4095-cdc-delete-binding-r1",
-  "status": "planned",
+  "status": "verified-awaiting-final-rebase",
   "execution": "manual-inline-gsd",
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-4095-cdc-delete-binding-r1"
