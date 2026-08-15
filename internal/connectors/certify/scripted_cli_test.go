@@ -81,6 +81,7 @@ func scriptedProtocols(opts certify.Options) []string {
 		"schedule_create",
 		"schedule_list",
 		"schedule_install",
+		"schedule_fire",
 		"schedule_remove",
 	}
 	if opts.Write {
@@ -208,6 +209,13 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		}
 		s.seen["schedule_install"]++
 		return writeScriptedEnvelope(stdout, "ScheduleInstall", map[string]any{"backend": "crontab", "schedule": map[string]any{"name": s.schedule}})
+	case prefix(args, "schedule", "fire") && hasJSON(args) && len(args) == 4 && args[2] == s.schedule:
+		s.seen["schedule_fire"]++
+		return writeScriptedEnvelope(stdout, "ScheduleFire", map[string]any{
+			"schedule": map[string]any{"name": s.schedule},
+			"status":   map[string]any{"status": "succeeded"},
+			"flow":     map[string]any{"name": s.scheduleFlow, "status": "ok"},
+		})
 	case prefix(args, "schedule", "remove") && hasJSON(args) && hasArg(args, "--crontab"):
 		if err := s.clearCrontab(); err != nil {
 			return s.protocolError(stderr, err.Error())

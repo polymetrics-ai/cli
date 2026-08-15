@@ -47,7 +47,10 @@ type SyncModeResult struct {
 }
 
 // ScheduleResult is Capabilities.Schedule (certification design §A report
-// artifact "schedule": {"result", "backend", "residue"}).
+// artifact "schedule": {"result", "backend", "residue"}). Result is
+// "pass", "fail", or "not_live": an isolated direct fire can prove the
+// command path while an unstarted scheduler daemon remains explicitly
+// unobserved.
 type ScheduleResult struct {
 	Result  string `json:"result"`
 	Backend string `json:"backend,omitempty"`
