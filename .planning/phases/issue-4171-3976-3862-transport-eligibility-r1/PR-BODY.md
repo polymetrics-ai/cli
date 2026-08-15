@@ -54,6 +54,7 @@ Green:
 
 - `go test -timeout 20m -count=1 ./cmd/connectorgen ./internal/synctransport ./internal/connectors/engine ./internal/connectors/native/postgres ./internal/app`
 - `go test -timeout 20m -count=1 ./internal/cli`
+- `go test -timeout 20m -count=1 ./internal/connectors/certify`
 - `go test -timeout 20m -race -count=1 ./internal/synctransport ./internal/connectors/engine ./internal/connectors/native/postgres ./internal/app`
 - `go test -timeout 20m -tags=databaseintegration -count=1 ./internal/connectors/native/postgres ./internal/cli`
   (compiled and skipped by its opt-in guards; no shared container retry was attempted)
@@ -122,3 +123,12 @@ read, printed, stored, committed, or included here, and no live row count is rep
 Primary route: `claude_auto` on PR creation. Status: pending automatic GitHub Action review for the
 head commit range. Fallback: none unless that route fails, skips, or is rate-limited; parent PR #4100
 is available for the non-default-base review fallback. No manual Claude or Copilot request was made.
+
+## Post-PR certification guard correction
+
+A clean comparison found the exact source of the reported failure before any edit: merge base
+`ef3c71caf` passed both `TestCertificationDeclaredTransportPair*` guards, while this branch at
+`73280ed81` failed because the guards named the source executor replaced by this PR. The tests now
+assert the active declaration-owned `declarative_stream_source` on the resolved and deliberately
+unregistered paths. `go test -timeout 20m -count=1 ./internal/connectors/certify` passes; no
+assertion was removed or relaxed.

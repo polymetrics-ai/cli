@@ -20,6 +20,11 @@ Green: focused package and race tests, vet, build, docs generation/check, connec
 surface drift checks, contract checks, and GSD workflow verification passed. See `VERIFICATION.md`
 for commands and the edge matrix.
 
+The post-PR certification gap was compared cleanly before change: the merge base passed while this
+branch failed from its renamed declaration-owned source reference. Both certification registration
+assertions were updated to the new exact `declarative_stream_source` ID and now pass without
+weakening the missing-registration guard.
+
 ## Pending external evidence
 
 The live Docker/PostgreSQL and authenticated `rails/rails` commits certification was not run: the

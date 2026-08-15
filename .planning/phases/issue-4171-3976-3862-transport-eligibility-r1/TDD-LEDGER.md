@@ -17,6 +17,7 @@ Status values begin `planned`; exact commands and retained traces are filled dur
 | R11 | Empty, single, and large cardinalities are honest | Current GitHub adapter's cap hides large inputs and polling has no production route. | Empty sends zero/does not advance existing state; single sends one; 103 GitHub records deliver in bounded pages. Live large certification remains pending. | green locally |
 | R12 | Acknowledged replay and duplicate/out-of-order delivery remain idempotent | No cross-family production proof. | Replayed acknowledged page does not add target rows; duplicate/out-of-order inputs follow declared keyed/ordered policies or fail typed with zero effects. | green locally |
 | R13 | Closed-spine conformance remains exact | API/database combinations can be hand-built without proving shipped composition. | `app.Open` loads exact references and accepted immutable evidence for API→database and database→database; mismatch/absence remains pre-I/O refusal. | green — production-composition tests |
+| G1 | Certification guards track the declaration-owned source reference exactly | At merge base `ef3c71caf`, both certification guards pass; at this branch's `73280ed81` head they fail because they still expect the replaced `issue_label_source` ID. | The assertions now require `declarative_stream_source` both for successful resolution and the deliberately unregistered typed refusal. Neither guard is removed or weakened. | green — `TestCertificationDeclaredTransportPair*` |
 
 ## Initial red commands
 

@@ -1,7 +1,7 @@
 ---
 status: clean
 depth: standard
-files_reviewed: 19
+files_reviewed: 20
 findings:
   critical: 0
   warning: 0
@@ -39,3 +39,11 @@ The review identified a missing case-equivalent stream edge assertion. It was ad
 `TestPreflightReturnsTypedSourceStreamIneligibleErrorBeforeExecutorAccess` and rerun under normal
 and race detection. No critical, warning, or informational finding remains. The external live
 certification is tracked as pending verification evidence, not a code-review finding.
+
+## Gap G1 follow-up review
+
+`stages_transport_internal_test.go` continues to prove both sides of the declaration registration
+contract: the successful probe must report the exact active source and destination references, and
+the no-factory probe must report that same active source reference as unregistered. Updating those
+two literals from the replaced `issue_label_source` to `declarative_stream_source` preserves the
+guard's observable success and failure assertions; it neither relaxes nor removes them.

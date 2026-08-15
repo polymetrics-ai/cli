@@ -77,6 +77,8 @@
 - [x] `make release-workflow-check`.
 - [x] `go run ./cmd/agentcontractgen check`.
 - [x] `scripts/verify-gsd-workflow` against the final diff.
+- [x] `go test -timeout 20m -count=1 ./internal/connectors/certify`, including both declaration
+      registration guards after the exact source-reference update.
 - [x] Inline `scripts/gsd prompt verify-work issue-4171-3976-3862-transport-eligibility-r1` record.
 - [x] Inline `scripts/gsd prompt code-review issue-4171-3976-3862-transport-eligibility-r1` record and
       all actionable findings dispositioned.
@@ -100,3 +102,11 @@ worker and the canonical contract forbids lifecycle role spawning. Verification 
 commands above rather than the disallowed monolithic suite. Manual source review covered the
 registry admission order, production dispatch, checkpoint sequencing, keyset tuple encoding, and
 generated declarations. No critical or warning finding remained; see `REVIEW.md`.
+
+### Gap G1 — certification registration guard
+
+Clean comparison before the fix: `ef3c71caf` passed both
+`TestCertificationDeclaredTransportPair*` tests; `73280ed81` failed both because the test still
+named the superseded `issue_label_source` reference. The guard remains exact: it now requires the
+new declaration-owned `declarative_stream_source` reference on both the success and intentionally
+unregistered paths. The focused certificate package, app, and transport packages pass.
