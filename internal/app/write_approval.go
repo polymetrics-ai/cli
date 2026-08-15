@@ -2,6 +2,7 @@ package app
 
 import (
 	"crypto/hmac"
+	"crypto/rand"
 	"crypto/sha256"
 	"crypto/subtle"
 	"encoding/hex"
@@ -46,6 +47,23 @@ func newProjectWriteApprovalAuthority(projectDir string) (*projectWriteApprovalA
 	if err != nil {
 		return nil, fmt.Errorf("open project write approval authority: %w", err)
 	}
+	return newProjectWriteApprovalAuthorityFromKey(vaultDir, vaultKey)
+}
+
+// newEphemeralProjectWriteApprovalAuthority supplies certification's
+// process-local credentials with the revision and configuration fingerprinting
+// required by RuntimeConfig. Its root key is random and never written to the
+// project; write-approval consumption remains rooted in the ephemeral project
+// only if a certification scenario explicitly exercises a write.
+func newEphemeralProjectWriteApprovalAuthority(projectDir string) (*projectWriteApprovalAuthority, error) {
+	var rootKey [sha256.Size]byte
+	if _, err := rand.Read(rootKey[:]); err != nil {
+		return nil, fmt.Errorf("generate ephemeral write approval key: %w", err)
+	}
+	return newProjectWriteApprovalAuthorityFromKey(projectDir, rootKey[:])
+}
+
+func newProjectWriteApprovalAuthorityFromKey(dir string, vaultKey []byte) (*projectWriteApprovalAuthority, error) {
 	if len(vaultKey) != sha256.Size {
 		return nil, fmt.Errorf("project write approval key must be %d bytes", sha256.Size)
 	}
@@ -57,7 +75,7 @@ func newProjectWriteApprovalAuthority(projectDir string) (*projectWriteApprovalA
 	if err != nil {
 		return nil, err
 	}
-	return &projectWriteApprovalAuthority{dir: vaultDir, key: rootKey, signer: signer}, nil
+	return &projectWriteApprovalAuthority{dir: dir, key: rootKey, signer: signer}, nil
 }
 
 func (a *projectWriteApprovalAuthority) CredentialRevision(credentialID string, secrets map[string]string) (string, error) {
