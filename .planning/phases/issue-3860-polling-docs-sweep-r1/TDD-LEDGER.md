@@ -11,6 +11,7 @@
 - Red: `TestPostgresNativeAPISurfaceHasNoFabricatedRESTEndpoints` reads the actual PostgreSQL bundle and asserts the `endpoints` array is empty. It fails if any REST-shaped endpoint is introduced.
 - Green: connector help, connection/ETL manuals, PostgreSQL generated manual/skill, PostgreSQL bundle docs, and website ETL/docs data now state the keyset ordering, durable-after-ack checkpoint, at-least-once replay, snapshot restriction, hard-delete limitation, cursor-advancing soft-delete condition, and explicit rebootstrap outcome. The help test asserts those exact operator-facing limitations.
 - Refactor: built `./bin/pm` fresh before `./bin/pm docs generate --dir docs/cli`, then ran `npm run gen:website-data`. The generated diff was audited; only the planned PostgreSQL polling declaration/manual and its propagated docs changed. Normalized hashes of both website connector-data files match HEAD after blanking PostgreSQL's changed `docs_md`/`docsMd`, proving no other connector entry moved.
+- CI follow-up: the full verifier exposed stale `golden_transcripts.json` help/manual fixtures. Regenerated it through its sanctioned `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1` path; exactly ten expected polling-text transcript values moved, and the golden/docs/surface rerun passed.
 
 ## Status
 
