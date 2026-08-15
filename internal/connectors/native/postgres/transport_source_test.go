@@ -39,7 +39,6 @@ func TestPostgresDefinitionDeclaresResumablePollingTransportSource(t *testing.T)
 		synccontract.ModeIncrementalAppend,
 		synccontract.ModeIncrementalUpsert,
 		synccontract.ModeIncrementalDedupe,
-		synccontract.ModeIncrementalDedupeHistory,
 	}; !sameModes(got, want) {
 		t.Fatalf("PostgreSQL source modes = %#v, want %#v", got, want)
 	}

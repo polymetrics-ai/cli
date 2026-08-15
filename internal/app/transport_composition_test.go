@@ -135,6 +135,135 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	}
 }
 
+func TestOpenPreflightsEveryDeclaredPostgresDestinationMode(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	postgres, ok := a.registry.Get("postgres")
+	if !ok {
+		t.Fatal("PostgreSQL connector is not registered")
+	}
+	destination, ok := connectors.DestinationTransportDescriptorOf(postgres)
+	if !ok {
+		t.Fatal("PostgreSQL destination transport is not declared")
+	}
+	wantSource := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_polling_watermark"}
+	wantDestination := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_managed_target"}
+	var fullOverwrite synctransport.ResolvedTransport
+	for _, mode := range destination.Modes {
+		t.Run(string(mode), func(t *testing.T) {
+			resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+				Source:      postgres,
+				Destination: postgres,
+				Stream:      "snapshot",
+				Mode:        mode,
+			})
+			if err != nil {
+				t.Fatalf("production PostgreSQL preflight for %q = %v", mode, err)
+			}
+			if got := resolved.Source.TransportExecutorReference(); got != wantSource {
+				t.Fatalf("production source for %q = %+v, want %+v", mode, got, wantSource)
+			}
+			if got := resolved.Destination.TransportExecutorReference(); got != wantDestination {
+				t.Fatalf("production destination for %q = %+v, want %+v", mode, got, wantDestination)
+			}
+			if mode == synccontract.ModeFullOverwrite {
+				fullOverwrite = resolved
+			}
+		})
+	}
+	if fullOverwrite.Source == nil {
+		t.Fatal("PostgreSQL destination declaration omitted full_overwrite")
+	}
+	var records []connectors.Record
+	err = fullOverwrite.Source.ReadTransport(context.Background(), synctransport.SourceRequest{
+		Connector: postgres,
+		Runtime: connectors.RuntimeConfig{ProjectDir: root, Config: map[string]string{
+			"mode": "fixture", "host": "fixture.internal", "database": "analytics", "username": "reader", "sslmode": "require",
+		}},
+		Stream: "public.users", CursorField: "updated_at", PrimaryKey: []string{"id"},
+		Mode: synccontract.ModeFullOverwrite, BatchSize: 2,
+		Resume: synccontract.ResumeExpectation{
+			Source:           synccontract.SourceIdentity{Engine: "postgres", AccountOrCluster: "fixture-credential", ObjectScope: "public.users"},
+			SourceGeneration: synccontract.OpaqueToken("fixture-generation"),
+		},
+	}, func(page synctransport.SourcePage) error {
+		records = append(records, page.Records...)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("production-composed PostgreSQL full_overwrite read = %v", err)
+	}
+	if got, want := len(records), 3; got != want {
+		t.Fatalf("production-composed PostgreSQL full_overwrite records = %d, want %d", got, want)
+	}
+}
+
+func TestOpenRefusesPostgresUnpairedHistoryModeBeforeExecutorIO(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	postgres, ok := a.registry.Get("postgres")
+	if !ok {
+		t.Fatal("PostgreSQL connector is not registered")
+	}
+	_, err = a.transports.Preflight(synctransport.PreflightRequest{
+		Source:      postgres,
+		Destination: postgres,
+		Stream:      "snapshot",
+		Mode:        synccontract.ModeIncrementalDedupeHistory,
+	})
+	if got, want := fmt.Sprint(err), `source transport does not support sync mode "incremental_dedupe_history"`; got != want {
+		t.Fatalf("history preflight refusal = %q, want %q before executor I/O", got, want)
+	}
+}
+
+func TestOpenPostgresTransportDeclarationsAreExactModeIntersection(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	postgres, ok := a.registry.Get("postgres")
+	if !ok {
+		t.Fatal("PostgreSQL connector is not registered")
+	}
+	source, ok := connectors.SourceTransportDescriptorOf(postgres)
+	if !ok {
+		t.Fatal("PostgreSQL source transport is not declared")
+	}
+	destination, ok := connectors.DestinationTransportDescriptorOf(postgres)
+	if !ok {
+		t.Fatal("PostgreSQL destination transport is not declared")
+	}
+	want := []synccontract.Mode{
+		synccontract.ModeFullOverwrite,
+		synccontract.ModeFullAppend,
+		synccontract.ModeIncrementalAppend,
+		synccontract.ModeIncrementalUpsert,
+		synccontract.ModeIncrementalDedupe,
+	}
+	if fmt.Sprint(source.Modes) != fmt.Sprint(want) {
+		t.Fatalf("PostgreSQL source modes = %v, want exact reachable intersection %v", source.Modes, want)
+	}
+	if fmt.Sprint(destination.Modes) != fmt.Sprint(want) {
+		t.Fatalf("PostgreSQL destination modes = %v, want exact reachable intersection %v", destination.Modes, want)
+	}
+}
+
 func assertGitHubTransportEligibleStreamsMatchDefinition(t *testing.T, github connectors.Connector) {
 	t.Helper()
 	definition, ok := connectors.DefinitionOf(github)
