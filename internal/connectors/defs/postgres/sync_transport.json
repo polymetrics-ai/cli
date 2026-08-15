@@ -11,8 +11,7 @@
       "full_append",
       "incremental_append",
       "incremental_upsert",
-      "incremental_dedupe",
-      "incremental_dedupe_history"
+      "incremental_dedupe"
     ],
     "delivery": {
       "idempotency": "at_least_once",
