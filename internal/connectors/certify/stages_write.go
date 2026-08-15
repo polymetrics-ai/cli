@@ -23,12 +23,15 @@ package certify
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
+
+	"polymetrics.ai/internal/app"
 )
 
 const (
@@ -117,10 +120,20 @@ func stageWritePlanPreview(rc *runContext, rep *Report) error {
 func stageWritePlanPreviewSelfTest(rc *runContext, rep *Report, wc *writeContext) {
 	recordStage(rc, rep, "write_outbox_credentials_add", 1, func() (bool, CLIStageInfo, string) {
 		outboxDir := filepath.Join(rc.root, ".polymetrics", "outbox")
-		res := rc.run("credentials", "add", writeOutboxCredentialName, "--connector", "outbox",
-			"--config", "path="+outboxDir, "--json")
-		passed, errMsg := assertKind(rc, "write_outbox_credentials_add", res, "Credential", 0)
-		return passed, cliInfoFrom(res), errMsg
+		if rc.ephemeralCredentials == nil {
+			return false, CLIStageInfo{}, "certification ephemeral credentials are unavailable"
+		}
+		if err := rc.ephemeralCredentials.Put(app.EphemeralCredential{
+			Name:      writeOutboxCredentialName,
+			Connector: "outbox",
+			Config:    map[string]string{"path": outboxDir},
+		}); err != nil {
+			return false, CLIStageInfo{}, fmt.Sprintf("register outbox credential: %v", err)
+		}
+		if !rc.ephemeralCredentials.HasCredential(writeOutboxCredentialName) {
+			return false, CLIStageInfo{}, "outbox credential was not retained in the ephemeral session"
+		}
+		return true, ephemeralCredentialStageInfo(writeOutboxCredentialName), ""
 	})
 
 	seedTable := "cert_write_seed_" + rc.opts.Connector
@@ -488,9 +501,18 @@ func seedGeneratedSourceTable(rc *runContext, table, primaryKey string, record m
 		return fmt.Errorf("write seed file: %w", err)
 	}
 	credName := "cert-write-seed-file-" + table
-	credRes := rc.run("credentials", "add", credName, "--connector", "file", "--config", "path="+seedPath, "--json")
-	if credRes.ExitCode != 0 {
-		return fmt.Errorf("seed credentials add: exit=%d stderr=%s", credRes.ExitCode, credRes.Stderr)
+	if rc.ephemeralCredentials == nil {
+		return fmt.Errorf("seed credentials: certification ephemeral credentials are unavailable")
+	}
+	if err := rc.ephemeralCredentials.Put(app.EphemeralCredential{
+		Name:      credName,
+		Connector: "file",
+		Config:    map[string]string{"path": seedPath},
+	}); err != nil {
+		return fmt.Errorf("register seed credential: %w", err)
+	}
+	if !rc.ephemeralCredentials.HasCredential(credName) {
+		return errors.New("seed credential was not retained in the ephemeral session")
 	}
 	streamName := strings.TrimSuffix(filepath.Base(seedPath), filepath.Ext(seedPath))
 	connName := "cert_write_seed_conn_" + table

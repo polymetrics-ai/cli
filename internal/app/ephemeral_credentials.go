@@ -171,6 +171,14 @@ func (s *CertificationEphemeralSession) credential(name string) (CredentialMeta,
 	}, cloneStringMap(credential.Secrets), true
 }
 
+// HasCredential reports whether name is currently registered without exposing
+// its secret values. Certification stages use this as their observable proof
+// that an intake was retained only by the process-local session.
+func (s *CertificationEphemeralSession) HasCredential(name string) bool {
+	_, _, ok := s.credential(name)
+	return ok
+}
+
 func (s *CertificationEphemeralSession) writeApproval() *projectWriteApprovalAuthority {
 	if s == nil {
 		return nil

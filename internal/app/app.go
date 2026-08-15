@@ -3198,6 +3198,11 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 }
 
 func (a *App) findCredential(name string) (CredentialMeta, bool) {
+	if a.ephemeralCredentials != nil {
+		if credential, _, ok := a.ephemeralCredentials.credential(name); ok {
+			return credential, true
+		}
+	}
 	for _, cred := range a.state.Credentials {
 		if cred.Name == name || cred.ID == name {
 			return cred, true
