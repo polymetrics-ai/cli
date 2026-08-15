@@ -104,3 +104,40 @@ func TestObservedTransportBoundsResponseBodyWithoutChangingChildBytes(t *testing
 		t.Fatalf("bounded captured body = %#v, want complete 65-byte source truncated to 32 bytes", captured)
 	}
 }
+
+func TestObservedTransportCapturesRedirectChain(t *testing.T) {
+	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		switch request.URL.Path {
+		case "/start":
+			http.Redirect(w, request, "/complete", http.StatusTemporaryRedirect)
+		case "/complete":
+			_, _ = w.Write([]byte("redirect-complete"))
+		default:
+			http.Error(w, "unexpected request", http.StatusNotFound)
+		}
+	}))
+	defer server.Close()
+
+	observer := certify.NewObservedTransport(server.Client().Transport, 4096)
+	response, err := (&http.Client{Transport: observer}).Get(server.URL + "/start")
+	if err != nil {
+		t.Fatalf("follow observed redirect: %v", err)
+	}
+	if _, err := io.ReadAll(response.Body); err != nil {
+		t.Fatalf("read final redirect body: %v", err)
+	}
+	if err := response.Body.Close(); err != nil {
+		t.Fatalf("close final redirect body: %v", err)
+	}
+
+	exchanges := observer.Exchanges()
+	if len(exchanges) != 2 {
+		t.Fatalf("redirect exchange count = %d, want source and final exchanges", len(exchanges))
+	}
+	if exchanges[0].Request.Target != server.URL+"/start" || exchanges[0].Response.Status != http.StatusTemporaryRedirect || !exchanges[0].Response.Body.Complete {
+		t.Fatalf("redirect source exchange = %#v, want complete 307 /start exchange", exchanges[0])
+	}
+	if exchanges[1].Request.Target != server.URL+"/complete" || exchanges[1].Response.Status != http.StatusOK || !exchanges[1].Response.Body.Complete {
+		t.Fatalf("redirect final exchange = %#v, want complete 200 /complete exchange", exchanges[1])
+	}
+}

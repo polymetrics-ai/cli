@@ -12,6 +12,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -289,6 +290,43 @@ func TestRelayExternalCertifyChildOutputRefusesCredentialWithoutWrites(t *testin
 	}
 	if stdout.Len() != 0 || stderr.Len() != 0 {
 		t.Fatalf("relay wrote child streams after refusal: stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+}
+
+func TestPrepareExternalCertifyStdinCredentialUsesChildMemoryOnly(t *testing.T) {
+	const token = "cert-canary-stdin-3989"
+	reader, writer, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("create stdin pipe: %v", err)
+	}
+	if _, err := io.WriteString(writer, token+"\n"); err != nil {
+		t.Fatalf("write stdin credential: %v", err)
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatalf("close stdin writer: %v", err)
+	}
+	originalStdin := os.Stdin
+	os.Stdin = reader
+	t.Cleanup(func() {
+		os.Stdin = originalStdin
+		_ = reader.Close()
+	})
+	args := []string{"recurly", "--external-proof", "--full-parity", "--value-stdin", "api_key", "--json"}
+	childArgs, childEnv, prepared, err := prepareExternalCertifyCredentialInput(args, parseFlags(args), certify.Options{})
+	if err != nil {
+		t.Fatalf("prepare stdin certification credential: %v", err)
+	}
+	if strings.Contains(strings.Join(childArgs, "\x00"), token) {
+		t.Fatal("child argv contains stdin credential material")
+	}
+	if got, want := childArgs[len(childArgs)-2:], []string{"--from-env", "api_key=" + certificationStdinSecretEnv}; !slices.Equal(got, want) {
+		t.Fatalf("derived child credential args = %v, want %v", got, want)
+	}
+	if got, want := prepared, []string{token}; !slices.Equal(got, want) {
+		t.Fatal("stdin credential was not retained as the prepared in-memory value")
+	}
+	if got, want := childEnv, []string{certificationStdinSecretEnv + "=" + token}; !slices.Equal(got, want) {
+		t.Fatal("stdin credential did not reach the child-only environment")
 	}
 }
 

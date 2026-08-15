@@ -36,37 +36,39 @@ var externalProofSHA256 = regexp.MustCompile(`^[a-f0-9]{64}$`)
 // contain raw values only long enough to generate HMAC fingerprints; neither
 // field has a JSON representation or a persistence path.
 type ExternalProofInput struct {
-	Connector      string
-	RunID          string
-	BinarySHA256   string
-	Command        []string
-	Stdout         string
-	Stderr         string
-	ExitCode       int
-	Passed         bool
-	FullParity     bool
-	PreparedValues []string
-	HTTPExchanges  []ObservedHTTPExchange
+	Connector               string
+	RunID                   string
+	BinarySHA256            string
+	Command                 []string
+	Stdout                  string
+	Stderr                  string
+	ExitCode                int
+	Passed                  bool
+	FullParity              bool
+	PreparedValues          []string
+	HTTPExchanges           []ObservedHTTPExchange
+	FlowRoundTripReferences []string
 }
 
 // externalProofArtifact is intentionally private so callers cannot construct
 // a serializable artifact containing raw credential or transcript values.
 type externalProofArtifact struct {
-	Version                int                         `json:"version"`
-	RedactionStrategy      string                      `json:"redaction_strategy"`
-	Connector              string                      `json:"connector"`
-	RunID                  string                      `json:"run_id"`
-	PMBinarySHA256         string                      `json:"pm_binary_sha256"`
-	CredentialFingerprints []string                    `json:"credential_fingerprints"`
-	Process                externalProofProcess        `json:"process"`
-	HTTPExchanges          []externalProofHTTPExchange `json:"http_exchanges"`
+	Version                 int                         `json:"version"`
+	RedactionStrategy       string                      `json:"redaction_strategy"`
+	Connector               string                      `json:"connector"`
+	RunID                   string                      `json:"run_id"`
+	PMBinarySHA256          string                      `json:"pm_binary_sha256"`
+	CredentialFingerprints  []string                    `json:"credential_fingerprints"`
+	Process                 externalProofProcess        `json:"process"`
+	HTTPExchanges           []externalProofHTTPExchange `json:"http_exchanges"`
+	FlowRoundTripReferences []string                    `json:"flow_round_trip_references"`
 }
 
 type externalProofProcess struct {
-	CommandFingerprint string `json:"command_fingerprint"`
-	ExitCode           int    `json:"exit_code"`
-	StdoutFingerprint  string `json:"stdout_fingerprint"`
-	StderrFingerprint  string `json:"stderr_fingerprint"`
+	Command           []string `json:"command"`
+	ExitCode          int      `json:"exit_code"`
+	StdoutFingerprint string   `json:"stdout_fingerprint"`
+	StderrFingerprint string   `json:"stderr_fingerprint"`
 }
 
 type externalProofHTTPExchange struct {
@@ -206,7 +208,31 @@ func validateExternalProofInput(input ExternalProofInput) ([]string, error) {
 			return nil, fmt.Errorf("external proof exchange %d: %w", index+1, err)
 		}
 	}
+	if err := validateExternalProofFlowRoundTripReferences(input.FlowRoundTripReferences); err != nil {
+		return nil, err
+	}
 	return prepared, nil
+}
+
+func validateExternalProofFlowRoundTripReferences(references []string) error {
+	required := []string{"flow_plan", "flow_preview", "flow_run", "flow_status"}
+	present := make(map[string]bool, len(required))
+	for _, reference := range references {
+		if !externalProofIdentifier.MatchString(reference) {
+			return fmt.Errorf("external proof has unsafe flow round-trip reference %q", reference)
+		}
+		for _, requiredReference := range required {
+			if reference == requiredReference {
+				present[reference] = true
+			}
+		}
+	}
+	for _, reference := range required {
+		if !present[reference] {
+			return fmt.Errorf("external proof requires successful flow round-trip reference %q", reference)
+		}
+	}
+	return nil
 }
 
 func validateObservedProofExchange(exchange ObservedHTTPExchange) error {
@@ -229,7 +255,6 @@ func validateObservedProofExchange(exchange ObservedHTTPExchange) error {
 }
 
 func sanitizeExternalProof(input ExternalProofInput, prepared []string, salt []byte) (externalProofArtifact, error) {
-	command := strings.Join(input.Command, "\x00")
 	artifact := externalProofArtifact{
 		Version:                externalProofVersion,
 		RedactionStrategy:      externalProofFingerprintID,
@@ -238,12 +263,13 @@ func sanitizeExternalProof(input ExternalProofInput, prepared []string, salt []b
 		PMBinarySHA256:         input.BinarySHA256,
 		CredentialFingerprints: fingerprintExternalPreparedValues(salt, prepared),
 		Process: externalProofProcess{
-			CommandFingerprint: externalProofFingerprintText(salt, command, prepared),
-			ExitCode:           input.ExitCode,
-			StdoutFingerprint:  externalProofFingerprintText(salt, input.Stdout, prepared),
-			StderrFingerprint:  externalProofFingerprintText(salt, input.Stderr, prepared),
+			Command:           append([]string(nil), input.Command...),
+			ExitCode:          input.ExitCode,
+			StdoutFingerprint: externalProofFingerprint(salt, input.Stdout),
+			StderrFingerprint: externalProofFingerprint(salt, input.Stderr),
 		},
-		HTTPExchanges: make([]externalProofHTTPExchange, 0, len(input.HTTPExchanges)),
+		HTTPExchanges:           make([]externalProofHTTPExchange, 0, len(input.HTTPExchanges)),
+		FlowRoundTripReferences: append([]string(nil), input.FlowRoundTripReferences...),
 	}
 	for _, exchange := range input.HTTPExchanges {
 		sanitized, err := sanitizeObservedProofExchange(exchange, prepared, salt)

@@ -42,7 +42,11 @@ func runCertify(ctx context.Context, root string, args []string, stdout, stderr 
 		if flags.first("full-parity") != "true" {
 			return usageErrorf("pm connectors certify --external-proof requires --full-parity")
 		}
-		return runExternalCertifyChild(ctx, root, args, stdout, stderr, certificationPreparedValues(opts))
+		childArgs, childEnv, preparedValues, err := prepareExternalCertifyCredentialInput(args, flags, opts)
+		if err != nil {
+			return err
+		}
+		return runExternalCertifyChild(ctx, root, childArgs, stdout, stderr, preparedValues, childEnv)
 	}
 
 	switch {
@@ -102,18 +106,23 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 		if err != nil {
 			return err
 		}
+		flowReferences, err := certificationFlowRoundTripReferences(rep)
+		if err != nil {
+			return fmt.Errorf("certify external proof: %w", err)
+		}
 		runID := fmt.Sprintf("external-%d", rep.StartedAt.UTC().UnixNano())
 		if _, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
-			Connector:      connector,
-			RunID:          runID,
-			BinarySHA256:   binarySHA256,
-			Command:        append([]string(nil), os.Args...),
-			Stdout:         rendered.String(),
-			ExitCode:       exitCodeForReport(rep),
-			Passed:         rep.Passed,
-			FullParity:     true,
-			PreparedValues: certificationPreparedValues(opts),
-			HTTPExchanges:  runner.ObservedHTTPExchanges(),
+			Connector:               connector,
+			RunID:                   runID,
+			BinarySHA256:            binarySHA256,
+			Command:                 append([]string(nil), os.Args...),
+			Stdout:                  rendered.String(),
+			ExitCode:                exitCodeForReport(rep),
+			Passed:                  rep.Passed,
+			FullParity:              true,
+			PreparedValues:          certificationPreparedValues(opts),
+			HTTPExchanges:           runner.ObservedHTTPExchanges(),
+			FlowRoundTripReferences: flowReferences,
 		}); err != nil {
 			return fmt.Errorf("certify external proof: %w", err)
 		}
@@ -125,7 +134,29 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 	return exitForReport(rep)
 }
 
-func runExternalCertifyChild(ctx context.Context, root string, args []string, stdout, stderr io.Writer, preparedValues []string) error {
+// certificationFlowRoundTripReferences turns the successful in-process flow
+// read-back stages into safe proof references. Accepted external evidence must
+// name the completed plan, preview, execution, and status/read-back steps
+// rather than treating a source-only HTTP transcript as a complete workflow.
+func certificationFlowRoundTripReferences(rep certify.Report) ([]string, error) {
+	required := []string{"flow_plan", "flow_preview", "flow_run", "flow_status"}
+	passed := make(map[string]bool, len(required))
+	for _, stage := range rep.Stages {
+		for _, name := range required {
+			if stage.Name == name && stage.Passed {
+				passed[name] = true
+			}
+		}
+	}
+	for _, name := range required {
+		if !passed[name] {
+			return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q", name)
+		}
+	}
+	return required, nil
+}
+
+func runExternalCertifyChild(ctx context.Context, root string, args []string, stdout, stderr io.Writer, preparedValues, childEnv []string) error {
 	moduleRoot, err := certificationModuleRoot()
 	if err != nil {
 		return err
@@ -147,6 +178,7 @@ func runExternalCertifyChild(ctx context.Context, root string, args []string, st
 	childArgs = append(childArgs, "--root", root)
 	child := exec.CommandContext(ctx, binaryPath, childArgs...)
 	child.Env = append(os.Environ(), certificationExternalChildEnv+"=1")
+	child.Env = append(child.Env, childEnv...)
 	var childStdout, childStderr bytes.Buffer
 	child.Stdout = &childStdout
 	child.Stderr = &childStderr
@@ -166,6 +198,54 @@ func runExternalCertifyChild(ctx context.Context, root string, args []string, st
 		return certifyExitErrorf(exitErr.ExitCode(), "external certification %s: exit %d", connector, exitErr.ExitCode())
 	}
 	return fmt.Errorf("certify external proof: run fresh pm binary: %w", err)
+}
+
+const certificationStdinSecretEnv = "PM_CERTIFICATION_STDIN_SECRET"
+
+// prepareExternalCertifyCredentialInput converts the one supported stdin
+// credential into a child-only environment value. The parent command line
+// keeps only a field name; the raw stdin value is never written, serialized
+// into argv, or handed to an ordinary credential profile.
+func prepareExternalCertifyCredentialInput(args []string, flags parsedFlags, opts certify.Options) ([]string, []string, []string, error) {
+	prepared := certificationPreparedValues(opts)
+	stdinValues := flags.values["value-stdin"]
+	if len(stdinValues) == 0 {
+		return append([]string(nil), args...), nil, prepared, nil
+	}
+	if len(stdinValues) != 1 || flags.isBare("value-stdin") {
+		return nil, nil, nil, usageErrorf("pm connectors certify --external-proof accepts exactly one --value-stdin field")
+	}
+	field := stdinValues[0]
+	if err := safety.ValidateIdentifier(field, "stdin credential field"); err != nil {
+		return nil, nil, nil, validationErrorf("%v", err)
+	}
+	payload, err := io.ReadAll(os.Stdin)
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("read stdin certification credential: %w", err)
+	}
+	value := strings.TrimRight(string(payload), "\r\n")
+	if value == "" {
+		return nil, nil, nil, errors.New("stdin certification credential is empty")
+	}
+	childArgs := replaceCertificationStdinArg(args, field)
+	prepared = append(prepared, value)
+	return childArgs, []string{certificationStdinSecretEnv + "=" + value}, prepared, nil
+}
+
+func replaceCertificationStdinArg(args []string, field string) []string {
+	out := make([]string, 0, len(args)+2)
+	for index := 0; index < len(args); index++ {
+		arg := args[index]
+		if arg == "--value-stdin" {
+			index++
+			continue
+		}
+		if strings.HasPrefix(arg, "--value-stdin=") {
+			continue
+		}
+		out = append(out, arg)
+	}
+	return append(out, "--from-env", field+"="+certificationStdinSecretEnv)
 }
 
 // relayExternalCertifyChildOutput is the parent-side final credential boundary:

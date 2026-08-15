@@ -28,6 +28,7 @@
 | No persisted credential | fake + filesystem audit before cleanup | zero certification credential/key/profile writes; refusal paths write zero artifacts. |
 | Fresh external full transcript | real freshly built `pm` + HTTPS test provider | observed child stdout/stderr match stored result and transcript contains method/query/body/status/response; incomplete run is rejected. |
 | Bounded redirects/retries/binaries/errors | HTTPS provider fake | explicit exchange count, redirect/retry/error observations, byte ceiling and truncation fields; a proof requiring truncation is refused. |
+| Safe argv and flow read-back | fresh external binary + refusal fake | artifact retains the exact credential-free child argv and references successful `flow_plan`, `flow_preview`, `flow_run`, and `flow_status`; a missing reference produces zero proof writes. |
 | Live GitHub smoke | opt-in live | accepted sanitized evidence only when already-configured credential reference exists; no secret is emitted or persisted. |
 
 ## Verification
