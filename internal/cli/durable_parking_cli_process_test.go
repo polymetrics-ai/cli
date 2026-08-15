@@ -209,9 +209,9 @@ func runDurableParkingCLIHelper(t *testing.T, mode string) {
 			t.Fatal("restarted CLI parked refusal advanced the checkpoint")
 		}
 	case "resume-race":
-		code, _ := run("etl", "status", runID, "--root", root, "--json")
+		code, output := run("etl", "status", runID, "--root", root, "--json")
 		if code != 0 {
-			t.Fatal("CLI app.Open could not participate in durable resume claim")
+			t.Fatalf("CLI app.Open could not participate in durable resume claim: exit=%d output=%q", code, output)
 		}
 	case "verify-resume":
 		code, output := run("etl", "status", runID, "--root", root, "--json")
