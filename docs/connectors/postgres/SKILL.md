@@ -7,7 +7,7 @@ description: PostgreSQL connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Read-only source.
+Reads PostgreSQL tables, writes warehouse worksets to owned managed PostgreSQL targets, and supports PostgreSQL 14+ logical-replication CDC. Generic SQL and direct connector writes remain unavailable.
 
 ## Icon
 
@@ -19,7 +19,7 @@ Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL s
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=true query=false
 - Integration type: database
 
 ## Authentication
@@ -48,8 +48,8 @@ Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL s
 ## Security
 
 - read risk: low
-- write risk: n/a (read-only source)
-- approval: none required for read-only sync
+- write risk: high (owned managed targets only)
+- approval: warehouse workset and managed-target ownership required for writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Sync Transport

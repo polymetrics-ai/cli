@@ -4,6 +4,8 @@ package postgres
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -810,18 +812,34 @@ func assertPostgresCDCPrerequisites(t *testing.T, ctx context.Context, source *p
 }
 
 func startCDCRead(connector Connector, ctx context.Context, req connectors.CDCReadRequest, events chan<- connectors.CDCEvent) <-chan error {
+	receiver := cdcIntegrationTransactionReceiver{events: events}
+	req.TransactionReceiver = receiver
 	done := make(chan error, 1)
 	go func() {
-		done <- connector.ReadCDC(ctx, req, func(event connectors.CDCEvent) error {
-			select {
-			case events <- event:
-				return nil
-			case <-ctx.Done():
-				return ctx.Err()
-			}
+		done <- connector.ReadCDC(ctx, req, func(connectors.CDCEvent) error {
+			return errors.New("PostgreSQL live CDC bypassed its durable transaction receiver")
 		})
 	}()
 	return done
+}
+
+type cdcIntegrationTransactionReceiver struct {
+	events chan<- connectors.CDCEvent
+}
+
+func (r cdcIntegrationTransactionReceiver) ReceiveCDCTransaction(ctx context.Context, transaction connectors.CDCTransaction) (connectors.CDCTransactionReceipt, error) {
+	if err := transaction.StreamEvents(ctx, func(event connectors.CDCEvent) error {
+		select {
+		case r.events <- event:
+			return nil
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+	}); err != nil {
+		return connectors.CDCTransactionReceipt{}, err
+	}
+	digest := sha256.Sum256([]byte(transaction.ID()))
+	return connectors.NewCDCTransactionReceipt("postgres-live-"+hex.EncodeToString(digest[:]), "warehouse:postgres-cdc-integration", time.Now().UTC())
 }
 
 func assertNoCDCActivity(t *testing.T, events <-chan connectors.CDCEvent, committer *cdcIntegrationCommitter, duration time.Duration) {

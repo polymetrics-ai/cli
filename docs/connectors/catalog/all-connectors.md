@@ -370,7 +370,7 @@
 | `pokeapi` | [`icons/pokeapi.svg`](../icons/pokeapi.svg) | PokeAPI | `api` | ga | check, catalog, read | 97 | 0 | [Documentation](https://pokeapi.co/docs/v2) | bundle definition |
 | `polygon-stock-api` | [`icons/polygon.svg`](../icons/polygon.svg) | Polygon Stock API | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://polygon.io/docs/stocks/getting-started) | bundle definition |
 | `poplar` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Poplar | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://docs.poplar.studio/) | bundle definition |
-| `postgres` | [`icons/postgresql.svg`](../icons/postgresql.svg) | PostgreSQL | `database` | ga | check, catalog, read | 0 | 0 | manual intervention needed | bundle definition |
+| `postgres` | [`icons/postgresql.svg`](../icons/postgresql.svg) | PostgreSQL | `database` | ga | check, catalog, read, write | 0 | 0 | manual intervention needed | bundle definition |
 | `posthog` | [`icons/posthog.svg`](../icons/posthog.svg) | PostHog | `api` | beta | check, catalog, read | 2 | 0 | [Documentation](https://posthog.com/docs/api) | bundle definition |
 | `postmarkapp` | [`icons/postmark.svg`](../icons/postmark.svg) | Postmark App | `api` | ga | check, catalog, read, write | 35 | 22 | [Documentation](https://postmarkapp.com/developer) | bundle definition |
 | `prestashop` | [`icons/prestashop.svg`](../icons/prestashop.svg) | PrestaShop | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://devdocs.prestashop-project.org/9/webservice/) | bundle definition |

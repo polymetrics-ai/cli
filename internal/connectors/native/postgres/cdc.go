@@ -48,8 +48,8 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	if _, err := cdcStageProjectRoot(req.Config.ProjectDir); err != nil {
 		return err
 	}
-	if emit == nil {
-		return errors.New("postgres CDC requires an event callback")
+	if emit == nil && req.TransactionReceiver == nil {
+		return errors.New("postgres CDC requires a committed transaction receiver or event callback")
 	}
 	if req.DurableCheckpointCommitter == nil {
 		return errors.New("postgres CDC requires a durable checkpoint committer")

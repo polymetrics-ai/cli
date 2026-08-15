@@ -22,8 +22,8 @@ func TestNameAndMetadata(t *testing.T) {
 	if !caps.Check || !caps.Catalog || !caps.Read {
 		t.Fatalf("capabilities = %+v, want Check && Catalog && Read", caps)
 	}
-	if caps.Write {
-		t.Fatalf("postgres source connector must be read-only, got Write=true")
+	if !caps.Write || !caps.CDC || caps.Query {
+		t.Fatalf("PostgreSQL capabilities = %+v, want write=true cdc=true query=false", caps)
 	}
 	if !connectors.MetadataOf(c).Capabilities.CDC {
 		t.Fatal("PostgreSQL CDC must be discoverable with the matching pgoutput v2 executor")
@@ -79,6 +79,9 @@ func TestManifestProjectsBundleCredentials(t *testing.T) {
 	}
 	if !manifest.Metadata.Capabilities.CDC {
 		t.Fatal("PostgreSQL manifest must advertise the proven pgoutput v2 capability")
+	}
+	if !manifest.Metadata.Capabilities.Write || manifest.Metadata.Capabilities.Query {
+		t.Fatalf("PostgreSQL manifest capabilities = %+v, want write=true query=false", manifest.Metadata.Capabilities)
 	}
 }
 
