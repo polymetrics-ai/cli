@@ -18,7 +18,7 @@ func TestCDCDeleteTombstoneConvertsPGOutputDeleteToExplicitSourceKeys(t *testing
 	if err != nil || len(events) != 1 {
 		t.Fatalf("decode delete = (%#v, %v), want one pgoutput delete", events, err)
 	}
-	tombstone, err := CDCDeleteTombstone(events[0], []string{"tenant", "id"})
+	tombstone, err := CDCDeleteTombstone(events[0], []string{"tenant", "id"}, 1)
 	if err != nil {
 		t.Fatalf("CDCDeleteTombstone() error = %v", err)
 	}
@@ -35,7 +35,7 @@ func TestCDCDeleteTombstoneConvertsPGOutputDeleteToExplicitSourceKeys(t *testing
 	if got, want := key, map[string]any{"tenant": "retain", "id": float64(9)}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("CDC delete tombstone key = %#v, want %#v", got, want)
 	}
-	if duplicate, err := CDCDeleteTombstone(events[0], []string{"tenant", "id"}); err != nil || !reflect.DeepEqual(duplicate, tombstone) {
+	if duplicate, err := CDCDeleteTombstone(events[0], []string{"tenant", "id"}, 1); err != nil || !reflect.DeepEqual(duplicate, tombstone) {
 		t.Fatalf("CDCDeleteTombstone() replay = (%#v, %v), want the same explicit tombstone %#v", duplicate, err, tombstone)
 	}
 }
@@ -51,8 +51,11 @@ func TestCDCDeleteTombstoneRefusesNonDeleteAndIncompleteSourceKeys(t *testing.T)
 		{Operation: "delete", Record: connectors.Record{"tenant": "retain"}, State: deleteEvent.State},
 		{Operation: "delete", Record: deleteEvent.Record, State: connectors.Record{}},
 	} {
-		if tombstone, err := CDCDeleteTombstone(event, []string{"tenant", "id"}); err == nil || tombstone.Key != nil || len(tombstone.EventID) != 0 {
+		if tombstone, err := CDCDeleteTombstone(event, []string{"tenant", "id"}, 1); err == nil || tombstone.Key != nil || len(tombstone.EventID) != 0 {
 			t.Fatalf("CDCDeleteTombstone(%#v) = (%#v, %v), want no envelope and a pre-apply refusal", event, tombstone, err)
 		}
+	}
+	if tombstone, err := CDCDeleteTombstone(deleteEvent, []string{"tenant", "id"}, 0); err == nil || tombstone.Key != nil || len(tombstone.EventID) != 0 {
+		t.Fatalf("CDCDeleteTombstone(zero ordinal) = (%#v, %v), want no envelope and a pre-apply refusal", tombstone, err)
 	}
 }
