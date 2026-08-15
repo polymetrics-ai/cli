@@ -37,7 +37,13 @@ func (d *DatabaseDriver) assertManagedTargetForWrite(ctx context.Context, querie
 	if err := postgresAssertTargetControl(ctx, querier, control, relationOID); err != nil {
 		return errPostgresWriteTargetUnverified
 	}
-	return postgresAssertMappedRelation(ctx, querier, target, plan.Mapping(), plan.Mode() == synccontract.ModeIncrementalDedupeHistory)
+	if err := postgresAssertMappedRelation(ctx, querier, target, plan.Mapping(), plan.Mode() == synccontract.ModeIncrementalDedupeHistory); err != nil {
+		return err
+	}
+	if plan.ConditionalOrderFence() {
+		return postgresAssertOrderFence(ctx, querier, target.Namespace())
+	}
+	return nil
 }
 
 type postgresManagedTargetQuerier interface {
@@ -107,6 +113,7 @@ func postgresAssertMappedRelation(ctx context.Context, querier postgresManagedTa
 		return err
 	}
 	defer rows.Close()
+	columns = append(columns, postgresManagedTargetSystemColumns()...)
 	for _, expected := range columns {
 		if !rows.Next() {
 			return errPostgresWriteTargetUnverified
@@ -143,6 +150,15 @@ func postgresAssertMappedRelation(ctx context.Context, querier postgresManagedTa
 		return errPostgresWriteTargetUnverified
 	}
 	return nil
+}
+
+func postgresAssertOrderFence(ctx context.Context, querier postgresManagedTargetQuerier, namespace string) error {
+	rows, err := querier.Query(ctx, `SELECT relation_name, key_digest, source_primary, source_tie_breaker, deleted FROM `+postgresQualifiedControlTable(namespace, postgresOrderFenceTable)+` LIMIT 1`)
+	if err != nil {
+		return errPostgresWriteTargetUnverified
+	}
+	rows.Close()
+	return rows.Err()
 }
 
 func postgresEquivalentColumnType(expected, observed string) bool {

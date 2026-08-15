@@ -208,7 +208,9 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 	second := connectors.Record{"source_tenant": "north", "source_id": int64(1), "source_value": "v2"}
 
 	firstPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false)
-	firstReceipt := postgresExecuteManagedTargetWrite(t, ctx, executor, firstPlan, []connectors.Record{first}, database.TombstoneEnvelope{})
+	firstReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, firstPlan, []database.OrderedRecord{{
+		Record: first, Position: postgresManagedTargetPosition(1),
+	}}, database.TombstoneEnvelope{})
 	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, firstReceipt)
 	initialRows := postgresManagedTargetHistoryRows(t, ctx, source, control)
 	if len(initialRows) != 1 || initialRows[0].value != "v1" || !initialRows[0].current || initialRows[0].validTo != nil || initialRows[0].validFrom.IsZero() {
@@ -216,7 +218,9 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 	}
 
 	secondPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false)
-	secondReceipt := postgresExecuteManagedTargetWrite(t, ctx, executor, secondPlan, []connectors.Record{second}, database.TombstoneEnvelope{})
+	secondReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, secondPlan, []database.OrderedRecord{{
+		Record: second, Position: postgresManagedTargetPosition(2),
+	}}, database.TombstoneEnvelope{})
 	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, secondReceipt)
 	versionedRows := postgresManagedTargetHistoryRows(t, ctx, source, control)
 	if len(versionedRows) != 2 || versionedRows[0].value != "v1" || versionedRows[0].current || versionedRows[0].validTo == nil || versionedRows[1].value != "v2" || !versionedRows[1].current || versionedRows[1].validTo != nil || !versionedRows[0].validTo.Equal(versionedRows[1].validFrom) {
@@ -243,7 +247,10 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 		t.Fatal("could not reconstruct PostgreSQL history executor")
 	}
 	replayPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 2, 0, false)
-	replayReceipt := postgresExecuteManagedTargetWrite(t, ctx, restartedExecutor, replayPlan, []connectors.Record{first, second}, database.TombstoneEnvelope{})
+	replayReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, restartedExecutor, replayPlan, []database.OrderedRecord{
+		{Record: first, Position: postgresManagedTargetPosition(1)},
+		{Record: second, Position: postgresManagedTargetPosition(2)},
+	}, database.TombstoneEnvelope{})
 	assertPostgresManagedTargetReceiptPersisted(t, ctx, restartedDriver, control, replayReceipt)
 	if got := postgresManagedTargetHistoryRows(t, ctx, restartedSource, control); !samePostgresManagedTargetHistoryRows(got, versionedRows) {
 		t.Fatalf("late/replay delivery changed durable history: got=%#v want=%#v", got, versionedRows)
@@ -264,7 +271,7 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 		t.Fatal("could not construct PostgreSQL history soft-delete envelope")
 	}
 	closePlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 0, 1, false)
-	closeReceipt := postgresExecuteManagedTargetWrite(t, ctx, restartedExecutor, closePlan, nil, envelope)
+	closeReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, restartedExecutor, closePlan, nil, envelope)
 	assertPostgresManagedTargetReceiptPersisted(t, ctx, restartedDriver, control, closeReceipt)
 	closedRows := postgresManagedTargetHistoryRows(t, ctx, restartedSource, control)
 	if len(closedRows) != 2 || closedRows[0].current || closedRows[0].validTo == nil || closedRows[1].current || closedRows[1].validTo == nil || versionedRows[0].validTo == nil || !closedRows[0].validTo.Equal(*versionedRows[0].validTo) || !closedRows[1].validTo.After(closedRows[1].validFrom) {
@@ -710,7 +717,14 @@ func assertPostgresManagedTargetCreated(t *testing.T, ctx context.Context, sourc
 		}
 		got = append(got, column)
 	}
-	want := []targetColumn{{name: "tenant", typeSQL: "text", notNull: true}, {name: "id", typeSQL: "bigint", notNull: true}, {name: "value", typeSQL: "text", notNull: false}}
+	want := []targetColumn{
+		{name: "tenant", typeSQL: "text", notNull: true},
+		{name: "id", typeSQL: "bigint", notNull: true},
+		{name: "value", typeSQL: "text", notNull: false},
+		{name: synccontract.HistoryValidFromColumn, typeSQL: "timestamp with time zone", notNull: false},
+		{name: synccontract.HistoryValidToColumn, typeSQL: "timestamp with time zone", notNull: false},
+		{name: synccontract.HistoryIsCurrentColumn, typeSQL: "boolean", notNull: false},
+	}
 	if err := rows.Err(); err != nil || len(got) != len(want) {
 		t.Fatalf("PostgreSQL first-create target columns = %#v (%v), want %#v", got, err, want)
 	}
@@ -805,6 +819,8 @@ func assertPostgresManagedTargetWriteModes(t *testing.T, ctx context.Context, so
 		{tenant: "tenant-a", id: 3, value: "deduped-new"},
 	})
 
+	assertPostgresManagedTargetOrderFenceAndHistory(t, ctx, source, executor, definition, control, fixture)
+
 	assertPostgresManagedTargetStatementFailureRollback(t, ctx, source, driver, executor, definition, control, fixture)
 	assertPostgresManagedTargetCancellationRollback(t, ctx, source, driver, definition, control, fixture)
 
@@ -871,6 +887,98 @@ func assertPostgresManagedTargetStatementFailureRollback(t *testing.T, ctx conte
 	if got := postgresManagedTargetDeliveryID(t, ctx, driver, control); got != beforeDeliveryID {
 		t.Fatalf("PostgreSQL statement failure changed durable delivery evidence: got=%q want=%q", got, beforeDeliveryID)
 	}
+}
+
+// assertPostgresManagedTargetOrderFenceAndHistory proves live PostgreSQL
+// state for the source-ordered strategies. Each stale replay is deliberately
+// applied after a newer durable event; a no-op implementation would leave the
+// asserted rows, tombstones, and validity windows in different states.
+func assertPostgresManagedTargetOrderFenceAndHistory(t *testing.T, ctx context.Context, source *pgx.Conn, executor *database.DatabaseWriteExecutor, definition database.Definition, control database.ManagedTargetControlRecord, fixture postgresManagedTargetFixture) {
+	t.Helper()
+	keys := []string{"tenant", "id"}
+	polling := newPostgresManagedTargetPollingApply(t, executor, definition, control, fixture)
+	refusalResolved, err := engine.PollingPreflight(ctx, polling.registry, polling.declaration, polling.object, synccontract.ModeIncrementalUpsert)
+	if err != nil {
+		t.Fatalf("could not preflight oversized PostgreSQL polling page: %v", err)
+	}
+	beforeRefusal := postgresManagedTargetRows(t, ctx, source, control)
+	oversized := engine.PollingApplyPage{Records: []engine.PollingApplyRecord{
+		{Record: connectors.Record{"source_tenant": "refusal", "source_id": int64(1), "source_value": "one"}, Position: postgresManagedTargetPosition(10)},
+		{Record: connectors.Record{"source_tenant": "refusal", "source_id": int64(2), "source_value": "two"}, Position: postgresManagedTargetPosition(11)},
+		{Record: connectors.Record{"source_tenant": "refusal", "source_id": int64(3), "source_value": "three"}, Position: postgresManagedTargetPosition(12)},
+	}}
+	if _, err := engine.ApplyPollingPage(ctx, refusalResolved, oversized); err == nil {
+		t.Fatal("oversized PostgreSQL polling page applied, want pre-mutation refusal")
+	}
+	if got := postgresManagedTargetRows(t, ctx, source, control); !samePostgresManagedTargetRows(got, beforeRefusal) {
+		t.Fatalf("oversized PostgreSQL polling page changed target rows: got=%#v want=%#v", got, beforeRefusal)
+	}
+
+	postgresApplyManagedTargetPollingPage(t, ctx, polling, synccontract.ModeIncrementalUpsert, []database.OrderedRecord{{
+		Record:   connectors.Record{"source_tenant": "fenced-upsert", "source_id": int64(1), "source_value": "newest"},
+		Position: postgresManagedTargetPosition(20),
+	}}, database.TombstoneEnvelope{})
+	// A physically absent unrelated key is not a deletion instruction.
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalUpsert, connectors.ApplyStrategyMerge, keys, 1, 0, false, true), []database.OrderedRecord{{
+		Record:   connectors.Record{"source_tenant": "fenced-unrelated", "source_id": int64(2), "source_value": "other"},
+		Position: postgresManagedTargetPosition(21),
+	}}, database.TombstoneEnvelope{})
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalUpsert, connectors.ApplyStrategyMerge, keys, 1, 0, false, true), []database.OrderedRecord{{
+		Record:   connectors.Record{"source_tenant": "fenced-upsert", "source_id": int64(1), "source_value": "stale"},
+		Position: postgresManagedTargetPosition(19),
+	}}, database.TombstoneEnvelope{})
+	assertPostgresManagedTargetValue(t, ctx, source, control, "fenced-upsert", 1, "newest", 1)
+
+	upsertDelete := postgresManagedTargetTombstone(t, "fenced-upsert", 1, 22)
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalUpsert, connectors.ApplyStrategyMerge, keys, 0, 1, false, true), nil, postgresManagedTargetTombstoneEnvelope(t, upsertDelete))
+	assertPostgresManagedTargetValue(t, ctx, source, control, "fenced-upsert", 1, "", 0)
+	// The older record cannot resurrect a physically deleted row because the
+	// explicit tombstone advanced the persisted source-order fence.
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalUpsert, connectors.ApplyStrategyMerge, keys, 1, 0, false, true), []database.OrderedRecord{{
+		Record:   connectors.Record{"source_tenant": "fenced-upsert", "source_id": int64(1), "source_value": "late-replay"},
+		Position: postgresManagedTargetPosition(20),
+	}}, database.TombstoneEnvelope{})
+	assertPostgresManagedTargetValue(t, ctx, source, control, "fenced-upsert", 1, "", 0)
+
+	dedupe := postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupe, connectors.ApplyStrategyDedupe, keys, 1, 0, false, true)
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, dedupe, []database.OrderedRecord{{
+		Record:   connectors.Record{"source_tenant": "fenced-dedupe", "source_id": int64(1), "source_value": "first"},
+		Position: postgresManagedTargetPosition(30),
+	}}, database.TombstoneEnvelope{})
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupe, connectors.ApplyStrategyDedupe, keys, 1, 0, false, true), []database.OrderedRecord{{
+		Record:   connectors.Record{"source_tenant": "fenced-dedupe", "source_id": int64(1), "source_value": "duplicate"},
+		Position: postgresManagedTargetPosition(31),
+	}}, database.TombstoneEnvelope{})
+	assertPostgresManagedTargetValue(t, ctx, source, control, "fenced-dedupe", 1, "first", 1)
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupe, connectors.ApplyStrategyDedupe, keys, 0, 1, false, true), nil, postgresManagedTargetTombstoneEnvelope(t, postgresManagedTargetTombstone(t, "fenced-dedupe", 1, 32)))
+	assertPostgresManagedTargetValue(t, ctx, source, control, "fenced-dedupe", 1, "", 0)
+
+	postgresApplyManagedTargetPollingPage(t, ctx, polling, synccontract.ModeIncrementalDedupeHistory, []database.OrderedRecord{{
+		Record:   connectors.Record{"source_tenant": "history", "source_id": int64(1), "source_value": "first"},
+		Position: postgresManagedTargetPosition(40),
+	}}, database.TombstoneEnvelope{})
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false, true), []database.OrderedRecord{{
+		Record:   connectors.Record{"source_tenant": "history", "source_id": int64(1), "source_value": "second"},
+		Position: postgresManagedTargetPosition(41),
+	}}, database.TombstoneEnvelope{})
+	assertPostgresManagedTargetHistory(t, ctx, source, control, "history", 1, []postgresManagedTargetHistoryRow{{value: "first", open: false, current: false}, {value: "second", open: true, current: true}})
+	// A later page omits history/1 entirely. Both retained versions prove that
+	// omission is not a close or physical-delete operation.
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false, true), []database.OrderedRecord{{
+		Record:   connectors.Record{"source_tenant": "history-other", "source_id": int64(2), "source_value": "other"},
+		Position: postgresManagedTargetPosition(42),
+	}}, database.TombstoneEnvelope{})
+	assertPostgresManagedTargetHistory(t, ctx, source, control, "history", 1, []postgresManagedTargetHistoryRow{{value: "first", open: false, current: false}, {value: "second", open: true, current: true}})
+
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 0, 1, false, true), nil, postgresManagedTargetTombstoneEnvelope(t, postgresManagedTargetTombstone(t, "history", 1, 43)))
+	assertPostgresManagedTargetHistory(t, ctx, source, control, "history", 1, []postgresManagedTargetHistoryRow{{value: "first", open: false, current: false}, {value: "second", open: false, current: false}})
+	// A stale record after the tombstone cannot create another current history
+	// row, so the explicit close remains the observable target state.
+	postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, postgresManagedTargetFencedWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false, true), []database.OrderedRecord{{
+		Record:   connectors.Record{"source_tenant": "history", "source_id": int64(1), "source_value": "late-replay"},
+		Position: postgresManagedTargetPosition(41),
+	}}, database.TombstoneEnvelope{})
+	assertPostgresManagedTargetHistory(t, ctx, source, control, "history", 1, []postgresManagedTargetHistoryRow{{value: "first", open: false, current: false}, {value: "second", open: false, current: false}})
 }
 
 func assertPostgresManagedTargetCancellationRollback(t *testing.T, ctx context.Context, source *pgx.Conn, driver *native.DatabaseDriver, definition database.Definition, control database.ManagedTargetControlRecord, fixture postgresManagedTargetFixture) {
@@ -971,21 +1079,27 @@ func postgresManagedTargetWriteDefinition(t *testing.T) database.Definition {
 
 func postgresManagedTargetWritePlan(t *testing.T, definition database.Definition, control database.ManagedTargetControlRecord, fixture postgresManagedTargetFixture, mode synccontract.Mode, strategy connectors.ApplyStrategy, keys []string, records, tombstones int, destructive bool) database.DatabaseWritePlan {
 	t.Helper()
+	return postgresManagedTargetFencedWritePlan(t, definition, control, fixture, mode, strategy, keys, records, tombstones, destructive, mode == synccontract.ModeIncrementalDedupeHistory)
+}
+
+func postgresManagedTargetFencedWritePlan(t *testing.T, definition database.Definition, control database.ManagedTargetControlRecord, fixture postgresManagedTargetFixture, mode synccontract.Mode, strategy connectors.ApplyStrategy, keys []string, records, tombstones int, destructive, conditionalOrderFence bool) database.DatabaseWritePlan {
+	t.Helper()
 	mapping, ok := fixture.plan.Mapping()
 	if !ok {
 		t.Fatal("mapped PostgreSQL target plan lost its shared mapping")
 	}
 	request := database.DatabaseWritePlanRequest{
-		Definition:     definition,
-		Control:        control,
-		Mode:           mode,
-		Strategy:       strategy,
-		Mapping:        mapping,
-		Keys:           keys,
-		RecordCount:    records,
-		TombstoneCount: tombstones,
-		BatchSize:      2,
-		Destructive:    destructive,
+		Definition:            definition,
+		Control:               control,
+		Mode:                  mode,
+		Strategy:              strategy,
+		Mapping:               mapping,
+		Keys:                  keys,
+		RecordCount:           records,
+		TombstoneCount:        tombstones,
+		BatchSize:             2,
+		Destructive:           destructive,
+		ConditionalOrderFence: conditionalOrderFence,
 	}
 	if mode == synccontract.ModeIncrementalDedupeHistory {
 		request.HistoryRoute = database.DatabaseWriteHistoryRoute{Source: definition.Driver(), Destination: definition.Driver()}
@@ -1003,6 +1117,20 @@ func postgresExecuteManagedTargetWrite(t *testing.T, ctx context.Context, execut
 	if err != nil {
 		t.Fatal("could not construct bounded PostgreSQL write input")
 	}
+	return postgresExecuteManagedTargetInput(t, ctx, executor, plan, input)
+}
+
+func postgresExecuteManagedTargetOrderedWrite(t *testing.T, ctx context.Context, executor *database.DatabaseWriteExecutor, plan database.DatabaseWritePlan, records []database.OrderedRecord, tombstones database.TombstoneEnvelope) database.DeliveryReceiptV1 {
+	t.Helper()
+	input, err := database.NewOrderedDatabaseWriteInput(records, tombstones)
+	if err != nil {
+		t.Fatal("could not construct source-ordered PostgreSQL write input")
+	}
+	return postgresExecuteManagedTargetInput(t, ctx, executor, plan, input)
+}
+
+func postgresExecuteManagedTargetInput(t *testing.T, ctx context.Context, executor *database.DatabaseWriteExecutor, plan database.DatabaseWritePlan, input database.DatabaseWriteInput) database.DeliveryReceiptV1 {
+	t.Helper()
 	preview, err := executor.Preview(ctx, plan)
 	if err != nil {
 		t.Fatalf("PostgreSQL %s preview failed: %v", plan.Mode(), err)
@@ -1020,6 +1148,186 @@ func postgresExecuteManagedTargetWrite(t *testing.T, ctx context.Context, execut
 		t.Fatalf("PostgreSQL %s did not return durable target receipt: %#v", plan.Mode(), result)
 	}
 	return receipt
+}
+
+type postgresManagedTargetPollingApply struct {
+	declaration *connectors.PollingWatermarkDescriptor
+	object      connectors.PollingCatalogObject
+	registry    *engine.PollingPreflightRegistry
+	apply       *engine.DatabasePollingApplyExecutor
+}
+
+func newPostgresManagedTargetPollingApply(t *testing.T, write *database.DatabaseWriteExecutor, definition database.Definition, control database.ManagedTargetControlRecord, fixture postgresManagedTargetFixture) postgresManagedTargetPollingApply {
+	t.Helper()
+	mapping, ok := fixture.plan.Mapping()
+	if !ok {
+		t.Fatal("mapped PostgreSQL target plan lost its polling mapping")
+	}
+	sourceReference := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_managed_target_polling_source"}
+	targetReference := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_managed_target_polling_target"}
+	apply, err := engine.NewDatabasePollingApplyExecutor(engine.DatabasePollingApplyConfig{
+		Reference:  targetReference,
+		Evidence:   engine.RequiredPollingWatermarkConformanceEvidence(),
+		Write:      write,
+		Definition: definition,
+		Control:    control,
+		Mapping:    mapping,
+		BatchSize:  2,
+	})
+	if err != nil {
+		t.Fatalf("could not construct PostgreSQL native polling target: %v", err)
+	}
+	registry := engine.NewPollingPreflightRegistry()
+	if err := registry.RegisterSource(&postgresManagedTargetPollingSource{reference: sourceReference, evidence: engine.RequiredPollingWatermarkConformanceEvidence()}); err != nil {
+		t.Fatalf("could not register PostgreSQL polling source fixture: %v", err)
+	}
+	if err := registry.RegisterApply(apply); err != nil {
+		t.Fatalf("could not register PostgreSQL native polling target: %v", err)
+	}
+	return postgresManagedTargetPollingApply{
+		declaration: &connectors.PollingWatermarkDescriptor{
+			Status: connectors.PollingWatermarkStatusImplemented,
+			Source: connectors.PollingWatermarkSourceDescriptor{
+				Executor: sourceReference,
+				Object:   connectors.PollingCatalogObjectSelector{Kind: connectors.PollingCatalogObjectRelation},
+				Read: connectors.PollingReadProtocol{
+					Kind: connectors.PollingReadProtocolKeyset, MaxPageSize: 2, MaxPages: 2, MaxRequests: 2,
+					StableTraversal: true, Predicate: connectors.PollingKeysetPredicateLexicographic,
+				},
+				Snapshot:         connectors.PollingSnapshotBarrier{Kind: connectors.PollingSnapshotBarrierTransaction},
+				Cursor:           connectors.PollingCursor{Codec: connectors.PollingCursorCodecRFC3339Nano, Type: connectors.PollingCursorTypeTimestamp, Precision: "nanosecond"},
+				Ordering:         connectors.PollingOrderingTuple{Watermark: connectors.PollingOrderingField{CatalogField: "updated_at", Ascending: true}, TieBreaker: connectors.PollingOrderingField{CatalogField: "id", Ascending: true, Unique: true}},
+				Mutation:         connectors.PollingMutationPolicy{Mutable: true, CommitOrdered: true, BoundedOverlap: true},
+				Identity:         connectors.PollingSourceIdentity{Engine: "postgres", AccountScope: "live-target", ObjectScope: "managed-target"},
+				Schema:           connectors.PollingSchemaCompatibilityExactFingerprint,
+				DeleteVisibility: connectors.PollingDeleteVisibilityTombstone,
+				SoftDeleteField:  "deleted_at", SoftDeleteAdvancesCursor: true,
+				Modes: []synccontract.Mode{
+					synccontract.ModeFullOverwrite, synccontract.ModeFullAppend, synccontract.ModeIncrementalAppend,
+					synccontract.ModeIncrementalUpsert, synccontract.ModeIncrementalDedupe, synccontract.ModeIncrementalDedupeHistory,
+				},
+			},
+			Target: connectors.PollingApplyDescriptor{
+				Executor: targetReference, MaxBatchRecords: 2, MaxBatchBytes: 1 << 20,
+				Staging: connectors.PollingStagingReplaceSupported, StableKeyMapping: []string{"tenant", "id"}, ConditionalOrderFence: true,
+				Transaction: connectors.PollingTransactionRequired, PartialResult: connectors.PollingPartialResultRollback,
+				RetrySafeCloseAndInsert: true, ValidityWindow: connectors.PollingValidityWindowSupported,
+				Strategies: []connectors.PollingApplyStrategy{
+					connectors.PollingApplyStrategyReplace, connectors.PollingApplyStrategyAppend, connectors.PollingApplyStrategyMerge,
+					connectors.PollingApplyStrategyDedupe, connectors.PollingApplyStrategyDedupeHistory,
+				},
+			},
+		},
+		object:   connectors.PollingCatalogObject{Kind: connectors.PollingCatalogObjectRelation, NameParts: []string{"public", "managed_target"}, Columns: []string{"tenant", "id", "updated_at", "deleted_at"}},
+		registry: registry,
+		apply:    apply,
+	}
+}
+
+func postgresApplyManagedTargetPollingPage(t *testing.T, ctx context.Context, polling postgresManagedTargetPollingApply, mode synccontract.Mode, records []database.OrderedRecord, tombstones database.TombstoneEnvelope) {
+	t.Helper()
+	resolved, err := engine.PollingPreflight(ctx, polling.registry, polling.declaration, polling.object, mode)
+	if err != nil {
+		t.Fatalf("PostgreSQL native polling preflight for %s failed: %v", mode, err)
+	}
+	page := engine.PollingApplyPage{Records: make([]engine.PollingApplyRecord, len(records)), Tombstones: tombstones.Tombstones()}
+	for index, record := range records {
+		page.Records[index] = engine.PollingApplyRecord{Record: record.Record, Position: record.Position}
+	}
+	acknowledgement, err := engine.ApplyPollingPage(ctx, resolved, page)
+	if err != nil || acknowledgement.Sink == "" || acknowledgement.AcknowledgedAt.IsZero() {
+		t.Fatalf("PostgreSQL native polling apply for %s = (%#v, %v), want durable acknowledgement", mode, acknowledgement, err)
+	}
+}
+
+type postgresManagedTargetPollingSource struct {
+	reference connectors.TransportExecutorReference
+	evidence  engine.PollingWatermarkConformanceEvidence
+}
+
+func (s *postgresManagedTargetPollingSource) PollingSourceExecutorReference() connectors.TransportExecutorReference {
+	return s.reference
+}
+
+func (s *postgresManagedTargetPollingSource) PollingSourceConformanceEvidence() engine.PollingWatermarkConformanceEvidence {
+	return s.evidence
+}
+
+func postgresManagedTargetPosition(sequence byte) synccontract.CheckpointPosition {
+	return synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken{sequence}, TieBreaker: synccontract.OpaqueToken{1}}
+}
+
+func postgresManagedTargetTombstone(t *testing.T, tenant string, id int64, sequence byte) synccontract.Tombstone {
+	t.Helper()
+	key, err := json.Marshal(map[string]any{"tenant": tenant, "id": id})
+	if err != nil {
+		t.Fatal("could not encode PostgreSQL tombstone key")
+	}
+	return synccontract.Tombstone{
+		Operation:   synccontract.OperationDelete,
+		EventID:     synccontract.OpaqueToken{sequence, 0xff},
+		Key:         key,
+		DeleteImage: synccontract.DeleteImageKeyOnly,
+		Position:    postgresManagedTargetPosition(sequence),
+	}
+}
+
+func postgresManagedTargetTombstoneEnvelope(t *testing.T, tombstone synccontract.Tombstone) database.TombstoneEnvelope {
+	t.Helper()
+	envelope, err := database.NewTombstoneEnvelope([]synccontract.Tombstone{tombstone})
+	if err != nil {
+		t.Fatal("could not construct PostgreSQL source-ordered tombstone envelope")
+	}
+	return envelope
+}
+
+func assertPostgresManagedTargetValue(t *testing.T, ctx context.Context, source *pgx.Conn, control database.ManagedTargetControlRecord, tenant string, id int64, want string, wantRows int) {
+	t.Helper()
+	rows, err := source.Query(ctx, "SELECT value FROM "+postgresManagedTargetQualifiedName(control.Target().Namespace(), control.Target().Relation())+" WHERE tenant = $1 AND id = $2", tenant, id)
+	if err != nil {
+		t.Fatal("could not query PostgreSQL fenced target value")
+	}
+	defer rows.Close()
+	values := make([]string, 0, wantRows)
+	for rows.Next() {
+		var value string
+		if err := rows.Scan(&value); err != nil {
+			t.Fatal("could not scan PostgreSQL fenced target value")
+		}
+		values = append(values, value)
+	}
+	if err := rows.Err(); err != nil || len(values) != wantRows || (wantRows == 1 && values[0] != want) {
+		t.Fatalf("PostgreSQL fenced target value %q/%d = %#v (%v), want %q with %d row(s)", tenant, id, values, err, want, wantRows)
+	}
+}
+
+func assertPostgresManagedTargetHistory(t *testing.T, ctx context.Context, source *pgx.Conn, control database.ManagedTargetControlRecord, tenant string, id int64, want []postgresManagedTargetHistoryRow) {
+	t.Helper()
+	rows, err := source.Query(ctx, "SELECT value, "+synccontract.HistoryValidFromColumn+" IS NOT NULL, "+synccontract.HistoryValidToColumn+" IS NULL, "+synccontract.HistoryIsCurrentColumn+" FROM "+postgresManagedTargetQualifiedName(control.Target().Namespace(), control.Target().Relation())+" WHERE tenant = $1 AND id = $2 AND "+synccontract.HistoryValidFromColumn+" IS NOT NULL ORDER BY value", tenant, id)
+	if err != nil {
+		t.Fatal("could not query PostgreSQL history target rows")
+	}
+	defer rows.Close()
+	got := make([]postgresManagedTargetHistoryRow, 0, len(want))
+	for rows.Next() {
+		var row postgresManagedTargetHistoryRow
+		var hasValidFrom bool
+		if err := rows.Scan(&row.value, &hasValidFrom, &row.open, &row.current); err != nil {
+			t.Fatal("could not scan PostgreSQL history target row")
+		}
+		if !hasValidFrom {
+			t.Fatal("PostgreSQL history row has no validity start")
+		}
+		got = append(got, row)
+	}
+	if err := rows.Err(); err != nil || len(got) != len(want) {
+		t.Fatalf("PostgreSQL history rows = %#v (%v), want %#v", got, err, want)
+	}
+	for index := range want {
+		if got[index] != want[index] {
+			t.Fatalf("PostgreSQL history row[%d] = %#v, want %#v", index, got[index], want[index])
+		}
+	}
 }
 
 func assertPostgresManagedTargetReceiptPersisted(t *testing.T, ctx context.Context, driver *native.DatabaseDriver, control database.ManagedTargetControlRecord, receipt database.DeliveryReceiptV1) {
@@ -1054,6 +1362,7 @@ type postgresManagedTargetHistoryRow struct {
 	value     string
 	validFrom time.Time
 	validTo   *time.Time
+	open      bool
 	current   bool
 }
 

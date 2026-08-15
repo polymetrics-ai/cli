@@ -155,23 +155,28 @@ type DatabaseWritePlanRequest struct {
 	// the product's PostgreSQL-to-PostgreSQL restriction before any preview,
 	// driver, ledger, source, or target operation can occur.
 	HistoryRoute DatabaseWriteHistoryRoute
+	// ConditionalOrderFence admits source positions into keyed incremental
+	// strategies. It remains false for sealed worksets that do not carry a
+	// source ordering tuple.
+	ConditionalOrderFence bool
 }
 
 // DatabaseWritePlan is an immutable, non-executing target application plan.
 // Its fields stay private so approval can compare the complete original
 // binding rather than a caller-mutable projection.
 type DatabaseWritePlan struct {
-	driver         DriverDeclaration
-	control        ManagedTargetControlRecord
-	mode           synccontract.Mode
-	strategy       connectors.ApplyStrategy
-	mapping        MappingContractV1
-	keys           []string
-	recordCount    int
-	tombstoneCount int
-	batchSize      int
-	destructive    bool
-	historyRoute   DatabaseWriteHistoryRoute
+	driver                DriverDeclaration
+	control               ManagedTargetControlRecord
+	mode                  synccontract.Mode
+	strategy              connectors.ApplyStrategy
+	mapping               MappingContractV1
+	keys                  []string
+	recordCount           int
+	tombstoneCount        int
+	batchSize             int
+	destructive           bool
+	historyRoute          DatabaseWriteHistoryRoute
+	conditionalOrderFence bool
 }
 
 // NewDatabaseWritePlan seals a typed target/mode/key/count/effects contract
@@ -223,26 +228,30 @@ func NewDatabaseWritePlan(ctx context.Context, request DatabaseWritePlanRequest)
 	if (request.Mode == synccontract.ModeFullOverwrite) != request.Destructive {
 		return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
 	}
+	if request.Mode == synccontract.ModeIncrementalDedupeHistory && !request.ConditionalOrderFence {
+		return DatabaseWritePlan{}, ErrDatabaseWritePlanInvalid
+	}
 	if err := ctx.Err(); err != nil {
 		return DatabaseWritePlan{}, err
 	}
 	return DatabaseWritePlan{
-		driver:         request.Definition.Driver(),
-		control:        request.Control,
-		mode:           request.Mode,
-		strategy:       request.Strategy,
-		mapping:        request.Mapping.clone(),
-		keys:           keys,
-		recordCount:    request.RecordCount,
-		tombstoneCount: request.TombstoneCount,
-		batchSize:      batchSize,
-		destructive:    request.Destructive,
-		historyRoute:   request.HistoryRoute,
+		driver:                request.Definition.Driver(),
+		control:               request.Control,
+		mode:                  request.Mode,
+		strategy:              request.Strategy,
+		mapping:               request.Mapping.clone(),
+		keys:                  keys,
+		recordCount:           request.RecordCount,
+		tombstoneCount:        request.TombstoneCount,
+		batchSize:             batchSize,
+		destructive:           request.Destructive,
+		historyRoute:          request.HistoryRoute,
+		conditionalOrderFence: request.ConditionalOrderFence,
 	}, nil
 }
 
 func (p DatabaseWritePlan) validate() error {
-	if p.driver.validate() != nil || p.control.validate() != nil || p.mode.Validate() != nil || p.strategy.Validate() != nil || p.mapping.validate() != nil || p.recordCount < 0 || p.tombstoneCount < 0 || (p.recordCount == 0 && p.tombstoneCount == 0) || p.batchSize <= 0 || canonicalDatabaseWriteStrategy(p.mode) != p.strategy {
+	if p.driver.validate() != nil || p.control.validate() != nil || p.mode.Validate() != nil || p.strategy.Validate() != nil || p.mapping.validate() != nil || p.recordCount < 0 || p.tombstoneCount < 0 || (p.recordCount == 0 && p.tombstoneCount == 0) || p.batchSize <= 0 || canonicalDatabaseWriteStrategy(p.mode) != p.strategy || (p.mode == synccontract.ModeIncrementalDedupeHistory && !p.conditionalOrderFence) {
 		return ErrDatabaseWritePlanInvalid
 	}
 	keys, err := normalizeDatabaseWriteKeys(p.keys)
@@ -305,8 +314,13 @@ func (p DatabaseWritePlan) Destructive() bool { return p.destructive }
 // other mode it is the zero value and carries no execution authority.
 func (p DatabaseWritePlan) HistoryRoute() DatabaseWriteHistoryRoute { return p.historyRoute }
 
+// ConditionalOrderFence reports whether every mutable keyed event carries a
+// source-owned ordering tuple and stale/equal events must not mutate target
+// state.
+func (p DatabaseWritePlan) ConditionalOrderFence() bool { return p.conditionalOrderFence }
+
 func (p DatabaseWritePlan) matches(other DatabaseWritePlan) bool {
-	if p.driver != other.driver || p.mode != other.mode || p.strategy != other.strategy || p.recordCount != other.recordCount || p.tombstoneCount != other.tombstoneCount || p.batchSize != other.batchSize || p.destructive != other.destructive || p.historyRoute != other.historyRoute || len(p.keys) != len(other.keys) || !p.mapping.matches(other.mapping) || !sameManagedTargetControl(p.control, other.control) {
+	if p.driver != other.driver || p.mode != other.mode || p.strategy != other.strategy || p.recordCount != other.recordCount || p.tombstoneCount != other.tombstoneCount || p.batchSize != other.batchSize || p.destructive != other.destructive || p.historyRoute != other.historyRoute || p.conditionalOrderFence != other.conditionalOrderFence || len(p.keys) != len(other.keys) || !p.mapping.matches(other.mapping) || !sameManagedTargetControl(p.control, other.control) {
 		return false
 	}
 	for index := range p.keys {
@@ -327,21 +341,28 @@ func definitionAdmitsMode(modes []synccontract.Mode, mode synccontract.Mode) boo
 }
 
 func canonicalDatabaseWriteStrategy(mode synccontract.Mode) connectors.ApplyStrategy {
+	strategy, _ := CanonicalDatabaseWriteStrategy(mode)
+	return strategy
+}
+
+// CanonicalDatabaseWriteStrategy returns the only native database mutation
+// family admitted for a closed synchronization mode.
+func CanonicalDatabaseWriteStrategy(mode synccontract.Mode) (connectors.ApplyStrategy, bool) {
 	switch mode {
 	case synccontract.ModeFullAppend, synccontract.ModeIncrementalAppend:
-		return connectors.ApplyStrategyAppend
+		return connectors.ApplyStrategyAppend, true
 	case synccontract.ModeFullOverwrite:
-		return connectors.ApplyStrategyReplace
+		return connectors.ApplyStrategyReplace, true
 	case synccontract.ModeIncrementalUpsert:
-		return connectors.ApplyStrategyMerge
+		return connectors.ApplyStrategyMerge, true
 	case synccontract.ModeIncrementalDedupe:
-		return connectors.ApplyStrategyDedupe
+		return connectors.ApplyStrategyDedupe, true
 	case synccontract.ModeIncrementalDedupeHistory:
-		return connectors.ApplyStrategyDedupeHistory
+		return connectors.ApplyStrategyDedupeHistory, true
 	case synccontract.ModeChangeCapture:
-		return connectors.ApplyStrategyChangeApply
+		return connectors.ApplyStrategyChangeApply, true
 	default:
-		return ""
+		return "", false
 	}
 }
 
@@ -450,17 +471,17 @@ func (a *DatabaseWriteApproval) Consumed() bool {
 // It provides no caller-selected mode, relation, SQL, or per-record commit.
 type WriteBatch struct {
 	sequence   uint64
-	records    []connectors.Record
+	records    []OrderedRecord
 	tombstones []synccontract.Tombstone
 }
 
-func newWriteBatch(sequence uint64, records []connectors.Record, tombstones []synccontract.Tombstone) (WriteBatch, error) {
+func newWriteBatch(sequence uint64, records []OrderedRecord, tombstones []synccontract.Tombstone) (WriteBatch, error) {
 	if sequence == 0 || (len(records) == 0 && len(tombstones) == 0) {
 		return WriteBatch{}, ErrDatabaseWritePlanInvalid
 	}
 	return WriteBatch{
 		sequence:   sequence,
-		records:    cloneDatabaseWriteRecords(records),
+		records:    cloneDatabaseWriteOrderedRecords(records),
 		tombstones: cloneDatabaseWriteTombstones(tombstones),
 	}, nil
 }
@@ -481,19 +502,22 @@ func (b WriteBatch) Sequence() uint64 { return b.sequence }
 // Records returns an independent top-level record projection for this call.
 func (b WriteBatch) Records() []connectors.Record { return cloneDatabaseWriteRecords(b.records) }
 
+// OrderedRecords returns independent source-positioned records. Native
+// drivers use it only when the sealed plan requires an order fence.
+func (b WriteBatch) OrderedRecords() []OrderedRecord {
+	return cloneDatabaseWriteOrderedRecords(b.records)
+}
+
 // Tombstones returns the only explicit delete requests in this bounded batch.
 // It never infers a delete from a missing entry in Records.
 func (b WriteBatch) Tombstones() []synccontract.Tombstone {
 	return cloneDatabaseWriteTombstones(b.tombstones)
 }
 
-func cloneDatabaseWriteRecords(records []connectors.Record) []connectors.Record {
+func cloneDatabaseWriteRecords(records []OrderedRecord) []connectors.Record {
 	clone := make([]connectors.Record, len(records))
 	for index, record := range records {
-		clone[index] = make(connectors.Record, len(record))
-		for key, value := range record {
-			clone[index][key] = value
-		}
+		clone[index] = cloneDatabaseWriteRecord(record.Record)
 	}
 	return clone
 }

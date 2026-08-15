@@ -15,6 +15,7 @@ const (
 	postgresNamespaceOwnerTable = "__polymetrics_namespace_owner"
 	postgresTargetControlTable  = "__polymetrics_target_control"
 	postgresDeliveryLedgerTable = "__polymetrics_delivery_ledger"
+	postgresOrderFenceTable     = "__polymetrics_order_fence"
 )
 
 func (d *DatabaseDriver) loadNamespaceOwner(ctx context.Context, target database.ManagedTargetRef, targetDatabase database.TargetDatabaseIdentity, native database.NativeNamespaceIdentity) (database.ManagedTargetNamespaceOwnerState, database.ManagedTargetNamespaceOwnerRecord, error) {

@@ -6,8 +6,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
-	"strconv"
-	"strings"
 	"sync"
 	"time"
 
@@ -118,8 +116,13 @@ func (d *DatabaseDriver) BeginDatabaseWrite(ctx context.Context, plan database.D
 		}
 		historyAt = time.Now().UTC()
 	}
+	qualifiedFence := postgresQualifiedControlTable(plan.Control().Target().Namespace(), postgresOrderFenceTable)
 	if plan.Mode() == synccontract.ModeFullOverwrite {
 		if _, err := tx.Exec(ctx, "TRUNCATE TABLE "+qualified); err != nil {
+			rollback()
+			return nil, errPostgresWriteSessionFailed
+		}
+		if _, err := tx.Exec(ctx, "DELETE FROM "+qualifiedFence+" WHERE relation_name = $1", plan.Control().Target().Relation()); err != nil {
 			rollback()
 			return nil, errPostgresWriteSessionFailed
 		}
@@ -131,25 +134,27 @@ func (d *DatabaseDriver) BeginDatabaseWrite(ctx context.Context, plan database.D
 		}
 	}
 	session := &postgresWriteSession{
-		tx:        tx,
-		plan:      plan,
-		columns:   columns,
-		qualified: qualified,
-		release:   release,
-		historyAt: historyAt,
-		nextBatch: 1,
+		tx:             tx,
+		plan:           plan,
+		columns:        columns,
+		qualified:      qualified,
+		qualifiedFence: qualifiedFence,
+		release:        release,
+		historyAt:      historyAt,
+		nextBatch:      1,
 	}
 	handoff = true // session now owns the exact matching unlock.
 	return session, nil
 }
 
 type postgresWriteSession struct {
-	tx        pgx.Tx
-	plan      database.DatabaseWritePlan
-	columns   []postgresManagedTargetColumn
-	qualified string
-	release   func()
-	historyAt time.Time
+	tx             pgx.Tx
+	plan           database.DatabaseWritePlan
+	columns        []postgresManagedTargetColumn
+	qualified      string
+	qualifiedFence string
+	release        func()
+	historyAt      time.Time
 
 	mu                sync.Mutex
 	closed            bool
@@ -174,7 +179,7 @@ func (s *postgresWriteSession) ApplyWriteBatch(ctx context.Context, batch databa
 	if s.closed || batch.Sequence() != s.nextBatch {
 		return errPostgresWriteSessionFailed
 	}
-	records, tombstones := batch.Records(), batch.Tombstones()
+	records, tombstones := batch.OrderedRecords(), batch.Tombstones()
 	if (len(records) == 0 && len(tombstones) == 0) || len(records)+len(tombstones) > s.plan.BatchSize() || s.recordsApplied+len(records) > s.plan.RecordCount() || s.tombstonesApplied+len(tombstones) > s.plan.TombstoneCount() {
 		return errPostgresWriteSessionFailed
 	}
@@ -281,8 +286,8 @@ func (s *postgresWriteSession) releaseConnection() {
 	}
 }
 
-func (s *postgresWriteSession) applyRecord(ctx context.Context, record connectors.Record) error {
-	mapped, err := s.plan.Mapping().MapRecord(record)
+func (s *postgresWriteSession) applyRecord(ctx context.Context, record database.OrderedRecord) error {
+	mapped, err := s.plan.Mapping().MapRecord(record.Record)
 	if err != nil {
 		return errPostgresWriteValueInvalid
 	}
@@ -294,6 +299,9 @@ func (s *postgresWriteSession) applyRecord(ctx context.Context, record connector
 	case synccontract.ModeFullOverwrite, synccontract.ModeFullAppend, synccontract.ModeIncrementalAppend:
 		return postgresInsertMappedRow(ctx, s.tx, s.qualified, s.columns, args)
 	case synccontract.ModeIncrementalUpsert:
+		if s.plan.ConditionalOrderFence() {
+			return s.applyFencedRecord(ctx, mapped, args, record.Position)
+		}
 		if err := postgresDeleteMappedKeys(ctx, s.tx, s.qualified, s.plan.Keys(), mapped, s.columns); err != nil {
 			return errPostgresWriteSessionFailed
 		}
@@ -302,15 +310,71 @@ func (s *postgresWriteSession) applyRecord(ctx context.Context, record connector
 		}
 		return nil
 	case synccontract.ModeIncrementalDedupe:
+		if s.plan.ConditionalOrderFence() {
+			return s.applyFencedRecord(ctx, mapped, args, record.Position)
+		}
 		if err := postgresInsertMappedRowIfAbsent(ctx, s.tx, s.qualified, s.plan.Keys(), s.columns, mapped, args); err != nil {
 			return errPostgresWriteSessionFailed
 		}
 		return nil
 	case synccontract.ModeIncrementalDedupeHistory:
-		return s.applyHistoryRecord(ctx, mapped, args)
+		return s.applyFencedRecord(ctx, mapped, args, record.Position)
 	default:
 		return errPostgresWriteSessionFailed
 	}
+}
+
+func (s *postgresWriteSession) applyFencedRecord(ctx context.Context, mapped connectors.Record, args []any, position synccontract.CheckpointPosition) error {
+	keyDigest, err := postgresMappedKeyDigest(s.plan.Keys(), mapped, s.columns)
+	if err != nil {
+		return errPostgresWriteValueInvalid
+	}
+	if s.plan.Mode() == synccontract.ModeIncrementalDedupeHistory {
+		return s.applyFencedHistoryRecord(ctx, mapped, args, keyDigest, position)
+	}
+	accepted, err := postgresOrderFenceAccepts(ctx, s.tx, s.qualifiedFence, s.plan.Control().Target().Relation(), keyDigest, position)
+	if err != nil {
+		return errPostgresWriteSessionFailed
+	}
+	if !accepted {
+		return nil
+	}
+	switch s.plan.Mode() {
+	case synccontract.ModeIncrementalUpsert:
+		if err := postgresDeleteMappedKeys(ctx, s.tx, s.qualified, s.plan.Keys(), mapped, s.columns); err != nil {
+			return errPostgresWriteSessionFailed
+		}
+		if err := postgresInsertMappedRow(ctx, s.tx, s.qualified, s.columns, args); err != nil {
+			return errPostgresWriteSessionFailed
+		}
+	case synccontract.ModeIncrementalDedupe:
+		if err := postgresInsertMappedRowIfAbsent(ctx, s.tx, s.qualified, s.plan.Keys(), s.columns, mapped, args); err != nil {
+			return errPostgresWriteSessionFailed
+		}
+	default:
+		return errPostgresWriteSessionFailed
+	}
+	if err := postgresStoreOrderFence(ctx, s.tx, s.qualifiedFence, s.plan.Control().Target().Relation(), keyDigest, position, false); err != nil {
+		return errPostgresWriteSessionFailed
+	}
+	return nil
+}
+
+func (s *postgresWriteSession) applyFencedHistoryRecord(ctx context.Context, mapped connectors.Record, args []any, keyDigest []byte, position synccontract.CheckpointPosition) error {
+	accepted, err := postgresOrderFenceAccepts(ctx, s.tx, s.qualifiedFence, s.plan.Control().Target().Relation(), keyDigest, position)
+	if err != nil {
+		return errPostgresWriteSessionFailed
+	}
+	if !accepted {
+		return nil
+	}
+	if err := s.applyHistoryRecord(ctx, mapped, args); err != nil {
+		return err
+	}
+	if err := postgresStoreOrderFence(ctx, s.tx, s.qualifiedFence, s.plan.Control().Target().Relation(), keyDigest, position, false); err != nil {
+		return errPostgresWriteSessionFailed
+	}
+	return nil
 }
 
 func (s *postgresWriteSession) applyTombstone(ctx context.Context, tombstone synccontract.Tombstone) error {
@@ -321,8 +385,32 @@ func (s *postgresWriteSession) applyTombstone(ctx context.Context, tombstone syn
 	if err != nil {
 		return errPostgresWriteValueInvalid
 	}
+	if s.plan.ConditionalOrderFence() {
+		keyDigest, err := postgresKeyValuesDigest(s.plan.Keys(), keys, s.columns)
+		if err != nil {
+			return errPostgresWriteValueInvalid
+		}
+		accepted, err := postgresOrderFenceAccepts(ctx, s.tx, s.qualifiedFence, s.plan.Control().Target().Relation(), keyDigest, tombstone.Position)
+		if err != nil {
+			return errPostgresWriteSessionFailed
+		}
+		if !accepted {
+			return nil
+		}
+		if s.plan.Mode() == synccontract.ModeIncrementalDedupeHistory {
+			if err := s.closeHistoryWindow(ctx, tombstone, keys); err != nil {
+				return err
+			}
+		} else if err := postgresDeleteKeyValues(ctx, s.tx, s.qualified, s.plan.Keys(), keys); err != nil {
+			return errPostgresWriteSessionFailed
+		}
+		if err := postgresStoreOrderFence(ctx, s.tx, s.qualifiedFence, s.plan.Control().Target().Relation(), keyDigest, tombstone.Position, true); err != nil {
+			return errPostgresWriteSessionFailed
+		}
+		return nil
+	}
 	if s.plan.Mode() == synccontract.ModeIncrementalDedupeHistory {
-		return s.closeHistoryWindow(ctx, tombstone, keys)
+		return errPostgresWriteSessionFailed
 	}
 	if err := postgresDeleteKeyValues(ctx, s.tx, s.qualified, s.plan.Keys(), keys); err != nil {
 		return errPostgresWriteSessionFailed
@@ -345,33 +433,10 @@ func (s *postgresWriteSession) applyHistoryRecord(ctx context.Context, mapped co
 	if exists {
 		return nil
 	}
-	keyArgs, keyPredicate, err := postgresMappedKeyPredicate(s.plan.Keys(), mapped, s.columns, 1)
-	if err != nil {
+	if err := postgresCloseHistoryKeyValues(ctx, s.tx, s.qualified, s.plan.Keys(), mapped, s.historyAt); err != nil {
 		return errPostgresWriteSessionFailed
 	}
-	valuePredicate := postgresMappedValuePredicate(s.columns, len(keyArgs)+1)
-	closeArgs := append(append([]any{}, keyArgs...), args...)
-	closeArgs = append(closeArgs, s.historyAt)
-	if _, err := s.tx.Exec(ctx,
-		"UPDATE "+s.qualified+
-			" SET "+quoteIdentifier(synccontract.HistoryValidToColumn)+" = $"+strconv.Itoa(len(closeArgs))+", "+quoteIdentifier(synccontract.HistoryIsCurrentColumn)+" = FALSE"+
-			" WHERE "+keyPredicate+" AND "+quoteIdentifier(synccontract.HistoryIsCurrentColumn)+" AND NOT ("+valuePredicate+")",
-		closeArgs...,
-	); err != nil {
-		return errPostgresWriteSessionFailed
-	}
-	names, placeholders := postgresColumnNamesAndPlaceholders(s.columns, 1)
-	names = append(names,
-		quoteIdentifier(synccontract.HistoryValidFromColumn),
-		quoteIdentifier(synccontract.HistoryValidToColumn),
-		quoteIdentifier(synccontract.HistoryIsCurrentColumn),
-	)
-	placeholders = append(placeholders, "$"+strconv.Itoa(len(args)+1), "NULL", "TRUE")
-	insertArgs := append(append([]any{}, args...), s.historyAt)
-	if _, err := s.tx.Exec(ctx,
-		"INSERT INTO "+s.qualified+" ("+strings.Join(names, ", ")+") VALUES ("+strings.Join(placeholders, ", ")+")",
-		insertArgs...,
-	); err != nil {
+	if err := postgresInsertMappedHistoryRow(ctx, s.tx, s.qualified, s.columns, args, s.historyAt); err != nil {
 		return errPostgresWriteSessionFailed
 	}
 	return nil
@@ -399,17 +464,7 @@ func (s *postgresWriteSession) closeHistoryWindow(ctx context.Context, tombstone
 	if err != nil || close.Action != synccontract.HistoryDeleteCloseValidityWindow || close.IsCurrent {
 		return errPostgresWriteSessionFailed
 	}
-	args, keyPredicate, err := postgresKeyValuePredicate(s.plan.Keys(), keys, 1)
-	if err != nil {
-		return errPostgresWriteSessionFailed
-	}
-	args = append(args, close.ValidTo, close.IsCurrent)
-	if _, err := s.tx.Exec(ctx,
-		"UPDATE "+s.qualified+
-			" SET "+quoteIdentifier(synccontract.HistoryValidToColumn)+" = $"+strconv.Itoa(len(args)-1)+", "+quoteIdentifier(synccontract.HistoryIsCurrentColumn)+" = $"+strconv.Itoa(len(args))+
-			" WHERE "+keyPredicate+" AND "+quoteIdentifier(synccontract.HistoryIsCurrentColumn),
-		args...,
-	); err != nil {
+	if err := postgresCloseHistoryKeyValues(ctx, s.tx, s.qualified, s.plan.Keys(), keys, close.ValidTo); err != nil {
 		return errPostgresWriteSessionFailed
 	}
 	return nil

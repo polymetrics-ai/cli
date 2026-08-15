@@ -7,6 +7,14 @@ import (
 	"polymetrics.ai/internal/synccontract"
 )
 
+// OrderedRecord pairs a source record with its source-owned ordering tuple.
+// The tuple stays opaque: native targets may compare its bytes but must not
+// parse, normalize, or replace it with target-observation time.
+type OrderedRecord struct {
+	Record   connectors.Record
+	Position synccontract.CheckpointPosition
+}
+
 var (
 	// ErrTombstoneEnvelopeInvalid refuses malformed or implicit delete input.
 	// A caller cannot represent deletion by omitting an ordinary record.
@@ -59,7 +67,7 @@ func (e TombstoneEnvelope) Tombstones() []synccontract.Tombstone {
 // DatabaseWriteInput combines ordinary records and explicit tombstones for a
 // single sealed write plan. It contains no implied delete set.
 type DatabaseWriteInput struct {
-	records   []connectors.Record
+	records   []OrderedRecord
 	tombstone TombstoneEnvelope
 }
 
@@ -67,8 +75,20 @@ type DatabaseWriteInput struct {
 // and tombstone counts are checked against a plan immediately before session
 // opening, where approval and driver identity are also checked.
 func NewDatabaseWriteInput(records []connectors.Record, tombstones TombstoneEnvelope) (DatabaseWriteInput, error) {
+	ordered := make([]OrderedRecord, len(records))
+	for index, record := range records {
+		ordered[index].Record = record
+	}
+	return NewOrderedDatabaseWriteInput(ordered, tombstones)
+}
+
+// NewOrderedDatabaseWriteInput constructs a candidate that retains the
+// source ordering tuple for a plan whose conditional order fence is enabled.
+// The legacy constructor remains available for plans that do not require a
+// fence, so a sealed workset cannot silently acquire synthetic ordering.
+func NewOrderedDatabaseWriteInput(records []OrderedRecord, tombstones TombstoneEnvelope) (DatabaseWriteInput, error) {
 	input := DatabaseWriteInput{
-		records:   cloneDatabaseWriteRecords(records),
+		records:   cloneDatabaseWriteOrderedRecords(records),
 		tombstone: TombstoneEnvelope{tombstones: tombstones.Tombstones()},
 	}
 	if err := input.validate(); err != nil {
@@ -82,7 +102,7 @@ func (i DatabaseWriteInput) validate() error {
 		return ErrDatabaseWriteInputInvalid
 	}
 	for _, record := range i.records {
-		if record == nil {
+		if record.Record == nil {
 			return ErrDatabaseWriteInputInvalid
 		}
 	}
@@ -93,12 +113,28 @@ func (i DatabaseWriteInput) validateFor(plan DatabaseWritePlan) error {
 	if i.validate() != nil || len(i.records) != plan.RecordCount() || i.tombstone.Count() != plan.TombstoneCount() {
 		return ErrDatabaseWriteInputInvalid
 	}
+	if plan.ConditionalOrderFence() {
+		for _, record := range i.records {
+			if len(record.Position.Primary) == 0 || len(record.Position.TieBreaker) == 0 {
+				return ErrDatabaseWriteInputInvalid
+			}
+		}
+	}
 	return nil
 }
 
 // Records returns independent top-level record projections.
 func (i DatabaseWriteInput) Records() []connectors.Record {
-	return cloneDatabaseWriteRecords(i.records)
+	records := make([]connectors.Record, len(i.records))
+	for index := range i.records {
+		records[index] = cloneDatabaseWriteRecord(i.records[index].Record)
+	}
+	return records
+}
+
+// OrderedRecords returns independent record and source-position projections.
+func (i DatabaseWriteInput) OrderedRecords() []OrderedRecord {
+	return cloneDatabaseWriteOrderedRecords(i.records)
 }
 
 // Tombstones returns the typed explicit delete envelope.
@@ -147,6 +183,25 @@ func cloneDatabaseWriteTombstones(tombstones []synccontract.Tombstone) []synccon
 	clone := make([]synccontract.Tombstone, len(tombstones))
 	for index := range tombstones {
 		clone[index] = tombstones[index].Clone()
+	}
+	return clone
+}
+
+func cloneDatabaseWriteOrderedRecords(records []OrderedRecord) []OrderedRecord {
+	clone := make([]OrderedRecord, len(records))
+	for index, record := range records {
+		clone[index] = OrderedRecord{
+			Record:   cloneDatabaseWriteRecord(record.Record),
+			Position: record.Position.Clone(),
+		}
+	}
+	return clone
+}
+
+func cloneDatabaseWriteRecord(record connectors.Record) connectors.Record {
+	clone := make(connectors.Record, len(record))
+	for key, value := range record {
+		clone[key] = value
 	}
 	return clone
 }

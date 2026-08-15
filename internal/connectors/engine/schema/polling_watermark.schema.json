@@ -110,7 +110,7 @@
     },
     "target": {
       "type": "object",
-      "required": ["executor", "max_batch_records", "staging", "stable_key_mapping", "conditional_order_fence", "transaction", "partial_result", "retry_safe_close_and_insert", "validity_window", "strategies"],
+      "required": ["executor", "max_batch_records", "max_batch_bytes", "staging", "stable_key_mapping", "conditional_order_fence", "transaction", "partial_result", "retry_safe_close_and_insert", "validity_window", "strategies"],
       "additionalProperties": false,
       "properties": {
         "executor": {
@@ -120,6 +120,7 @@
           "properties": {"family": {"type": "string"}, "id": {"type": "string"}}
         },
         "max_batch_records": {"type": "integer"},
+        "max_batch_bytes": {"type": "integer"},
         "staging": {"type": "string"},
         "stable_key_mapping": {"type": "array", "minItems": 1, "items": {"type": "string"}},
         "conditional_order_fence": {"type": "boolean"},
