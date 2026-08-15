@@ -420,6 +420,37 @@ func TestIssueLabelTransportSourceStopsAfterMatchedFullPage(t *testing.T) {
 	}
 }
 
+func TestIssueLabelTransportSourceCollectsBoundedBatchForManagedTarget(t *testing.T) {
+	fixture := newIssueLabelTransportApprovalFixture(t)
+	fixture.sourceRuntime.Config = cloneStringMap(fixture.sourceRuntime.Config)
+	delete(fixture.sourceRuntime.Config, issueLabelTransportSourceIssueConfig)
+	resume := streamResumeExpectation(fixture.sourceConnector, fixture.sourceCredential, fixture.sourceRuntime, "issues")
+	var pages []synctransport.SourcePage
+	err := fixture.sourceExecutor.ReadTransport(context.Background(), synctransport.SourceRequest{
+		Connector: fixture.sourceConnector,
+		Runtime:   fixture.sourceRuntime,
+		Stream:    "issues",
+		Mode:      synccontract.ModeIncrementalUpsert,
+		BatchSize: 3,
+		Resume:    resume,
+	}, func(page synctransport.SourcePage) error {
+		pages = append(pages, page)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ReadTransport() = %v", err)
+	}
+	fixture.assertProviderReads(t, 1)
+	if len(pages) != 1 || len(pages[0].Records) != 3 {
+		t.Fatalf("collection source pages = %#v, want one three-record bounded page", pages)
+	}
+	for index, want := range []int{fixture.sourceIssue, fixture.targetIssue, 1} {
+		if number, err := issueNumberFromRecord(pages[0].Records[index]); err != nil || number != want {
+			t.Fatalf("collection source record %d number = %d, %v; want %d", index, number, err, want)
+		}
+	}
+}
+
 func TestIssueLabelTransportReadBackStopsAfterMatchedFullPage(t *testing.T) {
 	fixture := newIssueLabelTransportApprovalFixture(t)
 	err := fixture.executor.ReadBackDestination(context.Background(), synctransport.DestinationReadBackRequest{

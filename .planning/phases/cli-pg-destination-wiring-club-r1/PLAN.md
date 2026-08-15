@@ -32,3 +32,13 @@ Make the already-implemented PostgreSQL managed driver, immutable workset delive
 ## Plan validation
 
 The plan is goal-backward: a shipped-binary call chain cannot exist without declaration/factory registration, actual App dispatch, warehouse-reopened Parquet consumption, target construction, and command-level approval. Each is paired with an observable red/green test, and every high-risk boundary has a failure/no-side-effect assertion.
+
+## Merge-gate gap plan — representative API collection
+
+Captain review found that the authenticated GitHub proof selected one known issue from `polymetrics-ai/cli`. That proved reachability but did not prove representative API collection or the requested refusal boundaries on the API-to-database route.
+
+1. **Red:** replace the singleton binary proof with a 50-record `rails/rails` proof. It must fail on the current production path because `validateClosedTransportBatchSize` rejects every GitHub source batch above one and `issueLabelSourceExecutor` requires `transport_source_issue_number`.
+2. **Green:** preserve the exact singleton behavior when `transport_source_issue_number` is present, but admit a bounded collection mode only when the definition-selected GitHub source is paired with the semantic managed-target destination. Buffer at most the requested batch across a fixed provider-page cap before emitting one warehouse page, so cancellation during collection cannot partially stage or write.
+3. **Production proof:** build `cmd/pm`; configure an authenticated `rails/rails` source only through `pm credentials add --from-env`; plan, preview, approve, and run through the binary. Independently reopen the Parquet artifact and PostgreSQL connection and assert exactly 50 rows, PostgreSQL logical types, a durable delivery receipt, and an advanced checkpoint.
+4. **Refusal proof:** exercise the production `app.Open` composition for missing approval, consumed-token replay, and cancellation while an HTTP request is in flight. Assert `ErrPostgresManagedTargetApprovalRequired`, `AuthorizationTokenReplayError`, or `context.Canceled` respectively, plus unchanged PostgreSQL business rows and byte-identical stream checkpoint state. The binary path is additionally retained for missing/replayed approval output without exposing the token.
+5. **Focused validation only:** run `internal/app`, `internal/cli`, and affected connector packages, then the one opt-in live GitHub/PostgreSQL test. Do not launch a full suite or full parity run under the active load-control instruction.

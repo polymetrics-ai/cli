@@ -15,6 +15,7 @@
 | R11 | Concurrent same target | Two runs could race approval, provision, baseline, or checkpoint. | App stale-writer/state-CAS tests retain the winning acknowledged checkpoint; managed target table locks and one-shot approval serialize mutation; concurrent destination baselines remain owner-isolated. | green |
 | R12 | Resume interruption | Durable pages could be reread or skipped after restart. | Fresh binary resumes the sealed slot/barrier/LSN after process death and applies the next committed row once; failed initial snapshot requires explicit rebootstrap instead of reuse. | green |
 | R13 | Binary and command surface | Component-only tests repeated the audited reachability defect. | Built `pm` plan/preview/approval/run reaches real authenticated GitHub and PostgreSQL sources, warehouse artifacts, real PostgreSQL target, receipts/read-back/checkpoints; help/docs/goldens are generated from the same surface. | green |
+| R14 | Representative API-to-database merge gate | The shipped-binary GitHub proof selected one known issue and every GitHub transport batch above one was rejected, so representative collection and API-route cancellation were unproven. | Built `pm` transferred exactly 50 independently counted `rails/rails` issue records through Parquet into real PostgreSQL in 47.700s; missing approval, consumed replay, and confirmed in-flight cancellation returned typed errors and preserved zero/unchanged rows and checkpoint. | green |
 
 ## Red / Green protocol
 

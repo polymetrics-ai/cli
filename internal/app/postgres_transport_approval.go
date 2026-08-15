@@ -19,7 +19,10 @@ const (
 	postgresManagedTargetBindingDomain   = "postgres_managed_target_transport/v1"
 )
 
-var ErrPostgresManagedTargetApprovalStale = errors.New("PostgreSQL managed target approval is stale")
+var (
+	ErrPostgresManagedTargetApprovalRequired = errors.New("PostgreSQL managed target approval is required")
+	ErrPostgresManagedTargetApprovalStale    = errors.New("PostgreSQL managed target approval is stale")
+)
 
 type postgresManagedTargetApprovalBinding struct {
 	Domain              string            `json:"domain"`
@@ -112,11 +115,14 @@ func (a *App) PreviewPostgresManagedTargetTransport(ctx context.Context, planID 
 
 func (a *App) authorizePostgresManagedTargetTransport(ctx context.Context, conn Connection, streamName string, approval synctransport.DestinationApproval, runtime connectors.RuntimeConfig) (synctransport.DestinationApproval, error) {
 	if strings.TrimSpace(approval.PlanID) == "" || strings.TrimSpace(approval.ApprovalToken) == "" {
-		return synctransport.DestinationApproval{}, errors.New("PostgreSQL managed target transport requires a previewed approval plan and stdin token")
+		return synctransport.DestinationApproval{}, fmt.Errorf("%w: transport requires a previewed approval plan and stdin token", ErrPostgresManagedTargetApprovalRequired)
 	}
 	plan, err := a.GetReversePlan(approval.PlanID)
 	if err != nil {
 		return synctransport.DestinationApproval{}, err
+	}
+	if plan.Mode == reversePlanModePostgresManagedTarget && plan.Status == "executed" {
+		return synctransport.DestinationApproval{}, &AuthorizationTokenReplayError{Reference: plan.ID}
 	}
 	if plan.Mode != reversePlanModePostgresManagedTarget || plan.TransportConnectionID != conn.ID || plan.TransportStream != streamName {
 		return synctransport.DestinationApproval{}, errors.New("PostgreSQL managed target approval does not match this connection stream")

@@ -8,6 +8,9 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -20,7 +23,11 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
+	pmapp "polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/native/dbtest"
+	"polymetrics.ai/internal/synctransport"
+	"polymetrics.ai/internal/warehouse"
 )
 
 const (
@@ -216,12 +223,13 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	}
 }
 
-// TestPMBinaryExecutesAuthenticatedGitHubWarehousePostgres proves the second
-// production destination route required by #3982. The source call reaches the
-// real GitHub API with a credential supplied only through pm credentials add;
-// the test never logs or serializes that value. It is a distinct opt-in from
-// the database harness so ordinary database-integration CI does not silently
-// substitute public or fake GitHub access when the credential is unavailable.
+// TestPMBinaryExecutesAuthenticatedGitHubWarehousePostgres proves the
+// representative API-to-database route required by #3982 and the merge gate
+// on PR #4167. A built pm extracts exactly fifty issues from rails/rails using
+// a credential supplied only through pm credentials add, materializes the
+// bounded page in connection-owned Parquet, and dispatches the registered
+// PostgreSQL managed target. Fresh filesystem and PostgreSQL reads establish
+// the row count and types independently of the run result held in memory.
 func TestPMBinaryExecutesAuthenticatedGitHubWarehousePostgres(t *testing.T) {
 	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" || os.Getenv("POLYMETRICS_GITHUB_INTEGRATION") != "1" {
 		t.Skip("authenticated GitHub-to-PostgreSQL integration is opt-in")
@@ -249,45 +257,119 @@ func TestPMBinaryExecutesAuthenticatedGitHubWarehousePostgres(t *testing.T) {
 		t.Fatalf("create GitHub target database: %v", err)
 	}
 	target := waitForPostgresTransport(t, ctx, endpoint, postgresTransportTargetDB, postgresTransportUser)
-	defer func() { _ = target.Close(context.Background()) }()
+	defer func() {
+		if target != nil {
+			_ = target.Close(context.Background())
+		}
+	}()
 
 	binary := buildTransportPM(t)
 	root := filepath.Join(t.TempDir(), "github-project")
 	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
 	mustPostgresTransportPM(t, binary, "",
 		"credentials", "add", "github-live", "--connector", "github",
-		"--config", "owner=polymetrics-ai", "--config", "repo=cli", "--config", "auth_type=token",
+		"--config", "owner=rails", "--config", "repo=rails", "--config", "auth_type=token",
 		"--config", "rate_limit_account=authenticated-transport-proof",
 		"--from-env", "token=POLYMETRICS_GITHUB_TOKEN", "--root", root, "--json")
 	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
 	mustPostgresTransportPM(t, binary, "",
 		"connections", "create", "github-to-postgres",
 		"--source", "github:github-live", "--destination", "postgres:pg-target",
-		"--stream", "issues", "--sync-mode", "full_overwrite",
+		"--stream", "issues", "--sync-mode", "incremental_upsert",
 		"--cursor", "updated_at", "--primary-key", "node_id", "--table", "issues",
-		"--source-config", "transport_source_issue_number=4163",
 		"--root", root, "--json")
 
-	run := runApprovedPostgresTransportBinary(t, binary, root, "github-to-postgres", "issues", 1).Run
-	if run.Status != "completed" || run.RecordsRead != 1 || run.RecordsLoaded != 1 {
-		t.Fatalf("authenticated GitHub binary run = %#v, want exact one-row transfer", run)
+	// A real, persisted but unpreviewed plan supplies no mutation authority.
+	// Both the shipped command and a fresh app.Open production composition must
+	// refuse before the API source, warehouse checkpoint, or target is touched.
+	unapproved := planPostgresTransportApproval(t, binary, root, "github-to-postgres", "issues")
+	beforeUnapprovedCounts := postgresTransportBusinessCounts(t, ctx, target)
+	beforeUnapprovedState := postgresTransportStreamStates(t, root)
+	unapprovedOutput, unapprovedErr := runTransportPM(binary, "",
+		"etl", "run", "--connection", "github-to-postgres", "--stream", "issues",
+		"--batch-size", "50", "--root", root, "--json")
+	if unapprovedErr == nil || !strings.Contains(unapprovedOutput, pmapp.ErrPostgresManagedTargetApprovalRequired.Error()) {
+		t.Fatalf("unapproved binary run = (%v, %s), want managed-target approval refusal", unapprovedErr, unapprovedOutput)
 	}
-	schema, relation, count, delivery := postgresTransportTargetState(t, ctx, target)
-	if count != 1 || delivery == "" {
-		t.Fatalf("GitHub managed target = %s.%s rows=%d delivery=%q, want one durable row", schema, relation, count, delivery)
+	unapprovedApp, err := pmapp.Open(root)
+	if err != nil {
+		t.Fatalf("open production composition for typed unapproved refusal: %v", err)
 	}
-	qualified := pgx.Identifier{schema, relation}.Sanitize()
-	var number int64
-	var nodeID, labels string
-	if err := target.QueryRow(ctx, "SELECT number, node_id, labels::text FROM "+qualified).Scan(&number, &nodeID, &labels); err != nil {
-		t.Fatalf("read authenticated GitHub target row: %v", err)
+	_, err = unapprovedApp.RunETL(ctx, pmapp.RunETLRequest{
+		Connection: "github-to-postgres", Stream: "issues", BatchSize: 50,
+		DestinationApproval: synctransport.DestinationApproval{PlanID: unapproved.PlanID},
+	})
+	if !errors.Is(err, pmapp.ErrPostgresManagedTargetApprovalRequired) {
+		t.Fatalf("unapproved app.Open run error = %T %v, want ErrPostgresManagedTargetApprovalRequired", err, err)
 	}
-	if number != 4163 || strings.TrimSpace(nodeID) == "" || !json.Valid([]byte(labels)) {
-		t.Fatalf("authenticated GitHub target row number=%d node_id_present=%t labels_json=%t", number, nodeID != "", json.Valid([]byte(labels)))
+	if after := postgresTransportBusinessCounts(t, ctx, target); !samePostgresTransportCounts(after, beforeUnapprovedCounts) {
+		t.Fatalf("unapproved plan changed target rows: before=%v after=%v", beforeUnapprovedCounts, after)
+	}
+	if after := postgresTransportStreamStates(t, root); after != beforeUnapprovedState {
+		t.Fatalf("unapproved plan advanced checkpoint: before=%s after=%s", beforeUnapprovedState, after)
+	}
+
+	assertCanceledGitHubManagedTargetIsStateFree(t, ctx, binary, root, target)
+
+	approved := runApprovedPostgresTransportBinary(t, binary, root, "github-to-postgres", "issues", 50)
+	run := approved.Run
+	if run.Status != "completed" || run.RecordsRead != 50 || run.RecordsLoaded != 50 {
+		t.Fatalf("authenticated rails/rails binary run = %#v, want exact 50-row transfer", run)
 	}
 	assertPostgresTransportWarehouse(t, root)
-	if states := postgresTransportStreamStates(t, root); !strings.Contains(states, "github-to-postgres") || !strings.Contains(states, "issues") {
-		t.Fatalf("authenticated GitHub run did not publish its acknowledged checkpoint: %s", states)
+	warehouseCount := postgresTransportWarehouseIssueRows(t, root, "rails/rails")
+	if warehouseCount != 50 {
+		t.Fatalf("independent rails/rails Parquet row count = %d, want 50", warehouseCount)
+	}
+	checkpointAfterSuccess := postgresTransportStreamStates(t, root)
+	if checkpointAfterSuccess == beforeUnapprovedState || !strings.Contains(checkpointAfterSuccess, "github-to-postgres") || !strings.Contains(checkpointAfterSuccess, "issues") {
+		t.Fatalf("authenticated rails/rails run did not independently advance its checkpoint: %s", checkpointAfterSuccess)
+	}
+
+	// Reconnect after the pm process exits so the proof queries PostgreSQL
+	// independently rather than relying on driver state from the write path.
+	_ = target.Close(context.Background())
+	target = waitForPostgresTransport(t, ctx, endpoint, postgresTransportTargetDB, postgresTransportUser)
+	schema, relation, count, delivery := postgresTransportTargetState(t, ctx, target)
+	if count != warehouseCount || delivery == "" {
+		t.Fatalf("GitHub managed target = %s.%s rows=%d delivery_present=%t, want %d durable rows", schema, relation, count, delivery != "", warehouseCount)
+	}
+	qualified := pgx.Identifier{schema, relation}.Sanitize()
+	var numberType, nodeIDType, labelsType, updatedAtType, lockedType string
+	if err := target.QueryRow(ctx, "SELECT pg_typeof(number)::text, pg_typeof(node_id)::text, pg_typeof(labels)::text, pg_typeof(updated_at)::text, pg_typeof(locked)::text FROM "+qualified+" LIMIT 1").Scan(&numberType, &nodeIDType, &labelsType, &updatedAtType, &lockedType); err != nil {
+		t.Fatalf("read authenticated GitHub target types: %v", err)
+	}
+	if numberType != "bigint" || nodeIDType != "text" || labelsType != "jsonb" || updatedAtType != "text" || lockedType != "boolean" {
+		t.Fatalf("authenticated GitHub target types = number:%s node_id:%s labels:%s updated_at:%s locked:%s", numberType, nodeIDType, labelsType, updatedAtType, lockedType)
+	}
+	t.Logf("observed rails/rails rows: warehouse_parquet=%d postgres=%d; PostgreSQL types number=%s node_id=%s labels=%s updated_at=%s locked=%s", warehouseCount, count, numberType, nodeIDType, labelsType, updatedAtType, lockedType)
+
+	beforeReplayCounts := postgresTransportBusinessCounts(t, ctx, target)
+	beforeReplayState := postgresTransportStreamStates(t, root)
+	replayOutput, replayErr := runPostgresTransportApproval(binary, root, "github-to-postgres", "issues", 50, approved)
+	if replayErr == nil || !strings.Contains(replayOutput, "authorization token") || !strings.Contains(replayOutput, "already been consumed") {
+		t.Fatalf("consumed GitHub approval replay = (%v, %s), want typed replay refusal", replayErr, replayOutput)
+	}
+	if strings.Contains(replayOutput, approved.Token) {
+		t.Fatal("consumed GitHub approval token appeared in refusal output")
+	}
+	replayApp, err := pmapp.Open(root)
+	if err != nil {
+		t.Fatalf("open production composition for typed replay refusal: %v", err)
+	}
+	_, err = replayApp.RunETL(ctx, pmapp.RunETLRequest{
+		Connection: "github-to-postgres", Stream: "issues", BatchSize: 50,
+		DestinationApproval: postgresTransportAppApproval(approved),
+	})
+	var typedReplay *pmapp.AuthorizationTokenReplayError
+	if !errors.As(err, &typedReplay) {
+		t.Fatalf("consumed app.Open replay error = %T %v, want AuthorizationTokenReplayError", err, err)
+	}
+	if after := postgresTransportBusinessCounts(t, ctx, target); !samePostgresTransportCounts(after, beforeReplayCounts) {
+		t.Fatalf("consumed replay changed target rows: before=%v after=%v", beforeReplayCounts, after)
+	}
+	if after := postgresTransportStreamStates(t, root); after != beforeReplayState {
+		t.Fatalf("consumed replay advanced checkpoint: before=%s after=%s", beforeReplayState, after)
 	}
 }
 
@@ -321,6 +403,24 @@ func runApprovedPostgresTransportBinary(t *testing.T, binary, root, connection, 
 
 func preparePostgresTransportApproval(t *testing.T, binary, root, connection, stream string) approvedPostgresTransportRun {
 	t.Helper()
+	planned := planPostgresTransportApproval(t, binary, root, connection, stream)
+	preview := mustPostgresTransportPM(t, binary, "",
+		"etl", "transport", "postgres-managed-target", "preview", planned.PlanID,
+		"--root", root)
+	const marker = "Approval token: "
+	index := strings.Index(preview, marker)
+	if index < 0 {
+		t.Fatal("PostgreSQL transport human preview did not issue an approval token")
+	}
+	token := strings.TrimSpace(strings.SplitN(preview[index+len(marker):], "\n", 2)[0])
+	if token == "" {
+		t.Fatal("PostgreSQL transport approval token was empty")
+	}
+	return approvedPostgresTransportRun{PlanID: planned.PlanID, Token: token}
+}
+
+func planPostgresTransportApproval(t *testing.T, binary, root, connection, stream string) approvedPostgresTransportRun {
+	t.Helper()
 	planOutput := mustPostgresTransportPM(t, binary, "",
 		"etl", "transport", "postgres-managed-target", "plan",
 		"--connection", connection, "--stream", stream, "--root", root, "--json")
@@ -332,19 +432,127 @@ func preparePostgresTransportApproval(t *testing.T, binary, root, connection, st
 	if err := json.Unmarshal([]byte(planOutput), &planned); err != nil || planned.Plan.ID == "" {
 		t.Fatalf("decode PostgreSQL transport plan: %v output=%s", err, planOutput)
 	}
-	preview := mustPostgresTransportPM(t, binary, "",
-		"etl", "transport", "postgres-managed-target", "preview", planned.Plan.ID,
-		"--root", root)
-	const marker = "Approval token: "
-	index := strings.Index(preview, marker)
-	if index < 0 {
-		t.Fatal("PostgreSQL transport human preview did not issue an approval token")
+	return approvedPostgresTransportRun{PlanID: planned.Plan.ID}
+}
+
+func postgresTransportAppApproval(approval approvedPostgresTransportRun) synctransport.DestinationApproval {
+	return synctransport.DestinationApproval{
+		PlanID:        approval.PlanID,
+		ApprovalToken: approval.Token,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
 	}
-	token := strings.TrimSpace(strings.SplitN(preview[index+len(marker):], "\n", 2)[0])
-	if token == "" {
-		t.Fatal("PostgreSQL transport approval token was empty")
+}
+
+func assertCanceledGitHubManagedTargetIsStateFree(t *testing.T, ctx context.Context, binary, root string, target *pgx.Conn) {
+	t.Helper()
+	requestStarted := make(chan struct{}, 1)
+	release := make(chan struct{})
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		if request.URL.Path != "/repos/rails/rails/issues" {
+			http.NotFound(response, request)
+			return
+		}
+		select {
+		case requestStarted <- struct{}{}:
+		default:
+		}
+		select {
+		case <-request.Context().Done():
+		case <-release:
+		}
+	}))
+	defer server.Close()
+	defer close(release)
+
+	mustPostgresTransportPM(t, binary, "",
+		"credentials", "add", "github-cancel", "--connector", "github",
+		"--config", "owner=rails", "--config", "repo=rails", "--config", "auth_type=token",
+		"--config", "base_url="+server.URL,
+		"--config", "rate_limit_account=authenticated-transport-cancel",
+		"--from-env", "token=POLYMETRICS_GITHUB_TOKEN", "--root", root, "--json")
+	mustPostgresTransportPM(t, binary, "",
+		"connections", "create", "github-cancel-to-postgres",
+		"--source", "github:github-cancel", "--destination", "postgres:pg-target",
+		"--stream", "issues", "--sync-mode", "incremental_upsert",
+		"--cursor", "updated_at", "--primary-key", "node_id", "--table", "canceled_issues",
+		"--root", root, "--json")
+	approval := preparePostgresTransportApproval(t, binary, root, "github-cancel-to-postgres", "issues")
+	beforeCounts := postgresTransportBusinessCounts(t, ctx, target)
+	beforeState := postgresTransportStreamStates(t, root)
+	composed, err := pmapp.Open(root)
+	if err != nil {
+		t.Fatalf("open production composition for cancellation: %v", err)
 	}
-	return approvedPostgresTransportRun{PlanID: planned.Plan.ID, Token: token}
+	runCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	done := make(chan error, 1)
+	go func() {
+		_, runErr := composed.RunETL(runCtx, pmapp.RunETLRequest{
+			Connection: "github-cancel-to-postgres", Stream: "issues", BatchSize: 50,
+			DestinationApproval: postgresTransportAppApproval(approval),
+		})
+		done <- runErr
+	}()
+	select {
+	case <-requestStarted:
+		cancel()
+	case runErr := <-done:
+		t.Fatalf("cancellation run exited before its provider request was in flight: %v", runErr)
+	case <-time.After(30 * time.Second):
+		t.Fatal("cancellation run did not reach its in-flight provider request")
+	}
+	select {
+	case runErr := <-done:
+		if !errors.Is(runErr, context.Canceled) {
+			t.Fatalf("in-flight cancellation error = %T %v, want context.Canceled", runErr, runErr)
+		}
+	case <-time.After(30 * time.Second):
+		t.Fatal("in-flight cancellation did not return")
+	}
+	if after := postgresTransportBusinessCounts(t, ctx, target); !samePostgresTransportCounts(after, beforeCounts) {
+		t.Fatalf("in-flight cancellation changed target rows: before=%v after=%v", beforeCounts, after)
+	}
+	if after := postgresTransportStreamStates(t, root); after != beforeState {
+		t.Fatalf("in-flight cancellation advanced checkpoint: before=%s after=%s", beforeState, after)
+	}
+}
+
+func postgresTransportWarehouseIssueRows(t *testing.T, root, repository string) int {
+	t.Helper()
+	var tablePath string
+	err := filepath.Walk(filepath.Join(root, ".polymetrics", "warehouse"), func(path string, info os.FileInfo, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if info.IsDir() || filepath.Ext(info.Name()) != ".parquet" || !strings.HasPrefix(info.Name(), "transport-stage_") || filepath.Base(filepath.Dir(path)) != "tables" {
+			return nil
+		}
+		if tablePath != "" {
+			t.Fatalf("found more than one connection-owned issues Parquet table: %s and %s", tablePath, path)
+		}
+		tablePath = path
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("discover connection-owned issues Parquet: %v", err)
+	}
+	if tablePath == "" {
+		t.Fatal("connection-owned issues Parquet table was not materialized")
+	}
+	count := 0
+	if err := warehouse.ReadTable(context.Background(), tablePath, func(row warehouse.Row) error {
+		count++
+		if row["repository"] != repository {
+			t.Fatalf("Parquet issue %d repository = %#v, want %q", count, row["repository"], repository)
+		}
+		if nodeID, ok := row["node_id"].(string); !ok || strings.TrimSpace(nodeID) == "" {
+			t.Fatalf("Parquet issue %d node_id = %#v, want non-empty text", count, row["node_id"])
+		}
+		return nil
+	}); err != nil {
+		t.Fatalf("independently read connection-owned issues Parquet: %v", err)
+	}
+	return count
 }
 
 func runPostgresTransportApproval(binary, root, connection, stream string, batchSize int, approval approvedPostgresTransportRun) (string, error) {

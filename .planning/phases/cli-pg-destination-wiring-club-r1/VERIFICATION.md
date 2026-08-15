@@ -10,3 +10,5 @@
 - [x] Focused package tests, `internal/cli`, race tests, build/vet, container live tests, and scoped CI gates pass without changing #4125/#4158.
 - [x] Inline `verify-work` and `code-review` have no unresolved finding.
 - [ ] Branch is committed/pushed, PR targets `integration/4015-mvp-flat-r1`, and the API-observed base is recorded.
+- [x] Merge gate: built `pm` transfers exactly 50 authenticated `rails/rails` issues into independently counted Parquet and real PostgreSQL rows with correct types and an advanced checkpoint.
+- [x] Merge gate: missing approval, consumed replay, and in-flight cancellation return typed errors and leave target rows/checkpoint unchanged.

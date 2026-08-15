@@ -129,8 +129,16 @@ func isIssueLabelTransportConnector(connector connectors.Connector) bool {
 }
 
 func validateClosedTransportBatchSize(source, destination connectors.Connector, batchSize int) error {
-	if (isIssueLabelTransportConnector(source) || isIssueLabelTransportConnector(destination)) && batchSize != 1 {
+	// The provider-mutating issue-label destination binds every source record
+	// to one configured target issue and therefore remains singleton-only. The
+	// same definition-selected source may deliver a bounded collection to a
+	// semantic managed database destination, whose own executor provides the
+	// batch transaction and replay contract.
+	if isIssueLabelTransportConnector(destination) && batchSize != 1 {
 		return errors.New("closed issue-label transport requires batch size 1")
+	}
+	if isIssueLabelTransportConnector(source) && batchSize > issueCollectionTransportMaxRecords {
+		return fmt.Errorf("bounded issue collection batch size must not exceed %d", issueCollectionTransportMaxRecords)
 	}
 	return nil
 }

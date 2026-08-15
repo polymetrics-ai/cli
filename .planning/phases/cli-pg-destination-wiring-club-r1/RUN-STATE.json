@@ -4,9 +4,9 @@
   "lifecycle": {
     "discuss_phase": "complete_inline",
     "plan_phase_tdd": "complete_inline",
-    "execute_phase": "complete_inline",
-    "verify_work": "complete_inline",
-    "code_review": "complete_inline"
+    "execute_phase": "gaps_complete_inline",
+    "verify_work": "complete_inline_after_gaps",
+    "code_review": "complete_inline_after_gaps"
   },
   "issues": [3979, 3982, 3983],
   "base": "integration/4015-mvp-flat-r1",

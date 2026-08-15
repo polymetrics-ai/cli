@@ -1,13 +1,35 @@
 package app
 
 import (
+	"context"
 	"errors"
 	"reflect"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/synctransport"
 )
+
+func TestPostgresManagedTargetMissingAndConsumedApprovalErrorsAreTyped(t *testing.T) {
+	a := &App{state: state{ReversePlans: []ReversePlan{{
+		ID: "rplan_consumed", Mode: reversePlanModePostgresManagedTarget, Status: "executed",
+	}}}}
+	before := a.state
+	if _, err := a.authorizePostgresManagedTargetTransport(context.Background(), Connection{}, "issues", synctransport.DestinationApproval{}, connectors.RuntimeConfig{}); !errors.Is(err, ErrPostgresManagedTargetApprovalRequired) {
+		t.Fatalf("missing approval error = %T %v, want ErrPostgresManagedTargetApprovalRequired", err, err)
+	}
+	_, err := a.authorizePostgresManagedTargetTransport(context.Background(), Connection{}, "issues", synctransport.DestinationApproval{
+		PlanID: "rplan_consumed", ApprovalToken: "opaque-replay-fixture",
+	}, connectors.RuntimeConfig{})
+	var replay *AuthorizationTokenReplayError
+	if !errors.As(err, &replay) {
+		t.Fatalf("consumed approval error = %T %v, want AuthorizationTokenReplayError", err, err)
+	}
+	if !reflect.DeepEqual(a.state, before) {
+		t.Fatalf("approval refusals changed App state: before=%#v after=%#v", before, a.state)
+	}
+}
 
 func TestPostgresManagedTargetStaleApprovalIsTypedAndStateFree(t *testing.T) {
 	a := &App{state: state{WorkspaceID: "workspace-before"}}

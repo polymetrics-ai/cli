@@ -26,6 +26,8 @@ const (
 	issueLabelTransportSetReplaceConsentConfig = "transport_allow_set_replace"
 	issueLabelTransportKeyedConsentConfig      = "transport_allow_keyed"
 	issueLabelTransportMaxReadPages            = 1
+	issueCollectionTransportMaxReadPages       = 10
+	issueCollectionTransportMaxRecords         = 1000
 )
 
 var (
@@ -381,6 +383,13 @@ func (e *issueLabelSourceExecutor) ReadTransport(ctx context.Context, request sy
 	if err := issueLabelTransportRepositoryConfig(request.Runtime.Config); err != nil {
 		return err
 	}
+	configuredIssue := strings.TrimSpace(request.Runtime.Config[issueLabelTransportSourceIssueConfig])
+	if configuredIssue == "" {
+		return e.readIssueCollection(ctx, request, emit)
+	}
+	if request.BatchSize != 1 {
+		return fmt.Errorf("closed issue-label transport requires batch size 1 when %s is configured", issueLabelTransportSourceIssueConfig)
+	}
 	sourceIssue, err := issueLabelTransportIssueNumber(request.Runtime.Config, issueLabelTransportSourceIssueConfig)
 	if err != nil {
 		return err
@@ -412,6 +421,46 @@ func (e *issueLabelSourceExecutor) ReadTransport(ctx context.Context, request sy
 	}
 	if len(records) != 1 {
 		return fmt.Errorf("closed issue-label source did not find configured issue %d in its bounded page", sourceIssue)
+	}
+	candidate, err := issueTransportCheckpoint(request.Resume, records)
+	if err != nil {
+		return err
+	}
+	return emit(synctransport.SourcePage{Records: records, CandidateCheckpoint: candidate})
+}
+
+// readIssueCollection is the bounded API-source half used when the declared
+// issue stream is paired with a managed database target. It buffers one
+// caller-sized page before emitting it, so cancellation or provider failure
+// during collection cannot partially stage a page, write target rows, or
+// advance its checkpoint. The provider request count is independently capped
+// even when the caller supplies an unexpectedly large batch.
+func (e *issueLabelSourceExecutor) readIssueCollection(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+	if request.BatchSize > issueCollectionTransportMaxRecords {
+		return fmt.Errorf("bounded issue collection batch size must not exceed %d", issueCollectionTransportMaxRecords)
+	}
+	records := make([]connectors.Record, 0, request.BatchSize)
+	err := e.connector.Read(ctx, connectors.ReadRequest{
+		Stream:   "issues",
+		Config:   request.Runtime,
+		Limit:    request.BatchSize,
+		MaxPages: issueCollectionTransportMaxReadPages,
+	}, func(record connectors.Record) error {
+		cloned, err := cloneTransportRecord(record)
+		if err != nil {
+			return err
+		}
+		records = append(records, cloned)
+		if len(records) == request.BatchSize {
+			return connectors.ErrReadLimitReached
+		}
+		return nil
+	})
+	if err := connectors.IgnoreReadLimit(err); err != nil {
+		return fmt.Errorf("read bounded issue collection: %w", err)
+	}
+	if err := ctx.Err(); err != nil {
+		return err
 	}
 	candidate, err := issueTransportCheckpoint(request.Resume, records)
 	if err != nil {

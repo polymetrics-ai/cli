@@ -5,7 +5,7 @@ coverage:
     requirement: "#3982"
     verification:
       - kind: e2e
-        ref: "internal/cli/postgres_transport_binary_integration_test.go — authenticated real GitHub issue through built pm and warehouse into live PostgreSQL"
+        ref: "internal/cli/postgres_transport_binary_integration_test.go — 50 authenticated rails/rails issues through built pm and warehouse into live PostgreSQL"
         status: pass
       - kind: integration
         ref: "internal/app/transport_composition_test.go — app.Open exact factory registration/preflight and write=false"
@@ -62,10 +62,19 @@ binary tests passed against real systems. The latter additionally proves the
 bootstrap App bridge, transactional pgoutput delivery, deliberate process death,
 and resume from the acknowledged LSN.
 
+The merge-gate API proof now buffers one bounded GitHub collection page (maximum
+1,000 records and ten provider pages), rather than selecting a known singleton.
+A built `pm` read 50 `rails/rails` issues with certification credentials,
+materialized 50 rows in Parquet, and delivered 50 independently queried rows to
+real PostgreSQL with `bigint`, `text`, `jsonb`, `text`, and `boolean` types.
+Missing approval, consumed replay, and cancellation after the provider request
+was observably in flight all returned typed errors with no target-row or
+checkpoint change.
+
 The final review removed `full_overwrite` from PostgreSQL's bounded, multi-page
 source declaration because applying replace once per page cannot honor a whole-
 snapshot overwrite. The destination still declares all five required modes;
-the authenticated one-row API route proves its safe production overwrite path.
+the representative API proof exercises its keyed `incremental_upsert` path.
 
 ## Verification
 

@@ -104,8 +104,14 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	if postgres.Metadata().Capabilities.Write {
 		t.Fatal("PostgreSQL published generic write capability for its closed managed destination")
 	}
-	if err := validateClosedTransportBatchSize(github, postgres, 2); err == nil {
-		t.Fatal("closed issue-label transport accepted a batch larger than its one-record contract")
+	if err := validateClosedTransportBatchSize(github, github, 2); err == nil {
+		t.Fatal("closed issue-label destination accepted a batch larger than its one-record contract")
+	}
+	if err := validateClosedTransportBatchSize(github, postgres, 50); err != nil {
+		t.Fatalf("GitHub managed-target transport rejected its bounded collection batch: %v", err)
+	}
+	if err := validateClosedTransportBatchSize(github, postgres, issueCollectionTransportMaxRecords+1); err == nil {
+		t.Fatal("GitHub managed-target transport accepted an allocation-sized batch above its fixed bound")
 	}
 	if err := validateClosedTransportBatchSize(postgres, postgres, 1000); err != nil {
 		t.Fatalf("PostgreSQL managed transport rejected its bounded database batch: %v", err)
