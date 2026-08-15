@@ -276,6 +276,105 @@ func TestFlowCreateApprovedActionStoresOnlyJobReference(t *testing.T) {
 	}
 }
 
+func TestFlowActionWithoutApprovedJobReferenceRefusesBeforeIO(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowScopedWarehouseApp(t, ctx)
+	target := &cliFlowActionTarget{}
+	a.Registry().Register(target)
+	path := writeManifestFile(t, `{
+		"version": 1,
+		"name": "legacy-inline-action-flow",
+		"steps": [{
+			"id": "action-without-job",
+			"kind": "action",
+			"action_cfg": {
+				"source_table": "records",
+				"source_connection": "acme",
+				"destination_connector": "flow-target",
+				"destination_credential": "flow-target",
+				"destination_table": "target",
+				"action": "create",
+				"mappings": {"id": "id"},
+				"authorization_reference": "auth_legacy",
+				"read_back_stream": "targets"
+			}
+		}]
+	}`)
+	beforeEvents := target.eventCount()
+
+	err := runFlow(ctx, config.Config{}, a, []string{"create", "--file", path}, &bytes.Buffer{}, true)
+	var referenceErr *flow.JobReferenceError
+	require.ErrorAs(t, err, &referenceErr)
+	assert.Equal(t, "", referenceErr.Reference)
+	assert.Equal(t, flow.JobReferenceMalformed, referenceErr.Reason)
+	classified := classifyError(err)
+	require.NotNil(t, classified)
+	assert.Equal(t, categoryValidation, classified.category)
+	assert.Equal(t, "flow_job_reference_refused", classified.code)
+	assert.Equal(t, beforeEvents, target.eventCount())
+	_, statErr := os.Stat(filepath.Join(a.ProjectDir(), "flows", "legacy-inline-action-flow.json"))
+	assert.ErrorIs(t, statErr, os.ErrNotExist)
+}
+
+func TestFlowActionRevokedJobReferenceRefusesBeforeIO(t *testing.T) {
+	ctx, _, a, target, manifest, plan := newAuthorizedScheduleFixture(t)
+	require.NoError(t, a.RevokeAuthorization(plan.AuthorizationReference))
+	beforeEvents := target.eventCount()
+
+	err := flowRun(ctx, config.Config{}, a, []string{manifest.Flow}, &bytes.Buffer{}, true)
+	var referenceErr *flow.JobReferenceError
+	require.ErrorAs(t, err, &referenceErr)
+	assert.Equal(t, plan.ID, referenceErr.Reference)
+	assert.Equal(t, flow.JobReferenceUnapproved, referenceErr.Reason)
+	var revoked *app.AuthorizationRevokedError
+	require.ErrorAs(t, err, &revoked)
+	classified := classifyError(err)
+	require.NotNil(t, classified)
+	assert.Equal(t, categoryValidation, classified.category)
+	assert.Equal(t, "flow_job_reference_refused", classified.code)
+	assert.Equal(t, beforeEvents, target.eventCount())
+}
+
+func TestFlowActionStaleJobReferenceRefusesBeforeIO(t *testing.T) {
+	ctx, root, a, target, manifest, plan := newAuthorizedScheduleFixture(t)
+	removeFlowActionJob(t, root, plan.ID)
+	beforeEvents := target.eventCount()
+
+	err := flowRun(ctx, config.Config{}, a, []string{manifest.Flow}, &bytes.Buffer{}, true)
+	var referenceErr *flow.JobReferenceError
+	require.ErrorAs(t, err, &referenceErr)
+	assert.Equal(t, plan.ID, referenceErr.Reference)
+	assert.Equal(t, flow.JobReferenceMissing, referenceErr.Reason)
+	classified := classifyError(err)
+	require.NotNil(t, classified)
+	assert.Equal(t, categoryValidation, classified.category)
+	assert.Equal(t, "flow_job_reference_refused", classified.code)
+	assert.Equal(t, beforeEvents, target.eventCount())
+}
+
+func removeFlowActionJob(t *testing.T, root, planID string) {
+	t.Helper()
+	path := filepath.Join(root, ".polymetrics", "state", "state.json")
+	payload, err := os.ReadFile(path)
+	require.NoError(t, err)
+	var state map[string]json.RawMessage
+	require.NoError(t, json.Unmarshal(payload, &state))
+	var plans []app.ReversePlan
+	require.NoError(t, json.Unmarshal(state["reverse_plans"], &plans))
+	filtered := make([]app.ReversePlan, 0, len(plans)-1)
+	for _, plan := range plans {
+		if plan.ID != planID {
+			filtered = append(filtered, plan)
+		}
+	}
+	require.Len(t, filtered, len(plans)-1)
+	state["reverse_plans"], err = json.Marshal(filtered)
+	require.NoError(t, err)
+	updated, err := json.Marshal(state)
+	require.NoError(t, err)
+	require.NoError(t, os.WriteFile(path, updated, 0o600))
+}
+
 // TestFlowStatusMissing checks that `pm flow status <missing>` returns an error.
 func TestFlowStatusMissing(t *testing.T) {
 	dir := t.TempDir()

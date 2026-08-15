@@ -202,9 +202,7 @@ func executeFreshBinaryGitHubFlowRoundTrip(t *testing.T, target githubFlowRoundT
 	mustRunGitHubFlowPM(t, binary, approvalToken+"\n", []string{target.token, approvalToken},
 		"reverse", "run", planID, "--approval-token-stdin", "--root", root, "--json",
 	)
-	authorizationReference := githubFlowAuthorizationReference(t, root)
-
-	flowPath := writeGitHubFlowManifest(t, root, authorizationReference)
+	flowPath := writeGitHubFlowManifest(t, root, planID)
 	mustRunGitHubFlowPM(t, binary, "", []string{target.token, approvalToken},
 		"flow", "plan", "--file", flowPath, "--root", root, "--json",
 	)
@@ -399,7 +397,7 @@ func githubFlowOutputField(t *testing.T, output, pattern string) string {
 	return match[1]
 }
 
-func writeGitHubFlowManifest(t *testing.T, root, authorizationReference string) string {
+func writeGitHubFlowManifest(t *testing.T, root, jobReference string) string {
 	t.Helper()
 	dir := filepath.Join(root, ".polymetrics", "flows")
 	if err := os.MkdirAll(dir, 0o700); err != nil {
@@ -416,12 +414,9 @@ func writeGitHubFlowManifest(t *testing.T, root, authorizationReference string) 
 			},
 			map[string]any{
 				"id": "comment_extracted_issue", "kind": "action", "in": []string{"flow_issues"}, "out": []string{},
+				"job": jobReference,
 				"action_cfg": map[string]any{
-					"source_table": "flow_issues", "source_connection": "github-flow-job",
-					"destination_connector": "github", "destination_credential": "github-flow",
-					"destination_table": "flow_issue_comment_target", "action": "comment_issue",
-					"mappings":                map[string]string{"number": "issue_number", "title": "body"},
-					"authorization_reference": authorizationReference, "read_back_stream": "issue_comments",
+					"read_back_stream": "issue_comments",
 				},
 			},
 		},
@@ -524,20 +519,6 @@ func assertGitHubFlowCheckpointUnchanged(t *testing.T, root string, before []byt
 	if !bytes.Equal(after, before) {
 		t.Fatalf("durable checkpoint advanced after %s", stage)
 	}
-}
-
-func githubFlowAuthorizationReference(t *testing.T, root string) string {
-	t.Helper()
-	var state struct {
-		Authorizations []struct {
-			Reference string `json:"reference"`
-		} `json:"authorizations"`
-	}
-	readGitHubFlowState(t, root, &state)
-	if len(state.Authorizations) != 1 || strings.TrimSpace(state.Authorizations[0].Reference) == "" {
-		t.Fatalf("durable flow authorization count = %d, want one", len(state.Authorizations))
-	}
-	return state.Authorizations[0].Reference
 }
 
 func assertGitHubFlowReceiptPersisted(t *testing.T, root string) bool {
