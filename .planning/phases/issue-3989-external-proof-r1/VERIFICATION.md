@@ -1,10 +1,10 @@
 # #3989 verification checklist
 
-- [ ] Every acceptance row has an observable state-change assertion.
-- [ ] External binary is freshly built and its SHA is recorded in sanitized evidence.
-- [ ] No raw credential appears in any captured stream, argv, project file, vault/key, or artifact.
-- [ ] Error/refusal paths write zero accepted-evidence artifacts.
-- [ ] HTTPS transcript covers method, target/query, request/response headers and bodies, status, redirect/retry/error behavior, and explicit byte bounds.
-- [ ] `go test -timeout 20m ./internal/connectors/certify/...` passes.
-- [ ] Required local gates and code review complete.
-- [ ] CLI help/manual/website parity checked or explicitly not applicable.
+- [x] Every acceptance row has an observable state-change assertion: evidence writer, observer, ephemeral-session, relay, and fresh-child tests each assert a positive write/request/fingerprint or an explicit zero-write refusal.
+- [x] External binary is freshly built and its SHA is recorded in sanitized evidence (`TestExternalProofFreshChildCapturesCompleteHTTPSProviderTranscript`).
+- [x] No raw credential appears in captured parent streams, project tree, vault/key, or artifact in the fresh TLS child test; parent relay refuses both streams before writing on a canary match.
+- [x] Error/refusal paths write zero accepted-evidence artifacts (`TestWriteExternalProofRefusesTruncatedBodyWithoutArtifactWrites` and `TestExternalProofFreshChildRefusesNoHTTPSWithoutArtifact`).
+- [x] HTTPS transcript covers exact request/response observation and explicit byte bounds; transport tests cover bounded error bodies while preserving the child-visible body.
+- [ ] `go test -timeout 20m ./internal/connectors/certify/...` passes after the final TLS/relay changes.
+- [ ] Required scoped local gates and code review complete.
+- [ ] CLI help/manual/website parity: `pm connectors`, `pm help connectors`, `pm connectors certify --help`, golden transcript, and docs check pass after final documentation changes.

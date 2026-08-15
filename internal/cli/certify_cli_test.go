@@ -4,9 +4,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
@@ -273,6 +276,79 @@ func TestExternalProofFreshChildRefusesNoHTTPSWithoutArtifact(t *testing.T) {
 	if bytes.Contains(stdout.Bytes(), []byte(token)) || bytes.Contains(stderr.Bytes(), []byte(token)) {
 		t.Fatal("fresh external child exposed credential material in process output")
 	}
+	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
+}
+
+func TestRelayExternalCertifyChildOutputRefusesCredentialWithoutWrites(t *testing.T) {
+	const token = "cert-canary-child-relay-3989"
+	var stdout, stderr bytes.Buffer
+
+	err := relayExternalCertifyChildOutput(&stdout, &stderr, "child report", "unexpected "+token, []string{token})
+	if err == nil || !strings.Contains(err.Error(), "credential material") {
+		t.Fatalf("relay error = %v, want credential-material refusal", err)
+	}
+	if stdout.Len() != 0 || stderr.Len() != 0 {
+		t.Fatalf("relay wrote child streams after refusal: stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+}
+
+func TestExternalProofFreshChildCapturesCompleteHTTPSProviderTranscript(t *testing.T) {
+	const token = "cert-canary-external-https-3989"
+	var requests atomic.Int64
+	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests.Add(1)
+		username, password, authorized := request.BasicAuth()
+		if !authorized || username != token || password != "" {
+			http.Error(w, "missing prepared authorization", http.StatusUnauthorized)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-External-Proof-Canary", "complete")
+		switch request.URL.Path {
+		case "/accounts":
+			_, _ = io.WriteString(w, `{"object":"list","data":[{"id":"acct_external_3989","code":"proof","email":"proof@example.test","state":"active","created_at":"2026-08-14T00:00:00Z","updated_at":"2026-08-15T00:00:00Z"}],"has_more":false}`)
+		default:
+			http.Error(w, "unexpected external proof request", http.StatusNotFound)
+		}
+	}))
+	defer server.Close()
+
+	trustPath := filepath.Join(t.TempDir(), "external-proof-provider.pem")
+	if err := os.WriteFile(trustPath, pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: server.Certificate().Raw}), 0o600); err != nil {
+		t.Fatalf("write provider trust certificate: %v", err)
+	}
+	root := t.TempDir()
+	t.Setenv("SSL_CERT_FILE", trustPath)
+	t.Setenv("SSL_CERT_DIR", "")
+	t.Setenv("GODEBUG", strings.TrimPrefix(os.Getenv("GODEBUG")+",x509usefallbackroots=1", ","))
+	t.Setenv("PM_CERTIFY_EXTERNAL_HTTPS_CANARY", token)
+	var stdout, stderr bytes.Buffer
+	err := runCertify(context.Background(), root, []string{
+		"recurly", "--external-proof", "--full-parity", "--json",
+		"--config", "base_url=" + server.URL,
+		"--from-env", "api_key=PM_CERTIFY_EXTERNAL_HTTPS_CANARY",
+	}, &stdout, &stderr, true)
+	if err != nil {
+		t.Fatalf("fresh external HTTPS certification: %v; stderr=%q", err, strings.ReplaceAll(stderr.String(), token, "<credential>"))
+	}
+	if requests.Load() == 0 {
+		t.Fatal("fresh external binary made no HTTPS provider request")
+	}
+	proofs, err := filepath.Glob(filepath.Join(root, ".polymetrics", "certifications", "external-proof", "recurly", "*.json"))
+	if err != nil || len(proofs) != 1 {
+		t.Fatalf("external HTTPS proof paths = %v, glob error = %v, want one", proofs, err)
+	}
+	matched, err := certify.VerifyExternalProofTranscript(root, proofs[0], stdout.String(), stderr.String())
+	if err != nil {
+		t.Fatalf("verify fresh external HTTPS transcript: %v", err)
+	}
+	if !matched {
+		t.Fatal("proof does not attest to the exact external binary stdout/stderr")
+	}
+	if bytes.Contains(stdout.Bytes(), []byte(token)) || bytes.Contains(stderr.Bytes(), []byte(token)) {
+		t.Fatal("fresh external HTTPS process output exposed credential material")
+	}
+	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
 }
 
 // TestExternalProofGitHubSmoke is deliberately opt-in because it reaches the
@@ -315,7 +391,12 @@ func TestExternalProofGitHubSmoke(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(root, ".polymetrics", "vault")); !errors.Is(err, os.ErrNotExist) {
 		t.Fatalf("external proof persisted a vault: stat error = %v, want not exist", err)
 	}
-	if err := filepath.WalkDir(filepath.Join(root, ".polymetrics"), func(path string, entry os.DirEntry, walkErr error) error {
+	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
+}
+
+func assertNoCredentialMaterialInTree(t *testing.T, root, token string) {
+	t.Helper()
+	if err := filepath.WalkDir(root, func(path string, entry os.DirEntry, walkErr error) error {
 		if walkErr != nil || entry.IsDir() {
 			return walkErr
 		}

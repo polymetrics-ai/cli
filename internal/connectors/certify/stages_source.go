@@ -211,7 +211,10 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	}
 	r.observedHTTP = nil
 	if r.opts.ObserveHTTP {
-		observer, removeObserver := installCertificationHTTPObserver(defaultObservedBodyBytes)
+		observer, removeObserver, observeErr := installCertificationHTTPObserver(defaultObservedBodyBytes)
+		if observeErr != nil {
+			return Report{}, fmt.Errorf("certify: install external HTTP observer: %w", observeErr)
+		}
 		defer func() {
 			r.observedHTTP = observer.Exchanges()
 			removeObserver()

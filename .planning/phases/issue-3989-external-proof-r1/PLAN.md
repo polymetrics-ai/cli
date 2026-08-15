@@ -17,7 +17,7 @@
 2. **Red:** test that evidence rejects absent exchanges, child failure, incomplete substitution, non-full-parity input, and truncated required body; assert no artifact is written. **Green:** wire the all-or-nothing proof model to the completed external run and make each refusal leave zero evidence writes.
 3. **Red:** exercise HTTPS redirects, retryable error then success, binary/opaque payload, and provider error body against the real built binary; assert missing observations or unbounded data fails. **Green:** collect bounded full-fidelity transcript observations with explicit truncation metadata while preserving child-visible bytes.
 4. **Red:** external-binary smoke acceptance must prove its stdout/stderr equals observed process output and a filesystem audit before cleanup finds no certification vault credential/key. **Green:** persist only sanitized accepted evidence after the full child run succeeds.
-5. **Refactor/review:** retain in-process harnesses for fixtures, remove them from accepted live evidence, document CLI parity as not applicable if no public flag/help/output changes, and run focused plus repository gates.
+5. **Refactor/review:** retain in-process harnesses for fixtures, remove them from accepted live evidence, add the explicit `--external-proof --full-parity` help/manual/website contract, and run focused plus repository gates.
 
 ## Acceptance evidence
 
@@ -40,4 +40,7 @@
 
 ## CLI parity
 
-The planned public command shape is unchanged. Confirm `pm connectors`, `pm help connectors`, and `pm connectors certify --help` remain unchanged; no docs/website/generated-help edit is expected unless an implementation changes the public surface.
+`--external-proof --full-parity` is public certification CLI behavior. Its help text,
+generated manual source, `docs/cli/connectors.md`, website CLI reference, and golden
+transcript are updated together. Verify `pm connectors`, `pm help connectors`, and
+`pm connectors certify --help` alongside the docs check.

@@ -440,7 +440,7 @@ ACTIONS
     Runs the legacy connector test harness. It does not set the generated
     CERTIFIED status; only proof-bearing certification records can do that.
     --external-proof is an explicit live HTTPS acceptance mode: it builds a
-    fresh pm child binary, accepts credentials only from --from-env/stdin,
+    fresh pm child binary, accepts credentials only from --from-env,
     and writes a fingerprint-only transcript after a full-parity run. It
     requires --full-parity and refuses incomplete or truncated exchanges.
     With --full --json from a source checkout,

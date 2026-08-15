@@ -42,7 +42,7 @@ func runCertify(ctx context.Context, root string, args []string, stdout, stderr 
 		if flags.first("full-parity") != "true" {
 			return usageErrorf("pm connectors certify --external-proof requires --full-parity")
 		}
-		return runExternalCertifyChild(ctx, root, args, stdout, stderr)
+		return runExternalCertifyChild(ctx, root, args, stdout, stderr, certificationPreparedValues(opts))
 	}
 
 	switch {
@@ -125,7 +125,7 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 	return exitForReport(rep)
 }
 
-func runExternalCertifyChild(ctx context.Context, root string, args []string, stdout, stderr io.Writer) error {
+func runExternalCertifyChild(ctx context.Context, root string, args []string, stdout, stderr io.Writer, preparedValues []string) error {
 	moduleRoot, err := certificationModuleRoot()
 	if err != nil {
 		return err
@@ -151,11 +151,8 @@ func runExternalCertifyChild(ctx context.Context, root string, args []string, st
 	child.Stdout = &childStdout
 	child.Stderr = &childStderr
 	err = child.Run()
-	if _, writeErr := io.Copy(stdout, &childStdout); writeErr != nil {
-		return writeErr
-	}
-	if _, writeErr := io.Copy(stderr, &childStderr); writeErr != nil {
-		return writeErr
+	if relayErr := relayExternalCertifyChildOutput(stdout, stderr, childStdout.String(), childStderr.String(), preparedValues); relayErr != nil {
+		return relayErr
 	}
 	if err == nil {
 		return nil
@@ -169,6 +166,24 @@ func runExternalCertifyChild(ctx context.Context, root string, args []string, st
 		return certifyExitErrorf(exitErr.ExitCode(), "external certification %s: exit %d", connector, exitErr.ExitCode())
 	}
 	return fmt.Errorf("certify external proof: run fresh pm binary: %w", err)
+}
+
+// relayExternalCertifyChildOutput is the parent-side final credential boundary:
+// the child has no terminal attached, so neither stream may reach the invoking
+// process until both have been checked against the prepared credential values.
+// On a refusal it writes neither stream, leaving no caller-captured transcript
+// or log with the secret.
+func relayExternalCertifyChildOutput(stdout, stderr io.Writer, childStdout, childStderr string, preparedValues []string) error {
+	if len(certify.ScanForSecrets(childStdout, preparedValues)) != 0 || len(certify.ScanForSecrets(childStderr, preparedValues)) != 0 {
+		return errors.New("external certification child output contained credential material; refusing to relay captured streams")
+	}
+	if _, err := io.WriteString(stdout, childStdout); err != nil {
+		return err
+	}
+	if _, err := io.WriteString(stderr, childStderr); err != nil {
+		return err
+	}
+	return nil
 }
 
 func rejectCertificationSecretArgv(args []string, opts certify.Options) error {
