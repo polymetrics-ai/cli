@@ -47,9 +47,10 @@ Refs #4119, #4125, and #4169. This Firstmate-authorized corrective PR targets
 - No provider credentials or live provider calls were used. Error formatting
   retains no raw provider URL/body or credential value. No provider write,
   generic write tool, or reverse execution was introduced.
-- `TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip` has an independent
-  pre-auth flow-control failure on the dispatch base; its corrected auth
-  assertion is retained, not weakened. See `VERIFICATION.md`.
+- The stale `TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip`
+  flow-control fixture was resolved upstream by merged PR #4174. After
+  confirming the updated base contains `ec1f200c9`, this branch's fresh-binary
+  round trip passes locally. See `VERIFICATION.md`.
 - `TestCLIDurableParkingAdmissionAndResumeAcrossKilledProcess` is an existing
   concurrent-resume proof, outside this PR's behavior changes. At the same
   dispatch base it produced 6 passes and 1 failure across directly observed
@@ -66,3 +67,4 @@ Refs #4119, #4125, and #4169. This Firstmate-authorized corrective PR targets
 3. `f61b0819d` — #4125 bounded shared window fix
 4. `cab821f5e` — #4169 typed credential classification
 5. `329699f2a` — durable concurrent-resume failure diagnostics
+6. `aa3704271` — merged integration base containing #4174

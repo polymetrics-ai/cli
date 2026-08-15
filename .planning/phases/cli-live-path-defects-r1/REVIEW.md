@@ -23,5 +23,6 @@ No actionable findings.
 
 ## Disposition
 
-The isolated legacy full-flow failure is not changed or re-baselined. It occurs
-before the auth assertion and is recorded in `VERIFICATION.md` for its owner.
+The isolated legacy full-flow failure was resolved by merged PR #4174. This
+branch contains that base update and the fresh-binary round trip now passes;
+the #4169 credential assertion remains intact.

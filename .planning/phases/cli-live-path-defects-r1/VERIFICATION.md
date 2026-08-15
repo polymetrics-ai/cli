@@ -47,6 +47,9 @@
   '^TestFreshBinaryProvider401IsCredentialErrorWithoutWritesOrCheckpointAdvance$'`
   passed: a freshly built binary emitted `auth/credential_error`, sent one
   provider read, sent zero writes, and did not advance its checkpoint.
+- After absorbing merged base `ec1f200c9`, `go test -count=1 -timeout 20m
+  ./internal/cli -run '^TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip$'`
+  passed.
 - `go vet ./...`, `go build ./cmd/pm`, `make tidy-check`, `make lint`,
   `make docs-check`, `make smoke-no-build`, `make agent-contract-check`,
   `make connector-boundary`, `make release-workflow-check`,
@@ -57,13 +60,15 @@
   artifact is changed because the command surface and output schema are
   unchanged.
 
-## Independent pre-existing failure
+## Resolved base dependency
 
-`TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip` failed before this
-phase's classification implementation at a valid flow control step with exit
-3, before its provider-401 assertion. The test is intentionally retained with
-the corrected auth expectation; this phase neither relaxes it nor changes the
-unrelated flow-control path.
+`TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip` initially failed
+before this phase's classification implementation at a valid flow-control step
+with exit 3, before its provider-401 assertion. Merged PR #4174 replaced the
+stale inline-action fixture. After fetching the updated integration base and
+proving `ec1f200c9c9b11d1b2f54505bae2ea6c3a621f63` was contained in it, this
+branch merged that base as `aa3704271`. The exact fresh-binary round-trip test
+then passed locally without relaxing its assertion.
 
 ## Durable-parking CI triage (not a phase behavior change)
 

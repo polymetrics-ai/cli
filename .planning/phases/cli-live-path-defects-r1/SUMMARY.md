@@ -32,8 +32,8 @@ closes the proof gap without inventing a duplicate transport change. #4125 now
 rejects invalid windows before coordinator I/O. #4169 preserves a safe provider
 401 identity through response formatting and exposes it as a credential error.
 
-The corrected legacy fresh-flow assertion remains in place but has an
-independent pre-auth flow-control failure recorded in `VERIFICATION.md`.
+The corrected legacy fresh-flow assertion remains in place and passes after
+the branch absorbed merged PR #4174 from the integration base.
 
 During CI triage, the existing durable-parking process test also showed a
 load-sensitive base flake (six observed passes and one failure at
