@@ -11,14 +11,13 @@
 
 ## Resolved gray areas
 
-- The one-time operator approval is not reintroduced per schedule run. It creates the durable
-  authorization once; the new per-fire grant is derived automatically only after exact scope
-  revalidation.
+- The one-time operator approval creates the sole durable authorization. A flow inherits that
+  approval from its referenced job, and a schedule inherits the flow; there is no schedule
+  authorization, per-fire grant, or authority carrier in the rendered command.
 - Prepared identity and authorization scope identity remain separate because one binds payload and
   the other deliberately does not.
-- Grant replay is prevented by a durable `O_EXCL` consumption marker under the existing approval
-  authority rather than schedule state alone. Schedule state remains the crash/automatic-replay
-  guard.
+- Identical prepared-payload replay is prevented by a non-authoritative `O_EXCL` evidence marker.
+  Schedule running/parked state remains the crash and automatic-replay guard.
 - Typed rate refusal belongs in `connsdk`, while coordinator detail remains a wrapped internal
   cause.
 - No product questions remain. The launch brief explicitly fixes scope, naming, edge cases,

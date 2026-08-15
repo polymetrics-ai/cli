@@ -1,107 +1,90 @@
-# Plan — connector action identity, per-fire grants, and typed rate refusal
+# Plan — connector action identity, standing job approval, and typed rate refusal
 
 ## Task Delivery Header
 
-- Issue: Refs #3994 — prepared connector-action execution identity; Refs #3992 — per-fire grants,
-  approval, and cleanup ordering; Refs #4049 — typed shared-coordinator rate-budget refusal.
-- Base branch: `integration/4015-mvp-flat-r1`
-- Merges into: `integration/4015-mvp-flat-r1 → main`
-- Delivery: Pull request open from `fm/cli-flow-identity-grant-club-r1` against the stated base,
-  committed with focused checks green and its API-reported base verified.
-- Working branch: `fm/cli-flow-identity-grant-club-r1`
-- Task: Add a payload-bound prepared identity and one-consume firing grant to the production
-  connector action path, make scheduled action firing use and retain safe evidence from that grant,
-  and expose the exact typed rate-budget refusal required when shared coordination is unavailable.
-- Verification: focused app/flow/schedule/CLI/engine/hook/connsdk tests with `-timeout 20m`, selected
-  race tests, fresh-binary production composition, available credentialed GitHub and PostgreSQL
-  evidence, CLI/docs/website parity, generated drift gates, vet/build/lint, and PR base API read-back.
+- Issues: closes #3994, #3992, and #4049.
+- Base: `integration/4015-mvp-flat-r1`; working branch:
+  `fm/cli-flow-identity-grant-club-r1`; merges base → `main` only through the human-gated parent.
+- Delivery: direct PR with focused tests, regenerated artifacts, inline GSD verification/review,
+  call-chain evidence, edge-case table, and API-confirmed base.
+- Required skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
+  `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`,
+  `golang-context`, `golang-concurrency`, `golang-documentation`, `golang-lint`, and
+  `golang-naming`. CLI parity and runtime/PostgreSQL routing references are active.
 
-## Evidence Table
+## Corrected design
 
-| Acceptance criterion | Evidence | Observable assertion or fake reason |
-| --- | --- | --- |
-| Prepared action identity reaches a durable receipt | live | A fresh `pm` binary executes an approved scheduled action and the persisted safe receipt has the expected non-empty payload-bound identity; without the implementation the field and grant do not exist. |
-| Every firing gets exactly one grant | fake | An isolated project and recording connector are necessary to deterministically race the same in-memory prepared firing; exactly one write/read-back/receipt/checkpoint succeeds and the loser gets a typed consumed-grant error. |
-| Pre-I/O refusals do not consume the grant | fake | Cancellation, invalid approval binding, expiry, revocation, and scope drift need injected state/clock control unavailable against a real provider; tests assert typed errors, zero provider events, no checkpoint, and an unconsumed marker or later legitimate consume. |
-| Process death/partial failure cannot replay | fake | A connector failure after durable grant consumption models the ambiguous crash boundary; a reopened App refuses the same grant and records no second write/checkpoint. |
-| Schedule state/lock cleanup follows write outcome | live | The production schedule path writes running state before dispatch, parks or completes terminal state before lock removal, and tests inspect exact persisted state plus lock/target ordering. |
-| `require_shared` coordinator loss returns the specified SDK contract | fake | A local counting transport and absent coordinator deterministically assert `*connsdk.RateBudgetRefusalError`, code `shared_coordinator_unavailable`, wrapped safe coordinator reason, and zero sends. |
-| Real GitHub behavior remains valid | live | When `PM_CERT_GITHUB_TOKEN`/`GITHUB_TOKEN` is present, the existing immutable lab boundary is used for a fresh-binary approved write/read-back/cleanup; credentials and tokens never enter output. |
-| Real PostgreSQL behavior remains valid | fake | The base has no published PostgreSQL destination transport (`write=false`, source-only descriptor), and #4158 is explicitly excluded. A live source/control check can prove only the read side; R2 destination proof is recorded as unavailable rather than fabricated. |
+- Keep one standing `AuthorizationRecord`, minted by the existing one-time reverse-plan
+  plan/preview/proceed lifecycle. Do not add a schedule authorization, per-fire grant, or token.
+- Add explicit flow job references. Sync references resolve to existing connections; action
+  references resolve to existing reverse plans with a non-empty, currently valid standing
+  authorization. Runtime action fields are derived from the stored plan on every execution.
+- Add an atomic flow-create path. It resolves every job before writing. The same resolution runs on
+  every flow run so credential, manifest/scope, mapping, action, confirmation, expiry, and
+  revocation drift fail before provider I/O.
+- A schedule manifest stores only name/cron/flow/root/timestamps. Create and install resolve the
+  named stored flow before schedule/backend writes. A flow may have one schedule so the rendered
+  direct `flow run` command can deterministically recover its fire lease.
+- Keep the exact crontab payload `pm --root <root> flow run <name> --json`. `flowRun` associates a
+  named scheduled flow before execution, begins the existing persistent fire lease, forces a fresh
+  firing checkpoint namespace, and completes or parks that lease only after the terminal flow
+  result.
+- Derive a payload-bound prepared-execution identity and persist it only after connector
+  acknowledgement plus independent read-back. Use a safe exclusive execution lease to reject
+  concurrent/replayed identical prepared execution without treating that lease as approval.
+- Return `*connsdk.RateBudgetRefusalError` / `shared_coordinator_unavailable` for every
+  `require_shared` unavailable path, including GitHub WriteHook routes, before any HTTP send.
 
 ## TDD slices
 
-1. **RED — prepared identity and grant contract.** Add app tests that require a non-empty stable
-   prepared identity, payload drift changing it, a signed per-firing grant, receipt propagation,
-   typed replay/expiry/refusal errors, zero events/checkpoint on every pre-I/O refusal, one winner
-   under concurrent consumption, and no replay after write failure/process reopen.
-2. **GREEN — approval authority.** Add the smallest authenticated execution-grant type to the
-   project write-approval authority, reuse its durable exclusive consumption marker, and bind the
-   resulting connector evidence to the exact preview target/digest.
-3. **GREEN — production action path.** Split action execution into prepare and execute boundaries;
-   revalidate scope/runtime immediately before grant consumption, consume immediately before write,
-   and persist safe prepared/firing identities only after acknowledgement and read-back.
-4. **RED/GREEN — schedule production composition.** Extend schedule/CLI tests and fresh-binary
-   proof so a firing observes one per-action grant, retains safe identities, rejects cancellation,
-   overlap, replay, revoked/expired authorization, and partial write without checkpoint advance,
-   and persists terminal state before lock cleanup.
-5. **RED/GREEN — rate refusal.** Add the `connsdk` error/code contract and require every existing
-   `require_shared` coordinator-unavailable path, including GitHub WriteHook, to wrap with it while
-   preserving context cancellation and the existing coordinator cause.
-6. **REFACTOR/PARITY.** Update flow/schedule help, CLI manual, website reference, generated
-   transcript/data, and lifecycle artifacts only where public safe status changes. No new command,
-   raw destination input, generic writer, or dependency is introduced.
-7. **VERIFY/LIVE/REVIEW.** Run focused suites and race checks, a fresh binary, available live
-   credentials without rendering them, the one-pass generators and drift checks, then execute
-   `verify-work` and `code-review` inline. Any gap uses `plan-phase --gaps` and
-   `execute-phase --gaps-only`.
+1. **RED correction:** replace the obsolete grant RED tests with missing/unapproved job creation,
+   missing-flow scheduling, direct rendered firing, standing-authorization revalidation, prepared
+   identity, replay/ambiguity, and named rate-refusal assertions. Retain the original failed command
+   as superseded historical evidence.
+2. **GREEN flow jobs:** add typed job-reference errors and resolver; hydrate action scope from the
+   approved reverse plan; atomically create the flow only after all positive checks; resolve again
+   at plan/run time.
+3. **GREEN schedule inheritance:** remove authorization from manifests/argv/output; validate stored
+   flow on create/install; render direct `flow run`; associate one schedule per flow and preserve
+   running/parked/succeeded ordering around the terminal result.
+4. **GREEN prepared identity:** keep prepare/execute separation, remove grant issuance/consumption,
+   revalidate live authorization and destructive preview immediately before write, enforce the
+   non-authoritative prepared execution lease, and persist safe identity evidence after read-back.
+5. **GREEN rate refusal:** expose the named SDK error/code while retaining context cancellation and
+   the existing coordinator cause; prove zero transport sends on engine and GitHub hook routes.
+6. **PARITY:** update flow/schedule help, generated manual, `docs/cli`, website docs/data, golden
+   transcripts, and the #3992 issue comment. Run generators once after source/docs settle, then all
+   drift checks until clean.
+7. **VERIFY/REVIEW:** focused tests/race checks, fresh binary call-chain proof, available live checks,
+   scoped vet/build/lint and non-suite gates, inline `verify-work` and `code-review`; close gaps with
+   the required GSD gap loop.
 
-## Edge-case matrix
+## Acceptance and negative side-effect evidence
 
-| Edge | Typed outcome | Required negative evidence |
+| Edge | Typed outcome | Negative/terminal proof |
 | --- | --- | --- |
-| cancellation before consume | `context.Canceled` | zero send/write, no receipt/checkpoint, grant remains consumable |
-| process dies / write outcome ambiguous | consumed/replay error on restart | no automatic second write or checkpoint |
-| already-granted/already-fired replay | `ExecutionGrantConsumedError` / parked schedule | one total write and one total receipt |
-| expired grant / revoked authorization | `ExecutionGrantExpiredError` / `AuthorizationRevokedError` | zero provider events; no grant consumption/checkpoint |
-| refused approval or binding | `ExecutionGrantRefusedError` | zero provider events; no grant consumption/checkpoint |
-| coordinator unavailable | `RateBudgetRefusalError(shared_coordinator_unavailable)` | zero HTTP sends and zero checkpoint advance |
-| concurrent same grant | exactly one success, one consumed error | exactly one write/read-back/receipt/checkpoint |
-| write fails partway | original typed/connector failure; schedule parked | terminal parked state precedes lock cleanup; no checkpoint; grant cannot replay |
+| missing/malformed/unrecognised flow job | `*flow.JobReferenceError` naming reference/reason | no flow file, provider event, receipt, or checkpoint |
+| unapproved/expired/revoked action job | `*flow.JobReferenceError` wrapping the precise App authorization error | no flow file/send/write/checkpoint |
+| missing/malformed scheduled flow | `*schedule.FlowReferenceError` | no schedule file, crontab entry, or sentinel |
+| cancellation before dispatch | `context.Canceled` | zero send/write/receipt/checkpoint; prepared lease released |
+| process death or ambiguous write | persisted running/parked lease | no automatic replay or checkpoint advance |
+| same prepared execution replay | `*app.PreparedExecutionReplayError` | one total write/read-back/receipt/checkpoint |
+| coordinator unavailable | `*connsdk.RateBudgetRefusalError` with named code | zero HTTP sends and no checkpoint |
+| concurrent schedule/prepared firing | `schedule.ErrFireInProgress` / prepared replay error | exactly one provider dispatch |
+| cleanup failure after terminal write | schedule `FireStopCleanup` park | terminal state is stored before lock cleanup; no replay |
 
-## Required skills and workflow
+## CLI/docs parity checklist
 
-Loaded: `golang-how-to`, `golang-cli`, `golang-design-patterns`,
-`golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`,
-`golang-testing`, `golang-context`, and `golang-concurrency`. `golang-lint` is loaded before final
-review as required by #4049. CLI parity and runtime/PostgreSQL references are active.
-
-Resolved GSD path: `discuss-phase` → `plan-phase --tdd` → `execute-phase` → `verify-work` →
-`code-review`, executed inline because this issue-club is not a roadmap-numbered phase and the
-canonical delivery contract forbids spawning roles.
-
-## CLI parity checklist
-
-- [ ] `pm flow`, `pm help flow`, and `pm flow --help` remain contextual and accurate.
-- [ ] `pm schedule`, `pm help schedule`, and `pm schedule --help` remain contextual and accurate.
-- [ ] JSON/human output exposes only opaque safe identities, never grant/token/MAC material.
-- [ ] `docs/cli/flow.md`, `docs/cli/schedule.md`, website references, embedded manual, and generated
-      transcripts/data are updated or explicitly unchanged after inspection.
-- [ ] Invalid actions remain usage errors and bare namespaces exit successfully.
-
-## Commit checkpoints
-
-1. plan/TDD evidence;
-2. RED tests and captured failures;
-3. approval/grant plus action/schedule GREEN implementation;
-4. typed rate-refusal GREEN implementation;
-5. regenerated artifacts, verification/review evidence, and any review fixes.
+- [ ] `pm flow`, `pm help flow`, `pm flow --help`, and new creation help are accurate.
+- [ ] `pm schedule`, `pm help schedule`, and `pm schedule --help` describe flow inheritance and no
+      crontab approval token/reference.
+- [ ] Bare namespaces remain successful contextual help; invalid actions remain usage errors.
+- [ ] Human/JSON output contains only safe job/flow/prepared/receipt identities.
+- [ ] Generated manual, CLI docs, website docs/data, and golden transcripts are regenerated once and
+      pass drift checks.
 
 ## Scope guards
 
-- Do not edit #4125 duration-overflow behavior or #4158 managed-target route matching.
-- Do not publish PostgreSQL write capability or invent the missing destination descriptor.
-- Do not change GitHub rate-limit declarations or GraphQL exclusion.
-- Do not add a generic HTTP/SQL/shell write surface, dependency, credential field, or raw token
-  carrier.
+No generic HTTP/SQL/shell writer, raw destination control, new credential carrier, dependency,
+PostgreSQL destination publication, #4125 change, or #4158 change.
 

@@ -10,12 +10,11 @@ import (
 // Group C — golden rendering tests.
 
 var nightlyManifest = Manifest{
-	Name:                   "nightly-leads",
-	Cron:                   "0 2 * * *",
-	Flow:                   "likely-customers",
-	AuthorizationReference: "auth_0123456789abcdef",
-	CreatedAt:              time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
-	UpdatedAt:              time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
+	Name:      "nightly-leads",
+	Cron:      "0 2 * * *",
+	Flow:      "likely-customers",
+	CreatedAt: time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
+	UpdatedAt: time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
 }
 
 const testPmBin = "/usr/local/bin/pm"
@@ -107,7 +106,7 @@ func TestRenderScheduleCommandsIncludeRoot(t *testing.T) {
 	if err != nil {
 		t.Fatalf("renderCrontabLine: %v", err)
 	}
-	wantShellCommand := "'/opt/Poly Metrics/pm' --root '/tmp/polymetrics root' schedule fire nightly-leads --authorization auth_0123456789abcdef --json"
+	wantShellCommand := "'/opt/Poly Metrics/pm' --root '/tmp/polymetrics root' flow run nightly-flow --json"
 	if !strings.Contains(crontab, wantShellCommand) {
 		t.Fatalf("crontab command missing rooted flow run\ngot:  %q\nwant containing: %q", crontab, wantShellCommand)
 	}
@@ -128,10 +127,9 @@ func TestRenderScheduleCommandsIncludeRoot(t *testing.T) {
 		"<string>/opt/Poly Metrics/pm</string>",
 		"<string>--root</string>",
 		"<string>/tmp/polymetrics root</string>",
-		"<string>schedule</string>",
-		"<string>fire</string>",
-		"<string>nightly-leads</string>",
-		"<string>auth_0123456789abcdef</string>",
+		"<string>flow</string>",
+		"<string>run</string>",
+		"<string>nightly-flow</string>",
 	} {
 		if !strings.Contains(plist, fragment) {
 			t.Fatalf("launchd plist missing %q\ngot:\n%s", fragment, plist)
@@ -139,9 +137,9 @@ func TestRenderScheduleCommandsIncludeRoot(t *testing.T) {
 	}
 }
 
-func TestRenderScheduleCommandsCarryOnlyAuthorizationReference(t *testing.T) {
+func TestRenderScheduleCommandsCarryNoAuthorizationMaterial(t *testing.T) {
 	manifest := nightlyManifest
-	manifest.AuthorizationReference = "auth_abcdef0123456789"
+	const forbiddenReference = "auth_abcdef0123456789"
 	const forbiddenToken = "approval-token-fixture"
 	const forbiddenSecret = "fixture-secret-value"
 
@@ -155,10 +153,10 @@ func TestRenderScheduleCommandsCarryOnlyAuthorizationReference(t *testing.T) {
 			if err != nil {
 				t.Fatalf("render: %v", err)
 			}
-			if !strings.Contains(got, "schedule") || !strings.Contains(got, "fire") || !strings.Contains(got, manifest.AuthorizationReference) {
-				t.Fatalf("rendered payload did not invoke authorized schedule fire: %q", got)
+			if !strings.Contains(got, "flow") || !strings.Contains(got, "run") || !strings.Contains(got, manifest.Flow) {
+				t.Fatalf("rendered payload did not invoke the existing flow: %q", got)
 			}
-			for _, forbidden := range []string{forbiddenToken, forbiddenSecret} {
+			for _, forbidden := range []string{forbiddenReference, forbiddenToken, forbiddenSecret, "--authorization"} {
 				if strings.Contains(got, forbidden) {
 					t.Fatalf("rendered payload leaked %q: %q", forbidden, got)
 				}

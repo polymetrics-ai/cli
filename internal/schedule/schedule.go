@@ -15,17 +15,12 @@ import (
 
 // Manifest is a persisted schedule definition.
 type Manifest struct {
-	Name string `json:"name"`
-	Cron string `json:"cron"`
-	Flow string `json:"flow"`
-	// AuthorizationReference is the opaque durable scope record required for
-	// every scheduled action firing. It is a reference only: an approval token,
-	// credential, secret, payload, or secret-derived material is never stored
-	// in a schedule manifest.
-	AuthorizationReference string    `json:"authorization_reference"`
-	Root                   string    `json:"root,omitempty"`
-	CreatedAt              time.Time `json:"created_at"`
-	UpdatedAt              time.Time `json:"updated_at"`
+	Name      string    `json:"name"`
+	Cron      string    `json:"cron"`
+	Flow      string    `json:"flow"`
+	Root      string    `json:"root,omitempty"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 // BackendKind identifies which scheduler backend is active.
@@ -46,9 +41,44 @@ type Backend interface {
 }
 
 var (
-	validName                   = regexp.MustCompile(`^[a-z0-9][a-z0-9-]{0,63}$`)
-	validAuthorizationReference = regexp.MustCompile(`^auth_[0-9a-f]{16}$`)
+	validName          = regexp.MustCompile(`^[a-z0-9][a-z0-9-]{0,63}$`)
+	validFlowReference = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$`)
 )
+
+type FlowReferenceReason string
+
+const (
+	FlowReferenceMissing   FlowReferenceReason = "missing"
+	FlowReferenceMalformed FlowReferenceReason = "malformed"
+	FlowReferenceAmbiguous FlowReferenceReason = "ambiguous"
+	FlowReferenceInvalid   FlowReferenceReason = "invalid"
+)
+
+// FlowReferenceError names the exact flow a schedule could not positively
+// resolve before any manifest or scheduler backend write.
+type FlowReferenceError struct {
+	Flow   string
+	Reason FlowReferenceReason
+	Err    error
+}
+
+func (e *FlowReferenceError) Error() string {
+	if e == nil {
+		return "schedule flow reference refused"
+	}
+	message := fmt.Sprintf("schedule flow %q is %s", e.Flow, e.Reason)
+	if e.Err != nil {
+		message += ": " + e.Err.Error()
+	}
+	return message
+}
+
+func (e *FlowReferenceError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.Err
+}
 
 func validateName(name string) error {
 	if name == "" {
@@ -60,9 +90,9 @@ func validateName(name string) error {
 	return nil
 }
 
-func validateAuthorizationReference(reference string) error {
-	if !validAuthorizationReference.MatchString(reference) {
-		return errors.New("schedule authorization reference must be an opaque auth_<id> reference")
+func validateFlowReference(reference string) error {
+	if !validFlowReference.MatchString(reference) {
+		return &FlowReferenceError{Flow: reference, Reason: FlowReferenceMalformed}
 	}
 	return nil
 }
@@ -88,7 +118,7 @@ func Save(root string, m Manifest, allowOverwrite bool) error {
 	if err := validateName(m.Name); err != nil {
 		return err
 	}
-	if err := validateAuthorizationReference(m.AuthorizationReference); err != nil {
+	if err := validateFlowReference(m.Flow); err != nil {
 		return err
 	}
 	dir := schedulesDir(root)
@@ -118,10 +148,39 @@ func Load(root, name string) (Manifest, error) {
 	if err := json.Unmarshal(data, &m); err != nil {
 		return Manifest{}, fmt.Errorf("schedule: unmarshal: %w", err)
 	}
-	if err := validateAuthorizationReference(m.AuthorizationReference); err != nil {
-		return Manifest{}, fmt.Errorf("schedule: invalid authorization reference: %w", err)
+	if err := validateName(m.Name); err != nil {
+		return Manifest{}, fmt.Errorf("schedule: invalid name: %w", err)
+	}
+	if err := validateFlowReference(m.Flow); err != nil {
+		return Manifest{}, err
 	}
 	return m, nil
+}
+
+// FindByFlow returns the sole schedule that owns a named flow. A direct
+// installed `flow run` cannot safely guess between multiple schedules, so an
+// ambiguous manually-authored inventory is refused before execution.
+func FindByFlow(root, flow string) (Manifest, bool, error) {
+	if err := validateFlowReference(flow); err != nil {
+		return Manifest{}, false, err
+	}
+	manifests, err := List(root)
+	if err != nil {
+		return Manifest{}, false, err
+	}
+	var found Manifest
+	count := 0
+	for _, manifest := range manifests {
+		if manifest.Flow != flow {
+			continue
+		}
+		found = manifest
+		count++
+	}
+	if count > 1 {
+		return Manifest{}, false, &FlowReferenceError{Flow: flow, Reason: FlowReferenceAmbiguous}
+	}
+	return found, count == 1, nil
 }
 
 // List returns all manifests under <root>/schedules/.

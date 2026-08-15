@@ -1,5 +1,43 @@
 package connsdk
 
+import "fmt"
+
+// RateBudgetRefusalCode is a stable, machine-readable explanation for a
+// request that was refused before provider dispatch.
+type RateBudgetRefusalCode string
+
+const (
+	// RateBudgetRefusalSharedCoordinatorUnavailable means a require_shared
+	// policy could not obtain the shared admission decision it declared.
+	RateBudgetRefusalSharedCoordinatorUnavailable RateBudgetRefusalCode = "shared_coordinator_unavailable"
+)
+
+// RateBudgetRefusalError is the SDK-facing fail-closed contract for rate
+// budget admission. It carries only safe classifications; Err remains
+// reachable for callers that need a more specific internal cause.
+type RateBudgetRefusalError struct {
+	Code   RateBudgetRefusalCode
+	Reason string
+	Err    error
+}
+
+func (e *RateBudgetRefusalError) Error() string {
+	if e == nil {
+		return "rate budget refused"
+	}
+	if e.Reason == "" {
+		return fmt.Sprintf("rate budget refused: %s", e.Code)
+	}
+	return fmt.Sprintf("rate budget refused: %s: %s", e.Code, e.Reason)
+}
+
+func (e *RateBudgetRefusalError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.Err
+}
+
 // RateLimitState records whether a bundle has an enforceable provider policy.
 // Unknown and not_applicable are deliberate, honest states; only declared
 // policies are eligible for engine resolution and pacing.

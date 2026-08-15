@@ -3,7 +3,6 @@ package app_test
 import (
 	"context"
 	"errors"
-	"os"
 	"path/filepath"
 	"sync"
 	"testing"
@@ -58,6 +57,7 @@ func TestExecuteAuthorizedFlowActionAcknowledgesReadsBackThenRecordsReceipt(t *t
 		FlowName:               "close-stale-issues",
 		StepID:                 "close",
 		RunID:                  "flow-run-1",
+		ManifestDigest:         "fmd_fixture_1",
 		SourceTable:            sourcePlan.SourceTable,
 		SourceConnection:       sourcePlan.SourceConnection,
 		DestinationTable:       "flow-action-target",
@@ -130,6 +130,7 @@ func TestExecuteAuthorizedFlowActionScopeDriftRefusesBeforeProviderWrite(t *test
 		FlowName:               "close-stale-issues",
 		StepID:                 "close",
 		RunID:                  "flow-run-2",
+		ManifestDigest:         "fmd_fixture_2",
 		SourceTable:            sourcePlan.SourceTable,
 		SourceConnection:       sourcePlan.SourceConnection,
 		DestinationTable:       "flow-action-target",
@@ -189,6 +190,7 @@ func TestExecuteAuthorizedFlowActionReadBackFailurePersistsNoReceipt(t *testing.
 		FlowName:               "close-stale-issues",
 		StepID:                 "close",
 		RunID:                  "flow-run-3",
+		ManifestDigest:         "fmd_fixture_3",
 		SourceTable:            sourcePlan.SourceTable,
 		SourceConnection:       sourcePlan.SourceConnection,
 		DestinationTable:       "flow-action-target",
@@ -219,8 +221,8 @@ func TestAuthorizedFlowActionPreparedIdentityBindsPayloadAndReachesReceipt(t *te
 	if err != nil {
 		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
 	}
-	if prepared.Identity == "" || prepared.FiringID != req.RunID || prepared.GrantID == "" {
-		t.Fatalf("prepared action = %+v, want safe identity, firing, and grant identifiers", prepared)
+	if prepared.Identity == "" || prepared.FiringID != req.RunID {
+		t.Fatalf("prepared action = %+v, want safe identity and firing identifiers", prepared)
 	}
 
 	drifted := req
@@ -233,6 +235,15 @@ func TestAuthorizedFlowActionPreparedIdentityBindsPayloadAndReachesReceipt(t *te
 	}
 	if driftedPrepared.Identity == prepared.Identity {
 		t.Fatalf("prepared identity = %q for two payloads, want payload-bound identities", prepared.Identity)
+	}
+	manifestDrift := req
+	manifestDrift.ManifestDigest = "fmd_fixture_changed_query"
+	manifestPrepared, err := a.PrepareAuthorizedFlowAction(ctx, manifestDrift)
+	if err != nil {
+		t.Fatalf("PrepareAuthorizedFlowAction(manifest drift) error = %v", err)
+	}
+	if manifestPrepared.Identity == prepared.Identity {
+		t.Fatalf("prepared identity = %q for two manifests, want manifest-bound identities", prepared.Identity)
 	}
 
 	result, err := a.ExecutePreparedFlowAction(ctx, prepared)
@@ -251,7 +262,7 @@ func TestAuthorizedFlowActionPreparedIdentityBindsPayloadAndReachesReceipt(t *te
 	}
 }
 
-func TestAuthorizedFlowActionGrantCancellationDoesNotConsumeAndReplayWritesOnce(t *testing.T) {
+func TestAuthorizedFlowActionCancellationReleasesPreparedLeaseAndReplayWritesOnce(t *testing.T) {
 	ctx := context.Background()
 	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-cancel")
 	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
@@ -259,7 +270,6 @@ func TestAuthorizedFlowActionGrantCancellationDoesNotConsumeAndReplayWritesOnce(
 		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
 	}
 	beforeEvents := len(target.events())
-	beforeMarkers := countWriteApprovalMarkers(t, a.ProjectDir())
 
 	canceled, cancel := context.WithCancel(ctx)
 	cancel()
@@ -267,25 +277,25 @@ func TestAuthorizedFlowActionGrantCancellationDoesNotConsumeAndReplayWritesOnce(
 	if !errors.Is(err, context.Canceled) {
 		t.Fatalf("ExecutePreparedFlowAction(cancelled) error = %T %v, want context.Canceled", err, err)
 	}
-	if len(target.events()) != beforeEvents || countWriteApprovalMarkers(t, a.ProjectDir()) != beforeMarkers {
-		t.Fatalf("cancelled firing changed provider events or grant markers: events=%d/%d markers=%d/%d", len(target.events()), beforeEvents, countWriteApprovalMarkers(t, a.ProjectDir()), beforeMarkers)
+	if len(target.events()) != beforeEvents {
+		t.Fatalf("cancelled firing changed provider events: events=%d/%d", len(target.events()), beforeEvents)
 	}
 
 	if _, err := a.ExecutePreparedFlowAction(ctx, prepared); err != nil {
-		t.Fatalf("ExecutePreparedFlowAction(after cancellation) error = %v; grant was consumed by refusal", err)
+		t.Fatalf("ExecutePreparedFlowAction(after cancellation) error = %v; prepared execution stayed parked", err)
 	}
 	writesAfterSuccess := target.writeCalls()
 	_, err = a.ExecutePreparedFlowAction(ctx, prepared)
-	var consumed *app.ExecutionGrantConsumedError
-	if !errors.As(err, &consumed) {
-		t.Fatalf("ExecutePreparedFlowAction(replay) error = %T %v, want ExecutionGrantConsumedError", err, err)
+	var replay *app.PreparedExecutionReplayError
+	if !errors.As(err, &replay) {
+		t.Fatalf("ExecutePreparedFlowAction(replay) error = %T %v, want PreparedExecutionReplayError", err, err)
 	}
 	if target.writeCalls() != writesAfterSuccess || len(a.ListFlowActionReceipts()) != 1 {
-		t.Fatalf("grant replay changed provider/receipt state: writes=%d receipts=%d", target.writeCalls(), len(a.ListFlowActionReceipts()))
+		t.Fatalf("prepared replay changed provider/receipt state: writes=%d receipts=%d", target.writeCalls(), len(a.ListFlowActionReceipts()))
 	}
 }
 
-func TestAuthorizedFlowActionRevokedAuthorizationRefusesBeforeGrantConsumption(t *testing.T) {
+func TestAuthorizedFlowActionRevokedAuthorizationRefusesAndReleasesPreparedLease(t *testing.T) {
 	ctx := context.Background()
 	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-revoked")
 	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
@@ -293,44 +303,41 @@ func TestAuthorizedFlowActionRevokedAuthorizationRefusesBeforeGrantConsumption(t
 		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
 	}
 	beforeWrites := target.writeCalls()
-	beforeMarkers := countWriteApprovalMarkers(t, a.ProjectDir())
 	if err := a.RevokeAuthorization(req.AuthorizationReference); err != nil {
 		t.Fatalf("RevokeAuthorization() error = %v", err)
 	}
 
 	_, err = a.ExecutePreparedFlowAction(ctx, prepared)
-	var refused *app.ExecutionGrantRefusedError
 	var revoked *app.AuthorizationRevokedError
-	if !errors.As(err, &refused) || !errors.As(err, &revoked) {
-		t.Fatalf("ExecutePreparedFlowAction(revoked) error = %T %v, want grant refusal wrapping AuthorizationRevokedError", err, err)
+	if !errors.As(err, &revoked) {
+		t.Fatalf("ExecutePreparedFlowAction(revoked) error = %T %v, want AuthorizationRevokedError", err, err)
 	}
-	if target.writeCalls() != beforeWrites || countWriteApprovalMarkers(t, a.ProjectDir()) != beforeMarkers || len(a.ListFlowActionReceipts()) != 0 {
-		t.Fatalf("revoked grant changed state: writes=%d markers=%d receipts=%d", target.writeCalls()-beforeWrites, countWriteApprovalMarkers(t, a.ProjectDir())-beforeMarkers, len(a.ListFlowActionReceipts()))
+	if target.writeCalls() != beforeWrites || len(a.ListFlowActionReceipts()) != 0 {
+		t.Fatalf("revoked authorization changed state: writes=%d receipts=%d", target.writeCalls()-beforeWrites, len(a.ListFlowActionReceipts()))
 	}
 }
 
-func TestAuthorizedFlowActionTamperedGrantRefusesBeforeConsumption(t *testing.T) {
+func TestAuthorizedFlowActionTamperedPreparedIdentityRefusesBeforeDispatch(t *testing.T) {
 	ctx := context.Background()
 	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-tampered")
 	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
 	if err != nil {
 		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
 	}
-	prepared.FiringID = "different-firing"
+	prepared.Identity = "pex_tampered"
 	beforeWrites := target.writeCalls()
-	beforeMarkers := countWriteApprovalMarkers(t, a.ProjectDir())
 
 	_, err = a.ExecutePreparedFlowAction(ctx, prepared)
-	var refused *app.ExecutionGrantRefusedError
+	var refused *app.PreparedExecutionRefusedError
 	if !errors.As(err, &refused) {
-		t.Fatalf("ExecutePreparedFlowAction(tampered) error = %T %v, want ExecutionGrantRefusedError", err, err)
+		t.Fatalf("ExecutePreparedFlowAction(tampered) error = %T %v, want PreparedExecutionRefusedError", err, err)
 	}
-	if target.writeCalls() != beforeWrites || countWriteApprovalMarkers(t, a.ProjectDir()) != beforeMarkers || len(a.ListFlowActionReceipts()) != 0 {
-		t.Fatalf("tampered grant changed state: writes=%d markers=%d receipts=%d", target.writeCalls()-beforeWrites, countWriteApprovalMarkers(t, a.ProjectDir())-beforeMarkers, len(a.ListFlowActionReceipts()))
+	if target.writeCalls() != beforeWrites || len(a.ListFlowActionReceipts()) != 0 {
+		t.Fatalf("tampered prepared execution changed state: writes=%d receipts=%d", target.writeCalls()-beforeWrites, len(a.ListFlowActionReceipts()))
 	}
 }
 
-func TestAuthorizedFlowActionConcurrentGrantConsumptionHasOneWinner(t *testing.T) {
+func TestAuthorizedFlowActionConcurrentPreparedExecutionHasOneWinner(t *testing.T) {
 	ctx := context.Background()
 	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-race")
 	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
@@ -350,35 +357,35 @@ func TestAuthorizedFlowActionConcurrentGrantConsumptionHasOneWinner(t *testing.T
 	}
 	close(start)
 	first, second := <-errs, <-errs
-	winners, consumedCount := 0, 0
+	winners, replayCount := 0, 0
 	for _, executeErr := range []error{first, second} {
 		if executeErr == nil {
 			winners++
 			continue
 		}
-		var consumed *app.ExecutionGrantConsumedError
-		if errors.As(executeErr, &consumed) {
-			consumedCount++
+		var replay *app.PreparedExecutionReplayError
+		if errors.As(executeErr, &replay) {
+			replayCount++
 			continue
 		}
-		t.Fatalf("concurrent execution error = %T %v, want nil or consumed grant", executeErr, executeErr)
+		t.Fatalf("concurrent execution error = %T %v, want nil or prepared replay", executeErr, executeErr)
 	}
-	if winners != 1 || consumedCount != 1 || target.writeCalls() != beforeWrites+1 || len(a.ListFlowActionReceipts()) != 1 {
-		t.Fatalf("concurrent grant result winners=%d consumed=%d writes=%d receipts=%d", winners, consumedCount, target.writeCalls()-beforeWrites, len(a.ListFlowActionReceipts()))
+	if winners != 1 || replayCount != 1 || target.writeCalls() != beforeWrites+1 || len(a.ListFlowActionReceipts()) != 1 {
+		t.Fatalf("concurrent prepared result winners=%d replay=%d writes=%d receipts=%d", winners, replayCount, target.writeCalls()-beforeWrites, len(a.ListFlowActionReceipts()))
 	}
 }
 
-func TestAuthorizedFlowActionWriteFailureConsumesGrantAndPersistsNoReceipt(t *testing.T) {
+func TestAuthorizedFlowActionWriteFailureParksPreparedExecutionAndPersistsNoReceipt(t *testing.T) {
 	ctx := context.Background()
 	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-partial")
 	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
 	if err != nil {
 		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
 	}
-	target.setWriteError(errors.New("write failed after approval consumption"))
+	target.setWriteError(errors.New("write failed after possible dispatch"))
 	beforeWrites := target.writeCalls()
 	_, err = a.ExecutePreparedFlowAction(ctx, prepared)
-	if err == nil || err.Error() != "write failed after approval consumption" {
+	if err == nil || err.Error() != "write failed after possible dispatch" {
 		t.Fatalf("ExecutePreparedFlowAction(write failure) error = %v", err)
 	}
 	if target.writeCalls() != beforeWrites || len(a.ListFlowActionReceipts()) != 0 {
@@ -392,9 +399,9 @@ func TestAuthorizedFlowActionWriteFailureConsumesGrantAndPersistsNoReceipt(t *te
 	target.setWriteError(nil)
 	reopened.Registry().Register(target)
 	_, err = reopened.ExecutePreparedFlowAction(ctx, prepared)
-	var consumed *app.ExecutionGrantConsumedError
-	if !errors.As(err, &consumed) {
-		t.Fatalf("ExecutePreparedFlowAction(reopen replay) error = %T %v, want ExecutionGrantConsumedError", err, err)
+	var replay *app.PreparedExecutionReplayError
+	if !errors.As(err, &replay) {
+		t.Fatalf("ExecutePreparedFlowAction(reopen replay) error = %T %v, want PreparedExecutionReplayError", err, err)
 	}
 	if target.writeCalls() != beforeWrites || len(reopened.ListFlowActionReceipts()) != 0 {
 		t.Fatalf("reopened replay changed provider/receipt state: writes=%d receipts=%d", target.writeCalls()-beforeWrites, len(reopened.ListFlowActionReceipts()))
@@ -429,7 +436,7 @@ func newPreparedFlowActionFixture(t *testing.T, ctx context.Context, runID strin
 		t.Fatalf("ReadActionSource() error = %v", err)
 	}
 	return a, target, app.FlowActionExecutionRequest{
-		FlowName: "prepared-flow", StepID: "create", RunID: runID,
+		FlowName: "prepared-flow", StepID: "create", RunID: runID, ManifestDigest: "fmd_fixture_prepared",
 		SourceTable: sourcePlan.SourceTable, SourceConnection: sourcePlan.SourceConnection,
 		DestinationTable: "flow-action-target", DestinationConnector: target.Name(), DestinationCredential: "flow-target",
 		Action: "create", Mappings: map[string]string{"id": "id", "email": "email"},
@@ -443,18 +450,6 @@ func cloneTestRecord(record connectors.Record) connectors.Record {
 		clone[key] = value
 	}
 	return clone
-}
-
-func countWriteApprovalMarkers(t *testing.T, projectDir string) int {
-	t.Helper()
-	entries, err := os.ReadDir(filepath.Join(projectDir, "vault", "write-approval-consumed"))
-	if errors.Is(err, os.ErrNotExist) {
-		return 0
-	}
-	if err != nil {
-		t.Fatalf("read write approval markers: %v", err)
-	}
-	return len(entries)
 }
 
 type flowActionTarget struct {

@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -14,19 +15,22 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/rlm"
+	"polymetrics.ai/internal/schedule"
 )
 
-// runFlow dispatches pm flow subcommands: plan | preview | run | status | list.
+// runFlow dispatches pm flow subcommands: create | plan | preview | run | status | list.
 // pmcert:workflow flow_authoring
 func runFlow(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
-		return usageErrorf("flow: subcommand required (plan|preview|run|status|list)")
+		return usageErrorf("flow: subcommand required (create|plan|preview|run|status|list)")
 	}
 
 	sub := args[0]
 	rest := args[1:]
 
 	switch sub {
+	case "create":
+		return flowCreate(ctx, a, rest, stdout, jsonOut)
 	case "plan":
 		return flowPlan(ctx, rest, stdout, jsonOut, false)
 	case "preview":
@@ -40,6 +44,39 @@ func runFlow(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 	default:
 		return usageErrorf("flow: unknown subcommand %q", sub)
 	}
+}
+
+func flowCreate(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+	if a == nil {
+		return errors.New("flow create requires an initialized project")
+	}
+	file, _, _, authorization, _ := parseFlowFlags(args)
+	if authorization != "" {
+		return usageErrorf("flow create derives approval from jobs; --authorization is not accepted")
+	}
+	if file == "" {
+		return usageErrorf("flow create: --file <path> is required")
+	}
+	manifest, err := readManifestFile(file)
+	if err != nil {
+		return err
+	}
+	resolved, err := resolveManifestJobs(ctx, a, manifest)
+	if err != nil {
+		return err
+	}
+	order, err := flow.BuildDAG(resolved)
+	if err != nil {
+		return err
+	}
+	if err := saveFlowManifest(a.ProjectDir(), manifest); err != nil {
+		return err
+	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "Flow", "ok": true, "flow": manifest.Name, "order": order})
+	}
+	_, _ = fmt.Fprintf(stdout, "Created flow %s from approved jobs\n", manifest.Name)
+	return nil
 }
 
 // parseFlowFlags extracts the flow-owned flags without accepting arbitrary
@@ -146,9 +183,26 @@ func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, 
 // flowRun executes the flow.
 func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
 	file, flowsDir, force, authorization, positional := parseFlowFlags(args)
+	if authorization != "" {
+		return usageErrorf("flow run derives approval from its jobs; --authorization is not accepted")
+	}
+	var fireLease *schedule.FireLease
 	if file == "" {
 		if len(positional) == 0 {
 			return usageErrorf("flow run: --file <path> or <flow-name> is required")
+		}
+		flowName := positional[0]
+		if a != nil {
+			root := filepath.Dir(a.ProjectDir())
+			if scheduled, found, err := schedule.FindByFlow(root, flowName); err != nil {
+				return err
+			} else if found {
+				fireLease, err = schedule.BeginFire(root, scheduled.Name)
+				if err != nil {
+					return err
+				}
+				force = true
+			}
 		}
 		if flowsDir == "" {
 			if a != nil {
@@ -165,7 +219,13 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 
 	m, err := readManifestFile(file)
 	if err != nil {
-		return err
+		return parkScheduledFlow(fireLease, err)
+	}
+	if a != nil {
+		m, err = resolveManifestJobs(ctx, a, m)
+		if err != nil {
+			return parkScheduledFlow(fireLease, err)
+		}
 	}
 
 	// Build a no-op adapter when app is nil (testing without real app).
@@ -189,12 +249,24 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 		LockDir:    dir,
 	}
 	if a != nil {
-		e.ActionRunner = &connectorFlowActionRunner{app: a, flowName: m.Name, authorizationReference: authorization}
+		manifestDigest, err := flow.ManifestDigest(m)
+		if err != nil {
+			return parkScheduledFlow(fireLease, err)
+		}
+		e.ActionRunner = &connectorFlowActionRunner{app: a, flowName: m.Name, manifestDigest: manifestDigest}
 	}
 
 	result, err := e.Run(ctx, flow.RunOptions{Force: force})
 	if err != nil {
-		return err
+		return parkScheduledFlow(fireLease, err)
+	}
+	if fireLease != nil {
+		if err := fireLease.Complete(schedule.FireReceipt{
+			FlowName: result.FlowName, FlowStatus: result.Status,
+			ReceiptIDs: flowReceiptIDs(result), PreparedExecutionIdentities: flowPreparedExecutionIdentities(result),
+		}); err != nil {
+			return err
+		}
 	}
 
 	if jsonOut {
@@ -202,6 +274,16 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 	}
 	_, _ = fmt.Fprintf(stdout, "Flow %s: %s\n", result.FlowName, result.Status)
 	return nil
+}
+
+func parkScheduledFlow(lease *schedule.FireLease, runErr error) error {
+	if lease == nil || runErr == nil {
+		return runErr
+	}
+	if err := lease.Park(scheduleFireStopReason(runErr)); err != nil {
+		return fmt.Errorf("park scheduled flow after failure: %w", err)
+	}
+	return runErr
 }
 
 // flowStatus returns last checkpoint info for a named flow.

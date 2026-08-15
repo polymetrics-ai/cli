@@ -120,6 +120,162 @@ func TestFlowPlanCyclic(t *testing.T) {
 		"error should mention cycle: %v", err)
 }
 
+func TestFlowManualDescribesApprovedJobInheritance(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{"flow"}, &stdout, &stderr)
+	require.Equal(t, 0, code, stderr.String())
+	manual := stdout.String()
+	for _, want := range []string{
+		"pm flow create --file flow.json",
+		"Missing, malformed,",
+		"No approval token or authorization reference is accepted by flow",
+		"payload-bound prepared-execution identity",
+	} {
+		assert.Contains(t, manual, want)
+	}
+	for _, obsolete := range []string{"--authorization <auth-ref>", "run-scoped grant"} {
+		assert.NotContains(t, manual, obsolete)
+	}
+}
+
+func TestFlowCreateMissingJobReturnsTypedErrorAndWritesNothing(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowScopedWarehouseApp(t, ctx)
+	path := writeManifestFile(t, `{
+		"version": 1,
+		"name": "missing-job-flow",
+		"steps": [{
+			"id": "sync-missing",
+			"kind": "sync",
+			"job": "missing-connection",
+			"streams": ["records"],
+			"out": ["records"]
+		}]
+	}`)
+
+	err := runFlow(ctx, config.Config{}, a, []string{"create", "--file", path}, &bytes.Buffer{}, true)
+	var referenceErr *flow.JobReferenceError
+	require.ErrorAs(t, err, &referenceErr)
+	assert.Equal(t, "missing-connection", referenceErr.Reference)
+	assert.Equal(t, flow.JobReferenceMissing, referenceErr.Reason)
+	_, statErr := os.Stat(filepath.Join(a.ProjectDir(), "flows", "missing-job-flow.json"))
+	assert.ErrorIs(t, statErr, os.ErrNotExist)
+
+	root := filepath.Dir(a.ProjectDir())
+	var stdout, stderr bytes.Buffer
+	code := Run([]string{"--root", root, "--json", "flow", "create", "--file", path}, &stdout, &stderr)
+	assert.Equal(t, 3, code)
+	assert.Contains(t, stdout.String(), `"code": "flow_job_reference_refused"`)
+	assert.Contains(t, stdout.String(), `"category": "validation"`)
+	_, statErr = os.Stat(filepath.Join(a.ProjectDir(), "flows", "missing-job-flow.json"))
+	assert.ErrorIs(t, statErr, os.ErrNotExist)
+}
+
+func TestFlowCreateMalformedJobReturnsTypedErrorAndWritesNothing(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowScopedWarehouseApp(t, ctx)
+	path := writeManifestFile(t, `{
+		"version": 1,
+		"name": "malformed-job-flow",
+		"steps": [{
+			"id": "action-malformed",
+			"kind": "action",
+			"job": "../rplan_escape",
+			"action_cfg": {"read_back_stream": "targets"}
+		}]
+	}`)
+
+	err := runFlow(ctx, config.Config{}, a, []string{"create", "--file", path}, &bytes.Buffer{}, true)
+	var referenceErr *flow.JobReferenceError
+	require.ErrorAs(t, err, &referenceErr)
+	assert.Equal(t, "../rplan_escape", referenceErr.Reference)
+	assert.Equal(t, flow.JobReferenceMalformed, referenceErr.Reason)
+	_, statErr := os.Stat(filepath.Join(a.ProjectDir(), "flows", "malformed-job-flow.json"))
+	assert.ErrorIs(t, statErr, os.ErrNotExist)
+}
+
+func TestFlowCreateUnrecognizedJobReturnsTypedErrorAndWritesNothing(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowScopedWarehouseApp(t, ctx)
+	path := writeManifestFile(t, `{
+		"version": 1,
+		"name": "unrecognized-job-flow",
+		"steps": [{
+			"id": "sync-mismatch",
+			"kind": "sync",
+			"job": "acme",
+			"connection": "different-connection",
+			"streams": ["records"],
+			"out": ["records"]
+		}]
+	}`)
+
+	err := runFlow(ctx, config.Config{}, a, []string{"create", "--file", path}, &bytes.Buffer{}, true)
+	var referenceErr *flow.JobReferenceError
+	require.ErrorAs(t, err, &referenceErr)
+	assert.Equal(t, "acme", referenceErr.Reference)
+	assert.Equal(t, flow.JobReferenceUnrecognized, referenceErr.Reason)
+	_, statErr := os.Stat(filepath.Join(a.ProjectDir(), "flows", "unrecognized-job-flow.json"))
+	assert.ErrorIs(t, statErr, os.ErrNotExist)
+}
+
+func TestFlowCreateUnapprovedActionJobReturnsTypedErrorAndWritesNothing(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowScopedWarehouseApp(t, ctx)
+	target := &cliFlowActionTarget{}
+	a.Registry().Register(target)
+	_, err := a.AddCredential(ctx, app.AddCredentialRequest{Name: "flow-target", Connector: target.Name(), Secrets: map[string]string{"token": "fixture-token"}})
+	require.NoError(t, err)
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name: "unapproved-flow-target", SourceTable: "records", SourceConnection: "acme",
+		DestinationConnector: target.Name(), DestinationCredential: "flow-target",
+		Action: "create", Mappings: map[string]string{"id": "id"},
+	})
+	require.NoError(t, err)
+	path := writeManifestFile(t, fmt.Sprintf(`{
+		"version": 1,
+		"name": "unapproved-job-flow",
+		"steps": [{
+			"id": "action-unapproved",
+			"kind": "action",
+			"job": %q,
+			"action_cfg": {"read_back_stream": "targets"}
+		}]
+	}`, plan.ID))
+	beforeEvents := target.eventCount()
+
+	err = runFlow(ctx, config.Config{}, a, []string{"create", "--file", path}, &bytes.Buffer{}, true)
+	var referenceErr *flow.JobReferenceError
+	require.ErrorAs(t, err, &referenceErr)
+	assert.Equal(t, plan.ID, referenceErr.Reference)
+	assert.Equal(t, flow.JobReferenceUnapproved, referenceErr.Reason)
+	assert.Equal(t, beforeEvents, target.eventCount())
+	_, statErr := os.Stat(filepath.Join(a.ProjectDir(), "flows", "unapproved-job-flow.json"))
+	assert.ErrorIs(t, statErr, os.ErrNotExist)
+}
+
+func TestFlowCreateApprovedActionStoresOnlyJobReference(t *testing.T) {
+	ctx, _, a, _, _, plan := newAuthorizedScheduleFixture(t)
+	path := writeManifestFile(t, fmt.Sprintf(`{
+		"version": 1,
+		"name": "approved-created-flow",
+		"steps": [{
+			"id": "action-approved",
+			"kind": "action",
+			"job": %q,
+			"action_cfg": {"read_back_stream": "targets"}
+		}]
+	}`, plan.ID))
+
+	require.NoError(t, runFlow(ctx, config.Config{}, a, []string{"create", "--file", path}, &bytes.Buffer{}, true))
+	data, err := os.ReadFile(filepath.Join(a.ProjectDir(), "flows", "approved-created-flow.json"))
+	require.NoError(t, err)
+	assert.Contains(t, string(data), plan.ID)
+	for _, forbidden := range []string{"authorization_reference", "approval_token", plan.ApprovalToken, "fixture-token"} {
+		assert.NotContains(t, string(data), forbidden)
+	}
+}
+
 // TestFlowStatusMissing checks that `pm flow status <missing>` returns an error.
 func TestFlowStatusMissing(t *testing.T) {
 	dir := t.TempDir()

@@ -1,70 +1,72 @@
-# Connector action identity, per-fire grant, and rate refusal context
+# Connector action identity, standing job approval, and rate refusal context
 
 **Issues:** #3994, #3992, #4049  
 **Base:** `integration/4015-mvp-flat-r1`  
 **Mode:** inline/manual GSD fallback; the canonical single-worker contract forbids role spawning.
 
+## Captain correction applied
+
+The first plan for this combined phase interpreted #3992 as requiring a newly issued, single-use
+grant for every scheduled firing. The 2026-08-15 launch correction explicitly rejects that model.
+The committed RED checkpoint for per-fire grants is retained as historical evidence, but R2-R4 in
+that ledger are superseded here and the grant implementation/tests are removed before proceeding.
+
+Approval attaches once to an existing reverse-ETL job through its durable
+`AuthorizationRecord`. A flow composes existing jobs and retains only their safe references. A
+schedule retains only the name of an existing flow. Every firing loads those jobs again and
+revalidates credential revision, source/table scope, mappings, destination action/configuration,
+confirmation policy, expiry, and revocation before any provider request.
+
 ## Outcome
 
-Close the three adjacent audited residuals without changing the standing authorization model:
-
-1. a connector action carries a payload-bound prepared-execution identity from the production
-   flow path through its durable receipt;
-2. every firing derives and consumes exactly one short-lived grant from the already-approved,
-   content-free authorization scope before the physical write;
-3. an unavailable coordinator under `require_shared` returns an `errors.As`-visible
-   `*connsdk.RateBudgetRefusalError` whose code is `shared_coordinator_unavailable`, before
-   transport.
+1. A connector action carries a payload-bound prepared-execution identity from the production flow
+   path through its durable receipt. This identity is execution evidence, not authority.
+2. Flow creation positively resolves sync jobs to existing connections and action jobs to existing
+   reverse plans with live standing authorization before writing the flow.
+3. Schedule creation and installation positively resolve an existing, valid flow before writing a
+   schedule or backend entry. Schedule files and rendered commands contain no authorization
+   reference, token, credential, secret, or secret-derived preimage.
+4. The installed command remains `pm --root <root> flow run <name> --json`. The named flow is
+   associated with its single schedule at runtime so the existing persisted fire lease still parks
+   drift, cancellation, ambiguous acknowledgement, and cleanup failure without inventing another
+   authorization state machine.
+5. An unavailable coordinator under `require_shared` returns an `errors.As`-visible
+   `*connsdk.RateBudgetRefusalError` with code `shared_coordinator_unavailable` before transport.
 
 ## Locked decisions
 
-- The existing `AuthorizationRecord` remains the durable, revocable, content-free approval. No
-  payload, record count, run ID, token, credential, or raw configuration is added to it.
-- A prepared-execution identity is distinct from the scope identity. It binds the authorization
-  reference and scope identity to the actual mapped payload, destination write target, preview
-  digest, flow/step identity, and run/firing identity.
-- A firing grant is opaque, short-lived, authenticated by the existing project approval authority,
-  and single-consume across processes. It is never serialized into schedule state, argv, JSON,
-  logs, or receipts.
-- Scope/revocation/expiry, destination validation, preview, context cancellation, and grant
-  authentication all precede durable grant consumption. A refusal at those gates performs zero
-  sends/writes, advances no checkpoint, and consumes no grant.
-- The grant is consumed immediately before the provider/database write. Cancellation, process
-  death, or an ambiguous/partial write after that point parks the firing and cannot replay the
-  grant automatically.
-- A successful receipt exposes only safe identities: prepared execution, firing, authorization,
-  connector/action, and acknowledgement/read-back timestamps.
-- Schedule terminal state is durable before its lease cleanup. Failure after a potentially
-  non-idempotent write parks before lock cleanup; a successful write/read-back/checkpoint records
-  success before removing the lock.
-- Rate-budget refusal is an SDK contract layered over the existing safe coordinator cause. It
-  preserves `context.Canceled`/deadline errors and retains `SharedRateLimitUnavailableError` in the
-  unwrap chain for compatibility.
-- #4125 and #4158 are excluded and will not be changed.
+- `AuthorizationRecord` is the sole durable approval. No per-fire grant, approval object, approval
+  token, MAC, raw credential, payload, or raw configuration is added to schedule/flow state.
+- A sync job reference names an existing App connection. An action job reference names an existing
+  `ReversePlan` whose one-time plan/preview/proceed already minted a standing authorization. The
+  action's executable scope is hydrated from that plan rather than trusted from duplicated inline
+  manifest fields.
+- Missing, malformed, unrecognised, unapproved, expired, revoked, or drifted job references return
+  typed errors naming the reference. Creation writes nothing on refusal.
+- A prepared-execution identity is distinct from the content-free scope identity. It binds the
+  standing authorization and current mapped payload, write target, preview, flow/step, and run.
+- A safe prepared-execution lease prevents concurrent/replayed dispatch of the same prepared
+  execution. It is non-authoritative replay/ambiguity state, never a token or grant. Refusal before
+  dispatch releases it; once dispatch may have occurred it remains halted.
+- The existing schedule fire lease owns running/succeeded/parked ordering. Terminal state is durable
+  before lock cleanup; partial or ambiguous writes do not advance a flow checkpoint or auto-replay.
+- Rate-budget refusal preserves cancellation/deadline errors and the existing typed shared
+  coordinator cause in its unwrap chain.
+- #4125 and #4158 remain excluded.
 
 ## Production composition
 
 - Flow action: `cmd/pm.main -> cli.Run -> runFlow -> flowRun -> flow.Engine.Run ->
   connectorFlowActionRunner -> app.App.ExecuteAuthorizedFlowAction -> typed connector Write`.
-- Schedule: `cmd/pm.main -> cli.Run -> runSchedule -> runScheduleFire -> flowRun -> the same flow
-  action path`, with schedule lease persistence around the firing.
-- GitHub rate admission: `cmd/pm.main -> cli.Run -> app/connector composition -> GitHub WriteHook
-  -> engine.Runtime.RequesterFor -> connsdk.Requester admission -> HTTP transport`.
+- Scheduled flow: `cmd/pm.main -> cli.Run -> runFlow -> flowRun -> schedule.BeginFire -> the same
+  connector action path -> schedule.FireLease.Complete/Park`.
+- GitHub rate admission: `cmd/pm.main -> cli.Run -> App connector composition -> GitHub WriteHook ->
+  engine.Runtime.RequesterFor -> connsdk.Requester admission -> HTTP transport`.
 
-## Current-base constraint
+## Live-proof constraint
 
-The base publishes PostgreSQL as source-only: `internal/connectors/defs/postgres/sync_transport.json`
-has no destination transport and `metadata.json` has `write: false`. Therefore a production R2
-GitHub-to-PostgreSQL scheduled destination cannot truthfully pass on this branch. #3982 owns that
-destination publication, while #4158 owns the currently failing live managed-target assertion. This
-task will prove grant carriage through the real binary and action path, run any available PostgreSQL
-read/control evidence, and record the exact R2 limitation without editing either excluded issue.
-
-## Required edge contract
-
-Cancellation, process death, replay, grant expiry/revocation, approval refusal, coordinator
-unavailability, concurrent grant consumption, and partial-write cleanup ordering each need a typed
-outcome plus an observable negative side-effect assertion. Hermetic tests use only local transports,
-injected clocks, and isolated project roots; live GitHub/PostgreSQL evidence is run only when the
-required environment is present and never renders credentials.
+The base publishes PostgreSQL as source-only; #4158 is excluded. Available GitHub/PostgreSQL
+environment capability is detected without rendering credential values. Where live execution is
+unavailable, the issue/PR evidence names the exact gap and the hermetic production-path proof used
+instead.
 

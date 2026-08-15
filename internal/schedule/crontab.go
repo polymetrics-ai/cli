@@ -92,7 +92,7 @@ func renderCrontabLine(m Manifest, pmBin string) (string, error) {
 	if m.Root != "" {
 		rootArgs = " --root " + shellArg(m.Root)
 	}
-	return fmt.Sprintf("%s  %s%s schedule fire %s --authorization %s --json  %s", m.Cron, shellArg(pmBin), rootArgs, shellArg(m.Name), shellArg(m.AuthorizationReference), sentinel), nil
+	return fmt.Sprintf("%s  %s%s flow run %s --json  %s", m.Cron, shellArg(pmBin), rootArgs, shellArg(m.Flow), sentinel), nil
 }
 
 // removeCrontabLine removes the sentinel line for name from crontab content.
