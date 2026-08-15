@@ -1,3 +1,5 @@
+Refs #4180
+
 ## Intent
 
 Fix the durable parking `resume-race` process flake without masking it. This
