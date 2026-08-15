@@ -10,6 +10,7 @@ The `pm etl` command group has two lanes:
 | Direct connector operations | `pm etl check`, `pm etl catalog`, `pm etl read` | Preflight and connector development without creating a connection. |
 | Configured syncs | `pm etl run`, `pm etl status` | Production-style extraction from a saved connection into a local table. |
 | Closed GitHub transport | `pm etl transport github-issue-label`, approved `pm etl run` | One fixed issue-to-label transport through durable warehouse reopen and typed cleanup. |
+| Closed PostgreSQL transport | `pm etl transport postgres-managed-target`, approved `pm etl run` | A definition-selected PostgreSQL or API source through the durable warehouse into a managed PostgreSQL target. |
 
 Connector capabilities are inspectable through `pm connectors inspect`. Use the advertised streams, cursors, and primary keys before creating a long-running extraction.
 
@@ -196,6 +197,41 @@ pm etl transport github-issue-label cleanup run <cleanup-plan-id> \
 The cleanup action is the fixed typed `remove_issue_label` inverse. A declared
 GitHub missing-label `404` is accepted as an idempotent cleanup; replaying a
 consumed approval is rejected before another provider request.
+
+## Closed PostgreSQL managed-target transport
+
+`postgres-managed-target` is a fixed definition-selected source-to-PostgreSQL
+route, not a generic SQL writer. The saved connection owns both credentials,
+the source stream and sealed schema, primary key, mode, and immutable managed
+destination identity. PostgreSQL sources use their typed relation catalog;
+declared API sources use their authoritative JSON stream schema.
+
+Create and preview a plan, then pass its one-time token only through standard
+input to the ordinary ETL run:
+
+```bash
+pm etl transport postgres-managed-target plan \
+  --connection <name> --stream <stream> --json
+pm etl transport postgres-managed-target preview <plan-id>
+
+pm etl run --connection <name> --stream <stream> \
+  --batch-size 1000 --approval-plan <plan-id> \
+  --approval-token-stdin --confirm destructive --json
+```
+
+The registered source stages each bounded page in the connection-owned
+warehouse. The registered destination reopens the sealed Parquet, derives an
+immutable workset, applies it through the native managed target, independently
+reads back the durable receipt, and only then advances the source checkpoint.
+
+For an `incremental_upsert` PostgreSQL source, set `transport_bootstrap=true`
+on the source credential to start with a gap-free snapshot barrier and continue
+into committed `pgoutput` transactions. A fresh process resumes from the
+acknowledged LSN. Planning binds the sealed source schema and both credential
+revisions; stale, replayed, authentication-refused, and permission-refused runs
+do not advance the checkpoint. PostgreSQL remains `write=false` in the public
+connector capability surface, and this route accepts no raw SQL or caller-
+selected target identifiers.
 
 ## Checking run status
 

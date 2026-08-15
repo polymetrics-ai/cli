@@ -231,7 +231,7 @@ func (a *projectWriteApprovalAuthority) VerifyWriteGrant(grant connectors.WriteA
 	})
 }
 
-func (e *projectWriteApprovalEvidence) AuthorizeProjectWrite(target connectors.WriteApprovalTarget, previewDigest string, now time.Time) error {
+func (e *projectWriteApprovalEvidence) ValidateProjectWrite(target connectors.WriteApprovalTarget, previewDigest string, now time.Time) error {
 	if e == nil || e.use == nil {
 		return errors.New("consumed project write approval evidence is required")
 	}
@@ -250,9 +250,6 @@ func (e *projectWriteApprovalEvidence) AuthorizeProjectWrite(target connectors.W
 		if !now.UTC().Before(scope.ExpiresAt.UTC()) {
 			return errors.New("durable authorization evidence has expired")
 		}
-		if !e.use.consumed.CompareAndSwap(false, true) {
-			return errors.New("durable authorization evidence has already been consumed")
-		}
 		return nil
 	}
 	if target.Scope != connectors.WriteApprovalScopeProject || !sameProjectApprovalTarget(e.target, target) || !projectApprovalStringEqual(e.previewDigest, previewDigest) {
@@ -264,7 +261,17 @@ func (e *projectWriteApprovalEvidence) AuthorizeProjectWrite(target connectors.W
 	if !now.UTC().Before(e.expiresAt) {
 		return errors.New("write approval evidence has expired")
 	}
+	return nil
+}
+
+func (e *projectWriteApprovalEvidence) AuthorizeProjectWrite(target connectors.WriteApprovalTarget, previewDigest string, now time.Time) error {
+	if err := e.ValidateProjectWrite(target, previewDigest, now); err != nil {
+		return err
+	}
 	if !e.use.consumed.CompareAndSwap(false, true) {
+		if e.authorization != nil {
+			return errors.New("durable authorization evidence has already been consumed")
+		}
 		return errors.New("write approval evidence has already been consumed")
 	}
 	return nil

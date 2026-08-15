@@ -56,6 +56,14 @@ type DestinationExecutor interface {
 	ReadBackDestination(context.Context, DestinationReadBackRequest) error
 }
 
+// ManagedTargetApprovalDestination marks a destination whose structural
+// transport binding is authorized by App's closed managed-target plan/preview
+// lifecycle. The marker keeps provider identity out of shared App dispatch.
+type ManagedTargetApprovalDestination interface {
+	DestinationExecutor
+	ManagedTargetApprovalDestination()
+}
+
 // SourceRequest is the fixed source invocation context. It has no generic
 // request URL, SQL text, command, action, or caller-authored payload.
 type SourceRequest struct {
@@ -64,6 +72,7 @@ type SourceRequest struct {
 	Stream     string
 	Mode       synccontract.Mode
 	BatchSize  int
+	PrimaryKey []string
 	Resume     synccontract.ResumeExpectation
 	Checkpoint *synccontract.CheckpointEnvelope
 }
@@ -75,6 +84,10 @@ type SourcePage struct {
 	Records             []connectors.Record
 	Tombstones          []synccontract.Tombstone
 	CandidateCheckpoint synccontract.CheckpointEnvelope
+	// DeferCheckpoint stages and applies this page without publishing its
+	// candidate as resumable state. PostgreSQL bootstrap uses it for every
+	// non-final snapshot page because one slot barrier covers the whole snapshot.
+	DeferCheckpoint bool
 }
 
 // WarehouseStage is the required mediator. The source never invokes a
@@ -159,18 +172,37 @@ func (r WarehouseReceipt) Validate() error {
 // audit visibility, but the orchestrator commits the original source candidate
 // so a stage cannot silently substitute a source position.
 type WarehouseWorkset struct {
-	ID                  string
+	ID string
+	// SourceParquet is the immutable stage-owned materialization reopened for
+	// this receipt. Destinations may consume it only together with the receipt
+	// hashes; callers cannot supply it on the command surface.
+	SourceParquet       string
 	Records             []connectors.Record
 	Tombstones          []synccontract.Tombstone
 	CandidateCheckpoint synccontract.CheckpointEnvelope
 }
 
+// DestinationBinding is structural application identity supplied by App from
+// persisted connection state. It contains no display name or credential.
+type DestinationBinding struct {
+	WorkspaceID       string
+	SourceConnectorID string
+	ConnectionID      string
+	StreamID          string
+	PrimaryKey        []string
+}
+
 type DestinationPlanRequest struct {
 	Connector     connectors.Connector
 	Runtime       connectors.RuntimeConfig
+	Source        connectors.Connector
+	SourceRuntime connectors.RuntimeConfig
+	Binding       DestinationBinding
 	Stream        string
 	Mode          synccontract.Mode
+	BatchSize     int
 	ApplyStrategy connectors.DestinationApplyStrategy
+	Approval      DestinationApproval `json:"-"`
 }
 
 type DestinationPlan struct {
@@ -182,9 +214,12 @@ type DestinationPlan struct {
 // non-serializable: warehouse receipts, runtime configuration, destination
 // plans, and evidence artifacts never retain the operator token.
 type DestinationApproval struct {
-	PlanID        string                       `json:"-"`
-	ApprovalToken string                       `json:"-"`
-	Confirmation  connectors.WriteConfirmation `json:"-"`
+	PlanID        string                            `json:"-"`
+	ApprovalToken string                            `json:"-"`
+	Confirmation  connectors.WriteConfirmation      `json:"-"`
+	Evidence      *connectors.WriteApprovalEvidence `json:"-"`
+	Target        connectors.WriteApprovalTarget    `json:"-"`
+	PreviewDigest string                            `json:"-"`
 }
 
 type DestinationApplyRequest struct {
@@ -198,10 +233,16 @@ type DestinationApplyRequest struct {
 	Workset WarehouseWorkset
 	// Runtime is supplied per call so a registered adapter never keeps
 	// credential material after the request returns.
-	Runtime connectors.RuntimeConfig
-	// Approval was obtained before the transport run. The destination may
-	// consume it only after it has validated the independently reopened
-	// workset against the receipt and closed connection mapping.
+	Runtime       connectors.RuntimeConfig
+	Source        connectors.Connector
+	SourceRuntime connectors.RuntimeConfig
+	Binding       DestinationBinding
+	Stream        string
+	Mode          synccontract.Mode
+	BatchSize     int
+	// Approval was obtained before the transport run. Planning consumes its
+	// single-use grant; Apply must revalidate its binding and expiry after the
+	// warehouse workset is independently reopened and before each mutation.
 	Approval DestinationApproval `json:"-"`
 }
 
@@ -213,7 +254,12 @@ type DestinationReadBackRequest struct {
 	Workset         WarehouseWorkset
 	Acknowledgement synccontract.DownstreamAcknowledgement
 	// Runtime is the same per-call endpoint configuration used by Apply.
-	Runtime connectors.RuntimeConfig
+	Runtime       connectors.RuntimeConfig
+	Source        connectors.Connector
+	SourceRuntime connectors.RuntimeConfig
+	Binding       DestinationBinding
+	Stream        string
+	Mode          synccontract.Mode
 }
 
 // PreflightRequest contains only identities and closed declarations needed to
@@ -233,6 +279,7 @@ type RunRequest struct {
 	SourceRuntime      connectors.RuntimeConfig
 	Destination        connectors.Connector
 	DestinationRuntime connectors.RuntimeConfig
+	DestinationBinding DestinationBinding
 	Stream             string
 	Mode               synccontract.Mode
 	BatchSize          int
@@ -280,6 +327,7 @@ func (r RunRequest) validateDispatchDependencies() error {
 func cloneSourceRequest(request SourceRequest) SourceRequest {
 	clone := request
 	clone.Runtime = cloneRuntimeConfig(request.Runtime)
+	clone.PrimaryKey = append([]string(nil), request.PrimaryKey...)
 	clone.Resume.SourceGeneration = append(synccontract.OpaqueToken(nil), request.Resume.SourceGeneration...)
 	if request.Checkpoint != nil {
 		checkpoint := request.Checkpoint.Clone()
@@ -291,12 +339,16 @@ func cloneSourceRequest(request SourceRequest) SourceRequest {
 func cloneDestinationPlanRequest(request DestinationPlanRequest) DestinationPlanRequest {
 	clone := request
 	clone.Runtime = cloneRuntimeConfig(request.Runtime)
+	clone.SourceRuntime = cloneRuntimeConfig(request.SourceRuntime)
+	clone.Binding.PrimaryKey = append([]string(nil), request.Binding.PrimaryKey...)
 	return clone
 }
 
 func cloneDestinationReadBackRequest(request DestinationReadBackRequest) (DestinationReadBackRequest, error) {
 	clone := request
 	clone.Runtime = cloneRuntimeConfig(request.Runtime)
+	clone.SourceRuntime = cloneRuntimeConfig(request.SourceRuntime)
+	clone.Binding.PrimaryKey = append([]string(nil), request.Binding.PrimaryKey...)
 	workset, err := cloneWarehouseWorkset(request.Workset)
 	if err != nil {
 		return DestinationReadBackRequest{}, err
@@ -308,6 +360,8 @@ func cloneDestinationReadBackRequest(request DestinationReadBackRequest) (Destin
 func cloneDestinationApplyRequest(request DestinationApplyRequest) (DestinationApplyRequest, error) {
 	clone := request
 	clone.Runtime = cloneRuntimeConfig(request.Runtime)
+	clone.SourceRuntime = cloneRuntimeConfig(request.SourceRuntime)
+	clone.Binding.PrimaryKey = append([]string(nil), request.Binding.PrimaryKey...)
 	workset, err := cloneWarehouseWorkset(request.Workset)
 	if err != nil {
 		return DestinationApplyRequest{}, err

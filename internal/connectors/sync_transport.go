@@ -222,7 +222,7 @@ func (d SourceTransportDescriptor) Validate() error {
 	if err := d.Executor.Validate(); err != nil {
 		return err
 	}
-	if err := validateTransportNames("source eligible stream", d.EligibleStreams); err != nil {
+	if err := validateSourceTransportStreams(d.EligibleStreams); err != nil {
 		return err
 	}
 	if err := validateTransportModes(d.Modes); err != nil {
@@ -232,6 +232,18 @@ func (d SourceTransportDescriptor) Validate() error {
 		return err
 	}
 	return d.Conformance.Validate()
+}
+
+func validateSourceTransportStreams(streams []string) error {
+	if len(streams) == 1 && streams[0] == "*" {
+		return nil
+	}
+	for _, stream := range streams {
+		if stream == "*" {
+			return fmt.Errorf("source eligible stream wildcard must be the only entry")
+		}
+	}
+	return validateTransportNames("source eligible stream", streams)
 }
 
 func (d DestinationTransportDescriptor) Validate() error {

@@ -1352,7 +1352,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 }
 
 func hasDestinationApproval(approval synctransport.DestinationApproval) bool {
-	return approval.PlanID != "" || approval.ApprovalToken != "" || approval.Confirmation.Kind != ""
+	return approval.PlanID != "" || approval.ApprovalToken != "" || approval.Confirmation.Kind != "" || approval.Evidence != nil
 }
 
 func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {

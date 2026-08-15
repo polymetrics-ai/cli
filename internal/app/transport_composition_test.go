@@ -71,6 +71,51 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	if got, want := githubResolved.Source.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyDeclarativeAPI, ID: "issue_label_source"}); got != want {
 		t.Fatalf("registered GitHub source reference = %+v, want %+v", got, want)
 	}
+	postgresResolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+		Source:      postgres,
+		Destination: postgres,
+		Stream:      "snapshot",
+		Mode:        synccontract.ModeIncrementalUpsert,
+	})
+	if err != nil {
+		t.Fatalf("definition-owned PostgreSQL-to-PostgreSQL preflight = %v", err)
+	}
+	if got, want := postgresResolved.Destination.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_managed_target"}); got != want {
+		t.Fatalf("registered PostgreSQL destination reference = %+v, want %+v", got, want)
+	}
+	githubPostgresResolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+		Source:      github,
+		Destination: postgres,
+		Stream:      "issues",
+		Mode:        synccontract.ModeFullAppend,
+	})
+	if err != nil {
+		t.Fatalf("definition-owned GitHub-to-PostgreSQL preflight = %v", err)
+	}
+	if got, want := githubPostgresResolved.Source.TransportExecutorReference(), issueLabelSourceReference; got != want {
+		t.Fatalf("registered API source reference = %+v, want %+v", got, want)
+	}
+	if got, want := githubPostgresResolved.Destination.TransportExecutorReference(), postgresResolved.Destination.TransportExecutorReference(); got != want {
+		t.Fatalf("registered API destination reference = %+v, want %+v", got, want)
+	}
+	if a.shouldRunTransport(Connection{}, "issues", SyncMode{ContractMode: synccontract.ModeFullAppend}, github, postgres) != true {
+		t.Fatal("declared GitHub-to-PostgreSQL route was not selected for production dispatch")
+	}
+	if postgres.Metadata().Capabilities.Write {
+		t.Fatal("PostgreSQL published generic write capability for its closed managed destination")
+	}
+	if err := validateClosedTransportBatchSize(github, github, 2); err == nil {
+		t.Fatal("closed issue-label destination accepted a batch larger than its one-record contract")
+	}
+	if err := validateClosedTransportBatchSize(github, postgres, 50); err != nil {
+		t.Fatalf("GitHub managed-target transport rejected its bounded collection batch: %v", err)
+	}
+	if err := validateClosedTransportBatchSize(github, postgres, issueCollectionTransportMaxRecords+1); err == nil {
+		t.Fatal("GitHub managed-target transport accepted an allocation-sized batch above its fixed bound")
+	}
+	if err := validateClosedTransportBatchSize(postgres, postgres, 1000); err != nil {
+		t.Fatalf("PostgreSQL managed transport rejected its bounded database batch: %v", err)
+	}
 }
 
 func TestLocalWarehouseDestinationExecutorWritesAndReadBacksConnectionOwnedParquet(t *testing.T) {

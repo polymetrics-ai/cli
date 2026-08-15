@@ -272,6 +272,41 @@ func TestOrchestratorCommitsOnlyAfterDurableAcknowledgement(t *testing.T) {
 	}
 }
 
+func TestOrchestratorAppliesDeferredBootstrapPagesWithoutAdvancingCheckpoint(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	first := testCheckpoint(pair.source.Name())
+	second := testCheckpoint(pair.source.Name())
+	second.Position.Primary = synccontract.OpaqueToken("second")
+	second.Dedupe.Value = synccontract.OpaqueToken("second")
+	second.DedupeWindow.End = synccontract.OpaqueToken("second")
+	pair.sourceExecutor.pages = []SourcePage{
+		{Records: []connectors.Record{{"id": "1"}}, CandidateCheckpoint: first, DeferCheckpoint: true},
+		{Records: []connectors.Record{{"id": "2"}}, CandidateCheckpoint: second},
+	}
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	commits := 0
+	var committed synccontract.CheckpointEnvelope
+
+	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+		BatchSize: 10, Stage: &testWarehouseStage{}, Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
+			commits++
+			committed = checkpoint.Clone()
+			return nil
+		},
+	})
+	if err != nil {
+		t.Fatalf("Run() = %v", err)
+	}
+	if pair.destinationExecutor.applyCalls != 2 || pair.destinationExecutor.readBackCalls != 2 || result.Pages != 2 || result.RecordsApplied != 2 {
+		t.Fatalf("deferred bootstrap apply/read-back/result = %d/%d/%+v, want both pages durable", pair.destinationExecutor.applyCalls, pair.destinationExecutor.readBackCalls, result)
+	}
+	if commits != 1 || string(committed.Position.Primary) != "second" || result.CommittedCheckpoint == nil || string(result.CommittedCheckpoint.Position.Primary) != "second" {
+		t.Fatalf("deferred bootstrap checkpoint = commits %d committed=%+v result=%+v, want only final page", commits, committed, result.CommittedCheckpoint)
+	}
+}
+
 func TestCloneRecordCopiesBinaryValuesAtEveryNestingLevel(t *testing.T) {
 	scalar := []byte{0x01}
 	nested := []byte{0x02}

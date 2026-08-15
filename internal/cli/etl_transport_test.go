@@ -36,9 +36,19 @@ func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
 		{"transport"},
 		{"transport", "github-issue-label"},
 		{"transport", "github-issue-label", "cleanup"},
+		{"transport", "postgres-managed-target"},
 	} {
 		if command, ok := etlTransportManualCommand(args); !ok || command == "" {
 			t.Fatalf("etlTransportManualCommand(%v) = %q, %t; want a project-free transport manual", args, command, ok)
+		}
+	}
+	var postgresStdout bytes.Buffer
+	if err := runETLTransport(context.Background(), nil, []string{"postgres-managed-target"}, &postgresStdout, false); err != nil {
+		t.Fatalf("runPostgresManagedTargetTransport help = %v", err)
+	}
+	for _, want := range []string{"warehouse worksets", "incremental_upsert", "write=false", "--approval-token-stdin"} {
+		if !strings.Contains(postgresStdout.String(), want) {
+			t.Fatalf("PostgreSQL transport help missing %q", want)
 		}
 	}
 	var stdout, stderr bytes.Buffer
@@ -176,6 +186,20 @@ func TestETLRunTransportApprovalAllowsDurablePlanReferenceWithoutTokenCarrier(t 
 	}
 	if flags.value("approval-token-stdin") != "" {
 		t.Fatal("durable authorization carriage unexpectedly requested token stdin")
+	}
+}
+
+func TestETLRunTransportApprovalLeavesStreamAndBatchPolicyToTheResolvedRoute(t *testing.T) {
+	approval, present, _, err := parseETLRunTransportApproval([]string{
+		"--connection", "postgres-transport",
+		"--stream", "issues",
+		"--batch-size", "1000",
+		"--approval-plan", "rplan_postgres",
+		"--approval-token-stdin",
+		"--confirm", "destructive",
+	}, strings.NewReader("ephemeral-token\n"))
+	if err != nil || !present || approval.ApprovalToken != "ephemeral-token" {
+		t.Fatalf("generic transport carriage = %#v present=%t err=%v, want route-owned stream and batch policy", approval, present, err)
 	}
 }
 

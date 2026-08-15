@@ -120,7 +120,7 @@ func postgresAssertMappedRelation(ctx context.Context, querier postgresManagedTa
 		}
 		var name, typeName, collation string
 		var notNull bool
-		if err := rows.Scan(&name, &notNull, &typeName, &collation); err != nil || name != expected.name || notNull == expected.nullable || (expected.collation != "" && collation != expected.collation) || !postgresEquivalentColumnType(expected.typeSQL, typeName) {
+		if err := rows.Scan(&name, &notNull, &typeName, &collation); err != nil || name != expected.name || notNull == expected.nullable || (expected.collation != "" && collation != expected.collation) || !postgresEquivalentColumnType(postgresTypeWithoutCollation(expected.typeSQL), typeName) {
 			return errPostgresWriteTargetUnverified
 		}
 	}
@@ -150,6 +150,14 @@ func postgresAssertMappedRelation(ctx context.Context, querier postgresManagedTa
 		return errPostgresWriteTargetUnverified
 	}
 	return nil
+}
+
+func postgresTypeWithoutCollation(value string) string {
+	upper := strings.ToUpper(value)
+	if index := strings.LastIndex(upper, " COLLATE "); index >= 0 {
+		return strings.TrimSpace(value[:index])
+	}
+	return value
 }
 
 func postgresAssertOrderFence(ctx context.Context, querier postgresManagedTargetQuerier, namespace string) error {

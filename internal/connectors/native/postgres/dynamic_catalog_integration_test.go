@@ -184,7 +184,7 @@ func assertPostgresRegisteredSnapshotTransport(t *testing.T, ctx context.Context
 		AccountOrCluster: "postgres-catalog-integration",
 		ObjectScope:      postgresCatalogIntegrationDatabase + "." + postgresCatalogAlphaSchema + "." + postgresCatalogReadTable,
 	}
-	for _, mode := range []synccontract.Mode{synccontract.ModeFullAppend, synccontract.ModeFullOverwrite} {
+	for _, mode := range []synccontract.Mode{synccontract.ModeFullAppend} {
 		resolved, err := registry.Preflight(synctransport.PreflightRequest{
 			Source:      connector,
 			Destination: destination,

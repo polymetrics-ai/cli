@@ -53,6 +53,31 @@ func TestMappingContractV1ProjectsLosslessValuesAndRoundTrips(t *testing.T) {
 	}
 }
 
+func TestMappingContractV1CanonicalizesStructuredJSONValue(t *testing.T) {
+	jsonType := database.NewJSON()
+	typePlan, err := database.CompileTypePlan(jsonType, jsonType)
+	if err != nil {
+		t.Fatal(err)
+	}
+	mapping, err := database.NewMappingContractV1([]database.MappingColumnV1{{
+		Source: "labels", Target: "labels", Type: typePlan,
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	mapped, err := mapping.MapRecord(connectors.Record{
+		"labels": []any{map[string]any{"name": "production"}},
+	})
+	if err != nil {
+		t.Fatalf("MapRecord() structured JSON error = %v", err)
+	}
+	encoded, ok := mapped["labels"].(json.RawMessage)
+	if !ok || string(encoded) != `[{"name":"production"}]` {
+		t.Fatalf("mapped labels = %#v, want canonical JSON", mapped["labels"])
+	}
+}
+
 func TestMappingContractV1RefusesUnrepresentableMappingsAndValues(t *testing.T) {
 	int32Type, err := database.NewSignedInteger(32)
 	if err != nil {

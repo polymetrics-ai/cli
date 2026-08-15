@@ -367,11 +367,12 @@ type ReversePlan struct {
 	// minted by the single-use approval. It is safe to persist in a schedule or
 	// print as a reference; the scope record never carries the token.
 	AuthorizationReference string `json:"authorization_reference,omitempty"`
-	// TransportConnectionID and TransportBindingSHA256 are only used by the
-	// closed GitHub issue-label walking slice. They bind a pre-run approval to
+	// TransportConnectionID and TransportBindingSHA256 are used by closed
+	// definition-selected transport writes. They bind a pre-run approval to
 	// one connection configuration; neither field is caller-selectable write
 	// input and neither contains an approval token or credential material.
 	TransportConnectionID  string    `json:"transport_connection_id,omitempty"`
+	TransportStream        string    `json:"transport_stream,omitempty"`
 	TransportBindingSHA256 string    `json:"transport_binding_sha256,omitempty"`
 	TransportForwardPlanID string    `json:"transport_forward_plan_id,omitempty"`
 	CreatedAt              time.Time `json:"created_at"`
