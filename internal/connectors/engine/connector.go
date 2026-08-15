@@ -554,6 +554,10 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 	if b.PollingWatermark != nil {
 		pollingWatermark = b.PollingWatermark.Clone()
 	}
+	var syncTransport *connectors.SyncTransportDescriptor
+	if b.SyncTransport != nil {
+		syncTransport = b.SyncTransport.Clone()
+	}
 
 	return connectors.Definition{
 		Name:             b.Metadata.Name,
@@ -565,6 +569,7 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		Capabilities:     synthesizeMetadata(b).Capabilities,
 		Changefeed:       changefeed,
 		PollingWatermark: pollingWatermark,
+		SyncTransport:    syncTransport,
 		Spec:             specJSON(b),
 		Streams:          streamSummaries,
 		WriteActions:     writeActions,

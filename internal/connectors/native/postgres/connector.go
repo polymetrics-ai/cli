@@ -20,10 +20,9 @@
 // with every other connector. database.json is a typed policy declaration
 // only: it does not register a driver or promote write/CDC capability. The
 // connector embeds engine.Base — built from that bundle at construction — to
-// serve its bundle-derived identity and definition base. Definition adds this
-// package's dynamic-catalog snapshot transport declaration; Base does NOT
-// provide Check/Catalog/Read/Write, which remain this package's own
-// implementation.
+// serve its bundle-derived identity and definition, including the declared
+// snapshot transport. Base does NOT provide Check/Catalog/Read/Write, which
+// remain this package's own implementation.
 //
 // Capabilities:
 //   - Check:   pgxpool connect + ping using host/port/database/username/
@@ -125,20 +124,6 @@ func (c Connector) Metadata() connectors.Metadata {
 		*override.target(&m.Capabilities) = override.value
 	}
 	return m
-}
-
-// Definition adds the PostgreSQL-owned bounded snapshot transport declaration
-// to the bundle-derived connector definition. The dynamic catalog means there
-// is no static table list to place in a JSON bundle; the one logical snapshot
-// stream resolves its relation from the checkpoint source scope at execution.
-// Registration remains explicit through RegisterSnapshotTransportSource, so a
-// declaration cannot become executable merely by constructing a connector.
-func (c Connector) Definition() connectors.Definition {
-	definition := c.Base.Definition()
-	definition.SyncTransport = &connectors.SyncTransportDescriptor{
-		Source: postgresSnapshotTransportDescriptor(),
-	}
-	return definition
 }
 
 func (c Connector) Manifest() connectors.Manifest {

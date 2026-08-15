@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "native_database",
+      "id": "postgres_bounded_snapshot"
+    },
+    "eligible_streams": ["snapshot"],
+    "modes": ["full_append", "full_overwrite"],
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "postgres_snapshot",
+      "run_id": "bounded_full_v1"
+    }
+  }
+}

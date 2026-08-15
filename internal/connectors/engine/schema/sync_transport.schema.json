@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sync_transport.json",
+  "type": "object",
+  "required": ["schema_version"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "integer", "enum": [1]},
+    "source_transport": {
+      "type": "object",
+      "required": ["executor", "eligible_streams", "modes", "delivery", "conformance"],
+      "additionalProperties": false,
+      "properties": {
+        "executor": {
+          "type": "object", "required": ["family", "id"], "additionalProperties": false,
+          "properties": {"family": {"type": "string"}, "id": {"type": "string"}}
+        },
+        "eligible_streams": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "modes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "delivery": {
+          "type": "object", "required": ["idempotency", "ordering", "deletes"], "additionalProperties": false,
+          "properties": {"idempotency": {"type": "string"}, "ordering": {"type": "string"}, "deletes": {"type": "string"}}
+        },
+        "conformance": {
+          "type": "object", "required": ["suite", "run_id"], "additionalProperties": false,
+          "properties": {"suite": {"type": "string"}, "run_id": {"type": "string"}}
+        }
+      }
+    },
+    "destination_transport": {
+      "type": "object",
+      "required": ["executor", "eligible_actions", "modes", "delivery", "conformance", "acknowledgement", "apply_strategies"],
+      "additionalProperties": false,
+      "properties": {
+        "executor": {
+          "type": "object", "required": ["family", "id"], "additionalProperties": false,
+          "properties": {"family": {"type": "string"}, "id": {"type": "string"}}
+        },
+        "eligible_actions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "modes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "delivery": {
+          "type": "object", "required": ["idempotency", "ordering", "deletes"], "additionalProperties": false,
+          "properties": {"idempotency": {"type": "string"}, "ordering": {"type": "string"}, "deletes": {"type": "string"}}
+        },
+        "conformance": {
+          "type": "object", "required": ["suite", "run_id"], "additionalProperties": false,
+          "properties": {"suite": {"type": "string"}, "run_id": {"type": "string"}}
+        },
+        "acknowledgement": {"type": "string", "enum": ["durable_warehouse", "none"]},
+        "apply_strategies": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "required": ["mode", "strategy", "action"], "additionalProperties": false,
+            "properties": {"mode": {"type": "string"}, "strategy": {"type": "string"}, "action": {"type": "string"}}
+          }
+        }
+      }
+    }
+  }
+}

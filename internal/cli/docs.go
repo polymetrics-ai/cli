@@ -325,7 +325,7 @@ DESCRIPTION
   role still requires externally verified conformance; it is not a certification
   claim.
 
-POLLING-WATERMARK ELIGIBILITY
+  POLLING-WATERMARK ELIGIBILITY
   polling_watermark is a bounded polling scan, not CDC or change capture.
   Its declaration status, where one exists, is separate from the connector's
   CDC capability. A polling mode is executable only when runtime preflight
@@ -343,6 +343,10 @@ POLLING-WATERMARK ELIGIBILITY
   mapping. State incompatibility, source identity mismatch, snapshot expiry,
   and retention failure require an explicit rebootstrap; pm never implies an
   automatic rescan.
+
+  GitHub currently declares both closed transport roles, so pm connectors
+  inspect github --json reports source and destination status=declared. That
+  inspection result is metadata only and does not read credentials.
 
   For connectors with a declared rate-limit policy, inspection reports RATE
   LIMIT COORDINATION. Process-local policies coordinate only requests made by

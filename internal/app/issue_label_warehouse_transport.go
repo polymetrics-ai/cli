@@ -47,94 +47,49 @@ var (
 	}
 )
 
-// issueLabelTransportConnector embeds the concrete declarative connector,
-// preserving every optional engine capability while adding only this walking
-// slice's exact transport descriptor. No generic API transport is exposed.
-type issueLabelTransportConnector struct {
-	*engine.Connector
-	contract issueLabelTransportContract
-}
-
-func (c *issueLabelTransportConnector) Definition() connectors.Definition {
-	definition := c.Connector.Definition()
-	definition.SyncTransport = issueLabelTransportDescriptor(c.contract)
-	return definition
-}
-
-func issueLabelTransportDescriptor(contract issueLabelTransportContract) *connectors.SyncTransportDescriptor {
-	modes := contract.modes()
-	strategies, err := contract.applyStrategies()
-	if err != nil {
-		return nil
-	}
-	return &connectors.SyncTransportDescriptor{
-		Source: &connectors.SourceTransportDescriptor{
-			Executor:        issueLabelSourceReference,
-			EligibleStreams: []string{contract.stream},
-			Modes:           modes,
-			Delivery: connectors.DeliveryGuarantees{
-				Idempotency: connectors.DeliveryIdempotencyKeyed,
-				Ordering:    connectors.DeliveryOrderingSource,
-				Deletes:     connectors.DeliveryDeletesTombstone,
+// issueLabelTransportDefinitionFactories names only the two GitHub adapter
+// hooks. Their selection and evidence admission are performed generically from
+// sync_transport.json by synctransport.RegisterDeclaredTransports.
+func issueLabelTransportDefinitionFactories(a *App) []synctransport.DefinitionFactory {
+	return []synctransport.DefinitionFactory{
+		{
+			Reference:      issueLabelSourceReference,
+			SourceEvidence: issueLabelSourceEvidence,
+			BuildSource: func(connector connectors.Connector) (synctransport.SourceExecutor, error) {
+				engineConnector, contract, err := issueLabelTransportConnectorContract(connector)
+				if err != nil {
+					return nil, err
+				}
+				return &issueLabelSourceExecutor{connector: engineConnector, contract: contract}, nil
 			},
-			Conformance: issueLabelSourceEvidence,
 		},
-		Destination: &connectors.DestinationTransportDescriptor{
-			Executor:        issueLabelDestinationReference,
-			EligibleActions: contract.destinationActionNames(),
-			Modes:           modes,
-			Delivery: connectors.DeliveryGuarantees{
-				Idempotency: connectors.DeliveryIdempotencyKeyed,
-				Ordering:    connectors.DeliveryOrderingSource,
-				Deletes:     connectors.DeliveryDeletesUnavailable,
+		{
+			Reference:           issueLabelDestinationReference,
+			DestinationEvidence: issueLabelDestinationEvidence,
+			BuildDestination: func(connector connectors.Connector) (synctransport.DestinationExecutor, error) {
+				if a == nil {
+					return nil, fmt.Errorf("closed issue-label transport requires an app")
+				}
+				engineConnector, contract, err := issueLabelTransportConnectorContract(connector)
+				if err != nil {
+					return nil, err
+				}
+				return &issueLabelDestinationExecutor{app: a, connector: engineConnector, contract: contract}, nil
 			},
-			Conformance:     issueLabelDestinationEvidence,
-			Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
-			ApplyStrategies: strategies,
 		},
 	}
 }
 
-// acceptedIssueLabelEvidenceVerifier is intentionally read-only. Its selected
-// connector name is definition-derived at composition time, so shared runtime
-// code does not carry a provider policy or self-certify a descriptor.
-type acceptedIssueLabelEvidenceVerifier struct{ connectorName string }
-
-func (v acceptedIssueLabelEvidenceVerifier) VerifyTransportConformance(request synctransport.ConformanceVerification) error {
-	switch {
-	case request.Role == connectors.TransportRoleSource && request.ConnectorName == v.connectorName && request.Executor == issueLabelSourceReference && request.Evidence == issueLabelSourceEvidence:
-		return nil
-	case request.Role == connectors.TransportRoleDestination && request.ConnectorName == v.connectorName && request.Executor == issueLabelDestinationReference && request.Evidence == issueLabelDestinationEvidence:
-		return nil
-	default:
-		return fmt.Errorf("closed issue-label transport evidence is not accepted for %s %s", request.Role, request.Executor.ID)
+func issueLabelTransportConnectorContract(connector connectors.Connector) (*engine.Connector, issueLabelTransportContract, error) {
+	candidate, ok := connector.(*engine.Connector)
+	if !ok || candidate == nil {
+		return nil, issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport requires a declarative connector")
 	}
-}
-
-// newIssueLabelWarehouseMediatedTransport is the sole production composition
-// root for the walking slice. It selects the one declarative definition that
-// owns the exact issues/add-label/remove-label contract, installs an
-// owner-scoped stage and read-only evidence verifier, then registers its fixed
-// source and destination roles.
-func newIssueLabelWarehouseMediatedTransport(a *App) (*synctransport.Registry, synctransport.WarehouseStage, error) {
-	if a == nil || a.registry == nil {
-		return nil, nil, fmt.Errorf("closed issue-label transport requires an app registry")
-	}
-	connector, contract, err := issueLabelTransportEngine(a.registry)
+	contract, err := issueLabelTransportContractForDefinition(candidate.Definition())
 	if err != nil {
-		return nil, nil, err
+		return nil, issueLabelTransportContract{}, err
 	}
-	wrapped := &issueLabelTransportConnector{Connector: connector, contract: contract}
-	a.registry.Register(wrapped)
-
-	registry := synctransport.NewRegistry(acceptedIssueLabelEvidenceVerifier{connectorName: connector.Name()})
-	if err := registry.RegisterSource(&issueLabelSourceExecutor{connector: connector, contract: contract}); err != nil {
-		return nil, nil, err
-	}
-	if err := registry.RegisterDestination(&issueLabelDestinationExecutor{app: a, connector: connector, contract: contract}); err != nil {
-		return nil, nil, err
-	}
-	return registry, newConnectionWarehouseStage(a), nil
+	return candidate, contract, nil
 }
 
 // issueLabelTransportEngine resolves the exact existing declarative bundle by
@@ -151,22 +106,13 @@ func issueLabelTransportEngine(registry *connectors.Registry) (*engine.Connector
 		if !ok {
 			continue
 		}
-		var candidate *engine.Connector
-		switch connector := registered.(type) {
-		case *engine.Connector:
-			candidate = connector
-		case *issueLabelTransportConnector:
-			candidate = connector.Connector
-		default:
-			continue
-		}
-		definition := candidate.Definition()
-		contract, err := issueLabelTransportContractForDefinition(definition)
+		candidate, contract, err := issueLabelTransportConnectorContract(registered)
 		if err != nil {
-			if definitionDeclaresIssueLabelTransport(definition) {
-				return nil, issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport definition %q is invalid: %w", candidate.Name(), err)
+			definition, ok := connectors.DefinitionOf(registered)
+			if !ok || !definitionDeclaresIssueLabelTransport(definition) {
+				continue
 			}
-			continue
+			return nil, issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport definition %q is invalid: %w", registered.Name(), err)
 		}
 		if selected != nil && selected.Name() != candidate.Name() {
 			return nil, issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport contract is ambiguous across declarative connectors")

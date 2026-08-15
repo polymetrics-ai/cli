@@ -647,15 +647,15 @@ func newIssueLabelTransportApprovalFixtureWithIssuePages(t *testing.T, cleanupSt
 	if !ok {
 		t.Fatal("GitHub connector is not registered")
 	}
-	github, ok := registered.(*issueLabelTransportConnector)
-	if !ok || github.Connector == nil {
-		t.Fatalf("GitHub transport connector = %T, want concrete engine wrapper", registered)
+	github, contract, err := issueLabelTransportConnectorContract(registered)
+	if err != nil || github == nil {
+		t.Fatalf("GitHub transport connector = %T, want declarative issue-label connector: %v", registered, err)
 	}
 	return issueLabelTransportApprovalFixture{
 		app:              a,
 		connection:       connection,
-		executor:         &issueLabelDestinationExecutor{app: a, connector: github.Connector, contract: github.contract},
-		sourceExecutor:   &issueLabelSourceExecutor{connector: github.Connector, contract: github.contract},
+		executor:         &issueLabelDestinationExecutor{app: a, connector: github, contract: contract},
+		sourceExecutor:   &issueLabelSourceExecutor{connector: github, contract: contract},
 		sourceConnector:  sourceConnector,
 		sourceCredential: sourceCredential,
 		sourceRuntime:    sourceRuntime,
@@ -663,9 +663,9 @@ func newIssueLabelTransportApprovalFixtureWithIssuePages(t *testing.T, cleanupSt
 		sourceIssue:      100,
 		targetIssue:      200,
 		label:            "transport-demo",
-		applyAction:      github.contract.apply.name,
-		replaceAction:    github.contract.replace.name,
-		cleanupAction:    github.contract.cleanup.name,
+		applyAction:      contract.apply.name,
+		replaceAction:    contract.replace.name,
+		cleanupAction:    contract.cleanup.name,
 		reads:            &reads,
 		writes:           &writes,
 		sets:             &sets,

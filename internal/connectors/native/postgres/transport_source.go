@@ -38,26 +38,6 @@ var postgresSnapshotTransportReference = connectors.TransportExecutorReference{
 	ID:     postgresSnapshotTransportID,
 }
 
-// postgresSnapshotTransportDescriptor is intentionally constructed next to
-// its executor. The PostgreSQL bundle supplies the connector definition, while
-// this native connector supplies the one dynamic catalog-backed source role.
-func postgresSnapshotTransportDescriptor() *connectors.SourceTransportDescriptor {
-	return &connectors.SourceTransportDescriptor{
-		Executor:        postgresSnapshotTransportReference,
-		EligibleStreams: []string{postgresSnapshotTransportStream},
-		Modes:           []synccontract.Mode{synccontract.ModeFullAppend, synccontract.ModeFullOverwrite},
-		Delivery: connectors.DeliveryGuarantees{
-			Idempotency: connectors.DeliveryIdempotencyAtLeastOnce,
-			Ordering:    connectors.DeliveryOrderingSource,
-			Deletes:     connectors.DeliveryDeletesUnavailable,
-		},
-		Conformance: connectors.ConformanceEvidenceReference{
-			Suite: postgresSnapshotConformanceSuite,
-			RunID: postgresSnapshotConformanceRunID,
-		},
-	}
-}
-
 // SnapshotTransportSource is the PostgreSQL-specific source side of the
 // closed transport contract. It has no generic SQL input: both relation and
 // ordering come from the typed catalog and the checkpoint source identity.
@@ -69,6 +49,40 @@ type SnapshotTransportSource struct {
 // source. Callers register it explicitly with RegisterSnapshotTransportSource.
 func NewSnapshotTransportSource(connector Connector) *SnapshotTransportSource {
 	return &SnapshotTransportSource{connector: connector}
+}
+
+// SnapshotTransportDefinitionFactory supplies the PostgreSQL-local adapter for
+// the exact executor declared by defs/postgres/sync_transport.json. The
+// conformance reference is an external composition allow-list; constructing a
+// descriptor does not certify itself or register the adapter.
+func SnapshotTransportDefinitionFactory() synctransport.DefinitionFactory {
+	return synctransport.DefinitionFactory{
+		Reference: postgresSnapshotTransportReference,
+		SourceEvidence: connectors.ConformanceEvidenceReference{
+			Suite: postgresSnapshotConformanceSuite,
+			RunID: postgresSnapshotConformanceRunID,
+		},
+		BuildSource: func(connector connectors.Connector) (synctransport.SourceExecutor, error) {
+			switch typed := connector.(type) {
+			case Connector:
+				return NewSnapshotTransportSource(typed), nil
+			case *Connector:
+				if typed == nil {
+					return nil, errors.New("postgres snapshot transport connector is required")
+				}
+				return NewSnapshotTransportSource(*typed), nil
+			default:
+				return nil, errors.New("postgres snapshot transport requires the native postgres connector")
+			}
+		},
+	}
+}
+
+// SyncTransportDefinitionFactories exposes the PostgreSQL-local adapter to
+// generic production composition. The bundle still decides whether the source
+// role is declared and therefore whether this factory is used.
+func (Connector) SyncTransportDefinitionFactories() []synctransport.DefinitionFactory {
+	return []synctransport.DefinitionFactory{SnapshotTransportDefinitionFactory()}
 }
 
 // RegisterSnapshotTransportSource registers the one executor selected by the
