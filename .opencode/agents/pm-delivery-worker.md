@@ -67,11 +67,11 @@ The one active canonical worker owns the assigned job and its parent GitHub stat
 <!-- BEGIN POLYMETRICS CONNECTOR CERTIFICATION SHEPHERD GATE -->
 ## Connector certification Shepherd gate
 
-This is the versioned, read-only `connector-certification-shepherd` gate. It reads only `internal/connectors/certifications/capability-matrix.json`, `internal/connectors/certifications/flow-matrix.json`, `internal/connectors/certifications/status.json`, and accepted records below `internal/connectors/certifications/evidence`; it never creates evidence, loads credentials, invokes a provider, or mutates provider/production state.
+This is the versioned, read-only `connector-certification-shepherd` gate. It reads only definition-owned certification shards below `internal/connectors/defs`, `internal/connectors/certifications/status.json`, and accepted records below `internal/connectors/certifications/evidence`; it never creates evidence, loads credentials, invokes a provider, or mutates provider/production state.
 
 - Enforce a `PROCEED` verdict before `integrate_sub_pr, accepted, ready_parent, and human_ready`.
 - Run argv `["go","run","./cmd/agentcontractgen","certification-gate","--root","<repository-root>","--connector","<connector>","--transition","<transition>"]` at the transition boundary. Run this read-only command at each protected transition with one canonical absolute non-symlink repository root. It emits the complete deterministic verdict as JSON, exits zero only for PROCEED, and otherwise preserves RETRY or HALT evidence on stdout while blocking the transition.
-- Input schema v1 requires every field: `schema_version`, `connector`, `transition`, `inputs.capability_matrix`, `inputs.flow_matrix`, `inputs.status`, and `inputs.evidence_directory`.
+- Input schema v1 requires every field: `schema_version`, `connector`, `transition`, `inputs.certification_shards`, `inputs.status`, and `inputs.evidence_directory`.
 - The nested `inputs` values must exactly equal the canonical paths above; no adapter-local default or replacement is allowed.
 - Every applicable capability, workflow, sync-mode primitive, and flow pair needs declared, implemented, fixture_tested, live_tested, and live_evidence plus a matching accepted live-evidence record. File presence, reachability, or `implemented` alone cannot pass.
 - Verdict schema v1 contains every field: `schema_version`, `connector`, `transition`, `decision`, and `failures`. Allowed decisions: `PROCEED`, `RETRY`, and `HALT`.

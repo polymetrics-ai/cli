@@ -14,13 +14,13 @@ import (
 )
 
 const (
-	certificationGeneratedCommand = "go run ./cmd/connectorgen certification-matrix"
+	certificationGeneratedCommand = "go run ./cmd/connectorgen certification-matrix --check"
 	certificationCredentialNote   = "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface."
 )
 
 func TestEvaluateCertificationGateGitHubBaselineAndGreenFixture(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
-	request := certificationGateRequest("integrate_sub_pr")
+	request := certificationGateRequestFor(contract, "integrate_sub_pr")
 
 	baseline, err := EvaluateCertificationGate(repositoryRoot(t), contract, request)
 	if err != nil {
@@ -31,6 +31,8 @@ func TestEvaluateCertificationGateGitHubBaselineAndGreenFixture(t *testing.T) {
 	}
 	assertCertificationFailureID(t, baseline, "capability/github/capability:check/live_evidence")
 
+	contract = loadCertificationTestContract(t)
+	request = certificationGateRequest("integrate_sub_pr")
 	fixtureRoot := writeGreenCertificationFixture(t)
 	green, err := EvaluateCertificationGate(fixtureRoot, contract, request)
 	if err != nil {
@@ -45,7 +47,7 @@ func TestEvaluateCertificationGateGitHubBaselineAndGreenFixture(t *testing.T) {
 }
 
 func TestCertificationGateBindingCriteriaYieldExactCellIDs(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	for _, criterion := range []string{"declared", "implemented", "fixture_tested", "live_tested"} {
 		t.Run(criterion, func(t *testing.T) {
 			root := writeGreenCertificationFixture(t)
@@ -71,7 +73,7 @@ func TestCertificationGateBindingCriteriaYieldExactCellIDs(t *testing.T) {
 }
 
 func TestCertificationGateRejectsLiveTestedWithoutEvidenceWithCoordinates(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	root := writeGreenCertificationFixture(t)
 	cell := certificationFixtureCapabilityCell(t, root)
 	cell["live_tested"] = true
@@ -92,7 +94,7 @@ func TestCertificationGateRejectsLiveTestedWithoutEvidenceWithCoordinates(t *tes
 }
 
 func TestCertificationGateRejectsMalformedEvidencePointersWithTrustedCoordinates(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	tests := []struct {
 		name           string
 		mutate         func(map[string]any)
@@ -136,7 +138,7 @@ func TestCertificationGateRejectsMalformedEvidencePointersWithTrustedCoordinates
 }
 
 func TestCertificationGateRejectsDerivedStatusAndAggregateMismatches(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	tests := []struct {
 		name   string
 		mutate func(*testing.T, string)
@@ -201,7 +203,7 @@ func TestCertificationGateRejectsDerivedStatusAndAggregateMismatches(t *testing.
 }
 
 func TestCertificationGatePreservesCoordinatesAcrossWorkflowSyncAndFlowCells(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	tests := []struct {
 		name   string
 		mutate func(*testing.T, string)
@@ -261,7 +263,7 @@ func TestCertificationGatePreservesCoordinatesAcrossWorkflowSyncAndFlowCells(t *
 }
 
 func TestCertificationGateDoesNotPromoteReachabilityOrImplementedWithoutLiveEvidence(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	root := writeGreenCertificationFixture(t)
 	cell := certificationFixtureCapabilityCell(t, root)
 	cell["declared"] = true
@@ -294,7 +296,7 @@ func TestCertificationGateDoesNotPromoteReachabilityOrImplementedWithoutLiveEvid
 }
 
 func TestCertificationGateHaltCarriesExactCellAndEvidenceCoordinates(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	root := writeGreenCertificationFixture(t)
 	record := filepath.Join(root, "internal", "connectors", "certifications", "evidence", "capability.json")
 	if err := os.Remove(record); err != nil {
@@ -316,7 +318,7 @@ func TestCertificationGateHaltCarriesExactCellAndEvidenceCoordinates(t *testing.
 }
 
 func TestCertificationGateMatchesSemanticallyEquivalentEvidenceProof(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	root := writeGreenCertificationFixture(t)
 	path := filepath.Join(root, "internal", "connectors", "certifications", "evidence", "capability.json")
 	raw, err := os.ReadFile(path)
@@ -340,7 +342,7 @@ func TestCertificationGateMatchesSemanticallyEquivalentEvidenceProof(t *testing.
 }
 
 func TestCertificationGateMatchesEvidenceProofsWithReorderedJSONMembers(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	root := writeGreenCertificationFixture(t)
 	fingerprint := "{{pmcertfp:v1:" + strings.Repeat("a", 64) + "}}"
 	value := map[string]any{"a": fingerprint, "b": fingerprint}
@@ -390,7 +392,7 @@ func TestCertificationGateMatchesEvidenceProofsWithReorderedJSONMembers(t *testi
 }
 
 func TestCertificationGateRejectsEmptyFingerprintSequences(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	tests := []struct {
 		name   string
 		mutate func(map[string]any)
@@ -431,7 +433,7 @@ func TestCertificationGateRejectsEmptyFingerprintSequences(t *testing.T) {
 }
 
 func TestCertificationGateRejectsIncompleteFlowTopology(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	tests := []struct {
 		name   string
 		mutate func(*testing.T, string)
@@ -509,7 +511,7 @@ func TestCertificationGateRejectsIncompleteFlowTopology(t *testing.T) {
 }
 
 func TestCertificationGateRejectsFlowKindInventoryDrift(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	tests := []struct {
 		name   string
 		mutate func(*testing.T, string)
@@ -565,7 +567,7 @@ func TestCertificationGateRejectsFlowKindInventoryDrift(t *testing.T) {
 }
 
 func TestCertificationGateRejectsImmutableFlowOverridePromotion(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	root := writeGreenCertificationFixture(t)
 	matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
 	baseCell := matrix["pair_sets"].([]any)[0].(map[string]any)["cell"].(map[string]any)
@@ -592,7 +594,7 @@ func TestCertificationGateRejectsImmutableFlowOverridePromotion(t *testing.T) {
 }
 
 func TestCertificationGateRejectsFlowPairsThatDisagreeWithEndpointRoles(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	tests := []struct {
 		name    string
 		mutate  func(map[string]any)
@@ -660,7 +662,7 @@ func TestCertificationGateRejectsFlowPairsThatDisagreeWithEndpointRoles(t *testi
 }
 
 func TestCertificationGateBindsRawFlowPairSetEvidenceBeforeOverrides(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	const flowCellID = "flow/api_to_api/github/github"
 	tests := []struct {
 		name       string
@@ -725,7 +727,7 @@ func TestCertificationGateBindsRawFlowPairSetEvidenceBeforeOverrides(t *testing.
 }
 
 func TestCertificationGateRejectsDistinctLargeProofNumbers(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	root := writeGreenCertificationFixture(t)
 	matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/capability-matrix.json")
 	pointer := matrix["connectors"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)["live_evidence"].([]any)[0].(map[string]any)
@@ -754,7 +756,7 @@ func TestCertificationGateRejectsDistinctLargeProofNumbers(t *testing.T) {
 }
 
 func TestCertificationGateRejectsEscapedOrNonRegularInputs(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	tests := []struct {
 		name      string
 		prepare   func(*testing.T) string
@@ -824,7 +826,7 @@ func TestCertificationGateRejectsEscapedOrNonRegularInputs(t *testing.T) {
 }
 
 func TestCertificationGateAcceptsProducerValidDeliveryLimitations(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	root := writeGreenCertificationFixture(t)
 	mutateCertificationFixtureFlowProof(t, root, func(proof map[string]any) {
 		delivery := proof["flow"].(map[string]any)["delivery"].(map[string]any)
@@ -846,7 +848,7 @@ func TestCertificationGateAcceptsProducerValidDeliveryLimitations(t *testing.T) 
 }
 
 func TestCertificationGateRejectsUnredactedProofBody(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	root := writeGreenCertificationFixture(t)
 	evidence := readCertificationFixtureObject(t, root, "internal/connectors/certifications/evidence/capability.json")
 	proof := evidence["proof"].(map[string]any)
@@ -866,7 +868,7 @@ func TestCertificationGateRejectsUnredactedProofBody(t *testing.T) {
 }
 
 func TestCertificationGateFailsClosedForSchemaAndAdapterInputDrift(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	tests := []struct {
 		name   string
 		mutate func(*testing.T, string) CertificationGateRequest
@@ -937,7 +939,7 @@ func TestCertificationGateEnforcesEveryProtectedTransition(t *testing.T) {
 	greenRoot := writeGreenCertificationFixture(t)
 	for _, transition := range contract.CertificationGate.EnforcedTransitions {
 		t.Run(transition, func(t *testing.T) {
-			blocked, err := EnforceCertificationGate(baselineRoot, contract, certificationGateRequest(transition))
+			blocked, err := EnforceCertificationGate(baselineRoot, contract, certificationGateRequestFor(contract, transition))
 			if err == nil {
 				t.Fatalf("baseline unexpectedly passed protected %s transition", transition)
 			}
@@ -947,7 +949,8 @@ func TestCertificationGateEnforcesEveryProtectedTransition(t *testing.T) {
 			}
 			assertCertificationFailureID(t, blocked, "capability/github/capability:check/live_evidence")
 
-			proceed, err := EnforceCertificationGate(greenRoot, contract, certificationGateRequest(transition))
+			fixtureContract := loadCertificationTestContract(t)
+			proceed, err := EnforceCertificationGate(greenRoot, fixtureContract, certificationGateRequest(transition))
 			if err != nil || proceed.Decision != CertificationGateProceed {
 				t.Fatalf("all-green enforcement = verdict=%#v err=%v, want PROCEED", proceed, err)
 			}
@@ -983,7 +986,7 @@ func TestCertificationGateCurrentBaselineRejectsWithoutBreakingStructuralContrac
 	if err := CheckRoot(context.Background(), root); err != nil {
 		t.Fatalf("generic contract/projection check must remain structural with zero certified connectors: %v", err)
 	}
-	verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+	verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequestFor(contract, "integrate_sub_pr"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -993,7 +996,7 @@ func TestCertificationGateCurrentBaselineRejectsWithoutBreakingStructuralContrac
 }
 
 func TestCertificationGateEvaluationIsReadOnly(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	root := writeGreenCertificationFixture(t)
 	before := certificationFixtureSnapshot(t, root)
 	verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
@@ -1015,6 +1018,23 @@ func certificationGateInputsForTest() CertificationGateInputs {
 		FlowMatrix:        "internal/connectors/certifications/flow-matrix.json",
 		Status:            "internal/connectors/certifications/status.json",
 		EvidenceDirectory: "internal/connectors/certifications/evidence",
+	}
+}
+
+func loadCertificationTestContract(t *testing.T) *Contract {
+	t.Helper()
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract.CertificationGate.Inputs = certificationGateInputsForTest()
+	contract.CertificationGate.InputFields = []string{"schema_version", "connector", "transition", "inputs.capability_matrix", "inputs.flow_matrix", "inputs.status", "inputs.evidence_directory"}
+	return contract
+}
+
+func certificationGateRequestFor(contract *Contract, transition string) CertificationGateRequest {
+	return CertificationGateRequest{
+		SchemaVersion: 1,
+		Connector:     "github",
+		Transition:    transition,
+		Inputs:        contract.CertificationGate.Inputs,
 	}
 }
 
@@ -1366,7 +1386,7 @@ func writeCertificationFixtureCapabilityCell(t *testing.T, root string, cell map
 
 func rewriteCertificationFixtureDerivedReports(t *testing.T, root string) {
 	t.Helper()
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract := loadCertificationTestContract(t)
 	capabilities, err := loadCapabilityMatrix(root, contract.CertificationGate)
 	if err != nil {
 		t.Fatal(err)

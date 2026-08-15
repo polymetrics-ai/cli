@@ -122,9 +122,25 @@ func certificationFlowKindsForCatalog(root string, contract *Contract) ([]certif
 		return nil, err
 	}
 	gate := contract.CertificationGate
-	matrix, err := loadFlowMatrix(root, gate)
-	if err != nil {
-		return nil, fmt.Errorf("load producer flow matrix: %w", err)
+	var matrix certificationFlowMatrix
+	if gate.Inputs.CertificationShards != "" {
+		status, err := loadStatusArtifact(root, gate)
+		if err != nil {
+			return nil, fmt.Errorf("load producer certification status: %w", err)
+		}
+		if err := validateStatusArtifact(status, gate); err != nil {
+			return nil, fmt.Errorf("validate producer certification status: %w", err)
+		}
+		_, matrix, err = loadCertificationShardMatrices(root, gate, status)
+		if err != nil {
+			return nil, fmt.Errorf("load producer certification shards: %w", err)
+		}
+	} else {
+		var err error
+		matrix, err = loadFlowMatrix(root, gate)
+		if err != nil {
+			return nil, fmt.Errorf("load producer flow matrix: %w", err)
+		}
 	}
 	if matrix.SchemaVersion != gate.InputSchemaVersion || matrix.GeneratedCommand != gate.GeneratedCommand || matrix.Mediator != localParquetWarehouse {
 		return nil, fmt.Errorf("producer flow matrix has an unsupported schema, command, or mediator")

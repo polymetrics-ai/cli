@@ -36,7 +36,7 @@ func TestOpenCodeProjectionsAreRequiredGeneratedGateInputs(t *testing.T) {
 			t.Fatal(err)
 		}
 		if !bytes.Contains(content, []byte("## Connector certification Shepherd gate")) ||
-			!bytes.Contains(content, []byte("inputs.capability_matrix")) ||
+			!bytes.Contains(content, []byte("inputs.certification_shards")) ||
 			!bytes.Contains(content, []byte("decision")) {
 			t.Fatalf("OpenCode projection %s omitted canonical certification gate inputs or verdict fields", target.Path)
 		}
@@ -112,7 +112,7 @@ func TestProjectionCheckRejectsCertificationGateDriftForEveryHarness(t *testing.
 			if err != nil {
 				t.Fatal(err)
 			}
-			content = bytes.Replace(content, []byte("inputs.capability_matrix"), []byte("inputs.adapter_local_capability_matrix"), 1)
+			content = bytes.Replace(content, []byte("inputs.certification_shards"), []byte("inputs.adapter_local_certification_shards"), 1)
 			if err := os.WriteFile(path, content, 0o644); err != nil {
 				t.Fatal(err)
 			}

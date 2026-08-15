@@ -158,10 +158,11 @@ type ConnectorCertificationGate struct {
 // each adapter invocation. Explicit paths prevent an adapter-local default from weakening the
 // source of proof.
 type CertificationGateInputs struct {
-	CapabilityMatrix  string `json:"capability_matrix"`
-	FlowMatrix        string `json:"flow_matrix"`
-	Status            string `json:"status"`
-	EvidenceDirectory string `json:"evidence_directory"`
+	CertificationShards string `json:"certification_shards,omitempty"`
+	CapabilityMatrix    string `json:"capability_matrix,omitempty"`
+	FlowMatrix          string `json:"flow_matrix,omitempty"`
+	Status              string `json:"status"`
+	EvidenceDirectory   string `json:"evidence_directory"`
 }
 
 type TrackerContract struct {
@@ -420,7 +421,7 @@ func (gate ConnectorCertificationGate) Validate() error {
 		gate.AcceptedEvidenceSchemaVersion != 1 ||
 		gate.ProofRedactionStrategy != "repository_salted_hmac_sha256_v1" ||
 		!gate.ReadOnly ||
-		gate.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix" ||
+		gate.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix --check" ||
 		gate.UnsupportedProofSchemaBehavior != "HALT" {
 		return fmt.Errorf("canonical contract: certification Shepherd gate version, source, and read-only policy are invalid")
 	}
@@ -431,7 +432,10 @@ func (gate ConnectorCertificationGate) Validate() error {
 	if !slices.Equal(gate.Command.Argv, wantCommand) || strings.TrimSpace(gate.Command.Instruction) == "" {
 		return fmt.Errorf("canonical contract: certification Shepherd gate command is invalid")
 	}
-	wantInputs := []string{"schema_version", "connector", "transition", "inputs.capability_matrix", "inputs.flow_matrix", "inputs.status", "inputs.evidence_directory"}
+	wantInputs := []string{"schema_version", "connector", "transition", "inputs.certification_shards", "inputs.status", "inputs.evidence_directory"}
+	if gate.Inputs.CertificationShards == "" {
+		wantInputs = []string{"schema_version", "connector", "transition", "inputs.capability_matrix", "inputs.flow_matrix", "inputs.status", "inputs.evidence_directory"}
+	}
 	wantVerdicts := []string{"schema_version", "connector", "transition", "decision", "failures"}
 	wantCriteria := []string{"declared", "implemented", "fixture_tested", "live_tested", "live_evidence"}
 	wantTransitions := []string{"integrate_sub_pr", "accepted", "ready_parent", "human_ready"}
@@ -445,12 +449,24 @@ func (gate ConnectorCertificationGate) Validate() error {
 }
 
 func (inputs CertificationGateInputs) Validate() error {
+	sharded := inputs.CertificationShards != ""
+	aggregate := inputs.CapabilityMatrix != "" || inputs.FlowMatrix != ""
+	if sharded == aggregate || aggregate && (inputs.CapabilityMatrix == "" || inputs.FlowMatrix == "") {
+		return fmt.Errorf("canonical contract: certification gate must select exactly one complete generated-input layout")
+	}
+	if inputs.Status == "" || inputs.EvidenceDirectory == "" {
+		return fmt.Errorf("canonical contract: certification gate status and evidence directory are required")
+	}
 	for name, value := range map[string]string{
-		"capability_matrix":  inputs.CapabilityMatrix,
-		"flow_matrix":        inputs.FlowMatrix,
-		"status":             inputs.Status,
-		"evidence_directory": inputs.EvidenceDirectory,
+		"certification_shards": inputs.CertificationShards,
+		"capability_matrix":    inputs.CapabilityMatrix,
+		"flow_matrix":          inputs.FlowMatrix,
+		"status":               inputs.Status,
+		"evidence_directory":   inputs.EvidenceDirectory,
 	} {
+		if value == "" {
+			continue
+		}
 		if !fs.ValidPath(value) || path.Clean(value) != value || path.IsAbs(value) {
 			return fmt.Errorf("canonical contract: certification gate %s path is not local", name)
 		}

@@ -247,7 +247,7 @@
     "accepted_evidence_schema_version": 1,
     "proof_redaction_strategy": "repository_salted_hmac_sha256_v1",
     "read_only": true,
-    "generated_command": "go run ./cmd/connectorgen certification-matrix",
+    "generated_command": "go run ./cmd/connectorgen certification-matrix --check",
     "command": {
       "argv": [
         "go",
@@ -264,8 +264,7 @@
       "instruction": "Run this read-only command at each protected transition with one canonical absolute non-symlink repository root. It emits the complete deterministic verdict as JSON, exits zero only for PROCEED, and otherwise preserves RETRY or HALT evidence on stdout while blocking the transition."
     },
     "inputs": {
-      "capability_matrix": "internal/connectors/certifications/capability-matrix.json",
-      "flow_matrix": "internal/connectors/certifications/flow-matrix.json",
+      "certification_shards": "internal/connectors/defs",
       "status": "internal/connectors/certifications/status.json",
       "evidence_directory": "internal/connectors/certifications/evidence"
     },
@@ -273,8 +272,7 @@
       "schema_version",
       "connector",
       "transition",
-      "inputs.capability_matrix",
-      "inputs.flow_matrix",
+      "inputs.certification_shards",
       "inputs.status",
       "inputs.evidence_directory"
     ],

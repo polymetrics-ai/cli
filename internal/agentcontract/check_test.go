@@ -3,6 +3,7 @@ package agentcontract
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"slices"
@@ -53,17 +54,39 @@ func TestCertificationFlowKindCatalogSyncAndCheck(t *testing.T) {
 	repository := repositoryRoot(t)
 	contract := loadRepositoryContract(t, repository)
 	root := t.TempDir()
-	flowMatrixPath := filepath.Join(repository, filepath.FromSlash(contract.CertificationGate.Inputs.FlowMatrix))
-	flowMatrix, err := os.ReadFile(flowMatrixPath)
+	statusPath := filepath.Join(repository, filepath.FromSlash(contract.CertificationGate.Inputs.Status))
+	status, err := os.ReadFile(statusPath)
 	if err != nil {
 		t.Fatal(err)
 	}
-	fixtureFlowMatrixPath := filepath.Join(root, filepath.FromSlash(contract.CertificationGate.Inputs.FlowMatrix))
-	if err := os.MkdirAll(filepath.Dir(fixtureFlowMatrixPath), 0o755); err != nil {
+	fixtureStatusPath := filepath.Join(root, filepath.FromSlash(contract.CertificationGate.Inputs.Status))
+	if err := os.MkdirAll(filepath.Dir(fixtureStatusPath), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(fixtureFlowMatrixPath, flowMatrix, 0o644); err != nil {
+	if err := os.WriteFile(fixtureStatusPath, status, 0o644); err != nil {
 		t.Fatal(err)
+	}
+	var scope struct {
+		Connectors []struct {
+			Connector string `json:"connector"`
+		} `json:"connectors"`
+	}
+	if err := json.Unmarshal(status, &scope); err != nil {
+		t.Fatal(err)
+	}
+	for _, item := range scope.Connectors {
+		relative := filepath.Join(filepath.FromSlash(contract.CertificationGate.Inputs.CertificationShards), item.Connector, "certification-matrix.json")
+		shard, err := os.ReadFile(filepath.Join(repository, relative))
+		if err != nil {
+			t.Fatal(err)
+		}
+		fixtureShardPath := filepath.Join(root, relative)
+		if err := os.MkdirAll(filepath.Dir(fixtureShardPath), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(fixtureShardPath, shard, 0o644); err != nil {
+			t.Fatal(err)
+		}
 	}
 
 	updated, err := SyncCertificationFlowKindCatalog(root, contract)

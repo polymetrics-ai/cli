@@ -26,6 +26,8 @@ const (
 	certificationDecisionProceed   = CertificationGateDecision("PROCEED")
 	certificationDecisionRetry     = CertificationGateDecision("RETRY")
 	certificationDecisionHalt      = CertificationGateDecision("HALT")
+	certificationCheckCommand      = "go run ./cmd/connectorgen certification-matrix --check"
+	certificationAllCommand        = "go run ./cmd/connectorgen certification-matrix --all"
 
 	fullParityCredentialScope = "full_parity"
 	fullParityCredentialNote  = "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface."
@@ -136,17 +138,26 @@ func EvaluateCertificationGate(root string, contract *Contract, request Certific
 		return certificationGateHalt(request, "request/inputs", "request", err.Error()), nil
 	}
 
-	capabilities, err := loadCapabilityMatrix(root, gate)
-	if err != nil {
-		return certificationGateHalt(request, certificationInputFailureID("capability_matrix", err), "input", err.Error()), nil
-	}
-	flow, err := loadFlowMatrix(root, gate)
-	if err != nil {
-		return certificationGateHalt(request, certificationInputFailureID("flow_matrix", err), "input", err.Error()), nil
-	}
 	status, err := loadStatusArtifact(root, gate)
 	if err != nil {
 		return certificationGateHalt(request, certificationInputFailureID("status", err), "input", err.Error()), nil
+	}
+	var capabilities certificationCapabilityMatrix
+	var flow certificationFlowMatrix
+	if gate.Inputs.CertificationShards != "" {
+		capabilities, flow, err = loadCertificationShardMatrices(root, gate, status)
+		if err != nil {
+			return certificationGateHalt(request, certificationInputFailureID("certification_shards", err), "input", err.Error()), nil
+		}
+	} else {
+		capabilities, err = loadCapabilityMatrix(root, gate)
+		if err != nil {
+			return certificationGateHalt(request, certificationInputFailureID("capability_matrix", err), "input", err.Error()), nil
+		}
+		flow, err = loadFlowMatrix(root, gate)
+		if err != nil {
+			return certificationGateHalt(request, certificationInputFailureID("flow_matrix", err), "input", err.Error()), nil
+		}
 	}
 	evidence, err := loadAcceptedCertificationEvidence(root, gate)
 	if err != nil {
@@ -1243,9 +1254,10 @@ type certificationConnectorStatus struct {
 }
 
 type certificationStatusArtifact struct {
-	SchemaVersion    int                            `json:"schema_version"`
-	GeneratedCommand string                         `json:"generated_command"`
-	Connectors       []certificationConnectorStatus `json:"connectors"`
+	SchemaVersion      int                            `json:"schema_version"`
+	GeneratedCommand   string                         `json:"generated_command"`
+	CertificationScope []string                       `json:"certification_scope,omitempty"`
+	Connectors         []certificationConnectorStatus `json:"connectors"`
 }
 
 type certificationFlowMatrix struct {
@@ -1263,6 +1275,126 @@ type certificationFlowMatrix struct {
 	PairOverrides     []certificationFlowPairOverride `json:"pair_overrides"`
 	ConnectorStatuses []certificationConnectorStatus  `json:"connector_statuses"`
 	Baseline          certificationFlowBaseline       `json:"baseline"`
+}
+
+type certificationShard struct {
+	SchemaVersion    int                              `json:"schema_version"`
+	GeneratedCommand string                           `json:"generated_command"`
+	FunctionKinds    []certificationFunctionKind      `json:"function_kinds"`
+	Connector        certificationCapabilityConnector `json:"connector"`
+	FlowKinds        []certificationFlowKind          `json:"flow_kinds"`
+	WorkflowKinds    []certificationWorkflowKind      `json:"workflow_kinds"`
+	Workflow         certificationWorkflowSet         `json:"workflow"`
+	SyncModeKinds    []certificationSyncModeKind      `json:"sync_mode_kinds"`
+	SyncPrimitives   []certificationSyncPrimitive     `json:"sync_primitives"`
+	SyncModeCells    certificationSyncModeSet         `json:"sync_mode_cells"`
+	ConnectorRoles   certificationConnectorRoles      `json:"connector_roles"`
+	PairOverrides    []certificationFlowPairOverride  `json:"pair_overrides"`
+}
+
+func loadCertificationShardMatrices(root string, gate ConnectorCertificationGate, status certificationStatusArtifact) (certificationCapabilityMatrix, certificationFlowMatrix, error) {
+	capabilities := certificationCapabilityMatrix{
+		SchemaVersion:    gate.SchemaVersion,
+		GeneratedCommand: gate.GeneratedCommand,
+		LegacyCertificationInputs: certificationLegacyInventory{
+			Ignored: true,
+			Files:   []certificationLegacyFile{},
+		},
+	}
+	flow := certificationFlowMatrix{
+		SchemaVersion:     gate.SchemaVersion,
+		GeneratedCommand:  gate.GeneratedCommand,
+		Mediator:          localParquetWarehouse,
+		ConnectorStatuses: slices.Clone(status.Connectors),
+		PairOverrides:     []certificationFlowPairOverride{},
+	}
+	if status.SchemaVersion != gate.SchemaVersion || status.GeneratedCommand != certificationAllCommand || len(status.Connectors) == 0 {
+		return capabilities, flow, errors.New("certification status does not identify a supported shard set")
+	}
+
+	names := make([]string, 0, len(status.Connectors))
+	seen := make(map[string]bool, len(status.Connectors))
+	claimedCapabilityComplete := make(map[string]bool, len(status.Connectors))
+	statusByConnector := make(map[string]certificationConnectorStatus, len(status.Connectors))
+	for _, item := range status.Connectors {
+		if !safeCertificationID(item.Connector) || seen[item.Connector] {
+			return capabilities, flow, fmt.Errorf("certification status connector %q is unsafe or duplicated", item.Connector)
+		}
+		seen[item.Connector] = true
+		names = append(names, item.Connector)
+		statusByConnector[item.Connector] = item
+	}
+	sort.Strings(names)
+
+	for index, name := range names {
+		var shard certificationShard
+		shardPath := pathpkg.Join(gate.Inputs.CertificationShards, name, "certification-matrix.json")
+		if err := readCertificationFile(root, shardPath, &shard); err != nil {
+			return capabilities, flow, fmt.Errorf("read connector %q certification shard: %w", name, err)
+		}
+		if shard.SchemaVersion != gate.SchemaVersion || shard.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix --connector "+name {
+			return capabilities, flow, fmt.Errorf("connector %q certification shard has an unsupported schema or command", name)
+		}
+		if shard.Connector.Name != name || shard.Workflow.Connector != name || shard.SyncModeCells.Connector != name || shard.ConnectorRoles.Connector != name {
+			return capabilities, flow, fmt.Errorf("connector %q certification shard has mismatched owned records", name)
+		}
+		if index == 0 {
+			capabilities.FunctionKinds = slices.Clone(shard.FunctionKinds)
+			flow.FlowKinds = slices.Clone(shard.FlowKinds)
+			flow.WorkflowKinds = slices.Clone(shard.WorkflowKinds)
+			flow.SyncModeKinds = slices.Clone(shard.SyncModeKinds)
+			flow.SyncPrimitives = slices.Clone(shard.SyncPrimitives)
+		} else if !reflect.DeepEqual(capabilities.FunctionKinds, shard.FunctionKinds) ||
+			!reflect.DeepEqual(flow.FlowKinds, shard.FlowKinds) ||
+			!reflect.DeepEqual(flow.WorkflowKinds, shard.WorkflowKinds) ||
+			!reflect.DeepEqual(flow.SyncModeKinds, shard.SyncModeKinds) ||
+			!reflect.DeepEqual(flow.SyncPrimitives, shard.SyncPrimitives) {
+			return capabilities, flow, fmt.Errorf("connector %q certification shard has a divergent shared inventory", name)
+		}
+		for _, override := range shard.PairOverrides {
+			if override.Source != name {
+				return capabilities, flow, fmt.Errorf("connector %q certification shard owns an override for source %q", name, override.Source)
+			}
+		}
+		capabilities.Connectors = append(capabilities.Connectors, shard.Connector)
+		claimedCapabilityComplete[name] = shard.Connector.CapabilityComplete
+		flow.Workflows = append(flow.Workflows, shard.Workflow)
+		flow.SyncModeCells = append(flow.SyncModeCells, shard.SyncModeCells)
+		flow.ConnectorRoles = append(flow.ConnectorRoles, shard.ConnectorRoles)
+		flow.PairOverrides = append(flow.PairOverrides, shard.PairOverrides...)
+	}
+
+	rolesByConnector := make(map[string]map[string]certificationFlowRole, len(flow.ConnectorRoles))
+	for _, declaration := range flow.ConnectorRoles {
+		roles := make(map[string]certificationFlowRole, len(declaration.Roles))
+		for _, role := range declaration.Roles {
+			roles[role.Role] = role
+		}
+		rolesByConnector[declaration.Connector] = roles
+	}
+	for _, kind := range flow.FlowKinds {
+		for _, source := range names {
+			for _, destination := range names {
+				sourceRole, sourceOK := rolesByConnector[source][kind.SourceRole]
+				destinationRole, destinationOK := rolesByConnector[destination][kind.DestinationRole]
+				if !sourceOK || !destinationOK {
+					return capabilities, flow, fmt.Errorf("flow kind %q cannot resolve endpoint roles for %s -> %s", kind.ID, source, destination)
+				}
+				flow.PairSets = append(flow.PairSets, certificationFlowPairSet{
+					FlowKind:              kind.ID,
+					Mediator:              localParquetWarehouse,
+					SourceConnectors:      []string{source},
+					DestinationConnectors: []string{destination},
+					Cell: certificationFlowCell{
+						certificationFacts: certificationFlowPairRoleFacts(sourceRole, destinationRole),
+					},
+				})
+			}
+		}
+	}
+	capabilities.Baseline = deriveCertificationCapabilityBaseline(capabilities, claimedCapabilityComplete)
+	flow.Baseline = deriveCertificationFlowBaseline(flow, statusByConnector)
+	return capabilities, flow, nil
 }
 
 func loadCapabilityMatrix(root string, gate ConnectorCertificationGate) (certificationCapabilityMatrix, error) {
@@ -1614,11 +1746,26 @@ func validateStatusArtifact(artifact certificationStatusArtifact, gate Connector
 	if artifact.SchemaVersion != gate.SchemaVersion {
 		return fmt.Errorf("schema_version %d is unsupported", artifact.SchemaVersion)
 	}
-	if artifact.GeneratedCommand != gate.GeneratedCommand || len(artifact.Connectors) == 0 {
+	wantCommand := gate.GeneratedCommand
+	if gate.Inputs.CertificationShards != "" {
+		wantCommand = certificationAllCommand
+	}
+	if artifact.GeneratedCommand != wantCommand || len(artifact.Connectors) == 0 {
 		return errors.New("generated command or connector statuses are invalid")
 	}
 	if err := validateUniqueIDs("status connector", artifact.Connectors, func(status certificationConnectorStatus) string { return status.Connector }); err != nil {
 		return err
+	}
+	if gate.Inputs.CertificationShards != "" {
+		connectors := make([]string, 0, len(artifact.Connectors))
+		for _, item := range artifact.Connectors {
+			connectors = append(connectors, item.Connector)
+		}
+		if !slices.Equal(artifact.CertificationScope, connectors) {
+			return errors.New("certification scope does not match status connectors")
+		}
+	} else if len(artifact.CertificationScope) != 0 {
+		return errors.New("aggregate certification status cannot declare a shard scope")
 	}
 	for _, status := range artifact.Connectors {
 		if status.Certified {
@@ -2524,7 +2671,11 @@ func RenderCertificationGateIO(contract *Contract) ([]byte, error) {
 	fmt.Fprintln(&output, certificationGateBeginMarker)
 	fmt.Fprintln(&output, "## Connector certification Shepherd gate")
 	fmt.Fprintln(&output)
-	fmt.Fprintf(&output, "This is the versioned, read-only `%s` gate. It reads only `%s`, `%s`, `%s`, and accepted records below `%s`; it never creates evidence, loads credentials, invokes a provider, or mutates provider/production state.\n\n", gate.Name, gate.Inputs.CapabilityMatrix, gate.Inputs.FlowMatrix, gate.Inputs.Status, gate.Inputs.EvidenceDirectory)
+	if gate.Inputs.CertificationShards != "" {
+		fmt.Fprintf(&output, "This is the versioned, read-only `%s` gate. It reads only definition-owned certification shards below `%s`, `%s`, and accepted records below `%s`; it never creates evidence, loads credentials, invokes a provider, or mutates provider/production state.\n\n", gate.Name, gate.Inputs.CertificationShards, gate.Inputs.Status, gate.Inputs.EvidenceDirectory)
+	} else {
+		fmt.Fprintf(&output, "This is the versioned, read-only `%s` gate. It reads only `%s`, `%s`, `%s`, and accepted records below `%s`; it never creates evidence, loads credentials, invokes a provider, or mutates provider/production state.\n\n", gate.Name, gate.Inputs.CapabilityMatrix, gate.Inputs.FlowMatrix, gate.Inputs.Status, gate.Inputs.EvidenceDirectory)
+	}
 	fmt.Fprintf(&output, "- Enforce a `PROCEED` verdict before `%s`.\n", joinNatural(gate.EnforcedTransitions))
 	fmt.Fprintf(&output, "- Run argv `%s` at the transition boundary. %s\n", commandArgv, gate.Command.Instruction)
 	fmt.Fprintf(&output, "- Input schema v%d requires every field: %s.\n", gate.InputSchemaVersion, joinInlineCode(gate.InputFields))
