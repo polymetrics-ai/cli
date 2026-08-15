@@ -1,6 +1,6 @@
 # VERIFICATION — #3865/#3867 durable production wiring
 
-Status: focused implementation evidence green; repository gates pending.
+Status: focused local verification green after #4165 rebase; PR CI rerun pending.
 
 - [x] Auth state survives SIGKILL and a new CLI process refuses before I/O.
 - [x] Dedicated credential test repairs the same cohort and advances epoch.
@@ -11,7 +11,8 @@ Status: focused implementation evidence green; repository gates pending.
 - [x] Cancellation, connection death, empty/single/large, duplicate/out-of-order,
       schema drift, permission/auth refusal, interrupted resume, and replay rows pass.
 - [x] Real PostgreSQL `databaseintegration` evidence passes with Docker/Colima.
-- [ ] Focused normal/race tests, vet, build, and individual repository gates pass.
-- [ ] Derived artifacts regenerated once and all drift checks pass with clean status.
-- [ ] GSD verify-work and deep code-review complete with findings dispositioned.
-- [ ] PR is open and API reports base `integration/4015-mvp-flat-r1`.
+- [x] Focused normal/race tests, vet, build, and individual repository gates pass.
+- [x] Derived artifacts regenerated once and all local drift checks pass.
+- [x] GSD gap-plan/execute, verify-work, and code-review prompts were resolved;
+      the slow-runner reset-window fixture was the only new finding and is fixed.
+- [x] PR #4164 is open and API reports base `integration/4015-mvp-flat-r1`.

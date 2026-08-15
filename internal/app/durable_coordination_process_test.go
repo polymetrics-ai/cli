@@ -20,7 +20,10 @@ import (
 	"polymetrics.ai/internal/synccontract"
 )
 
-const productionParkingHelperEnv = "POLYMETRICS_PRODUCTION_PARKING_HELPER"
+const (
+	productionParkingHelperEnv  = "POLYMETRICS_PRODUCTION_PARKING_HELPER"
+	productionParkingResetDelay = 30 * time.Second
+)
 
 func init() {
 	if os.Getenv(productionParkingHelperEnv) == "" {
@@ -69,6 +72,22 @@ func TestProductionParkingCompositionSurvivesProcessKill(t *testing.T) {
 	if got := productionParkingSendCount(t, counter); got != 2 {
 		t.Fatalf("provider sends before restart = %d, want initial success plus terminal 429", got)
 	}
+	parkingStore, err := coordination.OpenFileRateParkingStore(filepath.Join(root, ".polymetrics", "state", "rate-parking.json"))
+	if err != nil {
+		t.Fatalf("open production parking store after killed writer: %v", err)
+	}
+	parkedRuns, err := parkingStore.List()
+	if err != nil || len(parkedRuns) != 1 || parkedRuns[0].RunID != runID {
+		t.Fatalf("production parking records after killed writer = %#v, %v; want run %q", parkedRuns, err, runID)
+	}
+	resetAt := parkedRuns[0].ResetAt
+	// Keep the post-crash admission proof honest under a slow runner: the
+	// restarted process must still be fenced after startup work consumes more
+	// than the old two-second reset window.
+	time.Sleep(3 * time.Second)
+	if !time.Now().Before(resetAt) {
+		t.Fatalf("fixture reset elapsed before restarted admission: reset_at=%s", resetAt)
+	}
 	admit := productionParkingCommand(root, "admission", runID)
 	if output, err := admit.CombinedOutput(); err != nil {
 		t.Fatalf("admission process: %v\n%s", err, output)
@@ -77,17 +96,15 @@ func TestProductionParkingCompositionSurvivesProcessKill(t *testing.T) {
 		t.Fatalf("parked-scope refusal provider sends = %d, want 2 (zero new sends)", got)
 	}
 
-	time.Sleep(2100 * time.Millisecond)
+	if wait := time.Until(resetAt); wait > 0 {
+		time.Sleep(wait + 100*time.Millisecond)
+	}
 	resume := productionParkingCommand(root, "resume", runID)
 	if output, err := resume.CombinedOutput(); err != nil {
 		t.Fatalf("resume process: %v\n%s", err, output)
 	}
 	if got := productionParkingSendCount(t, counter); got != 3 {
 		t.Fatalf("provider sends after one resume = %d, want 3", got)
-	}
-	parkingStore, err := coordination.OpenFileRateParkingStore(filepath.Join(root, ".polymetrics", "state", "rate-parking.json"))
-	if err != nil {
-		t.Fatalf("open production parking store: %v", err)
 	}
 	if runs, err := parkingStore.List(); err != nil || len(runs) != 0 {
 		t.Fatalf("production parking records after resume = %#v, %v; want empty", runs, err)
@@ -201,7 +218,7 @@ func (*productionParkingSource) Read(ctx context.Context, req connectors.ReadReq
 	if os.Getenv(productionParkingHelperEnv) == "setup" && productionParkingReads.Add(1) == 2 {
 		return &connsdk.RateLimitError{
 			HTTPError: &connsdk.HTTPError{Status: 429, URL: "https://fixture.invalid/customers"},
-			Source:    connsdk.RateLimitObservationSourceRetryAfter, HasReset: true, ResetAt: time.Now().UTC().Add(2 * time.Second),
+			Source:    connsdk.RateLimitObservationSourceRetryAfter, HasReset: true, ResetAt: time.Now().UTC().Add(productionParkingResetDelay),
 		}
 	}
 	return emit(connectors.Record{"id": "1", "name": "durable", "updated_at": "2026-08-15T00:00:00Z"})
