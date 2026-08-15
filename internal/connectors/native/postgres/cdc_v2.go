@@ -247,6 +247,11 @@ func (m *pgoutputV2TransactionMachine) commit(ctx context.Context, xid uint32, c
 	if endLSN == 0 || commitLSN == 0 {
 		return errors.New("postgres CDC: commit is missing its LSN")
 	}
+	// Observe the source commit before asking the downstream receiver to make
+	// it durable. CommitAfterDownstreamAcknowledgement rejects the inverse
+	// timestamp order because it would claim that downstream durability
+	// preceded the source position being observed.
+	candidate := postgresCDCCheckpointForLSNs(m.source, m.barrier, m.lastDurable, commitLSN, endLSN)
 	if !transaction.replayed {
 		receiver := postgresCDCTransactionReceiver{emit: m.emit, durable: m.req.TransactionReceiver}
 		if _, err := m.stage.CommitTransaction(ctx, transaction.id, receiver); err != nil {
@@ -267,6 +272,11 @@ func (m *pgoutputV2TransactionMachine) commit(ctx context.Context, xid uint32, c
 		if err != nil {
 			return fmt.Errorf("postgres CDC: recover durable transaction receipt: %w", err)
 		}
+		// The original source-observation instant is not a persisted provider
+		// value. The already-durable receipt is a safe upper bound: treating its
+		// time as the recovered observation preserves acknowledgement ordering
+		// without inventing a later observation on process restart.
+		candidate.ObservedAt = stagedReceipt.DurableAt()
 		receipt, err := connectors.NewCDCTransactionReceipt(stagedReceipt.DownstreamReceiptID(), stagedReceipt.Sink(), stagedReceipt.DurableAt())
 		if err != nil {
 			return fmt.Errorf("postgres CDC: recover downstream transaction receipt: %w", err)
@@ -276,7 +286,6 @@ func (m *pgoutputV2TransactionMachine) commit(ctx context.Context, xid uint32, c
 		}
 	}
 
-	candidate := postgresCDCCheckpointForLSNs(m.source, m.barrier, m.lastDurable, commitLSN, endLSN)
 	if err := m.req.DurableCheckpointCommitter.CommitDurableChangefeedCheckpoint(ctx, candidate); err != nil {
 		return fmt.Errorf("postgres CDC: persist durable checkpoint: %w", err)
 	}

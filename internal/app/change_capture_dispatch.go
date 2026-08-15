@@ -307,14 +307,10 @@ func (r *warehouseChangeCaptureReceiver) result(completed bool) etlExecutionResu
 }
 
 func (a *App) runWarehouseChangeCapture(ctx context.Context, request etlModeDispatchRequest) (etlExecutionResult, error) {
-	definition, ok := connectors.DefinitionOf(request.source)
-	if !ok || !connectors.HasImplementedChangefeed(request.source, definition.Changefeed) {
+	if !hasImplementedChangefeedExecutor(request.source) {
 		return etlExecutionResult{}, &synccontract.ModeNotExecutableError{Mode: synccontract.ModeChangeCapture, Reason: "source has no matching implemented changefeed executor"}
 	}
-	changefeed, ok := request.source.(connectors.ChangefeedExecutor)
-	if !ok {
-		return etlExecutionResult{}, &synccontract.ModeNotExecutableError{Mode: synccontract.ModeChangeCapture, Reason: "source has no executable changefeed"}
-	}
+	changefeed := request.source.(connectors.ChangefeedExecutor)
 	receiver, err := newWarehouseChangeCaptureReceiver(a, request.runID, request.connection, request.streamName, request.stream, request.mode, request.destination, request.destinationRuntime)
 	if err != nil {
 		return etlExecutionResult{}, err
@@ -337,6 +333,15 @@ func (a *App) runWarehouseChangeCapture(ctx context.Context, request etlModeDisp
 		return result, errors.New("change capture completed without a durable warehouse checkpoint")
 	}
 	return result, nil
+}
+
+func hasImplementedChangefeedExecutor(source connectors.Connector) bool {
+	definition, ok := connectors.DefinitionOf(source)
+	if !ok || !connectors.HasImplementedChangefeed(source, definition.Changefeed) {
+		return false
+	}
+	_, ok = source.(connectors.ChangefeedExecutor)
+	return ok
 }
 
 func copyChangeCaptureWAL(ctx context.Context, destination io.Writer, existing string) error {

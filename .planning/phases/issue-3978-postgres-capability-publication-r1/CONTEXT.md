@@ -34,3 +34,12 @@ path was preserved as the first dispatch choice. PostgreSQL's separate residual 
 `ChangefeedExecutor` with no closed source/destination transport still had no production route into
 the connection-owned warehouse. This change closes only that residual and does not modify shared
 transport declaration or validation.
+
+A final independent re-audit required binary-entry evidence rather than an app-only fake. The added
+`databaseintegration` test builds a fresh `cmd/pm`, invokes `pm etl run`, waits for its real pgoutput
+slot, commits a PostgreSQL transaction, and requires the exact warehouse row, full checkpoint,
+native stage receipt, and confirmed source LSN. Its red run found that the app's route selector sent
+PostgreSQL's snapshot-only transport descriptor to generic preflight before considering the exact
+implemented changefeed. The fix is in this issue's application capability dispatch: an exact
+implemented `ChangefeedExecutor` takes the source-only CDC-to-local-warehouse route. The shared
+transport registry, descriptor validation, and #4156 generic route remain unchanged.

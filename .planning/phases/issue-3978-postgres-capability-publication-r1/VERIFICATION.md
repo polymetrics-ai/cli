@@ -120,3 +120,70 @@ No shared transport descriptor declaration or validation was changed. #4125 and 
 of scope. The PR targets a non-default integration base, so review coverage is recorded as
 `primary_route=claude_auto`, `coverage_route=sub_pr`, `fallback_route=parent_pr_fallback`,
 `review_status=pending` until the PR workflow posts its review record.
+
+## Fresh binary entry-point proof
+
+The final re-audit required proof above the app-only fake. The new tagged test builds a fresh
+`cmd/pm` and invokes the same executable entry point shipped to users:
+
+```text
+cmd/pm main
+  -> cli.Run etl run
+  -> App.RunETL
+  -> dispatchETLMode exact implemented changefeed route
+  -> postgres.Connector.ReadCDC
+  -> pgoutput v2 committed transaction receiver
+  -> connection-owned WAL + Parquet
+  -> full app checkpoint
+  -> PostgreSQL confirmed_flush_lsn
+```
+
+Its first red run failed before any slot with `source transport does not support sync mode
+"change_capture"`. Its second red run reached `ReadCDC` but correctly failed an inverted
+observation/receipt timestamp. Both are recorded in `traces/red-binary-dispatch.txt`.
+
+Final live result:
+
+```text
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
+POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
+go test -timeout 20m -tags=databaseintegration ./internal/cli \
+  -run '^TestPMBinaryDispatchesPostgresChangeCaptureToWarehouse$' -count=1 -v
+
+PASS (28.19s)
+Observed: source ID 901 in Parquet, full checkpoint present, native stage receipt present,
+and active replication slot confirmed_flush_lsn non-empty.
+```
+
+Post-binary-fix final gates:
+
+```text
+go test -race -timeout 20m ./internal/app \
+  -run 'TestRunETL(ChangeCapture|TransportDispatchesDeclaredChangeCapture)' -count=1
+PASS
+
+go test -race -timeout 20m ./internal/connectors/native/postgres \
+  -run '^TestPGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint$' -count=1
+PASS
+
+go test -timeout 20m ./internal/app -count=1
+PASS (185.880s)
+
+go test -timeout 20m ./internal/connectors/native/postgres -count=1
+PASS
+
+go vet ./...
+PASS
+
+golangci-lint run ./internal/app/... ./internal/cli/... ./internal/connectors/native/postgres/...
+PASS: 0 issues
+
+go build ./cmd/pm
+PASS
+
+go run ./cmd/connectorgen validate internal/connectors/defs
+PASS: 552 connectors, 0 findings
+
+go run ./cmd/connectorgen surface-sync --check
+PASS: 552 connectors, 0 drift
+```

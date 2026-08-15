@@ -42,6 +42,20 @@ func (s *appChangeCaptureSource) Definition() connectors.Definition {
 		ReleaseStage:    "test",
 		Capabilities:    metadata.Capabilities,
 		Changefeed:      &descriptor,
+		// Mirror PostgreSQL's independently valid bounded-snapshot transport.
+		// Descriptor presence must not divert an exact implemented changefeed
+		// into generic transport preflight for an undeclared CDC mode.
+		SyncTransport: &connectors.SyncTransportDescriptor{Source: &connectors.SourceTransportDescriptor{
+			Executor:        connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "app_change_capture_snapshot"},
+			EligibleStreams: []string{"records"},
+			Modes:           []synccontract.Mode{synccontract.ModeFullAppend, synccontract.ModeFullOverwrite},
+			Delivery: connectors.DeliveryGuarantees{
+				Idempotency: connectors.DeliveryIdempotencyAtLeastOnce,
+				Ordering:    connectors.DeliveryOrderingSource,
+				Deletes:     connectors.DeliveryDeletesUnavailable,
+			},
+			Conformance: connectors.ConformanceEvidenceReference{Suite: "app_change_capture_snapshot", RunID: "bounded_full_v1"},
+		}},
 	}
 }
 

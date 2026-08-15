@@ -1,0 +1,16 @@
+Command:
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -timeout 20m -tags=databaseintegration ./internal/cli -run '^TestPMBinaryDispatchesPostgresChangeCaptureToWarehouse$' -count=1 -v
+
+First observed red failure after #4156 rebase:
+fresh pm exited before active PostgreSQL logical-replication slot: source transport does not support sync mode "change_capture"
+
+This proves the shipped binary selected PostgreSQL's bounded snapshot transport solely because both
+endpoints had transport descriptors, then rejected change_capture before App.RunETL could reach the
+implemented ChangefeedExecutor.ReadCDC path.
+
+Second observed red failure after native CDC dispatch became reachable:
+postgres CDC: persist durable checkpoint: durable acknowledgement cannot precede checkpoint observation
+
+This proves ReadCDC and the warehouse receiver executed, but the PostgreSQL commit machine built the
+checkpoint observation after obtaining its durable warehouse receipt. The durability contract
+correctly refused that impossible timestamp order before acknowledging the source LSN.
