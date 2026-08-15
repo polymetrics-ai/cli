@@ -2,12 +2,15 @@
 
 ## Red
 
-- Pending: durable file-store contracts do not compile because production
-  stores and atomic mutation/claim APIs do not exist.
+- `go test ./internal/coordination -run 'TestDurableCoordinationStores|TestFileCoordinationStores' -count=1`
+  fails to compile at `durable_store_test.go` because
+  `OpenFileAuthCohortHealthStore`, `OpenFileRateParkingStore`, and
+  `ErrCoordinationStoreSchema` do not exist. The test starts a writer process,
+  waits until both transitions are durable, kills that process, and requires a
+  newly started process to observe the fence and resume the parked checkpoint.
 - Pending: production composition tests fail because `app.Open` constructs no
   auth or parking coordinator, resolved runtimes carry no admission owner, and
   ETL dispatch neither parks nor resumes.
-- Exact commands and failure output will be appended before production edits.
 
 ## Green
 
