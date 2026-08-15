@@ -196,6 +196,104 @@ func TestBundleLoadOptionalFilesAbsent(t *testing.T) {
 	}
 }
 
+func TestBundleLoadSyncTransportProjectsIndependentDefinition(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/sync_transport.json"] = &fstest.MapFile{Data: []byte(`{
+		"schema_version": 1,
+		"source_transport": {
+			"executor": {"family": "native_api", "id": "acme_snapshot_source"},
+			"eligible_streams": ["widgets"],
+			"modes": ["full_append"],
+			"delivery": {"idempotency": "at_least_once", "ordering": "source", "deletes": "unavailable"},
+			"conformance": {"suite": "acme_transport", "run_id": "source_v1"}
+		},
+		"destination_transport": {
+			"executor": {"family": "native_database", "id": "acme_stage_destination"},
+			"eligible_actions": ["stage_append"],
+			"modes": ["full_append"],
+			"delivery": {"idempotency": "keyed", "ordering": "source", "deletes": "unavailable"},
+			"conformance": {"suite": "acme_transport", "run_id": "destination_v1"},
+			"acknowledgement": "durable_warehouse",
+			"apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "stage_append"}]
+		}
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load() = %v", err)
+	}
+	connector := New(bundle, nil)
+	first := connector.Definition()
+	if first.SyncTransport == nil || first.SyncTransport.Source == nil || first.SyncTransport.Destination == nil {
+		t.Fatalf("Definition().SyncTransport = %#v, want the loaded source and destination declaration", first.SyncTransport)
+	}
+	if first.SyncTransport.Source.Executor.ID != "acme_snapshot_source" || first.SyncTransport.Destination.Executor.ID != "acme_stage_destination" {
+		t.Fatalf("Definition().SyncTransport = %#v, want loaded executor identities", first.SyncTransport)
+	}
+
+	first.SyncTransport.Source.EligibleStreams[0] = "caller-mutated"
+	second := connector.Definition()
+	if got := second.SyncTransport.Source.EligibleStreams; len(got) != 1 || got[0] != "widgets" {
+		t.Fatalf("second Definition().SyncTransport source streams = %#v, want independent loaded projection", got)
+	}
+}
+
+func TestBundleLoadSyncTransportRefusesUnknownOrUnsafeDeclarations(t *testing.T) {
+	valid := `{
+		"schema_version": 1,
+		"destination_transport": {
+			"executor": {"family": "native_database", "id": "acme_stage_destination"},
+			"eligible_actions": ["stage_append"],
+			"modes": ["full_append"],
+			"delivery": {"idempotency": "keyed", "ordering": "source", "deletes": "unavailable"},
+			"conformance": {"suite": "acme_transport", "run_id": "destination_v1"},
+			"acknowledgement": "durable_warehouse",
+			"apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "stage_append"}]
+		}
+	}`
+
+	tests := []struct {
+		name   string
+		mutate func(string) string
+	}{
+		{
+			name: "unknown member",
+			mutate: func(doc string) string {
+				return strings.Replace(doc, `"schema_version": 1,`, `"schema_version": 1, "untrusted_registration": true,`, 1)
+			},
+		},
+		{
+			name: "missing schema version",
+			mutate: func(doc string) string {
+				return strings.Replace(doc, `"schema_version": 1,`, "", 1)
+			},
+		},
+		{
+			name: "unsupported schema version",
+			mutate: func(doc string) string {
+				return strings.Replace(doc, `"schema_version": 1`, `"schema_version": 2`, 1)
+			},
+		},
+		{
+			name: "change capture destination",
+			mutate: func(doc string) string {
+				return strings.Replace(doc, `"modes": ["full_append"]`, `"modes": ["change_capture"]`, 1)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/sync_transport.json"] = &fstest.MapFile{Data: []byte(tt.mutate(valid))}
+			bundle, err := Load(fsys, "acme")
+			if err == nil {
+				t.Fatalf("Load() bundle = %#v, want declaration refusal", bundle)
+			}
+		})
+	}
+}
+
 func TestBundleLoadParsesUnsupportedChangefeed(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/changefeed.json"] = &fstest.MapFile{Data: []byte(`{

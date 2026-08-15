@@ -97,6 +97,26 @@ func TestDestinationTransportDescriptorRejectsStrategyOutsideDeclaredModes(t *te
 	}
 }
 
+func TestDestinationTransportDescriptorRefusesChangeCapture(t *testing.T) {
+	descriptor := DestinationTransportDescriptor{
+		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeDatabase, ID: "fake_database_destination"},
+		EligibleActions: []string{"stage_change_capture"},
+		Modes:           []synccontract.Mode{synccontract.ModeChangeCapture},
+		Delivery:        closedTestDeliveryGuarantees(),
+		Conformance:     closedTestConformanceReference(),
+		Acknowledgement: TransportAcknowledgementDurableWarehouse,
+		ApplyStrategies: []DestinationApplyStrategy{{
+			Mode:     synccontract.ModeChangeCapture,
+			Strategy: ApplyStrategyChangeApply,
+			Action:   "stage_change_capture",
+		}},
+	}
+
+	if err := descriptor.Validate(); err == nil {
+		t.Fatalf("Validate() = nil, want destination change_capture refusal before executor registration")
+	}
+}
+
 func TestSyncTransportGuideProjectsDeclaredRolesWithoutCertificationClaim(t *testing.T) {
 	descriptor := &SyncTransportDescriptor{
 		Source: &SourceTransportDescriptor{
