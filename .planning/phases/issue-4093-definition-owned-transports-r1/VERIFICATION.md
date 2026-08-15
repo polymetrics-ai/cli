@@ -52,6 +52,18 @@
   skill after its declared destination status changed; `make docs-check` then
   passed. The golden transcript was regenerated after rebasing #4071 and its
   checking test passes.
+- [x] Complete generated-artifact closure before the final push: ran `go run
+  ./cmd/agentcontractgen sync`, `go run ./cmd/connectorgen gen`, `go run
+  ./cmd/connectorgen surface-sync`, `go run ./cmd/connectorgen
+  certification-matrix --all`, `./pm docs generate --dir docs/cli`, `./pm
+  skills generate --dir docs/skills`, golden-transcript regeneration, and
+  `cd website && npm run gen:website-data`. The matching local drift checks
+  pass: agent-contract check, connector validation/surface/certification,
+  connector docs validation, `TestSkillsGenerateMatchesTrackedSkills`,
+  `TestGoldenTranscripts`, `TestGoldenDocsGenerateMatchesTrackedCLIManuals`,
+  `TestDocsGenerateIncludesConnectorCatalog`, GitHub parity artifacts, and a
+  generated-path diff. Only the expected generated GitHub and warehouse skill
+  files changed.
 - [x] Inline `verify-work` maps every acceptance criterion to an observable
   passing test or live output below.
 - [x] Inline code review has no unresolved actionable findings; see REVIEW.md.

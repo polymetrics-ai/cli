@@ -16,6 +16,7 @@
 | Inspection projection repair | Full CI RED found `connectors inspect github --json` still asserted both transport roles were unsupported after the GitHub bundle declared them. | The CLI projection test observes `source.status=declared` and `destination.status=declared` from the production definition; runtime help, CLI manual, generated connector docs, and website guide explain the visible status. | green |
 | Website data repair | Website CI RED detected the generated agent-guide data was stale after the transport declaration guidance changed. | `pnpm run gen:website-data` updates only `website/lib/docs.generated.ts`; the generated page includes the GitHub declared-role explanation. | green |
 | CI regression repair | `go test -count=1 -timeout 20m ./internal/app -run 'TestGithubPullRequestsETLSupportsLegacyExecutableModes|TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume'` failed: the noncanonical GitHub mode ordering bypassed the exact issue-label route guard and destination change capture was refused despite declaring `change_apply`. | The focused app command, `TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination`, and `go test -count=1 -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$'` pass: GitHub’s declaration is canonical, two-sided routing preserves legacy compatibility, and legitimate change capture reaches `change_apply`. | green |
+| Generated artifact closure | CI RED: `TestSkillsGenerateMatchesTrackedSkills` found the tracked skills tree differed after the warehouse declaration regenerated its connector manual/skill. | A full source-derived sweep runs `agentcontractgen sync`, `connectorgen gen`, `surface-sync`, `certification-matrix --all`, docs/catalog generation, skills generation, golden transcript generation, and website-data generation. Their CI checks pass and only the expected GitHub and warehouse skill documents change. | green |
 
 Every refusal test asserts the relevant side effect count is zero. No test relies
 only on `err != nil` or a lack of panic.
@@ -41,6 +42,12 @@ suite RED showed the previous one-sided routing predicate attempting transport
 preflight for legacy sources. Both failures occurred before the legacy source
 read or destination write that the corresponding green tests preserve.
 
+The next CI RED was `TestSkillsGenerateMatchesTrackedSkills`: regenerating the
+warehouse connector docs had changed the source content for the generated
+skills tree, but the tracked tree had not been regenerated. The mismatch is an
+observable byte-for-byte generated output difference, not merely a successful
+command exit.
+
 ## Green:
 
 The same focused test commands now pass with a versioned bundle loader,
@@ -62,3 +69,11 @@ post-acknowledgement table mutation during read-back. Its change-capture
 companion observes a valid tombstone remove the keyed row. The full app suite
 then proves both-sided declaration routing preserves every legacy warehouse
 flow while leaving malformed two-sided pairs closed.
+
+The generated-artifact repair reruns every applicable source generator in one
+pass. `TestSkillsGenerateMatchesTrackedSkills`, `TestGoldenTranscripts`,
+`TestGoldenDocsGenerateMatchesTrackedCLIManuals`, and
+`TestDocsGenerateIncludesConnectorCatalog` pass together; agent-contract,
+connector surface/certification, docs/catalog, GitHub parity, and website-data
+drift checks also pass. The generated-path diff is empty after accepting only
+the updated GitHub and warehouse skill content.
