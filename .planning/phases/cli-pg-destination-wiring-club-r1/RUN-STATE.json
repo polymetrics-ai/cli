@@ -1,0 +1,14 @@
+{
+  "phase": "cli-pg-destination-wiring-club-r1",
+  "status": "planned",
+  "lifecycle": {
+    "discuss_phase": "complete_inline",
+    "plan_phase_tdd": "complete_inline",
+    "execute_phase": "pending",
+    "verify_work": "pending",
+    "code_review": "pending"
+  },
+  "issues": [3979, 3982, 3983],
+  "base": "integration/4015-mvp-flat-r1",
+  "branch": "fm/cli-pg-destination-wiring-club-r1"
+}
