@@ -18,7 +18,8 @@ than only on the source filesystem.
 
 `pm connectors inspect github --json` now visibly reports both roles as
 `declared`; its help, CLI manual, generated connector documentation, and the
-website agent guide explain that inspection remains metadata-only.
+website agent guide and generated website data explain that inspection remains
+metadata-only.
 
 The acceptance matrix in VERIFICATION.md records stateful proof for valid
 registration, zero-side-effect refusals, evidence denial before source I/O,

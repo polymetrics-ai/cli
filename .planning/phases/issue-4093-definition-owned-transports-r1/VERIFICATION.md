@@ -39,6 +39,9 @@
   pass. `docs/cli/connectors.md`, generated GitHub connector docs/catalog, and
   `website/content/docs/agent-guide.mdx` document the metadata-only status;
   `make docs-check` passes.
+- [x] Website generated data: `cd website && pnpm run gen:website-data` updates
+  the agent-guide projection in `website/lib/docs.generated.ts` with no other
+  tracked generated-data drift.
 - [x] Inline `verify-work` maps every acceptance criterion to an observable
   passing test or live output below.
 - [x] Inline code review has no unresolved actionable findings; see REVIEW.md.
