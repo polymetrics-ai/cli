@@ -28,7 +28,26 @@ production implementation for the added contracts.
 pass after the registered, descriptor-bounded dispatch and acknowledgement
 gate were added.
 
+**Recorded RED — PostgreSQL strategy state:** the rebased base admitted only
+five PostgreSQL modes and `postgresWriteSession.applyRecord` had no
+`incremental_dedupe_history` case or persisted source-order fence. The
+manual-GSD fallback records this code-level red evidence because the required
+test is Docker-gated; the live scenario was added with the driver change and
+would have been refused by that base implementation.
+
 ## Green commands
 
-Use the scoped and live commands in `PLAN.md`; record the exact outcome here
-and in `VERIFICATION.md` after implementation.
+Completed GREEN evidence:
+
+- `go test -timeout 20m ./internal/connectors/... ./internal/synctransport/...`
+  passed.
+- `go test -race -timeout 20m -count=1 ./internal/connectors/engine
+  ./internal/connectors/database ./internal/connectors/native/postgres`
+  passed.
+- The explicit Docker/Colima PostgreSQL command in `PLAN.md` passed with the
+  six-strategy state scenario. Its observable assertions cover current rows,
+  stale replay fences, explicit physical deletes, omission retention, and
+  history-window close state; see `traces/postgres-live-green.txt`.
+- `go vet` on changed packages, `go build ./cmd/pm`, `connectorgen validate`,
+  and the individual repository gates passed. `lint` was delayed only by a
+  legitimate shared lock, then passed with `0 issues`.

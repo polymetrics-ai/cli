@@ -1,7 +1,7 @@
 {
   "issue": 3859,
   "phase": "issue-3859-native-apply-strategies-r1",
-  "status": "planned",
+  "status": "verified-local",
   "delivery_mode": "direct-pr",
   "gsd_execution": "inline-manual-fallback",
   "base": "integration/4015-mvp-flat-r1",

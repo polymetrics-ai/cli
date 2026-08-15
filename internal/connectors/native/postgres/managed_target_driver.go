@@ -13,6 +13,7 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"polymetrics.ai/internal/connectors/database"
+	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/warehouse"
 )
 
@@ -246,7 +247,7 @@ func postgresManagedTargetColumns(mapping database.MappingContractV1) ([]postgre
 	result := make([]postgresManagedTargetColumn, 0, len(columns))
 	for _, column := range columns {
 		typeSQL, constraint, err := postgresManagedTargetType(column.Type.Target())
-		if err != nil || validateIdentifier(column.Target) != nil {
+		if err != nil || validateIdentifier(column.Target) != nil || postgresManagedTargetSystemColumn(column.Target) {
 			return nil, errPostgresTargetTypeUnsupported
 		}
 		result = append(result, postgresManagedTargetColumn{
@@ -258,6 +259,18 @@ func postgresManagedTargetColumns(mapping database.MappingContractV1) ([]postgre
 		})
 	}
 	return result, nil
+}
+
+func postgresManagedTargetSystemColumn(name string) bool {
+	return name == synccontract.HistoryValidFromColumn || name == synccontract.HistoryValidToColumn || name == synccontract.HistoryIsCurrentColumn
+}
+
+func postgresManagedTargetSystemColumns() []postgresManagedTargetColumn {
+	return []postgresManagedTargetColumn{
+		{name: synccontract.HistoryValidFromColumn, typeSQL: "TIMESTAMP WITH TIME ZONE", nullable: true},
+		{name: synccontract.HistoryValidToColumn, typeSQL: "TIMESTAMP WITH TIME ZONE", nullable: true},
+		{name: synccontract.HistoryIsCurrentColumn, typeSQL: "BOOLEAN", nullable: true},
+	}
 }
 
 func postgresManagedTargetType(logical database.LogicalType) (string, string, error) {
@@ -351,6 +364,7 @@ func postgresCreateManagedTargetLayout(ctx context.Context, tx pgx.Tx, plan data
 	ownerTable := postgresQualifiedControlTable(target.Namespace(), postgresNamespaceOwnerTable)
 	controlTable := postgresQualifiedControlTable(target.Namespace(), postgresTargetControlTable)
 	ledgerTable := postgresQualifiedControlTable(target.Namespace(), postgresDeliveryLedgerTable)
+	orderFenceTable := postgresQualifiedControlTable(target.Namespace(), postgresOrderFenceTable)
 	if _, err := tx.Exec(ctx, `CREATE TABLE `+ownerTable+` (
 		singleton BOOLEAN PRIMARY KEY DEFAULT TRUE CHECK (singleton),
 		workspace_id TEXT NOT NULL,
@@ -382,6 +396,16 @@ func postgresCreateManagedTargetLayout(ctx context.Context, tx pgx.Tx, plan data
 	)`); err != nil {
 		return err
 	}
+	if _, err := tx.Exec(ctx, `CREATE TABLE `+orderFenceTable+` (
+		relation_name TEXT NOT NULL,
+		key_digest BYTEA NOT NULL CHECK (octet_length(key_digest) = 32),
+		source_primary BYTEA NOT NULL,
+		source_tie_breaker BYTEA NOT NULL,
+		deleted BOOLEAN NOT NULL,
+		PRIMARY KEY (relation_name, key_digest)
+	)`); err != nil {
+		return err
+	}
 	columnDDL := make([]string, 0, len(columns))
 	for _, column := range columns {
 		definition := quoteIdentifier(column.name) + " " + column.typeSQL
@@ -393,6 +417,9 @@ func postgresCreateManagedTargetLayout(ctx context.Context, tx pgx.Tx, plan data
 			definition += " CHECK (" + fmt.Sprintf(column.constraint, quoted, quoted) + ")"
 		}
 		columnDDL = append(columnDDL, definition)
+	}
+	for _, column := range postgresManagedTargetSystemColumns() {
+		columnDDL = append(columnDDL, quoteIdentifier(column.name)+" "+column.typeSQL)
 	}
 	relationTable := quoteIdentifier(target.Namespace()) + "." + quoteIdentifier(target.Relation())
 	if _, err := tx.Exec(ctx, "CREATE TABLE "+relationTable+" ("+strings.Join(columnDDL, ", ")+")"); err != nil {

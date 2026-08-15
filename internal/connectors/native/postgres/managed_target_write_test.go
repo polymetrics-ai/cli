@@ -99,6 +99,27 @@ func TestPostgresManagedTargetTypeMappingAndValueEncoding(t *testing.T) {
 	}
 }
 
+func TestPostgresOrderFenceKeyDigestUsesTypedSQLKeySemantics(t *testing.T) {
+	columns := []postgresManagedTargetColumn{
+		{name: "id", typeSQL: "BIGINT", nullable: false},
+		{name: "ratio", typeSQL: "DOUBLE PRECISION", nullable: false},
+	}
+	fromMappedRecord, err := postgresKeyDigest([]string{"id", "ratio"}, []any{int64(7), float64(1)}, columns)
+	if err != nil {
+		t.Fatalf("postgresKeyDigest(mapped values) error = %v", err)
+	}
+	fromTombstone, err := postgresKeyDigest([]string{"id", "ratio"}, []any{int64(7), "1.0"}, columns)
+	if err != nil {
+		t.Fatalf("postgresKeyDigest(tombstone values) error = %v", err)
+	}
+	if !samePostgresBytes(fromMappedRecord, fromTombstone) {
+		t.Fatalf("typed order-fence key digest drifted between equivalent mapped/tombstone values: mapped=%x tombstone=%x", fromMappedRecord, fromTombstone)
+	}
+	if _, err := postgresKeyDigest([]string{"id"}, []any{"not-an-integer"}, columns); err == nil {
+		t.Fatal("postgresKeyDigest accepted a key value outside the mapped PostgreSQL type")
+	}
+}
+
 func mustPostgresManagedTargetBinary(t *testing.T) database.LogicalType {
 	t.Helper()
 	logical, err := database.NewBinary(0)
