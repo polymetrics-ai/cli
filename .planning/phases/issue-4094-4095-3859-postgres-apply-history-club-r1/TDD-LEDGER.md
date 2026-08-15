@@ -26,3 +26,16 @@ receipt. Exact output is retained in `traces/red-adapter-history-plan.txt`.
 
 The focused, race, live, and static commands are listed in `PLAN.md` and will
 be recorded here with observable results during execution.
+
+**Green — adapter history:** `TestPostgresManagedTargetIncrementalDedupeHistoryLive`
+passed after the registered source definition was sealed with the destination
+definition. The test applied v1, v2, a restart replay, and a CDC-derived delete
+through `DatabasePollingApplyExecutor`; after each call it required a changed
+durable delivery ID, and its PostgreSQL queries proved the validity-window and
+soft-delete state. See `traces/green-adapter-history-live.txt`.
+
+**Green — route/CDC regressions:** the non-PostgreSQL history route matrix kept
+its typed reason and zero begin/batch/commit/rollback/ledger mutation checks;
+the tombstone mapping/CDC tests passed; and the live workset scenario read back
+the retained omission and explicit delete effect. See
+`traces/green-route-cdc-focused.txt`.
