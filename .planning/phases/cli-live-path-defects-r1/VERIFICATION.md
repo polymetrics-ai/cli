@@ -21,7 +21,9 @@
 - [x] `git diff --check`.
 - [x] Inline `verify-work` and `code-review` evidence with all actionable
   findings fixed or explicitly dispositioned.
-- [ ] Push direct PR and confirm the API-reported base is
+- [x] Direct PR #4173 is open and its API-backed `gh-axi pr list` query scoped
+  by both head and `--base integration/4015-mvp-flat-r1` returned exactly that
+  PR. The target base is therefore verified as
   `integration/4015-mvp-flat-r1`.
 
 ## CLI parity disposition

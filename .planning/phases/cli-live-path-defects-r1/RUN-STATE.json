@@ -1,7 +1,8 @@
 {
   "phase": "cli-live-path-defects-r1",
   "issues": [4119, 4125, 4169],
-  "status": "verified_local",
+  "status": "pr_open",
+  "pr": 4173,
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-live-path-defects-r1",
   "manual_gsd_fallback": true,
