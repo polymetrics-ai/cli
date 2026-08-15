@@ -6,8 +6,15 @@ wave: 1
 depends_on: []
 files_modified:
   - .planning/phases/issue-3990-4091-github-live-proof-club-r1/
-  - scripts/github-live-*.mjs
-  - scripts/tests/github-live-*.test.mjs
+  - internal/connectors/certify/
+  - internal/cli/etl_transport.go
+  - internal/cli/etl_transport_test.go
+  - internal/cli/docs.go
+  - internal/cli/testdata/golden_transcripts.json
+  - internal/app/github_warehouse_transport_approval_test.go
+  - docs/cli/etl.md
+  - website/content/docs/etl.mdx
+  - website/lib/docs.generated.ts
 autonomous: true
 requirements:
   - ISSUE-3990-LIVE

@@ -159,6 +159,26 @@ func TestETLRunTransportApprovalReadsExactlyOneEphemeralStdinLine(t *testing.T) 
 	}
 }
 
+func TestETLRunTransportApprovalAllowsDurablePlanReferenceWithoutTokenCarrier(t *testing.T) {
+	args := []string{
+		"--connection", "transport-demo",
+		"--stream", "issues",
+		"--batch-size", "1",
+		"--approval-plan", "rplan_one",
+		"--confirm", "destructive",
+	}
+	approval, present, flags, err := parseETLRunTransportApproval(args, strings.NewReader(""))
+	if err != nil {
+		t.Fatalf("parseETLRunTransportApproval() = %v, want durable authorization carriage", err)
+	}
+	if !present || approval.PlanID != "rplan_one" || approval.ApprovalToken != "" || approval.Confirmation.Kind != connectors.ConfirmationKindDestructive {
+		t.Fatalf("parseETLRunTransportApproval() = present=%t approval=%+v, want plan-scoped durable authorization", present, approval)
+	}
+	if flags.value("approval-token-stdin") != "" {
+		t.Fatal("durable authorization carriage unexpectedly requested token stdin")
+	}
+}
+
 func TestETLRunTransportApprovalLeavesLegacyRuntimeAlone(t *testing.T) {
 	approval, present, _, err := parseETLRunTransportApproval([]string{
 		"--connection", "ordinary-connection",

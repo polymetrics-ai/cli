@@ -170,6 +170,12 @@ checkpoint.
 The raw token is never accepted in argv, environment variables, files, JSON
 output, or persisted project state.
 
+After that first approved non-additive run, an identical-scope run reuses the
+durable authorization by supplying the same `--approval-plan` and
+`--confirm destructive` without `--approval-token-stdin`. A changed, expired,
+or revoked scope is refused before a provider write. Cleanup always remains a
+separate plan with a fresh one-time stdin token.
+
 Source selection and independent provider read-back each inspect only the first
 GitHub issues page. If the configured source or target issue is not present,
 the run fails rather than requesting a second page.

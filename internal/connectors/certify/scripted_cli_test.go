@@ -225,6 +225,10 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		approvalToken := fmt.Sprintf("scripted-approval-%d", s.nextPlan)
 		s.plans[planID] = scriptedPlan{action: action, approvalToken: approvalToken}
 		s.seen["reverse_plan"]++
+		if action == "delete" {
+			_, _ = fmt.Fprintf(stdout, "Created reverse plan %s\nPreview required before an approval token is issued.\n", planID)
+			return 0
+		}
 		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s\nApproval token: %s\n", planID, approvalToken)
 		return 0
 	case prefix(args, "reverse", "preview") && hasJSON(args) && len(args) == 4:
@@ -234,6 +238,15 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		s.previewed[args[2]] = true
 		s.seen["reverse_preview"]++
 		return writeScriptedEnvelope(stdout, "ReversePlanPreview", map[string]any{"plan": map[string]any{"id": args[2], "records": 1}})
+	case prefix(args, "reverse", "preview") && !hasJSON(args) && len(args) == 3:
+		plan, ok := s.plans[args[2]]
+		if !ok {
+			return s.protocolError(stderr, "reverse preview received an unknown plan")
+		}
+		s.previewed[args[2]] = true
+		s.seen["reverse_preview"]++
+		_, _ = fmt.Fprintf(stdout, "Reverse plan %s previewed\nApproval token: %s\n", args[2], plan.approvalToken)
+		return 0
 	case prefix(args, "reverse", "run") && hasJSON(args) && hasFlag(args, "--approval-token-stdin"):
 		return s.runReverse(args, root, stdout, stderr)
 	default:
@@ -254,8 +267,11 @@ func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.W
 	if !ok {
 		return s.protocolError(stderr, "reverse run received an unknown plan")
 	}
-	if plan.action == "create" && !s.previewed[planID] {
+	if !s.previewed[planID] {
 		return s.protocolError(stderr, "reverse run occurred before its preview")
+	}
+	if plan.action == "delete" && flagValue(args, "--confirm") != "destructive" {
+		return s.protocolError(stderr, "destructive cleanup requires --confirm destructive")
 	}
 	if s.consumed[planID] {
 		s.replays[planID]++
@@ -365,6 +381,9 @@ func (s *scriptedCLI) assertProtocol(t *testing.T) {
 		}
 		if got := s.seen["reverse_run"]; got != 2 {
 			t.Errorf("scripted write lifecycle executed %d fresh plans, want exactly create+cleanup", got)
+		}
+		if got := s.seen["reverse_preview"]; got != 2 {
+			t.Errorf("scripted write lifecycle previewed %d plans, want exactly create+cleanup", got)
 		}
 		if got := s.seen["reverse_replay"]; got != 1 {
 			t.Errorf("scripted write lifecycle replayed consumed approval %d times, want exactly one negative replay", got)

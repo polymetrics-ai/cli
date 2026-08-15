@@ -68,8 +68,10 @@ func TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPl
 					t.Fatalf("first ApplyDestination() = %v", err)
 				}
 				fixture.assertProviderWrites(t, 1)
-				if err := fixture.apply(t, receipt, workset, approval); err == nil {
-					t.Fatal("ApplyDestination() accepted a replayed approval")
+				err := fixture.apply(t, receipt, workset, approval)
+				var replay *AuthorizationTokenReplayError
+				if !errors.As(err, &replay) {
+					t.Fatalf("ApplyDestination() replay error = %T %v, want AuthorizationTokenReplayError", err, err)
 				}
 				fixture.assertProviderWrites(t, 1)
 			},
@@ -172,8 +174,10 @@ func TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBef
 				t.Fatalf("durable authorization scope changed across an identical run: before=%q after=%q", beforeID, afterID)
 			}
 
-			if err := fixture.applyForMode(t, tt.mode, receipt, workset, approval); err == nil {
-				t.Fatal("ApplyDestination() accepted an already-consumed non-additive approval token")
+			err = fixture.applyForMode(t, tt.mode, receipt, workset, approval)
+			var replay *AuthorizationTokenReplayError
+			if !errors.As(err, &replay) {
+				t.Fatalf("ApplyDestination() replay error = %T %v, want AuthorizationTokenReplayError", err, err)
 			}
 			fixture.assertProviderSets(t, 1)
 

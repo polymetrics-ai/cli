@@ -627,11 +627,14 @@ func stageWriteCleanupSelfTest(rc *runContext, rep *Report, wc *writeContext) bo
 			return false, cliInfoFrom(planRes), fmt.Sprintf("write_cleanup: reverse plan exit=%d stderr=%s", planRes.ExitCode, planRes.Stderr)
 		}
 		planID := firstMatch(planIDLinePattern, planRes.Stdout)
-		token := firstMatch(approvalTokenLinePattern, planRes.Stdout)
-		if planID == "" || token == "" {
-			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id/approval token"
+		if planID == "" {
+			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id"
 		}
-		runRes := rc.runWithStdin(token+"\n", "reverse", "run", planID, "--approval-token-stdin", "--json")
+		token, previewRes, previewErr := previewReversePlanApproval(rc, planID)
+		if previewErr != "" {
+			return false, cliInfoFrom(previewRes), previewErr
+		}
+		runRes := rc.runWithStdin(token+"\n", cleanupReverseRunArgs(wc, planID)...)
 		passed, errMsg := assertKind(rc, "write_cleanup", runRes, "ReverseRun", 0)
 		return passed, cliInfoFrom(runRes), errMsg
 	})
@@ -688,11 +691,14 @@ func stageWriteCleanupLive(rc *runContext, rep *Report, wc *writeContext) bool {
 			return false, cliInfoFrom(planRes), fmt.Sprintf("write_cleanup: reverse plan exit=%d stderr=%s", planRes.ExitCode, planRes.Stderr)
 		}
 		planID := firstMatch(planIDLinePattern, planRes.Stdout)
-		token := firstMatch(approvalTokenLinePattern, planRes.Stdout)
-		if planID == "" || token == "" {
-			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id/approval token"
+		if planID == "" {
+			return false, cliInfoFrom(planRes), "write_cleanup: could not parse cleanup plan id"
 		}
-		runRes := rc.runWithStdin(token+"\n", "reverse", "run", planID, "--approval-token-stdin", "--json")
+		token, previewRes, previewErr := previewReversePlanApproval(rc, planID)
+		if previewErr != "" {
+			return false, cliInfoFrom(previewRes), previewErr
+		}
+		runRes := rc.runWithStdin(token+"\n", cleanupReverseRunArgs(wc, planID)...)
 		passed, errMsg := assertKind(rc, "write_cleanup", runRes, "ReverseRun", 0)
 		return passed, cliInfoFrom(runRes), errMsg
 	})
@@ -705,6 +711,29 @@ func stageWriteCleanupLive(rc *runContext, rep *Report, wc *writeContext) bool {
 		}
 	}
 	return stage.Passed
+}
+
+// previewReversePlanApproval completes the mandatory preview boundary for a
+// cleanup plan and returns its single-use approval through process memory
+// only. Destructive plans deliberately do not issue a token at plan time.
+func previewReversePlanApproval(rc *runContext, planID string) (string, CLIResult, string) {
+	previewRes := rc.run("reverse", "preview", planID)
+	if previewRes.ExitCode != 0 {
+		return "", previewRes, fmt.Sprintf("write_cleanup: reverse preview exit=%d stderr=%s", previewRes.ExitCode, previewRes.Stderr)
+	}
+	token := firstMatch(approvalTokenLinePattern, previewRes.Stdout)
+	if token == "" {
+		return "", previewRes, "write_cleanup: could not parse approval token after preview"
+	}
+	return token, previewRes, ""
+}
+
+func cleanupReverseRunArgs(wc *writeContext, planID string) []string {
+	args := []string{"reverse", "run", planID, "--approval-token-stdin"}
+	if wc.pairing.CleanupKind == "delete" {
+		args = append(args, "--confirm", "destructive")
+	}
+	return append(args, "--json")
 }
 
 // --- stage 16: cleanup_verify ---

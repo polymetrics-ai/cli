@@ -1,6 +1,9 @@
 package certify
 
-import "testing"
+import (
+	"os"
+	"testing"
+)
 
 func TestEffectiveCredentialConfigAddsGitHubBaseURL(t *testing.T) {
 	got := effectiveCredentialConfig("github", map[string]string{"owner": "octo", "repo": "hello"})
@@ -75,6 +78,34 @@ func TestResumeSkipsWhenIncrementalDidNotProduceCursor(t *testing.T) {
 	}
 	if stage.Passed || !stringsHasPrefix(stage.Error, "skipped:") {
 		t.Fatalf("resume stage = %+v, want documented skip", stage)
+	}
+}
+
+func TestQueryContractSkipsWhenLiveReadProducedNoCapture(t *testing.T) {
+	rc := &runContext{opts: Options{Connector: "github"}, currentStream: "code_scanning_alerts"}
+	rep := Report{}
+	if err := stageQueryContract(rc, &rep); err != nil {
+		t.Fatalf("stageQueryContract: %v", err)
+	}
+	stage := rep.Stages[len(rep.Stages)-1]
+	if stage.Name != "query_contract" || stage.Passed || !stringsHasPrefix(stage.Error, "skipped: no live capture") {
+		t.Fatalf("query stage = %+v, want documented no-capture skip", stage)
+	}
+}
+
+func TestFlowRoundtripSkipsWhenLiveCaptureIsEmpty(t *testing.T) {
+	capturePath := t.TempDir() + "/empty.jsonl"
+	if err := os.WriteFile(capturePath, nil, 0o600); err != nil {
+		t.Fatalf("write empty capture: %v", err)
+	}
+	rc := &runContext{opts: Options{Connector: "github"}, capturePath: capturePath, currentStream: "pull_requests"}
+	rep := Report{}
+	if err := stageFlowRoundtrip(rc, &rep); err != nil {
+		t.Fatalf("stageFlowRoundtrip: %v", err)
+	}
+	stage := rep.Stages[len(rep.Stages)-1]
+	if stage.Name != "flow_roundtrip" || stage.Passed || !stringsHasPrefix(stage.Error, "skipped: live capture is empty") {
+		t.Fatalf("flow stage = %+v, want documented empty-capture skip", stage)
 	}
 }
 
