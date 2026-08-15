@@ -325,6 +325,25 @@ DESCRIPTION
   role still requires externally verified conformance; it is not a certification
   claim.
 
+POLLING-WATERMARK ELIGIBILITY
+  polling_watermark is a bounded polling scan, not CDC or change capture.
+  Its declaration status, where one exists, is separate from the connector's
+  CDC capability. A polling mode is executable only when runtime preflight
+  accepts the specific connector, discovered catalog object, and destination
+  binding after checking the declared native source and apply executors plus
+  immutable conformance evidence. A planned, unsupported, or absent declaration
+  does not implement a polling mode.
+
+  An admitted source uses declared keyset ordering: a watermark and unique
+  tie-breaker are checkpointed only after durable downstream acknowledgement.
+  Delivery is at least once, so the inclusive resume boundary can replay an
+  accepted record. Snapshot barriers are declaration-bound and are never
+  silently replaced by a full scan. Polling cannot observe hard deletes after a
+  row disappears; tombstones require a declared, cursor-advancing soft-delete
+  mapping. State incompatibility, source identity mismatch, snapshot expiry,
+  and retention failure require an explicit rebootstrap; pm never implies an
+  automatic rescan.
+
   For connectors with a declared rate-limit policy, inspection reports RATE
   LIMIT COORDINATION. Process-local policies coordinate only requests made by
   this pm process; they make no cross-process claim. Policies explicitly
@@ -501,6 +520,17 @@ SYNC MODES
   is admitted. When a connector manifest declares defaults, pm fills them during
   connection creation.
 
+POLLING-WATERMARK LIMITS
+  polling_watermark is not a general connection mode and is not CDC. It can be
+  selected only by a connector's declared native source/object/destination
+  binding after runtime preflight succeeds. An admitted source resumes from its
+  declared watermark plus unique tie-breaker after durable downstream
+  acknowledgement, so replay is at least once. A polling scan cannot observe a
+  hard delete after the row is gone; delete-aware history requires a declared
+  cursor-advancing soft-delete mapping. Incompatible state, source identity
+  changes, snapshot expiry, and retention failures require explicit
+  rebootstrap rather than an automatic full scan.
+
 SECURITY
   Connections reference credentials by name only.
 
@@ -659,6 +689,17 @@ SYNC MODES
   modes require --primary-key. Static connector manifests advertise the full
   deduped compatibility name only with both fields, and incremental modes only
   with a declared incremental executor.
+
+POLLING-WATERMARK LIMITS
+  polling_watermark is a bounded keyset scan, not CDC or a generic database
+  query. The runtime evaluates every mode against the declared source ordering,
+  discovered object, destination binding, registered executors, and conformance
+  evidence before source I/O. A durable checkpoint records the watermark and
+  unique tie-breaker only after downstream acknowledgement, so accepted records
+  may replay. Hard deletes are not observable unless the declaration supplies
+  a cursor-advancing soft-delete mapping. Incompatible state, source identity
+  mismatch, snapshot expiry, and retention failure require explicit rebootstrap;
+  pm never converts them into an automatic full scan.
 
 SECURITY
   ETL resolves credentials in memory and stores only credential references.

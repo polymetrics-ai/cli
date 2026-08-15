@@ -3,6 +3,9 @@ package cli_test
 import (
 	"bytes"
 	"encoding/json"
+	"os"
+	"path/filepath"
+	"runtime"
 	"testing"
 
 	"polymetrics.ai/internal/cli"
@@ -108,5 +111,91 @@ func TestInspectPostgresReportsImplementedChangefeed(t *testing.T) {
 	}
 	if changefeed.Source.ArtifactURL == "" || changefeed.Source.Version == "" || changefeed.Source.RetrievedAt == "" {
 		t.Fatalf("implemented postgres changefeed must retain source evidence, got %+v", changefeed.Source)
+	}
+}
+
+func TestInspectPostgresKeepsPollingWatermarkPlannedUntilPreflightCanBindIt(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"connectors", "inspect", "postgres", "--json"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(connectors inspect postgres --json) code = %d stderr = %s", code, stderr.String())
+	}
+
+	var response map[string]json.RawMessage
+	if err := json.Unmarshal(stdout.Bytes(), &response); err != nil {
+		t.Fatalf("decode postgres inspect response: %v", err)
+	}
+	pollingRaw, ok := response["polling_watermark"]
+	if !ok {
+		t.Fatalf("postgres inspect omitted the polling-watermark status: %s", stdout.String())
+	}
+	var polling struct {
+		Status string `json:"status"`
+		Reason string `json:"reason"`
+	}
+	if err := json.Unmarshal(pollingRaw, &polling); err != nil {
+		t.Fatalf("decode postgres polling-watermark descriptor: %v", err)
+	}
+	if polling.Status != "planned" {
+		t.Fatalf("postgres polling-watermark status = %q, want planned until a source/object/destination preflight can succeed", polling.Status)
+	}
+	if polling.Reason == "" {
+		t.Fatalf("postgres planned polling-watermark status omitted its blocking reason: %s", pollingRaw)
+	}
+	if bytes.Contains(pollingRaw, []byte(`"implemented"`)) || bytes.Contains(pollingRaw, []byte("change_capture")) {
+		t.Fatalf("postgres polling-watermark inspection fabricated executable CDC semantics: %s", pollingRaw)
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	code = cli.Run([]string{"connectors", "catalog", "--capability", "cdc", "--json"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(connectors catalog --capability cdc --json) code = %d stderr = %s", code, stderr.String())
+	}
+	var catalog struct {
+		Connectors []struct {
+			Name             string `json:"name"`
+			PollingWatermark struct {
+				Status string `json:"status"`
+			} `json:"polling_watermark"`
+		} `json:"connectors"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &catalog); err != nil {
+		t.Fatalf("decode PostgreSQL CDC catalog: %v", err)
+	}
+	for _, connector := range catalog.Connectors {
+		if connector.Name != "postgres" {
+			continue
+		}
+		if connector.PollingWatermark.Status != "planned" {
+			t.Fatalf("PostgreSQL catalog polling-watermark status = %q, want planned rather than an executable polling claim", connector.PollingWatermark.Status)
+		}
+		return
+	}
+	t.Fatalf("PostgreSQL missing from the CDC catalog: %s", stdout.String())
+}
+
+func TestPostgresNativeAPISurfaceHasNoFabricatedRESTEndpoints(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller(0) failed")
+	}
+	apiSurfacePath := filepath.Join(filepath.Dir(thisFile), "..", "connectors", "defs", "postgres", "api_surface.json")
+	raw, err := os.ReadFile(apiSurfacePath)
+	if err != nil {
+		t.Fatalf("ReadFile(%s): %v", apiSurfacePath, err)
+	}
+	var surface struct {
+		API       string            `json:"api"`
+		Endpoints []json.RawMessage `json:"endpoints"`
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("decode PostgreSQL api surface: %v", err)
+	}
+	if len(surface.Endpoints) != 0 {
+		t.Fatalf("PostgreSQL native API surface fabricated %d REST endpoints: %s", len(surface.Endpoints), raw)
+	}
+	if surface.API == "" {
+		t.Fatalf("PostgreSQL native API surface omitted protocol identity: %s", raw)
 	}
 }

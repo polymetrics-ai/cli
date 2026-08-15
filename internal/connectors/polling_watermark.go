@@ -1,6 +1,7 @@
 package connectors
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -240,6 +241,24 @@ type PollingWatermarkDescriptor struct {
 	Reason string                           `json:"reason,omitempty"`
 	Source PollingWatermarkSourceDescriptor `json:"source"`
 	Target PollingApplyDescriptor           `json:"target"`
+}
+
+// MarshalJSON omits the intentionally absent runtime contract on planned and
+// unsupported declarations. Empty nested source and target values look like a
+// usable binding in inspection/catalog output even though those statuses can
+// never pass preflight.
+func (d PollingWatermarkDescriptor) MarshalJSON() ([]byte, error) {
+	if d.Status != PollingWatermarkStatusImplemented {
+		return json.Marshal(struct {
+			Status PollingWatermarkStatus `json:"status"`
+			Reason string                 `json:"reason,omitempty"`
+		}{
+			Status: d.Status,
+			Reason: d.Reason,
+		})
+	}
+	type encoded PollingWatermarkDescriptor
+	return json.Marshal(encoded(d))
 }
 
 // LegacyPollingWatermarkMode adapts one of #3810's five retained public mode

@@ -46,6 +46,17 @@ SYNC MODES
   is admitted. When a connector manifest declares defaults, pm fills them during
   connection creation.
 
+POLLING-WATERMARK LIMITS
+  polling_watermark is not a general connection mode and is not CDC. It can be
+  selected only by a connector's declared native source/object/destination
+  binding after runtime preflight succeeds. An admitted source resumes from its
+  declared watermark plus unique tie-breaker after durable downstream
+  acknowledgement, so replay is at least once. A polling scan cannot observe a
+  hard delete after the row is gone; delete-aware history requires a declared
+  cursor-advancing soft-delete mapping. Incompatible state, source identity
+  changes, snapshot expiry, and retention failures require explicit
+  rebootstrap rather than an automatic full scan.
+
 SECURITY
   Connections reference credentials by name only.
 

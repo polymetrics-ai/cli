@@ -121072,6 +121072,10 @@
         "runtime_catalog"
       ]
     },
+    "polling_watermark": {
+      "status": "planned",
+      "reason": "no registered native polling source and apply binding has passed object and destination preflight; no polling sync mode is implemented"
+    },
     "sync_transport": {
       "source_transport": {
         "executor": {

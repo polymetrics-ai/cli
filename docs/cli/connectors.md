@@ -29,6 +29,25 @@ DESCRIPTION
   role still requires externally verified conformance; it is not a certification
   claim.
 
+POLLING-WATERMARK ELIGIBILITY
+  polling_watermark is a bounded polling scan, not CDC or change capture.
+  Its declaration status, where one exists, is separate from the connector's
+  CDC capability. A polling mode is executable only when runtime preflight
+  accepts the specific connector, discovered catalog object, and destination
+  binding after checking the declared native source and apply executors plus
+  immutable conformance evidence. A planned, unsupported, or absent declaration
+  does not implement a polling mode.
+
+  An admitted source uses declared keyset ordering: a watermark and unique
+  tie-breaker are checkpointed only after durable downstream acknowledgement.
+  Delivery is at least once, so the inclusive resume boundary can replay an
+  accepted record. Snapshot barriers are declaration-bound and are never
+  silently replaced by a full scan. Polling cannot observe hard deletes after a
+  row disappears; tombstones require a declared, cursor-advancing soft-delete
+  mapping. State incompatibility, source identity mismatch, snapshot expiry,
+  and retention failure require an explicit rebootstrap; pm never implies an
+  automatic rescan.
+
   For connectors with a declared rate-limit policy, inspection reports RATE
   LIMIT COORDINATION. Process-local policies coordinate only requests made by
   this pm process; they make no cross-process claim. Policies explicitly
