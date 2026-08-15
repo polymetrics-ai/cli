@@ -119,6 +119,7 @@ func TestCLIDurableParkingAdmissionAndResumeAcrossKilledProcess(t *testing.T) {
 		t.Fatalf("pre-restart CLI provider sends = %d, want one success plus five terminal-429 attempts", got)
 	}
 	checkpointBefore := durableParkingCLIStreamStates(t, root)
+	tableBefore := durableParkingCLITable(t, root)
 	if err := durableParkingCLICommand(root, server.URL, "admission", runID).Run(); err != nil {
 		t.Fatal("restarted CLI admission helper failed")
 	}
@@ -128,13 +129,33 @@ func TestCLIDurableParkingAdmissionAndResumeAcrossKilledProcess(t *testing.T) {
 	if after := durableParkingCLIStreamStates(t, root); !bytes.Equal(after, checkpointBefore) {
 		t.Fatal("fenced CLI admission advanced a checkpoint")
 	}
+	if after := durableParkingCLITable(t, root); !bytes.Equal(after, tableBefore) {
+		t.Fatal("parked CLI admission wrote the destination table")
+	}
 
 	time.Sleep(4100 * time.Millisecond)
-	if err := durableParkingCLICommand(root, server.URL, "resume", runID).Run(); err != nil {
-		t.Fatal("restarted CLI resume helper failed")
+	resumeCommands := []*exec.Cmd{
+		durableParkingCLICommand(root, server.URL, "resume-race", runID),
+		durableParkingCLICommand(root, server.URL, "resume-race", runID),
+	}
+	for _, command := range resumeCommands {
+		if err := command.Start(); err != nil {
+			t.Fatal("could not start concurrent CLI resume helper")
+		}
+	}
+	for _, command := range resumeCommands {
+		if err := command.Wait(); err != nil {
+			t.Fatal("concurrent CLI resume helper failed")
+		}
 	}
 	if got := providerSends.Load(); got != 7 {
-		t.Fatalf("CLI provider sends after resume = %d, want 7", got)
+		t.Fatalf("CLI provider sends after concurrent resume = %d, want 7 (one claim winner)", got)
+	}
+	if err := durableParkingCLICommand(root, server.URL, "verify-resume", runID).Run(); err != nil {
+		t.Fatal("restarted CLI resume verification failed")
+	}
+	if got := providerSends.Load(); got != 7 {
+		t.Fatalf("CLI provider sends after resumed replay = %d, want 7", got)
 	}
 }
 
@@ -187,7 +208,12 @@ func runDurableParkingCLIHelper(t *testing.T, mode string) {
 		if after := durableParkingCLIStreamStates(t, root); !bytes.Equal(after, before) {
 			t.Fatal("restarted CLI parked refusal advanced the checkpoint")
 		}
-	case "resume":
+	case "resume-race":
+		code, _ := run("etl", "status", runID, "--root", root, "--json")
+		if code != 0 {
+			t.Fatal("CLI app.Open could not participate in durable resume claim")
+		}
+	case "verify-resume":
 		code, output := run("etl", "status", runID, "--root", root, "--json")
 		if code != 0 || !strings.Contains(output, `"status": "resumed"`) {
 			t.Fatal("CLI app.Open did not resume the durable parked run")
@@ -230,4 +256,17 @@ func durableParkingCLIStreamStates(t *testing.T, root string) []byte {
 		t.Fatal("could not decode CLI checkpoint state")
 	}
 	return append([]byte(nil), state.StreamStates...)
+}
+
+func durableParkingCLITable(t *testing.T, root string) []byte {
+	t.Helper()
+	paths, err := filepath.Glob(filepath.Join(root, ".polymetrics", "warehouse", "*", "*", "*", "tables", "parking_cli_customers.parquet"))
+	if err != nil || len(paths) != 1 {
+		t.Fatalf("parking CLI destination table paths = %#v, %v", paths, err)
+	}
+	data, err := os.ReadFile(paths[0])
+	if err != nil {
+		t.Fatal("could not read parking CLI destination table")
+	}
+	return data
 }

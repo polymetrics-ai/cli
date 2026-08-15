@@ -106,6 +106,12 @@ func TestFileRateParkingStoreClaimExpiryPreventsDuplicateResumeAndRecoversDeadOw
 	if _, claimed, _, err := store.Claim(run.RunID, "owner-two", now.Add(time.Minute), now.Add(2*time.Minute)); err != nil || !claimed {
 		t.Fatalf("claim after dead-owner expiry = %t, %v", claimed, err)
 	}
+	if err := store.Delete(run.RunID, now.Add(time.Minute)); !errors.Is(err, ErrRateParkingClaimLost) {
+		t.Fatalf("cancellation during active claim = %v, want ErrRateParkingClaimLost", err)
+	}
+	if runs, _ := store.List(); len(runs) != 1 {
+		t.Fatalf("active-claim cancellation deleted durable work: %#v", runs)
+	}
 	if err := store.Complete(run.RunID, "owner-one"); !errors.Is(err, ErrRateParkingClaimLost) {
 		t.Fatalf("stale owner completion = %v, want ErrRateParkingClaimLost", err)
 	}

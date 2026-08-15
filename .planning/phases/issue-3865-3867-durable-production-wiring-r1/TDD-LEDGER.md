@@ -37,8 +37,9 @@
 - Edge tests cover cancellation, SIGKILL/advisory-lock recovery, empty/single/
   128-record stores, idempotent duplicates, stale CAS/claim completion,
   checkpoint/schema drift, filesystem and protocol authentication refusal,
-  concurrent same-scope admission/claim renewal, interrupted resume, and
-  already-acknowledged replay.
+  concurrent same-scope admission/claim renewal, active-claim cancellation
+  refusal, interrupted resume, and already-acknowledged replay. Two restarted
+  CLI processes race the due record and produce exactly one HTTP resume send.
 - Green commands:
   - `go test -race -timeout 20m ./internal/coordination`
   - `go test -timeout 20m ./internal/app`

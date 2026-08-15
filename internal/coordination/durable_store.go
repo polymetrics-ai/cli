@@ -308,10 +308,14 @@ func (s *FileRateParkingStore) Complete(runID, owner string) error {
 	return err
 }
 
-func (s *FileRateParkingStore) Delete(runID string) error {
+func (s *FileRateParkingStore) Delete(runID string, now time.Time) error {
 	_, err := s.store.Update(func(state rateParkingFileState) (rateParkingFileState, error) {
 		if err := validateRateParkingFileState(state); err != nil {
 			return state, err
+		}
+		record, found := state.Records[runID]
+		if found && record.ClaimOwner != "" && record.ClaimUntil.After(now) {
+			return state, ErrRateParkingClaimLost
 		}
 		delete(state.Records, runID)
 		return state, nil

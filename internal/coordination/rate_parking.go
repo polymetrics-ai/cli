@@ -74,7 +74,7 @@ type RateParkingStore interface {
 	RenewClaim(runID, owner string, until time.Time) (bool, error)
 	ReleaseClaim(runID, owner string) error
 	Complete(runID, owner string) error
-	Delete(runID string) error
+	Delete(runID string, now time.Time) error
 }
 
 // MemoryRateParkingStore is a race-safe persistence seam for deterministic
@@ -206,11 +206,15 @@ func (s *MemoryRateParkingStore) Complete(runID, owner string) error {
 }
 
 // Delete removes a parked run after cancellation or successful resume.
-func (s *MemoryRateParkingStore) Delete(runID string) error {
+func (s *MemoryRateParkingStore) Delete(runID string, now time.Time) error {
 	if s == nil {
 		return errRateParkingUnavailable
 	}
 	s.mu.Lock()
+	if record, found := s.runs[runID]; found && record.ClaimOwner != "" && record.ClaimUntil.After(now) {
+		s.mu.Unlock()
+		return ErrRateParkingClaimLost
+	}
 	delete(s.runs, runID)
 	s.mu.Unlock()
 	return nil
@@ -478,7 +482,7 @@ func (c *RateParkingCoordinator) Cancel(runID string) error {
 		timer.Stop()
 	}
 	delete(c.timers, runID)
-	if err := c.store.Delete(runID); err != nil {
+	if err := c.store.Delete(runID, c.now()); err != nil {
 		c.mu.Unlock()
 		return errRateParkingUnavailable
 	}
