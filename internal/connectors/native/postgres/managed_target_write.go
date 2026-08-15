@@ -362,7 +362,7 @@ func (s *postgresWriteSession) applyFencedRecord(ctx context.Context, mapped con
 	return nil
 }
 
-func (s *postgresWriteSession) applyFencedHistoryRecord(ctx context.Context, mapped connectors.Record, args []any, keyDigest string, position synccontract.CheckpointPosition) error {
+func (s *postgresWriteSession) applyFencedHistoryRecord(ctx context.Context, mapped connectors.Record, args []any, keyDigest []byte, position synccontract.CheckpointPosition) error {
 	accepted, err := postgresOrderFenceAccepts(ctx, s.tx, s.qualifiedFence, s.plan.Control().Target().Relation(), keyDigest, position)
 	if err != nil {
 		return errPostgresWriteSessionFailed
