@@ -1,0 +1,7 @@
+{
+  "phase": "issue-4094-4095-3859-postgres-apply-history-club-r1",
+  "status": "planned",
+  "lifecycle": "manual-inline-gsd",
+  "base": "integration/4015-mvp-flat-r1",
+  "branch": "fm/cli-pg-apply-history-club-r1"
+}
