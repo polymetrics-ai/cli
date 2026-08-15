@@ -1,4 +1,13 @@
-# PLAN — transport source eligibility club (#4171, #3976, #3862)
+# PLAN — transport source eligibility club (#4171, #3862; #3976 deconflicted)
+
+## Scope correction — 2026-08-16
+
+PR 4175 owns #3976's PostgreSQL resumable-read implementation. A binary-level review of this
+branch found no standalone production preflight that can bind PostgreSQL's dynamic catalog object:
+the attempted bind occurs only inside source read execution after authentication admission and
+typed-catalog I/O. Therefore this branch must not advertise `polling_watermark` as implemented or
+duplicate PR 4175's adapter. The declaration remains `planned` with its blocking reason, while this
+PR delivers #4171 and #3862 only. This is a deliberate deconfliction, not a relaxed test.
 
 ## GSD setup and execution mode
 
@@ -20,8 +29,9 @@ Close three production routing gaps without changing the registry's fail-closed 
 
 1. GitHub explicitly admits each declarative stream the source adapter can execute, including
    `commits`, and pages/batches it through the existing warehouse-mediated transport.
-2. PostgreSQL's definition-selected native keyset reader is adapted to the shared resumable
-   polling executor and reached by production composition.
+2. PostgreSQL's `polling_watermark` declaration remains honestly `planned` until a shipped
+   production preflight can bind its dynamic source/object/destination contract; #3976's adapter
+   implementation is owned by PR 4175.
 3. Cross-family conformance is proven from the shipped entry path, while undeclared streams,
    executors, and evidence remain typed pre-I/O refusals.
 
@@ -32,9 +42,8 @@ Close three production routing gaps without changing the registry's fail-closed 
   shipped-entry tests.
 - `internal/synctransport/**`: typed stream-ineligibility outcome without changing admission
   order, exact executor lookup, or definition-owned evidence verification.
-- `internal/connectors/defs/postgres/**`, `internal/connectors/native/postgres/**`, and the narrow
-  shared polling seams in `internal/connectors/engine/**`: implemented polling declaration,
-  dynamic native binding, keyset fetch/traversal, and shared executor invocation.
+- `internal/connectors/defs/postgres/polling_watermark.json`: retain the planned declaration and
+  reason; do not add a source/apply runtime contract or adapter in this branch.
 - This phase directory: red/green traces, verification, review, summary, and PR evidence.
 
 No CLI command, flag, or output shape is added. `max_pages` remains a connector runtime-config
@@ -47,6 +56,8 @@ updated only if the existing generated bundle/docs surface changes.
 - No capability-bit inference, connector-name dispatch, wildcard GitHub eligibility, generic SQL,
   caller-authored query, raw cursor, or automatic polling fallback.
 - No replacement of PostgreSQL CDC or its explicit bootstrap handoff.
+- No #3976 polling implementation: it is deconflicted to PR 4175. This branch must neither
+  duplicate nor pre-empt that work.
 - No polling adapter for another database and no general-purpose transport-source generator.
 - No unbounded in-memory collection: provider pages are emitted in bounded transport batches.
 
@@ -70,27 +81,13 @@ exhaustion. Every provider callback is emitted as a bounded `SourcePage` with a 
 content-bound checkpoint candidate. An empty read emits no destination page and cannot advance a
 persisted checkpoint.
 
-### Slice B — PostgreSQL shared polling adapter
+### Slice B — PostgreSQL polling truthfulness and deconfliction
 
-Promote `polling_watermark.json` only with an exact native source/apply executor pair and immutable
-conformance evidence already understood by `PollingPreflight`. The authored declaration describes
-the closed mechanism and bounds; a named PostgreSQL binder fills dynamic relation identity,
-credential cohort, catalog fingerprint, caller-selected cursor column, and complete primary-key
-tuple only after typed catalog discovery.
-
-The native runner owns PostgreSQL concerns:
-
-- read-only typed catalog and authorization admission;
-- identifier-safe lexicographic SQL over `(cursor, primary-key...)`;
-- lossless typed cursor and composite-key token encoding;
-- page-size/request/time budgets and bounded pool use;
-- non-null cursor/key checks and strict native traversal validation;
-- schema/key/source-generation mismatch as typed rebootstrap outcomes.
-
-The shared `engine.PollingSourceExecutor` remains the only page/checkpoint sequencer. The existing
-`SnapshotTransportSource` outward executor reference stays definition-owned; it delegates only an
-implemented, supported incremental polling request to the admitted shared executor. Full snapshot
-and explicit bootstrap/CDC selection remain unchanged.
+Keep the existing declaration `planned`. `app.Open` may compose the closed snapshot transport, but
+that is not polling preflight: dynamic source/object/destination binding currently appears only in
+the attempted `ReadTransport` path after authentication and catalog I/O. This branch has no
+shipped-binary proof of a successful polling preflight and therefore leaves both the declaration
+and production path unchanged. PR 4175 owns the exact native/shared-poller implementation.
 
 ### Slice C — production spine conformance
 
@@ -111,17 +108,17 @@ staged pages, sends/rows, and checkpoint movement.
    coverage, multi-page bounded emission, and typed undeclared-stream zero-effect refusal.
 2. **Green A:** implement the typed error, explicit GitHub stream list, neutral declarative source,
    `max_pages` semantics, and stream-bound candidates.
-3. **Red B:** add PostgreSQL definition/native tests proving that production factory composition
-   selects the shared polling executor, preserves `(cursor, complete PK tuple)`, and refuses unsafe
-   shapes before any fetch/mutation.
-4. **Green B:** implement the PostgreSQL declaration/binder/runner and delegate through
-   `PollingSourceExecutor`; retain snapshot and CDC routes.
+3. **Red B:** `TestInspectPostgresKeepsPollingWatermarkPlannedUntilPreflightCanBindIt` must fail
+   when inspection advertises `implemented` without a bindable production preflight.
+4. **Green B:** restore the planned declaration and its blocking reason; do not change the guard or
+   add a test-only binding.
 5. **Red/green C:** exercise cancellation, interruption/restart, empty/single/large, duplicate,
    out-of-order, schema drift, auth refusal, concurrency, resume, and acknowledged replay. Each
    refusal asserts its typed result and all zero/unchanged side effects.
-6. **Live:** build `pm`; start the repository-owned PostgreSQL harness; run PostgreSQL polling and
-   authenticated `rails/rails` commits with `max_pages=unlimited`; independently count warehouse
-   and target rows. If infrastructure cannot start, record that fact and leave the live item open.
+6. **Live:** build `pm`; when the credential/runtime limits clear, run authenticated `rails/rails`
+   commits with `max_pages=unlimited` and independently count warehouse and target rows. PostgreSQL
+   polling execution is deliberately deferred to PR 4175. If infrastructure cannot start, record
+   that fact and leave the GitHub live item open.
 7. **Verify/review:** regenerate derived artifacts once, run focused tests/race tests and individual
    repository gates, then execute inline `verify-work` and `code-review`; close gaps before PR.
 
@@ -129,11 +126,8 @@ staged pages, sends/rows, and checkpoint movement.
 
 ```sh
 go test -count=1 ./internal/synctransport ./internal/connectors/engine
-go test -count=1 ./internal/connectors/native/postgres
 go test -count=1 ./internal/app
 go test -race -count=1 ./internal/synctransport ./internal/connectors/engine
-go test -race -count=1 ./internal/connectors/native/postgres ./internal/app
-go test -tags databaseintegration -count=1 ./internal/connectors/native/postgres
 go test -count=1 ./internal/cli
 go vet ./...
 go build ./cmd/pm
@@ -148,8 +142,8 @@ verification runs the applicable non-suite make gates individually as required b
   command in `TDD-LEDGER.md`.
 - The design retains exact family/reference/evidence checks and adds a typed result only at the
   existing positive allowlist decision.
-- Both requested production routes are composed from definitions; no test-only registration is an
-  acceptance proof.
+- GitHub's production route is composed from definitions; no test-only registration is an
+  acceptance proof. PostgreSQL polling remains planned until PR 4175 can deliver its own proof.
 - Every edge named in the brief is assigned to a deterministic test or live check in
   `VERIFICATION.md`.
 - Scope excludes the three prohibited issues and contains no dependency addition.

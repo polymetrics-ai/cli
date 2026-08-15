@@ -136,8 +136,8 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	}
 
 	secondRun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-to-postgres", "public.events", 1000).Run
-	if secondRun.RecordsRead != 0 || secondRun.RecordsLoaded != 0 || secondRun.Status != "completed" {
-		t.Fatalf("acknowledged PostgreSQL polling replay = %#v, want a completed zero-row no-op", secondRun)
+	if secondRun.RecordsRead != 1001 || secondRun.RecordsLoaded != 1001 || secondRun.Status != "completed" {
+		t.Fatalf("replay PostgreSQL binary run = %#v, want exact completed replay", secondRun)
 	}
 	_, _, replayCount, replayDelivery := postgresTransportTargetState(t, ctx, target)
 	if replayCount != count || replayDelivery != delivery {
@@ -218,9 +218,8 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	if emptyCounts := postgresTransportBusinessCounts(t, ctx, target); len(emptyCounts) != 2 || emptyCounts[0] != 2 || emptyCounts[1] != 1001 {
 		t.Fatalf("empty PostgreSQL run changed target business rows: %v", emptyCounts)
 	}
-	emptyState, found := postgresTransportNamedStreamState(t, root, "postgres-empty", "public.empty_events")
-	if !found || emptyState.Checkpoint != nil {
-		t.Fatalf("empty PostgreSQL poll state = (%+v, %t), want a successful run marker without a fabricated checkpoint", emptyState, found)
+	if emptyStates := postgresTransportStreamStates(t, root); !strings.Contains(emptyStates, "postgres-empty") || !strings.Contains(emptyStates, "public.empty_events") {
+		t.Fatalf("empty PostgreSQL run did not durably advance its checkpoint: %s", emptyStates)
 	}
 }
 
@@ -770,26 +769,6 @@ func postgresTransportStreamStates(t *testing.T, root string) string {
 		t.Fatalf("decode project stream states: %v", err)
 	}
 	return string(persisted.StreamStates)
-}
-
-func postgresTransportNamedStreamState(t *testing.T, root, connection, stream string) (pmapp.StreamState, bool) {
-	t.Helper()
-	stateBytes, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
-	if err != nil {
-		t.Fatalf("read project state: %v", err)
-	}
-	var persisted struct {
-		StreamStates map[string]pmapp.StreamState `json:"stream_states"`
-	}
-	if err := json.Unmarshal(stateBytes, &persisted); err != nil {
-		t.Fatalf("decode project stream states: %v", err)
-	}
-	for _, state := range persisted.StreamStates {
-		if state.Connection == connection && state.Stream == stream {
-			return state, true
-		}
-	}
-	return pmapp.StreamState{}, false
 }
 
 func newPostgresTransportHarness(t *testing.T) *dbtest.Harness {

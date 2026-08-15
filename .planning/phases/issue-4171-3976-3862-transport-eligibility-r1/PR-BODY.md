@@ -1,13 +1,17 @@
-Closes #4171, #3976, #3862
+Closes #4171, #3862
+
+#3976 is intentionally deconflicted to PR 4175. This branch leaves PostgreSQL polling declared
+`planned` because the shipped binary has no standalone preflight that can bind its dynamic
+source/object/destination contract.
 
 Parent branch: `integration/4015-mvp-flat-r1`  
 Parent PR: #4100 (draft, targets `main`)
 
 ## Intent
 
-Close the three source-side transport gaps without widening the closed registry: GitHub admits only
-its explicitly declared executable streams, PostgreSQL reaches the shared resumable polling executor,
-and the production transport spine remains definition/reference/evidence-led.
+Close the GitHub source-side admission and transport-spine gaps without widening the closed registry:
+GitHub admits only its explicitly declared executable streams, while PostgreSQL polling remains
+honestly planned until PR 4175 can prove a bindable production preflight.
 
 ## What changed
 
@@ -18,9 +22,10 @@ and the production transport spine remains definition/reference/evidence-led.
 - Made the declarative source stream-neutral: it honors `max_pages` (`omitted=1`, positive cap,
   `0`/`all`/`unlimited` exhaust), emits bounded batches, and uses source-owned candidate checkpoints
   for resume/replay.
-- Promoted PostgreSQL `polling_watermark` only with its declared native binder. It performs typed
-  catalog discovery, a strict cursor-plus-full-primary-key keyset query, `PollingPreflight`, and
-  `engine.PollingSourceExecutor`; it adds no generic SQL or connector-name routing.
+- Restored PostgreSQL `polling_watermark` to `planned`, with its blocking reason. `app.Open` only
+  composes the outer transport; the attempted bind occurred inside `ReadTransport` after
+  authentication and typed-catalog I/O, so it was not a shipped production preflight. The overlapping
+  #3976 adapter is removed here and remains PR 4175's responsibility.
 - Regenerated the connector catalog/docs and recorded the GSD TDD, verification, and inline-review
   evidence.
 
@@ -33,31 +38,27 @@ GitHub commits to PostgreSQL:
 `declarativeStreamSourceExecutor` → warehouse `Stage`/`Reopen` → PostgreSQL managed target →
 read-back → durable checkpoint CAS.
 
-PostgreSQL polling to PostgreSQL:
-
-`cmd/pm` → `cli.Run` → `app.RunETL` → `dispatchETLMode` → `runTransportETL` →
-`SnapshotTransportSource.ReadTransport` → `readPollingTransport` → `bindPollingSource` →
-`engine.PollingPreflight` → `engine.NewPollingSourceExecutor` → native PostgreSQL keyset runner →
-warehouse `Stage`/`Reopen` → PostgreSQL managed target → read-back → durable checkpoint CAS.
-
 `app.Open` tests construct the registered definitions and closed registry used by these routes; they do
 not hand-register a test-only transport executor.
+
+No PostgreSQL polling call chain is claimed in this PR. The real CLI inspection guard proves the
+opposite current truth: it remains `planned` until a source/object/destination preflight can bind.
 
 ## TDD and verification
 
 Red:
 
 - `.planning/phases/issue-4171-3976-3862-transport-eligibility-r1/traces/red-stream-admission.txt`
-- `.planning/phases/issue-4171-3976-3862-transport-eligibility-r1/traces/red-postgres-polling-production.txt`
+- `TestInspectPostgresKeepsPollingWatermarkPlannedUntilPreflightCanBindIt` failed while inspection
+  advertised `implemented`; the retained guard was not changed.
 
 Green:
 
-- `go test -timeout 20m -count=1 ./cmd/connectorgen ./internal/synctransport ./internal/connectors/engine ./internal/connectors/native/postgres ./internal/app`
-- `go test -timeout 20m -count=1 ./internal/cli`
-- `go test -timeout 20m -count=1 ./internal/connectors/certify`
-- `go test -timeout 20m -race -count=1 ./internal/synctransport ./internal/connectors/engine ./internal/connectors/native/postgres ./internal/app`
-- `go test -timeout 20m -tags=databaseintegration -count=1 ./internal/connectors/native/postgres ./internal/cli`
-  (compiled and skipped by its opt-in guards; no shared container retry was attempted)
+- `go test -timeout 20m -count=1 ./internal/synctransport ./internal/app ./internal/connectors/certify`
+- `go test -timeout 20m -count=1 ./internal/cli` (including fresh binary, inspection, golden, and
+  generated-skills guards)
+- `go test -timeout 20m -count=1 ./internal/connectors/native/postgres` (compile/regression only;
+  no container retry)
 - `go vet ./...`, `go build ./cmd/pm`, `make tidy-check`, `make lint`, `make docs-check-no-build`,
   `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`,
   `make connectorgen-surface-sync`, `make connectorgen-certification-matrix`,
@@ -70,25 +71,25 @@ Green:
 | Happy path | `TestOpenComposedGitHubCommitsSourceEmitsEveryUnlimitedPageInBoundedBatches` | Production-composed `commits` reads 103 fixture records from two provider pages and emits five batches of at most 25. |
 | Happy path | `TestOpenComposedGitHubCommitsHonorsTransportMaxPages` | Exact one-page default, bounded positive cap, and unlimited counts are asserted. |
 | Bad path | `TestPreflightReturnsTypedSourceStreamIneligibleErrorBeforeExecutorAccess` | Both an unknown stream and case-equivalent `ISSUES` return `SourceStreamIneligibleError` with zero source/stage/plan/apply/checkpoint effects. |
-| Edge path | `TestPostgresPollingPlanBindsCompleteCompositeKeyAndStrictResume` | Complete `(cursor, primary-key tuple)` resume, nullable/missing key refusal, stale token rebootstrap, and out-of-order refusal are asserted. |
-| Production construction | `TestOpenRegistersDefinitionOwnedProductionTransports` and `TestOpenComposesPostgresImplementedSharedPollingRoute` | `app.Open` resolves the exact GitHub/PostgreSQL references and shared polling declaration. |
+| Planned-capability guard | `TestInspectPostgresKeepsPollingWatermarkPlannedUntilPreflightCanBindIt` | Inspection reports `planned` and a reason; no executable polling contract is advertised. |
+| Production construction | `TestOpenRegistersDefinitionOwnedProductionTransports` | `app.Open` resolves the exact GitHub/PostgreSQL transport references while retaining closed registry admission. |
 
 ### Edge-case coverage
 
 | Edge | Coverage and state |
 | --- | --- |
 | cancellation mid-run | Orchestrator/app cancellation tests assert no interrupted checkpoint; binary route is integration-gated. |
-| process death partway | Production-composed GitHub source replays the same unacknowledged candidate; PostgreSQL live equivalent is integration-gated. |
-| empty input | Explicit empty-source marker has zero stage/apply/checkpoint effects; binary Postgres equivalent is integration-gated. |
-| single row | Native PostgreSQL live test asserts one delivered row; pending opt-in runtime. |
+| process death partway | Production-composed GitHub source replays the same unacknowledged candidate. |
+| empty input | Explicit empty-source marker has zero stage/apply/checkpoint effects. |
+| single row | Existing transport/orchestrator coverage; no PostgreSQL polling claim is made in this PR. |
 | large input | 103-record bounded fixture is green; real 99,345-row certification remains pending. |
-| duplicate delivery | Managed target binary replay assertion is integration-gated. |
-| out-of-order delivery | Native keyset traversal returns a typed non-advancing refusal before downstream effects. |
-| schema drift | Native and binary typed rebootstrap/zero-effect assertions are integration-gated. |
-| auth refusal | Binary target refusal asserts unchanged target/checkpoint; pending rotated credential/runtime. |
+| duplicate delivery | Transport/orchestrator coverage; PostgreSQL polling is deferred to PR 4175. |
+| out-of-order delivery | PostgreSQL polling is deferred to PR 4175. |
+| schema drift | PostgreSQL polling is deferred to PR 4175. |
+| auth refusal | GitHub live proof awaits rotated credentials; PostgreSQL polling is deferred to PR 4175. |
 | concurrent runs on one target | `internal/app/transport_dispatch_test.go` state-CAS conflict coverage remains green. |
-| resume after interruption | GitHub candidate resume is green; duplicate-cursor PostgreSQL resume is integration-gated. |
-| replay of an acknowledged item | Orchestrator acknowledgement sequencing is green; managed target binary replay is integration-gated. |
+| resume after interruption | GitHub candidate resume is green; PostgreSQL polling is deferred to PR 4175. |
+| replay of an acknowledged item | Orchestrator acknowledgement sequencing is green. |
 | undeclared and case-equivalent stream | Typed `SourceStreamIneligibleError`, zero effects, green locally. |
 
 ## Live certification status
@@ -110,13 +111,13 @@ read, printed, stored, committed, or included here, and no live row count is rep
 - Required skills used: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
   `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`,
   `golang-context`, `golang-concurrency`, and `golang-database`.
-- Derived artifacts regenerated once with connectorgen, certification-matrix, GitHub GraphQL parity,
-  website data, and connector docs generators; all drift checks passed before this push.
+- Derived artifacts regenerated through `pm docs generate`, `pm skills generate`, and the golden
+  transcript generator; their exact drift guards pass.
 - No CLI command/flag/output changed. `pm help connectors`, `pm connectors`, and
   `pm connectors --help` succeeded; generated connector catalog/manual/skill docs reflect the
   definition changes.
-- Scope deliberately excludes #4125, #4158, and #4169. No dependencies or generic write/query
-  surface was introduced.
+- Scope deliberately excludes #3976 (deconflicted to PR 4175), #4125, #4158, and #4169. No
+  dependencies or generic write/query surface was introduced.
 
 ## Automated review routing
 

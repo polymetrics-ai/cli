@@ -10,7 +10,7 @@ findings:
 review_mode: inline_manual_fallback
 ---
 
-# Code review — transport source eligibility club
+# Code review — transport source eligibility club (#4171, #3862; #3976 deconflicted)
 
 The lifecycle reviewer role was not spawned: this direct-PR issue club requires a single autonomous
 worker and the project contract forbids lifecycle role spawning. The official code-review prompt was
@@ -26,10 +26,10 @@ resolved and applied inline.
   `app.Open`; `ISSUES` and other absent values stay typed refusals.
 - The general declarative source keeps provider pagination in the engine, bounds emitted batches,
   and reconstructs resume only from its own candidate identities.
-- PostgreSQL performs typed catalog discovery before building an identifier-safe lexicographic query
-  over cursor plus every primary-key tie field. Invalid/nullable/lossy cursor or key shapes reject
-  before reads. The native adapter invokes `PollingPreflight` and the shared polling executor rather
-  than introducing connector-name routing or a generic query seam.
+- PostgreSQL polling is not advertised prematurely. The real CLI inspection guard remains exact:
+  it requires `planned` plus a blocking reason until a shipped preflight can bind source, object,
+  and destination. The overlapping native/shared-poller work is absent from this branch and owned
+  by PR 4175.
 - The orchestrator still stages, reopens, applies, reads back, and only then commits a checkpoint;
   cancellation and replay tests cover the acknowledgement boundary.
 
@@ -47,3 +47,10 @@ contract: the successful probe must report the exact active source and destinati
 the no-factory probe must report that same active source reference as unregistered. Updating those
 two literals from the replaced `issue_label_source` to `declarative_stream_source` preserves the
 guard's observable success and failure assertions; it neither relaxes nor removes them.
+
+## Gap G2 follow-up review
+
+The review confirmed that `app.Open` composes only the outward closed transport. The attempted
+`engine.PollingPreflight` occurred inside source `ReadTransport`, after authentication admission and
+typed-catalog I/O. Keeping an implemented declaration would therefore violate the inspection
+invariant; restoring `planned` and not duplicating PR 4175 is the narrow correction.

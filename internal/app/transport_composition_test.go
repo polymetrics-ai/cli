@@ -392,43 +392,6 @@ func TestOpenComposedGitHubCommitsHonorsTransportMaxPages(t *testing.T) {
 	}
 }
 
-func TestOpenComposesPostgresImplementedSharedPollingRoute(t *testing.T) {
-	root := t.TempDir()
-	if err := InitProject(root); err != nil {
-		t.Fatal(err)
-	}
-	a, err := Open(root)
-	if err != nil {
-		t.Fatal(err)
-	}
-	postgres, ok := a.registry.Get("postgres")
-	if !ok {
-		t.Fatal("PostgreSQL connector is not registered")
-	}
-	definition, ok := connectors.DefinitionOf(postgres)
-	if !ok || definition.PollingWatermark == nil {
-		t.Fatal("production PostgreSQL definition omitted polling_watermark")
-	}
-	if got, want := definition.PollingWatermark.Status, connectors.PollingWatermarkStatusImplemented; got != want {
-		t.Fatalf("production PostgreSQL polling status = %q, want %q", got, want)
-	}
-	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
-		Source: postgres, Destination: postgres, Stream: "public.events", Mode: synccontract.ModeIncrementalUpsert,
-	})
-	if err != nil {
-		t.Fatalf("production PostgreSQL transport preflight: %v", err)
-	}
-	shared, ok := resolved.Source.(interface {
-		SharedPollingSourceExecutorReference() connectors.TransportExecutorReference
-	})
-	if !ok {
-		t.Fatalf("production PostgreSQL source = %T, want shared polling route declaration", resolved.Source)
-	}
-	if got, want := shared.SharedPollingSourceExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_polling_source_v1"}); got != want {
-		t.Fatalf("production PostgreSQL shared polling reference = %+v, want %+v", got, want)
-	}
-}
-
 func TestLocalWarehouseDestinationExecutorWritesAndReadBacksConnectionOwnedParquet(t *testing.T) {
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
