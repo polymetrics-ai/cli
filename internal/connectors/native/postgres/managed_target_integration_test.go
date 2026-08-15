@@ -1294,12 +1294,6 @@ func assertPostgresManagedTargetValue(t *testing.T, ctx context.Context, source 
 	}
 }
 
-type postgresManagedTargetHistoryRow struct {
-	value   string
-	open    bool
-	current bool
-}
-
 func assertPostgresManagedTargetHistory(t *testing.T, ctx context.Context, source *pgx.Conn, control database.ManagedTargetControlRecord, tenant string, id int64, want []postgresManagedTargetHistoryRow) {
 	t.Helper()
 	rows, err := source.Query(ctx, "SELECT value, "+synccontract.HistoryValidFromColumn+" IS NOT NULL, "+synccontract.HistoryValidToColumn+" IS NULL, "+synccontract.HistoryIsCurrentColumn+" FROM "+postgresManagedTargetQualifiedName(control.Target().Namespace(), control.Target().Relation())+" WHERE tenant = $1 AND id = $2 AND "+synccontract.HistoryValidFromColumn+" IS NOT NULL ORDER BY value", tenant, id)
@@ -1361,6 +1355,7 @@ type postgresManagedTargetHistoryRow struct {
 	value     string
 	validFrom time.Time
 	validTo   *time.Time
+	open      bool
 	current   bool
 }
 

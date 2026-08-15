@@ -6,8 +6,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
-	"strconv"
-	"strings"
 	"sync"
 	"time"
 
@@ -435,33 +433,10 @@ func (s *postgresWriteSession) applyHistoryRecord(ctx context.Context, mapped co
 	if exists {
 		return nil
 	}
-	keyArgs, keyPredicate, err := postgresMappedKeyPredicate(s.plan.Keys(), mapped, s.columns, 1)
-	if err != nil {
+	if err := postgresCloseHistoryKeyValues(ctx, s.tx, s.qualified, s.plan.Keys(), mapped, s.historyAt); err != nil {
 		return errPostgresWriteSessionFailed
 	}
-	valuePredicate := postgresMappedValuePredicate(s.columns, len(keyArgs)+1)
-	closeArgs := append(append([]any{}, keyArgs...), args...)
-	closeArgs = append(closeArgs, s.historyAt)
-	if _, err := s.tx.Exec(ctx,
-		"UPDATE "+s.qualified+
-			" SET "+quoteIdentifier(synccontract.HistoryValidToColumn)+" = $"+strconv.Itoa(len(closeArgs))+", "+quoteIdentifier(synccontract.HistoryIsCurrentColumn)+" = FALSE"+
-			" WHERE "+keyPredicate+" AND "+quoteIdentifier(synccontract.HistoryIsCurrentColumn)+" AND NOT ("+valuePredicate+")",
-		closeArgs...,
-	); err != nil {
-		return errPostgresWriteSessionFailed
-	}
-	names, placeholders := postgresColumnNamesAndPlaceholders(s.columns, 1)
-	names = append(names,
-		quoteIdentifier(synccontract.HistoryValidFromColumn),
-		quoteIdentifier(synccontract.HistoryValidToColumn),
-		quoteIdentifier(synccontract.HistoryIsCurrentColumn),
-	)
-	placeholders = append(placeholders, "$"+strconv.Itoa(len(args)+1), "NULL", "TRUE")
-	insertArgs := append(append([]any{}, args...), s.historyAt)
-	if _, err := s.tx.Exec(ctx,
-		"INSERT INTO "+s.qualified+" ("+strings.Join(names, ", ")+") VALUES ("+strings.Join(placeholders, ", ")+")",
-		insertArgs...,
-	); err != nil {
+	if err := postgresInsertMappedHistoryRow(ctx, s.tx, s.qualified, s.columns, args, s.historyAt); err != nil {
 		return errPostgresWriteSessionFailed
 	}
 	return nil
@@ -489,17 +464,7 @@ func (s *postgresWriteSession) closeHistoryWindow(ctx context.Context, tombstone
 	if err != nil || close.Action != synccontract.HistoryDeleteCloseValidityWindow || close.IsCurrent {
 		return errPostgresWriteSessionFailed
 	}
-	args, keyPredicate, err := postgresKeyValuePredicate(s.plan.Keys(), keys, 1)
-	if err != nil {
-		return errPostgresWriteSessionFailed
-	}
-	args = append(args, close.ValidTo, close.IsCurrent)
-	if _, err := s.tx.Exec(ctx,
-		"UPDATE "+s.qualified+
-			" SET "+quoteIdentifier(synccontract.HistoryValidToColumn)+" = $"+strconv.Itoa(len(args)-1)+", "+quoteIdentifier(synccontract.HistoryIsCurrentColumn)+" = $"+strconv.Itoa(len(args))+
-			" WHERE "+keyPredicate+" AND "+quoteIdentifier(synccontract.HistoryIsCurrentColumn),
-		args...,
-	); err != nil {
+	if err := postgresCloseHistoryKeyValues(ctx, s.tx, s.qualified, s.plan.Keys(), keys, close.ValidTo); err != nil {
 		return errPostgresWriteSessionFailed
 	}
 	return nil
