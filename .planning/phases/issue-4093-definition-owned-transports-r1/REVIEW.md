@@ -9,8 +9,9 @@ contract.
   mutates a registry; the batch registration path validates the entire batch
   while locked before its first map write.
 - Factory selection is exact family-plus-ID matching, with no connector-name
-  or capability fallback. Provider adapters remain typed GitHub/PostgreSQL
-  implementations.
+  or capability fallback. Connector-local factory providers keep native
+  PostgreSQL wiring out of App; provider adapters remain typed
+  GitHub/PostgreSQL implementations.
 - The production test observes PostgreSQL and both GitHub roles through
   `Preflight`; refusal tests assert zero construction, registry, read, plan,
   and apply state changes.

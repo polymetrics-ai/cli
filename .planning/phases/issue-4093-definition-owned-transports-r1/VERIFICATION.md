@@ -22,6 +22,9 @@
   release-workflow-check`.
 - [x] `connectorgen validate` and `surface-sync --check` pass through the
   corresponding individual repository gates.
+- [x] The Connector Boundary CI feedback was repaired with connector-local
+  provider discovery; `go run ./cmd/connectorgen boundary . --json` passes on
+  the repaired commit.
 - [x] Inline `verify-work` maps every acceptance criterion to an observable
   passing test or live output below.
 - [x] Inline code review has no unresolved actionable findings; see REVIEW.md.

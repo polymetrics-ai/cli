@@ -18,6 +18,14 @@ type DefinitionFactory struct {
 	BuildDestination    func(connectors.Connector) (DestinationExecutor, error)
 }
 
+// DefinitionFactoryProvider lets a connector-local package expose adapters for
+// the exact transport roles its bundle may declare. The production composition
+// root reads this optional interface generically and never imports a native
+// connector package to discover its factories.
+type DefinitionFactoryProvider interface {
+	SyncTransportDefinitionFactories() []DefinitionFactory
+}
+
 type definitionConformanceKey struct {
 	role      connectors.TransportRole
 	reference connectors.TransportExecutorReference
@@ -80,6 +88,29 @@ type declaredSource struct {
 type declaredDestination struct {
 	connector connectors.Connector
 	factory   DefinitionFactory
+}
+
+// DefinitionFactoriesFromRegistry gathers factory providers from the concrete
+// connectors already admitted to a registry. It does not inspect connector
+// names, capabilities, or transport declarations; declaration validation stays
+// in RegisterDeclaredTransports.
+func DefinitionFactoriesFromRegistry(connectorRegistry *connectors.Registry) ([]DefinitionFactory, error) {
+	if connectorRegistry == nil {
+		return nil, fmt.Errorf("connector registry is required")
+	}
+	factories := make([]DefinitionFactory, 0)
+	for _, metadata := range connectorRegistry.List() {
+		connector, ok := connectorRegistry.Get(metadata.Name)
+		if !ok {
+			return nil, fmt.Errorf("declared connector %q disappeared from registry", metadata.Name)
+		}
+		provider, ok := connector.(DefinitionFactoryProvider)
+		if !ok {
+			continue
+		}
+		factories = append(factories, provider.SyncTransportDefinitionFactories()...)
+	}
+	return factories, nil
 }
 
 // RegisterDeclaredTransports validates every declaration and selected factory

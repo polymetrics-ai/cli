@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 
-	"polymetrics.ai/internal/connectors/native/postgres"
 	"polymetrics.ai/internal/synctransport"
 )
 
@@ -15,7 +14,11 @@ func (a *App) composeTransportRegistry() error {
 		return fmt.Errorf("definition-owned transport composition requires an app registry")
 	}
 	factories := issueLabelTransportDefinitionFactories(a)
-	factories = append(factories, postgres.SnapshotTransportDefinitionFactory())
+	connectorFactories, err := synctransport.DefinitionFactoriesFromRegistry(a.registry)
+	if err != nil {
+		return err
+	}
+	factories = append(factories, connectorFactories...)
 	verifier, err := synctransport.NewDefinitionConformanceVerifier(factories)
 	if err != nil {
 		return err

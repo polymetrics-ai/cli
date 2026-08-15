@@ -32,8 +32,9 @@ declarations and adapters required to exercise them. It deliberately excludes
    bundle field, clone-safe `Definition` projection, and reject destination
    `change_capture`.
 5. **GREEN production composition:** replace the hard-coded GitHub wrapper
-   composition with a declarative factory table; register actual GitHub source
-   and destination adapters and the actual PostgreSQL snapshot source from
+   composition with a declarative factory table; collect connector-local
+   factories through a generic provider interface; register actual GitHub
+   source/destination adapters and the actual PostgreSQL snapshot source from
    their declared definition roles. The verifier must accept only the factory's
    external exact evidence references.
 6. **Definition parity:** move GitHub and PostgreSQL descriptor data into their

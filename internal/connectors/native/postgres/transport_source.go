@@ -78,6 +78,13 @@ func SnapshotTransportDefinitionFactory() synctransport.DefinitionFactory {
 	}
 }
 
+// SyncTransportDefinitionFactories exposes the PostgreSQL-local adapter to
+// generic production composition. The bundle still decides whether the source
+// role is declared and therefore whether this factory is used.
+func (Connector) SyncTransportDefinitionFactories() []synctransport.DefinitionFactory {
+	return []synctransport.DefinitionFactory{SnapshotTransportDefinitionFactory()}
+}
+
 // RegisterSnapshotTransportSource registers the one executor selected by the
 // PostgreSQL Definition. Keeping the adapter in this native package prevents
 // App composition from assembling a connector-specific transport pair.
