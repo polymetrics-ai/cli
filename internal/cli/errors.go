@@ -6,7 +6,10 @@ import (
 	"io"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/safety"
+	"polymetrics.ai/internal/schedule"
 )
 
 const apiVersion = "polymetrics.ai/v1"
@@ -105,6 +108,26 @@ func classifyError(err error) *cliError {
 		// fault. Preserve the typed rejection's redacted message while exposing
 		// the standard validation category/code for scripts and monitoring.
 		return &cliError{category: categoryValidation, code: "validation_error", message: err.Error(), err: err}
+	}
+	var flowReference *schedule.FlowReferenceError
+	if errors.As(err, &flowReference) {
+		return &cliError{category: categoryValidation, code: "schedule_flow_reference_refused", message: err.Error(), err: err}
+	}
+	var jobReference *flow.JobReferenceError
+	if errors.As(err, &jobReference) {
+		return &cliError{category: categoryValidation, code: "flow_job_reference_refused", message: err.Error(), err: err}
+	}
+	var preparedReplay *app.PreparedExecutionReplayError
+	if errors.As(err, &preparedReplay) {
+		return &cliError{category: categoryPolicy, code: "prepared_execution_replay", message: err.Error(), err: err}
+	}
+	var preparedRefused *app.PreparedExecutionRefusedError
+	if errors.As(err, &preparedRefused) {
+		return &cliError{category: categoryPolicy, code: "prepared_execution_refused", message: err.Error(), err: err}
+	}
+	var rateBudgetRefusal *connsdk.RateBudgetRefusalError
+	if errors.As(err, &rateBudgetRefusal) {
+		return &cliError{category: categoryPolicy, code: string(rateBudgetRefusal.Code), message: err.Error(), err: err}
 	}
 	if errors.Is(err, errUsage) {
 		return &cliError{category: categoryUsage, code: "usage_error", message: errUsage.Error()}

@@ -11,12 +11,11 @@ import (
 
 func makeManifest(name string) Manifest {
 	return Manifest{
-		Name:                   name,
-		Cron:                   "0 2 * * *",
-		Flow:                   "test-flow",
-		AuthorizationReference: "auth_0123456789abcdef",
-		CreatedAt:              time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
-		UpdatedAt:              time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
+		Name:      name,
+		Cron:      "0 2 * * *",
+		Flow:      "test-flow",
+		CreatedAt: time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
+		UpdatedAt: time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
 	}
 }
 
@@ -32,7 +31,7 @@ func TestManifestSaveLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Load: %v", err)
 	}
-	if got.Name != m.Name || got.Cron != m.Cron || got.Flow != m.Flow || got.AuthorizationReference != m.AuthorizationReference {
+	if got.Name != m.Name || got.Cron != m.Cron || got.Flow != m.Flow {
 		t.Fatalf("round-trip mismatch: got %+v, want %+v", got, m)
 	}
 	if !got.CreatedAt.Equal(m.CreatedAt) || !got.UpdatedAt.Equal(m.UpdatedAt) {
@@ -40,35 +39,20 @@ func TestManifestSaveLoad(t *testing.T) {
 	}
 }
 
-func TestManifestRejectsMissingAuthorizationReference(t *testing.T) {
+func TestManifestContainsNoScheduleAuthorizationCarrier(t *testing.T) {
 	root := t.TempDir()
-	m := makeManifest("missing-authorization")
-	m.AuthorizationReference = ""
-	if err := Save(root, m, false); err == nil {
-		t.Fatal("Save without an authorization reference succeeded")
+	m := makeManifest("safe-schedule-state")
+	if err := Save(root, m, false); err != nil {
+		t.Fatalf("Save: %v", err)
 	}
-}
-
-func TestManifestRejectsNonOpaqueAuthorizationReference(t *testing.T) {
-	root := t.TempDir()
-	m := makeManifest("token-like-authorization")
-	m.AuthorizationReference = "approval-token-fixture"
-	if err := Save(root, m, false); err == nil {
-		t.Fatal("Save accepted token-like authorization material")
+	data, err := os.ReadFile(manifestPath(root, m.Name))
+	if err != nil {
+		t.Fatalf("ReadFile: %v", err)
 	}
-}
-
-func TestManifestLoadRejectsUnsafeAuthorizationReference(t *testing.T) {
-	root := t.TempDir()
-	if err := os.MkdirAll(schedulesDir(root), 0o755); err != nil {
-		t.Fatalf("MkdirAll: %v", err)
-	}
-	path := manifestPath(root, "unsafe-reference")
-	if err := os.WriteFile(path, []byte(`{"name":"unsafe-reference","cron":"0 2 * * *","flow":"flow","authorization_reference":"approval-token-fixture"}`), 0o600); err != nil {
-		t.Fatalf("WriteFile: %v", err)
-	}
-	if _, err := Load(root, "unsafe-reference"); err == nil {
-		t.Fatal("Load accepted token-like authorization material")
+	for _, forbidden := range []string{"authorization", "approval", "token", "credential"} {
+		if containsStr(string(data), forbidden) {
+			t.Fatalf("schedule manifest contains forbidden authority field %q: %s", forbidden, data)
+		}
 	}
 }
 

@@ -154,12 +154,18 @@ func TestScheduleInstallUsesConfigFileCrontabPath(t *testing.T) {
 	crontabFile := t.TempDir() + "/crontab"
 	root := writeMigrationConfig(t, "schedule:\n  crontab_file: "+crontabFile+"\n")
 	initProject(t, root)
+	flowsDir := filepath.Join(root, ".polymetrics", "flows")
+	if err := os.MkdirAll(flowsDir, 0o755); err != nil {
+		t.Fatalf("create flows dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(flowsDir, "likely-customers.json"), []byte(`{"version":1,"name":"likely-customers","steps":[{"id":"query","kind":"query","sql":"SELECT 1"}]}`), 0o600); err != nil {
+		t.Fatalf("write existing flow: %v", err)
+	}
 
 	_, stderr, code := scheduleRun(t, root, "schedule", "create",
 		"--name", "nightly-leads",
 		"--cron", "0 2 * * *",
 		"--flow", "likely-customers",
-		"--authorization", "auth_0123456789abcdef",
 	)
 	if code != 0 {
 		t.Fatalf("create: exit %d, stderr=%q", code, stderr)

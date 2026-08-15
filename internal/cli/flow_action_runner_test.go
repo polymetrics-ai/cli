@@ -3,8 +3,10 @@ package cli
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"path/filepath"
 	"sync"
 	"testing"
 	"time"
@@ -42,8 +44,9 @@ func TestConnectorFlowActionRunnerWritesReadsBackAndThenCheckpoints(t *testing.T
 	require.NoError(t, err)
 	_, err = a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken, Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}})
 	require.NoError(t, err)
-	authorizations := a.ListAuthorizations()
-	require.Len(t, authorizations, 1)
+	plan, err = a.GetReversePlan(plan.ID)
+	require.NoError(t, err)
+	require.NotEmpty(t, plan.AuthorizationReference)
 	beforeWrites := target.writeCalls()
 	sourceRecords, err := a.ReadActionSource(ctx, app.ActionSourceReadRequest{Table: "records", Connection: "acme"})
 	require.NoError(t, err)
@@ -55,19 +58,12 @@ func TestConnectorFlowActionRunnerWritesReadsBackAndThenCheckpoints(t *testing.T
   "steps": [{
     "id": "create-targets",
     "kind": "action",
+	"job": %q,
     "action_cfg": {
-      "source_table": "records",
-      "source_connection": "acme",
-      "destination_connector": %q,
-      "destination_credential": "flow-target",
-      "destination_table": "flow-action-target",
-      "action": "create",
-      "mappings": {"id": "id"},
-      "authorization_reference": %q,
       "read_back_stream": "targets"
     }
   }]
-}`, target.Name(), authorizations[0].Reference))
+}`, plan.ID))
 	var stdout bytes.Buffer
 	err = flowRun(ctx, config.Config{}, a, []string{"--file", manifestPath}, &stdout, true)
 	require.NoError(t, err)
@@ -78,6 +74,11 @@ func TestConnectorFlowActionRunnerWritesReadsBackAndThenCheckpoints(t *testing.T
 	receipts := a.ListFlowActionReceipts()
 	require.Len(t, receipts, 1)
 	assert.Equal(t, "approved-flow", receipts[0].FlowName)
+	assert.NotEmpty(t, receipts[0].PreparedExecutionIdentity)
+	var result flow.RunResult
+	require.NoError(t, json.Unmarshal(stdout.Bytes(), &result))
+	require.Len(t, result.Steps, 1)
+	assert.Equal(t, receipts[0].PreparedExecutionIdentity, result.Steps[0].PreparedExecutionIdentity)
 	checkpoints := &flow.FileCheckpointStore{Dir: a.ProjectDir()}
 	status, err := checkpoints.Get("approved-flow", "create-targets")
 	require.NoError(t, err)
@@ -108,8 +109,10 @@ func TestConnectorFlowActionRunnerScopeDriftStopsBeforeTargetRequest(t *testing.
 	require.NoError(t, err)
 	_, err = a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken, Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}})
 	require.NoError(t, err)
-	authorizations := a.ListAuthorizations()
-	require.Len(t, authorizations, 1)
+	plan, err = a.GetReversePlan(plan.ID)
+	require.NoError(t, err)
+	require.NotEmpty(t, plan.AuthorizationReference)
+	driftReversePlanMapping(t, filepath.Dir(a.ProjectDir()), plan.ID)
 	beforeWrites := target.writeCalls()
 	beforeEvents := target.eventCount()
 
@@ -119,19 +122,12 @@ func TestConnectorFlowActionRunnerScopeDriftStopsBeforeTargetRequest(t *testing.
   "steps": [{
     "id": "create-targets",
     "kind": "action",
+	"job": %q,
     "action_cfg": {
-      "source_table": "records",
-      "source_connection": "acme",
-      "destination_connector": %q,
-      "destination_credential": "flow-target",
-      "destination_table": "flow-action-target",
-      "action": "create",
-      "mappings": {"id": "changed-id"},
-      "authorization_reference": %q,
       "read_back_stream": "targets"
     }
   }]
-}`, target.Name(), authorizations[0].Reference))
+}`, plan.ID))
 	var stdout bytes.Buffer
 	err = flowRun(ctx, config.Config{}, a, []string{"--file", manifestPath}, &stdout, true)
 	require.Error(t, err)
@@ -147,6 +143,7 @@ type cliFlowActionTarget struct {
 	events_       []string
 	records       []connectors.Record
 	writeApproval bool
+	writeErr      error
 }
 
 func (*cliFlowActionTarget) Name() string { return "flow-cli-target" }
@@ -206,9 +203,18 @@ func (c *cliFlowActionTarget) Write(_ context.Context, req connectors.WriteReque
 	if err := req.Approval.Authorize(cliFlowActionApprovalTarget(c.Name(), req), "flow-cli-target-preview", time.Now().UTC()); err != nil {
 		return connectors.WriteResult{}, err
 	}
+	if c.writeErr != nil {
+		return connectors.WriteResult{}, c.writeErr
+	}
 	c.writes++
 	c.records = append(c.records, records...)
 	return connectors.WriteResult{RecordsWritten: len(records)}, nil
+}
+
+func (c *cliFlowActionTarget) setWriteError(err error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.writeErr = err
 }
 
 func (c *cliFlowActionTarget) writeCalls() int {

@@ -332,7 +332,7 @@ func (r *rateLimitResolver) resolve(ctx context.Context, policy connsdk.RateLimi
 	key := coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}
 	if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
 		if err := r.sharedRegistry.EnsureAvailable(ctx); err != nil {
-			return resolvedRateLimitPolicy{}, err
+			return resolvedRateLimitPolicy{}, rateBudgetRefusal(err)
 		}
 		limiter := r.sharedRegistry.Limiter(key, policy.Budgets)
 		return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets, scope: scope, parking: r.parking}, nil
@@ -381,16 +381,24 @@ func (e *responseFormatError) As(target any) bool {
 	if e == nil {
 		return false
 	}
-	unavailable, ok := target.(**coordination.SharedRateLimitUnavailableError)
-	if !ok {
+	switch typed := target.(type) {
+	case **coordination.SharedRateLimitUnavailableError:
+		var cause *coordination.SharedRateLimitUnavailableError
+		if !errors.As(e.cause, &cause) {
+			return false
+		}
+		*typed = cause
+		return true
+	case **connsdk.RateBudgetRefusalError:
+		var cause *connsdk.RateBudgetRefusalError
+		if !errors.As(e.cause, &cause) {
+			return false
+		}
+		*typed = cause
+		return true
+	default:
 		return false
 	}
-	var cause *coordination.SharedRateLimitUnavailableError
-	if !errors.As(e.cause, &cause) {
-		return false
-	}
-	*unavailable = cause
-	return true
 }
 
 func formatResponseError(message string, cause error) error {
@@ -449,11 +457,11 @@ func (r *endpointRateLimitResolver) AdmitRoute(ctx context.Context, route connsd
 			if err := ctx.Err(); err != nil {
 				return "", err
 			}
-			return "", &coordination.SharedRateLimitUnavailableError{Reason: coordination.SharedRateLimitRouteUnresolved}
+			return "", rateBudgetRefusal(&coordination.SharedRateLimitUnavailableError{Reason: coordination.SharedRateLimitRouteUnresolved})
 		}
 	}
 	if err := resolvedRateLimitAdmission(matched).Admit(ctx, connsdk.RateLimitRequest{Method: route.Method, Attempt: route.Attempt}); err != nil {
-		return "", err
+		return "", rateBudgetRefusal(err)
 	}
 	return costHeader, nil
 }
@@ -587,10 +595,29 @@ func (a resolvedRateLimitAdmission) Admit(ctx context.Context, request connsdk.R
 			}
 		}
 		if err := policy.admission.Admit(ctx, request); err != nil {
-			return err
+			return rateBudgetRefusal(err)
 		}
 	}
 	return nil
+}
+
+func rateBudgetRefusal(err error) error {
+	if err == nil || errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
+		return err
+	}
+	var refusal *connsdk.RateBudgetRefusalError
+	if errors.As(err, &refusal) {
+		return err
+	}
+	var unavailable *coordination.SharedRateLimitUnavailableError
+	if !errors.As(err, &unavailable) {
+		return err
+	}
+	return &connsdk.RateBudgetRefusalError{
+		Code:   connsdk.RateBudgetRefusalSharedCoordinatorUnavailable,
+		Reason: string(unavailable.Reason),
+		Err:    err,
+	}
 }
 
 type resolvedRateLimitObserver []resolvedRateLimitPolicy

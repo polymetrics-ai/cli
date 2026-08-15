@@ -2524,12 +2524,17 @@ func (a *App) validatePlanConfirmation(plan ReversePlan, got connectors.WriteCon
 }
 
 func (a *App) GetReversePlan(id string) (ReversePlan, error) {
-	for _, plan := range a.state.ReversePlans {
-		if plan.ID == id {
-			return plan, nil
-		}
+	if a == nil {
+		return ReversePlan{}, errors.New("app is required")
 	}
-	return ReversePlan{}, fmt.Errorf("reverse plan %q not found", id)
+	// Production Apps always have a configured store and must reload here so
+	// unattended flows revalidate the latest durable approval. A small set of
+	// isolated policy tests intentionally construct an in-memory App; preserve
+	// their pre-existing lookup semantics without creating a fake state path.
+	if strings.TrimSpace(a.store.Path) == "" {
+		return reversePlanFromState(a.state, id)
+	}
+	return a.loadReversePlan(id)
 }
 
 func (a *App) ListReversePlans() []ReversePlan {
@@ -3273,6 +3278,26 @@ func (a *App) findConnection(name string) (Connection, bool) {
 		}
 	}
 	return Connection{}, false
+}
+
+// GetConnection refreshes project state and positively resolves one persisted
+// ETL connection by name. It never opens the credential vault.
+func (a *App) GetConnection(name string) (Connection, error) {
+	if a == nil {
+		return Connection{}, errors.New("app is required")
+	}
+	loaded, err := a.store.LoadReadOnly()
+	if err != nil {
+		return Connection{}, err
+	}
+	if err := a.normalizeLoadedState(loaded, false); err != nil {
+		return Connection{}, err
+	}
+	connection, ok := a.findConnection(name)
+	if !ok {
+		return Connection{}, fmt.Errorf("connection %q not found", name)
+	}
+	return connection, nil
 }
 
 func (a *App) findConnectionByID(id string) (Connection, bool) {

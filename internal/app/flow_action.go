@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -10,45 +11,143 @@ import (
 	"polymetrics.ai/internal/connectors"
 )
 
-// ExecuteAuthorizedFlowAction is the connector-backed execution boundary for
-// one action step. It validates the durable authorization before any provider
-// call, then performs typed validation, connector acknowledgement, independent
-// read-back, and finally durable receipt persistence in that order.
+// ExecuteAuthorizedFlowAction prepares one payload-bound execution and then
+// dispatches it through the standing authorization. The split methods let
+// callers prove the prepared identity without turning it into authority.
 func (a *App) ExecuteAuthorizedFlowAction(ctx context.Context, req FlowActionExecutionRequest) (FlowActionExecutionResult, error) {
-	if strings.TrimSpace(req.RunID) == "" {
-		return FlowActionExecutionResult{}, errors.New("flow action run id is required")
-	}
-	writer, scope, runtime, err := a.validateAuthorizedFlowAction(ctx, req)
+	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
 	if err != nil {
 		return FlowActionExecutionResult{}, err
 	}
+	return a.ExecutePreparedFlowAction(ctx, prepared)
+}
 
+// PrepareAuthorizedFlowAction validates the standing authorization and exact
+// payload, then derives safe payload-bound evidence. It makes no write and
+// creates no approval or per-firing grant.
+func (a *App) PrepareAuthorizedFlowAction(ctx context.Context, req FlowActionExecutionRequest) (PreparedFlowAction, error) {
+	if strings.TrimSpace(req.RunID) == "" {
+		return PreparedFlowAction{}, errors.New("flow action run id is required")
+	}
+	if strings.TrimSpace(req.ManifestDigest) == "" {
+		return PreparedFlowAction{}, errors.New("flow action manifest digest is required")
+	}
+	writer, scope, runtime, err := a.validateAuthorizedFlowAction(ctx, req)
+	if err != nil {
+		return PreparedFlowAction{}, err
+	}
+
+	req = cloneFlowActionExecutionRequest(req)
 	mapped := mapReverseRecords(req.Records, req.Mappings)
 	writeRequest := connectors.WriteRequest{
 		Stream: "records", Table: req.DestinationTable, Action: req.Action, Config: runtime,
 	}
 	if validator, ok := writer.(connectors.WriteValidator); ok {
 		if err := validator.ValidateWrite(ctx, writeRequest, mapped); err != nil {
-			return FlowActionExecutionResult{}, fmt.Errorf("validate flow action destination: %w", err)
+			return PreparedFlowAction{}, fmt.Errorf("validate flow action destination: %w", err)
+		}
+	}
+	preview := connectors.WritePreview{}
+	if scope.ConfirmationPolicy.Kind != "" {
+		preview, err = validateAuthorizedDestructivePreview(ctx, writer, writeRequest, mapped)
+		if err != nil {
+			return PreparedFlowAction{}, err
+		}
+	}
+	scopeIdentity, err := AuthorizationScopeIdentity(scope)
+	if err != nil {
+		return PreparedFlowAction{}, err
+	}
+	identity, err := a.preparedFlowActionIdentity(req, mapped, runtime, scopeIdentity, preview)
+	if err != nil {
+		return PreparedFlowAction{}, err
+	}
+	return PreparedFlowAction{
+		Identity: identity, FiringID: req.RunID,
+		request: req, mappedRecords: deepCloneRecords(mapped), preview: preview,
+		sealedIdentity: identity, scopeIdentity: scopeIdentity,
+	}, nil
+}
+
+// ExecutePreparedFlowAction revalidates the live authorization and preview,
+// acquires a non-authoritative replay lease immediately before provider write,
+// then persists a receipt only after acknowledgement and independent read-back.
+func (a *App) ExecutePreparedFlowAction(ctx context.Context, prepared PreparedFlowAction) (FlowActionExecutionResult, error) {
+	result := FlowActionExecutionResult{
+		RecordsAttempted: len(prepared.mappedRecords), PreparedExecutionIdentity: prepared.Identity, FiringID: prepared.FiringID,
+	}
+	if ctx == nil {
+		return result, errors.New("flow action context is required")
+	}
+	if err := ctx.Err(); err != nil {
+		return result, err
+	}
+	if a == nil {
+		return result, errors.New("flow action approval authority is required")
+	}
+	if !projectApprovalStringEqual(prepared.Identity, prepared.sealedIdentity) ||
+		!projectApprovalStringEqual(prepared.FiringID, prepared.request.RunID) {
+		return result, &PreparedExecutionRefusedError{Identity: prepared.Identity, Reason: "prepared_identity_changed"}
+	}
+	// Serialize the same prepared identity before live state refresh. The marker
+	// is replay evidence, not authority: every refusal before possible dispatch
+	// releases it, while a possibly-sent write leaves it parked fail-closed.
+	lease, err := a.acquirePreparedExecutionLease(prepared.Identity)
+	if err != nil {
+		return result, err
+	}
+	dispatchMayHaveOccurred := false
+	defer func() {
+		if !dispatchMayHaveOccurred {
+			_ = lease.Release()
+		}
+	}()
+
+	writer, scope, runtime, err := a.validateAuthorizedFlowAction(ctx, prepared.request)
+	if err != nil {
+		return result, err
+	}
+	scopeIdentity, err := AuthorizationScopeIdentity(scope)
+	if err != nil {
+		return result, err
+	}
+	if !projectApprovalStringEqual(scopeIdentity, prepared.scopeIdentity) {
+		return result, &PreparedExecutionRefusedError{Identity: prepared.Identity, Reason: "authorization_scope_changed"}
+	}
+
+	mapped := deepCloneRecords(prepared.mappedRecords)
+	writeRequest := connectors.WriteRequest{
+		Stream: "records", Table: prepared.request.DestinationTable, Action: prepared.request.Action, Config: runtime,
+	}
+	if validator, ok := writer.(connectors.WriteValidator); ok {
+		if err := validator.ValidateWrite(ctx, writeRequest, mapped); err != nil {
+			return result, fmt.Errorf("validate prepared flow action destination: %w", err)
 		}
 	}
 	if scope.ConfirmationPolicy.Kind != "" {
-		if _, err := validateAuthorizedDestructivePreview(ctx, writer, writeRequest, mapped); err != nil {
-			return FlowActionExecutionResult{}, err
+		preview, err := validateAuthorizedDestructivePreview(ctx, writer, writeRequest, mapped)
+		if err != nil {
+			return result, err
 		}
+		if !projectApprovalStringEqual(preview.Digest, prepared.preview.Digest) || !sameProjectApprovalTarget(preview.ApprovalTarget, prepared.preview.ApprovalTarget) {
+			return result, &PreparedExecutionRefusedError{Identity: prepared.Identity, Reason: "preview_changed"}
+		}
+	}
+	if err := ctx.Err(); err != nil {
+		return result, err
+	}
+	if scope.ConfirmationPolicy.Kind != "" {
 		evidence, err := durableAuthorizationEvidence(scope)
 		if err != nil {
-			return FlowActionExecutionResult{}, err
+			return result, err
 		}
 		writeRequest.Approval = evidence
 	}
 
+	dispatchMayHaveOccurred = true
 	writeResult, err := writer.Write(ctx, writeRequest, mapped)
-	result := FlowActionExecutionResult{
-		RecordsAttempted: len(mapped),
-		RecordsSucceeded: writeResult.RecordsWritten,
-		RecordsFailed:    writeResult.RecordsFailed,
-	}
+	result.RecordsSucceeded = writeResult.RecordsWritten
+	result.RecordsFailed = writeResult.RecordsFailed
 	if err != nil {
 		return result, err
 	}
@@ -57,7 +156,7 @@ func (a *App) ExecuteAuthorizedFlowAction(ctx context.Context, req FlowActionExe
 	}
 	acknowledgedAt := time.Now().UTC()
 
-	readBackRecords, err := readFlowActionTarget(ctx, writer, req.ReadBackStream, runtime, writeResult.RecordsWritten)
+	readBackRecords, err := readFlowActionTarget(ctx, writer, prepared.request.ReadBackStream, runtime, writeResult.RecordsWritten)
 	if err != nil {
 		return result, err
 	}
@@ -66,20 +165,68 @@ func (a *App) ExecuteAuthorizedFlowAction(ctx context.Context, req FlowActionExe
 	}
 
 	receipt, err := a.recordFlowActionReceipt(FlowActionReceipt{
-		RunID:                  req.RunID,
-		FlowName:               req.FlowName,
-		StepID:                 req.StepID,
-		AuthorizationReference: req.AuthorizationReference,
-		DestinationConnector:   writer.Name(),
-		Action:                 req.Action,
-		AcknowledgedAt:         acknowledgedAt,
-		ReadBackAt:             time.Now().UTC(),
+		RunID: prepared.FiringID, FiringID: prepared.FiringID, PreparedExecutionIdentity: prepared.Identity,
+		FlowName: prepared.request.FlowName, StepID: prepared.request.StepID,
+		AuthorizationReference: prepared.request.AuthorizationReference,
+		DestinationConnector:   writer.Name(), Action: prepared.request.Action,
+		AcknowledgedAt: acknowledgedAt, ReadBackAt: time.Now().UTC(),
 	})
 	if err != nil {
 		return result, err
 	}
 	result.ReceiptID = receipt.ID
 	return result, nil
+}
+
+func (a *App) preparedFlowActionIdentity(req FlowActionExecutionRequest, mapped []connectors.Record, runtime connectors.RuntimeConfig, scopeIdentity string, preview connectors.WritePreview) (string, error) {
+	binding := struct {
+		AuthorizationReference string                         `json:"authorization_reference"`
+		ScopeIdentity          string                         `json:"scope_identity"`
+		FiringID               string                         `json:"firing_id"`
+		ManifestDigest         string                         `json:"manifest_digest"`
+		FlowName               string                         `json:"flow_name"`
+		StepID                 string                         `json:"step_id"`
+		SourceTable            string                         `json:"source_table"`
+		SourceConnection       string                         `json:"source_connection"`
+		DestinationTable       string                         `json:"destination_table"`
+		DestinationConnector   string                         `json:"destination_connector"`
+		Action                 string                         `json:"action"`
+		CredentialRevision     string                         `json:"credential_revision"`
+		ConfigurationDigest    string                         `json:"configuration_digest"`
+		Mappings               map[string]string              `json:"mappings"`
+		Records                []connectors.Record            `json:"records"`
+		PreviewDigest          string                         `json:"preview_digest"`
+		ApprovalTarget         connectors.WriteApprovalTarget `json:"approval_target"`
+	}{
+		AuthorizationReference: req.AuthorizationReference, ScopeIdentity: scopeIdentity,
+		FiringID: req.RunID, ManifestDigest: req.ManifestDigest, FlowName: req.FlowName, StepID: req.StepID,
+		SourceTable: req.SourceTable, SourceConnection: req.SourceConnection,
+		DestinationTable: req.DestinationTable, DestinationConnector: req.DestinationConnector, Action: req.Action,
+		CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest,
+		Mappings: cloneStringMap(req.Mappings), Records: deepCloneRecords(mapped),
+		PreviewDigest: preview.Digest, ApprovalTarget: preview.ApprovalTarget,
+	}
+	payload, err := json.Marshal(binding)
+	if err != nil {
+		return "", fmt.Errorf("encode prepared flow action identity: %w", err)
+	}
+	return "pex_" + hashString("prepared-flow-action-v1\x00"+string(payload)), nil
+}
+
+func cloneFlowActionExecutionRequest(req FlowActionExecutionRequest) FlowActionExecutionRequest {
+	clone := req
+	clone.DestinationConfig = cloneStringMap(req.DestinationConfig)
+	clone.Mappings = cloneStringMap(req.Mappings)
+	clone.Records = deepCloneRecords(req.Records)
+	return clone
+}
+
+func deepCloneRecords(records []connectors.Record) []connectors.Record {
+	cloned := make([]connectors.Record, len(records))
+	for i, record := range records {
+		cloned[i] = deepCloneRecord(record)
+	}
+	return cloned
 }
 
 // ValidateAuthorizedFlowAction verifies every non-payload precondition for a
@@ -194,7 +341,7 @@ func readFlowActionTarget(ctx context.Context, connector connectors.Connector, s
 }
 
 func (a *App) recordFlowActionReceipt(receipt FlowActionReceipt) (FlowActionReceipt, error) {
-	if receipt.RunID == "" || receipt.FlowName == "" || receipt.StepID == "" || receipt.AuthorizationReference == "" || receipt.DestinationConnector == "" || receipt.Action == "" || receipt.AcknowledgedAt.IsZero() || receipt.ReadBackAt.IsZero() {
+	if receipt.RunID == "" || receipt.FiringID == "" || receipt.PreparedExecutionIdentity == "" || receipt.FlowName == "" || receipt.StepID == "" || receipt.AuthorizationReference == "" || receipt.DestinationConnector == "" || receipt.Action == "" || receipt.AcknowledgedAt.IsZero() || receipt.ReadBackAt.IsZero() {
 		return FlowActionReceipt{}, errors.New("flow action receipt is incomplete")
 	}
 	id, err := prefixedID("fact")

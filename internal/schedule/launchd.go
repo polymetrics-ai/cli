@@ -75,7 +75,7 @@ func renderPlist(m Manifest, pmBin string) (string, error) {
 	if m.Root != "" {
 		args = append(args, "--root", m.Root)
 	}
-	args = append(args, "schedule", "fire", m.Name, "--authorization", m.AuthorizationReference, "--json")
+	args = append(args, "flow", "run", m.Flow, "--json")
 	for _, arg := range args {
 		fmt.Fprintf(&sb, "\t\t<string>%s</string>\n", arg)
 	}

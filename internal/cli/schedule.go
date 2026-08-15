@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -26,7 +27,7 @@ func runSchedule(ctx context.Context, cfg config.Config, root string, args []str
 	}
 	switch args[0] {
 	case "create":
-		return runScheduleCreate(root, args[1:], stdout, jsonOut)
+		return runScheduleCreate(ctx, root, args[1:], stdout, jsonOut)
 	case "list":
 		return runScheduleList(root, args[1:], stdout, jsonOut)
 	case "inspect", "status":
@@ -42,29 +43,31 @@ func runSchedule(ctx context.Context, cfg config.Config, root string, args []str
 	}
 }
 
-func runScheduleCreate(root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runScheduleCreate(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	name := flags.first("name")
 	cron := flags.first("cron")
 	flow := flags.first("flow")
-	authorization := flags.first("authorization")
 
-	if name == "" || cron == "" || flow == "" || authorization == "" {
-		return usageErrorf("pm schedule create requires --name, --cron, --flow, --authorization")
+	if name == "" || cron == "" || flow == "" {
+		return usageErrorf("pm schedule create requires --name, --cron, --flow")
 	}
 
 	if _, err := schedule.ParseCron(cron); err != nil {
 		return validationErrorf("invalid --cron: %v", err)
 	}
+	if err := validateStoredScheduledFlow(ctx, root, flow); err != nil {
+		return err
+	}
+	if _, found, err := schedule.FindByFlow(root, flow); err != nil {
+		return err
+	} else if found {
+		return &schedule.FlowReferenceError{Flow: flow, Reason: schedule.FlowReferenceAmbiguous, Err: errors.New("flow already has a schedule")}
+	}
 
 	now := time.Now().UTC()
 	m := schedule.Manifest{
-		Name:                   name,
-		Cron:                   cron,
-		Flow:                   flow,
-		AuthorizationReference: authorization,
-		CreatedAt:              now,
-		UpdatedAt:              now,
+		Name: name, Cron: cron, Flow: flow, CreatedAt: now, UpdatedAt: now,
 	}
 
 	if err := schedule.Save(root, m, false); err != nil {
@@ -77,7 +80,7 @@ func runScheduleCreate(root string, args []string, stdout io.Writer, jsonOut boo
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "Schedule", "ok": true, "schedule": m, "status": schedule.FireState{Status: schedule.FireStatusReady}})
 	}
-	_, _ = fmt.Fprintf(stdout, "Created schedule %s (cron: %s, flow: %s, authorization: %s, status: %s)\n", m.Name, m.Cron, m.Flow, m.AuthorizationReference, schedule.FireStatusReady)
+	_, _ = fmt.Fprintf(stdout, "Created schedule %s (cron: %s, flow: %s, status: %s)\n", m.Name, m.Cron, m.Flow, schedule.FireStatusReady)
 	return nil
 }
 
@@ -100,7 +103,7 @@ func runScheduleList(root string, args []string, stdout io.Writer, jsonOut bool)
 		if jsonOut {
 			continue
 		}
-		_, _ = fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\t%s\n", m.Name, m.Cron, m.Flow, m.AuthorizationReference, state.Status)
+		_, _ = fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\n", m.Name, m.Cron, m.Flow, state.Status)
 	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ScheduleList", "schedules": manifests, "statuses": statuses})
@@ -128,9 +131,12 @@ func runScheduleInspect(root string, args []string, stdout io.Writer, jsonOut bo
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ScheduleInspect", "schedule": m, "status": state})
 	}
-	_, _ = fmt.Fprintf(stdout, "Schedule: %s\nFlow: %s\nCron: %s\nAuthorization: %s\nStatus: %s\n", m.Name, m.Flow, m.Cron, m.AuthorizationReference, state.Status)
+	_, _ = fmt.Fprintf(stdout, "Schedule: %s\nFlow: %s\nCron: %s\nStatus: %s\n", m.Name, m.Flow, m.Cron, state.Status)
 	if len(state.LastFire.ReceiptIDs) > 0 {
 		_, _ = fmt.Fprintf(stdout, "Receipt IDs: %s\n", strings.Join(state.LastFire.ReceiptIDs, ","))
+	}
+	if len(state.LastFire.PreparedExecutionIdentities) > 0 {
+		_, _ = fmt.Fprintf(stdout, "Prepared executions: %s\n", strings.Join(state.LastFire.PreparedExecutionIdentities, ","))
 	}
 	return nil
 }
@@ -152,6 +158,9 @@ func runScheduleInstall(ctx context.Context, cfg config.Config, root string, arg
 		return err
 	}
 	m.Root = root
+	if err := validateStoredScheduledFlow(ctx, root, m.Flow); err != nil {
+		return err
+	}
 	state, err := schedule.LoadFireState(root, m.Name)
 	if err != nil {
 		return err
@@ -167,7 +176,7 @@ func runScheduleInstall(ctx context.Context, cfg config.Config, root string, arg
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ScheduleInstall", "ok": true, "schedule": m, "status": state, "backend": string(backend.Kind())})
 	}
-	_, _ = fmt.Fprintf(stdout, "Installed schedule %s via %s (authorization: %s, status: %s)\n", m.Name, backend.Kind(), m.AuthorizationReference, state.Status)
+	_, _ = fmt.Fprintf(stdout, "Installed schedule %s via %s (flow: %s, status: %s)\n", m.Name, backend.Kind(), m.Flow, state.Status)
 	return nil
 }
 
@@ -209,9 +218,9 @@ func runScheduleRemove(ctx context.Context, cfg config.Config, root string, args
 	}
 
 	if jsonOut {
-		return writeJSON(stdout, envelope{"kind": "ScheduleRemove", "ok": true, "name": name, "authorization_reference": m.AuthorizationReference, "status": state})
+		return writeJSON(stdout, envelope{"kind": "ScheduleRemove", "ok": true, "name": name, "flow": m.Flow, "status": state})
 	}
-	_, _ = fmt.Fprintf(stdout, "Removed schedule %s (authorization: %s, status: %s)\n", name, m.AuthorizationReference, state.Status)
+	_, _ = fmt.Fprintf(stdout, "Removed schedule %s (flow: %s, status: %s)\n", name, m.Flow, state.Status)
 	return nil
 }
 
@@ -225,7 +234,7 @@ func runScheduleFireWithApp(ctx context.Context, cfg config.Config, root string,
 	flags := parseFlags(args)
 	positionals := flags.values["_"]
 	if len(positionals) != 1 {
-		return usageErrorf("pm schedule fire <name> --authorization <auth-ref>")
+		return usageErrorf("pm schedule fire <name>")
 	}
 	m, err := schedule.Load(root, positionals[0])
 	if err != nil {
@@ -234,32 +243,22 @@ func runScheduleFireWithApp(ctx context.Context, cfg config.Config, root string,
 		}
 		return err
 	}
-	if supplied := flags.first("authorization"); supplied == "" || supplied != m.AuthorizationReference {
-		return validationErrorf("schedule %q authorization reference does not match its installed binding", m.Name)
-	}
-	lease, err := schedule.BeginFire(root, m.Name)
-	if err != nil {
-		return err
+	if flags.first("authorization") != "" {
+		return usageErrorf("schedule fire derives approval from flow jobs; --authorization is not accepted")
 	}
 
 	var flowOutput bytes.Buffer
 	var result flow.RunResult
-	err = flowRun(ctx, cfg, a, []string{m.Flow, "--authorization", m.AuthorizationReference}, &flowOutput, true)
+	err = flowRun(ctx, cfg, a, []string{m.Flow}, &flowOutput, true)
 	if err == nil {
 		if unmarshalErr := json.Unmarshal(flowOutput.Bytes(), &result); unmarshalErr != nil {
 			err = fmt.Errorf("decode scheduled flow result: %w", unmarshalErr)
 		}
 	}
 	if err != nil {
-		if parkErr := lease.Park(scheduleFireStopReason(err)); parkErr != nil {
-			return fmt.Errorf("park schedule %q after failed flow: %w", m.Name, parkErr)
-		}
 		return err
 	}
 	receiptIDs := flowReceiptIDs(result)
-	if err := lease.Complete(schedule.FireReceipt{FlowName: result.FlowName, FlowStatus: result.Status, ReceiptIDs: receiptIDs}); err != nil {
-		return err
-	}
 	state, err := schedule.LoadFireState(root, m.Name)
 	if err != nil {
 		return err
@@ -271,6 +270,29 @@ func runScheduleFireWithApp(ctx context.Context, cfg config.Config, root string,
 	return nil
 }
 
+func validateStoredScheduledFlow(ctx context.Context, root, flowName string) error {
+	if _, _, err := schedule.FindByFlow(root, flowName); err != nil {
+		return err
+	}
+	return withApp(root, func(a *app.App) error {
+		path := filepath.Join(a.ProjectDir(), "flows", flowName+".json")
+		manifest, err := readManifestFile(path)
+		if err != nil {
+			if errors.Is(err, os.ErrNotExist) {
+				return &schedule.FlowReferenceError{Flow: flowName, Reason: schedule.FlowReferenceMissing, Err: err}
+			}
+			return &schedule.FlowReferenceError{Flow: flowName, Reason: schedule.FlowReferenceInvalid, Err: err}
+		}
+		if manifest.Name != flowName {
+			return &schedule.FlowReferenceError{Flow: flowName, Reason: schedule.FlowReferenceInvalid, Err: errors.New("stored manifest name does not match its reference")}
+		}
+		if _, err := resolveManifestJobs(ctx, a, manifest); err != nil {
+			return &schedule.FlowReferenceError{Flow: flowName, Reason: schedule.FlowReferenceInvalid, Err: err}
+		}
+		return nil
+	})
+}
+
 func flowReceiptIDs(result flow.RunResult) []string {
 	ids := []string{}
 	for _, step := range result.Steps {
@@ -278,6 +300,17 @@ func flowReceiptIDs(result flow.RunResult) []string {
 	}
 	sort.Strings(ids)
 	return ids
+}
+
+func flowPreparedExecutionIdentities(result flow.RunResult) []string {
+	identities := []string{}
+	for _, step := range result.Steps {
+		if step.PreparedExecutionIdentity != "" {
+			identities = append(identities, step.PreparedExecutionIdentity)
+		}
+	}
+	sort.Strings(identities)
+	return identities
 }
 
 func scheduleFireStopReason(err error) schedule.FireStopReason {
@@ -295,6 +328,10 @@ func scheduleFireStopReason(err error) schedule.FireStopReason {
 	}
 	var rateLimited *connsdk.RateLimitError
 	if errors.As(err, &rateLimited) {
+		return schedule.FireStopRateLimit
+	}
+	var rateBudgetRefused *connsdk.RateBudgetRefusalError
+	if errors.As(err, &rateBudgetRefused) {
 		return schedule.FireStopRateLimit
 	}
 	return schedule.FireStopFailed

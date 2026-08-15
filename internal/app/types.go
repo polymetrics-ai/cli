@@ -397,6 +397,7 @@ type FlowActionExecutionRequest struct {
 	FlowName               string
 	StepID                 string
 	RunID                  string
+	ManifestDigest         string
 	SourceTable            string
 	SourceConnection       string
 	DestinationTable       string
@@ -410,29 +411,47 @@ type FlowActionExecutionRequest struct {
 	Records                []connectors.Record
 }
 
+// PreparedFlowAction is an in-memory, payload-bound execution prepared from a
+// standing authorization. Its exported fields are safe opaque evidence, not
+// authority. Request, mapped payload, and preview remain process-private.
+type PreparedFlowAction struct {
+	Identity string
+	FiringID string
+
+	request        FlowActionExecutionRequest
+	mappedRecords  []connectors.Record
+	preview        connectors.WritePreview
+	sealedIdentity string
+	scopeIdentity  string
+}
+
 // FlowActionExecutionResult contains only observable delivery accounting and
 // an opaque receipt identifier. It deliberately excludes source records,
 // payload content, credentials, and destination configuration.
 type FlowActionExecutionResult struct {
-	RecordsAttempted int
-	RecordsSucceeded int
-	RecordsFailed    int
-	ReceiptID        string
+	RecordsAttempted          int
+	RecordsSucceeded          int
+	RecordsFailed             int
+	ReceiptID                 string
+	PreparedExecutionIdentity string
+	FiringID                  string
 }
 
 // FlowActionReceipt is durable evidence that a connector acknowledged a flow
 // action and its configured target stream was read back successfully. It is
 // recorded only after both events, so it is safe for flow checkpointing.
 type FlowActionReceipt struct {
-	ID                     string    `json:"id"`
-	RunID                  string    `json:"run_id"`
-	FlowName               string    `json:"flow_name"`
-	StepID                 string    `json:"step_id"`
-	AuthorizationReference string    `json:"authorization_reference"`
-	DestinationConnector   string    `json:"destination_connector"`
-	Action                 string    `json:"action"`
-	AcknowledgedAt         time.Time `json:"acknowledged_at"`
-	ReadBackAt             time.Time `json:"read_back_at"`
+	ID                        string    `json:"id"`
+	RunID                     string    `json:"run_id"`
+	FiringID                  string    `json:"firing_id"`
+	PreparedExecutionIdentity string    `json:"prepared_execution_identity"`
+	FlowName                  string    `json:"flow_name"`
+	StepID                    string    `json:"step_id"`
+	AuthorizationReference    string    `json:"authorization_reference"`
+	DestinationConnector      string    `json:"destination_connector"`
+	Action                    string    `json:"action"`
+	AcknowledgedAt            time.Time `json:"acknowledged_at"`
+	ReadBackAt                time.Time `json:"read_back_at"`
 }
 
 type ReverseRun struct {

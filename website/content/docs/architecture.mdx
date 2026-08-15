@@ -136,23 +136,37 @@ Reverse ETL is deliberately split across plan, preview, approval, and run. Agent
 ## Flows
 
 ```bash
+pm flow create --file flow.json --json
 pm flow plan --file flow.json --json
 pm flow preview --file flow.json --json
-pm flow run --file flow.json --authorization <auth-ref> --force --json
+pm flow run nightly_leads --force --json
 pm flow status nightly_leads --flows-dir .polymetrics/flows --json
 pm flow list --flows-dir .polymetrics/flows --json
 ```
 
-Flow manifests describe ordered ETL and query steps. `plan` and `preview` validate the manifest and DAG. `run` executes supported steps through existing app primitives and checkpoints progress.
-Flow dependencies are inferred from `in` and `out` warehouse tables. Supported step kinds are `sync`, `query`, `rlm`, and approval-gated `action`. RLM steps reuse the same analyzers as `pm rlm run`; a relative `spec` path is resolved from the flow manifest file.
+Flow manifests describe ordered ETL, query, RLM, and action steps. `create`
+stores a flow only after its sync jobs resolve to existing ETL connections and
+its action jobs resolve to existing reverse-ETL plans with live standing
+authorization. Missing, malformed, unrecognised, and unapproved references are
+refused before the flow is written. `plan` and `preview` validate the manifest
+and DAG. `run` reloads every job, executes supported steps through existing app
+primitives, and checkpoints progress.
+
+Flow dependencies are inferred from `in` and `out` warehouse tables. RLM steps
+reuse the same analyzers as `pm rlm run`; a relative `spec` path is resolved
+from the flow manifest file.
 
 The [`pm flow` CLI manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/flow.md)
 owns source selection, including the manifest selectors and fail-closed handling
 for case-equivalent or undecidable sources. This is manifest syntax, not a flow
-CLI flag. Action steps also require a durable authorization reference created
-by the normal reverse-ETL plan → preview → approval lifecycle. They dispatch
-through typed connector validation and write APIs, read the configured target
-stream back, and persist an opaque receipt before checkpointing.
+CLI flag. Approve a reverse-ETL job once at connection, schema, preview,
+mapping, destination action, credential revision, and confirmation-policy
+granularity, then reference that job from the action step. The flow derives its
+scope and authorization; no token or authorization reference is accepted by
+flow create or run. Each execution binds the resolved manifest and payload into
+a prepared-execution identity, dispatches through typed connector validation
+and write APIs, reads the target stream back, and persists an opaque receipt
+before checkpointing.
 
 ```json
 {
@@ -195,16 +209,26 @@ The worker serves the typed RLM Temporal workflow. It is not a generic remote co
 ## Scheduling
 
 ```bash
-pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --authorization <auth-ref> --json
+pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --json
 pm schedule list --json
 pm schedule inspect nightly --json
 pm schedule status nightly --json
 pm schedule install nightly --crontab --json
-pm schedule fire nightly --authorization <auth-ref> --json
+pm schedule fire nightly --json
 pm schedule remove nightly --json
 ```
 
-Schedules store local cron expressions for named flows and a durable, revocable authorization reference. Installation chooses a local scheduler backend; `--crontab` forces the crontab path. Each fire re-derives the immutable content-free scope before it contacts a connector. Inspect/status exposes only the reference, terminal fire status, and safe receipt identifiers; revoked, expired, drifted, ambiguous, rate-limited, and cleanup-failed work remains stopped or parked instead of replaying.
+Schedules accept only an existing valid flow. Installation chooses a local
+scheduler backend; `--crontab` forces the crontab path. The installed command is
+exactly `pm --root <root> flow run <name> --json`, with no approval token or
+authorization reference in crontab, argv, schedule state, or JSON.
+
+Every unattended firing reloads its jobs and revalidates credential revision,
+manifest/schema, source scope, mappings, destination action, confirmation
+policy, expiry, and revocation before provider I/O. Any drift parks the
+schedule. Failed, ambiguous, rate-limited, and cleanup-failed writes also remain
+stopped or parked instead of replaying. Inspect/status exposes only terminal
+fire status, safe prepared-execution identities, and opaque receipt IDs.
 
 ## Runtime checks and benchmarks
 

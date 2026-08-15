@@ -1,7 +1,9 @@
 package flow
 
 import (
+	"crypto/sha256"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"regexp"
 )
@@ -44,6 +46,10 @@ type ActionConfig struct {
 type FlowStep struct {
 	ID   string   `json:"id"`
 	Kind StepKind `json:"kind"`
+	// Job is a positive reference to an existing App job. Sync steps resolve it
+	// to a connection; action steps resolve it to an already-approved reverse
+	// plan. Executable action scope is derived from that job on every run.
+	Job string `json:"job,omitempty"`
 	// Connection identifies the sync connection for sync steps and scopes the
 	// source warehouse views for query steps. _unattributed selects root-owned
 	// tables for a query. It remains optional for query steps so an omitted
@@ -66,6 +72,18 @@ type FlowManifest struct {
 	Steps       []FlowStep `json:"steps"`
 }
 
+// ManifestDigest returns a stable content digest for one fully resolved flow.
+// Prepared action identities bind it so edits to upstream queries, job scope,
+// dependencies, or action configuration cannot reuse old prepared evidence.
+func ManifestDigest(manifest FlowManifest) (string, error) {
+	payload, err := json.Marshal(manifest)
+	if err != nil {
+		return "", fmt.Errorf("encode flow manifest digest: %w", err)
+	}
+	digest := sha256.Sum256(payload)
+	return fmt.Sprintf("fmd_%x", digest[:]), nil
+}
+
 // ParseManifest decodes a JSON-encoded flow manifest.
 // Returns an error if the JSON is malformed.
 func ParseManifest(data []byte) (FlowManifest, error) {
@@ -77,6 +95,50 @@ func ParseManifest(data []byte) (FlowManifest, error) {
 }
 
 var validNameRe = regexp.MustCompile(`^[A-Za-z0-9_-]+$`)
+
+// JobReferenceReason is a stable reason a flow job reference was refused.
+type JobReferenceReason string
+
+const (
+	JobReferenceMissing      JobReferenceReason = "missing"
+	JobReferenceMalformed    JobReferenceReason = "malformed"
+	JobReferenceUnapproved   JobReferenceReason = "unapproved"
+	JobReferenceUnrecognized JobReferenceReason = "unrecognized"
+)
+
+// JobReferenceError names the exact flow step and reference that could not be
+// positively resolved. Err retains a more specific authorization refusal.
+type JobReferenceError struct {
+	Flow      string
+	StepID    string
+	Kind      StepKind
+	Reference string
+	Reason    JobReferenceReason
+	Err       error
+}
+
+func (e *JobReferenceError) Error() string {
+	if e == nil {
+		return "flow job reference refused"
+	}
+	message := fmt.Sprintf("flow %q step %q %s job %q is %s", e.Flow, e.StepID, e.Kind, e.Reference, e.Reason)
+	if e.Err != nil {
+		message += ": " + e.Err.Error()
+	}
+	return message
+}
+
+func (e *JobReferenceError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.Err
+}
+
+func IsJobReferenceError(err error, reason JobReferenceReason) bool {
+	var referenceErr *JobReferenceError
+	return errors.As(err, &referenceErr) && referenceErr.Reason == reason
+}
 
 // ValidateManifest checks the manifest for rule violations.
 // Returns a slice of errors (wrapping ErrManifestInvalid) for every violation found.
@@ -112,8 +174,8 @@ func ValidateManifest(m FlowManifest) []error {
 
 		switch s.Kind {
 		case KindSync:
-			if s.Connection == "" {
-				add("step %q (sync) must have a connection", s.ID)
+			if s.Job == "" && s.Connection == "" {
+				add("step %q (sync) must have a job or connection reference", s.ID)
 			}
 			if len(s.Streams) == 0 {
 				add("step %q (sync) must have at least one stream", s.ID)
@@ -148,17 +210,19 @@ func ValidateManifest(m FlowManifest) []error {
 				add("step %q (action) must have action_cfg", s.ID)
 				break
 			}
-			if cfg.SourceTable == "" {
-				add("step %q (action) must have source_table", s.ID)
-			}
-			if cfg.DestinationConnector == "" {
-				add("step %q (action) must have destination_connector", s.ID)
-			}
-			if len(cfg.Mappings) == 0 {
-				add("step %q (action) must have at least one mapping", s.ID)
+			if s.Job == "" {
+				if cfg.SourceTable == "" {
+					add("step %q (action) must have source_table or an approved job reference", s.ID)
+				}
+				if cfg.DestinationConnector == "" {
+					add("step %q (action) must have destination_connector or an approved job reference", s.ID)
+				}
+				if len(cfg.Mappings) == 0 {
+					add("step %q (action) must have at least one mapping or an approved job reference", s.ID)
+				}
 			}
 			// Default action to "upsert" — not an error if empty.
-			if cfg.Action == "" {
+			if cfg.Action == "" && s.Job == "" {
 				cfg.Action = "upsert"
 			}
 		default:

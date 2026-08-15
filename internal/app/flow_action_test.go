@@ -3,6 +3,7 @@ package app_test
 import (
 	"context"
 	"errors"
+	"path/filepath"
 	"sync"
 	"testing"
 	"time"
@@ -56,6 +57,7 @@ func TestExecuteAuthorizedFlowActionAcknowledgesReadsBackThenRecordsReceipt(t *t
 		FlowName:               "close-stale-issues",
 		StepID:                 "close",
 		RunID:                  "flow-run-1",
+		ManifestDigest:         "fmd_fixture_1",
 		SourceTable:            sourcePlan.SourceTable,
 		SourceConnection:       sourcePlan.SourceConnection,
 		DestinationTable:       "flow-action-target",
@@ -128,6 +130,7 @@ func TestExecuteAuthorizedFlowActionScopeDriftRefusesBeforeProviderWrite(t *test
 		FlowName:               "close-stale-issues",
 		StepID:                 "close",
 		RunID:                  "flow-run-2",
+		ManifestDigest:         "fmd_fixture_2",
 		SourceTable:            sourcePlan.SourceTable,
 		SourceConnection:       sourcePlan.SourceConnection,
 		DestinationTable:       "flow-action-target",
@@ -187,6 +190,7 @@ func TestExecuteAuthorizedFlowActionReadBackFailurePersistsNoReceipt(t *testing.
 		FlowName:               "close-stale-issues",
 		StepID:                 "close",
 		RunID:                  "flow-run-3",
+		ManifestDigest:         "fmd_fixture_3",
 		SourceTable:            sourcePlan.SourceTable,
 		SourceConnection:       sourcePlan.SourceConnection,
 		DestinationTable:       "flow-action-target",
@@ -209,6 +213,245 @@ func TestExecuteAuthorizedFlowActionReadBackFailurePersistsNoReceipt(t *testing.
 	}
 }
 
+func TestAuthorizedFlowActionPreparedIdentityBindsPayloadAndReachesReceipt(t *testing.T) {
+	ctx := context.Background()
+	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-1")
+
+	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
+	if err != nil {
+		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
+	}
+	if prepared.Identity == "" || prepared.FiringID != req.RunID {
+		t.Fatalf("prepared action = %+v, want safe identity and firing identifiers", prepared)
+	}
+
+	drifted := req
+	drifted.Records = append([]connectors.Record(nil), req.Records...)
+	drifted.Records[0] = cloneTestRecord(drifted.Records[0])
+	drifted.Records[0]["email"] = "changed@example.test"
+	driftedPrepared, err := a.PrepareAuthorizedFlowAction(ctx, drifted)
+	if err != nil {
+		t.Fatalf("PrepareAuthorizedFlowAction(payload drift) error = %v", err)
+	}
+	if driftedPrepared.Identity == prepared.Identity {
+		t.Fatalf("prepared identity = %q for two payloads, want payload-bound identities", prepared.Identity)
+	}
+	manifestDrift := req
+	manifestDrift.ManifestDigest = "fmd_fixture_changed_query"
+	manifestPrepared, err := a.PrepareAuthorizedFlowAction(ctx, manifestDrift)
+	if err != nil {
+		t.Fatalf("PrepareAuthorizedFlowAction(manifest drift) error = %v", err)
+	}
+	if manifestPrepared.Identity == prepared.Identity {
+		t.Fatalf("prepared identity = %q for two manifests, want manifest-bound identities", prepared.Identity)
+	}
+
+	result, err := a.ExecutePreparedFlowAction(ctx, prepared)
+	if err != nil {
+		t.Fatalf("ExecutePreparedFlowAction() error = %v", err)
+	}
+	if result.PreparedExecutionIdentity != prepared.Identity || result.FiringID != prepared.FiringID {
+		t.Fatalf("execution result = %+v, want prepared identity/firing propagated", result)
+	}
+	receipts := a.ListFlowActionReceipts()
+	if len(receipts) != 1 || receipts[0].PreparedExecutionIdentity != prepared.Identity || receipts[0].FiringID != prepared.FiringID {
+		t.Fatalf("flow action receipts = %+v, want safe prepared execution evidence", receipts)
+	}
+	if target.writeCalls() != 2 { // one write created the standing authorization; one is this firing
+		t.Fatalf("provider writes = %d, want standing approval plus one prepared firing", target.writeCalls())
+	}
+}
+
+func TestAuthorizedFlowActionCancellationReleasesPreparedLeaseAndReplayWritesOnce(t *testing.T) {
+	ctx := context.Background()
+	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-cancel")
+	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
+	if err != nil {
+		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
+	}
+	beforeEvents := len(target.events())
+
+	canceled, cancel := context.WithCancel(ctx)
+	cancel()
+	_, err = a.ExecutePreparedFlowAction(canceled, prepared)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("ExecutePreparedFlowAction(cancelled) error = %T %v, want context.Canceled", err, err)
+	}
+	if len(target.events()) != beforeEvents {
+		t.Fatalf("cancelled firing changed provider events: events=%d/%d", len(target.events()), beforeEvents)
+	}
+
+	if _, err := a.ExecutePreparedFlowAction(ctx, prepared); err != nil {
+		t.Fatalf("ExecutePreparedFlowAction(after cancellation) error = %v; prepared execution stayed parked", err)
+	}
+	writesAfterSuccess := target.writeCalls()
+	_, err = a.ExecutePreparedFlowAction(ctx, prepared)
+	var replay *app.PreparedExecutionReplayError
+	if !errors.As(err, &replay) {
+		t.Fatalf("ExecutePreparedFlowAction(replay) error = %T %v, want PreparedExecutionReplayError", err, err)
+	}
+	if target.writeCalls() != writesAfterSuccess || len(a.ListFlowActionReceipts()) != 1 {
+		t.Fatalf("prepared replay changed provider/receipt state: writes=%d receipts=%d", target.writeCalls(), len(a.ListFlowActionReceipts()))
+	}
+}
+
+func TestAuthorizedFlowActionRevokedAuthorizationRefusesAndReleasesPreparedLease(t *testing.T) {
+	ctx := context.Background()
+	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-revoked")
+	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
+	if err != nil {
+		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
+	}
+	beforeWrites := target.writeCalls()
+	if err := a.RevokeAuthorization(req.AuthorizationReference); err != nil {
+		t.Fatalf("RevokeAuthorization() error = %v", err)
+	}
+
+	_, err = a.ExecutePreparedFlowAction(ctx, prepared)
+	var revoked *app.AuthorizationRevokedError
+	if !errors.As(err, &revoked) {
+		t.Fatalf("ExecutePreparedFlowAction(revoked) error = %T %v, want AuthorizationRevokedError", err, err)
+	}
+	if target.writeCalls() != beforeWrites || len(a.ListFlowActionReceipts()) != 0 {
+		t.Fatalf("revoked authorization changed state: writes=%d receipts=%d", target.writeCalls()-beforeWrites, len(a.ListFlowActionReceipts()))
+	}
+}
+
+func TestAuthorizedFlowActionTamperedPreparedIdentityRefusesBeforeDispatch(t *testing.T) {
+	ctx := context.Background()
+	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-tampered")
+	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
+	if err != nil {
+		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
+	}
+	prepared.Identity = "pex_tampered"
+	beforeWrites := target.writeCalls()
+
+	_, err = a.ExecutePreparedFlowAction(ctx, prepared)
+	var refused *app.PreparedExecutionRefusedError
+	if !errors.As(err, &refused) {
+		t.Fatalf("ExecutePreparedFlowAction(tampered) error = %T %v, want PreparedExecutionRefusedError", err, err)
+	}
+	if target.writeCalls() != beforeWrites || len(a.ListFlowActionReceipts()) != 0 {
+		t.Fatalf("tampered prepared execution changed state: writes=%d receipts=%d", target.writeCalls()-beforeWrites, len(a.ListFlowActionReceipts()))
+	}
+}
+
+func TestAuthorizedFlowActionConcurrentPreparedExecutionHasOneWinner(t *testing.T) {
+	ctx := context.Background()
+	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-race")
+	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
+	if err != nil {
+		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
+	}
+	beforeWrites := target.writeCalls()
+
+	start := make(chan struct{})
+	errs := make(chan error, 2)
+	for range 2 {
+		go func() {
+			<-start
+			_, executeErr := a.ExecutePreparedFlowAction(ctx, prepared)
+			errs <- executeErr
+		}()
+	}
+	close(start)
+	first, second := <-errs, <-errs
+	winners, replayCount := 0, 0
+	for _, executeErr := range []error{first, second} {
+		if executeErr == nil {
+			winners++
+			continue
+		}
+		var replay *app.PreparedExecutionReplayError
+		if errors.As(executeErr, &replay) {
+			replayCount++
+			continue
+		}
+		t.Fatalf("concurrent execution error = %T %v, want nil or prepared replay", executeErr, executeErr)
+	}
+	if winners != 1 || replayCount != 1 || target.writeCalls() != beforeWrites+1 || len(a.ListFlowActionReceipts()) != 1 {
+		t.Fatalf("concurrent prepared result winners=%d replay=%d writes=%d receipts=%d", winners, replayCount, target.writeCalls()-beforeWrites, len(a.ListFlowActionReceipts()))
+	}
+}
+
+func TestAuthorizedFlowActionWriteFailureParksPreparedExecutionAndPersistsNoReceipt(t *testing.T) {
+	ctx := context.Background()
+	a, target, req := newPreparedFlowActionFixture(t, ctx, "prepared-flow-partial")
+	prepared, err := a.PrepareAuthorizedFlowAction(ctx, req)
+	if err != nil {
+		t.Fatalf("PrepareAuthorizedFlowAction() error = %v", err)
+	}
+	target.setWriteError(errors.New("write failed after possible dispatch"))
+	beforeWrites := target.writeCalls()
+	_, err = a.ExecutePreparedFlowAction(ctx, prepared)
+	if err == nil || err.Error() != "write failed after possible dispatch" {
+		t.Fatalf("ExecutePreparedFlowAction(write failure) error = %v", err)
+	}
+	if target.writeCalls() != beforeWrites || len(a.ListFlowActionReceipts()) != 0 {
+		t.Fatalf("failed write recorded success: writes=%d receipts=%d", target.writeCalls()-beforeWrites, len(a.ListFlowActionReceipts()))
+	}
+
+	reopened, err := app.Open(filepath.Dir(a.ProjectDir()))
+	if err != nil {
+		t.Fatalf("Open(replay project) error = %v", err)
+	}
+	target.setWriteError(nil)
+	reopened.Registry().Register(target)
+	_, err = reopened.ExecutePreparedFlowAction(ctx, prepared)
+	var replay *app.PreparedExecutionReplayError
+	if !errors.As(err, &replay) {
+		t.Fatalf("ExecutePreparedFlowAction(reopen replay) error = %T %v, want PreparedExecutionReplayError", err, err)
+	}
+	if target.writeCalls() != beforeWrites || len(reopened.ListFlowActionReceipts()) != 0 {
+		t.Fatalf("reopened replay changed provider/receipt state: writes=%d receipts=%d", target.writeCalls()-beforeWrites, len(reopened.ListFlowActionReceipts()))
+	}
+}
+
+func newPreparedFlowActionFixture(t *testing.T, ctx context.Context, runID string) (*app.App, *flowActionTarget, app.FlowActionExecutionRequest) {
+	t.Helper()
+	a, sourcePlan := setupApprovedReversePlan(t, ctx)
+	target := &flowActionTarget{}
+	a.Registry().Register(target)
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{Name: "flow-target", Connector: target.Name(), Secrets: map[string]string{"token": "fixture-token"}}); err != nil {
+		t.Fatalf("AddCredential(flow target) error = %v", err)
+	}
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name: "flow-action-target", SourceTable: sourcePlan.SourceTable, SourceConnection: sourcePlan.SourceConnection,
+		DestinationConnector: target.Name(), DestinationCredential: "flow-target", Action: "create",
+		Mappings: map[string]string{"id": "id", "email": "email"},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL(flow authorization) error = %v", err)
+	}
+	plan, _, err = a.PreviewReversePlan(ctx, plan.ID, nil)
+	if err != nil {
+		t.Fatalf("PreviewReversePlan(flow authorization) error = %v", err)
+	}
+	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken, Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}}); err != nil {
+		t.Fatalf("RunReverseETL(flow authorization) error = %v", err)
+	}
+	records, err := a.ReadActionSource(ctx, app.ActionSourceReadRequest{Table: sourcePlan.SourceTable, Connection: sourcePlan.SourceConnection})
+	if err != nil {
+		t.Fatalf("ReadActionSource() error = %v", err)
+	}
+	return a, target, app.FlowActionExecutionRequest{
+		FlowName: "prepared-flow", StepID: "create", RunID: runID, ManifestDigest: "fmd_fixture_prepared",
+		SourceTable: sourcePlan.SourceTable, SourceConnection: sourcePlan.SourceConnection,
+		DestinationTable: "flow-action-target", DestinationConnector: target.Name(), DestinationCredential: "flow-target",
+		Action: "create", Mappings: map[string]string{"id": "id", "email": "email"},
+		AuthorizationReference: a.ListAuthorizations()[0].Reference, ReadBackStream: "targets", Records: records,
+	}
+}
+
+func cloneTestRecord(record connectors.Record) connectors.Record {
+	clone := make(connectors.Record, len(record))
+	for key, value := range record {
+		clone[key] = value
+	}
+	return clone
+}
+
 type flowActionTarget struct {
 	mu            sync.Mutex
 	writes        int
@@ -218,6 +461,7 @@ type flowActionTarget struct {
 	receiptCount  func() int
 	earlyReceipt  bool
 	writeApproval bool
+	writeErr      error
 }
 
 func (*flowActionTarget) Name() string { return "flow-action-target" }
@@ -284,12 +528,21 @@ func (c *flowActionTarget) Write(_ context.Context, req connectors.WriteRequest,
 	if err := req.Approval.Authorize(flowActionApprovalTarget(c.Name(), req), "flow-action-target-preview", time.Now().UTC()); err != nil {
 		return connectors.WriteResult{}, err
 	}
+	if c.writeErr != nil {
+		return connectors.WriteResult{}, c.writeErr
+	}
 	if c.receiptCount != nil && c.receiptCount() != 0 {
 		c.earlyReceipt = true
 	}
 	c.writes++
 	c.records = append(c.records, records...)
 	return connectors.WriteResult{RecordsWritten: len(records)}, nil
+}
+
+func (c *flowActionTarget) setWriteError(err error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.writeErr = err
 }
 
 func (c *flowActionTarget) writeCalls() int {
