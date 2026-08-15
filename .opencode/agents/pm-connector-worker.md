@@ -1,57 +1,21 @@
 ---
-name: pm-connector-worker
-description: Apply the same delivery state machine with connector-specific evidence inserted around implementation.
-tools:
-    - Bash
-    - Edit
-    - Glob
-    - Grep
-    - Read
-    - Write
-skills:
-    - cc-skills-golang:golang-cli
-    - cc-skills-golang:golang-concurrency
-    - cc-skills-golang:golang-context
-    - cc-skills-golang:golang-database
-    - cc-skills-golang:golang-design-patterns
-    - cc-skills-golang:golang-documentation
-    - cc-skills-golang:golang-error-handling
-    - cc-skills-golang:golang-graphql
-    - cc-skills-golang:golang-how-to
-    - cc-skills-golang:golang-lint
-    - cc-skills-golang:golang-safety
-    - cc-skills-golang:golang-security
-    - cc-skills-golang:golang-spf13-cobra
-    - cc-skills-golang:golang-spf13-viper
-    - cc-skills-golang:golang-structs-interfaces
-    - cc-skills-golang:golang-testing
-    - frontend-design:frontend-design
-disallowedTools:
-    - Agent
-    - Task
-    - Skill
-permissionMode: default
+description: "Apply the same delivery state machine with connector-specific evidence inserted around implementation."
+mode: "subagent"
+permission:
+  edit: allow
+  bash: allow
+  skill: deny
+  task: deny
+  external_directory: deny
 ---
 
-## Claude Code projection
+## OpenCode projection
 
-Official behavior: https://code.claude.com/docs/en/sub-agents
+Official behavior: https://opencode.ai/docs/agents/
 
-Discovery: Claude Code scans .claude/agents recursively while walking upward from the current working directory; names must be unique across each discovered tree.
+Discovery: OpenCode discovers project agents from Markdown files under .opencode/agents; the filename determines the agent name.
 
-Precedence (highest first): managed definitions, CLI --agents, project .claude/agents, user ~/.claude/agents, and plugins. Managed definitions and CLI `--agents` remain higher-precedence caveats.
-
-Skill behavior: https://code.claude.com/docs/en/slash-commands
-
-Skill boundary: Only the listed plugin-qualified identifiers are preloaded through Claude's documented skills frontmatter. Plugin namespaces cannot collide with personal or project skill names. The Skill tool is omitted and denied, so no skill can be invoked during execution, including one that uses context: fork.
-
-Trusted preloaded skills: `cc-skills-golang:golang-cli`, `cc-skills-golang:golang-concurrency`, `cc-skills-golang:golang-context`, `cc-skills-golang:golang-database`, `cc-skills-golang:golang-design-patterns`, `cc-skills-golang:golang-documentation`, `cc-skills-golang:golang-error-handling`, `cc-skills-golang:golang-graphql`, `cc-skills-golang:golang-how-to`, `cc-skills-golang:golang-lint`, `cc-skills-golang:golang-safety`, `cc-skills-golang:golang-security`, `cc-skills-golang:golang-spf13-cobra`, `cc-skills-golang:golang-spf13-viper`, `cc-skills-golang:golang-structs-interfaces`, `cc-skills-golang:golang-testing`, and `frontend-design:frontend-design`.
-
-Unavailable repository-routed skills: `vercel-composition-patterns`, `vercel-react-best-practices`, and `web-design-guidelines`. Cost: Website and docs UI work requiring these design skills cannot satisfy repository skill routing in this Claude worker; preserve state and hand off to a captain-approved harness with trusted plugin packaging.
-
-Isolation: The explicit tools allowlist omits Agent and Skill, while disallowedTools removes Agent, its Task alias, and Skill. Claude Code documents that omitting Agent blocks subagent spawning through that tool and omitting Skill prevents runtime skill invocation; plugin-qualified preloads avoid personal and project same-name shadowing.
-
-Required clean-home smoke (not generation evidence): In a real authenticated Claude session using a clean trusted home with unrelated global agent and skill definitions, run `claude --agent pm-connector-worker -p 'report the active agent name, preloaded skill identifiers, and whether Agent, Task, or Skill is available without modifying files'`; verify the project role is selected, only the plugin-qualified preloads are present, and Agent, Task, Skill, and unrelated fork-capable skills are unavailable.
+Isolation: The generated permission map denies task and skill while retaining only bounded edit and bash access, so this worker cannot delegate to ambient agents or invoke an adapter-local skill surface.
 
 <!-- BEGIN POLYMETRICS CANONICAL AGENT CONTRACT role=pm-connector-worker version=1.4.0; DO NOT EDIT -->
 # pm-connector-worker

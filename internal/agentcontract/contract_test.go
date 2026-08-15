@@ -251,6 +251,40 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 				value.PiHarness.ChildTools = append(value.PiHarness.ChildTools, "subagent")
 			},
 		},
+		{
+			name: "OpenCode task permission allowed",
+			mutate: func(value *Contract) {
+				for index := range value.OpenCode.Permissions {
+					if value.OpenCode.Permissions[index].Tool == "task" {
+						value.OpenCode.Permissions[index].Access = "allow"
+					}
+				}
+			},
+		},
+		{
+			name: "OpenCode projection missing",
+			mutate: func(value *Contract) {
+				value.Projections = value.Projections[:len(value.Projections)-1]
+			},
+		},
+		{
+			name: "certification gate does not protect accepted transition",
+			mutate: func(value *Contract) {
+				value.CertificationGate.EnforcedTransitions = []string{"integrate_sub_pr", "ready_parent", "human_ready"}
+			},
+		},
+		{
+			name: "certification gate executable argv changed",
+			mutate: func(value *Contract) {
+				value.CertificationGate.Command.Argv = []string{"go", "run", "./cmd/agentcontractgen", "check"}
+			},
+		},
+		{
+			name: "tracker omits certification gate",
+			mutate: func(value *Contract) {
+				value.Tracker.IntegrateWhen = value.Tracker.IntegrateWhen[:len(value.Tracker.IntegrateWhen)-1]
+			},
+		},
 	}
 
 	for _, test := range tests {
@@ -310,12 +344,12 @@ func TestRenderIsStableAndConnectorInheritsBase(t *testing.T) {
 		}
 	}
 
-	const expectedSHA256 = "aee36b9878d12f70fea4324bfcfe5283de9178a391f481e18a64b280cc1fabf9"
+	const expectedSHA256 = "6de2132cd2d935ef9cca0473b4577fb43ef419abc6f58d325b60beb0633ace85"
 	gotSHA256 := fmt.Sprintf("%x", sha256.Sum256(base))
 	if gotSHA256 != expectedSHA256 {
 		t.Fatalf("base rendering hash = %s, update expected hash after intentional canonical change", gotSHA256)
 	}
-	const expectedConnectorSHA256 = "69feed369dd69280455ca2c85d7bf98a02c6498b639349177d9f7805302e3051"
+	const expectedConnectorSHA256 = "454f0437cdb516a22df2170bf5b30fa1c5e45596eba74e53aa9c51f16c563fb3"
 	gotConnectorSHA256 := fmt.Sprintf("%x", sha256.Sum256(connector))
 	if gotConnectorSHA256 != expectedConnectorSHA256 {
 		t.Fatalf("connector rendering hash = %s, update expected hash after intentional canonical change", gotConnectorSHA256)
