@@ -34,3 +34,8 @@ rejects invalid windows before coordinator I/O. #4169 preserves a safe provider
 
 The corrected legacy fresh-flow assertion remains in place but has an
 independent pre-auth flow-control failure recorded in `VERIFICATION.md`.
+
+During CI triage, the existing durable-parking process test also showed a
+load-sensitive base flake (six observed passes and one failure at
+`ef3c71caf`). Its assertion is retained; this PR adds only child-process
+failure diagnostics, with the underlying race explicitly left to a follow-up.

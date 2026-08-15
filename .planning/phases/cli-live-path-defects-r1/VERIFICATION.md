@@ -64,3 +64,20 @@ phase's classification implementation at a valid flow control step with exit
 3, before its provider-401 assertion. The test is intentionally retained with
 the corrected auth expectation; this phase neither relaxes it nor changes the
 unrelated flow-control path.
+
+## Durable-parking CI triage (not a phase behavior change)
+
+`TestCLIDurableParkingAdmissionAndResumeAcrossKilledProcess` failed in the PR
+CI run at its concurrent `resume-race` assertion. A clean comparison showed a
+failure at dispatch base `ef3c71caf` and a pass at the phase head, so the
+phase's shared-window bounds were not causally attributable. Repeating the
+same exact test at `ef3c71caf` produced six passes and one failure across the
+seven directly observed runs. The host's one-minute load averaged 11.6–16.0 on
+12 CPUs during that sample. This is evidence of a load-sensitive pre-existing
+race, not a reason to relax its real-process assertion.
+
+Commit `329699f2a` preserves the assertion and improves its failure evidence:
+the parent now receives the losing helper's exit code and sanitized CLI output.
+It adds no new behavior and is not a happy/bad/edge replacement for the three
+issue-specific tests above. The underlying concurrency repair remains outside
+this PR's scope.

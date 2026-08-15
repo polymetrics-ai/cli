@@ -50,6 +50,12 @@ Refs #4119, #4125, and #4169. This Firstmate-authorized corrective PR targets
 - `TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip` has an independent
   pre-auth flow-control failure on the dispatch base; its corrected auth
   assertion is retained, not weakened. See `VERIFICATION.md`.
+- `TestCLIDurableParkingAdmissionAndResumeAcrossKilledProcess` is an existing
+  concurrent-resume proof, outside this PR's behavior changes. At the same
+  dispatch base it produced 6 passes and 1 failure across directly observed
+  runs while the 1-minute host load was 11.6–16.0 on 12 CPUs. The preserved
+  assertion now reports the failed child exit code and sanitized CLI output;
+  it neither changes timing nor the underlying durable-parking behavior.
 - Inline code review found no actionable issues. Claude automatic review is
   expected to trigger on this PR; no Copilot fallback has been requested.
 
@@ -59,3 +65,4 @@ Refs #4119, #4125, and #4169. This Firstmate-authorized corrective PR targets
 2. `2b43c5c9e` — #4119 destination admission proof
 3. `f61b0819d` — #4125 bounded shared window fix
 4. `cab821f5e` — #4169 typed credential classification
+5. `329699f2a` — durable concurrent-resume failure diagnostics
