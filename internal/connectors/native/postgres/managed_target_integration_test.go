@@ -124,16 +124,10 @@ func TestPostgresManagedTargetWorksetDeliveryLive(t *testing.T) {
 
 	secondBaselineRecord := lookupPostgresWorksetBaseline(t, ctx, baselineStore, control)
 	thirdBaseline := writePostgresWorksetParquet(t, ctx, root, "third-baseline", readPostgresWorksetBaselineRows(t, ctx, secondBaselineRecord))
-	deleteRetained := synccontract.Tombstone{
-		Operation:   synccontract.OperationDelete,
-		EventID:     synccontract.OpaqueToken("postgres-workset-delete-retain-9"),
-		Key:         json.RawMessage(`{"source_tenant":"retain","source_id":9}`),
-		DeleteImage: synccontract.DeleteImageKeyOnly,
-		Position: synccontract.CheckpointPosition{
-			Primary:    synccontract.OpaqueToken("00000022"),
-			TieBreaker: synccontract.OpaqueToken("00000001"),
-		},
-	}
+	deleteRetained := postgresCDCDeleteTombstone(t, connectors.Record{
+		"source_tenant": "retain",
+		"source_id":     int64(9),
+	}, "0/22", 1)
 	thirdWorkset := derivePostgresWorkset(t, ctx, root, control, secondSource, thirdBaseline, []synccontract.Tombstone{deleteRetained})
 	thirdReceipt := executePostgresWorksetDelivery(t, ctx, delivery, fixture, control, thirdWorkset)
 	assertPostgresManagedTargetRows(t, ctx, source, control, []postgresManagedTargetRow{
@@ -256,15 +250,17 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 		t.Fatalf("late/replay delivery changed durable history: got=%#v want=%#v", got, versionedRows)
 	}
 
-	tombstone := synccontract.Tombstone{
-		Operation:   synccontract.OperationDelete,
-		EventID:     synccontract.OpaqueToken("postgres-history-delete-north-1"),
-		Key:         json.RawMessage(`{"tenant":"north","id":1}`),
-		DeleteImage: synccontract.DeleteImageKeyOnly,
-		Position: synccontract.CheckpointPosition{
-			Primary:    synccontract.OpaqueToken("00000051"),
-			TieBreaker: synccontract.OpaqueToken("00000001"),
-		},
+	mapping, ok := fixture.plan.Mapping()
+	if !ok {
+		t.Fatal("PostgreSQL history fixture lost its mapping")
+	}
+	sourceTombstone := postgresCDCDeleteTombstone(t, connectors.Record{
+		"source_tenant": "north",
+		"source_id":     int64(1),
+	}, "0/51", 1)
+	tombstone, err := mapping.MapTombstone(sourceTombstone, []string{"source_tenant", "source_id"})
+	if err != nil {
+		t.Fatalf("could not map PostgreSQL CDC delete to history target keys: %v", err)
 	}
 	envelope, err := database.NewTombstoneEnvelope([]synccontract.Tombstone{tombstone})
 	if err != nil {
@@ -277,6 +273,19 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 	if len(closedRows) != 2 || closedRows[0].current || closedRows[0].validTo == nil || closedRows[1].current || closedRows[1].validTo == nil || versionedRows[0].validTo == nil || !closedRows[0].validTo.Equal(*versionedRows[0].validTo) || !closedRows[1].validTo.After(closedRows[1].validFrom) {
 		t.Fatalf("history soft-delete rows = %#v, want both versions retained and v2 validity closed", closedRows)
 	}
+}
+
+func postgresCDCDeleteTombstone(t *testing.T, record connectors.Record, lsn string, ordinal uint64) synccontract.Tombstone {
+	t.Helper()
+	tombstone, err := native.CDCDeleteTombstone(connectors.CDCEvent{
+		Operation: "delete",
+		Record:    record,
+		State:     connectors.Record{"lsn": lsn},
+	}, []string{"source_tenant", "source_id"}, ordinal)
+	if err != nil {
+		t.Fatalf("could not convert PostgreSQL CDC delete to explicit source tombstone: %v", err)
+	}
+	return tombstone
 }
 
 func derivePostgresWorkset(t *testing.T, ctx context.Context, root string, control database.ManagedTargetControlRecord, sourceRows []warehouse.Row, baselinePath string, tombstones []synccontract.Tombstone) database.ChangeDeliveryWorkset {

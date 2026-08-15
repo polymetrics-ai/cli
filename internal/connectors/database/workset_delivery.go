@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
@@ -429,9 +428,11 @@ func changeDeliveryWriteInput(ctx context.Context, plan ChangeDeliveryPlan) (Dat
 	if err != nil {
 		return DatabaseWriteInput{}, ChangeDeliveryWorkset{}, err
 	}
-	tombstones, err = mapChangeDeliveryTombstones(tombstones, workset.manifest.Keys, plan.write.Mapping())
-	if err != nil {
-		return DatabaseWriteInput{}, ChangeDeliveryWorkset{}, ErrChangeDeliveryPlanInvalid
+	for index := range tombstones {
+		tombstones[index], err = plan.write.Mapping().MapTombstone(tombstones[index], workset.manifest.Keys)
+		if err != nil {
+			return DatabaseWriteInput{}, ChangeDeliveryWorkset{}, ErrChangeDeliveryPlanInvalid
+		}
 	}
 	if int64(len(records)) != workset.Changes() || int64(len(tombstones)) != workset.TombstoneCount() {
 		return DatabaseWriteInput{}, ChangeDeliveryWorkset{}, ErrChangeDeliveryPlanInvalid
@@ -448,47 +449,4 @@ func changeDeliveryWriteInput(ctx context.Context, plan ChangeDeliveryPlan) (Dat
 		return DatabaseWriteInput{}, ChangeDeliveryWorkset{}, ErrChangeDeliveryPlanInvalid
 	}
 	return input, workset, nil
-}
-
-// mapChangeDeliveryTombstones changes only the sealed key vocabulary from the
-// workset's source fields to MappingContractV1's target fields. It neither
-// adds deletes nor infers them from absent rows; every returned tombstone is a
-// clone of an explicit workset event.
-func mapChangeDeliveryTombstones(tombstones []synccontract.Tombstone, sourceKeys []string, mapping MappingContractV1) ([]synccontract.Tombstone, error) {
-	if len(tombstones) == 0 {
-		return nil, nil
-	}
-	if len(sourceKeys) == 0 || mapping.validate() != nil {
-		return nil, ErrChangeDeliveryPlanInvalid
-	}
-	targetBySource := make(map[string]string, len(mapping.Columns()))
-	for _, column := range mapping.Columns() {
-		targetBySource[column.Source] = column.Target
-	}
-	mapped := make([]synccontract.Tombstone, len(tombstones))
-	for index, tombstone := range tombstones {
-		if tombstone.Operation != synccontract.OperationDelete || tombstone.Validate() != nil {
-			return nil, ErrChangeDeliveryPlanInvalid
-		}
-		var sourceValues map[string]json.RawMessage
-		if err := json.Unmarshal(tombstone.Key, &sourceValues); err != nil || len(sourceValues) != len(sourceKeys) {
-			return nil, ErrChangeDeliveryPlanInvalid
-		}
-		targetValues := make(map[string]json.RawMessage, len(sourceKeys))
-		for _, sourceKey := range sourceKeys {
-			value, found := sourceValues[sourceKey]
-			targetKey, mappedKey := targetBySource[sourceKey]
-			if !found || !mappedKey || targetKey == "" {
-				return nil, ErrChangeDeliveryPlanInvalid
-			}
-			targetValues[targetKey] = append(json.RawMessage(nil), value...)
-		}
-		encoded, err := json.Marshal(targetValues)
-		if err != nil {
-			return nil, ErrChangeDeliveryPlanInvalid
-		}
-		mapped[index] = tombstone.Clone()
-		mapped[index].Key = encoded
-	}
-	return mapped, nil
 }

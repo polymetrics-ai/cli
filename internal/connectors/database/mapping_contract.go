@@ -1,6 +1,7 @@
 package database
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"math"
@@ -8,6 +9,7 @@ import (
 	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
 const (
@@ -150,6 +152,52 @@ func (c MappingContractV1) matches(other MappingContractV1) bool {
 // type; no undeclared source field can become a target column.
 func (c MappingContractV1) MapRecord(source connectors.Record) (connectors.Record, error) {
 	return c.projectRecord(source, false)
+}
+
+// MapTombstone projects an explicit source-keyed delete envelope into the
+// target-key vocabulary sealed by this mapping. It deliberately maps only the
+// declared stable keys: a missing record is never made into a tombstone and an
+// undeclared source key cannot reach a target predicate.
+func (c MappingContractV1) MapTombstone(source synccontract.Tombstone, sourceKeys []string) (synccontract.Tombstone, error) {
+	if c.validate() != nil || source.Operation != synccontract.OperationDelete || source.Validate() != nil || len(sourceKeys) == 0 {
+		return synccontract.Tombstone{}, ErrMappingContractInvalid
+	}
+	targetBySource := make(map[string]string, len(c.columns))
+	for _, column := range c.columns {
+		targetBySource[column.Source] = column.Target
+	}
+	keys := make(map[string]struct{}, len(sourceKeys))
+	for _, sourceKey := range sourceKeys {
+		if validateIdentifierComponent(sourceKey) != nil {
+			return synccontract.Tombstone{}, ErrMappingContractInvalid
+		}
+		if _, exists := keys[sourceKey]; exists {
+			return synccontract.Tombstone{}, ErrMappingContractInvalid
+		}
+		keys[sourceKey] = struct{}{}
+		if targetBySource[sourceKey] == "" {
+			return synccontract.Tombstone{}, ErrMappingContractInvalid
+		}
+	}
+	var sourceValues map[string]json.RawMessage
+	if err := json.Unmarshal(source.Key, &sourceValues); err != nil || len(sourceValues) != len(keys) {
+		return synccontract.Tombstone{}, ErrMappingContractInvalid
+	}
+	targetValues := make(map[string]json.RawMessage, len(keys))
+	for sourceKey := range keys {
+		value, found := sourceValues[sourceKey]
+		if !found || !json.Valid(value) || bytes.Equal(bytes.TrimSpace(value), []byte("null")) {
+			return synccontract.Tombstone{}, ErrMappingContractInvalid
+		}
+		targetValues[targetBySource[sourceKey]] = append(json.RawMessage(nil), value...)
+	}
+	encoded, err := json.Marshal(targetValues)
+	if err != nil {
+		return synccontract.Tombstone{}, ErrMappingContractInvalid
+	}
+	mapped := source.Clone()
+	mapped.Key = encoded
+	return mapped, nil
 }
 
 // UnmapRecord is the checked inverse projection for a value that was emitted

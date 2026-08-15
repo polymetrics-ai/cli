@@ -82,6 +82,85 @@ func TestMappingContractV1RefusesUnrepresentableMappingsAndValues(t *testing.T) 
 	}
 }
 
+func TestMappingContractV1MapsOnlyDeclaredTombstoneKeys(t *testing.T) {
+	stringType, err := database.NewString(64, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	integerType, err := database.NewSignedInteger(64)
+	if err != nil {
+		t.Fatal(err)
+	}
+	stringPlan, err := database.CompileTypePlan(stringType, stringType)
+	if err != nil {
+		t.Fatal(err)
+	}
+	integerPlan, err := database.CompileTypePlan(integerType, integerType)
+	if err != nil {
+		t.Fatal(err)
+	}
+	mapping, err := database.NewMappingContractV1([]database.MappingColumnV1{
+		{Source: "source_tenant", Target: "tenant", Type: stringPlan},
+		{Source: "source_id", Target: "id", Type: integerPlan},
+		{Source: "source_value", Target: "value", Type: stringPlan},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := synccontract.Tombstone{
+		Operation:   synccontract.OperationDelete,
+		EventID:     synccontract.OpaqueToken("cdc-delete-tenant-9"),
+		Key:         json.RawMessage(`{"source_tenant":"retain","source_id":9}`),
+		DeleteImage: synccontract.DeleteImageKeyOnly,
+		Position: synccontract.CheckpointPosition{
+			Primary:    synccontract.OpaqueToken("0/16B6C50"),
+			TieBreaker: synccontract.OpaqueToken("cdc-delete-tenant-9"),
+		},
+	}
+	mapped, err := mapping.MapTombstone(source, []string{"source_tenant", "source_id"})
+	if err != nil {
+		t.Fatalf("MapTombstone() error = %v", err)
+	}
+	var key map[string]json.RawMessage
+	if err := json.Unmarshal(mapped.Key, &key); err != nil {
+		t.Fatalf("mapped tombstone key = %q, want JSON: %v", mapped.Key, err)
+	}
+	if got, want := string(key["tenant"]), `"retain"`; got != want {
+		t.Fatalf("mapped tenant key = %s, want %s", got, want)
+	}
+	if got, want := string(key["id"]), `9`; got != want {
+		t.Fatalf("mapped id key = %s, want %s", got, want)
+	}
+	if len(key) != 2 || key["source_tenant"] != nil || key["source_id"] != nil || key["value"] != nil {
+		t.Fatalf("mapped tombstone keys = %#v, want only tenant and id", key)
+	}
+	if string(mapped.EventID) != string(source.EventID) || !reflect.DeepEqual(mapped.Position, source.Position) {
+		t.Fatalf("mapped tombstone metadata = %#v, want source identity and position preserved", mapped)
+	}
+
+	for _, invalid := range []synccontract.Tombstone{
+		func() synccontract.Tombstone {
+			copy := source.Clone()
+			copy.Key = json.RawMessage(`{"source_tenant":"retain"}`)
+			return copy
+		}(),
+		func() synccontract.Tombstone {
+			copy := source.Clone()
+			copy.Key = json.RawMessage(`{"source_tenant":"retain","source_id":9,"unexpected":true}`)
+			return copy
+		}(),
+		func() synccontract.Tombstone {
+			copy := source.Clone()
+			copy.Key = json.RawMessage(`{"source_tenant":"retain","source_id":null}`)
+			return copy
+		}(),
+	} {
+		if got, err := mapping.MapTombstone(invalid, []string{"source_tenant", "source_id"}); err == nil || got.Key != nil {
+			t.Fatalf("MapTombstone(%s) = (%#v, %v), want empty projection and refusal", invalid.Key, got, err)
+		}
+	}
+}
+
 func TestDatabaseWritePlanSealsMappingBeforeSessionMutation(t *testing.T) {
 	definition := testDatabaseWriteDefinition(t)
 	control := testDatabaseWriteControl(t, "orders", "stream-orders", 1)
