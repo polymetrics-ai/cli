@@ -1,5 +1,21 @@
 # Verification checklist — Issue #3976
 
+## R2 — resumable source reads (planned)
+
+- [ ] RR1 happy path: production construction reaches the shared polling executor and
+      asserts exact records plus successful checkpoint resume.
+- [ ] RR2 bad path: unset stream cursor returns the named typed refusal before source I/O.
+- [ ] RR3 edge: nullable cursor fixture cannot omit a null-cursor record.
+- [ ] RR4 bad path: stale/invalid resume checkpoint returns its named reason before I/O.
+- [ ] RR5 edge: two streams with distinct cursor columns bind independently.
+- [ ] The private PostgreSQL paging loop is absent from the source path.
+- [ ] Focused PostgreSQL/engine/CLI tests, race where applicable, vet, build, and
+      repository gates pass.
+- [ ] Generated `verify-work` / `code-review` manual-inline fallback records contain
+      production reach, red/green, and finding dispositions.
+- [ ] Live PostgreSQL dbtest status is explicitly recorded as pass or pending; no shared
+      container runtime is started or restarted for this task.
+
 ## Acceptance proof
 
 - [x] RED: `dynamic_catalog_integration_test.go` was committed before

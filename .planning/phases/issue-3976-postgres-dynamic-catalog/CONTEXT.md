@@ -104,3 +104,46 @@ existing `mode=fixture` catalog and test-only schema-creation/oracle SQL. Live
 table or field list. Existing CDC test setup and the unchanged unsupported
 `Write` method remain outside this child; no #3980/#3982/#3983/#3987 path was
 changed.
+
+## 2026-08-16 — Resumable PostgreSQL source-read remediation (R2)
+
+### Task delivery header
+
+- Issue: `Refs #3976 — Postgres Parity: make full and cursor reads exact and resumable`.
+- Base branch: `integration/4015-mvp-flat-r1` at dispatch head `ef3c71caf`.
+- Working branch: `fm/cli-3976-resumable-reads-r1`.
+- Delivery: direct PR to `integration/4015-mvp-flat-r1`; never `main`.
+- Target connector: native `postgres`, exactly one connector.
+- Task: replace PostgreSQL's private source paging loop with the declaration-selected
+  #3858 shared resumable polling source executor and its checkpoint/watermark contract.
+
+### Locked decisions
+
+- `full_overwrite` and `full_append` remain supported through the same shared source
+  executor; PostgreSQL must no longer privately reject the other polling modes or a
+  supplied checkpoint.
+- A polling cursor is mandatory **per stream** whenever the selected mode requires
+  one. It is validated against the live typed catalog before a source session, query,
+  checkpoint mutation, or delivery side effect occurs. A connection-level cursor may
+  not stand in for a stream whose column differs.
+- An absent cursor that would previously make a stored cursor silently ineffective is
+  a named typed refusal. A stale, malformed, or catalog-incompatible checkpoint is a
+  named resume refusal; none may restart as a full scan.
+- Nullable cursor values are an edge case, never an allowed omission. The adapter must
+  use the shared executor's lossless ordering contract or fail closed before delivery;
+  it may not issue a `>` predicate that silently loses null-cursor records.
+- No raw SQL/query surface, CDC, target write, bundle/generator, or shared executor
+  semantic change belongs in this connector-specific lane. If the existing shared
+  contract cannot express the PostgreSQL adapter without such a change, stop and open
+  a foundation split rather than widening this PR.
+
+### Manual GSD fallback
+
+`scripts/gsd doctor`, all five lifecycle `sources` resolutions, generated prompts,
+and `go run ./cmd/agentcontractgen check` passed. The generated phase registry reports
+this historical issue as an already executed non-roadmap phase (`roadmap.get-phase`
+does not resolve it), while the canonical delivery contract permits one active worker
+and no role delegation. The R2 lifecycle is therefore executed inline: discuss
+(`--auto`, task decisions are locked) → plan (`--tdd`) → execute → verify → review.
+This records the fallback only; it does not waive RED/GREEN, production-reach, review,
+or verification evidence.

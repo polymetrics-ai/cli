@@ -1,5 +1,57 @@
 # PLAN — Issue #3976: PostgreSQL dynamic typed catalog discovery
 
+## R2 — resumable source reads (active 2026-08-16)
+
+### Task delivery header
+
+- Issue: `Refs #3976 — Postgres Parity: make full and cursor reads exact and resumable`.
+- Base/PR target: `integration/4015-mvp-flat-r1` (dispatch head `ef3c71caf`).
+- Branch: `fm/cli-3976-resumable-reads-r1`.
+- One target connector: native PostgreSQL source reads only.
+- Delivery: direct PR; no `no-mistakes` pipeline and no merge.
+
+### R2 goal and ownership fence
+
+Make the production PostgreSQL source construction path select #3858's shared resumable
+polling source executor. Delete its parallel private paging loop rather than extending it.
+The adapter may map PostgreSQL's typed catalog rows into the shared source seam, but must
+not alter shared executor semantics, bundle schema/generation, arbitrary SQL support,
+CDC, or target writes. A shared-contract gap is a required foundation split.
+
+### TDD slices
+
+1. **RED — production reach/happy path.** Add a test through the real `pm`/sync
+   construction path proving a PostgreSQL incremental/cursor source selects the shared
+   executor, emits the expected records, and persists/uses its resumable tuple. It
+   fails while the private loop still owns the path.
+2. **RED — typed pre-I/O refusal.** Add separately named tests for an unset stream
+   cursor and stale/invalid checkpoint. Each asserts its concrete typed reason and
+   zero source-session/query, checkpoint-write, and delivery calls.
+3. **RED — cursor edge contract.** Add a nullable-cursor fixture and a restart fixture
+   with equal cursor values. Assert no nullable row vanishes and the resumed combined
+   identities are exact once-only; a live catalog mismatch is rejected specifically.
+4. **GREEN — PostgreSQL adapter.** Route the native source reader through the closed
+   shared source/polling seam, construct a live-catalog-validated per-stream cursor
+   binding, and propagate the real checkpoint without swallowing recovery outcomes.
+5. **GREEN — delete the duplicate loop.** Remove the private PostgreSQL paging/mode/
+   checkpoint restrictions and retain only thin driver-specific catalog/read mapping.
+6. **REFACTOR / review.** Keep the context, resource, parameterized query, defensive
+   copy, and identifier-safety boundaries. Record production call-chain evidence,
+   manual GSD verification/review, and focused gates.
+
+### Test-contract matrix
+
+| Class | Named R2 evidence | Observable assertion |
+| --- | --- | --- |
+| Happy path | shared-executor PostgreSQL incremental/resume | exact produced identities/rows and checkpoint-resume request, from the binary construction path |
+| Bad path | missing stream cursor; stale/invalid checkpoint | specific typed refusal before any query, delivery, or checkpoint mutation |
+| Edge case | nullable cursor; equal cursor/restart; two streams with different cursors | no omitted null record; exact-once combined identities; per-stream catalog binding |
+
+The integration/container proof is deliberately pending: this host's runtime is reported
+unreliable, so no shared runtime will be started or restarted. Unit/production-construction
+evidence is required before delivery; a successful live-dbtest run, if an already available
+explicit endpoint works, is supplemental and its exact output will be recorded.
+
 ## Goal
 
 Replace PostgreSQL's coarse/static-shaped source catalog projection with live,

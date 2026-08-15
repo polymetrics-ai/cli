@@ -1,5 +1,15 @@
 # TDD ledger — Issue #3976: PostgreSQL dynamic typed catalog discovery
 
+## R2 — resumable source reads (active)
+
+| ID | Class | Guarantee | RED assertion | GREEN proof |
+| --- | --- | --- | --- | --- |
+| RR1 | Happy path | PostgreSQL incremental/cursor reads are reached through #3858 rather than a private loop. | The real binary/sync construction path does not produce the shared source executor or resume tuple. | It produces exact records and resumes from the committed tuple through the shared executor. |
+| RR2 | Bad path | A cursor-required stream cannot silently ignore a stored checkpoint. | An unset cursor enters a source session/query or returns all rows. | A typed missing-stream-cursor refusal occurs before source I/O, delivery, or checkpoint mutation. |
+| RR3 | Edge case | Null cursor values cannot silently disappear. | A nullable fixture loses its null-cursor identity under the PostgreSQL source path. | The lossless shared ordering contract returns every identity exactly once, or a typed fail-closed boundary prevents delivery. |
+| RR4 | Bad path | Stale/invalid checkpoints do not restart from page one. | An incompatible checkpoint is refused only after the reader starts, or becomes a full read. | The recovery reason is specific and no source/delivery/checkpoint side effect occurs. |
+| RR5 | Edge case | Cursor selection belongs to a stream, not a connection. | A second relation is bound to the first relation's cursor column. | Each stream binds and validates its own catalog cursor; a mismatched/missing one rejects specifically. |
+
 | ID | Guarantee | RED assertion | GREEN proof |
 | --- | --- | --- | --- |
 | R1 | Dynamic variation | One static catalog/table/field model cannot satisfy two materially different live PostgreSQL schema fixtures. | Each fixture produces a distinct typed catalog/fingerprint without code or connector-bundle schema edits. |
