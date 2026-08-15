@@ -69,6 +69,7 @@ const EXTERNAL_BLOCKERS = Object.freeze({
   provider_admission_unavailable:
     "The external GitHub provider admission prerequisite is unavailable to this proof runner.",
 });
+const RESERVED_EXECUTION_FLAGS = ["--credential", "--connection", "--root", "--approve", "--approval-token-stdin", "--plan", "--confirm"];
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = path.resolve(SCRIPT_DIR, "..");
 const SURFACE_PATH = path.join(
@@ -308,6 +309,10 @@ function concreteReason(reason) {
     "unsupported",
   ]);
   return !generic.has(normalized.toLowerCase());
+}
+
+function isReservedExecutionFlag(argument) {
+  return RESERVED_EXECUTION_FLAGS.some((flag) => argument === flag || argument.startsWith(`${flag}=`));
 }
 
 function reportContainsForbiddenField(value) {
@@ -777,12 +782,86 @@ function validatePersistedCaseFile(caseFile) {
 
 function validateCaseFile(caseFile, boundary, surface) {
   validatePersistedCaseFile(caseFile);
+  validateCaseExecutionConstraints(caseFile, boundary, surface);
   const canonical = validateCanonicalCaseArtifact({ caseFile, surface, boundary });
   return {
     context: canonical.context,
     cases: new Map(canonical.cases.map((item) => [item.command, item])),
     caseDigest: canonical.case_digest,
   };
+}
+
+function flagValues(args, name) {
+  const flag = `--${name}`;
+  const values = [];
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === flag) {
+      const value = args[index + 1];
+      if (!value || value.startsWith("--")) {
+        throw new Error(`${flag} requires a value in a live proof case`);
+      }
+      values.push(value);
+      index += 1;
+    } else if (argument.startsWith(`${flag}=`)) {
+      const value = argument.slice(flag.length + 1);
+      if (!value) {
+        throw new Error(`${flag} requires a value in a live proof case`);
+      }
+      values.push(value);
+    }
+  }
+  return values;
+}
+
+function validateWriteRepositoryTarget(command, args, owner, repo) {
+  for (const [flag, expected] of [["owner", owner], ["repo", repo]]) {
+    for (const actual of flagValues(args, flag)) {
+      if (actual !== expected) {
+        throw new Error(`write case ${JSON.stringify(command)} may not override the dedicated repository ${flag}`);
+      }
+    }
+  }
+}
+
+function validateCaseExecutionConstraints(caseFile, boundary, surface) {
+  const surfaceCommands = new Map(surface.commands.map((command) => [command.path, command]));
+  for (const item of caseFile.cases) {
+    if (item.untestable_reason !== undefined) continue;
+    for (const argument of item.args) {
+      if (isReservedExecutionFlag(argument)) {
+        throw new Error(`case ${JSON.stringify(item.command)} may not override lifecycle or credential flags`);
+      }
+    }
+    const surfaceCommand = surfaceCommands.get(item.command);
+    if (surfaceCommand?.intent === "reverse_etl" || surfaceCommand?.intent === "direct_write") {
+      validateWriteRepositoryTarget(
+        item.command,
+        interpolateArguments(item.args, caseFile.context),
+        boundary.owner,
+        boundary.repo,
+      );
+    }
+    if (item.readback === undefined) continue;
+    for (const argument of item.readback.args) {
+      if (isReservedExecutionFlag(argument)) {
+        throw new Error(`readback for ${JSON.stringify(item.command)} may not override lifecycle or credential flags`);
+      }
+    }
+    const readbackCommand = surfaceCommands.get(item.readback.command);
+    if (!readbackCommand || readbackCommand.availability !== "implemented") {
+      throw new Error(`readback for ${JSON.stringify(item.command)} names an unknown implemented command`);
+    }
+    if (readbackCommand.intent === "reverse_etl" || readbackCommand.intent === "direct_write") {
+      throw new Error(`readback for ${JSON.stringify(item.command)} may not invoke another write`);
+    }
+    validateWriteRepositoryTarget(
+      `${item.command} readback`,
+      interpolateArguments(item.readback.args, caseFile.context),
+      boundary.owner,
+      boundary.repo,
+    );
+  }
 }
 
 function interpolateArguments(args, context) {
@@ -810,12 +889,12 @@ function shellSafeInvocation(command, args, credential, root) {
   ];
 }
 
-export function runProcess(binary, args, cwd, { timeoutMs = PROCESS_TIMEOUT_MS } = {}) {
+export function runProcess(binary, args, cwd, { timeoutMs = PROCESS_TIMEOUT_MS, stdin = "" } = {}) {
   if (!Number.isInteger(timeoutMs) || timeoutMs <= 0) {
     throw new Error("process timeout must be a positive integer");
   }
   return new Promise((resolve, reject) => {
-    const child = spawn(binary, args, { cwd, stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn(binary, args, { cwd, stdio: ["pipe", "pipe", "pipe"] });
     let stdout = "";
     let stderr = "";
     let bytes = 0;
@@ -852,10 +931,12 @@ export function runProcess(binary, args, cwd, { timeoutMs = PROCESS_TIMEOUT_MS }
     };
     child.stdout.on("data", (chunk) => consume("stdout", chunk));
     child.stderr.on("data", (chunk) => consume("stderr", chunk));
+    child.stdin.once("error", (error) => finish(() => reject(error)));
     child.once("error", (error) => finish(() => reject(error)));
     child.once("close", (code, signal) =>
       finish(() => resolve({ code, signal, stdout, stderr, overflow, timedOut, timeoutMs })),
     );
+    child.stdin.end(stdin);
   });
 }
 
@@ -927,7 +1008,7 @@ export function assertReadEnvelope(envelope, command) {
   throw new Error(`unexpected non-write result kind ${JSON.stringify(envelope.kind || "")}`);
 }
 
-async function runWriteLifecycle({ binary, root, credential, command, args, readback, owner, repo, cwd }) {
+export async function runWriteLifecycle({ binary, root, credential, command, args, readback, owner, repo, cwd }) {
   const planArgs = [CONNECTOR, ...command.split(" "), ...args, "--credential", credential, "--root", root, "--json"];
   const humanPlanArgs = planArgs.filter((argument) => argument !== "--json");
   const planResult = await runProcess(binary, humanPlanArgs, cwd);
@@ -954,40 +1035,45 @@ async function runWriteLifecycle({ binary, root, credential, command, args, read
     ...command.split(" "),
     "--plan",
     planID,
-    "--approve",
-    grant,
+    "--approval-token-stdin",
     ...(challenge ? ["--confirm", challenge] : []),
     "--root",
     root,
     "--json",
   ];
-  const runEnvelope = parseJSONOutput(await runProcess(binary, executeArgs, cwd), "write execution");
+  const runEnvelope = parseJSONOutput(
+    await runProcess(binary, executeArgs, cwd, { stdin: grant + "\n" }),
+    "write execution",
+  );
   const run = runEnvelope?.run;
   if (runEnvelope?.kind !== "ReverseRun" || run?.status !== "completed" || run?.records_succeeded !== 1 || run?.records_failed !== 0) {
     throw new Error("write execution did not report one completed provider mutation");
   }
   const operation = run.operation_direct_write;
-  const readbackArgs = interpolateArguments(readback.args, {
-    test_owner: owner,
-    test_repo: repo,
-    test_repository: `${owner}/${repo}`,
-  });
-  const readbackEnvelope = parseJSONOutput(
-    await runProcess(
-      binary,
-      [CONNECTOR, ...readback.command.split(" "), ...readbackArgs, "--credential", credential, "--root", root, "--json"],
-      cwd,
-    ),
-    "write readback",
-  );
-  const readbackResult = assertReadEnvelope(readbackEnvelope, readback.command);
+  let readbackResult;
+  if (readback) {
+    const readbackArgs = interpolateArguments(readback.args, {
+      test_owner: owner,
+      test_repo: repo,
+      test_repository: `${owner}/${repo}`,
+    });
+    const readbackEnvelope = parseJSONOutput(
+      await runProcess(
+        binary,
+        [CONNECTOR, ...readback.command.split(" "), ...readbackArgs, "--credential", credential, "--root", root, "--json"],
+        cwd,
+      ),
+      "write readback",
+    );
+    readbackResult = assertReadEnvelope(readbackEnvelope, readback.command);
+  }
   return {
     httpStatus: Number.isInteger(operation?.status) ? operation.status : undefined,
     assertion: {
-      kind: "reverse-write-readback",
+      kind: readbackResult ? "reverse-write-readback" : "reverse-write-result",
       subject: command,
       matched: true,
-      readback_kind: readbackResult.assertion.kind,
+      ...(readbackResult ? { readback_kind: readbackResult.assertion.kind } : {}),
     },
   };
 }

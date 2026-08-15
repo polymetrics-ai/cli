@@ -80,7 +80,7 @@ Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selec
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

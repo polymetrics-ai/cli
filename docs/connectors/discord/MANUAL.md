@@ -50,7 +50,7 @@ ETL STREAMS
     fields: color(integer), hoist(boolean), id(string), managed(boolean), mentionable(boolean), name(string), permissions(string), position(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Discord API read of guild, channel, and role data

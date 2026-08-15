@@ -32,7 +32,7 @@ COMMANDS
   reverse           list, plan, preview, run, and inspect reverse ETL writes
   flow              plan, preview, run, list, and inspect multi-step flows
   rlm               score warehouse records with deterministic or agent RLM
-  schedule          create, list, install, and remove flow schedules
+  schedule          create, inspect, install, fire, and remove authorized flow schedules
   agent             produce typed plans for external agents
   runtime           check PostgreSQL, DragonflyDB, and Temporal dependencies
   perf              compare dependency-free and runtime-backed performance
@@ -318,6 +318,42 @@ DESCRIPTION
   signal without reading credentials. COMMUNITY BUILD, UNCERTIFIED is a
   warning only; the connector remains reachable.
 
+  JSON inspection also projects the closed sync_transport source and
+  destination eligibility. A structurally valid destination that declares
+  acknowledgement=none remains declared so inspection reports that policy, but
+  runtime preflight refuses it; only durable_warehouse can execute. A declared
+  role still requires externally verified conformance; it is not a certification
+  claim.
+
+POLLING-WATERMARK ELIGIBILITY
+  polling_watermark is a bounded polling scan, not CDC or change capture.
+  Its declaration status, where one exists, is separate from the connector's
+  CDC capability. A polling mode is executable only when runtime preflight
+  accepts the specific connector, discovered catalog object, and destination
+  binding after checking the declared native source and apply executors plus
+  immutable conformance evidence. A planned, unsupported, or absent declaration
+  does not implement a polling mode.
+
+  An admitted source uses declared keyset ordering: a watermark and unique
+  tie-breaker are checkpointed only after durable downstream acknowledgement.
+  Delivery is at least once, so the inclusive resume boundary can replay an
+  accepted record. Snapshot barriers are declaration-bound and are never
+  silently replaced by a full scan. Polling cannot observe hard deletes after a
+  row disappears; tombstones require a declared, cursor-advancing soft-delete
+  mapping. State incompatibility, source identity mismatch, snapshot expiry,
+  and retention failure require an explicit rebootstrap; pm never implies an
+  automatic rescan.
+
+  For connectors with a declared rate-limit policy, inspection reports RATE
+  LIMIT COORDINATION. Process-local policies coordinate only requests made by
+  this pm process; they make no cross-process claim. Policies explicitly
+  declaring require_shared refuse before a request when their optional shared
+  coordinator is unavailable. A connector with both ordinary policies reports
+  policy-scoped coordination. A certification-only require_shared overlay
+  preserves the process-local default label and explicitly states the
+  certification boundary. Inspection never exposes a rate scope, coordinator
+  address, or credential.
+
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
   source-/destination-prefixed names.
@@ -392,8 +428,9 @@ ACTIONS
   inspect <name>
     Prints a man-style connector manual for a bare connector name. Use --json
     to print structured metadata for agents, including the generated binary
-    certification status. Inspection is metadata-only and does not resolve
-    credentials. A connector is either CERTIFIED or COMMUNITY BUILD,
+    certification status and declared rate-limit coordination provenance when
+    applicable. Inspection is metadata-only and does not resolve credentials or
+    expose a rate scope. A connector is either CERTIFIED or COMMUNITY BUILD,
     UNCERTIFIED; the latter remains available with a warning.
 
   help <name>
@@ -409,7 +446,10 @@ ACTIONS
     during the staged migration. A complete version-2 ledger reports its ledger
     version, artifact count, endpoint count, and cited endpoint count; invalid
     version-2 provenance fails certification without enabling or changing any
-    connector capability.
+    connector capability. When the connector declares coordinated rate limits,
+    JSON may also contain safe rate_limit_events for attempts, observed resets,
+    waits, and requests stopped before send; the events contain no credentials
+    or rendered rate scopes.
 
 EXAMPLES
   pm connectors
@@ -458,16 +498,38 @@ STREAM AND TABLE NAMES
   are checked when the connection is created, because a name the warehouse
   cannot materialize would otherwise fail every sync of that connection.
 
+  One local-warehouse connection cannot configure distinct --table spellings
+  that differ only by ASCII letter case, such as records and RECORDS: DuckDB
+  treats them as one identifier. Creation refuses that inventory before saving
+  it. A legacy inventory is left unchanged on open, but any local sync refuses
+  before changing run or warehouse state; create replacement connections whose
+  destination table names differ by more than ASCII letter case.
+
 SYNC MODES
   full_refresh_append              read all source records and append them
   full_refresh_overwrite           read all source records and replace final output
-  full_refresh_overwrite_deduped   replace final output and keep latest row per primary key
+  full_refresh_overwrite_deduped   compatibility name for typed full_overwrite admission
   incremental_append               append records at or after the saved cursor
-  incremental_append_deduped       append raw history and materialize latest row per primary key
+  incremental_append_deduped       compatibility name for typed incremental_dedupe admission
 
-  Incremental modes require --cursor. Deduped modes require --primary-key. When
-  a connector manifest declares defaults, pm fills them during connection
-  creation.
+  Incremental modes and deduped compatibility names require --cursor. Deduped
+  modes require --primary-key. A static connector manifest advertises the full
+  deduped compatibility name only with both fields, and incremental modes only
+  with a declared incremental executor. The two deduped compatibility names use
+  their typed contract and refuse before source I/O until a matching transport
+  is admitted. When a connector manifest declares defaults, pm fills them during
+  connection creation.
+
+POLLING-WATERMARK LIMITS
+  polling_watermark is not a general connection mode and is not CDC. It can be
+  selected only by a connector's declared native source/object/destination
+  binding after runtime preflight succeeds. An admitted source resumes from its
+  declared watermark plus unique tie-breaker after durable downstream
+  acknowledgement, so replay is at least once. A polling scan cannot observe a
+  hard delete after the row is gone; delete-aware history requires a declared
+  cursor-advancing soft-delete mapping. Incompatible state, source identity
+  changes, snapshot expiry, and retention failures require explicit
+  rebootstrap rather than an automatic full scan.
 
 SECURITY
   Connections reference credentials by name only.
@@ -510,6 +572,10 @@ SYNOPSIS
   pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
   pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json]
   pm etl status <run-id> [--json]
+  pm etl transport github-issue-label plan --connection <name> [--json]
+  pm etl transport github-issue-label preview <plan-id> [--json]
+  pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
+  pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
 DESCRIPTION
   ETL can directly check, catalog, and read enabled connectors by name. The
@@ -537,6 +603,32 @@ DESCRIPTION
   With --runtime, ETL also requires healthy PostgreSQL, DragonflyDB, and Temporal
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
+
+CLOSED GITHUB TRANSPORT
+  The github-issue-label transport is a fixed GitHub issue-to-label walking
+  slice. A saved connection owns the repository, source issue, target issue,
+  label, action, and credential configuration; the command accepts none of
+  those provider details directly.
+
+  Create a closed plan, preview it in human output to obtain an ephemeral
+  approval token, then pass that token only as one bounded stdin line to:
+
+    pm etl run --connection <name> --stream issues --batch-size 1 \
+      --approval-plan <plan-id> --approval-token-stdin --confirm destructive
+
+  The run keeps the source -> durable warehouse -> reopen -> typed GitHub
+  mutation and durable acknowledgement -> independent read-back -> checkpoint
+  order. Cleanup is a separate typed remove-label plan, preview, and one-time
+  approval. A declared GitHub missing-label DELETE is a successful cleanup;
+  replaying approval is refused.
+
+  Source selection and independent read-back each inspect only the first GitHub
+  issues page. The transport fails instead of requesting another page when the
+  configured source or target issue is not there.
+
+  Approval tokens are never accepted in argv, environment variables, files,
+  JSON output, or persisted project state. Run pm etl transport for the exact
+  closed lifecycle and its stdin-only token rule.
 
 DIRECT CONNECTOR COMMANDS
   check
@@ -582,17 +674,32 @@ SYNC MODES
     replaces the final Parquet table only after the run succeeds.
 
   full_refresh_overwrite_deduped
-    Replaces the write-ahead log with this run's records, dedupes by primary key
-    and cursor, then atomically replaces the final Parquet table.
+    Compatibility name for typed full_overwrite admission. pm refuses before
+    source I/O until a matching transport is admitted.
 
   incremental_append
     Reads records at or after the saved cursor and appends accepted records to
     the write-ahead log. Cursor state advances only after successful writes.
 
   incremental_append_deduped
-    Appends accepted records to the write-ahead log and materializes a final
-    Parquet table with one latest row per primary key. Delete/tombstone records
-    remove the row from final output.
+    Compatibility name for typed incremental_dedupe admission. pm refuses
+    before source I/O until a matching transport is admitted.
+
+  Incremental modes and deduped compatibility names require --cursor. Deduped
+  modes require --primary-key. Static connector manifests advertise the full
+  deduped compatibility name only with both fields, and incremental modes only
+  with a declared incremental executor.
+
+POLLING-WATERMARK LIMITS
+  polling_watermark is a bounded keyset scan, not CDC or a generic database
+  query. The runtime evaluates every mode against the declared source ordering,
+  discovered object, destination binding, registered executors, and conformance
+  evidence before source I/O. A durable checkpoint records the watermark and
+  unique tie-breaker only after downstream acknowledgement, so accepted records
+  may replay. Hard deletes are not observable unless the declaration supplies
+  a cursor-advancing soft-delete mapping. Incompatible state, source identity
+  mismatch, snapshot expiry, and retention failure require explicit rebootstrap;
+  pm never converts them into an automatic full scan.
 
 SECURITY
   ETL resolves credentials in memory and stores only credential references.
@@ -623,6 +730,12 @@ DESCRIPTION
   connections can use the same table name without overwriting each other. When
   more than one connection has a table of the requested name, the read is
   refused and lists the owning connections; pass --connection to pick one.
+  A legacy connection that itself configured distinct table spellings differing
+  only by ASCII letter case is different: --connection cannot choose between
+  one owner's destinations, so SQL references are refused. Use --table only
+  with an exact resolver-visible spelling to inspect retained data, or create
+  replacement connections whose destination table names differ by more than
+  ASCII letter case.
   A table at the warehouse root belongs to no connection, because a reverse ETL
   run writing to the warehouse connector produced it rather than a sync, or it
   was seeded by hand. It is listed and selected as _unattributed.
@@ -655,7 +768,7 @@ const flowHelp = `NAME
 SYNOPSIS
   pm flow plan --file flow.json [--json]
   pm flow preview --file flow.json [--json]
-  pm flow run --file flow.json [--force] [--json]
+  pm flow run --file flow.json [--authorization <auth-ref>] [--force] [--json]
   pm flow status <name> [--flows-dir .polymetrics/flows] [--json]
   pm flow list [--flows-dir .polymetrics/flows] [--json]
 
@@ -663,6 +776,34 @@ DESCRIPTION
   Flow manifests compose sync, query, rlm, and action steps. Dependencies are
   inferred from in/out warehouse tables. RLM steps reuse pm rlm analyzers and
   may reference a spec path relative to the flow manifest file.
+
+CONNECTION-SCOPED SOURCE READS
+  A query step may set "connection" to scope every warehouse table view used
+  by its SQL. An action step sets "source_connection" inside "action_cfg" to
+  scope its "source_table". Use _unattributed only for a root-level table that
+  no connection owns. When same-named tables have several owners, omitting the
+  applicable manifest selector refuses the read instead of choosing one.
+  A case-equivalent spelling whose owner cannot be decided also fails closed;
+  set "connection" to a known healthy owner rather than relying on an
+  unscoped query.
+
+  Query example:
+  {"id":"query-acme","kind":"query","connection":"acme",
+   "sql":"SELECT * FROM records","in":[],"out":[]}
+
+  Action source selector fragment:
+  "action_cfg": {"source_table":"records","source_connection":"acme"}
+
+ACTION EXECUTION
+  An action uses the selected warehouse rows and the destination connector's
+  typed ValidateWrite and Write methods; it never accepts a raw URL, generic
+  HTTP write, SQL write, or operation request. Before run, create and
+  consume the matching reverse-ETL plan → preview → approval lifecycle. Put
+  its durable authorization_reference in action_cfg or pass --authorization.
+  The action_cfg must also name destination_table and read_back_stream. A run
+  re-derives its content-free authorization scope before any provider request,
+  reads the target stream back, and persists an opaque receipt before the
+  action checkpoint can be marked successful.
 
 RLM STEP EXAMPLE
   {
@@ -676,7 +817,8 @@ RLM STEP EXAMPLE
 
 SECURITY
   Read-only sync, query, and rlm steps run through existing app primitives.
-  Action steps remain approval-gated.
+  Action steps require a durable, revocable authorization reference. A changed,
+  expired, or revoked scope stops before connector validation or write.
 
 EXIT STATUS
   0 success
@@ -707,22 +849,33 @@ EXIT STATUS
 `
 
 const scheduleHelp = `NAME
-  pm schedule - create, list, install, and remove flow schedules
+  pm schedule - manage authorized flow schedules
 
 SYNOPSIS
-  pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads [--json]
+  pm schedule create --name nightly --cron "0 2 * * *" --flow nightly_leads --authorization auth_<opaque-id> [--json]
   pm schedule list [--json]
+  pm schedule inspect nightly [--json]
+  pm schedule status nightly [--json]
   pm schedule install nightly [--crontab] [--json]
   pm schedule remove nightly [--crontab] [--json]
+  pm schedule fire nightly --authorization auth_<opaque-id> [--json]
 
 DESCRIPTION
-  Schedules bind a cron expression to a named flow and install it into the
-  selected local scheduler backend. Use --crontab on install or remove to force
-  the crontab backend. The payload is pm flow run.
+  Schedules bind a cron expression and a named flow to a durable, revocable
+  authorization reference. The selected local scheduler backend invokes
+  schedule fire with that reference. On every firing, pm re-derives the
+  content-free action scope and obtains a run-scoped grant before it sends a
+  connector request. Use inspect or status to view the safe reference and the
+  last fire state. Use --crontab on install or remove to force the crontab
+  backend.
 
 SECURITY
-  Schedules do not embed secret values. Flow execution still uses the normal
-  project credential references and approval gates.
+  A manifest, rendered scheduler payload, and fire receipt retain only the
+  opaque authorization reference and safe receipt identifiers; they never
+  retain approval tokens, credentials, payloads, or secret-derived values.
+  Expired, revoked, or scope-changed authorization stops before a provider
+  request. Failed, rate-limited, ambiguous, or cleanup-failed fires park and
+  never replay automatically.
 
 EXIT STATUS
   0 success
@@ -741,7 +894,7 @@ USAGE
   pm reverse plan <name> --source-table <table> [--connection name] --destination connector:credential --map source:dest [--json]
   pm reverse preview <plan-id> [--<withheld-flag> <value>...]
     [--from-env <env-only-flag>=ENV]... [--json]
-  pm reverse run <plan-id> --approve <token> [--confirm <challenge>]
+  pm reverse run <plan-id> --approval-token-stdin [--confirm <challenge>]
     [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
   pm reverse status <run-id> [--json]
 
@@ -836,9 +989,10 @@ COMMANDS
     The error names each missing flag.
 
   run
-    Execute a stored plan only when --approve is supplied with the approval
-    token from human-readable plan or preview output. Destructive plans require
-    a matching persisted preview and the closed --confirm destructive value. A
+    Execute a stored plan only when the bare --approval-token-stdin marker is
+    supplied and standard input contains the approval token as one bounded line
+    from human-readable plan or preview output. Destructive plans require a
+    matching persisted preview and the closed --confirm destructive value. A
     connector-command plan that withheld declared sensitive fields needs the
     same re-supply form: --from-env <flag>=ENV for an env_only field, or
     --<flag> <value> otherwise. A failed dispatch is recorded; pm does not
@@ -855,7 +1009,8 @@ FLAGS
   --map source:dest            field mapping, repeatable
   --action action              destination write action; inspect shows names
   --limit n                    maximum source rows to include in the plan
-  --approve token              approval token required by run
+  --approval-token-stdin       read the approval token as one bounded line from
+                               standard input; the marker accepts no value
   --confirm challenge          typed confirmation required by gated plans
   --<withheld-flag> value      re-supply a non-env_only field the plan withheld;
                                the flag is connector-owned, never persisted
@@ -901,14 +1056,16 @@ EXAMPLES
   pm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map email:email
   pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-local --action create_pull_request --map title:title --map head:head --map base:base --map reviewers:reviewers
   pm reverse preview rplan_abc123 --json
-  pm reverse run rplan_abc123 --approve <approval-token>
+  pm reverse run rplan_abc123 --approval-token-stdin
   pm reverse status rrun_abc123 --json
 
 SECURITY
-  Execution requires a time-bounded, single-use approval token. Destructive
-  tokens are created only after preview; execution revalidates the preview
-  digest before dispatch. JSON plan and preview output omit tokens so agents
-  cannot silently self-approve external writes. A connector-command plan never
+  Execution requires a time-bounded, single-use approval token on standard
+  input. Destructive tokens are created only after preview; execution revalidates
+  the preview digest before dispatch. JSON plan and preview output omit tokens
+  so agents cannot silently self-approve external writes. The stdin carrier is
+  one bounded line and the token is never accepted through command arguments,
+  environment, or project files. A connector-command plan never
   persists the fields its write action declares in redact_fields, or its
   direct_write operation declares in sensitive_policy.redact_fields; they are
   re-supplied per invocation and are not written back at preview or run. A
@@ -1046,9 +1203,9 @@ DESCRIPTION
   acquires a Dragonfly lease, appends a PostgreSQL ledger record, and compares
   that path against the dependency-free baseline.
 
-  The sync-modes subcommand runs a synthetic local file-to-warehouse benchmark
-  for every supported ETL sync mode and reports each mode's duration and records
-  per second.
+  The sync-modes subcommand benchmarks local sync modes that materialize without
+  a closed transport. Typed compatibility names that refuse before source I/O
+  are excluded.
 
 SECURITY
   Performance output contains counts and durations only.

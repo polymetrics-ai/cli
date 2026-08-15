@@ -8,6 +8,10 @@ SYNOPSIS
   pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
   pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json]
   pm etl status <run-id> [--json]
+  pm etl transport github-issue-label plan --connection <name> [--json]
+  pm etl transport github-issue-label preview <plan-id> [--json]
+  pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
+  pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
 DESCRIPTION
   ETL can directly check, catalog, and read enabled connectors by name. The
@@ -35,6 +39,32 @@ DESCRIPTION
   With --runtime, ETL also requires healthy PostgreSQL, DragonflyDB, and Temporal
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
+
+CLOSED GITHUB TRANSPORT
+  The github-issue-label transport is a fixed GitHub issue-to-label walking
+  slice. A saved connection owns the repository, source issue, target issue,
+  label, action, and credential configuration; the command accepts none of
+  those provider details directly.
+
+  Create a closed plan, preview it in human output to obtain an ephemeral
+  approval token, then pass that token only as one bounded stdin line to:
+
+    pm etl run --connection <name> --stream issues --batch-size 1 \
+      --approval-plan <plan-id> --approval-token-stdin --confirm destructive
+
+  The run keeps the source -> durable warehouse -> reopen -> typed GitHub
+  mutation and durable acknowledgement -> independent read-back -> checkpoint
+  order. Cleanup is a separate typed remove-label plan, preview, and one-time
+  approval. A declared GitHub missing-label DELETE is a successful cleanup;
+  replaying approval is refused.
+
+  Source selection and independent read-back each inspect only the first GitHub
+  issues page. The transport fails instead of requesting another page when the
+  configured source or target issue is not there.
+
+  Approval tokens are never accepted in argv, environment variables, files,
+  JSON output, or persisted project state. Run pm etl transport for the exact
+  closed lifecycle and its stdin-only token rule.
 
 DIRECT CONNECTOR COMMANDS
   check
@@ -80,17 +110,32 @@ SYNC MODES
     replaces the final Parquet table only after the run succeeds.
 
   full_refresh_overwrite_deduped
-    Replaces the write-ahead log with this run's records, dedupes by primary key
-    and cursor, then atomically replaces the final Parquet table.
+    Compatibility name for typed full_overwrite admission. pm refuses before
+    source I/O until a matching transport is admitted.
 
   incremental_append
     Reads records at or after the saved cursor and appends accepted records to
     the write-ahead log. Cursor state advances only after successful writes.
 
   incremental_append_deduped
-    Appends accepted records to the write-ahead log and materializes a final
-    Parquet table with one latest row per primary key. Delete/tombstone records
-    remove the row from final output.
+    Compatibility name for typed incremental_dedupe admission. pm refuses
+    before source I/O until a matching transport is admitted.
+
+  Incremental modes and deduped compatibility names require --cursor. Deduped
+  modes require --primary-key. Static connector manifests advertise the full
+  deduped compatibility name only with both fields, and incremental modes only
+  with a declared incremental executor.
+
+POLLING-WATERMARK LIMITS
+  polling_watermark is a bounded keyset scan, not CDC or a generic database
+  query. The runtime evaluates every mode against the declared source ordering,
+  discovered object, destination binding, registered executors, and conformance
+  evidence before source I/O. A durable checkpoint records the watermark and
+  unique tie-breaker only after downstream acknowledgement, so accepted records
+  may replay. Hard deletes are not observable unless the declaration supplies
+  a cursor-advancing soft-delete mapping. Incompatible state, source identity
+  mismatch, snapshot expiry, and retention failure require explicit rebootstrap;
+  pm never converts them into an automatic full scan.
 
 SECURITY
   ETL resolves credentials in memory and stores only credential references.

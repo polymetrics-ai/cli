@@ -13,21 +13,24 @@
 // connectors.Connector directly: Check/Catalog/Read/Write are hand-written
 // Go, not derived from streams.json (there is none — this is a
 // capabilities.dynamic_schema bundle, since a database's tables are
-// discovered at runtime from information_schema, not declared ahead of
+// discovered at runtime from PostgreSQL's system catalogs, not declared ahead of
 // time). It still ships a defs bundle
 // (internal/connectors/defs/postgres/{metadata.json,spec.json,
-// api_surface.json,docs.md}) so identity/spec/docs stay uniform with every
-// other connector, and it embeds engine.Base — built from that bundle at
-// construction — purely to serve Name()/Metadata()/Definition() (design
-// §B.7: "they embed engine.Base which serves Definition() ... from the
-// bundle"; Base does NOT provide Check/Catalog/Read/Write, which remain
-// this package's own implementation).
+// api_surface.json,database.json,docs.md}) so identity/spec/docs stay uniform
+// with every other connector. database.json is a typed policy declaration
+// only: it does not register a driver or promote write/CDC capability. The
+// connector embeds engine.Base — built from that bundle at construction — to
+// serve its bundle-derived identity and definition base. Definition adds this
+// package's dynamic-catalog snapshot transport declaration; Base does NOT
+// provide Check/Catalog/Read/Write, which remain this package's own
+// implementation.
 //
 // Capabilities:
 //   - Check:   pgxpool connect + ping using host/port/database/username/
 //     sslmode and the password secret (connection.go/cataloger.go).
-//   - Catalog: discover tables and columns from information_schema and map
-//     each PostgreSQL data_type to a coarse Field type (cataloger.go).
+//   - Catalog: discover configured-schema base tables, ordered columns, keys,
+//     and supported native/logical types from pg_catalog (typed_catalog.go),
+//     then derive the legacy Field projection only for compatibility.
 //   - Read:    snapshot SELECT over a stream, with optional
 //     cursor-incremental filtering on a configurable cursor column
 //     (reader.go; see StatefulReader below).
@@ -35,8 +38,7 @@
 //     with the legacy package. Capabilities.Write is false and Write
 //     returns ErrUnsupportedOperation.
 //
-// CDC (change data capture) remains fail-closed until the PostgreSQL 14+
-// streamed-transaction boundary is available (cdc.go).
+// CDC uses PostgreSQL 14+ pgoutput v2 streamed transaction staging (cdc.go).
 //
 // A mode=fixture config (cfg.Config["mode"]=="fixture") short-circuits all
 // network access so the conformance harness and unit tests can run with no
@@ -44,9 +46,9 @@
 // and Read emits canned rows.
 //
 // NO init()/RegisterFactory call exists in this package
-// in wave0 (enforced by a grep-guard test, postgres_test.go
-// TestNoInitRegistration) — the registration flip that wires native/postgres
-// into the production registry is a wave6 change; wave0 only builds and
+// in wave0 (enforced by capability_surface_test.go's
+// TestNoInitRegistration grep guard) — the registration flip that wires
+// native/postgres into the production registry is a wave6 change; wave0 only builds and
 // tests the package standalone, exactly as instructed.
 package postgres
 
@@ -54,18 +56,44 @@ import (
 	"context"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
 // Connector is the Tier-3 native pm PostgreSQL source connector. It embeds
-// engine.Base for Name()/Metadata()/Definition(), synthesized from the
-// defs/postgres bundle loaded once at construction (New), and implements
-// Check/Catalog/Read/Write itself (connection.go/cataloger.go/reader.go/
-// cdc.go) since a database connector's tables are discovered dynamically,
-// not declared in a streams.json.
+// engine.Base for Name()/Metadata() and the bundle-derived portion of
+// Definition(), synthesized from the defs/postgres bundle loaded once at
+// construction (New), and implements Check/Catalog/Read/Write itself
+// (connection.go/cataloger.go/reader.go/cdc.go) since a database connector's
+// tables are discovered dynamically, not declared in a streams.json.
 type Connector struct {
 	engine.Base
+
+	// databaseDefinition is the immutable database.json projection loaded with
+	// the same embedded bundle that supplies Base. Catalog discovery uses it
+	// directly so native/logical typing cannot become a second, disconnected
+	// PostgreSQL model.
+	databaseDefinition database.Definition
+}
+
+// postgresCapabilityOverride is a declarative capability row. Future native
+// capability lanes add a row rather than interleaving another override in
+// Metadata's composition control flow.
+type postgresCapabilityOverride struct {
+	name   string
+	value  bool
+	target func(*connectors.Capabilities) *bool
+}
+
+var postgresCapabilityOverrides = []postgresCapabilityOverride{
+	{
+		name:  "cdc",
+		value: true,
+		target: func(capabilities *connectors.Capabilities) *bool {
+			return &capabilities.CDC
+		},
+	},
 }
 
 // New returns the PostgreSQL connector as a connectors.Connector, loading
@@ -79,23 +107,38 @@ func New() Connector {
 	if err != nil {
 		panic("native/postgres: failed to load defs/postgres bundle: " + err.Error())
 	}
-	return Connector{Base: engine.NewBase(b)}
+	if b.Database == nil {
+		panic("native/postgres: defs/postgres bundle is missing database.json")
+	}
+	return Connector{Base: engine.NewBase(b), databaseDefinition: *b.Database}
 }
 
 // Metadata overrides engine.Base's bundle-synthesized Metadata with the
 // legacy-shaped description text, matching the pre-migration
-// connectors.Metadata field-for-field (parity target); Capabilities are
-// still whatever the bundle's metadata.json declares (single source of
-// truth for capability flags), so this override only refines
-// Description/DisplayName wording, never capability semantics.
+// connectors.Metadata field-for-field (parity target). Capabilities remain
+// owned by metadata.json; the current table repeats the proven native CDC
+// capability so this connector's legacy metadata projection stays aligned.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads. Read-only source."
-	// The bundle declares this too, but pin the native override to the same
-	// fail-closed state so this connector cannot accidentally advertise CDC
-	// while the executor remains unavailable.
-	m.Capabilities.CDC = false
+	m.Description = "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Read-only source."
+	for _, override := range postgresCapabilityOverrides {
+		*override.target(&m.Capabilities) = override.value
+	}
 	return m
+}
+
+// Definition adds the PostgreSQL-owned bounded snapshot transport declaration
+// to the bundle-derived connector definition. The dynamic catalog means there
+// is no static table list to place in a JSON bundle; the one logical snapshot
+// stream resolves its relation from the checkpoint source scope at execution.
+// Registration remains explicit through RegisterSnapshotTransportSource, so a
+// declaration cannot become executable merely by constructing a connector.
+func (c Connector) Definition() connectors.Definition {
+	definition := c.Base.Definition()
+	definition.SyncTransport = &connectors.SyncTransportDescriptor{
+		Source: postgresSnapshotTransportDescriptor(),
+	}
+	return definition
 }
 
 func (c Connector) Manifest() connectors.Manifest {

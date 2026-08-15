@@ -56,6 +56,12 @@ func TestProjectWriteApprovalRequiresSealedPlanAndPersistentConsumption(t *testi
 		PlanID: grant.PlanID, PlanHash: grant.PlanHash, PreviewDigest: grant.PreviewDigest,
 		ApprovalToken: "fixture-token", Target: target, Confirmation: confirmation,
 	}
+	if err := authority.ValidateWriteGrant(grant, expected, &seal); err != nil {
+		t.Fatalf("ValidateWriteGrant(first) error = %v", err)
+	}
+	if err := authority.ValidateWriteGrant(grant, expected, &seal); err != nil {
+		t.Fatalf("ValidateWriteGrant(second) error = %v", err)
+	}
 	evidence, err := authority.VerifyWriteGrant(grant, expected, &seal)
 	if err != nil {
 		t.Fatalf("VerifyWriteGrant(first) error = %v", err)

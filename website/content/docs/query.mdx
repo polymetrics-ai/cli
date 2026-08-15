@@ -34,6 +34,22 @@ Add `--connection` to pick one:
 pm query run --table records --connection acme --json
 ```
 
+### Case-equivalent names on one legacy connection
+
+DuckDB treats ASCII case-equivalent identifiers as the same SQL name. New
+local-warehouse connections therefore reject distinct destination table
+spellings such as `records` and `RECORDS` before saving the connection.
+
+An older connection may already contain that invalid inventory. `pm` leaves
+the existing configuration and data unchanged when it opens the project. The
+[connection manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/connections.md)
+owns the pre-sync recovery rule. A SQL reference to either spelling is also
+refused: `--connection` cannot choose between two destinations owned by the
+same connection. To inspect retained data, use `--table` with the exact
+spelling that the local resolver can see; do not rely on case aliasing. Then
+create replacement connections whose destination table names differ by more
+than ASCII letter case.
+
 A table written straight through the warehouse connector's write surface — a
 reverse ETL run whose destination is `warehouse`, or a file seeded by hand —
 lands at the warehouse root instead, because a direct write carries no

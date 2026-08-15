@@ -11,11 +11,12 @@ import (
 
 func makeManifest(name string) Manifest {
 	return Manifest{
-		Name:      name,
-		Cron:      "0 2 * * *",
-		Flow:      "test-flow",
-		CreatedAt: time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
-		UpdatedAt: time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
+		Name:                   name,
+		Cron:                   "0 2 * * *",
+		Flow:                   "test-flow",
+		AuthorizationReference: "auth_0123456789abcdef",
+		CreatedAt:              time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
+		UpdatedAt:              time.Date(2026, 6, 27, 0, 0, 0, 0, time.UTC),
 	}
 }
 
@@ -31,11 +32,43 @@ func TestManifestSaveLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Load: %v", err)
 	}
-	if got.Name != m.Name || got.Cron != m.Cron || got.Flow != m.Flow {
+	if got.Name != m.Name || got.Cron != m.Cron || got.Flow != m.Flow || got.AuthorizationReference != m.AuthorizationReference {
 		t.Fatalf("round-trip mismatch: got %+v, want %+v", got, m)
 	}
 	if !got.CreatedAt.Equal(m.CreatedAt) || !got.UpdatedAt.Equal(m.UpdatedAt) {
 		t.Fatalf("timestamp mismatch: got %v/%v", got.CreatedAt, got.UpdatedAt)
+	}
+}
+
+func TestManifestRejectsMissingAuthorizationReference(t *testing.T) {
+	root := t.TempDir()
+	m := makeManifest("missing-authorization")
+	m.AuthorizationReference = ""
+	if err := Save(root, m, false); err == nil {
+		t.Fatal("Save without an authorization reference succeeded")
+	}
+}
+
+func TestManifestRejectsNonOpaqueAuthorizationReference(t *testing.T) {
+	root := t.TempDir()
+	m := makeManifest("token-like-authorization")
+	m.AuthorizationReference = "approval-token-fixture"
+	if err := Save(root, m, false); err == nil {
+		t.Fatal("Save accepted token-like authorization material")
+	}
+}
+
+func TestManifestLoadRejectsUnsafeAuthorizationReference(t *testing.T) {
+	root := t.TempDir()
+	if err := os.MkdirAll(schedulesDir(root), 0o755); err != nil {
+		t.Fatalf("MkdirAll: %v", err)
+	}
+	path := manifestPath(root, "unsafe-reference")
+	if err := os.WriteFile(path, []byte(`{"name":"unsafe-reference","cron":"0 2 * * *","flow":"flow","authorization_reference":"approval-token-fixture"}`), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	if _, err := Load(root, "unsafe-reference"); err == nil {
+		t.Fatal("Load accepted token-like authorization material")
 	}
 }
 
@@ -53,6 +86,29 @@ func TestManifestList(t *testing.T) {
 	}
 	if len(list) != len(names) {
 		t.Fatalf("List returned %d items, want %d", len(list), len(names))
+	}
+}
+
+func TestManifestListIgnoresFireState(t *testing.T) {
+	root := t.TempDir()
+	manifest := makeManifest("fired")
+	if err := Save(root, manifest, false); err != nil {
+		t.Fatalf("Save: %v", err)
+	}
+	lease, err := BeginFire(root, manifest.Name)
+	if err != nil {
+		t.Fatalf("BeginFire: %v", err)
+	}
+	if err := lease.Complete(FireReceipt{ReceiptIDs: []string{"receipt-safe"}}); err != nil {
+		t.Fatalf("Complete: %v", err)
+	}
+
+	list, err := List(root)
+	if err != nil {
+		t.Fatalf("List: %v", err)
+	}
+	if len(list) != 1 || list[0].Name != manifest.Name {
+		t.Fatalf("List returned %#v, want only %q", list, manifest.Name)
 	}
 }
 

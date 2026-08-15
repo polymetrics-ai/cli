@@ -71,7 +71,7 @@ Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analyti
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 
@@ -122,7 +122,7 @@ Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analyti
   - --json (boolean): Emit machine-readable JSON output.
   - --limit (integer): Maximum records to emit from stream commands.
   - --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-  - --approve (string): Approval token required to execute a reverse-ETL plan.
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   - --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
 - YouTube Reporting
   - jobs list - Read YouTube Reporting jobs through the declared ETL stream. [intent=etl availability=implemented stream=jobs]; flags: --include-system-managed

@@ -5,42 +5,35 @@ import (
 	"encoding/json"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/synccontract"
 )
 
-// syncMode name constants mirror internal/app/sync_modes.go's MustSyncModeNames
-// verbatim (design §B.6). engine cannot import internal/app (app already
-// depends on connectors, and PLAN.md forbids editing internal/app/** for this
-// task); these are the same five strings, kept in lockstep by
-// TestDerivedSyncModesTruthTable against the design doc's truth table rather
-// than by a shared import.
-const (
-	syncModeFullRefreshAppend           = "full_refresh_append"
-	syncModeFullRefreshOverwrite        = "full_refresh_overwrite"
-	syncModeFullRefreshOverwriteDeduped = "full_refresh_overwrite_deduped"
-	syncModeIncrementalAppend           = "incremental_append"
-	syncModeIncrementalAppendDeduped    = "incremental_append_deduped"
-)
-
-// DerivedSyncModes returns the sync modes a stream supports, derived from its
-// bundle-declared shape rather than authored anywhere (design §B.6): the two
-// full_refresh modes are always available; the *_deduped variants require
-// x-primary-key; the incremental_* modes require an incremental block.
+// DerivedSyncModes returns sync modes derived from the bundle-declared stream shape.
 func DerivedSyncModes(s StreamSpec, sch *StreamSchema) []string {
-	modes := []string{syncModeFullRefreshAppend, syncModeFullRefreshOverwrite}
+	cursorField := effectiveCursorField(s, sch)
+	return synccontract.SupportedPublicModeNames(synccontract.PublicModeCapabilities{
+		HasPrimaryKey:          sch != nil && len(sch.PrimaryKey) > 0,
+		HasCursor:              cursorField != "",
+		HasIncrementalExecutor: hasIncrementalExecutor(s, cursorField),
+	})
+}
 
-	hasPrimaryKey := sch != nil && len(sch.PrimaryKey) > 0
-	hasIncremental := s.Incremental != nil
+func effectiveCursorField(s StreamSpec, sch *StreamSchema) string {
+	if sch != nil && sch.CursorField != "" {
+		return sch.CursorField
+	}
+	if s.Incremental != nil {
+		return s.Incremental.CursorField
+	}
+	return ""
+}
 
-	if hasPrimaryKey {
-		modes = append(modes, syncModeFullRefreshOverwriteDeduped)
+func hasIncrementalExecutor(s StreamSpec, cursorField string) bool {
+	if s.Incremental == nil || cursorField == "" {
+		return false
 	}
-	if hasIncremental {
-		modes = append(modes, syncModeIncrementalAppend)
-	}
-	if hasPrimaryKey && hasIncremental {
-		modes = append(modes, syncModeIncrementalAppendDeduped)
-	}
-	return modes
+	return s.Incremental.CursorField == "" || s.Incremental.CursorField == cursorField
 }
 
 // Connector adapts a declarative Bundle (+ optional Tier-2 Hooks) to
@@ -84,6 +77,65 @@ func (c *Connector) Definition() connectors.Definition {
 
 func (c *Connector) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(c.bundle)
+}
+
+// RateLimitCoordination returns the safe declaration-level provenance used by
+// connector inspection. It intentionally does not attempt a coordinator
+// connection or expose any protected scope identity.
+func (c *Connector) RateLimitCoordination() connectors.RateLimitCoordination {
+	if c == nil || c.bundle.RateLimits == nil || c.bundle.RateLimits.State != connsdk.RateLimitStateDeclared || len(c.bundle.RateLimits.Policies) == 0 {
+		return connectors.RateLimitCoordination{}
+	}
+	hasProcessLocal := false
+	hasRequireShared := false
+	hasCertificationOnlyRequireShared := false
+	for _, policy := range c.bundle.RateLimits.Policies {
+		if policy.Coordination == connsdk.RateLimitCoordinationRequireShared {
+			if rateLimitPolicyIsCertificationOnly(policy) {
+				hasCertificationOnlyRequireShared = true
+				continue
+			}
+			hasRequireShared = true
+		} else {
+			hasProcessLocal = true
+		}
+	}
+	if hasRequireShared && hasProcessLocal {
+		return connectors.RateLimitCoordination{
+			Mode:    connectors.RateLimitCoordinationMixed,
+			Message: "Rate-limit coordination is policy-scoped: process-local policies protect this pm process only and are not shared across processes; require_shared policies refuse before sending when the optional coordinator is unavailable.",
+		}
+	}
+	if hasRequireShared {
+		return connectors.RateLimitCoordination{
+			Mode:    connectors.RateLimitCoordinationRequireShared,
+			Message: "Shared rate-limit coordination is required; the command refuses before sending a request when the coordinator is unavailable.",
+		}
+	}
+	message := "Process-local rate-limit protection coordinates this pm process only; it is not shared across processes."
+	if hasCertificationOnlyRequireShared {
+		message += " Certification traffic requires shared rate-limit coordination and refuses before sending when the coordinator is unavailable."
+	}
+	return connectors.RateLimitCoordination{
+		Mode:    connectors.RateLimitCoordinationProcessLocal,
+		Message: message,
+	}
+}
+
+// rateLimitPolicyIsCertificationOnly reports whether a policy's declared
+// coordination requirement applies only to the certification runner. Connector
+// inspection has no selected credential tier, so it reports ordinary traffic's
+// process-local boundary separately while its message discloses this overlay.
+func rateLimitPolicyIsCertificationOnly(policy connsdk.RateLimitPolicy) bool {
+	if len(policy.Selector.Tiers) == 0 {
+		return false
+	}
+	for _, tier := range policy.Selector.Tiers {
+		if tier != "certification" {
+			return false
+		}
+	}
+	return true
 }
 
 // HasConfigurationConstraints reports whether this bundle declares
@@ -386,9 +438,8 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			}
 		}
 	}
-	// Preserve the canonical mode ordering (matches
-	// internal/app/sync_modes.go.MustSyncModeNames) rather than
-	// first-seen-per-stream order.
+	// Preserve the shared public mode ordering rather than first-seen-per-stream
+	// order.
 	syncModes = orderCanonicalModes(syncModes)
 
 	for _, a := range b.Writes {
@@ -475,8 +526,8 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		}
 		if sch != nil {
 			summary.PrimaryKey = sch.PrimaryKey
-			summary.CursorField = sch.CursorField
 		}
+		summary.CursorField = effectiveCursorField(s, sch)
 		streamSummaries = append(streamSummaries, summary)
 	}
 
@@ -484,13 +535,14 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 	for _, a := range b.Writes {
 		confirm := confirmationKindForWriteAction(a)
 		writeActions = append(writeActions, connectors.WriteActionInfo{
-			Name:      a.Name,
-			Kind:      a.Kind,
-			Method:    a.Method,
-			Path:      a.Path,
-			Risk:      a.Risk,
-			Batchable: cloneBoolPtr(a.Batchable),
-			Confirm:   confirm,
+			Name:             a.Name,
+			Kind:             a.Kind,
+			Method:           a.Method,
+			Path:             a.Path,
+			Risk:             a.Risk,
+			Batchable:        cloneBoolPtr(a.Batchable),
+			Confirm:          confirm,
+			TransportBinding: a.TransportBinding.Clone(),
 		})
 	}
 
@@ -498,19 +550,24 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 	if b.Changefeed != nil {
 		changefeed = b.Changefeed.Clone()
 	}
+	var pollingWatermark *connectors.PollingWatermarkDescriptor
+	if b.PollingWatermark != nil {
+		pollingWatermark = b.PollingWatermark.Clone()
+	}
 
 	return connectors.Definition{
-		Name:            b.Metadata.Name,
-		DisplayName:     b.Metadata.DisplayName,
-		Description:     b.Metadata.Description,
-		IntegrationType: b.Metadata.IntegrationType,
-		DocsURL:         b.Metadata.DocsURL,
-		ReleaseStage:    b.Metadata.ReleaseStage,
-		Capabilities:    synthesizeMetadata(b).Capabilities,
-		Changefeed:      changefeed,
-		Spec:            specJSON(b),
-		Streams:         streamSummaries,
-		WriteActions:    writeActions,
+		Name:             b.Metadata.Name,
+		DisplayName:      b.Metadata.DisplayName,
+		Description:      b.Metadata.Description,
+		IntegrationType:  b.Metadata.IntegrationType,
+		DocsURL:          b.Metadata.DocsURL,
+		ReleaseStage:     b.Metadata.ReleaseStage,
+		Capabilities:     synthesizeMetadata(b).Capabilities,
+		Changefeed:       changefeed,
+		PollingWatermark: pollingWatermark,
+		Spec:             specJSON(b),
+		Streams:          streamSummaries,
+		WriteActions:     writeActions,
 		Risk: connectors.RiskSpec{
 			Read:     b.Metadata.Risk.Read,
 			Write:    b.Metadata.Risk.Write,
@@ -576,6 +633,13 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			Notes:         cmd.Notes,
 		})
 	}
+	if commandSurfaceHasWriteIntent(out.Commands) {
+		for _, flag := range connectors.ReverseETLApprovalFlags() {
+			if !commandSurfaceHasGlobalFlag(out.GlobalFlags, flag.Name) {
+				out.GlobalFlags = append(out.GlobalFlags, flag)
+			}
+		}
+	}
 	for _, topic := range surface.HelpTopics {
 		out.HelpTopics = append(out.HelpTopics, connectors.CommandSurfaceHelpTopic{
 			Name:    topic.Name,
@@ -583,6 +647,24 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 		})
 	}
 	return out
+}
+
+func commandSurfaceHasWriteIntent(commands []connectors.CommandSurfaceCommand) bool {
+	for _, cmd := range commands {
+		if cmd.Intent == "reverse_etl" || cmd.Intent == "direct_write" {
+			return true
+		}
+	}
+	return false
+}
+
+func commandSurfaceHasGlobalFlag(flags []connectors.CommandSurfaceFlag, name string) bool {
+	for _, flag := range flags {
+		if flag.Name == name {
+			return true
+		}
+	}
+	return false
 }
 
 func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.CommandSurfaceEndpointRef {
@@ -686,20 +768,27 @@ func specJSON(b Bundle) []byte {
 func legacyStreamOf(b Bundle, s StreamSpec) connectors.Stream {
 	sch := b.Schemas[s.Name]
 	stream := connectors.Stream{Name: s.Name}
+	cursorField := effectiveCursorField(s, sch)
 	if sch == nil {
+		if cursorField != "" {
+			stream.CursorFields = []string{cursorField}
+		}
 		return stream
 	}
 	if len(sch.Raw) > 0 {
 		projected, err := connectors.StreamFromSchema(s.Name, "", sch.Raw)
 		if err == nil {
+			if cursorField != "" {
+				projected.CursorFields = []string{cursorField}
+			}
 			return projected
 		}
 	}
 	// Hand-assembled test bundles predating raw-schema retention still need a
 	// useful catalog projection. Loaded bundles always take the path above.
 	stream.PrimaryKey = sch.PrimaryKey
-	if sch.CursorField != "" {
-		stream.CursorFields = []string{sch.CursorField}
+	if cursorField != "" {
+		stream.CursorFields = []string{cursorField}
 	}
 	for _, name := range sch.Properties() {
 		stream.Fields = append(stream.Fields, connectors.Field{Name: name})
@@ -707,14 +796,7 @@ func legacyStreamOf(b Bundle, s StreamSpec) connectors.Stream {
 	return stream
 }
 
-// canonicalModeOrder is internal/app/sync_modes.go's MustSyncModeNames order.
-var canonicalModeOrder = []string{
-	syncModeFullRefreshAppend,
-	syncModeFullRefreshOverwrite,
-	syncModeFullRefreshOverwriteDeduped,
-	syncModeIncrementalAppend,
-	syncModeIncrementalAppendDeduped,
-}
+var canonicalModeOrder = synccontract.PublicModeNames()
 
 // orderCanonicalModes returns the subset of canonicalModeOrder present in
 // modes, in canonical order.

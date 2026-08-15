@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { chmod, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -26,6 +26,7 @@ import {
   resolveBoundLabLabel,
   resolveBoundLabIssue,
   resolveBootstrapRepositoryTarget,
+  runPMProcess,
   runPMScopedRead,
   runPMAccountBootstrapProbe,
   runPMPlannedWrite,
@@ -604,6 +605,35 @@ test("keeps archived lab results separate from the regenerated current-surface m
   assert.doesNotThrow(() => validateCleanupLedger({ entries, boundary: boundaryFile }));
 });
 
+test("PM process runner keeps supplied approval material out of argv", async () => {
+  const temp = await mkdtemp(path.join(os.tmpdir(), "github-live-lab-stdin-"));
+  try {
+    const binary = path.join(temp, "fake-pm");
+    const argvPath = path.join(temp, "argv");
+    const stdinPath = path.join(temp, "stdin");
+    await writeFile(
+      binary,
+      `#!/bin/sh\nprintf '%s\\n' "$@" > ${JSON.stringify(argvPath)}\ncat > ${JSON.stringify(stdinPath)}\nprintf '{"kind":"ok"}\\n'\n`,
+      "utf8",
+    );
+    await chmod(binary, 0o755);
+
+    const result = await runPMProcess(
+      binary,
+      ["reverse", "run", "rplan_test", "--approval-token-stdin"],
+      "transient-grant\n",
+    );
+    assert.equal(result.code, 0);
+    const argv = await readFile(argvPath, "utf8");
+    assert.equal(argv.includes("--approval-token-stdin"), true);
+    assert.equal(argv.includes("--approve"), false);
+    assert.equal(argv.includes("transient-grant"), false);
+    assert.equal(await readFile(stdinPath, "utf8"), "transient-grant\n");
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
 test("bootstrap write lifecycle keeps approval material process-only across plan, preview, and execute", async () => {
   const bootstrapBoundary = structuredClone(boundary);
   bootstrapBoundary.bootstrap_principals = [
@@ -633,10 +663,10 @@ test("bootstrap write lifecycle keeps approval material process-only across plan
     recordArgs: ["--name", "pm-live-lab-001", "--private", "--auto-init"],
     boundary: bootstrapBoundary,
     bootstrapRequest: request,
-    run: async (args) => {
-      calls.push(args);
+    run: async (args, stdin) => {
+      calls.push({ args, stdin });
       if (args.includes("--preview")) return { code: 0, stdout: "Approval token: transient-grant\n", stderr: "" };
-      if (args.includes("--approve")) {
+      if (args.includes("--approval-token-stdin")) {
         return {
           code: 0,
           stdout: JSON.stringify({
@@ -651,9 +681,12 @@ test("bootstrap write lifecycle keeps approval material process-only across plan
   });
 
   assert.equal(calls.length, 3);
-  assert.equal(calls[0].includes("--credential"), true);
-  assert.equal(calls[1].includes("--preview"), true);
-  assert.equal(calls[2].includes("--approve"), true);
+  assert.equal(calls[0].args.includes("--credential"), true);
+  assert.equal(calls[1].args.includes("--preview"), true);
+  assert.equal(calls[2].args.includes("--approval-token-stdin"), true);
+  assert.equal(calls[2].args.includes("--approve"), false);
+  assert.equal(calls[2].args.includes("transient-grant"), false);
+  assert.equal(calls[2].stdin, "transient-grant\n");
   assert.deepEqual(result, { command: "repo create", http_status: 201, records_succeeded: 1, records_failed: 0 });
   assert.equal(JSON.stringify(result).includes("transient-grant"), false);
 });
@@ -676,10 +709,10 @@ test("planned write re-supplies the exact record flags for withheld-field previe
     recordArgs,
     boundary,
     target: boundary.allowed_targets[0],
-    run: async (args) => {
-      calls.push(args);
+    run: async (args, stdin) => {
+      calls.push({ args, stdin });
       if (args.includes("--preview")) return { code: 0, stdout: "Approval token: transient-grant\n", stderr: "" };
-      if (args.includes("--approve")) {
+      if (args.includes("--approval-token-stdin")) {
         return {
           code: 0,
           stdout: JSON.stringify({
@@ -694,13 +727,37 @@ test("planned write re-supplies the exact record flags for withheld-field previe
   });
 
   assert.equal(calls.length, 3);
-  assert.deepEqual(calls[0].slice(3, 3 + recordArgs.length), recordArgs);
-  assert.deepEqual(calls[1].slice(6, 6 + recordArgs.length), recordArgs);
-  assert.deepEqual(calls[2].slice(7, 7 + recordArgs.length), recordArgs);
-  assert.equal(calls[1].includes("--credential"), false);
-  assert.equal(calls[2].includes("--credential"), false);
+  assert.deepEqual(calls[0].args.slice(3, 3 + recordArgs.length), recordArgs);
+  assert.deepEqual(calls[1].args.slice(6, 6 + recordArgs.length), recordArgs);
+  assert.deepEqual(calls[2].args.slice(6, 6 + recordArgs.length), recordArgs);
+  assert.equal(calls[1].args.includes("--credential"), false);
+  assert.equal(calls[2].args.includes("--credential"), false);
+  assert.equal(calls[2].args.includes("--approval-token-stdin"), true);
+  assert.equal(calls[2].args.includes("transient-grant"), false);
+  assert.equal(calls[2].stdin, "transient-grant\n");
   assert.deepEqual(result, { command: "issue edit", http_status: 200, records_succeeded: 1, records_failed: 0 });
   assert.equal(JSON.stringify(result).includes("transient-grant"), false);
+});
+
+test("planned writes reject caller-provided approval stdin markers", async () => {
+  let started = false;
+  await assert.rejects(
+    runPMPlannedWrite({
+      binary: "pm",
+      root: "/tmp/github-live-lab-root",
+      credentialName: "github-live-proof",
+      command: "issue create",
+      recordArgs: ["--approval-token-stdin"],
+      boundary,
+      target: boundary.allowed_targets[0],
+      run: async () => {
+        started = true;
+        throw new Error("PM process must not start");
+      },
+    }),
+    /may not override lifecycle or credential flags/u,
+  );
+  assert.equal(started, false);
 });
 
 test("normal planned writes bind the exact repository target before any PM process starts", async () => {

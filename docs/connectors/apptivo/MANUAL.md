@@ -46,7 +46,7 @@ ETL STREAMS
     fields: closingDate(string), creationDate(string), currencyCode(string), customerName(string), lastUpdateDate(string), opportunityAmount(string), opportunityId(string), opportunityName(string), salesStageName(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   remove_customer:

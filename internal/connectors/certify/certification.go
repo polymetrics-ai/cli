@@ -73,6 +73,13 @@ func applyCertificationSourceDefaults(connector string, config map[string]string
 			out[key] = value
 		}
 	}
+	// Required config values select a certification-only runtime contract and
+	// are declaration-owned rather than caller-controlled. In particular, a
+	// caller cannot choose a non-certification tier and silently bypass a
+	// provider's require_shared certification policy.
+	for key, value := range profile.spec.Source.RequiredCredentialConfig {
+		out[key] = value
+	}
 	return out
 }
 

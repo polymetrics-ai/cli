@@ -941,7 +941,7 @@ function validateRecordArgs(args) {
   if (!Array.isArray(args) || args.some((argument) => typeof argument !== "string" || /\r|\n|\0/u.test(argument))) {
     throw new Error("planned PM write record arguments must be a string array");
   }
-  const forbidden = new Set(["--approve", "--confirm", "--connection", "--credential", "--plan", "--root"]);
+  const forbidden = new Set(["--approve", "--approval-token-stdin", "--confirm", "--connection", "--credential", "--plan", "--root"]);
   if (args.some((argument) => forbidden.has(argument) || [...forbidden].some((flag) => argument.startsWith(`${flag}=`)))) {
     throw new Error("planned PM write record arguments may not override lifecycle or credential flags");
   }
@@ -1021,9 +1021,9 @@ function redactText(value) {
   return redactPersistedText(text);
 }
 
-async function runPMProcess(binary, args) {
+export async function runPMProcess(binary, args, stdin = "") {
   return new Promise((resolve, reject) => {
-    const child = spawn(binary, args, { stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn(binary, args, { stdio: ["pipe", "pipe", "pipe"] });
     let stdout = "";
     let stderr = "";
     let bytes = 0;
@@ -1040,8 +1040,10 @@ async function runPMProcess(binary, args) {
     };
     child.stdout.on("data", (chunk) => consume("stdout", chunk));
     child.stderr.on("data", (chunk) => consume("stderr", chunk));
+    child.stdin.on("error", reject);
     child.on("error", reject);
     child.on("close", (code, signal) => resolve({ code, signal, stdout, stderr, overflow }));
+    child.stdin.end(stdin);
   });
 }
 
@@ -1094,7 +1096,7 @@ export async function runPMPlannedWrite({ binary, root, credentialName, command,
     assertRepositoryWriteScope(allowedTarget, args);
   }
   const credential = safeCredentialName(credentialName);
-  const runner = run || ((processArgs) => runPMProcess(pmBinary, processArgs));
+  const runner = run || ((processArgs, stdin) => runPMProcess(pmBinary, processArgs, stdin));
   if (typeof runner !== "function") throw new Error("PM write executor must be a function");
 
   const planArgs = ["github", ...parts, ...args, "--credential", credential, "--root", projectRoot];
@@ -1121,15 +1123,14 @@ export async function runPMPlannedWrite({ binary, root, credentialName, command,
     ...parts,
     "--plan",
     planID,
-    "--approve",
-    grant,
+    "--approval-token-stdin",
     ...(challenge ? ["--confirm", challenge] : []),
     ...args,
     "--root",
     projectRoot,
     "--json",
   ];
-  const execution = normalizeProcessResult(await runner(executeArgs), "write execution");
+  const execution = normalizeProcessResult(await runner(executeArgs, grant + "\n"), "write execution");
   let envelope;
   try {
     envelope = JSON.parse(execution.stdout);

@@ -94,6 +94,8 @@ Reads DocuSeal templates, submissions, and submitters, and writes submission/sub
 
 - Run DocuSeal's declared streams and reverse-ETL actions.
 - Usage: pm docuseal <command> [flags]
+- Global flags:
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - Read streams
 - Reverse ETL writes
 - Other Commands

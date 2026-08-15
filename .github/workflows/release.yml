@@ -107,7 +107,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.25.12'
+          go-version: '1.26.6'
           cache: true
 
       - name: Build pm natively
@@ -161,7 +161,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.25.12'
+          go-version: '1.26.6'
           cache: true
 
       - name: Install nfpm
@@ -242,7 +242,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.25.12'
+          go-version: '1.26.6'
           cache: true
 
       - name: Build pm natively
@@ -414,7 +414,7 @@ jobs:
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version: '1.25.12'
+          go-version: '1.26.6'
           cache: true
 
       - name: Download natively built release binaries

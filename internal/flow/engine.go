@@ -2,10 +2,13 @@ package flow
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"time"
+
+	"polymetrics.ai/internal/warehouse"
 )
 
 // ETLResult is the result of a sync run.
@@ -33,7 +36,8 @@ type RLMRunRequest struct {
 // AppAdapter abstracts the app layer for the engine.
 type AppAdapter interface {
 	ETLRun(ctx context.Context, connectionID string, streams []string) (ETLResult, error)
-	QuerySQL(ctx context.Context, sql string, limit int) ([]map[string]any, error)
+	QuerySQL(ctx context.Context, sql, connection string, limit int) ([]map[string]any, error)
+	ReadActionSource(ctx context.Context, table, connection string) ([]map[string]any, error)
 	RLMRun(ctx context.Context, req RLMRunRequest) (RLMResult, error)
 }
 
@@ -52,25 +56,28 @@ type LedgerRecord struct {
 
 // RunOptions controls how a flow run behaves.
 type RunOptions struct {
-	DryRun        bool
-	Force         bool
-	JSON          bool
-	ApprovalToken string // required when any KindAction step is present
-	PerAction     bool   // each action step gets its own token (future)
+	DryRun bool
+	Force  bool
+	JSON   bool
+	// ApprovalToken is retained for legacy test runners. Connector-backed
+	// actions use a durable authorization reference, not a non-empty string.
+	ApprovalToken string
+	PerAction     bool // each action step gets its own token (future)
 }
 
 // StepResult is the per-step outcome in a RunResult.
 type StepResult struct {
-	ID             string `json:"id"`
-	Kind           string `json:"kind"`
-	Status         string `json:"status"`
-	RecordsRead    int    `json:"records_read"`
-	RecordsWritten int    `json:"records_written"`
-	RecordsFailed  int    `json:"records_failed,omitempty"`
-	DurationNs     int64  `json:"duration_ns"`
-	Error          string `json:"error,omitempty"`
-	DLQPath        string `json:"dlq_path,omitempty"`
-	SchemaDrift    bool   `json:"schema_drift,omitempty"`
+	ID             string   `json:"id"`
+	Kind           string   `json:"kind"`
+	Status         string   `json:"status"`
+	RecordsRead    int      `json:"records_read"`
+	RecordsWritten int      `json:"records_written"`
+	RecordsFailed  int      `json:"records_failed,omitempty"`
+	DurationNs     int64    `json:"duration_ns"`
+	Error          string   `json:"error,omitempty"`
+	DLQPath        string   `json:"dlq_path,omitempty"`
+	ReceiptIDs     []string `json:"receipt_ids,omitempty"`
+	SchemaDrift    bool     `json:"schema_drift,omitempty"`
 }
 
 // RunResult is the top-level outcome of Engine.Run.
@@ -105,8 +112,8 @@ func (e *Engine) acquireLease() error {
 		}
 		return err
 	}
-	defer f.Close()
-	fmt.Fprintf(f, "%d\n", os.Getpid())
+	defer func() { _ = f.Close() }()
+	_, _ = fmt.Fprintf(f, "%d\n", os.Getpid())
 	return nil
 }
 
@@ -145,19 +152,29 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 		}
 	}
 
-	// Pre-flight: if any action step is present and no token is provided, fail fast.
-	if !opts.DryRun {
-		for _, s := range e.Manifest.Steps {
-			if s.Kind == KindAction && opts.ApprovalToken == "" {
-				return result, ErrApprovalRequired
-			}
-		}
-	}
-
 	// Compute topological order.
 	order, err := BuildDAG(e.Manifest)
 	if err != nil {
 		return result, err
+	}
+	if !opts.DryRun {
+		for _, step := range e.Manifest.Steps {
+			if step.Kind != KindAction {
+				continue
+			}
+			if e.ActionRunner == nil {
+				return result, fmt.Errorf("action step %q: no ActionRunner configured", step.ID)
+			}
+			if preflight, ok := e.ActionRunner.(StepActionPreflight); ok {
+				if err := preflight.PreflightStep(ctx, step, opts.ApprovalToken); err != nil {
+					return result, err
+				}
+				continue
+			}
+			if opts.ApprovalToken == "" {
+				return result, ErrApprovalRequired
+			}
+		}
 	}
 
 	// Build step index.
@@ -210,7 +227,8 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			sr.RecordsRead = etlRes.RecordsRead
 			sr.RecordsWritten = etlRes.RecordsWritten
 		case KindQuery:
-			_, stepErr = e.App.QuerySQL(ctx, s.SQL, 0)
+			_, stepErr = e.App.QuerySQL(ctx, s.SQL, s.Connection, 0)
+			stepErr = withFlowSourceReadRemedy(s, stepErr)
 		case KindRLM:
 			var rlmRes RLMResult
 			rlmRes, stepErr = e.App.RLMRun(ctx, RLMRunRequest{
@@ -230,7 +248,8 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			// Fetch source records from the warehouse for this action step.
 			var sourceRecords []map[string]any
 			if s.ActionCfg != nil && s.ActionCfg.SourceTable != "" {
-				sourceRecords, stepErr = e.App.QuerySQL(ctx, "SELECT * FROM "+s.ActionCfg.SourceTable, 0)
+				sourceRecords, stepErr = e.App.ReadActionSource(ctx, s.ActionCfg.SourceTable, s.ActionCfg.SourceConnection)
+				stepErr = withFlowSourceReadRemedy(s, stepErr)
 				if stepErr != nil {
 					break
 				}
@@ -242,6 +261,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			sr.RecordsWritten = actionRes.RecordsSucceeded
 			sr.RecordsFailed = actionRes.RecordsFailed
 			sr.DLQPath = actionRes.DLQPath
+			sr.ReceiptIDs = append([]string(nil), actionRes.ReceiptIDs...)
 		default:
 			stepErr = fmt.Errorf("%w: %s", ErrUnknownStepKind, s.Kind)
 		}
@@ -253,7 +273,7 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 			sr.Error = stepErr.Error()
 			e.appendLedger(ctx, op, "failed", stepErr.Error())
 			result.Steps = append(result.Steps, sr)
-			runErr = fmt.Errorf("%w: step %s: %v", ErrStepFailed, id, stepErr)
+			runErr = fmt.Errorf("%w: step %s: %w", ErrStepFailed, id, stepErr)
 			break
 		}
 
@@ -274,6 +294,22 @@ func (e *Engine) Run(ctx context.Context, opts RunOptions) (RunResult, error) {
 	result.Status = "ok"
 	e.appendLedger(ctx, flowOp, "success", "")
 	return result, nil
+}
+
+// withFlowSourceReadRemedy names a manifest field only after that field exists
+// on the surface that failed. It leaves every non-ambiguity error untouched,
+// including errors that are not caused by a warehouse source read.
+func withFlowSourceReadRemedy(step FlowStep, err error) error {
+	var ambiguous *warehouse.AmbiguousTableError
+	if !errors.As(err, &ambiguous) {
+		return err
+	}
+	if step.Kind == KindAction {
+		return warehouse.WithAmbiguityRemedy(ambiguous,
+			fmt.Sprintf("set `action_cfg.source_connection` in flow action step %q to choose one", step.ID))
+	}
+	return warehouse.WithAmbiguityRemedy(ambiguous,
+		fmt.Sprintf("set `connection` in flow query step %q to choose one", step.ID))
 }
 
 func firstTable(tables []string) string {

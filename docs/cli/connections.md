@@ -24,16 +24,38 @@ STREAM AND TABLE NAMES
   are checked when the connection is created, because a name the warehouse
   cannot materialize would otherwise fail every sync of that connection.
 
+  One local-warehouse connection cannot configure distinct --table spellings
+  that differ only by ASCII letter case, such as records and RECORDS: DuckDB
+  treats them as one identifier. Creation refuses that inventory before saving
+  it. A legacy inventory is left unchanged on open, but any local sync refuses
+  before changing run or warehouse state; create replacement connections whose
+  destination table names differ by more than ASCII letter case.
+
 SYNC MODES
   full_refresh_append              read all source records and append them
   full_refresh_overwrite           read all source records and replace final output
-  full_refresh_overwrite_deduped   replace final output and keep latest row per primary key
+  full_refresh_overwrite_deduped   compatibility name for typed full_overwrite admission
   incremental_append               append records at or after the saved cursor
-  incremental_append_deduped       append raw history and materialize latest row per primary key
+  incremental_append_deduped       compatibility name for typed incremental_dedupe admission
 
-  Incremental modes require --cursor. Deduped modes require --primary-key. When
-  a connector manifest declares defaults, pm fills them during connection
-  creation.
+  Incremental modes and deduped compatibility names require --cursor. Deduped
+  modes require --primary-key. A static connector manifest advertises the full
+  deduped compatibility name only with both fields, and incremental modes only
+  with a declared incremental executor. The two deduped compatibility names use
+  their typed contract and refuse before source I/O until a matching transport
+  is admitted. When a connector manifest declares defaults, pm fills them during
+  connection creation.
+
+POLLING-WATERMARK LIMITS
+  polling_watermark is not a general connection mode and is not CDC. It can be
+  selected only by a connector's declared native source/object/destination
+  binding after runtime preflight succeeds. An admitted source resumes from its
+  declared watermark plus unique tie-breaker after durable downstream
+  acknowledgement, so replay is at least once. A polling scan cannot observe a
+  hard delete after the row is gone; delete-aware history requires a declared
+  cursor-advancing soft-delete mapping. Incompatible state, source identity
+  changes, snapshot expiry, and retention failures require explicit
+  rebootstrap rather than an automatic full scan.
 
 SECURITY
   Connections reference credentials by name only.

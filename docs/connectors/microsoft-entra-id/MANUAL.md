@@ -56,7 +56,7 @@ ETL STREAMS
     fields: description(string), display_name(string), id(string), role_template_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Microsoft Graph API read of tenant directory (users/groups/applications/service principals/directory roles) data

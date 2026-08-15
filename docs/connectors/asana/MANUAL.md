@@ -74,7 +74,7 @@ ETL STREAMS
     fields: gid(string), is_active(boolean), is_admin(boolean), is_guest(boolean), resource_type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_task:
@@ -389,7 +389,7 @@ COMMAND SURFACE
     --max-bytes (integer): Maximum bytes for future direct/binary operations; planned commands declare lower operation caps.
     --plan (string): Execute an approved reverse-ETL plan by id.
     --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-    --approve (string): Approval token required to execute a reverse-ETL plan.
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
     --confirm (string): Typed confirmation challenge for destructive/admin reverse-ETL writes.
   Access requests
     access-requests get-access-requests - Planned fixed-target Asana read: Get access requests. [intent=etl availability=planned operation=get_access_requests]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.

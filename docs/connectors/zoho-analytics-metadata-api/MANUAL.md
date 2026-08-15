@@ -75,7 +75,7 @@ ETL STREAMS
     fields: datasourceId(string), datasourceName(string), lastDataSyncStatus(string), lastDataSyncTime(string), nextScheduleTime(string), schedule(string), source(string), syncIntervalId(string), syncUsed(string), tableDetails(array), totalSyncAllowed(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   sync_datasource:

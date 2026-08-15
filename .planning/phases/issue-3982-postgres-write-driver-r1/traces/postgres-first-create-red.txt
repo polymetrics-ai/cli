@@ -1,0 +1,17 @@
+Command:
+
+    POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -run TestPostgresManagedTargetDriverLiveControlAssertions -v ./internal/connectors/native/postgres
+
+Observed real PostgreSQL result before the native mapped DDL implementation:
+
+    === RUN   TestPostgresManagedTargetDriverLiveControlAssertions
+        managed_target_integration_test.go:71: first PostgreSQL managed target create failed: database managed target state cannot be proven
+    --- FAIL: TestPostgresManagedTargetDriverLiveControlAssertions (7.16s)
+    FAIL
+    FAIL    polymetrics.ai/internal/connectors/native/postgres    7.902s
+    FAIL
+
+The live test reaches PostgreSQL through dbtest and observes that no mapping-backed
+first-create target exists. The Green test will inspect the created target OID,
+control rows, and `bigint NOT NULL` mapped column rather than treating a returned
+success as evidence.

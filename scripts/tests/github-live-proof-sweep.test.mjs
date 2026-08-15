@@ -13,6 +13,7 @@ import {
   enumerateImplementedCommands,
   redactForReport,
   runProcess,
+  runWriteLifecycle,
   validateCredentialScope,
   validateProofReport,
   validateProofRecords,
@@ -446,6 +447,38 @@ test("requires the canonical origin and a fully paginated App installation repos
   }
 });
 
+test("write lifecycle carries the approval only through child stdin", async () => {
+  const temp = await mkdtemp(path.join(os.tmpdir(), "github-live-proof-stdin-"));
+  try {
+    const binary = path.join(temp, "fake-pm");
+    const argvPath = path.join(temp, "argv");
+    const stdinPath = path.join(temp, "stdin");
+    await writeFile(
+      binary,
+      `#!/bin/sh\ncase "$*" in\n  *--approval-token-stdin*)\n    printf '%s\\n' "$@" > ${JSON.stringify(argvPath)}\n    cat > ${JSON.stringify(stdinPath)}\n    printf '{"kind":"ReverseRun","run":{"status":"completed","records_succeeded":1,"records_failed":0,"operation_direct_write":{"status":200}}}\\n'\n    ;;\n  *--preview*)\n    printf 'Approval token: transient-grant\\n'\n    ;;\n  *)\n    printf 'Created connector command plan plan-test-id\\n'\n    ;;\nesac\n`,
+      "utf8",
+    );
+    await chmod(binary, 0o755);
+
+    const result = await runWriteLifecycle({
+      binary,
+      root: path.join(temp, "project"),
+      credential: "github-live-proof",
+      command: "issue close",
+      args: ["--issue-number", "42"],
+      cwd: temp,
+    });
+    assert.equal(result.httpStatus, 200);
+    const argv = await readFile(argvPath, "utf8");
+    assert.equal(argv.includes("--approval-token-stdin"), true);
+    assert.equal(argv.includes("--approve"), false);
+    assert.equal(argv.includes("transient-grant"), false);
+    assert.equal(await readFile(stdinPath, "utf8"), "transient-grant\n");
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
 test("rejects unsafe boundary and report scalars without retaining their contents", () => {
   const secret = "-----BEGIN PRIVATE KEY-----\nnot-a-key\n-----END PRIVATE KEY-----";
   const report = {
@@ -681,13 +714,13 @@ test("rejects untyped target, transport, secret, and lifecycle case inputs befor
       {
         command: "repo view",
         args: ["--plan=existing-plan"],
-        expected: /canonical classifier artifact/i,
+        expected: /may not override lifecycle or credential flags/i,
       },
       {
         command: "orgs update",
         args: ["--org", "polymetrics-cert"],
         readback: { command: "repo view", args: ["--approve=existing-grant"] },
-        expected: /canonical classifier artifact/i,
+        expected: /may not override lifecycle or credential flags/i,
       },
       {
         command: "repo view",
@@ -704,6 +737,26 @@ test("rejects untyped target, transport, secret, and lifecycle case inputs befor
           delete target.args;
           target.untestable_reason = "-----BEGIN PRIVATE KEY-----\\nsynthetic\\n-----END PRIVATE KEY-----";
         },
+      },
+      {
+        command: "repos create-using-template",
+        args: ["--owner", "outside-the-dedicated-repository"],
+        expected: /dedicated repository owner/i,
+      },
+      {
+        command: "repos create-using-template",
+        args: ["--repo=outside-the-dedicated-repository"],
+        expected: /dedicated repository repo/i,
+      },
+      {
+        command: "repos create-using-template",
+        args: ["--approval-token-stdin"],
+        expected: /may not override lifecycle or credential flags/i,
+      },
+      {
+        command: "repos create-using-template",
+        args: ["--approve=argv-value"],
+        expected: /may not override lifecycle or credential flags/i,
       },
     ];
     for (const attempt of attempts) {

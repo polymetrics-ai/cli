@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"net/url"
 	"sort"
+	"strings"
 	"time"
+
+	"polymetrics.ai/internal/failures"
 )
 
 // HasConfigurationConstraints reports whether the root schema declares a
@@ -47,7 +50,7 @@ func (s *Schema) ValidateConfiguration(config map[string]string) error {
 		if !declared || !property.hasConfigurationConstraints() {
 			continue
 		}
-		if err := property.validateConfigurationString(config[key], "/"+key); err != nil {
+		if err := property.validateConfigurationString(config[key], jsonPointerForKey(key)); err != nil {
 			return err
 		}
 	}
@@ -64,12 +67,12 @@ func (n *schemaNode) validateConfigurationString(value, path string) error {
 			}
 		}
 		if !matched {
-			return fmt.Errorf("%s: value not in enum %v", displayPath(path), n.enum)
+			return configurationFailure("enum_mismatch", "configuration value must be one of the declared values", path, fmt.Errorf("%s: value not in enum %v", displayPath(path), n.enum))
 		}
 	}
 
 	if n.pattern != nil && !n.pattern.MatchString(value) {
-		return fmt.Errorf("%s: value does not match pattern %q", displayPath(path), n.pattern.String())
+		return configurationFailure("pattern_mismatch", "configuration value does not match the declared pattern", path, fmt.Errorf("%s: value does not match pattern %q", displayPath(path), n.pattern.String()))
 	}
 
 	if n.format == "" {
@@ -77,11 +80,28 @@ func (n *schemaNode) validateConfigurationString(value, path string) error {
 	}
 	if !matchesConfigurationFormat(value, n.format) {
 		if isSupportedConfigurationFormat(n.format) {
-			return fmt.Errorf("%s: value does not match format %q", displayPath(path), n.format)
+			return configurationFailure("format_mismatch", fmt.Sprintf("configuration value must use %q format", n.format), path, fmt.Errorf("%s: value does not match format %q", displayPath(path), n.format))
 		}
-		return fmt.Errorf("%s: declared format %q is not supported for configuration validation", displayPath(path), n.format)
+		return configurationFailure("unsupported_format", "configuration declaration uses an unsupported format", path, fmt.Errorf("%s: declared format %q is not supported for configuration validation", displayPath(path), n.format))
 	}
 	return nil
+}
+
+func configurationFailure(code, message, path string, cause error) error {
+	classification, err := failures.New(failures.Input{
+		Domain:    failures.DomainConfiguration,
+		Code:      code,
+		Message:   message,
+		FieldPath: path,
+	}, cause)
+	if err != nil {
+		return fmt.Errorf("build configuration failure classification: %w", err)
+	}
+	return classification
+}
+
+func jsonPointerForKey(key string) string {
+	return "/" + strings.NewReplacer("~", "~0", "/", "~1").Replace(key)
 }
 
 func matchesConfigurationFormat(value, format string) bool {

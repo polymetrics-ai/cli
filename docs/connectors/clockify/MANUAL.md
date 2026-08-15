@@ -73,7 +73,7 @@ ETL STREAMS
     fields: billable(boolean), costRate(object), customFieldValues(array), description(string), hourlyRate(object), id(string), isLocked(boolean), kioskId(string), projectId(string), tagIds(array), taskId(string), timeInterval(object), type(string), userId(string), workspaceId(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_client:

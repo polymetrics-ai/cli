@@ -3,6 +3,7 @@
 package engine
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -17,6 +18,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/database"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
@@ -29,25 +31,27 @@ var httpHeaderNamePattern = regexp.MustCompile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
 type Bundle struct {
 	Name               string
 	Metadata           Metadata
-	Changefeed         *connectors.ChangefeedDescriptor // changefeed.json; nil when a connector has not been surveyed
-	Spec               *Schema                          // compiled spec.json; SecretKeys() from x-secret
-	RawSpec            json.RawMessage                  // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
-	HTTP               HTTPBase                         // streams.json "base"; zero value when no streams.json
-	Streams            []StreamSpec                     // streams.json "streams"
-	Writes             []WriteAction                    // writes.json "actions"; nil when writes.json absent
-	Operations         []OperationSpec                  // operations.json "operations"; nil when operations.json absent
-	RawOperations      json.RawMessage                  // verbatim operations.json bytes for validation/audit scanning
-	Schemas            map[string]*StreamSchema         // stream name -> compiled schema + PK/cursor
-	Surface            *APISurface                      // api_surface.json, when available on disk
-	directWriteSurface *APISurface                      // runtime projection from shipped rest_write declarations
-	directReadLedger   *operationEndpointLedger         // generated direct-read endpoint projection
-	CLISurface         *CLISurface                      // cli_surface.json
-	RawCLISurface      json.RawMessage                  // verbatim cli_surface.json bytes; nil when absent
-	Certification      *CertificationSpec               // certification.json; nil when absent
-	RawCertification   json.RawMessage                  // verbatim certification.json bytes; nil when absent
-	RateLimits         *connsdk.RateLimits              // rate_limits.json; nil when absent
-	Docs               string                           // docs.md
-	Fixtures           fs.FS                            // fixtures/ subtree; nil when absent
+	Changefeed         *connectors.ChangefeedDescriptor       // changefeed.json; nil when a connector has not been surveyed
+	PollingWatermark   *connectors.PollingWatermarkDescriptor // polling_watermark.json; nil until a native database declaration exists
+	Database           *database.Definition                   // database.json; nil for non-database or unmigrated bundles
+	Spec               *Schema                                // compiled spec.json; SecretKeys() from x-secret
+	RawSpec            json.RawMessage                        // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
+	HTTP               HTTPBase                               // streams.json "base"; zero value when no streams.json
+	Streams            []StreamSpec                           // streams.json "streams"
+	Writes             []WriteAction                          // writes.json "actions"; nil when writes.json absent
+	Operations         []OperationSpec                        // operations.json "operations"; nil when operations.json absent
+	RawOperations      json.RawMessage                        // verbatim operations.json bytes for validation/audit scanning
+	Schemas            map[string]*StreamSchema               // stream name -> compiled schema + PK/cursor
+	Surface            *APISurface                            // api_surface.json, when available on disk
+	directWriteSurface *APISurface                            // runtime projection from shipped rest_write declarations
+	directReadLedger   *operationEndpointLedger               // generated direct-read endpoint projection
+	CLISurface         *CLISurface                            // cli_surface.json
+	RawCLISurface      json.RawMessage                        // verbatim cli_surface.json bytes; nil when absent
+	Certification      *CertificationSpec                     // certification.json; nil when absent
+	RawCertification   json.RawMessage                        // verbatim certification.json bytes; nil when absent
+	RateLimits         *connsdk.RateLimits                    // rate_limits.json; nil when absent
+	Docs               string                                 // docs.md
+	Fixtures           fs.FS                                  // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -486,10 +490,11 @@ type WriteAction struct {
 	// mark every hand-constructed WriteAction as non-batchable. nil means the
 	// bundle did not declare it, which is the permissive default every shipped
 	// action relies on. Read it through IsBatchable, never directly.
-	Batchable    *bool             `json:"batchable,omitempty"`
-	Confirm      string            `json:"confirm,omitempty"` // legacy: "" | "destructive"
-	Confirmation *ConfirmationSpec `json:"confirmation,omitempty"`
-	Hook         string            `json:"hook,omitempty"`
+	Batchable        *bool                              `json:"batchable,omitempty"`
+	Confirm          string                             `json:"confirm,omitempty"` // legacy: "" | "destructive"
+	Confirmation     *ConfirmationSpec                  `json:"confirmation,omitempty"`
+	TransportBinding *connectors.TransportActionBinding `json:"transport_binding,omitempty"`
+	Hook             string                             `json:"hook,omitempty"`
 }
 
 // ConfirmationSpec is the closed, declarative confirmation policy shared by
@@ -1047,6 +1052,7 @@ type CertificationSpec struct {
 type CertificationSourceSpec struct {
 	DefaultStream            string                                       `json:"default_stream,omitempty"`
 	SourceCredentialDefaults map[string]string                            `json:"source_credential_defaults,omitempty"`
+	RequiredCredentialConfig map[string]string                            `json:"required_credential_config,omitempty"`
 	LiveUnavailable          []CertificationLiveUnavailableClassification `json:"live_unavailable,omitempty"`
 }
 
@@ -1095,8 +1101,8 @@ type CertificationWritePairing struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, spec, streams, writes, apiSurface, operations, cliSurface, certification, rateLimits *Schema
-	err                                                                                                        error
+	metadata, changefeed, pollingWatermark, spec, streams, writes, apiSurface, operations, cliSurface, certification, rateLimits *Schema
+	err                                                                                                                          error
 }{}
 
 func init() {
@@ -1113,6 +1119,7 @@ func init() {
 	}
 	metaSchemas.metadata = compileMeta(metadataSchemaJSON)
 	metaSchemas.changefeed = compileMeta(changefeedSchemaJSON)
+	metaSchemas.pollingWatermark = compileMeta(pollingWatermarkSchemaJSON)
 	metaSchemas.spec = compileMeta(specSchemaJSON)
 	metaSchemas.streams = compileMeta(streamsSchemaJSON)
 	metaSchemas.writes = compileMeta(writesSchemaJSON)
@@ -1265,6 +1272,14 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
+	pollingWatermark, err := loadPollingWatermark(sub, dirName, metadata)
+	if err != nil {
+		return Bundle{}, err
+	}
+	databaseDefinition, err := loadDatabaseDefinition(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
 
 	spec, rawSpec, err := loadSpec(sub, dirName)
 	if err != nil {
@@ -1327,6 +1342,8 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 		Name:               dirName,
 		Metadata:           metadata,
 		Changefeed:         changefeed,
+		PollingWatermark:   pollingWatermark,
+		Database:           databaseDefinition,
 		Spec:               spec,
 		RawSpec:            rawSpec,
 		HTTP:               httpBase,
@@ -1436,6 +1453,49 @@ func loadChangefeed(sub fs.FS, dirName string) (*connectors.ChangefeedDescriptor
 		return nil, fmt.Errorf("load bundle %s: changefeed.json: %w", dirName, err)
 	}
 	return changefeed.Clone(), nil
+}
+
+// loadPollingWatermark reads the optional native database polling declaration.
+// It is a separate file from changefeed.json so a bounded watermark scan does
+// not become a CDC claim or an API-surface command.
+func loadPollingWatermark(sub fs.FS, dirName string, metadata Metadata) (*connectors.PollingWatermarkDescriptor, error) {
+	if !fileExists(sub, "polling_watermark.json") {
+		return nil, nil
+	}
+	if metadata.IntegrationType != "database" {
+		return nil, fmt.Errorf("load bundle %s: polling_watermark.json requires metadata integration_type %q", dirName, "database")
+	}
+	raw, err := readFile(sub, "polling_watermark.json")
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.pollingWatermark.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, fmt.Errorf("load bundle %s: polling_watermark.json: %w", dirName, err)
+	}
+	var declaration connectors.PollingWatermarkDescriptor
+	if err := strictDecode(raw, &declaration); err != nil {
+		return nil, fmt.Errorf("load bundle %s: polling_watermark.json: %w", dirName, err)
+	}
+	if err := declaration.Validate(); err != nil {
+		return nil, fmt.Errorf("load bundle %s: polling_watermark.json: %w", dirName, err)
+	}
+	return declaration.Clone(), nil
+}
+
+// loadDatabaseDefinition keeps database.json optional for the existing broad
+// connector fleet, while making every present declaration pass through the
+// shared closed loader during normal engine and connectorgen bundle loading.
+// The definition is policy only; this does not register a database driver or
+// promote any connector capability.
+func loadDatabaseDefinition(sub fs.FS, dirName string) (*database.Definition, error) {
+	if !fileExists(sub, "database.json") {
+		return nil, nil
+	}
+	definition, err := database.Load(context.Background(), sub)
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: database.json: %w", dirName, err)
+	}
+	return &definition, nil
 }
 
 // loadSpec returns both the compiled *Schema (used for runtime interpolation
@@ -2533,6 +2593,11 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 	}
 	if name := strings.TrimSpace(certification.Source.DefaultStream); name != "" && !streamNames[name] {
 		return fmt.Errorf("source.default_stream %q does not match a declared stream", name)
+	}
+	for key, value := range certification.Source.RequiredCredentialConfig {
+		if strings.TrimSpace(key) == "" || strings.TrimSpace(value) == "" {
+			return fmt.Errorf("source.required_credential_config must not contain empty keys or values")
+		}
 	}
 	for i, classifier := range certification.Source.LiveUnavailable {
 		if len(classifier.Contains) == 0 {

@@ -86,7 +86,7 @@ Reads and writes When I Work workforce-scheduling data: users, locations, positi
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Reverse ETL Actions
 

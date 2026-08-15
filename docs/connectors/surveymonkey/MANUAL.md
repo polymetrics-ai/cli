@@ -303,7 +303,7 @@ ETL STREAMS
     fields: collector_id(string), created_at(string), data(object), date_created(string), date_modified(string), email(string), externalId(string), first_name(string), group_id(string), href(string), id(string), last_name(string), links(object), meta(object), name(string), page_id(string), schemas(array), status(string), subtype(string), survey_id(string), title(string), total(integer), type(string), updated_at(string), userName(string), username(string), workgroup_id(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   update_collector:

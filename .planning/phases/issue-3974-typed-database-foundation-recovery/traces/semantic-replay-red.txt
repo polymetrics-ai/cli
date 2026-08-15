@@ -1,0 +1,25 @@
+Command:
+
+```sh
+git cherry-pick 0be21e1293a9e5c913d9b4e23a846237594630c7^..9e763fe07a69b48f8ed88484ccb18580c63ae160
+```
+
+Result before reconciliation:
+
+```text
+Auto-merging docs/architecture/connector-architecture-v2-design.md
+Auto-merging docs/migration/conventions.md
+CONFLICT (content): Merge conflict in docs/migration/conventions.md
+error: could not apply 9e763fe07... no-mistakes(document): docs: clarify database warehouse mediation
+```
+
+The replay also touched the other two predicted semantic-overlap paths without textual conflict:
+
+- `docs/architecture/connector-architecture-v2-design.md` auto-merged and was reviewed to retain
+  current #4003 framing plus only the database-specific F1 text.
+- `internal/connectors/native/postgres/connector.go` auto-merged and was reviewed to retain the
+  `pglogrepl` foundation, the pre-contact CDC gate, shared TLS behavior, and false capabilities.
+
+Disposition for the textual conflict: preserve the current planned/fail-closed CDC description and
+PostgreSQL bundle-doc ownership, then add the narrow reference `database.json` policy declaration.
+The stale claim that `pglogrepl` is absent is discarded.

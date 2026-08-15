@@ -2,10 +2,12 @@ package engine
 
 import (
 	"encoding/json"
+	"errors"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/failures"
 )
 
 func TestSchemaValidateConfigurationAppliesDeclaredConstraintsOnly(t *testing.T) {
@@ -43,11 +45,11 @@ func TestSchemaValidateConfigurationAppliesDeclaredConstraintsOnly(t *testing.T)
 				"environment": "production",
 			},
 		},
-		{name: "invalid uri", config: map[string]string{"base_url": "not-a-uri"}, wantError: `/base_url: value does not match format "uri"`},
-		{name: "invalid date", config: map[string]string{"start_date": "2026-02-30"}, wantError: `/start_date: value does not match format "date"`},
-		{name: "invalid date-time", config: map[string]string{"since": "not-a-date-time"}, wantError: `/since: value does not match format "date-time"`},
-		{name: "invalid pattern", config: map[string]string{"domain": "not.allowed"}, wantError: `/domain: value does not match pattern "^[a-z0-9-]+$"`},
-		{name: "invalid enum", config: map[string]string{"environment": "preview"}, wantError: "/environment: value not in enum"},
+		{name: "invalid uri", config: map[string]string{"base_url": "not-a-uri"}, wantError: `/base_url: configuration value must use "uri" format`},
+		{name: "invalid date", config: map[string]string{"start_date": "2026-02-30"}, wantError: `/start_date: configuration value must use "date" format`},
+		{name: "invalid date-time", config: map[string]string{"since": "not-a-date-time"}, wantError: `/since: configuration value must use "date-time" format`},
+		{name: "invalid pattern", config: map[string]string{"domain": "not.allowed"}, wantError: "/domain: configuration value does not match the declared pattern"},
+		{name: "invalid enum", config: map[string]string{"environment": "preview"}, wantError: "/environment: configuration value must be one of the declared values"},
 		{name: "does not enforce required or unconstrained field", config: map[string]string{"unconstrained": "any value"}},
 		{name: "does not reject undeclared fields", config: map[string]string{"extra": "still accepted"}},
 	}
@@ -88,6 +90,42 @@ func TestSchemaWithoutConfigurationConstraintsIsNotAdvertised(t *testing.T) {
 	}
 	if err := sch.ValidateConfiguration(map[string]string{"count": "not-an-integer", "extra": "still accepted"}); err != nil {
 		t.Fatalf("ValidateConfiguration() error = %v, want no new constraints", err)
+	}
+}
+
+func TestSchemaValidateConfigurationReturnsSharedClassification(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {"base_url": {"type": "string", "format": "uri"}}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+	err = sch.ValidateConfiguration(map[string]string{"base_url": "not-a-uri"})
+	var classification *failures.Classification
+	if !errors.As(err, &classification) {
+		t.Fatalf("ValidateConfiguration() error type = %T, want shared classification", err)
+	}
+	if got, want := classification.Domain(), failures.DomainConfiguration; got != want {
+		t.Fatalf("Domain() = %q, want %q", got, want)
+	}
+	if got, want := classification.Code(), "format_mismatch"; got != want {
+		t.Fatalf("Code() = %q, want %q", got, want)
+	}
+	if got, want := classification.FieldPath(), "/base_url"; got != want {
+		t.Fatalf("FieldPath() = %q, want %q", got, want)
+	}
+	if classification.Retryable() {
+		t.Fatal("configuration failure is retryable, want false")
+	}
+	if classification.Cause() == nil {
+		t.Fatal("configuration failure omitted internal cause")
+	}
+}
+
+func TestJSONPointerForKeyEscapesRFC6901Segments(t *testing.T) {
+	if got, want := jsonPointerForKey("client/id~primary"), "/client~1id~0primary"; got != want {
+		t.Fatalf("jsonPointerForKey() = %q, want %q", got, want)
 	}
 }
 

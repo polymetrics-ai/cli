@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -111,7 +112,14 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 			return withApp(root, func(a *app.App) error { return runQuery(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "reverse", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, stdout, jsonOut) })
+			approval, err := prepareReverseRunApproval(args, os.Stdin)
+			if err != nil {
+				return err
+			}
+			if approval.supplied {
+				return withReverseExecutionApp(root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
+			}
+			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
 		}},
 		{name: "agent", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runAgent(ctx, cfg, root, args, stdout, jsonOut)
@@ -163,6 +171,11 @@ func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, j
 			}
 			if len(args) == 0 && isManualCommand(spec.name) {
 				return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
+			}
+			if spec.name == "etl" {
+				if command, ok := etlTransportManualCommand(args); ok {
+					return markCobraLegacyError(writeETLTransportManual(stdout, jsonOut, command))
+				}
 			}
 			return markCobraLegacyError(spec.handler(ctx, root, args, stdout, jsonOut))
 		},

@@ -14,10 +14,10 @@ import (
 	"polymetrics.ai/internal/synccontract"
 )
 
-func TestCDCIsFailClosedUntilStreamedTransactionStagingExists(t *testing.T) {
+func TestCDCRequiresCrashRecoverableStageBeforeValidatingSource(t *testing.T) {
 	err := New().ReadCDC(context.Background(), connectors.CDCReadRequest{}, nil)
-	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
-		t.Fatalf("ReadCDC = %v, want unsupported while streamed transaction staging is unavailable", err)
+	if !errors.Is(err, errCDCProjectDirectory) {
+		t.Fatalf("ReadCDC = %v, want missing stage project directory", err)
 	}
 }
 
@@ -69,15 +69,15 @@ func TestCDCFailClosedBeforeOpeningSourceConnection(t *testing.T) {
 	}, func(connectors.CDCEvent) error {
 		return nil
 	})
-	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
-		t.Fatalf("ReadCDC = %v, want fail-closed unsupported result", err)
+	if !errors.Is(err, errCDCProjectDirectory) {
+		t.Fatalf("ReadCDC = %v, want a local stage-directory error before source access", err)
 	}
 
 	select {
 	case <-accepted:
-		t.Fatal("ReadCDC opened a source connection while CDC is planned")
+		t.Fatal("ReadCDC opened a source connection before it could create its durable stage")
 	case <-time.After(50 * time.Millisecond):
-		t.Log("ReadCDC returned the planned-stage error without opening the local source listener")
+		t.Log("ReadCDC rejected the missing durable stage directory without opening the local source listener")
 	}
 }
 
@@ -174,6 +174,15 @@ func TestCDCStartLSNRejectsUnretainedCheckpoint(t *testing.T) {
 	var recovery *synccontract.RebootstrapRequiredError
 	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeRetentionGap {
 		t.Fatalf("cdcStartLSN(unretained) recovery = %#v, want retention gap", recovery)
+	}
+}
+
+func TestCDCServerVersionRequiresPostgreSQL14OrNewer(t *testing.T) {
+	if err := validateCDCServerVersion(139999); !errors.Is(err, errCDCServerVersion) {
+		t.Fatalf("validateCDCServerVersion(139999) = %v, want PostgreSQL 14 requirement", err)
+	}
+	if err := validateCDCServerVersion(140000); err != nil {
+		t.Fatalf("validateCDCServerVersion(140000) = %v, want nil", err)
 	}
 }
 

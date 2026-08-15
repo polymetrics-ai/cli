@@ -80,7 +80,7 @@ smoke-no-build:
 	PLAN_ID=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Created reverse plan/ {print $$4}'); \
 	./pm reverse preview "$$PLAN_ID" --root "$$SMOKE_DIR" --json >/dev/null; \
 	APPROVAL=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Approval token:/ {print $$3}'); \
-	./pm reverse run "$$PLAN_ID" --approve "$$APPROVAL" --root "$$SMOKE_DIR" --json >/dev/null; \
+	printf '%s\n' "$$APPROVAL" | ./pm reverse run "$$PLAN_ID" --approval-token-stdin --root "$$SMOKE_DIR" --json >/dev/null; \
 	TABLE=$$(ls "$$SMOKE_DIR"/.polymetrics/warehouse/*/*/*/tables/sample_customers.parquet); \
 	test -s "$$TABLE"; \
 	test -s "$$(dirname "$$(dirname "$$TABLE")")/owner.json"; \
@@ -114,8 +114,8 @@ github-parity-artifacts-check:
 	node scripts/gen-github-graphql-parity.mjs --check
 	node scripts/github-combined-operation-ledger.mjs --check
 
-# Fails when the source-derived capability certification baseline drifts.
-# Regenerate with `go run ./cmd/connectorgen certification-matrix`.
+# Fails when the allowlisted connector certification shards drift.
+# Regenerate one connector with `go run ./cmd/connectorgen certification-matrix --connector <name>`.
 connectorgen-certification-matrix:
 	go run ./cmd/connectorgen certification-matrix --check
 

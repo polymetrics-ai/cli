@@ -1,0 +1,16 @@
+Command: go run ./cmd/connectorgen certification-matrix
+Exit: 0
+Output: generated certification matrices: connectors=556 capability_complete=0 certified=0
+
+Complete semantic comparison base:
+  002ddf674a447bf0872486aa979efdaa078f602c:internal/connectors/certifications/flow-matrix.json
+
+Complete semantic comparison result:
+  workflow_kinds[1].discovery_source
+  before: internal/cli/flow_cli.go:20
+  after:  internal/cli/flow_cli.go:21
+
+Generated-path diff after pre-correction evidence commit 76de5c740:
+  internal/connectors/certifications/flow-matrix.json
+
+No other generated artifact changed.
