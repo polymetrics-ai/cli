@@ -67,6 +67,27 @@ pm connections create <name> \
 
 Incremental modes and deduped compatibility names require a cursor. Deduped modes also require a primary key. A static connector advertises the full deduped compatibility name only with both fields, and advertises incremental modes only with a declared incremental executor. The two deduped compatibility names remain accepted public inputs, but they are not ordinary local materialization modes.
 
+### Polling-watermark limits and eligibility
+
+`polling_watermark` is a bounded keyset polling mechanism, not CDC or change
+capture. It is never enabled by a connector capability string alone. A mode is
+eligible only after runtime preflight accepts its declared native source,
+discovered catalog object, and destination binding with registered executors and
+current conformance evidence.
+
+An admitted binding orders each page by its declared watermark and unique
+tie-breaker. Its checkpoint advances only after durable downstream
+acknowledgement, so replay is at least once. The declared snapshot barrier is a
+restriction, not permission to replace an invalid state with a full scan. A
+poll cannot observe a hard delete after the row disappears; delete-aware history
+needs a declared cursor-advancing soft-delete mapping. State incompatibility,
+source identity mismatch, snapshot expiration, and retention failures require
+an explicit rebootstrap.
+
+Use `pm connectors inspect <name> --json` and `pm connectors catalog --json`
+to see a connector's declared polling-watermark status. A planned, unsupported,
+or absent declaration is not an executable polling mode.
+
 ## Running an extraction
 
 ```bash

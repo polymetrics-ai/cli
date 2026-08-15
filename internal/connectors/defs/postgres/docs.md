@@ -111,6 +111,17 @@ This connector is read-only. Read behavior: low.
 
 ## Known limits
 
+- `polling_watermark` is planned, not implemented. It is a bounded keyset poll
+  rather than CDC or change capture, and no polling mode can be selected until
+  one declared native source/object/destination binding passes runtime
+  preflight with registered source and apply executors plus immutable
+  conformance evidence. When such a binding exists, its source order must be a
+  declared watermark plus unique tie-breaker; its checkpoint is committed only
+  after durable downstream acknowledgement, so replay is at least once. A
+  polling source cannot observe a hard delete after the row disappears; a
+  delete-aware history contract needs a declared cursor-advancing soft-delete
+  mapping. Incompatible state, source identity changes, snapshot expiry, and
+  retention failure require explicit rebootstrap, never an automatic full scan.
 - Logical-replication CDC requires PostgreSQL 14+, `wal_level=logical`, a role with
   `REPLICATION`, positive `max_replication_slots` and `max_wal_senders`, a matching publication,
   and a stable primary-key replica identity. The slot is source-bound; a missing, incompatible,

@@ -44,6 +44,12 @@ func TestConnectorsHelpExplainsDeclaredNoneInspectionPolicy(t *testing.T) {
 		"acknowledgement=none remains declared",
 		"only durable_warehouse can execute",
 		"externally verified conformance",
+		"POLLING-WATERMARK ELIGIBILITY",
+		"not CDC or change capture",
+		"hard deletes after a",
+		"cursor-advancing soft-delete",
+		"source identity mismatch",
+		"explicit rebootstrap",
 	} {
 		if !strings.Contains(stdout.String(), want) {
 			t.Fatalf("connector help missing %q:\n%s", want, stdout.String())

@@ -126,6 +126,17 @@ SYNC MODES
   deduped compatibility name only with both fields, and incremental modes only
   with a declared incremental executor.
 
+POLLING-WATERMARK LIMITS
+  polling_watermark is a bounded keyset scan, not CDC or a generic database
+  query. The runtime evaluates every mode against the declared source ordering,
+  discovered object, destination binding, registered executors, and conformance
+  evidence before source I/O. A durable checkpoint records the watermark and
+  unique tie-breaker only after downstream acknowledgement, so accepted records
+  may replay. Hard deletes are not observable unless the declaration supplies
+  a cursor-advancing soft-delete mapping. Incompatible state, source identity
+  mismatch, snapshot expiry, and retention failure require explicit rebootstrap;
+  pm never converts them into an automatic full scan.
+
 SECURITY
   ETL resolves credentials in memory and stores only credential references.
 

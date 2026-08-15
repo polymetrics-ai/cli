@@ -48,6 +48,7 @@ func GuideOf(c Connector) ConnectorGuide {
 		guide = guideWithCommandSurface(guide, provider.CommandSurface())
 	}
 	guide = guideWithSyncTransport(guide, c)
+	guide = guideWithPollingWatermark(guide, c)
 	return guideWithIcon(guide, manifest)
 }
 
@@ -100,6 +101,35 @@ func guideWithSyncTransport(guide ConnectorGuide, connector Connector) Connector
 		lines = append(lines, "Destination executor: "+string(eligibility.Destination.Executor.Family)+"/"+eligibility.Destination.Executor.ID)
 	}
 	guide.Sections = append(guide.Sections, GuideSection{Title: "Sync Transport", Lines: lines})
+	return guide
+}
+
+// guideWithPollingWatermark exposes only declaration status. Mode execution is
+// intentionally not inferred here: the real preflight also needs the selected
+// catalog object and destination binding, neither of which inspection reads.
+func guideWithPollingWatermark(guide ConnectorGuide, connector Connector) ConnectorGuide {
+	definition, ok := DefinitionOf(connector)
+	if !ok || definition.PollingWatermark == nil {
+		return guide
+	}
+	for _, section := range guide.Sections {
+		if strings.EqualFold(section.Title, "polling watermark") {
+			return guide
+		}
+	}
+	declaration := definition.PollingWatermark
+	lines := []string{
+		"Status: " + string(declaration.Status),
+		"Mechanism: polling_watermark is a bounded polling scan, not CDC or change capture.",
+		"Eligibility: each mode remains blocked until runtime preflight validates the selected catalog object and destination binding, registered native executors, and immutable conformance evidence.",
+	}
+	if declaration.Reason != "" {
+		lines = append(lines, "Reason: "+declaration.Reason)
+	}
+	if declaration.Status != PollingWatermarkStatusImplemented {
+		lines = append(lines, "No polling source ordering, checkpoint, snapshot, deletion, or rebootstrap behavior is implemented for this connector while the declaration is non-implemented.")
+	}
+	guide.Sections = append(guide.Sections, GuideSection{Title: "Polling Watermark", Lines: lines})
 	return guide
 }
 

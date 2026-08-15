@@ -287,6 +287,9 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 				if def, ok := connectors.DefinitionOf(c); ok && def.Changefeed != nil {
 					response["changefeed"] = def.Changefeed
 				}
+				if def, ok := connectors.DefinitionOf(c); ok && def.PollingWatermark != nil {
+					response["polling_watermark"] = def.PollingWatermark
+				}
 				return writeJSON(stdout, response)
 			}
 			_, _ = fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
