@@ -51,3 +51,8 @@ Completed GREEN evidence:
 - `go vet` on changed packages, `go build ./cmd/pm`, `connectorgen validate`,
   and the individual repository gates passed. `lint` was delayed only by a
   legitimate shared lock, then passed with `0 issues`.
+- PR verification first exposed a stale definition assertion that expected
+  five admitted PostgreSQL modes. After adding the sixth
+  `incremental_dedupe_history` expectation, `go test -timeout 20m -count=1
+  ./internal/connectors/engine ./internal/connectors/database
+  ./internal/connectors/native/postgres` passed.

@@ -12,7 +12,7 @@
 - [x] `git diff --check` and final scope review confirm no #4125/#4136/#4090
   change, no public generic write surface, and no credential material.
 - [x] CLI/docs/website parity reviewed and recorded as not applicable: the
-  the final diff adds a user-visible surface.
+  final diff does not add a user-visible surface.
 
 ## Result
 
@@ -29,3 +29,7 @@ database, and PostgreSQL; explicit Docker/Colima `databaseintegration` test;
 wait), `docs-check`, `smoke-no-build`, `agent-contract-check`,
 `connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`,
 and `release-workflow-check`.
+
+The first PR verification run additionally caught a stale assertion that
+expected five PostgreSQL target modes. Updating it for the sixth history mode
+passed the focused engine/database/PostgreSQL test suite before the CI retry.
