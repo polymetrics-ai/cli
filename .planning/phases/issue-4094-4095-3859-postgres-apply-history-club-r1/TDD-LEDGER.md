@@ -15,8 +15,12 @@
 go test -timeout 20m -count=1 ./internal/connectors/engine ./internal/connectors/database ./internal/connectors/native/postgres -run 'Test.*(DatabasePolling.*History|History.*Adapter)'
 ```
 
-**Red:** pending; record the exact failing assertion under `traces/` before
-editing production code.
+**Red:** The focused live PostgreSQL test reached the registered database
+polling adapter and failed before its first write with
+`database polling target plan: database history route source and destination
+do not match the declared managed-target driver`. The returned acknowledgement
+was zero, so the adapter could not create an observable history row or durable
+receipt. Exact output is retained in `traces/red-adapter-history-plan.txt`.
 
 ## Green commands
 
