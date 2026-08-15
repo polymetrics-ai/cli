@@ -36,6 +36,14 @@ type DatabasePollingApplyExecutor struct {
 	batchSize  int
 }
 
+// databasePollingSourceDefinitionProvider is the additional sealed source
+// identity required only by incremental_dedupe_history. The registered source
+// owns this definition; the target adapter never infers driver authority from
+// an executor ID or other caller-selected text.
+type databasePollingSourceDefinitionProvider interface {
+	PollingSourceDatabaseDefinition() database.Definition
+}
+
 // NewDatabasePollingApplyExecutor constructs a registered-target candidate.
 // The first concrete page supplies only bounded records and explicit
 // tombstones; its selected mode and strategy remain declaration-derived.
@@ -97,7 +105,7 @@ func (e *DatabasePollingApplyExecutor) ApplyPollingPage(ctx context.Context, res
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("database polling target does not support sync mode %q", resolved.Mode)
 	}
 	keys := databasePollingTargetKeys(resolved.Mode, resolved.Declaration.Target.StableKeyMapping)
-	plan, err := database.NewDatabaseWritePlan(ctx, database.DatabaseWritePlanRequest{
+	request := database.DatabaseWritePlanRequest{
 		Definition:            e.definition,
 		Control:               e.control,
 		Mode:                  resolved.Mode,
@@ -109,7 +117,15 @@ func (e *DatabasePollingApplyExecutor) ApplyPollingPage(ctx context.Context, res
 		BatchSize:             e.batchSize,
 		Destructive:           resolved.Mode == synccontract.ModeFullOverwrite,
 		ConditionalOrderFence: resolved.Declaration.Target.ConditionalOrderFence,
-	})
+	}
+	if resolved.Mode == synccontract.ModeIncrementalDedupeHistory {
+		historyRoute, err := databasePollingHistoryRoute(resolved, e.definition)
+		if err != nil {
+			return synccontract.DownstreamAcknowledgement{}, err
+		}
+		request.HistoryRoute = historyRoute
+	}
+	plan, err := database.NewDatabaseWritePlan(ctx, request)
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("database polling target plan: %w", err)
 	}
@@ -138,6 +154,24 @@ func (e *DatabasePollingApplyExecutor) ApplyPollingPage(ctx context.Context, res
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
 	return result.DownstreamAcknowledgement()
+}
+
+func databasePollingHistoryRoute(resolved ResolvedPollingWatermark, destination database.Definition) (database.DatabaseWriteHistoryRoute, error) {
+	if resolved.Declaration == nil || resolved.Source == nil || destination.Validate() != nil {
+		return database.DatabaseWriteHistoryRoute{}, fmt.Errorf("database polling target history route: %w", database.ErrDatabaseWritePlanInvalid)
+	}
+	provider, ok := resolved.Source.(databasePollingSourceDefinitionProvider)
+	if !ok || isNilPollingPreflightExecutor(provider) {
+		return database.DatabaseWriteHistoryRoute{}, fmt.Errorf("database polling target history source definition: %w", database.ErrDatabaseWritePlanInvalid)
+	}
+	source := provider.PollingSourceDatabaseDefinition()
+	if source.Validate() != nil || source.Driver().ID != resolved.Declaration.Source.Identity.Engine {
+		return database.DatabaseWriteHistoryRoute{}, fmt.Errorf("database polling target history source definition: %w", database.ErrDatabaseWritePlanInvalid)
+	}
+	return database.DatabaseWriteHistoryRoute{
+		Source:      source.Driver(),
+		Destination: destination.Driver(),
+	}, nil
 }
 
 func databasePollingTargetKeys(mode synccontract.Mode, stableKeys []string) []string {

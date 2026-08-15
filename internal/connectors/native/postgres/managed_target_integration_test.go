@@ -197,25 +197,29 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 		t.Fatal("could not construct PostgreSQL history write executor")
 	}
 	definition := postgresManagedTargetWriteDefinition(t)
-	keys := []string{"tenant", "id"}
+	polling := newPostgresManagedTargetPollingApply(t, executor, definition, control, fixture)
 	first := connectors.Record{"source_tenant": "north", "source_id": int64(1), "source_value": "v1"}
 	second := connectors.Record{"source_tenant": "north", "source_id": int64(1), "source_value": "v2"}
 
-	firstPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false)
-	firstReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, firstPlan, []database.OrderedRecord{{
+	firstAcknowledgement := postgresApplyManagedTargetPollingPage(t, ctx, polling, synccontract.ModeIncrementalDedupeHistory, []database.OrderedRecord{{
 		Record: first, Position: postgresManagedTargetPosition(1),
 	}}, database.TombstoneEnvelope{})
-	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, firstReceipt)
+	firstDeliveryID := postgresManagedTargetDeliveryID(t, ctx, driver, control)
+	if firstAcknowledgement.Sink == "" || firstAcknowledgement.AcknowledgedAt.IsZero() || firstDeliveryID == "" {
+		t.Fatalf("first adapter history delivery evidence = (%#v, %q), want acknowledgement after durable receipt", firstAcknowledgement, firstDeliveryID)
+	}
 	initialRows := postgresManagedTargetHistoryRows(t, ctx, source, control)
 	if len(initialRows) != 1 || initialRows[0].value != "v1" || !initialRows[0].current || initialRows[0].validTo != nil || initialRows[0].validFrom.IsZero() {
 		t.Fatalf("first history version state = %#v, want one open current v1 row", initialRows)
 	}
 
-	secondPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 1, 0, false)
-	secondReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, executor, secondPlan, []database.OrderedRecord{{
+	secondAcknowledgement := postgresApplyManagedTargetPollingPage(t, ctx, polling, synccontract.ModeIncrementalDedupeHistory, []database.OrderedRecord{{
 		Record: second, Position: postgresManagedTargetPosition(2),
 	}}, database.TombstoneEnvelope{})
-	assertPostgresManagedTargetReceiptPersisted(t, ctx, driver, control, secondReceipt)
+	secondDeliveryID := postgresManagedTargetDeliveryID(t, ctx, driver, control)
+	if secondAcknowledgement.Sink == "" || secondAcknowledgement.AcknowledgedAt.IsZero() || secondDeliveryID == "" || secondDeliveryID == firstDeliveryID {
+		t.Fatalf("second adapter history delivery evidence = (%#v, %q), want a new receipt after durable update", secondAcknowledgement, secondDeliveryID)
+	}
 	versionedRows := postgresManagedTargetHistoryRows(t, ctx, source, control)
 	if len(versionedRows) != 2 || versionedRows[0].value != "v1" || versionedRows[0].current || versionedRows[0].validTo == nil || versionedRows[1].value != "v2" || !versionedRows[1].current || versionedRows[1].validTo != nil || !versionedRows[0].validTo.Equal(versionedRows[1].validFrom) {
 		t.Fatalf("version transition rows = %#v, want closed v1 joined exactly to open current v2", versionedRows)
@@ -240,12 +244,15 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 	if err != nil {
 		t.Fatal("could not reconstruct PostgreSQL history executor")
 	}
-	replayPlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 2, 0, false)
-	replayReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, restartedExecutor, replayPlan, []database.OrderedRecord{
+	restartedPolling := newPostgresManagedTargetPollingApply(t, restartedExecutor, definition, control, fixture)
+	replayAcknowledgement := postgresApplyManagedTargetPollingPage(t, ctx, restartedPolling, synccontract.ModeIncrementalDedupeHistory, []database.OrderedRecord{
 		{Record: first, Position: postgresManagedTargetPosition(1)},
 		{Record: second, Position: postgresManagedTargetPosition(2)},
 	}, database.TombstoneEnvelope{})
-	assertPostgresManagedTargetReceiptPersisted(t, ctx, restartedDriver, control, replayReceipt)
+	replayDeliveryID := postgresManagedTargetDeliveryID(t, ctx, restartedDriver, control)
+	if replayAcknowledgement.Sink == "" || replayAcknowledgement.AcknowledgedAt.IsZero() || replayDeliveryID == "" || replayDeliveryID == secondDeliveryID {
+		t.Fatalf("restarted adapter replay evidence = (%#v, %q), want a new durable replay receipt", replayAcknowledgement, replayDeliveryID)
+	}
 	if got := postgresManagedTargetHistoryRows(t, ctx, restartedSource, control); !samePostgresManagedTargetHistoryRows(got, versionedRows) {
 		t.Fatalf("late/replay delivery changed durable history: got=%#v want=%#v", got, versionedRows)
 	}
@@ -266,9 +273,11 @@ func TestPostgresManagedTargetIncrementalDedupeHistoryLive(t *testing.T) {
 	if err != nil {
 		t.Fatal("could not construct PostgreSQL history soft-delete envelope")
 	}
-	closePlan := postgresManagedTargetWritePlan(t, definition, control, fixture, synccontract.ModeIncrementalDedupeHistory, connectors.ApplyStrategyDedupeHistory, keys, 0, 1, false)
-	closeReceipt := postgresExecuteManagedTargetOrderedWrite(t, ctx, restartedExecutor, closePlan, nil, envelope)
-	assertPostgresManagedTargetReceiptPersisted(t, ctx, restartedDriver, control, closeReceipt)
+	closeAcknowledgement := postgresApplyManagedTargetPollingPage(t, ctx, restartedPolling, synccontract.ModeIncrementalDedupeHistory, nil, envelope)
+	closeDeliveryID := postgresManagedTargetDeliveryID(t, ctx, restartedDriver, control)
+	if closeAcknowledgement.Sink == "" || closeAcknowledgement.AcknowledgedAt.IsZero() || closeDeliveryID == "" || closeDeliveryID == replayDeliveryID {
+		t.Fatalf("adapter history close evidence = (%#v, %q), want a new receipt after durable close", closeAcknowledgement, closeDeliveryID)
+	}
 	closedRows := postgresManagedTargetHistoryRows(t, ctx, restartedSource, control)
 	if len(closedRows) != 2 || closedRows[0].current || closedRows[0].validTo == nil || closedRows[1].current || closedRows[1].validTo == nil || versionedRows[0].validTo == nil || !closedRows[0].validTo.Equal(*versionedRows[0].validTo) || !closedRows[1].validTo.After(closedRows[1].validFrom) {
 		t.Fatalf("history soft-delete rows = %#v, want both versions retained and v2 validity closed", closedRows)
@@ -1187,7 +1196,7 @@ func newPostgresManagedTargetPollingApply(t *testing.T, write *database.Database
 		t.Fatalf("could not construct PostgreSQL native polling target: %v", err)
 	}
 	registry := engine.NewPollingPreflightRegistry()
-	if err := registry.RegisterSource(&postgresManagedTargetPollingSource{reference: sourceReference, evidence: engine.RequiredPollingWatermarkConformanceEvidence()}); err != nil {
+	if err := registry.RegisterSource(&postgresManagedTargetPollingSource{reference: sourceReference, evidence: engine.RequiredPollingWatermarkConformanceEvidence(), definition: definition}); err != nil {
 		t.Fatalf("could not register PostgreSQL polling source fixture: %v", err)
 	}
 	if err := registry.RegisterApply(apply); err != nil {
@@ -1233,7 +1242,7 @@ func newPostgresManagedTargetPollingApply(t *testing.T, write *database.Database
 	}
 }
 
-func postgresApplyManagedTargetPollingPage(t *testing.T, ctx context.Context, polling postgresManagedTargetPollingApply, mode synccontract.Mode, records []database.OrderedRecord, tombstones database.TombstoneEnvelope) {
+func postgresApplyManagedTargetPollingPage(t *testing.T, ctx context.Context, polling postgresManagedTargetPollingApply, mode synccontract.Mode, records []database.OrderedRecord, tombstones database.TombstoneEnvelope) synccontract.DownstreamAcknowledgement {
 	t.Helper()
 	resolved, err := engine.PollingPreflight(ctx, polling.registry, polling.declaration, polling.object, mode)
 	if err != nil {
@@ -1247,11 +1256,13 @@ func postgresApplyManagedTargetPollingPage(t *testing.T, ctx context.Context, po
 	if err != nil || acknowledgement.Sink == "" || acknowledgement.AcknowledgedAt.IsZero() {
 		t.Fatalf("PostgreSQL native polling apply for %s = (%#v, %v), want durable acknowledgement", mode, acknowledgement, err)
 	}
+	return acknowledgement
 }
 
 type postgresManagedTargetPollingSource struct {
-	reference connectors.TransportExecutorReference
-	evidence  engine.PollingWatermarkConformanceEvidence
+	reference  connectors.TransportExecutorReference
+	evidence   engine.PollingWatermarkConformanceEvidence
+	definition database.Definition
 }
 
 func (s *postgresManagedTargetPollingSource) PollingSourceExecutorReference() connectors.TransportExecutorReference {
@@ -1260,6 +1271,10 @@ func (s *postgresManagedTargetPollingSource) PollingSourceExecutorReference() co
 
 func (s *postgresManagedTargetPollingSource) PollingSourceConformanceEvidence() engine.PollingWatermarkConformanceEvidence {
 	return s.evidence
+}
+
+func (s *postgresManagedTargetPollingSource) PollingSourceDatabaseDefinition() database.Definition {
+	return s.definition
 }
 
 func postgresManagedTargetPosition(sequence byte) synccontract.CheckpointPosition {
