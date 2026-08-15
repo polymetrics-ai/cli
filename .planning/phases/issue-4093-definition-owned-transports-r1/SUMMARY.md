@@ -16,6 +16,10 @@ The bundle embed inventory includes `sync_transport.json`, so these definitions
 are present in `defs.FS` and therefore in the production `pm` binary, rather
 than only on the source filesystem.
 
+`pm connectors inspect github --json` now visibly reports both roles as
+`declared`; its help, CLI manual, generated connector documentation, and the
+website agent guide explain that inspection remains metadata-only.
+
 The acceptance matrix in VERIFICATION.md records stateful proof for valid
 registration, zero-side-effect refusals, evidence denial before source I/O,
 and the mandated Docker/Colima PostgreSQL integration run.

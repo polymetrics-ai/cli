@@ -15,6 +15,9 @@ contract.
 - The production bundle embed inventory includes `sync_transport.json`; the
   binary lifecycle test and PostgreSQL definition tests prove the declaration
   does not disappear between source-tree validation and runtime composition.
+- The CLI inspection projection, help/manual, generated connector docs, and
+  website guide consistently expose GitHub's declared roles without implying
+  that a declaration is certified or executable before preflight.
 - The production test observes PostgreSQL and both GitHub roles through
   `Preflight`; refusal tests assert zero construction, registry, read, plan,
   and apply state changes.

@@ -59,5 +59,7 @@ runs inline with durable evidence in this directory.
 `golang-naming`, `golang-error-handling`, `golang-safety`, `golang-security`,
 `golang-database`, `golang-testing`, and `golang-documentation`.
 
-CLI help/manual/website parity is not applicable: no command, flag, help text,
-manual, or website surface changes.
+CLI help/manual/website parity applies to the changed inspection JSON status.
+`pm help connectors`, `pm connectors --json`, and `pm connectors --help` pass;
+the CLI manual, generated GitHub connector manual/skill/catalog, and website
+agent guide explain that GitHub's two roles are `declared` metadata only.

@@ -4156,6 +4156,14 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - local-workflows - Commands that depend on local git, browser, shell completion, extensions, or gh config are documented but not connector-dispatched.
   - known-gaps - Generic raw API, local-workflow, and unsupported provider operations remain non-executable; inspect each command's declared availability.
 
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: declared
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/issue_label_source
+- Destination executor: declarative_api/issue_label_destination
+
 ## Commands
 
 ### Inspect as a manual

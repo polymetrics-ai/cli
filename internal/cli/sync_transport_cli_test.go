@@ -9,7 +9,7 @@ import (
 	"polymetrics.ai/internal/cli"
 )
 
-func TestConnectorInspectProjectsUnsupportedSyncTransport(t *testing.T) {
+func TestConnectorInspectProjectsDeclaredSyncTransport(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"connectors", "inspect", "github", "--json"}, &stdout, &stderr)
 	if code != 0 {
@@ -29,8 +29,8 @@ func TestConnectorInspectProjectsUnsupportedSyncTransport(t *testing.T) {
 	if err := json.Unmarshal(stdout.Bytes(), &response); err != nil {
 		t.Fatalf("unmarshal inspect JSON: %v\n%s", err, stdout.String())
 	}
-	if response.SyncTransport.Source.Status != "unsupported" || response.SyncTransport.Destination.Status != "unsupported" {
-		t.Fatalf("sync transport eligibility = %#v, want unsupported source and destination", response.SyncTransport)
+	if response.SyncTransport.Source.Status != "declared" || response.SyncTransport.Destination.Status != "declared" {
+		t.Fatalf("sync transport eligibility = %#v, want declared source and destination from the GitHub definition", response.SyncTransport)
 	}
 }
 

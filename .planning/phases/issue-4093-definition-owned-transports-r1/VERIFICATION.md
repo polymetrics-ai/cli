@@ -33,6 +33,12 @@
   and required transport/connector package sweeps, `connectorgen validate`,
   `surface-sync --check`, `connector-boundary`, vet, and CLI build pass after
   the repair.
+- [x] CLI inspection parity: `TestConnectorInspectProjectsDeclaredSyncTransport`
+  observes the production GitHub source/destination statuses as `declared`;
+  `pm help connectors`, bare `pm connectors --json`, and `pm connectors --help`
+  pass. `docs/cli/connectors.md`, generated GitHub connector docs/catalog, and
+  `website/content/docs/agent-guide.mdx` document the metadata-only status;
+  `make docs-check` passes.
 - [x] Inline `verify-work` maps every acceptance criterion to an observable
   passing test or live output below.
 - [x] Inline code review has no unresolved actionable findings; see REVIEW.md.
@@ -49,3 +55,4 @@
 | Evidence is externally admitted | `TestDefinitionConformanceVerifierRefusesAlteredEvidenceBeforeSourceIO` | Altered evidence fails preflight with zero source reads. |
 | Destinations cannot claim change capture | `TestDestinationTransportDescriptorRefusesChangeCapture`, composition refusal test | The role is rejected before construction, registration, or executor I/O. |
 | PostgreSQL remains live-proven | mandated tagged native PostgreSQL test | Docker/Colima integration suite passes using the definition-owned production source adapter. |
+| GitHub inspection reports the declaration | CLI regression test + docs parity | `connectors inspect github --json` reports both statuses as `declared`; runtime help, CLI docs, generated connector docs, and website guidance describe that fact without claiming certification. |

@@ -127,6 +127,10 @@ valid destination with `acknowledgement: "none"` remains `declared` in inspectio
 so its policy is visible, but runtime preflight refuses it; only
 `durable_warehouse` may execute.
 
+GitHub currently declares both closed roles, so `pm connectors inspect github
+--json` reports `declared` for each role. This remains metadata-only and does
+not read credentials.
+
 ## Generating connector skills
 
 pm can generate connector-specific skill files for Claude Code and other agent runtimes:
