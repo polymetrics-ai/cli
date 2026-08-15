@@ -475,6 +475,14 @@ func TestResponseFormatErrorPreservesOnlySafeErrorIdentities(t *testing.T) {
 	if errors.As(formatted, &httpErr) {
 		t.Fatalf("formatted response exposed raw HTTP error body %q", httpErr.Body)
 	}
+	formatted = formatResponseError("safe formatted response error", &connsdk.HTTPError{Status: http.StatusUnauthorized, URL: "https://example.test/graphql", Body: "access_token=must-not-be-exposed"})
+	var credentialRejected *connsdk.CredentialRejectedError
+	if !errors.As(formatted, &credentialRejected) {
+		t.Fatalf("formatted provider 401 did not preserve safe credential rejection: %v", formatted)
+	}
+	if credentialRejected.Error() != "provider rejected the credential" {
+		t.Fatalf("formatted provider 401 credential error = %q", credentialRejected)
+	}
 
 	shared := &coordination.SharedRateLimitUnavailableError{Component: "dragonfly", Reason: coordination.SharedRateLimitCoordinatorNotConfigured}
 	formatted = formatResponseError("safe formatted response error", shared)

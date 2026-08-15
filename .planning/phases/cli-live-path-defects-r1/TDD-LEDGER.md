@@ -64,3 +64,30 @@
   and an `int` maximum that would overflow `time.Duration`; both are typed
   refusals without a panic or silent clamp.
 - Green command: `go test -timeout 20m ./internal/coordination` passed.
+
+### 2026-08-16 — #4169 provider authentication classification
+
+- Red: focused CLI tests failed before production edits: a 401 classified as
+  `internal/internal_error` and returned exit 1. The pre-existing fresh binary
+  flow harness was also run red-first but currently fails earlier at a valid
+  flow control step (exit 3), before it reaches the authentication assertion;
+  its assertion was retained rather than weakened.
+- Green: a safe `connsdk.CredentialRejectedError` preserves only the provider
+  401 identity through response formatting, never its URL or body. CLI maps
+  that typed identity (and an unformatted `HTTPError` fallback) to
+  `auth/credential_error` with the user-legible `provider rejected the
+  credential` message. Generic internal failures remain
+  `internal/internal_error`.
+- Happy class:
+  `TestFreshBinaryProvider401IsCredentialErrorWithoutWritesOrCheckpointAdvance`
+  drives a freshly built binary through credential storage and the declared
+  GitHub direct-read command; it asserts one provider read, zero writes, the
+  typed auth envelope, and unchanged durable checkpoint state.
+- Bad class: `TestClassifyErrorInternalFailureRemainsInternal` proves a real
+  internal error is not misclassified as a credential problem.
+- Edge class: `TestWriteErrorProvider401RedactsCredential` proves JSON and
+  stderr retain user guidance but no credential value; the existing fresh-flow
+  assertion also retains the full flow's zero provider mutations/checkpoint
+  guarantee once its independent setup failure is repaired.
+- Green commands: focused engine formatter, focused CLI classification, and
+  the new fresh-binary 401 proof passed.
