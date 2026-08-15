@@ -1,7 +1,10 @@
 {
   "phase": "issue-4094-4095-3859-postgres-apply-history-club-r1",
-  "status": "planned",
+  "status": "verified",
   "lifecycle": "manual-inline-gsd",
   "base": "integration/4015-mvp-flat-r1",
-  "branch": "fm/cli-pg-apply-history-club-r1"
+  "branch": "fm/cli-pg-apply-history-club-r1",
+  "red": "live adapter history plan refused with zero acknowledgement",
+  "green": "live adapter history, focused race/static, and repository gates passed",
+  "review": "deep inline review passed with no findings"
 }

@@ -60,3 +60,14 @@ Run applicable `make verify` gates individually per `AGENTS.md`: `tidy-check`,
 2. Commit the smallest green adapter implementation and focused proofs.
 3. Commit final live/verification/review evidence, push only the working branch,
    open the explicit-base PR, and report the API-observed base.
+
+## Execution deviation
+
+The source definition already belongs to the exact registered source stored in
+`ResolvedPollingWatermark`. Adding it to the target configuration would have
+created a second, independently supplied source identity. The green slice
+therefore uses an optional definition-provider interface on that resolved
+source and checks its driver ID against the descriptor source identity before
+sealing the full source/destination driver pair. This is narrower than the
+planned configuration field, keeps non-history paths unchanged, and preserves
+definition ownership without touching the #4093 transport registry.

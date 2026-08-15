@@ -23,7 +23,6 @@
 | #4095 | Receipt precedes source acknowledgement/LSN advancement and remains replay-safe across restart | live | The transport/apply result must contain a persisted delivery receipt before returning acknowledgement; a fresh executor replays and queries unchanged target state. |
 | #4095 | R1/R2 and destination CDC declarations refuse before I/O | fake | Closed preflight fakes are necessary to prove forbidden routes without opening those sources/destinations; assert the typed refusal and zero source/target/send/session counters. |
 | #3859 residual | The database polling adapter can plan the required history strategy | live | Apply an `incremental_dedupe_history` page through `DatabasePollingApplyExecutor`; without the fix it returns `ErrDatabaseWritePlanInvalid`, while green evidence queries the inserted history row and durable acknowledgement. |
-| #3859 residual | Adapter route identity cannot be invented or mismatched | fake | Use loaded PostgreSQL/non-PostgreSQL definitions with a recording write boundary; assert typed history-route refusal and zero preview/session/ledger mutations before a provider can be contacted. |
 
 ## Locked decisions
 
