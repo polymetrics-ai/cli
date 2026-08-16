@@ -48,13 +48,6 @@ type issueLabelPreparedWrite struct {
 	preview    connectors.WritePreview
 }
 
-type issueLabelTransportSourceKind string
-
-const (
-	issueLabelTransportSourceGitHub   issueLabelTransportSourceKind = "github_issues"
-	issueLabelTransportSourcePostgres issueLabelTransportSourceKind = "postgres_polling_watermark"
-)
-
 // PlanIssueLabelTransport creates the forward half of the explicit PM
 // plan -> preview -> approval -> execute lifecycle before a transport run.
 // It prepares only the fixed destination configured on the named connection;
@@ -516,12 +509,12 @@ func (a *App) issueLabelTransportBinding(conn Connection, syncMode synccontract.
 		ForwardPlanID:       forwardPlanID,
 	}
 	if mode == reversePlanModeIssueLabelTransport {
-		sourceKind, err := a.issueLabelTransportSourceKind(conn)
+		sourceBinding, err := a.issueLabelTransportSourceBinding(conn)
 		if err != nil {
 			return issueLabelTransportBinding{}, err
 		}
-		if sourceKind == issueLabelTransportSourceGitHub {
-			sourceIssue, err := issueLabelTransportIssueNumber(conn.Source.Config, issueLabelTransportSourceIssueConfig)
+		if sourceBinding.RecordMapping.Kind == connectors.SourceRecordMappingKindConfigMatch {
+			sourceIssue, err := issueLabelTransportIssueNumber(conn.Source.Config, sourceBinding.RecordMapping.ConfigKey)
 			if err != nil {
 				return issueLabelTransportBinding{}, err
 			}
@@ -575,7 +568,8 @@ func (a *App) issueLabelTransportConnection(connectionID string) (Connection, er
 	if !ok {
 		return Connection{}, fmt.Errorf("closed issue-label transport connection %q was not found", connectionID)
 	}
-	if _, err := a.issueLabelTransportSourceKind(conn); err != nil {
+	sourceBinding, err := a.issueLabelTransportSourceBinding(conn)
+	if err != nil {
 		return Connection{}, fmt.Errorf("closed issue-label transport connection %q does not select an admitted source: %w", conn.ID, err)
 	}
 	contract, err := a.issueLabelTransportContract(conn)
@@ -592,12 +586,8 @@ func (a *App) issueLabelTransportConnection(connectionID string) (Connection, er
 	if consent, required := issueLabelTransportConsentConfigForMode(mode); required && !strings.EqualFold(strings.TrimSpace(conn.Destination.Config[consent]), "true") {
 		return Connection{}, fmt.Errorf("closed issue-label transport connection %q requires explicit destination config %s=true for sync mode %q", conn.ID, consent, mode)
 	}
-	sourceKind, err := a.issueLabelTransportSourceKind(conn)
-	if err != nil {
-		return Connection{}, err
-	}
-	if sourceKind == issueLabelTransportSourceGitHub {
-		if _, err := issueLabelTransportIssueNumber(conn.Source.Config, issueLabelTransportSourceIssueConfig); err != nil {
+	if sourceBinding.RecordMapping.Kind == connectors.SourceRecordMappingKindConfigMatch {
+		if _, err := issueLabelTransportIssueNumber(conn.Source.Config, sourceBinding.RecordMapping.ConfigKey); err != nil {
 			return Connection{}, err
 		}
 	}
@@ -626,9 +616,9 @@ func issueLabelTransportMode(conn Connection) (synccontract.Mode, error) {
 }
 
 // issueLabelTransportStream keeps the closed label destination singleton
-// bounded while allowing PostgreSQL's dynamic relation name to remain the
-// source stream. The destination's own API stream remains "issues" inside its
-// typed writer; this is the source-side connection stream.
+// bounded while allowing a dynamic relation name to remain the source stream.
+// The destination's own collection remains internal to its typed writer; this
+// is the source-side connection stream.
 func issueLabelTransportStream(conn Connection) (string, StreamConfig, error) {
 	if len(conn.Streams) != 1 {
 		return "", StreamConfig{}, fmt.Errorf("closed issue-label transport connection %q must configure exactly one source stream", conn.ID)
@@ -668,43 +658,35 @@ func (a *App) issueLabelTransportContract(conn Connection) (issueLabelTransportC
 	return issueLabelTransportContractForDefinition(definition)
 }
 
-func (a *App) issueLabelTransportSourceKind(conn Connection) (issueLabelTransportSourceKind, error) {
+func (a *App) issueLabelTransportSourceBinding(conn Connection) (connectors.DestinationSourceBinding, error) {
 	if a == nil || a.registry == nil {
-		return "", fmt.Errorf("closed issue-label transport registry is unavailable")
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("closed issue-label transport registry is unavailable")
 	}
 	source, ok := a.registry.Get(conn.Source.Connector)
 	if !ok {
-		return "", fmt.Errorf("source connector %q is unavailable", conn.Source.Connector)
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("source connector %q is unavailable", conn.Source.Connector)
 	}
 	destination, ok := a.registry.Get(conn.Destination.Connector)
 	if !ok || !isIssueLabelTransportConnector(destination) {
-		return "", fmt.Errorf("destination connector %q does not select the exact definition-owned issue-label contract", conn.Destination.Connector)
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("destination connector %q does not select the exact definition-owned issue-label contract", conn.Destination.Connector)
 	}
-	descriptor, ok := connectors.SourceTransportDescriptorOf(source)
+	sourceDescriptor, ok := connectors.SourceTransportDescriptorOf(source)
 	if !ok {
-		return "", fmt.Errorf("source connector %q has no declared transport source", source.Name())
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("source connector %q has no declared transport source", source.Name())
 	}
-	switch descriptor.Executor {
-	case declarativeStreamSourceReference:
-		if source.Name() != destination.Name() {
-			return "", fmt.Errorf("declarative issue-label source %q does not match destination %q", source.Name(), destination.Name())
-		}
-		stream, _, err := issueLabelTransportStream(conn)
-		if err != nil {
-			return "", err
-		}
-		if stream != "issues" {
-			return "", fmt.Errorf("declarative issue-label source requires the issues stream")
-		}
-		return issueLabelTransportSourceGitHub, nil
-	case postgresPollingWatermarkSourceReference:
-		if _, _, err := issueLabelTransportStream(conn); err != nil {
-			return "", err
-		}
-		return issueLabelTransportSourcePostgres, nil
-	default:
-		return "", fmt.Errorf("source connector %q has unsupported issue-label transport executor %q", source.Name(), descriptor.Executor.ID)
+	destinationTransport, ok := connectors.SyncTransportDescriptorOf(destination)
+	if !ok || destinationTransport.Destination == nil {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("destination connector %q has no declared destination transport", destination.Name())
 	}
+	stream, _, err := issueLabelTransportStream(conn)
+	if err != nil {
+		return connectors.DestinationSourceBinding{}, err
+	}
+	binding, admitted := destinationTransport.Destination.SourceBindingFor(sourceDescriptor.Executor, stream)
+	if !admitted {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("destination connector %q does not admit source executor %q for stream %q", destination.Name(), sourceDescriptor.Executor.ID, stream)
+	}
+	return binding, nil
 }
 
 func (a *App) validateIssueLabelTransportPlan(plan ReversePlan, conn Connection, mode string, action issueLabelTransportAction, forwardPlanID string) error {
@@ -782,7 +764,7 @@ func (a *App) issueLabelTransportMappedWorksetRecord(conn Connection, mode syncc
 }
 
 func (a *App) issueLabelTransportMappedSourceRecord(conn Connection, action issueLabelTransportAction, sourceRecord connectors.Record) (connectors.Record, error) {
-	sourceKind, err := a.issueLabelTransportSourceKind(conn)
+	sourceBinding, err := a.issueLabelTransportSourceBinding(conn)
 	if err != nil {
 		return nil, err
 	}
@@ -798,22 +780,22 @@ func (a *App) issueLabelTransportMappedSourceRecord(conn Connection, action issu
 	if err != nil {
 		return nil, err
 	}
-	switch sourceKind {
-	case issueLabelTransportSourceGitHub:
-		expectedSource, err := issueLabelTransportIssueNumber(conn.Source.Config, issueLabelTransportSourceIssueConfig)
+	switch sourceBinding.RecordMapping.Kind {
+	case connectors.SourceRecordMappingKindConfigMatch:
+		expectedSource, err := issueLabelTransportIssueNumber(conn.Source.Config, sourceBinding.RecordMapping.ConfigKey)
 		if err != nil {
 			return nil, err
 		}
-		actualSource, err := issueNumberFromRecord(sourceRecord)
+		actualSource, err := issueNumberFromRecordField(sourceRecord, sourceBinding.RecordMapping.RecordField)
 		if err != nil {
-			return nil, fmt.Errorf("closed issue-label transport reopened source issue: %w", err)
+			return nil, fmt.Errorf("closed issue-label transport reopened configured source record: %w", err)
 		}
 		if actualSource != expectedSource {
-			return nil, fmt.Errorf("closed issue-label transport reopened source issue %d does not match configured source issue %d", actualSource, expectedSource)
+			return nil, fmt.Errorf("closed issue-label transport reopened source value %d does not match configured value %d", actualSource, expectedSource)
 		}
 		return expected, nil
-	case issueLabelTransportSourcePostgres:
-		mapped, err := action.recordFromPostgresRow(sourceRecord)
+	case connectors.SourceRecordMappingKindInputFields:
+		mapped, err := action.recordFromSourceRecord(sourceRecord, sourceBinding.RecordMapping.Inputs)
 		if err != nil {
 			return nil, err
 		}
@@ -822,7 +804,7 @@ func (a *App) issueLabelTransportMappedSourceRecord(conn Connection, action issu
 		}
 		return mapped, nil
 	default:
-		return nil, fmt.Errorf("closed issue-label transport source is unavailable")
+		return nil, fmt.Errorf("closed issue-label transport source record mapping is unavailable")
 	}
 }
 

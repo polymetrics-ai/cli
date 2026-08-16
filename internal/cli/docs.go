@@ -625,22 +625,21 @@ DESCRIPTION
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
 
-CLOSED GITHUB TRANSPORT
-  The github-issue-label transport is a fixed two-action GitHub label
-  destination, not a generic writer. Its source is either the retained GitHub
-  issues walking slice or PostgreSQL's declared polling-watermark relation. A
-  saved connection owns the repository, source selection, target issue, label,
-  action, and credential configuration; the command accepts none of those
-  provider details directly.
+CLOSED ISSUE-LABEL TRANSPORT
+  The fixed two-action issue-label destination is not a generic writer. Its
+  connector definition declares the admitted source executors, source streams,
+  and bounded record mappings. A saved connection owns the repository, source
+  selection, target issue, label, action, and credential configuration; the
+  command accepts none of those provider details directly.
 
-  PostgreSQL rows use only GitHub's declared transport-binding inputs:
-  target_issue (a positive integer) and label (a non-empty string). full_append
-  selects add_issue_labels; incremental_upsert selects set_issue_labels and
-  requires transport_allow_keyed=true. The row's derived issue and label must
-  equal the plan-bound destination configuration, so values cannot drift after
-  destructive approval. Null, malformed, mismatched, or delete/tombstone rows
-  are refused before GitHub write I/O. Use --batch-size 1 for this singleton
-  destination contract.
+  An input-fields source supplies only the destination definition's declared
+  inputs: target_issue (a positive integer) and label (a non-empty string).
+  full_append selects add_issue_labels; incremental_upsert selects
+  set_issue_labels and requires transport_allow_keyed=true. The row's derived
+  issue and label must equal the plan-bound destination configuration, so
+  values cannot drift after destructive approval. Null, malformed, mismatched,
+  or delete/tombstone rows are refused before destination write I/O. Use
+  --batch-size 1 for this singleton destination contract.
 
   Create a closed plan, preview it in human output to obtain an ephemeral
   approval token, then pass that token only as one bounded stdin line to:

@@ -35,11 +35,20 @@
 - `make connector-canon-check`
 - `make release-workflow-check`
 
+### Definition-owned admission correction — passed
+
+- `go test -count=1 -timeout 20m -run '^(TestPreflightReturnsTypedDestinationSourceIneligibleErrorBeforeExecutorAccess|TestSyncTransportDescriptorResolvesDeclaredApplyStrategy)$' ./internal/synctransport ./internal/connectors` — passed. An unlisted source receives typed `DestinationSourceIneligibleError` before source read, warehouse stage, destination plan/apply, or checkpoint I/O.
+- `go test -count=1 -timeout 20m -run '^(TestOpenSelectsPostgresIssueLabelDestinationTransport|TestIssueLabelTransportContractUsesDefinitionOwnedActionBindings|TestPostgresIssueLabelTransportRefusesBadInputsBeforeProviderWrite)$' ./internal/app` — passed.
+- `go test -count=1 -timeout 20m ./internal/app ./internal/cli ./internal/connectors ./internal/connectors/engine ./internal/synctransport` — passed.
+- `go run ./cmd/connectorgen validate` — passed: `552 connectors, 0 findings`.
+- `make connector-boundary`; `make connectorgen-validate`; `make connectorgen-surface-sync`; `make docs-check-no-build`; `go vet ./...`; `go build ./cmd/pm`; the four ETL help/namespace probes; and `git diff --check` — passed.
+- `pnpm --dir website run gen:docs` was run twice with a SHA-256 comparison of `website/lib/docs.generated.ts`; the repeat was byte-stable. `pnpm --dir website run typecheck` passed and `pnpm --dir website run lint` passed with 13 pre-existing warnings and no errors.
+
 The complete `go test ./...` / aggregate `make verify` commands were deliberately not run as one process because this task runner applies a per-command wall limit and the repository contract directs agents to run the changed-package tests and all other `make verify` gates individually. All individually runnable gates above passed.
 
 ### Inline GSD verification and review
 
-`verify-work` was executed as the documented manual GSD fallback against the acceptance table in `CONTEXT.md`: live proof, simulated boundary proof, typed refusal coverage, replay/resume/deletes edges, generated surface, and local gates are recorded above. `code-review` was also completed inline: no scope expansion, generic writer, credential persistence, Arrow/full-overwrite change, or API-to-API quadrant edit remains in the diff.
+`verify-work` was executed as the documented manual GSD fallback against the acceptance table in `CONTEXT.md`: live proof, simulated boundary proof, typed refusal coverage, replay/resume/deletes edges, generated surface, and local gates are recorded above. `code-review` was completed again after the boundary finding: the destination definition owns source admission and bounded mappings, so no shared provider policy, generic writer, credential persistence, Arrow/full-overwrite change, or API-to-API quadrant edit remains in the diff.
 
 ### Delivery header base verification — passed
 

@@ -41,10 +41,6 @@ var (
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
 		ID:     issueLabelDestinationExecutorID,
 	}
-	postgresPollingWatermarkSourceReference = connectors.TransportExecutorReference{
-		Family: connectors.TransportExecutorFamilyNativeDatabase,
-		ID:     "postgres_polling_watermark",
-	}
 	declarativeStreamSourceEvidence = connectors.ConformanceEvidenceReference{
 		Suite: declarativeStreamSourceEvidenceSuite,
 		RunID: declarativeStreamSourceEvidenceRun,
@@ -55,8 +51,8 @@ var (
 	}
 )
 
-// issueLabelTransportDefinitionFactories names only the two GitHub adapter
-// hooks. Their selection and evidence admission are performed generically from
+// issueLabelTransportDefinitionFactories names only the two adapter hooks.
+// Their selection and evidence admission are performed generically from
 // sync_transport.json by synctransport.RegisterDeclaredTransports.
 func issueLabelTransportDefinitionFactories(a *App) []synctransport.DefinitionFactory {
 	return []synctransport.DefinitionFactory{
@@ -194,8 +190,8 @@ type issueLabelTransportAction struct {
 	binding connectors.TransportActionBinding
 }
 
-// IssueLabelTransportRowMappingError is a pre-write refusal for a PostgreSQL
-// row that cannot satisfy the destination definition's closed transport
+// IssueLabelTransportRowMappingError is a pre-write refusal for a source row
+// that cannot satisfy the destination definition's closed transport
 // inputs. It carries only the input name and a structural reason, never the
 // row value.
 type IssueLabelTransportRowMappingError struct {
@@ -214,7 +210,7 @@ func (e *IssueLabelTransportRowMappingError) Error() string {
 }
 
 // IssueLabelTransportUnsupportedActionError identifies an action outside the
-// two definition-owned GitHub label actions. It is deliberately returned
+// two definition-owned label actions. It is deliberately returned
 // before a workset is applied, so an untrusted transport plan cannot turn a
 // malformed action into provider I/O.
 type IssueLabelTransportUnsupportedActionError struct {
@@ -229,9 +225,9 @@ func (e *IssueLabelTransportUnsupportedActionError) Error() string {
 }
 
 // IssueLabelTransportDeletesUnavailableError refuses a receipt carrying a
-// delete the destination cannot represent. PostgreSQL's polling source
-// declares deletes:not_available, so this guards against a future source or
-// malformed receipt being silently treated as an ordinary label write.
+// delete the destination cannot represent. A source declaring
+// deletes:not_available must surface it rather than silently treating a
+// malformed receipt as an ordinary label write.
 type IssueLabelTransportDeletesUnavailableError struct {
 	Tombstones int
 }
@@ -459,18 +455,31 @@ func (a issueLabelTransportAction) record(issueNumber int, label string) (connec
 	return record, nil
 }
 
-// recordFromPostgresRow maps only the declaration-owned transport input names
-// into the action record. The PostgreSQL relation is not a generic mapping
-// surface: it must expose `target_issue` and `label`, exactly the two inputs
-// declared in GitHub's transport_binding.
-func (a issueLabelTransportAction) recordFromPostgresRow(source connectors.Record) (connectors.Record, error) {
+// recordFromSourceRecord maps only the declaration-owned source input fields
+// into the action record. The selected binding is not a generic mapping
+// surface: it must provide exactly the action's declared inputs.
+func (a issueLabelTransportAction) recordFromSourceRecord(source connectors.Record, mappings []connectors.SourceRecordInputBinding) (connectors.Record, error) {
 	if source == nil {
 		return nil, &IssueLabelTransportRowMappingError{Reason: "row is absent"}
+	}
+	fields := make(map[string]string, len(mappings))
+	for _, mapping := range mappings {
+		if _, duplicate := fields[mapping.Input]; duplicate {
+			return nil, &IssueLabelTransportRowMappingError{Input: mapping.Input, Reason: "source binding repeats an input"}
+		}
+		fields[mapping.Input] = mapping.Field
+	}
+	if len(fields) != len(a.binding.Inputs) {
+		return nil, &IssueLabelTransportRowMappingError{Reason: "source binding does not provide exactly the declared inputs"}
 	}
 	var targetIssue int
 	var label string
 	for _, input := range a.binding.Inputs {
-		value, ok := source[input.Input]
+		field, declared := fields[input.Input]
+		if !declared {
+			return nil, &IssueLabelTransportRowMappingError{Input: input.Input, Reason: "source binding does not declare an input field"}
+		}
+		value, ok := source[field]
 		if !ok || value == nil {
 			return nil, &IssueLabelTransportRowMappingError{Input: input.Input, Reason: "value is null or absent"}
 		}
@@ -777,11 +786,8 @@ func (e *issueLabelDestinationExecutor) PlanDestination(_ context.Context, reque
 	if !e.contract.matchesApplyStrategy(request.ApplyStrategy) {
 		return synctransport.DestinationPlan{}, &IssueLabelTransportUnsupportedActionError{Action: request.ApplyStrategy.Action}
 	}
-	if request.Source == nil || !isIssueLabelTransportSourceConnector(request.Source, e.connector) {
-		return synctransport.DestinationPlan{}, fmt.Errorf("closed issue-label destination received an undeclared source")
-	}
-	if descriptor, ok := connectors.SourceTransportDescriptorOf(request.Source); !ok || (descriptor.Executor == declarativeStreamSourceReference && request.Stream != e.contract.stream) || (descriptor.Executor == postgresPollingWatermarkSourceReference && strings.TrimSpace(request.Stream) == "") {
-		return synctransport.DestinationPlan{}, fmt.Errorf("closed issue-label destination received an undeclared source stream")
+	if _, err := e.sourceBindingFor(request.Source, request.Stream); err != nil {
+		return synctransport.DestinationPlan{}, err
 	}
 	if err := issueLabelTransportRepositoryConfig(request.Runtime.Config); err != nil {
 		return synctransport.DestinationPlan{}, err
@@ -793,6 +799,25 @@ func (e *issueLabelDestinationExecutor) PlanDestination(_ context.Context, reque
 		return synctransport.DestinationPlan{}, err
 	}
 	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
+}
+
+func (e *issueLabelDestinationExecutor) sourceBindingFor(source connectors.Connector, stream string) (connectors.DestinationSourceBinding, error) {
+	if e == nil || e.connector == nil || source == nil {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("closed issue-label destination received an undeclared source")
+	}
+	sourceDescriptor, ok := connectors.SourceTransportDescriptorOf(source)
+	if !ok {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("closed issue-label destination received a source without a transport declaration")
+	}
+	destination := e.connector.Definition().SyncTransport
+	if destination == nil || destination.Destination == nil {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("closed issue-label destination lost its transport declaration")
+	}
+	binding, admitted := destination.Destination.SourceBindingFor(sourceDescriptor.Executor, stream)
+	if !admitted {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("closed issue-label destination does not admit source executor %q for stream %q", sourceDescriptor.Executor.ID, stream)
+	}
+	return binding, nil
 }
 
 func (e *issueLabelDestinationExecutor) ApplyDestination(ctx context.Context, request synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
@@ -913,9 +938,17 @@ func issueLabelTransportLabel(config map[string]string) (string, error) {
 }
 
 func issueNumberFromRecord(record connectors.Record) (int, error) {
-	value, ok := record["number"]
+	return issueNumberFromRecordField(record, "number")
+}
+
+func issueNumberFromRecordField(record connectors.Record, field string) (int, error) {
+	field = strings.TrimSpace(field)
+	if field == "" {
+		return 0, fmt.Errorf("issue record field is required")
+	}
+	value, ok := record[field]
 	if !ok {
-		return 0, fmt.Errorf("issue record has no number")
+		return 0, fmt.Errorf("issue record has no %s", field)
 	}
 	switch number := value.(type) {
 	case int:
@@ -941,7 +974,7 @@ func issueNumberFromRecord(record connectors.Record) (int, error) {
 			return parsed, nil
 		}
 	}
-	return 0, fmt.Errorf("issue record number is not a positive integer")
+	return 0, fmt.Errorf("issue record %s is not a positive integer", field)
 }
 
 func issueHasLabel(record connectors.Record, want string) bool {

@@ -76,6 +76,34 @@
       {"mode": "full_overwrite", "strategy": "replace", "action": "set_issue_labels"},
       {"mode": "full_append", "strategy": "append", "action": "add_issue_labels"},
       {"mode": "incremental_upsert", "strategy": "merge", "action": "set_issue_labels"}
+    ],
+    "source_bindings": [
+      {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": ["issues"],
+        "record_mapping": {
+          "kind": "config_match",
+          "config_key": "transport_source_issue_number",
+          "record_field": "number"
+        }
+      },
+      {
+        "executor": {
+          "family": "native_database",
+          "id": "postgres_polling_watermark"
+        },
+        "eligible_streams": ["*"],
+        "record_mapping": {
+          "kind": "input_fields",
+          "inputs": [
+            {"input": "target_issue", "field": "target_issue"},
+            {"input": "label", "field": "label"}
+          ]
+        }
+      }
     ]
   }
 }

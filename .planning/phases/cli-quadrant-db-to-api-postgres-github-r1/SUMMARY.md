@@ -1,6 +1,6 @@
 # Summary — DB → API PostgreSQL → GitHub route R1
 
-The shipped `pm` binary now accepts the exact PostgreSQL polling-watermark source descriptor for the closed GitHub issue-label destination. It maps only the two definition-declared inputs, `target_issue` and `label`, into the two definition-owned actions:
+The shipped `pm` binary now asks the closed issue-label destination definition which source executors, streams, and bounded row mappings it admits. That definition admits the exact PostgreSQL polling-watermark executor for every source stream through `input_fields` (`target_issue` and `label`), while retaining its declarative issue source through `config_match`. Shared transport preflight rejects an unlisted source with typed `DestinationSourceIneligibleError` before it can read, stage, plan, apply, or checkpoint. The PostgreSQL binding maps only the two definition-declared inputs into the two definition-owned actions:
 
 - `full_append` / append strategy → `add_issue_labels`.
 - keyed `incremental_upsert` / merge strategy → `set_issue_labels`.

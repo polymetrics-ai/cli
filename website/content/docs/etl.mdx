@@ -9,7 +9,7 @@ The `pm etl` command group has two lanes:
 |---|---|---|
 | Direct connector operations | `pm etl check`, `pm etl catalog`, `pm etl read` | Preflight and connector development without creating a connection. |
 | Configured syncs | `pm etl run`, `pm etl status` | Production-style extraction from a saved connection into a local table. |
-| Closed GitHub transport | `pm etl transport github-issue-label`, approved `pm etl run` | One fixed two-action GitHub label destination from GitHub issues or PostgreSQL polling-watermark rows, through durable warehouse reopen and typed cleanup. |
+| Closed GitHub transport | `pm etl transport github-issue-label`, approved `pm etl run` | One fixed two-action GitHub label destination from its definition-declared sources, through durable warehouse reopen and typed cleanup. |
 | Closed PostgreSQL transport | `pm etl transport postgres-managed-target`, approved `pm etl run` | A definition-selected PostgreSQL or API source through the durable warehouse into a managed PostgreSQL target. |
 
 Connector capabilities are inspectable through `pm connectors inspect`. Use the advertised streams, cursors, and primary keys before creating a long-running extraction.
@@ -166,18 +166,19 @@ pm etl run --connection my-github --stream issues --runtime --json
 `github-issue-label` is deliberately a closed two-action GitHub label
 destination, not a generic writer. Its saved connection owns the repository,
 source selection, target issue, label, action, and credential configuration.
-The source is either the retained GitHub issues walking slice or PostgreSQL's
-declared `postgres_polling_watermark` relation. The command accepts none of
-those provider details as flags.
+The destination's `sync_transport.json` declares each admitted source executor,
+eligible source streams, and its bounded record mapping. The command accepts
+none of those provider details as flags.
 
-For a PostgreSQL source, each durable reopened row must provide the two input
-names declared in GitHub's `transport_binding`: a positive integer
-`target_issue` and a non-empty string `label`. `full_append` maps to
-`add_issue_labels`; `incremental_upsert` maps to `set_issue_labels` and
-requires `transport_allow_keyed=true`. The mapped values must equal the
-plan-bound destination configuration. Null, malformed, mismatched, or
-tombstone/delete rows are rejected before GitHub write I/O. This singleton
-destination requires `--batch-size 1`.
+The declared `config_match` binding retains the one-record issue selection;
+the `input_fields` binding maps each durable reopened PostgreSQL row's
+`target_issue` and `label` fields into the exact input names declared in
+GitHub's `transport_binding`. `full_append` maps to `add_issue_labels`;
+`incremental_upsert` maps to `set_issue_labels` and requires
+`transport_allow_keyed=true`. The mapped values must equal the plan-bound
+destination configuration. Null, malformed, mismatched, or tombstone/delete
+rows are rejected before GitHub write I/O. This singleton destination requires
+`--batch-size 1`.
 
 Create a plan, preview it in human output, and pass the resulting one-time
 approval token only through standard input to the ordinary ETL run:

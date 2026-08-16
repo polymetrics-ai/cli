@@ -26,9 +26,8 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 }
 
 // shouldRunTransport keeps the closed issue-label transport opt-in at the
-// persisted connection boundary. GitHub is the only label destination, while
-// its source may be either the retained same-definition GitHub slice or the
-// exact PostgreSQL polling-watermark executor. Open installs the exact
+// persisted connection boundary. Its definition owns the admitted source
+// executors, streams, and record mappings. Open installs the exact
 // definition-owned composition so it can be preflighted, but that must not
 // turn every existing JSON ETL connection into a transport run merely because
 // its connector advertises a closed descriptor.
@@ -42,7 +41,10 @@ func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMo
 	sourceDeclarative := isDeclarativeStreamTransportConnector(source)
 	destinationIssueLabel := isIssueLabelTransportConnector(destination)
 	if destinationIssueLabel {
-		if !isIssueLabelTransportSourceConnector(source, destination) {
+		if a == nil || a.transports == nil {
+			return false
+		}
+		if _, err := a.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode}); err != nil {
 			return false
 		}
 	} else if !sourceDeclarative {
@@ -81,17 +83,6 @@ func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMo
 	}
 	_, err = contract.actionForSyncMode(mode.ContractMode)
 	return err == nil
-}
-
-func isIssueLabelTransportSourceConnector(source, destination connectors.Connector) bool {
-	descriptor, ok := connectors.SourceTransportDescriptorOf(source)
-	if !ok {
-		return false
-	}
-	if descriptor.Executor == declarativeStreamSourceReference {
-		return source.Name() == destination.Name()
-	}
-	return descriptor.Executor == postgresPollingWatermarkSourceReference
 }
 
 func isIssueLabelTransportConnector(connector connectors.Connector) bool {

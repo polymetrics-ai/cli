@@ -34,15 +34,16 @@ SYNOPSIS
 DESCRIPTION
   %s is a closed two-action %s label destination, not a generic writer. The
   connection owns the repository, source selection, target issue, label,
-  action, and credential configuration. Its source is either the retained
-  GitHub issues walking slice or PostgreSQL's declared polling-watermark
-  relation. This command family accepts none of those command details.
+  action, and credential configuration. Its destination definition declares
+  the admitted source executors, streams, and bounded record mappings. This
+  command family accepts none of those command details.
 
-  PostgreSQL rows provide only the destination definition's target_issue and
-  label inputs. full_append selects add_issue_labels; incremental_upsert
-  selects set_issue_labels and requires transport_allow_keyed=true. The
-  row-derived pair must match the plan-bound destination configuration, and
-  null, malformed, mismatched, or tombstone rows stop before write I/O.
+  An input-fields source provides only the destination definition's
+  target_issue and label inputs. full_append selects add_issue_labels;
+  incremental_upsert selects set_issue_labels and requires
+  transport_allow_keyed=true. The row-derived pair must match the plan-bound
+  destination configuration, and null, malformed, mismatched, or tombstone
+  rows stop before write I/O.
 
   Create a plan, preview it in human output to receive one ephemeral approval
   token, then send that token as one bounded line on standard input to pm etl
@@ -55,9 +56,10 @@ DESCRIPTION
   destructive without --approval-token-stdin. A changed, expired, or revoked
   scope is refused before a provider write.
 
-  GitHub source selection and every independent read-back inspect only the
-  first %s issues page. The transport fails instead of requesting another page
-  when the configured GitHub source or target issue is not there.
+  A config-matched source selection and every independent read-back inspect
+  only the first %s destination collection page. The transport fails instead
+  of requesting another page when the configured source or target issue is not
+  there.
 
   Cleanup is a separately planned, previewed, one-time approved typed inverse.
   A %s missing-label DELETE accepted by the declared missing_ok_status is a
@@ -523,10 +525,9 @@ func issueLabelTransportConnectionID(a *app.App, connectorName, name string) (st
 	for _, connection := range a.ListConnections() {
 		if connection.Name == name {
 			// App owns exact source admission from the registered transport
-			// descriptor. The CLI command selects the definition-owned GitHub
-			// destination only, so PostgreSQL's polling-watermark source reaches
-			// the same app-level closed validation rather than being rejected by
-			// this stale same-connector shortcut.
+			// descriptor. The CLI command selects the definition-owned destination
+			// only, so every admitted source reaches the same app-level closed
+			// validation rather than being rejected by a stale shortcut.
 			if connection.Destination.Connector != connectorName {
 				return "", validationErrorf("connection %q does not own the selected issue-label transport command", name)
 			}

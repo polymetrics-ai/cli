@@ -2,7 +2,7 @@
 
 ## Scope and skills
 
-Target connector: GitHub destination only. PostgreSQL's pre-existing polling-watermark source is exercised as the upstream native source; no PostgreSQL production behavior, generic transport contract, Arrow fast path, or #4184 run-scoped full-overwrite sequencing changes.
+Target connector: the existing issue-label destination only. PostgreSQL's pre-existing polling-watermark source is exercised as the upstream native source; no PostgreSQL production behavior, generic writer, Arrow fast path, or #4184 run-scoped full-overwrite sequencing changes.
 
 Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-concurrency`, `golang-database`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`.
 
@@ -24,11 +24,12 @@ The two source field names are the existing transport-binding input names; the a
 2. **R2 — closed source-row mapper:** Implement the narrow PostgreSQL-to-GitHub mapping at the existing destination adapter. Map only declaration inputs `target_issue`/`label` into their action-owned record fields, validate the row, and require it match the pre-approved preview pair before authorization or provider write; retain non-PostgreSQL behavior. Green tests cover both action declarations, null/malformed rows, and zero provider writes on refusal.
 3. **R3 — durability and replay boundaries:** Add binary/container proof for zero rows, `NULL` mapped columns, replay-safe keyed application, interruption/resume via PostgreSQL watermark, and the source's `deletes: not_available` refusal. Every named edge asserts provider state and checkpoint state, not exit status alone.
 4. **R4 — real controlled-repository proof:** Build the exact `pm` binary, source the GitHub token only into its process environment, execute plan → preview → approval → run against retained private `karthik-sivadas/pm-parity-proof-db-to-api`, and independently read labels from GitHub. The two dedicated sentinel issue labels remain as verifiable evidence; no third GitHub destination action is invoked for cleanup.
+5. **R6 — definition-owned source admission correction:** Replace the shared provider/executor switch with an optional closed `destination_transport.source_bindings` declaration. Each binding names an exact source executor, eligible source streams, and one bounded mapping form. Registry preflight rejects an unlisted source binding before executor access; the issue-label adapter reuses the selected binding for configured-record matching or typed input-field mapping. The connector definition, rather than shared Go, names the two admitted source executors and their row contract.
 
 ## Non-goals
 
 - No new GitHub write action (coverage remains two of 607).
-- No generic record-mapping language, generic API writer, generic SQL source, or generic transport action.
+- No generic API writer, generic SQL source, generic transport action, or open-ended record mapping. `source_bindings` is a closed descriptor field with two typed mapping forms and exact executor/stream declarations.
 - No changes to #4184 atomic full-overwrite behavior, Arrow path, or its benchmark evidence.
 - No API→API quadrant edits or broad certification of the remaining 605 actions.
 
