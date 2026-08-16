@@ -675,7 +675,13 @@ func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.
 	}
 	records := make([]connectors.Record, 0, request.BatchSize)
 	pageOrdinal := 0
-	waitingForResume := request.Checkpoint != nil
+	// Current-state and history dedupe both derive their source version from the
+	// bounded provider page. Replaying that page is the safe way to observe a
+	// changed record at the same primary key: their declared warehouse apply
+	// strategies collapse an identical replay and retain a distinct version.
+	// Suppressing it by an old page hash would instead turn an ordinary provider
+	// update into an invalid checkpoint before the destination can compare it.
+	waitingForResume := request.Checkpoint != nil && !declarativeCollectionReplaysForMode(request.Mode)
 	emitBatch := func() error {
 		if len(records) == 0 {
 			return nil
@@ -726,6 +732,10 @@ func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.
 		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "declarative stream resume page is no longer present")
 	}
 	return nil
+}
+
+func declarativeCollectionReplaysForMode(mode synccontract.Mode) bool {
+	return mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory
 }
 
 func declarativeTransportMaxPages(config map[string]string) (int, error) {

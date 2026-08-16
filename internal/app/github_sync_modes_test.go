@@ -82,7 +82,6 @@ func TestGithubContractDedupeModesMaterializeCurrentAndHistoryRows(t *testing.T)
 		a, connection, setRecords := setupGithubSyncModeApp(t, "incremental_dedupe")
 		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "first", "2026-01-01T00:00:00Z")})
 		runGithubETL(t, a, connection)
-		clearGithubTransportCheckpoint(t, a, connection)
 		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "second", "2026-01-02T00:00:00Z")})
 		runGithubETL(t, a, connection)
 		assertGithubRows(t, a, 1, map[string]string{"PR_1": "second"})
@@ -92,10 +91,8 @@ func TestGithubContractDedupeModesMaterializeCurrentAndHistoryRows(t *testing.T)
 		a, connection, setRecords := setupGithubSyncModeApp(t, "incremental_dedupe_history")
 		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "first", "2026-01-01T00:00:00Z")})
 		runGithubETL(t, a, connection)
-		clearGithubTransportCheckpoint(t, a, connection)
 		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "second", "2026-01-02T00:00:00Z")})
 		runGithubETL(t, a, connection)
-		clearGithubTransportCheckpoint(t, a, connection)
 		runGithubETL(t, a, connection)
 
 		rows, err := a.QueryTable(context.Background(), QueryTableRequest{Table: "github_prs", Limit: 10})
@@ -121,20 +118,6 @@ func TestGithubContractDedupeModesMaterializeCurrentAndHistoryRows(t *testing.T)
 			t.Fatalf("history source versions = %q, %q; want stable distinct identities", first["_polymetrics_source_version"], second["_polymetrics_source_version"])
 		}
 	})
-}
-
-// clearGithubTransportCheckpoint deliberately replays a source page through
-// the production ETL path. A normal acknowledged restart suppresses an exact
-// page before apply; this test exercises the destination's own replay guard.
-func clearGithubTransportCheckpoint(t *testing.T, a *App, connection string) {
-	t.Helper()
-	key := streamStateKey(connection, "pull_requests")
-	state, ok := a.state.StreamStates[key]
-	if !ok || state.Checkpoint == nil {
-		t.Fatalf("transport checkpoint %q is missing", key)
-	}
-	state.Checkpoint = nil
-	a.state.StreamStates[key] = state
 }
 
 func setupGithubSyncModeApp(t *testing.T, mode string) (*App, string, func([]map[string]any)) {

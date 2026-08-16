@@ -66,8 +66,10 @@ pm connections create <name> \
 | Full refresh overwrite deduped | `full_refresh_overwrite_deduped` | Compatibility name for typed `full_overwrite` admission. Without an admitted matching transport, pm refuses before source I/O. |
 | Incremental append | `incremental_append` | Extracts only records newer than the stored cursor value and appends them. |
 | Incremental append deduped | `incremental_append_deduped` | Compatibility name for typed `incremental_dedupe` admission. Without an admitted matching transport, pm refuses before source I/O. |
+| Incremental dedupe | `incremental_dedupe` | For an admitted source-to-warehouse transport, retains one current record per declared primary key. Other pairs refuse before source I/O. |
+| Incremental dedupe history | `incremental_dedupe_history` | For an admitted source-to-warehouse transport, retains deduplicated source versions with `_valid_from`, `_valid_to`, and `_is_current` fields. It requires declared primary-key and cursor fields. |
 
-Incremental modes and deduped compatibility names require a cursor. Deduped modes also require a primary key. A static connector advertises the full deduped compatibility name only with both fields, and advertises incremental modes only with a declared incremental executor. The two deduped compatibility names remain accepted public inputs, but they are not ordinary local materialization modes.
+Incremental modes and deduped compatibility names require a cursor. Deduped modes also require a primary key. A static connector advertises the full deduped compatibility name only with both fields, and advertises incremental modes only with a declared incremental executor. The two raw typed modes are selected only when source and warehouse transport declarations, registrations, and preflight admit them; otherwise they refuse before source I/O. The typed modes are not ordinary local materialization modes.
 
 ### Closed typed transforms
 

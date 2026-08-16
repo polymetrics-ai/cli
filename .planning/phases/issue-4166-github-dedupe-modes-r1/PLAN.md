@@ -45,7 +45,14 @@
 
 ## CLI help/manual/website parity
 
-No command name, flag, output schema, help topic, or connector CLI surface is intended to change: this makes two already-declared sync modes executable. Runtime `pm help`, bare namespace, and GitHub command-help smoke checks remain required; generated matrix and website connector documentation regeneration/checks remain required. If inspection reveals changed user-visible mode documentation, update runtime help, `docs/cli/**`, website docs, and generated artifacts in the same slice.
+The raw typed `incremental_dedupe` and `incremental_dedupe_history` values were already accepted by the parser but were omitted from user-facing help while they refused at runtime. Update runtime `pm help etl` and `pm connections`, generated `docs/cli/**`, website ETL docs, and golden help transcripts to describe their declared-pair-only semantics. Keep `incremental_append` unchanged.
+
+## Regenerated certification deltas
+
+The mode-aware generator deliberately changed both allowlisted shards:
+
+- GitHub: `incremental_append/api_read_into_warehouse` changed declared and implemented from true to false because the source transport omits that mode. The three `api_write_from_warehouse` cells for incremental append, dedupe, and history changed declared true to false because GitHub's closed issue-label destination omits them. The two requested API-read dedupe cells remain true only after this slice added both modes to GitHub's real source transport.
+- PostgreSQL: `incremental_dedupe_history/database_read_into_warehouse` and `change_capture/database_read_into_warehouse` changed declared and implemented from true to false because PostgreSQL's outer source transport omits both modes. PostgreSQL history execution remains explicitly out of scope.
 
 ## Scope fences
 
