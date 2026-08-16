@@ -1,0 +1,214 @@
+package main
+
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+	"sort"
+	"strings"
+
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/certify"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
+)
+
+const declaredTransportEvidenceProvider = "postgres_container"
+
+// runCertificationEvidence accepts one completed, passing declared-transport
+// report and records only the source bundle's exact modes as proof-bearing
+// database evidence. The selected bundle binds report executor references and
+// apply strategies; this generic importer adds no runtime transport behavior.
+func runCertificationEvidence(args []string, stdout, stderr io.Writer) int {
+	if len(args) < 2 || args[1] != "transport" {
+		logln(stderr, "connectorgen certification-evidence: require transport")
+		return 2
+	}
+	options, err := parsePostgresTransportEvidenceOptions(args[2:])
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 2
+	}
+	report, err := loadPostgresTransportEvidenceReport(options.reportPath)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+	if err := validatePostgresTransportEvidenceReport(report, options.connector); err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+	prepared, err := postgresTransportEvidencePreparedValue(options.secretEnv)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+
+	modes := append([]certify.DeclaredTransportModeResult(nil), report.Capabilities.DeclaredTransport.Modes...)
+	sort.Slice(modes, func(i, j int) bool { return modes[i].Mode < modes[j].Mode })
+	written := 0
+	for _, mode := range modes {
+		for _, primitive := range []string{"database_read_into_warehouse", "database_write_from_warehouse"} {
+			output := filepath.Join(options.repoRoot, acceptedEvidenceDirectory, options.recordPrefix+"-"+mode.Mode+"-"+primitive+".json")
+			body, err := json.Marshal(struct {
+				Mode                string `json:"mode"`
+				ApplyStrategy       string `json:"apply_strategy"`
+				RecordsRead         int    `json:"records_read"`
+				RecordsLoaded       int    `json:"records_loaded"`
+				CheckpointCommitted bool   `json:"checkpoint_committed"`
+				TargetNamespace     string `json:"target_namespace"`
+				TargetRelation      string `json:"target_relation"`
+			}{
+				Mode: mode.Mode, ApplyStrategy: mode.ApplyStrategy, RecordsRead: mode.RecordsRead,
+				RecordsLoaded: mode.RecordsLoaded, CheckpointCommitted: mode.CheckpointCommitted,
+				TargetNamespace: mode.TargetNamespace, TargetRelation: mode.TargetRelation,
+			})
+			if err != nil {
+				logf(stderr, "connectorgen certification-evidence: encode %s/%s: %v\n", mode.Mode, primitive, err)
+				return 1
+			}
+			_, err = writeProofBearingEvidence(options.repoRoot, output, completedLiveEvidence{
+				SchemaVersion: certificationSchemaVersion, Scope: evidenceScopeSyncMode, Connector: options.connector,
+				SyncMode: mode.Mode, Primitive: primitive, Provider: declaredTransportEvidenceProvider,
+				ExecutedAt:     report.CompletedAt.UTC().Format("2006-01-02T15:04:05Z"),
+				RunID:          options.runID + "-" + mode.Mode + "-" + primitive,
+				PMBinarySHA256: options.binarySHA, PMCommand: "pm connectors certify " + options.connector + " --full --write --from-env password=" + options.secretEnv,
+				Passed: true, CredentialFullParity: true, PreparedValues: []string{prepared},
+				DatabaseExchanges: []completedDatabaseExchange{{
+					Operation: "postgres_transport_" + mode.Mode + "_" + primitive,
+					Protocol:  "postgres_wire", Statement: "declared_transport_" + mode.Mode + "_" + mode.ApplyStrategy,
+					ResponseStatus: "completed", ResponseBody: body,
+				}},
+			})
+			if err != nil {
+				logf(stderr, "connectorgen certification-evidence: write %s/%s: %v\n", mode.Mode, primitive, err)
+				return 1
+			}
+			written++
+		}
+	}
+	logf(stdout, "wrote declared transport evidence records: %d\n", written)
+	return 0
+}
+
+type postgresTransportEvidenceOptions struct {
+	connector    string
+	reportPath   string
+	binarySHA    string
+	secretEnv    string
+	runID        string
+	recordPrefix string
+	repoRoot     string
+}
+
+func parsePostgresTransportEvidenceOptions(args []string) (postgresTransportEvidenceOptions, error) {
+	options := postgresTransportEvidenceOptions{repoRoot: "."}
+	for index := 0; index < len(args); index++ {
+		flag := args[index]
+		if !strings.HasPrefix(flag, "--") || index+1 >= len(args) {
+			return postgresTransportEvidenceOptions{}, fmt.Errorf("invalid flag %q", flag)
+		}
+		index++
+		value := args[index]
+		switch flag {
+		case "--report":
+			options.reportPath = value
+		case "--connector":
+			if !isSafeProofIdentifier(value) {
+				return postgresTransportEvidenceOptions{}, fmt.Errorf("--connector must be a safe connector name")
+			}
+			options.connector = value
+		case "--binary-sha":
+			options.binarySHA = value
+		case "--from-env":
+			field, envName, ok := strings.Cut(value, "=")
+			if !ok || field != "password" || !isSafeProofIdentifier(envName) {
+				return postgresTransportEvidenceOptions{}, errors.New("--from-env must be password=<safe environment variable>")
+			}
+			options.secretEnv = envName
+		case "--run-id":
+			options.runID = value
+		case "--record-prefix":
+			options.recordPrefix = value
+		case "--repo-root":
+			options.repoRoot = value
+		default:
+			return postgresTransportEvidenceOptions{}, fmt.Errorf("unknown flag %q", flag)
+		}
+	}
+	if options.connector == "" || strings.TrimSpace(options.reportPath) == "" || !isSHA256(options.binarySHA) || options.secretEnv == "" || !isSafeProofIdentifier(options.runID) || !isSafeProofIdentifier(options.recordPrefix) {
+		return postgresTransportEvidenceOptions{}, errors.New("--connector, --report, lowercase --binary-sha, --from-env password=<ENV>, --run-id, and --record-prefix are required")
+	}
+	root, err := filepath.Abs(options.repoRoot)
+	if err != nil {
+		return postgresTransportEvidenceOptions{}, fmt.Errorf("resolve repository root: %w", err)
+	}
+	options.repoRoot = root
+	return options, nil
+}
+
+func loadPostgresTransportEvidenceReport(path string) (certify.Report, error) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return certify.Report{}, fmt.Errorf("read report: %w", err)
+	}
+	var envelope struct {
+		Kind   string         `json:"kind"`
+		Report certify.Report `json:"report"`
+	}
+	if err := json.Unmarshal(raw, &envelope); err != nil {
+		return certify.Report{}, fmt.Errorf("parse report: %w", err)
+	}
+	if envelope.Kind != "ConnectorCertification" {
+		return certify.Report{}, fmt.Errorf("report kind %q is not ConnectorCertification", envelope.Kind)
+	}
+	return envelope.Report, nil
+}
+
+func validatePostgresTransportEvidenceReport(report certify.Report, connector string) error {
+	if report.Connector != connector || !report.Passed || report.Capabilities.DeclaredTransport == nil {
+		return errors.New("report is not a completed passing connector certification")
+	}
+	bundle, err := engine.Load(defs.FS, connector)
+	if err != nil || bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil || bundle.SyncTransport.Destination == nil {
+		return errors.New("connector does not declare a complete source and destination transport pair")
+	}
+	if bundle.SyncTransport.Source.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase || bundle.SyncTransport.Destination.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase {
+		return errors.New("connector does not declare a native-database transport pair")
+	}
+	transport := report.Capabilities.DeclaredTransport
+	if transport.Result != "pass" || transport.SourceExecutor != bundle.SyncTransport.Source.Executor.ID || transport.DestinationExecutor != bundle.SyncTransport.Destination.Executor.ID {
+		return errors.New("report did not execute the connector's declared transport pair")
+	}
+	expected := make(map[string]string, len(bundle.SyncTransport.Source.Modes))
+	for _, strategy := range bundle.SyncTransport.Destination.ApplyStrategies {
+		expected[string(strategy.Mode)] = string(strategy.Strategy)
+	}
+	if len(transport.Modes) != len(bundle.SyncTransport.Source.Modes) {
+		return fmt.Errorf("report has %d transport modes, want %d declared modes", len(transport.Modes), len(bundle.SyncTransport.Source.Modes))
+	}
+	seen := make(map[string]bool, len(expected))
+	for _, mode := range transport.Modes {
+		if expected[mode.Mode] != mode.ApplyStrategy || seen[mode.Mode] || mode.RecordsRead <= 0 || mode.RecordsLoaded <= 0 || !mode.CheckpointCommitted || !isSafeProofIdentifier(mode.TargetNamespace) || !isSafeProofIdentifier(mode.TargetRelation) {
+			return fmt.Errorf("report transport mode %q lacks completed declared target/read/checkpoint proof", mode.Mode)
+		}
+		seen[mode.Mode] = true
+	}
+	for _, mode := range bundle.SyncTransport.Source.Modes {
+		if !seen[string(mode)] {
+			return fmt.Errorf("report omitted declared transport mode %q", mode)
+		}
+	}
+	return nil
+}
+
+func postgresTransportEvidencePreparedValue(envName string) (string, error) {
+	value := os.Getenv(envName)
+	if strings.TrimSpace(value) == "" {
+		return "", fmt.Errorf("environment variable %s is empty", envName)
+	}
+	return value, nil
+}

@@ -74,6 +74,33 @@ type WriteActionResult struct {
 	Reason  string `json:"reason,omitempty"`
 }
 
+// DeclaredTransportModeResult is the redaction-safe result for one
+// definition-selected source/destination mode. Target address components are
+// opaque managed-target identifiers, never a credential or connection value.
+type DeclaredTransportModeResult struct {
+	Mode                string `json:"mode"`
+	ApplyStrategy       string `json:"apply_strategy"`
+	RecordsRead         int    `json:"records_read"`
+	RecordsLoaded       int    `json:"records_loaded"`
+	CheckpointCommitted bool   `json:"checkpoint_committed"`
+	TargetNamespace     string `json:"target_namespace"`
+	TargetRelation      string `json:"target_relation"`
+}
+
+// DeclaredTransportResult reports whether a connector's declared pair was
+// executed, benignly skipped, unavailable to the harness, or failed. It keeps
+// that distinction visible independently of the report's terminal exit code.
+type DeclaredTransportResult struct {
+	Result              string                        `json:"result"`
+	SourceExecutor      string                        `json:"source_executor,omitempty"`
+	DestinationExecutor string                        `json:"destination_executor,omitempty"`
+	RecordsRead         int                           `json:"records_read,omitempty"`
+	RecordsLoaded       int                           `json:"records_loaded,omitempty"`
+	CheckpointCommitted bool                          `json:"checkpoint_committed"`
+	Modes               []DeclaredTransportModeResult `json:"modes,omitempty"`
+	Reason              string                        `json:"reason,omitempty"`
+}
+
 // Capabilities mirrors the design §A "capabilities" object. Flow/Schedule/
 // WriteActions are pointers/nil-able maps so a report produced before those
 // stages run (or that skips them) omits the keys entirely rather than
@@ -82,19 +109,20 @@ type WriteActionResult struct {
 // later-phase field, deliberately absent from this struct (DATA-MODEL.md
 // §6).
 type Capabilities struct {
-	Check           CapabilityResult             `json:"check"`
-	Catalog         CapabilityResult             `json:"catalog"`
-	Read            CapabilityResult             `json:"read"`
-	SyncModes       map[string]SyncModeResult    `json:"sync_modes"`
-	Resume          CapabilityResult             `json:"resume"`
-	JSONContract    CapabilityResult             `json:"json_contract"`
-	SecretRedaction CapabilityResult             `json:"secret_redaction"`
-	DirectRead      *CapabilityResult            `json:"direct_read,omitempty"`
-	Binary          *CapabilityResult            `json:"binary,omitempty"`
-	Surface         *SurfaceResult               `json:"surface,omitempty"`
-	Flow            *CapabilityResult            `json:"flow,omitempty"`
-	Schedule        *ScheduleResult              `json:"schedule,omitempty"`
-	WriteActions    map[string]WriteActionResult `json:"write_actions,omitempty"`
+	Check             CapabilityResult             `json:"check"`
+	Catalog           CapabilityResult             `json:"catalog"`
+	Read              CapabilityResult             `json:"read"`
+	SyncModes         map[string]SyncModeResult    `json:"sync_modes"`
+	Resume            CapabilityResult             `json:"resume"`
+	JSONContract      CapabilityResult             `json:"json_contract"`
+	SecretRedaction   CapabilityResult             `json:"secret_redaction"`
+	DirectRead        *CapabilityResult            `json:"direct_read,omitempty"`
+	Binary            *CapabilityResult            `json:"binary,omitempty"`
+	Surface           *SurfaceResult               `json:"surface,omitempty"`
+	Flow              *CapabilityResult            `json:"flow,omitempty"`
+	Schedule          *ScheduleResult              `json:"schedule,omitempty"`
+	WriteActions      map[string]WriteActionResult `json:"write_actions,omitempty"`
+	DeclaredTransport *DeclaredTransportResult     `json:"declared_transport,omitempty"`
 }
 
 // CLIStageInfo records the redacted invocation and outcome of one in-process
@@ -107,8 +135,13 @@ type CLIStageInfo struct {
 
 // StageResult is one entry of Report.Stages.
 type StageResult struct {
-	Name       string       `json:"name"`
-	Tier       int          `json:"tier"`
+	Name string `json:"name"`
+	Tier int    `json:"tier"`
+	// Status distinguishes a completed pass from a benign environmental skip,
+	// an unexecutable applicable stage, and an ordinary failure. It is the
+	// report-visible input to the terminal certification roll-up; consumers
+	// must not infer a benign skip from free-form Error text.
+	Status     string       `json:"status"`
 	Passed     bool         `json:"passed"`
 	DurationMS int64        `json:"duration_ms"`
 	Error      string       `json:"error,omitempty"`

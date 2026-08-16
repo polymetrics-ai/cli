@@ -1055,7 +1055,7 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if stream.SyncMode == "" {
 			stream.SyncMode = DefaultUserFacingSyncMode
 		}
-		if isLegacySyncModeName(stream.SyncMode) {
+		if isLegacySyncModeName(stream.SyncMode) && !postgresManagedTargetContractMode(source, destination, stream.SyncMode) {
 			stream.LegacyCompatibility = true
 		}
 		mode, err := ParseStreamSyncMode(stream)

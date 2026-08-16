@@ -21,7 +21,9 @@ import (
 // returned to the connector-neutral certification stage. It contains no
 // credential, provider payload, URL, or connector-specific configuration.
 type DeclaredTransportCertificationProof struct {
+	Declared             bool
 	Applicable           bool
+	SkipReason           string
 	SourceReference      string
 	DestinationReference string
 	ProviderReads        int
@@ -31,6 +33,20 @@ type DeclaredTransportCertificationProof struct {
 	CheckpointCommitted  bool
 	WarehouseManifests   int
 	WarehouseParquet     int
+	Modes                []DeclaredTransportModeProof
+}
+
+// DeclaredTransportModeProof is the redaction-safe outcome for one declared
+// database transport mode. The target address is opaque, definition-derived
+// identity; it contains neither a credential nor a rendered connection value.
+type DeclaredTransportModeProof struct {
+	Mode                string
+	ApplyStrategy       string
+	RecordsRead         int
+	RecordsLoaded       int
+	CheckpointCommitted bool
+	TargetNamespace     string
+	TargetRelation      string
 }
 
 // ProbeDeclaredTransportForCertification executes the existing closed
@@ -70,6 +86,7 @@ func ProbeDeclaredTransportForCertification(ctx context.Context, certificationRo
 	if !ok || descriptor.Source == nil || descriptor.Destination == nil {
 		return DeclaredTransportCertificationProof{}, fmt.Errorf("certification transport adapter lost its source or destination declaration")
 	}
+	proof.Declared = true
 
 	var mu sync.Mutex
 	reads := 0

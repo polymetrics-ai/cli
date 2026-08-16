@@ -1128,12 +1128,20 @@ func TestCertificationStatusArtifactUsesAllGenerator(t *testing.T) {
 	}
 }
 
-func TestCertificationSyncModeDatabaseWriteStubIsNotImplemented(t *testing.T) {
+func TestCertificationSyncModePostgresDeclaredTransportPairRequiresLiveProof(t *testing.T) {
 	matrix := certificationMatrixForTest(t)
 	read, _ := capabilityCellFor(matrix, "postgres", "capability:read")
 	write, _ := capabilityCellFor(matrix, "postgres", "capability:write")
 	cdc, _ := capabilityCellFor(matrix, "postgres", "capability:cdc")
-	cell := syncModeCellFor(matrixConnectorSource{name: "postgres", integrationType: "database"}, "incremental_dedupe", syncPrimitive{
+	bundles, err := loadSourceBundlesForConnectors(repoRootForCertificationTest(t), []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadSourceBundlesForConnectors() error = %v", err)
+	}
+	sources, err := matrixConnectorSourcesForNames(bundles, []string{"postgres"})
+	if err != nil || len(sources) != 1 {
+		t.Fatalf("matrixConnectorSourcesForNames() = %#v, %v; want PostgreSQL source", sources, err)
+	}
+	cell := syncModeCellFor(sources[0], "incremental_dedupe", syncPrimitive{
 		ID:                 "database_write_from_warehouse",
 		IntegrationType:    "database",
 		Capability:         "write",
@@ -1142,8 +1150,38 @@ func TestCertificationSyncModeDatabaseWriteStubIsNotImplemented(t *testing.T) {
 	if !cell.Applicable {
 		t.Fatal("PostgreSQL database write was hidden as non-applicable")
 	}
+	if !cell.Declared || cell.Implemented {
+		t.Fatalf("PostgreSQL declared managed transport cell = %#v, want declared but unimplemented until live proof", cell)
+	}
+}
+
+func TestCertificationSyncModePostgresTransportPromotionRequiresExactPair(t *testing.T) {
+	matrix := certificationMatrixForTest(t)
+	read, _ := capabilityCellFor(matrix, "postgres", "capability:read")
+	write, _ := capabilityCellFor(matrix, "postgres", "capability:write")
+	cdc, _ := capabilityCellFor(matrix, "postgres", "capability:cdc")
+	bundles, err := loadSourceBundlesForConnectors(repoRootForCertificationTest(t), []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadSourceBundlesForConnectors() error = %v", err)
+	}
+	sources, err := matrixConnectorSourcesForNames(bundles, []string{"postgres"})
+	if err != nil || len(sources) != 1 {
+		t.Fatalf("matrixConnectorSourcesForNames() = %#v, %v; want PostgreSQL source", sources, err)
+	}
+	bundle := *sources[0].bundle
+	transport := bundle.SyncTransport.Clone()
+	transport.Destination.Executor.ID = "not_postgres_managed_target"
+	bundle.SyncTransport = transport
+	source := sources[0]
+	source.bundle = &bundle
+	cell := syncModeCellFor(source, "incremental_dedupe", syncPrimitive{
+		ID:                 "database_write_from_warehouse",
+		IntegrationType:    "database",
+		Capability:         "write",
+		WarehouseDirection: "from_warehouse",
+	}, read, write, cdc, false, nil)
 	if cell.Implemented {
-		t.Fatal("PostgreSQL ErrUnsupportedOperation write stub reported implemented for warehouse output")
+		t.Fatalf("non-PostgreSQL destination executor promoted database write: %#v", cell)
 	}
 }
 

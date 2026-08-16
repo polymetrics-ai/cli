@@ -16,6 +16,8 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -429,6 +431,7 @@ func recordStage(rc *runContext, rep *Report, name string, tier int, run func() 
 	stage := StageResult{
 		Name:       name,
 		Tier:       tier,
+		Status:     stageStatus(passed, errMsg),
 		Passed:     passed,
 		DurationMS: time.Since(start).Milliseconds(),
 		Error:      errMsg,
@@ -436,6 +439,19 @@ func recordStage(rc *runContext, rep *Report, name string, tier int, run func() 
 	}
 	rep.Stages = append(rep.Stages, stage)
 	return stage
+}
+
+func stageStatus(passed bool, errMsg string) string {
+	if passed {
+		return "pass"
+	}
+	if strings.HasPrefix(errMsg, "skipped:") {
+		return "skipped"
+	}
+	if strings.HasPrefix(errMsg, "unexecutable:") {
+		return "unexecutable"
+	}
+	return "fail"
 }
 
 // expectKind returns the expected envelope kind for name, substituting the
@@ -614,6 +630,9 @@ func runFullReadSweep(rc *runContext, rep *Report, readStages []stageFunc) error
 }
 
 func (rc *runContext) fullSweepStreamSpecs() []streamSpec {
+	if spec, ok := rc.dynamicPollingCertificationStreamSpec(); ok {
+		return []streamSpec{spec}
+	}
 	if len(rc.catalogStreamSpecs) > 0 {
 		out := make([]streamSpec, 0, len(rc.catalogStreamSpecs))
 		for _, spec := range rc.catalogStreamSpecs {
@@ -627,6 +646,29 @@ func (rc *runContext) fullSweepStreamSpecs() []streamSpec {
 		}
 	}
 	return []streamSpec{(streamSpec{Name: rc.streamName()}).withDefaults()}
+}
+
+// dynamicPollingCertificationStreamSpec selects a caller-named relation only
+// when its own bundle declares a native-database polling transport. A catalog
+// cannot truthfully invent a universal watermark, so an explicit cursor is
+// required. This is selection glue for an already declared pair, not a
+// generic database execution policy.
+func (rc *runContext) dynamicPollingCertificationStreamSpec() (streamSpec, bool) {
+	if strings.TrimSpace(rc.opts.Stream) == "" || strings.TrimSpace(rc.opts.Config["cursor_field"]) == "" {
+		return streamSpec{}, false
+	}
+	bundle, err := engine.Load(defs.FS, rc.opts.Connector)
+	if err != nil || bundle.PollingWatermark == nil || bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil || bundle.SyncTransport.Destination == nil ||
+		bundle.SyncTransport.Source.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase ||
+		bundle.SyncTransport.Destination.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase {
+		return streamSpec{}, false
+	}
+	for _, spec := range rc.catalogStreamSpecs {
+		if spec.Name == rc.opts.Stream && spec.PrimaryKey != "" {
+			return streamSpec{Name: spec.Name, PrimaryKey: spec.PrimaryKey, CursorField: rc.opts.Config["cursor_field"]}, true
+		}
+	}
+	return streamSpec{}, false
 }
 
 func stageFullSweepConnectionCreate(rc *runContext, rep *Report) error {
@@ -804,6 +846,14 @@ func stageCatalog(rc *runContext, rep *Report) error {
 		rep.Capabilities.Catalog.Streams = count
 		if count < 1 {
 			return false, cliInfoFrom(res), "catalog: expected at least one stream"
+		}
+		if spec, ok := rc.dynamicPollingCertificationStreamSpec(); ok {
+			// PostgreSQL's dynamic catalog exposes primary keys but does not
+			// invent a cursor_fields list. The native polling executor validates
+			// the caller-selected watermark against the live relation before it
+			// reads, so accepting this stream is not an inferred cursor claim.
+			rc.catalogStreamSpecs = []streamSpec{spec}
+			return true, cliInfoFrom(res), ""
 		}
 		if !catalogHasPKAndCursor(streams, stream) {
 			return false, cliInfoFrom(res), fmt.Sprintf("catalog: stream %q missing primary_key/cursor_fields", stream)
@@ -1133,6 +1183,11 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 // --- stage 8: etl_incremental_append (LIVE) + stage 9: resume (LIVE run 2) ---
 
 func stageIncrementalAppend(rc *runContext, rep *Report) error {
+	if _, dynamicPolling := rc.dynamicPollingCertificationStreamSpec(); dynamicPolling {
+		skipStage(rc, rep, "incremental_connection_create", "skipped: incremental watermark is exercised through the declared managed transport pair")
+		skipStage(rc, rep, "etl_incremental_append", "skipped: incremental watermark is exercised through the declared managed transport pair")
+		return nil
+	}
 	if rc.cursorField() == "" {
 		skipStage(rc, rep, "incremental_connection_create", "skipped: stream has no cursor field")
 		skipStage(rc, rep, "etl_incremental_append", "skipped: stream has no cursor field")
@@ -1398,21 +1453,17 @@ func finalizeSecretRedaction(rc *runContext, rep *Report, secretValues []string)
 
 func allStagesPassed(stages []StageResult) bool {
 	for _, s := range stages {
-		if s.Name == "fixture_conformance" {
-			// A documented skip never fails the overall report.
+		if s.Passed {
 			continue
 		}
-		if !s.Passed && (strings.HasPrefix(s.Error, "skipped: ") || strings.HasPrefix(s.Error, "not_live: ")) {
-			// A documented skip (e.g. Options.Write disabled, or no
-			// available write pairing) never fails the overall report,
-			// exactly like fixture_conformance above (design §A "no
-			// credential -> uncertified, never failed" applies analogously
-			// to an unavailable safe write path).
+		if s.Status == "skipped" {
+			// An explicit benign environmental/safety skip (e.g. write testing
+			// disabled or an unavailable safe write pairing) is not a failed
+			// execution. An unexecutable declared capability deliberately uses
+			// Status=unexecutable and therefore falls through to failure.
 			continue
 		}
-		if !s.Passed {
-			return false
-		}
+		return false
 	}
 	return true
 }

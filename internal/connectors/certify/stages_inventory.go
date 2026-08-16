@@ -2,7 +2,9 @@ package certify
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/fs"
 
 	"polymetrics.ai/internal/connectors/defs"
 )
@@ -41,8 +43,17 @@ const (
 )
 
 func declaredWriteActions(connector string) ([]writeActionDecl, error) {
+	if _, err := fs.Stat(defs.FS, connector); err != nil {
+		return nil, fmt.Errorf("read %s bundle: %w", connector, err)
+	}
 	raw, err := defs.FS.ReadFile(connector + "/writes.json")
 	if err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+			// No writes.json means no declared direct-write inventory. Full
+			// certification records its explicit no-inventory skip instead of
+			// treating a source-only connector as a failed write claim.
+			return []writeActionDecl{}, nil
+		}
 		return nil, fmt.Errorf("read %s writes: %w", connector, err)
 	}
 	var file writesFile
