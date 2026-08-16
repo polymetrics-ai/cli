@@ -173,6 +173,12 @@ func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, j
 			if len(args) > 0 && isHelpArg(args[0]) {
 				return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
 			}
+			if topic, ok := legacyLeafManualTopic(spec.name, args); ok {
+				// A leaf manual is a read-only command-dispatch result. Resolve it
+				// before the legacy handler so help never opens a project merely to
+				// describe flags that a new user needs to discover first.
+				return markCobraLegacyError(writeManual(topic, stdout, jsonOut))
+			}
 			if len(args) == 0 && isManualCommand(spec.name) {
 				return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
 			}
@@ -226,6 +232,35 @@ func isRootManualArg(arg string) bool {
 
 func isHelpArg(arg string) bool {
 	return arg == "--help" || arg == "-h" || arg == "help"
+}
+
+// legacyLeafManualTopic identifies leaf manuals that must dispatch without
+// opening a project. Their command handlers require app state for execution,
+// but their flag documentation is static and usable before pm init.
+func legacyLeafManualTopic(command string, args []string) (string, bool) {
+	if len(args) == 0 || !containsHelpFlag(args[1:]) {
+		return "", false
+	}
+	switch command {
+	case "etl":
+		if args[0] == "run" {
+			return "etl", true
+		}
+	case "connections":
+		if args[0] == "create" {
+			return "connections", true
+		}
+	}
+	return "", false
+}
+
+func containsHelpFlag(args []string) bool {
+	for _, arg := range args {
+		if arg == "--help" || arg == "-h" {
+			return true
+		}
+	}
+	return false
 }
 
 func mapCobraErr(err error) error {

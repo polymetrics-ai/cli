@@ -519,9 +519,8 @@ func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Wr
 	}
 	switch args[0] {
 	case "create":
-		if len(args) == 2 && (args[1] == "--help" || args[1] == "-h") {
-			_, err := fmt.Fprint(stdout, connectionsHelp)
-			return err
+		if containsHelpFlag(args[1:]) {
+			return writeManual("connections", stdout, jsonOut)
 		}
 		if len(args) < 2 {
 			return errUsage
@@ -710,9 +709,8 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		}
 		return nil
 	case "run":
-		if len(args) == 2 && (args[1] == "--help" || args[1] == "-h") {
-			_, err := fmt.Fprint(stdout, etlHelp)
-			return err
+		if containsHelpFlag(args[1:]) {
+			return writeManual("etl", stdout, jsonOut)
 		}
 		if approval, transportApproval, strictFlags, err := parseETLRunTransportApproval(args[1:], os.Stdin); err != nil {
 			return err

@@ -8,7 +8,7 @@
 - Delivery: Direct PR from `fm/cli-bounded-ordered-pipeline-throughput-r1`, API-read-back verified against `integration/4015-mvp-flat-r1` after opening.
 - Working branch: `fm/cli-bounded-ordered-pipeline-throughput-r1`.
 - Task: Overlap the PostgreSQL transformed full-overwrite Arrow extraction of batch N+1 with one ordered binary-COPY/apply of batch N. Add only the capability-bounded `--max-in-flight-batches` and connection-scoped `--target-copy-workers` surfaces required by the brief.
-- Verification: TDD red/green tests, targeted race tests, production-binary PostgreSQL correctness tests, before/after quiet-host 5 GB proof, CLI/help/docs parity, and the repository verification gates recorded in `VERIFICATION.md`.
+- Verification: TDD red/green tests, targeted race tests, production-binary PostgreSQL correctness tests, CLI/help/docs parity, and the repository verification gates recorded in `VERIFICATION.md`. The quiet-host 5 GB proof is explicitly pending by captain decision and is not a merge gate.
 
 ## Evidence table
 

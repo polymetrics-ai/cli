@@ -43,4 +43,4 @@ Skills used: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-hand
 
 ## Verification
 
-See the phase `VERIFICATION.md` for exact commands and results. The 5 GB performance proof is deliberately listed there as PENDING, not green. The remaining repository gate results and final API-reported PR base are appended before opening this PR.
+See the phase `VERIFICATION.md` for exact commands and results. After the initial PR verification found a real help-discovery regression, `TestChangedCLICommandHelpIsExecutable` was strengthened to run outside any project and the leaf-help dispatch was moved ahead of `withApp`; the full local gate set and golden transcripts were rerun green. The 5 GB performance proof is deliberately listed there as PENDING, not green. The remaining repository gate results and final API-reported PR base are appended before opening this PR.

@@ -41,6 +41,18 @@ It independently read every two-page overwrite row and the transformed Arrow-COP
 
 ### Package, CLI, and generated-surface checks
 
+#### PR #4190 help-dispatch gap (resolved)
+
+The PR verify run found that `pm etl run --help` and `pm connections create --help` reached `withApp` before their in-handler help guards, so invoking help from a directory without `.polymetrics` failed. This is a user-facing regression, not an environmental failure. The red step was:
+
+```bash
+go test -count=1 -timeout 20m ./internal/cli -run '^TestChangedCLICommandHelpIsExecutable$'
+```
+
+after the test changed into `t.TempDir()`; both subtests failed with `open project at .polymetrics`.
+
+Green moves dispatch for only those known leaf manuals ahead of `withApp`, retains the in-handler guard for direct callers, and makes the test assert zero stderr as well as exit zero and flag text. The full `internal/cli` suite, both golden-transcript passes (one update, one check), all scoped safety packages and race tests, the two tagged PostgreSQL binary regressions, and every individual non-aggregate repository gate below were rerun successfully. Direct built-binary calls from a fresh empty directory also succeeded for both leaf manuals. No project was created to satisfy the test, and the 5 GB performance proof remains deliberately pending.
+
 Green:
 
 ```bash
