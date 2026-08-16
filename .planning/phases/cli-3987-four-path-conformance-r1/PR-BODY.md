@@ -43,4 +43,4 @@ No credentials were read or recorded; no live provider/database write was perfor
 
 ## Review coverage
 
-Pending PR-open automatic Claude review. This stacked PR targets `integration/4015-mvp-flat-r1`; its review coverage record and any dispositions will be updated after GitHub reports the PR state.
+PR [#4195](https://github.com/polymetrics-ai/cli/pull/4195) is open against `integration/4015-mvp-flat-r1`; an API-backed `gh-axi` base/head query returned exactly that PR. The PR-open automatic Claude review route is pending. This stacked PR's coverage record and any dispositions will be updated after GitHub reports review state.

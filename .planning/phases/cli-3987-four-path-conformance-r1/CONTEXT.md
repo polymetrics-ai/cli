@@ -6,6 +6,7 @@
 - Base branch: `integration/4015-mvp-flat-r1`.
 - Merges into: `integration/4015-mvp-flat-r1` → `main`.
 - Delivery: Pull request open against `integration/4015-mvp-flat-r1`, with the stated local verification recorded and its API-reported base read back.
+- Pull request: [#4195](https://github.com/polymetrics-ai/cli/pull/4195) (`test(certification): prove four warehouse flow contracts`). After opening, `gh-axi pr list --state open --base integration/4015-mvp-flat-r1 --head fm/cli-3987-four-path-conformance-r1` returned exactly #4195, verifying GitHub's reported base selection through the required API-backed wrapper query.
 - Working branch: `fm/cli-3987-four-path-conformance-r1`.
 - Task: Add the missing conformance-matrix proof for the four canonical GitHub/PostgreSQL warehouse-mediated directions, preserving existing route behavior and making each direction, current executable mode, and the change-capture restriction independently observable.
 - Verification: Focused conformance tests; `go test -timeout 20m` for changed packages and `internal/cli`; generated-certification and connector-boundary checks; build, docs validation, smoke, lint, website docs generation twice, and the repository’s remaining individual local gates.

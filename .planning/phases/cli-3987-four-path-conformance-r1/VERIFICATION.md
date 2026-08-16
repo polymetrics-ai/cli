@@ -30,5 +30,6 @@ After a passing `connectorgen validate`, the test temporarily changed only the G
 - Inline/manual GSD fallback is recorded because canonical delivery forbids spawning a role executor in this task environment.
 - Manual code review is recorded in `REVIEW.md`; no production behavior or certification roll-up was altered.
 - The deterministic suite covers the transport topology. Existing fresh-binary/live route proofs remain the evidence for external GitHub/PostgreSQL behavior and are not reclassified as a new live certification here.
+- PR [#4195](https://github.com/polymetrics-ai/cli/pull/4195) is open against `integration/4015-mvp-flat-r1`; the API-backed `gh-axi` base/head filter returned exactly that PR after creation.
 
 Status: complete. This record distinguishes deterministic production-composition conformance from existing opt-in fresh-binary/live route proofs and does not promote either to #3978’s final certification.
