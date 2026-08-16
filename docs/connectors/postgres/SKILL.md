@@ -62,9 +62,9 @@ Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL s
 
 ## Polling Watermark
 
-- Status: planned
+- Static declaration status: planned
 - Mechanism: polling_watermark is a bounded polling scan, not CDC or change capture.
-- Eligibility: each mode remains blocked until runtime preflight validates the selected catalog object and destination binding, registered native executors, and immutable conformance evidence.
+- Runtime eligibility: this connector constructs an implemented declaration per selected catalog object. Every requested mode still requires runtime preflight for its destination binding, registered native executors, and immutable conformance evidence.
 - Reason: PostgreSQL binds its cursor type, per-stream cursor column, and unique tie-breaker from the live catalog at run time. The static bundle cannot truthfully name those dynamic fields; the live sync transport constructs and preflights the implemented polling declaration.
 
 ## Commands
