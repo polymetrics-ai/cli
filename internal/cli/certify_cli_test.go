@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -392,6 +393,82 @@ func TestExternalProofFreshChildRefusesIncompleteFullParityHTTPSRun(t *testing.T
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
 }
 
+func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts(t *testing.T) {
+	const token = "cert-canary-external-os-boundary-3989"
+	requestStarted := make(chan struct{}, 1)
+	releaseResponse := make(chan struct{})
+	responseReleased := false
+	release := func() {
+		if !responseReleased {
+			close(releaseResponse)
+			responseReleased = true
+		}
+	}
+	defer release()
+
+	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		username, password, authorized := request.BasicAuth()
+		if !authorized || username != token || password != "" {
+			http.Error(w, "missing prepared authorization", http.StatusUnauthorized)
+			return
+		}
+		select {
+		case requestStarted <- struct{}{}:
+		default:
+		}
+		select {
+		case <-releaseResponse:
+		case <-request.Context().Done():
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, `{"object":"list","data":[{"id":"acct_external_os_3989","code":"proof","email":"proof@example.test","state":"active","created_at":"2026-08-14T00:00:00Z","updated_at":"2026-08-15T00:00:00Z"}],"has_more":false}`)
+	}))
+	defer server.Close()
+
+	trustPath := filepath.Join(t.TempDir(), "external-proof-os-provider.pem")
+	if err := os.WriteFile(trustPath, pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: server.Certificate().Raw}), 0o600); err != nil {
+		t.Fatalf("write provider trust certificate: %v", err)
+	}
+	root := t.TempDir()
+	temporaryRoot := t.TempDir()
+	t.Setenv("SSL_CERT_FILE", trustPath)
+	t.Setenv("SSL_CERT_DIR", "")
+	t.Setenv("TMPDIR", temporaryRoot)
+	t.Setenv("GODEBUG", strings.TrimPrefix(os.Getenv("GODEBUG")+",x509usefallbackroots=1", ","))
+	t.Setenv("PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY", token)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+	defer cancel()
+	result := make(chan error, 1)
+	go func() {
+		var stdout, stderr bytes.Buffer
+		result <- runCertify(ctx, root, []string{
+			"recurly", "--external-proof", "--full-parity", "--json",
+			"--config", "base_url=" + server.URL,
+			"--from-env", "api_key=PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY",
+		}, &stdout, &stderr, true)
+	}()
+
+	select {
+	case <-requestStarted:
+	case <-time.After(90 * time.Second):
+		t.Fatal("fresh external child did not reach the held HTTPS provider request")
+	}
+	assertNoCredentialMaterialInProcessList(t, token)
+	assertNoCredentialMaterialInTemporaryArtifacts(t, root, temporaryRoot, token)
+
+	release()
+	select {
+	case err := <-result:
+		if err != nil {
+			t.Fatalf("fresh external OS-boundary certification: %s", strings.ReplaceAll(err.Error(), token, "<credential>"))
+		}
+	case <-time.After(30 * time.Second):
+		t.Fatal("fresh external child did not complete after the held provider response")
+	}
+	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
+}
+
 // TestExternalProofGitHubSmoke is deliberately opt-in because it reaches the
 // live GitHub HTTPS API with a full-parity credential. Unlike the in-process
 // fixture tests, it exercises the fresh external binary path and audits every
@@ -418,9 +495,43 @@ func TestExternalProofGitHubSmoke(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("run external GitHub proof exit code = %d", code)
 	}
+	var envelope struct {
+		Kind   string         `json:"kind"`
+		Report certify.Report `json:"report"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil {
+		t.Fatalf("parse external GitHub certification report: %v", err)
+	}
+	if envelope.Kind != "ConnectorCertification" || envelope.Report.Connector != "github" || !envelope.Report.Passed {
+		t.Fatalf("external GitHub certification result = kind:%q connector:%q passed:%t, want a passing GitHub report", envelope.Kind, envelope.Report.Connector, envelope.Report.Passed)
+	}
 	proofs, err := filepath.Glob(filepath.Join(root, ".polymetrics", "certifications", "external-proof", "github", "*.json"))
 	if err != nil || len(proofs) != 1 {
 		t.Fatalf("external proof paths = %v, glob error = %v, want one", proofs, err)
+	}
+	rawProof, err := os.ReadFile(proofs[0])
+	if err != nil {
+		t.Fatalf("read external GitHub proof: %v", err)
+	}
+	var proof struct {
+		HTTPExchanges []struct {
+			Response struct {
+				Status int `json:"status"`
+			} `json:"response"`
+		} `json:"http_exchanges"`
+	}
+	if err := json.Unmarshal(rawProof, &proof); err != nil {
+		t.Fatalf("parse external GitHub proof: %v", err)
+	}
+	providerSuccess := false
+	for _, exchange := range proof.HTTPExchanges {
+		if exchange.Response.Status >= http.StatusOK && exchange.Response.Status < http.StatusMultipleChoices {
+			providerSuccess = true
+			break
+		}
+	}
+	if !providerSuccess {
+		t.Fatal("external GitHub proof has no observed successful provider response")
 	}
 	matched, err := certify.VerifyExternalProofTranscript(root, proofs[0], stdout.String(), stderr.String())
 	if err != nil {
@@ -451,6 +562,88 @@ func assertNoCredentialMaterialInTree(t *testing.T, root, token string) {
 		return nil
 	}); err != nil {
 		t.Fatalf("external proof artifact audit: %v", err)
+	}
+}
+
+func assertNoCredentialMaterialInProcessList(t *testing.T, token string) {
+	t.Helper()
+	commandList, err := exec.Command("ps", "-A", "-o", "command=").Output()
+	if err != nil {
+		t.Fatalf("inspect operating-system process list: %v", err)
+	}
+	if bytes.Contains(commandList, []byte(token)) {
+		t.Fatal("raw credential material appeared in the operating-system process list")
+	}
+	if !bytes.Contains(commandList, []byte("connectors certify recurly")) {
+		t.Fatal("operating-system process list did not show the held external certification child")
+	}
+}
+
+func assertNoCredentialMaterialInTemporaryArtifacts(t *testing.T, root, temporaryRoot, token string) {
+	t.Helper()
+	buildPaths, err := filepath.Glob(filepath.Join(temporaryRoot, "pm-certify-external-*"))
+	if err != nil {
+		t.Fatalf("discover external-child temporary artifacts: %v", err)
+	}
+	if len(buildPaths) == 0 {
+		t.Fatal("held external child created no scoped temporary build directory")
+	}
+	for _, path := range []string{root, temporaryRoot} {
+		if err := scanTreeForCredential(path, []byte(token)); err != nil {
+			t.Fatalf("inspect scoped temporary artifacts: %v", err)
+		}
+	}
+}
+
+func scanTreeForCredential(root string, token []byte) error {
+	return filepath.WalkDir(root, func(path string, entry os.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !entry.Type().IsRegular() {
+			return nil
+		}
+		contains, err := fileContainsCredential(path, token)
+		if err != nil {
+			return err
+		}
+		if contains {
+			return errors.New("raw credential material reached a scoped temporary artifact")
+		}
+		return nil
+	})
+}
+
+func fileContainsCredential(path string, token []byte) (bool, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return false, err
+	}
+	defer file.Close()
+
+	const chunkBytes = 64 << 10
+	buffer := make([]byte, chunkBytes)
+	carry := make([]byte, 0, len(token))
+	for {
+		read, readErr := file.Read(buffer)
+		if read > 0 {
+			window := append(append([]byte(nil), carry...), buffer[:read]...)
+			if bytes.Contains(window, token) {
+				return true, nil
+			}
+			carry = carry[:0]
+			if overlap := len(token) - 1; overlap > 0 && len(window) > overlap {
+				carry = append(carry, window[len(window)-overlap:]...)
+			} else if overlap > 0 {
+				carry = append(carry, window...)
+			}
+		}
+		if errors.Is(readErr, io.EOF) {
+			return false, nil
+		}
+		if readErr != nil {
+			return false, readErr
+		}
 	}
 }
 

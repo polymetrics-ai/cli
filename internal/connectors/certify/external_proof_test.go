@@ -2,6 +2,9 @@ package certify_test
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -170,6 +173,125 @@ func TestReadExternalProofRefusesAnUnfingerprintedResponseRegression(t *testing.
 	if _, err := certify.ReadExternalProof(root, proofPath); err == nil || !strings.Contains(err.Error(), "unredacted") {
 		t.Fatalf("ReadExternalProof() error = %v, want an unredacted response rejection", err)
 	}
+}
+
+func TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials(t *testing.T) {
+	const credentialA = "cert-canary-opaque-a-3989"
+	const credentialB = "cert-canary-opaque-b-3989"
+	root := t.TempDir()
+
+	proofPath, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+		Connector:      "sample",
+		RunID:          "opaque-fingerprint-semantics-3989",
+		BinarySHA256:   strings.Repeat("f", 64),
+		Command:        []string{"pm", "connectors", "certify", "sample", "--from-env", "token=PM_CERT_TOKEN"},
+		ExitCode:       0,
+		Passed:         true,
+		FullParity:     true,
+		PreparedValues: []string{credentialA, credentialB},
+		HTTPExchanges: []certify.ObservedHTTPExchange{{
+			Request: certify.ObservedHTTPRequest{
+				Method: http.MethodPost,
+				Target: "https://proof.invalid/opaque",
+				Body: certify.ObservedBody{
+					Bytes:         []byte("opaque-request=" + credentialA + "&alternate=" + credentialB + "&repeat=" + credentialA),
+					OriginalBytes: len("opaque-request=" + credentialA + "&alternate=" + credentialB + "&repeat=" + credentialA),
+					Complete:      true,
+				},
+			},
+			Response: certify.ObservedHTTPResponse{
+				Status: http.StatusOK,
+				Body: certify.ObservedBody{
+					Bytes:         []byte("opaque-response=" + credentialB + "&echo=" + credentialA),
+					OriginalBytes: len("opaque-response=" + credentialB + "&echo=" + credentialA),
+					Complete:      true,
+				},
+			},
+		}},
+		FlowRoundTripReferences: []string{"flow_plan", "flow_preview", "flow_run", "flow_status"},
+	})
+	if err != nil {
+		t.Fatalf("write opaque proof: %v", err)
+	}
+	raw, err := os.ReadFile(proofPath)
+	if err != nil {
+		t.Fatalf("read opaque proof: %v", err)
+	}
+	salt, err := os.ReadFile(filepath.Join(root, ".polymetrics", "certifications", ".external-proof-salt"))
+	if err != nil {
+		t.Fatalf("read root proof salt: %v", err)
+	}
+
+	assertOpaqueExternalProofFingerprintSemantics(t, raw, credentialA, credentialB, salt)
+}
+
+func assertOpaqueExternalProofFingerprintSemantics(t *testing.T, raw []byte, credentialA, credentialB string, salt []byte) {
+	t.Helper()
+	for _, forbidden := range [][]byte{[]byte(credentialA), []byte(credentialB), salt} {
+		if bytes.Contains(raw, forbidden) {
+			t.Fatal("opaque proof retained raw credential material or its repository salt")
+		}
+	}
+
+	var proof struct {
+		CredentialFingerprints []string `json:"credential_fingerprints"`
+		HTTPExchanges          []struct {
+			Request struct {
+				Body struct {
+					Encoding string `json:"encoding"`
+					Value    string `json:"value"`
+				} `json:"body"`
+			} `json:"request"`
+			Response struct {
+				Body struct {
+					Encoding string `json:"encoding"`
+					Value    string `json:"value"`
+				} `json:"body"`
+			} `json:"response"`
+		} `json:"http_exchanges"`
+	}
+	if err := json.Unmarshal(raw, &proof); err != nil {
+		t.Fatalf("parse opaque proof: %v", err)
+	}
+	if len(proof.HTTPExchanges) != 1 {
+		t.Fatalf("opaque proof exchanges = %d, want 1", len(proof.HTTPExchanges))
+	}
+
+	fingerprintA := externalProofTestFingerprint(salt, credentialA)
+	fingerprintB := externalProofTestFingerprint(salt, credentialB)
+	if fingerprintA == fingerprintB {
+		t.Fatal("distinct credential values produced one fingerprint")
+	}
+	fingerprints := make(map[string]bool, len(proof.CredentialFingerprints))
+	for _, fingerprint := range proof.CredentialFingerprints {
+		fingerprints[fingerprint] = true
+	}
+	if len(fingerprints) != 2 || !fingerprints[fingerprintA] || !fingerprints[fingerprintB] {
+		t.Fatalf("credential fingerprints do not retain distinct A and B markers: %v", proof.CredentialFingerprints)
+	}
+
+	exchange := proof.HTTPExchanges[0]
+	if exchange.Request.Body.Encoding != "opaque" || exchange.Response.Body.Encoding != "opaque" {
+		t.Fatalf("opaque body encodings = request:%q response:%q, want opaque/opaque", exchange.Request.Body.Encoding, exchange.Response.Body.Encoding)
+	}
+	if got := strings.Count(exchange.Request.Body.Value, fingerprintA); got != 2 {
+		t.Fatalf("opaque request repeated credential A markers = %d, want 2", got)
+	}
+	if got := strings.Count(exchange.Request.Body.Value, fingerprintB); got != 1 {
+		t.Fatalf("opaque request credential B markers = %d, want 1", got)
+	}
+	if got := strings.Count(exchange.Response.Body.Value, fingerprintA); got != 1 {
+		t.Fatalf("opaque response credential A markers = %d, want 1", got)
+	}
+	if got := strings.Count(exchange.Response.Body.Value, fingerprintB); got != 1 {
+		t.Fatalf("opaque response credential B markers = %d, want 1", got)
+	}
+}
+
+func externalProofTestFingerprint(salt []byte, value string) string {
+	mac := hmac.New(sha256.New, salt)
+	_, _ = mac.Write([]byte(value))
+	return "{{pmcertfp:v1:" + hex.EncodeToString(mac.Sum(nil)) + "}}"
 }
 
 func TestWriteExternalProofRefusesTruncatedBodyWithoutArtifactWrites(t *testing.T) {

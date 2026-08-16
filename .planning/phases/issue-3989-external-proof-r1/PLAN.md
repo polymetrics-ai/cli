@@ -1,6 +1,35 @@
 # #3989 external-binary certification proof plan
 
-## Delivery header
+## Residual plan — live and OS-level proof
+
+### Task Delivery Header
+
+- Issue: Refs #3989 — Certification: add external-binary proof capture and ephemeral fingerprint-first credentials.
+- Base branch: `integration/4015-mvp-flat-r1` at refreshed head `4967fa2a0`.
+- Merges into: `integration/4015-mvp-flat-r1` → `main`.
+- Delivery: Commit the focused residual evidence and GSD records, push `fm/cli-3989-live-proof-residual-r1`, open a Conventional Commit PR to the exact base, then API-read the PR base.
+- Working branch: `fm/cli-3989-live-proof-residual-r1`.
+- Task: Execute the existing opt-in live GitHub proof with its disposable identity and extend only its test evidence for opaque body substitution, OS command-list/temporary paths, and same-run two-credential/root-salt semantics.
+- Verification: `go test -timeout 20m ./internal/connectors/certify`, `go test -timeout 20m ./internal/cli`, the explicitly credentialed live smoke, `go test -timeout 20m ./cmd/connectorgen`, `go vet ./...`, `go build ./cmd/pm`, each `make verify` constituent gate, website docs generation twice, `git diff --check`, and automated review after PR creation.
+
+### Required GSD and skills
+
+- Generated inline prompts: `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` for `issue-3989-external-proof-r1`.
+- Manual fallback: the phase is not registered in the GSD roadmap and the canonical contract forbids role spawning for this single-worker issue. The generated sequence is completed inline in these artifacts.
+- Skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, and `golang-structs-interfaces`.
+
+### Residual TDD slices
+
+1. **Opaque proof evidence:** Red—add the opaque request/response canary assertion and run it before its test support exists. Green—serialize an accepted complete opaque exchange and assert raw-canary absence plus exact fingerprint presence for both bodies. Refactor—keep the original bounded-capture refusal as its own negative test.
+2. **Fingerprint semantics:** Red—add one two-credential proof test expecting repeated A marker equality, B marker difference, and no serialized salt. Green—assert the existing normalized prepared-value boundary produces those facts in one proof. Refactor—retain the separate cross-root replay assertion as its independent salt-rotation contract.
+3. **Real OS boundary:** Red—add a blocked external-child test whose helper is initially absent. Green—hold the freshly built TLS child at a confirmed provider request, then assert the token is absent from real `ps` command output and from the scoped project/external-build temporary paths before child cleanup. Refactor—bound inspection to the current test's paths and stream large files so the scanner itself does not create unbounded test memory.
+4. **Live provider evidence:** Run `TestExternalProofGitHubSmoke` only with the disposable identity named by the brief and retain sanitized command/result metadata (never secret material) in the ledger and verification record. The smoke itself independently asserts observable GitHub-backed proof creation and read-back.
+
+### CLI parity assessment
+
+The residual changes no command, flag, output schema, help string, docs source, website source, generated manual, or completion metadata. `pm connectors`, `pm help connectors`, and `pm connectors certify --help` are nevertheless re-run and recorded as unchanged-surface checks; docs/website edits are explicitly not applicable.
+
+## Original merged-slice header — historical
 
 - Issue: Closes #3989 — Certification: add external-binary proof capture and ephemeral fingerprint-first credentials.
 - Base / head: `integration/4015-mvp-flat-r1` → `fm/cli-3989-external-proof-r1`.

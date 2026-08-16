@@ -1,19 +1,21 @@
 {
   "issue": 3989,
-  "state": "reviewed",
+  "state": "residual-verified",
   "mode": "manual-gsd-inline",
   "manual_fallback_reason": "phase 3989 is absent from the roadmap and this task cannot spawn compatible isolated GSD workers",
   "commands_resolved": [
-    "discuss-phase 3989 --auto",
-    "plan-phase 3989 --tdd --auto",
-    "execute-phase 3989 --interactive",
-    "verify-work 3989 --auto",
-    "code-review 3989 --depth=standard"
+    "scripts/gsd prompt discuss-phase issue-3989-external-proof-r1",
+    "scripts/gsd prompt plan-phase issue-3989-external-proof-r1 --tdd",
+    "scripts/gsd prompt execute-phase issue-3989-external-proof-r1",
+    "scripts/gsd prompt verify-work issue-3989-external-proof-r1",
+    "scripts/gsd prompt code-review issue-3989-external-proof-r1"
   ],
   "verification": {
-    "certify_suite": "passed",
-    "scoped_gates": "passed",
-    "cli_parity": "passed",
-    "live_postgres": "pre-existing #4158 failure recorded out of scope"
+    "residual_tests": "passed targeted opaque, fingerprint, and OS-boundary proofs",
+    "live_github_smoke": "passed against the disposable identity; sanitized report and observed 2xx proof response asserted",
+    "consumer_package": "pending",
+    "repository_gates": "all individual make verify constituents, docs byte-stability, lint, boundary, canon, and release gates passed",
+    "cli_parity": "unchanged surface rechecked: pm connectors, pm help connectors, and pm connectors certify --help passed",
+    "manual_code_review": "passed with no findings; final diff check, internal/cli vet, and diff secret-pattern scan passed"
   }
 }

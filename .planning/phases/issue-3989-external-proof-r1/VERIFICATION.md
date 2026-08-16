@@ -1,5 +1,34 @@
 # #3989 verification checklist
 
+## Residual verification — pending
+
+- [x] The live GitHub smoke runs, not skips, with its disposable identity and records an observable sanitized proof result (`TestExternalProofGitHubSmoke` parses a passing GitHub report and an observed 2xx proof response).
+- [x] Complete opaque request and response bodies carry credential canaries that are substituted before proof serialization (`TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials`).
+- [x] A held real external child is present during an OS command-list scan and scoped temporary-artifact scan, neither of which contains the raw credential (`TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts`).
+- [x] One proof demonstrates same-A equality, distinct-B separation, and absence of the repository salt from output (`TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials`).
+- [x] Focused suites, consumer package, repository gates, generator byte stability, and CLI unchanged-surface checks are recorded with their exact results.
+
+## Residual validation record
+
+| Command | Result |
+| --- | --- |
+| `go test -count=1 -run '^TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials$' ./internal/connectors/certify` | Passed after the planned red compile failure. |
+| `go test -count=1 -run '^TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts$' ./internal/cli` | Passed after the planned red compile failure; rerun after the process-list child-presence assertion. |
+| `go test -timeout 20m -count=1 -v -run '^TestExternalProofGitHubSmoke$' ./internal/cli` | Passed with the designated disposable identity. The run stays credential-free in this record. |
+| `go test -timeout 20m ./internal/connectors/certify` | Passed. |
+| `go test -timeout 20m ./internal/cli` | Passed. |
+| `go test -timeout 20m ./cmd/connectorgen` | Passed (required consumer package). |
+| `make tidy-check`, `make fmt`, `git diff --check`, `go vet ./...`, `go build ./cmd/pm` | Passed. |
+| `make docs-check`; `./pm connectors`; `./pm help connectors`; `./pm connectors certify --help` | Passed; no CLI/docs source change was applicable. |
+| `pnpm --dir website run gen:docs` twice, then `git diff --exit-code -- website/lib/docs.generated.ts` | Passed; generated website docs were byte-stable. |
+| `make smoke-no-build` | Passed. |
+| `make lint`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync` | Passed. |
+| `make github-parity-artifacts-check`, `make connectorgen-certification-matrix`, `make connector-boundary`, `make connector-canon-check`, `make release-workflow-check` | Passed. |
+
+The full `go test -timeout 20m ./...` / aggregate `make verify` commands were intentionally not run as a single per-command-timeout process: repository guidance requires their constituent gates and changed packages plus consumers to run separately because the 550+ connector suite routinely exceeds the execution wrapper window. No requested component gate was skipped.
+
+After rebasing the delivery commit on refreshed base `4967fa2a0`, the focused certify/CLI/consumer tests, `go vet ./...`, `go build ./cmd/pm`, tidy/docs/smoke/lint, website byte-stability, and every remaining individual generator/boundary/canon/release gate above were rerun successfully. The base delta has no change under either external-proof test file, so the authenticated disposable-identity smoke is retained as the already-run live evidence rather than needlessly repeating provider traffic.
+
 - [x] Every acceptance row has an observable state-change assertion: evidence writer, observer, ephemeral-session, relay, and fresh-child tests each assert a positive write/request/fingerprint or an explicit zero-write refusal.
 - [x] External binary is freshly built; evidence records its SHA, exact safe argv, and successful `flow_plan`/`flow_preview`/`flow_run`/`flow_status` references (`TestExternalProofFreshChildCapturesCompleteHTTPSProviderTranscript`).
 - [x] No raw credential appears in captured parent streams, project tree, vault/key, or artifact in the fresh TLS child test; parent relay refuses both streams before writing on a canary match. `--value-stdin` is rewritten to a child-only environment reference with no value in argv.
