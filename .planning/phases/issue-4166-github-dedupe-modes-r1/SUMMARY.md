@@ -38,3 +38,9 @@ intervals.
 The direct-PR live proof used retained private repository
 `karthik-sivadas/pm-truth-github-dedupe-modes-build-r1`, pull request #1. No
 credential material is recorded here.
+
+The CI help test also verified delivery at the CLI surface: the history mode's
+description had been split by the static manual template, so literal consumers
+did not receive the promised sentence. The actual sync-mode entry now emits
+that description intact; CLI manual, golden transcript, and website generation
+were refreshed and repeat generation remained byte-stable.

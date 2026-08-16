@@ -20,3 +20,14 @@ the issue-label destination retains exactly its two declared actions, that the
 replay exemption applies only to the two dedupe contracts, and that source
 version identity excludes run-specific WAL metadata. `make lint`, the scoped
 test suites, generated checks, and `connectorgen boundary` all pass.
+
+## CI help-rendering follow-up
+
+Manual inline `verify-work` and `code-review` follow-up found no actionable
+correctness, security, or scope issue. The static ETL manual, rather than a
+conditional mode list, had split the required history-mode description across
+two output lines. The fix keeps that wording in the actual
+`incremental_dedupe_history` entry, preserves the existing assertion, and
+regenerates only the derived CLI manual and golden transcript. Direct built
+binary help confirms the complete entry; the repeat website generator and the
+full scoped gates pass.

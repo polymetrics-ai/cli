@@ -47,6 +47,15 @@
 
 The raw typed `incremental_dedupe` and `incremental_dedupe_history` values were already accepted by the parser but were omitted from user-facing help while they refused at runtime. Update runtime `pm help etl` and `pm connections`, generated `docs/cli/**`, website ETL docs, and golden help transcripts to describe their declared-pair-only semantics. Keep `incremental_append` unchanged.
 
+### CI gap closure — rendered sync-mode description
+
+`TestETLHelpListsAllSyncModes` found that the history mode was rendered, but the
+manual's pre-wrapped source split its required description after `source`. Keep
+the existing assertion: render the history mode's description as one complete
+mode entry so human help and generated artifacts contain the promised wording
+without relying on whitespace normalization. Regenerate the CLI manuals, golden
+transcripts, and website docs; prove a second website generation is byte-stable.
+
 ## Regenerated certification deltas
 
 The mode-aware generator deliberately changed both allowlisted shards:

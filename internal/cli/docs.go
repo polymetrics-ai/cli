@@ -761,8 +761,7 @@ SYNC MODES
     per declared primary key. It refuses before source I/O for other pairs.
 
   incremental_dedupe_history
-    For an admitted source-to-warehouse transport, retains deduplicated source
-    versions with _valid_from, _valid_to, and _is_current fields. It requires
+    For an admitted source-to-warehouse transport, retains deduplicated source versions with _valid_from, _valid_to, and _is_current fields. It requires
     declared primary-key and cursor fields, and refuses before source I/O for
     other pairs.
 

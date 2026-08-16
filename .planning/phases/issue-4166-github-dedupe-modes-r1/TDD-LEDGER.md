@@ -32,3 +32,8 @@
 - Green: `go test -timeout 20m ./internal/app -run 'TestGithubContractDedupeModesMaterializeCurrentAndHistoryRows|TestGithubPullRequestsETLSupportsLegacyExecutableModes|TestOpenRegistersDefinitionOwnedProductionTransports'` passed after the two declared replay-safe dedupe modes re-emitted their bounded declarative page and let the identity-aware warehouse apply own replay suppression.
 - Green: a fresh built `pm` ran both modes against retained private GitHub PR `karthik-sivadas/pm-truth-github-dedupe-modes-build-r1#1`; independent `pm github pr list` and `pm query run` reads proved one current dedupe row, two closed/open history rows after an update, and no extra row/version after the final replay.
 - Manual GSD fallback: all required adapter prompts were resolved; inline execution is required because this task explicitly runs as one autonomous worker without compatible isolated GSD workers.
+
+### 2026-08-16 — CI help-rendering gap checkpoint
+
+- Red: CI and `go test -timeout 20m ./internal/cli -run '^TestETLHelpListsAllSyncModes$'` failed. The rendered `incremental_dedupe_history` entry was present, but its description was pre-wrapped between `source` and `versions`, so the required user-facing sentence was not emitted intact.
+- Green: kept the assertion unchanged and rendered the complete history description in its actual sync-mode entry. `go test -timeout 20m ./internal/cli -run '^(TestETLHelpListsAllSyncModes|TestGoldenDocsGenerateMatchesTrackedCLIManuals|TestGoldenTranscripts)$'` passed after regenerating `docs/cli/etl.md` and golden transcripts. Two `pnpm --dir website run gen:docs` runs produced the same SHA-256 for `website/lib/docs.generated.ts`.
