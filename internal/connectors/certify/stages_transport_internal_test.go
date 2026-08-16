@@ -91,20 +91,25 @@ func TestCertificationDeclaredTransportPairFailsWhenRegistrationIsMissing(t *tes
 	}
 }
 
-func TestCertificationDeclaredTransportPairSkipsConnectorWithoutAdapter(t *testing.T) {
+func TestCertificationDeclaredTransportPairFailsConnectorWithoutAdapter(t *testing.T) {
 	rc := &runContext{
 		ctx:  context.Background(),
 		opts: Options{Connector: "sample", Full: true},
 		root: t.TempDir(),
 		transportPairProbe: func(context.Context, string) (certificationTransportPairProof, error) {
-			return certificationTransportPairProof{}, nil
+			return certificationTransportPairProof{Declared: true}, nil
 		},
 	}
 	report := Report{Passed: true}
 	if err := stageDeclaredTransportPair(rc, &report); err != nil {
 		t.Fatalf("stageDeclaredTransportPair() = %v", err)
 	}
-	if len(report.Stages) != 1 || report.Stages[0].Passed || !strings.HasPrefix(report.Stages[0].Error, "skipped:") {
-		t.Fatalf("unadapted connector stage = %+v, want explicit skip", report.Stages)
+	report.Passed = allStagesPassed(report.Stages)
+
+	if report.Passed || ExitCodeFor(report) != 2 {
+		t.Fatalf("unadapted connector report = %+v, want terminal certification failure", report)
+	}
+	if len(report.Stages) != 1 || report.Stages[0].Passed || report.Stages[0].Status != "unexecutable" || !strings.HasPrefix(report.Stages[0].Error, "unexecutable:") {
+		t.Fatalf("unadapted connector stage = %+v, want explicit unexecutable result", report.Stages)
 	}
 }

@@ -298,6 +298,20 @@ For connectors with coordinated provider budgets, the JSON report may include
 outcomes so a stopped request is distinguishable from a provider response. They
 never include credentials, rendered requests, or rate-scope subjects.
 
+PostgreSQL's full database proof requires `--write` plus an explicit
+`--stream schema.table` and `cursor_field` configuration. It certifies live
+catalog discovery, one bounded typed relation read, and PostgreSQL's six
+declared polling-to-managed-target modes with independent target read-back. It
+does not claim every relation in a dynamic database or a direct `writes.json`
+action surface.
+
+```bash
+pm connectors certify postgres --full --write --stream public.events \
+  --config host=DB_HOST --config port=5432 --config database=DB_NAME \
+  --config username=DB_USER --config schema=public --config cursor_field=sequence \
+  --from-env password=POSTGRES_PASSWORD --json
+```
+
 ## Extract, query, and write
 
 ```bash

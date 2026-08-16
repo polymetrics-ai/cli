@@ -831,6 +831,22 @@ func TestBundleLoadEmbeddedGitHubCertification(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedPostgresCertification(t *testing.T) {
+	b, err := Load(defs.FS, "postgres")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, postgres): %v", err)
+	}
+	if b.Certification == nil {
+		t.Fatal("PostgreSQL Certification is nil; defs.FS must embed certification.json")
+	}
+	if got := b.Certification.Source.SourceCredentialDefaults["read_limit"]; got != "100" {
+		t.Fatalf("PostgreSQL certification read_limit = %q, want bounded 100", got)
+	}
+	if got := b.Certification.Source.SourceCredentialDefaults["sslmode"]; got != "disabled" {
+		t.Fatalf("PostgreSQL certification sslmode = %q, want disabled for the local container", got)
+	}
+}
+
 func TestBundleLoadParsesGraphQLStreamAndWriteAction(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{

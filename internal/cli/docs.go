@@ -476,6 +476,13 @@ ACTIONS
     waits, and requests stopped before send; the events contain no credentials
     or rendered rate scopes.
 
+    PostgreSQL's full database proof requires --write plus an explicit
+    --stream schema.table and cursor_field configuration. It certifies live
+    catalog discovery, one bounded typed relation read, and PostgreSQL's six
+    declared polling-to-managed-target modes with independent target read-back.
+    It does not claim every relation in a dynamic database or a direct
+    writes.json action surface.
+
 EXAMPLES
   pm connectors
   pm connectors --json
@@ -486,6 +493,7 @@ EXAMPLES
   pm connectors inspect github --json
   pm connectors certify sample --full --json
   pm connectors certify github --external-proof --full-parity --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
+  pm connectors certify postgres --full --write --stream public.events --config host=DB_HOST --config port=5432 --config database=DB_NAME --config username=DB_USER --config schema=public --config cursor_field=sequence --from-env password=POSTGRES_PASSWORD --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem

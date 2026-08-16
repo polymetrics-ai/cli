@@ -645,9 +645,19 @@ func syncModeCellFor(source matrixConnectorSource, mode string, primitive syncPr
 	// Certification mode cells must follow the definition-owned source or
 	// destination transport role that the real preflight will resolve.
 	admitted := syncModeTransportAdmits(source, primitive, synccontract.Mode(mode))
-	base.Declared = capability.Declared && admitted
-	base.Implemented = capability.Implemented && admitted
-	if primitive.Capability == "write" {
+	declaredPair := declaredNativeDatabaseTransportPair(source, synccontract.Mode(mode))
+	if declaredPair {
+		// A declared native-database pair does not use the connector's direct
+		// Write method. Mark implementation only after an accepted exact-mode
+		// live proof: the matrix must not infer an executable destination from a
+		// descriptor or import a connector-native factory into shared tooling.
+		base.Declared = admitted
+		base.Implemented = admitted && len(live) > 0
+	} else {
+		base.Declared = capability.Declared && admitted
+		base.Implemented = capability.Implemented && admitted
+	}
+	if primitive.Capability == "write" && !declaredPair {
 		// A connector Write method is not a checkpointed ETL destination until
 		// it can produce DurableETLDestination acknowledgement. This is why API
 		// destinations and the database write stubs remain red today.
@@ -661,6 +671,27 @@ func syncModeCellFor(source matrixConnectorSource, mode string, primitive syncPr
 	base.LiveTested = len(live) > 0
 	base.LiveEvidence = live
 	return base
+}
+
+// declaredNativeDatabaseTransportPair recognizes only a fully declared source
+// and destination native-database contract. It deliberately makes no claim
+// that such a pair is executable; implementation is admitted above only by a
+// matching exact-mode live evidence record. This lets certification preserve a
+// database connector's definition-owned contract without a connector-name
+// branch or a shared import of native implementation code.
+func declaredNativeDatabaseTransportPair(source matrixConnectorSource, mode synccontract.Mode) bool {
+	if source.integrationType != "database" {
+		return false
+	}
+	descriptor := syncTransportDescriptorFor(source)
+	if descriptor == nil || descriptor.Source == nil || descriptor.Destination == nil ||
+		descriptor.Source.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase ||
+		descriptor.Destination.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase ||
+		!syncTransportContainsMode(descriptor.Source.Modes, mode) ||
+		!syncTransportContainsMode(descriptor.Destination.Modes, mode) {
+		return false
+	}
+	return true
 }
 
 func syncModeTransportAdmits(source matrixConnectorSource, primitive syncPrimitive, mode synccontract.Mode) bool {

@@ -87,6 +87,12 @@ func stageWritePlanPreview(rc *runContext, rep *Report) error {
 	pairings := PairingsFor(rc.opts.Connector)
 	if len(pairings) > 0 {
 		wc.pairing = pairings[0]
+	} else if certificationProfileFor(rc.opts.Connector).spec != nil {
+		// A profile can declare a source/managed-target transport without a
+		// direct writes.json action. Do not substitute the outbox self-test:
+		// it would be unrelated to that connector's declared write surface.
+		skipWriteStages(rc, rep, "skipped: connector has no declared direct write pairing; declared transport writes are certified separately")
+		return nil
 	} else {
 		wc.selfTest = true
 		wc.pairing = WritePairing{
@@ -884,5 +890,15 @@ func skipWriteStages(rc *runContext, rep *Report, reason string) {
 func skipStage(rc *runContext, rep *Report, name, reason string) {
 	recordStage(rc, rep, name, 2, func() (bool, CLIStageInfo, string) {
 		return false, CLIStageInfo{}, reason
+	})
+}
+
+// unexecutableStage records an applicable capability the harness has no
+// executable adapter for. Unlike skipStage, it must make the certificate
+// terminally fail: a connector is not certified when its declared transport
+// cannot be exercised.
+func unexecutableStage(rc *runContext, rep *Report, name, reason string) {
+	recordStage(rc, rep, name, 2, func() (bool, CLIStageInfo, string) {
+		return false, CLIStageInfo{}, "unexecutable: " + reason
 	})
 }

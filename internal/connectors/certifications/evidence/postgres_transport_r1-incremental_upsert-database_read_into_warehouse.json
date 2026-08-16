@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "scope": "sync_mode",
+  "status": "passed",
+  "credential_scope": "full_parity",
+  "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+  "connector": "postgres",
+  "sync_mode": "incremental_upsert",
+  "primitive": "database_read_into_warehouse",
+  "provider": "postgres_container",
+  "executed_at": "2026-08-16T21:06:27Z",
+  "run_id": "postgres_transport_r1-incremental_upsert-database_read_into_warehouse",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
+    "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+    ],
+    "http_exchanges": [],
+    "database_exchanges": [
+      {
+        "operation": "postgres_transport_incremental_upsert_database_read_into_warehouse",
+        "protocol": "postgres_wire",
+        "request": {
+          "statement": "{{pmcertfp:v1:425beda341c0097f5edc6476d30d9d525c034fe2c59b8d31200285ce0d6d798a}}",
+          "parameters": []
+        },
+        "response": {
+          "status": "completed",
+          "body": {
+            "encoding": "json",
+            "value": {
+              "apply_strategy": "{{pmcertfp:v1:c4b11a7fe3bfb51d792d2a3d3d42edeb251b86ea1cfbb002bb61df908e26648b}}",
+              "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
+              "mode": "{{pmcertfp:v1:3b4c2d30f76b53e03dc7ea08f36418bfb583146e4a8d7900a204218964d70021}}",
+              "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
+              "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
+              "target_namespace": "{{pmcertfp:v1:bcacf15a9969b3129a588f66d5e70d63409a1393296804c18102cfc8626eabd7}}",
+              "target_relation": "{{pmcertfp:v1:8e49593a2626d587a997cfcfa8158e4372b20eed8521ab191b123b50d50f335d}}"
+            },
+            "original_bytes": 254,
+            "truncated": false
+          }
+        }
+      }
+    ]
+  }
+}

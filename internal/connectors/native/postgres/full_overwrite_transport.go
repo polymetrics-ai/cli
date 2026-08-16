@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"sort"
 	"strings"
 	"sync"
@@ -222,16 +223,16 @@ func (s *managedTargetFullOverwriteRun) publishShadow(ctx context.Context, recei
 	}
 	tx, err := s.resolved.conn.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
-		return ErrManagedTargetTransportUnavailable
+		return postgresFullOverwriteUnavailable("begin transaction", err)
 	}
 	rollback := func() { _ = tx.Rollback(context.WithoutCancel(ctx)) }
 	if _, err := tx.Exec(ctx, "SET LOCAL synchronous_commit = 'on'"); err != nil {
 		rollback()
-		return ErrManagedTargetTransportUnavailable
+		return postgresFullOverwriteUnavailable("enable synchronous commit", err)
 	}
 	if _, err := tx.Exec(ctx, "CREATE TABLE "+qualifiedShadow+" (LIKE "+qualified+" INCLUDING DEFAULTS INCLUDING IDENTITY INCLUDING GENERATED)"); err != nil {
 		rollback()
-		return ErrManagedTargetTransportUnavailable
+		return postgresFullOverwriteUnavailable("create shadow relation", err)
 	}
 	for _, page := range s.pages {
 		rows := 0
@@ -252,40 +253,50 @@ func (s *managedTargetFullOverwriteRun) publishShadow(ctx context.Context, recei
 		})
 		if err != nil || rows != page.records {
 			rollback()
-			return ErrManagedTargetTransportUnavailable
+			if err != nil {
+				return postgresFullOverwriteUnavailable("stage workset page", err)
+			}
+			return fmt.Errorf("%w: staged workset rows=%d want=%d", ErrManagedTargetTransportUnavailable, rows, page.records)
 		}
 	}
 	if _, err := tx.Exec(ctx, "LOCK TABLE "+qualified+" IN ACCESS EXCLUSIVE MODE"); err != nil {
 		rollback()
-		return ErrManagedTargetTransportUnavailable
+		return postgresFullOverwriteUnavailable("lock target relation", err)
 	}
 	if _, err := tx.Exec(ctx, "TRUNCATE TABLE "+qualified); err != nil {
 		rollback()
-		return ErrManagedTargetTransportUnavailable
+		return postgresFullOverwriteUnavailable("truncate target relation", err)
 	}
 	names, _ := postgresColumnNamesAndPlaceholders(columns, 1)
 	if _, err := tx.Exec(ctx, "INSERT INTO "+qualified+" ("+strings.Join(names, ", ")+") SELECT "+strings.Join(names, ", ")+" FROM "+qualifiedShadow); err != nil {
 		rollback()
-		return ErrManagedTargetTransportUnavailable
+		return postgresFullOverwriteUnavailable("replace target relation", err)
 	}
 	qualifiedFence := postgresQualifiedControlTable(s.control.Target().Namespace(), postgresOrderFenceTable)
 	if _, err := tx.Exec(ctx, "DELETE FROM "+qualifiedFence+" WHERE relation_name = $1", s.control.Target().Relation()); err != nil {
 		rollback()
-		return ErrManagedTargetTransportUnavailable
+		return postgresFullOverwriteUnavailable("clear order fence", err)
 	}
 	receiptTable := postgresQualifiedControlTable(s.control.Target().Namespace(), postgresFullOverwriteReceiptTable)
 	if _, err := tx.Exec(ctx, `INSERT INTO `+receiptTable+` (receipt_id, relation_name, plan_hash, checkpoint_hash, content_hash, records, published_at) VALUES ($1, $2, $3, $4, $5, $6, $7)`, receipt.ID, s.control.Target().Relation(), receipt.PlanHash, receipt.CheckpointHash, receipt.ContentHash, receipt.Records, receipt.PublishedAt); err != nil {
 		rollback()
-		return ErrManagedTargetTransportUnavailable
+		return postgresFullOverwriteUnavailable("record receipt", err)
 	}
 	if _, err := tx.Exec(ctx, "DROP TABLE "+qualifiedShadow); err != nil {
 		rollback()
-		return ErrManagedTargetTransportUnavailable
+		return postgresFullOverwriteUnavailable("drop shadow relation", err)
 	}
 	if err := tx.Commit(ctx); err != nil {
-		return ErrManagedTargetTransportUnavailable
+		return postgresFullOverwriteUnavailable("commit replacement", err)
 	}
 	return nil
+}
+
+// postgresFullOverwriteUnavailable preserves the closed public failure class
+// while carrying the safe database operation that failed. Parameters are
+// always bound, so no record values or credentials enter this error path.
+func postgresFullOverwriteUnavailable(operation string, err error) error {
+	return fmt.Errorf("%w: %s: %v", ErrManagedTargetTransportUnavailable, operation, err)
 }
 
 func postgresFullOverwritePlanHash(control database.ManagedTargetControlRecord, mapping database.MappingContractV1, transformHash string) string {
