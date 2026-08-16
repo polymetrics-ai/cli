@@ -25,11 +25,13 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	return sourceDeclared && destinationDeclared
 }
 
-// shouldRunTransport keeps the closed issue-label walking slice opt-in at the
-// persisted connection boundary. Open installs the exact definition-owned
-// composition so it can be preflighted, but that must not turn every existing
-// JSON ETL connection into a transport run merely because its connector now
-// advertises the closed descriptor.
+// shouldRunTransport keeps the closed issue-label transport opt-in at the
+// persisted connection boundary. GitHub is the only label destination, while
+// its source may be either the retained same-definition GitHub slice or the
+// exact PostgreSQL polling-watermark executor. Open installs the exact
+// definition-owned composition so it can be preflighted, but that must not
+// turn every existing JSON ETL connection into a transport run merely because
+// its connector advertises a closed descriptor.
 //
 // Other externally declared transport pairs retain the normal descriptor-led
 // dispatch. The walking slice participates only when the connection itself
@@ -40,11 +42,7 @@ func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMo
 	sourceDeclarative := isDeclarativeStreamTransportConnector(source)
 	destinationIssueLabel := isIssueLabelTransportConnector(destination)
 	if destinationIssueLabel {
-		// The closed composition is a same-definition source/destination pair.
-		// A one-sided descriptor is an ordinary legacy ETL connection, not a
-		// half-transport route; in particular, it must not divert a historical
-		// declarative source into the warehouse destination transport preflight.
-		if !sourceDeclarative || source.Name() != destination.Name() {
+		if !isIssueLabelTransportSourceConnector(source, destination) {
 			return false
 		}
 	} else if !sourceDeclarative {
@@ -69,11 +67,12 @@ func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMo
 		_, managedTarget := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
 		return managedTarget
 	}
-	if streamName != "issues" {
-		return false
-	}
 	transportConn, err := a.issueLabelTransportConnection(conn.ID)
 	if err != nil {
+		return false
+	}
+	configuredStream, _, err := issueLabelTransportStream(transportConn)
+	if err != nil || streamName != configuredStream {
 		return false
 	}
 	contract, err := a.issueLabelTransportContract(transportConn)
@@ -82,6 +81,17 @@ func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMo
 	}
 	_, err = contract.actionForSyncMode(mode.ContractMode)
 	return err == nil
+}
+
+func isIssueLabelTransportSourceConnector(source, destination connectors.Connector) bool {
+	descriptor, ok := connectors.SourceTransportDescriptorOf(source)
+	if !ok {
+		return false
+	}
+	if descriptor.Executor == declarativeStreamSourceReference {
+		return source.Name() == destination.Name()
+	}
+	return descriptor.Executor == postgresPollingWatermarkSourceReference
 }
 
 func isIssueLabelTransportConnector(connector connectors.Connector) bool {

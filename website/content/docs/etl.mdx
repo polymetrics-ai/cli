@@ -9,7 +9,7 @@ The `pm etl` command group has two lanes:
 |---|---|---|
 | Direct connector operations | `pm etl check`, `pm etl catalog`, `pm etl read` | Preflight and connector development without creating a connection. |
 | Configured syncs | `pm etl run`, `pm etl status` | Production-style extraction from a saved connection into a local table. |
-| Closed GitHub transport | `pm etl transport github-issue-label`, approved `pm etl run` | One fixed issue-to-label transport through durable warehouse reopen and typed cleanup. |
+| Closed GitHub transport | `pm etl transport github-issue-label`, approved `pm etl run` | One fixed two-action GitHub label destination from GitHub issues or PostgreSQL polling-watermark rows, through durable warehouse reopen and typed cleanup. |
 | Closed PostgreSQL transport | `pm etl transport postgres-managed-target`, approved `pm etl run` | A definition-selected PostgreSQL or API source through the durable warehouse into a managed PostgreSQL target. |
 
 Connector capabilities are inspectable through `pm connectors inspect`. Use the advertised streams, cursors, and primary keys before creating a long-running extraction.
@@ -163,10 +163,21 @@ pm etl run --connection my-github --stream issues --runtime --json
 
 ## Closed GitHub issue-label transport
 
-`github-issue-label` is deliberately a closed walking slice, not a generic
-GitHub writer. Its saved connection owns the repository, source issue, target
-issue, label, action, and credential configuration. The command accepts none
-of those provider details as flags.
+`github-issue-label` is deliberately a closed two-action GitHub label
+destination, not a generic writer. Its saved connection owns the repository,
+source selection, target issue, label, action, and credential configuration.
+The source is either the retained GitHub issues walking slice or PostgreSQL's
+declared `postgres_polling_watermark` relation. The command accepts none of
+those provider details as flags.
+
+For a PostgreSQL source, each durable reopened row must provide the two input
+names declared in GitHub's `transport_binding`: a positive integer
+`target_issue` and a non-empty string `label`. `full_append` maps to
+`add_issue_labels`; `incremental_upsert` maps to `set_issue_labels` and
+requires `transport_allow_keyed=true`. The mapped values must equal the
+plan-bound destination configuration. Null, malformed, mismatched, or
+tombstone/delete rows are rejected before GitHub write I/O. This singleton
+destination requires `--batch-size 1`.
 
 Create a plan, preview it in human output, and pass the resulting one-time
 approval token only through standard input to the ordinary ETL run:
@@ -175,16 +186,16 @@ approval token only through standard input to the ordinary ETL run:
 pm etl transport github-issue-label plan --connection transport-demo --json
 pm etl transport github-issue-label preview <forward-plan-id>
 
-pm etl run --connection transport-demo --stream issues --batch-size 1 \
+pm etl run --connection transport-demo --stream <stream> --batch-size 1 \
   --approval-plan <forward-plan-id> --approval-token-stdin \
   --confirm destructive --json
 # Paste the previewed token as the one stdin line, press Return, then EOF.
 ```
 
-The forward run remains the normal closed path: GitHub source read, durable
-connection-owned WAL/DuckDB/Parquet stage, independent reopen, typed label
-mutation and durable acknowledgement, independent provider read-back, then
-checkpoint.
+The forward run remains the normal closed path: GitHub or PostgreSQL source
+read, durable connection-owned WAL/DuckDB/Parquet stage, independent reopen,
+typed label mutation and durable acknowledgement, independent provider
+read-back, then checkpoint.
 The raw token is never accepted in argv, environment variables, files, JSON
 output, or persisted project state.
 
@@ -194,9 +205,9 @@ durable authorization by supplying the same `--approval-plan` and
 or revoked scope is refused before a provider write. Cleanup always remains a
 separate plan with a fresh one-time stdin token.
 
-Source selection and independent provider read-back each inspect only the first
-GitHub issues page. If the configured source or target issue is not present,
-the run fails rather than requesting a second page.
+GitHub source selection and every independent provider read-back inspect only
+the first GitHub issues page. If the configured GitHub source or target issue
+is not present, the run fails rather than requesting a second page.
 
 Cleanup is separately planned and approved; it cannot reuse the forward token:
 

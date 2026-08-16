@@ -41,6 +41,10 @@ var (
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
 		ID:     issueLabelDestinationExecutorID,
 	}
+	postgresPollingWatermarkSourceReference = connectors.TransportExecutorReference{
+		Family: connectors.TransportExecutorFamilyNativeDatabase,
+		ID:     "postgres_polling_watermark",
+	}
 	declarativeStreamSourceEvidence = connectors.ConformanceEvidenceReference{
 		Suite: declarativeStreamSourceEvidenceSuite,
 		RunID: declarativeStreamSourceEvidenceRun,
@@ -190,6 +194,55 @@ type issueLabelTransportAction struct {
 	binding connectors.TransportActionBinding
 }
 
+// IssueLabelTransportRowMappingError is a pre-write refusal for a PostgreSQL
+// row that cannot satisfy the destination definition's closed transport
+// inputs. It carries only the input name and a structural reason, never the
+// row value.
+type IssueLabelTransportRowMappingError struct {
+	Input  string
+	Reason string
+}
+
+func (e *IssueLabelTransportRowMappingError) Error() string {
+	if e == nil {
+		return "issue-label transport row cannot map to the destination action"
+	}
+	if e.Reason == "" {
+		return fmt.Sprintf("issue-label transport row cannot map input %q", e.Input)
+	}
+	return fmt.Sprintf("issue-label transport row cannot map input %q: %s", e.Input, e.Reason)
+}
+
+// IssueLabelTransportUnsupportedActionError identifies an action outside the
+// two definition-owned GitHub label actions. It is deliberately returned
+// before a workset is applied, so an untrusted transport plan cannot turn a
+// malformed action into provider I/O.
+type IssueLabelTransportUnsupportedActionError struct {
+	Action string
+}
+
+func (e *IssueLabelTransportUnsupportedActionError) Error() string {
+	if e == nil || strings.TrimSpace(e.Action) == "" {
+		return "closed issue-label destination received an unsupported action"
+	}
+	return fmt.Sprintf("closed issue-label destination received unsupported action %q", e.Action)
+}
+
+// IssueLabelTransportDeletesUnavailableError refuses a receipt carrying a
+// delete the destination cannot represent. PostgreSQL's polling source
+// declares deletes:not_available, so this guards against a future source or
+// malformed receipt being silently treated as an ordinary label write.
+type IssueLabelTransportDeletesUnavailableError struct {
+	Tombstones int
+}
+
+func (e *IssueLabelTransportDeletesUnavailableError) Error() string {
+	if e == nil || e.Tombstones <= 0 {
+		return "closed issue-label destination does not support deletes"
+	}
+	return fmt.Sprintf("closed issue-label destination does not support %d tombstone delete(s)", e.Tombstones)
+}
+
 type issueLabelTransportContract struct {
 	stream  string
 	apply   issueLabelTransportAction
@@ -225,7 +278,10 @@ func (c issueLabelTransportContract) actionForSyncMode(mode synccontract.Mode) (
 			}
 		}
 	}
-	return issueLabelTransportAction{}, fmt.Errorf("closed issue-label transport has no action for sync mode %q", mode)
+	return issueLabelTransportAction{}, &synccontract.ModeNotExecutableError{
+		Mode:   mode,
+		Reason: "closed issue-label destination has no definition-owned action for this mode",
+	}
 }
 
 func (c issueLabelTransportContract) applyStrategies() ([]connectors.DestinationApplyStrategy, error) {
@@ -401,6 +457,110 @@ func (a issueLabelTransportAction) record(issueNumber int, label string) (connec
 		}
 	}
 	return record, nil
+}
+
+// recordFromPostgresRow maps only the declaration-owned transport input names
+// into the action record. The PostgreSQL relation is not a generic mapping
+// surface: it must expose `target_issue` and `label`, exactly the two inputs
+// declared in GitHub's transport_binding.
+func (a issueLabelTransportAction) recordFromPostgresRow(source connectors.Record) (connectors.Record, error) {
+	if source == nil {
+		return nil, &IssueLabelTransportRowMappingError{Reason: "row is absent"}
+	}
+	var targetIssue int
+	var label string
+	for _, input := range a.binding.Inputs {
+		value, ok := source[input.Input]
+		if !ok || value == nil {
+			return nil, &IssueLabelTransportRowMappingError{Input: input.Input, Reason: "value is null or absent"}
+		}
+		switch input.Input {
+		case connectors.TransportInputTargetIssue:
+			parsed, err := issueLabelTransportPositiveInteger(value)
+			if err != nil {
+				return nil, &IssueLabelTransportRowMappingError{Input: input.Input, Reason: "must be a positive integer"}
+			}
+			targetIssue = parsed
+		case connectors.TransportInputLabel:
+			parsed, ok := value.(string)
+			if !ok || strings.TrimSpace(parsed) == "" {
+				return nil, &IssueLabelTransportRowMappingError{Input: input.Input, Reason: "must be a non-empty string"}
+			}
+			label = strings.TrimSpace(parsed)
+		default:
+			return nil, &IssueLabelTransportRowMappingError{Input: input.Input, Reason: "is not declared for issue-label transport"}
+		}
+	}
+	if targetIssue == 0 || label == "" {
+		return nil, &IssueLabelTransportRowMappingError{Reason: "definition did not provide both target_issue and label"}
+	}
+	return a.record(targetIssue, label)
+}
+
+func issueLabelTransportPositiveInteger(value any) (int, error) {
+	switch number := value.(type) {
+	case int:
+		if number > 0 {
+			return number, nil
+		}
+	case int64:
+		if number > 0 && number <= int64(^uint(0)>>1) {
+			return int(number), nil
+		}
+	case float64:
+		if number > 0 && number == float64(int(number)) {
+			return int(number), nil
+		}
+	case json.Number:
+		parsed, err := number.Int64()
+		if err == nil && parsed > 0 && parsed <= int64(^uint(0)>>1) {
+			return int(parsed), nil
+		}
+	case string:
+		parsed, err := strconv.Atoi(number)
+		if err == nil && parsed > 0 {
+			return parsed, nil
+		}
+	}
+	return 0, fmt.Errorf("not a positive integer")
+}
+
+func (a issueLabelTransportAction) targetAndLabel(record connectors.Record) (int, string, error) {
+	var targetIssue int
+	var label string
+	for _, input := range a.binding.Inputs {
+		value, ok := record[input.Field]
+		if !ok || value == nil {
+			return 0, "", fmt.Errorf("closed issue-label action record has no %s field", input.Input)
+		}
+		switch input.Input {
+		case connectors.TransportInputTargetIssue:
+			parsed, err := issueLabelTransportPositiveInteger(value)
+			if err != nil {
+				return 0, "", err
+			}
+			targetIssue = parsed
+		case connectors.TransportInputLabel:
+			switch values := value.(type) {
+			case []string:
+				if len(values) != 1 || strings.TrimSpace(values[0]) == "" {
+					return 0, "", fmt.Errorf("closed issue-label action record has an invalid labels array")
+				}
+				label = values[0]
+			case string:
+				if strings.TrimSpace(values) == "" {
+					return 0, "", fmt.Errorf("closed issue-label action record has an empty label")
+				}
+				label = values
+			default:
+				return 0, "", fmt.Errorf("closed issue-label action record has an invalid label")
+			}
+		}
+	}
+	if targetIssue == 0 || label == "" {
+		return 0, "", fmt.Errorf("closed issue-label action record is incomplete")
+	}
+	return targetIssue, label, nil
 }
 
 type declarativeStreamSourceExecutor struct {
@@ -611,8 +771,17 @@ func (e *issueLabelDestinationExecutor) PlanDestination(_ context.Context, reque
 	if e == nil || e.connector == nil {
 		return synctransport.DestinationPlan{}, fmt.Errorf("closed issue-label transport destination is unavailable")
 	}
-	if request.Connector == nil || request.Connector.Name() != e.connector.Name() || request.Stream != e.contract.stream || !e.contract.matchesApplyStrategy(request.ApplyStrategy) {
+	if request.Connector == nil || request.Connector.Name() != e.connector.Name() {
 		return synctransport.DestinationPlan{}, fmt.Errorf("closed issue-label destination received an undeclared strategy")
+	}
+	if !e.contract.matchesApplyStrategy(request.ApplyStrategy) {
+		return synctransport.DestinationPlan{}, &IssueLabelTransportUnsupportedActionError{Action: request.ApplyStrategy.Action}
+	}
+	if request.Source == nil || !isIssueLabelTransportSourceConnector(request.Source, e.connector) {
+		return synctransport.DestinationPlan{}, fmt.Errorf("closed issue-label destination received an undeclared source")
+	}
+	if descriptor, ok := connectors.SourceTransportDescriptorOf(request.Source); !ok || (descriptor.Executor == declarativeStreamSourceReference && request.Stream != e.contract.stream) || (descriptor.Executor == postgresPollingWatermarkSourceReference && strings.TrimSpace(request.Stream) == "") {
+		return synctransport.DestinationPlan{}, fmt.Errorf("closed issue-label destination received an undeclared source stream")
 	}
 	if err := issueLabelTransportRepositoryConfig(request.Runtime.Config); err != nil {
 		return synctransport.DestinationPlan{}, err
@@ -631,7 +800,7 @@ func (e *issueLabelDestinationExecutor) ApplyDestination(ctx context.Context, re
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("closed issue-label transport destination is unavailable")
 	}
 	if !e.contract.matchesApplyStrategy(request.Plan.ApplyStrategy) {
-		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("closed issue-label destination received an undeclared apply strategy")
+		return synccontract.DownstreamAcknowledgement{}, &IssueLabelTransportUnsupportedActionError{Action: request.Plan.ApplyStrategy.Action}
 	}
 	if request.Workset.ID == "" || len(request.Workset.Records) != 1 {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("closed issue-label destination requires exactly one reopened issue record")
@@ -643,19 +812,45 @@ func (e *issueLabelDestinationExecutor) ApplyDestination(ctx context.Context, re
 }
 
 func (e *issueLabelDestinationExecutor) ReadBackDestination(ctx context.Context, request synctransport.DestinationReadBackRequest) error {
-	if e == nil || e.connector == nil {
+	if e == nil || e.app == nil || e.connector == nil {
 		return fmt.Errorf("closed issue-label transport destination is unavailable")
 	}
-	if !e.contract.matchesApplyStrategy(request.Plan.ApplyStrategy) || request.Workset.ID == "" {
+	if request.Workset.ID == "" {
 		return fmt.Errorf("closed issue-label destination read-back received an undeclared receipt")
 	}
-	targetIssue, err := issueLabelTransportIssueNumber(request.Runtime.Config, issueLabelTransportTargetIssueConfig)
+	if !e.contract.matchesApplyStrategy(request.Plan.ApplyStrategy) {
+		return &IssueLabelTransportUnsupportedActionError{Action: request.Plan.ApplyStrategy.Action}
+	}
+	action, err := e.contract.actionForSyncMode(request.Plan.ApplyStrategy.Mode)
 	if err != nil {
 		return err
 	}
-	label, err := issueLabelTransportLabel(request.Runtime.Config)
-	if err != nil {
-		return err
+	var targetIssue int
+	var label string
+	if request.Binding.ConnectionID == "" {
+		// Focused legacy executor tests construct a read-back request directly.
+		// Production always supplies the persisted binding and exercises the
+		// reopened-source mapping below.
+		targetIssue, err = issueLabelTransportIssueNumber(request.Runtime.Config, issueLabelTransportTargetIssueConfig)
+		if err == nil {
+			label, err = issueLabelTransportLabel(request.Runtime.Config)
+		}
+		if err != nil {
+			return err
+		}
+	} else {
+		conn, err := e.app.issueLabelTransportConnection(request.Binding.ConnectionID)
+		if err != nil {
+			return err
+		}
+		mappedRecord, err := e.app.issueLabelTransportMappedSourceRecord(conn, action, request.Workset.Records[0])
+		if err != nil {
+			return err
+		}
+		targetIssue, label, err = action.targetAndLabel(mappedRecord)
+		if err != nil {
+			return err
+		}
 	}
 	found := false
 	exact := request.Plan.ApplyStrategy.Mode == synccontract.ModeFullOverwrite || request.Plan.ApplyStrategy.Mode == synccontract.ModeIncrementalUpsert

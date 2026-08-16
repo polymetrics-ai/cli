@@ -592,7 +592,7 @@ SYNOPSIS
   pm etl status <run-id> [--json]
   pm etl transport github-issue-label plan --connection <name> [--json]
   pm etl transport github-issue-label preview <plan-id> [--json]
-  pm etl run --connection <name> --stream issues --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
+  pm etl run --connection <name> --stream <stream> --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
   pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] [--json]
   pm etl transport postgres-managed-target preview <plan-id> [--json]
   pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
@@ -626,15 +626,26 @@ DESCRIPTION
   record after the local ETL completes.
 
 CLOSED GITHUB TRANSPORT
-  The github-issue-label transport is a fixed GitHub issue-to-label walking
-  slice. A saved connection owns the repository, source issue, target issue,
-  label, action, and credential configuration; the command accepts none of
-  those provider details directly.
+  The github-issue-label transport is a fixed two-action GitHub label
+  destination, not a generic writer. Its source is either the retained GitHub
+  issues walking slice or PostgreSQL's declared polling-watermark relation. A
+  saved connection owns the repository, source selection, target issue, label,
+  action, and credential configuration; the command accepts none of those
+  provider details directly.
+
+  PostgreSQL rows use only GitHub's declared transport-binding inputs:
+  target_issue (a positive integer) and label (a non-empty string). full_append
+  selects add_issue_labels; incremental_upsert selects set_issue_labels and
+  requires transport_allow_keyed=true. The row's derived issue and label must
+  equal the plan-bound destination configuration, so values cannot drift after
+  destructive approval. Null, malformed, mismatched, or delete/tombstone rows
+  are refused before GitHub write I/O. Use --batch-size 1 for this singleton
+  destination contract.
 
   Create a closed plan, preview it in human output to obtain an ephemeral
   approval token, then pass that token only as one bounded stdin line to:
 
-    pm etl run --connection <name> --stream issues --batch-size 1 \
+    pm etl run --connection <name> --stream <stream> --batch-size 1 \
       --approval-plan <plan-id> --approval-token-stdin --confirm destructive
 
   The run keeps the source -> durable warehouse -> reopen -> typed GitHub
@@ -646,9 +657,9 @@ CLOSED GITHUB TRANSPORT
   one-time approval. A declared GitHub missing-label DELETE is a successful
   cleanup; replaying approval is refused.
 
-  Source selection and independent read-back each inspect only the first GitHub
-  issues page. The transport fails instead of requesting another page when the
-  configured source or target issue is not there.
+  A GitHub source selection and every independent target read-back inspect only
+  the first GitHub issues page. The transport fails instead of requesting
+  another page when the configured GitHub source or target issue is not there.
 
   Approval tokens are never accepted in argv, environment variables, files,
   JSON output, or persisted project state. Run pm etl transport for the exact
