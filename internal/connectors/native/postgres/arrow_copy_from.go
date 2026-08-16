@@ -16,13 +16,13 @@ var errPostgresArrowCopyValueInvalid = errors.New("PostgreSQL Arrow binary COPY 
 // Go map or struct per output row. pgx.Conn.CopyFrom chooses PostgreSQL's
 // binary COPY protocol; this adapter intentionally has no INSERT fallback.
 type postgresArrowCopyFromSource struct {
-	record arrow.Record
+	record arrow.RecordBatch
 	row    int
 	values []any
 	err    error
 }
 
-func newPostgresArrowCopyFromSource(record arrow.Record) *postgresArrowCopyFromSource {
+func newPostgresArrowCopyFromSource(record arrow.RecordBatch) *postgresArrowCopyFromSource {
 	return &postgresArrowCopyFromSource{record: record, row: -1, values: make([]any, int(record.NumCols()))}
 }
 

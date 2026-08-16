@@ -17,7 +17,7 @@ func TestPostgresArrowCopyFromSourceReusesTypedRowVector(t *testing.T) {
 	builder.Field(1).(*array.StringBuilder).AppendValues([]string{"ONE", "TWO"}, nil)
 	builder.Field(2).(*array.Date32Builder).AppendValues([]arrow.Date32{0, 1}, nil)
 	builder.Field(3).(*array.TimestampBuilder).AppendValues([]arrow.Timestamp{0, arrow.Timestamp((24 * time.Hour).Microseconds())}, nil)
-	record := builder.NewRecord()
+	record := builder.NewRecordBatch()
 	builder.Release()
 	defer record.Release()
 
@@ -45,7 +45,7 @@ func TestPostgresArrowCopyFromSourceRefusesUnsupportedOutputType(t *testing.T) {
 	schema := arrow.NewSchema([]arrow.Field{{Name: "unsupported", Type: arrow.PrimitiveTypes.Float64}}, nil)
 	builder := array.NewRecordBuilder(memory.DefaultAllocator, schema)
 	builder.Field(0).(*array.Float64Builder).Append(1.5)
-	record := builder.NewRecord()
+	record := builder.NewRecordBatch()
 	builder.Release()
 	defer record.Release()
 	source := newPostgresArrowCopyFromSource(record)
@@ -60,7 +60,7 @@ func TestPostgresArrowCopyFromSourceRefusesUnsupportedOutputType(t *testing.T) {
 func TestPostgresArrowCopyFromSourceHandlesZeroRowsAndNulls(t *testing.T) {
 	schema := arrow.NewSchema([]arrow.Field{{Name: "id", Type: arrow.PrimitiveTypes.Int64}}, nil)
 	builder := array.NewRecordBuilder(memory.DefaultAllocator, schema)
-	empty := builder.NewRecord()
+	empty := builder.NewRecordBatch()
 	if newPostgresArrowCopyFromSource(empty).Next() {
 		empty.Release()
 		builder.Release()
@@ -68,7 +68,7 @@ func TestPostgresArrowCopyFromSourceHandlesZeroRowsAndNulls(t *testing.T) {
 	}
 	empty.Release()
 	builder.Field(0).(*array.Int64Builder).AppendNull()
-	nullRecord := builder.NewRecord()
+	nullRecord := builder.NewRecordBatch()
 	builder.Release()
 	defer nullRecord.Release()
 	source := newPostgresArrowCopyFromSource(nullRecord)

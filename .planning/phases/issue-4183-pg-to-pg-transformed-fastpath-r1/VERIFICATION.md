@@ -40,6 +40,12 @@ Red — CodeQL on `585d620e` reports the new Postgres map-capacity arithmetic an
 
 Green — the capacity hint now performs no arithmetic, and the filesystem probe retains its signed block-size rejection and multiplication-overflow clamp while removing only the dead unsigned-negative comparison. The Postgres compiler receives only a valid immutable plan created by the closed parser and its regular-file admission capped at 64 KiB; the native package cannot construct its representation. The bound therefore makes overflow practically unreachable, but the fix does not rely on it. `go test -count=1 -timeout 20m ./internal/connectors/native/postgres ./internal/warehouse`, `go vet ./...`, and full `make test` pass. The existing Postgres plan happy/bad tests and warehouse capacity happy/bad/edge tests retain their observable results. Remote CodeQL is the remaining confirmation. `security/snyk` is intentionally not chased because it fails identically on the base branch.
 
+### Arrow v18.7 lint follow-up
+
+Red — `make verify` on `585d620e` has zero test `--- FAIL:` lines but fails `make lint`: staticcheck `SA1019` reports the Arrow v18.7-deprecated `arrow.Record` and `NewRecord` APIs introduced by the CVE-fixing dependency update.
+
+Green — all eight scoped calls use `arrow.RecordBatch` or `NewRecordBatch`, including the two additional zero-row/null test constructors found by direct source scan. `go test -count=1 -timeout 20m ./internal/connectors/native/postgres` passes, `make lint` exits 0 with `0 issues.`, and full `make test` exits 0. The type/constructor migration preserves existing COPY happy/bad/zero-row-null results and record release lifecycle; no benchmark or behavior changed. Both mandatory command results are appended to the status file before push.
+
 ### Live binary correctness
 
 `POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/cli -run '^TestPMBinaryPostgres(FullOverwriteRetainsEverySourcePage|TransformedFullOverwriteUsesArrowCOPY)$'`

@@ -205,7 +205,7 @@ func (p postgresArrowRangePlan) readArrowRange(ctx context.Context, tx pgx.Tx, a
 	if err := rows.Err(); err != nil {
 		return synctransport.ArrowSourceBatch{}, synccontract.CheckpointPosition{}, false, fmt.Errorf("postgres Arrow range iterate: %w", err)
 	}
-	record := builder.NewRecord()
+	record := builder.NewRecordBatch()
 	candidate, err := postgresArrowRangeCheckpoint(source, state, after, last, count, time.Now().UTC())
 	if err != nil {
 		record.Release()
@@ -342,7 +342,7 @@ func appendPostgresArrowValue(builder array.Builder, logical database.LogicalTyp
 	}
 }
 
-func postgresArrowRecordBytes(record arrow.Record) int64 {
+func postgresArrowRecordBytes(record arrow.RecordBatch) int64 {
 	var total uint64
 	for index := 0; index < int(record.NumCols()); index++ {
 		total += record.Column(index).Data().SizeInBytes()
