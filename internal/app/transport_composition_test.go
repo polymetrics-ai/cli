@@ -267,7 +267,7 @@ func TestOpenPreflightsEveryDeclaredPostgresDestinationMode(t *testing.T) {
 	}
 }
 
-func TestOpenRefusesPostgresUnpairedHistoryModeBeforeExecutorIO(t *testing.T) {
+func TestOpenPostgresHistoryModeResolvesRegisteredExecutors(t *testing.T) {
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
 		t.Fatal(err)
@@ -280,14 +280,23 @@ func TestOpenRefusesPostgresUnpairedHistoryModeBeforeExecutorIO(t *testing.T) {
 	if !ok {
 		t.Fatal("PostgreSQL connector is not registered")
 	}
-	_, err = a.transports.Preflight(synctransport.PreflightRequest{
+	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
 		Source:      postgres,
 		Destination: postgres,
 		Stream:      "snapshot",
 		Mode:        synccontract.ModeIncrementalDedupeHistory,
 	})
-	if got, want := fmt.Sprint(err), `source transport does not support sync mode "incremental_dedupe_history"`; got != want {
-		t.Fatalf("history preflight refusal = %q, want %q before executor I/O", got, want)
+	if err != nil {
+		t.Fatalf("PostgreSQL history preflight = %v", err)
+	}
+	if got, want := resolved.Source.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_polling_watermark"}); got != want {
+		t.Fatalf("history source reference = %+v, want %+v", got, want)
+	}
+	if got, want := resolved.Destination.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_managed_target"}); got != want {
+		t.Fatalf("history destination reference = %+v, want %+v", got, want)
+	}
+	if got, want := resolved.ApplyStrategy, (connectors.DestinationApplyStrategy{Mode: synccontract.ModeIncrementalDedupeHistory, Strategy: connectors.ApplyStrategyDedupeHistory, Action: "managed_incremental_dedupe_history"}); got != want {
+		t.Fatalf("history apply strategy = %+v, want %+v", got, want)
 	}
 }
 
@@ -318,6 +327,7 @@ func TestOpenPostgresTransportDeclarationsAreExactModeIntersection(t *testing.T)
 		synccontract.ModeIncrementalAppend,
 		synccontract.ModeIncrementalUpsert,
 		synccontract.ModeIncrementalDedupe,
+		synccontract.ModeIncrementalDedupeHistory,
 	}
 	if fmt.Sprint(source.Modes) != fmt.Sprint(want) {
 		t.Fatalf("PostgreSQL source modes = %v, want exact reachable intersection %v", source.Modes, want)

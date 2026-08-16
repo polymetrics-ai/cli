@@ -112,6 +112,14 @@ func New() Connector {
 	return Connector{Base: engine.NewBase(b), databaseDefinition: *b.Database}
 }
 
+// managedTargetHistorySourceDefinition supplies the sealed source driver for
+// PostgreSQL's own managed-target history route. It deliberately exposes the
+// embedded typed definition rather than a connector name, so the write-plan
+// boundary remains the authority that validates the admitted route.
+func (c Connector) managedTargetHistorySourceDefinition() database.Definition {
+	return c.databaseDefinition
+}
+
 // Metadata overrides engine.Base's bundle-synthesized Metadata with the
 // legacy-shaped description text, matching the pre-migration
 // connectors.Metadata field-for-field (parity target). Capabilities remain

@@ -4,11 +4,13 @@ import (
 	"context"
 	"errors"
 	"os"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/synctransport"
 )
@@ -48,6 +50,56 @@ func TestManagedTargetTransportDestinationRefusesBeforeSideEffects(t *testing.T)
 		t.Fatalf("expired approval error = %v, want typed expiry refusal", err)
 	}
 	assertManagedTargetTransportDirectoryEmpty(t, root)
+}
+
+func TestManagedTargetHistoryRouteUsesTypedPostgresDefinitions(t *testing.T) {
+	destinationConnector := New()
+	destination := &ManagedTargetTransportDestination{connector: destinationConnector}
+
+	route, err := destination.historyRoute(synccontract.ModeIncrementalDedupeHistory, New())
+	if err != nil {
+		t.Fatalf("historyRoute() error = %v", err)
+	}
+	want := destinationConnector.databaseDefinition.Driver()
+	if route.Source != want || route.Destination != want {
+		t.Fatalf("historyRoute() = %#v, want source and destination %v", route, want)
+	}
+}
+
+func TestManagedTargetHistoryRouteRefusesSourceWithoutTypedDefinition(t *testing.T) {
+	destination := &ManagedTargetTransportDestination{connector: New()}
+
+	_, err := destination.historyRoute(synccontract.ModeIncrementalDedupeHistory, nil)
+	var routeErr *database.DatabaseWriteHistoryRouteError
+	if !errors.As(err, &routeErr) || routeErr.Reason != database.DatabaseWriteHistoryRouteSourceUnsupported {
+		t.Fatalf("historyRoute(nil) error = %T %v, want typed source-route refusal", err, err)
+	}
+}
+
+func TestManagedTargetHistoryWriteInputUsesSourceOwnedCandidatePosition(t *testing.T) {
+	position := synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken("20"), TieBreaker: synccontract.OpaqueToken("1")}
+	input, err := managedTargetDatabaseWriteInput(synctransport.DestinationApplyRequest{
+		Mode: synccontract.ModeIncrementalDedupeHistory,
+		Workset: synctransport.WarehouseWorkset{
+			Records:             []connectors.Record{{"id": int64(1)}, {"id": int64(2)}},
+			CandidateCheckpoint: synccontract.CheckpointEnvelope{Position: position},
+		},
+	}, database.TombstoneEnvelope{})
+	if err != nil {
+		t.Fatalf("managedTargetDatabaseWriteInput() error = %v", err)
+	}
+	for index, record := range input.OrderedRecords() {
+		if !reflect.DeepEqual(record.Position, position) {
+			t.Fatalf("ordered record %d position = %#v, want source candidate %#v", index, record.Position, position)
+		}
+	}
+}
+
+func TestManagedTargetHistoryWriteUsesDeclaredPrimaryKey(t *testing.T) {
+	keys := []string{"tenant", "id"}
+	if got := managedTargetWriteKeys(synccontract.ModeIncrementalDedupeHistory, keys); !reflect.DeepEqual(got, keys) {
+		t.Fatalf("managedTargetWriteKeys(history) = %#v, want %#v", got, keys)
+	}
 }
 
 func TestManagedTargetBaselineWindowIsStableAcrossPageReplay(t *testing.T) {

@@ -39,6 +39,7 @@ func TestPostgresDefinitionDeclaresResumablePollingTransportSource(t *testing.T)
 		synccontract.ModeIncrementalAppend,
 		synccontract.ModeIncrementalUpsert,
 		synccontract.ModeIncrementalDedupe,
+		synccontract.ModeIncrementalDedupeHistory,
 	}; !sameModes(got, want) {
 		t.Fatalf("PostgreSQL source modes = %#v, want %#v", got, want)
 	}
@@ -59,10 +60,11 @@ func TestPostgresDefinitionDeclaresResumablePollingTransportSource(t *testing.T)
 		synccontract.ModeIncrementalAppend,
 		synccontract.ModeIncrementalUpsert,
 		synccontract.ModeIncrementalDedupe,
+		synccontract.ModeIncrementalDedupeHistory,
 	}; !sameModes(got, want) {
 		t.Fatalf("PostgreSQL destination modes = %#v, want %#v", got, want)
 	}
-	for _, forbidden := range []synccontract.Mode{synccontract.ModeIncrementalDedupeHistory, synccontract.ModeChangeCapture} {
+	for _, forbidden := range []synccontract.Mode{synccontract.ModeChangeCapture} {
 		for _, advertised := range destination.Modes {
 			if advertised == forbidden {
 				t.Fatalf("PostgreSQL advertised non-executable destination mode %q", forbidden)
