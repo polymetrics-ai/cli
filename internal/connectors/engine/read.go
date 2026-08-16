@@ -15,6 +15,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/coordination"
 )
 
 // defaultPageSize is used when neither the stream's nor the base pagination
@@ -557,7 +558,11 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 		RateLimitAdmissionTimeout: rateLimitAdmissionTimeoutFor(cfg.ProjectDir),
 	}
 	resolver := newRateLimitResolverWithContext(ctx, b, rateLimitConfigForSelectedAuth(cfg, b.HTTP.Auth, h))
-	authRuntime := &Runtime{baseRequester: requester, rateLimits: resolver}
+	budget := cfg.BudgetCoordinator
+	if budget == nil {
+		budget = coordination.NewRateBudgetCoordinator(nil, coordination.RateBudgetCoordinatorOptions{})
+	}
+	authRuntime := &Runtime{baseRequester: requester, rateLimits: resolver, budget: budget}
 
 	// An empty auth list means the bundle declares no authentication scheme at
 	// all (e.g. a fully public API, or a test double) — selectAuth itself
@@ -575,7 +580,7 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	if err != nil {
 		return nil, err
 	}
-	return &Runtime{Requester: defaultRequester, baseRequester: requester, Bundle: &b, Config: cfg, rateLimits: resolver}, nil
+	return &Runtime{Requester: defaultRequester, baseRequester: requester, Bundle: &b, Config: cfg, rateLimits: resolver, budget: budget}, nil
 }
 
 // NewRuntime builds the bundle-authenticated requester used by a native

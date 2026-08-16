@@ -17,6 +17,7 @@ import (
 	"sync"
 	"time"
 
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/warehouse"
 )
@@ -373,6 +374,10 @@ type RuntimeConfig struct {
 	// the production composition root. They contain no credential material.
 	AuthenticationAdmission AuthenticationAdmission `json:"-"`
 	RateParkingAdmission    RateParkingAdmission    `json:"-"`
+	// BudgetCoordinator owns the opaque lifecycle reservation for a declared
+	// physical request. It receives only declaration-owned policy data and
+	// opaque scopes; it never receives request, response, or credential values.
+	BudgetCoordinator connsdk.BudgetCoordinator `json:"-"`
 }
 
 // PayloadApprovalKey identifies a file field within an approved write batch.

@@ -63,6 +63,32 @@ func (t *githubAppAuthRecordingTransport) RoundTrip(*http.Request) (*http.Respon
 	}, nil
 }
 
+// githubAppBudgetCoordinator records only the declaration-owned batch and
+// response observation needed to prove the lifecycle. It deliberately has no
+// request, header, body, JWT, private-key, or token field.
+type githubAppBudgetCoordinator struct {
+	decision connsdk.AdmissionDecision
+
+	decides  atomic.Int32
+	finishes atomic.Int32
+	batch    connsdk.ReservationBatch
+	lease    connsdk.RateBudgetLease
+	observed connsdk.CompletionObservation
+}
+
+func (c *githubAppBudgetCoordinator) Decide(_ context.Context, batch connsdk.ReservationBatch) (connsdk.AdmissionDecision, error) {
+	c.decides.Add(1)
+	c.batch = batch
+	return c.decision, nil
+}
+
+func (c *githubAppBudgetCoordinator) Finish(_ context.Context, lease connsdk.RateBudgetLease, observation connsdk.CompletionObservation) error {
+	c.finishes.Add(1)
+	c.lease = lease
+	c.observed = observation
+	return nil
+}
+
 func requireSharedGitHubAppBundle(t *testing.T) engine.Bundle {
 	t.Helper()
 	bundle, err := engine.Load(defs.FS, "github")
@@ -94,6 +120,13 @@ func githubAppAuthAdmissionConfig(t *testing.T) connectors.RuntimeConfig {
 		"installation_id": "admission-test-installation",
 	}, map[string]string{"private_key": testPrivateKeyPEM(t)})
 	cfg.CoordinationIdentity = identity
+	return cfg
+}
+
+func githubAppAuthBudgetLifecycleConfig(t *testing.T, coordinator connsdk.BudgetCoordinator) connectors.RuntimeConfig {
+	t.Helper()
+	cfg := githubAppAuthAdmissionConfig(t)
+	cfg.BudgetCoordinator = coordinator
 	return cfg
 }
 
@@ -236,6 +269,92 @@ func TestGitHubAppAuthRateAdmissionDoesNotRetryTokenMint(t *testing.T) {
 	}
 	if got := sends.Load(); got != 1 {
 		t.Fatalf("installation-token POST sends = %d, want 1", got)
+	}
+}
+
+func TestGitHubAppAuthBudgetLifecycleGrantFinishesExactlyOnce(t *testing.T) {
+	var sends atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		sends.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"token":"synthetic-installation-token"}`))
+	}))
+	t.Cleanup(server.Close)
+
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	bundle.HTTP.URL = server.URL
+	coordinator := &githubAppBudgetCoordinator{decision: connsdk.AdmissionDecision{
+		Granted: true,
+		Lease:   connsdk.RateBudgetLease("test-granted-lease"),
+	}}
+	cfg := githubAppAuthBudgetLifecycleConfig(t, coordinator)
+	cfg.Config["base_url"] = server.URL
+
+	if _, err := engine.NewRuntime(context.Background(), bundle, cfg, githubhooks.New()); err != nil {
+		t.Fatalf("NewRuntime() error = %v", err)
+	}
+	if got, want := coordinator.decides.Load(), int32(1); got != want {
+		t.Fatalf("BudgetCoordinator Decide calls = %d, want %d", got, want)
+	}
+	if got, want := coordinator.finishes.Load(), int32(1); got != want {
+		t.Fatalf("BudgetCoordinator Finish calls = %d, want %d", got, want)
+	}
+	if got, want := sends.Load(), int32(1); got != want {
+		t.Fatalf("physical installation-token POST sends = %d, want %d", got, want)
+	}
+	if got, want := coordinator.lease, connsdk.RateBudgetLease("test-granted-lease"); got != want {
+		t.Fatalf("BudgetCoordinator Finish lease = %q, want granted opaque lease", got)
+	}
+	if !coordinator.observed.Attempted {
+		t.Fatal("BudgetCoordinator Finish observation did not mark the granted token send attempted")
+	}
+	if len(coordinator.batch.Policies) == 0 {
+		t.Fatal("BudgetCoordinator Decide batch has no declaration-owned policies")
+	}
+	for _, policy := range coordinator.batch.Policies {
+		if policy.Key.PolicyFingerprint == "" || policy.Key.Scope == "" || len(policy.Budgets) == 0 {
+			t.Fatalf("BudgetCoordinator Decide received incomplete declaration-owned policy: %+v", policy)
+		}
+	}
+}
+
+func TestGitHubAppAuthBudgetLifecycleRefusalDoesNotFinishOrSend(t *testing.T) {
+	var sends atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		sends.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"token":"synthetic-installation-token"}`))
+	}))
+	t.Cleanup(server.Close)
+
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	bundle.HTTP.URL = server.URL
+	coordinator := &githubAppBudgetCoordinator{}
+	cfg := githubAppAuthBudgetLifecycleConfig(t, coordinator)
+	cfg.Config["base_url"] = server.URL
+
+	_, err = engine.NewRuntime(context.Background(), bundle, cfg, githubhooks.New())
+	var refusal *connsdk.RateBudgetRefusalError
+	if !errors.As(err, &refusal) {
+		t.Fatalf("NewRuntime error = %T %v, want typed budget refusal", err, err)
+	}
+	if got, want := refusal.Code, connsdk.RateBudgetRefusalCode("reservation_denied"); got != want {
+		t.Fatalf("budget refusal code = %q, want %q", got, want)
+	}
+	if got, want := coordinator.decides.Load(), int32(1); got != want {
+		t.Fatalf("BudgetCoordinator Decide calls = %d, want %d", got, want)
+	}
+	if got := coordinator.finishes.Load(); got != 0 {
+		t.Fatalf("BudgetCoordinator Finish calls = %d, want 0 when Decide did not grant a lease", got)
+	}
+	if got := sends.Load(); got != 0 {
+		t.Fatalf("physical installation-token POST sends = %d, want 0 after budget refusal", got)
 	}
 }
 
