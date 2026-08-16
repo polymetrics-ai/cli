@@ -1,9 +1,10 @@
 # Plan — Issue 4166 Live Write Certification
 
-**Status:** captain selected option 1. Implement the repository-safe 28-action
-wave now; the remaining 474 reachable actions are separately provisioned and
-scheduled in bounded resumable waves. The 105 control-plane actions remain
-explicitly non-live and make a full-parity claim unavailable.
+**Status:** implement the repository-safe 28-action wave now. The confirmed
+disposable certification identity, Polymetrics-Cert organisation, and
+in-progress Enterprise Cloud trial make the other 579 actions conditionally
+live-testable once their named browser-only credentials/fixtures exist. Until
+then they are concrete `not_live` rows and make a full-parity claim unavailable.
 
 ## Lifecycle and execution mode
 
@@ -44,9 +45,9 @@ waiting for that larger-infrastructure work.
    the exact action name; the intact control passes only after observable
    mutation/read-back.
 5. **Approved infrastructure waves (red/green).** After the captain completes
-   `MANUAL-PROVISIONING.md`, add one infrastructure family per bounded slice;
-   each wave has its own resource guard, cleanup proof, rate budget, and
-   resumability test.
+   `MANUAL-PROVISIONING.md`, add one of the 579 named prerequisite families per
+   bounded slice; each wave has its own resource guard, cleanup proof, rate
+   budget, and resumability test.
 6. **Help/docs/website parity.** Update runtime help, CLI manual, website
    reference, generated docs, and parity tests with the live boundary,
    non-live statuses, resumability, and full-parity preconditions.

@@ -1,29 +1,41 @@
 # Live GitHub Write Certification Scope
 
-## Inventory and classification
+## Revised disposable-identity boundary
 
-The GitHub bundle currently declares **607** write actions. This inventory is
-complete: every `writes.json.actions[]` entry is classified by the ordered
-rules below. A planned invariant test must fail if the action count changes or
-an action matches no rule.
+The earlier classification incorrectly treated the authenticated identity and
+its organisation as a captain-owned personal control plane. The captain has
+now established that the certification identity is disposable, the
+**Polymetrics-Cert** organisation already exists solely for this programme, and
+its GitHub Enterprise Cloud trial is in progress. No category is inherently
+non-live on that boundary.
 
-| Classification | Actions | Exact selector | Why this is the boundary |
+The GitHub bundle declares **607** write actions. The exact, mutually exclusive
+path/action selectors below classify all 607 actions. Every deferred row names
+the concrete missing prerequisite; every action also retains its own
+`writes.json.actions[].path` and `risk` in the eventual report. A future
+classification test must fail if the action count changes or a declaration
+matches no row.
+
+| Status now | Actions | Exact selector | Concrete current blocker |
 | --- | ---: | --- | --- |
-| `safe_repository` | 28 | The named action list below | Each action can change only run-owned state in one private retained repository, has a bounded provider read-back, and can be restored or removed without touching shared account, organisation, or enterprise state. |
-| `dedicated_repository_infrastructure` | 234 | Every other `/repos/{owner}/{repo}/...` action | A private repository alone is not sufficient: these endpoints need a deliberately controlled workflow, runner, webhook receiver, key, branch/PR graph, deployment/security fixture, or settings sandbox. Their risk field in `writes.json` is retained as the per-action reason. |
-| `dedicated_user_infrastructure` | 9 | `/gists/...` | Requires run-owned private Gists and account-scoped cleanup. The retained repository does not isolate Gist state. |
-| `dedicated_organization_infrastructure` | 217 | `/orgs/...`, `/organizations/...`, and `/teams/...` | Requires an independently owned disposable organisation and, depending on the action, members, teams, projects, runners, billing/security features, or a supported plan. Never mutate a shared organisation. |
-| `dedicated_application_infrastructure` | 14 | `/app/...`, `/applications/...`, `/app-manifests/...`, `/installation/...`, and `/agents/...` | Requires a separately registered disposable GitHub App/OAuth application, isolated installation, or coding-agent environment. No shared application or installation is eligible. |
-| `genuinely_untestable` | 105 | `/enterprises/...`, `/user/...`, `/users/...`, `/notifications/...`, and `/credentials/...` | These mutate enterprise-wide policy or the authenticated/named user’s identity, credentials, notification inbox, memberships, keys, packages, Codespaces, social graph, or personal settings. There is no disposable-resource boundary that makes the existing credential safe to mutate. |
+| `repository_wave_ready` | 28 | The named list below | None: one run-owned private repository under the disposable certification identity is enough. Harness implementation, not authority, is the remaining work. |
+| `repository_fixture_pending` | 234 | Every other `/repos/{owner}/{repo}/...` action | The specific run-owned fixture addressed by the endpoint does not yet exist: branch/PR/review graph; no-op Actions workflow/run/runner; webhook receiver/delivery; release asset; deployment/environment; ruleset; security alert/analysis; Codespace; secret/variable; imported repository; or package/repository policy baseline. The runner must create and restore that exact fixture before its action. |
+| `gist_fixture_pending` | 9 | `/gists/...` | A purpose-made private Gist and, where applicable, its comment/fork/star baseline are not yet created. |
+| `org_fixture_and_permission_pending` | 217 | `/orgs/...`, `/organizations/...`, and `/teams/...` | Polymetrics-Cert exists, but the disposable certification credential lacks the required organisation authority (`admin:org` on the classic test PAT) and the named team/project/member/runner/feature fixture. No other organisation is eligible. |
+| `app_or_oauth_pending` | 14 | `/app/...`, `/applications/...`, `/app-manifests/...`, `/installation/...`, and `/agents/...` | The dedicated Polymetrics-Cert GitHub App, its installation/private key, the private OAuth application/client secret, and the isolated coding-agent fixture have not yet been browser-provisioned. |
+| `enterprise_trial_and_token_pending` | 25 | `/enterprises/...` | The existing Enterprise Cloud trial must finish and yield its slug; the disposable certification identity must be an enterprise owner; a classic test PAT with `admin:enterprise` is required for routes GitHub documents as incompatible with fine-grained PATs/App tokens; enterprise team/security/Copilot fixture state must be created only inside that enterprise. |
+| `primary_user_fixture_and_permission_pending` | 49 | `/user/...` | The disposable primary account needs the named user-level fixtures (profile baseline, Codespace, user secret, key, package, migration, project, invite, social/follow target) and the dedicated classic-PAT scopes enumerated in `MANUAL-PROVISIONING.md`. |
+| `secondary_user_fixture_and_permission_pending` | 25 | `/users/{username}/...` | A second disposable account, its verified email, purpose-made credential, and its own package/project/attestation/Copilot-Space fixtures do not yet exist. It is the only permitted `{username}` target. |
+| `notification_token_and_fixture_pending` | 5 | `/notifications/...` | The disposable primary inbox needs a run-owned notification thread **and a classic PAT with `notifications` scope**. GitHub's current endpoint documentation says these writes do not accept fine-grained PATs or App tokens. |
+| `sacrificial_credential_pending` | 1 | `/credentials/revoke` | A separately created, purpose-made sacrificial token has not been supplied through secret injection. It must be revoked last and can never be the runner credential. |
 
-The counts are mutually exclusive and sum to 607. The selector table is an
-action-by-action classification: resolving an action’s declared path selects
-one row, while the 28 named safe actions override the generic repository row.
-The source bundle's own `risk` text remains the specific reason for every
-non-safe action; the eventual report must carry both the action name/path and
-that reason, rather than a generic aggregate label.
+The counts sum to 607. `not_live` remains an honest report outcome when a
+listed prerequisite is absent, but its reason must be the concrete row above
+plus the action's own path/risk—never “no safe boundary.” `--full-parity` must
+therefore refuse to claim success until all applicable rows have completed a
+real mutation, independent read-back, and verified cleanup/restoration.
 
-### Safely executable now: 28 actions
+### Repository wave ready now: 28 actions
 
 `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
 `reopen_issue`, `create_label`, `update_label`, `delete_label`,
@@ -34,89 +46,57 @@ that reason, rather than a generic aggregate label.
 `add_issue_labels`, `remove_issue_label`, `create_ref`, `update_ref`,
 `delete_ref`, and `replace_repo_topics`.
 
-Each needs deterministic fixture state in one uniquely named private
-repository, a production-path mutation, a separate REST read-back, and
-verified restoration or removal. `create_*` actions may use their paired
-cleanup action only as cleanup; cleanup does not count as evidence for the
-primary action without its own mutation/read-back scenario.
+Each needs production-path mutation, separate REST read-back, ownership-tag
+check, and verified cleanup/restoration. A cleanup action does not count as
+primary-action coverage unless it also has its own mutation/read-back scenario.
 
-### Infrastructure not currently available: 474 actions
+### Action-to-fixture precision for the 234 deferred repository routes
 
-- **234 repository-scoped** actions need fixtures that cannot safely be
-  inferred (no-op Actions workflow and disposable runner; a verified webhook
-  sink; non-secret deploy key; controlled branch/PR/review graph; release
-  asset; deployment/environment; security alert; or reversible repository
-  policy). Some are destructive even inside a test repository and must begin
-  from an explicitly created resource plus a restoration proof.
-- **9 Gist** actions need private Gist lifecycle support and a rule forbidding
-  use of pre-existing Gists.
-- **217 organisation/team** actions need a disposable organisation and feature
-  support. Organisation billing, policies, security, runners, and membership
-  operations require separate sub-boundaries rather than one broad admin token.
-- **14 application/install/agent** actions need isolated application
-  registration, keys, installation, and agent environment. The current
-  user-token credential is not evidence that these routes are safe.
+The `repository_fixture_pending` rule is deliberately a fixture lookup, not a
+permission hand-wave. The scenario manifest will select one of these exact
+route families before a write is enabled:
 
-### Genuine non-live residue: 105 actions
-
-Enterprise and user/control-plane endpoints are not candidates for this
-certification credential. They must appear as a distinct `not_live` outcome
-with their path and exact bundle risk, never as `pass`, `live`, or a full-parity
-success condition.
+| Route family | Missing run-owned fixture |
+| --- | --- |
+| `/pulls`, `/branches`, `/merges`, `/stacks`, `/issues/*/dependencies` | Base commit, tagged head branch, pull request, review/comment, and the secondary account as reviewer/collaborator. |
+| `/actions`, `/check-*`, `/statuses`, `/attestations` | No-op workflow file, completed run/job/artifact/check/status and, only where required, an isolated self-hosted runner. |
+| `/hooks`, `/dispatches`, `/pages`, `/deployments`, `/environments` | Controlled HTTPS receiver, tagged hook delivery, dispatch event, deployment/environment and read-back endpoint. |
+| `/contents`, `/git/*`, `/import`, `/forks`, `/generate`, `/transfer` | Disposable source/tree/blob/tag/import/template/fork target; transfer stays inside Polymetrics-Cert. |
+| `/rulesets`, `/branches/*/protection`, `/autolinks`, `/properties`, `/interaction-limits`, `/immutable-releases` | Captured repository-settings baseline and a dedicated branch/ruleset/property fixture so cleanup restores the exact pre-state. |
+| `/code-scanning`, `/dependabot`, `/secret-scanning`, `/dependency-graph`, `/vulnerability-*`, `/security-advisories`, `/code-quality` | Enterprise feature enabled and a deliberately generated test-only alert/analysis/SARIF/custom pattern/advisory fixture. |
+| `/codespaces`, `/agents`, `/secrets`, `/variables`, `/packages` | Disposable Codespace/agent task or encrypted test value/package-version fixture, with values held only in secret injection. |
+| remaining repository paths | The provider object directly named by the path (asset, key, invitation, reaction, subscription, cache, label, policy, or notification) is first created/tagged and its original state captured. |
 
 ## Rate and runtime budget
 
-The safe 28-action set needs roughly 3–5 provider calls per action (fixture
-setup when needed, mutation, independent read-back, cleanup/read-back), or
-about **84–140 requests** and **at least 56 content-generating requests**.
-Run them serially with a one-second inter-mutation floor, budget **5 minutes**
-wall clock for normal API latency and cleanup retries, and no concurrent
-mutations. GitHub’s current REST guidance says to serialize requests and wait
-at least one second between `POST`, `PATCH`, `PUT`, and `DELETE`; its published
-secondary-limit guidance is generally 80 content-generating requests/minute
-and 500/hour, with endpoint-specific limits possible. The runner must honor
-`Retry-After`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset`, otherwise back
-off for at least one minute with bounded exponential retries.
+The 28-action wave remains roughly 84–140 provider calls, with at least 56
+content-generating calls. It runs serially with a one-second mutation floor and
+a five-minute normal budget. GitHub rate-limit headers and `Retry-After` must
+checkpoint and resume rather than restart.
 
-If all 474 infrastructure-gated actions were eventually enabled, even the
-optimistic 3–5 calls/action model is 1,422–2,370 requests and likely exceeds
-the 500 content-generating-requests/hour guidance once setup and cleanup are
-included. That work needs a staged, resumable multi-hour schedule and isolated
-credentials/infrastructure, not a single `--full-parity` invocation.
+The other 579 actions are a staged, multi-hour programme. The prior
+3–5-calls/action lower bound is 1,737–2,895 calls before feature setup; waves
+must be serialized by fixture family and split below GitHub's published
+content-generation guidance. A provider feature that is unavailable after the
+named prerequisite is attempted becomes a concrete `not_live` reason naming
+that feature and action path.
 
 ## Resumability contract
 
-Before any provider mutation, a durable per-action ledger record must contain
-the connector, action, stable scenario id, ownership tag, resource identity
-when known, and state (`planned`, `mutated`, `read_back`, `cleaned`,
-`not_live`). On restart, the runner first read-backs and cleans incomplete
-run-owned resources; it never repeats a create merely because a process
-stopped. A rate-limit wait preserves the checkpoint and resumes the next
-unfinished action. A resource without a verified ownership tag is a terminal
+Before mutation, a durable per-action ledger record holds the connector,
+action, stable scenario id, ownership tag, resource identity when known, and
+state (`planned`, `mutated`, `read_back`, `cleaned`, `not_live`). On restart,
+the runner first reads and cleans incomplete run-owned resources; it never
+repeats a create merely because a process stopped. A rate-limit wait preserves
+the checkpoint. A resource without a verified ownership tag is a terminal
 safety failure, not a cleanup candidate.
 
-## Honest end state without additional infrastructure
+## Current decision record
 
-The defensible live claim is **28/607 safe repository actions executed** with
-read-back, alongside **474 infrastructure-gated** and **105 genuinely
-non-live** outcomes. `prepared_only` is not a passing or live status. A full
-parity proof must either require the provisioned actions for its declared
-surface or refuse to claim full parity while either applicable stage was
-skipped or the report contains a non-live action.
-
-## Decision required before implementation
-
-The captain’s direction is to make the 607-action claim true through execution,
-but the existing private repository can safely cover only 28 actions. Choose
-one of the following before the harness is built:
-
-1. Provision and authorize separately owned disposable organisation, app,
-   installation, Gist, Actions, webhook, deployment/security, and account
-   fixtures, then schedule the 474 infrastructure-gated actions in bounded
-   waves. Enterprise/user/control-plane endpoints remain explicitly non-live.
-2. Authorize the 28-action repository-safe boundary only. Certification then
-   reports every remaining action as a non-pass, non-live classification and
-   `--full-parity` must refuse whole-surface/full-write language.
-
-No option permits writing to a third-party repository or organisation, or
-mutating user/enterprise control-plane state with the existing credential.
+The captain's accepted plan is now **all 607 actions**, beginning with the
+28-action repository wave. The remaining manual/browser prerequisites are one
+consolidated list in `MANUAL-PROVISIONING.md`; they reuse the existing
+disposable identity, Polymetrics-Cert organisation, and in-progress Enterprise
+Cloud trial. No token value, application private key, client secret, or
+sacrificial credential may be recorded in this repository, a command line,
+or a certification artifact.

@@ -39,7 +39,12 @@ func stageWriteSweepAllPairings(rc *runContext, rep *Report) error {
 	}
 
 	for _, item := range inventory {
-		_, alreadyCoveredLive := rep.Capabilities.WriteActions[item.Action]
+		existing, hasExisting := rep.Capabilities.WriteActions[item.Action]
+		// Presence alone is not coverage: an earlier failed, prepared-only, or
+		// not_live row must be overwritten by the action's concrete non-live
+		// classification. Only a completed mutation with independent read-back
+		// and verified cleanup can suppress this sweep stage.
+		alreadyCoveredLive := hasExisting && existing.Result == "pass" && existing.Verify == "read_back"
 		pairing := item.Pairing
 		stageName := fmt.Sprintf("write_sweep_%s", item.Action)
 		recordStage(rc, rep, stageName, 2, func() (bool, CLIStageInfo, string) {
