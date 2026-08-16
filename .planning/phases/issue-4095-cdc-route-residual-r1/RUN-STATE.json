@@ -1,0 +1,11 @@
+{
+  "issue": 4095,
+  "phase": "issue-4095-cdc-route-residual-r1",
+  "state": "planned",
+  "gsd_execution": "inline_manual_single_worker",
+  "base": "integration/4015-mvp-flat-r1",
+  "r3": {
+    "status": "non_executable",
+    "reason": "GitHub destination lacks a CDC source binding and declares deletes unavailable; change_capture is source-only into a connection-owned local warehouse."
+  }
+}
