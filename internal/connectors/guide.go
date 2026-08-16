@@ -128,14 +128,18 @@ func guideWithPollingWatermark(guide ConnectorGuide, connector Connector) Connec
 	}
 	declaration := definition.PollingWatermark
 	lines := []string{
-		"Status: " + string(declaration.Status),
+		"Static declaration status: " + string(declaration.Status),
 		"Mechanism: polling_watermark is a bounded polling scan, not CDC or change capture.",
-		"Eligibility: each mode remains blocked until runtime preflight validates the selected catalog object and destination binding, registered native executors, and immutable conformance evidence.",
+	}
+	dynamic, _ := connector.(DynamicPollingWatermarkProvider)
+	if dynamic != nil && dynamic.HasDynamicPollingWatermark() {
+		lines = append(lines, "Runtime eligibility: this connector constructs an implemented declaration per selected catalog object. Every requested mode still requires runtime preflight for its destination binding, registered native executors, and immutable conformance evidence.")
+	} else {
+		lines = append(lines, "Runtime eligibility: a static declaration alone does not implement a polling mode. Every requested mode requires runtime preflight for its selected catalog object, destination binding, registered native executors, and immutable conformance evidence.")
 	}
 	if declaration.Reason != "" {
 		lines = append(lines, "Reason: "+declaration.Reason)
 	}
-	dynamic, _ := connector.(DynamicPollingWatermarkProvider)
 	if declaration.Status != PollingWatermarkStatusImplemented && (dynamic == nil || !dynamic.HasDynamicPollingWatermark()) {
 		lines = append(lines, "No polling source ordering, checkpoint, snapshot, deletion, or rebootstrap behavior is implemented for this connector while the declaration is non-implemented.")
 	}

@@ -58,3 +58,30 @@ Loaded skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-ha
 - [ ] Generated documentation twice, byte-stability confirmed
 - [ ] Individual applicable `make verify` gates
 - [ ] GSD verify-work and code-review recorded
+
+## Execution evidence
+
+### Runtime observation before source reconciliation
+
+Built `./cmd/pm` and ran it in an isolated fixture project. A PostgreSQL
+`incremental_dedupe` polling connection completed with `records_read: 3`,
+`records_loaded: 3`, and `batch_count: 2`; its second run completed with zero
+read and loaded records, proving the persisted polling checkpoint was used.
+The same binary rejected an unknown cursor with exit `1` and
+`postgres polling cursor field is absent from the selected relation`; no
+`postgres-fixture-missing-cursor:public.users` checkpoint was written.
+
+The implementation choice is **correct the claim, not remove the capability**.
+The executable dynamic PostgreSQL polling provider was already present and the
+binary proved it. The divergent text was the broad assertion that every
+`planned` declaration was non-executable, even though a planned *static*
+descriptor can be a placeholder for an implemented per-catalog declaration.
+
+### TDD ledger
+
+- **Red:** `go test -timeout 20m ./internal/cli -run '^(TestInspectPostgresKeepsStaticPollingWatermarkPlannedWhileRuntimeBindsItPerStream|TestPollingHelpDistinguishesStaticDeclarationsFromDynamicRuntimeEligibility)$' -count=1` failed: the manual omitted `Static declaration status` and global help denied dynamically constructed declarations.
+- **Green:** The same focused command passed after the guide labels static status, the runtime help scopes non-implementation to the static declaration alone, and website source docs carry the same rule.
+- **Refactor/generation:** `go run ./cmd/pm docs generate --dir docs/cli` regenerated CLI and connector documents; `pnpm --dir website run gen:docs` regenerated website input output. Each was run twice with identical post-generation diff hashes.
+- **Happy:** `TestPMBinaryExecutesPostgresFixturePollingResume` asserts the compiled binary emits the 3-record/3-loaded, then 0-record/0-loaded results.
+- **Bad:** `TestPostgresPollingTransportRefusesMissingPerStreamCursorBeforeIO` asserts the typed `ErrPollingCursorFieldRequired` and zero I/O; `TestPMBinaryRefusesPostgresFixturePollingUnknownStreamCursorBeforePageRead` asserts the surfaced missing-column refusal and no page/checkpoint state.
+- **Edge:** `TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO` checks unsafe declaration, stale-evidence, hard-delete, and incompatible-apply rejection before source or apply activity.

@@ -158,6 +158,12 @@ func TestInspectPostgresKeepsStaticPollingWatermarkPlannedWhileRuntimeBindsItPer
 	if !bytes.Contains(stdout.Bytes(), []byte("native_database/postgres_polling_watermark")) {
 		t.Fatalf("postgres manual omitted the production polling executor: %s", stdout.String())
 	}
+	if !bytes.Contains(stdout.Bytes(), []byte("Static declaration status: planned")) {
+		t.Fatalf("postgres manual did not scope its planned polling status to static metadata: %s", stdout.String())
+	}
+	if !bytes.Contains(stdout.Bytes(), []byte("constructs an implemented declaration per selected catalog object")) {
+		t.Fatalf("postgres manual did not disclose its dynamic executable declaration: %s", stdout.String())
+	}
 
 	stdout.Reset()
 	stderr.Reset()
@@ -186,6 +192,23 @@ func TestInspectPostgresKeepsStaticPollingWatermarkPlannedWhileRuntimeBindsItPer
 		return
 	}
 	t.Fatalf("PostgreSQL missing from the CDC catalog: %s", stdout.String())
+}
+
+func TestPollingHelpDistinguishesStaticDeclarationsFromDynamicRuntimeEligibility(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"connectors"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(connectors) code = %d stderr = %s", code, stderr.String())
+	}
+	if bytes.Contains(stdout.Bytes(), []byte("A planned, unsupported, or absent declaration\n  does not implement a polling mode.")) {
+		t.Fatalf("connectors help denies dynamically constructed polling declarations: %s", stdout.String())
+	}
+	if !bytes.Contains(stdout.Bytes(), []byte("declaration alone does not implement a polling mode")) {
+		t.Fatalf("connectors help omitted static declaration scope: %s", stdout.String())
+	}
+	if !bytes.Contains(stdout.Bytes(), []byte("constructs an implemented declaration per selected catalog object")) {
+		t.Fatalf("connectors help omitted dynamic runtime eligibility: %s", stdout.String())
+	}
 }
 
 func TestPostgresNativeAPISurfaceHasNoFabricatedRESTEndpoints(t *testing.T) {

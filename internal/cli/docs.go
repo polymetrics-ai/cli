@@ -331,8 +331,10 @@ DESCRIPTION
   CDC capability. A polling mode is executable only when runtime preflight
   accepts the specific connector, discovered catalog object, and destination
   binding after checking the declared native source and apply executors plus
-  immutable conformance evidence. A planned, unsupported, or absent declaration
-  does not implement a polling mode.
+  immutable conformance evidence. A planned, unsupported, or absent static
+  declaration alone does not implement a polling mode. A connector that
+  constructs an implemented declaration per selected catalog object can become
+  eligible only after the same runtime preflight succeeds.
 
   An admitted source uses declared keyset ordering: a watermark and unique
   tie-breaker are checkpointed only after durable downstream acknowledgement.

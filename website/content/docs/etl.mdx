@@ -113,8 +113,11 @@ source identity mismatch, snapshot expiration, and retention failures require
 an explicit rebootstrap.
 
 Use `pm connectors inspect <name> --json` and `pm connectors catalog --json`
-to see a connector's declared polling-watermark status. A planned, unsupported,
-or absent declaration is not an executable polling mode.
+to see a connector's static polling-watermark declaration status, not
+object-and-destination eligibility. A planned, unsupported, or absent static
+declaration alone is not an executable polling mode. A connector that constructs
+an implemented declaration per selected catalog object can become eligible only
+after the same runtime preflight succeeds.
 
 ## Running an extraction
 
