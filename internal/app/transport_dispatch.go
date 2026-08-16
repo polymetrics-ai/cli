@@ -260,13 +260,13 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		WarehouseElapsedNanos:    transportResult.StageElapsed.Nanoseconds(),
 		PostgreSQLElapsedNanos:   transportResult.ApplyElapsed.Nanoseconds(),
 	}
-	if err != nil {
-		return etlExecutionResult{
-			RecordsRead: transportResult.RecordsRead, RecordsLoaded: transportResult.RecordsApplied,
-			BatchCount: transportResult.Pages, TransportPhaseMeasurement: transportMeasurement,
-		}, err
-	}
 	if committed == nil || committed.CommittedAt == nil {
+		if err != nil {
+			return etlExecutionResult{
+				RecordsRead: transportResult.RecordsRead, RecordsLoaded: transportResult.RecordsApplied,
+				BatchCount: transportResult.Pages, TransportPhaseMeasurement: transportMeasurement,
+			}, err
+		}
 		if transportResult.Pages == 0 && transportResult.RecordsRead == 0 && transportResult.RecordsApplied == 0 {
 			if requiresManagedTargetApproval {
 				if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
@@ -309,6 +309,9 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		},
 	}
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+	if err != nil {
+		return result, err
+	}
 	if requiresManagedTargetApproval {
 		if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
 			return result, err
