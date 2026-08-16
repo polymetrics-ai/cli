@@ -44,6 +44,11 @@ type writeContext struct {
 	pairing WritePairing
 	tag     string
 	runID8  string
+	// resourceID is the stable, credential-free ownership handle checkpointed
+	// before mutation and carried through read-back/cleanup. The current
+	// pairing protocol uses the tag-addressable entity shape; richer scenarios
+	// may replace it with a provider-assigned handle after their first read.
+	resourceID string
 
 	planID        string
 	approvalToken string
@@ -93,6 +98,7 @@ func stageWritePlanPreview(rc *runContext, rep *Report) error {
 		}
 	}
 	wc.tag = NewTag(rc.opts.Connector, wc.runID8)
+	wc.resourceID = wc.pairing.VerifyStream + ":" + wc.tag
 
 	ledger, err := NewLedger(rc.root)
 	if err != nil {
@@ -315,9 +321,11 @@ func stageWriteCreate(rc *runContext, rep *Report) error {
 	}
 	if err := wc.ledger.RecordPlanned(LedgerEntry{
 		Action:     wc.pairing.Create,
+		Scenario:   "write_pairing/" + wc.pairing.Create,
 		Tag:        wc.tag,
 		Connector:  rc.opts.Connector,
 		EntityHint: entityHint,
+		ResourceID: wc.resourceID,
 	}); err != nil {
 		recordStage(rc, rep, "write_create", 2, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, fmt.Sprintf("write_create: write-ahead ledger record: %v", err)
@@ -343,6 +351,13 @@ func stageWriteCreate(rc *runContext, rep *Report) error {
 		return true, cliInfoFrom(res), ""
 	})
 	wc.createPassed = stage.Passed
+	if stage.Passed {
+		if err := wc.ledger.RecordMutated(wc.tag, wc.resourceID); err != nil {
+			recordStage(rc, rep, "write_create_ledger", tierFor(wc), func() (bool, CLIStageInfo, string) {
+				return false, CLIStageInfo{}, fmt.Sprintf("write_create: record mutation in ledger: %v", err)
+			})
+		}
+	}
 
 	result := "pass"
 	reason := ""
@@ -380,12 +395,10 @@ func stageWriteVerify(rc *runContext, rep *Report) error {
 				return false, CLIStageInfo{}, fmt.Sprintf("write_verify: read outbox records: %v", err)
 			}
 			if !found {
-				// design §A stage 14: "else unverified warning" — a
-				// missing read-back is a warning, not a hard stage
-				// failure, since some connectors/backends have no
-				// reliable read-your-write guarantee.
-				markWriteActionUnverified(rep, wc.pairing.Create, "write_verify: tag not found in outbox read-back")
-				return true, CLIStageInfo{}, ""
+				return false, CLIStageInfo{}, "write_verify: tag not found in outbox read-back"
+			}
+			if err := wc.ledger.RecordReadBack(wc.tag, wc.resourceID); err != nil {
+				return false, CLIStageInfo{}, fmt.Sprintf("write_verify: record read-back in ledger: %v", err)
 			}
 			return true, CLIStageInfo{}, ""
 		})
@@ -416,23 +429,14 @@ func stageWriteVerify(rc *runContext, rep *Report) error {
 			return false, cliInfoFrom(res), fmt.Sprintf("write_verify: %v", ferr)
 		}
 		if !found {
-			markWriteActionUnverified(rep, wc.pairing.Create, "write_verify: tag not found in live read-back of "+wc.pairing.VerifyStream)
+			return false, cliInfoFrom(res), "write_verify: tag not found in live read-back of " + wc.pairing.VerifyStream
+		}
+		if err := wc.ledger.RecordReadBack(wc.tag, wc.resourceID); err != nil {
+			return false, cliInfoFrom(res), fmt.Sprintf("write_verify: record read-back in ledger: %v", err)
 		}
 		return true, cliInfoFrom(res), ""
 	})
 	return nil
-}
-
-func markWriteActionUnverified(rep *Report, action, reason string) {
-	if rep.Capabilities.WriteActions == nil {
-		return
-	}
-	entry := rep.Capabilities.WriteActions[action]
-	entry.Verify = "unverified"
-	if entry.Reason == "" {
-		entry.Reason = reason
-	}
-	rep.Capabilities.WriteActions[action] = entry
 }
 
 // outboxRecordTagPresent reads the outbox table stageWritePlanPreviewSelfTest
@@ -639,13 +643,6 @@ func stageWriteCleanupSelfTest(rc *runContext, rep *Report, wc *writeContext) bo
 		return passed, cliInfoFrom(runRes), errMsg
 	})
 
-	if stage.Passed {
-		if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
-			recordStage(rc, rep, "write_cleanup_ledger", 1, func() (bool, CLIStageInfo, string) {
-				return false, CLIStageInfo{}, fmt.Sprintf("write_cleanup: record cleaned in ledger: %v", err)
-			})
-		}
-	}
 	return stage.Passed
 }
 
@@ -703,13 +700,6 @@ func stageWriteCleanupLive(rc *runContext, rep *Report, wc *writeContext) bool {
 		return passed, cliInfoFrom(runRes), errMsg
 	})
 
-	if stage.Passed {
-		if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
-			recordStage(rc, rep, "write_cleanup_ledger", 2, func() (bool, CLIStageInfo, string) {
-				return false, CLIStageInfo{}, fmt.Sprintf("write_cleanup: record cleaned in ledger: %v", err)
-			})
-		}
-	}
 	return stage.Passed
 }
 
@@ -765,6 +755,12 @@ func stageCleanupVerify(rc *runContext, rep *Report) error {
 		recordLeak(rep, wc, "cleanup_verify: entity still present after cleanup")
 		return nil
 	}
+	if err := wc.ledger.RecordCleaned(wc.tag); err != nil {
+		recordStage(rc, rep, "cleanup_verify_ledger", tierFor(wc), func() (bool, CLIStageInfo, string) {
+			return false, CLIStageInfo{}, fmt.Sprintf("cleanup_verify: record cleaned in ledger: %v", err)
+		})
+		return nil
+	}
 
 	if entry, ok := rep.Capabilities.WriteActions[wc.pairing.Create]; ok {
 		entry.Result = "pass"
@@ -772,6 +768,15 @@ func stageCleanupVerify(rc *runContext, rep *Report) error {
 			entry.Verify = "read_back"
 		}
 		rep.Capabilities.WriteActions[wc.pairing.Create] = entry
+	}
+	if rep.Capabilities.WriteActions == nil {
+		rep.Capabilities.WriteActions = map[string]WriteActionResult{}
+	}
+	rep.Capabilities.WriteActions[wc.pairing.Cleanup] = WriteActionResult{
+		Result: "pass",
+		Verify: "read_back",
+		Tag:    wc.tag,
+		Reason: "cleanup mutation independently verified the tagged resource is absent",
 	}
 	return nil
 }

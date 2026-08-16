@@ -77,6 +77,46 @@ func TestLedgerRecordCleanedMarksEntry(t *testing.T) {
 	}
 }
 
+func TestLedgerPersistsScenarioMutationReadBackAndCleanupState(t *testing.T) {
+	dir := t.TempDir()
+	ledger, err := certify.NewLedger(dir)
+	if err != nil {
+		t.Fatalf("NewLedger() error = %v", err)
+	}
+	const tag = "pm-cert-github-scenario01-1751450000"
+	if err := ledger.RecordPlanned(certify.LedgerEntry{
+		Action:     "update_issue",
+		Scenario:   "github_repository_safe_update_issue",
+		Tag:        tag,
+		Connector:  "github",
+		EntityHint: "issue",
+		ResourceID: "issue:42",
+	}); err != nil {
+		t.Fatalf("RecordPlanned() error = %v", err)
+	}
+	if err := ledger.RecordMutated(tag, "issue:42"); err != nil {
+		t.Fatalf("RecordMutated() error = %v", err)
+	}
+	if err := ledger.RecordReadBack(tag, "issue:42"); err != nil {
+		t.Fatalf("RecordReadBack() error = %v", err)
+	}
+	if err := ledger.RecordCleaned(tag); err != nil {
+		t.Fatalf("RecordCleaned() error = %v", err)
+	}
+
+	entries, err := certify.LoadLedger(dir)
+	if err != nil {
+		t.Fatalf("LoadLedger() error = %v", err)
+	}
+	status, ok := entries.StatusFor(tag)
+	if !ok {
+		t.Fatalf("StatusFor(%q) = absent", tag)
+	}
+	if status.Scenario != "github_repository_safe_update_issue" || status.ResourceID != "issue:42" || status.State != "cleaned" || !status.ReadBack || !status.Cleaned {
+		t.Fatalf("ledger status = %+v, want scenario/resource/mutated-readback-cleaned state", status)
+	}
+}
+
 // TestLoadLedgerUncleanedEntries proves the sweeper's core query: entries
 // with a planned_at but no cleaned_at are the ones that need attention
 // (design §C "Orphan sweeper: ledger entries without cleaned_at").

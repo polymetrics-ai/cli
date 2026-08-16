@@ -23,22 +23,40 @@ import (
 // "certify-ledger.jsonl").
 const ledgerFileName = "certify-ledger.jsonl"
 
+const (
+	ledgerStatePlanned  = "planned"
+	ledgerStateMutated  = "mutated"
+	ledgerStateReadBack = "read_back"
+	ledgerStateCleaned  = "cleaned"
+	ledgerStateNotLive  = "not_live"
+)
+
 // LedgerEntry is one line of certify-ledger.jsonl. A "planned" entry has
 // PlannedAt set and CleanedAt zero; a "cleaned" entry (recorded by
 // RecordCleaned) carries only Tag and CleanedAt — LoadLedger folds the two
 // together per-tag via LedgerEntries.StatusFor.
 type LedgerEntry struct {
 	Action     string `json:"action,omitempty"`
+	Scenario   string `json:"scenario,omitempty"`
 	Tag        string `json:"tag"`
 	Connector  string `json:"connector,omitempty"`
 	EntityHint string `json:"entity_hint,omitempty"`
+	// ResourceID is a provider-safe ownership handle (for example issue:42),
+	// never a credential. It is known before a mutation where the scenario
+	// addresses an existing resource, and is filled at mutation/read-back time
+	// for a provider-assigned identity.
+	ResourceID string `json:"resource_id,omitempty"`
+	// State is the durable lifecycle checkpoint. Older ledgers omitted it; the
+	// loader derives planned/cleaned from their timestamps for compatibility.
+	State string `json:"state,omitempty"`
 	// PlannedAt/CleanedAt use "omitzero" (not "omitempty": time.Time is a
 	// struct, so encoding/json's omitempty never treats it as empty) so a
 	// planned-only entry never serializes a spurious zero-value
 	// "cleaned_at" field a naive reader could mistake for an actual
 	// timestamp (TestLedgerRecordPlannedWritesBeforeCreate).
-	PlannedAt time.Time `json:"planned_at,omitzero"`
-	CleanedAt time.Time `json:"cleaned_at,omitzero"`
+	PlannedAt  time.Time `json:"planned_at,omitzero"`
+	CleanedAt  time.Time `json:"cleaned_at,omitzero"`
+	ObservedAt time.Time `json:"observed_at,omitzero"`
 }
 
 // Ledger is a write-ahead JSONL ledger rooted at a certify ephemeral workdir
@@ -82,7 +100,24 @@ func (l *Ledger) RecordPlanned(entry LedgerEntry) error {
 	if entry.PlannedAt.IsZero() {
 		entry.PlannedAt = time.Now().UTC()
 	}
+	if entry.Scenario == "" {
+		entry.Scenario = entry.Action
+	}
+	entry.State = ledgerStatePlanned
 	return l.append(entry)
+}
+
+// RecordMutated checkpoints a completed provider mutation. resourceID must
+// name the run-owned provider resource so a restarted runner can reconcile it
+// without reissuing a create blindly.
+func (l *Ledger) RecordMutated(tag, resourceID string) error {
+	return l.recordState(tag, resourceID, ledgerStateMutated)
+}
+
+// RecordReadBack checkpoints an independent provider read-back of the
+// run-owned resource after its mutation.
+func (l *Ledger) RecordReadBack(tag, resourceID string) error {
+	return l.recordState(tag, resourceID, ledgerStateReadBack)
 }
 
 // RecordCleaned appends a {tag, cleaned_at} entry after a cleanup has been
@@ -91,7 +126,21 @@ func (l *Ledger) RecordCleaned(tag string) error {
 	if tag == "" {
 		return fmt.Errorf("certify: RecordCleaned requires a tag")
 	}
-	return l.append(LedgerEntry{Tag: tag, CleanedAt: time.Now().UTC()})
+	now := time.Now().UTC()
+	return l.append(LedgerEntry{Tag: tag, State: ledgerStateCleaned, CleanedAt: now, ObservedAt: now})
+}
+
+func (l *Ledger) recordState(tag, resourceID, state string) error {
+	if tag == "" {
+		return fmt.Errorf("certify: %s checkpoint requires a tag", state)
+	}
+	if resourceID == "" {
+		return fmt.Errorf("certify: %s checkpoint requires a resource id", state)
+	}
+	if state != ledgerStateMutated && state != ledgerStateReadBack {
+		return fmt.Errorf("certify: invalid lifecycle checkpoint %q", state)
+	}
+	return l.append(LedgerEntry{Tag: tag, ResourceID: resourceID, State: state, ObservedAt: time.Now().UTC()})
 }
 
 func (l *Ledger) append(entry LedgerEntry) error {
@@ -153,8 +202,12 @@ type LedgerStatus struct {
 	Tag        string
 	Connector  string
 	Action     string
+	Scenario   string
 	EntityHint string
+	ResourceID string
+	State      string
 	PlannedAt  time.Time
+	ReadBack   bool
 	Cleaned    bool
 	CleanedAt  time.Time
 }
@@ -235,7 +288,28 @@ func LoadLedger(root string) (LedgerEntries, error) {
 			status.Action = entry.Action
 			status.EntityHint = entry.EntityHint
 		}
-		if !entry.CleanedAt.IsZero() {
+		if entry.Scenario != "" {
+			status.Scenario = entry.Scenario
+		}
+		if entry.ResourceID != "" {
+			status.ResourceID = entry.ResourceID
+		}
+		state := entry.State
+		if state == "" {
+			switch {
+			case !entry.CleanedAt.IsZero():
+				state = ledgerStateCleaned
+			case !entry.PlannedAt.IsZero():
+				state = ledgerStatePlanned
+			}
+		}
+		if state != "" {
+			status.State = state
+		}
+		if state == ledgerStateReadBack {
+			status.ReadBack = true
+		}
+		if !entry.CleanedAt.IsZero() || state == ledgerStateCleaned {
 			status.Cleaned = true
 			status.CleanedAt = entry.CleanedAt
 		}
