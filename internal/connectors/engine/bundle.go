@@ -1046,6 +1046,8 @@ type CertificationSpec struct {
 	DirectReadCandidates []CertificationCommandCandidate `json:"direct_read_candidates,omitempty"`
 	BinaryCandidates     []CertificationCommandCandidate `json:"binary_candidates,omitempty"`
 	WritePairings        []CertificationWritePairing     `json:"write_pairings,omitempty"`
+	WriteInventory       CertificationWriteInventorySpec `json:"write_inventory,omitempty"`
+	WriteWave            *CertificationWriteWaveSpec     `json:"write_wave,omitempty"`
 }
 
 // CertificationSourceSpec configures source-side certification setup and
@@ -1097,6 +1099,62 @@ type CertificationWritePairing struct {
 	VerifyStream string         `json:"verify_stream"`
 	VerifyField  string         `json:"verify_field"`
 	Overrides    map[string]any `json:"overrides,omitempty"`
+}
+
+// CertificationWriteInventorySpec classifies every declared write without
+// allowing a shared certification package to name a provider or fixture.
+// Rules are evaluated in declaration order after the bounded live wave.
+type CertificationWriteInventorySpec struct {
+	Rules []CertificationWriteInventoryRule `json:"rules,omitempty"`
+}
+
+// CertificationWriteInventoryRule names an honest non-live boundary for a
+// declared action/path set. Exact paths and path prefixes are declaration
+// owned; at least one selector must be supplied.
+type CertificationWriteInventoryRule struct {
+	Classification string   `json:"classification"`
+	Reason         string   `json:"reason"`
+	Actions        []string `json:"actions,omitempty"`
+	Paths          []string `json:"paths,omitempty"`
+	PathPrefixes   []string `json:"path_prefixes,omitempty"`
+}
+
+// CertificationWriteWaveSpec declares a bounded, resumable live-write wave.
+// It contains every provider-specific fixture, action grouping, ownership tag,
+// and known read-back blocker consumed by the shared harness.
+type CertificationWriteWaveSpec struct {
+	Fixture          CertificationWriteWaveFixture         `json:"fixture"`
+	Actions          []string                              `json:"actions"`
+	ActionBindings   map[string]string                     `json:"action_bindings"`
+	Scenarios        []CertificationWriteWaveScenario      `json:"scenarios"`
+	BlockedActions   []CertificationWriteWaveBlockedAction `json:"blocked_actions,omitempty"`
+	TagPrefix        string                                `json:"tag_prefix"`
+	TagSubjectPrefix string                                `json:"tag_subject_prefix"`
+}
+
+// CertificationWriteWaveFixture confines a live write wave to an exact,
+// connector-owned configuration boundary.
+type CertificationWriteWaveFixture struct {
+	Config      map[string]string `json:"config"`
+	Description string            `json:"description"`
+}
+
+// CertificationWriteWaveScenario pairs a selectable wave name with durable
+// ledger identity, a run-owned tag suffix, and the actions it proves.
+type CertificationWriteWaveScenario struct {
+	Name       string   `json:"name"`
+	LedgerName string   `json:"ledger_name"`
+	TagName    string   `json:"tag_name"`
+	Actions    []string `json:"actions"`
+}
+
+// CertificationWriteWaveBlockedAction records a known, concrete reason that
+// selected actions cannot be certified live until their independent read-back
+// precondition is repaired.
+type CertificationWriteWaveBlockedAction struct {
+	Name    string   `json:"name"`
+	Actions []string `json:"actions"`
+	Reason  string   `json:"reason"`
 }
 
 // metaSchemas holds the compiled meta-schemas used to validate the bundle

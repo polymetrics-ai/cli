@@ -219,8 +219,8 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	if r.opts.WriteOnly && r.opts.RequireFullParity {
 		return Report{}, fmt.Errorf("certify: Options.WriteOnly cannot claim full parity")
 	}
-	if r.opts.WriteOnly && r.opts.Connector != "github" {
-		return Report{}, fmt.Errorf("certify: Options.WriteOnly is currently defined only for github's bounded repository wave")
+	if r.opts.WriteOnly && !certificationHasWriteWave(r.opts.Connector) {
+		return Report{}, fmt.Errorf("certify: Options.WriteOnly requires a connector-declared bounded repository write wave")
 	}
 	if ctx == nil {
 		return Report{}, fmt.Errorf("certify: nil context")
@@ -328,7 +328,7 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 		stageWriteCleanup,
 		stageCleanupVerify,
 		stageApprovalIdempotency,
-		stageGithubRepositoryWriteWave,
+		stageRepositoryWriteWave,
 	}
 	if r.opts.WriteOnly {
 		// A bounded wave still uses the production credentials and write
@@ -336,7 +336,7 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 		// so a rate-limit restart can finish one self-cleaning resource family.
 		setupStages = []stageFunc{stagePreflight, stageCredentialsAdd, stageCredentialsTest}
 		readStages = nil
-		tailStages = []stageFunc{stageGithubRepositoryWriteWave}
+		tailStages = []stageFunc{stageRepositoryWriteWave}
 	}
 	if !r.opts.Full && !r.opts.WriteOnly {
 		tailStages = append(tailStages, stageFlowRoundtrip, stageScheduleRoundtrip)

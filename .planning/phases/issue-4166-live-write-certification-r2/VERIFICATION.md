@@ -24,6 +24,11 @@ recorded browser-only provisioning decision remains open for the larger waves.
   scratch change is restored.
 - [x] Repository-wave resume recovery refuses unowned resources, removes only
   tagged named resources, and restores an exact ledger-captured topic baseline.
+- [x] Connector boundary correction: `write_wave` and `write_inventory` keep
+  provider-specific fixture, action, pairing, tag, and read-back-blocker data
+  in the GitHub certification definition; the shared sweep names no provider.
+  Focused engine/certify tests, `make connector-boundary`, and a byte-stable
+  GitHub certification-matrix regeneration passed.
 - [x] Full-parity now implies `--full --write`, rejects `--skip write`, and a
   fresh external HTTPS child refuses to write a proof artifact for incomplete
   write coverage.

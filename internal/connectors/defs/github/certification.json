@@ -103,5 +103,127 @@
       "verify_stream": "milestones",
       "verify_field": "title"
     }
-  ]
+  ],
+  "write_inventory": {
+    "rules": [
+      {
+        "classification": "repository_fixture_pending",
+        "path_prefixes": ["/repos/"],
+        "reason": "the run-owned repository fixture addressed by this path has not been baseline-captured for this action"
+      },
+      {
+        "classification": "gist_fixture_pending",
+        "paths": ["/gists"],
+        "path_prefixes": ["/gists/"],
+        "reason": "the purpose-made private Gist fixture addressed by this path has not been created"
+      },
+      {
+        "classification": "org_fixture_and_permission_pending",
+        "path_prefixes": ["/orgs/", "/organizations/", "/teams/"],
+        "reason": "the disposable organisation fixture addressed by this path has not been created; the certification credential also needs the declared organisation-administration permission"
+      },
+      {
+        "classification": "app_or_oauth_pending",
+        "path_prefixes": ["/app/", "/applications/", "/app-manifests/", "/installation/", "/agents/"],
+        "reason": "the dedicated App or OAuth fixture required by this path has not been browser-provisioned"
+      },
+      {
+        "classification": "enterprise_trial_and_token_pending",
+        "path_prefixes": ["/enterprises/"],
+        "reason": "the disposable Enterprise Cloud trial, enterprise slug, and certification credential permission required by this path are not ready"
+      },
+      {
+        "classification": "primary_user_fixture_and_permission_pending",
+        "paths": ["/user"],
+        "path_prefixes": ["/user/"],
+        "reason": "the disposable primary-user fixture addressed by this path has not been prepared with its required credential permission"
+      },
+      {
+        "classification": "secondary_user_fixture_and_permission_pending",
+        "path_prefixes": ["/users/"],
+        "reason": "the second disposable-user fixture and credential addressed by this path have not been created"
+      },
+      {
+        "classification": "notification_token_and_fixture_pending",
+        "paths": ["/notifications"],
+        "path_prefixes": ["/notifications/"],
+        "reason": "the tagged disposable inbox fixture is absent and the certification token lacks the provider's notifications permission"
+      },
+      {
+        "classification": "sacrificial_credential_pending",
+        "paths": ["/credentials/revoke"],
+        "reason": "a separate sacrificial disposable credential has not been supplied for the final revocation scenario"
+      }
+    ]
+  },
+  "write_wave": {
+    "fixture": {
+      "config": {
+        "owner": "Polymetrics-Cert",
+        "repo": "pm-cert-3993-20260810-wz0fru"
+      },
+      "description": "captain-approved disposable repository fixture Polymetrics-Cert/pm-cert-3993-20260810-wz0fru"
+    },
+    "actions": [
+      "create_issue", "update_issue", "comment_issue", "update_issue_comment", "delete_issue_comment",
+      "lock_issue", "unlock_issue", "set_issue_labels", "add_issue_labels", "remove_issue_label",
+      "close_issue", "reopen_issue",
+      "create_label", "update_label", "delete_label",
+      "create_milestone", "update_milestone", "delete_milestone",
+      "create_release", "update_release", "delete_release",
+      "create_commit_comment", "update_commit_comment", "delete_commit_comment",
+      "create_ref", "update_ref", "delete_ref", "replace_repo_topics"
+    ],
+    "action_bindings": {
+      "issue_create": "create_issue",
+      "issue_update": "update_issue",
+      "issue_comment_create": "comment_issue",
+      "issue_comment_update": "update_issue_comment",
+      "issue_comment_delete": "delete_issue_comment",
+      "issue_lock": "lock_issue",
+      "issue_unlock": "unlock_issue",
+      "issue_labels_set": "set_issue_labels",
+      "issue_labels_add": "add_issue_labels",
+      "issue_label_remove": "remove_issue_label",
+      "issue_close": "close_issue",
+      "issue_reopen": "reopen_issue",
+      "label_create": "create_label",
+      "label_update": "update_label",
+      "label_delete": "delete_label",
+      "milestone_create": "create_milestone",
+      "milestone_update": "update_milestone",
+      "milestone_delete": "delete_milestone",
+      "release_create": "create_release",
+      "release_update": "update_release",
+      "release_delete": "delete_release",
+      "comment_create": "create_commit_comment",
+      "comment_update": "update_commit_comment",
+      "comment_delete": "delete_commit_comment",
+      "ref_create": "create_ref",
+      "ref_update": "update_ref",
+      "ref_delete": "delete_ref",
+      "topics_replace": "replace_repo_topics"
+    },
+    "scenarios": [
+      {"name": "issue_lifecycle", "ledger_name": "github_repository_issue_lifecycle", "tag_name": "issue-lifecycle", "actions": ["create_issue", "update_issue", "close_issue", "reopen_issue"]},
+      {"name": "issue_comments", "ledger_name": "github_repository_issue_comments", "tag_name": "issue-comment", "actions": ["create_issue", "comment_issue", "update_issue_comment", "delete_issue_comment", "close_issue"]},
+      {"name": "issue_lock", "ledger_name": "github_repository_issue_lock", "tag_name": "issue-lock", "actions": ["create_issue", "lock_issue", "unlock_issue", "close_issue"]},
+      {"name": "issue_labels", "ledger_name": "github_repository_issue_labels", "tag_name": "issue-labels", "actions": ["create_issue", "set_issue_labels", "add_issue_labels", "remove_issue_label", "close_issue"]},
+      {"name": "label_lifecycle", "ledger_name": "github_repository_label_lifecycle", "tag_name": "label", "actions": ["create_label", "update_label", "delete_label"]},
+      {"name": "milestone", "ledger_name": "github_repository_milestone", "tag_name": "milestone", "actions": ["create_milestone", "update_milestone", "delete_milestone"]},
+      {"name": "release", "ledger_name": "github_repository_release", "tag_name": "release", "actions": ["create_release", "update_release", "delete_release", "delete_ref"]},
+      {"name": "commit_comment", "ledger_name": "github_repository_commit_comment", "tag_name": "commit-comment", "actions": ["create_commit_comment", "update_commit_comment", "delete_commit_comment"]},
+      {"name": "ref", "ledger_name": "github_repository_ref", "tag_name": "ref", "actions": ["create_ref", "update_ref", "delete_ref"]},
+      {"name": "topics", "ledger_name": "github_repository_topics", "tag_name": "topics", "actions": ["replace_repo_topics"]}
+    ],
+    "blocked_actions": [
+      {
+        "name": "commit_comment_item_read",
+        "actions": ["create_commit_comment", "update_commit_comment", "delete_commit_comment"],
+        "reason": "GitHub direct read GET /repos/{owner}/{repo}/comments/{comment_id} is blocked: the disposable fine-grained PAT was refused with \"Resource not accessible by personal access token\". GitHub's picker names the required permission \"Metadata\" repository permissions (read); do not count the mutation as certified until that item read succeeds."
+      }
+    ],
+    "tag_prefix": "pm-cert-github-",
+    "tag_subject_prefix": "github"
+  }
 }

@@ -37,3 +37,22 @@ documented inline/manual fallback; no reviewer role was spawned.
 `go test -timeout 20m ./internal/connectors/certify`,
 `go test -timeout 20m ./internal/cli`, `make lint`, the generated-doc stability
 check, and the repository validation gates recorded in `VERIFICATION.md` pass.
+
+## Connector-boundary correction review
+
+**Method:** manual standard-depth fallback after `scripts/gsd prompt
+code-review 4166`; this execution environment cannot provide the required
+isolated reviewer role, and the project contract permits the documented inline
+fallback.
+
+- **Definition boundary:** the shared certification runner now consumes typed
+  `write_inventory` and `write_wave` declarations. The fixture, action set,
+  bindings, pairings, tags, inventory prerequisites, and known item-read
+  blocker remain in the connector definition.
+- **Fail closed:** malformed profiles, missing fixture configuration, unknown
+  scenario selections, undeclared actions, and action bindings outside the
+  declared wave stop the stage before a provider write.
+- **Regression coverage:** the focused engine/certify tests load the real
+  definition, prove the action inventory/wave relation, blocked outcome, and
+  fixture guard. `connector-boundary` and byte-stable matrix regeneration pass.
+- **Finding:** none.

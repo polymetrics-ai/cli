@@ -13,46 +13,21 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-// githubRepositoryWaveActions is the captain-approved, reversible first live
-// wave. It deliberately names actions rather than paths: the same endpoint
-// can be safe for a tagged, run-owned record and unsafe for an inherited
-// repository resource. Every item is sent through reverse plan, preview, and
-// run; no action in this list is a synthetic request or a DryRunWrite claim.
-var githubRepositoryWaveActions = []string{
-	"create_issue", "update_issue", "comment_issue", "update_issue_comment", "delete_issue_comment",
-	"lock_issue", "unlock_issue", "set_issue_labels", "add_issue_labels", "remove_issue_label",
-	"close_issue", "reopen_issue",
-	"create_label", "update_label", "delete_label",
-	"create_milestone", "update_milestone", "delete_milestone",
-	"create_release", "update_release", "delete_release",
-	"create_commit_comment", "update_commit_comment", "delete_commit_comment",
-	"create_ref", "update_ref", "delete_ref", "replace_repo_topics",
-}
-
-var githubCommitCommentActions = []string{
-	"create_commit_comment", "update_commit_comment", "delete_commit_comment",
-}
-
-const githubCommitCommentItemReadBlockedReason = "GitHub direct read GET /repos/{owner}/{repo}/comments/{comment_id} is blocked: the disposable fine-grained PAT was refused with \"Resource not accessible by personal access token\". GitHub's picker names the required permission \"Metadata\" repository permissions (read); do not count the mutation as certified until that item read succeeds."
-
-const (
-	githubRepositoryWaveFixtureOwner = "Polymetrics-Cert"
-	githubRepositoryWaveFixtureRepo  = "pm-cert-3993-20260810-wz0fru"
-)
-
-type githubRepositoryWave struct {
-	rc     *runContext
-	rep    *Report
-	ledger *Ledger
-	runID  string
+type repositoryWriteWave struct {
+	rc        *runContext
+	rep       *Report
+	ledger    *Ledger
+	runID     string
+	connector string
+	profile   *engine.CertificationWriteWaveSpec
 
 	// declarations lets every outcome retain its exact provider path and risk,
-	// including a failure before a mutation reaches GitHub.
+	// including a failure before a mutation reaches the provider.
 	declarations map[string]writeActionInventoryItem
 	completed    map[string]bool
 	readSequence int
 
-	// GitHub can acknowledge a mutation before a fresh collection read sees
+	// A provider can acknowledge a mutation before a fresh collection read sees
 	// it. Keep that eventual-consistency wait bounded and testable; a failed
 	// read-back remains a certification failure and a reported potential leak.
 	readBackAttempts int
@@ -60,27 +35,156 @@ type githubRepositoryWave struct {
 }
 
 const (
-	defaultGitHubReadBackAttempts = 5
-	githubReadBackRetryBase       = time.Second
+	defaultReadBackAttempts = 5
+	readBackRetryBase       = time.Second
 )
 
-// stageGithubRepositoryWriteWave executes the small, self-contained GitHub
+func validateRepositoryWriteWave(profile *engine.CertificationWriteWaveSpec) error {
+	if profile == nil {
+		return fmt.Errorf("profile is missing")
+	}
+	if len(profile.Fixture.Config) == 0 || strings.TrimSpace(profile.Fixture.Description) == "" {
+		return fmt.Errorf("fixture config and description are required")
+	}
+	if strings.TrimSpace(profile.TagPrefix) == "" || strings.TrimSpace(profile.TagSubjectPrefix) == "" {
+		return fmt.Errorf("tag_prefix and tag_subject_prefix are required")
+	}
+	declaredActions := make(map[string]struct{}, len(profile.Actions))
+	for _, action := range profile.Actions {
+		if strings.TrimSpace(action) == "" {
+			return fmt.Errorf("wave declares an empty action")
+		}
+		if _, duplicate := declaredActions[action]; duplicate {
+			return fmt.Errorf("wave declares action %q more than once", action)
+		}
+		declaredActions[action] = struct{}{}
+	}
+	if len(declaredActions) == 0 {
+		return fmt.Errorf("wave declares no actions")
+	}
+	for key, action := range profile.ActionBindings {
+		if strings.TrimSpace(key) == "" || strings.TrimSpace(action) == "" {
+			return fmt.Errorf("wave action binding has an empty key or action")
+		}
+		if _, ok := declaredActions[action]; !ok {
+			return fmt.Errorf("wave action binding %q references undeclared action %q", key, action)
+		}
+	}
+	if len(profile.ActionBindings) == 0 {
+		return fmt.Errorf("wave declares no action bindings")
+	}
+	scenarios := make(map[string]struct{}, len(profile.Scenarios))
+	for _, scenario := range profile.Scenarios {
+		if strings.TrimSpace(scenario.Name) == "" || strings.TrimSpace(scenario.LedgerName) == "" || strings.TrimSpace(scenario.TagName) == "" {
+			return fmt.Errorf("wave scenario has an empty name, ledger_name, or tag_name")
+		}
+		if _, duplicate := scenarios[scenario.Name]; duplicate {
+			return fmt.Errorf("wave declares scenario %q more than once", scenario.Name)
+		}
+		scenarios[scenario.Name] = struct{}{}
+		if len(scenario.Actions) == 0 {
+			return fmt.Errorf("wave scenario %q declares no actions", scenario.Name)
+		}
+		for _, action := range scenario.Actions {
+			if _, ok := declaredActions[action]; !ok {
+				return fmt.Errorf("wave scenario %q references undeclared action %q", scenario.Name, action)
+			}
+		}
+	}
+	if len(scenarios) == 0 {
+		return fmt.Errorf("wave declares no scenarios")
+	}
+	for _, blocked := range profile.BlockedActions {
+		if strings.TrimSpace(blocked.Name) == "" || strings.TrimSpace(blocked.Reason) == "" || len(blocked.Actions) == 0 {
+			return fmt.Errorf("blocked action declaration is incomplete")
+		}
+		for _, action := range blocked.Actions {
+			if _, ok := declaredActions[action]; !ok {
+				return fmt.Errorf("blocked action %q references undeclared action %q", blocked.Name, action)
+			}
+		}
+	}
+	return nil
+}
+
+func (w *repositoryWriteWave) scenario(name string) engine.CertificationWriteWaveScenario {
+	if w == nil || w.profile == nil {
+		return engine.CertificationWriteWaveScenario{}
+	}
+	for _, scenario := range w.profile.Scenarios {
+		if scenario.Name == name {
+			return scenario
+		}
+	}
+	return engine.CertificationWriteWaveScenario{}
+}
+
+func (w *repositoryWriteWave) scenarioActions(name string) []string {
+	return append([]string(nil), w.scenario(name).Actions...)
+}
+
+func (w *repositoryWriteWave) action(binding string) string {
+	if w == nil || w.profile == nil {
+		return ""
+	}
+	return w.profile.ActionBindings[binding]
+}
+
+func (w *repositoryWriteWave) blockedAction(name string) engine.CertificationWriteWaveBlockedAction {
+	if w == nil || w.profile == nil {
+		return engine.CertificationWriteWaveBlockedAction{}
+	}
+	for _, blocked := range w.profile.BlockedActions {
+		if blocked.Name == name {
+			return blocked
+		}
+	}
+	return engine.CertificationWriteWaveBlockedAction{}
+}
+
+func (w *repositoryWriteWave) tag(name string) string {
+	scenario := w.scenario(name)
+	return NewTag(w.profile.TagSubjectPrefix+"-"+scenario.TagName, w.runID)
+}
+
+func (w *repositoryWriteWave) scenarioTagPrefix(name string) string {
+	return w.profile.TagPrefix + w.scenario(name).TagName + "-"
+}
+
+func (w *repositoryWriteWave) recoveryScenario(name string) string {
+	return w.scenario(name).LedgerName + "_recovery"
+}
+
+// stageRepositoryWriteWave executes a definition-owned, self-contained
 // repository wave after the generic pairing proves the baseline lifecycle.
 // It is intentionally not part of a --full-only sweep: --write is the opt-in
 // for a bounded live mutation, while --full-parity later refuses to claim
 // success for every declared action that remains non-live.
-func stageGithubRepositoryWriteWave(rc *runContext, rep *Report) error {
-	if !rc.opts.Write || rc.opts.Connector != "github" {
+func stageRepositoryWriteWave(rc *runContext, rep *Report) error {
+	if !rc.opts.Write {
 		return nil
 	}
-	if strings.TrimSpace(rc.opts.Config["owner"]) != githubRepositoryWaveFixtureOwner || strings.TrimSpace(rc.opts.Config["repo"]) != githubRepositoryWaveFixtureRepo {
+	profile, ok := certificationWriteWaveFor(rc.opts.Connector)
+	if !ok {
+		return nil
+	}
+	if err := validateRepositoryWriteWave(profile); err != nil {
 		recordStage(rc, rep, "write_repository_wave", 2, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, fmt.Sprintf("write_repository_wave: GitHub live repository certification is restricted to the captain-approved disposable fixture %s/%s", githubRepositoryWaveFixtureOwner, githubRepositoryWaveFixtureRepo)
+			return false, CLIStageInfo{}, "write_repository_wave: invalid definition-owned profile: " + err.Error()
+		})
+		return nil
+	}
+	for key, expected := range profile.Fixture.Config {
+		if strings.TrimSpace(rc.opts.Config[key]) == expected {
+			continue
+		}
+		recordStage(rc, rep, "write_repository_wave", 2, func() (bool, CLIStageInfo, string) {
+			return false, CLIStageInfo{}, fmt.Sprintf("write_repository_wave: live repository certification is restricted to %s", profile.Fixture.Description)
 		})
 		return nil
 	}
 
-	inventory, err := writeActionInventoryFor("github")
+	inventory, err := writeActionInventoryFor(rc.opts.Connector)
 	if err != nil {
 		recordStage(rc, rep, "write_repository_wave", 2, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, fmt.Sprintf("write_repository_wave: inventory: %v", err)
@@ -91,7 +195,7 @@ func stageGithubRepositoryWriteWave(rc *runContext, rep *Report) error {
 	for _, item := range inventory {
 		declarations[item.Action] = item
 	}
-	for _, action := range githubRepositoryWaveActions {
+	for _, action := range profile.Actions {
 		item, ok := declarations[action]
 		if !ok || item.Classification != writeClassificationRepositoryWaveReady {
 			recordStage(rc, rep, "write_repository_wave", 2, func() (bool, CLIStageInfo, string) {
@@ -113,11 +217,13 @@ func stageGithubRepositoryWriteWave(rc *runContext, rep *Report) error {
 		return nil
 	}
 
-	wave := &githubRepositoryWave{
+	wave := &repositoryWriteWave{
 		rc:           rc,
 		rep:          rep,
 		ledger:       ledger,
 		runID:        NewRunID8(),
+		connector:    rc.opts.Connector,
+		profile:      profile,
 		declarations: declarations,
 		completed:    map[string]bool{},
 	}
@@ -195,36 +301,38 @@ func stageGithubRepositoryWriteWave(rc *runContext, rep *Report) error {
 	return nil
 }
 
-func (w *githubRepositoryWave) runSelected(selection string) (bool, error) {
-	all := []struct {
-		name string
-		run  func() bool
-	}{
-		{"issue_lifecycle", w.runIssueLifecycleScenario},
-		{"issue_comments", w.runIssueCommentScenario},
-		{"issue_lock", w.runIssueLockScenario},
-		{"issue_labels", w.runIssueLabelScenario},
-		{"label_lifecycle", w.runLabelLifecycleScenario},
-		{"milestone", w.runMilestoneScenario},
-		{"release", w.runReleaseScenario},
-		{"commit_comment", w.runCommitCommentScenario},
-		{"ref", w.runRefScenario},
-		{"topics", w.runTopicsScenario},
+func (w *repositoryWriteWave) runSelected(selection string) (bool, error) {
+	runners := map[string]func() bool{
+		"issue_lifecycle": w.runIssueLifecycleScenario,
+		"issue_comments":  w.runIssueCommentScenario,
+		"issue_lock":      w.runIssueLockScenario,
+		"issue_labels":    w.runIssueLabelScenario,
+		"label_lifecycle": w.runLabelLifecycleScenario,
+		"milestone":       w.runMilestoneScenario,
+		"release":         w.runReleaseScenario,
+		"commit_comment":  w.runCommitCommentScenario,
+		"ref":             w.runRefScenario,
+		"topics":          w.runTopicsScenario,
 	}
 	if selection != "" && selection != "all" {
 		if selection == "recover" {
 			return true, nil
 		}
-		for _, candidate := range all {
-			if selection == candidate.name {
-				return candidate.run(), nil
+		if _, declared := w.scenario(selection).Actions, w.scenario(selection).Name; declared != "" {
+			if run := runners[selection]; run != nil {
+				return run(), nil
 			}
+			return false, fmt.Errorf("declared certification_write_wave %q has no shared repository-wave runner", selection)
 		}
-		return false, fmt.Errorf("unknown certification_write_wave %q (want recover, issue_lifecycle, issue_comments, issue_lock, issue_labels, label_lifecycle, milestone, release, commit_comment, ref, topics, or all)", selection)
+		return false, fmt.Errorf("certification_write_wave %q is not declared by the connector profile", selection)
 	}
 	ok := true
-	for _, candidate := range all {
-		if !candidate.run() {
+	for _, scenario := range w.profile.Scenarios {
+		run := runners[scenario.Name]
+		if run == nil {
+			return false, fmt.Errorf("declared certification_write_wave %q has no shared repository-wave runner", scenario.Name)
+		}
+		if !run() {
 			ok = false
 		}
 	}
@@ -237,14 +345,14 @@ func (w *githubRepositoryWave) runSelected(selection string) (bool, error) {
 // a caller-supplied id, but it is deleted only after the production direct
 // read proves that the id still belongs to this ledger's exact ownership tag.
 // No raw provider write is used for recovery.
-func (w *githubRepositoryWave) recoverUncleanedReleaseScenarios() (bool, error) {
+func (w *repositoryWriteWave) recoverUncleanedReleaseScenarios() (bool, error) {
 	entries, err := LoadLedger(filepath.Dir(w.ledger.Path()))
 	if err != nil {
 		return false, fmt.Errorf("load durable write ledger: %w", err)
 	}
 	pending := make([]LedgerStatus, 0)
 	for _, status := range entries.Uncleaned() {
-		if status.Connector != "github" || status.Scenario != "github_repository_release" || !strings.HasPrefix(status.Tag, "pm-cert-github-release-") {
+		if status.Connector != w.connector || status.Scenario != w.scenario("release").LedgerName || !strings.HasPrefix(status.Tag, w.scenarioTagPrefix("release")) {
 			continue
 		}
 		pending = append(pending, status)
@@ -255,8 +363,8 @@ func (w *githubRepositoryWave) recoverUncleanedReleaseScenarios() (bool, error) 
 	// direct read below proves that id and tag still name the same run-owned
 	// release; it cannot become a generic delete-by-id escape hatch.
 	if legacyTag := strings.TrimSpace(configValue(w.rc.opts.Config, "certification_recovery_release_tag", "")); legacyTag != "" {
-		if !strings.HasPrefix(legacyTag, "pm-cert-github-release-") {
-			return false, fmt.Errorf("certification_recovery_release_tag %q is not a GitHub certification ownership tag", legacyTag)
+		if !strings.HasPrefix(legacyTag, w.scenarioTagPrefix("release")) {
+			return false, fmt.Errorf("certification_recovery_release_tag %q is not this connector profile's certification ownership tag", legacyTag)
 		}
 		if strings.TrimSpace(configValue(w.rc.opts.Config, "certification_recovery_release_id", "")) == "" {
 			return false, fmt.Errorf("certification_recovery_release_tag requires certification_recovery_release_id")
@@ -269,17 +377,17 @@ func (w *githubRepositoryWave) recoverUncleanedReleaseScenarios() (bool, error) 
 			}
 		}
 		if !found {
-			pending = append(pending, LedgerStatus{Tag: legacyTag, Connector: "github", Scenario: "github_repository_release"})
+			pending = append(pending, LedgerStatus{Tag: legacyTag, Connector: w.connector, Scenario: w.scenario("release").LedgerName})
 		}
 	}
 	sort.Slice(pending, func(i, j int) bool { return pending[i].Tag < pending[j].Tag })
 	for _, status := range pending {
 		releaseID, err := w.releaseRecoveryID(status.Tag)
 		if err != nil {
-			w.recordLeak(status.Tag, []string{"create_release", "update_release", "delete_release"}, "tagged release recovery could not identify the exact run-owned release: "+err.Error())
+			w.recordLeak(status.Tag, []string{w.action("release_create"), w.action("release_update"), w.action("release_delete")}, "tagged release recovery could not identify the exact run-owned release: "+err.Error())
 			return false, err
 		}
-		if !w.runAction("github_repository_release_recovery", "delete_release_recovery", "delete_release", status.Tag,
+		if !w.runAction(w.recoveryScenario("release"), "delete_release_recovery", w.action("release_delete"), status.Tag,
 			map[string]any{"release_id": releaseID}, fmt.Sprintf("release:%d", releaseID),
 			func() (string, error) { return w.verifyReleaseAbsent(releaseID) }) {
 			return false, fmt.Errorf("delete recovered tagged release %d", releaseID)
@@ -292,19 +400,19 @@ func (w *githubRepositoryWave) recoverUncleanedReleaseScenarios() (bool, error) 
 			if !valuesEqual(row["name"], status.Tag) {
 				continue
 			}
-			if !w.runAction("github_repository_release_recovery", "delete_release_tag_recovery", "delete_ref", status.Tag,
+			if !w.runAction(w.recoveryScenario("release"), "delete_release_tag_recovery", w.action("ref_delete"), status.Tag,
 				map[string]any{"ref": "tags/" + status.Tag}, "tag:"+status.Tag,
 				func() (string, error) { return w.verifyStreamAbsent("tags", "name", status.Tag) }) {
 				return false, fmt.Errorf("delete recovered tagged release ref %q", status.Tag)
 			}
 			break
 		}
-		w.markScenarioPassed(status.Tag, []string{"create_release", "update_release", "delete_release", "delete_ref"}, "interrupted tagged release removed with independent GitHub read-back")
+		w.markScenarioPassed(status.Tag, w.scenarioActions("release"), "interrupted tagged release removed with independent provider read-back")
 	}
 	return true, nil
 }
 
-func (w *githubRepositoryWave) releaseRecoveryID(tag string) (int, error) {
+func (w *repositoryWriteWave) releaseRecoveryID(tag string) (int, error) {
 	if raw := strings.TrimSpace(configValue(w.rc.opts.Config, "certification_recovery_release_id", "")); raw != "" {
 		id, err := strconv.Atoi(raw)
 		if err != nil || id <= 0 {
@@ -329,27 +437,27 @@ func (w *githubRepositoryWave) releaseRecoveryID(tag string) (int, error) {
 // same production reverse-plan path and the collection confirms its absence.
 // The original mutation remains blocked, never pass, because the item-level
 // read-back required for its certification was refused.
-func (w *githubRepositoryWave) recoverUncleanedCommitCommentScenarios() (bool, error) {
+func (w *repositoryWriteWave) recoverUncleanedCommitCommentScenarios() (bool, error) {
 	entries, err := LoadLedger(filepath.Dir(w.ledger.Path()))
 	if err != nil {
 		return false, fmt.Errorf("load durable write ledger: %w", err)
 	}
 	for _, status := range entries.Uncleaned() {
-		if status.Connector != "github" || status.Scenario != "github_repository_commit_comment" || !strings.HasPrefix(status.Tag, "pm-cert-github-commit-comment-") {
+		if status.Connector != w.connector || status.Scenario != w.scenario("commit_comment").LedgerName || !strings.HasPrefix(status.Tag, w.scenarioTagPrefix("commit_comment")) {
 			continue
 		}
 		commentID, err := commitCommentIDFromLedger(status)
 		if err != nil {
-			w.recordLeak(status.Tag, githubCommitCommentActions, "tagged commit-comment recovery could not determine its provider id: "+err.Error())
+			w.recordLeak(status.Tag, w.blockedAction("commit_comment_item_read").Actions, "tagged commit-comment recovery could not determine its provider id: "+err.Error())
 			return false, err
 		}
 		present, err := w.commitCommentPresent(commentID)
 		if err != nil {
-			w.recordLeak(status.Tag, githubCommitCommentActions, "tagged commit-comment cleanup could not be independently checked through the permitted collection stream: "+err.Error())
+			w.recordLeak(status.Tag, w.blockedAction("commit_comment_item_read").Actions, "tagged commit-comment cleanup could not be independently checked through the permitted collection stream: "+err.Error())
 			return false, err
 		}
 		if present {
-			if !w.runAction("github_repository_commit_comment_recovery", "delete_commit_comment_recovery", "delete_commit_comment", status.Tag,
+			if !w.runAction(w.recoveryScenario("commit_comment"), "delete_commit_comment_recovery", w.action("comment_delete"), status.Tag,
 				map[string]any{"comment_id": commentID}, fmt.Sprintf("commit_comment:%d", commentID),
 				func() (string, error) { return w.verifyStreamAbsent("commit_comments", "id", commentID) }) {
 				return false, fmt.Errorf("delete recovered tagged commit comment %d", commentID)
@@ -361,7 +469,8 @@ func (w *githubRepositoryWave) recoverUncleanedCommitCommentScenarios() (bool, e
 		if err := w.ledger.RecordCleaned(status.Tag); err != nil {
 			return false, fmt.Errorf("record cleanup for recovered commit comment %d: %w", commentID, err)
 		}
-		w.markBlocked(githubCommitCommentActions, status.Tag, githubCommitCommentItemReadBlockedReason, "verified")
+		blocked := w.blockedAction("commit_comment_item_read")
+		w.markBlocked(blocked.Actions, status.Tag, blocked.Reason, "verified")
 	}
 	return true, nil
 }
@@ -380,7 +489,7 @@ func commitCommentIDFromLedger(status LedgerStatus) (int, error) {
 	return 0, fmt.Errorf("ledger resource %q / entity hint %q is not a positive commit_comment id", status.ResourceID, status.EntityHint)
 }
 
-func (w *githubRepositoryWave) commitCommentPresent(commentID int) (bool, error) {
+func (w *repositoryWriteWave) commitCommentPresent(commentID int) (bool, error) {
 	rows, err := w.readStream("commit_comments")
 	if err != nil {
 		return false, err
@@ -393,23 +502,19 @@ func (w *githubRepositoryWave) commitCommentPresent(commentID int) (bool, error)
 	return false, nil
 }
 
-func (w *githubRepositoryWave) tag(scenario string) string {
-	return NewTag("github-"+scenario, w.runID)
-}
-
 // recoverUncleanedIssueScenarios reconciles an interrupted issue scenario
 // before a later wave starts. The durable ledger names only resources with
 // our pm-cert ownership marker; recovery reads the repository independently,
 // removes any tagged comment, and closes the tagged issue through the same
 // reverse-plan path. It never guesses at an untagged or third-party issue.
-func (w *githubRepositoryWave) recoverUncleanedIssueScenarios() (bool, error) {
+func (w *repositoryWriteWave) recoverUncleanedIssueScenarios() (bool, error) {
 	entries, err := LoadLedger(filepath.Dir(w.ledger.Path()))
 	if err != nil {
 		return false, fmt.Errorf("load durable write ledger: %w", err)
 	}
 	pending := make([]LedgerStatus, 0)
 	for _, status := range entries.Uncleaned() {
-		if status.Connector == "github" && strings.HasPrefix(status.Tag, "pm-cert-github-") && isRecoverableIssueScenario(status.Scenario) {
+		if status.Connector == w.connector && strings.HasPrefix(status.Tag, w.profile.TagPrefix) && w.isRecoverableIssueScenario(status.Scenario) {
 			pending = append(pending, status)
 		}
 	}
@@ -423,7 +528,7 @@ func (w *githubRepositoryWave) recoverUncleanedIssueScenarios() (bool, error) {
 	}
 	needsCommentRead := false
 	for _, status := range pending {
-		if status.Scenario == "github_repository_issue_comments" {
+		if status.Scenario == w.scenario("issue_comments").LedgerName {
 			needsCommentRead = true
 			break
 		}
@@ -444,17 +549,17 @@ func (w *githubRepositoryWave) recoverUncleanedIssueScenarios() (bool, error) {
 			}
 		}
 		if found == nil {
-			reason := "durable create_issue entry was not visible in independent GitHub read-back; refusing to guess at cleanup"
-			w.recordLeak(status.Tag, []string{"create_issue"}, reason)
+			reason := "durable create entry was not visible in independent provider read-back; refusing to guess at cleanup"
+			w.recordLeak(status.Tag, []string{w.action("issue_create")}, reason)
 			return false, fmt.Errorf("%s: %s", status.Tag, reason)
 		}
 		number, err := integerField(found, "number")
 		if err != nil {
-			w.recordLeak(status.Tag, []string{"create_issue"}, "tagged issue recovery could not determine its GitHub number: "+err.Error())
+			w.recordLeak(status.Tag, []string{w.action("issue_create")}, "tagged issue recovery could not determine its provider number: "+err.Error())
 			return false, err
 		}
 		resourceID := fmt.Sprintf("issue:%d", number)
-		if status.Scenario == "github_repository_issue_comments" {
+		if status.Scenario == w.scenario("issue_comments").LedgerName {
 			for _, comment := range comments {
 				body, _ := comment["body"].(string)
 				if !strings.HasPrefix(body, status.Tag) {
@@ -462,10 +567,10 @@ func (w *githubRepositoryWave) recoverUncleanedIssueScenarios() (bool, error) {
 				}
 				commentID, err := integerField(comment, "id")
 				if err != nil {
-					w.recordLeak(status.Tag, []string{"comment_issue"}, "tagged issue-comment recovery could not determine its GitHub comment id: "+err.Error())
+					w.recordLeak(status.Tag, []string{w.action("issue_comment_create")}, "tagged issue-comment recovery could not determine its provider comment id: "+err.Error())
 					return false, err
 				}
-				if !w.runAction("github_repository_issue_recovery", "delete_issue_comment_recovery", "delete_issue_comment", status.Tag,
+				if !w.runAction(w.recoveryScenario("issue_comments"), "delete_issue_comment_recovery", w.action("issue_comment_delete"), status.Tag,
 					map[string]any{"comment_id": commentID}, fmt.Sprintf("issue_comment:%d", commentID),
 					func() (string, error) { return w.verifyIssueCommentAbsent(commentID) }) {
 					return false, fmt.Errorf("delete recovered tagged issue comment %d", commentID)
@@ -482,19 +587,19 @@ func (w *githubRepositoryWave) recoverUncleanedIssueScenarios() (bool, error) {
 			}
 			continue
 		}
-		if !w.runAction("github_repository_issue_recovery", "close_issue_recovery", "close_issue", status.Tag,
+		if !w.runAction(w.recoveryScenario("issue_lifecycle"), "close_issue_recovery", w.action("issue_close"), status.Tag,
 			map[string]any{"issue_number": number}, resourceID,
 			func() (string, error) { return w.verifyIssueState(number, "closed") }) {
 			return false, fmt.Errorf("close recovered tagged issue %d", number)
 		}
-		w.markScenarioPassed(status.Tag, []string{"close_issue"}, "interrupted tagged issue closed with independent GitHub read-back")
+		w.markScenarioPassed(status.Tag, []string{w.action("issue_close")}, "interrupted tagged issue closed with independent provider read-back")
 	}
 	return true, nil
 }
 
-func isRecoverableIssueScenario(scenario string) bool {
+func (w *repositoryWriteWave) isRecoverableIssueScenario(scenario string) bool {
 	switch scenario {
-	case "github_repository_issue_lifecycle", "github_repository_issue_comments", "github_repository_issue_lock", "github_repository_issue_labels":
+	case w.scenario("issue_lifecycle").LedgerName, w.scenario("issue_comments").LedgerName, w.scenario("issue_lock").LedgerName, w.scenario("issue_labels").LedgerName:
 		return true
 	default:
 		return false
@@ -507,18 +612,18 @@ func isRecoverableIssueScenario(scenario string) bool {
 // the normal reverse plan/preview/run path before its absence is independently
 // read back. A recovered interrupted scenario is deliberately left not_live;
 // cleanup is not retrospective proof of the mutation that was interrupted.
-func (w *githubRepositoryWave) recoverUncleanedNamedResourceScenarios() (bool, error) {
+func (w *repositoryWriteWave) recoverUncleanedNamedResourceScenarios() (bool, error) {
 	entries, err := LoadLedger(filepath.Dir(w.ledger.Path()))
 	if err != nil {
 		return false, fmt.Errorf("load durable write ledger: %w", err)
 	}
 	pending := make([]LedgerStatus, 0)
 	for _, status := range entries.Uncleaned() {
-		if status.Connector != "github" || !strings.HasPrefix(status.Tag, "pm-cert-github-") {
+		if status.Connector != w.connector || !strings.HasPrefix(status.Tag, w.profile.TagPrefix) {
 			continue
 		}
 		switch status.Scenario {
-		case "github_repository_label_lifecycle", "github_repository_milestone", "github_repository_ref":
+		case w.scenario("label_lifecycle").LedgerName, w.scenario("milestone").LedgerName, w.scenario("ref").LedgerName:
 			pending = append(pending, status)
 		}
 	}
@@ -527,11 +632,11 @@ func (w *githubRepositoryWave) recoverUncleanedNamedResourceScenarios() (bool, e
 		var actions []string
 		var recoveryErr error
 		switch status.Scenario {
-		case "github_repository_label_lifecycle":
+		case w.scenario("label_lifecycle").LedgerName:
 			actions, recoveryErr = w.recoverTaggedLabels(status)
-		case "github_repository_milestone":
+		case w.scenario("milestone").LedgerName:
 			actions, recoveryErr = w.recoverTaggedMilestones(status)
-		case "github_repository_ref":
+		case w.scenario("ref").LedgerName:
 			actions, recoveryErr = w.recoverTaggedRefs(status)
 		}
 		if recoveryErr != nil {
@@ -544,13 +649,13 @@ func (w *githubRepositoryWave) recoverUncleanedNamedResourceScenarios() (bool, e
 		if err := w.ledger.RecordCleaned(status.Tag); err != nil {
 			return false, fmt.Errorf("record cleanup for recovered %s %q: %w", status.Scenario, status.Tag, err)
 		}
-		w.markRecoveryUncertified(actions, status.Tag, "interrupted tagged resource was removed with independent GitHub read-back; the interrupted mutation is not certified")
+		w.markRecoveryUncertified(actions, status.Tag, "interrupted tagged resource was removed with independent provider read-back; the interrupted mutation is not certified")
 	}
 	return true, nil
 }
 
-func (w *githubRepositoryWave) recoverTaggedLabels(status LedgerStatus) ([]string, error) {
-	actions := []string{"create_label", "update_label", "delete_label"}
+func (w *repositoryWriteWave) recoverTaggedLabels(status LedgerStatus) ([]string, error) {
+	actions := w.scenarioActions("label_lifecycle")
 	rows, err := w.readStream("labels")
 	if err != nil {
 		return actions, fmt.Errorf("read tagged labels for recovery: %w", err)
@@ -560,7 +665,7 @@ func (w *githubRepositoryWave) recoverTaggedLabels(status LedgerStatus) ([]strin
 		if !strings.HasPrefix(name, status.Tag) {
 			continue
 		}
-		if !w.runAction("github_repository_label_recovery", "delete_label_recovery", "delete_label", status.Tag,
+		if !w.runAction(w.recoveryScenario("label_lifecycle"), "delete_label_recovery", w.action("label_delete"), status.Tag,
 			map[string]any{"name": name}, "label:"+name,
 			func() (string, error) { return w.verifyStreamAbsent("labels", "name", name) }) {
 			return actions, fmt.Errorf("delete recovered tagged label %q", name)
@@ -569,8 +674,8 @@ func (w *githubRepositoryWave) recoverTaggedLabels(status LedgerStatus) ([]strin
 	return actions, nil
 }
 
-func (w *githubRepositoryWave) recoverTaggedMilestones(status LedgerStatus) ([]string, error) {
-	actions := []string{"create_milestone", "update_milestone", "delete_milestone"}
+func (w *repositoryWriteWave) recoverTaggedMilestones(status LedgerStatus) ([]string, error) {
+	actions := w.scenarioActions("milestone")
 	rows, err := w.readStream("milestones")
 	if err != nil {
 		return actions, fmt.Errorf("read tagged milestones for recovery: %w", err)
@@ -584,7 +689,7 @@ func (w *githubRepositoryWave) recoverTaggedMilestones(status LedgerStatus) ([]s
 		if err != nil {
 			return actions, fmt.Errorf("tagged milestone %q has no number: %w", title, err)
 		}
-		if !w.runAction("github_repository_milestone_recovery", "delete_milestone_recovery", "delete_milestone", status.Tag,
+		if !w.runAction(w.recoveryScenario("milestone"), "delete_milestone_recovery", w.action("milestone_delete"), status.Tag,
 			map[string]any{"milestone_number": number}, fmt.Sprintf("milestone:%d", number),
 			func() (string, error) { return w.verifyStreamAbsent("milestones", "number", number) }) {
 			return actions, fmt.Errorf("delete recovered tagged milestone %d", number)
@@ -593,8 +698,8 @@ func (w *githubRepositoryWave) recoverTaggedMilestones(status LedgerStatus) ([]s
 	return actions, nil
 }
 
-func (w *githubRepositoryWave) recoverTaggedRefs(status LedgerStatus) ([]string, error) {
-	actions := []string{"create_ref", "update_ref", "delete_ref"}
+func (w *repositoryWriteWave) recoverTaggedRefs(status LedgerStatus) ([]string, error) {
+	actions := w.scenarioActions("ref")
 	rows, err := w.readStream("branches")
 	if err != nil {
 		return actions, fmt.Errorf("read tagged branches for recovery: %w", err)
@@ -604,7 +709,7 @@ func (w *githubRepositoryWave) recoverTaggedRefs(status LedgerStatus) ([]string,
 		if !strings.HasPrefix(name, status.Tag) {
 			continue
 		}
-		if !w.runAction("github_repository_ref_recovery", "delete_ref_recovery", "delete_ref", status.Tag,
+		if !w.runAction(w.recoveryScenario("ref"), "delete_ref_recovery", w.action("ref_delete"), status.Tag,
 			map[string]any{"ref": "heads/" + name}, "ref:heads/"+name,
 			func() (string, error) { return w.verifyStreamAbsent("branches", "name", name) }) {
 			return actions, fmt.Errorf("delete recovered tagged branch %q", name)
@@ -617,13 +722,13 @@ type topicRecoveryBaseline struct {
 	Baseline []string `json:"baseline"`
 }
 
-func (w *githubRepositoryWave) recoverUncleanedTopicScenarios() (bool, error) {
+func (w *repositoryWriteWave) recoverUncleanedTopicScenarios() (bool, error) {
 	entries, err := LoadLedger(filepath.Dir(w.ledger.Path()))
 	if err != nil {
 		return false, fmt.Errorf("load durable write ledger: %w", err)
 	}
 	for _, status := range entries.Uncleaned() {
-		if status.Connector != "github" || status.Scenario != "github_repository_topics" || !strings.HasPrefix(status.Tag, "pm-cert-github-topics-") {
+		if status.Connector != w.connector || status.Scenario != w.scenario("topics").LedgerName || !strings.HasPrefix(status.Tag, w.scenarioTagPrefix("topics")) {
 			continue
 		}
 		var recovery topicRecoveryBaseline
@@ -646,15 +751,15 @@ func (w *githubRepositoryWave) recoverUncleanedTopicScenarios() (bool, error) {
 			if err := w.ledger.RecordCleaned(status.Tag); err != nil {
 				return false, fmt.Errorf("record unchanged topics cleanup %q: %w", status.Tag, err)
 			}
-			w.markRecoveryUncertified([]string{"replace_repo_topics"}, status.Tag, "interrupted topic scenario had no visible mutation; it is not certified")
+			w.markRecoveryUncertified([]string{w.action("topics_replace")}, status.Tag, "interrupted topic scenario had no visible mutation; it is not certified")
 			continue
 		}
 		if !sameStrings(names, []string{status.Tag}) {
 			reason := fmt.Sprintf("tagged topic recovery %q found topics other than its exact tag or captured baseline; refusing to overwrite an unknown provider state", status.Tag)
-			w.recordLeak(status.Tag, []string{"replace_repo_topics"}, reason)
+			w.recordLeak(status.Tag, []string{w.action("topics_replace")}, reason)
 			return false, fmt.Errorf("%s", reason)
 		}
-		if !w.runAction("github_repository_topics_recovery", "replace_repo_topics_restore_recovery", "replace_repo_topics", status.Tag,
+		if !w.runAction(w.recoveryScenario("topics"), "replace_repo_topics_restore_recovery", w.action("topics_replace"), status.Tag,
 			map[string]any{"names": recovery.Baseline}, "topics:"+status.Tag,
 			func() (string, error) {
 				current, err := w.readTopics()
@@ -671,31 +776,31 @@ func (w *githubRepositoryWave) recoverUncleanedTopicScenarios() (bool, error) {
 		if err := w.ledger.RecordCleaned(status.Tag); err != nil {
 			return false, fmt.Errorf("record recovered topics cleanup %q: %w", status.Tag, err)
 		}
-		w.markRecoveryUncertified([]string{"replace_repo_topics"}, status.Tag, "interrupted tagged topic mutation was restored with independent GitHub read-back; it is not certified")
+		w.markRecoveryUncertified([]string{w.action("topics_replace")}, status.Tag, "interrupted tagged topic mutation was restored with independent provider read-back; it is not certified")
 	}
 	return true, nil
 }
 
-func (w *githubRepositoryWave) recordTopicBaseline(scenario, tag string, baseline []string) error {
+func (w *repositoryWriteWave) recordTopicBaseline(scenario, tag string, baseline []string) error {
 	recovery, err := json.Marshal(topicRecoveryBaseline{Baseline: append([]string(nil), baseline...)})
 	if err != nil {
 		return fmt.Errorf("encode captured topic baseline: %w", err)
 	}
 	return w.ledger.RecordPlanned(LedgerEntry{
-		Action:     "replace_repo_topics",
+		Action:     w.action("topics_replace"),
 		Scenario:   scenario,
 		Tag:        tag,
-		Connector:  "github",
+		Connector:  w.connector,
 		EntityHint: "topics:" + tag,
 		ResourceID: "topics:" + tag,
 		Recovery:   recovery,
 	})
 }
 
-func (w *githubRepositoryWave) runIssueLifecycleScenario() bool {
-	tag := w.tag("issue-lifecycle")
-	const scenario = "github_repository_issue_lifecycle"
-	actions := []string{"create_issue", "update_issue", "close_issue", "reopen_issue"}
+func (w *repositoryWriteWave) runIssueLifecycleScenario() bool {
+	tag := w.tag("issue_lifecycle")
+	scenario := w.scenario("issue_lifecycle").LedgerName
+	actions := w.scenarioActions("issue_lifecycle")
 	updated := tag + " updated"
 	var number int
 	created := false
@@ -703,17 +808,17 @@ func (w *githubRepositoryWave) runIssueLifecycleScenario() bool {
 		if !created {
 			return true
 		}
-		clean := w.runAction(scenario, "close_issue_cleanup", "close_issue", tag,
+		clean := w.runAction(scenario, "close_issue_cleanup", w.action("issue_close"), tag,
 			map[string]any{"issue_number": number}, fmt.Sprintf("issue:%d", number),
 			func() (string, error) { return w.verifyIssueState(number, "closed") })
 		if !clean {
 			w.recordLeak(tag, actions, "tagged issue could not be closed for cleanup")
 			return false
 		}
-		w.markScenarioPassed(tag, actions, "tagged issue closed with independent GitHub read-back")
+		w.markScenarioPassed(tag, actions, "tagged issue closed with independent provider read-back")
 		return true
 	}
-	if !w.runAction(scenario, "create_issue", "create_issue", tag,
+	if !w.runAction(scenario, w.action("issue_create"), w.action("issue_create"), tag,
 		map[string]any{"title": tag, "body": tag}, "issue:"+tag,
 		func() (string, error) {
 			row, _, err := w.verifyStreamPresent("issues", "title", tag, "title", tag)
@@ -729,7 +834,7 @@ func (w *githubRepositoryWave) runIssueLifecycleScenario() bool {
 		return cleanup() && false
 	}
 	created = true
-	if !w.runAction(scenario, "update_issue", "update_issue", tag,
+	if !w.runAction(scenario, w.action("issue_update"), w.action("issue_update"), tag,
 		map[string]any{"issue_number": number, "title": updated, "body": updated}, fmt.Sprintf("issue:%d", number),
 		func() (string, error) {
 			_, id, err := w.verifyStreamPresent("issues", "number", number, "title", updated)
@@ -737,12 +842,12 @@ func (w *githubRepositoryWave) runIssueLifecycleScenario() bool {
 		}) {
 		return cleanup() && false
 	}
-	if !w.runAction(scenario, "close_issue", "close_issue", tag,
+	if !w.runAction(scenario, w.action("issue_close"), w.action("issue_close"), tag,
 		map[string]any{"issue_number": number}, fmt.Sprintf("issue:%d", number),
 		func() (string, error) { return w.verifyIssueState(number, "closed") }) {
 		return cleanup() && false
 	}
-	if !w.runAction(scenario, "reopen_issue", "reopen_issue", tag,
+	if !w.runAction(scenario, w.action("issue_reopen"), w.action("issue_reopen"), tag,
 		map[string]any{"issue_number": number}, fmt.Sprintf("issue:%d", number),
 		func() (string, error) { return w.verifyIssueState(number, "open") }) {
 		return cleanup() && false
@@ -750,10 +855,10 @@ func (w *githubRepositoryWave) runIssueLifecycleScenario() bool {
 	return cleanup()
 }
 
-func (w *githubRepositoryWave) runIssueCommentScenario() bool {
-	tag := w.tag("issue-comment")
-	const scenario = "github_repository_issue_comments"
-	actions := []string{"create_issue", "comment_issue", "update_issue_comment", "delete_issue_comment", "close_issue"}
+func (w *repositoryWriteWave) runIssueCommentScenario() bool {
+	tag := w.tag("issue_comments")
+	scenario := w.scenario("issue_comments").LedgerName
+	actions := w.scenarioActions("issue_comments")
 	body := tag + " comment"
 	updated := body + " updated"
 	var number, commentID int
@@ -763,14 +868,14 @@ func (w *githubRepositoryWave) runIssueCommentScenario() bool {
 	cleanup := func() bool {
 		clean := true
 		if commentAlive {
-			if !w.runAction(scenario, "delete_issue_comment_cleanup", "delete_issue_comment", tag,
+			if !w.runAction(scenario, "delete_issue_comment_cleanup", w.action("issue_comment_delete"), tag,
 				map[string]any{"comment_id": commentID}, fmt.Sprintf("issue_comment:%d", commentID),
 				func() (string, error) { return w.verifyIssueCommentAbsent(commentID) }) {
 				clean = false
 			}
 		}
 		if issueCreated {
-			if !w.runAction(scenario, "close_issue_cleanup", "close_issue", tag,
+			if !w.runAction(scenario, "close_issue_cleanup", w.action("issue_close"), tag,
 				map[string]any{"issue_number": number}, fmt.Sprintf("issue:%d", number),
 				func() (string, error) { return w.verifyIssueState(number, "closed") }) {
 				clean = false
@@ -781,11 +886,11 @@ func (w *githubRepositoryWave) runIssueCommentScenario() bool {
 			return false
 		}
 		if issueCreated {
-			w.markScenarioPassed(tag, actions, "tagged issue comment removed and containing issue closed with independent GitHub read-back")
+			w.markScenarioPassed(tag, actions, "tagged issue comment removed and containing issue closed with independent provider read-back")
 		}
 		return true
 	}
-	if !w.runAction(scenario, "create_issue", "create_issue", tag,
+	if !w.runAction(scenario, w.action("issue_create"), w.action("issue_create"), tag,
 		map[string]any{"title": tag, "body": tag}, "issue:"+tag,
 		func() (string, error) {
 			row, _, err := w.verifyStreamPresent("issues", "title", tag, "title", tag)
@@ -801,7 +906,7 @@ func (w *githubRepositoryWave) runIssueCommentScenario() bool {
 		return cleanup() && false
 	}
 	issueCreated = true
-	if !w.runAction(scenario, "comment_issue", "comment_issue", tag,
+	if !w.runAction(scenario, w.action("issue_comment_create"), w.action("issue_comment_create"), tag,
 		map[string]any{"issue_number": number, "body": body}, fmt.Sprintf("issue:%d", number),
 		func() (string, error) {
 			row, _, err := w.verifyStreamPresent("issue_comments", "body", body, "body", body)
@@ -821,14 +926,14 @@ func (w *githubRepositoryWave) runIssueCommentScenario() bool {
 		return cleanup() && false
 	}
 	commentAlive = true
-	if !w.runAction(scenario, "update_issue_comment", "update_issue_comment", tag,
+	if !w.runAction(scenario, w.action("issue_comment_update"), w.action("issue_comment_update"), tag,
 		map[string]any{"comment_id": commentID, "body": updated}, fmt.Sprintf("issue_comment:%d", commentID),
 		func() (string, error) {
 			return w.verifyIssueCommentUpdated(commentID, commentUpdatedAt)
 		}) {
 		return cleanup() && false
 	}
-	if !w.runAction(scenario, "delete_issue_comment", "delete_issue_comment", tag,
+	if !w.runAction(scenario, w.action("issue_comment_delete"), w.action("issue_comment_delete"), tag,
 		map[string]any{"comment_id": commentID}, fmt.Sprintf("issue_comment:%d", commentID),
 		func() (string, error) { return w.verifyIssueCommentAbsent(commentID) }) {
 		return cleanup() && false
@@ -837,24 +942,24 @@ func (w *githubRepositoryWave) runIssueCommentScenario() bool {
 	return cleanup()
 }
 
-func (w *githubRepositoryWave) runIssueLockScenario() bool {
-	tag := w.tag("issue-lock")
-	const scenario = "github_repository_issue_lock"
-	actions := []string{"create_issue", "lock_issue", "unlock_issue", "close_issue"}
+func (w *repositoryWriteWave) runIssueLockScenario() bool {
+	tag := w.tag("issue_lock")
+	scenario := w.scenario("issue_lock").LedgerName
+	actions := w.scenarioActions("issue_lock")
 	var number int
 	created := false
 	locked := false
 	cleanup := func() bool {
 		clean := true
 		if locked {
-			if !w.runAction(scenario, "unlock_issue_cleanup", "unlock_issue", tag,
+			if !w.runAction(scenario, "unlock_issue_cleanup", w.action("issue_unlock"), tag,
 				map[string]any{"issue_number": number}, fmt.Sprintf("issue:%d", number),
 				func() (string, error) { return w.verifyIssueLocked(number, false) }) {
 				clean = false
 			}
 		}
 		if created {
-			if !w.runAction(scenario, "close_issue_cleanup", "close_issue", tag,
+			if !w.runAction(scenario, "close_issue_cleanup", w.action("issue_close"), tag,
 				map[string]any{"issue_number": number}, fmt.Sprintf("issue:%d", number),
 				func() (string, error) { return w.verifyIssueState(number, "closed") }) {
 				clean = false
@@ -865,11 +970,11 @@ func (w *githubRepositoryWave) runIssueLockScenario() bool {
 			return false
 		}
 		if created {
-			w.markScenarioPassed(tag, actions, "tagged issue unlocked and closed with independent GitHub read-back")
+			w.markScenarioPassed(tag, actions, "tagged issue unlocked and closed with independent provider read-back")
 		}
 		return true
 	}
-	if !w.runAction(scenario, "create_issue", "create_issue", tag,
+	if !w.runAction(scenario, w.action("issue_create"), w.action("issue_create"), tag,
 		map[string]any{"title": tag, "body": tag}, "issue:"+tag,
 		func() (string, error) {
 			row, _, err := w.verifyStreamPresent("issues", "title", tag, "title", tag)
@@ -885,13 +990,13 @@ func (w *githubRepositoryWave) runIssueLockScenario() bool {
 		return cleanup() && false
 	}
 	created = true
-	if !w.runAction(scenario, "lock_issue", "lock_issue", tag,
+	if !w.runAction(scenario, w.action("issue_lock"), w.action("issue_lock"), tag,
 		map[string]any{"issue_number": number, "lock_reason": "resolved"}, fmt.Sprintf("issue:%d", number),
 		func() (string, error) { return w.verifyIssueLocked(number, true) }) {
 		return cleanup() && false
 	}
 	locked = true
-	if !w.runAction(scenario, "unlock_issue", "unlock_issue", tag,
+	if !w.runAction(scenario, w.action("issue_unlock"), w.action("issue_unlock"), tag,
 		map[string]any{"issue_number": number}, fmt.Sprintf("issue:%d", number),
 		func() (string, error) { return w.verifyIssueLocked(number, false) }) {
 		return cleanup() && false
@@ -900,10 +1005,10 @@ func (w *githubRepositoryWave) runIssueLockScenario() bool {
 	return cleanup()
 }
 
-func (w *githubRepositoryWave) runIssueLabelScenario() bool {
-	tag := w.tag("issue-labels")
-	const scenario = "github_repository_issue_labels"
-	actions := []string{"create_issue", "set_issue_labels", "add_issue_labels", "remove_issue_label", "close_issue"}
+func (w *repositoryWriteWave) runIssueLabelScenario() bool {
+	tag := w.tag("issue_labels")
+	scenario := w.scenario("issue_labels").LedgerName
+	actions := w.scenarioActions("issue_labels")
 	labels, err := w.fixtureLabels(2)
 	if err != nil {
 		w.recordScenarioFailure(scenario, actions, tag, "read two fixture-label baseline values: "+err.Error())
@@ -915,14 +1020,14 @@ func (w *githubRepositoryWave) runIssueLabelScenario() bool {
 	cleanup := func() bool {
 		clean := true
 		if labelsTouched {
-			if !w.runAction(scenario, "set_issue_labels_restore", "set_issue_labels", tag,
+			if !w.runAction(scenario, "set_issue_labels_restore", w.action("issue_labels_set"), tag,
 				map[string]any{"issue_number": number, "labels": []string{}}, fmt.Sprintf("issue:%d", number),
 				func() (string, error) { return w.verifyIssueNoLabels(number) }) {
 				clean = false
 			}
 		}
 		if created {
-			if !w.runAction(scenario, "close_issue_cleanup", "close_issue", tag,
+			if !w.runAction(scenario, "close_issue_cleanup", w.action("issue_close"), tag,
 				map[string]any{"issue_number": number}, fmt.Sprintf("issue:%d", number),
 				func() (string, error) { return w.verifyIssueState(number, "closed") }) {
 				clean = false
@@ -933,11 +1038,11 @@ func (w *githubRepositoryWave) runIssueLabelScenario() bool {
 			return false
 		}
 		if created {
-			w.markScenarioPassed(tag, actions, "tagged issue labels restored to empty and issue closed with independent GitHub read-back")
+			w.markScenarioPassed(tag, actions, "tagged issue labels restored to empty and issue closed with independent provider read-back")
 		}
 		return true
 	}
-	if !w.runAction(scenario, "create_issue", "create_issue", tag,
+	if !w.runAction(scenario, w.action("issue_create"), w.action("issue_create"), tag,
 		map[string]any{"title": tag, "body": tag}, "issue:"+tag,
 		func() (string, error) {
 			row, _, err := w.verifyStreamPresent("issues", "title", tag, "title", tag)
@@ -953,18 +1058,18 @@ func (w *githubRepositoryWave) runIssueLabelScenario() bool {
 		return cleanup() && false
 	}
 	created = true
-	if !w.runAction(scenario, "set_issue_labels", "set_issue_labels", tag,
+	if !w.runAction(scenario, w.action("issue_labels_set"), w.action("issue_labels_set"), tag,
 		map[string]any{"issue_number": number, "labels": []string{labels[0]}}, fmt.Sprintf("issue:%d", number),
 		func() (string, error) { return w.verifyIssueLabels(number, labels[0]) }) {
 		return cleanup() && false
 	}
 	labelsTouched = true
-	if !w.runAction(scenario, "add_issue_labels", "add_issue_labels", tag,
+	if !w.runAction(scenario, w.action("issue_labels_add"), w.action("issue_labels_add"), tag,
 		map[string]any{"issue_number": number, "labels": []string{labels[1]}}, fmt.Sprintf("issue:%d", number),
 		func() (string, error) { return w.verifyIssueLabels(number, labels[0], labels[1]) }) {
 		return cleanup() && false
 	}
-	if !w.runAction(scenario, "remove_issue_label", "remove_issue_label", tag,
+	if !w.runAction(scenario, w.action("issue_label_remove"), w.action("issue_label_remove"), tag,
 		map[string]any{"issue_number": number, "name": labels[1]}, fmt.Sprintf("issue:%d", number),
 		func() (string, error) { return w.verifyIssueLabelAbsent(number, labels[1]) }) {
 		return cleanup() && false
@@ -972,25 +1077,25 @@ func (w *githubRepositoryWave) runIssueLabelScenario() bool {
 	return cleanup()
 }
 
-func (w *githubRepositoryWave) runLabelLifecycleScenario() bool {
-	tag := w.tag("label")
-	const scenario = "github_repository_label_lifecycle"
-	actions := []string{"create_label", "update_label", "delete_label"}
-	first, updated, second := githubWaveLabelNames(tag)
+func (w *repositoryWriteWave) runLabelLifecycleScenario() bool {
+	tag := w.tag("label_lifecycle")
+	scenario := w.scenario("label_lifecycle").LedgerName
+	actions := w.scenarioActions("label_lifecycle")
+	first, updated, second := waveLabelNames(tag)
 	firstCreated := false
 	secondCreated := false
 	firstCurrent := first
 	cleanup := func() bool {
 		clean := true
 		if secondCreated {
-			if !w.runAction(scenario, "delete_label_second", "delete_label", tag,
+			if !w.runAction(scenario, "delete_label_second", w.action("label_delete"), tag,
 				map[string]any{"name": second}, "label:"+second,
 				func() (string, error) { return w.verifyStreamAbsent("labels", "name", second) }) {
 				clean = false
 			}
 		}
 		if firstCreated {
-			if !w.runAction(scenario, "delete_label_first", "delete_label", tag,
+			if !w.runAction(scenario, "delete_label_first", w.action("label_delete"), tag,
 				map[string]any{"name": firstCurrent}, "label:"+firstCurrent,
 				func() (string, error) { return w.verifyStreamAbsent("labels", "name", firstCurrent) }) {
 				clean = false
@@ -1001,11 +1106,11 @@ func (w *githubRepositoryWave) runLabelLifecycleScenario() bool {
 			return false
 		}
 		if firstCreated || secondCreated {
-			w.markScenarioPassed(tag, actions, "tagged labels removed with independent GitHub read-back")
+			w.markScenarioPassed(tag, actions, "tagged labels removed with independent provider read-back")
 		}
 		return true
 	}
-	if !w.runAction(scenario, "create_label_first", "create_label", tag,
+	if !w.runAction(scenario, "create_label_first", w.action("label_create"), tag,
 		map[string]any{"name": first, "color": "ededed", "description": tag}, "label:"+first,
 		func() (string, error) {
 			_, id, err := w.verifyStreamPresent("labels", "name", first, "name", first)
@@ -1014,7 +1119,7 @@ func (w *githubRepositoryWave) runLabelLifecycleScenario() bool {
 		return cleanup() && false
 	}
 	firstCreated = true
-	if !w.runAction(scenario, "create_label_second", "create_label", tag,
+	if !w.runAction(scenario, "create_label_second", w.action("label_create"), tag,
 		map[string]any{"name": second, "color": "ededed", "description": tag}, "label:"+second,
 		func() (string, error) {
 			_, id, err := w.verifyStreamPresent("labels", "name", second, "name", second)
@@ -1023,7 +1128,7 @@ func (w *githubRepositoryWave) runLabelLifecycleScenario() bool {
 		return cleanup() && false
 	}
 	secondCreated = true
-	if !w.runAction(scenario, "update_label", "update_label", tag,
+	if !w.runAction(scenario, w.action("label_update"), w.action("label_update"), tag,
 		map[string]any{"name": first, "new_name": updated, "color": "ededed", "description": updated}, "label:"+updated,
 		func() (string, error) {
 			_, id, err := w.verifyStreamPresent("labels", "name", updated, "name", updated)
@@ -1035,18 +1140,18 @@ func (w *githubRepositoryWave) runLabelLifecycleScenario() bool {
 	return cleanup()
 }
 
-// githubWaveLabelNames leaves room under GitHub's 50-character label-name
+// waveLabelNames leaves room under the provider's label-name
 // ceiling. NewTag already carries the full run ownership marker, so compact
 // distinct suffixes preserve cleanup safety without turning an update into a
 // provider-side 422.
-func githubWaveLabelNames(tag string) (first, updated, second string) {
+func waveLabelNames(tag string) (first, updated, second string) {
 	return tag + "-a", tag + "-b", tag + "-c"
 }
 
-func (w *githubRepositoryWave) runMilestoneScenario() bool {
+func (w *repositoryWriteWave) runMilestoneScenario() bool {
 	tag := w.tag("milestone")
-	const scenario = "github_repository_milestone"
-	actions := []string{"create_milestone", "update_milestone", "delete_milestone"}
+	scenario := w.scenario("milestone").LedgerName
+	actions := w.scenarioActions("milestone")
 	updated := tag + " updated"
 	var number int
 	created := false
@@ -1054,17 +1159,17 @@ func (w *githubRepositoryWave) runMilestoneScenario() bool {
 		if !created {
 			return true
 		}
-		clean := w.runAction(scenario, "delete_milestone", "delete_milestone", tag,
+		clean := w.runAction(scenario, w.action("milestone_delete"), w.action("milestone_delete"), tag,
 			map[string]any{"milestone_number": number}, fmt.Sprintf("milestone:%d", number),
 			func() (string, error) { return w.verifyStreamAbsent("milestones", "number", number) })
 		if !clean {
 			w.recordLeak(tag, actions, "tagged milestone remained after cleanup")
 			return false
 		}
-		w.markScenarioPassed(tag, actions, "tagged milestone removed with independent GitHub read-back")
+		w.markScenarioPassed(tag, actions, "tagged milestone removed with independent provider read-back")
 		return true
 	}
-	if !w.runAction(scenario, "create_milestone", "create_milestone", tag,
+	if !w.runAction(scenario, w.action("milestone_create"), w.action("milestone_create"), tag,
 		map[string]any{"title": tag, "description": tag}, "milestone:"+tag,
 		func() (string, error) {
 			row, _, err := w.verifyStreamPresent("milestones", "title", tag, "title", tag)
@@ -1080,7 +1185,7 @@ func (w *githubRepositoryWave) runMilestoneScenario() bool {
 		return cleanup() && false
 	}
 	created = true
-	if !w.runAction(scenario, "update_milestone", "update_milestone", tag,
+	if !w.runAction(scenario, w.action("milestone_update"), w.action("milestone_update"), tag,
 		map[string]any{"milestone_number": number, "title": updated, "description": tag + " updated"}, fmt.Sprintf("milestone:%d", number),
 		func() (string, error) {
 			_, id, err := w.verifyStreamPresent("milestones", "number", number, "title", updated)
@@ -1091,10 +1196,10 @@ func (w *githubRepositoryWave) runMilestoneScenario() bool {
 	return cleanup()
 }
 
-func (w *githubRepositoryWave) runReleaseScenario() bool {
+func (w *repositoryWriteWave) runReleaseScenario() bool {
 	tag := w.tag("release")
-	const scenario = "github_repository_release"
-	actions := []string{"create_release", "update_release", "delete_release", "delete_ref"}
+	scenario := w.scenario("release").LedgerName
+	actions := w.scenarioActions("release")
 	updated := tag + " updated"
 	var releaseID int
 	created := false
@@ -1102,17 +1207,17 @@ func (w *githubRepositoryWave) runReleaseScenario() bool {
 	cleanup := func() bool {
 		clean := true
 		if created && !deletedRelease {
-			if !w.runAction(scenario, "delete_release_cleanup", "delete_release", tag,
+			if !w.runAction(scenario, "delete_release_cleanup", w.action("release_delete"), tag,
 				map[string]any{"release_id": releaseID}, fmt.Sprintf("release:%d", releaseID),
 				func() (string, error) { return w.verifyStreamAbsent("releases", "id", releaseID) }) {
 				clean = false
 			}
 		}
-		// GitHub's delete-release endpoint deliberately leaves its tag behind.
-		// Deleting that run-owned tag via the declared delete_ref action is part
+		// The provider's delete-release endpoint deliberately leaves its tag behind.
+		// Deleting that run-owned tag via the declared ref-delete action is part
 		// of cleanup, not an untracked shell/API side effect.
 		if created {
-			if !w.runAction(scenario, "delete_ref_release_tag", "delete_ref", tag,
+			if !w.runAction(scenario, "delete_ref_release_tag", w.action("ref_delete"), tag,
 				map[string]any{"ref": "tags/" + tag}, "tag:"+tag,
 				func() (string, error) { return w.verifyStreamAbsent("tags", "name", tag) }) {
 				clean = false
@@ -1123,11 +1228,11 @@ func (w *githubRepositoryWave) runReleaseScenario() bool {
 			return false
 		}
 		if created {
-			w.markScenarioPassed(tag, actions, "tagged release deleted and its release-created tag removed with independent GitHub read-back")
+			w.markScenarioPassed(tag, actions, "tagged release deleted and its release-created tag removed with independent provider read-back")
 		}
 		return true
 	}
-	if !w.runAction(scenario, "create_release", "create_release", tag,
+	if !w.runAction(scenario, w.action("release_create"), w.action("release_create"), tag,
 		map[string]any{"tag_name": tag, "name": tag, "body": tag, "draft": false}, "release:"+tag,
 		func() (string, error) {
 			var err error
@@ -1140,7 +1245,7 @@ func (w *githubRepositoryWave) runReleaseScenario() bool {
 		return cleanup() && false
 	}
 	created = true
-	if !w.runAction(scenario, "update_release", "update_release", tag,
+	if !w.runAction(scenario, w.action("release_update"), w.action("release_update"), tag,
 		map[string]any{"release_id": releaseID, "name": updated, "body": tag + " updated", "draft": false}, fmt.Sprintf("release:%d", releaseID),
 		func() (string, error) {
 			id, err := w.verifyReleaseByID(releaseID, updated)
@@ -1151,7 +1256,7 @@ func (w *githubRepositoryWave) runReleaseScenario() bool {
 		}) {
 		return cleanup() && false
 	}
-	if !w.runAction(scenario, "delete_release", "delete_release", tag,
+	if !w.runAction(scenario, w.action("release_delete"), w.action("release_delete"), tag,
 		map[string]any{"release_id": releaseID}, fmt.Sprintf("release:%d", releaseID),
 		func() (string, error) { return w.verifyReleaseAbsent(releaseID) }) {
 		return cleanup() && false
@@ -1160,19 +1265,20 @@ func (w *githubRepositoryWave) runReleaseScenario() bool {
 	return cleanup()
 }
 
-func (w *githubRepositoryWave) runCommitCommentScenario() bool {
-	tag := w.tag("commit-comment")
-	const scenario = "github_repository_commit_comment"
-	actions := githubCommitCommentActions
+func (w *repositoryWriteWave) runCommitCommentScenario() bool {
+	tag := w.tag("commit_comment")
+	scenario := w.scenario("commit_comment").LedgerName
+	blocked := w.blockedAction("commit_comment_item_read")
+	actions := blocked.Actions
 	// A create/update/delete response cannot stand in for the item-level
 	// read-back. The current disposable token has been observed refusing that
 	// read, so do not keep creating a comment that cannot be certified. After a
 	// browser permission repair the caller opts in to re-attempting this bounded
 	// scenario; a provider refusal still leaves it blocked and non-pass.
 	if configValue(w.rc.opts.Config, "certification_commit_comment_item_read", "") != "enabled" {
-		w.markBlocked(actions, tag, githubCommitCommentItemReadBlockedReason, "not_attempted")
+		w.markBlocked(actions, tag, blocked.Reason, "not_attempted")
 		recordStage(w.rc, w.rep, "write_wave_commit_comment", 2, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, githubCommitCommentItemReadBlockedReason
+			return false, CLIStageInfo{}, blocked.Reason
 		})
 		return false
 	}
@@ -1191,17 +1297,17 @@ func (w *githubRepositoryWave) runCommitCommentScenario() bool {
 		if !created || !commentAlive {
 			return true
 		}
-		clean := w.runAction(scenario, "delete_commit_comment", "delete_commit_comment", tag,
+		clean := w.runAction(scenario, w.action("comment_delete"), w.action("comment_delete"), tag,
 			map[string]any{"comment_id": commentID}, fmt.Sprintf("commit_comment:%d", commentID),
 			func() (string, error) { return w.verifyCommitCommentAbsent(commentID) })
 		if !clean {
 			w.recordLeak(tag, actions, "tagged commit comment remained after cleanup")
 			return false
 		}
-		w.markScenarioPassed(tag, actions, "tagged commit comment removed with independent GitHub read-back")
+		w.markScenarioPassed(tag, actions, "tagged commit comment removed with independent provider read-back")
 		return true
 	}
-	if !w.runAction(scenario, "create_commit_comment", "create_commit_comment", tag,
+	if !w.runAction(scenario, w.action("comment_create"), w.action("comment_create"), tag,
 		map[string]any{"commit_sha": sha, "body": body}, "commit_comment:"+tag,
 		func() (string, error) {
 			row, _, err := w.verifyStreamPresent("commit_comments", "body", body, "body", body)
@@ -1222,27 +1328,27 @@ func (w *githubRepositoryWave) runCommitCommentScenario() bool {
 	}
 	created = true
 	commentAlive = true
-	if !w.runAction(scenario, "update_commit_comment", "update_commit_comment", tag,
+	if !w.runAction(scenario, w.action("comment_update"), w.action("comment_update"), tag,
 		map[string]any{"comment_id": commentID, "body": updated}, fmt.Sprintf("commit_comment:%d", commentID),
 		func() (string, error) {
 			return w.verifyCommitCommentUpdated(commentID, commentUpdatedAt)
 		}) {
 		return cleanup() && false
 	}
-	if !w.runAction(scenario, "delete_commit_comment", "delete_commit_comment", tag,
+	if !w.runAction(scenario, w.action("comment_delete"), w.action("comment_delete"), tag,
 		map[string]any{"comment_id": commentID}, fmt.Sprintf("commit_comment:%d", commentID),
 		func() (string, error) { return w.verifyCommitCommentAbsent(commentID) }) {
 		return cleanup() && false
 	}
 	commentAlive = false
-	w.markScenarioPassed(tag, actions, "tagged commit comment removed with independent GitHub read-back")
+	w.markScenarioPassed(tag, actions, "tagged commit comment removed with independent provider read-back")
 	return true
 }
 
-func (w *githubRepositoryWave) runRefScenario() bool {
+func (w *repositoryWriteWave) runRefScenario() bool {
 	tag := w.tag("ref")
-	const scenario = "github_repository_ref"
-	actions := []string{"create_ref", "update_ref", "delete_ref"}
+	scenario := w.scenario("ref").LedgerName
+	actions := w.scenarioActions("ref")
 	sha, err := w.firstCommitSHA()
 	if err != nil {
 		w.recordScenarioFailure(scenario, actions, tag, "read fixture commit for ref scenario: "+err.Error())
@@ -1254,17 +1360,17 @@ func (w *githubRepositoryWave) runRefScenario() bool {
 		if !created {
 			return true
 		}
-		clean := w.runAction(scenario, "delete_ref", "delete_ref", tag,
+		clean := w.runAction(scenario, w.action("ref_delete"), w.action("ref_delete"), tag,
 			map[string]any{"ref": "heads/" + branch}, "ref:heads/"+branch,
 			func() (string, error) { return w.verifyStreamAbsent("branches", "name", branch) })
 		if !clean {
 			w.recordLeak(tag, actions, "tagged branch ref remained after cleanup")
 			return false
 		}
-		w.markScenarioPassed(tag, actions, "tagged branch ref removed with independent GitHub read-back")
+		w.markScenarioPassed(tag, actions, "tagged branch ref removed with independent provider read-back")
 		return true
 	}
-	if !w.runAction(scenario, "create_ref", "create_ref", tag,
+	if !w.runAction(scenario, w.action("ref_create"), w.action("ref_create"), tag,
 		map[string]any{"ref": "refs/heads/" + branch, "sha": sha}, "ref:heads/"+branch,
 		func() (string, error) {
 			_, id, err := w.verifyStreamPresent("branches", "name", branch, "commit_sha", sha)
@@ -1273,7 +1379,7 @@ func (w *githubRepositoryWave) runRefScenario() bool {
 		return cleanup() && false
 	}
 	created = true
-	if !w.runAction(scenario, "update_ref", "update_ref", tag,
+	if !w.runAction(scenario, w.action("ref_update"), w.action("ref_update"), tag,
 		map[string]any{"ref": "heads/" + branch, "sha": sha, "force": false}, "ref:heads/"+branch,
 		func() (string, error) {
 			_, id, err := w.verifyStreamPresent("branches", "name", branch, "commit_sha", sha)
@@ -1284,10 +1390,10 @@ func (w *githubRepositoryWave) runRefScenario() bool {
 	return cleanup()
 }
 
-func (w *githubRepositoryWave) runTopicsScenario() bool {
+func (w *repositoryWriteWave) runTopicsScenario() bool {
 	tag := w.tag("topics")
-	const scenario = "github_repository_topics"
-	actions := []string{"replace_repo_topics"}
+	scenario := w.scenario("topics").LedgerName
+	actions := w.scenarioActions("topics")
 	baseline, err := w.readTopics()
 	if err != nil {
 		w.recordScenarioFailure(scenario, actions, tag, "read repository topics baseline: "+err.Error())
@@ -1302,7 +1408,7 @@ func (w *githubRepositoryWave) runTopicsScenario() bool {
 		if !changed {
 			return true
 		}
-		clean := w.runAction(scenario, "replace_repo_topics_restore", "replace_repo_topics", tag,
+		clean := w.runAction(scenario, "replace_repo_topics_restore", w.action("topics_replace"), tag,
 			map[string]any{"names": baseline}, "topics:"+tag,
 			func() (string, error) {
 				names, err := w.readTopics()
@@ -1318,10 +1424,10 @@ func (w *githubRepositoryWave) runTopicsScenario() bool {
 			w.recordLeak(tag, actions, "repository topics were not restored to their captured baseline")
 			return false
 		}
-		w.markScenarioPassed(tag, actions, "repository topics restored to the captured baseline with independent GitHub direct-read")
+		w.markScenarioPassed(tag, actions, "repository topics restored to the captured baseline with independent provider direct-read")
 		return true
 	}
-	if !w.runAction(scenario, "replace_repo_topics", "replace_repo_topics", tag,
+	if !w.runAction(scenario, w.action("topics_replace"), w.action("topics_replace"), tag,
 		map[string]any{"names": []string{tag}}, "topics:"+tag,
 		func() (string, error) {
 			names, err := w.readTopics()
@@ -1345,10 +1451,10 @@ func (w *githubRepositoryWave) runTopicsScenario() bool {
 // it with the normal approval/confirmation boundary. verify is an independent
 // connector read (or the fixed direct-read command for topics), never the
 // reverse-run response.
-func (w *githubRepositoryWave) runAction(scenario, stageID, action, tag string, overrides map[string]any, resourceHint string, verify func() (string, error)) bool {
+func (w *repositoryWriteWave) runAction(scenario, stageID, action, tag string, overrides map[string]any, resourceHint string, verify func() (string, error)) bool {
 	stageName := "write_wave_" + stageID
 	stage := recordStage(w.rc, w.rep, stageName, 2, func() (bool, CLIStageInfo, string) {
-		schema, err := writeActionRecordSchema("github", action)
+		schema, err := writeActionRecordSchema(w.connector, action)
 		if err != nil {
 			return false, CLIStageInfo{}, fmt.Sprintf("%s: load declared record schema: %v", action, err)
 		}
@@ -1360,7 +1466,7 @@ func (w *githubRepositoryWave) runAction(scenario, stageID, action, tag string, 
 			Action:     action,
 			Scenario:   scenario,
 			Tag:        tag,
-			Connector:  "github",
+			Connector:  w.connector,
 			EntityHint: resourceHint,
 			ResourceID: resourceHint,
 		}); err != nil {
@@ -1400,13 +1506,13 @@ func (w *githubRepositoryWave) runAction(scenario, stageID, action, tag string, 
 	return true
 }
 
-// readBackWithRetry allows GitHub's collection projection a small, explicit
+// readBackWithRetry allows the provider collection projection a small, explicit
 // window to observe a just-completed mutation. It is not a success shortcut:
 // once the bound is exhausted, the action remains failed and leaked_resource.
-func (w *githubRepositoryWave) readBackWithRetry(verify func() (string, error)) (string, error) {
+func (w *repositoryWriteWave) readBackWithRetry(verify func() (string, error)) (string, error) {
 	attempts := w.readBackAttempts
 	if attempts <= 0 {
-		attempts = defaultGitHubReadBackAttempts
+		attempts = defaultReadBackAttempts
 	}
 	var lastErr error
 	for attempt := 1; attempt <= attempts; attempt++ {
@@ -1425,7 +1531,7 @@ func (w *githubRepositoryWave) readBackWithRetry(verify func() (string, error)) 
 	return "", fmt.Errorf("not observed after %d independent read-back attempts: %w", attempts, lastErr)
 }
 
-func (w *githubRepositoryWave) waitForReadBackAttempt(attempt int) error {
+func (w *repositoryWriteWave) waitForReadBackAttempt(attempt int) error {
 	if w.waitForReadBack != nil {
 		return w.waitForReadBack(attempt)
 	}
@@ -1433,7 +1539,7 @@ func (w *githubRepositoryWave) waitForReadBackAttempt(attempt int) error {
 	if w.rc != nil && w.rc.ctx != nil {
 		ctx = w.rc.ctx
 	}
-	delay := githubReadBackRetryBase << (attempt - 1)
+	delay := readBackRetryBase << (attempt - 1)
 	timer := time.NewTimer(delay)
 	defer timer.Stop()
 	select {
@@ -1444,7 +1550,7 @@ func (w *githubRepositoryWave) waitForReadBackAttempt(attempt int) error {
 	}
 }
 
-func (w *githubRepositoryWave) executeProductionWrite(scenario, stageID, action string, record map[string]any) (CLIStageInfo, error) {
+func (w *repositoryWriteWave) executeProductionWrite(scenario, stageID, action string, record map[string]any) (CLIStageInfo, error) {
 	seedTable := "cert_write_wave_" + safeWaveName(scenario) + "_" + safeWaveName(stageID)
 	seedRecord := make(map[string]any, len(record)+1)
 	for key, value := range record {
@@ -1453,7 +1559,7 @@ func (w *githubRepositoryWave) executeProductionWrite(scenario, stageID, action 
 	// A synthetic source-table primary key is deliberately not mapped into the
 	// provider record. Some declared write schemas (notably topics.names) have
 	// no scalar identity but still must use the production source-table route.
-	seedRecord["certification_seed_id"] = NewTag("github-seed", w.runID)
+	seedRecord["certification_seed_id"] = NewTag(w.profile.TagSubjectPrefix+"-seed", w.runID)
 	if err := seedGeneratedSourceTable(w.rc, seedTable, "certification_seed_id", seedRecord); err != nil {
 		return CLIStageInfo{}, fmt.Errorf("seed declared record through ETL: %w", err)
 	}
@@ -1466,7 +1572,7 @@ func (w *githubRepositoryWave) executeProductionWrite(scenario, stageID, action 
 	planRes := w.rc.run(append([]string{
 		"reverse", "plan", planName,
 		"--source-table", seedTable,
-		"--destination", "github:" + sourceCredentialName,
+		"--destination", w.connector + ":" + sourceCredentialName,
 		"--action", action,
 	}, mapArgs...)...)
 	if planRes.ExitCode != 0 {
@@ -1476,7 +1582,7 @@ func (w *githubRepositoryWave) executeProductionWrite(scenario, stageID, action 
 	if planID == "" {
 		return cliInfoFrom(planRes), fmt.Errorf("reverse plan did not report a plan id")
 	}
-	destructive := githubWriteRequiresConfirmation(action)
+	destructive := w.writeRequiresConfirmation(action)
 	var token string
 	if destructive {
 		var previewRes CLIResult
@@ -1521,11 +1627,11 @@ func (w *githubRepositoryWave) executeProductionWrite(scenario, stageID, action 
 	return cliInfoFrom(runRes), nil
 }
 
-func githubWriteRequiresConfirmation(actionName string) bool {
-	profile := certificationProfileFor("github")
+func (w *repositoryWriteWave) writeRequiresConfirmation(actionName string) bool {
+	profile := certificationProfileFor(w.connector)
 	for _, action := range profile.writes {
 		if action.Name == actionName {
-			return engine.DestructiveTargetForWrite("github", action).RequiresApproval()
+			return engine.DestructiveTargetForWrite(w.connector, action).RequiresApproval()
 		}
 	}
 	// An unknown action must be stopped before dispatch by
@@ -1534,7 +1640,7 @@ func githubWriteRequiresConfirmation(actionName string) bool {
 	return true
 }
 
-func (w *githubRepositoryWave) verifyStreamPresent(stream, matchField string, matchValue any, expectField string, expectValue any) (map[string]any, string, error) {
+func (w *repositoryWriteWave) verifyStreamPresent(stream, matchField string, matchValue any, expectField string, expectValue any) (map[string]any, string, error) {
 	rows, err := w.readStream(stream)
 	if err != nil {
 		return nil, "", err
@@ -1547,7 +1653,7 @@ func (w *githubRepositoryWave) verifyStreamPresent(stream, matchField string, ma
 	return nil, "", fmt.Errorf("%s row with %s=%v and %s=%v was not returned", stream, matchField, matchValue, expectField, expectValue)
 }
 
-func (w *githubRepositoryWave) verifyStreamAbsent(stream, matchField string, matchValue any) (string, error) {
+func (w *repositoryWriteWave) verifyStreamAbsent(stream, matchField string, matchValue any) (string, error) {
 	rows, err := w.readStream(stream)
 	if err != nil {
 		return "", err
@@ -1560,12 +1666,12 @@ func (w *githubRepositoryWave) verifyStreamAbsent(stream, matchField string, mat
 	return stream + ":absent", nil
 }
 
-func (w *githubRepositoryWave) verifyIssueState(number int, want string) (string, error) {
+func (w *repositoryWriteWave) verifyIssueState(number int, want string) (string, error) {
 	_, id, err := w.verifyStreamPresent("issues", "number", number, "state", want)
 	return id, err
 }
 
-func (w *githubRepositoryWave) verifyIssueLocked(number int, want bool) (string, error) {
+func (w *repositoryWriteWave) verifyIssueLocked(number int, want bool) (string, error) {
 	_, id, err := w.verifyStreamPresent("issues", "number", number, "locked", want)
 	return id, err
 }
@@ -1573,9 +1679,9 @@ func (w *githubRepositoryWave) verifyIssueLocked(number int, want bool) (string,
 // verifyIssueCommentUpdated uses the declaration-owned direct-read command
 // rather than the collection stream. Its json_redacted output policy omits
 // comment bodies deliberately, so the independent proof binds the exact
-// comment id and requires GitHub's non-sensitive updated_at to advance from
+// comment id and requires the provider's non-sensitive updated_at to advance from
 // the creation read-back.
-func (w *githubRepositoryWave) verifyIssueCommentUpdated(commentID int, previousUpdatedAt string) (string, error) {
+func (w *repositoryWriteWave) verifyIssueCommentUpdated(commentID int, previousUpdatedAt string) (string, error) {
 	response, err := w.readIssueCommentResponse(commentID)
 	if err != nil {
 		return "", err
@@ -1590,7 +1696,7 @@ func (w *githubRepositoryWave) verifyIssueCommentUpdated(commentID int, previous
 	return fmt.Sprintf("issue_comment:%d", commentID), nil
 }
 
-func (w *githubRepositoryWave) readIssueCommentResponse(commentID int) (map[string]any, error) {
+func (w *repositoryWriteWave) readIssueCommentResponse(commentID int) (map[string]any, error) {
 	res := w.readIssueComment(commentID)
 	if passed, msg := assertKind(w.rc, "write_repository_wave", res, "ConnectorCommandDirectRead", 0); !passed {
 		return nil, fmt.Errorf("direct read issue comment %d: %s", commentID, msg)
@@ -1602,7 +1708,7 @@ func (w *githubRepositoryWave) readIssueCommentResponse(commentID int) (map[stri
 	return response, nil
 }
 
-func (w *githubRepositoryWave) verifyIssueCommentAbsent(commentID int) (string, error) {
+func (w *repositoryWriteWave) verifyIssueCommentAbsent(commentID int) (string, error) {
 	res := w.readIssueComment(commentID)
 	if res.Kind == "Error" && res.ExitCode != 0 && strings.Contains(strings.ToLower(res.Stdout+"\n"+res.Stderr), "404") {
 		return fmt.Sprintf("issue_comment:%d:absent", commentID), nil
@@ -1616,7 +1722,7 @@ func (w *githubRepositoryWave) verifyIssueCommentAbsent(commentID int) (string, 
 // verifyReleaseTag and verifyReleaseByID use declaration-owned direct reads.
 // Release collection streams can lag a just-created or just-deleted release;
 // the item endpoints bind the proof to the provider-assigned resource id.
-func (w *githubRepositoryWave) verifyReleaseTag(tag, wantName string) (int, error) {
+func (w *repositoryWriteWave) verifyReleaseTag(tag, wantName string) (int, error) {
 	response, err := w.readReleaseResponseByTag(tag)
 	if err != nil {
 		return 0, err
@@ -1632,7 +1738,7 @@ func (w *githubRepositoryWave) verifyReleaseTag(tag, wantName string) (int, erro
 	return integerField(response, "id")
 }
 
-func (w *githubRepositoryWave) verifyReleaseByID(releaseID int, wantName string) (int, error) {
+func (w *repositoryWriteWave) verifyReleaseByID(releaseID int, wantName string) (int, error) {
 	response, err := w.readReleaseResponseByID(releaseID)
 	if err != nil {
 		return 0, err
@@ -1651,7 +1757,7 @@ func (w *githubRepositoryWave) verifyReleaseByID(releaseID int, wantName string)
 	return actualID, nil
 }
 
-func (w *githubRepositoryWave) verifyReleaseAbsent(releaseID int) (string, error) {
+func (w *repositoryWriteWave) verifyReleaseAbsent(releaseID int) (string, error) {
 	res := w.readReleaseByID(releaseID)
 	if res.Kind == "Error" && res.ExitCode != 0 && strings.Contains(strings.ToLower(res.Stdout+"\n"+res.Stderr), "404") {
 		return fmt.Sprintf("release:%d:absent", releaseID), nil
@@ -1662,15 +1768,15 @@ func (w *githubRepositoryWave) verifyReleaseAbsent(releaseID int) (string, error
 	return "", fmt.Errorf("release %d remains present after delete", releaseID)
 }
 
-func (w *githubRepositoryWave) readReleaseResponseByTag(tag string) (map[string]any, error) {
+func (w *repositoryWriteWave) readReleaseResponseByTag(tag string) (map[string]any, error) {
 	return w.releaseResponse(w.readReleaseByTag(tag), fmt.Sprintf("tag %q", tag))
 }
 
-func (w *githubRepositoryWave) readReleaseResponseByID(releaseID int) (map[string]any, error) {
+func (w *repositoryWriteWave) readReleaseResponseByID(releaseID int) (map[string]any, error) {
 	return w.releaseResponse(w.readReleaseByID(releaseID), fmt.Sprintf("id %d", releaseID))
 }
 
-func (w *githubRepositoryWave) releaseResponse(res CLIResult, description string) (map[string]any, error) {
+func (w *repositoryWriteWave) releaseResponse(res CLIResult, description string) (map[string]any, error) {
 	if passed, msg := assertKind(w.rc, "write_repository_wave", res, "ConnectorCommandDirectRead", 0); !passed {
 		return nil, fmt.Errorf("direct read release %s: %s", description, msg)
 	}
@@ -1681,22 +1787,22 @@ func (w *githubRepositoryWave) releaseResponse(res CLIResult, description string
 	return response, nil
 }
 
-func (w *githubRepositoryWave) readReleaseByTag(tag string) CLIResult {
-	return w.rc.run("github", "releases", "tags", "view",
+func (w *repositoryWriteWave) readReleaseByTag(tag string) CLIResult {
+	return w.rc.run(w.connector, "releases", "tags", "view",
 		"--credential", sourceCredentialName,
 		"--tag", tag,
 		"--json")
 }
 
-func (w *githubRepositoryWave) readReleaseByID(releaseID int) CLIResult {
-	return w.rc.run("github", "releases", "view",
+func (w *repositoryWriteWave) readReleaseByID(releaseID int) CLIResult {
+	return w.rc.run(w.connector, "releases", "view",
 		"--credential", sourceCredentialName,
 		"--release-id", strconv.Itoa(releaseID),
 		"--json")
 }
 
-func (w *githubRepositoryWave) readIssueComment(commentID int) CLIResult {
-	return w.rc.run("github", "issues", "comments", "view",
+func (w *repositoryWriteWave) readIssueComment(commentID int) CLIResult {
+	return w.rc.run(w.connector, "issues", "comments", "view",
 		"--credential", sourceCredentialName,
 		"--comment-id", strconv.Itoa(commentID),
 		"--json")
@@ -1704,8 +1810,8 @@ func (w *githubRepositoryWave) readIssueComment(commentID int) CLIResult {
 
 // Commit-comment direct reads have the same deliberately redacted body policy
 // as issue comments. Bind the verified update to the provider-assigned id and
-// GitHub's updated_at rather than pretending a redacted body was observable.
-func (w *githubRepositoryWave) verifyCommitCommentUpdated(commentID int, previousUpdatedAt string) (string, error) {
+// provider updated_at rather than pretending a redacted body was observable.
+func (w *repositoryWriteWave) verifyCommitCommentUpdated(commentID int, previousUpdatedAt string) (string, error) {
 	response, err := w.readCommitCommentResponse(commentID)
 	if err != nil {
 		return "", err
@@ -1720,7 +1826,7 @@ func (w *githubRepositoryWave) verifyCommitCommentUpdated(commentID int, previou
 	return fmt.Sprintf("commit_comment:%d", commentID), nil
 }
 
-func (w *githubRepositoryWave) verifyCommitCommentAbsent(commentID int) (string, error) {
+func (w *repositoryWriteWave) verifyCommitCommentAbsent(commentID int) (string, error) {
 	res := w.readCommitComment(commentID)
 	if res.Kind == "Error" && res.ExitCode != 0 && strings.Contains(strings.ToLower(res.Stdout+"\n"+res.Stderr), "404") {
 		return fmt.Sprintf("commit_comment:%d:absent", commentID), nil
@@ -1731,7 +1837,7 @@ func (w *githubRepositoryWave) verifyCommitCommentAbsent(commentID int) (string,
 	return "", fmt.Errorf("commit comment %d remains present after delete", commentID)
 }
 
-func (w *githubRepositoryWave) readCommitCommentResponse(commentID int) (map[string]any, error) {
+func (w *repositoryWriteWave) readCommitCommentResponse(commentID int) (map[string]any, error) {
 	res := w.readCommitComment(commentID)
 	if passed, msg := assertKind(w.rc, "write_repository_wave", res, "ConnectorCommandDirectRead", 0); !passed {
 		return nil, fmt.Errorf("direct read commit comment %d: %s", commentID, msg)
@@ -1743,14 +1849,14 @@ func (w *githubRepositoryWave) readCommitCommentResponse(commentID int) (map[str
 	return response, nil
 }
 
-func (w *githubRepositoryWave) readCommitComment(commentID int) CLIResult {
-	return w.rc.run("github", "comments", "view",
+func (w *repositoryWriteWave) readCommitComment(commentID int) CLIResult {
+	return w.rc.run(w.connector, "comments", "view",
 		"--credential", sourceCredentialName,
 		"--comment-id", strconv.Itoa(commentID),
 		"--json")
 }
 
-func (w *githubRepositoryWave) verifyIssueLabels(number int, want ...string) (string, error) {
+func (w *repositoryWriteWave) verifyIssueLabels(number int, want ...string) (string, error) {
 	rows, err := w.readStream("issues")
 	if err != nil {
 		return "", err
@@ -1769,7 +1875,7 @@ func (w *githubRepositoryWave) verifyIssueLabels(number int, want ...string) (st
 	return "", fmt.Errorf("issue %d was not returned", number)
 }
 
-func (w *githubRepositoryWave) verifyIssueLabelAbsent(number int, absent string) (string, error) {
+func (w *repositoryWriteWave) verifyIssueLabelAbsent(number int, absent string) (string, error) {
 	rows, err := w.readStream("issues")
 	if err != nil {
 		return "", err
@@ -1786,7 +1892,7 @@ func (w *githubRepositoryWave) verifyIssueLabelAbsent(number int, absent string)
 	return "", fmt.Errorf("issue %d was not returned", number)
 }
 
-func (w *githubRepositoryWave) verifyIssueNoLabels(number int) (string, error) {
+func (w *repositoryWriteWave) verifyIssueNoLabels(number int) (string, error) {
 	rows, err := w.readStream("issues")
 	if err != nil {
 		return "", err
@@ -1803,7 +1909,7 @@ func (w *githubRepositoryWave) verifyIssueNoLabels(number int) (string, error) {
 	return "", fmt.Errorf("issue %d was not returned", number)
 }
 
-func (w *githubRepositoryWave) fixtureLabels(count int) ([]string, error) {
+func (w *repositoryWriteWave) fixtureLabels(count int) ([]string, error) {
 	rows, err := w.readStream("labels")
 	if err != nil {
 		return nil, err
@@ -1822,7 +1928,7 @@ func (w *githubRepositoryWave) fixtureLabels(count int) ([]string, error) {
 	return nil, fmt.Errorf("fixture has %d usable baseline labels, need %d", len(labels), count)
 }
 
-func (w *githubRepositoryWave) firstCommitSHA() (string, error) {
+func (w *repositoryWriteWave) firstCommitSHA() (string, error) {
 	rows, err := w.readStream("commits")
 	if err != nil {
 		return "", err
@@ -1835,7 +1941,7 @@ func (w *githubRepositoryWave) firstCommitSHA() (string, error) {
 	return "", fmt.Errorf("fixture repository has no readable commit SHA")
 }
 
-func (w *githubRepositoryWave) readStream(stream string) ([]map[string]any, error) {
+func (w *repositoryWriteWave) readStream(stream string) ([]map[string]any, error) {
 	primaryKey, ok := map[string]string{
 		"issues":          "node_id",
 		"issue_comments":  "id",
@@ -1855,7 +1961,7 @@ func (w *githubRepositoryWave) readStream(stream string) ([]map[string]any, erro
 	connection := "cert_write_wave_read_" + id
 	table := "cert_write_wave_read_" + id
 	connectionRes := w.rc.run("connections", "create", connection,
-		"--source", "github:"+sourceCredentialName,
+		"--source", w.connector+":"+sourceCredentialName,
 		"--destination", "warehouse:"+warehouseCredentialName,
 		"--stream", stream,
 		"--primary-key", primaryKey,
@@ -1883,8 +1989,8 @@ func (w *githubRepositoryWave) readStream(stream string) ([]map[string]any, erro
 	return rows, nil
 }
 
-func (w *githubRepositoryWave) readTopics() ([]string, error) {
-	res := w.rc.run("github", "topics", "view", "--credential", sourceCredentialName, "--json")
+func (w *repositoryWriteWave) readTopics() ([]string, error) {
+	res := w.rc.run(w.connector, "topics", "view", "--credential", sourceCredentialName, "--json")
 	if passed, msg := assertKind(w.rc, "write_repository_wave", res, "ConnectorCommandDirectRead", 0); !passed {
 		return nil, fmt.Errorf("direct read repository topics: %s", msg)
 	}
@@ -1904,7 +2010,7 @@ func (w *githubRepositoryWave) readTopics() ([]string, error) {
 	return names, nil
 }
 
-func (w *githubRepositoryWave) markScenarioPassed(tag string, actions []string, reason string) {
+func (w *repositoryWriteWave) markScenarioPassed(tag string, actions []string, reason string) {
 	if err := w.ledger.RecordCleaned(tag); err != nil {
 		w.recordScenarioFailure("ledger", actions, tag, "record verified cleanup: "+err.Error())
 		return
@@ -1929,7 +2035,7 @@ func (w *githubRepositoryWave) markScenarioPassed(tag string, actions []string, 
 	}
 }
 
-func (w *githubRepositoryWave) markFailed(action, tag, reason string) {
+func (w *repositoryWriteWave) markFailed(action, tag, reason string) {
 	if w.rep.Capabilities.WriteActions == nil {
 		w.rep.Capabilities.WriteActions = map[string]WriteActionResult{}
 	}
@@ -1943,7 +2049,7 @@ func (w *githubRepositoryWave) markFailed(action, tag, reason string) {
 // have accepted a mutation, but a known permission boundary can prevent the
 // independent read-back that certification requires. That is not coverage and
 // must not be folded into a pass roll-up, even when cleanup was later proven.
-func (w *githubRepositoryWave) markBlocked(actions []string, tag, reason, cleanup string) {
+func (w *repositoryWriteWave) markBlocked(actions []string, tag, reason, cleanup string) {
 	if w.rep.Capabilities.WriteActions == nil {
 		w.rep.Capabilities.WriteActions = map[string]WriteActionResult{}
 	}
@@ -1965,7 +2071,7 @@ func (w *githubRepositoryWave) markBlocked(actions []string, tag, reason, cleanu
 // markRecoveryUncertified records a completed cleanup without laundering a
 // prior interrupted mutation into coverage. A resumed `all` wave replaces
 // this outcome only after it sends the complete fresh scenario itself.
-func (w *githubRepositoryWave) markRecoveryUncertified(actions []string, tag, reason string) {
+func (w *repositoryWriteWave) markRecoveryUncertified(actions []string, tag, reason string) {
 	if w.rep.Capabilities.WriteActions == nil {
 		w.rep.Capabilities.WriteActions = map[string]WriteActionResult{}
 	}
@@ -1983,7 +2089,7 @@ func (w *githubRepositoryWave) markRecoveryUncertified(actions []string, tag, re
 	}
 }
 
-func (w *githubRepositoryWave) recordScenarioFailure(scenario string, actions []string, tag, reason string) {
+func (w *repositoryWriteWave) recordScenarioFailure(scenario string, actions []string, tag, reason string) {
 	for _, action := range actions {
 		if !w.completed[action] {
 			w.markFailed(action, tag, scenario+": "+reason)
@@ -1991,11 +2097,11 @@ func (w *githubRepositoryWave) recordScenarioFailure(scenario string, actions []
 	}
 }
 
-func (w *githubRepositoryWave) recordLeak(tag string, actions []string, reason string) {
+func (w *repositoryWriteWave) recordLeak(tag string, actions []string, reason string) {
 	if w.rep.Capabilities.WriteActions == nil {
 		w.rep.Capabilities.WriteActions = map[string]WriteActionResult{}
 	}
-	w.rep.Leaks = append(w.rep.Leaks, Leak{Tag: tag, Connector: "github", Action: strings.Join(actions, ","), Reason: reason})
+	w.rep.Leaks = append(w.rep.Leaks, Leak{Tag: tag, Connector: w.connector, Action: strings.Join(actions, ","), Reason: reason})
 	for _, action := range actions {
 		item := w.declarations[action]
 		w.rep.Capabilities.WriteActions[action] = WriteActionResult{

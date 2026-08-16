@@ -21,6 +21,56 @@ func certificationProfileFor(connector string) certificationProfile {
 	return certificationProfile{spec: bundle.Certification, writes: bundle.Writes}
 }
 
+func certificationWriteWaveFor(connector string) (*engine.CertificationWriteWaveSpec, bool) {
+	profile := certificationProfileFor(connector)
+	if profile.spec == nil || profile.spec.WriteWave == nil {
+		return nil, false
+	}
+	return profile.spec.WriteWave, true
+}
+
+func certificationHasWriteWave(connector string) bool {
+	_, ok := certificationWriteWaveFor(connector)
+	return ok
+}
+
+func certificationWriteInventoryClassification(connector, action, path string) (classification, reason string, declared bool, err error) {
+	profile := certificationProfileFor(connector)
+	if profile.spec == nil {
+		return "", "", false, nil
+	}
+	if wave := profile.spec.WriteWave; wave != nil {
+		for _, candidate := range wave.Actions {
+			if candidate == action {
+				return writeClassificationRepositoryWaveReady,
+					"the connector-declared bounded repository scenario is not yet executed for this action", true, nil
+			}
+		}
+	}
+	rules := profile.spec.WriteInventory.Rules
+	if len(rules) == 0 {
+		return "", "", false, nil
+	}
+	for _, rule := range rules {
+		for _, candidate := range rule.Actions {
+			if candidate == action {
+				return rule.Classification, rule.Reason, true, nil
+			}
+		}
+		for _, candidate := range rule.Paths {
+			if candidate == path {
+				return rule.Classification, rule.Reason, true, nil
+			}
+		}
+		for _, prefix := range rule.PathPrefixes {
+			if strings.HasPrefix(path, prefix) {
+				return rule.Classification, rule.Reason, true, nil
+			}
+		}
+	}
+	return "", "", true, fmt.Errorf("definition-owned write inventory has no classification for action %q path %q", action, path)
+}
+
 func certificationPairingsFor(connector string) []WritePairing {
 	profile := certificationProfileFor(connector)
 	if profile.spec == nil || len(profile.spec.WritePairings) == 0 {
