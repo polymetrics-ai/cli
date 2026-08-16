@@ -107,6 +107,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 	}
 
 	result := Result{}
+	pendingReceipts := make([]WarehouseReceipt, 0)
 	err = resolved.Source.ReadTransport(ctx, cloneSourceRequest(SourceRequest{
 		Connector:    request.Source,
 		Runtime:      request.SourceRuntime,
@@ -169,6 +170,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		if err := receipt.Validate(); err != nil {
 			return err
 		}
+		pendingReceipts = append(pendingReceipts, receipt)
 		staged, err := request.Stage.Reopen(ctx, receipt)
 		if err != nil {
 			result.StageElapsed += time.Since(stageStarted)
@@ -254,6 +256,10 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			}); err != nil {
 				return err
 			}
+			if err := retireCommittedReceipts(ctx, request, pendingReceipts); err != nil {
+				return err
+			}
+			pendingReceipts = pendingReceipts[:0]
 		}
 
 		committed := candidate.Clone()
@@ -328,6 +334,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 	}()
 
 	var lastCandidate *synccontract.CheckpointEnvelope
+	receipts := make([]WarehouseReceipt, 0)
 	err = resolved.Source.ReadTransport(ctx, cloneSourceRequest(SourceRequest{
 		Connector:    request.Source,
 		Runtime:      request.SourceRuntime,
@@ -380,6 +387,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		if err := receipt.Validate(); err != nil {
 			return err
 		}
+		receipts = append(receipts, receipt)
 		staged, err := request.Stage.Reopen(ctx, receipt)
 		if err != nil {
 			result.StageElapsed += time.Since(stageStarted)
@@ -455,9 +463,27 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 	}); err != nil {
 		return result, err
 	}
+	if err := retireCommittedReceipts(ctx, request, receipts); err != nil {
+		return result, err
+	}
 	committed := lastCandidate.Clone()
 	committedAt := acknowledgement.AcknowledgedAt
 	committed.CommittedAt = &committedAt
 	result.CommittedCheckpoint = &committed
 	return result, nil
+}
+
+func retireCommittedReceipts(ctx context.Context, request RunRequest, receipts []WarehouseReceipt) error {
+	stage, ok := request.Stage.(RetirableWarehouseStage)
+	if !ok || len(receipts) == 0 {
+		return nil
+	}
+	cleanupCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), request.unitDeadline())
+	defer cancel()
+	for _, receipt := range receipts {
+		if err := stage.Retire(cleanupCtx, receipt); err != nil {
+			return fmt.Errorf("retire committed warehouse stage receipt %q: %w", receipt.ID, err)
+		}
+	}
+	return nil
 }

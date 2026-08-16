@@ -948,6 +948,54 @@ func TestOrchestratorCommitsOnlyAfterDurableAcknowledgement(t *testing.T) {
 	}
 }
 
+func TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit(t *testing.T) {
+	tests := []struct {
+		name        string
+		commit      func(synccontract.CheckpointEnvelope) error
+		wantErr     bool
+		wantRetires int
+	}{
+		{
+			name: "checkpoint committed",
+			commit: func(synccontract.CheckpointEnvelope) error {
+				return nil
+			},
+			wantRetires: 1,
+		},
+		{
+			name: "checkpoint persistence fails",
+			commit: func(synccontract.CheckpointEnvelope) error {
+				return errors.New("synthetic checkpoint persistence failure")
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			pair := newTestTransportPair("api", "database")
+			registry := NewRegistry(pair.verifier)
+			registerTransportPair(t, registry, pair)
+			stage := &retiringTestWarehouseStage{}
+
+			_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+				ConnectionID: "test-connection-owner", Generation: 1,
+				Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+				BatchSize: 10, Stage: stage, Commit: testCase.commit,
+			})
+			if (err != nil) != testCase.wantErr {
+				t.Fatalf("Run() error = %v, want error=%t", err, testCase.wantErr)
+			}
+			if got := len(stage.retired); got != testCase.wantRetires {
+				t.Fatalf("retired receipts = %d, want %d; stage artifacts must survive an uncommitted checkpoint", got, testCase.wantRetires)
+			}
+			if stage.calls != 1 || pair.destinationExecutor.applyCalls != 1 {
+				t.Fatalf("stage/apply calls = %d/%d, want one accepted effect before checkpoint disposition", stage.calls, pair.destinationExecutor.applyCalls)
+			}
+		})
+	}
+}
+
 func TestOrchestratorAdmitsEmptyResultOnlyFromExplicitSourceMarker(t *testing.T) {
 	for _, testCase := range []struct {
 		name    string
@@ -1658,6 +1706,16 @@ type testWarehouseStage struct {
 	mutateRawMessage        bool
 	injectUnsupportedRecord bool
 	worksets                map[string]WarehouseWorkset
+}
+
+type retiringTestWarehouseStage struct {
+	testWarehouseStage
+	retired []WarehouseReceipt
+}
+
+func (s *retiringTestWarehouseStage) Retire(_ context.Context, receipt WarehouseReceipt) error {
+	s.retired = append(s.retired, receipt)
+	return nil
 }
 
 func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequest) (WarehouseReceipt, error) {

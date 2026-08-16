@@ -7,6 +7,83 @@ status: completed
 
 # Plan — #4093 definition-owned production transports
 
+## R2 continuation — task delivery header
+
+- **Issue:** `Refs #4093 — feat(synctransport): load definition-owned transports, register production adapters, and retire transient stages`
+- **Base branch:** `integration/4015-mvp-flat-r1`
+- **Merges into:** `integration/4015-mvp-flat-r1 → main`
+- **Delivery:** direct PR open against `integration/4015-mvp-flat-r1`, API-verified after creation.
+- **Working branch:** `fm/cli-4093-definition-owned-transports-r1`
+- **Task:** Reconcile the current branch with #4093 and close the residual proof gap: a second connector must be loaded from its own `sync_transport.json`, discovered through the generic factory-provider path, registered by App without connector-name dispatch, and run through the generic orchestrator. Close the remaining transient-stage lifecycle gap by retiring only exact receipts after checkpoint persistence and reconciling a process killed between those two durable events.
+- **Verification:** focused RED/GREEN tests in `internal/app` and `internal/synctransport`, connector boundary, generated-definition checks, vet/build, scoped suites, and repository gates recorded in `VERIFICATION.md`.
+
+### Reconciliation before R2 implementation
+
+- Merged **#4156** (`11fd27b4b`) already supplies versioned strict loading,
+  clone-safe `engine.Definition` projection, exact family/identifier factory
+  selection, definition-selected evidence admission, generic registration, and
+  production PostgreSQL/GitHub hooks.
+- Merged **#4186** (`281560ca1`) adds GitHub's definition-owned
+  `destination_transport.source_bindings`; its source eligibility no longer
+  belongs in shared Go.
+- Merged **#4187** and **#4188** made the advertised history modes executable.
+  The original issue's route-specific history refusal is therefore stale and
+  must not be reintroduced. CDC/change-capture remains role-aware: a
+  destination cannot independently capture changes; the existing closed
+  `change_apply` strategy is the destination half of a source `change_capture`
+  run.
+- Existing `TestRegisterDeclaredTransportsRegistersTwoDefinitionOwnedPairs`
+  proves generic registration with Go-authored test connectors, but it does
+  not load a throwaway bundle, invoke `App.composeTransportRegistry`, or run a
+  production composition result through the generic orchestrator. That is the
+  residual this continuation owns.
+
+### R2 TDD slice
+
+1. **Residual proof:** add a test-only connector whose sole transport
+   declaration is `sync_transport.json`; inject it into an App registry solely
+   through the ordinary factory-provider interface. Baseline reconciliation
+   found the existing generic composition already satisfies this behavior, so
+   this is a GREEN acceptance proof rather than a contrived production-code
+   rewrite. It observes one build per role, one staged source record, one
+   destination apply/read-back, and one acknowledged checkpoint; it fails if a
+   connector-name filter or dispatch bypass is introduced.
+2. **RED:** make an accepted destination effect whose checkpoint persistence
+   fails. The stage must not be retired. Before the lifecycle implementation,
+   the successful sibling case also reported zero retirements.
+3. **GREEN:** make the optional owned-stage retirement happen only after the
+   durable commit, then prove a fresh App safely and boundedly reconciles an
+   exact committed receipt after a simulated process kill while preserving an
+   active receipt.
+
+## R2 evidence table
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| A synthetic connector is definition-owned and generic | fake — deterministic in-memory bundle | `engine.Load` parses the synthetic `sync_transport.json`; App discovers its named test hook via `DefinitionFactoryProvider`, and generic orchestration stages/applies/reads back one record and commits one checkpoint. An in-memory bundle is necessary because `defs.FS` is compile-time embedded; the assertion is against the real bundle loader, App composition, registry, and orchestrator, not a hand-authored descriptor. |
+| A committed transient stage is retired without overreach | fake — deterministic owned project fixture | `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit` proves that an opt-in generic stage receives no retirement before a persistence failure and one exact receipt after a successful commit. `TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages` proves that connection-owned evidence survives ordinary `Open`, then its bounded pre-execution reconciler removes only the committed manifest/WAL/Parquet and preserves the active receipt. |
+
+## R3 certification regression repair
+
+CI's `certify-timing` target found that eager post-commit retirement and eager
+`Open` reconciliation delete the exact connection-owned durable receipt which
+`app.ProbeDeclaredTransportForCertification` must reopen and inspect. The
+declared GitHub pair still executed (one apply and a committed checkpoint), but
+the certification proof correctly failed with zero retained manifest and
+Parquet artifacts. This repair is confined to generic stage registration and
+runtime lifecycle; `internal/connectors/certify/stages_transport.go` is owned
+by the concurrent database-certification lane and will not be changed.
+
+1. **RED:** `go test -count=1 -timeout 20m ./internal/connectors/certify -run
+   '^TestCertificationDeclaredTransportPairResolvesAndExecutes$'` fails with
+   `warehouse_manifests=0 warehouse_parquet=0` after a successful execution.
+2. **GREEN:** keep the generic optional immediate-retirement interface for
+   stages that opt in, but leave connection-owned receipt evidence available
+   after a completed run and reopen. Run its bounded committed-receipt cleanup
+   before the next generic transport execution, before source I/O. Prove the
+   certification pair passes and a kill-after-commit receipt is cleaned only by
+   that deferred reconciliation, never by ordinary `Open`.
+
 ## Scope
 
 This foundation issue owns bundle loading/projection, strict role validation,

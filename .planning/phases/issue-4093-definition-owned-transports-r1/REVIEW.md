@@ -42,3 +42,37 @@ this issue uses the non-numeric phase directory above; the compatible inline
 manual review fallback is recorded here. Result: no unresolved actionable
 findings. Automated review is not requested: the task's direct-PR brief makes
 CI the review gate.
+
+## R2 inline code review
+
+- The synthetic proof uses `engine.Load` on a complete test bundle rather than
+  a hand-authored descriptor, then enters App through the same
+  `DefinitionFactoryProvider` discovery path as production. Its assertions span
+  source read, staging, destination plan/apply/read-back, and checkpoint commit,
+  so a connector-name registration branch or dispatch bypass fails observably.
+- `RetirableWarehouseStage` is deliberately optional and exposes only an exact
+  validated receipt, never a path. The connection-owned implementation derives
+  every candidate path from the validated owner and opaque receipt ID, verifies
+  the retained manifest, and never performs broad directory removal.
+- Retirement runs after, not before, the durable commit callback. The bounded
+  fresh-App reconciliation requires an exact committed-checkpoint match and
+  leaves malformed, foreign, active, and uncommitted receipts alone. Data files
+  are removed before the manifest so an interrupted cleanup remains safely
+  retryable.
+- Focused, scoped, generator, boundary, vet/build, and individual repository
+  gates are recorded in `VERIFICATION.md`. No unresolved actionable finding
+  remains.
+
+## R3 certification regression review
+
+- The failed CI proof executed the declared pair successfully; its zero
+  artifact count pinpointed eager cleanup, not missing registration or a
+  certification-stage adapter defect. `stages_transport.go` is unchanged.
+- Connection-owned stages do not opt into the generic eager-retirement
+  interface. They retain exact durable evidence through ordinary Open and use
+  the same ownership-checked, bounded reconciler immediately before the next
+  generic transport execution.
+- A reconciliation error exits before transport preflight/source I/O; a valid
+  reconciliation removes only an exact committed receipt and leaves an active
+  receipt. `make certify-timing`, full certification, full app, vet, and
+  connector-boundary are green. No unresolved actionable finding remains.

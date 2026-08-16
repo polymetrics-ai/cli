@@ -182,6 +182,16 @@ type WarehouseStage interface {
 	Reopen(context.Context, WarehouseReceipt) (WarehouseWorkset, error)
 }
 
+// RetirableWarehouseStage owns bounded transient worksets and can remove an
+// exact receipt only after its checkpoint is durable. It is intentionally
+// optional: durable stages that retain artifacts for longer reconciliation do
+// not need to implement it, while implementations that do must never accept a
+// caller-provided path or a receipt that they do not own.
+type RetirableWarehouseStage interface {
+	WarehouseStage
+	Retire(context.Context, WarehouseReceipt) error
+}
+
 type WarehouseStageRequest struct {
 	// ConnectionID is the opaque project-owned identity of the connection that
 	// owns the staged artifact. It is not a display name or credential value.

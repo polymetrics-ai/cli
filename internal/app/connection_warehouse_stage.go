@@ -3,9 +3,11 @@ package app
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"time"
 
@@ -19,6 +21,7 @@ const (
 	connectionWarehouseStageManifestVersion = 1
 	connectionWarehouseStageManifestDir     = "transport"
 	connectionWarehouseStagePrefix          = "transport-"
+	connectionWarehouseStageReconcileLimit  = 64
 )
 
 // connectionWarehouseStage owns temporary transport worksets inside the
@@ -252,6 +255,105 @@ func (s *connectionWarehouseStage) Reopen(ctx context.Context, receipt synctrans
 	}, nil
 }
 
+// retire removes exactly one committed, connection-owned transient receipt.
+// The receipt controls neither its directory nor its file names: artifactFor
+// derives all three paths from the validated owner and opaque stage ID.
+//
+// Connection-owned receipts intentionally do not implement the optional eager
+// RetirableWarehouseStage: their durable manifest and Parquet remain observable
+// through ordinary Open for recovery and certification. The generic
+// pre-execution reconciliation path invokes this private operation instead.
+func (s *connectionWarehouseStage) retire(ctx context.Context, receipt synctransport.WarehouseReceipt) error {
+	if s == nil || s.app == nil {
+		return fmt.Errorf("connection-owned warehouse stage is unavailable")
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if err := receipt.Validate(); err != nil {
+		return err
+	}
+	conn, ok := s.connectionByID(receipt.Owner)
+	if !ok {
+		return fmt.Errorf("warehouse stage receipt %q has an unknown connection owner", receipt.ID)
+	}
+	artifact, err := s.artifactFor(conn, receipt.ID)
+	if err != nil {
+		return err
+	}
+	manifest, err := readConnectionStageManifest(artifact.manifestPath)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	if err := manifest.matchesReceipt(receipt); err != nil {
+		return err
+	}
+	return removeConnectionStageArtifact(ctx, artifact)
+}
+
+// ReconcileCommitted retires only receipts whose exact candidate checkpoint is
+// already durably committed in this project. It is intentionally bounded per
+// open and leaves malformed, foreign, active, or newer receipts untouched.
+// Thus a process killed after checkpoint persistence cannot repeat a
+// destination effect, while a process killed before persistence retains the
+// workset for later investigation/recovery.
+func (s *connectionWarehouseStage) ReconcileCommitted(ctx context.Context) error {
+	if s == nil || s.app == nil {
+		return fmt.Errorf("connection-owned warehouse stage is unavailable")
+	}
+	inspected := 0
+	for _, conn := range s.app.state.Connections {
+		if inspected >= connectionWarehouseStageReconcileLimit {
+			return nil
+		}
+		location, err := s.app.warehouseLocation(filepath.Join(s.app.projectDir, "warehouse"), conn)
+		if err != nil {
+			return err
+		}
+		manifestDir := filepath.Join(location.ConnectionDir, connectionWarehouseStageManifestDir)
+		entries, err := os.ReadDir(manifestDir)
+		if errors.Is(err, os.ErrNotExist) {
+			continue
+		}
+		if err != nil {
+			return fmt.Errorf("read staged receipt directory: %w", err)
+		}
+		for _, entry := range entries {
+			if inspected >= connectionWarehouseStageReconcileLimit {
+				return nil
+			}
+			if entry.IsDir() || filepath.Ext(entry.Name()) != ".json" {
+				continue
+			}
+			inspected++
+			stageID := strings.TrimSuffix(entry.Name(), ".json")
+			artifact, err := s.artifactFor(conn, stageID)
+			if err != nil {
+				continue
+			}
+			manifest, err := readConnectionStageManifest(artifact.manifestPath)
+			if err != nil || !manifest.belongsToConnection(conn) {
+				continue
+			}
+			streamState, present := s.app.state.StreamStates[streamStateKey(conn.Name, manifest.Stream)]
+			if !present || !committedStageCheckpointMatches(manifest.CandidateCheckpoint, streamState.Checkpoint) {
+				continue
+			}
+			manifestSHA256, _, err := digestPayloadFile(artifact.manifestPath)
+			if err != nil {
+				continue
+			}
+			if err := s.retire(ctx, manifest.receipt(manifestSHA256)); err != nil {
+				return fmt.Errorf("retire reconciled warehouse stage receipt %q: %w", manifest.ID, err)
+			}
+		}
+	}
+	return nil
+}
+
 func (s *connectionWarehouseStage) connectionForStageRequest(request synctransport.WarehouseStageRequest) (Connection, error) {
 	if strings.TrimSpace(request.ConnectionID) == "" {
 		return Connection{}, fmt.Errorf("warehouse stage connection ID is required")
@@ -312,6 +414,49 @@ func (s *connectionWarehouseStage) artifactFor(conn Connection, stageID string) 
 		parquetPath:  parquetPath,
 		manifestPath: filepath.Join(location.ConnectionDir, connectionWarehouseStageManifestDir, stagePart+".json"),
 	}, nil
+}
+
+func (m connectionWarehouseStageManifest) belongsToConnection(conn Connection) bool {
+	if m.Owner != conn.ID || m.SourceName != conn.Source.Connector || m.DestinationName != conn.Destination.Connector {
+		return false
+	}
+	if _, ok := conn.Streams[m.Stream]; !ok {
+		return false
+	}
+	return m.Generation > 0 && m.Records >= 0 && m.Mode.Validate() == nil
+}
+
+func committedStageCheckpointMatches(candidate synccontract.CheckpointEnvelope, committed *synccontract.CheckpointEnvelope) bool {
+	if committed == nil || committed.CommittedAt == nil {
+		return false
+	}
+	withoutCommit := committed.Clone()
+	withoutCommit.CommittedAt = nil
+	return reflect.DeepEqual(candidate, withoutCommit)
+}
+
+func removeConnectionStageArtifact(ctx context.Context, artifact connectionWarehouseStageArtifact) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	// Delete data before the manifest, so an interrupted cleanup leaves the
+	// ownership proof available for the next bounded reconciliation attempt.
+	for _, path := range []string{artifact.parquetPath, artifact.walPath, artifact.manifestPath} {
+		if err := os.Remove(path); err != nil && !errors.Is(err, os.ErrNotExist) {
+			return fmt.Errorf("remove staged artifact: %w", err)
+		}
+	}
+	seen := make(map[string]struct{}, 3)
+	for _, dir := range []string{filepath.Dir(artifact.parquetPath), filepath.Dir(artifact.walPath), filepath.Dir(artifact.manifestPath)} {
+		if _, duplicate := seen[dir]; duplicate {
+			continue
+		}
+		seen[dir] = struct{}{}
+		if err := syncLocalWarehouseDirectoryChain(dir); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func writeConnectionStageWAL(ctx context.Context, path, stageID string, generation int64, records []connectors.Record) error {
