@@ -4,6 +4,8 @@ Direct Firstmate delivery for audit finding F2: make the existing PostgreSQL
 `incremental_dedupe_history` claim true. No GitHub issue number was supplied
 with this direct-PR task. Base: `integration/4015-mvp-flat-r1`.
 
+Refs #4015
+
 Exactly one connector is implemented: `postgres`. No shared runtime, schema,
 or unrelated connector implementation was changed.
 
