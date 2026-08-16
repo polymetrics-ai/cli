@@ -29,3 +29,23 @@ Scope: the residual test additions and their GSD evidence records. The review tr
 The opaque proof test computes expected HMAC markers from the proof's root salt only in test memory, asserts A repetition/B separation across both opaque bodies, and asserts neither raw credential nor salt occurs in the artifact. The live smoke parses a passing GitHub report plus a sanitized observed 2xx response; it never renders either credential or proof body.
 
 Result: no Critical, Warning, or Info findings. `git diff --check`, a final `go vet ./internal/cli`, and a diff secret-pattern check are clean. No production source, connector definition, declaration stage, direct-read candidate, or live-write path changed.
+
+## CI handoff repair review
+
+Scope: the PR #4198 repair to the OS process-list/temporary-artifact proof and
+its updated TDD/verification evidence.
+
+Mode: inline/manual review after the failed CI run. The review checked the
+request lifecycle rather than accepting a longer completion wait: `sync.Once`
+holds only the first authenticated provider call; later declared certification
+calls receive ordinary TLS responses and cannot block on the one-shot signal.
+The first response is written, flushed, and observed to finish before the test
+waits for the child report — a child-side state transition that follows
+provider-response consumption. Cleanup releases the handler before closing the
+test server, then cancels and reaps the external child after report persistence.
+All observed values are status/error/path states; no credential is added to a
+log, diagnostic, artifact, or assertion message.
+
+Result: no Critical, Warning, or Info findings. Focused repeat coverage,
+`go test -timeout 20m ./internal/cli`, `go test -timeout 20m ./cmd/connectorgen`,
+and `go vet ./...` pass.

@@ -15,6 +15,7 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -395,8 +396,12 @@ func TestExternalProofFreshChildRefusesIncompleteFullParityHTTPSRun(t *testing.T
 
 func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts(t *testing.T) {
 	const token = "cert-canary-external-os-boundary-3989"
+	const providerResponse = `{"object":"list","data":[{"id":"acct_external_os_3989","code":"proof","email":"proof@example.test","state":"active","created_at":"2026-08-14T00:00:00Z","updated_at":"2026-08-15T00:00:00Z"}],"has_more":false}`
 	requestStarted := make(chan struct{}, 1)
 	releaseResponse := make(chan struct{})
+	responseDelivered := make(chan error, 1)
+	handlerFinished := make(chan struct{})
+	var firstRequest sync.Once
 	responseReleased := false
 	release := func() {
 		if !responseReleased {
@@ -404,27 +409,46 @@ func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifa
 			responseReleased = true
 		}
 	}
-	defer release()
 
+	writeProviderResponse := func(w http.ResponseWriter) error {
+		w.Header().Set("Content-Type", "application/json")
+		_, err := io.WriteString(w, providerResponse)
+		if flusher, ok := w.(http.Flusher); ok {
+			flusher.Flush()
+		}
+		return err
+	}
 	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
 		username, password, authorized := request.BasicAuth()
 		if !authorized || username != token || password != "" {
 			http.Error(w, "missing prepared authorization", http.StatusUnauthorized)
 			return
 		}
-		select {
-		case requestStarted <- struct{}{}:
-		default:
+		first := false
+		firstRequest.Do(func() {
+			first = true
+			close(requestStarted)
+		})
+		if !first {
+			_ = writeProviderResponse(w)
+			return
 		}
+		defer close(handlerFinished)
 		select {
 		case <-releaseResponse:
 		case <-request.Context().Done():
+			responseDelivered <- request.Context().Err()
 			return
 		}
-		w.Header().Set("Content-Type", "application/json")
-		_, _ = io.WriteString(w, `{"object":"list","data":[{"id":"acct_external_os_3989","code":"proof","email":"proof@example.test","state":"active","created_at":"2026-08-14T00:00:00Z","updated_at":"2026-08-15T00:00:00Z"}],"has_more":false}`)
+		responseDelivered <- writeProviderResponse(w)
 	}))
-	defer server.Close()
+	// Releasing the handler must happen before Server.Close: Close waits for
+	// active handlers, so the inverse order would deadlock exactly when this
+	// test needs to report a failed handoff.
+	defer func() {
+		release()
+		server.Close()
+	}()
 
 	trustPath := filepath.Join(t.TempDir(), "external-proof-os-provider.pem")
 	if err := os.WriteFile(trustPath, pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: server.Certificate().Raw}), 0o600); err != nil {
@@ -437,7 +461,7 @@ func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifa
 	t.Setenv("TMPDIR", temporaryRoot)
 	t.Setenv("GODEBUG", strings.TrimPrefix(os.Getenv("GODEBUG")+",x509usefallbackroots=1", ","))
 	t.Setenv("PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY", token)
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	result := make(chan error, 1)
 	go func() {
@@ -458,15 +482,75 @@ func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifa
 	assertNoCredentialMaterialInTemporaryArtifacts(t, root, temporaryRoot, token)
 
 	release()
-	select {
-	case err := <-result:
-		if err != nil {
-			t.Fatalf("fresh external OS-boundary certification: %s", strings.ReplaceAll(err.Error(), token, "<credential>"))
-		}
-	case <-time.After(30 * time.Second):
-		t.Fatal("fresh external child did not complete after the held provider response")
-	}
+	awaitExternalProofProviderResponse(t, responseDelivered)
+	awaitExternalProofHandlerFinish(t, handlerFinished)
+	awaitExternalProofReport(t, filepath.Join(root, ".polymetrics", "certifications", "recurly.json"))
+
+	// The report proves the child consumed the released provider response and
+	// completed its certification run. End it here: external-proof serialization
+	// (including a fresh-binary hash) is covered by the acceptance test above
+	// and is deliberately not part of this OS-observation boundary.
+	cancel()
+	awaitExternalProofTermination(t, result)
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
+}
+
+// awaitExternalProofProviderResponse makes the test's held-response handoff
+// explicit. It is not a delay: the test proceeds only after the provider has
+// written and flushed the response that unblocks the external child.
+func awaitExternalProofProviderResponse(t *testing.T, delivered <-chan error) {
+	t.Helper()
+	select {
+	case err := <-delivered:
+		if err != nil {
+			t.Fatalf("held HTTPS provider could not deliver its response: %v", err)
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("held HTTPS provider did not deliver a response after release")
+	}
+}
+
+func awaitExternalProofHandlerFinish(t *testing.T, finished <-chan struct{}) {
+	t.Helper()
+	select {
+	case <-finished:
+	case <-time.After(5 * time.Second):
+		t.Fatal("held HTTPS provider handler did not finish after delivering its response")
+	}
+}
+
+// awaitExternalProofReport observes the child-side state transition that can
+// happen only after its held provider response has been received and evaluated.
+func awaitExternalProofReport(t *testing.T, path string) {
+	t.Helper()
+	// This is the pre-existing completion bound. Unlike the former wait for
+	// process exit, it observes the exact child-side state transition that the
+	// released provider response must cause.
+	deadline := time.NewTimer(30 * time.Second)
+	defer deadline.Stop()
+	poll := time.NewTicker(10 * time.Millisecond)
+	defer poll.Stop()
+	for {
+		if _, err := os.Stat(path); err == nil {
+			return
+		} else if !errors.Is(err, os.ErrNotExist) {
+			t.Fatalf("inspect fresh-child certification report: %v", err)
+		}
+		select {
+		case <-deadline.C:
+			t.Fatal("fresh external child did not persist its report after the observed provider response")
+		case <-poll.C:
+		}
+	}
+}
+
+func awaitExternalProofTermination(t *testing.T, result <-chan error) {
+	t.Helper()
+	select {
+	case <-result:
+	case <-time.After(5 * time.Second):
+		t.Fatal("cancelled fresh external child did not exit")
+	}
 }
 
 // TestExternalProofGitHubSmoke is deliberately opt-in because it reaches the

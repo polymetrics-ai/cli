@@ -14,6 +14,7 @@
 | --- | --- |
 | `go test -count=1 -run '^TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials$' ./internal/connectors/certify` | Passed after the planned red compile failure. |
 | `go test -count=1 -run '^TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts$' ./internal/cli` | Passed after the planned red compile failure; rerun after the process-list child-presence assertion. |
+| `go test -count=3 -timeout 20m -run '^TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts$' -v ./internal/cli` | Passed after the PR #4198 CI handoff repair. The first provider request is explicitly released and observed; report persistence, not unrelated proof serialization, is the bounded child-side completion condition. |
 | `go test -timeout 20m -count=1 -v -run '^TestExternalProofGitHubSmoke$' ./internal/cli` | Passed with the designated disposable identity. The run stays credential-free in this record. |
 | `go test -timeout 20m ./internal/connectors/certify` | Passed. |
 | `go test -timeout 20m ./internal/cli` | Passed. |
