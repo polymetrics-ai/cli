@@ -67,7 +67,11 @@ func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMo
 			return false
 		}
 		_, managedTarget := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
-		return managedTarget
+		if managedTarget {
+			return true
+		}
+		materializer, localWarehouse := destination.(connectors.LocalWarehouseMaterializer)
+		return localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode)
 	}
 	transportConn, err := a.issueLabelTransportConnection(conn.ID)
 	if err != nil {
@@ -83,6 +87,10 @@ func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMo
 	}
 	_, err = contract.actionForSyncMode(mode.ContractMode)
 	return err == nil
+}
+
+func isWarehouseDedupeContractMode(mode synccontract.Mode) bool {
+	return mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory
 }
 
 func isIssueLabelTransportConnector(connector connectors.Connector) bool {
@@ -102,11 +110,11 @@ func isIssueLabelTransportConnector(connector connectors.Connector) bool {
 		return false
 	}
 	wantModes := contract.modes()
-	if len(descriptor.Source.Modes) != len(wantModes) || len(descriptor.Destination.Modes) != len(wantModes) {
+	if len(descriptor.Destination.Modes) != len(wantModes) {
 		return false
 	}
 	for i, mode := range wantModes {
-		if descriptor.Source.Modes[i] != mode || descriptor.Destination.Modes[i] != mode {
+		if descriptor.Destination.Modes[i] != mode || !transportContainsMode(descriptor.Source.Modes, mode) {
 			return false
 		}
 	}

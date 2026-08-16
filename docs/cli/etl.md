@@ -170,6 +170,15 @@ SYNC MODES
     Compatibility name for typed incremental_dedupe admission. pm refuses
     before source I/O until a matching transport is admitted.
 
+  incremental_dedupe
+    For an admitted source-to-warehouse transport, retains one current record
+    per declared primary key. It refuses before source I/O for other pairs.
+
+  incremental_dedupe_history
+    For an admitted source-to-warehouse transport, retains deduplicated source versions with _valid_from, _valid_to, and _is_current fields. It requires
+    declared primary-key and cursor fields, and refuses before source I/O for
+    other pairs.
+
   Incremental modes and deduped compatibility names require --cursor. Deduped
   modes require --primary-key. Static connector manifests advertise the full
   deduped compatibility name only with both fields, and incremental modes only

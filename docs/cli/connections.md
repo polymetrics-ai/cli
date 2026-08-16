@@ -45,14 +45,18 @@ SYNC MODES
   full_refresh_overwrite_deduped   compatibility name for typed full_overwrite admission
   incremental_append               append records at or after the saved cursor
   incremental_append_deduped       compatibility name for typed incremental_dedupe admission
+  incremental_dedupe               typed current-state dedupe for an admitted source-to-warehouse transport
+  incremental_dedupe_history       typed source-version history for an admitted source-to-warehouse transport
 
   Incremental modes and deduped compatibility names require --cursor. Deduped
   modes require --primary-key. A static connector manifest advertises the full
   deduped compatibility name only with both fields, and incremental modes only
   with a declared incremental executor. The two deduped compatibility names use
   their typed contract and refuse before source I/O until a matching transport
-  is admitted. When a connector manifest declares defaults, pm fills them during
-  connection creation.
+  is admitted. The two raw typed modes are selected only when source and
+  warehouse transport declarations, registrations, and preflight admit them;
+  otherwise they refuse before source I/O. When a connector manifest declares
+  defaults, pm fills them during connection creation.
 
 POLLING-WATERMARK LIMITS
   polling_watermark is not a general connection mode and is not CDC. It can be

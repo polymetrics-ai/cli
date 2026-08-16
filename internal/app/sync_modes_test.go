@@ -457,6 +457,11 @@ func TestParseSyncModeMatrix(t *testing.T) {
 	}
 	if _, err := ParseSyncMode("full_refresh_replace"); err == nil {
 		t.Fatal("ParseSyncMode(invalid) error = nil")
+	} else {
+		var unsupported *UnsupportedSyncModeError
+		if !errors.As(err, &unsupported) || unsupported.Mode != "full_refresh_replace" {
+			t.Fatalf("ParseSyncMode(invalid) error = %T %[1]v, want UnsupportedSyncModeError for the supplied mode", err)
+		}
 	}
 }
 

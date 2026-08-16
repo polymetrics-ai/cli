@@ -109,6 +109,37 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	if a.shouldRunTransport(Connection{}, "commits", SyncMode{ContractMode: synccontract.ModeFullAppend}, github, postgres) != true {
 		t.Fatal("declared GitHub commits-to-PostgreSQL route was not selected for production dispatch")
 	}
+	for _, mode := range []synccontract.Mode{
+		synccontract.ModeIncrementalDedupe,
+		synccontract.ModeIncrementalDedupeHistory,
+	} {
+		t.Run("github_to_warehouse_"+string(mode), func(t *testing.T) {
+			resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+				Source:      github,
+				Destination: warehouse,
+				Stream:      "pull_requests",
+				Mode:        mode,
+			})
+			if err != nil {
+				t.Fatalf("GitHub-to-warehouse %q preflight = %v", mode, err)
+			}
+			if got, want := resolved.Destination.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "local_parquet_warehouse"}); got != want {
+				t.Fatalf("GitHub-to-warehouse %q destination = %+v, want %+v", mode, got, want)
+			}
+			if !a.shouldRunTransport(Connection{}, "pull_requests", SyncMode{ContractMode: mode}, github, warehouse) {
+				t.Fatalf("declared GitHub-to-warehouse %q route was not selected for production dispatch", mode)
+			}
+		})
+	}
+	_, err = a.transports.Preflight(synctransport.PreflightRequest{
+		Source:      github,
+		Destination: warehouse,
+		Stream:      "pull_requests",
+		Mode:        synccontract.ModeIncrementalAppend,
+	})
+	if got, want := fmt.Sprint(err), `source transport does not support sync mode "incremental_append"`; got != want {
+		t.Fatalf("GitHub-to-warehouse incremental_append preflight refusal = %q, want %q before executor I/O", got, want)
+	}
 	assertGitHubTransportEligibleStreamsMatchDefinition(t, github)
 	_, err = a.transports.Preflight(synctransport.PreflightRequest{
 		Source:      github,

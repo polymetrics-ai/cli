@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/synccontract"
 )
 
 var certificationMatrixTestCache struct {
@@ -1132,7 +1133,7 @@ func TestCertificationSyncModeDatabaseWriteStubIsNotImplemented(t *testing.T) {
 	read, _ := capabilityCellFor(matrix, "postgres", "capability:read")
 	write, _ := capabilityCellFor(matrix, "postgres", "capability:write")
 	cdc, _ := capabilityCellFor(matrix, "postgres", "capability:cdc")
-	cell := syncModeCellFor("postgres", "database", "incremental_dedupe", syncPrimitive{
+	cell := syncModeCellFor(matrixConnectorSource{name: "postgres", integrationType: "database"}, "incremental_dedupe", syncPrimitive{
 		ID:                 "database_write_from_warehouse",
 		IntegrationType:    "database",
 		Capability:         "write",
@@ -1146,8 +1147,54 @@ func TestCertificationSyncModeDatabaseWriteStubIsNotImplemented(t *testing.T) {
 	}
 }
 
+func TestCertificationSyncModeReadRequiresDeclaredSourceTransportMode(t *testing.T) {
+	matrix := certificationMatrixForTest(t)
+	bundles, err := loadSourceBundlesForConnectors(repoRootForCertificationTest(t), []string{"github"})
+	if err != nil {
+		t.Fatalf("loadSourceBundlesForConnectors() error = %v", err)
+	}
+	sources, err := matrixConnectorSourcesForNames(bundles, []string{"github"})
+	if err != nil {
+		t.Fatalf("matrixConnectorSourcesForNames() error = %v", err)
+	}
+	if len(sources) != 1 || sources[0].bundle == nil || sources[0].bundle.SyncTransport == nil || sources[0].bundle.SyncTransport.Source == nil {
+		t.Fatalf("GitHub matrix source = %#v, want one source transport declaration", sources)
+	}
+
+	// Keep this source transport intentionally narrower than GitHub's authored
+	// declaration. The cell must follow this concrete declaration, not the
+	// connector-level read capability that remains true for GitHub.
+	bundle := *sources[0].bundle
+	transport := bundle.SyncTransport.Clone()
+	transport.Source.Modes = []synccontract.Mode{synccontract.ModeFullAppend}
+	bundle.SyncTransport = transport
+	source := sources[0]
+	source.bundle = &bundle
+	source.connector = engine.New(bundle, nil)
+
+	cells, err := buildConnectorSyncModeCells([]matrixConnectorSource{source}, matrix, []syncModeKind{{ID: string(synccontract.ModeIncrementalDedupe)}}, []syncPrimitive{{
+		ID:                 "api_read_into_warehouse",
+		IntegrationType:    "api",
+		Capability:         "read",
+		WarehouseDirection: "into_warehouse",
+	}}, nil)
+	if err != nil {
+		t.Fatalf("buildConnectorSyncModeCells() error = %v", err)
+	}
+	if len(cells) != 1 || len(cells[0].Cells) != 1 {
+		t.Fatalf("sync cells = %#v, want one GitHub read cell", cells)
+	}
+	cell := cells[0].Cells[0]
+	if !cell.Applicable {
+		t.Fatalf("source mode cell = %#v, want applicable mode cell", cell)
+	}
+	if cell.Declared || cell.Implemented {
+		t.Fatalf("source mode cell = %#v, want unadmitted transport mode to be neither declared nor implemented", cell)
+	}
+}
+
 func TestCertificationChangeCaptureRequiresDatabaseReadIntoWarehouse(t *testing.T) {
-	cell := syncModeCellFor("github", "api", "change_capture", syncPrimitive{
+	cell := syncModeCellFor(matrixConnectorSource{name: "github", integrationType: "api"}, "change_capture", syncPrimitive{
 		ID:                 "api_read_into_warehouse",
 		IntegrationType:    "api",
 		Capability:         "read",

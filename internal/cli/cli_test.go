@@ -602,6 +602,9 @@ func TestETLHelpListsAllSyncModes(t *testing.T) {
 		"incremental_append",
 		"incremental_append_deduped",
 		"Compatibility name for typed incremental_dedupe admission",
+		"incremental_dedupe",
+		"incremental_dedupe_history",
+		"retains deduplicated source versions with _valid_from, _valid_to, and _is_current fields",
 	} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("etl help missing %q:\n%s", want, out)

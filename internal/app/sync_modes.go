@@ -39,6 +39,20 @@ type SyncMode struct {
 	LegacyCompatibility bool
 }
 
+// UnsupportedSyncModeError is returned before a connection can be persisted
+// or a source can be selected. Callers can distinguish an invalid user input
+// from a mode that parsed correctly but later failed transport preflight.
+type UnsupportedSyncModeError struct {
+	Mode string
+}
+
+func (e *UnsupportedSyncModeError) Error() string {
+	if e == nil {
+		return "unsupported sync mode"
+	}
+	return fmt.Sprintf("unsupported sync mode %q", e.Mode)
+}
+
 const syncModeCompatibilityVersion uint = 1
 
 type syncModeDefinition struct {
@@ -108,7 +122,7 @@ func ParseSyncMode(raw string) (SyncMode, error) {
 	if definition, ok := syncModeDefinitions[value]; ok {
 		return definition.mode, nil
 	}
-	return SyncMode{}, fmt.Errorf("unsupported sync mode %q", raw)
+	return SyncMode{}, &UnsupportedSyncModeError{Mode: raw}
 }
 
 func publicSyncMode(raw string) (SyncMode, synccontract.PublicMode, bool) {
