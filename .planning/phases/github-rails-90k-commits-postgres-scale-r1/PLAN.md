@@ -2,7 +2,7 @@
 
 ## Delivery header
 
-- Issue: Closes #4181 and #4171 — prove the declared `commits` source can complete the shipped GitHub → warehouse → PostgreSQL transport at real scale, then repair the globally scoped approval timeout that prevented the 90k proof.
+- Issues: #4181 and #4171 — prove the declared `commits` source can complete the shipped GitHub → warehouse → PostgreSQL transport at real scale, then repair the globally scoped approval timeout that prevented the 90k proof.
 - Base / head: `integration/4015-mvp-flat-r1` → `fm/cli-github-rails-90k-commits-postgres-scale-r1`.
 - Required GSD route: `discuss-phase` → `plan-phase --tdd` → `execute-phase` → `verify-work` → `code-review`.
 - Manual fallback: the task phase is not present in the current roadmap (`gsd-sdk query init.phase-op github-rails-90k-commits-postgres-scale-r1` returned `phase_found:false`), the project-local task-delivery header template is absent, and this non-Pi runner cannot provide the compatible isolated roles. This phase record, TDD ledger, run-state, verification, and review record execute the required route inline.

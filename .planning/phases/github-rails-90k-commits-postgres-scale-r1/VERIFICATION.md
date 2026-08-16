@@ -61,9 +61,11 @@ RSS stayed well below the 2 GiB VM capacity.
 
 ## Commands and outcomes
 
-- `go test -count=1 ./internal/app ./internal/cli ./internal/synctransport ./internal/connectors/engine ./internal/connectors/native/postgres` — passed (the long CLI package run was allowed to finish under its documented timeout).
+- `go test -count=1 -timeout 20m ./internal/app` — passed in 222.274s after the acknowledged-failure regression repair.
+- `go test -count=1 -timeout 20m ./internal/cli` — passed in 415.041s.
+- `go test -count=1 -timeout 20m ./internal/synctransport ./internal/connectors/engine ./internal/connectors/native/postgres` — passed.
 - Focused authorization, deadline, measurement, and CLI lifetime tests — passed.
-- One-page latest-code live binary test — passed: durable/independent `100/100/100`.
+- One-page latest-code live binary test — passed in 24.090s: durable/independent `100/100/100`.
 - Exact 900-page live binary test — persisted `90000/90000/90000`; separate read-back `90000`.
 - `go vet ./...`, `go build ./cmd/pm`, `make tidy-check`, `make lint`, `./pm docs validate --connectors-dir docs/connectors`, `npm run typecheck` — passed.
 - `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make connector-boundary`, `make github-parity-artifacts-check`, `make connectorgen-certification-matrix`, `make connector-canon-check`, `make release-workflow-check` — passed.
