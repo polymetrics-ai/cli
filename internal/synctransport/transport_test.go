@@ -15,6 +15,7 @@ import (
 	"github.com/apache/arrow-go/v18/arrow/array"
 	"github.com/apache/arrow-go/v18/arrow/memory"
 
+	"polymetrics.ai/internal/certificationcatalog"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/synccontract"
@@ -277,34 +278,54 @@ func TestRegistryPreflightIsRaceSafeDuringRegistration(t *testing.T) {
 }
 
 func TestOrchestratorDispatchesFourClosedPairingsWithoutPairBranches(t *testing.T) {
-	pairs := []struct {
+	pairs := map[string]struct {
 		name            string
 		sourceType      string
 		destinationType string
 	}{
-		{name: "api_to_api", sourceType: "api", destinationType: "api"},
-		{name: "api_to_database", sourceType: "api", destinationType: "database"},
-		{name: "database_to_api", sourceType: "database", destinationType: "api"},
-		{name: "database_to_database", sourceType: "database", destinationType: "database"},
+		"api_to_api":           {name: "api_to_api", sourceType: "api", destinationType: "api"},
+		"api_to_database":      {name: "api_to_database", sourceType: "api", destinationType: "database"},
+		"database_to_api":      {name: "database_to_api", sourceType: "database", destinationType: "api"},
+		"database_to_database": {name: "database_to_database", sourceType: "database", destinationType: "database"},
 	}
 
-	for _, tt := range pairs {
+	flowKinds := certificationcatalog.FlowKinds()
+	if len(flowKinds) != len(pairs) {
+		t.Fatalf("generated flow kinds = %d, want %d conformance pairs", len(flowKinds), len(pairs))
+	}
+	for _, flowKind := range flowKinds {
+		tt, ok := pairs[flowKind.ID]
+		if !ok {
+			t.Fatalf("generated flow kind %q has no orchestrator conformance pair", flowKind.ID)
+		}
+		if got, want := tt.sourceType+"_source", flowKind.SourceRole; got != want {
+			t.Fatalf("flow kind %q source role = %q, want %q", flowKind.ID, got, want)
+		}
+		if got, want := tt.destinationType+"_destination", flowKind.DestinationRole; got != want {
+			t.Fatalf("flow kind %q destination role = %q, want %q", flowKind.ID, got, want)
+		}
 		t.Run(tt.name, func(t *testing.T) {
 			pair := newTestTransportPair(tt.sourceType, tt.destinationType)
 			registry := NewRegistry(pair.verifier)
 			registerTransportPair(t, registry, pair)
-			stage := &testWarehouseStage{}
+			events := make([]string, 0, 7)
+			pair.sourceExecutor.events = &events
+			pair.destinationExecutor.events = &events
+			stage := &testWarehouseStage{events: &events}
 			commits := 0
 
 			result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
-				Source:      pair.source,
-				Destination: pair.destination,
-				Stream:      "records",
-				Mode:        synccontract.ModeFullAppend,
-				BatchSize:   10,
-				Stage:       stage,
+				ConnectionID: "test-" + tt.name,
+				Generation:   1,
+				Source:       pair.source,
+				Destination:  pair.destination,
+				Stream:       "records",
+				Mode:         synccontract.ModeFullAppend,
+				BatchSize:    10,
+				Stage:        stage,
 				Commit: func(synccontract.CheckpointEnvelope) error {
 					commits++
+					events = append(events, "checkpoint")
 					return nil
 				},
 			})
@@ -322,6 +343,31 @@ func TestOrchestratorDispatchesFourClosedPairingsWithoutPairBranches(t *testing.
 			}
 			if got := stage.lastPage.Records[0]; !reflect.DeepEqual(got, connectors.Record{"id": "1", "provider": "untouched"}) {
 				t.Fatalf("warehouse stage provider record = %#v, want unchanged provider payload", got)
+			}
+			if got, want := stage.lastRequest.ConnectionID, "test-"+tt.name; got != want {
+				t.Fatalf("warehouse source owner = %q, want connection-owned %q", got, want)
+			}
+			if got, want := stage.lastRequest.SourceName, pair.source.Name(); got != want {
+				t.Fatalf("warehouse source name = %q, want %q", got, want)
+			}
+			if got, want := stage.lastRequest.DestinationName, pair.destination.Name(); got != want {
+				t.Fatalf("warehouse destination name = %q, want %q", got, want)
+			}
+			if got, want := pair.destinationExecutor.lastApply.ConnectionID, stage.lastRequest.ConnectionID; got != want {
+				t.Fatalf("destination apply owner = %q, want staged owner %q", got, want)
+			}
+			if got, want := pair.destinationExecutor.lastApply.Receipt, stage.lastReceipt; got != want {
+				t.Fatalf("destination receipt = %#v, want sealed staged receipt %#v", got, want)
+			}
+			if got, want := pair.destinationExecutor.lastApply.Workset.ID, stage.lastReceipt.ID; got != want {
+				t.Fatalf("destination workset = %q, want reopened receipt workset %q", got, want)
+			}
+			if got, want := pair.destinationExecutor.lastReadBack.Workset.ID, stage.lastReceipt.ID; got != want {
+				t.Fatalf("destination read-back workset = %q, want reopened receipt workset %q", got, want)
+			}
+			wantEvents := []string{"destination-plan", "source-read", "warehouse-stage", "warehouse-reopen", "destination-apply", "destination-readback", "checkpoint"}
+			if !reflect.DeepEqual(events, wantEvents) {
+				t.Fatalf("warehouse-mediated execution order = %v, want %v", events, wantEvents)
 			}
 		})
 	}
@@ -1303,6 +1349,7 @@ type testSourceExecutor struct {
 	reference connectors.TransportExecutorReference
 	pages     []SourcePage
 	readCalls int
+	events    *[]string
 }
 
 type emptyResultTestSource struct {
@@ -1316,6 +1363,9 @@ func (e *testSourceExecutor) TransportExecutorReference() connectors.TransportEx
 }
 func (e *testSourceExecutor) ReadTransport(ctx context.Context, request SourceRequest, emit func(SourcePage) error) error {
 	e.readCalls++
+	if e.events != nil {
+		*e.events = append(*e.events, "source-read")
+	}
 	for _, page := range e.pages {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -1344,7 +1394,9 @@ type testDestinationExecutor struct {
 	applyCalls          int
 	readBackCalls       int
 	lastPlan            DestinationPlanRequest
+	lastApply           DestinationApplyRequest
 	lastReadBack        DestinationReadBackRequest
+	events              *[]string
 	fullOverwrite       *testFullOverwriteRun
 	fullOverwriteBegins int
 }
@@ -1355,10 +1407,17 @@ func (e *testDestinationExecutor) TransportExecutorReference() connectors.Transp
 func (e *testDestinationExecutor) PlanDestination(_ context.Context, request DestinationPlanRequest) (DestinationPlan, error) {
 	e.planCalls++
 	e.lastPlan = request
+	if e.events != nil {
+		*e.events = append(*e.events, "destination-plan")
+	}
 	return DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
 }
 func (e *testDestinationExecutor) ApplyDestination(ctx context.Context, request DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
 	e.applyCalls++
+	e.lastApply = request
+	if e.events != nil {
+		*e.events = append(*e.events, "destination-apply")
+	}
 	if e.applyContext != nil {
 		if err := e.applyContext(ctx, e.applyCalls); err != nil {
 			return synccontract.DownstreamAcknowledgement{}, err
@@ -1390,6 +1449,9 @@ func (e *testDestinationExecutor) ApplyDestination(ctx context.Context, request 
 func (e *testDestinationExecutor) ReadBackDestination(_ context.Context, request DestinationReadBackRequest) error {
 	e.readBackCalls++
 	e.lastReadBack = request
+	if e.events != nil {
+		*e.events = append(*e.events, "destination-readback")
+	}
 	if e.afterReadBack != nil {
 		e.afterReadBack()
 	}
@@ -1588,6 +1650,9 @@ func databaseTransformHash(raw string) (string, error) {
 type testWarehouseStage struct {
 	calls                   int
 	lastPage                SourcePage
+	lastRequest             WarehouseStageRequest
+	lastReceipt             WarehouseReceipt
+	events                  *[]string
 	afterStage              func()
 	mutateNestedPayload     bool
 	mutateRawMessage        bool
@@ -1598,6 +1663,10 @@ type testWarehouseStage struct {
 func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequest) (WarehouseReceipt, error) {
 	s.calls++
 	s.lastPage = request.Page
+	s.lastRequest = request
+	if s.events != nil {
+		*s.events = append(*s.events, "warehouse-stage")
+	}
 	if s.mutateNestedPayload {
 		nested, ok := request.Page.Records[0]["nested"].(map[string]any)
 		if !ok {
@@ -1623,7 +1692,7 @@ func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequ
 		s.worksets = make(map[string]WarehouseWorkset)
 	}
 	s.worksets[workset.ID] = workset
-	return WarehouseReceipt{
+	receipt := WarehouseReceipt{
 		ID:               workset.ID,
 		Owner:            "test-connection-owner",
 		Generation:       1,
@@ -1636,12 +1705,17 @@ func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequ
 		ParquetSHA256:    "test-parquet",
 		Records:          len(workset.Records),
 		Tombstones:       len(workset.Tombstones),
-	}, nil
+	}
+	s.lastReceipt = receipt
+	return receipt, nil
 }
 
 func (s *testWarehouseStage) Reopen(_ context.Context, receipt WarehouseReceipt) (WarehouseWorkset, error) {
 	if err := receipt.Validate(); err != nil {
 		return WarehouseWorkset{}, err
+	}
+	if s.events != nil {
+		*s.events = append(*s.events, "warehouse-reopen")
 	}
 	workset, ok := s.worksets[receipt.ID]
 	if !ok {
