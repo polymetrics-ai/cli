@@ -352,8 +352,12 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 
 	skip := parseCSVFlags(flags.values["skip"])
 	fullParity := flags.first("full-parity") == "true"
-	write := flags.first("write") == "true" || fullParity
+	writeOnly := flags.first("write-only") == "true"
+	write := flags.first("write") == "true" || fullParity || writeOnly
 	full := flags.first("full") == "true" || fullParity
+	if writeOnly && fullParity {
+		return certify.Options{}, usageErrorf("--write-only cannot be combined with --full-parity")
+	}
 	for _, s := range skip {
 		if s == "write" {
 			if fullParity {
@@ -372,6 +376,7 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 		SecretEnv:         secretEnv,
 		KeepWork:          flags.first("keep-workdir") == "true",
 		Write:             write,
+		WriteOnly:         writeOnly,
 		Full:              full,
 		RequireFullParity: fullParity,
 	}, nil

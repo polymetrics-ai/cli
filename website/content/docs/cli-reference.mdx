@@ -270,8 +270,23 @@ For a full-fidelity live HTTPS proof, add `--external-proof --full-parity` and
 supply credentials only with `--from-env` or `--value-stdin`. This
 source-checkout mode builds a fresh `pm` child binary, keeps the
 credential session in memory, and writes only salted fingerprints of the
-observed process transcript and complete bounded exchanges. It refuses an
-incomplete or truncated exchange before creating a proof artifact.
+observed process transcript and complete bounded exchanges. `--full-parity`
+enables both the full read sweep and live writes, and refuses the parity claim
+unless every applicable declared write has a production mutation, independent
+read-back, and verified cleanup. A skipped, `not_live`, `recovered_unverified`,
+blocked, failed, or leaked action is never pass coverage. It refuses an incomplete or truncated
+exchange before creating a proof artifact.
+
+`--write-only` is a bounded GitHub repository-fixture wave rather than a
+full-parity claim. It is restricted to the captain-approved run-owned fixture
+`Polymetrics-Cert/pm-cert-3993-20260810-wz0fru` and reports any unavailable
+action distinctly. In the current boundary, commit-comment
+actions need GitHub's **Metadata — Read-only** repository permission for their
+item read-back; without it they are `blocked`, not `pass`.
+After that permission is granted, enable their bounded re-run explicitly with
+`--config certification_commit_comment_item_read=enabled`; the default avoids
+creating a further unverified commit comment while the permission remains
+missing.
 
 ```bash
 pm connectors certify github --external-proof --full-parity \

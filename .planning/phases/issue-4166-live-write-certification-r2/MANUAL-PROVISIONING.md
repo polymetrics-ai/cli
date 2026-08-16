@@ -135,8 +135,32 @@ a durable lifecycle ledger entry, provider read-back, and verified cleanup or
 baseline restoration. The organisation, enterprise, and identities are never
 deleted by the harness.
 
-The immediate 28 repository-safe scenarios need none of the browser steps
-above. The 579 remaining actions are scheduled in bounded resumable waves once
-their named prerequisite is available. An unavailable trial feature remains a
-path- and risk-specific `not_live` result and makes `--full-parity` refuse its
-claim.
+The immediate 28 repository-safe scenarios use the existing run-owned
+`Polymetrics-Cert/pm-cert-3993-20260810-wz0fru` fixture. They need none of the
+browser steps above and specifically do **not** need repository-creation
+permission. The 579 remaining actions are scheduled in bounded resumable waves
+once their named prerequisite is available. Add repository-creation permission
+only if a later wave identifies the exact action family that needs a second
+repository; an unavailable trial feature remains a path- and risk-specific
+`not_live` result and makes `--full-parity` refuse its claim.
+
+### Immediate repository-wave repair: commit-comment read-back
+
+In the disposable certification account's **existing fine-grained PAT** for
+`Polymetrics-Cert/pm-cert-3993-20260810-wz0fru`, set the repository permission
+shown by GitHub's picker as **Metadata — Read-only**. This is the documented
+fine-grained permission for `GET /repos/{owner}/{repo}/comments/{comment_id}`
+(`Get a commit comment`). The current line-277 token returns **`Resource not
+accessible by personal access token`** for that exact endpoint; the line-283
+token returns **`Not Found`** because it is not scoped to this repository.
+
+This is a concrete three-action gap only: `create_commit_comment`,
+`update_commit_comment`, and `delete_commit_comment`. Until an item read
+succeeds, the harness records those actions as `blocked`, not `pass`, even if
+GitHub accepted their write. It uses the permitted commit-comment collection
+read solely to verify cleanup of a run-owned tagged comment; cleanup does not
+upgrade the blocked mutation to coverage. No repository-creation permission is
+needed for this repair. Once the permission is present, the bounded re-run is
+explicitly enabled with `--config certification_commit_comment_item_read=enabled`;
+the default deliberately avoids creating another comment that cannot yet be
+certified.

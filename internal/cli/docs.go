@@ -303,7 +303,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
-  pm connectors certify <connector> [--full] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]
+  pm connectors certify <connector> [--full] [--write-only] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -450,6 +450,20 @@ ACTIONS
     --value-stdin,
     and writes a fingerprint-only transcript after a full-parity run. It
     requires --full-parity and refuses incomplete or truncated exchanges.
+    --full-parity enables both the full read sweep and live writes; it refuses
+    to claim parity unless every applicable declared write has a production
+    mutation, independent read-back, and verified cleanup. Skipped, not_live,
+    recovered_unverified, blocked, failed, or leaked actions are never folded
+    into a pass result.
+    --write-only is a bounded GitHub repository-fixture wave, not a parity
+    claim: it is restricted to Polymetrics-Cert/pm-cert-3993-20260810-wz0fru,
+    the captain-approved run-owned disposable fixture, and records every
+    non-live boundary explicitly. Commit-comment actions currently require
+    GitHub's "Metadata" repository permission (read) for their item read-back;
+    without it they are reported blocked, never pass.
+    After that permission is granted, enable their bounded re-run explicitly
+    with --config certification_commit_comment_item_read=enabled; the default
+    avoids creating a further unverified commit comment while it is missing.
     With --full --json from a source checkout,
     the report includes the API-surface inventory and provider-artifact
     provenance evidence separately from endpoint coverage and connector

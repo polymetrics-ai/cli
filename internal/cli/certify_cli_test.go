@@ -235,7 +235,7 @@ func TestCertifyCLIHelpShowsProvenanceContract(t *testing.T) {
 		t.Fatalf("runConnectors(certify --help): %v", err)
 	}
 	for _, want := range []string{
-		"pm connectors certify <connector> [--full] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
+		"pm connectors certify <connector> [--full] [--write-only] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
 		"provider-artifact",
 		"provenance evidence",
 		"legacy_unverified",
@@ -336,7 +336,7 @@ func TestPrepareExternalCertifyStdinCredentialUsesChildMemoryOnly(t *testing.T) 
 	}
 }
 
-func TestExternalProofFreshChildCapturesCompleteHTTPSProviderTranscript(t *testing.T) {
+func TestExternalProofFreshChildRefusesIncompleteFullParityHTTPSRun(t *testing.T) {
 	const token = "cert-canary-external-https-3989"
 	var requests atomic.Int64
 	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
@@ -372,22 +372,15 @@ func TestExternalProofFreshChildCapturesCompleteHTTPSProviderTranscript(t *testi
 		"--config", "base_url=" + server.URL,
 		"--from-env", "api_key=PM_CERTIFY_EXTERNAL_HTTPS_CANARY",
 	}, &stdout, &stderr, true)
-	if err != nil {
-		t.Fatalf("fresh external HTTPS certification: %v; stderr=%q", err, strings.ReplaceAll(stderr.String(), token, "<credential>"))
+	if err == nil || !strings.Contains(err.Error(), "exit 1") || !strings.Contains(stderr.String(), "external proof requires a completed successful process") {
+		t.Fatalf("fresh external HTTPS incomplete-parity refusal = %v; stderr=%q", err, strings.ReplaceAll(stderr.String(), token, "<credential>"))
 	}
 	if requests.Load() == 0 {
 		t.Fatal("fresh external binary made no HTTPS provider request")
 	}
 	proofs, err := filepath.Glob(filepath.Join(root, ".polymetrics", "certifications", "external-proof", "recurly", "*.json"))
-	if err != nil || len(proofs) != 1 {
-		t.Fatalf("external HTTPS proof paths = %v, glob error = %v, want one", proofs, err)
-	}
-	matched, err := certify.VerifyExternalProofTranscript(root, proofs[0], stdout.String(), stderr.String())
-	if err != nil {
-		t.Fatalf("verify fresh external HTTPS transcript: %v", err)
-	}
-	if !matched {
-		t.Fatal("proof does not attest to the exact external binary stdout/stderr")
+	if err != nil || len(proofs) != 0 {
+		t.Fatalf("external HTTPS proof paths = %v, glob error = %v, want no proof for incomplete full parity", proofs, err)
 	}
 	if bytes.Contains(stdout.Bytes(), []byte(token)) || bytes.Contains(stderr.Bytes(), []byte(token)) {
 		t.Fatal("fresh external HTTPS process output exposed credential material")

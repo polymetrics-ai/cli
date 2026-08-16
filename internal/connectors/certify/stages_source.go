@@ -213,6 +213,15 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	if r.opts.Connector == "" {
 		return Report{}, fmt.Errorf("certify: Options.Connector is required")
 	}
+	if r.opts.WriteOnly && !r.opts.Write {
+		return Report{}, fmt.Errorf("certify: Options.WriteOnly requires Options.Write")
+	}
+	if r.opts.WriteOnly && r.opts.RequireFullParity {
+		return Report{}, fmt.Errorf("certify: Options.WriteOnly cannot claim full parity")
+	}
+	if r.opts.WriteOnly && r.opts.Connector != "github" {
+		return Report{}, fmt.Errorf("certify: Options.WriteOnly is currently defined only for github's bounded repository wave")
+	}
 	if ctx == nil {
 		return Report{}, fmt.Errorf("certify: nil context")
 	}
@@ -319,11 +328,22 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 		stageWriteCleanup,
 		stageCleanupVerify,
 		stageApprovalIdempotency,
+		stageGithubRepositoryWriteWave,
 	}
-	if !r.opts.Full {
+	if r.opts.WriteOnly {
+		// A bounded wave still uses the production credentials and write
+		// machinery, but intentionally avoids unrelated source/schedule stages
+		// so a rate-limit restart can finish one self-cleaning resource family.
+		setupStages = []stageFunc{stagePreflight, stageCredentialsAdd, stageCredentialsTest}
+		readStages = nil
+		tailStages = []stageFunc{stageGithubRepositoryWriteWave}
+	}
+	if !r.opts.Full && !r.opts.WriteOnly {
 		tailStages = append(tailStages, stageFlowRoundtrip, stageScheduleRoundtrip)
 	}
-	tailStages = append(tailStages, stageWriteSweepAllPairings)
+	if !r.opts.WriteOnly {
+		tailStages = append(tailStages, stageWriteSweepAllPairings)
+	}
 	if r.opts.RequireFullParity {
 		tailStages = append(tailStages, stageFullParityClaim)
 	}
@@ -356,7 +376,7 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 
 	finalizeJSONContract(&rep)
 	finalizeSecretRedaction(rc, &rep, secretValues)
-	if hasNonLiveWriteAction(rep.Capabilities.WriteActions) {
+	if hasIncompleteWriteAction(rep.Capabilities.WriteActions) {
 		// A baseline certification can pass its applicable source checks while
 		// write coverage is incomplete. Do not render that as a generic live
 		// certification result.
@@ -369,7 +389,11 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	// stronger guarantee than it is" — the converse also holds: a "fail"
 	// must actually fail the report, since the certification-design's own
 	// enablement gate (cmd/certstatus) keys off Report.Passed).
-	rep.Passed = allStagesPassed(rep.Stages) && rep.Capabilities.SecretRedaction.Result != "fail"
+	// A known blocked write is a non-coverage outcome even when a dedicated
+	// recovery stage has cleaned its tagged resource. Do not let a successful
+	// cleanup-only run flatten it into Passed=true; that would recreate the F4
+	// false-coverage claim at the report root.
+	rep.Passed = allStagesPassed(rep.Stages) && rep.Capabilities.SecretRedaction.Result != "fail" && !hasBlockingWriteAction(rep.Capabilities.WriteActions)
 	return rep, nil
 }
 
@@ -1393,9 +1417,19 @@ func allStagesPassed(stages []StageResult) bool {
 	return true
 }
 
-func hasNonLiveWriteAction(actions map[string]WriteActionResult) bool {
+func hasIncompleteWriteAction(actions map[string]WriteActionResult) bool {
 	for _, action := range actions {
-		if action.Result == "not_live" {
+		if action.Result != "pass" {
+			return true
+		}
+	}
+	return false
+}
+
+func hasBlockingWriteAction(actions map[string]WriteActionResult) bool {
+	for _, action := range actions {
+		switch action.Result {
+		case "blocked", "fail", "leaked_resource", "recovered_unverified":
 			return true
 		}
 	}

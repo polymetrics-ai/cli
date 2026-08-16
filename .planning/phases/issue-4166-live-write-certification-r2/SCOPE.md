@@ -18,7 +18,8 @@ matches no row.
 
 | Status now | Actions | Exact selector | Concrete current blocker |
 | --- | ---: | --- | --- |
-| `repository_wave_ready` | 28 | The named list below | None: one run-owned private repository under the disposable certification identity is enough. Harness implementation, not authority, is the remaining work. |
+| `repository_wave_ready` | 25 | The named list below except commit comments | The existing run-owned `Polymetrics-Cert/pm-cert-3993-20260810-wz0fru` fixture has disposable-token `push` and `admin`, issues enabled, and a captured label baseline. This wave must not create a repository or request repository-creation permission. |
+| `repository_item_read_permission_pending` | 3 | `create_commit_comment`, `update_commit_comment`, `delete_commit_comment` | The line-277 disposable fine-grained PAT can create/update/delete a tagged commit comment but GitHub refuses the required `GET /repos/{owner}/{repo}/comments/{comment_id}` read-back with `Resource not accessible by personal access token`. GitHub documents the picker permission as **Metadata — Read-only** for that endpoint. These actions are `blocked`, never `pass`, until that item read succeeds. |
 | `repository_fixture_pending` | 234 | Every other `/repos/{owner}/{repo}/...` action | The specific run-owned fixture addressed by the endpoint does not yet exist: branch/PR/review graph; no-op Actions workflow/run/runner; webhook receiver/delivery; release asset; deployment/environment; ruleset; security alert/analysis; Codespace; secret/variable; imported repository; or package/repository policy baseline. The runner must create and restore that exact fixture before its action. |
 | `gist_fixture_pending` | 9 | `/gists/...` | A purpose-made private Gist and, where applicable, its comment/fork/star baseline are not yet created. |
 | `org_fixture_and_permission_pending` | 217 | `/orgs/...`, `/organizations/...`, and `/teams/...` | Polymetrics-Cert exists, but the disposable certification credential lacks the required organisation authority (`admin:org` on the classic test PAT) and the named team/project/member/runner/feature fixture. No other organisation is eligible. |
@@ -47,8 +48,13 @@ real mutation, independent read-back, and verified cleanup/restoration.
 `delete_ref`, and `replace_repo_topics`.
 
 Each needs production-path mutation, separate REST read-back, ownership-tag
-check, and verified cleanup/restoration. A cleanup action does not count as
-primary-action coverage unless it also has its own mutation/read-back scenario.
+check, and verified cleanup/restoration against
+`Polymetrics-Cert/pm-cert-3993-20260810-wz0fru`. A cleanup action does not
+count as primary-action coverage unless it also has its own mutation/read-back
+scenario. The close-only issue cleanup is the declared reversible boundary for
+that API: its tagged issue is left closed, never deleted or repurposed.
+The production runner rejects any other owner/repository pair before it builds
+a credential or sends a provider request for this wave.
 
 ### Action-to-fixture precision for the 234 deferred repository routes
 
@@ -86,15 +92,21 @@ that feature and action path.
 Before mutation, a durable per-action ledger record holds the connector,
 action, stable scenario id, ownership tag, resource identity when known, and
 state (`planned`, `mutated`, `read_back`, `cleaned`, `not_live`). On restart,
-the runner first reads and cleans incomplete run-owned resources; it never
-repeats a create merely because a process stopped. A rate-limit wait preserves
-the checkpoint. A resource without a verified ownership tag is a terminal
-safety failure, not a cleanup candidate.
+the runner first reads and cleans incomplete run-owned resources; named
+resources are matched only by their exact ownership tag and repository-topic
+restoration uses the baseline captured in the write-ahead ledger. A
+recovery-only action is `recovered_unverified`, not `pass`, until a later
+complete wave executes it afresh. It never repeats a create merely because a
+process stopped. A rate-limit wait preserves the checkpoint. A resource
+without a verified ownership tag is a terminal safety failure, not a cleanup
+candidate.
 
 ## Current decision record
 
 The captain's accepted plan is now **all 607 actions**, beginning with the
-28-action repository wave. The remaining manual/browser prerequisites are one
+28-action repository wave. The first execution boundary is currently 25
+live-testable actions plus three explicitly blocked commit-comment actions.
+The remaining manual/browser prerequisites are one
 consolidated list in `MANUAL-PROVISIONING.md`; they reuse the existing
 disposable identity, Polymetrics-Cert organisation, and in-progress Enterprise
 Cloud trial. No token value, application private key, client secret, or

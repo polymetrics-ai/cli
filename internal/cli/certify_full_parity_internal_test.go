@@ -19,3 +19,17 @@ func TestCertifyOptionsFullParityEnablesFullWriteAndRejectsWriteSkip(t *testing.
 		t.Fatalf("--full-parity --skip write error = %v, want refusal", err)
 	}
 }
+
+func TestCertifyOptionsWriteOnlyEnablesWriteWithoutFullParity(t *testing.T) {
+	opts, err := certifyOptionsFromFlags("github", parseFlags([]string{"github", "--write-only"}))
+	if err != nil {
+		t.Fatalf("certifyOptionsFromFlags(--write-only) = %v", err)
+	}
+	if !opts.Write || !opts.WriteOnly || opts.Full || opts.RequireFullParity {
+		t.Fatalf("--write-only options = %+v, want bounded write-only mode", opts)
+	}
+	_, err = certifyOptionsFromFlags("github", parseFlags([]string{"github", "--write-only", "--full-parity"}))
+	if err == nil || !strings.Contains(err.Error(), "cannot be combined") {
+		t.Fatalf("--write-only --full-parity error = %v, want refusal", err)
+	}
+}

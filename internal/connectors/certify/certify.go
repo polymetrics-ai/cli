@@ -31,6 +31,13 @@ type Options struct {
 	// must never fail the report).
 	Write bool
 
+	// WriteOnly executes a selected, self-cleaning live write scenario through
+	// the normal certification entry point. It retains credential setup and the
+	// reverse plan/preview/run path but omits unrelated source/schedule checks,
+	// allowing rate-bounded repository waves to resume independently. It is
+	// intentionally incompatible with full-parity claims.
+	WriteOnly bool
+
 	// Full enables the comprehensive sweep: every stream (not just the
 	// first), every write pairing (not just the first), binary downloads,
 	// and direct reads. The existing single-pairing write stages still run

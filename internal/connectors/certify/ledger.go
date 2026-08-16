@@ -57,6 +57,10 @@ type LedgerEntry struct {
 	PlannedAt  time.Time `json:"planned_at,omitzero"`
 	CleanedAt  time.Time `json:"cleaned_at,omitzero"`
 	ObservedAt time.Time `json:"observed_at,omitzero"`
+	// Recovery is scenario-owned, non-secret state needed to restore a
+	// captured provider baseline after a crash. It is deliberately durable with
+	// the write-ahead entry: a restart must not guess at the pre-mutation state.
+	Recovery json.RawMessage `json:"recovery,omitempty"`
 }
 
 // Ledger is a write-ahead JSONL ledger rooted at a certify ephemeral workdir
@@ -210,6 +214,7 @@ type LedgerStatus struct {
 	ReadBack   bool
 	Cleaned    bool
 	CleanedAt  time.Time
+	Recovery   json.RawMessage
 }
 
 // LedgerEntries is the fully-loaded, per-tag-folded view of a ledger file
@@ -293,6 +298,9 @@ func LoadLedger(root string) (LedgerEntries, error) {
 		}
 		if entry.ResourceID != "" {
 			status.ResourceID = entry.ResourceID
+		}
+		if len(entry.Recovery) != 0 {
+			status.Recovery = append(status.Recovery[:0], entry.Recovery...)
 		}
 		state := entry.State
 		if state == "" {
