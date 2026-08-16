@@ -80,8 +80,9 @@
 - [x] Inline code review has no unresolved actionable findings; see REVIEW.md.
 - [x] Branch was refreshed against `origin/integration/4015-mvp-flat-r1`
   immediately before the final push; both local HEAD and remote base resolved
-  to `ff6a8710199c10f209d9d47cce87e5c8f7c429e6`. PR base will be API-verified
-  after creation.
+  to `ff6a8710199c10f209d9d47cce87e5c8f7c429e6`. PR #4196 was created against
+  `integration/4015-mvp-flat-r1`; the read-only GitHub API reports that exact
+  base ref.
 
 ## Acceptance matrix
 
