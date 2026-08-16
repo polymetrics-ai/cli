@@ -40,3 +40,7 @@ The complete `go test ./...` / aggregate `make verify` commands were deliberatel
 ### Inline GSD verification and review
 
 `verify-work` was executed as the documented manual GSD fallback against the acceptance table in `CONTEXT.md`: live proof, simulated boundary proof, typed refusal coverage, replay/resume/deletes edges, generated surface, and local gates are recorded above. `code-review` was also completed inline: no scope expansion, generic writer, credential persistence, Arrow/full-overwrite change, or API-to-API quadrant edit remains in the diff.
+
+### Delivery header base verification — passed
+
+PR #4186 is open from `fm/cli-quadrant-db-to-api-postgres-github-r1`. The API query `gh-axi pr list -R polymetrics-ai/cli --state open --base integration/4015-mvp-flat-r1 --head fm/cli-quadrant-db-to-api-postgres-github-r1 --limit 10 --fields url` returned only that PR, confirming its required non-default base.

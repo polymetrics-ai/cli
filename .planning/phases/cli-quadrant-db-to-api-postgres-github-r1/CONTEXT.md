@@ -5,7 +5,7 @@
 - Issue: Refs #4015 — Production MVP — certification.
 - Base branch: `integration/4015-mvp-flat-r1` (`2c48e4deb34128339fccbe5d4b7daad4e13a23e7`, confirmed before edits).
 - Merges into: `integration/4015-mvp-flat-r1` → `main`.
-- Delivery: A PR from `fm/cli-quadrant-db-to-api-postgres-github-r1` will target the exact base; its API-reported base and local verification/evidence are recorded before handoff.
+- Delivery: PR #4186 from `fm/cli-quadrant-db-to-api-postgres-github-r1` targets the exact base. `gh-axi pr list -R polymetrics-ai/cli --state open --base integration/4015-mvp-flat-r1 --head fm/cli-quadrant-db-to-api-postgres-github-r1 --limit 10 --fields url` returned only PR #4186, confirming the API-reported base selection.
 - Working branch: `fm/cli-quadrant-db-to-api-postgres-github-r1`.
 - Task: Prove through the shipped `pm` binary that PostgreSQL polling-watermark rows cross the durable warehouse and drive GitHub's two declared issue-label actions, with receipt/read-back/checkpoint ordering and real-provider evidence.
 - Verification: targeted Go tests (including opt-in PostgreSQL binary integration), `go vet`, build, generated connector checks, lint, all other `make verify` gates individually, a real GitHub read-back in a controlled repository, and API verification of the PR base.
