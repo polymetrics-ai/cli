@@ -144,7 +144,7 @@ func (e *localWarehouseDestinationExecutor) ApplyDestination(ctx context.Context
 	if err := writeLocalWarehouseTransportWAL(ctx, rawPath, request.Receipt.ID, rawRecords, strategy.Strategy == connectors.ApplyStrategyReplace); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
-	rows, err := materializeFinalTable(ctx, rawPath, finalPath, localWarehouseDedupes(strategy.Strategy), nil)
+	rows, err := materializeLocalWarehouseTransportTable(ctx, rawPath, finalPath, strategy.Strategy)
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("materialize local warehouse transport table: %w", err)
 	}
@@ -226,11 +226,18 @@ func localWarehouseApplyStrategy(mode synccontract.Mode) (connectors.Destination
 
 func localWarehouseDedupes(strategy connectors.ApplyStrategy) bool {
 	switch strategy {
-	case connectors.ApplyStrategyMerge, connectors.ApplyStrategyDedupe, connectors.ApplyStrategyChangeApply:
+	case connectors.ApplyStrategyMerge, connectors.ApplyStrategyDedupe, connectors.ApplyStrategyDedupeHistory, connectors.ApplyStrategyChangeApply:
 		return true
 	default:
 		return false
 	}
+}
+
+func materializeLocalWarehouseTransportTable(ctx context.Context, rawPath, finalPath string, strategy connectors.ApplyStrategy) (int, error) {
+	if strategy == connectors.ApplyStrategyDedupeHistory {
+		return materializeHistoryFinalTable(ctx, rawPath, finalPath)
+	}
+	return materializeFinalTable(ctx, rawPath, finalPath, localWarehouseDedupes(strategy), nil)
 }
 
 func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, workset synctransport.WarehouseWorkset, stream StreamConfig, strategy connectors.DestinationApplyStrategy) ([]localRawRecord, error) {
@@ -240,6 +247,9 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 	}
 	if !deduped && len(workset.Tombstones) > 0 {
 		return nil, fmt.Errorf("local warehouse transport %q cannot apply tombstones", strategy.Mode)
+	}
+	if strategy.Strategy == connectors.ApplyStrategyDedupeHistory && stream.CursorField == "" {
+		return nil, fmt.Errorf("local warehouse transport %q requires a cursor field", strategy.Mode)
 	}
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	raw := make([]localRawRecord, 0, len(workset.Records)+len(workset.Tombstones))
@@ -253,6 +263,10 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 				return nil, fmt.Errorf("local warehouse transport record %d: %w", index, err)
 			}
 		}
+		cursor, err := recordCursor(cloned, stream.CursorField)
+		if err != nil {
+			return nil, fmt.Errorf("local warehouse transport record %d: %w", index, err)
+		}
 		raw = append(raw, localRawRecord{
 			RawID:        fmt.Sprintf("%s:%012d", receipt.ID, index+1),
 			RunID:        receipt.ID,
@@ -260,6 +274,7 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 			GenerationID: receipt.Generation,
 			ExtractedAt:  now,
 			LoadedAt:     now,
+			Cursor:       cursor,
 			PrimaryKey:   primaryKey,
 			Record:       cloned,
 		})
@@ -279,6 +294,9 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 		if err != nil {
 			return nil, fmt.Errorf("local warehouse transport tombstone %d: %w", index, err)
 		}
+		if strategy.Strategy == connectors.ApplyStrategyDedupeHistory && len(tombstone.Position.Primary) == 0 {
+			return nil, fmt.Errorf("local warehouse transport tombstone %d requires a source cursor", index)
+		}
 		raw = append(raw, localRawRecord{
 			RawID:        fmt.Sprintf("%s:tombstone:%012d", receipt.ID, index+1),
 			RunID:        receipt.ID,
@@ -286,6 +304,7 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 			GenerationID: receipt.Generation,
 			ExtractedAt:  now,
 			LoadedAt:     now,
+			Cursor:       string(tombstone.Position.Primary),
 			PrimaryKey:   primaryKey,
 			Deleted:      true,
 			Record:       key,

@@ -13,6 +13,7 @@ import (
 	"sort"
 	"strings"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -596,7 +597,7 @@ func buildConnectorSyncModeCells(sources []matrixConnectorSource, capabilities c
 		cells := make([]syncModeCertificationCell, 0, len(modes)*len(primitives))
 		for _, mode := range modes {
 			for _, primitive := range primitives {
-				cell := syncModeCellFor(source.name, source.integrationType, mode.ID, primitive, read, write, cdc, durable, evidence)
+				cell := syncModeCellFor(source, mode.ID, primitive, read, write, cdc, durable, evidence)
 				if err := validateSyncModeCertificationCell(cell); err != nil {
 					return nil, fmt.Errorf("connector %q mode %q primitive %q: %w", source.name, mode.ID, primitive.ID, err)
 				}
@@ -608,17 +609,17 @@ func buildConnectorSyncModeCells(sources []matrixConnectorSource, capabilities c
 	return out, nil
 }
 
-func syncModeCellFor(connector, integrationType, mode string, primitive syncPrimitive, read, write, cdc certificationCell, durable bool, evidence []acceptedEvidence) syncModeCertificationCell {
+func syncModeCellFor(source matrixConnectorSource, mode string, primitive syncPrimitive, read, write, cdc certificationCell, durable bool, evidence []acceptedEvidence) syncModeCertificationCell {
 	base := syncModeCertificationCell{
 		SyncMode:        mode,
 		Primitive:       primitive.ID,
 		FixtureEvidence: []string{},
 		LiveEvidence:    []evidencePointer{},
 	}
-	if integrationType != primitive.IntegrationType {
+	if source.integrationType != primitive.IntegrationType {
 		base.NotApplicable = &notApplicableReason{
 			Code:   "primitive_requires_" + primitive.IntegrationType + "_connector",
-			Reason: fmt.Sprintf("connector %q integration_type %q cannot execute primitive %q", connector, integrationType, primitive.ID),
+			Reason: fmt.Sprintf("connector %q integration_type %q cannot execute primitive %q", source.name, source.integrationType, primitive.ID),
 		}
 		return base
 	}
@@ -637,10 +638,15 @@ func syncModeCellFor(connector, integrationType, mode string, primitive syncPrim
 	if mode == string(synccontract.ModeChangeCapture) {
 		capability = cdc
 	}
-	live := matchingSyncModeEvidence(evidence, connector, mode, primitive.ID)
+	live := matchingSyncModeEvidence(evidence, source.name, mode, primitive.ID)
 	base.Applicable = true
-	base.Declared = capability.Declared
-	base.Implemented = capability.Implemented
+	// A connector-level read/write bit says that a connector has a broad
+	// operation path. It does not admit any particular warehouse sync mode.
+	// Certification mode cells must follow the definition-owned source or
+	// destination transport role that the real preflight will resolve.
+	admitted := syncModeTransportAdmits(source, primitive, synccontract.Mode(mode))
+	base.Declared = capability.Declared && admitted
+	base.Implemented = capability.Implemented && admitted
 	if primitive.Capability == "write" {
 		// A connector Write method is not a checkpointed ETL destination until
 		// it can produce DurableETLDestination acknowledgement. This is why API
@@ -655,6 +661,43 @@ func syncModeCellFor(connector, integrationType, mode string, primitive syncPrim
 	base.LiveTested = len(live) > 0
 	base.LiveEvidence = live
 	return base
+}
+
+func syncModeTransportAdmits(source matrixConnectorSource, primitive syncPrimitive, mode synccontract.Mode) bool {
+	descriptor := syncTransportDescriptorFor(source)
+	if descriptor == nil {
+		return false
+	}
+	if primitive.WarehouseDirection == "into_warehouse" {
+		return descriptor.Source != nil && syncTransportContainsMode(descriptor.Source.Modes, mode)
+	}
+	if primitive.WarehouseDirection == "from_warehouse" {
+		return descriptor.Destination != nil && syncTransportContainsMode(descriptor.Destination.Modes, mode)
+	}
+	return false
+}
+
+func syncTransportDescriptorFor(source matrixConnectorSource) *connectors.SyncTransportDescriptor {
+	if source.bundle != nil && source.bundle.SyncTransport != nil {
+		return source.bundle.SyncTransport
+	}
+	if source.connector == nil {
+		return nil
+	}
+	descriptor, ok := connectors.SyncTransportDescriptorOf(source.connector)
+	if !ok {
+		return nil
+	}
+	return descriptor
+}
+
+func syncTransportContainsMode(modes []synccontract.Mode, want synccontract.Mode) bool {
+	for _, mode := range modes {
+		if mode == want {
+			return true
+		}
+	}
+	return false
 }
 
 func matchingSyncModeEvidence(evidence []acceptedEvidence, connector, mode, primitive string) []evidencePointer {

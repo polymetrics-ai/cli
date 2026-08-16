@@ -77,6 +77,66 @@ func TestGithubPullRequestsETLSupportsLegacyExecutableModes(t *testing.T) {
 	}
 }
 
+func TestGithubContractDedupeModesMaterializeCurrentAndHistoryRows(t *testing.T) {
+	t.Run("incremental dedupe retains one current row for a repeated key", func(t *testing.T) {
+		a, connection, setRecords := setupGithubSyncModeApp(t, "incremental_dedupe")
+		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "first", "2026-01-01T00:00:00Z")})
+		runGithubETL(t, a, connection)
+		clearGithubTransportCheckpoint(t, a, connection)
+		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "second", "2026-01-02T00:00:00Z")})
+		runGithubETL(t, a, connection)
+		assertGithubRows(t, a, 1, map[string]string{"PR_1": "second"})
+	})
+
+	t.Run("incremental dedupe history retains source versions and ignores replay", func(t *testing.T) {
+		a, connection, setRecords := setupGithubSyncModeApp(t, "incremental_dedupe_history")
+		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "first", "2026-01-01T00:00:00Z")})
+		runGithubETL(t, a, connection)
+		clearGithubTransportCheckpoint(t, a, connection)
+		setRecords([]map[string]any{githubPRFixture("PR_1", 1, "second", "2026-01-02T00:00:00Z")})
+		runGithubETL(t, a, connection)
+		clearGithubTransportCheckpoint(t, a, connection)
+		runGithubETL(t, a, connection)
+
+		rows, err := a.QueryTable(context.Background(), QueryTableRequest{Table: "github_prs", Limit: 10})
+		if err != nil {
+			t.Fatalf("QueryTable() error = %v", err)
+		}
+		if len(rows) != 2 {
+			t.Fatalf("history rows = %#v, want exactly the two source versions after replay", rows)
+		}
+		byTitle := map[string]connectors.Record{}
+		for _, row := range rows {
+			byTitle[toComparableString(row["title"])] = row
+		}
+		first, found := byTitle["first"]
+		if !found || first["_valid_from"] != "2026-01-01T00:00:00Z" || first["_valid_to"] != "2026-01-02T00:00:00Z" || first["_is_current"] != false {
+			t.Fatalf("closed history row = %#v, want the first version closed at the second source cursor", first)
+		}
+		second, found := byTitle["second"]
+		if !found || second["_valid_from"] != "2026-01-02T00:00:00Z" || second["_valid_to"] != nil || second["_is_current"] != true {
+			t.Fatalf("current history row = %#v, want the second version open and current", second)
+		}
+		if toComparableString(first["_polymetrics_source_version"]) == "" || toComparableString(first["_polymetrics_source_version"]) == toComparableString(second["_polymetrics_source_version"]) {
+			t.Fatalf("history source versions = %q, %q; want stable distinct identities", first["_polymetrics_source_version"], second["_polymetrics_source_version"])
+		}
+	})
+}
+
+// clearGithubTransportCheckpoint deliberately replays a source page through
+// the production ETL path. A normal acknowledged restart suppresses an exact
+// page before apply; this test exercises the destination's own replay guard.
+func clearGithubTransportCheckpoint(t *testing.T, a *App, connection string) {
+	t.Helper()
+	key := streamStateKey(connection, "pull_requests")
+	state, ok := a.state.StreamStates[key]
+	if !ok || state.Checkpoint == nil {
+		t.Fatalf("transport checkpoint %q is missing", key)
+	}
+	state.Checkpoint = nil
+	a.state.StreamStates[key] = state
+}
+
 func setupGithubSyncModeApp(t *testing.T, mode string) (*App, string, func([]map[string]any)) {
 	t.Helper()
 	ctx := context.Background()

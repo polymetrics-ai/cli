@@ -44,7 +44,7 @@
       "discussions",
       "discussion"
     ],
-    "modes": ["full_overwrite", "full_append", "incremental_upsert"],
+    "modes": ["full_overwrite", "full_append", "incremental_upsert", "incremental_dedupe", "incremental_dedupe_history"],
     "delivery": {
       "idempotency": "keyed",
       "ordering": "source_ordered",
