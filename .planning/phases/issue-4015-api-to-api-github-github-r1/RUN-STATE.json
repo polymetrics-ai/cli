@@ -1,7 +1,7 @@
 {
   "phase": "issue-4015-api-to-api-github-github-r1",
   "delivery_mode": "direct-pr",
-  "status": "planning_complete_execution_in_progress",
+  "status": "needs_decision_controlled_github_repository",
   "base_commit": "2c48e4deb34128339fccbe5d4b7daad4e13a23e7",
   "gsd": {
     "inline_manual_fallback": true,
@@ -20,5 +20,12 @@
     "mode": "full_append",
     "strategy": "append",
     "destination_action": "add_issue_labels"
+  },
+  "blocker": {
+    "key": "controlled-github-repository",
+    "recorded_token": "revoked; not retried",
+    "attempt": "gh-axi repo create Polymetrics-Cert/pm-api-api-transport-r1 --private",
+    "result": "CreateRepository refused for current GitHub identity before any repository was created",
+    "required": "an existing run-owned repository installed for the GitHub App, or current identity CreateRepository authority in Polymetrics-Cert"
   }
 }
