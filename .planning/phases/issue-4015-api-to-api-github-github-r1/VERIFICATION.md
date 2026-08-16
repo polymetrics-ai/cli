@@ -43,3 +43,20 @@ GitHub App is installed, or grant the current GitHub identity organization
 repository-creation permission (`CreateRepository`) in `Polymetrics-Cert`.
 The proof additionally needs the App's existing `Issues: write` grant on that
 repository. This lane must not use the revoked token or a third-party repository.
+
+## Follow-up decision gate — personal proof repository
+
+Captain authorized and `gh-axi` created the private, retained evidence
+repository `karthik-sivadas/pm-parity-proof-api-to-api`; its run-owned source
+and destination sentinel issues are `#1` and `#2`. No label has been applied
+and no PM credential has been injected.
+
+The genuine production path uses the GitHub App credential described by the
+GitHub connector (`auth_type=github_app`, `app_id`, `installation_id`, and
+stdin-only `private_key`), not the revoked personal token. The authoritative
+runbook identifies that App as `polymetrics-cert-app` and records its
+installation under `Polymetrics-Cert`, not the new personal repository. This
+task therefore requires a human to install **`polymetrics-cert-app`** on
+`karthik-sivadas/pm-parity-proof-api-to-api` with GitHub App repository
+permission **Issues: Read and write**. No worker may grant or widen that App
+installation; no personal-token fallback is valid evidence for this route.
