@@ -377,11 +377,14 @@ func assertNoScheduleAuthorityText(stage, value string) string {
 
 // stageScheduleRoundtrip drives stage 19 (design §D): snapshot the
 // (redirected, ephemeral) crontab, create + list + install --crontab, assert
-// the "# pm-schedule-<name>" sentinel is present, remove, assert the
-// sentinel is absent AND the crontab is byte-identical to the pre-create
+// the "# pm-schedule-<name>" sentinel is present, then execute `schedule fire`
+// and observe its terminal flow/status before remove. The stage finally asserts
+// the sentinel is absent AND the crontab is byte-identical to the pre-create
 // snapshot. Any residue (leftover sentinel or crontab drift) is reported as
 // Capabilities.Schedule.Residue = true, the same severity class as a leaked
-// resource (design §D "residue -> leaked_schedule").
+// resource (design §D "residue -> leaked_schedule"). The redirected file does
+// not start a real scheduler daemon, so that unobserved boundary is reported
+// explicitly as not_live rather than folded into a pass result.
 func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 	crontabPath := filepath.Join(rc.root, scheduleCrontabFileName)
 
@@ -484,6 +487,35 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 		return true, cliInfoFrom(res), ""
 	})
 
+	fireStage := recordStage(rc, rep, "schedule_fire", 2, func() (bool, CLIStageInfo, string) {
+		if !installStage.Passed {
+			return false, CLIStageInfo{}, "schedule_fire: refused before execution because schedule_install did not pass"
+		}
+		res := rc.run("schedule", "fire", name, "--json")
+		passed, errMsg := assertKind(rc, "schedule_fire", res, "ScheduleFire", 0)
+		if !passed {
+			return false, cliInfoFrom(res), errMsg
+		}
+		flowResult, ok := res.Envelope["flow"].(map[string]any)
+		if !ok {
+			return false, cliInfoFrom(res), "schedule_fire: response omitted flow result"
+		}
+		if status, _ := flowResult["status"].(string); status != "ok" {
+			return false, cliInfoFrom(res), fmt.Sprintf("schedule_fire: flow status=%q, want ok", status)
+		}
+		fireState, ok := res.Envelope["status"].(map[string]any)
+		if !ok {
+			return false, cliInfoFrom(res), "schedule_fire: response omitted terminal schedule status"
+		}
+		if status, _ := fireState["status"].(string); status != "succeeded" {
+			return false, cliInfoFrom(res), fmt.Sprintf("schedule_fire: terminal status=%q, want succeeded", status)
+		}
+		if errMsg := assertNoScheduleAuthority("schedule_fire", res.Envelope); errMsg != "" {
+			return false, cliInfoFrom(res), errMsg
+		}
+		return true, cliInfoFrom(res), ""
+	})
+
 	removeStage := recordStage(rc, rep, "schedule_remove", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("schedule", "remove", name, "--crontab", "--json")
 		passed, errMsg := assertKind(rc, "schedule_remove", res, "ScheduleRemove", 0)
@@ -512,11 +544,11 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 		forceRemoveCrontabSentinel(crontabPath, sentinel)
 	}
 
-	overallPassed := createStage.Passed && listStage.Passed && installStage.Passed && removeStage.Passed && !residue
+	overallPassed := createStage.Passed && listStage.Passed && installStage.Passed && fireStage.Passed && removeStage.Passed && !residue
 	recordStage(rc, rep, "schedule_roundtrip", 2, func() (bool, CLIStageInfo, string) {
 		if !overallPassed {
-			reason := "schedule_roundtrip: one or more of create/list/install/remove failed (see named sub-stages)"
-			if residue && createStage.Passed && listStage.Passed && installStage.Passed && removeStage.Passed {
+			reason := "schedule_roundtrip: one or more of create/list/install/fire/remove failed (see named sub-stages)"
+			if residue && createStage.Passed && listStage.Passed && installStage.Passed && fireStage.Passed && removeStage.Passed {
 				reason = fmt.Sprintf("schedule_roundtrip: residue after remove (sentinel_absent=%v crontab_identical=%v)", sentinelAbsent, crontabIdentical)
 			}
 			return false, CLIStageInfo{}, reason
@@ -524,11 +556,11 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 		return true, CLIStageInfo{}, ""
 	})
 
-	result := "pass"
-	reason := ""
+	result := "not_live"
+	reason := "not-live: direct schedule fire was observed against the isolated crontab fixture; the scheduler daemon was not started"
 	if !overallPassed {
 		result = "fail"
-		reason = "schedule_roundtrip: see schedule_create/schedule_list/schedule_install/schedule_remove stages"
+		reason = "schedule_roundtrip: see schedule_create/schedule_list/schedule_install/schedule_fire/schedule_remove stages"
 	}
 	rep.Capabilities.Schedule = &ScheduleResult{
 		Result:  result,

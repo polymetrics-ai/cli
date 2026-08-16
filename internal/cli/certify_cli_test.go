@@ -120,6 +120,12 @@ func assertFullSourceSweepReport(t *testing.T, report certify.Report) {
 	if got := countCertifyReportStages(report, "schedule_roundtrip"); got != 2 {
 		t.Fatalf("schedule_roundtrip stages = %d, want 2 for sample's catalog streams", got)
 	}
+	if got := countCertifyReportStages(report, "schedule_fire"); got != 2 {
+		t.Fatalf("schedule_fire stages = %d, want 2 for sample's catalog streams", got)
+	}
+	if report.Capabilities.Schedule == nil || report.Capabilities.Schedule.Result != "not_live" || !strings.Contains(report.Capabilities.Schedule.Reason, "scheduler daemon") {
+		t.Fatalf("Capabilities.Schedule = %+v, want direct fire evidence plus explicit not_live scheduler boundary", report.Capabilities.Schedule)
+	}
 	if stage := certifyReportStage(t, report, "direct_read_sweep"); stage.Passed || !strings.Contains(stage.Error, "skipped:") {
 		t.Fatalf("direct_read_sweep = %+v, want documented skip for sample", stage)
 	}

@@ -220,6 +220,54 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 	}
 }
 
+// TestFullCertificationStageSetIsStrictSuperset proves --full cannot silently
+// drop the flow or schedule coverage included in an ordinary run. The full
+// runner intentionally executes both glue stages for every catalog stream;
+// it must also contain an additional full-sweep-only stage.
+func TestFullCertificationStageSetIsStrictSuperset(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+	options := certify.Options{
+		Connector: "sample",
+		Stream:    "customers",
+		Limit:     50,
+		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	}
+
+	partialRunner, partialDriver := scriptedSampleRunner(t, options)
+	partial, err := partialRunner.Run(context.Background())
+	if err != nil {
+		t.Fatalf("ordinary Run() error = %v", err)
+	}
+	partialDriver.assertProtocol(t)
+
+	options.Full = true
+	fullRunner, fullDriver := scriptedSampleRunner(t, options)
+	full, err := fullRunner.Run(context.Background())
+	if err != nil {
+		t.Fatalf("full Run() error = %v", err)
+	}
+	fullDriver.assertProtocol(t)
+
+	partialStages := stageNameSet(partial)
+	fullStages := stageNameSet(full)
+	for name := range partialStages {
+		if !fullStages[name] {
+			t.Errorf("full certification omitted ordinary stage %q", name)
+		}
+	}
+	for _, name := range []string{"flow_roundtrip", "schedule_roundtrip", "schedule_fire"} {
+		if !fullStages[name] {
+			t.Errorf("full certification omitted required glue stage %q", name)
+		}
+	}
+	if !fullStages["full_sweep_connection_create_customers"] {
+		t.Errorf("full certification lacks full-only customer sweep stage; stages=%v", full.Stages)
+	}
+	if len(fullStages) <= len(partialStages) {
+		t.Errorf("full stage set has %d names, ordinary has %d; want strict superset", len(fullStages), len(partialStages))
+	}
+}
+
 // TestSourceStagesSabotageFailsNamedStage proves a deliberately-wrong
 // expected envelope kind flips exactly the sabotaged stage to failed and the
 // overall report to Passed=false, naming the failing stage (PLAN.md T-14 /
@@ -354,6 +402,14 @@ func mustStage(t *testing.T, rep certify.Report, name string) certify.StageResul
 	}
 	t.Fatalf("stage %q not found in report; stages=%+v", name, rep.Stages)
 	return certify.StageResult{}
+}
+
+func stageNameSet(rep certify.Report) map[string]bool {
+	names := make(map[string]bool, len(rep.Stages))
+	for _, stage := range rep.Stages {
+		names[stage.Name] = true
+	}
+	return names
 }
 
 func containsAny(s string, subs ...string) bool {
