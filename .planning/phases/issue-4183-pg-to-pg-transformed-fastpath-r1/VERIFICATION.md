@@ -12,6 +12,28 @@
 
 ## Acceptance record
 
+### CI fix round 1
+
+The independent repairs are complete and recorded without changing the fast-path benchmark result.
+
+- Green — `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1` regenerated the three stale `connections` transcript entries. Inspection before regeneration established that each carried only the two intended changes: the `--transform-file plan.json` synopsis token and the closed `TransformPlanV1` manual section. The rerun passes.
+- Green — `pnpm --dir website run gen:docs` regenerated `website/lib/docs.generated.ts`; a second generator run preserved its SHA-256, and `pnpm --dir website run typecheck` passes.
+- Green — `go mod why -m github.com/apache/thrift` establishes `internal/warehouse -> apache/arrow-go/v18/parquet -> thrift`. Upgrading the existing direct Arrow dependency from `v18.1.0` to `v18.7.0` selects Apache Thrift `v0.24.0` instead of `v0.21.0`. `go mod verify`, `go build ./cmd/pm`, and `go test -timeout 20m ./internal/warehouse ./internal/connectors/database ./internal/connectors/native/postgres ./internal/synctransport ./internal/cli` pass.
+- Green — the complete CLI package, `go vet ./internal/warehouse ./internal/connectors/database ./internal/connectors/native/postgres ./internal/synctransport ./internal/cli`, and `make docs-check` pass after the generated-output repair.
+
+### Full-overwrite acknowledgement-contract decision
+
+The accepted decision and its independent second opinion were read in full before this repair. Production publish-then-checkpoint semantics remain unchanged; this is an App test-double and test-matrix correction only.
+
+- Red — `TestAppTransportDestinationAfterApplyRunsAfterOrdinaryAcknowledgement` first observed zero acknowledgement calls in the callback; the historical full-overwrite stale-writer wait timed out at 21.28 s because page apply is not a receipt boundary. The full-overwrite source/cancellation inverse first observed no abort (`1/0/0/0` apply/abort/publish/read-back).
+- Green — the ordinary callback now follows acknowledgement construction. `TestRunETLTransportFullOverwriteSourceFailureAbortsWithoutCheckpoint`, `TestRunETLTransportFullOverwriteCancellationBeforePublishAbortsWithoutCheckpoint`, `TestRunETLTransportFullOverwriteStaleWriterAfterReceiptReadBackFinalizesLosingRun`, `TestRunETLTransportFullOverwriteCompletionRebasesUnrelatedStateAfterFinalCheckpoint`, and `TestRunETLTransportFullOverwriteCompletionMissingRunIsTypedConflictAfterFinalCheckpoint` pass alongside their retained per-page matrices. These prove one abort and zero publish/read-back/checkpoint before publication, a same-target stale winner after receipt read-back, and the two truthful final-checkpoint terminal races.
+- Green — `go test -timeout 20m ./internal/app -run '^TestRunETLTransportFullOverwriteStaleWriterAfterReceiptReadBackFinalizesLosingRun$' -count=20` passes at the existing 20-second test timeout; no timeout was raised. The focused race run for the full-overwrite stale/rebase/missing tests also passes.
+- The two end-to-end post-final-checkpoint cancellation/failure cases remain executed for acknowledgement-per-page modes and are explicitly inapplicable for `full_overwrite`: the controller has no real observation point after its sole final checkpoint. No test is skipped or disabled, and no fake hook was added.
+
+### Full local regression gate
+
+Green — `make test` passes in full after the decision repair.
+
 ### Live binary correctness
 
 `POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/cli -run '^TestPMBinaryPostgres(FullOverwriteRetainsEverySourcePage|TransformedFullOverwriteUsesArrowCOPY)$'`

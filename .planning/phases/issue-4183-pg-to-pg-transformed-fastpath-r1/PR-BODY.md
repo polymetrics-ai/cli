@@ -2,6 +2,16 @@
 
 Refs #4183. This stacked direct PR targets `integration/4015-mvp-flat-r1` and implements the additive PostgreSQL-to-PostgreSQL transformed `full_overwrite` vertical slice.
 
+## Benchmark re-qualification — gate still not met
+
+Input bytes are pre-transform projected source Arrow buffers; they exclude Parquet, pgwire, target storage, and checkpoint bytes.
+
+**Historical, resource-contended result:** 5,368,947,776 logical input bytes in 48.032609708 s: **111.78 decimal MB/s (106.60 MiB/s)**. This ran inside a **2-CPU / 2-GiB Colima VM** while macOS Spotlight mass re-indexing was contending for CPU (`mds_stores` at 303% CPU).
+
+**Quiet re-qualification:** 5,368,947,776 logical input bytes in 48.000221500 s: **111.85 decimal MB/s (106.67 MiB/s)**. This ran inside an **8-CPU / 16-GiB Colima VM**; `mds_stores` was 20.2% CPU at launch, below the ~50% quiet-machine threshold. **This remains BELOW the 200 MB/s / 25 s commitment.**
+
+The named bottleneck remains the **sequential source-read plus binary-COPY critical path** (16.869 s source read and 27.727 s binary COPY in the quiet run). More cores will not yield a linear 3× gain because this path does not parallelize with cores; extra cores can help PostgreSQL WAL, index/background work, and the DuckDB vectorised transform. Parallel partitioned extraction and the bounded pipeline were deliberately out of scope for this slice and remain the path to the gate. The near-identical qualified pair retains the original number while showing that the current ceiling is the sequential path, not a core-scalable claim.
+
 ## What changed
 
 - Characterized and fixed `cli-full-overwrite-per-page-truncate-dataloss-r1`: a two-page production-binary test proved the historical per-page truncate loss, and both legacy and Arrow routes now use one run-scoped shadow/publish lifecycle.
@@ -36,6 +46,15 @@ The test intentionally fails only when the explicit 5 GB performance opt-in is s
 - Live Docker Unix-socket production-binary correctness test for two-page overwrite and transformed Arrow COPY.
 - Scoped `go vet`, `go build ./cmd/pm`, `pm help connections`, bare `pm connections`, command help, generated docs validation, and smoke flow.
 - Agent-contract, connector validation/surface/boundary, connector canon, pinned-build, Homebrew notification, and release-target checks.
+
+### CI repair round 1
+
+- Regenerated the three `connections` golden transcript entries only after verifying that the diff contains the intended `--transform-file` synopsis token and the closed-plan `TRANSFORMS` help section; the transcript test passes.
+- Regenerated `website/lib/docs.generated.ts` with `pnpm --dir website run gen:docs`; a repeat run is byte-stable and website type-checking passes.
+- Dependency Review's transitive `github.com/apache/thrift@v0.21.0` finding is resolved by upgrading the direct `github.com/apache/arrow-go/v18` dependency to `v18.7.0`, which selects Thrift `v0.24.0`. `go mod verify`, targeted Arrow/PostgreSQL suites, and `go build ./cmd/pm` pass.
+- The accepted independent review corrected a test-harness regression: ordinary `afterApply` now runs after acknowledgement construction. The inherently per-page source-failure and page-one/page-two rows retain page-mode coverage; full-overwrite has honest inverse/final-CAS coverage at pre-publish abort, post-receipt read-back stale-writer, and post-final-checkpoint terminal boundaries. Production publish-then-checkpoint is unchanged. The two post-final-checkpoint cancellation/failure cases are explicitly inapplicable for full-overwrite until their product observation point is decided; no test is skipped or disabled.
+- The load-sensitive stale-writer test now synchronizes at receipt read-back, not page apply, and passes 20 consecutive runs at the existing 20-second timeout. `make test` passes in full.
+- New test classes: **happy** — post-ack ordinary callback and distinct full-overwrite page/publish/read-back lifecycle; **bad** — pre-publication and wrong-receipt refusals before read-back, plus typed stale/missing final-checkpoint conflicts; **edge** — repeated acknowledgement/abort, source failure and cancellation before publish, two-page receipt-to-final-CAS racing, and unrelated final-checkpoint rebase. These are App construction-path tests; the existing tagged binary tests remain the production PostgreSQL proof.
 
 ## CLI parity / skills / safety
 
