@@ -132,6 +132,46 @@ func TestPreflightReturnsTypedSourceStreamIneligibleErrorBeforeExecutorAccess(t 
 	}
 }
 
+func TestPreflightReturnsTypedDestinationSourceIneligibleErrorBeforeExecutorAccess(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	pair.destination.descriptor.Destination.SourceBindings = []connectors.DestinationSourceBinding{{
+		Executor:        connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeAPI, ID: "other_declared_source"},
+		EligibleStreams: []string{"records"},
+		RecordMapping: connectors.SourceRecordMapping{
+			Kind:        connectors.SourceRecordMappingKindConfigMatch,
+			ConfigKey:   "transport_source_id",
+			RecordField: "id",
+		},
+	}}
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	stage := &testWarehouseStage{}
+	commits := 0
+
+	_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source:      pair.source,
+		Destination: pair.destination,
+		Stream:      "records",
+		Mode:        synccontract.ModeFullAppend,
+		BatchSize:   10,
+		Stage:       stage,
+		Commit:      func(synccontract.CheckpointEnvelope) error { commits++; return nil },
+	})
+	var ineligible *DestinationSourceIneligibleError
+	if !errors.As(err, &ineligible) {
+		t.Fatalf("Preflight() error = %v, want DestinationSourceIneligibleError", err)
+	}
+	if got, want := ineligible.SourceExecutor, pair.sourceExecutor.reference; got != want {
+		t.Fatalf("ineligible source executor = %+v, want %+v", got, want)
+	}
+	if got, want := ineligible.Destination, pair.destination.Name(); got != want {
+		t.Fatalf("ineligible destination = %q, want %q", got, want)
+	}
+	if pair.sourceExecutor.readCalls != 0 || stage.calls != 0 || pair.destinationExecutor.planCalls != 0 || pair.destinationExecutor.applyCalls != 0 || commits != 0 {
+		t.Fatalf("destination admission refusal effects source/stage/plan/apply/checkpoint = %d/%d/%d/%d/%d, want zero", pair.sourceExecutor.readCalls, stage.calls, pair.destinationExecutor.planCalls, pair.destinationExecutor.applyCalls, commits)
+	}
+}
+
 func TestOrchestratorRejectsInvalidSiblingDescriptorBeforeProviderAccess(t *testing.T) {
 	for _, tt := range []struct {
 		name    string

@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"fmt"
+	"reflect"
 	"strings"
 	"time"
 
@@ -278,7 +279,8 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 	if err := a.validateIssueLabelTransportPlan(plan, conn, reversePlanModeIssueLabelTransport, action, ""); err != nil {
 		return connectors.WriteResult{}, err
 	}
-	if err := validateIssueLabelTransportWorkset(conn, syncMode, receipt, workset); err != nil {
+	mappedRecord, err := a.issueLabelTransportMappedWorksetRecord(conn, syncMode, action, receipt, workset)
+	if err != nil {
 		return connectors.WriteResult{}, err
 	}
 	prepared, err := a.prepareIssueLabelTransportWrite(ctx, conn, conn.Destination, action)
@@ -334,7 +336,7 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 		Action:   action.name,
 		Config:   prepared.runtime,
 		Approval: evidence,
-	}, []connectors.Record{prepared.record})
+	}, []connectors.Record{mappedRecord})
 	if err != nil {
 		return connectors.WriteResult{}, fmt.Errorf("execute approved issue-label transport: %w", err)
 	}
@@ -479,6 +481,10 @@ func (a *App) prepareIssueLabelTransportWrite(ctx context.Context, conn Connecti
 }
 
 func (a *App) issueLabelTransportBinding(conn Connection, syncMode synccontract.Mode, mode string, action issueLabelTransportAction, runtime connectors.RuntimeConfig, preview connectors.WritePreview, config map[string]string, forwardPlanID string) (issueLabelTransportBinding, error) {
+	stream, _, err := issueLabelTransportStream(conn)
+	if err != nil {
+		return issueLabelTransportBinding{}, err
+	}
 	targetIssue, err := issueLabelTransportIssueNumber(config, issueLabelTransportTargetIssueConfig)
 	if err != nil {
 		return issueLabelTransportBinding{}, err
@@ -490,7 +496,7 @@ func (a *App) issueLabelTransportBinding(conn Connection, syncMode synccontract.
 	binding := issueLabelTransportBinding{
 		Domain:              issueLabelTransportBindingDomain,
 		ConnectionID:        conn.ID,
-		Stream:              "issues",
+		Stream:              stream,
 		Mode:                syncMode,
 		Destination:         conn.Destination.Connector,
 		Action:              action.name,
@@ -503,11 +509,17 @@ func (a *App) issueLabelTransportBinding(conn Connection, syncMode synccontract.
 		ForwardPlanID:       forwardPlanID,
 	}
 	if mode == reversePlanModeIssueLabelTransport {
-		sourceIssue, err := issueLabelTransportIssueNumber(conn.Source.Config, issueLabelTransportSourceIssueConfig)
+		sourceBinding, err := a.issueLabelTransportSourceBinding(conn)
 		if err != nil {
 			return issueLabelTransportBinding{}, err
 		}
-		binding.ExpectedSourceIssue = sourceIssue
+		if sourceBinding.RecordMapping.Kind == connectors.SourceRecordMappingKindConfigMatch {
+			sourceIssue, err := issueLabelTransportIssueNumber(conn.Source.Config, sourceBinding.RecordMapping.ConfigKey)
+			if err != nil {
+				return issueLabelTransportBinding{}, err
+			}
+			binding.ExpectedSourceIssue = sourceIssue
+		}
 	}
 	return binding, nil
 }
@@ -556,8 +568,9 @@ func (a *App) issueLabelTransportConnection(connectionID string) (Connection, er
 	if !ok {
 		return Connection{}, fmt.Errorf("closed issue-label transport connection %q was not found", connectionID)
 	}
-	if conn.Source.Connector == "" || conn.Source.Connector != conn.Destination.Connector {
-		return Connection{}, fmt.Errorf("closed issue-label transport connection %q must use one definition-owned connector as source and destination", conn.ID)
+	sourceBinding, err := a.issueLabelTransportSourceBinding(conn)
+	if err != nil {
+		return Connection{}, fmt.Errorf("closed issue-label transport connection %q does not select an admitted source: %w", conn.ID, err)
 	}
 	contract, err := a.issueLabelTransportContract(conn)
 	if err != nil {
@@ -573,8 +586,10 @@ func (a *App) issueLabelTransportConnection(connectionID string) (Connection, er
 	if consent, required := issueLabelTransportConsentConfigForMode(mode); required && !strings.EqualFold(strings.TrimSpace(conn.Destination.Config[consent]), "true") {
 		return Connection{}, fmt.Errorf("closed issue-label transport connection %q requires explicit destination config %s=true for sync mode %q", conn.ID, consent, mode)
 	}
-	if _, err := issueLabelTransportIssueNumber(conn.Source.Config, issueLabelTransportSourceIssueConfig); err != nil {
-		return Connection{}, err
+	if sourceBinding.RecordMapping.Kind == connectors.SourceRecordMappingKindConfigMatch {
+		if _, err := issueLabelTransportIssueNumber(conn.Source.Config, sourceBinding.RecordMapping.ConfigKey); err != nil {
+			return Connection{}, err
+		}
 	}
 	if _, err := issueLabelTransportIssueNumber(conn.Destination.Config, issueLabelTransportTargetIssueConfig); err != nil {
 		return Connection{}, err
@@ -586,9 +601,9 @@ func (a *App) issueLabelTransportConnection(connectionID string) (Connection, er
 }
 
 func issueLabelTransportMode(conn Connection) (synccontract.Mode, error) {
-	stream, ok := conn.Streams["issues"]
-	if !ok {
-		return "", fmt.Errorf("closed issue-label transport connection %q has no issues stream", conn.ID)
+	_, stream, err := issueLabelTransportStream(conn)
+	if err != nil {
+		return "", err
 	}
 	mode, err := ParseStreamSyncMode(stream)
 	if err != nil {
@@ -598,6 +613,23 @@ func issueLabelTransportMode(conn Connection) (synccontract.Mode, error) {
 		return "", fmt.Errorf("closed issue-label transport connection %q has no contract sync mode", conn.ID)
 	}
 	return mode.ContractMode, nil
+}
+
+// issueLabelTransportStream keeps the closed label destination singleton
+// bounded while allowing a dynamic relation name to remain the source stream.
+// The destination's own collection remains internal to its typed writer; this
+// is the source-side connection stream.
+func issueLabelTransportStream(conn Connection) (string, StreamConfig, error) {
+	if len(conn.Streams) != 1 {
+		return "", StreamConfig{}, fmt.Errorf("closed issue-label transport connection %q must configure exactly one source stream", conn.ID)
+	}
+	for name, stream := range conn.Streams {
+		if strings.TrimSpace(name) == "" {
+			return "", StreamConfig{}, fmt.Errorf("closed issue-label transport connection %q has an empty source stream", conn.ID)
+		}
+		return name, stream, nil
+	}
+	return "", StreamConfig{}, fmt.Errorf("closed issue-label transport connection %q has no source stream", conn.ID)
 }
 
 func issueLabelTransportConsentConfigForMode(mode synccontract.Mode) (string, bool) {
@@ -615,15 +647,46 @@ func (a *App) issueLabelTransportContract(conn Connection) (issueLabelTransportC
 	if a == nil || a.registry == nil {
 		return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport registry is unavailable")
 	}
-	registered, ok := a.registry.Get(conn.Source.Connector)
+	registered, ok := a.registry.Get(conn.Destination.Connector)
 	if !ok {
-		return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport connector %q is unavailable", conn.Source.Connector)
+		return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport destination %q is unavailable", conn.Destination.Connector)
 	}
 	definition, ok := connectors.DefinitionOf(registered)
 	if !ok {
-		return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport connector %q has no definition", conn.Source.Connector)
+		return issueLabelTransportContract{}, fmt.Errorf("closed issue-label transport destination %q has no definition", conn.Destination.Connector)
 	}
 	return issueLabelTransportContractForDefinition(definition)
+}
+
+func (a *App) issueLabelTransportSourceBinding(conn Connection) (connectors.DestinationSourceBinding, error) {
+	if a == nil || a.registry == nil {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("closed issue-label transport registry is unavailable")
+	}
+	source, ok := a.registry.Get(conn.Source.Connector)
+	if !ok {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("source connector %q is unavailable", conn.Source.Connector)
+	}
+	destination, ok := a.registry.Get(conn.Destination.Connector)
+	if !ok || !isIssueLabelTransportConnector(destination) {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("destination connector %q does not select the exact definition-owned issue-label contract", conn.Destination.Connector)
+	}
+	sourceDescriptor, ok := connectors.SourceTransportDescriptorOf(source)
+	if !ok {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("source connector %q has no declared transport source", source.Name())
+	}
+	destinationTransport, ok := connectors.SyncTransportDescriptorOf(destination)
+	if !ok || destinationTransport.Destination == nil {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("destination connector %q has no declared destination transport", destination.Name())
+	}
+	stream, _, err := issueLabelTransportStream(conn)
+	if err != nil {
+		return connectors.DestinationSourceBinding{}, err
+	}
+	binding, admitted := destinationTransport.Destination.SourceBindingFor(sourceDescriptor.Executor, stream)
+	if !admitted {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("destination connector %q does not admit source executor %q for stream %q", destination.Name(), sourceDescriptor.Executor.ID, stream)
+	}
+	return binding, nil
 }
 
 func (a *App) validateIssueLabelTransportPlan(plan ReversePlan, conn Connection, mode string, action issueLabelTransportAction, forwardPlanID string) error {
@@ -677,24 +740,72 @@ func validateIssueLabelTransportWorkset(conn Connection, mode synccontract.Mode,
 	if err := receipt.Validate(); err != nil {
 		return fmt.Errorf("closed issue-label transport receipt: %w", err)
 	}
-	if receipt.Owner != conn.ID || receipt.ID != workset.ID || receipt.Stream != "issues" || receipt.Mode != mode || receipt.Records != len(workset.Records) || receipt.Tombstones != len(workset.Tombstones) {
-		return fmt.Errorf("closed issue-label transport receipt does not bind the reopened workset")
-	}
-	if len(workset.Records) != 1 {
-		return fmt.Errorf("closed issue-label transport requires exactly one reopened source issue")
-	}
-	expectedSource, err := issueLabelTransportIssueNumber(conn.Source.Config, issueLabelTransportSourceIssueConfig)
+	stream, _, err := issueLabelTransportStream(conn)
 	if err != nil {
 		return err
 	}
-	actualSource, err := issueNumberFromRecord(workset.Records[0])
-	if err != nil {
-		return fmt.Errorf("closed issue-label transport reopened source issue: %w", err)
+	if receipt.Owner != conn.ID || receipt.ID != workset.ID || receipt.Stream != stream || receipt.Mode != mode || receipt.Records != len(workset.Records) || receipt.Tombstones != len(workset.Tombstones) {
+		return fmt.Errorf("closed issue-label transport receipt does not bind the reopened workset")
 	}
-	if actualSource != expectedSource {
-		return fmt.Errorf("closed issue-label transport reopened source issue %d does not match configured source issue %d", actualSource, expectedSource)
+	if len(workset.Records) != 1 {
+		return fmt.Errorf("closed issue-label transport requires exactly one reopened source row")
+	}
+	if len(workset.Tombstones) != 0 {
+		return &IssueLabelTransportDeletesUnavailableError{Tombstones: len(workset.Tombstones)}
 	}
 	return nil
+}
+
+func (a *App) issueLabelTransportMappedWorksetRecord(conn Connection, mode synccontract.Mode, action issueLabelTransportAction, receipt synctransport.WarehouseReceipt, workset synctransport.WarehouseWorkset) (connectors.Record, error) {
+	if err := validateIssueLabelTransportWorkset(conn, mode, receipt, workset); err != nil {
+		return nil, err
+	}
+	return a.issueLabelTransportMappedSourceRecord(conn, action, workset.Records[0])
+}
+
+func (a *App) issueLabelTransportMappedSourceRecord(conn Connection, action issueLabelTransportAction, sourceRecord connectors.Record) (connectors.Record, error) {
+	sourceBinding, err := a.issueLabelTransportSourceBinding(conn)
+	if err != nil {
+		return nil, err
+	}
+	targetIssue, err := issueLabelTransportIssueNumber(conn.Destination.Config, issueLabelTransportTargetIssueConfig)
+	if err != nil {
+		return nil, err
+	}
+	label, err := issueLabelTransportLabel(conn.Destination.Config)
+	if err != nil {
+		return nil, err
+	}
+	expected, err := action.record(targetIssue, label)
+	if err != nil {
+		return nil, err
+	}
+	switch sourceBinding.RecordMapping.Kind {
+	case connectors.SourceRecordMappingKindConfigMatch:
+		expectedSource, err := issueLabelTransportIssueNumber(conn.Source.Config, sourceBinding.RecordMapping.ConfigKey)
+		if err != nil {
+			return nil, err
+		}
+		actualSource, err := issueNumberFromRecordField(sourceRecord, sourceBinding.RecordMapping.RecordField)
+		if err != nil {
+			return nil, fmt.Errorf("closed issue-label transport reopened configured source record: %w", err)
+		}
+		if actualSource != expectedSource {
+			return nil, fmt.Errorf("closed issue-label transport reopened source value %d does not match configured value %d", actualSource, expectedSource)
+		}
+		return expected, nil
+	case connectors.SourceRecordMappingKindInputFields:
+		mapped, err := action.recordFromSourceRecord(sourceRecord, sourceBinding.RecordMapping.Inputs)
+		if err != nil {
+			return nil, err
+		}
+		if !reflect.DeepEqual(mapped, expected) {
+			return nil, &IssueLabelTransportRowMappingError{Reason: "mapped values do not match the pre-approved destination record"}
+		}
+		return mapped, nil
+	default:
+		return nil, fmt.Errorf("closed issue-label transport source record mapping is unavailable")
+	}
 }
 
 func validateIssueLabelTransportApproval(approval synctransport.DestinationApproval) error {

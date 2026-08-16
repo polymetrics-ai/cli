@@ -88,6 +88,22 @@ type SourceStreamIneligibleError struct {
 	Stream    string
 }
 
+// DestinationSourceIneligibleError reports a destination's positive
+// definition-owned source admission refusal. It is returned before executor
+// lookup or provider access.
+type DestinationSourceIneligibleError struct {
+	Destination    string
+	SourceExecutor connectors.TransportExecutorReference
+	Stream         string
+}
+
+func (e *DestinationSourceIneligibleError) Error() string {
+	if e == nil {
+		return "destination transport does not admit source"
+	}
+	return fmt.Sprintf("destination transport does not admit source executor %q for stream %q", e.SourceExecutor.ID, e.Stream)
+}
+
 func (e *SourceStreamIneligibleError) Error() string {
 	if e == nil {
 		return "source transport does not support stream"
@@ -142,6 +158,11 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 	}
 	if !containsName(sourceDescriptor.EligibleStreams, request.Stream) {
 		return ResolvedTransport{}, &SourceStreamIneligibleError{Connector: request.Source.Name(), Stream: request.Stream}
+	}
+	if len(destinationDescriptor.SourceBindings) != 0 {
+		if _, admitted := destinationDescriptor.SourceBindingFor(sourceDescriptor.Executor, request.Stream); !admitted {
+			return ResolvedTransport{}, &DestinationSourceIneligibleError{Destination: request.Destination.Name(), SourceExecutor: sourceDescriptor.Executor, Stream: request.Stream}
+		}
 	}
 	if destinationDescriptor.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
 		return ResolvedTransport{}, fmt.Errorf("destination transport requires durable warehouse acknowledgement")

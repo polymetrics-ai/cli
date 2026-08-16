@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -133,6 +134,67 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	}
 	if err := validateClosedTransportBatchSize(postgres, postgres, 1000); err != nil {
 		t.Fatalf("PostgreSQL managed transport rejected its bounded database batch: %v", err)
+	}
+}
+
+// TestOpenSelectsPostgresIssueLabelDestinationTransport is the route-level
+// regression test for the database-to-API quadrant. The source/destination
+// pair is already definition-preflightable; persisted connection dispatch must
+// also admit PostgreSQL's polling-watermark rows to GitHub's two-action label
+// destination rather than reserving it for a GitHub-to-GitHub demo.
+func TestOpenSelectsPostgresIssueLabelDestinationTransport(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	postgres, ok := a.registry.Get("postgres")
+	if !ok {
+		t.Fatal("PostgreSQL connector is not registered")
+	}
+	github, ok := a.registry.Get("github")
+	if !ok {
+		t.Fatal("GitHub connector is not registered")
+	}
+
+	for _, testCase := range []struct {
+		name       string
+		mode       synccontract.Mode
+		consentKey string
+	}{
+		{name: "append maps to add issue labels", mode: synccontract.ModeFullAppend},
+		{name: "keyed maps to set issue labels", mode: synccontract.ModeIncrementalUpsert, consentKey: issueLabelTransportKeyedConsentConfig},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			connection := Connection{
+				ID:     "conn_postgres_github_" + strings.ReplaceAll(string(testCase.mode), "_", "-"),
+				Name:   "postgres_github_" + strings.ReplaceAll(string(testCase.mode), "_", "-"),
+				Source: EndpointConfig{Connector: "postgres"},
+				Destination: EndpointConfig{Connector: "github", Config: map[string]string{
+					issueLabelTransportTargetIssueConfig: "200",
+					issueLabelTransportLabelConfig:       "from-postgres",
+					testCase.consentKey:                  "true",
+				}},
+				Streams: map[string]StreamConfig{
+					"public.issue_label_events": {
+						SyncMode:         string(testCase.mode),
+						CursorField:      "sequence",
+						PrimaryKey:       []string{"id"},
+						DestinationTable: "issue_label_events",
+					},
+				},
+			}
+			if testCase.consentKey == "" {
+				delete(connection.Destination.Config, "")
+			}
+			a.state.Connections = append(a.state.Connections, connection)
+			if !a.shouldRunTransport(connection, "public.issue_label_events", SyncMode{ContractMode: testCase.mode}, postgres, github) {
+				t.Fatalf("PostgreSQL-to-GitHub %q route was not selected for declared transport dispatch", testCase.mode)
+			}
+		})
 	}
 }
 

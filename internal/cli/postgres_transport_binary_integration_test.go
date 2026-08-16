@@ -10,6 +10,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"io/fs"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -46,6 +48,15 @@ const (
 	postgresFastPathProofLogicalBytes = int64(5_000_000_000)
 	postgresFastPathPayloadBytes      = 1 << 20
 	postgresFastPathRows              = 5120
+
+	livePostgresGitHubIssueLabelProofEnv   = "POLYMETRICS_GITHUB_ISSUE_LABEL_LIVE_PROOF"
+	livePostgresGitHubIssueLabelTokenEnv   = "POLYMETRICS_GITHUB_TOKEN"
+	livePostgresGitHubIssueLabelOwner      = "karthik-sivadas"
+	livePostgresGitHubIssueLabelRepository = "pm-parity-proof-db-to-api"
+	livePostgresGitHubIssueLabelAddIssue   = 1
+	livePostgresGitHubIssueLabelSetIssue   = 2
+	livePostgresGitHubIssueLabelAddLabel   = "pm-db-api-live-add"
+	livePostgresGitHubIssueLabelSetLabel   = "pm-db-api-live-set"
 )
 
 var errGitHubCommitScaleMaxPages = errors.New("GitHub commit scale max pages must be unlimited or a positive integer")
@@ -295,6 +306,267 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	if emptyStates := postgresTransportStreamStates(t, root); !strings.Contains(emptyStates, "postgres-empty") || !strings.Contains(emptyStates, "public.empty_events") {
 		t.Fatalf("empty PostgreSQL run did not durably advance its checkpoint: %s", emptyStates)
 	}
+}
+
+// TestPMBinaryExecutesPostgresWarehouseGitHubIssueLabels exercises the
+// shipped binary's database-to-API production route. A real PostgreSQL source
+// is read through the connection-owned durable warehouse; GitHub's declared
+// POST and PUT label actions acknowledge and are then independently read back
+// from a faithful HTTP implementation before the polling watermark advances.
+func TestPMBinaryExecutesPostgresWarehouseGitHubIssueLabels(t *testing.T) {
+	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
+		t.Skip("database integration is opt-in")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+	harness := newPostgresTransportHarness(t)
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Errorf("close PostgreSQL-to-GitHub transport harness: %v", err)
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatalf("start PostgreSQL-to-GitHub transport harness: %v", err)
+	}
+	admin := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
+	defer func() { _ = admin.Close(context.Background()) }()
+	for _, statement := range []string{
+		`CREATE TABLE public.issue_label_append (id bigint PRIMARY KEY, sequence bigint NOT NULL, target_issue bigint NOT NULL, label text NOT NULL)`,
+		`INSERT INTO public.issue_label_append VALUES (1, 10, 4081201, 'pm-db-api-add')`,
+		`CREATE TABLE public.issue_label_set (id bigint PRIMARY KEY, sequence bigint NOT NULL, target_issue bigint NOT NULL, label text NOT NULL)`,
+		`INSERT INTO public.issue_label_set VALUES (1, 10, 4081202, 'pm-db-api-set')`,
+		`CREATE TABLE public.issue_label_empty (id bigint PRIMARY KEY, sequence bigint NOT NULL, target_issue bigint, label text)`,
+		`CREATE TABLE public.issue_label_null (id bigint PRIMARY KEY, sequence bigint NOT NULL, target_issue bigint, label text)`,
+		`INSERT INTO public.issue_label_null VALUES (1, 10, 4081204, NULL)`,
+		`CREATE TABLE public.issue_label_resume (id bigint PRIMARY KEY, sequence bigint NOT NULL, target_issue bigint NOT NULL, label text NOT NULL)`,
+		`INSERT INTO public.issue_label_resume VALUES (1, 10, 4081203, 'pm-db-api-resume'), (2, 20, 4081203, 'pm-db-api-resume')`,
+	} {
+		if _, err := admin.Exec(ctx, statement); err != nil {
+			t.Fatalf("prepare PostgreSQL-to-GitHub source: %v", err)
+		}
+	}
+
+	github := newPostgresIssueLabelTransportServer(t)
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "postgres-github-project")
+	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-source", postgresTransportSourceDB)
+	mustPostgresTransportPM(t, binary, "",
+		"credentials", "add", "github-destination", "--connector", "github",
+		"--config", "owner=acme", "--config", "repo=widgets", "--config", "public_access=true", "--config", "base_url="+github.URL,
+		"--root", root, "--json")
+
+	createConnection := func(name, stream, mode string, target int, label string, extraDestinationConfig ...string) string {
+		t.Helper()
+		args := []string{
+			"connections", "create", name,
+			"--source", "postgres:pg-source", "--destination", "github:github-destination",
+			"--stream", stream, "--sync-mode", mode, "--cursor", "sequence", "--primary-key", "id", "--table", strings.TrimPrefix(stream, "public."),
+			"--destination-config", "transport_target_issue_number=" + strconv.Itoa(target),
+			"--destination-config", "transport_label=" + label,
+		}
+		for _, config := range extraDestinationConfig {
+			args = append(args, "--destination-config", config)
+		}
+		args = append(args, "--root", root, "--json")
+		return transportConnectionIDFromOutput(t, mustPostgresTransportPM(t, binary, "", args...))
+	}
+
+	appendConnectionID := createConnection("postgres-github-append", "public.issue_label_append", "full_append", 4081201, "pm-db-api-add")
+	appendApproval := preparePostgresIssueLabelApproval(t, binary, root, "postgres-github-append", "add_issue_labels")
+	appendRun := runApprovedPostgresIssueLabelTransport(t, binary, root, "postgres-github-append", "public.issue_label_append", appendApproval)
+	assertPostgresIssueLabelRun(t, appendRun, 1)
+	assertPostgresIssueLabelWarehouseArtifacts(t, root, appendConnectionID)
+	assertPostgresIssueLabelCheckpoint(t, root, appendRun.RunID, "postgres-github-append", "public.issue_label_append")
+	github.assertLabels(t, 4081201, []string{"pm-db-api-add"})
+	github.assertEventsContainInOrder(t, []string{"POST:4081201", "GET"})
+
+	setConnectionID := createConnection("postgres-github-set", "public.issue_label_set", "incremental_upsert", 4081202, "pm-db-api-set", "transport_allow_keyed=true")
+	setApproval := preparePostgresIssueLabelApproval(t, binary, root, "postgres-github-set", "set_issue_labels")
+	setRun := runApprovedPostgresIssueLabelTransport(t, binary, root, "postgres-github-set", "public.issue_label_set", setApproval)
+	assertPostgresIssueLabelRun(t, setRun, 1)
+	assertPostgresIssueLabelWarehouseArtifacts(t, root, setConnectionID)
+	assertPostgresIssueLabelCheckpoint(t, root, setRun.RunID, "postgres-github-set", "public.issue_label_set")
+	github.assertLabels(t, 4081202, []string{"pm-db-api-set"})
+	if _, err := admin.Exec(ctx, `UPDATE public.issue_label_set SET sequence = 20 WHERE id = 1`); err != nil {
+		t.Fatalf("advance PostgreSQL keyed replay watermark: %v", err)
+	}
+	keyedReplayOutput, keyedReplayErr := runPostgresIssueLabelTransport(t, binary, root, "postgres-github-set", "public.issue_label_set", setApproval.PlanID, "")
+	if keyedReplayErr != nil {
+		t.Fatalf("keyed PostgreSQL-to-GitHub replay failed: %v\n%s", keyedReplayErr, keyedReplayOutput)
+	}
+	keyedReplay := decodePostgresIssueLabelRun(t, keyedReplayOutput, "postgres-github-set", "public.issue_label_set")
+	assertPostgresIssueLabelRun(t, keyedReplay, 1)
+	github.assertSetCalls(t, 4081202, 2)
+	github.assertLabels(t, 4081202, []string{"pm-db-api-set"})
+
+	emptyConnectionID := createConnection("postgres-github-empty", "public.issue_label_empty", "full_append", 4081205, "pm-db-api-empty")
+	emptyApproval := preparePostgresIssueLabelApproval(t, binary, root, "postgres-github-empty", "add_issue_labels")
+	emptyRun := runApprovedPostgresIssueLabelTransport(t, binary, root, "postgres-github-empty", "public.issue_label_empty", emptyApproval)
+	assertPostgresIssueLabelRun(t, emptyRun, 0)
+	assertPostgresIssueLabelWarehouseArtifacts(t, root, emptyConnectionID)
+	if state := postgresTransportStreamStates(t, root); !strings.Contains(state, "postgres-github-empty") || !strings.Contains(state, "public.issue_label_empty") {
+		t.Fatalf("zero-row PostgreSQL-to-GitHub run did not retain a durable stream checkpoint: %s", state)
+	}
+
+	nullConnectionID := createConnection("postgres-github-null", "public.issue_label_null", "full_append", 4081204, "pm-db-api-null")
+	nullApproval := preparePostgresIssueLabelApproval(t, binary, root, "postgres-github-null", "add_issue_labels")
+	beforeNullWrites := github.writeCalls()
+	nullOutput, nullErr := runPostgresIssueLabelTransport(t, binary, root, "postgres-github-null", "public.issue_label_null", nullApproval.PlanID, nullApproval.Token)
+	if nullErr == nil || !strings.Contains(nullOutput, "issue-label transport row cannot map input \"label\"") {
+		t.Fatalf("null PostgreSQL label binary run = (%v, %s), want pre-write typed mapping refusal", nullErr, nullOutput)
+	}
+	if got := github.writeCalls(); got != beforeNullWrites {
+		t.Fatalf("null PostgreSQL label reached GitHub write I/O: before=%d after=%d", beforeNullWrites, got)
+	}
+	if state := postgresTransportStreamStates(t, root); strings.Contains(state, "postgres-github-null\"}") {
+		t.Fatalf("null PostgreSQL label unexpectedly advanced a checkpoint: %s", state)
+	}
+	_ = nullConnectionID // The terminal-state assertion identifies the connection by its durable name.
+
+	resumeConnectionID := createConnection("postgres-github-resume", "public.issue_label_resume", "incremental_upsert", 4081203, "pm-db-api-resume", "transport_allow_keyed=true")
+	resumeApproval := preparePostgresIssueLabelApproval(t, binary, root, "postgres-github-resume", "set_issue_labels")
+	github.blockNextSet(t, 4081203)
+	resumeProcess := startPostgresIssueLabelTransport(t, binary, root, "postgres-github-resume", "public.issue_label_resume", resumeApproval)
+	defer resumeProcess.stop()
+	github.waitForBlockedSet(t, 4081203)
+	checkpointAfterFirstPage := postgresTransportStreamStates(t, root)
+	if !strings.Contains(checkpointAfterFirstPage, "postgres-github-resume") {
+		t.Fatalf("first acknowledged PostgreSQL-to-GitHub page did not persist a resumable checkpoint: %s", checkpointAfterFirstPage)
+	}
+	resumeProcess.killAndWait(t)
+	resumedOutput, resumedErr := runPostgresIssueLabelTransport(t, binary, root, "postgres-github-resume", "public.issue_label_resume", resumeApproval.PlanID, "")
+	if resumedErr != nil {
+		t.Fatalf("resumed PostgreSQL-to-GitHub transport failed: %v\n%s", resumedErr, resumedOutput)
+	}
+	resumed := decodePostgresIssueLabelRun(t, resumedOutput, "postgres-github-resume", "public.issue_label_resume")
+	assertPostgresIssueLabelRun(t, resumed, 1)
+	github.assertSetCalls(t, 4081203, 3) // first success, interrupted second request, resumed second row
+	github.assertLabels(t, 4081203, []string{"pm-db-api-resume"})
+	assertPostgresIssueLabelWarehouseArtifacts(t, root, resumeConnectionID)
+}
+
+// TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels is the opt-in
+// production proof for the PostgreSQL-to-GitHub route. Unlike the deterministic
+// test above, this test writes only to its retained private proof repository:
+// karthik-sivadas/pm-parity-proof-db-to-api. It uses dedicated, label-free
+// issues #1 and #2 so no other lane can change either action's result. The
+// written labels remain on those issues as independently inspectable evidence.
+//
+// The test deliberately has two independent observations of each mutation:
+// the destination's production read-back before the polling watermark commits,
+// then a separate authenticated GitHub labels API request after the fresh pm
+// process exits. The latter is the acceptance assertion; it is not the
+// transport writer's reported result.
+//
+// Invoke only with a token fetched into the environment, never in arguments or
+// files:
+//
+//	export POLYMETRICS_GITHUB_TOKEN="$(gh auth token)"
+//	POLYMETRICS_DATABASE_INTEGRATION=1 \
+//	POLYMETRICS_GITHUB_ISSUE_LABEL_LIVE_PROOF=1 \
+//	POLYMETRICS_CONTAINER_RUNTIME=docker \
+//	POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/.../.colima/default/docker.sock \
+//	go test -tags databaseintegration -count=1 -timeout 20m -v ./internal/cli \
+//	  -run '^TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels$'
+func TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels(t *testing.T) {
+	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" || os.Getenv(livePostgresGitHubIssueLabelProofEnv) != "1" {
+		t.Skip("live PostgreSQL-to-GitHub issue-label proof is opt-in; set POLYMETRICS_DATABASE_INTEGRATION=1 and " + livePostgresGitHubIssueLabelProofEnv + "=1")
+	}
+	token := strings.TrimSpace(os.Getenv(livePostgresGitHubIssueLabelTokenEnv))
+	if token == "" {
+		t.Fatalf("%s=1 requires %s", livePostgresGitHubIssueLabelProofEnv, livePostgresGitHubIssueLabelTokenEnv)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+
+	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelAddIssue, nil)
+	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelSetIssue, nil)
+
+	harness := newPostgresTransportHarness(t)
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Errorf("close live PostgreSQL-to-GitHub transport harness: %v", err)
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatalf("start live PostgreSQL-to-GitHub transport harness: %v", err)
+	}
+	admin := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
+	defer func() { _ = admin.Close(context.Background()) }()
+	for _, statement := range []string{
+		`CREATE TABLE public.issue_label_live_add (id bigint PRIMARY KEY, sequence bigint NOT NULL, target_issue bigint NOT NULL, label text NOT NULL)`,
+		`INSERT INTO public.issue_label_live_add VALUES (1, 10, 1, 'pm-db-api-live-add')`,
+		`CREATE TABLE public.issue_label_live_set (id bigint PRIMARY KEY, sequence bigint NOT NULL, target_issue bigint NOT NULL, label text NOT NULL)`,
+		`INSERT INTO public.issue_label_live_set VALUES (1, 10, 2, 'pm-db-api-live-set')`,
+	} {
+		if _, err := admin.Exec(ctx, statement); err != nil {
+			t.Fatalf("prepare live PostgreSQL-to-GitHub source: %v", err)
+		}
+	}
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "live-postgres-github-project")
+	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-source", postgresTransportSourceDB)
+	mustPostgresTransportPM(t, binary, "",
+		"credentials", "add", "github-live-destination", "--connector", "github",
+		"--config", "owner="+livePostgresGitHubIssueLabelOwner,
+		"--config", "repo="+livePostgresGitHubIssueLabelRepository,
+		"--config", "auth_type=token",
+		"--config", "rate_limit_account="+livePostgresGitHubIssueLabelOwner,
+		"--from-env", "token="+livePostgresGitHubIssueLabelTokenEnv,
+		"--root", root, "--json")
+
+	createConnection := func(name, stream, mode string, issue int, label string, extraDestinationConfig ...string) string {
+		t.Helper()
+		args := []string{
+			"connections", "create", name,
+			"--source", "postgres:pg-source", "--destination", "github:github-live-destination",
+			"--stream", stream, "--sync-mode", mode, "--cursor", "sequence", "--primary-key", "id", "--table", strings.TrimPrefix(stream, "public."),
+			"--destination-config", "transport_target_issue_number=" + strconv.Itoa(issue),
+			"--destination-config", "transport_label=" + label,
+		}
+		for _, config := range extraDestinationConfig {
+			args = append(args, "--destination-config", config)
+		}
+		args = append(args, "--root", root, "--json")
+		return transportConnectionIDFromOutput(t, mustPostgresTransportPM(t, binary, "", args...))
+	}
+
+	addConnectionID := createConnection("postgres-github-live-add", "public.issue_label_live_add", "full_append", livePostgresGitHubIssueLabelAddIssue, livePostgresGitHubIssueLabelAddLabel)
+	addApproval := preparePostgresIssueLabelApproval(t, binary, root, "postgres-github-live-add", "add_issue_labels")
+	addRun := runApprovedPostgresIssueLabelTransport(t, binary, root, "postgres-github-live-add", "public.issue_label_live_add", addApproval)
+	assertPostgresIssueLabelRun(t, addRun, 1)
+	assertPostgresIssueLabelWarehouseArtifacts(t, root, addConnectionID)
+	assertPostgresIssueLabelCheckpoint(t, root, addRun.RunID, "postgres-github-live-add", "public.issue_label_live_add")
+	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelAddIssue, []string{livePostgresGitHubIssueLabelAddLabel})
+
+	setConnectionID := createConnection("postgres-github-live-set", "public.issue_label_live_set", "incremental_upsert", livePostgresGitHubIssueLabelSetIssue, livePostgresGitHubIssueLabelSetLabel, "transport_allow_keyed=true")
+	setApproval := preparePostgresIssueLabelApproval(t, binary, root, "postgres-github-live-set", "set_issue_labels")
+	setRun := runApprovedPostgresIssueLabelTransport(t, binary, root, "postgres-github-live-set", "public.issue_label_live_set", setApproval)
+	assertPostgresIssueLabelRun(t, setRun, 1)
+	assertPostgresIssueLabelWarehouseArtifacts(t, root, setConnectionID)
+	assertPostgresIssueLabelCheckpoint(t, root, setRun.RunID, "postgres-github-live-set", "public.issue_label_live_set")
+	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelSetIssue, []string{livePostgresGitHubIssueLabelSetLabel})
+
+	if _, err := admin.Exec(ctx, `UPDATE public.issue_label_live_set SET sequence = 20 WHERE id = 1`); err != nil {
+		t.Fatalf("advance live PostgreSQL keyed replay watermark: %v", err)
+	}
+	keyedReplayOutput, keyedReplayErr := runPostgresIssueLabelTransport(t, binary, root, "postgres-github-live-set", "public.issue_label_live_set", setApproval.PlanID, "")
+	if keyedReplayErr != nil {
+		t.Fatalf("live keyed PostgreSQL-to-GitHub replay failed: %v", keyedReplayErr)
+	}
+	keyedReplay := decodePostgresIssueLabelRun(t, keyedReplayOutput, "postgres-github-live-set", "public.issue_label_live_set")
+	assertPostgresIssueLabelRun(t, keyedReplay, 1)
+	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelSetIssue, []string{livePostgresGitHubIssueLabelSetLabel})
+	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
 }
 
 // TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage characterizes the
@@ -1049,6 +1321,430 @@ func logDurableGitHubCommitTransportPhaseCounts(t *testing.T, root, connection, 
 		}
 		t.Logf("durable rails/rails commits phase counts before cleanup: status=%s extracted=%d warehouse_parquet=%d postgres=%d extract_elapsed_ns=%d warehouse_elapsed_ns=%d postgresql_elapsed_ns=%d", reopened.Status, measurement.ExtractedRecords, measurement.WarehouseParquetRecords, measurement.PostgreSQLAppliedRecords, measurement.ExtractElapsedNanos, measurement.WarehouseElapsedNanos, measurement.PostgreSQLElapsedNanos)
 		return
+	}
+}
+
+type postgresIssueLabelApproval struct {
+	PlanID string
+	Token  string
+}
+
+type postgresIssueLabelRun struct {
+	RunID         string
+	Status        string
+	RecordsRead   int
+	RecordsLoaded int
+}
+
+func preparePostgresIssueLabelApproval(t *testing.T, binary, root, connection, wantAction string) postgresIssueLabelApproval {
+	t.Helper()
+	planOutput := mustPostgresTransportPM(t, binary, "",
+		"etl", "transport", "github-issue-label", "plan", "--connection", connection, "--root", root, "--json")
+	var planned struct {
+		Plan struct {
+			ID     string `json:"id"`
+			Action string `json:"action"`
+		} `json:"plan"`
+	}
+	if err := json.Unmarshal([]byte(planOutput), &planned); err != nil || planned.Plan.ID == "" || planned.Plan.Action != wantAction {
+		t.Fatalf("PostgreSQL-to-GitHub plan = (%v, %s), want %q plan", err, planOutput, wantAction)
+	}
+	preview := mustPostgresTransportPM(t, binary, "",
+		"etl", "transport", "github-issue-label", "preview", planned.Plan.ID, "--root", root)
+	token := assertTransportPreviewOutput(t, preview, "issue_label_transport", wantAction, true)
+	return postgresIssueLabelApproval{PlanID: planned.Plan.ID, Token: token}
+}
+
+func runApprovedPostgresIssueLabelTransport(t *testing.T, binary, root, connection, stream string, approval postgresIssueLabelApproval) postgresIssueLabelRun {
+	t.Helper()
+	output, err := runPostgresIssueLabelTransport(t, binary, root, connection, stream, approval.PlanID, approval.Token)
+	if err != nil {
+		t.Fatalf("approved PostgreSQL-to-GitHub run failed: %v\n%s", err, output)
+	}
+	return decodePostgresIssueLabelRun(t, output, connection, stream)
+}
+
+func runPostgresIssueLabelTransport(t *testing.T, binary, root, connection, stream, planID, token string) (string, error) {
+	t.Helper()
+	args := []string{
+		"etl", "run", "--connection", connection, "--stream", stream, "--batch-size", "1",
+		"--approval-plan", planID, "--confirm", "destructive", "--root", root, "--json",
+	}
+	stdin := ""
+	if token != "" {
+		args = append(args[:8], append([]string{"--approval-token-stdin"}, args[8:]...)...)
+		stdin = token + "\n"
+	}
+	return runTransportPM(binary, stdin, args...)
+}
+
+func decodePostgresIssueLabelRun(t *testing.T, output, connection, stream string) postgresIssueLabelRun {
+	t.Helper()
+	var envelope struct {
+		Run struct {
+			ID            string `json:"id"`
+			Connection    string `json:"connection"`
+			Stream        string `json:"stream"`
+			Status        string `json:"status"`
+			RecordsRead   int    `json:"records_read"`
+			RecordsLoaded int    `json:"records_loaded"`
+			RecordsFailed int    `json:"records_failed"`
+		} `json:"run"`
+	}
+	if err := json.Unmarshal([]byte(output), &envelope); err != nil {
+		t.Fatalf("decode PostgreSQL-to-GitHub run: %v output=%s", err, output)
+	}
+	if envelope.Run.ID == "" || envelope.Run.Connection != connection || envelope.Run.Stream != stream || envelope.Run.Status != "completed" || envelope.Run.RecordsFailed != 0 {
+		t.Fatalf("PostgreSQL-to-GitHub run = %+v, want completed run for %s/%s", envelope.Run, connection, stream)
+	}
+	return postgresIssueLabelRun{RunID: envelope.Run.ID, Status: envelope.Run.Status, RecordsRead: envelope.Run.RecordsRead, RecordsLoaded: envelope.Run.RecordsLoaded}
+}
+
+func assertPostgresIssueLabelRun(t *testing.T, run postgresIssueLabelRun, wantRows int) {
+	t.Helper()
+	if run.Status != "completed" || run.RecordsRead != wantRows || run.RecordsLoaded != wantRows {
+		t.Fatalf("PostgreSQL-to-GitHub run = %+v, want completed %d-row transfer", run, wantRows)
+	}
+}
+
+func startPostgresIssueLabelTransport(t *testing.T, binary, root, connection, stream string, approval postgresIssueLabelApproval) *postgresTransportProcess {
+	t.Helper()
+	process := &postgresTransportProcess{done: make(chan error, 1)}
+	process.command = exec.Command(binary,
+		"etl", "run", "--connection", connection, "--stream", stream, "--batch-size", "1",
+		"--approval-plan", approval.PlanID, "--approval-token-stdin", "--confirm", "destructive", "--root", root, "--json")
+	process.command.Stdin = strings.NewReader(approval.Token + "\n")
+	process.command.Stdout = &process.output
+	process.command.Stderr = &process.output
+	if err := process.command.Start(); err != nil {
+		t.Fatalf("start PostgreSQL-to-GitHub transport process: %v", err)
+	}
+	go func() { process.done <- process.command.Wait() }()
+	return process
+}
+
+func assertLivePostgresGitHubIssueLabels(t *testing.T, ctx context.Context, token string, issue int, want []string) {
+	t.Helper()
+	got, err := livePostgresGitHubIssueLabels(ctx, token, issue)
+	if err != nil {
+		t.Fatalf("independently read live GitHub labels for issue %d: %v", issue, err)
+	}
+	got = append([]string(nil), got...)
+	want = append([]string(nil), want...)
+	sort.Strings(got)
+	sort.Strings(want)
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("independent live GitHub labels for issue %d = %v, want exact %v", issue, got, want)
+	}
+	t.Logf("independent live GitHub labels for issue %d = %v", issue, got)
+}
+
+func livePostgresGitHubIssueLabels(ctx context.Context, token string, issue int) ([]string, error) {
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet,
+		fmt.Sprintf("https://api.github.com/repos/%s/%s/issues/%d/labels", livePostgresGitHubIssueLabelOwner, livePostgresGitHubIssueLabelRepository, issue), nil)
+	if err != nil {
+		return nil, fmt.Errorf("build independent GitHub labels request: %w", err)
+	}
+	request.Header.Set("Accept", "application/vnd.github+json")
+	request.Header.Set("Authorization", "Bearer "+token)
+	request.Header.Set("X-GitHub-Api-Version", "2022-11-28")
+	request.Header.Set("Cache-Control", "no-cache")
+	request.Header.Set("Pragma", "no-cache")
+	response, err := (&http.Client{Timeout: 30 * time.Second}).Do(request)
+	if err != nil {
+		return nil, fmt.Errorf("execute independent GitHub labels request: %w", err)
+	}
+	defer func() { _ = response.Body.Close() }()
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("independent GitHub labels response = %s", response.Status)
+	}
+	var labels []struct {
+		Name string `json:"name"`
+	}
+	if err := json.NewDecoder(io.LimitReader(response.Body, 1<<20)).Decode(&labels); err != nil {
+		return nil, fmt.Errorf("decode independent GitHub labels response: %w", err)
+	}
+	names := make([]string, 0, len(labels))
+	for _, label := range labels {
+		if strings.TrimSpace(label.Name) == "" {
+			return nil, fmt.Errorf("independent GitHub labels response contains an empty name")
+		}
+		names = append(names, label.Name)
+	}
+	return names, nil
+}
+
+func assertPostgresIssueLabelWarehouseArtifacts(t *testing.T, root, wantOwner string) {
+	t.Helper()
+	warehouseRoot := filepath.Join(root, ".polymetrics", "warehouse")
+	found := false
+	err := filepath.WalkDir(warehouseRoot, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !strings.Contains(filepath.ToSlash(path), "/transport/") || filepath.Ext(path) != ".json" {
+			return nil
+		}
+		contents, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		var manifest struct {
+			Owner         string `json:"owner"`
+			Records       int    `json:"records"`
+			WALSHA256     string `json:"wal_sha256"`
+			ParquetSHA256 string `json:"parquet_sha256"`
+		}
+		if err := json.Unmarshal(contents, &manifest); err != nil {
+			return err
+		}
+		if manifest.Owner == wantOwner {
+			if manifest.Records != 1 || manifest.WALSHA256 == "" || manifest.ParquetSHA256 == "" {
+				t.Fatalf("PostgreSQL-to-GitHub manifest for %q is incomplete: %+v", wantOwner, manifest)
+			}
+			found = true
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("walk PostgreSQL-to-GitHub warehouse artifacts: %v", err)
+	}
+	if !found {
+		t.Fatalf("no durable PostgreSQL-to-GitHub receipt belongs to %q", wantOwner)
+	}
+}
+
+func assertPostgresIssueLabelCheckpoint(t *testing.T, root, runID, connection, stream string) {
+	t.Helper()
+	contents, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read PostgreSQL-to-GitHub state: %v", err)
+	}
+	var state struct {
+		Runs []struct {
+			ID     string `json:"id"`
+			Status string `json:"status"`
+		} `json:"runs"`
+		StreamStates map[string]struct {
+			Connection string          `json:"connection"`
+			Stream     string          `json:"stream"`
+			Checkpoint json.RawMessage `json:"checkpoint"`
+		} `json:"stream_states"`
+	}
+	if err := json.Unmarshal(contents, &state); err != nil {
+		t.Fatalf("decode PostgreSQL-to-GitHub state: %v", err)
+	}
+	completed := false
+	for _, run := range state.Runs {
+		completed = completed || (run.ID == runID && run.Status == "completed")
+	}
+	if !completed {
+		t.Fatalf("PostgreSQL-to-GitHub run %q was not durably completed", runID)
+	}
+	for _, streamState := range state.StreamStates {
+		if streamState.Connection == connection && streamState.Stream == stream && len(streamState.Checkpoint) != 0 {
+			return
+		}
+	}
+	t.Fatalf("PostgreSQL-to-GitHub checkpoint was not persisted for %s/%s", connection, stream)
+}
+
+type postgresIssueLabelTransportServer struct {
+	*httptest.Server
+	mu          sync.Mutex
+	labels      map[int][]string
+	events      []string
+	posts       map[int]int
+	sets        map[int]int
+	blockTarget int
+	blockArmed  bool
+	blocked     chan struct{}
+}
+
+func newPostgresIssueLabelTransportServer(t *testing.T) *postgresIssueLabelTransportServer {
+	t.Helper()
+	server := &postgresIssueLabelTransportServer{
+		labels: make(map[int][]string), posts: make(map[int]int), sets: make(map[int]int),
+	}
+	server.Server = httptest.NewServer(http.HandlerFunc(server.serveHTTP))
+	t.Cleanup(server.Close)
+	return server
+}
+
+func (s *postgresIssueLabelTransportServer) serveHTTP(response http.ResponseWriter, request *http.Request) {
+	if request.Header.Get("Accept") != "application/vnd.github+json" || request.Header.Get("X-GitHub-Api-Version") != "2026-03-10" || request.Header.Get("User-Agent") != "polymetrics-go-cli" || request.Header.Get("Authorization") != "" {
+		http.Error(response, "request did not use declared GitHub public contract", http.StatusBadRequest)
+		return
+	}
+	if request.Method == http.MethodGet && request.URL.Path == "/repos/acme/widgets/issues" {
+		s.mu.Lock()
+		issues := make([]int, 0, len(s.labels)+5)
+		for issue := range s.labels {
+			issues = append(issues, issue)
+		}
+		for _, issue := range []int{4081201, 4081202, 4081203, 4081204, 4081205} {
+			if _, found := s.labels[issue]; !found {
+				issues = append(issues, issue)
+			}
+		}
+		sort.Ints(issues)
+		records := make([]map[string]any, 0, len(issues))
+		for _, issue := range issues {
+			records = append(records, faithfulIssue(issue, issueLabelResponse(s.labels[issue])))
+		}
+		s.events = append(s.events, "GET")
+		s.mu.Unlock()
+		response.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(response).Encode(records)
+		return
+	}
+	issue, ok := postgresIssueLabelPath(request.URL.Path, request.Method)
+	if !ok {
+		http.NotFound(response, request)
+		return
+	}
+	var body struct {
+		Labels []string `json:"labels"`
+	}
+	if request.Header.Get("Content-Type") != "application/json" || json.NewDecoder(request.Body).Decode(&body) != nil || len(body.Labels) != 1 || strings.TrimSpace(body.Labels[0]) == "" {
+		http.Error(response, "invalid declared GitHub issue-label payload", http.StatusBadRequest)
+		return
+	}
+	s.mu.Lock()
+	if request.Method == http.MethodPost {
+		s.posts[issue]++
+		if !issueLabelContains(s.labels[issue], body.Labels[0]) {
+			s.labels[issue] = append(s.labels[issue], body.Labels[0])
+		}
+		s.events = append(s.events, "POST:"+strconv.Itoa(issue))
+		labels := append([]string(nil), s.labels[issue]...)
+		s.mu.Unlock()
+		response.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(response).Encode(issueLabelResponse(labels))
+		return
+	}
+	s.sets[issue]++
+	shouldBlock := s.blockArmed && s.blockTarget == issue
+	if shouldBlock {
+		s.blockArmed = false
+		s.events = append(s.events, "PUT:block:"+strconv.Itoa(issue))
+		blocked := s.blocked
+		s.mu.Unlock()
+		close(blocked)
+		<-request.Context().Done()
+		return
+	}
+	s.labels[issue] = append([]string(nil), body.Labels...)
+	s.events = append(s.events, "PUT:"+strconv.Itoa(issue))
+	labels := append([]string(nil), s.labels[issue]...)
+	s.mu.Unlock()
+	response.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(response).Encode(issueLabelResponse(labels))
+}
+
+func postgresIssueLabelPath(path string, method string) (int, bool) {
+	if method != http.MethodPost && method != http.MethodPut {
+		return 0, false
+	}
+	parts := strings.Split(strings.Trim(path, "/"), "/")
+	if len(parts) != 6 || parts[0] != "repos" || parts[1] != "acme" || parts[2] != "widgets" || parts[3] != "issues" || parts[5] != "labels" {
+		return 0, false
+	}
+	issue, err := strconv.Atoi(parts[4])
+	return issue, err == nil && issue > 0
+}
+
+func issueLabelResponse(labels []string) []map[string]any {
+	response := make([]map[string]any, 0, len(labels))
+	for _, label := range labels {
+		response = append(response, map[string]any{"name": label})
+	}
+	return response
+}
+
+func issueLabelContains(labels []string, want string) bool {
+	for _, label := range labels {
+		if label == want {
+			return true
+		}
+	}
+	return false
+}
+
+func (s *postgresIssueLabelTransportServer) writeCalls() int {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	count := 0
+	for _, calls := range s.posts {
+		count += calls
+	}
+	for _, calls := range s.sets {
+		count += calls
+	}
+	return count
+}
+
+func (s *postgresIssueLabelTransportServer) assertLabels(t *testing.T, issue int, want []string) {
+	t.Helper()
+	s.mu.Lock()
+	got := append([]string(nil), s.labels[issue]...)
+	s.mu.Unlock()
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("independent GitHub issue %d labels = %v, want %v", issue, got, want)
+	}
+}
+
+func (s *postgresIssueLabelTransportServer) assertSetCalls(t *testing.T, issue, want int) {
+	t.Helper()
+	s.mu.Lock()
+	got := s.sets[issue]
+	s.mu.Unlock()
+	if got != want {
+		t.Fatalf("GitHub PUT calls for issue %d = %d, want %d", issue, got, want)
+	}
+}
+
+func (s *postgresIssueLabelTransportServer) assertEventsContainInOrder(t *testing.T, want []string) {
+	t.Helper()
+	s.mu.Lock()
+	events := append([]string(nil), s.events...)
+	s.mu.Unlock()
+	index := 0
+	for _, event := range events {
+		if index < len(want) && event == want[index] {
+			index++
+		}
+	}
+	if index != len(want) {
+		t.Fatalf("GitHub events = %v, want ordered subset %v", events, want)
+	}
+}
+
+func (s *postgresIssueLabelTransportServer) blockNextSet(t *testing.T, issue int) {
+	t.Helper()
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.blockArmed {
+		t.Fatal("a GitHub PUT block is already armed")
+	}
+	s.blockTarget = issue
+	s.blockArmed = true
+	s.blocked = make(chan struct{})
+}
+
+func (s *postgresIssueLabelTransportServer) waitForBlockedSet(t *testing.T, issue int) {
+	t.Helper()
+	s.mu.Lock()
+	blocked := s.blocked
+	armedFor := s.blockTarget
+	s.mu.Unlock()
+	if blocked == nil || armedFor != issue {
+		t.Fatalf("GitHub PUT block is not armed for issue %d", issue)
+	}
+	select {
+	case <-blocked:
+	case <-time.After(90 * time.Second):
+		t.Fatalf("timed out waiting for interrupted GitHub PUT on issue %d", issue)
 	}
 }
 

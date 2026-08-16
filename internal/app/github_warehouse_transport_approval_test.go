@@ -519,6 +519,147 @@ func TestIssueLabelTransportReadBackDoesNotReadBeyondFirstPageWhenIssueMissing(t
 	fixture.assertProviderReads(t, 1)
 }
 
+// TestPostgresIssueLabelTransportMapsDefinitionInputsThroughDurableReopen
+// proves the database-to-API route with the same destination executor the
+// production composition registers. The source rows use only the two input
+// names declared by GitHub's writes.json transport binding; the test never
+// supplies a hand-authored API record.
+func TestPostgresIssueLabelTransportMapsDefinitionInputsThroughDurableReopen(t *testing.T) {
+	for _, testCase := range []struct {
+		name       string
+		mode       synccontract.Mode
+		wantAction string
+		keyed      bool
+	}{
+		{name: "full append uses add_issue_labels", mode: synccontract.ModeFullAppend, wantAction: "add_issue_labels"},
+		{name: "incremental upsert uses set_issue_labels and remains keyed", mode: synccontract.ModeIncrementalUpsert, wantAction: "set_issue_labels", keyed: true},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			fixture := newIssueLabelTransportApprovalFixture(t).withPostgresSource(t, testCase.mode)
+			action, err := fixture.executor.contract.actionForSyncMode(testCase.mode)
+			if err != nil {
+				t.Fatalf("definition action for mode %q = %v", testCase.mode, err)
+			}
+			if action.name != testCase.wantAction {
+				t.Fatalf("definition action for mode %q = %q, want %q", testCase.mode, action.name, testCase.wantAction)
+			}
+			fixture.assertPostgresPlanDestination(t, testCase.mode, action.name)
+
+			plan, approval := fixture.preRunApproval(t)
+			if plan.Action != testCase.wantAction || plan.TransportBindingSHA256 == "" {
+				t.Fatalf("PostgreSQL issue-label plan = %+v, want definition-owned %q binding", plan, testCase.wantAction)
+			}
+			receipt, workset := fixture.stagePostgresAndReopen(t, testCase.mode, connectors.Record{
+				"id":           int64(1),
+				"sequence":     int64(10),
+				"target_issue": int64(fixture.targetIssue),
+				"label":        fixture.label,
+			}, nil)
+			if err := fixture.applyForMode(t, testCase.mode, receipt, workset, approval); err != nil {
+				t.Fatalf("PostgreSQL ApplyDestination() = %v", err)
+			}
+			if testCase.keyed {
+				fixture.assertProviderWrites(t, 0)
+				fixture.assertProviderSets(t, 1)
+			} else {
+				fixture.assertProviderWrites(t, 1)
+				fixture.assertProviderSets(t, 0)
+			}
+			if err := fixture.readBackPostgresForMode(t, testCase.mode, workset); err != nil {
+				t.Fatalf("PostgreSQL ReadBackDestination() = %v", err)
+			}
+
+			if testCase.keyed {
+				// A standing keyed authorization deliberately permits an identical
+				// replay. The provider's independent exact-set read proves it did
+				// not duplicate or corrupt the label set.
+				unattended := approval
+				unattended.ApprovalToken = ""
+				if err := fixture.applyForMode(t, testCase.mode, receipt, workset, unattended); err != nil {
+					t.Fatalf("keyed PostgreSQL replay ApplyDestination() = %v", err)
+				}
+				fixture.assertProviderSets(t, 2)
+				if err := fixture.readBackPostgresForMode(t, testCase.mode, workset); err != nil {
+					t.Fatalf("keyed PostgreSQL replay ReadBackDestination() = %v", err)
+				}
+			}
+		})
+	}
+}
+
+func TestPostgresIssueLabelTransportRefusesBadInputsBeforeProviderWrite(t *testing.T) {
+	t.Run("unsupported action", func(t *testing.T) {
+		fixture := newIssueLabelTransportApprovalFixture(t).withPostgresSource(t, synccontract.ModeFullAppend)
+		postgres, ok := fixture.app.registry.Get("postgres")
+		if !ok {
+			t.Fatal("PostgreSQL connector is not registered")
+		}
+		_, err := fixture.executor.PlanDestination(context.Background(), synctransport.DestinationPlanRequest{
+			Connector: fixture.executor.connector,
+			Runtime:   fixture.destinationRuntime(t),
+			Source:    postgres,
+			Stream:    issueLabelTransportPostgresStream,
+			Mode:      synccontract.ModeFullAppend,
+			ApplyStrategy: connectors.DestinationApplyStrategy{
+				Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "remove_issue_labels",
+			},
+		})
+		var unsupported *IssueLabelTransportUnsupportedActionError
+		if !errors.As(err, &unsupported) || unsupported.Action != "remove_issue_labels" {
+			t.Fatalf("PlanDestination() unsupported action error = %T %v, want IssueLabelTransportUnsupportedActionError", err, err)
+		}
+		fixture.assertProviderWrites(t, 0)
+		fixture.assertProviderSets(t, 0)
+	})
+
+	t.Run("ineligible mode", func(t *testing.T) {
+		fixture := newIssueLabelTransportApprovalFixture(t).withPostgresSource(t, synccontract.ModeIncrementalAppend)
+		_, err := fixture.app.PlanIssueLabelTransport(context.Background(), fixture.connection.ID)
+		var ineligible *synccontract.ModeNotExecutableError
+		if !errors.As(err, &ineligible) || ineligible.Mode != synccontract.ModeIncrementalAppend {
+			t.Fatalf("PlanIssueLabelTransport() ineligible mode error = %T %v, want ModeNotExecutableError", err, err)
+		}
+		fixture.assertProviderWrites(t, 0)
+		fixture.assertProviderSets(t, 0)
+	})
+
+	t.Run("null label row", func(t *testing.T) {
+		fixture := newIssueLabelTransportApprovalFixture(t).withPostgresSource(t, synccontract.ModeFullAppend)
+		_, approval := fixture.preRunApproval(t)
+		receipt, workset := fixture.stagePostgresAndReopen(t, synccontract.ModeFullAppend, connectors.Record{
+			"id":           int64(1),
+			"sequence":     int64(10),
+			"target_issue": int64(fixture.targetIssue),
+			"label":        nil,
+		}, nil)
+		err := fixture.apply(t, receipt, workset, approval)
+		var mapping *IssueLabelTransportRowMappingError
+		if !errors.As(err, &mapping) || mapping.Input != connectors.TransportInputLabel {
+			t.Fatalf("ApplyDestination() null label error = %T %v, want IssueLabelTransportRowMappingError(label)", err, err)
+		}
+		fixture.assertProviderWrites(t, 0)
+		fixture.assertProviderSets(t, 0)
+	})
+
+	t.Run("tombstones are rejected because deletes are unavailable", func(t *testing.T) {
+		fixture := newIssueLabelTransportApprovalFixture(t).withPostgresSource(t, synccontract.ModeFullAppend)
+		_, approval := fixture.preRunApproval(t)
+		receipt, workset := fixture.stagePostgresAndReopen(t, synccontract.ModeFullAppend, connectors.Record{
+			"id":           int64(1),
+			"sequence":     int64(10),
+			"target_issue": int64(fixture.targetIssue),
+			"label":        fixture.label,
+		}, []synccontract.Tombstone{issueLabelTransportDurabilityTombstone()})
+		err := fixture.apply(t, receipt, workset, approval)
+		var deletesUnavailable *IssueLabelTransportDeletesUnavailableError
+		if !errors.As(err, &deletesUnavailable) || deletesUnavailable.Tombstones != 1 {
+			t.Fatalf("ApplyDestination() delete refusal = %T %v, want IssueLabelTransportDeletesUnavailableError", err, err)
+		}
+		fixture.assertProviderWrites(t, 0)
+		fixture.assertProviderSets(t, 0)
+	})
+}
+
 type issueLabelTransportApprovalFixture struct {
 	app              *App
 	connection       Connection
@@ -539,6 +680,8 @@ type issueLabelTransportApprovalFixture struct {
 	sets             *int
 	deletes          *int
 }
+
+const issueLabelTransportPostgresStream = "public.issue_label_events"
 
 func newIssueLabelTransportApprovalFixture(t *testing.T) issueLabelTransportApprovalFixture {
 	return newIssueLabelTransportApprovalFixtureWithCleanupStatus(t, http.StatusNoContent)
@@ -718,6 +861,50 @@ func newIssueLabelTransportApprovalFixtureWithIssuePages(t *testing.T, cleanupSt
 	}
 }
 
+func (f issueLabelTransportApprovalFixture) withPostgresSource(t *testing.T, mode synccontract.Mode) issueLabelTransportApprovalFixture {
+	t.Helper()
+	f.connection.Source = EndpointConfig{
+		Connector:  "postgres",
+		Credential: "postgres-transport-local",
+		Config: map[string]string{
+			"host":     "localhost",
+			"database": "transport",
+			"username": "pm",
+			"sslmode":  "disable",
+		},
+	}
+	f.connection.Streams = map[string]StreamConfig{
+		issueLabelTransportPostgresStream: {
+			SyncMode:         string(mode),
+			CursorField:      "sequence",
+			PrimaryKey:       []string{"id"},
+			DestinationTable: "issue_label_events",
+		},
+	}
+	f.connection.Destination.Config = cloneStringMap(f.connection.Destination.Config)
+	if mode == synccontract.ModeIncrementalUpsert {
+		f.connection.Destination.Config[issueLabelTransportKeyedConsentConfig] = "true"
+	} else {
+		delete(f.connection.Destination.Config, issueLabelTransportKeyedConsentConfig)
+	}
+	updated := false
+	for index := range f.app.state.Connections {
+		if f.app.state.Connections[index].ID != f.connection.ID {
+			continue
+		}
+		f.app.state.Connections[index] = f.connection
+		updated = true
+		break
+	}
+	if !updated {
+		t.Fatalf("connection %q was not stored", f.connection.ID)
+	}
+	if err := f.app.save(); err != nil {
+		t.Fatal(err)
+	}
+	return f
+}
+
 func writeIssueLabelTransportJSON(t *testing.T, w http.ResponseWriter, value any) {
 	t.Helper()
 	if err := json.NewEncoder(w).Encode(value); err != nil {
@@ -832,6 +1019,62 @@ func (f issueLabelTransportApprovalFixture) stageAndReopenForMode(t *testing.T, 
 	return receipt, workset
 }
 
+func (f issueLabelTransportApprovalFixture) stagePostgresAndReopen(t *testing.T, mode synccontract.Mode, record connectors.Record, tombstones []synccontract.Tombstone) (synctransport.WarehouseReceipt, synctransport.WarehouseWorkset) {
+	t.Helper()
+	page := synctransport.SourcePage{Records: []connectors.Record{record}, Tombstones: tombstones}
+	if len(tombstones) != 0 {
+		page.CandidateCheckpoint = issueLabelTransportDurabilityCheckpoint()
+	}
+	receipt, err := f.app.transportStage.Stage(context.Background(), synctransport.WarehouseStageRequest{
+		ConnectionID:    f.connection.ID,
+		Generation:      1,
+		SourceName:      "postgres",
+		DestinationName: "github",
+		Stream:          issueLabelTransportPostgresStream,
+		Mode:            mode,
+		Page:            page,
+	})
+	if err != nil {
+		t.Fatalf("Stage(PostgreSQL row) = %v", err)
+	}
+	page.Records[0]["label"] = "mutated-source-alias"
+	page.Records = nil
+	page.Tombstones = nil
+	workset, err := f.app.transportStage.Reopen(context.Background(), receipt)
+	if err != nil {
+		t.Fatalf("Reopen(PostgreSQL row) = %v", err)
+	}
+	return receipt, workset
+}
+
+func (f issueLabelTransportApprovalFixture) assertPostgresPlanDestination(t *testing.T, mode synccontract.Mode, action string) {
+	t.Helper()
+	postgres, ok := f.app.registry.Get("postgres")
+	if !ok {
+		t.Fatal("PostgreSQL connector is not registered")
+	}
+	strategy, err := issueLabelTransportApplyStrategy(mode)
+	if err != nil {
+		t.Fatalf("definition strategy for mode %q = %v", mode, err)
+	}
+	plan, err := f.executor.PlanDestination(context.Background(), synctransport.DestinationPlanRequest{
+		Connector: f.executor.connector,
+		Runtime:   f.destinationRuntime(t),
+		Source:    postgres,
+		Stream:    issueLabelTransportPostgresStream,
+		Mode:      mode,
+		ApplyStrategy: connectors.DestinationApplyStrategy{
+			Mode: mode, Strategy: strategy, Action: action,
+		},
+	})
+	if err != nil {
+		t.Fatalf("PlanDestination(PostgreSQL source) = %v", err)
+	}
+	if plan.ApplyStrategy.Action != action {
+		t.Fatalf("PostgreSQL destination plan action = %q, want %q", plan.ApplyStrategy.Action, action)
+	}
+}
+
 func (f issueLabelTransportApprovalFixture) expirePlanSeal(t *testing.T, planID string) {
 	t.Helper()
 	found := false
@@ -934,6 +1177,26 @@ func (f issueLabelTransportApprovalFixture) readBackForMode(t *testing.T, mode s
 		}},
 		Workset: workset,
 		Runtime: f.destinationRuntime(t),
+	})
+}
+
+func (f issueLabelTransportApprovalFixture) readBackPostgresForMode(t *testing.T, mode synccontract.Mode, workset synctransport.WarehouseWorkset) error {
+	t.Helper()
+	action, err := f.executor.contract.actionForSyncMode(mode)
+	if err != nil {
+		t.Fatalf("definition PostgreSQL read-back action for mode %q = %v", mode, err)
+	}
+	strategy, err := issueLabelTransportApplyStrategy(mode)
+	if err != nil {
+		t.Fatalf("definition PostgreSQL read-back strategy for mode %q = %v", mode, err)
+	}
+	return f.executor.ReadBackDestination(context.Background(), synctransport.DestinationReadBackRequest{
+		Plan: synctransport.DestinationPlan{ApplyStrategy: connectors.DestinationApplyStrategy{
+			Mode: mode, Strategy: strategy, Action: action.name,
+		}},
+		Workset: workset,
+		Runtime: f.destinationRuntime(t),
+		Binding: synctransport.DestinationBinding{ConnectionID: f.connection.ID, StreamID: issueLabelTransportPostgresStream},
 	})
 }
 

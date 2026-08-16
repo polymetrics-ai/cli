@@ -214,7 +214,12 @@ func TestBundleLoadSyncTransportProjectsIndependentDefinition(t *testing.T) {
 			"delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
 			"conformance": {"suite": "acme_transport", "run_id": "destination_v1"},
 			"acknowledgement": "durable_warehouse",
-			"apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "stage_append"}]
+			"apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "stage_append"}],
+			"source_bindings": [{
+				"executor": {"family": "native_api", "id": "acme_snapshot_source"},
+				"eligible_streams": ["widgets"],
+				"record_mapping": {"kind": "input_fields", "inputs": [{"input": "widget_id", "field": "id"}]}
+			}]
 		}
 	}`)}
 
@@ -230,11 +235,18 @@ func TestBundleLoadSyncTransportProjectsIndependentDefinition(t *testing.T) {
 	if first.SyncTransport.Source.Executor.ID != "acme_snapshot_source" || first.SyncTransport.Destination.Executor.ID != "acme_stage_destination" {
 		t.Fatalf("Definition().SyncTransport = %#v, want loaded executor identities", first.SyncTransport)
 	}
+	if bindings := first.SyncTransport.Destination.SourceBindings; len(bindings) != 1 || bindings[0].Executor.ID != "acme_snapshot_source" || bindings[0].RecordMapping.Kind != connectors.SourceRecordMappingKindInputFields || len(bindings[0].RecordMapping.Inputs) != 1 || bindings[0].RecordMapping.Inputs[0] != (connectors.SourceRecordInputBinding{Input: "widget_id", Field: "id"}) {
+		t.Fatalf("Definition().SyncTransport destination source bindings = %#v, want the loaded closed mapping", bindings)
+	}
 
 	first.SyncTransport.Source.EligibleStreams[0] = "caller-mutated"
+	first.SyncTransport.Destination.SourceBindings[0].RecordMapping.Inputs[0].Field = "caller-mutated"
 	second := connector.Definition()
 	if got := second.SyncTransport.Source.EligibleStreams; len(got) != 1 || got[0] != "widgets" {
 		t.Fatalf("second Definition().SyncTransport source streams = %#v, want independent loaded projection", got)
+	}
+	if got := second.SyncTransport.Destination.SourceBindings[0].RecordMapping.Inputs[0].Field; got != "id" {
+		t.Fatalf("second Definition().SyncTransport source mapping field = %q, want independent loaded projection", got)
 	}
 }
 
