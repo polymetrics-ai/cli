@@ -14,11 +14,13 @@ import (
 )
 
 type cobraLegacyHandler func(context.Context, string, []string, io.Writer, bool) error
+type cobraLegacyManualResolver func([]string) (string, bool)
 
 type cobraLegacyCommand struct {
-	name    string
-	hidden  bool
-	handler cobraLegacyHandler
+	name           string
+	hidden         bool
+	manualResolver cobraLegacyManualResolver
+	handler        cobraLegacyHandler
 }
 
 type cobraLegacyError struct {
@@ -58,7 +60,7 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 				if isDynamicConnectorCommand(args[0]) {
 					return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, stderr, jsonOut))
 				}
-				return markCobraLegacyError(writeManual(args[0], stdout, jsonOut))
+				return markCobraLegacyError(usageErrorf("unknown command %q", args[0]))
 			}
 			return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, stderr, jsonOut))
 		},
@@ -109,7 +111,7 @@ func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraL
 		{name: "catalog", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runCatalog(ctx, a, args, stdout, jsonOut) })
 		}},
-		{name: "etl", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+		{name: "etl", manualResolver: etlTransportManualCommand, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })
 		}},
 		{name: "query", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -173,19 +175,22 @@ func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, j
 			if len(args) > 0 && isHelpArg(args[0]) {
 				return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
 			}
-			if topic, ok := legacyLeafManualTopic(spec.name, args); ok {
-				// A leaf manual is a read-only command-dispatch result. Resolve it
-				// before the legacy handler so help never opens a project merely to
-				// describe flags that a new user needs to discover first.
-				return markCobraLegacyError(writeManual(topic, stdout, jsonOut))
+			if spec.manualResolver != nil {
+				if command, ok := spec.manualResolver(args); ok {
+					return markCobraLegacyError(writeETLTransportManual(stdout, jsonOut, command))
+				}
+			}
+			if containsHelpFlag(args) {
+				// All legacy leaves share static manuals. Resolve a help request before
+				// the handler so it cannot open project state, validate required flags,
+				// read credentials, or execute a command just to describe its flags.
+				if manualDocumentsInvocation(spec.name, args) {
+					return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
+				}
+				return markCobraLegacyError(usageErrorf("unknown command %q", strings.Join(commandPath(args), " ")))
 			}
 			if len(args) == 0 && isManualCommand(spec.name) {
 				return markCobraLegacyError(writeManual(spec.name, stdout, jsonOut))
-			}
-			if spec.name == "etl" {
-				if command, ok := etlTransportManualCommand(args); ok {
-					return markCobraLegacyError(writeETLTransportManual(stdout, jsonOut, command))
-				}
 			}
 			return markCobraLegacyError(spec.handler(ctx, root, args, stdout, jsonOut))
 		},
@@ -234,26 +239,6 @@ func isHelpArg(arg string) bool {
 	return arg == "--help" || arg == "-h" || arg == "help"
 }
 
-// legacyLeafManualTopic identifies leaf manuals that must dispatch without
-// opening a project. Their command handlers require app state for execution,
-// but their flag documentation is static and usable before pm init.
-func legacyLeafManualTopic(command string, args []string) (string, bool) {
-	if len(args) == 0 || !containsHelpFlag(args[1:]) {
-		return "", false
-	}
-	switch command {
-	case "etl":
-		if args[0] == "run" {
-			return "etl", true
-		}
-	case "connections":
-		if args[0] == "create" {
-			return "connections", true
-		}
-	}
-	return "", false
-}
-
 func containsHelpFlag(args []string) bool {
 	for _, arg := range args {
 		if arg == "--help" || arg == "-h" {
@@ -261,6 +246,92 @@ func containsHelpFlag(args []string) bool {
 		}
 	}
 	return false
+}
+
+// manualDocumentsInvocation admits a help request only when its non-flag
+// command prefix matches a documented invocation in the wrapper's own manual.
+// The manual is the declaration shared by runtime help and generated CLI docs,
+// so a newly documented leaf stays project-free without a per-command switch.
+func manualDocumentsInvocation(topic string, args []string) bool {
+	manual, ok := docs[topic]
+	if !ok {
+		return false
+	}
+	path := append([]string{topic}, commandPath(args)...)
+	if len(path) == 1 {
+		return true
+	}
+	for _, documented := range manualCommandPaths(manual) {
+		if commandPathsOverlap(path, documented) {
+			return true
+		}
+	}
+	return false
+}
+
+func commandPath(args []string) []string {
+	path := make([]string, 0, len(args))
+	for _, arg := range args {
+		if strings.HasPrefix(arg, "-") {
+			break
+		}
+		path = append(path, arg)
+	}
+	return path
+}
+
+func manualCommandPaths(manual string) [][]string {
+	var paths [][]string
+	inCommandSection := false
+	for _, line := range strings.Split(manual, "\n") {
+		trimmed := strings.TrimSpace(line)
+		switch trimmed {
+		case "SYNOPSIS", "USAGE":
+			inCommandSection = true
+			continue
+		}
+		if isManualSectionHeader(trimmed) {
+			inCommandSection = false
+		}
+		if !inCommandSection {
+			continue
+		}
+		if path := manualCommandPath(trimmed); len(path) > 0 {
+			paths = append(paths, path)
+		}
+	}
+	return paths
+}
+
+func isManualSectionHeader(line string) bool {
+	return line != "" && line == strings.ToUpper(line) && strings.IndexFunc(line, func(r rune) bool {
+		return r >= 'A' && r <= 'Z'
+	}) >= 0
+}
+
+func manualCommandPath(line string) []string {
+	fields := strings.Fields(strings.TrimSpace(line))
+	if len(fields) < 2 || fields[0] != "pm" {
+		return nil
+	}
+	path := make([]string, 0, len(fields)-1)
+	for _, field := range fields[1:] {
+		if strings.HasPrefix(field, "[") || strings.HasPrefix(field, "<") || strings.HasPrefix(field, "--") {
+			break
+		}
+		path = append(path, field)
+	}
+	return path
+}
+
+func commandPathsOverlap(path, documented []string) bool {
+	limit := min(len(path), len(documented))
+	for i := 0; i < limit; i++ {
+		if path[i] != documented[i] {
+			return false
+		}
+	}
+	return true
 }
 
 func mapCobraErr(err error) error {

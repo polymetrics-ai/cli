@@ -875,9 +875,9 @@
     "args": [
       "worker"
     ],
-    "exit_code": 2,
-    "stdout": "",
-    "stderr": "error: worker: missing subcommand (serve|status)\n"
+    "exit_code": 0,
+    "stdout": "NAME\n  pm worker - operate the optional RLM worker\n\nSYNOPSIS\n  pm worker serve [--json]\n  pm worker status [--json]\n\nDESCRIPTION\n  Starts or inspects the optional Temporal-backed worker used by RLM agent\n  mode. Runtime services are opt-in; use pm runtime doctor before starting a\n  runtime-backed workflow.\n\nEXIT STATUS\n  0 success\n  1 runtime error\n  2 usage error\n",
+    "stderr": ""
   },
   {
     "name": "worker_unknown_subcommand_json",
@@ -982,9 +982,9 @@
       "--help",
       "--json"
     ],
-    "exit_code": 1,
-    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"help topic \\\"extract\\\" not found\"\n  },\n  \"kind\": \"Error\"\n}\n",
-    "stderr": "error: help topic \"extract\" not found\n"
+    "exit_code": 0,
+    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"command\": \"extract\",\n  \"kind\": \"CommandManual\",\n  \"manual\": \"NAME\\n  pm extract - route a natural-language data request safely\\n\\nSYNOPSIS\\n  pm extract --request \\u003ctext\\u003e [--sql query] [--limit n] [--in table] [--out table] [--json]\\n\\nDESCRIPTION\\n  Classifies a bounded natural-language request and routes it to a typed local\\n  query or RLM analysis path. It never accepts an unrestricted shell, HTTP, or\\n  SQL write operation.\\n\\nOPTIONS\\n  --request text       request to classify\\n  --sql query          optional validated local query\\n  --limit n            maximum returned rows; default 100\\n  --in table           source table for an executable RLM route\\n  --out table          destination table for an executable RLM route\\n  --json               render machine-readable JSON\\n\\nEXIT STATUS\\n  0 success\\n  1 runtime error\\n  2 usage error\\n\"\n}\n",
+    "stderr": ""
   },
   {
     "name": "hidden_worker_help_json",
@@ -993,8 +993,8 @@
       "--help",
       "--json"
     ],
-    "exit_code": 1,
-    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"help topic \\\"worker\\\" not found\"\n  },\n  \"kind\": \"Error\"\n}\n",
-    "stderr": "error: help topic \"worker\" not found\n"
+    "exit_code": 0,
+    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"command\": \"worker\",\n  \"kind\": \"CommandManual\",\n  \"manual\": \"NAME\\n  pm worker - operate the optional RLM worker\\n\\nSYNOPSIS\\n  pm worker serve [--json]\\n  pm worker status [--json]\\n\\nDESCRIPTION\\n  Starts or inspects the optional Temporal-backed worker used by RLM agent\\n  mode. Runtime services are opt-in; use pm runtime doctor before starting a\\n  runtime-backed workflow.\\n\\nEXIT STATUS\\n  0 success\\n  1 runtime error\\n  2 usage error\\n\"\n}\n",
+    "stderr": ""
   }
 ]
