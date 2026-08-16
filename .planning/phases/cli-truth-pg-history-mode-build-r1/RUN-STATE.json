@@ -3,6 +3,7 @@
   "status": "verified",
   "mode": "direct-pr",
   "base_branch": "integration/4015-mvp-flat-r1",
+  "base_commit": "281560ca14f80df7e2c473edb350d133d0af8b98",
   "working_branch": "fm/cli-truth-pg-history-mode-build-r1",
   "target_connector": "postgres",
   "lifecycle": {
@@ -10,6 +11,7 @@
     "plan_phase_tdd": "inline_manual_complete",
     "execute_phase": "inline_manual_complete",
     "verify_work": "inline_manual_complete",
-    "code_review": "inline_manual_complete"
+    "code_review": "inline_manual_complete",
+    "rebase_validation": "complete_after_4186"
   }
 }

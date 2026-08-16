@@ -26,4 +26,9 @@ to the existing conditional history fence. A fresh built binary proves target
 history state independently of its own report: initial version, closed-and-new
 version after update, and unchanged replay.
 
-See `VERIFICATION.md` for commands, results, and the GSD inline fallback.
+After #4186 merged, the branch was rebased onto the current integration head.
+The definition-owned `source_bindings` PostgreSQL-to-GitHub route and its
+composition/binary tests remain alongside this history proof; the generated
+catalog was regenerated twice and was byte-stable.
+
+See `VERIFICATION.md` for commands, rerun results, and the GSD inline fallback.

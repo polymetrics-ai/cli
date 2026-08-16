@@ -49,6 +49,35 @@ connector catalog. `./pm docs generate --dir docs/cli` regenerated
 This is the required generated manual/catalog parity update, not a wording
 change.
 
+## Rebase validation — #4186 current integration head
+
+The branch was rebased onto
+`integration/4015-mvp-flat-r1` at `281560ca14f80df7e2c473edb350d133d0af8b98`
+after #4186 merged. The three overlapping files were resolved without losing
+either proof set:
+
+- `docs/connectors/catalog/all-connectors.json` was regenerated with
+  `./pm docs generate --dir docs/cli`; the immediate repeat was byte-stable.
+- `internal/app/transport_composition_test.go` retains #4186's
+  `TestOpenRegistersDefinitionOwnedProductionTransports` (including the
+  definition-owned `source_bindings` PostgreSQL-to-GitHub preflight) and this
+  change's `TestOpenPostgresHistoryModeResolvesRegisteredExecutors`.
+- `internal/cli/postgres_transport_binary_integration_test.go` retains #4186's
+  deterministic and opt-in live PostgreSQL-to-GitHub tests as well as the
+  independent history update/replay binary test.
+
+All recorded local gates were rerun against the rebased tip and passed:
+
+| Command or check group | Result |
+| --- | --- |
+| `go test -timeout 20m -count=1 ./internal/app`, `./internal/connectors/database`, `./internal/connectors/engine`, `./internal/connectors/native/postgres`, `./internal/synctransport`, and `./internal/cli` | PASS |
+| tagged `TestPMBinaryExecutesPostgresIncrementalDedupeHistory` against live PostgreSQL | PASS (32.052s) |
+| `go vet ./...`; `go build ./cmd/pm` | PASS |
+| `connectorgen` validate, surface-sync, certification-matrix, and boundary | PASS |
+| `pnpm --dir website run gen:docs` twice; catalog generation twice | PASS; both repeats byte-stable |
+| `make tidy-check`, `make lint`, `make docs-check-no-build`, `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make release-workflow-check` | PASS |
+| `scripts/verify-gsd-workflow`; `git diff --check` | PASS |
+
 ## Lifecycle and review
 
 `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and

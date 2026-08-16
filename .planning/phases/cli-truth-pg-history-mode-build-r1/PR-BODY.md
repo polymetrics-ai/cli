@@ -7,6 +7,25 @@ with this direct-PR task. Base: `integration/4015-mvp-flat-r1`.
 Exactly one connector is implemented: `postgres`. No shared runtime, schema,
 or unrelated connector implementation was changed.
 
+## Rebase resolution — #4186
+
+Rebased onto the current `integration/4015-mvp-flat-r1` head
+`281560ca14f80df7e2c473edb350d133d0af8b98` after #4186 merged. The three
+overlapping files were resolved explicitly:
+
+- Regenerated `docs/connectors/catalog/all-connectors.json` rather than
+  hand-merging; an immediate second generation was byte-stable.
+- Kept #4186's definition-owned `source_bindings` coverage and its
+  PostgreSQL-to-GitHub route cases in `internal/app/transport_composition_test.go`,
+  alongside the PostgreSQL history executor-resolution case.
+- Kept both #4186 PostgreSQL-to-GitHub binary tests (deterministic and opt-in
+  live) in `internal/cli/postgres_transport_binary_integration_test.go`, and
+  added the independent PostgreSQL history update/replay binary proof next to
+  them.
+
+The full local gate set below was rerun after the rebase; all checks passed on
+the rebased tip.
+
 ## What Changed
 
 - Declared history mode and its managed `dedupe_history` action on PostgreSQL's
@@ -73,6 +92,10 @@ Passed locally:
   `make connectorgen-validate`, `make connectorgen-surface-sync`, and
   `make release-workflow-check`; `scripts/verify-gsd-workflow`
 
+Rebased-tip result: all commands above were rerun after rebasing. The fresh
+live PostgreSQL history proof passed in 32.052s; catalog and website
+generation were each repeated and byte-stable.
+
 ## CLI, Docs, and Safety
 
 No CLI syntax, help text, or website prose changed: the published capability
@@ -86,8 +109,9 @@ introduced.
 
 ## Pipeline and Review
 
-Commits: `bb39f7ea2` (implementation and GSD evidence); delivery-body record
-follows. Branch pushed: `fm/cli-truth-pg-history-mode-build-r1`.
+Rebased implementation commit: `d2bb755ce`; this delivery-record follow-up
+documents conflict resolution and rerun verification. Branch:
+`fm/cli-truth-pg-history-mode-build-r1`.
 
 Manual standard review found no unresolved findings. Claude automatic review
 is the primary GitHub route on PR open; no Copilot request was made. No work is

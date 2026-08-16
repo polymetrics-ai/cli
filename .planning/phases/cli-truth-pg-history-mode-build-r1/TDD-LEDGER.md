@@ -7,6 +7,7 @@
 | R3 | Updates preserve history | Before repair the run cannot reach the existing close/insert writer. | A larger-cursor source update produces exactly one closed former row and one open current row with adjacent validity timestamps. |
 | R4 | Replay is idempotent | Before repair no valid history snapshot exists to replay. | A later approved replay leaves the target's history rows byte-for-value equivalent; no duplicate or reopened row exists. |
 | R5 | Forbidden routes remain safely closed | Existing fake source/destination route cells are rejected before session/ledger mutation. | Existing typed-error test stays green unchanged; it proves this repair does not expand other connector routes. |
+| R6 | Rebase onto #4186 preserves both route proofs | A conflicted overlap can silently retain only the PostgreSQL history test or #4186's definition-owned `source_bindings` and PostgreSQL-to-GitHub tests. | The rebased test files retain #4186's composition, deterministic binary, and opt-in live PostgreSQL-to-GitHub cases alongside this history proof; the generated catalog is regenerated and repeat-stable. |
 
 ## Red command
 
@@ -47,3 +48,18 @@ identity.
 tagged live binary test passes in 30.70 seconds and independently observes
 initial, superseded, and replay-safe target history. See
 `traces/green-binary-history-live.txt`.
+
+## Rebase green — #4186 integration head
+
+The branch was rebased onto `integration/4015-mvp-flat-r1` at
+`281560ca14f80df7e2c473edb350d133d0af8b98` (`#4186`). The three overlapping
+files were resolved as one compatibility slice: `all-connectors.json` was
+regenerated twice rather than hand-merged; `transport_composition_test.go`
+retains `TestOpenRegistersDefinitionOwnedProductionTransports` and
+`TestOpenPostgresHistoryModeResolvesRegisteredExecutors`; and
+`postgres_transport_binary_integration_test.go` retains both #4186
+PostgreSQL-to-GitHub tests plus
+`TestPMBinaryExecutesPostgresIncrementalDedupeHistory`. The new base's
+definition-owned `source_bindings` mechanism and PostgreSQL-to-GitHub route
+are therefore still covered. The full local gate set was rerun after this
+resolution; the fresh tagged history proof passed in 32.052 seconds.
