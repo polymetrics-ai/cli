@@ -32,6 +32,7 @@ type CapabilityResult struct {
 	Stream        string `json:"stream,omitempty"`
 	Records       int    `json:"records,omitempty"`
 	StagesChecked int    `json:"stages_checked,omitempty"`
+	ResumedStages int    `json:"resumed_stages,omitempty"`
 	Reason        string `json:"reason,omitempty"`
 	// UntestableReason carries a safe classification when a capability cannot be
 	// exercised. Its JSON representation excludes the internal diagnostic cause.
@@ -143,6 +144,7 @@ type StageResult struct {
 	// must not infer a benign skip from free-form Error text.
 	Status     string       `json:"status"`
 	Passed     bool         `json:"passed"`
+	Resumed    bool         `json:"resumed,omitempty"`
 	DurationMS int64        `json:"duration_ms"`
 	Error      string       `json:"error,omitempty"`
 	CLI        CLIStageInfo `json:"cli"`

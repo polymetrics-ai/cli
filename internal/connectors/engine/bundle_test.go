@@ -394,6 +394,28 @@ func TestBundleLoadParsesCertification(t *testing.T) {
 	if len(b.Certification.DirectReadCandidates) != 1 {
 		t.Fatalf("DirectReadCandidates = %+v", b.Certification.DirectReadCandidates)
 	}
+	assertions := b.Certification.DirectReadCandidates[0].OutputAssertions
+	if len(assertions) != 0 {
+		t.Fatalf("OutputAssertions = %+v, want no assertions when omitted", assertions)
+	}
+}
+
+func TestBundleLoadRejectsInvalidCertificationDirectReadOutputAssertion(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/certification.json"] = &fstest.MapFile{Data: []byte(`{
+		"schema_version": 1,
+		"direct_read_candidates": [{
+			"stage_name": "direct_read_sweep_widget",
+			"command": "widget get",
+			"args": [{"connector": true}],
+			"output_assertions": [{"json_pointer": "/kind", "equals": "ConnectorCommandDirectRead"}]
+		}]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil || !strings.Contains(err.Error(), "output_assertions") || !strings.Contains(err.Error(), "response") {
+		t.Fatalf("Load error = %v, want response-only direct-read assertion rejection", err)
+	}
 }
 
 func TestBundleLoadRejectsUnknownCertificationKey(t *testing.T) {

@@ -1070,9 +1070,20 @@ type CertificationLiveUnavailableClassification struct {
 // CertificationCommandCandidate describes one CLI command candidate for a
 // direct-read or binary certification sweep.
 type CertificationCommandCandidate struct {
-	StageName string                    `json:"stage_name"`
-	Command   string                    `json:"command"`
-	Args      []CertificationCommandArg `json:"args"`
+	StageName        string                         `json:"stage_name"`
+	Command          string                         `json:"command"`
+	Args             []CertificationCommandArg      `json:"args"`
+	OutputAssertions []CertificationOutputAssertion `json:"output_assertions,omitempty"`
+}
+
+// CertificationOutputAssertion describes one expected value in a sanitized
+// direct-read response envelope. JSONPointer must select a member below
+// /response so a certification cannot pass merely by reasserting transport
+// metadata such as its envelope kind or exit status.
+type CertificationOutputAssertion struct {
+	JSONPointer string `json:"json_pointer"`
+	Equals      any    `json:"equals"`
+	ValueType   string `json:"value_type,omitempty"`
 }
 
 // CertificationCommandArg is a typed command-argument atom. Exactly one source
@@ -2774,6 +2785,45 @@ func validateCertificationCommandCandidate(section string, i int, candidate Cert
 	for j, arg := range candidate.Args {
 		if err := validateCertificationCommandArg(arg); err != nil {
 			return fmt.Errorf("%s[%d].args[%d]: %w", section, i, j, err)
+		}
+	}
+	seenPointers := make(map[string]struct{}, len(candidate.OutputAssertions))
+	for j, assertion := range candidate.OutputAssertions {
+		if err := validateCertificationOutputAssertion(assertion); err != nil {
+			return fmt.Errorf("%s[%d].output_assertions[%d]: %w", section, i, j, err)
+		}
+		if _, duplicate := seenPointers[assertion.JSONPointer]; duplicate {
+			return fmt.Errorf("%s[%d].output_assertions[%d]: duplicate json_pointer %q", section, i, j, assertion.JSONPointer)
+		}
+		seenPointers[assertion.JSONPointer] = struct{}{}
+	}
+	return nil
+}
+
+func validateCertificationOutputAssertion(assertion CertificationOutputAssertion) error {
+	pointer := assertion.JSONPointer
+	if pointer != "/response" && !strings.HasPrefix(pointer, "/response/") {
+		return fmt.Errorf("json_pointer must address the produced direct-read response or a value below /response")
+	}
+	for _, token := range strings.Split(strings.TrimPrefix(pointer, "/"), "/") {
+		for index := 0; index < len(token); index++ {
+			if token[index] != '~' {
+				continue
+			}
+			if index+1 >= len(token) || (token[index+1] != '0' && token[index+1] != '1') {
+				return fmt.Errorf("json_pointer contains an invalid JSON Pointer escape")
+			}
+			index++
+		}
+	}
+	if assertion.Equals == nil && assertion.ValueType == "" {
+		return fmt.Errorf("must declare equals or value_type")
+	}
+	if assertion.ValueType != "" {
+		switch assertion.ValueType {
+		case "object", "array", "string", "number", "boolean", "null":
+		default:
+			return fmt.Errorf("value_type must be object, array, string, number, boolean, or null")
 		}
 	}
 	return nil

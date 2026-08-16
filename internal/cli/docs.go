@@ -405,7 +405,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
-  pm connectors certify <connector> [--full] [--write-only] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]
+  pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -570,7 +570,17 @@ ACTIONS
     the report includes the API-surface inventory and provider-artifact
     provenance evidence separately from endpoint coverage and connector
     capabilities. Version-1 and pre-ledger inventories remain legacy_unverified
-    during the staged migration. A complete version-2 ledger reports its ledger
+    during the staged migration and cannot be treated as an endpoint coverage
+    claim. Full direct-read
+    sweeps are serial. If one stops after a provider rate-limit response,
+    rerun it with --resume to reuse only matching, credential-free candidate
+    checkpoints; the report marks resumed rows instead of implying they were
+    re-executed.
+    --direct-read-only retains preflight, live credential validation, serial
+    rate-limit handling, declaration-owned output assertions, and secret scans
+    for direct-read candidates, but does not run unrelated stream/ETL stages.
+    It cannot be combined with --write or --external-proof.
+    A complete version-2 ledger reports its ledger
     version, artifact count, endpoint count, and cited endpoint count; invalid
     version-2 provenance fails certification without enabling or changing any
     connector capability. When the connector declares coordinated rate limits,

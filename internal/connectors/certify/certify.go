@@ -51,6 +51,17 @@ type Options struct {
 	// applicable stage/action rather than merely rendering a full-run-shaped
 	// artifact.
 	RequireFullParity bool
+	// DirectReadOnly runs the credential preflight plus declaration-owned
+	// direct-read candidates, without folding unrelated stream/ETL evidence
+	// into a read-command certification claim.
+	DirectReadOnly bool
+
+	// Resume reuses only completed direct-read candidates from the safe
+	// checkpoint at DirectReadCheckpointPath. It is meaningful only for a
+	// full certification run: interrupted provider sweeps resume at the first
+	// candidate that has not already recorded a passing real invocation.
+	Resume                   bool
+	DirectReadCheckpointPath string
 
 	// ObserveHTTP retains bounded, exact HTTP exchanges in process memory for
 	// an external-binary proof. It is deliberately not a user-facing capture

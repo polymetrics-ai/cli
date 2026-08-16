@@ -7,7 +7,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
-  pm connectors certify <connector> [--full] [--write-only] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]
+  pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -179,6 +179,12 @@ ACTIONS
     JSON may also contain safe rate_limit_events for attempts, observed resets,
     waits, and requests stopped before send; the events contain no credentials
     or rendered rate scopes.
+    --direct-read-only keeps preflight, live credential validation, serialized
+    rate-limit handling, declaration-owned direct-read output assertions, and
+    secret scans, while skipping unrelated stream/ETL stages. It cannot be
+    combined with --write or --external-proof. Use --resume after a rate-limit
+    stop to reuse only matching credential-free direct-read checkpoints; the
+    report marks resumed rows instead of claiming they were re-executed.
 
     PostgreSQL's full database proof requires --write plus an explicit
     --stream schema.table and cursor_field configuration. It certifies live
@@ -196,6 +202,7 @@ EXAMPLES
   pm connectors inspect github
   pm connectors inspect github --json
   pm connectors certify sample --full --json
+  pm connectors certify github --direct-read-only --resume --from-env token=GITHUB_TOKEN --json
   pm connectors certify github --external-proof --full-parity --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
   pm connectors certify postgres --full --write --stream public.events --config host=DB_HOST --config port=5432 --config database=DB_NAME --config username=DB_USER --config schema=public --config cursor_field=sequence --from-env password=POSTGRES_PASSWORD --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public

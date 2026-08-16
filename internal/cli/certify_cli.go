@@ -28,6 +28,9 @@ const certificationExternalChildEnv = "PM_CERTIFICATION_EXTERNAL_CHILD"
 func runCertify(ctx context.Context, root string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	positionals := flags.values["_"]
+	if flags.first("direct-read-only") == "true" && flags.first("external-proof") == "true" {
+		return usageErrorf("pm connectors certify --direct-read-only cannot be combined with --external-proof")
+	}
 	if flags.first("external-proof") == "true" && os.Getenv(certificationExternalChildEnv) != "1" {
 		if flags.first("all") == "true" || flags.first("sweep") == "true" || len(positionals) != 1 {
 			return usageErrorf("pm connectors certify --external-proof requires one connector")
@@ -78,6 +81,10 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 	// crash or rate-limit restart can reconcile tagged resources rather than
 	// replaying a create from scratch.
 	opts.LedgerRoot = filepath.Join(root, ".polymetrics", "certifications", "ledger", connector)
+	if opts.Full {
+		opts.Resume = flags.first("resume") == "true"
+		opts.DirectReadCheckpointPath = filepath.Join(root, ".polymetrics", "certifications", "progress", connector+"-direct-read.json")
+	}
 	externalProof := flags.first("external-proof") == "true"
 	if externalProof {
 		if os.Getenv(certificationExternalChildEnv) != "1" {
@@ -353,10 +360,14 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 	skip := parseCSVFlags(flags.values["skip"])
 	fullParity := flags.first("full-parity") == "true"
 	writeOnly := flags.first("write-only") == "true"
+	directReadOnly := flags.first("direct-read-only") == "true"
 	write := flags.first("write") == "true" || fullParity || writeOnly
-	full := flags.first("full") == "true" || fullParity
+	full := flags.first("full") == "true" || fullParity || directReadOnly
 	if writeOnly && fullParity {
 		return certify.Options{}, usageErrorf("--write-only cannot be combined with --full-parity")
+	}
+	if directReadOnly && write {
+		return certify.Options{}, usageErrorf("pm connectors certify --direct-read-only cannot be combined with --write")
 	}
 	for _, s := range skip {
 		if s == "write" {
@@ -379,6 +390,7 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 		WriteOnly:         writeOnly,
 		Full:              full,
 		RequireFullParity: fullParity,
+		DirectReadOnly:    directReadOnly,
 	}, nil
 }
 
@@ -516,6 +528,20 @@ func renderCertifyReportText(rep certify.Report) string {
 	fmt.Fprintf(&b, "  read:     %s (stream=%s records=%d)\n", rep.Capabilities.Read.Result, rep.Capabilities.Read.Stream, rep.Capabilities.Read.Records)
 	fmt.Fprintf(&b, "  resume:   %s\n", rep.Capabilities.Resume.Result)
 	fmt.Fprintf(&b, "  redaction:%s\n", rep.Capabilities.SecretRedaction.Result)
+	if directRead := rep.Capabilities.DirectRead; directRead != nil {
+		fmt.Fprintf(&b, "  direct-read: %s", directRead.Result)
+		if directRead.StagesChecked > 0 {
+			fmt.Fprintf(&b, " (candidates=%d", directRead.StagesChecked)
+			if directRead.ResumedStages > 0 {
+				fmt.Fprintf(&b, " resumed=%d", directRead.ResumedStages)
+			}
+			fmt.Fprint(&b, ")")
+		}
+		if directRead.Reason != "" {
+			fmt.Fprintf(&b, "; %s", directRead.Reason)
+		}
+		fmt.Fprintln(&b)
+	}
 	if surface := rep.Capabilities.Surface; surface != nil {
 		fmt.Fprintf(&b, "  surface:  %s", surface.Result)
 		if provenance := surface.Provenance; provenance != nil {
