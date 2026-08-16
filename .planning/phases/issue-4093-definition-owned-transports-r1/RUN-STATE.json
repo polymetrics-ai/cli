@@ -1,6 +1,6 @@
 {
   "issue": 4093,
-  "branch": "fm/cli-4093-transport-registration-r1",
+  "branch": "fm/cli-4093-definition-owned-transports-r1",
   "base": "integration/4015-mvp-flat-r1",
   "lifecycle": "inline-manual-gsd",
   "state": "verified",

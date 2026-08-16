@@ -8,12 +8,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strconv"
 	"strings"
 	"testing"
+	"testing/fstest"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/synctransport"
 	"polymetrics.ai/internal/warehouse"
@@ -165,6 +168,201 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	}
 	if err := validateClosedTransportBatchSize(postgres, postgres, 1000); err != nil {
 		t.Fatalf("PostgreSQL managed transport rejected its bounded database batch: %v", err)
+	}
+}
+
+// TestAppCompositionRoutesLoadedSyntheticDefinitionConnector is the scalable
+// registration proof for #4093. The connector's source and destination roles
+// exist only in its loaded sync_transport.json; App discovers the test-only
+// named hook through DefinitionFactoryProvider and the generic orchestrator
+// runs the declared pair without a connector-name branch.
+func TestAppCompositionRoutesLoadedSyntheticDefinitionConnector(t *testing.T) {
+	bundle, err := engine.Load(syntheticTransportBundleFS(), "synthetic")
+	if err != nil {
+		t.Fatalf("load synthetic definition bundle: %v", err)
+	}
+
+	sourceReference := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeAPI, ID: "synthetic_snapshot_source"}
+	destinationReference := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeAPI, ID: "synthetic_stage_destination"}
+	source := &syntheticDefinitionSource{reference: sourceReference, page: synctransport.SourcePage{
+		Records:             []connectors.Record{{"id": "synthetic-1", "value": "definition-owned"}},
+		CandidateCheckpoint: syntheticDefinitionCheckpoint(),
+	}}
+	destination := &syntheticDefinitionDestination{reference: destinationReference, sink: "synthetic"}
+	connector := &syntheticDefinitionConnector{Connector: engine.New(bundle, nil)}
+	connector.factories = []synctransport.DefinitionFactory{
+		{
+			Reference:      sourceReference,
+			SourceEvidence: connectors.ConformanceEvidenceReference{Suite: "synthetic_transport", RunID: "source_v1"},
+			BuildSource: func(received connectors.Connector) (synctransport.SourceExecutor, error) {
+				if received != connector {
+					return nil, fmt.Errorf("synthetic source hook received another connector")
+				}
+				return source, nil
+			},
+		},
+		{
+			Reference:           destinationReference,
+			DestinationEvidence: connectors.ConformanceEvidenceReference{Suite: "synthetic_transport", RunID: "destination_v1"},
+			BuildDestination: func(received connectors.Connector) (synctransport.DestinationExecutor, error) {
+				if received != connector {
+					return nil, fmt.Errorf("synthetic destination hook received another connector")
+				}
+				return destination, nil
+			},
+		},
+	}
+
+	a := &App{registry: connectors.NewEmptyRegistry()}
+	a.registry.Register(connector)
+	if err := a.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose generic synthetic transport registry: %v", err)
+	}
+	if !a.shouldRunTransport(Connection{}, "widgets", SyncMode{ContractMode: synccontract.ModeFullAppend}, connector, connector) {
+		t.Fatal("definition-owned synthetic connector was not selected for transport dispatch")
+	}
+
+	stage := &syntheticDefinitionStage{}
+	commits := 0
+	result, err := synctransport.NewOrchestrator(a.transports).Run(context.Background(), synctransport.RunRequest{
+		ConnectionID: "synthetic-connection",
+		Generation:   1,
+		Source:       connector,
+		Destination:  connector,
+		Stream:       "widgets",
+		Mode:         synccontract.ModeFullAppend,
+		BatchSize:    1,
+		Stage:        stage,
+		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
+			commits++
+			if checkpoint.CommittedAt == nil {
+				return fmt.Errorf("synthetic checkpoint was not acknowledged")
+			}
+			return nil
+		},
+	})
+	if err != nil {
+		t.Fatalf("run synthetic definition-owned transport: %v", err)
+	}
+	if source.reads != 1 || stage.stages != 1 || destination.plans != 1 || destination.applies != 1 || destination.readBacks != 1 || commits != 1 {
+		t.Fatalf("synthetic route effects read/stage/plan/apply/read-back/commit = %d/%d/%d/%d/%d/%d, want 1 each", source.reads, stage.stages, destination.plans, destination.applies, destination.readBacks, commits)
+	}
+	if result.RecordsRead != 1 || result.RecordsStaged != 1 || result.RecordsApplied != 1 || result.CommittedCheckpoint == nil {
+		t.Fatalf("synthetic transport result = %#v, want one record through a committed declaration-owned route", result)
+	}
+}
+
+type syntheticDefinitionConnector struct {
+	*engine.Connector
+	factories []synctransport.DefinitionFactory
+}
+
+func (c *syntheticDefinitionConnector) SyncTransportDefinitionFactories() []synctransport.DefinitionFactory {
+	return append([]synctransport.DefinitionFactory(nil), c.factories...)
+}
+
+type syntheticDefinitionSource struct {
+	reference connectors.TransportExecutorReference
+	page      synctransport.SourcePage
+	reads     int
+}
+
+func (s *syntheticDefinitionSource) TransportExecutorReference() connectors.TransportExecutorReference {
+	return s.reference
+}
+
+func (s *syntheticDefinitionSource) ReadTransport(ctx context.Context, _ synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+	s.reads++
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	return emit(s.page)
+}
+
+type syntheticDefinitionDestination struct {
+	reference connectors.TransportExecutorReference
+	sink      string
+	plans     int
+	applies   int
+	readBacks int
+}
+
+func (d *syntheticDefinitionDestination) TransportExecutorReference() connectors.TransportExecutorReference {
+	return d.reference
+}
+
+func (d *syntheticDefinitionDestination) PlanDestination(_ context.Context, request synctransport.DestinationPlanRequest) (synctransport.DestinationPlan, error) {
+	d.plans++
+	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
+}
+
+func (d *syntheticDefinitionDestination) ApplyDestination(_ context.Context, request synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
+	d.applies++
+	if got, want := request.Workset.Records, []connectors.Record{{"id": "synthetic-1", "value": "definition-owned"}}; !reflect.DeepEqual(got, want) {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("synthetic workset = %#v, want %#v", got, want)
+	}
+	return synccontract.NewDurableDownstreamAcknowledgement(d.sink, time.Now().UTC())
+}
+
+func (d *syntheticDefinitionDestination) ReadBackDestination(_ context.Context, request synctransport.DestinationReadBackRequest) error {
+	d.readBacks++
+	if request.Acknowledgement.Sink != d.sink || request.Acknowledgement.AcknowledgedAt.IsZero() {
+		return fmt.Errorf("synthetic destination acknowledgement is not durable")
+	}
+	return nil
+}
+
+type syntheticDefinitionStage struct {
+	stages  int
+	workset synctransport.WarehouseWorkset
+}
+
+func (s *syntheticDefinitionStage) Stage(_ context.Context, request synctransport.WarehouseStageRequest) (synctransport.WarehouseReceipt, error) {
+	s.stages++
+	s.workset = synctransport.WarehouseWorkset{
+		ID:                  "synthetic-stage",
+		Records:             request.Page.Records,
+		Tombstones:          request.Page.Tombstones,
+		CandidateCheckpoint: request.Page.CandidateCheckpoint.Clone(),
+	}
+	return synctransport.WarehouseReceipt{
+		ID: "synthetic-stage", Owner: "synthetic-connection", Generation: request.Generation, Stream: request.Stream, Mode: request.Mode,
+		CheckpointSHA256: "synthetic-checkpoint", TombstonesSHA256: "synthetic-tombstones", ManifestSHA256: "synthetic-manifest", ContentSHA256: "synthetic-content", ParquetSHA256: "synthetic-parquet",
+		Records: len(request.Page.Records), Tombstones: len(request.Page.Tombstones),
+	}, nil
+}
+
+func (s *syntheticDefinitionStage) Reopen(_ context.Context, receipt synctransport.WarehouseReceipt) (synctransport.WarehouseWorkset, error) {
+	if receipt.ID != s.workset.ID {
+		return synctransport.WarehouseWorkset{}, fmt.Errorf("synthetic stage receipt %q is unknown", receipt.ID)
+	}
+	return s.workset, nil
+}
+
+func syntheticDefinitionCheckpoint() synccontract.CheckpointEnvelope {
+	positionObserved := true
+	observedAt := time.Now().UTC().Add(-time.Minute)
+	return synccontract.CheckpointEnvelope{
+		StateVersion: synccontract.StateVersion,
+		Source:       synccontract.SourceIdentity{Engine: "synthetic", AccountOrCluster: "fixture", ObjectScope: "widgets"},
+		Mechanism:    "synthetic_definition", SnapshotBarrier: &synccontract.SnapshotBarrier{Kind: "fixture", Token: synccontract.OpaqueToken("barrier")},
+		Position: synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken("1"), TieBreaker: synccontract.OpaqueToken("1")}, PositionObserved: &positionObserved,
+		Partitions: []synccontract.PartitionState{}, SourceGeneration: synccontract.OpaqueToken("generation"), SchemaVersion: "synthetic-v1", ProtocolVersion: "synthetic-v1",
+		Dedupe:       synccontract.DedupeIdentity{Kind: "synthetic", Value: synccontract.OpaqueToken("synthetic-1")},
+		DedupeWindow: synccontract.DedupeWindow{Kind: "synthetic", Start: synccontract.OpaqueToken("start"), End: synccontract.OpaqueToken("end")},
+		ObservedAt:   observedAt,
+	}
+}
+
+func syntheticTransportBundleFS() fstest.MapFS {
+	return fstest.MapFS{
+		"synthetic/metadata.json":        &fstest.MapFile{Data: []byte(`{"name":"synthetic","display_name":"Synthetic","description":"test-only definition-owned connector","integration_type":"api","release_stage":"ga","capabilities":{"check":true,"read":true,"write":true,"query":false,"cdc":false,"dynamic_schema":false}}`)},
+		"synthetic/spec.json":            &fstest.MapFile{Data: []byte(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["base_url"],"properties":{"base_url":{"type":"string"}}}`)},
+		"synthetic/streams.json":         &fstest.MapFile{Data: []byte(`{"base":{"url":"{{ config.base_url }}","user_agent":"synthetic","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/ping"},"error_map":[]},"streams":[{"name":"widgets","path":"/widgets","records":{"path":"data"},"schema":"schemas/widgets.json"}]}`)},
+		"synthetic/api_surface.json":     &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}}]}`)},
+		"synthetic/schemas/widgets.json": &fstest.MapFile{Data: []byte(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","x-primary-key":["id"],"properties":{"id":{"type":"string"}}}`)},
+		"synthetic/docs.md":              &fstest.MapFile{Data: []byte("# Overview\n\nsynthetic\n\n## Auth setup\n\nnone\n\n## Streams notes\n\nnone\n\n## Write actions & risks\n\nnone\n\n## Known limits\n\nnone\n")},
+		"synthetic/sync_transport.json":  &fstest.MapFile{Data: []byte(`{"schema_version":1,"source_transport":{"executor":{"family":"native_api","id":"synthetic_snapshot_source"},"eligible_streams":["widgets"],"modes":["full_append"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"not_available"},"conformance":{"suite":"synthetic_transport","run_id":"source_v1"}},"destination_transport":{"executor":{"family":"native_api","id":"synthetic_stage_destination"},"eligible_actions":["stage_append"],"modes":["full_append"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"not_available"},"conformance":{"suite":"synthetic_transport","run_id":"destination_v1"},"acknowledgement":"durable_warehouse","apply_strategies":[{"mode":"full_append","strategy":"append","action":"stage_append"}]}}`)},
 	}
 }
 

@@ -17,6 +17,8 @@
 | Website data repair | Website CI RED detected the generated agent-guide data was stale after the transport declaration guidance changed. | `pnpm run gen:website-data` updates only `website/lib/docs.generated.ts`; the generated page includes the GitHub declared-role explanation. | green |
 | CI regression repair | `go test -count=1 -timeout 20m ./internal/app -run 'TestGithubPullRequestsETLSupportsLegacyExecutableModes|TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume'` failed: the noncanonical GitHub mode ordering bypassed the exact issue-label route guard and destination change capture was refused despite declaring `change_apply`. | The focused app command, `TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination`, and `go test -count=1 -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$'` pass: GitHub’s declaration is canonical, two-sided routing preserves legacy compatibility, and legitimate change capture reaches `change_apply`. | green |
 | Generated artifact closure | CI RED: `TestSkillsGenerateMatchesTrackedSkills` found the tracked skills tree differed after the warehouse declaration regenerated its connector manual/skill. | A full source-derived sweep runs `agentcontractgen sync`, `connectorgen gen`, `surface-sync`, `certification-matrix --all`, docs/catalog generation, skills generation, golden transcript generation, and website-data generation. Their CI checks pass and only the expected GitHub and warehouse skill documents change. | green |
+| R2 loaded synthetic connector route | No test loaded a second connector from its own `sync_transport.json`, sent it through `App.composeTransportRegistry`, and ran the resulting registration through `synctransport.Orchestrator`. | The new test loads a throwaway bundle, uses only its declared family/identifier/evidence plus a named test hook, and observes one source read, staged record, destination plan/apply/read-back, and committed checkpoint with no App/orchestrator/dispatch production edit. | green |
+| R2 transient-stage retirement | `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit` failed before the lifecycle patch: a checkpoint-committed page reported `retired receipts = 0, want 1`; the persistence-failure sibling defines the non-retirement safety boundary. | A successful commit retires exactly one receipt; a failed commit retires none. Fresh App startup reconciles a simulated kill-after-commit receipt only when its exact checkpoint is durable, leaving the distinct active receipt untouched. | green |
 
 Every refusal test asserts the relevant side effect count is zero. No test relies
 only on `err != nil` or a lack of panic.
@@ -77,3 +79,25 @@ pass. `TestSkillsGenerateMatchesTrackedSkills`, `TestGoldenTranscripts`,
 connector surface/certification, docs/catalog, GitHub parity, and website-data
 drift checks also pass. The generated-path diff is empty after accepting only
 the updated GitHub and warehouse skill content.
+
+## R2 Red:
+
+`go test -count=1 -timeout 20m ./internal/synctransport -run
+'^TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit$'` failed before
+the production lifecycle patch. Its checkpoint-committed subtest observed
+`retired receipts = 0, want 1; stage artifacts must survive an uncommitted
+checkpoint`. The failure identified the missing post-commit retirement path;
+the failing checkpoint-persistence sibling simultaneously established that no
+retirement may occur before the durable commit.
+
+## R2 Green:
+
+The same focused test now passes, with exactly one retirement only after the
+commit callback accepts the acknowledged checkpoint and zero after the callback
+returns an error. `TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages`
+then simulates a process kill after that durable checkpoint: a fresh App removes
+only the exact committed receipt's manifest, WAL, and Parquet workset while
+preserving an active receipt. The independent loaded-synthetic-connector proof
+passes through `engine.Load`, App composition, the registry, and the generic
+orchestrator with no production registration, App dispatch, or orchestrator
+change for that connector.

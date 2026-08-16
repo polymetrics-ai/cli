@@ -24,3 +24,19 @@ metadata-only.
 The acceptance matrix in VERIFICATION.md records stateful proof for valid
 registration, zero-side-effect refusals, evidence denial before source I/O,
 and the mandated Docker/Colima PostgreSQL integration run.
+
+## R2 continuation
+
+The residual scalable-registration proof now loads a throwaway second connector
+from its own `sync_transport.json`, supplies only definition-selected named
+test hooks, and drives it through the real App composition, transport registry,
+and generic orchestrator. One record is read, staged, planned, applied,
+read-back, and committed without a connector-name branch or a production App,
+orchestrator, or dispatch edit for that connector.
+
+Transient connection-owned worksets now have an optional exact-receipt
+retirement contract. The orchestrator calls it only after the durable checkpoint
+commit; a bounded startup reconciliation repairs the kill-after-commit window
+by matching the receipt's candidate checkpoint to the persisted committed
+checkpoint. It deletes only the derived manifest/WAL/Parquet paths for that
+owned receipt and retains foreign, malformed, active, and uncommitted worksets.

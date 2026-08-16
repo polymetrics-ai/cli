@@ -2,6 +2,17 @@
 
 ## Checklist
 
+### R2 continuation
+
+- [x] Reconcile each #4093 clause with merged #4156/#4186 and the current
+  integration branch; record the residual synthetic-bundle proof plus the
+  history/CDC current-state divergence in the PR body.
+- [x] Record a RED and GREEN run for the loaded synthetic connector route and
+  the residual transient-stage lifecycle implementation.
+- [x] Run the requested connector-boundary, generated-definition, scoped test,
+  vet/build, website generation, and repository gates; record exact commands
+  and results below.
+
 - [x] Targeted `synctransport` and connector test packages pass:
   `go test -timeout 20m ./internal/synctransport/... ./internal/connectors/...`.
 - [x] Race coverage passes for the changed registries/loaders and app
@@ -67,8 +78,10 @@
 - [x] Inline `verify-work` maps every acceptance criterion to an observable
   passing test or live output below.
 - [x] Inline code review has no unresolved actionable findings; see REVIEW.md.
-- [ ] Branch is rebased on `origin/integration/4015-mvp-flat-r1` immediately
-  before the final push; PR base is API-verified.
+- [x] Branch was refreshed against `origin/integration/4015-mvp-flat-r1`
+  immediately before the final push; both local HEAD and remote base resolved
+  to `ff6a8710199c10f209d9d47cce87e5c8f7c429e6`. PR base will be API-verified
+  after creation.
 
 ## Acceptance matrix
 
@@ -77,9 +90,62 @@
 | A definition-owned transport loads and projects safely | `TestBundleLoadSyncTransportProjectsIndependentDefinition` | Exact source/destination references appear in `Definition`; mutating one returned projection leaves the next unchanged. |
 | Unknown or malformed declarations do not register anything | `TestBundleLoadSyncTransportRefusesUnknownOrUnsafeDeclarations`, `TestRegisterDeclaredTransportsRefusesBeforeAnyRegistration` | Unknown/version/role declarations are errors; source/destination builds, registry entries, reads, plans, and applies all remain zero. |
 | Composition accepts declarations, not connector names | `TestRegisterDeclaredTransportsRegistersTwoDefinitionOwnedPairs`, `TestOpenRegistersDefinitionOwnedProductionTransports` | A synthetic second definition produces a second registered pair; real PostgreSQL and GitHub preflights resolve the declared executor IDs. |
+| A loaded synthetic second connector routes generically | `TestAppCompositionRoutesLoadedSyntheticDefinitionConnector` | A real test bundle supplies `sync_transport.json`; generic App composition selects its named hooks by declared family/ID/evidence and the generic orchestrator reads, stages, plans, applies, read-backs, and commits one record. |
 | Evidence is externally admitted | `TestDefinitionConformanceVerifierRefusesAlteredEvidenceBeforeSourceIO` | Altered evidence fails preflight with zero source reads. |
 | Destination change capture stays closed | `TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination`, descriptor and composition tests | A `change_apply` declaration produces one source read/stage/plan/apply; a `change_capture`/`append` declaration has zero builds, registrations, reads, plans, and applies. |
+| Committed transient stages reconcile safely | `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit`, `TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages` | Persistence failure has zero retirements; a successful checkpoint retires one exact receipt. After a simulated kill, fresh App startup removes only that checkpoint's owned manifest/WAL/Parquet and leaves an active receipt intact. |
 | PostgreSQL remains live-proven | mandated tagged native PostgreSQL test | Docker/Colima integration suite passed for the definition-owned production source adapter before the CI repair; the post-repair mandatory run is recorded below. |
 | Local warehouse is a closed destination | production preflight + local executor test | PostgreSQL-to-warehouse preflight resolves the warehouse-owned adapter; apply writes the connection-owned Parquet table and read-back confirms its durable digest and row count. |
 | Legacy routes stay outside a half-transport | full app suite | One-sided declarations take the legacy path; malformed two-sided declarations reach preflight; the full app suite remains green. |
 | GitHub inspection reports the declaration | CLI regression test + docs parity | `connectors inspect github --json` reports both statuses as `declared`; runtime help, CLI docs, generated connector docs, and website guidance describe that fact without claiming certification. |
+
+## R2 commands and results
+
+All commands below exited 0 unless stated otherwise.
+
+```text
+# RED before the lifecycle production patch
+go test -count=1 -timeout 20m ./internal/synctransport -run '^TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit$'
+# failed: checkpoint committed reported "retired receipts = 0, want 1"
+
+# R2 focused GREEN
+go test -count=1 -timeout 20m ./internal/app -run '^TestAppCompositionRoutesLoadedSyntheticDefinitionConnector$'
+go test -count=1 -timeout 20m ./internal/synctransport -run '^TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit$'
+go test -count=1 -timeout 20m ./internal/app -run '^TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages$'
+go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestBundleLoadSyncTransportRefusesUnknownOrUnsafeDeclarations$'
+go test -count=1 -timeout 20m ./internal/synctransport -run '^TestPreflightReturnsTypedDestinationSourceIneligibleErrorBeforeExecutorAccess$'
+go test -count=1 -timeout 20m ./internal/synctransport -run '^TestRegisterDeclaredTransportsRefusesBeforeAnyRegistration$'
+go test -count=1 -timeout 20m ./internal/app -run '^TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination$'
+
+# Scoped suites and build quality
+go test -count=1 -timeout 20m ./internal/synctransport
+go test -count=1 -timeout 20m ./internal/connectors/engine
+go test -count=1 -timeout 20m ./internal/connectors
+go test -count=1 -timeout 20m ./internal/app
+go test -count=1 -timeout 20m ./internal/cli
+go test -count=1 -timeout 20m ./cmd/connectorgen
+go vet ./...
+go build ./cmd/pm
+go run ./cmd/connectorgen boundary . --json
+pnpm --dir website run gen:docs  # run twice; both generated 12 pages and left no diff
+
+# Individual make verify gates
+make tidy-check
+make lint
+make docs-check
+make smoke-no-build
+make agent-contract-check
+make connectorgen-validate
+make connectorgen-surface-sync
+make connector-boundary
+make release-workflow-check
+make connectorgen-certification-matrix
+make connector-canon-check
+make github-parity-artifacts-check
+git diff --check
+```
+
+The repository instruction explicitly advises against one monolithic
+`go test ./...`/`make verify` invocation in this per-command environment; the
+changed packages plus `internal/cli` and every non-test `make verify` gate were
+therefore run separately above. Full-suite execution remains CI coverage.
