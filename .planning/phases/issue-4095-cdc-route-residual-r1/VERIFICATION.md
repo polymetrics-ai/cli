@@ -41,6 +41,51 @@ PASS (four named typed zero-I/O rows)
 
 go test -timeout 20m ./internal/connectors/engine -run '^TestApplyPollingPageRefusesUnsafeInputBeforeTargetMutation$/^record_limit$' -count=1 -v
 PASS (declared page limit refuses before target mutation)
+
+make fmt && git diff --exit-code
+PASS (formatting and clean generated/source diff)
+
+make tidy-check
+PASS (module metadata stable)
+
+go vet ./...
+PASS
+
+go build ./cmd/pm
+PASS
+
+make docs-check-no-build && make smoke-no-build
+PASS (connector docs validate; fresh-project smoke succeeds)
+
+pnpm --dir website run gen:docs && git diff --exit-code && pnpm --dir website run gen:docs && git diff --exit-code
+PASS (two generation passes, byte-stable)
+
+make lint
+PASS (0 issues)
+
+make agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix
+PASS (552 declarations valid; surface sync has 0 corrections; generated artifacts current)
+
+make connector-boundary
+PASS (repository boundary scan completed with exit 0)
+
+make connector-canon-check && make release-workflow-check
+PASS (canon, immutable build dependencies, Homebrew notification, and release-target parity)
+
+go test -timeout 20m ./internal/app
+PASS
+
+go test -timeout 20m ./internal/cli
+PASS
+
+go test -timeout 20m ./cmd/connectorgen
+PASS (required consumer package)
+
+go test -timeout 20m ./...
+PASS (exit 0)
+
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres
+PASS (75.897s)
 ```
 
-The remaining repository gates below are pending at this planning checkpoint and will be marked with their actual results before handoff; no unrun gate is a pass.
+The only non-executable item is R3, deliberately recorded above with its declaration-level reason. No unrun gate is recorded as a pass.
