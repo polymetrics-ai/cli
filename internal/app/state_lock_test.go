@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/json"
 	"errors"
 	"os"
 	"path/filepath"
@@ -8,6 +9,56 @@ import (
 
 	statestore "polymetrics.ai/internal/state"
 )
+
+func TestOpenReadsCurrentStateWhileLegacyStateLockIsHeld(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	opened, err := Open(root)
+	if err != nil {
+		t.Fatalf("initial Open() error = %v", err)
+	}
+
+	legacyLock := statestore.FileLock{Path: filepath.Join(root, ".polymetrics", "state", "state.json.lock")}
+	unlock, err := legacyLock.Lock()
+	if err != nil {
+		t.Fatalf("legacy Lock() error = %v", err)
+	}
+	t.Cleanup(func() {
+		if err := unlock(); err != nil {
+			t.Errorf("legacy unlock() error = %v", err)
+		}
+	})
+
+	reopened, err := Open(root)
+	if err != nil {
+		t.Fatalf("Open() while a concurrent writer holds the state lock error = %v", err)
+	}
+	if reopened.state.Revision != opened.state.Revision {
+		t.Fatalf("reopened state revision = %d, want snapshot revision %d", reopened.state.Revision, opened.state.Revision)
+	}
+}
+
+func TestOpenRejectsMalformedStateBeforeCreatingDurableParkingStore(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	projectDir := filepath.Join(root, ".polymetrics")
+	if err := os.WriteFile(filepath.Join(projectDir, "state", "state.json"), []byte(`{"revision":`), 0o600); err != nil {
+		t.Fatalf("write malformed state: %v", err)
+	}
+
+	_, err := Open(root)
+	var syntaxErr *json.SyntaxError
+	if !errors.As(err, &syntaxErr) {
+		t.Fatalf("Open() error = %v, want wrapped *json.SyntaxError", err)
+	}
+	if _, statErr := os.Stat(filepath.Join(projectDir, "state", "rate-parking.json")); !errors.Is(statErr, os.ErrNotExist) {
+		t.Fatalf("malformed state created durable parking store: %v", statErr)
+	}
+}
 
 func TestNewStateStoreMutationsHonorLegacyStateLock(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "state.json")

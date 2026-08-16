@@ -208,7 +208,11 @@ func open(root string, deferNormalization bool) (*App, error) {
 		catalogs:                newCatalogStorage(projectDir),
 	}
 	a.sqlEngine = newSQLEngine(a)
-	if err := a.load(!deferNormalization); err != nil {
+	// state.json is atomically replaced by writers, so opening a current project
+	// can take a coherent read-only snapshot without contending on their legacy
+	// O_EXCL writer marker. This lets a second CLI construct its durable parking
+	// coordinator while the first process is resuming a claimed parked run.
+	if err := a.load(false); err != nil {
 		return nil, err
 	}
 	authStore, err := coordination.OpenFileAuthCohortHealthStore(filepath.Join(projectDir, "state", "auth-cohorts.json"))
