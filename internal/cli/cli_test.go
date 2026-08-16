@@ -612,34 +612,6 @@ func TestETLHelpListsAllSyncModes(t *testing.T) {
 	}
 }
 
-func TestChangedCLICommandHelpIsExecutable(t *testing.T) {
-	// Help must remain useful before a user has initialized a project. Keeping
-	// this test outside the repository's own .polymetrics directory prevents a
-	// local project from masking an early withApp call in command dispatch.
-	t.Chdir(t.TempDir())
-	for _, tt := range []struct {
-		name string
-		args []string
-		want string
-	}{
-		{name: "etl run", args: []string{"etl", "run", "--help"}, want: "--max-in-flight-batches"},
-		{name: "connections create", args: []string{"connections", "create", "--help"}, want: "--target-copy-workers"},
-	} {
-		t.Run(tt.name, func(t *testing.T) {
-			var stdout, stderr bytes.Buffer
-			if code := cli.Run(tt.args, &stdout, &stderr); code != 0 {
-				t.Fatalf("Run(%v) code = %d stderr = %s", tt.args, code, stderr.String())
-			}
-			if stderr.Len() != 0 {
-				t.Fatalf("Run(%v) wrote stderr while rendering help: %s", tt.args, stderr.String())
-			}
-			if !strings.Contains(stdout.String(), tt.want) {
-				t.Fatalf("Run(%v) output missing %q:\n%s", tt.args, tt.want, stdout.String())
-			}
-		})
-	}
-}
-
 func TestETLRejectsLegacyPrefixedConnectorCommands(t *testing.T) {
 	root := t.TempDir()
 	var stdout, stderr bytes.Buffer

@@ -8,12 +8,14 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"sort"
 	"strings"
 	"testing"
 
 	"github.com/spf13/cobra"
 
 	"polymetrics.ai/internal/config"
+	"polymetrics.ai/internal/connectors"
 )
 
 func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
@@ -184,18 +186,18 @@ func TestCobraRouterShellMapsGenuineCobraParseErrorsToUsage(t *testing.T) {
 	}
 }
 
-func TestCobraRouterShellPreservesLegacyHelpInterceptionForFallback(t *testing.T) {
+func TestCobraRouterShellRejectsUnknownHelpWithUsage(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	args := []string{"nosuch", "--help", "--json"}
 	code := Run(args, &stdout, &stderr)
-	if code != 1 {
-		t.Fatalf("Run(%v) code = %d, want 1; stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+	if code != 2 {
+		t.Fatalf("Run(%v) code = %d, want 2; stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
 	}
-	if want := `"message": "help topic \"nosuch\" not found"`; !strings.Contains(stdout.String(), want) {
+	if want := `"message": "unknown command \"nosuch\""`; !strings.Contains(stdout.String(), want) {
 		t.Fatalf("stdout missing %q:\n%s", want, stdout.String())
 	}
-	if strings.Contains(stderr.String(), "unknown command") || strings.Contains(stderr.String(), "missing connector command path") {
-		t.Fatalf("fallback help was routed as command execution: stderr=%s", stderr.String())
+	if !strings.Contains(stderr.String(), "unknown command") {
+		t.Fatalf("stderr missing usage error: %s", stderr.String())
 	}
 }
 
@@ -276,6 +278,167 @@ func TestCobraRouterShellPreservesDynamicConnectorPassthroughWithLateGlobals(t *
 	if env.Kind != "ConnectorCommandRead" || env.Command != "issue list" || env.Stream != "issues" || env.Count != 1 {
 		t.Fatalf("envelope = %+v, want dynamic connector read result", env)
 	}
+}
+
+type legacyHelpCase struct {
+	path []string
+}
+
+func TestEveryLegacyLeafHelpIsExecutable(t *testing.T) {
+	cases := legacyHelpCases(t)
+	for _, project := range []struct {
+		name        string
+		initialized bool
+	}{
+		{name: "outside a project"},
+		{name: "inside an initialized project", initialized: true},
+	} {
+		t.Run(project.name, func(t *testing.T) {
+			root := t.TempDir()
+			t.Chdir(root)
+			if project.initialized {
+				var stdout, stderr bytes.Buffer
+				if code := Run([]string{"init", "--root", root}, &stdout, &stderr); code != 0 {
+					t.Fatalf("initialize project: code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+				}
+			}
+
+			for _, helpFlag := range []string{"--help", "-h"} {
+				for _, tc := range cases {
+					t.Run(strings.Join(append(append([]string(nil), tc.path...), helpFlag), " "), func(t *testing.T) {
+						args := append(append([]string(nil), tc.path...), helpFlag)
+						var stdout, stderr bytes.Buffer
+						if code := Run(args, &stdout, &stderr); code != 0 {
+							t.Fatalf("Run(%v) code=%d stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+						}
+						if stderr.Len() != 0 {
+							t.Fatalf("Run(%v) wrote stderr while rendering help: %s", args, stderr.String())
+						}
+						want := "pm " + strings.Join(tc.path, " ")
+						if !strings.Contains(stdout.String(), want) {
+							t.Fatalf("Run(%v) missing its documented invocation %q:\n%s", args, want, stdout.String())
+						}
+					})
+				}
+			}
+		})
+	}
+}
+
+func TestEveryDynamicConnectorLeafHelpRendersWithoutDispatch(t *testing.T) {
+	registry := appRegistry()
+	checked := 0
+	for _, meta := range registry.List() {
+		connector, ok := registry.Get(meta.Name)
+		if !ok {
+			t.Fatalf("registered connector %q is missing", meta.Name)
+		}
+		provider, ok := connector.(connectors.CommandSurfaceProvider)
+		if !ok || provider.CommandSurface() == nil {
+			continue
+		}
+		surface := provider.CommandSurface()
+		for _, command := range surface.Commands {
+			path := strings.Fields(command.Path)
+			if len(path) == 0 {
+				t.Errorf("connector %q declares a command with an empty path", meta.Name)
+				continue
+			}
+			for _, helpFlag := range []string{"--help", "-h"} {
+				args := append(append([]string(nil), path...), helpFlag)
+				if !connectorHelpRequested(args, surface) {
+					t.Errorf("connector %q command %q did not resolve %s before dispatch", meta.Name, command.Path, helpFlag)
+					continue
+				}
+				gotCommand, manual := renderConnectorCommandManual(meta.Name, connector, surface, args)
+				wantCommand := meta.Name + " " + command.Path
+				if gotCommand != wantCommand || !strings.Contains(manual, "NAME\n") {
+					t.Errorf("connector %q command %q %s manual = %q / %q, want %q with NAME section", meta.Name, command.Path, helpFlag, gotCommand, manual, wantCommand)
+				}
+				checked++
+			}
+		}
+	}
+	if checked == 0 {
+		t.Fatal("no dynamic connector commands were checked")
+	}
+	t.Logf("checked %d dynamic connector command help variants", checked)
+}
+
+func TestLeafHelpDoesNotMaskInvalidCommandsOrApprovalCarrierSyntax(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		args []string
+	}{
+		{name: "unknown top-level command", args: []string{"not-a-command", "--help"}},
+		{name: "unknown leaf command", args: []string{"credentials", "not-a-command", "--help"}},
+		{name: "approval carrier with value", args: []string{"reverse", "run", "--approval-token-stdin=token", "--help"}},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			if code := Run(tt.args, &stdout, &stderr); code != 2 {
+				t.Fatalf("Run(%v) code=%d want usage exit 2; stdout=%s stderr=%s", tt.args, code, stdout.String(), stderr.String())
+			}
+			if strings.Contains(stdout.String(), "NAME\n") {
+				t.Fatalf("Run(%v) rendered help instead of refusing invalid input: %s", tt.args, stdout.String())
+			}
+		})
+	}
+}
+
+func TestLeafHelpWithOtherFlagsRendersBeforeRequiredFlags(t *testing.T) {
+	for _, args := range [][]string{
+		{"schedule", "create", "--name", "nightly", "--help"},
+		{"schedule", "inspect", "--help"},
+	} {
+		var stdout, stderr bytes.Buffer
+		if code := Run(args, &stdout, &stderr); code != 0 {
+			t.Fatalf("Run(%v) code=%d stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+		}
+		if !strings.Contains(stdout.String(), "pm schedule create --name nightly") {
+			t.Fatalf("Run(%v) did not render the schedule manual:\n%s", args, stdout.String())
+		}
+		if stderr.Len() != 0 {
+			t.Fatalf("Run(%v) wrote stderr while rendering help: %s", args, stderr.String())
+		}
+	}
+}
+
+func legacyHelpCases(t *testing.T) []legacyHelpCase {
+	t.Helper()
+	seen := map[string]legacyHelpCase{}
+	for _, spec := range cobraLegacyCommands(config.Config{}) {
+		manual, ok := docs[spec.name]
+		if !ok {
+			t.Errorf("legacy wrapper %q has no manual; every executable wrapper must be discoverable", spec.name)
+			continue
+		}
+		found := 0
+		for _, path := range manualCommandPaths(manual) {
+			if len(path) == 0 || path[0] != spec.name {
+				continue
+			}
+			found++
+			key := strings.Join(path, "\x00")
+			seen[key] = legacyHelpCase{path: path}
+		}
+		if found == 0 {
+			t.Errorf("legacy wrapper %q manual has no parseable pm invocation", spec.name)
+		}
+	}
+	if t.Failed() {
+		t.FailNow()
+	}
+	keys := make([]string, 0, len(seen))
+	for key := range seen {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	cases := make([]legacyHelpCase, 0, len(keys))
+	for _, key := range keys {
+		cases = append(cases, seen[key])
+	}
+	return cases
 }
 
 func runCobraRouterCLI(t *testing.T, args []string) (stdout string, stderr string) {

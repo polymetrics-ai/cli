@@ -161,7 +161,7 @@ func runHelp(args []string, stdout io.Writer, jsonOut bool) error {
 }
 
 func isManualCommand(cmd string) bool {
-	if cmd == "init" || cmd == "help" || cmd == "man" || cmd == "version" {
+	if cmd == "init" || cmd == "help" || cmd == "man" || cmd == "version" || cmd == "extract" {
 		return false
 	}
 	_, ok := docs[cmd]

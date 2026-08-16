@@ -71,6 +71,9 @@ EXIT STATUS
 var docs = map[string]string{
 	"":            rootHelp,
 	"pm":          rootHelp,
+	"init":        initHelp,
+	"help":        helpHelp,
+	"man":         manHelp,
 	"credentials": credentialsHelp,
 	"etl":         etlHelp,
 	"reverse":     reverseHelp,
@@ -88,7 +91,106 @@ var docs = map[string]string{
 	"docs":        docsHelp,
 	"skills":      skillsHelp,
 	"version":     versionHelp,
+	"extract":     extractHelp,
+	"worker":      workerHelp,
 }
+
+const initHelp = `NAME
+  pm init - initialize a local Polymetrics project
+
+SYNOPSIS
+  pm init [--root path] [--json]
+
+DESCRIPTION
+  Creates the .polymetrics project directory at the selected root. Run this
+  once before configuring credentials, connections, or local warehouse data.
+
+OPTIONS
+  --root path    project root that will contain .polymetrics
+  --json         render machine-readable JSON
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+`
+
+const helpHelp = `NAME
+  pm help - show a detailed command manual
+
+SYNOPSIS
+  pm help [<topic>] [--json]
+  pm help etl transport [--json]
+
+DESCRIPTION
+  With no topic, prints the root manual. Pass a command namespace to read its
+  detailed manual before creating a project or supplying credentials.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+`
+
+const manHelp = `NAME
+  pm man - alias for pm help
+
+SYNOPSIS
+  pm man [<topic>] [--json]
+  pm man etl transport [--json]
+
+DESCRIPTION
+  Prints the same command manuals as pm help. Use a command namespace as the
+  topic to inspect its flags and workflow before execution.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+`
+
+const extractHelp = `NAME
+  pm extract - route a natural-language data request safely
+
+SYNOPSIS
+  pm extract --request <text> [--sql query] [--limit n] [--in table] [--out table] [--json]
+
+DESCRIPTION
+  Classifies a bounded natural-language request and routes it to a typed local
+  query or RLM analysis path. It never accepts an unrestricted shell, HTTP, or
+  SQL write operation.
+
+OPTIONS
+  --request text       request to classify
+  --sql query          optional validated local query
+  --limit n            maximum returned rows; default 100
+  --in table           source table for an executable RLM route
+  --out table          destination table for an executable RLM route
+  --json               render machine-readable JSON
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+`
+
+const workerHelp = `NAME
+  pm worker - operate the optional RLM worker
+
+SYNOPSIS
+  pm worker serve [--json]
+  pm worker status [--json]
+
+DESCRIPTION
+  Starts or inspects the optional Temporal-backed worker used by RLM agent
+  mode. Runtime services are opt-in; use pm runtime doctor before starting a
+  runtime-backed workflow.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+`
 
 const configHelp = `NAME
   pm help config - configuration reference
