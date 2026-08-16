@@ -28,5 +28,11 @@
 
 ## GREEN
 
-- Pending: wire the engine adapter and rerun the same focused test. Record the
-  exact command, result, and commit after it is green.
+- Green: `go test -timeout 20m ./internal/connectors/hooks/github -run '^TestGitHubAppAuthBudgetLifecycle' -count=1`
+- Result: pass (2026-08-17). The grant test observed exactly
+  `Decide=1`, `Finish=1`, and `send=1`; the refusal test observed exactly
+  `Decide=1`, `Finish=0`, and `send=0` with
+  `*connsdk.RateBudgetRefusalError{Code: "reservation_denied"}`.
+- Implementation: the engine derives a batch from the same declaration-
+  resolved policy identity, opaque scope, and declared budgets used for the
+  auth route, then completes the opaque lease once after `Requester.Do`.

@@ -2,7 +2,7 @@
 phase: issue-4072-budget-lifecycle-residual-r1
 plan: "01"
 type: tdd
-status: in_progress
+status: complete
 base: integration/4015-mvp-flat-r1
 requirements:
   - ISSUE-4072-RESIDUAL

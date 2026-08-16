@@ -300,6 +300,7 @@ func (r *rateLimitResolver) resolvePolicies(ctx context.Context, method, path st
 }
 
 type resolvedRateLimitPolicy struct {
+	id           string
 	admission    connsdk.RateLimitAdmission
 	observer     connsdk.RateLimitObserver
 	costHeader   string
@@ -336,13 +337,42 @@ func (r *rateLimitResolver) resolve(ctx context.Context, policy connsdk.RateLimi
 			return resolvedRateLimitPolicy{}, rateBudgetRefusal(err)
 		}
 		limiter := r.sharedRegistry.Limiter(key, policy.Budgets)
-		return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets, scope: scope, parking: r.parking}, nil
+		return resolvedRateLimitPolicy{id: policy.ID, admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets, scope: scope, parking: r.parking}, nil
 	}
 	if r.registry == nil {
 		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q local registry is unavailable", policy.ID)
 	}
 	limiter := r.registry.Limiter(key, policy.Budgets)
-	return resolvedRateLimitPolicy{admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets, scope: scope, parking: r.parking}, nil
+	return resolvedRateLimitPolicy{id: policy.ID, admission: limiter, observer: limiter, costHeader: costHeader, budgets: policy.Budgets, scope: scope, parking: r.parking}, nil
+}
+
+// reservationBatch derives the coordinator input from the same selected,
+// declaration-owned policies that the requester will admit at its physical
+// send boundary. Scope keys and policy fingerprints are opaque; neither raw
+// request material nor credentials cross this seam.
+func (r *rateLimitResolver) reservationBatch(ctx context.Context, method, path string) (connsdk.ReservationBatch, error) {
+	if r == nil {
+		return connsdk.ReservationBatch{}, nil
+	}
+	matched, _, err := r.resolvePolicies(ctx, strings.ToUpper(strings.TrimSpace(method)), path, r.policies)
+	if err != nil {
+		return connsdk.ReservationBatch{}, err
+	}
+	batch := connsdk.ReservationBatch{Policies: make([]connsdk.ReservationPolicy, 0, len(matched))}
+	for _, policy := range matched {
+		fingerprint, err := coordination.RateBudgetPolicyFingerprint(r.connector, policy.id, policy.budgets)
+		if err != nil {
+			return connsdk.ReservationBatch{}, fmt.Errorf("rate-limit policy %q reservation fingerprint: %w", policy.id, err)
+		}
+		batch.Policies = append(batch.Policies, connsdk.ReservationPolicy{
+			Key: connsdk.ReservationKey{
+				PolicyFingerprint: fingerprint,
+				Scope:             string(policy.scope),
+			},
+			Budgets: policy.budgets,
+		})
+	}
+	return batch, nil
 }
 
 type endpointRateLimitResolver struct {

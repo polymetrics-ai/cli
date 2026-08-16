@@ -22,6 +22,7 @@ type Runtime struct {
 	Bundle        *Bundle
 	Config        connectors.RuntimeConfig
 	rateLimits    *rateLimitResolver
+	budget        connsdk.BudgetCoordinator
 }
 
 // Hooks is the base interface every hook set implements. A concrete hook set
@@ -113,7 +114,56 @@ func (r declaredRouteRequester) DoJSON(ctx context.Context, request DeclaredRout
 	}
 	clone.DefaultHeaders = headers
 	clone.DisableRetries = true
-	return clone.Do(ctx, method, path, nil, request.Body)
+
+	lease, err := r.runtime.reserveDeclaredRouteBudget(ctx, method, path)
+	if err != nil {
+		return nil, err
+	}
+	response, requestErr := clone.Do(ctx, method, path, nil, request.Body)
+	if lease == "" {
+		return response, requestErr
+	}
+	// A provider attempt may complete at the same moment its caller cancels.
+	// Completion must still reach the lease owner so an admitted token request
+	// cannot strand an in-flight reservation. The observation is deliberately
+	// limited to the safe requester's vocabulary and contains no provider body,
+	// headers, route, or auth material.
+	finishErr := r.runtime.budget.Finish(context.WithoutCancel(ctx), lease, connsdk.CompletionObservation{Attempted: true})
+	if requestErr != nil {
+		return nil, requestErr
+	}
+	if finishErr != nil {
+		return nil, fmt.Errorf("auth declared route budget completion: %w", finishErr)
+	}
+	return response, nil
+}
+
+// reserveDeclaredRouteBudget derives an opaque batch only after the auth hook
+// has named its own declared request. It owns the one Decide call for an
+// eventual physical auth send; a non-grant has no lease and therefore no
+// Finish call.
+func (rt *Runtime) reserveDeclaredRouteBudget(ctx context.Context, method, path string) (connsdk.RateBudgetLease, error) {
+	if rt == nil || rt.budget == nil || rt.rateLimits == nil {
+		return "", nil
+	}
+	batch, err := rt.rateLimits.reservationBatch(ctx, method, path)
+	if err != nil {
+		return "", err
+	}
+	if len(batch.Policies) == 0 {
+		return "", nil
+	}
+	decision, err := rt.budget.Decide(ctx, batch)
+	if err != nil {
+		return "", fmt.Errorf("auth declared route budget decision: %w", err)
+	}
+	if !decision.Granted || decision.Lease == "" {
+		return "", &connsdk.RateBudgetRefusalError{
+			Code:   connsdk.RateBudgetRefusalReservationDenied,
+			Reason: "lifecycle coordinator did not grant a lease",
+		}
+	}
+	return decision.Lease, nil
 }
 
 // RecordHook post-processes a single record beyond the declarative

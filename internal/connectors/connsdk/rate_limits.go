@@ -10,6 +10,9 @@ const (
 	// RateBudgetRefusalSharedCoordinatorUnavailable means a require_shared
 	// policy could not obtain the shared admission decision it declared.
 	RateBudgetRefusalSharedCoordinatorUnavailable RateBudgetRefusalCode = "shared_coordinator_unavailable"
+	// RateBudgetRefusalReservationDenied means the run-local lifecycle
+	// coordinator did not grant an opaque lease before provider dispatch.
+	RateBudgetRefusalReservationDenied RateBudgetRefusalCode = "reservation_denied"
 )
 
 // RateBudgetRefusalError is the SDK-facing fail-closed contract for rate

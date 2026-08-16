@@ -344,6 +344,9 @@ func TestGitHubAppAuthBudgetLifecycleRefusalDoesNotFinishOrSend(t *testing.T) {
 	if !errors.As(err, &refusal) {
 		t.Fatalf("NewRuntime error = %T %v, want typed budget refusal", err, err)
 	}
+	if got, want := refusal.Code, connsdk.RateBudgetRefusalCode("reservation_denied"); got != want {
+		t.Fatalf("budget refusal code = %q, want %q", got, want)
+	}
 	if got, want := coordinator.decides.Load(), int32(1); got != want {
 		t.Fatalf("BudgetCoordinator Decide calls = %d, want %d", got, want)
 	}
