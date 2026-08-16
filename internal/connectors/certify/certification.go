@@ -1,11 +1,9 @@
 package certify
 
 import (
-	"context"
 	"fmt"
 	"strings"
 
-	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
@@ -153,41 +151,4 @@ func writeActionRecordSchema(connector, actionName string) ([]byte, error) {
 		return append([]byte(nil), action.RecordSchema...), nil
 	}
 	return nil, fmt.Errorf("no record_schema available for %q action %q", connector, actionName)
-}
-
-// certificationWriteActionProbe resolves one definition once, then prepares
-// every declared action through the real engine without records, credentials,
-// filesystem input, or a provider call.
-func certificationWriteActionProbe(connector string) (func(context.Context, string, string) error, error) {
-	bundle, err := engine.Load(defs.FS, connector)
-	if err != nil {
-		return nil, fmt.Errorf("load connector definition: %w", err)
-	}
-	config := applyCertificationSourceDefaults(bundle.Name, nil)
-	return func(ctx context.Context, probedConnector, action string) error {
-		if probedConnector != connector {
-			return fmt.Errorf("prepared connector %q does not match requested connector %q", connector, probedConnector)
-		}
-		return probeCertificationWriteBundleWithConfig(ctx, bundle, action, config)
-	}, nil
-}
-
-func probeCertificationWriteBundle(ctx context.Context, bundle engine.Bundle, action string) error {
-	return probeCertificationWriteBundleWithConfig(ctx, bundle, action, applyCertificationSourceDefaults(bundle.Name, nil))
-}
-
-func probeCertificationWriteBundleWithConfig(ctx context.Context, bundle engine.Bundle, action string, config map[string]string) error {
-	_, err := engine.DryRunWrite(ctx, bundle, connectors.WriteRequest{
-		Action: action,
-		Config: connectors.RuntimeConfig{
-			Config:              config,
-			CredentialRevision:  "certification-definition-probe",
-			ConfigurationDigest: "certification-definition-probe",
-			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
-		},
-	}, nil, nil)
-	if err != nil {
-		return fmt.Errorf("prepare declared action: %w", err)
-	}
-	return nil
 }

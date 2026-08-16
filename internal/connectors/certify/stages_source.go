@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -136,12 +137,6 @@ type runContext struct {
 	// tag, ledger handle) across stage boundaries; nil whenever
 	// write_plan_preview recorded a skip (Options.Write is false).
 	write *writeContext
-
-	// writeActionProbe is a per-run negative-control seam. Production runs use
-	// probeCertificationWriteAction; focused internal tests may replace it to
-	// prove that one broken declaration fails the full certification sweep.
-	// It never executes a provider request.
-	writeActionProbe func(context.Context, string, string) error
 
 	// transportPairProbe exercises one declared source/destination pair through
 	// App's production definition-composition root. The seam exists only so an
@@ -329,6 +324,9 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 		tailStages = append(tailStages, stageFlowRoundtrip, stageScheduleRoundtrip)
 	}
 	tailStages = append(tailStages, stageWriteSweepAllPairings)
+	if r.opts.RequireFullParity {
+		tailStages = append(tailStages, stageFullParityClaim)
+	}
 
 	for _, stage := range setupStages {
 		if err := stage(rc, &rep); err != nil {
@@ -358,6 +356,12 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 
 	finalizeJSONContract(&rep)
 	finalizeSecretRedaction(rc, &rep, secretValues)
+	if hasNonLiveWriteAction(rep.Capabilities.WriteActions) {
+		// A baseline certification can pass its applicable source checks while
+		// write coverage is incomplete. Do not render that as a generic live
+		// certification result.
+		rep.Mode = "partial_live"
+	}
 	rep.CompletedAt = time.Now().UTC()
 	// A secret_redaction failure is a security-relevant fact operators must
 	// not be able to miss by only checking per-stage Passed flags (M2,
@@ -1374,7 +1378,7 @@ func allStagesPassed(stages []StageResult) bool {
 			// A documented skip never fails the overall report.
 			continue
 		}
-		if !s.Passed && strings.HasPrefix(s.Error, "skipped: ") {
+		if !s.Passed && (strings.HasPrefix(s.Error, "skipped: ") || strings.HasPrefix(s.Error, "not_live: ")) {
 			// A documented skip (e.g. Options.Write disabled, or no
 			// available write pairing) never fails the overall report,
 			// exactly like fixture_conformance above (design §A "no
@@ -1387,6 +1391,54 @@ func allStagesPassed(stages []StageResult) bool {
 		}
 	}
 	return true
+}
+
+func hasNonLiveWriteAction(actions map[string]WriteActionResult) bool {
+	for _, action := range actions {
+		if action.Result == "not_live" {
+			return true
+		}
+	}
+	return false
+}
+
+// fullParityStage is emitted only for an explicit --full-parity request. Its
+// success is the single report-local fact an external proof may use for the
+// full-parity claim; callers must not infer that fact merely from command-line
+// spelling or a successful subset of stages.
+const fullParityStage = "full_parity"
+
+func stageFullParityClaim(rc *runContext, rep *Report) error {
+	if !rc.opts.Full || !rc.opts.Write {
+		recordStage(rc, rep, fullParityStage, 2, func() (bool, CLIStageInfo, string) {
+			return false, CLIStageInfo{}, "full parity requires full read and write execution"
+		})
+		return nil
+	}
+
+	notLive := make([]string, 0)
+	for action, result := range rep.Capabilities.WriteActions {
+		if result.Result != "pass" {
+			notLive = append(notLive, action)
+		}
+	}
+	sort.Strings(notLive)
+	recordStage(rc, rep, fullParityStage, 2, func() (bool, CLIStageInfo, string) {
+		if len(notLive) == 0 {
+			return true, CLIStageInfo{}, ""
+		}
+		return false, CLIStageInfo{}, fmt.Sprintf("full parity unavailable: %d declared write action(s) are not provider-verified; first=%s", len(notLive), notLive[0])
+	})
+	return nil
+}
+
+func (rep Report) FullParityVerified() bool {
+	for _, stage := range rep.Stages {
+		if stage.Name == fullParityStage {
+			return stage.Passed
+		}
+	}
+	return false
 }
 
 func secretValuesFromEnv(secretEnv map[string]string) []string {

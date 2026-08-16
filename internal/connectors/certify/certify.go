@@ -33,6 +33,12 @@ type Options struct {
 	// docs/plans/connector-complete-testing-and-mail-setup-plan.md.
 	Full bool
 
+	// RequireFullParity is set only by the public --full-parity request. It
+	// implies Full and Write, then requires the completed report to prove every
+	// applicable stage/action rather than merely rendering a full-run-shaped
+	// artifact.
+	RequireFullParity bool
+
 	// ObserveHTTP retains bounded, exact HTTP exchanges in process memory for
 	// an external-binary proof. It is deliberately not a user-facing capture
 	// switch: the CLI enables it only inside a freshly built child process.

@@ -1,7 +1,9 @@
 # Plan — Issue 4166 Live Write Certification
 
-**Status:** blocked on the scope decision recorded in `SCOPE.md`; no provider
-write harness or production edit has started.
+**Status:** captain selected option 1. Implement the repository-safe 28-action
+wave now; the remaining 474 reachable actions are separately provisioned and
+scheduled in bounded resumable waves. The 105 control-plane actions remain
+explicitly non-live and make a full-parity claim unavailable.
 
 ## Lifecycle and execution mode
 
@@ -19,10 +21,11 @@ write harness or production edit has started.
 **Evidence:** `SCOPE.md` classifies every GitHub declared action, establishes
 the resource boundary, estimates rate/runtime, and defines resume behavior.
 
-**Gate:** Do not construct a live runner until the open decision selects the
-allowed infrastructure scope.
+**Gate resolved:** captain selected option 1. The browser-only prerequisites
+are consolidated in `MANUAL-PROVISIONING.md`; implementation proceeds without
+waiting for that larger-infrastructure work.
 
-## Subsequent TDD slices (pending decision)
+## TDD slices
 
 1. **Report truthfulness (red/green).** Red tests prove a prepared-only or
    infrastructure-gated action cannot become `pass`, cannot make the batch
@@ -32,7 +35,7 @@ allowed infrastructure scope.
    child path with `--full-parity` alone and show that it is not full/write.
    Green makes it enable full and write stages, rejects contradictory skip
    flags, and refuses an artifact when an applicable full/write stage skipped.
-3. **Repository-safe scenarios (red/green).** Red tests require each scenario
+3. **Repository-safe scenarios (red/green; active).** Red tests require each scenario
    to use the production `runCertify` entry point, mutate its run-owned
    resource, independently read it back, and clean it. Green supplies
    definition-owned scenario metadata and durable resume ledger handling.
@@ -40,8 +43,8 @@ allowed infrastructure scope.
    compilation makes the same production certification entry point fail with
    the exact action name; the intact control passes only after observable
    mutation/read-back.
-5. **Approved infrastructure waves (red/green).** Only after explicit
-   provisioning authority, add one infrastructure family per bounded slice;
+5. **Approved infrastructure waves (red/green).** After the captain completes
+   `MANUAL-PROVISIONING.md`, add one infrastructure family per bounded slice;
    each wave has its own resource guard, cleanup proof, rate budget, and
    resumability test.
 6. **Help/docs/website parity.** Update runtime help, CLI manual, website

@@ -62,7 +62,12 @@ type ScheduleResult struct {
 // report artifact example: "create_issue": {"result", "cleanup", "verify",
 // "tag"}).
 type WriteActionResult struct {
-	Result  string `json:"result"`
+	Result string `json:"result"`
+	// Path and Risk are retained for a non-live result so an operator can see
+	// exactly which declared provider mutation was not covered, rather than
+	// mistaking an aggregate status for a provider execution claim.
+	Path    string `json:"path,omitempty"`
+	Risk    string `json:"risk,omitempty"`
 	Cleanup string `json:"cleanup,omitempty"`
 	Verify  string `json:"verify,omitempty"`
 	Tag     string `json:"tag,omitempty"`
