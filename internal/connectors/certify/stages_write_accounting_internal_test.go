@@ -49,3 +49,64 @@ func TestWriteActionInventoryForPropagatesMissingWritesFile(t *testing.T) {
 		t.Fatal("writeActionInventoryFor(missing) error = nil, want read failure")
 	}
 }
+
+func TestGithubWriteActionInventoryClassifiesEveryDeferredActionWithConcretePrerequisite(t *testing.T) {
+	items, err := writeActionInventoryFor("github")
+	if err != nil {
+		t.Fatalf("writeActionInventoryFor(github): %v", err)
+	}
+
+	wantCounts := map[string]int{
+		"repository_wave_ready":                         28,
+		"repository_fixture_pending":                    234,
+		"gist_fixture_pending":                          9,
+		"org_fixture_and_permission_pending":            217,
+		"app_or_oauth_pending":                          14,
+		"enterprise_trial_and_token_pending":            25,
+		"primary_user_fixture_and_permission_pending":   49,
+		"secondary_user_fixture_and_permission_pending": 25,
+		"notification_token_and_fixture_pending":        5,
+		"sacrificial_credential_pending":                1,
+	}
+	gotCounts := map[string]int{}
+	for _, item := range items {
+		if item.Classification == "" {
+			t.Fatalf("%s (%s) has no classification", item.Action, item.Path)
+		}
+		if item.Reason == "" {
+			t.Fatalf("%s (%s) has no concrete prerequisite", item.Action, item.Path)
+		}
+		gotCounts[item.Classification]++
+	}
+	if len(gotCounts) != len(wantCounts) {
+		t.Fatalf("classification count = %d, want %d: got %#v", len(gotCounts), len(wantCounts), gotCounts)
+	}
+	for classification, want := range wantCounts {
+		if got := gotCounts[classification]; got != want {
+			t.Errorf("%s count = %d, want %d", classification, got, want)
+		}
+	}
+}
+
+func TestWriteSweepDoesNotTreatExistingNonPassResultAsLiveCoverage(t *testing.T) {
+	rc := &runContext{opts: Options{Connector: "github", Full: true, Write: true}}
+	rep := &Report{Capabilities: Capabilities{WriteActions: map[string]WriteActionResult{
+		"create_issue": {Result: "not_live", Reason: "stale prepared-only entry"},
+	}}}
+	if err := stageWriteSweepAllPairings(rc, rep); err != nil {
+		t.Fatalf("stageWriteSweepAllPairings() error = %v", err)
+	}
+	for _, stage := range rep.Stages {
+		if stage.Name != "write_sweep_create_issue" {
+			continue
+		}
+		if stage.Passed {
+			t.Fatalf("%s passed for an existing non-pass result", stage.Name)
+		}
+		if stage.Error == "" {
+			t.Fatalf("%s error empty, want not_live reason", stage.Name)
+		}
+		return
+	}
+	t.Fatal("write_sweep_create_issue stage was not recorded")
+}

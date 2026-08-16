@@ -111,6 +111,75 @@
           }
         }
       }
+    },
+    "write_inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["classification", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "classification": { "type": "string" },
+              "reason": { "type": "string" },
+              "actions": { "type": "array", "items": { "type": "string" } },
+              "paths": { "type": "array", "items": { "type": "string" } },
+              "path_prefixes": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "write_wave": {
+      "type": "object",
+      "required": ["fixture", "actions", "action_bindings", "scenarios", "tag_prefix", "tag_subject_prefix"],
+      "additionalProperties": false,
+      "properties": {
+        "fixture": {
+          "type": "object",
+          "required": ["config", "description"],
+          "additionalProperties": false,
+          "properties": {
+            "config": { "type": "object", "additionalProperties": true },
+            "description": { "type": "string" }
+          }
+        },
+        "actions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "action_bindings": { "type": "object", "minProperties": 1, "additionalProperties": true },
+        "scenarios": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "ledger_name", "tag_name", "actions"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "ledger_name": { "type": "string" },
+              "tag_name": { "type": "string" },
+              "actions": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+            }
+          }
+        },
+        "blocked_actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "actions", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "actions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+              "reason": { "type": "string" }
+            }
+          }
+        },
+        "tag_prefix": { "type": "string" },
+        "tag_subject_prefix": { "type": "string" }
+      }
     }
   }
 }

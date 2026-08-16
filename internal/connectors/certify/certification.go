@@ -1,11 +1,9 @@
 package certify
 
 import (
-	"context"
 	"fmt"
 	"strings"
 
-	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
@@ -21,6 +19,55 @@ func certificationProfileFor(connector string) certificationProfile {
 		return certificationProfile{}
 	}
 	return certificationProfile{spec: bundle.Certification, writes: bundle.Writes}
+}
+
+func certificationWriteWaveFor(connector string) (*engine.CertificationWriteWaveSpec, bool) {
+	profile := certificationProfileFor(connector)
+	if profile.spec == nil || profile.spec.WriteWave == nil {
+		return nil, false
+	}
+	return profile.spec.WriteWave, true
+}
+
+func certificationHasWriteWave(connector string) bool {
+	_, ok := certificationWriteWaveFor(connector)
+	return ok
+}
+
+func certificationWriteInventoryClassification(profile certificationProfile, action, path string) (classification, reason string, declared bool, err error) {
+	if profile.spec == nil {
+		return "", "", false, nil
+	}
+	if wave := profile.spec.WriteWave; wave != nil {
+		for _, candidate := range wave.Actions {
+			if candidate == action {
+				return writeClassificationRepositoryWaveReady,
+					"the connector-declared bounded repository scenario is not yet executed for this action", true, nil
+			}
+		}
+	}
+	rules := profile.spec.WriteInventory.Rules
+	if len(rules) == 0 {
+		return "", "", false, nil
+	}
+	for _, rule := range rules {
+		for _, candidate := range rule.Actions {
+			if candidate == action {
+				return rule.Classification, rule.Reason, true, nil
+			}
+		}
+		for _, candidate := range rule.Paths {
+			if candidate == path {
+				return rule.Classification, rule.Reason, true, nil
+			}
+		}
+		for _, prefix := range rule.PathPrefixes {
+			if strings.HasPrefix(path, prefix) {
+				return rule.Classification, rule.Reason, true, nil
+			}
+		}
+	}
+	return "", "", true, fmt.Errorf("definition-owned write inventory has no classification for action %q path %q", action, path)
 }
 
 func certificationPairingsFor(connector string) []WritePairing {
@@ -153,41 +200,4 @@ func writeActionRecordSchema(connector, actionName string) ([]byte, error) {
 		return append([]byte(nil), action.RecordSchema...), nil
 	}
 	return nil, fmt.Errorf("no record_schema available for %q action %q", connector, actionName)
-}
-
-// certificationWriteActionProbe resolves one definition once, then prepares
-// every declared action through the real engine without records, credentials,
-// filesystem input, or a provider call.
-func certificationWriteActionProbe(connector string) (func(context.Context, string, string) error, error) {
-	bundle, err := engine.Load(defs.FS, connector)
-	if err != nil {
-		return nil, fmt.Errorf("load connector definition: %w", err)
-	}
-	config := applyCertificationSourceDefaults(bundle.Name, nil)
-	return func(ctx context.Context, probedConnector, action string) error {
-		if probedConnector != connector {
-			return fmt.Errorf("prepared connector %q does not match requested connector %q", connector, probedConnector)
-		}
-		return probeCertificationWriteBundleWithConfig(ctx, bundle, action, config)
-	}, nil
-}
-
-func probeCertificationWriteBundle(ctx context.Context, bundle engine.Bundle, action string) error {
-	return probeCertificationWriteBundleWithConfig(ctx, bundle, action, applyCertificationSourceDefaults(bundle.Name, nil))
-}
-
-func probeCertificationWriteBundleWithConfig(ctx context.Context, bundle engine.Bundle, action string, config map[string]string) error {
-	_, err := engine.DryRunWrite(ctx, bundle, connectors.WriteRequest{
-		Action: action,
-		Config: connectors.RuntimeConfig{
-			Config:              config,
-			CredentialRevision:  "certification-definition-probe",
-			ConfigurationDigest: "certification-definition-probe",
-			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
-		},
-	}, nil, nil)
-	if err != nil {
-		return fmt.Errorf("prepare declared action: %w", err)
-	}
-	return nil
 }

@@ -73,6 +73,11 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 	if err != nil {
 		return err
 	}
+	// A certification workdir is intentionally ephemeral. Its write-ahead
+	// lifecycle ledger is not: persist it where --sweep discovers it so a
+	// crash or rate-limit restart can reconcile tagged resources rather than
+	// replaying a create from scratch.
+	opts.LedgerRoot = filepath.Join(root, ".polymetrics", "certifications", "ledger", connector)
 	externalProof := flags.first("external-proof") == "true"
 	if externalProof {
 		if os.Getenv(certificationExternalChildEnv) != "1" {
@@ -119,7 +124,7 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 			Stdout:                  rendered.String(),
 			ExitCode:                exitCodeForReport(rep),
 			Passed:                  rep.Passed,
-			FullParity:              true,
+			FullParity:              rep.FullParityVerified(),
 			PreparedValues:          certificationPreparedValues(opts),
 			HTTPExchanges:           runner.ObservedHTTPExchanges(),
 			FlowRoundTripReferences: flowReferences,
@@ -346,24 +351,34 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 	}
 
 	skip := parseCSVFlags(flags.values["skip"])
-	write := flags.first("write") == "true"
-	full := flags.first("full") == "true"
+	fullParity := flags.first("full-parity") == "true"
+	writeOnly := flags.first("write-only") == "true"
+	write := flags.first("write") == "true" || fullParity || writeOnly
+	full := flags.first("full") == "true" || fullParity
+	if writeOnly && fullParity {
+		return certify.Options{}, usageErrorf("--write-only cannot be combined with --full-parity")
+	}
 	for _, s := range skip {
 		if s == "write" {
+			if fullParity {
+				return certify.Options{}, usageErrorf("--full-parity cannot skip write")
+			}
 			write = false
 		}
 	}
 
 	return certify.Options{
-		Connector: connector,
-		Stream:    flags.first("stream"),
-		Limit:     limit,
-		Modes:     parseCSVFlags(flags.values["modes"]),
-		Config:    config,
-		SecretEnv: secretEnv,
-		KeepWork:  flags.first("keep-workdir") == "true",
-		Write:     write,
-		Full:      full,
+		Connector:         connector,
+		Stream:            flags.first("stream"),
+		Limit:             limit,
+		Modes:             parseCSVFlags(flags.values["modes"]),
+		Config:            config,
+		SecretEnv:         secretEnv,
+		KeepWork:          flags.first("keep-workdir") == "true",
+		Write:             write,
+		WriteOnly:         writeOnly,
+		Full:              full,
+		RequireFullParity: fullParity,
 	}, nil
 }
 
@@ -427,7 +442,7 @@ func runCertifySweep(ctx context.Context, root string, flags parsedFlags, stdout
 	results := make(map[string]certify.SweepResult, len(connectors))
 	for _, name := range connectors {
 		ledgerRoot := filepath.Join(root, ".polymetrics", "certifications", "ledger", name)
-		sweeper := certify.NewSweeper(certify.SweeperOptions{Root: ledgerRoot, OlderThan: olderThan})
+		sweeper := certify.NewSweeper(certify.SweeperOptions{Root: ledgerRoot, ProjectRoot: root, OlderThan: olderThan})
 		res, err := sweeper.Sweep(ctx)
 		if err != nil {
 			return fmt.Errorf("certify: sweep %s: %w", name, err)
@@ -491,6 +506,9 @@ func renderCertifyReportText(rep certify.Report) string {
 	if rep.Passed {
 		status = "PASS"
 	}
+	if rep.Mode == "partial_live" {
+		status = "PARTIAL"
+	}
 	fmt.Fprintf(&b, "Legacy certification run: %s [%s]\n", rep.Connector, status)
 	fmt.Fprintln(&b, "  This run does not set the generated connector certification status.")
 	fmt.Fprintf(&b, "  check:    %s\n", rep.Capabilities.Check.Result)
@@ -531,6 +549,10 @@ func renderCertifyReportText(rep certify.Report) string {
 		// so the text summary must not label them FAILED too.
 		if stage.Name == "fixture_conformance" || strings.HasPrefix(stage.Error, "skipped: ") {
 			fmt.Fprintf(&b, "  stage %s: skipped: %s\n", stage.Name, strings.TrimPrefix(stage.Error, "skipped: "))
+			continue
+		}
+		if strings.HasPrefix(stage.Error, "not_live: ") {
+			fmt.Fprintf(&b, "  stage %s: not live: %s\n", stage.Name, strings.TrimPrefix(stage.Error, "not_live: "))
 			continue
 		}
 		fmt.Fprintf(&b, "  stage %s: FAILED: %s\n", stage.Name, stage.Error)

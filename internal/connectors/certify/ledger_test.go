@@ -1,6 +1,7 @@
 package certify_test
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -74,6 +75,81 @@ func TestLedgerRecordCleanedMarksEntry(t *testing.T) {
 	}
 	if !status.Cleaned {
 		t.Errorf("StatusFor(%q).Cleaned = false, want true after RecordCleaned", tag)
+	}
+}
+
+func TestLedgerPersistsScenarioMutationReadBackAndCleanupState(t *testing.T) {
+	dir := t.TempDir()
+	ledger, err := certify.NewLedger(dir)
+	if err != nil {
+		t.Fatalf("NewLedger() error = %v", err)
+	}
+	const tag = "pm-cert-github-scenario01-1751450000"
+	if err := ledger.RecordPlanned(certify.LedgerEntry{
+		Action:     "update_issue",
+		Scenario:   "github_repository_safe_update_issue",
+		Tag:        tag,
+		Connector:  "github",
+		EntityHint: "issue",
+		ResourceID: "issue:42",
+	}); err != nil {
+		t.Fatalf("RecordPlanned() error = %v", err)
+	}
+	if err := ledger.RecordMutated(tag, "issue:42"); err != nil {
+		t.Fatalf("RecordMutated() error = %v", err)
+	}
+	if err := ledger.RecordReadBack(tag, "issue:42"); err != nil {
+		t.Fatalf("RecordReadBack() error = %v", err)
+	}
+	if err := ledger.RecordCleaned(tag); err != nil {
+		t.Fatalf("RecordCleaned() error = %v", err)
+	}
+
+	entries, err := certify.LoadLedger(dir)
+	if err != nil {
+		t.Fatalf("LoadLedger() error = %v", err)
+	}
+	status, ok := entries.StatusFor(tag)
+	if !ok {
+		t.Fatalf("StatusFor(%q) = absent", tag)
+	}
+	if status.Scenario != "github_repository_safe_update_issue" || status.ResourceID != "issue:42" || status.State != "cleaned" || !status.ReadBack || !status.Cleaned {
+		t.Fatalf("ledger status = %+v, want scenario/resource/mutated-readback-cleaned state", status)
+	}
+}
+
+func TestLedgerRetainsCapturedRecoveryBaselineAcrossLaterCheckpoints(t *testing.T) {
+	dir := t.TempDir()
+	ledger, err := certify.NewLedger(dir)
+	if err != nil {
+		t.Fatalf("NewLedger() error = %v", err)
+	}
+	const tag = "pm-cert-github-topics01-1751450000"
+	baseline := json.RawMessage(`{"baseline":["fixture-topic"]}`)
+	if err := ledger.RecordPlanned(certify.LedgerEntry{
+		Action: "replace_repo_topics", Scenario: "github_repository_topics", Tag: tag,
+		Connector: "github", EntityHint: "topics:" + tag, Recovery: baseline,
+	}); err != nil {
+		t.Fatalf("RecordPlanned(captured baseline) error = %v", err)
+	}
+	// The normal production action appends its own planned checkpoint after the
+	// baseline checkpoint. Loading must retain the earlier recovery material.
+	if err := ledger.RecordPlanned(certify.LedgerEntry{
+		Action: "replace_repo_topics", Scenario: "github_repository_topics", Tag: tag,
+		Connector: "github", EntityHint: "topics:" + tag,
+	}); err != nil {
+		t.Fatalf("RecordPlanned(production action) error = %v", err)
+	}
+	entries, err := certify.LoadLedger(dir)
+	if err != nil {
+		t.Fatalf("LoadLedger() error = %v", err)
+	}
+	status, ok := entries.StatusFor(tag)
+	if !ok {
+		t.Fatalf("StatusFor(%q) = absent", tag)
+	}
+	if got := string(status.Recovery); got != string(baseline) {
+		t.Fatalf("recovery baseline = %s, want %s", got, baseline)
 	}
 }
 

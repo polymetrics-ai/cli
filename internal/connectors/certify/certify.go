@@ -16,6 +16,12 @@ type Options struct {
 	Config    map[string]string // connector config for credentials add
 	SecretEnv map[string]string // field -> ENV name
 	KeepWork  bool
+	// LedgerRoot is the durable, caller-owned location for the append-only
+	// write lifecycle ledger. An empty value retains the self-contained
+	// workdir behaviour used by fixture tests; production CLI callers set it
+	// below .polymetrics/certifications/ledger/<connector> so --sweep and a
+	// resumed run see the same checkpoints after the ephemeral workdir exits.
+	LedgerRoot string
 
 	// Write enables the create-then-cleanup write protocol (stages 12-17,
 	// design §C). When false, or when the connector has no available
@@ -25,6 +31,13 @@ type Options struct {
 	// must never fail the report).
 	Write bool
 
+	// WriteOnly executes a selected, self-cleaning live write scenario through
+	// the normal certification entry point. It retains credential setup and the
+	// reverse plan/preview/run path but omits unrelated source/schedule checks,
+	// allowing rate-bounded repository waves to resume independently. It is
+	// intentionally incompatible with full-parity claims.
+	WriteOnly bool
+
 	// Full enables the comprehensive sweep: every stream (not just the
 	// first), every write pairing (not just the first), binary downloads,
 	// and direct reads. The existing single-pairing write stages still run
@@ -32,6 +45,12 @@ type Options struct {
 	// remaining pairings. See
 	// docs/plans/connector-complete-testing-and-mail-setup-plan.md.
 	Full bool
+
+	// RequireFullParity is set only by the public --full-parity request. It
+	// implies Full and Write, then requires the completed report to prove every
+	// applicable stage/action rather than merely rendering a full-run-shaped
+	// artifact.
+	RequireFullParity bool
 
 	// ObserveHTTP retains bounded, exact HTTP exchanges in process memory for
 	// an external-binary proof. It is deliberately not a user-facing capture
