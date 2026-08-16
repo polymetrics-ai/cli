@@ -35,6 +35,13 @@ recorded browser-only provisioning decision remains open for the larger waves.
   certify-timing` passes at 33.473s total (8.902s certify, 24.571s CLI) against
   the unchanged 210s budget. The lightweight discovery fails if it finds no
   declaration or any declaration cannot load through `certificationWriteWaveFor`.
+- [x] Round-two rebase/matrix check: absorbed `ff6a8710`; the CI report that
+  named malformed MySQL actually logged a stale Postgres certification shard.
+  The unchanged exact test passes at the original timing commit, its parent,
+  and the rebased head; the rebased `cmd/connectorgen` package and
+  certification-matrix drift check pass. The full `make test` command reached
+  the unrelated CLI package timeout under whole-suite concurrency, while its
+  prescribed separate `go test -timeout 20m ./internal/cli` fallback passes.
 - [x] Full-parity now implies `--full --write`, rejects `--skip write`, and a
   fresh external HTTPS child refuses to write a proof artifact for incomplete
   write coverage.
