@@ -40,9 +40,14 @@ type postgresManagedTargetApprovalBinding struct {
 	SourceConfiguration string            `json:"source_configuration_digest"`
 	Destination         string            `json:"destination"`
 	PrimaryKey          []string          `json:"primary_key,omitempty"`
-	CredentialRevision  string            `json:"credential_revision"`
-	ConfigurationDigest string            `json:"configuration_digest"`
-	ApprovalScope       string            `json:"approval_scope"`
+	// TransformPlanHash binds the normalized closed mapping into the plan,
+	// preview digest, approval target and durable authorization scope. It is
+	// deliberately a hash only; no expression or source SQL reaches approval
+	// persistence.
+	TransformPlanHash   string `json:"transform_plan_hash,omitempty"`
+	CredentialRevision  string `json:"credential_revision"`
+	ConfigurationDigest string `json:"configuration_digest"`
+	ApprovalScope       string `json:"approval_scope"`
 }
 
 func (a *App) PlanPostgresManagedTargetTransport(ctx context.Context, connectionName, streamName string) (ReversePlan, error) {
@@ -261,6 +266,7 @@ func (a *App) postgresManagedTargetAuthorizationScope(conn Connection, streamNam
 			"source_configuration_digest": binding.SourceConfiguration,
 			"sync_mode":                   string(mode.ContractMode),
 			"transport_binding_sha256":    plan.TransportBindingSHA256,
+			"transform_plan_hash":         binding.TransformPlanHash,
 		},
 		WriteAction:                    plan.Action,
 		DestinationConfigurationDigest: runtime.ConfigurationDigest,
@@ -388,7 +394,7 @@ func (a *App) preparePostgresManagedTargetApproval(ctx context.Context, connecti
 		SourceCredential: sourceRuntime.CredentialRevision, SourceConfiguration: sourceRuntime.ConfigurationDigest,
 		Destination: conn.Destination.Connector,
 		PrimaryKey:  append([]string(nil), stream.PrimaryKey...), CredentialRevision: runtime.CredentialRevision,
-		ConfigurationDigest: runtime.ConfigurationDigest, ApprovalScope: runtime.WriteApprovalScope,
+		TransformPlanHash: stream.TransformPlanHash, ConfigurationDigest: runtime.ConfigurationDigest, ApprovalScope: runtime.WriteApprovalScope,
 	}
 	return conn, stream, mode, runtime, binding, nil
 }

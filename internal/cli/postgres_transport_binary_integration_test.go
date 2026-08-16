@@ -9,15 +9,18 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
 	"sync"
+	"syscall"
 	"testing"
 	"time"
 
@@ -39,6 +42,10 @@ const (
 	githubCommitTransportMaxPagesEnv = "POLYMETRICS_GITHUB_COMMITS_MAX_PAGES"
 	githubCommitTransportPageSize    = 100
 	githubCommitTransportMinimumRows = 99345
+
+	postgresFastPathProofLogicalBytes = int64(5_000_000_000)
+	postgresFastPathPayloadBytes      = 1 << 20
+	postgresFastPathRows              = 5120
 )
 
 var errGitHubCommitScaleMaxPages = errors.New("GitHub commit scale max pages must be unlimited or a positive integer")
@@ -288,6 +295,446 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	if emptyStates := postgresTransportStreamStates(t, root); !strings.Contains(emptyStates, "postgres-empty") || !strings.Contains(emptyStates, "public.empty_events") {
 		t.Fatalf("empty PostgreSQL run did not durably advance its checkpoint: %s", emptyStates)
 	}
+}
+
+// TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage characterizes the
+// shipped full-overwrite route with two bounded source pages. Its target query
+// is deliberately the final-content assertion: a per-page TRUNCATE leaves
+// only the second page and must fail this test rather than be mistaken for a
+// successful run.
+func TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage(t *testing.T) {
+	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
+		t.Skip("database integration is opt-in")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+	harness := newPostgresTransportHarness(t)
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Errorf("close full-overwrite PostgreSQL harness: %v", err)
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatalf("start full-overwrite PostgreSQL harness: %v", err)
+	}
+	admin := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
+	defer func() { _ = admin.Close(context.Background()) }()
+	if _, err := admin.Exec(ctx, "CREATE DATABASE "+postgresTransportTargetDB); err != nil {
+		t.Fatalf("create full-overwrite target database: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `CREATE TABLE public.overwrite_events (id bigint PRIMARY KEY, sequence bigint NOT NULL, label text NOT NULL)`); err != nil {
+		t.Fatalf("create full-overwrite source table: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `INSERT INTO public.overwrite_events (id, sequence, label) VALUES (1, 10, 'page-one-a'), (2, 20, 'page-one-b'), (3, 30, 'page-two')`); err != nil {
+		t.Fatalf("seed full-overwrite source rows: %v", err)
+	}
+	target := waitForPostgresTransport(t, ctx, endpoint, postgresTransportTargetDB, postgresTransportUser)
+	defer func() { _ = target.Close(context.Background()) }()
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "project")
+	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-source", postgresTransportSourceDB)
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
+	mustPostgresTransportPM(t, binary, "",
+		"connections", "create", "postgres-full-overwrite",
+		"--source", "postgres:pg-source", "--destination", "postgres:pg-target",
+		"--stream", "public.overwrite_events", "--sync-mode", "full_overwrite",
+		"--cursor", "sequence", "--primary-key", "id", "--table", "overwrite_events",
+		"--root", root, "--json")
+
+	run := runApprovedPostgresTransportBinary(t, binary, root, "postgres-full-overwrite", "public.overwrite_events", 2).Run
+	if run.Status != "completed" || run.RecordsRead != 3 || run.RecordsLoaded != 3 {
+		t.Fatalf("two-page full-overwrite binary run = %#v, want completed 3-row transfer", run)
+	}
+	schema, relation, count := postgresTransportTargetRelation(t, ctx, target)
+	if count != 3 || postgresTransportFullOverwriteReceiptCount(t, ctx, target, schema) != 1 {
+		t.Fatalf("two-page full-overwrite target = %s.%s rows=%d, want all 3 rows and one durable receipt", schema, relation, count)
+	}
+	qualified := pgx.Identifier{schema, relation}.Sanitize()
+	var ids []int64
+	if err := target.QueryRow(ctx, "SELECT array_agg(id ORDER BY id) FROM "+qualified).Scan(&ids); err != nil {
+		t.Fatalf("read two-page full-overwrite target rows: %v", err)
+	}
+	if len(ids) != 3 || ids[0] != 1 || ids[1] != 2 || ids[2] != 3 {
+		t.Fatalf("two-page full-overwrite target IDs = %v, want every source page [1 2 3]", ids)
+	}
+}
+
+// TestPMBinaryPostgresTransformedFullOverwriteUsesArrowCOPY proves the actual
+// shipped transformed route from CLI construction, rather than wiring native
+// source/destination objects in a test. It requires two source ranges, a
+// realistic typed projection/filter, durable Parquet segments, PostgreSQL's
+// binary COPY apply, one publish receipt, and checkpoint-after-readback.
+func TestPMBinaryPostgresTransformedFullOverwriteUsesArrowCOPY(t *testing.T) {
+	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
+		t.Skip("database integration is opt-in")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+	harness := newPostgresTransportHarness(t)
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Errorf("close transformed full-overwrite PostgreSQL harness: %v", err)
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatalf("start transformed full-overwrite PostgreSQL harness: %v", err)
+	}
+	admin := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
+	defer func() { _ = admin.Close(context.Background()) }()
+	if _, err := admin.Exec(ctx, "CREATE DATABASE "+postgresTransportTargetDB); err != nil {
+		t.Fatalf("create transformed full-overwrite target database: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `CREATE TABLE public.transformed_events (id bigint PRIMARY KEY, sequence bigint NOT NULL, amount bigint NOT NULL, status text NOT NULL, updated_at timestamptz NOT NULL)`); err != nil {
+		t.Fatalf("create transformed full-overwrite source table: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `INSERT INTO public.transformed_events (id, sequence, amount, status, updated_at) VALUES (1, 10, 11, 'new', '2026-08-01T10:00:00Z'), (2, 20, 22, 'skip', '2026-08-02T10:00:00Z'), (3, 30, 33, 'done', '2026-08-03T10:00:00Z'), (4, 40, 44, 'skip', '2026-08-04T10:00:00Z')`); err != nil {
+		t.Fatalf("seed transformed full-overwrite source rows: %v", err)
+	}
+	target := waitForPostgresTransport(t, ctx, endpoint, postgresTransportTargetDB, postgresTransportUser)
+	defer func() { _ = target.Close(context.Background()) }()
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "project")
+	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-source", postgresTransportSourceDB)
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
+	transformFile := filepath.Join(t.TempDir(), "transformed-events.json")
+	if err := os.WriteFile(transformFile, []byte(`{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"},{"expr":{"date":"updated_at"},"target":"event_date","type":"date"},{"expr":{"cast":{"multiply":["amount",100]}},"target":"amount_cents","type":"int64","rounding":"exact"},{"expr":{"upper":"status"},"target":"status","type":"string"}],"where":{"not_equal":[{"mod":["id",2]},0]}}`), 0o600); err != nil {
+		t.Fatalf("write closed transform fixture: %v", err)
+	}
+	mustPostgresTransportPM(t, binary, "",
+		"connections", "create", "postgres-transformed-full-overwrite",
+		"--source", "postgres:pg-source", "--destination", "postgres:pg-target",
+		"--stream", "public.transformed_events", "--sync-mode", "full_overwrite",
+		"--cursor", "sequence", "--primary-key", "id", "--table", "transformed_events",
+		"--transform-file", transformFile, "--root", root, "--json")
+
+	run := runApprovedPostgresTransportBinary(t, binary, root, "postgres-transformed-full-overwrite", "public.transformed_events", 2).Run
+	if run.Status != "completed" || run.RecordsRead != 4 || run.RecordsLoaded != 2 {
+		t.Fatalf("transformed two-page full-overwrite binary run = %#v, want completed source=4 transformed=2", run)
+	}
+	if measurement := run.TransportPhaseMeasurement; measurement == nil || measurement.SourceLogicalBytes <= 0 || measurement.TransformElapsedNanos <= 0 || measurement.ParquetCloseElapsedNanos <= 0 || measurement.BinaryCOPYElapsedNanos <= 0 || measurement.PublishReceiptElapsedNanos <= 0 || measurement.CheckpointElapsedNanos <= 0 || measurement.CriticalPathElapsedNanos <= 0 {
+		t.Fatalf("transformed run phase measurement = %#v, want durable logical-byte and all phase counters", measurement)
+	}
+	schema, relation, count := postgresTransportTargetRelation(t, ctx, target)
+	if count != 2 {
+		t.Fatalf("transformed target = %s.%s rows=%d, want filtered transformed rows", schema, relation, count)
+	}
+	qualified := pgx.Identifier{schema, relation}.Sanitize()
+	rows, err := target.Query(ctx, "SELECT event_id, event_date::text, amount_cents, status FROM "+qualified+" ORDER BY event_id")
+	if err != nil {
+		t.Fatalf("read transformed target rows: %v", err)
+	}
+	defer rows.Close()
+	var got []string
+	for rows.Next() {
+		var id, cents int64
+		var date string
+		var status string
+		if err := rows.Scan(&id, &date, &cents, &status); err != nil {
+			t.Fatal(err)
+		}
+		got = append(got, strconv.FormatInt(id, 10)+"/"+date+"/"+strconv.FormatInt(cents, 10)+"/"+status)
+	}
+	if err := rows.Err(); err != nil {
+		t.Fatal(err)
+	}
+	if want := []string{"1/2026-08-01/1100/NEW", "3/2026-08-03/3300/DONE"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("transformed durable target rows = %v, want %v", got, want)
+	}
+	if receipts := postgresTransportFullOverwriteReceiptCount(t, ctx, target, schema); receipts != 1 {
+		t.Fatalf("full-overwrite receipt count = %d, want one receipt in publish transaction", receipts)
+	}
+}
+
+// TestPMBinaryPostgresTransformedFullOverwriteFiveGigabyteProof is the
+// captain's opt-in acceptance harness. Its repeated payload is intentionally
+// 5+ GB of logical Arrow source bytes while remaining compact on PostgreSQL
+// and Zstd storage, so it measures extraction, closed typed transformation,
+// Parquet close/fsync, binary COPY, receipt publication, and checkpoint—not a
+// host disk exhaustion. Invoke only after reclaiming dangling container images:
+//
+// POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_PG_FASTPATH_5GB=1 \
+// POLYMETRICS_CONTAINER_RUNTIME=docker \
+// POLYMETRICS_CONTAINER_ENDPOINT=unix:///.../docker.sock \
+//
+//	go test -tags=databaseintegration -count=1 -timeout 45m -v ./internal/cli \
+//	  -run '^TestPMBinaryPostgresTransformedFullOverwriteFiveGigabyteProof$'
+//
+// "Input" is source logical bytes: the pre-transform Arrow buffers for the
+// projected source fields. It excludes Parquet, pgwire, target storage, and
+// checkpoint bytes. Individual phase intervals can overlap; gate rates use
+// critical_path_elapsed_ns, the end-to-end wall clock.
+func TestPMBinaryPostgresTransformedFullOverwriteFiveGigabyteProof(t *testing.T) {
+	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" || os.Getenv("POLYMETRICS_PG_FASTPATH_5GB") != "1" {
+		t.Skip("5 GB PostgreSQL fast-path proof is opt-in")
+	}
+	if available := postgresFastPathAvailableBytes(t); available < 3<<30 {
+		t.Fatalf("hard stop: host free space %d below 3 GiB safety reserve", available)
+	}
+	proof := postgresFastPathProofReport{Status: "starting", InputBytesDefinition: "pre-transform projected source Arrow buffer bytes; excludes Parquet, pgwire, target storage, and checkpoint bytes", GateDecimalMBPerSecond: 200, GateCriticalPathNanos: (25 * time.Second).Nanoseconds()}
+	defer func() { postgresFastPathWriteProofReport(t, proof) }()
+	ctx, cancel := context.WithTimeout(context.Background(), 45*time.Minute)
+	defer cancel()
+	harness := newPostgresTransportHarness(t)
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Errorf("close 5 GB PostgreSQL proof harness: %v", err)
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatalf("start 5 GB PostgreSQL proof harness: %v", err)
+	}
+	admin := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
+	defer func() { _ = admin.Close(context.Background()) }()
+	if _, err := admin.Exec(ctx, "CREATE DATABASE "+postgresTransportTargetDB); err != nil {
+		t.Fatalf("create 5 GB proof target database: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `CREATE TABLE public.fastpath_events (id bigint PRIMARY KEY, sequence bigint NOT NULL, amount bigint NOT NULL, status text NOT NULL, updated_at timestamptz NOT NULL, payload text NOT NULL)`); err != nil {
+		t.Fatalf("create 5 GB proof source table: %v", err)
+	}
+	if _, err := admin.Exec(ctx, fmt.Sprintf(`INSERT INTO public.fastpath_events (id, sequence, amount, status, updated_at, payload)
+SELECT value, value * 10, value, CASE WHEN value %% 10 = 0 THEN 'skip' ELSE 'active' END,
+       '2026-08-01T00:00:00Z'::timestamptz + value * interval '1 second',
+       repeat('x', %d)
+FROM generate_series(1, %d) AS value`, postgresFastPathPayloadBytes, postgresFastPathRows)); err != nil {
+		t.Fatalf("seed 5 GB logical proof source: %v", err)
+	}
+	proof.Status = "source_seeded"
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "project")
+	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-source", postgresTransportSourceDB)
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
+
+	identity := postgresFastPathProofPlan(t, `{"version":1,"select":[{"source":"id","target":"id","type":"int64"},{"source":"sequence","target":"sequence","type":"int64"},{"source":"amount","target":"amount","type":"int64"},{"source":"status","target":"status","type":"string"},{"source":"updated_at","target":"updated_at","type":"timestamp"},{"source":"payload","target":"payload","type":"string"}]}`)
+	realistic := postgresFastPathProofPlan(t, `{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"},{"source":"sequence","target":"sequence","type":"int64"},{"expr":{"date":"updated_at"},"target":"event_date","type":"date"},{"expr":{"cast":{"multiply":["amount",100]}},"target":"amount_cents","type":"int64","rounding":"exact"},{"expr":{"upper":"status"},"target":"status","type":"string"},{"source":"payload","target":"payload","type":"string"}],"where":{"not_equal":[{"mod":["id",10]},0]}}`)
+
+	identityRun, err := postgresFastPathProofRun(ctx, binary, root, "postgres-fastpath-identity", identity, "fastpath_identity")
+	if err != nil {
+		proof.Failure = err.Error()
+		t.Fatal(err)
+	}
+	proof.Identity = identityRun
+	proof.Status = "identity_completed"
+	t.Logf("FASTPATH_PROOF identity input_bytes=%d decimal_mb_s=%.2f mib_s=%.2f wall_ns=%d source_ns=%d transform_ns=%d parquet_ns=%d copy_ns=%d index_constraint_ns=%d publish_ns=%d checkpoint_ns=%d peak_host_disk_used=%d min_host_free=%d", identityRun.Measurement.SourceLogicalBytes, identityRun.Measurement.InputDecimalMBPerSecond, identityRun.Measurement.InputMiBPerSecond, identityRun.Measurement.CriticalPathElapsedNanos, identityRun.Measurement.SourceReadElapsedNanos, identityRun.Measurement.TransformElapsedNanos, identityRun.Measurement.ParquetCloseElapsedNanos, identityRun.Measurement.BinaryCOPYElapsedNanos, identityRun.Measurement.IndexConstraintBuildElapsedNanos, identityRun.Measurement.PublishReceiptElapsedNanos, identityRun.Measurement.CheckpointElapsedNanos, identityRun.PeakDiskUsed, identityRun.MinimumFree)
+	realisticRun, err := postgresFastPathProofRun(ctx, binary, root, "postgres-fastpath-realistic", realistic, "fastpath_realistic")
+	if err != nil {
+		proof.Failure = err.Error()
+		t.Fatal(err)
+	}
+	proof.Realistic = realisticRun
+	proof.Status = "realistic_completed"
+	if realisticRun.Measurement.SourceLogicalBytes < postgresFastPathProofLogicalBytes {
+		proof.Status = "gate_missed"
+		proof.Failure = fmt.Sprintf("realistic input logical bytes %d below required %d", realisticRun.Measurement.SourceLogicalBytes, postgresFastPathProofLogicalBytes)
+		t.Fatalf("realistic input logical bytes = %d, want at least %d", realisticRun.Measurement.SourceLogicalBytes, postgresFastPathProofLogicalBytes)
+	}
+	if realisticRun.Measurement.CriticalPathElapsedNanos > (25*time.Second).Nanoseconds() || realisticRun.Measurement.InputDecimalMBPerSecond < 200 {
+		proof.Status = "gate_missed"
+		proof.Failure = fmt.Sprintf("realistic 5 GB gate missed: %.2f decimal MB/s, %.2f MiB/s, wall_ns=%d", realisticRun.Measurement.InputDecimalMBPerSecond, realisticRun.Measurement.InputMiBPerSecond, realisticRun.Measurement.CriticalPathElapsedNanos)
+		t.Fatalf("realistic 5 GB gate missed: input_bytes=%d wall_ns=%d decimal_mb_s=%.2f mib_s=%.2f; phase source=%d transform=%d parquet=%d copy=%d publish=%d checkpoint=%d",
+			realisticRun.Measurement.SourceLogicalBytes, realisticRun.Measurement.CriticalPathElapsedNanos, realisticRun.Measurement.InputDecimalMBPerSecond, realisticRun.Measurement.InputMiBPerSecond,
+			realisticRun.Measurement.SourceReadElapsedNanos, realisticRun.Measurement.TransformElapsedNanos, realisticRun.Measurement.ParquetCloseElapsedNanos, realisticRun.Measurement.BinaryCOPYElapsedNanos, realisticRun.Measurement.PublishReceiptElapsedNanos, realisticRun.Measurement.CheckpointElapsedNanos)
+	}
+	t.Logf("FASTPATH_PROOF realistic input_bytes=%d decimal_mb_s=%.2f mib_s=%.2f wall_ns=%d source_ns=%d transform_ns=%d parquet_ns=%d copy_ns=%d index_constraint_ns=%d publish_ns=%d checkpoint_ns=%d peak_host_disk_used=%d min_host_free=%d", realisticRun.Measurement.SourceLogicalBytes, realisticRun.Measurement.InputDecimalMBPerSecond, realisticRun.Measurement.InputMiBPerSecond, realisticRun.Measurement.CriticalPathElapsedNanos, realisticRun.Measurement.SourceReadElapsedNanos, realisticRun.Measurement.TransformElapsedNanos, realisticRun.Measurement.ParquetCloseElapsedNanos, realisticRun.Measurement.BinaryCOPYElapsedNanos, realisticRun.Measurement.IndexConstraintBuildElapsedNanos, realisticRun.Measurement.PublishReceiptElapsedNanos, realisticRun.Measurement.CheckpointElapsedNanos, realisticRun.PeakDiskUsed, realisticRun.MinimumFree)
+	proof.Status = "passed"
+}
+
+type postgresFastPathProofResult struct {
+	Measurement  *pmapp.TransportPhaseMeasurement `json:"measurement"`
+	PeakDiskUsed int64                            `json:"peak_host_disk_used_bytes"`
+	MinimumFree  int64                            `json:"minimum_host_free_bytes"`
+}
+
+// postgresFastPathProofReport is written only when the opt-in acceptance
+// command sets POLYMETRICS_PG_FASTPATH_5GB_REPORT. It makes the two mappings'
+// phase results reviewable without relying on a terminal scrollback, while the
+// production run itself still persists its measurement before cleanup.
+type postgresFastPathProofReport struct {
+	Status                 string                      `json:"status"`
+	Failure                string                      `json:"failure,omitempty"`
+	InputBytesDefinition   string                      `json:"input_bytes_definition"`
+	GateDecimalMBPerSecond float64                     `json:"gate_decimal_mb_per_second"`
+	GateCriticalPathNanos  int64                       `json:"gate_critical_path_ns"`
+	Identity               postgresFastPathProofResult `json:"identity"`
+	Realistic              postgresFastPathProofResult `json:"realistic"`
+}
+
+func postgresFastPathWriteProofReport(t *testing.T, report postgresFastPathProofReport) {
+	t.Helper()
+	path := strings.TrimSpace(os.Getenv("POLYMETRICS_PG_FASTPATH_5GB_REPORT"))
+	if path == "" {
+		return
+	}
+	encoded, err := json.MarshalIndent(report, "", "  ")
+	if err != nil {
+		t.Fatalf("encode 5 GB fast-path proof report: %v", err)
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		t.Fatalf("create 5 GB fast-path proof report directory: %v", err)
+	}
+	if err := os.WriteFile(path, append(encoded, '\n'), 0o600); err != nil {
+		t.Fatalf("write 5 GB fast-path proof report: %v", err)
+	}
+}
+
+func postgresFastPathProofPlan(t *testing.T, raw string) string {
+	t.Helper()
+	path := filepath.Join(t.TempDir(), "transform.json")
+	if err := os.WriteFile(path, []byte(raw), 0o600); err != nil {
+		t.Fatalf("write fast-path proof transform: %v", err)
+	}
+	return path
+}
+
+func postgresFastPathProofRun(ctx context.Context, binary, root, connection, transformFile, table string) (postgresFastPathProofResult, error) {
+	var result postgresFastPathProofResult
+	if output, err := runTransportPM(binary, "",
+		"connections", "create", connection,
+		"--source", "postgres:pg-source", "--destination", "postgres:pg-target",
+		"--stream", "public.fastpath_events", "--sync-mode", "full_overwrite",
+		"--cursor", "sequence", "--primary-key", "id", "--table", table,
+		"--transform-file", transformFile, "--root", root, "--json"); err != nil {
+		return result, fmt.Errorf("create %s fast-path connection: %w", connection, err)
+	} else if strings.TrimSpace(output) == "" {
+		return result, fmt.Errorf("create %s fast-path connection produced no output", connection)
+	}
+	planOutput, err := runTransportPM(binary, "", "etl", "transport", "postgres-managed-target", "plan", "--connection", connection, "--stream", "public.fastpath_events", "--root", root, "--json")
+	if err != nil {
+		return result, fmt.Errorf("plan %s fast-path run: %w", connection, err)
+	}
+	var planned struct {
+		Plan struct {
+			ID string `json:"id"`
+		} `json:"plan"`
+	}
+	if err := json.Unmarshal([]byte(planOutput), &planned); err != nil || planned.Plan.ID == "" {
+		return result, fmt.Errorf("decode %s fast-path plan", connection)
+	}
+	preview, err := runTransportPM(binary, "", "etl", "transport", "postgres-managed-target", "preview", planned.Plan.ID, "--root", root)
+	if err != nil {
+		return result, fmt.Errorf("preview %s fast-path run: %w", connection, err)
+	}
+	const marker = "Approval token: "
+	index := strings.Index(preview, marker)
+	if index < 0 {
+		return result, fmt.Errorf("preview %s fast-path run issued no approval token", connection)
+	}
+	token := strings.TrimSpace(strings.SplitN(preview[index+len(marker):], "\n", 2)[0])
+	if token == "" {
+		return result, fmt.Errorf("preview %s fast-path run issued an empty approval token", connection)
+	}
+	monitor, err := newPostgresFastPathDiskMonitor()
+	if err != nil {
+		return result, fmt.Errorf("monitor %s fast-path run disk: %w", connection, err)
+	}
+	runOutput, err := runPostgresTransportApproval(binary, root, connection, "public.fastpath_events", 128, approvedPostgresTransportRun{PlanID: planned.Plan.ID, Token: token})
+	peakUsed, minimumFree, monitorErr := monitor.Stop()
+	if monitorErr != nil {
+		return result, fmt.Errorf("monitor %s fast-path run disk: %w", connection, monitorErr)
+	}
+	if minimumFree < 3<<30 {
+		return result, fmt.Errorf("hard stop: host free space %d fell below 3 GiB safety reserve", minimumFree)
+	}
+	if err != nil {
+		return result, fmt.Errorf("run %s fast-path transport: %w", connection, err)
+	}
+	var envelope struct {
+		Run postgresTransportRun `json:"run"`
+	}
+	if err := json.Unmarshal([]byte(runOutput), &envelope); err != nil {
+		return result, fmt.Errorf("decode %s fast-path run", connection)
+	}
+	approved := envelope.Run
+	if approved.Status != "completed" || approved.RecordsRead != postgresFastPathRows || approved.TransportPhaseMeasurement == nil {
+		return result, fmt.Errorf("%s fast-path run was not completed with a durable measurement", connection)
+	}
+	if err := ctx.Err(); err != nil {
+		return result, fmt.Errorf("%s fast-path proof context ended: %w", connection, err)
+	}
+	return postgresFastPathProofResult{Measurement: approved.TransportPhaseMeasurement, PeakDiskUsed: peakUsed, MinimumFree: minimumFree}, nil
+}
+
+type postgresFastPathDiskMonitor struct {
+	stop    chan struct{}
+	done    chan struct{}
+	mu      sync.Mutex
+	total   int64
+	minimum int64
+	err     error
+	once    sync.Once
+}
+
+func newPostgresFastPathDiskMonitor() (*postgresFastPathDiskMonitor, error) {
+	total, available, err := postgresFastPathDiskSpace()
+	if err != nil {
+		return nil, err
+	}
+	monitor := &postgresFastPathDiskMonitor{stop: make(chan struct{}), done: make(chan struct{}), total: total, minimum: available}
+	go func() {
+		defer close(monitor.done)
+		ticker := time.NewTicker(time.Second)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-monitor.stop:
+				return
+			case <-ticker.C:
+				_, available, err := postgresFastPathDiskSpace()
+				monitor.mu.Lock()
+				if err != nil && monitor.err == nil {
+					monitor.err = err
+				}
+				if err == nil && available < monitor.minimum {
+					monitor.minimum = available
+				}
+				monitor.mu.Unlock()
+			}
+		}
+	}()
+	return monitor, nil
+}
+
+func (m *postgresFastPathDiskMonitor) Stop() (int64, int64, error) {
+	m.once.Do(func() {
+		close(m.stop)
+		<-m.done
+	})
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return m.total - m.minimum, m.minimum, m.err
+}
+
+func postgresFastPathAvailableBytes(t *testing.T) int64 {
+	t.Helper()
+	_, available, err := postgresFastPathDiskSpace()
+	if err != nil {
+		t.Fatalf("measure host disk for fast-path proof: %v", err)
+	}
+	return available
+}
+
+func postgresFastPathDiskSpace() (int64, int64, error) {
+	var stat syscall.Statfs_t
+	if err := syscall.Statfs(".", &stat); err != nil {
+		return 0, 0, err
+	}
+	total := int64(uint64(stat.Blocks) * uint64(stat.Bsize))
+	available := int64(uint64(stat.Bavail) * uint64(stat.Bsize))
+	return total, available, nil
 }
 
 // TestPMBinaryExecutesAuthenticatedGitHubWarehousePostgres proves the
@@ -1105,6 +1552,17 @@ func mustPostgresTransportPM(t *testing.T, binary, stdin string, args ...string)
 
 func postgresTransportTargetState(t *testing.T, ctx context.Context, target *pgx.Conn) (string, string, int, string) {
 	t.Helper()
+	schema, relation, count := postgresTransportTargetRelation(t, ctx, target)
+	ledger := pgx.Identifier{schema, "__polymetrics_delivery_ledger"}.Sanitize()
+	var delivery string
+	if err := target.QueryRow(ctx, "SELECT delivery_id FROM "+ledger+" LIMIT 1").Scan(&delivery); err != nil {
+		t.Fatalf("read managed target delivery receipt: %v", err)
+	}
+	return schema, relation, count, delivery
+}
+
+func postgresTransportTargetRelation(t *testing.T, ctx context.Context, target *pgx.Conn) (string, string, int) {
+	t.Helper()
 	var schema, relation string
 	err := target.QueryRow(ctx, `SELECT n.nspname, c.relname
 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
@@ -1118,12 +1576,17 @@ ORDER BY n.nspname, c.relname LIMIT 1`).Scan(&schema, &relation)
 	if err := target.QueryRow(ctx, "SELECT count(*) FROM "+qualified).Scan(&count); err != nil {
 		t.Fatalf("count managed target rows: %v", err)
 	}
-	ledger := pgx.Identifier{schema, "__polymetrics_delivery_ledger"}.Sanitize()
-	var delivery string
-	if err := target.QueryRow(ctx, "SELECT delivery_id FROM "+ledger+" LIMIT 1").Scan(&delivery); err != nil {
-		t.Fatalf("read managed target delivery receipt: %v", err)
+	return schema, relation, count
+}
+
+func postgresTransportFullOverwriteReceiptCount(t *testing.T, ctx context.Context, target *pgx.Conn, schema string) int {
+	t.Helper()
+	receiptTable := pgx.Identifier{schema, "__polymetrics_full_overwrite_receipt"}.Sanitize()
+	var receipts int
+	if err := target.QueryRow(ctx, "SELECT count(*) FROM "+receiptTable).Scan(&receipts); err != nil {
+		t.Fatalf("read full-overwrite receipt count: %v", err)
 	}
-	return schema, relation, count, delivery
+	return receipts
 }
 
 func assertPostgresTransportWarehouse(t *testing.T, root string) {

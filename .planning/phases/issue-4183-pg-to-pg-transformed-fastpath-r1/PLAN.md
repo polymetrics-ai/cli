@@ -15,7 +15,7 @@ GSD uses the inline/manual fallback because this worker has no compatible Pi run
 3. **R3 closed transform:** Write failing happy/bad/edge tests for deterministic normalized `TransformPlanV1`, plan hash persistence/binding, pre-I/O validation, and the connection-create `--transform-file` surface. Implement the closed language and all applicable CLI help/manual/website/generated-doc parity.
 4. **R4 PostgreSQL adapters:** Write failing live/container tests for range extraction, Arrow/DuckDB transformation, Parquet segment durability, binary COPY to logged shadows, one publish/receipt transaction, and checkpoint-after-reconciliation. Implement through the neutral ports, preserving old interfaces and modes.
 5. **R5 durability/measurement:** Write failing success/failure/replay/credit/cancellation tests that observe durable phase counters, no run deadline, per-unit deadlines, receipt-before-checkpoint ordering, and exact typed refusals before I/O. Implement payload-free phase timing/counters and machine-readable MB/s/MiB/s output.
-6. **R6 proof harness:** Add the opt-in two-container binary correctness test and the tagged 2–3 GB external-host harness. Include transformed-versus-identity reporting, measured logical-byte preflight, zero-row-INSERT protocol assertions, integrity aggregates, and an explicit skip when the opt-in is absent.
+6. **R6 proof harness:** Add the opt-in two-container binary correctness test and the tagged 5 GB external-host harness (≤25.0 s at the 200 MB/s gate). Include transformed-versus-identity reporting, measured logical-byte preflight, peak-disk reporting, a machine-readable report before cleanup, and an explicit skip when the opt-in is absent. The harness refuses to start below 3 GiB free disk; the operator reclaims only enumerated dangling Docker images before invoking it. The source stays present for the identity/realistic comparison and the harness container cleanup then removes it. Add MySQL only if its extractor implements the existing neutral port with no substrate change.
 
 ## Non-goals
 
@@ -30,8 +30,7 @@ No object-store source, generic SQL or HTTP writes, non-overwrite fast modes, CD
 
 ## CLI parity checklist
 
-- [ ] `pm connections create --help` and `pm help connections` document `--transform-file` and its closed, no-arbitrary-SQL contract.
-- [ ] Bare namespace behavior and invalid-action behavior remain tested if the touched command group exposes either.
-- [ ] `docs/cli/**`, website docs, generated help/manual/index artifacts, and transcript tests match the runtime help.
+- [x] `pm connections create --help` and `pm help connections` document `--transform-file` and its closed, no-arbitrary-SQL contract.
+- [x] Bare namespace behavior remains available; invalid-action behavior is unchanged because this slice adds a create flag, not a namespace/action.
+- [x] `docs/cli/**`, website docs, generated help/manual/index artifacts, and transcript tests match the runtime help.
 - [ ] PR body records runtime help, docs/website grep/generator evidence, and any true not-applicable surface.
-

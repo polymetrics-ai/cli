@@ -11,7 +11,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/apache/arrow-go/v18/arrow"
+	"github.com/apache/arrow-go/v18/arrow/array"
+	"github.com/apache/arrow-go/v18/arrow/memory"
+
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -279,6 +284,157 @@ func TestOrchestratorDispatchesFourClosedPairingsWithoutPairBranches(t *testing.
 				t.Fatalf("warehouse stage provider record = %#v, want unchanged provider payload", got)
 			}
 		})
+	}
+}
+
+func TestOrchestratorFullOverwritePublishesAllBoundedPagesBeforeOneCheckpoint(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{
+		Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace",
+	}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	first := testCheckpoint(pair.source.Name())
+	second := testCheckpoint(pair.source.Name())
+	second.Position.Primary = synccontract.OpaqueToken("2")
+	second.Position.TieBreaker = synccontract.OpaqueToken("2")
+	pair.sourceExecutor.pages = []SourcePage{
+		{Records: []connectors.Record{{"id": "one"}}, CandidateCheckpoint: first},
+		{Records: []connectors.Record{{"id": "two"}}, CandidateCheckpoint: second},
+	}
+	fullOverwrite := &testFullOverwriteRun{sink: pair.destination.Name()}
+	pair.destinationExecutor.fullOverwrite = fullOverwrite
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	commits := 0
+	var checkpoint synccontract.CheckpointEnvelope
+
+	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite,
+		BatchSize: 1, Stage: &testWarehouseStage{}, Commit: func(value synccontract.CheckpointEnvelope) error {
+			commits++
+			checkpoint = value.Clone()
+			return nil
+		},
+	})
+	if err != nil {
+		t.Fatalf("Run() = %v", err)
+	}
+	if got, want := fullOverwrite.ids, []string{"one", "two"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("full-overwrite staged IDs = %v, want every source page %v", got, want)
+	}
+	if fullOverwrite.publishCalls != 1 || fullOverwrite.readBackCalls != 1 || fullOverwrite.abortCalls != 0 {
+		t.Fatalf("full-overwrite publish/read-back/abort calls = %d/%d/%d, want 1/1/0", fullOverwrite.publishCalls, fullOverwrite.readBackCalls, fullOverwrite.abortCalls)
+	}
+	if pair.destinationExecutor.applyCalls != 0 || commits != 1 || result.Pages != 2 || result.CommittedCheckpoint == nil || string(checkpoint.Position.Primary) != "2" {
+		t.Fatalf("legacy applies/checkpoints/result = %d/%d/%+v checkpoint=%+v, want no legacy apply and one final checkpoint", pair.destinationExecutor.applyCalls, commits, result, checkpoint)
+	}
+}
+
+func TestOrchestratorArrowFullOverwriteTransformsDurablyBulkAppliesThenCheckpoints(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	checkpoint := testCheckpoint(pair.source.Name())
+	record := testArrowRecord(t, []int64{1, 2}, []string{"open", "ignored"})
+	source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}, batches: []ArrowSourceBatch{{Record: record, SourceLogicalBytes: 64, SourceRows: 2, CandidateCheckpoint: checkpoint}}}
+	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name()}}
+	registry := NewRegistry(pair.verifier)
+	if err := registry.RegisterSource(source); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(destination); err != nil {
+		t.Fatal(err)
+	}
+	plan := `{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"},{"expr":{"upper":"status"},"target":"status","type":"string"}],"where":{"not_equal":[{"mod":["id",2]},0]}}`
+	hash, err := databaseTransformHash(plan)
+	if err != nil {
+		t.Fatal(err)
+	}
+	commits := 0
+	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		ConnectionID: "test-connection-owner", Generation: 1, Source: pair.source, Destination: pair.destination,
+		DestinationBinding: DestinationBinding{WorkspaceID: "workspace", SourceConnectorID: pair.source.Name(), ConnectionID: "test-connection-owner", StreamID: "stream", PrimaryKey: []string{"id"}},
+		Stream:             "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 2, TransformPlanJSON: plan, TransformPlanHash: hash,
+		FastSegments: &testFastSegmentStore{}, ByteCreditCapacity: 128,
+		Commit: func(synccontract.CheckpointEnvelope) error { commits++; return nil },
+	})
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	if got, want := destination.run.ids, []int64{1}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("Arrow bulk applied IDs = %v, want transformed/filter result %v", got, want)
+	}
+	if destination.run.publishCalls != 1 || destination.run.readBackCalls != 1 || destination.run.abortCalls != 0 || commits != 1 {
+		t.Fatalf("publish/readback/abort/checkpoint = %d/%d/%d/%d, want 1/1/0/1", destination.run.publishCalls, destination.run.readBackCalls, destination.run.abortCalls, commits)
+	}
+	if result.RecordsRead != 2 || result.RecordsApplied != 1 || result.SourceLogicalBytes != 64 || result.ParquetBytes == 0 || result.PeakCreditBytes != 64 || result.CommittedCheckpoint == nil {
+		t.Fatalf("Arrow result = %#v, want source/transform/Parquet/COPY/checkpoint counters", result)
+	}
+}
+
+func TestOrchestratorArrowFullOverwriteRefusesMissingSegmentStoreBeforeExtractorIO(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}}
+	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name()}}
+	registry := NewRegistry(pair.verifier)
+	if err := registry.RegisterSource(source); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(destination); err != nil {
+		t.Fatal(err)
+	}
+	_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1,
+		TransformPlanJSON: `{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"}]}`,
+		TransformPlanHash: "0c4d306bca2e827717e1f4ef641ce2bc39d7e05ac418bbf332d94e907e1d1fe1",
+		Commit:            func(synccontract.CheckpointEnvelope) error { return nil },
+	})
+	if !errors.Is(err, ErrArrowFastPathInvalid) {
+		t.Fatalf("Run() error = %T %v, want ErrArrowFastPathInvalid", err, err)
+	}
+	if source.extractCalls != 0 || destination.beginCalls != 0 {
+		t.Fatalf("missing store reached extractor/begin = %d/%d, want 0/0", source.extractCalls, destination.beginCalls)
+	}
+}
+
+func TestOrchestratorArrowFullOverwritePublishesZeroSourceWithNoCreditLeak(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}}
+	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name()}}
+	registry := NewRegistry(pair.verifier)
+	if err := registry.RegisterSource(source); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(destination); err != nil {
+		t.Fatal(err)
+	}
+	const plan = `{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"}]}`
+	hash, err := databaseTransformHash(plan)
+	if err != nil {
+		t.Fatal(err)
+	}
+	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1,
+		TransformPlanJSON: plan, TransformPlanHash: hash, FastSegments: &testFastSegmentStore{},
+		Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+	})
+	if err != nil {
+		t.Fatalf("Run(zero source) error = %v", err)
+	}
+	if destination.run.publishCalls != 1 || result.PeakCreditBytes != 0 || result.RecordsApplied != 0 || result.CommittedCheckpoint != nil {
+		t.Fatalf("zero-source Arrow result = %#v, publish calls=%d", result, destination.run.publishCalls)
 	}
 }
 
@@ -815,20 +971,22 @@ func (e *testSourceExecutor) ReadTransport(ctx context.Context, request SourceRe
 }
 
 type testDestinationExecutor struct {
-	reference          connectors.TransportExecutorReference
-	sink               string
-	acknowledgement    synccontract.DownstreamAcknowledgement
-	acknowledgementSet bool
-	afterApply         func()
-	applyContext       func(context.Context, int) error
-	afterReadBack      func()
-	readBackErr        error
-	mutateStringMap    bool
-	planCalls          int
-	applyCalls         int
-	readBackCalls      int
-	lastPlan           DestinationPlanRequest
-	lastReadBack       DestinationReadBackRequest
+	reference           connectors.TransportExecutorReference
+	sink                string
+	acknowledgement     synccontract.DownstreamAcknowledgement
+	acknowledgementSet  bool
+	afterApply          func()
+	applyContext        func(context.Context, int) error
+	afterReadBack       func()
+	readBackErr         error
+	mutateStringMap     bool
+	planCalls           int
+	applyCalls          int
+	readBackCalls       int
+	lastPlan            DestinationPlanRequest
+	lastReadBack        DestinationReadBackRequest
+	fullOverwrite       *testFullOverwriteRun
+	fullOverwriteBegins int
 }
 
 func (e *testDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -876,6 +1034,176 @@ func (e *testDestinationExecutor) ReadBackDestination(_ context.Context, request
 		e.afterReadBack()
 	}
 	return e.readBackErr
+}
+
+func (e *testDestinationExecutor) BeginFullOverwrite(_ context.Context, request FullOverwriteRunRequest) (FullOverwriteRun, error) {
+	e.fullOverwriteBegins++
+	if request.Mode != synccontract.ModeFullOverwrite || e.fullOverwrite == nil {
+		return nil, fmt.Errorf("test full-overwrite run is unavailable")
+	}
+	return e.fullOverwrite, nil
+}
+
+type testFullOverwriteRun struct {
+	sink          string
+	ids           []string
+	publishCalls  int
+	readBackCalls int
+	abortCalls    int
+}
+
+func (r *testFullOverwriteRun) ApplyFullOverwrite(_ context.Context, request DestinationApplyRequest) error {
+	for _, record := range request.Workset.Records {
+		id, ok := record["id"].(string)
+		if !ok {
+			return fmt.Errorf("test full-overwrite record has no string ID")
+		}
+		r.ids = append(r.ids, id)
+	}
+	return nil
+}
+
+func (r *testFullOverwriteRun) PublishFullOverwrite(_ context.Context, request FullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
+	r.publishCalls++
+	if request.Pages != len(r.ids) || request.Records != len(r.ids) || request.LastCheckpoint == nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("test full-overwrite publication is incomplete")
+	}
+	return synccontract.NewDurableDownstreamAcknowledgement(r.sink, time.Now().UTC())
+}
+
+func (r *testFullOverwriteRun) ReadBackFullOverwrite(_ context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
+	r.readBackCalls++
+	if acknowledgement.Sink != r.sink || acknowledgement.AcknowledgedAt.IsZero() {
+		return fmt.Errorf("test full-overwrite receipt is not durable")
+	}
+	return nil
+}
+
+func (r *testFullOverwriteRun) AbortFullOverwrite(context.Context) error {
+	r.abortCalls++
+	return nil
+}
+
+type testArrowSource struct {
+	*testSourceExecutor
+	batches      []ArrowSourceBatch
+	extractCalls int
+}
+
+func (*testArrowSource) AllowEmptySourceResult() {}
+
+func (s *testArrowSource) ExtractArrowRanges(ctx context.Context, _ ArrowExtractRequest, emit func(ArrowSourceBatch) error) error {
+	s.extractCalls++
+	for _, batch := range s.batches {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		if err := emit(batch); err != nil {
+			return err
+		}
+		batch.Record.Release()
+	}
+	return nil
+}
+
+type testArrowDestination struct {
+	*testDestinationExecutor
+	run        *testArrowFullOverwriteRun
+	beginCalls int
+}
+
+func (d *testArrowDestination) PlanDestination(_ context.Context, request DestinationPlanRequest) (DestinationPlan, error) {
+	d.planCalls++
+	d.lastPlan = request
+	return DestinationPlan{ApplyStrategy: request.ApplyStrategy, TransformPlanHash: request.TransformPlanHash}, nil
+}
+
+func (d *testArrowDestination) BeginArrowFullOverwrite(_ context.Context, request ArrowFullOverwriteRunRequest) (ArrowFullOverwriteRun, error) {
+	d.beginCalls++
+	if request.Plan.TransformPlanHash != request.TransformPlanHash || d.run == nil {
+		return nil, ErrArrowFastPathInvalid
+	}
+	return d.run, nil
+}
+
+type testArrowFullOverwriteRun struct {
+	sink          string
+	ids           []int64
+	publishCalls  int
+	readBackCalls int
+	abortCalls    int
+}
+
+func (r *testArrowFullOverwriteRun) ApplyArrowSegment(_ context.Context, request ArrowBulkApplyRequest) error {
+	ids, ok := request.Record.Column(0).(*array.Int64)
+	if !ok || request.Segment.TransformedRows != request.Record.NumRows() {
+		return ErrArrowFastPathInvalid
+	}
+	for index := 0; index < ids.Len(); index++ {
+		r.ids = append(r.ids, ids.Value(index))
+	}
+	return nil
+}
+
+func (r *testArrowFullOverwriteRun) PublishArrowFullOverwrite(_ context.Context, request ArrowFullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
+	r.publishCalls++
+	if request.TransformedRows != int64(len(r.ids)) || request.SourceRows < request.TransformedRows {
+		return synccontract.DownstreamAcknowledgement{}, ErrArrowFastPathInvalid
+	}
+	return synccontract.NewDurableDownstreamAcknowledgement(r.sink, time.Now().UTC())
+}
+
+func (r *testArrowFullOverwriteRun) ReadBackArrowFullOverwrite(_ context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
+	r.readBackCalls++
+	if acknowledgement.Sink != r.sink || acknowledgement.AcknowledgedAt.IsZero() {
+		return ErrArrowFastPathInvalid
+	}
+	return nil
+}
+
+func (r *testArrowFullOverwriteRun) AbortArrowFullOverwrite(context.Context) error {
+	r.abortCalls++
+	return nil
+}
+
+type testFastSegmentStore struct{ calls int }
+
+func (s *testFastSegmentStore) StoreArrowSegment(_ context.Context, request FastSegmentWriteRequest) (FastSegmentReceipt, error) {
+	s.calls++
+	if request.Record == nil || request.SegmentID == "" {
+		return FastSegmentReceipt{}, ErrArrowFastPathInvalid
+	}
+	return FastSegmentReceipt{
+		ID: request.SegmentID, SchemaHash: "schema", TransformPlanHash: request.TransformPlanHash,
+		ContentSHA256: "content", ParquetSHA256: "parquet", SourceLogicalBytes: request.SourceLogicalBytes,
+		SourceRows: request.SourceRows, TransformedRows: request.Record.NumRows(), TransformedBytes: 16, ParquetBytes: 16,
+	}, nil
+}
+
+func (*testFastSegmentStore) DiscardArrowSegment(context.Context, FastSegmentReceipt) error {
+	return nil
+}
+
+func testArrowRecord(t *testing.T, ids []int64, statuses []string) arrow.Record {
+	t.Helper()
+	if len(ids) != len(statuses) {
+		t.Fatalf("Arrow input ids/statuses length = %d/%d", len(ids), len(statuses))
+	}
+	schema := arrow.NewSchema([]arrow.Field{{Name: "id", Type: arrow.PrimitiveTypes.Int64}, {Name: "status", Type: arrow.BinaryTypes.String}}, nil)
+	builder := array.NewRecordBuilder(memory.DefaultAllocator, schema)
+	builder.Field(0).(*array.Int64Builder).AppendValues(ids, nil)
+	builder.Field(1).(*array.StringBuilder).AppendValues(statuses, nil)
+	record := builder.NewRecord()
+	builder.Release()
+	return record
+}
+
+func databaseTransformHash(raw string) (string, error) {
+	plan, err := database.ParseTransformPlanV1([]byte(raw))
+	if err != nil {
+		return "", err
+	}
+	return plan.Hash(), nil
 }
 
 type testWarehouseStage struct {

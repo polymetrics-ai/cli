@@ -65,6 +65,68 @@ type DestinationExecutor interface {
 	ReadBackDestination(context.Context, DestinationReadBackRequest) error
 }
 
+// FullOverwriteDestination is the optional run-scoped destination protocol for
+// the canonical replace mode. It keeps the whole replacement lifecycle behind
+// a destination-neutral port: the orchestrator stages and admits each bounded
+// source unit, while the destination owns its private shadow, receipt, and
+// publish implementation. No database handle, SQL string, or source payload
+// crosses this boundary.
+//
+// A destination that does not implement this port cannot receive a
+// full_overwrite transport run. Applying the generic per-page destination
+// method for that mode would make replacement semantics depend on page size.
+type FullOverwriteDestination interface {
+	DestinationExecutor
+	BeginFullOverwrite(context.Context, FullOverwriteRunRequest) (FullOverwriteRun, error)
+}
+
+// FullOverwriteRunRequest binds a run-scoped replacement to the same sealed
+// plan, connection ownership, and approval evidence as its bounded pages.
+// It intentionally has no provider cursor, target identifier, record, or
+// database-specific type.
+type FullOverwriteRunRequest struct {
+	ConnectionID  string
+	Generation    int64
+	Plan          DestinationPlan
+	Runtime       connectors.RuntimeConfig
+	Source        connectors.Connector
+	SourceRuntime connectors.RuntimeConfig
+	Binding       DestinationBinding
+	Stream        string
+	Mode          synccontract.Mode
+	BatchSize     int
+	// TransformPlanJSON is canonical closed configuration supplied by App. It
+	// contains no engine syntax; destinations parse only their shared contract.
+	TransformPlanJSON string
+	TransformPlanHash string
+	Approval          DestinationApproval `json:"-"`
+}
+
+// FullOverwriteRun owns one destination-private shadow-and-publish lifecycle.
+// ApplyFullOverwrite accepts one independently reopened warehouse workset at a
+// time, so source pagination never turns into a whole-run in-memory payload.
+// PublishFullOverwrite produces the sole durable acknowledgement; checkpoint
+// advancement is performed by the generic orchestrator only after its
+// ReadBackFullOverwrite confirmation. AbortFullOverwrite is idempotent cleanup
+// for every pre-publication exit path.
+type FullOverwriteRun interface {
+	ApplyFullOverwrite(context.Context, DestinationApplyRequest) error
+	PublishFullOverwrite(context.Context, FullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error)
+	ReadBackFullOverwrite(context.Context, synccontract.DownstreamAcknowledgement) error
+	AbortFullOverwrite(context.Context) error
+}
+
+// FullOverwritePublicationRequest is payload-free aggregate evidence supplied
+// only after source emission completed. LastCheckpoint remains source-owned;
+// the destination cannot replace it, and the orchestrator remains responsible
+// for committing it after receipt reconciliation.
+type FullOverwritePublicationRequest struct {
+	LastCheckpoint *synccontract.CheckpointEnvelope
+	Pages          int
+	Records        int
+	Tombstones     int
+}
+
 // ManagedTargetApprovalDestination marks a destination whose structural
 // transport binding is authorized by App's closed managed-target plan/preview
 // lifecycle. The marker keeps provider identity out of shared App dispatch.
@@ -213,20 +275,23 @@ type DestinationBinding struct {
 }
 
 type DestinationPlanRequest struct {
-	Connector     connectors.Connector
-	Runtime       connectors.RuntimeConfig
-	Source        connectors.Connector
-	SourceRuntime connectors.RuntimeConfig
-	Binding       DestinationBinding
-	Stream        string
-	Mode          synccontract.Mode
-	BatchSize     int
-	ApplyStrategy connectors.DestinationApplyStrategy
-	Approval      DestinationApproval `json:"-"`
+	Connector         connectors.Connector
+	Runtime           connectors.RuntimeConfig
+	Source            connectors.Connector
+	SourceRuntime     connectors.RuntimeConfig
+	Binding           DestinationBinding
+	Stream            string
+	Mode              synccontract.Mode
+	BatchSize         int
+	TransformPlanJSON string
+	TransformPlanHash string
+	ApplyStrategy     connectors.DestinationApplyStrategy
+	Approval          DestinationApproval `json:"-"`
 }
 
 type DestinationPlan struct {
-	ApplyStrategy connectors.DestinationApplyStrategy
+	ApplyStrategy     connectors.DestinationApplyStrategy
+	TransformPlanHash string
 }
 
 // DestinationApproval carries only the ephemeral result of a separately
@@ -308,6 +373,15 @@ type RunRequest struct {
 	CursorField        string
 	Mode               synccontract.Mode
 	BatchSize          int
+	TransformPlanJSON  string
+	TransformPlanHash  string
+	// FastSegments is the connector-neutral versioned Parquet segment store
+	// used only by the Arrow transformed full-overwrite path. Legacy transports
+	// retain Stage and their JSONL-backed warehouse behavior unchanged.
+	FastSegments FastSegmentStore
+	// ByteCreditCapacity bounds retained Arrow payload bytes. Zero selects the
+	// 512 MiB fast-path default; it is never a run deadline.
+	ByteCreditCapacity int64
 	Resume             synccontract.ResumeExpectation
 	Checkpoint         *synccontract.CheckpointEnvelope
 	// UnitDeadline bounds a single retryable provider-page fetch or destination
@@ -322,14 +396,28 @@ type RunRequest struct {
 }
 
 type Result struct {
-	RecordsRead         int
-	RecordsStaged       int
-	RecordsApplied      int
-	Pages               int
-	ExtractElapsed      time.Duration
-	StageElapsed        time.Duration
-	ApplyElapsed        time.Duration
-	CommittedCheckpoint *synccontract.CheckpointEnvelope
+	RecordsRead      int
+	RecordsStaged    int
+	RecordsApplied   int
+	Pages            int
+	ExtractElapsed   time.Duration
+	TransformElapsed time.Duration
+	StageElapsed     time.Duration
+	ParquetElapsed   time.Duration
+	ApplyElapsed     time.Duration
+	// IndexConstraintElapsed is destination schema/index work performed once
+	// for the private full-overwrite shadow. It is distinct from binary COPY so
+	// a high COPY rate cannot hide a slow target build.
+	IndexConstraintElapsed time.Duration
+	PublishElapsed         time.Duration
+	CheckpointElapsed      time.Duration
+	WallElapsed            time.Duration
+	SourceLogicalBytes     int64
+	TransformedBytes       int64
+	ParquetBytes           int64
+	PeakCreditBytes        int64
+	CreditWaitElapsed      time.Duration
+	CommittedCheckpoint    *synccontract.CheckpointEnvelope
 }
 
 const defaultTransportUnitDeadline = time.Minute
@@ -345,6 +433,9 @@ func (r RunRequest) validateExecution() error {
 	if r.UnitDeadline < 0 {
 		return fmt.Errorf("transport unit deadline must not be negative")
 	}
+	if r.ByteCreditCapacity < 0 {
+		return fmt.Errorf("transport byte credit capacity must not be negative")
+	}
 	return nil
 }
 
@@ -359,11 +450,15 @@ func (r RunRequest) unitDeadline() time.Duration {
 // absent stage cannot hide a missing executor, invalid mode, or unsafe
 // acknowledgement declaration. None of these checks can cause source I/O.
 func (r RunRequest) validateDispatchDependencies() error {
-	if isNilInterface(r.Stage) {
-		return fmt.Errorf("warehouse stage is required for transport dispatch")
-	}
 	if r.Commit == nil {
 		return fmt.Errorf("checkpoint committer is required for transport dispatch")
+	}
+	return nil
+}
+
+func (r RunRequest) validateLegacyDispatchDependencies() error {
+	if isNilInterface(r.Stage) {
+		return fmt.Errorf("warehouse stage is required for transport dispatch")
 	}
 	return nil
 }

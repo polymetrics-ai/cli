@@ -97,7 +97,16 @@ func (d *ManagedTargetTransportDestination) PlanDestination(ctx context.Context,
 	if !ok || strategy != request.ApplyStrategy.Strategy {
 		return synctransport.DestinationPlan{}, ErrManagedTargetTransportBindingInvalid
 	}
-	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
+	if (strings.TrimSpace(request.TransformPlanJSON) == "") != (strings.TrimSpace(request.TransformPlanHash) == "") {
+		return synctransport.DestinationPlan{}, ErrManagedTargetTransportBindingInvalid
+	}
+	if request.TransformPlanHash != "" {
+		plan, err := database.ParseTransformPlanV1([]byte(request.TransformPlanJSON))
+		if err != nil || plan.Hash() != request.TransformPlanHash {
+			return synctransport.DestinationPlan{}, ErrManagedTargetTransportBindingInvalid
+		}
+	}
+	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy, TransformPlanHash: request.TransformPlanHash}, nil
 }
 
 func (d *ManagedTargetTransportDestination) ApplyDestination(ctx context.Context, request synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
@@ -330,6 +339,14 @@ func (r managedTargetTransportResolution) provision(ctx context.Context) (databa
 }
 
 func (d *ManagedTargetTransportDestination) resolveManagedTarget(ctx context.Context, source connectors.Connector, sourceRuntime, targetRuntime connectors.RuntimeConfig, binding synctransport.DestinationBinding, stream string) (managedTargetTransportResolution, error) {
+	return d.resolveManagedTargetWithTransform(ctx, source, sourceRuntime, targetRuntime, binding, stream, nil)
+}
+
+// resolveManagedTargetWithTransform provisions the output relation of a
+// sealed TransformPlanV1 when the Arrow fast path is selected. The transform
+// changes only the managed target's typed schema/mapping; source discovery,
+// ownership and all endpoint construction remain unchanged.
+func (d *ManagedTargetTransportDestination) resolveManagedTargetWithTransform(ctx context.Context, source connectors.Connector, sourceRuntime, targetRuntime connectors.RuntimeConfig, binding synctransport.DestinationBinding, stream string, transform *database.TransformPlanV1) (managedTargetTransportResolution, error) {
 	if err := validateManagedTargetTransportBinding(binding); err != nil {
 		return managedTargetTransportResolution{}, err
 	}
@@ -342,7 +359,21 @@ func (d *ManagedTargetTransportDestination) resolveManagedTarget(ctx context.Con
 	if err != nil {
 		return managedTargetTransportResolution{}, err
 	}
-	relationCatalog, err := database.NewCatalog(catalog.Ref(), []database.Relation{relation})
+	schemaRelation := relation
+	if transform != nil {
+		if err := transform.ValidateAgainstRelation(relation); err != nil {
+			return managedTargetTransportResolution{}, database.ErrTransformPlanInvalid
+		}
+		mapping, err = transform.OutputMapping()
+		if err != nil {
+			return managedTargetTransportResolution{}, database.ErrTransformPlanInvalid
+		}
+		schemaRelation, err = transform.OutputRelation(relation)
+		if err != nil {
+			return managedTargetTransportResolution{}, database.ErrTransformPlanInvalid
+		}
+	}
+	relationCatalog, err := database.NewCatalog(catalog.Ref(), []database.Relation{schemaRelation})
 	if err != nil {
 		return managedTargetTransportResolution{}, err
 	}

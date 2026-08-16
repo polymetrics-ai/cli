@@ -3,12 +3,20 @@ NAME
   pm connections - configure source-to-destination sync connections
 
 SYNOPSIS
-  pm connections create <name> --source connector:credential --destination connector:credential --stream stream [--sync-mode mode] [--cursor field] [--primary-key field] [--table table]
+  pm connections create <name> --source connector:credential --destination connector:credential --stream stream [--sync-mode mode] [--cursor field] [--primary-key field] [--table table] [--transform-file plan.json]
   pm connections list [--json]
 
 DESCRIPTION
   A connection joins one source endpoint to one destination endpoint and stores
   stream-level sync settings.
+
+TRANSFORMS
+  --transform-file reads one bounded JSON TransformPlanV1 during creation. The
+  file is validated against the source's typed catalog before any connection is
+  saved. pm stores only the normalized closed plan and its SHA-256 hash; it
+  never stores the filename or accepts arbitrary SQL. The admitted vocabulary
+  is typed projection/rename, date, checked multiply/cast, upper, mod, and a
+  not_equal filter.
 
 CONNECTION NAMES
   A name may contain letters, digits, '-' and '_', must start with a letter or

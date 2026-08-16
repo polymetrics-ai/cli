@@ -210,14 +210,17 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			StreamID:          stream.StreamID,
 			PrimaryKey:        append([]string(nil), stream.PrimaryKey...),
 		},
-		Stream:      streamName,
-		CursorField: stream.CursorField,
-		Mode:        mode.ContractMode,
-		BatchSize:   batchSize,
-		Resume:      sourceExpectation,
-		Checkpoint:  prior.Checkpoint,
-		Approval:    approval,
-		Stage:       a.transportStage,
+		Stream:            streamName,
+		CursorField:       stream.CursorField,
+		Mode:              mode.ContractMode,
+		BatchSize:         batchSize,
+		TransformPlanJSON: stream.TransformPlan,
+		TransformPlanHash: stream.TransformPlanHash,
+		FastSegments:      &connectionArrowSegmentStore{app: a, connectionID: conn.ID, stream: streamName},
+		Resume:            sourceExpectation,
+		Checkpoint:        prior.Checkpoint,
+		Approval:          approval,
+		Stage:             a.transportStage,
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
 			interim := checkpoint.Clone()
 			if interim.CommittedAt == nil {
@@ -252,14 +255,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			return nil
 		},
 	})
-	transportMeasurement := &TransportPhaseMeasurement{
-		ExtractedRecords:         transportResult.RecordsRead,
-		WarehouseParquetRecords:  transportResult.RecordsStaged,
-		PostgreSQLAppliedRecords: transportResult.RecordsApplied,
-		ExtractElapsedNanos:      transportResult.ExtractElapsed.Nanoseconds(),
-		WarehouseElapsedNanos:    transportResult.StageElapsed.Nanoseconds(),
-		PostgreSQLElapsedNanos:   transportResult.ApplyElapsed.Nanoseconds(),
-	}
+	transportMeasurement := transportPhaseMeasurement(transportResult)
 	if committed == nil || committed.CommittedAt == nil {
 		if err != nil {
 			return etlExecutionResult{
@@ -318,6 +314,27 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		}
 	}
 	return result, nil
+}
+
+func transportPhaseMeasurement(result synctransport.Result) *TransportPhaseMeasurement {
+	measurement := &TransportPhaseMeasurement{
+		ExtractedRecords: result.RecordsRead, WarehouseParquetRecords: result.RecordsStaged, PostgreSQLAppliedRecords: result.RecordsApplied,
+		ExtractElapsedNanos: result.ExtractElapsed.Nanoseconds(), WarehouseElapsedNanos: result.StageElapsed.Nanoseconds(), PostgreSQLElapsedNanos: result.ApplyElapsed.Nanoseconds(),
+		SourceRecords: result.RecordsRead, TransformedRecords: result.RecordsStaged, CopyAppliedRecords: result.RecordsApplied,
+		SourceLogicalBytes: result.SourceLogicalBytes, TransformedLogicalBytes: result.TransformedBytes, ParquetBytes: result.ParquetBytes,
+		SourceReadElapsedNanos: result.ExtractElapsed.Nanoseconds(), TransformElapsedNanos: result.TransformElapsed.Nanoseconds(),
+		ParquetCloseElapsedNanos: result.ParquetElapsed.Nanoseconds(), BinaryCOPYElapsedNanos: result.ApplyElapsed.Nanoseconds(),
+		IndexConstraintBuildElapsedNanos: result.IndexConstraintElapsed.Nanoseconds(),
+		PublishReceiptElapsedNanos:       result.PublishElapsed.Nanoseconds(), CheckpointElapsedNanos: result.CheckpointElapsed.Nanoseconds(),
+		CriticalPathElapsedNanos: result.WallElapsed.Nanoseconds(), PeakCreditBytes: result.PeakCreditBytes,
+		ByteCreditWaitElapsedNanos: result.CreditWaitElapsed.Nanoseconds(),
+	}
+	if result.SourceLogicalBytes > 0 && result.WallElapsed > 0 {
+		seconds := result.WallElapsed.Seconds()
+		measurement.InputDecimalMBPerSecond = float64(result.SourceLogicalBytes) / 1_000_000 / seconds
+		measurement.InputMiBPerSecond = float64(result.SourceLogicalBytes) / (1024 * 1024) / seconds
+	}
+	return measurement
 }
 
 func transportStreamStateEqual(left, right StreamState) bool {

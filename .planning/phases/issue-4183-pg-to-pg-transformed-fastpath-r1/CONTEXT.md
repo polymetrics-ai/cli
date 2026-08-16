@@ -8,7 +8,7 @@
 - Delivery: A direct PR from `fm/cli-pg-to-pg-transformed-fastpath-r1` targeting `integration/4015-mvp-flat-r1`, with the API-reported base verified after opening.
 - Working branch: `fm/cli-pg-to-pg-transformed-fastpath-r1`.
 - Task: Implement the approved, additive PostgreSQL-to-PostgreSQL transformed `full_overwrite` vertical slice. The substrate is connector-neutral: source extraction and destination bulk application are ports; Arrow batches, closed transforms, durable segments/manifests, credit control, receipts, checkpoints, and per-unit timing contain no PostgreSQL, pgx, or SQL types. PostgreSQL supplies the range extractor and binary-COPY shadow-publish adapter only.
-- Verification: Red/green unit and production-composition tests; live two-plus-page PostgreSQL container test; tagged binary correctness/performance harness; targeted Go tests, vet, binary build, individual verify gates, `verify-work`, code review, and API PR-base readback.
+- Verification: Red/green unit and production-composition tests; live two-plus-page PostgreSQL container test; tagged binary correctness/performance harness; targeted Go tests, vet, binary build, individual verify gates, `verify-work`, code review, and API PR-base readback. The performance harness is 5 GB logical source input at a 200 MB/s/25 s gate, with a 3 GiB free-space hard stop and peak-disk reporting.
 
 ## Evidence Table
 
@@ -19,7 +19,7 @@
 | Neutral segment pipeline carries typed transformed rows without row maps | fake | Unit tests use a typed in-memory Arrow batch port because live tests must not inspect internal allocation shape; the binary live test proves the port is reachable. |
 | COPY/shadow publish writes the transformed target exactly once | live | A PostgreSQL container observes transformed counts/aggregates and a single matching receipt after replay from a post-receipt checkpoint fault. |
 | Progress survives success and failure before cleanup | live | Durable run state contains phase counters and elapsed intervals after an injected stage/apply failure and after a successful run. |
-| 2–3 GB gate is measured honestly | fake | The qualified separate-volume host is unavailable in this worktree; the tagged binary harness and its preflight/JSON assertions ship but remain unscored here. |
+| 5 GB gate is measured honestly | live | The direct Docker Unix-socket harness moved 5,368,947,776 logical source bytes and wrote the durable JSON report before cleanup. It scored 111.78 MB/s / 106.60 MiB/s in 48.03 s, below the 200 MB/s / 25 s gate. |
 
 ## Assertion Rule
 
@@ -27,10 +27,10 @@ Every live test asserts an externally observable target row set, receipt, checkp
 
 ## Binding decisions
 
-- Read the performance report's `Next PR: one honest vertical slice`, `In scope`, `Explicitly out of scope`, and `Exact 2–3 GB proof plan` as the design contract. No redesign is authorized.
+- Read the performance report's `Next PR: one honest vertical slice`, `In scope`, `Explicitly out of scope`, and `Exact 2–3 GB proof plan` as the design contract, amended by the captain to a 5 GB logical input/25 s gate. No redesign is authorized.
 - PR #4182 is present in the base. It established durable progress and per-unit deadline behavior; this slice must preserve no overall run deadline and must emit payload-free phase telemetry before cleanup on success and failure.
 - `full_overwrite` is the only production fast apply. Other modes, CDC, object stores, user-owned tables, unlogged staging, custom pgwire codecs, and legacy warehouse changes remain excluded.
 - The transformed production path is not an identity relay: it must support the specified closed projection/rename, declared types, scalar expressions, and filtering. Cross-segment production dedupe remains excluded; its kernel proof may not be presented as the production mode.
 - The PostgreSQL adapter must use binary `CopyFrom`; no bulk-path INSERT/UPDATE/DELETE is permitted. Logged shadow publication, index/constraint build, deterministic receipt insertion, and checkpoint reconciliation preserve exactly-once ordering.
+- The 5 GB harness must use a narrow logical-row fixture, reclaim only explicitly identified dangling Docker images before it starts, hard-stop below 3 GiB free disk, report peak disk, and release the source fixture after extraction only when its immutable segments are durably complete. A MySQL source variant is allowed only when it implements the existing neutral extract port without a substrate change.
 - A future connector inherits the neutral `Extract`/Arrow pipeline, transform, segment, manifest, credit, receipt, and checkpoint contracts. It implements a source extractor and/or destination bulk applier without a PostgreSQL type leaking into those shared layers.
-

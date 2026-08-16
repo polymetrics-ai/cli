@@ -53,7 +53,8 @@ pm connections create <name> \
   --primary-key <field> \
   --cursor <field> \
   --sync-mode <mode> \
-  --table <destination-table>
+  --table <destination-table> \
+  --transform-file transform-plan.json
 ```
 
 ### Sync modes
@@ -67,6 +68,22 @@ pm connections create <name> \
 | Incremental append deduped | `incremental_append_deduped` | Compatibility name for typed `incremental_dedupe` admission. Without an admitted matching transport, pm refuses before source I/O. |
 
 Incremental modes and deduped compatibility names require a cursor. Deduped modes also require a primary key. A static connector advertises the full deduped compatibility name only with both fields, and advertises incremental modes only with a declared incremental executor. The two deduped compatibility names remain accepted public inputs, but they are not ordinary local materialization modes.
+
+### Closed typed transforms
+
+`--transform-file` is an optional bounded JSON `TransformPlanV1`. `pm` checks
+it against the source's typed catalog before it saves the connection, stores
+only its normalized form and SHA-256 hash, and binds that hash into the
+database plan, preview, and approval. The available operations are typed
+projection/rename, timestamp and date values, checked integer
+multiply-and-cast, uppercase, modulo, and a `not_equal` filter. It never
+accepts arbitrary SQL.
+
+For the eligible PostgreSQL-to-PostgreSQL `full_overwrite` transport, this
+plan selects the Arrow/DuckDB/binary-COPY path. Its input-byte measurement is
+the pre-transform projected source Arrow bytes; it excludes Parquet, pgwire,
+target storage, and checkpoint bytes. The durable run record reports decimal
+MB/s and MiB/s plus individual phase timings.
 
 ### Polling-watermark limits and eligibility
 
