@@ -1079,6 +1079,9 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if stream.DestinationTable == "" {
 			stream.DestinationTable = name
 		}
+		if err := validateConnectionTransformPlan(ctx, source, sourceRuntime, name, &stream); err != nil {
+			return Connection{}, fmt.Errorf("validate transform for stream %q: %w", name, err)
+		}
 		// Against the local warehouse the stream and table names are path
 		// components, so they are held to the same rule as the connection
 		// name: rejected at creation rather than coerced into something that

@@ -135,6 +135,11 @@ type StreamConfig struct {
 	CursorField         string   `json:"cursor_field,omitempty"`
 	PrimaryKey          []string `json:"primary_key,omitempty"`
 	DestinationTable    string   `json:"destination_table,omitempty"`
+	// TransformPlan is normalized TransformPlanV1 JSON. It never stores a
+	// source filename, arbitrary SQL, or raw user formatting; TransformPlanHash
+	// binds the persisted closed form into later plans and approvals.
+	TransformPlan     string `json:"transform_plan,omitempty"`
+	TransformPlanHash string `json:"transform_plan_hash,omitempty"`
 }
 
 type StreamState struct {
@@ -251,12 +256,36 @@ type Run struct {
 }
 
 type TransportPhaseMeasurement struct {
+	// Legacy fields remain for existing non-fast transport readers.
 	ExtractedRecords         int   `json:"extracted_records"`
 	WarehouseParquetRecords  int   `json:"warehouse_parquet_records"`
 	PostgreSQLAppliedRecords int   `json:"postgresql_applied_records"`
 	ExtractElapsedNanos      int64 `json:"extract_elapsed_ns"`
 	WarehouseElapsedNanos    int64 `json:"warehouse_elapsed_ns"`
 	PostgreSQLElapsedNanos   int64 `json:"postgresql_elapsed_ns"`
+
+	// Generic fast-path counters report input as logical source bytes (the
+	// source Arrow buffer bytes before transformation), never Parquet, pgwire,
+	// or target-storage bytes. Phase intervals may overlap; critical_path_ns is
+	// the run wall clock used for both throughput rates.
+	SourceRecords                    int     `json:"source_records"`
+	TransformedRecords               int     `json:"transformed_records"`
+	CopyAppliedRecords               int     `json:"copy_applied_records"`
+	SourceLogicalBytes               int64   `json:"source_logical_bytes"`
+	TransformedLogicalBytes          int64   `json:"transformed_logical_bytes"`
+	ParquetBytes                     int64   `json:"parquet_bytes"`
+	SourceReadElapsedNanos           int64   `json:"source_read_elapsed_ns"`
+	TransformElapsedNanos            int64   `json:"transform_elapsed_ns"`
+	ParquetCloseElapsedNanos         int64   `json:"parquet_close_fsync_elapsed_ns"`
+	BinaryCOPYElapsedNanos           int64   `json:"binary_copy_elapsed_ns"`
+	IndexConstraintBuildElapsedNanos int64   `json:"index_constraint_build_elapsed_ns"`
+	PublishReceiptElapsedNanos       int64   `json:"publish_receipt_elapsed_ns"`
+	CheckpointElapsedNanos           int64   `json:"checkpoint_elapsed_ns"`
+	CriticalPathElapsedNanos         int64   `json:"critical_path_elapsed_ns"`
+	PeakCreditBytes                  int64   `json:"peak_credit_bytes"`
+	ByteCreditWaitElapsedNanos       int64   `json:"byte_credit_wait_elapsed_ns"`
+	InputDecimalMBPerSecond          float64 `json:"input_decimal_mb_per_second"`
+	InputMiBPerSecond                float64 `json:"input_mib_per_second"`
 }
 
 type QueryTableRequest struct {

@@ -77,6 +77,31 @@ func TestPostgresManagedTargetStaleApprovalIsTypedAndStateFree(t *testing.T) {
 	}
 }
 
+// The transform hash is part of the operator-approved write shape. A plan
+// issued for one normalized mapping must become stale before any source or
+// destination I/O when the connection changes to another mapping.
+func TestPostgresManagedTargetApprovalBindingChangesWithTransformPlanHash(t *testing.T) {
+	identity := postgresManagedTargetApprovalBinding{
+		Domain: postgresManagedTargetBindingDomain, ConnectionID: "conn", Stream: "events", StreamID: "stream_events",
+		Mode: synccontract.ModeFullOverwrite, SourceConnector: "postgres", SourceSchema: "source-schema",
+		SourceCredential: "source-revision", SourceConfiguration: "source-config", Destination: "postgres",
+		CredentialRevision: "destination-revision", ConfigurationDigest: "destination-config",
+	}
+	identityMapping, err := hashJSON(identity)
+	if err != nil {
+		t.Fatal(err)
+	}
+	transformed := identity
+	transformed.TransformPlanHash = "sha256:realistic-projection-and-filter"
+	transformedMapping, err := hashJSON(transformed)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if identityMapping == transformedMapping {
+		t.Fatalf("approval binding hash = %q for distinct transform hashes, want plan/preview/approval scope to change", identityMapping)
+	}
+}
+
 func TestPostgresManagedTargetDurableAuthorizationValidationDoesNotReusePreviewSealLifetime(t *testing.T) {
 	binding := postgresManagedTargetApprovalBinding{
 		Domain: postgresManagedTargetBindingDomain, ConnectionID: "conn", Stream: "commits", StreamID: "stream_commits",

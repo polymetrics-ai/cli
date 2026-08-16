@@ -364,6 +364,7 @@ func postgresCreateManagedTargetLayout(ctx context.Context, tx pgx.Tx, plan data
 	ownerTable := postgresQualifiedControlTable(target.Namespace(), postgresNamespaceOwnerTable)
 	controlTable := postgresQualifiedControlTable(target.Namespace(), postgresTargetControlTable)
 	ledgerTable := postgresQualifiedControlTable(target.Namespace(), postgresDeliveryLedgerTable)
+	fullOverwriteReceiptTable := postgresQualifiedControlTable(target.Namespace(), postgresFullOverwriteReceiptTable)
 	orderFenceTable := postgresQualifiedControlTable(target.Namespace(), postgresOrderFenceTable)
 	if _, err := tx.Exec(ctx, `CREATE TABLE `+ownerTable+` (
 		singleton BOOLEAN PRIMARY KEY DEFAULT TRUE CHECK (singleton),
@@ -393,6 +394,17 @@ func postgresCreateManagedTargetLayout(ctx context.Context, tx pgx.Tx, plan data
 		relation_name TEXT NOT NULL,
 		target_database_oid TEXT NOT NULL,
 		delivery_id TEXT NOT NULL
+	)`); err != nil {
+		return err
+	}
+	if _, err := tx.Exec(ctx, `CREATE TABLE `+fullOverwriteReceiptTable+` (
+		receipt_id TEXT PRIMARY KEY,
+		relation_name TEXT NOT NULL,
+		plan_hash TEXT NOT NULL,
+		checkpoint_hash TEXT NOT NULL,
+		content_hash TEXT NOT NULL,
+		records BIGINT NOT NULL CHECK (records >= 0),
+		published_at TIMESTAMPTZ NOT NULL
 	)`); err != nil {
 		return err
 	}

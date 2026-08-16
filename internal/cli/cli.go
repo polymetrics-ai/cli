@@ -551,6 +551,14 @@ func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			PrimaryKey:       flags.values["primary-key"],
 			DestinationTable: valueOr(flags.first("table"), stream),
 		}
+		if transformFile := flags.first("transform-file"); transformFile != "" {
+			plan, err := readTransformPlanFile(transformFile)
+			if err != nil {
+				return err
+			}
+			streamCfg.TransformPlan = string(plan.NormalizedJSON())
+			streamCfg.TransformPlanHash = plan.Hash()
+		}
 		conn, err := a.CreateConnection(ctx, app.CreateConnectionRequest{
 			Name:        args[1],
 			Source:      source,

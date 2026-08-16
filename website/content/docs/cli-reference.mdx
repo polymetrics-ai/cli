@@ -194,7 +194,12 @@ pm connections create github_to_warehouse \
 pm connections list --json
 ```
 
-Connections bind credentials, a stream, table, sync mode, cursor, and primary key.
+Connections bind credentials, a stream, table, sync mode, cursor, and primary key. Add
+`--transform-file plan.json` to create an eligible typed database transport with a
+closed `TransformPlanV1`; the file is catalog-validated and persisted only as
+normalized JSON plus its hash. It supports typed projection/rename, timestamp/date,
+checked integer multiply/cast, uppercase, modulo, and a `not_equal` filter—never
+arbitrary SQL.
 
 Connection names accept letters, digits, `-` and `_`, must start with a letter or digit, and must
 differ by more than letter case. Ambiguous names are rejected at creation rather than rewritten,
