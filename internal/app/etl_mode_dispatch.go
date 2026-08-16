@@ -25,6 +25,7 @@ type etlModeDispatchRequest struct {
 	stream              StreamConfig
 	mode                SyncMode
 	batchSize           int
+	maxInFlightBatches  int
 	destinationApproval synctransport.DestinationApproval
 }
 
@@ -47,11 +48,18 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 		return a.completeAcknowledgedTransportRun(request.runID, result)
 	}
 	transportRoute := a.shouldRunTransport(request.connection, request.streamName, request.mode, request.source, request.destination)
+	if request.maxInFlightBatches > 0 && (!transportRoute || !isOrderedArrowFullOverwriteCandidate(request)) {
+		return a.failRun(request.runID, &synctransport.OrderedPipelineUnsupportedError{Source: request.source.Name(), Destination: request.destination.Name()})
+	}
 	if !transportRoute && hasDestinationApproval(request.destinationApproval) {
 		return a.failRun(request.runID, fmt.Errorf("destination approval is valid only for a closed definition-selected transport route"))
 	}
 	if transportRoute {
-		result, err := a.runTransportETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.streamName, request.stream, request.mode, request.batchSize, request.destinationApproval)
+		maxInFlightBatches := request.maxInFlightBatches
+		if maxInFlightBatches == 0 && isOrderedArrowFullOverwriteCandidate(request) {
+			maxInFlightBatches = 2
+		}
+		result, err := a.runTransportETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.streamName, request.stream, request.mode, request.batchSize, maxInFlightBatches, request.destinationApproval)
 		if err != nil {
 			if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, err); handled {
 				return parked, parkErr
@@ -101,4 +109,20 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 		return a.failRun(request.runID, err)
 	}
 	return a.completeRun(request.runID, result)
+}
+
+// hasDeclaredOrderedPipeline reads only connector declarations. It does not
+// infer safety from connector names, pools, or a generic Read/Write surface.
+func hasDeclaredOrderedPipeline(source, destination connectors.Connector) bool {
+	sourceDescriptor, sourceDeclared := connectors.SourceTransportDescriptorOf(source)
+	destinationDescriptor, destinationDeclared := connectors.DestinationTransportDescriptorOf(destination)
+	return sourceDeclared && destinationDeclared && sourceDescriptor.OrderedPipeline && destinationDescriptor.OrderedPipeline
+}
+
+// isOrderedArrowFullOverwriteCandidate is deliberately narrower than a
+// declaration: the bounded producer/consumer implementation exists only for
+// transformed Arrow full-overwrite runs. All other routes retain their prior
+// serial default until they have a separately admitted implementation.
+func isOrderedArrowFullOverwriteCandidate(request etlModeDispatchRequest) bool {
+	return request.mode.ContractMode == synccontract.ModeFullOverwrite && request.stream.TransformPlan != "" && request.stream.TransformPlanHash != "" && hasDeclaredOrderedPipeline(request.source, request.destination)
 }

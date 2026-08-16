@@ -14,6 +14,7 @@
       "incremental_dedupe",
       "incremental_dedupe_history"
     ],
+    "ordered_pipeline": true,
     "delivery": {
       "idempotency": "at_least_once",
       "ordering": "source_ordered",
@@ -45,6 +46,8 @@
       "incremental_dedupe",
       "incremental_dedupe_history"
     ],
+    "ordered_pipeline": true,
+    "copy_worker_maximum": 8,
     "delivery": {
       "idempotency": "keyed",
       "ordering": "source_ordered",

@@ -1106,6 +1106,10 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		stream.StreamID = streamID
 		req.Streams[name] = stream
 	}
+	targetCopyWorkers, _, err := resolveTargetCopyWorkers(destination, req.Streams, req.TargetCopyWorkers)
+	if err != nil {
+		return Connection{}, err
+	}
 	if materializesWarehouse {
 		if err := validateSameOwnerCaseEquivalentDestinationTables([]Connection{{
 			Name:    req.Name,
@@ -1126,13 +1130,14 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	}
 	now := time.Now().UTC()
 	conn := Connection{
-		ID:          connectionID,
-		Name:        req.Name,
-		Source:      req.Source,
-		Destination: req.Destination,
-		Streams:     req.Streams,
-		CreatedAt:   now,
-		UpdatedAt:   now,
+		ID:                connectionID,
+		Name:              req.Name,
+		Source:            req.Source,
+		Destination:       req.Destination,
+		Streams:           req.Streams,
+		TargetCopyWorkers: targetCopyWorkers,
+		CreatedAt:         now,
+		UpdatedAt:         now,
 	}
 	stored := cloneConnection(conn)
 	a.state.Connections = append(a.state.Connections, stored)
@@ -1298,6 +1303,9 @@ func catalogSnapshotWithStaleness(snapshot CatalogSnapshot, now time.Time) Catal
 }
 
 func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
+	if req.MaxInFlightBatches < 0 || req.MaxInFlightBatches > 8 {
+		return Run{}, fmt.Errorf("max in-flight batches must be between 1 and 8")
+	}
 	conn, ok := a.findConnection(req.Connection)
 	if !ok {
 		return Run{}, fmt.Errorf("connection %q not found", req.Connection)
@@ -1353,6 +1361,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		stream:              stream,
 		mode:                mode,
 		batchSize:           batchSize,
+		maxInFlightBatches:  req.MaxInFlightBatches,
 		destinationApproval: req.DestinationApproval,
 	}
 	return a.dispatchETLMode(ctx, dispatchRequest)

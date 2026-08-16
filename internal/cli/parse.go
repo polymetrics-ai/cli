@@ -141,6 +141,37 @@ func parseIntFlag(name, value string, fallback int) (int, error) {
 	return n, nil
 }
 
+// parseMaxInFlightBatches keeps the command-line contract distinct from the
+// app's zero-value sentinel: absence is passed through as zero, while every
+// supplied value must name an executable bounded pipeline depth.
+func parseMaxInFlightBatches(value string) (int, error) {
+	if value == "" {
+		return 0, nil
+	}
+	n, err := parseIntFlag("max-in-flight-batches", value, 0)
+	if err != nil {
+		return 0, err
+	}
+	if n < 1 || n > 8 {
+		return 0, validationErrorf("--max-in-flight-batches must be between 1 and 8")
+	}
+	return n, nil
+}
+
+func parseTargetCopyWorkers(value string) (int, error) {
+	if value == "" {
+		return 0, nil
+	}
+	n, err := parseIntFlag("target-copy-workers", value, 0)
+	if err != nil {
+		return 0, err
+	}
+	if n < 1 || n > 8 {
+		return 0, validationErrorf("--target-copy-workers must be between 1 and 8")
+	}
+	return n, nil
+}
+
 func writeJSON(w io.Writer, v any) error {
 	// Stamp every JSON envelope with the API version so agents get a consistent
 	// contract (api_version + kind) on every response, not just on errors.

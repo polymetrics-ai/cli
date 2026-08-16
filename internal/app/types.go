@@ -153,22 +153,24 @@ type StreamState struct {
 }
 
 type CreateConnectionRequest struct {
-	Name        string                  `json:"name"`
-	Source      EndpointConfig          `json:"source"`
-	Destination EndpointConfig          `json:"destination"`
-	Streams     map[string]StreamConfig `json:"streams"`
+	Name              string                  `json:"name"`
+	Source            EndpointConfig          `json:"source"`
+	Destination       EndpointConfig          `json:"destination"`
+	Streams           map[string]StreamConfig `json:"streams"`
+	TargetCopyWorkers int                     `json:"target_copy_workers,omitempty"`
 }
 
 type Connection struct {
 	// ID is the opaque generated identifier used as a warehouse path
 	// component. Name is a display value and never becomes a path.
-	ID          string                  `json:"id,omitempty"`
-	Name        string                  `json:"name"`
-	Source      EndpointConfig          `json:"source"`
-	Destination EndpointConfig          `json:"destination"`
-	Streams     map[string]StreamConfig `json:"streams"`
-	CreatedAt   time.Time               `json:"created_at"`
-	UpdatedAt   time.Time               `json:"updated_at"`
+	ID                string                  `json:"id,omitempty"`
+	Name              string                  `json:"name"`
+	Source            EndpointConfig          `json:"source"`
+	Destination       EndpointConfig          `json:"destination"`
+	Streams           map[string]StreamConfig `json:"streams"`
+	TargetCopyWorkers int                     `json:"target_copy_workers,omitempty"`
+	CreatedAt         time.Time               `json:"created_at"`
+	UpdatedAt         time.Time               `json:"updated_at"`
 }
 
 func cloneEndpointConfig(config EndpointConfig) EndpointConfig {
@@ -227,9 +229,13 @@ type catalogReference struct {
 }
 
 type RunETLRequest struct {
-	Connection          string                            `json:"connection"`
-	Stream              string                            `json:"stream"`
-	BatchSize           int                               `json:"batch_size,omitempty"`
+	Connection string `json:"connection"`
+	Stream     string `json:"stream"`
+	BatchSize  int    `json:"batch_size,omitempty"`
+	// MaxInFlightBatches is an optional ordered Arrow full-overwrite pipeline
+	// bound. Zero means the caller did not select the CLI/app capability
+	// control; admitted fast paths choose their documented default of two.
+	MaxInFlightBatches  int                               `json:"max_in_flight_batches,omitempty"`
 	DestinationApproval synctransport.DestinationApproval `json:"-"`
 }
 
@@ -422,8 +428,13 @@ type ReversePlan struct {
 	// PostgreSQL managed-target transport plan is created. It is included in
 	// the sealed plan hash before its single-use approval token is issued.
 	AuthorizationLifetime time.Duration `json:"authorization_lifetime_ns,omitempty"`
-	CreatedAt             time.Time     `json:"created_at"`
-	ExpiresAt             time.Time     `json:"expires_at"`
+	// TargetCopyWorkers and TargetCopyWorkerMaximum are safe, persisted
+	// connection-policy evidence for the target's bounded immutable COPY
+	// capacity. They carry neither a credential nor a target identifier.
+	TargetCopyWorkers       int       `json:"target_copy_workers,omitempty"`
+	TargetCopyWorkerMaximum int       `json:"target_copy_worker_maximum,omitempty"`
+	CreatedAt               time.Time `json:"created_at"`
+	ExpiresAt               time.Time `json:"expires_at"`
 }
 
 type RunReverseETLRequest struct {

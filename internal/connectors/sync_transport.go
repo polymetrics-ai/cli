@@ -213,9 +213,13 @@ func (b DestinationSourceBinding) Validate() error {
 // SourceTransportDescriptor is the source side of a connector's transport
 // declaration. EligibleStreams are the only streams this role may receive.
 type SourceTransportDescriptor struct {
-	Executor        TransportExecutorReference   `json:"executor"`
-	EligibleStreams []string                     `json:"eligible_streams"`
-	Modes           []synccontract.Mode          `json:"modes"`
+	Executor        TransportExecutorReference `json:"executor"`
+	EligibleStreams []string                   `json:"eligible_streams"`
+	Modes           []synccontract.Mode        `json:"modes"`
+	// OrderedPipeline declares that this exact endpoint can safely have its
+	// next bounded extraction overlap a prior ordered destination apply. It
+	// does not declare source partitioning or unordered concurrent reads.
+	OrderedPipeline bool                         `json:"ordered_pipeline,omitempty"`
 	Delivery        DeliveryGuarantees           `json:"delivery"`
 	Conformance     ConformanceEvidenceReference `json:"conformance"`
 }
@@ -224,14 +228,21 @@ type SourceTransportDescriptor struct {
 // transport declaration. Its strategies are resolved from the requested mode
 // before a source can begin reading.
 type DestinationTransportDescriptor struct {
-	Executor        TransportExecutorReference   `json:"executor"`
-	EligibleActions []string                     `json:"eligible_actions"`
-	Modes           []synccontract.Mode          `json:"modes"`
-	Delivery        DeliveryGuarantees           `json:"delivery"`
-	Conformance     ConformanceEvidenceReference `json:"conformance"`
-	Acknowledgement TransportAcknowledgement     `json:"acknowledgement"`
-	ApplyStrategies []DestinationApplyStrategy   `json:"apply_strategies"`
-	SourceBindings  []DestinationSourceBinding   `json:"source_bindings,omitempty"`
+	Executor        TransportExecutorReference `json:"executor"`
+	EligibleActions []string                   `json:"eligible_actions"`
+	Modes           []synccontract.Mode        `json:"modes"`
+	// OrderedPipeline declares that this exact endpoint can safely consume one
+	// ordered bounded pipeline. It is not a declaration of multi-COPY support.
+	OrderedPipeline bool `json:"ordered_pipeline,omitempty"`
+	// CopyWorkerMaximum is the target-declared connection-pool ceiling that a
+	// future immutable full-overwrite COPY lane may consume. It is a bounded
+	// connection policy, never a generic per-run worker dial.
+	CopyWorkerMaximum int                          `json:"copy_worker_maximum,omitempty"`
+	Delivery          DeliveryGuarantees           `json:"delivery"`
+	Conformance       ConformanceEvidenceReference `json:"conformance"`
+	Acknowledgement   TransportAcknowledgement     `json:"acknowledgement"`
+	ApplyStrategies   []DestinationApplyStrategy   `json:"apply_strategies"`
+	SourceBindings    []DestinationSourceBinding   `json:"source_bindings,omitempty"`
 }
 
 // SyncTransportDescriptor declares one or both roles a connector can perform.
@@ -347,6 +358,9 @@ func validateSourceTransportStreams(streams []string) error {
 }
 
 func (d DestinationTransportDescriptor) Validate() error {
+	if d.CopyWorkerMaximum < 0 || d.CopyWorkerMaximum > 8 {
+		return fmt.Errorf("destination transport copy worker maximum must be zero or between 1 and 8")
+	}
 	if err := d.Executor.Validate(); err != nil {
 		return err
 	}

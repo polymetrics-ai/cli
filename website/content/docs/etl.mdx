@@ -54,7 +54,8 @@ pm connections create <name> \
   --cursor <field> \
   --sync-mode <mode> \
   --table <destination-table> \
-  --transform-file transform-plan.json
+  --transform-file transform-plan.json \
+  --target-copy-workers <n>
 ```
 
 ### Sync modes
@@ -87,6 +88,13 @@ the pre-transform projected source Arrow bytes; it excludes Parquet, pgwire,
 target storage, and checkpoint bytes. The durable run record reports decimal
 MB/s and MiB/s plus individual phase timings.
 
+For that immutable transformed target, `--target-copy-workers` is saved on the
+connection, defaults to `2`, and is constrained to `1..min(8, target-declared
+pool maximum)`. The closed plan and preview report the saved value and the
+declared maximum. It is not a per-run `--workers` override: this release keeps
+one ordered COPY consumer, so a second COPY lane remains a separately measured
+follow-on rather than an implied capability.
+
 ### Polling-watermark limits and eligibility
 
 `polling_watermark` is a bounded keyset polling mechanism, not CDC or change
@@ -111,7 +119,7 @@ or absent declaration is not an executable polling mode.
 ## Running an extraction
 
 ```bash
-pm etl run --connection <name> --stream <stream> [--batch-size <n>] [--json]
+pm etl run --connection <name> --stream <stream> [--batch-size <n>] [--max-in-flight-batches <n>] [--json]
 ```
 
 ### Flags
@@ -121,6 +129,7 @@ pm etl run --connection <name> --stream <stream> [--batch-size <n>] [--json]
 | `--connection` | Yes | Name of the connection to use. |
 | `--stream` | Yes | Stream within that connection to extract. |
 | `--batch-size` | No | Records per write batch. Default is 1000. |
+| `--max-in-flight-batches` | No | `1..8` only for a transformed `full_overwrite` Arrow transport when both endpoints declare ordered-pipeline support. The admitted default is `2`; `1` preserves serial callback behavior. Unsupported endpoints fail before I/O. |
 | `--runtime` | No | After local ETL completes, record the run through optional PostgreSQL, DragonflyDB, and Temporal runtime checks. |
 | `--json` | No | Emit structured JSON to stdout instead of human-readable text. |
 
@@ -135,6 +144,18 @@ For tighter memory bounds on large streams:
 ```bash
 pm etl run --connection my-github --stream pull_requests --batch-size 500 --json
 ```
+
+For an eligible PostgreSQL transformed full-overwrite run, overlap the next
+bounded source extraction with the current ordered COPY:
+
+```bash
+pm etl run --connection pg_snapshot --stream public.events \
+  --max-in-flight-batches 2 --json
+```
+
+The depth is both a retained-batch and byte-credit bound. It preserves receipt
+order and the single publish/read-back/checkpoint barrier; it neither creates
+unordered work nor adds a second COPY worker.
 
 For runtime-backed recording:
 

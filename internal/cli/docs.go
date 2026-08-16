@@ -487,12 +487,23 @@ const connectionsHelp = `NAME
   pm connections - configure source-to-destination sync connections
 
 SYNOPSIS
-  pm connections create <name> --source connector:credential --destination connector:credential --stream stream [--sync-mode mode] [--cursor field] [--primary-key field] [--table table] [--transform-file plan.json]
+  pm connections create <name> --source connector:credential --destination connector:credential --stream stream [--sync-mode mode] [--cursor field] [--primary-key field] [--table table] [--transform-file plan.json] [--target-copy-workers n]
   pm connections list [--json]
 
 DESCRIPTION
   A connection joins one source endpoint to one destination endpoint and stores
   stream-level sync settings.
+
+TARGET COPY CAPACITY
+  --target-copy-workers records the bounded target connection capacity for an
+  immutable transformed full_overwrite COPY destination. PostgreSQL currently
+  declares a maximum of 8, so its default is 2 and accepted values are 1..8;
+  another destination is accepted only when its own transport declaration
+  supplies a lower maximum. The saved policy is included in the closed target
+  plan and preview. It is not a run flag and does not permit unordered apply.
+  This release has one ordered COPY consumer; a second COPY lane remains a
+  separately measured follow-on rather than an implied consequence of this
+  configuration value.
 
 TRANSFORMS
   --transform-file reads one bounded JSON TransformPlanV1 during creation. The
@@ -592,7 +603,7 @@ SYNOPSIS
   pm etl check --connector <name> [--config key=value] [--json]
   pm etl catalog --connector <name> [--config key=value] [--json]
   pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
-  pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json]
+  pm etl run --connection <name> --stream <stream> [--batch-size n] [--max-in-flight-batches n] [--runtime] [--json]
   pm etl status <run-id> [--json]
   pm etl transport github-issue-label plan --connection <name> [--json]
   pm etl transport github-issue-label preview <plan-id> [--json]
@@ -624,6 +635,15 @@ DESCRIPTION
 
   ETL writes destination records in bounded batches. Use --batch-size for large
   paginated streams when you want tighter memory bounds.
+
+ORDERED PIPELINE
+  --max-in-flight-batches selects a bounded 1..8 producer/consumer depth only
+  for a transformed full_overwrite Arrow transport whose source and destination
+  both declare ordered-pipeline support. Its admitted default is 2; 1 preserves
+  the prior serial callback behavior. The bound covers retained batches as well
+  as the Arrow byte-credit policy, preserves source order, and refuses an
+  undeclared endpoint before source or destination I/O. It is not a generic
+  --workers flag and does not create parallel destination COPY lanes.
 
   With --runtime, ETL also requires healthy PostgreSQL, DragonflyDB, and Temporal
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger

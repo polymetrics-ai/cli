@@ -27,7 +27,7 @@ SYNOPSIS
   pm etl transport %s preview <plan-id> [--json]
   pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] [--json]
   pm etl transport postgres-managed-target preview <plan-id> [--json]
-  pm etl run --connection <name> --stream <stream> --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
+  pm etl run --connection <name> --stream <stream> --batch-size 1 [--max-in-flight-batches n] --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
   pm etl transport %s cleanup plan --connection <name> --forward-plan <plan-id> [--json]
   pm etl transport %s cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
@@ -84,7 +84,7 @@ const postgresManagedTargetTransportHelp = `NAME
 SYNOPSIS
   pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] [--json]
   pm etl transport postgres-managed-target preview <plan-id> [--json]
-  pm etl run --connection <name> --stream <stream> --batch-size <n> --approval-plan <plan-id> --approval-token-stdin --confirm destructive [--json]
+  pm etl run --connection <name> --stream <stream> --batch-size <n> [--max-in-flight-batches n] --approval-plan <plan-id> --approval-token-stdin --confirm destructive [--json]
 
 DESCRIPTION
   This is a closed definition-selected source-to-PostgreSQL transport, not a
@@ -124,23 +124,27 @@ EXIT STATUS
 `
 
 type etlTransportPlanOutput struct {
-	ID                    string                       `json:"id"`
-	Status                string                       `json:"status"`
-	Mode                  string                       `json:"mode"`
-	ConnectionID          string                       `json:"connection_id"`
-	Action                string                       `json:"action"`
-	RecordCount           int                          `json:"record_count"`
-	Confirmation          connectors.WriteConfirmation `json:"confirmation"`
-	CreatedAt             time.Time                    `json:"created_at"`
-	ExpiresAt             time.Time                    `json:"expires_at"`
-	AuthorizationLifetime time.Duration                `json:"authorization_lifetime_ns,omitempty"`
-	ForwardPlanID         string                       `json:"forward_plan_id,omitempty"`
+	ID                      string                       `json:"id"`
+	Status                  string                       `json:"status"`
+	Mode                    string                       `json:"mode"`
+	ConnectionID            string                       `json:"connection_id"`
+	Action                  string                       `json:"action"`
+	RecordCount             int                          `json:"record_count"`
+	Confirmation            connectors.WriteConfirmation `json:"confirmation"`
+	CreatedAt               time.Time                    `json:"created_at"`
+	ExpiresAt               time.Time                    `json:"expires_at"`
+	AuthorizationLifetime   time.Duration                `json:"authorization_lifetime_ns,omitempty"`
+	ForwardPlanID           string                       `json:"forward_plan_id,omitempty"`
+	TargetCopyWorkers       int                          `json:"target_copy_workers,omitempty"`
+	TargetCopyWorkerMaximum int                          `json:"target_copy_worker_maximum,omitempty"`
 }
 
 type etlTransportWritePreviewOutput struct {
-	RecordsStaged int    `json:"records_staged"`
-	Action        string `json:"action"`
-	Digest        string `json:"digest"`
+	RecordsStaged           int    `json:"records_staged"`
+	Action                  string `json:"action"`
+	Digest                  string `json:"digest"`
+	TargetCopyWorkers       int    `json:"target_copy_workers,omitempty"`
+	TargetCopyWorkerMaximum int    `json:"target_copy_worker_maximum,omitempty"`
 }
 
 type strictTransportFlags struct {
@@ -347,12 +351,13 @@ func parseETLRunTransportApproval(args []string, stdin io.Reader) (synctransport
 		return synctransport.DestinationApproval{}, false, strictTransportFlags{}, nil
 	}
 	flags, err := parseStrictTransportFlags(args, map[string]strictTransportFlagSpec{
-		"connection":           {},
-		"stream":               {},
-		"batch-size":           {},
-		"approval-plan":        {},
-		"approval-token-stdin": {allowBare: true, bareOnly: true},
-		"confirm":              {},
+		"connection":            {},
+		"stream":                {},
+		"batch-size":            {},
+		"max-in-flight-batches": {},
+		"approval-plan":         {},
+		"approval-token-stdin":  {allowBare: true, bareOnly: true},
+		"confirm":               {},
 	})
 	if err != nil {
 		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
@@ -366,6 +371,9 @@ func parseETLRunTransportApproval(args []string, stdin io.Reader) (synctransport
 	}
 	if batchSize <= 0 {
 		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, validationErrorf("approved transport ETL requires a positive --batch-size")
+	}
+	if _, err := parseMaxInFlightBatches(flags.value("max-in-flight-batches")); err != nil {
+		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
 	}
 	if _, err := issueLabelTransportConnectionIDFromName(flags.value("connection")); err != nil {
 		return synctransport.DestinationApproval{}, true, strictTransportFlags{}, err
@@ -389,10 +397,15 @@ func runApprovedIssueLabelTransportETL(ctx context.Context, a *app.App, flags st
 	if err != nil {
 		return err
 	}
+	maxInFlightBatches, err := parseMaxInFlightBatches(flags.value("max-in-flight-batches"))
+	if err != nil {
+		return err
+	}
 	run, err := a.RunETL(ctx, app.RunETLRequest{
 		Connection:          flags.value("connection"),
 		Stream:              flags.value("stream"),
 		BatchSize:           batchSize,
+		MaxInFlightBatches:  maxInFlightBatches,
 		DestinationApproval: approval,
 	})
 	if err != nil {
@@ -572,17 +585,19 @@ func validateTransportPlanID(planID string) error {
 
 func safeETLTransportPlan(plan app.ReversePlan) etlTransportPlanOutput {
 	return etlTransportPlanOutput{
-		ID:                    plan.ID,
-		Status:                plan.Status,
-		Mode:                  plan.Mode,
-		ConnectionID:          plan.TransportConnectionID,
-		Action:                plan.Action,
-		RecordCount:           plan.RecordCount,
-		Confirmation:          plan.ConfirmationPolicy,
-		CreatedAt:             plan.CreatedAt,
-		ExpiresAt:             plan.ExpiresAt,
-		AuthorizationLifetime: plan.AuthorizationLifetime,
-		ForwardPlanID:         plan.TransportForwardPlanID,
+		ID:                      plan.ID,
+		Status:                  plan.Status,
+		Mode:                    plan.Mode,
+		ConnectionID:            plan.TransportConnectionID,
+		Action:                  plan.Action,
+		RecordCount:             plan.RecordCount,
+		Confirmation:            plan.ConfirmationPolicy,
+		CreatedAt:               plan.CreatedAt,
+		ExpiresAt:               plan.ExpiresAt,
+		AuthorizationLifetime:   plan.AuthorizationLifetime,
+		ForwardPlanID:           plan.TransportForwardPlanID,
+		TargetCopyWorkers:       plan.TargetCopyWorkers,
+		TargetCopyWorkerMaximum: plan.TargetCopyWorkerMaximum,
 	}
 }
 
@@ -593,6 +608,9 @@ func writeETLTransportPlan(stdout io.Writer, jsonOut bool, plan app.ReversePlan)
 	}
 	_, _ = fmt.Fprintf(stdout, "Issue-label transport plan %s\n", safe.ID)
 	_, _ = fmt.Fprintf(stdout, "Mode: %s\nAction: %s\nRecords: %d\n", safe.Mode, safe.Action, safe.RecordCount)
+	if safe.TargetCopyWorkers > 0 {
+		_, _ = fmt.Fprintf(stdout, "Target COPY workers: %d (declared pool maximum %d)\n", safe.TargetCopyWorkers, safe.TargetCopyWorkerMaximum)
+	}
 	_, _ = fmt.Fprintln(stdout, "Preview required before an approval token is issued.")
 	_, err := fmt.Fprintln(stdout, "Confirmation required: --confirm destructive")
 	return err
@@ -601,9 +619,11 @@ func writeETLTransportPlan(stdout io.Writer, jsonOut bool, plan app.ReversePlan)
 func writeETLTransportPreview(stdout io.Writer, jsonOut bool, plan app.ReversePlan, preview connectors.WritePreview) error {
 	safePlan := safeETLTransportPlan(plan)
 	safePreview := etlTransportWritePreviewOutput{
-		RecordsStaged: preview.RecordsStaged,
-		Action:        preview.Action,
-		Digest:        preview.Digest,
+		RecordsStaged:           preview.RecordsStaged,
+		Action:                  preview.Action,
+		Digest:                  preview.Digest,
+		TargetCopyWorkers:       safePlan.TargetCopyWorkers,
+		TargetCopyWorkerMaximum: safePlan.TargetCopyWorkerMaximum,
 	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{
@@ -616,6 +636,9 @@ func writeETLTransportPreview(stdout io.Writer, jsonOut bool, plan app.ReversePl
 	}
 	_, _ = fmt.Fprintf(stdout, "Issue-label transport preview %s\n", safePlan.ID)
 	_, _ = fmt.Fprintf(stdout, "Mode: %s\nAction: %s\nRecords staged: %d\n", safePlan.Mode, safePlan.Action, safePreview.RecordsStaged)
+	if safePreview.TargetCopyWorkers > 0 {
+		_, _ = fmt.Fprintf(stdout, "Target COPY workers: %d (declared pool maximum %d)\n", safePreview.TargetCopyWorkers, safePreview.TargetCopyWorkerMaximum)
+	}
 	if plan.ApprovalToken == "" {
 		return fmt.Errorf("issue-label transport preview did not issue an approval token")
 	}

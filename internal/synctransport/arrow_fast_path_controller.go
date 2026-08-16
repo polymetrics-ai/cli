@@ -19,6 +19,9 @@ import (
 // segment admission, byte credits, one run receipt and checkpoint-after-
 // reconciliation sequencing.
 func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunRequest, resolved ResolvedTransport, plan DestinationPlan, source ArrowRangeExtractor, destination ArrowBulkDestination) (result Result, err error) {
+	if request.MaxInFlightBatches > 1 {
+		return o.runArrowFullOverwritePipelined(ctx, request, resolved, plan, source, destination)
+	}
 	started := time.Now()
 	defer func() { result.WallElapsed = time.Since(started) }()
 	if request.Mode != synccontract.ModeFullOverwrite || source == nil || destination == nil || isNilInterface(request.FastSegments) || request.TransformPlanHash == "" || request.TransformPlanJSON == "" || plan.TransformPlanHash != request.TransformPlanHash {

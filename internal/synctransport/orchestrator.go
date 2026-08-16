@@ -15,6 +15,21 @@ type Orchestrator struct {
 	registry *Registry
 }
 
+// OrderedPipelineUnsupportedError is a typed pre-I/O refusal when a caller
+// asks for more than one in-flight batch but the selected fast-path endpoints
+// have not both declared the ordered pipeline contract.
+type OrderedPipelineUnsupportedError struct {
+	Source      string
+	Destination string
+}
+
+func (e *OrderedPipelineUnsupportedError) Error() string {
+	if e == nil {
+		return "ordered pipeline is not supported by the selected transport endpoints"
+	}
+	return fmt.Sprintf("ordered pipeline is not supported by source %q and destination %q", e.Source, e.Destination)
+}
+
 func NewOrchestrator(registry *Registry) *Orchestrator {
 	return &Orchestrator{registry: registry}
 }
@@ -35,6 +50,9 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 	}
 	if err := request.validateDispatchDependencies(); err != nil {
 		return Result{}, err
+	}
+	if request.MaxInFlightBatches > 1 && (request.Mode != synccontract.ModeFullOverwrite || request.TransformPlanHash == "" || request.TransformPlanJSON == "" || !resolved.SourceDescriptor.OrderedPipeline || !resolved.DestinationDescriptor.OrderedPipeline) {
+		return Result{}, &OrderedPipelineUnsupportedError{Source: request.Source.Name(), Destination: request.Destination.Name()}
 	}
 
 	plan, err := resolved.Destination.PlanDestination(ctx, cloneDestinationPlanRequest(DestinationPlanRequest{

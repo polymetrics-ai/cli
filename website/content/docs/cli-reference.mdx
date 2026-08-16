@@ -201,6 +201,11 @@ normalized JSON plus its hash. It supports typed projection/rename, timestamp/da
 checked integer multiply/cast, uppercase, modulo, and a `not_equal` filter—never
 arbitrary SQL.
 
+An immutable transformed PostgreSQL full-overwrite target additionally accepts
+`--target-copy-workers <n>`. It defaults to `2` and is bounded by `min(8,
+target-declared pool maximum)`; the saved policy appears in the closed target
+plan and preview rather than becoming an unconstrained ETL run flag.
+
 Connection names accept letters, digits, `-` and `_`, must start with a letter or digit, and must
 differ by more than letter case. Ambiguous names are rejected at creation rather than rewritten,
 because two connections that cannot be told apart cannot own separate warehouse data. The name is a
