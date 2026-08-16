@@ -13,8 +13,8 @@
 - [x] `pnpm --dir website run gen:docs`, then repeat it and prove the second run is byte-stable.
 - [x] Runtime help/parity smoke: `pm connectors inspect github --json`, `pm help etl`, `pm connections`, and `pm github pr list --help`; help/manual/website text changed and generated outputs were refreshed.
 - [x] Inline `verify-work` and `code-review` evidence, with each actionable finding fixed or dispositioned (manual fallback recorded in `UAT.md` and `REVIEW.md`).
-- [ ] Direct PR opened and its API-reported base exactly equals `integration/4015-mvp-flat-r1`.
+- [x] Direct PR [#4188](https://github.com/polymetrics-ai/cli/pull/4188) opened; `gh-axi pr list --head fm/cli-truth-github-dedupe-modes-build-r1 --base integration/4015-mvp-flat-r1` returned exactly that PR.
 
 ## Results
 
-Pending final GSD verification/review and direct-PR base check.
+All required local verification and direct-PR base checks passed.
