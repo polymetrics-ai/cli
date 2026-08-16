@@ -56,3 +56,19 @@ fallback.
   definition, prove the action inventory/wave relation, blocked outcome, and
   fixture guard. `connector-boundary` and byte-stable matrix regeneration pass.
 - **Finding:** none.
+
+## Certification timing correction review
+
+**Method:** manual standard-depth fallback after `scripts/gsd prompt
+code-review 4166`; the environment has no compatible isolated reviewer role.
+
+- **Performance:** inventory classification receives the one already-loaded
+  profile, eliminating one complete bundle load per declared action without
+  weakening malformed-definition failures.
+- **Non-vacuity:** lightweight test discovery counts every `write_wave`
+  declaration and fails if none exist or a declaration cannot produce the
+  production `certificationWriteWaveFor` result.
+- **Verification:** `go test -timeout 20m ./internal/connectors/certify`, the
+  full CLI package, the repository gate set, and unchanged-budget `make
+  certify-timing` pass.
+- **Finding:** none.

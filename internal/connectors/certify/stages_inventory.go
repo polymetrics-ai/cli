@@ -68,6 +68,7 @@ func writeActionInventoryFor(connector string) ([]writeActionInventoryItem, erro
 	if err != nil {
 		return nil, err
 	}
+	profile := certificationProfileFor(connector)
 	curated := map[string]WritePairing{}
 	names := make([]string, 0, len(declared))
 	for _, action := range declared {
@@ -84,7 +85,7 @@ func writeActionInventoryFor(connector string) ([]writeActionInventoryItem, erro
 	for _, declaredAction := range declared {
 		name := declaredAction.Name
 		item := writeActionInventoryItem{Action: name, Path: declaredAction.Path, Risk: declaredAction.Risk}
-		if classification, reason, declared, err := certificationWriteInventoryClassification(connector, name, declaredAction.Path); err != nil {
+		if classification, reason, declared, err := certificationWriteInventoryClassification(profile, name, declaredAction.Path); err != nil {
 			return nil, err
 		} else if declared {
 			item.Classification = classification

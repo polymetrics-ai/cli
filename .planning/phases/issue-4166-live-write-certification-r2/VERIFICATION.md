@@ -29,6 +29,12 @@ recorded browser-only provisioning decision remains open for the larger waves.
   in the GitHub certification definition; the shared sweep names no provider.
   Focused engine/certify tests, `make connector-boundary`, and a byte-stable
   GitHub certification-matrix regeneration passed.
+- [x] Certification timing correction: CI's 409.546s result was repeated full
+  bundle loading, not provider work or an accepted slower budget. The retained
+  five affected tests are 0.13–0.21s in a cold focused run, and `make
+  certify-timing` passes at 33.473s total (8.902s certify, 24.571s CLI) against
+  the unchanged 210s budget. The lightweight discovery fails if it finds no
+  declaration or any declaration cannot load through `certificationWriteWaveFor`.
 - [x] Full-parity now implies `--full --write`, rejects `--skip write`, and a
   fresh external HTTPS child refuses to write a proof artifact for incomplete
   write coverage.

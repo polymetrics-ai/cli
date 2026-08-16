@@ -34,8 +34,7 @@ func certificationHasWriteWave(connector string) bool {
 	return ok
 }
 
-func certificationWriteInventoryClassification(connector, action, path string) (classification, reason string, declared bool, err error) {
-	profile := certificationProfileFor(connector)
+func certificationWriteInventoryClassification(profile certificationProfile, action, path string) (classification, reason string, declared bool, err error) {
 	if profile.spec == nil {
 		return "", "", false, nil
 	}

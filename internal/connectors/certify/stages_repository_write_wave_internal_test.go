@@ -1,7 +1,9 @@
 package certify
 
 import (
+	"encoding/json"
 	"errors"
+	"io/fs"
 	"strings"
 	"testing"
 
@@ -17,21 +19,42 @@ func testRepositoryWriteWaveProfile(t *testing.T) (string, *engine.Certification
 	}
 	var connector string
 	var profile *engine.CertificationWriteWaveSpec
+	declarationCandidates := 0
 	for _, entry := range entries {
 		if !entry.IsDir() {
 			continue
 		}
+		raw, err := defs.FS.ReadFile(entry.Name() + "/certification.json")
+		if errors.Is(err, fs.ErrNotExist) {
+			continue
+		}
+		if err != nil {
+			t.Fatalf("read %q certification profile: %v", entry.Name(), err)
+		}
+		var declaration struct {
+			WriteWave json.RawMessage `json:"write_wave"`
+		}
+		if err := json.Unmarshal(raw, &declaration); err != nil {
+			t.Fatalf("parse %q certification profile: %v", entry.Name(), err)
+		}
+		if len(declaration.WriteWave) == 0 || string(declaration.WriteWave) == "null" {
+			continue
+		}
+		declarationCandidates++
 		candidate, ok := certificationWriteWaveFor(entry.Name())
 		if !ok {
-			continue
+			t.Fatalf("definition-owned write-wave declaration for %q did not load through certificationWriteWaveFor", entry.Name())
 		}
 		if profile != nil {
 			t.Fatalf("repository write-wave test requires one definition-owned profile, found %q and %q", connector, entry.Name())
 		}
 		connector, profile = entry.Name(), candidate
 	}
+	if declarationCandidates == 0 {
+		t.Fatal("no definition-owned repository write-wave declaration was found")
+	}
 	if profile == nil {
-		t.Fatal("definition-owned repository write wave is missing")
+		t.Fatal("definition-owned repository write wave did not load")
 	}
 	return connector, profile
 }

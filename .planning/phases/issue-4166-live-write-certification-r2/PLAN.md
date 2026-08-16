@@ -58,6 +58,18 @@ waiting for that larger-infrastructure work.
 6. **Help/docs/website parity (complete).** Update runtime help, CLI manual, website
    reference, generated docs, and parity tests with the live boundary,
    non-live statuses, resumability, and full-parity preconditions.
+7. **Certification timing gate (complete).** CI run `31969966913` passed all
+   tests but measured 409.546s against the 210s certify budget. Four inventory
+   tests clustered immediately below 60s and the repository-wave inventory
+   test took 71.360s. Diagnosis is complete before any budget decision:
+   `writeActionInventoryFor` calls a classifier that reloads the full connector
+   bundle for every declared action, while the new test discovers a wave by
+   fully loading every connector. Green requires one full profile load per
+   inventory and lightweight definition discovery in the test, with all five
+   tests retained and `make certify-timing` below the existing budget. The
+   test also fails if no declaration is found or a declaration cannot load by
+   the production `certificationWriteWaveFor` path, so the discovery remains
+   non-vacuous.
 
 ## Verification evidence
 
