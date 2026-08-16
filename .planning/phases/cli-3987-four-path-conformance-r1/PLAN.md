@@ -2,7 +2,7 @@
 phase: cli-3987-four-path-conformance-r1
 issue: 3987
 mode: tdd
-status: in_progress
+status: complete
 ---
 
 # Plan — #3987 four-path warehouse conformance
