@@ -34,6 +34,12 @@ The accepted decision and its independent second opinion were read in full befor
 
 Green — `make test` passes in full after the decision repair.
 
+### CodeQL follow-up
+
+Red — CodeQL on `585d620e` reports the new Postgres map-capacity arithmetic and the impossible unsigned `Bavail < 0` comparison.
+
+Green — the capacity hint now performs no arithmetic, and the filesystem probe retains its signed block-size rejection and multiplication-overflow clamp while removing only the dead unsigned-negative comparison. The Postgres compiler receives only a valid immutable plan created by the closed parser and its regular-file admission capped at 64 KiB; the native package cannot construct its representation. The bound therefore makes overflow practically unreachable, but the fix does not rely on it. `go test -count=1 -timeout 20m ./internal/connectors/native/postgres ./internal/warehouse`, `go vet ./...`, and full `make test` pass. The existing Postgres plan happy/bad tests and warehouse capacity happy/bad/edge tests retain their observable results. Remote CodeQL is the remaining confirmation. `security/snyk` is intentionally not chased because it fails identically on the base branch.
+
 ### Live binary correctness
 
 `POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/cli -run '^TestPMBinaryPostgres(FullOverwriteRetainsEverySourcePage|TransformedFullOverwriteUsesArrowCOPY)$'`

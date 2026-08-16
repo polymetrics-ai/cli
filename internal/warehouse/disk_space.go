@@ -51,7 +51,7 @@ func filesystemAvailableBytes(path string) (int64, error) {
 	if err := syscall.Statfs(path, &stat); err != nil {
 		return 0, err
 	}
-	if stat.Bavail < 0 || stat.Bsize <= 0 {
+	if stat.Bsize <= 0 {
 		return 0, ErrInsufficientFastPathDisk
 	}
 	available := uint64(stat.Bavail) * uint64(stat.Bsize)

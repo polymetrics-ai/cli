@@ -119,7 +119,7 @@ func newPostgresArrowRangePlan(base postgresPollingReadPlan, transform database.
 		return postgresArrowRangePlan{}, err
 	}
 	recordFields := make(map[string]struct{}, len(fields))
-	required := make(map[string]struct{}, len(fields)+2)
+	required := make(map[string]struct{})
 	for _, field := range fields {
 		recordFields[field] = struct{}{}
 		required[field] = struct{}{}
