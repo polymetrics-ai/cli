@@ -41,23 +41,23 @@ Loaded skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-ha
 
 ### CLI parity checklist
 
-- [ ] `pm <namespace>` behavior evaluated; no dispatch-order changes.
-- [ ] `pm help <topic>` evaluated against the built binary.
-- [ ] `pm <command> --help` evaluated against the built binary.
-- [ ] Invalid/unsafe polling behavior evaluated without credential or transport I/O.
-- [ ] `pm connectors inspect <name> --json` and catalog output evaluated.
-- [ ] `docs/cli/**`, generated manual/help artifacts, and `website/**` generator inputs reconciled or explicitly not applicable.
-- [ ] PR body records help/manual/website parity, happy/bad/edge evidence, the chosen build-vs-correct-claim resolution, and verification outcomes.
+- [x] `pm <namespace>` behavior evaluated; no dispatch-order changes.
+- [x] `pm help <topic>` evaluated against the built binary.
+- [x] `pm <command> --help` evaluated against the built binary.
+- [x] Invalid/unsafe polling behavior evaluated without credential or transport I/O.
+- [x] `pm connectors inspect <name> --json` and catalog output evaluated.
+- [x] `docs/cli/**`, generated manual/help artifacts, and `website/**` generator inputs reconciled.
+- [x] PR body records help/manual/website parity, happy/bad/edge evidence, the chosen build-vs-correct-claim resolution, and verification outcomes.
 
 ### Verification checklist
 
-- [ ] `go build -o ./bin/pm ./cmd/pm`
-- [ ] Real-binary polling eligibility probes (happy, bad, edge)
-- [ ] Targeted package tests with `-timeout 20m`
-- [ ] Real `commandrunner.Preflight` sweep
-- [ ] Generated documentation twice, byte-stability confirmed
-- [ ] Individual applicable `make verify` gates
-- [ ] GSD verify-work and code-review recorded
+- [x] `go build -o ./bin/pm ./cmd/pm`
+- [x] Real-binary polling eligibility probes (happy, bad, edge)
+- [x] Targeted package tests with `-timeout 20m`
+- [x] Real `commandrunner.Preflight` sweep
+- [x] Generated documentation twice, byte-stability confirmed
+- [x] Individual applicable `make verify` gates
+- [x] GSD verify-work and code-review recorded
 
 ## Execution evidence
 
@@ -85,3 +85,54 @@ descriptor can be a placeholder for an implemented per-catalog declaration.
 - **Happy:** `TestPMBinaryExecutesPostgresFixturePollingResume` asserts the compiled binary emits the 3-record/3-loaded, then 0-record/0-loaded results.
 - **Bad:** `TestPostgresPollingTransportRefusesMissingPerStreamCursorBeforeIO` asserts the typed `ErrPollingCursorFieldRequired` and zero I/O; `TestPMBinaryRefusesPostgresFixturePollingUnknownStreamCursorBeforePageRead` asserts the surfaced missing-column refusal and no page/checkpoint state.
 - **Edge:** `TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO` checks unsafe declaration, stale-evidence, hard-delete, and incompatible-apply rejection before source or apply activity.
+
+## Verify-work — inline execution
+
+### Built-binary surface evidence
+
+- `./pm help connectors`, bare `./pm connectors`, and `./pm connectors --help`
+  all rendered the scoped rule: a planned/unsupported/absent **static**
+  declaration alone does not implement polling, while an eligible connector may
+  construct an implemented declaration per selected catalog object.
+- `./pm connectors inspect postgres` rendered `Static declaration status:
+  planned` and the dynamic runtime-eligibility explanation. `./pm connectors
+  inspect postgres --json` retained the truthful static reason that the live
+  transport constructs and preflights the declaration.
+- `./pm etl --help` does not claim a polling capability. `./pm connections
+  --help` renders the bounded, non-CDC polling limits, hard-delete limitation,
+  and explicit-rebootstrap rule.
+
+### Commands run locally
+
+| Command | Result |
+| --- | --- |
+| `go build -o ./bin/pm ./cmd/pm` | pass |
+| `go test -timeout 20m ./internal/cli -count=1` | pass |
+| `go test -timeout 20m ./internal/connectors -count=1` | pass |
+| `go test -timeout 20m ./internal/connectors/engine -count=1` | pass |
+| `go test -timeout 20m ./internal/connectors/native/postgres -count=1` | pass |
+| `go test -timeout 20m ./internal/cli -run '^(TestGoldenTranscripts\|TestInspectPostgresKeepsStaticPollingWatermarkPlannedWhileRuntimeBindsItPerStream\|TestPollingHelpDistinguishesStaticDeclarationsFromDynamicRuntimeEligibility\|TestPMBinaryExecutesPostgresFixturePollingResume\|TestPMBinaryRefusesPostgresFixturePollingUnknownStreamCursorBeforePageRead)$' -count=1` | pass |
+| `go test -timeout 20m ./internal/connectors/engine -run '^(TestPollingPreflightAdmitsDeclaredPollingBeforeGuardedSourceRead\|TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO\|TestPollingModeEligibilitySweepsEveryImplementedPollingModeThroughRuntimePreflight)$' -count=1` | pass |
+| `go test -timeout 20m ./internal/connectors/native/postgres -run '^(TestPostgresPollingTransportResumesFixtureCursor\|TestPostgresPollingTransportRefusesMissingPerStreamCursorBeforeIO)$' -count=1` | pass |
+| `go vet ./...` and `go build ./cmd/pm` | pass |
+| `make docs-check tidy-check agent-contract-check connectorgen-validate connectorgen-surface-sync` | pass (run as individual make targets) |
+| `make lint connector-boundary release-workflow-check` | pass (run as individual make targets) |
+| `pnpm --dir website run typecheck` and `pnpm --dir website run test:scripts` | pass |
+| `go run ./cmd/pm docs generate --dir docs/cli` twice | pass; identical SHA-256 after each: `41852315887f45cba7d3759911d1b0e2604173a6a62e3353f3c4a2f944d57bf7` |
+| `pnpm --dir website run gen:docs` twice | pass; identical SHA-256 after each: `48d097ea7446e03e1afdd3d9d9ded4ee99fa6d23220108232f9949d42de4e0d8` |
+| `git diff --check` | pass |
+
+The monolithic `go test -timeout 20m ./...` is left to CI because this
+repository's own AGENTS.md says not to run it as one command under a
+per-command timeout; all changed and directly related packages above were run
+individually. `make smoke-no-build` was not run: it executes reverse-ETL
+behavior, which issue #3860 names as a non-goal for this lane.
+
+## Code review — inline execution
+
+Reviewed the final diff against `integration/4015-mvp-flat-r1` for
+truthfulness, generated-file provenance, failure-before-I/O coverage, and
+scope. No actionable finding: the static `planned` descriptor still says only
+what it can know, the dynamic capability remains guarded by runtime preflight,
+and all edited documentation is generated from or sourced by the documented
+generators.
