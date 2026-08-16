@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"context"
+	"errors"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -10,7 +11,6 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/synctransport"
 )
 
 func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
@@ -46,7 +46,7 @@ func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
 	if err := runETLTransport(context.Background(), nil, []string{"postgres-managed-target"}, &postgresStdout, false); err != nil {
 		t.Fatalf("runPostgresManagedTargetTransport help = %v", err)
 	}
-	for _, want := range []string{"warehouse worksets", "incremental_upsert", "write=false", "--approval-token-stdin"} {
+	for _, want := range []string{"warehouse worksets", "incremental_upsert", "write=false", "--approval-token-stdin", "--authorization-lifetime", "24h through 48h"} {
 		if !strings.Contains(postgresStdout.String(), want) {
 			t.Fatalf("PostgreSQL transport help missing %q", want)
 		}
@@ -55,6 +55,20 @@ func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
 	code := Run([]string{"etl", "transport", "github-issue-label", "cleanup", "--root", filepath.Join(t.TempDir(), "uninitialized")}, &stdout, &stderr)
 	if code != 0 || !strings.Contains(stdout.String(), "pm etl transport github-issue-label plan") || stderr.Len() != 0 {
 		t.Fatalf("bare cleanup namespace = code %d stdout=%q stderr=%q, want contextual manual without opening a project", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestPostgresManagedTargetPlanRejectsMalformedAuthorizationLifetimeBeforeProjectIO(t *testing.T) {
+	var stdout bytes.Buffer
+	err := runETLTransport(context.Background(), nil, []string{
+		"postgres-managed-target", "plan", "--connection", "transport-demo", "--stream", "commits", "--authorization-lifetime", "tomorrow",
+	}, &stdout, false)
+	var refusal *cliError
+	if !errors.As(err, &refusal) || refusal.category != categoryValidation {
+		t.Fatalf("malformed authorization lifetime error = %T %v, want typed validation refusal", err, err)
+	}
+	if !strings.Contains(refusal.Error(), "invalid --authorization-lifetime") {
+		t.Fatalf("malformed authorization lifetime refusal = %q, want exact flag reason", refusal.Error())
 	}
 }
 
@@ -210,7 +224,7 @@ func TestETLRunTransportApprovalLeavesLegacyRuntimeAlone(t *testing.T) {
 		"--batch-size", "10",
 		"--runtime",
 	}, strings.NewReader(""))
-	if err != nil || present || approval != (synctransport.DestinationApproval{}) {
+	if err != nil || present || approval.PlanID != "" || approval.ApprovalToken != "" || approval.Evidence != nil || approval.AuthorizeNextUnit != nil {
 		t.Fatalf("legacy --runtime carrier = %#v present=%t err=%v, want untouched legacy ETL arguments", approval, present, err)
 	}
 }

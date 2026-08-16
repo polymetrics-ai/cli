@@ -159,24 +159,25 @@ func validateClosedTransportBatchSize(source, destination connectors.Connector, 
 // this seam therefore fails closed unless a stage and externally verified
 // transports are registered.
 func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int, approval synctransport.DestinationApproval) (etlExecutionResult, error) {
+	emptyResult := etlExecutionResult{TransportPhaseMeasurement: &TransportPhaseMeasurement{}}
 	if a.transports == nil {
-		return etlExecutionResult{}, fmt.Errorf("closed transport registry is unavailable")
+		return emptyResult, fmt.Errorf("closed transport registry is unavailable")
 	}
 	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
 		Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode,
 	})
 	if err != nil {
-		return etlExecutionResult{}, err
+		return emptyResult, err
 	}
 	_, requiresManagedTargetApproval := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
 	if err := validateClosedTransportBatchSize(source, destination, batchSize); err != nil {
-		return etlExecutionResult{}, err
+		return emptyResult, err
 	}
 	if requiresManagedTargetApproval {
 		var err error
 		approval, err = a.authorizePostgresManagedTargetTransport(ctx, conn, streamName, approval, destRuntime)
 		if err != nil {
-			return etlExecutionResult{}, err
+			return emptyResult, err
 		}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
@@ -184,7 +185,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	prior = cloneStreamState(prior)
 	if prior.Checkpoint != nil {
 		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
-			return etlExecutionResult{}, err
+			return emptyResult, err
 		}
 	}
 	generationID := prior.GenerationID
@@ -251,14 +252,25 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			return nil
 		},
 	})
+	transportMeasurement := &TransportPhaseMeasurement{
+		ExtractedRecords:         transportResult.RecordsRead,
+		WarehouseParquetRecords:  transportResult.RecordsStaged,
+		PostgreSQLAppliedRecords: transportResult.RecordsApplied,
+		ExtractElapsedNanos:      transportResult.ExtractElapsed.Nanoseconds(),
+		WarehouseElapsedNanos:    transportResult.StageElapsed.Nanoseconds(),
+		PostgreSQLElapsedNanos:   transportResult.ApplyElapsed.Nanoseconds(),
+	}
 	if committed == nil || committed.CommittedAt == nil {
 		if err != nil {
-			return etlExecutionResult{}, err
+			return etlExecutionResult{
+				RecordsRead: transportResult.RecordsRead, RecordsLoaded: transportResult.RecordsApplied,
+				BatchCount: transportResult.Pages, TransportPhaseMeasurement: transportMeasurement,
+			}, err
 		}
 		if transportResult.Pages == 0 && transportResult.RecordsRead == 0 && transportResult.RecordsApplied == 0 {
 			if requiresManagedTargetApproval {
 				if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
-					return etlExecutionResult{}, err
+					return emptyResult, err
 				}
 			}
 			updated := cloneStreamState(prior)
@@ -269,12 +281,12 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			updated.RecordsLoaded = 0
 			updated.UpdatedAt = time.Now().UTC()
 			result := etlExecutionResult{
-				PendingStreamState: &pendingStreamState{Key: stateKey, State: updated},
+				PendingStreamState: &pendingStreamState{Key: stateKey, State: updated}, TransportPhaseMeasurement: transportMeasurement,
 			}
 			result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
 			return result, nil
 		}
-		return etlExecutionResult{}, fmt.Errorf("closed transport completed without a durable committed checkpoint")
+		return emptyResult, fmt.Errorf("closed transport completed without a durable committed checkpoint")
 	}
 
 	updated := StreamState{
@@ -287,9 +299,10 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		UpdatedAt:           *committed.CommittedAt,
 	}
 	result := etlExecutionResult{
-		RecordsRead:   transportResult.RecordsRead,
-		RecordsLoaded: transportResult.RecordsApplied,
-		BatchCount:    transportResult.Pages,
+		RecordsRead:               transportResult.RecordsRead,
+		RecordsLoaded:             transportResult.RecordsApplied,
+		BatchCount:                transportResult.Pages,
+		TransportPhaseMeasurement: transportMeasurement,
 		PendingStreamState: &pendingStreamState{
 			Key:   stateKey,
 			State: updated,

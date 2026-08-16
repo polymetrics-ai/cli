@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
@@ -88,6 +89,12 @@ type SourceRequest struct {
 	PrimaryKey  []string
 	Resume      synccontract.ResumeExpectation
 	Checkpoint  *synccontract.CheckpointEnvelope
+	// UnitDeadline bounds one provider page fetch when the registered source
+	// supports page-aware deadlines. It never bounds the whole transport run.
+	UnitDeadline time.Duration `json:"-"`
+	// RecordExtraction reports an individual provider page-fetch duration to
+	// the orchestration measurement. It carries neither a record nor a route.
+	RecordExtraction func(time.Duration) `json:"-"`
 }
 
 // SourcePage carries a bounded provider payload separately from #3810's
@@ -233,6 +240,10 @@ type DestinationApproval struct {
 	Evidence      *connectors.WriteApprovalEvidence `json:"-"`
 	Target        connectors.WriteApprovalTarget    `json:"-"`
 	PreviewDigest string                            `json:"-"`
+	// AuthorizeNextUnit rechecks a standing authorization immediately before a
+	// staged batch can cause a destination side effect. It is in-memory only:
+	// receipts and checkpoints retain no token or authorization callback.
+	AuthorizeNextUnit func(context.Context) error `json:"-"`
 }
 
 type DestinationApplyRequest struct {
@@ -299,6 +310,10 @@ type RunRequest struct {
 	BatchSize          int
 	Resume             synccontract.ResumeExpectation
 	Checkpoint         *synccontract.CheckpointEnvelope
+	// UnitDeadline bounds a single retryable provider-page fetch or destination
+	// apply/read-back unit. Zero selects the conservative default; it is never
+	// a deadline for the full source-to-destination run.
+	UnitDeadline time.Duration
 	// Approval is intentionally carried only in memory from App.RunETL to the
 	// destination apply boundary. It is never written into a stage artifact.
 	Approval DestinationApproval `json:"-"`
@@ -311,8 +326,13 @@ type Result struct {
 	RecordsStaged       int
 	RecordsApplied      int
 	Pages               int
+	ExtractElapsed      time.Duration
+	StageElapsed        time.Duration
+	ApplyElapsed        time.Duration
 	CommittedCheckpoint *synccontract.CheckpointEnvelope
 }
+
+const defaultTransportUnitDeadline = time.Minute
 
 func (r RunRequest) preflightRequest() PreflightRequest {
 	return PreflightRequest{Source: r.Source, Destination: r.Destination, Stream: r.Stream, Mode: r.Mode}
@@ -322,7 +342,17 @@ func (r RunRequest) validateExecution() error {
 	if r.BatchSize <= 0 {
 		return fmt.Errorf("transport batch size must be positive")
 	}
+	if r.UnitDeadline < 0 {
+		return fmt.Errorf("transport unit deadline must not be negative")
+	}
 	return nil
+}
+
+func (r RunRequest) unitDeadline() time.Duration {
+	if r.UnitDeadline > 0 {
+		return r.UnitDeadline
+	}
+	return defaultTransportUnitDeadline
 }
 
 // validateDispatchDependencies runs after closed registry preflight so an

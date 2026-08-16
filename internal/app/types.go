@@ -240,9 +240,23 @@ type Run struct {
 	RecordsFailed      int               `json:"records_failed"`
 	BatchCount         int               `json:"batch_count,omitempty"`
 	Checkpoint         map[string]string `json:"checkpoint,omitempty"`
-	Error              string            `json:"error,omitempty"`
-	StartedAt          time.Time         `json:"started_at"`
-	CompletedAt        time.Time         `json:"completed_at,omitempty"`
+	// TransportPhaseMeasurement is emitted with the terminal run transition on
+	// closed source -> warehouse -> destination transports. It deliberately
+	// contains counts and elapsed times only, never records, paths, tokens, or
+	// connector configuration.
+	TransportPhaseMeasurement *TransportPhaseMeasurement `json:"transport_phase_measurement,omitempty"`
+	Error                     string                     `json:"error,omitempty"`
+	StartedAt                 time.Time                  `json:"started_at"`
+	CompletedAt               time.Time                  `json:"completed_at,omitempty"`
+}
+
+type TransportPhaseMeasurement struct {
+	ExtractedRecords         int   `json:"extracted_records"`
+	WarehouseParquetRecords  int   `json:"warehouse_parquet_records"`
+	PostgreSQLAppliedRecords int   `json:"postgresql_applied_records"`
+	ExtractElapsedNanos      int64 `json:"extract_elapsed_ns"`
+	WarehouseElapsedNanos    int64 `json:"warehouse_elapsed_ns"`
+	PostgreSQLElapsedNanos   int64 `json:"postgresql_elapsed_ns"`
 }
 
 type QueryTableRequest struct {
@@ -371,12 +385,16 @@ type ReversePlan struct {
 	// definition-selected transport writes. They bind a pre-run approval to
 	// one connection configuration; neither field is caller-selectable write
 	// input and neither contains an approval token or credential material.
-	TransportConnectionID  string    `json:"transport_connection_id,omitempty"`
-	TransportStream        string    `json:"transport_stream,omitempty"`
-	TransportBindingSHA256 string    `json:"transport_binding_sha256,omitempty"`
-	TransportForwardPlanID string    `json:"transport_forward_plan_id,omitempty"`
-	CreatedAt              time.Time `json:"created_at"`
-	ExpiresAt              time.Time `json:"expires_at"`
+	TransportConnectionID  string `json:"transport_connection_id,omitempty"`
+	TransportStream        string `json:"transport_stream,omitempty"`
+	TransportBindingSHA256 string `json:"transport_binding_sha256,omitempty"`
+	TransportForwardPlanID string `json:"transport_forward_plan_id,omitempty"`
+	// AuthorizationLifetime is a bounded day-scale lifetime requested when a
+	// PostgreSQL managed-target transport plan is created. It is included in
+	// the sealed plan hash before its single-use approval token is issued.
+	AuthorizationLifetime time.Duration `json:"authorization_lifetime_ns,omitempty"`
+	CreatedAt             time.Time     `json:"created_at"`
+	ExpiresAt             time.Time     `json:"expires_at"`
 }
 
 type RunReverseETLRequest struct {

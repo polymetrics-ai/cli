@@ -585,7 +585,7 @@ SYNOPSIS
   pm etl transport github-issue-label plan --connection <name> [--json]
   pm etl transport github-issue-label preview <plan-id> [--json]
   pm etl run --connection <name> --stream issues --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
-  pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--json]
+  pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] [--json]
   pm etl transport postgres-managed-target preview <plan-id> [--json]
   pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
   pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
@@ -657,7 +657,7 @@ CLOSED POSTGRESQL MANAGED-TARGET TRANSPORT
   the ordinary ETL run:
 
     pm etl transport postgres-managed-target plan \
-      --connection <name> --stream <stream> --json
+      --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] --json
     pm etl transport postgres-managed-target preview <plan-id>
     pm etl run --connection <name> --stream <stream> --batch-size 1000 \
       --approval-plan <plan-id> --approval-token-stdin --confirm destructive
@@ -670,10 +670,14 @@ CLOSED POSTGRESQL MANAGED-TARGET TRANSPORT
   credential, a gap-free snapshot barrier continues into committed pgoutput
   transactions and resumes from the acknowledged LSN after restart.
 
-  Approval binds the live source schema and both credential revisions. Stale,
-  replayed, authentication-refused, and permission-refused runs stop before a
-  checkpoint advance. The public PostgreSQL connector remains write=false and
-  this route accepts no raw SQL or target identifiers.
+  Approval binds the live source schema and both credential revisions. The
+  one-time preview token creates a durable, revocable authorization with a
+  24h default lifetime (configurable from 24h through 48h at plan time).
+  Each provider page fetch and staged PostgreSQL apply has its own bounded
+  deadline, so a stalled unit stops without expiring the overall authority.
+  Stale, replayed, authentication-refused, and permission-refused runs stop
+  before a checkpoint advance. The public PostgreSQL connector remains
+  write=false and this route accepts no raw SQL or target identifiers.
 
 DIRECT CONNECTOR COMMANDS
   check

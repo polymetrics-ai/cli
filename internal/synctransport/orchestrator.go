@@ -3,6 +3,7 @@ package synctransport
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"polymetrics.ai/internal/synccontract"
 )
@@ -60,15 +61,19 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 
 	result := Result{}
 	err = resolved.Source.ReadTransport(ctx, cloneSourceRequest(SourceRequest{
-		Connector:   request.Source,
-		Runtime:     request.SourceRuntime,
-		Stream:      request.Stream,
-		CursorField: request.CursorField,
-		Mode:        request.Mode,
-		BatchSize:   request.BatchSize,
-		PrimaryKey:  request.DestinationBinding.PrimaryKey,
-		Resume:      request.Resume,
-		Checkpoint:  request.Checkpoint,
+		Connector:    request.Source,
+		Runtime:      request.SourceRuntime,
+		Stream:       request.Stream,
+		CursorField:  request.CursorField,
+		Mode:         request.Mode,
+		BatchSize:    request.BatchSize,
+		PrimaryKey:   request.DestinationBinding.PrimaryKey,
+		Resume:       request.Resume,
+		Checkpoint:   request.Checkpoint,
+		UnitDeadline: request.unitDeadline(),
+		RecordExtraction: func(elapsed time.Duration) {
+			result.ExtractElapsed += elapsed
+		},
 	}), func(page SourcePage) error {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -84,6 +89,14 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 				return fmt.Errorf("source transport tombstone: %w", err)
 			}
 		}
+		// Extraction has completed when the source gives us a valid bounded page,
+		// independently of whether a later warehouse or destination unit fails.
+		result.RecordsRead += len(page.Records)
+		if request.Approval.AuthorizeNextUnit != nil {
+			if err := request.Approval.AuthorizeNextUnit(ctx); err != nil {
+				return fmt.Errorf("authorize transport unit: %w", err)
+			}
+		}
 
 		// Retain the source-owned candidate for the final commit. The stage and
 		// destination receive defensive payload copies and cannot replace it.
@@ -92,6 +105,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		if err != nil {
 			return fmt.Errorf("clone source transport page: %w", err)
 		}
+		stageStarted := time.Now()
 		receipt, err := request.Stage.Stage(ctx, WarehouseStageRequest{
 			ConnectionID:    request.ConnectionID,
 			Generation:      request.Generation,
@@ -102,6 +116,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			Page:            stagePage,
 		})
 		if err != nil {
+			result.StageElapsed += time.Since(stageStarted)
 			return fmt.Errorf("stage transport page: %w", err)
 		}
 		if err := receipt.Validate(); err != nil {
@@ -109,14 +124,18 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		}
 		staged, err := request.Stage.Reopen(ctx, receipt)
 		if err != nil {
+			result.StageElapsed += time.Since(stageStarted)
 			return fmt.Errorf("reopen staged transport receipt: %w", err)
 		}
+		result.StageElapsed += time.Since(stageStarted)
 		if staged.ID == "" {
 			return fmt.Errorf("warehouse stage reopened an empty workset ID")
 		}
 		if staged.ID != receipt.ID {
 			return fmt.Errorf("warehouse stage reopened workset %q for receipt %q", staged.ID, receipt.ID)
 		}
+		// The re-opened workset is the independent durable Parquet boundary.
+		result.RecordsStaged += len(staged.Records)
 		if err := ctx.Err(); err != nil {
 			return err
 		}
@@ -141,26 +160,43 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		if err != nil {
 			return fmt.Errorf("clone destination apply request: %w", err)
 		}
-		acknowledgement, err := resolved.Destination.ApplyDestination(ctx, destinationApplyRequest)
+		acknowledgement, err := func() (synccontract.DownstreamAcknowledgement, error) {
+			applyCtx, cancelApply := context.WithTimeout(ctx, request.unitDeadline())
+			defer cancelApply()
+
+			applyStarted := time.Now()
+			acknowledgement, err := resolved.Destination.ApplyDestination(applyCtx, destinationApplyRequest)
+			result.ApplyElapsed += time.Since(applyStarted)
+			if err != nil {
+				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply destination transport: %w", err)
+			}
+			// Apply acknowledged the bounded workset. Retain this count even if the
+			// subsequent independent read-back refuses to advance its checkpoint.
+			result.RecordsApplied += len(staged.Records)
+			readBackRequest, err := cloneDestinationReadBackRequest(DestinationReadBackRequest{
+				Plan:            plan,
+				Workset:         destinationWorkset,
+				Acknowledgement: acknowledgement,
+				Runtime:         request.DestinationRuntime,
+				Source:          request.Source,
+				SourceRuntime:   request.SourceRuntime,
+				Binding:         request.DestinationBinding,
+				Stream:          request.Stream,
+				Mode:            request.Mode,
+			})
+			if err != nil {
+				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("clone destination read-back request: %w", err)
+			}
+			readBackStarted := time.Now()
+			if err := resolved.Destination.ReadBackDestination(applyCtx, readBackRequest); err != nil {
+				result.ApplyElapsed += time.Since(readBackStarted)
+				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("read back destination transport receipt: %w", err)
+			}
+			result.ApplyElapsed += time.Since(readBackStarted)
+			return acknowledgement, nil
+		}()
 		if err != nil {
-			return fmt.Errorf("apply destination transport: %w", err)
-		}
-		readBackRequest, err := cloneDestinationReadBackRequest(DestinationReadBackRequest{
-			Plan:            plan,
-			Workset:         destinationWorkset,
-			Acknowledgement: acknowledgement,
-			Runtime:         request.DestinationRuntime,
-			Source:          request.Source,
-			SourceRuntime:   request.SourceRuntime,
-			Binding:         request.DestinationBinding,
-			Stream:          request.Stream,
-			Mode:            request.Mode,
-		})
-		if err != nil {
-			return fmt.Errorf("clone destination read-back request: %w", err)
-		}
-		if err := resolved.Destination.ReadBackDestination(ctx, readBackRequest); err != nil {
-			return fmt.Errorf("read back destination transport receipt: %w", err)
+			return err
 		}
 		if !page.DeferCheckpoint {
 			if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
@@ -176,9 +212,6 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		committed := candidate.Clone()
 		committedAt := acknowledgement.AcknowledgedAt
 		committed.CommittedAt = &committedAt
-		result.RecordsRead += len(page.Records)
-		result.RecordsStaged += len(staged.Records)
-		result.RecordsApplied += len(staged.Records)
 		result.Pages++
 		if !page.DeferCheckpoint {
 			result.CommittedCheckpoint = &committed

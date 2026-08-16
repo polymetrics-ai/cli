@@ -35,7 +35,74 @@ const (
 	postgresTransportSourceDB = "pm_transport_source"
 	postgresTransportTargetDB = "pm_transport_target"
 	postgresTransportUser     = "pm_transport"
+
+	githubCommitTransportMaxPagesEnv = "POLYMETRICS_GITHUB_COMMITS_MAX_PAGES"
+	githubCommitTransportPageSize    = 100
+	githubCommitTransportMinimumRows = 99345
 )
+
+var errGitHubCommitScaleMaxPages = errors.New("GitHub commit scale max pages must be unlimited or a positive integer")
+
+type githubCommitTransportScale struct {
+	MaxPages     string
+	ExpectedRows int
+	MinimumRows  int
+}
+
+func githubCommitTransportScaleConfig(raw string) (githubCommitTransportScale, error) {
+	raw = strings.ToLower(strings.TrimSpace(raw))
+	if raw == "" || raw == "unlimited" {
+		return githubCommitTransportScale{MaxPages: "unlimited", MinimumRows: githubCommitTransportMinimumRows}, nil
+	}
+	pages, err := strconv.Atoi(raw)
+	if err != nil || pages <= 0 || pages > int(^uint(0)>>1)/githubCommitTransportPageSize {
+		return githubCommitTransportScale{}, errGitHubCommitScaleMaxPages
+	}
+	return githubCommitTransportScale{MaxPages: strconv.Itoa(pages), ExpectedRows: pages * githubCommitTransportPageSize}, nil
+}
+
+func TestGitHubCommitTransportScaleConfigDefaultFullCertification(t *testing.T) {
+	config, err := githubCommitTransportScaleConfig("")
+	if err != nil {
+		t.Fatalf("default GitHub commit scale config: %v", err)
+	}
+	if config.MaxPages != "unlimited" || config.ExpectedRows != 0 || config.MinimumRows != 99345 {
+		t.Fatalf("default GitHub commit scale config = %#v, want unlimited with 99,345 minimum rows", config)
+	}
+}
+
+func TestGitHubCommitTransportScaleConfigRejectsInvalidPagesBeforeHarness(t *testing.T) {
+	for _, raw := range []string{"0", "-1", "not-a-number"} {
+		t.Run(raw, func(t *testing.T) {
+			_, err := githubCommitTransportScaleConfig(raw)
+			if !errors.Is(err, errGitHubCommitScaleMaxPages) {
+				t.Fatalf("githubCommitTransportScaleConfig(%q) error = %T %v, want errGitHubCommitScaleMaxPages before harness startup", raw, err, err)
+			}
+		})
+	}
+}
+
+func TestGitHubCommitTransportScaleConfigBoundedPagesProduceExactRecordCounts(t *testing.T) {
+	for _, testCase := range []struct {
+		name         string
+		raw          string
+		wantMaxPages string
+		wantRows     int
+	}{
+		{name: "single GitHub page", raw: "1", wantMaxPages: "1", wantRows: 100},
+		{name: "ninety thousand commits", raw: "900", wantMaxPages: "900", wantRows: 90000},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			config, err := githubCommitTransportScaleConfig(testCase.raw)
+			if err != nil {
+				t.Fatalf("githubCommitTransportScaleConfig(%q): %v", testCase.raw, err)
+			}
+			if config.MaxPages != testCase.wantMaxPages || config.ExpectedRows != testCase.wantRows || config.MinimumRows != 0 {
+				t.Fatalf("githubCommitTransportScaleConfig(%q) = %#v, want pages=%q exact_rows=%d", testCase.raw, config, testCase.wantMaxPages, testCase.wantRows)
+			}
+		})
+	}
+}
 
 // TestPMBinaryExecutesPostgresWarehousePostgres proves the shipped composition
 // root rather than a hand-built driver: fresh pm processes consume a real
@@ -343,6 +410,30 @@ func TestPMBinaryExecutesAuthenticatedGitHubWarehousePostgres(t *testing.T) {
 		t.Fatalf("authenticated GitHub target types = number:%s node_id:%s labels:%s updated_at:%s locked:%s", numberType, nodeIDType, labelsType, updatedAtType, lockedType)
 	}
 	t.Logf("observed rails/rails rows: warehouse_parquet=%d postgres=%d; PostgreSQL types number=%s node_id=%s labels=%s updated_at=%s locked=%s", warehouseCount, count, numberType, nodeIDType, labelsType, updatedAtType, lockedType)
+	beforeUnattendedCounts := postgresTransportBusinessCounts(t, ctx, target)
+
+	// The first human token mints a durable, shape-bound authorization. A
+	// same-shape run must be reachable through a fresh shipped binary without
+	// placing that single-use token back into stdin or argv.
+	unattendedOutput, unattendedErr := runTransportPM(binary, "",
+		"etl", "run", "--connection", "github-to-postgres", "--stream", "issues",
+		"--batch-size", "50", "--approval-plan", approved.PlanID, "--confirm", "destructive",
+		"--root", root, "--json")
+	if unattendedErr != nil {
+		t.Fatalf("same-shape unattended GitHub transport = (%v, %s), want completed durable-authorization run", unattendedErr, unattendedOutput)
+	}
+	var unattended struct {
+		Run postgresTransportRun `json:"run"`
+	}
+	if err := json.Unmarshal([]byte(unattendedOutput), &unattended); err != nil {
+		t.Fatalf("decode unattended GitHub transport run: %v output=%s", err, unattendedOutput)
+	}
+	if unattended.Run.Status != "completed" || unattended.Run.RecordsRead != 0 || unattended.Run.RecordsLoaded != 0 {
+		t.Fatalf("same-shape unattended GitHub transport run = %#v, want completed zero-new-row resume", unattended.Run)
+	}
+	if after := postgresTransportBusinessCounts(t, ctx, target); !samePostgresTransportCounts(after, beforeUnattendedCounts) {
+		t.Fatalf("same-shape unattended transport changed target rows: before=%v after=%v", beforeUnattendedCounts, after)
+	}
 
 	beforeReplayCounts := postgresTransportBusinessCounts(t, ctx, target)
 	beforeReplayState := postgresTransportStreamStates(t, root)
@@ -385,6 +476,10 @@ func TestPMBinaryExecutesAuthenticatedGitHubCommitsWarehousePostgres(t *testing.
 	if os.Getenv("POLYMETRICS_GITHUB_TOKEN") == "" {
 		t.Fatal("POLYMETRICS_GITHUB_INTEGRATION=1 requires POLYMETRICS_GITHUB_TOKEN")
 	}
+	scale, err := githubCommitTransportScaleConfig(os.Getenv(githubCommitTransportMaxPagesEnv))
+	if err != nil {
+		t.Fatalf("%s: %v", githubCommitTransportMaxPagesEnv, err)
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
 	defer cancel()
 	harness := newPostgresTransportHarness(t)
@@ -414,7 +509,7 @@ func TestPMBinaryExecutesAuthenticatedGitHubCommitsWarehousePostgres(t *testing.
 		"credentials", "add", "github-commits-live", "--connector", "github",
 		"--config", "owner=rails", "--config", "repo=rails", "--config", "auth_type=token",
 		"--config", "rate_limit_account=authenticated-commits-transport-proof",
-		"--config", "max_pages=unlimited",
+		"--config", "max_pages="+scale.MaxPages,
 		"--from-env", "token=POLYMETRICS_GITHUB_TOKEN", "--root", root, "--json")
 	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
 	mustPostgresTransportPM(t, binary, "",
@@ -423,15 +518,24 @@ func TestPMBinaryExecutesAuthenticatedGitHubCommitsWarehousePostgres(t *testing.
 		"--stream", "commits", "--sync-mode", "incremental_upsert",
 		"--cursor", "commit_committer_date", "--primary-key", "sha", "--table", "commits",
 		"--root", root, "--json")
+	// Run this defer before the harness and TempDir cleanup defers. A terminal
+	// failure must retain its independently named durable counts in the test
+	// log; cleanup previously erased the only evidence of where a long run got.
+	defer logDurableGitHubCommitTransportPhaseCounts(t, root, "github-commits-to-postgres", "commits")
 
 	approved := runApprovedPostgresTransportBinary(t, binary, root, "github-commits-to-postgres", "commits", 1000)
 	run := approved.Run
 	if run.Status != "completed" || run.RecordsRead != run.RecordsLoaded {
 		t.Fatalf("authenticated rails/rails commits binary run = %#v, want an exact completed transfer", run)
 	}
-	const priorCertificationRows = 99345
-	if run.RecordsRead < priorCertificationRows {
-		t.Fatalf("authenticated rails/rails commits extracted %d rows, below the 99,345-row defect reference; max_pages=unlimited may not have reached the wire", run.RecordsRead)
+	if scale.ExpectedRows != 0 && run.RecordsRead != scale.ExpectedRows {
+		t.Fatalf("authenticated rails/rails commits extracted %d rows with max_pages=%s, want exact %d", run.RecordsRead, scale.MaxPages, scale.ExpectedRows)
+	}
+	if scale.MinimumRows != 0 && run.RecordsRead < scale.MinimumRows {
+		t.Fatalf("authenticated rails/rails commits extracted %d rows, below the %d-row defect reference; max_pages=%s may not have reached the wire", run.RecordsRead, scale.MinimumRows, scale.MaxPages)
+	}
+	if measurement := run.TransportPhaseMeasurement; measurement == nil || measurement.ExtractedRecords != run.RecordsRead || measurement.WarehouseParquetRecords != run.RecordsRead || measurement.PostgreSQLAppliedRecords != run.RecordsLoaded {
+		t.Fatalf("completed GitHub commit phase measurement = %#v, want durable exact extraction/Parquet/PostgreSQL counts", measurement)
 	}
 	assertPostgresTransportWarehouse(t, root)
 	warehouseCount := postgresTransportWarehouseCommitRows(t, root, "rails/rails")
@@ -445,13 +549,60 @@ func TestPMBinaryExecutesAuthenticatedGitHubCommitsWarehousePostgres(t *testing.
 	if targetCount != run.RecordsRead || delivery == "" {
 		t.Fatalf("GitHub commits managed target = %s.%s rows=%d delivery_present=%t, want all %d extracted rows", schema, relation, targetCount, delivery != "", run.RecordsRead)
 	}
-	t.Logf("observed rails/rails commits with max_pages=unlimited: extracted=%d warehouse_parquet=%d postgres=%d prior_reference=%d", run.RecordsRead, warehouseCount, targetCount, priorCertificationRows)
+	t.Logf("observed rails/rails commits with max_pages=%s: extracted=%d warehouse_parquet=%d postgres=%d expected_rows=%d minimum_rows=%d", scale.MaxPages, run.RecordsRead, warehouseCount, targetCount, scale.ExpectedRows, scale.MinimumRows)
 }
 
 type postgresTransportRun struct {
-	Status        string `json:"status"`
-	RecordsRead   int    `json:"records_read"`
-	RecordsLoaded int    `json:"records_loaded"`
+	Status                    string                           `json:"status"`
+	RecordsRead               int                              `json:"records_read"`
+	RecordsLoaded             int                              `json:"records_loaded"`
+	TransportPhaseMeasurement *pmapp.TransportPhaseMeasurement `json:"transport_phase_measurement,omitempty"`
+}
+
+// logDurableGitHubCommitTransportPhaseCounts reopens persisted state rather
+// than trusting the child process's success claim. It intentionally runs while
+// the test's project and database harness still exist, on both success and
+// failure exits, and logs only counts and elapsed durations.
+func logDurableGitHubCommitTransportPhaseCounts(t *testing.T, root, connection, stream string) {
+	t.Helper()
+	instance, err := pmapp.Open(root)
+	if err != nil {
+		t.Errorf("reopen GitHub commit project for durable phase counts before cleanup: %v", err)
+		return
+	}
+	stateBytes, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
+	if err != nil {
+		t.Errorf("read GitHub commit durable state before cleanup: %v", err)
+		return
+	}
+	var persisted struct {
+		Runs []pmapp.Run `json:"runs"`
+	}
+	if err := json.Unmarshal(stateBytes, &persisted); err != nil {
+		t.Errorf("decode GitHub commit durable state before cleanup: %v", err)
+		return
+	}
+	for i := len(persisted.Runs) - 1; i >= 0; i-- {
+		run := persisted.Runs[i]
+		if run.Connection != connection || run.Stream != stream {
+			continue
+		}
+		// Use the separately reopened App snapshot for the reported values; the
+		// direct JSON decode above identifies the terminal run even after the
+		// child command itself failed before it could print a run envelope.
+		reopened, err := instance.GetRun(run.ID)
+		if err != nil {
+			t.Errorf("read durable GitHub commit run %s before cleanup: %v", run.ID, err)
+			return
+		}
+		measurement := reopened.TransportPhaseMeasurement
+		if measurement == nil {
+			t.Errorf("durable GitHub commit run %s has no phase measurement before cleanup", run.ID)
+			return
+		}
+		t.Logf("durable rails/rails commits phase counts before cleanup: status=%s extracted=%d warehouse_parquet=%d postgres=%d extract_elapsed_ns=%d warehouse_elapsed_ns=%d postgresql_elapsed_ns=%d", reopened.Status, measurement.ExtractedRecords, measurement.WarehouseParquetRecords, measurement.PostgreSQLAppliedRecords, measurement.ExtractElapsedNanos, measurement.WarehouseElapsedNanos, measurement.PostgreSQLElapsedNanos)
+		return
+	}
 }
 
 type approvedPostgresTransportRun struct {

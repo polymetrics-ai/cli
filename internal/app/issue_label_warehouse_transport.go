@@ -461,10 +461,12 @@ func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Contex
 
 	records := make([]connectors.Record, 0, 1)
 	err = e.connector.Read(ctx, connectors.ReadRequest{
-		Stream:   "issues",
-		Config:   request.Runtime,
-		Limit:    request.BatchSize,
-		MaxPages: issueLabelTransportMaxReadPages,
+		Stream:           "issues",
+		Config:           request.Runtime,
+		Limit:            request.BatchSize,
+		MaxPages:         issueLabelTransportMaxReadPages,
+		PageDeadline:     request.UnitDeadline,
+		ObservePageFetch: request.RecordExtraction,
 	}, func(record connectors.Record) error {
 		number, err := issueNumberFromRecord(record)
 		if err != nil {
@@ -526,9 +528,11 @@ func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.
 		return emit(page)
 	}
 	err = e.connector.Read(ctx, connectors.ReadRequest{
-		Stream:   request.Stream,
-		Config:   request.Runtime,
-		MaxPages: maxPages,
+		Stream:           request.Stream,
+		Config:           request.Runtime,
+		MaxPages:         maxPages,
+		PageDeadline:     request.UnitDeadline,
+		ObservePageFetch: request.RecordExtraction,
 	}, func(record connectors.Record) error {
 		cloned, err := cloneTransportRecord(record)
 		if err != nil {

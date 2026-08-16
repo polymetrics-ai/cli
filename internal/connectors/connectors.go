@@ -402,6 +402,12 @@ type ReadRequest struct {
 	// tighten a declared stream limit; zero leaves it unchanged and a negative
 	// value is rejected.
 	MaxPages int
+	// PageDeadline bounds one retryable provider page request. It is used by
+	// closed transports and never represents a deadline for an entire stream.
+	PageDeadline time.Duration
+	// ObservePageFetch receives only an elapsed duration after a provider page
+	// request returns. It carries no route, headers, payload, or credentials.
+	ObservePageFetch func(time.Duration)
 }
 
 type DirectReadRequest struct {

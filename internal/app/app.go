@@ -1532,16 +1532,16 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 // checkpoint, or replay destination work.
 func (a *App) failAcknowledgedTransportRun(runID string, result etlExecutionResult, runErr error) (Run, error) {
 	if errors.Is(runErr, errTransportStreamStateConflict) {
-		return a.failRun(runID, runErr)
+		return a.failRunWithResult(runID, result, runErr)
 	}
 	if result.PendingStreamState == nil {
-		return a.failRun(runID, runErr)
+		return a.failRunWithResult(runID, result, runErr)
 	}
 	acknowledged, present := a.state.StreamStates[result.PendingStreamState.Key]
 	if !present {
-		return a.failRun(runID, runErr)
+		return a.failRunWithResult(runID, result, runErr)
 	}
-	return a.failRunWithAcknowledgedTransportState(runID, runErr, &acknowledgedTransportCompletion{
+	return a.failRunWithAcknowledgedTransportState(runID, result, runErr, &acknowledgedTransportCompletion{
 		key:   result.PendingStreamState.Key,
 		state: cloneStreamState(acknowledged),
 	})
@@ -1584,6 +1584,7 @@ func (a *App) completeRunWithAcknowledgedTransportState(runID string, result etl
 			current.Runs[i].RecordsFailed = result.RecordsFailed
 			current.Runs[i].BatchCount = result.BatchCount
 			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
+			current.Runs[i].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
 			current.Runs[i].CompletedAt = completedAt
 			found = true
 			transitionedInCallback = true
@@ -1623,7 +1624,7 @@ func (a *App) completeRunWithAcknowledgedTransportState(runID string, result etl
 	return Run{}, fmt.Errorf("completed run %q was not stored", runID)
 }
 
-func (a *App) failRunWithAcknowledgedTransportState(runID string, runErr error, acknowledged *acknowledgedTransportCompletion) (Run, error) {
+func (a *App) failRunWithAcknowledgedTransportState(runID string, result etlExecutionResult, runErr error, acknowledged *acknowledgedTransportCompletion) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
 	transitionedInCallback := false
@@ -1643,6 +1644,13 @@ func (a *App) failRunWithAcknowledgedTransportState(runID string, runErr error, 
 				return current, fmt.Errorf("acknowledged transport run %q has status %q, want running before failure: %w", runID, current.Runs[i].Status, errStateRevisionConflict)
 			}
 			current.Runs[i].Status = "failed"
+			current.Runs[i].RecordsRead = result.RecordsRead
+			current.Runs[i].RecordsTransformed = result.RecordsTransformed
+			current.Runs[i].RecordsLoaded = result.RecordsLoaded
+			current.Runs[i].RecordsFailed = result.RecordsFailed
+			current.Runs[i].BatchCount = result.BatchCount
+			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
+			current.Runs[i].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
 			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
 			current.Runs[i].CompletedAt = completedAt
 			transitionedInCallback = true
@@ -3329,6 +3337,10 @@ func (a *App) findConnectionFold(name string) (Connection, bool) {
 // must not return the JSON store's speculative callback state after a definite
 // pre-rename failure.
 func (a *App) failRun(runID string, runErr error) (Run, error) {
+	return a.failRunWithResult(runID, etlExecutionResult{}, runErr)
+}
+
+func (a *App) failRunWithResult(runID string, result etlExecutionResult, runErr error) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
 	transportStateConflict := errors.Is(runErr, errTransportStreamStateConflict)
@@ -3347,6 +3359,13 @@ func (a *App) failRun(runID string, runErr error) (Run, error) {
 				return current, fmt.Errorf("transport conflict run %q has status %q, want running before finalization", runID, current.Runs[i].Status)
 			}
 			current.Runs[i].Status = "failed"
+			current.Runs[i].RecordsRead = result.RecordsRead
+			current.Runs[i].RecordsTransformed = result.RecordsTransformed
+			current.Runs[i].RecordsLoaded = result.RecordsLoaded
+			current.Runs[i].RecordsFailed = result.RecordsFailed
+			current.Runs[i].BatchCount = result.BatchCount
+			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
+			current.Runs[i].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
 			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
 			current.Runs[i].CompletedAt = completedAt
 			transitionedInCallback = true

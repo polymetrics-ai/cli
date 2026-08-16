@@ -25,7 +25,7 @@ const etlTransportHelp = `NAME
 SYNOPSIS
   pm etl transport %s plan --connection <name> [--json]
   pm etl transport %s preview <plan-id> [--json]
-  pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--json]
+  pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] [--json]
   pm etl transport postgres-managed-target preview <plan-id> [--json]
   pm etl run --connection <name> --stream issues --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
   pm etl transport %s cleanup plan --connection <name> --forward-plan <plan-id> [--json]
@@ -73,7 +73,7 @@ const postgresManagedTargetTransportHelp = `NAME
   pm etl transport postgres-managed-target - deliver sealed warehouse worksets to PostgreSQL
 
 SYNOPSIS
-  pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--json]
+  pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] [--json]
   pm etl transport postgres-managed-target preview <plan-id> [--json]
   pm etl run --connection <name> --stream <stream> --batch-size <n> --approval-plan <plan-id> --approval-token-stdin --confirm destructive [--json]
 
@@ -95,6 +95,11 @@ DESCRIPTION
   After the snapshot barrier is durably delivered, committed pgoutput
   transactions follow the same warehouse and target acknowledgement path.
 
+  --authorization-lifetime selects the durable authorization lifetime after
+  the one-time preview token is consumed. It accepts 24h through 48h and
+  defaults to 24h. It does not extend the preview token: every provider page
+  fetch and staged destination apply remains independently deadline-bounded.
+
 SECURITY
   The approval token is accepted only through --approval-token-stdin. It is
   single-use and binds the source schema plus both credential revisions. Stale,
@@ -110,16 +115,17 @@ EXIT STATUS
 `
 
 type etlTransportPlanOutput struct {
-	ID            string                       `json:"id"`
-	Status        string                       `json:"status"`
-	Mode          string                       `json:"mode"`
-	ConnectionID  string                       `json:"connection_id"`
-	Action        string                       `json:"action"`
-	RecordCount   int                          `json:"record_count"`
-	Confirmation  connectors.WriteConfirmation `json:"confirmation"`
-	CreatedAt     time.Time                    `json:"created_at"`
-	ExpiresAt     time.Time                    `json:"expires_at"`
-	ForwardPlanID string                       `json:"forward_plan_id,omitempty"`
+	ID                    string                       `json:"id"`
+	Status                string                       `json:"status"`
+	Mode                  string                       `json:"mode"`
+	ConnectionID          string                       `json:"connection_id"`
+	Action                string                       `json:"action"`
+	RecordCount           int                          `json:"record_count"`
+	Confirmation          connectors.WriteConfirmation `json:"confirmation"`
+	CreatedAt             time.Time                    `json:"created_at"`
+	ExpiresAt             time.Time                    `json:"expires_at"`
+	AuthorizationLifetime time.Duration                `json:"authorization_lifetime_ns,omitempty"`
+	ForwardPlanID         string                       `json:"forward_plan_id,omitempty"`
 }
 
 type etlTransportWritePreviewOutput struct {
@@ -159,7 +165,7 @@ func runPostgresManagedTargetTransport(ctx context.Context, a *app.App, args []s
 	}
 	switch args[0] {
 	case "plan":
-		flags, err := parseStrictTransportFlags(args[1:], map[string]strictTransportFlagSpec{"connection": {}, "stream": {}})
+		flags, err := parseStrictTransportFlags(args[1:], map[string]strictTransportFlagSpec{"connection": {}, "stream": {}, "authorization-lifetime": {}})
 		if err != nil {
 			return err
 		}
@@ -169,7 +175,14 @@ func runPostgresManagedTargetTransport(ctx context.Context, a *app.App, args []s
 		if strings.TrimSpace(flags.value("stream")) == "" {
 			return validationErrorf("missing --stream")
 		}
-		plan, err := a.PlanPostgresManagedTargetTransport(ctx, flags.value("connection"), flags.value("stream"))
+		var authorizationLifetime time.Duration
+		if raw := strings.TrimSpace(flags.value("authorization-lifetime")); raw != "" {
+			authorizationLifetime, err = time.ParseDuration(raw)
+			if err != nil {
+				return validationErrorf("invalid --authorization-lifetime %q: %v", raw, err)
+			}
+		}
+		plan, err := a.PlanPostgresManagedTargetTransportWithAuthorizationLifetime(ctx, flags.value("connection"), flags.value("stream"), authorizationLifetime)
 		if err != nil {
 			return err
 		}
@@ -546,16 +559,17 @@ func validateTransportPlanID(planID string) error {
 
 func safeETLTransportPlan(plan app.ReversePlan) etlTransportPlanOutput {
 	return etlTransportPlanOutput{
-		ID:            plan.ID,
-		Status:        plan.Status,
-		Mode:          plan.Mode,
-		ConnectionID:  plan.TransportConnectionID,
-		Action:        plan.Action,
-		RecordCount:   plan.RecordCount,
-		Confirmation:  plan.ConfirmationPolicy,
-		CreatedAt:     plan.CreatedAt,
-		ExpiresAt:     plan.ExpiresAt,
-		ForwardPlanID: plan.TransportForwardPlanID,
+		ID:                    plan.ID,
+		Status:                plan.Status,
+		Mode:                  plan.Mode,
+		ConnectionID:          plan.TransportConnectionID,
+		Action:                plan.Action,
+		RecordCount:           plan.RecordCount,
+		Confirmation:          plan.ConfirmationPolicy,
+		CreatedAt:             plan.CreatedAt,
+		ExpiresAt:             plan.ExpiresAt,
+		AuthorizationLifetime: plan.AuthorizationLifetime,
+		ForwardPlanID:         plan.TransportForwardPlanID,
 	}
 }
 
