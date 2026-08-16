@@ -102,4 +102,6 @@ The repository explicitly directs agents under a per-command timeout not to invo
 
 ### Review
 
-Manual inline review is recorded in `REVIEW.md`. It found and fixed the queue off-by-one admission and no-op explicit-flag paths before final validation. Automated review coverage is pending the trusted-author PR-open trigger; it will be recorded with the API-reported base/head/SHA after PR creation.
+Manual inline review is recorded in `REVIEW.md`. It found and fixed the queue off-by-one admission and no-op explicit-flag paths before final validation, then the PR #4190 leaf-help regression above.
+
+Automated review coverage record: PR `https://github.com/polymetrics-ai/cli/pull/4190`, base `integration/4015-mvp-flat-r1`, head `fm/cli-bounded-ordered-pipeline-throughput-r1`, current head `973d217296857186ecd175756c35dc3e4025b1e2`, reviewed range pending. The PR is a non-draft sub-PR; parent PR #4100 (`integration/4015-mvp-flat-r1` → `main`) exists but remains draft. Per the stacked-PR route, primary `claude_auto` has no review record yet and the coverage route is `parent_pr_fallback`, status `pending`; fallback `none`. The API check poll after the fix push reported 6 passed, 10 pending, 4 skipped, 0 failed. Pending review/CI is not treated as approval.
