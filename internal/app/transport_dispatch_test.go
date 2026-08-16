@@ -120,6 +120,65 @@ func TestRunETLCanonicalFullAppendUsesRegisteredTransports(t *testing.T) {
 	}
 }
 
+func TestRunETLTransportPersistsPartialPhaseMeasurementBeforeFailureCleanup(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	first := fixture.sourceExecutor.page
+	second := fixture.sourceExecutor.page
+	second.Records = []connectors.Record{{"id": "2", "provider": "second"}}
+	second.CandidateCheckpoint.Position.Primary = synccontract.OpaqueToken("2")
+	second.CandidateCheckpoint.Position.TieBreaker = synccontract.OpaqueToken("2")
+	fixture.sourceExecutor.pages = []synctransport.SourcePage{first, second}
+	fixture.destinationExecutor.failApplyAt = 2
+	fixture.destinationExecutor.applyErr = errors.New("injected destination apply failure")
+
+	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	})
+	if !errors.Is(err, fixture.destinationExecutor.applyErr) {
+		t.Fatalf("RunETL() error = %T %v, want injected destination failure", err, err)
+	}
+	if run.Status != "failed" || run.TransportPhaseMeasurement == nil {
+		t.Fatalf("failed run = %#v, want persisted transport phase measurement", run)
+	}
+	measurement := run.TransportPhaseMeasurement
+	if measurement.ExtractedRecords != 2 || measurement.WarehouseParquetRecords != 2 || measurement.PostgreSQLAppliedRecords != 1 {
+		t.Fatalf("failed measurement counts = %#v, want extracted/warehouse/postgres = 2/2/1", measurement)
+	}
+	if measurement.ExtractElapsedNanos <= 0 || measurement.WarehouseElapsedNanos <= 0 || measurement.PostgreSQLElapsedNanos <= 0 {
+		t.Fatalf("failed measurement durations = %#v, want all three phase durations before deferred caller cleanup", measurement)
+	}
+	reopened, reopenErr := Open(filepath.Dir(fixture.app.ProjectDir()))
+	if reopenErr != nil {
+		t.Fatalf("Open(reopened project) error = %v", reopenErr)
+	}
+	persisted, persistedErr := reopened.GetRun(run.ID)
+	if persistedErr != nil || !reflect.DeepEqual(persisted.TransportPhaseMeasurement, measurement) {
+		t.Fatalf("persisted failed run measurement = (%#v, %v), want %#v before project cleanup", persisted.TransportPhaseMeasurement, persistedErr, measurement)
+	}
+}
+
+func TestRunETLTransportPersistsZeroPhaseMeasurementWhenRefusedBeforeSourceIO(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	fixture.app.transports = nil
+
+	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	})
+	if err == nil || !strings.Contains(err.Error(), "closed transport registry is unavailable") {
+		t.Fatalf("RunETL() error = %v, want closed transport refusal before source I/O", err)
+	}
+	if fixture.sourceExecutor.readCalls != 0 || fixture.destinationExecutor.applyCalls != 0 {
+		t.Fatalf("source/apply calls = %d/%d, want no I/O after pre-source refusal", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls)
+	}
+	if run.Status != "failed" || run.TransportPhaseMeasurement == nil {
+		t.Fatalf("pre-source refused run = %#v, want terminal zero phase measurement", run)
+	}
+	measurement := run.TransportPhaseMeasurement
+	if measurement.ExtractedRecords != 0 || measurement.WarehouseParquetRecords != 0 || measurement.PostgreSQLAppliedRecords != 0 || measurement.ExtractElapsedNanos != 0 || measurement.WarehouseElapsedNanos != 0 || measurement.PostgreSQLElapsedNanos != 0 {
+		t.Fatalf("pre-source refused measurement = %#v, want explicit zero counts and durations", measurement)
+	}
+}
+
 func TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeChangeCapture)
 
@@ -2339,7 +2398,7 @@ type appTransportSourceExecutor struct {
 func (e *appTransportSourceExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
 	return e.reference
 }
-func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, _ synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
 	e.readCalls++
 	if err := ctx.Err(); err != nil {
 		return err
@@ -2349,6 +2408,9 @@ func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, _ synctr
 		pages = []synctransport.SourcePage{e.page}
 	}
 	for _, page := range pages {
+		if request.RecordExtraction != nil {
+			request.RecordExtraction(time.Nanosecond)
+		}
 		if err := emit(page); err != nil {
 			return err
 		}
@@ -2370,6 +2432,8 @@ type appTransportDestinationExecutor struct {
 	applyCalls    int
 	readBackCalls int
 	afterApply    func()
+	failApplyAt   int
+	applyErr      error
 }
 
 func (e *appTransportDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -2382,6 +2446,9 @@ func (e *appTransportDestinationExecutor) PlanDestination(_ context.Context, req
 }
 func (e *appTransportDestinationExecutor) ApplyDestination(_ context.Context, _ synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
 	e.applyCalls++
+	if e.failApplyAt == e.applyCalls && e.applyErr != nil {
+		return synccontract.DownstreamAcknowledgement{}, e.applyErr
+	}
 	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(e.sink, time.Now().UTC())
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err

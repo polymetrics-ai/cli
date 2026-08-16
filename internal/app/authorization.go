@@ -216,6 +216,25 @@ func fmtAuthorizationNotFound(reference string) error {
 	return errors.New("authorization " + reference + " not found")
 }
 
+// authorizationRecord reloads one durable record before a caller derives a
+// scope whose expiry must match it exactly. It never exposes a token or raw
+// credential material, and does not itself authorize a mutation.
+func (a *App) authorizationRecord(reference string) (AuthorizationRecord, error) {
+	loaded, err := a.store.LoadReadOnly()
+	if err != nil {
+		return AuthorizationRecord{}, err
+	}
+	if err := a.normalizeLoadedState(loaded, false); err != nil {
+		return AuthorizationRecord{}, err
+	}
+	for _, record := range a.state.Authorizations {
+		if record.Reference == reference {
+			return cloneAuthorizationRecord(record), nil
+		}
+	}
+	return AuthorizationRecord{}, fmtAuthorizationNotFound(reference)
+}
+
 func (a *App) requireAuthorization(reference string, actual AuthorizationScope, now time.Time) (AuthorizationRecord, error) {
 	loaded, err := a.store.LoadReadOnly()
 	if err != nil {

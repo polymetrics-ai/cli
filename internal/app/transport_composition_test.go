@@ -10,6 +10,7 @@ import (
 	"net/http/httptest"
 	"strconv"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
@@ -518,6 +519,61 @@ func TestOpenComposedGitHubCommitsHonorsTransportMaxPages(t *testing.T) {
 				t.Fatalf("max_pages=%q read = (err=%v requests=%d records=%d), want requests=%d records=%d", testCase.maxPages, err, providerRequests, records, testCase.wantRequests, testCase.wantRecords)
 			}
 		})
+	}
+}
+
+func TestOpenComposedGitHubCommitsTimesOutOneProviderPageWithoutCancellingTheRunContext(t *testing.T) {
+	providerRequests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		providerRequests++
+		<-request.Context().Done()
+	}))
+	defer server.Close()
+
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	github, _ := a.registry.Get("github")
+	postgres, _ := a.registry.Get("postgres")
+	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+		Source: github, Destination: postgres, Stream: "commits", Mode: synccontract.ModeFullAppend,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	resume := synccontract.ResumeExpectation{
+		Source:           synccontract.SourceIdentity{Engine: "github", AccountOrCluster: "deadline-test", ObjectScope: "commits"},
+		SourceGeneration: synccontract.OpaqueToken("deadline-generation"),
+	}
+	runCtx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	started := time.Now()
+	err = resolved.Source.ReadTransport(runCtx, synctransport.SourceRequest{
+		Connector: github, Runtime: connectors.RuntimeConfig{ProjectDir: root, Config: map[string]string{
+			"base_url": server.URL, "owner": "rails", "repo": "rails", "public_access": "true", "max_pages": "1",
+		}},
+		Stream: "commits", Mode: synccontract.ModeFullAppend, BatchSize: 100,
+		Resume: resume, UnitDeadline: 20 * time.Millisecond,
+	}, func(synctransport.SourcePage) error {
+		t.Fatal("slow provider page reached the source emitter")
+		return nil
+	})
+	if !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("ReadTransport() error = %T %v, want the one-page deadline", err, err)
+	}
+	if elapsed := time.Since(started); elapsed >= 300*time.Millisecond {
+		t.Fatalf("ReadTransport() elapsed = %s, want a page deadline rather than the one-second run context", elapsed)
+	}
+	if providerRequests != 1 {
+		t.Fatalf("provider requests = %d, want one timed-out fetch", providerRequests)
+	}
+	if runCtx.Err() != nil {
+		t.Fatalf("run context = %v, want the timed-out page to leave the run context usable for checkpoint resume", runCtx.Err())
 	}
 }
 

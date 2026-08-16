@@ -21,13 +21,22 @@ import (
 )
 
 type etlExecutionResult struct {
-	RecordsRead        int
-	RecordsTransformed int
-	RecordsLoaded      int
-	RecordsFailed      int
-	BatchCount         int
-	Checkpoint         map[string]string
-	PendingStreamState *pendingStreamState
+	RecordsRead               int
+	RecordsTransformed        int
+	RecordsLoaded             int
+	RecordsFailed             int
+	BatchCount                int
+	Checkpoint                map[string]string
+	TransportPhaseMeasurement *TransportPhaseMeasurement
+	PendingStreamState        *pendingStreamState
+}
+
+func cloneTransportPhaseMeasurement(measurement *TransportPhaseMeasurement) *TransportPhaseMeasurement {
+	if measurement == nil {
+		return nil
+	}
+	clone := *measurement
+	return &clone
 }
 
 type pendingStreamState struct {

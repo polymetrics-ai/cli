@@ -211,7 +211,7 @@ input to the ordinary ETL run:
 
 ```bash
 pm etl transport postgres-managed-target plan \
-  --connection <name> --stream <stream> --json
+  --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] --json
 pm etl transport postgres-managed-target preview <plan-id>
 
 pm etl run --connection <name> --stream <stream> \
@@ -228,10 +228,13 @@ For an `incremental_upsert` PostgreSQL source, set `transport_bootstrap=true`
 on the source credential to start with a gap-free snapshot barrier and continue
 into committed `pgoutput` transactions. A fresh process resumes from the
 acknowledged LSN. Planning binds the sealed source schema and both credential
-revisions; stale, replayed, authentication-refused, and permission-refused runs
-do not advance the checkpoint. PostgreSQL remains `write=false` in the public
-connector capability surface, and this route accepts no raw SQL or caller-
-selected target identifiers.
+revisions. The one-time preview token creates a durable, revocable authorization
+with a 24h default lifetime (configurable from 24h through 48h at plan time).
+Each provider page fetch and staged PostgreSQL apply has its own bounded
+deadline, so a stalled unit stops without expiring the overall authority. Stale,
+replayed, authentication-refused, and permission-refused runs do not advance the
+checkpoint. PostgreSQL remains `write=false` in the public connector capability
+surface, and this route accepts no raw SQL or caller-selected target identifiers.
 
 ## Checking run status
 

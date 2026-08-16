@@ -14,14 +14,18 @@ import (
 )
 
 const (
-	reversePlanModePostgresManagedTarget = "postgres_managed_target_transport"
-	postgresManagedTargetOperation       = "postgres_managed_target"
-	postgresManagedTargetBindingDomain   = "postgres_managed_target_transport/v1"
+	reversePlanModePostgresManagedTarget              = "postgres_managed_target_transport"
+	postgresManagedTargetOperation                    = "postgres_managed_target"
+	postgresManagedTargetBindingDomain                = "postgres_managed_target_transport/v1"
+	postgresManagedTargetAuthorizationDefaultLifetime = 24 * time.Hour
+	postgresManagedTargetAuthorizationMinimumLifetime = 24 * time.Hour
+	postgresManagedTargetAuthorizationMaximumLifetime = 48 * time.Hour
 )
 
 var (
-	ErrPostgresManagedTargetApprovalRequired = errors.New("PostgreSQL managed target approval is required")
-	ErrPostgresManagedTargetApprovalStale    = errors.New("PostgreSQL managed target approval is stale")
+	ErrPostgresManagedTargetApprovalRequired      = errors.New("PostgreSQL managed target approval is required")
+	ErrPostgresManagedTargetApprovalStale         = errors.New("PostgreSQL managed target approval is stale")
+	ErrPostgresManagedTargetAuthorizationLifetime = errors.New("PostgreSQL managed target authorization lifetime must be between 24h and 48h")
 )
 
 type postgresManagedTargetApprovalBinding struct {
@@ -42,6 +46,18 @@ type postgresManagedTargetApprovalBinding struct {
 }
 
 func (a *App) PlanPostgresManagedTargetTransport(ctx context.Context, connectionName, streamName string) (ReversePlan, error) {
+	return a.PlanPostgresManagedTargetTransportWithAuthorizationLifetime(ctx, connectionName, streamName, 0)
+}
+
+// PlanPostgresManagedTargetTransportWithAuthorizationLifetime creates the
+// one-time-token plan for the closed PostgreSQL route. The lifetime becomes
+// part of its sealed, shape-bound standing authorization only after that token
+// is consumed; it never extends the token or its preview grant.
+func (a *App) PlanPostgresManagedTargetTransportWithAuthorizationLifetime(ctx context.Context, connectionName, streamName string, authorizationLifetime time.Duration) (ReversePlan, error) {
+	authorizationLifetime, err := normalizePostgresManagedTargetAuthorizationLifetime(authorizationLifetime)
+	if err != nil {
+		return ReversePlan{}, err
+	}
 	conn, stream, mode, runtime, binding, err := a.preparePostgresManagedTargetApproval(ctx, connectionName, streamName)
 	if err != nil {
 		return ReversePlan{}, err
@@ -50,10 +66,7 @@ func (a *App) PlanPostgresManagedTargetTransport(ctx context.Context, connection
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	planHash, err := hashJSON(struct {
-		Domain  string `json:"domain"`
-		Binding string `json:"binding"`
-	}{postgresManagedTargetBindingDomain, bindingSHA256})
+	planHash, err := postgresManagedTargetPlanHash(bindingSHA256, authorizationLifetime)
 	if err != nil {
 		return ReversePlan{}, err
 	}
@@ -80,7 +93,8 @@ func (a *App) PlanPostgresManagedTargetTransport(ctx context.Context, connection
 		Mappings: map[string]string{}, ConfirmationChallenge: string(confirmation.Kind), ConfirmationPolicy: confirmation,
 		RecordCount: 0, PlanHash: planHash, PlanSeal: &seal,
 		TransportConnectionID: conn.ID, TransportStream: streamName, TransportBindingSHA256: bindingSHA256,
-		CreatedAt: seal.IssuedAt, ExpiresAt: seal.ExpiresAt,
+		AuthorizationLifetime: authorizationLifetime,
+		CreatedAt:             seal.IssuedAt, ExpiresAt: seal.ExpiresAt,
 	}
 	_ = stream
 	a.state.ReversePlans = append(a.state.ReversePlans, plan)
@@ -88,6 +102,24 @@ func (a *App) PlanPostgresManagedTargetTransport(ctx context.Context, connection
 		return ReversePlan{}, err
 	}
 	return plan, nil
+}
+
+func normalizePostgresManagedTargetAuthorizationLifetime(lifetime time.Duration) (time.Duration, error) {
+	if lifetime == 0 {
+		return postgresManagedTargetAuthorizationDefaultLifetime, nil
+	}
+	if lifetime < postgresManagedTargetAuthorizationMinimumLifetime || lifetime > postgresManagedTargetAuthorizationMaximumLifetime {
+		return 0, ErrPostgresManagedTargetAuthorizationLifetime
+	}
+	return lifetime, nil
+}
+
+func postgresManagedTargetPlanHash(bindingSHA256 string, authorizationLifetime time.Duration) (string, error) {
+	return hashJSON(struct {
+		Domain                     string        `json:"domain"`
+		Binding                    string        `json:"binding"`
+		AuthorizationLifetimeNanos time.Duration `json:"authorization_lifetime_ns"`
+	}{postgresManagedTargetBindingDomain, bindingSHA256, authorizationLifetime})
 }
 
 func (a *App) PreviewPostgresManagedTargetTransport(ctx context.Context, planID string) (ReversePlan, connectors.WritePreview, error) {
@@ -114,44 +146,128 @@ func (a *App) PreviewPostgresManagedTargetTransport(ctx context.Context, planID 
 }
 
 func (a *App) authorizePostgresManagedTargetTransport(ctx context.Context, conn Connection, streamName string, approval synctransport.DestinationApproval, runtime connectors.RuntimeConfig) (synctransport.DestinationApproval, error) {
-	if strings.TrimSpace(approval.PlanID) == "" || strings.TrimSpace(approval.ApprovalToken) == "" {
-		return synctransport.DestinationApproval{}, fmt.Errorf("%w: transport requires a previewed approval plan and stdin token", ErrPostgresManagedTargetApprovalRequired)
+	if strings.TrimSpace(approval.PlanID) == "" {
+		return synctransport.DestinationApproval{}, fmt.Errorf("%w: transport requires a previewed approval plan", ErrPostgresManagedTargetApprovalRequired)
 	}
 	plan, err := a.GetReversePlan(approval.PlanID)
 	if err != nil {
 		return synctransport.DestinationApproval{}, err
 	}
-	if plan.Mode == reversePlanModePostgresManagedTarget && plan.Status == "executed" {
+	if plan.Mode == reversePlanModePostgresManagedTarget && plan.Status == "executed" && plan.AuthorizationReference == "" && strings.TrimSpace(approval.ApprovalToken) != "" {
 		return synctransport.DestinationApproval{}, &AuthorizationTokenReplayError{Reference: plan.ID}
 	}
 	if plan.Mode != reversePlanModePostgresManagedTarget || plan.TransportConnectionID != conn.ID || plan.TransportStream != streamName {
 		return synctransport.DestinationApproval{}, errors.New("PostgreSQL managed target approval does not match this connection stream")
 	}
-	_, _, _, resolvedRuntime, binding, err := a.preparePostgresManagedTargetApproval(ctx, conn.Name, streamName)
+	resolvedConn, stream, mode, resolvedRuntime, binding, err := a.preparePostgresManagedTargetApproval(ctx, conn.Name, streamName)
 	if err != nil {
 		return synctransport.DestinationApproval{}, err
 	}
 	if !runtimeApprovalIdentityEqual(runtime, resolvedRuntime) {
 		return synctransport.DestinationApproval{}, errors.New("PostgreSQL managed target approval runtime changed")
 	}
-	preview, err := a.validatePostgresManagedTargetPlan(plan, resolvedRuntime, binding)
+	// The one-time preview seal is deliberately short lived. Once that seal
+	// mints the standing authorization, later units validate the durable record
+	// and its shape instead; otherwise an expired preview seal would silently
+	// reintroduce a run-scoped ceiling below the authorization lifetime.
+	preview, err := a.validatePostgresManagedTargetPlanWithSeal(plan, resolvedRuntime, binding, plan.AuthorizationReference == "")
 	if err != nil {
 		return synctransport.DestinationApproval{}, err
 	}
-	evidence, _, err := a.consumePlanApproval(plan, RunReverseETLRequest{
-		PlanID: approval.PlanID, ApprovalToken: approval.ApprovalToken, Confirmation: approval.Confirmation,
-	}, preview, nil)
+
+	var (
+		scope                  AuthorizationScope
+		authorizationReference string
+	)
+	if plan.AuthorizationReference != "" {
+		if strings.TrimSpace(approval.ApprovalToken) != "" {
+			return synctransport.DestinationApproval{}, &AuthorizationTokenReplayError{Reference: plan.AuthorizationReference}
+		}
+		record, err := a.authorizationRecord(plan.AuthorizationReference)
+		if err != nil {
+			return synctransport.DestinationApproval{}, err
+		}
+		scope, err = a.postgresManagedTargetAuthorizationScope(resolvedConn, streamName, stream, mode, plan, resolvedRuntime, binding, record.Scope.ExpiresAt)
+		if err != nil {
+			return synctransport.DestinationApproval{}, err
+		}
+		if _, err := a.requireAuthorization(record.Reference, scope, time.Now().UTC()); err != nil {
+			return synctransport.DestinationApproval{}, err
+		}
+		authorizationReference = record.Reference
+	} else {
+		if strings.TrimSpace(approval.ApprovalToken) == "" {
+			return synctransport.DestinationApproval{}, fmt.Errorf("%w: transport requires a previewed approval plan and stdin token", ErrPostgresManagedTargetApprovalRequired)
+		}
+		lifetime, err := normalizePostgresManagedTargetAuthorizationLifetime(plan.AuthorizationLifetime)
+		if err != nil {
+			return synctransport.DestinationApproval{}, err
+		}
+		scope, err = a.postgresManagedTargetAuthorizationScope(resolvedConn, streamName, stream, mode, plan, resolvedRuntime, binding, time.Now().UTC().Add(lifetime))
+		if err != nil {
+			return synctransport.DestinationApproval{}, err
+		}
+		authorization, err := newAuthorizationRecord(scope, time.Now().UTC())
+		if err != nil {
+			return synctransport.DestinationApproval{}, err
+		}
+		if _, _, err := a.consumePlanApproval(plan, RunReverseETLRequest{
+			PlanID: approval.PlanID, ApprovalToken: approval.ApprovalToken, Confirmation: approval.Confirmation,
+		}, preview, &authorization); err != nil {
+			return synctransport.DestinationApproval{}, err
+		}
+		authorizationReference = authorization.Reference
+	}
+	evidence, err := durableAuthorizationEvidence(scope)
 	if err != nil {
 		return synctransport.DestinationApproval{}, err
-	}
-	if evidence == nil {
-		return synctransport.DestinationApproval{}, errors.New("PostgreSQL managed target approval produced no authenticated evidence")
 	}
 	approval.ApprovalToken = ""
 	approval.Evidence = evidence
 	approval.Target = preview.ApprovalTarget
 	approval.PreviewDigest = preview.Digest
+	approval.AuthorizeNextUnit = func(unitCtx context.Context) error {
+		if unitCtx == nil {
+			return errors.New("PostgreSQL managed target authorization context is required")
+		}
+		if err := unitCtx.Err(); err != nil {
+			return err
+		}
+		_, err := a.requireAuthorization(authorizationReference, scope, time.Now().UTC())
+		return err
+	}
 	return approval, nil
+}
+
+func (a *App) postgresManagedTargetAuthorizationScope(conn Connection, streamName string, stream StreamConfig, mode SyncMode, plan ReversePlan, runtime connectors.RuntimeConfig, binding postgresManagedTargetApprovalBinding, expiresAt time.Time) (AuthorizationScope, error) {
+	credential, ok := a.findCredential(conn.Destination.Credential)
+	if !ok {
+		return AuthorizationScope{}, fmt.Errorf("PostgreSQL managed target authorization credential %q was not found", conn.Destination.Credential)
+	}
+	destinationTable := stream.DestinationTable
+	if destinationTable == "" {
+		destinationTable = streamName
+	}
+	return canonicalAuthorizationScope(AuthorizationScope{
+		SourceConnection:              conn.ID,
+		DestinationConnection:         credential.ID,
+		DestinationCredentialRevision: runtime.CredentialRevision,
+		StreamTables: []AuthorizationStreamTable{{
+			Stream: streamName, SourceTable: binding.SourceSchema, DestinationTable: destinationTable,
+		}},
+		FieldMappings: map[string]string{
+			"source_connector":            binding.SourceConnector,
+			"source_credential_revision":  binding.SourceCredential,
+			"source_configuration_digest": binding.SourceConfiguration,
+			"sync_mode":                   string(mode.ContractMode),
+			"transport_binding_sha256":    plan.TransportBindingSHA256,
+		},
+		WriteAction:                    plan.Action,
+		DestinationConfigurationDigest: runtime.ConfigurationDigest,
+		EnabledOperations:              []string{plan.Action},
+		ConfirmationPolicy:             connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+		ExpiresAt:                      expiresAt.UTC(),
+	}), nil
 }
 
 func (a *App) markPostgresManagedTargetPlanExecuted(planID string) error {
@@ -160,7 +276,13 @@ func (a *App) markPostgresManagedTargetPlanExecuted(planID string) error {
 			if current.ReversePlans[i].ID != planID {
 				continue
 			}
-			if current.ReversePlans[i].Mode != reversePlanModePostgresManagedTarget || current.ReversePlans[i].Status != reversePlanStatusApprovalConsumptionUncertain {
+			if current.ReversePlans[i].Mode != reversePlanModePostgresManagedTarget {
+				return current, fmt.Errorf("PostgreSQL managed target plan %q is not awaiting transport completion", planID)
+			}
+			if current.ReversePlans[i].Status == "executed" && current.ReversePlans[i].AuthorizationReference != "" {
+				return current, nil
+			}
+			if current.ReversePlans[i].Status != reversePlanStatusApprovalConsumptionUncertain {
 				return current, fmt.Errorf("PostgreSQL managed target plan %q is not awaiting transport completion", planID)
 			}
 			current.ReversePlans[i].Status = "executed"
@@ -177,6 +299,15 @@ func (a *App) markPostgresManagedTargetPlanExecuted(planID string) error {
 }
 
 func (a *App) validatePostgresManagedTargetPlan(plan ReversePlan, runtime connectors.RuntimeConfig, binding postgresManagedTargetApprovalBinding) (connectors.WritePreview, error) {
+	return a.validatePostgresManagedTargetPlanWithSeal(plan, runtime, binding, true)
+}
+
+// validatePostgresManagedTargetPlanWithSeal validates the sealed initial
+// approval shape. A pre-token plan must have a current seal. A plan that has
+// already minted a durable authorization is instead bound by the authorization
+// record's exact scope identity, including this plan binding, and may outlive
+// the intentionally short preview seal.
+func (a *App) validatePostgresManagedTargetPlanWithSeal(plan ReversePlan, runtime connectors.RuntimeConfig, binding postgresManagedTargetApprovalBinding, requireCurrentSeal bool) (connectors.WritePreview, error) {
 	bindingSHA256, err := hashJSON(binding)
 	if err != nil {
 		return connectors.WritePreview{}, err
@@ -184,15 +315,21 @@ func (a *App) validatePostgresManagedTargetPlan(plan ReversePlan, runtime connec
 	if plan.TransportBindingSHA256 != bindingSHA256 || plan.DestinationConnector != binding.Destination || plan.Action != postgresManagedTargetAction(binding.Mode) {
 		return connectors.WritePreview{}, fmt.Errorf("%w: plan no longer matches the connection", ErrPostgresManagedTargetApprovalStale)
 	}
-	planHash, err := hashJSON(struct {
-		Domain  string `json:"domain"`
-		Binding string `json:"binding"`
-	}{postgresManagedTargetBindingDomain, bindingSHA256})
+	authorizationLifetime, err := normalizePostgresManagedTargetAuthorizationLifetime(plan.AuthorizationLifetime)
+	if err != nil {
+		return connectors.WritePreview{}, fmt.Errorf("%w: authorization lifetime", ErrPostgresManagedTargetApprovalStale)
+	}
+	planHash, err := postgresManagedTargetPlanHash(bindingSHA256, authorizationLifetime)
 	if err != nil || plan.PlanHash != planHash {
 		return connectors.WritePreview{}, fmt.Errorf("%w: plan hash changed", ErrPostgresManagedTargetApprovalStale)
 	}
-	if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
-		return connectors.WritePreview{}, err
+	if requireCurrentSeal {
+		if plan.PlanSeal == nil {
+			return connectors.WritePreview{}, fmt.Errorf("%w: plan seal is missing", ErrPostgresManagedTargetApprovalStale)
+		}
+		if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
+			return connectors.WritePreview{}, err
+		}
 	}
 	confirmation := connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
 	target := connectors.WriteApprovalTarget{

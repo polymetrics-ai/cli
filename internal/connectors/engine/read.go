@@ -214,7 +214,12 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 		if err != nil {
 			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
 		}
-		resp, err := requester.Do(ctx, http.MethodGet, reqPath, page.Query, nil)
+		pageCtx, cancelPage := readPageContext(ctx, req.PageDeadline)
+		pageStarted := time.Now()
+		resp, err := requester.Do(pageCtx, http.MethodGet, reqPath, page.Query, nil)
+		elapsed := time.Since(pageStarted)
+		cancelPage()
+		recordReadPageFetch(req, elapsed)
 		if err != nil {
 			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
 		}
@@ -350,7 +355,12 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
-		resp, err := requester.Do(ctx, method, reqPath, query, body)
+		pageCtx, cancelPage := readPageContext(ctx, req.PageDeadline)
+		pageStarted := time.Now()
+		resp, err := requester.Do(pageCtx, method, reqPath, query, body)
+		elapsed := time.Since(pageStarted)
+		cancelPage()
+		recordReadPageFetch(req, elapsed)
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Class: class, Hint: hint, Err: err}
@@ -419,6 +429,19 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 
 	return nil
+}
+
+func readPageContext(ctx context.Context, deadline time.Duration) (context.Context, context.CancelFunc) {
+	if deadline <= 0 {
+		return ctx, func() {}
+	}
+	return context.WithTimeout(ctx, deadline)
+}
+
+func recordReadPageFetch(req connectors.ReadRequest, elapsed time.Duration) {
+	if req.ObservePageFetch != nil {
+		req.ObservePageFetch(elapsed)
+	}
 }
 
 func effectiveReadMaxPages(declared, requested int) int {

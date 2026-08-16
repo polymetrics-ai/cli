@@ -282,6 +282,85 @@ func TestOrchestratorDispatchesFourClosedPairingsWithoutPairBranches(t *testing.
 	}
 }
 
+func TestOrchestratorTimesOutOnlyTheSecondDestinationUnitAndRetainsDurablePhaseCounts(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	first := testCheckpoint("api")
+	second := testCheckpoint("api")
+	second.Position.Primary = synccontract.OpaqueToken("2")
+	second.Position.TieBreaker = synccontract.OpaqueToken("2")
+	pair.sourceExecutor.pages = []SourcePage{
+		{Records: []connectors.Record{{"id": "one"}}, CandidateCheckpoint: first},
+		{Records: []connectors.Record{{"id": "two"}}, CandidateCheckpoint: second},
+	}
+	pair.destinationExecutor.applyContext = func(ctx context.Context, calls int) error {
+		if calls != 2 {
+			return nil
+		}
+		<-ctx.Done()
+		return ctx.Err()
+	}
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	commits := 0
+
+	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+		BatchSize: 1, UnitDeadline: 20 * time.Millisecond, Stage: &testWarehouseStage{},
+		Commit: func(synccontract.CheckpointEnvelope) error { commits++; return nil },
+	})
+	if !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("Run() error = %T %v, want a timed-out second unit", err, err)
+	}
+	if pair.destinationExecutor.applyCalls != 2 || commits != 1 {
+		t.Fatalf("destination applies/checkpoints = %d/%d, want first unit durable and only the second unit timed out", pair.destinationExecutor.applyCalls, commits)
+	}
+	if result.RecordsRead != 2 || result.RecordsStaged != 2 || result.RecordsApplied != 1 || result.Pages != 1 {
+		t.Fatalf("partial result = %+v, want extracted/staged/applied/pages = 2/2/1/1", result)
+	}
+	if result.ExtractElapsed <= 0 || result.StageElapsed <= 0 || result.ApplyElapsed <= 0 {
+		t.Fatalf("phase timing = extract:%s stage:%s apply:%s, want all phase durations persisted before failure", result.ExtractElapsed, result.StageElapsed, result.ApplyElapsed)
+	}
+}
+
+func TestOrchestratorRechecksAuthorizationBeforeEachUnitAndRefusesRevocationBeforeSecondStage(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	first := testCheckpoint("api")
+	second := testCheckpoint("api")
+	second.Position.Primary = synccontract.OpaqueToken("2")
+	second.Position.TieBreaker = synccontract.OpaqueToken("2")
+	pair.sourceExecutor.pages = []SourcePage{
+		{Records: []connectors.Record{{"id": "one"}}, CandidateCheckpoint: first},
+		{Records: []connectors.Record{{"id": "two"}}, CandidateCheckpoint: second},
+	}
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	stage := &testWarehouseStage{}
+	errAuthorizationRevoked := errors.New("authorization revoked")
+	authorizationChecks := 0
+
+	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+		BatchSize: 1, Stage: stage,
+		Approval: DestinationApproval{AuthorizeNextUnit: func(context.Context) error {
+			authorizationChecks++
+			if authorizationChecks == 2 {
+				return errAuthorizationRevoked
+			}
+			return nil
+		}},
+		Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+	})
+	if !errors.Is(err, errAuthorizationRevoked) {
+		t.Fatalf("Run() error = %T %v, want second-unit authorization revocation", err, err)
+	}
+	if authorizationChecks != 2 || stage.calls != 1 || pair.destinationExecutor.applyCalls != 1 {
+		t.Fatalf("authorization/stage/apply calls = %d/%d/%d, want 2/1/1 so revocation stops before second warehouse or PostgreSQL mutation", authorizationChecks, stage.calls, pair.destinationExecutor.applyCalls)
+	}
+	if result.RecordsRead != 2 || result.RecordsStaged != 1 || result.RecordsApplied != 1 || result.Pages != 1 {
+		t.Fatalf("partial result = %+v, want extracted/staged/applied/pages = 2/1/1/1", result)
+	}
+}
+
 func TestOrchestratorCommitsOnlyAfterDurableAcknowledgement(t *testing.T) {
 	pair := newTestTransportPair("api", "database")
 	registry := NewRegistry(pair.verifier)
@@ -719,11 +798,14 @@ func (*emptyResultTestSource) AllowEmptySourceResult() {}
 func (e *testSourceExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
 	return e.reference
 }
-func (e *testSourceExecutor) ReadTransport(ctx context.Context, _ SourceRequest, emit func(SourcePage) error) error {
+func (e *testSourceExecutor) ReadTransport(ctx context.Context, request SourceRequest, emit func(SourcePage) error) error {
 	e.readCalls++
 	for _, page := range e.pages {
 		if err := ctx.Err(); err != nil {
 			return err
+		}
+		if request.RecordExtraction != nil {
+			request.RecordExtraction(time.Nanosecond)
 		}
 		if err := emit(page); err != nil {
 			return err
@@ -738,6 +820,7 @@ type testDestinationExecutor struct {
 	acknowledgement    synccontract.DownstreamAcknowledgement
 	acknowledgementSet bool
 	afterApply         func()
+	applyContext       func(context.Context, int) error
 	afterReadBack      func()
 	readBackErr        error
 	mutateStringMap    bool
@@ -756,8 +839,13 @@ func (e *testDestinationExecutor) PlanDestination(_ context.Context, request Des
 	e.lastPlan = request
 	return DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
 }
-func (e *testDestinationExecutor) ApplyDestination(_ context.Context, request DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
+func (e *testDestinationExecutor) ApplyDestination(ctx context.Context, request DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
 	e.applyCalls++
+	if e.applyContext != nil {
+		if err := e.applyContext(ctx, e.applyCalls); err != nil {
+			return synccontract.DownstreamAcknowledgement{}, err
+		}
+	}
 	if e.mutateStringMap {
 		labels, ok := request.Workset.Records[0]["labels"].(map[string]string)
 		if !ok {
