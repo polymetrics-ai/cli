@@ -567,6 +567,93 @@ func TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels(t *testing.T) {
 	assertPostgresIssueLabelRun(t, keyedReplay, 1)
 	assertLivePostgresGitHubIssueLabels(t, ctx, token, livePostgresGitHubIssueLabelSetIssue, []string{livePostgresGitHubIssueLabelSetLabel})
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
+
+}
+
+// TestPMBinaryExecutesPostgresIncrementalDedupeHistory proves that the
+// descriptor-admitted history route reaches the existing writer through a
+// freshly built pm binary. The assertions query the separate target database;
+// they do not trust the run report to establish history or replay behavior.
+func TestPMBinaryExecutesPostgresIncrementalDedupeHistory(t *testing.T) {
+	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
+		t.Skip("database integration is opt-in")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+	harness := newPostgresTransportHarness(t)
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Errorf("close PostgreSQL history transport harness: %v", err)
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatalf("start PostgreSQL history transport harness: %v", err)
+	}
+	source := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
+	defer func() { _ = source.Close(context.Background()) }()
+	if _, err := source.Exec(ctx, "CREATE DATABASE "+postgresTransportTargetDB); err != nil {
+		t.Fatalf("create isolated PostgreSQL history target database: %v", err)
+	}
+	if _, err := source.Exec(ctx, `CREATE TABLE public.history_events (id bigint PRIMARY KEY, sequence bigint NOT NULL, label text NOT NULL)`); err != nil {
+		t.Fatalf("create live PostgreSQL history source table: %v", err)
+	}
+	if _, err := source.Exec(ctx, `INSERT INTO public.history_events (id, sequence, label) VALUES (1, 10, 'history-v1')`); err != nil {
+		t.Fatalf("seed live PostgreSQL history source row: %v", err)
+	}
+	target := waitForPostgresTransport(t, ctx, endpoint, postgresTransportTargetDB, postgresTransportUser)
+	defer func() { _ = target.Close(context.Background()) }()
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "project")
+	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-source", postgresTransportSourceDB)
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
+	mustPostgresTransportPM(t, binary, "",
+		"connections", "create", "postgres-history",
+		"--source", "postgres:pg-source", "--destination", "postgres:pg-target",
+		"--stream", "public.history_events", "--sync-mode", "incremental_dedupe_history",
+		"--cursor", "sequence", "--primary-key", "id", "--table", "history_events",
+		"--root", root, "--json")
+
+	first := runApprovedPostgresTransportBinary(t, binary, root, "postgres-history", "public.history_events", 1).Run
+	if first.Status != "completed" || first.RecordsRead != 1 || first.RecordsLoaded != 1 {
+		t.Fatalf("first PostgreSQL history binary run = %#v, want one completed row", first)
+	}
+	schema, relation, count, delivery := postgresTransportTargetState(t, ctx, target)
+	if count != 1 || delivery == "" {
+		t.Fatalf("first PostgreSQL history target = %s.%s rows=%d delivery=%q, want one durable row and receipt", schema, relation, count, delivery)
+	}
+	initialRows := postgresTransportHistoryRows(t, ctx, target, schema, relation)
+	if len(initialRows) != 1 || initialRows[0].ID != 1 || initialRows[0].Sequence != 10 || initialRows[0].Label != "history-v1" || !initialRows[0].Current || initialRows[0].ValidTo != nil || initialRows[0].ValidFrom.IsZero() {
+		t.Fatalf("first independently read history state = %#v, want one open current v1 row", initialRows)
+	}
+	firstCheckpoint := postgresTransportStreamStates(t, root)
+
+	if _, err := source.Exec(ctx, `UPDATE public.history_events SET sequence = 20, label = 'history-v2' WHERE id = 1`); err != nil {
+		t.Fatalf("update live PostgreSQL history source row: %v", err)
+	}
+	second := runApprovedPostgresTransportBinary(t, binary, root, "postgres-history", "public.history_events", 1).Run
+	if second.Status != "completed" || second.RecordsRead != 1 || second.RecordsLoaded != 1 {
+		t.Fatalf("updated PostgreSQL history binary run = %#v, want one completed updated row", second)
+	}
+	if afterCheckpoint := postgresTransportStreamStates(t, root); afterCheckpoint == firstCheckpoint {
+		t.Fatalf("history update did not durably advance the source checkpoint: before=%s after=%s", firstCheckpoint, afterCheckpoint)
+	}
+	updatedRows := postgresTransportHistoryRows(t, ctx, target, schema, relation)
+	if len(updatedRows) != 2 || updatedRows[0].ID != 1 || updatedRows[0].Sequence != 10 || updatedRows[0].Label != "history-v1" || updatedRows[0].Current || updatedRows[0].ValidTo == nil || updatedRows[1].ID != 1 || updatedRows[1].Sequence != 20 || updatedRows[1].Label != "history-v2" || !updatedRows[1].Current || updatedRows[1].ValidTo != nil || !updatedRows[0].ValidTo.Equal(updatedRows[1].ValidFrom) {
+		t.Fatalf("updated independently read history state = %#v, want closed v1 joined exactly to open current v2", updatedRows)
+	}
+
+	replay := runApprovedPostgresTransportBinary(t, binary, root, "postgres-history", "public.history_events", 1).Run
+	if replay.Status != "completed" || replay.RecordsRead != 0 || replay.RecordsLoaded != 0 {
+		t.Fatalf("PostgreSQL history replay binary run = %#v, want completed zero-row replay", replay)
+	}
+	if got := postgresTransportHistoryRows(t, ctx, target, schema, relation); !reflect.DeepEqual(got, updatedRows) {
+		t.Fatalf("history replay duplicated, reopened, or corrupted target rows: got=%#v want=%#v", got, updatedRows)
+	}
 }
 
 // TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage characterizes the
@@ -2273,6 +2360,36 @@ ORDER BY n.nspname, c.relname LIMIT 1`).Scan(&schema, &relation)
 		t.Fatalf("count managed target rows: %v", err)
 	}
 	return schema, relation, count
+}
+
+type postgresTransportHistoryRow struct {
+	ID        int64
+	Sequence  int64
+	Label     string
+	ValidFrom time.Time
+	ValidTo   *time.Time
+	Current   bool
+}
+
+func postgresTransportHistoryRows(t *testing.T, ctx context.Context, target *pgx.Conn, schema, relation string) []postgresTransportHistoryRow {
+	t.Helper()
+	rows, err := target.Query(ctx, "SELECT id, sequence, label, _valid_from, _valid_to, _is_current FROM "+pgx.Identifier{schema, relation}.Sanitize()+" WHERE id = $1 ORDER BY _valid_from", int64(1))
+	if err != nil {
+		t.Fatalf("independently query PostgreSQL history rows: %v", err)
+	}
+	defer rows.Close()
+	var history []postgresTransportHistoryRow
+	for rows.Next() {
+		var row postgresTransportHistoryRow
+		if err := rows.Scan(&row.ID, &row.Sequence, &row.Label, &row.ValidFrom, &row.ValidTo, &row.Current); err != nil {
+			t.Fatalf("scan independently read PostgreSQL history row: %v", err)
+		}
+		history = append(history, row)
+	}
+	if err := rows.Err(); err != nil {
+		t.Fatalf("iterate independently read PostgreSQL history rows: %v", err)
+	}
+	return history
 }
 
 func postgresTransportFullOverwriteReceiptCount(t *testing.T, ctx context.Context, target *pgx.Conn, schema string) int {

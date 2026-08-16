@@ -121231,7 +121231,8 @@
           "full_append",
           "incremental_append",
           "incremental_upsert",
-          "incremental_dedupe"
+          "incremental_dedupe",
+          "incremental_dedupe_history"
         ],
         "delivery": {
           "idempotency": "at_least_once",
@@ -121253,14 +121254,16 @@
           "managed_full_append",
           "managed_incremental_append",
           "managed_incremental_upsert",
-          "managed_incremental_dedupe"
+          "managed_incremental_dedupe",
+          "managed_incremental_dedupe_history"
         ],
         "modes": [
           "full_overwrite",
           "full_append",
           "incremental_append",
           "incremental_upsert",
-          "incremental_dedupe"
+          "incremental_dedupe",
+          "incremental_dedupe_history"
         ],
         "delivery": {
           "idempotency": "keyed",
@@ -121297,6 +121300,11 @@
             "mode": "incremental_dedupe",
             "strategy": "dedupe",
             "action": "managed_incremental_dedupe"
+          },
+          {
+            "mode": "incremental_dedupe_history",
+            "strategy": "dedupe_history",
+            "action": "managed_incremental_dedupe_history"
           }
         ]
       }

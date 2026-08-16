@@ -48,6 +48,13 @@ type ManagedTargetTransportDestination struct {
 	now       func() time.Time
 }
 
+// managedTargetHistorySourceDefinitionProvider is deliberately narrow: a
+// history route must be sealed from the source connector's typed database
+// declaration, not inferred from a connector name or runtime configuration.
+type managedTargetHistorySourceDefinitionProvider interface {
+	managedTargetHistorySourceDefinition() database.Definition
+}
+
 func ManagedTargetTransportDefinitionFactory() synctransport.DefinitionFactory {
 	return synctransport.DefinitionFactory{
 		Reference: postgresManagedTargetTransportReference,
@@ -125,6 +132,10 @@ func (d *ManagedTargetTransportDestination) ApplyDestination(ctx context.Context
 	if err := validateManagedTargetApplyRequest(request); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
+	historyRoute, err := d.historyRoute(request.Mode, request.Source)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
 	resolved, err := d.resolveManagedTarget(ctx, request.Source, request.SourceRuntime, request.Runtime, request.Binding, request.Stream)
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
@@ -149,7 +160,21 @@ func (d *ManagedTargetTransportDestination) ApplyDestination(ctx context.Context
 	if request.Mode == synccontract.ModeIncrementalUpsert {
 		return d.applyChangeDelivery(ctx, request, resolved, control, write)
 	}
-	return d.applyDatabaseWrite(ctx, request, resolved, control, write)
+	return d.applyDatabaseWrite(ctx, request, resolved, control, write, historyRoute)
+}
+
+func (d *ManagedTargetTransportDestination) historyRoute(mode synccontract.Mode, source connectors.Connector) (database.DatabaseWriteHistoryRoute, error) {
+	if mode != synccontract.ModeIncrementalDedupeHistory {
+		return database.DatabaseWriteHistoryRoute{}, nil
+	}
+	provider, ok := source.(managedTargetHistorySourceDefinitionProvider)
+	if !ok {
+		return database.DatabaseWriteHistoryRoute{}, &database.DatabaseWriteHistoryRouteError{Reason: database.DatabaseWriteHistoryRouteSourceUnsupported}
+	}
+	return database.DatabaseWriteHistoryRoute{
+		Source:      provider.managedTargetHistorySourceDefinition().Driver(),
+		Destination: d.connector.databaseDefinition.Driver(),
+	}, nil
 }
 
 func (d *ManagedTargetTransportDestination) currentTime() time.Time {
@@ -221,7 +246,7 @@ func (d *ManagedTargetTransportDestination) applyChangeDelivery(ctx context.Cont
 	return synccontract.NewDurableDownstreamAcknowledgement(d.connector.Name(), ack.AcknowledgedAt)
 }
 
-func (d *ManagedTargetTransportDestination) applyDatabaseWrite(ctx context.Context, request synctransport.DestinationApplyRequest, resolved managedTargetTransportResolution, control database.ManagedTargetControlRecord, write *database.DatabaseWriteExecutor) (synccontract.DownstreamAcknowledgement, error) {
+func (d *ManagedTargetTransportDestination) applyDatabaseWrite(ctx context.Context, request synctransport.DestinationApplyRequest, resolved managedTargetTransportResolution, control database.ManagedTargetControlRecord, write *database.DatabaseWriteExecutor, historyRoute database.DatabaseWriteHistoryRoute) (synccontract.DownstreamAcknowledgement, error) {
 	plan, err := database.NewDatabaseWritePlan(ctx, database.DatabaseWritePlanRequest{
 		Definition:     d.connector.databaseDefinition,
 		Control:        control,
@@ -233,6 +258,12 @@ func (d *ManagedTargetTransportDestination) applyDatabaseWrite(ctx context.Conte
 		TombstoneCount: len(request.Workset.Tombstones),
 		BatchSize:      request.BatchSize,
 		Destructive:    request.Mode == synccontract.ModeFullOverwrite,
+		HistoryRoute:   historyRoute,
+		// The durable workset retains the source page's candidate checkpoint.
+		// PostgreSQL polling advances that tuple only after this apply/read-back
+		// sequence completes, so it is the source-owned ordering fence for every
+		// key observed in this bounded page.
+		ConditionalOrderFence: request.Mode == synccontract.ModeIncrementalDedupeHistory,
 	})
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
@@ -249,7 +280,7 @@ func (d *ManagedTargetTransportDestination) applyDatabaseWrite(ctx context.Conte
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
-	input, err := database.NewDatabaseWriteInput(request.Workset.Records, tombstones)
+	input, err := managedTargetDatabaseWriteInput(request, tombstones)
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
@@ -262,6 +293,18 @@ func (d *ManagedTargetTransportDestination) applyDatabaseWrite(ctx context.Conte
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
 	return synccontract.NewDurableDownstreamAcknowledgement(d.connector.Name(), ack.AcknowledgedAt)
+}
+
+func managedTargetDatabaseWriteInput(request synctransport.DestinationApplyRequest, tombstones database.TombstoneEnvelope) (database.DatabaseWriteInput, error) {
+	if request.Mode != synccontract.ModeIncrementalDedupeHistory {
+		return database.NewDatabaseWriteInput(request.Workset.Records, tombstones)
+	}
+	position := request.Workset.CandidateCheckpoint.Position.Clone()
+	records := make([]database.OrderedRecord, len(request.Workset.Records))
+	for index, record := range request.Workset.Records {
+		records[index] = database.OrderedRecord{Record: record, Position: position.Clone()}
+	}
+	return database.NewOrderedDatabaseWriteInput(records, tombstones)
 }
 
 func (d *ManagedTargetTransportDestination) ReadBackDestination(ctx context.Context, request synctransport.DestinationReadBackRequest) error {
@@ -479,7 +522,7 @@ func managedTargetBaselineInput(ctx context.Context, store *database.FileChangeD
 }
 
 func managedTargetWriteKeys(mode synccontract.Mode, keys []string) []string {
-	if mode == synccontract.ModeIncrementalUpsert || mode == synccontract.ModeIncrementalDedupe {
+	if mode == synccontract.ModeIncrementalUpsert || mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory {
 		return append([]string(nil), keys...)
 	}
 	return nil

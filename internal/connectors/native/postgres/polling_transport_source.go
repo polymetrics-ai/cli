@@ -262,7 +262,7 @@ func (s *PollingTransportSource) preparePollingRunner(ctx context.Context, reque
 		closeRunner()
 		return nil, nil, connectors.PollingCatalogObject{}, nil, err
 	}
-	return &postgresPollingSourceRunner{pool: pool, plan: plan, state: postgresPollingRuntimeState(request, plan), reference: postgresPollingTransportReference}, declaration, object, closeRunner, nil
+	return &postgresPollingSourceRunner{pool: pool, plan: plan, state: postgresPollingRuntimeState(request, plan), reference: postgresPollingTransportReference, definition: s.connector.databaseDefinition}, declaration, object, closeRunner, nil
 }
 
 func (s *PollingTransportSource) prepareFixturePollingRunner(request synctransport.SourceRequest) (engine.PollingSourceRunner, *connectors.PollingWatermarkDescriptor, connectors.PollingCatalogObject, func(), error) {
@@ -293,7 +293,7 @@ func (s *PollingTransportSource) prepareFixturePollingRunner(request synctranspo
 	for _, field := range stream.Fields {
 		object.Columns = append(object.Columns, field.Name)
 	}
-	runner := &postgresFixturePollingRunner{rows: rows, cursor: request.CursorField, tieBreaker: request.PrimaryKey[0], state: postgresPollingRuntimeState(request, plan), reference: postgresPollingTransportReference}
+	runner := &postgresFixturePollingRunner{rows: rows, cursor: request.CursorField, tieBreaker: request.PrimaryKey[0], state: postgresPollingRuntimeState(request, plan), reference: postgresPollingTransportReference, definition: s.connector.databaseDefinition}
 	return runner, declaration, object, func() {}, nil
 }
 
@@ -485,10 +485,11 @@ func postgresPollingSchemaVersion(plan postgresPollingReadPlan) string {
 }
 
 type postgresPollingSourceRunner struct {
-	pool      *pgxpool.Pool
-	plan      postgresPollingReadPlan
-	state     engine.PollingSourceRuntimeState
-	reference connectors.TransportExecutorReference
+	pool       *pgxpool.Pool
+	plan       postgresPollingReadPlan
+	state      engine.PollingSourceRuntimeState
+	reference  connectors.TransportExecutorReference
+	definition database.Definition
 }
 
 func (r *postgresPollingSourceRunner) PollingSourceExecutorReference() connectors.TransportExecutorReference {
@@ -496,6 +497,12 @@ func (r *postgresPollingSourceRunner) PollingSourceExecutorReference() connector
 }
 func (*postgresPollingSourceRunner) PollingSourceConformanceEvidence() engine.PollingWatermarkConformanceEvidence {
 	return engine.RequiredPollingWatermarkConformanceEvidence()
+}
+func (r *postgresPollingSourceRunner) PollingSourceDatabaseDefinition() database.Definition {
+	if r == nil {
+		return database.Definition{}
+	}
+	return r.definition
 }
 func (r *postgresPollingSourceRunner) PollingSourceRuntimeState(context.Context, connectors.PollingCatalogObject) (engine.PollingSourceRuntimeState, error) {
 	return r.state.Clone(), nil
@@ -538,6 +545,7 @@ type postgresFixturePollingRunner struct {
 	tieBreaker string
 	state      engine.PollingSourceRuntimeState
 	reference  connectors.TransportExecutorReference
+	definition database.Definition
 }
 
 func (r *postgresFixturePollingRunner) PollingSourceExecutorReference() connectors.TransportExecutorReference {
@@ -545,6 +553,12 @@ func (r *postgresFixturePollingRunner) PollingSourceExecutorReference() connecto
 }
 func (*postgresFixturePollingRunner) PollingSourceConformanceEvidence() engine.PollingWatermarkConformanceEvidence {
 	return engine.RequiredPollingWatermarkConformanceEvidence()
+}
+func (r *postgresFixturePollingRunner) PollingSourceDatabaseDefinition() database.Definition {
+	if r == nil {
+		return database.Definition{}
+	}
+	return r.definition
 }
 func (r *postgresFixturePollingRunner) PollingSourceRuntimeState(context.Context, connectors.PollingCatalogObject) (engine.PollingSourceRuntimeState, error) {
 	return r.state.Clone(), nil
