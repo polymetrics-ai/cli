@@ -167,7 +167,7 @@ func validateClosedTransportBatchSize(source, destination connectors.Connector, 
 // action. Real durable warehouse/apply adapters remain separate foundations;
 // this seam therefore fails closed unless a stage and externally verified
 // transports are registered.
-func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int, approval synctransport.DestinationApproval) (etlExecutionResult, error) {
+func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize, maxInFlightBatches int, approval synctransport.DestinationApproval) (etlExecutionResult, error) {
 	emptyResult := etlExecutionResult{TransportPhaseMeasurement: &TransportPhaseMeasurement{}}
 	if a.transports == nil {
 		return emptyResult, fmt.Errorf("closed transport registry is unavailable")
@@ -219,17 +219,18 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			StreamID:          stream.StreamID,
 			PrimaryKey:        append([]string(nil), stream.PrimaryKey...),
 		},
-		Stream:            streamName,
-		CursorField:       stream.CursorField,
-		Mode:              mode.ContractMode,
-		BatchSize:         batchSize,
-		TransformPlanJSON: stream.TransformPlan,
-		TransformPlanHash: stream.TransformPlanHash,
-		FastSegments:      &connectionArrowSegmentStore{app: a, connectionID: conn.ID, stream: streamName},
-		Resume:            sourceExpectation,
-		Checkpoint:        prior.Checkpoint,
-		Approval:          approval,
-		Stage:             a.transportStage,
+		Stream:             streamName,
+		CursorField:        stream.CursorField,
+		Mode:               mode.ContractMode,
+		BatchSize:          batchSize,
+		MaxInFlightBatches: maxInFlightBatches,
+		TransformPlanJSON:  stream.TransformPlan,
+		TransformPlanHash:  stream.TransformPlanHash,
+		FastSegments:       &connectionArrowSegmentStore{app: a, connectionID: conn.ID, stream: streamName},
+		Resume:             sourceExpectation,
+		Checkpoint:         prior.Checkpoint,
+		Approval:           approval,
+		Stage:              a.transportStage,
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
 			interim := checkpoint.Clone()
 			if interim.CommittedAt == nil {

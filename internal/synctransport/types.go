@@ -373,6 +373,10 @@ type RunRequest struct {
 	CursorField        string
 	Mode               synccontract.Mode
 	BatchSize          int
+	// MaxInFlightBatches bounds the ordered Arrow full-overwrite pipeline.
+	// Zero keeps the programmatic legacy serial behavior; the CLI/app selects
+	// the user-facing default of two for an admitted fast path.
+	MaxInFlightBatches int
 	TransformPlanJSON  string
 	TransformPlanHash  string
 	// FastSegments is the connector-neutral versioned Parquet segment store
@@ -435,6 +439,9 @@ func (r RunRequest) validateExecution() error {
 	}
 	if r.ByteCreditCapacity < 0 {
 		return fmt.Errorf("transport byte credit capacity must not be negative")
+	}
+	if r.MaxInFlightBatches < 0 || r.MaxInFlightBatches > 8 {
+		return fmt.Errorf("transport max in-flight batches must be zero or between 1 and 8")
 	}
 	return nil
 }

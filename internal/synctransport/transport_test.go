@@ -416,6 +416,326 @@ func TestOrchestratorArrowFullOverwriteTransformsDurablyBulkAppliesThenCheckpoin
 	}
 }
 
+func TestOrchestratorArrowFullOverwriteOverlapsNextExtractionWithPreviousCopy(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.source.descriptor.Source.OrderedPipeline = true
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.OrderedPipeline = true
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	first := testCheckpoint(pair.source.Name())
+	second := testCheckpoint(pair.source.Name())
+	third := testCheckpoint(pair.source.Name())
+	second.Position.Primary = synccontract.OpaqueToken("2")
+	second.Position.TieBreaker = synccontract.OpaqueToken("2")
+	third.Position.Primary = synccontract.OpaqueToken("3")
+	third.Position.TieBreaker = synccontract.OpaqueToken("3")
+	secondExtracted := make(chan struct{})
+	thirdExtracted := make(chan struct{})
+	source := &testArrowSource{
+		testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference},
+		batches: []ArrowSourceBatch{
+			{Record: testArrowRecord(t, []int64{1}, []string{"first"}), SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: first},
+			{Record: testArrowRecord(t, []int64{2}, []string{"second"}), SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: second},
+			{Record: testArrowRecord(t, []int64{3}, []string{"third"}), SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: third},
+		},
+		onEmit: func(index int) {
+			switch index {
+			case 1:
+				close(secondExtracted)
+			case 2:
+				close(thirdExtracted)
+			}
+		},
+	}
+	applyStarted := make(chan struct{}, 2)
+	releaseApply := make(chan struct{})
+	destination := &testArrowDestination{
+		testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()},
+		run:                     &testArrowFullOverwriteRun{sink: pair.destination.Name(), applyStarted: applyStarted, releaseApply: releaseApply},
+	}
+	registry := NewRegistry(pair.verifier)
+	if err := registry.RegisterSource(source); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(destination); err != nil {
+		t.Fatal(err)
+	}
+	const plan = `{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"}]}`
+	hash, err := databaseTransformHash(plan)
+	if err != nil {
+		t.Fatal(err)
+	}
+	type pipelineOutcome struct {
+		result Result
+		err    error
+	}
+	runDone := make(chan pipelineOutcome, 1)
+	go func() {
+		result, runErr := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+			ConnectionID: "test-connection-owner", Generation: 1, Source: pair.source, Destination: pair.destination,
+			DestinationBinding: DestinationBinding{WorkspaceID: "workspace", SourceConnectorID: pair.source.Name(), ConnectionID: "test-connection-owner", StreamID: "stream", PrimaryKey: []string{"id"}},
+			Stream:             "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1, MaxInFlightBatches: 2,
+			TransformPlanJSON: plan, TransformPlanHash: hash, FastSegments: &testFastSegmentStore{}, ByteCreditCapacity: 64,
+			Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+		})
+		runDone <- pipelineOutcome{result: result, err: runErr}
+	}()
+	select {
+	case <-applyStarted:
+	case <-time.After(time.Second):
+		t.Fatal("first COPY did not begin")
+	}
+	select {
+	case <-secondExtracted:
+	case <-time.After(time.Second):
+		t.Fatal("source did not extract page two while page one COPY was blocked")
+	}
+	select {
+	case <-thirdExtracted:
+		t.Fatal("depth two extracted page three while page one COPY and page two admission were still in flight")
+	case <-time.After(75 * time.Millisecond):
+	}
+	close(releaseApply)
+	received := <-runDone
+	if received.err != nil {
+		t.Fatalf("Run() error = %v", received.err)
+	}
+	if got, want := destination.run.ids, []int64{1, 2, 3}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("ordered pipeline COPY IDs = %v, want %v", got, want)
+	}
+	if received.result.PeakCreditBytes != 64 {
+		t.Fatalf("ordered pipeline peak credit = %d, want two 32-byte admitted batches", received.result.PeakCreditBytes)
+	}
+}
+
+func TestOrchestratorArrowFullOverwriteDepthOneKeepsSerialEmitBehavior(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	first, second := testCheckpoint(pair.source.Name()), testCheckpoint(pair.source.Name())
+	second.Position.Primary, second.Position.TieBreaker = synccontract.OpaqueToken("2"), synccontract.OpaqueToken("2")
+	secondExtracted := make(chan struct{})
+	source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}, batches: []ArrowSourceBatch{
+		{Record: testArrowRecord(t, []int64{1}, []string{"first"}), SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: first},
+		{Record: testArrowRecord(t, []int64{2}, []string{"second"}), SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: second},
+	}, onEmit: func(index int) {
+		if index == 1 {
+			close(secondExtracted)
+		}
+	}}
+	applyStarted, releaseApply := make(chan struct{}, 2), make(chan struct{})
+	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name(), applyStarted: applyStarted, releaseApply: releaseApply}}
+	registry := NewRegistry(pair.verifier)
+	if err := registry.RegisterSource(source); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(destination); err != nil {
+		t.Fatal(err)
+	}
+	const plan = `{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"}]}`
+	hash, err := databaseTransformHash(plan)
+	if err != nil {
+		t.Fatal(err)
+	}
+	runDone := make(chan error, 1)
+	go func() {
+		_, runErr := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+			ConnectionID: "test-connection-owner", Generation: 1, Source: pair.source, Destination: pair.destination,
+			DestinationBinding: DestinationBinding{WorkspaceID: "workspace", SourceConnectorID: pair.source.Name(), ConnectionID: "test-connection-owner", StreamID: "stream", PrimaryKey: []string{"id"}},
+			Stream:             "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1, MaxInFlightBatches: 1,
+			TransformPlanJSON: plan, TransformPlanHash: hash, FastSegments: &testFastSegmentStore{}, ByteCreditCapacity: 64,
+			Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+		})
+		runDone <- runErr
+	}()
+	select {
+	case <-applyStarted:
+	case <-time.After(time.Second):
+		t.Fatal("first COPY did not begin")
+	}
+	select {
+	case <-secondExtracted:
+		t.Fatal("depth one extracted page two before page one COPY completed")
+	case <-time.After(75 * time.Millisecond):
+	}
+	close(releaseApply)
+	if err := <-runDone; err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	if destination.run.publishCalls != 1 || destination.run.readBackCalls != 1 || destination.run.abortCalls != 0 {
+		t.Fatalf("depth one publish/readback/abort = %d/%d/%d, want 1/1/0", destination.run.publishCalls, destination.run.readBackCalls, destination.run.abortCalls)
+	}
+}
+
+func TestOrchestratorArrowFullOverwriteRefusesUndeclaredPipelineBeforeIO(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}}
+	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name()}}
+	registry := NewRegistry(pair.verifier)
+	if err := registry.RegisterSource(source); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(destination); err != nil {
+		t.Fatal(err)
+	}
+	const plan = `{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"}]}`
+	hash, err := databaseTransformHash(plan)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		ConnectionID: "test-connection-owner", Generation: 1, Source: pair.source, Destination: pair.destination,
+		DestinationBinding: DestinationBinding{WorkspaceID: "workspace", SourceConnectorID: pair.source.Name(), ConnectionID: "test-connection-owner", StreamID: "stream", PrimaryKey: []string{"id"}},
+		Stream:             "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1, MaxInFlightBatches: 2,
+		TransformPlanJSON: plan, TransformPlanHash: hash, FastSegments: &testFastSegmentStore{}, Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+	})
+	var unsupported *OrderedPipelineUnsupportedError
+	if !errors.As(err, &unsupported) {
+		t.Fatalf("Run() error = %T %v, want OrderedPipelineUnsupportedError", err, err)
+	}
+	if source.extractCalls != 0 || destination.planCalls != 0 || destination.beginCalls != 0 {
+		t.Fatalf("undeclared pipeline reached extractor/plan/begin = %d/%d/%d, want 0/0/0", source.extractCalls, destination.planCalls, destination.beginCalls)
+	}
+}
+
+func TestOrchestratorArrowFullOverwritePipelineFailureAbortsBeforePublicationOrCheckpoint(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.source.descriptor.Source.OrderedPipeline = true
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.OrderedPipeline = true
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	first, second := testCheckpoint(pair.source.Name()), testCheckpoint(pair.source.Name())
+	second.Position.Primary, second.Position.TieBreaker = synccontract.OpaqueToken("2"), synccontract.OpaqueToken("2")
+	secondExtracted := make(chan struct{})
+	source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}, batches: []ArrowSourceBatch{
+		{Record: testArrowRecord(t, []int64{1}, []string{"first"}), SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: first},
+		{Record: testArrowRecord(t, []int64{2}, []string{"second"}), SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: second},
+	}, onEmit: func(index int) {
+		if index == 1 {
+			close(secondExtracted)
+		}
+	}}
+	applyStarted, releaseApply := make(chan struct{}, 2), make(chan struct{})
+	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name(), applyStarted: applyStarted, releaseApply: releaseApply, failApplyAt: 2, applyErr: errors.New("injected pipeline COPY failure")}}
+	registry := NewRegistry(pair.verifier)
+	if err := registry.RegisterSource(source); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(destination); err != nil {
+		t.Fatal(err)
+	}
+	const plan = `{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"}]}`
+	hash, err := databaseTransformHash(plan)
+	if err != nil {
+		t.Fatal(err)
+	}
+	commits := 0
+	runDone := make(chan error, 1)
+	go func() {
+		_, runErr := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+			ConnectionID: "test-connection-owner", Generation: 1, Source: pair.source, Destination: pair.destination,
+			DestinationBinding: DestinationBinding{WorkspaceID: "workspace", SourceConnectorID: pair.source.Name(), ConnectionID: "test-connection-owner", StreamID: "stream", PrimaryKey: []string{"id"}},
+			Stream:             "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1, MaxInFlightBatches: 2,
+			TransformPlanJSON: plan, TransformPlanHash: hash, FastSegments: &testFastSegmentStore{}, ByteCreditCapacity: 64,
+			Commit: func(synccontract.CheckpointEnvelope) error { commits++; return nil },
+		})
+		runDone <- runErr
+	}()
+	select {
+	case <-applyStarted:
+	case <-time.After(time.Second):
+		t.Fatal("first COPY did not begin")
+	}
+	select {
+	case <-secondExtracted:
+	case <-time.After(time.Second):
+		t.Fatal("page two was not queued before injected failure")
+	}
+	close(releaseApply)
+	if err := <-runDone; err == nil || !strings.Contains(err.Error(), "injected pipeline COPY failure") {
+		t.Fatalf("Run() error = %v, want injected COPY failure", err)
+	}
+	if destination.run.publishCalls != 0 || destination.run.readBackCalls != 0 || destination.run.abortCalls != 1 || commits != 0 {
+		t.Fatalf("failed pipeline publish/readback/abort/checkpoints = %d/%d/%d/%d, want 0/0/1/0", destination.run.publishCalls, destination.run.readBackCalls, destination.run.abortCalls, commits)
+	}
+}
+
+func TestOrchestratorArrowFullOverwritePipelineCancellationDrainsBeforeAbort(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.source.descriptor.Source.OrderedPipeline = true
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.OrderedPipeline = true
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	first, second := testCheckpoint(pair.source.Name()), testCheckpoint(pair.source.Name())
+	second.Position.Primary, second.Position.TieBreaker = synccontract.OpaqueToken("2"), synccontract.OpaqueToken("2")
+	secondExtracted := make(chan struct{})
+	source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}, batches: []ArrowSourceBatch{
+		{Record: testArrowRecord(t, []int64{1}, []string{"first"}), SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: first},
+		{Record: testArrowRecord(t, []int64{2}, []string{"second"}), SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: second},
+	}, onEmit: func(index int) {
+		if index == 1 {
+			close(secondExtracted)
+		}
+	}}
+	applyStarted, releaseApply := make(chan struct{}, 2), make(chan struct{})
+	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name(), applyStarted: applyStarted, releaseApply: releaseApply}}
+	registry := NewRegistry(pair.verifier)
+	if err := registry.RegisterSource(source); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(destination); err != nil {
+		t.Fatal(err)
+	}
+	const plan = `{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"}]}`
+	hash, err := databaseTransformHash(plan)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	runDone := make(chan error, 1)
+	go func() {
+		_, runErr := NewOrchestrator(registry).Run(ctx, RunRequest{
+			ConnectionID: "test-connection-owner", Generation: 1, Source: pair.source, Destination: pair.destination,
+			DestinationBinding: DestinationBinding{WorkspaceID: "workspace", SourceConnectorID: pair.source.Name(), ConnectionID: "test-connection-owner", StreamID: "stream", PrimaryKey: []string{"id"}},
+			Stream:             "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1, MaxInFlightBatches: 2,
+			TransformPlanJSON: plan, TransformPlanHash: hash, FastSegments: &testFastSegmentStore{}, ByteCreditCapacity: 64,
+			Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+		})
+		runDone <- runErr
+	}()
+	select {
+	case <-applyStarted:
+	case <-time.After(time.Second):
+		t.Fatal("first COPY did not begin")
+	}
+	select {
+	case <-secondExtracted:
+	case <-time.After(time.Second):
+		t.Fatal("page two was not admitted before cancellation")
+	}
+	cancel()
+	close(releaseApply)
+	if err := <-runDone; !errors.Is(err, context.Canceled) {
+		t.Fatalf("Run() error = %T %v, want context.Canceled", err, err)
+	}
+	if destination.run.publishCalls != 0 || destination.run.readBackCalls != 0 || destination.run.abortCalls != 1 {
+		t.Fatalf("canceled pipeline publish/readback/abort = %d/%d/%d, want 0/0/1", destination.run.publishCalls, destination.run.readBackCalls, destination.run.abortCalls)
+	}
+}
+
 func TestOrchestratorArrowFullOverwriteRefusesMissingSegmentStoreBeforeExtractorIO(t *testing.T) {
 	pair := newTestTransportPair("database", "database")
 	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
@@ -1128,15 +1448,19 @@ type testArrowSource struct {
 	*testSourceExecutor
 	batches      []ArrowSourceBatch
 	extractCalls int
+	onEmit       func(int)
 }
 
 func (*testArrowSource) AllowEmptySourceResult() {}
 
 func (s *testArrowSource) ExtractArrowRanges(ctx context.Context, _ ArrowExtractRequest, emit func(ArrowSourceBatch) error) error {
 	s.extractCalls++
-	for _, batch := range s.batches {
+	for index, batch := range s.batches {
 		if err := ctx.Err(); err != nil {
 			return err
+		}
+		if s.onEmit != nil {
+			s.onEmit(index)
 		}
 		if err := emit(batch); err != nil {
 			return err
@@ -1172,9 +1496,24 @@ type testArrowFullOverwriteRun struct {
 	publishCalls  int
 	readBackCalls int
 	abortCalls    int
+	applyStarted  chan<- struct{}
+	releaseApply  <-chan struct{}
+	applyCalls    int
+	failApplyAt   int
+	applyErr      error
 }
 
 func (r *testArrowFullOverwriteRun) ApplyArrowSegment(_ context.Context, request ArrowBulkApplyRequest) error {
+	r.applyCalls++
+	if r.applyStarted != nil {
+		r.applyStarted <- struct{}{}
+	}
+	if r.releaseApply != nil {
+		<-r.releaseApply
+	}
+	if r.failApplyAt == r.applyCalls && r.applyErr != nil {
+		return r.applyErr
+	}
 	ids, ok := request.Record.Column(0).(*array.Int64)
 	if !ok || request.Segment.TransformedRows != request.Record.NumRows() {
 		return ErrArrowFastPathInvalid

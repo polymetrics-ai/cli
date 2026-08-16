@@ -1286,6 +1286,9 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
+	if err := validateCopyWorkerMaximum(syncTransport, databaseDefinition); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: sync_transport.json: %w", dirName, err)
+	}
 
 	spec, rawSpec, err := loadSpec(sub, dirName)
 	if err != nil {
@@ -1538,6 +1541,24 @@ func loadDatabaseDefinition(sub fs.FS, dirName string) (*database.Definition, er
 		return nil, fmt.Errorf("load bundle %s: database.json: %w", dirName, err)
 	}
 	return &definition, nil
+}
+
+// validateCopyWorkerMaximum makes the optional transport COPY declaration a
+// projection of the destination's own typed database pool policy. A connector
+// may omit it, but it cannot advertise more COPY connections than its
+// database.json declares.
+func validateCopyWorkerMaximum(transport *connectors.SyncTransportDescriptor, definition *database.Definition) error {
+	if transport == nil || transport.Destination == nil || transport.Destination.CopyWorkerMaximum == 0 {
+		return nil
+	}
+	if definition == nil {
+		return fmt.Errorf("copy_worker_maximum requires a database resource declaration")
+	}
+	poolMaximum := definition.Resources().Pool.Maximum
+	if transport.Destination.CopyWorkerMaximum > poolMaximum {
+		return fmt.Errorf("copy_worker_maximum exceeds declared database pool maximum %d", poolMaximum)
+	}
+	return nil
 }
 
 // loadSpec returns both the compiled *Schema (used for runtime interpolation

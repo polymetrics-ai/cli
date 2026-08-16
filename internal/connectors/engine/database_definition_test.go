@@ -38,6 +38,15 @@ func TestBundleLoadPostgresDatabaseDefinitionWithProvenCDCCapability(t *testing.
 	if bundle.Metadata.Capabilities.Write || !bundle.Metadata.Capabilities.CDC {
 		t.Fatalf("PostgreSQL metadata capabilities = %+v, want write=false and cdc=true", bundle.Metadata.Capabilities)
 	}
+	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil || bundle.SyncTransport.Destination == nil {
+		t.Fatal("postgres bundle does not declare both transport endpoints")
+	}
+	if !bundle.SyncTransport.Source.OrderedPipeline || !bundle.SyncTransport.Destination.OrderedPipeline {
+		t.Fatalf("postgres ordered pipeline declarations = source=%t destination=%t, want both true", bundle.SyncTransport.Source.OrderedPipeline, bundle.SyncTransport.Destination.OrderedPipeline)
+	}
+	if got, want := bundle.SyncTransport.Destination.CopyWorkerMaximum, bundle.Database.Resources().Pool.Maximum; got != want {
+		t.Fatalf("postgres COPY worker maximum = %d, want database pool maximum %d", got, want)
+	}
 }
 
 func TestNonPostgresDatabaseDefinitionRetainsFivePrivateManagedTargetModes(t *testing.T) {

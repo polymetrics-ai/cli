@@ -278,3 +278,32 @@ func TestETLTransportSafeOutputOmitsApprovalAndDestinationInternals(t *testing.T
 		}
 	}
 }
+
+func TestETLTransportPlanAndPreviewShowBoundedTargetCopyCapacity(t *testing.T) {
+	plan := transportPlanForOutputTest()
+	plan.TargetCopyWorkers = 2
+	plan.TargetCopyWorkerMaximum = 8
+	var stdout bytes.Buffer
+	if err := writeETLTransportPlan(&stdout, false, plan); err != nil {
+		t.Fatal(err)
+	}
+	if err := writeETLTransportPreview(&stdout, false, plan, connectors.WritePreview{RecordsStaged: 1, Action: plan.Action, Digest: "safe-preview-digest"}); err != nil {
+		t.Fatal(err)
+	}
+	if got, want := strings.Count(stdout.String(), "Target COPY workers: 2 (declared pool maximum 8)"), 2; got != want {
+		t.Fatalf("target COPY capacity lines = %d, want %d in plan and preview:\n%s", got, want, stdout.String())
+	}
+
+	stdout.Reset()
+	if err := writeETLTransportPlan(&stdout, true, plan); err != nil {
+		t.Fatal(err)
+	}
+	if err := writeETLTransportPreview(&stdout, true, plan, connectors.WritePreview{RecordsStaged: 1, Action: plan.Action, Digest: "safe-preview-digest"}); err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{`"target_copy_workers": 2`, `"target_copy_worker_maximum": 8`} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Fatalf("machine-readable target COPY capacity output missing %q:\n%s", want, stdout.String())
+		}
+	}
+}

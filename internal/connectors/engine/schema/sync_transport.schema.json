@@ -17,6 +17,7 @@
         },
         "eligible_streams": {"type": "array", "minItems": 1, "items": {"type": "string"}},
         "modes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "ordered_pipeline": {"type": "boolean"},
         "delivery": {
           "type": "object", "required": ["idempotency", "ordering", "deletes"], "additionalProperties": false,
           "properties": {"idempotency": {"type": "string"}, "ordering": {"type": "string"}, "deletes": {"type": "string"}}
@@ -38,6 +39,8 @@
         },
         "eligible_actions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
         "modes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "ordered_pipeline": {"type": "boolean"},
+        "copy_worker_maximum": {"type": "integer", "enum": [1, 2, 3, 4, 5, 6, 7, 8]},
         "delivery": {
           "type": "object", "required": ["idempotency", "ordering", "deletes"], "additionalProperties": false,
           "properties": {"idempotency": {"type": "string"}, "ordering": {"type": "string"}, "deletes": {"type": "string"}}

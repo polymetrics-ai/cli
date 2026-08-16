@@ -44,10 +44,12 @@ type postgresManagedTargetApprovalBinding struct {
 	// preview digest, approval target and durable authorization scope. It is
 	// deliberately a hash only; no expression or source SQL reaches approval
 	// persistence.
-	TransformPlanHash   string `json:"transform_plan_hash,omitempty"`
-	CredentialRevision  string `json:"credential_revision"`
-	ConfigurationDigest string `json:"configuration_digest"`
-	ApprovalScope       string `json:"approval_scope"`
+	TransformPlanHash       string `json:"transform_plan_hash,omitempty"`
+	TargetCopyWorkers       int    `json:"target_copy_workers,omitempty"`
+	TargetCopyWorkerMaximum int    `json:"target_copy_worker_maximum,omitempty"`
+	CredentialRevision      string `json:"credential_revision"`
+	ConfigurationDigest     string `json:"configuration_digest"`
+	ApprovalScope           string `json:"approval_scope"`
 }
 
 func (a *App) PlanPostgresManagedTargetTransport(ctx context.Context, connectionName, streamName string) (ReversePlan, error) {
@@ -98,8 +100,10 @@ func (a *App) PlanPostgresManagedTargetTransportWithAuthorizationLifetime(ctx co
 		Mappings: map[string]string{}, ConfirmationChallenge: string(confirmation.Kind), ConfirmationPolicy: confirmation,
 		RecordCount: 0, PlanHash: planHash, PlanSeal: &seal,
 		TransportConnectionID: conn.ID, TransportStream: streamName, TransportBindingSHA256: bindingSHA256,
-		AuthorizationLifetime: authorizationLifetime,
-		CreatedAt:             seal.IssuedAt, ExpiresAt: seal.ExpiresAt,
+		AuthorizationLifetime:   authorizationLifetime,
+		TargetCopyWorkers:       binding.TargetCopyWorkers,
+		TargetCopyWorkerMaximum: binding.TargetCopyWorkerMaximum,
+		CreatedAt:               seal.IssuedAt, ExpiresAt: seal.ExpiresAt,
 	}
 	_ = stream
 	a.state.ReversePlans = append(a.state.ReversePlans, plan)
@@ -384,6 +388,13 @@ func (a *App) preparePostgresManagedTargetApproval(ctx context.Context, connecti
 	if _, ok := resolved.Destination.(synctransport.ManagedTargetApprovalDestination); !ok {
 		return Connection{}, StreamConfig{}, SyncMode{}, connectors.RuntimeConfig{}, postgresManagedTargetApprovalBinding{}, errors.New("closed managed target approval requires its declared destination executor")
 	}
+	copyWorkerMaximum := targetCopyWorkerMaximum(destination)
+	if conn.TargetCopyWorkers > 0 && copyWorkerMaximum == 0 {
+		return Connection{}, StreamConfig{}, SyncMode{}, connectors.RuntimeConfig{}, postgresManagedTargetApprovalBinding{}, &TargetCopyWorkersUnsupportedError{Destination: destination.Name()}
+	}
+	if conn.TargetCopyWorkers > copyWorkerMaximum {
+		return Connection{}, StreamConfig{}, SyncMode{}, connectors.RuntimeConfig{}, postgresManagedTargetApprovalBinding{}, &TargetCopyWorkersRangeError{Requested: conn.TargetCopyWorkers, Maximum: copyWorkerMaximum}
+	}
 	sourceSchema, err := postgresManagedTargetSourceSchema(ctx, source, sourceRuntime, streamName)
 	if err != nil {
 		return Connection{}, StreamConfig{}, SyncMode{}, connectors.RuntimeConfig{}, postgresManagedTargetApprovalBinding{}, err
@@ -395,6 +406,7 @@ func (a *App) preparePostgresManagedTargetApproval(ctx context.Context, connecti
 		Destination: conn.Destination.Connector,
 		PrimaryKey:  append([]string(nil), stream.PrimaryKey...), CredentialRevision: runtime.CredentialRevision,
 		TransformPlanHash: stream.TransformPlanHash, ConfigurationDigest: runtime.ConfigurationDigest, ApprovalScope: runtime.WriteApprovalScope,
+		TargetCopyWorkers: conn.TargetCopyWorkers, TargetCopyWorkerMaximum: copyWorkerMaximum,
 	}
 	return conn, stream, mode, runtime, binding, nil
 }

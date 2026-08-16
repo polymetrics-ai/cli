@@ -6,7 +6,7 @@ SYNOPSIS
   pm etl check --connector <name> [--config key=value] [--json]
   pm etl catalog --connector <name> [--config key=value] [--json]
   pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
-  pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json]
+  pm etl run --connection <name> --stream <stream> [--batch-size n] [--max-in-flight-batches n] [--runtime] [--json]
   pm etl status <run-id> [--json]
   pm etl transport github-issue-label plan --connection <name> [--json]
   pm etl transport github-issue-label preview <plan-id> [--json]
@@ -38,6 +38,15 @@ DESCRIPTION
 
   ETL writes destination records in bounded batches. Use --batch-size for large
   paginated streams when you want tighter memory bounds.
+
+ORDERED PIPELINE
+  --max-in-flight-batches selects a bounded 1..8 producer/consumer depth only
+  for a transformed full_overwrite Arrow transport whose source and destination
+  both declare ordered-pipeline support. Its admitted default is 2; 1 preserves
+  the prior serial callback behavior. The bound covers retained batches as well
+  as the Arrow byte-credit policy, preserves source order, and refuses an
+  undeclared endpoint before source or destination I/O. It is not a generic
+  --workers flag and does not create parallel destination COPY lanes.
 
   With --runtime, ETL also requires healthy PostgreSQL, DragonflyDB, and Temporal
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger

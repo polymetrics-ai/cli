@@ -519,6 +519,10 @@ func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Wr
 	}
 	switch args[0] {
 	case "create":
+		if len(args) == 2 && (args[1] == "--help" || args[1] == "-h") {
+			_, err := fmt.Fprint(stdout, connectionsHelp)
+			return err
+		}
 		if len(args) < 2 {
 			return errUsage
 		}
@@ -534,6 +538,10 @@ func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		stream := flags.first("stream")
 		if stream == "" {
 			return errors.New("missing --stream")
+		}
+		targetCopyWorkers, err := parseTargetCopyWorkers(flags.first("target-copy-workers"))
+		if err != nil {
+			return err
 		}
 		sourceConfig, err := keyValues(flags.values["source-config"])
 		if err != nil {
@@ -560,10 +568,11 @@ func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			streamCfg.TransformPlanHash = plan.Hash()
 		}
 		conn, err := a.CreateConnection(ctx, app.CreateConnectionRequest{
-			Name:        args[1],
-			Source:      source,
-			Destination: dest,
-			Streams:     map[string]app.StreamConfig{stream: streamCfg},
+			Name:              args[1],
+			Source:            source,
+			Destination:       dest,
+			Streams:           map[string]app.StreamConfig{stream: streamCfg},
+			TargetCopyWorkers: targetCopyWorkers,
 		})
 		if err != nil {
 			return err
@@ -701,6 +710,10 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		}
 		return nil
 	case "run":
+		if len(args) == 2 && (args[1] == "--help" || args[1] == "-h") {
+			_, err := fmt.Fprint(stdout, etlHelp)
+			return err
+		}
 		if approval, transportApproval, strictFlags, err := parseETLRunTransportApproval(args[1:], os.Stdin); err != nil {
 			return err
 		} else if transportApproval {
@@ -711,10 +724,15 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		if err != nil {
 			return err
 		}
+		maxInFlightBatches, err := parseMaxInFlightBatches(flags.first("max-in-flight-batches"))
+		if err != nil {
+			return err
+		}
 		run, err := a.RunETL(ctx, app.RunETLRequest{
-			Connection: flags.first("connection"),
-			Stream:     flags.first("stream"),
-			BatchSize:  batchSize,
+			Connection:         flags.first("connection"),
+			Stream:             flags.first("stream"),
+			BatchSize:          batchSize,
+			MaxInFlightBatches: maxInFlightBatches,
 		})
 		if err != nil {
 			return err
