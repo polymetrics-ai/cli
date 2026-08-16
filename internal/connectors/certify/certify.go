@@ -16,6 +16,12 @@ type Options struct {
 	Config    map[string]string // connector config for credentials add
 	SecretEnv map[string]string // field -> ENV name
 	KeepWork  bool
+	// LedgerRoot is the durable, caller-owned location for the append-only
+	// write lifecycle ledger. An empty value retains the self-contained
+	// workdir behaviour used by fixture tests; production CLI callers set it
+	// below .polymetrics/certifications/ledger/<connector> so --sweep and a
+	// resumed run see the same checkpoints after the ephemeral workdir exits.
+	LedgerRoot string
 
 	// Write enables the create-then-cleanup write protocol (stages 12-17,
 	// design §C). When false, or when the connector has no available

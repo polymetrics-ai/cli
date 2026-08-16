@@ -116,6 +116,31 @@ func TestRunBatchRunsEveryConnectorAndAggregatesExitCode(t *testing.T) {
 	}
 }
 
+func TestRunBatchAssignsDurablePerConnectorLedgerRoot(t *testing.T) {
+	batchDir := t.TempDir()
+	var got certify.Options
+	factory := func(name string, opts certify.Options) certify.Runnable {
+		if name != "github" {
+			t.Fatalf("factory connector = %q, want github", name)
+		}
+		got = opts
+		return &fakeRunnable{rep: passingReport(name)}
+	}
+
+	_, err := certify.RunBatch(context.Background(), certify.BatchOptions{
+		CredsFile:     certify.CredsFile{Connectors: map[string]certify.ConnectorCredsEntry{"github": {}}},
+		RunnerFactory: factory,
+		BatchDir:      batchDir,
+	})
+	if err != nil {
+		t.Fatalf("RunBatch() error = %v", err)
+	}
+	want := filepath.Join(batchDir, "certifications", "ledger", "github")
+	if got.LedgerRoot != want {
+		t.Fatalf("runner LedgerRoot = %q, want %q", got.LedgerRoot, want)
+	}
+}
+
 // TestRunBatchExitCodeReflectsWorstConnector proves a single failing
 // connector forces exit 2 even when others pass.
 func TestRunBatchExitCodeReflectsWorstConnector(t *testing.T) {

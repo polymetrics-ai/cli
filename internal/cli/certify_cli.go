@@ -73,6 +73,11 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 	if err != nil {
 		return err
 	}
+	// A certification workdir is intentionally ephemeral. Its write-ahead
+	// lifecycle ledger is not: persist it where --sweep discovers it so a
+	// crash or rate-limit restart can reconcile tagged resources rather than
+	// replaying a create from scratch.
+	opts.LedgerRoot = filepath.Join(root, ".polymetrics", "certifications", "ledger", connector)
 	externalProof := flags.first("external-proof") == "true"
 	if externalProof {
 		if os.Getenv(certificationExternalChildEnv) != "1" {
@@ -432,7 +437,7 @@ func runCertifySweep(ctx context.Context, root string, flags parsedFlags, stdout
 	results := make(map[string]certify.SweepResult, len(connectors))
 	for _, name := range connectors {
 		ledgerRoot := filepath.Join(root, ".polymetrics", "certifications", "ledger", name)
-		sweeper := certify.NewSweeper(certify.SweeperOptions{Root: ledgerRoot, OlderThan: olderThan})
+		sweeper := certify.NewSweeper(certify.SweeperOptions{Root: ledgerRoot, ProjectRoot: root, OlderThan: olderThan})
 		res, err := sweeper.Sweep(ctx)
 		if err != nil {
 			return fmt.Errorf("certify: sweep %s: %w", name, err)

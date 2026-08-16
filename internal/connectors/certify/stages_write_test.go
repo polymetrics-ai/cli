@@ -420,3 +420,38 @@ func TestWriteStagesLedgerWrittenBeforeCreate(t *testing.T) {
 		t.Errorf("ledger file %s has no cleaned_at entry after a clean run", ledgerPath)
 	}
 }
+
+func TestWriteStagesLedgerPersistsAtConfiguredLedgerRoot(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+	ledgerRoot := filepath.Join(t.TempDir(), "durable-ledger")
+
+	r, driver := scriptedSampleRunner(t, certify.Options{
+		Connector:  "sample",
+		Stream:     "customers",
+		Limit:      50,
+		SecretEnv:  map[string]string{"token": "PM_SAMPLE_TOKEN"},
+		Write:      true,
+		LedgerRoot: ledgerRoot,
+	})
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	driver.assertProtocol(t)
+	if !rep.Passed {
+		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
+	}
+
+	entries, err := certify.LoadLedger(ledgerRoot)
+	if err != nil {
+		t.Fatalf("LoadLedger(%s): %v", ledgerRoot, err)
+	}
+	if len(entries.All()) == 0 {
+		t.Fatalf("durable ledger %s has no entries", ledgerRoot)
+	}
+	for _, status := range entries.All() {
+		if !status.Cleaned || !status.ReadBack || status.State != "cleaned" {
+			t.Fatalf("durable ledger status = %+v, want read-back and cleaned lifecycle", status)
+		}
+	}
+}

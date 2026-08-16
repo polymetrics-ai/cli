@@ -15,10 +15,12 @@ import (
 
 // SweeperOptions configures a Sweeper.
 type SweeperOptions struct {
-	// Root is the project root (an existing `pm init`-ed directory) whose
-	// certify-ledger.jsonl the sweeper scans and whose CLI surface it drives
-	// to perform cleanup.
+	// Root is the durable directory containing certify-ledger.jsonl.
 	Root string
+	// ProjectRoot is the existing `pm init`-ed directory whose CLI surface
+	// drives cleanup. When omitted, Root preserves the legacy combined-root
+	// behaviour used by fixture callers.
+	ProjectRoot string
 	// OlderThan is the minimum age (measured from LedgerEntry.PlannedAt) an
 	// uncleaned entry must have before the sweeper will touch it
 	// (certification design §A/§B "--older-than 24h" default), so an
@@ -76,7 +78,7 @@ func (s *Sweeper) Sweep(ctx context.Context) (SweepResult, error) {
 	}
 
 	threshold := time.Now().UTC().Add(-s.opts.OlderThan)
-	harness := NewHarness(s.opts.Root)
+	harness := NewHarness(s.harnessRoot())
 
 	for _, status := range entries.Uncleaned() {
 		if status.PlannedAt.After(threshold) {
@@ -100,6 +102,16 @@ func (s *Sweeper) Sweep(ctx context.Context) (SweepResult, error) {
 	}
 
 	return result, nil
+}
+
+func (s *Sweeper) harnessRoot() string {
+	if s != nil && s.opts.ProjectRoot != "" {
+		return s.opts.ProjectRoot
+	}
+	if s == nil {
+		return ""
+	}
+	return s.opts.Root
 }
 
 // sweepCleanTag attempts to clean up one uncleaned ledger entry, dispatching

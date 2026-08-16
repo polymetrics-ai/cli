@@ -100,7 +100,11 @@ func stageWritePlanPreview(rc *runContext, rep *Report) error {
 	wc.tag = NewTag(rc.opts.Connector, wc.runID8)
 	wc.resourceID = wc.pairing.VerifyStream + ":" + wc.tag
 
-	ledger, err := NewLedger(rc.root)
+	ledgerRoot := rc.opts.LedgerRoot
+	if ledgerRoot == "" {
+		ledgerRoot = rc.root
+	}
+	ledger, err := NewLedger(ledgerRoot)
 	if err != nil {
 		recordStage(rc, rep, "write_plan_preview", 2, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, fmt.Sprintf("write_plan_preview: create ledger: %v", err)
