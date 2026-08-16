@@ -255,10 +255,15 @@ func (s *connectionWarehouseStage) Reopen(ctx context.Context, receipt synctrans
 	}, nil
 }
 
-// Retire removes exactly one committed, connection-owned transient receipt.
+// retire removes exactly one committed, connection-owned transient receipt.
 // The receipt controls neither its directory nor its file names: artifactFor
 // derives all three paths from the validated owner and opaque stage ID.
-func (s *connectionWarehouseStage) Retire(ctx context.Context, receipt synctransport.WarehouseReceipt) error {
+//
+// Connection-owned receipts intentionally do not implement the optional eager
+// RetirableWarehouseStage: their durable manifest and Parquet remain observable
+// through ordinary Open for recovery and certification. The generic
+// pre-execution reconciliation path invokes this private operation instead.
+func (s *connectionWarehouseStage) retire(ctx context.Context, receipt synctransport.WarehouseReceipt) error {
 	if s == nil || s.app == nil {
 		return fmt.Errorf("connection-owned warehouse stage is unavailable")
 	}
@@ -341,7 +346,7 @@ func (s *connectionWarehouseStage) ReconcileCommitted(ctx context.Context) error
 			if err != nil {
 				continue
 			}
-			if err := s.Retire(ctx, manifest.receipt(manifestSHA256)); err != nil {
+			if err := s.retire(ctx, manifest.receipt(manifestSHA256)); err != nil {
 				return fmt.Errorf("retire reconciled warehouse stage receipt %q: %w", manifest.ID, err)
 			}
 		}

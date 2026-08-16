@@ -18,7 +18,8 @@
 | CI regression repair | `go test -count=1 -timeout 20m ./internal/app -run 'TestGithubPullRequestsETLSupportsLegacyExecutableModes|TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume'` failed: the noncanonical GitHub mode ordering bypassed the exact issue-label route guard and destination change capture was refused despite declaring `change_apply`. | The focused app command, `TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination`, and `go test -count=1 -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$'` pass: GitHub’s declaration is canonical, two-sided routing preserves legacy compatibility, and legitimate change capture reaches `change_apply`. | green |
 | Generated artifact closure | CI RED: `TestSkillsGenerateMatchesTrackedSkills` found the tracked skills tree differed after the warehouse declaration regenerated its connector manual/skill. | A full source-derived sweep runs `agentcontractgen sync`, `connectorgen gen`, `surface-sync`, `certification-matrix --all`, docs/catalog generation, skills generation, golden transcript generation, and website-data generation. Their CI checks pass and only the expected GitHub and warehouse skill documents change. | green |
 | R2 loaded synthetic connector route | No test loaded a second connector from its own `sync_transport.json`, sent it through `App.composeTransportRegistry`, and ran the resulting registration through `synctransport.Orchestrator`. | The new test loads a throwaway bundle, uses only its declared family/identifier/evidence plus a named test hook, and observes one source read, staged record, destination plan/apply/read-back, and committed checkpoint with no App/orchestrator/dispatch production edit. | green |
-| R2 transient-stage retirement | `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit` failed before the lifecycle patch: a checkpoint-committed page reported `retired receipts = 0, want 1`; the persistence-failure sibling defines the non-retirement safety boundary. | A successful commit retires exactly one receipt; a failed commit retires none. Fresh App startup reconciles a simulated kill-after-commit receipt only when its exact checkpoint is durable, leaving the distinct active receipt untouched. | green |
+| R2 transient-stage retirement | `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit` failed before the lifecycle patch: a checkpoint-committed page reported `retired receipts = 0, want 1`; the persistence-failure sibling defines the non-retirement safety boundary. | An opt-in generic stage retires exactly one receipt after a successful commit and none after a failure. R3 fixes the production connection-owned policy: it defers bounded reconciliation until the next generic execution so durable proof remains observable after ordinary Open. | green |
+| R3 certification retention and deferred cleanup | CI `certify-timing` RED: `TestCertificationDeclaredTransportPairResolvesAndExecutes` reports a committed one-write pair but `warehouse_manifests=0 warehouse_parquet=0`, because eager generic retirement removes the durable proof before it is inspected. | The real certification proof retains exactly one owned manifest/Parquet after ordinary reopen. Deferred generic pre-execution reconciliation removes the exact committed receipt while preserving an active one, before source I/O. | green |
 
 Every refusal test asserts the relevant side effect count is zero. No test relies
 only on `err != nil` or a lack of panic.
@@ -94,10 +95,29 @@ retirement may occur before the durable commit.
 
 The same focused test now passes, with exactly one retirement only after the
 commit callback accepts the acknowledged checkpoint and zero after the callback
-returns an error. `TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages`
-then simulates a process kill after that durable checkpoint: a fresh App removes
-only the exact committed receipt's manifest, WAL, and Parquet workset while
+returns an error. `TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages`
+then simulates a process kill after that durable checkpoint: ordinary Open
+retains both durable worksets, and the next bounded generic reconciliation
+removes only the exact committed receipt's manifest, WAL, and Parquet while
 preserving an active receipt. The independent loaded-synthetic-connector proof
 passes through `engine.Load`, App composition, the registry, and the generic
 orchestrator with no production registration, App dispatch, or orchestrator
 change for that connector.
+
+## R3 Red:
+
+CI's `make certify-timing` failure was reproduced locally with
+`go test -count=1 -timeout 20m ./internal/connectors/certify -run
+'^TestCertificationDeclaredTransportPairResolvesAndExecutes$'`. The actual
+declared GitHub pair read twice, applied once, and committed its checkpoint, but
+the report failed closed with `warehouse_manifests=0 warehouse_parquet=0`.
+That evidence established that eager post-commit retirement and eager Open
+reconciliation, not the certification adapter, were deleting the receipt.
+
+## R3 Green:
+
+`make certify-timing` now passes, including the declared-pair proof. Full
+`./internal/connectors/certify` and `./internal/app` suites pass. The new app
+test proves a reconciliation error stops before source or destination I/O;
+the deferred-reconciliation fixture proves a fresh Open retains proof and the
+next generic cleanup removes only the committed owned artifact.

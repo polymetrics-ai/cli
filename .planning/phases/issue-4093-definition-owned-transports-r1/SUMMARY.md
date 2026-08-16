@@ -34,9 +34,11 @@ and generic orchestrator. One record is read, staged, planned, applied,
 read-back, and committed without a connector-name branch or a production App,
 orchestrator, or dispatch edit for that connector.
 
-Transient connection-owned worksets now have an optional exact-receipt
-retirement contract. The orchestrator calls it only after the durable checkpoint
-commit; a bounded startup reconciliation repairs the kill-after-commit window
-by matching the receipt's candidate checkpoint to the persisted committed
-checkpoint. It deletes only the derived manifest/WAL/Parquet paths for that
-owned receipt and retains foreign, malformed, active, and uncommitted worksets.
+Transient connection-owned worksets retain their durable manifest and Parquet
+through ordinary Open, so recovery and certification can inspect the real
+execution evidence. The generic optional exact-receipt retirement contract is
+still available to stages that choose eager disposal. Connection-owned cleanup
+instead occurs boundedly before the next generic source read: it matches the
+candidate checkpoint to the persisted committed checkpoint, deletes only that
+receipt's derived manifest/WAL/Parquet, and retains foreign, malformed, active,
+and uncommitted worksets.

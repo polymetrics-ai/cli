@@ -36,12 +36,14 @@ issue's kill/reconciliation acceptance.
   Parquet stage retires only an exact validated receipt, derives all paths from
   its owner and opaque stage ID, verifies its retained manifest, and never
   accepts a path or removes a directory tree.
-- Retire committed receipts only after the durable checkpoint callback
-  succeeds. Reconcile a bounded maximum of 64 owned manifest candidates on
-  startup by matching their candidate checkpoint to the persisted committed
+- Connection-owned receipts retain their manifest and Parquet through ordinary
+  Open so durable recovery/certification evidence can be inspected. A bounded
+  maximum of 64 owned candidates is reconciled before the next generic source
+  read by matching its candidate checkpoint to the persisted committed
   checkpoint. An interruption during cleanup remains retryable because data is
   removed before its manifest; active, malformed, foreign, and uncommitted
-  worksets are retained.
+  worksets are retained. The optional eager-retirement interface remains for
+  stages that explicitly opt in.
 
 ## Acceptance evidence
 
@@ -50,7 +52,7 @@ issue's kill/reconciliation acceptance.
 | Happy | `TestAppCompositionRoutesLoadedSyntheticDefinitionConnector` proves the definition-loaded synthetic connector end-to-end. `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit` observes one retirement after one durable commit. |
 | Bad / before I/O | Existing `TestBundleLoadSyncTransportRefusesUnknownOrUnsafeDeclarations` proves unknown/version/role members fail closed. `TestPreflightReturnsTypedDestinationSourceIneligibleErrorBeforeExecutorAccess` asserts the specific `*DestinationSourceIneligibleError` and zero executor access. `TestRegisterDeclaredTransportsRefusesBeforeAnyRegistration` proves malformed declarations produce zero builders/registrations. |
 | CDC role boundary | `TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination` permits only the declared closed `change_apply` pairing and asserts a malformed `change_capture`/`append` pair performs zero builds, registrations, reads, plans, and applies. |
-| Kill-after-commit edge | `TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages` simulates death after checkpoint persistence. A fresh App removes only that receipt's manifest/WAL/Parquet paths and preserves a second active receipt. The checkpoint is the durable resume guard, so the already-applied effect cannot be repeated. |
+| Kill-after-commit edge | `TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages` simulates death after checkpoint persistence. Ordinary Open preserves both durable receipts; generic pre-execution reconciliation removes only the committed receipt's manifest/WAL/Parquet and preserves a second active receipt. `TestRunETLTransportReconcilesCommittedStagesBeforeSourceIO` proves a reconciliation failure reaches neither source read nor destination apply. The checkpoint is the durable resume guard, so the already-applied effect cannot be repeated. |
 
 ## GSD and skills
 
@@ -70,7 +72,7 @@ All commands below passed (exit 0) after the recorded RED, unless noted:
 ```text
 go test -count=1 -timeout 20m ./internal/app -run '^TestAppCompositionRoutesLoadedSyntheticDefinitionConnector$'
 go test -count=1 -timeout 20m ./internal/synctransport -run '^TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit$'
-go test -count=1 -timeout 20m ./internal/app -run '^TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages$'
+go test -count=1 -timeout 20m ./internal/app -run '^TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages$'
 go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestBundleLoadSyncTransportRefusesUnknownOrUnsafeDeclarations$'
 go test -count=1 -timeout 20m ./internal/synctransport -run '^TestPreflightReturnsTypedDestinationSourceIneligibleErrorBeforeExecutorAccess$'
 go test -count=1 -timeout 20m ./internal/synctransport -run '^TestRegisterDeclaredTransportsRefusesBeforeAnyRegistration$'
@@ -107,3 +109,22 @@ gate; full-suite coverage remains CI.
 
 No user-facing CLI, generated manual, or website source changed. Website docs
 generation was run twice and was byte-stable.
+
+## Certification timing regression repair
+
+CI initially failed `TestCertificationDeclaredTransportPairResolvesAndExecutes`:
+the declared pair had one write and a durable checkpoint, but the proof's
+manifest/Parquet were already removed. The repair leaves connection-owned proof
+available through ordinary Open and moves its bounded cleanup to the generic
+pre-source execution path. It does not change `internal/connectors/certify`'s
+stage adapter.
+
+```text
+make certify-timing
+go test -count=1 -timeout 20m ./internal/connectors/certify
+go test -count=1 -timeout 20m ./internal/app
+go vet ./internal/app ./internal/connectors/certify
+go run ./cmd/connectorgen boundary . --json
+```
+
+All passed after the fix.

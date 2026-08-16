@@ -13,6 +13,15 @@
   vet/build, website generation, and repository gates; record exact commands
   and results below.
 
+### R3 certification regression repair
+
+- [x] Preserve the certification proof's connection-owned durable receipt
+  across ordinary `Open`, without touching the owned certification stage.
+- [x] Reconcile committed receipts through the generic pre-execution path and
+  prove it occurs before source I/O.
+- [x] Run the failing certify-timing test plus the changed consumer/package and
+  boundary/generated gates; record the exact results below.
+
 - [x] Targeted `synctransport` and connector test packages pass:
   `go test -timeout 20m ./internal/synctransport/... ./internal/connectors/...`.
 - [x] Race coverage passes for the changed registries/loaders and app
@@ -94,7 +103,7 @@
 | A loaded synthetic second connector routes generically | `TestAppCompositionRoutesLoadedSyntheticDefinitionConnector` | A real test bundle supplies `sync_transport.json`; generic App composition selects its named hooks by declared family/ID/evidence and the generic orchestrator reads, stages, plans, applies, read-backs, and commits one record. |
 | Evidence is externally admitted | `TestDefinitionConformanceVerifierRefusesAlteredEvidenceBeforeSourceIO` | Altered evidence fails preflight with zero source reads. |
 | Destination change capture stays closed | `TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination`, descriptor and composition tests | A `change_apply` declaration produces one source read/stage/plan/apply; a `change_capture`/`append` declaration has zero builds, registrations, reads, plans, and applies. |
-| Committed transient stages reconcile safely | `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit`, `TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages` | Persistence failure has zero retirements; a successful checkpoint retires one exact receipt. After a simulated kill, fresh App startup removes only that checkpoint's owned manifest/WAL/Parquet and leaves an active receipt intact. |
+| Committed transient stages reconcile safely | `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit`, `TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages`, `TestRunETLTransportReconcilesCommittedStagesBeforeSourceIO` | An opt-in stage has zero retirements on persistence failure and one on success. Connection-owned evidence remains through ordinary Open; before the next source read, generic reconciliation removes only a matching committed manifest/WAL/Parquet and leaves an active receipt intact. A reconciliation error has zero source reads and destination applies. |
 | PostgreSQL remains live-proven | mandated tagged native PostgreSQL test | Docker/Colima integration suite passed for the definition-owned production source adapter before the CI repair; the post-repair mandatory run is recorded below. |
 | Local warehouse is a closed destination | production preflight + local executor test | PostgreSQL-to-warehouse preflight resolves the warehouse-owned adapter; apply writes the connection-owned Parquet table and read-back confirms its durable digest and row count. |
 | Legacy routes stay outside a half-transport | full app suite | One-sided declarations take the legacy path; malformed two-sided declarations reach preflight; the full app suite remains green. |
@@ -112,7 +121,7 @@ go test -count=1 -timeout 20m ./internal/synctransport -run '^TestOrchestratorRe
 # R2 focused GREEN
 go test -count=1 -timeout 20m ./internal/app -run '^TestAppCompositionRoutesLoadedSyntheticDefinitionConnector$'
 go test -count=1 -timeout 20m ./internal/synctransport -run '^TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit$'
-go test -count=1 -timeout 20m ./internal/app -run '^TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages$'
+go test -count=1 -timeout 20m ./internal/app -run '^TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages$'
 go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestBundleLoadSyncTransportRefusesUnknownOrUnsafeDeclarations$'
 go test -count=1 -timeout 20m ./internal/synctransport -run '^TestPreflightReturnsTypedDestinationSourceIneligibleErrorBeforeExecutorAccess$'
 go test -count=1 -timeout 20m ./internal/synctransport -run '^TestRegisterDeclaredTransportsRefusesBeforeAnyRegistration$'
@@ -150,3 +159,18 @@ The repository instruction explicitly advises against one monolithic
 `go test ./...`/`make verify` invocation in this per-command environment; the
 changed packages plus `internal/cli` and every non-test `make verify` gate were
 therefore run separately above. Full-suite execution remains CI coverage.
+
+## R3 certification regression commands and results
+
+All exited 0 after the recorded CI RED:
+
+```text
+go test -count=1 -timeout 20m ./internal/connectors/certify -run '^TestCertificationDeclaredTransportPairResolvesAndExecutes$'
+go test -count=1 -timeout 20m ./internal/app -run '^(TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages|TestRunETLTransportReconcilesCommittedStagesBeforeSourceIO)$'
+make certify-timing
+go test -count=1 -timeout 20m ./internal/connectors/certify
+go test -count=1 -timeout 20m ./internal/app
+go vet ./internal/app ./internal/connectors/certify
+go run ./cmd/connectorgen boundary . --json
+git diff --check
+```

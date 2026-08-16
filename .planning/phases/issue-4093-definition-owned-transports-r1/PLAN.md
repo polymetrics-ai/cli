@@ -61,7 +61,28 @@ status: completed
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
 | A synthetic connector is definition-owned and generic | fake — deterministic in-memory bundle | `engine.Load` parses the synthetic `sync_transport.json`; App discovers its named test hook via `DefinitionFactoryProvider`, and generic orchestration stages/applies/reads back one record and commits one checkpoint. An in-memory bundle is necessary because `defs.FS` is compile-time embedded; the assertion is against the real bundle loader, App composition, registry, and orchestrator, not a hand-authored descriptor. |
-| A committed transient stage is retired without overreach | fake — deterministic owned project fixture | `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit` observes zero retirement after a persistence failure and one exact receipt retirement after success. `TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages` simulates a kill after checkpoint persistence; fresh `Open` removes only the committed receipt's manifest/WAL/Parquet and preserves the active receipt. |
+| A committed transient stage is retired without overreach | fake — deterministic owned project fixture | `TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit` proves that an opt-in generic stage receives no retirement before a persistence failure and one exact receipt after a successful commit. `TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages` proves that connection-owned evidence survives ordinary `Open`, then its bounded pre-execution reconciler removes only the committed manifest/WAL/Parquet and preserves the active receipt. |
+
+## R3 certification regression repair
+
+CI's `certify-timing` target found that eager post-commit retirement and eager
+`Open` reconciliation delete the exact connection-owned durable receipt which
+`app.ProbeDeclaredTransportForCertification` must reopen and inspect. The
+declared GitHub pair still executed (one apply and a committed checkpoint), but
+the certification proof correctly failed with zero retained manifest and
+Parquet artifacts. This repair is confined to generic stage registration and
+runtime lifecycle; `internal/connectors/certify/stages_transport.go` is owned
+by the concurrent database-certification lane and will not be changed.
+
+1. **RED:** `go test -count=1 -timeout 20m ./internal/connectors/certify -run
+   '^TestCertificationDeclaredTransportPairResolvesAndExecutes$'` fails with
+   `warehouse_manifests=0 warehouse_parquet=0` after a successful execution.
+2. **GREEN:** keep the generic optional immediate-retirement interface for
+   stages that opt in, but leave connection-owned receipt evidence available
+   after a completed run and reopen. Run its bounded committed-receipt cleanup
+   before the next generic transport execution, before source I/O. Prove the
+   certification pair passes and a kill-after-commit receipt is cleaned only by
+   that deferred reconciliation, never by ordinary `Open`.
 
 ## Scope
 

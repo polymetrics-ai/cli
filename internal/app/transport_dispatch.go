@@ -172,6 +172,9 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	if a.transports == nil {
 		return emptyResult, fmt.Errorf("closed transport registry is unavailable")
 	}
+	if err := a.reconcileCommittedTransportStages(ctx); err != nil {
+		return emptyResult, err
+	}
 	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
 		Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode,
 	})
@@ -324,6 +327,22 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		}
 	}
 	return result, nil
+}
+
+// reconcileCommittedTransportStages retires only previously committed,
+// connection-owned worksets before the next closed transport can reach source
+// I/O. Ordinary Open deliberately leaves an accepted receipt observable for
+// recovery and certification evidence; a stage that needs eager disposal may
+// separately opt into synctransport.RetirableWarehouseStage.
+func (a *App) reconcileCommittedTransportStages(ctx context.Context) error {
+	stage, ok := a.transportStage.(interface{ ReconcileCommitted(context.Context) error })
+	if !ok {
+		return nil
+	}
+	if err := stage.ReconcileCommitted(ctx); err != nil {
+		return fmt.Errorf("reconcile committed transport stages: %w", err)
+	}
+	return nil
 }
 
 func transportPhaseMeasurement(result synctransport.Result) *TransportPhaseMeasurement {

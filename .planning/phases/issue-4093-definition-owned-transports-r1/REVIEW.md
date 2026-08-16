@@ -62,3 +62,17 @@ CI the review gate.
 - Focused, scoped, generator, boundary, vet/build, and individual repository
   gates are recorded in `VERIFICATION.md`. No unresolved actionable finding
   remains.
+
+## R3 certification regression review
+
+- The failed CI proof executed the declared pair successfully; its zero
+  artifact count pinpointed eager cleanup, not missing registration or a
+  certification-stage adapter defect. `stages_transport.go` is unchanged.
+- Connection-owned stages do not opt into the generic eager-retirement
+  interface. They retain exact durable evidence through ordinary Open and use
+  the same ownership-checked, bounded reconciler immediately before the next
+  generic transport execution.
+- A reconciliation error exits before transport preflight/source I/O; a valid
+  reconciliation removes only an exact committed receipt and leaves an active
+  receipt. `make certify-timing`, full certification, full app, vet, and
+  connector-boundary are green. No unresolved actionable finding remains.

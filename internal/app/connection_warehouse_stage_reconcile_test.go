@@ -12,7 +12,7 @@ import (
 	"polymetrics.ai/internal/synctransport"
 )
 
-func TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages(t *testing.T) {
+func TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages(t *testing.T) {
 	ctx := context.Background()
 	fixture := newIssueLabelWarehouseStageFixture(t)
 	stage, ok := fixture.app.transportStage.(*connectionWarehouseStage)
@@ -57,13 +57,22 @@ func TestOpenReconcilesOnlyCommittedConnectionOwnedTransportStages(t *testing.T)
 
 	// Opening a fresh process models a kill immediately after the checkpoint
 	// rename: the checkpoint is durable, while its transient receipt was never
-	// retired by the killed process.
+	// retired by the killed process. Open retains the evidence for recovery and
+	// certification; the next generic execution reconciles it before source I/O.
 	fresh, err := Open(fixture.app.root)
 	if err != nil {
 		t.Fatalf("open after committed-stage interruption: %v", err)
 	}
 	if fresh == nil {
 		t.Fatal("Open() returned a nil app")
+	}
+	for _, path := range []string{committedArtifact.manifestPath, committedArtifact.walPath, committedArtifact.parquetPath, activeArtifact.manifestPath, activeArtifact.walPath, activeArtifact.parquetPath} {
+		if _, err := os.Stat(path); err != nil {
+			t.Fatalf("fresh Open removed transient artifact %q: %v", path, err)
+		}
+	}
+	if err := fresh.reconcileCommittedTransportStages(ctx); err != nil {
+		t.Fatalf("reconcile committed transport stages: %v", err)
 	}
 	for _, path := range []string{committedArtifact.manifestPath, committedArtifact.walPath, committedArtifact.parquetPath} {
 		if _, err := os.Stat(path); !errors.Is(err, os.ErrNotExist) {

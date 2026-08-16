@@ -231,11 +231,6 @@ func open(root string, deferNormalization bool) (*App, error) {
 	if err := a.composeTransportRegistry(); err != nil {
 		return nil, err
 	}
-	if stage, ok := a.transportStage.(interface{ ReconcileCommitted(context.Context) error }); ok {
-		if err := stage.ReconcileCommitted(context.Background()); err != nil {
-			return nil, fmt.Errorf("reconcile committed transport stages: %w", err)
-		}
-	}
 	if err := a.rateParking.Start(context.Background()); err != nil {
 		return nil, fmt.Errorf("start durable rate parking: %w", err)
 	}

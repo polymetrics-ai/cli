@@ -179,6 +179,36 @@ func TestRunETLTransportPersistsZeroPhaseMeasurementWhenRefusedBeforeSourceIO(t 
 	}
 }
 
+func TestRunETLTransportReconcilesCommittedStagesBeforeSourceIO(t *testing.T) {
+	t.Run("reconciles before the source read", func(t *testing.T) {
+		fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+		stage := &reconcilingAppTransportStage{}
+		fixture.app.transportStage = stage
+
+		if _, err := fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1}); err != nil {
+			t.Fatalf("RunETL() = %v", err)
+		}
+		if stage.reconciliations != 1 || fixture.sourceExecutor.readCalls != 1 {
+			t.Fatalf("reconciliations/source reads = %d/%d, want 1/1", stage.reconciliations, fixture.sourceExecutor.readCalls)
+		}
+	})
+
+	t.Run("reconciliation refusal prevents source io", func(t *testing.T) {
+		fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+		wantErr := errors.New("synthetic transient reconciliation failure")
+		stage := &reconcilingAppTransportStage{err: wantErr}
+		fixture.app.transportStage = stage
+
+		_, err := fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+		if !errors.Is(err, wantErr) {
+			t.Fatalf("RunETL() error = %v, want %v", err, wantErr)
+		}
+		if stage.reconciliations != 1 || fixture.sourceExecutor.readCalls != 0 || fixture.destinationExecutor.applyCalls != 0 {
+			t.Fatalf("reconciliations/source reads/destination applies = %d/%d/%d, want 1/0/0", stage.reconciliations, fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls)
+		}
+	})
+}
+
 func TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeChangeCapture)
 
@@ -2820,6 +2850,17 @@ type appTransportStage struct {
 	calls    int
 	lastPage synctransport.SourcePage
 	worksets map[string]synctransport.WarehouseWorkset
+}
+
+type reconcilingAppTransportStage struct {
+	appTransportStage
+	reconciliations int
+	err             error
+}
+
+func (s *reconcilingAppTransportStage) ReconcileCommitted(context.Context) error {
+	s.reconciliations++
+	return s.err
 }
 
 func (s *appTransportStage) Stage(_ context.Context, request synctransport.WarehouseStageRequest) (synctransport.WarehouseReceipt, error) {
