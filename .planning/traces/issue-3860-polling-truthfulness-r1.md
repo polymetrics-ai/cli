@@ -111,6 +111,7 @@ descriptor can be a placeholder for an implemented per-catalog declaration.
 | `go test -timeout 20m ./internal/connectors -count=1` | pass |
 | `go test -timeout 20m ./internal/connectors/engine -count=1` | pass |
 | `go test -timeout 20m ./internal/connectors/native/postgres -count=1` | pass |
+| `go test -timeout 20m ./cmd/connectorgen -count=1` | pass; required consumer-package gate for changed guide and generated documentation surfaces |
 | `go test -timeout 20m ./internal/cli -run '^(TestGoldenTranscripts\|TestInspectPostgresKeepsStaticPollingWatermarkPlannedWhileRuntimeBindsItPerStream\|TestPollingHelpDistinguishesStaticDeclarationsFromDynamicRuntimeEligibility\|TestPMBinaryExecutesPostgresFixturePollingResume\|TestPMBinaryRefusesPostgresFixturePollingUnknownStreamCursorBeforePageRead)$' -count=1` | pass |
 | `go test -timeout 20m ./internal/connectors/engine -run '^(TestPollingPreflightAdmitsDeclaredPollingBeforeGuardedSourceRead\|TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO\|TestPollingModeEligibilitySweepsEveryImplementedPollingModeThroughRuntimePreflight)$' -count=1` | pass |
 | `go test -timeout 20m ./internal/connectors/native/postgres -run '^(TestPostgresPollingTransportResumesFixtureCursor\|TestPostgresPollingTransportRefusesMissingPerStreamCursorBeforeIO)$' -count=1` | pass |
