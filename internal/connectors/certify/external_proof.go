@@ -6,6 +6,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"crypto/subtle"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -280,6 +281,45 @@ func importedExternalProofFields(fields []externalProofField) []ImportedExternal
 
 func importedExternalProofBody(body externalProofObservedBody) ImportedExternalProofBody {
 	return ImportedExternalProofBody{Encoding: body.Encoding, Value: append(json.RawMessage(nil), body.Value...), OriginalBytes: body.OriginalBytes}
+}
+
+// RedactExternalProofDiagnostic preserves a readable diagnostic while
+// replacing every detected representation of a prepared credential with the
+// external-proof HMAC marker. Its salt is random, in-memory, and per-call:
+// diagnostics never create a proof, a root salt, or another persisted
+// credential-bearing artifact.
+func RedactExternalProofDiagnostic(text string, secretValues []string) (string, error) {
+	prepared := normalizedExternalProofValues(secretValues)
+	if len(prepared) == 0 || text == "" {
+		return text, nil
+	}
+	salt := make([]byte, sha256.Size)
+	if _, err := rand.Read(salt); err != nil {
+		return "", fmt.Errorf("generate external-proof diagnostic salt: %w", err)
+	}
+	for _, secret := range prepared {
+		marker := externalProofFingerprint(salt, secret)
+		for _, form := range externalProofDiagnosticSecretForms(secret) {
+			text = strings.ReplaceAll(text, form, marker)
+		}
+	}
+	if len(ScanForSecrets(text, prepared)) != 0 {
+		return "", errors.New("external-proof diagnostic retains credential material")
+	}
+	return text, nil
+}
+
+func externalProofDiagnosticSecretForms(secret string) []string {
+	forms := []string{
+		secret,
+		base64.StdEncoding.EncodeToString([]byte(secret)),
+		base64.RawStdEncoding.EncodeToString([]byte(secret)),
+		url.QueryEscape(secret),
+	}
+	sort.Slice(forms, func(left, right int) bool {
+		return len(forms[left]) > len(forms[right])
+	})
+	return forms
 }
 
 func validateExternalProofInput(input ExternalProofInput) ([]string, error) {

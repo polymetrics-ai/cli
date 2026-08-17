@@ -121,16 +121,20 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 		return err
 	}
 	if externalProof {
+		if !rep.Passed || exitCodeForReport(rep) != 0 {
+			diagnostic, err := certificationFailedReportDiagnostic(rep, certificationPreparedValues(opts))
+			if err != nil {
+				return errors.New("certify external proof: external proof requires a completed successful process; fingerprint-redacted report diagnostic unavailable")
+			}
+			return fmt.Errorf("certify external proof: external proof requires a completed successful process; fingerprint-redacted diagnostic: %s", diagnostic)
+		}
 		binarySHA256, err := currentBinarySHA256()
 		if err != nil {
 			return err
 		}
-		var flowReferences []string
-		if opts.RequireFullParity {
-			flowReferences, err = certificationFlowRoundTripReferences(rep)
-			if err != nil {
-				return fmt.Errorf("certify external proof: %w", err)
-			}
+		flowReferences, err := certificationFlowRoundTripReferences(rep, certificationPreparedValues(opts))
+		if err != nil {
+			return fmt.Errorf("certify external proof: %w", err)
 		}
 		runID := fmt.Sprintf("external-%d", rep.StartedAt.UTC().UnixNano())
 		if _, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
@@ -160,22 +164,83 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 // read-back stages into safe proof references. Accepted external evidence must
 // name the completed plan, preview, execution, and status/read-back steps
 // rather than treating a source-only HTTP transcript as a complete workflow.
-func certificationFlowRoundTripReferences(rep certify.Report) ([]string, error) {
+func certificationFlowRoundTripReferences(rep certify.Report, preparedValues []string) ([]string, error) {
 	required := []string{"flow_plan", "flow_preview", "flow_run", "flow_status"}
-	passed := make(map[string]bool, len(required))
-	for _, stage := range rep.Stages {
-		for _, name := range required {
-			if stage.Name == name && stage.Passed {
-				passed[name] = true
-			}
-		}
-	}
 	for _, name := range required {
-		if !passed[name] {
-			return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q", name)
+		stagePassed := false
+		var failed *certify.StageResult
+		for index := range rep.Stages {
+			stage := &rep.Stages[index]
+			if stage.Name != name {
+				continue
+			}
+			if stage.Passed {
+				stagePassed = true
+				break
+			}
+			failed = stage
 		}
+		if stagePassed {
+			continue
+		}
+		if failed == nil {
+			aggregate := certificationStageResult(rep, "flow_roundtrip")
+			if aggregate == nil {
+				return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: no passing stage result", name)
+			}
+			redacted, err := certificationStageDiagnostic(*aggregate, preparedValues)
+			if err != nil {
+				return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: fingerprint-redacted aggregate diagnostic unavailable", name)
+			}
+			predecessor := certificationStageResult(rep, "etl_full_refresh_append")
+			if predecessor == nil || predecessor.Passed {
+				return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: no named stage result; flow_roundtrip aggregate: %s", name, redacted)
+			}
+			predecessorRedacted, err := certificationStageDiagnostic(*predecessor, preparedValues)
+			if err != nil {
+				return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: fingerprint-redacted prerequisite diagnostic unavailable", name)
+			}
+			return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: no named stage result; flow_roundtrip aggregate: %s; etl_full_refresh_append prerequisite: %s", name, redacted, predecessorRedacted)
+		}
+		redacted, err := certificationStageDiagnostic(*failed, preparedValues)
+		if err != nil {
+			return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: fingerprint-redacted diagnostic unavailable", name)
+		}
+		return nil, fmt.Errorf("full external certification did not complete flow round-trip stage %q: %s", name, redacted)
 	}
 	return required, nil
+}
+
+func certificationStageResult(rep certify.Report, name string) *certify.StageResult {
+	for index := range rep.Stages {
+		if rep.Stages[index].Name == name {
+			return &rep.Stages[index]
+		}
+	}
+	return nil
+}
+
+func certificationStageDiagnostic(stage certify.StageResult, preparedValues []string) (string, error) {
+	diagnostic := fmt.Sprintf("stage=%q status=%q exit_code=%d kind=%q error=%s", stage.Name, stage.Status, stage.CLI.ExitCode, stage.CLI.Kind, stage.Error)
+	return certify.RedactExternalProofDiagnostic(diagnostic, preparedValues)
+}
+
+// certificationFailedReportDiagnostic exposes the one actionable stage from a
+// completed but unsuccessful external certification report. It deliberately
+// redacts before returning because the report's Error fields may originate in
+// provider responses and must never reach terminal output unfiltered.
+func certificationFailedReportDiagnostic(rep certify.Report, preparedValues []string) (string, error) {
+	for _, stage := range rep.Stages {
+		if stage.Passed || stage.Status == "skipped" {
+			continue
+		}
+		redacted, err := certificationStageDiagnostic(stage, preparedValues)
+		if err != nil {
+			return "", err
+		}
+		return "first non-passing stage: " + redacted, nil
+	}
+	return "report passed=false without a non-passing stage result", nil
 }
 
 func runExternalCertifyChild(ctx context.Context, root string, args []string, stdout, stderr io.Writer, preparedValues, childEnv []string) error {
@@ -273,11 +338,19 @@ func replaceCertificationStdinArg(args []string, field string) []string {
 // relayExternalCertifyChildOutput is the parent-side final credential boundary:
 // the child has no terminal attached, so neither stream may reach the invoking
 // process until both have been checked against the prepared credential values.
-// On a refusal it writes neither stream, leaving no caller-captured transcript
-// or log with the secret.
+// On a refusal it writes neither raw stream; it returns only a separately
+// fingerprint-redacted diagnostic so an external-proof failure stays
+// diagnosable without exposing a credential.
 func relayExternalCertifyChildOutput(stdout, stderr io.Writer, childStdout, childStderr string, preparedValues []string) error {
 	if len(certify.ScanForSecrets(childStdout, preparedValues)) != 0 || len(certify.ScanForSecrets(childStderr, preparedValues)) != 0 {
-		return errors.New("external certification child output contained credential material; refusing to relay captured streams")
+		diagnostic, err := certify.RedactExternalProofDiagnostic(
+			"external certification child stdout:\n"+childStdout+"\nexternal certification child stderr:\n"+childStderr,
+			preparedValues,
+		)
+		if err != nil {
+			return errors.New("external certification child output contained credential material; refusing to relay captured streams and diagnostic")
+		}
+		return fmt.Errorf("external certification child output contained credential material; refusing to relay captured streams; fingerprint-redacted diagnostic:\n%s", diagnostic)
 	}
 	if _, err := io.WriteString(stdout, childStdout); err != nil {
 		return err

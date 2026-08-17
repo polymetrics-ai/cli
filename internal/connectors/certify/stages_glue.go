@@ -422,10 +422,11 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 			"--flow", rc.flowName(),
 			"--json")
 		passed, errMsg := assertKind(rc, "schedule_create", res, "Schedule", 0)
-		if passed {
-			errMsg = assertNoScheduleAuthority("schedule_create", res.Envelope)
-			passed = errMsg == ""
+		if !passed {
+			return false, cliInfoFrom(res), errMsg
 		}
+		errMsg = assertNoScheduleAuthority("schedule_create", res.Envelope)
+		passed = errMsg == ""
 		return passed, cliInfoFrom(res), errMsg
 	})
 

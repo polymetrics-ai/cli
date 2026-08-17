@@ -132,3 +132,25 @@ The focused verbose run retains exactly 17,800 variants, the focused `-race`
 run passes, and the full package passes in 694.432s without a timeout change,
 test sampling, or coverage deletion. Result: no Critical, Warning, or Info
 findings.
+
+## Live diagnostic review
+
+Scope: the post-rebase safe diagnostic path for the external GitHub smoke.
+
+Mode: inline/manual review. The report and child-stream diagnostics use the
+same in-memory HMAC marker shape as accepted proofs, while their salts are
+neither persisted nor returned. `assertKind` is the common boundary for typed
+CLI errors, so any source, flow, resume, or schedule mismatch retains the
+non-secret category/code/message only after fingerprint redaction. The report
+gate returns exactly the first non-passing stage before refusing proof
+creation; it never serializes a failed proof or relays raw child stdout/stderr.
+
+The live smoke's non-secret coordination account was supplied to satisfy—not
+bypass—GitHub's declared rate policy. Full parity nevertheless ended at
+different non-passing stages on two final runs, so no claim of a provider
+success or accepted evidence was made. Planted-secret tests cover exact,
+base64, and URL forms and `git diff --check`, full `internal/connectors/certify`,
+full `internal/cli`, the required consumer package, vet, and build pass.
+
+Result: no code-quality or credential-boundary findings. Live full parity is
+an external acceptance blocker, not a condition this review can waive.

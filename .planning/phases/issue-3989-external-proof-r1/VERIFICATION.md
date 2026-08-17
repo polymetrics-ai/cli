@@ -1,12 +1,12 @@
 # #3989 verification checklist
 
-## Residual verification — pending
+## Residual verification — blocked on live full parity
 
-- [x] The live GitHub smoke runs, not skips, with its disposable identity and records an observable sanitized proof result (`TestExternalProofGitHubSmoke` parses a passing GitHub report and an observed 2xx proof response).
+- [ ] The live GitHub smoke ran, not skipped, with the designated disposable identity, but did not produce an accepted proof. After supplying its required non-secret `rate_limit_account` coordination subject, full parity reached distinct non-passing stages (`schedule_create`, then `resume`) on the final authorized runs. The raw credential was not rendered; the remaining live full-parity failure is the blocker.
 - [x] Complete opaque request and response bodies carry credential canaries that are substituted before proof serialization (`TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials`).
 - [x] A real fresh child snapshots its own process-list entry, argv, project root, runner workdir, and fresh-binary directory at the credential-live boundary. The parent verifies the finished secret-free artifact records no raw credential, no external timing window, and no CI opt-out; it also requires Recurly's legitimate incomplete-full-parity exit because the one-route TLS fixture does not certify its declared write surface (`TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts`).
 - [x] One proof demonstrates same-A equality, distinct-B separation, and absence of the repository salt from output (`TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials`).
-- [x] Focused suites, consumer package, repository gates, generator byte stability, and CLI unchanged-surface checks are recorded with their exact results.
+- [x] Changed-package and consumer verification passed after the safe diagnostic change: full `internal/connectors/certify`, full `internal/cli` under its unchanged 20-minute ceiling, required `cmd/connectorgen`, `go vet ./...`, `go build ./cmd/pm`, and `git diff --check`. The broader historical gate record remains valid for unchanged generated and documentation surfaces.
 
 ## Residual validation record
 
@@ -15,10 +15,14 @@
 | `go test -count=1 -run '^TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials$' ./internal/connectors/certify` | Passed after the planned red compile failure. |
 | `go test -count=1 -run '^TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts$' ./internal/cli` | Passed after the planned red compile failure; rerun after the process-list child-presence assertion. |
 | `go test -count=2 -parallel=4 -timeout 20m -run '^TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts$' -v ./internal/cli` | Passed after rebase (115.27s and 117.20s). Each child emits its secret-safe snapshot at the credential-live boundary, then Recurly's intentionally one-route fixture exits 1 for incomplete full parity. |
-| `go test -timeout 20m -count=1 -v -run '^TestExternalProofGitHubSmoke$' ./internal/cli` | Passed with the designated disposable identity. The run stays credential-free in this record. |
+| `go test -timeout 20m -count=1 -v -run '^TestExternalProofGitHubSmoke$' ./internal/cli` | Ran repeatedly with the designated disposable identity and did not skip. The first run exposed missing declared non-secret rate-limit coordination; after adding `rate_limit_account`, full parity remained non-passing. Final safe diagnostics named `schedule_create` and then `resume` with typed CLI errors. No accepted proof or raw credential was retained. |
 | `go test -timeout 20m ./internal/connectors/certify` | Passed. |
 | `go test -timeout 20m ./internal/cli` | Passed. |
 | `go test -timeout 20m ./cmd/connectorgen` | Passed (required consumer package). |
+| `go test -timeout 20m ./internal/connectors/certify` | Passed after the universal diagnostic change in 9.238s. |
+| `go test -timeout 20m ./cmd/connectorgen` | Passed after the universal diagnostic change in 91.170s. |
+| `go test -timeout 20m ./internal/cli` | Passed after the universal diagnostic change in 648.115s, below the unchanged 20-minute ceiling. |
+| `go vet ./...`; `go build ./cmd/pm`; `git diff --check` | Passed after the universal diagnostic change. |
 | `make tidy-check`, `make fmt`, `git diff --check`, `go vet ./...`, `go build ./cmd/pm` | Passed. |
 | `make docs-check`; `./pm connectors`; `./pm help connectors`; `./pm connectors certify --help` | Passed; no CLI/docs source change was applicable. |
 | `pnpm --dir website run gen:docs` twice, then `git diff --exit-code -- website/lib/docs.generated.ts` | Passed; generated website docs were byte-stable. |

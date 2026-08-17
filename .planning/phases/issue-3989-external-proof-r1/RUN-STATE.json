@@ -1,6 +1,6 @@
 {
   "issue": 3989,
-  "state": "residual-verified",
+  "state": "blocked-live-full-parity",
   "mode": "manual-gsd-inline",
   "manual_fallback_reason": "phase 3989 is absent from the roadmap and this task cannot spawn compatible isolated GSD workers",
   "commands_resolved": [
@@ -8,13 +8,15 @@
     "scripts/gsd prompt plan-phase issue-3989-external-proof-r1 --tdd",
     "scripts/gsd prompt execute-phase issue-3989-external-proof-r1",
     "scripts/gsd prompt verify-work issue-3989-external-proof-r1",
-    "scripts/gsd prompt code-review issue-3989-external-proof-r1"
+    "scripts/gsd prompt code-review issue-3989-external-proof-r1",
+    "scripts/gsd prompt plan-phase issue-3989-external-proof-r1 --gaps",
+    "scripts/gsd prompt execute-phase issue-3989-external-proof-r1 --gaps-only"
   ],
   "verification": {
     "residual_tests": "passed targeted opaque, fingerprint, and OS-boundary proofs",
-    "live_github_smoke": "passed against the disposable identity; sanitized report and observed 2xx proof response asserted",
-    "consumer_package": "pending",
-    "repository_gates": "all individual make verify constituents, docs byte-stability, lint, boundary, canon, and release gates passed",
+    "live_github_smoke": "ran with the designated disposable identity and no skip. Supplying the required non-secret rate_limit_account moved it past admission, but full parity then failed at schedule_create and, on the last authorized diagnostic run, resume; no accepted external proof was created. Every rendered diagnostic was fingerprint-redacted and contained no credential value.",
+    "consumer_package": "passed after the universal diagnostic change: go test -timeout 20m ./cmd/connectorgen (91.170s)",
+    "repository_gates": "changed-package verification after the diagnostic change passed: internal/connectors/certify (9.238s), internal/cli (648.115s), cmd/connectorgen (91.170s), go vet ./..., go build ./cmd/pm, and git diff --check. Earlier individual make/byte-stability gates remain historical because no generated or documentation source changed.",
     "cli_parity": "unchanged surface rechecked: pm connectors, pm help connectors, and pm connectors certify --help passed",
     "manual_code_review": "passed with no findings; final diff check, internal/cli vet, and diff secret-pattern scan passed"
   }

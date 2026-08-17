@@ -2,6 +2,7 @@ package certify
 
 import (
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -42,6 +43,53 @@ func TestLiveStreamUnavailableClassifiesGitHubUnavailableErrors(t *testing.T) {
 	unknown := &runContext{opts: Options{Connector: "unknown-certification-connector"}}
 	if liveStreamUnavailable(unknown, cases[0]) {
 		t.Fatalf("liveStreamUnavailable unknown connector = true, want safe false")
+	}
+}
+
+func TestSafeCLIErrorEnvelopeDiagnosticFingerprintsSecret(t *testing.T) {
+	const token = "cert-canary-etl-diagnostic-3989"
+	diagnostic, err := safeCLIErrorEnvelopeDiagnostic(CLIResult{Envelope: map[string]any{
+		"error": map[string]any{
+			"category": "internal",
+			"code":     "provider_error",
+			"message":  "GitHub rejected credential " + token + " because the fixture stream is unavailable",
+		},
+	}}, []string{token})
+	if err != nil {
+		t.Fatalf("safe CLI error diagnostic: %v", err)
+	}
+	if len(ScanForSecrets(diagnostic, []string{token})) != 0 {
+		t.Fatal("safe CLI error diagnostic retained a planted credential")
+	}
+	for _, want := range []string{"category=\"internal\"", "code=\"provider_error\"", "fixture stream is unavailable", "{{pmcertfp:v1:"} {
+		if !strings.Contains(diagnostic, want) {
+			t.Fatalf("safe CLI error diagnostic omitted %q", want)
+		}
+	}
+}
+
+func TestAssertKindFingerprintsErrorEnvelopeDiagnostic(t *testing.T) {
+	const token = "cert-canary-assert-kind-diagnostic-3989"
+	rc := &runContext{harness: NewHarness(t.TempDir(), WithSecrets(token))}
+	passed, diagnostic := assertKind(rc, "resume", CLIResult{
+		ExitCode: 1,
+		Kind:     "Error",
+		Envelope: map[string]any{"error": map[string]any{
+			"category": "internal",
+			"code":     "provider_error",
+			"message":  "resume rejected credential " + token + " while replaying the source stream",
+		}},
+	}, "ETLRun", 0)
+	if passed {
+		t.Fatal("assertKind accepted an Error envelope")
+	}
+	if len(ScanForSecrets(diagnostic, []string{token})) != 0 {
+		t.Fatal("assertKind diagnostic retained a planted credential")
+	}
+	for _, want := range []string{"kind got=\"Error\"", "cli_error", "provider_error", "replaying the source stream", "{{pmcertfp:v1:"} {
+		if !strings.Contains(diagnostic, want) {
+			t.Fatalf("assertKind diagnostic omitted %q", want)
+		}
 	}
 }
 

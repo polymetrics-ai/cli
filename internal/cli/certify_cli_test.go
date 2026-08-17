@@ -297,10 +297,87 @@ func TestRelayExternalCertifyChildOutputRefusesCredentialWithoutWrites(t *testin
 
 	err := relayExternalCertifyChildOutput(&stdout, &stderr, "child report", "unexpected "+token, []string{token})
 	if err == nil || !strings.Contains(err.Error(), "credential material") {
-		t.Fatalf("relay error = %v, want credential-material refusal", err)
+		t.Fatal("relay did not return a credential-material refusal")
+	}
+	if len(certify.ScanForSecrets(err.Error(), []string{token})) != 0 {
+		t.Fatal("relay diagnostic retained a planted credential form")
+	}
+	if !strings.Contains(err.Error(), "{{pmcertfp:v1:") || !strings.Contains(err.Error(), "unexpected") {
+		t.Fatal("relay diagnostic did not retain the fingerprint marker and readable failure reason")
 	}
 	if stdout.Len() != 0 || stderr.Len() != 0 {
-		t.Fatalf("relay wrote child streams after refusal: stdout=%q stderr=%q", stdout.String(), stderr.String())
+		t.Fatal("relay wrote child streams after refusal")
+	}
+}
+
+func TestCertificationFlowRoundTripReferencesFingerprintsFailedStageDiagnostic(t *testing.T) {
+	const token = "cert-canary-flow-stage-diagnostic-3989"
+	_, err := certificationFlowRoundTripReferences(certify.Report{Stages: []certify.StageResult{{
+		Name:   "flow_plan",
+		Status: "failed",
+		Error:  "provider denied " + token + " because the disposable repository is unavailable",
+		CLI:    certify.CLIStageInfo{ExitCode: 1, Kind: "Error"},
+	}}}, []string{token})
+	if err == nil {
+		t.Fatal("flow reference gate accepted a failed flow plan")
+	}
+	if len(certify.ScanForSecrets(err.Error(), []string{token})) != 0 {
+		t.Fatal("flow reference diagnostic retained a planted credential form")
+	}
+	for _, want := range []string{"flow_plan", "status=\"failed\"", "exit_code=1", "kind=\"Error\"", "disposable repository is unavailable", "{{pmcertfp:v1:"} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("flow reference diagnostic omitted %q", want)
+		}
+	}
+}
+
+func TestCertificationFlowRoundTripReferencesFingerprintsAbsentStageAggregateAndETLPredecessor(t *testing.T) {
+	const token = "cert-canary-flow-aggregate-diagnostic-3989"
+	_, err := certificationFlowRoundTripReferences(certify.Report{Stages: []certify.StageResult{
+		{
+			Name:   "etl_full_refresh_append",
+			Status: "skipped",
+			Error:  "live stream for " + token + " is unavailable",
+			CLI:    certify.CLIStageInfo{ExitCode: 1, Kind: "Error"},
+		},
+		{
+			Name:   "flow_roundtrip",
+			Status: "skipped",
+			Error:  "live capture for " + token + " is empty",
+			CLI:    certify.CLIStageInfo{ExitCode: 0},
+		},
+	}}, []string{token})
+	if err == nil {
+		t.Fatal("flow reference gate accepted an absent flow plan")
+	}
+	if len(certify.ScanForSecrets(err.Error(), []string{token})) != 0 {
+		t.Fatal("absent-stage aggregate diagnostic retained a planted credential form")
+	}
+	for _, want := range []string{"flow_plan", "flow_roundtrip", "etl_full_refresh_append", "status=\"skipped\"", "live capture for", "live stream for", "is empty", "is unavailable", "{{pmcertfp:v1:"} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("absent-stage aggregate diagnostic omitted %q", want)
+		}
+	}
+}
+
+func TestCertificationFailedReportDiagnosticFingerprintsSecret(t *testing.T) {
+	const token = "cert-canary-report-diagnostic-3989"
+	diagnostic, err := certificationFailedReportDiagnostic(certify.Report{Stages: []certify.StageResult{{
+		Name:   "full_parity",
+		Status: "failed",
+		Error:  "declared write action used credential " + token + " without provider verification",
+		CLI:    certify.CLIStageInfo{ExitCode: 2, Kind: "Error"},
+	}}}, []string{token})
+	if err != nil {
+		t.Fatalf("redact failed certification report: %v", err)
+	}
+	if len(certify.ScanForSecrets(diagnostic, []string{token})) != 0 {
+		t.Fatal("failed-report diagnostic retained a planted credential")
+	}
+	for _, want := range []string{"first non-passing stage", "full_parity", "status=\"failed\"", "declared write action", "provider verification", "{{pmcertfp:v1:"} {
+		if !strings.Contains(diagnostic, want) {
+			t.Fatalf("failed-report diagnostic omitted %q", want)
+		}
 	}
 }
 
@@ -514,6 +591,7 @@ func TestExternalProofGitHubSmoke(t *testing.T) {
 	const tokenEnv = "POLYMETRICS_CERTIFY_GITHUB_TOKEN"
 	const ownerEnv = "POLYMETRICS_CERTIFY_GITHUB_OWNER"
 	const repoEnv = "POLYMETRICS_CERTIFY_GITHUB_REPO"
+	const rateLimitAccount = "polymetrics-ai-certification"
 	for _, name := range []string{tokenEnv, ownerEnv, repoEnv} {
 		if strings.TrimSpace(os.Getenv(name)) == "" {
 			t.Skipf("live external GitHub proof requires %s", name)
@@ -527,10 +605,14 @@ func TestExternalProofGitHubSmoke(t *testing.T) {
 		"--config", "owner=" + os.Getenv(ownerEnv),
 		"--config", "repo=" + os.Getenv(repoEnv),
 		"--config", "auth_type=token",
+		// GitHub's declared certification policy coordinates the authenticated
+		// account, not the target repository owner. This is the disposable
+		// identity the opt-in test is specifically authorized to exercise.
+		"--config", "rate_limit_account=" + rateLimitAccount,
 		"--from-env", "token=" + tokenEnv,
 	}, &stdout, &stderr)
 	if code != 0 {
-		t.Fatalf("run external GitHub proof exit code = %d", code)
+		t.Fatalf("run external GitHub proof exit code = %d; fingerprint-redacted diagnostic:\n%s", code, externalProofFailureDiagnostic(t, token, stdout.String(), stderr.String()))
 	}
 	var envelope struct {
 		Kind   string         `json:"kind"`
@@ -581,6 +663,22 @@ func TestExternalProofGitHubSmoke(t *testing.T) {
 		t.Fatalf("external proof persisted a vault: stat error = %v, want not exist", err)
 	}
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
+}
+
+func externalProofFailureDiagnostic(t *testing.T, token, stdout, stderr string) string {
+	t.Helper()
+	diagnostic, err := certify.RedactExternalProofDiagnostic(
+		"external proof stdout:\n"+stdout+"\nexternal proof stderr:\n"+stderr,
+		[]string{token},
+	)
+	if err != nil || len(certify.ScanForSecrets(diagnostic, []string{token})) != 0 {
+		return "fingerprint-redacted diagnostic unavailable"
+	}
+	const maxDiagnosticBytes = 64 << 10
+	if len(diagnostic) > maxDiagnosticBytes {
+		return diagnostic[:maxDiagnosticBytes] + "\n[diagnostic truncated after 65536 bytes]"
+	}
+	return diagnostic
 }
 
 func assertNoCredentialMaterialInTree(t *testing.T, root, token string) {

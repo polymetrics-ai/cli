@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -292,6 +294,29 @@ func externalProofTestFingerprint(salt []byte, value string) string {
 	mac := hmac.New(sha256.New, salt)
 	_, _ = mac.Write([]byte(value))
 	return "{{pmcertfp:v1:" + hex.EncodeToString(mac.Sum(nil)) + "}}"
+}
+
+func TestRedactExternalProofDiagnosticFingerprintsSecrets(t *testing.T) {
+	const credential = "cert-canary-diagnostic-3989"
+	diagnostic, err := certify.RedactExternalProofDiagnostic(
+		"github provider rejected credential="+credential+
+			" encoded="+base64.StdEncoding.EncodeToString([]byte(credential))+
+			" query="+url.QueryEscape(credential)+
+			" because repository visibility is restricted",
+		[]string{credential},
+	)
+	if err != nil {
+		t.Fatalf("redact external-proof diagnostic: %v", err)
+	}
+	if len(certify.ScanForSecrets(diagnostic, []string{credential})) != 0 {
+		t.Fatal("fingerprinted diagnostic retained a planted secret form")
+	}
+	if !strings.Contains(diagnostic, "github provider rejected") || !strings.Contains(diagnostic, "repository visibility is restricted") {
+		t.Fatal("fingerprinted diagnostic did not retain its readable provider reason")
+	}
+	if strings.Count(diagnostic, "{{pmcertfp:v1:") != 3 {
+		t.Fatal("fingerprinted diagnostic did not replace every planted secret form")
+	}
 }
 
 func TestWriteExternalProofRefusesTruncatedBodyWithoutArtifactWrites(t *testing.T) {
