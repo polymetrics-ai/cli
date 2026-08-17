@@ -13,7 +13,20 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-const certificationCandidatesFile = "certification.json"
+const (
+	certificationCandidatesFile         = "certification.json"
+	mutationCertificationCandidatesFile = "certification-mutation-candidates.json"
+)
+
+// mutationCertificationCandidatesArtifact is generator-owned inventory data.
+// Runtime commands do not execute or certify mutations in Slice 0, so loading
+// every row on each fresh pm process would make a static inventory part of the
+// CLI startup cost. The certification-candidates generator owns its exhaustive
+// validation and byte-for-byte freshness instead.
+type mutationCertificationCandidatesArtifact struct {
+	SchemaVersion      int                                     `json:"schema_version"`
+	MutationCandidates []engine.CertificationMutationCandidate `json:"mutation_candidates"`
+}
 
 // readCandidateGeneration is the narrow source-owned input used to derive
 // direct-read candidates. Endpoint and command data always comes from the CLI
@@ -624,15 +637,29 @@ func generateCertificationCandidates(root, connector string, check bool) error {
 			return err
 		}
 	}
+	var mutationArtifact []byte
 	if generation := bundle.Certification.MutationGeneration; generation != nil {
 		generated, err := buildGeneratedMutationCandidates(connector, bundle.CLISurface.Commands, bundle.Operations, bundle.Writes, *generation)
 		if err != nil {
 			return err
 		}
-		bundle.Certification.MutationCandidates, err = mergeGeneratedMutationCandidates(bundle.Certification.MutationCandidates, generated)
+		mutationCandidates, err := mergeGeneratedMutationCandidates(bundle.Certification.MutationCandidates, generated)
 		if err != nil {
 			return err
 		}
+		mutationArtifact, err = json.MarshalIndent(mutationCertificationCandidatesArtifact{
+			SchemaVersion:      bundle.Certification.SchemaVersion,
+			MutationCandidates: mutationCandidates,
+		}, "", "  ")
+		if err != nil {
+			return fmt.Errorf("render mutation certification candidates: %w", err)
+		}
+		mutationArtifact = append(mutationArtifact, '\n')
+
+		// A generated row in certification.json is legacy placement. Keep only
+		// individually authored overrides in the runtime contract and write the
+		// exhaustive generated inventory to its generator-owned sidecar.
+		bundle.Certification.MutationCandidates = manualMutationCandidateOverrides(bundle.Certification.MutationCandidates)
 	}
 	raw, err := json.MarshalIndent(bundle.Certification, "", "  ")
 	if err != nil {
@@ -648,12 +675,39 @@ func generateCertificationCandidates(root, connector string, check bool) error {
 		if !bytes.Equal(committed, raw) {
 			return fmt.Errorf("certification candidates are stale; run `connectorgen certification-candidates --connector %s`", connector)
 		}
+		if mutationArtifact == nil {
+			return nil
+		}
+		mutationPath := filepath.Join(definitionsRoot, connector, mutationCertificationCandidatesFile)
+		committedMutationArtifact, err := os.ReadFile(mutationPath)
+		if err != nil {
+			return fmt.Errorf("read mutation certification candidates: %w", err)
+		}
+		if !bytes.Equal(committedMutationArtifact, mutationArtifact) {
+			return fmt.Errorf("mutation certification candidates are stale; run `connectorgen certification-candidates --connector %s`", connector)
+		}
 		return nil
 	}
 	if err := writeGeneratedArtifact(path, raw); err != nil {
 		return fmt.Errorf("write certification candidates: %w", err)
 	}
+	if mutationArtifact != nil {
+		mutationPath := filepath.Join(definitionsRoot, connector, mutationCertificationCandidatesFile)
+		if err := writeGeneratedArtifact(mutationPath, mutationArtifact); err != nil {
+			return fmt.Errorf("write mutation certification candidates: %w", err)
+		}
+	}
 	return nil
+}
+
+func manualMutationCandidateOverrides(candidates []engine.CertificationMutationCandidate) []engine.CertificationMutationCandidate {
+	manual := make([]engine.CertificationMutationCandidate, 0, len(candidates))
+	for _, candidate := range candidates {
+		if !candidate.Generated {
+			manual = append(manual, candidate)
+		}
+	}
+	return manual
 }
 
 // mergeGeneratedReadCandidates leaves explicitly authored candidates intact.

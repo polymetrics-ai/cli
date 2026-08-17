@@ -7,19 +7,22 @@ does not add a parallel projection and it does not invoke a credential,
 provider endpoint, fixture, reverse plan, preview, approval, execution, or
 evidence publication.
 
-`internal/connectors/defs/github/certification.json` now declares the mutation
-cohort and containment families. Shared Go derives each candidate's command
-tokens, declaration identity, executor, required flags, credential flag, JSON
-mode, typed input slots, address, and fixture provenance from `cli_surface.json`
-plus the referenced operation or write action. No connector identifier or
-connector allowlist was added to shared Go.
+`internal/connectors/defs/github/certification.json` declares the mutation
+cohort, containment families, and any bounded manual override. The generated
+856-row inventory lives in the generator-only
+`certification-mutation-candidates.json` sidecar, deliberately outside the
+runtime `defs.FS`. Shared Go derives each candidate's command tokens,
+declaration identity, executor, required flags, credential flag, JSON mode,
+typed input slots, address, and fixture provenance from `cli_surface.json` plus
+the referenced operation or write action. No connector identifier or connector
+allowlist was added to shared Go.
 
 ## Measured accounting
 
 Measured with:
 
 ```sh
-jq '{candidate_count: (.mutation_candidates | length), generated: ([.mutation_candidates[] | select(.generated == true)] | length), manual: ([.mutation_candidates[] | select(.generated != true)] | length), by_intent: (reduce .mutation_candidates[] as $candidate ({}; .[$candidate.intent] = (.[$candidate.intent] // 0) + 1)), by_fixture: (reduce .mutation_candidates[] as $candidate ({}; .[$candidate.fixture.strategy] = (.[$candidate.fixture.strategy] // 0) + 1)), by_classification: (reduce .mutation_candidates[] as $candidate ({}; .[$candidate.classification.code] = (.[$candidate.classification.code] // 0) + 1))}' internal/connectors/defs/github/certification.json
+jq '{candidate_count: (.mutation_candidates | length), generated: ([.mutation_candidates[] | select(.generated == true)] | length), manual: ([.mutation_candidates[] | select(.generated != true)] | length), by_intent: (reduce .mutation_candidates[] as $candidate ({}; .[$candidate.intent] = (.[$candidate.intent] // 0) + 1)), by_fixture: (reduce .mutation_candidates[] as $candidate ({}; .[$candidate.fixture.strategy] = (.[$candidate.fixture.strategy] // 0) + 1)), by_classification: (reduce .mutation_candidates[] as $candidate ({}; .[$candidate.classification.code] = (.[$candidate.classification.code] // 0) + 1))}' internal/connectors/defs/github/certification-mutation-candidates.json
 go run ./cmd/connectorgen certification-sweep --connector github --check
 ```
 
@@ -62,6 +65,20 @@ The canonical certification sweep reports the complete 1,571-command surface.
 There are no manual candidates. The generator nevertheless permits an override
 only when it names an exact generated command and provides `override_reason`;
 an invented or duplicate manual command is rejected.
+
+## Runtime-cost guard
+
+The inventory is a Slice 0 generator product, not a runtime CLI input. Keeping
+the 856 generated rows in `certification.json` expanded the embedded runtime
+bundle to 1,700,968 bytes; a fresh `pm` process schema-validated, decoded, and
+validated every row even though this slice neither runs nor certifies one. The
+compact runtime declaration is now 145,585 bytes; the 1,555,409-byte sidecar is
+loaded only by `connectorgen certification-candidates`, which rebuilds and
+byte-compares all rows. `TestGitHubMutationInventoryIsNotEmbeddedInTheRuntimeBundle`
+proves both that runtime sees zero generated mutation rows and that `defs.FS`
+does not embed the sidecar. The existing
+`TestGitHubCommandSurfacePlansReverseETLCommand` remains the representative
+end-to-end CLI proof.
 
 ## Derived CRUD fixture provenance
 
@@ -154,11 +171,16 @@ Passed:
   tests in `./cmd/connectorgen`;
 - isolated `TestCertificationMatrixRejectsDatabaseWriteStubs` in 979.333s;
 - candidate and sweep generation twice, then both `--check` commands;
+- full `go test -count=1 -timeout 20m ./cmd/connectorgen` (83.320s) and
+  `go test -count=1 -timeout 20m ./internal/connectors/engine` (5.551s);
+- `go test -timeout 20m ./internal/cli` before and after the runtime-inventory
+  split: 510.076s → 503.941s, both passing under the unchanged 1200s ceiling;
 - `pnpm --dir website run gen:docs`, `pnpm --dir website run
   gen:website-data`, and `go run ./cmd/pm skills generate --dir docs/skills`,
   each twice with an empty combined diff on the second run;
-- `make verify` end-to-end, including full Go tests, build, docs, smoke, lint,
-  validation, candidate/sweep freshness, and a clean whole-tree boundary scan.
+- `make verify` end-to-end after the runtime-cost repair, including full Go
+  tests, build, docs, smoke, lint, validation, candidate/sweep freshness, and
+  a clean whole-tree boundary scan.
 
 The first aggregate attempt timed out under concurrent full-suite load in
 unrelated matrix/app/boundary/conformance packages. No test was changed or
@@ -166,3 +188,10 @@ skipped; the exact matrix test then passed alone and the complete cached retry
 passed. Full command/result detail is in the committed GSD
 `VERIFICATION.md`. All projection/generator commands are local declaration
 processing only; no credential was needed or read.
+
+GSD/TDD was performed inline because this single-worker execution environment
+cannot provide compatible isolated Pi workers. The adapter was checked with
+`scripts/gsd doctor` and its discuss, plan (`--tdd`), execute, verify, and
+code-review prompts were resolved. Required skills loaded: `golang-how-to`,
+`golang-testing`, `golang-cli`, `golang-troubleshooting`, `golang-benchmark`,
+and `golang-safety`.

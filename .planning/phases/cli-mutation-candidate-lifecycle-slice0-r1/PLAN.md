@@ -4,7 +4,7 @@
 
 ## Scope
 
-Extend the landed `connectorgen certification-candidates` generic projection; do not create a parallel command or a second candidate model. The target connector definition is GitHub. Shared Go owns only declaration-independent candidate projection, classification data types, validation, and deterministic reporting. GitHub-owned membership, matching/evidence, and any exact manual override live in `internal/connectors/defs/github/certification.json`.
+Extend the landed `connectorgen certification-candidates` generic projection; do not create a parallel command or a second candidate model. The target connector definition is GitHub. Shared Go owns only declaration-independent candidate projection, classification data types, validation, and deterministic reporting. GitHub-owned membership, matching/evidence, and any exact manual override live in `internal/connectors/defs/github/certification.json`; the exhaustive generated mutation inventory lives in the generator-only `certification-mutation-candidates.json` sidecar so runtime `pm` startup does not load a Slice 0 inventory it cannot execute.
 
 ## TDD execution plan
 
@@ -16,6 +16,7 @@ Extend the landed `connectorgen certification-candidates` generic projection; do
 6. **RED/GREEN — derived CRUD fixture provenance.** For REST `cli_surface` addresses, derive a collection by removing only a terminal path parameter; derive sibling POST/PUT provisioners and order collections by URL depth. A shared GraphQL transport, a command without `api_surface`, or a collection without a POST/PUT must be a named exception, never an authored fixture fallback.
 7. **Generated artifacts and accounting.** Regenerate candidate and certification sweep surfaces, run the generator twice, and record byte stability. Show `279 + 577 = 856`, the fixture-provenance split, and the complete sweep total of `1,571` in the PR body.
 8. **Verification and review.** Run the targeted tests, their consumers, no-I/O generator checks, binary build/help checks, required individual `make verify` gates, full `make verify`, inline security/code review, then write verification and review evidence.
+9. **Runtime-cost regression.** Keep a failing guard that the runtime bundle contains zero generated mutation rows and does not embed the sidecar. Preserve one existing GitHub reverse-plan CLI proof; run the unfiltered `internal/cli` package before and after under the unchanged 20-minute ceiling.
 
 ## Scope fences
 

@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
+	"os"
+	"path/filepath"
 	"reflect"
 	"sort"
 	"testing"
@@ -343,12 +346,45 @@ func TestGitHubFixtureRequiredMutationCohortGeneratesEveryCandidate(t *testing.T
 	if got, want := byFixtureStrategy, map[string]int{"derived_collection_cycle": 489, "named_exception": 367}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("mutation fixture provenance = %#v, want %#v", got, want)
 	}
-	if got := len(bundle.Certification.MutationCandidates); got != len(generated) {
+	committed := committedMutationCandidates(t)
+	if got := len(committed); got != len(generated) {
 		t.Fatalf("committed mutation candidates = %d, want %d generated candidates", got, len(generated))
 	}
-	if got, want := bundle.Certification.MutationCandidates, generated; !reflect.DeepEqual(got, want) {
+	if got, want := committed, generated; !reflect.DeepEqual(got, want) {
 		t.Fatal("committed mutation candidates differ from the declared-surface projection")
 	}
+}
+
+func TestGitHubMutationInventoryIsNotEmbeddedInTheRuntimeBundle(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github) error = %v", err)
+	}
+	if got := len(bundle.Certification.MutationCandidates); got != 0 {
+		t.Fatalf("runtime bundle mutation candidates = %d, want 0; exhaustive candidate validation belongs to connectorgen", got)
+	}
+	if _, err := defs.FS.ReadFile(filepath.Join("github", mutationCertificationCandidatesFile)); err == nil {
+		t.Fatalf("runtime defs.FS embeds %s; generator-only mutation inventory must not affect fresh pm startup", mutationCertificationCandidatesFile)
+	}
+}
+
+func committedMutationCandidates(t *testing.T) []engine.CertificationMutationCandidate {
+	t.Helper()
+	path := filepath.Join(repoRootForCertificationTest(t), "internal", "connectors", "defs", "github", mutationCertificationCandidatesFile)
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read mutation candidate artifact: %v", err)
+	}
+	var artifact mutationCertificationCandidatesArtifact
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&artifact); err != nil {
+		t.Fatalf("decode mutation candidate artifact: %v", err)
+	}
+	if artifact.SchemaVersion != 1 {
+		t.Fatalf("mutation candidate artifact schema_version = %d, want 1", artifact.SchemaVersion)
+	}
+	return artifact.MutationCandidates
 }
 
 func mutationCandidatesByCommand(t *testing.T, candidates []engine.CertificationMutationCandidate) map[string]engine.CertificationMutationCandidate {
