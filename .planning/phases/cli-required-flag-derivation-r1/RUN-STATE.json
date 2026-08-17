@@ -1,0 +1,9 @@
+{
+  "phase": "cli-required-flag-derivation-r1",
+  "status": "planned",
+  "delivery": "direct-pr",
+  "base": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-required-flag-derivation-r1",
+  "gsd_mode": "inline_manual_fallback",
+  "reason": "Canonical project contract forbids spawning GSD roles in this environment."
+}
