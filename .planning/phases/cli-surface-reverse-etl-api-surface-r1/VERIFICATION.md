@@ -2,7 +2,7 @@
 
 ## Checklist
 
-- [x] New invariant demonstrably fails on the pre-fix condition (248 total: 214 GitHub, 34 Workday) and passes after regeneration.
+- [x] New invariant demonstrably fails on the pre-fix endpoint-like condition, then joins canonical API-surface evidence to recover the 214 true GitHub defects without guessing 34 punctuated Workday strings; the final invariant passes after regeneration.
 - [x] Focused test proves generic endpoint-summary derivation and preserves alias-like human summaries.
 - [x] GitHub has 214 recovered API-surface references and exactly 14 intentional empty aliases: `issue close`, `issue reopen`, `pr close`, `pr comment`, `pr lock`, `pr reopen`, `pr unlock`, `repo create`, `repo delete`, `repo archive`, `repo unarchive`, `secret set`, `secret delete`, and `cache delete`.
 - [x] Generated sweep status buckets remain `1466 + 25 + 50 + 29 + 1 = 1571`, with zero delta per bucket.
@@ -14,7 +14,7 @@
 
 | Command | Result |
 | --- | --- |
-| `go test -timeout 20m ./cmd/connectorgen -run '^TestImplementedEndpointSummaryAlwaysHasAPISurface$' -count=1` | Red before the fix: 248 findings (214 GitHub and 34 Workday); green after generated synchronization. |
+| `go test -timeout 20m ./cmd/connectorgen -run '^TestImplementedEndpointSummaryAlwaysHasAPISurface$' -count=1` | Initial broad red: 248 endpoint-like strings (214 GitHub plus 34 punctuated Workday summaries); final canonical-endpoint invariant passes after generated synchronization. |
 | `go test -timeout 20m ./cmd/connectorgen -run '^TestSyncBundleDerivesAPISurfaceFromEndpointSummary$' -count=1` | Red before the fix (`api surface fills = 0`); green after generic derivation. |
 | `go test -timeout 20m ./cmd/connectorgen` | Pass. |
 | `go run ./cmd/connectorgen validate internal/connectors/defs` | Pass. |

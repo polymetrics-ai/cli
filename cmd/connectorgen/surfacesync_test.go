@@ -123,6 +123,13 @@ func TestImplementedEndpointSummaryAlwaysHasAPISurface(t *testing.T) {
 	type cliSurface struct {
 		Commands []command `json:"commands"`
 	}
+	type endpoint struct {
+		Method string `json:"method"`
+		Path   string `json:"path"`
+	}
+	type declaredSurface struct {
+		Endpoints []endpoint `json:"endpoints"`
+	}
 
 	var findings []string
 	for _, entry := range entries {
@@ -141,8 +148,24 @@ func TestImplementedEndpointSummaryAlwaysHasAPISurface(t *testing.T) {
 		if err := json.Unmarshal(raw, &surface); err != nil {
 			t.Fatalf("decode %s: %v", path, err)
 		}
+		declaredRaw, err := os.ReadFile(filepath.Join(defsDir, entry.Name(), "api_surface.json"))
+		if os.IsNotExist(err) {
+			continue
+		}
+		if err != nil {
+			t.Fatalf("read declared api surface for %s: %v", entry.Name(), err)
+		}
+		var declared declaredSurface
+		if err := json.Unmarshal(declaredRaw, &declared); err != nil {
+			t.Fatalf("decode declared api surface for %s: %v", entry.Name(), err)
+		}
+		endpoints := map[string]bool{}
+		for _, endpoint := range declared.Endpoints {
+			endpoints[strings.ToUpper(endpoint.Method)+" "+endpoint.Path] = true
+		}
 		for _, command := range surface.Commands {
-			if command.Availability == "implemented" && endpointSummaryForInvariantRE.MatchString(command.Summary) && len(command.APISurface) == 0 {
+			matches := endpointSummaryForInvariantRE.FindStringSubmatch(command.Summary)
+			if command.Availability == "implemented" && len(matches) == 3 && endpoints[matches[1]+" "+matches[2]] && len(command.APISurface) == 0 {
 				findings = append(findings, entry.Name()+" "+command.Path+": "+command.Summary)
 			}
 		}
@@ -166,6 +189,9 @@ func TestSyncBundleDerivesAPISurfaceFromEndpointSummary(t *testing.T) {
 	t.Run("endpoint summary fills api surface", func(t *testing.T) {
 		cli, ops := newBundle("PATCH /widgets/{widget_id} (update_widget)")
 		dir := writeSyncBundle(t, cli, ops)
+		if err := os.WriteFile(filepath.Join(dir, "api_surface.json"), []byte(`{"endpoints":[{"method":"PATCH","path":"/widgets/{widget_id}"}]}`), 0o644); err != nil {
+			t.Fatalf("write api_surface.json: %v", err)
+		}
 
 		stats, err := syncBundle(dir, false)
 		if err != nil {
@@ -176,6 +202,25 @@ func TestSyncBundleDerivesAPISurfaceFromEndpointSummary(t *testing.T) {
 		}
 		if got := readSyncedCommand(t, dir)["api_surface"]; !endpointPathIs(got, "/widgets/{widget_id}") {
 			t.Fatalf("api_surface = %v, want summary endpoint", got)
+		}
+	})
+
+	t.Run("summary punctuation is not an endpoint declaration", func(t *testing.T) {
+		cli, ops := newBundle("PATCH /widgets/{widget_id}.")
+		dir := writeSyncBundle(t, cli, ops)
+		if err := os.WriteFile(filepath.Join(dir, "api_surface.json"), []byte(`{"endpoints":[{"method":"PATCH","path":"/widgets/{widget_id}"}]}`), 0o644); err != nil {
+			t.Fatalf("write api_surface.json: %v", err)
+		}
+
+		stats, err := syncBundle(dir, false)
+		if err != nil {
+			t.Fatalf("syncBundle: %v", err)
+		}
+		if stats.Filled.APISurface != 0 || stats.Corrected.APISurface != 0 {
+			t.Fatalf("api surface stats = %+v, want no guessed endpoint", stats)
+		}
+		if _, present := readSyncedCommand(t, dir)["api_surface"]; present {
+			t.Fatalf("punctuated summary unexpectedly gained api_surface")
 		}
 	})
 

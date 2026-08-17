@@ -34,11 +34,11 @@ import (
 //
 //   - api_surface  <- any command's declared endpoint summary, independent of
 //     its intent. A raw `METHOD /path` summary is an imported address, not a
-//     human description; an optional write-action annotation is ignored. An
+//     human description; an optional write-action annotation is ignored. The
+//     parsed endpoint must already appear in api_surface.json, so this is a
+//     join across consistent files, never an invented endpoint. An
 //     operation-backed endpoint remains an authoritative, more specific source
-//     for direct_read, direct_write, and binary_download. The endpoint is
-//     already tracked in api_surface.json, so this is a join across consistent
-//     files, never an invented endpoint.
+//     for direct_read, direct_write, and binary_download.
 //   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
 //     that endpoint's path.
 //   - flags[].required <- true when the mapped REST path parameter is declared
@@ -272,6 +272,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 
 	cliPath := filepath.Join(dir, "cli_surface.json")
 	opsPath := filepath.Join(dir, "operations.json")
+	apiSurfacePath := filepath.Join(dir, "api_surface.json")
 	cliRaw, err := os.ReadFile(cliPath)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -295,6 +296,10 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 	if err := json.Unmarshal(opsRaw, &ops); err != nil {
 		return stats, fmt.Errorf("operations.json: %w", err)
 	}
+	declaredEndpoints, err := declaredAPISurfaceEndpoints(apiSurfacePath)
+	if err != nil {
+		return stats, err
+	}
 
 	opsByID := map[string]*orderedObject{}
 	for _, raw := range arrayField(ops.root, "operations") {
@@ -315,7 +320,8 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		if stringField(cmd, "availability") != "implemented" {
 			continue
 		}
-		if method, endpointPath, ok := surfaceEndpointFromSummary(stringField(cmd, "summary")); ok {
+		if method, endpointPath, ok := surfaceEndpointFromSummary(stringField(cmd, "summary")); ok &&
+			declaredEndpoints[surfaceEndpointKey(method, endpointPath)] {
 			synchronizeCommandAPISurface(cmd, method, endpointPath, &stats)
 		}
 
@@ -488,6 +494,37 @@ func surfaceEndpointFromSummary(summary string) (method, path string, ok bool) {
 		return "", "", false
 	}
 	return parts[1], parts[2], true
+}
+
+// declaredAPISurfaceEndpoints records the canonical endpoint set already
+// declared by the bundle. A raw summary with sentence punctuation is not an
+// endpoint declaration, so it cannot silently invent a binding merely because
+// it resembles one.
+func declaredAPISurfaceEndpoints(path string) (map[string]bool, error) {
+	endpoints := map[string]bool{}
+	raw, err := os.ReadFile(path)
+	if os.IsNotExist(err) {
+		return endpoints, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("api_surface.json: %w", err)
+	}
+	var surface orderedJSON
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		return nil, fmt.Errorf("api_surface.json: %w", err)
+	}
+	for _, rawEndpoint := range arrayField(surface.root, "endpoints") {
+		endpoint, ok := rawEndpoint.(*orderedObject)
+		if !ok {
+			continue
+		}
+		method := strings.ToUpper(strings.TrimSpace(stringField(endpoint, "method")))
+		endpointPath := stringField(endpoint, "path")
+		if method != "" && endpointPath != "" {
+			endpoints[surfaceEndpointKey(method, endpointPath)] = true
+		}
+	}
+	return endpoints, nil
 }
 
 // synchronizeCommandAPISurface applies one declaration-owned endpoint to a
