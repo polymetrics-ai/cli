@@ -57,12 +57,20 @@ CI carries the full aggregate suite.
 
 ## Website generated-data gap closure
 
-- [x] First `pnpm --dir website run gen:docs` diff is limited to the intended
-  required-path-flag documentation changes. It produced no `website/**` diff.
-- [x] Second generator pass and `git diff --exit-code -- website` are clean.
-- [x] Gap-closure evidence is committed and pushed to PR 4209. No website file
-  exists to commit because the repository generator output was already stable.
+- [x] `gh-axi run view 32015741074 --log-failed` confirmed CI requires
+  `cd website && pnpm run gen:website-data` and names the stale catalog data
+  artifact.
+- [x] First `pnpm --dir website run gen:website-data` diff changes only
+  `website/data/connectors.generated.json` and
+  `website/lib/connectors.catalog.data.generated.json`.
+- [x] A semantic JSON comparison finds exactly 104 added `required: true`
+  fields in each file and zero unexpected changes.
+- [x] A second `gen:website-data` pass and a following `gen:docs` pass preserve
+  SHA-256s for both changed artifacts and their generated docs siblings.
+- [x] Generated data and gap-closure evidence are committed and pushed to PR
+  4209.
 
-Both `pnpm --dir website run gen:docs` passes exited 0 and reported 12 pages;
-`git diff --exit-code -- website` then exited 0. The first-pass website diff
-was empty, which proves this regeneration did not absorb unrelated data.
+The initial `gen:docs`-only rerun was a no-op because it is not the CI target.
+The corrected data generator writes five generated surfaces; only the two
+connector data files differ. Their semantic diff is precisely the expected
+required-path-flag propagation and nothing else.

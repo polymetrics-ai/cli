@@ -36,7 +36,9 @@ the PR body records the pending automatic-review status for the coordinator.
 
 ## Website generated-data gap review
 
-After PR 4209's `Website generated data` failure, the repository generator ran
-twice. The first and second passes produced no `website/**` diff, and
-`git diff --exit-code -- website` passed. Therefore no generated website file
-was staged or baselined without an intended required-flag change.
+After PR 4209's `Website generated data` failure, the CI log was inspected
+instead of inferring its target. It names `gen:website-data` and the catalog
+artifact, whereas the prior `gen:docs` rerun was a no-op. The corrected
+generator's two JSON artifacts each add exactly 104 `required: true` fields;
+a structural JSON comparison found zero unrelated changes. A second data pass
+and explicit docs pass preserved all generated-file SHA-256s.

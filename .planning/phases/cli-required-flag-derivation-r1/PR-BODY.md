@@ -92,6 +92,16 @@ go run ./cmd/connectorgen certification-sweep --connector github --check
 guidance, the changed packages plus their consumers were run locally rather
 than the timeout-prone aggregate `go test ./...`; CI carries that full suite.
 
+### Website generated-data follow-up
+
+PR CI's actual failure log names `pnpm --dir website run gen:website-data`,
+which is distinct from `gen:docs`. The corrected generator updated only
+`website/data/connectors.generated.json` and
+`website/lib/connectors.catalog.data.generated.json`. A structural comparison
+confirmed exactly 104 added `required: true` fields in each artifact and zero
+unexpected changes. A second data-generator pass and an explicit `gen:docs`
+pass retained identical SHA-256s.
+
 ## Safety and Follow-ups
 
 - No credentials, live provider writes, external state changes, or generic

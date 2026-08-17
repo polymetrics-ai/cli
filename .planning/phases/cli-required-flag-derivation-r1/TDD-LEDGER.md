@@ -9,7 +9,7 @@
 | Typed pre-I/O refusal | The GitHub fixture previously reached late `missing path variable "pull_number"` validation | `MissingRequiredFlagError` produces `category=usage`, `code=usage_error`, exit 2, and zero fake-provider calls | green |
 | GitHub P1 count | `certification-sweep --connector github --check` reported 92 product defects on the base | Regenerated sweep reports zero product defects (104 flag fields in 92 commands) | green |
 | Unsupported declaration audit | No verifier existed for the 50 declared entries | Audit lists every entry without mutation: 26 `unsupported_api` declarations contradict the source lock; 23 `unsupported_local` declarations hold | green |
-| Website generated-data gap | PR 4209 `Website generated data` CI check failed | Two repository-generator passes leave `website/**` clean. The first pass produced no website diff, so it could not absorb unrelated or required-flag changes. | green |
+| Website generated-data gap | PR 4209's actual `Website Data` log names `pnpm run gen:website-data` and shows missing `required: true` fields in `website/lib/connectors.catalog.data.generated.json` | `gen:website-data` adds exactly 104 `required: true` fields in each of the two generated connector data artifacts, with zero unexpected semantic changes; a second data pass and `gen:docs` preserve the same SHA-256s. | green |
 
 ## Constraints
 
