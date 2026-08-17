@@ -5288,6 +5288,309 @@
       }
     ]
   },
+  "mutation_generation": {
+    "cohort": {
+      "name": "fixture_required_mutations",
+      "command_count": 856,
+      "intents": [
+        "direct_write",
+        "reverse_etl"
+      ]
+    },
+    "unassessed": {
+      "code": "unassessed",
+      "evidence": "no connector-owned containment family matched; the candidate must not execute until a named family supplies the disposable-boundary evidence"
+    },
+    "families": [
+      {
+        "id": "real_money_graphql",
+        "classification": {
+          "code": "real_money",
+          "evidence": "the declared GraphQL operation changes sponsorship, subscription, support-entitlement, or purchase authority on the captain-owned Enterprise trial"
+        },
+        "operations": [
+          "github.graphql.mutation.add-enterprise-support-entitlement",
+          "github.graphql.mutation.cancel-sponsorship",
+          "github.graphql.mutation.create-sponsors-listing",
+          "github.graphql.mutation.create-sponsors-tier",
+          "github.graphql.mutation.create-sponsorship",
+          "github.graphql.mutation.create-sponsorships",
+          "github.graphql.mutation.publish-sponsors-tier",
+          "github.graphql.mutation.remove-enterprise-support-entitlement",
+          "github.graphql.mutation.retire-sponsors-tier",
+          "github.graphql.mutation.update-enterprise-members-can-make-purchases-setting",
+          "github.graphql.mutation.update-patreon-sponsorability",
+          "github.graphql.mutation.update-sponsorship-preferences",
+          "github.graphql.mutation.update-subscription"
+        ]
+      },
+      {
+        "id": "real_money_copilot_seats",
+        "classification": {
+          "code": "real_money",
+          "evidence": "the declared REST action adds paid Copilot seats and can create a real charge on the captain-owned Enterprise trial"
+        },
+        "writes": [
+          "copilot_add_copilot_seats_for_teams",
+          "copilot_add_copilot_seats_for_users"
+        ]
+      },
+      {
+        "id": "real_people_graphql",
+        "classification": {
+          "code": "real_people",
+          "evidence": "the declared GraphQL operation changes an invitation, assignment, membership, or collaborator relationship whose target identity is not bound by this Slice 0 declaration"
+        },
+        "operations": [
+          "github.graphql.mutation.accept-enterprise-administrator-invitation",
+          "github.graphql.mutation.accept-enterprise-member-invitation",
+          "github.graphql.mutation.add-assignees-to-assignable",
+          "github.graphql.mutation.add-enterprise-organization-member",
+          "github.graphql.mutation.cancel-enterprise-admin-invitation",
+          "github.graphql.mutation.cancel-enterprise-member-invitation",
+          "github.graphql.mutation.create-attribution-invitation",
+          "github.graphql.mutation.invite-enterprise-admin",
+          "github.graphql.mutation.invite-enterprise-member",
+          "github.graphql.mutation.remove-assignees-from-assignable",
+          "github.graphql.mutation.remove-enterprise-member",
+          "github.graphql.mutation.remove-outside-collaborator",
+          "github.graphql.mutation.update-project-v2-collaborators"
+        ]
+      },
+      {
+        "id": "real_people_rest",
+        "classification": {
+          "code": "real_people",
+          "evidence": "the declared REST action changes an assignee, collaborator, invitation, membership, or Copilot-space participant without an input binding that restricts every identity to the two disposable accounts"
+        },
+        "writes": [
+          "invitations_invitation_id",
+          "invitations_invitation_id2",
+          "enterprise_team_memberships_bulk_add",
+          "enterprise_team_memberships_bulk_remove",
+          "enterprise_team_memberships_add",
+          "enterprise_team_memberships_remove",
+          "copilot_spaces_add_collaborator_for_org",
+          "copilot_spaces_update_collaborator_for_org",
+          "copilot_spaces_remove_collaborator_for_org",
+          "orgs_create_invitation",
+          "orgs_cancel_invitation",
+          "orgs_remove_member",
+          "orgs_set_membership_for_user",
+          "orgs_remove_membership_for_user",
+          "orgs_convert_member_to_outside_collaborator",
+          "orgs_remove_outside_collaborator",
+          "teams_add_or_update_membership_for_user_in_org",
+          "teams_remove_membership_for_user_in_org",
+          "teams_add_member_legacy",
+          "teams_remove_member_legacy",
+          "teams_add_or_update_membership_for_user_legacy",
+          "teams_remove_membership_for_user_legacy",
+          "copilot_spaces_add_collaborator_for_user",
+          "copilot_spaces_update_collaborator_for_user",
+          "copilot_spaces_remove_collaborator_for_user"
+        ]
+      },
+      {
+        "id": "public_visibility_rest",
+        "classification": {
+          "code": "public_visibility",
+          "evidence": "the declared REST action can publish a gist, release, repository, public membership, or public SSH key under the organisation or disposable identity name"
+        },
+        "writes": [
+          "gists_create",
+          "gists_update",
+          "gists_create_comment",
+          "gists_update_comment",
+          "gists_fork",
+          "create_release",
+          "update_release",
+          "codespaces_publish_for_authenticated_user",
+          "orgs_set_public_membership_for_authenticated_user",
+          "users_create_public_ssh_key_for_authenticated_user"
+        ]
+      },
+      {
+        "id": "contained_declared_cycle_actions",
+        "classification": {
+          "code": "contained",
+          "evidence": "the declared action is confined to the polymetrics-ai-certification identity or Polymetrics-Cert disposable organisation; its generated fixture provenance must derive a fresh same-collection cycle or name an explicit exception before any live proof"
+        },
+        "writes": [
+          "create_issue",
+          "update_issue",
+          "comment_issue",
+          "lock_issue",
+          "unlock_issue",
+          "close_issue",
+          "reopen_issue",
+          "create_label",
+          "update_label",
+          "delete_label",
+          "create_release",
+          "update_release",
+          "delete_release"
+        ],
+        "exclude_commands": [
+          "issue close",
+          "issue reopen",
+          "pr close",
+          "pr reopen",
+          "pr comment",
+          "pr lock",
+          "pr unlock",
+          "repo create",
+          "repo delete",
+          "repo archive",
+          "repo unarchive",
+          "cache delete",
+          "secret set",
+          "secret delete"
+        ],
+        "exclude_writes": [
+          "create_release",
+          "update_release"
+        ]
+      },
+      {
+        "id": "contained_friendly_alias",
+        "classification": {
+          "code": "contained",
+          "evidence": "the wrapper resolves to a declared write action scoped by the disposable certification configuration; it may execute only after its named provenance exception is replaced by a fresh disposable-container plan and verified cleanup"
+        },
+        "commands": [
+          "issue close",
+          "issue reopen",
+          "pr close",
+          "pr reopen",
+          "pr comment",
+          "pr lock",
+          "pr unlock",
+          "repo create",
+          "repo delete",
+          "repo archive",
+          "repo unarchive",
+          "cache delete",
+          "secret set",
+          "secret delete"
+        ]
+      },
+      {
+        "id": "contained_remaining_graphql",
+        "classification": {
+          "code": "contained",
+          "evidence": "the candidate is a fixed GraphQL mutation outside an explicitly escaping family; any future execution must bind every opaque input node to a fresh object inside the disposable certification identity and organisation, then destroy that container"
+        },
+        "intents": [
+          "direct_write"
+        ],
+        "exclude_operations": [
+          "github.graphql.mutation.add-enterprise-support-entitlement",
+          "github.graphql.mutation.cancel-sponsorship",
+          "github.graphql.mutation.create-sponsors-listing",
+          "github.graphql.mutation.create-sponsors-tier",
+          "github.graphql.mutation.create-sponsorship",
+          "github.graphql.mutation.create-sponsorships",
+          "github.graphql.mutation.publish-sponsors-tier",
+          "github.graphql.mutation.remove-enterprise-support-entitlement",
+          "github.graphql.mutation.retire-sponsors-tier",
+          "github.graphql.mutation.update-enterprise-members-can-make-purchases-setting",
+          "github.graphql.mutation.update-patreon-sponsorability",
+          "github.graphql.mutation.update-sponsorship-preferences",
+          "github.graphql.mutation.update-subscription",
+          "github.graphql.mutation.accept-enterprise-administrator-invitation",
+          "github.graphql.mutation.accept-enterprise-member-invitation",
+          "github.graphql.mutation.add-assignees-to-assignable",
+          "github.graphql.mutation.add-enterprise-organization-member",
+          "github.graphql.mutation.cancel-enterprise-admin-invitation",
+          "github.graphql.mutation.cancel-enterprise-member-invitation",
+          "github.graphql.mutation.create-attribution-invitation",
+          "github.graphql.mutation.invite-enterprise-admin",
+          "github.graphql.mutation.invite-enterprise-member",
+          "github.graphql.mutation.remove-assignees-from-assignable",
+          "github.graphql.mutation.remove-enterprise-member",
+          "github.graphql.mutation.remove-outside-collaborator",
+          "github.graphql.mutation.update-project-v2-collaborators"
+        ]
+      },
+      {
+        "id": "contained_remaining_rest",
+        "classification": {
+          "code": "contained",
+          "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+        },
+        "intents": [
+          "reverse_etl"
+        ],
+        "exclude_commands": [
+          "issue close",
+          "issue reopen",
+          "pr close",
+          "pr reopen",
+          "pr comment",
+          "pr lock",
+          "pr unlock",
+          "repo create",
+          "repo delete",
+          "repo archive",
+          "repo unarchive",
+          "cache delete",
+          "secret set",
+          "secret delete"
+        ],
+        "exclude_writes": [
+          "copilot_add_copilot_seats_for_teams",
+          "copilot_add_copilot_seats_for_users",
+          "invitations_invitation_id",
+          "invitations_invitation_id2",
+          "enterprise_team_memberships_bulk_add",
+          "enterprise_team_memberships_bulk_remove",
+          "enterprise_team_memberships_add",
+          "enterprise_team_memberships_remove",
+          "copilot_spaces_add_collaborator_for_org",
+          "copilot_spaces_update_collaborator_for_org",
+          "copilot_spaces_remove_collaborator_for_org",
+          "orgs_create_invitation",
+          "orgs_cancel_invitation",
+          "orgs_remove_member",
+          "orgs_set_membership_for_user",
+          "orgs_remove_membership_for_user",
+          "orgs_convert_member_to_outside_collaborator",
+          "orgs_remove_outside_collaborator",
+          "teams_add_or_update_membership_for_user_in_org",
+          "teams_remove_membership_for_user_in_org",
+          "teams_add_member_legacy",
+          "teams_remove_member_legacy",
+          "teams_add_or_update_membership_for_user_legacy",
+          "teams_remove_membership_for_user_legacy",
+          "copilot_spaces_add_collaborator_for_user",
+          "copilot_spaces_update_collaborator_for_user",
+          "copilot_spaces_remove_collaborator_for_user",
+          "gists_create",
+          "gists_update",
+          "gists_create_comment",
+          "gists_update_comment",
+          "gists_fork",
+          "create_release",
+          "update_release",
+          "codespaces_publish_for_authenticated_user",
+          "orgs_set_public_membership_for_authenticated_user",
+          "users_create_public_ssh_key_for_authenticated_user",
+          "create_issue",
+          "update_issue",
+          "comment_issue",
+          "lock_issue",
+          "unlock_issue",
+          "close_issue",
+          "reopen_issue",
+          "create_label",
+          "update_label",
+          "delete_label",
+          "delete_release"
+        ]
+      }
+    ]
+  },
   "binary_candidates": [
     {
       "stage_name": "binary_download_sweep_release_download",
