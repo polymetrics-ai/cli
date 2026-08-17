@@ -115,108 +115,12 @@
       {
         "function_kind": "capability:write",
         "applicable": true,
-        "declared": true,
-        "implemented": true,
+        "declared": false,
+        "implemented": false,
         "fixture_tested": false,
-        "live_tested": true,
+        "live_tested": false,
         "fixture_evidence": [],
-        "live_evidence": [
-          {
-            "record": "internal/connectors/certifications/evidence/postgres_transport_r1-capability-write.json",
-            "provider": "postgres_container",
-            "executed_at": "2026-08-17T01:26:58Z",
-            "run_id": "postgres_transport_r1-capability-write",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
-            "proof": {
-              "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "58e3218380bc558544206d902f62dc06f63934e7ae957caa6e52d10cb3e83dee",
-              "pm_command_fingerprint": "{{pmcertfp:v1:0eae27666341e8f7934929bf1e80db1b80f11ab35b0db480dde466552cbf9742}}",
-              "credential_fingerprints": [
-                "{{pmcertfp:v1:4c4ca079b3412f283a3b116d8b175385f7a43b2882bd484897a55843ca8dd14b}}"
-              ],
-              "http_exchanges": [],
-              "database_exchanges": [
-                {
-                  "operation": "postgres_transport_capability_write",
-                  "protocol": "postgres_wire",
-                  "request": {
-                    "statement": "{{pmcertfp:v1:9ac9842a70d1d3ec65c53a7f7775f6881e9ef9c93592cc8f9e2ab73982437b21}}",
-                    "parameters": []
-                  },
-                  "response": {
-                    "status": "completed",
-                    "body": {
-                      "encoding": "json",
-                      "value": {
-                        "completed_destination_modes": [
-                          {
-                            "apply_strategy": "{{pmcertfp:v1:18a16f38a7c799f282c05ac59aac59f81cd713d33d5c7d33fde68af75e600fb2}}",
-                            "checkpoint_committed": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                            "mode": "{{pmcertfp:v1:44f7c270dafda98b769360a2e0d182574b1fd9e35233bc115a43bf0e7f81090c}}",
-                            "records_loaded": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "records_read": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "target_namespace": "{{pmcertfp:v1:b9bb02f0020b7bc0d25d026d411514cd004cacdff6ef1e4640f1f8ea0ad52e88}}",
-                            "target_relation": "{{pmcertfp:v1:a3c1644a703a3338a02cbf3b0adb84059465db09e4303d6471c1796fd5472ea0}}"
-                          },
-                          {
-                            "apply_strategy": "{{pmcertfp:v1:56251ce83ffdf6fb849041b4780ed81a93bfbb50fda2a7ea0e4180a8e53f00ad}}",
-                            "checkpoint_committed": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                            "mode": "{{pmcertfp:v1:28456ec649b6b8215ccd9e12e9271b9a0d799043d4536785ee9f2faf8b80e57f}}",
-                            "records_loaded": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "records_read": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "target_namespace": "{{pmcertfp:v1:ed4437f2cd4645f5b55ff3bfb5d5aeba63e6381ad65ad2a4dbc57db24772d824}}",
-                            "target_relation": "{{pmcertfp:v1:9a180a521ecb748926625163aec0f5b33e8f5702963d070511c7d214c213e97d}}"
-                          },
-                          {
-                            "apply_strategy": "{{pmcertfp:v1:18a16f38a7c799f282c05ac59aac59f81cd713d33d5c7d33fde68af75e600fb2}}",
-                            "checkpoint_committed": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                            "mode": "{{pmcertfp:v1:aa53eef274a86e1a6b3cf2bc45ee9b07f63f43cbb3cdc2b99dbc8970d11ffb88}}",
-                            "records_loaded": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "records_read": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "target_namespace": "{{pmcertfp:v1:aed0eac7270b6fb2b508a256dd7e65b8bd759d29abc8ed492dbbc1da469c063e}}",
-                            "target_relation": "{{pmcertfp:v1:9658e95f05bb46668a521e7b81c4880bb6c6e3cb54087d60ce561ef7e26d706b}}"
-                          },
-                          {
-                            "apply_strategy": "{{pmcertfp:v1:359070300a16c16d57c43eb7de46dffd2ac313d45401659d100c62de06eecef5}}",
-                            "checkpoint_committed": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                            "mode": "{{pmcertfp:v1:48118e1c4f242c79a0b2e8008a04142eb0ae8946acd5bc00cebdb715520276ea}}",
-                            "records_loaded": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "records_read": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "target_namespace": "{{pmcertfp:v1:60f2c8e5a0f86d9df71c7a2f2e81ff6f49b324a46f98245b5f4f57011f78e993}}",
-                            "target_relation": "{{pmcertfp:v1:56b9ab2bb8aa36a50985b9db6cb43ec126698c985a11229819228486252eb760}}"
-                          },
-                          {
-                            "apply_strategy": "{{pmcertfp:v1:4f73ea8ab5f3f0a5f73745f1dc194de6b3ad9c0e4e0a4de3d0bb2ace2e228702}}",
-                            "checkpoint_committed": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                            "mode": "{{pmcertfp:v1:aee3360a1eb3799703a7986c5e149d890d655d39b96dcac5e942ac836f615a85}}",
-                            "records_loaded": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "records_read": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "target_namespace": "{{pmcertfp:v1:a0f91e87e21de02fc110e5f4f78143bba16b8606a4294d86c4cea45c0c5053b4}}",
-                            "target_relation": "{{pmcertfp:v1:cefa5f6c40da932b4f48fe2da114bd76304a87cf64e3065ab6fd5fa28a1e8073}}"
-                          },
-                          {
-                            "apply_strategy": "{{pmcertfp:v1:f0516e6c9a1a3c89786c6f789e7036c4f5fbd892152efd4ef5f75f16d9a7bc98}}",
-                            "checkpoint_committed": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                            "mode": "{{pmcertfp:v1:6217abd40e39e522f233d26eaa0b15f2aababf5015aa399aacc104147a18aba8}}",
-                            "records_loaded": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "records_read": "{{pmcertfp:v1:5abb69ce1994dc9cbe4b5e2f48f212ab6531ccbca10c78c3804a8448109306df}}",
-                            "target_namespace": "{{pmcertfp:v1:d9d567858467ebb7d2947265a1fdc5db8478bf48d29fe062f302050fecf4e5e1}}",
-                            "target_relation": "{{pmcertfp:v1:d2631907e97d9461aca43220335364e446ea017270003935dc1fb7d569a5444c}}"
-                          }
-                        ],
-                        "destination_executor": "{{pmcertfp:v1:54dce7486c9838a34be71515ed50009249681c564938e325ea64f58070bdbeae}}",
-                        "source_executor": "{{pmcertfp:v1:76d5416527feb69dfb54647f539dd5ba4a6aa7b261e098873b24a068b21fe93a}}"
-                      },
-                      "original_bytes": 1670,
-                      "truncated": false
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
+        "live_evidence": []
       },
       {
         "function_kind": "operation:binary_download",
@@ -617,8 +521,8 @@
       {
         "workflow_kind": "reverse_etl",
         "applicable": true,
-        "declared": true,
-        "implemented": true,
+        "declared": false,
+        "implemented": false,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": null,
@@ -1684,7 +1588,7 @@
       {
         "role": "database_destination",
         "applicable": true,
-        "declared": true,
+        "declared": false,
         "implemented": false
       }
     ]

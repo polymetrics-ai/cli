@@ -1,201 +1,117 @@
 # Verification — Issue #3978: final PostgreSQL certification and publication
 
-## Scope and reconciliation
+## Published shape
 
-This is a certification/publication change. It does not add a generic SQL
-writer, a direct source-to-target hop, an API CDC sink, a broker, MCP, or UI
-behavior.
+PostgreSQL publishes `write=false`, `cdc=true`, and `query=false`.
 
-- The issue's request to reject `incremental_dedupe_history` is stale. The
-  current PostgreSQL definition declares all six managed-target modes and the
-  current committed evidence has a real-binary record for each; the matrix now
-  retains that fact.
-- The issue's Podman-only wording is stale. All live checks used the explicitly
-  configured shared Colima Docker socket; Docker/Colima were neither restarted
-  nor reconfigured.
-- The pre-task `write=false, cdc=true` publication was stale relative to merged
-  #4195/#4199 transport behavior. `write=true` now means only the declared
-  warehouse-mediated managed destination. It never makes direct
-  `Connector.Write` available. `query=false` remains exact.
-- PostgreSQL CDC remains a source-to-connection-owned-warehouse route only.
-  The generated matrix records API primitives and destination `change_capture`
-  as non-pass cells with concrete reasons. No CDC-to-API behavior is implied.
+- `write=false` is deliberate: the public boolean represents a generic writer,
+  while PostgreSQL deliberately exposes no direct `Connector.Write` and has
+  only a closed managed destination.
+- The narrower, live-proven contract stays in
+  `sync_transport.destination_transport`: `postgres_managed_target`, six
+  named modes, fixed apply strategies, bounded warehouse staging, and
+  acknowledgement after receipt.
+- `cdc=true` is separately backed by PostgreSQL 14+ pgoutput from a database
+  source to the connection-owned warehouse. Neither a CDC-to-API route nor
+  destination `change_capture` is claimed.
+- `query=false` is unchanged.
 
-The four programme transfer directions are the previously merged #3987/#4195
-evidence set (API→API, API→database, database→API, database→database). This
-issue's fresh live work re-certifies the PostgreSQL definition-owned six-mode
-database transport and source-only CDC publication; it does not re-open the
-GitHub/external-binary lanes that the task excludes.
+The generated PostgreSQL matrix retains each exact `sync_mode` proof on its
+own cell. It does not use an exact-mode record to certify a broad capability;
+the generic `capability:write` cell is applicable but not declared,
+implemented, or live-tested, with the concrete reason recorded by the shard.
 
-## TDD and failure controls
+## Issue-text reconciliation
 
-Red observations:
+1. The request to reject `incremental_dedupe_history` is stale. It is an
+   executable declared mode and its PostgreSQL 16 real-binary evidence remains
+   in its exact mode cells.
+2. The Podman-only wording is stale. The shared harness supports Docker, and
+   the historical live run used the explicit Colima Docker socket without
+   restarting or reconfiguring Docker or Colima.
+3. A prior revision attempted to promote generic write. The generic capability
+   scope was not a valid description of the closed destination, so this final
+   publication retracts that broad claim rather than weakening a guard.
 
-1. `TestCertificationMatrixPromotesPostgresManagedWriteOnlyWithDeclaredLiveTransportProof`
-   failed before publication because PostgreSQL was still declared `write=false`.
-2. `TestCertificationMatrixPromotesPostgresChangeCaptureOnlyWithReceiptBackedLiveProof`
-   failed before the fresh CDC proof because the accepted CDC capability record
-   was absent.
-3. `TestCertificationChangeCaptureRequiresImplementedChangefeedContract`
-   failed against a source whose bundle changefeed had been removed. The green
-   projection now refuses to declare that mode without an implemented database
-   changefeed contract.
-4. The scratch `sslmode=bananas` profile compiled through the definition
-   validator but the real built PostgreSQL certification binary exited 2. The
-   exact run and restoration are in `traces/red-runtime-profile.txt`.
+## Red → green evidence
 
-Green controls:
+| Slice | Red observation | Green control |
+| --- | --- | --- |
+| Evidence scope | `sync_mode` evidence bound to `capability:write` was rejected by the certification gate at every protected transition. | Exact records remain exact; the relevant agent-contract tests pass and a bad GitHub baseline still rejects. |
+| Generic write | `TestCertificationMatrixDoesNotTreatPostgresManagedTransportAsGenericWrite` failed with `PostgreSQL managed destination evidence promoted generic write capability`. | Generic `write` again follows the direct writer seam, which remains unsupported, so it is false. |
+| Composition | `TestOpenRegistersDefinitionOwnedProductionTransports` rejected `write=true` because the destination is closed and managed. | Metadata, generated matrix, docs, and website data publish `write=false`; the narrow transport remains. |
+| Exact destination proof | A broad capability cell would hide the actual contract. | `TestCertificationMatrixRetainsPostgresManagedDestinationEvidenceAtExactModeScope` requires every named `database_write_from_warehouse` mode cell to be declared, implemented, live-tested, and to retain its own proof. |
+| CDC receipt | Acknowledging before warehouse receipt is invalid. | The receipt-backed `capability:cdc` and source `change_capture/database_read_into_warehouse` proof remain; API and destination CDC cells are non-pass. |
 
-- `TestCertificationMatrixKeepsPostgresManagedWriteUnimplementedWithoutCapabilityScopedLiveProof`
-  proves a metadata declaration plus all twelve mode records is still
-  insufficient without the broad capability record.
-- `TestPostgresPublishedWriteAndCDCMatchLiveCertification` requires every true
-  PostgreSQL public flag to have a declared, implemented, accepted live matrix
-  cell. `write` points at a capability-scoped aggregate record whose importer
-  revalidates all six destination modes; those six `sync_mode` records remain
-  attached only to their exact cells. `cdc` points at the receipt-backed record.
-- `TestWriteUnsupported` remains green: a direct `Connector.Write` cannot
-  bypass the managed transport's plan/preview/approval/receipt boundary.
+The earlier aggregate `capability:write` record was produced by a real
+PostgreSQL 16 built-binary run after independent read-back of all six closed
+managed-target modes. That work is sound evidence for those exact modes, but
+it cannot honestly turn the generic public boolean true. The aggregate record
+and its writer are therefore removed, not relabeled or re-scoped.
 
-## Live PostgreSQL evidence
+## Retained live PostgreSQL evidence
 
-```text
-POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
-POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
-POLYMETRICS_WRITE_POSTGRES_CAPABILITY_EVIDENCE=1 \
-go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres \
-  -run '^TestPostgresCertificationProfileRunsBuiltBinaryLive$' -count=1 -v
-PASS
+The recorded fresh profile built `pm`, ran the declared PostgreSQL transport,
+and independently read every target back for all six modes. The source CDC
+run built a fresh `pm`, started a PostgreSQL 16 pgoutput source, committed ID
+901, independently read it from the connection-owned Parquet warehouse,
+required a durable receipt with no pending transaction manifest and a complete
+checkpoint, then verified `confirmed_flush_lsn` reached the post-insert
+transaction LSN. The capability `cdc` record and the exact
+`change_capture/database_read_into_warehouse` record remain.
 
-POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
-POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
-POLYMETRICS_WRITE_POSTGRES_CERTIFICATION_EVIDENCE=1 \
-go test -timeout 20m -tags=databaseintegration ./internal/cli \
-  -run '^TestPMBinaryDispatchesPostgresChangeCaptureToWarehouse$' -count=1 -v
-PASS
-```
+The four program transfer directions are retained from merged #3987/#4195
+evidence. This issue does not re-open the excluded GitHub or external-binary
+lanes.
 
-The certification profile builds `pm`, executes the declared PostgreSQL
-transport, verifies all six modes with independent target SQL read-back, and
-requires positive read/load/checkpoint counts. The CDC binary test builds a
-fresh `pm`, starts a PostgreSQL 16 pgoutput source, commits ID 901, reads that
-ID back from the connection-owned Parquet warehouse, requires a durable receipt
-with no pending transaction manifest and a complete checkpoint, then observes
-`confirmed_flush_lsn` at or after the post-insert transaction LSN. It emitted
-only these redacted proof records:
+The required failure demonstration was retained: after schema compilation, a
+scratch `sslmode=bananas` profile made the real PostgreSQL certification binary
+exit 2; the profile was restored and the normal certification run passed. The
+red trace is `traces/red-runtime-profile.txt`.
 
-- `internal/connectors/certifications/evidence/postgres_transport_r1-capability-write.json`
-- `internal/connectors/certifications/evidence/postgres_cdc_r1-capability-cdc.json`
-- `internal/connectors/certifications/evidence/postgres_cdc_r1-change_capture-database_read_into_warehouse.json`
-
-The generated PostgreSQL matrix therefore has `write=true` with one
-capability-scoped aggregate record from the fresh PostgreSQL 16 six-mode
-profile; the six exact destination records remain in their own `sync_mode`
-cells. It has `cdc=true` with one receipt-backed capability record plus one
-`change_capture/database_read_into_warehouse` record. `query` is false. Its
-aggregate `capability_complete` remains false because unrelated applicable
-capability cells lack fixture/live evidence; that aggregate is not a substitute
-for the individual published capability evidence.
-
-## Certification-gate correction
-
-The first promotion attempt incorrectly attached six `sync_mode` records to
-`capability/postgres/capability:write`. The agent contract gate halted every
-protected transition with `evidence scope "sync_mode" does not match
-"capability"`; that halt was correct. No gate check, fixture, or baseline was
-weakened or changed.
-
-The corrected path adds
-`internal/connectors/certifications/evidence/postgres_transport_r1-capability-write.json`.
-It is a fresh, separately scoped `capability:write` record emitted only after
-the PostgreSQL 16 built-binary profile and its independent target read-backs
-prove all six declared destination modes. The matrix now uses that one record
-for the capability cell and uses the existing twelve mode records only for
-their exact source/destination cells.
-
-```text
-go test -timeout 20m ./cmd/connectorgen \
-  -run '^TestCertificationMatrixPromotesPostgresManagedWriteOnlyWithDeclaredLiveTransportProof$' \
-  -count=1
-RED before aggregate capability evidence: write implemented=false, live_tested=false
-
-POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
-POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
-POLYMETRICS_WRITE_POSTGRES_CAPABILITY_EVIDENCE=1 \
-go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres \
-  -run '^TestPostgresCertificationProfileRunsBuiltBinaryLive$' -count=1 -v
-PASS; emitted capability:write record after six independent target read-backs
-
-go test -timeout 20m ./internal/agentcontract \
-  -run '^(TestCertificationGateEnforcesEveryProtectedTransition|TestCertificationGateCurrentBaselineRejectsWithoutBreakingStructuralContractCheck|TestEvaluateCertificationGateGitHubBaselineAndGreenFixture)$' \
-  -count=1 -v
-PASS; all protected transitions remain enforced, current bad GitHub baseline still RETRY, and GitHub expectations are unchanged
-```
-
-## Generated artifacts and CLI parity
-
-```text
-go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors
-PASS
-
-pnpm --dir website run gen:website-data
-PASS
-pnpm --dir website run gen:docs
-PASS
-pnpm --dir website run gen:docs
-PASS
-git diff --exit-code -- website
-PASS (no second-pass working-tree diff)
-
-./pm help connectors
-./pm connectors
-./pm connectors certify --help
-PASS (all contextual help succeeds)
-
-./pm connectors inspect postgres --json
-PASS: connector.capabilities.write=true, cdc=true, query=false
-```
-
-## Local verification
+## Current local verification
 
 ```text
 go test -timeout 20m ./cmd/connectorgen -count=1                                      PASS
-go test -timeout 20m ./internal/connectors/native/postgres -count=1                  PASS
-go test -timeout 20m ./internal/connectors/engine -count=1                           PASS
-go test -timeout 20m ./internal/connectors/certify -count=1                          PASS
-go test -timeout 20m ./internal/app -count=1                                         PASS
-go test -timeout 20m ./internal/cli -count=1                                         PASS
-go vet ./...                                                                           PASS
+go test -timeout 20m ./internal/app -count=1                                           PASS
+go test -timeout 20m ./internal/connectors/native/postgres -count=1                   PASS
+go test -timeout 20m ./internal/connectors/engine -count=1                            PASS
+go test -timeout 20m ./internal/agentcontract -count=1                                PASS
+go test -timeout 20m ./cmd/connectorgen \
+  -run '^(TestCertificationMatrixDoesNotTreatPostgresManagedTransportAsGenericWrite|TestCertificationMatrixRetainsPostgresManagedDestinationEvidenceAtExactModeScope|TestPostgresPublishesOnlyGenericCapabilitiesWithMatchingLiveCertification|TestCertificationScopedSourceResolutionUsesScopedPostgresBundle)$' \
+  -count=1 -v                                                                          PASS
+go test -timeout 20m ./internal/app \
+  -run '^TestOpenRegistersDefinitionOwnedProductionTransports$' -count=1 -v          PASS
+go test -timeout 20m ./internal/agentcontract \
+  -run '^(TestCertificationGateEnforcesEveryProtectedTransition|TestCertificationGateCurrentBaselineRejectsWithoutBreakingStructuralContractCheck|TestCertificationScopedSourceResolutionUsesScopedPostgresBundle|TestEvaluateCertificationGateGitHubBaselineAndGreenFixture)$' \
+  -count=1 -v                                                                          PASS
+go run ./cmd/connectorgen certification-matrix --check                                PASS
+go vet ./...                                                                            PASS
 go build -o pm ./cmd/pm                                                                PASS
-make tidy-check                                                                        PASS
-make lint                                                                              PASS (0 issues)
-make docs-check-no-build                                                               PASS
-make smoke-no-build                                                                    PASS
-make agent-contract-check                                                              PASS
-make connectorgen-validate                                                             PASS (552 bundles, 0 findings)
-make connectorgen-surface-sync                                                        PASS (0 drift)
-make github-parity-artifacts-check                                                     PASS
-make connectorgen-certification-matrix                                                 PASS
-make connector-boundary                                                                PASS
-make connector-canon-check                                                             PASS
-make release-workflow-check                                                            PASS
-pnpm --dir website run lint                                                            PASS (13 existing warnings)
-pnpm --dir website run typecheck                                                       PASS
-pnpm --dir website run test:unit                                                       PASS (80 tests)
-pnpm --dir website run test:scripts                                                    PASS (28 tests)
-pnpm --dir website run test:e2e                                                        PASS (19 passed, 7 expected skips)
+make tidy-check; make lint; make docs-check-no-build                                   PASS
+make smoke-no-build; make agent-contract-check                                         PASS
+make connectorgen-validate; make connectorgen-surface-sync                             PASS
+make connectorgen-certification-matrix; make connector-boundary                         PASS
+make connector-canon-check; make release-workflow-check                                PASS
+pnpm --dir website run lint; pnpm --dir website run typecheck                          PASS
+pnpm --dir website run test:unit; pnpm --dir website run test:scripts                  PASS
+pnpm --dir website run gen:website-data; pnpm --dir website run gen:docs (twice)      PASS
 pnpm --dir website run build                                                           PASS
 ```
 
-## Inline verification and review fallback
+`pnpm --dir website run test:e2e` could not complete locally on its final
+retry: Playwright's configured web server failed before tests with
+`EADDRINUSE 127.0.0.1:3000`. Two earlier runs also failed inconsistently in
+docs-smoke after transient server JSON parsing. This is shared local port
+contention, not a source finding; no server or website state was changed. The
+clean CI `Website checks` and `Website generated data` gates are authoritative
+for this one unexecuted local check.
 
-The canonical contract prohibits role spawning in this worker. I ran the
-GSD adapter health/source checks and generated the `discuss-phase`,
-`plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` prompts,
-then performed the required TDD, verification, and standard cross-file review
-inline. Review focused on the evidence importer, proof redaction boundary,
-matrix projection, source LSN ordering, generated artifacts, and the direct
-writer boundary. The global matrix check caught one real GitHub regression
-during review; it was fixed by limiting the new projection to declared native
-database destinations, then rechecked byte-identical for GitHub. No unresolved
-Critical or Warning finding remains.
+## Lifecycle and review
+
+The canonical single-worker contract forbids lifecycle-role spawning. The GSD
+adapter health/source checks and generated discuss, plan, execute, verify, and
+review prompts were run inline/manual. This phase contains the required plan,
+TDD ledger, verification report, run state, and red/green evidence. Inline
+review found no unresolved Critical or Warning issue after the scope and
+composition corrections.

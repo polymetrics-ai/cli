@@ -159,9 +159,10 @@ func (c Connector) Manifest() connectors.Manifest {
 }
 
 // Write stays unsupported because it bypasses the definition-owned managed
-// target transport. PostgreSQL's public write capability is the separately
-// registered, warehouse-mediated destination route; a direct Connector.Write
-// call must remain unavailable so it cannot skip plan/approval/receipt gates.
+// target transport. That closed warehouse-mediated destination is published
+// through sync_transport.json, not as a generic Connector.Write capability;
+// a direct call must remain unavailable so it cannot skip plan/approval/receipt
+// gates.
 func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
 }

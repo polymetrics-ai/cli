@@ -121179,7 +121179,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": true,
+      "write": false,
       "query": false,
       "cdc": true
     },
@@ -121399,7 +121399,7 @@
     "streams": [],
     "risk": {
       "read": "low",
-      "write": "managed warehouse-mediated target transport requires the existing reverse-ETL approval boundary",
+      "write": "not a generic write capability; the closed managed target transport follows its existing plan, preview, approval, execute boundary",
       "approval": "source reads require none; managed target transport follows its plan, preview, approval, execute boundary"
     },
     "icon": {

@@ -715,41 +715,6 @@ func implementedDatabaseChangeCaptureContract(source matrixConnectorSource) bool
 	return ok && definition.Changefeed != nil && definition.Changefeed.Status == connectors.ChangefeedStatusImplemented
 }
 
-// declaredNativeDatabaseDestinationModeEvidence returns exact per-mode proof
-// for validating that a declared native destination completed every mode. Its
-// result remains scoped to sync-mode cells: callers must never attach these
-// pointers to a capability cell.
-func declaredNativeDatabaseDestinationModeEvidence(source matrixConnectorSource, evidence []acceptedEvidence) []evidencePointer {
-	if !declaredNativeDatabaseDestination(source) {
-		return nil
-	}
-	descriptor := syncTransportDescriptorFor(source)
-	matched := make([]evidencePointer, 0, len(descriptor.Destination.Modes))
-	for _, mode := range descriptor.Destination.Modes {
-		if !declaredNativeDatabaseTransportPair(source, mode) {
-			return nil
-		}
-		modeEvidence := matchingSyncModeEvidence(evidence, source.name, string(mode), "database_write_from_warehouse")
-		if len(modeEvidence) == 0 {
-			return nil
-		}
-		matched = append(matched, modeEvidence...)
-	}
-	sort.Slice(matched, func(i, j int) bool { return matched[i].Record < matched[j].Record })
-	return matched
-}
-
-func declaredNativeDatabaseDestination(source matrixConnectorSource) bool {
-	descriptor := syncTransportDescriptorFor(source)
-	if descriptor == nil || descriptor.Source == nil || descriptor.Destination == nil ||
-		descriptor.Source.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase ||
-		descriptor.Destination.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase ||
-		len(descriptor.Destination.Modes) == 0 {
-		return false
-	}
-	return true
-}
-
 func syncModeTransportAdmits(source matrixConnectorSource, primitive syncPrimitive, mode synccontract.Mode) bool {
 	descriptor := syncTransportDescriptorFor(source)
 	if descriptor == nil {

@@ -19,7 +19,7 @@ Reads PostgreSQL tables, supports PostgreSQL 14+ logical-replication CDC into th
 
 ## Capabilities
 
-- check=true catalog=true read=true write=true query=false
+- check=true catalog=true read=true write=false query=false
 - Integration type: database
 
 ## Authentication
@@ -48,7 +48,7 @@ Reads PostgreSQL tables, supports PostgreSQL 14+ logical-replication CDC into th
 ## Security
 
 - read risk: low
-- write risk: managed warehouse-mediated target transport requires the existing reverse-ETL approval boundary
+- write risk: not a generic write capability; the closed managed target transport follows its existing plan, preview, approval, execute boundary
 - approval: source reads require none; managed target transport follows its plan, preview, approval, execute boundary
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 

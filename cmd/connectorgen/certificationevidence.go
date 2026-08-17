@@ -25,18 +25,16 @@ const declaredTransportEvidenceProvider = "postgres_container"
 // generic importer adds no runtime transport behavior.
 func runCertificationEvidence(args []string, stdout, stderr io.Writer) int {
 	if len(args) < 2 {
-		logln(stderr, "connectorgen certification-evidence: require transport, transport-capability-write, or change-capture")
+		logln(stderr, "connectorgen certification-evidence: require transport or change-capture")
 		return 2
 	}
 	switch args[1] {
 	case "transport":
 		return runPostgresTransportCertificationEvidence(args[2:], stdout, stderr)
-	case "transport-capability-write":
-		return runPostgresTransportCapabilityWriteEvidence(args[2:], stdout, stderr)
 	case "change-capture":
 		return runChangeCaptureCertificationEvidence(args[2:], stdout, stderr)
 	default:
-		logln(stderr, "connectorgen certification-evidence: require transport, transport-capability-write, or change-capture")
+		logln(stderr, "connectorgen certification-evidence: require transport or change-capture")
 		return 2
 	}
 }
@@ -106,69 +104,6 @@ func runPostgresTransportCertificationEvidence(args []string, stdout, stderr io.
 		}
 	}
 	logf(stdout, "wrote declared transport evidence records: %d\n", written)
-	return 0
-}
-
-// runPostgresTransportCapabilityWriteEvidence records the broad write claim
-// separately from the mode records. A sync_mode record proves exactly one
-// mode; it is never eligible to satisfy this capability cell. The aggregate
-// certificate report is eligible because validatePostgresTransportEvidenceReport
-// requires every declared destination mode to have completed independently
-// exercised target/read/checkpoint evidence.
-func runPostgresTransportCapabilityWriteEvidence(args []string, stdout, stderr io.Writer) int {
-	options, err := parsePostgresTransportEvidenceOptions(args)
-	if err != nil {
-		logf(stderr, "connectorgen certification-evidence: %v\n", err)
-		return 2
-	}
-	report, err := loadPostgresTransportEvidenceReport(options.reportPath)
-	if err != nil {
-		logf(stderr, "connectorgen certification-evidence: %v\n", err)
-		return 1
-	}
-	if err := validatePostgresTransportEvidenceReport(report, options.connector); err != nil {
-		logf(stderr, "connectorgen certification-evidence: %v\n", err)
-		return 1
-	}
-	prepared, err := postgresTransportEvidencePreparedValue(options.secretEnv)
-	if err != nil {
-		logf(stderr, "connectorgen certification-evidence: %v\n", err)
-		return 1
-	}
-	modes := append([]certify.DeclaredTransportModeResult(nil), report.Capabilities.DeclaredTransport.Modes...)
-	sort.Slice(modes, func(i, j int) bool { return modes[i].Mode < modes[j].Mode })
-	body, err := json.Marshal(struct {
-		SourceExecutor      string                                `json:"source_executor"`
-		DestinationExecutor string                                `json:"destination_executor"`
-		Modes               []certify.DeclaredTransportModeResult `json:"completed_destination_modes"`
-	}{
-		SourceExecutor:      report.Capabilities.DeclaredTransport.SourceExecutor,
-		DestinationExecutor: report.Capabilities.DeclaredTransport.DestinationExecutor,
-		Modes:               modes,
-	})
-	if err != nil {
-		logf(stderr, "connectorgen certification-evidence: encode transport capability write: %v\n", err)
-		return 1
-	}
-	output := filepath.Join(options.repoRoot, acceptedEvidenceDirectory, options.recordPrefix+"-capability-write.json")
-	_, err = writeProofBearingEvidence(options.repoRoot, output, completedLiveEvidence{
-		SchemaVersion: certificationSchemaVersion, Scope: evidenceScopeCapability, Connector: options.connector,
-		FunctionKind: "capability:write", Provider: declaredTransportEvidenceProvider,
-		ExecutedAt:     report.CompletedAt.UTC().Format("2006-01-02T15:04:05Z"),
-		RunID:          options.runID + "-capability-write",
-		PMBinarySHA256: options.binarySHA, PMCommand: "pm connectors certify " + options.connector + " --full --write --from-env password=" + options.secretEnv,
-		Passed: true, CredentialFullParity: true, PreparedValues: []string{prepared},
-		DatabaseExchanges: []completedDatabaseExchange{{
-			Operation: options.connector + "_transport_capability_write",
-			Protocol:  "postgres_wire", Statement: "declared_transport_all_destination_modes",
-			ResponseStatus: "completed", ResponseBody: body,
-		}},
-	})
-	if err != nil {
-		logf(stderr, "connectorgen certification-evidence: write transport capability write: %v\n", err)
-		return 1
-	}
-	logln(stdout, "wrote declared transport capability evidence records: 1")
 	return 0
 }
 

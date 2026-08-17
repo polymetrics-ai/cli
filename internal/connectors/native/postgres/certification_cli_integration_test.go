@@ -149,7 +149,6 @@ func TestPostgresCertificationProfileRunsBuiltBinaryLive(t *testing.T) {
 		t.Fatalf("PostgreSQL source rows after certification = %d, want unchanged %d", sourceRowsAfter, sourceRowsBefore)
 	}
 	writePostgresCertificationEvidence(t, ctx, binary, passwordEnv, stdout.Bytes())
-	writePostgresTransportCapabilityEvidence(t, ctx, binary, passwordEnv, stdout.Bytes())
 }
 
 // seedPostgresCertificationRelation keeps the certification proof focused on
@@ -236,50 +235,6 @@ func writePostgresCertificationEvidence(t *testing.T, ctx context.Context, binar
 	}
 	if stdout.String() != "wrote declared transport evidence records: 12\n" {
 		t.Fatalf("write PostgreSQL certification evidence stdout=%q", stdout.String())
-	}
-}
-
-// writePostgresTransportCapabilityEvidence is separately opt-in from the
-// per-mode writer. The aggregate report has independently checked read-back
-// for every declared target mode, so it can prove capability:write at that
-// broader scope. It never relabels the per-mode records.
-func writePostgresTransportCapabilityEvidence(t *testing.T, ctx context.Context, binary, passwordEnv string, reportJSON []byte) {
-	t.Helper()
-	if os.Getenv("POLYMETRICS_WRITE_POSTGRES_CAPABILITY_EVIDENCE") != "1" {
-		return
-	}
-	binaryBytes, err := os.ReadFile(binary)
-	if err != nil {
-		t.Fatalf("read built PostgreSQL certification binary for capability evidence: %v", err)
-	}
-	reportPath := filepath.Join(t.TempDir(), "postgres-certification-report.json")
-	if err := os.WriteFile(reportPath, reportJSON, 0o600); err != nil {
-		t.Fatalf("write PostgreSQL certification report for capability evidence: %v", err)
-	}
-	_, thisFile, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("could not locate PostgreSQL certification integration test for capability evidence")
-	}
-	repoRoot := postgresCertificationRepositoryRoot(t, thisFile)
-	checksum := sha256.Sum256(binaryBytes)
-	command := exec.CommandContext(ctx, "go", "run", "./cmd/connectorgen",
-		"certification-evidence", "transport-capability-write", "--connector", "postgres",
-		"--report", reportPath,
-		"--binary-sha", fmt.Sprintf("%x", checksum),
-		"--from-env", "password="+passwordEnv,
-		"--run-id", "postgres_transport_r1",
-		"--record-prefix", "postgres_transport_r1",
-		"--repo-root", repoRoot,
-	)
-	command.Dir = repoRoot
-	var stdout, stderr bytes.Buffer
-	command.Stdout = &stdout
-	command.Stderr = &stderr
-	if err := command.Run(); err != nil {
-		t.Fatalf("write PostgreSQL transport capability evidence: %v (stdout_bytes=%d stderr_bytes=%d)", err, stdout.Len(), stderr.Len())
-	}
-	if stdout.String() != "wrote declared transport capability evidence records: 1\n" {
-		t.Fatalf("write PostgreSQL transport capability evidence stdout=%q", stdout.String())
 	}
 }
 

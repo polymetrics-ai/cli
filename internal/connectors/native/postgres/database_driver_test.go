@@ -19,8 +19,8 @@ func TestPostgresDatabaseDriverReferenceSeam(t *testing.T) {
 	}
 
 	caps := native.New().Metadata().Capabilities
-	if !caps.Write || !caps.CDC || caps.Query {
-		t.Fatalf("PostgreSQL capabilities = %+v, want write=true cdc=true query=false for the certified managed-target transport", caps)
+	if caps.Write || !caps.CDC || caps.Query {
+		t.Fatalf("PostgreSQL capabilities = %+v, want write=false cdc=true query=false; the certified managed target is a closed transport", caps)
 	}
 }
 
