@@ -44,9 +44,6 @@ func runCertify(ctx context.Context, root string, args []string, stdout, stderr 
 		if err := rejectCertificationSecretArgv(args, opts); err != nil {
 			return err
 		}
-		if flags.first("full-parity") != "true" && flags.first("direct-read-only") != "true" {
-			return usageErrorf("pm connectors certify --external-proof requires --full-parity or --direct-read-only")
-		}
 		childArgs, childEnv, preparedValues, err := prepareExternalCertifyCredentialInput(args, flags, opts)
 		if err != nil {
 			return err
@@ -92,9 +89,6 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 		if os.Getenv(certificationExternalChildEnv) != "1" {
 			return errors.New("external certification proof must execute in a fresh child process")
 		}
-		if flags.first("full-parity") != "true" && !opts.DirectReadOnly {
-			return usageErrorf("pm connectors certify --external-proof requires --full-parity or --direct-read-only")
-		}
 		if err := rejectCertificationSecretArgv(os.Args[1:], opts); err != nil {
 			return err
 		}
@@ -121,20 +115,16 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 		return err
 	}
 	if externalProof {
-		if !rep.Passed || exitCodeForReport(rep) != 0 {
-			diagnostic, err := certificationFailedReportDiagnostic(rep, certificationPreparedValues(opts))
-			if err != nil {
-				return errors.New("certify external proof: external proof requires a completed successful process; fingerprint-redacted report diagnostic unavailable")
-			}
-			return fmt.Errorf("certify external proof: external proof requires a completed successful process; fingerprint-redacted diagnostic: %s", diagnostic)
-		}
 		binarySHA256, err := currentBinarySHA256()
 		if err != nil {
 			return err
 		}
-		flowReferences, err := certificationFlowRoundTripReferences(rep, certificationPreparedValues(opts))
-		if err != nil {
-			return fmt.Errorf("certify external proof: %w", err)
+		flowReferences := []string(nil)
+		if rep.FullParityVerified() {
+			flowReferences, err = certificationFlowRoundTripReferences(rep, certificationPreparedValues(opts))
+			if err != nil {
+				return fmt.Errorf("certify external proof: %w", err)
+			}
 		}
 		runID := fmt.Sprintf("external-%d", rep.StartedAt.UTC().UnixNano())
 		if _, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
@@ -150,6 +140,12 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 			HTTPExchanges:           runner.ObservedHTTPExchanges(),
 			FlowRoundTripReferences: flowReferences,
 		}); err != nil {
+			if !rep.Passed {
+				diagnostic, diagnosticErr := certificationFailedReportDiagnostic(rep, certificationPreparedValues(opts))
+				if diagnosticErr == nil {
+					return fmt.Errorf("certify external proof: %w; fingerprint-redacted diagnostic: %s", err, diagnostic)
+				}
+			}
 			return fmt.Errorf("certify external proof: %w", err)
 		}
 	}

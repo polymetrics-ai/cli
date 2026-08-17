@@ -21,12 +21,17 @@ import (
 )
 
 const (
-	externalProofVersion               = 1
+	externalProofVersion               = 2
 	externalProofFingerprintID         = "repository_salted_hmac_sha256_v1"
 	externalProofMarkerPrefix          = "{{pmcertfp:v1:"
 	externalProofMarkerSuffix          = "}}"
 	externalProofMaxExchangesPerTarget = 16
 	externalProofMaxTotalExchanges     = 4096
+
+	externalProofCredentialScopeFullParity         = "full_parity"
+	externalProofCredentialScopeObservedOperations = "observed_operations"
+	externalProofScopeProofFullParityStage         = "full_parity_stage"
+	externalProofScopeProofProtocolExchanges       = "protocol_exchanges"
 )
 
 var externalProofIdentifier = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]*$`)
@@ -60,6 +65,8 @@ type externalProofArtifact struct {
 	Connector               string                      `json:"connector"`
 	RunID                   string                      `json:"run_id"`
 	PMBinarySHA256          string                      `json:"pm_binary_sha256"`
+	CredentialScope         string                      `json:"credential_scope,omitempty"`
+	CredentialScopeProof    string                      `json:"credential_scope_proof,omitempty"`
 	CredentialFingerprints  []string                    `json:"credential_fingerprints"`
 	Process                 externalProofProcess        `json:"process"`
 	HTTPExchanges           []externalProofHTTPExchange `json:"http_exchanges"`
@@ -149,13 +156,13 @@ type ImportedExternalProofBody struct {
 	OriginalBytes int
 }
 
-// WriteExternalProof accepts a completed external run and creates its artifact
-// after all bounded-capture and sanitization checks pass. A full-parity run
-// supplies its flow references; a direct-read run instead proves only the
-// observed protocol exchanges that its report names. A rejected input performs
-// no artifact or salt writes.
+// WriteExternalProof creates a schema-v2 artifact after all bounded-capture
+// and sanitization checks pass. Its credential scope is derived here, not
+// supplied by a caller: a verified full-parity result retains that claim;
+// every other completed run can claim only the successful protocol exchanges
+// it actually observed. A rejected input performs no artifact or salt writes.
 func WriteExternalProof(root string, input ExternalProofInput) (string, error) {
-	prepared, err := validateExternalProofInput(input)
+	prepared, scope, err := validateExternalProofInput(input)
 	if err != nil {
 		return "", err
 	}
@@ -164,7 +171,7 @@ func WriteExternalProof(root string, input ExternalProofInput) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	artifact, err := sanitizeExternalProof(input, prepared, salt)
+	artifact, err := sanitizeExternalProof(input, prepared, salt, scope)
 	if err != nil {
 		return "", err
 	}
@@ -212,8 +219,11 @@ func VerifyExternalProofTranscript(root, proofPath, stdout, stderr string) (bool
 	if err := json.Unmarshal(raw, &artifact); err != nil {
 		return false, fmt.Errorf("parse external proof: %w", err)
 	}
-	if artifact.Version != externalProofVersion || artifact.RedactionStrategy != externalProofFingerprintID {
+	if (artifact.Version != 1 && artifact.Version != externalProofVersion) || artifact.RedactionStrategy != externalProofFingerprintID {
 		return false, errors.New("external proof has an unsupported schema")
+	}
+	if artifact.Version == externalProofVersion && !validExternalProofCredentialScope(artifact.CredentialScope, artifact.CredentialScopeProof) {
+		return false, errors.New("external proof has an unsupported credential scope claim")
 	}
 	stdoutFingerprint := externalProofFingerprint(salt, stdout)
 	stderrFingerprint := externalProofFingerprint(salt, stderr)
@@ -322,54 +332,83 @@ func externalProofDiagnosticSecretForms(secret string) []string {
 	return forms
 }
 
-func validateExternalProofInput(input ExternalProofInput) ([]string, error) {
-	if !input.Passed || input.ExitCode != 0 {
-		return nil, errors.New("external proof requires a completed successful process")
+type externalProofCredentialScope struct {
+	credentialScope string
+	proof           string
+	fullParity      bool
+}
+
+func validateExternalProofInput(input ExternalProofInput) ([]string, externalProofCredentialScope, error) {
+	if input.ExitCode < 0 {
+		return nil, externalProofCredentialScope{}, errors.New("external proof requires a completed process exit code")
+	}
+	scope := externalProofCredentialScope{
+		credentialScope: externalProofCredentialScopeObservedOperations,
+		proof:           externalProofScopeProofProtocolExchanges,
+	}
+	if input.Passed && input.ExitCode == 0 && input.FullParity {
+		scope = externalProofCredentialScope{
+			credentialScope: externalProofCredentialScopeFullParity,
+			proof:           externalProofScopeProofFullParityStage,
+			fullParity:      true,
+		}
 	}
 	if !externalProofIdentifier.MatchString(input.Connector) || !externalProofIdentifier.MatchString(input.RunID) {
-		return nil, errors.New("external proof connector and run id must be safe identifiers")
+		return nil, externalProofCredentialScope{}, errors.New("external proof connector and run id must be safe identifiers")
 	}
 	if !externalProofSHA256.MatchString(input.BinarySHA256) {
-		return nil, errors.New("external proof requires a lowercase SHA-256 built-binary fingerprint")
+		return nil, externalProofCredentialScope{}, errors.New("external proof requires a lowercase SHA-256 built-binary fingerprint")
 	}
 	if len(input.Command) == 0 {
-		return nil, errors.New("external proof requires the exact observed process command")
+		return nil, externalProofCredentialScope{}, errors.New("external proof requires the exact observed process command")
 	}
 	prepared := normalizedExternalProofValues(input.PreparedValues)
 	if len(prepared) == 0 {
-		return nil, errors.New("external proof requires prepared credential values")
+		return nil, externalProofCredentialScope{}, errors.New("external proof requires prepared credential values")
 	}
 	if len(ScanForSecrets(strings.Join(input.Command, "\x00"), prepared)) != 0 {
-		return nil, errors.New("external proof refuses credential material in process arguments")
+		return nil, externalProofCredentialScope{}, errors.New("external proof refuses credential material in process arguments")
 	}
 	if len(ScanForSecrets(input.Stdout, prepared)) != 0 || len(ScanForSecrets(input.Stderr, prepared)) != 0 {
-		return nil, errors.New("external proof refuses credential material in observed process output")
+		return nil, externalProofCredentialScope{}, errors.New("external proof refuses credential material in observed process output")
 	}
 	if len(input.HTTPExchanges) == 0 {
-		return nil, errors.New("external proof requires at least one observed HTTPS exchange")
+		return nil, externalProofCredentialScope{}, errors.New("external proof requires at least one observed HTTPS exchange")
 	}
 	if len(input.HTTPExchanges) > externalProofMaxTotalExchanges {
-		return nil, fmt.Errorf("external proof observed %d exchanges, exceeding bounded whole-surface limit %d", len(input.HTTPExchanges), externalProofMaxTotalExchanges)
+		return nil, externalProofCredentialScope{}, fmt.Errorf("external proof observed %d exchanges, exceeding bounded whole-surface limit %d", len(input.HTTPExchanges), externalProofMaxTotalExchanges)
 	}
 	exchangesPerTarget := make(map[string]int)
+	observedProviderSuccess := false
 	for index, exchange := range input.HTTPExchanges {
 		if err := validateObservedProofExchange(exchange); err != nil {
-			return nil, fmt.Errorf("external proof exchange %d: %w", index+1, err)
+			return nil, externalProofCredentialScope{}, fmt.Errorf("external proof exchange %d: %w", index+1, err)
+		}
+		if exchange.Response.Status >= 200 && exchange.Response.Status < 300 {
+			observedProviderSuccess = true
 		}
 		targetKey := strings.ToUpper(exchange.Request.Method) + "\x00" + exchange.Request.Target
 		exchangesPerTarget[targetKey]++
 		if exchangesPerTarget[targetKey] > externalProofMaxExchangesPerTarget {
-			return nil, fmt.Errorf("external proof observed more than %d exchanges for one request target, exceeding bounded redirect/retry limit", externalProofMaxExchangesPerTarget)
+			return nil, externalProofCredentialScope{}, fmt.Errorf("external proof observed more than %d exchanges for one request target, exceeding bounded redirect/retry limit", externalProofMaxExchangesPerTarget)
 		}
 	}
-	if input.FullParity {
+	if !observedProviderSuccess {
+		return nil, externalProofCredentialScope{}, errors.New("external proof requires an observed successful provider response")
+	}
+	if scope.fullParity {
 		if err := validateExternalProofFlowRoundTripReferences(input.FlowRoundTripReferences); err != nil {
-			return nil, err
+			return nil, externalProofCredentialScope{}, err
 		}
 	} else if len(input.FlowRoundTripReferences) != 0 {
-		return nil, errors.New("observed-operation external proof must not claim flow round-trip references")
+		return nil, externalProofCredentialScope{}, errors.New("observed-operations external proof must not include full-parity flow references")
 	}
-	return prepared, nil
+	return prepared, scope, nil
+}
+
+func validExternalProofCredentialScope(scope, proof string) bool {
+	return (scope == externalProofCredentialScopeFullParity && proof == externalProofScopeProofFullParityStage) ||
+		(scope == externalProofCredentialScopeObservedOperations && proof == externalProofScopeProofProtocolExchanges)
 }
 
 func decodeExternalProofArtifact(raw []byte, target *externalProofArtifact) error {
@@ -382,8 +421,11 @@ func decodeExternalProofArtifact(raw []byte, target *externalProofArtifact) erro
 }
 
 func validateStoredExternalProof(artifact externalProofArtifact) error {
-	if artifact.Version != externalProofVersion || artifact.RedactionStrategy != externalProofFingerprintID {
+	if (artifact.Version != 1 && artifact.Version != externalProofVersion) || artifact.RedactionStrategy != externalProofFingerprintID {
 		return errors.New("external proof has an unsupported schema")
+	}
+	if artifact.Version == externalProofVersion && !validExternalProofCredentialScope(artifact.CredentialScope, artifact.CredentialScopeProof) {
+		return errors.New("external proof has an unsupported credential scope claim")
 	}
 	if !externalProofIdentifier.MatchString(artifact.Connector) || !externalProofIdentifier.MatchString(artifact.RunID) {
 		return errors.New("external proof connector and run id must be safe identifiers")
@@ -394,10 +436,10 @@ func validateStoredExternalProof(artifact externalProofArtifact) error {
 	if len(artifact.CredentialFingerprints) == 0 || !sortedUniqueExternalProofFingerprints(artifact.CredentialFingerprints) {
 		return errors.New("external proof credential fingerprints must be a non-empty sorted unique list")
 	}
-	if len(artifact.Process.Command) == 0 || artifact.Process.ExitCode != 0 ||
+	if len(artifact.Process.Command) == 0 || artifact.Process.ExitCode < 0 ||
 		!isExternalProofFingerprintSequence(artifact.Process.StdoutFingerprint) ||
 		!isExternalProofFingerprintSequence(artifact.Process.StderrFingerprint) {
-		return errors.New("external proof process record is not a completed successful redacted process")
+		return errors.New("external proof process record is not a completed redacted process")
 	}
 	if len(artifact.HTTPExchanges) == 0 || len(artifact.HTTPExchanges) > externalProofMaxTotalExchanges {
 		return errors.New("external proof must contain a bounded non-empty HTTPS exchange set")
@@ -407,8 +449,33 @@ func validateStoredExternalProof(artifact externalProofArtifact) error {
 			return fmt.Errorf("http_exchanges[%d]: %w", i, err)
 		}
 	}
-	if err := validateExternalProofFlowRoundTripReferences(artifact.FlowRoundTripReferences); err != nil {
-		return err
+	if artifact.Version == 1 {
+		if artifact.Process.ExitCode != 0 {
+			return errors.New("version-1 external proof process record is not successful")
+		}
+		if len(artifact.FlowRoundTripReferences) != 0 {
+			return validateExternalProofFlowRoundTripReferences(artifact.FlowRoundTripReferences)
+		}
+		return nil
+	}
+	observedProviderSuccess := false
+	for _, exchange := range artifact.HTTPExchanges {
+		if exchange.Response.Status >= 200 && exchange.Response.Status < 300 {
+			observedProviderSuccess = true
+			break
+		}
+	}
+	if !observedProviderSuccess {
+		return errors.New("external proof requires an observed successful provider response")
+	}
+	if artifact.CredentialScope == externalProofCredentialScopeFullParity {
+		if artifact.Process.ExitCode != 0 {
+			return errors.New("full-parity external proof process record is not successful")
+		}
+		return validateExternalProofFlowRoundTripReferences(artifact.FlowRoundTripReferences)
+	}
+	if len(artifact.FlowRoundTripReferences) != 0 {
+		return errors.New("observed-operations external proof must not include full-parity flow references")
 	}
 	return nil
 }
@@ -533,9 +600,6 @@ func isExternalProofMethod(method string) bool {
 }
 
 func validateExternalProofFlowRoundTripReferences(references []string) error {
-	if len(references) == 0 {
-		return nil
-	}
 	required := []string{"flow_plan", "flow_preview", "flow_run", "flow_status"}
 	present := make(map[string]bool, len(required))
 	for _, reference := range references {
@@ -575,13 +639,15 @@ func validateObservedProofExchange(exchange ObservedHTTPExchange) error {
 	return nil
 }
 
-func sanitizeExternalProof(input ExternalProofInput, prepared []string, salt []byte) (externalProofArtifact, error) {
+func sanitizeExternalProof(input ExternalProofInput, prepared []string, salt []byte, scope externalProofCredentialScope) (externalProofArtifact, error) {
 	artifact := externalProofArtifact{
 		Version:                externalProofVersion,
 		RedactionStrategy:      externalProofFingerprintID,
 		Connector:              input.Connector,
 		RunID:                  input.RunID,
 		PMBinarySHA256:         input.BinarySHA256,
+		CredentialScope:        scope.credentialScope,
+		CredentialScopeProof:   scope.proof,
 		CredentialFingerprints: fingerprintExternalPreparedValues(salt, prepared),
 		Process: externalProofProcess{
 			Command:           append([]string(nil), input.Command...),

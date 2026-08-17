@@ -154,3 +154,33 @@ full `internal/cli`, the required consumer package, vet, and build pass.
 
 Result: no code-quality or credential-boundary findings. Live full parity is
 an external acceptance blocker, not a condition this review can waive.
+
+## Schema-v2 bounded-scope review
+
+Scope: the #4215 credential-scope contract adopted by the #3989 residual.
+
+The review verified that scope is derived in `WriteExternalProof`, never
+accepted from a caller: only a passed zero-exit full-parity report can emit
+`full_parity` / `full_parity_stage`; every other completed run is limited to
+`observed_operations` / `protocol_exchanges`. Complete captured bodies and at
+least one observed provider 2xx remain mandatory. The new negative test proves
+an all-unsuccessful transcript writes neither a proof nor a salt.
+
+The CLI removes the stale `--full-parity` gate in both parent and fresh-child
+paths but preserves the certification report's real exit. Full flow references
+are still resolved and checked only for the full-parity claim. The bounded TLS
+child, OS-boundary child, and live GitHub smoke each read the serialized v2
+artifact, require the observed scope/proof pair, and scan for their prepared
+credential. The OS fixture continues to require its exact current
+certification-failure exit (2), not a passing result.
+
+The live-test failure helper parses one JSON report when available and otherwise
+uses a bounded fingerprint-redacted excerpt. Its planted-secret test asserts
+that both paths emit a `{{pmcertfp:v1:...}}` marker rather than any raw value.
+The GitHub test uses the fresh-child `runCertify` path with explicit JSON output
+so its transcript verification is against the exact child report, not an outer
+human rendering.
+
+Result: no Critical, Warning, or Info findings. The designated disposable live
+smoke passed with the bounded claim; historical full-parity `schedule_create`
+and `resume` failures remain separately reported and were not patched around.

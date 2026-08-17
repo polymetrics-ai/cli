@@ -240,7 +240,7 @@ func TestCertifyCLIHelpShowsProvenanceContract(t *testing.T) {
 		t.Fatalf("runConnectors(certify --help): %v", err)
 	}
 	for _, want := range []string{
-		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof (--full-parity | --direct-read-only)] [--from-env field=ENV | --value-stdin field] [--json]",
+		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof] [--full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
 		"provider-artifact",
 		"provenance evidence",
 		"legacy_unverified",
@@ -252,19 +252,27 @@ func TestCertifyCLIHelpShowsProvenanceContract(t *testing.T) {
 	}
 }
 
-func TestCertifyCLIExternalProofRequiresFullParityBeforeWrites(t *testing.T) {
+func TestCertifyCLIExternalProofRunsWithoutFullParityBeforeNoHTTPSRefusal(t *testing.T) {
 	root := t.TempDir()
-	t.Setenv("PM_CERTIFY_EXTERNAL_PROOF_CANARY", "cert-canary-argv-3989")
-	var stdout bytes.Buffer
+	const token = "cert-canary-argv-3989"
+	t.Setenv("PM_CERTIFY_EXTERNAL_PROOF_CANARY", token)
+	var stdout, stderr bytes.Buffer
 
 	err := runCertify(context.Background(), root, []string{"sample",
-		"--external-proof", "--from-env", "token=PM_CERTIFY_EXTERNAL_PROOF_CANARY", "--json"}, &stdout, io.Discard, true)
-	if err == nil || !strings.Contains(err.Error(), "requires --full-parity or --direct-read-only") {
-		t.Fatalf("external-proof refusal = %v, want full-parity or direct-read-only requirement", err)
+		"--external-proof", "--from-env", "token=PM_CERTIFY_EXTERNAL_PROOF_CANARY", "--json"}, &stdout, &stderr, true)
+	if err == nil || strings.Contains(err.Error(), "requires --full-parity") {
+		t.Fatal("external proof without --full-parity did not reach the fresh-child HTTPS-proof boundary")
 	}
-	if _, err := os.Stat(filepath.Join(root, ".polymetrics")); !errors.Is(err, os.ErrNotExist) {
-		t.Fatalf("external-proof refusal created project state: stat error = %v, want not exist", err)
+	if _, statErr := os.Stat(filepath.Join(root, ".polymetrics", "certifications", "sample.json")); statErr != nil {
+		t.Fatalf("gate-free external proof did not save its child report: %v", statErr)
 	}
+	if _, statErr := os.Stat(filepath.Join(root, ".polymetrics", "certifications", "external-proof")); !errors.Is(statErr, os.ErrNotExist) {
+		t.Fatalf("no-HTTPS external proof created an artifact directory: stat error = %v, want not exist", statErr)
+	}
+	if bytes.Contains(stdout.Bytes(), []byte(token)) || bytes.Contains(stderr.Bytes(), []byte(token)) {
+		t.Fatal("gate-free external proof exposed credential material in process output")
+	}
+	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
 }
 
 func TestExternalProofFreshChildRefusesNoHTTPSWithoutArtifact(t *testing.T) {
@@ -418,7 +426,7 @@ func TestPrepareExternalCertifyStdinCredentialUsesChildMemoryOnly(t *testing.T) 
 	}
 }
 
-func TestExternalProofFreshChildRefusesIncompleteFullParityHTTPSRun(t *testing.T) {
+func TestExternalProofFreshChildPublishesBoundedProofWithoutFullParity(t *testing.T) {
 	const token = "cert-canary-external-https-3989"
 	var requests atomic.Int64
 	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
@@ -450,24 +458,58 @@ func TestExternalProofFreshChildRefusesIncompleteFullParityHTTPSRun(t *testing.T
 	t.Setenv("PM_CERTIFY_EXTERNAL_HTTPS_CANARY", token)
 	var stdout, stderr bytes.Buffer
 	err := runCertify(context.Background(), root, []string{
-		"recurly", "--external-proof", "--full-parity", "--json",
+		"recurly", "--external-proof", "--json",
 		"--config", "base_url=" + server.URL,
 		"--from-env", "api_key=PM_CERTIFY_EXTERNAL_HTTPS_CANARY",
 	}, &stdout, &stderr, true)
-	if err == nil || !strings.Contains(err.Error(), "exit 1") || !strings.Contains(stderr.String(), "external proof requires a completed successful process") {
-		t.Fatalf("fresh external HTTPS incomplete-parity refusal = %v; stderr=%q", err, strings.ReplaceAll(stderr.String(), token, "<credential>"))
+	if err != nil && !strings.Contains(err.Error(), "external certification recurly: exit") {
+		t.Fatalf("fresh external HTTPS bounded result = %v", strings.ReplaceAll(fmt.Sprint(err), token, "<credential>"))
 	}
 	if requests.Load() == 0 {
 		t.Fatal("fresh external binary made no HTTPS provider request")
 	}
 	proofs, err := filepath.Glob(filepath.Join(root, ".polymetrics", "certifications", "external-proof", "recurly", "*.json"))
-	if err != nil || len(proofs) != 0 {
-		t.Fatalf("external HTTPS proof paths = %v, glob error = %v, want no proof for incomplete full parity", proofs, err)
+	if err != nil || len(proofs) != 1 {
+		t.Fatalf("external HTTPS bounded proof count = %d, glob error = %v, want one", len(proofs), err)
 	}
 	if bytes.Contains(stdout.Bytes(), []byte(token)) || bytes.Contains(stderr.Bytes(), []byte(token)) {
 		t.Fatal("fresh external HTTPS process output exposed credential material")
 	}
+	assertExternalProofObservedOperationsClaim(t, proofs[0], token)
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
+}
+
+func assertExternalProofObservedOperationsClaim(t *testing.T, proofPath, token string) {
+	t.Helper()
+	raw, err := os.ReadFile(proofPath)
+	if err != nil {
+		t.Fatalf("read bounded external proof: %v", err)
+	}
+	if bytes.Contains(raw, []byte(token)) {
+		t.Fatal("bounded external proof retained a credential")
+	}
+	var proof struct {
+		Version              int    `json:"version"`
+		CredentialScope      string `json:"credential_scope"`
+		CredentialScopeProof string `json:"credential_scope_proof"`
+		HTTPExchanges        []struct {
+			Response struct {
+				Status int `json:"status"`
+			} `json:"response"`
+		} `json:"http_exchanges"`
+	}
+	if err := json.Unmarshal(raw, &proof); err != nil {
+		t.Fatalf("parse bounded external proof: %v", err)
+	}
+	if proof.Version != 2 || proof.CredentialScope != "observed_operations" || proof.CredentialScopeProof != "protocol_exchanges" {
+		t.Fatalf("bounded external proof claim = version:%d scope:%q proof:%q, want schema-v2 observed operations", proof.Version, proof.CredentialScope, proof.CredentialScopeProof)
+	}
+	for _, exchange := range proof.HTTPExchanges {
+		if exchange.Response.Status >= http.StatusOK && exchange.Response.Status < http.StatusMultipleChoices {
+			return
+		}
+	}
+	t.Fatal("bounded external proof has no observed successful provider response")
 }
 
 func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts(t *testing.T) {
@@ -513,11 +555,8 @@ func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifa
 	// one-route TLS fixture supplies only its authenticated accounts read. The
 	// current full-parity roll-up must therefore reject it; this OS-boundary
 	// test proves credential absence in the real child before that honest exit.
-	if err == nil || !strings.Contains(err.Error(), "external certification recurly: exit 1") {
-		t.Fatalf("fresh external HTTPS incomplete-parity result = %v, want recurly exit 1", strings.ReplaceAll(fmt.Sprint(err), token, "<credential>"))
-	}
-	if !strings.Contains(stderr.String(), "external proof requires a completed successful process") {
-		t.Fatal("fresh external child did not preserve the stricter incomplete-parity refusal")
+	if err == nil || !strings.Contains(err.Error(), "external certification recurly: exit 2") {
+		t.Fatalf("fresh external HTTPS incomplete-parity result = %v, want recurly exit 2; fingerprint-redacted diagnostic:\n%s", strings.ReplaceAll(fmt.Sprint(err), token, "<credential>"), externalProofFailureDiagnostic(t, token, stdout.String(), stderr.String()))
 	}
 	if requests.Load() == 0 {
 		t.Fatal("fresh external binary made no HTTPS provider request")
@@ -525,6 +564,11 @@ func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifa
 	if bytes.Contains(stdout.Bytes(), []byte(token)) || bytes.Contains(stderr.Bytes(), []byte(token)) {
 		t.Fatal("fresh external HTTPS process output exposed credential material")
 	}
+	proofs, globErr := filepath.Glob(filepath.Join(root, ".polymetrics", "certifications", "external-proof", "recurly", "*.json"))
+	if globErr != nil || len(proofs) != 1 {
+		t.Fatalf("external OS-boundary proof count = %d, glob error = %v, want one bounded proof", len(proofs), globErr)
+	}
+	assertExternalProofObservedOperationsClaim(t, proofs[0], token)
 	observation, err := loadExternalRuntimeObservation(snapshotPath)
 	if err != nil {
 		t.Fatalf("read fresh-child runtime observation: %v", err)
@@ -584,9 +628,9 @@ func assertExternalRuntimeObservation(t *testing.T, observation externalRuntimeO
 }
 
 // TestExternalProofGitHubSmoke is deliberately opt-in because it reaches the
-// live GitHub HTTPS API with a full-parity credential. Unlike the in-process
-// fixture tests, it exercises the fresh external binary path and audits every
-// generated project artifact for absence of the credential value.
+// live GitHub HTTPS API with the designated disposable identity. Unlike the
+// in-process fixture tests, it exercises the fresh external binary path and
+// audits every generated project artifact for absence of the credential value.
 func TestExternalProofGitHubSmoke(t *testing.T) {
 	const tokenEnv = "POLYMETRICS_CERTIFY_GITHUB_TOKEN"
 	const ownerEnv = "POLYMETRICS_CERTIFY_GITHUB_OWNER"
@@ -600,8 +644,8 @@ func TestExternalProofGitHubSmoke(t *testing.T) {
 	token := os.Getenv(tokenEnv)
 	root := t.TempDir()
 	var stdout, stderr bytes.Buffer
-	code := Run([]string{
-		"--root", root, "connectors", "certify", "github", "--external-proof", "--full-parity", "--json",
+	err := runCertify(context.Background(), root, []string{
+		"github", "--external-proof", "--json",
 		"--config", "owner=" + os.Getenv(ownerEnv),
 		"--config", "repo=" + os.Getenv(repoEnv),
 		"--config", "auth_type=token",
@@ -610,54 +654,49 @@ func TestExternalProofGitHubSmoke(t *testing.T) {
 		// identity the opt-in test is specifically authorized to exercise.
 		"--config", "rate_limit_account=" + rateLimitAccount,
 		"--from-env", "token=" + tokenEnv,
-	}, &stdout, &stderr)
-	if code != 0 {
-		t.Fatalf("run external GitHub proof exit code = %d; fingerprint-redacted diagnostic:\n%s", code, externalProofFailureDiagnostic(t, token, stdout.String(), stderr.String()))
+	}, &stdout, &stderr, true)
+	code := 0
+	if err != nil {
+		var cliErr *cliError
+		if !errors.As(err, &cliErr) || cliErr.exitOverride == nil {
+			t.Fatalf("live external GitHub certification returned an unclassified error type %T; fingerprint-redacted diagnostic: %s", err, externalProofFailureDiagnostic(t, token, stdout.String(), stderr.String()))
+		}
+		code = *cliErr.exitOverride
 	}
 	var envelope struct {
 		Kind   string         `json:"kind"`
 		Report certify.Report `json:"report"`
 	}
-	if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil {
-		t.Fatalf("parse external GitHub certification report: %v", err)
+	childStdout, _, ok := decodeExternalProofChildReport(stdout.Bytes())
+	if !ok {
+		t.Fatalf("external proof did not relay a parseable JSON certification report; fingerprint-redacted diagnostic: %s", externalProofFailureDiagnostic(t, token, stdout.String(), stderr.String()))
 	}
-	if envelope.Kind != "ConnectorCertification" || envelope.Report.Connector != "github" || !envelope.Report.Passed {
-		t.Fatalf("external GitHub certification result = kind:%q connector:%q passed:%t, want a passing GitHub report", envelope.Kind, envelope.Report.Connector, envelope.Report.Passed)
+	if err := json.Unmarshal(childStdout, &envelope); err != nil {
+		t.Fatalf("parse external GitHub certification report: %v; fingerprint-redacted diagnostic: %s", err, externalProofFailureDiagnostic(t, token, stdout.String(), stderr.String()))
+	}
+	if envelope.Kind != "ConnectorCertification" || envelope.Report.Connector != "github" {
+		t.Fatalf("external GitHub certification result = kind:%q connector:%q, want GitHub report", envelope.Kind, envelope.Report.Connector)
+	}
+	if envelope.Report.FullParityVerified() {
+		t.Fatal("bounded external GitHub proof unexpectedly claimed full parity")
+	}
+	for _, stageName := range []string{"schedule_create", "resume"} {
+		logLiveGitHubStageFinding(t, envelope.Report, stageName, token)
 	}
 	proofs, err := filepath.Glob(filepath.Join(root, ".polymetrics", "certifications", "external-proof", "github", "*.json"))
 	if err != nil || len(proofs) != 1 {
 		t.Fatalf("external proof paths = %v, glob error = %v, want one", proofs, err)
 	}
-	rawProof, err := os.ReadFile(proofs[0])
-	if err != nil {
-		t.Fatalf("read external GitHub proof: %v", err)
-	}
-	var proof struct {
-		HTTPExchanges []struct {
-			Response struct {
-				Status int `json:"status"`
-			} `json:"response"`
-		} `json:"http_exchanges"`
-	}
-	if err := json.Unmarshal(rawProof, &proof); err != nil {
-		t.Fatalf("parse external GitHub proof: %v", err)
-	}
-	providerSuccess := false
-	for _, exchange := range proof.HTTPExchanges {
-		if exchange.Response.Status >= http.StatusOK && exchange.Response.Status < http.StatusMultipleChoices {
-			providerSuccess = true
-			break
-		}
-	}
-	if !providerSuccess {
-		t.Fatal("external GitHub proof has no observed successful provider response")
-	}
-	matched, err := certify.VerifyExternalProofTranscript(root, proofs[0], stdout.String(), stderr.String())
+	assertExternalProofObservedOperationsClaim(t, proofs[0], token)
+	matched, err := certify.VerifyExternalProofTranscript(root, proofs[0], string(childStdout), "")
 	if err != nil {
 		t.Fatalf("verify external GitHub process transcript: %v", err)
 	}
 	if !matched {
 		t.Fatal("proof did not match the exact external binary stdout")
+	}
+	if code != 0 {
+		t.Logf("live bounded GitHub certification exited %d after retaining its proof; fingerprint-redacted parent diagnostic: %s", code, externalProofFailureDiagnostic(t, token, stdout.String(), stderr.String()))
 	}
 	if _, err := os.Stat(filepath.Join(root, ".polymetrics", "vault")); !errors.Is(err, os.ErrNotExist) {
 		t.Fatalf("external proof persisted a vault: stat error = %v, want not exist", err)
@@ -665,20 +704,102 @@ func TestExternalProofGitHubSmoke(t *testing.T) {
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
 }
 
+func decodeExternalProofChildReport(stdout []byte) ([]byte, certify.Report, bool) {
+	start := bytes.IndexByte(stdout, '{')
+	if start < 0 {
+		return nil, certify.Report{}, false
+	}
+	decoder := json.NewDecoder(bytes.NewReader(stdout[start:]))
+	var envelope struct {
+		Report certify.Report `json:"report"`
+	}
+	if err := decoder.Decode(&envelope); err != nil {
+		return nil, certify.Report{}, false
+	}
+	end := start + int(decoder.InputOffset())
+	if end < len(stdout) && stdout[end] == '\n' {
+		end++
+	}
+	return stdout[start:end], envelope.Report, true
+}
+
+func logLiveGitHubStageFinding(t *testing.T, report certify.Report, stageName, token string) {
+	t.Helper()
+	stage := certificationStageResult(report, stageName)
+	if stage == nil || stage.Passed {
+		return
+	}
+	diagnostic, err := certificationStageDiagnostic(*stage, []string{token})
+	if err != nil {
+		t.Logf("live bounded GitHub finding stage=%s diagnostic=fingerprint-redacted diagnostic unavailable", stageName)
+		return
+	}
+	t.Logf("live bounded GitHub finding: %s", diagnostic)
+}
+
+func TestExternalProofFailureDiagnosticFingerprintsPlantedCredential(t *testing.T) {
+	const token = "cert-canary-diagnostic-3989"
+	payload, err := json.Marshal(struct {
+		Kind   string         `json:"kind"`
+		Report certify.Report `json:"report"`
+	}{
+		Kind: "ConnectorCertification",
+		Report: certify.Report{Stages: []certify.StageResult{{
+			Name:   "schedule_create",
+			Status: "fail",
+			Error:  "provider rejected " + token,
+			CLI:    certify.CLIStageInfo{ExitCode: 3, Kind: "Error"},
+		}}},
+	})
+	if err != nil {
+		t.Fatalf("marshal planted external child report: %v", err)
+	}
+
+	diagnostic := externalProofFailureDiagnostic(t, token, string(payload)+"\n", "")
+	if len(certify.ScanForSecrets(diagnostic, []string{token})) != 0 {
+		t.Fatal("external-proof diagnostic retained the planted credential")
+	}
+	if !strings.Contains(diagnostic, "pmcertfp:v1:") {
+		t.Fatalf("external-proof diagnostic = %q, want fingerprint marker", diagnostic)
+	}
+	if !strings.Contains(diagnostic, `stage="schedule_create"`) {
+		t.Fatalf("external-proof diagnostic = %q, want concise stage name", diagnostic)
+	}
+
+	fallback := externalProofFailureDiagnostic(t, token, "child pre-report failure: "+token, "")
+	if len(certify.ScanForSecrets(fallback, []string{token})) != 0 {
+		t.Fatal("external-proof pre-report diagnostic retained the planted credential")
+	}
+	if !strings.Contains(fallback, "pmcertfp:v1:") || !strings.Contains(fallback, "output before report") {
+		t.Fatalf("external-proof pre-report diagnostic = %q, want fingerprinted bounded output", fallback)
+	}
+}
+
 func externalProofFailureDiagnostic(t *testing.T, token, stdout, stderr string) string {
 	t.Helper()
-	diagnostic, err := certify.RedactExternalProofDiagnostic(
-		"external proof stdout:\n"+stdout+"\nexternal proof stderr:\n"+stderr,
-		[]string{token},
-	)
-	if err != nil || len(certify.ScanForSecrets(diagnostic, []string{token})) != 0 {
-		return "fingerprint-redacted diagnostic unavailable"
+	if _, report, ok := decodeExternalProofChildReport([]byte(stdout)); ok {
+		diagnostic, err := certificationFailedReportDiagnostic(report, []string{token})
+		if err == nil && len(certify.ScanForSecrets(diagnostic, []string{token})) == 0 {
+			return diagnostic
+		}
 	}
-	const maxDiagnosticBytes = 64 << 10
-	if len(diagnostic) > maxDiagnosticBytes {
-		return diagnostic[:maxDiagnosticBytes] + "\n[diagnostic truncated after 65536 bytes]"
+	if stderr != "" {
+		diagnostic, err := certify.RedactExternalProofDiagnostic("external proof stderr: "+stderr, []string{token})
+		if err == nil && len(certify.ScanForSecrets(diagnostic, []string{token})) == 0 {
+			return diagnostic
+		}
 	}
-	return diagnostic
+	if stdout != "" {
+		const maxOutputExcerptBytes = 2048
+		if len(stdout) > maxOutputExcerptBytes {
+			stdout = stdout[:maxOutputExcerptBytes] + "\n[output excerpt truncated]"
+		}
+		diagnostic, err := certify.RedactExternalProofDiagnostic("external proof output before report: "+stdout, []string{token})
+		if err == nil && len(certify.ScanForSecrets(diagnostic, []string{token})) == 0 {
+			return diagnostic
+		}
+	}
+	return "fingerprint-redacted diagnostic unavailable"
 }
 
 func assertNoCredentialMaterialInTree(t *testing.T, root, token string) {

@@ -20,10 +20,11 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > UNCERTIFIED`; reachability is never gated.
 >
 > Accepted evidence embeds a publishable transcript with repository-salted HMAC
-> fingerprints substituted before persistence. Schema-v2 evidence names its
-> verified credential scope: `full_parity` requires the full-parity stage and
-> flow proof, while `observed_operations` is limited to its recorded protocol
-> exchanges. It never contains raw or encrypted credentials and records every
+> fingerprints substituted before persistence. Its schema-v2 credential scope is
+> explicit: a completed, verified full-parity run may claim `full_parity` with
+> `full_parity_stage` proof; every other completed run may claim only
+> `observed_operations` with `protocol_exchanges` proof. Neither form contains
+> raw or encrypted credentials, and each records every
 > false flow-delivery guarantee with a named limitation. See
 > `data/cli-live-certification-matrix-r1/report.md` for the concrete schema and
 > first baseline. The historical harness remains useful test infrastructure but

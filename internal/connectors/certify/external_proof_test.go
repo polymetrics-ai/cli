@@ -147,6 +147,7 @@ func TestReadExternalProofRefusesAnUnfingerprintedResponseRegression(t *testing.
 			Response: certify.ObservedHTTPResponse{Status: http.StatusOK,
 				Body: certify.ObservedBody{Bytes: []byte(`{"account":"` + canary + `"}`), OriginalBytes: len(`{"account":"` + canary + `"}`), Complete: true}},
 		}},
+		FlowRoundTripReferences: []string{"flow_plan", "flow_preview", "flow_run", "flow_status"},
 	})
 	if err != nil {
 		t.Fatalf("WriteExternalProof() = %v", err)
@@ -174,6 +175,99 @@ func TestReadExternalProofRefusesAnUnfingerprintedResponseRegression(t *testing.
 	}
 	if _, err := certify.ReadExternalProof(root, proofPath); err == nil || !strings.Contains(err.Error(), "unredacted") {
 		t.Fatalf("ReadExternalProof() error = %v, want an unredacted response rejection", err)
+	}
+}
+
+func TestWriteExternalProofPublishesBoundedObservedOperations(t *testing.T) {
+	const credential = "cert-canary-bounded-scope-3989"
+	root := t.TempDir()
+
+	proofPath, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+		Connector:      "sample",
+		RunID:          "bounded-observed-operations-3989",
+		BinarySHA256:   strings.Repeat("b", 64),
+		Command:        []string{"pm", "connectors", "certify", "sample", "--from-env", "token=PM_CERT_TOKEN"},
+		Stdout:         "completed provider observation before certification failure\n",
+		ExitCode:       1,
+		Passed:         false,
+		FullParity:     false,
+		PreparedValues: []string{credential},
+		HTTPExchanges: []certify.ObservedHTTPExchange{{
+			Request: certify.ObservedHTTPRequest{
+				Method:  http.MethodGet,
+				Target:  "https://provider.example.test/records",
+				Headers: map[string][]string{"Authorization": {"Bearer " + credential}},
+				Body:    certify.ObservedBody{Complete: true},
+			},
+			Response: certify.ObservedHTTPResponse{
+				Status: http.StatusOK,
+				Body:   certify.ObservedBody{Bytes: []byte(`{"result":"authenticated"}`), OriginalBytes: len(`{"result":"authenticated"}`), Complete: true},
+			},
+		}},
+	})
+	if err != nil {
+		t.Fatalf("write bounded external proof: %v", err)
+	}
+	raw, err := os.ReadFile(proofPath)
+	if err != nil {
+		t.Fatalf("read bounded external proof: %v", err)
+	}
+	if bytes.Contains(raw, []byte(credential)) {
+		t.Fatal("bounded external proof retained a planted credential")
+	}
+	var proof struct {
+		Version                 int      `json:"version"`
+		CredentialScope         string   `json:"credential_scope"`
+		CredentialScopeProof    string   `json:"credential_scope_proof"`
+		FlowRoundTripReferences []string `json:"flow_round_trip_references"`
+		Process                 struct {
+			ExitCode int `json:"exit_code"`
+		} `json:"process"`
+	}
+	if err := json.Unmarshal(raw, &proof); err != nil {
+		t.Fatalf("parse bounded external proof: %v", err)
+	}
+	if proof.Version != 2 || proof.CredentialScope != "observed_operations" || proof.CredentialScopeProof != "protocol_exchanges" {
+		t.Fatalf("bounded external proof claim = version:%d scope:%q proof:%q, want schema-v2 observed operations", proof.Version, proof.CredentialScope, proof.CredentialScopeProof)
+	}
+	if proof.Process.ExitCode != 1 {
+		t.Fatalf("bounded external proof exit code = %d, want the completed certification failure", proof.Process.ExitCode)
+	}
+	if len(proof.FlowRoundTripReferences) != 0 {
+		t.Fatalf("bounded observed-operations proof retained full-parity flow references: %v", proof.FlowRoundTripReferences)
+	}
+}
+
+func TestWriteExternalProofRefusesBoundedClaimWithoutSuccessfulProviderResponse(t *testing.T) {
+	const credential = "cert-canary-no-provider-success-3989"
+	root := t.TempDir()
+
+	_, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+		Connector:      "sample",
+		RunID:          "no-provider-success-3989",
+		BinarySHA256:   strings.Repeat("c", 64),
+		Command:        []string{"pm", "connectors", "certify", "sample", "--from-env", "token=PM_CERT_TOKEN"},
+		Stdout:         "provider returned an authorization failure\n",
+		ExitCode:       1,
+		PreparedValues: []string{credential},
+		HTTPExchanges: []certify.ObservedHTTPExchange{{
+			Request: certify.ObservedHTTPRequest{
+				Method:  http.MethodGet,
+				Target:  "https://provider.example.test/records",
+				Headers: map[string][]string{"Authorization": {"Bearer " + credential}},
+				Body:    certify.ObservedBody{Complete: true},
+			},
+			Response: certify.ObservedHTTPResponse{
+				Status: http.StatusUnauthorized,
+				Body:   certify.ObservedBody{Bytes: []byte(`{"error":"unauthorized"}`), OriginalBytes: len(`{"error":"unauthorized"}`), Complete: true},
+			},
+		}},
+	})
+	if err == nil || !strings.Contains(err.Error(), "observed successful provider response") {
+		t.Fatalf("write bounded proof error = %v, want missing successful provider response", err)
+	}
+	if _, statErr := os.Stat(filepath.Join(root, ".polymetrics", "certifications")); !os.IsNotExist(statErr) {
+		t.Fatalf("refused bounded proof wrote certification material: stat error = %v", statErr)
 	}
 }
 

@@ -1,6 +1,6 @@
 {
   "issue": 3989,
-  "state": "blocked-live-full-parity",
+  "state": "validating-bounded-credential-scope",
   "mode": "manual-gsd-inline",
   "manual_fallback_reason": "phase 3989 is absent from the roadmap and this task cannot spawn compatible isolated GSD workers",
   "commands_resolved": [
@@ -14,10 +14,10 @@
   ],
   "verification": {
     "residual_tests": "passed targeted opaque, fingerprint, and OS-boundary proofs",
-    "live_github_smoke": "ran with the designated disposable identity and no skip. Supplying the required non-secret rate_limit_account moved it past admission, but full parity then failed at schedule_create and, on the last authorized diagnostic run, resume; no accepted external proof was created. Every rendered diagnostic was fingerprint-redacted and contained no credential value.",
-    "consumer_package": "passed after the universal diagnostic change: go test -timeout 20m ./cmd/connectorgen (91.170s)",
-    "repository_gates": "changed-package verification after the diagnostic change passed: internal/connectors/certify (9.238s), internal/cli (648.115s), cmd/connectorgen (91.170s), go vet ./..., go build ./cmd/pm, and git diff --check. Earlier individual make/byte-stability gates remain historical because no generated or documentation source changed.",
-    "cli_parity": "unchanged surface rechecked: pm connectors, pm help connectors, and pm connectors certify --help passed",
-    "manual_code_review": "passed with no findings; final diff check, internal/cli vet, and diff secret-pattern scan passed"
+    "live_github_smoke": "ran with the designated disposable identity and no skip. After #4215 removed the obsolete external-proof full-parity admission requirement, the opt-in smoke passed with one schema-v2 observed_operations/protocol_exchanges proof, an observed GitHub provider success, exact child-transcript verification, and no credential material in its temporary project tree. Earlier authorized full-parity attempts remain separate fingerprint-redacted findings: schedule_create typed CLI error exit 3, then resume typed CLI error exit 1. The bounded proof does not claim either stage passed or claim full parity.",
+    "consumer_package": "passed: go test -count=1 -timeout 20m ./cmd/connectorgen (187.484s)",
+    "repository_gates": "final changed-package verification passed: internal/connectors/certify (10.476s), internal/cli (666.954s), cmd/connectorgen (187.484s), go vet ./..., go build ./cmd/pm, agentcontractgen check, git diff --check, and every individual make verification target. Docs, website, skills, and certification generators were run twice and were byte-stable on their second pass.",
+    "cli_parity": "pm connectors, pm help connectors, pm connectors certify --help, and the golden transcript check passed after the v2 external-proof documentation update",
+    "manual_code_review": "passed with no findings; bounded scope is writer-derived, failed exits remain honest, the planted-secret diagnostic test passes, and diff secret-pattern scan is clean"
   }
 }

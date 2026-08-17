@@ -1,12 +1,57 @@
 # #3989 verification checklist
 
-## Residual verification — blocked on live full parity
+## Residual verification — bounded credential scope
 
-- [ ] The live GitHub smoke ran, not skipped, with the designated disposable identity, but did not produce an accepted proof. After supplying its required non-secret `rate_limit_account` coordination subject, full parity reached distinct non-passing stages (`schedule_create`, then `resume`) on the final authorized runs. The raw credential was not rendered; the remaining live full-parity failure is the blocker.
+The prior full-parity blocker is resolved by #4215’s schema-v2 bounded scope,
+not by weakening full parity. The remaining implementation proof must emit a
+truthful `observed_operations` / `protocol_exchanges` artifact from the real
+fresh child, preserve any certification failure exit, and record the two
+historical stage failures separately.
+
+- [x] Bounded external proof omits the obsolete `--full-parity` gate, emits
+  schema-v2 scope/proof fields from complete observed HTTPS exchanges, and
+  requires an observable successful provider response without claiming parity.
+- [x] The opt-in GitHub smoke ran with the designated disposable identity and
+  retained one secret-free bounded proof plus exact-transcript verification.
+- [x] `schedule_create` (typed CLI error, exit 3) and `resume` (typed CLI
+  error, exit 1) are named separately with redacted evidence; neither is
+  treated as environmental success or patched around.
+
+- [x] The live GitHub smoke ran, not skipped, with the designated disposable identity and the required non-secret `rate_limit_account` subject. With no `--full-parity`, it passed and retained a schema-v2 `observed_operations` / `protocol_exchanges` proof from a real GitHub exchange. The report does not claim full parity; the earlier `schedule_create` and `resume` results remain separate redacted findings.
 - [x] Complete opaque request and response bodies carry credential canaries that are substituted before proof serialization (`TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials`).
 - [x] A real fresh child snapshots its own process-list entry, argv, project root, runner workdir, and fresh-binary directory at the credential-live boundary. The parent verifies the finished secret-free artifact records no raw credential, no external timing window, and no CI opt-out; it also requires Recurly's legitimate incomplete-full-parity exit because the one-route TLS fixture does not certify its declared write surface (`TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts`).
 - [x] One proof demonstrates same-A equality, distinct-B separation, and absence of the repository salt from output (`TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials`).
-- [x] Changed-package and consumer verification passed after the safe diagnostic change: full `internal/connectors/certify`, full `internal/cli` under its unchanged 20-minute ceiling, required `cmd/connectorgen`, `go vet ./...`, `go build ./cmd/pm`, and `git diff --check`. The broader historical gate record remains valid for unchanged generated and documentation surfaces.
+- [x] Final changed-package and consumer verification passed: full
+  `internal/connectors/certify`, full `internal/cli` under its unchanged
+  20-minute ceiling, required `cmd/connectorgen`, `go vet ./...`,
+  `go build ./cmd/pm`, `git diff --check`, all individual repository gates,
+  CLI manual/golden checks, and four generated-surface byte-stability checks.
+
+## Final bounded-scope validation
+
+| Command | Result |
+| --- | --- |
+| `go test -count=1 -v -run '^(TestWriteExternalProofFingerprintsObservedExternalTranscript|TestWriteExternalProofPublishesBoundedObservedOperations|TestWriteExternalProofRefusesBoundedClaimWithoutSuccessfulProviderResponse|TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials|TestWriteExternalProofRefusesTruncatedBodyWithoutArtifactWrites|TestWriteExternalProofRefusesMissingFlowReferencesWithoutArtifactWrites)$' ./internal/connectors/certify` | Passed. Covers v2 bounded claim, no-provider-success refusal, opaque request/response substitution, same-run A/B semantics, truncation, and full-parity reference refusal. |
+| `go test -count=1 -v -run '^TestCertifyCLIExternalProofRunsWithoutFullParityBeforeNoHTTPSRefusal$' ./internal/cli` | Passed. A fresh child starts without `--full-parity`, saves its report, and still writes no proof when it observed no HTTPS exchange. |
+| `go test -count=1 -v -run '^TestExternalProofFreshChildPublishesBoundedProofWithoutFullParity$' ./internal/cli` | Passed in 37.327s. Fresh TLS child creates one v2 bounded proof with a provider 2xx. |
+| `go test -count=1 -v -run '^TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts$' ./internal/cli` | Passed in 157.150s. Real child self-audits command list, argv, project, runner workdir, and fresh-binary temporary locations without raw credential presence. |
+| `go test -count=1 -v -run '^TestExternalProofFailureDiagnosticFingerprintsPlantedCredential$' ./internal/cli` | Passed. Parsed-report and pre-report diagnostics both substitute the planted credential with a fingerprint marker. |
+| Credentialed `go test -count=1 -timeout 20m -v -run '^TestExternalProofGitHubSmoke$' ./internal/cli` with only the designated token, owner, and repository environment variables | Passed in 30.239s. The real GitHub fresh child retained and verified one secret-free schema-v2 `observed_operations` / `protocol_exchanges` proof. |
+| `go test -count=1 -timeout 20m ./internal/connectors/certify`; `go test -count=1 -timeout 20m ./internal/cli`; `go test -count=1 -timeout 20m ./cmd/connectorgen` | Passed in 10.476s, 666.954s, and 187.484s respectively. |
+| `go vet ./...`; `go build ./cmd/pm`; `go run ./cmd/agentcontractgen check`; `git diff --check` | Passed. |
+| `make tidy-check fmt docs-check smoke-no-build lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check` | Passed. |
+| `./pm connectors`; `./pm help connectors`; `./pm connectors certify --help`; `go test -count=1 -run '^TestGoldenTranscripts$' ./internal/cli` | Passed. |
+| Docs, website, skills, and certification generators run twice with `git hash-object` aggregate comparison | Second run byte-stable for all four generated surfaces. |
+
+### Separate historical full-parity findings
+
+Before #4215 enabled the bounded claim, the authorized disposable-identity
+full-parity sequence produced two distinct non-passing facts: `schedule_create`
+returned a typed CLI error with exit 3; a later diagnostic run reached `resume`
+and returned a typed CLI error with exit 1. Both were emitted only through the
+fingerprint-redacted diagnostic path. They are retained as product findings,
+not reclassified as environmental success, and the bounded proof above makes no
+claim about either stage.
 
 ## Residual validation record
 
@@ -16,6 +61,9 @@
 | `go test -count=1 -run '^TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts$' ./internal/cli` | Passed after the planned red compile failure; rerun after the process-list child-presence assertion. |
 | `go test -count=2 -parallel=4 -timeout 20m -run '^TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts$' -v ./internal/cli` | Passed after rebase (115.27s and 117.20s). Each child emits its secret-safe snapshot at the credential-live boundary, then Recurly's intentionally one-route fixture exits 1 for incomplete full parity. |
 | `go test -timeout 20m -count=1 -v -run '^TestExternalProofGitHubSmoke$' ./internal/cli` | Ran repeatedly with the designated disposable identity and did not skip. The first run exposed missing declared non-secret rate-limit coordination; after adding `rate_limit_account`, full parity remained non-passing. Final safe diagnostics named `schedule_create` and then `resume` with typed CLI errors. No accepted proof or raw credential was retained. |
+| `go test -count=1 -timeout 20m -v -run '^TestExternalProofGitHubSmoke$' ./internal/cli` with the designated disposable token, owner, and repository environment variables | Passed after the schema-v2 bounded-scope change. The fresh child retained one secret-free `observed_operations` / `protocol_exchanges` proof, asserted an observed GitHub 2xx, and verified the exact child transcript. No full-parity claim was made. |
+| `go test -count=1 -v -run '^TestExternalProofFreshChildPublishesBoundedProofWithoutFullParity$' ./internal/cli`; `go test -count=1 -v -run '^TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts$' ./internal/cli` | Passed. The first proves the gate-free v2 TLS-child route; the second proves child-side process-list/argv/project/temporary scans remain clear of the prepared credential while the intentionally incomplete full-parity fixture exits with the current certification-failure code 2. |
+| `go test -count=1 -v -run '^TestExternalProofFailureDiagnosticFingerprintsPlantedCredential$' ./internal/cli` | Passed. A planted secret is absent from both parsed-report and pre-report diagnostics, which instead carry `{{pmcertfp:v1:...}}`; the rendered finding stays concise. |
 | `go test -timeout 20m ./internal/connectors/certify` | Passed. |
 | `go test -timeout 20m ./internal/cli` | Passed. |
 | `go test -timeout 20m ./cmd/connectorgen` | Passed (required consumer package). |
