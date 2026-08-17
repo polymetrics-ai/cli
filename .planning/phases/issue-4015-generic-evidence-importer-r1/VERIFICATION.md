@@ -10,7 +10,7 @@
 - [x] Targeted evidence checks passed: `go test -timeout 20m ./cmd/connectorgen -run 'TestCertificationEvidence(Report|Postgres)' -count=1`; `go test -timeout 20m ./internal/connectors/certify -run 'Test(ReadExternalProof|WriteExternalProof)' -count=1`; `go test -timeout 20m ./internal/connectors/engine -count=1`; and `go test -timeout 20m ./internal/connectors/certify -count=1`.
 - [x] Generated documentation was regenerated twice and byte-stable: `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors`, plus `pnpm run gen:docs` and `pnpm run gen:website-data` from `website/`.
 - [x] GSD inline `verify-work` and `code-review` fallback completed: no actionable implementation, accounting, path-safety, or secret-redaction finding remains. The external review route is `claude_auto` after the direct PR opens.
-- [ ] PR API base read-back equals `integration/4015-mvp-flat-r1`.
+- [x] PR API base read-back equals `integration/4015-mvp-flat-r1`: `gh-axi pr list -R polymetrics-ai/cli --state open --base integration/4015-mvp-flat-r1 --head fm/cli-generic-evidence-importer-r1` returned only PR #4216; `gh-axi pr view 4216 --full` returned the complete issue-linked body.
 
 ## Local limitation
 
