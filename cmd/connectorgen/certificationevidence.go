@@ -149,6 +149,10 @@ func runReportCertificationEvidence(args []string, stdout, stderr io.Writer) int
 		logln(stderr, "connectorgen certification-evidence: external proof connector does not match report connector")
 		return 1
 	}
+	if proof.RunID != externalProofRunIDForReport(report) {
+		logln(stderr, "connectorgen certification-evidence: external proof does not belong to the completed report run")
+		return 1
+	}
 	bundle, err := engine.Load(defs.FS, options.connector)
 	if err != nil || bundle.Certification == nil || bundle.Certification.EvidenceImport == nil {
 		logln(stderr, "connectorgen certification-evidence: connector does not declare report evidence import bindings")
@@ -160,7 +164,12 @@ func runReportCertificationEvidence(args []string, stdout, stderr io.Writer) int
 		return 1
 	}
 	exchanges := importedHTTPExchanges(proof.HTTPExchanges)
-	written := 0
+	type pendingEvidence struct {
+		path     string
+		identity importedLiveEvidence
+	}
+	pending := make([]pendingEvidence, 0, len(bindings))
+	paths := make(map[string]struct{}, len(bindings))
 	for index, binding := range bindings {
 		if binding.Scope == evidenceScopeFlow {
 			logln(stderr, "connectorgen certification-evidence: flow evidence requires a delivery receipt in addition to an HTTP proof")
@@ -170,6 +179,12 @@ func runReportCertificationEvidence(args []string, stdout, stderr io.Writer) int
 			logf(stderr, "connectorgen certification-evidence: binding %d: %v\n", index+1, err)
 			return 1
 		}
+		output := filepath.Join(options.repoRoot, acceptedEvidenceDirectory, options.recordPrefix+"-"+evidenceBindingSuffix(binding)+".json")
+		if _, exists := paths[output]; exists {
+			logf(stderr, "connectorgen certification-evidence: binding %d resolves to a duplicate evidence path\n", index+1)
+			return 1
+		}
+		paths[output] = struct{}{}
 		identity := importedLiveEvidence{
 			SchemaVersion:          certificationSchemaVersion,
 			Scope:                  binding.Scope,
@@ -189,14 +204,15 @@ func runReportCertificationEvidence(args []string, stdout, stderr io.Writer) int
 			CredentialFingerprints: append([]string(nil), proof.CredentialFingerprints...),
 			HTTPExchanges:          exchanges,
 		}
-		output := filepath.Join(options.repoRoot, acceptedEvidenceDirectory, options.recordPrefix+"-"+evidenceBindingSuffix(binding)+".json")
-		if _, err := writeImportedProofBearingEvidence(options.repoRoot, output, identity); err != nil {
+		pending = append(pending, pendingEvidence{path: output, identity: identity})
+	}
+	for index, record := range pending {
+		if _, err := writeImportedProofBearingEvidence(options.repoRoot, record.path, record.identity); err != nil {
 			logf(stderr, "connectorgen certification-evidence: write binding %d: %v\n", index+1, err)
 			return 1
 		}
-		written++
 	}
-	logf(stdout, "wrote report evidence records: %d\n", written)
+	logf(stdout, "wrote report evidence records: %d\n", len(pending))
 	return 0
 }
 
@@ -239,10 +255,20 @@ func parseReportEvidenceOptions(args []string) (reportEvidenceOptions, error) {
 }
 
 func validateCompletedCertificationEvidenceReport(report certify.Report, connector string) error {
-	if report.Kind != "ConnectorCertification" || report.Connector != connector || !report.Passed || report.CompletedAt.IsZero() {
+	if report.Kind != "ConnectorCertification" || report.Connector != connector || !report.Passed || report.StartedAt.IsZero() || report.CompletedAt.IsZero() {
 		return errors.New("report is not a completed passing connector certification")
 	}
+	if !report.FullParityVerified() {
+		return errors.New("report does not prove the accepted full-parity credential scope")
+	}
 	return nil
+}
+
+// externalProofRunIDForReport mirrors the fresh-child writer's report-bound
+// identifier. It prevents an importer from combining a passing report from
+// one run with a redacted exchange transcript from another run.
+func externalProofRunIDForReport(report certify.Report) string {
+	return fmt.Sprintf("external-%d", report.StartedAt.UTC().UnixNano())
 }
 
 func importedHTTPExchanges(exchanges []certify.ImportedExternalHTTPExchange) []certifiedHTTPExchange {

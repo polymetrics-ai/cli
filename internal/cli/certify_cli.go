@@ -28,8 +28,8 @@ const certificationExternalChildEnv = "PM_CERTIFICATION_EXTERNAL_CHILD"
 func runCertify(ctx context.Context, root string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	positionals := flags.values["_"]
-	if flags.first("direct-read-only") == "true" && flags.first("external-proof") == "true" && flags.first("resume") == "true" {
-		return usageErrorf("pm connectors certify --direct-read-only --external-proof requires a fresh complete read sweep; resumed stages have no current HTTP proof")
+	if flags.first("direct-read-only") == "true" && flags.first("external-proof") == "true" {
+		return usageErrorf("pm connectors certify --direct-read-only cannot be combined with --external-proof")
 	}
 	if flags.first("external-proof") == "true" && os.Getenv(certificationExternalChildEnv) != "1" {
 		if flags.first("all") == "true" || flags.first("sweep") == "true" || len(positionals) != 1 {
@@ -118,7 +118,7 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 		if err != nil {
 			return err
 		}
-		flowReferences, err := certificationFlowRoundTripReferences(rep, opts.DirectReadOnly)
+		flowReferences, err := certificationFlowRoundTripReferences(rep)
 		if err != nil {
 			return fmt.Errorf("certify external proof: %w", err)
 		}
@@ -131,7 +131,7 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 			Stdout:                  rendered.String(),
 			ExitCode:                exitCodeForReport(rep),
 			Passed:                  rep.Passed,
-			FullParity:              externalProofUsesFullParityCredential(rep, opts),
+			FullParity:              rep.FullParityVerified(),
 			PreparedValues:          certificationPreparedValues(opts),
 			HTTPExchanges:           runner.ObservedHTTPExchanges(),
 			FlowRoundTripReferences: flowReferences,
@@ -146,23 +146,11 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 	return exitForReport(rep)
 }
 
-// externalProofUsesFullParityCredential distinguishes a completed full
-// connector certification from a completed, read-only certification surface.
-// Both require the caller's explicit full-parity credential attestation;
-// only the former can make the stronger whole-surface FullParityVerified
-// claim. The report's Passed status remains mandatory in WriteExternalProof.
-func externalProofUsesFullParityCredential(rep certify.Report, opts certify.Options) bool {
-	return opts.RequireFullParity && (rep.FullParityVerified() || opts.DirectReadOnly)
-}
-
 // certificationFlowRoundTripReferences turns the successful in-process flow
 // read-back stages into safe proof references. Accepted external evidence must
 // name the completed plan, preview, execution, and status/read-back steps
 // rather than treating a source-only HTTP transcript as a complete workflow.
-func certificationFlowRoundTripReferences(rep certify.Report, directReadOnly bool) ([]string, error) {
-	if directReadOnly {
-		return nil, nil
-	}
+func certificationFlowRoundTripReferences(rep certify.Report) ([]string, error) {
 	required := []string{"flow_plan", "flow_preview", "flow_run", "flow_status"}
 	passed := make(map[string]bool, len(required))
 	for _, stage := range rep.Stages {
@@ -373,7 +361,7 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 	fullParity := flags.first("full-parity") == "true"
 	writeOnly := flags.first("write-only") == "true"
 	directReadOnly := flags.first("direct-read-only") == "true"
-	write := flags.first("write") == "true" || writeOnly || (fullParity && !directReadOnly)
+	write := flags.first("write") == "true" || fullParity || writeOnly
 	full := flags.first("full") == "true" || fullParity || directReadOnly
 	if writeOnly && fullParity {
 		return certify.Options{}, usageErrorf("--write-only cannot be combined with --full-parity")

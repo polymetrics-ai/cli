@@ -550,11 +550,10 @@ ACTIONS
     --external-proof is an explicit live HTTPS acceptance mode: it builds a
     fresh pm child binary, accepts credentials only from --from-env or
     --value-stdin,
-    and writes a fingerprint-only transcript after a completed
-    credential-attested certification scope. It requires --full-parity and
-    refuses incomplete or truncated exchanges.
-    --full-parity normally enables both the full read sweep and live writes; it refuses
-    the whole-surface parity claim unless every applicable declared write has a production
+    and writes a fingerprint-only transcript after a full-parity run. It
+    requires --full-parity and refuses incomplete or truncated exchanges.
+    --full-parity enables both the full read sweep and live writes; it refuses
+    to claim parity unless every applicable declared write has a production
     mutation, independent read-back, and verified cleanup. Skipped, not_live,
     recovered_unverified, blocked, failed, or leaked actions are never folded
     into a pass result.
@@ -580,9 +579,7 @@ ACTIONS
     --direct-read-only retains preflight, live credential validation, serial
     rate-limit handling, declaration-owned output assertions, and secret scans
     for direct-read candidates, but does not run unrelated stream/ETL stages.
-    It cannot be combined with --write. Combined with --external-proof
-    --full-parity, it creates a read-only proof without running writes; it
-    must be a fresh sweep because resumed rows have no current HTTP transcript.
+    It cannot be combined with --write or --external-proof.
     A complete version-2 ledger reports its ledger
     version, artifact count, endpoint count, and cited endpoint count; invalid
     version-2 provenance fails certification without enabling or changing any
@@ -609,7 +606,6 @@ EXAMPLES
   pm connectors certify sample --full --json
   pm connectors certify github --direct-read-only --resume --from-env token=GITHUB_TOKEN --json
   pm connectors certify github --external-proof --full-parity --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
-  pm connectors certify github --direct-read-only --external-proof --full-parity --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
   pm connectors certify postgres --full --write --stream public.events --config host=DB_HOST --config port=5432 --config database=DB_NAME --config username=DB_USER --config schema=public --config cursor_field=sequence --from-env password=POSTGRES_PASSWORD --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN

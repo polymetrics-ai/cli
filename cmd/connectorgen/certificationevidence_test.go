@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -286,6 +287,120 @@ func TestCertificationEvidenceReportRequiresFreshCompletedStages(t *testing.T) {
 	}
 }
 
+func TestCertificationEvidenceReportRefusesIncompleteBindingsWithoutPartialPublication(t *testing.T) {
+	root := t.TempDir()
+	reportPath := writeCompletedReadEvidenceReport(t, root, "github")
+	var report certify.Report
+	raw, err := os.ReadFile(reportPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal(raw, &report); err != nil {
+		t.Fatal(err)
+	}
+	for index := range report.Stages {
+		if strings.HasPrefix(report.Stages[index].Name, "graphql_") {
+			report.Stages[index].Resumed = true
+			break
+		}
+	}
+	raw, err = json.Marshal(report)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(reportPath, raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	proofPath := writeImportedEvidenceProof(t, root, "github", "cert-evidence-incomplete-binding-canary")
+	var stdout, stderr bytes.Buffer
+	code := run([]string{
+		"certification-evidence", "report", "--connector", "github", "--report", reportPath,
+		"--external-proof", proofPath, "--record-prefix", "github_incomplete_binding", "--repo-root", root,
+	}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), "not freshly completed") {
+		t.Fatalf("incomplete binding importer exit=%d stderr=%q", code, stderr.String())
+	}
+	items, err := loadAcceptedEvidence(root, []string{"github"})
+	if err != nil || len(items) != 0 {
+		t.Fatalf("incomplete binding emitted partial evidence=%#v err=%v", items, err)
+	}
+}
+
+func TestCertificationEvidenceReportRefusesUnverifiedFullParityScope(t *testing.T) {
+	root := t.TempDir()
+	reportPath := writeCompletedReadEvidenceReport(t, root, "github")
+	var report certify.Report
+	raw, err := os.ReadFile(reportPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal(raw, &report); err != nil {
+		t.Fatal(err)
+	}
+	for index := range report.Stages {
+		if report.Stages[index].Name == "full_parity" {
+			report.Stages[index].Passed = false
+			break
+		}
+	}
+	raw, err = json.Marshal(report)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(reportPath, raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	proofPath := writeImportedEvidenceProof(t, root, "github", "cert-evidence-unverified-scope-canary")
+	var stdout, stderr bytes.Buffer
+	code := run([]string{
+		"certification-evidence", "report", "--connector", "github", "--report", reportPath,
+		"--external-proof", proofPath, "--record-prefix", "github_unverified_scope", "--repo-root", root,
+	}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), "does not prove the accepted full-parity credential scope") {
+		t.Fatalf("unverified scope importer exit=%d stderr=%q", code, stderr.String())
+	}
+	items, err := loadAcceptedEvidence(root, []string{"github"})
+	if err != nil || len(items) != 0 {
+		t.Fatalf("unverified scope emitted evidence=%#v err=%v", items, err)
+	}
+}
+
+func TestCertificationEvidenceReportRefusesProofFromDifferentRun(t *testing.T) {
+	root := t.TempDir()
+	reportPath := writeCompletedReadEvidenceReport(t, root, "github")
+	proofPath := writeImportedEvidenceProof(t, root, "github", "cert-evidence-wrong-run-canary")
+	var report certify.Report
+	raw, err := os.ReadFile(reportPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal(raw, &report); err != nil {
+		t.Fatal(err)
+	}
+	report.StartedAt = report.StartedAt.Add(time.Second)
+	raw, err = json.Marshal(report)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(reportPath, raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr bytes.Buffer
+	code := run([]string{
+		"certification-evidence", "report", "--connector", "github", "--report", reportPath,
+		"--external-proof", proofPath, "--record-prefix", "github_wrong_run", "--repo-root", root,
+	}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), "does not belong to the completed report run") {
+		t.Fatalf("wrong-run importer exit=%d stderr=%q", code, stderr.String())
+	}
+	items, err := loadAcceptedEvidence(root, []string{"github"})
+	if err != nil || len(items) != 0 {
+		t.Fatalf("wrong-run proof emitted evidence=%#v err=%v", items, err)
+	}
+}
+
+var evidenceImportTestStartedAt = time.Date(2026, time.August, 17, 0, 0, 0, 0, time.UTC)
+
 func writeCompletedReadEvidenceReport(t *testing.T, root, connector string) string {
 	t.Helper()
 	bundle, err := engine.Load(defs.FS, connector)
@@ -301,9 +416,10 @@ func writeCompletedReadEvidenceReport(t *testing.T, root, connector string) stri
 			stages = append(stages, certify.StageResult{Name: candidate.StageName, Passed: true, Status: "passed"})
 		}
 	}
+	stages = append(stages, certify.StageResult{Name: "full_parity", Passed: true, Status: "passed"})
 	report := certify.Report{
 		Kind: "ConnectorCertification", Connector: connector, Passed: true,
-		CompletedAt: time.Date(2026, time.August, 17, 0, 0, 0, 0, time.UTC), Stages: stages,
+		StartedAt: evidenceImportTestStartedAt, CompletedAt: evidenceImportTestStartedAt.Add(time.Second), Stages: stages,
 	}
 	raw, err := json.Marshal(report)
 	if err != nil {
@@ -320,7 +436,7 @@ func writeImportedEvidenceProof(t *testing.T, root, connector, canary string) st
 	t.Helper()
 	body := []byte(`{"account":"` + canary + `"}`)
 	path, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
-		Connector: connector, RunID: "evidence-import-" + connector, BinarySHA256: strings.Repeat("a", 64),
+		Connector: connector, RunID: fmt.Sprintf("external-%d", evidenceImportTestStartedAt.UTC().UnixNano()), BinarySHA256: strings.Repeat("a", 64),
 		Command: []string{"pm", "connectors", "certify", connector, "--from-env", "token=PM_CERT_TOKEN"},
 		Stdout:  "completed", ExitCode: 0, Passed: true, FullParity: true, PreparedValues: []string{canary},
 		HTTPExchanges: []certify.ObservedHTTPExchange{{

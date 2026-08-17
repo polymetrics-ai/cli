@@ -281,6 +281,36 @@ func TestCertificationApplicableCellWithoutLiveEvidencePreventsCompletion(t *tes
 	}
 }
 
+func TestCertificationGitHubRestReadWithoutAcceptedEvidenceStaysNotLiveTested(t *testing.T) {
+	repoRoot := repoRootForCertificationTest(t)
+	bundles, err := loadSourceBundlesForConnectors(repoRoot, []string{"github"})
+	if err != nil || len(bundles) != 1 {
+		t.Fatalf("loadSourceBundlesForConnectors() = %#v, %v; want GitHub bundle", bundles, err)
+	}
+	sources, err := matrixConnectorSourcesForNames(bundles, []string{"github"})
+	if err != nil || len(sources) != 1 {
+		t.Fatalf("matrixConnectorSourcesForNames() = %#v, %v; want GitHub source", sources, err)
+	}
+	kinds, err := discoverFunctionKinds(repoRoot)
+	if err != nil {
+		t.Fatalf("discoverFunctionKinds() = %v", err)
+	}
+	for _, kind := range kinds {
+		if kind.ID != "operation:rest_read" {
+			continue
+		}
+		cell, err := buildCertificationCell(repoRoot, sources[0], kind, nil)
+		if err != nil {
+			t.Fatalf("buildCertificationCell() = %v", err)
+		}
+		if cell.LiveTested || len(cell.LiveEvidence) != 0 {
+			t.Fatalf("GitHub rest-read cell without accepted evidence = %#v, want not live-tested", cell)
+		}
+		return
+	}
+	t.Fatal("operation:rest_read function kind missing")
+}
+
 func TestCertificationRejectsNotApplicableWithoutNamedReason(t *testing.T) {
 	cell := certificationCell{
 		FunctionKind: "operation:graphql_query",

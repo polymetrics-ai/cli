@@ -271,7 +271,7 @@ func importedExternalHTTPExchange(exchange externalProofHTTPExchange) ImportedEx
 func importedExternalProofFields(fields []externalProofField) []ImportedExternalProofField {
 	result := make([]ImportedExternalProofField, len(fields))
 	for i, field := range fields {
-		result[i] = ImportedExternalProofField{Name: field.Name, Value: field.Value}
+		result[i] = ImportedExternalProofField(field)
 	}
 	return result
 }
