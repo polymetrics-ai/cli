@@ -54,3 +54,15 @@ whole `go test ./...`/`make verify` aggregate because the 552-connector suite
 can be cut off and look like a hang. The changed packages, their CLI consumer,
 and `cmd/connectorgen` (the generated-artifact consumer) were all run above;
 CI carries the full aggregate suite.
+
+## Website generated-data gap closure
+
+- [x] First `pnpm --dir website run gen:docs` diff is limited to the intended
+  required-path-flag documentation changes. It produced no `website/**` diff.
+- [x] Second generator pass and `git diff --exit-code -- website` are clean.
+- [x] Gap-closure evidence is committed and pushed to PR 4209. No website file
+  exists to commit because the repository generator output was already stable.
+
+Both `pnpm --dir website run gen:docs` passes exited 0 and reported 12 pages;
+`git diff --exit-code -- website` then exited 0. The first-pass website diff
+was empty, which proves this regeneration did not absorb unrelated data.

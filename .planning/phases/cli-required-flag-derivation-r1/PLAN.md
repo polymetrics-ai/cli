@@ -18,6 +18,7 @@ Make required REST path parameters and CLI required flags one derived contract f
 4. **Parity evidence:** Run the GitHub surface sweep and repository-wide counterpart before and after regeneration; record GitHub zero and the other-connector delta.
 5. **Unsupported audit:** Enumerate the 27 `unsupported_api` and 23 `unsupported_local` declarations through their command/operation/provider-surface metadata. Emit an evidence report listing all 50 and any contradiction, without changing their classification.
 6. **Verification and review:** Run required local gates, generator and website docs twice for deterministic output, execute the `verify-work` checklist, then perform code review and record findings/dispositions.
+7. **Website generated-data gap:** CI reported stale website generated data after the required-flag documentation change. Run only the repository website generator, inspect the first-pass `website/**` diff for required-flag content only, run it again, and require a clean second-pass website diff before committing the generated file.
 
 ## CLI help/docs/website parity
 

@@ -33,3 +33,10 @@ No unresolved findings.
 This direct-PR branch will rely on the repository's automatic Claude review on
 PR open. No manual `@claude review` request is made for the initial commit;
 the PR body records the pending automatic-review status for the coordinator.
+
+## Website generated-data gap review
+
+After PR 4209's `Website generated data` failure, the repository generator ran
+twice. The first and second passes produced no `website/**` diff, and
+`git diff --exit-code -- website` passed. Therefore no generated website file
+was staged or baselined without an intended required-flag change.
