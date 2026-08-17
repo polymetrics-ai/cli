@@ -34,3 +34,17 @@ The full Go suite and `make verify` are deliberately deferred until the end of t
 - Firstmate decision cleanup path: a subsequent disposable user-Space setup response could not be parsed by the orchestration wrapper, so no resource or command-under-test ran and no accepted evidence was written. The named Space was reconciled through the connector collection and removed with a direct provider DELETE; an independent GET returned HTTP 404. `GITHUB-COPILOT-USER-RESOURCE-FIXTURE-RUN.json` records the sanitized recovery proof.
 - User-resource fixture follow-up: direct-provider resource setup and the connector's declared PM planned-write setup each failed before `copilot-spaces get-resource-for-user` could execute. Both disposable parent Spaces were removed with direct provider DELETE calls and independent HTTP 404 read-backs. The receipt retains only exit codes and response fingerprints; no acceptance record was written.
 - Firstmate supplied the corrected GitHub metadata shape. A new user Space and `free_text` resource with `metadata.name` and `metadata.text` were created. An initial four-read run honestly recorded four 404 `no_object` outcomes because its declaration defaults named stale identifiers; the resolved identifier rerun executed and certified all four reads at HTTP 200, validating each evidence record immediately. Direct provider cleanup was independently read back as HTTP 404. The accepted-record count is 74.
+
+## Slice 1 continuation — manual GSD/TDD verification
+
+- Manual-GSD fallback: this direct-PR evidence-only continuation could not use spawned lifecycle roles; its Red and Green evidence is recorded in `PLAN.md` under “Slice 1 continuation — manual GSD/TDD fallback”.
+- `go run ./cmd/connectorgen certification-matrix --check` — passed after every one of the 36 fresh external-proof-backed records and passed at the final gate: `certification shards are current: connectors=2 capability_complete=0 certified=0`.
+- `go run ./cmd/connectorgen validate` — passed: `552 connector(s) checked, 0 findings`.
+- `go run ./cmd/connectorgen surface-sync --check` — passed: `552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)`.
+- `go test -timeout 20m ./cmd/connectorgen` — passed.
+- `go test -timeout 20m ./internal/cli` — passed.
+- `make docs-check` — passed: `Validated connector docs in docs/connectors`.
+- `make connector-boundary` — passed.
+- `go run ./cmd/agentcontractgen check` — passed.
+- `git diff --check` — passed before commit.
+- Required workflow gate: `bash scripts/verify-gsd-workflow origin/integration/4015-mvp-flat-r1` — pending local re-run after this planning evidence is staged; it is a hard pre-push gate for this continuation.

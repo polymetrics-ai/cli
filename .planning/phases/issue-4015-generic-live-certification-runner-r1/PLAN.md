@@ -52,3 +52,12 @@ Captain direction on 2026-08-17 explicitly widened the runner from one provider 
 - It never writes outside the selected repository's local project or `internal/connectors/certifications/evidence/`; it performs no provider mutation unless a definition-declared candidate explicitly requires it and the caller opts in.
 - Provider output is never persisted raw: every scalar is replaced by a repository-salted HMAC fingerprint before it reaches an evidence record.
 - Captain standing directive, 2026-08-18: the full 1,571-command sweep is the priority. One bounded retry is permitted per obstacle, then the runner records the honest outcome and advances. Direct provider fixture setup/cleanup inside the disposable boundary, agent-derived assertions, and a credential retry are authorised. Only real money, real people, public visibility under the disposable organisation, or a third-party repository/organisation is an escalation; unclassified mutations become `unassessed` and do not stall the batch.
+
+## Slice 1 continuation — manual GSD/TDD fallback
+
+This direct-PR evidence-only continuation changes `internal/connectors/certifications/evidence/` but does not change production behavior. The project lifecycle is recorded inline because the task requires real serial provider execution and the direct-PR brief forbids spawned GSD roles.
+
+- Scope: after PR #4219 merged, rebase onto `origin/integration/4015-mvp-flat-r1`; add only fresh GitHub schema-v2 records backed by external protocol proofs; execute the remaining non-mutating Slice 1 direct-read, binary-download, and ETL paths one at a time; do not run paused direct-write or reverse-ETL commands.
+- Red: the accepted importer rejected the completed direct-read cohort even though 36 operations passed, because 84 legitimate non-passes made the aggregate report fail. It wrote zero records (`importer_all_or_nothing_cohort`, `36 passed / 84 legitimate non-pass / 0 records written`).
+- Green: rerun each passing stage with its own external proof, write the 36 bounded `observed_operations` schema-v2 records, and immediately run `go run ./cmd/connectorgen certification-matrix --check` after each. Record every later non-pass with GitHub's response; leave a successful command uncertified when it does not emit a captured protocol exchange rather than inventing one.
+- Verification and review: the exact final local gates and results are in `VERIFICATION.md`; `bash scripts/verify-gsd-workflow origin/integration/4015-mvp-flat-r1` must pass before pushing the direct PR.
