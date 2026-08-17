@@ -3,7 +3,7 @@
 ## Task Delivery Header
 
 - Issue: Refs #4015 — Production MVP
-- Base branch: integration/4015-mvp-flat-r1 (`9d01ab98a86d0d78cac04c579d548778f8197674` fetched before work)
+- Base branch: integration/4015-mvp-flat-r1 (`cc2bfe6a2252e94ad27630b7fa4857a4d5b07d6e` fetched and rebased before the full-sweep extension)
 - Merges into: integration/4015-mvp-flat-r1 → main
 - Delivery: A direct PR is open against the exact base after the runner has persisted only individually validated live evidence, with its local verification results recorded.
 - Working branch: fm/cli-github-certify-now-r1
@@ -30,6 +30,8 @@ Captain direction on 2026-08-17 explicitly widened the runner from one provider 
 2. **Green runner.** Add one Node script that constructs candidates strictly from the selected definition bundle, captures only in-memory raw output, fingerprints it before persistence, and validates after every accepted record.
 3. **Real provider proof.** Run the selected connector with the disposable credential. Certify each passing operation before attempting another; classify every non-pass with a sanitized provider receipt.
 4. **Portability proof and review.** Run the unchanged script with a second connector argument, complete matrix/check and targeted validations, then perform inline code review.
+5. **Direct never-stall full sweep.** Firstmate decided that `scripts/certify-connector-live.mjs` remains untouched because its declared-direct-read candidate model is deliberately narrower than the captain's full-surface direction. Execute each selected command directly instead: inspect the bundle for command/API shape, invoke the built binary with a point-in-time Keychain credential, assert the observed response, write one schema-v2 accepted-evidence JSON record, and immediately run `certification-matrix --check`. A derived assertion is labelled `agent_derived` in strict-schema evidence provenance; unsupported commands are recorded as `not_implemented`, never executed.
+6. **Bounded live batches.** Resume serially in batches of at most 100 from individual local receipts. Missing fixture inputs, credential mismatch, entitlement, unassessed mutation containment, and provider defects become an immediately persisted non-pass. A provider mutation used solely as fixture setup is directly deleted through the provider API and independently read back before the next command; the CLI delete exit code is never cleanup proof.
 
 ## Executed evidence
 
@@ -49,3 +51,4 @@ Captain direction on 2026-08-17 explicitly widened the runner from one provider 
 - The runner never prints, writes, or includes a credential in argv. The credential is supplied only through an inherited environment variable set by command substitution outside the script.
 - It never writes outside the selected repository's local project or `internal/connectors/certifications/evidence/`; it performs no provider mutation unless a definition-declared candidate explicitly requires it and the caller opts in.
 - Provider output is never persisted raw: every scalar is replaced by a repository-salted HMAC fingerprint before it reaches an evidence record.
+- Captain standing directive, 2026-08-18: the full 1,571-command sweep is the priority. One bounded retry is permitted per obstacle, then the runner records the honest outcome and advances. Direct provider fixture setup/cleanup inside the disposable boundary, agent-derived assertions, and a credential retry are authorised. Only real money, real people, public visibility under the disposable organisation, or a third-party repository/organisation is an escalation; unclassified mutations become `unassessed` and do not stall the batch.
