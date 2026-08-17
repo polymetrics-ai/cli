@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "connector": "freshchat",
+  "integration_type": "api",
+  "run_id": "freshchat-1786992239382-27cc30a6573e",
+  "started_at": "2026-08-17T18:43:59.382Z",
+  "credential_scope": "observed_operations",
+  "records": [
+    {
+      "stage_name": "definition_candidates",
+      "executed": false,
+      "outcome": "missing_fixture",
+      "reason": "connector definitions declare no produced-value certification candidates"
+    }
+  ],
+  "summary": {
+    "executed": 0,
+    "certified": 0,
+    "provider_refused": 0,
+    "missing_fixture": 1,
+    "product_defect": 0
+  },
+  "local_cleanup": {
+    "credential_removed": null
+  },
+  "updated_at": "2026-08-17T18:43:59.383Z"
+}

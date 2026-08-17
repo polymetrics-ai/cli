@@ -1,0 +1,10 @@
+{
+  "phase": "issue-4015-generic-live-certification-runner-r1",
+  "status": "verified_pending_pr",
+  "execution": "inline_manual",
+  "reason": "direct-PR brief forbids spawned roles",
+  "accepted_records": 38,
+  "provider_nonpasses": 80,
+  "missing_fixture_nonpasses": 4,
+  "product_defects": []
+}
