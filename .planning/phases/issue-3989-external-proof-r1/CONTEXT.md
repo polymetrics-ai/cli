@@ -1,6 +1,27 @@
 # #3989 external-binary certification proof context
 
+## Residual delivery addendum — live and OS-level evidence
+
 ## Task Delivery Header
+
+- Issue: Refs #3989 — Certification: add external-binary proof capture and ephemeral fingerprint-first credentials.
+- Base branch: `integration/4015-mvp-flat-r1` (refreshed and rebased at `4967fa2a0`).
+- Merges into: `integration/4015-mvp-flat-r1` → `main`.
+- Delivery: A non-draft PR from `fm/cli-3989-live-proof-residual-r1` is open against the stated base, API-read back after creation, with the residual tests, live smoke, generators, and scoped repository gates recorded.
+- Working branch: `fm/cli-3989-live-proof-residual-r1`.
+- Task: Retain an actually executed disposable-identity GitHub smoke and add the missing opaque-body, OS process-list/temporary-artifact, and single-run fingerprint-semantics evidence without rebuilding #4159's delivered proof boundary.
+- Verification: Run the focused certify and CLI packages; execute the opt-in GitHub smoke with only a disposable token supplied through its environment variable; run `go test -timeout 20m ./cmd/connectorgen`, `go vet ./...`, `go build ./cmd/pm`, all individual `make verify` gates, the docs generator twice for byte stability, and the final diff check.
+
+## Residual Evidence Table
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Live GitHub smoke actually executes | live | The fresh external binary makes at least one authorized GitHub request, creates exactly one sanitized proof, attests its exact process streams, and has no vault or raw token in the project tree. |
+| Opaque request and response canaries are substituted | fake HTTPS provider | A credential canary placed in non-JSON request and response bodies appears only as its same root-salted fingerprint in both serialized proof locations. A local TLS provider is necessary to produce deterministic opaque bytes. |
+| OS-visible command line and temporary paths contain no raw secret | fake HTTPS provider + local OS inspection | While the fresh child is held at a confirmed HTTPS request, `ps` command output and the task's project/build temporary paths contain no token bytes. |
+| One run proves fingerprint semantics | deterministic proof writer | Credential A repeated in several locations uses one marker, credential B uses another marker, and the root salt itself is absent from the serialized proof. |
+
+## Original merged-slice header — historical
 
 - Issue: Closes #3989 — Certification: add external-binary proof capture and ephemeral fingerprint-first credentials.
 - Base branch: `integration/4015-mvp-flat-r1`; delivery PR targets that branch.

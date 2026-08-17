@@ -2,11 +2,16 @@ package certify_test
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -142,6 +147,7 @@ func TestReadExternalProofRefusesAnUnfingerprintedResponseRegression(t *testing.
 			Response: certify.ObservedHTTPResponse{Status: http.StatusOK,
 				Body: certify.ObservedBody{Bytes: []byte(`{"account":"` + canary + `"}`), OriginalBytes: len(`{"account":"` + canary + `"}`), Complete: true}},
 		}},
+		FlowRoundTripReferences: []string{"flow_plan", "flow_preview", "flow_run", "flow_status"},
 	})
 	if err != nil {
 		t.Fatalf("WriteExternalProof() = %v", err)
@@ -169,6 +175,241 @@ func TestReadExternalProofRefusesAnUnfingerprintedResponseRegression(t *testing.
 	}
 	if _, err := certify.ReadExternalProof(root, proofPath); err == nil || !strings.Contains(err.Error(), "unredacted") {
 		t.Fatalf("ReadExternalProof() error = %v, want an unredacted response rejection", err)
+	}
+}
+
+func TestWriteExternalProofPublishesBoundedObservedOperations(t *testing.T) {
+	const credential = "cert-canary-bounded-scope-3989"
+	root := t.TempDir()
+
+	proofPath, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+		Connector:      "sample",
+		RunID:          "bounded-observed-operations-3989",
+		BinarySHA256:   strings.Repeat("b", 64),
+		Command:        []string{"pm", "connectors", "certify", "sample", "--from-env", "token=PM_CERT_TOKEN"},
+		Stdout:         "completed provider observation before certification failure\n",
+		ExitCode:       1,
+		Passed:         false,
+		FullParity:     false,
+		PreparedValues: []string{credential},
+		HTTPExchanges: []certify.ObservedHTTPExchange{{
+			Request: certify.ObservedHTTPRequest{
+				Method:  http.MethodGet,
+				Target:  "https://provider.example.test/records",
+				Headers: map[string][]string{"Authorization": {"Bearer " + credential}},
+				Body:    certify.ObservedBody{Complete: true},
+			},
+			Response: certify.ObservedHTTPResponse{
+				Status: http.StatusOK,
+				Body:   certify.ObservedBody{Bytes: []byte(`{"result":"authenticated"}`), OriginalBytes: len(`{"result":"authenticated"}`), Complete: true},
+			},
+		}},
+	})
+	if err != nil {
+		t.Fatalf("write bounded external proof: %v", err)
+	}
+	raw, err := os.ReadFile(proofPath)
+	if err != nil {
+		t.Fatalf("read bounded external proof: %v", err)
+	}
+	if bytes.Contains(raw, []byte(credential)) {
+		t.Fatal("bounded external proof retained a planted credential")
+	}
+	var proof struct {
+		Version                 int      `json:"version"`
+		CredentialScope         string   `json:"credential_scope"`
+		CredentialScopeProof    string   `json:"credential_scope_proof"`
+		FlowRoundTripReferences []string `json:"flow_round_trip_references"`
+		Process                 struct {
+			ExitCode int `json:"exit_code"`
+		} `json:"process"`
+	}
+	if err := json.Unmarshal(raw, &proof); err != nil {
+		t.Fatalf("parse bounded external proof: %v", err)
+	}
+	if proof.Version != 2 || proof.CredentialScope != "observed_operations" || proof.CredentialScopeProof != "protocol_exchanges" {
+		t.Fatalf("bounded external proof claim = version:%d scope:%q proof:%q, want schema-v2 observed operations", proof.Version, proof.CredentialScope, proof.CredentialScopeProof)
+	}
+	if proof.Process.ExitCode != 1 {
+		t.Fatalf("bounded external proof exit code = %d, want the completed certification failure", proof.Process.ExitCode)
+	}
+	if len(proof.FlowRoundTripReferences) != 0 {
+		t.Fatalf("bounded observed-operations proof retained full-parity flow references: %v", proof.FlowRoundTripReferences)
+	}
+}
+
+func TestWriteExternalProofRefusesBoundedClaimWithoutSuccessfulProviderResponse(t *testing.T) {
+	const credential = "cert-canary-no-provider-success-3989"
+	root := t.TempDir()
+
+	_, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+		Connector:      "sample",
+		RunID:          "no-provider-success-3989",
+		BinarySHA256:   strings.Repeat("c", 64),
+		Command:        []string{"pm", "connectors", "certify", "sample", "--from-env", "token=PM_CERT_TOKEN"},
+		Stdout:         "provider returned an authorization failure\n",
+		ExitCode:       1,
+		PreparedValues: []string{credential},
+		HTTPExchanges: []certify.ObservedHTTPExchange{{
+			Request: certify.ObservedHTTPRequest{
+				Method:  http.MethodGet,
+				Target:  "https://provider.example.test/records",
+				Headers: map[string][]string{"Authorization": {"Bearer " + credential}},
+				Body:    certify.ObservedBody{Complete: true},
+			},
+			Response: certify.ObservedHTTPResponse{
+				Status: http.StatusUnauthorized,
+				Body:   certify.ObservedBody{Bytes: []byte(`{"error":"unauthorized"}`), OriginalBytes: len(`{"error":"unauthorized"}`), Complete: true},
+			},
+		}},
+	})
+	if err == nil || !strings.Contains(err.Error(), "observed successful provider response") {
+		t.Fatalf("write bounded proof error = %v, want missing successful provider response", err)
+	}
+	if _, statErr := os.Stat(filepath.Join(root, ".polymetrics", "certifications")); !os.IsNotExist(statErr) {
+		t.Fatalf("refused bounded proof wrote certification material: stat error = %v", statErr)
+	}
+}
+
+func TestWriteExternalProofFingerprintsOpaqueBodiesAndSeparatesCredentials(t *testing.T) {
+	const credentialA = "cert-canary-opaque-a-3989"
+	const credentialB = "cert-canary-opaque-b-3989"
+	root := t.TempDir()
+
+	proofPath, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+		Connector:      "sample",
+		RunID:          "opaque-fingerprint-semantics-3989",
+		BinarySHA256:   strings.Repeat("f", 64),
+		Command:        []string{"pm", "connectors", "certify", "sample", "--from-env", "token=PM_CERT_TOKEN"},
+		ExitCode:       0,
+		Passed:         true,
+		FullParity:     true,
+		PreparedValues: []string{credentialA, credentialB},
+		HTTPExchanges: []certify.ObservedHTTPExchange{{
+			Request: certify.ObservedHTTPRequest{
+				Method: http.MethodPost,
+				Target: "https://proof.invalid/opaque",
+				Body: certify.ObservedBody{
+					Bytes:         []byte("opaque-request=" + credentialA + "&alternate=" + credentialB + "&repeat=" + credentialA),
+					OriginalBytes: len("opaque-request=" + credentialA + "&alternate=" + credentialB + "&repeat=" + credentialA),
+					Complete:      true,
+				},
+			},
+			Response: certify.ObservedHTTPResponse{
+				Status: http.StatusOK,
+				Body: certify.ObservedBody{
+					Bytes:         []byte("opaque-response=" + credentialB + "&echo=" + credentialA),
+					OriginalBytes: len("opaque-response=" + credentialB + "&echo=" + credentialA),
+					Complete:      true,
+				},
+			},
+		}},
+		FlowRoundTripReferences: []string{"flow_plan", "flow_preview", "flow_run", "flow_status"},
+	})
+	if err != nil {
+		t.Fatalf("write opaque proof: %v", err)
+	}
+	raw, err := os.ReadFile(proofPath)
+	if err != nil {
+		t.Fatalf("read opaque proof: %v", err)
+	}
+	salt, err := os.ReadFile(filepath.Join(root, ".polymetrics", "certifications", ".external-proof-salt"))
+	if err != nil {
+		t.Fatalf("read root proof salt: %v", err)
+	}
+
+	assertOpaqueExternalProofFingerprintSemantics(t, raw, credentialA, credentialB, salt)
+}
+
+func assertOpaqueExternalProofFingerprintSemantics(t *testing.T, raw []byte, credentialA, credentialB string, salt []byte) {
+	t.Helper()
+	for _, forbidden := range [][]byte{[]byte(credentialA), []byte(credentialB), salt} {
+		if bytes.Contains(raw, forbidden) {
+			t.Fatal("opaque proof retained raw credential material or its repository salt")
+		}
+	}
+
+	var proof struct {
+		CredentialFingerprints []string `json:"credential_fingerprints"`
+		HTTPExchanges          []struct {
+			Request struct {
+				Body struct {
+					Encoding string `json:"encoding"`
+					Value    string `json:"value"`
+				} `json:"body"`
+			} `json:"request"`
+			Response struct {
+				Body struct {
+					Encoding string `json:"encoding"`
+					Value    string `json:"value"`
+				} `json:"body"`
+			} `json:"response"`
+		} `json:"http_exchanges"`
+	}
+	if err := json.Unmarshal(raw, &proof); err != nil {
+		t.Fatalf("parse opaque proof: %v", err)
+	}
+	if len(proof.HTTPExchanges) != 1 {
+		t.Fatalf("opaque proof exchanges = %d, want 1", len(proof.HTTPExchanges))
+	}
+
+	fingerprintA := externalProofTestFingerprint(salt, credentialA)
+	fingerprintB := externalProofTestFingerprint(salt, credentialB)
+	if fingerprintA == fingerprintB {
+		t.Fatal("distinct credential values produced one fingerprint")
+	}
+	fingerprints := make(map[string]bool, len(proof.CredentialFingerprints))
+	for _, fingerprint := range proof.CredentialFingerprints {
+		fingerprints[fingerprint] = true
+	}
+	if len(fingerprints) != 2 || !fingerprints[fingerprintA] || !fingerprints[fingerprintB] {
+		t.Fatalf("credential fingerprints do not retain distinct A and B markers: %v", proof.CredentialFingerprints)
+	}
+
+	exchange := proof.HTTPExchanges[0]
+	if exchange.Request.Body.Encoding != "opaque" || exchange.Response.Body.Encoding != "opaque" {
+		t.Fatalf("opaque body encodings = request:%q response:%q, want opaque/opaque", exchange.Request.Body.Encoding, exchange.Response.Body.Encoding)
+	}
+	if got := strings.Count(exchange.Request.Body.Value, fingerprintA); got != 2 {
+		t.Fatalf("opaque request repeated credential A markers = %d, want 2", got)
+	}
+	if got := strings.Count(exchange.Request.Body.Value, fingerprintB); got != 1 {
+		t.Fatalf("opaque request credential B markers = %d, want 1", got)
+	}
+	if got := strings.Count(exchange.Response.Body.Value, fingerprintA); got != 1 {
+		t.Fatalf("opaque response credential A markers = %d, want 1", got)
+	}
+	if got := strings.Count(exchange.Response.Body.Value, fingerprintB); got != 1 {
+		t.Fatalf("opaque response credential B markers = %d, want 1", got)
+	}
+}
+
+func externalProofTestFingerprint(salt []byte, value string) string {
+	mac := hmac.New(sha256.New, salt)
+	_, _ = mac.Write([]byte(value))
+	return "{{pmcertfp:v1:" + hex.EncodeToString(mac.Sum(nil)) + "}}"
+}
+
+func TestRedactExternalProofDiagnosticFingerprintsSecrets(t *testing.T) {
+	const credential = "cert-canary-diagnostic-3989"
+	diagnostic, err := certify.RedactExternalProofDiagnostic(
+		"github provider rejected credential="+credential+
+			" encoded="+base64.StdEncoding.EncodeToString([]byte(credential))+
+			" query="+url.QueryEscape(credential)+
+			" because repository visibility is restricted",
+		[]string{credential},
+	)
+	if err != nil {
+		t.Fatalf("redact external-proof diagnostic: %v", err)
+	}
+	if len(certify.ScanForSecrets(diagnostic, []string{credential})) != 0 {
+		t.Fatal("fingerprinted diagnostic retained a planted secret form")
+	}
+	if !strings.Contains(diagnostic, "github provider rejected") || !strings.Contains(diagnostic, "repository visibility is restricted") {
+		t.Fatal("fingerprinted diagnostic did not retain its readable provider reason")
+	}
+	if strings.Count(diagnostic, "{{pmcertfp:v1:") != 3 {
+		t.Fatal("fingerprinted diagnostic did not replace every planted secret form")
 	}
 }
 

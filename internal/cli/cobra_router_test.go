@@ -327,7 +327,15 @@ func TestEveryLegacyLeafHelpIsExecutable(t *testing.T) {
 
 func TestEveryDynamicConnectorLeafHelpRendersWithoutDispatch(t *testing.T) {
 	registry := appRegistry()
-	checked := 0
+	type helpCase struct {
+		connectorName string
+		connector     connectors.Connector
+		surface       *connectors.CommandSurface
+		commandPath   string
+		path          []string
+		helpFlag      string
+	}
+	var cases []helpCase
 	for _, meta := range registry.List() {
 		connector, ok := registry.Get(meta.Name)
 		if !ok {
@@ -345,24 +353,36 @@ func TestEveryDynamicConnectorLeafHelpRendersWithoutDispatch(t *testing.T) {
 				continue
 			}
 			for _, helpFlag := range []string{"--help", "-h"} {
-				args := append(append([]string(nil), path...), helpFlag)
-				if !connectorHelpRequested(args, surface) {
-					t.Errorf("connector %q command %q did not resolve %s before dispatch", meta.Name, command.Path, helpFlag)
-					continue
-				}
-				gotCommand, manual := renderConnectorCommandManual(meta.Name, connector, surface, args)
-				wantCommand := meta.Name + " " + command.Path
-				if gotCommand != wantCommand || !strings.Contains(manual, "NAME\n") {
-					t.Errorf("connector %q command %q %s manual = %q / %q, want %q with NAME section", meta.Name, command.Path, helpFlag, gotCommand, manual, wantCommand)
-				}
-				checked++
+				cases = append(cases, helpCase{
+					connectorName: meta.Name,
+					connector:     connector,
+					surface:       surface,
+					commandPath:   command.Path,
+					path:          append([]string(nil), path...),
+					helpFlag:      helpFlag,
+				})
 			}
 		}
 	}
-	if checked == 0 {
+	if len(cases) == 0 {
 		t.Fatal("no dynamic connector commands were checked")
 	}
-	t.Logf("checked %d dynamic connector command help variants", checked)
+	for _, tc := range cases {
+		tc := tc
+		t.Run(strings.Join([]string{tc.connectorName, tc.commandPath, tc.helpFlag}, " "), func(t *testing.T) {
+			t.Parallel()
+			args := append(append([]string(nil), tc.path...), tc.helpFlag)
+			if !connectorHelpRequested(args, tc.surface) {
+				t.Fatalf("connector %q command %q did not resolve %s before dispatch", tc.connectorName, tc.commandPath, tc.helpFlag)
+			}
+			gotCommand, manual := renderConnectorCommandManual(tc.connectorName, tc.connector, tc.surface, args)
+			wantCommand := tc.connectorName + " " + tc.commandPath
+			if gotCommand != wantCommand || !strings.Contains(manual, "NAME\n") {
+				t.Fatalf("connector %q command %q %s manual = %q / %q, want %q with NAME section", tc.connectorName, tc.commandPath, tc.helpFlag, gotCommand, manual, wantCommand)
+			}
+		})
+	}
+	t.Logf("checked %d dynamic connector command help variants", len(cases))
 }
 
 func TestLeafHelpDoesNotMaskInvalidCommandsOrApprovalCarrierSyntax(t *testing.T) {

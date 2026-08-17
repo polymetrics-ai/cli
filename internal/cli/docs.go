@@ -405,7 +405,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
-  pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof (--full-parity | --direct-read-only)] [--from-env field=ENV | --value-stdin field] [--json]
+  pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof] [--full-parity] [--from-env field=ENV | --value-stdin field] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -549,11 +549,13 @@ ACTIONS
     CERTIFIED status; only proof-bearing certification records can do that.
     --external-proof is an explicit live HTTPS acceptance mode: it builds a
     fresh pm child binary, accepts credentials only from --from-env or
-    --value-stdin,
-    and writes a fingerprint-only transcript after a full-parity or bounded
-    direct-read-only run. It refuses incomplete or truncated exchanges. A
-    direct-read proof certifies only its observed operations; it never claims
-    broader credential scope or full parity.
+    --value-stdin, and writes a fingerprint-only transcript from complete,
+    bounded exchanges. Its version-2 credential scope is derived by the proof
+    writer: a verified --full-parity run claims full_parity; otherwise it
+    claims only observed_operations with protocol_exchanges as its proof. The
+    artifact preserves the actual certification exit and requires at least one
+    observed successful provider response; it refuses incomplete or truncated
+    exchanges.
     --full-parity enables both the full read sweep and live writes; it refuses
     to claim parity unless every applicable declared write has a production
     mutation, independent read-back, and verified cleanup. Skipped, not_live,

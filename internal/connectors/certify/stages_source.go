@@ -266,6 +266,14 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 			secretFields[field] = v
 		}
 	}
+	if r.opts.RuntimeObservation != nil {
+		if err := r.opts.RuntimeObservation(RuntimeObservationInput{
+			Workdir:      root,
+			SecretValues: append([]string(nil), secretValues...),
+		}); err != nil {
+			return Report{}, fmt.Errorf("certify: capture external runtime observation: %w", err)
+		}
+	}
 	ephemeralCredentials, err := app.BeginCertificationEphemeralCredentials(root,
 		app.EphemeralCredential{
 			Name:      sourceCredentialName,
@@ -496,9 +504,41 @@ func (rc *runContext) expectKind(stageName, kind string) string {
 func assertKind(rc *runContext, stageName string, res CLIResult, wantKind string, wantExit int) (bool, string) {
 	kind := rc.expectKind(stageName, wantKind)
 	if err := rc.harness.MustKind(res, kind, wantExit); err != nil {
-		return false, err.Error()
+		return false, stageErrorWithSafeCLIEnvelope(err.Error(), res, rc.harness.secrets)
 	}
 	return true, ""
+}
+
+// safeCLIErrorEnvelopeDiagnostic retains the structured reason from a CLI
+// error envelope only after replacing every prepared credential form with the
+// external-proof fingerprint marker. The result may be stored in a stage
+// error, unlike raw stdout/stderr which remain in-memory redaction inputs.
+func safeCLIErrorEnvelopeDiagnostic(res CLIResult, secrets []string) (string, error) {
+	errEnvelope, ok := res.Envelope["error"].(map[string]any)
+	if !ok {
+		return "", nil
+	}
+	message, _ := errEnvelope["message"].(string)
+	if strings.TrimSpace(message) == "" {
+		return "", nil
+	}
+	category, _ := errEnvelope["category"].(string)
+	code, _ := errEnvelope["code"].(string)
+	return RedactExternalProofDiagnostic(
+		fmt.Sprintf("cli_error category=%q code=%q message=%s", category, code, message),
+		secrets,
+	)
+}
+
+func stageErrorWithSafeCLIEnvelope(errMsg string, res CLIResult, secrets []string) string {
+	diagnostic, err := safeCLIErrorEnvelopeDiagnostic(res, secrets)
+	if err != nil {
+		return errMsg + "; cli error diagnostic unavailable after credential redaction"
+	}
+	if diagnostic == "" {
+		return errMsg
+	}
+	return errMsg + "; " + diagnostic
 }
 
 // assertTypedPreIORefusal verifies the serialized CLI shape of a typed
