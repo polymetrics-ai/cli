@@ -138,8 +138,9 @@ func TestGoldenTranscripts(t *testing.T) {
 	t.Setenv("PM_TEMPORAL_ADDR", "")
 
 	path := filepath.Join("testdata", "golden_transcripts.json")
+	selected := selectedGoldenTranscriptNames(t)
 	if os.Getenv("POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS") == "1" {
-		writeGoldenTranscripts(t, path)
+		writeGoldenTranscripts(t, path, selected)
 	}
 
 	content, err := os.ReadFile(path)
@@ -157,6 +158,11 @@ func TestGoldenTranscripts(t *testing.T) {
 
 	for _, tt := range transcripts {
 		t.Run(tt.Name, func(t *testing.T) {
+			if selected != nil {
+				if _, ok := selected[tt.Name]; !ok {
+					t.Skip("not selected by POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES")
+				}
+			}
 			got := runTranscript(tt.Args)
 			if got.ExitCode != tt.ExitCode {
 				t.Fatalf("exit code = %d, want %d\nstdout=%s\nstderr=%s", got.ExitCode, tt.ExitCode, got.Stdout, got.Stderr)
@@ -172,6 +178,31 @@ func TestGoldenTranscripts(t *testing.T) {
 			}
 		})
 	}
+}
+
+func selectedGoldenTranscriptNames(t *testing.T) map[string]struct{} {
+	t.Helper()
+	raw := os.Getenv("POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES")
+	if raw == "" {
+		return nil
+	}
+
+	known := make(map[string]struct{}, len(goldenTranscriptInputs))
+	for _, input := range goldenTranscriptInputs {
+		known[input.Name] = struct{}{}
+	}
+	selected := make(map[string]struct{})
+	for _, name := range strings.Split(raw, ",") {
+		name = strings.TrimSpace(name)
+		if name == "" {
+			t.Fatalf("POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES contains an empty transcript name")
+		}
+		if _, ok := known[name]; !ok {
+			t.Fatalf("POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES selects unknown transcript %q", name)
+		}
+		selected[name] = struct{}{}
+	}
+	return selected
 }
 
 func TestGoldenDocsGenerateMatchesTrackedCLIManuals(t *testing.T) {
@@ -228,14 +259,38 @@ func assertGoldenInputsMatchFixture(t *testing.T, transcripts []goldenTranscript
 	}
 }
 
-func writeGoldenTranscripts(t *testing.T, path string) {
+func writeGoldenTranscripts(t *testing.T, path string, selected map[string]struct{}) {
 	t.Helper()
 	transcripts := make([]goldenTranscript, 0, len(goldenTranscriptInputs))
+	if selected != nil {
+		content, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read existing golden transcripts for targeted update: %v", err)
+		}
+		if err := json.Unmarshal(content, &transcripts); err != nil {
+			t.Fatalf("parse existing golden transcripts for targeted update: %v", err)
+		}
+		assertGoldenInputsMatchFixture(t, transcripts)
+	}
 	for _, input := range goldenTranscriptInputs {
+		if selected != nil {
+			if _, ok := selected[input.Name]; !ok {
+				continue
+			}
+		}
 		got := runTranscript(input.Args)
 		got.Name = input.Name
 		got.Args = append(make([]string, 0, len(input.Args)), input.Args...)
-		transcripts = append(transcripts, got)
+		if selected == nil {
+			transcripts = append(transcripts, got)
+			continue
+		}
+		for index, transcript := range transcripts {
+			if transcript.Name == input.Name {
+				transcripts[index] = got
+				break
+			}
+		}
 	}
 	content, err := json.MarshalIndent(transcripts, "", "  ")
 	if err != nil {

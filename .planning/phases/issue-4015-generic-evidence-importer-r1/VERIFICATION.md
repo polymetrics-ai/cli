@@ -14,6 +14,9 @@
 - [x] Generated documentation was regenerated twice and byte-stable: `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors`, plus `pnpm run gen:docs` and `pnpm run gen:website-data` from `website/`.
 - [x] GSD inline `verify-work` and `code-review` fallback completed: no actionable implementation, accounting, path-safety, or secret-redaction finding remains. The external review route is `claude_auto` after the direct PR opens.
 - [x] PR API base read-back equals `integration/4015-mvp-flat-r1`: `gh-axi pr list -R polymetrics-ai/cli --state open --base integration/4015-mvp-flat-r1 --head fm/cli-generic-evidence-importer-r1` returned only PR #4216; `gh-axi pr view 4216 --full` returned the complete issue-linked body.
+- [x] Red: newest Verify job `95429332235` identified four stale golden transcript entries, not a harness-cost regression. The package completed in 1082 seconds, below the known 1200-second ceiling.
+- [x] Green: supported targeted regeneration updated exactly those four entries. The second generator pass was byte-stable at SHA-256 `ffe235d7ae35274de4de5d61bbf3d01301e25106efbd5d9349a938f76dc79045`, and the selected normal test passed. The complete local transcript corpus timed out after its unchanged 20-minute cap, so the PR's newest Verify run remains the complete-corpus authority.
+- [ ] Pending CI: newest Verify run after the golden fixture update must complete successfully. No local timeout or test bound was changed.
 
 ## Credential-rotation limitation
 
