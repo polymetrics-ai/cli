@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -148,6 +150,186 @@ func appChangeCaptureDescriptor() connectors.ChangefeedDescriptor {
 		Checkpoint: &connectors.ChangefeedCheckpoint{Kind: "lsn", Keys: []string{"lsn"}, CommitAfter: "downstream_ack", OnInvalid: "resnapshot_required"},
 		Delivery:   &connectors.ChangefeedDelivery{Ordering: "source_transaction_order", Duplicates: "at_least_once", Deletes: "tombstone", DedupeKey: []string{"lsn"}},
 		Streams:    []string{"runtime_catalog"},
+	}
+}
+
+// TestDeclaredChangeCaptureRoutesRefuseBeforeIO enumerates the current four
+// production route cells rather than treating the dispatcher guard as a proxy
+// for their declaration-level truth. R3 deliberately remains a refusal: the
+// separately proven R4 route is PostgreSQL CDC -> connection warehouse ->
+// PostgreSQL history target, never a direct CDC destination mode.
+func TestDeclaredChangeCaptureRoutesRefuseBeforeIO(t *testing.T) {
+	tests := []struct {
+		name        string
+		source      string
+		destination string
+		reason      string
+	}{
+		{
+			name:        "R1 GitHub CDC to GitHub",
+			source:      "github",
+			destination: "github",
+			reason:      "change capture requires a connection-owned local warehouse destination",
+		},
+		{
+			name:        "R2 GitHub CDC to PostgreSQL",
+			source:      "github",
+			destination: "postgres",
+			reason:      "change capture requires a connection-owned local warehouse destination",
+		},
+		{
+			name:        "R3 PostgreSQL CDC to GitHub",
+			source:      "postgres",
+			destination: "github",
+			reason:      "change capture requires a connection-owned local warehouse destination",
+		},
+		{
+			name:        "R4 PostgreSQL CDC to PostgreSQL",
+			source:      "postgres",
+			destination: "postgres",
+			reason:      "change capture requires a connection-owned local warehouse destination",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctx := context.Background()
+			root := t.TempDir()
+			if err := InitProject(root); err != nil {
+				t.Fatal(err)
+			}
+			a, err := Open(root)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			source := newDeclaredChangeCaptureIOProbe(t, tt.source)
+			destination := source
+			if tt.destination != tt.source {
+				destination = newDeclaredChangeCaptureIOProbe(t, tt.destination)
+			}
+			registry := connectors.NewEmptyRegistry()
+			registry.Register(source)
+			if destination != source {
+				registry.Register(destination)
+			}
+			a.registry = registry
+
+			if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "source", Connector: source.Name()}); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "destination", Connector: destination.Name()}); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := a.CreateConnection(ctx, CreateConnectionRequest{
+				Name:        "declared_change_capture_refusal",
+				Source:      EndpointConfig{Connector: source.Name(), Credential: "source"},
+				Destination: EndpointConfig{Connector: destination.Name(), Credential: "destination"},
+				Streams: map[string]StreamConfig{
+					"records": {
+						SyncMode:         string(synccontract.ModeChangeCapture),
+						PrimaryKey:       []string{"id"},
+						DestinationTable: "records",
+					},
+				},
+			}); err != nil {
+				t.Fatal(err)
+			}
+			// Connection creation discovers a source catalog. The assertion is
+			// specifically that executing the refused route adds no I/O.
+			source.resetIO()
+			if destination != source {
+				destination.resetIO()
+			}
+
+			_, err = a.RunETL(ctx, RunETLRequest{Connection: "declared_change_capture_refusal", Stream: "records", BatchSize: 1})
+			var modeErr *synccontract.ModeNotExecutableError
+			if !errors.As(err, &modeErr) || modeErr.Mode != synccontract.ModeChangeCapture || modeErr.Reason != tt.reason {
+				t.Fatalf("RunETL() error = %T %v, want change_capture ModeNotExecutableError reason %q", err, err, tt.reason)
+			}
+			source.assertNoIO(t)
+			if destination != source {
+				destination.assertNoIO(t)
+			}
+		})
+	}
+}
+
+// declaredChangeCaptureIOProbe preserves the production bundle definition
+// while making every runtime connector operation observable. It lets this
+// matrix prove the pre-I/O boundary without calling an API or database.
+type declaredChangeCaptureIOProbe struct {
+	name       string
+	metadata   connectors.Metadata
+	definition connectors.Definition
+	checks     int
+	catalogs   int
+	reads      int
+	cdcReads   int
+	writes     int
+}
+
+func newDeclaredChangeCaptureIOProbe(t *testing.T, name string) *declaredChangeCaptureIOProbe {
+	t.Helper()
+	bundle, err := engine.Load(defs.FS, name)
+	if err != nil {
+		t.Fatalf("load declared %s bundle: %v", name, err)
+	}
+	declared := engine.New(bundle, nil)
+	definition := declared.Definition()
+	if definition.Name != name {
+		t.Fatalf("declared connector identity = %q, want %q", definition.Name, name)
+	}
+	return &declaredChangeCaptureIOProbe{name: name, metadata: declared.Metadata(), definition: definition}
+}
+
+func (c *declaredChangeCaptureIOProbe) Name() string                  { return c.name }
+func (c *declaredChangeCaptureIOProbe) Metadata() connectors.Metadata { return c.metadata }
+func (c *declaredChangeCaptureIOProbe) Definition() connectors.Definition {
+	return c.definition
+}
+func (c *declaredChangeCaptureIOProbe) Check(context.Context, connectors.RuntimeConfig) error {
+	c.checks++
+	return errors.New("declared change-capture refusal probe Check must not be called")
+}
+func (c *declaredChangeCaptureIOProbe) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
+	c.catalogs++
+	return connectors.Catalog{Connector: c.Name(), Streams: []connectors.Stream{{Name: "records", PrimaryKey: []string{"id"}}}}, nil
+}
+func (c *declaredChangeCaptureIOProbe) Read(context.Context, connectors.ReadRequest, func(connectors.Record) error) error {
+	c.reads++
+	return errors.New("declared change-capture refusal probe Read must not be called")
+}
+func (c *declaredChangeCaptureIOProbe) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
+	c.writes++
+	return connectors.WriteResult{}, errors.New("declared change-capture refusal probe Write must not be called")
+}
+func (c *declaredChangeCaptureIOProbe) ChangefeedExecutorDescriptor() connectors.ChangefeedExecutorDescriptor {
+	if c.definition.Changefeed == nil {
+		return connectors.ChangefeedExecutorDescriptor{}
+	}
+	return connectors.ChangefeedExecutorDescriptor{
+		Status:     c.definition.Changefeed.Status,
+		Mechanism:  c.definition.Changefeed.Mechanism,
+		Executor:   *c.definition.Changefeed.Executor,
+		Checkpoint: *c.definition.Changefeed.Checkpoint,
+	}
+}
+func (c *declaredChangeCaptureIOProbe) ReadCDC(context.Context, connectors.CDCReadRequest, func(connectors.CDCEvent) error) error {
+	c.cdcReads++
+	return errors.New("declared change-capture refusal probe ReadCDC must not be called")
+}
+func (c *declaredChangeCaptureIOProbe) resetIO() {
+	c.checks = 0
+	c.catalogs = 0
+	c.reads = 0
+	c.cdcReads = 0
+	c.writes = 0
+}
+func (c *declaredChangeCaptureIOProbe) assertNoIO(t *testing.T) {
+	t.Helper()
+	if c.checks != 0 || c.catalogs != 0 || c.reads != 0 || c.cdcReads != 0 || c.writes != 0 {
+		t.Fatalf("declared connector %q I/O calls check=%d catalog=%d read=%d read_cdc=%d write=%d, want zero", c.name, c.checks, c.catalogs, c.reads, c.cdcReads, c.writes)
 	}
 }
 
