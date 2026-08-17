@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_orgs_list_failed_invitations",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:18:54.676Z",
+  "run_id": "github-1787001534678-agent_derived_orgs_list_failed_invitations",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "34237212e88fc3db2aa84fa8e82a2d6862db5632f260be2dc85e9d087197c56a",
+    "pm_command_fingerprint": "{{pmcertfp:v1:0a599acc7db7cf11dda35f76123768dccec645b4c1f21f778f126291bc73b9b8}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:32f6f2d5e166b54dccabc488e484d3e33f99c7af704b0dcbfcda11d1671ff508}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_orgs_list_failed_invitations",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:e433b9848f175abffe3ccdb11b4a9df2fa610cac12e3c566e0d834f96d56405b}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [],
+            "original_bytes": 2,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
