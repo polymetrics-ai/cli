@@ -9,14 +9,14 @@
 - Merges into: `integration/4015-mvp-flat-r1` → `main`.
 - Delivery: Commit the focused residual evidence and GSD records, push `fm/cli-3989-live-proof-residual-r1`, open a Conventional Commit PR to the exact base, then API-read the PR base.
 - Working branch: `fm/cli-3989-live-proof-residual-r1`.
-- Task: Execute the existing opt-in live GitHub proof with its disposable identity and extend only its test evidence for opaque body substitution, OS command-list/temporary paths, and same-run two-credential/root-salt semantics.
+- Task: Execute the existing opt-in live GitHub proof with its disposable identity and extend only its test evidence for opaque body substitution, OS command-list/temporary paths, and same-run two-credential/root-salt semantics. Maintain the aggregate `internal/cli` package below its fixed 20-minute capacity by parallelizing only independent dynamic-help assertions; no test coverage is sampled, deleted, or moved behind an opt-in.
 - Verification: `go test -timeout 20m ./internal/connectors/certify`, `go test -timeout 20m ./internal/cli`, the explicitly credentialed live smoke, `go test -timeout 20m ./cmd/connectorgen`, `go vet ./...`, `go build ./cmd/pm`, each `make verify` constituent gate, website docs generation twice, `git diff --check`, and automated review after PR creation.
 
 ### Required GSD and skills
 
 - Generated inline prompts: `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` for `issue-3989-external-proof-r1`.
 - Manual fallback: the phase is not registered in the GSD roadmap and the canonical contract forbids role spawning for this single-worker issue. The generated sequence is completed inline in these artifacts.
-- Skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, and `golang-structs-interfaces`.
+- Skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-concurrency`, `golang-benchmark`, `golang-performance`, and `golang-troubleshooting`.
 
 ### Residual TDD slices
 
@@ -24,6 +24,7 @@
 2. **Fingerprint semantics:** Red—add one two-credential proof test expecting repeated A marker equality, B marker difference, and no serialized salt. Green—assert the existing normalized prepared-value boundary produces those facts in one proof. Refactor—retain the separate cross-root replay assertion as its independent salt-rotation contract.
 3. **Real OS boundary:** Red—add a blocked external-child test whose helper is initially absent. Green—after the fresh child resolves the credential into memory, have that child record a secret-safe snapshot of its own process-list entry, argv, project root, runner workdir, and fresh-binary directory; after ordinary completion the parent verifies the artifact reports no raw credential in any location. The one-route Recurly TLS fixture deliberately expects its strict incomplete-full-parity exit after the snapshot: it has authenticated only `/accounts`, not Recurly's declared write surface. Refactor—do not hold/release the child or poll parent-side lifecycle state; stream scanned files, redact any detected value before serialization, and keep the evidence request unconditional in CI.
 4. **Live provider evidence:** Run `TestExternalProofGitHubSmoke` only with the disposable identity named by the brief and retain sanitized command/result metadata (never secret material) in the ledger and verification record. The smoke itself independently asserts observable GitHub-backed proof creation and read-back.
+5. **CLI package capacity:** Red—run the complete `internal/cli` package with verbose timings and establish that the fixed 20-minute deadline is aggregate capacity, not a Bahmni-specific hang; the 706.417s baseline ranks the external-child proofs first (118.770s and 118.210s), Bahmni at 39.140s, and the independent 17,800-case dynamic-help sweep at 22.500s. Green—make each connector-command/`--help` or `-h` assertion an explicitly parallel subtest while retaining the same generated command set, both flag variants, all three assertions, and the nonzero total. The focused verbose run still reports 17,800 variants, the focused race run passes, and the unchanged full-package deadline passes in 694.432s. Refactor—share only the immutable loaded registry and per-command immutable surface; every subtest owns its arguments and output, with no test timeout, sampling, or coverage reduction.
 
 ### CLI parity assessment
 

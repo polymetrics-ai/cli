@@ -111,3 +111,24 @@ argv, and artifact state. This preserves the test's security subject without
 weakening certification, adding a skip, or changing any timeout.
 
 Result: no Critical, Warning, or Info findings.
+
+## CLI package-capacity review
+
+Scope: the fixed 20-minute `internal/cli` package deadline after CI displayed a
+Bahmni test at timeout. The manual review first used a complete verbose package
+timing run: the package passed in 706.417s; Bahmni was 39.140s, the two
+external-child proofs were 118.770s and 118.210s, and the 17,800-case dynamic
+leaf-help sweep was 22.500s. The displayed test was not diagnosed as the hang.
+
+`TestEveryDynamicConnectorLeafHelpRendersWithoutDispatch` now constructs every
+case before scheduling it. The shared registry and command surfaces are loaded
+once and then read only; each parallel case holds an immutable path copy and
+allocates its own arguments/manual output. No test counter, buffer, project
+directory, credential, transport, or global state is shared between parallel
+subtests. Test names now include connector, command, and help spelling, which
+improves a failure's attribution.
+
+The focused verbose run retains exactly 17,800 variants, the focused `-race`
+run passes, and the full package passes in 694.432s without a timeout change,
+test sampling, or coverage deletion. Result: no Critical, Warning, or Info
+findings.

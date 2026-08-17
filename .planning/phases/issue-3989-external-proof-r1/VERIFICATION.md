@@ -61,6 +61,19 @@ opt-out:
 | `pnpm --dir website run gen:docs` twice, then `git diff --exit-code -- website` | Passed; the second pass was byte-stable. |
 | `make tidy-check`; `make lint`; `make smoke-no-build`; `make agent-contract-check`; `make connectorgen-validate`; `make connectorgen-surface-sync`; `make github-parity-artifacts-check`; `make connectorgen-certification-matrix`; `make connector-boundary`; `make connector-canon-check`; `make release-workflow-check` | Passed. |
 
+## CLI package-capacity validation
+
+CI's timeout displayed `TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked`, but a `go test -count=1 -timeout 20m -v ./internal/cli` baseline passed in 706.417s and showed that test at 39.140s. The actual slowest tests are the two external-child proof cases (118.770s and 118.210s); the new dynamic leaf-help sweep runs 17,800 independent manual-render cases in 22.500s locally. The failure is therefore aggregate capacity, not a Bahmni hang.
+
+| Command | Result |
+| --- | --- |
+| `go test -count=1 -timeout 20m -v ./internal/cli` | Passed in 706.417s before the scheduling change. It retained all verbose per-test timings; the ranked costs are recorded above. |
+| `go test -count=1 -timeout 20m -v -run '^TestEveryDynamicConnectorLeafHelpRendersWithoutDispatch$' ./internal/cli` | Passed; the parent logs exactly `checked 17800 dynamic connector command help variants` and the package completes in 6.137s. |
+| `go test -race -count=1 -timeout 20m -run '^TestEveryDynamicConnectorLeafHelpRendersWithoutDispatch$' ./internal/cli` | Passed in 61.753s; no race is reported while the independent leaf-help cases run in parallel. |
+| `go test -count=1 -timeout 20m ./internal/cli` | Passed in 694.432s after the scheduling change, under the unchanged 20-minute package limit. |
+
+The parallel change neither filters the generated case set nor reduces assertions: each discovered command still runs with both `--help` and `-h`, validates help interception before dispatch, validates the exact rendered command, and requires a `NAME` section. It merely assigns independent read-only cases to the test runner's bounded parallel scheduler.
+
 - [x] Every acceptance row has an observable state-change assertion: evidence writer, observer, ephemeral-session, relay, and fresh-child tests each assert a positive write/request/fingerprint or an explicit zero-write refusal. The OS fresh-child test additionally requires child-captured process-list/argv/project/temporary evidence at the credential-live boundary.
 - [x] External binary is freshly built; evidence records its SHA, exact safe argv, and successful `flow_plan`/`flow_preview`/`flow_run`/`flow_status` references (`TestExternalProofFreshChildCapturesCompleteHTTPSProviderTranscript`).
 - [x] No raw credential appears in captured parent streams, project tree, vault/key, or artifact in the fresh TLS child test; parent relay refuses both streams before writing on a canary match. `--value-stdin` is rewritten to a child-only environment reference with no value in argv.
