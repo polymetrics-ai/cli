@@ -84,8 +84,8 @@
   "publication": {
     "status": "withheld",
     "accepted_evidence_record_emitted": false,
-    "reason": "#4211 / PR #4215 has not yet verified the full-parity credential-scope claim",
-    "next_step_after_contract_fix": "import through PR #4216 generic importer and validate under the fixed contract"
+    "scope_contract": "PR #4215 merged; its verified scope construction is present in the rebased base",
+    "reason": "the landed importer supports transport and change-capture only; generic GitHub live-evidence import remains open as PR #4216",
+    "next_step_after_importer_lands": "import this bounded observation through PR #4216's generic importer and validate under the fixed contract; do not emit a full-parity claim"
   }
 }
-

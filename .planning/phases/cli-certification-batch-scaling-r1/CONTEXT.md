@@ -3,9 +3,9 @@
 ## Task Delivery Header
 
 - Issue: Refs #4015 — Production MVP certification; operationally blocks publication under #4211.
-- Base branch: `integration/4015-mvp-flat-r1` at `eba2658c5fd671a1eebfb71463cbe6a3045d3c65` (fetched before planning).
+- Base branch: `integration/4015-mvp-flat-r1` at `17c43c75aaf1a13319d0891c8b6a01a85032fa6a` (re-fetched and rebased after PR #4215 merged).
 - Merges into: `integration/4015-mvp-flat-r1` → `main`.
-- Delivery: A direct PR is open against the stated base, with measured 10/100/repeated-100 live-read curves, staged non-published evidence inputs, verification, and an API-read-back of the PR base.
+- Delivery: A direct PR will target the stated base, with measured 10/100/repeated-100 live-read curves, staged bounded evidence inputs, verification, and an API-read-back of the PR base.
 - Working branch: `fm/cli-certification-batch-scaling-r1`.
 - Task: Measure end-to-end serial GitHub direct-read certification throughput, including a fresh project setup, credential validation, checkpoint I/O, report persistence, and teardown. Classify every execution as produced-value pass, provider refusal, missing fixture, or product defect; record rate-limit/header evidence; project the remaining read surface only from those measurements; do not publish evidence while #4211 is unresolved.
 - Verification: Current-head `pm` help; current #4214 candidate-projection check; live 10/100/repeated-100 runs; structural checks that every successful row asserted `/response` as object or array; resume checkpoint inspection; generated checks; changed-package/consumer tests including `./cmd/connectorgen`; repository verification gates; diff review; and GitHub API base read-back.
@@ -18,7 +18,7 @@
 | Hundred-operation end-to-end cost is measured | live | A fresh disposable project executes exactly 100 direct reads from the pinned #4214 candidate projection; result buckets sum to 100. |
 | Repeated 100-operation behavior is measured | live | At least three fresh, serial 100-operation batches execute with the same deterministic candidate manifest; the comparison includes wall clock, mean, rate events, and checkpoint counts. |
 | Throttling conclusion has header evidence | live | Saved sanitized run facts include real rate-limit event type/reason/reset fields. If no throttle occurs, the report explicitly bounds that conclusion to the measured operations and records the absence of Retry-After/HTTP-429 evidence. |
-| Evidence is ready but publication is honest | live | A staged generic live-report input contains only sanitized execution facts and no `credential_scope`; no accepted evidence file or certification matrix is written before #4211 is verified. |
+| Evidence is ready but publication is honest | live | A staged generic live-report input contains only sanitized execution facts and no `credential_scope`; after #4211 is fixed, do not hand-author accepted evidence while its generic importer (#4216) remains unmerged. |
 | Reusable run rules are captured | live | The final report contains explicit rules for serial batching, checkpoint/resume, Retry-After handling, and produced-value classification. |
 
 ## Decisions
@@ -27,7 +27,7 @@
 - The 10-operation manifest contains the first ten generated direct reads in source order. The 100-operation manifest contains all 97 generated direct reads plus the first three existing direct-read overrides. This is deterministic and uses direct reads only.
 - Repeated hundred-operation batches reuse the exact 100-operation manifest. Reads are idempotent; using one stable workload separates load effects from changing fixture mix.
 - Each run uses a fresh disposable `pm` project and runs serially. The timing starts before project initialization and ends only after the project is removed. The committed report retains counts, timing, stage names, and safe rate-limit metadata, never credentials or provider response bodies.
-- #4211 / PR #4215 is a hard publishing gate. This lane may stage non-accepted evidence inputs but must never create an accepted record or claim `credential_scope: full_parity`.
+- PR #4215 merged while the run was in progress and the base was rebased to include it. It fixes the scope-validation gate, but its landed command has only `transport` and `change-capture` import modes. PR #4216's generic live-evidence importer is still open, so this lane retains a bounded staged input rather than hand-authoring an accepted record or falsely claiming `credential_scope: full_parity`.
 
 ## GSD and skills record
 

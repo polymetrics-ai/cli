@@ -4,7 +4,11 @@
 
 Throughput is **flat at 100-operation batches**. Three fresh 100-operation runs averaged **154.831 seconds / 1.548 seconds per target operation** (range 150.351–158.521 seconds). That is below the fresh, setup-heavy 10-operation cohort (25.528 seconds / 2.553 seconds per operation), not degradation.
 
-Execution is therefore not the present throughput bottleneck. Publication is still blocked solely by #4211 / PR #4215's unverified credential-scope contract; this lane staged no accepted certification record.
+Execution is therefore not the present throughput bottleneck. PR #4215 merged
+while this run was active and fixes the credential-scope contract. Its landed
+command has no generic GitHub live-evidence importer, however; that remains
+open as PR #4216. This lane staged no accepted record rather than hand-authoring
+one or claiming that a partial direct-read sample is `full_parity`.
 
 ## Method
 
@@ -86,5 +90,4 @@ These are measured-seconds-per-operation projections, not a percentage guess.
 
 ## Publication status
 
-\`STAGED-LIVE-REPORT.json\` holds the safe, non-accepted payload and deliberately omits a \`credential_scope\` claim. Nothing was published to the matrix. Import it through PR #4216 only after #4211 / PR #4215 fixes and verifies the scope contract.
-
+\`STAGED-LIVE-REPORT.json\` holds the safe, non-accepted payload and deliberately omits a \`credential_scope\` claim. PR #4215 is now in the rebased base; nothing was published because its landed importer supports only `transport` and `change-capture`, while GitHub's generic importer remains open as PR #4216. Import through that command after it lands—never by hand and never as `full_parity` for this partial sample.

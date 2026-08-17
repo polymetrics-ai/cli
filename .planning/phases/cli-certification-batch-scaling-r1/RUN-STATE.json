@@ -21,7 +21,8 @@
   },
   "publication": {
     "state": "withheld",
-    "blocker": "#4211 / PR #4215 has not verified an accepted full-parity credential scope"
+    "scope_contract": "PR #4215 merged at 17c43c75aaf1a13319d0891c8b6a01a85032fa6a",
+    "blocker": "generic bounded live-evidence importer is still open as PR #4216; do not hand-author an accepted record or a full-parity claim"
   },
   "measurement": {
     "state": "complete",

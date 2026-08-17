@@ -2,7 +2,7 @@
 
 ## Fixed constraints from the captain brief
 
-- Read operations only; no GitHub mutation, fixture creation, or publication.
+- Read operations only; no GitHub mutation or fixture creation. Publication is allowed only after the verified scope contract lands and through its supported importer.
 - Use the disposable certification identity through an environment variable only; do not use ambient `gh` authentication.
 - Serialize requests and preserve checkpoint state so a throttle can resume without replaying completed reads.
 - A successful process is not a pass: a candidate must assert a produced `/response` value.
@@ -18,4 +18,9 @@
 
 ## Publication gate
 
-`credential_scope: full_parity` is unverified on the integration base. This lane will retain only a sanitized, non-accepted live-report input. It will neither call an evidence importer nor generate a matrix/evidence artifact until the #4211 contract is actually present and verified.
+PR #4215 merged while this lane was running. The rebased base now verifies the
+scope construction, but the landed `connectorgen certification-evidence`
+command exposes only `transport` and `change-capture`; the generic importer is
+still owned by open PR #4216. The lane will retain a sanitized, bounded staged
+input rather than hand-author accepted evidence or present a partial
+direct-read run as `full_parity`.
