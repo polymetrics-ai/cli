@@ -5700,5 +5700,24 @@
     ],
     "tag_prefix": "pm-cert-github-",
     "tag_subject_prefix": "github"
+  },
+  "evidence_import": {
+    "provider": "github_api",
+    "bindings": [
+      {
+        "scope": "capability",
+        "function_kind": "operation:rest_read",
+        "stage_sets": [
+          "direct_read_candidates"
+        ]
+      },
+      {
+        "scope": "capability",
+        "function_kind": "operation:graphql_query",
+        "stage_sets": [
+          "graphql_live_candidates"
+        ]
+      }
+    ]
   }
 }

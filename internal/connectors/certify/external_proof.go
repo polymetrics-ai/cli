@@ -148,9 +148,11 @@ type ImportedExternalProofBody struct {
 	OriginalBytes int
 }
 
-// WriteExternalProof accepts only a completed full-parity external run and
-// creates its artifact after all bounded-capture and sanitization checks pass.
-// A rejected input performs no artifact or salt writes.
+// WriteExternalProof accepts a completed external run and creates its artifact
+// after all bounded-capture and sanitization checks pass. A full-parity run
+// supplies its flow references; a direct-read run instead proves only the
+// observed protocol exchanges that its report names. A rejected input performs
+// no artifact or salt writes.
 func WriteExternalProof(root string, input ExternalProofInput) (string, error) {
 	prepared, err := validateExternalProofInput(input)
 	if err != nil {
@@ -284,9 +286,6 @@ func validateExternalProofInput(input ExternalProofInput) ([]string, error) {
 	if !input.Passed || input.ExitCode != 0 {
 		return nil, errors.New("external proof requires a completed successful process")
 	}
-	if !input.FullParity {
-		return nil, errors.New("external proof requires a full-parity credential")
-	}
 	if !externalProofIdentifier.MatchString(input.Connector) || !externalProofIdentifier.MatchString(input.RunID) {
 		return nil, errors.New("external proof connector and run id must be safe identifiers")
 	}
@@ -323,8 +322,12 @@ func validateExternalProofInput(input ExternalProofInput) ([]string, error) {
 			return nil, fmt.Errorf("external proof observed more than %d exchanges for one request target, exceeding bounded redirect/retry limit", externalProofMaxExchangesPerTarget)
 		}
 	}
-	if err := validateExternalProofFlowRoundTripReferences(input.FlowRoundTripReferences); err != nil {
-		return nil, err
+	if input.FullParity {
+		if err := validateExternalProofFlowRoundTripReferences(input.FlowRoundTripReferences); err != nil {
+			return nil, err
+		}
+	} else if len(input.FlowRoundTripReferences) != 0 {
+		return nil, errors.New("observed-operation external proof must not claim flow round-trip references")
 	}
 	return prepared, nil
 }

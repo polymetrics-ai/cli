@@ -215,8 +215,17 @@ func TestCertificationEvidenceReportImportsDefinitionBoundHTTPProofWithoutSecret
 	if got := matchingCapabilityEvidence(items, "github", "operation:graphql_query"); len(got) != 1 {
 		t.Fatalf("matchingCapabilityEvidence() = %#v, want one imported GitHub GraphQL read record", got)
 	}
-	if len(items) != 2 || items[0].Provider != "github_api" || len(items[0].Proof.HTTPExchanges) != 1 {
+	if len(items) != 2 || items[0].Provider != "github_api" || len(items[0].Proof.HTTPExchanges) == 0 {
 		t.Fatalf("imported GitHub evidence = %#v", items)
+	}
+	if got, want := items[0].SchemaVersion, acceptedEvidenceSchemaVersion; got != want {
+		t.Fatalf("imported schema version = %d, want %d", got, want)
+	}
+	if got, want := items[0].CredentialScope, credentialScopeObservedOperations; got != want {
+		t.Fatalf("credential scope = %q, want observed-operation scope %q", got, want)
+	}
+	if got, want := items[0].CredentialScopeProof, credentialScopeProofProtocolExchanges; got != want {
+		t.Fatalf("credential scope proof = %q, want %q", got, want)
 	}
 	raw, err := os.ReadFile(filepath.Join(root, acceptedEvidenceDirectory, "github_read_import-capability_operation_rest_read.json"))
 	if err != nil {
@@ -250,6 +259,24 @@ func TestCertificationEvidenceReportUsesSecondConnectorDefinitionWithoutSharedBr
 	var evidence acceptedEvidence
 	if err := decodeStrictJSON(raw, &evidence); err != nil || validateAcceptedEvidence(evidence) != nil || evidence.Provider != "xero_api" || evidence.FunctionKind != "operation:rest_read" {
 		t.Fatalf("second connector evidence = %#v, decode/validate error=%v", evidence, err)
+	}
+}
+
+func TestCertificationEvidenceReportRequiresObservedExchangeForEachBoundStage(t *testing.T) {
+	root := t.TempDir()
+	reportPath := writeCompletedReadEvidenceReport(t, root, "github")
+	proofPath := writeImportedEvidenceProofWithExchangeCount(t, root, "github", "cert-evidence-short-proof-canary", 1)
+	var stdout, stderr bytes.Buffer
+	code := run([]string{
+		"certification-evidence", "report", "--connector", "github", "--report", reportPath,
+		"--external-proof", proofPath, "--record-prefix", "github_short_proof", "--repo-root", root,
+	}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), "observed proof has 1 HTTP exchanges, want at least 120") {
+		t.Fatalf("short-proof importer exit=%d stderr=%q", code, stderr.String())
+	}
+	items, err := loadAcceptedEvidence(root, []string{"github"})
+	if err != nil || len(items) != 0 {
+		t.Fatalf("short proof emitted evidence=%#v err=%v", items, err)
 	}
 }
 
@@ -326,7 +353,7 @@ func TestCertificationEvidenceReportRefusesIncompleteBindingsWithoutPartialPubli
 	}
 }
 
-func TestCertificationEvidenceReportRefusesUnverifiedFullParityScope(t *testing.T) {
+func TestCertificationEvidenceReportRefusesNonPassingReport(t *testing.T) {
 	root := t.TempDir()
 	reportPath := writeCompletedReadEvidenceReport(t, root, "github")
 	var report certify.Report
@@ -337,12 +364,7 @@ func TestCertificationEvidenceReportRefusesUnverifiedFullParityScope(t *testing.
 	if err := json.Unmarshal(raw, &report); err != nil {
 		t.Fatal(err)
 	}
-	for index := range report.Stages {
-		if report.Stages[index].Name == "full_parity" {
-			report.Stages[index].Passed = false
-			break
-		}
-	}
+	report.Passed = false
 	raw, err = json.Marshal(report)
 	if err != nil {
 		t.Fatal(err)
@@ -350,18 +372,18 @@ func TestCertificationEvidenceReportRefusesUnverifiedFullParityScope(t *testing.
 	if err := os.WriteFile(reportPath, raw, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	proofPath := writeImportedEvidenceProof(t, root, "github", "cert-evidence-unverified-scope-canary")
+	proofPath := writeImportedEvidenceProof(t, root, "github", "cert-evidence-nonpassing-canary")
 	var stdout, stderr bytes.Buffer
 	code := run([]string{
 		"certification-evidence", "report", "--connector", "github", "--report", reportPath,
-		"--external-proof", proofPath, "--record-prefix", "github_unverified_scope", "--repo-root", root,
+		"--external-proof", proofPath, "--record-prefix", "github_nonpassing", "--repo-root", root,
 	}, &stdout, &stderr)
-	if code != 1 || !strings.Contains(stderr.String(), "does not prove the accepted full-parity credential scope") {
-		t.Fatalf("unverified scope importer exit=%d stderr=%q", code, stderr.String())
+	if code != 1 || !strings.Contains(stderr.String(), "not a completed passing connector certification") {
+		t.Fatalf("nonpassing report importer exit=%d stderr=%q", code, stderr.String())
 	}
 	items, err := loadAcceptedEvidence(root, []string{"github"})
 	if err != nil || len(items) != 0 {
-		t.Fatalf("unverified scope emitted evidence=%#v err=%v", items, err)
+		t.Fatalf("nonpassing report emitted evidence=%#v err=%v", items, err)
 	}
 }
 
@@ -416,7 +438,6 @@ func writeCompletedReadEvidenceReport(t *testing.T, root, connector string) stri
 			stages = append(stages, certify.StageResult{Name: candidate.StageName, Passed: true, Status: "passed"})
 		}
 	}
-	stages = append(stages, certify.StageResult{Name: "full_parity", Passed: true, Status: "passed"})
 	report := certify.Report{
 		Kind: "ConnectorCertification", Connector: connector, Passed: true,
 		StartedAt: evidenceImportTestStartedAt, CompletedAt: evidenceImportTestStartedAt.Add(time.Second), Stages: stages,
@@ -433,17 +454,35 @@ func writeCompletedReadEvidenceReport(t *testing.T, root, connector string) stri
 }
 
 func writeImportedEvidenceProof(t *testing.T, root, connector, canary string) string {
+	return writeImportedEvidenceProofWithExchangeCount(t, root, connector, canary, 0)
+}
+
+func writeImportedEvidenceProofWithExchangeCount(t *testing.T, root, connector, canary string, exchangeCount int) string {
 	t.Helper()
 	body := []byte(`{"account":"` + canary + `"}`)
+	bundle, err := engine.Load(defs.FS, connector)
+	if err != nil {
+		t.Fatalf("load %s bundle: %v", connector, err)
+	}
+	if exchangeCount == 0 {
+		exchangeCount = 1
+		if bundle.Certification != nil && len(bundle.Certification.DirectReadCandidates) > exchangeCount {
+			exchangeCount = len(bundle.Certification.DirectReadCandidates)
+		}
+	}
+	exchanges := make([]certify.ObservedHTTPExchange, exchangeCount)
+	for index := range exchanges {
+		exchanges[index] = certify.ObservedHTTPExchange{
+			Request: certify.ObservedHTTPRequest{Method: http.MethodGet, Target: fmt.Sprintf("https://api.example.test/resource/%d?token=%s", index, canary),
+				Headers: http.Header{"Authorization": {"Bearer " + canary}}, Body: certify.ObservedBody{Complete: true}},
+			Response: certify.ObservedHTTPResponse{Status: http.StatusOK, Body: certify.ObservedBody{Bytes: body, OriginalBytes: len(body), Complete: true}},
+		}
+	}
 	path, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
 		Connector: connector, RunID: fmt.Sprintf("external-%d", evidenceImportTestStartedAt.UTC().UnixNano()), BinarySHA256: strings.Repeat("a", 64),
 		Command: []string{"pm", "connectors", "certify", connector, "--from-env", "token=PM_CERT_TOKEN"},
-		Stdout:  "completed", ExitCode: 0, Passed: true, FullParity: true, PreparedValues: []string{canary},
-		HTTPExchanges: []certify.ObservedHTTPExchange{{
-			Request: certify.ObservedHTTPRequest{Method: http.MethodGet, Target: "https://api.example.test/resource?token=" + canary,
-				Headers: http.Header{"Authorization": {"Bearer " + canary}}, Body: certify.ObservedBody{Complete: true}},
-			Response: certify.ObservedHTTPResponse{Status: http.StatusOK, Body: certify.ObservedBody{Bytes: body, OriginalBytes: len(body), Complete: true}},
-		}},
+		Stdout:  "completed", ExitCode: 0, Passed: true, FullParity: false, PreparedValues: []string{canary},
+		HTTPExchanges: exchanges,
 	})
 	if err != nil {
 		t.Fatalf("write external proof: %v", err)

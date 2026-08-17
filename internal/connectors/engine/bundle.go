@@ -26,6 +26,7 @@ import (
 var namePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 var graphQLNamePattern = regexp.MustCompile(`^[_A-Za-z][_0-9A-Za-z]*$`)
 var httpHeaderNamePattern = regexp.MustCompile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
+var certificationEvidenceIdentifierPattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_.:-]*$`)
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
@@ -1050,6 +1051,41 @@ type CertificationSpec struct {
 	WritePairings        []CertificationWritePairing           `json:"write_pairings,omitempty"`
 	WriteInventory       CertificationWriteInventorySpec       `json:"write_inventory,omitempty"`
 	WriteWave            *CertificationWriteWaveSpec           `json:"write_wave,omitempty"`
+	EvidenceImport       *CertificationEvidenceImportSpec      `json:"evidence_import,omitempty"`
+}
+
+// CertificationEvidenceImportSpec is connector-owned acceptance metadata for
+// completed certification reports. It maps evidence to matrix identities
+// without teaching shared import code about a particular provider.
+type CertificationEvidenceImportSpec struct {
+	Provider string                                  `json:"provider"`
+	Database *CertificationEvidenceDatabaseProofSpec `json:"database,omitempty"`
+	Bindings []CertificationEvidenceImportBinding    `json:"bindings,omitempty"`
+}
+
+// CertificationEvidenceDatabaseProofSpec supplies the provider-owned labels
+// for database exchanges. The shared importer only assembles declared report
+// facts; it never names a database engine or wire protocol.
+type CertificationEvidenceDatabaseProofSpec struct {
+	Protocol               string `json:"protocol"`
+	OperationPrefix        string `json:"operation_prefix"`
+	ChangeCaptureStatement string `json:"change_capture_statement,omitempty"`
+}
+
+// CertificationEvidenceImportBinding selects completed report stages and the
+// accepted-evidence identity they can prove. Candidate sets are derived from
+// the same certification definition that scheduled the live commands.
+type CertificationEvidenceImportBinding struct {
+	Scope        string   `json:"scope"`
+	FunctionKind string   `json:"function_kind,omitempty"`
+	WorkflowKind string   `json:"workflow_kind,omitempty"`
+	SyncMode     string   `json:"sync_mode,omitempty"`
+	Primitive    string   `json:"primitive,omitempty"`
+	Source       string   `json:"source,omitempty"`
+	Destination  string   `json:"destination,omitempty"`
+	FlowKind     string   `json:"flow_kind,omitempty"`
+	StageSets    []string `json:"stage_sets,omitempty"`
+	Stages       []string `json:"stages,omitempty"`
 }
 
 // CertificationReadCandidateGeneration contains connector-owned fixture
@@ -2841,6 +2877,30 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 			}
 		}
 	}
+	if evidenceImport := certification.EvidenceImport; evidenceImport != nil {
+		if !certificationEvidenceIdentifierPattern.MatchString(evidenceImport.Provider) {
+			return fmt.Errorf("evidence_import.provider must be a safe provider identifier")
+		}
+		if database := evidenceImport.Database; database != nil {
+			if !certificationEvidenceIdentifierPattern.MatchString(database.Protocol) || !certificationEvidenceIdentifierPattern.MatchString(database.OperationPrefix) {
+				return fmt.Errorf("evidence_import.database protocol and operation_prefix must be safe identifiers")
+			}
+			if strings.TrimSpace(database.ChangeCaptureStatement) == "" {
+				return fmt.Errorf("evidence_import.database change_capture_statement must not be empty")
+			}
+		}
+		seenBindings := make(map[string]struct{}, len(evidenceImport.Bindings))
+		for i, binding := range evidenceImport.Bindings {
+			if err := validateCertificationEvidenceImportBinding(binding, certification); err != nil {
+				return fmt.Errorf("evidence_import.bindings[%d]: %w", i, err)
+			}
+			key := strings.Join([]string{binding.Scope, binding.FunctionKind, binding.WorkflowKind, binding.SyncMode, binding.Primitive, binding.Source, binding.Destination, binding.FlowKind}, "\x00")
+			if _, exists := seenBindings[key]; exists {
+				return fmt.Errorf("evidence_import.bindings[%d] duplicates an evidence identity", i)
+			}
+			seenBindings[key] = struct{}{}
+		}
+	}
 	writeActions := make(map[string]bool, len(writes))
 	for _, action := range writes {
 		writeActions[action.Name] = true
@@ -2861,6 +2921,71 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 		if !streamNames[pairing.VerifyStream] {
 			return fmt.Errorf("write_pairings[%d].verify_stream %q does not match a declared stream", i, pairing.VerifyStream)
 		}
+	}
+	return nil
+}
+
+func validateCertificationEvidenceImportBinding(binding CertificationEvidenceImportBinding, certification CertificationSpec) error {
+	if len(binding.StageSets) == 0 && len(binding.Stages) == 0 {
+		return fmt.Errorf("must declare at least one stage_set or stage")
+	}
+	for _, value := range []string{binding.FunctionKind, binding.WorkflowKind, binding.SyncMode, binding.Primitive, binding.Source, binding.Destination, binding.FlowKind} {
+		if value != "" && !certificationEvidenceIdentifierPattern.MatchString(value) {
+			return fmt.Errorf("evidence identity %q is not a safe identifier", value)
+		}
+	}
+	switch binding.Scope {
+	case "capability":
+		if binding.FunctionKind == "" {
+			return fmt.Errorf("capability binding requires function_kind")
+		}
+	case "workflow":
+		if binding.WorkflowKind == "" {
+			return fmt.Errorf("workflow binding requires workflow_kind")
+		}
+	case "sync_mode":
+		if binding.SyncMode == "" || binding.Primitive == "" {
+			return fmt.Errorf("sync_mode binding requires sync_mode and primitive")
+		}
+	case "flow":
+		if binding.Source == "" || binding.Destination == "" || binding.FlowKind == "" {
+			return fmt.Errorf("flow binding requires source, destination, and flow_kind")
+		}
+	default:
+		return fmt.Errorf("scope %q is unsupported", binding.Scope)
+	}
+	seenSets := make(map[string]struct{}, len(binding.StageSets))
+	for _, set := range binding.StageSets {
+		if _, exists := seenSets[set]; exists {
+			return fmt.Errorf("stage_set %q is duplicated", set)
+		}
+		seenSets[set] = struct{}{}
+		switch set {
+		case "direct_read_candidates":
+			if len(certification.DirectReadCandidates) == 0 {
+				return fmt.Errorf("stage_set %q has no declared candidates", set)
+			}
+		case "binary_candidates":
+			if len(certification.BinaryCandidates) == 0 {
+				return fmt.Errorf("stage_set %q has no declared candidates", set)
+			}
+		case "graphql_live_candidates":
+			if certification.GraphQL == nil || len(certification.GraphQL.LiveCandidates) == 0 {
+				return fmt.Errorf("stage_set %q has no declared candidates", set)
+			}
+		default:
+			return fmt.Errorf("stage_set %q is unsupported", set)
+		}
+	}
+	seenStages := make(map[string]struct{}, len(binding.Stages))
+	for _, stage := range binding.Stages {
+		if !certificationEvidenceIdentifierPattern.MatchString(stage) {
+			return fmt.Errorf("stage %q is not a safe identifier", stage)
+		}
+		if _, exists := seenStages[stage]; exists {
+			return fmt.Errorf("stage %q is duplicated", stage)
+		}
+		seenStages[stage] = struct{}{}
 	}
 	return nil
 }

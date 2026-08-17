@@ -239,7 +239,7 @@ func TestCertifyCLIHelpShowsProvenanceContract(t *testing.T) {
 		t.Fatalf("runConnectors(certify --help): %v", err)
 	}
 	for _, want := range []string{
-		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
+		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof (--full-parity | --direct-read-only)] [--from-env field=ENV | --value-stdin field] [--json]",
 		"provider-artifact",
 		"provenance evidence",
 		"legacy_unverified",
@@ -258,8 +258,8 @@ func TestCertifyCLIExternalProofRequiresFullParityBeforeWrites(t *testing.T) {
 
 	err := runCertify(context.Background(), root, []string{"sample",
 		"--external-proof", "--from-env", "token=PM_CERTIFY_EXTERNAL_PROOF_CANARY", "--json"}, &stdout, io.Discard, true)
-	if err == nil || !strings.Contains(err.Error(), "requires --full-parity") {
-		t.Fatalf("external-proof refusal = %v, want full-parity requirement", err)
+	if err == nil || !strings.Contains(err.Error(), "requires --full-parity or --direct-read-only") {
+		t.Fatalf("external-proof refusal = %v, want full-parity or direct-read-only requirement", err)
 	}
 	if _, err := os.Stat(filepath.Join(root, ".polymetrics")); !errors.Is(err, os.ErrNotExist) {
 		t.Fatalf("external-proof refusal created project state: stat error = %v, want not exist", err)

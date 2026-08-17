@@ -175,8 +175,13 @@ func runReportCertificationEvidence(args []string, stdout, stderr io.Writer) int
 			logln(stderr, "connectorgen certification-evidence: flow evidence requires a delivery receipt in addition to an HTTP proof")
 			return 1
 		}
-		if err := validateEvidenceBindingStages(report, *bundle.Certification, binding); err != nil {
+		requiredStages, err := completedEvidenceBindingStages(report, *bundle.Certification, binding)
+		if err != nil {
 			logf(stderr, "connectorgen certification-evidence: binding %d: %v\n", index+1, err)
+			return 1
+		}
+		if len(proof.HTTPExchanges) < len(requiredStages) {
+			logf(stderr, "connectorgen certification-evidence: binding %d: observed proof has %d HTTP exchanges, want at least %d for its freshly completed stages\n", index+1, len(proof.HTTPExchanges), len(requiredStages))
 			return 1
 		}
 		output := filepath.Join(options.repoRoot, acceptedEvidenceDirectory, options.recordPrefix+"-"+evidenceBindingSuffix(binding)+".json")
@@ -186,7 +191,7 @@ func runReportCertificationEvidence(args []string, stdout, stderr io.Writer) int
 		}
 		paths[output] = struct{}{}
 		identity := importedLiveEvidence{
-			SchemaVersion:          certificationSchemaVersion,
+			SchemaVersion:          acceptedEvidenceSchemaVersion,
 			Scope:                  binding.Scope,
 			Connector:              options.connector,
 			FunctionKind:           binding.FunctionKind,
@@ -258,9 +263,6 @@ func validateCompletedCertificationEvidenceReport(report certify.Report, connect
 	if report.Kind != "ConnectorCertification" || report.Connector != connector || !report.Passed || report.StartedAt.IsZero() || report.CompletedAt.IsZero() {
 		return errors.New("report is not a completed passing connector certification")
 	}
-	if !report.FullParityVerified() {
-		return errors.New("report does not prove the accepted full-parity credential scope")
-	}
 	return nil
 }
 
@@ -310,7 +312,7 @@ func importedHTTPBody(body certify.ImportedExternalProofBody) certifiedHTTPBody 
 	return certifiedHTTPBody{Encoding: body.Encoding, Value: append(json.RawMessage(nil), body.Value...), OriginalBytes: body.OriginalBytes}
 }
 
-func validateEvidenceBindingStages(report certify.Report, certification engine.CertificationSpec, binding engine.CertificationEvidenceImportBinding) error {
+func completedEvidenceBindingStages(report certify.Report, certification engine.CertificationSpec, binding engine.CertificationEvidenceImportBinding) (map[string]struct{}, error) {
 	required := make(map[string]struct{})
 	for _, stage := range binding.Stages {
 		required[stage] = struct{}{}
@@ -338,10 +340,10 @@ func validateEvidenceBindingStages(report certify.Report, certification engine.C
 	for stage := range required {
 		result, ok := completed[stage]
 		if !ok || !result.Passed || result.Resumed {
-			return fmt.Errorf("required stage %q was not freshly completed and passing", stage)
+			return nil, fmt.Errorf("required stage %q was not freshly completed and passing", stage)
 		}
 	}
-	return nil
+	return required, nil
 }
 
 func evidenceBindingSuffix(binding engine.CertificationEvidenceImportBinding) string {

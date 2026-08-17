@@ -7,7 +7,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
-  pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]
+  pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof (--full-parity | --direct-read-only)] [--from-env field=ENV | --value-stdin field] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -152,8 +152,10 @@ ACTIONS
     --external-proof is an explicit live HTTPS acceptance mode: it builds a
     fresh pm child binary, accepts credentials only from --from-env or
     --value-stdin,
-    and writes a fingerprint-only transcript after a full-parity run. It
-    requires --full-parity and refuses incomplete or truncated exchanges.
+    and writes a fingerprint-only transcript after a full-parity or bounded
+    direct-read-only run. It refuses incomplete or truncated exchanges. A
+    direct-read proof certifies only its observed operations; it never claims
+    broader credential scope or full parity.
     --full-parity enables both the full read sweep and live writes; it refuses
     to claim parity unless every applicable declared write has a production
     mutation, independent read-back, and verified cleanup. Skipped, not_live,
@@ -181,7 +183,8 @@ ACTIONS
     --direct-read-only retains preflight, live credential validation, serial
     rate-limit handling, declaration-owned output assertions, and secret scans
     for direct-read candidates, but does not run unrelated stream/ETL stages.
-    It cannot be combined with --write or --external-proof.
+    It cannot be combined with --write. With --external-proof it emits an
+    observed-operations proof; use --full-parity only for a full-parity claim.
     A complete version-2 ledger reports its ledger
     version, artifact count, endpoint count, and cited endpoint count; invalid
     version-2 provenance fails certification without enabling or changing any
@@ -207,7 +210,7 @@ EXAMPLES
   pm connectors inspect github --json
   pm connectors certify sample --full --json
   pm connectors certify github --direct-read-only --resume --from-env token=GITHUB_TOKEN --json
-  pm connectors certify github --external-proof --full-parity --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
+  pm connectors certify github --direct-read-only --external-proof --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
   pm connectors certify postgres --full --write --stream public.events --config host=DB_HOST --config port=5432 --config database=DB_NAME --config username=DB_USER --config schema=public --config cursor_field=sequence --from-env password=POSTGRES_PASSWORD --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN

@@ -248,6 +248,30 @@ func TestWriteExternalProofRefusesMissingFlowReferencesWithoutArtifactWrites(t *
 	}
 }
 
+func TestWriteExternalProofAcceptsObservedOperationsWithoutFullParity(t *testing.T) {
+	root := t.TempDir()
+	proofPath, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+		Connector:      "sample",
+		RunID:          "observed-operations-4215",
+		BinarySHA256:   strings.Repeat("f", 64),
+		Command:        []string{"pm", "connectors", "certify", "sample", "--direct-read-only"},
+		ExitCode:       0,
+		Passed:         true,
+		FullParity:     false,
+		PreparedValues: []string{"cert-canary"},
+		HTTPExchanges: []certify.ObservedHTTPExchange{{
+			Request:  certify.ObservedHTTPRequest{Method: http.MethodGet, Target: "https://proof.invalid/observed", Body: certify.ObservedBody{Complete: true}},
+			Response: certify.ObservedHTTPResponse{Status: http.StatusOK, Body: certify.ObservedBody{Complete: true}},
+		}},
+	})
+	if err != nil {
+		t.Fatalf("write observed-operations proof: %v", err)
+	}
+	if _, err := certify.ReadExternalProof(root, proofPath); err != nil {
+		t.Fatalf("read observed-operations proof: %v", err)
+	}
+}
+
 func TestWriteExternalProofRefusesExchangesBeyondRedirectRetryBoundWithoutWrites(t *testing.T) {
 	root := t.TempDir()
 	exchanges := make([]certify.ObservedHTTPExchange, 17)

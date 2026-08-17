@@ -8,11 +8,14 @@ import (
 )
 
 func TestDirectReadCandidatesForGitHub(t *testing.T) {
-	candidates := directReadCandidatesFor("github", map[string]string{
+	candidates, err := directReadCandidatesFor("github", map[string]string{
 		"direct_read_path":     "docs/index.md",
 		"direct_read_dir_path": "",
 		"direct_read_ref":      "main",
 	})
+	if err != nil {
+		t.Fatalf("directReadCandidatesFor() = %v", err)
+	}
 	if len(candidates) != 120 {
 		t.Fatalf("len(candidates) = %d, want 120 (23 manual plus 97 generated): %+v", len(candidates), candidates)
 	}
@@ -57,7 +60,10 @@ func TestDirectReadCandidatesForGitHubTrialCohorts(t *testing.T) {
 		"trial_enterprise":        21,
 	}
 	for cohort, want := range wantCounts {
-		candidates := directReadCandidatesFor("github", map[string]string{"certification_cohort": cohort})
+		candidates, err := directReadCandidatesFor("github", map[string]string{"certification_cohort": cohort})
+		if err != nil {
+			t.Fatalf("%s directReadCandidatesFor() = %v", cohort, err)
+		}
 		if len(candidates) != want {
 			t.Fatalf("%s candidates = %d, want %d", cohort, len(candidates), want)
 		}
@@ -69,6 +75,24 @@ func TestDirectReadCandidatesForGitHubTrialCohorts(t *testing.T) {
 				t.Fatalf("%s candidate %q assertion = %#v, want generated object-or-array assertion", cohort, candidate.Command, candidate.OutputAssertions)
 			}
 		}
+	}
+}
+
+func TestDirectReadCandidatesForGitHubAcceptsDeclaredStageSelection(t *testing.T) {
+	candidates, err := directReadCandidatesFor("github", map[string]string{
+		"certification_stages": "direct_read_sweep_repo_read_file,generated_direct_read_copilot_configuration_view",
+	})
+	if err != nil {
+		t.Fatalf("directReadCandidatesFor() = %v", err)
+	}
+	if len(candidates) != 2 {
+		t.Fatalf("selected candidates = %#v, want two", candidates)
+	}
+	if candidates[0].StageName != "direct_read_sweep_repo_read_file" || candidates[1].StageName != "generated_direct_read_copilot_configuration_view" {
+		t.Fatalf("selected stages = %#v", candidates)
+	}
+	if _, err := directReadCandidatesFor("github", map[string]string{"certification_stages": "missing_stage"}); err == nil || !strings.Contains(err.Error(), "undeclared") {
+		t.Fatalf("unknown stage error = %v, want declared-stage refusal", err)
 	}
 }
 
