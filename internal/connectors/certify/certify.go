@@ -68,9 +68,23 @@ type Options struct {
 	// switch: the CLI enables it only inside a freshly built child process.
 	ObserveHTTP bool
 
+	// RuntimeObservation receives a secret-safe child-process audit request
+	// immediately after the runner resolves credential values into memory. It
+	// is set only by the external-proof child when an integration test requests
+	// a self-observation artifact; it is never a user-facing capture option.
+	RuntimeObservation func(RuntimeObservationInput) error
+
 	// RateLimitAdmissionTimeout bounds a single provider-budget wait. A zero
 	// value uses the certification default; it does not shorten normal stages.
 	RateLimitAdmissionTimeout time.Duration
+}
+
+// RuntimeObservationInput carries the minimum in-memory state required for a
+// child process to audit itself at the credential-live boundary. Consumers
+// must never render or persist SecretValues directly.
+type RuntimeObservationInput struct {
+	Workdir      string
+	SecretValues []string
 }
 
 // Runner orchestrates certification stages for exactly one connector,

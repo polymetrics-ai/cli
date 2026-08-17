@@ -15,7 +15,6 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
-	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -397,58 +396,22 @@ func TestExternalProofFreshChildRefusesIncompleteFullParityHTTPSRun(t *testing.T
 func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts(t *testing.T) {
 	const token = "cert-canary-external-os-boundary-3989"
 	const providerResponse = `{"object":"list","data":[{"id":"acct_external_os_3989","code":"proof","email":"proof@example.test","state":"active","created_at":"2026-08-14T00:00:00Z","updated_at":"2026-08-15T00:00:00Z"}],"has_more":false}`
-	requestStarted := make(chan struct{}, 1)
-	releaseResponse := make(chan struct{})
-	responseDelivered := make(chan error, 1)
-	handlerFinished := make(chan struct{})
-	var firstRequest sync.Once
-	responseReleased := false
-	release := func() {
-		if !responseReleased {
-			close(releaseResponse)
-			responseReleased = true
-		}
-	}
-
-	writeProviderResponse := func(w http.ResponseWriter) error {
-		w.Header().Set("Content-Type", "application/json")
-		_, err := io.WriteString(w, providerResponse)
-		if flusher, ok := w.(http.Flusher); ok {
-			flusher.Flush()
-		}
-		return err
-	}
+	var requests atomic.Int64
 	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests.Add(1)
 		username, password, authorized := request.BasicAuth()
 		if !authorized || username != token || password != "" {
 			http.Error(w, "missing prepared authorization", http.StatusUnauthorized)
 			return
 		}
-		first := false
-		firstRequest.Do(func() {
-			first = true
-			close(requestStarted)
-		})
-		if !first {
-			_ = writeProviderResponse(w)
+		if request.URL.Path != "/accounts" {
+			http.Error(w, "unexpected external proof request", http.StatusNotFound)
 			return
 		}
-		defer close(handlerFinished)
-		select {
-		case <-releaseResponse:
-		case <-request.Context().Done():
-			responseDelivered <- request.Context().Err()
-			return
-		}
-		responseDelivered <- writeProviderResponse(w)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, providerResponse)
 	}))
-	// Releasing the handler must happen before Server.Close: Close waits for
-	// active handlers, so the inverse order would deadlock exactly when this
-	// test needs to report a failed handoff.
-	defer func() {
-		release()
-		server.Close()
-	}()
+	defer server.Close()
 
 	trustPath := filepath.Join(t.TempDir(), "external-proof-os-provider.pem")
 	if err := os.WriteFile(trustPath, pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: server.Certificate().Raw}), 0o600); err != nil {
@@ -456,190 +419,84 @@ func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifa
 	}
 	root := t.TempDir()
 	temporaryRoot := t.TempDir()
+	snapshotPath := filepath.Join(root, ".polymetrics", "certifications", "external-runtime-observation.json")
 	t.Setenv("SSL_CERT_FILE", trustPath)
 	t.Setenv("SSL_CERT_DIR", "")
 	t.Setenv("TMPDIR", temporaryRoot)
 	t.Setenv("GODEBUG", strings.TrimPrefix(os.Getenv("GODEBUG")+",x509usefallbackroots=1", ","))
 	t.Setenv("PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY", token)
-	ctx, cancel := context.WithCancel(context.Background())
-	result := make(chan externalProofRunResult, 1)
-	resultObserved := false
-	t.Cleanup(func() {
-		release()
-		cancel()
-		if resultObserved {
-			return
-		}
-		select {
-		case <-result:
-		case <-time.After(5 * time.Second):
-		}
-	})
-	go func() {
-		var stdout, stderr bytes.Buffer
-		result <- externalProofRunResult{
-			err: runCertify(ctx, root, []string{
-				"recurly", "--external-proof", "--full-parity", "--json",
-				"--config", "base_url=" + server.URL,
-				"--from-env", "api_key=PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY",
-			}, &stdout, &stderr, true),
-			stdout: stdout.String(),
-			stderr: stderr.String(),
-		}
-	}()
-
-	select {
-	case <-requestStarted:
-	case <-time.After(90 * time.Second):
-		t.Fatal("fresh external child did not reach the held HTTPS provider request")
-	}
-	assertNoCredentialMaterialInProcessList(t, token)
-	assertNoCredentialMaterialInTemporaryArtifacts(t, root, temporaryRoot, token)
-
-	release()
-	settled, err := awaitExternalProofSettlement(
-		result,
-		responseDelivered,
-		handlerFinished,
-		filepath.Join(root, ".polymetrics", "certifications", "recurly.json"),
-		temporaryRoot,
-	)
-	resultObserved = settled.childExited
+	t.Setenv(certificationExternalRuntimeObservationEnv, snapshotPath)
+	var stdout, stderr bytes.Buffer
+	err := runCertify(context.Background(), root, []string{
+		"recurly", "--external-proof", "--full-parity", "--json",
+		"--config", "base_url=" + server.URL,
+		"--from-env", "api_key=PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY",
+	}, &stdout, &stderr, true)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("fresh external HTTPS certification: %v", strings.ReplaceAll(err.Error(), token, "<credential>"))
 	}
-	if bytes.Contains([]byte(settled.result.stdout), []byte(token)) || bytes.Contains([]byte(settled.result.stderr), []byte(token)) {
+	if requests.Load() == 0 {
+		t.Fatal("fresh external binary made no HTTPS provider request")
+	}
+	if bytes.Contains(stdout.Bytes(), []byte(token)) || bytes.Contains(stderr.Bytes(), []byte(token)) {
 		t.Fatal("fresh external HTTPS process output exposed credential material")
 	}
+	observation, err := loadExternalRuntimeObservation(snapshotPath)
+	if err != nil {
+		t.Fatalf("read fresh-child runtime observation: %v", err)
+	}
+	assertExternalRuntimeObservation(t, observation, token, root, temporaryRoot)
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
 	assertNoCredentialMaterialInTree(t, temporaryRoot, token)
 }
 
-type externalProofRunResult struct {
-	err    error
-	stdout string
-	stderr string
-}
-
-type externalProofSettlement struct {
-	result      externalProofRunResult
-	childExited bool
-}
-
-// awaitExternalProofSettlement observes every post-release boundary the OS
-// proof depends on. The test is deliberately driven by real conditions rather
-// than assuming that a flushed response implies a persisted report or cleaned
-// build directory. Existing bounds are retained: five seconds for the held
-// handler to respond and thirty seconds for the child to settle its report and
-// scoped temporary artifacts.
-func awaitExternalProofSettlement(
-	result <-chan externalProofRunResult,
-	responseDelivered <-chan error,
-	handlerFinished <-chan struct{},
-	reportPath, temporaryRoot string,
-) (externalProofSettlement, error) {
-	const (
-		handlerBound    = 5 * time.Second
-		settlementBound = 30 * time.Second
-		pollInterval    = 10 * time.Millisecond
-	)
-
-	responseDeadline := time.NewTimer(handlerBound)
-	defer responseDeadline.Stop()
-	handlerDeadline := time.NewTimer(handlerBound)
-	defer handlerDeadline.Stop()
-	settlementDeadline := time.NewTimer(settlementBound)
-	defer settlementDeadline.Stop()
-	poll := time.NewTicker(pollInterval)
-	defer poll.Stop()
-
-	var settled externalProofSettlement
-	responseObserved := false
-	handlerObserved := false
-	reportComplete := false
-	temporaryArtifactsSettled := false
-	for {
-		if !reportComplete {
-			complete, err := externalProofReportComplete(reportPath)
-			if err != nil {
-				return settled, fmt.Errorf("inspect fresh-child certification report: %w", err)
-			}
-			reportComplete = complete
-		}
-		if !temporaryArtifactsSettled {
-			complete, err := externalProofTemporaryArtifactsSettled(temporaryRoot)
-			if err != nil {
-				return settled, fmt.Errorf("inspect fresh-child temporary artifacts: %w", err)
-			}
-			temporaryArtifactsSettled = complete
-		}
-		if responseObserved && handlerObserved && settled.childExited && reportComplete && temporaryArtifactsSettled {
-			if settled.result.err != nil {
-				return settled, errors.New("fresh external child exited unsuccessfully after the held provider response")
-			}
-			return settled, nil
-		}
-
-		select {
-		case err := <-responseDelivered:
-			if err != nil {
-				return settled, fmt.Errorf("held HTTPS provider could not deliver its response: %w", err)
-			}
-			responseObserved = true
-			responseDelivered = nil
-		case <-handlerFinished:
-			handlerObserved = true
-			handlerFinished = nil
-		case settled.result = <-result:
-			settled.childExited = true
-			result = nil
-		case <-responseDeadline.C:
-			if !responseObserved {
-				return settled, errors.New("held HTTPS provider did not deliver a response after release")
-			}
-		case <-handlerDeadline.C:
-			if !handlerObserved {
-				return settled, errors.New("held HTTPS provider handler did not finish after delivering its response")
-			}
-		case <-settlementDeadline.C:
-			return settled, fmt.Errorf(
-				"fresh external child did not settle after the observed provider response (child_exited=%t report_complete=%t temporary_artifacts_settled=%t)",
-				settled.childExited,
-				reportComplete,
-				temporaryArtifactsSettled,
-			)
-		case <-poll.C:
-		}
+func assertExternalRuntimeObservation(t *testing.T, observation externalRuntimeObservation, token, root, temporaryRoot string) {
+	t.Helper()
+	if observation.SchemaVersion != externalRuntimeObservationSchemaVersion {
+		t.Fatalf("runtime observation schema version = %d, want %d", observation.SchemaVersion, externalRuntimeObservationSchemaVersion)
 	}
-}
-
-func externalProofReportComplete(path string) (bool, error) {
-	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
-		return false, nil
-	} else if err != nil {
-		return false, err
+	if observation.ProcessList.Command == "" || !strings.Contains(observation.ProcessList.Command, "connectors certify recurly") {
+		t.Fatal("child runtime observation did not capture its own external certification process-list entry")
 	}
-	report, err := certify.LoadReport(path)
+	if observation.ProcessList.ContainsCredential || bytes.Contains([]byte(observation.ProcessList.Command), []byte(token)) {
+		t.Fatal("raw credential material appeared in the child-captured process-list entry")
+	}
+	if !strings.Contains(strings.Join(observation.Argv.Values, " "), "connectors certify recurly") {
+		t.Fatal("child runtime observation did not capture its external certification argv")
+	}
+	if observation.Argv.ContainsCredential || bytes.Contains([]byte(strings.Join(observation.Argv.Values, "\x00")), []byte(token)) {
+		t.Fatal("raw credential material appeared in the child-captured argv")
+	}
+	if observation.ProjectArtifacts.ContainsCredential || bytes.Contains([]byte(observation.ProjectArtifacts.Path), []byte(token)) {
+		t.Fatal("raw credential material appeared in child-captured project artifacts")
+	}
+	wantRoot, err := filepath.Abs(root)
 	if err != nil {
-		// Save writes the report directly, so a reader can observe a partial JSON
-		// document while the child is persisting it. Keep polling that concrete
-		// condition rather than treating file existence as completion.
-		return false, nil
+		t.Fatalf("resolve project root: %v", err)
 	}
-	return report.Connector == "recurly" &&
-		!report.StartedAt.IsZero() &&
-		!report.CompletedAt.IsZero() &&
-		!report.CompletedAt.Before(report.StartedAt) &&
-		report.Passed &&
-		len(report.Stages) > 0, nil
-}
-
-func externalProofTemporaryArtifactsSettled(temporaryRoot string) (bool, error) {
-	buildPaths, err := filepath.Glob(filepath.Join(temporaryRoot, "pm-certify-external-*"))
+	if observation.ProjectArtifacts.Path != wantRoot {
+		t.Fatal("child runtime observation scanned an unexpected project-artifact root")
+	}
+	if len(observation.TemporaryArtifacts) < 2 {
+		t.Fatal("child runtime observation did not capture both runner and fresh-binary temporary locations")
+	}
+	wantTemporaryRoot, err := filepath.Abs(temporaryRoot)
 	if err != nil {
-		return false, err
+		t.Fatalf("resolve temporary root: %v", err)
 	}
-	return len(buildPaths) == 0, nil
+	filesScanned := 0
+	for _, location := range observation.TemporaryArtifacts {
+		if location.ContainsCredential || bytes.Contains([]byte(location.Path), []byte(token)) {
+			t.Fatal("raw credential material appeared in child-captured temporary artifacts")
+		}
+		if location.Path != wantTemporaryRoot && !strings.HasPrefix(location.Path, wantTemporaryRoot+string(filepath.Separator)) {
+			t.Fatal("child runtime observation scanned a temporary location outside the test-owned TMPDIR")
+		}
+		filesScanned += location.FilesScanned
+	}
+	if filesScanned == 0 {
+		t.Fatal("child runtime observation did not scan a temporary artifact file")
+	}
 }
 
 // TestExternalProofGitHubSmoke is deliberately opt-in because it reaches the

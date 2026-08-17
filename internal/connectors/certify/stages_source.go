@@ -266,6 +266,14 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 			secretFields[field] = v
 		}
 	}
+	if r.opts.RuntimeObservation != nil {
+		if err := r.opts.RuntimeObservation(RuntimeObservationInput{
+			Workdir:      root,
+			SecretValues: append([]string(nil), secretValues...),
+		}); err != nil {
+			return Report{}, fmt.Errorf("certify: capture external runtime observation: %w", err)
+		}
+	}
 	ephemeralCredentials, err := app.BeginCertificationEphemeralCredentials(root,
 		app.EphemeralCredential{
 			Name:      sourceCredentialName,

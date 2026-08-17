@@ -20,6 +20,11 @@ import (
 
 const certificationExternalChildEnv = "PM_CERTIFICATION_EXTERNAL_CHILD"
 
+// certificationExternalRuntimeObservationEnv requests one secret-safe
+// self-observation artifact from a fresh external-proof child. It is an
+// integration-test seam, not a command-line option and never skips a proof.
+const certificationExternalRuntimeObservationEnv = "PM_CERTIFICATION_EXTERNAL_RUNTIME_OBSERVATION"
+
 // runCertify dispatches `pm connectors certify ...` (certification design §A
 // command spec): a single connector by name, `--all --credentials-file`
 // batch mode (§B), or `--sweep` orphan cleanup (§C). Purely additive to the
@@ -94,6 +99,11 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 			return err
 		}
 		opts.ObserveHTTP = true
+		if observationPath := os.Getenv(certificationExternalRuntimeObservationEnv); observationPath != "" {
+			opts.RuntimeObservation = func(input certify.RuntimeObservationInput) error {
+				return writeExternalRuntimeObservation(observationPath, root, input)
+			}
+		}
 	}
 
 	runner := certify.NewRunner(opts)

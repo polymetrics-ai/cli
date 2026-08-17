@@ -73,3 +73,26 @@ file-only wait; diagnostics contain only booleans and fixed state names.
 Result: no Critical, Warning, or Info findings. The focused test passed three
 repeat runs under `-parallel=4`; the earlier Redis connection-refused logs are
 confirmed deliberate unreachable-endpoint fixture coverage outside this test.
+
+## CI child-side observation inversion review
+
+Scope: the third PR #4198 CI failure, where every parent-side settlement
+observable was false, and the decision to replace outside observation with a
+child-side security snapshot.
+
+Mode: inline/manual completion of the generated `code-review` prompt. The
+phase is not registered in the roadmap and this single-worker task may not
+spawn a review role.
+
+The review rejected a fourth timing repair. The fresh external child now calls
+`ps` for its own PID, captures its own argv, and scans the project root, runner
+workdir, and fresh-binary directory immediately after it resolves credentials
+into memory. It writes a JSON artifact only after redacting every prepared
+value and checking the serialized result contains none. The parent reads that
+artifact only after normal process completion. The test requires the process
+command, safe argv, two `TMPDIR`-owned locations, and at least one scanned
+temporary file, so a placeholder or post-cleanup empty scan cannot pass.
+
+The artifact request is an integration-test evidence path, not a command-line
+switch and never skips the proof. No timeout was added or widened. Result: no
+Critical, Warning, or Info findings.
