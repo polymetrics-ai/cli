@@ -42,3 +42,6 @@ The subsequent direct batch used the same disposable credential and asserted `st
 | Actions selected-repository permission reads | entitlement: GitHub returned `409` for this organization configuration. |
 | Actions allowed-actions organization read | entitlement: GitHub returned `409` for `/actions/permissions/selected-actions`. |
 | Billing budgets read | entitlement: GitHub returned `400` for the organization billing-budgets endpoint. |
+| Code-quality findings read | entitlement: GitHub returned `403` and stated `Code quality is not enabled for this repository.` |
+
+`compare view --basehead main...main` is a controlled product defect.  The command rejects the required `basehead` form before sending a request (`path variable basehead must not contain path traversal`), but the same classic credential and repository, through `gh-axi api repos/Polymetrics-Cert/pm-cert-3993-20260810-wz0fru/compare/main...main`, received GitHub's successful `identical` response.  The connector's path safety rule incorrectly rejects GitHub's documented comparison delimiter.
