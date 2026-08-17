@@ -1,0 +1,117 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:apps_list_subscriptions_for_authenticated_user_stubbed",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:20:45.119Z",
+  "run_id": "github-direct-apps_list_subscriptions_for_authenticated_user_stubbed-1787001645119",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:575a9a6d41bf978ec2fc0440f93f84b6764780dacff2880c741a2ebc3be3dfdd}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:apps_list_subscriptions_for_authenticated_user_stubbed",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:5b36582c0cb501577ffc8da8338f38b64c10c24625843c67c1af8b14ce1b8419}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [
+              {
+                "account": {
+                  "email": null,
+                  "id": "{{pmcertfp:v1:af3629cb1eb2af6e32651ea339ed4913008900242de5754acf4c349e93f62038}}",
+                  "login": "{{pmcertfp:v1:7f4734fa946cc3c05c1dc0615684fb1b2fd5971ed97d390ddff0f98614f90f37}}",
+                  "organization_billing_email": "{{pmcertfp:v1:86960c3598ecc0cb2d6d5a500bd9150d36e647211c63574c18ee5a66d4be7e0f}}",
+                  "type": "{{pmcertfp:v1:8a4d8075cefecb7cb222c40f9bb970e740b143868dea4707603250587fc953d2}}",
+                  "url": "{{pmcertfp:v1:e8749c82e1ca07ae445411e0c3e29606f44350354d338cec4f4f9b7b7eb695cf}}"
+                },
+                "billing_cycle": "{{pmcertfp:v1:ef28e2e293b981872ead4352c0ceb911734a9e630dee61bdabf90a6b1ad8a203}}",
+                "free_trial_ends_on": null,
+                "next_billing_date": "{{pmcertfp:v1:2d4c25114db641f052bbca971d79af6df71583990a5cd5f9d11775f4ca0f57ae}}",
+                "on_free_trial": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                "plan": {
+                  "accounts_url": "{{pmcertfp:v1:58edba77cf85f976784a944eef37a3f5e9ee18375eae393af99f355d8e400eb8}}",
+                  "bullets": [
+                    "{{pmcertfp:v1:e000f08e6183a831387b7a31945b46333ecbe03f98e2439f0223db9c2ccae7d3}}",
+                    "{{pmcertfp:v1:614ebae1655eba5d8d2c196037420edb63fac521db68e4317c6f08accb75c3ce}}"
+                  ],
+                  "description": "{{pmcertfp:v1:22343a461279b4ef758b5c8796e3601f1ca628ab4a753c6080fa7969404f0690}}",
+                  "has_free_trial": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                  "id": "{{pmcertfp:v1:c88075aa678500bed786ac105a0d549f9062bf9274fec60116007d8c7c442641}}",
+                  "monthly_price_in_cents": "{{pmcertfp:v1:bbc483cabe520bb92365199e60f8a06b7b81387540e50dcd04b80dc526519f23}}",
+                  "name": "{{pmcertfp:v1:445987adf3866e93a3fe29ea03a7bed05fc9a496797cfe53a69be73cdc9facd8}}",
+                  "number": "{{pmcertfp:v1:857c63a556b38b92608672df03bddd5ab6c39f241dc1dbdbd80a2a00c6ecd602}}",
+                  "price_model": "{{pmcertfp:v1:d94eecc6b43c5ade0e37ec39a338509c6ad98e4e78f981efcceaba384050f368}}",
+                  "state": "{{pmcertfp:v1:ef3162db8f33a383cf142fb72b4b1470cb87e14b42248197ebf2e7cfb44ec3da}}",
+                  "unit_name": null,
+                  "url": "{{pmcertfp:v1:24c9d2762e30084fc048a2205ab1d00258e8b209d45c22a775c0471d4f891e2c}}",
+                  "yearly_price_in_cents": "{{pmcertfp:v1:f046ed0ab4ff806b01b48647d0f937487c627ecef8643cb448d0ef5d605413f0}}"
+                },
+                "unit_count": null,
+                "updated_at": "{{pmcertfp:v1:c8e5cc925ca08b43eb74782e9b55a9900d03866af85dc5a05438217a96cd38f7}}"
+              },
+              {
+                "account": {
+                  "email": "{{pmcertfp:v1:6fdd99829fb7675b9ffdf5b8172702942d34b322960edd25fd69801bef2671aa}}",
+                  "id": "{{pmcertfp:v1:e4035211b6690c9836dcb5668cd768dcb9aa1077fd042798b007dea834a62789}}",
+                  "login": "{{pmcertfp:v1:3b7531498d1595a20fab815b03517e2e8142dbd533e64965d7651599fc830338}}",
+                  "type": "{{pmcertfp:v1:6b0a948b3659d96b93abfcb36ebb01785370059116d87bff4db7bf96b5401907}}",
+                  "url": "{{pmcertfp:v1:1d8aeb24a2179ccd545fd0b9fc98c63f911b4ef16a1213020db0cb51644b2028}}"
+                },
+                "billing_cycle": "{{pmcertfp:v1:ef28e2e293b981872ead4352c0ceb911734a9e630dee61bdabf90a6b1ad8a203}}",
+                "free_trial_ends_on": null,
+                "next_billing_date": "{{pmcertfp:v1:2d4c25114db641f052bbca971d79af6df71583990a5cd5f9d11775f4ca0f57ae}}",
+                "on_free_trial": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                "plan": {
+                  "accounts_url": "{{pmcertfp:v1:86dbbde51c3de5dddaed712f77b38d33a407171cf1ba37c3375ce6053c2f923b}}",
+                  "bullets": [
+                    "{{pmcertfp:v1:0f4b284b97f011519d4abece08fc79d6e06dba71d34bf200936f9cb5305a9cee}}",
+                    "{{pmcertfp:v1:57457ec272482f7f0670417da378d4230c04fc839adad16825bc12fa339126ba}}"
+                  ],
+                  "description": "{{pmcertfp:v1:22a90b7ab570fe5ea669e23a17477083aa38603174b9236b0457e4c28249bed1}}",
+                  "has_free_trial": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                  "id": "{{pmcertfp:v1:7939f031f99eb81987cf4234a45d710d51bfbf7d34a80e602f1b3e82f413d482}}",
+                  "monthly_price_in_cents": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                  "name": "{{pmcertfp:v1:57c8da4ec2d3095d5c4e8569bec440fcb6fede3ec9f20fa27660564c6741a258}}",
+                  "number": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+                  "price_model": "{{pmcertfp:v1:655bbbef41babfe9f878015960cc55169e2ba4a3ce2a0ff16f5b9a6ba6a2b691}}",
+                  "state": "{{pmcertfp:v1:ef3162db8f33a383cf142fb72b4b1470cb87e14b42248197ebf2e7cfb44ec3da}}",
+                  "unit_name": null,
+                  "url": "{{pmcertfp:v1:27de8dd3ae86f048fd428923c2793cd7419bd12e587297e89fd215910de48c08}}",
+                  "yearly_price_in_cents": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}"
+                },
+                "unit_count": null,
+                "updated_at": "{{pmcertfp:v1:c8e5cc925ca08b43eb74782e9b55a9900d03866af85dc5a05438217a96cd38f7}}"
+              }
+            ],
+            "original_bytes": 1581,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
