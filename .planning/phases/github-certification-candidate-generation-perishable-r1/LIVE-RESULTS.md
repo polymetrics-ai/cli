@@ -58,22 +58,30 @@ for an intentionally absent sub-resource are missing-fixture results, not
 passes and not entitlement conclusions. Provider policies/refusals remain
 provider results rather than product defects.
 
-## Rebase reconciliation — current integration base `a96216d09`
+## Rebase reconciliation — final integration base `eba2658c5`
 
-The rebase preserved all 97 generated command memberships, but the current
-base correctly marks the ten formerly optional REST path flags as required.
-Candidate regeneration therefore added connector-owned fixture values for
-`analysis-id`, `language`, `codeql-variant-analysis-id`, `repo-owner`,
-`repo-name`, and `sarif-id`. The 10 operations were rerun serially (31
-Advanced Security and 22 Codespaces candidates); their requests now reach the
-provider and are all concrete provider/missing-fixture non-passes. There are
-**no current product defects** in this bounded cohort or its generated sweep.
+The first rebase preserved all 97 generated command memberships, but the then
+current base correctly marked the ten formerly optional REST path flags as
+required. Candidate regeneration therefore added connector-owned fixture values
+for `analysis-id`, `language`, `codeql-variant-analysis-id`, `repo-owner`,
+`repo-name`, and `sarif-id`. The 10 operations were rerun serially (31 Advanced
+Security and 22 Codespaces candidates); their requests now reach the provider
+and are all concrete provider/missing-fixture non-passes. There are **no current
+product defects** in this bounded cohort or its generated sweep.
 
 The original 10 product-defect observations are not carried forward as current
 results after their path-flag declarations were corrected. Re-running the
 affected cohorts preserved the 34 produced-value passes and changed the
 accounting from `34 / 10 / 53` to **`34 pass / 0 product defect / 63
 provider-or-missing-fixture non-pass`**.
+
+The final rebase target `eba2658c5` changes only the package-scoped `pm` test
+binary reuse implementation and its phase evidence; it does not change a
+GitHub certification definition, generated-candidate input, or runtime command
+path. Candidates and sweep were regenerated twice on that head and both
+`--check` modes passed byte-stably. The 97 generated commands therefore remain
+identical to the rerun set, so the `34 / 0 / 63` live accounting remains current
+without pretending a non-changing command was re-executed.
 
 ## Measured provider evidence
 

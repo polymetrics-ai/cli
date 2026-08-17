@@ -1,7 +1,7 @@
 # Verification — GitHub certification candidate generation
 
-Status: complete — implementation, bounded live proof, and local repository
-verification passed.
+Status: complete — implementation, bounded live proof, and final-base local
+repository verification passed on integration `eba2658c5`.
 
 - [x] Candidate projection is deterministic and preserves named manual cases.
 - [x] Candidate assertions select only produced response values.
@@ -15,9 +15,12 @@ verification passed.
   `go test -timeout 20m ./cmd/connectorgen` (117.973s),
   `go test -timeout 20m ./internal/connectors/certify`, and
   `go test -timeout 20m ./internal/connectors/engine`.
-- [x] `make verify` passed, including `internal/cli` (816.971s), candidate
-  generation/sweep drift checks, connector validation/boundary, docs, smoke,
-  lint, and release-target parity.
+- [x] After rebase to `eba2658c5`, candidate and sweep generators again ran
+  twice byte-stably and their `--check` modes passed; the 97-member generated
+  set remained unchanged from the rerun set.
+- [x] Final `make verify` passed, including `internal/cli` (892.463s),
+  candidate generation/sweep drift checks, connector validation/boundary, docs,
+  smoke, lint, and release-target parity.
 - [x] Manual inline code review found no actionable issue: generic Go contains
   no provider identifier, generated candidates assert `/response` rather than
   exit status, manual overrides remain explicit, and the 1,571 sweep total is

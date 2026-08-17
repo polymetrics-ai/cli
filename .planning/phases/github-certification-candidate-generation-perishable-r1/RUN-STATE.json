@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "github-certification-candidate-generation-perishable-r1",
-  "status": "verification_in_progress",
+  "status": "complete",
   "execution_mode": "inline_manual_gsd",
   "target_connector": "github",
   "excluded_concurrent_path": "cmd/connectorgen/certificationevidence.go",

@@ -48,16 +48,23 @@ non-passes rather than reclassified as product failures.
 
 ### Rebase reconciliation
 
-After rebase to integration `a96216d09`, generation still selected the same 97
-commands. The current base correctly marks ten REST path flags as required, so
-the regenerated candidates include connector-owned fixture values for their
-now-required flags. I reran the affected Advanced Security and Codespaces
-cohorts (53 reads) with the rebased binary: all ten previously reported
-path-flag product defects now reach GitHub and are provider/missing-fixture
-non-passes. The current bounded result is therefore **34 / 0 / 63**, not the
-pre-rebase 34 / 10 / 53. There are no unresolved product defects in this
-cohort; they remain separately represented by the current sweep rather than
-hidden as a pass.
+After the first rebase to integration `a96216d09`, generation still selected
+the same 97 commands. The current base correctly marks ten REST path flags as
+required, so the regenerated candidates include connector-owned fixture values
+for their now-required flags. I reran the affected Advanced Security and
+Codespaces cohorts (53 reads) with the rebased binary: all ten previously
+reported path-flag product defects now reach GitHub and are provider/missing-
+fixture non-passes. The bounded result is therefore **34 / 0 / 63**, not the
+pre-rebase 34 / 10 / 53.
+
+The final base `eba2658c5` changes only package-scoped `pm` test-binary reuse
+and its phase evidence. It does not alter certification definitions, candidate
+inputs, or runtime command code. I nevertheless regenerated candidates and
+sweep twice on that head; both checks are byte-stable and the membership is
+still 97. The live counts therefore remain current without falsely recording a
+second execution of unchanged operations. There are no unresolved product
+defects in this cohort; the current sweep keeps zero product defects explicit
+rather than hiding them as a pass.
 
 ## Negative control
 
@@ -92,7 +99,7 @@ eligible_pending_live 122
 - `go test -timeout 20m ./internal/connectors/engine` — PASS
 - `make connectorgen-validate connectorgen-surface-sync connector-boundary` — PASS
 - generated candidates and sweep each regenerated twice, then both `--check` commands passed (byte-stable)
-- `make verify` — pending rebase validation; it will rerun before this update is pushed.
+- `make verify` — PASS on final integration base `eba2658c5`; includes full `go test ./...`, with `internal/cli` PASS (892.463s), build, docs, smoke, lint, generated checks, boundary, canon, and release-target parity.
 
 This direct-PR task used the documented inline/manual GSD fallback; its plan,
 TDD red/green ledger, verification, live results, and final code review record
