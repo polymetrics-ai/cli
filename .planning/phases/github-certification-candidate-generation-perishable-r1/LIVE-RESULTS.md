@@ -58,7 +58,7 @@ for an intentionally absent sub-resource are missing-fixture results, not
 passes and not entitlement conclusions. Provider policies/refusals remain
 provider results rather than product defects.
 
-## Rebase reconciliation — final integration base `eba2658c5`
+## Rebase reconciliation — final integration base `17c43c75a`
 
 The first rebase preserved all 97 generated command memberships, but the then
 current base correctly marked the ten formerly optional REST path flags as
@@ -75,13 +75,15 @@ affected cohorts preserved the 34 produced-value passes and changed the
 accounting from `34 / 10 / 53` to **`34 pass / 0 product defect / 63
 provider-or-missing-fixture non-pass`**.
 
-The final rebase target `eba2658c5` changes only the package-scoped `pm` test
-binary reuse implementation and its phase evidence; it does not change a
-GitHub certification definition, generated-candidate input, or runtime command
-path. Candidates and sweep were regenerated twice on that head and both
-`--check` modes passed byte-stably. The 97 generated commands therefore remain
-identical to the rerun set, so the `34 / 0 / 63` live accounting remains current
-without pretending a non-changing command was re-executed.
+The final rebase target `17c43c75a` adds the accepted-evidence v2 credential-
+scope proof contract. This delivery has no staged accepted evidence record, so
+there is no evidence shape to migrate; no `live_tested` or published claim is
+made here. It does not change a GitHub certification definition,
+generated-candidate input, or direct-read runtime command path. Candidates and
+sweep were regenerated twice on that head and both `--check` modes passed byte-
+stably. The 97 generated commands therefore remain identical to the rerun set,
+so the `34 / 0 / 63` live accounting remains current without pretending a
+non-changing command was re-executed.
 
 ## Measured provider evidence
 

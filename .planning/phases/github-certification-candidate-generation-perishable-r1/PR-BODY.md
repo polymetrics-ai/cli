@@ -57,14 +57,16 @@ reported path-flag product defects now reach GitHub and are provider/missing-
 fixture non-passes. The bounded result is therefore **34 / 0 / 63**, not the
 pre-rebase 34 / 10 / 53.
 
-The final base `eba2658c5` changes only package-scoped `pm` test-binary reuse
-and its phase evidence. It does not alter certification definitions, candidate
-inputs, or runtime command code. I nevertheless regenerated candidates and
-sweep twice on that head; both checks are byte-stable and the membership is
-still 97. The live counts therefore remain current without falsely recording a
-second execution of unchanged operations. There are no unresolved product
-defects in this cohort; the current sweep keeps zero product defects explicit
-rather than hiding them as a pass.
+The final base `17c43c75a` adds accepted-evidence schema v2 and a provable
+credential-scope contract. This delivery stages no accepted evidence record, so
+there is no evidence shape to migrate and no `live_tested` or published claim.
+It does not alter certification definitions, candidate inputs, or direct-read
+runtime code. I nevertheless regenerated candidates and sweep twice on that
+head; both checks are byte-stable and the membership is still 97. The live
+counts therefore remain current without falsely recording a second execution of
+unchanged operations. There are no unresolved product defects in this cohort;
+the current sweep keeps zero product defects explicit rather than hiding them
+as a pass.
 
 ## Negative control
 
@@ -99,7 +101,7 @@ eligible_pending_live 122
 - `go test -timeout 20m ./internal/connectors/engine` — PASS
 - `make connectorgen-validate connectorgen-surface-sync connector-boundary` — PASS
 - generated candidates and sweep each regenerated twice, then both `--check` commands passed (byte-stable)
-- `make verify` — PASS on final integration base `eba2658c5`; includes full `go test ./...`, with `internal/cli` PASS (892.463s), build, docs, smoke, lint, generated checks, boundary, canon, and release-target parity.
+- `make verify` — PASS on final integration base `17c43c75a`; includes full `go test ./...`, with `internal/cli` PASS (580.634s), build, docs, smoke, lint, generated checks, boundary, canon, and release-target parity.
 
 This direct-PR task used the documented inline/manual GSD fallback; its plan,
 TDD red/green ledger, verification, live results, and final code review record

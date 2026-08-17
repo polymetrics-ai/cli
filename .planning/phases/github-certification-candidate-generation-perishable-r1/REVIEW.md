@@ -16,9 +16,10 @@ identifier, generated candidates cannot become passes without a live stage,
 the produced-value assertion is below `/response`, and manual candidates are
 explicit exact-command overrides rather than an unbounded bypass.
 
-Rebase review: the final integration target `eba2658c5` changes only
-package-scoped `pm` test-binary reuse and its planning evidence. Candidates and
-sweep were regenerated twice after that rebase and remained byte-stable; the
-final full verification gate passed. No candidate-projection surface was
-restructured, preserving the extension point required by the mutation
-lifecycle follow-on.
+Rebase review: the final integration target `17c43c75a` adds the v2 accepted-
+evidence credential-scope proof contract. This delivery has no accepted evidence
+record to migrate, and its candidate projection, fixture cohort, and direct-read
+runtime path are unchanged. Candidates and sweep were regenerated twice after
+the rebase and remained byte-stable; the final full verification gate passed.
+No candidate-projection surface was restructured, preserving the extension
+point required by the mutation-lifecycle follow-on.
