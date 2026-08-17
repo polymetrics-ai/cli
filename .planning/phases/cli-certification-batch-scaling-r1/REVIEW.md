@@ -17,4 +17,3 @@ Reviewed the final diff against the captain brief and delivery contract.
 - Status before PR creation: pending. This non-draft, trusted-author direct PR will trigger the repository's configured automatic review on open.
 - Fallback: none unless the automatic run is skipped, fails, or is unavailable. Copilot is not requested proactively.
 - No automated findings exist before the PR is created. Update this record with the PR URL, reviewed head SHA, and any dispositions after GitHub posts review evidence.
-

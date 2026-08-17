@@ -20,7 +20,7 @@
 | `make connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check` | pass |
 | `bash -n run-live-batch.sh`; `bash -n classify-failed-direct-reads.sh`; `jq empty RUN-STATE.json STAGED-LIVE-REPORT.json` | pass |
 | `pnpm run gen:docs`; `pnpm run gen:website-data`; `pm skills generate --dir docs/skills --json`; `connectorgen certification-matrix --all`; `connectorgen certification-sweep --connector github` | run twice after rebase; byte-stable (`git diff --exit-code`) |
-| `scripts/verify-gsd-workflow` | pending final committed verification artifact |
+| `scripts/verify-gsd-workflow` | pass: implementation changes have GSD/TDD evidence against `origin/main` |
 
 ## Intentionally not run as one command
 
@@ -34,4 +34,3 @@
 - The credential was passed only as an environment-variable name; no secret is in tracked files or command output.
 - Temporary source/project copies were removed before repository-wide contract validation, so no nested agent inventory or credential storage remains.
 - No accepted certification evidence was hand-authored or published.
-

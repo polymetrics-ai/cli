@@ -52,4 +52,3 @@ The full `make verify` / 550+ connector suite was not invoked as one worktree co
 
 - Route: `claude_auto` on PR open; no manual Claude/Copilot request.
 - Status: pending creation. Any review findings will be dispositioned before merge.
-

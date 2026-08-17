@@ -16,4 +16,3 @@ This lane changes no connector/runtime/generated surface. It adds reproducible m
 
 - Read `LIVE-RESULTS.md` for the curve, failure taxonomy, throttle evidence, projection, and rulebook rules.
 - Import `STAGED-LIVE-REPORT.json` only through PR #4216's generic importer after it lands; do not promote the sample to `full_parity`.
-
