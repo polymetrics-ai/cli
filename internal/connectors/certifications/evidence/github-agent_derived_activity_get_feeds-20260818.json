@@ -1,0 +1,77 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_activity_get_feeds",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:35:52.195Z",
+  "run_id": "github-1787002552195-agent_derived_activity_get_feeds",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "34237212e88fc3db2aa84fa8e82a2d6862db5632f260be2dc85e9d087197c56a",
+    "pm_command_fingerprint": "{{pmcertfp:v1:fd10a06bd4f5d1d14c2e8fbc9a54059aa5452e4acf373ac6418c0f353598f155}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:3e91b3e7f98955374e9bc12c710075406e8c11f2d3c8e7025b2829126de68191}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_activity_get_feeds",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:900f78554e19a7340a6b5c20b3bb142c9da33d8105028357d56476357a284e8e}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "_links": {
+                "repository_discussions": {
+                  "href": "{{pmcertfp:v1:89150660d8f51a2a63158ee8aa302daeeca0a1b182bbf5389ccaeabea4459fc8}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "repository_discussions_category": {
+                  "href": "{{pmcertfp:v1:2bc89486cbdfbdc7bd61dcad5af88ba0a05ed6a35066ceb1d8c1d1bc09c737b0}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "security_advisories": {
+                  "href": "{{pmcertfp:v1:afceec53e5dad927462c88d059d2fda3e6c4acfd16ea6e8c1a3a9bad0d2acb7f}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "timeline": {
+                  "href": "{{pmcertfp:v1:bfe610745697b9095dfc9e5f3b3a00db116cc2acd6e41151c28d14c4b020b073}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "user": {
+                  "href": "{{pmcertfp:v1:0bab6cf482fd3613aedda7348764cf379326ab6dac959287dbe0bf6aa52281dd}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                }
+              },
+              "repository_discussions_category_url": "{{pmcertfp:v1:2bc89486cbdfbdc7bd61dcad5af88ba0a05ed6a35066ceb1d8c1d1bc09c737b0}}",
+              "repository_discussions_url": "{{pmcertfp:v1:89150660d8f51a2a63158ee8aa302daeeca0a1b182bbf5389ccaeabea4459fc8}}",
+              "security_advisories_url": "{{pmcertfp:v1:afceec53e5dad927462c88d059d2fda3e6c4acfd16ea6e8c1a3a9bad0d2acb7f}}",
+              "timeline_url": "{{pmcertfp:v1:bfe610745697b9095dfc9e5f3b3a00db116cc2acd6e41151c28d14c4b020b073}}",
+              "user_url": "{{pmcertfp:v1:0bab6cf482fd3613aedda7348764cf379326ab6dac959287dbe0bf6aa52281dd}}"
+            },
+            "original_bytes": 855,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
