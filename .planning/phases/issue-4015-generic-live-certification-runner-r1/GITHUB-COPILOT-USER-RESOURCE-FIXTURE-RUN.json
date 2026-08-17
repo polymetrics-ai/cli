@@ -23,5 +23,38 @@
       "verified_at": "2026-08-17T20:27:16Z"
     }
   },
-  "updated_at": "2026-08-17T20:24:44.617Z"
+  "attempts": [
+    {
+      "setup_path": "direct_provider_api",
+      "space_name": "pm-cert-user-resource-space-1786998648",
+      "space_number": 3,
+      "space_create_exit_code": 0,
+      "resource_create_exit_code": 2,
+      "resource_setup_response_sha256": "7f6016df303a36a4f150490efd6b0e770badc3c4096321cb78bee88c7b9aaf08",
+      "command_under_test_executed": false,
+      "outcome": "no_object",
+      "direct_cleanup": {
+        "delete_exit_code": 0,
+        "readback_provider_result": "HTTP 404 Not Found",
+        "verified_absent": true
+      }
+    },
+    {
+      "setup_path": "pm_declared_planned_write",
+      "space_name": "pm-cert-user-resource-space-1786998930",
+      "space_number": 5,
+      "space_create_exit_code": 0,
+      "resource_plan_and_preview_completed": true,
+      "resource_execute_exit_code": 1,
+      "resource_setup_response_sha256": "7e2dbefae50ab840c6697a00e5ab605a47537408844fb6847fc1b62b8e712871",
+      "command_under_test_executed": false,
+      "outcome": "no_object",
+      "direct_cleanup": {
+        "delete_exit_code": 0,
+        "readback_provider_result": "HTTP 404 Not Found",
+        "verified_absent": true
+      }
+    }
+  ],
+  "updated_at": "2026-08-17T20:35:18Z"
 }
