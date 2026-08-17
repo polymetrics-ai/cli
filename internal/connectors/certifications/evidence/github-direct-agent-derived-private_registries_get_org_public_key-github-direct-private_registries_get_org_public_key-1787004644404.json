@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:private_registries_get_org_public_key",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:10:47.035Z",
+  "run_id": "github-direct-private_registries_get_org_public_key-1787004644404",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:63f0abb51173fa16cb8fd94df07c15274b21e2b2fcfbd0627cdef8e02225fc4e}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:private_registries_get_org_public_key",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:6bc96f6cd2d8196ad8ad3e2c041e041d8893dc5fe074834eda0d62c0092c9342}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "key": "{{pmcertfp:v1:d74bc547615c6675bb886f533ea3fed1626bbdc9a11a6e23c881078a011ddcdd}}",
+              "key_id": "{{pmcertfp:v1:e934b7434eb2e2d28e9e75e3dcd65ace44f45446059cbb6092e7ef01b067f3b8}}"
+            },
+            "original_bytes": 85,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

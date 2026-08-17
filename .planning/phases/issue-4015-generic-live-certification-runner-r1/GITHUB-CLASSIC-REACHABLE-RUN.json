@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "integration_type": "api",
+  "run_id": "github-1786996178700-7cad2779d27a",
+  "started_at": "2026-08-17T19:49:38.700Z",
+  "credential_scope": "observed_operations",
+  "records": [
+    {
+      "stage_name": "generated_direct_read_code_security_get_configurations_for_enterprise",
+      "command": "code-security get-configurations-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "code-security",
+        "get-configurations-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /enterprises/{enterprise}/code-security/configurations: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /enterprises/{enterprise}/code-security/configurations: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_code_security_get_default_configurations_for_enterprise",
+      "command": "code-security get-default-configurations-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "code-security",
+        "get-default-configurations-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /enterprises/{enterprise}/code-security/configurations/defaults: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /enterprises/{enterprise}/code-security/configurations/defaults: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_get_public_key_for_authenticated_user",
+      "command": "codespaces get-public-key-for-authenticated-user",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "codespaces",
+        "get-public-key-for-authenticated-user",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /user/codespaces/secrets/public-key: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /user/codespaces/secrets/public-key: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_list_secrets_for_authenticated_user",
+      "command": "codespaces list-secrets-for-authenticated-user",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "codespaces",
+        "list-secrets-for-authenticated-user",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /user/codespaces/secrets: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /user/codespaces/secrets: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_get_for_org",
+      "command": "copilot-spaces get-for-org",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "get-for-org",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--org",
+        "Polymetrics-Cert",
+        "--space-number",
+        "1",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /orgs/{org}/copilot-spaces/{space_number}: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /orgs/{org}/copilot-spaces/{space_number}: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_collaborators_for_org",
+      "command": "copilot-spaces list-collaborators-for-org",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "list-collaborators-for-org",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--org",
+        "Polymetrics-Cert",
+        "--space-number",
+        "1",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /orgs/{org}/copilot-spaces/{space_number}/collaborators: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /orgs/{org}/copilot-spaces/{space_number}/collaborators: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_for_user",
+      "command": "copilot-spaces list-for-user",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "list-for-user",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--username",
+        "polymetrics-ai-certification",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /users/{username}/copilot-spaces: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /users/{username}/copilot-spaces: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_resources_for_org",
+      "command": "copilot-spaces list-resources-for-org",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "list-resources-for-org",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--org",
+        "Polymetrics-Cert",
+        "--space-number",
+        "1",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /orgs/{org}/copilot-spaces/{space_number}/resources: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /orgs/{org}/copilot-spaces/{space_number}/resources: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_list_alerts_for_enterprise",
+      "command": "dependabot list-alerts-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "dependabot",
+        "list-alerts-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /enterprises/{enterprise}/dependabot/alerts: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /enterprises/{enterprise}/dependabot/alerts: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_repository_access_for_enterprise",
+      "command": "dependabot repository-access-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "dependabot",
+        "repository-access-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /enterprises/{enterprise}/dependabot/repository-access: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /enterprises/{enterprise}/dependabot/repository-access: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_enterprise_teams_list",
+      "command": "enterprise-teams list",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "enterprise-teams",
+        "list",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /enterprises/{enterprise}/teams: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /enterprises/{enterprise}/teams: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    },
+    {
+      "stage_name": "generated_direct_read_oidc_list_oidc_custom_property_inclusions_for_enterprise",
+      "command": "oidc list-oidc-custom-property-inclusions-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "oidc",
+        "list-oidc-custom-property-inclusions-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996178700-7cad2779d27a",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-08nkeH"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /enterprises/{enterprise}/actions/oidc/customization/properties/repo: rate-limit admission: rate-limit policy \\\"authenticated-user\\\" requires non-secret config \\\"rate_limit_account\\\" for its declared scope\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /enterprises/{enterprise}/actions/oidc/customization/properties/repo: rate-limit admission: rate-limit policy \"authenticated-user\" requires non-secret config \"rate_limit_account\" for its declared scope"
+    }
+  ],
+  "summary": {
+    "executed": 12,
+    "certified": 0,
+    "no_object": 0,
+    "wrong_credential": 0,
+    "entitlement": 0,
+    "product_defect": 12
+  },
+  "local_cleanup": {
+    "credential_removed": true
+  },
+  "updated_at": "2026-08-17T19:49:59.745Z"
+}

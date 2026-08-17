@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "integration_type": "api",
+  "run_id": "github-1786996230487-d654f07e4332",
+  "started_at": "2026-08-17T19:50:30.487Z",
+  "credential_scope": "observed_operations",
+  "records": [
+    {
+      "stage_name": "generated_direct_read_code_security_get_configurations_for_enterprise",
+      "command": "code-security get-configurations-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "code-security",
+        "get-configurations-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_code_security_get_configurations_for_enterprise-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_code_security_get_default_configurations_for_enterprise",
+      "command": "code-security get-default-configurations-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "code-security",
+        "get-default-configurations-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_code_security_get_default_configurations_for_enterprise-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_get_public_key_for_authenticated_user",
+      "command": "codespaces get-public-key-for-authenticated-user",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "codespaces",
+        "get-public-key-for-authenticated-user",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_codespaces_get_public_key_for_authenticated_user-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_list_secrets_for_authenticated_user",
+      "command": "codespaces list-secrets-for-authenticated-user",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "codespaces",
+        "list-secrets-for-authenticated-user",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_codespaces_list_secrets_for_authenticated_user-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_get_for_org",
+      "command": "copilot-spaces get-for-org",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "get-for-org",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--org",
+        "Polymetrics-Cert",
+        "--space-number",
+        "1",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_copilot_spaces_get_for_org-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_collaborators_for_org",
+      "command": "copilot-spaces list-collaborators-for-org",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "list-collaborators-for-org",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--org",
+        "Polymetrics-Cert",
+        "--space-number",
+        "1",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_copilot_spaces_list_collaborators_for_org-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_for_user",
+      "command": "copilot-spaces list-for-user",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "list-for-user",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--username",
+        "polymetrics-ai-certification",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_copilot_spaces_list_for_user-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_resources_for_org",
+      "command": "copilot-spaces list-resources-for-org",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "list-resources-for-org",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--org",
+        "Polymetrics-Cert",
+        "--space-number",
+        "1",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_copilot_spaces_list_resources_for_org-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_list_alerts_for_enterprise",
+      "command": "dependabot list-alerts-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "dependabot",
+        "list-alerts-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "product_defect",
+      "provider_response": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"direct read GET /enterprises/{enterprise}/dependabot/alerts: http 400 for https://api.github.com/enterprises/polymetrics-cert/dependabot/alerts: [redacted]\"\n  },\n  \"kind\": \"Error\"\n}\n\nerror: direct read GET /enterprises/{enterprise}/dependabot/alerts: http 400 for https://api.github.com/enterprises/polymetrics-cert/dependabot/alerts: [redacted]"
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_repository_access_for_enterprise",
+      "command": "dependabot repository-access-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "dependabot",
+        "repository-access-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_dependabot_repository_access_for_enterprise-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_enterprise_teams_list",
+      "command": "enterprise-teams list",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "enterprise-teams",
+        "list",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_enterprise_teams_list-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_oidc_list_oidc_custom_property_inclusions_for_enterprise",
+      "command": "oidc list-oidc-custom-property-inclusions-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "oidc",
+        "list-oidc-custom-property-inclusions-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996230487-d654f07e4332",
+        "--enterprise",
+        "polymetrics-cert",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-GpuNrQ"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_oidc_list_oidc_custom_property_inclusions_for_enterprise-github-1786996230487-d654f07e4332.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    }
+  ],
+  "summary": {
+    "executed": 12,
+    "certified": 11,
+    "no_object": 0,
+    "wrong_credential": 0,
+    "entitlement": 0,
+    "product_defect": 1
+  },
+  "local_cleanup": {
+    "credential_removed": true
+  },
+  "updated_at": "2026-08-17T19:51:18.127Z"
+}

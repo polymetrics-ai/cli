@@ -1,0 +1,51 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:copilot_get_copilot_coding_agent_permissions_organization",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:03:34.993Z",
+  "run_id": "github-direct-copilot_get_copilot_coding_agent_permissions_organization-1787004212372",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:e629cc9e3de7aeb1c8a2fa5b473cc359e9d4830634dc79cd9c710b2b7c4fe039}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:copilot_get_copilot_coding_agent_permissions_organization",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:d0617b97873d682daed2b750c53a289df30e6c54a5c5c1944f0afee9d35cc208}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "enabled_repositories": "{{pmcertfp:v1:285e5b6bff63271efe14bfd91ae523aaef4d42a162c21007fcbddaa8f6f6c0be}}"
+            },
+            "original_bytes": 30,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

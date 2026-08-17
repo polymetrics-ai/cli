@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "integration_type": "api",
+  "run_id": "github-1786999201655-85f8d98262ea",
+  "started_at": "2026-08-17T20:40:01.655Z",
+  "credential_scope": "observed_operations",
+  "records": [
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_get_for_user",
+      "command": "copilot-spaces get-for-user",
+      "invocation": [
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "get-for-user",
+        "--credential",
+        "github-cert-github-1786999201655-85f8d98262ea",
+        "--username",
+        "polymetrics-ai-certification",
+        "--space-number",
+        "7",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-i6s01Y"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_copilot_spaces_get_for_user-github-1786999201655-85f8d98262ea.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_get_resource_for_user",
+      "command": "copilot-spaces get-resource-for-user",
+      "invocation": [
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "get-resource-for-user",
+        "--credential",
+        "github-cert-github-1786999201655-85f8d98262ea",
+        "--username",
+        "polymetrics-ai-certification",
+        "--space-number",
+        "7",
+        "--space-resource-id",
+        "4055250",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-i6s01Y"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_copilot_spaces_get_resource_for_user-github-1786999201655-85f8d98262ea.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_collaborators_for_user",
+      "command": "copilot-spaces list-collaborators-for-user",
+      "invocation": [
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "list-collaborators-for-user",
+        "--credential",
+        "github-cert-github-1786999201655-85f8d98262ea",
+        "--username",
+        "polymetrics-ai-certification",
+        "--space-number",
+        "7",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-i6s01Y"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_copilot_spaces_list_collaborators_for_user-github-1786999201655-85f8d98262ea.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_resources_for_user",
+      "command": "copilot-spaces list-resources-for-user",
+      "invocation": [
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/pm-live-certification",
+        "github",
+        "copilot-spaces",
+        "list-resources-for-user",
+        "--credential",
+        "github-cert-github-1786999201655-85f8d98262ea",
+        "--username",
+        "polymetrics-ai-certification",
+        "--space-number",
+        "7",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-i6s01Y"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_copilot_spaces_list_resources_for_user-github-1786999201655-85f8d98262ea.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    }
+  ],
+  "summary": {
+    "executed": 4,
+    "certified": 4,
+    "no_object": 0,
+    "wrong_credential": 0,
+    "entitlement": 0,
+    "product_defect": 0
+  },
+  "local_cleanup": {
+    "credential_removed": true
+  },
+  "updated_at": "2026-08-17T20:40:19.434Z"
+}
