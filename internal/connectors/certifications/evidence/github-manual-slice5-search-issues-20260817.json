@@ -1,0 +1,25 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:generated_direct_read_search_issues",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:10:31Z",
+  "run_id": "github-manual-slice5-search-issues-20260817",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "d1d7a4b8b6e020373a593a22a34a6bdc4f3fbcb2eb5cb846b75b7b0b4b76c975",
+    "pm_command_fingerprint": "{{pmcertfp:v1:8924979dc5fa994672154f1aa653dbe72d47588fc66891a3ac27ad13a84e6331}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:baa4cc0033fe7a0fff95bc3611f968da2192e52001a15620b5bc724becd14f42}}"],
+    "http_exchanges": [{
+      "operation": "generated_direct_read_search_issues",
+      "request": {"method": "GET", "target": "{{pmcertfp:v1:51d90d2793886cb622c1426f6fc27b01d5b7d7d922c99d7ae9aff3f9be94c49d}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+      "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"total_count": "{{pmcertfp:v1:a87c6c89fd6d7bced683ff0cdf3c01e7d3efc21c7ea402834e114b085b66c775}}"}, "original_bytes": 1, "truncated": false}}
+    }],
+    "database_exchanges": []
+  }
+}
