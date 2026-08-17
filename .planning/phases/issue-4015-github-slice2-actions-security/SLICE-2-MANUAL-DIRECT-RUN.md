@@ -16,8 +16,9 @@ All commands in this receipt were invoked directly through the built `pm` binary
 | actions selected-actions view | entitlement | GitHub: `http 409` for `/actions/permissions/selected-actions`. |
 | actions storage-limit view | entitlement | GitHub: `http 402` for `/actions/cache/storage-limit`. |
 | interactions get-pull-request-creation-cap-for-repo | provider_error | `pm` received HTTP `405`; an independent raw HTTPS GET to the identical `api.github.com` URL with the same classic credential also returned HTTP `405` (`Server Error`). This is GitHub behaviour, not a connector defect. |
-| import large_files view | product_defect | GitHub: `http 404`; provider states the endpoint is deprecated and directs callers to GitHub Importer. |
-| import view | product_defect | GitHub: `http 404`; provider states the endpoint is deprecated and directs callers to GitHub Importer. |
+| import authors view | provider_error | `pm` and independent raw HTTPS GET both received HTTP `404` with GitHub's deprecation message directing callers to GitHub Importer. |
+| import large_files view | provider_error | GitHub returns `404` and states the endpoint is deprecated; this is provider behaviour, not a connector defect. |
+| import view | provider_error | GitHub returns `404` and states the endpoint is deprecated; this is provider behaviour, not a connector defect. |
 | installation view | wrong_credential | Runtime: `provider rejected the credential` with both classic and fine-grained credentials. |
 
 Pre-request `missing path variable` and `unresolved path template` failures from the retired runner are superseded by direct calls with the supplied path constants; they are not `no_object` evidence.
