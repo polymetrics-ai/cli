@@ -239,6 +239,7 @@ pm connectors port-plan postgres --json
 pm connectors inspect 100ms --json
 pm connectors help 100ms
 pm connectors certify sample --full --json
+pm connectors certify github --direct-read-only --resume --from-env token=GITHUB_TOKEN --json
 ```
 
 `pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
@@ -265,6 +266,16 @@ cited endpoint count, and a status. Existing version-1 and pre-ledger inventorie
 `legacy_unverified` during the staged migration; invalid version-2 provenance fails certification.
 Provenance never supplies a `covered_by` binding, enables a command, or sets
 the generated certification quality signal.
+
+`--direct-read-only` is the bounded direct-command certification mode. It
+retains preflight, live credential validation, serialized rate-limit handling,
+declaration-owned output assertions, and secret scans, but does not run
+unrelated stream/ETL stages. After an admitted rate-limit stop, `--resume`
+reuses only matching credential-free checkpoints and marks those rows as
+resumed; it never represents them as fresh provider calls. A direct-read pass
+states its candidate count and does not claim the connector's entire command or
+stream surface. This mode cannot be combined with `--write` or
+`--external-proof`.
 
 For a full-fidelity live HTTPS proof, add `--external-proof --full-parity` and
 supply credentials only with `--from-env` or `--value-stdin`. This

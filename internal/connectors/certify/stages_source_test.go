@@ -3,6 +3,7 @@ package certify_test
 import (
 	"context"
 	"os"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/certify"
@@ -216,6 +217,31 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		}
 		if stage.CLI.ArgvRedacted == "" {
 			t.Errorf("stage %s: CLI.ArgvRedacted empty, want a recorded pm invocation", stage.Name)
+		}
+	}
+}
+
+func TestDirectReadOnlyRetainsCredentialCheckWithoutStreamETL(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+	r, driver := scriptedSampleRunner(t, certify.Options{
+		Connector:      "sample",
+		Full:           true,
+		DirectReadOnly: true,
+		SecretEnv:      map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	})
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	if !mustStage(t, rep, "preflight").Passed || !mustStage(t, rep, "credentials_test").Passed {
+		t.Fatalf("direct-read-only did not retain preflight and credential test: %+v", rep.Stages)
+	}
+	if driver.seen["connections_create"] != 0 || driver.seen["etl_run"] != 0 || driver.seen["catalog_refresh"] != 0 {
+		t.Fatalf("direct-read-only drove stream stages: seen=%+v", driver.seen)
+	}
+	for _, stage := range rep.Stages {
+		if strings.HasPrefix(stage.Name, "etl_") || stage.Name == "catalog" {
+			t.Fatalf("direct-read-only recorded unrelated stream stage %+v", stage)
 		}
 	}
 }

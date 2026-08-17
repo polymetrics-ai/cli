@@ -1,6 +1,11 @@
 package certify
 
-import "testing"
+import (
+	"strings"
+	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
+)
 
 func TestDirectReadCandidatesForGitHub(t *testing.T) {
 	candidates := directReadCandidatesFor("github", map[string]string{
@@ -8,19 +13,26 @@ func TestDirectReadCandidatesForGitHub(t *testing.T) {
 		"direct_read_dir_path": "",
 		"direct_read_ref":      "main",
 	})
-	if len(candidates) != 2 {
-		t.Fatalf("len(candidates) = %d, want 2: %+v", len(candidates), candidates)
+	if len(candidates) != 23 {
+		t.Fatalf("len(candidates) = %d, want 23: %+v", len(candidates), candidates)
 	}
 
 	want := map[string][]string{
 		"repo read-file": {"github", "repo", "read-file", "--credential", sourceCredentialName, "--path", "docs/index.md", "--ref", "main", "--max-bytes", "1048576", "--json"},
-		"repo read-dir":  {"github", "repo", "read-dir", "--credential", sourceCredentialName, "--path", "", "--ref", "main", "--max-bytes", "1048576", "--json"},
+		"branches view":  {"github", "branches", "view", "--credential", sourceCredentialName, "--branch", "main", "--max-bytes", "1048576", "--json"},
+		"git ref view":   {"github", "git", "ref", "view", "--credential", sourceCredentialName, "--ref", "heads/main", "--max-bytes", "1048576", "--json"},
+		"commits view":   {"github", "commits", "view", "--credential", sourceCredentialName, "--ref", "main", "--max-bytes", "1048576", "--json"},
 	}
+	seen := make(map[string]bool, len(want))
 	for _, candidate := range candidates {
 		wantArgs, ok := want[candidate.Command]
-		if !ok {
-			t.Fatalf("unexpected candidate command %q", candidate.Command)
+		if len(candidate.OutputAssertions) == 0 {
+			t.Fatalf("%s has no produced-value assertion", candidate.Command)
 		}
+		if !ok {
+			continue
+		}
+		seen[candidate.Command] = true
 		if len(candidate.Args) != len(wantArgs) {
 			t.Fatalf("%s Args len = %d, want %d: %v", candidate.Command, len(candidate.Args), len(wantArgs), candidate.Args)
 		}
@@ -28,6 +40,11 @@ func TestDirectReadCandidatesForGitHub(t *testing.T) {
 			if candidate.Args[i] != wantArgs[i] {
 				t.Fatalf("%s Args[%d] = %q, want %q; args=%v", candidate.Command, i, candidate.Args[i], wantArgs[i], candidate.Args)
 			}
+		}
+	}
+	for command := range want {
+		if !seen[command] {
+			t.Fatalf("did not find expected candidate %q", command)
 		}
 	}
 }
@@ -46,4 +63,47 @@ func TestDirectReadCandidateForUnknownConnector(t *testing.T) {
 	if candidate, ok := directReadCandidateFor("sample", nil); ok {
 		t.Fatalf("directReadCandidateFor(sample) = %+v, true; want no candidate", candidate)
 	}
+}
+
+func TestDirectReadOutputAssertions(t *testing.T) {
+	res := CLIResult{Envelope: map[string]any{
+		"kind":     "ConnectorCommandDirectRead",
+		"response": map[string]any{"name": "fixture-readme", "type": "file"},
+	}}
+
+	t.Run("matching produced value passes", func(t *testing.T) {
+		passed, reason := assertDirectReadOutputAssertions("fixture_read", res, []engine.CertificationOutputAssertion{{
+			JSONPointer: "/response/name",
+			Equals:      "fixture-readme",
+		}})
+		if !passed || reason != "" {
+			t.Fatalf("assertDirectReadOutputAssertions = %t, %q; want pass", passed, reason)
+		}
+	})
+
+	t.Run("produced response type passes", func(t *testing.T) {
+		passed, reason := assertDirectReadOutputAssertions("fixture_read", res, []engine.CertificationOutputAssertion{{
+			JSONPointer: "/response",
+			ValueType:   "object",
+		}})
+		if !passed || reason != "" {
+			t.Fatalf("assertDirectReadOutputAssertions = %t, %q; want object response pass", passed, reason)
+		}
+	})
+
+	t.Run("post-schema mismatch turns the direct-read assertion red", func(t *testing.T) {
+		passed, reason := assertDirectReadOutputAssertions("fixture_read", res, []engine.CertificationOutputAssertion{{
+			JSONPointer: "/response/name",
+			Equals:      "impossible-after-schema-compile",
+		}})
+		if passed {
+			t.Fatal("assertDirectReadOutputAssertions passed an impossible declared value")
+		}
+		if !strings.Contains(reason, "fixture_read") || !strings.Contains(reason, "/response/name") || !strings.Contains(reason, "does not match") {
+			t.Fatalf("failure reason = %q, want stage and pointer without rendered values", reason)
+		}
+		if strings.Contains(reason, "impossible-after-schema-compile") || strings.Contains(reason, "fixture-readme") {
+			t.Fatalf("failure reason rendered assertion values: %q", reason)
+		}
+	})
 }

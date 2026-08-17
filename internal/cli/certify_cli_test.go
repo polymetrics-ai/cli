@@ -235,7 +235,7 @@ func TestCertifyCLIHelpShowsProvenanceContract(t *testing.T) {
 		t.Fatalf("runConnectors(certify --help): %v", err)
 	}
 	for _, want := range []string{
-		"pm connectors certify <connector> [--full] [--write-only] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
+		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof --full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
 		"provider-artifact",
 		"provenance evidence",
 		"legacy_unverified",

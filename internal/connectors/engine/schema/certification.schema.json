@@ -60,6 +60,22 @@
                 "source_credential": { "type": "boolean" }
               }
             }
+          },
+          "output_assertions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["json_pointer"],
+              "additionalProperties": false,
+              "properties": {
+                "json_pointer": { "type": "string" },
+                "equals": {},
+                "value_type": {
+                  "type": "string",
+                  "enum": ["object", "array", "string", "number", "boolean", "null"]
+                }
+              }
+            }
           }
         }
       }

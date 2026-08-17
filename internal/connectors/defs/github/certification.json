@@ -40,25 +40,244 @@
         { "literal": "--max-bytes" },
         { "literal": "1048576" },
         { "literal": "--json" }
+      ],
+      "output_assertions": [
+        { "json_pointer": "/response/name", "equals": "README.md" },
+        { "json_pointer": "/response/type", "equals": "file" }
       ]
     },
     {
-      "stage_name": "direct_read_sweep_repo_read_dir",
-      "command": "repo read-dir",
+      "stage_name": "direct_read_sweep_readme_view",
+      "command": "readme view",
       "args": [
-        { "connector": true },
-        { "literal": "repo" },
-        { "literal": "read-dir" },
-        { "literal": "--credential" },
-        { "source_credential": true },
-        { "literal": "--path" },
-        { "config_key": "direct_read_dir_path" },
-        { "literal": "--ref", "when_config_key": "direct_read_ref" },
-        { "config_key": "direct_read_ref", "omit_when_empty": true },
-        { "literal": "--max-bytes" },
-        { "literal": "1048576" },
-        { "literal": "--json" }
+        { "connector": true }, { "literal": "readme" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--ref" }, { "config_key": "direct_read_ref", "default": "main" },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [
+        { "json_pointer": "/response/name", "equals": "README.md" },
+        { "json_pointer": "/response/type", "equals": "file" }
       ]
+    },
+    {
+      "stage_name": "direct_read_sweep_branches_view",
+      "command": "branches view",
+      "args": [
+        { "connector": true }, { "literal": "branches" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--branch" }, { "config_key": "direct_read_branch", "default": "main" },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [
+        { "json_pointer": "/response/name", "equals": "main" }
+      ]
+    },
+    {
+      "stage_name": "direct_read_sweep_git_ref_view",
+      "command": "git ref view",
+      "args": [
+        { "connector": true }, { "literal": "git" }, { "literal": "ref" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--ref" }, { "config_key": "direct_read_git_ref", "default": "heads/main" },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [
+        { "json_pointer": "/response/ref", "equals": "refs/heads/main" }
+      ]
+    },
+    {
+      "stage_name": "direct_read_sweep_commits_view",
+      "command": "commits view",
+      "args": [
+        { "connector": true }, { "literal": "commits" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--ref" }, { "config_key": "direct_read_ref", "default": "main" },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_commits_status",
+      "command": "commits status view",
+      "args": [
+        { "connector": true }, { "literal": "commits" }, { "literal": "status" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--ref" }, { "config_key": "direct_read_ref", "default": "main" },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_commits_statuses",
+      "command": "commits statuses view",
+      "args": [
+        { "connector": true }, { "literal": "commits" }, { "literal": "statuses" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--ref" }, { "config_key": "direct_read_ref", "default": "main" },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "array" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_activity_view",
+      "command": "activity view",
+      "args": [
+        { "connector": true }, { "literal": "activity" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "array" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_assignees_view",
+      "command": "assignees view-2",
+      "args": [
+        { "connector": true }, { "literal": "assignees" }, { "literal": "view-2" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "array" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_events_view",
+      "command": "events view",
+      "args": [
+        { "connector": true }, { "literal": "events" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "array" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_topics_view",
+      "command": "topics view",
+      "args": [
+        { "connector": true }, { "literal": "topics" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_community_profile",
+      "command": "community profile view",
+      "args": [
+        { "connector": true }, { "literal": "community" }, { "literal": "profile" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_hash_algorithm",
+      "command": "hash-algorithm view",
+      "args": [
+        { "connector": true }, { "literal": "hash-algorithm" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_teams_view",
+      "command": "teams view",
+      "args": [
+        { "connector": true }, { "literal": "teams" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "array" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_actions_access",
+      "command": "actions access view",
+      "args": [
+        { "connector": true }, { "literal": "actions" }, { "literal": "access" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_actions_caches",
+      "command": "actions caches view",
+      "args": [
+        { "connector": true }, { "literal": "actions" }, { "literal": "caches" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_actions_downloads",
+      "command": "actions downloads view",
+      "args": [
+        { "connector": true }, { "literal": "actions" }, { "literal": "downloads" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "array" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_actions_permissions",
+      "command": "actions permissions view",
+      "args": [
+        { "connector": true }, { "literal": "actions" }, { "literal": "permissions" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_actions_workflow",
+      "command": "actions workflow view",
+      "args": [
+        { "connector": true }, { "literal": "actions" }, { "literal": "workflow" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_actions_runners",
+      "command": "actions runners view",
+      "args": [
+        { "connector": true }, { "literal": "actions" }, { "literal": "runners" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_actions_secrets",
+      "command": "actions secrets view",
+      "args": [
+        { "connector": true }, { "literal": "actions" }, { "literal": "secrets" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_actions_variables",
+      "command": "actions variables view",
+      "args": [
+        { "connector": true }, { "literal": "actions" }, { "literal": "variables" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "object" }]
+    },
+    {
+      "stage_name": "direct_read_sweep_ruleset_suites",
+      "command": "rulesets rule-suites view",
+      "args": [
+        { "connector": true }, { "literal": "rulesets" }, { "literal": "rule-suites" }, { "literal": "view" },
+        { "literal": "--credential" }, { "source_credential": true },
+        { "literal": "--max-bytes" }, { "literal": "1048576" }, { "literal": "--json" }
+      ],
+      "output_assertions": [{ "json_pointer": "/response", "value_type": "array" }]
     }
   ],
   "binary_candidates": [

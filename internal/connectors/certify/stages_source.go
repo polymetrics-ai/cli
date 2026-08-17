@@ -301,6 +301,25 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 		Passed:        true,
 	}
 	rep.Capabilities.SyncModes = map[string]SyncModeResult{}
+	if r.opts.DirectReadOnly {
+		directReadStages := []stageFunc{
+			stagePreflight,
+			stageCredentialsAdd,
+			stageCredentialsTest,
+			stageDirectReadSweep,
+		}
+		for _, stage := range directReadStages {
+			if err := stage(rc, &rep); err != nil {
+				rep.CompletedAt = time.Now().UTC()
+				return rep, err
+			}
+		}
+		finalizeJSONContract(&rep)
+		finalizeSecretRedaction(rc, &rep, secretValues)
+		rep.CompletedAt = time.Now().UTC()
+		rep.Passed = allStagesPassed(rep.Stages) && rep.Capabilities.SecretRedaction.Result != "fail"
+		return rep, nil
+	}
 
 	setupStages := []stageFunc{
 		stagePreflight,
