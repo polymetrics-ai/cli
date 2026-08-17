@@ -604,6 +604,7 @@ EXAMPLES
   pm connectors inspect github
   pm connectors inspect github --json
   pm connectors certify sample --full --json
+  pm connectors certify github --direct-read-only --resume --from-env token=GITHUB_TOKEN --json
   pm connectors certify github --external-proof --full-parity --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
   pm connectors certify postgres --full --write --stream public.events --config host=DB_HOST --config port=5432 --config database=DB_NAME --config username=DB_USER --config schema=public --config cursor_field=sequence --from-env password=POSTGRES_PASSWORD --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public

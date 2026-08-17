@@ -172,19 +172,23 @@ ACTIONS
     the report includes the API-surface inventory and provider-artifact
     provenance evidence separately from endpoint coverage and connector
     capabilities. Version-1 and pre-ledger inventories remain legacy_unverified
-    during the staged migration. A complete version-2 ledger reports its ledger
+    during the staged migration and cannot be treated as an endpoint coverage
+    claim. Full direct-read
+    sweeps are serial. If one stops after a provider rate-limit response,
+    rerun it with --resume to reuse only matching, credential-free candidate
+    checkpoints; the report marks resumed rows instead of implying they were
+    re-executed.
+    --direct-read-only retains preflight, live credential validation, serial
+    rate-limit handling, declaration-owned output assertions, and secret scans
+    for direct-read candidates, but does not run unrelated stream/ETL stages.
+    It cannot be combined with --write or --external-proof.
+    A complete version-2 ledger reports its ledger
     version, artifact count, endpoint count, and cited endpoint count; invalid
     version-2 provenance fails certification without enabling or changing any
     connector capability. When the connector declares coordinated rate limits,
     JSON may also contain safe rate_limit_events for attempts, observed resets,
     waits, and requests stopped before send; the events contain no credentials
     or rendered rate scopes.
-    --direct-read-only keeps preflight, live credential validation, serialized
-    rate-limit handling, declaration-owned direct-read output assertions, and
-    secret scans, while skipping unrelated stream/ETL stages. It cannot be
-    combined with --write or --external-proof. Use --resume after a rate-limit
-    stop to reuse only matching credential-free direct-read checkpoints; the
-    report marks resumed rows instead of claiming they were re-executed.
 
     PostgreSQL's full database proof requires --write plus an explicit
     --stream schema.table and cursor_field configuration. It certifies live
