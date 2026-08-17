@@ -51,7 +51,7 @@ func TestRenderCertifyReportTextStatesDirectReadBoundary(t *testing.T) {
 			DirectRead: &certify.CapabilityResult{
 				Result:        "pass",
 				StagesChecked: 23,
-				Reason:        "pass: 23 declaration-owned direct-read candidates; no whole GitHub command or stream surface claim",
+				Reason:        "pass: 23 declaration-owned direct-read candidates; no whole connector command or stream surface claim",
 			},
 		},
 	}
@@ -60,7 +60,7 @@ func TestRenderCertifyReportTextStatesDirectReadBoundary(t *testing.T) {
 	for _, want := range []string{
 		"direct-read: pass (candidates=23)",
 		"23 declaration-owned direct-read candidates",
-		"no whole GitHub command or stream surface claim",
+		"no whole connector command or stream surface claim",
 	} {
 		if !strings.Contains(text, want) {
 			t.Fatalf("renderCertifyReportText = %q, want %q", text, want)

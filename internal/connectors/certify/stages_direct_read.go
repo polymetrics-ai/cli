@@ -88,7 +88,7 @@ func stageDirectReadSweep(rc *runContext, rep *Report) error {
 		})
 	}
 	if passedCount == len(candidates) {
-		reason := fmt.Sprintf("pass: %d declaration-owned direct-read candidates; no whole GitHub command or stream surface claim", len(candidates))
+		reason := fmt.Sprintf("pass: %d declaration-owned direct-read candidates; no whole connector command or stream surface claim", len(candidates))
 		if resumedCount > 0 {
 			reason = fmt.Sprintf("%s; %d resumed from a matching prior live checkpoint", reason, resumedCount)
 		}
