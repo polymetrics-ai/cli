@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "fixture": {
+    "space_name": "pm-cert-user-resource-space-1786998283",
+    "resource_name": "pm-cert-user-resource-1786998283",
+    "space_number": null,
+    "resource_id": null,
+    "create_space_exit": "0",
+    "create_resource_exit": "not_run",
+    "setup_output_sha256": {
+      "space": "2e391ce1fa565ac7fd7f2d60ca5933ba703f488dcec52770a82ca7f78dab0047",
+      "resource": null
+    },
+    "read": {
+      "exit_code": "not_run"
+    },
+    "direct_cleanup": {
+      "delete_exit_code": "0",
+      "readback_exit_code": "1",
+      "readback_provider_result": "HTTP 404 Not Found",
+      "verified_absent": true,
+      "verified_at": "2026-08-17T20:27:16Z"
+    }
+  },
+  "updated_at": "2026-08-17T20:24:44.617Z"
+}
