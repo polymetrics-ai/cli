@@ -52,9 +52,10 @@ and `go vet ./...` pass.
 
 ## CI complete-state settlement review
 
-Scope: the second PR #4198 CI failure at the now-moved report-persistence
-assertion and the resulting redesign of the OS process-list/temporary-artifact
-proof.
+Scope: the second PR #4198 CI failure at the then-current report-persistence
+assertion and the intermediate redesign of the OS
+process-list/temporary-artifact proof. This was superseded by the later
+child-side observation inversion.
 
 Mode: inline/manual completion of the generated `code-review` prompt. The
 phase is not registered in the roadmap and this single-worker task may not
@@ -96,3 +97,17 @@ temporary file, so a placeholder or post-cleanup empty scan cannot pass.
 The artifact request is an integration-test evidence path, not a command-line
 switch and never skips the proof. No timeout was added or widened. Result: no
 Critical, Warning, or Info findings.
+
+## Rebased Recurly vehicle review
+
+Scope: PR #4198 after rebase onto `integration/4015-mvp-flat-r1` at
+`4a0289bcc`, which made the one-route Recurly TLS fixture return exit 1.
+
+The revised all-stage roll-up is correct: the fixture authenticates a real
+`/accounts` call but cannot provider-certify Recurly's declared write surface.
+The OS-boundary test does not claim otherwise. It now requires that exact
+incomplete-parity result after the fresh child has captured its own process,
+argv, and artifact state. This preserves the test's security subject without
+weakening certification, adding a skip, or changing any timeout.
+
+Result: no Critical, Warning, or Info findings.

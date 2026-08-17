@@ -432,8 +432,15 @@ func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifa
 		"--config", "base_url=" + server.URL,
 		"--from-env", "api_key=PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY",
 	}, &stdout, &stderr, true)
-	if err != nil {
-		t.Fatalf("fresh external HTTPS certification: %v", strings.ReplaceAll(err.Error(), token, "<credential>"))
+	// Recurly declares a broad live-write surface, while this intentionally
+	// one-route TLS fixture supplies only its authenticated accounts read. The
+	// current full-parity roll-up must therefore reject it; this OS-boundary
+	// test proves credential absence in the real child before that honest exit.
+	if err == nil || !strings.Contains(err.Error(), "external certification recurly: exit 1") {
+		t.Fatalf("fresh external HTTPS incomplete-parity result = %v, want recurly exit 1", strings.ReplaceAll(fmt.Sprint(err), token, "<credential>"))
+	}
+	if !strings.Contains(stderr.String(), "external proof requires a completed successful process") {
+		t.Fatal("fresh external child did not preserve the stricter incomplete-parity refusal")
 	}
 	if requests.Load() == 0 {
 		t.Fatal("fresh external binary made no HTTPS provider request")

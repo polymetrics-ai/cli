@@ -5,7 +5,7 @@
 ### Task Delivery Header
 
 - Issue: Refs #3989 — Certification: add external-binary proof capture and ephemeral fingerprint-first credentials.
-- Base branch: `integration/4015-mvp-flat-r1` at refreshed head `4967fa2a0`.
+- Base branch: `integration/4015-mvp-flat-r1` at refreshed head `4a0289bcc`.
 - Merges into: `integration/4015-mvp-flat-r1` → `main`.
 - Delivery: Commit the focused residual evidence and GSD records, push `fm/cli-3989-live-proof-residual-r1`, open a Conventional Commit PR to the exact base, then API-read the PR base.
 - Working branch: `fm/cli-3989-live-proof-residual-r1`.
@@ -22,7 +22,7 @@
 
 1. **Opaque proof evidence:** Red—add the opaque request/response canary assertion and run it before its test support exists. Green—serialize an accepted complete opaque exchange and assert raw-canary absence plus exact fingerprint presence for both bodies. Refactor—keep the original bounded-capture refusal as its own negative test.
 2. **Fingerprint semantics:** Red—add one two-credential proof test expecting repeated A marker equality, B marker difference, and no serialized salt. Green—assert the existing normalized prepared-value boundary produces those facts in one proof. Refactor—retain the separate cross-root replay assertion as its independent salt-rotation contract.
-3. **Real OS boundary:** Red—add a blocked external-child test whose helper is initially absent. Green—after the fresh child resolves the credential into memory, have that child record a secret-safe snapshot of its own process-list entry, argv, project root, runner workdir, and fresh-binary directory; after ordinary completion the parent verifies the artifact reports no raw credential in any location. Refactor—do not hold/release the child or poll parent-side lifecycle state; stream scanned files, redact any detected value before serialization, and keep the evidence request unconditional in CI.
+3. **Real OS boundary:** Red—add a blocked external-child test whose helper is initially absent. Green—after the fresh child resolves the credential into memory, have that child record a secret-safe snapshot of its own process-list entry, argv, project root, runner workdir, and fresh-binary directory; after ordinary completion the parent verifies the artifact reports no raw credential in any location. The one-route Recurly TLS fixture deliberately expects its strict incomplete-full-parity exit after the snapshot: it has authenticated only `/accounts`, not Recurly's declared write surface. Refactor—do not hold/release the child or poll parent-side lifecycle state; stream scanned files, redact any detected value before serialization, and keep the evidence request unconditional in CI.
 4. **Live provider evidence:** Run `TestExternalProofGitHubSmoke` only with the disposable identity named by the brief and retain sanitized command/result metadata (never secret material) in the ledger and verification record. The smoke itself independently asserts observable GitHub-backed proof creation and read-back.
 
 ### CLI parity assessment
