@@ -1,0 +1,43 @@
+{
+  "phase": "cli-certification-batch-scaling-r1",
+  "branch": "fm/cli-certification-batch-scaling-r1",
+  "base": "integration/4015-mvp-flat-r1",
+  "base_head": "eba2658c5fd671a1eebfb71463cbe6a3045d3c65",
+  "candidate_source": {
+    "pr": 4214,
+    "head": "7306b9ec3e079b51ac9c70a674605a3a27f6e09b",
+    "state": "open"
+  },
+  "lifecycle": {
+    "discuss-phase": "scripts/gsd prompt discuss-phase certification-batch-scaling-r1",
+    "plan-phase --tdd": "scripts/gsd prompt plan-phase certification-batch-scaling-r1 --tdd",
+    "execute-phase": "scripts/gsd prompt execute-phase certification-batch-scaling-r1",
+    "verify-work": "scripts/gsd prompt verify-work certification-batch-scaling-r1",
+    "code-review": "scripts/gsd prompt code-review certification-batch-scaling-r1"
+  },
+  "fallback": {
+    "used": true,
+    "reason": "No compatible Pi-isolated runtime is available and the delivery contract forbids role spawning; the lifecycle is executed inline with durable artifacts."
+  },
+  "publication": {
+    "state": "withheld",
+    "blocker": "#4211 / PR #4215 has not verified an accepted full-parity credential scope"
+  },
+  "measurement": {
+    "state": "complete",
+    "timing_boundary": "fresh project setup through credential validation, serial direct reads, checkpoint/report persistence, and teardown; pinned-binary build is reported separately",
+    "candidate_counts": {
+      "ten": 10,
+      "hundred": 100,
+      "repeated_hundred_runs": 3
+    },
+    "batches": [
+      {"id": "batch-10", "operations": 10, "wall_ms": 25527.667968, "passes": 2, "product_defects": 4, "missing_fixtures": 0, "provider_refusals": 4, "resumed": 0},
+      {"id": "batch-100-fresh", "operations": 100, "wall_ms": 158521.083904, "passes": 33, "product_defects": 14, "missing_fixtures": 6, "provider_refusals": 47, "resumed": 0},
+      {"id": "batch-100-repeat-1", "operations": 100, "wall_ms": 155620.976896, "passes": 33, "product_defects": 14, "missing_fixtures": 6, "provider_refusals": 47, "resumed": 0},
+      {"id": "batch-100-repeat-2", "operations": 100, "wall_ms": 150351.252992, "passes": 33, "product_defects": 14, "missing_fixtures": 6, "provider_refusals": 47, "resumed": 0}
+    ],
+    "resumability_probe": {"operations": 100, "resumed": 17, "checkpoint_completed": 34, "included_in_scaling_curve": false},
+    "scaling_verdict": "flat: 100-operation mean is 1.548311 seconds per target operation, versus 2.552767 seconds for the small setup-heavy 10-operation cohort; the three 100-operation walls span 150.351253 to 158.521084 seconds with no rate-limit admission wait or not-sent event"
+  }
+}
