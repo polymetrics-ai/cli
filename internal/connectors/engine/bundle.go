@@ -1042,16 +1042,18 @@ type CLIHelpTopic struct {
 // write lifecycle pairings next to the connector definition instead of in
 // shared provider-specific Go tables.
 type CertificationSpec struct {
-	SchemaVersion        int                                   `json:"schema_version"`
-	Source               CertificationSourceSpec               `json:"source,omitempty"`
-	DirectReadCandidates []CertificationCommandCandidate       `json:"direct_read_candidates,omitempty"`
-	DirectReadGeneration *CertificationReadCandidateGeneration `json:"direct_read_generation,omitempty"`
-	BinaryCandidates     []CertificationCommandCandidate       `json:"binary_candidates,omitempty"`
-	GraphQL              *CertificationGraphQLSpec             `json:"graphql,omitempty"`
-	WritePairings        []CertificationWritePairing           `json:"write_pairings,omitempty"`
-	WriteInventory       CertificationWriteInventorySpec       `json:"write_inventory,omitempty"`
-	WriteWave            *CertificationWriteWaveSpec           `json:"write_wave,omitempty"`
-	EvidenceImport       *CertificationEvidenceImportSpec      `json:"evidence_import,omitempty"`
+	SchemaVersion        int                                       `json:"schema_version"`
+	Source               CertificationSourceSpec                   `json:"source,omitempty"`
+	DirectReadCandidates []CertificationCommandCandidate           `json:"direct_read_candidates,omitempty"`
+	DirectReadGeneration *CertificationReadCandidateGeneration     `json:"direct_read_generation,omitempty"`
+	MutationCandidates   []CertificationMutationCandidate          `json:"mutation_candidates,omitempty"`
+	MutationGeneration   *CertificationMutationCandidateGeneration `json:"mutation_generation,omitempty"`
+	BinaryCandidates     []CertificationCommandCandidate           `json:"binary_candidates,omitempty"`
+	GraphQL              *CertificationGraphQLSpec                 `json:"graphql,omitempty"`
+	WritePairings        []CertificationWritePairing               `json:"write_pairings,omitempty"`
+	WriteInventory       CertificationWriteInventorySpec           `json:"write_inventory,omitempty"`
+	WriteWave            *CertificationWriteWaveSpec               `json:"write_wave,omitempty"`
+	EvidenceImport       *CertificationEvidenceImportSpec          `json:"evidence_import,omitempty"`
 }
 
 // CertificationEvidenceImportSpec is connector-owned acceptance metadata for
@@ -1105,6 +1107,107 @@ type CertificationReadCandidateCohort struct {
 	Name         string   `json:"name"`
 	CommandCount int      `json:"command_count"`
 	Commands     []string `json:"commands"`
+}
+
+// CertificationMutationCandidate is a generated, non-executing inventory
+// record for one mutation command. It derives command and declaration facts;
+// connector-owned metadata supplies only the containment-family assessment.
+type CertificationMutationCandidate struct {
+	Command        string                                   `json:"command"`
+	CommandTokens  []string                                 `json:"command_tokens"`
+	Intent         string                                   `json:"intent"`
+	Cohort         string                                   `json:"cohort"`
+	CredentialFlag string                                   `json:"credential_flag"`
+	JSONMode       *bool                                    `json:"json_mode,omitempty"`
+	Declaration    CertificationMutationDeclaration         `json:"declaration"`
+	Address        CertificationMutationAddress             `json:"address"`
+	Fixture        CertificationMutationFixtureProvisioning `json:"fixture"`
+	InputSlots     []CertificationMutationInputSlot         `json:"input_slots"`
+	RequiredFlags  []string                                 `json:"required_flags"`
+	Classification CertificationMutationClassification      `json:"classification"`
+	Generated      bool                                     `json:"generated,omitempty"`
+	OverrideReason string                                   `json:"override_reason,omitempty"`
+}
+
+// CertificationMutationDeclaration identifies the production executor that a
+// future lifecycle runner must use. Slice 0 only records it; it never invokes
+// the executor.
+type CertificationMutationDeclaration struct {
+	Kind     string `json:"kind"`
+	ID       string `json:"id"`
+	Executor string `json:"executor"`
+}
+
+// CertificationMutationAddress preserves the declaration source for the
+// operation address. A CLI surface address is preferred; an alias falls back
+// to its declared write action rather than inventing an endpoint.
+type CertificationMutationAddress struct {
+	Source    string `json:"source"`
+	Transport string `json:"transport"`
+	Method    string `json:"method"`
+	Path      string `json:"path"`
+}
+
+// CertificationMutationFixtureProvisioning records whether the declared
+// endpoint tree can create a fresh object for this candidate's own collection.
+// It is generated only: no fixture object, credential, or provider contact is
+// involved. A named exception is intentionally explicit so a missing cycle
+// cannot silently reuse a long-lived fixture.
+type CertificationMutationFixtureProvisioning struct {
+	Strategy            string   `json:"strategy"`
+	Collection          string   `json:"collection,omitempty"`
+	CollectionDepth     int      `json:"collection_depth,omitempty"`
+	ProvisionerCommands []string `json:"provisioner_commands,omitempty"`
+	ExceptionCode       string   `json:"exception_code,omitempty"`
+	Evidence            string   `json:"evidence"`
+}
+
+// CertificationMutationInputSlot is one typed user or record value required
+// by the declared mutation contract.
+type CertificationMutationInputSlot struct {
+	Path     string   `json:"path"`
+	Type     string   `json:"type"`
+	Required bool     `json:"required"`
+	Values   []string `json:"values,omitempty"`
+}
+
+// CertificationMutationClassification is the containment-first result for a
+// mutation candidate. It is inventory only, never a certification outcome.
+type CertificationMutationClassification struct {
+	Code     string `json:"code"`
+	Family   string `json:"family,omitempty"`
+	Evidence string `json:"evidence"`
+}
+
+// CertificationMutationCandidateGeneration declares the exhaustive mutation
+// cohort and connector-owned escape families consumed by connectorgen.
+type CertificationMutationCandidateGeneration struct {
+	Cohort     CertificationMutationCandidateCohort        `json:"cohort"`
+	Unassessed CertificationMutationClassification         `json:"unassessed"`
+	Families   []CertificationMutationClassificationFamily `json:"families"`
+}
+
+// CertificationMutationCandidateCohort selects a declared mutation intent
+// set and pins its expected count so surface drift cannot go unnoticed.
+type CertificationMutationCandidateCohort struct {
+	Name         string   `json:"name"`
+	CommandCount int      `json:"command_count"`
+	Intents      []string `json:"intents"`
+}
+
+// CertificationMutationClassificationFamily is a connector-owned semantic
+// family. Positive selectors are ORed; exclusions keep broad containment
+// families disjoint from the explicitly named escape families.
+type CertificationMutationClassificationFamily struct {
+	ID                string                              `json:"id"`
+	Classification    CertificationMutationClassification `json:"classification"`
+	Commands          []string                            `json:"commands,omitempty"`
+	Operations        []string                            `json:"operations,omitempty"`
+	Writes            []string                            `json:"writes,omitempty"`
+	Intents           []string                            `json:"intents,omitempty"`
+	ExcludeCommands   []string                            `json:"exclude_commands,omitempty"`
+	ExcludeOperations []string                            `json:"exclude_operations,omitempty"`
+	ExcludeWrites     []string                            `json:"exclude_writes,omitempty"`
 }
 
 // CertificationGraphQLSpec declares a bounded schema-conformance inventory
@@ -2853,6 +2956,16 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 			}
 		}
 	}
+	for i, candidate := range certification.MutationCandidates {
+		if err := validateCertificationMutationCandidate(i, candidate); err != nil {
+			return err
+		}
+	}
+	if generation := certification.MutationGeneration; generation != nil {
+		if err := validateCertificationMutationGeneration(*generation); err != nil {
+			return err
+		}
+	}
 	for i, candidate := range certification.BinaryCandidates {
 		if err := validateCertificationCommandCandidate("binary_candidates", i, candidate); err != nil {
 			return err
@@ -3013,6 +3126,143 @@ func validateCertificationCommandCandidate(section string, i int, candidate Cert
 		seenPointers[assertion.JSONPointer] = struct{}{}
 	}
 	return nil
+}
+
+func validateCertificationMutationCandidate(i int, candidate CertificationMutationCandidate) error {
+	section := fmt.Sprintf("mutation_candidates[%d]", i)
+	if strings.TrimSpace(candidate.Command) == "" || len(candidate.CommandTokens) == 0 || strings.TrimSpace(candidate.Intent) == "" || strings.TrimSpace(candidate.Cohort) == "" || candidate.CredentialFlag != "--credential" {
+		return fmt.Errorf("%s must declare command, command_tokens, intent, cohort, and the --credential flag", section)
+	}
+	if candidate.Intent != "direct_write" && candidate.Intent != "reverse_etl" {
+		return fmt.Errorf("%s intent %q is not a mutation intent", section, candidate.Intent)
+	}
+	if candidate.Declaration.Kind != "operation" && candidate.Declaration.Kind != "write_action" {
+		return fmt.Errorf("%s declaration.kind %q is invalid", section, candidate.Declaration.Kind)
+	}
+	if strings.TrimSpace(candidate.Declaration.ID) == "" || (candidate.Declaration.Executor != "direct_write" && candidate.Declaration.Executor != "reverse_plan") {
+		return fmt.Errorf("%s declaration must declare id and supported executor", section)
+	}
+	if strings.TrimSpace(candidate.Address.Source) == "" || strings.TrimSpace(candidate.Address.Method) == "" || strings.TrimSpace(candidate.Address.Path) == "" {
+		return fmt.Errorf("%s must declare an address source, method, and path", section)
+	}
+	if candidate.Address.Source != "cli_surface" && candidate.Address.Source != "operation" && candidate.Address.Source != "write_action" {
+		return fmt.Errorf("%s address.source %q is invalid", section, candidate.Address.Source)
+	}
+	if candidate.Address.Transport != "" && candidate.Address.Transport != "rest" && candidate.Address.Transport != "graphql" {
+		return fmt.Errorf("%s address.transport %q is invalid", section, candidate.Address.Transport)
+	}
+	if candidate.Fixture.Strategy != "" {
+		if err := validateCertificationMutationFixture(section+".fixture", candidate.Fixture); err != nil {
+			return err
+		}
+	}
+	if candidate.JSONMode != nil && !*candidate.JSONMode {
+		return fmt.Errorf("%s json_mode must be true when declared", section)
+	}
+	if err := validateCertificationMutationClassification(section+".classification", candidate.Classification, false); err != nil {
+		return err
+	}
+	if candidate.Generated && strings.TrimSpace(candidate.OverrideReason) != "" {
+		return fmt.Errorf("%s generated candidate must not declare override_reason", section)
+	}
+	if !candidate.Generated && strings.TrimSpace(candidate.OverrideReason) == "" {
+		return fmt.Errorf("%s manual candidate must declare override_reason", section)
+	}
+	slots := make(map[string]struct{}, len(candidate.InputSlots))
+	for j, slot := range candidate.InputSlots {
+		if strings.TrimSpace(slot.Path) == "" || strings.TrimSpace(slot.Type) == "" {
+			return fmt.Errorf("%s.input_slots[%d] must declare path and type", section, j)
+		}
+		if _, duplicate := slots[slot.Path]; duplicate {
+			return fmt.Errorf("%s input slot %q is duplicated", section, slot.Path)
+		}
+		slots[slot.Path] = struct{}{}
+	}
+	return nil
+}
+
+func validateCertificationMutationFixture(section string, fixture CertificationMutationFixtureProvisioning) error {
+	if strings.TrimSpace(fixture.Evidence) == "" {
+		return fmt.Errorf("%s must declare concrete evidence", section)
+	}
+	switch fixture.Strategy {
+	case "derived_collection_cycle":
+		if strings.TrimSpace(fixture.Collection) == "" || fixture.CollectionDepth <= 0 || len(fixture.ProvisionerCommands) == 0 {
+			return fmt.Errorf("%s derived_collection_cycle must declare collection, positive collection_depth, and provisioner_commands", section)
+		}
+		if strings.TrimSpace(fixture.ExceptionCode) != "" {
+			return fmt.Errorf("%s derived_collection_cycle must not declare exception_code", section)
+		}
+	case "named_exception":
+		if strings.TrimSpace(fixture.ExceptionCode) == "" {
+			return fmt.Errorf("%s named_exception must declare exception_code", section)
+		}
+		if fixture.Collection != "" || fixture.CollectionDepth != 0 || len(fixture.ProvisionerCommands) != 0 {
+			return fmt.Errorf("%s named_exception must not declare a derived collection", section)
+		}
+	default:
+		return fmt.Errorf("%s strategy %q is invalid", section, fixture.Strategy)
+	}
+	return nil
+}
+
+func validateCertificationMutationGeneration(generation CertificationMutationCandidateGeneration) error {
+	if strings.TrimSpace(generation.Cohort.Name) == "" || generation.Cohort.CommandCount <= 0 || len(generation.Cohort.Intents) == 0 {
+		return fmt.Errorf("mutation_generation.cohort must declare name, positive command_count, and intents")
+	}
+	intents := make(map[string]struct{}, len(generation.Cohort.Intents))
+	for i, intent := range generation.Cohort.Intents {
+		if intent != "direct_write" && intent != "reverse_etl" {
+			return fmt.Errorf("mutation_generation.cohort.intents[%d] %q is not a mutation intent", i, intent)
+		}
+		if _, duplicate := intents[intent]; duplicate {
+			return fmt.Errorf("mutation_generation.cohort intent %q is duplicated", intent)
+		}
+		intents[intent] = struct{}{}
+	}
+	if err := validateCertificationMutationClassification("mutation_generation.unassessed", generation.Unassessed, true); err != nil {
+		return err
+	}
+	if generation.Unassessed.Code != "unassessed" {
+		return fmt.Errorf("mutation_generation.unassessed must use code \"unassessed\"")
+	}
+	families := make(map[string]struct{}, len(generation.Families))
+	for i, family := range generation.Families {
+		section := fmt.Sprintf("mutation_generation.families[%d]", i)
+		if strings.TrimSpace(family.ID) == "" {
+			return fmt.Errorf("%s must declare id", section)
+		}
+		if _, duplicate := families[family.ID]; duplicate {
+			return fmt.Errorf("mutation_generation family %q is duplicated", family.ID)
+		}
+		families[family.ID] = struct{}{}
+		if err := validateCertificationMutationClassification(section+".classification", family.Classification, true); err != nil {
+			return err
+		}
+		if len(family.Commands)+len(family.Operations)+len(family.Writes)+len(family.Intents) == 0 {
+			return fmt.Errorf("%s must declare at least one positive selector", section)
+		}
+	}
+	return nil
+}
+
+func validateCertificationMutationClassification(section string, classification CertificationMutationClassification, allowEmptyFamily bool) error {
+	if !validCertificationMutationClassificationCode(classification.Code) || strings.TrimSpace(classification.Evidence) == "" {
+		return fmt.Errorf("%s must declare a supported code and concrete evidence", section)
+	}
+	if !allowEmptyFamily && strings.TrimSpace(classification.Family) == "" {
+		return fmt.Errorf("%s must declare family", section)
+	}
+	return nil
+}
+
+func validCertificationMutationClassificationCode(code string) bool {
+	switch code {
+	case "contained", "real_money", "real_people", "public_visibility", "third_party_scope", "unassessed":
+		return true
+	default:
+		return false
+	}
 }
 
 func validateCertificationOutputAssertion(assertion CertificationOutputAssertion) error {
