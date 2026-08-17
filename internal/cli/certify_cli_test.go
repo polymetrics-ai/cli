@@ -54,6 +54,10 @@ func TestMain(m *testing.M) {
 		fmt.Fprintf(os.Stderr, "certify CLI real invocation budget exceeded: got %d, allowed %d; retain one certify router proof and render remaining cases from fixtures\n", got, certifyCLIRealInvocationBudget)
 		code = 1
 	}
+	if err := removePMTestBinaryFixture(); err != nil {
+		fmt.Fprintf(os.Stderr, "remove shared pm test fixture: %v\n", err)
+		code = 1
+	}
 	os.Exit(code)
 }
 
