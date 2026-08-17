@@ -1,6 +1,6 @@
 {
   "phase": "issue-4015-cli-package-test-ceiling-r1",
-  "state": "reviewed",
+  "state": "ready_to_push",
   "base": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-cli-package-test-ceiling-r1",
   "manual_gsd_fallback": "non-Pi worker and canonical contract prohibits role spawning",

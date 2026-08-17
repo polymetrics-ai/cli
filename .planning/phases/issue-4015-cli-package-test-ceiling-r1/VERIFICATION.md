@@ -7,8 +7,8 @@
 - [x] Focused red test demonstrates non-shared binary paths before fixture implementation (`red-fixture-identity.log`).
 - [x] Focused fixture test passes after the implementation (`green-fixture-identity.log`).
 - [x] Changed inventory equals the baseline inventory exactly (263 runnable names).
-- [x] Changed verbose package duration is 532.694s / 537.29s wall, a 14.5% local reduction; applying it to the 1180.982s documented integration base produces an estimated 1010s (15.9% below 1200s), without a timeout change. Hosted Verify remains required.
-- [x] `go test -timeout 20m ./internal/cli` through `make verify` (standard aggregate run reports 685.504s).
+- [x] Changed verbose package duration is 532.694s / 537.29s wall, a 14.5% local reduction. Final rebased normal-topology evidence is stronger: `make verify` reports 847.535s (29.4% below 1200s), without a timeout change.
+- [x] `go test -timeout 20m ./internal/cli` through final rebased `make verify` (standard aggregate run reports 847.535s).
 - [x] `go test -timeout 20m ./cmd/connectorgen` (pass, 94.783s).
 - [x] Repository verification gates and generated-file checks: `make tidy-check`, `go vet ./...`, `go build ./cmd/pm`, `make docs-check-no-build`, `make smoke-no-build`, `make lint`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make github-parity-artifacts-check`, `make connectorgen-certification-matrix`, `make connectorgen-certification-sweep`, `make connector-boundary`, `make connector-canon-check`, `make release-workflow-check`, and the aggregate `make verify` all passed. `pnpm --dir website run gen:docs` passed twice and `git diff --exit-code -- website` confirmed byte stability.
 - [x] Static diff review and inline GSD `verify-work` evidence; `git diff --check` passed.

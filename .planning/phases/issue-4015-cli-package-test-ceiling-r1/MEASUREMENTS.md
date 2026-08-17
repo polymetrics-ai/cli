@@ -23,9 +23,10 @@ Both captures contained 263 runnable test names. Their SHA-256 hashes are identi
 | --- | --- | ---: | ---: | --- |
 | Before | `/usr/bin/time -p go test -v -timeout 30m ./internal/cli` | 623.128s | 627.73s | pass |
 | After | `/usr/bin/time -p go test -v -timeout 30m ./internal/cli` | 532.694s | 537.29s | pass |
-| Aggregate verification | `make verify` → `go test -timeout 20m ./...` | 685.504s for `internal/cli` | n/a | pass |
+| Aggregate verification, pre-rebase | `make verify` → `go test -timeout 20m ./...` | 685.504s for `internal/cli` | n/a | pass |
+| Aggregate verification, final rebased branch | `make verify` → `go test -timeout 20m ./...` | 847.535s for `internal/cli` | n/a | pass |
 
-The local like-for-like package reduction is 90.434s (14.5%). The documented integration-base CI measurement is 1180.982s; applying the measured relative reduction yields approximately 1010s, or 15.9% under the unchanged 1200s per-binary ceiling. This is an inference; the hosted Verify result is the authoritative CI measurement.
+The local like-for-like package reduction is 90.434s (14.5%). More importantly, the exact rebased delivery branch passes the standard `go test -timeout 20m ./...` invocation in 847.535s for `internal/cli`: 352.465s (29.4%) under the unchanged 1200s ceiling. The documented integration-base CI measurement is 1180.982s, so the final local normal-topology run no longer collides with that base-branch condition. Hosted Verify remains the authoritative CI measurement.
 
 ## Root-cause measurement
 

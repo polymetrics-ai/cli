@@ -41,6 +41,8 @@ The compact command, inventory, and timing evidence is in `MEASUREMENTS.md`. The
 - `buildTransportPM` has **18 call sites** across the real-binary proofs. It invokes `go build -o <test-tempdir>/pm ./cmd/pm` once per caller; no test depends on changing the executable.
 - `.github/workflows/verify.yml` runs `make verify`, whose `test` target is exactly `go test -timeout 20m ./...`; Go can schedule packages but `internal/cli` remains one serial test binary. The hosted runner therefore cannot reclaim the repeated linking inside that binary.
 
+The final rebased aggregate `make verify` command directly proves the normal `-timeout 20m` package result at 847.535s — 29.4% below the ceiling — rather than relying solely on an extrapolation from the diagnostic run.
+
 ### Selected mechanism: lazy package-scoped binary fixture
 
 Use a `sync.Once` fixture owned by `TestMain`: the first real-binary test creates a package-owned temporary directory, builds `./cmd/pm` once, and later callers receive that read-only path. `TestMain` removes the directory only after `m.Run()` completes, before its existing explicit `os.Exit`.
