@@ -52,9 +52,26 @@ environment-variable name, or protected key path — never a raw secret.
   `live_tested=false, records=0`; restoring it regenerates
   `live_tested=true, records=1`.
 
+## Delivery record
+
+- GSD lifecycle: resolved `discuss-phase`, `plan-phase`, `execute-phase`,
+  `verify-work`, and `code-review` through `scripts/gsd`; executed the
+  issue-specific TDD/verification/review steps inline because this direct-PR
+  slice has no registered GSD phase. The plan and ledger record the red/green
+  evidence, including this PR's post-CI gap closure.
+- Required Go skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
+  `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-database`,
+  `golang-graphql`, `golang-documentation`, and `golang-lint`.
+- Code review: inline review found no new connector identifier, boundary
+  allowlist change, unsafe unredacted data flow, or selector path that can
+  broaden a completed selection. Claude's configured automatic PR review is
+  the external review route for the pushed correction.
+
 ## Verification
 
 - `go test -timeout 20m ./cmd/connectorgen ./internal/connectors/certify ./internal/cli`
+- `go test -timeout 20m ./cmd/connectorgen ./internal/connectors/certify`
 - `go test -timeout 20m ./cmd/connectorgen -count=1`
 - `go run ./cmd/connectorgen certification-candidates --connector github` twice
   (byte-stable)
@@ -63,8 +80,10 @@ environment-variable name, or protected key path — never a raw secret.
 - `git diff --exit-code c9791db4d -- internal/connectors/certifications/evidence`
 - `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors` twice
 - `pnpm run gen:docs` twice and `pnpm run gen:website-data` twice from `website/`
+- `make certify-timing` — pass in 21 seconds: 16 real CLI invocations (budget 25), with the existing 3m30s cap unchanged. The preceding CI failure was a stage-selector correctness failure, not a harness-cost overrun.
 
-`make verify` passed after the rebase, including the full Go suite, build,
-docs, generation, certification, boundary, canon, and release-workflow gates.
+`make verify` passed after the selector correction, including the full Go suite,
+build, docs, generation, certification, boundary, canon, and release-workflow
+gates.
 `security/snyk` remains CI-only and has the known identical base-branch
 failure; this PR does not mask it.

@@ -136,8 +136,9 @@ func directReadCandidatesFor(connector string, config map[string]string) ([]dire
 	}
 	cohort := strings.TrimSpace(configValue(config, "certification_cohort", ""))
 	requestedStages := strings.TrimSpace(configValue(config, "certification_stages", ""))
+	stageSelectionRequested := requestedStages != ""
 	selected := make(map[string]struct{})
-	if requestedStages != "" {
+	if stageSelectionRequested {
 		for _, stage := range strings.Split(requestedStages, ",") {
 			stage = strings.TrimSpace(stage)
 			if stage == "" {
@@ -154,7 +155,7 @@ func directReadCandidatesFor(connector string, config map[string]string) ([]dire
 		if cohort != "" && candidate.Cohort != cohort {
 			continue
 		}
-		if len(selected) != 0 {
+		if stageSelectionRequested {
 			if _, wanted := selected[candidate.StageName]; !wanted {
 				continue
 			}

@@ -36,6 +36,7 @@
 - Resolved GSD command sources: `discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review`; `go run ./cmd/agentcontractgen check` passed.
 - Inline/manual fallback: `gsd-sdk query init.phase-op issue-4015-generic-evidence-importer-r1` reports `phase_found: false`; the issue is a direct-PR delivery slice rather than a roadmap phase. The canonical adapter therefore cannot create phase artifacts or isolated workers. This worker executes the same discuss → TDD plan → execute → verify → review lifecycle inline and records it here.
 - Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-database`, `golang-graphql`, `golang-documentation`, and `golang-lint`.
+- Gap closure: CI job `95424260739` established a selector correctness failure within the certify-timing target, while its 16 real CLI calls remained below the 25-call budget. The inline GSD gap plan preserves a separate selector-present state so consuming the final selected name cannot broaden the run; no budget or duration cap changes are allowed.
 
 ## Execution Plan
 
@@ -44,3 +45,11 @@
 3. Replace database-specific command plumbing with definition-derived generic input and run the records through the existing proof builder/accepted-evidence validator.
 4. Exercise the generic report importer with validated proof fixtures, prove PostgreSQL byte stability plus a second connector-shaped import, and stage GitHub's observed-operation binding. Defer its live proof only while the credential rotation prevents a safe new run.
 5. Execute focused and repository gates, perform the deliberate broken-evidence demonstration, run verification and code review inline, commit/push, open the direct PR, and read its API base back.
+
+## Gap Closure Result
+
+The post-CI selector correction completed red → green without changing the
+certification timing budget or duration cap. `make certify-timing` remained at
+16 real CLI invocations against a budget of 25, and the corrected tree passed
+`make verify`. The GSD gap plan/execution/verification/code-review steps were
+performed inline because this direct-PR issue is not a registered GSD phase.
