@@ -12,6 +12,7 @@ import (
 	"sync"
 	"testing"
 
+	"polymetrics.ai/internal/connectors/certify"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/synccontract"
 )
@@ -298,13 +299,14 @@ func TestCertificationRejectsNotApplicableWithoutNamedReason(t *testing.T) {
 
 func TestCertificationRejectsMalformedAcceptedLiveEvidence(t *testing.T) {
 	err := validateAcceptedEvidence(acceptedEvidence{
-		SchemaVersion:   1,
-		Scope:           evidenceScopeCapability,
-		Status:          evidenceStatusPassed,
-		CredentialScope: credentialScopeFullParity,
-		CredentialNote:  fullParityCredentialNote,
-		Connector:       "github",
-		FunctionKind:    "capability:read",
+		SchemaVersion:        acceptedEvidenceSchemaVersion,
+		Scope:                evidenceScopeCapability,
+		Status:               evidenceStatusPassed,
+		CredentialScope:      credentialScopeObservedOperations,
+		CredentialNote:       observedOperationsCredentialNote,
+		CredentialScopeProof: credentialScopeProofProtocolExchanges,
+		Connector:            "github",
+		FunctionKind:         "capability:read",
 	})
 	if err == nil {
 		t.Fatal("validateAcceptedEvidence() error = nil, want missing real-provider evidence rejection")
@@ -316,14 +318,15 @@ func TestCertificationRejectsMalformedAcceptedLiveEvidence(t *testing.T) {
 
 func TestCertificationRejectsUnsafeEvidenceIdentifiers(t *testing.T) {
 	err := validateAcceptedEvidence(acceptedEvidence{
-		SchemaVersion:   certificationSchemaVersion,
-		Scope:           evidenceScopeCapability,
-		Status:          evidenceStatusPassed,
-		CredentialScope: credentialScopeFullParity,
-		CredentialNote:  fullParityCredentialNote,
-		Connector:       "github",
-		FunctionKind:    "capability:read",
-		Provider:        "github credential",
+		SchemaVersion:        acceptedEvidenceSchemaVersion,
+		Scope:                evidenceScopeCapability,
+		Status:               evidenceStatusPassed,
+		CredentialScope:      credentialScopeObservedOperations,
+		CredentialNote:       observedOperationsCredentialNote,
+		CredentialScopeProof: credentialScopeProofProtocolExchanges,
+		Connector:            "github",
+		FunctionKind:         "capability:read",
+		Provider:             "github credential",
 	})
 	if err == nil {
 		t.Fatal("validateAcceptedEvidence() error = nil, want unsafe provider rejection")
@@ -341,16 +344,17 @@ func TestCertificationRejectsUnsafeEvidenceIdentifiers(t *testing.T) {
 
 func TestCertificationRejectsProoflessAcceptedLiveEvidence(t *testing.T) {
 	err := validateAcceptedEvidence(acceptedEvidence{
-		SchemaVersion:   1,
-		Scope:           evidenceScopeCapability,
-		Status:          evidenceStatusPassed,
-		Connector:       "github",
-		FunctionKind:    "capability:read",
-		Provider:        "github",
-		ExecutedAt:      "2026-08-10T00:00:00Z",
-		RunID:           "live-run-123",
-		CredentialScope: credentialScopeFullParity,
-		CredentialNote:  fullParityCredentialNote,
+		SchemaVersion:        acceptedEvidenceSchemaVersion,
+		Scope:                evidenceScopeCapability,
+		Status:               evidenceStatusPassed,
+		Connector:            "github",
+		FunctionKind:         "capability:read",
+		Provider:             "github",
+		ExecutedAt:           "2026-08-10T00:00:00Z",
+		RunID:                "live-run-123",
+		CredentialScope:      credentialScopeObservedOperations,
+		CredentialNote:       observedOperationsCredentialNote,
+		CredentialScopeProof: credentialScopeProofProtocolExchanges,
 	})
 	if err == nil {
 		t.Fatal("validateAcceptedEvidence() error = nil, want proof-bearing live evidence rejection")
@@ -363,19 +367,18 @@ func TestCertificationRejectsProoflessAcceptedLiveEvidence(t *testing.T) {
 func TestCertificationSanitizesPreparedValuesBeforeProofPersistence(t *testing.T) {
 	secret := "token-value-used-by-the-prepared-request"
 	evidence, err := newProofBearingEvidence(completedLiveEvidence{
-		SchemaVersion:        certificationSchemaVersion,
-		Scope:                evidenceScopeCapability,
-		Connector:            "github",
-		FunctionKind:         "operation:rest_read",
-		Provider:             "github",
-		ExecutedAt:           "2026-08-10T00:00:00Z",
-		RunID:                "live-run-123",
-		PMBinarySHA256:       strings.Repeat("a", 64),
-		PMCommand:            "pm etl read --connector github --json",
-		Passed:               true,
-		CredentialFullParity: true,
-		RepositorySalt:       []byte("0123456789abcdef0123456789abcdef"),
-		PreparedValues:       []string{secret},
+		SchemaVersion:  certificationSchemaVersion,
+		Scope:          evidenceScopeCapability,
+		Connector:      "github",
+		FunctionKind:   "operation:rest_read",
+		Provider:       "github",
+		ExecutedAt:     "2026-08-10T00:00:00Z",
+		RunID:          "live-run-123",
+		PMBinarySHA256: strings.Repeat("a", 64),
+		PMCommand:      "pm etl read --connector github --json",
+		Passed:         true,
+		RepositorySalt: []byte("0123456789abcdef0123456789abcdef"),
+		PreparedValues: []string{secret},
 		HTTPExchanges: []completedHTTPExchange{{
 			Operation: "github.repos.get",
 			Request: completedHTTPRequest{
@@ -426,18 +429,17 @@ func TestCertificationEvidenceWriterUsesRepositoryLocalSaltBeforePersistence(t *
 	path := filepath.Join(root, "internal", "connectors", "certifications", "evidence", "github.json")
 	secret := "credential-only-in-memory"
 	completed := completedLiveEvidence{
-		SchemaVersion:        certificationSchemaVersion,
-		Scope:                evidenceScopeCapability,
-		Connector:            "github",
-		FunctionKind:         "operation:rest_read",
-		Provider:             "github",
-		ExecutedAt:           "2026-08-10T00:00:00Z",
-		RunID:                "github-local-salt",
-		PMBinarySHA256:       strings.Repeat("d", 64),
-		PMCommand:            "pm etl read --connector github --json",
-		Passed:               true,
-		CredentialFullParity: true,
-		PreparedValues:       []string{secret},
+		SchemaVersion:  certificationSchemaVersion,
+		Scope:          evidenceScopeCapability,
+		Connector:      "github",
+		FunctionKind:   "operation:rest_read",
+		Provider:       "github",
+		ExecutedAt:     "2026-08-10T00:00:00Z",
+		RunID:          "github-local-salt",
+		PMBinarySHA256: strings.Repeat("d", 64),
+		PMCommand:      "pm etl read --connector github --json",
+		Passed:         true,
+		PreparedValues: []string{secret},
 		HTTPExchanges: []completedHTTPExchange{{
 			Operation: "github.repos.get",
 			Request: completedHTTPRequest{
@@ -496,19 +498,18 @@ func TestCertificationEvidenceWriterUsesRepositoryLocalSaltBeforePersistence(t *
 func TestCertificationRejectsUnsafeEmbeddedProof(t *testing.T) {
 	secret := "unsafe-proof-token"
 	evidence, err := newProofBearingEvidence(completedLiveEvidence{
-		SchemaVersion:        certificationSchemaVersion,
-		Scope:                evidenceScopeCapability,
-		Connector:            "github",
-		FunctionKind:         "operation:rest_read",
-		Provider:             "github",
-		ExecutedAt:           "2026-08-10T00:00:00Z",
-		RunID:                "live-run-unsafe-proof",
-		PMBinarySHA256:       strings.Repeat("b", 64),
-		PMCommand:            "pm etl read --connector github --json",
-		Passed:               true,
-		CredentialFullParity: true,
-		RepositorySalt:       []byte("0123456789abcdef0123456789abcdef"),
-		PreparedValues:       []string{secret},
+		SchemaVersion:  certificationSchemaVersion,
+		Scope:          evidenceScopeCapability,
+		Connector:      "github",
+		FunctionKind:   "operation:rest_read",
+		Provider:       "github",
+		ExecutedAt:     "2026-08-10T00:00:00Z",
+		RunID:          "live-run-unsafe-proof",
+		PMBinarySHA256: strings.Repeat("b", 64),
+		PMCommand:      "pm etl read --connector github --json",
+		Passed:         true,
+		RepositorySalt: []byte("0123456789abcdef0123456789abcdef"),
+		PreparedValues: []string{secret},
 		HTTPExchanges: []completedHTTPExchange{{
 			Operation: "github.repos.get",
 			Request:   completedHTTPRequest{Method: "GET", Target: "https://api.github.example/repos/acme/widget"},
@@ -556,8 +557,8 @@ func TestCertificationArtifactProofValidationPrecedesCodeDrift(t *testing.T) {
 	}
 }
 
-func TestCertificationRejectsNarrowCredentialEvidence(t *testing.T) {
-	_, err := newProofBearingEvidence(completedLiveEvidence{
+func TestCertificationPublishesNarrowCredentialEvidence(t *testing.T) {
+	evidence, err := newProofBearingEvidence(completedLiveEvidence{
 		SchemaVersion:  certificationSchemaVersion,
 		Scope:          evidenceScopeCapability,
 		Connector:      "github",
@@ -576,8 +577,91 @@ func TestCertificationRejectsNarrowCredentialEvidence(t *testing.T) {
 			Response:  completedHTTPResponse{Status: 200},
 		}},
 	})
-	if err == nil || !strings.Contains(err.Error(), "full-parity") {
-		t.Fatalf("newProofBearingEvidence() error = %v, want full-parity rejection", err)
+	if err != nil {
+		t.Fatalf("newProofBearingEvidence() = %v, want bounded evidence publication", err)
+	}
+	if evidence.CredentialScope != credentialScopeObservedOperations || evidence.CredentialScopeProof != credentialScopeProofProtocolExchanges {
+		t.Fatalf("bounded credential claim = (%q, %q), want (%q, %q)", evidence.CredentialScope, evidence.CredentialScopeProof, credentialScopeObservedOperations, credentialScopeProofProtocolExchanges)
+	}
+}
+
+func TestCertificationBoundedScopePublishesObservedOperations(t *testing.T) {
+	evidence, err := newProofBearingEvidence(completedLiveEvidence{
+		SchemaVersion:  certificationSchemaVersion,
+		Scope:          evidenceScopeCapability,
+		Connector:      "test_connector",
+		FunctionKind:   "operation:rest_read",
+		Provider:       "test_provider",
+		ExecutedAt:     "2026-08-10T00:00:00Z",
+		RunID:          "bounded-credential-run",
+		PMBinarySHA256: strings.Repeat("f", 64),
+		PMCommand:      "pm test_connector records list --json",
+		Passed:         true,
+		RepositorySalt: []byte("0123456789abcdef0123456789abcdef"),
+		PreparedValues: []string{"bounded-credential-token"},
+		HTTPExchanges: []completedHTTPExchange{{
+			Operation: "records.list",
+			Request:   completedHTTPRequest{Method: "GET", Target: "https://api.example.test/records"},
+			Response:  completedHTTPResponse{Status: 200},
+		}},
+	})
+	if err != nil {
+		t.Fatalf("newProofBearingEvidence() = %v, want bounded evidence publication", err)
+	}
+	if evidence.CredentialScope != credentialScopeObservedOperations {
+		t.Fatalf("credential_scope = %q, want %q", evidence.CredentialScope, credentialScopeObservedOperations)
+	}
+	if evidence.CredentialScopeProof != credentialScopeProofProtocolExchanges {
+		t.Fatalf("credential_scope_proof = %q, want %q", evidence.CredentialScopeProof, credentialScopeProofProtocolExchanges)
+	}
+	if err := validateAcceptedEvidence(evidence); err != nil {
+		t.Fatalf("validateAcceptedEvidence(bounded) = %v", err)
+	}
+}
+
+func TestCertificationFullParityScopeRequiresPassedReportStage(t *testing.T) {
+	completed := completedLiveEvidence{
+		SchemaVersion:  certificationSchemaVersion,
+		Scope:          evidenceScopeCapability,
+		Connector:      "test_connector",
+		FunctionKind:   "operation:rest_read",
+		Provider:       "test_provider",
+		ExecutedAt:     "2026-08-10T00:00:00Z",
+		RunID:          "unverified-full-parity-run",
+		PMBinarySHA256: strings.Repeat("e", 64),
+		PMCommand:      "pm test_connector records list --json",
+		Passed:         true,
+		RepositorySalt: []byte("0123456789abcdef0123456789abcdef"),
+		PreparedValues: []string{"full-parity-credential-token"},
+		HTTPExchanges: []completedHTTPExchange{{
+			Operation: "records.list",
+			Request:   completedHTTPRequest{Method: "GET", Target: "https://api.example.test/records"},
+			Response:  completedHTTPResponse{Status: 200},
+		}},
+	}
+
+	// This is a passed direct-read-like run. It has no full-parity stage, so
+	// its evidence must fail before a full-parity record can be constructed.
+	_, err := newFullParityProofBearingEvidence(completed, certify.Report{
+		Stages: []certify.StageResult{{Name: "direct_read_sweep", Passed: true}},
+	})
+	if err == nil || !strings.Contains(err.Error(), "full-parity stage") {
+		t.Fatalf("newFullParityProofBearingEvidence(unverified report) error = %v, want full-parity stage refusal", err)
+	}
+
+	evidence, err := newFullParityProofBearingEvidence(completed, certify.Report{
+		Stages: []certify.StageResult{{Name: "full_parity", Passed: true}},
+	})
+	if err != nil {
+		t.Fatalf("newFullParityProofBearingEvidence(verified report) = %v", err)
+	}
+	if evidence.CredentialScope != credentialScopeFullParity || evidence.CredentialScopeProof != credentialScopeProofFullParityStage {
+		t.Fatalf("verified full-parity credential claim = (%q, %q), want (%q, %q)", evidence.CredentialScope, evidence.CredentialScopeProof, credentialScopeFullParity, credentialScopeProofFullParityStage)
+	}
+
+	evidence.CredentialScopeProof = credentialScopeProofProtocolExchanges
+	if err := validateAcceptedEvidence(evidence); err == nil || !strings.Contains(err.Error(), "scope proof") {
+		t.Fatalf("validateAcceptedEvidence(mismatched full-parity proof) error = %v, want scope proof rejection", err)
 	}
 }
 
@@ -1455,20 +1539,19 @@ func TestCertificationFlowPairAllowsGitHubToItselfThroughWarehouse(t *testing.T)
 func TestCertificationFlowEvidenceRequiresRoundTripProof(t *testing.T) {
 	secret := "flow-evidence-token"
 	evidence, err := newProofBearingEvidence(completedLiveEvidence{
-		SchemaVersion:        certificationSchemaVersion,
-		Scope:                evidenceScopeFlow,
-		Source:               "github",
-		Destination:          "github",
-		FlowKind:             "api_to_api",
-		Provider:             "github",
-		ExecutedAt:           "2026-08-10T00:00:00Z",
-		RunID:                "github-round-trip",
-		PMBinarySHA256:       strings.Repeat("e", 64),
-		PMCommand:            "pm flow run --file github-round-trip.json --json",
-		Passed:               true,
-		CredentialFullParity: true,
-		RepositorySalt:       []byte("0123456789abcdef0123456789abcdef"),
-		PreparedValues:       []string{secret},
+		SchemaVersion:  certificationSchemaVersion,
+		Scope:          evidenceScopeFlow,
+		Source:         "github",
+		Destination:    "github",
+		FlowKind:       "api_to_api",
+		Provider:       "github",
+		ExecutedAt:     "2026-08-10T00:00:00Z",
+		RunID:          "github-round-trip",
+		PMBinarySHA256: strings.Repeat("e", 64),
+		PMCommand:      "pm flow run --file github-round-trip.json --json",
+		Passed:         true,
+		RepositorySalt: []byte("0123456789abcdef0123456789abcdef"),
+		PreparedValues: []string{secret},
 		HTTPExchanges: []completedHTTPExchange{
 			{Operation: "warehouse.readback", Request: completedHTTPRequest{Method: "GET", Target: "https://proof.example/warehouse"}, Response: completedHTTPResponse{Status: 200}},
 			{Operation: "github.destination.readback", Request: completedHTTPRequest{Method: "GET", Target: "https://proof.example/github"}, Response: completedHTTPResponse{Status: 200}},

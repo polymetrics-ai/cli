@@ -1,20 +1,21 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "scope": "capability",
   "status": "passed",
-  "credential_scope": "full_parity",
-  "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
   "connector": "postgres",
   "function_kind": "capability:cdc",
   "provider": "postgres_container",
-  "executed_at": "2026-08-17T00:32:49Z",
+  "executed_at": "2026-08-17T12:18:21Z",
   "run_id": "postgres_cdc_r1-capability_cdc",
   "proof": {
     "redaction_strategy": "repository_salted_hmac_sha256_v1",
-    "pm_binary_sha256": "58e3218380bc558544206d902f62dc06f63934e7ae957caa6e52d10cb3e83dee",
-    "pm_command_fingerprint": "{{pmcertfp:v1:b8c47e91453fb86319f30397ad66d3e3a635143c73c0e8464878c5ec781952a9}}",
+    "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+    "pm_command_fingerprint": "{{pmcertfp:v1:852b9f027186f46da48d0b8eb0865fd273e5b2b79fa9e61c0ff5b35aafef0cc4}}",
     "credential_fingerprints": [
-      "{{pmcertfp:v1:db6513a63a636547a31077c340a2485e8c57e75e156da34e72f26dcb67944285}}"
+      "{{pmcertfp:v1:b55999c5cd0f589b61f3d0796764efc17187cc94913e680a23e09fe671cbc3b4}}"
     ],
     "http_exchanges": [],
     "database_exchanges": [
@@ -22,7 +23,7 @@
         "operation": "postgres_change_capture_capability_cdc",
         "protocol": "postgres_wire",
         "request": {
-          "statement": "{{pmcertfp:v1:04746770a7261af9ba365d05b72ecf9f3d3774ab670a096e8965dc4c2cbaad05}}",
+          "statement": "{{pmcertfp:v1:2caf4c2aed624d7857fe3f964be29cd84c9de7406e9563b2948234a45153841f}}",
           "parameters": []
         },
         "response": {
@@ -30,10 +31,10 @@
           "body": {
             "encoding": "json",
             "value": {
-              "acknowledged_after_warehouse_receipt": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-              "bounded_durable_staging": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-              "independent_warehouse_readback": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-              "warehouse_receipt_persisted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}"
+              "acknowledged_after_warehouse_receipt": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+              "bounded_durable_staging": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+              "independent_warehouse_readback": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+              "warehouse_receipt_persisted": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}"
             },
             "original_bytes": 149,
             "truncated": false

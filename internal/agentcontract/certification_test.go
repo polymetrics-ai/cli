@@ -15,7 +15,7 @@ import (
 
 const (
 	certificationGeneratedCommand = "go run ./cmd/connectorgen certification-matrix --check"
-	certificationCredentialNote   = "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface."
+	certificationCredentialNote   = "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed."
 )
 
 func TestEvaluateCertificationGateGitHubBaselineAndGreenFixture(t *testing.T) {
@@ -1269,15 +1269,16 @@ func cloneCertificationFixtureObject(t *testing.T, value map[string]any) map[str
 
 func certificationTestEvidence(record string, proof map[string]any, scope map[string]any) map[string]any {
 	evidence := map[string]any{
-		"record":           "internal/connectors/certifications/evidence/" + record,
-		"schema_version":   1,
-		"status":           "passed",
-		"credential_scope": "full_parity",
-		"credential_note":  certificationCredentialNote,
-		"provider":         "test-provider",
-		"executed_at":      "2026-08-11T00:00:00Z",
-		"run_id":           "test-run-1",
-		"proof":            proof,
+		"record":                 "internal/connectors/certifications/evidence/" + record,
+		"schema_version":         2,
+		"status":                 "passed",
+		"credential_scope":       "observed_operations",
+		"credential_note":        certificationCredentialNote,
+		"credential_scope_proof": "protocol_exchanges",
+		"provider":               "test-provider",
+		"executed_at":            "2026-08-11T00:00:00Z",
+		"run_id":                 "test-run-1",
+		"proof":                  proof,
 	}
 	for key, value := range scope {
 		evidence[key] = value
@@ -1287,13 +1288,14 @@ func certificationTestEvidence(record string, proof map[string]any, scope map[st
 
 func certificationTestEvidencePointer(evidence map[string]any, proof map[string]any) map[string]any {
 	return map[string]any{
-		"record":           evidence["record"],
-		"provider":         evidence["provider"],
-		"executed_at":      evidence["executed_at"],
-		"run_id":           evidence["run_id"],
-		"credential_scope": evidence["credential_scope"],
-		"credential_note":  evidence["credential_note"],
-		"proof":            proof,
+		"record":                 evidence["record"],
+		"provider":               evidence["provider"],
+		"executed_at":            evidence["executed_at"],
+		"run_id":                 evidence["run_id"],
+		"credential_scope":       evidence["credential_scope"],
+		"credential_note":        evidence["credential_note"],
+		"credential_scope_proof": evidence["credential_scope_proof"],
+		"proof":                  proof,
 	}
 }
 

@@ -418,7 +418,7 @@ func (contract OpenCodeContract) Validate() error {
 func (gate ConnectorCertificationGate) Validate() error {
 	if gate.SchemaVersion != 1 || gate.Name != "connector-certification-shepherd" ||
 		gate.InputSchemaVersion != 1 || gate.VerdictSchemaVersion != 1 ||
-		gate.AcceptedEvidenceSchemaVersion != 1 ||
+		gate.AcceptedEvidenceSchemaVersion != 2 ||
 		gate.ProofRedactionStrategy != "repository_salted_hmac_sha256_v1" ||
 		!gate.ReadOnly ||
 		gate.GeneratedCommand != "go run ./cmd/connectorgen certification-matrix --check" ||
