@@ -22,6 +22,7 @@ const (
 	certificationSweepProviderRefused     = "provider_refused"
 	certificationSweepNotApplicable       = "not_applicable"
 	certificationSweepArtifactFile        = "certification-sweep.json"
+	certificationObservationFile          = "certification-observations.json"
 )
 
 // certificationSweep is the deterministic, source-derived accounting record
@@ -121,6 +122,10 @@ func runCertificationSweep(args []string, stdout, stderr io.Writer) int {
 			logf(stderr, "connectorgen certification-sweep: generated artifact %q is missing; run `go run ./cmd/connectorgen certification-sweep --connector %s`\n", filepath.ToSlash(path), options.connector)
 			return 1
 		}
+		if err := validateCertificationSweepArtifact(current); err != nil {
+			logf(stderr, "connectorgen certification-sweep: generated artifact %q is invalid: %v\n", filepath.ToSlash(path), err)
+			return 1
+		}
 		if !bytes.Equal(current, raw) {
 			logf(stderr, "connectorgen certification-sweep: generated artifact %q has drift; run `go run ./cmd/connectorgen certification-sweep --connector %s`\n", filepath.ToSlash(path), options.connector)
 			return 1
@@ -128,7 +133,7 @@ func runCertificationSweep(args []string, stdout, stderr io.Writer) int {
 		logf(stdout, "connectorgen certification-sweep: %s is current (%d commands)\n", filepath.ToSlash(path), sweep.DeclaredCommands)
 		return 0
 	}
-	if err := os.WriteFile(path, raw, 0o644); err != nil {
+	if err := writeGeneratedArtifact(path, raw); err != nil {
 		logf(stderr, "connectorgen certification-sweep: write %q: %v\n", filepath.ToSlash(path), err)
 		return 1
 	}
@@ -178,6 +183,10 @@ func certificationSweepArtifactPath(repoRoot, connector string) string {
 	return filepath.Join(repoRoot, "internal", "connectors", "defs", connector, certificationSweepArtifactFile)
 }
 
+func certificationSweepObservationPath(repoRoot, connector string) string {
+	return filepath.Join(repoRoot, "internal", "connectors", "defs", connector, certificationObservationFile)
+}
+
 func buildCertificationSweep(repoRoot, connector string) (certificationSweep, error) {
 	definitionsRoot := filepath.Join(repoRoot, "internal", "connectors", "defs")
 	bundle, err := engine.Load(os.DirFS(definitionsRoot), connector)
@@ -191,6 +200,17 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 	assertions, err := certificationSweepAssertions(&bundle)
 	if err != nil {
 		return certificationSweep{}, err
+	}
+	providerRefusals, err := certificationSweepProviderRefusals(repoRoot, connector)
+	if err != nil {
+		return certificationSweep{}, err
+	}
+	refusalByCommand := make(map[string]certificationSweepProviderRefusal, len(providerRefusals))
+	for _, refusal := range providerRefusals {
+		if _, duplicate := refusalByCommand[refusal.Command]; duplicate {
+			return certificationSweep{}, fmt.Errorf("provider-refusal observation duplicates command %q", refusal.Command)
+		}
+		refusalByCommand[refusal.Command] = refusal
 	}
 	operations := make(map[string]engine.OperationSpec, len(bundle.Operations))
 	for _, operation := range bundle.Operations {
@@ -206,7 +226,7 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 		DeclaredCommands: len(commands),
 		Commands:         make([]certificationSweepCommand, 0, len(commands)),
 		ProductDefects:   []certificationSweepProductDefect{},
-		ProviderRefusals: []certificationSweepProviderRefusal{},
+		ProviderRefusals: providerRefusals,
 	}
 	seen := make(map[string]bool, len(commands))
 	for _, command := range commands {
@@ -214,7 +234,7 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 			return certificationSweep{}, fmt.Errorf("connector %q cli_surface has missing or duplicate command path %q", connector, command.Path)
 		}
 		seen[command.Path] = true
-		row, defect := classifyCertificationSweepCommand(command, operations[command.Operation], assertions[command.Path])
+		row, defect := classifyCertificationSweepCommand(command, operations[command.Operation], assertions[command.Path], refusalByCommand[command.Path])
 		sweep.Commands = append(sweep.Commands, row)
 		if defect != nil {
 			sweep.ProductDefects = append(sweep.ProductDefects, *defect)
@@ -225,11 +245,39 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 			return certificationSweep{}, fmt.Errorf("certification assertion overlay command %q is absent from cli_surface.json", path)
 		}
 	}
+	for path := range refusalByCommand {
+		if !seen[path] {
+			return certificationSweep{}, fmt.Errorf("provider-refusal observation command %q is absent from cli_surface.json", path)
+		}
+	}
 	sweep.StatusTotal = len(sweep.Commands)
 	if err := validateCertificationSweep(sweep); err != nil {
 		return certificationSweep{}, err
 	}
 	return sweep, nil
+}
+
+type certificationSweepObservations struct {
+	SchemaVersion    int                                 `json:"schema_version"`
+	ProviderRefusals []certificationSweepProviderRefusal `json:"provider_refusals"`
+}
+
+func certificationSweepProviderRefusals(repoRoot, connector string) ([]certificationSweepProviderRefusal, error) {
+	raw, err := os.ReadFile(certificationSweepObservationPath(repoRoot, connector))
+	if errors.Is(err, os.ErrNotExist) {
+		return []certificationSweepProviderRefusal{}, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("read certification observations for connector %q: %w", connector, err)
+	}
+	var observations certificationSweepObservations
+	if err := decodeStrictJSON(raw, &observations); err != nil {
+		return nil, fmt.Errorf("parse certification observations for connector %q: %w", connector, err)
+	}
+	if observations.SchemaVersion != certificationSweepSchemaVersion {
+		return nil, fmt.Errorf("certification observations for connector %q require schema_version %d", connector, certificationSweepSchemaVersion)
+	}
+	return append([]certificationSweepProviderRefusal(nil), observations.ProviderRefusals...), nil
 }
 
 func certificationSweepAssertions(bundle *engine.Bundle) (map[string][]engine.CertificationOutputAssertion, error) {
@@ -249,7 +297,7 @@ func certificationSweepAssertions(bundle *engine.Bundle) (map[string][]engine.Ce
 	return assertions, nil
 }
 
-func classifyCertificationSweepCommand(command engine.CLICommand, operation engine.OperationSpec, assertions []engine.CertificationOutputAssertion) (certificationSweepCommand, *certificationSweepProductDefect) {
+func classifyCertificationSweepCommand(command engine.CLICommand, operation engine.OperationSpec, assertions []engine.CertificationOutputAssertion, providerRefusal certificationSweepProviderRefusal) (certificationSweepCommand, *certificationSweepProductDefect) {
 	row := certificationSweepCommand{
 		Summary:       command.Summary,
 		Path:          command.Path,
@@ -273,6 +321,15 @@ func classifyCertificationSweepCommand(command engine.CLICommand, operation engi
 			row.AssertionSource = "certification.json direct_read_candidates"
 		}
 		return row, defect
+	}
+	if providerRefusal.Command != "" {
+		row.Status = certificationSweepProviderRefused
+		row.Reason = providerRefusal.Reason
+		if len(assertions) != 0 {
+			row.OutputAssertions = assertions
+			row.AssertionSource = "certification.json direct_read_candidates"
+		}
+		return row, nil
 	}
 	if len(assertions) != 0 {
 		row.Status = certificationSweepEligiblePendingLive
@@ -338,23 +395,37 @@ func requiredPathFlagDefect(command engine.CLICommand, operation engine.Operatio
 	if command.Operation == "" || operation.REST == nil {
 		return nil
 	}
-	required := make(map[string]bool, len(operation.REST.Parameters))
+	required := make([]string, 0, len(operation.REST.Parameters))
 	for _, parameter := range operation.REST.Parameters {
 		if parameter.In == "path" && parameter.Required {
-			required[parameter.Name] = true
+			required = append(required, parameter.Name)
 		}
 	}
-	for _, flag := range command.Flags {
-		pathParameter, mapped := strings.CutPrefix(flag.MapsTo, "path.")
-		if !mapped || !required[pathParameter] {
-			continue
+	sort.Strings(required)
+	for _, pathParameter := range required {
+		var mappedFlag *engine.CLIFlag
+		for index := range command.Flags {
+			flag := &command.Flags[index]
+			mappedParameter, mapped := strings.CutPrefix(flag.MapsTo, "path.")
+			if mapped && mappedParameter == pathParameter {
+				mappedFlag = flag
+				break
+			}
 		}
-		if !flag.Required {
+		if mappedFlag == nil {
 			return &certificationSweepProductDefect{
 				Command:       command.Path,
-				Flag:          flag.Name,
+				Flag:          "<missing>",
 				PathParameter: pathParameter,
-				Reason:        fmt.Sprintf("required REST path parameter %q maps to CLI flag --%s that is not required", pathParameter, flag.Name),
+				Reason:        fmt.Sprintf("required REST path parameter %q has no mapped CLI flag", pathParameter),
+			}
+		}
+		if !mappedFlag.Required {
+			return &certificationSweepProductDefect{
+				Command:       command.Path,
+				Flag:          mappedFlag.Name,
+				PathParameter: pathParameter,
+				Reason:        fmt.Sprintf("required REST path parameter %q maps to CLI flag --%s that is not required", pathParameter, mappedFlag.Name),
 			}
 		}
 	}
@@ -414,6 +485,9 @@ func validateCertificationSweep(sweep certificationSweep) error {
 		providerRefusals[refusal.Command] = true
 	}
 	for path, command := range paths {
+		if command.Status == certificationSweepStatusProductDefect && !defects[path] {
+			return fmt.Errorf("product-defect command %q has no concrete product-defect record", path)
+		}
 		if command.Status == certificationSweepProviderRefused && !providerRefusals[path] {
 			return fmt.Errorf("provider-refused command %q has no concrete provider refusal record", path)
 		}
@@ -439,4 +513,12 @@ func marshalCertificationSweep(sweep certificationSweep) ([]byte, error) {
 		return nil, fmt.Errorf("encode certification sweep: %w", err)
 	}
 	return append(raw, '\n'), nil
+}
+
+func validateCertificationSweepArtifact(raw []byte) error {
+	var sweep certificationSweep
+	if err := decodeStrictJSON(raw, &sweep); err != nil {
+		return fmt.Errorf("parse: %w", err)
+	}
+	return validateCertificationSweep(sweep)
 }

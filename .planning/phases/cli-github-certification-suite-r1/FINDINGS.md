@@ -18,13 +18,16 @@ caller omits the flag. The full, machine-readable finding list is
 
 ## Provider refusals
 
-The deterministic generation phase makes no provider request, so it has no
-provider-refusal records. A live sweep may add one only with the provider's
-concrete HTTP status and reason; it must not be reclassified as a product
-defect merely because the operation did not pass.
+The named, single-operation observation overlay records the measured
+`actions fork-pr-contributor-approval view` refusal: GitHub returned HTTP 422
+because that setting does not apply to the disposable certification repository.
+It is a provider refusal, not a product defect. The overlay is an allowed
+named exception to generated candidate identity; a future live sweep may add
+only similarly concrete status-and-reason observations.
 
 ## Accounting snapshot
 
 The generated artifact reconciles all 1,571 declared commands: 20
-`eligible_pending_live`, 1,409 `fixture_required`, 92 `product_defect`, and 50
-`not_applicable`. No generated command has an affirmative `pass` status.
+`eligible_pending_live`, 1,408 `fixture_required`, 92 `product_defect`, one
+`provider_refused`, and 50 `not_applicable`. No generated command has an
+affirmative `pass` status.

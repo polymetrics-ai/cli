@@ -329,7 +329,7 @@
         }
       ],
       "status": "product_defect",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
+      "reason": "required REST path parameter \"attempt_number\" maps to CLI flag --attempt-number that is not required"
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/actions/caches",
@@ -1248,8 +1248,8 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "provider_refused",
+      "reason": "GitHub returned HTTP 422 because this setting does not apply to the disposable certification repository"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
@@ -2082,7 +2082,7 @@
         }
       ],
       "status": "product_defect",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
+      "reason": "required REST path parameter \"attempt_number\" maps to CLI flag --attempt-number that is not required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
@@ -17136,7 +17136,7 @@
         }
       ],
       "status": "product_defect",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "reason": "required REST path parameter \"branch_policy_id\" maps to CLI flag --branch-policy-id that is not required"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
@@ -26202,7 +26202,7 @@
         }
       ],
       "status": "product_defect",
-      "reason": "required REST path parameter \"hook_id\" maps to CLI flag --hook-id that is not required"
+      "reason": "required REST path parameter \"delivery_id\" maps to CLI flag --delivery-id that is not required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}",
@@ -27502,7 +27502,7 @@
         }
       ],
       "status": "product_defect",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
+      "reason": "required REST path parameter \"assignee\" maps to CLI flag --assignee that is not required"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
@@ -45333,9 +45333,9 @@
     },
     {
       "command": "actions attempts view",
-      "flag": "run-id",
-      "path_parameter": "run_id",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
+      "flag": "attempt-number",
+      "path_parameter": "attempt_number",
+      "reason": "required REST path parameter \"attempt_number\" maps to CLI flag --attempt-number that is not required"
     },
     {
       "command": "actions concurrency_groups view-2",
@@ -45357,9 +45357,9 @@
     },
     {
       "command": "actions jobs view-2",
-      "flag": "run-id",
-      "path_parameter": "run_id",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
+      "flag": "attempt-number",
+      "path_parameter": "attempt_number",
+      "reason": "required REST path parameter \"attempt_number\" maps to CLI flag --attempt-number that is not required"
     },
     {
       "command": "actions jobs view-3",
@@ -45639,9 +45639,9 @@
     },
     {
       "command": "environments deployment-branch-policies view-2",
-      "flag": "environment-name",
-      "path_parameter": "environment_name",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "flag": "branch-policy-id",
+      "path_parameter": "branch_policy_id",
+      "reason": "required REST path parameter \"branch_policy_id\" maps to CLI flag --branch-policy-id that is not required"
     },
     {
       "command": "environments deployment_protection_rules view",
@@ -45717,15 +45717,15 @@
     },
     {
       "command": "hooks deliveries view-2",
-      "flag": "hook-id",
-      "path_parameter": "hook_id",
-      "reason": "required REST path parameter \"hook_id\" maps to CLI flag --hook-id that is not required"
+      "flag": "delivery-id",
+      "path_parameter": "delivery_id",
+      "reason": "required REST path parameter \"delivery_id\" maps to CLI flag --delivery-id that is not required"
     },
     {
       "command": "issues assignees view",
-      "flag": "issue-number",
-      "path_parameter": "issue_number",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
+      "flag": "assignee",
+      "path_parameter": "assignee",
+      "reason": "required REST path parameter \"assignee\" maps to CLI flag --assignee that is not required"
     },
     {
       "command": "issues blocked_by view",
@@ -45878,5 +45878,11 @@
       "reason": "required REST path parameter \"alert_number\" maps to CLI flag --alert-number that is not required"
     }
   ],
-  "provider_refusals": []
+  "provider_refusals": [
+    {
+      "command": "actions fork-pr-contributor-approval view",
+      "provider_status": 422,
+      "reason": "GitHub returned HTTP 422 because this setting does not apply to the disposable certification repository"
+    }
+  ]
 }

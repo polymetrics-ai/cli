@@ -24,6 +24,7 @@
 
 - Target connector: GitHub only.
 - Owned paths: `cmd/connectorgen/**` for generic surface-derived certification generation, its tests, the generated GitHub certification sweep artifact, GitHub's certification definition only when a narrow assertion overlay needs documentation, and this phase's evidence.
+- Named exception: `internal/connectors/defs/github/certification-observations.json` contains only the live-measured `actions fork-pr-contributor-approval view` HTTP 422. It is a concrete provider observation, with status and reason, not a hand-authored candidate or a product classification.
 - Not owned: PR #4198 transport capture, PostgreSQL, connector engine/runtime execution changes, broker/MCP/UI work, credential scope changes, and any new generic write/HTTP/SQL tool.
 - Boundary rule: generator code must operate on a loaded bundle and never name GitHub in shared Go. GitHub-specific fixture/credential facts stay in its definition or planning evidence.
 

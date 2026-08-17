@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestCertificationSweepForGitHubIsSurfaceDerivedAndExhaustive(t *testing.T) {
@@ -108,8 +110,34 @@ func TestCertificationSweepSeparatesProductDefectsAndProviderRefusals(t *testing
 	if assetDefect.Flag != "asset-id" || assetDefect.PathParameter != "asset_id" || !strings.Contains(assetDefect.Reason, "not required") {
 		t.Fatalf("asset defect = %#v, want non-required --asset-id mapped to asset_id", assetDefect)
 	}
-	if len(sweep.ProviderRefusals) != 0 {
-		t.Fatalf("static surface sweep provider refusals = %#v, want none before a provider response", sweep.ProviderRefusals)
+	var providerRefusal *certificationSweepProviderRefusal
+	for index := range sweep.ProviderRefusals {
+		if sweep.ProviderRefusals[index].Command == "actions fork-pr-contributor-approval view" {
+			providerRefusal = &sweep.ProviderRefusals[index]
+			break
+		}
+	}
+	if providerRefusal == nil || providerRefusal.ProviderStatus != 422 || !strings.Contains(providerRefusal.Reason, "does not apply") {
+		t.Fatalf("provider refusals = %#v, want named HTTP 422 provider refusal", sweep.ProviderRefusals)
+	}
+	foundProviderRefusalCommand := false
+	for _, command := range sweep.Commands {
+		if command.Path == providerRefusal.Command && command.Status != certificationSweepProviderRefused {
+			t.Fatalf("provider refusal command status = %q, want %q", command.Status, certificationSweepProviderRefused)
+		}
+		if command.Path == providerRefusal.Command {
+			foundProviderRefusalCommand = true
+		}
+	}
+	if !foundProviderRefusalCommand {
+		t.Fatalf("provider refusal command %q is missing from generated sweep", providerRefusal.Command)
+	}
+
+	missingFlag := requiredPathFlagDefect(engine.CLICommand{Path: "widgets view", Operation: "widgets_view"}, engine.OperationSpec{
+		REST: &engine.RESTOperationSpec{Parameters: []engine.OperationParameter{{Name: "widget_id", In: "path", Required: true}}},
+	})
+	if missingFlag == nil || missingFlag.Flag != "<missing>" || missingFlag.PathParameter != "widget_id" {
+		t.Fatalf("missing required path flag defect = %#v, want concrete missing widget_id flag finding", missingFlag)
 	}
 
 	if err := validateCertificationSweep(certificationSweep{
@@ -119,11 +147,24 @@ func TestCertificationSweepSeparatesProductDefectsAndProviderRefusals(t *testing
 		DeclaredCommands: 1,
 		StatusTotal:      1,
 		Commands: []certificationSweepCommand{{
-			Path: "widgets view", Intent: "direct_read", Availability: "implemented", Status: certificationSweepProviderRefused,
+			Summary: "View widget", Path: "widgets view", Intent: "direct_read", Availability: "implemented", Status: certificationSweepProviderRefused,
 			Reason: "provider refused request",
 		}},
 	}); err == nil {
 		t.Fatal("validateCertificationSweep accepted a provider refusal without a concrete provider status")
+	}
+	if err := validateCertificationSweep(certificationSweep{
+		SchemaVersion:    certificationSweepSchemaVersion,
+		Connector:        "acme",
+		Source:           "cli_surface.json",
+		DeclaredCommands: 1,
+		StatusTotal:      1,
+		Commands: []certificationSweepCommand{{
+			Summary: "View widget", Path: "widgets view", Intent: "direct_read", Availability: "implemented", Status: certificationSweepStatusProductDefect,
+			Reason: "required REST path parameter is missing its mapped CLI flag",
+		}},
+	}); err == nil {
+		t.Fatal("validateCertificationSweep accepted a product-defect command without a concrete product-defect record")
 	}
 }
 
@@ -132,5 +173,22 @@ func TestCertificationSweepCommandChecksGeneratedGitHubArtifact(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	if code := run([]string{"certification-sweep", root, "--connector", "github", "--check"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("certification-sweep --check exit=%d stderr=%s stdout=%s", code, stderr.String(), stdout.String())
+	}
+}
+
+func TestCertificationSweepArtifactValidationRejectsUnknownFields(t *testing.T) {
+	sweep, err := buildCertificationSweep(repoRootForCertificationTest(t), "github")
+	if err != nil {
+		t.Fatalf("buildCertificationSweep() error = %v", err)
+	}
+	raw, err := marshalCertificationSweep(sweep)
+	if err != nil {
+		t.Fatalf("marshalCertificationSweep() error = %v", err)
+	}
+	if err := validateCertificationSweepArtifact(raw); err != nil {
+		t.Fatalf("validateCertificationSweepArtifact() error = %v", err)
+	}
+	if err := validateCertificationSweepArtifact([]byte(`{"schema_version":1,"unexpected":true}`)); err == nil {
+		t.Fatal("validateCertificationSweepArtifact accepted an unknown field")
 	}
 }
