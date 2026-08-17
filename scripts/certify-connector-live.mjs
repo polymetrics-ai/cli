@@ -22,6 +22,7 @@ const safeIdentifier = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,255}$/u;
 const safeFieldName = /^[A-Za-z0-9][A-Za-z0-9_.-]*$/u;
 const safeEnvironmentName = /^[A-Za-z_][A-Za-z0-9_]*$/u;
 const httpMethods = new Set(["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]);
+const nonPassOutcomes = new Set(["no_object", "wrong_credential", "entitlement", "product_defect"]);
 
 function usage() {
   return `usage: certify-connector-live.mjs <connector> [options]
@@ -115,13 +116,25 @@ async function readOptionalJSON(file, label) {
   }
 }
 
-async function selectedStageNames(file, connector) {
+async function selectedStageRoute(file, connector) {
   const source = requireObject(await readJSON(withinRepository(requirePathText(file, "--stages-file")), "stages file"), "stages file");
   if (source.connector !== connector) fail("stages file connector does not match the selected connector");
   if (!Array.isArray(source.stage_names) || source.stage_names.length === 0) fail("stages file must declare one or more stage_names");
-  const result = new Set(source.stage_names.map((stageName) => requireIdentifier(stageName, "stages file stage_name")));
-  if (result.size !== source.stage_names.length) fail("stages file has duplicate stage_names");
-  return result;
+  const stageNames = new Set(source.stage_names.map((stageName) => requireIdentifier(stageName, "stages file stage_name")));
+  if (stageNames.size !== source.stage_names.length) fail("stages file has duplicate stage_names");
+  const outcomes = new Map();
+  if (source.nonpass_outcomes !== undefined) {
+    const declared = requireObject(source.nonpass_outcomes, "stages file nonpass_outcomes");
+    for (const [stageName, outcome] of Object.entries(declared)) {
+      requireIdentifier(stageName, "stages file nonpass outcome stage_name");
+      if (!stageNames.has(stageName)) fail(`stages file declares a nonpass outcome for unselected ${stageName}`);
+      if (typeof outcome !== "string" || !nonPassOutcomes.has(outcome)) {
+        fail(`stages file nonpass outcome for ${stageName} is invalid`);
+      }
+      outcomes.set(stageName, outcome);
+    }
+  }
+  return { stageNames, outcomes };
 }
 
 function requireObject(value, label) {
@@ -352,14 +365,17 @@ function providerDiagnostic(result, credential) {
   return "provider command exited without a provider diagnostic";
 }
 
-function classifyNonPass(reason, source) {
+function classifyNonPass(reason, source, routedOutcome) {
+  if (routedOutcome !== undefined) return routedOutcome;
   const lower = reason.toLowerCase();
+  if (/\b(?:http|status)\s+401\b/u.test(lower) || lower.includes("bad credentials") || lower.includes("authentication required")) return "wrong_credential";
+  if (/\b(?:http|status)\s+(?:402|403)\b/u.test(lower) || lower.includes("payment required") || lower.includes("not authorized") || lower.includes("not accessible")) return "entitlement";
+  if (/\b(?:http|status)\s+404\b/u.test(lower) || /\b(?:not found|no .+ found|does not exist|missing)\b/u.test(lower)) return "no_object";
   for (const unavailable of source.live_unavailable || []) {
     const parts = Array.isArray(unavailable?.contains) ? unavailable.contains.map((item) => String(item).toLowerCase()) : [];
-    if (parts.length > 0 && parts.some((part) => lower.includes(part))) return "provider_refused";
+    if (parts.length > 0 && parts.some((part) => lower.includes(part))) return "entitlement";
   }
-  if (/\b(?:http|status)\s+(?:4|5)[0-9]{2}\b/u.test(lower)) return "provider_refused";
-  if (lower.includes("configuration") || lower.includes("fixture") || lower.includes("unresolved")) return "missing_fixture";
+  if (lower.includes("configuration") || lower.includes("fixture") || lower.includes("unresolved")) return "no_object";
   return "product_defect";
 }
 
@@ -509,7 +525,7 @@ function initialReceipt(connector, metadata, runID) {
     started_at: new Date().toISOString(),
     credential_scope: "observed_operations",
     records: [],
-    summary: { executed: 0, certified: 0, provider_refused: 0, missing_fixture: 0, product_defect: 0 },
+    summary: { executed: 0, certified: 0, no_object: 0, wrong_credential: 0, entitlement: 0, product_defect: 0 },
     local_cleanup: { credential_removed: null },
   };
 }
@@ -517,10 +533,7 @@ function initialReceipt(connector, metadata, runID) {
 function addReceipt(receipt, record) {
   receipt.records.push(record);
   if (record.executed) receipt.summary.executed += 1;
-  if (record.outcome === "certified") receipt.summary.certified += 1;
-  if (record.outcome === "provider_refused") receipt.summary.provider_refused += 1;
-  if (record.outcome === "missing_fixture") receipt.summary.missing_fixture += 1;
-  if (record.outcome === "product_defect") receipt.summary.product_defect += 1;
+  if (Object.hasOwn(receipt.summary, record.outcome)) receipt.summary[record.outcome] += 1;
 }
 
 async function persistReceipt(file, receipt) {
@@ -562,12 +575,14 @@ async function main() {
     candidates = allCandidates.filter((item) => eligible.has(item.command));
   }
   if (options["stages-file"] !== undefined) {
-    const selected = await selectedStageNames(options["stages-file"], options.connector);
+    const selectedRoute = await selectedStageRoute(options["stages-file"], options.connector);
+    const selected = selectedRoute.stageNames;
     const available = new Set(candidates.map((item) => item.stageName));
     for (const stageName of selected) {
       if (!available.has(stageName)) fail(`stages file selected ${stageName}, which is not an eligible declared candidate`);
     }
     candidates = candidates.filter((item) => selected.has(item.stageName));
+    options.nonpassOutcomes = selectedRoute.outcomes;
   }
   const definitionConfigs = certification === null ? new Map() : declaredCredentialConfig(certification);
   if (options["definition-check"]) {
@@ -584,9 +599,9 @@ async function main() {
     const reason = certification === null
       ? "connector definitions do not declare certification.json"
       : "connector definitions declare no produced-value certification candidates";
-    addReceipt(receipt, { stage_name: "definition_candidates", executed: false, outcome: "missing_fixture", reason });
+    addReceipt(receipt, { stage_name: "definition_candidates", executed: false, outcome: "no_object", reason });
     await persistReceipt(receiptPath, receipt);
-    process.stdout.write(`${options.connector} certification: executed=0 certified=0 provider_refused=0 missing_fixture=1 product_defect=0\n`);
+    process.stdout.write(`${options.connector} certification: executed=0 certified=0 no_object=1 wrong_credential=0 entitlement=0 product_defect=0\n`);
     return 0;
   }
 
@@ -606,7 +621,7 @@ async function main() {
       try {
         rendered = renderArguments(candidate, options.connector, project.credential, values);
       } catch (error) {
-        addReceipt(receipt, { stage_name: candidate.stageName, command: candidate.command, executed: false, outcome: "missing_fixture", reason: error instanceof Error ? error.message : "candidate configuration could not be rendered" });
+        addReceipt(receipt, { stage_name: candidate.stageName, command: candidate.command, executed: false, outcome: "no_object", reason: error instanceof Error ? error.message : "candidate configuration could not be rendered" });
         await persistReceipt(receiptPath, receipt);
         continue;
       }
@@ -622,7 +637,7 @@ async function main() {
       }
       if (result.code !== 0 || result.timedOut || result.overflow) {
         const reason = providerDiagnostic(result, credential);
-        addReceipt(receipt, { stage_name: candidate.stageName, command: candidate.command, invocation, executed: true, outcome: classifyNonPass(reason, certification?.source || {}), provider_response: reason });
+        addReceipt(receipt, { stage_name: candidate.stageName, command: candidate.command, invocation, executed: true, outcome: classifyNonPass(reason, certification?.source || {}, options.nonpassOutcomes?.get(candidate.stageName)), provider_response: reason });
         await persistReceipt(receiptPath, receipt);
         continue;
       }
@@ -681,7 +696,7 @@ async function main() {
     receipt.local_cleanup.credential_removed = await cleanupProject(binary, project);
     await persistReceipt(receiptPath, receipt);
   }
-  process.stdout.write(`${options.connector} certification: executed=${receipt.summary.executed} certified=${receipt.summary.certified} provider_refused=${receipt.summary.provider_refused} missing_fixture=${receipt.summary.missing_fixture} product_defect=${receipt.summary.product_defect}\n`);
+  process.stdout.write(`${options.connector} certification: executed=${receipt.summary.executed} certified=${receipt.summary.certified} no_object=${receipt.summary.no_object} wrong_credential=${receipt.summary.wrong_credential} entitlement=${receipt.summary.entitlement} product_defect=${receipt.summary.product_defect}\n`);
   return receipt.summary.product_defect === 0 ? 0 : 1;
 }
 

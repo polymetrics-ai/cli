@@ -3,10 +3,12 @@
   "status": "verified_pending_pr",
   "execution": "inline_manual",
   "reason": "direct-PR brief forbids spawned roles",
-  "accepted_records": 53,
+  "accepted_records": 64,
   "provider_nonpasses": 81,
   "missing_fixture_nonpasses": 4,
   "product_defects": [
-    "dependabot list-alerts-for-org: direct App probe reports 200, but the declaration-owned pm run returned HTTP 400 and redacted the provider body"
+    "dependabot list-alerts-for-org: direct App probe reports 200, but the declaration-owned pm run returned HTTP 400 and redacted the provider body",
+    "classic credential batch initially could not reach GitHub because the runner omitted the required non-secret rate_limit_account; corrected rerun certified 11 of 12",
+    "dependabot list-alerts-for-enterprise: direct classic-PAT probe reports 200, but the declaration-owned pm run returned HTTP 400 and redacted the provider body"
   ]
 }
