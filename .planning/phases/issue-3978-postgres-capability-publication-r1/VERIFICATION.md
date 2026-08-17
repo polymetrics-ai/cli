@@ -46,12 +46,14 @@ Red observations:
 
 Green controls:
 
-- `TestCertificationMatrixKeepsPostgresManagedWriteUnimplementedWithoutAllDeclaredLiveProof`
-  proves a metadata declaration plus an empty evidence set is insufficient.
+- `TestCertificationMatrixKeepsPostgresManagedWriteUnimplementedWithoutCapabilityScopedLiveProof`
+  proves a metadata declaration plus all twelve mode records is still
+  insufficient without the broad capability record.
 - `TestPostgresPublishedWriteAndCDCMatchLiveCertification` requires every true
   PostgreSQL public flag to have a declared, implemented, accepted live matrix
-  cell. `write` points at six exact destination-mode records; `cdc` points at
-  the receipt-backed record.
+  cell. `write` points at a capability-scoped aggregate record whose importer
+  revalidates all six destination modes; those six `sync_mode` records remain
+  attached only to their exact cells. `cdc` points at the receipt-backed record.
 - `TestWriteUnsupported` remains green: a direct `Connector.Write` cannot
   bypass the managed transport's plan/preview/approval/receipt boundary.
 
@@ -60,6 +62,7 @@ Green controls:
 ```text
 POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
 POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
+POLYMETRICS_WRITE_POSTGRES_CAPABILITY_EVIDENCE=1 \
 go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres \
   -run '^TestPostgresCertificationProfileRunsBuiltBinaryLive$' -count=1 -v
 PASS
@@ -81,15 +84,53 @@ with no pending transaction manifest and a complete checkpoint, then observes
 `confirmed_flush_lsn` at or after the post-insert transaction LSN. It emitted
 only these redacted proof records:
 
+- `internal/connectors/certifications/evidence/postgres_transport_r1-capability-write.json`
 - `internal/connectors/certifications/evidence/postgres_cdc_r1-capability-cdc.json`
 - `internal/connectors/certifications/evidence/postgres_cdc_r1-change_capture-database_read_into_warehouse.json`
 
-The generated PostgreSQL matrix therefore has `write=true` with six exact live
-destination records and `cdc=true` with one receipt-backed capability record
-plus one `change_capture/database_read_into_warehouse` record. `query` is
-false. Its aggregate `capability_complete` remains false because unrelated
-applicable capability cells lack fixture/live evidence; that aggregate is not a
-substitute for the individual published capability evidence.
+The generated PostgreSQL matrix therefore has `write=true` with one
+capability-scoped aggregate record from the fresh PostgreSQL 16 six-mode
+profile; the six exact destination records remain in their own `sync_mode`
+cells. It has `cdc=true` with one receipt-backed capability record plus one
+`change_capture/database_read_into_warehouse` record. `query` is false. Its
+aggregate `capability_complete` remains false because unrelated applicable
+capability cells lack fixture/live evidence; that aggregate is not a substitute
+for the individual published capability evidence.
+
+## Certification-gate correction
+
+The first promotion attempt incorrectly attached six `sync_mode` records to
+`capability/postgres/capability:write`. The agent contract gate halted every
+protected transition with `evidence scope "sync_mode" does not match
+"capability"`; that halt was correct. No gate check, fixture, or baseline was
+weakened or changed.
+
+The corrected path adds
+`internal/connectors/certifications/evidence/postgres_transport_r1-capability-write.json`.
+It is a fresh, separately scoped `capability:write` record emitted only after
+the PostgreSQL 16 built-binary profile and its independent target read-backs
+prove all six declared destination modes. The matrix now uses that one record
+for the capability cell and uses the existing twelve mode records only for
+their exact source/destination cells.
+
+```text
+go test -timeout 20m ./cmd/connectorgen \
+  -run '^TestCertificationMatrixPromotesPostgresManagedWriteOnlyWithDeclaredLiveTransportProof$' \
+  -count=1
+RED before aggregate capability evidence: write implemented=false, live_tested=false
+
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
+POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
+POLYMETRICS_WRITE_POSTGRES_CAPABILITY_EVIDENCE=1 \
+go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres \
+  -run '^TestPostgresCertificationProfileRunsBuiltBinaryLive$' -count=1 -v
+PASS; emitted capability:write record after six independent target read-backs
+
+go test -timeout 20m ./internal/agentcontract \
+  -run '^(TestCertificationGateEnforcesEveryProtectedTransition|TestCertificationGateCurrentBaselineRejectsWithoutBreakingStructuralContractCheck|TestEvaluateCertificationGateGitHubBaselineAndGreenFixture)$' \
+  -count=1 -v
+PASS; all protected transitions remain enforced, current bad GitHub baseline still RETRY, and GitHub expectations are unchanged
+```
 
 ## Generated artifacts and CLI parity
 

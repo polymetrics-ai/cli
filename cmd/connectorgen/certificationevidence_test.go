@@ -97,6 +97,85 @@ func TestCertificationEvidencePostgresTransportRejectsUnexecutedMode(t *testing.
 	}
 }
 
+func TestCertificationEvidencePostgresTransportCapabilityWritePromotesOnlyCompleteAggregateProfile(t *testing.T) {
+	root := t.TempDir()
+	reportPath := filepath.Join(root, "postgres-report.json")
+	raw, err := json.Marshal(struct {
+		Kind   string         `json:"kind"`
+		Report certify.Report `json:"report"`
+	}{Kind: "ConnectorCertification", Report: postgresTransportEvidenceTestReport()})
+	if err != nil {
+		t.Fatalf("marshal report: %v", err)
+	}
+	if err := os.WriteFile(reportPath, raw, 0o600); err != nil {
+		t.Fatalf("write report: %v", err)
+	}
+	t.Setenv("PM_POSTGRES_CERTIFICATION_EVIDENCE_TEST_PASSWORD", "live-test-secret")
+
+	var stdout, stderr bytes.Buffer
+	code := run([]string{
+		"certification-evidence", "transport-capability-write", "--connector", "postgres",
+		"--report", reportPath,
+		"--binary-sha", strings.Repeat("a", 64),
+		"--from-env", "password=PM_POSTGRES_CERTIFICATION_EVIDENCE_TEST_PASSWORD",
+		"--run-id", "postgres_transport_test",
+		"--record-prefix", "postgres_transport_test",
+		"--repo-root", root,
+	}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("certification-evidence exit=%d stderr=%q", code, stderr.String())
+	}
+	if got := stdout.String(); got != "wrote declared transport capability evidence records: 1\n" {
+		t.Fatalf("certification-evidence stdout=%q", got)
+	}
+	items, err := loadAcceptedEvidence(root, []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadAcceptedEvidence() error = %v", err)
+	}
+	if len(items) != 1 || items[0].Scope != evidenceScopeCapability || items[0].FunctionKind != "capability:write" {
+		t.Fatalf("accepted PostgreSQL capability evidence=%#v, want one capability:write record", items)
+	}
+}
+
+func TestCertificationEvidencePostgresTransportCapabilityWriteRejectsIncompleteAggregateProfile(t *testing.T) {
+	root := t.TempDir()
+	report := postgresTransportEvidenceTestReport()
+	report.Capabilities.DeclaredTransport.Modes[0].CheckpointCommitted = false
+	raw, err := json.Marshal(struct {
+		Kind   string         `json:"kind"`
+		Report certify.Report `json:"report"`
+	}{Kind: "ConnectorCertification", Report: report})
+	if err != nil {
+		t.Fatalf("marshal report: %v", err)
+	}
+	reportPath := filepath.Join(root, "postgres-report.json")
+	if err := os.WriteFile(reportPath, raw, 0o600); err != nil {
+		t.Fatalf("write report: %v", err)
+	}
+	t.Setenv("PM_POSTGRES_CERTIFICATION_EVIDENCE_TEST_PASSWORD", "live-test-secret")
+
+	var stdout, stderr bytes.Buffer
+	code := run([]string{
+		"certification-evidence", "transport-capability-write", "--connector", "postgres",
+		"--report", reportPath,
+		"--binary-sha", strings.Repeat("a", 64),
+		"--from-env", "password=PM_POSTGRES_CERTIFICATION_EVIDENCE_TEST_PASSWORD",
+		"--run-id", "postgres_transport_test",
+		"--record-prefix", "postgres_transport_test",
+		"--repo-root", root,
+	}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), "lacks completed declared target/read/checkpoint proof") {
+		t.Fatalf("certification-evidence rejected report exit=%d stderr=%q", code, stderr.String())
+	}
+	items, err := loadAcceptedEvidence(root, []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadAcceptedEvidence() after rejected report: %v", err)
+	}
+	if len(items) != 0 {
+		t.Fatalf("rejected PostgreSQL capability report wrote %d evidence records", len(items))
+	}
+}
+
 func TestCertificationEvidencePostgresChangeCapturePromotesOnlyReceiptBackedBinaryProof(t *testing.T) {
 	root := t.TempDir()
 	reportPath := filepath.Join(root, "postgres-cdc-report.json")

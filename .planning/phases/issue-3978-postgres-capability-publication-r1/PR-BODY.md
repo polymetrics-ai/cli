@@ -15,14 +15,30 @@ Refs #3978
 
 ## Evidence and publication boundary
 
-- Twelve inherited, redacted PostgreSQL transport records provide independent source/target read-back for the six warehouse-mediated modes in both directions. `write` is promoted only when all six exact destination-mode records exist.
+- Twelve inherited, redacted PostgreSQL transport records provide independent source/target read-back for the six warehouse-mediated modes in both directions. They remain `sync_mode` evidence only. A fresh PostgreSQL 16 full profile emitted `postgres_transport_r1-capability-write.json` at `scope=capability` only after it revalidated all six destination modes; that one aggregate record is the sole live evidence bound to `capability:write`.
 - Fresh PostgreSQL 16 built-binary CDC proof emitted two redacted records: `capability:cdc` and `change_capture/database_read_into_warehouse`. It requires the warehouse row and checkpoint, a durable receipt with no pending stage manifest, then acknowledgement at/after the committed LSN.
 - `query` remains false. `capability_complete=false` remains correct because it summarizes other applicable cells without complete fixture/live evidence, not a shortfall in the published `write`/`cdc` claims.
+
+## Certification-gate correction
+
+The first version of this PR was halted correctly: it attached `sync_mode`
+evidence to `capability/postgres/capability:write`. The gate refused every
+protected transition because `evidence scope "sync_mode" does not match
+"capability"`. No scope rule, fixture, or baseline was weakened.
+
+This update changes the write cell from six improperly bound mode pointers to
+one capability-scoped aggregate pointer produced by the fresh PostgreSQL 16
+profile. The aggregate importer refuses any incomplete declared mode; the mode
+records stay in mode cells. Regression coverage removes the capability record
+while retaining all 12 mode records and keeps `write` false. The protected
+transition test still enforces `accepted`, `human_ready`, `integrate_sub_pr`,
+and `ready_parent`; the current bad GitHub baseline still returns `RETRY`, and
+the GitHub fixture expectations are unchanged.
 
 ## Cases exercised
 
 - Happy: all six managed target modes independently read back; a fresh `pm` captures PostgreSQL ID 901 into Parquet, persists receipt/checkpoint, then acknowledges its LSN.
-- Bad: an acknowledgement-before-receipt report is rejected; removing accepted destination evidence keeps `write` unimplemented; direct `Connector.Write` remains unsupported.
+- Bad: an acknowledgement-before-receipt report is rejected; removing the capability-scoped write record while retaining all 12 mode records keeps `write` unimplemented; direct `Connector.Write` remains unsupported.
 - Edge: a schema-valid scratch `sslmode=bananas` profile makes the real certification binary fail after compilation, then green after exact restoration. A startup replication-slot LSN is not accepted as the transaction acknowledgement.
 
 ## Verification
@@ -36,6 +52,7 @@ go test -timeout 20m ./internal/app -count=1                                    
 go test -timeout 20m ./internal/cli -count=1                                         PASS
 POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
   POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
+  POLYMETRICS_WRITE_POSTGRES_CAPABILITY_EVIDENCE=1 \
   go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres \
   -run '^TestPostgresCertificationProfileRunsBuiltBinaryLive$' -count=1 -v           PASS
 POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \

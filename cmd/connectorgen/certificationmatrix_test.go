@@ -102,12 +102,12 @@ func TestCertificationMatrixPromotesPostgresManagedWriteOnlyWithDeclaredLiveTran
 	if !cell.Applicable || !cell.Declared || !cell.Implemented || !cell.LiveTested {
 		t.Fatalf("PostgreSQL managed write cell = %#v, want declared, implemented, and live certified", cell)
 	}
-	if len(cell.LiveEvidence) != 6 {
-		t.Fatalf("PostgreSQL managed write evidence=%d, want one proof for every declared destination mode", len(cell.LiveEvidence))
+	if len(cell.LiveEvidence) != 1 || cell.LiveEvidence[0].Record != "internal/connectors/certifications/evidence/postgres_transport_r1-capability-write.json" {
+		t.Fatalf("PostgreSQL managed write evidence=%#v, want one capability-scoped aggregate proof", cell.LiveEvidence)
 	}
 }
 
-func TestCertificationMatrixKeepsPostgresManagedWriteUnimplementedWithoutAllDeclaredLiveProof(t *testing.T) {
+func TestCertificationMatrixKeepsPostgresManagedWriteUnimplementedWithoutCapabilityScopedLiveProof(t *testing.T) {
 	repoRoot := repoRootForCertificationTest(t)
 	bundles, err := loadSourceBundlesForConnectors(repoRoot, []string{"postgres"})
 	if err != nil {
@@ -117,12 +117,25 @@ func TestCertificationMatrixKeepsPostgresManagedWriteUnimplementedWithoutAllDecl
 	if err != nil || len(sources) != 1 {
 		t.Fatalf("matrixConnectorSourcesForNames() = %#v, %v; want PostgreSQL source", sources, err)
 	}
-	implemented, err := capabilityImplemented(repoRoot, sources[0], "write", nil)
+	evidence, err := loadAcceptedEvidence(repoRoot, []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadAcceptedEvidence() error = %v", err)
+	}
+	modeOnly := make([]acceptedEvidence, 0, len(evidence))
+	for _, item := range evidence {
+		if item.Scope == evidenceScopeSyncMode && item.SyncMode != string(synccontract.ModeChangeCapture) {
+			modeOnly = append(modeOnly, item)
+		}
+	}
+	if len(modeOnly) != 12 {
+		t.Fatalf("PostgreSQL mode-only evidence=%d, want 12 exact mode records", len(modeOnly))
+	}
+	implemented, err := capabilityImplemented(repoRoot, sources[0], "write", modeOnly)
 	if err != nil {
 		t.Fatalf("capabilityImplemented() error = %v", err)
 	}
 	if implemented {
-		t.Fatal("PostgreSQL managed write was implemented without exact evidence for every declared destination mode")
+		t.Fatal("PostgreSQL managed write was implemented from sync-mode evidence without a capability-scoped proof")
 	}
 }
 
@@ -925,8 +938,8 @@ func TestCertificationScopedSourceResolutionUsesScopedPostgresBundle(t *testing.
 		t.Fatalf("buildCapabilityMatrixForConnectors() error = %v", err)
 	}
 	write, found := capabilityCellFor(matrix, "postgres", "capability:write")
-	if !found || write.Implemented {
-		t.Fatalf("scoped PostgreSQL write cell = %#v, %t; want implemented=false, found=true", write, found)
+	if !found || !write.Implemented || !write.LiveTested || len(write.LiveEvidence) != 1 || write.LiveEvidence[0].Record != "internal/connectors/certifications/evidence/postgres_transport_r1-capability-write.json" {
+		t.Fatalf("scoped PostgreSQL write cell = %#v, %t; want capability-scoped aggregate live proof", write, found)
 	}
 }
 

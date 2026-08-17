@@ -715,12 +715,11 @@ func implementedDatabaseChangeCaptureContract(source matrixConnectorSource) bool
 	return ok && definition.Changefeed != nil && definition.Changefeed.Status == connectors.ChangefeedStatusImplemented
 }
 
-// declaredNativeDatabaseDestinationEvidence accepts a public write claim only
-// when its full declared source/destination transport pair has one exact live
-// proof for every destination mode. Connector.Write is intentionally not part
-// of this check: the managed target receives sealed warehouse worksets through
-// the transport boundary rather than an unplanned direct writer.
-func declaredNativeDatabaseDestinationEvidence(source matrixConnectorSource, evidence []acceptedEvidence) []evidencePointer {
+// declaredNativeDatabaseDestinationModeEvidence returns exact per-mode proof
+// for validating that a declared native destination completed every mode. Its
+// result remains scoped to sync-mode cells: callers must never attach these
+// pointers to a capability cell.
+func declaredNativeDatabaseDestinationModeEvidence(source matrixConnectorSource, evidence []acceptedEvidence) []evidencePointer {
 	if !declaredNativeDatabaseDestination(source) {
 		return nil
 	}

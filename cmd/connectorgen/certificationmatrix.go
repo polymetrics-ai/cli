@@ -1134,10 +1134,13 @@ func capabilityImplemented(repoRoot string, source matrixConnectorSource, capabi
 	}
 	// A native database destination is dispatched through its definition-owned
 	// warehouse transport, not Connector.Write. Preserve the direct Write stub
-	// check below for every other shape; this path becomes implemented only when
-	// every declared destination mode has an accepted exact-mode live proof.
+	// check below for every other shape. This public capability requires two
+	// distinct evidence classes: an accepted capability:write record produced
+	// from the aggregate certification profile, plus exact sync-mode records for
+	// every declared destination mode. Mode records are deliberately not bound
+	// into the capability cell.
 	if capability == "write" && declaredNativeDatabaseDestination(source) {
-		return len(declaredNativeDatabaseDestinationEvidence(source, evidence)) > 0, nil
+		return len(matchingCapabilityEvidence(evidence, source, "capability:write")) > 0 && len(declaredNativeDatabaseDestinationModeEvidence(source, evidence)) > 0, nil
 	}
 	method, ok := capabilityMethod(source.connector, capability)
 	if !ok {
@@ -1397,9 +1400,6 @@ func matchingCapabilityEvidence(evidence []acceptedEvidence, source matrixConnec
 			CredentialNote:  item.CredentialNote,
 			Proof:           item.Proof,
 		})
-	}
-	if kind == "capability:write" {
-		matched = append(matched, declaredNativeDatabaseDestinationEvidence(source, evidence)...)
 	}
 	sort.Slice(matched, func(i, j int) bool {
 		if matched[i].Record == matched[j].Record {
