@@ -19,5 +19,5 @@ package defs
 
 import "embed"
 
-//go:embed operation_endpoint_ledger.json */metadata.json */changefeed.json */polling_watermark.json */sync_transport.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json */rate_limits.json */database.json
+//go:embed operation_endpoint_ledger.json */metadata.json */changefeed.json */polling_watermark.json */sync_transport.json */spec.json */streams.json */writes.json */schemas/* */sources/* */docs.md */operations.json */cli_surface.json */certification.json */rate_limits.json */database.json
 var FS embed.FS

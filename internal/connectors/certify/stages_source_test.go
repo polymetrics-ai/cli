@@ -199,17 +199,19 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		// write stages 12-17 (stages_write.go) are skipped entirely in
 		// this test (Options.Write is false) — each records a documented
 		// skip with no CLI call, exactly like fixture_conformance above.
-		"write_plan_preview":       true,
-		"write_create":             true,
-		"write_verify":             true,
-		"write_cleanup":            true,
-		"cleanup_verify":           true,
-		"approval_idempotency":     true,
-		"write_sweep_all_pairings": true,
-		"direct_read_sweep":        true,
-		"binary_download_sweep":    true,
-		"surface_inventory":        true,
-		"declared_transport_pair":  true,
+		"write_plan_preview":         true,
+		"write_create":               true,
+		"write_verify":               true,
+		"write_cleanup":              true,
+		"cleanup_verify":             true,
+		"approval_idempotency":       true,
+		"write_sweep_all_pairings":   true,
+		"direct_read_sweep":          true,
+		"graphql_schema_conformance": true,
+		"graphql_inventory_boundary": true,
+		"binary_download_sweep":      true,
+		"surface_inventory":          true,
+		"declared_transport_pair":    true,
 	}
 	for _, stage := range rep.Stages {
 		if metaStagesWithoutDirectCLICall[stage.Name] {

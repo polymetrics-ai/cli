@@ -118,6 +118,7 @@ type Capabilities struct {
 	JSONContract      CapabilityResult             `json:"json_contract"`
 	SecretRedaction   CapabilityResult             `json:"secret_redaction"`
 	DirectRead        *CapabilityResult            `json:"direct_read,omitempty"`
+	GraphQL           *GraphQLCertificationResult  `json:"graphql,omitempty"`
 	Binary            *CapabilityResult            `json:"binary,omitempty"`
 	Surface           *SurfaceResult               `json:"surface,omitempty"`
 	Flow              *CapabilityResult            `json:"flow,omitempty"`

@@ -146,6 +146,10 @@ type runContext struct {
 	// on the real registration error.
 	transportPairProbe func(context.Context, string) (certificationTransportPairProof, error)
 
+	// graphQLInventory is a test seam for the definition-owned GraphQL schema
+	// compiler. Production uses graphQLCertificationInventoryFor directly.
+	graphQLInventory func(string) (graphQLCertificationInventory, error)
+
 	// currentStage names the stage function presently executing, so run()
 	// can tag each captured CLI invocation with its owning stage without
 	// threading a stage name through every one of the ~20 call sites.
@@ -306,6 +310,7 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 			stagePreflight,
 			stageCredentialsAdd,
 			stageCredentialsTest,
+			stageGraphQLSchemaConformance,
 			stageDirectReadSweep,
 		}
 		for _, stage := range directReadStages {
@@ -341,6 +346,7 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	tailStages := []stageFunc{
 		stageSurfaceInventory,
 		stageDeclaredTransportPair,
+		stageGraphQLSchemaConformance,
 		stageDirectReadSweep,
 		stageBinaryDownloadSweep,
 		stageWritePlanPreview,
@@ -469,6 +475,9 @@ func stageStatus(passed bool, errMsg string) string {
 	}
 	if strings.HasPrefix(errMsg, "unexecutable:") {
 		return "unexecutable"
+	}
+	if strings.HasPrefix(errMsg, "not_live:") {
+		return "not_live"
 	}
 	return "fail"
 }
