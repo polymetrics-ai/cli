@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Ubidots devices, variables, variable values, device groups, device types, dashboards, and events, and writes device/variable lifecycle mutations and new variable data points through API v2.0.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -59,7 +57,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_device:
     endpoint: POST api/v2.0/devices/
-    required fields: label
     risk: creates a new Ubidots device; low-risk external mutation, no approval required
   update_device:
     endpoint: PATCH api/v2.0/devices/{{ record.id }}/
@@ -71,7 +68,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a device and all of its variables/values; destructive and irreversible; approval required
   create_variable:
     endpoint: POST api/v2.0/variables/
-    required fields: label, device
     risk: creates a new variable under an existing device; low-risk external mutation, no approval required
   update_variable:
     endpoint: PATCH api/v2.0/variables/{{ record.id }}/
@@ -83,8 +79,8 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a variable and all of its stored values; destructive and irreversible; approval required
   create_variable_value:
     endpoint: POST api/v1.6/variables/{{ record.variable_id }}/values/
-    required fields: variable_id, value
-    optional fields: timestamp, context
+    required fields: variable_id
+    optional fields: value, timestamp, context
     risk: injects a new data point (dot) into an existing variable; low-risk external mutation, no approval required
 
 SECURITY

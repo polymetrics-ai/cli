@@ -11,7 +11,6 @@ Reads Amazon Advertising profiles, Sponsored Products campaigns, ad groups, prod
 
 ## Icon
 
-- id: amazonads
 - asset: icons/amazonads.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -11,11 +11,9 @@ Reads subscribers, lists, and campaigns, and writes subscriber create/upsert act
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -51,7 +49,6 @@ Reads subscribers, lists, and campaigns, and writes subscriber create/upsert act
 
 - create_subscriber:
   - endpoint: POST /segment/customer
-  - required fields: email
   - risk: creates or upserts a subscriber (customer) into the caller's tinyEmail account, optionally into a named audience segment; low-risk external mutation, no approval required
 
 ## Security

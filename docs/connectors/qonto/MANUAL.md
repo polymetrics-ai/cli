@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Qonto bank transactions, memberships, and accounts through the Qonto REST API (read-only).
 
 ICON
-  id: qonto
   asset: icons/qonto.svg
   source: upstream_registry
   review_status: upstream_seeded

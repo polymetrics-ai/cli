@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Short.io links and domains through the Short.io REST API.
 
 ICON
-  id: shortio
   asset: icons/shortio.svg
   source: upstream_registry
   review_status: upstream_seeded

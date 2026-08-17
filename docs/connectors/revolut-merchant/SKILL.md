@@ -11,7 +11,6 @@ Reads Revolut Merchant orders, customers, settlements, and payment links through
 
 ## Icon
 
-- id: revolut
 - asset: icons/revolut.svg
 - source: official
 - review_status: official_verified

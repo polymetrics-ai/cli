@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Recreation.gov RIDB facilities, campsites, activities, organizations, and recreation areas through the RIDB REST API.
 
 ICON
-  id: recreation
   asset: icons/recreation.svg
   source: upstream_registry
   review_status: upstream_seeded

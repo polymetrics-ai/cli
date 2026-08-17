@@ -13,7 +13,6 @@ DESCRIPTION
   Reads YouTube Reporting API jobs, report types, and generated reports via the Google OAuth 2.0 refresh-token grant.
 
 ICON
-  id: youtube-analytics
   asset: icons/youtube-analytics.svg
   source: upstream_registry
   review_status: upstream_seeded

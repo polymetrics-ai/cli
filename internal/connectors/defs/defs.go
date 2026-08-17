@@ -6,9 +6,7 @@
 // api_surface.json and fixtures/**;
 // those remain on disk for connectorgen/conformance tests. Keeping replay
 // fixtures out of cmd/pm avoids compiling tens of megabytes of inert JSON into
-// every shipped binary. A connector bundle whose spec publishes a fixture-replay
-// mode as a supported config value embeds its own fixtures from its own
-// subpackage instead of widening this pattern.
+// every shipped binary.
 package defs
 
 import "embed"

@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and writes documented PandaDoc public API resources across documents, templates, contacts, folders, forms, logs, members, webhooks, workspaces, notary, and catalog surfaces.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

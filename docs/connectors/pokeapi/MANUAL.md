@@ -13,7 +13,6 @@ DESCRIPTION
   Reads the documented public PokeAPI v2 resource catalog, including list and detail endpoints.
 
 ICON
-  id: pokeapi
   asset: icons/pokeapi.svg
   source: upstream_registry
   review_status: upstream_seeded

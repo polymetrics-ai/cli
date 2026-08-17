@@ -13,11 +13,9 @@ DESCRIPTION
   Reads SavvyCal events, scheduling links, contacts, time zones, webhooks, and workflows, and writes scheduling-link and webhook lifecycle mutations, through the SavvyCal API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -60,11 +58,10 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_personal_link:
     endpoint: POST /v1/links
-    required fields: name
     risk: creates a new scheduling link in the authenticated user's personal scope; external mutation, approval required
   create_scope_link:
     endpoint: POST /v1/scopes/{{ record.scope_slug }}/links
-    required fields: scope_slug, name
+    required fields: scope_slug
     risk: creates a new scheduling link under a specific team or individual scope; external mutation, approval required
   update_link:
     endpoint: PATCH /v1/links/{{ record.id }}
@@ -88,7 +85,6 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: cancels a scheduled event, notifying attendees; approval required
   create_webhook:
     endpoint: POST /v1/webhooks
-    required fields: url
     risk: creates a new webhook subscription that will POST event notifications to an external URL; approval required
   delete_webhook:
     endpoint: DELETE /v1/webhooks/{{ record.id }}

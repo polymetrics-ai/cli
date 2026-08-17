@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Yotpo store products, product variants, collections, customers, orders, and webhook targets/filters/subscriptions, and writes product/variant/order/customer/fulfillment/collection-membership/webhook mutations through the Yotpo Core API v3.
 
 ICON
-  id: yotpo
   asset: icons/yotpo.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -73,63 +72,59 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_product:
     endpoint: POST /core/v3/stores/{{ config.store_id }}/products
-    required fields: product
     risk: external mutation; creates a new product in the store's catalog; approval required. Body is wrapped under a top-level "product" key (Yotpo Core API v3 convention) — the record itself carries that wrapper, since the engine's write dialect sends record fields verbatim as the JSON body with no nested-wrapper construction primitive (see teamwork/ynab precedent).
   update_product:
     endpoint: PATCH /core/v3/stores/{{ config.store_id }}/products/{{ record.yotpo_id }}
-    required fields: yotpo_id, product
+    required fields: yotpo_id
     risk: external mutation; updates an existing product's catalog fields; approval required
   create_product_variant:
     endpoint: POST /core/v3/stores/{{ config.store_id }}/products/{{ record.product_yotpo_id }}/variants
-    required fields: product_yotpo_id, variant
+    required fields: product_yotpo_id
     risk: external mutation; creates a new variant under an existing product; approval required
   update_product_variant:
     endpoint: PATCH /core/v3/stores/{{ config.store_id }}/products/{{ record.product_yotpo_id }}/variants/{{ record.yotpo_id }}
-    required fields: product_yotpo_id, yotpo_id, variant
+    required fields: product_yotpo_id, yotpo_id
     risk: external mutation; updates an existing product variant's fields; approval required
   create_order:
     endpoint: POST /core/v3/stores/{{ config.store_id }}/orders
-    required fields: order
     risk: external mutation; creates a new order (may trigger Yotpo's automatic review-request email flow for the associated customer); approval required. Not possible to send automatic review-request emails for orders older than six months (Yotpo's own documented constraint).
   update_order:
     endpoint: PATCH /core/v3/stores/{{ config.store_id }}/orders/{{ record.yotpo_id }}
-    required fields: yotpo_id, order
+    required fields: yotpo_id
     risk: external mutation; updates an existing order's status/pricing/cancellation fields; approval required
   create_customer:
     endpoint: POST /core/v3/stores/{{ config.store_id }}/customers
-    required fields: customer
     risk: external mutation; creates or updates (upsert-by-external_id) a customer profile; approval required. Yotpo's own endpoint is documented as create-or-update, keyed on external_id — there is no separate update_customer action since the same request both creates and upserts.
   create_order_fulfillment:
     endpoint: POST /core/v3/stores/{{ config.store_id }}/orders/{{ record.order_yotpo_id }}/fulfillments
-    required fields: order_yotpo_id, fulfillment
+    required fields: order_yotpo_id
     risk: external mutation; records a shipment/fulfillment event against an existing order; approval required
   update_order_fulfillment:
     endpoint: PATCH /core/v3/stores/{{ config.store_id }}/orders/{{ record.order_yotpo_id }}/fulfillments/{{ record.yotpo_id }}
-    required fields: order_yotpo_id, yotpo_id, fulfillment
+    required fields: order_yotpo_id, yotpo_id
     risk: external mutation; updates the shipment status/tracking of an existing order fulfillment; approval required
   create_collection:
     endpoint: POST /core/v3/stores/{{ config.store_id }}/collections
-    required fields: collection
     risk: external mutation; creates a new product collection; approval required
   update_collection:
     endpoint: PATCH /core/v3/stores/{{ config.store_id }}/collections/{{ record.yotpo_id }}
-    required fields: yotpo_id, collection
+    required fields: yotpo_id
     risk: external mutation; renames an existing product collection; approval required
   add_product_to_collection:
     endpoint: POST /core/v3/stores/{{ config.store_id }}/collections/{{ record.collection_yotpo_id }}/products
-    required fields: collection_yotpo_id, product_id
+    required fields: collection_yotpo_id
     risk: external mutation; adds a product to an existing collection; approval required
   remove_product_from_collection:
     endpoint: DELETE /core/v3/stores/{{ config.store_id }}/collections/{{ record.collection_yotpo_id }}/products
-    required fields: collection_yotpo_id, product_id
+    required fields: collection_yotpo_id
+    optional fields: product_id
     risk: irreversible external mutation; removes a product from an existing collection; approval required
   create_webhook_target:
     endpoint: POST /core/v3/stores/{{ config.store_id }}/webhooks/targets
-    required fields: webhook_target
     risk: external mutation; registers a webhook callback URL target; approval required
   update_webhook_target:
     endpoint: PATCH /core/v3/stores/{{ config.store_id }}/webhooks/targets/{{ record.yotpo_id }}
-    required fields: yotpo_id, webhook_target
+    required fields: yotpo_id
     risk: external mutation; changes an existing webhook target's callback URL; approval required
   delete_webhook_target:
     endpoint: DELETE /core/v3/stores/{{ config.store_id }}/webhooks/targets/{{ record.yotpo_id }}
@@ -137,11 +132,10 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; removes a registered webhook target (any subscription still referencing it becomes inactive); approval required
   create_webhook_filter:
     endpoint: POST /core/v3/stores/{{ config.store_id }}/webhooks/filters
-    required fields: webhook_filter
     risk: external mutation; creates a webhook event filter (an event type cannot be used twice across filters, per Yotpo's own constraint); approval required
   update_webhook_filter:
     endpoint: PATCH /core/v3/stores/{{ config.store_id }}/webhooks/filters/{{ record.yotpo_id }}
-    required fields: yotpo_id, webhook_filter
+    required fields: yotpo_id
     risk: external mutation; changes an existing webhook filter's subscribed event types; approval required
   delete_webhook_filter:
     endpoint: DELETE /core/v3/stores/{{ config.store_id }}/webhooks/filters/{{ record.yotpo_id }}
@@ -149,11 +143,10 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; removes a webhook filter (only unused filters can be deleted, per Yotpo's own constraint); approval required
   create_webhook_subscription:
     endpoint: POST /core/v3/stores/{{ config.store_id }}/webhooks/subscriptions
-    required fields: webhook_subscription
     risk: external mutation; activates webhook event delivery by combining an existing target and filter; approval required
   update_webhook_subscription:
     endpoint: PATCH /core/v3/stores/{{ config.store_id }}/webhooks/subscriptions/{{ record.yotpo_id }}
-    required fields: yotpo_id, webhook_subscription
+    required fields: yotpo_id
     risk: external mutation; retargets or (de)activates an existing webhook subscription; approval required
   delete_webhook_subscription:
     endpoint: DELETE /core/v3/stores/{{ config.store_id }}/webhooks/subscriptions/{{ record.yotpo_id }}

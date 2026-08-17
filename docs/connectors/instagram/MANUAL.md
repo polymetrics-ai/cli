@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Instagram Business/Creator account profile, media, and stories through the Facebook Graph API.
 
 ICON
-  id: instagram
   asset: icons/instagram.svg
   source: upstream_registry
   review_status: upstream_seeded

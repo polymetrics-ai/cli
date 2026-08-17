@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Paystack customers, transactions, subscriptions, invoices, and disputes through the Paystack REST API.
 
 ICON
-  id: paystack
   asset: icons/paystack.svg
   source: upstream_registry
   review_status: upstream_seeded

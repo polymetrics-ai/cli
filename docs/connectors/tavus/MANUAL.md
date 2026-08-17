@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objectives, documents, pronunciation dictionaries, voices, and skills, and writes approved video/conversation/PAL/guardrail/objective/document/pronunciation-dictionary create-delete mutations through the Tavus API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -70,7 +68,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_video:
     endpoint: POST /videos
-    required fields: replica_id
     risk: generates a new async video render from a face and script/audio; consumes video-generation minutes on the account
   delete_video:
     endpoint: DELETE /videos/{{ record.id }}
@@ -89,7 +86,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a conversation and its recorded history; use end_conversation instead for routine call cleanup
   create_pal:
     endpoint: POST /pals
-    required fields: default_face_id
     risk: creates a new PAL persona; low-risk external mutation, no approval required
   delete_pal:
     endpoint: DELETE /pals/{{ record.id }}
@@ -97,7 +93,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a PAL; any conversation still referencing its pal_id will fail to start
   create_guardrail:
     endpoint: POST /guardrails
-    required fields: guardrail_name, guardrail_prompt
     risk: creates a new behavioral guardrail; low-risk external mutation, no approval required
   delete_guardrail:
     endpoint: DELETE /guardrails/{{ record.id }}
@@ -105,7 +100,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a guardrail; any PAL referencing it via guardrail_ids loses that behavioral boundary immediately
   create_objective:
     endpoint: POST /objectives
-    required fields: data
     risk: creates one or more new PAL objectives; low-risk external mutation, no approval required
   delete_objective:
     endpoint: DELETE /objectives/{{ record.id }}
@@ -113,7 +107,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an objective; any PAL referencing it via objectives_id loses that goal-oriented instruction immediately
   create_document:
     endpoint: POST /documents
-    required fields: document_url
     risk: uploads a document to the knowledge base; processing is asynchronous and the document becomes available to PALs only once status reaches ready
   delete_document:
     endpoint: DELETE /documents/{{ record.id }}
@@ -121,7 +114,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a knowledge-base document and its processed data; any PAL referencing it via document_ids loses that knowledge source immediately
   create_pronunciation_dictionary:
     endpoint: POST /pronunciation-dictionaries
-    required fields: name
     risk: creates a new pronunciation dictionary; low-risk external mutation, no approval required
   delete_pronunciation_dictionary:
     endpoint: DELETE /pronunciation-dictionaries/{{ record.id }}

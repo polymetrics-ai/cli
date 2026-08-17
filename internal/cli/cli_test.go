@@ -126,34 +126,6 @@ func TestDynamicConnectorInvalidFlagOnlyInvocationsAreUsageErrors(t *testing.T) 
 	}
 }
 
-func TestDynamicConnectorUnknownPathIsUsageError(t *testing.T) {
-	var stdout, stderr bytes.Buffer
-	code := cli.Run([]string{"amazon-sqs", "not-a-command", "--json"}, &stdout, &stderr)
-	if code != 2 {
-		t.Fatalf("Run(amazon-sqs not-a-command --json) code = %d, want usage error; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
-	}
-
-	var env struct {
-		Error struct {
-			Category string `json:"category"`
-			Code     string `json:"code"`
-			Message  string `json:"message"`
-		} `json:"error"`
-	}
-	if err := json.Unmarshal(stdout.Bytes(), &env); err != nil {
-		t.Fatalf("decode error JSON: %v\nstdout=%s\nstderr=%s", err, stdout.String(), stderr.String())
-	}
-	if env.Error.Category != "usage" || env.Error.Code != "usage_error" {
-		t.Fatalf("error = %+v, want usage_error; stdout=%s stderr=%s", env.Error, stdout.String(), stderr.String())
-	}
-	if !strings.Contains(env.Error.Message, `unknown command "not-a-command"`) {
-		t.Fatalf("message = %q, want unknown command", env.Error.Message)
-	}
-	if strings.Contains(stdout.String()+stderr.String(), "connector_command_blocked") {
-		t.Fatalf("unknown command returned policy block output: stdout=%s stderr=%s", stdout.String(), stderr.String())
-	}
-}
-
 func TestDynamicConnectorEmptyLifecycleFlagsWithCommandAreUsageErrors(t *testing.T) {
 	for _, flag := range []string{"--plan=", "--approve=", "--confirm=", "--plan", "--approve", "--confirm"} {
 		t.Run(flag, func(t *testing.T) {

@@ -11,7 +11,6 @@ Reads current weather, hourly and daily forecasts, and government alerts for a c
 
 ## Icon
 
-- id: openweather
 - asset: icons/openweather.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and writes the documented Pylon REST API surface through concrete streams and write actions.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -216,23 +214,19 @@ SYNC MODES
 REVERSE ETL ACTIONS
   update_accounts:
     endpoint: PATCH /accounts
-    required fields: account_ids
     risk: external Pylon PATCH /accounts; approval required
   create_account:
     endpoint: POST /accounts
-    required fields: name
     risk: external Pylon POST /accounts; approval required
   merge_accounts:
     endpoint: POST /accounts/merge
-    required fields: merge_into_account_id, merge_account_ids
     risk: destructive external Pylon POST /accounts/merge; approval required
   search_accounts:
     endpoint: POST /accounts/search
-    required fields: filter
     risk: external Pylon POST /accounts/search; approval required
   create_account_highlight:
     endpoint: POST /accounts/{{ record.account_id }}/highlights
-    required fields: account_id, content_html
+    required fields: account_id
     risk: external Pylon POST /accounts/{account_id}/highlights; approval required
   delete_account_highlight:
     endpoint: DELETE /accounts/{{ record.account_id }}/highlights/{{ record.highlight_id }}
@@ -244,7 +238,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /accounts/{account_id}/highlights/{highlight_id}; approval required
   create_account_relationship:
     endpoint: POST /accounts/{{ record.account_id }}/relationship
-    required fields: account_id, related_object_id, relationship_type
+    required fields: account_id
     risk: external Pylon POST /accounts/{account_id}/relationship; approval required
   delete_account_relationship:
     endpoint: DELETE /accounts/{{ record.account_id }}/relationships/{{ record.relationship_id }}
@@ -260,7 +254,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /accounts/{id}; approval required
   create_activity:
     endpoint: POST /accounts/{{ record.account_id }}/activities
-    required fields: account_id, slug
+    required fields: account_id
     risk: external Pylon POST /accounts/{id}/activities; approval required
   search_audit_logs:
     endpoint: POST /audit-logs/search
@@ -278,11 +272,9 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /call-recordings/{id}; approval required
   create_contact:
     endpoint: POST /contacts
-    required fields: name
     risk: external Pylon POST /contacts; approval required
   search_contacts:
     endpoint: POST /contacts/search
-    required fields: filter
     risk: external Pylon POST /contacts/search; approval required
   delete_contact:
     endpoint: DELETE /contacts/{{ record.contact_id }}
@@ -294,7 +286,6 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /contacts/{id}; approval required
   create_custom_field:
     endpoint: POST /custom-fields
-    required fields: object_type, label, type
     risk: external Pylon POST /custom-fields; approval required
   update_custom_field:
     endpoint: PATCH /custom-fields/{{ record.custom_field_id }}
@@ -302,15 +293,15 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /custom-fields/{id}; approval required
   update_custom_objects:
     endpoint: PATCH /custom-objects/{{ record.custom_object_type }}
-    required fields: custom_object_type, ids
+    required fields: custom_object_type
     risk: external Pylon PATCH /custom-objects/{type}; approval required
   create_custom_object:
     endpoint: POST /custom-objects/{{ record.custom_object_type }}
-    required fields: custom_object_type, name
+    required fields: custom_object_type
     risk: external Pylon POST /custom-objects/{type}; approval required
   search_custom_objects:
     endpoint: POST /custom-objects/{{ record.custom_object_type }}/search
-    required fields: custom_object_type, filter
+    required fields: custom_object_type
     risk: external Pylon POST /custom-objects/{type}/search; approval required
   delete_custom_object:
     endpoint: DELETE /custom-objects/{{ record.custom_object_type }}/{{ record.custom_object_id }}
@@ -322,7 +313,6 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /custom-objects/{type}/{id}; approval required
   create_feature_request:
     endpoint: POST /feature-requests
-    required fields: title
     risk: external Pylon POST /feature-requests; approval required
   search_feature_requests:
     endpoint: POST /feature-requests/search
@@ -337,27 +327,23 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /feature-requests/{id}; approval required
   set_feature_request_portal_visibility:
     endpoint: POST /feature-requests/{{ record.feature_request_id }}/set-portal-visibility
-    required fields: feature_request_id, account_ids, visible
+    required fields: feature_request_id
     risk: external Pylon POST /feature-requests/{id}/set-portal-visibility; approval required
   import_contact:
     endpoint: POST /import/contacts
-    required fields: name, email
     risk: external Pylon POST /import/contacts; approval required
   import_issue:
     endpoint: POST /import/issues
-    required fields: title, state, messages
     risk: external Pylon POST /import/issues; approval required
   import_messages:
     endpoint: POST /import/issues/{{ record.issue_id }}/messages
-    required fields: issue_id, messages
+    required fields: issue_id
     risk: external Pylon POST /import/issues/{id}/messages; approval required
   create_issue:
     endpoint: POST /issues
-    required fields: title, body_html
     risk: external Pylon POST /issues; approval required
   search_issues:
     endpoint: POST /issues/search
-    required fields: filter
     risk: external Pylon POST /issues/search; approval required
   delete_issue:
     endpoint: DELETE /issues/{{ record.issue_id }}
@@ -369,11 +355,11 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /issues/{id}; approval required
   create_issue_ai_response:
     endpoint: POST /issues/{{ record.issue_id }}/ai-response
-    required fields: issue_id, ai_agent_id
+    required fields: issue_id
     risk: external Pylon POST /issues/{id}/ai-response; approval required
   link_external_issue:
     endpoint: POST /issues/{{ record.issue_id }}/external-issues
-    required fields: issue_id, source, external_issue_id
+    required fields: issue_id
     risk: external Pylon POST /issues/{id}/external-issues; approval required
   add_issue_followers:
     endpoint: POST /issues/{{ record.issue_id }}/followers
@@ -389,15 +375,15 @@ REVERSE ETL ACTIONS
     risk: destructive external Pylon POST /issues/{id}/messages/{message_id}/redact; approval required
   create_issue_note:
     endpoint: POST /issues/{{ record.issue_id }}/note
-    required fields: issue_id, body_html
+    required fields: issue_id
     risk: external Pylon POST /issues/{id}/note; approval required
   create_issue_reply:
     endpoint: POST /issues/{{ record.issue_id }}/reply
-    required fields: issue_id, body_html, message_id
+    required fields: issue_id
     risk: external Pylon POST /issues/{id}/reply; approval required
   snooze_issue:
     endpoint: POST /issues/{{ record.issue_id }}/snooze
-    required fields: issue_id, snooze_until
+    required fields: issue_id
     risk: external Pylon POST /issues/{id}/snooze; approval required
   create_issue_thread:
     endpoint: POST /issues/{{ record.issue_id }}/threads
@@ -405,7 +391,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon POST /issues/{id}/threads; approval required
   create_article:
     endpoint: POST /knowledge-bases/{{ record.knowledge_base_id }}/articles
-    required fields: knowledge_base_id, title, author_user_id, body_html
+    required fields: knowledge_base_id
     risk: external Pylon POST /knowledge-bases/{id}/articles; approval required
   delete_article:
     endpoint: DELETE /knowledge-bases/{{ record.knowledge_base_id }}/articles/{{ record.article_id }}
@@ -421,7 +407,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon POST /knowledge-bases/{id}/articles/{article_id}/request-review; approval required
   create_collection:
     endpoint: POST /knowledge-bases/{{ record.knowledge_base_id }}/collections
-    required fields: knowledge_base_id, title
+    required fields: knowledge_base_id
     risk: external Pylon POST /knowledge-bases/{id}/collections; approval required
   delete_collection:
     endpoint: DELETE /knowledge-bases/{{ record.knowledge_base_id }}/collections/{{ record.collection_id }}
@@ -433,11 +419,10 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /knowledge-bases/{id}/collections/{collection_id}; approval required
   create_route_redirect:
     endpoint: POST /knowledge-bases/{{ record.knowledge_base_id }}/route-redirects
-    required fields: knowledge_base_id, from_path, object_id, object_type
+    required fields: knowledge_base_id
     risk: external Pylon POST /knowledge-bases/{id}/route-redirects; approval required
   create_macro:
     endpoint: POST /macros
-    required fields: name, text_html, macro_group_id
     risk: external Pylon POST /macros; approval required
   update_macro:
     endpoint: PATCH /macros/{{ record.macro_id }}
@@ -445,7 +430,6 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /macros/{id}; approval required
   create_milestone:
     endpoint: POST /milestones
-    required fields: name, project_id
     risk: external Pylon POST /milestones; approval required
   delete_milestone:
     endpoint: DELETE /milestones/{{ record.milestone_id }}
@@ -457,7 +441,6 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /milestones/{id}; approval required
   create_project:
     endpoint: POST /projects
-    required fields: name, account_id
     risk: external Pylon POST /projects; approval required
   search_projects:
     endpoint: POST /projects/search
@@ -475,7 +458,6 @@ REVERSE ETL ACTIONS
     risk: external Pylon POST /surveys/search; approval required
   create_tag:
     endpoint: POST /tags
-    required fields: object_type, value
     risk: external Pylon POST /tags; approval required
   delete_tag:
     endpoint: DELETE /tags/{{ record.tag_id }}
@@ -487,7 +469,6 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /tags/{id}; approval required
   create_task:
     endpoint: POST /tasks
-    required fields: title
     risk: external Pylon POST /tasks; approval required
   search_tasks:
     endpoint: POST /tasks/search
@@ -502,7 +483,7 @@ REVERSE ETL ACTIONS
     risk: external Pylon PATCH /tasks/{id}; approval required
   create_task_comment:
     endpoint: POST /tasks/{{ record.task_id }}/comments
-    required fields: task_id, body_html
+    required fields: task_id
     risk: external Pylon POST /tasks/{id}/comments; approval required
   delete_task_comment:
     endpoint: DELETE /tasks/{{ record.task_id }}/comments/{{ record.comment_id }}
@@ -510,7 +491,7 @@ REVERSE ETL ACTIONS
     risk: destructive external Pylon DELETE /tasks/{id}/comments/{comment_id}; approval required
   update_task_comment:
     endpoint: PATCH /tasks/{{ record.task_id }}/comments/{{ record.comment_id }}
-    required fields: task_id, comment_id, body_html
+    required fields: task_id, comment_id
     risk: external Pylon PATCH /tasks/{id}/comments/{comment_id}; approval required
   create_team:
     endpoint: POST /teams
@@ -531,7 +512,6 @@ REVERSE ETL ACTIONS
     risk: destructive external Pylon DELETE /training-data/{id}/documents; approval required
   search_users:
     endpoint: POST /users/search
-    required fields: filter
     risk: external Pylon POST /users/search; approval required
   update_user:
     endpoint: PATCH /users/{{ record.user_id }}

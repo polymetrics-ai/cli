@@ -13,7 +13,6 @@ DESCRIPTION
   Reads CoinAPI market data: symbols, exchanges, assets, exchange rates, current quotes, current order book, the metrics catalog, and historical OHLCV and trades for a configured symbol via the CoinAPI REST API.
 
 ICON
-  id: coinapi
   asset: icons/coinapi.svg
   source: upstream_registry
   review_status: upstream_seeded

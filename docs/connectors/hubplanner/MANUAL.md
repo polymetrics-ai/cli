@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through the Hubplanner REST API.
 
 ICON
-  id: hubplanner
   asset: icons/hubplanner.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Eventzilla events, categories, users, attendees, ticket types, and transactions, and writes attendee check-in and event sales-page toggle mutations, through the Eventzilla v2 REST API.
 
 ICON
-  id: eventzilla
   asset: icons/eventzilla.svg
   source: official
   review_status: official_verified
@@ -57,11 +56,9 @@ SYNC MODES
 REVERSE ETL ACTIONS
   checkin_attendee:
     endpoint: POST /attendees/checkin
-    required fields: barcode, eventcheckin
     risk: marks an attendee checked in or reverts check-in at the door; low-risk operational mutation, no approval required
   toggle_event_sales:
     endpoint: POST /events/togglesales
-    required fields: eventid, status
     risk: publishes or unpublishes an event's public sales page; setting status false immediately stops new ticket sales for that event, approval required
 
 SECURITY

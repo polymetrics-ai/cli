@@ -11,7 +11,6 @@ Reads current, historical, forecast, marine, and location-autocomplete weather d
 
 ## Icon
 
-- id: weatherstack
 - asset: icons/weatherstack.svg
 - source: upstream_registry
 - review_status: upstream_seeded

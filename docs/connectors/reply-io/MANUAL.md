@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Reply.io legacy v1 objects and current v3 API resources; writes supported v3 mutations through the REST API.
 
 ICON
-  id: reply-io
   asset: icons/reply-io.svg
   source: upstream_registry
   review_status: upstream_seeded

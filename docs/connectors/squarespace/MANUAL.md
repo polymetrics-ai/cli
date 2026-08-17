@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Squarespace orders, products, inventory, profiles, transactions, store pages, webhook subscriptions, and contacts, and writes webhook subscription mutations through the Squarespace Commerce API.
 
 ICON
-  id: simple-icons-squarespace
-  asset: icons/simple-icons/squarespace.svg
-  title: Squarespace
-  simple_icon_slug: squarespace
-  simple_icon_hex: 000000
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Squarespace
-  match: exact-name-or-slug
-  matched_by: squarespace
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -70,7 +62,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_webhook_subscription:
     endpoint: POST /webhook_subscriptions
-    required fields: endpointUrl
     risk: registers a new HTTPS endpoint to receive live order/contact/address event notifications; low-risk external mutation, no approval required
   delete_webhook_subscription:
     endpoint: DELETE /webhook_subscriptions/{{ record.id }}

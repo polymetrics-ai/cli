@@ -13,7 +13,6 @@ DESCRIPTION
   Reads a coin's current metadata/market snapshot and exchange tickers from the CoinGecko REST API (GET /coins/{id}, GET /coins/{id}/tickers). Read-only; unauthenticated by default, an optional pro api_key unlocks the pro base URL and higher limits.
 
 ICON
-  id: coingeckocoins
   asset: icons/coingeckocoins.svg
   source: upstream_registry
   review_status: upstream_seeded

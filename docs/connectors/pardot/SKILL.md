@@ -11,7 +11,6 @@ Reads and writes documented Salesforce Account Engagement (Pardot) API v5 JSON r
 
 ## Icon
 
-- id: salesforcepardot
 - asset: icons/salesforcepardot.svg
 - source: upstream_registry
 - review_status: upstream_seeded

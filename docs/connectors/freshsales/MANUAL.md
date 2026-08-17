@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Freshsales (Freshworks CRM) contacts, sales accounts, deals, and leads through the Freshsales REST API.
 
 ICON
-  id: freshsales
   asset: icons/freshsales.svg
   source: upstream_registry
   review_status: upstream_seeded

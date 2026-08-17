@@ -11,7 +11,6 @@ Reads latest, currency-conversion, time-series, and fluctuation foreign-exchange
 
 ## Icon
 
-- id: exchangeratesapi
 - asset: icons/exchangeratesapi.svg
 - source: upstream_registry
 - review_status: upstream_seeded

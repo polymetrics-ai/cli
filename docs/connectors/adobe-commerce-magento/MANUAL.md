@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Adobe Commerce (Magento) products, orders, customers, categories, invoices, shipments, credit memos, customer groups, and store configuration through the Magento REST API, and writes product/category updates plus order cancellation.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -81,7 +79,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; overwrites live Magento catalog product fields; approval required
   create_category:
     endpoint: POST /categories
-    required fields: name, parent_id
     risk: external mutation; creates a live Magento catalog category; approval required
   update_category:
     endpoint: PUT /categories/{{ record.id }}

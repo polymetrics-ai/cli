@@ -10,35 +10,50 @@ SYNOPSIS
   pm credentials add <name> --connector google-calendar [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token.
+  Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
-  id: simple-icons-googlecalendar
-  asset: icons/simple-icons/googlecalendar.svg
-  title: Google Calendar
-  simple_icon_slug: googlecalendar
-  simple_icon_hex: 4285F4
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Google%20Calendar
-  match: exact-name-or-slug
-  matched_by: google-calendar
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  calendarid
+  mode
+  client_id (secret)
+  client_refresh_token_2 (secret)
+  client_secret (secret)
+
+ETL STREAMS
+  calendar_list:
+    primary key: id
+    fields: accessRole(), colorId(), deleted(), description(), etag(), hidden(), id(), kind(), primary(), selected(), summary(), timeZone()
+  events:
+    primary key: id
+    cursor: updated
+    fields: attendees(), created(), creator(), description(), end(), etag(), htmlLink(), iCalUID(), id(), kind(), location(), organizer(), recurringEventId(), start(), status(), summary(), updated()
+  settings:
+    primary key: id
+    fields: etag(), id(), kind(), value()
+  acl:
+    primary key: id
+    fields: etag(), id(), kind(), role(), scope()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Google Calendar API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

@@ -11,7 +11,6 @@ Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing a f
 
 ## Icon
 
-- id: ip2whois
 - asset: icons/ip2whois.svg
 - source: upstream_registry
 - review_status: upstream_seeded

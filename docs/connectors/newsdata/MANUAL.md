@@ -13,7 +13,6 @@ DESCRIPTION
   Reads latest news, cryptocurrency news, and news sources from the NewsData.io REST API.
 
 ICON
-  id: source-newsdata
   asset: icons/source-newsdata.svg
   source: upstream_registry
   review_status: upstream_seeded

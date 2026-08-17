@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Klaviyo profiles, events, campaigns, lists, metrics, and segments through the Klaviyo REST (JSON:API) API.
 
 ICON
-  id: klaviyo
   asset: icons/klaviyo.svg
   source: upstream_registry
   review_status: upstream_seeded

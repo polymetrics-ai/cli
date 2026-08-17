@@ -11,7 +11,6 @@ Reads Wikimedia pageview metrics for articles and top-article reports through th
 
 ## Icon
 
-- id: wikipedia-pageviews
 - asset: icons/wikipedia-pageviews.svg
 - source: upstream_registry
 - review_status: upstream_seeded

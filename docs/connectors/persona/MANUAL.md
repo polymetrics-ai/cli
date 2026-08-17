@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Persona inquiries, accounts, reports, transactions, and cases, and performs lifecycle mutations (redact, inquiry approve/decline/expire/resume, report re-run/pause/resume-monitoring, transaction biometrics redaction), through the Persona REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

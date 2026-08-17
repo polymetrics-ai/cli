@@ -11,7 +11,6 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

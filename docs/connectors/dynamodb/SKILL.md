@@ -11,7 +11,6 @@ Reads DynamoDB table items through the AWS JSON HTTP API (DynamoDB_20120810.Scan
 
 ## Icon
 
-- id: dynamodb
 - asset: icons/dynamodb.svg
 - source: upstream_registry
 - review_status: upstream_seeded

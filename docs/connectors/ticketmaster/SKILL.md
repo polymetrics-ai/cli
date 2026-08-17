@@ -11,7 +11,6 @@ Reads events, venues, attractions, and classifications from the Ticketmaster Dis
 
 ## Icon
 
-- id: ticketmaster
 - asset: icons/ticketmaster.svg
 - source: official
 - review_status: official_verified

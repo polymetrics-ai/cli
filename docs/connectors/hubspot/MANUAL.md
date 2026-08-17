@@ -13,7 +13,6 @@ DESCRIPTION
   Connector-local HubSpot official API operation ledger and planned typed command surface.
 
 ICON
-  id: hubspot
   asset: icons/hubspot.svg
   source: upstream_registry
   review_status: upstream_seeded

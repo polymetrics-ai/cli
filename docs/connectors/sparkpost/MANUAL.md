@@ -13,17 +13,9 @@ DESCRIPTION
   Reads SparkPost recipient lists, templates, sending domains, transmissions, suppression list records, IP pools, webhooks, subaccounts, tracking domains, inbound domains, relay webhooks, sending IPs, and A/B tests; writes email sends, recipient list/template/domain/suppression/IP-pool/webhook/subaccount/relay-webhook lifecycle mutations.
 
 ICON
-  id: simple-icons-sparkpost
-  asset: icons/simple-icons/sparkpost.svg
-  title: SparkPost
-  simple_icon_slug: sparkpost
-  simple_icon_hex: FA6423
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=SparkPost
-  match: exact-name-or-slug
-  matched_by: sparkpost
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -91,15 +83,12 @@ REVERSE ETL ACTIONS
     risk: external mutation; changes account-wide settings (company name, two-factor requirement, default tracking/transactional options) affecting every sender on the account; approval required
   create_transmission:
     endpoint: POST /transmissions
-    required fields: recipients, content
     risk: external mutation; sends real email to every listed recipient through the connected SparkPost account; approval required
   create_recipient_list:
     endpoint: POST /recipient-lists
-    required fields: recipients
     risk: external mutation; creates a stored recipient list; approval required
   create_template:
     endpoint: POST /templates
-    required fields: content
     risk: external mutation; creates a message template (as a draft unless published); approval required
   update_template:
     endpoint: PUT /templates/{{ record.id }}
@@ -111,7 +100,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; permanently deletes a message template; approval required
   create_sending_domain:
     endpoint: POST /sending-domains
-    required fields: domain
     risk: external mutation; registers a new sending domain pending DNS verification; approval required
   update_sending_domain:
     endpoint: PUT /sending-domains/{{ record.domain }}
@@ -123,7 +111,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; permanently removes a sending domain; approval required
   create_or_update_suppression:
     endpoint: PUT /suppression-list/{{ record.recipient }}
-    required fields: recipient, type
+    required fields: recipient
     risk: external mutation; adds or updates a recipient's suppression (opt-out) entry, affecting future deliverability to that address; approval required
   delete_suppression:
     endpoint: DELETE /suppression-list/{{ record.recipient }}
@@ -131,11 +119,10 @@ REVERSE ETL ACTIONS
     risk: external mutation; removes a recipient's suppression entry, re-enabling delivery to that address; approval required
   create_ip_pool:
     endpoint: POST /ip-pools
-    required fields: name
     risk: external mutation; creates a dedicated IP pool; approval required
   update_ip_pool:
     endpoint: PUT /ip-pools/{{ record.id }}
-    required fields: id, name
+    required fields: id
     risk: external mutation; changes an IP pool's DKIM signing domain / auto-warmup overflow configuration; approval required
   delete_ip_pool:
     endpoint: DELETE /ip-pools/{{ record.id }}
@@ -143,7 +130,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; permanently deletes an IP pool; approval required
   create_webhook:
     endpoint: POST /webhooks
-    required fields: name, target, events
     risk: external mutation; creates a webhook that will POST live event batches to an externally-supplied URL; a test POST is sent to target immediately; approval required
   update_webhook:
     endpoint: PUT /webhooks/{{ record.id }}
@@ -155,7 +141,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; permanently deletes a webhook; approval required
   create_subaccount:
     endpoint: POST /subaccounts
-    required fields: name
     risk: external mutation; provisions a new subaccount, optionally with a live API key; approval required
   update_subaccount:
     endpoint: PUT /subaccounts/{{ record.id }}
@@ -163,7 +148,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; changes a subaccount's name/status/ip_pool -- status transitions (e.g. to suspended/terminated) directly affect that subaccount's ability to send mail; approval required
   create_tracking_domain:
     endpoint: POST /tracking-domains
-    required fields: domain
     risk: external mutation; registers a new tracking domain pending DNS verification; approval required
   delete_tracking_domain:
     endpoint: DELETE /tracking-domains/{{ record.domain }}
@@ -171,7 +155,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; permanently removes a tracking domain; approval required
   create_inbound_domain:
     endpoint: POST /inbound-domains
-    required fields: domain
     risk: external mutation; registers a new inbound (receiving) domain; approval required
   delete_inbound_domain:
     endpoint: DELETE /inbound-domains/{{ record.domain }}
@@ -179,7 +162,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; permanently removes an inbound domain, stopping inbound relay of mail addressed to it; approval required
   create_relay_webhook:
     endpoint: POST /relay-webhooks
-    required fields: target, match
     risk: external mutation; creates a relay webhook that will POST live inbound-mail batches to an externally-supplied URL; approval required
   update_relay_webhook:
     endpoint: PUT /relay-webhooks/{{ record.id }}

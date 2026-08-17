@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Klaus (Zendesk QA) users and rating categories through the Klaus public REST API. The reviews stream is not yet migrated (ENGINE_GAP, see docs.md).
 
 ICON
-  id: klaus-api
   asset: icons/klaus-api.svg
   source: upstream_registry
   review_status: upstream_seeded

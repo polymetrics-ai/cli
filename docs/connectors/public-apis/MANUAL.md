@@ -13,7 +13,6 @@ DESCRIPTION
   Reads public API directory entries and categories from the api.publicapis.org directory API. Read-only and credential-free.
 
 ICON
-  id: public-apis
   asset: icons/public-apis.svg
   source: upstream_registry
   review_status: upstream_seeded

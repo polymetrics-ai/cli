@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Mixmax code snippets, messages, rules, sequences, and meeting types through the Mixmax REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

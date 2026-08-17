@@ -11,7 +11,6 @@ Reads Insightly CRM contacts, organisations, opportunities, leads, projects, and
 
 ## Icon
 
-- id: insightly
 - asset: icons/insightly.svg
 - source: upstream_registry
 - review_status: upstream_seeded

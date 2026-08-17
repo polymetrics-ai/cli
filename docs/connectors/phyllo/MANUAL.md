@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Phyllo users, accounts, profiles, social content/comments, audience, and income data, and writes user/webhook/account-config mutations using Basic-auth REST endpoints.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -85,11 +83,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_user:
     endpoint: POST /v1/users
-    required fields: name, external_id
     risk: creates a new Phyllo end-user record that every subsequent Connect/account/profile flow is anchored to; low-risk external mutation, no destructive side effect, no approval required
   update_account:
     endpoint: PATCH /v1/accounts/{{ record.id }}
-    required fields: id, data
+    required fields: id
+    optional fields: data
     risk: changes an account's identity/engagement/income monitoring configuration (e.g. STANDARD vs EXTENSIVE data collection level), affecting what data Phyllo collects going forward; external mutation, approval required
   disconnect_account:
     endpoint: POST /v1/accounts/{{ record.id }}/disconnect
@@ -97,11 +95,10 @@ REVERSE ETL ACTIONS
     risk: revokes Phyllo's connection to the creator's linked social/creator platform account, permanently stopping all future data collection for it; destructive external mutation, approval required
   create_webhook:
     endpoint: POST /v1/webhooks
-    required fields: url, events
     risk: registers a new webhook endpoint that will receive Phyllo event notifications; low-risk external mutation, no approval required
   update_webhook:
     endpoint: PUT /v1/webhooks/{{ record.id }}
-    required fields: id, url, events
+    required fields: id
     risk: changes an existing webhook's target URL and/or subscribed event set, redirecting future event delivery; external mutation, approval required
   delete_webhook:
     endpoint: DELETE /v1/webhooks/{{ record.id }}

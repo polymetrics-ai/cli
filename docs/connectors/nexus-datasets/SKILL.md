@@ -11,7 +11,6 @@ Reads records from a configured Infor Nexus export dataset through the Infor Nex
 
 ## Icon
 
-- id: nexus-datasets
 - asset: icons/nexus-datasets.svg
 - source: upstream_registry
 - review_status: upstream_seeded

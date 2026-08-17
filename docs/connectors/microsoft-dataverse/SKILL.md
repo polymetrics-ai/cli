@@ -11,7 +11,6 @@ Reads Microsoft Dataverse accounts, contacts, leads, opportunities, and users th
 
 ## Icon
 
-- id: microsoftdataverse
 - asset: icons/microsoftdataverse.svg
 - source: upstream_registry
 - review_status: upstream_seeded

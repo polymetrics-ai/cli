@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.
 
 ICON
-  id: simple-icons-helpscout
-  asset: icons/simple-icons/helpscout.svg
-  title: Help Scout
-  simple_icon_slug: helpscout
-  simple_icon_hex: 1292EE
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Help%20Scout
-  match: exact-name-or-slug
-  matched_by: help-scout
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

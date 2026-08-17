@@ -13,7 +13,6 @@ DESCRIPTION
   Reads current weather, hourly and daily forecasts, and government alerts for a configured geographic location from the OpenWeather One Call API 3.0.
 
 ICON
-  id: openweather
   asset: icons/openweather.svg
   source: upstream_registry
   review_status: upstream_seeded

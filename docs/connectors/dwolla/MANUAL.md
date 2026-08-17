@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Dwolla customers, events, exchange partners, and business classifications, and writes customer/funding-source/transfer/webhook-subscription/beneficial-owner lifecycle mutations, via the Dwolla HAL+JSON REST API using OAuth2 client-credentials.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -54,7 +52,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_customer:
     endpoint: POST /customers
-    required fields: firstName, lastName, email
     risk: external mutation; creates a new Dwolla customer (personal, business, receive-only, or unverified), subject to Dwolla's identity-verification rules for the requested type
   update_customer:
     endpoint: POST /customers/{{ record.id }}
@@ -62,7 +59,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; updates a customer's profile fields, or its status (e.g. deactivating/reactivating the customer, which blocks/restores its ability to transact)
   create_funding_source:
     endpoint: POST /customers/{{ record.customer_id }}/funding-sources
-    required fields: customer_id, name
+    required fields: customer_id
     risk: external mutation; attaches a new bank-account funding source to a customer, either as unverified (routingNumber/accountNumber, requiring later micro-deposit verification) or pre-verified via an open-banking plaidToken/onDemandAuthorizationId
   update_funding_source:
     endpoint: POST /funding-sources/{{ record.id }}
@@ -70,7 +67,8 @@ REVERSE ETL ACTIONS
     risk: external mutation; renames a funding source or replaces its unverified bank-account routing/account numbers
   remove_funding_source:
     endpoint: POST /funding-sources/{{ record.id }}
-    required fields: id, removed
+    required fields: id
+    optional fields: removed
     risk: destructive external mutation; Dwolla has no hard-delete for funding sources, this soft-removes it (POST {removed:true}) so it can no longer send/receive transfers; not reversible via the API
   initiate_micro_deposits:
     endpoint: POST /funding-sources/{{ record.id }}/initiate-micro-deposits
@@ -78,19 +76,21 @@ REVERSE ETL ACTIONS
     risk: external mutation; sends two small trial-deposit ACH transactions to an unverified bank-account funding source, the first step of micro-deposit verification
   verify_micro_deposits:
     endpoint: POST /funding-sources/{{ record.id }}/verify-micro-deposits
-    required fields: id, amount1, amount2
+    required fields: id
+    optional fields: amount1, amount2
     risk: external mutation; verifies a funding source's micro-deposit amounts, completing bank-account verification; Dwolla locks the funding source after repeated failed attempts
   cancel_transfer:
     endpoint: POST /transfers/{{ record.id }}
-    required fields: id, status
+    required fields: id
+    optional fields: status
     risk: external mutation; cancels a still-pending transfer before it clears, this action is not reversible and only succeeds while the transfer's status is pending
   create_webhook_subscription:
     endpoint: POST /webhook-subscriptions
-    required fields: url, secret
     risk: external mutation; registers a new webhook subscription; Dwolla enforces a maximum of 10 active subscriptions in Sandbox and 5 in Production
   update_webhook_subscription:
     endpoint: POST /webhook-subscriptions/{{ record.id }}
-    required fields: id, paused
+    required fields: id
+    optional fields: paused
     risk: external mutation; pauses or resumes webhook delivery for a subscription (Dwolla still generates the events while paused, it just withholds delivery)
   delete_webhook_subscription:
     endpoint: DELETE /webhook-subscriptions/{{ record.id }}
@@ -98,7 +98,7 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; permanently deletes a webhook subscription and stops all future event delivery to it; not reversible
   create_beneficial_owner:
     endpoint: POST /customers/{{ record.customer_id }}/beneficial-owners
-    required fields: customer_id, firstName, lastName, dateOfBirth, ssn, address
+    required fields: customer_id
     risk: external mutation; registers a beneficial owner (25%+ equity holder) for a business verified customer; submits sensitive PII (SSN, date of birth, address) to Dwolla for identity verification
   update_beneficial_owner:
     endpoint: POST /beneficial-owners/{{ record.id }}
@@ -110,7 +110,8 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; permanently removes a beneficial owner from a business verified customer; not reversible and may affect the customer's beneficial-ownership certification status
   certify_beneficial_ownership:
     endpoint: POST /customers/{{ record.customer_id }}/beneficial-ownership
-    required fields: customer_id, status
+    required fields: customer_id
+    optional fields: status
     risk: external mutation; the Account Admin attests that a business customer's beneficial-owner information is accurate and complete, which is required before the customer can transact
 
 SECURITY

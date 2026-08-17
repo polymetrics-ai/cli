@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Facebook Marketing ad accounts, campaigns, ads, ad sets, ad creatives, custom audiences, and performance insights, and creates/updates campaigns and ad sets, through the Graph API.
 
 ICON
-  id: facebook
   asset: icons/facebook.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -60,7 +59,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_campaign:
     endpoint: POST /{{ config.ad_account_id }}/campaigns
-    required fields: name, objective, status, special_ad_categories
     risk: external mutation on a live Facebook ad account; creates a campaign that can incur ad spend once ads are attached; approval required
   update_campaign:
     endpoint: POST /{{ record.id }}
@@ -68,7 +66,6 @@ REVERSE ETL ACTIONS
     risk: external mutation on a live Facebook ad account (e.g. pausing/resuming spend); approval required
   create_ad_set:
     endpoint: POST /{{ config.ad_account_id }}/adsets
-    required fields: name, campaign_id, billing_event, optimization_goal, targeting, status
     risk: external mutation on a live Facebook ad account; creates an ad set that can incur ad spend once ads are attached; approval required
 
 SECURITY

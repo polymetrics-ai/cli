@@ -11,11 +11,10 @@ Reads Elasticsearch index metadata and documents through the REST API. Read-only
 
 ## Icon
 
-- id: elasticsearch
 - asset: icons/elasticsearch.svg
-- source: official
-- review_status: official_verified
-- review_url: https://www.elastic.co/docs/reference/elasticsearch
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html
 
 ## Capabilities
 

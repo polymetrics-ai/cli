@@ -11,7 +11,6 @@ Reads FullStory segments, users, events, and user-scoped sessions; writes server
 
 ## Icon
 
-- id: fullstory
 - asset: icons/fullstory.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -63,7 +62,6 @@ Reads FullStory segments, users, events, and user-scoped sessions; writes server
 
 - create_user:
   - endpoint: POST /v2/users
-  - required fields: uid
   - risk: creates or upserts a FullStory user profile and associated custom user properties
 - update_user:
   - endpoint: POST /v2/users/{{ record.id }}
@@ -71,7 +69,6 @@ Reads FullStory segments, users, events, and user-scoped sessions; writes server
   - risk: updates a FullStory user profile's display fields or custom properties
 - create_event:
   - endpoint: POST /v2/events
-  - required fields: name
   - risk: creates a custom FullStory event that becomes part of analytics/session context
 
 ## Security

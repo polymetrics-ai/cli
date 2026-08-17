@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Appfigures app-store reviews, products, analytics reports (sales/ratings/revenue/subscriptions/ads/estimates), reference data (categories/countries/languages/currencies/stores/SDKs), release events, connected external accounts, account users, and account info through the Appfigures v2 REST API, and manages release events and review responses.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -94,11 +92,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   reply_to_review:
     endpoint: POST /reviews/{{ record.id }}/response
-    required fields: id, content
+    required fields: id
+    optional fields: content
     risk: publishes a developer response to a customer review, visible on the public app store listing
   create_event:
     endpoint: POST /events/
-    required fields: caption, date
     risk: creates a release/marketing event marker overlaid on every Appfigures analytics chart
   update_event:
     endpoint: PUT /events/{{ record.id }}

@@ -11,17 +11,9 @@ Reads Invoice Ninja clients, invoices, products, payments, and quotes through th
 
 ## Icon
 
-- id: simple-icons-invoiceninja
-- asset: icons/simple-icons/invoiceninja.svg
-- title: Invoice Ninja
-- simple_icon_slug: invoiceninja
-- simple_icon_hex: 000000
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Invoice%20Ninja
-- match: exact-name-or-slug
-- matched_by: invoiceninja
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 

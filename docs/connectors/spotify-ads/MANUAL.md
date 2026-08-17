@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Spotify Ads ad accounts, campaigns, ad sets, ads, businesses, business-scoped ad accounts, and assets, and writes campaign mutations through the Spotify Ads API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

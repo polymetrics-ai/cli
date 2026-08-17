@@ -11,7 +11,6 @@ Reads Braintree transactions, customers, subscriptions, reference data, payment 
 
 ## Icon
 
-- id: braintree
 - asset: icons/braintree.svg
 - source: upstream_registry
 - review_status: upstream_seeded

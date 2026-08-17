@@ -13,17 +13,9 @@ DESCRIPTION
   Reads and writes WordPress REST API content: posts, pages, comments, media, users, categories, tags, taxonomies, post types, and post statuses.
 
 ICON
-  id: simple-icons-wordpress
-  asset: icons/simple-icons/wordpress.svg
-  title: WordPress
-  simple_icon_slug: wordpress
-  simple_icon_hex: 21759B
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=WordPress
-  match: exact-name-or-slug
-  matched_by: wordpress
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -102,7 +94,6 @@ REVERSE ETL ACTIONS
     risk: external deletion of public site content (moves to trash unless force=true is embedded in the path); approval required
   create_comment:
     endpoint: POST /wp-json/wp/v2/comments
-    required fields: post, content
     risk: external mutation; publishes a public-facing comment; approval required
   update_comment:
     endpoint: POST /wp-json/wp/v2/comments/{{ record.id }}
@@ -122,7 +113,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a media/attachment item (WordPress core requires force=true; attachments do not support trashing); approval required
   create_user:
     endpoint: POST /wp-json/wp/v2/users
-    required fields: username, email, password
     risk: external mutation; creates a new site user account with a password; approval required
   update_user:
     endpoint: POST /wp-json/wp/v2/users/{{ record.id }}
@@ -134,7 +124,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a site user account (WordPress core requires force=true and a reassign target; users do not support trashing); approval required
   create_category:
     endpoint: POST /wp-json/wp/v2/categories
-    required fields: name
     risk: external mutation; approval required
   update_category:
     endpoint: POST /wp-json/wp/v2/categories/{{ record.id }}
@@ -146,7 +135,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a category (WordPress core requires force=true; terms do not support trashing); approval required
   create_tag:
     endpoint: POST /wp-json/wp/v2/tags
-    required fields: name
     risk: external mutation; approval required
   update_tag:
     endpoint: POST /wp-json/wp/v2/tags/{{ record.id }}

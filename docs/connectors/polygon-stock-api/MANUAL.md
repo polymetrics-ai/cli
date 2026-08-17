@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Polygon.io stock tickers, dividends, and splits through the Polygon.io reference REST API.
 
 ICON
-  id: polygon
   asset: icons/polygon.svg
   source: upstream_registry
   review_status: upstream_seeded

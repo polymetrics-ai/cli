@@ -13,7 +13,6 @@ DESCRIPTION
   Reads OneSignal account-level applications through the OneSignal REST API. Device/notification/outcome streams remain quarantined (ENGINE_GAP: no per-stream auth override).
 
 ICON
-  id: onesignal
   asset: icons/onesignal.svg
   source: upstream_registry
   review_status: upstream_seeded

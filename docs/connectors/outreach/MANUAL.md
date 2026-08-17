@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and mutates Outreach REST API v2 JSON:API resources, including standard resources and caller-selected custom objects.
 
 ICON
-  id: outreach
   asset: icons/outreach.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -380,11 +379,10 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_account_note:
     endpoint: POST /accountNotes
-    required fields: data
     risk: external Outreach mutation; create account note; approval required
   update_account_note:
     endpoint: PATCH /accountNotes/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update account note; approval required
   delete_account_note:
     endpoint: DELETE /accountNotes/{{ record.id }}
@@ -392,11 +390,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete account note in Outreach; approval required
   create_account:
     endpoint: POST /accounts
-    required fields: data
     risk: external Outreach mutation; create account; approval required
   update_account:
     endpoint: PATCH /accounts/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update account; approval required
   delete_account:
     endpoint: DELETE /accounts/{{ record.id }}
@@ -404,95 +401,74 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete account in Outreach; approval required
   add_account_tags:
     endpoint: POST /batches/actions/accountAddTags
-    required fields: data
     risk: external Outreach mutation; add account tags; approval required
   add_account_assignments:
     endpoint: POST /batches/actions/accountsAddAssignments
-    required fields: data
     risk: external Outreach mutation; add account assignments; approval required
   assign_account_owner:
     endpoint: POST /batches/actions/accountsAssignOwner
-    required fields: data
     risk: external Outreach mutation; assign account owner; approval required
   bulk_modify_accounts:
     endpoint: POST /batches/actions/accountsBulkModify
-    required fields: data
     risk: external Outreach mutation; bulk modify accounts; approval required
   destroy_all_accounts:
     endpoint: POST /batches/actions/accountsDestroyAll
-    required fields: data
     risk: destructive external mutation; destroy all accounts in Outreach; approval required
   remove_all_account_assignments:
     endpoint: POST /batches/actions/accountsRemoveAllAssignments
-    required fields: data
     risk: destructive external mutation; remove all account assignments in Outreach; approval required
   remove_account_assignments:
     endpoint: POST /batches/actions/accountsRemoveAssignments
-    required fields: data
     risk: external Outreach mutation; remove account assignments; approval required
   remove_account_tags:
     endpoint: POST /batches/actions/accountsRemoveTags
-    required fields: data
     risk: external Outreach mutation; remove account tags; approval required
   bulk_delete_custom_objects:
     endpoint: POST /batches/actions/customObjectBulkDelete?actionParams[objectName]={{ record.objectName }}
-    required fields: objectName, data
+    required fields: objectName
     risk: destructive external mutation; bulk delete custom objects in Outreach; approval required
   bulk_modify_custom_objects:
     endpoint: POST /batches/actions/customObjectBulkModify?actionParams[objectName]={{ record.objectName }}
-    required fields: objectName, data
+    required fields: objectName
     risk: external Outreach mutation; bulk modify custom objects; approval required
   add_prospect_assignments:
     endpoint: POST /batches/actions/prospectsAddAssignments
-    required fields: data
     risk: external Outreach mutation; add prospect assignments; approval required
   add_prospect_tags:
     endpoint: POST /batches/actions/prospectsAddTags
-    required fields: data
     risk: external Outreach mutation; add prospect tags; approval required
   add_prospects_to_sequence:
     endpoint: POST /batches/actions/prospectsAddToSequence
-    required fields: data
     risk: external Outreach mutation; add prospects to sequence; approval required
   assign_prospect_account:
     endpoint: POST /batches/actions/prospectsAssignAccount
-    required fields: data
     risk: external Outreach mutation; assign prospect account; approval required
   assign_prospect_opportunity:
     endpoint: POST /batches/actions/prospectsAssignOpportunity
-    required fields: data
     risk: external Outreach mutation; assign prospect opportunity; approval required
   assign_prospect_owner:
     endpoint: POST /batches/actions/prospectsAssignOwner
-    required fields: data
     risk: external Outreach mutation; assign prospect owner; approval required
   bulk_modify_prospects:
     endpoint: POST /batches/actions/prospectsBulkModify
-    required fields: data
     risk: external Outreach mutation; bulk modify prospects; approval required
   destroy_all_prospects:
     endpoint: POST /batches/actions/prospectsDestroyAll
-    required fields: data
     risk: destructive external mutation; destroy all prospects in Outreach; approval required
   finish_all_prospects:
     endpoint: POST /batches/actions/prospectsFinishAll
-    required fields: data
     risk: external Outreach mutation; finish all prospects; approval required
   pause_all_prospects:
     endpoint: POST /batches/actions/prospectsPauseAll
-    required fields: data
     risk: external Outreach mutation; pause all prospects; approval required
   remove_all_prospect_assignments:
     endpoint: POST /batches/actions/prospectsRemoveAllAssignments
-    required fields: data
     risk: destructive external mutation; remove all prospect assignments in Outreach; approval required
   remove_prospect_assignments:
     endpoint: POST /batches/actions/prospectsRemoveAssignments
-    required fields: data
     risk: external Outreach mutation; remove prospect assignments; approval required
   remove_prospect_tags:
     endpoint: POST /batches/actions/prospectsRemoveTags
-    required fields: data
     risk: external Outreach mutation; remove prospect tags; approval required
   cancel_batch:
     endpoint: POST /batches/{{ record.id }}/actions/cancel
@@ -504,11 +480,10 @@ REVERSE ETL ACTIONS
     risk: external Outreach mutation; confirm batch; approval required
   create_call_disposition:
     endpoint: POST /callDispositions
-    required fields: data
     risk: external Outreach mutation; create call disposition; approval required
   update_call_disposition:
     endpoint: PATCH /callDispositions/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update call disposition; approval required
   delete_call_disposition:
     endpoint: DELETE /callDispositions/{{ record.id }}
@@ -516,11 +491,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete call disposition in Outreach; approval required
   create_call_purpose:
     endpoint: POST /callPurposes
-    required fields: data
     risk: external Outreach mutation; create call purpose; approval required
   update_call_purpose:
     endpoint: PATCH /callPurposes/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update call purpose; approval required
   delete_call_purpose:
     endpoint: DELETE /callPurposes/{{ record.id }}
@@ -528,7 +502,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete call purpose in Outreach; approval required
   create_call:
     endpoint: POST /calls
-    required fields: data
     risk: external Outreach mutation; create call; approval required
   delete_call:
     endpoint: DELETE /calls/{{ record.id }}
@@ -536,15 +509,13 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete call in Outreach; approval required
   create_compliance_request:
     endpoint: POST /complianceRequests
-    required fields: data
     risk: external Outreach mutation; create compliance request; approval required
   create_content_category:
     endpoint: POST /contentCategories
-    required fields: data
     risk: external Outreach mutation; create content category; approval required
   update_content_category:
     endpoint: PATCH /contentCategories/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update content category; approval required
   delete_content_category:
     endpoint: DELETE /contentCategories/{{ record.id }}
@@ -552,7 +523,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete content category in Outreach; approval required
   create_content_category_membership:
     endpoint: POST /contentCategoryMemberships
-    required fields: data
     risk: external Outreach mutation; create content category membership; approval required
   delete_content_category_membership:
     endpoint: DELETE /contentCategoryMemberships/{{ record.id }}
@@ -560,7 +530,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete content category membership in Outreach; approval required
   create_content_category_ownership:
     endpoint: POST /contentCategoryOwnerships
-    required fields: data
     risk: external Outreach mutation; create content category ownership; approval required
   delete_content_category_ownership:
     endpoint: DELETE /contentCategoryOwnerships/{{ record.id }}
@@ -568,15 +537,13 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete content category ownership in Outreach; approval required
   create_custom_duty:
     endpoint: POST /customDuties
-    required fields: data
     risk: external Outreach mutation; create custom duty; approval required
   create_email_address:
     endpoint: POST /emailAddresses
-    required fields: data
     risk: external Outreach mutation; create email address; approval required
   update_email_address:
     endpoint: PATCH /emailAddresses/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update email address; approval required
   delete_email_address:
     endpoint: DELETE /emailAddresses/{{ record.id }}
@@ -584,7 +551,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete email address in Outreach; approval required
   create_favorite:
     endpoint: POST /favorites
-    required fields: data
     risk: external Outreach mutation; create favorite; approval required
   delete_favorite:
     endpoint: DELETE /favorites/{{ record.id }}
@@ -592,22 +558,18 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete favorite in Outreach; approval required
   import_accounts:
     endpoint: POST /imports/actions/accountsImport
-    required fields: data
     risk: external Outreach mutation; import accounts; approval required
   bulk_upsert_imports:
     endpoint: POST /imports/actions/bulkUpsert
-    required fields: data
     risk: external Outreach mutation; bulk upsert imports; approval required
   bulk_upsert_custom_objects:
     endpoint: POST /imports/actions/customObjectBulkUpsert
-    required fields: data
     risk: external Outreach mutation; bulk upsert custom objects; approval required
   generate_import_upload_link:
     endpoint: POST /imports/actions/generateUploadLink
     risk: external Outreach mutation; generate import upload link; approval required
   import_prospects:
     endpoint: POST /imports/actions/prospectsImport
-    required fields: data
     risk: external Outreach mutation; import prospects; approval required
   validate_import_upload:
     endpoint: POST /imports/actions/validateUpload?actionParams[hash]={{ record.hash }}&actionParams[storageKey]={{ record.storageKey }}
@@ -615,15 +577,13 @@ REVERSE ETL ACTIONS
     risk: external Outreach mutation; validate import upload; approval required
   create_kaia_voice_import:
     endpoint: POST /kaiaVoiceImports
-    required fields: data
     risk: external Outreach mutation; create kaia voice import; approval required
   create_mailbox:
     endpoint: POST /mailboxes
-    required fields: data
     risk: external Outreach mutation; create mailbox; approval required
   update_mailbox:
     endpoint: PATCH /mailboxes/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update mailbox; approval required
   delete_mailbox:
     endpoint: DELETE /mailboxes/{{ record.id }}
@@ -647,15 +607,13 @@ REVERSE ETL ACTIONS
     risk: external Outreach mutation; unlink ews master account mailbox; approval required
   create_mailing:
     endpoint: POST /mailings
-    required fields: data
     risk: external Outreach mutation; create mailing; approval required
   create_opportunity:
     endpoint: POST /opportunities
-    required fields: data
     risk: external Outreach mutation; create opportunity; approval required
   update_opportunity:
     endpoint: PATCH /opportunities/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update opportunity; approval required
   delete_opportunity:
     endpoint: DELETE /opportunities/{{ record.id }}
@@ -663,11 +621,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete opportunity in Outreach; approval required
   create_opportunity_prospect_role:
     endpoint: POST /opportunityProspectRoles
-    required fields: data
     risk: external Outreach mutation; create opportunity prospect role; approval required
   update_opportunity_prospect_role:
     endpoint: PATCH /opportunityProspectRoles/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update opportunity prospect role; approval required
   delete_opportunity_prospect_role:
     endpoint: DELETE /opportunityProspectRoles/{{ record.id }}
@@ -675,11 +632,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete opportunity prospect role in Outreach; approval required
   create_opportunity_stage:
     endpoint: POST /opportunityStages
-    required fields: data
     risk: external Outreach mutation; create opportunity stage; approval required
   update_opportunity_stage:
     endpoint: PATCH /opportunityStages/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update opportunity stage; approval required
   delete_opportunity_stage:
     endpoint: DELETE /opportunityStages/{{ record.id }}
@@ -687,15 +643,14 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete opportunity stage in Outreach; approval required
   update_org_setting:
     endpoint: PATCH /orgSettings/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update org setting; approval required
   create_persona:
     endpoint: POST /personas
-    required fields: data
     risk: external Outreach mutation; create persona; approval required
   update_persona:
     endpoint: PATCH /personas/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update persona; approval required
   delete_persona:
     endpoint: DELETE /personas/{{ record.id }}
@@ -703,11 +658,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete persona in Outreach; approval required
   create_phone_number:
     endpoint: POST /phoneNumbers
-    required fields: data
     risk: external Outreach mutation; create phone number; approval required
   update_phone_number:
     endpoint: PATCH /phoneNumbers/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update phone number; approval required
   delete_phone_number:
     endpoint: DELETE /phoneNumbers/{{ record.id }}
@@ -715,11 +669,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete phone number in Outreach; approval required
   create_product:
     endpoint: POST /products
-    required fields: data
     risk: external Outreach mutation; create product; approval required
   update_product:
     endpoint: PATCH /products/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update product; approval required
   delete_product:
     endpoint: DELETE /products/{{ record.id }}
@@ -727,11 +680,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete product in Outreach; approval required
   create_profile:
     endpoint: POST /profiles
-    required fields: data
     risk: external Outreach mutation; create profile; approval required
   update_profile:
     endpoint: PATCH /profiles/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update profile; approval required
   delete_profile:
     endpoint: DELETE /profiles/{{ record.id }}
@@ -739,11 +691,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete profile in Outreach; approval required
   create_prospect_note:
     endpoint: POST /prospectNotes
-    required fields: data
     risk: external Outreach mutation; create prospect note; approval required
   update_prospect_note:
     endpoint: PATCH /prospectNotes/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update prospect note; approval required
   delete_prospect_note:
     endpoint: DELETE /prospectNotes/{{ record.id }}
@@ -751,11 +702,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete prospect note in Outreach; approval required
   create_prospect:
     endpoint: POST /prospects
-    required fields: data
     risk: external Outreach mutation; create prospect; approval required
   update_prospect:
     endpoint: PATCH /prospects/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update prospect; approval required
   delete_prospect:
     endpoint: DELETE /prospects/{{ record.id }}
@@ -763,11 +713,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete prospect in Outreach; approval required
   create_purchase:
     endpoint: POST /purchases
-    required fields: data
     risk: external Outreach mutation; create purchase; approval required
   update_purchase:
     endpoint: PATCH /purchases/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update purchase; approval required
   delete_purchase:
     endpoint: DELETE /purchases/{{ record.id }}
@@ -775,11 +724,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete purchase in Outreach; approval required
   create_recipient:
     endpoint: POST /recipients
-    required fields: data
     risk: external Outreach mutation; create recipient; approval required
   update_recipient:
     endpoint: PATCH /recipients/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update recipient; approval required
   delete_recipient:
     endpoint: DELETE /recipients/{{ record.id }}
@@ -787,11 +735,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete recipient in Outreach; approval required
   create_role:
     endpoint: POST /roles
-    required fields: data
     risk: external Outreach mutation; create role; approval required
   update_role:
     endpoint: PATCH /roles/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update role; approval required
   delete_role:
     endpoint: DELETE /roles/{{ record.id }}
@@ -799,11 +746,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete role in Outreach; approval required
   create_ruleset:
     endpoint: POST /rulesets
-    required fields: data
     risk: external Outreach mutation; create ruleset; approval required
   update_ruleset:
     endpoint: PATCH /rulesets/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update ruleset; approval required
   delete_ruleset:
     endpoint: DELETE /rulesets/{{ record.id }}
@@ -811,7 +757,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete ruleset in Outreach; approval required
   create_sequence_state:
     endpoint: POST /sequenceStates
-    required fields: data
     risk: external Outreach mutation; create sequence state; approval required
   delete_sequence_state:
     endpoint: DELETE /sequenceStates/{{ record.id }}
@@ -831,19 +776,17 @@ REVERSE ETL ACTIONS
     risk: external Outreach mutation; resume sequence state; approval required
   create_sequence_step:
     endpoint: POST /sequenceSteps
-    required fields: data
     risk: external Outreach mutation; create sequence step; approval required
   update_sequence_step:
     endpoint: PATCH /sequenceSteps/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update sequence step; approval required
   create_sequence_template:
     endpoint: POST /sequenceTemplates
-    required fields: data
     risk: external Outreach mutation; create sequence template; approval required
   update_sequence_template:
     endpoint: PATCH /sequenceTemplates/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update sequence template; approval required
   delete_sequence_template:
     endpoint: DELETE /sequenceTemplates/{{ record.id }}
@@ -859,11 +802,10 @@ REVERSE ETL ACTIONS
     risk: external Outreach mutation; deactivate sequence template; approval required
   create_sequence:
     endpoint: POST /sequences
-    required fields: data
     risk: external Outreach mutation; create sequence; approval required
   update_sequence:
     endpoint: PATCH /sequences/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update sequence; approval required
   delete_sequence:
     endpoint: DELETE /sequences/{{ record.id }}
@@ -879,11 +821,10 @@ REVERSE ETL ACTIONS
     risk: external Outreach mutation; deactivate sequence; approval required
   create_snippet:
     endpoint: POST /snippets
-    required fields: data
     risk: external Outreach mutation; create snippet; approval required
   update_snippet:
     endpoint: PATCH /snippets/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update snippet; approval required
   delete_snippet:
     endpoint: DELETE /snippets/{{ record.id }}
@@ -891,11 +832,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete snippet in Outreach; approval required
   create_stage:
     endpoint: POST /stages
-    required fields: data
     risk: external Outreach mutation; create stage; approval required
   update_stage:
     endpoint: PATCH /stages/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update stage; approval required
   delete_stage:
     endpoint: DELETE /stages/{{ record.id }}
@@ -903,11 +843,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete stage in Outreach; approval required
   create_task_disposition:
     endpoint: POST /taskDispositions
-    required fields: data
     risk: external Outreach mutation; create task disposition; approval required
   update_task_disposition:
     endpoint: PATCH /taskDispositions/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update task disposition; approval required
   delete_task_disposition:
     endpoint: DELETE /taskDispositions/{{ record.id }}
@@ -915,11 +854,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete task disposition in Outreach; approval required
   create_task_purpose:
     endpoint: POST /taskPurposes
-    required fields: data
     risk: external Outreach mutation; create task purpose; approval required
   update_task_purpose:
     endpoint: PATCH /taskPurposes/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update task purpose; approval required
   delete_task_purpose:
     endpoint: DELETE /taskPurposes/{{ record.id }}
@@ -927,11 +865,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete task purpose in Outreach; approval required
   create_task:
     endpoint: POST /tasks
-    required fields: data
     risk: external Outreach mutation; create task; approval required
   update_task:
     endpoint: PATCH /tasks/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update task; approval required
   delete_task:
     endpoint: DELETE /tasks/{{ record.id }}
@@ -975,11 +912,10 @@ REVERSE ETL ACTIONS
     risk: external Outreach mutation; update opportunity association task; approval required
   create_team:
     endpoint: POST /teams
-    required fields: data
     risk: external Outreach mutation; create team; approval required
   update_team:
     endpoint: PATCH /teams/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update team; approval required
   delete_team:
     endpoint: DELETE /teams/{{ record.id }}
@@ -987,11 +923,10 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete team in Outreach; approval required
   create_template:
     endpoint: POST /templates
-    required fields: data
     risk: external Outreach mutation; create template; approval required
   update_template:
     endpoint: PATCH /templates/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update template; approval required
   delete_template:
     endpoint: DELETE /templates/{{ record.id }}
@@ -999,19 +934,17 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete template in Outreach; approval required
   create_user:
     endpoint: POST /users
-    required fields: data
     risk: external Outreach mutation; create user; approval required
   update_user:
     endpoint: PATCH /users/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update user; approval required
   create_webhook:
     endpoint: POST /webhooks
-    required fields: data
     risk: external Outreach mutation; create webhook; approval required
   update_webhook:
     endpoint: PATCH /webhooks/{{ record.id }}
-    required fields: id, data
+    required fields: id
     risk: external Outreach mutation; update webhook; approval required
   delete_webhook:
     endpoint: DELETE /webhooks/{{ record.id }}
@@ -1019,11 +952,11 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; delete webhook in Outreach; approval required
   create_custom_object_record:
     endpoint: POST /customObjects/{{ record.objectName }}
-    required fields: objectName, data
+    required fields: objectName
     risk: external Outreach mutation; creates a record in the configured custom object type; approval required
   update_custom_object_record:
     endpoint: PATCH /customObjects/{{ record.objectName }}/{{ record.id }}
-    required fields: objectName, id, data
+    required fields: objectName, id
     risk: external Outreach mutation; updates a record in the configured custom object type; approval required
   delete_custom_object_record:
     endpoint: DELETE /customObjects/{{ record.objectName }}/{{ record.id }}

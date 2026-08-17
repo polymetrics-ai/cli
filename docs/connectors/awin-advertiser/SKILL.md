@@ -11,11 +11,9 @@ Reads Awin advertiser transactions, publisher-aggregated performance reports, pu
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -65,7 +63,6 @@ Reads Awin advertiser transactions, publisher-aggregated performance reports, pu
 
 - create_offer:
   - endpoint: POST /promotion/advertiser/{{ config.advertiserId }}
-  - required fields: title, description, terms, type, url, startDate, endDate, appliesToAllRegions, promotionCategories
   - risk: creates a new promotion or voucher offer in the advertiser's MyOffers system, visible to publishers immediately; external mutation, approval required
 
 ## Security

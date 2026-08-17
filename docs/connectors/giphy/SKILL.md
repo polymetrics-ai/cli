@@ -11,17 +11,9 @@ Reads GIFs, stickers, and clips from the Giphy search and trending REST endpoint
 
 ## Icon
 
-- id: simple-icons-giphy
-- asset: icons/simple-icons/giphy.svg
-- title: GIPHY
-- simple_icon_slug: giphy
-- simple_icon_hex: FF6666
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=GIPHY
-- match: exact-name-or-slug
-- matched_by: giphy
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 

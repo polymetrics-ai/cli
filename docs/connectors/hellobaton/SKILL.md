@@ -11,7 +11,6 @@ Reads Hellobaton projects, milestones, tasks, phases, companies, and users throu
 
 ## Icon
 
-- id: hellobaton
 - asset: icons/hellobaton.svg
 - source: upstream_registry
 - review_status: upstream_seeded

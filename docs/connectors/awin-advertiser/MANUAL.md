@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Awin advertiser transactions, publisher-aggregated performance reports, publisher relationships, and publisher performance reports, and creates advertiser promotion/voucher offers, through the Awin Advertiser REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -61,7 +59,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_offer:
     endpoint: POST /promotion/advertiser/{{ config.advertiserId }}
-    required fields: title, description, terms, type, url, startDate, endDate, appliesToAllRegions, promotionCategories
     risk: creates a new promotion or voucher offer in the advertiser's MyOffers system, visible to publishers immediately; external mutation, approval required
 
 SECURITY

@@ -11,7 +11,6 @@ Reads Project Gutenberg books from the free, public Gutendex JSON API (books, po
 
 ## Icon
 
-- id: source-gutendex
 - asset: icons/source-gutendex.svg
 - source: upstream_registry
 - review_status: upstream_seeded

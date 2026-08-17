@@ -11,7 +11,6 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
 
 ## Icon
 
-- id: printify
 - asset: icons/printify.svg
 - source: official
 - review_status: official_verified
@@ -124,7 +123,6 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: disconnects the configured shop from the Printify account
 - create_product:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/products.json
-  - required fields: title, blueprint_id, print_provider_id
   - risk: creates a product in the configured shop
 - update_product:
   - endpoint: PUT /v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}.json
@@ -140,11 +138,11 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: publishes a product to the connected sales channel
 - mark_product_publishing_succeeded:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}/publishing_succeeded.json
-  - required fields: product_id, external
+  - required fields: product_id
   - risk: marks product publishing as succeeded and stores an external handle
 - mark_product_publishing_failed:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}/publishing_failed.json
-  - required fields: product_id, reason
+  - required fields: product_id
   - risk: marks product publishing as failed
 - unpublish_product:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/products/{{ record.product_id }}/unpublish.json
@@ -152,11 +150,9 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: notifies Printify that a product has been unpublished
 - submit_order:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/orders.json
-  - required fields: line_items, address_to
   - risk: submits an order to Printify
 - submit_express_order:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/orders/express.json
-  - required fields: line_items, address_to
   - risk: submits a Printify Express order
 - send_order_to_production:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/orders/{{ record.order_id }}/send_to_production.json
@@ -164,7 +160,6 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: sends an existing order to production
 - calculate_order_shipping:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/orders/shipping.json
-  - required fields: line_items, address_to
   - risk: calculates shipping costs for a prospective order without submitting it
 - cancel_order:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/orders/{{ record.order_id }}/cancel.json
@@ -172,7 +167,6 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: cancels an unpaid order
 - upload_image:
   - endpoint: POST /v1/uploads/images.json
-  - required fields: file_name
   - risk: uploads an image into the Printify media library
 - archive_uploaded_image:
   - endpoint: POST /v1/uploads/{{ record.image_id }}/archive.json
@@ -180,7 +174,6 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
   - risk: archives an uploaded image
 - create_webhook:
   - endpoint: POST /v1/shops/{{ config.shop_id }}/webhooks.json
-  - required fields: topic, url
   - risk: creates a webhook subscription for the configured shop
 - update_webhook:
   - endpoint: PUT /v1/shops/{{ config.shop_id }}/webhooks/{{ record.webhook_id }}.json

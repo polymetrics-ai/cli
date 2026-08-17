@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes allow-listed Zendesk Support resources and carries a complete blocked-by-default operation ledger for the Zendesk Support REST API v2 official OAS.
 
 ICON
-  id: zendesk-support
   asset: icons/zendesk-support.svg
   source: upstream_registry
   review_status: upstream_seeded

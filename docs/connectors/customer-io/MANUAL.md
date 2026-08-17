@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, messages, exports, transactional templates, object types, reporting webhooks, sender identities, snippets, subscription channels/topics, workspaces, and collections; writes snippet/webhook/segment mutations and can send transactional email or trigger broadcasts, through the Customer.io App API.
 
 ICON
-  id: customer-io
   asset: icons/customer-io.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -97,11 +96,9 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_snippet:
     endpoint: POST /snippets
-    required fields: name, value
     risk: external mutation; creates a reusable content snippet referenced by live messages/newsletters
   update_snippet:
     endpoint: PUT /snippets
-    required fields: name, value
     risk: external mutation; overwrites the content of a live snippet, changing every message/newsletter that references it
   delete_snippet:
     endpoint: DELETE /snippets/{{ record.name }}
@@ -109,11 +106,10 @@ REVERSE ETL ACTIONS
     risk: external mutation; permanently removes a snippet; irreversible, breaks any message/newsletter still referencing it; approval required
   create_reporting_webhook:
     endpoint: POST /reporting_webhooks
-    required fields: name, endpoint, events
     risk: external mutation; registers a new reporting webhook that will deliver live workspace event data to the given endpoint URL
   update_reporting_webhook:
     endpoint: PUT /reporting_webhooks/{{ record.id }}
-    required fields: id, name, endpoint, events
+    required fields: id
     risk: external mutation; changes a live reporting webhook's target endpoint/event selection or enables/disables delivery
   delete_reporting_webhook:
     endpoint: DELETE /reporting_webhooks/{{ record.id }}
@@ -121,7 +117,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; permanently removes a reporting webhook; event delivery to its target URL stops immediately; approval required
   create_manual_segment:
     endpoint: POST /segments
-    required fields: segment
     risk: external mutation; creates a new manual segment in the live workspace
   delete_manual_segment:
     endpoint: DELETE /segments/{{ record.id }}
@@ -129,7 +124,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; permanently removes a manual segment; irreversible, any campaign/newsletter targeting it loses that audience slice immediately; approval required
   send_email:
     endpoint: POST /send/email
-    required fields: to
     risk: sends a live transactional email to the given recipient on the workspace's behalf; irreversible once delivered
   trigger_broadcast:
     endpoint: POST /campaigns/{{ record.broadcast_id }}/triggers

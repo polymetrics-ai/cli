@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Google Web Fonts families (default, popular, trending, newest, and alphabetical views) through the Google Fonts Developer API. Read-only.
 
 ICON
-  id: googleworkpace
   asset: icons/googleworkpace.svg
   source: upstream_registry
   review_status: upstream_seeded

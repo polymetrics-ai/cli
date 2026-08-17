@@ -11,7 +11,6 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
 
 ## Icon
 
-- id: revenuecat
 - asset: icons/revenuecat.svg
 - source: official
 - review_status: official_verified
@@ -196,11 +195,9 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
 
 - create_project:
   - endpoint: POST /projects
-  - required fields: name
   - risk: creates a RevenueCat project
 - create_app:
   - endpoint: POST /projects/{{ config.project_id }}/apps
-  - required fields: name, type
   - risk: creates a RevenueCat app in the configured project
 - update_app:
   - endpoint: POST /projects/{{ config.project_id }}/apps/{{ record.app_id }}
@@ -212,7 +209,6 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
   - risk: permanently deletes a RevenueCat app and its configuration
 - create_customer:
   - endpoint: POST /projects/{{ config.project_id }}/customers
-  - required fields: id
   - risk: creates a RevenueCat customer
 - delete_customer:
   - endpoint: DELETE /projects/{{ config.project_id }}/customers/{{ record.customer_id }}
@@ -224,35 +220,34 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
   - risk: assigns or clears a customer offering override
 - grant_customer_entitlement:
   - endpoint: POST /projects/{{ config.project_id }}/customers/{{ record.customer_id }}/actions/grant_entitlement
-  - required fields: customer_id, entitlement_id
+  - required fields: customer_id
   - risk: grants an entitlement to a customer
 - restore_purchase_by_order_id:
   - endpoint: POST /projects/{{ config.project_id }}/customers/{{ record.customer_id }}/actions/restore_purchase_by_order_id
-  - required fields: customer_id, order_id
+  - required fields: customer_id
   - risk: restores a Google Play purchase by order id
 - revoke_customer_granted_entitlement:
   - endpoint: POST /projects/{{ config.project_id }}/customers/{{ record.customer_id }}/actions/revoke_granted_entitlement
-  - required fields: customer_id, entitlement_id
+  - required fields: customer_id
   - risk: revokes a granted customer entitlement
 - transfer_customer_data:
   - endpoint: POST /projects/{{ config.project_id }}/customers/{{ record.customer_id }}/actions/transfer
-  - required fields: customer_id, destination_customer_id
+  - required fields: customer_id
   - risk: transfers subscriptions and purchases to another customer
 - set_customer_attributes:
   - endpoint: POST /projects/{{ config.project_id }}/customers/{{ record.customer_id }}/attributes
-  - required fields: customer_id, attributes
+  - required fields: customer_id
   - risk: sets customer attributes
 - create_virtual_currencies_transaction:
   - endpoint: POST /projects/{{ config.project_id }}/customers/{{ record.customer_id }}/virtual_currencies/transactions
-  - required fields: customer_id, currency_code, amount
+  - required fields: customer_id
   - risk: creates a virtual currency transaction for a customer
 - update_virtual_currencies_balance:
   - endpoint: POST /projects/{{ config.project_id }}/customers/{{ record.customer_id }}/virtual_currencies/update_balance
-  - required fields: customer_id, currency_code, balance
+  - required fields: customer_id
   - risk: updates a customer virtual currency balance without creating a transaction
 - create_entitlement:
   - endpoint: POST /projects/{{ config.project_id }}/entitlements
-  - required fields: lookup_key, display_name
   - risk: creates an entitlement
 - update_entitlement:
   - endpoint: POST /projects/{{ config.project_id }}/entitlements/{{ record.entitlement_id }}
@@ -272,15 +267,14 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
   - risk: unarchives an entitlement
 - attach_products_to_entitlement:
   - endpoint: POST /projects/{{ config.project_id }}/entitlements/{{ record.entitlement_id }}/actions/attach_products
-  - required fields: entitlement_id, product_ids
+  - required fields: entitlement_id
   - risk: attaches products to an entitlement
 - detach_products_from_entitlement:
   - endpoint: POST /projects/{{ config.project_id }}/entitlements/{{ record.entitlement_id }}/actions/detach_products
-  - required fields: entitlement_id, product_ids
+  - required fields: entitlement_id
   - risk: detaches products from an entitlement
 - create_webhook_integration:
   - endpoint: POST /projects/{{ config.project_id }}/integrations/webhooks
-  - required fields: name, url
   - risk: creates a webhook integration that sends events to the configured URL
 - update_webhook_integration:
   - endpoint: POST /projects/{{ config.project_id }}/integrations/webhooks/{{ record.webhook_integration_id }}
@@ -292,7 +286,6 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
   - risk: deletes a webhook integration
 - create_offering:
   - endpoint: POST /projects/{{ config.project_id }}/offerings
-  - required fields: lookup_key, display_name
   - risk: creates an offering
 - update_offering:
   - endpoint: POST /projects/{{ config.project_id }}/offerings/{{ record.offering_id }}
@@ -312,7 +305,7 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
   - risk: unarchives an offering
 - create_package:
   - endpoint: POST /projects/{{ config.project_id }}/offerings/{{ record.offering_id }}/packages
-  - required fields: offering_id, lookup_key, display_name
+  - required fields: offering_id
   - risk: creates a package in an offering
 - update_package:
   - endpoint: POST /projects/{{ config.project_id }}/packages/{{ record.package_id }}
@@ -324,15 +317,14 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
   - risk: deletes a package
 - attach_products_to_package:
   - endpoint: POST /projects/{{ config.project_id }}/packages/{{ record.package_id }}/actions/attach_products
-  - required fields: package_id, product_ids
+  - required fields: package_id
   - risk: attaches products to a package
 - detach_products_from_package:
   - endpoint: POST /projects/{{ config.project_id }}/packages/{{ record.package_id }}/actions/detach_products
-  - required fields: package_id, product_ids
+  - required fields: package_id
   - risk: detaches products from a package
 - create_paywall:
   - endpoint: POST /projects/{{ config.project_id }}/paywalls
-  - required fields: name, offering_id
   - risk: creates a paywall
 - update_paywall:
   - endpoint: PATCH /projects/{{ config.project_id }}/paywalls/{{ record.paywall_id }}
@@ -348,7 +340,6 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
   - risk: creates a paywall version
 - create_product:
   - endpoint: POST /projects/{{ config.project_id }}/products
-  - required fields: store_identifier, type, app_id, display_name
   - risk: creates a product
 - update_product:
   - endpoint: POST /projects/{{ config.project_id }}/products/{{ record.product_id }}
@@ -392,7 +383,6 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
   - risk: refunds a Play Store or Galaxy subscription transaction
 - create_virtual_currency:
   - endpoint: POST /projects/{{ config.project_id }}/virtual_currencies
-  - required fields: code, name
   - risk: creates a virtual currency
 - update_virtual_currency:
   - endpoint: POST /projects/{{ config.project_id }}/virtual_currencies/{{ record.virtual_currency_code }}

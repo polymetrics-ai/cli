@@ -13,17 +13,9 @@ DESCRIPTION
   Reads and writes When I Work workforce-scheduling data: users, locations, positions, shifts, sites, shift templates, annotations, availability events, request types, time entries, timezones, payrolls, open-shift approval requests, and shift swaps.
 
 ICON
-  id: simple-icons-wheniwork
-  asset: icons/simple-icons/wheniwork.svg
-  title: When I Work
-  simple_icon_slug: wheniwork
-  simple_icon_hex: 51A33D
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=When%20I%20Work
-  match: exact-name-or-slug
-  matched_by: when-i-work
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -99,7 +91,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a workforce-scheduling user account; approval required
   create_location:
     endpoint: POST /2/locations
-    required fields: name
     risk: external mutation; approval required
   update_location:
     endpoint: PUT /2/locations/{{ record.id }}
@@ -111,7 +102,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a schedule location; approval required
   create_position:
     endpoint: POST /2/positions
-    required fields: name
     risk: external mutation; approval required
   update_position:
     endpoint: PUT /2/positions/{{ record.id }}
@@ -123,7 +113,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a position; approval required
   create_site:
     endpoint: POST /2/sites
-    required fields: location_id, name
     risk: external mutation; approval required
   update_site:
     endpoint: PUT /2/sites/{{ record.id }}
@@ -135,7 +124,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a site; approval required
   create_block:
     endpoint: POST /2/blocks
-    required fields: start_time, end_time, location_id
     risk: external mutation; approval required
   update_block:
     endpoint: PUT /2/blocks/{{ record.id }}
@@ -147,7 +135,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a shift template; approval required
   create_annotation:
     endpoint: POST /2/annotations
-    required fields: start_date, end_date, title
     risk: external mutation; approval required
   update_annotation:
     endpoint: PUT /2/annotations/{{ record.id }}
@@ -159,7 +146,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a schedule annotation; approval required
   create_availability_event:
     endpoint: POST /2/availabilityevents
-    required fields: start_time, type
     risk: external mutation; writes a user's availability/unavailability preference; approval required
   update_availability_event:
     endpoint: PUT /2/availabilityevents/{{ record.id }}
@@ -171,7 +157,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a user availability event; approval required
   create_time:
     endpoint: POST /2/times
-    required fields: user_id, start_time, end_time
     risk: external mutation; creates a worked-time entry feeding payroll; approval required
   update_time:
     endpoint: PUT /2/times/{{ record.id }}
@@ -183,7 +168,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a worked-time entry feeding payroll; approval required
   create_shift:
     endpoint: POST /2/shifts
-    required fields: start_time, end_time, location_id
     risk: external mutation; creates a scheduled shift; approval required
   delete_shift:
     endpoint: DELETE /2/shifts/{{ record.id }}

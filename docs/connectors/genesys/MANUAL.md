@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Genesys Cloud users, queues, groups, and divisions through the Genesys Cloud Platform API.
 
 ICON
-  id: genesys
   asset: icons/genesys.svg
   source: upstream_registry
   review_status: upstream_seeded

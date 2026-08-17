@@ -11,11 +11,9 @@ Reads and writes ServiceNow incident, user, and group table data through the Ser
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -59,11 +57,9 @@ Reads and writes ServiceNow incident, user, and group table data through the Ser
   - risk: creates a new incident record; low-risk external mutation (a new ticket), no approval required
 - create_user:
   - endpoint: POST /api/now/table/sys_user
-  - required fields: user_name
   - risk: creates a new ServiceNow user account record; a new user account granted whatever role/ACL defaults the instance applies is a higher-scrutiny mutation than an incident/group create
 - create_group:
   - endpoint: POST /api/now/table/sys_user_group
-  - required fields: name
   - risk: creates a new user group record; low-risk external mutation, no approval required
 - update_incident:
   - endpoint: PATCH /api/now/table/incident/{{ record.sys_id }}

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads WooCommerce orders, products, customers, and coupons through the WooCommerce REST API (wc/v3).
 
 ICON
-  id: woocommerce
   asset: icons/woocommerce.svg
   source: upstream_registry
   review_status: upstream_seeded

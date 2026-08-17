@@ -11,7 +11,6 @@ Reads Unleash projects, feature toggles, environments, and segments through admi
 
 ## Icon
 
-- id: unleash
 - asset: icons/unleash.svg
 - source: upstream_registry
 - review_status: upstream_seeded

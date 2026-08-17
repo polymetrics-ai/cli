@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes Circa events, contacts, companies, teams, custom fields, and event/company sub-resources through the Circa REST API.
 
 ICON
-  id: circa
   asset: icons/circa.svg
   source: official
   review_status: official_verified
@@ -70,7 +69,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_contact:
     endpoint: POST /contacts
-    required fields: first_name, last_name
     risk: external mutation; creates a new CRM contact record
   update_contact:
     endpoint: PATCH /contacts/{{ record.id }}
@@ -82,7 +80,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a CRM contact; approval required
   create_event:
     endpoint: POST /events
-    required fields: name
     risk: external mutation; creates a new event record
   update_event:
     endpoint: PATCH /events/{{ record.id }}
@@ -94,7 +91,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of an event; approval required
   create_company:
     endpoint: POST /companies
-    required fields: name
     risk: external mutation; creates a new company record
   update_company:
     endpoint: PATCH /companies/{{ record.id }}
@@ -106,7 +102,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a company; approval required
   add_event_contact:
     endpoint: POST /events/{{ record.event_id }}/contacts
-    required fields: event_id, contact_id
+    required fields: event_id
     risk: external mutation; registers an existing contact onto an event
   update_event_contact:
     endpoint: PATCH /events/{{ record.event_id }}/contacts/{{ record.contact_id }}

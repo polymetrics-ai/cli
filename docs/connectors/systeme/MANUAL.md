@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Systeme.io contacts, tags, contact fields, funnels, and funnel steps, and writes contact/tag/contact-field/funnel lifecycle mutations and contact-tag assignment, through the Systeme.io public API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -57,7 +55,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_contact:
     endpoint: POST /contacts
-    required fields: email
     risk: creates a new contact; low-risk external mutation, no approval required
   update_contact:
     endpoint: PATCH /contacts/{{ record.id }}
@@ -69,11 +66,10 @@ REVERSE ETL ACTIONS
     risk: irreversibly deletes a contact; approval required
   create_tag:
     endpoint: POST /tags
-    required fields: name
     risk: creates a new tag; low-risk external mutation, no approval required
   update_tag:
     endpoint: PUT /tags/{{ record.id }}
-    required fields: id, name
+    required fields: id
     risk: renames an existing tag; external mutation, no approval required
   delete_tag:
     endpoint: DELETE /tags/{{ record.id }}
@@ -81,7 +77,7 @@ REVERSE ETL ACTIONS
     risk: irreversibly deletes a tag, removing it from every contact it is assigned to; approval required
   add_contact_tag:
     endpoint: POST /contacts/{{ record.contact_id }}/tags
-    required fields: contact_id, tag_id
+    required fields: contact_id
     risk: assigns a tag to a contact; assigning certain tags can trigger Systeme.io automations (enrollment in a course/campaign); external mutation, no approval required
   remove_contact_tag:
     endpoint: DELETE /contacts/{{ record.contact_id }}/tags/{{ record.tag_id }}
@@ -89,7 +85,6 @@ REVERSE ETL ACTIONS
     risk: removes a tag from a contact; removing certain tags can trigger Systeme.io automations; external mutation, no approval required
   create_contact_field:
     endpoint: POST /contact_fields
-    required fields: slug, type
     risk: creates a new custom contact field definition; low-risk external mutation, no approval required
   update_contact_field:
     endpoint: PATCH /contact_fields/{{ record.id }}
@@ -101,15 +96,13 @@ REVERSE ETL ACTIONS
     risk: irreversibly deletes a custom contact field definition and its stored values on every contact; approval required
   create_funnel:
     endpoint: POST /funnels
-    required fields: name
     risk: creates a new sales funnel; low-risk external mutation, no approval required
   create_funnel_step:
     endpoint: POST /funnels/{{ record.funnel_id }}/steps
-    required fields: funnel_id, name
+    required fields: funnel_id
     risk: creates a new step within an existing funnel; low-risk external mutation, no approval required
   create_webhook:
     endpoint: POST /webhooks
-    required fields: url, event
     risk: creates a new outgoing webhook subscription; low-risk external mutation, no approval required
 
 SECURITY

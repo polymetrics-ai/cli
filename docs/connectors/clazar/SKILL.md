@@ -11,7 +11,6 @@ Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, private
 
 ## Icon
 
-- id: clazar
 - asset: icons/clazar.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -105,11 +104,11 @@ Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, private
   - risk: permanently deletes a Clazar contact record; approval required (destructive, irreversible)
 - update_metering_record:
   - endpoint: PATCH /metering/{{ record.id }}/
-  - required fields: id, custom_properties
+  - required fields: id
   - risk: updates only the custom_properties of a submitted metering record; low-risk
 - create_metering_records:
   - endpoint: POST /metering/
-  - required fields: request
+  - optional fields: request
   - risk: submits usage-based billing metering records that drive cloud marketplace invoicing for the buyer's contract; approval required (financial impact, effectively irreversible once billed)
 
 ## Security

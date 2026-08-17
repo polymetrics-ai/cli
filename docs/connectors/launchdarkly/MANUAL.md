@@ -13,7 +13,6 @@ DESCRIPTION
   Reads LaunchDarkly projects, members, audit log entries, feature flags, and environments through the LaunchDarkly REST API.
 
 ICON
-  id: launchdarkly
   asset: icons/launchdarkly.svg
   source: upstream_registry
   review_status: upstream_seeded

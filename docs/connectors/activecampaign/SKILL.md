@@ -11,7 +11,6 @@ Reads ActiveCampaign contacts, lists, deals, campaigns, tags, automations, custo
 
 ## Icon
 
-- id: activecampaign
 - asset: icons/activecampaign.svg
 - source: official
 - review_status: official_verified

@@ -11,11 +11,9 @@ Reads Box folder files and per-file detail metadata, and writes file rename/desc
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

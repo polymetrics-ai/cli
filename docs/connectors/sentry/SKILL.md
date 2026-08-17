@@ -11,7 +11,6 @@ Reads Sentry projects, issues, error events, and releases through the Sentry RES
 
 ## Icon
 
-- id: sentry
 - asset: icons/sentry.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -11,11 +11,9 @@ Reads and writes ZapSign documents, signers, templates, and webhooks.
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -54,7 +52,6 @@ Reads and writes ZapSign documents, signers, templates, and webhooks.
 
 - create_document_from_template:
   - endpoint: POST /models/create-doc/
-  - required fields: template_id, signers
   - risk: creates a new signable document from an existing template and notifies signers by email/WhatsApp if send_automatic_email/send_automatic_whatsapp is set; external mutation, approval required
 - cancel_document:
   - endpoint: POST /docs/{{ record.token }}/cancel/
@@ -66,8 +63,8 @@ Reads and writes ZapSign documents, signers, templates, and webhooks.
   - risk: soft-deletes a document, hiding it from the ZapSign web interface for end users while it remains readable via the API
 - add_signer:
   - endpoint: POST /docs/{{ record.doc_token }}/add-signer/
-  - required fields: doc_token, name
-  - optional fields: email, phone_country, phone_number, auth_mode, send_automatic_email, send_automatic_whatsapp
+  - required fields: doc_token
+  - optional fields: name, email, phone_country, phone_number, auth_mode, send_automatic_email, send_automatic_whatsapp
   - risk: adds a new signer to an existing document and, if send_automatic_email/send_automatic_whatsapp is set, immediately notifies them with a signing link
 - update_signer:
   - endpoint: POST /signers/{{ record.token }}/
@@ -79,7 +76,6 @@ Reads and writes ZapSign documents, signers, templates, and webhooks.
   - risk: permanently removes a signer from a document; this is irreversible, and re-adding the same person issues a brand new signing token/link
 - create_webhook:
   - endpoint: POST /webhooks/
-  - required fields: url, type
   - risk: registers a new outbound webhook that will POST live document-event data to an external URL of the caller's choosing; verify the target endpoint before enabling
 - delete_webhook:
   - endpoint: DELETE /webhooks/{{ record.id }}/

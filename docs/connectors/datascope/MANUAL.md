@@ -13,7 +13,6 @@ DESCRIPTION
   Reads DataScope locations, form answers, lists, notifications, task assignments, tickets (findings), and generated files, and writes location/list/task-assignment/form-answer mutations, through the DataScope external REST API (full-refresh).
 
 ICON
-  id: datascope
   asset: icons/datascope.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -63,7 +62,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_location:
     endpoint: POST /locations
-    required fields: name
     risk: creates a new field-data-collection location record; low-risk external mutation, no approval required
   update_location:
     endpoint: POST /locations/{{ record.id }}
@@ -71,11 +69,9 @@ REVERSE ETL ACTIONS
     risk: mutates an existing location's address/contact metadata; external mutation, approval required
   assign_task:
     endpoint: POST /assign_task
-    required fields: form_id, user_id, date
     risk: assigns a new field task/inspection to a user for a scheduled date; low-risk external mutation, no approval required
   create_metadata_object:
     endpoint: POST /metadata_object
-    required fields: metadata_type, name
     risk: creates a new list (metadata object) element; low-risk external mutation, no approval required
   update_metadata_object:
     endpoint: POST /metadata_object/{{ record.id }}
@@ -83,11 +79,9 @@ REVERSE ETL ACTIONS
     risk: mutates an existing list element's fields; external mutation, approval required
   bulk_update_metadata_objects:
     endpoint: POST /metadata_objects/bulk_update
-    required fields: metadata_type, list_objects
     risk: replaces/updates many list elements of one metadata_type in a single call; higher blast radius than a single-object update, approval required
   create_metadata_type:
     endpoint: POST /metadata_types
-    required fields: name
     risk: creates a new empty list (metadata type/category); low-risk external mutation, no approval required
   update_metadata_type:
     endpoint: POST /metadata_types/{{ record.id }}
@@ -95,7 +89,6 @@ REVERSE ETL ACTIONS
     risk: renames/reconfigures an existing list definition; every list element under it is affected, external mutation, approval required
   change_form_answer:
     endpoint: POST /change_form_answer
-    required fields: form_name, form_code, question_name, question_value
     risk: overwrites a previously-submitted form answer's value in place, rewriting collected field data after the fact; external mutation, approval required
 
 SECURITY

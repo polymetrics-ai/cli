@@ -11,7 +11,6 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
 
 ## Icon
 
-- id: persistiq
 - asset: icons/persistiq.svg
 - source: official
 - review_status: official_verified
@@ -88,11 +87,9 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
   - risk: external mutation of an existing PersistIQ lead's fields; changing status/status_id/owner_id can move a lead into or out of active outbound-sequence automation depending on the target account's own campaign rules; approval required
 - create_campaign:
   - endpoint: POST /v1/campaigns
-  - required fields: campaign_name, owner_id
   - risk: creates a new outbound-email campaign in the target PersistIQ account; approval required
 - duplicate_campaign:
   - endpoint: POST /v1/campaigns/duplicate
-  - required fields: campaign_id, owner_id
   - risk: duplicates an existing campaign (including its steps/sequence) into a new campaign in the target account; approval required
 - add_lead_to_campaign:
   - endpoint: POST /v1/campaigns/{{ record.campaign_id }}/leads
@@ -104,11 +101,10 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
   - risk: removes a lead from a live outbound-email campaign, stopping any further scheduled automated outreach to it in that sequence; approval required
 - reply_to_campaign_message:
   - endpoint: POST /v1/campaigns/{{ record.campaign_id }}/replies
-  - required fields: campaign_id, inbox_message_id, body
+  - required fields: campaign_id
   - risk: sends a real outbound email reply on behalf of the campaign's mailbox owner; irreversible once delivered; approval required
 - add_dnc_domain:
   - endpoint: POST /v1/dnc_domains
-  - required fields: name
   - risk: adds a domain to the account's Do-Not-Contact list; blocks future outreach to that domain account-wide; approval required
 
 ## Security

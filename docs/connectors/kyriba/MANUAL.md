@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Kyriba bank accounts, transactions, statements, and payments through tenant REST API collection endpoints. Read-only.
 
 ICON
-  id: kyriba
   asset: icons/kyriba.svg
   source: upstream_registry
   review_status: upstream_seeded

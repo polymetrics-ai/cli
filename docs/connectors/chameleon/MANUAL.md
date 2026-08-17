@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Chameleon surveys, tours, launchers, tooltips, and segments through the Chameleon v3 REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -81,27 +79,26 @@ SYNC MODES
 REVERSE ETL ACTIONS
   publish_survey:
     endpoint: PATCH /edit/surveys/{{ record.id }}
-    required fields: id, published_at
+    required fields: id
     risk: external mutation publishing/unpublishing a live in-product Microsurvey to end-users; approval required
   publish_tour:
     endpoint: PATCH /edit/tours/{{ record.id }}
-    required fields: id, published_at
+    required fields: id
     risk: external mutation publishing/unpublishing a live in-product Tour to end-users; approval required
   publish_launcher:
     endpoint: PATCH /edit/launchers/{{ record.id }}
-    required fields: id, published_at
+    required fields: id
     risk: external mutation publishing/unpublishing a live in-product Launcher to end-users; approval required
   publish_tooltip:
     endpoint: PATCH /edit/tooltips/{{ record.id }}
-    required fields: id, published_at
+    required fields: id
     risk: external mutation publishing/unpublishing a live in-product Tooltip to end-users; approval required
   publish_embed:
     endpoint: PATCH /edit/embeds/{{ record.id }}
-    required fields: id, published_at
+    required fields: id
     risk: external mutation publishing/unpublishing a live in-product Embeddable to end-users; approval required
   create_delivery:
     endpoint: POST /edit/deliveries
-    required fields: model_kind, model_id
     risk: external mutation directly triggering a Tour or Microsurvey experience for one specific end-user; approval required
   delete_delivery:
     endpoint: DELETE /edit/deliveries/{{ record.id }}
@@ -109,7 +106,6 @@ REVERSE ETL ACTIONS
     risk: cancels a not-yet-triggered Delivery; irreversible once the target has already been shown, approval required
   create_webhook:
     endpoint: POST /edit/webhooks
-    required fields: url, topics
     risk: external mutation creating a new outbound webhook subscription that will POST Chameleon event data to a third-party URL; approval required
   delete_webhook:
     endpoint: DELETE /edit/webhooks/{{ record.id }}

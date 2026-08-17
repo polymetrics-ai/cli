@@ -11,7 +11,6 @@ Reads public Germany COVID case, state, district, and history data derived from 
 
 ## Icon
 
-- id: rki
 - asset: icons/rki.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Goldcast organizations, events, agenda items, discussion groups, and tracks through the Goldcast customapi REST API.
 
 ICON
-  id: goldcast
   asset: icons/goldcast.svg
   source: upstream_registry
   review_status: upstream_seeded

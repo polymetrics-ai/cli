@@ -10,35 +10,50 @@ SYNOPSIS
   pm credentials add <name> --connector basecamp [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Basecamp 3 projects, people, and account activity events through the Basecamp REST API.
+  Reads Basecamp 3 projects, people, and account activity events through the Basecamp REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
-  id: simple-icons-basecamp
-  asset: icons/simple-icons/basecamp.svg
-  title: Basecamp
-  simple_icon_slug: basecamp
-  simple_icon_hex: 1D2D35
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Basecamp
-  match: exact-name-or-slug
-  matched_by: basecamp
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  account_id
+  base_url
+  mode
+  start_date
+  client_id (secret)
+  client_refresh_token_2 (secret)
+  client_secret (secret)
+
+ETL STREAMS
+  projects:
+    primary key: id
+    cursor: updated_at
+    fields: app_url(), bookmark_url(), created_at(), description(), id(), name(), purpose(), status(), updated_at(), url()
+  people:
+    primary key: id
+    cursor: updated_at
+    fields: admin(), client(), created_at(), email_address(), id(), name(), owner(), personable_type(), time_zone(), title(), updated_at()
+  events:
+    primary key: id
+    cursor: created_at
+    fields: action(), created_at(), id(), kind(), recording_id(), summary()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Basecamp API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

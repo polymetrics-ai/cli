@@ -11,7 +11,6 @@ Reads Braze campaigns, Canvases, segments (list + per-id details/analytics-summa
 
 ## Icon
 
-- id: braze
 - asset: icons/braze.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -128,31 +127,24 @@ Reads Braze campaigns, Canvases, segments (list + per-id details/analytics-summa
   - risk: permanently and irreversibly deletes user profiles and all their associated data (attributes, event/purchase history, message engagement); Braze does not offer an undelete path
 - merge_users:
   - endpoint: POST /users/merge
-  - required fields: merge_updates
   - risk: irreversibly merges one user profile's full history into another and deletes the source profile identifier; up to 50 merge pairs per request per Braze's documented limit
 - create_user_alias:
   - endpoint: POST /users/alias/new
-  - required fields: user_aliases
   - risk: creates new alias identifiers for existing (or new anonymous) user profiles; low-risk additive mutation, no approval required
 - update_user_alias:
   - endpoint: POST /users/alias/update
-  - required fields: alias_updates
   - risk: renames an existing alias identifier on a user profile; any external system correlating users by the old alias_name stops matching after this runs
 - remove_user_external_ids:
   - endpoint: POST /users/external_ids/remove
-  - required fields: external_ids
   - risk: detaches an external_id from its user profile, converting that profile to anonymous; the profile itself is not deleted but becomes unreachable by the removed identifier
 - rename_user_external_ids:
   - endpoint: POST /users/external_ids/rename
-  - required fields: external_id_renames
   - risk: renames a user's external_id; any external system correlating users by the old id stops matching after this runs
 - set_subscription_status_v2:
   - endpoint: POST /v2/subscription/status/set
-  - required fields: subscription_groups
   - risk: opts users into or out of an email/SMS subscription group in bulk (up to 50 groups x 50 identifiers per Braze's documented limit); setting subscription_state to unsubscribed on a transactional-adjacent group can stop legally-required or expected communications reaching those users
 - create_catalog:
   - endpoint: POST /catalogs
-  - required fields: catalogs
   - risk: creates a new catalog container with a fixed field schema; low-risk additive mutation, no approval required
 - delete_catalog:
   - endpoint: DELETE /catalogs/{{ record.catalog_name }}
@@ -160,15 +152,18 @@ Reads Braze campaigns, Canvases, segments (list + per-id details/analytics-summa
   - risk: permanently deletes a catalog and every item it contains; any campaign/Canvas/Connected Content template referencing this catalog by name starts failing to resolve
 - create_catalog_items:
   - endpoint: POST /catalogs/{{ record.catalog_name }}/items
-  - required fields: catalog_name, items
+  - required fields: catalog_name
+  - optional fields: items
   - risk: adds new rows (up to 50 per request per Braze's documented limit) to an existing catalog; low-risk additive mutation, no approval required
 - update_catalog_items:
   - endpoint: PATCH /catalogs/{{ record.catalog_name }}/items
-  - required fields: catalog_name, items
+  - required fields: catalog_name
+  - optional fields: items
   - risk: partially updates existing catalog rows in bulk by their id field; any Connected Content template or campaign personalization reading this catalog reflects the new values on its next fetch
 - update_catalog_item:
   - endpoint: PATCH /catalogs/{{ record.catalog_name }}/items/{{ record.item_id }}
-  - required fields: catalog_name, item_id, items
+  - required fields: catalog_name, item_id
+  - optional fields: items
   - risk: partially updates a single existing catalog row; any Connected Content template or campaign personalization reading this catalog reflects the new value on its next fetch
 - delete_catalog_item:
   - endpoint: DELETE /catalogs/{{ record.catalog_name }}/items/{{ record.item_id }}
@@ -176,59 +171,46 @@ Reads Braze campaigns, Canvases, segments (list + per-id details/analytics-summa
   - risk: permanently removes a single row from a catalog; any Connected Content template or campaign personalization referencing this item_id starts returning no match
 - create_content_block:
   - endpoint: POST /content_blocks/create
-  - required fields: name, content
   - risk: creates a new reusable email Content Block; low-risk additive mutation, no approval required
 - update_content_block:
   - endpoint: POST /content_blocks/update
-  - required fields: content_block_id
   - risk: mutates an existing Content Block's markup/text; changes are reflected in EVERY campaign/Canvas/template that includes this block on their next send, including already-scheduled sends
 - create_email_template:
   - endpoint: POST /templates/email/create
-  - required fields: template_name, subject, body
   - risk: creates a new reusable email template; low-risk additive mutation, no approval required
 - update_email_template:
   - endpoint: POST /templates/email/update
-  - required fields: email_template_id
   - risk: mutates an existing email template's subject/body; changes are reflected in EVERY campaign using this template on its next send, including already-scheduled sends
 - create_email_blocklist:
   - endpoint: POST /email/blocklist
-  - required fields: email
   - risk: permanently blocklists email addresses from ever receiving Braze email again for this workspace; Braze's own docs note blocklisting cannot be undone via the API (requires a support request to reverse)
 - remove_email_hard_bounce:
   - endpoint: POST /email/bounce/remove
-  - required fields: email
   - risk: clears an email address's hard-bounced status, allowing future sends to resume; use only after confirming the underlying delivery issue is actually resolved, or the address will likely hard-bounce again and harm sender reputation
 - remove_email_spam:
   - endpoint: POST /email/spam/remove
-  - required fields: email
   - risk: clears an email address's spam-complaint status, allowing future sends to resume; reversing a genuine spam complaint risks another complaint and further sender-reputation damage
 - set_email_subscription_status:
   - endpoint: POST /email/status
-  - required fields: email, subscription_state
   - risk: changes a single email address's global subscription state (subscribed/unsubscribed/opted_in); setting unsubscribed stops all future non-transactional email to that address
 - remove_sms_invalid_phone_numbers:
   - endpoint: POST /sms/invalid_phone_numbers/remove
-  - required fields: phone_numbers
   - risk: clears the invalid-number flag for phone numbers, allowing future SMS/MMS sends to resume; use only after confirming the number can actually receive messages again, or it will likely be re-flagged and waste sending budget
 - create_preference_center:
   - endpoint: POST /preference_center/v1
-  - required fields: name, preference_center_title, preference_center_page_html, confirmation_page_html
   - risk: publishes a new customer-facing preference center page (a live, externally-reachable URL once active); low-risk additive mutation but review the submitted HTML before use since it is served to end users verbatim
 - update_preference_center:
   - endpoint: PUT /preference_center/v1/{{ record.preference_center_external_id }}
-  - required fields: preference_center_external_id, name, preference_center_title, preference_center_page_html, confirmation_page_html
+  - required fields: preference_center_external_id
   - risk: overwrites an already-live, externally-reachable preference center page's HTML/title; visible to any end user who visits the page immediately after this runs
 - send_message:
   - endpoint: POST /messages/send
-  - required fields: messages
   - risk: immediately sends a live message (push/email/SMS/webhook/Content Card) to the specified users, segment, or broadcast audience; irreversible once dispatched and the single riskiest write this connector exposes — always confirm the audience scope (segment_id/audience filter vs. an explicit small external_user_ids list) before use
 - trigger_campaign_send:
   - endpoint: POST /campaigns/trigger/send
-  - required fields: campaign_id
   - risk: immediately dispatches an existing API-triggered campaign to the specified recipients/audience; irreversible once dispatched, always confirm the recipients/audience scope before use
 - trigger_canvas_send:
   - endpoint: POST /canvas/trigger/send
-  - required fields: canvas_id
   - risk: immediately enters the specified recipients/audience into an existing API-triggered Canvas; irreversible once dispatched, always confirm the recipients/audience scope before use
 
 ## Security

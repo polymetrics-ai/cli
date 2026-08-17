@@ -13,7 +13,6 @@ DESCRIPTION
   Reads QuickBooks Online customers, invoices, payments, accounts, and vendors through the v3 Query API via the OAuth 2.0 refresh-token grant. Read-only.
 
 ICON
-  id: quickbooks
   asset: icons/quickbooks.svg
   source: upstream_registry
   review_status: upstream_seeded

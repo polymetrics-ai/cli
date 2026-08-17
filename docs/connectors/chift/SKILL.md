@@ -11,7 +11,6 @@ Reads and writes Chift consumers, connections, syncs, integrations, datastores, 
 
 ## Icon
 
-- id: chift
 - asset: icons/chift.svg
 - source: official
 - review_status: official_verified
@@ -64,7 +63,6 @@ Reads and writes Chift consumers, connections, syncs, integrations, datastores, 
 
 - create_consumer:
   - endpoint: POST /consumers
-  - required fields: name
   - risk: external mutation; approval required
 - update_consumer:
   - endpoint: PATCH /consumers/{{ record.consumerid }}

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes WaiterAid restaurant reservations, meals, guests, and queue entries.
 
 ICON
-  id: waiteraid
   asset: icons/waiteraid.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -50,23 +49,20 @@ SYNC MODES
 REVERSE ETL ACTIONS
   add_booking:
     endpoint: POST /wa-api/addBooking?restid={{ config.restid }}&start_time={{ record.start_time }}&amount={{ record.amount }}&date={{ record.date }}&mealid={{ record.mealid }}
-    required fields: start_time, amount, date, mealid
     risk: creates a new restaurant reservation, visible to restaurant staff and the guest; external mutation, approval required
   set_booking_status:
     endpoint: POST /wa-api/setBookingStatus?restid={{ config.restid }}&bookingId={{ record.id }}&status={{ record.status }}
-    required fields: id, status
+    required fields: id
     risk: changes a reservation's status (including marking it deleted); external mutation, approval required
   edit_booking:
     endpoint: POST /wa-api/editBooking?restid={{ config.restid }}&bookingId={{ record.id }}&start_time={{ record.start_time }}
-    required fields: id, start_time
+    required fields: id
     risk: edits an existing reservation's start time; external mutation, approval required
   add_guest:
     endpoint: POST /wa-api/addGuest?restid={{ config.restid }}&firstname={{ record.firstname }}&lastname={{ record.lastname }}
-    required fields: firstname, lastname
     risk: creates a new guest record; external mutation, approval required
   add_to_queue:
     endpoint: POST /wa-api/queue/add?restid={{ config.restid }}&name={{ record.name }}&amount={{ record.amount }}
-    required fields: name, amount
     risk: adds a guest to the restaurant's walk-in queue; external mutation, approval required
   delete_from_queue:
     endpoint: POST /wa-api/queue/delete?restid={{ config.restid }}&queue_id={{ record.queue_id }}

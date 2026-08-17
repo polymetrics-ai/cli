@@ -11,7 +11,6 @@ Reads Serpstat SEO domain keyword, competitor, and top-URL data through the Serp
 
 ## Icon
 
-- id: serpstat
 - asset: icons/serpstat.svg
 - source: upstream_registry
 - review_status: upstream_seeded

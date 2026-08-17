@@ -11,17 +11,9 @@ Reads eBay seller orders, exploded line items, shipping fulfillments, and paymen
 
 ## Icon
 
-- id: simple-icons-ebay-fulfillment
-- asset: icons/simple-icons/ebay-fulfillment.svg
-- title: eBay
-- simple_icon_slug: ebay
-- simple_icon_hex: E53238
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=eBay
-- match: curated-alias
-- matched_by: ebay
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 

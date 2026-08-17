@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes WorkRamp users and groups, and reads guides, resources, and SCORM courses, through the real WorkRamp Employee Learning Cloud API (app.workramp.com/api/v1).
 
 ICON
-  id: workramp
   asset: icons/workramp.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -59,7 +58,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_user:
     endpoint: POST /api/v1/users
-    required fields: email
     risk: creates a WorkRamp user account; approval required
   update_user:
     endpoint: POST /api/v1/users/{{ record.id }}
@@ -71,7 +69,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a WorkRamp user account; approval required
   create_group:
     endpoint: POST /api/v1/groups
-    required fields: name
     risk: creates a WorkRamp group; approval required
   update_group:
     endpoint: POST /api/v1/groups/{{ record.id }}

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Oura API v2 usercollection profile, daily summary, time-series, sleep, tag, workout, session, and device-configuration data.
 
 ICON
-  id: oura
   asset: icons/oura.svg
   source: upstream_registry
   review_status: upstream_seeded

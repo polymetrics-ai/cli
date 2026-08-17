@@ -11,11 +11,9 @@ Reads Drip subscribers, campaigns, broadcasts, accounts, workflows, forms, tags,
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -69,7 +67,7 @@ Reads Drip subscribers, campaigns, broadcasts, accounts, workflows, forms, tags,
 
 - create_or_update_subscriber:
   - endpoint: POST /{{ config.account_id }}/subscribers
-  - required fields: subscribers
+  - optional fields: subscribers
   - risk: creates a new subscriber or updates an existing one matched by email; low-risk external mutation, no approval required. Drip's real API strictly requires the one-subscriber-per-write body to still be an ARRAY under the "subscribers" key ({"subscribers": [{...}]}), not a bare object — record_schema's "subscribers" field is itself that array, and body_fields copies it verbatim so the wire body matches Drip's real shape exactly; the engine's schema dialect has no minItems/maxItems keyword to mechanically cap it to exactly one element, so callers are expected to supply exactly one (this action is not the true batch endpoint).
 - delete_subscriber:
   - endpoint: DELETE /{{ config.account_id }}/subscribers/{{ record.id }}
@@ -77,11 +75,12 @@ Reads Drip subscribers, campaigns, broadcasts, accounts, workflows, forms, tags,
   - risk: permanently removes a subscriber and their event/tag history; destructive, approval required
 - unsubscribe_subscriber:
   - endpoint: POST /{{ config.account_id }}/unsubscribes
-  - required fields: subscribers
+  - optional fields: subscribers
   - risk: unsubscribes the named email from ALL mailings in the account; stops all future campaign/broadcast/workflow sends to them, approval required
 - apply_tag:
   - endpoint: POST /{{ config.account_id }}/subscribers/{{ record.subscriber_id }}/tags
-  - required fields: subscriber_id, tags
+  - required fields: subscriber_id
+  - optional fields: tags
   - risk: applies one or more tags to a subscriber, potentially triggering any workflow with a matching tag-applied trigger; low-risk external mutation, no approval required
 - remove_tag:
   - endpoint: DELETE /{{ config.account_id }}/subscribers/{{ record.subscriber_id }}/tags/{{ record.tag }}
@@ -89,15 +88,16 @@ Reads Drip subscribers, campaigns, broadcasts, accounts, workflows, forms, tags,
   - risk: removes a tag from a subscriber, potentially triggering any workflow with a matching tag-removed trigger; low-risk external mutation, no approval required
 - record_event:
   - endpoint: POST /{{ config.account_id }}/events
-  - required fields: events
+  - optional fields: events
   - risk: records a custom behavioral event on a subscriber, which can trigger any workflow with a matching event trigger; low-risk external mutation, no approval required. Drip's real API requires the body to be an ARRAY under the "events" key even for one event; record_schema's "events" field is itself that array (callers are expected to supply exactly one element; this action is not the true batch endpoint).
 - create_broadcast:
   - endpoint: POST /{{ config.account_id }}/broadcasts
-  - required fields: broadcasts
+  - optional fields: broadcasts
   - risk: creates a new draft single-email campaign (broadcast); low-risk in draft form (not sent), no approval required. Drip's real API requires the body to be an ARRAY under the "broadcasts" key even for one broadcast; record_schema's "broadcasts" field is itself that array (callers are expected to supply exactly one element; this action is not the true batch endpoint).
 - update_broadcast:
   - endpoint: PATCH /{{ config.account_id }}/broadcasts/{{ record.id }}
-  - required fields: id, broadcasts
+  - required fields: id
+  - optional fields: broadcasts
   - risk: mutates an existing draft broadcast's subject/content; Drip only allows updating broadcasts still in draft status, so this cannot alter an already-sent email; external mutation, approval required
 - delete_broadcast:
   - endpoint: DELETE /{{ config.account_id }}/broadcasts/{{ record.id }}
@@ -113,7 +113,7 @@ Reads Drip subscribers, campaigns, broadcasts, accounts, workflows, forms, tags,
   - risk: pauses an active workflow, stopping automated sends to everyone currently enrolled and disabling new triggers; low-risk (reversible via activate_workflow), no approval required
 - create_webhook:
   - endpoint: POST /{{ config.account_id }}/webhooks
-  - required fields: webhooks
+  - optional fields: webhooks
   - risk: registers a new outbound webhook that will POST live subscriber/campaign event data to an external URL of the caller's choosing; verify the target endpoint before enabling. Drip's real API requires the body to be an ARRAY under the "webhooks" key even for one webhook; record_schema's "webhooks" field is itself that array (callers are expected to supply exactly one element; this action is not the true batch endpoint).
 - delete_webhook:
   - endpoint: DELETE /{{ config.account_id }}/webhooks/{{ record.id }}

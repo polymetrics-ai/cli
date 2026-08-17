@@ -13,17 +13,9 @@ DESCRIPTION
   Reads and writes Buildkite organizations, pipelines, builds, agents, teams, and clusters through the Buildkite REST API v2.
 
 ICON
-  id: simple-icons-buildkite
-  asset: icons/simple-icons/buildkite.svg
-  title: Buildkite
-  simple_icon_slug: buildkite
-  simple_icon_hex: 14CC80
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Buildkite
-  match: exact-name-or-slug
-  matched_by: buildkite
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -69,7 +61,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_pipeline:
     endpoint: POST /organizations/{{ config.organization }}/pipelines
-    required fields: name, cluster_id, repository
     risk: creates a new CI/CD pipeline scoped to a cluster and repository; low-risk external mutation, no approval required
   update_pipeline:
     endpoint: PATCH /organizations/{{ config.organization }}/pipelines/{{ record.slug }}
@@ -89,7 +80,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a pipeline and its build history; irreversible
   create_build:
     endpoint: POST /organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds
-    required fields: pipeline_slug, commit, branch
+    required fields: pipeline_slug
     risk: immediately triggers a new CI/CD build on the target pipeline/branch; consumes agent capacity and may run arbitrary pipeline-defined commands
   cancel_build:
     endpoint: PUT /organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds/{{ record.number }}/cancel
@@ -101,7 +92,7 @@ REVERSE ETL ACTIONS
     risk: triggers a full re-run of a completed build on new agent capacity; may run arbitrary pipeline-defined commands again
   create_annotation:
     endpoint: POST /organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds/{{ record.build_number }}/annotations
-    required fields: pipeline_slug, build_number, body
+    required fields: pipeline_slug, build_number
     risk: posts a visible HTML/Markdown annotation onto a build's detail page; low-risk external mutation, no approval required
   retry_job:
     endpoint: PUT /organizations/{{ config.organization }}/jobs/{{ record.job_id }}/retry
@@ -128,7 +119,6 @@ REVERSE ETL ACTIONS
     risk: resumes a previously paused agent so it can pick up new jobs again
   create_team:
     endpoint: POST /organizations/{{ config.organization }}/teams
-    required fields: name
     risk: creates a new team; low-risk external mutation, no approval required
   update_team:
     endpoint: PATCH /organizations/{{ config.organization }}/teams/{{ record.id }}

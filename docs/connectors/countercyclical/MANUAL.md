@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Countercyclical investments, valuations, research memos, teams, assumptions, and pipelines, and creates investments, through the Countercyclical REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -57,7 +55,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_investment:
     endpoint: POST /integrations/make/actions/investments
-    required fields: tickerSymbol
     risk: creates a new Investment in the caller's Countercyclical workspace via the Make-integration action endpoint (the only documented general-purpose creation endpoint; the functionally-identical Zapier-integration endpoint is not separately exposed, see api_surface.json); external mutation, no approval required
 
 SECURITY

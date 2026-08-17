@@ -11,7 +11,6 @@ Reads Trello boards, lists, and checklists through the Trello REST API. Cards an
 
 ## Icon
 
-- id: trello
 - asset: icons/trello.svg
 - source: upstream_registry
 - review_status: upstream_seeded

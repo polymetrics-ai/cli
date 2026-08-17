@@ -11,7 +11,6 @@ Reads Rocket.Chat users, public channels, private groups, direct messages, and r
 
 ## Icon
 
-- id: rocket-chat
 - asset: icons/rocket-chat.svg
 - source: official
 - review_status: official_verified

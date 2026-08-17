@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Everhour projects, clients, team members, team time records, per-project tasks and sections, time-off types, time-off allocations, expenses, expense categories, and invoices, and writes client/project/task/section/time-record/expense mutations, through the Everhour REST API.
 
 ICON
-  id: everhour
   asset: icons/everhour.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -72,7 +71,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_client:
     endpoint: POST /clients
-    required fields: name
     risk: creates a new client record; low-risk external mutation, no approval required
   update_client:
     endpoint: PUT /clients/{{ record.id }}
@@ -84,7 +82,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a client and its association with any linked projects; irreversible, approval required
   create_project:
     endpoint: POST /projects
-    required fields: name, type
     risk: creates a new project; low-risk external mutation, no approval required
   update_project:
     endpoint: PUT /projects/{{ record.id }}
@@ -92,7 +89,7 @@ REVERSE ETL ACTIONS
     risk: renames or reconfigures an existing project; low-risk external mutation
   archive_project:
     endpoint: PATCH /projects/{{ record.id }}/archive
-    required fields: id, archived
+    required fields: id
     risk: archives or unarchives a project, hiding it from active project lists and blocking new time entries against it while archived; approval required for archiving a project still in active use
   delete_project:
     endpoint: DELETE /projects/{{ record.id }}
@@ -100,7 +97,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a project and its tasks/sections/time associations; irreversible, approval required
   create_task:
     endpoint: POST /projects/{{ record.project_id }}/tasks
-    required fields: project_id, name, section
+    required fields: project_id
     risk: creates a new task under an existing project section; low-risk external mutation, no approval required
   update_task:
     endpoint: PUT /tasks/{{ record.id }}
@@ -112,7 +109,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a task and its logged time association; irreversible, approval required
   create_section:
     endpoint: POST /projects/{{ record.project_id }}/sections
-    required fields: project_id, name
+    required fields: project_id
     risk: creates a new task section within a project; low-risk external mutation, no approval required
   delete_section:
     endpoint: DELETE /sections/{{ record.id }}
@@ -120,7 +117,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a task section; any tasks in it become unsectioned, approval required
   create_time_record:
     endpoint: POST /time
-    required fields: time, date
     risk: logs a new time entry against a task, which can feed directly into client billing/invoicing; low-risk external mutation, no approval required
   update_time_record:
     endpoint: PUT /time/{{ record.id }}
@@ -132,7 +128,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a logged time entry, which can affect billing/invoicing history; irreversible, approval required
   create_expense:
     endpoint: POST /expenses
-    required fields: category, date
     risk: logs a new billable/non-billable expense, which can feed directly into client invoicing; low-risk external mutation, no approval required
   delete_expense:
     endpoint: DELETE /expenses/{{ record.id }}

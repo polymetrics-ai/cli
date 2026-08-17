@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Mailtrap accounts, inboxes, projects, and sending domains through the Mailtrap account-management REST API.
 
 ICON
-  id: simple-icons-mailtrap
-  asset: icons/simple-icons/mailtrap.svg
-  title: Mailtrap
-  simple_icon_slug: mailtrap
-  simple_icon_hex: 22D172
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Mailtrap
-  match: exact-name-or-slug
-  matched_by: mailtrap
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

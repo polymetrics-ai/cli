@@ -13,7 +13,6 @@ DESCRIPTION
   Reads PagerDuty incidents, users, services, and teams through the REST API.
 
 ICON
-  id: pagerduty
   asset: icons/pagerduty.svg
   source: upstream_registry
   review_status: upstream_seeded

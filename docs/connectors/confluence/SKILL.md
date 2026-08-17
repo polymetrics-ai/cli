@@ -11,7 +11,6 @@ Reads Confluence Cloud spaces, pages, blog posts, labels, attachments, comments,
 
 ## Icon
 
-- id: confluence
 - asset: icons/confluence.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -75,23 +74,19 @@ Reads Confluence Cloud spaces, pages, blog posts, labels, attachments, comments,
 
 - create_page:
   - endpoint: POST /wiki/api/v2/pages
-  - required fields: spaceId, title, body
   - risk: creates a new published or draft page in the target space; external mutation, no approval required
 - update_page:
   - endpoint: PUT /wiki/api/v2/pages/{{ record.id }}
-  - required fields: id, status, title, spaceId, version
+  - required fields: id
   - risk: mutates an existing page's content/status; requires the caller to supply the next version.number (Confluence rejects a stale version number), external mutation, no approval required
 - create_blogpost:
   - endpoint: POST /wiki/api/v2/blogposts
-  - required fields: spaceId, title, body
   - risk: creates a new published or draft blog post in the target space; external mutation, no approval required
 - create_footer_comment:
   - endpoint: POST /wiki/api/v2/footer-comments
-  - required fields: pageId, body
   - risk: creates a new footer comment (or reply) on a page/blogpost; external mutation, no approval required
 - create_inline_comment:
   - endpoint: POST /wiki/api/v2/inline-comments
-  - required fields: pageId, body, inlineCommentProperties
   - risk: creates a new inline comment (or reply) anchored to a text selection on a page/blogpost; external mutation, no approval required
 
 ## Security

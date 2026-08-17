@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Google Admin SDK Directory users, groups, organizational units, and ChromeOS devices via bearer-token OAuth. Read-only.
 
 ICON
-  id: googledirectory
   asset: icons/googledirectory.svg
   source: upstream_registry
   review_status: upstream_seeded

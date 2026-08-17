@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Insightly CRM contacts, organisations, opportunities, leads, projects, and tasks through the Insightly REST API v3.1.
 
 ICON
-  id: insightly
   asset: icons/insightly.svg
   source: upstream_registry
   review_status: upstream_seeded

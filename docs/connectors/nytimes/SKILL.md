@@ -11,7 +11,6 @@ Reads New York Times Most Popular (viewed, emailed, shared) articles via the NYT
 
 ## Icon
 
-- id: nytimes
 - asset: icons/nytimes.svg
 - source: upstream_registry
 - review_status: upstream_seeded

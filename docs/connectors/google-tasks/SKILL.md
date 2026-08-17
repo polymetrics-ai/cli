@@ -11,17 +11,9 @@ Reads Google task lists and tasks through the Google Tasks REST API.
 
 ## Icon
 
-- id: simple-icons-googletasks
-- asset: icons/simple-icons/googletasks.svg
-- title: Google Tasks
-- simple_icon_slug: googletasks
-- simple_icon_hex: 2684FC
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Google%20Tasks
-- match: exact-name-or-slug
-- matched_by: google-tasks
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 

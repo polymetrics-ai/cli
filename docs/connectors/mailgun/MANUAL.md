@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Mailgun sending domains, email events, mailing lists, and analytics tags through the Mailgun v3 REST API.
 
 ICON
-  id: mailgun
   asset: icons/mailgun.svg
   source: upstream_registry
   review_status: upstream_seeded

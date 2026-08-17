@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Zendesk Chat agents, chats, departments, shortcuts, and triggers through the Zendesk Chat REST API v2.
 
 ICON
-  id: zendesk-chat
   asset: icons/zendesk-chat.svg
   source: upstream_registry
   review_status: upstream_seeded

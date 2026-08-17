@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Lago customers, invoices, subscriptions, plans, and billable metrics through the Lago REST API.
 
 ICON
-  id: getlago
   asset: icons/getlago.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Pennylane v2 customers, customer invoices, suppliers, supplier invoices, products, categories, transactions, and bank accounts, and writes customer/supplier/product/category mutations through the REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -71,7 +69,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_company_customer:
     endpoint: POST /company_customers
-    required fields: name, billing_address
     risk: external mutation; creates a company customer record in Pennylane's accounting ledger; approval required
   update_company_customer:
     endpoint: PUT /company_customers/{{ record.id }}
@@ -79,7 +76,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; updates a company customer record in Pennylane's accounting ledger; approval required
   create_individual_customer:
     endpoint: POST /individual_customers
-    required fields: first_name, last_name, billing_address
     risk: external mutation; creates an individual customer record in Pennylane's accounting ledger; approval required
   update_individual_customer:
     endpoint: PUT /individual_customers/{{ record.id }}
@@ -87,7 +83,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; updates an individual customer record in Pennylane's accounting ledger; approval required
   create_supplier:
     endpoint: POST /suppliers
-    required fields: name
     risk: external mutation; creates a supplier record in Pennylane's accounting ledger; approval required
   update_supplier:
     endpoint: PUT /suppliers/{{ record.id }}
@@ -102,7 +97,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; updates a product's pricing/VAT metadata in Pennylane; approval required
   create_category:
     endpoint: POST /categories
-    required fields: label, category_group_id
     risk: external mutation; creates an analytical category in Pennylane's chart of accounts; approval required
   update_category:
     endpoint: PUT /categories/{{ record.id }}

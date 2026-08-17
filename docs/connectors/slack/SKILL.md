@@ -11,7 +11,6 @@ Reads Slack workspace users, channels, and channel messages through the Slack We
 
 ## Icon
 
-- id: slack
 - asset: icons/slack.svg
 - source: upstream_registry
 - review_status: upstream_seeded

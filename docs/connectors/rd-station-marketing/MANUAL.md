@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes RD Station Marketing platform contacts, segmentation contacts, analytics, contact fields, product catalog feeds, and workflows.
 
 ICON
-  id: rdstation
   asset: icons/rdstation.svg
   source: official
   review_status: official_verified
@@ -107,7 +106,7 @@ REVERSE ETL ACTIONS
     risk: deletes a contact from the RD Station Marketing lead base
   add_contact_tags:
     endpoint: POST /contacts/{{ record.identifier }}:{{ record.value }}/tag
-    required fields: identifier, value, tags
+    required fields: identifier, value
     risk: adds tags to an existing RD Station Marketing contact
   update_contact_funnel:
     endpoint: PUT /contacts/{{ record.identifier }}:{{ record.value }}/funnels/default
@@ -115,19 +114,17 @@ REVERSE ETL ACTIONS
     risk: updates lifecycle/opportunity ownership fields in the default contact funnel
   insert_workflow_leads:
     endpoint: POST /workflows/{{ record.workflow_id }}/leads
-    required fields: workflow_id, leads
+    required fields: workflow_id
     risk: inserts one or more leads into a marketing automation workflow
   create_contact_field:
     endpoint: POST /contacts/fields
-    required fields: api_identifier, data_type, label, name, presentation_type
     risk: creates a custom contact field in the RD Station Marketing account
   create_catalog_feed:
     endpoint: POST /catalog_feeds
-    required fields: name, url, format
     risk: creates a product catalog feed configuration
   update_catalog_feed:
     endpoint: PATCH /catalog_feeds/{{ record.catalog_feed_id }}
-    required fields: catalog_feed_id, name, url, format
+    required fields: catalog_feed_id
     risk: updates a product catalog feed configuration
   delete_catalog_feed:
     endpoint: DELETE /catalog_feeds/{{ record.catalog_feed_id }}

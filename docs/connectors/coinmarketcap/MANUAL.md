@@ -13,7 +13,6 @@ DESCRIPTION
   Reads CoinMarketCap Pro API global market metrics, id/slug/symbol-keyed cryptocurrency detail and quote lookups, price conversion, fear-and-greed index, and altcoin season index. Read-only.
 
 ICON
-  id: coinmarketcap
   asset: icons/coinmarketcap.svg
   source: upstream_registry
   review_status: upstream_seeded

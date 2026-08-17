@@ -13,7 +13,6 @@ DESCRIPTION
   Reads SendPulse address books, campaigns, senders, per-book emails, and the account blacklist, and writes address-book/sender/blacklist lifecycle mutations and campaign create/cancel actions through the SendPulse API.
 
 ICON
-  id: sendpulse
   asset: icons/sendpulse.svg
   source: official
   review_status: official_verified
@@ -55,11 +54,10 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_addressbook:
     endpoint: POST /addressbooks
-    required fields: bookName
     risk: creates a new address book (mailing list); external mutation, approval required
   update_addressbook:
     endpoint: PUT /addressbooks/{{ record.id }}
-    required fields: id, name
+    required fields: id
     risk: renames an existing address book
   delete_addressbook:
     endpoint: DELETE /addressbooks/{{ record.id }}
@@ -67,15 +65,16 @@ REVERSE ETL ACTIONS
     risk: permanently removes an address book and all its subscriber associations; irreversible
   add_emails_to_book:
     endpoint: POST /addressbooks/{{ record.id }}/emails
-    required fields: id, emails
+    required fields: id
+    optional fields: emails
     risk: subscribes new email addresses to an address book; each add may trigger a double opt-in confirmation email depending on account settings
   remove_emails_from_book:
     endpoint: DELETE /addressbooks/{{ record.id }}/emails
-    required fields: id, emails
+    required fields: id
+    optional fields: emails
     risk: unsubscribes the given email addresses from an address book; irreversible without re-adding them
   create_campaign:
     endpoint: POST /campaigns
-    required fields: sender_name, sender_email, subject, body, list_id
     risk: creates a new email campaign against a real address book; depending on account settings this may schedule actual sending to real subscribers, the highest-impact action in this bundle, approval required
   cancel_campaign:
     endpoint: DELETE /campaigns/{{ record.id }}
@@ -83,19 +82,17 @@ REVERSE ETL ACTIONS
     risk: cancels a scheduled/in-progress campaign; stops further sends but does not un-send already-delivered emails
   add_sender:
     endpoint: POST /senders
-    required fields: email, name
     risk: registers a new sender email address, which SendPulse will send an activation email to; low-risk external mutation
   remove_sender:
     endpoint: DELETE /senders
-    required fields: email
+    optional fields: email
     risk: removes a sender email address; any campaign still referencing it as its sender will fail to send
   add_to_blacklist:
     endpoint: POST /blacklist
-    required fields: emails
     risk: permanently suppresses future sends to the given address(es) account-wide
   remove_from_blacklist:
     endpoint: DELETE /blacklist
-    required fields: emails
+    optional fields: emails
     risk: removes an address from the account-wide suppression list; future campaigns can reach it again
 
 SECURITY

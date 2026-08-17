@@ -11,17 +11,9 @@ Reads and writes documented Rollbar API v1 resources through the declarative con
 
 ## Icon
 
-- id: simple-icons-rollbar
-- asset: icons/simple-icons/rollbar.svg
-- title: Rollbar
-- simple_icon_slug: rollbar
-- simple_icon_hex: 3569F3
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Rollbar
-- match: exact-name-or-slug
-- matched_by: rollbar
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 

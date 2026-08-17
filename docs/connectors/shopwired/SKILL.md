@@ -11,11 +11,9 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -353,7 +351,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Create new app data in ShopWired
 - create_blog_category:
   - endpoint: POST /blog-categories
-  - required fields: title
   - risk: Create a new blog category in ShopWired
 - delete_blog_category:
   - endpoint: DELETE /blog-categories/{{ record.id }}
@@ -365,7 +362,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a blog category in ShopWired
 - create_blog_post:
   - endpoint: POST /blog-posts
-  - required fields: title, slug
   - risk: Create a new blog post in ShopWired
 - delete_blog_post:
   - endpoint: DELETE /blog-posts/{{ record.id }}
@@ -373,11 +369,10 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Delete a blog post in ShopWired
 - update_blog_post:
   - endpoint: PUT /blog-posts/{{ record.id }}
-  - required fields: id, title, slug
+  - required fields: id
   - risk: Update a blog post in ShopWired
 - create_blog_tag:
   - endpoint: POST /blog-tags
-  - required fields: title
   - risk: Create a new blog tag in ShopWired
 - delete_blog_tag:
   - endpoint: DELETE /blog-tags/{{ record.id }}
@@ -389,7 +384,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a blog tag in ShopWired
 - create_brand:
   - endpoint: POST /brands
-  - required fields: title
   - risk: Create a new brand in ShopWired
 - delete_brand:
   - endpoint: DELETE /brands/{{ record.id }}
@@ -401,11 +395,9 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a brand in ShopWired
 - change_business_feature_status:
   - endpoint: POST /business/features/change-status
-  - required fields: name, status
   - risk: Change business feature status in ShopWired
 - create_category:
   - endpoint: POST /categories
-  - required fields: title
   - risk: Create a new category in ShopWired
 - delete_category_by_id:
   - endpoint: DELETE /categories/{{ record.id }}
@@ -413,11 +405,10 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Delete a category in ShopWired
 - update_category_by_id:
   - endpoint: PUT /categories/{{ record.id }}
-  - required fields: id, title
+  - required fields: id
   - risk: Update a category in ShopWired
 - create_choice_set_value:
   - endpoint: POST /choice-set-values
-  - required fields: set, name
   - risk: Create a choice set value in ShopWired
 - delete_choice_set_value:
   - endpoint: DELETE /choice-set-values/{{ record.id }}
@@ -429,7 +420,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a choice set value in ShopWired
 - create_choice_set:
   - endpoint: POST /choice-sets
-  - required fields: displayName, internalName
   - risk: Create a choice set in ShopWired
 - delete_choice_set:
   - endpoint: DELETE /choice-sets/{{ record.id }}
@@ -441,7 +431,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a choice set in ShopWired
 - create_custom_field:
   - endpoint: POST /custom-fields
-  - required fields: name, itemType
   - risk: Create a custom field in ShopWired
 - delete_custom_field:
   - endpoint: DELETE /custom-fields/{{ record.id }}
@@ -453,11 +442,9 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a custom field in ShopWired
 - create_customer:
   - endpoint: POST /customers
-  - required fields: firstName, lastName, email, password
   - risk: Create a new customer in ShopWired
 - create_digital_file:
   - endpoint: POST /digital-files
-  - required fields: name, extension, sourceUrl
   - risk: Create a new digital file in ShopWired
 - delete_digital_file:
   - endpoint: DELETE /digital-files/{{ record.id }}
@@ -469,7 +456,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a digital file in ShopWired
 - create_filter_group:
   - endpoint: POST /filter-groups
-  - required fields: title
   - risk: Create a new filter group in ShopWired
 - delete_filter_group:
   - endpoint: DELETE /filter-groups/{{ record.id }}
@@ -477,11 +463,10 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Delete a filter group in ShopWired
 - update_filter_group:
   - endpoint: PUT /filter-groups/{{ record.id }}
-  - required fields: id, title
+  - required fields: id
   - risk: Update a filter group in ShopWired
 - create_gift_card:
   - endpoint: POST /gift-vouchers
-  - required fields: code, amount, amountUsed
   - risk: Create a gift card in ShopWired
 - delete_gift_card:
   - endpoint: DELETE /gift-vouchers/{{ record.id }}
@@ -493,7 +478,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a gift card in ShopWired
 - create_business_nexus:
   - endpoint: POST /nexuses
-  - required fields: countryId, stateId, type, name, addressLine1, city, postcode
   - risk: Create a new business nexus item in ShopWired
 - delete_business_nexus:
   - endpoint: DELETE /nexuses/{{ record.id }}
@@ -505,7 +489,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a business nexus item in ShopWired
 - create_offer:
   - endpoint: POST /offers
-  - required fields: title, itemCount
   - risk: Create a new offer in ShopWired
 - delete_offer:
   - endpoint: DELETE /offers/{{ record.id }}
@@ -517,7 +500,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update an offer in ShopWired
 - create_order_status:
   - endpoint: POST /order-statuses
-  - required fields: name, sortOrder
   - risk: Create an order status in ShopWired
 - delete_order_status:
   - endpoint: DELETE /order-statuses/{{ record.id }}
@@ -525,7 +507,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Delete an order status in ShopWired
 - create_order:
   - endpoint: POST /orders
-  - required fields: status, billingAddress, shippingAddress, shippingRate, products
   - risk: Create a new order in ShopWired
 - delete_order:
   - endpoint: DELETE /orders/{{ record.id }}
@@ -549,11 +530,10 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update an order's status in ShopWired
 - create_refund:
   - endpoint: POST /orders/{{ record.order_id }}/refunds
-  - required fields: order_id, amount, comment
+  - required fields: order_id
   - risk: Create a refund for an order in ShopWired
 - create_page:
   - endpoint: POST /pages
-  - required fields: title
   - risk: Create a new page in ShopWired
 - delete_page:
   - endpoint: DELETE /pages/{{ record.id }}
@@ -565,7 +545,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a page in ShopWired
 - create_product:
   - endpoint: POST /products
-  - required fields: title
   - risk: Create a new product in ShopWired
 - update_prices:
   - endpoint: POST /products/prices
@@ -580,7 +559,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a product in ShopWired
 - create_bulk_price:
   - endpoint: POST /products/{{ record.id }}/bulk-prices
-  - required fields: id, fromQuantity, toQuantity, price
+  - required fields: id
   - risk: Create a bulk price for a product in ShopWired
 - delete_bulk_price:
   - endpoint: DELETE /products/{{ record.product_id }}/bulk-prices/{{ record.id }}
@@ -592,7 +571,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a specific bulk price in ShopWired
 - assign_product_choice:
   - endpoint: POST /products/{{ record.product_id }}/choices
-  - required fields: product_id, set, value
+  - required fields: product_id
   - risk: Assign a choice to a product in ShopWired
 - delete_product_choice:
   - endpoint: DELETE /products/{{ record.product_id }}/choices/{{ record.id }}
@@ -604,7 +583,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a product choice in ShopWired
 - create_product_customization_field:
   - endpoint: POST /products/{{ record.product_id }}/customization-fields
-  - required fields: product_id, label, type
+  - required fields: product_id
   - risk: Create a product customisation field in ShopWired
 - delete_product_customization_field:
   - endpoint: DELETE /products/{{ record.product_id }}/customization-fields/{{ record.id }}
@@ -616,7 +595,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a product customisation field in ShopWired
 - create_product_extra:
   - endpoint: POST /products/{{ record.product_id }}/extras
-  - required fields: product_id, name, price, sku
+  - required fields: product_id
   - risk: Create a product extra in ShopWired
 - delete_product_extra:
   - endpoint: DELETE /products/{{ record.product_id }}/extras/{{ record.id }}
@@ -628,7 +607,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a product extra in ShopWired
 - create_product_image:
   - endpoint: POST /products/{{ record.product_id }}/images
-  - required fields: product_id, image
+  - required fields: product_id
   - risk: Create a product image in ShopWired
 - delete_product_image:
   - endpoint: DELETE /products/{{ record.product_id }}/images/{{ record.id }}
@@ -640,7 +619,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a product image in ShopWired
 - create_product_option_value:
   - endpoint: POST /products/{{ record.product_id }}/option-values
-  - required fields: product_id, name, option
+  - required fields: product_id
   - risk: Create a product option value in ShopWired
 - delete_product_option_value:
   - endpoint: DELETE /products/{{ record.product_id }}/option-values/{{ record.id }}
@@ -652,7 +631,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a product option value in ShopWired
 - create_product_option:
   - endpoint: POST /products/{{ record.product_id }}/options
-  - required fields: product_id, name
+  - required fields: product_id
   - risk: Create a product option in ShopWired
 - delete_product_option:
   - endpoint: DELETE /products/{{ record.product_id }}/options/{{ record.id }}
@@ -664,7 +643,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a product option in ShopWired
 - create_product_review:
   - endpoint: POST /products/{{ record.product_id }}/reviews
-  - required fields: product_id, name, content, rating
+  - required fields: product_id
   - risk: Create a product review in ShopWired
 - delete_product_review:
   - endpoint: DELETE /products/{{ record.product_id }}/reviews/{{ record.id }}
@@ -676,7 +655,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a product review in ShopWired
 - create_product_variation:
   - endpoint: POST /products/{{ record.product_id }}/variations
-  - required fields: product_id, values
+  - required fields: product_id
   - risk: Create a new product variation in ShopWired
 - delete_product_variation:
   - endpoint: DELETE /products/{{ record.product_id }}/variations/{{ record.id }}
@@ -688,7 +667,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a product variation in ShopWired
 - create_redirect:
   - endpoint: POST /redirects
-  - required fields: oldPath, newPath
   - risk: Create a new 301 redirect in ShopWired
 - delete_redirect:
   - endpoint: DELETE /redirects/{{ record.id }}
@@ -696,7 +674,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Delete a 301 redirect in ShopWired
 - create_sale:
   - endpoint: POST /sales
-  - required fields: targetType, targetId, discount, validFrom, active
   - risk: Create a sale in ShopWired
 - delete_sale:
   - endpoint: DELETE /sales/{{ record.id }}
@@ -704,11 +681,10 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Delete a sale in ShopWired
 - update_sale:
   - endpoint: PUT /sales/{{ record.id }}
-  - required fields: id, targetType, targetId, discount, validFrom, active
+  - required fields: id
   - risk: Update a sale in ShopWired
 - create_shipping_rate:
   - endpoint: POST /shipping-rates
-  - required fields: country, name, criteria, from, to, cost, vatExclusive
   - risk: Create a new shipping rate in ShopWired
 - delete_shipping_rate:
   - endpoint: DELETE /shipping-rates/{{ record.id }}
@@ -720,7 +696,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a shipping rate in ShopWired
 - create_shipping_zone:
   - endpoint: POST /shipping-zones
-  - required fields: country, vat
   - risk: Create a new shipping zone in ShopWired
 - delete_shipping_zone:
   - endpoint: DELETE /shipping-zones/{{ record.country_id }}
@@ -728,14 +703,13 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Delete a shipping zone in ShopWired
 - update_shipping_zone:
   - endpoint: PUT /shipping-zones/{{ record.country_id }}
-  - required fields: country_id, vat
+  - required fields: country_id
   - risk: Update an existing shipping zone in ShopWired
 - update_stock:
   - endpoint: POST /stock
   - risk: Update stock quantity in ShopWired
 - return_stock:
   - endpoint: POST /stock/return
-  - required fields: orderProductItemId
   - risk: Return stock for cancelled orders in ShopWired
 - delete_theme_asset:
   - endpoint: DELETE /theme-assets/{{ record.theme_id }}
@@ -743,15 +717,14 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Delete a theme asset in ShopWired
 - create_or_update_theme_asset:
   - endpoint: POST /theme-assets/{{ record.theme_id }}
-  - required fields: theme_id, key
+  - required fields: theme_id
   - risk: Create or update a theme asset in ShopWired
 - update_theme:
   - endpoint: PUT /themes/{{ record.id }}
-  - required fields: id, title
+  - required fields: id
   - risk: Update a theme in ShopWired
 - create_trade_customer_product_price:
   - endpoint: POST /trade-customer-product-prices
-  - required fields: customerId, productId, price
   - risk: Create a new trade customer product price in ShopWired
 - bulk_trade_customer_product_prices:
   - endpoint: POST /trade-customer-product-prices/bulk
@@ -766,7 +739,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a trade customer product price in ShopWired
 - create_trade_group:
   - endpoint: POST /trade-groups
-  - required fields: title, products
   - risk: Create a trade pricing band in ShopWired
 - delete_trade_group:
   - endpoint: DELETE /trade-groups/{{ record.id }}
@@ -774,7 +746,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Delete a trade pricing band in ShopWired
 - update_trade_group:
   - endpoint: PUT /trade-groups/{{ record.id }}
-  - required fields: id, products
+  - required fields: id
   - risk: Update a trade pricing band in ShopWired
 - create_voucher:
   - endpoint: POST /vouchers
@@ -789,7 +761,6 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Update a voucher in ShopWired
 - create_a_webhook:
   - endpoint: POST /webhooks
-  - required fields: topic, url
   - risk: Create a webhook in ShopWired
 - delete_a_webhook:
   - endpoint: DELETE /webhooks/{{ record.id }}
@@ -805,15 +776,14 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
   - risk: Verify a webhook in ShopWired
 - create_a_wishlist:
   - endpoint: POST /wishlists
-  - required fields: customerId
   - risk: Create a wishlist in ShopWired
 - update_a_wishlist:
   - endpoint: PUT /wishlists/{{ record.id }}
-  - required fields: id, public
+  - required fields: id
   - risk: Update a wishlist in ShopWired
 - modify_a_wishlist:
   - endpoint: POST /wishlists/{{ record.id }}/modify
-  - required fields: id, action
+  - required fields: id
   - risk: Modify a wishlist in ShopWired
 
 ## Security

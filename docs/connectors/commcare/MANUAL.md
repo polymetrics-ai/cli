@@ -13,7 +13,6 @@ DESCRIPTION
   Reads CommCare HQ project, application, form, case, user, group, report, location, lookup table, export, and messaging API data; writes supported JSON mutations for cases, users, groups, locations, and lookup tables.
 
 ICON
-  id: commcare
   asset: icons/commcare.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -183,7 +182,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_case_v2:
     endpoint: POST /a/{{ config.project_space }}/api/case/v2/
-    required fields: case_type, case_name, owner_id
     risk: creates a CommCare case by submitting a server-generated XForm
   update_case_v2:
     endpoint: PUT /a/{{ config.project_space }}/api/case/v2/{{ record.case_id }}
@@ -195,11 +193,9 @@ REVERSE ETL ACTIONS
     risk: updates or creates a CommCare case matched by external id
   upsert_case_v2:
     endpoint: PUT /a/{{ config.project_space }}/api/case/v2/
-    required fields: external_id
     risk: updates or creates a CommCare case matched by the request body's external_id
   create_mobile_worker:
     endpoint: POST /a/{{ config.project_space }}/api/user/v1/
-    required fields: username, email
     risk: creates a mobile worker account; password-bearing creation is intentionally not represented in fixtures or docs
   update_mobile_worker:
     endpoint: PUT /a/{{ config.project_space }}/api/user/v1/{{ record.mobile_worker_id }}/
@@ -215,7 +211,6 @@ REVERSE ETL ACTIONS
     risk: sends a password reset email to a mobile worker
   create_web_user_invitation:
     endpoint: POST /a/{{ config.project_space }}/api/invitation/v1/
-    required fields: email, role
     risk: invites a web user to the project
   update_web_user:
     endpoint: PATCH /a/{{ config.project_space }}/api/web-user/v1/{{ record.web_user_id }}/
@@ -231,11 +226,9 @@ REVERSE ETL ACTIONS
     risk: disables a web user account
   create_group:
     endpoint: POST /a/{{ config.project_space }}/api/group/v1/
-    required fields: name
     risk: creates a user group
   create_groups_bulk:
     endpoint: PATCH /a/{{ config.project_space }}/api/group/v1/
-    required fields: objects
     risk: creates multiple user groups from one request body
   update_group:
     endpoint: PUT /a/{{ config.project_space }}/api/group/v1/{{ record.group_id }}/
@@ -247,7 +240,6 @@ REVERSE ETL ACTIONS
     risk: deletes a user group
   create_location_v2:
     endpoint: POST /a/{{ config.project_space }}/api/location/v2/
-    required fields: name, location_type_code
     risk: creates a location in the project hierarchy
   update_location_v2:
     endpoint: PUT /a/{{ config.project_space }}/api/location/v2/{{ record.location_id }}
@@ -255,15 +247,13 @@ REVERSE ETL ACTIONS
     risk: updates a location in the project hierarchy
   bulk_upsert_locations_v2:
     endpoint: PATCH /a/{{ config.project_space }}/api/location/v2/
-    required fields: objects
     risk: atomically creates and updates multiple locations
   create_lookup_table:
     endpoint: POST /a/{{ config.project_space }}/api/lookup_table/v1/
-    required fields: tag, fields
     risk: creates a lookup table definition
   update_lookup_table:
     endpoint: PUT /a/{{ config.project_space }}/api/lookup_table/v1/{{ record.lookup_table_id }}
-    required fields: lookup_table_id, tag, fields
+    required fields: lookup_table_id
     risk: updates a lookup table definition
   delete_lookup_table:
     endpoint: DELETE /a/{{ config.project_space }}/api/lookup_table/v1/{{ record.lookup_table_id }}
@@ -271,11 +261,10 @@ REVERSE ETL ACTIONS
     risk: deletes a lookup table definition
   create_lookup_table_row:
     endpoint: POST /a/{{ config.project_space }}/api/lookup_table_item/v1/
-    required fields: data_type_id, fields
     risk: creates a lookup table row
   update_lookup_table_row:
     endpoint: PUT /a/{{ config.project_space }}/api/lookup_table_item/v1/{{ record.lookup_table_item_id }}
-    required fields: lookup_table_item_id, data_type_id, fields
+    required fields: lookup_table_item_id
     risk: updates a lookup table row
   delete_lookup_table_row:
     endpoint: DELETE /a/{{ config.project_space }}/api/lookup_table_item/v1/{{ record.lookup_table_item_id }}

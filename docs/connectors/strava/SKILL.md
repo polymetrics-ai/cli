@@ -11,7 +11,6 @@ Reads the authenticated Strava athlete's profile, activities, lifetime stats, an
 
 ## Icon
 
-- id: strava
 - asset: icons/strava.svg
 - source: upstream_registry
 - review_status: upstream_seeded

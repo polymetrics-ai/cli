@@ -11,11 +11,9 @@ Reads Coassemble courses, screen types, collections, clients, users, learner tra
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -85,11 +83,10 @@ Reads Coassemble courses, screen types, collections, clients, users, learner tra
   - risk: restores a previously soft-deleted course; no approval required
 - delete_tracking:
   - endpoint: DELETE /api/v1/headless/tracking
-  - required fields: id, identifier
+  - optional fields: id, identifier
   - risk: permanently erases one learner's tracking/progress record for a course; irreversible, approval required
 - create_collection:
   - endpoint: POST /api/v1/headless/collection
-  - required fields: title
   - risk: creates a new collection of courses; low-risk external mutation, no approval required
 - delete_collection:
   - endpoint: DELETE /api/v1/headless/collection/{{ record.id }}
@@ -119,7 +116,8 @@ Reads Coassemble courses, screen types, collections, clients, users, learner tra
   - risk: irreversibly removes a learner identity, applying Coassemble's server-side DEFAULT handling for that identity's course progress (the real endpoint also accepts optional action=reallocate|delete|ignore/reallocateTo/clientIdentifier query params to control that handling explicitly, and Coassemble's own docs do not fully specify their exact semantics beyond "choose what to do with any courses associated with this identifier" — this action deliberately does not expose them, since the write-action path/query dialect has no way to send an optional record field only when present, and silently defaulting an ambiguous, irreversible per-learner-data-retention choice would be worse than declaring it out of scope; approval required
 - translate_course:
   - endpoint: POST /api/v1/headless/translation/translate/{{ record.course_id }}
-  - required fields: course_id, language
+  - required fields: course_id
+  - optional fields: language
   - risk: kicks off machine translation of a course into a new BCP-47 language variant; low-risk external mutation, no approval required
 - set_default_translation:
   - endpoint: POST /api/v1/headless/translation/default/{{ record.course_id }}/{{ record.language }}

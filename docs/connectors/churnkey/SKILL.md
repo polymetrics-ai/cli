@@ -11,11 +11,9 @@ Reads Churnkey cancel-flow sessions and aggregated session counts through the Ch
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -49,14 +47,12 @@ Reads Churnkey cancel-flow sessions and aggregated session counts through the Ch
 
 - create_event:
   - endpoint: POST /v1/api/events/new
-  - required fields: event, customerId
   - risk: external mutation; records a usage/billing event against a Churnkey customer, influencing cancel-flow offer targeting; approval required
 - update_customer:
   - endpoint: POST /v1/api/events/customer-update
   - risk: external mutation; overwrites a Churnkey customer's tracked attributes used to drive cancel-flow segmentation and offer eligibility; approval required
 - set_billing_users:
   - endpoint: POST /v1/api/events/customer-update/set-users
-  - required fields: customerId, users
   - risk: external mutation; overwrites which users on a Churnkey customer account receive Payment Recovery billing-contact emails; approval required
 
 ## Security

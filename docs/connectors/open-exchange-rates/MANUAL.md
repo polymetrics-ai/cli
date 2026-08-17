@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Open Exchange Rates account usage/plan status through the Open Exchange Rates JSON API (read-only). Live/historical/currencies rate-map streams remain quarantined (ENGINE_GAP).
 
 ICON
-  id: open-exchange-rates
   asset: icons/open-exchange-rates.svg
   source: upstream_registry
   review_status: upstream_seeded

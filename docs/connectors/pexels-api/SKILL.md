@@ -11,7 +11,6 @@ Reads Pexels photo/video search and curated/popular results plus featured and pe
 
 ## Icon
 
-- id: pexels
 - asset: icons/pexels.svg
 - source: upstream_registry
 - review_status: upstream_seeded

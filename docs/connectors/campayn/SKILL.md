@@ -11,11 +11,9 @@ Reads and writes Campayn subscriber lists, signup forms, contacts, email campaig
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -60,7 +58,7 @@ Reads and writes Campayn subscriber lists, signup forms, contacts, email campaig
 
 - add_contact:
   - endpoint: POST /lists/{{ record.list_id }}/contacts.json
-  - required fields: list_id, email
+  - required fields: list_id
   - risk: adds a new contact to a Campayn subscriber list; low-risk external mutation, no approval required
 - update_contact:
   - endpoint: PUT /contacts/{{ record.id }}.json

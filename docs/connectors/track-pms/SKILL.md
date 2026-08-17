@@ -11,11 +11,9 @@ Reads and writes Track PMS reservations, guests, units, owners, CRM contacts, an
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -61,11 +59,9 @@ Reads and writes Track PMS reservations, guests, units, owners, CRM contacts, an
 
 - create_reservation:
   - endpoint: POST /pms/reservations
-  - required fields: unitId, arrivalDate, departureDate
   - risk: creates a new guest reservation and blocks the unit's availability for the given date range; external mutation, approval required
 - create_unit:
   - endpoint: POST /pms/units
-  - required fields: name
   - risk: creates a new rentable unit/property record; external mutation, approval required
 - update_unit:
   - endpoint: PUT /pms/units/{{ record.id }}
@@ -74,7 +70,6 @@ Reads and writes Track PMS reservations, guests, units, owners, CRM contacts, an
   - risk: mutates an existing unit's descriptive/configuration fields; a changed nodeId or unitTypeId affects rate/availability grouping for future reservations
 - create_owner:
   - endpoint: POST /pms/owners
-  - required fields: name
   - risk: creates a new property owner record; external mutation, approval required
 - update_owner:
   - endpoint: PATCH /pms/owners/{{ record.id }}
@@ -83,7 +78,6 @@ Reads and writes Track PMS reservations, guests, units, owners, CRM contacts, an
   - risk: mutates an existing owner's contact/status fields; setting isActive:false affects that owner's active-unit reporting
 - create_contact:
   - endpoint: POST /crm/contacts
-  - required fields: firstName, lastName
   - risk: creates a new CRM contact (guest, lead, or owner-linked person record); external mutation, approval required. Tremendous-adjacent restricted fields (taxId, paymentType, ACH banking fields) are not modeled — see docs.md Known limits
 - update_contact:
   - endpoint: PATCH /crm/contacts/{{ record.id }}

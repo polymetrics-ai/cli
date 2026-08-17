@@ -11,11 +11,9 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -78,7 +76,6 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
 
 - create_gate:
   - endpoint: POST /gates
-  - required fields: name
   - risk: external mutation; approval required
 - update_gate:
   - endpoint: PATCH /gates/{{ record.id }}
@@ -90,7 +87,6 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
   - risk: irreversible external deletion; approval required
 - create_dynamic_config:
   - endpoint: POST /dynamic_configs
-  - required fields: name
   - risk: external mutation; approval required
 - update_dynamic_config:
   - endpoint: PATCH /dynamic_configs/{{ record.id }}
@@ -102,7 +98,6 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
   - risk: irreversible external deletion; approval required
 - create_segment:
   - endpoint: POST /segments
-  - required fields: name, type
   - risk: external mutation; approval required
 - delete_segment:
   - endpoint: DELETE /segments/{{ record.id }}
@@ -110,7 +105,6 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
   - risk: irreversible external deletion; approval required
 - create_tag:
   - endpoint: POST /tags
-  - required fields: name, description
   - risk: external mutation; approval required
 - update_tag:
   - endpoint: PATCH /tags/{{ record.id }}
@@ -122,7 +116,6 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
   - risk: irreversible external deletion; approval required
 - create_target_app:
   - endpoint: POST /target_app
-  - required fields: name, description
   - risk: external mutation; approval required
 - update_target_app:
   - endpoint: PATCH /target_app/{{ record.id }}
@@ -134,7 +127,6 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
   - risk: irreversible external deletion; approval required
 - create_holdout:
   - endpoint: POST /holdouts
-  - required fields: name
   - risk: external mutation; approval required
 - delete_holdout:
   - endpoint: DELETE /holdouts/{{ record.id }}
@@ -142,7 +134,6 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
   - risk: irreversible external deletion; approval required
 - create_layer:
   - endpoint: POST /layers
-  - required fields: name, idType
   - risk: external mutation; approval required
 - delete_layer:
   - endpoint: DELETE /layers/{{ record.id }}
@@ -150,7 +141,6 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
   - risk: irreversible external deletion; approval required
 - create_key:
   - endpoint: POST /keys
-  - required fields: description, type
   - risk: external mutation creating a live API credential; approval required
 - delete_key:
   - endpoint: DELETE /keys/{{ record.key }}

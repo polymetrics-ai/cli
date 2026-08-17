@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and writes Elastic Email contacts, campaigns, lists, segments, templates, webhooks, domains, inbound routes, suppressions, and account statistics through the Elastic Email v4 REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -88,7 +86,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_contact:
     endpoint: POST /contacts
-    required fields: Email
     risk: adds a new contact to the account's overall recipient list; low-risk external mutation, no approval required
   update_contact:
     endpoint: PUT /contacts/{{ record.Email }}
@@ -100,7 +97,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a contact and its activity/consent history from the account
   create_list:
     endpoint: POST /lists
-    required fields: ListName
     risk: creates a new contact list, optionally seeding it from existing contact emails; low-risk external mutation, no approval required
   update_list:
     endpoint: PUT /lists/{{ record.ListName }}
@@ -113,16 +109,15 @@ REVERSE ETL ACTIONS
     risk: permanently removes a contact list; any campaign still targeting this list by name will fail to resolve its recipients
   add_list_contacts:
     endpoint: POST /lists/{{ record.ListName }}/contacts
-    required fields: ListName, Emails
-    optional fields: Status
+    required fields: ListName
+    optional fields: Emails, Status
     risk: adds existing contacts to a list, making them eligible recipients for any campaign targeting that list
   create_segment:
     endpoint: POST /segments
-    required fields: Name, Rule
     risk: creates a new dynamic contact segment from a SQL-like rule; low-risk external mutation, no approval required
   update_segment:
     endpoint: PUT /segments/{{ record.Name }}
-    required fields: Name, Rule
+    required fields: Name
     risk: changes the membership rule of an existing segment; immediately changes which contacts any campaign targeting this segment will reach
   delete_segment:
     endpoint: DELETE /segments/{{ record.Name }}
@@ -130,7 +125,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a segment; any campaign still targeting this segment by name will fail to resolve its recipients
   create_template:
     endpoint: POST /templates
-    required fields: Name
     risk: creates a new email template; low-risk external mutation, no approval required
   update_template:
     endpoint: PUT /templates/{{ record.Name }}
@@ -142,7 +136,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a template; any campaign still referencing this template by name will fail to build its content
   create_campaign:
     endpoint: POST /campaigns
-    required fields: Name, Recipients
     risk: creates a new campaign targeting the given lists/segments; depending on Options this may schedule a live send to real recipients, not a preview-only action
   update_campaign:
     endpoint: PUT /campaigns/{{ record.Name }}
@@ -158,7 +151,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a campaign; if it has not finished sending, any remaining scheduled deliveries are cancelled
   create_webhook:
     endpoint: POST /webhook
-    required fields: Name, URL
     risk: registers a new outbound webhook that will POST live event data (sent/opened/clicked/bounced) to an external URL of the caller's choosing; verify the target endpoint before enabling
   update_webhook:
     endpoint: PUT /webhook/{{ record.WebhookID }}
@@ -170,7 +162,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a webhook subscription; event delivery to its target URL stops immediately
   create_domain:
     endpoint: POST /domains
-    required fields: Domain
     risk: registers a new sending domain pending DNS verification; low-risk external mutation, no approval required
   delete_domain:
     endpoint: DELETE /domains/{{ record.Domain }}
@@ -178,7 +169,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a verified sending domain; any campaign configured to send from this domain will fail until reconfigured
   create_inbound_route:
     endpoint: POST /inboundroute
-    required fields: Name, Filter, FilterType, ActionType
     risk: creates a new inbound-mail routing rule that forwards matching inbound email to an external address or webhook URL of the caller's choosing
   update_inbound_route:
     endpoint: PUT /inboundroute/{{ record.PublicId }}

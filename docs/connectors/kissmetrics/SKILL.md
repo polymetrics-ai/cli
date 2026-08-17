@@ -11,7 +11,6 @@ Reads Kissmetrics products, reports, events, and properties through the Kissmetr
 
 ## Icon
 
-- id: kissmetrics
 - asset: icons/kissmetrics.svg
 - source: official
 - review_status: official_verified

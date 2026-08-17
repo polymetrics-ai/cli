@@ -11,11 +11,9 @@ Reads Castor EDC studies, users, countries, and audit-trail events through the C
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -120,23 +118,19 @@ Reads Castor EDC studies, users, countries, and audit-trail events through the C
 
 - create_record:
   - endpoint: POST /study/{{ config.study_id }}/record
-  - required fields: institute_id, email_address
   - risk: external mutation creating a new clinical-trial study participant record; approval required
 - create_site:
   - endpoint: POST /study/{{ config.study_id }}/site
-  - required fields: name, abbreviation, code, country_id
   - risk: external mutation creating a new study site/institute; approval required
 - create_role:
   - endpoint: POST /study/{{ config.study_id }}/role
-  - required fields: name, description, permissions
   - risk: external mutation creating a new study access-control role; approval required
 - create_survey_package_instance:
   - endpoint: POST /study/{{ config.study_id }}/surveypackageinstance
-  - required fields: survey_package_id, record_id, email_address
   - risk: external mutation dispatching a survey package invitation to a study participant; approval required
 - create_report_instance:
   - endpoint: POST /study/{{ config.study_id }}/record/{{ record.record_id }}/report-instance
-  - required fields: record_id, report_id
+  - required fields: record_id
   - risk: external mutation creating a new report instance for a study participant record; approval required
 - create_randomization:
   - endpoint: POST /study/{{ config.study_id }}/record/{{ record.record_id }}/randomization

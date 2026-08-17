@@ -11,7 +11,6 @@ Reads LinkedIn organization (company page) profile, follower statistics, share s
 
 ## Icon
 
-- id: linkedin
 - asset: icons/linkedin.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Aha! features, products, ideas, releases, initiatives, goals, epics, and users through the Aha! REST API (read-only).
 
 ICON
-  id: aha
   asset: icons/aha.svg
   source: official
   review_status: official_verified

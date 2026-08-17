@@ -11,7 +11,6 @@ Reads and writes Dremio catalog entries, reflections, sources, users, and roles 
 
 ## Icon
 
-- id: dremio
 - asset: icons/dremio.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -58,7 +57,6 @@ Reads and writes Dremio catalog entries, reflections, sources, users, and roles 
 
 - create_user:
   - endpoint: POST /user
-  - required fields: name
   - risk: creates a new Dremio user account with instance-wide access, scoped by whatever role assignment follows; external mutation, approval required
 - update_user:
   - endpoint: PUT /user/{{ record.id }}
@@ -70,7 +68,6 @@ Reads and writes Dremio catalog entries, reflections, sources, users, and roles 
   - risk: permanently removes a Dremio user account and revokes its access; destructive, approval required
 - create_role:
   - endpoint: POST /role
-  - required fields: name
   - risk: creates a new Dremio role; low external mutation risk on its own until members/grants are attached
 - update_role:
   - endpoint: PUT /role/{{ record.id }}
@@ -94,8 +91,8 @@ Reads and writes Dremio catalog entries, reflections, sources, users, and roles 
   - risk: permanently removes a reflection definition; any query relying on it for acceleration falls back to the raw dataset; destructive, approval required
 - create_personal_access_token:
   - endpoint: POST /user/{{ record.user_id }}/token
-  - required fields: user_id, label
-  - optional fields: millisToExpire
+  - required fields: user_id
+  - optional fields: label, millisToExpire
   - risk: mints a new long-lived Personal Access Token credential for the named user; the response body carries the plaintext token exactly once and must never be logged; external mutation, approval required
 - delete_personal_access_token:
   - endpoint: DELETE /user/{{ record.user_id }}/token/{{ record.token_id }}

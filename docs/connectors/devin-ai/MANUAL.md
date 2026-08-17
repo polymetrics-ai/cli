@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Devin AI sessions, session child resources, playbooks, knowledge notes, repositories, schedules, membership, metrics, consumption, and secret metadata through the Devin v3 REST API; writes documented organization-scoped JSON mutations.
 
 ICON
-  id: devin-ai
   asset: icons/devin-ai.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -130,19 +129,18 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_session:
     endpoint: POST /v3/organizations/{{ config.org_id }}/sessions
-    required fields: prompt
     risk: creates a new Devin session in the organization and can consume ACUs
   send_session_message:
     endpoint: POST /v3/organizations/{{ config.org_id }}/sessions/{{ record.devin_id }}/messages
-    required fields: devin_id, message
+    required fields: devin_id
     risk: sends a message to an active or suspended Devin session and may resume work
   append_session_tags:
     endpoint: POST /v3/organizations/{{ config.org_id }}/sessions/{{ record.devin_id }}/tags
-    required fields: devin_id, tags
+    required fields: devin_id
     risk: adds tags to a Devin session
   replace_session_tags:
     endpoint: PUT /v3/organizations/{{ config.org_id }}/sessions/{{ record.devin_id }}/tags
-    required fields: devin_id, tags
+    required fields: devin_id
     risk: replaces all tags on a Devin session
   archive_session:
     endpoint: POST /v3/organizations/{{ config.org_id }}/sessions/{{ record.devin_id }}/archive
@@ -158,7 +156,6 @@ REVERSE ETL ACTIONS
     risk: triggers on-demand generation of session insights
   create_schedule:
     endpoint: POST /v3/organizations/{{ config.org_id }}/schedules
-    required fields: name, prompt
     risk: creates a scheduled Devin session that can run automatically
   update_schedule:
     endpoint: PATCH /v3/organizations/{{ config.org_id }}/schedules/{{ record.schedule_id }}
@@ -170,11 +167,10 @@ REVERSE ETL ACTIONS
     risk: soft-deletes a schedule
   create_playbook:
     endpoint: POST /v3/organizations/{{ config.org_id }}/playbooks
-    required fields: title, body
     risk: creates an organization-level Devin playbook
   update_playbook:
     endpoint: PUT /v3/organizations/{{ config.org_id }}/playbooks/{{ record.playbook_id }}
-    required fields: playbook_id, title, body
+    required fields: playbook_id
     risk: replaces an organization-level Devin playbook
   delete_playbook:
     endpoint: DELETE /v3/organizations/{{ config.org_id }}/playbooks/{{ record.playbook_id }}
@@ -182,11 +178,10 @@ REVERSE ETL ACTIONS
     risk: deletes an organization-level Devin playbook
   create_knowledge_note:
     endpoint: POST /v3/organizations/{{ config.org_id }}/knowledge/notes
-    required fields: name, body
     risk: creates an organization-level Devin knowledge note
   update_knowledge_note:
     endpoint: PUT /v3/organizations/{{ config.org_id }}/knowledge/notes/{{ record.note_id }}
-    required fields: note_id, name, body
+    required fields: note_id
     risk: replaces an organization-level Devin knowledge note
   delete_knowledge_note:
     endpoint: DELETE /v3/organizations/{{ config.org_id }}/knowledge/notes/{{ record.note_id }}
@@ -198,7 +193,6 @@ REVERSE ETL ACTIONS
     risk: enables indexing for a repository and can trigger indexing jobs
   bulk_index_repositories:
     endpoint: PUT /v3beta1/organizations/{{ config.org_id }}/repositories/indexing
-    required fields: repositories
     risk: enables indexing for multiple repositories and can trigger indexing jobs
   remove_repository_indexing:
     endpoint: DELETE /v3beta1/organizations/{{ config.org_id }}/repositories/{{ record.encoded_repository_path }}/indexing
@@ -206,7 +200,7 @@ REVERSE ETL ACTIONS
     risk: disables indexing and clears configured branches for a repository
   bulk_remove_repository_indexing:
     endpoint: DELETE /v3beta1/organizations/{{ config.org_id }}/repositories/indexing
-    required fields: repository_paths
+    optional fields: repository_paths
     risk: disables indexing and clears configured branches for multiple repositories
   remove_repository_branch_indexing:
     endpoint: DELETE /v3beta1/organizations/{{ config.org_id }}/repositories/{{ record.encoded_repository_path }}/indexing/branches/{{ record.encoded_branch_name }}
@@ -214,7 +208,6 @@ REVERSE ETL ACTIONS
     risk: removes one branch from repository indexing and can disable indexing if no branches remain
   trigger_pr_review:
     endpoint: POST /v3/organizations/{{ config.org_id }}/pr-reviews
-    required fields: pr_url
     risk: triggers a Devin Review for a pull or merge request
   delete_secret:
     endpoint: DELETE /v3/organizations/{{ config.org_id }}/secrets/{{ record.secret_id }}

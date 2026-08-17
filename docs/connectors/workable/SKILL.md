@@ -11,7 +11,6 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
 
 ## Icon
 
-- id: workable
 - asset: icons/workable.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -178,15 +177,13 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
 
 - create_department:
   - endpoint: POST /departments
-  - required fields: name
   - risk: POST /departments mutates Workable data; approval required
 - update_department:
   - endpoint: PUT /departments
-  - required fields: id
   - risk: PUT /departments mutates Workable data; approval required
 - merge_department:
   - endpoint: POST /departments/{{ record.department_id }}/merge
-  - required fields: department_id, target_department_id
+  - required fields: department_id
   - risk: POST /departments/{{ record.department_id }}/merge mutates Workable data; approval required
 - delete_department:
   - endpoint: DELETE /departments/{{ record.department_id }}?force={{ record.force }}
@@ -194,11 +191,9 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: DELETE /departments/{{ record.department_id }}?force={{ record.force }} mutates Workable data; approval required
 - invite_member:
   - endpoint: POST /members/invite
-  - required fields: email
   - risk: POST /members/invite mutates Workable data; approval required
 - update_member:
   - endpoint: PUT /members
-  - required fields: id
   - risk: PUT /members mutates Workable data; approval required
 - deactivate_member:
   - endpoint: DELETE /members/{{ record.member_id }}
@@ -210,7 +205,6 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: POST /members/{{ record.member_id }}/enable mutates Workable data; approval required
 - create_subscription:
   - endpoint: POST /subscriptions
-  - required fields: target, event
   - risk: POST /subscriptions mutates Workable data; approval required
 - delete_subscription:
   - endpoint: DELETE /subscriptions/{{ record.subscription_id }}
@@ -225,11 +219,9 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: PATCH /employees/{{ record.employee_id }} mutates Workable data; approval required
 - create_review_template:
   - endpoint: POST /review-cycles/templates
-  - required fields: name
   - risk: POST /review-cycles/templates mutates Workable data; approval required
 - bulk_create_time_entries:
   - endpoint: POST /time-tracking/time-entries
-  - required fields: time_entries
   - risk: POST /time-tracking/time-entries mutates Workable data; approval required
 - create_time_entry:
   - endpoint: POST /time-tracking/employees/{{ record.employee_id }}/time-entries
@@ -245,23 +237,22 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: DELETE /time-tracking/employees/{{ record.employee_id }}/time-entries/{{ record.uuid }} mutates Workable data; approval required
 - decide_timeoff_approval:
   - endpoint: PATCH /timeoff/approvals/{{ record.approval_key }}
-  - required fields: approval_key, state
+  - required fields: approval_key
   - risk: PATCH /timeoff/approvals/{{ record.approval_key }} mutates Workable data; approval required
 - create_timeoff_request:
   - endpoint: POST /timeoff/requests
-  - required fields: from_date
   - risk: POST /timeoff/requests mutates Workable data; approval required
 - update_candidate_custom_attribute:
   - endpoint: PATCH /candidates/{{ record.candidate_id }}/update_custom_attribute_value
-  - required fields: candidate_id, custom_attribute_id, value
+  - required fields: candidate_id
   - risk: PATCH /candidates/{{ record.candidate_id }}/update_custom_attribute_value mutates Workable data; approval required
 - comment_on_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/comments
-  - required fields: candidate_id, comment
+  - required fields: candidate_id
   - risk: POST /candidates/{{ record.candidate_id }}/comments mutates Workable data; approval required
 - copy_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/copy
-  - required fields: candidate_id, member_id, target_job_shortcode, target_stage
+  - required fields: candidate_id
   - risk: POST /candidates/{{ record.candidate_id }}/copy mutates Workable data; approval required
 - disqualify_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/disqualify
@@ -269,15 +260,15 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: POST /candidates/{{ record.candidate_id }}/disqualify mutates Workable data; approval required
 - create_job_candidate:
   - endpoint: POST /jobs/{{ record.job_shortcode }}/candidates
-  - required fields: job_shortcode, name
+  - required fields: job_shortcode
   - risk: POST /jobs/{{ record.job_shortcode }}/candidates mutates Workable data; approval required
 - move_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/move
-  - required fields: candidate_id, target_stage
+  - required fields: candidate_id
   - risk: POST /candidates/{{ record.candidate_id }}/move mutates Workable data; approval required
 - relocate_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/relocate
-  - required fields: candidate_id, target_job_shortcode
+  - required fields: candidate_id
   - risk: POST /candidates/{{ record.candidate_id }}/relocate mutates Workable data; approval required
 - revert_candidate_disqualification:
   - endpoint: POST /candidates/{{ record.candidate_id }}/revert
@@ -285,15 +276,15 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: POST /candidates/{{ record.candidate_id }}/revert mutates Workable data; approval required
 - update_candidate_tags:
   - endpoint: PUT /candidates/{{ record.candidate_id }}/tags
-  - required fields: candidate_id, tags
+  - required fields: candidate_id
   - risk: PUT /candidates/{{ record.candidate_id }}/tags mutates Workable data; approval required
 - rate_candidate:
   - endpoint: POST /candidates/{{ record.candidate_id }}/ratings
-  - required fields: candidate_id, rating
+  - required fields: candidate_id
   - risk: POST /candidates/{{ record.candidate_id }}/ratings mutates Workable data; approval required
 - update_candidate_rating:
   - endpoint: PUT /candidates/{{ record.candidate_id }}/ratings
-  - required fields: candidate_id, rating
+  - required fields: candidate_id
   - risk: PUT /candidates/{{ record.candidate_id }}/ratings mutates Workable data; approval required
 - update_candidate:
   - endpoint: PATCH /candidates/{{ record.candidate_id }}
@@ -324,7 +315,7 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
   - risk: PATCH /requisitions/{{ record.requisition_code }}/reject mutates Workable data; approval required
 - create_talent_pool_candidate:
   - endpoint: POST /talent_pool/{{ record.stage }}/candidates
-  - required fields: stage, name
+  - required fields: stage
   - risk: POST /talent_pool/{{ record.stage }}/candidates mutates Workable data; approval required
 
 ## Security

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads users, projects, clients, calendar/time events, time entries (hours), tags (labels), and teams from the Timely API. Read-only: every Timely mutation endpoint requires a nested single-key JSON body envelope (e.g. {"client": {...}}) the engine's declarative write dialect cannot express.
 
 ICON
-  id: timely
   asset: icons/timely.svg
   source: upstream_registry
   review_status: upstream_seeded

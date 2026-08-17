@@ -11,7 +11,6 @@ Reads and writes documented Okta Admin Management API resources through the Okta
 
 ## Icon
 
-- id: okta
 - asset: icons/okta.svg
 - source: official
 - review_status: official_verified
@@ -887,7 +886,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_agent_pools_pool_id_updates_settings:
   - endpoint: POST /api/v1/agentPools/{{ record.pool_id }}/updates/settings
-  - required fields: pool_id, agentType
+  - required fields: pool_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_agent_pools_pool_id_updates_update_id:
   - endpoint: POST /api/v1/agentPools/{{ record.pool_id }}/updates/{{ record.update_id }}
@@ -934,11 +933,10 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_apps:
   - endpoint: POST /api/v1/apps
-  - required fields: signOnMode, label
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_apps_app_id:
   - endpoint: PUT /api/v1/apps/{{ record.app_id }}
-  - required fields: app_id, signOnMode, label
+  - required fields: app_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_apps_app_id:
   - endpoint: DELETE /api/v1/apps/{{ record.app_id }}
@@ -946,7 +944,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_apps_app_id_connections_default:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/connections/default
-  - required fields: app_id, profile
+  - required fields: app_id
   - risk: medium: external Okta admin API mutation; approval required
 - execute_api_v1_apps_app_id_connections_default_lifecycle_activate:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/connections/default/lifecycle/activate
@@ -1002,7 +1000,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_apps_app_id_cwo_connections_connection_id:
   - endpoint: PATCH /api/v1/apps/{{ record.app_id }}/cwo/connections/{{ record.connection_id }}
-  - required fields: app_id, connection_id, status
+  - required fields: app_id, connection_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_apps_app_id_cwo_connections_connection_id:
   - endpoint: DELETE /api/v1/apps/{{ record.app_id }}/cwo/connections/{{ record.connection_id }}
@@ -1026,7 +1024,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_apps_app_id_grants:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/grants
-  - required fields: app_id, issuer, scopeId
+  - required fields: app_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_apps_app_id_grants_grant_id:
   - endpoint: DELETE /api/v1/apps/{{ record.app_id }}/grants/{{ record.grant_id }}
@@ -1034,11 +1032,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_apps_app_id_group_push_mappings:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/group-push/mappings
-  - required fields: app_id, sourceGroupId
+  - required fields: app_id
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_apps_app_id_group_push_mappings_mapping_id:
   - endpoint: PATCH /api/v1/apps/{{ record.app_id }}/group-push/mappings/{{ record.mapping_id }}
-  - required fields: app_id, mapping_id, status
+  - required fields: app_id, mapping_id
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_apps_app_id_groups_group_id:
   - endpoint: PUT /api/v1/apps/{{ record.app_id }}/groups/{{ record.group_id }}
@@ -1078,7 +1076,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_apps_app_id_users:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/users
-  - required fields: app_id, id
+  - required fields: app_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_apps_app_id_users_user_id:
   - endpoint: POST /api/v1/apps/{{ record.app_id }}/users/{{ record.user_id }}
@@ -1212,11 +1210,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules:
   - endpoint: POST /api/v1/authorizationServers/{{ record.auth_server_id }}/policies/{{ record.policy_id }}/rules
-  - required fields: auth_server_id, policy_id, name, conditions, type
+  - required fields: auth_server_id, policy_id
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id:
   - endpoint: PUT /api/v1/authorizationServers/{{ record.auth_server_id }}/policies/{{ record.policy_id }}/rules/{{ record.rule_id }}
-  - required fields: auth_server_id, policy_id, rule_id, name, conditions, type
+  - required fields: auth_server_id, policy_id, rule_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id:
   - endpoint: DELETE /api/v1/authorizationServers/{{ record.auth_server_id }}/policies/{{ record.policy_id }}/rules/{{ record.rule_id }}
@@ -1248,11 +1246,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_authorization_servers_auth_server_id_scopes:
   - endpoint: POST /api/v1/authorizationServers/{{ record.auth_server_id }}/scopes
-  - required fields: auth_server_id, name
+  - required fields: auth_server_id
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_authorization_servers_auth_server_id_scopes_scope_id:
   - endpoint: PUT /api/v1/authorizationServers/{{ record.auth_server_id }}/scopes/{{ record.scope_id }}
-  - required fields: auth_server_id, scope_id, name
+  - required fields: auth_server_id, scope_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_authorization_servers_auth_server_id_scopes_scope_id:
   - endpoint: DELETE /api/v1/authorizationServers/{{ record.auth_server_id }}/scopes/{{ record.scope_id }}
@@ -1260,11 +1258,10 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_behaviors:
   - endpoint: POST /api/v1/behaviors
-  - required fields: name, type
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_behaviors_behavior_id:
   - endpoint: PUT /api/v1/behaviors/{{ record.behavior_id }}
-  - required fields: behavior_id, name, type
+  - required fields: behavior_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_behaviors_behavior_id:
   - endpoint: DELETE /api/v1/behaviors/{{ record.behavior_id }}
@@ -1280,15 +1277,13 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_bot_protection_configuration:
   - endpoint: POST /api/v1/bot-protection/configuration
-  - required fields: level, mode
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_brands:
   - endpoint: POST /api/v1/brands
-  - required fields: name
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}
-  - required fields: brand_id, name
+  - required fields: brand_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_brands_brand_id:
   - endpoint: DELETE /api/v1/brands/{{ record.brand_id }}
@@ -1328,11 +1323,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id_pages_sign_out_customized:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}/pages/sign-out/customized
-  - required fields: brand_id, type
+  - required fields: brand_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_brands_brand_id_templates_email_template_name_customizations:
   - endpoint: POST /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/customizations
-  - required fields: brand_id, template_name, language
+  - required fields: brand_id, template_name
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_brands_brand_id_templates_email_template_name_customizations:
   - endpoint: DELETE /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/customizations
@@ -1340,7 +1335,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/customizations/{{ record.customization_id }}
-  - required fields: brand_id, template_name, customization_id, language
+  - required fields: brand_id, template_name, customization_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id:
   - endpoint: DELETE /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/customizations/{{ record.customization_id }}
@@ -1348,7 +1343,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id_templates_email_template_name_settings:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/settings
-  - required fields: brand_id, template_name, recipients
+  - required fields: brand_id, template_name
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_brands_brand_id_templates_email_template_name_test:
   - endpoint: POST /api/v1/brands/{{ record.brand_id }}/templates/email/{{ record.template_name }}/test
@@ -1356,7 +1351,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id_themes_theme_id:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}/themes/{{ record.theme_id }}
-  - required fields: brand_id, theme_id, primaryColorHex, secondaryColorHex, signInPageTouchPointVariant, endUserDashboardTouchPointVariant, errorPageTouchPointVariant, emailTemplateTouchPointVariant
+  - required fields: brand_id, theme_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_brands_brand_id_themes_theme_id_background_image:
   - endpoint: DELETE /api/v1/brands/{{ record.brand_id }}/themes/{{ record.theme_id }}/background-image
@@ -1372,7 +1367,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_brands_brand_id_well_known_uris_path_customized:
   - endpoint: PUT /api/v1/brands/{{ record.brand_id }}/well-known-uris/{{ record.path }}/customized
-  - required fields: brand_id, path, representation
+  - required fields: brand_id, path
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_captchas:
   - endpoint: POST /api/v1/captchas
@@ -1441,19 +1436,18 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_directories_app_instance_id_groups_modify:
   - endpoint: POST /api/v1/directories/{{ record.app_instance_id }}/groups/modify
-  - required fields: app_instance_id, id, parameters
+  - required fields: app_instance_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_directories_app_instance_id_groups_group_id_query:
   - endpoint: POST /api/v1/directories/{{ record.app_instance_id }}/groups/{{ record.group_id }}/query
-  - required fields: app_instance_id, group_id, attributes
+  - required fields: app_instance_id, group_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_domains:
   - endpoint: POST /api/v1/domains
-  - required fields: certificateSourceType, domain
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_domains_domain_id:
   - endpoint: PUT /api/v1/domains/{{ record.domain_id }}
-  - required fields: domain_id, brandId
+  - required fields: domain_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_domains_domain_id:
   - endpoint: DELETE /api/v1/domains/{{ record.domain_id }}
@@ -1461,7 +1455,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_domains_domain_id_certificate:
   - endpoint: PUT /api/v1/domains/{{ record.domain_id }}/certificate
-  - required fields: domain_id, certificate, certificateChain, privateKey, type
+  - required fields: domain_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_domains_domain_id_verify:
   - endpoint: POST /api/v1/domains/{{ record.domain_id }}/verify
@@ -1475,11 +1469,10 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_email_domains:
   - endpoint: POST /api/v1/email-domains
-  - required fields: displayName, userName
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_email_domains_email_domain_id:
   - endpoint: PUT /api/v1/email-domains/{{ record.email_domain_id }}
-  - required fields: email_domain_id, displayName, userName
+  - required fields: email_domain_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_email_domains_email_domain_id:
   - endpoint: DELETE /api/v1/email-domains/{{ record.email_domain_id }}
@@ -1491,11 +1484,10 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_email_servers:
   - endpoint: POST /api/v1/email-servers
-  - required fields: alias, enabled, host, port, username, authType
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_email_servers_email_server_id:
   - endpoint: PATCH /api/v1/email-servers/{{ record.email_server_id }}
-  - required fields: email_server_id, authType
+  - required fields: email_server_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_email_servers_email_server_id:
   - endpoint: DELETE /api/v1/email-servers/{{ record.email_server_id }}
@@ -1503,15 +1495,14 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_email_servers_email_server_id_test:
   - endpoint: POST /api/v1/email-servers/{{ record.email_server_id }}/test
-  - required fields: email_server_id, fromAddress, toAddress
+  - required fields: email_server_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_event_hooks:
   - endpoint: POST /api/v1/eventHooks
-  - required fields: name, events, channel
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_event_hooks_event_hook_id:
   - endpoint: PUT /api/v1/eventHooks/{{ record.event_hook_id }}
-  - required fields: event_hook_id, name, events, channel
+  - required fields: event_hook_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_event_hooks_event_hook_id:
   - endpoint: DELETE /api/v1/eventHooks/{{ record.event_hook_id }}
@@ -1577,7 +1568,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_groups_group_id_roles:
   - endpoint: POST /api/v1/groups/{{ record.group_id }}/roles
-  - required fields: group_id, type
+  - required fields: group_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_groups_group_id_roles_role_assignment_id:
   - endpoint: DELETE /api/v1/groups/{{ record.group_id }}/roles/{{ record.role_assignment_id }}
@@ -1645,7 +1636,6 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_iam_resource_sets:
   - endpoint: POST /api/v1/iam/resource-sets
-  - required fields: description, label, resources
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_iam_resource_sets_resource_set_id_or_label:
   - endpoint: PUT /api/v1/iam/resource-sets/{{ record.resource_set_id_or_label }}
@@ -1673,7 +1663,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_iam_resource_sets_resource_set_id_or_label_resources:
   - endpoint: POST /api/v1/iam/resource-sets/{{ record.resource_set_id_or_label }}/resources
-  - required fields: resource_set_id_or_label, resourceOrnOrUrl, conditions
+  - required fields: resource_set_id_or_label
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_iam_resource_sets_resource_set_id_or_label_resources:
   - endpoint: PATCH /api/v1/iam/resource-sets/{{ record.resource_set_id_or_label }}/resources
@@ -1689,11 +1679,10 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_iam_roles:
   - endpoint: POST /api/v1/iam/roles
-  - required fields: label, description, permissions
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_iam_roles_role_id_or_label:
   - endpoint: PUT /api/v1/iam/roles/{{ record.role_id_or_label }}
-  - required fields: role_id_or_label, label, description
+  - required fields: role_id_or_label
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_iam_roles_role_id_or_label:
   - endpoint: DELETE /api/v1/iam/roles/{{ record.role_id_or_label }}
@@ -1788,7 +1777,6 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_idps_credentials_keys:
   - endpoint: POST /api/v1/idps/credentials/keys
-  - required fields: x5c
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_idps_credentials_keys_kid:
   - endpoint: PUT /api/v1/idps/credentials/keys/{{ record.kid }}
@@ -1859,11 +1847,10 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_log_streams:
   - endpoint: POST /api/v1/logStreams
-  - required fields: created, id, lastUpdated, name, status, type, _links
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_log_streams_log_stream_id:
   - endpoint: PUT /api/v1/logStreams/{{ record.log_stream_id }}
-  - required fields: log_stream_id, name, type
+  - required fields: log_stream_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_log_streams_log_stream_id:
   - endpoint: DELETE /api/v1/logStreams/{{ record.log_stream_id }}
@@ -1879,7 +1866,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_mappings_mapping_id:
   - endpoint: POST /api/v1/mappings/{{ record.mapping_id }}
-  - required fields: mapping_id, properties
+  - required fields: mapping_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_meta_schemas_apps_app_id_default:
   - endpoint: POST /api/v1/meta/schemas/apps/{{ record.app_id }}/default
@@ -1901,7 +1888,6 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_meta_types_user:
   - endpoint: POST /api/v1/meta/types/user
-  - required fields: name, displayName
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_meta_types_user_type_id:
   - endpoint: POST /api/v1/meta/types/user/{{ record.type_id }}
@@ -1909,7 +1895,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_meta_types_user_type_id:
   - endpoint: PUT /api/v1/meta/types/user/{{ record.type_id }}
-  - required fields: type_id, name, displayName, description
+  - required fields: type_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_meta_types_user_type_id:
   - endpoint: DELETE /api/v1/meta/types/user/{{ record.type_id }}
@@ -1959,11 +1945,9 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_org_privacy_aerial_grant:
   - endpoint: POST /api/v1/org/privacy/aerial/grant
-  - required fields: accountId
   - risk: medium: external Okta admin API mutation; approval required
 - execute_api_v1_org_privacy_aerial_revoke:
   - endpoint: POST /api/v1/org/privacy/aerial/revoke
-  - required fields: accountId
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_org_privacy_okta_communication_opt_in:
   - endpoint: POST /api/v1/org/privacy/oktaCommunication/optIn
@@ -1992,15 +1976,13 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_orgs:
   - endpoint: POST /api/v1/orgs
-  - required fields: admin, edition, name, subdomain
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_policies:
   - endpoint: POST /api/v1/policies
-  - required fields: name, type
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_policies_policy_id:
   - endpoint: PUT /api/v1/policies/{{ record.policy_id }}
-  - required fields: policy_id, name, type
+  - required fields: policy_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_policies_policy_id:
   - endpoint: DELETE /api/v1/policies/{{ record.policy_id }}
@@ -2048,11 +2030,10 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_principal_rate_limits:
   - endpoint: POST /api/v1/principal-rate-limits
-  - required fields: principalId, principalType
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_principal_rate_limits_principal_rate_limit_id:
   - endpoint: PUT /api/v1/principal-rate-limits/{{ record.principal_rate_limit_id }}
-  - required fields: principal_rate_limit_id, principalId, principalType
+  - required fields: principal_rate_limit_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_push_providers:
   - endpoint: POST /api/v1/push-providers
@@ -2067,15 +2048,12 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_rate_limit_settings_admin_notifications:
   - endpoint: PUT /api/v1/rate-limit-settings/admin-notifications
-  - required fields: notificationsEnabled
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_rate_limit_settings_per_client:
   - endpoint: PUT /api/v1/rate-limit-settings/per-client
-  - required fields: defaultMode
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_rate_limit_settings_warning_threshold:
   - endpoint: PUT /api/v1/rate-limit-settings/warning-threshold
-  - required fields: warningThreshold
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_realm_assignments:
   - endpoint: POST /api/v1/realm-assignments
@@ -2120,11 +2098,10 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_security_events_providers:
   - endpoint: POST /api/v1/security-events-providers
-  - required fields: name, settings, type
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_security_events_providers_security_event_provider_id:
   - endpoint: PUT /api/v1/security-events-providers/{{ record.security_event_provider_id }}
-  - required fields: security_event_provider_id, name, settings, type
+  - required fields: security_event_provider_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_security_events_providers_security_event_provider_id:
   - endpoint: DELETE /api/v1/security-events-providers/{{ record.security_event_provider_id }}
@@ -2148,22 +2125,18 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_ssf_stream:
   - endpoint: POST /api/v1/ssf/stream
-  - required fields: events_requested, delivery
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_ssf_stream:
   - endpoint: PUT /api/v1/ssf/stream
-  - required fields: events_requested, delivery
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_ssf_stream_2:
   - endpoint: PATCH /api/v1/ssf/stream
-  - required fields: events_requested, delivery
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_ssf_stream:
   - endpoint: DELETE /api/v1/ssf/stream
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_ssf_stream_verification:
   - endpoint: POST /api/v1/ssf/stream/verification
-  - required fields: stream_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_telephony_providers:
   - endpoint: POST /api/v1/telephony-providers
@@ -2209,7 +2182,6 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_threats_configuration:
   - endpoint: POST /api/v1/threats/configuration
-  - required fields: action
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_trusted_origins:
   - endpoint: POST /api/v1/trustedOrigins
@@ -2232,7 +2204,6 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_api_v1_users:
   - endpoint: POST /api/v1/users
-  - required fields: profile
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_users_id:
   - endpoint: POST /api/v1/users/{{ record.id }}
@@ -2364,11 +2335,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - update_api_v1_users_user_id_risk:
   - endpoint: PUT /api/v1/users/{{ record.user_id }}/risk
-  - required fields: user_id, riskLevel
+  - required fields: user_id
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_users_user_id_roles:
   - endpoint: POST /api/v1/users/{{ record.user_id }}/roles
-  - required fields: user_id, type
+  - required fields: user_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_users_user_id_roles_role_assignment_id:
   - endpoint: DELETE /api/v1/users/{{ record.user_id }}/roles/{{ record.role_assignment_id }}
@@ -2416,11 +2387,10 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_api_v1_zones:
   - endpoint: POST /api/v1/zones
-  - required fields: name, type
   - risk: medium: external Okta admin API mutation; approval required
 - update_api_v1_zones_zone_id:
   - endpoint: PUT /api/v1/zones/{{ record.zone_id }}
-  - required fields: zone_id, name, type
+  - required fields: zone_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_api_v1_zones_zone_id:
   - endpoint: DELETE /api/v1/zones/{{ record.zone_id }}
@@ -2442,7 +2412,6 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_integrations_api_v1_api_services:
   - endpoint: POST /integrations/api/v1/api-services
-  - required fields: type, grantedScopes
   - risk: medium: external Okta admin API mutation; approval required
 - delete_integrations_api_v1_api_services_api_service_id:
   - endpoint: DELETE /integrations/api/v1/api-services/{{ record.api_service_id }}
@@ -2466,7 +2435,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_oauth2_v1_clients_client_id_roles:
   - endpoint: POST /oauth2/v1/clients/{{ record.client_id }}/roles
-  - required fields: client_id, type
+  - required fields: client_id
   - risk: medium: external Okta admin API mutation; approval required
 - delete_oauth2_v1_clients_client_id_roles_role_assignment_id:
   - endpoint: DELETE /oauth2/v1/clients/{{ record.client_id }}/roles/{{ record.role_assignment_id }}
@@ -2504,7 +2473,6 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: medium: external Okta admin API mutation; approval required
 - create_privileged_access_api_v1_okta_service_accounts:
   - endpoint: POST /privileged-access/api/v1/okta-service-accounts
-  - required fields: name, oktaUserId
   - risk: medium: external Okta admin API mutation; approval required
 - update_privileged_access_api_v1_okta_service_accounts_id:
   - endpoint: PATCH /privileged-access/api/v1/okta-service-accounts/{{ record.id }}
@@ -2516,7 +2484,6 @@ Reads and writes documented Okta Admin Management API resources through the Okta
   - risk: high: external Okta admin API mutation; approval required
 - create_privileged_access_api_v1_service_accounts:
   - endpoint: POST /privileged-access/api/v1/service-accounts
-  - required fields: name, containerOrn, username, password
   - risk: medium: external Okta admin API mutation; approval required
 - update_privileged_access_api_v1_service_accounts_id:
   - endpoint: PATCH /privileged-access/api/v1/service-accounts/{{ record.id }}

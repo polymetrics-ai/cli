@@ -11,7 +11,6 @@ Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and contr
 
 ## Icon
 
-- id: coda
 - asset: icons/coda.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -66,12 +65,13 @@ Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and contr
 
 - upsert_rows:
   - endpoint: POST /docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows
-  - required fields: table_id, rows
-  - optional fields: keyColumns
+  - required fields: table_id
+  - optional fields: rows, keyColumns
   - risk: inserts new rows, or upserts existing ones when keyColumns is set, into a Coda table; queued for async processing (202) and generally applied within seconds
 - update_row:
   - endpoint: PUT /docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows/{{ record.row_id }}
-  - required fields: table_id, row_id, row
+  - required fields: table_id, row_id
+  - optional fields: row
   - risk: overwrites cell values on an existing row; queued for async processing (202) and generally applied within seconds
 - delete_row:
   - endpoint: DELETE /docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows/{{ record.row_id }}
@@ -79,7 +79,8 @@ Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and contr
   - risk: permanently removes a row from a Coda table; irreversible, queued for async processing (202)
 - delete_rows:
   - endpoint: DELETE /docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows
-  - required fields: table_id, rowIds
+  - required fields: table_id
+  - optional fields: rowIds
   - risk: permanently removes multiple rows from a Coda table in one request; irreversible, queued for async processing (202)
 - push_button:
   - endpoint: POST /docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows/{{ record.row_id }}/buttons/{{ record.column_id }}

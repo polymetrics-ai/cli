@@ -13,7 +13,6 @@ DESCRIPTION
   Reads SonarCloud issues, components, projects, hotspots, rules, metrics, languages, quality gates, measures, webhooks, and project analyses through the Web API; writes webhook lifecycle, issue comment/assign/tag/transition, and project-tag mutations.
 
 ICON
-  id: sonarcloud
   asset: icons/sonarcloud.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -81,35 +80,27 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_webhook:
     endpoint: POST /api/webhooks/create
-    required fields: name, organization, url
     risk: external mutation; creates a project or organization webhook that will receive analysis-completion callbacks; approval required
   update_webhook:
     endpoint: POST /api/webhooks/update
-    required fields: webhook, name, url
     risk: external mutation; changes an existing webhook's callback URL/secret; approval required
   delete_webhook:
     endpoint: POST /api/webhooks/delete
-    required fields: webhook
     risk: external mutation; permanently removes a webhook; approval required
   add_issue_comment:
     endpoint: POST /api/issues/add_comment
-    required fields: issue, text
     risk: external mutation; adds a permanent comment to an issue; approval required
   assign_issue:
     endpoint: POST /api/issues/assign
-    required fields: issue
     risk: external mutation; assigns or unassigns (empty assignee) an issue; approval required
   set_issue_tags:
     endpoint: POST /api/issues/set_tags
-    required fields: issue
     risk: external mutation; replaces an issue's full tag set (empty tags clears them); approval required
   do_issue_transition:
     endpoint: POST /api/issues/do_transition
-    required fields: issue, transition
     risk: external mutation; moves an issue through its workflow (e.g. resolve, wontfix, falsepositive); some transitions require elevated project permissions on the live API; approval required
   set_project_tags:
     endpoint: POST /api/project_tags/set
-    required fields: project, tags
     risk: external mutation; replaces a project's full tag set; approval required
 
 SECURITY

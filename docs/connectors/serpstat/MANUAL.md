@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Serpstat SEO domain keyword, competitor, and top-URL data through the Serpstat JSON-RPC-over-HTTP API. Read-only.
 
 ICON
-  id: serpstat
   asset: icons/serpstat.svg
   source: upstream_registry
   review_status: upstream_seeded

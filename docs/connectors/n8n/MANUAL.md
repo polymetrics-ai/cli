@@ -13,7 +13,6 @@ DESCRIPTION
   Reads n8n workflows, executions, tags, users, variables, projects, data tables, and credential metadata; writes supported n8n public REST API mutations.
 
 ICON
-  id: n8n
   asset: icons/n8n.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -144,11 +143,10 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_workflow:
     endpoint: POST /workflows
-    required fields: name, nodes, connections, settings
     risk: external mutation; approval required
   update_workflow:
     endpoint: PUT /workflows/{{ record.workflow_id }}
-    required fields: workflow_id, name, nodes, connections, settings
+    required fields: workflow_id
     risk: external mutation; approval required
   publish_workflow:
     endpoint: POST /workflows/{{ record.workflow_id }}/activate
@@ -168,7 +166,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   transfer_workflow:
     endpoint: PUT /workflows/{{ record.workflow_id }}/transfer
-    required fields: workflow_id, destinationProjectId
+    required fields: workflow_id
     risk: external mutation; approval required
   retry_execution:
     endpoint: POST /executions/{{ record.execution_id }}/retry
@@ -180,67 +178,62 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   stop_executions:
     endpoint: POST /executions/stop
-    required fields: status
     risk: external mutation; approval required
   create_tag:
     endpoint: POST /tags
-    required fields: name
     risk: external mutation; approval required
   update_tag:
     endpoint: PUT /tags/{{ record.tag_id }}
-    required fields: tag_id, name
+    required fields: tag_id
     risk: external mutation; approval required
   create_variable:
     endpoint: POST /variables
-    required fields: key, value
     risk: external mutation; approval required
   update_variable:
     endpoint: PUT /variables/{{ record.variable_id }}
-    required fields: variable_id, key, value
+    required fields: variable_id
     risk: external mutation; approval required
   create_project:
     endpoint: POST /projects
-    required fields: name
     risk: external mutation; approval required
   update_project:
     endpoint: PUT /projects/{{ record.project_id }}
-    required fields: project_id, name
+    required fields: project_id
     risk: external mutation; approval required
   add_project_users:
     endpoint: POST /projects/{{ record.project_id }}/users
-    required fields: project_id, relations
+    required fields: project_id
     risk: external mutation; approval required
   change_project_user_role:
     endpoint: PATCH /projects/{{ record.project_id }}/users/{{ record.project_user_id }}
-    required fields: project_id, project_user_id, role
+    required fields: project_id, project_user_id
     risk: external mutation; approval required
   create_data_table:
     endpoint: POST /data-tables
-    required fields: name, columns
     risk: external mutation; approval required
   update_data_table:
     endpoint: PATCH /data-tables/{{ record.data_table_id }}
-    required fields: data_table_id, name
+    required fields: data_table_id
     risk: external mutation; approval required
   insert_data_table_rows:
     endpoint: POST /data-tables/{{ record.data_table_id }}/rows
-    required fields: data_table_id, data
+    required fields: data_table_id
     risk: external mutation; approval required
   update_data_table_rows:
     endpoint: PATCH /data-tables/{{ record.data_table_id }}/rows/update
-    required fields: data_table_id, filter, data
+    required fields: data_table_id
     risk: external mutation; approval required
   upsert_data_table_row:
     endpoint: POST /data-tables/{{ record.data_table_id }}/rows/upsert
-    required fields: data_table_id, filter, data
+    required fields: data_table_id
     risk: external mutation; approval required
   add_data_table_column:
     endpoint: POST /data-tables/{{ record.data_table_id }}/columns
-    required fields: data_table_id, name, type
+    required fields: data_table_id
     risk: external mutation; approval required
   update_data_table_column:
     endpoint: PATCH /data-tables/{{ record.data_table_id }}/columns/{{ record.data_table_column_id }}
-    required fields: data_table_id, data_table_column_id, name
+    required fields: data_table_id, data_table_column_id
     risk: external mutation; approval required
   test_credential:
     endpoint: POST /credentials/{{ record.credential_id }}/test
@@ -248,7 +241,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   transfer_credential:
     endpoint: PUT /credentials/{{ record.credential_id }}/transfer
-    required fields: credential_id, destinationProjectId
+    required fields: credential_id
     risk: external mutation; approval required
   pull_source_control:
     endpoint: POST /source-control/pull

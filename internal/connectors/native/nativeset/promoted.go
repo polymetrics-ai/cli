@@ -58,7 +58,7 @@ func promotedFactories() []Factory {
 	return []Factory{
 		{Name: "alpha-vantage", New: func() connectors.Connector { return withBundleDefinition("alpha-vantage", alphavantage.New()) }},
 		{Name: "apify-dataset", New: func() connectors.Connector { return withBundleDefinition("apify-dataset", apifydataset.New()) }},
-		{Name: "ashby", New: func() connectors.Connector { return ashby.New() }},
+		{Name: "ashby", New: func() connectors.Connector { return withBundleDefinition("ashby", ashby.New()) }},
 		{Name: "aws-cloudtrail", New: func() connectors.Connector { return withBundleDefinition("aws-cloudtrail", awscloudtrail.New()) }},
 		{Name: "babelforce", New: func() connectors.Connector { return withBundleDefinition("babelforce", babelforce.New()) }},
 		{Name: "basecamp", New: func() connectors.Connector { return withBundleDefinition("basecamp", basecamp.New()) }},

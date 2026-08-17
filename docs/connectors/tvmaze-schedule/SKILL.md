@@ -11,7 +11,6 @@ Reads public TVmaze broadcast and web schedules without credentials.
 
 ## Icon
 
-- id: tvmazeschedule
 - asset: icons/tvmazeschedule.svg
 - source: upstream_registry
 - review_status: upstream_seeded

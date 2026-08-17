@@ -11,7 +11,6 @@ Reads Intruder issues, issue occurrences, scans, and targets through the Intrude
 
 ## Icon
 
-- id: intruder
 - asset: icons/intruder.svg
 - source: official
 - review_status: official_verified

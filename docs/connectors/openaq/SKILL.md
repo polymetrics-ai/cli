@@ -11,7 +11,6 @@ Reads OpenAQ air quality reference data (countries, parameters, locations, instr
 
 ## Icon
 
-- id: openaq
 - asset: icons/openaq.svg
 - source: official
 - review_status: official_verified

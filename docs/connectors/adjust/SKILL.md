@@ -11,7 +11,6 @@ Reads Adjust report-service report rows for configured dimensions and metrics. R
 
 ## Icon
 
-- id: adjust
 - asset: icons/adjust.svg
 - source: official
 - review_status: official_verified

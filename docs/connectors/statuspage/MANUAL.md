@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Statuspage pages, components, incidents, subscribers, component groups, metrics, metrics providers, page access groups/users, and incident templates through the Statuspage API.
 
 ICON
-  id: statuspage
   asset: icons/statuspage.svg
   source: upstream_registry
   review_status: upstream_seeded

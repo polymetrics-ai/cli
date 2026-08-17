@@ -13,17 +13,9 @@ DESCRIPTION
   Reads TestRail projects, suites, cases, milestones, plans, runs, users, and reference data (case types/fields, priorities, statuses, result fields, templates), and writes approved test-management mutations (projects, milestones, suites, cases, plans, runs, results) through the TestRail v2 API.
 
 ICON
-  id: simple-icons-testrail
-  asset: icons/simple-icons/testrail.svg
-  title: TestRail
-  simple_icon_slug: testrail
-  simple_icon_hex: 65C179
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=TestRail
-  match: exact-name-or-slug
-  matched_by: testrail
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -85,19 +77,18 @@ SYNC MODES
 REVERSE ETL ACTIONS
   add_project:
     endpoint: POST index.php?/api/v2/add_project
-    required fields: name
     risk: creates a new top-level TestRail project; low-risk external mutation, no approval required
   add_milestone:
     endpoint: POST index.php?/api/v2/add_milestone/{{ record.project_id }}
-    required fields: project_id, name
+    required fields: project_id
     risk: creates a new milestone under the target project; low-risk external mutation, no approval required
   add_suite:
     endpoint: POST index.php?/api/v2/add_suite/{{ record.project_id }}
-    required fields: project_id, name
+    required fields: project_id
     risk: creates a new test suite under the target project; low-risk external mutation, no approval required
   add_case:
     endpoint: POST index.php?/api/v2/add_case/{{ record.section_id }}
-    required fields: section_id, title
+    required fields: section_id
     risk: creates a new test case in the target section; low-risk external mutation, no approval required
   update_case:
     endpoint: POST index.php?/api/v2/update_case/{{ record.id }}
@@ -105,11 +96,11 @@ REVERSE ETL ACTIONS
     risk: mutates an existing test case's title, type, priority, milestone, estimate, or references
   add_plan:
     endpoint: POST index.php?/api/v2/add_plan/{{ record.project_id }}
-    required fields: project_id, name
+    required fields: project_id
     risk: creates a new test plan under the target project; low-risk external mutation, no approval required
   add_run:
     endpoint: POST index.php?/api/v2/add_run/{{ record.project_id }}
-    required fields: project_id, name
+    required fields: project_id
     risk: creates a new test run under the target project, selecting test cases into it for execution; low-risk external mutation, no approval required
   close_run:
     endpoint: POST index.php?/api/v2/close_run/{{ record.id }}

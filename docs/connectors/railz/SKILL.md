@@ -11,7 +11,6 @@ Reads Railz businesses, connections, customers, invoices, and bills through the 
 
 ## Icon
 
-- id: railz
 - asset: icons/railz.svg
 - source: upstream_registry
 - review_status: upstream_seeded

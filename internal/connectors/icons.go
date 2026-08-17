@@ -3,13 +3,11 @@ package connectors
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"path"
 	"path/filepath"
 	"regexp"
-	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -21,48 +19,30 @@ const (
 	IconSourceOfficial    = "official"
 	IconSourceUpstream    = "upstream_registry"
 	IconSourcePolymetrics = "polymetrics"
-	IconSourceSimpleIcons = "simple-icons"
 
-	IconReviewUpstreamSeeded          = "upstream_seeded"
-	IconReviewOfficial                = "official_verified"
-	IconReviewManualOverride          = "manual_override"
-	IconReviewPolymetrics             = "polymetrics"
-	IconReviewSimpleIconsCC0Trademark = "cc0_with_trademark_caveat"
+	IconReviewUpstreamSeeded = "upstream_seeded"
+	IconReviewOfficial       = "official_verified"
+	IconReviewManualOverride = "manual_override"
+	IconReviewPolymetrics    = "polymetrics"
 )
 
 // ConnectorIcon identifies a local SVG asset and how it was sourced. The path is
 // relative to the connector docs root, e.g. icons/github.svg.
 type ConnectorIcon struct {
-	ID             string `json:"id"`
-	Path           string `json:"path"`
-	Title          string `json:"title,omitempty"`
-	SimpleIconSlug string `json:"simple_icon_slug,omitempty"`
-	SimpleIconHex  string `json:"simple_icon_hex,omitempty"`
-	Source         string `json:"source"`
-	License        string `json:"license,omitempty"`
-	Attribution    string `json:"attribution,omitempty"`
-	ReviewStatus   string `json:"review_status"`
-	ReviewURL      string `json:"review_url,omitempty"`
-	Match          string `json:"match,omitempty"`
-	MatchedBy      string `json:"matched_by,omitempty"`
+	ID           string `json:"id"`
+	Path         string `json:"path"`
+	Source       string `json:"source"`
+	ReviewStatus string `json:"review_status"`
+	ReviewURL    string `json:"review_url,omitempty"`
 }
 
 type connectorIconEntry struct {
-	Connector           string `json:"connector"`
-	ID                  string `json:"id"`
-	Path                string `json:"path"`
-	Source              string `json:"source"`
-	ReviewStatus        string `json:"review_status"`
-	ReviewURL           string `json:"review_url,omitempty"`
-	Implemented         bool   `json:"implemented"`
-	FallbackDisposition string `json:"fallback_disposition,omitempty"`
-	Title               string `json:"title,omitempty"`
-	SimpleIconSlug      string `json:"simple_icon_slug,omitempty"`
-	SimpleIconHex       string `json:"simple_icon_hex,omitempty"`
-	License             string `json:"license,omitempty"`
-	Attribution         string `json:"attribution,omitempty"`
-	Match               string `json:"match,omitempty"`
-	MatchedBy           string `json:"matched_by,omitempty"`
+	Connector    string `json:"connector"`
+	ID           string `json:"id"`
+	Path         string `json:"path"`
+	Source       string `json:"source"`
+	ReviewStatus string `json:"review_status"`
+	ReviewURL    string `json:"review_url,omitempty"`
 }
 
 var unsafeSVGPatterns = []struct {
@@ -78,17 +58,10 @@ var unsafeSVGPatterns = []struct {
 //go:embed icon_data.json
 var connectorIconData []byte
 
-// ErrConnectorIconPathRuntimeBuiltin reports a connector icon path that is
-// declared only by runtime builtin rows carrying implemented: false. Those rows
-// are retained dispositions; they never authorize connector definition
-// ownership, but the path is declared rather than orphaned.
-var ErrConnectorIconPathRuntimeBuiltin = errors.New("connector icon path is a runtime builtin disposition")
-
 var connectorIcons = struct {
-	once    sync.Once
-	by      map[string]ConnectorIcon
-	entries []connectorIconEntry
-	err     error
+	once sync.Once
+	by   map[string]ConnectorIcon
+	err  error
 }{}
 
 func ConnectorIconFor(name string) (ConnectorIcon, bool) {
@@ -96,24 +69,47 @@ func ConnectorIconFor(name string) (ConnectorIcon, bool) {
 	if err != nil {
 		return ConnectorIcon{}, false
 	}
-	icon, ok := icons[strings.TrimSpace(name)]
-	return icon, ok
+	for _, candidate := range []string{name, "source-" + name, "destination-" + name} {
+		icon, ok := icons[candidate]
+		if ok {
+			return icon, true
+		}
+	}
+	return ConnectorIcon{}, false
 }
 
 func ConnectorIconEntries() []connectorIconEntry {
-	entries, err := connectorIconRegistryEntries()
-	if err != nil {
+	var entries []connectorIconEntry
+	if err := json.Unmarshal(connectorIconData, &entries); err != nil {
 		return nil
 	}
-	return slices.Clone(entries)
+	sort.SliceStable(entries, func(i, j int) bool { return entries[i].Connector < entries[j].Connector })
+	return entries
 }
 
 func MetadataWithIcon(meta Metadata) Metadata {
-	meta.Icon = nil
+	if meta.Icon != nil {
+		icon := *meta.Icon
+		meta.Icon = &icon
+		return meta
+	}
 	if icon, ok := ConnectorIconFor(meta.Name); ok {
+		meta.Icon = &icon
+	} else {
+		icon := fallbackConnectorIcon(meta.Name)
 		meta.Icon = &icon
 	}
 	return meta
+}
+
+func fallbackConnectorIcon(name string) ConnectorIcon {
+	return ConnectorIcon{
+		ID:           "pm-" + name,
+		Path:         "icons/pm-sample.svg",
+		Source:       IconSourcePolymetrics,
+		ReviewStatus: IconReviewPolymetrics,
+		ReviewURL:    "https://github.com/polymetrics-ai/cli",
+	}
 }
 
 func manifestWithIcon(manifest Manifest) Manifest {
@@ -121,135 +117,25 @@ func manifestWithIcon(manifest Manifest) Manifest {
 	return manifest
 }
 
-func loadConnectorIconRegistry() ([]connectorIconEntry, map[string]ConnectorIcon, error) {
+func connectorIconRegistry() (map[string]ConnectorIcon, error) {
 	connectorIcons.once.Do(func() {
-		entries, err := decodeConnectorIconRegistry()
-		if err != nil {
-			connectorIcons.err = err
+		var entries []connectorIconEntry
+		if err := json.Unmarshal(connectorIconData, &entries); err != nil {
+			connectorIcons.err = fmt.Errorf("decode connector icon registry: %w", err)
 			return
 		}
 		icons := make(map[string]ConnectorIcon, len(entries))
 		for _, entry := range entries {
-			icons[entry.Connector] = connectorIconProjection(entry)
+			connector := strings.TrimSpace(entry.Connector)
+			if connector == "" {
+				connectorIcons.err = fmt.Errorf("connector icon registry entry missing connector")
+				return
+			}
+			icons[connector] = ConnectorIcon{ID: entry.ID, Path: entry.Path, Source: entry.Source, ReviewStatus: entry.ReviewStatus, ReviewURL: entry.ReviewURL}
 		}
-		connectorIcons.entries = entries
 		connectorIcons.by = icons
 	})
-	return connectorIcons.entries, connectorIcons.by, connectorIcons.err
-}
-
-func connectorIconRegistry() (map[string]ConnectorIcon, error) {
-	_, icons, err := loadConnectorIconRegistry()
-	return icons, err
-}
-
-func connectorIconRegistryEntries() ([]connectorIconEntry, error) {
-	entries, _, err := loadConnectorIconRegistry()
-	return entries, err
-}
-
-func decodeConnectorIconRegistry() ([]connectorIconEntry, error) {
-	var entries []connectorIconEntry
-	if err := json.Unmarshal(connectorIconData, &entries); err != nil {
-		return nil, fmt.Errorf("decode connector icon registry: %w", err)
-	}
-	seen := make(map[string]bool, len(entries))
-	for i := range entries {
-		entry := &entries[i]
-		entry.Connector = strings.TrimSpace(entry.Connector)
-		entry.ID = strings.TrimSpace(entry.ID)
-		entry.Path = strings.TrimSpace(entry.Path)
-		entry.Source = strings.TrimSpace(entry.Source)
-		entry.ReviewStatus = strings.TrimSpace(entry.ReviewStatus)
-		entry.ReviewURL = strings.TrimSpace(entry.ReviewURL)
-		entry.FallbackDisposition = strings.TrimSpace(entry.FallbackDisposition)
-		entry.Title = strings.TrimSpace(entry.Title)
-		entry.SimpleIconSlug = strings.TrimSpace(entry.SimpleIconSlug)
-		entry.SimpleIconHex = strings.TrimSpace(entry.SimpleIconHex)
-		entry.License = strings.TrimSpace(entry.License)
-		entry.Attribution = strings.TrimSpace(entry.Attribution)
-		entry.Match = strings.TrimSpace(entry.Match)
-		entry.MatchedBy = strings.TrimSpace(entry.MatchedBy)
-		if entry.Connector == "" {
-			return nil, fmt.Errorf("connector icon registry entry missing connector")
-		}
-		if hasLegacyIconConnectorPrefix(entry.Connector) {
-			return nil, fmt.Errorf("connector icon registry entry %q must use a bare connector identifier", entry.Connector)
-		}
-		if seen[entry.Connector] {
-			return nil, fmt.Errorf("duplicate connector icon registry entry %q", entry.Connector)
-		}
-		seen[entry.Connector] = true
-		if entry.ID == "" || entry.Path == "" || entry.Source == "" || entry.ReviewStatus == "" {
-			return nil, fmt.Errorf("connector icon registry entry %q has incomplete icon metadata", entry.Connector)
-		}
-		if !validIconReviewStatus(entry.ReviewStatus) {
-			return nil, fmt.Errorf("connector icon registry entry %q has unsupported review_status %q", entry.Connector, entry.ReviewStatus)
-		}
-		if err := validateConnectorIconPath(entry.Path); err != nil {
-			return nil, fmt.Errorf("connector icon registry entry %q: %w", entry.Connector, err)
-		}
-	}
-	sort.SliceStable(entries, func(i, j int) bool { return entries[i].Connector < entries[j].Connector })
-	return entries, nil
-}
-
-func connectorIconProjection(entry connectorIconEntry) ConnectorIcon {
-	return ConnectorIcon{
-		ID:             entry.ID,
-		Path:           entry.Path,
-		Title:          entry.Title,
-		SimpleIconSlug: entry.SimpleIconSlug,
-		SimpleIconHex:  entry.SimpleIconHex,
-		Source:         entry.Source,
-		License:        entry.License,
-		Attribution:    entry.Attribution,
-		ReviewStatus:   entry.ReviewStatus,
-		ReviewURL:      entry.ReviewURL,
-		Match:          entry.Match,
-		MatchedBy:      entry.MatchedBy,
-	}
-}
-
-func (r *Registry) ValidateIconCoverage() error {
-	icons, err := connectorIconRegistry()
-	if err != nil {
-		return err
-	}
-	names := make([]string, 0, len(r.connectors))
-	for name := range r.connectors {
-		names = append(names, name)
-	}
-	sort.Strings(names)
-	for _, name := range names {
-		if name == "" || name != strings.TrimSpace(name) || hasLegacyIconConnectorPrefix(name) {
-			return fmt.Errorf("connector registry name %q must be a bare connector identifier", name)
-		}
-		metadataName := strings.TrimSpace(r.connectors[name].Metadata().Name)
-		if metadataName != name {
-			return fmt.Errorf("connector %q metadata name %q must match registry name", name, metadataName)
-		}
-		if _, ok := icons[name]; !ok {
-			return fmt.Errorf("missing explicit icon registry entry for connector %q", name)
-		}
-	}
-	return nil
-}
-
-// MustValidateIconCoverage enforces canonical icon coverage while constructing a
-// process registry. Coverage drift means the embedded registry no longer
-// describes the compiled connector set, so it aborts with the remediation
-// instead of serving connectors with missing icon identity. Layered
-// constructors may each enforce it: a registry that has not been mutated since
-// its last successful validation is already covered, so repeat calls are free.
-func (r *Registry) MustValidateIconCoverage() {
-	if r.iconCoverageValidated {
-		return
-	}
-	if err := r.ValidateIconCoverage(); err != nil {
-		panic("validate connector icon coverage: " + err.Error() + "; regenerate internal/connectors/icon_data.json with `make icons-generate`")
-	}
-	r.iconCoverageValidated = true
+	return connectorIcons.by, connectorIcons.err
 }
 
 func ValidateConnectorIcons(connectorsDir string, defs []Definition, metas []Metadata) error {
@@ -279,10 +165,13 @@ func ValidateConnectorIcon(connectorsDir, connector string, icon ConnectorIcon) 
 	if !validIconReviewStatus(icon.ReviewStatus) {
 		return fmt.Errorf("connector icon %s: unsupported review_status %q", connector, icon.ReviewStatus)
 	}
-	if err := validateConnectorIconPath(icon.Path); err != nil {
-		return fmt.Errorf("connector icon %s: %w", connector, err)
-	}
 	clean := path.Clean(icon.Path)
+	if clean != icon.Path || strings.HasPrefix(clean, "../") || strings.HasPrefix(clean, "/") || !strings.HasPrefix(clean, "icons/") {
+		return fmt.Errorf("connector icon %s: invalid path %q: must stay under icons/", connector, icon.Path)
+	}
+	if path.Ext(clean) != ".svg" {
+		return fmt.Errorf("connector icon %s: invalid path %q: icon assets must be .svg", connector, icon.Path)
+	}
 	assetPath := filepath.Join(connectorsDir, filepath.FromSlash(clean))
 	data, err := os.ReadFile(assetPath)
 	if err != nil {
@@ -319,91 +208,9 @@ func ValidateConnectorIconSVGContent(connector string, data []byte) error {
 
 func validIconReviewStatus(status string) bool {
 	switch status {
-	case IconReviewUpstreamSeeded, IconReviewOfficial, IconReviewManualOverride, IconReviewPolymetrics, IconReviewSimpleIconsCC0Trademark:
+	case IconReviewUpstreamSeeded, IconReviewOfficial, IconReviewManualOverride, IconReviewPolymetrics:
 		return true
 	default:
 		return false
 	}
-}
-
-func validateConnectorIconPath(iconPath string) error {
-	clean := path.Clean(iconPath)
-	if clean != iconPath || strings.HasPrefix(clean, "../") || strings.HasPrefix(clean, "/") || !strings.HasPrefix(clean, "icons/") {
-		return fmt.Errorf("invalid path %q: must stay under icons/", iconPath)
-	}
-	if path.Ext(clean) != ".svg" {
-		return fmt.Errorf("invalid path %q: icon assets must be .svg", iconPath)
-	}
-	return nil
-}
-
-func hasLegacyIconConnectorPrefix(connector string) bool {
-	return strings.HasPrefix(connector, "source-") || strings.HasPrefix(connector, "destination-")
-}
-
-func canonicalIconPathForOwnedFile(rel string) (string, bool) {
-	clean := strings.Trim(strings.TrimPrefix(filepath.ToSlash(rel), "./"), "/")
-	for _, prefix := range []string{"docs/connectors/", "website/public/connectors/"} {
-		if strings.HasPrefix(clean, prefix) {
-			iconPath := strings.TrimPrefix(clean, prefix)
-			if strings.HasPrefix(iconPath, "icons/") && validateConnectorIconPath(iconPath) == nil {
-				return iconPath, true
-			}
-		}
-	}
-	return "", false
-}
-
-func ConnectorIconOwnerForPath(rel string) (string, error) {
-	iconPath, ok := canonicalIconPathForOwnedFile(rel)
-	if !ok {
-		return "", fmt.Errorf("unsupported connector icon path %q: must be under docs/connectors/icons/ or website/public/connectors/icons/", rel)
-	}
-	entries, err := connectorIconRegistryEntries()
-	if err != nil {
-		return "", err
-	}
-	var owners []string
-	var builtins []string
-	for _, entry := range entries {
-		if entry.Path != iconPath {
-			continue
-		}
-		if !entry.Implemented {
-			builtins = append(builtins, entry.Connector)
-			continue
-		}
-		owners = append(owners, entry.Connector)
-	}
-	sort.Strings(owners)
-	sort.Strings(builtins)
-	switch len(owners) {
-	case 0:
-		if len(builtins) > 0 {
-			return "", fmt.Errorf("%w: %q is declared by %s and does not authorize connector ownership", ErrConnectorIconPathRuntimeBuiltin, rel, strings.Join(builtins, ", "))
-		}
-		return "", fmt.Errorf("undeclared connector icon path %q", rel)
-	case 1:
-		return owners[0], nil
-	default:
-		return "", fmt.Errorf("ambiguous connector icon path %q is declared by %s", rel, strings.Join(owners, ", "))
-	}
-}
-
-func ValidateConnectorIconOwnershipPaths(paths []string) (map[string]string, error) {
-	owners := make(map[string]string, len(paths))
-	seen := map[string]bool{}
-	for _, rel := range paths {
-		clean := strings.Trim(strings.TrimPrefix(filepath.ToSlash(rel), "./"), "/")
-		if seen[clean] {
-			return nil, fmt.Errorf("duplicate connector icon path %q", rel)
-		}
-		seen[clean] = true
-		owner, err := ConnectorIconOwnerForPath(clean)
-		if err != nil {
-			return nil, err
-		}
-		owners[clean] = owner
-	}
-	return owners, nil
 }

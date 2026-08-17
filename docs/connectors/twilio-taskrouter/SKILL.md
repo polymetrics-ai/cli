@@ -11,7 +11,6 @@ Reads Twilio TaskRouter workers, tasks, activities, task queues, and workflows f
 
 ## Icon
 
-- id: twilio
 - asset: icons/twilio.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -11,11 +11,9 @@ Reads Cin7 Core (DEAR Inventory) products, customers, suppliers, sales, purchase
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -93,35 +91,27 @@ Reads Cin7 Core (DEAR Inventory) products, customers, suppliers, sales, purchase
 
 - create_product:
   - endpoint: POST /product
-  - required fields: SKU, Name, Category, CostingMethod, UOM, Status
   - risk: external mutation; creates a live Cin7 Core product-catalog entry; approval required
 - update_product:
   - endpoint: PUT /product
-  - required fields: ID
   - risk: external mutation; overwrites live Cin7 Core product-catalog fields; approval required
 - create_customer:
   - endpoint: POST /customer
-  - required fields: Name, Currency, PaymentTerm, AccountReceivable, RevenueAccount, TaxRule
   - risk: external mutation; creates a live Cin7 Core customer record used for future sales; approval required
 - update_customer:
   - endpoint: PUT /customer
-  - required fields: ID
   - risk: external mutation; overwrites live Cin7 Core customer fields (billing terms, tax rule, credit settings); approval required
 - create_supplier:
   - endpoint: POST /supplier
-  - required fields: Name, Currency, PaymentTerm, AccountPayable, TaxRule
   - risk: external mutation; creates a live Cin7 Core supplier record used for future purchases; approval required
 - update_supplier:
   - endpoint: PUT /supplier
-  - required fields: ID
   - risk: external mutation; overwrites live Cin7 Core supplier fields (billing terms, tax rule); approval required
 - create_product_category:
   - endpoint: POST /ref/category
-  - required fields: Name
   - risk: external mutation; creates a live Cin7 Core product category, immediately selectable on any product; approval required
 - update_product_category:
   - endpoint: PUT /ref/category
-  - required fields: ID, Name
   - risk: external mutation; renames a live Cin7 Core product category referenced by existing products; approval required
 - delete_product_category:
   - endpoint: DELETE /ref/category?ID={{ record.ID }}
@@ -129,19 +119,15 @@ Reads Cin7 Core (DEAR Inventory) products, customers, suppliers, sales, purchase
   - risk: external mutation; irreversibly deletes a live Cin7 Core product category; approval required
 - create_brand:
   - endpoint: POST /ref/brand
-  - required fields: Name
   - risk: external mutation; creates a live Cin7 Core product brand, immediately selectable on any product; approval required
 - update_brand:
   - endpoint: PUT /ref/brand
-  - required fields: ID, Name
   - risk: external mutation; renames a live Cin7 Core product brand referenced by existing products; approval required
 - create_payment_term:
   - endpoint: POST /ref/paymentterm
-  - required fields: Name
   - risk: external mutation; creates a live Cin7 Core payment term, immediately selectable on customers/suppliers; approval required
 - update_payment_term:
   - endpoint: PUT /ref/paymentterm
-  - required fields: ID, Name
   - risk: external mutation; overwrites a live Cin7 Core payment term's duration/method, affecting due-date calculation on future customer/supplier transactions; approval required
 
 ## Security

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Mailchimp Marketing API audiences (lists), campaigns, reports, and automations through the datacenter-scoped REST API.
 
 ICON
-  id: mailchimp
   asset: icons/mailchimp.svg
   source: upstream_registry
   review_status: upstream_seeded

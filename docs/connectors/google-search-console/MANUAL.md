@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Google Search Console sites, sitemaps, and Search Analytics performance reports (by date, query, page, country, and device) through the Search Console v3 REST API; submits/removes sites and sitemaps through explicit write actions.
 
 ICON
-  id: googlesearchconsole
   asset: icons/googlesearchconsole.svg
   source: upstream_registry
   review_status: upstream_seeded

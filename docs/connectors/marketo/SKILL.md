@@ -11,7 +11,6 @@ Reads Marketo leads, programs, and activities through Marketo REST endpoints. Re
 
 ## Icon
 
-- id: marketo
 - asset: icons/marketo.svg
 - source: upstream_registry
 - review_status: upstream_seeded

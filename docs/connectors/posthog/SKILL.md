@@ -11,7 +11,6 @@ Reads PostHog events and persons for a project via the PostHog REST API. Read-on
 
 ## Icon
 
-- id: posthog
 - asset: icons/posthog.svg
 - source: official
 - review_status: official_verified

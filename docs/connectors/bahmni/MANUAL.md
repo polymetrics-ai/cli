@@ -13,7 +13,6 @@ DESCRIPTION
   Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-docker setups, through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs — patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses — executes bounded direct reads and a schema-gated typed GET patient search, and models retained OpenMRS/Bahmni clinical mutations as approval-gated, schema-bound reverse-ETL actions. Output is bounded; secret-shaped fields and typed patient-search declared sensitive fields are redacted by the current runtime, while broad clinical PHI field redaction remains a separate engine policy decision.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

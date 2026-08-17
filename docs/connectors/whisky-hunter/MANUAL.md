@@ -13,7 +13,6 @@ DESCRIPTION
   Reads public Whisky Hunter auction and distillery data. Read-only, no credentials required.
 
 ICON
-  id: whiskyhunter
   asset: icons/whiskyhunter.svg
   source: upstream_registry
   review_status: upstream_seeded

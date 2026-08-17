@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Discord guild, channel, and role data through the Discord REST API using a bot token. The members stream is out of scope for this migration (see docs.md's Known limits).
 
 ICON
-  id: simple-icons-discord
-  asset: icons/simple-icons/discord.svg
-  title: Discord
-  simple_icon_slug: discord
-  simple_icon_hex: 5865F2
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Discord
-  match: exact-name-or-slug
-  matched_by: discord
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

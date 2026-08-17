@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Iterable lists, campaigns, and templates through the Iterable REST API. Read-only.
 
 ICON
-  id: iterable
   asset: icons/iterable.svg
   source: upstream_registry
   review_status: upstream_seeded

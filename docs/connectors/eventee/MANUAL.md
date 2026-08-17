@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Eventee event agenda, attendee, registration, group, review, and partner data; writes documented Eventee agenda, attendee, registration, partner, speaker, and track mutations through the public REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -77,11 +75,10 @@ REVERSE ETL ACTIONS
     risk: deletes all tracks, pauses, speakers, workshops, lectures, and halls from the configured test event
   create_hall:
     endpoint: POST /hall
-    required fields: name
     risk: creates a hall in the configured event
   update_hall:
     endpoint: PATCH /hall/{{ record.id }}
-    required fields: id, name
+    required fields: id
     risk: updates a hall in the configured event
   delete_hall:
     endpoint: DELETE /hall/{{ record.id }}
@@ -89,11 +86,10 @@ REVERSE ETL ACTIONS
     risk: deletes a hall from the configured event
   create_lecture:
     endpoint: POST /lecture
-    required fields: name, start, end, hall_id, speakers, type, tracks
     risk: creates a lecture or session in the configured event
   update_lecture:
     endpoint: PATCH /lecture/{{ record.id }}
-    required fields: id, name, start, end, hall_id, speakers, type, tracks
+    required fields: id
     risk: updates an existing lecture or session in the configured event
   delete_lecture:
     endpoint: DELETE /lecture/{{ record.id }}
@@ -101,23 +97,20 @@ REVERSE ETL ACTIONS
     risk: deletes a lecture or session from the configured event
   invite_attendees:
     endpoint: PUT /attendee/invite
-    required fields: users
     risk: invites one or more attendees to the configured event
   update_attendee_checkin:
     endpoint: PUT /attendee/{{ record.id }}/checkin
-    required fields: id, checkin
+    required fields: id
     risk: sets the check-in state for an attendee
   remove_attendee:
     endpoint: DELETE /attendee
-    required fields: email
     risk: removes an invited attendee and may remove their access and event-linked information
   create_partner:
     endpoint: POST /partner
-    required fields: company
     risk: creates a partner, sponsor, or exhibitor profile in the configured event
   update_partner:
     endpoint: PATCH /partner/{{ record.id }}
-    required fields: id, company
+    required fields: id
     risk: updates an existing partner, sponsor, or exhibitor profile in the configured event
   delete_partner:
     endpoint: DELETE /partner/{{ record.id }}
@@ -125,11 +118,10 @@ REVERSE ETL ACTIONS
     risk: deletes a partner, sponsor, or exhibitor profile from the configured event
   create_pause:
     endpoint: POST /pause
-    required fields: name, start, end
     risk: creates a pause or break in the configured event agenda
   update_pause:
     endpoint: PATCH /pause/{{ record.id }}
-    required fields: id, name, start, end
+    required fields: id
     risk: updates an existing pause or break in the configured event agenda
   delete_pause:
     endpoint: DELETE /pause/{{ record.id }}
@@ -137,19 +129,16 @@ REVERSE ETL ACTIONS
     risk: deletes a pause or break from the configured event agenda
   invite_registrations:
     endpoint: PUT /registration/invite
-    required fields: registrations
     risk: invites one or more registrants to the configured event
   remove_registration:
     endpoint: DELETE /registration
-    required fields: email
     risk: removes an invited registrant from the configured event
   create_speaker:
     endpoint: POST /speaker
-    required fields: name, phone
     risk: creates a speaker profile in the configured event
   update_speaker:
     endpoint: PATCH /speaker/{{ record.id }}
-    required fields: id, name, phone
+    required fields: id
     risk: updates an existing speaker profile in the configured event
   delete_speaker:
     endpoint: DELETE /speaker/{{ record.id }}

@@ -13,7 +13,6 @@ DESCRIPTION
   Local JSONL destination that records reverse ETL writes and receipts.
 
 ICON
-  id: pm-outbox
   asset: icons/pm-outbox.svg
   source: polymetrics
   review_status: polymetrics

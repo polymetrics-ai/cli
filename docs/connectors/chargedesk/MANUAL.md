@@ -13,11 +13,9 @@ DESCRIPTION
   Reads ChargeDesk charges, customers, subscriptions, and products through the ChargeDesk REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -100,7 +98,6 @@ REVERSE ETL ACTIONS
     risk: gateway method; irreversibly cancels future recurring charges for a subscription on the originating payment gateway as well as ChargeDesk; approval required
   create_webhook:
     endpoint: POST /webhooks
-    required fields: url
     risk: external mutation creating a new outbound webhook subscription that will POST ChargeDesk event data to a third-party URL; approval required
   delete_webhook:
     endpoint: DELETE /webhooks/{{ record.webhook_id }}
@@ -108,7 +105,6 @@ REVERSE ETL ACTIONS
     risk: irreversible removal of an outbound webhook subscription; approval required
   create_agent:
     endpoint: POST /agents
-    required fields: name, email, role
     risk: external mutation inviting a new support agent (or updating an existing agent's role) with account access to ChargeDesk; approval required
   delete_agent:
     endpoint: DELETE /agents/{{ record.email }}

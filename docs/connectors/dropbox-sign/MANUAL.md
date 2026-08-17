@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and account details, and writes signature-request/template/team/account lifecycle mutations, through the Dropbox Sign REST API.
 
 ICON
-  id: simple-icons-dropbox
-  asset: icons/simple-icons/dropbox.svg
-  title: Dropbox
-  simple_icon_slug: dropbox
-  simple_icon_hex: 0061FF
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Dropbox
-  match: curated-alias
-  matched_by: dropbox
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -59,7 +51,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   update_signature_request:
     endpoint: POST /signature_request/update/{{ record.signature_request_id }}
-    required fields: signature_request_id, signature_id
+    required fields: signature_request_id
     risk: external mutation; changes a signer's email address or name on an in-progress signature request, redirecting where the next request/reminder is delivered; approval required
   cancel_signature_request:
     endpoint: POST /signature_request/cancel/{{ record.signature_request_id }}
@@ -67,7 +59,7 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; cancels an incomplete signature request, this action is not reversible; approval required
   remind_signature_request:
     endpoint: POST /signature_request/remind/{{ record.signature_request_id }}
-    required fields: signature_request_id, email_address
+    required fields: signature_request_id
     risk: external mutation; sends an email reminder to a signer; cannot be sent again within 1 hour of the last reminder (manual or automatic)
   release_hold_signature_request:
     endpoint: POST /signature_request/release_hold/{{ record.signature_request_id }}
@@ -94,7 +86,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; creates a new Team and makes the calling account its member; fails if the caller already belongs to a Team
   update_team:
     endpoint: PUT /team
-    required fields: name
     risk: external mutation; renames the caller's own Team
   add_team_member:
     endpoint: PUT /team/add_member

@@ -11,17 +11,9 @@ Reads Blogger (Google Blogger API v3) blogs, posts, pages, comments, and page-vi
 
 ## Icon
 
-- id: simple-icons-blogger
-- asset: icons/simple-icons/blogger.svg
-- title: Blogger
-- simple_icon_slug: blogger
-- simple_icon_hex: FF5722
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Blogger
-- match: exact-name-or-slug
-- matched_by: blogger
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Zendesk Talk phone numbers, greetings, greeting categories, IVRs, and agent activity statistics through the Zendesk Talk (voice) REST API.
 
 ICON
-  id: zendesk-talk
   asset: icons/zendesk-talk.svg
   source: upstream_registry
   review_status: upstream_seeded

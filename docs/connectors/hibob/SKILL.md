@@ -11,7 +11,6 @@ Reads HiBob HR data: employee profiles, company named lists, and people field de
 
 ## Icon
 
-- id: hibob
 - asset: icons/hibob.svg
 - source: official
 - review_status: official_verified

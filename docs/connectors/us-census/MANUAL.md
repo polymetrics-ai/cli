@@ -13,7 +13,6 @@ DESCRIPTION
   Reads configured datasets from the US Census Bureau's API via a caller-supplied query path and query-string qualifier, and reads the Bureau's own published dataset catalog.
 
 ICON
-  id: uscensus
   asset: icons/uscensus.svg
   source: upstream_registry
   review_status: upstream_seeded

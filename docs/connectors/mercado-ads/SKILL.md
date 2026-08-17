@@ -7,15 +7,13 @@ description: Mercado Ads connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Mercado Ads brand, display, and product advertisers and daily campaign metrics from the Mercado Libre Advertising API.
+Reads Mercado Ads brand, display, and product advertisers and daily campaign metrics from the Mercado Libre Advertising API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -24,17 +22,52 @@ Reads Mercado Ads brand, display, and product advertisers and daily campaign met
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- end_date
+- lookback_days
+- mode
+- start_date
+- client_id (secret)
+- client_refresh_token (secret)
+- client_secret (secret)
+
+## ETL Streams
+
+- brand_advertisers:
+  - primary key: advertiser_id
+  - fields: account_name(), advertiser_id(), advertiser_name(), site_id()
+- display_advertisers:
+  - primary key: advertiser_id
+  - fields: account_name(), advertiser_id(), advertiser_name(), site_id()
+- product_advertisers:
+  - primary key: advertiser_id
+  - fields: account_name(), advertiser_id(), advertiser_name(), site_id()
+- brand_campaigns_metrics:
+  - primary key: date, advertiser_id, campaign_id
+  - cursor: date
+  - fields: acos(), advertiser_id(), campaign_id(), clicks(), cost(), cpc(), ctr(), date(), direct_amount(), indirect_amount(), prints(), total_amount(), units_quantity()
+- display_campaigns_metrics:
+  - primary key: date, advertiser_id, campaign_id
+  - cursor: date
+  - fields: acos(), advertiser_id(), campaign_id(), clicks(), cost(), cpc(), ctr(), date(), direct_amount(), indirect_amount(), prints(), total_amount(), units_quantity()
+- product_campaigns_metrics:
+  - primary key: date, advertiser_id, campaign_id
+  - cursor: date
+  - fields: acos(), advertiser_id(), campaign_id(), clicks(), cost(), cpc(), ctr(), date(), direct_amount(), indirect_amount(), prints(), total_amount(), units_quantity()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Mercado Ads API reads performed by the legacy connector via a Tier-2 hook
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

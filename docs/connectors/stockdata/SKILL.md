@@ -11,7 +11,6 @@ Reads StockData market quotes, prices, splits, dividends, news, entity stats, en
 
 ## Icon
 
-- id: stockdata
 - asset: icons/stockdata.svg
 - source: official
 - review_status: official_verified

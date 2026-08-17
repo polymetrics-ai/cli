@@ -11,7 +11,6 @@ Reads tyntec SMS messages, templates, sender IDs, and delivery reports through A
 
 ## Icon
 
-- id: tyntec
 - asset: icons/tyntec.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -56,7 +55,6 @@ Reads tyntec SMS messages, templates, sender IDs, and delivery reports through A
 
 - send_message:
   - endpoint: POST sms/v1/messages
-  - required fields: to, from, text
   - risk: sends a billable SMS message to the recipient phone number and may notify an external user
 
 ## Security

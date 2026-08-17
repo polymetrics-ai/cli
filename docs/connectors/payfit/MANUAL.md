@@ -13,11 +13,9 @@ DESCRIPTION
   Reads PayFit legacy /v1 resources and current company-scoped PayFit API resources; writes supported JSON customer-key mutations.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -113,7 +111,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_absence:
     endpoint: POST /companies/{{ record.company_id }}/absences
-    required fields: company_id, contractId, type, startDate, endDate
+    required fields: company_id
     risk: external PayFit mutation; create absence; approval required
   cancel_absence:
     endpoint: DELETE /companies/{{ record.company_id }}/absences/{{ record.absence_id }}
@@ -121,23 +119,23 @@ REVERSE ETL ACTIONS
     risk: external mutation; cancels an existing PayFit absence; approval required
   create_collaborator:
     endpoint: POST /companies/{{ record.company_id }}/collaborators
-    required fields: company_id, firstName, lastName, personalEmail
+    required fields: company_id
     risk: external PayFit mutation; create collaborator; approval required
   create_contract:
     endpoint: POST /companies/{{ record.company_id }}/collaborators/{{ record.collaborator_id }}/contracts
-    required fields: company_id, collaborator_id, jobTitle, startDate
+    required fields: company_id, collaborator_id
     risk: external PayFit mutation; create contract; approval required
   update_contract_health_insurance:
     endpoint: PUT /companies/{{ record.company_id }}/contracts-fr/{{ record.contract_id }}/health-insurance
-    required fields: company_id, contract_id, healthInsuranceContractIds
+    required fields: company_id, contract_id
     risk: external PayFit mutation; update contract health insurance; approval required
   update_contract_provident_fund:
     endpoint: PUT /companies/{{ record.company_id }}/contracts-fr/{{ record.contract_id }}/provident-fund
-    required fields: company_id, contract_id, providentFundContractIds
+    required fields: company_id, contract_id
     risk: external PayFit mutation; update contract provident fund; approval required
   request_health_insurance_regularization:
     endpoint: POST /companies/{{ record.company_id }}/contracts-fr/{{ record.contract_id }}/regularization
-    required fields: company_id, contract_id, healthInsuranceContractIds, effectiveDate
+    required fields: company_id, contract_id
     risk: external PayFit mutation; request health insurance regularization; approval required
 
 SECURITY

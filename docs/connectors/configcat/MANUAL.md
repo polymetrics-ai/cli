@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes ConfigCat feature-flag platform data: organizations, products, configs, environments, settings/feature flags, deleted settings, SDK keys, segments, webhooks, permission groups, integrations, proxy profiles, members, audit logs, stale flags, tags, and the authenticated user's own profile through the ConfigCat Public Management API.
 
 ICON
-  id: configcat
   asset: icons/configcat.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -134,7 +133,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_config:
     endpoint: POST /v1/products/{{ config.product_id }}/configs
-    required fields: name
     risk: creates a new ConfigCat config within the configured product; low risk, no data destruction
   update_config:
     endpoint: PUT /v1/configs/{{ record.configId }}
@@ -146,7 +144,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a ConfigCat config and every feature flag/setting defined in it; destructive, external mutation; approval required
   create_environment:
     endpoint: POST /v1/products/{{ config.product_id }}/environments
-    required fields: name
     risk: creates a new ConfigCat environment within the configured product; low risk, no data destruction
   update_environment:
     endpoint: PUT /v1/environments/{{ record.environmentId }}
@@ -158,11 +155,10 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a ConfigCat environment and every feature flag value/SDK key scoped to it; destructive, external mutation; approval required
   create_flag:
     endpoint: POST /v1/configs/{{ config.config_id }}/settings
-    required fields: key, name, settingType
     risk: creates a new ConfigCat feature flag/setting within the configured config; low risk, no data destruction
   update_flag:
     endpoint: PUT /v1/settings/{{ record.settingId }}
-    required fields: settingId, name
+    required fields: settingId
     risk: replaces an existing ConfigCat feature flag/setting's metadata (name/hint/tags); does not itself change the flag's evaluated VALUE in any environment
   delete_flag:
     endpoint: DELETE /v1/settings/{{ record.settingId }}
@@ -170,7 +166,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a ConfigCat feature flag/setting and its values in every environment; destructive, external mutation; approval required
   create_tag:
     endpoint: POST /v1/products/{{ config.product_id }}/tags
-    required fields: name
     risk: creates a new ConfigCat tag within the configured product; low risk, no data destruction
   update_tag:
     endpoint: PUT /v1/tags/{{ record.tagId }}

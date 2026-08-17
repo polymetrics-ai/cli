@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Google Forms metadata, form items, and submitted responses through the Google Forms REST API using an OAuth 2.0 refresh-token grant.
 
 ICON
-  id: simple-icons-googleforms
-  asset: icons/simple-icons/googleforms.svg
-  title: Google Forms
-  simple_icon_slug: googleforms
-  simple_icon_hex: 7248B9
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Google%20Forms
-  match: exact-name-or-slug
-  matched_by: google-forms
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

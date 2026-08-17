@@ -13,7 +13,6 @@ DESCRIPTION
   Built-in deterministic source connector for local development and tests.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

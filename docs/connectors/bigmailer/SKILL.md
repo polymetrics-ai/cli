@@ -11,11 +11,9 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -92,7 +90,6 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
 
 - create_brand:
   - endpoint: POST /brands
-  - required fields: name, from_name, from_email, connection_id
   - risk: external mutation; creates a new BigMailer brand (sending identity); approval required
 - update_brand:
   - endpoint: POST /brands/{{ record.id }}
@@ -100,7 +97,7 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
   - risk: external mutation; approval required
 - create_contact:
   - endpoint: POST /brands/{{ record.brand_id }}/contacts
-  - required fields: brand_id, email
+  - required fields: brand_id
   - risk: external mutation; creates a contact in a BigMailer brand; approval required
 - update_contact:
   - endpoint: POST /brands/{{ record.brand_id }}/contacts/{{ record.id }}
@@ -108,7 +105,7 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
   - risk: external mutation; approval required
 - upsert_contact:
   - endpoint: POST /brands/{{ record.brand_id }}/contacts/upsert
-  - required fields: brand_id, email
+  - required fields: brand_id
   - risk: external mutation; creates the contact if the email is new, otherwise updates the existing contact; approval required
 - delete_contact:
   - endpoint: DELETE /brands/{{ record.brand_id }}/contacts/{{ record.id }}
@@ -116,7 +113,7 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
   - risk: permanently removes a contact from a brand; irreversible; approval required
 - create_list:
   - endpoint: POST /brands/{{ record.brand_id }}/lists
-  - required fields: brand_id, name
+  - required fields: brand_id
   - risk: external mutation; creates a contact list in a BigMailer brand; approval required
 - update_list:
   - endpoint: POST /brands/{{ record.brand_id }}/lists/{{ record.id }}
@@ -128,7 +125,7 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
   - risk: permanently removes a list from a brand (contacts in the list are NOT deleted); irreversible; approval required
 - create_field:
   - endpoint: POST /brands/{{ record.brand_id }}/fields
-  - required fields: brand_id, name, type
+  - required fields: brand_id
   - risk: external mutation; creates a custom contact field in a BigMailer brand; approval required
 - update_field:
   - endpoint: POST /brands/{{ record.brand_id }}/fields/{{ record.id }}
@@ -140,7 +137,7 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
   - risk: permanently removes a custom contact field from a brand; irreversible; approval required
 - create_message_type:
   - endpoint: POST /brands/{{ record.brand_id }}/message-types
-  - required fields: brand_id, name
+  - required fields: brand_id
   - risk: external mutation; creates a message type (unsubscribe category) in a BigMailer brand; approval required
 - update_message_type:
   - endpoint: POST /brands/{{ record.brand_id }}/message-types/{{ record.id }}
@@ -152,7 +149,7 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
   - risk: permanently removes a message type from a brand; irreversible; approval required
 - create_segment:
   - endpoint: POST /brands/{{ record.brand_id }}/segments
-  - required fields: brand_id, name, operator, conditions
+  - required fields: brand_id
   - risk: external mutation; creates a contact segment in a BigMailer brand; approval required
 - update_segment:
   - endpoint: POST /brands/{{ record.brand_id }}/segments/{{ record.id }}
@@ -164,7 +161,7 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
   - risk: permanently removes a segment from a brand; irreversible; approval required
 - create_sender:
   - endpoint: POST /brands/{{ record.brand_id }}/senders
-  - required fields: brand_id, identity
+  - required fields: brand_id
   - risk: external mutation; adds a sender domain/email identity to a BigMailer brand; approval required
 - update_sender:
   - endpoint: POST /brands/{{ record.brand_id }}/senders/{{ record.id }}
@@ -176,7 +173,7 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
   - risk: permanently removes a sender identity from a brand; irreversible; approval required
 - create_template:
   - endpoint: POST /brands/{{ record.brand_id }}/templates
-  - required fields: brand_id, name, type, html
+  - required fields: brand_id
   - risk: external mutation; creates a campaign template in a BigMailer brand; approval required
 - update_template:
   - endpoint: POST /brands/{{ record.brand_id }}/templates/{{ record.id }}
@@ -188,7 +185,6 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
   - risk: permanently removes a template from a brand; irreversible; approval required
 - create_user:
   - endpoint: POST /users
-  - required fields: email, role
   - risk: external mutation; invites a new user into the BigMailer account; approval required
 - update_user:
   - endpoint: POST /users/{{ record.id }}

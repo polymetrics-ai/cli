@@ -13,7 +13,6 @@ DESCRIPTION
   Reads ConvertKit (Kit) subscribers, forms, sequences, tags, broadcasts, custom fields, and purchases, and writes subscriber/tag/form/sequence/broadcast/custom-field/purchase/webhook mutations, through the ConvertKit v3 REST API.
 
 ICON
-  id: convertkit
   asset: icons/convertkit.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -72,11 +71,10 @@ REVERSE ETL ACTIONS
     risk: mutates an existing subscriber's name/email/custom-field values; external mutation, no approval required
   create_tag:
     endpoint: POST /tags
-    required fields: name
     risk: creates a new tag on the account; low-risk external mutation, no approval required
   tag_subscriber:
     endpoint: POST /tags/{{ record.tag_id }}/subscribe
-    required fields: tag_id, email
+    required fields: tag_id
     risk: applies a tag to a subscriber (creating the subscriber if the email is new); external mutation, no approval required
   remove_tag_from_subscriber:
     endpoint: DELETE /subscribers/{{ record.subscriber_id }}/tags/{{ record.tag_id }}
@@ -84,15 +82,14 @@ REVERSE ETL ACTIONS
     risk: removes a tag from a subscriber; external mutation, no approval required
   subscribe_to_form:
     endpoint: POST /forms/{{ record.form_id }}/subscribe
-    required fields: form_id, email
+    required fields: form_id
     risk: subscribes an email address to a form (creating the subscriber if the email is new); external mutation, no approval required
   subscribe_to_sequence:
     endpoint: POST /sequences/{{ record.sequence_id }}/subscribe
-    required fields: sequence_id, email
+    required fields: sequence_id
     risk: subscribes an email address to a sequence (creating the subscriber if the email is new); external mutation, no approval required
   create_broadcast:
     endpoint: POST /broadcasts
-    required fields: subject, content
     risk: creates a draft or scheduled email broadcast; a scheduled broadcast (send_at/published_at set) will send to the account's live subscriber list, external mutation, approval required
   update_broadcast:
     endpoint: PUT /broadcasts/{{ record.id }}
@@ -104,19 +101,16 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a draft or scheduled broadcast record; irreversible, approval required
   create_custom_field:
     endpoint: POST /custom_fields
-    required fields: label
     risk: creates a new custom subscriber field on the account (up to 140 total); low-risk external mutation, no approval required
   update_custom_field:
     endpoint: PUT /custom_fields/{{ record.id }}
-    required fields: id, label
+    required fields: id
     risk: renames a custom field's label (the underlying key is unchanged per Kit's own docs); external mutation, no approval required
   create_purchase:
     endpoint: POST /purchases
-    required fields: purchase
     risk: records a new purchase-tracking transaction for a subscriber; external mutation, no approval required
   create_webhook:
     endpoint: POST /automations/hooks
-    required fields: target_url, event
     risk: creates a webhook that POSTs subscriber-event payloads to an external URL the caller controls; external mutation, approval required
   delete_webhook:
     endpoint: DELETE /automations/hooks/{{ record.rule_id }}

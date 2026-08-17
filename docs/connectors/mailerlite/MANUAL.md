@@ -13,7 +13,6 @@ DESCRIPTION
   Reads MailerLite subscribers, campaigns, groups, segments, and automations through the MailerLite v2 REST API.
 
 ICON
-  id: mailerlite
   asset: icons/mailerlite.svg
   source: upstream_registry
   review_status: upstream_seeded

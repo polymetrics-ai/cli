@@ -13,17 +13,9 @@ DESCRIPTION
   Reads subreddit posts and comments through the Reddit OAuth API listing endpoints.
 
 ICON
-  id: simple-icons-reddit
-  asset: icons/simple-icons/reddit.svg
-  title: Reddit
-  simple_icon_slug: reddit
-  simple_icon_hex: FF4500
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Reddit
-  match: exact-name-or-slug
-  matched_by: reddit
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

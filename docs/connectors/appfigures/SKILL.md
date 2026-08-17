@@ -11,11 +11,9 @@ Reads Appfigures app-store reviews, products, analytics reports (sales/ratings/r
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -98,11 +96,11 @@ Reads Appfigures app-store reviews, products, analytics reports (sales/ratings/r
 
 - reply_to_review:
   - endpoint: POST /reviews/{{ record.id }}/response
-  - required fields: id, content
+  - required fields: id
+  - optional fields: content
   - risk: publishes a developer response to a customer review, visible on the public app store listing
 - create_event:
   - endpoint: POST /events/
-  - required fields: caption, date
   - risk: creates a release/marketing event marker overlaid on every Appfigures analytics chart
 - update_event:
   - endpoint: PUT /events/{{ record.id }}

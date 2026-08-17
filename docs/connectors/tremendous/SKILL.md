@@ -11,11 +11,9 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -64,7 +62,6 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
 
 - create_order:
   - endpoint: POST /api/v2/orders
-  - required fields: payment, reward
   - risk: spends real funding-source balance to issue a gift card / prepaid card / donation reward to a recipient; external mutation with real financial impact, approval required
 - approve_order:
   - endpoint: POST /api/v2/order_approvals/{{ record.id }}/approve
@@ -89,7 +86,6 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
   - risk: generates a new redemption link for an existing LINK-delivery reward; low-risk, does not move funds
 - create_invoice:
   - endpoint: POST /api/v2/invoices
-  - required fields: amount
   - risk: creates an invoice that funds the organization's Tremendous balance once paid; low direct risk (a document, not a payment itself), no approval required
 - delete_invoice:
   - endpoint: DELETE /api/v2/invoices/{{ record.id }}
@@ -97,11 +93,9 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
   - risk: removes an invoice; per Tremendous's own docs this is a cosmetic operation with no further financial consequence (an already-paid invoice's funds are unaffected)
 - create_member:
   - endpoint: POST /api/v2/members
-  - required fields: email, role
   - risk: invites a new user to manage the Tremendous organization (funding sources, campaigns, orders); grants organization access, approval required
 - create_webhook:
   - endpoint: POST /api/v2/webhooks
-  - required fields: url
   - risk: registers/replaces the organization's single webhook endpoint; a changed url redirects all future event deliveries to a different endpoint (Tremendous allows exactly one webhook per organization)
 - delete_webhook:
   - endpoint: DELETE /api/v2/webhooks/{{ record.id }}

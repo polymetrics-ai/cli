@@ -13,7 +13,6 @@ DESCRIPTION
   Reads New York Times Most Popular (viewed, emailed, shared) articles via the NYTimes Developer APIs.
 
 ICON
-  id: nytimes
   asset: icons/nytimes.svg
   source: upstream_registry
   review_status: upstream_seeded

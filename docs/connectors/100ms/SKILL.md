@@ -11,11 +11,9 @@ Reads 100ms rooms, sessions, recordings, templates, live streams, external strea
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -81,7 +79,6 @@ Reads 100ms rooms, sessions, recordings, templates, live streams, external strea
   - risk: mutates an existing room's metadata, or disables/re-enables it via the enabled field (100ms's disable/enable API is the same POST /rooms/{id} endpoint); disabling blocks all future joins to that room. External mutation, approval required
 - create_template:
   - endpoint: POST /templates
-  - required fields: name
   - risk: creates a new room-policy template (roles/settings); external mutation, approval required
 - create_room_code:
   - endpoint: POST /room-codes/room/{{ record.room_id }}
@@ -89,7 +86,6 @@ Reads 100ms rooms, sessions, recordings, templates, live streams, external strea
   - risk: generates join-authentication room codes for every role in the named room; codes act as join credentials, external mutation, approval required
 - update_room_code:
   - endpoint: POST /room-codes/code
-  - required fields: code, enabled
   - risk: enables or disables a specific join-credential room code; disabling revokes that code's ability to join. External mutation, approval required
 - start_recording:
   - endpoint: POST /recordings/room/{{ record.room_id }}/start

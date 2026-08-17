@@ -13,7 +13,6 @@ DESCRIPTION
   Reads TMDb movie, TV, person, collection, company, keyword, review, account, search, trending, and reference metadata from The Movie Database API.
 
 ICON
-  id: tmdb
   asset: icons/tmdb.svg
   source: upstream_registry
   review_status: upstream_seeded

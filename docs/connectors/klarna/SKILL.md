@@ -11,7 +11,6 @@ Reads Klarna settlement payouts and transactions through the Klarna Settlements 
 
 ## Icon
 
-- id: klarna
 - asset: icons/klarna.svg
 - source: upstream_registry
 - review_status: upstream_seeded

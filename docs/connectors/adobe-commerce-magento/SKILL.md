@@ -11,11 +11,9 @@ Reads Adobe Commerce (Magento) products, orders, customers, categories, invoices
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -85,7 +83,6 @@ Reads Adobe Commerce (Magento) products, orders, customers, categories, invoices
   - risk: external mutation; overwrites live Magento catalog product fields; approval required
 - create_category:
   - endpoint: POST /categories
-  - required fields: name, parent_id
   - risk: external mutation; creates a live Magento catalog category; approval required
 - update_category:
   - endpoint: PUT /categories/{{ record.id }}

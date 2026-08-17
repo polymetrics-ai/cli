@@ -13,7 +13,6 @@ DESCRIPTION
   Reads sitemap, scraping job, account, and problematic-URL metadata, and writes sitemap/scraping-job create/update/delete mutations, through the Web Scraper Cloud API.
 
 ICON
-  id: web-scraper
   asset: icons/web-scraper.svg
   source: official
   review_status: official_verified
@@ -59,11 +58,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_sitemap:
     endpoint: POST /sitemap
-    required fields: _id, startUrl, selectors
     risk: creates a new sitemap (scraper configuration) in the caller's Web Scraper Cloud account; low-risk, does not itself start scraping any site
   update_sitemap:
     endpoint: PUT /sitemap/{{ record.id }}
-    required fields: id, _id, startUrl, selectors
+    required fields: id
+    optional fields: _id, startUrl, selectors
     risk: overwrites an existing sitemap's start URLs and selector configuration; any scraping job created from this sitemap after the update uses the new configuration
   delete_sitemap:
     endpoint: DELETE /sitemap/{{ record.id }}
@@ -71,7 +70,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a sitemap; any scraping job history tied to it is not itself deleted but the configuration can no longer be reused or edited
   create_scraping_job:
     endpoint: POST /scraping-job
-    required fields: sitemap_id
     risk: starts a real scraping run against the sitemap's (or start_urls override's) target site(s); consumes page credits from the caller's Web Scraper Cloud account for every page scraped
   delete_scraping_job:
     endpoint: DELETE /scraping-job/{{ record.id }}

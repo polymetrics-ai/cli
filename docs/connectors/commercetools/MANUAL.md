@@ -13,7 +13,6 @@ DESCRIPTION
   Reads commercetools customers, orders, and products through the HTTP API.
 
 ICON
-  id: commercetools
   asset: icons/commercetools.svg
   source: upstream_registry
   review_status: upstream_seeded

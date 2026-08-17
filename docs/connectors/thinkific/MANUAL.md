@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes Thinkific courses, users, enrollments, products, orders, and site administration resources through the Thinkific Admin API.
 
 ICON
-  id: thinkific
   asset: icons/thinkific.svg
   source: official
   review_status: official_verified
@@ -82,7 +81,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_user:
     endpoint: POST /api/public/v1/users
-    required fields: email, first_name, last_name
     risk: creates a new Thinkific user account; low-risk additive external mutation, no approval required
   update_user:
     endpoint: PUT /api/public/v1/users/{{ record.id }}
@@ -101,11 +99,10 @@ REVERSE ETL ACTIONS
     risk: changes an enrollment's activation or expiry date, which can extend or revoke a user's access window to a course
   create_coupon:
     endpoint: POST /api/public/v1/coupons
-    required fields: code
     risk: creates a discount coupon code redeemable at checkout; low-risk additive external mutation, no approval required
   update_coupon:
     endpoint: PUT /api/public/v1/coupons/{{ record.id }}
-    required fields: id, code
+    required fields: id
     risk: mutates an existing coupon's code, quantity, or usage counter; can change a customer-facing discount code that has already been shared
   delete_coupon:
     endpoint: DELETE /api/public/v1/coupons/{{ record.id }}
@@ -113,7 +110,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a coupon; any customer relying on the code at checkout will see it rejected
   create_collection:
     endpoint: POST /api/public/v1/collections
-    required fields: name, description, slug
     risk: creates a new course category (Collection); low-risk additive external mutation, no approval required
   update_collection:
     endpoint: PUT /api/public/v1/collections/{{ record.id }}
@@ -125,15 +121,16 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a course category; any public page linking to it will 404
   add_products_to_collection:
     endpoint: POST /api/public/v1/collection_memberships/{{ record.collection_id }}
-    required fields: collection_id, product_ids
+    required fields: collection_id
+    optional fields: product_ids
     risk: adds one or more products (courses/bundles) to a public category, changing what appears on that category's landing page
   remove_products_from_collection:
     endpoint: DELETE /api/public/v1/collection_memberships/{{ record.collection_id }}
-    required fields: collection_id, product_ids
+    required fields: collection_id
+    optional fields: product_ids
     risk: removes one or more products from a public category, which can hide previously-listed courses from that category's landing page
   create_group:
     endpoint: POST /api/public/v1/groups
-    required fields: name
     risk: creates a new Group (used for bulk enrollment/organization management); low-risk additive external mutation, no approval required
   delete_group:
     endpoint: DELETE /api/public/v1/groups/{{ record.id }}
@@ -141,15 +138,13 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a Group; members lose any group-scoped access/reporting association
   add_user_to_groups:
     endpoint: POST /api/public/v1/group_users
-    required fields: group_names, user_id
     risk: adds a user to one or more existing Groups by name; low-risk additive external mutation, no approval required
   create_instructor:
     endpoint: POST /api/public/v1/instructors
-    required fields: first_name, last_name, slug
     risk: creates a new public Instructor profile; low-risk additive external mutation, no approval required
   update_instructor:
     endpoint: PUT /api/public/v1/instructors/{{ record.id }}
-    required fields: id, first_name, last_name, slug
+    required fields: id
     risk: mutates a public Instructor profile's name, bio, or slug, changing what's shown on every course page that credits them
   delete_instructor:
     endpoint: DELETE /api/public/v1/instructors/{{ record.id }}
@@ -157,11 +152,10 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an Instructor profile; any course crediting them loses that attribution
   create_promotion:
     endpoint: POST /api/public/v1/promotions
-    required fields: name, discount_type, amount
     risk: creates a discount promotion applied automatically at checkout for the targeted products; low-risk additive external mutation, no approval required
   update_promotion:
     endpoint: PUT /api/public/v1/promotions/{{ record.id }}
-    required fields: id, name, discount_type, amount
+    required fields: id
     risk: mutates an active discount promotion's amount, type, or eligible products, directly changing checkout pricing
   delete_promotion:
     endpoint: DELETE /api/public/v1/promotions/{{ record.id }}
@@ -169,11 +163,10 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an active discount promotion; checkout pricing reverts to full price immediately
   create_site_script:
     endpoint: POST /api/public/v1/site_scripts
-    required fields: name, description, page_scopes, category
     risk: injects arbitrary third-party HTML/JavaScript into every scoped page of the public site; high-risk external mutation (site-wide script injection), approval required
   update_site_script:
     endpoint: PUT /api/public/v1/site_scripts/{{ record.id }}
-    required fields: id, name, description, page_scopes, category
+    required fields: id
     risk: changes the injected third-party HTML/JavaScript payload site-wide; high-risk external mutation, approval required
   delete_site_script:
     endpoint: DELETE /api/public/v1/site_scripts/{{ record.id }}
@@ -181,15 +174,14 @@ REVERSE ETL ACTIONS
     risk: removes an injected site script from every scoped page immediately
   create_course_review:
     endpoint: POST /api/public/v1/course_reviews
-    required fields: approved, rating, review_text, title, user_id
     risk: creates a course review that, once approved, is publicly visible on the course landing page; low-risk additive external mutation, no approval required
   approve_product_publish_request:
     endpoint: POST /api/public/v1/product_publish_requests/{{ record.id }}/approve
-    required fields: id, user_id
+    required fields: id
     risk: approves a pending course-publish request, making the course publicly visible/purchasable; approval required
   deny_product_publish_request:
     endpoint: POST /api/public/v1/product_publish_requests/{{ record.id }}/deny
-    required fields: id, user_id
+    required fields: id
     risk: denies a pending course-publish request, blocking the course from going live
 
 SECURITY

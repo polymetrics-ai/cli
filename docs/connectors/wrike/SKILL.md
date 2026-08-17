@@ -11,7 +11,6 @@ Reads Wrike tasks, folders, and contacts through the Wrike REST API. Read-only.
 
 ## Icon
 
-- id: wrike
 - asset: icons/wrike.svg
 - source: upstream_registry
 - review_status: upstream_seeded

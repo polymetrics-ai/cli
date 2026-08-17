@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Harness NextGen organizations, projects, services, connectors, and pipelines through the Harness platform REST API.
 
 ICON
-  id: harness
   asset: icons/harness.svg
   source: upstream_registry
   review_status: upstream_seeded

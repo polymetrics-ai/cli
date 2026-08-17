@@ -13,7 +13,6 @@ DESCRIPTION
   Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
 
 ICON
-  id: gitlab
   asset: icons/gitlab.svg
   source: upstream_registry
   review_status: upstream_seeded

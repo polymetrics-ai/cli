@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes documented Freshservice REST API v2 resources, preserving legacy ticket, agent, requester, asset, and problem stream projections.
 
 ICON
-  id: freshservice
   asset: icons/freshservice.svg
   source: upstream_registry
   review_status: upstream_seeded

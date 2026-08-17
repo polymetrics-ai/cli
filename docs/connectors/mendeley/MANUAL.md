@@ -10,35 +10,54 @@ SYNOPSIS
   pm credentials add <name> --connector mendeley [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API.
+  Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
-  id: simple-icons-mendeley
-  asset: icons/simple-icons/mendeley.svg
-  title: Mendeley
-  simple_icon_slug: mendeley
-  simple_icon_hex: 9D1620
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Mendeley
-  match: exact-name-or-slug
-  matched_by: mendeley
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  name_for_institution
+  query_for_catalog
+  start_date
+  client_id (secret)
+  client_refresh_token (secret)
+  client_secret (secret)
+
+ETL STREAMS
+  documents:
+    primary key: id
+    cursor: last_modified
+    fields: abstract(), created(), group_id(), id(), last_modified(), profile_id(), source(), title(), type(), year()
+  folders:
+    primary key: id
+    cursor: modified
+    fields: created(), group_id(), id(), modified(), name(), parent_id()
+  groups:
+    primary key: id
+    fields: access_level(), created(), description(), id(), name(), owning_profile_id(), role(), webpage()
+  annotations:
+    primary key: id
+    cursor: last_modified
+    fields: created(), document_id(), filehash(), id(), last_modified(), privacy_level(), profile_id(), text(), type()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Mendeley API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

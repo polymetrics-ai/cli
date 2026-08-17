@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Captain Data workspace, workflows, jobs, and job results, and writes a launch_workflow action to trigger a new workflow run, through the Captain Data v3 REST API.
 
 ICON
-  id: captain-data
   asset: icons/captain-data.svg
   source: upstream_registry
   review_status: upstream_seeded

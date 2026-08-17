@@ -13,17 +13,9 @@ DESCRIPTION
   Reads and writes Dolibarr ERP/CRM third parties, contacts, products, customer invoices, and orders through the Dolibarr REST API.
 
 ICON
-  id: simple-icons-dolibarr
-  asset: icons/simple-icons/dolibarr.svg
-  title: Dolibarr
-  simple_icon_slug: dolibarr
-  simple_icon_hex: 263C5C
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Dolibarr
-  match: exact-name-or-slug
-  matched_by: dolibarr
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -91,7 +83,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_thirdparty:
     endpoint: POST /thirdparties
-    required fields: name
     risk: external mutation; creates a live Dolibarr third party (customer/supplier); approval required
   update_thirdparty:
     endpoint: PUT /thirdparties/{{ record.id }}
@@ -103,7 +94,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Dolibarr third party; approval required
   create_contact:
     endpoint: POST /contacts
-    required fields: lastname
     risk: external mutation; creates a live Dolibarr contact; approval required
   update_contact:
     endpoint: PUT /contacts/{{ record.id }}
@@ -115,7 +105,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Dolibarr contact; approval required
   create_product:
     endpoint: POST /products
-    required fields: ref, label
     risk: external mutation; creates a live Dolibarr product/service; approval required
   update_product:
     endpoint: PUT /products/{{ record.id }}
@@ -127,7 +116,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Dolibarr product/service; approval required
   create_invoice:
     endpoint: POST /invoices
-    required fields: socid
     risk: external mutation; creates a live Dolibarr customer invoice (draft status); approval required
   update_invoice:
     endpoint: PUT /invoices/{{ record.id }}
@@ -144,7 +132,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; validates a live Dolibarr invoice, transitioning it out of draft status irreversibly and assigning its final reference number; approval required
   create_order:
     endpoint: POST /orders
-    required fields: socid
     risk: external mutation; creates a live Dolibarr sales order (draft status); approval required
   update_order:
     endpoint: PUT /orders/{{ record.id }}

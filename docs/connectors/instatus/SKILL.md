@@ -11,7 +11,6 @@ Reads and manages Instatus status pages, components, incidents, maintenances, te
 
 ## Icon
 
-- id: instatus
 - asset: icons/instatus.svg
 - source: official
 - review_status: official_verified

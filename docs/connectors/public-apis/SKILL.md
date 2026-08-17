@@ -11,7 +11,6 @@ Reads public API directory entries and categories from the api.publicapis.org di
 
 ## Icon
 
-- id: public-apis
 - asset: icons/public-apis.svg
 - source: upstream_registry
 - review_status: upstream_seeded

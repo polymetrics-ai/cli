@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Mailjet contacts, contact lists, messages, campaigns, and statistics through the Mailjet Email REST API (v3).
 
 ICON
-  id: mailjetmail
   asset: icons/mailjetmail.svg
   source: upstream_registry
   review_status: upstream_seeded

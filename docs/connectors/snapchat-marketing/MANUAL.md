@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Snapchat Marketing (Ads API) organizations, ad accounts, campaigns, ad squads, and ads via the OAuth2 refresh-token grant.
 
 ICON
-  id: snapchat
   asset: icons/snapchat.svg
   source: upstream_registry
   review_status: upstream_seeded

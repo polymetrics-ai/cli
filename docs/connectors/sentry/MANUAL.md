@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Sentry projects, issues, error events, and releases through the Sentry REST API (read-only).
 
 ICON
-  id: sentry
   asset: icons/sentry.svg
   source: upstream_registry
   review_status: upstream_seeded

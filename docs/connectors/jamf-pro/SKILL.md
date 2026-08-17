@@ -11,11 +11,9 @@ Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf 
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

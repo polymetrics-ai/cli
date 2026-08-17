@@ -11,7 +11,6 @@ Reads Granola meeting notes metadata and full note detail (summary, owner, atten
 
 ## Icon
 
-- id: source-granola
 - asset: icons/source-granola.svg
 - source: upstream_registry
 - review_status: upstream_seeded

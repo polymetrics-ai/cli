@@ -13,7 +13,6 @@ DESCRIPTION
   Reads public SpaceX launch, rocket, core, capsule, crew, Dragon, history, payload, and Starlink data.
 
 ICON
-  id: spacex
   asset: icons/spacex.svg
   source: upstream_registry
   review_status: upstream_seeded

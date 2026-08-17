@@ -11,7 +11,6 @@ Reads CoinAPI market data: symbols, exchanges, assets, exchange rates, current q
 
 ## Icon
 
-- id: coinapi
 - asset: icons/coinapi.svg
 - source: upstream_registry
 - review_status: upstream_seeded

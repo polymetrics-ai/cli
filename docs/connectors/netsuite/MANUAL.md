@@ -13,7 +13,6 @@ DESCRIPTION
   Reads selected NetSuite REST Record API resources (customers, vendors, items, sales orders), authenticating with OAuth 1.0a Token-Based Authentication (HMAC-SHA256 request signing). Read-only.
 
 ICON
-  id: netsuite
   asset: icons/netsuite.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,11 +11,9 @@ Reads Teamtailor jobs, candidates, job applications, departments, locations, rol
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -75,43 +73,33 @@ Reads Teamtailor jobs, candidates, job applications, departments, locations, rol
 
 - create_job:
   - endpoint: POST /jobs
-  - required fields: data
   - risk: creates a new job posting; low-risk external mutation, no approval required
 - create_candidate:
   - endpoint: POST /candidates
-  - required fields: data
   - risk: creates a new candidate record; stores personal data (name/email) about a real individual, subject to data-protection obligations
 - update_candidate:
   - endpoint: PATCH /candidates/{{ record.data.id }}
-  - required fields: data
   - risk: mutates an existing candidate's personal data (name/email/pitch)
 - create_job_application:
   - endpoint: POST /job-applications
-  - required fields: data
   - risk: links a candidate to a job as a new application; moves the candidate into that job's active pipeline and may trigger applicant notifications
 - update_job_application:
   - endpoint: PATCH /job-applications/{{ record.data.id }}
-  - required fields: data
   - risk: mutates an existing job application (e.g. moves it to a different stage); may trigger applicant-facing notifications
 - create_department:
   - endpoint: POST /departments
-  - required fields: data
   - risk: creates a new department record; low-risk external mutation, no approval required
 - create_location:
   - endpoint: POST /locations
-  - required fields: data
   - risk: creates a new office/location record; low-risk external mutation, no approval required
 - create_team:
   - endpoint: POST /teams
-  - required fields: data
   - risk: creates a new hiring team; low-risk external mutation, no approval required
 - create_todo:
   - endpoint: POST /todos
-  - required fields: data
   - risk: creates a new to-do reminder, optionally assigned to a user against a candidate; low-risk external mutation, no approval required
 - create_note:
   - endpoint: POST /notes
-  - required fields: data
   - risk: creates a new internal note on a candidate; stores potentially sensitive recruiter commentary about a real individual
 
 ## Security

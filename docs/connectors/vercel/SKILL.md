@@ -11,17 +11,9 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
 
 ## Icon
 
-- id: simple-icons-vercel
-- asset: icons/simple-icons/vercel.svg
-- title: Vercel
-- simple_icon_slug: vercel
-- simple_icon_hex: 000000
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Vercel
-- match: exact-name-or-slug
-- matched_by: vercel
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -78,7 +70,6 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
 
 - create_project:
   - endpoint: POST /v11/projects
-  - required fields: name
   - risk: external mutation; approval required
 - update_project:
   - endpoint: PATCH /v9/projects/{{ record.id }}
@@ -90,7 +81,6 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
   - risk: destructive external mutation; approval required
 - create_deployment:
   - endpoint: POST /v13/deployments
-  - required fields: name
   - risk: external mutation; approval required
 - cancel_deployment:
   - endpoint: PATCH /v12/deployments/{{ record.id }}/cancel
@@ -102,7 +92,7 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
   - risk: destructive external mutation; approval required
 - add_project_domain:
   - endpoint: POST /v10/projects/{{ record.project_id }}/domains
-  - required fields: project_id, name
+  - required fields: project_id
   - risk: external mutation; approval required
 - remove_project_domain:
   - endpoint: DELETE /v9/projects/{{ record.project_id }}/domains/{{ record.domain }}
@@ -110,7 +100,7 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
   - risk: destructive external mutation; approval required
 - create_project_env_var:
   - endpoint: POST /v10/projects/{{ record.project_id }}/env
-  - required fields: project_id, key, value, type
+  - required fields: project_id
   - risk: external mutation; approval required
 - delete_project_env_var:
   - endpoint: DELETE /v9/projects/{{ record.project_id }}/env/{{ record.id }}
@@ -118,7 +108,6 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
   - risk: destructive external mutation; approval required
 - create_webhook:
   - endpoint: POST /v1/webhooks
-  - required fields: url, events
   - risk: external mutation; approval required
 - delete_webhook:
   - endpoint: DELETE /v1/webhooks/{{ record.id }}
@@ -126,7 +115,6 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
   - risk: destructive external mutation; approval required
 - create_log_drain:
   - endpoint: POST /v1/log-drains
-  - required fields: deliveryFormat, url, sources
   - risk: external mutation; approval required
 - delete_log_drain:
   - endpoint: DELETE /v1/log-drains/{{ record.id }}
@@ -134,11 +122,10 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
   - risk: destructive external mutation; approval required
 - create_edge_config:
   - endpoint: POST /v1/edge-config
-  - required fields: slug
   - risk: external mutation; approval required
 - update_edge_config:
   - endpoint: PUT /v1/edge-config/{{ record.id }}
-  - required fields: id, slug
+  - required fields: id
   - risk: external mutation; approval required
 - delete_edge_config:
   - endpoint: DELETE /v1/edge-config/{{ record.id }}

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Kissmetrics products, reports, events, and properties through the Kissmetrics query API using HTTP Basic authentication.
 
 ICON
-  id: kissmetrics
   asset: icons/kissmetrics.svg
   source: official
   review_status: official_verified

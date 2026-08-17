@@ -13,11 +13,9 @@ DESCRIPTION
   Reads DingConnect reference catalogs (countries, currencies, regions, providers, products, product descriptions, promotions, provider status, error code descriptions, account balance) through the DingConnect REST API, and sends real-money mobile top-up transfers.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -70,7 +68,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   send_transfer:
     endpoint: POST /api/V1/SendTransfer
-    required fields: SkuCode, SendValue, AccountNumber, DistributorRef
     risk: external mutation; sends a real-money mobile top-up/airtime transfer to a live account and deducts the distributor's DingConnect balance unless ValidateOnly is set; approval required
 
 SECURITY

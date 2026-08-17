@@ -7,11 +7,10 @@ description: Feishu / Lark connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open Platform REST API using a tenant_access_token exchange.
+Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open Platform REST API using a tenant_access_token exchange. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ## Icon
 
-- id: feishu
 - asset: icons/feishu.svg
 - source: official
 - review_status: official_verified
@@ -24,17 +23,40 @@ Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- lark_host
+- mode
+- page_size
+- table_id
+- app_id (secret)
+- app_secret (secret)
+- app_token (secret)
+
+## ETL Streams
+
+- records:
+  - primary key: record_id
+  - fields: fields(), record_id()
+- tables:
+  - primary key: table_id
+  - fields: name(), revision(), table_id()
+- fields:
+  - primary key: field_id
+  - fields: field_id(), field_name(), is_hidden(), is_primary(), property(), type(), ui_type()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Feishu / Lark API reads performed by the legacy connector via a Tier-2 hook
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

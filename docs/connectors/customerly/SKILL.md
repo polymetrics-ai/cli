@@ -11,11 +11,9 @@ Reads Customerly users, leads, and accounts, and writes user/lead/tag/message/at
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -67,19 +65,17 @@ Reads Customerly users, leads, and accounts, and writes user/lead/tag/message/at
   - risk: external mutation; unsubscribes a live user from Customerly messaging; approval required
 - add_tag:
   - endpoint: POST /tags
-  - required fields: tag
   - risk: external mutation; adds or removes a tag on one or more live users/leads
 - delete_tag:
   - endpoint: DELETE /tags
-  - required fields: tag
+  - optional fields: tag
   - risk: external mutation; permanently removes a tag definition from the app; it is un-applied from every contact that carried it; approval required
 - send_message:
   - endpoint: POST /messages
-  - required fields: from, to, content
   - risk: sends a user-visible message from Customerly on the sender's behalf; may notify the recipient
 - add_user_attributes:
   - endpoint: POST /users/add-attributes/{{ record.user_id }}
-  - required fields: user_id, attributes
+  - required fields: user_id
   - risk: external mutation; adds/overwrites custom attribute values on a live user
 - add_company_attributes:
   - endpoint: POST /company/add-attributes/{{ record.company_id }}
@@ -87,7 +83,6 @@ Reads Customerly users, leads, and accounts, and writes user/lead/tag/message/at
   - risk: external mutation; adds/overwrites custom attribute values (and optionally renames) a live company
 - add_user_to_company:
   - endpoint: POST /users/add-to-company
-  - required fields: company_id
   - risk: external mutation; links a live user to a company, creating the company if it does not already exist
 
 ## Security

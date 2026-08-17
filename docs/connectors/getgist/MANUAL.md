@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Gist contacts, tags, segments, campaigns, forms, teammates, articles, collections, conversations, teams, workspace metadata, and e-commerce resources through the Gist REST API; writes regular JSON Gist resources and relationship actions.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

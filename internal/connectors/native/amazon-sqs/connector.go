@@ -3,7 +3,7 @@
 // for the golden migration reference). It migrates to Tier 3, not a
 // declarative Tier-1/Tier-2 bundle, because it signs AWS SQS Query API
 // requests with hand-rolled AWS SigV4 (canonical request construction, HMAC
-// derivation) and decodes XML (not JSON) SQS Query API response bodies —
+// derivation) and decodes an XML (not JSON) ReceiveMessageResponse body —
 // both are named Tier-2-ineligible/protocol-native triggers in
 // docs/migration/conventions.md (§1's "signature auth (SigV4, HMAC)" hook
 // trigger list, and a 3rd distinct shape — XML decoding — on top of it,
@@ -15,7 +15,7 @@
 // minus cataloger.go/cdc.go — this connector's single-stream catalog is a
 // two-line literal not worth a dedicated file, and legacy implements no
 // CDC path at all, unlike postgres's documented stub):
-//   - connector.go (this file) — entry/wiring, Metadata, Catalog, Write entrypoint.
+//   - connector.go (this file) — entry/wiring, Metadata, Catalog, Write stub.
 //   - connection.go — SigV4 signing, the signed HTTP request helper, config
 //     resolution/validation.
 //   - reader.go — Read: the bounded ReceiveMessage poll loop, XML decoding,
@@ -31,9 +31,11 @@
 // schema-discovered at runtime from anywhere (see docs.md's Known limits,
 // matching native/faker's identical precedent).
 //
-// This connector has no incremental cursor state (SQS's ReceiveMessage has no
-// timestamp/offset filter), and no CDC path, so neither connectors.StatefulReader
-// nor connectors.CDCReader is implemented here, unlike postgres.
+// This connector has no incremental cursor state (legacy implements no
+// InitialState/StatefulReader either — SQS's ReceiveMessage has no
+// timestamp/offset filter), and no CDC path (legacy implements no ReadCDC
+// either), so neither connectors.StatefulReader nor connectors.CDCReader is
+// implemented here, unlike postgres.
 //
 // NO init()/RegisterFactory call exists in this package
 // (enforced by a grep-guard test, amazon_sqs_test.go TestNoInitRegistration)
@@ -93,13 +95,12 @@ func New() Connector {
 // Description/DisplayName wording, never capability semantics.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue actions through fixed AWS Query API operations."
+	m.Description = "Reads messages from Amazon SQS via signed ReceiveMessage calls. Read-only; messages are not deleted."
 	return m
 }
 
-// Catalog returns the fixed single messages stream. The operation-level parity
-// slice keeps message reads as the only ETL stream; other SQS read operations
-// are exposed as typed operation direct reads through cli_surface.json.
+// Catalog returns the fixed single messages stream, matching legacy's
+// hand-written Catalog exactly (amazon_sqs.go).
 func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (connectors.Catalog, error) {
 	if err := ctx.Err(); err != nil {
 		return connectors.Catalog{}, err
@@ -114,23 +115,17 @@ func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 				Fields: []connectors.Field{
 					{Name: "message_id", Type: "string"},
 					{Name: "md5_of_body", Type: "string"},
-					{Name: "receipt_handle", Type: "string"},
 					{Name: "body", Type: "object"},
 					{Name: "sent_timestamp", Type: "string"},
-					{Name: "approximate_receive_count", Type: "string"},
-					{Name: "sender_id", Type: "string"},
-					{Name: "sequence_number", Type: "string"},
-					{Name: "message_group_id", Type: "string"},
-					{Name: "message_deduplication_id", Type: "string"},
 				},
 			},
 		},
 	}, nil
 }
 
-// Write executes one of the fixed typed SQS write/admin actions declared in
-// writes.json. It never accepts arbitrary AWS Action names or raw request
-// bodies; dispatch is closed over sqsWriteActions in writer.go.
+// Write is unsupported: this is a read-only source connector, matching
+// legacy's Write returning ErrUnsupportedOperation exactly. Capabilities.Write
+// is false.
 func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
-	return c.writeSQS(ctx, req, records)
+	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
 }

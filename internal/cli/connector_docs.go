@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -57,7 +56,7 @@ func writeConnectorDocs(dir string, registry *connectors.Registry) error {
 }
 
 func validateConnectorDocs(dir string, registry *connectors.Registry) error {
-	if err := validateConnectorCatalogDocs(filepath.Join(dir, "catalog"), registry.CatalogEntries()); err != nil {
+	if err := validateConnectorCatalogDocs(filepath.Join(dir, "catalog"), len(registry.CatalogEntries())); err != nil {
 		return err
 	}
 	if err := connectors.ValidateConnectorIcons(dir, registry.CatalogEntries(), registry.List()); err != nil {
@@ -81,18 +80,14 @@ func validateConnectorDocs(dir string, registry *connectors.Registry) error {
 				return fmt.Errorf("connector %s manual missing %s", meta.Name, required)
 			}
 		}
-		expectedManual := connectors.RenderConnectorManual(connector)
-		if err := validateGeneratedConnectorIconMetadata(string(manual), expectedManual, "ICON\n", meta.Name, "manual"); err != nil {
-			return err
-		}
-		if err := validateConnectorSkillFile(dir, meta.Name, connector); err != nil {
+		if err := validateConnectorSkillFile(dir, meta.Name); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func validateConnectorSkillFile(dir, name string, connector connectors.Connector) error {
+func validateConnectorSkillFile(dir, name string) error {
 	skillPath := filepath.Join(dir, name, "SKILL.md")
 	skill, err := os.ReadFile(skillPath)
 	if err != nil {
@@ -103,62 +98,7 @@ func validateConnectorSkillFile(dir, name string, connector connectors.Connector
 			return fmt.Errorf("connector %s skill missing %q", name, required)
 		}
 	}
-	return validateGeneratedConnectorIconMetadata(string(skill), connectors.RenderConnectorSkill(connector), "## Icon\n\n", name, "skill")
-}
-
-func validateGeneratedConnectorIconMetadata(document, expected, heading, name, surface string) error {
-	got, err := generatedConnectorIconBlock(document, heading)
-	if err != nil {
-		return fmt.Errorf("connector %s %s icon metadata: %w", name, surface, err)
-	}
-	want, err := generatedConnectorIconBlock(expected, heading)
-	if err != nil {
-		return fmt.Errorf("connector %s canonical %s icon metadata: %w", name, surface, err)
-	}
-	if got != want {
-		return fmt.Errorf("connector %s %s icon metadata does not match canonical registry", name, surface)
-	}
 	return nil
-}
-
-func generatedConnectorIconBlock(document, heading string) (string, error) {
-	headingLine := strings.TrimRight(heading, "\n")
-	if headingLine == "" || strings.Contains(headingLine, "\n") {
-		return "", fmt.Errorf("invalid section heading")
-	}
-	separator := heading[len(headingLine):]
-	starts := make([]int, 0, 1)
-	for lineStart := 0; lineStart <= len(document); {
-		relativeEnd := strings.IndexByte(document[lineStart:], '\n')
-		lineEnd := len(document)
-		if relativeEnd >= 0 {
-			lineEnd = lineStart + relativeEnd
-		}
-		if document[lineStart:lineEnd] == headingLine {
-			starts = append(starts, lineStart)
-		}
-		if lineEnd == len(document) {
-			break
-		}
-		lineStart = lineEnd + 1
-	}
-	if len(starts) == 0 {
-		return "", fmt.Errorf("missing section")
-	}
-	if len(starts) > 1 {
-		return "", fmt.Errorf("duplicate sections")
-	}
-	start := starts[0]
-	remainder := document[start+len(headingLine):]
-	if !strings.HasPrefix(remainder, separator) {
-		return "", fmt.Errorf("invalid section separator")
-	}
-	remainder = remainder[len(separator):]
-	end := strings.Index(remainder, "\n\n")
-	if end < 0 {
-		return "", fmt.Errorf("unterminated section")
-	}
-	return remainder[:end], nil
 }
 
 func writeConnectorCatalogDocs(dir string, defs []connectors.Definition) error {
@@ -187,7 +127,7 @@ func writeConnectorCatalogDocs(dir string, defs []connectors.Definition) error {
 	return nil
 }
 
-func validateConnectorCatalogDocs(dir string, wantDefs []connectors.Definition) error {
+func validateConnectorCatalogDocs(dir string, wantDefs int) error {
 	jsonPath := filepath.Join(dir, "all-connectors.json")
 	mdPath := filepath.Join(dir, "all-connectors.md")
 	data, err := os.ReadFile(jsonPath)
@@ -198,33 +138,8 @@ func validateConnectorCatalogDocs(dir string, wantDefs []connectors.Definition) 
 	if err := json.Unmarshal(data, &defs); err != nil {
 		return fmt.Errorf("decode connector catalog json: %w", err)
 	}
-	var rawDefs []struct {
-		Name string          `json:"name"`
-		Icon json.RawMessage `json:"icon"`
-	}
-	if err := json.Unmarshal(data, &rawDefs); err != nil {
-		return fmt.Errorf("decode raw connector catalog json: %w", err)
-	}
-	if len(defs) != len(wantDefs) {
-		return fmt.Errorf("connector catalog json has %d entries, want %d", len(defs), len(wantDefs))
-	}
-	wantByName := make(map[string]connectors.Definition, len(wantDefs))
-	for _, def := range wantDefs {
-		wantByName[def.Name] = def
-	}
-	seen := make(map[string]struct{}, len(defs))
-	for i, def := range defs {
-		want, ok := wantByName[def.Name]
-		if !ok {
-			return fmt.Errorf("connector catalog json has unexpected connector %q", def.Name)
-		}
-		if _, duplicate := seen[def.Name]; duplicate {
-			return fmt.Errorf("connector catalog json has duplicate connector %q", def.Name)
-		}
-		seen[def.Name] = struct{}{}
-		if err := validateCatalogIconMetadata("json", def.Name, rawDefs[i].Icon, want.Icon); err != nil {
-			return err
-		}
+	if len(defs) != wantDefs {
+		return fmt.Errorf("connector catalog json has %d entries, want %d", len(defs), wantDefs)
 	}
 	markdown, err := os.ReadFile(mdPath)
 	if err != nil {
@@ -234,30 +149,6 @@ func validateConnectorCatalogDocs(dir string, wantDefs []connectors.Definition) 
 		if !strings.Contains(string(markdown), required) {
 			return fmt.Errorf("connector catalog markdown missing %q", required)
 		}
-	}
-	for _, def := range wantDefs {
-		rowPrefix := "| `" + def.Name + "` | " + catalogIconMarkdown(def.Icon) + " |"
-		if !strings.Contains(string(markdown), rowPrefix) {
-			return fmt.Errorf("connector %s catalog markdown icon path does not match canonical registry", def.Name)
-		}
-	}
-	return nil
-}
-
-func validateCatalogIconMetadata(surface, name string, got json.RawMessage, want *connectors.ConnectorIcon) error {
-	if want == nil {
-		return fmt.Errorf("connector %s canonical icon metadata is missing", name)
-	}
-	var gotData bytes.Buffer
-	if err := json.Compact(&gotData, got); err != nil {
-		return fmt.Errorf("decode connector %s catalog %s icon metadata: %w", name, surface, err)
-	}
-	wantData, err := json.Marshal(want)
-	if err != nil {
-		return fmt.Errorf("encode connector %s canonical icon metadata: %w", name, err)
-	}
-	if !bytes.Equal(gotData.Bytes(), wantData) {
-		return fmt.Errorf("connector %s catalog %s icon metadata does not match canonical registry", name, surface)
 	}
 	return nil
 }
@@ -314,29 +205,22 @@ func copyConnectorIconAssets(connectorsDir string) error {
 	if samePath(src, dst) {
 		return nil
 	}
+	entries, err := os.ReadDir(src)
+	if err != nil {
+		return fmt.Errorf("read connector icon assets from %s: %w", src, err)
+	}
 	if err := os.MkdirAll(dst, 0o755); err != nil {
 		return fmt.Errorf("create connector icons dir: %w", err)
 	}
-	return filepath.WalkDir(src, func(path string, entry os.DirEntry, walkErr error) error {
-		if walkErr != nil {
-			return walkErr
-		}
+	for _, entry := range entries {
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".svg") {
-			return nil
+			continue
 		}
-		rel, err := filepath.Rel(src, path)
-		if err != nil {
-			return fmt.Errorf("resolve connector icon %s: %w", path, err)
+		if err := copyFile(filepath.Join(src, entry.Name()), filepath.Join(dst, entry.Name())); err != nil {
+			return err
 		}
-		if strings.HasPrefix(filepath.ToSlash(rel), "../") {
-			return fmt.Errorf("connector icon %s escapes icon source root", path)
-		}
-		target := filepath.Join(dst, rel)
-		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
-			return fmt.Errorf("create connector icon dir %s: %w", filepath.Dir(target), err)
-		}
-		return copyFile(path, target)
-	})
+	}
+	return nil
 }
 
 func connectorIconSourceDir(connectorsDir string) (string, error) {

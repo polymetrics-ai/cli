@@ -11,17 +11,9 @@ Reads Fillout forms and manages webhooks/submission deletion through the Fillout
 
 ## Icon
 
-- id: simple-icons-fillout
-- asset: icons/simple-icons/fillout.svg
-- title: Fillout
-- simple_icon_slug: fillout
-- simple_icon_hex: FFC738
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Fillout
-- match: exact-name-or-slug
-- matched_by: fillout
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -52,11 +44,9 @@ Reads Fillout forms and manages webhooks/submission deletion through the Fillout
 
 - create_webhook:
   - endpoint: POST /webhook/create
-  - required fields: formId, url
   - risk: registers a new outbound webhook subscription that will POST live form-submission data to an external URL; external mutation, approval required
 - remove_webhook:
   - endpoint: POST /webhook/delete
-  - required fields: webhookId
   - risk: permanently removes a webhook subscription; event delivery to its target URL stops immediately
 - delete_submission_by_id:
   - endpoint: DELETE /forms/{{ record.form_id }}/submissions/{{ record.submission_id }}

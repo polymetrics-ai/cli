@@ -13,7 +13,6 @@ DESCRIPTION
   Reads ShipStation orders, shipments, products, and customers through the ShipStation REST API.
 
 ICON
-  id: shipstation
   asset: icons/shipstation.svg
   source: official
   review_status: official_verified

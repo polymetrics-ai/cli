@@ -11,7 +11,6 @@ Reads Harness NextGen organizations, projects, services, connectors, and pipelin
 
 ## Icon
 
-- id: harness
 - asset: icons/harness.svg
 - source: upstream_registry
 - review_status: upstream_seeded

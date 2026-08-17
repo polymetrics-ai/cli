@@ -11,7 +11,6 @@ Reads public SpaceX launch, rocket, core, capsule, crew, Dragon, history, payloa
 
 ## Icon
 
-- id: spacex
 - asset: icons/spacex.svg
 - source: upstream_registry
 - review_status: upstream_seeded

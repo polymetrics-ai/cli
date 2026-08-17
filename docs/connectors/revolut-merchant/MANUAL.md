@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Revolut Merchant orders, customers, settlements, and payment links through the REST API.
 
 ICON
-  id: revolut
   asset: icons/revolut.svg
   source: official
   review_status: official_verified

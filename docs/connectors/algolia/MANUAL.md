@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Algolia indices, API keys, index settings, dictionaries, security sources, and logs, and writes index settings/API keys, through the Algolia Search REST API.
 
 ICON
-  id: simple-icons-algolia
-  asset: icons/simple-icons/algolia.svg
-  title: Algolia
-  simple_icon_slug: algolia
-  simple_icon_hex: 003DFF
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Algolia
-  match: exact-name-or-slug
-  matched_by: algolia
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -71,7 +63,6 @@ REVERSE ETL ACTIONS
     risk: overwrites the named index's search settings (ranking, faceting, searchable attributes); settings not included in the submitted record are left unchanged, but any included field replaces its current value immediately for live search traffic
   create_api_key:
     endpoint: POST /1/keys
-    required fields: acl
     risk: creates a new live Algolia API key with the requested ACL/index scope; a broadly-scoped key (e.g. admin-level ACLs) is a new standing credential that must be tracked and rotated like any other secret
 
 SECURITY

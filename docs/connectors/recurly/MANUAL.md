@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Recurly accounts, subscriptions, invoices, transactions, and plans through the Recurly v3 REST API.
 
 ICON
-  id: recurly
   asset: icons/recurly.svg
   source: upstream_registry
   review_status: upstream_seeded

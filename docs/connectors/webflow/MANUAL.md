@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Webflow sites, collections, collection items, pages, forms, form submissions, assets, asset folders, webhooks, redirects, custom domains, components, orders, products, and ecommerce settings, and writes CMS collection-item lifecycle actions, form-submission hidden-field updates, asset metadata, webhook subscriptions, and ecommerce order/inventory mutations, using the Webflow Data API v2.
 
 ICON
-  id: webflow
   asset: icons/webflow.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -87,8 +86,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_collection_item:
     endpoint: POST /v2/collections/{{ record.collection_id }}/items
-    required fields: collection_id, fieldData
-    optional fields: isArchived, isDraft, cmsLocaleId
+    optional fields: fieldData, isArchived, isDraft, cmsLocaleId
     risk: creates a new staged (unpublished-to-live) CMS item in the given collection; consumes the site's CMS item quota; the item is not visible on the live site until a subsequent publish_collection_item call
   update_collection_item:
     endpoint: PATCH /v2/collections/{{ record.collection_id }}/items/{{ record.id }}
@@ -101,11 +99,13 @@ REVERSE ETL ACTIONS
     risk: permanently removes a staged CMS item from the collection; if the item was previously published live, it remains live until a subsequent unpublish, since delete only affects the staged copy per Webflow's staged/live item model
   publish_collection_item:
     endpoint: POST /v2/collections/{{ record.collection_id }}/items/publish
-    required fields: collection_id, itemIds
+    required fields: collection_id
+    optional fields: itemIds
     risk: publishes the current staged content of the named item ids live immediately, making them visible on the site's live domain(s); does not itself trigger a full site publish/build
   update_form_submission:
     endpoint: PATCH /v2/sites/{{ config.site_id }}/form_submissions/{{ record.id }}
-    required fields: id, formSubmissionData
+    required fields: id
+    optional fields: formSubmissionData
     risk: overwrites the values of hidden fields already defined on the form's schema for one submission; cannot add new fields or edit visible/user-submitted answers
   update_asset:
     endpoint: PATCH /v2/assets/{{ record.id }}
@@ -118,8 +118,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an uploaded asset from the site's asset library; any live page still referencing the asset's URL will show a broken image/file link
   create_webhook:
     endpoint: POST /v2/sites/{{ config.site_id }}/webhooks
-    required fields: triggerType, url
-    optional fields: filter
+    optional fields: triggerType, url, filter
     risk: registers a new outbound webhook subscription for the site (up to 75 per triggerType); Webflow will begin POSTing event payloads to the given url immediately for matching events
   delete_webhook:
     endpoint: DELETE /v2/webhooks/{{ record.id }}
@@ -141,8 +140,8 @@ REVERSE ETL ACTIONS
     risk: DESTRUCTIVE FINANCIAL ACTION: reverses the underlying Stripe charge and refunds the customer's payment in full, setting the order's status to refunded; cannot be undone through the API
   update_inventory:
     endpoint: PATCH /v2/collections/{{ record.sku_collection_id }}/items/{{ record.sku_id }}/inventory
-    required fields: sku_collection_id, sku_id, inventoryType
-    optional fields: quantity, updateQuantity
+    required fields: sku_collection_id, sku_id
+    optional fields: inventoryType, quantity, updateQuantity
     risk: changes live storefront stock levels for a SKU either absolutely (quantity) or incrementally (updateQuantity); an incorrect value can oversell or wrongly zero-out a product's live availability
 
 SECURITY

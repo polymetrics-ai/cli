@@ -11,17 +11,9 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
 
 ## Icon
 
-- id: simple-icons-gitbook
-- asset: icons/simple-icons/gitbook.svg
-- title: GitBook
-- simple_icon_slug: gitbook
-- simple_icon_hex: BBDDE5
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=GitBook
-- match: exact-name-or-slug
-- matched_by: gitbook
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -682,11 +674,11 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /spaces/{spaceId}/move (Move a space to a different collection or position) executes a live GitBook API operation.
 - import_git_repository:
   - endpoint: POST /spaces/{{ record.space_id }}/git/import
-  - required fields: space_id, url, ref
+  - required fields: space_id
   - risk: POST /spaces/{spaceId}/git/import (Pull content into a space from a connected Git repository) executes a live GitBook API operation.
 - export_to_git_repository:
   - endpoint: POST /spaces/{{ record.space_id }}/git/export
-  - required fields: space_id, url, ref, commit_message
+  - required fields: space_id
   - risk: POST /spaces/{spaceId}/git/export (Push space content to a connected Git repository) executes a live GitBook API operation.
 - delete_legacy_git_installation:
   - endpoint: DELETE /spaces/{{ record.space_id }}/git/legacy-installation
@@ -714,15 +706,15 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /spaces/{spaceId}/permissions/users/{userId} (Remove a space user) executes a live GitBook API operation.
 - apply_template_to_space:
   - endpoint: POST /spaces/{{ record.space_id }}/content/template
-  - required fields: space_id, id
+  - required fields: space_id
   - risk: POST /spaces/{spaceId}/content/template (Apply a content template to populate a space with initial pages) executes a live GitBook API operation.
 - get_computed_document:
   - endpoint: POST /spaces/{{ record.space_id }}/content/computed/document
-  - required fields: space_id, source, seed
+  - required fields: space_id
   - risk: POST /spaces/{spaceId}/content/computed/document (Compute and render a document from a structured content source) executes a live GitBook API operation.
 - get_computed_revision:
   - endpoint: POST /spaces/{{ record.space_id }}/content/computed/revision
-  - required fields: space_id, source, seed
+  - required fields: space_id
   - risk: POST /spaces/{spaceId}/content/computed/revision (Compute and render a full revision from a structured content source) executes a live GitBook API operation.
 - create_change_request:
   - endpoint: POST /spaces/{{ record.space_id }}/change-requests
@@ -742,11 +734,11 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /spaces/{spaceId}/change-requests/{changeRequestId}/update (Sync a change request with the latest live space content) executes a live GitBook API operation.
 - submit_change_request_review:
   - endpoint: POST /spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/reviews
-  - required fields: space_id, change_request_id, status
+  - required fields: space_id, change_request_id
   - risk: POST /spaces/{spaceId}/change-requests/{changeRequestId}/reviews (Submit an approve or request-changes review for a change request) executes a live GitBook API operation.
 - request_reviewers_for_change_request:
   - endpoint: POST /spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/requested-reviewers
-  - required fields: space_id, change_request_id, users
+  - required fields: space_id, change_request_id
   - risk: POST /spaces/{spaceId}/change-requests/{changeRequestId}/requested-reviewers (Send review requests to users for a change request) executes a live GitBook API operation.
 - remove_requested_reviewer_from_change_request:
   - endpoint: DELETE /spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/requested-reviewers/{{ record.user_id }}
@@ -754,7 +746,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /spaces/{spaceId}/change-requests/{changeRequestId}/requested-reviewers/{userId} (Remove a reviewer from a change request) executes a live GitBook API operation.
 - update_change_request_conversation:
   - endpoint: PATCH /spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/conversations/{{ record.conversation_id }}
-  - required fields: space_id, change_request_id, conversation_id, title
+  - required fields: space_id, change_request_id, conversation_id
   - risk: PATCH /spaces/{spaceId}/change-requests/{changeRequestId}/conversations/{conversationId} (Update the title of an AI agent conversation on a change request) executes a live GitBook API operation.
 - delete_change_request_conversation:
   - endpoint: DELETE /spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/conversations/{{ record.conversation_id }}
@@ -762,7 +754,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /spaces/{spaceId}/change-requests/{changeRequestId}/conversations/{conversationId} (Delete an agent conversation) executes a live GitBook API operation.
 - post_comment_in_change_request:
   - endpoint: POST /spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/comments
-  - required fields: space_id, change_request_id, body
+  - required fields: space_id, change_request_id
   - risk: POST /spaces/{spaceId}/change-requests/{changeRequestId}/comments (Post a new comment on a change request) executes a live GitBook API operation.
 - update_comment_in_change_request:
   - endpoint: PUT /spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/comments/{{ record.comment_id }}
@@ -774,7 +766,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId} (Delete a change request comment) executes a live GitBook API operation.
 - post_comment_reply_in_change_request:
   - endpoint: POST /spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/comments/{{ record.comment_id }}/replies
-  - required fields: space_id, change_request_id, comment_id, body
+  - required fields: space_id, change_request_id, comment_id
   - risk: POST /spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}/replies (Post a reply to a change request comment) executes a live GitBook API operation.
 - update_comment_reply_in_change_request:
   - endpoint: PUT /spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/comments/{{ record.comment_id }}/replies/{{ record.comment_reply_id }}
@@ -786,11 +778,11 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /spaces/{spaceId}/change-requests/{changeRequestId}/comments/{commentId}/replies/{commentReplyId} (Delete a change request comment reply) executes a live GitBook API operation.
 - update_change_request_content:
   - endpoint: POST /spaces/{{ record.space_id }}/change-requests/{{ record.change_request_id }}/content
-  - required fields: space_id, change_request_id, changes
+  - required fields: space_id, change_request_id
   - risk: POST /spaces/{spaceId}/change-requests/{changeRequestId}/content (Apply a batch of content changes to a change request) executes a live GitBook API operation.
 - post_comment_in_space:
   - endpoint: POST /spaces/{{ record.space_id }}/comments
-  - required fields: space_id, body
+  - required fields: space_id
   - risk: POST /spaces/{spaceId}/comments (Post a new comment on a space or a specific page) executes a live GitBook API operation.
 - update_comment_in_space:
   - endpoint: PUT /spaces/{{ record.space_id }}/comments/{{ record.comment_id }}
@@ -802,7 +794,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /spaces/{spaceId}/comments/{commentId} (Delete a space comment) executes a live GitBook API operation.
 - post_comment_reply_in_space:
   - endpoint: POST /spaces/{{ record.space_id }}/comments/{{ record.comment_id }}/replies
-  - required fields: space_id, comment_id, body
+  - required fields: space_id, comment_id
   - risk: POST /spaces/{spaceId}/comments/{commentId}/replies (Post a reply to an existing space comment) executes a live GitBook API operation.
 - update_comment_reply_in_space:
   - endpoint: PUT /spaces/{{ record.space_id }}/comments/{{ record.comment_id }}/replies/{{ record.comment_reply_id }}
@@ -826,7 +818,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /collections/{collectionId}/move (Move a collection to a new position.) executes a live GitBook API operation.
 - transfer_collection:
   - endpoint: POST /collections/{{ record.collection_id }}/transfer
-  - required fields: collection_id, organization
+  - required fields: collection_id
   - risk: POST /collections/{collectionId}/transfer (Transfer a collection) executes a live GitBook API operation.
 - invite_to_collection:
   - endpoint: POST /collections/{{ record.collection_id }}/permissions
@@ -850,7 +842,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /collections/{collectionId}/permissions/users/{userId} (Remove a user from a collection) executes a live GitBook API operation.
 - publish_integration:
   - endpoint: POST /integrations/{{ record.integration_name }}
-  - required fields: integration_name, organization, title, description, script, scopes
+  - required fields: integration_name
   - risk: POST /integrations/{integrationName} (Publish an integration) executes a live GitBook API operation.
 - unpublish_integration:
   - endpoint: DELETE /integrations/{{ record.integration_name }}
@@ -858,11 +850,11 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /integrations/{integrationName} (Unpublish an integration) executes a live GitBook API operation.
 - install_integration:
   - endpoint: POST /integrations/{{ record.integration_name }}/installations
-  - required fields: integration_name, organization
+  - required fields: integration_name
   - risk: POST /integrations/{integrationName}/installations (Install an integration) executes a live GitBook API operation.
 - set_integration_development_mode:
   - endpoint: PUT /integrations/{{ record.integration_name }}/dev
-  - required fields: integration_name, tunnel_url
+  - required fields: integration_name
   - risk: PUT /integrations/{integrationName}/dev (Enable integration dev mode) executes a live GitBook API operation.
 - disable_integration_development_mode:
   - endpoint: DELETE /integrations/{{ record.integration_name }}/dev
@@ -870,11 +862,11 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /integrations/{integrationName}/dev (Disable integration dev mode) executes a live GitBook API operation.
 - render_integration_ui_with_post:
   - endpoint: POST /integrations/{{ record.integration_name }}/render
-  - required fields: integration_name, component_id, props, context
+  - required fields: integration_name
   - risk: POST /integrations/{integrationName}/render (Render an integration UI with POST method) executes a live GitBook API operation.
 - queue_integration_task:
   - endpoint: POST /integrations/{{ record.integration_name }}/tasks
-  - required fields: integration_name, task
+  - required fields: integration_name
   - risk: POST /integrations/{integrationName}/tasks (Queue an integration task) executes a live GitBook API operation.
 - update_integration_installation:
   - endpoint: PATCH /integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}
@@ -890,7 +882,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /integrations/{integrationName}/installations/{installationId}/tokens (Create an integration installation API token) executes a live GitBook API operation.
 - install_integration_on_space:
   - endpoint: POST /integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/spaces
-  - required fields: integration_name, installation_id, space
+  - required fields: integration_name, installation_id
   - risk: POST /integrations/{integrationName}/installations/{installationId}/spaces (Install an integration on a space) executes a live GitBook API operation.
 - update_integration_space_installation:
   - endpoint: PATCH /integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/spaces/{{ record.space_id }}
@@ -902,7 +894,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /integrations/{integrationName}/installations/{installationId}/spaces/{spaceId} (Uninstall an integration from a space) executes a live GitBook API operation.
 - install_integration_on_site:
   - endpoint: POST /integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/sites
-  - required fields: integration_name, installation_id, site_id
+  - required fields: integration_name, installation_id
   - risk: POST /integrations/{integrationName}/installations/{installationId}/sites (Install an integration on a site) executes a live GitBook API operation.
 - update_integration_site_installation:
   - endpoint: PATCH /integrations/{{ record.integration_name }}/installations/{{ record.installation_id }}/sites/{{ record.site_id }}
@@ -934,11 +926,11 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /orgs/{organizationId}/members/{userId}/sso (Set a user as an SSO member of an organization) executes a live GitBook API operation.
 - create_organization_team:
   - endpoint: PUT /orgs/{{ record.organization_id }}/teams
-  - required fields: organization_id, title
+  - required fields: organization_id
   - risk: PUT /orgs/{organizationId}/teams (Create a team) executes a live GitBook API operation.
 - update_team_in_organization_by_id:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/teams/{{ record.team_id }}
-  - required fields: organization_id, team_id, title
+  - required fields: organization_id, team_id
   - risk: PATCH /orgs/{organizationId}/teams/{teamId} (Update a team) executes a live GitBook API operation.
 - remove_team_from_organization_by_id:
   - endpoint: DELETE /orgs/{{ record.organization_id }}/teams/{{ record.team_id }}
@@ -958,7 +950,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /orgs/{organizationId}/teams/{teamId}/members/{userId} (Delete a team member) executes a live GitBook API operation.
 - invite_users_to_organization:
   - endpoint: POST /orgs/{{ record.organization_id }}/invites
-  - required fields: organization_id, emails
+  - required fields: organization_id
   - risk: POST /orgs/{organizationId}/invites (Invite users in an organization) executes a live GitBook API operation.
 - join_organization_with_invite:
   - endpoint: POST /orgs/{{ record.organization_id }}/invites/{{ record.invite_id }}
@@ -990,7 +982,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /orgs/{organizationId}/collections (Create a collection) executes a live GitBook API operation.
 - create_organization_saml_provider:
   - endpoint: POST /orgs/{{ record.organization_id }}/saml
-  - required fields: organization_id, label
+  - required fields: organization_id
   - risk: POST /orgs/{organizationId}/saml (Create a new SAML provider) executes a live GitBook API operation.
 - update_organization_saml_provider:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/saml/{{ record.saml_provider_id }}
@@ -1002,19 +994,19 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /orgs/{organizationId}/saml/{samlProviderId} (Delete a SAML provider) executes a live GitBook API operation.
 - ask_in_organization:
   - endpoint: POST /orgs/{{ record.organization_id }}/ask
-  - required fields: organization_id, query
+  - required fields: organization_id
   - risk: POST /orgs/{organizationId}/ask (Ask a question in an organization) executes a live GitBook API operation.
 - create_open_api_spec:
   - endpoint: POST /orgs/{{ record.organization_id }}/openapi
-  - required fields: organization_id, source, slug
+  - required fields: organization_id
   - risk: POST /orgs/{organizationId}/openapi (Create an OpenAPI spec) executes a live GitBook API operation.
 - create_or_update_open_api_spec_by_slug:
   - endpoint: PUT /orgs/{{ record.organization_id }}/openapi/{{ record.spec_slug }}
-  - required fields: organization_id, spec_slug, source
+  - required fields: organization_id, spec_slug
   - risk: PUT /orgs/{organizationId}/openapi/{specSlug} (Create or update an OpenAPI spec) executes a live GitBook API operation.
 - update_open_api_spec_by_slug:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/openapi/{{ record.spec_slug }}
-  - required fields: organization_id, spec_slug, visibility
+  - required fields: organization_id, spec_slug
   - risk: PATCH /orgs/{organizationId}/openapi/{specSlug} (Update OpenAPI spec visibility) executes a live GitBook API operation.
 - delete_open_api_spec_by_slug:
   - endpoint: DELETE /orgs/{{ record.organization_id }}/openapi/{{ record.spec_slug }}
@@ -1022,15 +1014,15 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /orgs/{organizationId}/openapi/{specSlug} (Delete an OpenAPI spec) executes a live GitBook API operation.
 - update_organization_agent_instructions:
   - endpoint: PUT /orgs/{{ record.organization_id }}/agent-instructions
-  - required fields: organization_id, instructions
+  - required fields: organization_id
   - risk: PUT /orgs/{organizationId}/agent-instructions (Update Docs agent instructions for an organization) executes a live GitBook API operation.
 - create_translation:
   - endpoint: POST /orgs/{{ record.organization_id }}/translations
-  - required fields: organization_id, language, source
+  - required fields: organization_id
   - risk: POST /orgs/{organizationId}/translations (Create a translation) executes a live GitBook API operation.
 - update_translation:
   - endpoint: PUT /orgs/{{ record.organization_id }}/translations/{{ record.translation_id }}
-  - required fields: organization_id, translation_id, instructions
+  - required fields: organization_id, translation_id
   - risk: PUT /orgs/{organizationId}/translations/{translationId} (Update a translation) executes a live GitBook API operation.
 - delete_translation:
   - endpoint: DELETE /orgs/{{ record.organization_id }}/translations/{{ record.translation_id }}
@@ -1042,15 +1034,15 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /orgs/{organizationId}/translations/{translationId}/run (Run a translation again) executes a live GitBook API operation.
 - update_glossary_entries:
   - endpoint: PUT /orgs/{{ record.organization_id }}/translations-glossary
-  - required fields: organization_id, operations
+  - required fields: organization_id
   - risk: PUT /orgs/{organizationId}/translations-glossary (Update glossary entries) executes a live GitBook API operation.
 - generate_storage_upload_url:
   - endpoint: POST /orgs/{{ record.organization_id }}/storage/upload
-  - required fields: organization_id, file, kind
+  - required fields: organization_id
   - risk: POST /orgs/{organizationId}/storage/upload (Create a signed URL to upload a file) executes a live GitBook API operation.
 - create_custom_font:
   - endpoint: PUT /orgs/{{ record.organization_id }}/fonts
-  - required fields: organization_id, font_family, font_faces
+  - required fields: organization_id
   - risk: PUT /orgs/{organizationId}/fonts (Create a custom font) executes a live GitBook API operation.
 - update_custom_font:
   - endpoint: POST /orgs/{{ record.organization_id }}/fonts/{{ record.font_id }}
@@ -1062,7 +1054,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /orgs/{organizationId}/fonts/{fontId} (Delete a custom font) executes a live GitBook API operation.
 - start_import_run:
   - endpoint: POST /org/{{ record.organization_id }}/imports
-  - required fields: organization_id, source, target
+  - required fields: organization_id
   - risk: POST /org/{organizationId}/imports (Import content into a space from a website) executes a live GitBook API operation.
 - cancel_import_run:
   - endpoint: POST /org/{{ record.organization_id }}/imports/{{ record.import_run_id }}/cancel
@@ -1082,7 +1074,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /orgs/{organizationId}/sites/{siteId} (Delete a site) executes a live GitBook API operation.
 - update_site_adaptive_schema:
   - endpoint: PUT /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/adaptive-schema
-  - required fields: organization_id, site_id, json_schema
+  - required fields: organization_id, site_id
   - risk: PUT /orgs/{organizationId}/sites/{siteId}/adaptive-schema (Update the visitor attributes JSON schema for an adaptive content site) executes a live GitBook API operation.
 - publish_site:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/publish
@@ -1094,7 +1086,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /orgs/{organizationId}/sites/{siteId}/unpublish (Take a site offline by unpublishing it) executes a live GitBook API operation.
 - create_site_share_link:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/share-links
-  - required fields: organization_id, site_id, name
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/share-links (Create a private share link for a site) executes a live GitBook API operation.
 - update_site_share_link_by_id:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/share-links/{{ record.share_link_id }}
@@ -1106,7 +1098,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /orgs/{organizationId}/sites/{siteId}/share-links/{shareLinkId} (Deletes a share link) executes a live GitBook API operation.
 - sort_site_structure:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/structure/sort
-  - required fields: organization_id, site_id, item, position
+  - required fields: organization_id, site_id
   - risk: PATCH /orgs/{organizationId}/sites/{siteId}/structure/sort (Move a site space, section, or section group to a new position) executes a live GitBook API operation.
 - update_site_publishing_auth_by_id:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/publishing/auth
@@ -1118,15 +1110,15 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /orgs/{organizationId}/sites/{siteId}/publishing/auth/regenerate (Regenerate the private key for a site's published content authentication) executes a live GitBook API operation.
 - update_site_customization_by_id:
   - endpoint: PUT /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/customization
-  - required fields: organization_id, site_id, styling, internationalization, favicon, header, footer, themes, feedback, ai, advanced_customization, trademark, external_links, pagination, page_actions, privacy_policy, social_preview, social_accounts, insights
+  - required fields: organization_id, site_id
   - risk: PUT /orgs/{organizationId}/sites/{siteId}/customization (Update the branding and visual customization settings for a site) executes a live GitBook API operation.
 - add_space_to_site:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/site-spaces
-  - required fields: organization_id, site_id, space_id
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/site-spaces (Add a space to a site as a content source) executes a live GitBook API operation.
 - add_section_group_to_site:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/section-groups
-  - required fields: organization_id, site_id, title
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/section-groups (Add a section group to a site's navigation structure) executes a live GitBook API operation.
 - update_site_section_group_by_id:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/section-groups/{{ record.site_section_group_id }}
@@ -1138,7 +1130,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /orgs/{organizationId}/sites/{siteId}/section-groups/{siteSectionGroupId} (Delete a site section group) executes a live GitBook API operation.
 - add_section_to_site:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/sections
-  - required fields: organization_id, site_id, space_id
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/sections (Add a new navigation section to a site backed by a space) executes a live GitBook API operation.
 - update_site_section_by_id:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/sections/{{ record.site_section_id }}
@@ -1150,19 +1142,19 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /orgs/{organizationId}/sites/{siteId}/sections/{siteSectionId} (Delete a site section) executes a live GitBook API operation.
 - search_site_content:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/search
-  - required fields: organization_id, site_id, query
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/search (Full-text search across all content in a site) executes a live GitBook API operation.
 - stream_ask_in_site:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/ask
-  - required fields: organization_id, site_id, question, scope
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/ask (Ask a question in a site) executes a live GitBook API operation.
 - create_site_scan:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/scans
-  - required fields: organization_id, site_id, topic
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/scans (Enqueue a new site scan) executes a live GitBook API operation.
 - update_site_finding_by_id:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/findings/{{ record.site_finding_id }}
-  - required fields: organization_id, site_id, site_finding_id, status
+  - required fields: organization_id, site_id, site_finding_id
   - risk: PATCH /orgs/{organizationId}/sites/{siteId}/findings/{siteFindingId} (Update a site finding) executes a live GitBook API operation.
 - trigger_change_requests_for_site_finding:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/findings/{{ record.site_finding_id }}/change-requests
@@ -1186,7 +1178,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /orgs/{organizationId}/sites/{siteId}/context-connections/{siteContextConnectionId}/sync (Trigger a sync for a context connection) executes a live GitBook API operation.
 - update_site_topic_by_id:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/topics/{{ record.site_topic_id }}
-  - required fields: organization_id, site_id, site_topic_id, usage_settings
+  - required fields: organization_id, site_id, site_topic_id
   - risk: PATCH /orgs/{organizationId}/sites/{siteId}/topics/{siteTopicId} (Update a topic) executes a live GitBook API operation.
 - delete_site_topic_findings:
   - endpoint: DELETE /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/topics/{{ record.site_topic_id }}/findings
@@ -1242,11 +1234,11 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /orgs/{organizationId}/sites/{siteId}/permissions/teams/{teamId} (Remove an org team from a site) executes a live GitBook API operation.
 - stream_ai_response_in_site:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/ai/response
-  - required fields: organization_id, site_id, input
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/ai/response (Generate an AI response in a site) executes a live GitBook API operation.
 - update_site_agent_settings_by_id:
   - endpoint: PUT /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/agent-settings
-  - required fields: organization_id, site_id, scans, findings, editing
+  - required fields: organization_id, site_id
   - risk: PUT /orgs/{organizationId}/sites/{siteId}/agent-settings (Update the AI agent configuration for a site) executes a live GitBook API operation.
 - create_site_styleguide_by_id:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/styleguide
@@ -1254,11 +1246,11 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /orgs/{organizationId}/sites/{siteId}/styleguide (Create or retrieve the styleguide space for a site) executes a live GitBook API operation.
 - track_events_in_site_by_id:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/insights/events
-  - required fields: organization_id, site_id, events
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/insights/events (Track site events) executes a live GitBook API operation.
 - aggregate_site_events:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/insights/events/aggregate
-  - required fields: organization_id, site_id, range
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/insights/events/aggregate (Query site events) executes a live GitBook API operation.
 - update_site_ads_by_id:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/ads
@@ -1266,11 +1258,11 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: POST /orgs/{organizationId}/sites/{siteId}/ads (Update the advertising settings for a site) executes a live GitBook API operation.
 - create_site_redirect:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/redirects
-  - required fields: organization_id, site_id, source, destination
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/redirects (Create a URL redirect rule for a site) executes a live GitBook API operation.
 - bulk_upsert_site_redirects:
   - endpoint: PUT /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/redirects
-  - required fields: organization_id, site_id, redirects
+  - required fields: organization_id, site_id
   - risk: PUT /orgs/{organizationId}/sites/{siteId}/redirects (Create, update, delete, or publish site redirect rules in bulk) executes a live GitBook API operation.
 - update_site_redirect_by_id:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/redirects/{{ record.site_redirect_id }}
@@ -1282,7 +1274,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: DELETE /orgs/{organizationId}/sites/{siteId}/redirects/{siteRedirectId} (Delete a site redirect) executes a live GitBook API operation.
 - create_site_mcp_server:
   - endpoint: POST /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/mcp-servers
-  - required fields: organization_id, site_id, name, url, headers
+  - required fields: organization_id, site_id
   - risk: POST /orgs/{organizationId}/sites/{siteId}/mcp-servers (Add a new MCP server configuration to a site) executes a live GitBook API operation.
 - update_site_mcp_server_by_id:
   - endpoint: PATCH /orgs/{{ record.organization_id }}/sites/{{ record.site_id }}/mcp-servers/{{ record.site_mcp_server_id }}
@@ -1318,11 +1310,9 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
   - risk: PATCH /ads/sites/{siteId} (Update the Ads configuration for a site) executes a live GitBook API operation.
 - resolve_published_content_by_url:
   - endpoint: POST /urls/published
-  - required fields: url
   - risk: POST /urls/published (Resolve a URL of a published content.) executes a live GitBook API operation.
 - install_git_sync_provider_on_target:
   - endpoint: POST /git/installations
-  - required fields: provider, target
   - risk: POST /git/installations (Install a Git Sync provider on a target) executes a live GitBook API operation.
 - update_git_sync_installation_by_id:
   - endpoint: PATCH /git/installations/{{ record.installation_id }}

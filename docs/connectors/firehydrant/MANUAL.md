@@ -13,11 +13,9 @@ DESCRIPTION
   Reads broad FireHydrant REST API resources and exposes direct JSON/no-body FireHydrant mutations through declarative write actions.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

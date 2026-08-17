@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Leadfeeder accounts and their leads, visits, and custom feeds through the Leadfeeder JSON:API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

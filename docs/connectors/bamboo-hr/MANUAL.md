@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes BambooHR employee, metadata, reporting, time off, applicant tracking, benefits, goals, training, time tracking, scheduling, and webhook resources that are available through the documented Basic-auth API surface.
 
 ICON
-  id: bamboohr
   asset: icons/bamboohr.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -321,11 +320,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_application_comment:
     endpoint: POST /api/v1/applicant_tracking/applications/{{ record.application_id }}/comments
-    required fields: application_id, comment
+    required fields: application_id
     risk: Create Job Application Comment through the BambooHR API.
   update_applicant_status:
     endpoint: POST /api/v1/applicant_tracking/applications/{{ record.application_id }}/status
-    required fields: application_id, status
+    required fields: application_id
     risk: Update Applicant Status through the BambooHR API.
   add_new_company_benefit:
     endpoint: POST /api/v1/benefit/company_benefit
@@ -376,19 +375,18 @@ REVERSE ETL ACTIONS
     risk: Add an employee's default withholdings through the BambooHR API.
   create_employee_dependent:
     endpoint: POST /api/v1/employeedependents
-    required fields: employeeId
     risk: Create Employee Dependent through the BambooHR API.
   update_employee_dependent:
     endpoint: PUT /api/v1/employeedependents/{{ record.id }}
-    required fields: id, employeeId
+    required fields: id
     risk: Update Employee Dependent through the BambooHR API.
   adjust_time_off_balance:
     endpoint: PUT /api/v1/employees/{{ record.employee_id }}/time_off/balance_adjustment
-    required fields: employee_id, amount, date, timeOffTypeId
+    required fields: employee_id
     risk: Adjust Time Off Balance through the BambooHR API.
   create_time_off_history:
     endpoint: PUT /api/v1/employees/{{ record.employee_id }}/time_off/history
-    required fields: employee_id, date
+    required fields: employee_id
     risk: Create Time Off History Item through the BambooHR API.
   assign_time_off_policies:
     endpoint: PUT /api/v1/employees/{{ record.employee_id }}/time_off/policies
@@ -396,7 +394,7 @@ REVERSE ETL ACTIONS
     risk: Assign Time Off Policies through the BambooHR API.
   create_time_off_request:
     endpoint: PUT /api/v1/employees/{{ record.employee_id }}/time_off/request
-    required fields: employee_id, status, start, end, timeOffTypeId
+    required fields: employee_id
     risk: Create Time Off Request through the BambooHR API.
   create_table_row:
     endpoint: POST /api/v1/employees/{{ record.id }}/tables/{{ record.table }}
@@ -416,7 +414,7 @@ REVERSE ETL ACTIONS
     risk: Update List Field Values through the BambooHR API.
   create_goal:
     endpoint: POST /api/v1/performance/employees/{{ record.employee_id }}/goals
-    required fields: employee_id, title, dueDate, sharedWithEmployeeIds
+    required fields: employee_id
     risk: Create Goal through the BambooHR API.
   delete_goal:
     endpoint: DELETE /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}
@@ -424,7 +422,7 @@ REVERSE ETL ACTIONS
     risk: Deletes BambooHR data: Delete Goal.
   update_goal_v1:
     endpoint: PUT /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}
-    required fields: employee_id, goal_id, dueDate, sharedWithEmployeeIds, title
+    required fields: employee_id, goal_id
     risk: Update Goal (v1) through the BambooHR API.
   close_goal:
     endpoint: POST /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/close
@@ -432,7 +430,7 @@ REVERSE ETL ACTIONS
     risk: Close Goal through the BambooHR API.
   create_goal_comment:
     endpoint: POST /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/comments
-    required fields: employee_id, goal_id, text
+    required fields: employee_id, goal_id
     risk: Create Goal Comment through the BambooHR API.
   delete_goal_comment:
     endpoint: DELETE /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/comments/{{ record.comment_id }}
@@ -440,15 +438,15 @@ REVERSE ETL ACTIONS
     risk: Deletes BambooHR data: Delete Goal Comment.
   update_goal_comment:
     endpoint: PUT /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/comments/{{ record.comment_id }}
-    required fields: employee_id, goal_id, comment_id, text
+    required fields: employee_id, goal_id, comment_id
     risk: Update Goal Comment through the BambooHR API.
   update_goal_milestone_progress:
     endpoint: PUT /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/milestones/{{ record.milestone_id }}/progress
-    required fields: employee_id, goal_id, milestone_id, complete
+    required fields: employee_id, goal_id, milestone_id
     risk: Update Milestone Progress through the BambooHR API.
   update_goal_progress:
     endpoint: PUT /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/progress
-    required fields: employee_id, goal_id, percentComplete
+    required fields: employee_id, goal_id
     risk: Update Goal Progress through the BambooHR API.
   reopen_goal:
     endpoint: POST /api/v1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}/reopen
@@ -460,7 +458,6 @@ REVERSE ETL ACTIONS
     risk: Update Goal Sharing through the BambooHR API.
   create_scheduling_create_schedule:
     endpoint: POST /api/v1/scheduling/schedules
-    required fields: name, locationId, startOfWeek
     risk: Create Schedule through the BambooHR API.
   delete_scheduling_delete_schedule:
     endpoint: DELETE /api/v1/scheduling/schedules/{{ record.id }}
@@ -472,11 +469,9 @@ REVERSE ETL ACTIONS
     risk: Update Schedule through the BambooHR API.
   create_scheduling_create_shift:
     endpoint: POST /api/v1/scheduling/shifts
-    required fields: scheduleId, status, color, timezone, start, end
     risk: Create Shift through the BambooHR API.
   create_scheduling_publish_shifts:
     endpoint: POST /api/v1/scheduling/shifts/publish
-    required fields: shiftIds
     risk: Publish Shifts through the BambooHR API.
   delete_scheduling_delete_shift:
     endpoint: DELETE /api/v1/scheduling/shifts/{{ record.id }}
@@ -488,7 +483,6 @@ REVERSE ETL ACTIONS
     risk: Update Shift through the BambooHR API.
   create_break_policy:
     endpoint: POST /api/v1/time-tracking/break-policies
-    required fields: name
     risk: Create Break Policy through the BambooHR API.
   delete_break_policy:
     endpoint: DELETE /api/v1/time-tracking/break-policies/{{ record.id }}
@@ -500,11 +494,11 @@ REVERSE ETL ACTIONS
     risk: Update Break Policy through the BambooHR API.
   assign_employees_to_break_policy:
     endpoint: POST /api/v1/time-tracking/break-policies/{{ record.id }}/assign
-    required fields: id, employeeIds
+    required fields: id
     risk: Assign Employees to Break Policy through the BambooHR API.
   set_break_policy_employees:
     endpoint: PUT /api/v1/time-tracking/break-policies/{{ record.id }}/assign
-    required fields: id, employeeIds
+    required fields: id
     risk: Set Employees for Break Policy through the BambooHR API.
   create_break:
     endpoint: POST /api/v1/time-tracking/break-policies/{{ record.id }}/breaks
@@ -520,7 +514,7 @@ REVERSE ETL ACTIONS
     risk: Sync Break Policy through the BambooHR API.
   create_unassign_employees_from_break_policy:
     endpoint: POST /api/v1/time-tracking/break-policies/{{ record.id }}/unassign
-    required fields: id, employeeIds
+    required fields: id
     risk: Unassign Employees from Break Policy through the BambooHR API.
   delete_break:
     endpoint: DELETE /api/v1/time-tracking/breaks/{{ record.id }}
@@ -532,7 +526,6 @@ REVERSE ETL ACTIONS
     risk: Update Break through the BambooHR API.
   create_project:
     endpoint: POST /api/v1/time-tracking/projects
-    required fields: name
     risk: Create Time Tracking Project through the BambooHR API.
   delete_project:
     endpoint: DELETE /api/v1/time-tracking/projects/{{ record.id }}
@@ -544,11 +537,10 @@ REVERSE ETL ACTIONS
     risk: Update Time Tracking Project through the BambooHR API.
   create_project_task:
     endpoint: POST /api/v1/time-tracking/projects/{{ record.project_id }}/tasks
-    required fields: project_id, name
+    required fields: project_id
     risk: Create Time Tracking Project Task through the BambooHR API.
   create_shift_differential:
     endpoint: POST /api/v1/time-tracking/shift-differentials
-    required fields: name, rate, rateType, times
     risk: Create Time Tracking Shift Differential through the BambooHR API.
   delete_shift_differential:
     endpoint: DELETE /api/v1/time-tracking/shift-differentials/{{ record.id }}
@@ -568,7 +560,7 @@ REVERSE ETL ACTIONS
     risk: Update Time Tracking Task through the BambooHR API.
   update_time_off_request_status:
     endpoint: PUT /api/v1/time_off/requests/{{ record.request_id }}/status
-    required fields: request_id, status
+    required fields: request_id
     risk: Update Time Off Request Status through the BambooHR API.
   delete_clock_entries:
     endpoint: DELETE /api/v1/time_tracking/clock_entries
@@ -578,11 +570,9 @@ REVERSE ETL ACTIONS
     risk: Store clock entries through the BambooHR API.
   delete_timesheet_clock_entries_via_post:
     endpoint: POST /api/v1/time_tracking/clock_entries/delete
-    required fields: clockEntryIds
     risk: Delete Timesheet Clock Entries through the BambooHR API.
   create_or_update_timesheet_clock_entries:
     endpoint: POST /api/v1/time_tracking/clock_entries/store
-    required fields: entries
     risk: Create or Update Timesheet Clock Entries through the BambooHR API.
   clock_in:
     endpoint: POST /api/v1/time_tracking/clock_in/{{ record.employee_id }}
@@ -613,30 +603,24 @@ REVERSE ETL ACTIONS
     risk: Create Timesheet Clock-Out Entry through the BambooHR API.
   delete_timesheet_hour_entries_via_post:
     endpoint: POST /api/v1/time_tracking/hour_entries/delete
-    required fields: hourEntryIds
     risk: Delete Timesheet Hour Entries through the BambooHR API.
   create_or_update_timesheet_hour_entries:
     endpoint: POST /api/v1/time_tracking/hour_entries/store
-    required fields: hours
     risk: Create or Update Timesheet Hour Entries through the BambooHR API.
   create_time_tracking_project:
     endpoint: POST /api/v1/time_tracking/projects
-    required fields: name
     risk: Create Time Tracking Project through the BambooHR API.
   approve_employee_timesheets:
     endpoint: POST /api/v1/time_tracking/timesheets/approve
-    required fields: lastChanged, timesheets
     risk: Approve employee timesheets through the BambooHR API.
   clock_out_and_approve_employee_timesheets:
     endpoint: POST /api/v1/time_tracking/timesheets/clock_out_and_approve
     risk: Approve timesheets for employees that are currently clocked in through the BambooHR API.
   create_time_tracking_hour_record:
     endpoint: POST /api/v1/timetracking/add
-    required fields: dateHoursWorked, employeeId, hoursWorked, rateType, timeTrackingId
     risk: Create Hour Record through the BambooHR API.
   update_time_tracking_record:
     endpoint: PUT /api/v1/timetracking/adjust
-    required fields: timeTrackingId, hoursWorked
     risk: Update Hour Record through the BambooHR API.
   delete_time_tracking_hour_record:
     endpoint: DELETE /api/v1/timetracking/delete/{{ record.id }}
@@ -647,7 +631,6 @@ REVERSE ETL ACTIONS
     risk: Create or Update Hour Records through the BambooHR API.
   create_training_category:
     endpoint: POST /api/v1/training/category
-    required fields: name
     risk: Create Training Category through the BambooHR API.
   delete_training_category:
     endpoint: DELETE /api/v1/training/category/{{ record.training_category_id }}
@@ -655,11 +638,11 @@ REVERSE ETL ACTIONS
     risk: Deletes BambooHR data: Delete Training Category.
   update_training_category:
     endpoint: PUT /api/v1/training/category/{{ record.training_category_id }}
-    required fields: training_category_id, name
+    required fields: training_category_id
     risk: Update Training Category through the BambooHR API.
   create_employee_training_record:
     endpoint: POST /api/v1/training/record/employee/{{ record.employee_id }}
-    required fields: employee_id, completed, type
+    required fields: employee_id
     risk: Create Employee Training Record through the BambooHR API.
   delete_employee_training_record:
     endpoint: DELETE /api/v1/training/record/{{ record.employee_training_record_id }}
@@ -667,11 +650,10 @@ REVERSE ETL ACTIONS
     risk: Deletes BambooHR data: Delete Employee Training Record.
   update_employee_training_record:
     endpoint: PUT /api/v1/training/record/{{ record.employee_training_record_id }}
-    required fields: employee_training_record_id, completed
+    required fields: employee_training_record_id
     risk: Update Employee Training Record through the BambooHR API.
   create_training_type:
     endpoint: POST /api/v1/training/type
-    required fields: name
     risk: Create Training Type through the BambooHR API.
   delete_training_type:
     endpoint: DELETE /api/v1/training/type/{{ record.training_type_id }}
@@ -683,7 +665,6 @@ REVERSE ETL ACTIONS
     risk: Update Training Type through the BambooHR API.
   create_webhook:
     endpoint: POST /api/v1/webhooks
-    required fields: name, url, format
     risk: Create Webhook through the BambooHR API.
   delete_webhook:
     endpoint: DELETE /api/v1/webhooks/{{ record.id }}
@@ -691,7 +672,7 @@ REVERSE ETL ACTIONS
     risk: Deletes BambooHR data: Delete Webhook.
   update_webhook:
     endpoint: PUT /api/v1/webhooks/{{ record.id }}
-    required fields: id, name, url, format
+    required fields: id
     risk: Update Webhook through the BambooHR API.
   assign_time_off_policies_v1_1:
     endpoint: PUT /api/v1_1/employees/{{ record.employee_id }}/time_off/policies
@@ -707,7 +688,7 @@ REVERSE ETL ACTIONS
     risk: Update Table Row v1.1 through the BambooHR API.
   update_goal_v1_1:
     endpoint: PUT /api/v1_1/performance/employees/{{ record.employee_id }}/goals/{{ record.goal_id }}
-    required fields: employee_id, goal_id, title, dueDate, sharedWithEmployeeIds
+    required fields: employee_id, goal_id
     risk: Update Goal (v1.1) through the BambooHR API.
   update_company_benefit_properties:
     endpoint: POST /api/v1_2/benefit/company_benefit/{{ record.id }}

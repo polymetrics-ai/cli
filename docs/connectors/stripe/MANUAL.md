@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse ETL customer create, update, and typed destructive delete actions through the Stripe REST API.
 
 ICON
-  id: stripe
   asset: icons/stripe.svg
   source: upstream_registry
   review_status: upstream_seeded

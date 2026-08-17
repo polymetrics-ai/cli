@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Fastly services, the current user, the current customer (account), and datacenters through the Fastly REST API. Read-only.
 
 ICON
-  id: simple-icons-fastly
-  asset: icons/simple-icons/fastly.svg
-  title: Fastly
-  simple_icon_slug: fastly
-  simple_icon_hex: FF282D
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Fastly
-  match: exact-name-or-slug
-  matched_by: fastly
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

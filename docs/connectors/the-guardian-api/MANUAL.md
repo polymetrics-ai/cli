@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Guardian content search results through the Guardian Open Platform Content API.
 
 ICON
-  id: theguardian
   asset: icons/theguardian.svg
   source: upstream_registry
   review_status: upstream_seeded

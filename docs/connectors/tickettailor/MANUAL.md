@@ -13,17 +13,9 @@ DESCRIPTION
   Reads and writes events, orders, issued tickets, event series, holds, discounts, memberships, products, stores, and vouchers through the Ticket Tailor API.
 
 ICON
-  id: simple-icons-tickettailor
-  asset: icons/simple-icons/tickettailor.svg
-  title: Ticket Tailor
-  simple_icon_slug: tickettailor
-  simple_icon_hex: 222432
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Ticket%20Tailor
-  match: exact-name-or-slug
-  matched_by: tickettailor
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -95,7 +87,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_event_series:
     endpoint: POST /event_series
-    required fields: name
     risk: creates a new event series (a recurring/template event definition); low-risk additive external mutation, no approval required
   update_event_series:
     endpoint: POST /event_series/{{ record.id }}
@@ -107,11 +98,11 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an event series and every event occurrence within it; destructive, approval required
   change_event_series_status:
     endpoint: POST /event_series/{{ record.id }}/status
-    required fields: id, status
+    required fields: id
+    optional fields: status
     risk: changes an event series' publication status; setting to draft/sales_closed immediately stops further public ticket sales
   create_discount:
     endpoint: POST /discounts
-    required fields: name, code, type
     risk: creates a discount code redeemable at checkout; low-risk additive external mutation, no approval required
   update_discount:
     endpoint: POST /discounts/{{ record.id }}
@@ -127,11 +118,9 @@ REVERSE ETL ACTIONS
     risk: releases a hold, returning its reserved tickets to public sale immediately
   create_check_in:
     endpoint: POST /check_ins
-    required fields: issued_ticket_id, quantity
     risk: checks an attendee's issued ticket in (or out, when quantity is -1) at the door; low-risk operational mutation, no approval required
   create_issued_ticket:
     endpoint: POST /issued_tickets
-    required fields: full_name
     risk: issues a new ticket directly (bypassing checkout), consuming inventory from either a ticket type or an existing hold; low-risk additive external mutation, no approval required
   void_issued_ticket:
     endpoint: POST /issued_tickets/{{ record.id }}/void
@@ -147,7 +136,6 @@ REVERSE ETL ACTIONS
     risk: marks an order (typically an offline/manual payment method) as paid, releasing its tickets from pending status
   create_membership_type:
     endpoint: POST /membership_types
-    required fields: name, valid_from_type, valid_to_type
     risk: creates a new membership type template; low-risk additive external mutation, no approval required
   delete_membership_type:
     endpoint: DELETE /membership_types/{{ record.id }}
@@ -155,7 +143,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a membership type; any issued membership referencing it is orphaned
   create_issued_membership:
     endpoint: POST /issued_memberships
-    required fields: membership_type_id, first_name, last_name, email
     risk: issues a new membership directly to a member; low-risk additive external mutation, no approval required
   update_issued_membership:
     endpoint: POST /issued_memberships/{{ record.id }}
@@ -167,7 +154,6 @@ REVERSE ETL ACTIONS
     risk: voids an issued membership, invalidating it immediately for entry/redemption
   create_voucher:
     endpoint: POST /vouchers
-    required fields: name, value
     risk: creates a new voucher and its redeemable codes; low-risk additive external mutation, no approval required
   update_voucher:
     endpoint: POST /vouchers/{{ record.id }}
@@ -183,7 +169,6 @@ REVERSE ETL ACTIONS
     risk: voids a single voucher code, invalidating it for redemption immediately
   create_product:
     endpoint: POST /products
-    required fields: name, price
     risk: creates a new sellable add-on product; low-risk additive external mutation, no approval required
   update_product:
     endpoint: POST /products/{{ record.id }}

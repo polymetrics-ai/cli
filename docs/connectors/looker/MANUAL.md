@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Looker users, groups, folders, looks, and dashboards through the Looker API 4.0.
 
 ICON
-  id: looker
   asset: icons/looker.svg
   source: upstream_registry
   review_status: upstream_seeded

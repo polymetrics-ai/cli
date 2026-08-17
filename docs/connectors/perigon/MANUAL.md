@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Perigon news articles, story clusters, journalists, sources, companies, people, and topics through the Perigon REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

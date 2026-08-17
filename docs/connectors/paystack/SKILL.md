@@ -11,7 +11,6 @@ Reads Paystack customers, transactions, subscriptions, invoices, and disputes th
 
 ## Icon
 
-- id: paystack
 - asset: icons/paystack.svg
 - source: upstream_registry
 - review_status: upstream_seeded

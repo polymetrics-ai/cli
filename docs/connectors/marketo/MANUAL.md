@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Marketo leads, programs, and activities through Marketo REST endpoints. Read-only; does not refresh OAuth tokens internally.
 
 ICON
-  id: marketo
   asset: icons/marketo.svg
   source: upstream_registry
   review_status: upstream_seeded

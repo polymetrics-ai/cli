@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and writes Sharetribe listings, users, transactions, availability, stock, and marketplace data through the Sharetribe Integration API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -60,67 +58,51 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_listing:
     endpoint: POST /integration_api/listings/create
-    required fields: title, authorId
     risk: creates a new marketplace listing; low-risk external mutation, no approval required
   update_listing:
     endpoint: POST /integration_api/listings/update
-    required fields: id
     risk: mutates an existing listing's details by id; cannot be used to change listing state (use close_listing/open_listing/approve_listing for that); publicData/privateData/metadata are merged with the existing object on the top level, not deep-merged
   close_listing:
     endpoint: POST /integration_api/listings/close
-    required fields: id
     risk: sets the listing's state to closed; it stops being discoverable via the public Marketplace API listings/query endpoint but remains reachable by id or through related transactions
   open_listing:
     endpoint: POST /integration_api/listings/open
-    required fields: id
     risk: sets a closed listing's state back to published, making it publicly discoverable again; low-risk, no approval required
   approve_listing:
     endpoint: POST /integration_api/listings/approve
-    required fields: id
     risk: approves a listing currently in pendingApproval state, setting it to published and making it publicly visible; review before enabling in a caller with untrusted input if the marketplace relies on manual listing moderation
   approve_user:
     endpoint: POST /integration_api/users/approve
-    required fields: id
     risk: approves a pending user account, setting its state to active and granting it marketplace access; higher-scrutiny than listing writes since it grants account access
   update_user_profile:
     endpoint: POST /integration_api/users/update_profile
-    required fields: id
     risk: mutates an existing user's profile fields by id; publicData/protectedData/privateData/metadata are merged with the existing object on the top level, not deep-merged
   update_user_permissions:
     endpoint: POST /integration_api/users/update_permissions
-    required fields: id
     risk: changes what a user is permitted to do on the marketplace (post listings, initiate transactions, read); a higher-scrutiny access-control mutation, review before enabling in a caller with untrusted input
   verify_user_email:
     endpoint: POST /integration_api/users/verify_email
-    required fields: id, email
     risk: marks the given email address as verified for the user; low-risk account-state mutation
   transition_transaction:
     endpoint: POST /integration_api/transactions/transition
-    required fields: id, transition, params
     risk: transitions a real transaction to a new state via the marketplace's transaction process (e.g. accepting/declining a booking, marking payment); only operator-actor transitions are permitted; a maximum of 100 transitions per transaction; can trigger real payment capture/payout actions depending on the process definition
   transition_transaction_speculative:
     endpoint: POST /integration_api/transactions/transition_speculative
-    required fields: id, transition, params
     risk: simulates a transaction transition to validate parameters or preview the resulting price breakdown; the transaction state is NOT actually changed — safe to call freely, no approval required
   update_transaction_metadata:
     endpoint: POST /integration_api/transactions/update_metadata
-    required fields: id, metadata
     risk: mutates an existing transaction's metadata (merged with the existing object on the top level, not deep-merged); low-risk, does not affect payment/process state
   create_availability_exception:
     endpoint: POST /integration_api/availability_exceptions/create
-    required fields: listingId, seats, start, end
     risk: overrides a listing's availability plan for a given time range (e.g. blocking it out or opening extra seats); low-risk external mutation, no approval required
   delete_availability_exception:
     endpoint: POST /integration_api/availability_exceptions/delete
-    required fields: id
     risk: permanently removes an availability exception by id, restoring the listing's default availability plan for that time range
   set_listing_stock:
     endpoint: POST /integration_api/stock/compare_and_set
-    required fields: listingId, newTotal
     risk: sets a listing's total available stock via a compare-and-set (only applied if the listing's current stock matches oldTotal); low-risk external mutation, no approval required
   create_stock_adjustment:
     endpoint: POST /integration_api/stock_adjustments/create
-    required fields: listingId, quantity
     risk: creates an immutable stock adjustment for a listing (increases or decreases available stock by quantity); low-risk external mutation, no approval required
 
 SECURITY

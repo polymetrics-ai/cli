@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Gainsight PX accounts, users, features, and segments through the aptrinsic REST API (read-only).
 
 ICON
-  id: gainsight-px
   asset: icons/gainsight-px.svg
   source: upstream_registry
   review_status: upstream_seeded

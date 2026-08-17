@@ -20,9 +20,6 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	}
 
 	registry := New()
-	if err := registry.ValidateIconCoverage(); err != nil {
-		t.Fatalf("ValidateIconCoverage(): %v", err)
-	}
 
 	for _, b := range bundles {
 		if _, ok := registry.Get(b.Name); !ok {

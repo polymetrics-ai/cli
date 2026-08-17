@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Grafana dashboards, folders, data sources, organization users, and provisioned alert rules through the Grafana REST API (read-only).
 
 ICON
-  id: grafana
   asset: icons/grafana.svg
   source: official
   review_status: official_verified

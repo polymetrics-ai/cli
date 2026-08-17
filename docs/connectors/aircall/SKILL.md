@@ -11,7 +11,6 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
 
 ## Icon
 
-- id: aircall
 - asset: icons/aircall.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -68,7 +67,6 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
 
 - create_user:
   - endpoint: POST /users
-  - required fields: name, email
   - risk: creates a new Aircall agent seat, which may consume a billable license; external mutation, approval required
 - update_user:
   - endpoint: PUT /users/{{ record.id }}
@@ -80,7 +78,6 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
   - risk: permanently removes an Aircall agent seat; irreversible, frees the associated license; approval required
 - create_team:
   - endpoint: POST /teams
-  - required fields: name
   - risk: creates a new team container; low-risk external mutation, no approval required
 - delete_team:
   - endpoint: DELETE /teams/{{ record.id }}
@@ -107,7 +104,6 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
   - risk: permanently removes a directory contact; irreversible
 - create_tag:
   - endpoint: POST /tags
-  - required fields: name, color
   - risk: creates a new call-tagging label; low-risk external mutation, no approval required
 - update_tag:
   - endpoint: PUT /tags/{{ record.id }}
@@ -119,7 +115,6 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
   - risk: permanently removes a tag; it is un-applied from every call that previously carried it
 - create_webhook:
   - endpoint: POST /webhooks
-  - required fields: url, events
   - risk: registers a new outbound webhook that will POST live call/event data to an external URL of the caller's choosing; verify the target endpoint before enabling
 - update_webhook:
   - endpoint: PUT /webhooks/{{ record.id }}
@@ -139,11 +134,13 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
   - risk: restores a previously archived call to default call-list views
 - comment_call:
   - endpoint: POST /calls/{{ record.id }}/comments
-  - required fields: id, content
+  - required fields: id
+  - optional fields: content
   - risk: adds an internal comment note to a call record; visible to other agents with call access, no external side effect
 - tag_call:
   - endpoint: POST /calls/{{ record.id }}/tags
-  - required fields: id, tag_ids
+  - required fields: id
+  - optional fields: tag_ids
   - risk: applies the given tags to a call; additive, does not remove tags already present
 
 ## Security

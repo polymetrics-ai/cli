@@ -11,11 +11,9 @@ Reads AssemblyAI transcripts, per-transcript detail, sentences, paragraphs, and 
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -74,7 +72,6 @@ Reads AssemblyAI transcripts, per-transcript detail, sentences, paragraphs, and 
 
 - create_transcript:
   - endpoint: POST /v2/transcript
-  - required fields: audio_url
   - risk: external mutation; submits a new transcription job against a caller-supplied audio_url and consumes AssemblyAI account balance/quota; approval required
 
 ## Security

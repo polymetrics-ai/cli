@@ -13,7 +13,6 @@ DESCRIPTION
   Reads cost, budget, resource-management, segment, notification, and integration data from the Vantage API and writes budgets, folders, dashboards, cost reports, resource reports, saved filters, workspaces, teams, cost alerts, budget alerts, anomaly alerts, business metrics, virtual tag configs, segments, report notifications, recommendation views, network flow reports, Kubernetes efficiency reports, anomaly notifications, and canvases.
 
 ICON
-  id: vantage
   asset: icons/vantage.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -119,7 +118,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_budget:
     endpoint: POST /v2/budgets
-    required fields: name, period_amount
     risk: external mutation; approval required
   update_budget:
     endpoint: PUT /v2/budgets/{{ record.budget_token }}
@@ -131,7 +129,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_folder:
     endpoint: POST /v2/folders
-    required fields: title
     risk: external mutation; approval required
   update_folder:
     endpoint: PUT /v2/folders/{{ record.folder_token }}
@@ -143,7 +140,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_dashboard:
     endpoint: POST /v2/dashboards
-    required fields: title
     risk: external mutation; approval required
   update_dashboard:
     endpoint: PUT /v2/dashboards/{{ record.dashboard_token }}
@@ -155,7 +151,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_cost_report:
     endpoint: POST /v2/cost_reports
-    required fields: title
     risk: external mutation; approval required
   update_cost_report:
     endpoint: PUT /v2/cost_reports/{{ record.cost_report_token }}
@@ -167,7 +162,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_saved_filter:
     endpoint: POST /v2/saved_filters
-    required fields: title, filter
     risk: external mutation; approval required
   delete_saved_filter:
     endpoint: DELETE /v2/saved_filters/{{ record.saved_filter_token }}
@@ -175,7 +169,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_workspace:
     endpoint: POST /v2/workspaces
-    required fields: name
     risk: external mutation; approval required
   delete_workspace:
     endpoint: DELETE /v2/workspaces/{{ record.workspace_token }}
@@ -183,7 +176,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_team:
     endpoint: POST /v2/teams
-    required fields: name
     risk: external mutation; approval required
   delete_team:
     endpoint: DELETE /v2/teams/{{ record.team_token }}
@@ -191,7 +183,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_cost_alert:
     endpoint: POST /v2/cost_alerts
-    required fields: title
     risk: external mutation; approval required
   update_cost_alert:
     endpoint: PUT /v2/cost_alerts/{{ record.cost_alert_token }}
@@ -203,7 +194,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_budget_alert:
     endpoint: POST /v2/budget_alerts
-    required fields: budget_token, user_token, threshold
     risk: external mutation; approval required
   delete_budget_alert:
     endpoint: DELETE /v2/budget_alerts/{{ record.budget_alert_token }}
@@ -211,7 +201,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_business_metric:
     endpoint: POST /v2/business_metrics
-    required fields: title
     risk: external mutation; approval required
   update_business_metric:
     endpoint: PUT /v2/business_metrics/{{ record.business_metric_token }}
@@ -251,7 +240,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   create_segment:
     endpoint: POST /v2/segments
-    required fields: title
     risk: external mutation; approval required
   update_segment:
     endpoint: PUT /v2/segments/{{ record.segment_token }}
@@ -263,7 +251,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_report_notification:
     endpoint: POST /v2/report_notifications
-    required fields: title, cost_report_token, frequency, change
     risk: external mutation; approval required
   update_report_notification:
     endpoint: PUT /v2/report_notifications/{{ record.report_notification_token }}
@@ -275,7 +262,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_recommendation_view:
     endpoint: POST /v2/recommendation_views
-    required fields: title, workspace_token
     risk: external mutation; approval required
   update_recommendation_view:
     endpoint: PUT /v2/recommendation_views/{{ record.recommendation_view_token }}
@@ -287,7 +273,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_network_flow_report:
     endpoint: POST /v2/network_flow_reports
-    required fields: workspace_token, title
     risk: external mutation; approval required
   update_network_flow_report:
     endpoint: PUT /v2/network_flow_reports/{{ record.network_flow_report_token }}
@@ -299,7 +284,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_kubernetes_efficiency_report:
     endpoint: POST /v2/kubernetes_efficiency_reports
-    required fields: workspace_token, title
     risk: external mutation; approval required
   update_kubernetes_efficiency_report:
     endpoint: PUT /v2/kubernetes_efficiency_reports/{{ record.kubernetes_efficiency_report_token }}
@@ -311,7 +295,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_anomaly_notification:
     endpoint: POST /v2/anomaly_notifications
-    required fields: cost_report_token
     risk: external mutation; approval required
   update_anomaly_notification:
     endpoint: PUT /v2/anomaly_notifications/{{ record.anomaly_notification_token }}
@@ -323,7 +306,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_canvas:
     endpoint: POST /v2/canvases
-    required fields: title, prompt
     risk: external mutation; approval required
   update_canvas:
     endpoint: PUT /v2/canvases/{{ record.canvas_token }}
@@ -335,7 +317,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_resource_report:
     endpoint: POST /v2/resource_reports
-    required fields: workspace_token
     risk: external mutation; approval required
   update_resource_report:
     endpoint: PUT /v2/resource_reports/{{ record.resource_report_token }}
@@ -347,7 +328,6 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_virtual_tag_config:
     endpoint: POST /v2/virtual_tag_configs
-    required fields: key, overridable, values
     risk: external mutation; approval required
 
 SECURITY

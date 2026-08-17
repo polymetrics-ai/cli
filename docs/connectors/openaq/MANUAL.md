@@ -13,7 +13,6 @@ DESCRIPTION
   Reads OpenAQ air quality reference data (countries, parameters, locations, instruments, and manufacturers) from the OpenAQ v3 REST API.
 
 ICON
-  id: openaq
   asset: icons/openaq.svg
   source: official
   review_status: official_verified

@@ -426,34 +426,12 @@ func iconSection(manifest Manifest) GuideSection {
 		return GuideSection{Title: "Icon", Lines: []string{"No icon metadata is registered for this connector."}}
 	}
 	lines := []string{
-		"id: " + icon.ID,
 		"asset: " + icon.Path,
+		"source: " + icon.Source,
+		"review_status: " + icon.ReviewStatus,
 	}
-	if icon.Title != "" {
-		lines = append(lines, "title: "+icon.Title)
-	}
-	if icon.SimpleIconSlug != "" {
-		lines = append(lines, "simple_icon_slug: "+icon.SimpleIconSlug)
-	}
-	if icon.SimpleIconHex != "" {
-		lines = append(lines, "simple_icon_hex: "+icon.SimpleIconHex)
-	}
-	lines = append(lines, "source: "+icon.Source)
-	if icon.License != "" {
-		lines = append(lines, "license: "+icon.License)
-	}
-	if icon.Attribution != "" {
-		lines = append(lines, "attribution: "+icon.Attribution)
-	}
-	lines = append(lines, "review_status: "+icon.ReviewStatus)
 	if icon.ReviewURL != "" {
 		lines = append(lines, "review_url: "+icon.ReviewURL)
-	}
-	if icon.Match != "" {
-		lines = append(lines, "match: "+icon.Match)
-	}
-	if icon.MatchedBy != "" {
-		lines = append(lines, "matched_by: "+icon.MatchedBy)
 	}
 	return GuideSection{Title: "Icon", Lines: lines}
 }

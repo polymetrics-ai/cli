@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and writes Zoho Bigin pipelines, contacts, companies, products, tasks, events, calls, notes, users, tags, module metadata, and generic module records via the Zoho OAuth 2.0 refresh-token grant.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -82,15 +80,12 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_record:
     endpoint: POST /{{ config.module_name }}
-    required fields: data
     risk: creates one or more new records in config.module_name; external mutation, approval required
   update_record:
     endpoint: PUT /{{ config.module_name }}
-    required fields: data
     risk: overwrites the named fields of one or more existing records in config.module_name; external mutation, approval required
   upsert_record:
     endpoint: POST /{{ config.module_name }}/upsert
-    required fields: data
     risk: inserts a new record in config.module_name if no match is found on duplicate_check_fields, otherwise overwrites the matched existing record's submitted fields; external mutation, approval required
   delete_record:
     endpoint: DELETE /{{ config.module_name }}/{{ record.id }}
@@ -98,7 +93,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a single record from config.module_name; external mutation, approval required
   create_note:
     endpoint: POST /{{ config.module_name }}/{{ record.parent_id }}/Notes
-    required fields: parent_id, data
+    required fields: parent_id
     risk: attaches one or more notes to an existing record in config.module_name; low-risk external mutation, no approval required
   delete_note:
     endpoint: DELETE /{{ config.module_name }}/{{ record.parent_id }}/Notes/{{ record.id }}

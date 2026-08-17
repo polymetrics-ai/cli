@@ -11,7 +11,6 @@ Reads Iterable lists, campaigns, and templates through the Iterable REST API. Re
 
 ## Icon
 
-- id: iterable
 - asset: icons/iterable.svg
 - source: upstream_registry
 - review_status: upstream_seeded

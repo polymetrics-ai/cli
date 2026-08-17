@@ -11,7 +11,6 @@ Reads Klaus (Zendesk QA) users and rating categories through the Klaus public RE
 
 ## Icon
 
-- id: klaus-api
 - asset: icons/klaus-api.svg
 - source: upstream_registry
 - review_status: upstream_seeded

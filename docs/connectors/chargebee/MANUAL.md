@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes Chargebee subscription billing data (customers, subscriptions, invoices, plans, items, item prices, coupons, credit notes, transactions, orders, quotes, payment sources, events, and more) through the Chargebee v2 REST API.
 
 ICON
-  id: chargebee
   asset: icons/chargebee.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -167,7 +166,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_item:
     endpoint: POST /items
-    required fields: id, name, type, item_family_id
     risk: external mutation; approval required
   update_item:
     endpoint: POST /items/{{ record.id }}
@@ -179,7 +177,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_item_price:
     endpoint: POST /item_prices
-    required fields: id, item_id, name
     risk: external mutation; approval required
   update_item_price:
     endpoint: POST /item_prices/{{ record.id }}
@@ -191,7 +188,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_item_family:
     endpoint: POST /item_families
-    required fields: id, name
     risk: external mutation; approval required
   update_item_family:
     endpoint: POST /item_families/{{ record.id }}
@@ -215,7 +211,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external mutation (subscription cancellation) with billing side effects; approval required
   create_credit_note:
     endpoint: POST /credit_notes
-    required fields: type
     risk: external mutation with accounting/billing side effects; approval required
   void_credit_note:
     endpoint: POST /credit_notes/{{ record.id }}/void
@@ -223,7 +218,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external mutation; approval required
   create_coupon:
     endpoint: POST /coupons/create_for_items
-    required fields: id, name, apply_on
     risk: external mutation with billing/discount side effects; approval required
   update_coupon:
     endpoint: POST /coupons/{{ record.id }}/update_for_items
@@ -235,7 +229,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_order:
     endpoint: POST /orders
-    required fields: invoice_id
     risk: external mutation; approval required
   update_order:
     endpoint: POST /orders/{{ record.id }}
@@ -243,7 +236,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   cancel_order:
     endpoint: POST /orders/{{ record.id }}/cancel
-    required fields: id, cancellation_reason
+    required fields: id
     risk: irreversible external mutation (order cancellation); approval required
   void_invoice:
     endpoint: POST /invoices/{{ record.id }}/void
@@ -255,7 +248,6 @@ REVERSE ETL ACTIONS
     risk: external mutation that attempts to charge a payment method; approval required
   create_webhook_endpoint:
     endpoint: POST /webhook_endpoints
-    required fields: name, url
     risk: external mutation exposing business data to a third-party URL; approval required
   update_webhook_endpoint:
     endpoint: POST /webhook_endpoints/{{ record.id }}
@@ -267,7 +259,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_comment:
     endpoint: POST /comments
-    required fields: entity_type, entity_id, notes
     risk: external mutation; approval required
   delete_comment:
     endpoint: POST /comments/{{ record.id }}/delete
@@ -275,15 +266,12 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   add_promotional_credit:
     endpoint: POST /promotional_credits/add
-    required fields: customer_id, description
     risk: external mutation with a direct billing-credit financial effect; approval required
   deduct_promotional_credit:
     endpoint: POST /promotional_credits/deduct
-    required fields: customer_id, description
     risk: external mutation with a direct billing-credit financial effect; approval required
   create_virtual_bank_account:
     endpoint: POST /virtual_bank_accounts
-    required fields: customer_id
     risk: external mutation; approval required
   delete_virtual_bank_account:
     endpoint: POST /virtual_bank_accounts/{{ record.id }}/delete
@@ -291,7 +279,6 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_card_payment_source:
     endpoint: POST /payment_sources/create_card
-    required fields: customer_id
     risk: external mutation carrying raw payment-card data; approval required
   delete_payment_source:
     endpoint: POST /payment_sources/{{ record.id }}/delete

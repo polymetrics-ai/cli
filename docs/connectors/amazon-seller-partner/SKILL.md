@@ -11,7 +11,6 @@ Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, 
 
 ## Icon
 
-- id: amazonsellerpartner
 - asset: icons/amazonsellerpartner.svg
 - source: upstream_registry
 - review_status: upstream_seeded

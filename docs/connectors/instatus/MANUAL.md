@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and manages Instatus status pages, components, incidents, maintenances, templates, subscribers, metrics, monitors, and related status-page resources through the Instatus REST API.
 
 ICON
-  id: instatus
   asset: icons/instatus.svg
   source: official
   review_status: official_verified

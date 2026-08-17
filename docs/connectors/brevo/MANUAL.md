@@ -13,17 +13,9 @@ DESCRIPTION
   Reads and writes Brevo (formerly Sendinblue) contacts, email campaigns, contact lists, segments, senders, sender domains, CRM companies/deals, and webhooks through the Brevo REST API.
 
 ICON
-  id: simple-icons-brevo
-  asset: icons/simple-icons/brevo.svg
-  title: Brevo
-  simple_icon_slug: brevo
-  simple_icon_hex: 0B996E
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Brevo
-  match: exact-name-or-slug
-  matched_by: brevo
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -91,11 +83,9 @@ REVERSE ETL ACTIONS
     risk: permanently removes a contact and its engagement history; irreversible
   create_contacts_list:
     endpoint: POST /contacts/lists
-    required fields: name, folderId
     risk: creates a new contact list under an existing folder; low-risk external mutation, no approval required
   create_sender:
     endpoint: POST /senders
-    required fields: name, email
     risk: registers a new verified-sending identity; Brevo emails a verification link to the address before it can send
   update_sender:
     endpoint: PUT /senders/{{ record.senderId }}
@@ -107,7 +97,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a sending identity; any scheduled campaign still referencing it will fail to send
   create_company:
     endpoint: POST /companies
-    required fields: name
     risk: creates a new CRM company record; low-risk external mutation, no approval required
   update_company:
     endpoint: PATCH /companies/{{ record.id }}
@@ -115,7 +104,6 @@ REVERSE ETL ACTIONS
     risk: mutates an existing CRM company's name, attributes, or linked contact/deal set
   create_deal:
     endpoint: POST /crm/deals
-    required fields: name
     risk: creates a new CRM deal record; low-risk external mutation, no approval required
   update_deal:
     endpoint: PATCH /crm/deals/{{ record.id }}
@@ -123,7 +111,6 @@ REVERSE ETL ACTIONS
     risk: mutates an existing CRM deal's stage, amount, or linked contact/company set
   create_webhook:
     endpoint: POST /webhooks
-    required fields: url, events
     risk: registers live event delivery (opens/clicks/bounces/unsubscribes) to an external endpoint of the caller's choosing; review the target before enabling, per metadata.json risk.write
   update_webhook:
     endpoint: PUT /webhooks/{{ record.webhookId }}

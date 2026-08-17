@@ -11,7 +11,6 @@ Reads tweets and their authors matching a search query from the Twitter (X) API 
 
 ## Icon
 
-- id: twitter
 - asset: icons/twitter.svg
 - source: upstream_registry
 - review_status: upstream_seeded

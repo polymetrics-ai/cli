@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and writes EZOfficeInventory assets, inventory items, stock assets, members, locations, groups, vendors, and purchase orders through the EZOfficeInventory REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -63,7 +61,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_asset:
     endpoint: POST /assets.api
-    required fields: fixed_asset[name], fixed_asset[group_id], fixed_asset[location_id]
     risk: external mutation; creates a new asset record; approval required
   update_asset:
     endpoint: PUT /assets/{{ record.id }}.api
@@ -71,7 +68,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   create_member:
     endpoint: POST /members.api
-    required fields: user[email], user[first_name], user[last_name], user[role_id]
     risk: external mutation; creates a new member/user account; approval required
   update_member:
     endpoint: PUT /members/{{ record.id }}.api
@@ -79,7 +75,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   create_location:
     endpoint: POST /locations.api
-    required fields: location[name]
     risk: external mutation; creates a new location; approval required
   update_location:
     endpoint: PUT /locations/{{ record.id }}.api
@@ -87,7 +82,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   create_group:
     endpoint: POST /groups.api
-    required fields: group[name]
     risk: external mutation; creates a new asset group/classification; approval required
   update_group:
     endpoint: PUT /groups/{{ record.id }}.api
@@ -95,7 +89,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   create_vendor:
     endpoint: POST /vendors.api
-    required fields: vendor[name]
     risk: external mutation; creates a new vendor; approval required
   update_vendor:
     endpoint: PUT /vendors/{{ record.id }}.api
@@ -103,7 +96,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   create_purchase_order:
     endpoint: POST /purchase_orders.api
-    required fields: vendor_id
     risk: external mutation; creates a new purchase order (financial document); approval required
 
 SECURITY

@@ -13,11 +13,10 @@ DESCRIPTION
   Reads Salesforce object metadata and allow-listed Account, Contact, and Lead SOQL queries through the REST API. Read-only.
 
 ICON
-  id: salesforce
   asset: icons/salesforce.svg
-  source: official
-  review_status: official_verified
-  review_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/rest_rns.htm
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

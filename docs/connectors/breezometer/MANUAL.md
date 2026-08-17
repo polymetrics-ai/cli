@@ -13,7 +13,6 @@ DESCRIPTION
   Reads BreezoMeter (Google Environment) air quality, pollen, weather, and wildfire-tracking conditions/forecasts for a configured location via the BreezoMeter REST API; writes a stateless cleanest-route environmental-cleanliness scoring computation.
 
 ICON
-  id: breezometer
   asset: icons/breezometer.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -79,7 +78,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   score_cleanest_route:
     endpoint: POST /insights/v1/cleanest-route
-    required fields: routes
     risk: stateless environmental-cleanliness scoring computation over caller-supplied route geometries; creates or mutates no persistent BreezoMeter object and has no side effects beyond the API call itself, low-risk
 
 SECURITY

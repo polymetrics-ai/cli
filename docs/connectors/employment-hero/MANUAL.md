@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Employment Hero organisations, employees, HR reference data, forms, goals, rosters, employee subresources, and exposes documented JSON mutations through the Employment Hero REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -223,7 +221,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_certification:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/certifications
-    required fields: name
     risk: external Employment Hero mutation; approval required before execution
   update_certification:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/certifications/{{ record.certification_id }}
@@ -231,7 +228,8 @@ REVERSE ETL ACTIONS
     risk: external Employment Hero mutation; approval required before execution
   archive_certification:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/certifications/{{ record.certification_id }}/archive_status
-    required fields: certification_id, status
+    required fields: certification_id
+    optional fields: status
     risk: archives or restores an Employment Hero certification configuration
   delete_certification:
     endpoint: DELETE /v1/organisations/{{ config.organization_id }}/certifications/{{ record.certification_id }}
@@ -239,7 +237,6 @@ REVERSE ETL ACTIONS
     risk: deletes an Employment Hero certification configuration
   create_department:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/departments
-    required fields: name
     risk: external Employment Hero mutation; approval required before execution
   update_department:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/departments/{{ record.department_id }}
@@ -247,15 +244,12 @@ REVERSE ETL ACTIONS
     risk: external Employment Hero mutation; approval required before execution
   quick_add_employee:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/employees/quick_add_employee
-    required fields: first_name, last_name, email
     risk: external Employment Hero mutation; approval required before execution
   quick_add_contractor:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/employees/quick_add_contractor
-    required fields: first_name, last_name, email
     risk: external Employment Hero mutation; approval required before execution
   onboard_employee_async:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/employees/polling_onboard_employee
-    required fields: first_name, last_name, user_attributes
     risk: starts an asynchronous employee onboarding job; approval required before execution
   update_employee_personal_details:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/employees/{{ record.employee_id }}/personal_details
@@ -283,7 +277,6 @@ REVERSE ETL ACTIONS
     risk: deletes an Employment Hero form
   create_form_category:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/form_categories
-    required fields: name
     risk: external Employment Hero mutation; approval required before execution
   update_form_category:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/form_categories/{{ record.form_category_id }}
@@ -295,7 +288,6 @@ REVERSE ETL ACTIONS
     risk: external Employment Hero mutation; approval required before execution
   create_form_template:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/form_templates
-    required fields: name
     risk: external Employment Hero mutation; approval required before execution
   update_form_template:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/form_templates/{{ record.template_id }}
@@ -307,19 +299,17 @@ REVERSE ETL ACTIONS
     risk: external Employment Hero mutation; approval required before execution
   update_goal_archive_status:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/goals/{{ record.goal_id }}/archive_status
-    required fields: goal_id, status
+    required fields: goal_id
     risk: archives or restores an Employment Hero goal
   update_goal_health_status:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/goals/{{ record.goal_id }}/update_status
-    required fields: goal_id, health_status
+    required fields: goal_id
     risk: changes an Employment Hero goal health status
   bulk_grant_kiosk_access:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/kiosk_members/bulk_grant_access
-    required fields: member_ids
     risk: grants kiosk access to multiple members
   bulk_revoke_kiosk_access:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/kiosk_members/bulk_revoke_access
-    required fields: member_ids
     risk: revokes kiosk access from multiple members
   update_leave_balance:
     endpoint: PUT /v1/organisations/{{ config.organization_id }}/employees/{{ record.employee_id }}/leave_balances/{{ record.id }}
@@ -327,11 +317,10 @@ REVERSE ETL ACTIONS
     risk: adjusts an employee leave balance
   create_leave_request:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/employees/{{ record.employee_id }}/leave_requests
-    required fields: employee_id, leave_category_id, start_date, end_date
+    required fields: employee_id
     risk: creates an employee leave request
   create_position:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/positions
-    required fields: name
     risk: external Employment Hero mutation; approval required before execution
   update_position:
     endpoint: PATCH /v1/organisations/{{ config.organization_id }}/positions/{{ record.position_id }}
@@ -339,15 +328,12 @@ REVERSE ETL ACTIONS
     risk: external Employment Hero mutation; approval required before execution
   bulk_create_rostered_shifts:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/rostered_shifts/bulk_create
-    required fields: start_date_time, end_date_time, number_of_shifts
     risk: creates rostered shifts in bulk and may publish them
   create_timesheet_entries:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/timesheet_entries
-    required fields: timesheets
     risk: creates employee timesheet entries
   create_work_site:
     endpoint: POST /v1/organisations/{{ config.organization_id }}/work_sites
-    required fields: name
     risk: external Employment Hero mutation; approval required before execution
   update_work_site:
     endpoint: PUT /v1/organisations/{{ config.organization_id }}/work_sites/{{ record.work_site_id }}

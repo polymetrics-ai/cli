@@ -389,12 +389,7 @@ Adding a connector is the highest-leverage contribution. The pattern:
    Run `PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate` to seed icons from an upstream registry. If the seeded icon is stale,
    compare it against the vendor website or official documentation, replace the SVG under
    `docs/connectors/icons/`, and update the icon entry in `internal/connectors/icon_data.json`
-   with `review_status` set to `official_verified` or `manual_override`. Assets under
-   `docs/connectors/icons/simple-icons/` are the exception: they are fetched and checksum-pinned,
-   so refresh them with `node scripts/fetch-simple-icons.mjs --update-lockfile` from `website/`
-   instead of hand-editing. Registry keys are bare connector identifiers —
-   `source-*`/`destination-*` keys are rejected — and every connector needs its own entry; see
-   `docs/migration/icon-registry-single-source.md`.
+   with `review_status` set to `official_verified` or `manual_override`.
 6. **Validate and regenerate generated sets** — `go run ./cmd/connectorgen validate internal/connectors/defs`
    must report zero findings. Run `go run ./cmd/connectorgen gen` if hook/native package sets
    changed, then `make verify`.

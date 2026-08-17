@@ -11,11 +11,9 @@ Reads SmartReach teams, campaigns, prospects, email settings, do-not-contact rec
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -71,40 +69,35 @@ Reads SmartReach teams, campaigns, prospects, email settings, do-not-contact rec
   - risk: external mutation; creates or updates a prospect (deduped by email/phone/linkedin_url/company+name per SmartReach's unique_identifier_columns rule) on the connected SmartReach account; approval required
 - add_prospects_to_campaign:
   - endpoint: POST campaigns/{{ record.campaign_id }}/prospects?team_id={{ config.team_id }}
-  - required fields: campaign_id, prospect_ids
+  - required fields: campaign_id
   - risk: external mutation; enrolls prospects into an outbound campaign, triggering scheduled sequence messages to real recipients; approval required
 - unassign_prospects_from_campaign:
   - endpoint: PUT campaigns/{{ record.campaign_id }}/prospects?team_id={{ config.team_id }}
-  - required fields: campaign_id, prospect_ids
+  - required fields: campaign_id
   - risk: external mutation; removes prospects from an outbound campaign, stopping any further scheduled sequence messages to them; approval required
 - update_prospect_campaign_status:
   - endpoint: PUT prospects/prospect_status_change?team_id={{ config.team_id }}
-  - required fields: prospect_ids, prospect_status, campaign_ids
   - risk: external mutation; changes a prospect's engagement status for a campaign (e.g. pausing/resuming/marking replied), affecting whether further outreach messages are sent; approval required
 - update_campaign_status:
   - endpoint: PUT campaigns/{{ record.campaign_id }}/status?team_id={{ config.team_id }}
-  - required fields: campaign_id, status
+  - required fields: campaign_id
   - risk: external mutation; starts, schedules, or stops an entire outbound campaign, directly controlling whether real outreach messages are sent to prospects; approval required
 - remove_from_do_not_contact:
   - endpoint: DELETE do-not-contact?team_id={{ config.team_id }}
-  - required fields: dnc_ids
   - risk: external mutation; removes entries from the do-not-contact suppression list, which re-enables outreach to those emails/domains; approval required
 - add_emails_to_do_not_contact:
   - endpoint: POST do-not-contact/email?team_id={{ config.team_id }}
-  - required fields: emails
   - risk: external mutation; blacklists emails from all future outreach on the connected SmartReach account; approval required
 - add_domains_to_do_not_contact:
   - endpoint: POST do-not-contact/domain?team_id={{ config.team_id }}
-  - required fields: domains
   - risk: external mutation; blacklists entire domains from all future outreach on the connected SmartReach account; approval required
 - create_or_update_account:
   - endpoint: POST accounts?team_id={{ config.team_id }}
-  - required fields: name
   - risk: external mutation; creates or updates a CRM-style account (company) record on the connected SmartReach account; approval required
 - update_task_status:
   - endpoint: PUT tasks/{{ record.task_id }}/status
-  - required fields: task_id, status_type
-  - optional fields: due_at, snoozed_till
+  - required fields: task_id
+  - optional fields: status_type, due_at, snoozed_till
   - risk: external mutation; changes a sales task's status (due/snoozed/done/skipped) on the connected SmartReach account; approval required
 
 ## Security

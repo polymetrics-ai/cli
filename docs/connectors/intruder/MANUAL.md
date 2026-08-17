@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Intruder issues, issue occurrences, scans, and targets through the Intruder REST API (read-only, full refresh).
 
 ICON
-  id: intruder
   asset: icons/intruder.svg
   source: official
   review_status: official_verified

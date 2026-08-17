@@ -11,7 +11,6 @@ Reads Zoom users, meetings, and webinars through the Zoom REST API.
 
 ## Icon
 
-- id: zoom
 - asset: icons/zoom.svg
 - source: upstream_registry
 - review_status: upstream_seeded

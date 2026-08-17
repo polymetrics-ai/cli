@@ -11,7 +11,6 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
 
 ## Icon
 
-- id: toggl
 - asset: icons/toggl.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -67,7 +66,6 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
 
 - create_time_entry:
   - endpoint: POST /workspaces/{{ config.workspace_id }}/time_entries
-  - required fields: start, duration, created_with
   - risk: creates a new time entry on the caller's account; external mutation, no approval required
 - update_time_entry:
   - endpoint: PUT /workspaces/{{ config.workspace_id }}/time_entries/{{ record.id }}
@@ -84,7 +82,6 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
   - risk: permanently deletes a time entry; irreversible
 - create_project:
   - endpoint: POST /workspaces/{{ config.workspace_id }}/projects
-  - required fields: name
   - risk: creates a new project in the target workspace; external mutation, no approval required
 - update_project:
   - endpoint: PUT /workspaces/{{ config.workspace_id }}/projects/{{ record.id }}
@@ -97,7 +94,6 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
   - risk: permanently deletes a project; also removes its association from any time entries that referenced it
 - create_client:
   - endpoint: POST /workspaces/{{ config.workspace_id }}/clients
-  - required fields: name
   - risk: creates a new client in the target workspace; external mutation, no approval required
 - update_client:
   - endpoint: PUT /workspaces/{{ config.workspace_id }}/clients/{{ record.id }}
@@ -110,11 +106,11 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
   - risk: permanently deletes a client; projects previously associated with it lose that association
 - create_tag:
   - endpoint: POST /workspaces/{{ config.workspace_id }}/tags
-  - required fields: name
   - risk: creates a new tag in the target workspace; external mutation, no approval required
 - update_tag:
   - endpoint: PUT /workspaces/{{ config.workspace_id }}/tags/{{ record.id }}
-  - required fields: id, name
+  - required fields: id
+  - optional fields: name
   - risk: renames an existing tag; the new name applies retroactively everywhere the tag is shown
 - delete_tag:
   - endpoint: DELETE /workspaces/{{ config.workspace_id }}/tags/{{ record.id }}
@@ -122,8 +118,8 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
   - risk: permanently deletes a tag; it is removed from every time entry that referenced it
 - create_task:
   - endpoint: POST /workspaces/{{ config.workspace_id }}/projects/{{ record.project_id }}/tasks
-  - required fields: project_id, name
-  - optional fields: active, estimated_seconds, user_id, external_reference
+  - required fields: project_id
+  - optional fields: name, active, estimated_seconds, user_id, external_reference
   - risk: creates a new task under the given project; external mutation, no approval required
 - update_task:
   - endpoint: PUT /workspaces/{{ config.workspace_id }}/projects/{{ record.project_id }}/tasks/{{ record.id }}

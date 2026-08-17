@@ -13,7 +13,6 @@ DESCRIPTION
   Reads public Germany COVID case, state, district, and history data derived from RKI reports via the corona-zahlen.org JSON API. Read-only, credential-free.
 
 ICON
-  id: rki
   asset: icons/rki.svg
   source: upstream_registry
   review_status: upstream_seeded

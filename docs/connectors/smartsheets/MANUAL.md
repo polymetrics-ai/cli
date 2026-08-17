@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes Smartsheet sheets, rows, folders, reports, dashboards, users, webhooks, attachments, discussions, proofs, update requests, and workspace metadata.
 
 ICON
-  id: smartsheet
   asset: icons/smartsheet.svg
   source: upstream_registry
   review_status: upstream_seeded

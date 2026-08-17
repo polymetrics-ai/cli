@@ -13,7 +13,6 @@ DESCRIPTION
   Reads tweets and their authors matching a search query from the Twitter (X) API v2 recent search endpoint using an App-only Bearer token.
 
 ICON
-  id: twitter
   asset: icons/twitter.svg
   source: upstream_registry
   review_status: upstream_seeded

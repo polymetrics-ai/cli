@@ -11,7 +11,6 @@ Reads SendGrid Marketing Campaigns lists, segments, and contacts, plus suppressi
 
 ## Icon
 
-- id: sendgrid
 - asset: icons/sendgrid.svg
 - source: upstream_registry
 - review_status: upstream_seeded

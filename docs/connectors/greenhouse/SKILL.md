@@ -11,7 +11,6 @@ Reads and writes documented Greenhouse Harvest REST API resources through the de
 
 ## Icon
 
-- id: greenhouse
 - asset: icons/greenhouse.svg
 - source: upstream_registry
 - review_status: upstream_seeded

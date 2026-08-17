@@ -11,11 +11,9 @@ Reads Fleetio fleet management data: vehicles, contacts, fuel entries, issues, a
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

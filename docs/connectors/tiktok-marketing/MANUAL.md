@@ -13,7 +13,6 @@ DESCRIPTION
   Reads TikTok Business advertisers, campaigns, ad groups, and ads through the TikTok Marketing (Business) API.
 
 ICON
-  id: tiktok
   asset: icons/tiktok.svg
   source: upstream_registry
   review_status: upstream_seeded

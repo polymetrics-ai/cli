@@ -11,7 +11,6 @@ Reads Freshdesk tickets, contacts, companies, agents, and groups through the Fre
 
 ## Icon
 
-- id: freshdesk
 - asset: icons/freshdesk.svg
 - source: upstream_registry
 - review_status: upstream_seeded

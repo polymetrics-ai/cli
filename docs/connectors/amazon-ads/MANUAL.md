@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Amazon Advertising profiles, Sponsored Products campaigns, ad groups, product ads, keywords, negative keywords, and portfolios via the Amazon Ads API using a Login with Amazon (LWA) refresh-token grant. Read-only.
 
 ICON
-  id: amazonads
   asset: icons/amazonads.svg
   source: upstream_registry
   review_status: upstream_seeded

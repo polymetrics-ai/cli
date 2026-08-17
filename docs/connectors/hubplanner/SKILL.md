@@ -11,7 +11,6 @@ Reads Hubplanner resources, projects, clients, events, holidays, bookings, and b
 
 ## Icon
 
-- id: hubplanner
 - asset: icons/hubplanner.svg
 - source: upstream_registry
 - review_status: upstream_seeded

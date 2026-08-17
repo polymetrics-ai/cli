@@ -13,7 +13,6 @@ DESCRIPTION
   Reads MailerSend email activity, analytics, domains, messages, recipients, templates, scheduled messages, sender identities, inbound routes, users, invites, tokens, and webhooks through the MailerSend REST API.
 
 ICON
-  id: mailersend
   asset: icons/mailersend.svg
   source: upstream_registry
   review_status: upstream_seeded

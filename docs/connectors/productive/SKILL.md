@@ -11,7 +11,6 @@ Reads Productive projects, people, companies, and tasks through the Productive J
 
 ## Icon
 
-- id: productive
 - asset: icons/productive.svg
 - source: official
 - review_status: official_verified

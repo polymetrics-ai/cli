@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Calendly scheduled events (and their invitees), event types, organization memberships, groups, routing forms and submissions, webhook subscriptions, availability schedules, activity log entries, and the current user, and manages bookings/webhooks/memberships/invitations/event types through the Calendly v2 REST API.
 
 ICON
-  id: simple-icons-calendly
-  asset: icons/simple-icons/calendly.svg
-  title: Calendly
-  simple_icon_slug: calendly
-  simple_icon_hex: 006BFF
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Calendly
-  match: exact-name-or-slug
-  matched_by: calendly
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -99,11 +91,9 @@ REVERSE ETL ACTIONS
     risk: external mutation; cancels a real scheduled event and notifies invitees; approval required
   create_invitee:
     endpoint: POST /invitees
-    required fields: event_type, start_time, invitee
     risk: external mutation; books a real meeting slot on the target event type and notifies the invitee; approval required
   create_webhook_subscription:
     endpoint: POST /webhook_subscriptions
-    required fields: url, events, organization, scope
     risk: external mutation; registers a new webhook endpoint that will receive live invitee/routing-form event payloads; approval required
   delete_webhook_subscription:
     endpoint: DELETE /webhook_subscriptions/{{ record.uuid }}
@@ -115,15 +105,14 @@ REVERSE ETL ACTIONS
     risk: destructive; permanently removes a user's membership from the organization, revoking their access; approval required
   invite_user_to_organization:
     endpoint: POST /organizations/{{ record.organization_uuid }}/invitations
-    required fields: organization_uuid, email
+    required fields: organization_uuid
+    optional fields: email
     risk: external mutation; sends a real organization-invitation email to the given address; approval required
   create_one_off_event_type:
     endpoint: POST /one_off_event_types
-    required fields: name, host, duration, date_setting
     risk: external mutation; publishes a new one-off publicly-bookable event type; approval required
   create_share:
     endpoint: POST /shares
-    required fields: event_type
     risk: external mutation; creates a new shareable booking link with its own spot limit for an event type; approval required
 
 SECURITY

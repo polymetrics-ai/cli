@@ -13,7 +13,6 @@ DESCRIPTION
   Reads PayPal transactions, balances, catalog products, and customer disputes through the PayPal REST API using OAuth 2.0 client-credentials auth.
 
 ICON
-  id: paypal
   asset: icons/paypal.svg
   source: upstream_registry
   review_status: upstream_seeded

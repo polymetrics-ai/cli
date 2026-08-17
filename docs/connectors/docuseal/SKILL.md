@@ -11,11 +11,9 @@ Reads DocuSeal templates, submissions, and submitters, and writes submission/sub
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -60,7 +58,6 @@ Reads DocuSeal templates, submissions, and submitters, and writes submission/sub
 
 - create_submission:
   - endpoint: POST /submissions
-  - required fields: template_id, submitters
   - risk: external mutation; dispatches a live signature-request email/SMS to every listed submitter unless send_email/send_sms are explicitly set false; approval required
 - archive_submission:
   - endpoint: DELETE /submissions/{{ record.id }}

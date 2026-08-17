@@ -11,7 +11,6 @@ Reads Google Search Console sites, sitemaps, and Search Analytics performance re
 
 ## Icon
 
-- id: googlesearchconsole
 - asset: icons/googlesearchconsole.svg
 - source: upstream_registry
 - review_status: upstream_seeded

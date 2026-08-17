@@ -11,7 +11,6 @@ Reads GNews articles from the keyword search and top-headlines endpoints of the 
 
 ## Icon
 
-- id: gnews
 - asset: icons/gnews.svg
 - source: upstream_registry
 - review_status: upstream_seeded

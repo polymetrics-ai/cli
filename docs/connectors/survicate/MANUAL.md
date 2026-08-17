@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Survicate surveys, survey questions, responses, and respondent attributes, and manages GDPR personal-data requests, through the Survicate Data Export API v2. Read-only.
 
 ICON
-  id: survicate
   asset: icons/survicate.svg
   source: official
   review_status: official_verified

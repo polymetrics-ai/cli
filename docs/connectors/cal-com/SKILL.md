@@ -11,17 +11,9 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
 
 ## Icon
 
-- id: simple-icons-caldotcom
-- asset: icons/simple-icons/caldotcom.svg
-- title: Cal.com
-- simple_icon_slug: caldotcom
-- simple_icon_hex: 292929
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Cal.com
-- match: curated-alias
-- matched_by: caldotcom
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -64,7 +56,6 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
 
 - create_booking:
   - endpoint: POST /v2/bookings
-  - required fields: start, eventTypeId, attendee
   - risk: external mutation; books a real meeting slot on the target event type and notifies attendees; approval required
 - cancel_booking:
   - endpoint: POST /v2/bookings/{{ record.uid }}/cancel
@@ -80,11 +71,10 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
   - risk: external mutation; declines a booking pending host approval, notifying the attendee; approval required
 - reschedule_booking:
   - endpoint: POST /v2/bookings/{{ record.uid }}/reschedule
-  - required fields: uid, start
+  - required fields: uid
   - risk: external mutation; moves a real booking to a new time and notifies attendees; approval required
 - create_event_type:
   - endpoint: POST /v2/event-types
-  - required fields: title, slug, lengthInMinutes
   - risk: external mutation; creates a new publicly-bookable event type; approval required
 - update_event_type:
   - endpoint: PATCH /v2/event-types/{{ record.id }}
@@ -96,7 +86,6 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
   - risk: destructive; permanently deletes an event type, breaking any existing public booking links; approval required
 - create_schedule:
   - endpoint: POST /v2/schedules
-  - required fields: name, timeZone, isDefault
   - risk: external mutation; creates a new availability schedule, which can be attached to event types and change public availability; approval required
 - update_schedule:
   - endpoint: PATCH /v2/schedules/{{ record.id }}
@@ -108,7 +97,6 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
   - risk: destructive; permanently deletes an availability schedule; approval required
 - create_webhook:
   - endpoint: POST /v2/webhooks
-  - required fields: subscriberUrl, triggers, active
   - risk: external mutation; registers a new webhook endpoint that will receive live booking event payloads; approval required
 - delete_webhook:
   - endpoint: DELETE /v2/webhooks/{{ record.id }}

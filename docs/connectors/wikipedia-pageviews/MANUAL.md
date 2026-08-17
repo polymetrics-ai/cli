@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Wikimedia pageview metrics for articles and top-article reports through the public Wikimedia REST API.
 
 ICON
-  id: wikipedia-pageviews
   asset: icons/wikipedia-pageviews.svg
   source: upstream_registry
   review_status: upstream_seeded

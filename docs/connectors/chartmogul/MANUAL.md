@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and writes ChartMogul customers, contacts, subscription activities, plans, invoices, tasks, customer-count metrics, and account details through the ChartMogul REST API.
 
 ICON
-  id: chartmogul
   asset: icons/chartmogul.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -67,7 +66,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_customer:
     endpoint: POST /customers
-    required fields: data_source_uuid, external_id
     risk: external mutation; approval required
   update_customer:
     endpoint: PUT /customers/{{ record.uuid }}

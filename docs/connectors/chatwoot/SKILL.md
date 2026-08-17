@@ -11,17 +11,10 @@ Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, 
 
 ## Icon
 
-- id: simple-icons-chatwoot
-- asset: icons/simple-icons/chatwoot.svg
-- title: Chatwoot
-- simple_icon_slug: chatwoot
-- simple_icon_hex: 1F93FF
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Chatwoot
-- match: exact-name-or-slug
-- matched_by: chatwoot
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -74,7 +67,6 @@ Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, 
 
 - create_contact:
   - endpoint: POST /contacts
-  - required fields: inbox_id
   - risk: creates a new Chatwoot contact record; low risk, no customer notification
 - update_contact:
   - endpoint: PUT /contacts/{{ record.id }}
@@ -82,19 +74,17 @@ Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, 
   - risk: updates an existing Chatwoot contact's profile fields; low risk, no customer notification
 - create_conversation:
   - endpoint: POST /conversations
-  - required fields: source_id
   - risk: creates a new conversation in the target inbox; customer-visible once the initial message is delivered through a live channel
 - send_message:
   - endpoint: POST /conversations/{{ record.conversation_id }}/messages
-  - required fields: conversation_id, content
+  - required fields: conversation_id
   - risk: sends a message into a conversation; customer-visible unless private is true and may notify the contact through the inbox channel
 - toggle_conversation_status:
   - endpoint: POST /conversations/{{ record.conversation_id }}/toggle_status
-  - required fields: conversation_id, status
+  - required fields: conversation_id
   - risk: changes a conversation's status (open/resolved/pending/snoozed); may affect agent routing and reporting metrics
 - create_label:
   - endpoint: POST /labels
-  - required fields: title
   - risk: creates a new account-wide label; low risk, visible to all agents in the sidebar when show_on_sidebar is true
 
 ## Security

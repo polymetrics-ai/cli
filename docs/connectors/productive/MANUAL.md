@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Productive projects, people, companies, and tasks through the Productive JSON:API-style REST API (read-only).
 
 ICON
-  id: productive
   asset: icons/productive.svg
   source: official
   review_status: official_verified

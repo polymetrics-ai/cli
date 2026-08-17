@@ -11,7 +11,6 @@ Reads Drift users, accounts, conversations, contacts, and teams, and writes cont
 
 ## Icon
 
-- id: drift
 - asset: icons/drift.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -63,11 +62,10 @@ Reads Drift users, accounts, conversations, contacts, and teams, and writes cont
 
 - create_contact:
   - endpoint: POST /contacts
-  - required fields: attributes
   - risk: creates a new Drift contact record; low-risk external mutation, no approval required
 - update_contact:
   - endpoint: PATCH /contacts/{{ record.id }}
-  - required fields: id, attributes
+  - required fields: id
   - risk: mutates an existing Drift contact's attributes, including standard fields (email/name/phone) and any custom attribute; external mutation, approval required
 - delete_contact:
   - endpoint: DELETE /contacts/{{ record.id }}
@@ -75,15 +73,12 @@ Reads Drift users, accounts, conversations, contacts, and teams, and writes cont
   - risk: permanently removes a Drift contact and its conversation history association; destructive, approval required
 - post_timeline_event:
   - endpoint: POST /contacts/timeline
-  - required fields: contactId, event
   - risk: posts a custom timeline event onto a contact's record; low-risk external mutation, no approval required
 - create_account:
   - endpoint: POST /accounts/create
-  - required fields: ownerId, domain
   - risk: creates a new Drift account (company) record; low-risk external mutation, no approval required
 - update_account:
   - endpoint: PATCH /accounts/update
-  - required fields: accountId, ownerId
   - risk: mutates an existing Drift account's owner/name/domain/targeting/custom properties; external mutation, approval required
 - delete_account:
   - endpoint: DELETE /accounts/{{ record.account_id }}
@@ -91,19 +86,16 @@ Reads Drift users, accounts, conversations, contacts, and teams, and writes cont
   - risk: permanently removes a Drift account record; destructive, approval required
 - create_message:
   - endpoint: POST /conversations/{{ record.conversation_id }}/messages
-  - required fields: conversation_id, type
+  - required fields: conversation_id
   - risk: posts a message into a live Drift conversation, visible to the end customer when type is chat; external mutation, approval required
 - create_conversation:
   - endpoint: POST /conversations/new
-  - required fields: email
   - risk: starts a new Drift conversation for the given contact email; external mutation, approval required
 - gdpr_retrieve:
   - endpoint: POST /gdpr/retrieve
-  - required fields: email
   - risk: triggers Drift to compile and email all data held for the given email address to the account's admin; a data-subject-access-request action, approval required
 - gdpr_delete:
   - endpoint: POST /gdpr/delete
-  - required fields: email
   - risk: permanently erases every contact/user record matching the given email address from Drift; irreversible data-subject-erasure action, approval required
 
 ## Security

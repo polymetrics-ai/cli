@@ -13,7 +13,6 @@ DESCRIPTION
   Reads ActiveCampaign contacts, lists, deals, campaigns, tags, automations, custom fields, accounts, users, deal stages, and deal tasks through the ActiveCampaign v3 REST API.
 
 ICON
-  id: activecampaign
   asset: icons/activecampaign.svg
   source: official
   review_status: official_verified

@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Capsule CRM parties, opportunities, cases, tasks, users, tags, custom field definitions, teams, pipelines, milestones, lost reasons, task categories, boards, and stages, and writes party/opportunity/case/task create, update, and delete actions, through the Capsule v2 REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -86,11 +84,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_party:
     endpoint: POST /parties
-    required fields: party
     risk: external mutation; creates a live Capsule CRM contact; approval required. Body wraps the record under a top-level "party" key (Capsule's resource-envelope convention) — the record itself must carry that wrapper, since the engine's write dialect sends record fields verbatim as the JSON body with no nested-wrapper construction primitive.
   update_party:
     endpoint: PUT /parties/{{ record.id }}
-    required fields: id, party
+    required fields: id
+    optional fields: party
     risk: external mutation; updates a live Capsule CRM contact; approval required. Body wraps the record under a top-level "party" key; "id" is path-only (path_fields) and excluded from the body via body_fields.
   delete_party:
     endpoint: DELETE /parties/{{ record.id }}
@@ -98,11 +96,11 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Capsule CRM contact and its associated history; approval required
   create_opportunity:
     endpoint: POST /opportunities
-    required fields: opportunity
     risk: external mutation; creates a live Capsule CRM sales opportunity; approval required. Body wraps the record under a top-level "opportunity" key.
   update_opportunity:
     endpoint: PUT /opportunities/{{ record.id }}
-    required fields: id, opportunity
+    required fields: id
+    optional fields: opportunity
     risk: external mutation; updates a live Capsule CRM sales opportunity (including moving pipeline stage or closing/losing it); approval required
   delete_opportunity:
     endpoint: DELETE /opportunities/{{ record.id }}
@@ -110,11 +108,11 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Capsule CRM sales opportunity; approval required
   create_kase:
     endpoint: POST /kases
-    required fields: kase
     risk: external mutation; creates a live Capsule CRM case/project; approval required. Body wraps the record under a top-level "kase" key (Capsule kept the "kase" spelling in the API after renaming Cases to Projects in the product UI, to avoid a breaking change; see docs.md).
   update_kase:
     endpoint: PUT /kases/{{ record.id }}
-    required fields: id, kase
+    required fields: id
+    optional fields: kase
     risk: external mutation; updates a live Capsule CRM case/project, including closing it; approval required
   delete_kase:
     endpoint: DELETE /kases/{{ record.id }}
@@ -122,11 +120,11 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Capsule CRM case/project; approval required
   create_task:
     endpoint: POST /tasks
-    required fields: task
     risk: external mutation; creates a live Capsule CRM task/reminder; approval required. Body wraps the record under a top-level "task" key.
   update_task:
     endpoint: PUT /tasks/{{ record.id }}
-    required fields: id, task
+    required fields: id
+    optional fields: task
     risk: external mutation; updates a live Capsule CRM task, including marking it complete; approval required
   delete_task:
     endpoint: DELETE /tasks/{{ record.id }}

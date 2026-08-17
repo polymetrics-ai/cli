@@ -11,11 +11,9 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -71,7 +69,6 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
 
 - create_post:
   - endpoint: POST /posts
-  - required fields: title, content
   - risk: external mutation; creates a new Beamer announcement post, optionally published immediately (visible to end users); approval required
 - update_post:
   - endpoint: PUT /posts/{{ record.id }}
@@ -83,7 +80,7 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
   - risk: permanently removes an announcement post; irreversible; approval required
 - create_post_comment:
   - endpoint: POST /posts/{{ record.post_id }}/comments
-  - required fields: post_id, text
+  - required fields: post_id
   - risk: external mutation; adds a comment to a live announcement post on behalf of a user; approval required
 - delete_post_comment:
   - endpoint: DELETE /posts/{{ record.post_id }}/comments/{{ record.id }}
@@ -91,7 +88,6 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
   - risk: permanently removes a comment from a post; irreversible; approval required
 - create_feature_request:
   - endpoint: POST /feature-requests
-  - required fields: title, content
   - risk: external mutation; creates a new feature request, optionally visible immediately to end users; approval required
 - update_feature_request:
   - endpoint: PUT /feature-requests/{{ record.id }}
@@ -103,7 +99,7 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
   - risk: permanently removes a feature request; irreversible; approval required
 - create_feature_request_comment:
   - endpoint: POST /feature-requests/{{ record.feature_request_id }}/comments
-  - required fields: feature_request_id, text
+  - required fields: feature_request_id
   - risk: external mutation; adds a comment to a feature request on behalf of a user; approval required
 - delete_feature_request_comment:
   - endpoint: DELETE /feature-requests/{{ record.feature_request_id }}/comments/{{ record.id }}
@@ -111,7 +107,7 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
   - risk: permanently removes a comment from a feature request; irreversible; approval required
 - create_post_reaction:
   - endpoint: POST /posts/{{ record.post_id }}/reactions
-  - required fields: post_id, reaction
+  - required fields: post_id
   - risk: external mutation; records a reaction to a post on behalf of a user; approval required
 - delete_post_reaction:
   - endpoint: DELETE /posts/{{ record.post_id }}/reactions/{{ record.id }}

@@ -11,7 +11,6 @@ Reads Square payments, refunds, customers, and locations through the Square Conn
 
 ## Icon
 
-- id: square
 - asset: icons/square.svg
 - source: upstream_registry
 - review_status: upstream_seeded

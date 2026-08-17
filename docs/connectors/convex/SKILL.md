@@ -11,11 +11,10 @@ Reads Convex tables and documents through the deployment HTTP API.
 
 ## Icon
 
-- id: convex
 - asset: icons/convex.svg
-- source: official
-- review_status: official_verified
-- review_url: https://docs.convex.dev/
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.convex.dev/http-api/
 
 ## Capabilities
 

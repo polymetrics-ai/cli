@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Smartwaiver waivers, checkins, templates, published keys, user info, and account settings; sends prefill/SMS/webhook mutations through the Smartwaiver API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -59,7 +57,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   set_webhook_config:
     endpoint: PUT /v4/webhooks/configure
-    required fields: endpoint
     risk: changes where the account's near-real-time waiver-signed webhook notifications are delivered; approval required
   resend_webhook:
     endpoint: PUT /v4/webhooks/resend/{{ record.waiver_id }}
@@ -67,7 +64,6 @@ REVERSE ETL ACTIONS
     risk: re-triggers the new-waiver webhook delivery for a specific waiver (testing aid, heavily rate limited by Smartwaiver at 2/minute); approval required
   send_sms:
     endpoint: POST /v4/sms
-    required fields: templateId, number
     risk: sends an outbound SMS with a waiver-signing link to a real phone number (rate limited daily by Smartwaiver for anti-spam); approval required
   prefill_template:
     endpoint: POST /v4/templates/{{ record.template_id }}/prefill

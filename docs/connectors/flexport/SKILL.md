@@ -11,7 +11,6 @@ Reads Flexport logistics, network, billing, booking, purchase order, product, do
 
 ## Icon
 
-- id: flexport
 - asset: icons/flexport.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -108,27 +107,23 @@ Reads Flexport logistics, network, billing, booking, purchase order, product, do
 
 - create_booking_amendment:
   - endpoint: POST /booking_amendments
-  - required fields: booking_id
-  - optional fields: new_name, amendment_note, new_container_counts, new_wants_pickup_service, new_wants_import_customs_service, new_wants_flexport_freight, new_wants_bco, new_wants_214_filing, new_wants_ftz_entry, new_origin_address_ref, new_origin_port_us_cbp_port_code, new_origin_port_loc_code, new_destination_address_ref, new_destination_port_us_cbp_port_code, new_destination_port_loc_code, new_cargo_ready_date, new_delivery_date, new_product_descriptions, new_cargo, new_metadata, new_container_references
+  - optional fields: booking_id, new_name, amendment_note, new_container_counts, new_wants_pickup_service, new_wants_import_customs_service, new_wants_flexport_freight, new_wants_bco, new_wants_214_filing, new_wants_ftz_entry, new_origin_address_ref, new_origin_port_us_cbp_port_code, new_origin_port_loc_code, new_destination_address_ref, new_destination_port_us_cbp_port_code, new_destination_port_loc_code, new_cargo_ready_date, new_delivery_date, new_product_descriptions, new_cargo, new_metadata, new_container_references
   - risk: requests a booking amendment; Flexport may apply the change immediately or queue it for approval depending on shipment state
 - create_booking_line_item:
   - endpoint: POST /booking_line_items
-  - required fields: purchase_order_line_item_id, booking_id, units
+  - optional fields: purchase_order_line_item_id, booking_id, units
   - risk: adds units from a purchase-order line item to a booking
 - create_booking:
   - endpoint: POST /bookings
-  - required fields: name, shipper_entity_ref, consignee_entity_ref, origin_address_ref, destination_address_ref, cargo_ready_date, wants_export_customs_service, cargo
-  - optional fields: notify_party, ocean_booking, air_booking, trucking_booking, delivery_date, wants_flexport_freight, wants_import_customs_service, wants_bco, special_instructions, metadata, declared_as_strategy, eccn_codes, flow_direct, user_email
+  - optional fields: name, shipper_entity_ref, consignee_entity_ref, notify_party, ocean_booking, air_booking, trucking_booking, origin_address_ref, destination_address_ref, cargo_ready_date, delivery_date, wants_export_customs_service, wants_flexport_freight, wants_import_customs_service, wants_bco, cargo, special_instructions, metadata, declared_as_strategy, eccn_codes, flow_direct, user_email
   - risk: creates a real Flexport booking request and can initiate operational freight workflows
 - create_document:
   - endpoint: POST /documents
-  - required fields: file_name, mime_type, document_type, document, shipment_id
-  - optional fields: memo, user_email
+  - optional fields: file_name, mime_type, document_type, memo, document, user_email, shipment_id
   - risk: uploads a base64-encoded document to a shipment; incorrect documents can affect operational shipment records
 - create_company:
   - endpoint: POST /network/companies
-  - required fields: name
-  - optional fields: ref
+  - optional fields: name, ref
   - risk: creates a company in the Flexport network
 - update_company:
   - endpoint: PATCH /network/companies/{{ record.id }}
@@ -137,8 +132,7 @@ Reads Flexport logistics, network, billing, booking, purchase order, product, do
   - risk: updates company name or external reference in the Flexport network
 - create_company_entity:
   - endpoint: POST /network/company_entities
-  - required fields: name, mailing_address
-  - optional fields: company_id, company_ref, ref, vat_numbers
+  - optional fields: name, company_id, company_ref, mailing_address, ref, vat_numbers
   - risk: creates a legal company entity under a Flexport network company
 - update_company_entity:
   - endpoint: PATCH /network/company_entities/{{ record.id }}
@@ -147,8 +141,7 @@ Reads Flexport logistics, network, billing, booking, purchase order, product, do
   - risk: updates company entity legal name, mailing address, reference, or VAT numbers
 - create_contact:
   - endpoint: POST /network/contacts
-  - required fields: name, email, phone_number
-  - optional fields: company_id
+  - optional fields: name, email, phone_number, company_id
   - risk: creates a contact in the Flexport network
 - update_contact:
   - endpoint: PATCH /network/contacts/{{ record.id }}
@@ -157,8 +150,7 @@ Reads Flexport logistics, network, billing, booking, purchase order, product, do
   - risk: updates contact details in the Flexport network
 - create_location:
   - endpoint: POST /network/locations
-  - required fields: name, company_id, address
-  - optional fields: contact_ids, ref, metadata
+  - optional fields: name, company_id, address, contact_ids, ref, metadata
   - risk: creates a network location and address in Flexport
 - update_location:
   - endpoint: PATCH /network/locations/{{ record.id }}
@@ -167,8 +159,7 @@ Reads Flexport logistics, network, billing, booking, purchase order, product, do
   - risk: updates location identity, address, contacts, reference, or metadata
 - create_product:
   - endpoint: POST /products
-  - required fields: name, sku
-  - optional fields: description, product_category, country_of_origin, client_verified, product_properties, classifications, suppliers
+  - optional fields: name, sku, description, product_category, country_of_origin, client_verified, product_properties, classifications, suppliers
   - risk: creates a product in the Flexport Product Library
 - update_product:
   - endpoint: PATCH /products/{{ record.id }}
@@ -177,11 +168,12 @@ Reads Flexport logistics, network, billing, booking, purchase order, product, do
   - risk: updates product library fields; arrays replace the existing values when provided
 - update_shipment:
   - endpoint: PATCH /shipments/{{ record.id }}
-  - required fields: id, metadata
+  - required fields: id
+  - optional fields: metadata
   - risk: replaces shipment metadata tags; incorrect metadata can affect downstream shipment workflows
 - create_shipments_shareable:
   - endpoint: POST /shipments_shareable
-  - required fields: shipment_ids
+  - optional fields: shipment_ids
   - risk: creates shareable shipment URLs for the listed shipment ids
 
 ## Security

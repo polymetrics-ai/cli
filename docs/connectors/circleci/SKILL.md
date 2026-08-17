@@ -11,17 +11,9 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
 
 ## Icon
 
-- id: simple-icons-circleci
-- asset: icons/simple-icons/circleci.svg
-- title: CircleCI
-- simple_icon_slug: circleci
-- simple_icon_hex: 343434
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=CircleCI
-- match: exact-name-or-slug
-- matched_by: circleci
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -85,7 +77,6 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
 
 - create_schedule:
   - endpoint: POST /project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/schedule
-  - required fields: name, timetable, attribution-actor, parameters
   - risk: external mutation; creates a new scheduled-pipeline trigger for this project
 - update_schedule:
   - endpoint: PATCH /schedule/{{ record.id }}
@@ -97,7 +88,6 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
   - risk: irreversible external deletion of a scheduled-pipeline trigger; approval required
 - create_environment_variable:
   - endpoint: POST /project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar
-  - required fields: name, value
   - risk: external mutation; creates or overwrites a project environment variable used by every future CI run
 - delete_environment_variable:
   - endpoint: DELETE /project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar/{{ record.name }}
@@ -105,7 +95,6 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
   - risk: irreversible external deletion of a project environment variable; may break future CI runs that depend on it; approval required
 - create_checkout_key:
   - endpoint: POST /project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key
-  - required fields: type
   - risk: external mutation; creates a new deploy/checkout SSH key with repository access
 - delete_checkout_key:
   - endpoint: DELETE /project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key/{{ record.fingerprint }}

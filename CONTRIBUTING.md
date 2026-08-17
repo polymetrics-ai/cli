@@ -27,7 +27,6 @@ pnpm run gen:website-data
 pnpm run lint
 pnpm run typecheck
 pnpm run test:unit
-pnpm run test:scripts
 pnpm run test:e2e
 pnpm run build
 ```

@@ -11,7 +11,6 @@ Reads Microsoft Teams users, groups, channels, and device-usage reports through 
 
 ## Icon
 
-- id: microsoft-teams
 - asset: icons/microsoft-teams.svg
 - source: upstream_registry
 - review_status: upstream_seeded

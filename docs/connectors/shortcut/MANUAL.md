@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Shortcut stories, epics, projects, and iterations through the Shortcut REST API.
 
 ICON
-  id: shortcut
   asset: icons/shortcut.svg
   source: official
   review_status: official_verified

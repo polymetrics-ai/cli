@@ -13,7 +13,6 @@ DESCRIPTION
   Reads and manages Amplitude behavioral cohorts, chart annotations, annotation categories, event lists, and the governed taxonomy (event/category definitions) through the Amplitude Analytics REST API.
 
 ICON
-  id: amplitude
   asset: icons/amplitude.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -71,7 +70,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_annotation:
     endpoint: POST /api/3/annotations
-    required fields: label, start
     risk: creates a chart annotation visible to every Amplitude project user
   update_annotation:
     endpoint: PUT /api/3/annotations/{{ record.id }}
@@ -83,11 +81,10 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a chart annotation
   create_annotation_category:
     endpoint: POST /api/3/annotation-categories
-    required fields: category
     risk: creates a new annotation category shared across the Amplitude project
   update_annotation_category:
     endpoint: PUT /api/3/annotation-categories/{{ record.id }}
-    required fields: id, category
+    required fields: id
     risk: renames an existing annotation category shared across the Amplitude project
   delete_annotation_category:
     endpoint: DELETE /api/3/annotation-categories/{{ record.id }}
@@ -95,11 +92,10 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an annotation category shared across the Amplitude project
   create_taxonomy_category:
     endpoint: POST /api/2/taxonomy/category
-    required fields: category_name
     risk: creates a new event category in the Amplitude project's governed taxonomy
   update_taxonomy_category:
     endpoint: PUT /api/2/taxonomy/category/{{ record.category_id }}
-    required fields: category_id, category_name
+    required fields: category_id
     risk: renames an existing event category in the Amplitude project's governed taxonomy
   delete_taxonomy_category:
     endpoint: DELETE /api/2/taxonomy/category/{{ record.category_id }}
@@ -107,7 +103,6 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an event category from the Amplitude project's governed taxonomy
   create_taxonomy_event:
     endpoint: POST /api/2/taxonomy/event
-    required fields: event_type
     risk: registers a new governed event type in the Amplitude project's taxonomy
   update_taxonomy_event:
     endpoint: PUT /api/2/taxonomy/event/{{ record.event_type }}

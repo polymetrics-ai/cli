@@ -11,7 +11,6 @@ Reads TallyPrime accounting data (companies, ledgers, groups, stock items, vouch
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

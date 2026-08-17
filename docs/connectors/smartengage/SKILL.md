@@ -11,7 +11,6 @@ Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers; crea
 
 ## Icon
 
-- id: smartengage
 - asset: icons/smartengage.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -58,39 +57,30 @@ Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers; crea
 
 - add_subscriber:
   - endpoint: POST subscribers/add
-  - required fields: avatar_id
   - risk: external mutation; creates a new subscriber on the connected SmartEngage account; approval required
 - update_subscriber:
   - endpoint: POST subscribers/update
-  - required fields: avatar_id, subscriber_id
   - risk: external mutation; overwrites subscriber fields on the connected SmartEngage account (fields omitted from the record remain unchanged); approval required
 - create_tag:
   - endpoint: POST tags/create
-  - required fields: avatar_id, name
   - risk: external mutation; creates a new tag on the connected SmartEngage account; approval required
 - add_tag_to_subscriber:
   - endpoint: POST tags/add
-  - required fields: avatar_id, subscriber_id, tag
   - risk: external mutation; attaches an existing tag to a subscriber; approval required
 - remove_tag_from_subscriber:
   - endpoint: POST tags/delete
-  - required fields: avatar_id, subscriber_id, tag
   - risk: external mutation; detaches a tag from a subscriber; approval required
 - create_custom_field:
   - endpoint: POST customfields/create
-  - required fields: avatar_id, custom_field_name, custom_field_type
   - risk: external mutation; creates a new custom field definition on the connected SmartEngage account; approval required
 - set_custom_field_value:
   - endpoint: POST customfields/update
-  - required fields: avatar_id, subscriber_id, field, value
   - risk: external mutation; sets a custom field value on a subscriber; approval required
 - add_subscriber_to_sequence:
   - endpoint: POST sequences/add
-  - required fields: avatar_id, subscriber_id, sequence
   - risk: external mutation; enrolls a subscriber into an automation sequence, triggering scheduled messages; approval required
 - remove_subscriber_from_sequence:
   - endpoint: POST sequences/remove
-  - required fields: avatar_id, subscriber_id, sequence
   - risk: external mutation; unenrolls a subscriber from an automation sequence, stopping scheduled messages; approval required
 
 ## Security

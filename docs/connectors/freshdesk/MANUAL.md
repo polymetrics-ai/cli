@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2.
 
 ICON
-  id: freshdesk
   asset: icons/freshdesk.svg
   source: upstream_registry
   review_status: upstream_seeded

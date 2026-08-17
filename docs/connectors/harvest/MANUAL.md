@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Harvest clients, contacts, company settings, projects, tasks, task assignments, users, time entries, invoices, estimates, expenses, item categories, expense categories, and roles through the Harvest v2 REST API.
 
 ICON
-  id: harvest
   asset: icons/harvest.svg
   source: upstream_registry
   review_status: upstream_seeded

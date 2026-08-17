@@ -13,7 +13,6 @@ DESCRIPTION
   Reads NASA Open API data: Astronomy Picture of the Day, Near-Earth Objects (NeoWs feed and browse), EPIC Earth imagery, and Mars rover photos. Read-only.
 
 ICON
-  id: nasa
   asset: icons/nasa.svg
   source: upstream_registry
   review_status: upstream_seeded

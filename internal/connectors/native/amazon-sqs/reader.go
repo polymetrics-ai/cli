@@ -70,13 +70,7 @@ func receiveForm(cfg connectors.RuntimeConfig) url.Values {
 	for i, attr := range splitCSV(attrs) {
 		form.Set(fmt.Sprintf("MessageAttributeName.%d", i+1), attr)
 	}
-	systemAttrs := strings.TrimSpace(cfg.Config["system_attributes_to_return"])
-	if systemAttrs == "" {
-		systemAttrs = "All"
-	}
-	for i, attr := range splitCSV(systemAttrs) {
-		form.Set(fmt.Sprintf("AttributeName.%d", i+1), attr)
-	}
+	form.Set("AttributeName.1", "All")
 	return form
 }
 

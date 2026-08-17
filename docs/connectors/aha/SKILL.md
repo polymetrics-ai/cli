@@ -11,7 +11,6 @@ Reads Aha! features, products, ideas, releases, initiatives, goals, epics, and u
 
 ## Icon
 
-- id: aha
 - asset: icons/aha.svg
 - source: official
 - review_status: official_verified

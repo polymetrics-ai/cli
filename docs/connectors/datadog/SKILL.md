@@ -11,7 +11,6 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
 
 ## Icon
 
-- id: datadog
 - asset: icons/datadog.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -94,7 +93,6 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
 
 - create_monitor:
   - endpoint: POST /api/v1/monitor
-  - required fields: name, type, query, message
   - risk: creates a new alerting monitor; low-risk external mutation, no approval required
 - update_monitor:
   - endpoint: PUT /api/v1/monitor/{{ record.id }}
@@ -106,11 +104,10 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
   - risk: irreversibly removes a monitor and its alerting history reference; approval required
 - create_dashboard:
   - endpoint: POST /api/v1/dashboard
-  - required fields: title, layout_type, widgets
   - risk: creates a new dashboard; low-risk external mutation, no approval required
 - update_dashboard:
   - endpoint: PUT /api/v1/dashboard/{{ record.id }}
-  - required fields: id, title, layout_type, widgets
+  - required fields: id
   - risk: replaces an existing dashboard's full widget layout; external mutation, approval required
 - delete_dashboard:
   - endpoint: DELETE /api/v1/dashboard/{{ record.id }}
@@ -118,11 +115,10 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
   - risk: irreversibly removes a dashboard; approval required
 - create_dashboard_list:
   - endpoint: POST /api/v1/dashboard/lists/manual
-  - required fields: name
   - risk: creates a new dashboard list (folder); low-risk external mutation, no approval required
 - update_dashboard_list:
   - endpoint: PUT /api/v1/dashboard/lists/manual/{{ record.id }}
-  - required fields: id, name
+  - required fields: id
   - risk: renames an existing dashboard list; external mutation, approval required
 - delete_dashboard_list:
   - endpoint: DELETE /api/v1/dashboard/lists/manual/{{ record.id }}
@@ -130,7 +126,6 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
   - risk: irreversibly removes a dashboard list (folder); the dashboards themselves are unaffected, approval required
 - create_downtime:
   - endpoint: POST /api/v1/downtime
-  - required fields: scope
   - risk: schedules a downtime that silences monitor alerts for the given scope; suppresses real alerting during the window, approval required
 - update_downtime:
   - endpoint: PUT /api/v1/downtime/{{ record.id }}
@@ -142,11 +137,10 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
   - risk: cancels a scheduled/active downtime; alerting resumes immediately for its scope, approval required
 - create_notebook:
   - endpoint: POST /api/v1/notebooks
-  - required fields: name, cells, time
   - risk: creates a new notebook; low-risk external mutation, no approval required
 - update_notebook:
   - endpoint: PUT /api/v1/notebooks/{{ record.id }}
-  - required fields: id, name, cells, time
+  - required fields: id
   - risk: replaces an existing notebook's content; external mutation, approval required
 - delete_notebook:
   - endpoint: DELETE /api/v1/notebooks/{{ record.id }}
@@ -154,7 +148,6 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
   - risk: irreversibly removes a notebook; approval required
 - create_slo:
   - endpoint: POST /api/v1/slo
-  - required fields: name, type, thresholds
   - risk: creates a new SLO target; low-risk external mutation, no approval required
 - update_slo:
   - endpoint: PUT /api/v1/slo/{{ record.id }}
@@ -166,7 +159,6 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
   - risk: irreversibly removes an SLO and its historical error-budget tracking; approval required
 - create_user:
   - endpoint: POST /api/v1/user
-  - required fields: email
   - risk: invites a new user into the Datadog organization with the given role; approval required
 - update_user:
   - endpoint: PUT /api/v1/user/{{ record.handle }}
@@ -178,11 +170,9 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
   - risk: disables a user's access to the Datadog organization; approval required
 - create_event:
   - endpoint: POST /api/v1/events
-  - required fields: title, text
   - risk: posts a custom event into the Datadog event stream; low-risk external mutation, no approval required
 - create_synthetics_api_test:
   - endpoint: POST /api/v1/synthetics/tests/api
-  - required fields: name, type, config, locations
   - risk: creates a new Synthetics API test that begins actively probing the configured URL/host on a schedule; low-risk external mutation, no approval required
 - update_synthetics_api_test:
   - endpoint: PUT /api/v1/synthetics/tests/api/{{ record.public_id }}
@@ -190,11 +180,10 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
   - risk: mutates an existing Synthetics API test's request target/assertions; changes what is actively probed, approval required
 - create_api_key:
   - endpoint: POST /api/v1/api_key
-  - required fields: name
   - risk: creates a new organization API key with full agent-submission scope; a newly-minted long-lived credential, approval required
 - update_api_key:
   - endpoint: PUT /api/v1/api_key/{{ record.key }}
-  - required fields: key, name
+  - required fields: key
   - risk: renames an existing API key; low-risk external mutation, no approval required
 - delete_api_key:
   - endpoint: DELETE /api/v1/api_key/{{ record.key }}

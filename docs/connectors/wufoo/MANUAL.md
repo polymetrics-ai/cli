@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Wufoo forms, fields, entries, comments, reports, and widgets, and writes entry submissions and webhook registrations through the Wufoo API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -75,7 +73,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; creates a live Wufoo form entry; approval required
   add_webhook:
     endpoint: PUT /forms/{{ config.form_hash }}/webhooks.json
-    required fields: url
     risk: external mutation; registers a webhook callback URL on the configured form; approval required
   delete_webhook:
     endpoint: DELETE /forms/{{ config.form_hash }}/webhooks/{{ record.hash }}.json

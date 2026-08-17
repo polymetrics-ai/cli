@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Linear issues, teams, projects, and users through the Linear GraphQL API. Read-only.
 
 ICON
-  id: simple-icons-linear
-  asset: icons/simple-icons/linear.svg
-  title: Linear
-  simple_icon_slug: linear
-  simple_icon_hex: 5E6AD2
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Linear
-  match: exact-name-or-slug
-  matched_by: linear
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

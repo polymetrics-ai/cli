@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, settings, replies, and legacy product/widget resources through the Judge.me REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -126,35 +124,31 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_review:
     endpoint: POST /reviews
-    required fields: shop_domain, platform, name, email, rating, body
     risk: creates a public web review in Judge.me; approval required
   update_review:
     endpoint: PUT /reviews/{{ record.id }}
-    required fields: id, curated
+    required fields: id
     risk: publishes or hides a Judge.me review by changing curated status; approval required
   update_reviewer:
     endpoint: PUT /reviewers/{{ record.id }}
-    required fields: id, reviewer
+    required fields: id
     risk: creates or updates reviewer identity fields in Judge.me; approval required
   request_reviewer_data:
     endpoint: POST /reviewers/data_request
-    required fields: customer
     risk: submits a Judge.me reviewer data request; approval required
   delete_webhook:
     endpoint: DELETE /webhooks
-    required fields: key, url
+    optional fields: key, url
     risk: deletes a Judge.me webhook subscription; approval required
   create_webhook:
     endpoint: POST /webhooks
-    required fields: webhook
     risk: creates a Judge.me webhook subscription; approval required
   update_webhook:
     endpoint: PUT /webhooks/{{ record.id }}
-    required fields: id, webhook
+    required fields: id
     risk: updates a Judge.me webhook subscription; approval required
   bulk_create_webhooks:
     endpoint: POST /webhooks/bulk_create
-    required fields: webhooks
     risk: creates multiple Judge.me webhook subscriptions; approval required
   update_shop:
     endpoint: PUT /shops
@@ -164,15 +158,12 @@ REVERSE ETL ACTIONS
     risk: uninstalls the shop from Judge.me; destructive approval required
   create_checkout_comment:
     endpoint: POST /shops
-    required fields: content, external_product_id, create_from, customer
     risk: creates a checkout comment in Judge.me Checkout Comments; approval required
   create_reply:
     endpoint: POST /replies
-    required fields: review_id, reply
     risk: creates a public reply on a Judge.me review; approval required
   create_private_reply:
     endpoint: POST /private_replies
-    required fields: review_id, private_reply
     risk: creates a private email reply for a Judge.me review; approval required
 
 SECURITY

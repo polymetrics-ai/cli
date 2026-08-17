@@ -11,7 +11,6 @@ Reads AppFollow account users, app collections, app lists, reviews, review summa
 
 ## Icon
 
-- id: appfollow
 - asset: icons/appfollow.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -81,49 +80,39 @@ Reads AppFollow account users, app collections, app lists, reviews, review summa
 
 - reply_to_review:
   - endpoint: POST /reviews/reply
-  - required fields: ext_id, review_id, answer_text
   - risk: external mutation; posts a public reply to a live app-store review, cannot be unsent programmatically; approval required
 - update_review_tags:
   - endpoint: POST /reviews/tags
-  - required fields: ext_id, review_id, tags
   - risk: external mutation; overwrites a review's tag set; approval required
 - update_review_notes:
   - endpoint: POST /reviews/notes
-  - required fields: ext_id, review_id, content
   - risk: external mutation; overwrites a review's internal note; approval required
 - edit_keywords:
   - endpoint: POST /aso/keywords
-  - required fields: country, device, keywords
   - risk: external mutation; replaces the tracked ASO keyword list for a country/device pair; approval required
 - add_user:
   - endpoint: POST /account/users
-  - required fields: name, role, email
   - risk: external mutation; grants AppFollow account access to a new user; approval required
 - update_user:
   - endpoint: PATCH /account/users
-  - required fields: id, name, role, email
   - risk: external mutation; changes an existing account user's role/access; approval required
 - remove_user:
   - endpoint: DELETE /account/users
-  - required fields: id
-  - optional fields: email
+  - optional fields: id, email
   - risk: irreversible external mutation; revokes an AppFollow account user's access; approval required
 - add_collection:
   - endpoint: POST /account/apps
-  - required fields: title, countries
   - risk: external mutation; creates a new billable app collection; approval required
 - remove_collection:
   - endpoint: DELETE /account/apps
-  - required fields: apps_id
+  - optional fields: apps_id
   - risk: irreversible external deletion; removes an app collection and every app tracked under it; approval required
 - add_app:
   - endpoint: POST /account/apps/app
-  - required fields: store, ext_id, apps_id, locale
   - risk: external mutation; adds a tracked app to an existing collection; approval required
 - remove_app:
   - endpoint: DELETE /account/apps/app
-  - required fields: store, ext_id, apps_id
-  - optional fields: user_id
+  - optional fields: store, ext_id, apps_id, user_id
   - risk: irreversible external deletion; stops tracking an app under a collection; approval required
 
 ## Security

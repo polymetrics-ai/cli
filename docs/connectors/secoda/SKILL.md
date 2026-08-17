@@ -11,7 +11,6 @@ Reads Secoda catalog metadata (tables, documents, collections, questions) throug
 
 ## Icon
 
-- id: secoda
 - asset: icons/secoda.svg
 - source: official
 - review_status: official_verified

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads current, historical, forecast, marine, and location-autocomplete weather data from Weatherstack. Read-only.
 
 ICON
-  id: weatherstack
   asset: icons/weatherstack.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,7 +11,6 @@ Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list c
 
 ## Icon
 
-- id: emailoctopus
 - asset: icons/emailoctopus.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -59,11 +58,11 @@ Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list c
 
 - create_list:
   - endpoint: POST /lists
-  - required fields: name
   - risk: creates a new contact list; low-risk external mutation, no approval required
 - update_list:
   - endpoint: PUT /lists/{{ record.id }}
-  - required fields: id, name
+  - required fields: id
+  - optional fields: name
   - risk: renames an existing list; the id used by campaigns/API integrations to reference it is unchanged
 - delete_list:
   - endpoint: DELETE /lists/{{ record.id }}
@@ -71,7 +70,7 @@ Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list c
   - risk: permanently removes a list and all of its contacts/tags/custom fields
 - create_list_contact:
   - endpoint: POST /lists/{{ record.list_id }}/contacts
-  - required fields: list_id, email_address
+  - required fields: list_id
   - risk: adds a new contact to a list, immediately eligible to receive future campaigns targeting it (unless status is PENDING on a double opt-in list)
 - update_list_contact:
   - endpoint: PUT /lists/{{ record.list_id }}/contacts/{{ record.member_id }}
@@ -83,11 +82,13 @@ Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list c
   - risk: permanently removes a contact from a list and its subscription/consent history
 - create_list_tag:
   - endpoint: POST /lists/{{ record.list_id }}/tags
-  - required fields: list_id, tag
+  - required fields: list_id
+  - optional fields: tag
   - risk: creates a new tag on a list, up to that list's tag-count limit; low-risk external mutation, no approval required
 - update_list_tag:
   - endpoint: PUT /lists/{{ record.list_id }}/tags/{{ record.tag }}
-  - required fields: list_id, tag, new_tag
+  - required fields: list_id, tag
+  - optional fields: new_tag
   - risk: renames an existing tag on a list; any external automation/segment referencing the old tag name stops matching contacts by that name
 - delete_list_tag:
   - endpoint: DELETE /lists/{{ record.list_id }}/tags/{{ record.tag }}
@@ -95,12 +96,12 @@ Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list c
   - risk: permanently removes a tag from a list and from every contact currently carrying it
 - create_list_field:
   - endpoint: POST /lists/{{ record.list_id }}/fields
-  - required fields: list_id, label, tag, type
+  - required fields: list_id
   - risk: creates a new custom field on a list; the field's type (NUMBER/TEXT/DATE) cannot be changed after creation
 - update_list_field:
   - endpoint: PUT /lists/{{ record.list_id }}/fields/{{ record.tag }}
-  - required fields: list_id, tag, label, new_tag
-  - optional fields: fallback
+  - required fields: list_id, tag
+  - optional fields: label, new_tag, fallback
   - risk: renames a custom field's label/tag or changes its fallback default; any email template referencing the old field tag stops resolving a value
 - delete_list_field:
   - endpoint: DELETE /lists/{{ record.list_id }}/fields/{{ record.tag }}
@@ -108,7 +109,8 @@ Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list c
   - risk: permanently removes a custom field and its stored values from every contact on the list
 - start_automation:
   - endpoint: POST /automations/{{ record.automation_id }}/queue
-  - required fields: automation_id, list_member_id
+  - required fields: automation_id
+  - optional fields: list_member_id
   - risk: enrolls a contact into a live automation sequence, triggering its configured emails/delays; the automation must already have the 'Started via API' trigger enabled in the EmailOctopus dashboard
 
 ## Security

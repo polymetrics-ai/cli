@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Salesloft people, accounts, cadences, users, and emails through the Salesloft REST API v2.
 
 ICON
-  id: salesloft
   asset: icons/salesloft.svg
   source: official
   review_status: official_verified

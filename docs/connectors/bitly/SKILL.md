@@ -11,17 +11,9 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
 
 ## Icon
 
-- id: simple-icons-bitly
-- asset: icons/simple-icons/bitly.svg
-- title: Bitly
-- simple_icon_slug: bitly
-- simple_icon_hex: EE6123
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Bitly
-- match: exact-name-or-slug
-- matched_by: bitly
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -76,7 +68,6 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
 
 - create_bitlink:
   - endpoint: POST /bitlinks
-  - required fields: long_url
   - risk: creates a new publicly-resolvable short link; low-risk external mutation, no approval required
 - update_bitlink:
   - endpoint: PATCH /bitlinks/{{ record.id }}
@@ -88,15 +79,16 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
   - risk: permanently removes a bitlink; any traffic still hitting the short URL starts failing to resolve
 - update_bitlink_tags:
   - endpoint: PATCH /bitlinks/{{ record.id }}/tags
-  - required fields: id, tags
+  - required fields: id
+  - optional fields: tags
   - risk: replaces the full tag set on a bitlink; overwrites any tags not included in the submitted list
 - delete_bitlink_tags:
   - endpoint: DELETE /bitlinks/{{ record.id }}/tags
-  - required fields: id, tags
+  - required fields: id
+  - optional fields: tags
   - risk: removes the named tags from a bitlink; irreversible without re-adding them via update_bitlink_tags
 - create_campaign:
   - endpoint: POST /campaigns
-  - required fields: group_guid
   - risk: creates a new campaign container in the target group; low-risk external mutation, no approval required
 - update_campaign:
   - endpoint: PATCH /campaigns/{{ record.guid }}
@@ -108,7 +100,8 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
   - risk: renames or re-parents an existing group; a visible change for every member of that group
 - update_group_preferences:
   - endpoint: PATCH /groups/{{ record.group_guid }}/preferences
-  - required fields: group_guid, domain_preference
+  - required fields: group_guid
+  - optional fields: domain_preference
   - risk: changes the default branded short domain new bitlinks in this group are created with
 - create_channel:
   - endpoint: POST /channels
@@ -119,7 +112,6 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
   - risk: mutates an existing channel's name or campaign association
 - create_webhook:
   - endpoint: POST /webhooks
-  - required fields: group_guid, event, url
   - risk: registers a new outbound webhook that will POST live event data (clicks/scans) to an external URL of the caller's choosing; verify the target endpoint before enabling
 - update_webhook:
   - endpoint: PATCH /webhooks/{{ record.guid }}
@@ -131,15 +123,14 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
   - risk: permanently removes a webhook subscription; event delivery to its target URL stops immediately
 - create_custom_bitlink:
   - endpoint: POST /custom_bitlinks
-  - required fields: custom_bitlink, bitlink_id
   - risk: claims a custom keyword/back-half on a branded short domain and points it at a bitlink; consumes a finite custom-bitlink allocation on the domain
 - update_custom_bitlink:
   - endpoint: PATCH /custom_bitlinks/{{ record.custom_bitlink }}
-  - required fields: custom_bitlink, bitlink_id
+  - required fields: custom_bitlink
+  - optional fields: bitlink_id
   - risk: re-points an existing custom keyword at a different bitlink; redirects all future traffic hitting that custom URL to the new destination
 - create_qr_code:
   - endpoint: POST /qr-codes
-  - required fields: group_guid, destination
   - risk: creates a new QR code resource pointed at a bitlink or long_url; low-risk external mutation, no approval required
 - update_qr_code:
   - endpoint: PATCH /qr-codes/{{ record.qrcode_id }}

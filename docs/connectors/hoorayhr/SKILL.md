@@ -11,7 +11,6 @@ Reads HoorayHR users, time-off, leave-types, and sick-leave records through the 
 
 ## Icon
 
-- id: hoorayhr
 - asset: icons/hoorayhr.svg
 - source: official
 - review_status: official_verified

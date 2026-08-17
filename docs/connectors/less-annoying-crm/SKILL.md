@@ -7,11 +7,10 @@ description: Less Annoying CRM connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API.
+Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ## Icon
 
-- id: less-annoying-crm
 - asset: icons/less-annoying-crm.svg
 - source: official
 - review_status: official_verified
@@ -24,17 +23,44 @@ Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Le
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- mode
+- start_date
+- api_key (secret)
+
+## ETL Streams
+
+- users:
+  - primary key: UserId
+  - fields: FirstName(), LastName(), Timezone(), UserId()
+- contacts:
+  - primary key: ContactId
+  - fields: Address(), AssignedTo(), Company Name(), CompanyId(), ContactId(), DateCreated(), Email(), IsCompany(), Job Title(), LastUpdate(), Name(), Phone(), Website()
+- tasks:
+  - primary key: TaskId
+  - cursor: DateCreated
+  - fields: AssignedTo(), CalendarId(), ContactId(), DateCreated(), Description(), DueDate(), IsCompleted(), Name(), TaskId()
+- notes:
+  - primary key: NoteId
+  - fields: ContactId(), DateCreated(), DateDisplayedInHistory(), IsRichText(), Note(), NoteId(), UserId()
+- events:
+  - primary key: EventId
+  - cursor: DateUpdated
+  - fields: ContactIds(), DateCreated(), DateUpdated(), Description(), EndDate(), EventId(), IsAllDay(), IsRecurring(), Location(), Name(), StartDate(), UserIds()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Less Annoying CRM API reads performed by the legacy connector via a Tier-2 hook
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

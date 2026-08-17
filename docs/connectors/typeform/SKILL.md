@@ -11,7 +11,6 @@ Reads Typeform forms, workspaces, themes, and images through the Typeform REST A
 
 ## Icon
 
-- id: typeform
 - asset: icons/typeform.svg
 - source: upstream_registry
 - review_status: upstream_seeded

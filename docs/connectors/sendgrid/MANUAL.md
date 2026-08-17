@@ -13,7 +13,6 @@ DESCRIPTION
   Reads SendGrid Marketing Campaigns lists, segments, and contacts, plus suppression bounces, through the SendGrid v3 REST API. Read-only.
 
 ICON
-  id: sendgrid
   asset: icons/sendgrid.svg
   source: upstream_registry
   review_status: upstream_seeded

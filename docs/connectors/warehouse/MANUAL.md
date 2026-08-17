@@ -13,7 +13,6 @@ DESCRIPTION
   Local JSONL warehouse destination used by the dependency-free MVP.
 
 ICON
-  id: pm-warehouse
   asset: icons/pm-warehouse.svg
   source: polymetrics
   review_status: polymetrics

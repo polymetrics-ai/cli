@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Churnkey cancel-flow sessions and aggregated session counts through the Churnkey Data API, and sends usage/billing events and customer attribute updates through the Churnkey Event Tracking API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -45,14 +43,12 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_event:
     endpoint: POST /v1/api/events/new
-    required fields: event, customerId
     risk: external mutation; records a usage/billing event against a Churnkey customer, influencing cancel-flow offer targeting; approval required
   update_customer:
     endpoint: POST /v1/api/events/customer-update
     risk: external mutation; overwrites a Churnkey customer's tracked attributes used to drive cancel-flow segmentation and offer eligibility; approval required
   set_billing_users:
     endpoint: POST /v1/api/events/customer-update/set-users
-    required fields: customerId, users
     risk: external mutation; overwrites which users on a Churnkey customer account receive Payment Recovery billing-contact emails; approval required
 
 SECURITY

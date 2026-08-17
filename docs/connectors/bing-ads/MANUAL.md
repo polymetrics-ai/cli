@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Microsoft Advertising (Bing Ads) accounts, users, campaigns, ad groups, and ads through the v13 Customer Management and Campaign Management REST APIs. Read-only.
 
 ICON
-  id: bingads
   asset: icons/bingads.svg
   source: upstream_registry
   review_status: upstream_seeded

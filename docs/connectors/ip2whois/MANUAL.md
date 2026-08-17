@@ -13,7 +13,6 @@ DESCRIPTION
   Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing a flattened whois stream and per-role contact streams (registrant, admin, tech, billing). The nameservers stream is not migrated; see docs.md Known limits.
 
 ICON
-  id: ip2whois
   asset: icons/ip2whois.svg
   source: upstream_registry
   review_status: upstream_seeded

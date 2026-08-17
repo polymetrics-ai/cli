@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Plaid institutions and category metadata through read-only POST endpoints. All credentials and pagination/filter state travel in the JSON request body (Plaid's own convention), driven by a StreamHook.
 
 ICON
-  id: plaid
   asset: icons/plaid.svg
   source: official
   review_status: official_verified

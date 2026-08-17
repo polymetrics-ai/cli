@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and writes Concord contract lifecycle management data: agreements (and their metadata/summary/comments/activities/members/versions/attachments sub-resources), organizations, folders, reports, tags, clauses, approvals, groups, members, events, subscription, branding, and automated templates through the Concord REST API.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -139,7 +137,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_folder:
     endpoint: POST /organizations/{{ config.organization_id }}/folders
-    required fields: name, parentId
     risk: creates a new Concord folder within the configured organization; low risk, no data destruction
   update_folder:
     endpoint: PUT /organizations/{{ config.organization_id }}/folders/{{ record.id }}
@@ -154,7 +151,7 @@ REVERSE ETL ACTIONS
     risk: creates a new saved Concord report within the configured organization; low risk
   update_report:
     endpoint: PUT /organizations/{{ config.organization_id }}/reports/{{ record.id }}
-    required fields: id, name, description, filters
+    required fields: id
     risk: replaces an existing Concord saved report's definition; may change what other users see when they run it
   delete_report:
     endpoint: DELETE /organizations/{{ config.organization_id }}/reports/{{ record.id }}
@@ -162,11 +159,10 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a Concord saved report; destructive, external mutation; approval required
   create_clause:
     endpoint: POST /organizations/{{ config.organization_id }}/clauses
-    required fields: title, content
     risk: creates a new reusable Concord clause template within the configured organization; low risk
   update_clause:
     endpoint: PUT /organizations/{{ config.organization_id }}/clauses/{{ record.id }}
-    required fields: id, title, content
+    required fields: id
     risk: updates an existing Concord clause template; may affect future agreements linked to this clause
   delete_clause:
     endpoint: DELETE /organizations/{{ config.organization_id }}/clauses/{{ record.id }}
@@ -174,15 +170,13 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a Concord clause template; destructive, external mutation; approval required
   create_group:
     endpoint: POST /organizations/{{ config.organization_id }}/groups
-    required fields: name
     risk: creates a new Concord user group within the configured organization; low risk
   create_approval:
     endpoint: POST /organizations/{{ config.organization_id }}/approvals
-    required fields: title, description, blockThirdPartySignature
     risk: creates a new Concord company approval workflow within the configured organization; affects future agreement signature routing
   update_approval:
     endpoint: POST /organizations/{{ config.organization_id }}/approvals/{{ record.id }}
-    required fields: id, title, description, blockThirdPartySignature
+    required fields: id
     risk: replaces an existing Concord company approval workflow; affects agreements already routed through it
   delete_approval:
     endpoint: DELETE /organizations/{{ config.organization_id }}/approvals/{{ record.id }}

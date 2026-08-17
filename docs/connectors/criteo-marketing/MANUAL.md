@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad spend statistics, and Marketplace Performance Outcomes (MPO) advertisers/sellers/budgets/seller-campaigns through the Criteo REST API using OAuth2 client-credentials auth.
 
 ICON
-  id: criteo
   asset: icons/criteo.svg
   source: official
   review_status: official_verified

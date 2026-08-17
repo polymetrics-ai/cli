@@ -11,17 +11,9 @@ Reads Zoho Campaigns lists, campaigns, and contacts through the Zoho Campaigns R
 
 ## Icon
 
-- id: simple-icons-zoho-campaign
-- asset: icons/simple-icons/zoho-campaign.svg
-- title: Zoho
-- simple_icon_slug: zoho
-- simple_icon_hex: E42527
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Zoho
-- match: curated-alias
-- matched_by: zoho
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 

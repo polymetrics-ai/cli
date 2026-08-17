@@ -13,7 +13,6 @@ DESCRIPTION
   Reads PartnerStack partnerships, customers, transactions, and groups through the REST API.
 
 ICON
-  id: partnerstack
   asset: icons/partnerstack.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -13,11 +13,9 @@ DESCRIPTION
   Reads Outlook messages, mail folders, and calendar events through Microsoft Graph using an OAuth 2.0 refresh-token grant.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

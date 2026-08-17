@@ -12,47 +12,6 @@ make connector-boundary
 `--base <ref>` limits the primary scan to Go files changed from that git ref, including untracked
 files, while exception-ledger contracts are still checked against the whole tree.
 
-## Connector implementation ownership
-
-`connectorgen ownership` validates changed paths for connector implementation PRs. It requires one
-connector target, either from a machine-readable scope file or inferred from changed connector-owned
-paths so label/tag omission cannot skip the check.
-
-```bash
-go run ./cmd/connectorgen ownership . --base origin/main --scope-file connector-scope.json
-go run ./cmd/connectorgen ownership . --base origin/main --json --scope-file connector-scope.json
-```
-
-Scope file contract:
-
-```json
-{
-  "api_version": "polymetrics.ai/v1",
-  "kind": "ConnectorImplementationScope",
-  "connectors": ["target-slug"]
-}
-```
-
-The `connectors` array must contain exactly one connector slug. The validator allows target
-`internal/connectors/defs/<slug>/`, target hooks/native/legacy connector paths, target generated
-connector docs/icons/manual outputs, connector-owned test files that follow the
-`<slug>_..._test.go` naming convention directly inside `cmd/connectorgen/` or
-`internal/connectors/engine/` (hyphens in the slug become underscores, so `google-ads` owns
-`google_ads_..._test.go`), and a narrow set of shared generated indexes/goldens (including
-`docs/cli/connectors.md`, `docs/cli/reverse.md`,
-`docs/connectors/catalog/all-connectors.{json,md}`, and `website/lib/docs.generated.ts`; that
-allowlist is literal paths only, so other `docs/cli/` pages stay rejected as shared docs).
-
-Every `.planning/phases/**` path is ignored rather than matched against the target, so a lane
-commits the GSD plan/TDD/verification artifacts `AGENTS.md` requires without registering its phase
-directory with the guard.
-
-The validator rejects shared runtime/tooling, unrelated connectors, unrelated generated
-docs/website churn, and guardrail exception/config edits — the guard's own files under
-`internal/connectors/boundary/`, `cmd/connectorgen/ownership.go`,
-`cmd/connectorgen/ownership_test.go`, `cmd/connectorgen/boundary.go`, this doc, and required-check
-workflow files. Use a separate foundation PR for those changes.
-
 ## Output and exit status
 
 - Exit `0`: clean boundary report.

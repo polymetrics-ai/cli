@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and writes Cisco Meraki organizations, networks, devices, admins, licenses, configuration templates, policy objects, branding policies, SAML roles, and organization audit logs from the Meraki Dashboard API v1.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -76,7 +74,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_network:
     endpoint: POST /organizations/{{ record.organizationId }}/networks
-    required fields: organizationId, name, productTypes
+    required fields: organizationId
     risk: external mutation; creates a new Meraki network under an organization
   update_network:
     endpoint: PUT /networks/{{ record.id }}
@@ -92,7 +90,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; updates an existing device's name, tags, physical location, or notes
   create_admin:
     endpoint: POST /organizations/{{ record.organizationId }}/admins
-    required fields: organizationId, email, name, orgAccess
+    required fields: organizationId
     risk: external mutation; grants a new dashboard administrator access to this organization
   update_admin:
     endpoint: PUT /organizations/{{ record.organizationId }}/admins/{{ record.id }}
@@ -104,7 +102,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external revocation of a dashboard administrator's access to this organization; approval required
   create_config_template:
     endpoint: POST /organizations/{{ record.organizationId }}/configTemplates
-    required fields: organizationId, name
+    required fields: organizationId
     risk: external mutation; creates a new configuration template under an organization
   update_config_template:
     endpoint: PUT /organizations/{{ record.organizationId }}/configTemplates/{{ record.id }}
@@ -116,7 +114,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a configuration template; may unbind networks currently attached to it; approval required
   create_policy_object:
     endpoint: POST /organizations/{{ record.organizationId }}/policyObjects
-    required fields: organizationId, name, category, type
+    required fields: organizationId
     risk: external mutation; creates a new network policy object (CIDR/FQDN definition) used by firewall/traffic-shaping rules
   update_policy_object:
     endpoint: PUT /organizations/{{ record.organizationId }}/policyObjects/{{ record.id }}

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Delighted survey responses, people, bounces, unsubscribes, and aggregate metrics through the Delighted REST API; can create/update and delete people.
 
 ICON
-  id: delighted
   asset: icons/delighted.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -55,7 +54,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_person:
     endpoint: POST /people.json
-    required fields: email
     risk: creates or updates a Delighted person and may trigger survey workflow depending on account settings
   delete_person:
     endpoint: DELETE /people/{{ record.person_id }}.json

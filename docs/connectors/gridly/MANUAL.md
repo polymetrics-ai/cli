@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Gridly views, per-view records (with flattened column cells), and per-view branches through the Gridly REST API.
 
 ICON
-  id: gridly
   asset: icons/gridly.svg
   source: official
   review_status: official_verified

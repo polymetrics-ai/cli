@@ -11,7 +11,6 @@ Reads Opsgenie alerts, incidents, users, teams, and services through the Opsgeni
 
 ## Icon
 
-- id: source-opsgenie
 - asset: icons/source-opsgenie.svg
 - source: upstream_registry
 - review_status: upstream_seeded

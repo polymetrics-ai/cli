@@ -11,7 +11,6 @@ Reads Captain Data workspace, workflows, jobs, and job results, and writes a lau
 
 ## Icon
 
-- id: captain-data
 - asset: icons/captain-data.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Workday tenant data (workers, organizations, positions) through conservative Workday API endpoints. Read-only.
 
 ICON
-  id: workday
   asset: icons/workday.svg
   source: official
   review_status: official_verified

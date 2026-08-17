@@ -11,7 +11,6 @@ Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad 
 
 ## Icon
 
-- id: criteo
 - asset: icons/criteo.svg
 - source: official
 - review_status: official_verified

@@ -11,11 +11,9 @@ Reads BoldSign documents, templates, teams, contacts, brands, users, contact gro
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -71,15 +69,13 @@ Reads BoldSign documents, templates, teams, contacts, brands, users, contact gro
 
 - create_team:
   - endpoint: POST /v1/teams/create
-  - required fields: teamName
   - risk: external mutation; creates a new BoldSign team; approval required
 - update_team:
   - endpoint: PUT /v1/teams/update
-  - required fields: teamId, teamName
   - risk: external mutation; renames an existing BoldSign team; approval required
 - update_contact:
   - endpoint: PUT /v1/contacts/update?id={{ record.id }}
-  - required fields: id, email, name
+  - required fields: id
   - risk: external mutation; overwrites an existing BoldSign contact's details; approval required
 - delete_contact:
   - endpoint: DELETE /v1/contacts/delete?id={{ record.id }}
@@ -87,11 +83,10 @@ Reads BoldSign documents, templates, teams, contacts, brands, users, contact gro
   - risk: destructive external mutation; permanently deletes a BoldSign contact; approval required
 - create_contact_group:
   - endpoint: POST /v1/contactGroups/create
-  - required fields: groupName
   - risk: external mutation; creates a new BoldSign contact group; approval required
 - update_contact_group:
   - endpoint: PUT /v1/contactGroups/update?groupId={{ record.groupId }}
-  - required fields: groupId, groupName
+  - required fields: groupId
   - risk: external mutation; overwrites an existing BoldSign contact group's members/name; approval required
 - delete_contact_group:
   - endpoint: DELETE /v1/contactGroups/delete?groupId={{ record.groupId }}
@@ -99,7 +94,7 @@ Reads BoldSign documents, templates, teams, contacts, brands, users, contact gro
   - risk: destructive external mutation; permanently deletes a BoldSign contact group; approval required
 - revoke_document:
   - endpoint: POST /v1/document/revoke?documentId={{ record.documentId }}
-  - required fields: documentId, message
+  - required fields: documentId
   - risk: destructive external mutation; revokes a BoldSign document, permanently ending its signature request; approval required
 - remind_document:
   - endpoint: POST /v1/document/remind?documentId={{ record.documentId }}
@@ -111,19 +106,16 @@ Reads BoldSign documents, templates, teams, contacts, brands, users, contact gro
   - risk: destructive external mutation; moves a BoldSign document to trash (or permanently deletes it when deletePermanently=true); approval required
 - add_document_tags:
   - endpoint: PATCH /v1/document/addTags
-  - required fields: documentId, tags
   - risk: external mutation; adds label tags to a BoldSign document; approval required
 - delete_document_tags:
   - endpoint: DELETE /v1/document/deleteTags
-  - required fields: documentId, tags
   - risk: external mutation; removes label tags from a BoldSign document; approval required
 - update_user:
   - endpoint: PUT /v1/users/update
-  - required fields: userId
   - risk: external mutation; changes a BoldSign user's role or active/deactivated status; approval required
 - change_user_team:
   - endpoint: PUT /v1/users/changeTeam?userId={{ record.userId }}
-  - required fields: userId, toTeamId
+  - required fields: userId
   - risk: external mutation; moves a BoldSign user to a different team; approval required
 
 ## Security

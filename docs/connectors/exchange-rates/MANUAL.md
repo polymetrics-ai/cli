@@ -13,7 +13,6 @@ DESCRIPTION
   Reads latest, currency-conversion, time-series, and fluctuation foreign-exchange rate data from the exchangeratesapi.io REST API. The legacy exchange_rates daily-historical stream (a date-by-date iteration over a start_date..end_date window) and the symbols stream are not ported; see docs.md Known limits.
 
 ICON
-  id: exchangeratesapi
   asset: icons/exchangeratesapi.svg
   source: upstream_registry
   review_status: upstream_seeded

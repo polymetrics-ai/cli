@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and manages Appcues in-app guidance experiences (flows, Flows 2.0, pins, mobile experiences, launchpads, banners, checklists, embeds, NPS 2.0), audience data (segments, tags), operational resources (offline jobs, SDK authentication keys), and individual end-user/group profiles through the Appcues REST API v2.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -165,7 +163,6 @@ REVERSE ETL ACTIONS
     risk: unpublishes a live NPS 2.0 survey, immediately hiding it from end users
   create_segment:
     endpoint: POST /accounts/{{ config.account_id }}/segments
-    required fields: name
     risk: creates a new user segment used to target flows/banners/checklists
   update_segment:
     endpoint: PATCH /accounts/{{ config.account_id }}/segments/{{ record.id }}
@@ -177,11 +174,13 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a user segment; any flow/banner/checklist targeting rule referencing it stops matching
   add_segment_user_ids:
     endpoint: POST /accounts/{{ config.account_id }}/segments/{{ record.id }}/add_user_ids
-    required fields: id, user_ids
+    required fields: id
+    optional fields: user_ids
     risk: adds specific end users to a segment (async job), changing who any targeting rule referencing it matches
   remove_segment_user_ids:
     endpoint: POST /accounts/{{ config.account_id }}/segments/{{ record.id }}/remove_user_ids
-    required fields: id, user_ids
+    required fields: id
+    optional fields: user_ids
     risk: removes specific end users from a segment (async job), changing who any targeting rule referencing it matches
   update_user_profile:
     endpoint: PATCH /accounts/{{ config.account_id }}/users/{{ record.user_id }}/profile
@@ -193,7 +192,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an end user's profile, properties, and flow/banner completion history (async job)
   track_user_event:
     endpoint: POST /accounts/{{ config.account_id }}/users/{{ record.user_id }}/events
-    required fields: user_id, name
+    required fields: user_id
     risk: injects a synthetic behavioral event into an end user's timeline, which may trigger flow/banner targeting rules
   update_group_profile:
     endpoint: PATCH /accounts/{{ config.account_id }}/groups/{{ record.group_id }}/profile
@@ -201,15 +200,15 @@ REVERSE ETL ACTIONS
     risk: mutates a group's profile attributes, changing which flows/segments its members match
   associate_group_users:
     endpoint: PATCH /accounts/{{ config.account_id }}/groups/{{ record.group_id }}/users
-    required fields: group_id, user_ids
+    required fields: group_id
+    optional fields: user_ids
     risk: associates end users with a group, changing group-scoped targeting and analytics rollups
   create_sdk_key:
     endpoint: POST /accounts/{{ config.account_id }}/sdk_keys
-    required fields: name
     risk: creates a new SDK authentication key with production data-ingestion access
   update_sdk_key:
     endpoint: PATCH /accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}
-    required fields: id, tag_field
+    required fields: id
     risk: changes an SDK key's tag field, altering how future ingested data is tagged
   delete_sdk_key:
     endpoint: DELETE /accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}

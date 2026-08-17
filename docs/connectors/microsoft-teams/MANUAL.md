@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Microsoft Teams users, groups, channels, and device-usage reports through the Microsoft Graph REST API using an OAuth2 client-credentials grant. Read-only.
 
 ICON
-  id: microsoft-teams
   asset: icons/microsoft-teams.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,17 +11,9 @@ Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, ac
 
 ## Icon
 
-- id: simple-icons-brex
-- asset: icons/simple-icons/brex.svg
-- title: Brex
-- simple_icon_slug: brex
-- simple_icon_hex: 212121
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Brex
-- match: exact-name-or-slug
-- matched_by: brex
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 
@@ -110,19 +102,15 @@ Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, ac
   - risk: permanently removes a vendor record; any transfer still referencing it as counterparty will fail to resolve
 - create_department:
   - endpoint: POST /v2/departments
-  - required fields: name
   - risk: creates a new organizational department; low-risk external mutation, no approval required
 - create_location:
   - endpoint: POST /v2/locations
-  - required fields: name
   - risk: creates a new organizational location; low-risk external mutation, no approval required
 - create_title:
   - endpoint: POST /v2/titles
-  - required fields: name
   - risk: creates a new job title; low-risk external mutation, no approval required
 - create_user:
   - endpoint: POST /v2/users
-  - required fields: email, first_name, last_name
   - risk: invites a new user to the Brex account; sends a real invitation email to the target address
 - update_user:
   - endpoint: PUT /v2/users/{{ record.id }}
@@ -150,7 +138,7 @@ Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, ac
   - risk: mutates an existing card expense's memo; low-risk metadata-only external mutation
 - update_webhook:
   - endpoint: PUT /v1/webhooks/{{ record.id }}
-  - required fields: id, url, event_types, status
+  - required fields: id
   - risk: re-points an already-registered webhook's delivery URL, event set, or active status; redirects live event delivery immediately
 - delete_webhook:
   - endpoint: DELETE /v1/webhooks/{{ record.id }}

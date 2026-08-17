@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, fulfillment, reports, feeds, seller, shipping, vendor, and supporting JSON resources via Login with Amazon (LWA) authentication; exposes declarative writes for SP-API mutations that fit path/body JSON requests.
 
 ICON
-  id: amazonsellerpartner
   asset: icons/amazonsellerpartner.svg
   source: upstream_registry
   review_status: upstream_seeded

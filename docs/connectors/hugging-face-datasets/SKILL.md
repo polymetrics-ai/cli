@@ -11,17 +11,9 @@ Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer RE
 
 ## Icon
 
-- id: simple-icons-huggingface
-- asset: icons/simple-icons/huggingface.svg
-- title: Hugging Face
-- simple_icon_slug: huggingface
-- simple_icon_hex: FFD21E
-- source: simple-icons
-- license: CC0-1.0
-- review_status: cc0_with_trademark_caveat
-- review_url: https://simpleicons.org/?q=Hugging%20Face
-- match: curated-alias
-- matched_by: huggingface
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
 
 ## Capabilities
 

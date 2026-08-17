@@ -11,7 +11,6 @@ Reads TMDb movie, TV, person, collection, company, keyword, review, account, sea
 
 ## Icon
 
-- id: tmdb
 - asset: icons/tmdb.svg
 - source: upstream_registry
 - review_status: upstream_seeded

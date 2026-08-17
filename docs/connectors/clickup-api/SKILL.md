@@ -11,7 +11,6 @@ Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space ta
 
 ## Icon
 
-- id: clickup
 - asset: icons/clickup.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -74,7 +73,6 @@ Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space ta
 
 - create_task:
   - endpoint: POST /list/{{ config.list_id }}/task
-  - required fields: name
   - risk: creates a new ClickUp task in the configured list; low-risk (additive)
 - update_task:
   - endpoint: PUT /task/{{ record.id }}
@@ -86,8 +84,7 @@ Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space ta
   - risk: permanently deletes a ClickUp task; irreversible; approval required
 - create_task_comment:
   - endpoint: POST /task/{{ record.task_id }}/comment
-  - required fields: task_id, comment_text, notify_all
-  - optional fields: assignee, group_assignee
+  - optional fields: comment_text, notify_all, assignee, group_assignee
   - risk: adds a new comment to a ClickUp task, visible to all task watchers when notify_all is true; low-risk
 - add_tag_to_task:
   - endpoint: POST /task/{{ record.task_id }}/tag/{{ record.tag_name }}
@@ -99,20 +96,18 @@ Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space ta
   - risk: removes a tag from a task (does not delete the tag from the Space); low-risk
 - set_custom_field_value:
   - endpoint: POST /task/{{ record.task_id }}/field/{{ record.field_id }}
-  - required fields: task_id, field_id, value
-  - optional fields: value_options
+  - required fields: task_id, field_id
+  - optional fields: value, value_options
   - risk: sets a Custom Field value on a task; the accepted value shape varies by the field's type (text/number/date/dropdown/label/people/task-relationship/manual-progress/location/button); approval required since an incorrectly-typed value can silently fail or corrupt a differently-typed field
 - create_goal:
   - endpoint: POST /team/{{ config.team_id }}/goal
-  - required fields: name
   - risk: creates a new ClickUp Goal in the configured team/workspace; low-risk (additive)
 - create_folder:
   - endpoint: POST /space/{{ config.space_id }}/folder
-  - required fields: name
   - risk: creates a new Folder in the configured space; low-risk (additive)
 - update_folder:
   - endpoint: PUT /folder/{{ record.id }}
-  - required fields: id, name
+  - required fields: id
   - risk: renames an existing ClickUp Folder; approval required
 - delete_folder:
   - endpoint: DELETE /folder/{{ record.id }}
@@ -120,11 +115,10 @@ Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space ta
   - risk: permanently deletes a ClickUp Folder and every List/task inside it; irreversible; approval required
 - create_list:
   - endpoint: POST /folder/{{ config.folder_id }}/list
-  - required fields: name
   - risk: creates a new List in the configured Folder; low-risk (additive)
 - update_list:
   - endpoint: PUT /list/{{ record.id }}
-  - required fields: id, name
+  - required fields: id
   - risk: updates an existing ClickUp List's name/description/due date/priority/assignee/color; approval required
 - delete_list:
   - endpoint: DELETE /list/{{ record.id }}
@@ -132,11 +126,10 @@ Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space ta
   - risk: permanently deletes a ClickUp List and every task inside it; irreversible; approval required
 - create_space:
   - endpoint: POST /team/{{ config.team_id }}/space
-  - required fields: name
   - risk: creates a new Space in the configured Workspace; low-risk (additive)
 - update_space:
   - endpoint: PUT /space/{{ record.id }}
-  - required fields: id, name
+  - required fields: id
   - risk: updates an existing ClickUp Space's name/color/privacy/ClickApp feature toggles; ClickUp's own docs mark every body field required (a partial update still needs the full current feature set re-sent to avoid resetting unspecified features); approval required
 - delete_space:
   - endpoint: DELETE /space/{{ record.id }}
@@ -144,7 +137,6 @@ Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space ta
   - risk: permanently deletes a ClickUp Space and every Folder/List/task inside it; irreversible; approval required
 - create_webhook:
   - endpoint: POST /team/{{ config.team_id }}/webhook
-  - required fields: endpoint, events
   - risk: registers or repoints an outbound event-delivery URL of the caller's choosing; approval required
 - update_webhook:
   - endpoint: PUT /webhook/{{ record.id }}

@@ -13,7 +13,6 @@ DESCRIPTION
   Reads HoorayHR users, time-off, leave-types, and sick-leave records through the HoorayHR REST API using session-token authentication.
 
 ICON
-  id: hoorayhr
   asset: icons/hoorayhr.svg
   source: official
   review_status: official_verified

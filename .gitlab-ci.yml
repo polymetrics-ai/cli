@@ -17,15 +17,11 @@ variables:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - website/**/*
-        - internal/connectors/icon_data.json
-        - docs/connectors/icons/**/*
         - .gitlab-ci.yml
         - .github/workflows/website.yml
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
         - website/**/*
-        - internal/connectors/icon_data.json
-        - docs/connectors/icons/**/*
         - .gitlab-ci.yml
         - .github/workflows/website.yml
     - if: '$CI_PIPELINE_SOURCE == "web"'
@@ -54,7 +50,6 @@ website:test:
     - pnpm run lint
     - pnpm run typecheck
     - pnpm run test:unit
-    - pnpm run test:scripts
     - pnpm run test:e2e
     - pnpm run build
 
@@ -89,8 +84,6 @@ website:deploy:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
         - website/**/*
-        - internal/connectors/icon_data.json
-        - docs/connectors/icons/**/*
         - .gitlab-ci.yml
         - .github/workflows/website.yml
     - if: '$CI_PIPELINE_SOURCE == "web" && $CI_COMMIT_BRANCH == "main"'

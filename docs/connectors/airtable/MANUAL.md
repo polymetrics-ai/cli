@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Airtable bases, tables, records, webhooks, and record comments, and writes record/table/field/comment/webhook mutations, through the Airtable Web API.
 
 ICON
-  id: airtable
   asset: icons/airtable.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -57,11 +56,10 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_record:
     endpoint: POST /{{ config.base_id }}/{{ config.table_id }}
-    required fields: fields
     risk: creates a new record in the configured base/table; low-risk external mutation, no approval required
   update_record:
     endpoint: PATCH /{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}
-    required fields: id, fields
+    required fields: id
     risk: mutates only the field values included in the request (non-destructive PATCH); unincluded cell values are left unchanged
   delete_record:
     endpoint: DELETE /{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}
@@ -69,7 +67,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a record from the base/table; irreversible
   create_table:
     endpoint: POST /meta/bases/{{ config.base_id }}/tables
-    required fields: name, fields
     risk: creates a new table (schema mutation) in the configured base; low-risk but changes the base's structure, visible to every collaborator
   update_table:
     endpoint: PATCH /meta/bases/{{ config.base_id }}/tables/{{ record.id }}
@@ -77,7 +74,7 @@ REVERSE ETL ACTIONS
     risk: renames or redescribes an existing table; a visible schema change for every collaborator on the base
   create_field:
     endpoint: POST /meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields
-    required fields: table_id, name, type
+    required fields: table_id
     risk: creates a new column (schema mutation) in the target table; low-risk but changes the table's structure, visible to every collaborator
   update_field:
     endpoint: PATCH /meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields/{{ record.id }}
@@ -85,11 +82,11 @@ REVERSE ETL ACTIONS
     risk: renames or redescribes an existing column; a visible schema change for every collaborator on the base
   create_comment:
     endpoint: POST /{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments
-    required fields: record_id, text
+    required fields: record_id
     risk: adds a visible comment to a record; every base collaborator with record access can see it, no external side effect
   update_comment:
     endpoint: PATCH /{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.id }}
-    required fields: record_id, id, text
+    required fields: record_id, id
     risk: edits the text of an existing comment; visible to every base collaborator with record access
   delete_comment:
     endpoint: DELETE /{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.id }}
@@ -97,7 +94,6 @@ REVERSE ETL ACTIONS
     risk: permanently removes a comment from a record; irreversible
   create_webhook:
     endpoint: POST /bases/{{ config.base_id }}/webhooks
-    required fields: notificationUrl, specification
     risk: registers a new outbound webhook that will POST live base-change notifications to an external URL of the caller's choosing; verify the target endpoint before enabling
   delete_webhook:
     endpoint: DELETE /bases/{{ config.base_id }}/webhooks/{{ record.id }}

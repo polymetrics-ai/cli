@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Secoda catalog metadata (tables, documents, collections, questions) through the Secoda API.
 
 ICON
-  id: secoda
   asset: icons/secoda.svg
   source: official
   review_status: official_verified

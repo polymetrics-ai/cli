@@ -13,17 +13,9 @@ DESCRIPTION
   Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscribers, segments, and templates through the createsend.com v3.3 REST API.
 
 ICON
-  id: simple-icons-campaignmonitor
-  asset: icons/simple-icons/campaignmonitor.svg
-  title: Campaign Monitor
-  simple_icon_slug: campaignmonitor
-  simple_icon_hex: 111324
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Campaign%20Monitor
-  match: exact-name-or-slug
-  matched_by: campaign-monitor
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -87,7 +79,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_list:
     endpoint: POST /lists/{{ config.client_id }}.json
-    required fields: Title
     risk: creates a new subscriber list under the configured client; low-risk external mutation, no approval required
   update_list:
     endpoint: PUT /lists/{{ record.ListID }}.json
@@ -99,15 +90,15 @@ REVERSE ETL ACTIONS
     risk: permanently removes a subscriber list and all of its subscribers/segments; irreversible, approval required
   add_subscriber:
     endpoint: POST /subscribers/{{ record.ListID }}.json
-    required fields: ListID, EmailAddress
+    required fields: ListID
     risk: adds a new subscriber to a list; low-risk external mutation, no approval required
   update_subscriber:
     endpoint: PUT /subscribers/{{ record.ListID }}.json?email={{ record.CurrentEmailAddress | urlencode }}
-    required fields: ListID, CurrentEmailAddress, EmailAddress
+    required fields: ListID, CurrentEmailAddress
     risk: updates an existing subscriber's profile/consent fields on a list, identified by their current email (CurrentEmailAddress, kept out of the body via path_fields since the API takes it as a query param, not a body field); low-risk external mutation, no approval required
   unsubscribe_subscriber:
     endpoint: POST /subscribers/{{ record.ListID }}/unsubscribe.json
-    required fields: ListID, EmailAddress
+    required fields: ListID
     risk: unsubscribes a contact from a list; low-risk external mutation, no approval required
   delete_subscriber:
     endpoint: DELETE /subscribers/{{ record.ListID }}.json?email={{ record.EmailAddress | urlencode }}
@@ -115,11 +106,11 @@ REVERSE ETL ACTIONS
     risk: permanently removes a subscriber's record from a list (distinct from unsubscribing — this deletes the record entirely); irreversible, approval recommended
   create_segment:
     endpoint: POST /segments/{{ record.ListID }}.json
-    required fields: ListID, Title, RuleGroups
+    required fields: ListID
     risk: creates a new subscriber segment (a saved rule-based filter) on a list; low-risk external mutation, no approval required
   update_segment:
     endpoint: PUT /segments/{{ record.SegmentID }}.json
-    required fields: SegmentID, Title, RuleGroups
+    required fields: SegmentID
     risk: replaces a segment's name and full rule set; low-risk external mutation, no approval required
   delete_segment:
     endpoint: DELETE /segments/{{ record.SegmentID }}.json
@@ -127,11 +118,10 @@ REVERSE ETL ACTIONS
     risk: permanently removes a segment; any campaign scheduled to send to it loses that targeting; irreversible, low-risk, no approval required
   create_campaign:
     endpoint: POST /campaigns/{{ config.client_id }}.json
-    required fields: Name, Subject, FromName, FromEmail, ReplyTo, HtmlUrl, ListIDs
     risk: creates a new DRAFT campaign under the configured client; drafts are not sent until send_campaign is separately invoked, so this alone has no delivery side effect; low-risk, no approval required
   send_campaign:
     endpoint: POST /campaigns/{{ record.CampaignID }}/send.json
-    required fields: CampaignID, ConfirmationEmail, SendDate
+    required fields: CampaignID
     risk: delivers a real email campaign to every subscriber on its targeted lists/segments; irreversible once sent, approval required
   unschedule_campaign:
     endpoint: POST /campaigns/{{ record.CampaignID }}/unschedule.json

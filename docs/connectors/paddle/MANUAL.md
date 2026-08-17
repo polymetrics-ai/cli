@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Paddle customers, subscriptions, transactions, and products through the Paddle REST API.
 
 ICON
-  id: paddle
   asset: icons/paddle.svg
   source: official
   review_status: official_verified

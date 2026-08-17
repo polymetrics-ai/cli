@@ -1,102 +1,60 @@
-// Fetches vetted Simple Icons SVGs listed in the canonical connector icon registry.
-// Run: node scripts/fetch-simple-icons.mjs               fetch and write checksum-verified SVGs
-//      node scripts/fetch-simple-icons.mjs --update-lockfile   re-pin digests, write no SVGs
+// Fetches vetted Simple Icons SVGs listed in website/data/icon_overrides.json.
+// Run: node scripts/fetch-simple-icons.mjs
 //
-// The Simple Icons list is intentionally curated in internal/connectors/icon_data.json.
-// Do not infer icons from arbitrary docs hosts such as GitHub, ReadMe, or Apiary:
-// that produces false brand matches.
-//
-// Fetched content is checksum-pinned per connector by website/data/simple-icons.lock.json;
-// see docs/migration/icon-registry-single-source.md for the lockfile contract and the
-// CodeQL alert #93 disposition.
+// The override list is intentionally curated. Do not infer icons from arbitrary
+// docs hosts such as GitHub, ReadMe, or Apiary: that produces false brand matches.
 
-import { readFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import {
-  assertLockfileCoversTargets,
-  collectSimpleIconTargets,
-  readSimpleIconsLockfile,
-  resolveSimpleIconRequest,
-  sha256Hex,
-  writeSimpleIconsLockfile,
-  writeVerifiedSimpleIcon,
-} from './lib/simple-icons.mjs';
-
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ICON_DATA = resolve(__dirname, '../../internal/connectors/icon_data.json');
-const DOCS_CONNECTORS = resolve(__dirname, '../../docs/connectors');
-const LOCKFILE = resolve(__dirname, '../data/simple-icons.lock.json');
-const UPDATE_LOCKFILE = process.argv.includes('--update-lockfile');
+const OVERRIDES = resolve(__dirname, '../data/icon_overrides.json');
+const PUBLIC_CONNECTORS = resolve(__dirname, '../public/connectors');
+const SIMPLE_ICON_CDN = 'https://cdn.simpleicons.org';
 
 function fail(message) {
   console.error(`fetch-simple-icons: ${message}`);
   process.exit(1);
 }
 
-function failWith(error, prefix) {
-  fail(prefix ? `${prefix}: ${error.message}` : error.message);
-  throw error;
+function validIconPath(path) {
+  return /^icons\/simple-icons\/[A-Za-z0-9._-]+\.svg$/.test(path);
 }
 
-let simpleIcons;
-try {
-  simpleIcons = collectSimpleIconTargets(JSON.parse(readFileSync(ICON_DATA, 'utf8')));
-} catch (error) {
-  failWith(error);
+function tintSvg(svg, hex) {
+  const clean = svg.replace(/<title>.*?<\/title>/s, '');
+  const color = String(hex || '').replace(/^#/, '');
+  if (!/^[0-9A-Fa-f]{6}$/.test(color)) return clean;
+  const openTag = clean.slice(0, clean.indexOf('>') + 1);
+  if (/\sfill=/.test(openTag)) return clean;
+  return clean.replace('<svg ', `<svg fill="#${color.toUpperCase()}" `);
 }
 
-const lockfile = UPDATE_LOCKFILE ? {} : readSimpleIconsLockfile(LOCKFILE);
-if (!UPDATE_LOCKFILE) {
-  try {
-    assertLockfileCoversTargets(lockfile, simpleIcons);
-  } catch (error) {
-    failWith(error);
-  }
-}
+const overrides = JSON.parse(readFileSync(OVERRIDES, 'utf8'));
+if (!Array.isArray(overrides)) fail('icon_overrides.json must be an array');
 
 let written = 0;
-let recorded = 0;
-for (const icon of simpleIcons) {
-  let request;
-  try {
-    request = resolveSimpleIconRequest(DOCS_CONNECTORS, icon);
-  } catch (error) {
-    failWith(error, icon.connector);
-  }
-  const { url, outputPath } = request;
+for (const icon of overrides) {
+  const slug = String(icon.simple_icon_slug || '').trim();
+  const path = String(icon.path || '').trim();
+  if (!slug || !/^[A-Za-z0-9._-]+$/.test(slug)) fail(`invalid simple_icon_slug: ${slug}`);
+  if (!validIconPath(path)) fail(`invalid icon path for ${icon.connector}: ${path}`);
 
-  const response = await fetch(url);
+  const response = await fetch(`${SIMPLE_ICON_CDN}/${slug}`);
   if (!response.ok) {
-    fail(`could not fetch ${icon.slug}: HTTP ${response.status}`);
+    fail(`could not fetch ${slug}: HTTP ${response.status}`);
   }
 
   const svg = await response.text();
   if (!svg.trim().startsWith('<svg') || /<script/i.test(svg)) {
-    fail(`unexpected SVG payload for ${icon.slug}`);
+    fail(`unexpected SVG payload for ${slug}`);
   }
 
-  if (UPDATE_LOCKFILE) {
-    lockfile[icon.connector] = { slug: icon.slug, sha256: sha256Hex(svg) };
-    recorded += 1;
-    continue;
-  }
-
-  try {
-    writeVerifiedSimpleIcon(lockfile, icon, svg, outputPath);
-  } catch (error) {
-    failWith(error, icon.connector);
-  }
+  const out = resolve(PUBLIC_CONNECTORS, path);
+  mkdirSync(dirname(out), { recursive: true });
+  writeFileSync(out, tintSvg(svg, icon.simple_icon_hex), 'utf8');
   written += 1;
 }
 
-if (UPDATE_LOCKFILE) {
-  writeSimpleIconsLockfile(LOCKFILE, lockfile);
-  console.log(
-    `Recorded ${recorded} Simple Icons connector digests in website/data/simple-icons.lock.json. ` +
-      'No SVGs were written; re-run without --update-lockfile to fetch verified assets.',
-  );
-} else {
-  console.log(`Fetched ${written} Simple Icons SVGs into docs/connectors/icons.`);
-}
+console.log(`Fetched ${written} Simple Icons SVGs.`);

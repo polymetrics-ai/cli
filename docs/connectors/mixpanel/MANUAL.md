@@ -13,7 +13,6 @@ DESCRIPTION
   Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selected current Query/Annotations API list/detail endpoints.
 
 ICON
-  id: mixpanel
   asset: icons/mixpanel.svg
   source: upstream_registry
   review_status: upstream_seeded

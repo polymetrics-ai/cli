@@ -13,11 +13,9 @@ DESCRIPTION
   Reads and writes the documented Luma public API for events, calendars, guests, contacts, tags, coupons, ticket types, memberships, webhooks, and organization resources.
 
 ICON
-  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -119,161 +117,123 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_event:
     endpoint: POST /v1/events/create
-    required fields: name, start_at, timezone
     risk: create event through the Luma API.
   update_event:
     endpoint: POST /v1/events/update
-    required fields: event_id
     risk: update event through the Luma API.
   update_guest_status:
     endpoint: POST /v1/events/guests/update-status
-    required fields: event_id, guest_id, status
     risk: update guest status through the Luma API.
   send_event_invites:
     endpoint: POST /v1/events/guests/send-invites
-    required fields: event_id, guests
     risk: send event invites through the Luma API.
   add_event_guests:
     endpoint: POST /v1/events/guests/add
-    required fields: event_id, guests
     risk: add event guests through the Luma API.
   add_event_host:
     endpoint: POST /v1/events/hosts/add
-    required fields: event_id, email
     risk: add event host through the Luma API.
   update_event_host:
     endpoint: POST /v1/events/hosts/update
-    required fields: event_id, email
     risk: update event host through the Luma API.
   remove_event_host:
     endpoint: POST /v1/events/hosts/remove
-    required fields: event_id, email
     risk: remove event host through the Luma API.
   create_event_coupon:
     endpoint: POST /v1/events/coupons/create
-    required fields: code, discount, event_id
     risk: create event coupon through the Luma API.
   update_event_coupon:
     endpoint: POST /v1/events/coupons/update
-    required fields: event_id, code
     risk: update event coupon through the Luma API.
   create_calendar_coupon:
     endpoint: POST /v1/calendars/coupons/create
-    required fields: code, discount
     risk: create calendar coupon through the Luma API.
   update_calendar_coupon:
     endpoint: POST /v1/calendars/coupons/update
-    required fields: code
     risk: update calendar coupon through the Luma API.
   import_calendar_contacts:
     endpoint: POST /v1/calendars/contacts/import
-    required fields: contacts
     risk: import calendar contacts through the Luma API.
   create_contact_tag:
     endpoint: POST /v1/calendars/contact-tags/create
-    required fields: name
     risk: create contact tag through the Luma API.
   update_contact_tag:
     endpoint: POST /v1/calendars/contact-tags/update
-    required fields: tag_id
     risk: update contact tag through the Luma API.
   delete_contact_tag:
     endpoint: POST /v1/calendars/contact-tags/delete
-    required fields: tag_id
     risk: delete contact tag through the Luma API.
   apply_contact_tag:
     endpoint: POST /v1/calendars/contact-tags/apply
-    required fields: tag
     risk: apply contact tag through the Luma API.
   unapply_contact_tag:
     endpoint: POST /v1/calendars/contact-tags/unapply
-    required fields: tag
     risk: unapply contact tag through the Luma API.
   create_event_tag:
     endpoint: POST /v1/calendars/event-tags/create
-    required fields: name
     risk: create event tag through the Luma API.
   update_event_tag:
     endpoint: POST /v1/calendars/event-tags/update
-    required fields: tag_id
     risk: update event tag through the Luma API.
   delete_event_tag:
     endpoint: POST /v1/calendars/event-tags/delete
-    required fields: tag_id
     risk: delete event tag through the Luma API.
   apply_event_tag:
     endpoint: POST /v1/calendars/event-tags/apply
-    required fields: tag, event_ids
     risk: apply event tag through the Luma API.
   unapply_event_tag:
     endpoint: POST /v1/calendars/event-tags/unapply
-    required fields: tag, event_ids
     risk: unapply event tag through the Luma API.
   add_calendar_event:
     endpoint: POST /v1/calendars/events/add
     risk: add calendar event through the Luma API.
   approve_calendar_event:
     endpoint: POST /v1/calendars/events/approve
-    required fields: calendar_event_id
     risk: approve calendar event through the Luma API.
   reject_calendar_event:
     endpoint: POST /v1/calendars/events/reject
-    required fields: calendar_event_id
     risk: reject calendar event through the Luma API.
   create_image_upload_url:
     endpoint: POST /v1/images/create-upload-url
     risk: create image upload url through the Luma API.
   create_ticket_type:
     endpoint: POST /v1/events/ticket-types/create
-    required fields: event_id, name, type
     risk: create ticket type through the Luma API.
   update_ticket_type:
     endpoint: POST /v1/events/ticket-types/update
-    required fields: event_ticket_type_id
     risk: update ticket type through the Luma API.
   delete_ticket_type:
     endpoint: POST /v1/events/ticket-types/delete
-    required fields: event_ticket_type_id
     risk: delete ticket type through the Luma API.
   add_membership_member:
     endpoint: POST /v1/memberships/members/add
-    required fields: email, membership_tier_id
     risk: add membership member through the Luma API.
   update_membership_member_status:
     endpoint: POST /v1/memberships/members/update-status
-    required fields: user_id, status
     risk: update membership member status through the Luma API.
   create_webhook:
     endpoint: POST /v2/webhooks/create
-    required fields: url, event_types
     risk: create webhook through the Luma API.
   update_webhook:
     endpoint: POST /v2/webhooks/update
-    required fields: id
     risk: update webhook through the Luma API.
   delete_webhook:
     endpoint: POST /v1/webhooks/delete
-    required fields: id
     risk: delete webhook through the Luma API.
   request_event_cancellation:
     endpoint: POST /v1/events/cancel/request
-    required fields: event_id
     risk: request event cancellation through the Luma API.
   cancel_event:
     endpoint: POST /v1/events/cancel
-    required fields: event_id, cancellation_token
     risk: cancel event through the Luma API.
   update_calendar:
     endpoint: POST /v1/calendars/update
-    required fields: calendar_id
     risk: update calendar through the Luma API.
   create_organization_calendar:
     endpoint: POST /v2/organizations/calendars/create
-    required fields: name
     risk: create organization calendar through the Luma API.
   transfer_event_calendar:
     endpoint: POST /v1/organizations/events/transfer-calendar
-    required fields: event_id, calendar_id
     risk: transfer event calendar through the Luma API.
 
 SECURITY

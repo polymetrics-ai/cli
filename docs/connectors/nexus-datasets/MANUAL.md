@@ -13,7 +13,6 @@ DESCRIPTION
   Reads records from a configured Infor Nexus export dataset through the Infor Nexus Data API (v3.1) using HMAC-SHA256 request signing. Read-only.
 
 ICON
-  id: nexus-datasets
   asset: icons/nexus-datasets.svg
   source: upstream_registry
   review_status: upstream_seeded

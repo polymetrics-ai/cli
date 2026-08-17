@@ -11,7 +11,6 @@ Reads users, projects, clients, calendar/time events, time entries (hours), tags
 
 ## Icon
 
-- id: timely
 - asset: icons/timely.svg
 - source: upstream_registry
 - review_status: upstream_seeded

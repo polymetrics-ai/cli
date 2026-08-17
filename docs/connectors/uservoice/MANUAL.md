@@ -13,17 +13,9 @@ DESCRIPTION
   Reads suggestions, forums, users, categories, statuses, labels, comments, notes, and teams from the UserVoice Admin API, and writes suggestion/comment/label/note lifecycle mutations.
 
 ICON
-  id: simple-icons-uservoice
-  asset: icons/simple-icons/uservoice.svg
-  title: UserVoice
-  simple_icon_slug: uservoice
-  simple_icon_hex: FF6720
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=UserVoice
-  match: exact-name-or-slug
-  matched_by: uservoice
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -80,7 +72,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_suggestion:
     endpoint: POST /api/v2/admin/suggestions
-    required fields: title, links
     risk: creates a new customer suggestion (idea); low-risk external mutation, no approval required
   update_suggestion:
     endpoint: PUT /api/v2/admin/suggestions/{{ record.id }}
@@ -96,11 +87,9 @@ REVERSE ETL ACTIONS
     risk: soft-deletes (moderates) a suggestion; UserVoice's own API keeps a matching restore endpoint (not modeled here) so this is a reversible moderation action, not permanent data loss, but is still marked destructive-shaped for operator awareness
   create_comment:
     endpoint: POST /api/v2/admin/comments
-    required fields: body, links
     risk: posts a new comment on an existing suggestion; low-risk external mutation, no approval required
   create_label:
     endpoint: POST /api/v2/admin/labels
-    required fields: name
     risk: creates a new label for tagging suggestions; low-risk external mutation, no approval required
   update_label:
     endpoint: PUT /api/v2/admin/labels/{{ record.id }}
@@ -108,7 +97,6 @@ REVERSE ETL ACTIONS
     risk: updates an existing label's name/settings; external mutation, no approval required
   create_note:
     endpoint: POST /api/v2/admin/notes
-    required fields: body, links
     risk: creates an internal (non-public) note on a suggestion; low-risk external mutation, no approval required
 
 SECURITY

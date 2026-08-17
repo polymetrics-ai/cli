@@ -11,7 +11,6 @@ Reads Pivotal Tracker projects, stories, iterations, and epics through API v5.
 
 ## Icon
 
-- id: pivotal-tracker
 - asset: icons/pivotal-tracker.svg
 - source: upstream_registry
 - review_status: upstream_seeded

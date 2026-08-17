@@ -11,11 +11,9 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
 
 ## Icon
 
-- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
@@ -275,111 +273,94 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
   - risk: Approve Time Off Request in the configured 7shifts account.
 - clear_task:
   - endpoint: POST /v2/company/{{ config.company_id }}/task_lists/{{ record.list_id }}/tasks/{{ record.task_id }}/clear
-  - required fields: list_id, task_id, user_id
+  - required fields: list_id, task_id
   - risk: Clear Task in the configured 7shifts account.
 - complete_task:
   - endpoint: POST /v2/company/{{ config.company_id }}/task_lists/{{ record.list_id }}/tasks/{{ record.task_id }}/complete
-  - required fields: list_id, task_id, user_id
+  - required fields: list_id, task_id
   - risk: Complete Task in the configured 7shifts account.
 - create_availability:
   - endpoint: POST /v2/company/{{ config.company_id }}/availabilities
-  - required fields: user_id, repeat, mon, mon_from, mon_to, mon_comments, mon_reason, tue, tue_from, tue_to, tue_comments, tue_reason, wed, wed_from, wed_to, wed_comments, wed_reason, thu, thu_from, thu_to, thu_comments, thu_reason, fri, fri_from, fri_to, fri_comments, fri_reason, sat, sat_from, sat_to, sat_comments, sat_reason, sun, sun_from, sun_to, sun_comments, sun_reason
   - risk: Create Availability in the configured 7shifts account.
 - create_availability_reason:
   - endpoint: POST /v2/company/{{ config.company_id }}/availability_reasons
-  - required fields: reason
   - risk: Create Availability Reason in the configured 7shifts account.
 - create_bulk_forecast_overrides:
   - endpoint: POST /v2/company/{{ config.company_id }}/location/{{ record.location_id }}/forecast_overrides
-  - required fields: location_id, data
+  - required fields: location_id
   - risk: Create Daily Projected Forecast Overrides in the configured 7shifts account.
 - create_complete_receipt:
   - endpoint: POST /v2/company/{{ config.company_id }}/receipts
-  - required fields: location_id, receipt_date, receipt_lines, tip_details, net_total, status
   - risk: Create Receipt in the configured 7shifts account.
 - create_department:
   - endpoint: POST /v2/company/{{ config.company_id }}/departments
-  - required fields: location_id, name, default
   - risk: Create Department in the configured 7shifts account.
 - create_department_assignment:
   - endpoint: POST /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/department_assignments
-  - required fields: user_id, department_id
+  - required fields: user_id
   - risk: Create Department Assignment in the configured 7shifts account.
 - create_employment_record:
   - endpoint: POST /v2/company/{{ config.company_id }}/employment_records
-  - required fields: user_id
   - risk: Create Employment Record in the configured 7shifts account.
 - create_event:
   - endpoint: POST /v2/company/{{ config.company_id }}/events
-  - required fields: location_ids, start_date, start_time, end_time, end_date, title, is_multi_day
   - risk: Create Event in the configured 7shifts account.
 - create_external_user_mappings:
   - endpoint: POST /v2/company/{{ config.company_id }}/external_user_mappings
-  - required fields: user_id, external_user_id
   - risk: Create External User Mapping in the configured 7shifts account.
 - create_forecast_override:
   - endpoint: POST /v2/company/{{ config.company_id }}/location/{{ record.location_id }}/forecast_override
-  - required fields: location_id, date, value, report_type
+  - required fields: location_id
   - risk: Create Daily Projected Forecast Override in the configured 7shifts account.
 - create_location:
   - endpoint: POST /v2/company/{{ config.company_id }}/locations
-  - required fields: name, country
   - risk: Create Location in the configured 7shifts account.
 - create_location_assignment:
   - endpoint: POST /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/location_assignments
-  - required fields: user_id, location_id
+  - required fields: user_id
   - risk: Create Location Assignments in the configured 7shifts account.
 - create_log_book_category:
   - endpoint: POST /v2/company/{{ config.company_id }}/log_book_categories
-  - required fields: name
   - risk: Create Log Book Category in the configured 7shifts account.
 - create_log_book_comment:
   - endpoint: POST /v2/company/{{ config.company_id }}/log_book_comments
-  - required fields: log_book_id, message
   - risk: Create Log Book Comment in the configured 7shifts account.
 - create_log_book_post:
   - endpoint: POST /v2/company/{{ config.company_id }}/log_book_posts
-  - required fields: location_id, log_book_category_id, date, message
   - risk: Create Log Book Post in the configured 7shifts account.
 - create_projected_sales_interval_override:
   - endpoint: POST /v2/company/{{ config.company_id }}/locations/{{ record.location_id }}/forecast_override_interval
-  - required fields: location_id, start, end, value
+  - required fields: location_id
   - risk: Create Sales Forecast Override Interval in the configured 7shifts account.
 - create_role:
   - endpoint: POST /v2/company/{{ config.company_id }}/roles
-  - required fields: name, color, location_id, department_id
   - risk: Create Role in the configured 7shifts account.
 - create_role_assignment:
   - endpoint: POST /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/role_assignments
-  - required fields: user_id, role_id
+  - required fields: user_id
   - risk: Create Role Assignment in the configured 7shifts account.
 - create_task_list_template:
   - endpoint: POST /v2/company/{{ config.company_id }}/task_list_templates
-  - required fields: title, recurrence, assignments
   - risk: Create Task List Template in the configured 7shifts account.
 - create_task_tags:
   - endpoint: POST /v2/company/{{ config.company_id }}/task_tags
-  - required fields: company_id, tags
   - risk: Create Task Tags in the configured 7shifts account.
 - create_time_off:
   - endpoint: POST /v2/time_off
-  - required fields: user_id, company_id, from_date, to_date, partial, status, category
   - risk: Create Time Off in the configured 7shifts account.
 - create_user_mappings_bulk:
   - endpoint: POST /v2/company/{{ config.company_id }}/external_user_mappings_bulk
-  - required fields: data
   - risk: Create User External Mappings in the configured 7shifts account.
 - create_user_wages:
   - endpoint: POST /v2/company/{{ config.company_id }}/users/{{ record.user_id }}/wages
-  - required fields: user_id, effective_date, wage_type, wage_cents
+  - required fields: user_id
   - risk: Create User Wage in the configured 7shifts account.
 - create_webhook:
   - endpoint: POST /v2/company/{{ config.company_id }}/webhooks
-  - required fields: url, method, event
   - risk: Create Webhook in the configured 7shifts account.
 - deactivate_user:
   - endpoint: DELETE /v2/company/{{ config.company_id }}/users/{{ record.identifier }}
-  - required fields: identifier, inactive_reason
+  - required fields: identifier
   - risk: Deactivate User in the configured 7shifts account.
 - decline_time_off:
   - endpoint: POST /v2/time_off/{{ record.time_off_id }}/decline
@@ -419,7 +400,7 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
   - risk: Delete External User Mapping in the configured 7shifts account.
 - delete_forecast_override:
   - endpoint: DELETE /v2/company/{{ config.company_id }}/location/{{ record.location_id }}/forecast_override
-  - required fields: location_id, start_date, report_type
+  - required fields: location_id
   - risk: Sync Daily Projected Forecast Override in the configured 7shifts account.
 - delete_location:
   - endpoint: DELETE /v2/company/{{ config.company_id }}/locations/{{ record.location_id }}
@@ -459,7 +440,6 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
   - risk: Delete Task List Template in the configured 7shifts account.
 - delete_task_tags:
   - endpoint: DELETE /v2/company/{{ config.company_id }}/task_tags
-  - required fields: company_id, uuids
   - risk: Delete Task Tags in the configured 7shifts account.
 - delete_time_off:
   - endpoint: DELETE /v2/time_off/{{ record.time_off_id }}
@@ -475,15 +455,15 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
   - risk: Update Availability in the configured 7shifts account.
 - edit_availability_reason:
   - endpoint: PUT /v2/company/{{ config.company_id }}/availability_reasons/{{ record.availability_reason_id }}
-  - required fields: availability_reason_id, reason
+  - required fields: availability_reason_id
   - risk: Update Availability Reason in the configured 7shifts account.
 - edit_company_webhook:
   - endpoint: PUT /v2/company/{{ config.company_id }}/webhooks/{{ record.webhook_id }}
-  - required fields: webhook_id, url
+  - required fields: webhook_id
   - risk: Update Webhook in the configured 7shifts account.
 - edit_event:
   - endpoint: PATCH /v2/company/{{ config.company_id }}/events/{{ record.event_id }}
-  - required fields: event_id, location_ids, start_date, start_time, end_time, end_date, title, is_multi_day
+  - required fields: event_id
   - risk: Update Event in the configured 7shifts account.
 - edit_task_list_template:
   - endpoint: PUT /v2/company/{{ config.company_id }}/task_list_templates/{{ record.uuid }}
@@ -495,15 +475,12 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
   - risk: Update Time Off in the configured 7shifts account.
 - post_shift:
   - endpoint: POST /v2/company/{{ config.company_id }}/shifts
-  - required fields: location_id, start, end
   - risk: Create Shift in the configured 7shifts account.
 - post_time_punch:
   - endpoint: POST /v2/company/{{ config.company_id }}/time_punches
-  - required fields: location_id, user_id, clocked_in
   - risk: Create Time Punch in the configured 7shifts account.
 - post_user:
   - endpoint: POST /v2/company/{{ config.company_id }}/users
-  - required fields: first_name, last_name, location_ids, department_ids, type
   - risk: Create User in the configured 7shifts account.
 - put_time_punch:
   - endpoint: PUT /v2/company/{{ config.company_id }}/time_punches/{{ record.time_punch_id }}
@@ -518,15 +495,15 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
   - risk: Create Time Off Settings in the configured 7shifts account.
 - save_tip_pool_manual_entry:
   - endpoint: PUT /v2/company/{{ config.company_id }}/tip_pool/{{ record.tip_pool_settings_uuid }}/manual_entry
-  - required fields: tip_pool_settings_uuid, data
+  - required fields: tip_pool_settings_uuid
   - risk: Update Tip Pool Manual Entries in the configured 7shifts account.
 - sync_overridden_projected_sales_interval:
   - endpoint: DELETE /v2/company/{{ config.company_id }}/locations/{{ record.location_id }}/forecast_override_interval
-  - required fields: location_id, start, end
+  - required fields: location_id
   - risk: Delete Sales Forecast Override Interval in the configured 7shifts account.
 - update_availability_status:
   - endpoint: PUT /v2/company/{{ config.company_id }}/availabilities/{{ record.availability_id }}/status
-  - required fields: availability_id, status
+  - required fields: availability_id
   - risk: Update Availability Status in the configured 7shifts account.
 - update_company:
   - endpoint: PATCH /v2/companies/{{ record.id }}
@@ -534,11 +511,11 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
   - risk: Update Company in the configured 7shifts account.
 - update_complete_receipt:
   - endpoint: PUT /v2/company/{{ config.company_id }}/receipts/{{ record.receipt_id }}
-  - required fields: receipt_id, net_total
+  - required fields: receipt_id
   - risk: Update Receipt in the configured 7shifts account.
 - update_department:
   - endpoint: PUT /v2/company/{{ config.company_id }}/departments/{{ record.department_id }}
-  - required fields: department_id, name, default
+  - required fields: department_id
   - risk: Update Department in the configured 7shifts account.
 - update_employment_record:
   - endpoint: PUT /v2/company/{{ config.company_id }}/employment_record/{{ record.uuid }}
@@ -570,7 +547,6 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
   - risk: Update Shift in the configured 7shifts account.
 - upsert_bulk_employment_records:
   - endpoint: POST /v2/company/{{ config.company_id }}/bulk_employment_records
-  - required fields: records
   - risk: Create Many Employment Records in the configured 7shifts account.
 
 ## Security

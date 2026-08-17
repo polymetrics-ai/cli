@@ -13,17 +13,9 @@ DESCRIPTION
   Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, container images, registries, triggers, and annotations, and can create/update/delete/run projects, pipelines, contexts, and agents through the Codefresh REST API.
 
 ICON
-  id: simple-icons-codefresh
-  asset: icons/simple-icons/codefresh.svg
-  title: Codefresh
-  simple_icon_slug: codefresh
-  simple_icon_hex: 08B1AB
-  source: simple-icons
-  license: CC0-1.0
-  review_status: cc0_with_trademark_caveat
-  review_url: https://simpleicons.org/?q=Codefresh
-  match: exact-name-or-slug
-  matched_by: codefresh
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -78,7 +70,6 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_project:
     endpoint: POST /projects
-    required fields: projectName
     risk: external mutation; creates a new Codefresh project; approval required
   delete_project:
     endpoint: DELETE /projects/{{ record.id }}
@@ -86,11 +77,10 @@ REVERSE ETL ACTIONS
     risk: destructive; irreversible deletion of a Codefresh project; approval required
   create_pipeline:
     endpoint: POST /pipelines
-    required fields: metadata
     risk: external mutation; creates a new Codefresh pipeline; approval required
   update_pipeline:
     endpoint: PUT /pipelines/{{ record.name }}
-    required fields: name, metadata
+    required fields: name
     risk: external mutation; replaces an existing Codefresh pipeline's spec; approval required
   delete_pipeline:
     endpoint: DELETE /pipelines/{{ record.name }}
@@ -102,7 +92,6 @@ REVERSE ETL ACTIONS
     risk: external mutation; triggers a real Codefresh pipeline run (build minutes/resources consumed); approval required
   create_context:
     endpoint: POST /contexts
-    required fields: metadata, spec
     risk: external mutation; creates a new Codefresh shared context (may hold configuration values); approval required
   delete_context:
     endpoint: DELETE /contexts/{{ record.name }}
@@ -110,7 +99,6 @@ REVERSE ETL ACTIONS
     risk: destructive; irreversible deletion of a Codefresh shared context; approval required
   create_agent:
     endpoint: POST /agents
-    required fields: name
     risk: external mutation; registers a new Codefresh runner agent; approval required
   delete_agent:
     endpoint: DELETE /agent/{{ record.id }}
