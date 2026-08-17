@@ -1,0 +1,95 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_direct_read_users_get_by_id",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:28:47.084Z",
+  "run_id": "github-slice4-1787002127084-agent_derived_direct_read_users_get_by_id",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "2b8083489042e1b4428480852dc676420ee9a035dc3500832e24730697819316",
+    "pm_command_fingerprint": "{{pmcertfp:v1:009bb48878c6807b56915813dff34b1aa753932c0d3f0c8cd921852195fa1b9d}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:713778cd5ee90211aae2d78594d98adb30cb2b40b52b34120d82e7e6b5119407}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_direct_read_users_get_by_id",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:25cf82feb617bcadbd39aa2955396adfd61475e127d05819f5b8cd4fb963f0cc}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "avatar_url": "{{pmcertfp:v1:d1d5d88737dccd0082e606843b4f96a1b10f736764d821db5059b1aecc6373c0}}",
+              "bio": null,
+              "blog": "{{pmcertfp:v1:bf6399f2425d63ff62fc3ef8777d302b68b420a2e8064805bbe3ff48f76abd74}}",
+              "collaborators": "{{pmcertfp:v1:560aa2b1615682ed8ebb69e64139880f0397d7edd4a4db3fdc0b13db7c5c8b5e}}",
+              "company": null,
+              "created_at": "{{pmcertfp:v1:acf4a024459c605cf70ce4996a1f9bd3e47583e66c08ca3c5150276ca402693e}}",
+              "disk_usage": "{{pmcertfp:v1:560aa2b1615682ed8ebb69e64139880f0397d7edd4a4db3fdc0b13db7c5c8b5e}}",
+              "email": null,
+              "events_url": "{{pmcertfp:v1:b2fed34df7ec05995db8cdc3905db0f8c305df1d0020a02214c3511f98f9357a}}",
+              "followers": "{{pmcertfp:v1:560aa2b1615682ed8ebb69e64139880f0397d7edd4a4db3fdc0b13db7c5c8b5e}}",
+              "followers_url": "{{pmcertfp:v1:d48d9a562ddd0c49bc1775e1b8b3a204e4720173f7bad8f4b55828fa1d87fde0}}",
+              "following": "{{pmcertfp:v1:560aa2b1615682ed8ebb69e64139880f0397d7edd4a4db3fdc0b13db7c5c8b5e}}",
+              "following_url": "{{pmcertfp:v1:9c0aac930b5e2df9783d7b4dce2440ac8bdbe20d3c7df6a0fa88b39b15a51eaa}}",
+              "gists_url": "{{pmcertfp:v1:19d6ea84ee66e05ab7ea9c6d4f83fc6d3892485d6dd6337d9ca82632ce13464f}}",
+              "gravatar_id": "{{pmcertfp:v1:bf6399f2425d63ff62fc3ef8777d302b68b420a2e8064805bbe3ff48f76abd74}}",
+              "hireable": null,
+              "html_url": "{{pmcertfp:v1:72507f81a65e07616741c9f3e44b72a36082e6d358a0a4776067770d9cc88548}}",
+              "id": "{{pmcertfp:v1:bb2840127064be24c9caea86feb72a41435efc0195405a8dde898d4e35f39b9e}}",
+              "location": null,
+              "login": "{{pmcertfp:v1:ca59ee5199681565128b88ddce44db4bce9a0cc8be2906bc56131aa27740ff18}}",
+              "name": null,
+              "node_id": "{{pmcertfp:v1:b30451c02e73a2e6178124379370a55fd201b5158741878bf3e38a6468a18296}}",
+              "organizations_url": "{{pmcertfp:v1:4e962c4e07b4b3971bceaf256b4cae6511819acdaf1772784248a6297c8863af}}",
+              "owned_private_repos": "{{pmcertfp:v1:5672718193efbc8514abad3c7e098f4afa9bb7a34e1539ab2f9d90bbf4b404c7}}",
+              "plan": {
+                "collaborators": "{{pmcertfp:v1:560aa2b1615682ed8ebb69e64139880f0397d7edd4a4db3fdc0b13db7c5c8b5e}}",
+                "name": "{{pmcertfp:v1:9972452b71b56a5f79bd0f6224580e7370c636a1b0fd81945bc917051a2028a2}}",
+                "private_repos": "{{pmcertfp:v1:17ebde6e8f390d25dfe4f61b9ae13bd137008c1869a308ebfbd902ab3e7b45a1}}",
+                "space": "{{pmcertfp:v1:1e74d363ba8257af7e9f930b7bcb0121caf9834aa0aeca19547e697d2dca4e70}}"
+              },
+              "private_gists": "{{pmcertfp:v1:560aa2b1615682ed8ebb69e64139880f0397d7edd4a4db3fdc0b13db7c5c8b5e}}",
+              "public_gists": "{{pmcertfp:v1:560aa2b1615682ed8ebb69e64139880f0397d7edd4a4db3fdc0b13db7c5c8b5e}}",
+              "public_repos": "{{pmcertfp:v1:560aa2b1615682ed8ebb69e64139880f0397d7edd4a4db3fdc0b13db7c5c8b5e}}",
+              "received_events_url": "{{pmcertfp:v1:f895d3d5e02712690c6520aa35327402f57e2e13de17f38e45c0fbe3119aed15}}",
+              "repos_url": "{{pmcertfp:v1:3b476a66213e2faf982bf53f8f7d45635b4b2d0b186c2daf7cd01e607f194ffb}}",
+              "site_admin": "{{pmcertfp:v1:eeebe1b1328d0fa14330a1f56b840079b5ae079aee57242467dbff5ae2d6cba4}}",
+              "starred_url": "{{pmcertfp:v1:b5bd4d2f02cc24e812f314e196c4bedd523a63b4db6b11e32b0ac6c1106f19c3}}",
+              "subscriptions_url": "{{pmcertfp:v1:57683b3e0ba451ca7e8aabe4eebf77297bf4509700256390ca058a9e253158f9}}",
+              "total_private_repos": "{{pmcertfp:v1:5672718193efbc8514abad3c7e098f4afa9bb7a34e1539ab2f9d90bbf4b404c7}}",
+              "twitter_username": null,
+              "two_factor_authentication": "{{pmcertfp:v1:eeebe1b1328d0fa14330a1f56b840079b5ae079aee57242467dbff5ae2d6cba4}}",
+              "type": "{{pmcertfp:v1:2d93a36eec5677e705bec41236fe3d1e41673d84eea81d41907cb337a9041180}}",
+              "updated_at": "{{pmcertfp:v1:8f9e98af3cda294424470699f548d271581c9caccd94c4edd114559ecb2eeace}}",
+              "url": "{{pmcertfp:v1:4080c36ba81b0d5b160e5f42daac7378f3eafa1458b948e6b1dc92340dc9166f}}",
+              "user_view_type": "{{pmcertfp:v1:3933d0858cecd940c24077f3015351b4f4ed94be5d92847b100b414e307b8b69}}"
+            },
+            "original_bytes": 1633,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
