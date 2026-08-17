@@ -1,0 +1,14 @@
+{
+  "phase": "issue-4015-cli-package-test-ceiling-r1",
+  "state": "reviewed",
+  "base": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-cli-package-test-ceiling-r1",
+  "manual_gsd_fallback": "non-Pi worker and canonical contract prohibits role spawning",
+  "selected_mechanism": "lazy package-scoped production-binary fixture",
+  "baseline": {
+    "package_seconds": 623.128,
+    "wall_seconds": 627.73,
+    "runnable_test_names": 263,
+    "base_ci_seconds": 1180.982
+  }
+}
