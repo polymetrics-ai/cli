@@ -102,6 +102,52 @@ type externalProofObservedBody struct {
 	OriginalBytes int             `json:"original_bytes"`
 }
 
+// ImportedExternalProof is the validated, redacted projection an evidence
+// publisher may consume. It intentionally omits raw process argv, stdout, and
+// stderr: those values never need to cross the certification-package boundary
+// after their fingerprints have been verified.
+type ImportedExternalProof struct {
+	Connector               string
+	RunID                   string
+	PMBinarySHA256          string
+	PMCommandFingerprint    string
+	CredentialFingerprints  []string
+	HTTPExchanges           []ImportedExternalHTTPExchange
+	FlowRoundTripReferences []string
+}
+
+// ImportedExternalHTTPExchange is already redacted. Every query/header/body
+// value has passed the stored-proof fingerprint validation in ReadExternalProof.
+type ImportedExternalHTTPExchange struct {
+	Request  ImportedExternalHTTPRequest
+	Response ImportedExternalHTTPResponse
+}
+
+type ImportedExternalHTTPRequest struct {
+	Method  string
+	Target  string
+	Query   []ImportedExternalProofField
+	Headers []ImportedExternalProofField
+	Body    ImportedExternalProofBody
+}
+
+type ImportedExternalHTTPResponse struct {
+	Status  int
+	Headers []ImportedExternalProofField
+	Body    ImportedExternalProofBody
+}
+
+type ImportedExternalProofField struct {
+	Name  string
+	Value string
+}
+
+type ImportedExternalProofBody struct {
+	Encoding      string
+	Value         json.RawMessage
+	OriginalBytes int
+}
+
 // WriteExternalProof accepts only a completed full-parity external run and
 // creates its artifact after all bounded-capture and sanitization checks pass.
 // A rejected input performs no artifact or salt writes.
@@ -172,6 +218,68 @@ func VerifyExternalProofTranscript(root, proofPath, stdout, stderr string) (bool
 		subtle.ConstantTimeCompare([]byte(artifact.Process.StderrFingerprint), []byte(stderrFingerprint)) == 1, nil
 }
 
+// ReadExternalProof loads a proof only after checking that all serialized
+// transcript values are fingerprints. It is the narrow bridge from an
+// ephemeral, sanitized external-proof artifact to a committed accepted
+// evidence record; callers cannot obtain the captured command or process
+// streams from it.
+func ReadExternalProof(root, proofPath string) (ImportedExternalProof, error) {
+	salt, err := readExternalProofSalt(root)
+	if err != nil {
+		return ImportedExternalProof{}, err
+	}
+	raw, err := os.ReadFile(proofPath)
+	if err != nil {
+		return ImportedExternalProof{}, fmt.Errorf("read external proof: %w", err)
+	}
+	var artifact externalProofArtifact
+	if err := decodeExternalProofArtifact(raw, &artifact); err != nil {
+		return ImportedExternalProof{}, fmt.Errorf("parse external proof: %w", err)
+	}
+	if err := validateStoredExternalProof(artifact); err != nil {
+		return ImportedExternalProof{}, fmt.Errorf("validate external proof: %w", err)
+	}
+	proof := ImportedExternalProof{
+		Connector:               artifact.Connector,
+		RunID:                   artifact.RunID,
+		PMBinarySHA256:          artifact.PMBinarySHA256,
+		PMCommandFingerprint:    externalProofFingerprint(salt, strings.Join(artifact.Process.Command, "\x00")),
+		CredentialFingerprints:  append([]string(nil), artifact.CredentialFingerprints...),
+		HTTPExchanges:           make([]ImportedExternalHTTPExchange, 0, len(artifact.HTTPExchanges)),
+		FlowRoundTripReferences: append([]string(nil), artifact.FlowRoundTripReferences...),
+	}
+	for _, exchange := range artifact.HTTPExchanges {
+		proof.HTTPExchanges = append(proof.HTTPExchanges, importedExternalHTTPExchange(exchange))
+	}
+	return proof, nil
+}
+
+func importedExternalHTTPExchange(exchange externalProofHTTPExchange) ImportedExternalHTTPExchange {
+	return ImportedExternalHTTPExchange{
+		Request: ImportedExternalHTTPRequest{
+			Method: exchange.Request.Method, Target: exchange.Request.Target,
+			Query: importedExternalProofFields(exchange.Request.Query), Headers: importedExternalProofFields(exchange.Request.Headers),
+			Body: importedExternalProofBody(exchange.Request.Body),
+		},
+		Response: ImportedExternalHTTPResponse{
+			Status: exchange.Response.Status, Headers: importedExternalProofFields(exchange.Response.Headers),
+			Body: importedExternalProofBody(exchange.Response.Body),
+		},
+	}
+}
+
+func importedExternalProofFields(fields []externalProofField) []ImportedExternalProofField {
+	result := make([]ImportedExternalProofField, len(fields))
+	for i, field := range fields {
+		result[i] = ImportedExternalProofField{Name: field.Name, Value: field.Value}
+	}
+	return result
+}
+
+func importedExternalProofBody(body externalProofObservedBody) ImportedExternalProofBody {
+	return ImportedExternalProofBody{Encoding: body.Encoding, Value: append(json.RawMessage(nil), body.Value...), OriginalBytes: body.OriginalBytes}
+}
+
 func validateExternalProofInput(input ExternalProofInput) ([]string, error) {
 	if !input.Passed || input.ExitCode != 0 {
 		return nil, errors.New("external proof requires a completed successful process")
@@ -221,7 +329,170 @@ func validateExternalProofInput(input ExternalProofInput) ([]string, error) {
 	return prepared, nil
 }
 
+func decodeExternalProofArtifact(raw []byte, target *externalProofArtifact) error {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(target); err != nil {
+		return err
+	}
+	return ensureExternalProofJSONEOF(decoder)
+}
+
+func validateStoredExternalProof(artifact externalProofArtifact) error {
+	if artifact.Version != externalProofVersion || artifact.RedactionStrategy != externalProofFingerprintID {
+		return errors.New("external proof has an unsupported schema")
+	}
+	if !externalProofIdentifier.MatchString(artifact.Connector) || !externalProofIdentifier.MatchString(artifact.RunID) {
+		return errors.New("external proof connector and run id must be safe identifiers")
+	}
+	if !externalProofSHA256.MatchString(artifact.PMBinarySHA256) {
+		return errors.New("external proof requires a lowercase SHA-256 built-binary fingerprint")
+	}
+	if len(artifact.CredentialFingerprints) == 0 || !sortedUniqueExternalProofFingerprints(artifact.CredentialFingerprints) {
+		return errors.New("external proof credential fingerprints must be a non-empty sorted unique list")
+	}
+	if len(artifact.Process.Command) == 0 || artifact.Process.ExitCode != 0 ||
+		!isExternalProofFingerprintSequence(artifact.Process.StdoutFingerprint) ||
+		!isExternalProofFingerprintSequence(artifact.Process.StderrFingerprint) {
+		return errors.New("external proof process record is not a completed successful redacted process")
+	}
+	if len(artifact.HTTPExchanges) == 0 || len(artifact.HTTPExchanges) > externalProofMaxTotalExchanges {
+		return errors.New("external proof must contain a bounded non-empty HTTPS exchange set")
+	}
+	for i, exchange := range artifact.HTTPExchanges {
+		if err := validateStoredExternalProofExchange(exchange); err != nil {
+			return fmt.Errorf("http_exchanges[%d]: %w", i, err)
+		}
+	}
+	if err := validateExternalProofFlowRoundTripReferences(artifact.FlowRoundTripReferences); err != nil {
+		return err
+	}
+	return nil
+}
+
+func sortedUniqueExternalProofFingerprints(values []string) bool {
+	for i, value := range values {
+		if !isExternalProofFingerprintSequence(value) {
+			return false
+		}
+		if i > 0 && values[i-1] >= value {
+			return false
+		}
+	}
+	return true
+}
+
+func validateStoredExternalProofExchange(exchange externalProofHTTPExchange) error {
+	if !isExternalProofMethod(exchange.Request.Method) || !isExternalProofFingerprintSequence(exchange.Request.Target) {
+		return errors.New("request method or target is invalid")
+	}
+	if exchange.Response.Status < 100 || exchange.Response.Status > 599 {
+		return errors.New("response status is invalid")
+	}
+	for _, fields := range [][]externalProofField{exchange.Request.Query, exchange.Request.Headers, exchange.Response.Headers} {
+		for _, field := range fields {
+			if (!externalProofFieldName.MatchString(field.Name) && !isExternalProofFingerprintSequence(field.Name)) || !isExternalProofFingerprintSequence(field.Value) {
+				return errors.New("field retains an unredacted name or value")
+			}
+		}
+	}
+	if err := validateStoredExternalProofBody(exchange.Request.Body); err != nil {
+		return fmt.Errorf("request body: %w", err)
+	}
+	if err := validateStoredExternalProofBody(exchange.Response.Body); err != nil {
+		return fmt.Errorf("response body: %w", err)
+	}
+	return nil
+}
+
+func validateStoredExternalProofBody(body externalProofObservedBody) error {
+	if body.OriginalBytes < 0 {
+		return errors.New("original_bytes is invalid")
+	}
+	switch body.Encoding {
+	case "none":
+		if string(body.Value) != "null" || body.OriginalBytes != 0 {
+			return errors.New("none body must be null with zero bytes")
+		}
+		return nil
+	case "opaque":
+		var value string
+		if err := json.Unmarshal(body.Value, &value); err != nil || !isExternalProofFingerprintSequence(value) {
+			return errors.New("opaque body retains an unredacted value")
+		}
+		return nil
+	case "json":
+		decoder := json.NewDecoder(bytes.NewReader(body.Value))
+		decoder.UseNumber()
+		var value any
+		if err := decoder.Decode(&value); err != nil || ensureExternalProofJSONEOF(decoder) != nil || !isStoredExternalProofJSON(value) {
+			return errors.New("JSON body retains an unredacted value")
+		}
+		return nil
+	default:
+		return fmt.Errorf("encoding %q is unsupported", body.Encoding)
+	}
+}
+
+func isStoredExternalProofJSON(value any) bool {
+	switch typed := value.(type) {
+	case map[string]any:
+		for key, child := range typed {
+			if (!externalProofFieldName.MatchString(key) && !isExternalProofFingerprintSequence(key)) || !isStoredExternalProofJSON(child) {
+				return false
+			}
+		}
+		return true
+	case []any:
+		for _, child := range typed {
+			if !isStoredExternalProofJSON(child) {
+				return false
+			}
+		}
+		return true
+	case nil:
+		return true
+	case string:
+		return isExternalProofFingerprintSequence(typed)
+	default:
+		return false
+	}
+}
+
+func isExternalProofFingerprintSequence(value string) bool {
+	if value == "" {
+		return false
+	}
+	for value != "" {
+		if !strings.HasPrefix(value, externalProofMarkerPrefix) {
+			return false
+		}
+		end := strings.Index(value[len(externalProofMarkerPrefix):], externalProofMarkerSuffix)
+		if end < 0 {
+			return false
+		}
+		digest := value[len(externalProofMarkerPrefix) : len(externalProofMarkerPrefix)+end]
+		if !externalProofSHA256.MatchString(digest) {
+			return false
+		}
+		value = value[len(externalProofMarkerPrefix)+end+len(externalProofMarkerSuffix):]
+	}
+	return true
+}
+
+func isExternalProofMethod(method string) bool {
+	switch method {
+	case "GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS":
+		return true
+	default:
+		return false
+	}
+}
+
 func validateExternalProofFlowRoundTripReferences(references []string) error {
+	if len(references) == 0 {
+		return nil
+	}
 	required := []string{"flow_plan", "flow_preview", "flow_run", "flow_status"}
 	present := make(map[string]bool, len(required))
 	for _, reference := range references {

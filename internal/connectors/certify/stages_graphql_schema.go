@@ -610,6 +610,14 @@ func stageGraphQLSchemaConformance(rc *runContext, rep *Report) error {
 		return nil
 	}
 	result.Reason = fmt.Sprintf("%d commands are schema-conformant only and %d mutations remain fixture-bound; neither result is a live provider pass", result.SchemaConformant, result.FixtureBound)
+	if rc.opts.DirectReadOnly {
+		// A direct-read certificate is intentionally scoped to the freshly
+		// executed provider reads above. Fixture-bound mutations remain plainly
+		// classified in the inventory, but cannot make this bounded read proof
+		// fail by pretending it claimed whole-connector completion.
+		skipStage(rc, rep, "graphql_inventory_boundary", "skipped: direct-read-only certification does not claim fixture-bound GraphQL mutations")
+		return nil
+	}
 	recordStage(rc, rep, "graphql_inventory_boundary", 0, func() (bool, CLIStageInfo, string) {
 		return false, CLIStageInfo{ArgvRedacted: "definition-owned GraphQL inventory", ExitCode: 0, Kind: "GraphQLCertificationInventory"}, "not_live: " + result.Reason
 	})

@@ -371,6 +371,97 @@ func writeProofBearingEvidence(repoRoot, path string, completed completedLiveEvi
 	return evidence, nil
 }
 
+// importedLiveEvidence contains only values that ReadExternalProof has already
+// proved are fingerprints or structural metadata. Unlike completedLiveEvidence
+// it deliberately has no raw credentials, request values, or response bodies.
+type importedLiveEvidence struct {
+	SchemaVersion          int
+	Scope                  string
+	Connector              string
+	FunctionKind           string
+	WorkflowKind           string
+	SyncMode               string
+	Primitive              string
+	Source                 string
+	Destination            string
+	FlowKind               string
+	Provider               string
+	ExecutedAt             string
+	RunID                  string
+	PMBinarySHA256         string
+	PMCommandFingerprint   string
+	CredentialFingerprints []string
+	HTTPExchanges          []certifiedHTTPExchange
+}
+
+// newImportedProofBearingEvidence accepts the safe projection from a completed
+// external proof. It still validates the whole accepted-record contract before
+// a file can be opened, so a future importer cannot turn an unredacted proof
+// field into committed evidence by bypassing the raw-value sanitizer.
+func newImportedProofBearingEvidence(completed importedLiveEvidence) (acceptedEvidence, error) {
+	proof := embeddedEvidenceProof{
+		RedactionStrategy:      proofRedactionStrategy,
+		PMBinarySHA256:         completed.PMBinarySHA256,
+		PMCommandFingerprint:   completed.PMCommandFingerprint,
+		CredentialFingerprints: append([]string(nil), completed.CredentialFingerprints...),
+		HTTPExchanges:          append([]certifiedHTTPExchange(nil), completed.HTTPExchanges...),
+		DatabaseExchanges:      []certifiedDatabaseExchange{},
+	}
+	evidence := acceptedEvidence{
+		SchemaVersion:   completed.SchemaVersion,
+		Scope:           completed.Scope,
+		Status:          evidenceStatusPassed,
+		CredentialScope: credentialScopeFullParity,
+		CredentialNote:  fullParityCredentialNote,
+		Connector:       completed.Connector,
+		FunctionKind:    completed.FunctionKind,
+		WorkflowKind:    completed.WorkflowKind,
+		SyncMode:        completed.SyncMode,
+		Primitive:       completed.Primitive,
+		Source:          completed.Source,
+		Destination:     completed.Destination,
+		FlowKind:        completed.FlowKind,
+		Provider:        completed.Provider,
+		ExecutedAt:      completed.ExecutedAt,
+		RunID:           completed.RunID,
+		Proof:           proof,
+	}
+	if err := validateAcceptedEvidence(evidence); err != nil {
+		return acceptedEvidence{}, err
+	}
+	return evidence, nil
+}
+
+func writeImportedProofBearingEvidence(repoRoot, path string, completed importedLiveEvidence) (acceptedEvidence, error) {
+	outputPath, err := acceptedEvidenceOutputPath(repoRoot, path)
+	if err != nil {
+		return acceptedEvidence{}, err
+	}
+	evidence, err := newImportedProofBearingEvidence(completed)
+	if err != nil {
+		return acceptedEvidence{}, err
+	}
+	payload, err := marshalGeneratedJSON(evidence)
+	if err != nil {
+		return acceptedEvidence{}, fmt.Errorf("render imported proof-bearing evidence: %w", err)
+	}
+	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
+		return acceptedEvidence{}, fmt.Errorf("create proof evidence directory: %w", err)
+	}
+	file, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	if err != nil {
+		return acceptedEvidence{}, fmt.Errorf("create proof-bearing evidence: %w", err)
+	}
+	if _, err := file.Write(payload); err != nil {
+		_ = file.Close()
+		return acceptedEvidence{}, fmt.Errorf("write proof-bearing evidence: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return acceptedEvidence{}, fmt.Errorf("close proof-bearing evidence: %w", err)
+	}
+	return evidence, nil
+}
+
 func acceptedEvidenceOutputPath(repoRoot, path string) (string, error) {
 	root, err := filepath.Abs(repoRoot)
 	if err != nil {
@@ -898,7 +989,7 @@ func validateDeliveryGuarantees(delivery deliveryGuarantees) error {
 
 func validateCertifiedQuery(query []certifiedQuery) error {
 	for _, item := range query {
-		if !isSafeProofFieldName(item.Name) {
+		if !isSafeProofFieldName(item.Name) && !isFingerprintSequence(item.Name) {
 			return errors.New("query name is invalid")
 		}
 		if !isFingerprintSequence(item.Value) {

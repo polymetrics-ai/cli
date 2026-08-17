@@ -17,49 +17,59 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-const declaredTransportEvidenceProvider = "postgres_container"
-
-// runCertificationEvidence accepts a completed, passing declared-transport or
-// change-capture report and emits proof at the requested contract scope. The
-// selected bundle binds report executor references and apply strategies; this
-// generic importer adds no runtime transport behavior.
+// runCertificationEvidence imports completed certification evidence. Database
+// transport receipts and external HTTP proofs share the same definition-owned
+// provider lookup and accepted-evidence validation path.
 func runCertificationEvidence(args []string, stdout, stderr io.Writer) int {
 	if len(args) < 2 {
-		logln(stderr, "connectorgen certification-evidence: require transport or change-capture")
+		logln(stderr, "connectorgen certification-evidence: require transport, change-capture, or report")
 		return 2
 	}
 	switch args[1] {
 	case "transport":
-		return runPostgresTransportCertificationEvidence(args[2:], stdout, stderr)
+		return runTransportCertificationEvidence(args[2:], stdout, stderr)
 	case "change-capture":
 		return runChangeCaptureCertificationEvidence(args[2:], stdout, stderr)
+	case "report":
+		return runReportCertificationEvidence(args[2:], stdout, stderr)
 	default:
-		logln(stderr, "connectorgen certification-evidence: require transport or change-capture")
+		logln(stderr, "connectorgen certification-evidence: require transport, change-capture, or report")
 		return 2
 	}
 }
 
-func runPostgresTransportCertificationEvidence(args []string, stdout, stderr io.Writer) int {
-	options, err := parsePostgresTransportEvidenceOptions(args)
+func runTransportCertificationEvidence(args []string, stdout, stderr io.Writer) int {
+	options, err := parseTransportEvidenceOptions(args)
 	if err != nil {
 		logf(stderr, "connectorgen certification-evidence: %v\n", err)
 		return 2
 	}
-	report, err := loadPostgresTransportEvidenceReport(options.reportPath)
+	report, err := loadCertificationEvidenceReport(options.reportPath)
 	if err != nil {
 		logf(stderr, "connectorgen certification-evidence: %v\n", err)
 		return 1
 	}
-	if err := validatePostgresTransportEvidenceReport(report, options.connector); err != nil {
+	if err := validateNativeDatabaseTransportEvidenceReport(report, options.connector); err != nil {
 		logf(stderr, "connectorgen certification-evidence: %v\n", err)
 		return 1
 	}
-	prepared, err := postgresTransportEvidencePreparedValue(options.secretEnv)
+	prepared, err := certificationEvidencePreparedValue(options.secretEnv)
 	if err != nil {
 		logf(stderr, "connectorgen certification-evidence: %v\n", err)
 		return 1
 	}
 
+	evidenceImport, err := certificationEvidenceImport(options.connector)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+	if evidenceImport.Database == nil {
+		logln(stderr, "connectorgen certification-evidence: connector does not declare database proof metadata")
+		return 1
+	}
+	provider := evidenceImport.Provider
+	databaseProof := evidenceImport.Database
 	modes := append([]certify.DeclaredTransportModeResult(nil), report.Capabilities.DeclaredTransport.Modes...)
 	sort.Slice(modes, func(i, j int) bool { return modes[i].Mode < modes[j].Mode })
 	written := 0
@@ -85,14 +95,14 @@ func runPostgresTransportCertificationEvidence(args []string, stdout, stderr io.
 			}
 			_, err = writeProofBearingEvidence(options.repoRoot, output, completedLiveEvidence{
 				SchemaVersion: certificationSchemaVersion, Scope: evidenceScopeSyncMode, Connector: options.connector,
-				SyncMode: mode.Mode, Primitive: primitive, Provider: declaredTransportEvidenceProvider,
+				SyncMode: mode.Mode, Primitive: primitive, Provider: provider,
 				ExecutedAt:     report.CompletedAt.UTC().Format("2006-01-02T15:04:05Z"),
 				RunID:          options.runID + "-" + mode.Mode + "-" + primitive,
 				PMBinarySHA256: options.binarySHA, PMCommand: "pm connectors certify " + options.connector + " --full --write --from-env password=" + options.secretEnv,
 				Passed: true, PreparedValues: []string{prepared},
 				DatabaseExchanges: []completedDatabaseExchange{{
-					Operation: "postgres_transport_" + mode.Mode + "_" + primitive,
-					Protocol:  "postgres_wire", Statement: "declared_transport_" + mode.Mode + "_" + mode.ApplyStrategy,
+					Operation: databaseProof.OperationPrefix + "_" + mode.Mode + "_" + primitive,
+					Protocol:  databaseProof.Protocol, Statement: "declared_transport_" + mode.Mode + "_" + mode.ApplyStrategy,
 					ResponseStatus: "completed", ResponseBody: body,
 				}},
 			})
@@ -105,6 +115,222 @@ func runPostgresTransportCertificationEvidence(args []string, stdout, stderr io.
 	}
 	logf(stdout, "wrote declared transport evidence records: %d\n", written)
 	return 0
+}
+
+type reportEvidenceOptions struct {
+	connector         string
+	reportPath        string
+	externalProofPath string
+	recordPrefix      string
+	repoRoot          string
+}
+
+func runReportCertificationEvidence(args []string, stdout, stderr io.Writer) int {
+	options, err := parseReportEvidenceOptions(args)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 2
+	}
+	report, err := loadCertificationEvidenceReport(options.reportPath)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+	if err := validateCompletedCertificationEvidenceReport(report, options.connector); err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+	proof, err := certify.ReadExternalProof(options.repoRoot, options.externalProofPath)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+	if proof.Connector != options.connector {
+		logln(stderr, "connectorgen certification-evidence: external proof connector does not match report connector")
+		return 1
+	}
+	bundle, err := engine.Load(defs.FS, options.connector)
+	if err != nil || bundle.Certification == nil || bundle.Certification.EvidenceImport == nil {
+		logln(stderr, "connectorgen certification-evidence: connector does not declare report evidence import bindings")
+		return 1
+	}
+	bindings := bundle.Certification.EvidenceImport.Bindings
+	if len(bindings) == 0 {
+		logln(stderr, "connectorgen certification-evidence: connector declares no report evidence import bindings")
+		return 1
+	}
+	exchanges := importedHTTPExchanges(proof.HTTPExchanges)
+	written := 0
+	for index, binding := range bindings {
+		if binding.Scope == evidenceScopeFlow {
+			logln(stderr, "connectorgen certification-evidence: flow evidence requires a delivery receipt in addition to an HTTP proof")
+			return 1
+		}
+		if err := validateEvidenceBindingStages(report, *bundle.Certification, binding); err != nil {
+			logf(stderr, "connectorgen certification-evidence: binding %d: %v\n", index+1, err)
+			return 1
+		}
+		identity := importedLiveEvidence{
+			SchemaVersion:          certificationSchemaVersion,
+			Scope:                  binding.Scope,
+			Connector:              options.connector,
+			FunctionKind:           binding.FunctionKind,
+			WorkflowKind:           binding.WorkflowKind,
+			SyncMode:               binding.SyncMode,
+			Primitive:              binding.Primitive,
+			Source:                 binding.Source,
+			Destination:            binding.Destination,
+			FlowKind:               binding.FlowKind,
+			Provider:               bundle.Certification.EvidenceImport.Provider,
+			ExecutedAt:             report.CompletedAt.UTC().Format(time.RFC3339),
+			RunID:                  proof.RunID + "-" + evidenceBindingSuffix(binding),
+			PMBinarySHA256:         proof.PMBinarySHA256,
+			PMCommandFingerprint:   proof.PMCommandFingerprint,
+			CredentialFingerprints: append([]string(nil), proof.CredentialFingerprints...),
+			HTTPExchanges:          exchanges,
+		}
+		output := filepath.Join(options.repoRoot, acceptedEvidenceDirectory, options.recordPrefix+"-"+evidenceBindingSuffix(binding)+".json")
+		if _, err := writeImportedProofBearingEvidence(options.repoRoot, output, identity); err != nil {
+			logf(stderr, "connectorgen certification-evidence: write binding %d: %v\n", index+1, err)
+			return 1
+		}
+		written++
+	}
+	logf(stdout, "wrote report evidence records: %d\n", written)
+	return 0
+}
+
+func parseReportEvidenceOptions(args []string) (reportEvidenceOptions, error) {
+	options := reportEvidenceOptions{repoRoot: "."}
+	for index := 0; index < len(args); index++ {
+		flag := args[index]
+		if !strings.HasPrefix(flag, "--") || index+1 >= len(args) {
+			return reportEvidenceOptions{}, fmt.Errorf("invalid flag %q", flag)
+		}
+		index++
+		value := args[index]
+		switch flag {
+		case "--connector":
+			if !isSafeProofIdentifier(value) {
+				return reportEvidenceOptions{}, errors.New("--connector must be a safe connector name")
+			}
+			options.connector = value
+		case "--report":
+			options.reportPath = value
+		case "--external-proof":
+			options.externalProofPath = value
+		case "--record-prefix":
+			options.recordPrefix = value
+		case "--repo-root":
+			options.repoRoot = value
+		default:
+			return reportEvidenceOptions{}, fmt.Errorf("unknown flag %q", flag)
+		}
+	}
+	if options.connector == "" || strings.TrimSpace(options.reportPath) == "" || strings.TrimSpace(options.externalProofPath) == "" || !isSafeProofIdentifier(options.recordPrefix) {
+		return reportEvidenceOptions{}, errors.New("--connector, --report, --external-proof, and --record-prefix are required")
+	}
+	root, err := filepath.Abs(options.repoRoot)
+	if err != nil {
+		return reportEvidenceOptions{}, fmt.Errorf("resolve repository root: %w", err)
+	}
+	options.repoRoot = root
+	return options, nil
+}
+
+func validateCompletedCertificationEvidenceReport(report certify.Report, connector string) error {
+	if report.Kind != "ConnectorCertification" || report.Connector != connector || !report.Passed || report.CompletedAt.IsZero() {
+		return errors.New("report is not a completed passing connector certification")
+	}
+	return nil
+}
+
+func importedHTTPExchanges(exchanges []certify.ImportedExternalHTTPExchange) []certifiedHTTPExchange {
+	result := make([]certifiedHTTPExchange, 0, len(exchanges))
+	for index, exchange := range exchanges {
+		result = append(result, certifiedHTTPExchange{
+			Operation: fmt.Sprintf("http_%03d", index+1),
+			Request: certifiedHTTPRequest{
+				Method: exchange.Request.Method, Target: exchange.Request.Target,
+				Query: importedQuery(exchange.Request.Query), Headers: importedHTTPFields(exchange.Request.Headers),
+				Body: importedHTTPBody(exchange.Request.Body),
+			},
+			Response: certifiedHTTPResponse{
+				Status: exchange.Response.Status, Headers: importedHTTPFields(exchange.Response.Headers),
+				Body: importedHTTPBody(exchange.Response.Body),
+			},
+		})
+	}
+	return result
+}
+
+func importedQuery(fields []certify.ImportedExternalProofField) []certifiedQuery {
+	result := make([]certifiedQuery, len(fields))
+	for i, field := range fields {
+		result[i] = certifiedQuery{Name: field.Name, Value: field.Value}
+	}
+	return result
+}
+
+func importedHTTPFields(fields []certify.ImportedExternalProofField) []certifiedHTTPField {
+	result := make([]certifiedHTTPField, len(fields))
+	for i, field := range fields {
+		result[i] = certifiedHTTPField{Name: field.Name, Value: field.Value}
+	}
+	return result
+}
+
+func importedHTTPBody(body certify.ImportedExternalProofBody) certifiedHTTPBody {
+	return certifiedHTTPBody{Encoding: body.Encoding, Value: append(json.RawMessage(nil), body.Value...), OriginalBytes: body.OriginalBytes}
+}
+
+func validateEvidenceBindingStages(report certify.Report, certification engine.CertificationSpec, binding engine.CertificationEvidenceImportBinding) error {
+	required := make(map[string]struct{})
+	for _, stage := range binding.Stages {
+		required[stage] = struct{}{}
+	}
+	for _, set := range binding.StageSets {
+		var candidates []engine.CertificationCommandCandidate
+		switch set {
+		case "direct_read_candidates":
+			candidates = certification.DirectReadCandidates
+		case "binary_candidates":
+			candidates = certification.BinaryCandidates
+		case "graphql_live_candidates":
+			if certification.GraphQL != nil {
+				candidates = certification.GraphQL.LiveCandidates
+			}
+		}
+		for _, candidate := range candidates {
+			required[candidate.StageName] = struct{}{}
+		}
+	}
+	completed := make(map[string]certify.StageResult, len(report.Stages))
+	for _, stage := range report.Stages {
+		completed[stage.Name] = stage
+	}
+	for stage := range required {
+		result, ok := completed[stage]
+		if !ok || !result.Passed || result.Resumed {
+			return fmt.Errorf("required stage %q was not freshly completed and passing", stage)
+		}
+	}
+	return nil
+}
+
+func evidenceBindingSuffix(binding engine.CertificationEvidenceImportBinding) string {
+	value := binding.Scope
+	switch binding.Scope {
+	case evidenceScopeCapability:
+		value += "-" + binding.FunctionKind
+	case evidenceScopeWorkflow:
+		value += "-" + binding.WorkflowKind
+	case evidenceScopeSyncMode:
+		value += "-" + binding.SyncMode + "-" + binding.Primitive
+	case evidenceScopeFlow:
+		value += "-" + binding.Source + "-" + binding.Destination + "-" + binding.FlowKind
+	}
+	return strings.NewReplacer(":", "_", ".", "_", "-", "_").Replace(value)
 }
 
 // changeCaptureEvidenceReport is the deliberately small receipt from
@@ -122,7 +348,7 @@ type changeCaptureEvidenceReport struct {
 }
 
 func runChangeCaptureCertificationEvidence(args []string, stdout, stderr io.Writer) int {
-	options, err := parsePostgresTransportEvidenceOptions(args)
+	options, err := parseTransportEvidenceOptions(args)
 	if err != nil {
 		logf(stderr, "connectorgen certification-evidence: %v\n", err)
 		return 2
@@ -136,7 +362,7 @@ func runChangeCaptureCertificationEvidence(args []string, stdout, stderr io.Writ
 		logf(stderr, "connectorgen certification-evidence: %v\n", err)
 		return 1
 	}
-	prepared, err := postgresTransportEvidencePreparedValue(options.secretEnv)
+	prepared, err := certificationEvidencePreparedValue(options.secretEnv)
 	if err != nil {
 		logf(stderr, "connectorgen certification-evidence: %v\n", err)
 		return 1
@@ -156,6 +382,17 @@ func runChangeCaptureCertificationEvidence(args []string, stdout, stderr io.Writ
 		logf(stderr, "connectorgen certification-evidence: encode change-capture report: %v\n", err)
 		return 1
 	}
+	evidenceImport, err := certificationEvidenceImport(options.connector)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+	if evidenceImport.Database == nil {
+		logln(stderr, "connectorgen certification-evidence: connector does not declare database proof metadata")
+		return 1
+	}
+	provider := evidenceImport.Provider
+	databaseProof := evidenceImport.Database
 	completed := func(scope, functionKind, mode, primitive, suffix string) completedLiveEvidence {
 		return completedLiveEvidence{
 			SchemaVersion:  certificationSchemaVersion,
@@ -164,7 +401,7 @@ func runChangeCaptureCertificationEvidence(args []string, stdout, stderr io.Writ
 			FunctionKind:   functionKind,
 			SyncMode:       mode,
 			Primitive:      primitive,
-			Provider:       declaredTransportEvidenceProvider,
+			Provider:       provider,
 			ExecutedAt:     report.CompletedAt.UTC().Format(time.RFC3339),
 			RunID:          options.runID + "-" + suffix,
 			PMBinarySHA256: options.binarySHA,
@@ -172,7 +409,7 @@ func runChangeCaptureCertificationEvidence(args []string, stdout, stderr io.Writ
 			Passed:         true, PreparedValues: []string{prepared},
 			DatabaseExchanges: []completedDatabaseExchange{{
 				Operation: options.connector + "_change_capture_" + suffix,
-				Protocol:  "postgres_wire", Statement: "pgoutput_v2_receipt_before_acknowledgement",
+				Protocol:  databaseProof.Protocol, Statement: databaseProof.ChangeCaptureStatement,
 				ResponseStatus: "completed", ResponseBody: body,
 			}},
 		}
@@ -220,7 +457,7 @@ func validateChangeCaptureEvidenceReport(report changeCaptureEvidenceReport, con
 	return nil
 }
 
-type postgresTransportEvidenceOptions struct {
+type transportEvidenceOptions struct {
 	connector    string
 	reportPath   string
 	binarySHA    string
@@ -230,12 +467,12 @@ type postgresTransportEvidenceOptions struct {
 	repoRoot     string
 }
 
-func parsePostgresTransportEvidenceOptions(args []string) (postgresTransportEvidenceOptions, error) {
-	options := postgresTransportEvidenceOptions{repoRoot: "."}
+func parseTransportEvidenceOptions(args []string) (transportEvidenceOptions, error) {
+	options := transportEvidenceOptions{repoRoot: "."}
 	for index := 0; index < len(args); index++ {
 		flag := args[index]
 		if !strings.HasPrefix(flag, "--") || index+1 >= len(args) {
-			return postgresTransportEvidenceOptions{}, fmt.Errorf("invalid flag %q", flag)
+			return transportEvidenceOptions{}, fmt.Errorf("invalid flag %q", flag)
 		}
 		index++
 		value := args[index]
@@ -244,7 +481,7 @@ func parsePostgresTransportEvidenceOptions(args []string) (postgresTransportEvid
 			options.reportPath = value
 		case "--connector":
 			if !isSafeProofIdentifier(value) {
-				return postgresTransportEvidenceOptions{}, fmt.Errorf("--connector must be a safe connector name")
+				return transportEvidenceOptions{}, fmt.Errorf("--connector must be a safe connector name")
 			}
 			options.connector = value
 		case "--binary-sha":
@@ -252,7 +489,7 @@ func parsePostgresTransportEvidenceOptions(args []string) (postgresTransportEvid
 		case "--from-env":
 			field, envName, ok := strings.Cut(value, "=")
 			if !ok || field != "password" || !isSafeProofIdentifier(envName) {
-				return postgresTransportEvidenceOptions{}, errors.New("--from-env must be password=<safe environment variable>")
+				return transportEvidenceOptions{}, errors.New("--from-env must be password=<safe environment variable>")
 			}
 			options.secretEnv = envName
 		case "--run-id":
@@ -262,39 +499,58 @@ func parsePostgresTransportEvidenceOptions(args []string) (postgresTransportEvid
 		case "--repo-root":
 			options.repoRoot = value
 		default:
-			return postgresTransportEvidenceOptions{}, fmt.Errorf("unknown flag %q", flag)
+			return transportEvidenceOptions{}, fmt.Errorf("unknown flag %q", flag)
 		}
 	}
 	if options.connector == "" || strings.TrimSpace(options.reportPath) == "" || !isSHA256(options.binarySHA) || options.secretEnv == "" || !isSafeProofIdentifier(options.runID) || !isSafeProofIdentifier(options.recordPrefix) {
-		return postgresTransportEvidenceOptions{}, errors.New("--connector, --report, lowercase --binary-sha, --from-env password=<ENV>, --run-id, and --record-prefix are required")
+		return transportEvidenceOptions{}, errors.New("--connector, --report, lowercase --binary-sha, --from-env password=<ENV>, --run-id, and --record-prefix are required")
 	}
 	root, err := filepath.Abs(options.repoRoot)
 	if err != nil {
-		return postgresTransportEvidenceOptions{}, fmt.Errorf("resolve repository root: %w", err)
+		return transportEvidenceOptions{}, fmt.Errorf("resolve repository root: %w", err)
 	}
 	options.repoRoot = root
 	return options, nil
 }
 
-func loadPostgresTransportEvidenceReport(path string) (certify.Report, error) {
+func loadCertificationEvidenceReport(path string) (certify.Report, error) {
 	raw, err := os.ReadFile(path)
 	if err != nil {
 		return certify.Report{}, fmt.Errorf("read report: %w", err)
 	}
 	var envelope struct {
-		Kind   string         `json:"kind"`
-		Report certify.Report `json:"report"`
+		Report json.RawMessage `json:"report"`
 	}
 	if err := json.Unmarshal(raw, &envelope); err != nil {
 		return certify.Report{}, fmt.Errorf("parse report: %w", err)
 	}
-	if envelope.Kind != "ConnectorCertification" {
-		return certify.Report{}, fmt.Errorf("report kind %q is not ConnectorCertification", envelope.Kind)
+	payload := raw
+	if len(envelope.Report) != 0 {
+		payload = envelope.Report
 	}
-	return envelope.Report, nil
+	var report certify.Report
+	if err := json.Unmarshal(payload, &report); err != nil {
+		return certify.Report{}, fmt.Errorf("parse report: %w", err)
+	}
+	if report.Kind != "ConnectorCertification" {
+		return certify.Report{}, fmt.Errorf("report kind %q is not ConnectorCertification", report.Kind)
+	}
+	return report, nil
 }
 
-func validatePostgresTransportEvidenceReport(report certify.Report, connector string) error {
+func certificationEvidenceImport(connector string) (*engine.CertificationEvidenceImportSpec, error) {
+	bundle, err := engine.Load(defs.FS, connector)
+	if err != nil || bundle.Certification == nil || bundle.Certification.EvidenceImport == nil {
+		return nil, errors.New("connector does not declare an evidence import provider")
+	}
+	provider := bundle.Certification.EvidenceImport.Provider
+	if !isSafeProofIdentifier(provider) {
+		return nil, errors.New("connector declares an unsafe evidence import provider")
+	}
+	return bundle.Certification.EvidenceImport, nil
+}
+
+func validateNativeDatabaseTransportEvidenceReport(report certify.Report, connector string) error {
 	if report.Connector != connector || !report.Passed || report.Capabilities.DeclaredTransport == nil {
 		return errors.New("report is not a completed passing connector certification")
 	}
@@ -331,7 +587,7 @@ func validatePostgresTransportEvidenceReport(report certify.Report, connector st
 	return nil
 }
 
-func postgresTransportEvidencePreparedValue(envName string) (string, error) {
+func certificationEvidencePreparedValue(envName string) (string, error) {
 	value := os.Getenv(envName)
 	if strings.TrimSpace(value) == "" {
 		return "", fmt.Errorf("environment variable %s is empty", envName)

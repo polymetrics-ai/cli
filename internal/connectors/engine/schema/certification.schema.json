@@ -192,6 +192,47 @@
         }
       }
     },
+    "evidence_import": {
+      "type": "object",
+      "required": ["provider"],
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "type": "string" },
+        "database": {
+          "type": "object",
+          "required": ["protocol", "operation_prefix", "change_capture_statement"],
+          "additionalProperties": false,
+          "properties": {
+            "protocol": { "type": "string" },
+            "operation_prefix": { "type": "string" },
+            "change_capture_statement": { "type": "string" }
+          }
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["scope"],
+            "additionalProperties": false,
+            "properties": {
+              "scope": { "type": "string", "enum": ["capability", "workflow", "sync_mode", "flow"] },
+              "function_kind": { "type": "string" },
+              "workflow_kind": { "type": "string" },
+              "sync_mode": { "type": "string" },
+              "primitive": { "type": "string" },
+              "source": { "type": "string" },
+              "destination": { "type": "string" },
+              "flow_kind": { "type": "string" },
+              "stage_sets": {
+                "type": "array",
+                "items": { "type": "string", "enum": ["direct_read_candidates", "binary_candidates", "graphql_live_candidates"] }
+              },
+              "stages": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
     "write_pairings": {
       "type": "array",
       "items": {

@@ -58,3 +58,25 @@ func TestGraphQLCertificationDeclaredButUnexecutableStaysUnexecutable(t *testing
 		t.Fatalf("GraphQL stage = %+v, want one non-passing unexecutable stage", report.Stages)
 	}
 }
+
+func TestGraphQLReadOnlyCertificateSkipsFixtureBoundInventoryBoundary(t *testing.T) {
+	rc := &runContext{
+		opts: Options{Connector: "github", Full: true, DirectReadOnly: true},
+		graphQLInventory: func(string) (graphQLCertificationInventory, error) {
+			return graphQLCertificationInventory{
+				SchemaConformant: 29,
+				FixtureBound:     274,
+			}, nil
+		},
+	}
+	report := Report{}
+	if err := stageGraphQLSchemaConformance(rc, &report); err != nil {
+		t.Fatalf("stageGraphQLSchemaConformance() error = %v", err)
+	}
+	if len(report.Stages) != 2 || report.Stages[1].Name != "graphql_inventory_boundary" || report.Stages[1].Status != "skipped" {
+		t.Fatalf("read-only GraphQL stages = %+v, want an explicit skipped inventory boundary", report.Stages)
+	}
+	if !allStagesPassed(report.Stages) {
+		t.Fatalf("a read-only GraphQL report must remain passing when only fixture-bound mutations remain: %+v", report.Stages)
+	}
+}
