@@ -15,7 +15,7 @@ All commands in this receipt were invoked directly through the built `pm` binary
 | actions retention-limit view | entitlement | GitHub: `http 402` for `/actions/cache/retention-limit`. |
 | actions selected-actions view | entitlement | GitHub: `http 409` for `/actions/permissions/selected-actions`. |
 | actions storage-limit view | entitlement | GitHub: `http 402` for `/actions/cache/storage-limit`. |
-| interactions get-pull-request-creation-cap-for-repo | product_defect | GitHub: `http 405` for `/interaction-limits/pulls/creation-cap`; endpoint/method surface requires correction. |
+| interactions get-pull-request-creation-cap-for-repo | provider_error | `pm` received HTTP `405`; an independent raw HTTPS GET to the identical `api.github.com` URL with the same classic credential also returned HTTP `405` (`Server Error`). This is GitHub behaviour, not a connector defect. |
 | import large_files view | product_defect | GitHub: `http 404`; provider states the endpoint is deprecated and directs callers to GitHub Importer. |
 | import view | product_defect | GitHub: `http 404`; provider states the endpoint is deprecated and directs callers to GitHub Importer. |
 | installation view | wrong_credential | Runtime: `provider rejected the credential` with both classic and fine-grained credentials. |
