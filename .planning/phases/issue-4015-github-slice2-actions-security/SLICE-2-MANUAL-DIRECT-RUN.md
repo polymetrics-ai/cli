@@ -27,3 +27,18 @@ The bounded structural exception supplied by the fleet audit is product work, no
 `actions create-org-variable` is also a product defect in the contained write path: the real command created `rplan_b6ec67ad91b44496`, and preview resolved `POST /orgs/Polymetrics-Cert/actions/variables`, but it remained `planned` with zero preview time and emitted no `Approval token:` line.  It therefore cannot reach the required approval-and-execute stage.
 
 `dependabot list-alerts-for-org` is a controlled product defect: at the same time, with the same classic credential and `Polymetrics-Cert` organization, the direct provider GET `/orgs/Polymetrics-Cert/dependabot/alerts` returned HTTP 200 with `[]`, while `pm github dependabot list-alerts-for-org --org Polymetrics-Cert` returned HTTP 400.  GitHub accepts the request; the connector command malforms it.
+
+## Continuing direct batch
+
+The subsequent direct batch used the same disposable credential and asserted `status: 200` plus a non-null JSON object or array, rejecting `null`, scalar values, malformed envelopes, and any non-200 response.  Evidence for each passing row was schema-v2 validated immediately.
+
+| Command group | Outcome |
+| --- | --- |
+| Actions organization permission, fork-workflow, self-hosted runner, custom-image, and runner-application reads | certified where GitHub returned `200`; individual schema-v2 records carry the captured exchange. |
+| Agents organization/repository secret, variable, and public-key reads | certified. |
+| Billing organization and disposable-user usage report reads | certified where GitHub returned `200`. |
+| Interactions organization and authenticated-user restriction/capability reads | certified. |
+| GitHub-hosted runner images, limits, machine sizes, platforms, and list reads | entitlement: GitHub returned `404` with `GitHub hosted runners are not supported for this organization`. |
+| Actions selected-repository permission reads | entitlement: GitHub returned `409` for this organization configuration. |
+| Actions allowed-actions organization read | entitlement: GitHub returned `409` for `/actions/permissions/selected-actions`. |
+| Billing budgets read | entitlement: GitHub returned `400` for the organization billing-budgets endpoint. |
