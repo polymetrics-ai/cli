@@ -9,13 +9,13 @@ require (
 	github.com/jackc/pglogrepl v0.0.0-20260401131349-e37c41485510
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/marcboeker/go-duckdb v1.8.5
-	github.com/pelletier/go-toml/v2 v2.2.4
-	github.com/redis/go-redis/v9 v9.21.0
+	github.com/pelletier/go-toml/v2 v2.4.3
+	github.com/redis/go-redis/v9 v9.22.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
-	go.temporal.io/api v1.63.1
-	go.temporal.io/sdk v1.45.0
+	go.temporal.io/api v1.63.5
+	go.temporal.io/sdk v1.47.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
