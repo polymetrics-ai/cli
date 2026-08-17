@@ -14,6 +14,7 @@
 - `internal/connectors/defs/github/certification-sweep.json` has 228 implemented commands without `api_surface`.
 - 214 summaries are parseable endpoint addresses: `METHOD /path`, optionally followed by one parenthesized write-action identifier. The suffix is metadata, not part of the endpoint.
 - The other 14 are intentional friendly aliases and retain no API surface: `issue close`, `issue reopen`, `pr close`, `pr comment`, `pr lock`, `pr reopen`, `pr unlock`, `repo create`, `repo delete`, `repo archive`, `repo unarchive`, `secret set`, `secret delete`, and `cache delete`.
+- The repository-wide invariant also exposed 34 matching Workday REST rows. They are corrected by the same generic rule; this is a consequence of applying the intended all-intent contract rather than a connector-specific expansion.
 - Current generated sweep buckets are `fixture_required=1466`, `eligible_pending_live=25`, `not_applicable=50`, `schema_conformant=29`, and `provider_refused=1`: `1466 + 25 + 50 + 29 + 1 = 1571`.
 
 ## Causal path and decision

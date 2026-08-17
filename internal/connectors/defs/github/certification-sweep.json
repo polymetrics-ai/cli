@@ -261,7 +261,12 @@
           "maps_to": "record.run_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approve"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -293,7 +298,12 @@
           "maps_to": "record.artifact_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --artifact-id",
       "required_flags": [
@@ -344,7 +354,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/caches"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -361,7 +376,12 @@
           "maps_to": "record.cache_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/caches/{cache_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -1040,7 +1060,12 @@
           "maps_to": "record.run_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -1057,7 +1082,12 @@
           "maps_to": "record.workflow_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -1161,7 +1191,12 @@
           "maps_to": "record.workflow_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -1242,7 +1277,12 @@
           "maps_to": "record.run_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --run-id",
       "required_flags": [
@@ -1285,7 +1325,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runners/generate-jitconfig"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2152,7 +2197,12 @@
           "maps_to": "record.runner_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2169,7 +2219,12 @@
           "maps_to": "record.runner_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2192,7 +2247,12 @@
           "maps_to": "record.runner_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2209,7 +2269,12 @@
           "maps_to": "record.runner_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2700,7 +2765,12 @@
           "maps_to": "record.run_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2747,7 +2817,12 @@
           "maps_to": "record.run_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2782,7 +2857,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2792,7 +2872,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/access"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2802,7 +2887,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2812,7 +2902,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2822,7 +2917,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2832,7 +2932,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2842,7 +2947,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/workflow"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -2890,7 +3000,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runners/registration-token"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -3127,7 +3242,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runners/remove-token"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -3144,7 +3264,12 @@
           "maps_to": "record.job_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -3167,7 +3292,12 @@
           "maps_to": "record.run_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --run-id",
       "required_flags": [
@@ -3180,7 +3310,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/cache/retention-limit"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -3212,7 +3347,12 @@
           "maps_to": "record.runner_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -4149,7 +4289,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/cache/storage-limit"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -4174,7 +4319,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -6583,7 +6733,12 @@
           "maps_to": "record.repository_ids"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/app/installations/{installation_id}/access_tokens"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --installation-id",
       "required_flags": [
@@ -6609,7 +6764,12 @@
           "maps_to": "record.client_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/applications/{client_id}/grant"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --access-token, --client-id",
       "required_flags": [
@@ -6636,7 +6796,12 @@
           "maps_to": "record.client_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/applications/{client_id}/token"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --access-token, --client-id",
       "required_flags": [
@@ -6663,7 +6828,12 @@
           "maps_to": "record.client_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/applications/{client_id}/token"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --access-token, --client-id",
       "required_flags": [
@@ -6690,7 +6860,12 @@
           "maps_to": "record.client_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/applications/{client_id}/token"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --access-token, --client-id",
       "required_flags": [
@@ -7590,7 +7765,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/attestations"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -7661,7 +7841,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/autolinks"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -7678,7 +7863,12 @@
           "maps_to": "record.autolink_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -7713,7 +7903,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/automated-security-fixes"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -7723,7 +7918,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/automated-security-fixes"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8199,7 +8399,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8216,7 +8421,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8233,7 +8443,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8275,7 +8490,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8292,7 +8512,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8309,7 +8534,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8351,7 +8581,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8368,7 +8603,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8410,7 +8650,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8427,7 +8672,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8469,7 +8719,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/rename"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8486,7 +8741,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8503,7 +8763,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8545,7 +8810,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8562,7 +8832,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8604,7 +8879,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8621,7 +8901,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8663,7 +8948,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8705,7 +8995,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8722,7 +9017,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8739,7 +9039,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8781,7 +9086,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8798,7 +9108,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -8815,7 +9130,12 @@
           "maps_to": "record.branch"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9111,7 +9431,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/check-runs"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9128,7 +9453,12 @@
           "maps_to": "record.check_run_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9145,7 +9475,12 @@
           "maps_to": "record.check_run_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9232,7 +9567,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/check-suites"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9242,7 +9582,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/check-suites/preferences"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9259,7 +9604,12 @@
           "maps_to": "record.check_suite_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9495,7 +9845,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/code-quality/setup"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9520,7 +9875,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/code-scanning/sarifs"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9562,7 +9922,12 @@
           "maps_to": "record.analysis_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9669,7 +10034,12 @@
           "maps_to": "record.alert_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9711,7 +10081,12 @@
           "maps_to": "record.alert_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9728,7 +10103,12 @@
           "maps_to": "record.language"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9778,7 +10158,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/code-scanning/default-setup"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -9929,7 +10314,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -11668,7 +12058,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/codespaces"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -11721,7 +12116,12 @@
           "maps_to": "record.working_directory"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/codespaces"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --pull-request",
       "required_flags": [
@@ -11807,7 +12207,12 @@
           "maps_to": "record.working_directory"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/codespaces"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --repository-id",
       "required_flags": [
@@ -13044,7 +13449,12 @@
           "maps_to": "record.comment_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -13067,7 +13477,12 @@
           "maps_to": "record.reaction_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -16333,7 +16748,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/dependency-graph/snapshots"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -16350,7 +16770,12 @@
           "maps_to": "record.deployment_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/deployments/{deployment_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -16367,7 +16792,12 @@
           "maps_to": "record.deployment_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -16523,7 +16953,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/dispatches"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -17195,7 +17630,12 @@
           "maps_to": "record.environment_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -17218,7 +17658,12 @@
           "maps_to": "record.environment_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -17241,7 +17686,12 @@
           "maps_to": "record.environment_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -17315,7 +17765,12 @@
           "maps_to": "record.environment_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -17338,7 +17793,12 @@
           "maps_to": "record.protection_rule_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -18165,7 +18625,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/git/blobs"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -18200,7 +18665,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/git/commits"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -18328,7 +18798,12 @@
           "maps_to": "record.type"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/git/tags"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --message, --object, --tag, --type",
       "required_flags": [
@@ -18369,7 +18844,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/git/trees"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26705,7 +27185,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/immutable-releases"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26715,7 +27200,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/immutable-releases"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26747,7 +27237,12 @@
           "maps_to": "record.author_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/import/authors/{author_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26779,7 +27274,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/import"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26804,7 +27304,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/import/lfs"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26814,7 +27319,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/import"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26824,7 +27334,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/import"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26864,7 +27379,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26874,7 +27394,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26899,7 +27424,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/interaction-limits"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -26909,7 +27439,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/interaction-limits"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -27223,7 +27758,12 @@
           "maps_to": "record.invitation_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/invitations/{invitation_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -27240,7 +27780,12 @@
           "maps_to": "record.invitation_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/invitations/{invitation_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -27743,7 +28288,12 @@
           "maps_to": "record.issue_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -27766,7 +28316,12 @@
           "maps_to": "record.issue_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -27995,7 +28550,12 @@
           "maps_to": "record.issue_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28018,7 +28578,12 @@
           "maps_to": "record.issue_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28035,7 +28600,12 @@
           "maps_to": "record.issue_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28077,7 +28647,12 @@
           "maps_to": "record.issue_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --issue-number",
       "required_flags": [
@@ -28239,7 +28814,12 @@
           "maps_to": "record.comment_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28256,7 +28836,12 @@
           "maps_to": "record.comment_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28273,7 +28858,12 @@
           "maps_to": "record.issue_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28290,7 +28880,12 @@
           "maps_to": "record.comment_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28307,7 +28902,12 @@
           "maps_to": "record.issue_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28330,7 +28930,12 @@
           "maps_to": "record.reaction_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28353,7 +28958,12 @@
           "maps_to": "record.reaction_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28452,7 +29062,12 @@
           "maps_to": "record.issue_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28469,7 +29084,12 @@
           "maps_to": "record.issue_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -28872,7 +29492,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/merge-upstream"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -29506,7 +30131,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/notifications"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -29855,7 +30485,12 @@
           "maps_to": "record.start_delimiter"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --custom-pattern-version, --end-delimiter, --org, --pattern-id",
       "required_flags": [
@@ -29920,7 +30555,12 @@
           "maps_to": "record.start_delimiter"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --custom-pattern-version, --must-match, --org, --pattern-id",
       "required_flags": [
@@ -29985,7 +30625,12 @@
           "maps_to": "record.start_delimiter"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --custom-pattern-version, --must-not-match, --org, --pattern-id",
       "required_flags": [
@@ -30050,7 +30695,12 @@
           "maps_to": "record.start_delimiter"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --custom-pattern-version, --org, --pattern, --pattern-id",
       "required_flags": [
@@ -30115,7 +30765,12 @@
           "maps_to": "record.start_delimiter"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --custom-pattern-version, --org, --pattern-id, --start-delimiter",
       "required_flags": [
@@ -30254,7 +30909,12 @@
           "maps_to": "record.org"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/attestations/delete-request"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --attestation-ids, --org",
       "required_flags": [
@@ -30281,7 +30941,12 @@
           "maps_to": "record.subject_digests"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/attestations/delete-request"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --org, --subject-digests",
       "required_flags": [
@@ -30414,7 +31079,12 @@
           "maps_to": "record.team_managers"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/campaigns"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --code-scanning-alerts, --description, --ends-at, --name, --org",
       "required_flags": [
@@ -30486,7 +31156,12 @@
           "maps_to": "record.team_managers"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/campaigns"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --description, --ends-at, --name, --org, --secret-scanning-alerts",
       "required_flags": [
@@ -32841,7 +33516,12 @@
           "maps_to": "record.project_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/fields"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --issue-field-id, --org, --project-number",
       "required_flags": [
@@ -32887,7 +33567,12 @@
           "maps_to": "record.project_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/fields"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --data-type, --iteration-configuration, --name, --org, --project-number",
       "required_flags": [
@@ -32929,7 +33614,12 @@
           "maps_to": "record.project_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/fields"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --data-type, --name, --org, --project-number",
       "required_flags": [
@@ -32976,7 +33666,12 @@
           "maps_to": "record.single_select_options"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/fields"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --data-type, --name, --org, --project-number, --single-select-options",
       "required_flags": [
@@ -33036,7 +33731,12 @@
           "maps_to": "record.type"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/items"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --id, --org, --project-number, --type",
       "required_flags": [
@@ -33095,7 +33795,12 @@
           "maps_to": "record.type"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/items"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --number, --org, --owner, --project-number, --repo, --type",
       "required_flags": [
@@ -35462,7 +36167,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pages/builds"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -35519,7 +36229,12 @@
           "maps_to": "record.pages_deployment_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -35529,7 +36244,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pages"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -35539,7 +36259,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/pages"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -35549,7 +36274,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pages/deployments"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -35614,7 +36344,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/pages"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -36728,7 +37463,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -36738,7 +37478,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -37677,7 +38422,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/properties/values"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -37831,7 +38581,12 @@
           "maps_to": "record.pull_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/codespaces"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -38140,7 +38895,12 @@
           "maps_to": "record.comment_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -38163,7 +38923,12 @@
           "maps_to": "record.reaction_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -38233,7 +38998,12 @@
           "maps_to": "record.pull_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --body, --comment-id, --pull-number",
       "required_flags": [
@@ -38255,7 +39025,12 @@
           "maps_to": "record.pull_number"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -38303,7 +39078,12 @@
           "maps_to": "record.review_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --pull-number, --review-id",
       "required_flags": [
@@ -38336,7 +39116,12 @@
           "maps_to": "record.review_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --body, --pull-number, --review-id",
       "required_flags": [
@@ -38818,7 +39603,12 @@
           "maps_to": "record.release_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -38828,7 +39618,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/releases/generate-notes"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -38860,7 +39655,12 @@
           "maps_to": "record.release_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -38883,7 +39683,12 @@
           "maps_to": "record.release_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -39151,7 +39956,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -39575,7 +40385,12 @@
           "maps_to": "record.start_delimiter"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --custom-pattern-version, --end-delimiter, --pattern-id",
       "required_flags": [
@@ -39633,7 +40448,12 @@
           "maps_to": "record.start_delimiter"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --custom-pattern-version, --must-match, --pattern-id",
       "required_flags": [
@@ -39691,7 +40511,12 @@
           "maps_to": "record.start_delimiter"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --custom-pattern-version, --must-not-match, --pattern-id",
       "required_flags": [
@@ -39749,7 +40574,12 @@
           "maps_to": "record.start_delimiter"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --custom-pattern-version, --pattern, --pattern-id",
       "required_flags": [
@@ -39807,7 +40637,12 @@
           "maps_to": "record.start_delimiter"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --custom-pattern-version, --pattern-id, --start-delimiter",
       "required_flags": [
@@ -39852,7 +40687,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -41457,7 +42297,12 @@
           "maps_to": "record.secret_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -41474,7 +42319,12 @@
           "maps_to": "record.secret_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -41491,7 +42341,12 @@
           "maps_to": "record.secret_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -41514,7 +42369,12 @@
           "maps_to": "record.secret_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -41531,7 +42391,12 @@
           "maps_to": "record.secret_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --secret-name",
       "required_flags": [
@@ -41602,7 +42467,12 @@
           "maps_to": "record.secret_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -41619,7 +42489,12 @@
           "maps_to": "record.secret_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -41636,7 +42511,12 @@
           "maps_to": "record.secret_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -41659,7 +42539,12 @@
           "maps_to": "record.secret_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -41688,7 +42573,12 @@
           "maps_to": "record.secret_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --encrypted-value, --key-id, --secret-name",
       "required_flags": [
@@ -41983,7 +42873,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/secret-scanning/push-protection-bypasses"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -42039,7 +42934,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/security-advisories"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -42056,7 +42956,12 @@
           "maps_to": "record.ghsa_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -42073,7 +42978,12 @@
           "maps_to": "record.ghsa_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -42148,7 +43058,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/security-advisories/reports"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -42165,7 +43080,12 @@
           "maps_to": "record.ghsa_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -42317,7 +43237,12 @@
           "maps_to": "record.sha"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/statuses/{sha}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -42327,7 +43252,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/subscription"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -42337,7 +43267,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/subscription"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -43662,7 +44597,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/transfer"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -43704,7 +44644,12 @@
           "maps_to": "record.emails"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/emails"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --emails",
       "required_flags": [
@@ -43724,7 +44669,12 @@
           "maps_to": "record.emails"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/emails"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --emails",
       "required_flags": [
@@ -43744,7 +44694,12 @@
           "maps_to": "record.emails"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/user/emails"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --emails",
       "required_flags": [
@@ -43764,7 +44719,12 @@
           "maps_to": "record.emails"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/user/emails"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --emails",
       "required_flags": [
@@ -43872,7 +44832,12 @@
           "maps_to": "record.username"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/attestations/delete-request"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --attestation-ids, --username",
       "required_flags": [
@@ -43899,7 +44864,12 @@
           "maps_to": "record.username"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/attestations/delete-request"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --subject-digests, --username",
       "required_flags": [
@@ -44818,7 +45788,12 @@
           "maps_to": "record.username"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/projectsV2/{project_number}/fields"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --data-type, --iteration-configuration, --name, --project-number, --username",
       "required_flags": [
@@ -44860,7 +45835,12 @@
           "maps_to": "record.username"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/projectsV2/{project_number}/fields"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --data-type, --name, --project-number, --username",
       "required_flags": [
@@ -44907,7 +45887,12 @@
           "maps_to": "record.username"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/projectsV2/{project_number}/fields"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --data-type, --name, --project-number, --single-select-options, --username",
       "required_flags": [
@@ -44967,7 +45952,12 @@
           "maps_to": "record.username"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/projectsV2/{project_number}/items"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --id, --project-number, --type, --username",
       "required_flags": [
@@ -45026,7 +46016,12 @@
           "maps_to": "record.username"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/projectsV2/{project_number}/items"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --number, --owner, --project-number, --repo, --type, --username",
       "required_flags": [
@@ -45187,7 +46182,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/variables"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45204,7 +46204,12 @@
           "maps_to": "record.environment_name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45227,7 +46232,12 @@
           "maps_to": "record.value"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/agents/variables"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name, --value",
       "required_flags": [
@@ -45258,7 +46268,12 @@
           "maps_to": "record.name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45281,7 +46296,12 @@
           "maps_to": "record.name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45298,7 +46318,12 @@
           "maps_to": "record.name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/agents/variables/{name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name",
       "required_flags": [
@@ -45348,7 +46373,12 @@
           "maps_to": "record.name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45371,7 +46401,12 @@
           "maps_to": "record.name"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45394,7 +46429,12 @@
           "maps_to": "record.value"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/agents/variables/{name}"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name",
       "required_flags": [
@@ -45407,7 +46447,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/vulnerability-alerts"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45417,7 +46462,12 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/vulnerability-alerts"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45455,7 +46505,12 @@
           "maps_to": "record.hook_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45472,7 +46527,12 @@
           "maps_to": "record.hook_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/pings"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45489,7 +46549,12 @@
           "maps_to": "record.hook_id"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/tests"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
@@ -45530,7 +46595,12 @@
           "maps_to": "record.url"
         }
       ],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config"
+        }
+      ],
       "status": "fixture_required",
       "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --hook-id",
       "required_flags": [

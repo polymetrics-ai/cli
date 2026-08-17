@@ -15,9 +15,8 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-// surfaceSync derives the command-surface metadata that operation-backed
-// direct_read, direct_write, and binary_download commands need in order to
-// actually execute, from the bundle's own operations.json.
+// surfaceSync derives the command-surface metadata that executable commands
+// need in order to actually execute, from the bundle's own declarations.
 //
 // It exists because the same facts previously had to be hand-copied into
 // cli_surface.json, and hand-copying is what let 174 commands claim
@@ -33,11 +32,13 @@ import (
 // filled, or a hand-edited api_surface would pass --check clean while help,
 // docs and the website advertised an endpoint the executor never calls:
 //
-//   - api_surface  <- the operation's endpoint method + path, taken from the
-//     block its kind declares (rest for direct_read and direct_write, binary
-//     for binary_download). The endpoint is already tracked in
-//     api_surface.json, so this is a join across consistent files, never an
-//     invented endpoint.
+//   - api_surface  <- any command's declared endpoint summary, independent of
+//     its intent. A raw `METHOD /path` summary is an imported address, not a
+//     human description; an optional write-action annotation is ignored. An
+//     operation-backed endpoint remains an authoritative, more specific source
+//     for direct_read, direct_write, and binary_download. The endpoint is
+//     already tracked in api_surface.json, so this is a join across consistent
+//     files, never an invented endpoint.
 //   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
 //     that endpoint's path.
 //   - flags[].required <- true when the mapped REST path parameter is declared
@@ -59,9 +60,9 @@ import (
 //     non-positive, matching the direct operation executors' default. A
 //     positive value is the operation's own declaration and is left alone.
 //
-// It never touches a command that is not an implemented operation-backed
-// direct_read, direct_write, or binary_download, and never invents an endpoint
-// for an operation that does not declare one.
+// It never touches a command that is not implemented, and never invents an
+// endpoint: a command must declare a parseable endpoint summary or an
+// operation endpoint before api_surface can be synchronized.
 const (
 	// defaultDirectReadOutputPolicy mirrors engine.directReadPolicyJSONRedacted.
 	defaultDirectReadOutputPolicy = "json_redacted"
@@ -70,6 +71,12 @@ const (
 )
 
 var surfacePathVarRE = regexp.MustCompile(`\{([^}]+)\}`)
+
+// surfaceSummaryEndpointRE identifies the source-material form used when a
+// command has an endpoint but no operation-backed transport. The optional
+// annotation names the write action that produced the row; it is not part of
+// the provider address.
+var surfaceSummaryEndpointRE = regexp.MustCompile(`^([A-Z]+) (\/[^[:space:]]+)(?: \([^)]*\))?$`)
 
 // surfaceSyncFields counts one outcome across the synced fields.
 type surfaceSyncFields struct {
@@ -305,11 +312,15 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		if !ok {
 			continue
 		}
-		intent := stringField(cmd, "intent")
-		if intent != "direct_read" && intent != "direct_write" && intent != "binary_download" {
+		if stringField(cmd, "availability") != "implemented" {
 			continue
 		}
-		if stringField(cmd, "availability") != "implemented" {
+		if method, endpointPath, ok := surfaceEndpointFromSummary(stringField(cmd, "summary")); ok {
+			synchronizeCommandAPISurface(cmd, method, endpointPath, &stats)
+		}
+
+		intent := stringField(cmd, "intent")
+		if intent != "direct_read" && intent != "direct_write" && intent != "binary_download" {
 			continue
 		}
 		if intent == "direct_read" {
@@ -357,19 +368,9 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			continue
 		}
 
-		// DERIVED: the operation's endpoint is the only source, so a present
-		// api_surface that disagrees with it is drift and gets replaced. The
-		// schema allows exactly method and path on an entry, so replacing the
-		// whole array loses nothing an author could have written.
-		existing := arrayField(cmd, "api_surface")
-		switch {
-		case len(existing) == 0:
-			cmd.set("api_surface", derivedAPISurface(method, endpointPath))
-			stats.Filled.APISurface++
-		case len(existing) != 1 || !endpointMatches(existing[0], method, endpointPath):
-			cmd.set("api_surface", derivedAPISurface(method, endpointPath))
-			stats.Corrected.APISurface++
-		}
+		// DERIVED: the operation endpoint is authoritative for operation-backed
+		// commands, so it corrects an imported summary endpoint if they diverge.
+		synchronizeCommandAPISurface(cmd, method, endpointPath, &stats)
 
 		// A direct write's response policy is part of the operation's own
 		// preview-bound contract, so it must exactly match. Direct reads use a
@@ -476,6 +477,32 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		}
 	}
 	return stats, nil
+}
+
+// surfaceEndpointFromSummary extracts the declared provider endpoint from the
+// source-material summary form. Friendly human summaries intentionally do not
+// match, so an ergonomic alias with no one-to-one endpoint remains unbound.
+func surfaceEndpointFromSummary(summary string) (method, path string, ok bool) {
+	parts := surfaceSummaryEndpointRE.FindStringSubmatch(strings.TrimSpace(summary))
+	if len(parts) != 3 {
+		return "", "", false
+	}
+	return parts[1], parts[2], true
+}
+
+// synchronizeCommandAPISurface applies one declaration-owned endpoint to a
+// command. The schema allows exactly method and path on an entry, so replacing
+// a divergent array loses no author-owned field.
+func synchronizeCommandAPISurface(cmd *orderedObject, method, path string, stats *surfaceSyncStats) {
+	existing := arrayField(cmd, "api_surface")
+	switch {
+	case len(existing) == 0:
+		cmd.set("api_surface", derivedAPISurface(method, path))
+		stats.Filled.APISurface++
+	case len(existing) != 1 || !endpointMatches(existing[0], method, path):
+		cmd.set("api_surface", derivedAPISurface(method, path))
+		stats.Corrected.APISurface++
+	}
 }
 
 // removeLegacyDirectReadCursorFlags removes old raw provider-cursor flags from

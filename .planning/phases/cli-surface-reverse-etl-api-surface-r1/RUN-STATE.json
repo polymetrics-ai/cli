@@ -1,6 +1,6 @@
 {
   "phase": "cli-surface-reverse-etl-api-surface-r1",
-  "status": "planned",
+  "status": "implemented_pending_verification",
   "delivery": "direct-pr",
   "base": "integration/4015-mvp-flat-r1@db494bc8fba63023b9ca79b022c2b9dd638aaf76",
   "branch": "fm/cli-surface-reverse-etl-api-surface-r1",

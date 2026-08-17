@@ -14978,7 +14978,7 @@
     },
     {
       "path": "communications create-managed-recipient",
-      "summary": "This API is used to manage a user\u2019s consent status for a messaging channel, allowing opt-in or opt-out actions using the associated phone number.",
+      "summary": "This API is used to manage a user’s consent status for a messaging channel, allowing opt-in or opt-out actions using the associated phone number.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "communications_create_managed_recipient",
@@ -15129,7 +15129,13 @@
       "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/",
       "risk": "Writes to the configured Workday tenant.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/connect/v2/messageTemplates."
+        }
+      ]
     },
     {
       "path": "connect update-message-templates",
@@ -15267,7 +15273,13 @@
       "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/",
       "risk": "Writes to the configured Workday tenant.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customObjectDefinition/v1/definitions."
+        }
+      ]
     },
     {
       "path": "custom-object-definition delete-definitions",
@@ -15327,6 +15339,12 @@
           "maps_to": "record.ID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customObjectDefinition/v1/definitions/{ID}/activate."
+        }
       ]
     },
     {
@@ -15346,6 +15364,12 @@
           "summary": "Record field ID.",
           "maps_to": "record.ID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customObjectDefinition/v1/definitions/{ID}/conditionRules."
         }
       ]
     },
@@ -15421,6 +15445,12 @@
           "maps_to": "record.ID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customObjectDefinition/v1/definitions/{ID}/fields."
+        }
       ]
     },
     {
@@ -15495,6 +15525,12 @@
           "maps_to": "record.ID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customObjectDefinition/v1/definitions/{ID}/validations."
+        }
       ]
     },
     {
@@ -15561,7 +15597,13 @@
       "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/",
       "risk": "Writes to the configured Workday tenant.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customObjectDefinition/v1/fieldTypes."
+        }
+      ]
     },
     {
       "path": "custom-object-definition replace-field-types",
@@ -15600,6 +15642,12 @@
           "summary": "Record field ID.",
           "maps_to": "record.ID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customObjectDefinition/v1/fieldTypes/{ID}/listValues."
         }
       ]
     },
@@ -15672,7 +15720,13 @@
       "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/",
       "risk": "Writes to the configured Workday tenant.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/expense/v1/entries."
+        }
+      ]
     },
     {
       "path": "expense delete-entries",
@@ -15691,6 +15745,12 @@
           "summary": "Record field ID.",
           "maps_to": "record.ID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/expense/v1/entries/{ID}."
         }
       ]
     },
@@ -15711,6 +15771,12 @@
           "summary": "Record field ID.",
           "maps_to": "record.ID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/expense/v1/entries/{ID}."
         }
       ]
     },
@@ -15764,7 +15830,13 @@
       "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/",
       "risk": "Writes to the configured Workday tenant.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/expense/v1/reports."
+        }
+      ]
     },
     {
       "path": "expense create-reports-by-id-lines",
@@ -15803,6 +15875,12 @@
           "summary": "Record field ID.",
           "maps_to": "record.ID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/expense/v1/reports/{ID}/submit."
         }
       ]
     },
@@ -15990,6 +16068,12 @@
           "maps_to": "record.ID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/helpArticle/v1/articleVersions/{ID}/articleEffectiveDate."
+        }
       ]
     },
     {
@@ -16081,6 +16165,12 @@
           "maps_to": "record.ID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/helpCase/v4/cases/{ID}/comment."
+        }
       ]
     },
     {
@@ -16100,6 +16190,12 @@
           "summary": "Record field ID.",
           "maps_to": "record.ID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/helpCase/v4/cases/{ID}/internalNoteTimeline."
         }
       ]
     },
@@ -16398,7 +16494,13 @@
       "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/",
       "risk": "Writes to the configured Workday tenant.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/performanceEnablement/v5/cascadedGoalEvent."
+        }
+      ]
     },
     {
       "path": "performance-enablement update-give-requested-feedback-events",
@@ -16442,7 +16544,13 @@
       "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/",
       "risk": "Writes to the configured Workday tenant.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/performanceEnablement/v5/organizationGoals."
+        }
+      ]
     },
     {
       "path": "performance-enablement update-organization-goals",
@@ -16621,6 +16729,12 @@
           "maps_to": "record.ID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/person/v4/homeContactInformationChanges/{ID}/addresses."
+        }
       ]
     },
     {
@@ -16648,6 +16762,12 @@
           "maps_to": "record.subresourceID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/person/v4/homeContactInformationChanges/{ID}/addresses/{subresourceID}."
+        }
       ]
     },
     {
@@ -16674,6 +16794,12 @@
           "summary": "Record field subresourceID.",
           "maps_to": "record.subresourceID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/person/v4/homeContactInformationChanges/{ID}/addresses/{subresourceID}."
         }
       ]
     },
@@ -17028,6 +17154,12 @@
           "maps_to": "record.ID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/person/v4/workContactInformationChanges/{ID}."
+        }
       ]
     },
     {
@@ -17047,6 +17179,12 @@
           "summary": "Record field ID.",
           "maps_to": "record.ID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/person/v4/workContactInformationChanges/{ID}/addresses."
         }
       ]
     },
@@ -17075,6 +17213,12 @@
           "maps_to": "record.subresourceID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/person/v4/workContactInformationChanges/{ID}/addresses/{subresourceID}."
+        }
       ]
     },
     {
@@ -17101,6 +17245,12 @@
           "summary": "Record field subresourceID.",
           "maps_to": "record.subresourceID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/person/v4/workContactInformationChanges/{ID}/addresses/{subresourceID}."
         }
       ]
     },
@@ -17956,6 +18106,12 @@
           "summary": "Record field ID.",
           "maps_to": "record.ID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/recruiting/v4/interviews/{ID}/feedback."
         }
       ]
     },
@@ -19016,6 +19172,12 @@
           "maps_to": "record.ID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/staffing/v7/workers/{ID}/skillItems."
+        }
       ]
     },
     {
@@ -19035,6 +19197,12 @@
           "summary": "Record field ID.",
           "maps_to": "record.ID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/staffing/v7/workers/{ID}/workContactInformationChanges."
         }
       ]
     },
@@ -19073,6 +19241,12 @@
           "maps_to": "record.ID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/studentCore/v1/holds/{ID}/overrideHold."
+        }
       ]
     },
     {
@@ -19092,6 +19266,12 @@
           "summary": "Record field ID.",
           "maps_to": "record.ID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/studentCore/v1/holds/{ID}/removeHold."
         }
       ]
     },
@@ -19187,6 +19367,12 @@
           "maps_to": "record.subresourceID",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/studentCore/v1/immigrationEvents/{ID}/dependentImmigrationData/{subresourceID}."
+        }
       ]
     },
     {
@@ -19233,6 +19419,12 @@
           "summary": "Record field subresourceID.",
           "maps_to": "record.subresourceID",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/studentCore/v1/immigrationEvents/{ID}/immigrationData/{subresourceID}."
         }
       ]
     },
@@ -19520,7 +19712,13 @@
       "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/",
       "risk": "Writes to the configured Workday tenant.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/talentManagement/v2/successionPlans."
+        }
+      ]
     },
     {
       "path": "time-tracking create-time-clock-events",
@@ -19584,7 +19782,13 @@
       "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/",
       "risk": "Writes to the configured Workday tenant.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/timeTracking/v5/workerTimeAttestation."
+        }
+      ]
     },
     {
       "path": "time-tracking create-workers-by-id-time-review-events",
