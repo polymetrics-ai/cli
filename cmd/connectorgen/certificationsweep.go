@@ -46,18 +46,19 @@ type certificationSweep struct {
 // overlay from certification.json; its command identity always originates in
 // cli_surface.json.
 type certificationSweepCommand struct {
-	Summary          string                                `json:"summary"`
-	Path             string                                `json:"path"`
-	Intent           string                                `json:"intent"`
-	Availability     string                                `json:"availability"`
-	Stream           string                                `json:"stream,omitempty"`
-	Flags            []certificationSweepFlag              `json:"flags"`
-	APISurface       []engine.CLISurfaceEndpointRef        `json:"api_surface"`
-	Status           string                                `json:"status"`
-	Reason           string                                `json:"reason"`
-	RequiredFlags    []string                              `json:"required_flags,omitempty"`
-	OutputAssertions []engine.CertificationOutputAssertion `json:"output_assertions,omitempty"`
-	AssertionSource  string                                `json:"assertion_source,omitempty"`
+	Summary             string                                `json:"summary"`
+	Path                string                                `json:"path"`
+	Intent              string                                `json:"intent"`
+	Availability        string                                `json:"availability"`
+	Stream              string                                `json:"stream,omitempty"`
+	Flags               []certificationSweepFlag              `json:"flags"`
+	APISurface          []engine.CLISurfaceEndpointRef        `json:"api_surface"`
+	Status              string                                `json:"status"`
+	Reason              string                                `json:"reason"`
+	RequiredFlags       []string                              `json:"required_flags,omitempty"`
+	OutputAssertions    []engine.CertificationOutputAssertion `json:"output_assertions,omitempty"`
+	AssertionSource     string                                `json:"assertion_source,omitempty"`
+	CertificationCohort string                                `json:"certification_cohort,omitempty"`
 }
 
 // certificationSweepFlag retains the declaration-owned inputs a fixture or
@@ -288,6 +289,7 @@ func certificationSweepProviderRefusals(repoRoot, connector string) ([]certifica
 type certificationSweepAssertionOverlay struct {
 	Assertions []engine.CertificationOutputAssertion
 	Source     string
+	Cohort     string
 }
 
 type certificationSweepGraphQLProfile struct {
@@ -310,7 +312,8 @@ func certificationSweepAssertions(bundle *engine.Bundle) (map[string]certificati
 		}
 		assertions[candidate.Command] = certificationSweepAssertionOverlay{
 			Assertions: append([]engine.CertificationOutputAssertion(nil), candidate.OutputAssertions...),
-			Source:     "certification.json direct_read_candidates",
+			Source:     certificationSweepDirectReadAssertionSource(candidate),
+			Cohort:     candidate.Cohort,
 		}
 	}
 	if graphql := bundle.Certification.GraphQL; graphql != nil {
@@ -330,6 +333,13 @@ func certificationSweepAssertions(bundle *engine.Bundle) (map[string]certificati
 	return assertions, nil
 }
 
+func certificationSweepDirectReadAssertionSource(candidate engine.CertificationCommandCandidate) string {
+	if candidate.Generated {
+		return "certification.json direct_read_candidates generated from cli_surface.json"
+	}
+	return "certification.json direct_read_candidates"
+}
+
 func certificationSweepGraphQLProfileFor(bundle *engine.Bundle) (certificationSweepGraphQLProfile, error) {
 	if bundle.Certification == nil || bundle.Certification.GraphQL == nil {
 		return certificationSweepGraphQLProfile{}, nil
@@ -347,14 +357,15 @@ func certificationSweepGraphQLProfileFor(bundle *engine.Bundle) (certificationSw
 
 func classifyCertificationSweepCommand(command engine.CLICommand, operation engine.OperationSpec, assertion certificationSweepAssertionOverlay, graphql certificationSweepGraphQLProfile, providerRefusal certificationSweepProviderRefusal) (certificationSweepCommand, *certificationSweepProductDefect) {
 	row := certificationSweepCommand{
-		Summary:       command.Summary,
-		Path:          command.Path,
-		Intent:        command.Intent,
-		Availability:  command.Availability,
-		Stream:        command.Stream,
-		Flags:         certificationSweepFlags(command.Flags),
-		APISurface:    append([]engine.CLISurfaceEndpointRef(nil), command.APISurface...),
-		RequiredFlags: certificationSweepRequiredFlags(command.Flags),
+		Summary:             command.Summary,
+		Path:                command.Path,
+		Intent:              command.Intent,
+		Availability:        command.Availability,
+		Stream:              command.Stream,
+		Flags:               certificationSweepFlags(command.Flags),
+		APISurface:          append([]engine.CLISurfaceEndpointRef(nil), command.APISurface...),
+		RequiredFlags:       certificationSweepRequiredFlags(command.Flags),
+		CertificationCohort: assertion.Cohort,
 	}
 	if command.Availability != "implemented" {
 		row.Status = certificationSweepNotApplicable

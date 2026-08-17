@@ -45,6 +45,8 @@
         "properties": {
           "stage_name": { "type": "string" },
           "command": { "type": "string" },
+          "cohort": { "type": "string" },
+          "generated": { "type": "boolean" },
           "args": {
             "type": "array",
             "items": {
@@ -72,9 +74,34 @@
                 "equals": {},
                 "value_type": {
                   "type": "string",
-                  "enum": ["object", "array", "string", "number", "boolean", "null"]
+                  "enum": ["object", "array", "object_or_array", "string", "number", "boolean", "null"]
                 }
               }
+            }
+          }
+        }
+      }
+    },
+    "direct_read_generation": {
+      "type": "object",
+      "required": ["cohorts"],
+      "additionalProperties": false,
+      "properties": {
+        "required_flag_defaults": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "cohorts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "command_count", "commands"],
+            "additionalProperties": false,
+            "properties": {
+              "name": {"type": "string"},
+              "command_count": {"type": "integer"},
+              "commands": {"type": "array", "minItems": 1, "items": {"type": "string"}}
             }
           }
         }
@@ -155,7 +182,7 @@
                     "equals": {},
                     "value_type": {
                       "type": "string",
-                      "enum": ["object", "array", "string", "number", "boolean", "null"]
+                      "enum": ["object", "array", "object_or_array", "string", "number", "boolean", "null"]
                     }
                   }
                 }

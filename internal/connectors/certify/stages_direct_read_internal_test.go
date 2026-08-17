@@ -13,8 +13,8 @@ func TestDirectReadCandidatesForGitHub(t *testing.T) {
 		"direct_read_dir_path": "",
 		"direct_read_ref":      "main",
 	})
-	if len(candidates) != 23 {
-		t.Fatalf("len(candidates) = %d, want 23: %+v", len(candidates), candidates)
+	if len(candidates) != 120 {
+		t.Fatalf("len(candidates) = %d, want 120 (23 manual plus 97 generated): %+v", len(candidates), candidates)
 	}
 
 	want := map[string][]string{
@@ -45,6 +45,29 @@ func TestDirectReadCandidatesForGitHub(t *testing.T) {
 	for command := range want {
 		if !seen[command] {
 			t.Fatalf("did not find expected candidate %q", command)
+		}
+	}
+}
+
+func TestDirectReadCandidatesForGitHubTrialCohorts(t *testing.T) {
+	wantCounts := map[string]int{
+		"trial_advanced_security": 31,
+		"trial_codespaces":        22,
+		"trial_copilot":           23,
+		"trial_enterprise":        21,
+	}
+	for cohort, want := range wantCounts {
+		candidates := directReadCandidatesFor("github", map[string]string{"certification_cohort": cohort})
+		if len(candidates) != want {
+			t.Fatalf("%s candidates = %d, want %d", cohort, len(candidates), want)
+		}
+		for _, candidate := range candidates {
+			if !strings.HasPrefix(candidate.StageName, "generated_direct_read_") {
+				t.Fatalf("%s includes non-generated candidate %+v", cohort, candidate)
+			}
+			if len(candidate.OutputAssertions) != 1 || candidate.OutputAssertions[0].ValueType != "object_or_array" {
+				t.Fatalf("%s candidate %q assertion = %#v, want generated object-or-array assertion", cohort, candidate.Command, candidate.OutputAssertions)
+			}
 		}
 	}
 }
@@ -88,6 +111,30 @@ func TestDirectReadOutputAssertions(t *testing.T) {
 		}})
 		if !passed || reason != "" {
 			t.Fatalf("assertDirectReadOutputAssertions = %t, %q; want object response pass", passed, reason)
+		}
+	})
+
+	t.Run("generated structural assertion accepts an object response", func(t *testing.T) {
+		passed, reason := assertDirectReadOutputAssertions("generated_fixture_read", res, []engine.CertificationOutputAssertion{{
+			JSONPointer: "/response",
+			ValueType:   "object_or_array",
+		}})
+		if !passed || reason != "" {
+			t.Fatalf("assertDirectReadOutputAssertions = %t, %q; want generated structural assertion pass", passed, reason)
+		}
+	})
+
+	t.Run("generated structural assertion rejects scalar response", func(t *testing.T) {
+		scalar := CLIResult{Envelope: map[string]any{
+			"kind":     "ConnectorCommandDirectRead",
+			"response": "not-a-produced-record-or-collection",
+		}}
+		passed, reason := assertDirectReadOutputAssertions("generated_fixture_read", scalar, []engine.CertificationOutputAssertion{{
+			JSONPointer: "/response",
+			ValueType:   "object_or_array",
+		}})
+		if passed || !strings.Contains(reason, "wrong type") {
+			t.Fatalf("assertDirectReadOutputAssertions = %t, %q; want scalar generated assertion failure", passed, reason)
 		}
 	})
 
