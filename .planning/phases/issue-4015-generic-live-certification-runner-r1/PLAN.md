@@ -36,6 +36,7 @@ Captain direction on 2026-08-17 explicitly widened the runner from one provider 
 - The authorized live sweep executed all 122 definition-owned `eligible_pending_live` candidates: 38 accepted records were written under `internal/connectors/certifications/evidence/`, 80 provider refusals and 4 missing-fixture non-passes were written immediately to `GITHUB-LIVE-RUN-ACCOUNTED.json`, and no corrected-sweep product defect occurred.
 - Each of the 38 record writes was immediately followed by a passing `go run ./cmd/connectorgen certification-matrix --check`; the same check passed again at the end.
 - The unchanged runner recorded Freshchat's definition-owned no-candidate outcome (`executed=0`, `missing_fixture=1`), and its definition-only path passed for all 36 connector command surfaces. Connectors without `certification.json` now produce a definition-owned missing-fixture receipt instead of an invocation error.
+- After PR #4219 opened, a data-selected GitHub App retry excluded every enterprise path. It executed the 16 rows whose captain-supplied direct probe reported `new_status=200`, certified 15, and recorded one HTTP 400 product defect without retrying it.
 
 ## Required skills and lifecycle
 

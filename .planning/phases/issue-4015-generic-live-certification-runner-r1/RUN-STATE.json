@@ -3,8 +3,10 @@
   "status": "verified_pending_pr",
   "execution": "inline_manual",
   "reason": "direct-PR brief forbids spawned roles",
-  "accepted_records": 38,
-  "provider_nonpasses": 80,
+  "accepted_records": 53,
+  "provider_nonpasses": 81,
   "missing_fixture_nonpasses": 4,
-  "product_defects": []
+  "product_defects": [
+    "dependabot list-alerts-for-org: direct App probe reports 200, but the declaration-owned pm run returned HTTP 400 and redacted the provider body"
+  ]
 }

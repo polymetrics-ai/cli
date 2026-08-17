@@ -37,6 +37,7 @@ options:
   --credential-config <key=value>   non-secret credential config; repeatable
   --root <path>                     run-owned pm project inside this repository
   --receipt-file <path>             repository-relative sanitized receipt path
+  --stages-file <path>              repository-relative JSON selector for declared stage names
   --limit <n>                       stop after n candidates (default: all)
   --definition-check                validate definitions without running pm
   --help                            show this help
@@ -78,7 +79,7 @@ function parseOptions(argv) {
     index += 1;
     if (key === "credential-config") {
       result.configs.push(value);
-    } else if (["pm", "credential-env", "credential-field", "root", "receipt-file", "limit"].includes(key)) {
+    } else if (["pm", "credential-env", "credential-field", "root", "receipt-file", "stages-file", "limit"].includes(key)) {
       if (result[key] !== undefined) fail(`${argument} may be provided once`);
       result[key] = value;
     } else {
@@ -112,6 +113,15 @@ async function readOptionalJSON(file, label) {
     if (error instanceof Error && error.message.includes("ENOENT")) return null;
     throw error;
   }
+}
+
+async function selectedStageNames(file, connector) {
+  const source = requireObject(await readJSON(withinRepository(requirePathText(file, "--stages-file")), "stages file"), "stages file");
+  if (source.connector !== connector) fail("stages file connector does not match the selected connector");
+  if (!Array.isArray(source.stage_names) || source.stage_names.length === 0) fail("stages file must declare one or more stage_names");
+  const result = new Set(source.stage_names.map((stageName) => requireIdentifier(stageName, "stages file stage_name")));
+  if (result.size !== source.stage_names.length) fail("stages file has duplicate stage_names");
+  return result;
 }
 
 function requireObject(value, label) {
@@ -551,9 +561,17 @@ async function main() {
     }
     candidates = allCandidates.filter((item) => eligible.has(item.command));
   }
+  if (options["stages-file"] !== undefined) {
+    const selected = await selectedStageNames(options["stages-file"], options.connector);
+    const available = new Set(candidates.map((item) => item.stageName));
+    for (const stageName of selected) {
+      if (!available.has(stageName)) fail(`stages file selected ${stageName}, which is not an eligible declared candidate`);
+    }
+    candidates = candidates.filter((item) => selected.has(item.stageName));
+  }
   const definitionConfigs = certification === null ? new Map() : declaredCredentialConfig(certification);
   if (options["definition-check"]) {
-    process.stdout.write(`${options.connector} definition check: commands=${commands.size} candidates=${allCandidates.length} eligible=${candidates.length} credential_configs=${definitionConfigs.size}\n`);
+    process.stdout.write(`${options.connector} definition check: commands=${commands.size} candidates=${allCandidates.length} selected=${candidates.length} credential_configs=${definitionConfigs.size}\n`);
     return 0;
   }
 

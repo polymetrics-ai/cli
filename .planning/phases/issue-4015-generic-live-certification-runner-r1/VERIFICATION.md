@@ -23,3 +23,4 @@ The full Go suite and `make verify` are deliberately deferred until the end of t
 - `go test -timeout 20m ./internal/cli` — passed (511.153s).
 - End-of-run repository gates passed: `make fmt tidy-check vet build docs-check-no-build smoke-no-build lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check`.
 - `git diff --check` — pending immediately before commit.
+- Post-PR App retry: selected 16 captain-probed App-200 rows, executed all 16, certified 15, and retained one HTTP 400 product-defect receipt. Final `certification-matrix --check` passed with 53 GitHub accepted records on disk.
