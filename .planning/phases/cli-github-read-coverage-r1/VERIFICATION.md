@@ -11,4 +11,4 @@
 - [x] Rebased onto integration head `73d73058e39d6258e1790427fcb57aa40ff054c8` after PostgreSQL PR #4199/#4200, regenerated the PostgreSQL certification matrix through `go run ./cmd/connectorgen certification-matrix --connector postgres`, and reran `go test -timeout 20m ./cmd/connectorgen` successfully. The generator produced no residual diff.
 - [x] CLI help/manual/website parity: `internal/cli/docs.go`, `docs/cli/connectors.md`, and `website/content/docs/cli-reference.mdx` document `--direct-read-only`; `./pm help connectors`, `./pm connectors`, and `./pm connectors certify --help` are green; `make docs-check` is green.
 - [x] Inline code review found no unresolved actionable issue: reviewed checkpoint secrecy/fingerprint binding, no-value assertion errors, direct-only stage isolation, candidate boundaries, report wording, and fail-closed artifact rendering.
-- [ ] PR base is API-read as `integration/4015-mvp-flat-r1`.
+- [x] PR [#4203](https://github.com/polymetrics-ai/cli/pull/4203) is API-read through `gh-axi pr list --state open --base integration/4015-mvp-flat-r1 --limit 100`; the branch appears in that base-filtered result.
