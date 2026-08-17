@@ -1,7 +1,7 @@
 {
   "name": "postgres",
   "display_name": "PostgreSQL",
-  "description": "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Source-only; managed-target writes remain unpublished until a production destination is registered.",
+  "description": "Reads PostgreSQL tables, supports PostgreSQL 14+ logical-replication CDC into the local warehouse, and delivers managed PostgreSQL targets through the warehouse-mediated transport. Direct Connector.Write remains unavailable; query is not implemented.",
   "integration_type": "database",
   "release_stage": "ga",
   "capabilities": {
@@ -14,7 +14,7 @@
   },
   "risk": {
     "read": "low",
-    "write": "n/a (source-only until a production database destination is registered)",
-    "approval": "none required for source-only sync"
+    "write": "not a generic write capability; the closed managed target transport follows its existing plan, preview, approval, execute boundary",
+    "approval": "source reads require none; managed target transport follows its plan, preview, approval, execute boundary"
   }
 }

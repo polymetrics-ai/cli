@@ -109,7 +109,7 @@ func usage() string {
 	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
 	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]  (default dir: internal/connectors/defs)
 	connectorgen certification-matrix [repo-root] (--connector <name> | --all | --check)
-	connectorgen certification-evidence transport --connector <name> --report <path> --binary-sha <sha256> --from-env password=<ENV> --run-id <id> --record-prefix <id> [--repo-root <path>]
+	connectorgen certification-evidence (transport|change-capture) --connector <name> --report <path> --binary-sha <sha256> --from-env password=<ENV> --run-id <id> --record-prefix <id> [--repo-root <path>]
 	connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
   connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
   connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]

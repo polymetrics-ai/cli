@@ -1,45 +1,21 @@
-# Context — Issues 3978 and 3977: truthful PostgreSQL capability publication
+# Context — Issue #3978: final PostgreSQL certification and publication
 
-## Task Delivery Header
+## Task delivery header
 
-- Issues: `Closes #3978` and `Refs #3977`.
-- Base branch: `integration/4015-mvp-flat-r1`.
-- Merges into: `integration/4015-mvp-flat-r1 -> main`.
-- Delivery: direct PR against `integration/4015-mvp-flat-r1`; do not use no-mistakes.
-- Working branch: `fm/cli-pg-capability-publication-club-r1`.
-- Target connector: PostgreSQL only.
-- Task: publish `write: true`, `cdc: true`, and `query: false` only after the production application can dispatch PostgreSQL change capture into its connection-owned warehouse and the existing managed-target write driver remains behaviorally proven.
-- Required verification: focused app/connector/CLI tests; explicit Docker/Colima `databaseintegration` proof; generated connector/docs parity; scoped repository gates; CI.
+- Issue: `Refs #3978 — Postgres Parity: certify parity and publish truthful capabilities`.
+- Base branch: `integration/4015-mvp-flat-r1` at `4a0289bcc490d705b12640093f5779df48a28cfe`.
+- Delivery: one direct PR, `fm/cli-3978-postgres-certify-publish-r1` to `integration/4015-mvp-flat-r1`.
+- Target connector: PostgreSQL only. No generic SQL writer, direct source-to-target route, API CDC sink, broker, MCP, or UI behavior.
 
-The task-delivery-header template named by `AGENTS.md` is absent from this integration base. This context records the required fields as the repository's documented manual fallback.
+## Binding reconciliation
 
-## Locked decisions
+1. #3978's `incremental_dedupe_history` rejection clause is stale: current PostgreSQL declares and live-proves all six managed-target modes, including history.
+2. #3978's Podman-only wording is stale: `native/dbtest` supports Docker and the evidence run used the explicit shared Colima Docker socket without restart or reconfiguration.
+3. `sync_transport.json` already admits the truthful narrow publication: closed `postgres_managed_target`, six named modes, fixed strategies, warehouse receipt acknowledgement, and no caller-selected SQL/target.
+4. `metadata.json.capabilities.write` and `connectors.Capabilities.Write` admit only a generic boolean. It cannot express the closed destination transport; `write=true` promises arbitrary generic writer semantics that PostgreSQL's direct `Connector.Write` intentionally refuses.
+5. The fresh PostgreSQL 16 aggregate profile is sound proof that all six closed strategies executed with independent read-back. It cannot be bound or published as `capability:write`. The source-controlled twelve exact `sync_mode` records remain the publishable proof for the narrow destination contract.
+6. `cdc=true` is separate: PostgreSQL 14+ pgoutput is proven only from database source into the connection-owned warehouse, after durable staging and receipt. `query=false` stays exact.
 
-1. A public capability flag is executable truth, not metadata intent. PostgreSQL CDC must reach the production `App.RunETL` path, durably publish a whole source transaction to the connection-owned warehouse, persist its full checkpoint, and only then let the native reader acknowledge the LSN.
-2. The #3977 amendment is authoritative: PostgreSQL CDC -> warehouse is the only admitted source route. There is no direct CDC-to-target dispatch and no polling/cursor fallback.
-3. PostgreSQL write publication relies on the already-merged managed-target driver, sealed workset delivery, approval, receipt, and live row-state proofs. This slice does not invent a generic connector `Write`, arbitrary SQL, or a direct source-to-target route.
-4. `query` stays false. `incremental_dedupe_history`, arbitrary existing targets, physical-absence deletes, generic SQL, and API changefeed sinks remain explicit non-support.
-5. Generated catalog, connector docs, website data, and golden transcripts are regenerated through repository generators when their source surfaces move. No derived artifact is hand-authored.
-6. #4125 and #4158 are excluded even if their base failures appear during broad verification.
+## GSD execution and skills
 
-## GSD execution and required skills
-
-The installed `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` prompts were resolved with `scripts/gsd`; `scripts/gsd doctor` and `go run ./cmd/agentcontractgen check` pass. This issue slug is not a numbered roadmap phase and the canonical contract requires one worker, so the lifecycle runs inline and is recorded in this directory.
-
-Loaded skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-database`, `golang-context`, `golang-concurrency`, `golang-cli`, `golang-documentation`, and `golang-lint`. The PostgreSQL/runtime and CLI help/docs/website parity references were read.
-
-The branch was paused while #4156 landed the shared definition-owned transport declaration and
-`change_capture` route. After rebasing onto base commit `11fd27b4b`, its generic declared transport
-path was preserved as the first dispatch choice. PostgreSQL's separate residual remained: a native
-`ChangefeedExecutor` with no closed source/destination transport still had no production route into
-the connection-owned warehouse. This change closes only that residual and does not modify shared
-transport declaration or validation.
-
-A final independent re-audit required binary-entry evidence rather than an app-only fake. The added
-`databaseintegration` test builds a fresh `cmd/pm`, invokes `pm etl run`, waits for its real pgoutput
-slot, commits a PostgreSQL transaction, and requires the exact warehouse row, full checkpoint,
-native stage receipt, and confirmed source LSN. Its red run found that the app's route selector sent
-PostgreSQL's snapshot-only transport descriptor to generic preflight before considering the exact
-implemented changefeed. The fix is in this issue's application capability dispatch: an exact
-implemented `ChangefeedExecutor` takes the source-only CDC-to-local-warehouse route. The shared
-transport registry, descriptor validation, and #4156 generic route remain unchanged.
+The project-local GSD adapter was checked with `scripts/gsd doctor`, sources were resolved for discuss/plan/execute/verify/review, and the gap prompts were generated inline because the canonical single-worker contract forbids lifecycle-role spawning. Loaded skills: `golang-how-to`, `golang-cli`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`, `golang-database`, `golang-lint`, and `golang-documentation`.

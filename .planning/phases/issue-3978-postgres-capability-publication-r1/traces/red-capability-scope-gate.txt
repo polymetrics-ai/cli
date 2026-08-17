@@ -1,0 +1,28 @@
+Certification-gate red observation — issue #3978
+
+Command:
+  go test -timeout 20m ./internal/agentcontract \
+    -run '^(TestCertificationGateEnforcesEveryProtectedTransition|TestCertificationGateCurrentBaselineRejectsWithoutBreakingStructuralContractCheck|TestEvaluateCertificationGateGitHubBaselineAndGreenFixture)$' \
+    -count=1 -v
+  go test -timeout 20m ./cmd/connectorgen \
+    -run '^TestCertificationScopedSourceResolutionUsesScopedPostgresBundle$' \
+    -count=1 -v
+
+Observed verdict for every protected transition:
+  decision: HALT
+  failure: evidence/internal/connectors/certifications/evidence/postgres_transport_r1-full_append-database_write_from_warehouse.json/binding
+  cell: capability/postgres/capability:write
+  message: evidence scope "sync_mode" does not match "capability"
+
+Interpretation:
+  This was a substantive scope error, not a stale baseline. A single sync-mode
+  record can never be bound, relabelled, re-scoped, or exempted to satisfy
+  capability:write. The gate, fixture, and baseline remained unchanged.
+
+Green replacement:
+  The PostgreSQL 16 full-profile test independently read back every declared
+  target mode and emitted a new scope=capability, function_kind=capability:write
+  aggregate record. The matrix binds only that record to capability:write and
+  retains mode records only in sync-mode cells. The same protected-transition
+  and current-bad-baseline tests then passed; the bad GitHub baseline still
+  returned RETRY.

@@ -288,8 +288,11 @@ with a 24h default lifetime (configurable from 24h through 48h at plan time).
 Each provider page fetch and staged PostgreSQL apply has its own bounded
 deadline, so a stalled unit stops without expiring the overall authority. Stale,
 replayed, authentication-refused, and permission-refused runs do not advance the
-checkpoint. PostgreSQL remains `write=false` in the public connector capability
-surface, and this route accepts no raw SQL or caller-selected target identifiers.
+checkpoint. PostgreSQL publishes this certified managed warehouse-mediated
+destination only through its closed `destination_transport` declaration:
+`write=false` remains the truthful public capability because direct
+`Connector.Write` is unavailable. The route accepts no raw SQL or
+caller-selected target identifiers.
 
 ## Checking run status
 

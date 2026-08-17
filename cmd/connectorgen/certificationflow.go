@@ -646,7 +646,14 @@ func syncModeCellFor(source matrixConnectorSource, mode string, primitive syncPr
 	// destination transport role that the real preflight will resolve.
 	admitted := syncModeTransportAdmits(source, primitive, synccontract.Mode(mode))
 	declaredPair := declaredNativeDatabaseTransportPair(source, synccontract.Mode(mode))
-	if declaredPair {
+	if mode == string(synccontract.ModeChangeCapture) {
+		// Change capture has its own declared changefeed rather than a polling
+		// sync_transport mode. Its only admitted route is database -> warehouse;
+		// implementation remains false until a matching receipt-backed live
+		// proof has been accepted.
+		base.Declared = cdc.Declared && implementedDatabaseChangeCaptureContract(source)
+		base.Implemented = base.Declared && cdc.Implemented && len(live) > 0
+	} else if declaredPair {
 		// A declared native-database pair does not use the connector's direct
 		// Write method. Mark implementation only after an accepted exact-mode
 		// live proof: the matrix must not infer an executable destination from a
@@ -692,6 +699,20 @@ func declaredNativeDatabaseTransportPair(source matrixConnectorSource, mode sync
 		return false
 	}
 	return true
+}
+
+func implementedDatabaseChangeCaptureContract(source matrixConnectorSource) bool {
+	if source.integrationType != "database" {
+		return false
+	}
+	if source.bundle != nil {
+		return source.bundle.Changefeed != nil && source.bundle.Changefeed.Status == connectors.ChangefeedStatusImplemented
+	}
+	if source.connector == nil {
+		return false
+	}
+	definition, ok := connectors.DefinitionOf(source.connector)
+	return ok && definition.Changefeed != nil && definition.Changefeed.Status == connectors.ChangefeedStatusImplemented
 }
 
 func syncModeTransportAdmits(source matrixConnectorSource, primitive syncPrimitive, mode synccontract.Mode) bool {

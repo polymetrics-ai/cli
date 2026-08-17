@@ -1,32 +1,9 @@
-# TDD ledger — Issues 3978 and 3977
+# TDD ledger — Issue #3978: final PostgreSQL certification and publication
 
-| ID | Red guarantee | Green implementation | Status |
+| ID | Red guarantee | Green implementation / evidence | Status |
 | --- | --- | --- | --- |
-| PGCAP-1 | `App.RunETL(change_capture)` advertises PostgreSQL CDC but returns a typed no-dispatch refusal. | A matching implemented changefeed dispatches into the connection-owned warehouse. | Green; Red: `traces/red-app-dispatch.txt`; Green: exact Parquet IDs plus checkpoint in `TestRunETLChangeCapturePublishesCommittedTransactionToConnectionWarehouse` |
-| PGCAP-2 | A per-event callback can be mistaken for a durable whole-transaction sink. | A streaming committed-transaction receiver returns the warehouse receipt only after atomic WAL publication, Parquet materialization, and directory sync. | Green; app transaction publication and PostgreSQL ordering tests pass |
-| PGCAP-3 | Source LSN could advance without application checkpoint persistence. | The app consumes the warehouse acknowledgement to persist the full checkpoint before the native reader sends standby status. | Green; receipt/checkpoint/ack ordering and restart restoration tests pass |
-| PGCAP-4 | Capability publication can drift from production behavior. | Exact CLI/bundle/native tests require `write=false`, `cdc=true`, `query=false`; the published CDC behavior must produce an observable warehouse/checkpoint/LSN change. | Green; exact projection plus production binary CDC suite pass |
-| PGCAP-5 | Generated docs/catalog/website artifacts can retain old flags. | Repository generators produce a clean parity diff and checks pass. | Green; connector docs/catalog and website generators rerun |
-| PGCAP-6 | Unit-only claims can hide live no-ops. | PostgreSQL dbtest observes CDC rows/checkpoint/LSN through the built binary. | Green; fresh-binary live CDC test passed after #4156 rebase |
-| PGCAP-7 | PostgreSQL had no explicit rate-limit artifact, so the required no-provider-HTTP state was absent. | `rate_limits.json` declares `not_applicable` with an exact native-wire-protocol reason, covered through the real bundle loader. | Green; red observed `bundle.RateLimits == nil`, focused test and bundle validation pass |
-| PGCAP-8 | A recovered stage receipt could use the raw stage lookup ID while its warehouse receipt was derived from the stage's opaque transaction key, making restart reject its own receipt. | Both initial delivery and receipt restoration use `CommittedTransaction.TransactionKey`; the test requires exact initial/restored identity equality and rejects the raw lookup ID. | Green; code-review assertion and race test pass; live CDC rerun passes |
-| PGCAP-9 | A fresh `pm etl run` selected PostgreSQL's snapshot-only generic transport and failed with `source transport does not support sync mode "change_capture"` before creating a replication slot. | Exact implemented changefeeds dispatch source-only CDC to the local warehouse before descriptor-presence routing; sources without that exact executor retain #4156 generic preflight. | Green; Red: `traces/red-binary-dispatch.txt`; fresh-binary live test observes row/checkpoint/receipt/LSN |
-| PGCAP-10 | Once binary dispatch reached `ReadCDC`, PostgreSQL created the checkpoint observation after the warehouse receipt, so the durability contract refused the inverted timestamp order. | The commit candidate is observed before downstream delivery; receipt recovery uses the persisted receipt time as a conservative recovered observation bound. | Green; Red: `traces/red-binary-dispatch.txt`; unit race and fresh-binary live test pass |
-| PGCAP-11 | CI certification rejected `write=true` because the shipped connector has no destination dispatch: auth write is false, destination transport is unsupported, the typed driver is unregistered, and generic `Write` returns unsupported. | Keep `write=false`; publish only the binary-proven CDC capability and defer production destination registration/publication to #3982. | Green; Red: `traces/red-write-publication-certification.txt`; focused certification, engine projection, binary inspection, and generated-drift gates pass |
-
-## Planned commands
-
-```sh
-go test -timeout 20m ./internal/app -run 'TestRunETL.*ChangeCapture' -count=1
-go test -timeout 20m ./internal/connectors ./internal/connectors/native/postgres ./internal/cli -count=1
-POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/postgres
-```
-
-The earlier post-rebase selection exercised both CDC and the private managed-target implementation,
-while excluding the known base-only #4158 test. Only CDC is published by this PR; the private
-managed-target result is not treated as production write-capability evidence:
-
-```sh
-go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres \
-  -run 'TestPostgres(PGOutputV2ContainerHarness|ManagedTargetWorksetDeliveryLive|ManagedTargetIncrementalDedupeHistoryLive)$' -count=1 -v
-```
+| PGFINAL-1 | The original mode-to-capability binding was halted because `sync_mode` cannot satisfy `capability`. | No scope check, baseline, or fixture was weakened. Exact records remain on exact mode cells. | Green: protected certification-gate tests still pass. |
+| PGFINAL-2 | `TestCertificationMatrixDoesNotTreatPostgresManagedTransportAsGenericWrite` failed with `PostgreSQL managed destination evidence promoted generic write capability`. | The generic write implementation again follows the direct `Connector.Write` stub, so it is false despite complete closed managed-target evidence. | Green: focused `cmd/connectorgen` test. |
+| PGFINAL-3 | The composition guard rejected `write=true`: a closed managed target is not a generic writer. | Metadata, manifest, generated matrix, docs, and website publish `write=false`; the closed `destination_transport` remains declared. | Green: `TestOpenRegistersDefinitionOwnedProductionTransports`. |
+| PGFINAL-4 | A complete profile must not disappear merely because it cannot make a generic capability true. | `TestCertificationMatrixRetainsPostgresManagedDestinationEvidenceAtExactModeScope` requires all six `database_write_from_warehouse` cells to be declared, implemented, live-tested, and carry one exact proof each. | Green: focused `cmd/connectorgen` test. |
+| PGFINAL-5 | CDC acknowledgement before receipt is invalid. | Receipt-backed PostgreSQL 16 binary evidence keeps `cdc=true` and one `change_capture/database_read_into_warehouse` cell true; API/destination CDC remains non-pass. | Green: existing tagged binary proof and focused matrix tests. |
