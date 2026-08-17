@@ -28,16 +28,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_cdc_r1-capability-cdc.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-17T00:32:49Z",
+            "executed_at": "2026-08-17T12:18:21Z",
             "run_id": "postgres_cdc_r1-capability_cdc",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "58e3218380bc558544206d902f62dc06f63934e7ae957caa6e52d10cb3e83dee",
-              "pm_command_fingerprint": "{{pmcertfp:v1:b8c47e91453fb86319f30397ad66d3e3a635143c73c0e8464878c5ec781952a9}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:852b9f027186f46da48d0b8eb0865fd273e5b2b79fa9e61c0ff5b35aafef0cc4}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:db6513a63a636547a31077c340a2485e8c57e75e156da34e72f26dcb67944285}}"
+                "{{pmcertfp:v1:b55999c5cd0f589b61f3d0796764efc17187cc94913e680a23e09fe671cbc3b4}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -45,7 +46,7 @@
                   "operation": "postgres_change_capture_capability_cdc",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:04746770a7261af9ba365d05b72ecf9f3d3774ab670a096e8965dc4c2cbaad05}}",
+                    "statement": "{{pmcertfp:v1:2caf4c2aed624d7857fe3f964be29cd84c9de7406e9563b2948234a45153841f}}",
                     "parameters": []
                   },
                   "response": {
@@ -53,10 +54,10 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "acknowledged_after_warehouse_receipt": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                        "bounded_durable_staging": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                        "independent_warehouse_readback": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                        "warehouse_receipt_persisted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}"
+                        "acknowledged_after_warehouse_receipt": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "bounded_durable_staging": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "independent_warehouse_readback": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "warehouse_receipt_persisted": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}"
                       },
                       "original_bytes": 149,
                       "truncated": false
@@ -647,16 +648,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-full_overwrite-database_read_into_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-full_overwrite-database_read_into_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -664,7 +666,7 @@
                   "operation": "postgres_transport_full_overwrite_database_read_into_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:90c131e21af1581e217b0d8db229fa4f9dcd0940044b43468d6dac4bbd35c940}}",
+                    "statement": "{{pmcertfp:v1:f02a5059c7bdeb74db8ad82a0c7ebb35c145adc399c006e9f1c6ecc3f764c231}}",
                     "parameters": []
                   },
                   "response": {
@@ -672,13 +674,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:872f29ea106361153a57b8498d829fcc921cdb55e21d39e9617014c3adefefb1}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:ac0e00fa8a3e9a78c9e472f8ffcc1bfbea8cdefe3d729cea0f6ce170bd38a03b}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:502c370a1b714a3471b5806be6cd62a4c03ee9375c7144d802e888247b68d3bb}}",
-                        "target_relation": "{{pmcertfp:v1:187ffead8989f2f2f6dba4582f741d3d4e7e7e39bf489bd770b477ba3337e505}}"
+                        "apply_strategy": "{{pmcertfp:v1:31d810ba8dbc08a2510c03f46ecf5c6954b262e2bc379e143c8bd4f962c2fca0}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:dd379f30be3f66c681fc6480f61e79490b24d6cb0fbcef3bea89e9dce19e5315}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:a28520fe6c24a78e0fdc0923f97d5737d42a3cb32ff96181fa5a98b825b0ce0e}}",
+                        "target_relation": "{{pmcertfp:v1:eee72ce5e5ed1a11cadab6131c66c31264be3d82942e1b665eaaf8f2d20ab35d}}"
                       },
                       "original_bytes": 252,
                       "truncated": false
@@ -703,16 +705,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-full_overwrite-database_write_from_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-full_overwrite-database_write_from_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -720,7 +723,7 @@
                   "operation": "postgres_transport_full_overwrite_database_write_from_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:90c131e21af1581e217b0d8db229fa4f9dcd0940044b43468d6dac4bbd35c940}}",
+                    "statement": "{{pmcertfp:v1:f02a5059c7bdeb74db8ad82a0c7ebb35c145adc399c006e9f1c6ecc3f764c231}}",
                     "parameters": []
                   },
                   "response": {
@@ -728,13 +731,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:872f29ea106361153a57b8498d829fcc921cdb55e21d39e9617014c3adefefb1}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:ac0e00fa8a3e9a78c9e472f8ffcc1bfbea8cdefe3d729cea0f6ce170bd38a03b}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:502c370a1b714a3471b5806be6cd62a4c03ee9375c7144d802e888247b68d3bb}}",
-                        "target_relation": "{{pmcertfp:v1:187ffead8989f2f2f6dba4582f741d3d4e7e7e39bf489bd770b477ba3337e505}}"
+                        "apply_strategy": "{{pmcertfp:v1:31d810ba8dbc08a2510c03f46ecf5c6954b262e2bc379e143c8bd4f962c2fca0}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:dd379f30be3f66c681fc6480f61e79490b24d6cb0fbcef3bea89e9dce19e5315}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:a28520fe6c24a78e0fdc0923f97d5737d42a3cb32ff96181fa5a98b825b0ce0e}}",
+                        "target_relation": "{{pmcertfp:v1:eee72ce5e5ed1a11cadab6131c66c31264be3d82942e1b665eaaf8f2d20ab35d}}"
                       },
                       "original_bytes": 252,
                       "truncated": false
@@ -789,16 +792,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-full_append-database_read_into_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-full_append-database_read_into_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -806,7 +810,7 @@
                   "operation": "postgres_transport_full_append_database_read_into_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:b0c5c61a557a037f7dc089769508c13e657aafe8d8e021a9a8a81bfb5d6bee52}}",
+                    "statement": "{{pmcertfp:v1:0ff1e3676d1c63c2566f39dd6ffa6a3715807f21eb3615dc72c202c05988f1d5}}",
                     "parameters": []
                   },
                   "response": {
@@ -814,13 +818,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:f28c0ab3681cfe41ad8e3011e9eed0589d379fcf92de66c89bbc2643675f1df8}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:ac5efaf6fdc42d1f7de2d54651ee2b853b497d362ff3dfb4cdbe81ae387b1832}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:3bb72b28715b411a161646873f5bd69b12910e5c67ae5ef417d3592717d50e13}}",
-                        "target_relation": "{{pmcertfp:v1:00e2a31b20857ca42e2ee9262f219993f95e9d463fb6e0ad951fc7036cceab6c}}"
+                        "apply_strategy": "{{pmcertfp:v1:4f54560ea59f20aad201a52e9303bcbae27be041f0d8474e1f7706744d619b90}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:439b7b6d89f7c43702aecca0cd41035e099a29ef2d276f0e77828f0ea9d98a92}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:6c3f41db5e71b87ea8163dafec4e82269d0816c1696e416b940cbea424bf51bd}}",
+                        "target_relation": "{{pmcertfp:v1:1f7019d5eb2e8c5346c7d5140543f269c124b651a5d8c23c015e5761950c6078}}"
                       },
                       "original_bytes": 248,
                       "truncated": false
@@ -845,16 +849,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-full_append-database_write_from_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-full_append-database_write_from_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -862,7 +867,7 @@
                   "operation": "postgres_transport_full_append_database_write_from_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:b0c5c61a557a037f7dc089769508c13e657aafe8d8e021a9a8a81bfb5d6bee52}}",
+                    "statement": "{{pmcertfp:v1:0ff1e3676d1c63c2566f39dd6ffa6a3715807f21eb3615dc72c202c05988f1d5}}",
                     "parameters": []
                   },
                   "response": {
@@ -870,13 +875,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:f28c0ab3681cfe41ad8e3011e9eed0589d379fcf92de66c89bbc2643675f1df8}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:ac5efaf6fdc42d1f7de2d54651ee2b853b497d362ff3dfb4cdbe81ae387b1832}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:3bb72b28715b411a161646873f5bd69b12910e5c67ae5ef417d3592717d50e13}}",
-                        "target_relation": "{{pmcertfp:v1:00e2a31b20857ca42e2ee9262f219993f95e9d463fb6e0ad951fc7036cceab6c}}"
+                        "apply_strategy": "{{pmcertfp:v1:4f54560ea59f20aad201a52e9303bcbae27be041f0d8474e1f7706744d619b90}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:439b7b6d89f7c43702aecca0cd41035e099a29ef2d276f0e77828f0ea9d98a92}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:6c3f41db5e71b87ea8163dafec4e82269d0816c1696e416b940cbea424bf51bd}}",
+                        "target_relation": "{{pmcertfp:v1:1f7019d5eb2e8c5346c7d5140543f269c124b651a5d8c23c015e5761950c6078}}"
                       },
                       "original_bytes": 248,
                       "truncated": false
@@ -931,16 +936,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_append-database_read_into_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-incremental_append-database_read_into_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -948,7 +954,7 @@
                   "operation": "postgres_transport_incremental_append_database_read_into_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:be6e1c8ac76aa5d289d2a5e2fefc198d1d2ec4b21c0cfad5acea87c159523d19}}",
+                    "statement": "{{pmcertfp:v1:1b0ff91220d81648bb680bcf4e08f3d2bcb7b9202af33b4c9b4188ecf8bb86f5}}",
                     "parameters": []
                   },
                   "response": {
@@ -956,13 +962,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:f28c0ab3681cfe41ad8e3011e9eed0589d379fcf92de66c89bbc2643675f1df8}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:c1f6f988dec8f3c3cc302d719fa7110179658f70fee8d9ef81a05ec05b99b6bc}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:65b0c5f4cf02c301eaaeaaf72d3bf2ebcf61bd7ed1a775f96c48328d62dbb475}}",
-                        "target_relation": "{{pmcertfp:v1:8cd892594abd475724cc1379a615ae9662cbd978c119fd538abb72d29d8b3acb}}"
+                        "apply_strategy": "{{pmcertfp:v1:4f54560ea59f20aad201a52e9303bcbae27be041f0d8474e1f7706744d619b90}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:22d46d899969fa5899397ee1ee172d70c8a9334e594d54f7a96563a0c333e17e}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:b51c57f8e3c45fbccc5158ea16b170f690001a6fda9175b60b17d10eff945bc1}}",
+                        "target_relation": "{{pmcertfp:v1:9c019e72fbd9237d4f6c0676cf2fe9461d414d69481ebdc4cb77f97f249cd5bb}}"
                       },
                       "original_bytes": 255,
                       "truncated": false
@@ -987,16 +993,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_append-database_write_from_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-incremental_append-database_write_from_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -1004,7 +1011,7 @@
                   "operation": "postgres_transport_incremental_append_database_write_from_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:be6e1c8ac76aa5d289d2a5e2fefc198d1d2ec4b21c0cfad5acea87c159523d19}}",
+                    "statement": "{{pmcertfp:v1:1b0ff91220d81648bb680bcf4e08f3d2bcb7b9202af33b4c9b4188ecf8bb86f5}}",
                     "parameters": []
                   },
                   "response": {
@@ -1012,13 +1019,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:f28c0ab3681cfe41ad8e3011e9eed0589d379fcf92de66c89bbc2643675f1df8}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:c1f6f988dec8f3c3cc302d719fa7110179658f70fee8d9ef81a05ec05b99b6bc}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:65b0c5f4cf02c301eaaeaaf72d3bf2ebcf61bd7ed1a775f96c48328d62dbb475}}",
-                        "target_relation": "{{pmcertfp:v1:8cd892594abd475724cc1379a615ae9662cbd978c119fd538abb72d29d8b3acb}}"
+                        "apply_strategy": "{{pmcertfp:v1:4f54560ea59f20aad201a52e9303bcbae27be041f0d8474e1f7706744d619b90}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:22d46d899969fa5899397ee1ee172d70c8a9334e594d54f7a96563a0c333e17e}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:b51c57f8e3c45fbccc5158ea16b170f690001a6fda9175b60b17d10eff945bc1}}",
+                        "target_relation": "{{pmcertfp:v1:9c019e72fbd9237d4f6c0676cf2fe9461d414d69481ebdc4cb77f97f249cd5bb}}"
                       },
                       "original_bytes": 255,
                       "truncated": false
@@ -1073,16 +1080,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_upsert-database_read_into_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-incremental_upsert-database_read_into_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -1090,7 +1098,7 @@
                   "operation": "postgres_transport_incremental_upsert_database_read_into_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:425beda341c0097f5edc6476d30d9d525c034fe2c59b8d31200285ce0d6d798a}}",
+                    "statement": "{{pmcertfp:v1:a7fd21d188892253f4eead7ae4d898ee226c2ad30e269053927b639e97d8ca15}}",
                     "parameters": []
                   },
                   "response": {
@@ -1098,13 +1106,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:c4b11a7fe3bfb51d792d2a3d3d42edeb251b86ea1cfbb002bb61df908e26648b}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:3b4c2d30f76b53e03dc7ea08f36418bfb583146e4a8d7900a204218964d70021}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:bcacf15a9969b3129a588f66d5e70d63409a1393296804c18102cfc8626eabd7}}",
-                        "target_relation": "{{pmcertfp:v1:8e49593a2626d587a997cfcfa8158e4372b20eed8521ab191b123b50d50f335d}}"
+                        "apply_strategy": "{{pmcertfp:v1:7af8d3bce5d61b4d05822cd4b26f4f95105bee3d441810d359fb5df2e0d7e6ee}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:72aa6292184da9dcb1fa85115d81adb0af2e8b1e6f8b521f7fe5a92c6a9be783}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:774467f6b4388a038a2d57f869eb3c5fcdeabb94fc8b2037c9c4ede68c5125da}}",
+                        "target_relation": "{{pmcertfp:v1:df8d6faffcb40b9f5f59ac75eafb464677c09698169f5d5fc3ca2490f3e7e7e8}}"
                       },
                       "original_bytes": 254,
                       "truncated": false
@@ -1129,16 +1137,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_upsert-database_write_from_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-incremental_upsert-database_write_from_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -1146,7 +1155,7 @@
                   "operation": "postgres_transport_incremental_upsert_database_write_from_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:425beda341c0097f5edc6476d30d9d525c034fe2c59b8d31200285ce0d6d798a}}",
+                    "statement": "{{pmcertfp:v1:a7fd21d188892253f4eead7ae4d898ee226c2ad30e269053927b639e97d8ca15}}",
                     "parameters": []
                   },
                   "response": {
@@ -1154,13 +1163,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:c4b11a7fe3bfb51d792d2a3d3d42edeb251b86ea1cfbb002bb61df908e26648b}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:3b4c2d30f76b53e03dc7ea08f36418bfb583146e4a8d7900a204218964d70021}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:bcacf15a9969b3129a588f66d5e70d63409a1393296804c18102cfc8626eabd7}}",
-                        "target_relation": "{{pmcertfp:v1:8e49593a2626d587a997cfcfa8158e4372b20eed8521ab191b123b50d50f335d}}"
+                        "apply_strategy": "{{pmcertfp:v1:7af8d3bce5d61b4d05822cd4b26f4f95105bee3d441810d359fb5df2e0d7e6ee}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:72aa6292184da9dcb1fa85115d81adb0af2e8b1e6f8b521f7fe5a92c6a9be783}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:774467f6b4388a038a2d57f869eb3c5fcdeabb94fc8b2037c9c4ede68c5125da}}",
+                        "target_relation": "{{pmcertfp:v1:df8d6faffcb40b9f5f59ac75eafb464677c09698169f5d5fc3ca2490f3e7e7e8}}"
                       },
                       "original_bytes": 254,
                       "truncated": false
@@ -1215,16 +1224,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_dedupe-database_read_into_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-incremental_dedupe-database_read_into_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -1232,7 +1242,7 @@
                   "operation": "postgres_transport_incremental_dedupe_database_read_into_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:9ce53f2b96d0eae4cad3e47d6de2c3ebad81486cda99dc02fa11ed700c86693c}}",
+                    "statement": "{{pmcertfp:v1:dc0bcebe0026ab3dbc9ec8bb25330612fc24a353c23ef5915630694e085b9abb}}",
                     "parameters": []
                   },
                   "response": {
@@ -1240,13 +1250,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:3a0ede1168bf082c1a72d1d8e1438649cce2ccb73af67645dea9bc4e22e3f2c9}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:8f553279856df89997ebb5d55ce8ede60d6f7b428d0c78076ec4ddea66afc21e}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:c1c8a9964e4f9456ae4cd490c67b0e1c01cba2a04a01090a38bcc05a009f7de0}}",
-                        "target_relation": "{{pmcertfp:v1:21a38c3cf8f9f304cbb2cda3b7dc7d18823d6273d15a5abf5dfb294fd0a8f053}}"
+                        "apply_strategy": "{{pmcertfp:v1:62b0297f87b9c1554c757f9b5b0e9e9a1d2ed0647a994e3cf2f9a71b3144684a}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:76a20a5c048f94f495aa3da71d4da2df33418506f3f6c11b6695f5e164dfa8b8}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:5255ada3ba6a14e44f76b715b48e2a6d18251e5049f5606984af476ed22da346}}",
+                        "target_relation": "{{pmcertfp:v1:d06969eaf5527922f4926437ecf76d631d9edd83627b25463c4479c7e5acb8a8}}"
                       },
                       "original_bytes": 255,
                       "truncated": false
@@ -1271,16 +1281,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_dedupe-database_write_from_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-incremental_dedupe-database_write_from_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -1288,7 +1299,7 @@
                   "operation": "postgres_transport_incremental_dedupe_database_write_from_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:9ce53f2b96d0eae4cad3e47d6de2c3ebad81486cda99dc02fa11ed700c86693c}}",
+                    "statement": "{{pmcertfp:v1:dc0bcebe0026ab3dbc9ec8bb25330612fc24a353c23ef5915630694e085b9abb}}",
                     "parameters": []
                   },
                   "response": {
@@ -1296,13 +1307,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:3a0ede1168bf082c1a72d1d8e1438649cce2ccb73af67645dea9bc4e22e3f2c9}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:8f553279856df89997ebb5d55ce8ede60d6f7b428d0c78076ec4ddea66afc21e}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:c1c8a9964e4f9456ae4cd490c67b0e1c01cba2a04a01090a38bcc05a009f7de0}}",
-                        "target_relation": "{{pmcertfp:v1:21a38c3cf8f9f304cbb2cda3b7dc7d18823d6273d15a5abf5dfb294fd0a8f053}}"
+                        "apply_strategy": "{{pmcertfp:v1:62b0297f87b9c1554c757f9b5b0e9e9a1d2ed0647a994e3cf2f9a71b3144684a}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:76a20a5c048f94f495aa3da71d4da2df33418506f3f6c11b6695f5e164dfa8b8}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:5255ada3ba6a14e44f76b715b48e2a6d18251e5049f5606984af476ed22da346}}",
+                        "target_relation": "{{pmcertfp:v1:d06969eaf5527922f4926437ecf76d631d9edd83627b25463c4479c7e5acb8a8}}"
                       },
                       "original_bytes": 255,
                       "truncated": false
@@ -1357,16 +1368,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_dedupe_history-database_read_into_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-incremental_dedupe_history-database_read_into_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -1374,7 +1386,7 @@
                   "operation": "postgres_transport_incremental_dedupe_history_database_read_into_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:b8bcfd1d6596f32696213bf6cd25bd387096d89ee3fd536c5c99423bcf6d08ba}}",
+                    "statement": "{{pmcertfp:v1:895a33657cb733e6ae9edc8675a3ec0559dd2420422a0e94f9435ca644453f1a}}",
                     "parameters": []
                   },
                   "response": {
@@ -1382,13 +1394,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:49a7c4a702226f9561e53cab86ea8072dedf92bac0e1e8331cf2efebc2474a87}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:7e228d36074add765d709fd188d850699021daee5d01d90c029c489e5bf780cd}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:541dea913345ed1a64ab34ac436be27fbd81485ba08838c097267f67cc8eca74}}",
-                        "target_relation": "{{pmcertfp:v1:52ceea6ea68a26b514e5fe6e545f51ff24fcb26118b793cacbd7d2c95b0c82e2}}"
+                        "apply_strategy": "{{pmcertfp:v1:62658a52bdc836d4bc8f6bee4d7b3bb93c28a8e94647a51beba119b7d5900cb2}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:10259edaa74b2bc14adb9d42e07f4744e3c74569e031fd2e46e0ab9e70942900}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:a2042cd1ae5621e3ea50eb9373629fb1c101af46520f294ae5b0597e47aa1a43}}",
+                        "target_relation": "{{pmcertfp:v1:e18e8ff014345d01b1fa9f774e32b2bdf9b75ed820cf43f2cac0fbd99ff275a2}}"
                       },
                       "original_bytes": 271,
                       "truncated": false
@@ -1413,16 +1425,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_transport_r1-incremental_dedupe_history-database_write_from_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-16T21:06:27Z",
+            "executed_at": "2026-08-17T12:17:13Z",
             "run_id": "postgres_transport_r1-incremental_dedupe_history-database_write_from_warehouse",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "b41457f0e8c98bba7233145a94e4c05b5e37850db6d8ab6cda42bcd082f43e1c",
-              "pm_command_fingerprint": "{{pmcertfp:v1:c4504ae73633ef57b3e2efad825cf2c4481ad311601dcf8bf26247aa5d607a06}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:adbc2dbddbc8efdfed53a0b6fd1afabb161a984614391943218b95725fcfeef1}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:841005b6f3db647254bf35a86663b2300ff86acd42d9ff77e1cb35062fb8f702}}"
+                "{{pmcertfp:v1:42140189f7d02f557725bd874d22550ff57f99ffcbf768fdab4d06815c25ec86}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -1430,7 +1443,7 @@
                   "operation": "postgres_transport_incremental_dedupe_history_database_write_from_warehouse",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:b8bcfd1d6596f32696213bf6cd25bd387096d89ee3fd536c5c99423bcf6d08ba}}",
+                    "statement": "{{pmcertfp:v1:895a33657cb733e6ae9edc8675a3ec0559dd2420422a0e94f9435ca644453f1a}}",
                     "parameters": []
                   },
                   "response": {
@@ -1438,13 +1451,13 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "apply_strategy": "{{pmcertfp:v1:49a7c4a702226f9561e53cab86ea8072dedf92bac0e1e8331cf2efebc2474a87}}",
-                        "checkpoint_committed": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
-                        "mode": "{{pmcertfp:v1:7e228d36074add765d709fd188d850699021daee5d01d90c029c489e5bf780cd}}",
-                        "records_loaded": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "records_read": "{{pmcertfp:v1:d66d0e37f283c85fdf31bab8a5be2938ee0627b7a9da5f1956115bc467d5ab73}}",
-                        "target_namespace": "{{pmcertfp:v1:541dea913345ed1a64ab34ac436be27fbd81485ba08838c097267f67cc8eca74}}",
-                        "target_relation": "{{pmcertfp:v1:52ceea6ea68a26b514e5fe6e545f51ff24fcb26118b793cacbd7d2c95b0c82e2}}"
+                        "apply_strategy": "{{pmcertfp:v1:62658a52bdc836d4bc8f6bee4d7b3bb93c28a8e94647a51beba119b7d5900cb2}}",
+                        "checkpoint_committed": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "mode": "{{pmcertfp:v1:10259edaa74b2bc14adb9d42e07f4744e3c74569e031fd2e46e0ab9e70942900}}",
+                        "records_loaded": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "records_read": "{{pmcertfp:v1:843d09720d97b2f199ae1bc6295b7eb5a6929b23f97e90ae6a3b053aa8b88fb2}}",
+                        "target_namespace": "{{pmcertfp:v1:a2042cd1ae5621e3ea50eb9373629fb1c101af46520f294ae5b0597e47aa1a43}}",
+                        "target_relation": "{{pmcertfp:v1:e18e8ff014345d01b1fa9f774e32b2bdf9b75ed820cf43f2cac0fbd99ff275a2}}"
                       },
                       "original_bytes": 271,
                       "truncated": false
@@ -1499,16 +1512,17 @@
           {
             "record": "internal/connectors/certifications/evidence/postgres_cdc_r1-change_capture-database_read_into_warehouse.json",
             "provider": "postgres_container",
-            "executed_at": "2026-08-17T00:32:49Z",
+            "executed_at": "2026-08-17T12:18:21Z",
             "run_id": "postgres_cdc_r1-change_capture_database_read",
-            "credential_scope": "full_parity",
-            "credential_note": "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface.",
+            "credential_scope": "observed_operations",
+            "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+            "credential_scope_proof": "protocol_exchanges",
             "proof": {
               "redaction_strategy": "repository_salted_hmac_sha256_v1",
-              "pm_binary_sha256": "58e3218380bc558544206d902f62dc06f63934e7ae957caa6e52d10cb3e83dee",
-              "pm_command_fingerprint": "{{pmcertfp:v1:b8c47e91453fb86319f30397ad66d3e3a635143c73c0e8464878c5ec781952a9}}",
+              "pm_binary_sha256": "4bda83453435eb120d3c1ac182203c6ce780b81d64c51122267056e2133bf0c6",
+              "pm_command_fingerprint": "{{pmcertfp:v1:852b9f027186f46da48d0b8eb0865fd273e5b2b79fa9e61c0ff5b35aafef0cc4}}",
               "credential_fingerprints": [
-                "{{pmcertfp:v1:db6513a63a636547a31077c340a2485e8c57e75e156da34e72f26dcb67944285}}"
+                "{{pmcertfp:v1:b55999c5cd0f589b61f3d0796764efc17187cc94913e680a23e09fe671cbc3b4}}"
               ],
               "http_exchanges": [],
               "database_exchanges": [
@@ -1516,7 +1530,7 @@
                   "operation": "postgres_change_capture_change_capture_database_read",
                   "protocol": "postgres_wire",
                   "request": {
-                    "statement": "{{pmcertfp:v1:04746770a7261af9ba365d05b72ecf9f3d3774ab670a096e8965dc4c2cbaad05}}",
+                    "statement": "{{pmcertfp:v1:2caf4c2aed624d7857fe3f964be29cd84c9de7406e9563b2948234a45153841f}}",
                     "parameters": []
                   },
                   "response": {
@@ -1524,10 +1538,10 @@
                     "body": {
                       "encoding": "json",
                       "value": {
-                        "acknowledged_after_warehouse_receipt": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                        "bounded_durable_staging": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                        "independent_warehouse_readback": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
-                        "warehouse_receipt_persisted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}"
+                        "acknowledged_after_warehouse_receipt": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "bounded_durable_staging": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "independent_warehouse_readback": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}",
+                        "warehouse_receipt_persisted": "{{pmcertfp:v1:b75676c8d8941e533db0bcdbf6f6e868a06ec5df654af0e05e8ddd18a64b1f2d}}"
                       },
                       "original_bytes": 149,
                       "truncated": false

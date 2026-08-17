@@ -29,9 +29,13 @@ const (
 	certificationCheckCommand      = "go run ./cmd/connectorgen certification-matrix --check"
 	certificationAllCommand        = "go run ./cmd/connectorgen certification-matrix --all"
 
-	fullParityCredentialScope = "full_parity"
-	fullParityCredentialNote  = "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface."
-	localParquetWarehouse     = "local_parquet_warehouse"
+	fullParityCredentialScope              = "full_parity"
+	observedOperationsCredentialScope      = "observed_operations"
+	fullParityCredentialScopeProof         = "full_parity_stage"
+	observedOperationsCredentialScopeProof = "protocol_exchanges"
+	fullParityCredentialNote               = "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface."
+	observedOperationsCredentialNote       = "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed."
+	localParquetWarehouse                  = "local_parquet_warehouse"
 )
 
 var (
@@ -952,33 +956,35 @@ type certificationNotApplicableReason struct {
 }
 
 type certificationEvidencePointer struct {
-	Record          string                     `json:"record"`
-	Provider        string                     `json:"provider"`
-	ExecutedAt      string                     `json:"executed_at"`
-	RunID           string                     `json:"run_id"`
-	CredentialScope string                     `json:"credential_scope"`
-	CredentialNote  string                     `json:"credential_note"`
-	Proof           certificationEvidenceProof `json:"proof"`
+	Record               string                     `json:"record"`
+	Provider             string                     `json:"provider"`
+	ExecutedAt           string                     `json:"executed_at"`
+	RunID                string                     `json:"run_id"`
+	CredentialScope      string                     `json:"credential_scope"`
+	CredentialNote       string                     `json:"credential_note"`
+	CredentialScopeProof string                     `json:"credential_scope_proof"`
+	Proof                certificationEvidenceProof `json:"proof"`
 }
 
 type certificationAcceptedEvidence struct {
-	SchemaVersion   int                        `json:"schema_version"`
-	Scope           string                     `json:"scope"`
-	Status          string                     `json:"status"`
-	CredentialScope string                     `json:"credential_scope"`
-	CredentialNote  string                     `json:"credential_note"`
-	Connector       string                     `json:"connector,omitempty"`
-	FunctionKind    string                     `json:"function_kind,omitempty"`
-	WorkflowKind    string                     `json:"workflow_kind,omitempty"`
-	SyncMode        string                     `json:"sync_mode,omitempty"`
-	Primitive       string                     `json:"primitive,omitempty"`
-	Source          string                     `json:"source,omitempty"`
-	Destination     string                     `json:"destination,omitempty"`
-	FlowKind        string                     `json:"flow_kind,omitempty"`
-	Provider        string                     `json:"provider"`
-	ExecutedAt      string                     `json:"executed_at"`
-	RunID           string                     `json:"run_id"`
-	Proof           certificationEvidenceProof `json:"proof"`
+	SchemaVersion        int                        `json:"schema_version"`
+	Scope                string                     `json:"scope"`
+	Status               string                     `json:"status"`
+	CredentialScope      string                     `json:"credential_scope"`
+	CredentialNote       string                     `json:"credential_note"`
+	CredentialScopeProof string                     `json:"credential_scope_proof"`
+	Connector            string                     `json:"connector,omitempty"`
+	FunctionKind         string                     `json:"function_kind,omitempty"`
+	WorkflowKind         string                     `json:"workflow_kind,omitempty"`
+	SyncMode             string                     `json:"sync_mode,omitempty"`
+	Primitive            string                     `json:"primitive,omitempty"`
+	Source               string                     `json:"source,omitempty"`
+	Destination          string                     `json:"destination,omitempty"`
+	FlowKind             string                     `json:"flow_kind,omitempty"`
+	Provider             string                     `json:"provider"`
+	ExecutedAt           string                     `json:"executed_at"`
+	RunID                string                     `json:"run_id"`
+	Proof                certificationEvidenceProof `json:"proof"`
 }
 
 type certificationEvidenceProof struct {
@@ -2127,7 +2133,7 @@ func validateAcceptedEvidence(record certificationAcceptedEvidence, gate Connect
 	if record.SchemaVersion != gate.AcceptedEvidenceSchemaVersion || record.Status != "passed" {
 		return errors.New("evidence schema_version or status is unsupported")
 	}
-	if err := validateEvidenceIdentity(record.Provider, record.ExecutedAt, record.RunID, record.CredentialScope, record.CredentialNote); err != nil {
+	if err := validateEvidenceIdentity(record.Provider, record.ExecutedAt, record.RunID, record.CredentialScope, record.CredentialNote, record.CredentialScopeProof); err != nil {
 		return err
 	}
 	if err := validateEvidenceProof(record.Proof, gate); err != nil {
@@ -2160,21 +2166,30 @@ func validateEvidencePointer(pointer certificationEvidencePointer, gate Connecto
 	if !safeEvidenceRecordPath(pointer.Record, gate.Inputs.EvidenceDirectory) {
 		return errors.New("evidence record path is unsafe")
 	}
-	if err := validateEvidenceIdentity(pointer.Provider, pointer.ExecutedAt, pointer.RunID, pointer.CredentialScope, pointer.CredentialNote); err != nil {
+	if err := validateEvidenceIdentity(pointer.Provider, pointer.ExecutedAt, pointer.RunID, pointer.CredentialScope, pointer.CredentialNote, pointer.CredentialScopeProof); err != nil {
 		return err
 	}
 	return validateEvidenceProof(pointer.Proof, gate)
 }
 
-func validateEvidenceIdentity(provider, executedAt, runID, credentialScope, credentialNote string) error {
+func validateEvidenceIdentity(provider, executedAt, runID, credentialScope, credentialNote, credentialScopeProof string) error {
 	if !safeCertificationID(provider) || !safeCertificationID(runID) {
 		return errors.New("provider and run_id must be safe identifiers")
 	}
 	if _, err := time.Parse(time.RFC3339, executedAt); err != nil {
 		return fmt.Errorf("executed_at must be RFC3339: %w", err)
 	}
-	if credentialScope != fullParityCredentialScope || credentialNote != fullParityCredentialNote {
-		return errors.New("evidence credential scope is not full parity")
+	switch credentialScope {
+	case fullParityCredentialScope:
+		if credentialNote != fullParityCredentialNote || credentialScopeProof != fullParityCredentialScopeProof {
+			return errors.New("full-parity credential scope proof is invalid")
+		}
+	case observedOperationsCredentialScope:
+		if credentialNote != observedOperationsCredentialNote || credentialScopeProof != observedOperationsCredentialScopeProof {
+			return errors.New("observed-operations credential scope proof is invalid")
+		}
+	default:
+		return errors.New("evidence credential scope is unsupported")
 	}
 	return nil
 }
@@ -2444,7 +2459,7 @@ func safeEvidenceRecordPath(record, directory string) bool {
 func evidencePointerMatchesRecord(pointer certificationEvidencePointer, record certificationAcceptedEvidence) bool {
 	return pointer.Provider == record.Provider && pointer.ExecutedAt == record.ExecutedAt &&
 		pointer.RunID == record.RunID && pointer.CredentialScope == record.CredentialScope &&
-		pointer.CredentialNote == record.CredentialNote && certificationProofEqual(pointer.Proof, record.Proof)
+		pointer.CredentialNote == record.CredentialNote && pointer.CredentialScopeProof == record.CredentialScopeProof && certificationProofEqual(pointer.Proof, record.Proof)
 }
 
 func certificationProofEqual(left, right certificationEvidenceProof) bool {

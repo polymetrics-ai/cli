@@ -244,7 +244,7 @@
     "name": "connector-certification-shepherd",
     "input_schema_version": 1,
     "verdict_schema_version": 1,
-    "accepted_evidence_schema_version": 1,
+    "accepted_evidence_schema_version": 2,
     "proof_redaction_strategy": "repository_salted_hmac_sha256_v1",
     "read_only": true,
     "generated_command": "go run ./cmd/connectorgen certification-matrix --check",

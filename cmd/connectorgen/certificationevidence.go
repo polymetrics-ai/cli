@@ -89,7 +89,7 @@ func runPostgresTransportCertificationEvidence(args []string, stdout, stderr io.
 				ExecutedAt:     report.CompletedAt.UTC().Format("2006-01-02T15:04:05Z"),
 				RunID:          options.runID + "-" + mode.Mode + "-" + primitive,
 				PMBinarySHA256: options.binarySHA, PMCommand: "pm connectors certify " + options.connector + " --full --write --from-env password=" + options.secretEnv,
-				Passed: true, CredentialFullParity: true, PreparedValues: []string{prepared},
+				Passed: true, PreparedValues: []string{prepared},
 				DatabaseExchanges: []completedDatabaseExchange{{
 					Operation: "postgres_transport_" + mode.Mode + "_" + primitive,
 					Protocol:  "postgres_wire", Statement: "declared_transport_" + mode.Mode + "_" + mode.ApplyStrategy,
@@ -169,7 +169,7 @@ func runChangeCaptureCertificationEvidence(args []string, stdout, stderr io.Writ
 			RunID:          options.runID + "-" + suffix,
 			PMBinarySHA256: options.binarySHA,
 			PMCommand:      "pm etl run --sync-mode change_capture --from-env password=" + options.secretEnv,
-			Passed:         true, CredentialFullParity: true, PreparedValues: []string{prepared},
+			Passed:         true, PreparedValues: []string{prepared},
 			DatabaseExchanges: []completedDatabaseExchange{{
 				Operation: options.connector + "_change_capture_" + suffix,
 				Protocol:  "postgres_wire", Statement: "pgoutput_v2_receipt_before_acknowledgement",

@@ -517,13 +517,14 @@ func matchingWorkflowEvidence(evidence []acceptedEvidence, connector, workflow s
 			continue
 		}
 		matched = append(matched, evidencePointer{
-			Record:          item.recordPath,
-			Provider:        item.Provider,
-			ExecutedAt:      item.ExecutedAt,
-			RunID:           item.RunID,
-			CredentialScope: item.CredentialScope,
-			CredentialNote:  item.CredentialNote,
-			Proof:           item.Proof,
+			Record:               item.recordPath,
+			Provider:             item.Provider,
+			ExecutedAt:           item.ExecutedAt,
+			RunID:                item.RunID,
+			CredentialScope:      item.CredentialScope,
+			CredentialNote:       item.CredentialNote,
+			CredentialScopeProof: item.CredentialScopeProof,
+			Proof:                item.Proof,
 		})
 	}
 	sort.Slice(matched, func(i, j int) bool { return matched[i].Record < matched[j].Record })
@@ -759,13 +760,14 @@ func matchingSyncModeEvidence(evidence []acceptedEvidence, connector, mode, prim
 			continue
 		}
 		matched = append(matched, evidencePointer{
-			Record:          item.recordPath,
-			Provider:        item.Provider,
-			ExecutedAt:      item.ExecutedAt,
-			RunID:           item.RunID,
-			CredentialScope: item.CredentialScope,
-			CredentialNote:  item.CredentialNote,
-			Proof:           item.Proof,
+			Record:               item.recordPath,
+			Provider:             item.Provider,
+			ExecutedAt:           item.ExecutedAt,
+			RunID:                item.RunID,
+			CredentialScope:      item.CredentialScope,
+			CredentialNote:       item.CredentialNote,
+			CredentialScopeProof: item.CredentialScopeProof,
+			Proof:                item.Proof,
 		})
 	}
 	sort.Slice(matched, func(i, j int) bool { return matched[i].Record < matched[j].Record })
@@ -1152,13 +1154,14 @@ func applyFlowEvidence(matrix *flowMatrix, evidence []acceptedEvidence) error {
 		}
 		cell := resolved.Cell
 		pointer := evidencePointer{
-			Record:          item.recordPath,
-			Provider:        item.Provider,
-			ExecutedAt:      item.ExecutedAt,
-			RunID:           item.RunID,
-			CredentialScope: item.CredentialScope,
-			CredentialNote:  item.CredentialNote,
-			Proof:           item.Proof,
+			Record:               item.recordPath,
+			Provider:             item.Provider,
+			ExecutedAt:           item.ExecutedAt,
+			RunID:                item.RunID,
+			CredentialScope:      item.CredentialScope,
+			CredentialNote:       item.CredentialNote,
+			CredentialScopeProof: item.CredentialScopeProof,
+			Proof:                item.Proof,
 		}
 		cell.LiveEvidence = append(cell.LiveEvidence, pointer)
 		cell.LiveTested = len(cell.LiveEvidence) > 0

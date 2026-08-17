@@ -63,13 +63,14 @@ type notApplicableReason struct {
 // fingerprints, so a shard can be read and checked without loading an
 // untrusted sidecar or ever becoming a credential/provider-data store.
 type evidencePointer struct {
-	Record          string                `json:"record"`
-	Provider        string                `json:"provider"`
-	ExecutedAt      string                `json:"executed_at"`
-	RunID           string                `json:"run_id"`
-	CredentialScope string                `json:"credential_scope"`
-	CredentialNote  string                `json:"credential_note"`
-	Proof           embeddedEvidenceProof `json:"proof"`
+	Record               string                `json:"record"`
+	Provider             string                `json:"provider"`
+	ExecutedAt           string                `json:"executed_at"`
+	RunID                string                `json:"run_id"`
+	CredentialScope      string                `json:"credential_scope"`
+	CredentialNote       string                `json:"credential_note"`
+	CredentialScopeProof string                `json:"credential_scope_proof,omitempty"`
+	Proof                embeddedEvidenceProof `json:"proof"`
 }
 
 // certificationCell records the four facts that must all be true for an
@@ -159,23 +160,24 @@ type certificationShard struct {
 // derived. No existing bundle certification contract or fixture filename uses
 // this schema or directory, so filename matches cannot promote a connector.
 type acceptedEvidence struct {
-	SchemaVersion   int                   `json:"schema_version"`
-	Scope           string                `json:"scope"`
-	Status          string                `json:"status"`
-	CredentialScope string                `json:"credential_scope"`
-	CredentialNote  string                `json:"credential_note"`
-	Connector       string                `json:"connector,omitempty"`
-	FunctionKind    string                `json:"function_kind,omitempty"`
-	WorkflowKind    string                `json:"workflow_kind,omitempty"`
-	SyncMode        string                `json:"sync_mode,omitempty"`
-	Primitive       string                `json:"primitive,omitempty"`
-	Source          string                `json:"source,omitempty"`
-	Destination     string                `json:"destination,omitempty"`
-	FlowKind        string                `json:"flow_kind,omitempty"`
-	Provider        string                `json:"provider"`
-	ExecutedAt      string                `json:"executed_at"`
-	RunID           string                `json:"run_id"`
-	Proof           embeddedEvidenceProof `json:"proof"`
+	SchemaVersion        int                   `json:"schema_version"`
+	Scope                string                `json:"scope"`
+	Status               string                `json:"status"`
+	CredentialScope      string                `json:"credential_scope"`
+	CredentialNote       string                `json:"credential_note"`
+	CredentialScopeProof string                `json:"credential_scope_proof,omitempty"`
+	Connector            string                `json:"connector,omitempty"`
+	FunctionKind         string                `json:"function_kind,omitempty"`
+	WorkflowKind         string                `json:"workflow_kind,omitempty"`
+	SyncMode             string                `json:"sync_mode,omitempty"`
+	Primitive            string                `json:"primitive,omitempty"`
+	Source               string                `json:"source,omitempty"`
+	Destination          string                `json:"destination,omitempty"`
+	FlowKind             string                `json:"flow_kind,omitempty"`
+	Provider             string                `json:"provider"`
+	ExecutedAt           string                `json:"executed_at"`
+	RunID                string                `json:"run_id"`
+	Proof                embeddedEvidenceProof `json:"proof"`
 
 	recordPath string
 }
@@ -1382,13 +1384,14 @@ func matchingCapabilityEvidence(evidence []acceptedEvidence, connectorName, kind
 			continue
 		}
 		matched = append(matched, evidencePointer{
-			Record:          item.recordPath,
-			Provider:        item.Provider,
-			ExecutedAt:      item.ExecutedAt,
-			RunID:           item.RunID,
-			CredentialScope: item.CredentialScope,
-			CredentialNote:  item.CredentialNote,
-			Proof:           item.Proof,
+			Record:               item.recordPath,
+			Provider:             item.Provider,
+			ExecutedAt:           item.ExecutedAt,
+			RunID:                item.RunID,
+			CredentialScope:      item.CredentialScope,
+			CredentialNote:       item.CredentialNote,
+			CredentialScopeProof: item.CredentialScopeProof,
+			Proof:                item.Proof,
 		})
 	}
 	sort.Slice(matched, func(i, j int) bool {
@@ -1467,7 +1470,7 @@ func validateEvidencePointer(evidence evidencePointer) error {
 	if err := validateEvidenceRunID(evidence.RunID); err != nil {
 		return fmt.Errorf("run_id: %w", err)
 	}
-	if err := validateFullParityCredential(evidence.CredentialScope, evidence.CredentialNote); err != nil {
+	if err := validateCredentialScopeClaim(evidence.CredentialScope, evidence.CredentialNote, evidence.CredentialScopeProof); err != nil {
 		return fmt.Errorf("credential: %w", err)
 	}
 	if err := validateEmbeddedEvidenceProof(evidence.Proof); err != nil {
@@ -1489,14 +1492,14 @@ func validateNotApplicableReason(reason notApplicableReason) error {
 }
 
 func validateAcceptedEvidence(evidence acceptedEvidence) error {
-	if evidence.SchemaVersion != certificationSchemaVersion {
+	if evidence.SchemaVersion != acceptedEvidenceSchemaVersion {
 		return fmt.Errorf("schema_version %d is unsupported", evidence.SchemaVersion)
+	}
+	if err := validateCredentialScopeClaim(evidence.CredentialScope, evidence.CredentialNote, evidence.CredentialScopeProof); err != nil {
+		return fmt.Errorf("credential: %w", err)
 	}
 	if evidence.Status != evidenceStatusPassed {
 		return fmt.Errorf("status %q is not accepted", evidence.Status)
-	}
-	if err := validateFullParityCredential(evidence.CredentialScope, evidence.CredentialNote); err != nil {
-		return fmt.Errorf("credential: %w", err)
 	}
 	if err := validateEvidenceProvider(evidence.Provider); err != nil {
 		return fmt.Errorf("provider: %w", err)
@@ -1564,6 +1567,30 @@ func validateFullParityCredential(scope, note string) error {
 	}
 	if note != fullParityCredentialNote {
 		return errors.New("note must state the full-parity subset behavior exactly")
+	}
+	return nil
+}
+
+func validateCredentialScopeClaim(scope, note, proof string) error {
+	switch scope {
+	case credentialScopeFullParity:
+		// Preserve the exact legacy validator as a distinct guard, then prove
+		// the new record says which report fact established that claim.
+		if err := validateFullParityCredential(scope, note); err != nil {
+			return err
+		}
+		if proof != credentialScopeProofFullParityStage {
+			return fmt.Errorf("full-parity scope proof %q must be %q", proof, credentialScopeProofFullParityStage)
+		}
+	case credentialScopeObservedOperations:
+		if note != observedOperationsCredentialNote {
+			return errors.New("observed-operations note must state the bounded protocol-exchange claim exactly")
+		}
+		if proof != credentialScopeProofProtocolExchanges {
+			return fmt.Errorf("observed-operations scope proof %q must be %q", proof, credentialScopeProofProtocolExchanges)
+		}
+	default:
+		return fmt.Errorf("scope %q is unsupported", scope)
 	}
 	return nil
 }
