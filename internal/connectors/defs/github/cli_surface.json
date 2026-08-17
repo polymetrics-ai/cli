@@ -2848,7 +2848,13 @@
       "source_cli_path": "",
       "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}"
+        }
+      ]
     },
     {
       "path": "repo update",
@@ -2859,7 +2865,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}"
+        }
+      ]
     },
     {
       "path": "artifact download",
@@ -2914,7 +2926,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/cache/retention-limit"
+        }
+      ]
     },
     {
       "path": "actions storage-limit view",
@@ -2941,7 +2959,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/cache/storage-limit"
+        }
+      ]
     },
     {
       "path": "actions usage view",
@@ -2968,7 +2992,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/caches"
+        }
+      ]
     },
     {
       "path": "actions caches view",
@@ -3035,6 +3065,12 @@
           "type": "integer",
           "summary": "cache_id path parameter",
           "maps_to": "record.cache_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/caches/{cache_id}"
         }
       ]
     },
@@ -3152,6 +3188,12 @@
           "summary": "job_id path parameter",
           "maps_to": "record.job_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun"
+        }
       ]
     },
     {
@@ -3179,7 +3221,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub"
+        }
+      ]
     },
     {
       "path": "actions organization-secrets view",
@@ -3238,7 +3286,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions"
+        }
+      ]
     },
     {
       "path": "actions access view",
@@ -3265,7 +3319,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/access"
+        }
+      ]
     },
     {
       "path": "actions artifact-and-log-retention view",
@@ -3292,7 +3352,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention"
+        }
+      ]
     },
     {
       "path": "actions fork-pr-contributor-approval view",
@@ -3319,7 +3385,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval"
+        }
+      ]
     },
     {
       "path": "actions fork-pr-workflows-private-repos view",
@@ -3346,7 +3418,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos"
+        }
+      ]
     },
     {
       "path": "actions selected-actions view",
@@ -3373,7 +3451,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions"
+        }
+      ]
     },
     {
       "path": "actions workflow view",
@@ -3400,7 +3484,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/permissions/workflow"
+        }
+      ]
     },
     {
       "path": "actions runners view",
@@ -3450,7 +3540,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runners/generate-jitconfig"
+        }
+      ]
     },
     {
       "path": "actions registration-token create",
@@ -3461,7 +3557,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runners/registration-token"
+        }
+      ]
     },
     {
       "path": "actions remove-token create",
@@ -3472,7 +3574,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runners/remove-token"
+        }
+      ]
     },
     {
       "path": "actions runners delete",
@@ -3489,6 +3597,12 @@
           "type": "integer",
           "summary": "runner_id path parameter",
           "maps_to": "record.runner_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}"
         }
       ]
     },
@@ -3532,6 +3646,12 @@
           "summary": "runner_id path parameter",
           "maps_to": "record.runner_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+        }
       ]
     },
     {
@@ -3574,6 +3694,12 @@
           "summary": "runner_id path parameter",
           "maps_to": "record.runner_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+        }
       ]
     },
     {
@@ -3591,6 +3717,12 @@
           "type": "integer",
           "summary": "runner_id path parameter",
           "maps_to": "record.runner_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
         }
       ]
     },
@@ -3615,6 +3747,12 @@
           "type": "string",
           "summary": "name path parameter",
           "maps_to": "record.name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}"
         }
       ]
     },
@@ -3657,6 +3795,12 @@
           "type": "integer",
           "summary": "run_id path parameter",
           "maps_to": "record.run_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approve"
         }
       ]
     },
@@ -3796,6 +3940,12 @@
           "summary": "run_id path parameter",
           "maps_to": "record.run_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule"
+        }
       ]
     },
     {
@@ -3847,6 +3997,12 @@
           "type": "integer",
           "summary": "run_id path parameter",
           "maps_to": "record.run_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs"
         }
       ]
     },
@@ -3911,6 +4067,12 @@
           "type": "integer",
           "summary": "run_id path parameter",
           "maps_to": "record.run_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
         }
       ]
     },
@@ -3986,6 +4148,12 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+        }
       ]
     },
     {
@@ -4040,6 +4208,12 @@
           "summary": "Id of the public key the value was sealed with.",
           "maps_to": "record.key_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+        }
       ]
     },
     {
@@ -4067,7 +4241,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/variables"
+        }
+      ]
     },
     {
       "path": "variable delete-2",
@@ -4084,6 +4264,12 @@
           "type": "string",
           "summary": "name path parameter",
           "maps_to": "record.name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
         }
       ]
     },
@@ -4127,6 +4313,12 @@
           "summary": "name path parameter",
           "maps_to": "record.name"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        }
       ]
     },
     {
@@ -4145,6 +4337,12 @@
           "summary": "workflow_id path parameter",
           "maps_to": "record.workflow_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"
+        }
       ]
     },
     {
@@ -4162,6 +4360,12 @@
           "type": "integer",
           "summary": "workflow_id path parameter",
           "maps_to": "record.workflow_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"
         }
       ]
     },
@@ -4222,7 +4426,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/attestations"
+        }
+      ]
     },
     {
       "path": "attestations view",
@@ -4263,7 +4473,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/autolinks"
+        }
+      ]
     },
     {
       "path": "autolinks delete",
@@ -4281,6 +4497,12 @@
           "summary": "autolink_id path parameter",
           "maps_to": "record.autolink_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}"
+        }
       ]
     },
     {
@@ -4292,7 +4514,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/automated-security-fixes"
+        }
+      ]
     },
     {
       "path": "automated-security-fixes view",
@@ -4319,7 +4547,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/automated-security-fixes"
+        }
+      ]
     },
     {
       "path": "branches protection delete",
@@ -4336,6 +4570,12 @@
           "type": "string",
           "summary": "branch path parameter",
           "maps_to": "record.branch"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
         }
       ]
     },
@@ -4379,6 +4619,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
+        }
       ]
     },
     {
@@ -4396,6 +4642,12 @@
           "type": "string",
           "summary": "branch path parameter",
           "maps_to": "record.branch"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
         }
       ]
     },
@@ -4439,6 +4691,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+        }
       ]
     },
     {
@@ -4456,6 +4714,12 @@
           "type": "string",
           "summary": "branch path parameter",
           "maps_to": "record.branch"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
         }
       ]
     },
@@ -4499,6 +4763,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+        }
       ]
     },
     {
@@ -4516,6 +4786,12 @@
           "type": "string",
           "summary": "branch path parameter",
           "maps_to": "record.branch"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
         }
       ]
     },
@@ -4559,6 +4835,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+        }
       ]
     },
     {
@@ -4576,6 +4858,12 @@
           "type": "string",
           "summary": "branch path parameter",
           "maps_to": "record.branch"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
         }
       ]
     },
@@ -4619,6 +4907,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+        }
       ]
     },
     {
@@ -4636,6 +4930,12 @@
           "type": "string",
           "summary": "branch path parameter",
           "maps_to": "record.branch"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
         }
       ]
     },
@@ -4679,6 +4979,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+        }
       ]
     },
     {
@@ -4697,6 +5003,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+        }
       ]
     },
     {
@@ -4714,6 +5026,12 @@
           "type": "string",
           "summary": "branch path parameter",
           "maps_to": "record.branch"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
         }
       ]
     },
@@ -4757,6 +5075,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+        }
       ]
     },
     {
@@ -4799,6 +5123,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+        }
       ]
     },
     {
@@ -4817,6 +5147,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+        }
       ]
     },
     {
@@ -4834,6 +5170,12 @@
           "type": "string",
           "summary": "branch path parameter",
           "maps_to": "record.branch"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
         }
       ]
     },
@@ -4877,6 +5219,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+        }
       ]
     },
     {
@@ -4895,6 +5243,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+        }
       ]
     },
     {
@@ -4912,6 +5266,12 @@
           "type": "string",
           "summary": "branch path parameter",
           "maps_to": "record.branch"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
         }
       ]
     },
@@ -4955,6 +5315,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+        }
       ]
     },
     {
@@ -4972,6 +5338,12 @@
           "type": "string",
           "summary": "branch path parameter",
           "maps_to": "record.branch"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
         }
       ]
     },
@@ -4991,6 +5363,12 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/rename"
+        }
       ]
     },
     {
@@ -5002,7 +5380,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/check-runs"
+        }
+      ]
     },
     {
       "path": "check-runs view",
@@ -5043,6 +5427,12 @@
           "type": "integer",
           "summary": "check_run_id path parameter",
           "maps_to": "record.check_run_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}"
         }
       ]
     },
@@ -5086,6 +5476,12 @@
           "summary": "check_run_id path parameter",
           "maps_to": "record.check_run_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest"
+        }
       ]
     },
     {
@@ -5097,7 +5493,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/check-suites"
+        }
+      ]
     },
     {
       "path": "check-suites preferences update",
@@ -5108,7 +5510,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/check-suites/preferences"
+        }
+      ]
     },
     {
       "path": "check-suites view",
@@ -5201,6 +5609,12 @@
           "summary": "check_suite_id path parameter",
           "maps_to": "record.check_suite_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest"
+        }
       ]
     },
     {
@@ -5289,7 +5703,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/code-quality/setup"
+        }
+      ]
     },
     {
       "path": "code-scanning autofix view",
@@ -5331,6 +5751,12 @@
           "summary": "alert_number path parameter",
           "maps_to": "record.alert_number"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix"
+        }
       ]
     },
     {
@@ -5348,6 +5774,12 @@
           "type": "integer",
           "summary": "alert_number path parameter",
           "maps_to": "record.alert_number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits"
         }
       ]
     },
@@ -5469,6 +5901,12 @@
           "summary": "analysis_id path parameter",
           "maps_to": "record.analysis_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
+        }
       ]
     },
     {
@@ -5527,6 +5965,12 @@
           "summary": "language path parameter",
           "maps_to": "record.language"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
+        }
       ]
     },
     {
@@ -5562,7 +6006,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses"
+        }
+      ]
     },
     {
       "path": "code-scanning variant-analyses view",
@@ -5651,7 +6101,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/code-scanning/default-setup"
+        }
+      ]
     },
     {
       "path": "code-sanning upload",
@@ -5662,7 +6118,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/code-scanning/sarifs"
+        }
+      ]
     },
     {
       "path": "code-scanning sarifs view",
@@ -5752,7 +6214,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/codespaces"
+        }
+      ]
     },
     {
       "path": "codespaces devcontainers view",
@@ -5913,6 +6381,12 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+        }
       ]
     },
     {
@@ -5954,6 +6428,12 @@
           "type": "string",
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
         }
       ]
     },
@@ -6013,6 +6493,12 @@
           "summary": "comment_id path parameter",
           "maps_to": "record.comment_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions"
+        }
       ]
     },
     {
@@ -6036,6 +6522,12 @@
           "type": "integer",
           "summary": "reaction_id path parameter",
           "maps_to": "record.reaction_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}"
         }
       ]
     },
@@ -6331,6 +6823,12 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+        }
       ]
     },
     {
@@ -6372,6 +6870,12 @@
           "type": "string",
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
         }
       ]
     },
@@ -6466,7 +6970,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/dependency-graph/snapshots"
+        }
+      ]
     },
     {
       "path": "deployments delete",
@@ -6483,6 +6993,12 @@
           "type": "integer",
           "summary": "deployment_id path parameter",
           "maps_to": "record.deployment_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/deployments/{deployment_id}"
         }
       ]
     },
@@ -6526,6 +7042,12 @@
           "summary": "deployment_id path parameter",
           "maps_to": "record.deployment_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
+        }
       ]
     },
     {
@@ -6537,7 +7059,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/dispatches"
+        }
+      ]
     },
     {
       "path": "environments deployment-branch-policies view",
@@ -6579,6 +7107,12 @@
           "summary": "environment_name path parameter",
           "maps_to": "record.environment_name"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies"
+        }
       ]
     },
     {
@@ -6602,6 +7136,12 @@
           "type": "integer",
           "summary": "branch_policy_id path parameter",
           "maps_to": "record.branch_policy_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
         }
       ]
     },
@@ -6658,6 +7198,12 @@
           "summary": "branch_policy_id path parameter",
           "maps_to": "record.branch_policy_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+        }
       ]
     },
     {
@@ -6699,6 +7245,12 @@
           "type": "string",
           "summary": "environment_name path parameter",
           "maps_to": "record.environment_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
         }
       ]
     },
@@ -6747,6 +7299,12 @@
           "type": "integer",
           "summary": "protection_rule_id path parameter",
           "maps_to": "record.protection_rule_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
         }
       ]
     },
@@ -6851,6 +7409,12 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+        }
       ]
     },
     {
@@ -6906,6 +7470,12 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+        }
       ]
     },
     {
@@ -6948,6 +7518,12 @@
           "summary": "environment_name path parameter",
           "maps_to": "record.environment_name"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables"
+        }
       ]
     },
     {
@@ -6971,6 +7547,12 @@
           "type": "string",
           "summary": "name path parameter",
           "maps_to": "record.name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
         }
       ]
     },
@@ -7027,6 +7609,12 @@
           "summary": "name path parameter",
           "maps_to": "record.name"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+        }
       ]
     },
     {
@@ -7038,7 +7626,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/git/blobs"
+        }
+      ]
     },
     {
       "path": "git blobs view",
@@ -7073,7 +7667,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/git/commits"
+        }
+      ]
     },
     {
       "path": "git ref view",
@@ -7132,7 +7732,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/git/trees"
+        }
+      ]
     },
     {
       "path": "git trees view",
@@ -7267,6 +7873,12 @@
           "summary": "delivery_id path parameter",
           "maps_to": "record.delivery_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts"
+        }
       ]
     },
     {
@@ -7284,6 +7896,12 @@
           "type": "integer",
           "summary": "hook_id path parameter",
           "maps_to": "record.hook_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/pings"
         }
       ]
     },
@@ -7303,6 +7921,12 @@
           "summary": "hook_id path parameter",
           "maps_to": "record.hook_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/tests"
+        }
       ]
     },
     {
@@ -7314,7 +7938,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/immutable-releases"
+        }
+      ]
     },
     {
       "path": "immutable-releases view",
@@ -7341,7 +7971,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/immutable-releases"
+        }
+      ]
     },
     {
       "path": "import delete",
@@ -7352,7 +7988,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/import"
+        }
+      ]
     },
     {
       "path": "import view",
@@ -7379,7 +8021,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/import"
+        }
+      ]
     },
     {
       "path": "import set",
@@ -7390,7 +8038,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/import"
+        }
+      ]
     },
     {
       "path": "import authors view",
@@ -7431,6 +8085,12 @@
           "summary": "author_id path parameter",
           "maps_to": "record.author_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/import/authors/{author_id}"
+        }
       ]
     },
     {
@@ -7458,7 +8118,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/import/lfs"
+        }
+      ]
     },
     {
       "path": "installation view",
@@ -7485,7 +8151,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/interaction-limits"
+        }
+      ]
     },
     {
       "path": "interaction-limits view",
@@ -7512,7 +8184,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/interaction-limits"
+        }
+      ]
     },
     {
       "path": "interaction-limits bypass-list delete",
@@ -7523,7 +8201,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
+        }
+      ]
     },
     {
       "path": "interaction-limits bypass-list view",
@@ -7550,7 +8234,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
+        }
+      ]
     },
     {
       "path": "invitations delete",
@@ -7567,6 +8257,12 @@
           "type": "integer",
           "summary": "invitation_id path parameter",
           "maps_to": "record.invitation_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/invitations/{invitation_id}"
         }
       ]
     },
@@ -7585,6 +8281,12 @@
           "type": "integer",
           "summary": "invitation_id path parameter",
           "maps_to": "record.invitation_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/invitations/{invitation_id}"
         }
       ]
     },
@@ -7620,6 +8322,12 @@
           "summary": "comment_id path parameter",
           "maps_to": "record.comment_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin"
+        }
       ]
     },
     {
@@ -7637,6 +8345,12 @@
           "type": "integer",
           "summary": "comment_id path parameter",
           "maps_to": "record.comment_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin"
         }
       ]
     },
@@ -7696,6 +8410,12 @@
           "summary": "comment_id path parameter",
           "maps_to": "record.comment_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"
+        }
       ]
     },
     {
@@ -7719,6 +8439,12 @@
           "type": "integer",
           "summary": "reaction_id path parameter",
           "maps_to": "record.reaction_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}"
         }
       ]
     },
@@ -7793,6 +8519,12 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by"
+        }
       ]
     },
     {
@@ -7816,6 +8548,12 @@
           "type": "integer",
           "summary": "issue_id path parameter",
           "maps_to": "record.issue_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}"
         }
       ]
     },
@@ -7883,6 +8621,12 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values"
+        }
       ]
     },
     {
@@ -7900,6 +8644,12 @@
           "type": "integer",
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values"
         }
       ]
     },
@@ -7924,6 +8674,12 @@
           "type": "integer",
           "summary": "issue_field_id path parameter",
           "maps_to": "record.issue_field_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}"
         }
       ]
     },
@@ -8007,6 +8763,12 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions"
+        }
       ]
     },
     {
@@ -8031,6 +8793,12 @@
           "summary": "reaction_id path parameter",
           "maps_to": "record.reaction_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}"
+        }
       ]
     },
     {
@@ -8048,6 +8816,12 @@
           "type": "integer",
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue"
         }
       ]
     },
@@ -8091,6 +8865,12 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues"
+        }
       ]
     },
     {
@@ -8108,6 +8888,12 @@
           "type": "integer",
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority"
         }
       ]
     },
@@ -8143,7 +8929,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/merge-upstream"
+        }
+      ]
     },
     {
       "path": "milestones labels view",
@@ -8219,7 +9011,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/notifications"
+        }
+      ]
     },
     {
       "path": "pages delete",
@@ -8230,7 +9028,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/pages"
+        }
+      ]
     },
     {
       "path": "pages view",
@@ -8257,7 +9061,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pages"
+        }
+      ]
     },
     {
       "path": "pages set",
@@ -8268,7 +9078,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/pages"
+        }
+      ]
     },
     {
       "path": "pages builds view",
@@ -8295,7 +9111,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pages/builds"
+        }
+      ]
     },
     {
       "path": "pages latest view",
@@ -8346,7 +9168,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pages/deployments"
+        }
+      ]
     },
     {
       "path": "pages deployments view",
@@ -8388,6 +9216,12 @@
           "summary": "pages_deployment_id path parameter",
           "maps_to": "record.pages_deployment_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel"
+        }
       ]
     },
     {
@@ -8415,7 +9249,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
+        }
+      ]
     },
     {
       "path": "private-vulnerability-reporting view",
@@ -8442,7 +9282,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
+        }
+      ]
     },
     {
       "path": "properties values view",
@@ -8469,7 +9315,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/properties/values"
+        }
+      ]
     },
     {
       "path": "pulls reactions view",
@@ -8527,6 +9379,12 @@
           "summary": "comment_id path parameter",
           "maps_to": "record.comment_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"
+        }
       ]
     },
     {
@@ -8551,6 +9409,12 @@
           "summary": "reaction_id path parameter",
           "maps_to": "record.reaction_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}"
+        }
       ]
     },
     {
@@ -8568,6 +9432,12 @@
           "type": "integer",
           "summary": "pull_number path parameter",
           "maps_to": "record.pull_number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/codespaces"
         }
       ]
     },
@@ -8658,6 +9528,12 @@
           "type": "integer",
           "summary": "pull_number path parameter",
           "maps_to": "record.pull_number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
         }
       ]
     },
@@ -8802,7 +9678,13 @@
       "source_cli_path": "",
       "risk": "low",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/releases/generate-notes"
+        }
+      ]
     },
     {
       "path": "releases assets view-2",
@@ -8843,6 +9725,12 @@
           "type": "integer",
           "summary": "release_id path parameter",
           "maps_to": "record.release_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
         }
       ]
     },
@@ -8900,6 +9788,12 @@
           "summary": "release_id path parameter",
           "maps_to": "record.release_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions"
+        }
       ]
     },
     {
@@ -8923,6 +9817,12 @@
           "type": "integer",
           "summary": "reaction_id path parameter",
           "maps_to": "record.reaction_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}"
         }
       ]
     },
@@ -9102,7 +10002,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/secret-scanning/push-protection-bypasses"
+        }
+      ]
     },
     {
       "path": "secret-scanning scan-history view",
@@ -9129,7 +10035,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/security-advisories"
+        }
+      ]
     },
     {
       "path": "security-advisories reports create",
@@ -9140,7 +10052,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/security-advisories/reports"
+        }
+      ]
     },
     {
       "path": "security-advisories update",
@@ -9157,6 +10075,12 @@
           "type": "integer",
           "summary": "ghsa_id path parameter",
           "maps_to": "record.ghsa_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}"
         }
       ]
     },
@@ -9176,6 +10100,12 @@
           "summary": "ghsa_id path parameter",
           "maps_to": "record.ghsa_id"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve"
+        }
       ]
     },
     {
@@ -9193,6 +10123,12 @@
           "type": "integer",
           "summary": "ghsa_id path parameter",
           "maps_to": "record.ghsa_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks"
         }
       ]
     },
@@ -9292,6 +10228,12 @@
           "summary": "sha path parameter",
           "maps_to": "record.sha"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/statuses/{sha}"
+        }
       ]
     },
     {
@@ -9303,7 +10245,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/subscription"
+        }
+      ]
     },
     {
       "path": "subscription view",
@@ -9330,7 +10278,13 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/subscription"
+        }
+      ]
     },
     {
       "path": "repo archive tarball",
@@ -9465,7 +10419,13 @@
       "source_cli_path": "",
       "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/transfer"
+        }
+      ]
     },
     {
       "path": "vulnerability-alerts delete",
@@ -9476,7 +10436,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/vulnerability-alerts"
+        }
+      ]
     },
     {
       "path": "vulnerability-alerts view",
@@ -9503,7 +10469,13 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/vulnerability-alerts"
+        }
+      ]
     },
     {
       "path": "repo archive zipball",
@@ -34036,6 +35008,12 @@
           "maps_to": "record.subject_digests",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/attestations/delete-request"
+        }
       ]
     },
     {
@@ -34059,6 +35037,12 @@
           "type": "json",
           "maps_to": "record.attestation_ids",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/attestations/delete-request"
         }
       ]
     },
@@ -34122,6 +35106,12 @@
           "maps_to": "record.code_scanning_alerts",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/campaigns"
+        }
       ]
     },
     {
@@ -34184,6 +35174,12 @@
           "maps_to": "record.secret_scanning_alerts",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/campaigns"
+        }
       ]
     },
     {
@@ -34213,6 +35209,12 @@
           "type": "integer",
           "maps_to": "record.issue_field_id",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/fields"
         }
       ]
     },
@@ -34249,6 +35251,12 @@
           "type": "string",
           "maps_to": "record.data_type",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/fields"
         }
       ]
     },
@@ -34292,6 +35300,12 @@
           "maps_to": "record.single_select_options",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/fields"
+        }
       ]
     },
     {
@@ -34333,6 +35347,12 @@
           "type": "json",
           "maps_to": "record.iteration_configuration",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/fields"
         }
       ]
     },
@@ -34384,6 +35404,12 @@
           "name": "number",
           "type": "integer",
           "maps_to": "record.number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/items"
         }
       ]
     },
@@ -34437,6 +35463,12 @@
           "type": "integer",
           "maps_to": "record.number",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orgs/{org}/projectsV2/{project_number}/items"
         }
       ]
     },
@@ -34511,6 +35543,12 @@
           "type": "integer",
           "maps_to": "record.retention_period_minutes"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/codespaces"
+        }
       ]
     },
     {
@@ -34559,6 +35597,12 @@
           "type": "integer",
           "maps_to": "record.idle_timeout_minutes"
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/codespaces"
+        }
       ]
     },
     {
@@ -34583,6 +35627,12 @@
           "maps_to": "record.subject_digests",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/attestations/delete-request"
+        }
       ]
     },
     {
@@ -34606,6 +35656,12 @@
           "type": "json",
           "maps_to": "record.attestation_ids",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/attestations/delete-request"
         }
       ]
     },
@@ -34642,6 +35698,12 @@
           "type": "string",
           "maps_to": "record.data_type",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/projectsV2/{project_number}/fields"
         }
       ]
     },
@@ -34685,6 +35747,12 @@
           "maps_to": "record.single_select_options",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/projectsV2/{project_number}/fields"
+        }
       ]
     },
     {
@@ -34726,6 +35794,12 @@
           "type": "json",
           "maps_to": "record.iteration_configuration",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/projectsV2/{project_number}/fields"
         }
       ]
     },
@@ -34777,6 +35851,12 @@
           "name": "number",
           "type": "integer",
           "maps_to": "record.number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/projectsV2/{project_number}/items"
         }
       ]
     },
@@ -34831,6 +35911,12 @@
           "maps_to": "record.number",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{username}/projectsV2/{project_number}/items"
+        }
       ]
     },
     {
@@ -34868,6 +35954,12 @@
           "maps_to": "record.repository_ids",
           "summary": "Optional repository ids record field."
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/app/installations/{installation_id}/access_tokens"
+        }
       ]
     },
     {
@@ -34886,6 +35978,12 @@
           "maps_to": "record.artifact_id",
           "required": true,
           "summary": "The unique identifier of the artifact."
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}"
         }
       ]
     },
@@ -35012,6 +36110,12 @@
           "required": true,
           "summary": "The unique identifier of the workflow run."
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel"
+        }
       ]
     },
     {
@@ -35036,6 +36140,12 @@
           "type": "boolean",
           "maps_to": "record.enable_debug_logging",
           "summary": "Optional enable debug logging record field."
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs"
         }
       ]
     },
@@ -35355,6 +36465,12 @@
           "required": true,
           "summary": "The name of the secret."
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
+        }
       ]
     },
     {
@@ -35412,6 +36528,12 @@
           "required": true,
           "summary": "Required key id record field."
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
+        }
       ]
     },
     {
@@ -35467,6 +36589,12 @@
           "required": true,
           "summary": "Required value record field."
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/agents/variables"
+        }
       ]
     },
     {
@@ -35485,6 +36613,12 @@
           "maps_to": "record.name",
           "required": true,
           "summary": "The name of the variable."
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/agents/variables/{name}"
         }
       ]
     },
@@ -35534,6 +36668,12 @@
           "type": "string",
           "maps_to": "record.value",
           "summary": "Optional value record field."
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/agents/variables/{name}"
         }
       ]
     },
@@ -36010,6 +37150,12 @@
           ],
           "summary": "Required type record field."
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/git/tags"
+        }
       ]
     },
     {
@@ -36100,6 +37246,12 @@
           "type": "string",
           "maps_to": "record.url",
           "summary": "Optional url record field."
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config"
         }
       ]
     },
@@ -36268,6 +37420,12 @@
           "maps_to": "record.issue_number",
           "required": true,
           "summary": "The number that identifies the issue."
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels"
         }
       ]
     },
@@ -36561,6 +37719,12 @@
           "required": true,
           "summary": "Required body record field."
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies"
+        }
       ]
     },
     {
@@ -36610,6 +37774,12 @@
           "maps_to": "record.review_id",
           "required": true,
           "summary": "The unique identifier of the review."
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
         }
       ]
     },
@@ -36674,6 +37844,12 @@
           "maps_to": "record.body",
           "required": true,
           "summary": "Required body record field."
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
         }
       ]
     },
@@ -36914,6 +38090,12 @@
           "required": true,
           "summary": "Required access token record field."
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/applications/{client_id}/grant"
+        }
       ]
     },
     {
@@ -36939,6 +38121,12 @@
           "maps_to": "record.access_token",
           "required": true,
           "summary": "Required access token record field."
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/applications/{client_id}/token"
         }
       ]
     },
@@ -36966,6 +38154,12 @@
           "required": true,
           "summary": "Required access token record field."
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/applications/{client_id}/token"
+        }
       ]
     },
     {
@@ -36991,6 +38185,12 @@
           "maps_to": "record.access_token",
           "required": true,
           "summary": "Required access token record field."
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/applications/{client_id}/token"
         }
       ]
     },
@@ -37048,6 +38248,12 @@
           "maps_to": "record.custom_pattern_version",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+        }
       ]
     },
     {
@@ -37103,6 +38309,12 @@
           "type": "string",
           "maps_to": "record.custom_pattern_version",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
         }
       ]
     },
@@ -37160,6 +38372,12 @@
           "maps_to": "record.custom_pattern_version",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+        }
       ]
     },
     {
@@ -37215,6 +38433,12 @@
           "type": "string",
           "maps_to": "record.custom_pattern_version",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
         }
       ]
     },
@@ -37272,6 +38496,12 @@
           "maps_to": "record.custom_pattern_version",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+        }
       ]
     },
     {
@@ -37321,6 +38551,12 @@
           "type": "string",
           "maps_to": "record.custom_pattern_version",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
         }
       ]
     },
@@ -37372,6 +38608,12 @@
           "maps_to": "record.custom_pattern_version",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+        }
       ]
     },
     {
@@ -37421,6 +38663,12 @@
           "type": "string",
           "maps_to": "record.custom_pattern_version",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
         }
       ]
     },
@@ -37472,6 +38720,12 @@
           "maps_to": "record.custom_pattern_version",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+        }
       ]
     },
     {
@@ -37522,6 +38776,12 @@
           "maps_to": "record.custom_pattern_version",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+        }
       ]
     },
     {
@@ -37539,6 +38799,12 @@
           "type": "json",
           "maps_to": "record.emails",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/emails"
         }
       ]
     },
@@ -37558,6 +38824,12 @@
           "maps_to": "record.emails",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/emails"
+        }
       ]
     },
     {
@@ -37576,6 +38848,12 @@
           "maps_to": "record.emails",
           "required": true
         }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/user/emails"
+        }
       ]
     },
     {
@@ -37593,6 +38871,12 @@
           "type": "json",
           "maps_to": "record.emails",
           "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/user/emails"
         }
       ]
     },

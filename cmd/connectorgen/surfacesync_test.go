@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"testing"
 )
+
+var endpointSummaryForInvariantRE = regexp.MustCompile(`^([A-Z]+) (\/[^[:space:]]+)(?: \([^)]*\))?$`)
 
 // writeSyncBundle lays down a minimal one-command bundle and returns its dir.
 func writeSyncBundle(t *testing.T, cli, ops any) string {
@@ -97,6 +100,145 @@ func directWriteBundle(apiSurface []any, outputPolicy string, mapsTo string) (an
 		},
 	}}}
 	return cli, ops
+}
+
+// TestImplementedEndpointSummaryAlwaysHasAPISurface prevents a raw provider
+// endpoint from being stranded in summary. The optional parenthesized suffix
+// is a write-action identifier emitted by the source materializer, not part of
+// the endpoint itself. Friendly aliases use human summaries and therefore do
+// not match this predicate.
+func TestImplementedEndpointSummaryAlwaysHasAPISurface(t *testing.T) {
+	defsDir := filepath.Join("..", "..", "internal", "connectors", "defs")
+	entries, err := os.ReadDir(defsDir)
+	if err != nil {
+		t.Fatalf("read connector definitions: %v", err)
+	}
+
+	type command struct {
+		Path         string            `json:"path"`
+		Summary      string            `json:"summary"`
+		Availability string            `json:"availability"`
+		APISurface   []json.RawMessage `json:"api_surface"`
+	}
+	type cliSurface struct {
+		Commands []command `json:"commands"`
+	}
+	type endpoint struct {
+		Method string `json:"method"`
+		Path   string `json:"path"`
+	}
+	type declaredSurface struct {
+		Endpoints []endpoint `json:"endpoints"`
+	}
+
+	var findings []string
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		path := filepath.Join(defsDir, entry.Name(), "cli_surface.json")
+		raw, err := os.ReadFile(path)
+		if os.IsNotExist(err) {
+			continue
+		}
+		if err != nil {
+			t.Fatalf("read %s: %v", path, err)
+		}
+		var surface cliSurface
+		if err := json.Unmarshal(raw, &surface); err != nil {
+			t.Fatalf("decode %s: %v", path, err)
+		}
+		declaredRaw, err := os.ReadFile(filepath.Join(defsDir, entry.Name(), "api_surface.json"))
+		if os.IsNotExist(err) {
+			continue
+		}
+		if err != nil {
+			t.Fatalf("read declared api surface for %s: %v", entry.Name(), err)
+		}
+		var declared declaredSurface
+		if err := json.Unmarshal(declaredRaw, &declared); err != nil {
+			t.Fatalf("decode declared api surface for %s: %v", entry.Name(), err)
+		}
+		endpoints := map[string]bool{}
+		for _, endpoint := range declared.Endpoints {
+			endpoints[strings.ToUpper(endpoint.Method)+" "+endpoint.Path] = true
+		}
+		for _, command := range surface.Commands {
+			matches := endpointSummaryForInvariantRE.FindStringSubmatch(command.Summary)
+			if command.Availability == "implemented" && len(matches) == 3 && endpoints[matches[1]+" "+matches[2]] && len(command.APISurface) == 0 {
+				findings = append(findings, entry.Name()+" "+command.Path+": "+command.Summary)
+			}
+		}
+	}
+	if len(findings) > 0 {
+		t.Fatalf("implemented commands with parseable endpoint summaries must declare api_surface (%d): %s", len(findings), strings.Join(findings, "; "))
+	}
+}
+
+func TestSyncBundleDerivesAPISurfaceFromEndpointSummary(t *testing.T) {
+	newBundle := func(summary string) (any, any) {
+		return map[string]any{"usage": "pm acme <command>", "commands": []any{map[string]any{
+			"path":         "widgets update",
+			"summary":      summary,
+			"intent":       "reverse_etl",
+			"availability": "implemented",
+			"write":        "update_widget",
+		}}}, map[string]any{"operations": []any{}}
+	}
+
+	t.Run("endpoint summary fills api surface", func(t *testing.T) {
+		cli, ops := newBundle("PATCH /widgets/{widget_id} (update_widget)")
+		dir := writeSyncBundle(t, cli, ops)
+		if err := os.WriteFile(filepath.Join(dir, "api_surface.json"), []byte(`{"endpoints":[{"method":"PATCH","path":"/widgets/{widget_id}"}]}`), 0o644); err != nil {
+			t.Fatalf("write api_surface.json: %v", err)
+		}
+
+		stats, err := syncBundle(dir, false)
+		if err != nil {
+			t.Fatalf("syncBundle: %v", err)
+		}
+		if stats.Filled.APISurface != 1 {
+			t.Fatalf("api surface fills = %d, want 1 (stats: %+v)", stats.Filled.APISurface, stats)
+		}
+		if got := readSyncedCommand(t, dir)["api_surface"]; !endpointPathIs(got, "/widgets/{widget_id}") {
+			t.Fatalf("api_surface = %v, want summary endpoint", got)
+		}
+	})
+
+	t.Run("summary punctuation is not an endpoint declaration", func(t *testing.T) {
+		cli, ops := newBundle("PATCH /widgets/{widget_id}.")
+		dir := writeSyncBundle(t, cli, ops)
+		if err := os.WriteFile(filepath.Join(dir, "api_surface.json"), []byte(`{"endpoints":[{"method":"PATCH","path":"/widgets/{widget_id}"}]}`), 0o644); err != nil {
+			t.Fatalf("write api_surface.json: %v", err)
+		}
+
+		stats, err := syncBundle(dir, false)
+		if err != nil {
+			t.Fatalf("syncBundle: %v", err)
+		}
+		if stats.Filled.APISurface != 0 || stats.Corrected.APISurface != 0 {
+			t.Fatalf("api surface stats = %+v, want no guessed endpoint", stats)
+		}
+		if _, present := readSyncedCommand(t, dir)["api_surface"]; present {
+			t.Fatalf("punctuated summary unexpectedly gained api_surface")
+		}
+	})
+
+	t.Run("friendly summary remains without api surface", func(t *testing.T) {
+		cli, ops := newBundle("Update a widget")
+		dir := writeSyncBundle(t, cli, ops)
+
+		stats, err := syncBundle(dir, false)
+		if err != nil {
+			t.Fatalf("syncBundle: %v", err)
+		}
+		if stats.Filled.APISurface != 0 || stats.Corrected.APISurface != 0 {
+			t.Fatalf("api surface stats = %+v, want an untouched friendly summary", stats)
+		}
+		if _, present := readSyncedCommand(t, dir)["api_surface"]; present {
+			t.Fatalf("friendly summary unexpectedly gained api_surface")
+		}
+	})
 }
 
 // TestSyncBundleReportsDivergentAPISurface is the check the tool documents but
