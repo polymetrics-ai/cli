@@ -1032,12 +1032,12 @@ func buildCertificationCell(repoRoot string, source matrixConnectorSource, kind 
 		}, nil
 	}
 
-	implemented, err := functionKindImplemented(repoRoot, source, kind)
+	liveEvidence := matchingCapabilityEvidence(evidence, source, kind.ID)
+	implemented, err := functionKindImplemented(repoRoot, source, kind, evidence)
 	if err != nil {
 		return certificationCell{}, err
 	}
 	fixtureTested, fixtureEvidence := functionKindFixtureTested(source, kind)
-	liveEvidence := matchingCapabilityEvidence(evidence, source.name, kind.ID)
 	cell := certificationCell{
 		FunctionKind:    kind.ID,
 		Applicable:      true,
@@ -1118,19 +1118,26 @@ func nonApplicableFor(source matrixConnectorSource, kind functionKind) *notAppli
 	}
 }
 
-func functionKindImplemented(repoRoot string, source matrixConnectorSource, kind functionKind) (bool, error) {
+func functionKindImplemented(repoRoot string, source matrixConnectorSource, kind functionKind, evidence []acceptedEvidence) (bool, error) {
 	switch kind.Category {
 	case "operation":
 		return kind.ExecutorSource != "", nil
 	case "capability":
-		return capabilityImplemented(repoRoot, source, kind.Name)
+		return capabilityImplemented(repoRoot, source, kind.Name, evidence)
 	}
 	return false, nil
 }
 
-func capabilityImplemented(repoRoot string, source matrixConnectorSource, capability string) (bool, error) {
+func capabilityImplemented(repoRoot string, source matrixConnectorSource, capability string, evidence []acceptedEvidence) (bool, error) {
 	if source.connector == nil {
 		return false, nil
+	}
+	// A native database destination is dispatched through its definition-owned
+	// warehouse transport, not Connector.Write. Preserve the direct Write stub
+	// check below for every other shape; this path becomes implemented only when
+	// every declared destination mode has an accepted exact-mode live proof.
+	if capability == "write" && declaredNativeDatabaseDestination(source) {
+		return len(declaredNativeDatabaseDestinationEvidence(source, evidence)) > 0, nil
 	}
 	method, ok := capabilityMethod(source.connector, capability)
 	if !ok {
@@ -1375,10 +1382,10 @@ func fixtureEvidencePath(connectorName, path string) string {
 	return filepath.ToSlash(filepath.Join("internal", "connectors", "defs", connectorName, "fixtures", path))
 }
 
-func matchingCapabilityEvidence(evidence []acceptedEvidence, connectorName, kind string) []evidencePointer {
+func matchingCapabilityEvidence(evidence []acceptedEvidence, source matrixConnectorSource, kind string) []evidencePointer {
 	matched := make([]evidencePointer, 0)
 	for _, item := range evidence {
-		if item.Scope != evidenceScopeCapability || item.Status != evidenceStatusPassed || item.Connector != connectorName || item.FunctionKind != kind {
+		if item.Scope != evidenceScopeCapability || item.Status != evidenceStatusPassed || item.Connector != source.name || item.FunctionKind != kind {
 			continue
 		}
 		matched = append(matched, evidencePointer{
@@ -1390,6 +1397,9 @@ func matchingCapabilityEvidence(evidence []acceptedEvidence, connectorName, kind
 			CredentialNote:  item.CredentialNote,
 			Proof:           item.Proof,
 		})
+	}
+	if kind == "capability:write" {
+		matched = append(matched, declaredNativeDatabaseDestinationEvidence(source, evidence)...)
 	}
 	sort.Slice(matched, func(i, j int) bool {
 		if matched[i].Record == matched[j].Record {

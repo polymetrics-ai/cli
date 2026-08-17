@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/certify"
@@ -23,11 +24,23 @@ const declaredTransportEvidenceProvider = "postgres_container"
 // database evidence. The selected bundle binds report executor references and
 // apply strategies; this generic importer adds no runtime transport behavior.
 func runCertificationEvidence(args []string, stdout, stderr io.Writer) int {
-	if len(args) < 2 || args[1] != "transport" {
-		logln(stderr, "connectorgen certification-evidence: require transport")
+	if len(args) < 2 {
+		logln(stderr, "connectorgen certification-evidence: require transport or change-capture")
 		return 2
 	}
-	options, err := parsePostgresTransportEvidenceOptions(args[2:])
+	switch args[1] {
+	case "transport":
+		return runPostgresTransportCertificationEvidence(args[2:], stdout, stderr)
+	case "change-capture":
+		return runChangeCaptureCertificationEvidence(args[2:], stdout, stderr)
+	default:
+		logln(stderr, "connectorgen certification-evidence: require transport or change-capture")
+		return 2
+	}
+}
+
+func runPostgresTransportCertificationEvidence(args []string, stdout, stderr io.Writer) int {
+	options, err := parsePostgresTransportEvidenceOptions(args)
 	if err != nil {
 		logf(stderr, "connectorgen certification-evidence: %v\n", err)
 		return 2
@@ -92,6 +105,119 @@ func runCertificationEvidence(args []string, stdout, stderr io.Writer) int {
 	}
 	logf(stdout, "wrote declared transport evidence records: %d\n", written)
 	return 0
+}
+
+// changeCaptureEvidenceReport is the deliberately small receipt from
+// the independently asserted pm binary test. It contains delivery facts only;
+// the proof writer fingerprints the actual credential and command before a
+// record becomes publishable.
+type changeCaptureEvidenceReport struct {
+	Kind                              string    `json:"kind"`
+	Connector                         string    `json:"connector"`
+	CompletedAt                       time.Time `json:"completed_at"`
+	BoundedDurableStaging             bool      `json:"bounded_durable_staging"`
+	WarehouseReceiptPersisted         bool      `json:"warehouse_receipt_persisted"`
+	IndependentWarehouseReadback      bool      `json:"independent_warehouse_readback"`
+	AcknowledgedAfterWarehouseReceipt bool      `json:"acknowledged_after_warehouse_receipt"`
+}
+
+func runChangeCaptureCertificationEvidence(args []string, stdout, stderr io.Writer) int {
+	options, err := parsePostgresTransportEvidenceOptions(args)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 2
+	}
+	report, err := loadChangeCaptureEvidenceReport(options.reportPath)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+	if err := validateChangeCaptureEvidenceReport(report, options.connector); err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+	prepared, err := postgresTransportEvidencePreparedValue(options.secretEnv)
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: %v\n", err)
+		return 1
+	}
+	body, err := json.Marshal(struct {
+		BoundedDurableStaging             bool `json:"bounded_durable_staging"`
+		WarehouseReceiptPersisted         bool `json:"warehouse_receipt_persisted"`
+		IndependentWarehouseReadback      bool `json:"independent_warehouse_readback"`
+		AcknowledgedAfterWarehouseReceipt bool `json:"acknowledged_after_warehouse_receipt"`
+	}{
+		BoundedDurableStaging:             report.BoundedDurableStaging,
+		WarehouseReceiptPersisted:         report.WarehouseReceiptPersisted,
+		IndependentWarehouseReadback:      report.IndependentWarehouseReadback,
+		AcknowledgedAfterWarehouseReceipt: report.AcknowledgedAfterWarehouseReceipt,
+	})
+	if err != nil {
+		logf(stderr, "connectorgen certification-evidence: encode change-capture report: %v\n", err)
+		return 1
+	}
+	completed := func(scope, functionKind, mode, primitive, suffix string) completedLiveEvidence {
+		return completedLiveEvidence{
+			SchemaVersion:  certificationSchemaVersion,
+			Scope:          scope,
+			Connector:      options.connector,
+			FunctionKind:   functionKind,
+			SyncMode:       mode,
+			Primitive:      primitive,
+			Provider:       declaredTransportEvidenceProvider,
+			ExecutedAt:     report.CompletedAt.UTC().Format(time.RFC3339),
+			RunID:          options.runID + "-" + suffix,
+			PMBinarySHA256: options.binarySHA,
+			PMCommand:      "pm etl run --sync-mode change_capture --from-env password=" + options.secretEnv,
+			Passed:         true, CredentialFullParity: true, PreparedValues: []string{prepared},
+			DatabaseExchanges: []completedDatabaseExchange{{
+				Operation: options.connector + "_change_capture_" + suffix,
+				Protocol:  "postgres_wire", Statement: "pgoutput_v2_receipt_before_acknowledgement",
+				ResponseStatus: "completed", ResponseBody: body,
+			}},
+		}
+	}
+	records := []struct {
+		name      string
+		completed completedLiveEvidence
+	}{
+		{name: options.recordPrefix + "-capability-cdc.json", completed: completed(evidenceScopeCapability, "capability:cdc", "", "", "capability_cdc")},
+		{name: options.recordPrefix + "-change_capture-database_read_into_warehouse.json", completed: completed(evidenceScopeSyncMode, "", "change_capture", "database_read_into_warehouse", "change_capture_database_read")},
+	}
+	for _, record := range records {
+		if _, err := writeProofBearingEvidence(options.repoRoot, filepath.Join(options.repoRoot, acceptedEvidenceDirectory, record.name), record.completed); err != nil {
+			logf(stderr, "connectorgen certification-evidence: write %s: %v\n", record.name, err)
+			return 1
+		}
+	}
+	logf(stdout, "wrote change-capture evidence records: %d\n", len(records))
+	return 0
+}
+
+func loadChangeCaptureEvidenceReport(path string) (changeCaptureEvidenceReport, error) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return changeCaptureEvidenceReport{}, fmt.Errorf("read report: %w", err)
+	}
+	var report changeCaptureEvidenceReport
+	if err := json.Unmarshal(raw, &report); err != nil {
+		return changeCaptureEvidenceReport{}, fmt.Errorf("parse report: %w", err)
+	}
+	return report, nil
+}
+
+func validateChangeCaptureEvidenceReport(report changeCaptureEvidenceReport, connector string) error {
+	if report.Kind != "ChangeCaptureCertification" || report.Connector != connector || report.CompletedAt.IsZero() {
+		return errors.New("report is not a completed change-capture certification")
+	}
+	if !report.BoundedDurableStaging || !report.WarehouseReceiptPersisted || !report.IndependentWarehouseReadback || !report.AcknowledgedAfterWarehouseReceipt {
+		return errors.New("report requires bounded staging, independent warehouse read-back, and acknowledgement after receipt")
+	}
+	bundle, err := engine.Load(defs.FS, connector)
+	if err != nil || bundle.Metadata.IntegrationType != "database" || !bundle.Metadata.Capabilities.CDC || bundle.Changefeed == nil || bundle.Changefeed.Status != connectors.ChangefeedStatusImplemented {
+		return errors.New("connector does not declare an implemented database change-capture contract")
+	}
+	return nil
 }
 
 type postgresTransportEvidenceOptions struct {

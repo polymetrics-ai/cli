@@ -1,247 +1,160 @@
-# Verification — Issues 3978 and 3977
+# Verification — Issue #3978: final PostgreSQL certification and publication
 
-## Behavior evidence
+## Scope and reconciliation
 
-- Red: `traces/red-app-dispatch.txt` records production `App.RunETL(change_capture)` refusing the
-  already-implemented PostgreSQL changefeed before warehouse dispatch.
-- Green: `TestRunETLChangeCapturePublishesCommittedTransactionToConnectionWarehouse` requires two
-  exact IDs in the connection-owned Parquet table and the full `lsn-1` checkpoint. A no-op cannot
-  satisfy either assertion.
-- Green: `TestRunETLChangeCaptureRestoresWarehouseReceiptBeforeCheckpointAfterRestart` simulates
-  process loss after durable warehouse receipt, then proves restart restores the receipt, persists
-  the checkpoint, and does not receive the transaction twice.
-- Green: PostgreSQL transaction tests require warehouse receipt before app checkpoint before source
-  LSN acknowledgement.
-- Green after #4156 rebase: both the generic declared-transport `change_capture` test and the native
-  PostgreSQL warehouse fallback test pass, proving the shared route retains precedence.
+This is a certification/publication change. It does not add a generic SQL
+writer, a direct source-to-target hop, an API CDC sink, a broker, MCP, or UI
+behavior.
 
-## Completed commands
+- The issue's request to reject `incremental_dedupe_history` is stale. The
+  current PostgreSQL definition declares all six managed-target modes and the
+  current committed evidence has a real-binary record for each; the matrix now
+  retains that fact.
+- The issue's Podman-only wording is stale. All live checks used the explicitly
+  configured shared Colima Docker socket; Docker/Colima were neither restarted
+  nor reconfigured.
+- The pre-task `write=false, cdc=true` publication was stale relative to merged
+  #4195/#4199 transport behavior. `write=true` now means only the declared
+  warehouse-mediated managed destination. It never makes direct
+  `Connector.Write` available. `query=false` remains exact.
+- PostgreSQL CDC remains a source-to-connection-owned-warehouse route only.
+  The generated matrix records API primitives and destination `change_capture`
+  as non-pass cells with concrete reasons. No CDC-to-API behavior is implied.
+
+The four programme transfer directions are the previously merged #3987/#4195
+evidence set (API→API, API→database, database→API, database→database). This
+issue's fresh live work re-certifies the PostgreSQL definition-owned six-mode
+database transport and source-only CDC publication; it does not re-open the
+GitHub/external-binary lanes that the task excludes.
+
+## TDD and failure controls
+
+Red observations:
+
+1. `TestCertificationMatrixPromotesPostgresManagedWriteOnlyWithDeclaredLiveTransportProof`
+   failed before publication because PostgreSQL was still declared `write=false`.
+2. `TestCertificationMatrixPromotesPostgresChangeCaptureOnlyWithReceiptBackedLiveProof`
+   failed before the fresh CDC proof because the accepted CDC capability record
+   was absent.
+3. `TestCertificationChangeCaptureRequiresImplementedChangefeedContract`
+   failed against a source whose bundle changefeed had been removed. The green
+   projection now refuses to declare that mode without an implemented database
+   changefeed contract.
+4. The scratch `sslmode=bananas` profile compiled through the definition
+   validator but the real built PostgreSQL certification binary exited 2. The
+   exact run and restoration are in `traces/red-runtime-profile.txt`.
+
+Green controls:
+
+- `TestCertificationMatrixKeepsPostgresManagedWriteUnimplementedWithoutAllDeclaredLiveProof`
+  proves a metadata declaration plus an empty evidence set is insufficient.
+- `TestPostgresPublishedWriteAndCDCMatchLiveCertification` requires every true
+  PostgreSQL public flag to have a declared, implemented, accepted live matrix
+  cell. `write` points at six exact destination-mode records; `cdc` points at
+  the receipt-backed record.
+- `TestWriteUnsupported` remains green: a direct `Connector.Write` cannot
+  bypass the managed transport's plan/preview/approval/receipt boundary.
+
+## Live PostgreSQL evidence
 
 ```text
-go test -timeout 20m ./internal/app -count=1
-PASS (183.146s)
-
-go test -timeout 20m ./internal/connectors ./internal/connectors/database ./internal/connectors/native/postgres -count=1
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
+POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
+go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres \
+  -run '^TestPostgresCertificationProfileRunsBuiltBinaryLive$' -count=1 -v
 PASS
 
-go test -timeout 20m ./internal/cli -count=1
-PASS (314.840s)
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
+POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
+POLYMETRICS_WRITE_POSTGRES_CERTIFICATION_EVIDENCE=1 \
+go test -timeout 20m -tags=databaseintegration ./internal/cli \
+  -run '^TestPMBinaryDispatchesPostgresChangeCaptureToWarehouse$' -count=1 -v
+PASS
+```
 
-go run ./cmd/connectorgen validate internal/connectors/defs
-PASS: 552 connector bundles validated, 0 errors
+The certification profile builds `pm`, executes the declared PostgreSQL
+transport, verifies all six modes with independent target SQL read-back, and
+requires positive read/load/checkpoint counts. The CDC binary test builds a
+fresh `pm`, starts a PostgreSQL 16 pgoutput source, commits ID 901, reads that
+ID back from the connection-owned Parquet warehouse, requires a durable receipt
+with no pending transaction manifest and a complete checkpoint, then observes
+`confirmed_flush_lsn` at or after the post-insert transaction LSN. It emitted
+only these redacted proof records:
 
+- `internal/connectors/certifications/evidence/postgres_cdc_r1-capability-cdc.json`
+- `internal/connectors/certifications/evidence/postgres_cdc_r1-change_capture-database_read_into_warehouse.json`
+
+The generated PostgreSQL matrix therefore has `write=true` with six exact live
+destination records and `cdc=true` with one receipt-backed capability record
+plus one `change_capture/database_read_into_warehouse` record. `query` is
+false. Its aggregate `capability_complete` remains false because unrelated
+applicable capability cells lack fixture/live evidence; that aggregate is not a
+substitute for the individual published capability evidence.
+
+## Generated artifacts and CLI parity
+
+```text
 go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors
 PASS
 
-(cd website && npm run gen:website-data)
-PASS: 552 connectors; write=241, query=0, cdc=1
+pnpm --dir website run gen:website-data
+PASS
+pnpm --dir website run gen:docs
+PASS
+pnpm --dir website run gen:docs
+PASS
+git diff --exit-code -- website
+PASS (no second-pass working-tree diff)
+
+./pm help connectors
+./pm connectors
+./pm connectors certify --help
+PASS (all contextual help succeeds)
+
+./pm connectors inspect postgres --json
+PASS: connector.capabilities.write=true, cdc=true, query=false
 ```
 
-Live evidence after rebasing onto #4156:
+## Local verification
 
 ```text
-POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
-POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
-go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres \
-  -run 'TestPostgres(PGOutputV2ContainerHarness|ManagedTargetWorksetDeliveryLive|ManagedTargetIncrementalDedupeHistoryLive)$' \
-  -count=1 -v
-
-PASS TestPostgresPGOutputV2ContainerHarness (10.22s)
-PASS TestPostgresManagedTargetWorksetDeliveryLive (5.84s)
-PASS TestPostgresManagedTargetIncrementalDedupeHistoryLive (5.93s)
+go test -timeout 20m ./cmd/connectorgen -count=1                                      PASS
+go test -timeout 20m ./internal/connectors/native/postgres -count=1                  PASS
+go test -timeout 20m ./internal/connectors/engine -count=1                           PASS
+go test -timeout 20m ./internal/connectors/certify -count=1                          PASS
+go test -timeout 20m ./internal/app -count=1                                         PASS
+go test -timeout 20m ./internal/cli -count=1                                         PASS
+go vet ./...                                                                           PASS
+go build -o pm ./cmd/pm                                                                PASS
+make tidy-check                                                                        PASS
+make lint                                                                              PASS (0 issues)
+make docs-check-no-build                                                               PASS
+make smoke-no-build                                                                    PASS
+make agent-contract-check                                                              PASS
+make connectorgen-validate                                                             PASS (552 bundles, 0 findings)
+make connectorgen-surface-sync                                                        PASS (0 drift)
+make github-parity-artifacts-check                                                     PASS
+make connectorgen-certification-matrix                                                 PASS
+make connector-boundary                                                                PASS
+make connector-canon-check                                                             PASS
+make release-workflow-check                                                            PASS
+pnpm --dir website run lint                                                            PASS (13 existing warnings)
+pnpm --dir website run typecheck                                                       PASS
+pnpm --dir website run test:unit                                                       PASS (80 tests)
+pnpm --dir website run test:scripts                                                    PASS (28 tests)
+pnpm --dir website run test:e2e                                                        PASS (19 passed, 7 expected skips)
+pnpm --dir website run build                                                           PASS
 ```
 
-The CDC live test observes committed replication events, a persisted checkpoint, and acknowledged
-LSN behavior. The managed-target live tests assert private driver behavior only; they do not prove
-a production destination and therefore do not authorize `write=true`. #4158's known base-only live
-control assertion was excluded as required.
+## Inline verification and review fallback
 
-## Pre-CI final gates
-
-All final gates passed:
-
-```text
-gofmt (changed Go files); git diff --check
-PASS
-
-go test -race -timeout 20m ./internal/app -run 'TestRunETL(ChangeCapture|TransportDispatchesDeclaredChangeCapture)' -count=1
-PASS
-
-go test -race -timeout 20m ./internal/connectors/native/postgres -run 'Test(PGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint|PostgresDeclaresProviderHTTPRateLimitsNotApplicable|NameAndMetadata)$' -count=1
-PASS
-
-go vet ./...
-PASS
-
-make tidy-check; make build
-PASS
-
-make -j2 lint docs-check-no-build smoke-no-build agent-contract-check connectorgen-validate \
-  connectorgen-surface-sync connector-runtime-preflight connector-canon-check connector-boundary \
-  release-workflow-check
-PASS; boundary outcome=clean, checked_files=261, connectors_loaded=552
-```
-
-The built CLI previously exposed the false `write=true` claim. CI certification and a fresh binary
-audit showed that the same inspection payload had `auth_modes.write=false` and
-`sync_transport.destination.status=unsupported`; native `DatabaseDriver` is deliberately
-unregistered and generic `Connector.Write` returns unsupported. The CDC-only correction requires
-`write=false`, `cdc=true`, `query=false`. Issue #3982 owns the production destination declaration
-and factory needed before write can be published.
-
-## Inline code review
-
-Review of the whole base-to-head diff found one actionable durability issue: initial PostgreSQL
-delivery derived its receiver receipt from the staged content digest, while crash restoration
-supplied the raw transaction-stage lookup ID. The disposition was accepted. Both boundaries now use
-the stage's opaque `TransactionKey`, and the unit test requires the restored ID to equal the initial
-receiver ID while differing from the raw lookup value.
-
-Post-fix verification:
-
-```text
-go test -race -timeout 20m ./internal/connectors/native/postgres \
-  -run '^TestPGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint$' -count=1
-PASS
-
-go test -timeout 20m ./internal/connectors/native/postgres -count=1
-PASS
-
-go test -timeout 20m ./internal/app \
-  -run 'TestRunETL(ChangeCapture|TransportDispatchesDeclaredChangeCapture)' -count=1
-PASS
-
-POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
-POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
-go test -timeout 20m -tags=databaseintegration ./internal/connectors/native/postgres \
-  -run '^TestPostgresPGOutputV2ContainerHarness$' -count=1 -v
-PASS (11.15s)
-```
-
-No shared transport descriptor declaration or validation was changed. #4125 and #4158 remain out
-of scope. The PR targets a non-default integration base, so review coverage is recorded as
-`primary_route=claude_auto`, `coverage_route=sub_pr`, `fallback_route=parent_pr_fallback`,
-`review_status=pending` until the PR workflow posts its review record.
-
-## Fresh binary entry-point proof
-
-The final re-audit required proof above the app-only fake. The new tagged test builds a fresh
-`cmd/pm` and invokes the same executable entry point shipped to users:
-
-```text
-cmd/pm main
-  -> cli.Run etl run
-  -> App.RunETL
-  -> dispatchETLMode exact implemented changefeed route
-  -> postgres.Connector.ReadCDC
-  -> pgoutput v2 committed transaction receiver
-  -> connection-owned WAL + Parquet
-  -> full app checkpoint
-  -> PostgreSQL confirmed_flush_lsn
-```
-
-Its first red run failed before any slot with `source transport does not support sync mode
-"change_capture"`. Its second red run reached `ReadCDC` but correctly failed an inverted
-observation/receipt timestamp. Both are recorded in `traces/red-binary-dispatch.txt`.
-
-Final live result:
-
-```text
-POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker \
-POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock \
-go test -timeout 20m -tags=databaseintegration ./internal/cli \
-  -run '^TestPMBinaryDispatchesPostgresChangeCaptureToWarehouse$' -count=1 -v
-
-PASS (28.19s)
-Observed: source ID 901 in Parquet, full checkpoint present, native stage receipt present,
-and active replication slot confirmed_flush_lsn non-empty.
-```
-
-Post-binary-fix final gates:
-
-```text
-go test -race -timeout 20m ./internal/app \
-  -run 'TestRunETL(ChangeCapture|TransportDispatchesDeclaredChangeCapture)' -count=1
-PASS
-
-go test -race -timeout 20m ./internal/connectors/native/postgres \
-  -run '^TestPGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint$' -count=1
-PASS
-
-go test -timeout 20m ./internal/app -count=1
-PASS (185.880s)
-
-go test -timeout 20m ./internal/connectors/native/postgres -count=1
-PASS
-
-go vet ./...
-PASS
-
-golangci-lint run ./internal/app/... ./internal/cli/... ./internal/connectors/native/postgres/...
-PASS: 0 issues
-
-go build ./cmd/pm
-PASS
-
-go run ./cmd/connectorgen validate internal/connectors/defs
-PASS: 552 connectors, 0 findings
-
-go run ./cmd/connectorgen surface-sync --check
-PASS: 552 connectors, 0 drift
-```
-
-## CDC-only correction after CI certification failure
-
-CI and the focused local reproduction rejected the attempted `write=true` publication. The red
-evidence is recorded in `traces/red-write-publication-certification.txt`. The production binary
-had no PostgreSQL destination dispatch: inspection reported `auth_modes.write=false` and
-`sync_transport.destination.status=unsupported`, the typed `DatabaseDriver` is deliberately
-unregistered, and generic `Connector.Write` returns `ErrUnsupportedOperation`. Per the capability
-truth rule, this PR now keeps `write=false`; #3982 owns the destination declaration and factory.
-Issue #3978 is therefore only partially delivered by this PR.
-
-After reverting the false write publication, all three CI regressions passed locally:
-
-```text
-go test -timeout 20m ./internal/connectors/engine \
-  -run '^TestBundleLoadPostgresDatabaseDefinitionWithProvenCDCCapability$' -count=1
-PASS
-
-go test -timeout 20m ./cmd/connectorgen \
-  -run 'TestCertification(MatrixRejectsDatabaseWriteStubs|CheckIgnoresMalformedNonAllowlistedRuntimeLedgerEntry|ScopedSourceResolutionUsesScopedPostgresBundle|SyncModeDatabaseWriteStubIsNotImplemented)$' \
-  -count=1
-PASS
-```
-
-Every requested derived surface was regenerated in one pass: `surface-sync`, both certification
-shards/status via `certification-matrix --all`, CLI manuals and connector manuals/skills/catalog,
-golden transcripts, and all website data projections. The full changed-package set passed:
-
-```text
-go test -timeout 20m ./cmd/connectorgen ./internal/connectors/engine \
-  ./internal/connectors/native/postgres ./internal/app ./internal/cli -count=1
-PASS
-```
-
-The same non-test drift and repository gates used by CI passed locally: `gofmt`, `git diff --check`,
-`tidy-check`, `go vet ./...`, `go build ./cmd/pm`, `docs-check-no-build`, `smoke-no-build`, `lint`,
-`agent-contract-check`, `connectorgen-validate`, `connectorgen-surface-sync`,
-`github-parity-artifacts-check`, `connectorgen-certification-matrix`, `connector-boundary`,
-`connector-canon-check`, and `release-workflow-check`. The boundary report was clean across 261
-files and 552 connectors.
-
-Fresh binary inspection after those gates returned exactly:
-
-```json
-{
-  "capabilities": {"check":true,"catalog":true,"read":true,"write":false,"query":false,"cdc":true},
-  "auth_write": false,
-  "destination_status": "unsupported"
-}
-```
-
-`pm help connectors`, bare `pm connectors`, and `pm connectors --help` all exited successfully.
-The regenerated golden transcript test passed without further drift. The CDC production call chain
-remains proven from the built `cmd/pm` entry point through `App.RunETL`, `dispatchETLMode`, and
-`postgres.Connector.ReadCDC` to observable Parquet, checkpoint, receipt, and acknowledged LSN
-state changes.
+The canonical contract prohibits role spawning in this worker. I ran the
+GSD adapter health/source checks and generated the `discuss-phase`,
+`plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` prompts,
+then performed the required TDD, verification, and standard cross-file review
+inline. Review focused on the evidence importer, proof redaction boundary,
+matrix projection, source LSN ordering, generated artifacts, and the direct
+writer boundary. The global matrix check caught one real GitHub regression
+during review; it was fixed by limiting the new projection to declared native
+database destinations, then rechecked byte-identical for GitHub. No unresolved
+Critical or Warning finding remains.

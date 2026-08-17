@@ -646,7 +646,14 @@ func syncModeCellFor(source matrixConnectorSource, mode string, primitive syncPr
 	// destination transport role that the real preflight will resolve.
 	admitted := syncModeTransportAdmits(source, primitive, synccontract.Mode(mode))
 	declaredPair := declaredNativeDatabaseTransportPair(source, synccontract.Mode(mode))
-	if declaredPair {
+	if mode == string(synccontract.ModeChangeCapture) {
+		// Change capture has its own declared changefeed rather than a polling
+		// sync_transport mode. Its only admitted route is database -> warehouse;
+		// implementation remains false until a matching receipt-backed live
+		// proof has been accepted.
+		base.Declared = cdc.Declared && implementedDatabaseChangeCaptureContract(source)
+		base.Implemented = base.Declared && cdc.Implemented && len(live) > 0
+	} else if declaredPair {
 		// A declared native-database pair does not use the connector's direct
 		// Write method. Mark implementation only after an accepted exact-mode
 		// live proof: the matrix must not infer an executable destination from a
@@ -689,6 +696,56 @@ func declaredNativeDatabaseTransportPair(source matrixConnectorSource, mode sync
 		descriptor.Destination.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase ||
 		!syncTransportContainsMode(descriptor.Source.Modes, mode) ||
 		!syncTransportContainsMode(descriptor.Destination.Modes, mode) {
+		return false
+	}
+	return true
+}
+
+func implementedDatabaseChangeCaptureContract(source matrixConnectorSource) bool {
+	if source.integrationType != "database" {
+		return false
+	}
+	if source.bundle != nil {
+		return source.bundle.Changefeed != nil && source.bundle.Changefeed.Status == connectors.ChangefeedStatusImplemented
+	}
+	if source.connector == nil {
+		return false
+	}
+	definition, ok := connectors.DefinitionOf(source.connector)
+	return ok && definition.Changefeed != nil && definition.Changefeed.Status == connectors.ChangefeedStatusImplemented
+}
+
+// declaredNativeDatabaseDestinationEvidence accepts a public write claim only
+// when its full declared source/destination transport pair has one exact live
+// proof for every destination mode. Connector.Write is intentionally not part
+// of this check: the managed target receives sealed warehouse worksets through
+// the transport boundary rather than an unplanned direct writer.
+func declaredNativeDatabaseDestinationEvidence(source matrixConnectorSource, evidence []acceptedEvidence) []evidencePointer {
+	if !declaredNativeDatabaseDestination(source) {
+		return nil
+	}
+	descriptor := syncTransportDescriptorFor(source)
+	matched := make([]evidencePointer, 0, len(descriptor.Destination.Modes))
+	for _, mode := range descriptor.Destination.Modes {
+		if !declaredNativeDatabaseTransportPair(source, mode) {
+			return nil
+		}
+		modeEvidence := matchingSyncModeEvidence(evidence, source.name, string(mode), "database_write_from_warehouse")
+		if len(modeEvidence) == 0 {
+			return nil
+		}
+		matched = append(matched, modeEvidence...)
+	}
+	sort.Slice(matched, func(i, j int) bool { return matched[i].Record < matched[j].Record })
+	return matched
+}
+
+func declaredNativeDatabaseDestination(source matrixConnectorSource) bool {
+	descriptor := syncTransportDescriptorFor(source)
+	if descriptor == nil || descriptor.Source == nil || descriptor.Destination == nil ||
+		descriptor.Source.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase ||
+		descriptor.Destination.Executor.Family != connectors.TransportExecutorFamilyNativeDatabase ||
+		len(descriptor.Destination.Modes) == 0 {
 		return false
 	}
 	return true

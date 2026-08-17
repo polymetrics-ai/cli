@@ -97,6 +97,105 @@ func TestCertificationEvidencePostgresTransportRejectsUnexecutedMode(t *testing.
 	}
 }
 
+func TestCertificationEvidencePostgresChangeCapturePromotesOnlyReceiptBackedBinaryProof(t *testing.T) {
+	root := t.TempDir()
+	reportPath := filepath.Join(root, "postgres-cdc-report.json")
+	raw, err := json.Marshal(postgresChangeCaptureEvidenceTestReport())
+	if err != nil {
+		t.Fatalf("marshal change-capture report: %v", err)
+	}
+	if err := os.WriteFile(reportPath, raw, 0o600); err != nil {
+		t.Fatalf("write change-capture report: %v", err)
+	}
+	t.Setenv("PM_POSTGRES_CERTIFICATION_EVIDENCE_TEST_PASSWORD", "live-test-secret")
+
+	var stdout, stderr bytes.Buffer
+	code := run([]string{
+		"certification-evidence", "change-capture", "--connector", "postgres",
+		"--report", reportPath,
+		"--binary-sha", strings.Repeat("a", 64),
+		"--from-env", "password=PM_POSTGRES_CERTIFICATION_EVIDENCE_TEST_PASSWORD",
+		"--run-id", "postgres_cdc_test",
+		"--record-prefix", "postgres_cdc_test",
+		"--repo-root", root,
+	}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("certification-evidence exit=%d stderr=%q", code, stderr.String())
+	}
+	if got := stdout.String(); got != "wrote change-capture evidence records: 2\n" {
+		t.Fatalf("certification-evidence stdout=%q", got)
+	}
+	items, err := loadAcceptedEvidence(root, []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadAcceptedEvidence() error = %v", err)
+	}
+	if len(items) != 2 {
+		t.Fatalf("accepted PostgreSQL change-capture evidence=%d, want 2", len(items))
+	}
+	seenCapability, seenMode := false, false
+	for _, item := range items {
+		switch {
+		case item.Scope == evidenceScopeCapability && item.FunctionKind == "capability:cdc":
+			seenCapability = true
+		case item.Scope == evidenceScopeSyncMode && item.SyncMode == "change_capture" && item.Primitive == "database_read_into_warehouse":
+			seenMode = true
+		default:
+			t.Fatalf("accepted PostgreSQL evidence = %#v, want only CDC capability and database-read mode proof", item)
+		}
+	}
+	if !seenCapability || !seenMode {
+		t.Fatalf("change-capture evidence coverage capability=%t mode=%t, want both", seenCapability, seenMode)
+	}
+}
+
+func TestCertificationEvidencePostgresChangeCaptureRejectsAcknowledgementBeforeReceipt(t *testing.T) {
+	root := t.TempDir()
+	report := postgresChangeCaptureEvidenceTestReport()
+	report.AcknowledgedAfterWarehouseReceipt = false
+	raw, err := json.Marshal(report)
+	if err != nil {
+		t.Fatalf("marshal change-capture report: %v", err)
+	}
+	reportPath := filepath.Join(root, "postgres-cdc-report.json")
+	if err := os.WriteFile(reportPath, raw, 0o600); err != nil {
+		t.Fatalf("write change-capture report: %v", err)
+	}
+	t.Setenv("PM_POSTGRES_CERTIFICATION_EVIDENCE_TEST_PASSWORD", "live-test-secret")
+
+	var stdout, stderr bytes.Buffer
+	code := run([]string{
+		"certification-evidence", "change-capture", "--connector", "postgres",
+		"--report", reportPath,
+		"--binary-sha", strings.Repeat("a", 64),
+		"--from-env", "password=PM_POSTGRES_CERTIFICATION_EVIDENCE_TEST_PASSWORD",
+		"--run-id", "postgres_cdc_test",
+		"--record-prefix", "postgres_cdc_test",
+		"--repo-root", root,
+	}, &stdout, &stderr)
+	if code != 1 || !strings.Contains(stderr.String(), "requires bounded staging, independent warehouse read-back, and acknowledgement after receipt") {
+		t.Fatalf("certification-evidence rejected report exit=%d stderr=%q", code, stderr.String())
+	}
+	items, err := loadAcceptedEvidence(root, []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadAcceptedEvidence() after rejected report: %v", err)
+	}
+	if len(items) != 0 {
+		t.Fatalf("rejected PostgreSQL change-capture report wrote %d evidence records", len(items))
+	}
+}
+
+func postgresChangeCaptureEvidenceTestReport() changeCaptureEvidenceReport {
+	return changeCaptureEvidenceReport{
+		Kind:                              "ChangeCaptureCertification",
+		Connector:                         "postgres",
+		CompletedAt:                       time.Date(2026, time.August, 17, 0, 0, 0, 0, time.UTC),
+		BoundedDurableStaging:             true,
+		WarehouseReceiptPersisted:         true,
+		IndependentWarehouseReadback:      true,
+		AcknowledgedAfterWarehouseReceipt: true,
+	}
+}
+
 func postgresTransportEvidenceTestReport() certify.Report {
 	expected := []struct {
 		mode     string

@@ -1,35 +1,24 @@
-# Plan — Issues 3978 and 3977: PostgreSQL capability publication
+# Plan — Issue #3978: final PostgreSQL certification and publication
 
 ## Goal
 
-Make the already-proven PostgreSQL CDC executor reachable through the production application and connection-owned warehouse, then publish exact `write=true`, `cdc=true`, `query=false` metadata with all generated surfaces in parity.
+Make the published PostgreSQL capability projection agree with current, executable, definition-owned certification evidence: six warehouse-mediated polling/managed-target modes and a source-only pgoutput CDC route. `query` remains false. This is a certification/publication repair, not a new transport implementation.
 
 ## TDD slices
 
-1. **Red — application dispatch.** Add an app test whose implemented changefeed emits one committed transaction. `RunETL(change_capture)` must currently fail with `ModeNotExecutableError`; the test will require observable Parquet/WAL rows and a committed full checkpoint instead.
-2. **Green — committed transaction port.** Add the smallest connector-level streaming transaction receiver/receipt contract. Adapt PostgreSQL's committed transaction stage to use it when supplied while preserving the existing connector-local callback path.
-3. **Green — connection warehouse receiver.** Route `change_capture` only when the source has a matching implemented changefeed and the destination materializes a local warehouse. Atomically publish a complete transaction to the owned WAL, rebuild the single Parquet table, persist the checkpoint with the warehouse acknowledgement, then return so PostgreSQL may acknowledge the LSN. Refuse missing descriptors, non-warehouse targets, cursor fallback, and receipt/checkpoint failures before an LSN can advance.
-4. **Red/green — publication.** Update PostgreSQL source metadata and native override to `write=true`, `cdc=true`, `query=false`; update exact behavior tests. Regenerate connector catalog, docs, website data, and golden transcripts with repository generators.
-5. **Live proof.** Run the PostgreSQL dbtest suite through the explicit Colima socket. Assert existing CDC tests observe committed rows/checkpoints/acknowledged LSNs and existing managed-target tests observe actual row mutations and durable receipts. Run focused application tests proving the dispatch bridge.
-6. **Verify and review.** Run formatting, focused/race tests, build/vet, connector/docs gates, and deep inline code review. Record base-only #4158 separately without modifying it.
+1. **Red — expose the mismatch.** The current matrix had twelve live mode cells but published `write=false` and evidence-free `cdc=true`. Add tests that fail on the missing capability proof and prove that a `write=true` declaration alone cannot pass certification.
+2. **Green — definition-owned certification projection.** Change only certification/publication interpretation necessary to bind a declared native-database destination transport and its accepted live mode evidence to `write`; bind the source-only declared CDC route and its accepted binary/live proof to `cdc`. Do not change the direct `Connector.Write` operation or introduce a generic SQL/direct write API.
+3. **Green — complete mode result.** Represent the six executable target `synccontract.Mode` outcomes and source-only `change_capture`; retain destination/API exclusions as concrete non-pass reasons. `incremental_dedupe_history` remains executable. PostgreSQL CDC→API is not declared, so it is N/A/deferred rather than silently skipped or passed.
+4. **Live certification.** Run the current-SHA built binary against PostgreSQL through the explicit Docker socket. Capture only redacted proof-bearing records from independently asserted live runs, regenerate the PostgreSQL shard, run the global shard drift gate, and prove website documentation output deterministic with two `gen:docs` runs.
+5. **Failure control.** After schema compilation accepts the scratch bundle, make a safe local runtime-only declaration invalid, observe certification failure, restore exactly, then rerun green.
+6. **Verify and review.** Exercise the four existing binary warehouse-flow proofs, current database CDC proof, targeted consumers, generated docs/help/website parity, repository gates, GSD verification, and inline code review. Record all commands and divergences in the PR.
 
-## Red / Green evidence requirements
+## Publication boundary
 
-- Red must fail because production `RunETL` has no `change_capture` dispatch, not because a fixture is malformed.
-- Green must assert actual warehouse record contents plus a committed `CheckpointEnvelope`; flag-string presence alone is insufficient.
-- CDC acknowledgement ordering is warehouse transaction receipt -> app checkpoint persistence -> native LSN acknowledgement.
-- Write proof is the existing live managed-target path's exact PostgreSQL row state and delivery receipt, rerun on this branch.
+- `write=true` means the declared `postgres_polling_watermark → postgres_managed_target` warehouse-mediated destination transport has passed its exact live certification for every declared mode. It does **not** mean `Connector.Write` became a generic direct writer.
+- `cdc=true` means PostgreSQL 14+ pgoutput change capture is executable only as a database source into the connection-owned warehouse, with durable staging, receipt, checkpoint, then LSN acknowledgement. It does **not** mean CDC-to-API or any destination `change_capture` route is executable.
+- `query=false` stays a concrete non-support claim.
 
-## CLI/docs/website parity
+## CLI/help/docs/website parity
 
-- `pm connectors inspect postgres --json` and `connectors catalog --capability` must agree with the metadata.
-- Bare `pm connectors`, `pm help connectors`, and relevant `--help` surfaces remain unchanged but are smoke-checked.
-- Connector docs, generated catalog, website generated data, and golden transcripts are regenerated or explicitly shown unchanged.
-
-## Checkpoints
-
-1. Planning plus red-test evidence.
-2. Green application dispatch and connector transaction boundary.
-3. Capability publication and generated parity.
-4. Live/scoped verification and review fixes.
-5. Push, open the explicit-base PR, verify its API-reported base, and report the full URL.
+The command surface is unchanged. The plan will still verify `pm help connectors`, `pm connectors`, and `pm connectors certify --help`; regenerate any connector/manual/website output the existing generators identify; and state an explicit not-applicable result for new flags, namespaces, completion, or syntax.

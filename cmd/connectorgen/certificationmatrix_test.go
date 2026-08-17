@@ -76,7 +76,7 @@ func TestCertificationOperationExecutorAnnotationsAreRealPaths(t *testing.T) {
 func TestCertificationMatrixRejectsDatabaseWriteStubs(t *testing.T) {
 	matrix := certificationMatrixForTest(t)
 
-	for _, connectorName := range []string{"postgres", "mysql"} {
+	for _, connectorName := range []string{"mysql"} {
 		cell, ok := capabilityCellFor(matrix, connectorName, "capability:write")
 		if !ok {
 			t.Fatalf("%s write cell missing", connectorName)
@@ -90,6 +90,98 @@ func TestCertificationMatrixRejectsDatabaseWriteStubs(t *testing.T) {
 		if cell.Implemented {
 			t.Errorf("%s Write stub reported implemented", connectorName)
 		}
+	}
+}
+
+func TestCertificationMatrixPromotesPostgresManagedWriteOnlyWithDeclaredLiveTransportProof(t *testing.T) {
+	matrix := certificationMatrixForTest(t)
+	cell, ok := capabilityCellFor(matrix, "postgres", "capability:write")
+	if !ok {
+		t.Fatal("postgres write cell missing")
+	}
+	if !cell.Applicable || !cell.Declared || !cell.Implemented || !cell.LiveTested {
+		t.Fatalf("PostgreSQL managed write cell = %#v, want declared, implemented, and live certified", cell)
+	}
+	if len(cell.LiveEvidence) != 6 {
+		t.Fatalf("PostgreSQL managed write evidence=%d, want one proof for every declared destination mode", len(cell.LiveEvidence))
+	}
+}
+
+func TestCertificationMatrixKeepsPostgresManagedWriteUnimplementedWithoutAllDeclaredLiveProof(t *testing.T) {
+	repoRoot := repoRootForCertificationTest(t)
+	bundles, err := loadSourceBundlesForConnectors(repoRoot, []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadSourceBundlesForConnectors() error = %v", err)
+	}
+	sources, err := matrixConnectorSourcesForNames(bundles, []string{"postgres"})
+	if err != nil || len(sources) != 1 {
+		t.Fatalf("matrixConnectorSourcesForNames() = %#v, %v; want PostgreSQL source", sources, err)
+	}
+	implemented, err := capabilityImplemented(repoRoot, sources[0], "write", nil)
+	if err != nil {
+		t.Fatalf("capabilityImplemented() error = %v", err)
+	}
+	if implemented {
+		t.Fatal("PostgreSQL managed write was implemented without exact evidence for every declared destination mode")
+	}
+}
+
+func TestCertificationMatrixPromotesPostgresChangeCaptureOnlyWithReceiptBackedLiveProof(t *testing.T) {
+	repoRoot := repoRootForCertificationTest(t)
+	matrix := certificationMatrixForTest(t)
+	cdc, ok := capabilityCellFor(matrix, "postgres", "capability:cdc")
+	if !ok {
+		t.Fatal("postgres CDC cell missing")
+	}
+	if !cdc.Applicable || !cdc.Declared || !cdc.Implemented || !cdc.LiveTested || len(cdc.LiveEvidence) != 1 {
+		t.Fatalf("PostgreSQL CDC cell = %#v, want one declared, implemented, live receipt-backed proof", cdc)
+	}
+	bundles, err := loadSourceBundlesForConnectors(repoRoot, []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadSourceBundlesForConnectors() error = %v", err)
+	}
+	sources, err := matrixConnectorSourcesForNames(bundles, []string{"postgres"})
+	if err != nil || len(sources) != 1 {
+		t.Fatalf("matrixConnectorSourcesForNames() = %#v, %v; want PostgreSQL source", sources, err)
+	}
+	evidence, err := loadAcceptedEvidence(repoRoot, []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadAcceptedEvidence() error = %v", err)
+	}
+	cells, err := buildConnectorSyncModeCells(sources, matrix, []syncModeKind{{ID: string(synccontract.ModeChangeCapture)}}, []syncPrimitive{{
+		ID:                 "database_read_into_warehouse",
+		IntegrationType:    "database",
+		Capability:         "read",
+		WarehouseDirection: "into_warehouse",
+	}}, evidence)
+	if err != nil || len(cells) != 1 || len(cells[0].Cells) != 1 {
+		t.Fatalf("buildConnectorSyncModeCells() = %#v, %v; want one PostgreSQL change-capture cell", cells, err)
+	}
+	cell := cells[0].Cells[0]
+	if !cell.Applicable || !cell.Declared || !cell.Implemented || !cell.LiveTested || len(cell.LiveEvidence) != 1 {
+		t.Fatalf("PostgreSQL change-capture cell = %#v, want one declared, implemented, live receipt-backed proof", cell)
+	}
+}
+
+func TestPostgresPublishedWriteAndCDCMatchLiveCertification(t *testing.T) {
+	matrix := certificationMatrixForTest(t)
+	bundles, err := loadSourceBundlesForConnectors(repoRootForCertificationTest(t), []string{"postgres"})
+	if err != nil || len(bundles) != 1 {
+		t.Fatalf("loadSourceBundlesForConnectors() = %#v, %v; want PostgreSQL bundle", bundles, err)
+	}
+	capabilities := bundles[0].Metadata.Capabilities
+	for _, capability := range []string{"write", "cdc"} {
+		published, found := boolFieldForKind(capabilities, capability)
+		if !found || !published {
+			t.Fatalf("PostgreSQL %s publication = %t, want true only with current evidence", capability, published)
+		}
+		cell, ok := capabilityCellFor(matrix, "postgres", "capability:"+capability)
+		if !ok || !cell.Declared || !cell.Implemented || !cell.LiveTested || len(cell.LiveEvidence) == 0 {
+			t.Fatalf("PostgreSQL published %s cell = %#v, want declaration, implementation, and accepted live evidence", capability, cell)
+		}
+	}
+	if capabilities.Query {
+		t.Fatalf("PostgreSQL query publication = true, want concrete false while no query route is certified")
 	}
 }
 
@@ -1246,6 +1338,34 @@ func TestCertificationChangeCaptureRequiresDatabaseReadIntoWarehouse(t *testing.
 	}
 	if err := validateSyncModeCertificationCell(cell); err != nil {
 		t.Fatalf("validateSyncModeCertificationCell() error = %v", err)
+	}
+}
+
+func TestCertificationChangeCaptureRequiresImplementedChangefeedContract(t *testing.T) {
+	matrix := certificationMatrixForTest(t)
+	read, _ := capabilityCellFor(matrix, "postgres", "capability:read")
+	write, _ := capabilityCellFor(matrix, "postgres", "capability:write")
+	cdc, _ := capabilityCellFor(matrix, "postgres", "capability:cdc")
+	bundles, err := loadSourceBundlesForConnectors(repoRootForCertificationTest(t), []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadSourceBundlesForConnectors() error = %v", err)
+	}
+	sources, err := matrixConnectorSourcesForNames(bundles, []string{"postgres"})
+	if err != nil || len(sources) != 1 {
+		t.Fatalf("matrixConnectorSourcesForNames() = %#v, %v; want PostgreSQL source", sources, err)
+	}
+	bundle := *sources[0].bundle
+	bundle.Changefeed = nil
+	source := sources[0]
+	source.bundle = &bundle
+	cell := syncModeCellFor(source, string(synccontract.ModeChangeCapture), syncPrimitive{
+		ID:                 "database_read_into_warehouse",
+		IntegrationType:    "database",
+		Capability:         "read",
+		WarehouseDirection: "into_warehouse",
+	}, read, write, cdc, false, nil)
+	if cell.Declared || cell.Implemented {
+		t.Fatalf("change-capture cell without implemented declaration = %#v, want neither declared nor implemented", cell)
 	}
 }
 

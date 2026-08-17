@@ -127,7 +127,7 @@ func (c Connector) managedTargetHistorySourceDefinition() database.Definition {
 // capability so this connector's legacy metadata projection stays aligned.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads PostgreSQL tables: dynamically discovers schemas/columns from PostgreSQL system catalogs, snapshots tables, supports cursor-incremental reads, and supports PostgreSQL 14+ logical-replication CDC. Source-only; managed-target writes remain unpublished until a production destination is registered."
+	m.Description = "Reads PostgreSQL tables, supports PostgreSQL 14+ logical-replication CDC into the local warehouse, and delivers managed PostgreSQL targets through the warehouse-mediated transport. Direct Connector.Write remains unavailable; query is not implemented."
 	for _, override := range postgresCapabilityOverrides {
 		*override.target(&m.Capabilities) = override.value
 	}
@@ -158,9 +158,10 @@ func (c Connector) Manifest() connectors.Manifest {
 	return manifest
 }
 
-// Write stays unsupported because the typed managed-target DatabaseDriver is
-// not registered on the production connector path. The public write capability
-// remains false until a production destination can dispatch this operation.
+// Write stays unsupported because it bypasses the definition-owned managed
+// target transport. PostgreSQL's public write capability is the separately
+// registered, warehouse-mediated destination route; a direct Connector.Write
+// call must remain unavailable so it cannot skip plan/approval/receipt gates.
 func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
 }
