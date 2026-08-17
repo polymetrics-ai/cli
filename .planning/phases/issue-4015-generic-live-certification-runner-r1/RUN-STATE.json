@@ -13,6 +13,7 @@
     "copilot list-copilot-coding-agent-selected-repositories-for-organization: direct probe returns semantic HTTP 409 (cloud agent enabled for all repositories), but pm returns it as a redacted internal error rather than a produced result",
     "enterprise-teams get: GitHub returns a valid team slug prefixed ent:, but direct-read path validation rejects ':' before request dispatch",
     "enterprise-teams delete: a controlled create/delete cycle reported exit 0 with records_succeeded=1 and records_failed=0, but six bounded read-back polls never observed absence; this is a false success, not eventual consistency",
-    "copilot-spaces delete-resource-for-org: two reverse-ETL delete runs each reported records_succeeded=1 and records_failed=0, but the resource remained through six bounded polls; direct GitHub API cleanup removed the disposable fixture"
+    "copilot-spaces delete-resource-for-org: two reverse-ETL delete runs each reported records_succeeded=1 and records_failed=0, but the resource remained through six bounded polls; direct GitHub API cleanup removed the disposable fixture",
+    "release-blocking false-success destroy path is tracked in issue #4221; fixture setup now records cleanup only from an independent direct-provider 404 read-back"
   ]
 }
