@@ -7,7 +7,7 @@ const PEM_BLOCK = /-----BEGIN [\s\S]{0,8192}?-----END [^-]{1,80}-----/gu;
 const BASE64_TEXT = /^[A-Za-z0-9+/_=-]{32,}$/u;
 const BASE64_URL = /^[A-Za-z0-9_-]+$/u;
 const SENSITIVE_FIELD_NAME = /(?:^|[-_])(?:approval|authorization|grant|password|private[-_]?key|secret|token)(?:$|[-_])/iu;
-const SENSITIVE_ASSIGNMENT = /^([\t ]*(?:approval|authorization|grant|password|private[ _-]?key|secret|token)(?:[ _-][A-Za-z0-9_.-]+)?[\t ]*[:=][\t ]*)[^\r\n]*$/gimu;
+const SENSITIVE_ASSIGNMENT = /^([\t ]*(?=[A-Za-z0-9_. -]*(?:approval|authorization|grant|password|private[ _-]?key|secret|token))[A-Za-z0-9_. -]+[\t ]*[:=][\t ]*)[^\r\n]*$/gimu;
 const SAFE_METADATA_FIELD_NAMES = new Set(["secret_material"]);
 const TOKEN_PATTERNS = Object.freeze([
   /gh[pousr]_[A-Za-z0-9_-]+/iu,
@@ -121,23 +121,23 @@ export function stableJSONString(value) {
 }
 
 export function redactPersistedText(value) {
-	let text = String(value ?? "").replace(PEM_BLOCK, "<redacted>");
-	for (const pattern of TOKEN_REDACTION_PATTERNS) {
-		text = text.replace(pattern, "<redacted>");
-	}
-	text = text.replace(SENSITIVE_ASSIGNMENT, "$1<redacted>");
-	text = text.replace(/[A-Za-z0-9+/_=-]{32,}/gu, (candidate) =>
-		hasEncodedPrivateKeyArmor(candidate) ? "<redacted>" : candidate,
-	);
-	text = text.replace(/[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+){2,4}/gu, (candidate) =>
-		isCompactJOSE(candidate) ? "<redacted>" : candidate,
-	);
-	if (UNSAFE_TEXT_CONTROL.test(text) ||
-		PEM_ARMOR.test(text) ||
-		hasEncodedPrivateKeyArmor(text) ||
-		isCompactJOSE(text) ||
-		TOKEN_PATTERNS.some((pattern) => pattern.test(text))) {
-		throw new Error("refusing to emit text that still contains unsafe credential-like material");
-	}
-	return text;
+  let text = String(value ?? "").replace(PEM_BLOCK, "<redacted>");
+  for (const pattern of TOKEN_REDACTION_PATTERNS) {
+    text = text.replace(pattern, "<redacted>");
+  }
+  text = text.replace(SENSITIVE_ASSIGNMENT, "$1<redacted>");
+  text = text.replace(/[A-Za-z0-9+/_=-]{32,}/gu, (candidate) =>
+    hasEncodedPrivateKeyArmor(candidate) ? "<redacted>" : candidate,
+  );
+  text = text.replace(/[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+){2,4}/gu, (candidate) =>
+    isCompactJOSE(candidate) ? "<redacted>" : candidate,
+  );
+  if (UNSAFE_TEXT_CONTROL.test(text) ||
+      PEM_ARMOR.test(text) ||
+      hasEncodedPrivateKeyArmor(text) ||
+      isCompactJOSE(text) ||
+      TOKEN_PATTERNS.some((pattern) => pattern.test(text))) {
+    throw new Error("refusing to emit text that still contains unsafe credential-like material");
+  }
+  return text;
 }
