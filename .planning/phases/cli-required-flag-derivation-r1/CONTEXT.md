@@ -28,3 +28,8 @@
 ## Discussion resolution
 
 The brief settles the material design choice: generator-owned derivation, never GitHub-specific edits or an allowlist. The remaining work is implementation and evidence collection; no product decision is pending.
+
+## PR delivery
+
+- PR: `https://github.com/polymetrics-ai/cli/pull/4209`
+- Base verification after open: `gh-axi pr list -R polymetrics-ai/cli --state open --head fm/cli-required-flag-derivation-r1 --base integration/4015-mvp-flat-r1 --fields url` returned exactly PR 4209. This is the API-filtered confirmation that the PR base is the required integration branch.

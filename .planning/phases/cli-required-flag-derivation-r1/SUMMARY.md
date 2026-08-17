@@ -20,3 +20,6 @@
 See `TDD-LEDGER.md`, `VERIFICATION.md`, `NOT-APPLICABLE-AUDIT.md`, and
 `REVIEW.md`. GSD prompts were executed inline under the recorded contract
 fallback because this environment forbids role spawning.
+
+PR: https://github.com/polymetrics-ai/cli/pull/4209 (API-filtered base
+confirmation: `integration/4015-mvp-flat-r1`).

@@ -1,9 +1,11 @@
 {
   "phase": "cli-required-flag-derivation-r1",
-  "status": "verified",
+  "status": "pr_open",
   "delivery": "direct-pr",
   "base": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-required-flag-derivation-r1",
   "gsd_mode": "inline_manual_fallback",
-  "reason": "Canonical project contract forbids spawning GSD roles in this environment."
+  "reason": "Canonical project contract forbids spawning GSD roles in this environment.",
+  "pull_request": "https://github.com/polymetrics-ai/cli/pull/4209",
+  "base_verified": "integration/4015-mvp-flat-r1"
 }
