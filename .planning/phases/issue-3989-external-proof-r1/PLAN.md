@@ -73,7 +73,7 @@ showing its intentionally unserved route.
 ### Task Delivery Header
 
 - Issue: Refs #3989 — Certification: add external-binary proof capture and ephemeral fingerprint-first credentials.
-- Base branch: `integration/4015-mvp-flat-r1` at refreshed head `c9791db4d`.
+- Base branch: `integration/4015-mvp-flat-r1` at refreshed head `c2dedecbc`.
 - Merges into: `integration/4015-mvp-flat-r1` → `main`.
 - Delivery: Commit the focused residual evidence and GSD records, push `fm/cli-3989-live-proof-residual-r1`, open a Conventional Commit PR to the exact base, then API-read the PR base.
 - Working branch: `fm/cli-3989-live-proof-residual-r1`.

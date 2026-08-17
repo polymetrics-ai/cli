@@ -113,6 +113,30 @@ opt-out:
 | `pnpm --dir website run gen:docs` twice, then `git diff --exit-code -- website` | Passed; the second pass was byte-stable. |
 | `make tidy-check`; `make lint`; `make smoke-no-build`; `make agent-contract-check`; `make connectorgen-validate`; `make connectorgen-surface-sync`; `make github-parity-artifacts-check`; `make connectorgen-certification-matrix`; `make connector-boundary`; `make connector-canon-check`; `make release-workflow-check` | Passed. |
 
+## Refreshed integration-base revalidation (2026-08-18)
+
+The branch was rebased onto `integration/4015-mvp-flat-r1` at `c2dedecbc`.
+The post-rebase reader fixture initially failed because a `FullParity` test
+fixture had no flow references. It was corrected by providing the existing
+four required references; no production admission rule was relaxed.
+
+| Command | Result |
+| --- | --- |
+| `go test -count=1 -timeout 20m -run '^TestReadExternalProofRefusesAnUnfingerprintedResponseRegression$' ./internal/connectors/certify` | Passed after the fixture correction. |
+| Credentialed `go test -count=1 -timeout 20m -v -run '^TestExternalProofGitHubSmoke$' ./internal/cli` with only the designated disposable token, owner, and repository environment variables | Passed in 24.932s. The real GitHub child observed a provider success, verified its exact transcript, wrote a secret-free schema-v2 bounded proof, and did not skip. No credential value is retained here. |
+| `go test -count=1 -timeout 20m ./internal/connectors/certify` | Passed in 9.359s. |
+| `go test -count=1 -timeout 20m ./internal/cli` | Passed in 532.221s, below the unchanged 20-minute ceiling. |
+| `go test -count=1 -timeout 20m ./cmd/connectorgen` | Passed in 80.792s (required consumer package). |
+| `go vet ./...`; `go build ./cmd/pm`; `make fmt`; `git diff --check`; `go run ./cmd/agentcontractgen check` | Passed. |
+| `./pm connectors`; `./pm help connectors`; `./pm connectors certify --help`; `go test -count=1 -timeout 20m -run '^TestGoldenTranscripts$' ./internal/cli` | Passed; the golden test completed in 9.610s. |
+| `make tidy-check lint docs-check smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check` | Passed. `connector-boundary` reported `outcome: clean`. |
+| `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -count=1 -timeout 20m -run '^TestGoldenTranscripts$' ./internal/cli`; `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors` twice; `pnpm --dir website run gen:docs` twice; `pnpm --dir website run gen:website-data` twice | Passed. Each of the four generated surfaces matched the committed bytes after its second pass. |
+
+As required for this repository's per-command execution environment, the
+aggregate `go test -timeout 20m ./...` and `make verify` were not run as one
+wrapper process. Their changed packages, consumer package, build/vet checks,
+and every individual `make verify` component target above were run separately.
+
 ## CLI package-capacity validation
 
 CI's timeout displayed `TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked`, but a `go test -count=1 -timeout 20m -v ./internal/cli` baseline passed in 706.417s and showed that test at 39.140s. The actual slowest tests are the two external-child proof cases (118.770s and 118.210s); the new dynamic leaf-help sweep runs 17,800 independent manual-render cases in 22.500s locally. The failure is therefore aggregate capacity, not a Bahmni hang.

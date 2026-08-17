@@ -184,3 +184,20 @@ human rendering.
 Result: no Critical, Warning, or Info findings. The designated disposable live
 smoke passed with the bounded claim; historical full-parity `schedule_create`
 and `resume` failures remain separately reported and were not patched around.
+
+## Refreshed-base final review
+
+Scope: the rebase onto `integration/4015-mvp-flat-r1` at `c2dedecbc`, the
+schema-v2 external-proof reader fixture, and the refreshed verification record.
+
+The review confirmed that the rebase's only test adjustment supplies the four
+already-required flow references to a `FullParity` fixture. It does not alter
+the reader, relaxation rules, opaque-body checks, OS proof, provider fixtures,
+or credential path. The live GitHub smoke was rerun with the designated
+disposable identity and passed with a bounded provider-backed claim; the record
+contains only its command shape and result, never a credential value. The
+complete certify/CLI/consumer package tests, generated-surface repeat checks,
+and every non-aggregate repository gate passed locally, including a clean
+connector-boundary report.
+
+Result: no Critical, Warning, or Info findings.

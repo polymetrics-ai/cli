@@ -1,6 +1,6 @@
 {
   "issue": 3989,
-  "state": "validating-bounded-credential-scope",
+  "state": "verification-complete-awaiting-pr-update",
   "mode": "manual-gsd-inline",
   "manual_fallback_reason": "phase 3989 is absent from the roadmap and this task cannot spawn compatible isolated GSD workers",
   "commands_resolved": [
@@ -14,9 +14,9 @@
   ],
   "verification": {
     "residual_tests": "passed targeted opaque, fingerprint, and OS-boundary proofs",
-    "live_github_smoke": "ran with the designated disposable identity and no skip. After #4215 removed the obsolete external-proof full-parity admission requirement, the opt-in smoke passed with one schema-v2 observed_operations/protocol_exchanges proof, an observed GitHub provider success, exact child-transcript verification, and no credential material in its temporary project tree. Earlier authorized full-parity attempts remain separate fingerprint-redacted findings: schedule_create typed CLI error exit 3, then resume typed CLI error exit 1. The bounded proof does not claim either stage passed or claim full parity.",
-    "consumer_package": "passed: go test -count=1 -timeout 20m ./cmd/connectorgen (187.484s)",
-    "repository_gates": "final changed-package verification passed: internal/connectors/certify (10.476s), internal/cli (666.954s), cmd/connectorgen (187.484s), go vet ./..., go build ./cmd/pm, agentcontractgen check, git diff --check, and every individual make verification target. Docs, website, skills, and certification generators were run twice and were byte-stable on their second pass.",
+    "live_github_smoke": "reran after the c2dedecbc rebase with the designated disposable identity and no skip: the opt-in smoke passed in 24.932s with one schema-v2 observed_operations/protocol_exchanges proof, an observed GitHub provider success, exact child-transcript verification, and no credential material retained in its temporary project tree. Earlier authorized full-parity attempts remain separate fingerprint-redacted findings: schedule_create typed CLI error exit 3, then resume typed CLI error exit 1. The bounded proof does not claim either stage passed or claim full parity.",
+    "consumer_package": "passed after the c2dedecbc rebase: go test -count=1 -timeout 20m ./cmd/connectorgen (80.792s)",
+    "repository_gates": "post-rebase changed-package verification passed: internal/connectors/certify (9.359s), internal/cli (532.221s), cmd/connectorgen (80.792s), go vet ./..., go build ./cmd/pm, agentcontractgen check, git diff --check, and every individual make verification target. Golden, CLI docs, website docs, and website data generators were each run twice and byte-stable on their second pass.",
     "cli_parity": "pm connectors, pm help connectors, pm connectors certify --help, and the golden transcript check passed after the v2 external-proof documentation update",
     "manual_code_review": "passed with no findings; bounded scope is writer-derived, failed exits remain honest, the planted-secret diagnostic test passes, and diff secret-pattern scan is clean"
   }
