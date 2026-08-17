@@ -54,7 +54,45 @@
         "readback_provider_result": "HTTP 404 Not Found",
         "verified_absent": true
       }
+    },
+    {
+      "setup_path": "direct_provider_api_corrected_metadata_shape",
+      "space_name": "pm-cert-user-resource-space-1786999111",
+      "space_number": 7,
+      "space_create_exit_code": 0,
+      "resource_create_exit_code": 0,
+      "resource_id": 4055250,
+      "resource_payload": {
+        "resource_type": "free_text",
+        "metadata_keys": [
+          "name",
+          "text"
+        ]
+      },
+      "initial_read_attempt": {
+        "executed": 4,
+        "certified": 0,
+        "no_object": 4,
+        "reason": "candidate defaults named stale Space 1 and resource 1 rather than this fixture's resolved identifiers"
+      },
+      "resolved_identifier_read_attempt": {
+        "executed": 4,
+        "certified": 4,
+        "provider_statuses": [
+          200,
+          200,
+          200,
+          200
+        ],
+        "receipt": "GITHUB-COPILOT-USER-RESOURCE-READ-CORRECTED-RUN.json"
+      },
+      "direct_cleanup": {
+        "delete_dispatched": true,
+        "delete_exit_code": "not_retained_after_local_timing-format error",
+        "readback_provider_result": "HTTP 404 Not Found",
+        "verified_absent": true
+      }
     }
   ],
-  "updated_at": "2026-08-17T20:35:18Z"
+  "updated_at": "2026-08-17T20:41:50Z"
 }
