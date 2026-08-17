@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_direct_read_hosted_compute_list_network_configurations_for_org",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:19:17.794Z",
+  "run_id": "github-slice4-1787001557794-agent_derived_direct_read_hosted_compute_list_network_configurations_for_org",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "2b8083489042e1b4428480852dc676420ee9a035dc3500832e24730697819316",
+    "pm_command_fingerprint": "{{pmcertfp:v1:88064f73f7b7395b9729b2f26e43cc2756a0b4449d9803f4d9726b06ed6212ed}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:713778cd5ee90211aae2d78594d98adb30cb2b40b52b34120d82e7e6b5119407}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_direct_read_hosted_compute_list_network_configurations_for_org",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:93440738167a22e36874e1a55e814ddd90cf82cd7f6491783bc09a7a465155a2}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "network_configurations": [],
+              "total_count": "{{pmcertfp:v1:560aa2b1615682ed8ebb69e64139880f0397d7edd4a4db3fdc0b13db7c5c8b5e}}"
+            },
+            "original_bytes": 45,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

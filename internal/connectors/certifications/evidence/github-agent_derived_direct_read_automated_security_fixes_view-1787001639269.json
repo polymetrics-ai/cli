@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_direct_read_automated_security_fixes_view",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:20:39.269Z",
+  "run_id": "github-slice4-1787001639269-agent_derived_direct_read_automated_security_fixes_view",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "2b8083489042e1b4428480852dc676420ee9a035dc3500832e24730697819316",
+    "pm_command_fingerprint": "{{pmcertfp:v1:0c200fcc1978c2d93a6b0b09bb9b6e3a3699ae46f9df187dd37563baccdb5bb3}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:713778cd5ee90211aae2d78594d98adb30cb2b40b52b34120d82e7e6b5119407}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_direct_read_automated_security_fixes_view",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:5af88fb914962ce6bebb871046442841f0e3cef5ea8729652c8d2dffc4d84879}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "enabled": "{{pmcertfp:v1:ae0e3a5b5c44523b565d33363c426bb37889e96a63fd606762085b0416cfe919}}",
+              "paused": "{{pmcertfp:v1:eeebe1b1328d0fa14330a1f56b840079b5ae079aee57242467dbff5ae2d6cba4}}"
+            },
+            "original_bytes": 31,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
