@@ -232,7 +232,7 @@
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.run_id"
         }
       ],
@@ -242,8 +242,11 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --run-id",
+      "required_flags": [
+        "--run-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve",
@@ -306,7 +309,7 @@
         {
           "name": "attempt-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.attempt_number"
         },
         {
@@ -318,7 +321,7 @@
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.run_id"
         }
       ],
@@ -328,8 +331,12 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"attempt_number\" maps to CLI flag --attempt-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --attempt-number, --run-id",
+      "required_flags": [
+        "--attempt-number",
+        "--run-id"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/actions/caches",
@@ -451,7 +458,7 @@
         {
           "name": "concurrency-group-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.concurrency_group_name"
         }
       ],
@@ -461,8 +468,11 @@
           "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"concurrency_group_name\" maps to CLI flag --concurrency-group-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --concurrency-group-name",
+      "required_flags": [
+        "--concurrency-group-name"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups",
@@ -473,7 +483,7 @@
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.run_id"
         }
       ],
@@ -483,8 +493,11 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --run-id",
+      "required_flags": [
+        "--run-id"
+      ]
     },
     {
       "summary": "Create a GitHub-hosted runner for an organization",
@@ -2043,7 +2056,7 @@
         {
           "name": "job-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.job_id"
         }
       ],
@@ -2053,8 +2066,11 @@
           "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"job_id\" maps to CLI flag --job-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --job-id",
+      "required_flags": [
+        "--job-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs",
@@ -2065,13 +2081,13 @@
         {
           "name": "attempt-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.attempt_number"
         },
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.run_id"
         }
       ],
@@ -2081,8 +2097,12 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"attempt_number\" maps to CLI flag --attempt-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --attempt-number, --run-id",
+      "required_flags": [
+        "--attempt-number",
+        "--run-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
@@ -2103,7 +2123,7 @@
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.run_id"
         }
       ],
@@ -2113,8 +2133,11 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/jobs"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --run-id",
+      "required_flags": [
+        "--run-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
@@ -2199,7 +2222,7 @@
         {
           "name": "runner-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.runner_id"
         }
       ],
@@ -2209,8 +2232,11 @@
           "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"runner_id\" maps to CLI flag --runner-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --runner-id",
+      "required_flags": [
+        "--runner-id"
+      ]
     },
     {
       "summary": "List image versions of a custom image for an organization",
@@ -2734,7 +2760,7 @@
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.run_id"
         }
       ],
@@ -2744,8 +2770,11 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --run-id",
+      "required_flags": [
+        "--run-id"
+      ]
     },
     {
       "summary": "PUT /repos/{owner}/{repo}/actions/permissions",
@@ -3226,7 +3255,7 @@
         {
           "name": "runner-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.runner_id"
         }
       ],
@@ -3236,8 +3265,11 @@
           "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"runner_id\" maps to CLI flag --runner-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --runner-id",
+      "required_flags": [
+        "--runner-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}",
@@ -3403,7 +3435,7 @@
         {
           "name": "secret-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.secret_name"
         }
       ],
@@ -3413,8 +3445,11 @@
           "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"secret_name\" maps to CLI flag --secret-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --secret-name",
+      "required_flags": [
+        "--secret-name"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/selected-actions",
@@ -4167,7 +4202,7 @@
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.run_id"
         }
       ],
@@ -4177,8 +4212,11 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --run-id",
+      "required_flags": [
+        "--run-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
@@ -4189,7 +4227,7 @@
         {
           "name": "workflow-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.workflow_id"
         }
       ],
@@ -4199,8 +4237,11 @@
           "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"workflow_id\" maps to CLI flag --workflow-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --workflow-id",
+      "required_flags": [
+        "--workflow-id"
+      ]
     },
     {
       "summary": "Update a GitHub-hosted runner for an organization",
@@ -4463,7 +4504,7 @@
         {
           "name": "name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.name"
         }
       ],
@@ -4473,8 +4514,11 @@
           "path": "/repos/{owner}/{repo}/actions/variables/{name}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"name\" maps to CLI flag --name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name",
+      "required_flags": [
+        "--name"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/workflow",
@@ -7478,7 +7522,7 @@
         {
           "name": "assignee",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.assignee"
         }
       ],
@@ -7488,8 +7532,11 @@
           "path": "/repos/{owner}/{repo}/assignees/{assignee}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"assignee\" maps to CLI flag --assignee that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --assignee",
+      "required_flags": [
+        "--assignee"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/assignees",
@@ -7562,7 +7609,7 @@
         {
           "name": "subject-digest",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.subject_digest"
         }
       ],
@@ -7572,8 +7619,11 @@
           "path": "/repos/{owner}/{repo}/attestations/{subject_digest}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"subject_digest\" maps to CLI flag --subject-digest that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --subject-digest",
+      "required_flags": [
+        "--subject-digest"
+      ]
     },
     {
       "summary": "Authenticate gh",
@@ -8196,7 +8246,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch"
         }
       ],
@@ -8206,8 +8256,11 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
@@ -8269,7 +8322,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch"
         }
       ],
@@ -8279,8 +8332,11 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
@@ -8325,7 +8381,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch"
         }
       ],
@@ -8335,8 +8391,11 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection",
@@ -8381,7 +8440,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch"
         }
       ],
@@ -8391,8 +8450,11 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/rename",
@@ -8454,7 +8516,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch"
         }
       ],
@@ -8464,8 +8526,11 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
@@ -8510,7 +8575,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch"
         }
       ],
@@ -8520,8 +8585,11 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
@@ -8566,7 +8634,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch"
         }
       ],
@@ -8576,8 +8644,11 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
@@ -8605,7 +8676,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch"
         }
       ],
@@ -8615,8 +8686,11 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
@@ -8678,7 +8752,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch"
         }
       ],
@@ -8688,8 +8762,11 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
@@ -8751,7 +8828,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch"
         }
       ],
@@ -8761,8 +8838,11 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}",
@@ -9009,7 +9089,7 @@
         {
           "name": "check-run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.check_run_id"
         }
       ],
@@ -9019,8 +9099,11 @@
           "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/annotations"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"check_run_id\" maps to CLI flag --check-run-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --check-run-id",
+      "required_flags": [
+        "--check-run-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/check-runs",
@@ -9075,7 +9158,7 @@
         {
           "name": "check-run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.check_run_id"
         }
       ],
@@ -9085,8 +9168,11 @@
           "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"check_run_id\" maps to CLI flag --check-run-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --check-run-id",
+      "required_flags": [
+        "--check-run-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs",
@@ -9103,7 +9189,7 @@
         {
           "name": "check-suite-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.check_suite_id"
         },
         {
@@ -9134,8 +9220,11 @@
           "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"check_suite_id\" maps to CLI flag --check-suite-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --check-suite-id",
+      "required_flags": [
+        "--check-suite-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/check-suites",
@@ -9183,7 +9272,7 @@
         {
           "name": "check-suite-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.check_suite_id"
         }
       ],
@@ -9193,8 +9282,11 @@
           "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"check_suite_id\" maps to CLI flag --check-suite-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --check-suite-id",
+      "required_flags": [
+        "--check-suite-id"
+      ]
     },
     {
       "summary": "Closing down - Get a classroom (deprecated by GitHub, still documented)",
@@ -9381,7 +9473,7 @@
         {
           "name": "finding-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.finding_number"
         }
       ],
@@ -9391,8 +9483,11 @@
           "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"finding_number\" maps to CLI flag --finding-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --finding-number",
+      "required_flags": [
+        "--finding-number"
+      ]
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/code-quality/setup",
@@ -9545,7 +9640,7 @@
         {
           "name": "analysis-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.analysis_id"
         }
       ],
@@ -9555,8 +9650,11 @@
           "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"analysis_id\" maps to CLI flag --analysis-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --analysis-id",
+      "required_flags": [
+        "--analysis-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
@@ -9584,7 +9682,7 @@
         {
           "name": "alert-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.alert_number"
         }
       ],
@@ -9594,8 +9692,11 @@
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"alert_number\" maps to CLI flag --alert-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --alert-number",
+      "required_flags": [
+        "--alert-number"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
@@ -9655,7 +9756,7 @@
         {
           "name": "language",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.language"
         }
       ],
@@ -9665,8 +9766,11 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"language\" maps to CLI flag --language that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --language",
+      "required_flags": [
+        "--language"
+      ]
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/code-scanning/default-setup",
@@ -9702,7 +9806,7 @@
         {
           "name": "alert-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.alert_number"
         },
         {
@@ -9724,8 +9828,11 @@
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"alert_number\" maps to CLI flag --alert-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --alert-number",
+      "required_flags": [
+        "--alert-number"
+      ]
     },
     {
       "summary": "List code scanning alerts for an organization",
@@ -9761,19 +9868,19 @@
         {
           "name": "codeql-variant-analysis-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.codeql_variant_analysis_id"
         },
         {
           "name": "repo-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.repo_name"
         },
         {
           "name": "repo-owner",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.repo_owner"
         }
       ],
@@ -9783,8 +9890,13 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"codeql_variant_analysis_id\" maps to CLI flag --codeql-variant-analysis-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --codeql-variant-analysis-id, --repo-name, --repo-owner",
+      "required_flags": [
+        "--codeql-variant-analysis-id",
+        "--repo-name",
+        "--repo-owner"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
@@ -9795,7 +9907,7 @@
         {
           "name": "sarif-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.sarif_id"
         }
       ],
@@ -9805,8 +9917,11 @@
           "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"sarif_id\" maps to CLI flag --sarif-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --sarif-id",
+      "required_flags": [
+        "--sarif-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
@@ -9827,7 +9942,7 @@
         {
           "name": "codeql-variant-analysis-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.codeql_variant_analysis_id"
         }
       ],
@@ -9837,8 +9952,11 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"codeql_variant_analysis_id\" maps to CLI flag --codeql-variant-analysis-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --codeql-variant-analysis-id",
+      "required_flags": [
+        "--codeql-variant-analysis-id"
+      ]
     },
     {
       "summary": "Attach a configuration to repositories",
@@ -12553,7 +12671,7 @@
         {
           "name": "secret-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.secret_name"
         }
       ],
@@ -12563,8 +12681,11 @@
           "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"secret_name\" maps to CLI flag --secret-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --secret-name",
+      "required_flags": [
+        "--secret-name"
+      ]
     },
     {
       "summary": "Manage access control for organization codespaces (deprecated by GitHub, still documented)",
@@ -12959,7 +13080,7 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.comment_id"
         },
         {
@@ -12985,8 +13106,11 @@
           "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"comment_id\" maps to CLI flag --comment-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --comment-id",
+      "required_flags": [
+        "--comment-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/comments/{comment_id}",
@@ -13022,7 +13146,7 @@
         {
           "name": "commit-sha",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.commit_sha"
         }
       ],
@@ -13032,8 +13156,11 @@
           "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"commit_sha\" maps to CLI flag --commit-sha that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --commit-sha",
+      "required_flags": [
+        "--commit-sha"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/commits/{ref}/check-runs",
@@ -13066,7 +13193,7 @@
         {
           "name": "ref",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.ref"
         },
         {
@@ -13087,8 +13214,11 @@
           "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ref",
+      "required_flags": [
+        "--ref"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/commits/{ref}/check-suites",
@@ -13111,7 +13241,7 @@
         {
           "name": "ref",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.ref"
         }
       ],
@@ -13121,8 +13251,11 @@
           "path": "/repos/{owner}/{repo}/commits/{ref}/check-suites"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ref",
+      "required_flags": [
+        "--ref"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/commits/{commit_sha}/comments",
@@ -13170,7 +13303,7 @@
         {
           "name": "commit-sha",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.commit_sha"
         }
       ],
@@ -13180,8 +13313,11 @@
           "path": "/repos/{owner}/{repo}/commits/{commit_sha}/pulls"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"commit_sha\" maps to CLI flag --commit-sha that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --commit-sha",
+      "required_flags": [
+        "--commit-sha"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/commits/{ref}/status",
@@ -13192,7 +13328,7 @@
         {
           "name": "ref",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.ref"
         }
       ],
@@ -13202,8 +13338,11 @@
           "path": "/repos/{owner}/{repo}/commits/{ref}/status"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "required_flags": [
+        "--ref"
+      ],
       "output_assertions": [
         {
           "json_pointer": "/response",
@@ -13222,7 +13361,7 @@
         {
           "name": "ref",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.ref"
         }
       ],
@@ -13232,8 +13371,11 @@
           "path": "/repos/{owner}/{repo}/commits/{ref}/statuses"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "required_flags": [
+        "--ref"
+      ],
       "output_assertions": [
         {
           "json_pointer": "/response",
@@ -13320,7 +13462,7 @@
         {
           "name": "basehead",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.basehead"
         }
       ],
@@ -13330,8 +13472,11 @@
           "path": "/repos/{owner}/{repo}/compare/{basehead}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"basehead\" maps to CLI flag --basehead that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --basehead",
+      "required_flags": [
+        "--basehead"
+      ]
     },
     {
       "summary": "Generate shell completion",
@@ -15974,7 +16119,7 @@
         {
           "name": "secret-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.secret_name"
         }
       ],
@@ -15984,8 +16129,11 @@
           "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"secret_name\" maps to CLI flag --secret-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --secret-name",
+      "required_flags": [
+        "--secret-name"
+      ]
     },
     {
       "summary": "Set the default repository access level for Dependabot",
@@ -16157,7 +16305,7 @@
         {
           "name": "basehead",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.basehead"
         },
         {
@@ -16173,8 +16321,11 @@
           "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"basehead\" maps to CLI flag --basehead that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --basehead",
+      "required_flags": [
+        "--basehead"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/dependency-graph/snapshots",
@@ -16229,7 +16380,7 @@
         {
           "name": "deployment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.deployment_id"
         }
       ],
@@ -16239,8 +16390,11 @@
           "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"deployment_id\" maps to CLI flag --deployment-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --deployment-id",
+      "required_flags": [
+        "--deployment-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
@@ -17012,7 +17166,7 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.environment_name"
         }
       ],
@@ -17022,8 +17176,11 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name",
+      "required_flags": [
+        "--environment-name"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
@@ -17097,7 +17254,7 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.environment_name"
         }
       ],
@@ -17107,8 +17264,11 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name",
+      "required_flags": [
+        "--environment-name"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
@@ -17119,13 +17279,13 @@
         {
           "name": "branch-policy-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.branch_policy_id"
         },
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.environment_name"
         }
       ],
@@ -17135,8 +17295,12 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"branch_policy_id\" maps to CLI flag --branch-policy-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch-policy-id, --environment-name",
+      "required_flags": [
+        "--branch-policy-id",
+        "--environment-name"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
@@ -17187,7 +17351,7 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.environment_name"
         }
       ],
@@ -17197,8 +17361,11 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name",
+      "required_flags": [
+        "--environment-name"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
@@ -17209,13 +17376,13 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.environment_name"
         },
         {
           "name": "protection-rule-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.protection_rule_id"
         }
       ],
@@ -17225,8 +17392,12 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name, --protection-rule-id",
+      "required_flags": [
+        "--environment-name",
+        "--protection-rule-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
@@ -17237,7 +17408,7 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.environment_name"
         }
       ],
@@ -17247,8 +17418,11 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name",
+      "required_flags": [
+        "--environment-name"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets",
@@ -17259,7 +17433,7 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.environment_name"
         }
       ],
@@ -17269,8 +17443,11 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name",
+      "required_flags": [
+        "--environment-name"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
@@ -17281,13 +17458,13 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.environment_name"
         },
         {
           "name": "secret-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.secret_name"
         }
       ],
@@ -17297,8 +17474,12 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name, --secret-name",
+      "required_flags": [
+        "--environment-name",
+        "--secret-name"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/variables",
@@ -17309,7 +17490,7 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.environment_name"
         }
       ],
@@ -17319,8 +17500,11 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name",
+      "required_flags": [
+        "--environment-name"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
@@ -17331,13 +17515,13 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.environment_name"
         },
         {
           "name": "name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.name"
         }
       ],
@@ -17347,8 +17531,12 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name, --name",
+      "required_flags": [
+        "--environment-name",
+        "--name"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}",
@@ -17990,7 +18178,7 @@
         {
           "name": "file-sha",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.file_sha"
         }
       ],
@@ -18000,8 +18188,11 @@
           "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"file_sha\" maps to CLI flag --file-sha that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --file-sha",
+      "required_flags": [
+        "--file-sha"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/git/commits",
@@ -18072,7 +18263,7 @@
         {
           "name": "ref",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.ref"
         }
       ],
@@ -18082,8 +18273,11 @@
           "path": "/repos/{owner}/{repo}/git/ref/{ref}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "required_flags": [
+        "--ref"
+      ],
       "output_assertions": [
         {
           "json_pointer": "/response/ref",
@@ -18153,7 +18347,7 @@
         {
           "name": "tag-sha",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.tag_sha"
         }
       ],
@@ -18163,8 +18357,11 @@
           "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"tag_sha\" maps to CLI flag --tag-sha that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --tag-sha",
+      "required_flags": [
+        "--tag-sha"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/git/trees",
@@ -18191,7 +18388,7 @@
         {
           "name": "tree-sha",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.tree_sha"
         }
       ],
@@ -18201,8 +18398,11 @@
           "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"tree_sha\" maps to CLI flag --tree-sha that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --tree-sha",
+      "required_flags": [
+        "--tree-sha"
+      ]
     },
     {
       "summary": "Get all gitignore templates",
@@ -26153,7 +26353,7 @@
         {
           "name": "hook-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.hook_id"
         },
         {
@@ -26173,8 +26373,11 @@
           "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"hook_id\" maps to CLI flag --hook-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --hook-id",
+      "required_flags": [
+        "--hook-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}",
@@ -26185,13 +26388,13 @@
         {
           "name": "delivery-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.delivery_id"
         },
         {
           "name": "hook-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.hook_id"
         }
       ],
@@ -26201,8 +26404,12 @@
           "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"delivery_id\" maps to CLI flag --delivery-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --delivery-id, --hook-id",
+      "required_flags": [
+        "--delivery-id",
+        "--hook-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}",
@@ -27485,13 +27692,13 @@
         {
           "name": "assignee",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.assignee"
         },
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.issue_number"
         }
       ],
@@ -27501,8 +27708,12 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"assignee\" maps to CLI flag --assignee that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --assignee, --issue-number",
+      "required_flags": [
+        "--assignee",
+        "--issue-number"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
@@ -27553,7 +27764,7 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.issue_number"
         }
       ],
@@ -27563,8 +27774,11 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --issue-number",
+      "required_flags": [
+        "--issue-number"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking",
@@ -27575,7 +27789,7 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.issue_number"
         }
       ],
@@ -27585,8 +27799,11 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --issue-number",
+      "required_flags": [
+        "--issue-number"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/issues/comments/{comment_id}",
@@ -27816,7 +28033,7 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.issue_number"
         }
       ],
@@ -27826,8 +28043,11 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --issue-number",
+      "required_flags": [
+        "--issue-number"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels",
@@ -27975,7 +28195,7 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.issue_number"
         }
       ],
@@ -27985,8 +28205,11 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --issue-number",
+      "required_flags": [
+        "--issue-number"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
@@ -28128,7 +28351,7 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.comment_id"
         },
         {
@@ -28154,8 +28377,11 @@
           "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"comment_id\" maps to CLI flag --comment-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --comment-id",
+      "required_flags": [
+        "--comment-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/reactions",
@@ -28182,7 +28408,7 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.issue_number"
         }
       ],
@@ -28192,8 +28418,11 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --issue-number",
+      "required_flags": [
+        "--issue-number"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
@@ -28238,7 +28467,7 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.issue_number"
         }
       ],
@@ -28248,8 +28477,11 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --issue-number",
+      "required_flags": [
+        "--issue-number"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/timeline",
@@ -29212,7 +29444,7 @@
         {
           "name": "milestone-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.milestone_number"
         }
       ],
@@ -29222,8 +29454,11 @@
           "path": "/repos/{owner}/{repo}/milestones/{milestone_number}/labels"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"milestone_number\" maps to CLI flag --milestone-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --milestone-number",
+      "required_flags": [
+        "--milestone-number"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/milestones/{milestone_number}",
@@ -35240,7 +35475,7 @@
         {
           "name": "build-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.build_id"
         }
       ],
@@ -35250,8 +35485,11 @@
           "path": "/repos/{owner}/{repo}/pages/builds/{build_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"build_id\" maps to CLI flag --build-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --build-id",
+      "required_flags": [
+        "--build-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
@@ -35309,7 +35547,7 @@
         {
           "name": "pages-deployment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.pages_deployment_id"
         }
       ],
@@ -35319,8 +35557,11 @@
           "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"pages_deployment_id\" maps to CLI flag --pages-deployment-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pages-deployment-id",
+      "required_flags": [
+        "--pages-deployment-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/pages/health",
@@ -35418,7 +35659,7 @@
         {
           "name": "ref",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.ref"
         },
         {
@@ -35439,8 +35680,11 @@
           "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ref",
+      "required_flags": [
+        "--ref"
+      ]
     },
     {
       "summary": "Close a pull request",
@@ -37585,13 +37829,13 @@
         {
           "name": "pull-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.pull_number"
         },
         {
           "name": "review-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.review_id"
         }
       ],
@@ -37601,8 +37845,12 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"pull_number\" maps to CLI flag --pull-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pull-number, --review-id",
+      "required_flags": [
+        "--pull-number",
+        "--review-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/pulls/comments/{comment_id}",
@@ -37701,7 +37949,7 @@
         {
           "name": "pull-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.pull_number"
         }
       ],
@@ -37711,8 +37959,11 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/commits"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"pull_number\" maps to CLI flag --pull-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pull-number",
+      "required_flags": [
+        "--pull-number"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/files",
@@ -37723,7 +37974,7 @@
         {
           "name": "pull-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.pull_number"
         }
       ],
@@ -37733,8 +37984,11 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/files"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"pull_number\" maps to CLI flag --pull-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pull-number",
+      "required_flags": [
+        "--pull-number"
+      ]
     },
     {
       "summary": "Get the result of an asynchronous merge",
@@ -37777,7 +38031,7 @@
         {
           "name": "pull-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.pull_number"
         }
       ],
@@ -37787,8 +38041,11 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"pull_number\" maps to CLI flag --pull-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pull-number",
+      "required_flags": [
+        "--pull-number"
+      ]
     },
     {
       "summary": "Merge a pull request asynchronously",
@@ -37904,7 +38161,7 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.comment_id"
         },
         {
@@ -37930,8 +38187,11 @@
           "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"comment_id\" maps to CLI flag --comment-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --comment-id",
+      "required_flags": [
+        "--comment-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies",
@@ -38079,7 +38339,7 @@
         {
           "name": "pull-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.pull_number"
         }
       ],
@@ -38089,8 +38349,11 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"pull_number\" maps to CLI flag --pull-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pull-number",
+      "required_flags": [
+        "--pull-number"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
@@ -38206,7 +38469,7 @@
         {
           "name": "dir",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.dir"
         },
         {
@@ -38222,8 +38485,11 @@
           "path": "/repos/{owner}/{repo}/readme/{dir}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"dir\" maps to CLI flag --dir that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --dir",
+      "required_flags": [
+        "--dir"
+      ]
     },
     {
       "summary": "Create a release",
@@ -38483,7 +38749,7 @@
         {
           "name": "asset-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.asset_id"
         }
       ],
@@ -38493,8 +38759,11 @@
           "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"asset_id\" maps to CLI flag --asset-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --asset-id",
+      "required_flags": [
+        "--asset-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/releases/{release_id}/assets",
@@ -38505,7 +38774,7 @@
         {
           "name": "release-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.release_id"
         }
       ],
@@ -38515,8 +38784,11 @@
           "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"release_id\" maps to CLI flag --release-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --release-id",
+      "required_flags": [
+        "--release-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/releases/{release_id}/assets",
@@ -38623,7 +38895,7 @@
         {
           "name": "release-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.release_id"
         }
       ],
@@ -38633,8 +38905,11 @@
           "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"release_id\" maps to CLI flag --release-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --release-id",
+      "required_flags": [
+        "--release-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/releases/tags/{tag}",
@@ -40550,7 +40825,7 @@
         {
           "name": "ruleset-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.ruleset_id"
         }
       ],
@@ -40560,8 +40835,11 @@
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"ruleset_id\" maps to CLI flag --ruleset-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ruleset-id",
+      "required_flags": [
+        "--ruleset-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}",
@@ -40572,13 +40850,13 @@
         {
           "name": "ruleset-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.ruleset_id"
         },
         {
           "name": "version-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.version_id"
         }
       ],
@@ -40588,8 +40866,12 @@
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"ruleset_id\" maps to CLI flag --ruleset-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ruleset-id, --version-id",
+      "required_flags": [
+        "--ruleset-id",
+        "--version-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/rulesets/rule-suites",
@@ -40671,7 +40953,7 @@
         {
           "name": "rule-suite-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.rule_suite_id"
         }
       ],
@@ -40681,8 +40963,11 @@
           "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"rule_suite_id\" maps to CLI flag --rule-suite-id that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --rule-suite-id",
+      "required_flags": [
+        "--rule-suite-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}",
@@ -41661,7 +41946,7 @@
         {
           "name": "alert-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "path.alert_number"
         }
       ],
@@ -41671,8 +41956,11 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations"
         }
       ],
-      "status": "product_defect",
-      "reason": "required REST path parameter \"alert_number\" maps to CLI flag --alert-number that is not required"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --alert-number",
+      "required_flags": [
+        "--alert-number"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
@@ -45324,560 +45612,7 @@
       ]
     }
   ],
-  "product_defects": [
-    {
-      "command": "actions approvals view",
-      "flag": "run-id",
-      "path_parameter": "run_id",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
-    },
-    {
-      "command": "actions attempts view",
-      "flag": "attempt-number",
-      "path_parameter": "attempt_number",
-      "reason": "required REST path parameter \"attempt_number\" maps to CLI flag --attempt-number that is not required"
-    },
-    {
-      "command": "actions concurrency_groups view-2",
-      "flag": "concurrency-group-name",
-      "path_parameter": "concurrency_group_name",
-      "reason": "required REST path parameter \"concurrency_group_name\" maps to CLI flag --concurrency-group-name that is not required"
-    },
-    {
-      "command": "actions concurrency_groups view-3",
-      "flag": "run-id",
-      "path_parameter": "run_id",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
-    },
-    {
-      "command": "actions jobs view",
-      "flag": "job-id",
-      "path_parameter": "job_id",
-      "reason": "required REST path parameter \"job_id\" maps to CLI flag --job-id that is not required"
-    },
-    {
-      "command": "actions jobs view-2",
-      "flag": "attempt-number",
-      "path_parameter": "attempt_number",
-      "reason": "required REST path parameter \"attempt_number\" maps to CLI flag --attempt-number that is not required"
-    },
-    {
-      "command": "actions jobs view-3",
-      "flag": "run-id",
-      "path_parameter": "run_id",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
-    },
-    {
-      "command": "actions labels view",
-      "flag": "runner-id",
-      "path_parameter": "runner_id",
-      "reason": "required REST path parameter \"runner_id\" maps to CLI flag --runner-id that is not required"
-    },
-    {
-      "command": "actions pending_deployments view",
-      "flag": "run-id",
-      "path_parameter": "run_id",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
-    },
-    {
-      "command": "actions runners view-2",
-      "flag": "runner-id",
-      "path_parameter": "runner_id",
-      "reason": "required REST path parameter \"runner_id\" maps to CLI flag --runner-id that is not required"
-    },
-    {
-      "command": "actions secrets view-2",
-      "flag": "secret-name",
-      "path_parameter": "secret_name",
-      "reason": "required REST path parameter \"secret_name\" maps to CLI flag --secret-name that is not required"
-    },
-    {
-      "command": "actions timing view",
-      "flag": "run-id",
-      "path_parameter": "run_id",
-      "reason": "required REST path parameter \"run_id\" maps to CLI flag --run-id that is not required"
-    },
-    {
-      "command": "actions timing view-2",
-      "flag": "workflow-id",
-      "path_parameter": "workflow_id",
-      "reason": "required REST path parameter \"workflow_id\" maps to CLI flag --workflow-id that is not required"
-    },
-    {
-      "command": "actions variables view-2",
-      "flag": "name",
-      "path_parameter": "name",
-      "reason": "required REST path parameter \"name\" maps to CLI flag --name that is not required"
-    },
-    {
-      "command": "assignees view",
-      "flag": "assignee",
-      "path_parameter": "assignee",
-      "reason": "required REST path parameter \"assignee\" maps to CLI flag --assignee that is not required"
-    },
-    {
-      "command": "attestations view",
-      "flag": "subject-digest",
-      "path_parameter": "subject_digest",
-      "reason": "required REST path parameter \"subject_digest\" maps to CLI flag --subject-digest that is not required"
-    },
-    {
-      "command": "branches apps view",
-      "flag": "branch",
-      "path_parameter": "branch",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
-    },
-    {
-      "command": "branches contexts view",
-      "flag": "branch",
-      "path_parameter": "branch",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
-    },
-    {
-      "command": "branches enforce_admins view",
-      "flag": "branch",
-      "path_parameter": "branch",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
-    },
-    {
-      "command": "branches protection view",
-      "flag": "branch",
-      "path_parameter": "branch",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
-    },
-    {
-      "command": "branches required_pull_request_reviews view",
-      "flag": "branch",
-      "path_parameter": "branch",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
-    },
-    {
-      "command": "branches required_signatures view",
-      "flag": "branch",
-      "path_parameter": "branch",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
-    },
-    {
-      "command": "branches required_status_checks view",
-      "flag": "branch",
-      "path_parameter": "branch",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
-    },
-    {
-      "command": "branches restrictions view",
-      "flag": "branch",
-      "path_parameter": "branch",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
-    },
-    {
-      "command": "branches teams view",
-      "flag": "branch",
-      "path_parameter": "branch",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
-    },
-    {
-      "command": "branches users view",
-      "flag": "branch",
-      "path_parameter": "branch",
-      "reason": "required REST path parameter \"branch\" maps to CLI flag --branch that is not required"
-    },
-    {
-      "command": "check-runs annotations view",
-      "flag": "check-run-id",
-      "path_parameter": "check_run_id",
-      "reason": "required REST path parameter \"check_run_id\" maps to CLI flag --check-run-id that is not required"
-    },
-    {
-      "command": "check-runs view",
-      "flag": "check-run-id",
-      "path_parameter": "check_run_id",
-      "reason": "required REST path parameter \"check_run_id\" maps to CLI flag --check-run-id that is not required"
-    },
-    {
-      "command": "check-suites check-runs view",
-      "flag": "check-suite-id",
-      "path_parameter": "check_suite_id",
-      "reason": "required REST path parameter \"check_suite_id\" maps to CLI flag --check-suite-id that is not required"
-    },
-    {
-      "command": "check-suites view",
-      "flag": "check-suite-id",
-      "path_parameter": "check_suite_id",
-      "reason": "required REST path parameter \"check_suite_id\" maps to CLI flag --check-suite-id that is not required"
-    },
-    {
-      "command": "code-quality findings view-2",
-      "flag": "finding-number",
-      "path_parameter": "finding_number",
-      "reason": "required REST path parameter \"finding_number\" maps to CLI flag --finding-number that is not required"
-    },
-    {
-      "command": "code-scanning analyses view-2",
-      "flag": "analysis-id",
-      "path_parameter": "analysis_id",
-      "reason": "required REST path parameter \"analysis_id\" maps to CLI flag --analysis-id that is not required"
-    },
-    {
-      "command": "code-scanning autofix view",
-      "flag": "alert-number",
-      "path_parameter": "alert_number",
-      "reason": "required REST path parameter \"alert_number\" maps to CLI flag --alert-number that is not required"
-    },
-    {
-      "command": "code-scanning databases view-2",
-      "flag": "language",
-      "path_parameter": "language",
-      "reason": "required REST path parameter \"language\" maps to CLI flag --language that is not required"
-    },
-    {
-      "command": "code-scanning instances view",
-      "flag": "alert-number",
-      "path_parameter": "alert_number",
-      "reason": "required REST path parameter \"alert_number\" maps to CLI flag --alert-number that is not required"
-    },
-    {
-      "command": "code-scanning repos view",
-      "flag": "codeql-variant-analysis-id",
-      "path_parameter": "codeql_variant_analysis_id",
-      "reason": "required REST path parameter \"codeql_variant_analysis_id\" maps to CLI flag --codeql-variant-analysis-id that is not required"
-    },
-    {
-      "command": "code-scanning sarifs view",
-      "flag": "sarif-id",
-      "path_parameter": "sarif_id",
-      "reason": "required REST path parameter \"sarif_id\" maps to CLI flag --sarif-id that is not required"
-    },
-    {
-      "command": "code-scanning variant-analyses view",
-      "flag": "codeql-variant-analysis-id",
-      "path_parameter": "codeql_variant_analysis_id",
-      "reason": "required REST path parameter \"codeql_variant_analysis_id\" maps to CLI flag --codeql-variant-analysis-id that is not required"
-    },
-    {
-      "command": "codespaces secrets view-2",
-      "flag": "secret-name",
-      "path_parameter": "secret_name",
-      "reason": "required REST path parameter \"secret_name\" maps to CLI flag --secret-name that is not required"
-    },
-    {
-      "command": "comments reactions view",
-      "flag": "comment-id",
-      "path_parameter": "comment_id",
-      "reason": "required REST path parameter \"comment_id\" maps to CLI flag --comment-id that is not required"
-    },
-    {
-      "command": "commits branches-where-head view",
-      "flag": "commit-sha",
-      "path_parameter": "commit_sha",
-      "reason": "required REST path parameter \"commit_sha\" maps to CLI flag --commit-sha that is not required"
-    },
-    {
-      "command": "commits check-runs view",
-      "flag": "ref",
-      "path_parameter": "ref",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required"
-    },
-    {
-      "command": "commits check-suites view",
-      "flag": "ref",
-      "path_parameter": "ref",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required"
-    },
-    {
-      "command": "commits pulls view",
-      "flag": "commit-sha",
-      "path_parameter": "commit_sha",
-      "reason": "required REST path parameter \"commit_sha\" maps to CLI flag --commit-sha that is not required"
-    },
-    {
-      "command": "commits status view",
-      "flag": "ref",
-      "path_parameter": "ref",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required"
-    },
-    {
-      "command": "commits statuses view",
-      "flag": "ref",
-      "path_parameter": "ref",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required"
-    },
-    {
-      "command": "compare view",
-      "flag": "basehead",
-      "path_parameter": "basehead",
-      "reason": "required REST path parameter \"basehead\" maps to CLI flag --basehead that is not required"
-    },
-    {
-      "command": "dependabot secrets view-2",
-      "flag": "secret-name",
-      "path_parameter": "secret_name",
-      "reason": "required REST path parameter \"secret_name\" maps to CLI flag --secret-name that is not required"
-    },
-    {
-      "command": "dependency-graph compare view",
-      "flag": "basehead",
-      "path_parameter": "basehead",
-      "reason": "required REST path parameter \"basehead\" maps to CLI flag --basehead that is not required"
-    },
-    {
-      "command": "deployments statuses view",
-      "flag": "deployment-id",
-      "path_parameter": "deployment_id",
-      "reason": "required REST path parameter \"deployment_id\" maps to CLI flag --deployment-id that is not required"
-    },
-    {
-      "command": "environments apps view",
-      "flag": "environment-name",
-      "path_parameter": "environment_name",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
-    },
-    {
-      "command": "environments deployment-branch-policies view",
-      "flag": "environment-name",
-      "path_parameter": "environment_name",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
-    },
-    {
-      "command": "environments deployment-branch-policies view-2",
-      "flag": "branch-policy-id",
-      "path_parameter": "branch_policy_id",
-      "reason": "required REST path parameter \"branch_policy_id\" maps to CLI flag --branch-policy-id that is not required"
-    },
-    {
-      "command": "environments deployment_protection_rules view",
-      "flag": "environment-name",
-      "path_parameter": "environment_name",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
-    },
-    {
-      "command": "environments deployment_protection_rules view-2",
-      "flag": "environment-name",
-      "path_parameter": "environment_name",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
-    },
-    {
-      "command": "environments public-key view",
-      "flag": "environment-name",
-      "path_parameter": "environment_name",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
-    },
-    {
-      "command": "environments secrets view",
-      "flag": "environment-name",
-      "path_parameter": "environment_name",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
-    },
-    {
-      "command": "environments secrets view-2",
-      "flag": "environment-name",
-      "path_parameter": "environment_name",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
-    },
-    {
-      "command": "environments variables view",
-      "flag": "environment-name",
-      "path_parameter": "environment_name",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
-    },
-    {
-      "command": "environments variables view-2",
-      "flag": "environment-name",
-      "path_parameter": "environment_name",
-      "reason": "required REST path parameter \"environment_name\" maps to CLI flag --environment-name that is not required"
-    },
-    {
-      "command": "git blobs view",
-      "flag": "file-sha",
-      "path_parameter": "file_sha",
-      "reason": "required REST path parameter \"file_sha\" maps to CLI flag --file-sha that is not required"
-    },
-    {
-      "command": "git ref view",
-      "flag": "ref",
-      "path_parameter": "ref",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required"
-    },
-    {
-      "command": "git tags view",
-      "flag": "tag-sha",
-      "path_parameter": "tag_sha",
-      "reason": "required REST path parameter \"tag_sha\" maps to CLI flag --tag-sha that is not required"
-    },
-    {
-      "command": "git trees view",
-      "flag": "tree-sha",
-      "path_parameter": "tree_sha",
-      "reason": "required REST path parameter \"tree_sha\" maps to CLI flag --tree-sha that is not required"
-    },
-    {
-      "command": "hooks deliveries view",
-      "flag": "hook-id",
-      "path_parameter": "hook_id",
-      "reason": "required REST path parameter \"hook_id\" maps to CLI flag --hook-id that is not required"
-    },
-    {
-      "command": "hooks deliveries view-2",
-      "flag": "delivery-id",
-      "path_parameter": "delivery_id",
-      "reason": "required REST path parameter \"delivery_id\" maps to CLI flag --delivery-id that is not required"
-    },
-    {
-      "command": "issues assignees view",
-      "flag": "assignee",
-      "path_parameter": "assignee",
-      "reason": "required REST path parameter \"assignee\" maps to CLI flag --assignee that is not required"
-    },
-    {
-      "command": "issues blocked_by view",
-      "flag": "issue-number",
-      "path_parameter": "issue_number",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
-    },
-    {
-      "command": "issues blocking view",
-      "flag": "issue-number",
-      "path_parameter": "issue_number",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
-    },
-    {
-      "command": "issues issue-field-values view",
-      "flag": "issue-number",
-      "path_parameter": "issue_number",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
-    },
-    {
-      "command": "issues parent view",
-      "flag": "issue-number",
-      "path_parameter": "issue_number",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
-    },
-    {
-      "command": "issues reactions view",
-      "flag": "comment-id",
-      "path_parameter": "comment_id",
-      "reason": "required REST path parameter \"comment_id\" maps to CLI flag --comment-id that is not required"
-    },
-    {
-      "command": "issues reactions view-2",
-      "flag": "issue-number",
-      "path_parameter": "issue_number",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
-    },
-    {
-      "command": "issues sub_issues view",
-      "flag": "issue-number",
-      "path_parameter": "issue_number",
-      "reason": "required REST path parameter \"issue_number\" maps to CLI flag --issue-number that is not required"
-    },
-    {
-      "command": "milestones labels view",
-      "flag": "milestone-number",
-      "path_parameter": "milestone_number",
-      "reason": "required REST path parameter \"milestone_number\" maps to CLI flag --milestone-number that is not required"
-    },
-    {
-      "command": "pages builds view-2",
-      "flag": "build-id",
-      "path_parameter": "build_id",
-      "reason": "required REST path parameter \"build_id\" maps to CLI flag --build-id that is not required"
-    },
-    {
-      "command": "pages deployments view",
-      "flag": "pages-deployment-id",
-      "path_parameter": "pages_deployment_id",
-      "reason": "required REST path parameter \"pages_deployment_id\" maps to CLI flag --pages-deployment-id that is not required"
-    },
-    {
-      "command": "pr checks",
-      "flag": "ref",
-      "path_parameter": "ref",
-      "reason": "required REST path parameter \"ref\" maps to CLI flag --ref that is not required"
-    },
-    {
-      "command": "pulls comments view",
-      "flag": "pull-number",
-      "path_parameter": "pull_number",
-      "reason": "required REST path parameter \"pull_number\" maps to CLI flag --pull-number that is not required"
-    },
-    {
-      "command": "pulls commits view",
-      "flag": "pull-number",
-      "path_parameter": "pull_number",
-      "reason": "required REST path parameter \"pull_number\" maps to CLI flag --pull-number that is not required"
-    },
-    {
-      "command": "pulls files view",
-      "flag": "pull-number",
-      "path_parameter": "pull_number",
-      "reason": "required REST path parameter \"pull_number\" maps to CLI flag --pull-number that is not required"
-    },
-    {
-      "command": "pulls merge view",
-      "flag": "pull-number",
-      "path_parameter": "pull_number",
-      "reason": "required REST path parameter \"pull_number\" maps to CLI flag --pull-number that is not required"
-    },
-    {
-      "command": "pulls reactions view",
-      "flag": "comment-id",
-      "path_parameter": "comment_id",
-      "reason": "required REST path parameter \"comment_id\" maps to CLI flag --comment-id that is not required"
-    },
-    {
-      "command": "pulls reviews view",
-      "flag": "pull-number",
-      "path_parameter": "pull_number",
-      "reason": "required REST path parameter \"pull_number\" maps to CLI flag --pull-number that is not required"
-    },
-    {
-      "command": "readme view-2",
-      "flag": "dir",
-      "path_parameter": "dir",
-      "reason": "required REST path parameter \"dir\" maps to CLI flag --dir that is not required"
-    },
-    {
-      "command": "releases assets view",
-      "flag": "asset-id",
-      "path_parameter": "asset_id",
-      "reason": "required REST path parameter \"asset_id\" maps to CLI flag --asset-id that is not required"
-    },
-    {
-      "command": "releases assets view-2",
-      "flag": "release-id",
-      "path_parameter": "release_id",
-      "reason": "required REST path parameter \"release_id\" maps to CLI flag --release-id that is not required"
-    },
-    {
-      "command": "releases reactions view",
-      "flag": "release-id",
-      "path_parameter": "release_id",
-      "reason": "required REST path parameter \"release_id\" maps to CLI flag --release-id that is not required"
-    },
-    {
-      "command": "rulesets history view",
-      "flag": "ruleset-id",
-      "path_parameter": "ruleset_id",
-      "reason": "required REST path parameter \"ruleset_id\" maps to CLI flag --ruleset-id that is not required"
-    },
-    {
-      "command": "rulesets history view-2",
-      "flag": "ruleset-id",
-      "path_parameter": "ruleset_id",
-      "reason": "required REST path parameter \"ruleset_id\" maps to CLI flag --ruleset-id that is not required"
-    },
-    {
-      "command": "rulesets rule-suites view-2",
-      "flag": "rule-suite-id",
-      "path_parameter": "rule_suite_id",
-      "reason": "required REST path parameter \"rule_suite_id\" maps to CLI flag --rule-suite-id that is not required"
-    },
-    {
-      "command": "secret-scanning locations view",
-      "flag": "alert-number",
-      "path_parameter": "alert_number",
-      "reason": "required REST path parameter \"alert_number\" maps to CLI flag --alert-number that is not required"
-    }
-  ],
+  "product_defects": [],
   "provider_refusals": [
     {
       "command": "actions fork-pr-contributor-approval view",

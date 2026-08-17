@@ -2212,6 +2212,13 @@ func TestRunOperationDirectReadRequiredQueryFlags(t *testing.T) {
 		if err == nil || !strings.Contains(err.Error(), "missing required flag --billing-setup") {
 			t.Fatalf("Run error = %v, want missing billing setup", err)
 		}
+		var missingRequired *MissingRequiredFlagError
+		if !errors.As(err, &missingRequired) {
+			t.Fatalf("Run error = %T %v, want MissingRequiredFlagError", err, err)
+		}
+		if missingRequired.Command != command.Path || missingRequired.Flag != "billing-setup" {
+			t.Fatalf("MissingRequiredFlagError = %+v, want command %q flag billing-setup", missingRequired, command.Path)
+		}
 		if connector.operationDirectReadReq.Operation != "" {
 			t.Fatalf("operation direct read executed: %+v", connector.operationDirectReadReq)
 		}

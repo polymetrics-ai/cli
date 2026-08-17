@@ -930,14 +930,16 @@ func TestGitHubDirectReadParametersAndPageContextReachWire(t *testing.T) {
 	// Both rejections occur before the handler is reached, and the enum
 	// rejection names every accepted option instead of deferring to GitHub.
 	for _, tc := range []struct {
-		args []string
-		want string
+		args         []string
+		want         string
+		usageRefusal bool
 	}{
-		{[]string{"github", "issue", "list", "--credential", "github-local", "--state", "impossible", "--root", root, "--json"}, "all|closed|open"},
-		{[]string{"github", "pulls", "files", "view", "--credential", "github-local", "--root", root, "--json"}, "missing path variable \"pull_number\""},
+		{args: []string{"github", "issue", "list", "--credential", "github-local", "--state", "impossible", "--root", root, "--json"}, want: "all|closed|open"},
+		{args: []string{"github", "pulls", "files", "view", "--credential", "github-local", "--root", root, "--json"}, want: "missing required flag --pull-number", usageRefusal: true},
 	} {
 		var stdout, stderr bytes.Buffer
-		if code := cli.Run(tc.args, &stdout, &stderr); code == 0 {
+		code := cli.Run(tc.args, &stdout, &stderr)
+		if code == 0 {
 			t.Fatalf("Run(%v) code = 0, want parser refusal", tc.args)
 		}
 		if got := stdout.String() + stderr.String(); !strings.Contains(got, tc.want) {
@@ -945,6 +947,24 @@ func TestGitHubDirectReadParametersAndPageContextReachWire(t *testing.T) {
 		}
 		if len(observed) != 0 {
 			t.Fatalf("Run(%v) reached the provider: %#v", tc.args, observed)
+		}
+		if tc.usageRefusal {
+			if code != 2 {
+				t.Fatalf("Run(%v) exit code = %d, want 2 usage error", tc.args, code)
+			}
+			var envelope struct {
+				Error struct {
+					Category string `json:"category"`
+					Code     string `json:"code"`
+					Message  string `json:"message"`
+				} `json:"error"`
+			}
+			if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil {
+				t.Fatalf("decode usage refusal: %v\nstdout=%s", err, stdout.String())
+			}
+			if envelope.Error.Category != "usage" || envelope.Error.Code != "usage_error" || !strings.Contains(envelope.Error.Message, tc.want) {
+				t.Fatalf("usage refusal = %+v, want category=usage code=usage_error message containing %q", envelope.Error, tc.want)
+			}
 		}
 	}
 

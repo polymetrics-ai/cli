@@ -361,7 +361,8 @@ not a full override by default.
   `internal/connectors/direct_read_page_flags.json` and answered from the connector's own declared
   pagination spec, so no bundle declares them (see AGENTS.md, "Direct Reads Return One Page, And
   Say So"). The command fields that are derivable from `operations.json` — `api_surface`, flag
-  `maps_to`, `output_policy`, and `rest.max_bytes` — are not hand-authored:
+  `maps_to`, requiredness for a mapped required REST path parameter, `output_policy`, and
+  `rest.max_bytes` — are not hand-authored:
   `go run ./cmd/connectorgen surface-sync` fills them and `--check` fails on drift (see AGENTS.md,
   "Command Surface Must Stay Executable"). The same command generates the embedded
   `operation_endpoint_ledger.json` runtime projection from `api_surface.json` and
@@ -479,8 +480,10 @@ The import deliberately drops two classes of parameter:
 ### What you still author by hand
 
 A flag the derivation cannot know about, and a better summary or narrower type
-than the specification carries. `surface-sync` only ever **adds** derived flags;
-a flag you already declared is left exactly as written.
+than the specification carries. `surface-sync` adds missing derived flags and
+synchronizes only the operation-owned fields it can prove: `maps_to` and
+requiredness for a flag mapped to a required REST path parameter. A declared
+summary, type, and supported optional query/body behavior remain author-owned.
 
 ### Verifying
 

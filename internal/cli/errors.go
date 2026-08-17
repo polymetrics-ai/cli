@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/safety"
@@ -102,6 +103,10 @@ func classifyError(err error) *cliError {
 	var ce *cliError
 	if errors.As(err, &ce) {
 		return ce
+	}
+	var missingRequiredFlag *commandrunner.MissingRequiredFlagError
+	if errors.As(err, &missingRequiredFlag) {
+		return &cliError{category: categoryUsage, code: "usage_error", message: missingRequiredFlag.Error(), err: err}
 	}
 	var replay *app.AuthorizationTokenReplayError
 	if errors.As(err, &replay) {

@@ -158,6 +158,46 @@ func TestSyncBundleReportsDivergentFlagMapsTo(t *testing.T) {
 	}
 }
 
+// A required REST path parameter is not an author preference: the executor
+// cannot construct its declared request without it. Surface sync must correct
+// an existing mapped flag as well as marking a newly derived one required.
+// Required query parameters remain outside this path-specific contract.
+func TestSyncBundleDerivesRequiredPathFlagFromRESTParameter(t *testing.T) {
+	surface := []any{map[string]any{"method": "GET", "path": "/issues/{issue_id}/{project_id}"}}
+	cli, ops := directReadBundle(surface, "json_redacted", "path.issue_id")
+	command := cli.(map[string]any)["commands"].([]any)[0].(map[string]any)
+	command["flags"] = []any{
+		map[string]any{"name": "issue-id", "type": "string", "maps_to": "path.issue_id", "required": false},
+		map[string]any{"name": "project-id", "type": "string", "maps_to": "path.project_id"},
+		map[string]any{"name": "state", "type": "string", "maps_to": "query.state"},
+	}
+	rest := ops.(map[string]any)["operations"].([]any)[0].(map[string]any)["rest"].(map[string]any)
+	rest["parameters"] = []any{
+		map[string]any{"name": "issue_id", "in": "path", "type": "string", "required": true},
+		map[string]any{"name": "project_id", "in": "path", "type": "string", "required": true},
+		map[string]any{"name": "state", "in": "query", "type": "string", "required": true},
+	}
+	dir := writeSyncBundle(t, cli, ops)
+
+	stats, err := syncBundle(dir, false)
+	if err != nil {
+		t.Fatalf("syncBundle: %v", err)
+	}
+	flags, _ := readSyncedCommand(t, dir)["flags"].([]any)
+	if !flagNamedRequired(flags, "issue-id") {
+		t.Fatalf("flags = %v, want corrected required --issue-id for required path.issue_id", flags)
+	}
+	if !flagNamedRequired(flags, "project-id") {
+		t.Fatalf("flags = %v, want filled required --project-id for required path.project_id", flags)
+	}
+	if stats.Corrected.FlagRequired != 1 || stats.Filled.FlagRequired != 1 {
+		t.Fatalf("required flag stats = %+v, want one corrected and one filled field", stats)
+	}
+	if flagNamedRequired(flags, "state") {
+		t.Fatalf("flags = %v, want optional --state because only path requiredness is synchronized", flags)
+	}
+}
+
 // A direct read has exactly one opaque-cursor channel: --page-cursor. Legacy
 // command surfaces predate that contract and can still carry raw provider
 // cursor flags. Keep an explicit size override, but never leave a second
@@ -511,4 +551,16 @@ func flagMapsTo(raw any, want string) bool {
 	}
 	flag, ok := flags[0].(map[string]any)
 	return ok && flag["maps_to"] == want
+}
+
+func flagNamedRequired(flags []any, name string) bool {
+	for _, raw := range flags {
+		flag, ok := raw.(map[string]any)
+		if !ok || flag["name"] != name {
+			continue
+		}
+		required, _ := flag["required"].(bool)
+		return required
+	}
+	return false
 }

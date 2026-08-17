@@ -2,11 +2,50 @@ package main
 
 import (
 	"bytes"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
 )
+
+// Required REST path parameters are executable command inputs. This
+// repository-wide invariant prevents a surface from advertising one as
+// optional and deferring the failure to path interpolation or provider I/O.
+func TestRequiredRESTPathParametersAlwaysMapToRequiredCLIFlags(t *testing.T) {
+	definitionsRoot := filepath.Join(repoRootForCertificationTest(t), "internal", "connectors", "defs")
+	entries, err := os.ReadDir(definitionsRoot)
+	if err != nil {
+		t.Fatalf("read connector definitions: %v", err)
+	}
+
+	var violations []string
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		bundle, err := engine.Load(os.DirFS(definitionsRoot), entry.Name())
+		if err != nil {
+			t.Fatalf("load connector %q: %v", entry.Name(), err)
+		}
+		if bundle.CLISurface == nil {
+			continue
+		}
+		operations := make(map[string]engine.OperationSpec, len(bundle.Operations))
+		for _, operation := range bundle.Operations {
+			operations[operation.ID] = operation
+		}
+		for _, command := range bundle.CLISurface.Commands {
+			if defect := requiredPathFlagDefect(command, operations[command.Operation]); defect != nil {
+				violations = append(violations, entry.Name()+" "+defect.Command+": "+defect.Reason)
+			}
+		}
+	}
+	if len(violations) != 0 {
+		t.Fatalf("optional CLI flags mapped to required REST path parameters (%d):\n%s", len(violations), strings.Join(violations, "\n"))
+	}
+}
 
 func TestCertificationSweepForGitHubIsSurfaceDerivedAndExhaustive(t *testing.T) {
 	root := repoRootForCertificationTest(t)
@@ -97,18 +136,8 @@ func TestCertificationSweepSeparatesProductDefectsAndProviderRefusals(t *testing
 		t.Fatalf("buildCertificationSweep() error = %v", err)
 	}
 
-	var assetDefect *certificationSweepProductDefect
-	for index := range sweep.ProductDefects {
-		if sweep.ProductDefects[index].Command == "releases assets view" {
-			assetDefect = &sweep.ProductDefects[index]
-			break
-		}
-	}
-	if assetDefect == nil {
-		t.Fatalf("product defects = %#v, want releases assets view", sweep.ProductDefects)
-	}
-	if assetDefect.Flag != "asset-id" || assetDefect.PathParameter != "asset_id" || !strings.Contains(assetDefect.Reason, "not required") {
-		t.Fatalf("asset defect = %#v, want non-required --asset-id mapped to asset_id", assetDefect)
+	if len(sweep.ProductDefects) != 0 {
+		t.Fatalf("product defects = %#v, want none after required-path flag derivation", sweep.ProductDefects)
 	}
 	var providerRefusal *certificationSweepProviderRefusal
 	for index := range sweep.ProviderRefusals {

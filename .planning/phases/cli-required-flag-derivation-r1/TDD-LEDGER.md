@@ -4,11 +4,11 @@
 
 | Slice | Red evidence | Green evidence | Status |
 | --- | --- | --- | --- |
-| Repository required-path invariant | New all-bundle test fails, enumerating optional flags mapped to required REST path parameters | Same test returns zero findings after generic derivation and regeneration | planned |
-| Surface-sync derivation | Fixture expects required path flag while current output omits it | Generator derives `required: true`, but leaves optional query parameters optional | planned |
-| Typed pre-I/O refusal | Missing path flag test proves the current late path-variable error or absence of validation | Typed usage error names the CLI flag and transport call count is zero | planned |
-| GitHub P1 count | Generated sweep reports 92 GitHub findings on the base | Same sweep reports zero GitHub findings after generated surface update | planned |
-| Unsupported declaration audit | No verifier exists for the 50 declared entries | Programmatic report names all declarations and flags any contradiction without mutation | planned |
+| Repository required-path invariant | `go test -timeout 20m ./cmd/connectorgen -run TestRequiredRESTPathParametersAlwaysMapToRequiredCLIFlags -count=1` reported 92 GitHub violations | Same test returns zero across all 552 bundles after derivation and regeneration | green |
+| Surface-sync derivation | Focused fixture omitted path-flag requiredness and failed | Fixture verifies both a corrected `required: false` and filled field become `true`, while a required query flag stays optional | green |
+| Typed pre-I/O refusal | The GitHub fixture previously reached late `missing path variable "pull_number"` validation | `MissingRequiredFlagError` produces `category=usage`, `code=usage_error`, exit 2, and zero fake-provider calls | green |
+| GitHub P1 count | `certification-sweep --connector github --check` reported 92 product defects on the base | Regenerated sweep reports zero product defects (104 flag fields in 92 commands) | green |
+| Unsupported declaration audit | No verifier existed for the 50 declared entries | Audit lists every entry without mutation: 26 `unsupported_api` declarations contradict the source lock; 23 `unsupported_local` declarations hold | green |
 
 ## Constraints
 
