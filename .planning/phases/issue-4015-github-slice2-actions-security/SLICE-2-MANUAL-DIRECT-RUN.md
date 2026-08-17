@@ -23,3 +23,5 @@ All commands in this receipt were invoked directly through the built `pm` binary
 Pre-request `missing path variable` and `unresolved path template` failures from the retired runner are superseded by direct calls with the supplied path constants; they are not `no_object` evidence.
 
 The bounded structural exception supplied by the fleet audit is product work, not a provider result: commands requiring `{enterprise-team}` with no matching flag are uninvokable.  The affected GitHub command family is `enterprise-team-memberships` (add, bulk-add, bulk-remove, get, list, remove) and `enterprise-team-organizations` (add, bulk-add, bulk-remove, delete, get-assignment, get-assignments).  No retry is appropriate until the command surface exposes that path input.
+
+`actions create-org-variable` is also a product defect in the contained write path: the real command created `rplan_b6ec67ad91b44496`, and preview resolved `POST /orgs/Polymetrics-Cert/actions/variables`, but it remained `planned` with zero preview time and emitted no `Approval token:` line.  It therefore cannot reach the required approval-and-execute stage.
