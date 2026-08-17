@@ -1,6 +1,6 @@
 {
   "phase": "cli-required-flag-derivation-r1",
-  "status": "executing_gap",
+  "status": "pr_open",
   "delivery": "direct-pr",
   "base": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-required-flag-derivation-r1",
