@@ -1,0 +1,53 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_actions_sub_view",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:03:01.859Z",
+  "run_id": "github-slice2-agent_derived_actions_sub_view",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:163027dfb951f52982205c0d24362f40b9b57b6ffdf6b9fa850c67fde216b6a1}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_actions_sub_view",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:cafed4e3a564b816547e1e17a46b3bd126e11abc40213c8806c6fbe4b9d14930}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "sub_claim_prefix": "{{pmcertfp:v1:a616c9739612f146cd6ed970c9a954fe5d071eeed1e88d5186b4a0da90c09c47}}",
+              "use_default": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+              "use_immutable_subject": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}"
+            },
+            "original_bytes": 143,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
