@@ -49,3 +49,27 @@ log, diagnostic, artifact, or assertion message.
 Result: no Critical, Warning, or Info findings. Focused repeat coverage,
 `go test -timeout 20m ./internal/cli`, `go test -timeout 20m ./cmd/connectorgen`,
 and `go vet ./...` pass.
+
+## CI complete-state settlement review
+
+Scope: the second PR #4198 CI failure at the now-moved report-persistence
+assertion and the resulting redesign of the OS process-list/temporary-artifact
+proof.
+
+Mode: inline/manual completion of the generated `code-review` prompt. The
+phase is not registered in the roadmap and this single-worker task may not
+spawn a review role.
+
+The review enumerated the test's actual post-release observables: the held
+provider response is flushed, the held handler has returned, the fresh child
+has exited, `recurly.json` is present and parseable as a completed passing
+report, and the test-owned `pm-certify-external-*` build directories are gone.
+The revised test checks each condition independently in one bounded poll and
+keeps the existing five-second handler and thirty-second settlement bounds. It
+does not cancel a merely progressing child or lengthen any timeout. A child
+error is observed concurrently with report persistence rather than hidden by a
+file-only wait; diagnostics contain only booleans and fixed state names.
+
+Result: no Critical, Warning, or Info findings. The focused test passed three
+repeat runs under `-parallel=4`; the earlier Redis connection-refused logs are
+confirmed deliberate unreachable-endpoint fixture coverage outside this test.

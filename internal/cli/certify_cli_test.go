@@ -462,15 +462,30 @@ func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifa
 	t.Setenv("GODEBUG", strings.TrimPrefix(os.Getenv("GODEBUG")+",x509usefallbackroots=1", ","))
 	t.Setenv("PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY", token)
 	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	result := make(chan error, 1)
+	result := make(chan externalProofRunResult, 1)
+	resultObserved := false
+	t.Cleanup(func() {
+		release()
+		cancel()
+		if resultObserved {
+			return
+		}
+		select {
+		case <-result:
+		case <-time.After(5 * time.Second):
+		}
+	})
 	go func() {
 		var stdout, stderr bytes.Buffer
-		result <- runCertify(ctx, root, []string{
-			"recurly", "--external-proof", "--full-parity", "--json",
-			"--config", "base_url=" + server.URL,
-			"--from-env", "api_key=PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY",
-		}, &stdout, &stderr, true)
+		result <- externalProofRunResult{
+			err: runCertify(ctx, root, []string{
+				"recurly", "--external-proof", "--full-parity", "--json",
+				"--config", "base_url=" + server.URL,
+				"--from-env", "api_key=PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY",
+			}, &stdout, &stderr, true),
+			stdout: stdout.String(),
+			stderr: stderr.String(),
+		}
 	}()
 
 	select {
@@ -482,75 +497,149 @@ func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifa
 	assertNoCredentialMaterialInTemporaryArtifacts(t, root, temporaryRoot, token)
 
 	release()
-	awaitExternalProofProviderResponse(t, responseDelivered)
-	awaitExternalProofHandlerFinish(t, handlerFinished)
-	awaitExternalProofReport(t, filepath.Join(root, ".polymetrics", "certifications", "recurly.json"))
-
-	// The report proves the child consumed the released provider response and
-	// completed its certification run. End it here: external-proof serialization
-	// (including a fresh-binary hash) is covered by the acceptance test above
-	// and is deliberately not part of this OS-observation boundary.
-	cancel()
-	awaitExternalProofTermination(t, result)
+	settled, err := awaitExternalProofSettlement(
+		result,
+		responseDelivered,
+		handlerFinished,
+		filepath.Join(root, ".polymetrics", "certifications", "recurly.json"),
+		temporaryRoot,
+	)
+	resultObserved = settled.childExited
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bytes.Contains([]byte(settled.result.stdout), []byte(token)) || bytes.Contains([]byte(settled.result.stderr), []byte(token)) {
+		t.Fatal("fresh external HTTPS process output exposed credential material")
+	}
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
+	assertNoCredentialMaterialInTree(t, temporaryRoot, token)
 }
 
-// awaitExternalProofProviderResponse makes the test's held-response handoff
-// explicit. It is not a delay: the test proceeds only after the provider has
-// written and flushed the response that unblocks the external child.
-func awaitExternalProofProviderResponse(t *testing.T, delivered <-chan error) {
-	t.Helper()
-	select {
-	case err := <-delivered:
-		if err != nil {
-			t.Fatalf("held HTTPS provider could not deliver its response: %v", err)
-		}
-	case <-time.After(5 * time.Second):
-		t.Fatal("held HTTPS provider did not deliver a response after release")
-	}
+type externalProofRunResult struct {
+	err    error
+	stdout string
+	stderr string
 }
 
-func awaitExternalProofHandlerFinish(t *testing.T, finished <-chan struct{}) {
-	t.Helper()
-	select {
-	case <-finished:
-	case <-time.After(5 * time.Second):
-		t.Fatal("held HTTPS provider handler did not finish after delivering its response")
-	}
+type externalProofSettlement struct {
+	result      externalProofRunResult
+	childExited bool
 }
 
-// awaitExternalProofReport observes the child-side state transition that can
-// happen only after its held provider response has been received and evaluated.
-func awaitExternalProofReport(t *testing.T, path string) {
-	t.Helper()
-	// This is the pre-existing completion bound. Unlike the former wait for
-	// process exit, it observes the exact child-side state transition that the
-	// released provider response must cause.
-	deadline := time.NewTimer(30 * time.Second)
-	defer deadline.Stop()
-	poll := time.NewTicker(10 * time.Millisecond)
+// awaitExternalProofSettlement observes every post-release boundary the OS
+// proof depends on. The test is deliberately driven by real conditions rather
+// than assuming that a flushed response implies a persisted report or cleaned
+// build directory. Existing bounds are retained: five seconds for the held
+// handler to respond and thirty seconds for the child to settle its report and
+// scoped temporary artifacts.
+func awaitExternalProofSettlement(
+	result <-chan externalProofRunResult,
+	responseDelivered <-chan error,
+	handlerFinished <-chan struct{},
+	reportPath, temporaryRoot string,
+) (externalProofSettlement, error) {
+	const (
+		handlerBound    = 5 * time.Second
+		settlementBound = 30 * time.Second
+		pollInterval    = 10 * time.Millisecond
+	)
+
+	responseDeadline := time.NewTimer(handlerBound)
+	defer responseDeadline.Stop()
+	handlerDeadline := time.NewTimer(handlerBound)
+	defer handlerDeadline.Stop()
+	settlementDeadline := time.NewTimer(settlementBound)
+	defer settlementDeadline.Stop()
+	poll := time.NewTicker(pollInterval)
 	defer poll.Stop()
+
+	var settled externalProofSettlement
+	responseObserved := false
+	handlerObserved := false
+	reportComplete := false
+	temporaryArtifactsSettled := false
 	for {
-		if _, err := os.Stat(path); err == nil {
-			return
-		} else if !errors.Is(err, os.ErrNotExist) {
-			t.Fatalf("inspect fresh-child certification report: %v", err)
+		if !reportComplete {
+			complete, err := externalProofReportComplete(reportPath)
+			if err != nil {
+				return settled, fmt.Errorf("inspect fresh-child certification report: %w", err)
+			}
+			reportComplete = complete
 		}
+		if !temporaryArtifactsSettled {
+			complete, err := externalProofTemporaryArtifactsSettled(temporaryRoot)
+			if err != nil {
+				return settled, fmt.Errorf("inspect fresh-child temporary artifacts: %w", err)
+			}
+			temporaryArtifactsSettled = complete
+		}
+		if responseObserved && handlerObserved && settled.childExited && reportComplete && temporaryArtifactsSettled {
+			if settled.result.err != nil {
+				return settled, errors.New("fresh external child exited unsuccessfully after the held provider response")
+			}
+			return settled, nil
+		}
+
 		select {
-		case <-deadline.C:
-			t.Fatal("fresh external child did not persist its report after the observed provider response")
+		case err := <-responseDelivered:
+			if err != nil {
+				return settled, fmt.Errorf("held HTTPS provider could not deliver its response: %w", err)
+			}
+			responseObserved = true
+			responseDelivered = nil
+		case <-handlerFinished:
+			handlerObserved = true
+			handlerFinished = nil
+		case settled.result = <-result:
+			settled.childExited = true
+			result = nil
+		case <-responseDeadline.C:
+			if !responseObserved {
+				return settled, errors.New("held HTTPS provider did not deliver a response after release")
+			}
+		case <-handlerDeadline.C:
+			if !handlerObserved {
+				return settled, errors.New("held HTTPS provider handler did not finish after delivering its response")
+			}
+		case <-settlementDeadline.C:
+			return settled, fmt.Errorf(
+				"fresh external child did not settle after the observed provider response (child_exited=%t report_complete=%t temporary_artifacts_settled=%t)",
+				settled.childExited,
+				reportComplete,
+				temporaryArtifactsSettled,
+			)
 		case <-poll.C:
 		}
 	}
 }
 
-func awaitExternalProofTermination(t *testing.T, result <-chan error) {
-	t.Helper()
-	select {
-	case <-result:
-	case <-time.After(5 * time.Second):
-		t.Fatal("cancelled fresh external child did not exit")
+func externalProofReportComplete(path string) (bool, error) {
+	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+		return false, nil
+	} else if err != nil {
+		return false, err
 	}
+	report, err := certify.LoadReport(path)
+	if err != nil {
+		// Save writes the report directly, so a reader can observe a partial JSON
+		// document while the child is persisting it. Keep polling that concrete
+		// condition rather than treating file existence as completion.
+		return false, nil
+	}
+	return report.Connector == "recurly" &&
+		!report.StartedAt.IsZero() &&
+		!report.CompletedAt.IsZero() &&
+		!report.CompletedAt.Before(report.StartedAt) &&
+		report.Passed &&
+		len(report.Stages) > 0, nil
+}
+
+func externalProofTemporaryArtifactsSettled(temporaryRoot string) (bool, error) {
+	buildPaths, err := filepath.Glob(filepath.Join(temporaryRoot, "pm-certify-external-*"))
+	if err != nil {
+		return false, err
+	}
+	return len(buildPaths) == 0, nil
 }
 
 // TestExternalProofGitHubSmoke is deliberately opt-in because it reaches the
