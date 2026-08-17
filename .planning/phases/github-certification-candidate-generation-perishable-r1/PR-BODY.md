@@ -31,8 +31,8 @@ environment-only credentials and produced-value assertions:
 | Result | Count |
 | --- | ---: |
 | Produced-value pass (executed, not yet certified/published) | 34 |
-| Product defect | 10 |
-| Provider refusal or missing fixture | 53 |
+| Product defect | 0 |
+| Provider refusal or missing fixture | 63 |
 | **Executed generated reads** | **97** |
 
 The accepted-evidence importer is concurrently owned elsewhere, therefore the
@@ -46,18 +46,18 @@ provider message `no analysis found`. That is a missing-analysis fixture, not
 an entitlement block. Provider policy and absent-resource responses are kept as
 non-passes rather than reclassified as product failures.
 
-### Product defects (10)
+### Rebase reconciliation
 
-- `code-scanning analyses view-2` — `analysis_id` path flag optional
-- `code-scanning autofix view` — `alert_number` path flag optional
-- `code-scanning databases view-2` — `language` path flag optional
-- `code-scanning instances view` — `alert_number` path flag optional
-- `code-scanning repos view` — `codeql_variant_analysis_id` path flag optional
-- `code-scanning sarifs view` — `sarif_id` path flag optional
-- `code-scanning variant-analyses view` — `codeql_variant_analysis_id` path flag optional
-- `dependabot secrets view-2` — `secret_name` path flag optional
-- `secret-scanning locations view` — `alert_number` path flag optional
-- `codespaces secrets view-2` — `secret_name` path flag optional
+After rebase to integration `a96216d09`, generation still selected the same 97
+commands. The current base correctly marks ten REST path flags as required, so
+the regenerated candidates include connector-owned fixture values for their
+now-required flags. I reran the affected Advanced Security and Codespaces
+cohorts (53 reads) with the rebased binary: all ten previously reported
+path-flag product defects now reach GitHub and are provider/missing-fixture
+non-passes. The current bounded result is therefore **34 / 0 / 63**, not the
+pre-rebase 34 / 10 / 53. There are no unresolved product defects in this
+cohort; they remain separately represented by the current sweep rather than
+hidden as a pass.
 
 ## Negative control
 
@@ -77,10 +77,9 @@ and rerunning that same case made the stage pass again.
 The generated sweep remains exhaustive:
 
 ```
-eligible_pending_live 109
-+ fixture_required   1290
+eligible_pending_live 122
++ fixture_required   1369
 + not_applicable       50
-+ product_defect       92
 + provider_refused      1
 + schema_conformant    29
 = total              1571
@@ -93,7 +92,7 @@ eligible_pending_live 109
 - `go test -timeout 20m ./internal/connectors/engine` — PASS
 - `make connectorgen-validate connectorgen-surface-sync connector-boundary` — PASS
 - generated candidates and sweep each regenerated twice, then both `--check` commands passed (byte-stable)
-- `make verify` — PASS; includes full `go test ./...`, with `internal/cli` PASS (816.971s), build, docs, smoke, lint, generated checks, boundary, canon, and release-target parity
+- `make verify` — pending rebase validation; it will rerun before this update is pushed.
 
 This direct-PR task used the documented inline/manual GSD fallback; its plan,
 TDD red/green ledger, verification, live results, and final code review record

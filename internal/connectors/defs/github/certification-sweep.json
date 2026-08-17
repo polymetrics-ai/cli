@@ -1405,11 +1405,20 @@
           "path": "/enterprises/{enterprise}/actions/cache/retention-limit"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get GitHub Actions cache retention limit for an organization",
@@ -1455,11 +1464,20 @@
           "path": "/enterprises/{enterprise}/actions/cache/storage-limit"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get GitHub Actions cache storage limit for an organization",
@@ -9903,11 +9921,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --alert-number",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
@@ -9993,8 +10020,17 @@
           "path": "/repos/{owner}/{repo}/code-scanning/analyses"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
@@ -10015,11 +10051,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --analysis-id",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--analysis-id"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
@@ -10062,11 +10107,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --alert-number",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
@@ -10124,8 +10178,17 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
@@ -10146,11 +10209,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --language",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--language"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/code-scanning/default-setup",
@@ -10179,8 +10251,17 @@
           "path": "/repos/{owner}/{repo}/code-scanning/default-setup"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
@@ -10213,11 +10294,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --alert-number",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List code scanning alerts for an organization",
@@ -10238,11 +10328,20 @@
           "path": "/orgs/{org}/code-scanning/alerts"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
@@ -10275,13 +10374,22 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --codeql-variant-analysis-id, --repo-name, --repo-owner",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--codeql-variant-analysis-id",
         "--repo-name",
         "--repo-owner"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
@@ -10302,11 +10410,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --sarif-id",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--sarif-id"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
@@ -10342,11 +10459,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --codeql-variant-analysis-id",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--codeql-variant-analysis-id"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Attach a configuration to repositories",
@@ -11078,11 +11204,20 @@
           "path": "/enterprises/{enterprise}/code-security/configurations"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get code security configurations for an organization",
@@ -11103,11 +11238,20 @@
           "path": "/orgs/{org}/code-security/configurations"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Get default code security configurations",
@@ -11128,11 +11272,20 @@
           "path": "/orgs/{org}/code-security/configurations/defaults"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Get default code security configurations for an enterprise",
@@ -11153,11 +11306,20 @@
           "path": "/enterprises/{enterprise}/code-security/configurations/defaults"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get repositories associated with a code security configuration",
@@ -11216,12 +11378,21 @@
           "path": "/enterprises/{enterprise}/code-security/configurations/{configuration_id}/repositories"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --configuration-id, --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--configuration-id",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Retrieve a code security configuration of an enterprise",
@@ -11248,12 +11419,21 @@
           "path": "/enterprises/{enterprise}/code-security/configurations/{configuration_id}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --configuration-id, --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--configuration-id",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Set a code security configuration as a default for an organization",
@@ -12046,11 +12226,20 @@
           "path": "/user/codespaces/{codespace_name}/machines"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --codespace-name",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--codespace-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/codespaces",
@@ -12484,8 +12673,17 @@
           "path": "/repos/{owner}/{repo}/codespaces/devcontainers"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Export a codespace for the authenticated user",
@@ -12537,12 +12735,21 @@
           "path": "/orgs/{org}/members/{username}/codespaces"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org, --username",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get details about a codespace export",
@@ -12569,12 +12776,21 @@
           "path": "/user/codespaces/{codespace_name}/exports/{export_id}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --codespace-name, --export-id",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--codespace-name",
         "--export-id"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get a codespace for the authenticated user",
@@ -12595,11 +12811,20 @@
           "path": "/user/codespaces/{codespace_name}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --codespace-name",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--codespace-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get an organization public key",
@@ -12620,11 +12845,20 @@
           "path": "/orgs/{org}/codespaces/secrets/public-key"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get an organization secret",
@@ -12651,12 +12885,21 @@
           "path": "/orgs/{org}/codespaces/secrets/{secret_name}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org, --secret-name",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get public key for the authenticated user",
@@ -12670,8 +12913,17 @@
           "path": "/user/codespaces/secrets/public-key"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get a secret for the authenticated user",
@@ -12692,11 +12944,20 @@
           "path": "/user/codespaces/secrets/{secret_name}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --secret-name",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List codespaces for the authenticated user",
@@ -12710,8 +12971,17 @@
           "path": "/user/codespaces"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List codespaces for the organization",
@@ -12732,11 +13002,20 @@
           "path": "/orgs/{org}/codespaces"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List organization secrets",
@@ -12757,11 +13036,20 @@
           "path": "/orgs/{org}/codespaces/secrets"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List selected repositories for a user secret",
@@ -12782,11 +13070,20 @@
           "path": "/user/codespaces/secrets/{secret_name}/repositories"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --secret-name",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List secrets for the authenticated user",
@@ -12800,8 +13097,17 @@
           "path": "/user/codespaces/secrets"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List selected repositories for an organization secret",
@@ -12828,12 +13134,21 @@
           "path": "/orgs/{org}/codespaces/secrets/{secret_name}/repositories"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org, --secret-name",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codespaces/machines",
@@ -12866,8 +13181,17 @@
           "path": "/repos/{owner}/{repo}/codespaces/machines"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codespaces/new",
@@ -12894,8 +13218,17 @@
           "path": "/repos/{owner}/{repo}/codespaces/new"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codespaces/permissions_check",
@@ -12922,12 +13255,21 @@
           "path": "/repos/{owner}/{repo}/codespaces/permissions_check"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --devcontainer-path, --ref",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--devcontainer-path",
         "--ref"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/public-key",
@@ -12941,8 +13283,17 @@
           "path": "/repos/{owner}/{repo}/codespaces/secrets/public-key"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Create a repository from an unpublished codespace",
@@ -13064,8 +13415,17 @@
           "path": "/repos/{owner}/{repo}/codespaces/secrets"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
@@ -13086,11 +13446,20 @@
           "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --secret-name",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Manage access control for organization codespaces (deprecated by GitHub, still documented)",
@@ -13383,8 +13752,17 @@
           "path": "/repos/{owner}/{repo}/codespaces"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/collaborators/{username}/permission",
@@ -14104,8 +14482,17 @@
           "path": "/repos/{owner}/{repo}/copilot/cloud-agent/configuration"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot content exclusion rules for an organization",
@@ -14126,11 +14513,20 @@
           "path": "/orgs/{org}/copilot/content_exclusion"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot enterprise usage metrics for a specific day",
@@ -14157,12 +14553,21 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/enterprise-1-day"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --day, --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get Copilot enterprise repository report for a specific day",
@@ -14189,12 +14594,21 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/repos-1-day"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --day, --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get Copilot enterprise usage metrics",
@@ -14215,11 +14629,20 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/enterprise-28-day/latest"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get Copilot enterprise user-teams report for a specific day",
@@ -14246,12 +14669,21 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/user-teams-1-day"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --day, --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get Copilot organization usage metrics for a specific day",
@@ -14278,12 +14710,21 @@
           "path": "/orgs/{org}/copilot/metrics/reports/organization-1-day"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --day, --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot organization repository report for a specific day",
@@ -14310,12 +14751,21 @@
           "path": "/orgs/{org}/copilot/metrics/reports/repos-1-day"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --day, --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot organization usage metrics",
@@ -14336,11 +14786,20 @@
           "path": "/orgs/{org}/copilot/metrics/reports/organization-28-day/latest"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot organization user-teams report for a specific day",
@@ -14367,12 +14826,21 @@
           "path": "/orgs/{org}/copilot/metrics/reports/user-teams-1-day"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --day, --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot organization users usage metrics for a specific day",
@@ -14399,12 +14867,21 @@
           "path": "/orgs/{org}/copilot/metrics/reports/users-1-day"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --day, --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot organization users usage metrics",
@@ -14425,11 +14902,20 @@
           "path": "/orgs/{org}/copilot/metrics/reports/users-28-day/latest"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot users usage metrics for a specific day",
@@ -14456,12 +14942,21 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/users-1-day"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --day, --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get Copilot users usage metrics",
@@ -14482,11 +14977,20 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/users-28-day/latest"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Disable a repository for Copilot cloud agent in an organization",
@@ -14571,11 +15075,20 @@
           "path": "/orgs/{org}/copilot/coding-agent/permissions"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot seat information and settings for an organization",
@@ -14596,11 +15109,20 @@
           "path": "/orgs/{org}/copilot/billing"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot seat assignment details for a user",
@@ -14627,12 +15149,21 @@
           "path": "/orgs/{org}/members/{username}/copilot"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org, --username",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List repositories enabled for Copilot cloud agent in an organization",
@@ -14653,11 +15184,20 @@
           "path": "/orgs/{org}/copilot/coding-agent/permissions/repositories"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List all Copilot seat assignments for an organization",
@@ -14678,11 +15218,20 @@
           "path": "/orgs/{org}/copilot/billing/seats"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Remove organizations from the enterprise coding agent policy",
@@ -15354,12 +15903,21 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org, --space-number",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--space-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get a Copilot Space for a user",
@@ -15386,12 +15944,21 @@
           "path": "/users/{username}/copilot-spaces/{space_number}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --space-number, --username",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--space-number",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get a resource for an organization Copilot Space",
@@ -15424,13 +15991,22 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}/resources/{space_resource_id}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org, --space-number, --space-resource-id",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--space-number",
         "--space-resource-id"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get a resource for a Copilot Space for a user",
@@ -15463,13 +16039,22 @@
           "path": "/users/{username}/copilot-spaces/{space_number}/resources/{space_resource_id}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --space-number, --space-resource-id, --username",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--space-number",
         "--space-resource-id",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List collaborators for an organization Copilot Space",
@@ -15496,12 +16081,21 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}/collaborators"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org, --space-number",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--space-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List collaborators for a Copilot Space for a user",
@@ -15528,12 +16122,21 @@
           "path": "/users/{username}/copilot-spaces/{space_number}/collaborators"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --space-number, --username",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--space-number",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List organization Copilot Spaces",
@@ -15554,11 +16157,20 @@
           "path": "/orgs/{org}/copilot-spaces"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List Copilot Spaces for a user",
@@ -15579,11 +16191,20 @@
           "path": "/users/{username}/copilot-spaces"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --username",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List resources for an organization Copilot Space",
@@ -15610,12 +16231,21 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}/resources"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org, --space-number",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--space-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List resources for a Copilot Space for a user",
@@ -15642,12 +16272,21 @@
           "path": "/users/{username}/copilot-spaces/{space_number}/resources"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --space-number, --username",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--space-number",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Remove a collaborator from an organization Copilot Space",
@@ -16142,11 +16781,20 @@
           "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --alert-number",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Create or update an organization secret",
@@ -16261,11 +16909,20 @@
           "path": "/orgs/{org}/dependabot/secrets/public-key"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Get an organization secret",
@@ -16292,12 +16949,21 @@
           "path": "/orgs/{org}/dependabot/secrets/{secret_name}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org, --secret-name",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List Dependabot alerts for an enterprise",
@@ -16318,11 +16984,20 @@
           "path": "/enterprises/{enterprise}/dependabot/alerts"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "List Dependabot alerts for an organization",
@@ -16343,11 +17018,20 @@
           "path": "/orgs/{org}/dependabot/alerts"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List organization secrets",
@@ -16368,11 +17052,20 @@
           "path": "/orgs/{org}/dependabot/secrets"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List selected repositories for an organization secret",
@@ -16399,12 +17092,21 @@
           "path": "/orgs/{org}/dependabot/secrets/{secret_name}/repositories"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org, --secret-name",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/public-key",
@@ -16418,8 +17120,17 @@
           "path": "/repos/{owner}/{repo}/dependabot/secrets/public-key"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Remove selected repository from an organization secret",
@@ -16479,11 +17190,20 @@
           "path": "/enterprises/{enterprise}/dependabot/repository-access"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Lists the repositories Dependabot can access in an organization",
@@ -16504,11 +17224,20 @@
           "path": "/orgs/{org}/dependabot/repository-access"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets",
@@ -16522,8 +17251,17 @@
           "path": "/repos/{owner}/{repo}/dependabot/secrets"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
@@ -16544,11 +17282,20 @@
           "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --secret-name",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Set the default repository access level for Dependabot",
@@ -17098,12 +17845,21 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/memberships/{username}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise, --username",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "List members in an enterprise team",
@@ -17124,11 +17880,20 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/memberships"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Remove team membership",
@@ -17315,12 +18080,21 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/organizations/{org}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise, --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise",
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get organization assignments",
@@ -17341,11 +18115,20 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/organizations"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Create an enterprise team",
@@ -17479,12 +18262,21 @@
           "path": "/enterprises/{enterprise}/teams/{team_slug}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise, --team-slug",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise",
         "--team-slug"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "List enterprise teams",
@@ -17505,11 +18297,20 @@
           "path": "/enterprises/{enterprise}/teams"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Update an enterprise team",
@@ -30352,11 +31153,20 @@
           "path": "/enterprises/{enterprise}/actions/oidc/customization/properties/repo"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "List OIDC custom property inclusions for an organization",
@@ -42612,11 +43422,20 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --alert-number",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Bulk create organization custom patterns",
@@ -42771,11 +43590,20 @@
           "path": "/orgs/{org}/secret-scanning/alerts"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List organization custom patterns",
@@ -42796,11 +43624,20 @@
           "path": "/orgs/{org}/secret-scanning/custom-patterns"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List organization pattern configurations",
@@ -42821,11 +43658,20 @@
           "path": "/orgs/{org}/secret-scanning/pattern-configurations"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List repository custom patterns",
@@ -42839,8 +43685,17 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
@@ -42861,11 +43716,20 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --alert-number",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
@@ -42894,8 +43758,17 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/scan-history"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Update organization pattern configurations",

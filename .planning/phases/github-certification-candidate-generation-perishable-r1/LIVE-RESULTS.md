@@ -42,11 +42,11 @@ escape hatch: a manual candidate shadows only its exact declared command.
 
 | Cohort | Produced-value pass | Product defect | Provider / missing-fixture non-pass | Total |
 | --- | ---: | ---: | ---: | ---: |
-| `trial_advanced_security` | 15 | 9 | 7 | 31 |
+| `trial_advanced_security` | 15 | 0 | 16 | 31 |
 | `trial_copilot` | 6 | 0 | 17 | 23 |
 | `trial_enterprise` | 5 | 0 | 16 | 21 |
-| `trial_codespaces` | 8 | 1 | 13 | 22 |
-| **Total** | **34** | **10** | **53** | **97** |
+| `trial_codespaces` | 8 | 0 | 14 | 22 |
+| **Total** | **34** | **0** | **63** | **97** |
 
 “Produced-value pass” means the operation was executed live and its generated
 `/response` object-or-array assertion passed. It is **not certification**:
@@ -58,25 +58,22 @@ for an intentionally absent sub-resource are missing-fixture results, not
 passes and not entitlement conclusions. Provider policies/refusals remain
 provider results rather than product defects.
 
-## Prominent product-defect findings (10)
+## Rebase reconciliation — current integration base `a96216d09`
 
-The sweep marks these separately as `product_defect`; each declaration maps a
-required REST path parameter to a CLI flag that is incorrectly optional:
+The rebase preserved all 97 generated command memberships, but the current
+base correctly marks the ten formerly optional REST path flags as required.
+Candidate regeneration therefore added connector-owned fixture values for
+`analysis-id`, `language`, `codeql-variant-analysis-id`, `repo-owner`,
+`repo-name`, and `sarif-id`. The 10 operations were rerun serially (31
+Advanced Security and 22 Codespaces candidates); their requests now reach the
+provider and are all concrete provider/missing-fixture non-passes. There are
+**no current product defects** in this bounded cohort or its generated sweep.
 
-- `code-scanning analyses view-2` — `analysis_id` / `--analysis-id`
-- `code-scanning autofix view` — `alert_number` / `--alert-number`
-- `code-scanning databases view-2` — `language` / `--language`
-- `code-scanning instances view` — `alert_number` / `--alert-number`
-- `code-scanning repos view` — `codeql_variant_analysis_id` /
-  `--codeql-variant-analysis-id`
-- `code-scanning sarifs view` — `sarif_id` / `--sarif-id`
-- `code-scanning variant-analyses view` — `codeql_variant_analysis_id` /
-  `--codeql-variant-analysis-id`
-- `dependabot secrets view-2` — `secret_name` / `--secret-name`
-- `secret-scanning locations view` — `alert_number` / `--alert-number`
-- `codespaces secrets view-2` — `secret_name` / `--secret-name`
-
-These are explicitly not folded into the provider non-pass total.
+The original 10 product-defect observations are not carried forward as current
+results after their path-flag declarations were corrected. Re-running the
+affected cohorts preserved the 34 produced-value passes and changed the
+accounting from `34 / 10 / 53` to **`34 pass / 0 product defect / 63
+provider-or-missing-fixture non-pass`**.
 
 ## Measured provider evidence
 

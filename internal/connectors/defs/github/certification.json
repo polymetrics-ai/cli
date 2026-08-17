@@ -1157,6 +1157,13 @@
           "source_credential": true
         },
         {
+          "literal": "--analysis-id"
+        },
+        {
+          "config_key": "analysis-id",
+          "default": "1"
+        },
+        {
           "literal": "--json"
         }
       ],
@@ -1191,6 +1198,13 @@
         },
         {
           "source_credential": true
+        },
+        {
+          "literal": "--alert-number"
+        },
+        {
+          "config_key": "alert-number",
+          "default": "1"
         },
         {
           "literal": "--json"
@@ -1265,6 +1279,13 @@
           "source_credential": true
         },
         {
+          "literal": "--language"
+        },
+        {
+          "config_key": "language",
+          "default": "javascript"
+        },
+        {
           "literal": "--json"
         }
       ],
@@ -1335,6 +1356,13 @@
         },
         {
           "source_credential": true
+        },
+        {
+          "literal": "--alert-number"
+        },
+        {
+          "config_key": "alert-number",
+          "default": "1"
         },
         {
           "literal": "--json"
@@ -1413,6 +1441,27 @@
           "source_credential": true
         },
         {
+          "literal": "--codeql-variant-analysis-id"
+        },
+        {
+          "config_key": "codeql-variant-analysis-id",
+          "default": "1"
+        },
+        {
+          "literal": "--repo-owner"
+        },
+        {
+          "config_key": "repo-owner",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--repo-name"
+        },
+        {
+          "config_key": "repo-name",
+          "default": "pm-cert-3993-20260810-wz0fru"
+        },
+        {
           "literal": "--json"
         }
       ],
@@ -1449,6 +1498,13 @@
           "source_credential": true
         },
         {
+          "literal": "--sarif-id"
+        },
+        {
+          "config_key": "sarif-id",
+          "default": "1"
+        },
+        {
           "literal": "--json"
         }
       ],
@@ -1483,6 +1539,13 @@
         },
         {
           "source_credential": true
+        },
+        {
+          "literal": "--codeql-variant-analysis-id"
+        },
+        {
+          "config_key": "codeql-variant-analysis-id",
+          "default": "1"
         },
         {
           "literal": "--json"
@@ -2570,6 +2633,13 @@
         },
         {
           "source_credential": true
+        },
+        {
+          "literal": "--secret-name"
+        },
+        {
+          "config_key": "secret-name",
+          "default": "pm-cert-generated-read"
         },
         {
           "literal": "--json"
@@ -4379,6 +4449,13 @@
           "source_credential": true
         },
         {
+          "literal": "--secret-name"
+        },
+        {
+          "config_key": "secret-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
           "literal": "--json"
         }
       ],
@@ -4912,6 +4989,13 @@
           "source_credential": true
         },
         {
+          "literal": "--alert-number"
+        },
+        {
+          "config_key": "alert-number",
+          "default": "1"
+        },
+        {
           "literal": "--json"
         }
       ],
@@ -4965,14 +5049,20 @@
   "direct_read_generation": {
     "required_flag_defaults": {
       "alert-number": "1",
+      "analysis-id": "1",
+      "codeql-variant-analysis-id": "1",
       "codespace-name": "pm-cert-generated-read",
       "configuration-id": "1",
       "day": "2026-08-16",
       "devcontainer-path": ".devcontainer/devcontainer.json",
       "enterprise": "polymetrics-cert",
       "export-id": "pm-cert-generated-read",
+      "language": "javascript",
       "org": "Polymetrics-Cert",
       "ref": "main",
+      "repo-name": "pm-cert-3993-20260810-wz0fru",
+      "repo-owner": "Polymetrics-Cert",
+      "sarif-id": "1",
       "secret-name": "pm-cert-generated-read",
       "space-number": "1",
       "space-resource-id": "1",
