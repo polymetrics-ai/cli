@@ -129,6 +129,49 @@ func TestWriteExternalProofFingerprintsObservedExternalTranscript(t *testing.T) 
 	}
 }
 
+func TestReadExternalProofRefusesAnUnfingerprintedResponseRegression(t *testing.T) {
+	const canary = "cert-read-external-proof-canary"
+	root := t.TempDir()
+	proofPath, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+		Connector: "sample", RunID: "external-proof-read-3989", BinarySHA256: strings.Repeat("a", 64),
+		Command: []string{"pm", "connectors", "certify", "sample", "--from-env", "token=PM_CERT_TOKEN"},
+		Stdout:  "completed", ExitCode: 0, Passed: true, FullParity: true, PreparedValues: []string{canary},
+		HTTPExchanges: []certify.ObservedHTTPExchange{{
+			Request: certify.ObservedHTTPRequest{Method: http.MethodGet, Target: "https://api.example.test/items?token=" + canary,
+				Headers: http.Header{"Authorization": {"Bearer " + canary}}, Body: certify.ObservedBody{Complete: true}},
+			Response: certify.ObservedHTTPResponse{Status: http.StatusOK,
+				Body: certify.ObservedBody{Bytes: []byte(`{"account":"` + canary + `"}`), OriginalBytes: len(`{"account":"` + canary + `"}`), Complete: true}},
+		}},
+	})
+	if err != nil {
+		t.Fatalf("WriteExternalProof() = %v", err)
+	}
+	if _, err := certify.ReadExternalProof(root, proofPath); err != nil {
+		t.Fatalf("ReadExternalProof() = %v", err)
+	}
+	raw, err := os.ReadFile(proofPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var artifact map[string]any
+	if err := json.Unmarshal(raw, &artifact); err != nil {
+		t.Fatal(err)
+	}
+	exchanges := artifact["http_exchanges"].([]any)
+	response := exchanges[0].(map[string]any)["response"].(map[string]any)
+	response["body"].(map[string]any)["value"] = map[string]any{"account": canary}
+	corrupted, err := json.Marshal(artifact)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(proofPath, corrupted, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := certify.ReadExternalProof(root, proofPath); err == nil || !strings.Contains(err.Error(), "unredacted") {
+		t.Fatalf("ReadExternalProof() error = %v, want an unredacted response rejection", err)
+	}
+}
+
 func TestWriteExternalProofRefusesTruncatedBodyWithoutArtifactWrites(t *testing.T) {
 	transport := certify.NewObservedTransport(roundTripperFunc(func(*http.Request) (*http.Response, error) {
 		return &http.Response{
@@ -202,6 +245,30 @@ func TestWriteExternalProofRefusesMissingFlowReferencesWithoutArtifactWrites(t *
 	}
 	if _, statErr := os.Stat(filepath.Join(root, ".polymetrics", "certifications")); !os.IsNotExist(statErr) {
 		t.Fatalf("missing-flow refusal created artifact material: stat error = %v, want not exist", statErr)
+	}
+}
+
+func TestWriteExternalProofAcceptsObservedOperationsWithoutFullParity(t *testing.T) {
+	root := t.TempDir()
+	proofPath, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
+		Connector:      "sample",
+		RunID:          "observed-operations-4215",
+		BinarySHA256:   strings.Repeat("f", 64),
+		Command:        []string{"pm", "connectors", "certify", "sample", "--direct-read-only"},
+		ExitCode:       0,
+		Passed:         true,
+		FullParity:     false,
+		PreparedValues: []string{"cert-canary"},
+		HTTPExchanges: []certify.ObservedHTTPExchange{{
+			Request:  certify.ObservedHTTPRequest{Method: http.MethodGet, Target: "https://proof.invalid/observed", Body: certify.ObservedBody{Complete: true}},
+			Response: certify.ObservedHTTPResponse{Status: http.StatusOK, Body: certify.ObservedBody{Complete: true}},
+		}},
+	})
+	if err != nil {
+		t.Fatalf("write observed-operations proof: %v", err)
+	}
+	if _, err := certify.ReadExternalProof(root, proofPath); err != nil {
+		t.Fatalf("read observed-operations proof: %v", err)
 	}
 }
 

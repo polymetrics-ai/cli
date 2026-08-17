@@ -5,5 +5,13 @@
       "read_limit": "100",
       "sslmode": "disabled"
     }
+  },
+  "evidence_import": {
+    "provider": "postgres_container",
+    "database": {
+      "protocol": "postgres_wire",
+      "operation_prefix": "postgres_transport",
+      "change_capture_statement": "pgoutput_v2_receipt_before_acknowledgement"
+    }
   }
 }

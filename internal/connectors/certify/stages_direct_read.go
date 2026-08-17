@@ -1,8 +1,10 @@
 package certify
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
+	"sort"
 	"strings"
 
 	"polymetrics.ai/internal/connectors/engine"
@@ -23,7 +25,14 @@ func stageDirectReadSweep(rc *runContext, rep *Report) error {
 		return nil
 	}
 
-	candidates := directReadCandidatesFor(rc.opts.Connector, rc.opts.Config)
+	candidates, err := directReadCandidatesFor(rc.opts.Connector, rc.opts.Config)
+	if err != nil {
+		rep.Capabilities.DirectRead = &CapabilityResult{Result: "fail", Reason: err.Error()}
+		recordStage(rc, rep, "direct_read_candidates", 0, func() (bool, CLIStageInfo, string) {
+			return false, CLIStageInfo{}, err.Error()
+		})
+		return nil
+	}
 	if len(candidates) == 0 {
 		reason := fmt.Sprintf("skipped: connector %q has no definition-owned direct-read certification candidate", rc.opts.Connector)
 		rep.Capabilities.DirectRead = &CapabilityResult{Result: "skipped", Reason: reason}
@@ -115,25 +124,59 @@ func recordResumedDirectReadStage(rep *Report, name string) {
 	})
 }
 
-func directReadCandidatesFor(connector string, config map[string]string) []directReadCandidate {
+// directReadCandidatesFor optionally narrows a definition-owned cohort to a
+// comma-separated list of declared stage names. The selector is checked
+// against the loaded declaration before any request can run, so publication
+// can re-execute precisely the stages whose evidence it will import without a
+// connector-specific command path.
+func directReadCandidatesFor(connector string, config map[string]string) ([]directReadCandidate, error) {
 	profile := certificationProfileFor(connector)
 	if profile.spec == nil || len(profile.spec.DirectReadCandidates) == 0 {
-		return nil
+		return nil, nil
 	}
 	cohort := strings.TrimSpace(configValue(config, "certification_cohort", ""))
+	requestedStages := strings.TrimSpace(configValue(config, "certification_stages", ""))
+	stageSelectionRequested := requestedStages != ""
+	selected := make(map[string]struct{})
+	if stageSelectionRequested {
+		for _, stage := range strings.Split(requestedStages, ",") {
+			stage = strings.TrimSpace(stage)
+			if stage == "" {
+				return nil, errors.New("certification_stages must not contain an empty stage name")
+			}
+			if _, duplicate := selected[stage]; duplicate {
+				return nil, fmt.Errorf("certification_stages repeats %q", stage)
+			}
+			selected[stage] = struct{}{}
+		}
+	}
 	out := make([]directReadCandidate, 0, len(profile.spec.DirectReadCandidates))
 	for _, candidate := range profile.spec.DirectReadCandidates {
 		if cohort != "" && candidate.Cohort != cohort {
 			continue
 		}
+		if stageSelectionRequested {
+			if _, wanted := selected[candidate.StageName]; !wanted {
+				continue
+			}
+			delete(selected, candidate.StageName)
+		}
 		out = append(out, commandCandidateFor(connector, config, candidate))
 	}
-	return out
+	if len(selected) != 0 {
+		missing := make([]string, 0, len(selected))
+		for stage := range selected {
+			missing = append(missing, stage)
+		}
+		sort.Strings(missing)
+		return nil, fmt.Errorf("certification_stages names undeclared or excluded stage %q", missing[0])
+	}
+	return out, nil
 }
 
 func directReadCandidateFor(connector string, config map[string]string) (directReadCandidate, bool) {
-	candidates := directReadCandidatesFor(connector, config)
-	if len(candidates) == 0 {
+	candidates, err := directReadCandidatesFor(connector, config)
+	if err != nil || len(candidates) == 0 {
 		return directReadCandidate{}, false
 	}
 	return candidates[0], true

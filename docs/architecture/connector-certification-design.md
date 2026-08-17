@@ -20,8 +20,10 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > UNCERTIFIED`; reachability is never gated.
 >
 > Accepted evidence embeds a publishable transcript with repository-salted HMAC
-> fingerprints substituted before persistence. It is full-parity credential
-> evidence only, never contains raw or encrypted credentials, and records every
+> fingerprints substituted before persistence. Schema-v2 evidence names its
+> verified credential scope: `full_parity` requires the full-parity stage and
+> flow proof, while `observed_operations` is limited to its recorded protocol
+> exchanges. It never contains raw or encrypted credentials and records every
 > false flow-delivery guarantee with a named limitation. See
 > `data/cli-live-certification-matrix-r1/report.md` for the concrete schema and
 > first baseline. The historical harness remains useful test infrastructure but
@@ -233,6 +235,15 @@ subject. A `not_sent` event proves admission stopped the physical provider
 request. Certification bounds each individual rate-admission wait so a depleted
 shared provider budget becomes an explicit deadline cutoff rather than an
 unbounded run.
+
+### Certification runbook secret rule
+
+Certification runbooks must contain only a secret-store reference, an approved
+environment-variable name, or a protected key path — never the secret value.
+If a raw credential appears in a terminal, report it without repeating the
+value, stop using it, and have the credential owner revoke or rotate it before
+any future use. Evidence, fixtures, status lines, commits, and PR bodies must
+retain only fingerprints or non-secret references.
 
 An `untestable` capability may include `untestable_reason`, an optional serialized
 [`failures.Classification`](../../internal/failures/classification.go). It carries only a safe

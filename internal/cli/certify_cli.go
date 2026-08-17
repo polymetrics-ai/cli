@@ -28,9 +28,6 @@ const certificationExternalChildEnv = "PM_CERTIFICATION_EXTERNAL_CHILD"
 func runCertify(ctx context.Context, root string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	positionals := flags.values["_"]
-	if flags.first("direct-read-only") == "true" && flags.first("external-proof") == "true" {
-		return usageErrorf("pm connectors certify --direct-read-only cannot be combined with --external-proof")
-	}
 	if flags.first("external-proof") == "true" && os.Getenv(certificationExternalChildEnv) != "1" {
 		if flags.first("all") == "true" || flags.first("sweep") == "true" || len(positionals) != 1 {
 			return usageErrorf("pm connectors certify --external-proof requires one connector")
@@ -42,8 +39,8 @@ func runCertify(ctx context.Context, root string, args []string, stdout, stderr 
 		if err := rejectCertificationSecretArgv(args, opts); err != nil {
 			return err
 		}
-		if flags.first("full-parity") != "true" {
-			return usageErrorf("pm connectors certify --external-proof requires --full-parity")
+		if flags.first("full-parity") != "true" && flags.first("direct-read-only") != "true" {
+			return usageErrorf("pm connectors certify --external-proof requires --full-parity or --direct-read-only")
 		}
 		childArgs, childEnv, preparedValues, err := prepareExternalCertifyCredentialInput(args, flags, opts)
 		if err != nil {
@@ -90,8 +87,8 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 		if os.Getenv(certificationExternalChildEnv) != "1" {
 			return errors.New("external certification proof must execute in a fresh child process")
 		}
-		if flags.first("full-parity") != "true" {
-			return usageErrorf("pm connectors certify --external-proof requires --full-parity")
+		if flags.first("full-parity") != "true" && !opts.DirectReadOnly {
+			return usageErrorf("pm connectors certify --external-proof requires --full-parity or --direct-read-only")
 		}
 		if err := rejectCertificationSecretArgv(os.Args[1:], opts); err != nil {
 			return err
@@ -118,9 +115,12 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 		if err != nil {
 			return err
 		}
-		flowReferences, err := certificationFlowRoundTripReferences(rep)
-		if err != nil {
-			return fmt.Errorf("certify external proof: %w", err)
+		var flowReferences []string
+		if opts.RequireFullParity {
+			flowReferences, err = certificationFlowRoundTripReferences(rep)
+			if err != nil {
+				return fmt.Errorf("certify external proof: %w", err)
+			}
 		}
 		runID := fmt.Sprintf("external-%d", rep.StartedAt.UTC().UnixNano())
 		if _, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
