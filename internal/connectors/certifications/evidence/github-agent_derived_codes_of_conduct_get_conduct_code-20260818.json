@@ -1,0 +1,55 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_codes_of_conduct_get_conduct_code",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:39:11.953Z",
+  "run_id": "github-1787002751953-agent_derived_codes_of_conduct_get_conduct_code",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "34237212e88fc3db2aa84fa8e82a2d6862db5632f260be2dc85e9d087197c56a",
+    "pm_command_fingerprint": "{{pmcertfp:v1:657de6212b09744ffc6dc1bf61bfa3c7d9d8b89a5291084c9bc8f2a62d068380}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:3e91b3e7f98955374e9bc12c710075406e8c11f2d3c8e7025b2829126de68191}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_codes_of_conduct_get_conduct_code",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:d9557258ba6e1e258a6b3cbbf87e27d1d9a6ed609bf0c050d84163643ef5544d}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "body_redacted": "{{pmcertfp:v1:28cfbd5418add8f0360a3a8e8fe0246004957e8c24a6b517733af8e8ecd47efa}}",
+              "html_url": null,
+              "key": "{{pmcertfp:v1:2f62218cf6ffead7ec80df235395f33a3e80b22cb7890fee29149242ba51f26b}}",
+              "name": "{{pmcertfp:v1:afc2a6bd5e1f2e8547905d54a9700f8e15565ca0079512c7da0ad07a606b6248}}",
+              "url": "{{pmcertfp:v1:31ab5fb1cd3ea1e76e9ec4a879fd96d7fb3f1ace7af3735a561ba9a73cd3cb20}}"
+            },
+            "original_bytes": 166,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
