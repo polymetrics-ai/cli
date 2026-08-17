@@ -3,7 +3,7 @@
 - Issue: Refs #4015 — Production MVP certification (P2 GraphQL mechanism).
 - Base branch: `integration/4015-mvp-flat-r1` at `e7ae907ec6962920ebf42dc52c27c6014de6031a`.
 - Merges into: `integration/4015-mvp-flat-r1` → human-gated integration → `main`.
-- Delivery: A pull request from `fm/cli-graphql-certification-mechanism-r1` is open against the stated base, its API-reported base matches exactly, and local required checks are recorded.
+- Delivery: A pull request from `fm/cli-graphql-certification-mechanism-r1` targets the stated base; its API-reported base must match exactly after opening, and local required checks are recorded.
 - Working branch: `fm/cli-graphql-certification-mechanism-r1`.
 - Task: Add a bounded, connector-neutral GraphQL certification stage. GraphQL schema, operation assertions, and classification data remain owned by connector definitions. Establish an honest, mutually exclusive 305-command split of schema-conformant, live-required, and fixture-bound commands; unexecuted commands must have a concrete non-pass status.
 - Verification: Red/green tests prove a compiled schema and then a broken assertion fail; test the shared certification and consuming `cmd/connectorgen` packages; run validation, generated-file, boundary, lint, docs, and website-byte-stability gates; exercise the approved disposable GitHub credential only through the product path where a bounded read-only live probe is needed.
