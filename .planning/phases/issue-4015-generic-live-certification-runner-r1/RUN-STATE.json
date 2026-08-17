@@ -3,7 +3,7 @@
   "status": "verified_pending_pr",
   "execution": "inline_manual",
   "reason": "direct-PR brief forbids spawned roles",
-  "accepted_records": 67,
+  "accepted_records": 70,
   "provider_nonpasses": 81,
   "missing_fixture_nonpasses": 4,
   "product_defects": [
