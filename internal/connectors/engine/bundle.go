@@ -1041,14 +1041,34 @@ type CLIHelpTopic struct {
 // write lifecycle pairings next to the connector definition instead of in
 // shared provider-specific Go tables.
 type CertificationSpec struct {
-	SchemaVersion        int                             `json:"schema_version"`
-	Source               CertificationSourceSpec         `json:"source,omitempty"`
-	DirectReadCandidates []CertificationCommandCandidate `json:"direct_read_candidates,omitempty"`
-	BinaryCandidates     []CertificationCommandCandidate `json:"binary_candidates,omitempty"`
-	GraphQL              *CertificationGraphQLSpec       `json:"graphql,omitempty"`
-	WritePairings        []CertificationWritePairing     `json:"write_pairings,omitempty"`
-	WriteInventory       CertificationWriteInventorySpec `json:"write_inventory,omitempty"`
-	WriteWave            *CertificationWriteWaveSpec     `json:"write_wave,omitempty"`
+	SchemaVersion        int                                   `json:"schema_version"`
+	Source               CertificationSourceSpec               `json:"source,omitempty"`
+	DirectReadCandidates []CertificationCommandCandidate       `json:"direct_read_candidates,omitempty"`
+	DirectReadGeneration *CertificationReadCandidateGeneration `json:"direct_read_generation,omitempty"`
+	BinaryCandidates     []CertificationCommandCandidate       `json:"binary_candidates,omitempty"`
+	GraphQL              *CertificationGraphQLSpec             `json:"graphql,omitempty"`
+	WritePairings        []CertificationWritePairing           `json:"write_pairings,omitempty"`
+	WriteInventory       CertificationWriteInventorySpec       `json:"write_inventory,omitempty"`
+	WriteWave            *CertificationWriteWaveSpec           `json:"write_wave,omitempty"`
+}
+
+// CertificationReadCandidateGeneration contains connector-owned fixture
+// bindings and cohorts used by connectorgen to derive read candidates from the
+// declared CLI surface. It deliberately carries neither an endpoint nor a
+// connector identifier: the generator reads those from cli_surface.json.
+type CertificationReadCandidateGeneration struct {
+	RequiredFlagDefaults map[string]string                  `json:"required_flag_defaults,omitempty"`
+	Cohorts              []CertificationReadCandidateCohort `json:"cohorts"`
+}
+
+// CertificationReadCandidateCohort is an auditable, connector-owned command
+// membership declaration. Cohorts may include writes so a single entitlement
+// boundary remains complete, while the read generator selects only executable
+// direct_read commands from the declared set.
+type CertificationReadCandidateCohort struct {
+	Name         string   `json:"name"`
+	CommandCount int      `json:"command_count"`
+	Commands     []string `json:"commands"`
 }
 
 // CertificationGraphQLSpec declares a bounded schema-conformance inventory
@@ -1087,6 +1107,8 @@ type CertificationCommandCandidate struct {
 	Command          string                         `json:"command"`
 	Args             []CertificationCommandArg      `json:"args"`
 	OutputAssertions []CertificationOutputAssertion `json:"output_assertions,omitempty"`
+	Cohort           string                         `json:"cohort,omitempty"`
+	Generated        bool                           `json:"generated,omitempty"`
 }
 
 // CertificationOutputAssertion describes one expected value in a sanitized
@@ -2759,6 +2781,42 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 			return err
 		}
 	}
+	if generation := certification.DirectReadGeneration; generation != nil {
+		if len(generation.Cohorts) == 0 {
+			return fmt.Errorf("direct_read_generation must declare at least one cohort")
+		}
+		for key, value := range generation.RequiredFlagDefaults {
+			if strings.TrimSpace(key) == "" || strings.TrimSpace(value) == "" {
+				return fmt.Errorf("direct_read_generation.required_flag_defaults must not contain empty keys or values")
+			}
+		}
+		cohortNames := make(map[string]struct{}, len(generation.Cohorts))
+		cohortCommands := make(map[string]string)
+		for i, cohort := range generation.Cohorts {
+			if strings.TrimSpace(cohort.Name) == "" {
+				return fmt.Errorf("direct_read_generation.cohorts[%d].name must not be empty", i)
+			}
+			if _, duplicate := cohortNames[cohort.Name]; duplicate {
+				return fmt.Errorf("direct_read_generation.cohorts[%d].name %q is duplicated", i, cohort.Name)
+			}
+			cohortNames[cohort.Name] = struct{}{}
+			if len(cohort.Commands) == 0 {
+				return fmt.Errorf("direct_read_generation.cohorts[%d].commands must not be empty", i)
+			}
+			if cohort.CommandCount != len(cohort.Commands) {
+				return fmt.Errorf("direct_read_generation.cohorts[%d].command_count = %d, want %d declared commands", i, cohort.CommandCount, len(cohort.Commands))
+			}
+			for j, command := range cohort.Commands {
+				if strings.TrimSpace(command) == "" {
+					return fmt.Errorf("direct_read_generation.cohorts[%d].commands[%d] must not be empty", i, j)
+				}
+				if prior, duplicate := cohortCommands[command]; duplicate {
+					return fmt.Errorf("direct_read_generation command %q appears in cohorts %q and %q", command, prior, cohort.Name)
+				}
+				cohortCommands[command] = cohort.Name
+			}
+		}
+	}
 	for i, candidate := range certification.BinaryCandidates {
 		if err := validateCertificationCommandCandidate("binary_candidates", i, candidate); err != nil {
 			return err
@@ -2853,9 +2911,9 @@ func validateCertificationOutputAssertion(assertion CertificationOutputAssertion
 	}
 	if assertion.ValueType != "" {
 		switch assertion.ValueType {
-		case "object", "array", "string", "number", "boolean", "null":
+		case "object", "array", "object_or_array", "string", "number", "boolean", "null":
 		default:
-			return fmt.Errorf("value_type must be object, array, string, number, boolean, or null")
+			return fmt.Errorf("value_type must be object, array, object_or_array, string, number, boolean, or null")
 		}
 	}
 	return nil

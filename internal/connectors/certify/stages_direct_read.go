@@ -120,8 +120,12 @@ func directReadCandidatesFor(connector string, config map[string]string) []direc
 	if profile.spec == nil || len(profile.spec.DirectReadCandidates) == 0 {
 		return nil
 	}
+	cohort := strings.TrimSpace(configValue(config, "certification_cohort", ""))
 	out := make([]directReadCandidate, 0, len(profile.spec.DirectReadCandidates))
 	for _, candidate := range profile.spec.DirectReadCandidates {
+		if cohort != "" && candidate.Cohort != cohort {
+			continue
+		}
 		out = append(out, commandCandidateFor(connector, config, candidate))
 	}
 	return out
@@ -153,8 +157,12 @@ func assertDirectReadOutputAssertions(stageName string, res CLIResult, assertion
 		if !found {
 			return false, fmt.Sprintf("%s: declared output at %s is absent", stageName, assertion.JSONPointer)
 		}
-		if assertion.ValueType != "" && certificationJSONValueType(actual) != assertion.ValueType {
-			return false, fmt.Sprintf("%s: declared output at %s has the wrong type", stageName, assertion.JSONPointer)
+		if assertion.ValueType != "" {
+			actualType := certificationJSONValueType(actual)
+			matches := actualType == assertion.ValueType || (assertion.ValueType == "object_or_array" && (actualType == "object" || actualType == "array"))
+			if !matches {
+				return false, fmt.Sprintf("%s: declared output at %s has the wrong type", stageName, assertion.JSONPointer)
+			}
 		}
 		if assertion.Equals != nil && !reflect.DeepEqual(actual, assertion.Equals) {
 			return false, fmt.Sprintf("%s: declared output at %s does not match", stageName, assertion.JSONPointer)

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -108,12 +109,19 @@ func TestCertificationSweepForGitHubIsSurfaceDerivedAndExhaustive(t *testing.T) 
 
 	eligible := 0
 	assertionOverlays := 0
+	generatedTrialCandidates := map[string]int{}
 	for _, command := range sweep.Commands {
 		if command.AssertionSource != "" {
 			assertionOverlays++
 			if len(command.OutputAssertions) == 0 {
 				t.Fatalf("assertion overlay command %q has no produced-value assertion", command.Path)
 			}
+		}
+		if command.CertificationCohort != "" {
+			if command.AssertionSource != "certification.json direct_read_candidates generated from cli_surface.json" {
+				t.Fatalf("generated cohort command %q has assertion source %q", command.Path, command.AssertionSource)
+			}
+			generatedTrialCandidates[command.CertificationCohort]++
 		}
 		if command.Status == certificationSweepEligiblePendingLive {
 			eligible++
@@ -125,8 +133,16 @@ func TestCertificationSweepForGitHubIsSurfaceDerivedAndExhaustive(t *testing.T) 
 	if eligible == 0 {
 		t.Fatal("generated sweep has no eligible assertion-bearing commands")
 	}
-	if assertionOverlays != 25 {
-		t.Fatalf("assertion overlays = %d, want the 25 declaration-owned overlays", assertionOverlays)
+	if assertionOverlays != 122 {
+		t.Fatalf("assertion overlays = %d, want 25 hand-authored plus 97 generated overlays", assertionOverlays)
+	}
+	if got, want := generatedTrialCandidates, map[string]int{
+		"trial_advanced_security": 31,
+		"trial_codespaces":        22,
+		"trial_copilot":           23,
+		"trial_enterprise":        21,
+	}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("generated trial cohort candidates = %#v, want %#v", got, want)
 	}
 }
 
