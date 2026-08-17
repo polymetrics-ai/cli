@@ -40,6 +40,8 @@ import (
 //     invented endpoint.
 //   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
 //     that endpoint's path.
+//   - flags[].required <- true when the mapped REST path parameter is declared
+//     required. A caller cannot supply a required path input by another route.
 //
 // DEFAULTED — the bundle author's value wins; only an absent or unusable one is
 // replaced:
@@ -69,28 +71,30 @@ const (
 
 var surfacePathVarRE = regexp.MustCompile(`\{([^}]+)\}`)
 
-// surfaceSyncFields counts one outcome across the four synced fields.
+// surfaceSyncFields counts one outcome across the synced fields.
 type surfaceSyncFields struct {
 	APISurface   int
 	OutputPolicy int
 	FlagMapsTo   int
+	FlagRequired int
 	FlagDerived  int
 	MaxBytes     int
 }
 
 func (f surfaceSyncFields) total() int {
-	return f.APISurface + f.OutputPolicy + f.FlagMapsTo + f.FlagDerived + f.MaxBytes
+	return f.APISurface + f.OutputPolicy + f.FlagMapsTo + f.FlagRequired + f.FlagDerived + f.MaxBytes
 }
 
 func (f surfaceSyncFields) String() string {
-	return fmt.Sprintf("api_surface=%d output_policy=%d flag_maps_to=%d flag_derived=%d rest.max_bytes=%d",
-		f.APISurface, f.OutputPolicy, f.FlagMapsTo, f.FlagDerived, f.MaxBytes)
+	return fmt.Sprintf("api_surface=%d output_policy=%d flag_maps_to=%d flag_required=%d flag_derived=%d rest.max_bytes=%d",
+		f.APISurface, f.OutputPolicy, f.FlagMapsTo, f.FlagRequired, f.FlagDerived, f.MaxBytes)
 }
 
 func (f *surfaceSyncFields) add(other surfaceSyncFields) {
 	f.APISurface += other.APISurface
 	f.OutputPolicy += other.OutputPolicy
 	f.FlagMapsTo += other.FlagMapsTo
+	f.FlagRequired += other.FlagRequired
 	f.FlagDerived += other.FlagDerived
 	f.MaxBytes += other.MaxBytes
 }
@@ -431,6 +435,16 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			stats.Filled.FlagDerived += deriveCommandParameterFlags(cmd, block)
 		}
 
+		// DERIVED: a REST path parameter marked required is an executable
+		// command input, not a display preference. Its mapped CLI flag must
+		// therefore be required before commandrunner attempts path
+		// interpolation or creates a provider request. This intentionally
+		// applies to every REST operation kind and every connector, while
+		// leaving query/body requiredness to their own declared contracts.
+		filled, corrected := deriveRequiredPathFlagRequiredness(cmd, block)
+		stats.Filled.FlagRequired += filled
+		stats.Corrected.FlagRequired += corrected
+
 		// DEFAULTED for REST direct operations: a binary_download operation
 		// must declare its own positive max_bytes at bundle load, and a
 		// positive rest.max_bytes is the operation's own declaration rather
@@ -652,6 +666,50 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 		cmd.set("flags", flags)
 	}
 	return added
+}
+
+// deriveRequiredPathFlagRequiredness synchronizes requiredness for flags that
+// resolve REST path parameters. A required path cannot be supplied by any
+// other command input, so leaving its mapped flag optional defers a caller
+// mistake until interpolation or provider I/O. Query and body parameters have
+// distinct contracts and are deliberately not changed here.
+func deriveRequiredPathFlagRequiredness(cmd, rest *orderedObject) (filled, corrected int) {
+	requiredPathParameters := map[string]bool{}
+	for _, raw := range arrayField(rest, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok || stringField(parameter, "in") != "path" {
+			continue
+		}
+		required, _ := parameter.get("required")
+		if required == true {
+			requiredPathParameters[stringField(parameter, "name")] = true
+		}
+	}
+	if len(requiredPathParameters) == 0 {
+		return 0, 0
+	}
+
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		parameter, mapped := strings.CutPrefix(strings.TrimSpace(stringField(flag, "maps_to")), "path.")
+		if !mapped || !requiredPathParameters[parameter] {
+			continue
+		}
+		required, present := flag.get("required")
+		if required == true {
+			continue
+		}
+		flag.set("required", true)
+		if present {
+			corrected++
+		} else {
+			filled++
+		}
+	}
+	return filled, corrected
 }
 
 // derivedFlagType maps a provider parameter type onto the command surface's own

@@ -912,7 +912,8 @@
           "name": "ref",
           "type": "string",
           "summary": "ref path parameter",
-          "maps_to": "path.ref"
+          "maps_to": "path.ref",
+          "required": true
         },
         {
           "name": "check-name",
@@ -3065,7 +3066,8 @@
           "name": "concurrency-group-name",
           "type": "string",
           "summary": "concurrency_group_name path parameter",
-          "maps_to": "path.concurrency_group_name"
+          "maps_to": "path.concurrency_group_name",
+          "required": true
         },
         {
           "name": "ahead-of-job",
@@ -3100,7 +3102,8 @@
           "name": "job-id",
           "type": "integer",
           "summary": "job_id path parameter",
-          "maps_to": "path.job_id"
+          "maps_to": "path.job_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -3501,7 +3504,8 @@
           "name": "runner-id",
           "type": "integer",
           "summary": "runner_id path parameter",
-          "maps_to": "path.runner_id"
+          "maps_to": "path.runner_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -3542,7 +3546,8 @@
           "name": "runner-id",
           "type": "integer",
           "summary": "runner_id path parameter",
-          "maps_to": "path.runner_id"
+          "maps_to": "path.runner_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -3625,7 +3630,8 @@
           "name": "run-id",
           "type": "integer",
           "summary": "run_id path parameter",
-          "maps_to": "path.run_id"
+          "maps_to": "path.run_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -3666,13 +3672,15 @@
           "name": "run-id",
           "type": "integer",
           "summary": "run_id path parameter",
-          "maps_to": "path.run_id"
+          "maps_to": "path.run_id",
+          "required": true
         },
         {
           "name": "attempt-number",
           "type": "integer",
           "summary": "attempt_number path parameter",
-          "maps_to": "path.attempt_number"
+          "maps_to": "path.attempt_number",
+          "required": true
         },
         {
           "name": "exclude-pull-requests",
@@ -3701,13 +3709,15 @@
           "name": "run-id",
           "type": "integer",
           "summary": "run_id path parameter",
-          "maps_to": "path.run_id"
+          "maps_to": "path.run_id",
+          "required": true
         },
         {
           "name": "attempt-number",
           "type": "integer",
           "summary": "attempt_number path parameter",
-          "maps_to": "path.attempt_number"
+          "maps_to": "path.attempt_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -3758,7 +3768,8 @@
           "name": "run-id",
           "type": "integer",
           "summary": "run_id path parameter",
-          "maps_to": "path.run_id"
+          "maps_to": "path.run_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -3799,7 +3810,8 @@
           "name": "run-id",
           "type": "integer",
           "summary": "run_id path parameter",
-          "maps_to": "path.run_id"
+          "maps_to": "path.run_id",
+          "required": true
         },
         {
           "name": "filter",
@@ -3872,7 +3884,8 @@
           "name": "run-id",
           "type": "integer",
           "summary": "run_id path parameter",
-          "maps_to": "path.run_id"
+          "maps_to": "path.run_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -3913,7 +3926,8 @@
           "name": "run-id",
           "type": "integer",
           "summary": "run_id path parameter",
-          "maps_to": "path.run_id"
+          "maps_to": "path.run_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -3986,7 +4000,8 @@
           "name": "secret-name",
           "type": "string",
           "summary": "secret_name path parameter",
-          "maps_to": "path.secret_name"
+          "maps_to": "path.secret_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4084,7 +4099,8 @@
           "name": "name",
           "type": "string",
           "summary": "name path parameter",
-          "maps_to": "path.name"
+          "maps_to": "path.name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4161,7 +4177,8 @@
           "name": "workflow-id",
           "type": "integer",
           "summary": "workflow_id path parameter",
-          "maps_to": "path.workflow_id"
+          "maps_to": "path.workflow_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4184,7 +4201,8 @@
           "name": "assignee",
           "type": "string",
           "summary": "assignee path parameter",
-          "maps_to": "path.assignee"
+          "maps_to": "path.assignee",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4218,7 +4236,8 @@
           "name": "subject-digest",
           "type": "string",
           "summary": "subject_digest path parameter",
-          "maps_to": "path.subject_digest"
+          "maps_to": "path.subject_digest",
+          "required": true
         },
         {
           "name": "predicate-type",
@@ -4332,7 +4351,8 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "path.branch"
+          "maps_to": "path.branch",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4391,7 +4411,8 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "path.branch"
+          "maps_to": "path.branch",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4450,7 +4471,8 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "path.branch"
+          "maps_to": "path.branch",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4509,7 +4531,8 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "path.branch"
+          "maps_to": "path.branch",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4568,7 +4591,8 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "path.branch"
+          "maps_to": "path.branch",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4627,7 +4651,8 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "path.branch"
+          "maps_to": "path.branch",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4704,7 +4729,8 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "path.branch"
+          "maps_to": "path.branch",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4745,7 +4771,8 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "path.branch"
+          "maps_to": "path.branch",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4822,7 +4849,8 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "path.branch"
+          "maps_to": "path.branch",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4899,7 +4927,8 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "path.branch"
+          "maps_to": "path.branch",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4987,7 +5016,8 @@
           "name": "check-run-id",
           "type": "integer",
           "summary": "check_run_id path parameter",
-          "maps_to": "path.check_run_id"
+          "maps_to": "path.check_run_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5028,7 +5058,8 @@
           "name": "check-run-id",
           "type": "integer",
           "summary": "check_run_id path parameter",
-          "maps_to": "path.check_run_id"
+          "maps_to": "path.check_run_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5091,7 +5122,8 @@
           "name": "check-suite-id",
           "type": "integer",
           "summary": "check_suite_id path parameter",
-          "maps_to": "path.check_suite_id"
+          "maps_to": "path.check_suite_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5114,7 +5146,8 @@
           "name": "check-suite-id",
           "type": "integer",
           "summary": "check_suite_id path parameter",
-          "maps_to": "path.check_suite_id"
+          "maps_to": "path.check_suite_id",
+          "required": true
         },
         {
           "name": "check-name",
@@ -5219,7 +5252,8 @@
           "name": "finding-number",
           "type": "integer",
           "summary": "finding_number path parameter",
-          "maps_to": "path.finding_number"
+          "maps_to": "path.finding_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5269,7 +5303,8 @@
           "name": "alert-number",
           "type": "integer",
           "summary": "alert_number path parameter",
-          "maps_to": "path.alert_number"
+          "maps_to": "path.alert_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5328,7 +5363,8 @@
           "name": "alert-number",
           "type": "integer",
           "summary": "alert_number path parameter",
-          "maps_to": "path.alert_number"
+          "maps_to": "path.alert_number",
+          "required": true
         },
         {
           "name": "pr",
@@ -5447,7 +5483,8 @@
           "name": "analysis-id",
           "type": "integer",
           "summary": "analysis_id path parameter",
-          "maps_to": "path.analysis_id"
+          "maps_to": "path.analysis_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5504,7 +5541,8 @@
           "name": "language",
           "type": "string",
           "summary": "language path parameter",
-          "maps_to": "path.language"
+          "maps_to": "path.language",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5538,7 +5576,8 @@
           "name": "codeql-variant-analysis-id",
           "type": "integer",
           "summary": "codeql_variant_analysis_id path parameter",
-          "maps_to": "path.codeql_variant_analysis_id"
+          "maps_to": "path.codeql_variant_analysis_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5561,19 +5600,22 @@
           "name": "codeql-variant-analysis-id",
           "type": "integer",
           "summary": "codeql_variant_analysis_id path parameter",
-          "maps_to": "path.codeql_variant_analysis_id"
+          "maps_to": "path.codeql_variant_analysis_id",
+          "required": true
         },
         {
           "name": "repo-owner",
           "type": "string",
           "summary": "repo_owner path parameter",
-          "maps_to": "path.repo_owner"
+          "maps_to": "path.repo_owner",
+          "required": true
         },
         {
           "name": "repo-name",
           "type": "string",
           "summary": "repo_name path parameter",
-          "maps_to": "path.repo_name"
+          "maps_to": "path.repo_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5634,7 +5676,8 @@
           "name": "sarif-id",
           "type": "integer",
           "summary": "sarif_id path parameter",
-          "maps_to": "path.sarif_id"
+          "maps_to": "path.sarif_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5884,7 +5927,8 @@
           "name": "secret-name",
           "type": "string",
           "summary": "secret_name path parameter",
-          "maps_to": "path.secret_name"
+          "maps_to": "path.secret_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5925,7 +5969,8 @@
           "name": "comment-id",
           "type": "integer",
           "summary": "comment_id path parameter",
-          "maps_to": "path.comment_id"
+          "maps_to": "path.comment_id",
+          "required": true
         },
         {
           "name": "content",
@@ -6006,7 +6051,8 @@
           "name": "commit-sha",
           "type": "string",
           "summary": "commit_sha path parameter",
-          "maps_to": "path.commit_sha"
+          "maps_to": "path.commit_sha",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6029,7 +6075,8 @@
           "name": "commit-sha",
           "type": "string",
           "summary": "commit_sha path parameter",
-          "maps_to": "path.commit_sha"
+          "maps_to": "path.commit_sha",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6052,7 +6099,8 @@
           "name": "ref",
           "type": "string",
           "summary": "ref path parameter",
-          "maps_to": "path.ref"
+          "maps_to": "path.ref",
+          "required": true
         },
         {
           "name": "check-name",
@@ -6107,7 +6155,8 @@
           "name": "ref",
           "type": "string",
           "summary": "ref path parameter",
-          "maps_to": "path.ref"
+          "maps_to": "path.ref",
+          "required": true
         },
         {
           "name": "check-name",
@@ -6142,7 +6191,8 @@
           "name": "ref",
           "type": "string",
           "summary": "ref path parameter",
-          "maps_to": "path.ref"
+          "maps_to": "path.ref",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6165,7 +6215,8 @@
           "name": "ref",
           "type": "string",
           "summary": "ref path parameter",
-          "maps_to": "path.ref"
+          "maps_to": "path.ref",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6204,7 +6255,8 @@
           "name": "basehead",
           "type": "string",
           "summary": "basehead path parameter",
-          "maps_to": "path.basehead"
+          "maps_to": "path.basehead",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6293,7 +6345,8 @@
           "name": "secret-name",
           "type": "string",
           "summary": "secret_name path parameter",
-          "maps_to": "path.secret_name"
+          "maps_to": "path.secret_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6334,7 +6387,8 @@
           "name": "basehead",
           "type": "string",
           "summary": "basehead path parameter",
-          "maps_to": "path.basehead"
+          "maps_to": "path.basehead",
+          "required": true
         },
         {
           "name": "name",
@@ -6444,7 +6498,8 @@
           "name": "deployment-id",
           "type": "integer",
           "summary": "deployment_id path parameter",
-          "maps_to": "path.deployment_id"
+          "maps_to": "path.deployment_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6496,7 +6551,8 @@
           "name": "environment-name",
           "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "path.environment_name"
+          "maps_to": "path.environment_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6561,13 +6617,15 @@
           "name": "environment-name",
           "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "path.environment_name"
+          "maps_to": "path.environment_name",
+          "required": true
         },
         {
           "name": "branch-policy-id",
           "type": "integer",
           "summary": "branch_policy_id path parameter",
-          "maps_to": "path.branch_policy_id"
+          "maps_to": "path.branch_policy_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6614,7 +6672,8 @@
           "name": "environment-name",
           "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "path.environment_name"
+          "maps_to": "path.environment_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6655,7 +6714,8 @@
           "name": "environment-name",
           "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "path.environment_name"
+          "maps_to": "path.environment_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6702,13 +6762,15 @@
           "name": "environment-name",
           "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "path.environment_name"
+          "maps_to": "path.environment_name",
+          "required": true
         },
         {
           "name": "protection-rule-id",
           "type": "integer",
           "summary": "protection_rule_id path parameter",
-          "maps_to": "path.protection_rule_id"
+          "maps_to": "path.protection_rule_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6731,7 +6793,8 @@
           "name": "environment-name",
           "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "path.environment_name"
+          "maps_to": "path.environment_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6754,7 +6817,8 @@
           "name": "environment-name",
           "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "path.environment_name"
+          "maps_to": "path.environment_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6801,13 +6865,15 @@
           "name": "environment-name",
           "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "path.environment_name"
+          "maps_to": "path.environment_name",
+          "required": true
         },
         {
           "name": "secret-name",
           "type": "string",
           "summary": "secret_name path parameter",
-          "maps_to": "path.secret_name"
+          "maps_to": "path.secret_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6854,7 +6920,8 @@
           "name": "environment-name",
           "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "path.environment_name"
+          "maps_to": "path.environment_name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6919,13 +6986,15 @@
           "name": "environment-name",
           "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "path.environment_name"
+          "maps_to": "path.environment_name",
+          "required": true
         },
         {
           "name": "name",
           "type": "string",
           "summary": "name path parameter",
-          "maps_to": "path.name"
+          "maps_to": "path.name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6983,7 +7052,8 @@
           "name": "file-sha",
           "type": "string",
           "summary": "file_sha path parameter",
-          "maps_to": "path.file_sha"
+          "maps_to": "path.file_sha",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7017,7 +7087,8 @@
           "name": "ref",
           "type": "string",
           "summary": "ref path parameter",
-          "maps_to": "path.ref"
+          "maps_to": "path.ref",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7040,7 +7111,8 @@
           "name": "tag-sha",
           "type": "string",
           "summary": "tag_sha path parameter",
-          "maps_to": "path.tag_sha"
+          "maps_to": "path.tag_sha",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7074,7 +7146,8 @@
           "name": "tree-sha",
           "type": "string",
           "summary": "tree_sha path parameter",
-          "maps_to": "path.tree_sha"
+          "maps_to": "path.tree_sha",
+          "required": true
         },
         {
           "name": "recursive",
@@ -7119,7 +7192,8 @@
           "name": "hook-id",
           "type": "integer",
           "summary": "hook_id path parameter",
-          "maps_to": "path.hook_id"
+          "maps_to": "path.hook_id",
+          "required": true
         },
         {
           "name": "status",
@@ -7152,13 +7226,15 @@
           "name": "hook-id",
           "type": "integer",
           "summary": "hook_id path parameter",
-          "maps_to": "path.hook_id"
+          "maps_to": "path.hook_id",
+          "required": true
         },
         {
           "name": "delivery-id",
           "type": "integer",
           "summary": "delivery_id path parameter",
-          "maps_to": "path.delivery_id"
+          "maps_to": "path.delivery_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7576,7 +7652,8 @@
           "name": "comment-id",
           "type": "integer",
           "summary": "comment_id path parameter",
-          "maps_to": "path.comment_id"
+          "maps_to": "path.comment_id",
+          "required": true
         },
         {
           "name": "content",
@@ -7657,13 +7734,15 @@
           "name": "issue-number",
           "type": "integer",
           "summary": "issue_number path parameter",
-          "maps_to": "path.issue_number"
+          "maps_to": "path.issue_number",
+          "required": true
         },
         {
           "name": "assignee",
           "type": "string",
           "summary": "assignee path parameter",
-          "maps_to": "path.assignee"
+          "maps_to": "path.assignee",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7686,7 +7765,8 @@
           "name": "issue-number",
           "type": "integer",
           "summary": "issue_number path parameter",
-          "maps_to": "path.issue_number"
+          "maps_to": "path.issue_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7751,7 +7831,8 @@
           "name": "issue-number",
           "type": "integer",
           "summary": "issue_number path parameter",
-          "maps_to": "path.issue_number"
+          "maps_to": "path.issue_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7774,7 +7855,8 @@
           "name": "issue-number",
           "type": "integer",
           "summary": "issue_number path parameter",
-          "maps_to": "path.issue_number"
+          "maps_to": "path.issue_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7857,7 +7939,8 @@
           "name": "issue-number",
           "type": "integer",
           "summary": "issue_number path parameter",
-          "maps_to": "path.issue_number"
+          "maps_to": "path.issue_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7880,7 +7963,8 @@
           "name": "issue-number",
           "type": "integer",
           "summary": "issue_number path parameter",
-          "maps_to": "path.issue_number"
+          "maps_to": "path.issue_number",
+          "required": true
         },
         {
           "name": "content",
@@ -7979,7 +8063,8 @@
           "name": "issue-number",
           "type": "integer",
           "summary": "issue_number path parameter",
-          "maps_to": "path.issue_number"
+          "maps_to": "path.issue_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8072,7 +8157,8 @@
           "name": "milestone-number",
           "type": "integer",
           "summary": "milestone_number path parameter",
-          "maps_to": "path.milestone_number"
+          "maps_to": "path.milestone_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8239,7 +8325,8 @@
           "name": "build-id",
           "type": "integer",
           "summary": "build_id path parameter",
-          "maps_to": "path.build_id"
+          "maps_to": "path.build_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8273,7 +8360,8 @@
           "name": "pages-deployment-id",
           "type": "integer",
           "summary": "pages_deployment_id path parameter",
-          "maps_to": "path.pages_deployment_id"
+          "maps_to": "path.pages_deployment_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8395,7 +8483,8 @@
           "name": "comment-id",
           "type": "integer",
           "summary": "comment_id path parameter",
-          "maps_to": "path.comment_id"
+          "maps_to": "path.comment_id",
+          "required": true
         },
         {
           "name": "content",
@@ -8494,7 +8583,8 @@
           "name": "pull-number",
           "type": "integer",
           "summary": "pull_number path parameter",
-          "maps_to": "path.pull_number"
+          "maps_to": "path.pull_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8517,7 +8607,8 @@
           "name": "pull-number",
           "type": "integer",
           "summary": "pull_number path parameter",
-          "maps_to": "path.pull_number"
+          "maps_to": "path.pull_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8540,7 +8631,8 @@
           "name": "pull-number",
           "type": "integer",
           "summary": "pull_number path parameter",
-          "maps_to": "path.pull_number"
+          "maps_to": "path.pull_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8581,7 +8673,8 @@
           "name": "pull-number",
           "type": "integer",
           "summary": "pull_number path parameter",
-          "maps_to": "path.pull_number"
+          "maps_to": "path.pull_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8604,13 +8697,15 @@
           "name": "pull-number",
           "type": "integer",
           "summary": "pull_number path parameter",
-          "maps_to": "path.pull_number"
+          "maps_to": "path.pull_number",
+          "required": true
         },
         {
           "name": "review-id",
           "type": "integer",
           "summary": "review_id path parameter",
-          "maps_to": "path.review_id"
+          "maps_to": "path.review_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8656,7 +8751,8 @@
           "name": "dir",
           "type": "string",
           "summary": "dir path parameter",
-          "maps_to": "path.dir"
+          "maps_to": "path.dir",
+          "required": true
         },
         {
           "name": "ref",
@@ -8685,7 +8781,8 @@
           "name": "asset-id",
           "type": "integer",
           "summary": "asset_id path parameter",
-          "maps_to": "path.asset_id"
+          "maps_to": "path.asset_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8719,7 +8816,8 @@
           "name": "release-id",
           "type": "integer",
           "summary": "release_id path parameter",
-          "maps_to": "path.release_id"
+          "maps_to": "path.release_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8760,7 +8858,8 @@
           "name": "release-id",
           "type": "integer",
           "summary": "release_id path parameter",
-          "maps_to": "path.release_id"
+          "maps_to": "path.release_id",
+          "required": true
         },
         {
           "name": "content",
@@ -8903,7 +9002,8 @@
           "name": "rule-suite-id",
           "type": "integer",
           "summary": "rule_suite_id path parameter",
-          "maps_to": "path.rule_suite_id"
+          "maps_to": "path.rule_suite_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8926,7 +9026,8 @@
           "name": "ruleset-id",
           "type": "integer",
           "summary": "ruleset_id path parameter",
-          "maps_to": "path.ruleset_id"
+          "maps_to": "path.ruleset_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8949,13 +9050,15 @@
           "name": "ruleset-id",
           "type": "integer",
           "summary": "ruleset_id path parameter",
-          "maps_to": "path.ruleset_id"
+          "maps_to": "path.ruleset_id",
+          "required": true
         },
         {
           "name": "version-id",
           "type": "integer",
           "summary": "version_id path parameter",
-          "maps_to": "path.version_id"
+          "maps_to": "path.version_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8978,7 +9081,8 @@
           "name": "alert-number",
           "type": "integer",
           "summary": "alert_number path parameter",
-          "maps_to": "path.alert_number"
+          "maps_to": "path.alert_number",
+          "required": true
         }
       ],
       "api_surface": [

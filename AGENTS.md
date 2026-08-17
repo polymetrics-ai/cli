@@ -254,9 +254,11 @@ This fact explained a defect nobody could see; do not rediscover it the hard way
 A `direct_read` command's flags come from the connector's own provider
 specification, not from authoring. `connectorgen params-import` writes the
 accepted parameter set into `operations.json` as `rest.parameters`;
-`surface-sync` derives the command flags from it and only ever ADDS, so a
-hand-authored flag is left as written. The split keeps CI hermetic —
-`surface-sync --check` needs no artifact and no network.
+`surface-sync` adds missing command flags and synchronizes their operation-owned
+mapping plus requiredness for a flag mapped to a required REST path parameter.
+It preserves author-owned summaries, types, and optional query/body behavior.
+The split keeps CI hermetic — `surface-sync --check` needs no artifact and no
+network.
 
 Never hand-author an opaque provider cursor (`cursor`, `start_cursor`,
 `page_token`, and equivalents). Navigation is answered by `--page` or
