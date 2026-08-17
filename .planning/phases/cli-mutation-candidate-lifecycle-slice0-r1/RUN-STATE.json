@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "phase": "cli-mutation-candidate-lifecycle-slice0-r1",
+  "state": "blocked_upstream_dependency",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "base_commit": "eba2658c5fd671a1eebfb71463cbe6a3045d3c65",
+  "dependency": {
+    "pull_request": 4214,
+    "required_capability": "landed generic connectorgen certification-candidates direct-read projection",
+    "observed_state": "open"
+  },
+  "live_mutations_executed": 0,
+  "certifications_recorded": 0
+}
