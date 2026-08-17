@@ -47,4 +47,4 @@ The full Go suite and `make verify` are deliberately deferred until the end of t
 - `make connector-boundary` — passed.
 - `go run ./cmd/agentcontractgen check` — passed.
 - `git diff --check` — passed before commit.
-- Required workflow gate: `bash scripts/verify-gsd-workflow origin/integration/4015-mvp-flat-r1` — pending local re-run after this planning evidence is staged; it is a hard pre-push gate for this continuation.
+- Required workflow gate: `bash scripts/verify-gsd-workflow origin/integration/4015-mvp-flat-r1` — passed after committing this planning evidence; it reported `implementation changes have GSD/TDD evidence against origin/integration/4015-mvp-flat-r1`.
