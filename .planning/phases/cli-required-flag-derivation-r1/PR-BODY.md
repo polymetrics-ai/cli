@@ -102,6 +102,14 @@ confirmed exactly 104 added `required: true` fields in each artifact and zero
 unexpected changes. A second data-generator pass and an explicit `gen:docs`
 pass retained identical SHA-256s.
 
+### Tracked-skills follow-up
+
+`TestSkillsGenerateMatchesTrackedSkills` identified the fourth generated
+surface. `go run ./cmd/pm skills generate --dir docs/skills --json` regenerated
+only `docs/skills/pm-github/SKILL.md`, where the same required GitHub flags are
+now labeled `(required)`. A second pass retained the same SHA-256, and
+`go test -timeout 20m ./internal/cli -run TestSkillsGenerateMatchesTrackedSkills -count=1` passed.
+
 ## Safety and Follow-ups
 
 - No credentials, live provider writes, external state changes, or generic

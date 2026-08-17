@@ -10,6 +10,7 @@
 | GitHub P1 count | `certification-sweep --connector github --check` reported 92 product defects on the base | Regenerated sweep reports zero product defects (104 flag fields in 92 commands) | green |
 | Unsupported declaration audit | No verifier existed for the 50 declared entries | Audit lists every entry without mutation: 26 `unsupported_api` declarations contradict the source lock; 23 `unsupported_local` declarations hold | green |
 | Website generated-data gap | PR 4209's actual `Website Data` log names `pnpm run gen:website-data` and shows missing `required: true` fields in `website/lib/connectors.catalog.data.generated.json` | `gen:website-data` adds exactly 104 `required: true` fields in each of the two generated connector data artifacts, with zero unexpected semantic changes; a second data pass and `gen:docs` preserve the same SHA-256s. | green |
+| Tracked-skills gap | PR 4209's `TestSkillsGenerateMatchesTrackedSkills` reported generated skills drift | Two `pm skills generate` runs preserve `docs/skills/pm-github/SKILL.md` SHA-256; its generated diff only marks the same GitHub flags required, and the exact regression test passes. | green |
 
 ## Constraints
 

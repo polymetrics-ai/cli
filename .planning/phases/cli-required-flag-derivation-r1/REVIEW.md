@@ -42,3 +42,10 @@ artifact, whereas the prior `gen:docs` rerun was a no-op. The corrected
 generator's two JSON artifacts each add exactly 104 `required: true` fields;
 a structural JSON comparison found zero unrelated changes. A second data pass
 and explicit docs pass preserved all generated-file SHA-256s.
+
+## Tracked-skills gap review
+
+`TestSkillsGenerateMatchesTrackedSkills` identified the fourth generated
+surface. The repository skills generator changed only the GitHub skill, adding
+the same required-flag labels as the CLI and website artifacts. Its second-pass
+SHA-256 matched, and the exact drift regression test passed.

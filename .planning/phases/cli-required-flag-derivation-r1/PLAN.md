@@ -19,6 +19,7 @@ Make required REST path parameters and CLI required flags one derived contract f
 5. **Unsupported audit:** Enumerate the 27 `unsupported_api` and 23 `unsupported_local` declarations through their command/operation/provider-surface metadata. Emit an evidence report listing all 50 and any contradiction, without changing their classification.
 6. **Verification and review:** Run required local gates, generator and website docs twice for deterministic output, execute the `verify-work` checklist, then perform code review and record findings/dispositions.
 7. **Website generated-data gap:** Read CI's actual `Website Data` failure before acting. It requires `pnpm --dir website run gen:website-data`, not the separate `gen:docs` target. Inspect the first-pass `website/**` diff for required-flag additions only, run the data target again, then run the docs target it invokes and require byte-identical generated outputs before committing.
+8. **Tracked-skills gap:** Regenerate `docs/skills` with `pm skills generate`, inspect the first-pass output for required-flag markers only, rerun it for byte stability, and execute `TestSkillsGenerateMatchesTrackedSkills` before committing.
 
 ## CLI help/docs/website parity
 

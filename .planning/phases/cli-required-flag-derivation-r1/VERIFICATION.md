@@ -74,3 +74,12 @@ The initial `gen:docs`-only rerun was a no-op because it is not the CI target.
 The corrected data generator writes five generated surfaces; only the two
 connector data files differ. Their semantic diff is precisely the expected
 required-path-flag propagation and nothing else.
+
+## Tracked-skills gap closure
+
+- [x] `go run ./cmd/pm skills generate --dir docs/skills --json` generated
+  only `docs/skills/pm-github/SKILL.md`.
+- [x] Its first-pass diff adds only the expected `(required)` flag markers.
+- [x] The second generator pass retained SHA-256
+  `bdac333497bef946da5fb0c1831f1b2b484ce7fdde6602773162416f8da8f7d4`.
+- [x] `go test -timeout 20m ./internal/cli -run TestSkillsGenerateMatchesTrackedSkills -count=1` passed.
