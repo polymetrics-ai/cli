@@ -120,9 +120,26 @@ func TestCertifyOptionsDirectReadOnlyRejectsWrite(t *testing.T) {
 	}
 }
 
-func TestRunCertifyDirectReadOnlyRejectsExternalProof(t *testing.T) {
+func TestRunCertifyDirectReadOnlyExternalProofStillRequiresFullParityCredential(t *testing.T) {
 	err := runCertify(context.Background(), t.TempDir(), []string{"github", "--direct-read-only", "--external-proof"}, io.Discard, io.Discard, true)
-	if err == nil || !strings.Contains(err.Error(), "cannot be combined with --external-proof") {
-		t.Fatalf("runCertify() error = %v, want direct-read-only/external-proof refusal", err)
+	if err == nil || !strings.Contains(err.Error(), "requires --full-parity") {
+		t.Fatalf("runCertify() error = %v, want full-parity credential refusal", err)
+	}
+}
+
+func TestRunCertifyDirectReadOnlyExternalProofRejectsResumedStages(t *testing.T) {
+	err := runCertify(context.Background(), t.TempDir(), []string{"github", "--direct-read-only", "--external-proof", "--resume", "--full-parity"}, io.Discard, io.Discard, true)
+	if err == nil || !strings.Contains(err.Error(), "requires a fresh complete read sweep") {
+		t.Fatalf("runCertify() error = %v, want fresh-proof refusal", err)
+	}
+}
+
+func TestCertifyOptionsDirectReadOnlyFullParityKeepsWritesOutOfReadEvidence(t *testing.T) {
+	opts, err := certifyOptionsFromFlags("github", parseFlags([]string{"--direct-read-only", "--full-parity", "--from-env", "token=PM_CERT_TOKEN"}))
+	if err != nil {
+		t.Fatalf("certifyOptionsFromFlags() = %v", err)
+	}
+	if !opts.DirectReadOnly || !opts.Full || !opts.RequireFullParity || opts.Write {
+		t.Fatalf("direct-read full-parity options = %+v, want direct read, full scope, full-parity credential, and no writes", opts)
 	}
 }
