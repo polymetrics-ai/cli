@@ -23,6 +23,50 @@
       }
     ]
   },
+  "graphql": {
+    "source_lock": "sources/github-operation-source-lock.json",
+    "command_prefix": "graphql ",
+    "schema_conformant_reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
+    "fixture_required_reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required",
+    "live_candidates": [
+      {
+        "stage_name": "graphql_query_viewer",
+        "command": "graphql query viewer",
+        "args": [
+          { "connector": true },
+          { "literal": "graphql" },
+          { "literal": "query" },
+          { "literal": "viewer" },
+          { "literal": "--credential" },
+          { "source_credential": true },
+          { "literal": "--max-bytes" },
+          { "literal": "1048576" },
+          { "literal": "--json" }
+        ],
+        "output_assertions": [
+          { "json_pointer": "/response/viewer/__typename", "equals": "User" }
+        ]
+      },
+      {
+        "stage_name": "graphql_query_rate_limit",
+        "command": "graphql query rate-limit",
+        "args": [
+          { "connector": true },
+          { "literal": "graphql" },
+          { "literal": "query" },
+          { "literal": "rate-limit" },
+          { "literal": "--credential" },
+          { "source_credential": true },
+          { "literal": "--max-bytes" },
+          { "literal": "1048576" },
+          { "literal": "--json" }
+        ],
+        "output_assertions": [
+          { "json_pointer": "/response/rateLimit/remaining", "value_type": "number" }
+        ]
+      }
+    ]
+  },
   "direct_read_candidates": [
     {
       "stage_name": "direct_read_sweep_repo_read_file",

@@ -17,6 +17,7 @@ import (
 const (
 	certificationSweepSchemaVersion       = 1
 	certificationSweepEligiblePendingLive = "eligible_pending_live"
+	certificationSweepSchemaConformant    = "schema_conformant"
 	certificationSweepFixtureRequired     = "fixture_required"
 	certificationSweepStatusProductDefect = "product_defect"
 	certificationSweepProviderRefused     = "provider_refused"
@@ -201,6 +202,10 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 	if err != nil {
 		return certificationSweep{}, err
 	}
+	graphql, err := certificationSweepGraphQLProfileFor(&bundle)
+	if err != nil {
+		return certificationSweep{}, err
+	}
 	providerRefusals, err := certificationSweepProviderRefusals(repoRoot, connector)
 	if err != nil {
 		return certificationSweep{}, err
@@ -234,7 +239,7 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 			return certificationSweep{}, fmt.Errorf("connector %q cli_surface has missing or duplicate command path %q", connector, command.Path)
 		}
 		seen[command.Path] = true
-		row, defect := classifyCertificationSweepCommand(command, operations[command.Operation], assertions[command.Path], refusalByCommand[command.Path])
+		row, defect := classifyCertificationSweepCommand(command, operations[command.Operation], assertions[command.Path], graphql, refusalByCommand[command.Path])
 		sweep.Commands = append(sweep.Commands, row)
 		if defect != nil {
 			sweep.ProductDefects = append(sweep.ProductDefects, *defect)
@@ -280,8 +285,19 @@ func certificationSweepProviderRefusals(repoRoot, connector string) ([]certifica
 	return append([]certificationSweepProviderRefusal(nil), observations.ProviderRefusals...), nil
 }
 
-func certificationSweepAssertions(bundle *engine.Bundle) (map[string][]engine.CertificationOutputAssertion, error) {
-	assertions := map[string][]engine.CertificationOutputAssertion{}
+type certificationSweepAssertionOverlay struct {
+	Assertions []engine.CertificationOutputAssertion
+	Source     string
+}
+
+type certificationSweepGraphQLProfile struct {
+	CommandPrefix          string
+	SchemaConformantReason string
+	FixtureRequiredReason  string
+}
+
+func certificationSweepAssertions(bundle *engine.Bundle) (map[string]certificationSweepAssertionOverlay, error) {
+	assertions := map[string]certificationSweepAssertionOverlay{}
 	if bundle.Certification == nil {
 		return assertions, nil
 	}
@@ -290,14 +306,46 @@ func certificationSweepAssertions(bundle *engine.Bundle) (map[string][]engine.Ce
 			return nil, errors.New("direct-read certification assertion overlay requires command and produced-value assertion")
 		}
 		if _, found := assertions[candidate.Command]; found {
-			return nil, fmt.Errorf("multiple direct-read certification assertion overlays for command %q", candidate.Command)
+			return nil, fmt.Errorf("multiple certification assertion overlays for command %q", candidate.Command)
 		}
-		assertions[candidate.Command] = append([]engine.CertificationOutputAssertion(nil), candidate.OutputAssertions...)
+		assertions[candidate.Command] = certificationSweepAssertionOverlay{
+			Assertions: append([]engine.CertificationOutputAssertion(nil), candidate.OutputAssertions...),
+			Source:     "certification.json direct_read_candidates",
+		}
+	}
+	if graphql := bundle.Certification.GraphQL; graphql != nil {
+		for _, candidate := range graphql.LiveCandidates {
+			if strings.TrimSpace(candidate.Command) == "" || len(candidate.OutputAssertions) == 0 {
+				return nil, errors.New("GraphQL certification assertion overlay requires command and produced-value assertion")
+			}
+			if _, found := assertions[candidate.Command]; found {
+				return nil, fmt.Errorf("multiple certification assertion overlays for command %q", candidate.Command)
+			}
+			assertions[candidate.Command] = certificationSweepAssertionOverlay{
+				Assertions: append([]engine.CertificationOutputAssertion(nil), candidate.OutputAssertions...),
+				Source:     "certification.json graphql.live_candidates",
+			}
+		}
 	}
 	return assertions, nil
 }
 
-func classifyCertificationSweepCommand(command engine.CLICommand, operation engine.OperationSpec, assertions []engine.CertificationOutputAssertion, providerRefusal certificationSweepProviderRefusal) (certificationSweepCommand, *certificationSweepProductDefect) {
+func certificationSweepGraphQLProfileFor(bundle *engine.Bundle) (certificationSweepGraphQLProfile, error) {
+	if bundle.Certification == nil || bundle.Certification.GraphQL == nil {
+		return certificationSweepGraphQLProfile{}, nil
+	}
+	graphql := bundle.Certification.GraphQL
+	if strings.TrimSpace(graphql.CommandPrefix) == "" || strings.TrimSpace(graphql.SchemaConformantReason) == "" || strings.TrimSpace(graphql.FixtureRequiredReason) == "" {
+		return certificationSweepGraphQLProfile{}, errors.New("GraphQL certification profile is missing a command prefix or non-pass reason")
+	}
+	return certificationSweepGraphQLProfile{
+		CommandPrefix:          graphql.CommandPrefix,
+		SchemaConformantReason: graphql.SchemaConformantReason,
+		FixtureRequiredReason:  graphql.FixtureRequiredReason,
+	}, nil
+}
+
+func classifyCertificationSweepCommand(command engine.CLICommand, operation engine.OperationSpec, assertion certificationSweepAssertionOverlay, graphql certificationSweepGraphQLProfile, providerRefusal certificationSweepProviderRefusal) (certificationSweepCommand, *certificationSweepProductDefect) {
 	row := certificationSweepCommand{
 		Summary:       command.Summary,
 		Path:          command.Path,
@@ -316,26 +364,59 @@ func classifyCertificationSweepCommand(command engine.CLICommand, operation engi
 	if defect := requiredPathFlagDefect(command, operation); defect != nil {
 		row.Status = certificationSweepStatusProductDefect
 		row.Reason = defect.Reason
-		if len(assertions) != 0 {
-			row.OutputAssertions = assertions
-			row.AssertionSource = "certification.json direct_read_candidates"
+		if len(assertion.Assertions) != 0 {
+			row.OutputAssertions = assertion.Assertions
+			row.AssertionSource = assertion.Source
 		}
 		return row, defect
 	}
 	if providerRefusal.Command != "" {
 		row.Status = certificationSweepProviderRefused
 		row.Reason = providerRefusal.Reason
-		if len(assertions) != 0 {
-			row.OutputAssertions = assertions
-			row.AssertionSource = "certification.json direct_read_candidates"
+		if len(assertion.Assertions) != 0 {
+			row.OutputAssertions = assertion.Assertions
+			row.AssertionSource = assertion.Source
 		}
 		return row, nil
 	}
-	if len(assertions) != 0 {
+	if graphql.CommandPrefix != "" && strings.HasPrefix(command.Path, graphql.CommandPrefix) {
+		switch operation.Kind {
+		case "graphql_query":
+			if command.Intent != "direct_read" {
+				row.Status = certificationSweepStatusProductDefect
+				row.Reason = "GraphQL query command does not declare direct_read intent"
+				return row, &certificationSweepProductDefect{Command: command.Path, Reason: row.Reason}
+			}
+			if len(assertion.Assertions) != 0 {
+				row.Status = certificationSweepEligiblePendingLive
+				row.Reason = "declaration-owned GraphQL produced-value assertions exist; live execution is pending"
+				row.OutputAssertions = assertion.Assertions
+				row.AssertionSource = assertion.Source
+				return row, nil
+			}
+			row.Status = certificationSweepSchemaConformant
+			row.Reason = graphql.SchemaConformantReason
+			return row, nil
+		case "graphql_mutation":
+			if command.Intent != "direct_write" {
+				row.Status = certificationSweepStatusProductDefect
+				row.Reason = "GraphQL mutation command does not declare direct_write intent"
+				return row, &certificationSweepProductDefect{Command: command.Path, Reason: row.Reason}
+			}
+			row.Status = certificationSweepFixtureRequired
+			row.Reason = certificationSweepFixtureReason(graphql.FixtureRequiredReason, row.RequiredFlags)
+			return row, nil
+		default:
+			row.Status = certificationSweepStatusProductDefect
+			row.Reason = fmt.Sprintf("GraphQL certification command has operation kind %q", operation.Kind)
+			return row, &certificationSweepProductDefect{Command: command.Path, Reason: row.Reason}
+		}
+	}
+	if len(assertion.Assertions) != 0 {
 		row.Status = certificationSweepEligiblePendingLive
 		row.Reason = "declaration-owned produced-value assertions exist; live execution is pending"
-		row.OutputAssertions = assertions
-		row.AssertionSource = "certification.json direct_read_candidates"
+		row.OutputAssertions = assertion.Assertions
+		row.AssertionSource = assertion.Source
 		return row, nil
 	}
 	switch command.Intent {
@@ -497,7 +578,7 @@ func validateCertificationSweep(sweep certificationSweep) error {
 
 func validCertificationSweepStatus(status string) bool {
 	switch status {
-	case certificationSweepEligiblePendingLive, certificationSweepFixtureRequired, certificationSweepStatusProductDefect, certificationSweepProviderRefused, certificationSweepNotApplicable:
+	case certificationSweepEligiblePendingLive, certificationSweepSchemaConformant, certificationSweepFixtureRequired, certificationSweepStatusProductDefect, certificationSweepProviderRefused, certificationSweepNotApplicable:
 		return true
 	default:
 		return false

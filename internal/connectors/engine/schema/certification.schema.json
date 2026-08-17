@@ -108,6 +108,63 @@
         }
       }
     },
+    "graphql": {
+      "type": "object",
+      "required": ["source_lock", "command_prefix", "schema_conformant_reason", "fixture_required_reason", "live_candidates"],
+      "additionalProperties": false,
+      "properties": {
+        "source_lock": { "type": "string" },
+        "command_prefix": { "type": "string" },
+        "schema_conformant_reason": { "type": "string" },
+        "fixture_required_reason": { "type": "string" },
+        "live_candidates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["stage_name", "command", "args", "output_assertions"],
+            "additionalProperties": false,
+            "properties": {
+              "stage_name": { "type": "string" },
+              "command": { "type": "string" },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "literal": { "type": "string" },
+                    "config_key": { "type": "string" },
+                    "default": { "type": "string" },
+                    "omit_when_empty": { "type": "boolean" },
+                    "when_config_key": { "type": "string" },
+                    "connector": { "type": "boolean" },
+                    "source_credential": { "type": "boolean" }
+                  }
+                }
+              },
+              "output_assertions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["json_pointer"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "json_pointer": { "type": "string" },
+                    "equals": {},
+                    "value_type": {
+                      "type": "string",
+                      "enum": ["object", "array", "string", "number", "boolean", "null"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "write_pairings": {
       "type": "array",
       "items": {

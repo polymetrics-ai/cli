@@ -86,8 +86,36 @@ func TestCertificationSweepForGitHubIsSurfaceDerivedAndExhaustive(t *testing.T) 
 	if eligible == 0 {
 		t.Fatal("generated sweep has no eligible assertion-bearing commands")
 	}
-	if assertionOverlays != 23 {
-		t.Fatalf("assertion overlays = %d, want the 23 declaration-owned overlays", assertionOverlays)
+	if assertionOverlays != 25 {
+		t.Fatalf("assertion overlays = %d, want the 25 declaration-owned overlays", assertionOverlays)
+	}
+}
+
+func TestCertificationSweepGraphQLUsesSchemaAndLiveBoundaries(t *testing.T) {
+	sweep, err := buildCertificationSweep(repoRootForCertificationTest(t), "github")
+	if err != nil {
+		t.Fatalf("buildCertificationSweep() error = %v", err)
+	}
+	counts := map[string]int{}
+	for _, command := range sweep.Commands {
+		if strings.HasPrefix(command.Path, "graphql ") {
+			counts[command.Status]++
+			if command.Reason == "" {
+				t.Fatalf("GraphQL command %q has no concrete non-pass reason", command.Path)
+			}
+		}
+	}
+	if got := counts[certificationSweepSchemaConformant]; got != 29 {
+		t.Fatalf("schema-conformant GraphQL commands = %d, want 29", got)
+	}
+	if got := counts[certificationSweepEligiblePendingLive]; got != 2 {
+		t.Fatalf("live-required GraphQL commands = %d, want 2", got)
+	}
+	if got := counts[certificationSweepFixtureRequired]; got != 274 {
+		t.Fatalf("fixture-bound GraphQL commands = %d, want 274", got)
+	}
+	if got := counts[certificationSweepSchemaConformant] + counts[certificationSweepEligiblePendingLive] + counts[certificationSweepFixtureRequired]; got != 305 {
+		t.Fatalf("classified GraphQL commands = %d, want 305", got)
 	}
 }
 

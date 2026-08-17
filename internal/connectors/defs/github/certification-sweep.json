@@ -25123,8 +25123,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --key",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--key"
       ]
@@ -25141,8 +25141,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed"
     },
     {
       "summary": "Run fixed GitHub GraphQL query enterprise.",
@@ -25169,8 +25169,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --slug",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--slug"
       ]
@@ -25211,8 +25211,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise-slug, --role, --user-login",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--enterprise-slug",
         "--role",
@@ -25238,8 +25238,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --invitation-token",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--invitation-token"
       ]
@@ -25269,8 +25269,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --enterprise-slug, --user-login",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--enterprise-slug",
         "--user-login"
@@ -25295,8 +25295,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --invitation-token",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--invitation-token"
       ]
@@ -25313,8 +25313,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed"
     },
     {
       "summary": "Run fixed GitHub GraphQL query license.",
@@ -25335,8 +25335,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --key",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--key"
       ]
@@ -25353,8 +25353,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed"
     },
     {
       "summary": "Run fixed GitHub GraphQL query marketplaceCategories.",
@@ -25387,8 +25387,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed"
     },
     {
       "summary": "Run fixed GitHub GraphQL query marketplaceCategory.",
@@ -25415,8 +25415,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --slug",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--slug"
       ]
@@ -25440,8 +25440,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --slug",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--slug"
       ]
@@ -25519,8 +25519,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --first",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--first"
       ]
@@ -25537,8 +25537,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed"
     },
     {
       "summary": "Run fixed GitHub GraphQL query node.",
@@ -25559,8 +25559,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--id"
       ]
@@ -25584,8 +25584,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ids",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--ids"
       ]
@@ -25609,8 +25609,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --login",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--login"
       ]
@@ -25634,8 +25634,16 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned GraphQL produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response/rateLimit/remaining",
+          "equals": null,
+          "value_type": "number"
+        }
+      ],
+      "assertion_source": "certification.json graphql.live_candidates"
     },
     {
       "summary": "Run fixed GitHub GraphQL query relay.",
@@ -25649,8 +25657,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed"
     },
     {
       "summary": "Run fixed GitHub GraphQL query repository.",
@@ -25683,8 +25691,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name, --owner",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--name",
         "--owner"
@@ -25709,8 +25717,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --login",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--login"
       ]
@@ -25734,8 +25742,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --url",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--url"
       ]
@@ -25780,8 +25788,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --first, --query, --type",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--first",
         "--query",
@@ -25849,8 +25857,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --first",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--first"
       ]
@@ -25874,8 +25882,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ghsa-id",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--ghsa-id"
       ]
@@ -25943,8 +25951,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --first",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--first"
       ]
@@ -26025,8 +26033,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --first",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--first"
       ]
@@ -26050,8 +26058,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--name"
       ]
@@ -26075,8 +26083,8 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --login",
+      "status": "schema_conformant",
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
         "--login"
       ]
@@ -26093,8 +26101,15 @@
           "path": "/graphql"
         }
       ],
-      "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned GraphQL produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response/viewer/__typename",
+          "equals": "User"
+        }
+      ],
+      "assertion_source": "certification.json graphql.live_candidates"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/hash-algorithm",

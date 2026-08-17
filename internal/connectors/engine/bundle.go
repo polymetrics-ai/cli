@@ -1045,9 +1045,22 @@ type CertificationSpec struct {
 	Source               CertificationSourceSpec         `json:"source,omitempty"`
 	DirectReadCandidates []CertificationCommandCandidate `json:"direct_read_candidates,omitempty"`
 	BinaryCandidates     []CertificationCommandCandidate `json:"binary_candidates,omitempty"`
+	GraphQL              *CertificationGraphQLSpec       `json:"graphql,omitempty"`
 	WritePairings        []CertificationWritePairing     `json:"write_pairings,omitempty"`
 	WriteInventory       CertificationWriteInventorySpec `json:"write_inventory,omitempty"`
 	WriteWave            *CertificationWriteWaveSpec     `json:"write_wave,omitempty"`
+}
+
+// CertificationGraphQLSpec declares a bounded schema-conformance inventory
+// and the small set of fixed, read-only commands that require live produced-
+// value proof. The source lock and all command names remain connector-owned;
+// the shared certification harness does not name providers or endpoints.
+type CertificationGraphQLSpec struct {
+	SourceLock             string                          `json:"source_lock"`
+	CommandPrefix          string                          `json:"command_prefix"`
+	SchemaConformantReason string                          `json:"schema_conformant_reason"`
+	FixtureRequiredReason  string                          `json:"fixture_required_reason"`
+	LiveCandidates         []CertificationCommandCandidate `json:"live_candidates"`
 }
 
 // CertificationSourceSpec configures source-side certification setup and
@@ -2749,6 +2762,25 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 	for i, candidate := range certification.BinaryCandidates {
 		if err := validateCertificationCommandCandidate("binary_candidates", i, candidate); err != nil {
 			return err
+		}
+	}
+	if graphql := certification.GraphQL; graphql != nil {
+		if !fs.ValidPath(graphql.SourceLock) || !strings.HasPrefix(graphql.SourceLock, "sources/") {
+			return fmt.Errorf("graphql.source_lock must be a connector-owned file beneath sources/")
+		}
+		if strings.TrimSpace(graphql.CommandPrefix) == "" || strings.TrimSpace(graphql.SchemaConformantReason) == "" || strings.TrimSpace(graphql.FixtureRequiredReason) == "" {
+			return fmt.Errorf("graphql must declare command_prefix, schema_conformant_reason, and fixture_required_reason")
+		}
+		if len(graphql.LiveCandidates) == 0 {
+			return fmt.Errorf("graphql.live_candidates must declare at least one read-only produced-value assertion")
+		}
+		for i, candidate := range graphql.LiveCandidates {
+			if err := validateCertificationCommandCandidate("graphql.live_candidates", i, candidate); err != nil {
+				return err
+			}
+			if len(candidate.OutputAssertions) == 0 {
+				return fmt.Errorf("graphql.live_candidates[%d] must declare a produced-value assertion", i)
+			}
 		}
 	}
 	writeActions := make(map[string]bool, len(writes))
