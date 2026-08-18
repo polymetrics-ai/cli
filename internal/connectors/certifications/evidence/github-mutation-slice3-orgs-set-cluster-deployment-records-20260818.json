@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:orgs_set_cluster_deployment_records",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:44:08Z",
+  "run_id": "github-mutation-slice3-orgs-set-cluster-deployment-records-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "b2af457377be74e2c7b86f6b09ee460b78304a2468815ff009ac1c1bac22ba84",
+    "pm_command_fingerprint": "{{pmcertfp:v1:a81368678958c5a493798b63d318c20b04e6682a6f0e21622743b3b6eb6a2327}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:baa4cc0033fe7a0fff95bc3611f968da2192e52001a15620b5bc724becd14f42}}"],
+    "http_exchanges": [
+      {
+        "operation": "orgs_cluster_deployment_records_agent_derived_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:541ca297c5660bd1902dc07a4bd3ab9d4457a9d654da66d20913d5856a350645}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"assertion_source": "{{pmcertfp:v1:c90e9daa2b2f412cca488245fa7845cb95f1cec462ea89522f07f0282c8b711a}}", "matched": "{{pmcertfp:v1:c42340b4661e0981dc8ec35f52d7aebb2b39f2acbbe119bab284cc85c3e7a353}}", "wrong_answer_rejected": "{{pmcertfp:v1:1909fc0cff4f7b43f70450f68c7dda8dda3f15ed6ce071034612b89c8c0a85f4}}", "cluster": "{{pmcertfp:v1:f81df4dd297dd49755fd6bb2f5d9396487d62ae720a4631c0878539a67ed0553}}", "deployment_name": "{{pmcertfp:v1:990b1874c5b821c1b861708ba3e70c0f1695e568d8857271895a90925f89a98a}}"}, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_cluster_deployment_records_provider_terminal_disposal",
+        "request": {"method": "POST", "target": "{{pmcertfp:v1:cf7378172cf58677abdfe3935561ce1c3826acdaedb96f0650bb373e3b3019f3}}", "query": [], "headers": [], "body": {"encoding": "json", "value": {"status": "{{pmcertfp:v1:785ac22d82eb676ebbb4c2c654de57c28e2b81b3496943fbc16422a5fefa6bdb}}"}, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"terminal_disposal": "{{pmcertfp:v1:7e31cdf637f5f8d5be4791e8ef51ce55db58849be05295aaffc9f1e1ad228a81}}"}, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_cluster_deployment_records_cleanup_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:541ca297c5660bd1902dc07a4bd3ab9d4457a9d654da66d20913d5856a350645}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"cleanup": "{{pmcertfp:v1:7e31cdf637f5f8d5be4791e8ef51ce55db58849be05295aaffc9f1e1ad228a81}}", "cluster": "{{pmcertfp:v1:f81df4dd297dd49755fd6bb2f5d9396487d62ae720a4631c0878539a67ed0553}}"}, "original_bytes": 0, "truncated": false}}
+      }
+    ],
+    "database_exchanges": []
+  }
+}
