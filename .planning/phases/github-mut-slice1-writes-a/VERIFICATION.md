@@ -86,6 +86,24 @@ Schema-v2 passing evidence was written immediately for commands 85–97. `go run
 
 The evidence validator and `git diff --check` pass for this incremental set. Every new record contains repository-salted fingerprints only; raw secret values and approval tokens are absent.
 
+### Batch 4 — commands 146–195
+
+Exactly 50 commands were processed, one at a time, under the corrected classification rules:
+
+- `certified` (27): 150, 151, 157, 160–169, 172, 173, 175, 179–181, 183, 186, 188, 189, 191, 192, 194, 195.
+- `escape_needs_captain` (17): 146, 148, 152–156, 158, 170, 171, 174, 176, 178, 182, 184, 185, 187.
+- `no_object` (4): 147, 149, 190, 193.
+- `product_defect` (2): 159, 177.
+- `wrong_credential`, `entitlement`, and `not_implemented` (0).
+
+The escape rows were skipped without an out-of-boundary provider mutation: enterprise-only targets, real reviewer/outside-collaborator notifications, public Sponsors state, metered Actions deployment creation, public-repository interaction limits, or third-party migration sources/archives. Command 182 was controlled against the real private fixture repository; PM and raw GitHub both state that repository interaction limits cannot be set for private repositories, while making a public repository is an explicit visibility escape.
+
+The `no_object` rows were not inferred from fake IDs. Command 147 used a fresh verifiable domain and both PM and raw GitHub showed that the newly created fixture already has a token, making regeneration ineligible; the domain was deleted and read as absent. Command 149 created a fresh issue, listed `pendingSuggestions: []`, confirmed GitHub exposes no suggestion-creation API, then deleted the issue and read `node: null`. Command 190 listed real closed pull requests and tried to create an archived PR fixture with both the classic credential and the GitHub App; GitHub denied `archivePullRequest` for both identities, so no eligible archived object can be created. Command 193 used the real certification user and proved self-follow is forbidden; the App has no user identity and no second real person is permitted.
+
+Commands 159 and 177 are product defects with raw controls. For 159, PM's fixed mutation returns only `__typename`; raw GitHub returns the affected repository identity, while no collection/read field exists to assert the bypass-user removal. For 177, PM again returns only `__typename`, while raw `revokeMigratorRole` returns effect-bearing `success: true`. The raw controls were run after real fixtures were granted, and terminal raw removals were applied. Neither result is mislabeled as `no_object`.
+
+The GitHub App retry was performed through the repository's encrypted PM credential mechanism. Its installation token was minted in memory, supplied to `pm credentials add` through stdin, never printed or placed in argv, and used only against the approved fixture repository. This recovered command 172: a real App-owned check suite was rerequested, independently read as queued/in-progress, then completed to terminal `NEUTRAL` through the provider and independently read as completed. All other certified rows have exact produced-value reads plus provider inverse/delete/close/archive terminal disposal and independent cleanup reads in their schema-v2 records.
+
 ### Second attempted command — not classifiable as absence
 
 - Executed: `graphql mutation abort-repository-migration` with the real fixture repository node ID supplied where the operation requires a `RepositoryMigration` node.
