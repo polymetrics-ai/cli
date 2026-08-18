@@ -137,16 +137,38 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 	}
 }
 
-// TestGitHubDeclaredParityWriteContracts protects the provider shapes that
+// TestGitHubDeclaredParityProviderContracts protects the provider shapes that
 // live certification exposed while promoting issue #4015 commands. Provider
 // identifiers remain strings across plan persistence (JSON numbers lose exact
-// integer spelling), and variable writes accept only the declared body fields.
-func TestGitHubDeclaredParityWriteContracts(t *testing.T) {
+// integer spelling), variable writes accept only the declared body fields, and
+// release downloads request bytes rather than GitHub's JSON asset metadata.
+func TestGitHubDeclaredParityProviderContracts(t *testing.T) {
 	t.Parallel()
 
 	bundle, err := engine.Load(defs.FS, "github")
 	if err != nil {
 		t.Fatalf("load github bundle: %v", err)
+	}
+	operations := make(map[string]engine.OperationSpec, len(bundle.Operations))
+	for _, operation := range bundle.Operations {
+		operations[operation.ID] = operation
+	}
+	releaseDownload, ok := operations["github.release.download_assets"]
+	if !ok {
+		t.Fatal("github release download operation is not declared")
+	}
+	if got := releaseDownload.Binary.Accept; got != "application/octet-stream" {
+		t.Errorf("github release download Accept = %q, want application/octet-stream", got)
+	}
+	if got := strings.Join(releaseDownload.Binary.AllowedHosts, ","); got != "release-assets.githubusercontent.com" {
+		t.Errorf("github release download allowed_hosts = %q, want release-assets.githubusercontent.com", got)
+	}
+	artifactDownload, ok := operations["github.actions_artifacts_artifact_id_archive_format"]
+	if !ok {
+		t.Fatal("github Actions artifact download operation is not declared")
+	}
+	if !artifactDownload.Binary.AllowCrossHost {
+		t.Error("github Actions artifact download must allow GitHub's signed cross-host storage redirect")
 	}
 	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
 	for _, action := range bundle.Writes {

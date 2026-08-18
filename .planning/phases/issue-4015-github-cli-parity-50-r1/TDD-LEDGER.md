@@ -43,6 +43,19 @@
   operation. Focused connsdk, engine, commandrunner, and bundle validation tests pass.
 - Refactor: no caller-supplied header or archive-extraction capability was introduced.
 
+## Slice 3c — live binary representation and redirect policy
+
+- Red: a real 51-byte release asset initially downloaded as 1,798 bytes of JSON metadata because
+  the operation did not request `application/octet-stream`; after selecting the byte representation,
+  the transport correctly blocked GitHub's undeclared cross-host asset redirect. The focused
+  provider-contract test failed on both missing policies.
+- Green: release assets now select `application/octet-stream` and permit only
+  `release-assets.githubusercontent.com`; the repeated CLI download produced the exact 51-byte
+  fixture and matched it byte-for-byte. Actions artifact downloads declare their provider-generated
+  signed cross-host redirect, while the shared transport strips credential headers on that hop.
+- Cleanup: the draft release and tag were deleted and independent API reads returned 404 for each;
+  the sealed local certification project and downloaded file were removed.
+
 ## Slice 4 — retained-command evidence and exact count
 
 - Red: the same focused test asserted 50 unique verdicts and failed on retained rows whose legacy
@@ -64,8 +77,8 @@
 - Cleanup: variable, autolink, issue, workflow file, and temporary PR branch were independently 404;
   PR #56 was restored to closed/non-draft; all temporary binary destination roots were removed.
 - Fixture limitations: codespace create reached GitHub but the fixture rejected creation and no
-  codespace exists; the fixture has no release assets or workflow artifacts, so their implemented
-  binary routes were provider-404 checks with zero filesystem residue. A gist mutation was not run
+  codespace exists; the fixture has no workflow artifacts, so `run download` was a provider-404
+  check with zero filesystem residue. A gist mutation was not run
   because it would violate the authorized organization/repository-only fixture boundary.
 
 No test receives a secret literal. Provider credentials are environment-only and are never emitted

@@ -128,7 +128,7 @@
       "id": "github.release.download_assets",
       "kind": "binary_download",
       "summary": "Download release assets with a bounded file-transfer policy.",
-      "source_url": "https://cli.github.com/manual/gh_release_download",
+      "source_url": "https://docs.github.com/en/rest/releases/assets#get-a-release-asset",
       "risk": "medium",
       "approval": "filesystem writes require an explicit destination policy",
       "output_policy": "file_manifest",
@@ -136,6 +136,10 @@
         "method": "GET",
         "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
         "max_bytes": 104857600,
+        "accept": "application/octet-stream",
+        "allowed_hosts": [
+          "release-assets.githubusercontent.com"
+        ],
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -233,7 +237,7 @@
       "id": "github.actions_artifacts_artifact_id_archive_format",
       "kind": "binary_download",
       "summary": "Download /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
-      "source_url": "https://docs.github.com/en/rest",
+      "source_url": "https://docs.github.com/en/rest/actions/artifacts#download-an-artifact",
       "risk": "medium",
       "approval": "none",
       "output_policy": "binary",
@@ -241,6 +245,7 @@
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
         "max_bytes": 104857600,
+        "allow_cross_host": true,
         "allow_overwrite": false,
         "extract_archives": false
       }

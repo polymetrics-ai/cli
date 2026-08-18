@@ -43,7 +43,7 @@ fixed API surface; retained commands name the exact provider, composite, local, 
 | 31 | `repo sync` | retained | This performs local fetch/reset/branch operations; no typed local-git executor exists. |
 | 32 | `repo set-default` | retained | This writes gh-local repository config, not provider state; no connector config executor exists. |
 | 33 | `release upload` | retained | GitHub documents a separate upload host and raw binary body; the runtime has no bounded binary-upload executor and generic HTTP writes are prohibited. |
-| 34 | `release download` | implemented | Fixed single-asset bounded downloader. The fixture had no assets; a provider 404 left no destination file. |
+| 34 | `release download` | implemented | Fixed single-asset bounded downloader; live certification retrieved the exact 51-byte asset through GitHub's credential-stripped release-assets redirect. |
 | 35 | `release verify` | retained | Verification is local cryptographic work over downloaded assets; no signature-verification executor exists. |
 | 36 | `run download` | implemented | Fixed single-artifact bounded ZIP downloader with extraction disabled. The fixture had no artifacts; a provider 404 left no destination file. |
 | 37 | `run watch` | retained | This requires cancellable polling and terminal rendering; no watch executor exists. |
@@ -74,8 +74,9 @@ credential and was never placed in argv, logs, fixtures, planning artifacts, or 
 - The existing certification PR used for `pr ready` was restored to its original closed/non-draft
   state.
 - The workflow fixture was restored to absence after enable/disable state assertions.
-- Download destination directories were removed after success or provider failure; failed downloads
-  left no partial files.
+- A draft `pm-cert-` release asset was downloaded byte-for-byte through the bounded CLI path, then
+  its release and tag were deleted; independent reads returned 404 for both. Download destination
+  directories were removed after success or provider failure, and failed downloads left no partial files.
 - GitHub refused codespace creation for the authorized fixture; the independent codespace list was
   empty, so there was nothing to delete.
 - Gist creation was not executed because a gist is user-scoped and the launch brief authorizes writes
@@ -86,6 +87,10 @@ credential and was never placed in argv, logs, fixtures, planning artifacts, or 
 - The binary downloader gained one fixed, declaration-owned `Accept` value. Callers still cannot
   supply headers, and cross-host credential stripping, byte caps, destination confinement, and the
   archive-extraction refusal remain unchanged.
+- Live release certification first returned GitHub's JSON asset metadata and then exposed the
+  provider's cross-host asset redirect. The release operation now fixes `application/octet-stream`
+  and permits only `release-assets.githubusercontent.com`; Actions artifact downloads explicitly
+  permit GitHub's dynamic signed storage redirect, with credentials stripped by the shared transport.
 - Live certification exposed provider IDs being persisted as floating-point numbers and rendered in
   scientific notation. Autolink and workflow identifiers are now opaque strings, and a regression
   test protects the contract.
