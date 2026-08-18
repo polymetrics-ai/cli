@@ -75,6 +75,17 @@
 
 Schema-v2 passing evidence was written immediately for commands 85–97. `go run ./cmd/connectorgen certification-matrix --check` and `git diff --check` both pass for the accumulated evidence set.
 
+### Commands 101–150 — corrected classification audit and live proofs
+
+- Commands 102–116 and 119–121 are certified. Their independent reads proved the exact ProjectV2, pull-request-review, ref, custom-property, ruleset, user-list, verifiable-domain, merge-queue, auto-merge, and organization-follow effects. Provider terminal disposal used the actual available GraphQL inverse/delete, REST delete, close, or repository-setting restore; the final read proved absence or the exact terminal state. Cleanup mechanics were not used to downgrade command correctness.
+- Command 117 remains unbanked: the only authorized user cannot author an approvable review on its own pull request, and the provider rejected dismissal of the real COMMENTED review. Command 118 is `no_object`: the real repository vulnerability-alert collection is empty and GitHub exposes no alert-creation API for a disposable fixture.
+- Command 122 is `no_object`, not `wrong_credential`: the only in-boundary user is the authenticated disposable identity itself, whose real read returned `viewerCanFollow: false`; PM and a raw `api.github.com` control both returned the provider's self-follow failure. No second real person was contacted.
+- Commands 128, 129, 131, 134, 135, 138, 142, 143, and 150 are additionally certified. Fresh private ProjectV2/team, issue/comment, draft pull request, and assignee fixtures were created; exact link, lock, template, ready-for-review, minimized, pin, and empty-assignee states were independently read. Raw inverse operations and container deletion/close were followed by `node: null`, empty-link, unlocked/unminimized/unpinned, closed-PR, deleted-ref, and REST 404 checks as applicable.
+- Command 147 reached GitHub against a real newly created verifiable domain but is not banked: both PM and raw GitHub control rejected regeneration because a fresh domain necessarily already has a verification token. The domain was directly deleted and independently read as absent; a second lifecycle is required before choosing a final bucket.
+- Commands 123, 126, 127, 145, and 146 cannot target an enterprise/public surface without leaving the authorized boundary. Command 145 (`publish-sponsors-tier`) is a public-visibility captain escape and was not executed. Remaining commands in this range are still pending and are not silently assigned to `no_object`, `wrong_credential`, or `product_defect`.
+
+The evidence validator and `git diff --check` pass for this incremental set. Every new record contains repository-salted fingerprints only; raw secret values and approval tokens are absent.
+
 ### Second attempted command — not classifiable as absence
 
 - Executed: `graphql mutation abort-repository-migration` with the real fixture repository node ID supplied where the operation requires a `RepositoryMigration` node.
