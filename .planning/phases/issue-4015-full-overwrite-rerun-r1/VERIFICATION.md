@@ -1,6 +1,6 @@
 # Verification Checklist
 
-**Status:** pending
+**Status:** locally verified; PR base/API and external review gates remain
 
 ## Acceptance checks
 
@@ -10,11 +10,13 @@
 - [x] Green unit test proves all four requested incremental modes retain prior checkpoints.
 - [x] Green live binary test independently proves target replacement after source deletion/update/insertion.
 - [x] Green live incremental test proves unchanged `incremental_upsert` still skips with `0/0`.
-- [ ] Targeted packages pass with `-timeout 20m`.
-- [ ] `go vet ./...` and `go build ./cmd/pm` pass.
-- [ ] Applicable generated, docs, contract, boundary, and release-workflow gates pass.
-- [ ] Code review has no unresolved critical or warning findings.
+- [x] Targeted packages pass with `-timeout 20m`.
+- [x] `go vet ./...` and `go build ./cmd/pm` pass.
+- [x] Applicable generated, docs, contract, boundary, and release-workflow gates pass.
+- [x] Code review has no unresolved critical or warning findings.
 - [ ] PR base is API-read back as `integration/4015-mvp-flat-r1`.
+
+Exact commands, results, intentionally excluded monolithic commands, and the known unrelated tagged CDC-restart failure are recorded in `traces/local-verification.md`.
 
 ## CLI/docs/website parity
 

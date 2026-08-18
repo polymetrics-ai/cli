@@ -683,10 +683,10 @@ func TestPMBinaryExecutesPostgresIncrementalDedupeHistory(t *testing.T) {
 }
 
 // TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage characterizes the
-// shipped full-overwrite route with two bounded source pages. Its target query
-// is deliberately the final-content assertion: a per-page TRUNCATE leaves
-// only the second page and must fail this test rather than be mistaken for a
-// successful run.
+// shipped full-overwrite route across two bounded pages and a changed-source
+// rerun. Its target queries are deliberately the final-content assertions: a
+// per-page TRUNCATE, checkpoint skip, or empty/stale publication must fail
+// rather than be mistaken for a successful run.
 func TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage(t *testing.T) {
 	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
 		t.Skip("database integration is opt-in")
@@ -847,6 +847,9 @@ func TestPMBinaryPostgresIncrementalUpsertStillSkipsUnchangedSource(t *testing.T
 		t.Fatalf("first incremental-upsert binary run = %#v, want completed 3-row transfer", first)
 	}
 	schema, relation, count, delivery := postgresTransportTargetState(t, ctx, target)
+	if count != 3 || delivery == "" {
+		t.Fatalf("first incremental-upsert target rows=%d delivery=%q, want three durable rows and a receipt", count, delivery)
+	}
 	qualified := pgx.Identifier{schema, relation}.Sanitize()
 	var beforeLabel string
 	if err := target.QueryRow(ctx, "SELECT label FROM "+qualified+" WHERE id = 2").Scan(&beforeLabel); err != nil {
