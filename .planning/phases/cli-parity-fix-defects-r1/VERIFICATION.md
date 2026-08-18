@@ -29,9 +29,9 @@
 ## Delivery
 
 - [x] Code review completed and every actionable finding dispositioned.
-- [ ] Commits pushed only to `fm/cli-parity-fix-defects`.
-- [ ] Direct PR opened with `Refs #4015`.
-- [ ] GitHub API reports base `integration/4015-mvp-flat-r1`.
+- [x] Commits pushed only to `fm/cli-parity-fix-defects`.
+- [x] Direct PR [#4234](https://github.com/polymetrics-ai/cli/pull/4234) opened with `Refs #4015`.
+- [x] An API-filtered `gh-axi pr list --base integration/4015-mvp-flat-r1 --head fm/cli-parity-fix-defects` returned exactly PR #4234.
 
 ## Verification evidence
 

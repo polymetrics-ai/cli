@@ -5,7 +5,7 @@
 - Issue: Refs #4015 — Production MVP; Refs #4221 — reverse delete false success.
 - Base branch: `integration/4015-mvp-flat-r1`.
 - Merges into: `integration/4015-mvp-flat-r1` → `main`.
-- Delivery: Open a direct pull request from `fm/cli-parity-fix-defects` against the stated base with the census, red/green evidence, live conversion evidence, and repository checks committed; then verify the API-reported base.
+- Delivery: Direct pull request [#4234](https://github.com/polymetrics-ai/cli/pull/4234) is open from `fm/cli-parity-fix-defects` with the census, red/green evidence, live conversion evidence, and repository checks committed. An API-filtered `gh-axi pr list` returned exactly this PR for base `integration/4015-mvp-flat-r1` and the task head.
 - Working branch: `fm/cli-parity-fix-defects`.
 - Task: Classify all 277 supplied GitHub product-defect commands, fix exact integer preservation, provider-required request bodies, invalid GitHub endpoint declarations, and false-success write accounting at their shared sources, then prove at least three real command conversions per fixed class without retaining credentials or fixtures.
 - Verification: Targeted Go tests, GitHub bundle validation and generated-surface checks, executable command preflight, CLI/help/docs parity checks, repository non-suite gates, live provider read-back and cleanup proof, secret scan, automated code review, and API read-back of the pull request base.

@@ -3,7 +3,7 @@
   "issue_refs": [4015, 4221],
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-parity-fix-defects",
-  "status": "verified",
+  "status": "pr-open",
   "census_total": 277,
   "red": [
     "persisted exact integer changes payload identity before provider dispatch",
