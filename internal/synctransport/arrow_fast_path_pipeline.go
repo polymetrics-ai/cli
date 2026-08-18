@@ -187,13 +187,9 @@ type arrowPipelineProducerResult struct {
 }
 
 func produceArrowPipeline(ctx context.Context, request RunRequest, source ArrowRangeExtractor, credits *ByteCreditController, work chan<- arrowPipelineBatch) (result arrowPipelineProducerResult) {
-	fastCheckpoint := request.Checkpoint
-	if request.Mode == synccontract.ModeFullOverwrite {
-		fastCheckpoint = nil
-	}
 	result.err = source.ExtractArrowRanges(ctx, cloneArrowExtractRequest(ArrowExtractRequest{
 		Connector: request.Source, Runtime: request.SourceRuntime, Stream: request.Stream, CursorField: request.CursorField,
-		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: fastCheckpoint,
+		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint),
 		BatchSize: request.BatchSize, UnitDeadline: request.unitDeadline(), TransformPlanJSON: request.TransformPlanJSON, TransformHash: request.TransformPlanHash,
 	}), func(batch ArrowSourceBatch) error {
 		if err := validateArrowSourceBatch(batch, request.BatchSize); err != nil {

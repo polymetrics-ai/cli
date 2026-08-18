@@ -19,7 +19,7 @@
 | --- | --- | --- |
 | A second full-overwrite run re-reads the full source | live | A real PostgreSQL source is changed between binary runs; the second run reports the exact changed-source count rather than `0/0`. |
 | Full overwrite replaces destination contents | live | An independent PostgreSQL query proves the target count and named sample changed, and a source row deleted before run two is absent afterward. |
-| Full-refresh and incremental semantics stay distinct across the mode matrix | live | An orchestrator boundary test proves prior checkpoints are withheld only for `full_append` and `full_overwrite`, while every incremental mode receives its committed checkpoint. |
+| Full-refresh and incremental semantics stay distinct across the mode matrix | automated | An orchestrator boundary test proves prior checkpoints are withheld only for `full_append` and `full_overwrite`, while every incremental mode receives its committed checkpoint. |
 | Incremental replay continues to skip unchanged input | live | The existing real PostgreSQL binary flow performs a second `incremental_upsert` run and asserts `records_read=0`, `records_loaded=0` with unchanged independent target state. |
 
 ## Phase Boundary
@@ -51,7 +51,7 @@ Repair source-refresh checkpoint handling in the shared transport boundary. Full
 - `RunRequest` carries both a resume identity and a prior checkpoint; only the checkpoint contains the source position that causes a polling executor to seek past previously read rows.
 - The Arrow full-overwrite paths already suppress the prior checkpoint locally, which is precedent for replacement-generation behavior but duplicates the rule.
 - The regular orchestrator passes the prior checkpoint unchanged to both generic and run-scoped full-overwrite source reads.
-- PostgreSQL's run-scoped full-overwrite destination publishes via a shadow relation and independent receipt read-back, including a zero-row replacement; destination publication should not own source refresh policy.
+- PostgreSQL's run-scoped full-overwrite destination publishes via a shadow relation and independent receipt read-back, including a zero-row replacement; live red evidence showed this route empties the target after the erroneous `0/0` source read. Destination publication should not own source refresh policy.
 - The existing opt-in binary harness already proves `incremental_upsert` run two is `0/0` and independently checks unchanged destination rows.
 
 ## GSD Runtime Note
@@ -61,4 +61,3 @@ The repository-local adapter was validated with `scripts/gsd doctor`, all five l
 ## Deferred Ideas
 
 None. Release `0.2.0`, PR #4250, broader connector certification, and unrelated transport refactors remain out of scope.
-

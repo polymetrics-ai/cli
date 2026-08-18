@@ -798,6 +798,76 @@ func TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage(t *testing.T) {
 	}
 }
 
+func TestPMBinaryPostgresIncrementalUpsertStillSkipsUnchangedSource(t *testing.T) {
+	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
+		t.Skip("database integration is opt-in")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+	harness := newPostgresTransportHarness(t)
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Errorf("close incremental-upsert PostgreSQL harness: %v", err)
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatalf("start incremental-upsert PostgreSQL harness: %v", err)
+	}
+	admin := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
+	defer func() { _ = admin.Close(context.Background()) }()
+	if _, err := admin.Exec(ctx, "CREATE DATABASE "+postgresTransportTargetDB); err != nil {
+		t.Fatalf("create incremental-upsert target database: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `CREATE TABLE public.incremental_events (id bigint PRIMARY KEY, sequence bigint NOT NULL, label text NOT NULL)`); err != nil {
+		t.Fatalf("create incremental-upsert source table: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `INSERT INTO public.incremental_events (id, sequence, label) VALUES (1, 10, 'event-one'), (2, 20, 'event-two'), (3, 30, 'event-three')`); err != nil {
+		t.Fatalf("seed incremental-upsert source rows: %v", err)
+	}
+	target := waitForPostgresTransport(t, ctx, endpoint, postgresTransportTargetDB, postgresTransportUser)
+	defer func() { _ = target.Close(context.Background()) }()
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "project")
+	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-source", postgresTransportSourceDB)
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
+	mustPostgresTransportPM(t, binary, "",
+		"connections", "create", "postgres-incremental-upsert",
+		"--source", "postgres:pg-source", "--destination", "postgres:pg-target",
+		"--stream", "public.incremental_events", "--sync-mode", "incremental_upsert",
+		"--cursor", "sequence", "--primary-key", "id", "--table", "incremental_events",
+		"--root", root, "--json")
+
+	first := runApprovedPostgresTransportBinary(t, binary, root, "postgres-incremental-upsert", "public.incremental_events", 2).Run
+	if first.Status != "completed" || first.RecordsRead != 3 || first.RecordsLoaded != 3 {
+		t.Fatalf("first incremental-upsert binary run = %#v, want completed 3-row transfer", first)
+	}
+	schema, relation, count, delivery := postgresTransportTargetState(t, ctx, target)
+	qualified := pgx.Identifier{schema, relation}.Sanitize()
+	var beforeLabel string
+	if err := target.QueryRow(ctx, "SELECT label FROM "+qualified+" WHERE id = 2").Scan(&beforeLabel); err != nil {
+		t.Fatalf("read first incremental-upsert target sample: %v", err)
+	}
+
+	rerun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-incremental-upsert", "public.incremental_events", 2).Run
+	if rerun.Status != "completed" || rerun.RecordsRead != 0 || rerun.RecordsLoaded != 0 {
+		t.Fatalf("unchanged incremental-upsert binary run = %#v, want completed checkpoint skip", rerun)
+	}
+	_, _, replayCount, replayDelivery := postgresTransportTargetState(t, ctx, target)
+	var replayLabel string
+	if err := target.QueryRow(ctx, "SELECT label FROM "+qualified+" WHERE id = 2").Scan(&replayLabel); err != nil {
+		t.Fatalf("read replayed incremental-upsert target sample: %v", err)
+	}
+	t.Logf("incremental-upsert replay: first_records_read=%d first_records_loaded=%d rerun_records_read=%d rerun_records_loaded=%d target_rows_before=%d target_rows_after=%d target_sample_before=id=2 label=%q target_sample_after=id=2 label=%q", first.RecordsRead, first.RecordsLoaded, rerun.RecordsRead, rerun.RecordsLoaded, count, replayCount, beforeLabel, replayLabel)
+	if count != 3 || replayCount != count || replayDelivery != delivery || beforeLabel != "event-two" || replayLabel != beforeLabel {
+		t.Fatalf("incremental-upsert replay changed target: rows=%d->%d delivery=%q->%q sample=%q->%q", count, replayCount, delivery, replayDelivery, beforeLabel, replayLabel)
+	}
+}
+
 // TestPMBinaryPostgresTransformedFullOverwriteUsesArrowCOPY proves the actual
 // shipped transformed route from CLI construction, rather than wiring native
 // source/destination objects in a test. It requires two source ranges, a
