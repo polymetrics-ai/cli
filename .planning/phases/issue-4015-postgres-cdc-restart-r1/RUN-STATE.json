@@ -4,8 +4,8 @@
   "base": "integration/4015-mvp-flat-r1",
   "release_target": "0.2.1",
   "lifecycle": "inline-manual-gsd-fallback",
-  "stage": "planned",
-  "red": "pending live reproduction and focused failing test",
+  "stage": "red",
+  "red": "recorded: traces/live-red.txt and traces/focused-red.txt",
   "green": "pending",
   "live": "pending",
   "review": "pending"
