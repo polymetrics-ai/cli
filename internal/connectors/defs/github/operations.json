@@ -10,7 +10,7 @@
       "output_policy": "json_redacted",
       "graphql": {
         "operation_name": "GitHubCLIRepoList",
-        "document": "query GitHubCLIRepoList($login: String!, $first: Int!, $after: String) { repositoryOwner(login: $login) { __typename login repositories(first: $first, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}) { nodes { id name nameWithOwner description url isPrivate isArchived isFork createdAt updatedAt pushedAt defaultBranchRef { name } } pageInfo { hasNextPage endCursor } } } rateLimit { limit cost remaining resetAt } }",
+        "document": "query GitHubCLIRepoList($login: String!, $first: Int!, $after: String) { repositoryOwner(login: $login) { __typename login repositories(first: $first, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}) { nodes { id databaseId name nameWithOwner description url isPrivate isArchived isFork createdAt updatedAt pushedAt defaultBranchRef { name target { oid } } } pageInfo { hasNextPage endCursor } } } rateLimit { limit cost remaining resetAt } }",
         "path": "/graphql",
         "max_bytes": 1048576,
         "variables_schema": {
@@ -136,6 +136,23 @@
         "method": "GET",
         "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
         "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "github.pull.diff",
+      "kind": "binary_download",
+      "summary": "Download one pull request diff using GitHub's fixed diff representation.",
+      "source_url": "https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request",
+      "risk": "low",
+      "approval": "filesystem writes require an explicit destination policy",
+      "output_policy": "file_manifest",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
+        "max_bytes": 104857600,
+        "accept": "application/vnd.github.diff",
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -9151,7 +9168,7 @@
       "output_policy": "json_redacted",
       "graphql": {
         "operation_name": "GitHubQueryNode",
-        "document": "query GitHubQueryNode($id: ID!) { node(id: $id) { __typename } rateLimit { limit cost remaining resetAt } }",
+        "document": "query GitHubQueryNode($id: ID!) { node(id: $id) { __typename ... on Issue { id number title isPinned } ... on PullRequest { id number title isDraft } ... on Repository { id databaseId nameWithOwner } } rateLimit { limit cost remaining resetAt } }",
         "path": "/graphql",
         "max_bytes": 1048576,
         "variables_schema": {

@@ -3098,8 +3098,19 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
       },
       "risk": "high"
     },
@@ -3138,11 +3149,16 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "name"
+          "name",
+          "value"
         ],
         "properties": {
           "name": {
+            "type": "string"
+          },
+          "value": {
             "type": "string"
           }
         }
@@ -3166,7 +3182,7 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -3189,7 +3205,7 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -3256,7 +3272,7 @@
         ],
         "properties": {
           "autolink_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },

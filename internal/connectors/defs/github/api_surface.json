@@ -64,7 +64,8 @@
       "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
       "covered_by": {
         "direct_reads": [
-          "artifact download"
+          "artifact download",
+          "run download"
         ]
       }
     },
@@ -3285,6 +3286,7 @@
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
       "covered_by": {
         "direct_reads": [
+          "pr diff",
           "pr view",
           "pulls view"
         ]

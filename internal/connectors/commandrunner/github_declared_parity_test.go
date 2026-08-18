@@ -1,11 +1,14 @@
 package commandrunner
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // TestGitHubDeclaredParityVerdicts pins the 50-row issue #4015 inventory to
@@ -18,6 +21,7 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 	implemented := []string{
 		"issue pin",
 		"issue unpin",
+		"pr diff",
 		"pr ready",
 		"repo list",
 		"repo autolink create",
@@ -39,9 +43,9 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 		"ssh-key list",
 		"agent-task list",
 		"release download",
+		"run download",
 	}
 	retained := map[string]string{
-		"pr diff":            "media type",
 		"label clone":        "composite",
 		"variable set":       "conditional composite",
 		"gist create":        "filename-keyed",
@@ -53,7 +57,6 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 		"repo set-default":   "config",
 		"release upload":     "binary-upload",
 		"release verify":     "cryptographic verification",
-		"run download":       "multiple artifacts",
 		"run watch":          "polling",
 		"codespace ssh":      "SSH",
 		"auth login":         "credential bootstrap",
@@ -131,5 +134,72 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 	}
 	if len(seen) != 50 {
 		t.Fatalf("unique verdict inventory = %d commands, want 50", len(seen))
+	}
+}
+
+// TestGitHubDeclaredParityWriteContracts protects the provider shapes that
+// live certification exposed while promoting issue #4015 commands. Provider
+// identifiers remain strings across plan persistence (JSON numbers lose exact
+// integer spelling), and variable writes accept only the declared body fields.
+func TestGitHubDeclaredParityWriteContracts(t *testing.T) {
+	t.Parallel()
+
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("load github bundle: %v", err)
+	}
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+
+	for _, name := range []string{
+		"autolinks_autolink_id",
+		"actions_workflows_workflow_id_disable",
+		"actions_workflows_workflow_id_enable",
+	} {
+		action, ok := actions[name]
+		if !ok {
+			t.Fatalf("github write action %q is not declared", name)
+		}
+		var schema struct {
+			Properties map[string]struct {
+				Type string `json:"type"`
+			} `json:"properties"`
+		}
+		if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
+			t.Fatalf("decode github write action %q schema: %v", name, err)
+		}
+		field := "workflow_id"
+		if name == "autolinks_autolink_id" {
+			field = "autolink_id"
+		}
+		if got := schema.Properties[field].Type; got != "string" {
+			t.Errorf("github write action %q field %q type = %q, want string", name, field, got)
+		}
+	}
+
+	for _, name := range []string{"actions_variables2", "actions_variables_name3"} {
+		action, ok := actions[name]
+		if !ok {
+			t.Fatalf("github write action %q is not declared", name)
+		}
+		var schema struct {
+			AdditionalProperties *bool                      `json:"additionalProperties"`
+			Required             []string                   `json:"required"`
+			Properties           map[string]json.RawMessage `json:"properties"`
+		}
+		if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
+			t.Fatalf("decode github write action %q schema: %v", name, err)
+		}
+		if schema.AdditionalProperties == nil || *schema.AdditionalProperties {
+			t.Errorf("github write action %q schema must reject undeclared fields", name)
+		}
+		if strings.Join(schema.Required, ",") != "name,value" {
+			t.Errorf("github write action %q required = %v, want [name value]", name, schema.Required)
+		}
+		if len(schema.Properties) != 2 || schema.Properties["name"] == nil || schema.Properties["value"] == nil {
+			t.Errorf("github write action %q properties = %v, want only name and value", name, schema.Properties)
+		}
 	}
 }

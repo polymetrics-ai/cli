@@ -64,6 +64,29 @@ func TestDoStreamReturnsOpenBody(t *testing.T) {
 	}
 }
 
+// TestDoStreamSendsDeclaredAcceptMediaType keeps fixed binary representations
+// declaration-owned. Callers cannot provide headers, but an operation such as
+// GitHub's pull-request diff endpoint can select its documented media type.
+func TestDoStreamSendsDeclaredAcceptMediaType(t *testing.T) {
+	const mediaType = "application/vnd.github.diff"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got := r.Header.Get("Accept"); got != mediaType {
+			t.Errorf("Accept = %q, want %q", got, mediaType)
+		}
+		_, _ = w.Write([]byte("diff --git a/a b/a\n"))
+	}))
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL}
+	resp, err := r.DoStream(context.Background(), http.MethodGet, "/diff", nil, StreamOptions{Accept: mediaType})
+	if err != nil {
+		t.Fatalf("DoStream: %v", err)
+	}
+	if got := drain(t, resp.Body); !strings.HasPrefix(got, "diff --git") {
+		t.Fatalf("body = %q", got)
+	}
+}
+
 // TestDoStreamRejectsCrossOriginRedirect: fail closed by default. A download
 // endpoint redirecting to a CDN must not silently proceed.
 func TestDoStreamRejectsCrossOriginRedirect(t *testing.T) {

@@ -46,15 +46,17 @@
 
 1. Complete provider schemas for autolink create/delete, workflow enable/disable, variable delete,
    and repository codespace creation, then expose source-CLI aliases through the plan lifecycle.
-2. Promote `release download` to the existing bounded asset-ID binary downloader.
-3. Add preflight and plan-generation tests that assert required flags, fixed endpoints, risk, and
+2. Promote `release download` and `run download` to existing bounded single-object downloaders.
+3. Extend the bounded binary contract with one declaration-owned `Accept` media type and implement
+   `pr diff` without admitting caller-supplied headers.
+4. Add preflight and plan-generation tests that assert required flags, fixed endpoints, risk, and
    approval; exercise no-credential binary reachability.
-4. Live-certify only operations admitted by the launch brief and current credential scopes. Reads
+5. Live-certify only operations admitted by the launch brief and current credential scopes. Reads
    assert values/counts; writes assert state, cleanup, and independent absence.
 
 ### Slice 4 — truthful retained commands and parity artifacts
 
-1. Replace generic unsupported notes for all 27 retained commands with the exact provider/runtime
+1. Replace generic unsupported notes for all 25 retained commands with the exact provider/runtime
    evidence from `RESEARCH.md`; never delete a declared command.
 2. Generate/synchronize connector surface, manuals, CLI docs, website references, and certification
    artifacts using repository entry points.
@@ -80,4 +82,3 @@
   command family is considered green.
 - A provider capability without an existing safe runtime executor is evidence for a retained
   declaration, not permission to smuggle a new shared foundation into the GitHub bundle.
-

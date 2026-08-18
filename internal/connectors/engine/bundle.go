@@ -892,6 +892,9 @@ type BinaryOperationSpec struct {
 	Method   string `json:"method"`
 	Path     string `json:"path"`
 	MaxBytes int    `json:"max_bytes,omitempty"`
+	// Accept selects one fixed provider-documented response representation.
+	// It is declaration-owned and cannot be overridden by command callers.
+	Accept string `json:"accept,omitempty"`
 	// AllowOverwrite permits replacing an existing destination file.
 	AllowOverwrite bool `json:"allow_overwrite,omitempty"`
 	// ExtractArchives is DECLARED by two existing github operations but is
@@ -2733,6 +2736,11 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		}
 		if op.Binary.MaxBytes <= 0 {
 			return fmt.Errorf("operation %d (%q) binary_download must declare positive max_bytes", i, op.ID)
+		}
+		if accept := strings.TrimSpace(op.Binary.Accept); accept != "" {
+			if _, _, err := mime.ParseMediaType(accept); err != nil {
+				return fmt.Errorf("operation %d (%q) binary_download accept %q is not a valid media type: %w", i, op.ID, op.Binary.Accept, err)
+			}
 		}
 	case "file_upload":
 		if op.File.Direction != "upload" {

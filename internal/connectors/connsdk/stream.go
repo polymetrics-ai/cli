@@ -17,6 +17,10 @@ import (
 // The zero value is the safe default: same-origin only, credentials attached.
 // Every widening is explicit and per-operation.
 type StreamOptions struct {
+	// Accept is a declaration-owned representation selector. It is never
+	// populated from caller input; binary operations use it for endpoints that
+	// require a fixed response media type.
+	Accept string
 	// AllowCrossHost permits a hop to ANY other origin. Credentials are
 	// stripped on such a hop regardless.
 	AllowCrossHost bool
@@ -100,6 +104,12 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			return nil, fmt.Errorf("build request: %w", err)
 		}
 		r.applyHeaders(req, false, "")
+		if opts.Accept != "" {
+			if strings.ContainsAny(opts.Accept, "\r\n") {
+				return nil, fmt.Errorf("invalid Accept header value")
+			}
+			req.Header.Set("Accept", opts.Accept)
+		}
 		// Snapshot the header keys auth contributes, so the redirect policy
 		// can strip exactly those on a cross-origin hop without having to
 		// know which scheme any given connector uses.

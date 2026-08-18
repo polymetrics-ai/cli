@@ -1077,7 +1077,7 @@
       "flags": [
         {
           "name": "workflow-id",
-          "type": "integer",
+          "type": "string",
           "required": false,
           "maps_to": "record.workflow_id"
         }
@@ -1186,7 +1186,7 @@
       "flags": [
         {
           "name": "workflow-id",
-          "type": "integer",
+          "type": "string",
           "required": false,
           "maps_to": "record.workflow_id"
         }
@@ -5330,11 +5330,16 @@
       "summary": "List GitHub agent tasks",
       "path": "agent-task list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
       "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents/tasks"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Start a task",
@@ -7858,7 +7863,26 @@
       "path": "autolinks create",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "flags": [],
+      "flags": [
+        {
+          "name": "is-alphanumeric",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_alphanumeric"
+        },
+        {
+          "name": "key-prefix",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.key_prefix"
+        },
+        {
+          "name": "url-template",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.url_template"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -7866,7 +7890,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --key-prefix, --url-template",
+      "required_flags": [
+        "--key-prefix",
+        "--url-template"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/autolinks/{autolink_id}",
@@ -7876,7 +7904,7 @@
       "flags": [
         {
           "name": "autolink-id",
-          "type": "integer",
+          "type": "string",
           "required": false,
           "maps_to": "record.autolink_id"
         }
@@ -9245,11 +9273,50 @@
       "summary": "List GitHub Actions caches",
       "path": "cache list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "direction",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "asc",
+            "desc"
+          ],
+          "maps_to": "query.direction"
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.key"
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.ref"
+        },
+        {
+          "name": "sort",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "created_at",
+            "last_accessed_at",
+            "size_in_bytes"
+          ],
+          "maps_to": "query.sort"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/caches"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Delete a campaign for an organization",
@@ -12109,22 +12176,108 @@
     {
       "summary": "Create a codespace",
       "path": "codespace create",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "client-ip",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.client_ip"
+        },
+        {
+          "name": "devcontainer-path",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.devcontainer_path"
+        },
+        {
+          "name": "display-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.display_name"
+        },
+        {
+          "name": "geo",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.geo"
+        },
+        {
+          "name": "idle-timeout-minutes",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.idle_timeout_minutes"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.location"
+        },
+        {
+          "name": "machine",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.machine"
+        },
+        {
+          "name": "multi-repo-permissions-opt-out",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.multi_repo_permissions_opt_out"
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.ref"
+        },
+        {
+          "name": "repository-id",
+          "type": "integer",
+          "required": true,
+          "maps_to": "record.repository_id"
+        },
+        {
+          "name": "retention-period-minutes",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.retention_period_minutes"
+        },
+        {
+          "name": "working-directory",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.working_directory"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/codespaces"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --repository-id",
+      "required_flags": [
+        "--repository-id"
+      ]
     },
     {
       "summary": "List codespaces",
       "path": "codespace list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
       "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/codespaces"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "SSH into a codespace",
@@ -18876,7 +19029,12 @@
       "intent": "direct_write",
       "availability": "unsupported_api",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/gists"
+        }
+      ],
       "status": "not_applicable",
       "reason": "declared availability is \"unsupported_api\", not implemented"
     },
@@ -18884,11 +19042,16 @@
       "summary": "List gists",
       "path": "gist list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
       "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gists"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Create a gist",
@@ -19729,11 +19892,16 @@
       "summary": "List GPG keys",
       "path": "gpg-key list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
       "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/gpg_keys"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Prepare fixed GitHub GraphQL mutation abortQueuedMigrations.",
@@ -28877,11 +29045,26 @@
       "summary": "Pin an issue",
       "path": "issue pin",
       "intent": "direct_write",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "input",
+          "type": "json",
+          "required": true,
+          "maps_to": "body.input"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --input",
+      "required_flags": [
+        "--input"
+      ]
     },
     {
       "summary": "Reopen an issue",
@@ -28966,11 +29149,26 @@
       "summary": "Unpin an issue",
       "path": "issue unpin",
       "intent": "direct_write",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "input",
+          "type": "json",
+          "required": true,
+          "maps_to": "body.input"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --input",
+      "required_flags": [
+        "--input"
+      ]
     },
     {
       "summary": "View issue details",
@@ -30018,7 +30216,16 @@
       "intent": "direct_write",
       "availability": "unsupported_api",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/labels"
+        },
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/labels"
+        }
+      ],
       "status": "not_applicable",
       "reason": "declared availability is \"unsupported_api\", not implemented"
     },
@@ -31234,11 +31441,16 @@
       "summary": "List organizations for the authenticated user",
       "path": "org list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
       "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/orgs"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_end_delimiter)",
@@ -37383,12 +37595,27 @@
     {
       "summary": "Show pull request diff",
       "path": "pr diff",
-      "intent": "direct_read",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "intent": "binary_download",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.pull_number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned binary fixture, destination, and produced-value assertion are required; required flags: --pull-number",
+      "required_flags": [
+        "--pull-number"
+      ]
     },
     {
       "summary": "Edit a pull request",
@@ -37576,11 +37803,26 @@
       "summary": "Mark a draft pull request ready",
       "path": "pr ready",
       "intent": "direct_write",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "input",
+          "type": "json",
+          "required": true,
+          "maps_to": "body.input"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --input",
+      "required_flags": [
+        "--input"
+      ]
     },
     {
       "summary": "Reopen a pull request",
@@ -40212,12 +40454,27 @@
     {
       "summary": "Download release assets",
       "path": "release download",
-      "intent": "local_workflow",
-      "availability": "unsupported_local",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_local\", not implemented"
+      "intent": "binary_download",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "asset-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.asset_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned binary fixture, destination, and produced-value assertion are required; required flags: --asset-id",
+      "required_flags": [
+        "--asset-id"
+      ]
     },
     {
       "summary": "Edit a release",
@@ -40311,7 +40568,12 @@
       "intent": "direct_write",
       "availability": "unsupported_local",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
+        }
+      ],
       "status": "not_applicable",
       "reason": "declared availability is \"unsupported_local\", not implemented"
     },
@@ -40648,22 +40910,65 @@
     {
       "summary": "Create a repository autolink",
       "path": "repo autolink create",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "is-alphanumeric",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_alphanumeric"
+        },
+        {
+          "name": "key-prefix",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.key_prefix"
+        },
+        {
+          "name": "url-template",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.url_template"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/autolinks"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --key-prefix, --url-template",
+      "required_flags": [
+        "--key-prefix",
+        "--url-template"
+      ]
     },
     {
       "summary": "Delete a repository autolink",
       "path": "repo autolink delete",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "autolink-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.autolink_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --autolink-id",
+      "required_flags": [
+        "--autolink-id"
+      ]
     },
     {
       "summary": "List repository autolinks",
@@ -40885,31 +41190,63 @@
       "summary": "List gitignore templates",
       "path": "repo gitignore list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
       "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gitignore/templates"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "List license templates",
       "path": "repo license list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
       "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/licenses"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "List repositories for an owner",
       "path": "repo list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "first",
+          "type": "integer",
+          "required": true,
+          "maps_to": "body.first"
+        },
+        {
+          "name": "login",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.login"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --first, --login",
+      "required_flags": [
+        "--first",
+        "--login"
+      ]
     },
     {
       "summary": "Read repository directory contents",
@@ -42712,12 +43049,37 @@
     {
       "summary": "Download workflow artifacts",
       "path": "run download",
-      "intent": "local_workflow",
-      "availability": "unsupported_local",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_local\", not implemented"
+      "intent": "binary_download",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "archive-format",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "zip"
+          ],
+          "maps_to": "path.archive_format"
+        },
+        {
+          "name": "artifact-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.artifact_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned binary fixture, destination, and produced-value assertion are required; required flags: --archive-format, --artifact-id",
+      "required_flags": [
+        "--archive-format",
+        "--artifact-id"
+      ]
     },
     {
       "summary": "List workflow runs",
@@ -43217,11 +43579,16 @@
       "summary": "List repository secrets",
       "path": "secret list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
       "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/secrets"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Create or update a secret",
@@ -44001,11 +44368,16 @@
       "summary": "List SSH keys",
       "path": "ssh-key list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
       "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/keys"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/stats/code_frequency",
@@ -47054,7 +47426,20 @@
       "path": "variable create",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "flags": [],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.value"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -47062,7 +47447,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name, --value",
+      "required_flags": [
+        "--name",
+        "--value"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/variables",
@@ -47121,23 +47510,13 @@
     {
       "summary": "Delete a repository variable",
       "path": "variable delete",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
-    },
-    {
-      "summary": "DELETE /repos/{owner}/{repo}/actions/variables/{name}",
-      "path": "variable delete-2",
       "intent": "reverse_etl",
       "availability": "implemented",
       "flags": [
         {
           "name": "name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.name"
         }
       ],
@@ -47148,7 +47527,35 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name",
+      "required_flags": [
+        "--name"
+      ]
+    },
+    {
+      "summary": "DELETE /repos/{owner}/{repo}/actions/variables/{name}",
+      "path": "variable delete-2",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name",
+      "required_flags": [
+        "--name"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
@@ -47207,21 +47614,41 @@
       "summary": "Get a repository variable",
       "path": "variable get",
       "intent": "direct_read",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name",
+      "required_flags": [
+        "--name"
+      ]
     },
     {
       "summary": "List repository variables",
       "path": "variable list",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
       "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/variables"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Create or update a repository variable",
@@ -47229,7 +47656,16 @@
       "intent": "direct_write",
       "availability": "unsupported_api",
       "flags": [],
-      "api_surface": null,
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/variables"
+        },
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        }
+      ],
       "status": "not_applicable",
       "reason": "declared availability is \"unsupported_api\", not implemented"
     },
@@ -47242,8 +47678,14 @@
         {
           "name": "name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.name"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.value"
         }
       ],
       "api_surface": [
@@ -47253,7 +47695,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name, --value",
+      "required_flags": [
+        "--name",
+        "--value"
+      ]
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
@@ -47483,22 +47929,52 @@
     {
       "summary": "Disable a workflow",
       "path": "workflow disable",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.workflow_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --workflow-id",
+      "required_flags": [
+        "--workflow-id"
+      ]
     },
     {
       "summary": "Enable a workflow",
       "path": "workflow enable",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
-      "flags": [],
-      "api_surface": null,
-      "status": "not_applicable",
-      "reason": "declared availability is \"unsupported_api\", not implemented"
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.workflow_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --workflow-id",
+      "required_flags": [
+        "--workflow-id"
+      ]
     },
     {
       "summary": "List workflows",

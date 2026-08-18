@@ -998,10 +998,27 @@
     {
       "path": "pr diff",
       "summary": "Show pull request diff",
-      "intent": "direct_read",
-      "availability": "unsupported_api",
+      "intent": "binary_download",
+      "availability": "implemented",
+      "operation": "github.pull.diff",
       "source_cli_path": "gh pr diff",
-      "notes": "GitHub requires the application/vnd.github.diff response media type; fixed per-command media type declarations are not supported by the current direct-read executor."
+      "source_url": "https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "string",
+          "summary": "Pull request number.",
+          "maps_to": "path.pull_number",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}"
+        }
+      ],
+      "notes": "Downloads one diff with GitHub's fixed application/vnd.github.diff representation and the bounded binary-download policy."
     },
     {
       "path": "pr checkout",
@@ -1450,7 +1467,7 @@
       "write": "autolinks",
       "source_url": "https://docs.github.com/en/rest/repos/autolinks#create-an-autolink-reference-for-a-repository",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "key-prefix",
@@ -1494,7 +1511,7 @@
       "flags": [
         {
           "name": "autolink-id",
-          "type": "integer",
+          "type": "string",
           "summary": "Autolink reference ID.",
           "maps_to": "record.autolink_id",
           "required": true
@@ -1824,6 +1841,13 @@
       "intent": "direct_write",
       "availability": "unsupported_local",
       "source_cli_path": "gh release upload",
+      "source_url": "https://docs.github.com/en/rest/releases/assets#upload-a-release-asset",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
+        }
+      ],
       "notes": "GitHub release assets use a separate upload host and raw request body; no bounded binary-upload executor exists."
     },
     {
@@ -1960,12 +1984,12 @@
       "write": "actions_workflows_workflow_id_enable",
       "source_url": "https://docs.github.com/en/rest/actions/workflows#enable-a-workflow",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "workflow-id",
-          "type": "integer",
-          "summary": "Numeric workflow ID.",
+          "type": "string",
+          "summary": "Workflow file name or numeric ID.",
           "maps_to": "record.workflow_id",
           "required": true
         }
@@ -1987,12 +2011,12 @@
       "write": "actions_workflows_workflow_id_disable",
       "source_url": "https://docs.github.com/en/rest/actions/workflows#disable-a-workflow",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "workflow-id",
-          "type": "integer",
-          "summary": "Numeric workflow ID.",
+          "type": "string",
+          "summary": "Workflow file name or numeric ID.",
           "maps_to": "record.workflow_id",
           "required": true
         }
@@ -2126,10 +2150,37 @@
     {
       "path": "run download",
       "summary": "Download workflow artifacts",
-      "intent": "local_workflow",
-      "availability": "unsupported_local",
+      "intent": "binary_download",
+      "availability": "implemented",
+      "operation": "github.actions_artifacts_artifact_id_archive_format",
       "source_cli_path": "gh run download",
-      "notes": "Selects multiple artifacts for a run, downloads them, and extracts archives; the runtime supports one bounded binary response and deliberately disables extraction."
+      "source_url": "https://docs.github.com/en/rest/actions/artifacts#download-an-artifact",
+      "flags": [
+        {
+          "name": "artifact-id",
+          "type": "string",
+          "summary": "Artifact ID.",
+          "maps_to": "path.artifact_id",
+          "required": true
+        },
+        {
+          "name": "archive-format",
+          "type": "enum",
+          "values": [
+            "zip"
+          ],
+          "summary": "Provider archive format.",
+          "maps_to": "path.archive_format",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"
+        }
+      ],
+      "notes": "Downloads one selected artifact as a bounded archive file; archive extraction remains deliberately disabled."
     },
     {
       "path": "run watch",
@@ -2331,6 +2382,16 @@
       "intent": "direct_write",
       "availability": "unsupported_api",
       "source_cli_path": "gh label clone",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/labels"
+        },
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/labels"
+        }
+      ],
       "notes": "GitHub exposes label list/create primitives, but cloning requires a paginated multi-write composite executor with partial-failure handling; no such executor exists."
     },
     {
@@ -2653,6 +2714,16 @@
       "intent": "direct_write",
       "availability": "unsupported_api",
       "source_cli_path": "gh variable set",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/variables"
+        },
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        }
+      ],
       "notes": "GitHub uses distinct create and update endpoints; set requires a conditional composite executor. The typed variable create and update commands remain available."
     },
     {
@@ -2989,7 +3060,14 @@
       "intent": "direct_write",
       "availability": "unsupported_api",
       "source_cli_path": "gh gist create",
-      "notes": "Create gist requires a dynamic filename-keyed files object, while REST structured JSON input is intentionally refused; user-scoped gist writes are also outside the authorized certification fixture."
+      "source_url": "https://docs.github.com/en/rest/gists/gists#create-a-gist",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/gists"
+        }
+      ],
+      "notes": "GitHub POST /gists exists, but gh gist create requires a dynamic filename-keyed files object and executing it would write outside the authorized organization/repository fixture; the command remains declared."
     },
     {
       "path": "codespace list",
@@ -3016,7 +3094,7 @@
       "write": "user_codespaces_create_from_repository",
       "source_url": "https://docs.github.com/rest/codespaces/codespaces#create-a-codespace-for-the-authenticated-user",
       "risk": "low",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
           "name": "repository-id",
@@ -3236,7 +3314,8 @@
       "intent": "direct_read",
       "availability": "unsupported_local",
       "source_cli_path": "gh attestation verify",
-      "notes": "The REST API only lists bundles; signature, identity, subject-digest, and policy verification is local and no cryptographic verifier exists."
+      "source_url": "https://docs.github.com/en/rest/repos/repos#list-attestations",
+      "notes": "GitHub GET /repos/{owner}/{repo}/attestations/{subject_digest} only lists bundles; signature, identity, subject-digest, and policy verification is local and no cryptographic verifier exists."
     },
     {
       "path": "copilot",
@@ -4673,7 +4752,22 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Repository variable name.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Repository variable value.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -4695,7 +4789,8 @@
           "name": "name",
           "type": "string",
           "summary": "name path parameter",
-          "maps_to": "record.name"
+          "maps_to": "record.name",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4743,7 +4838,15 @@
           "name": "name",
           "type": "string",
           "summary": "name path parameter",
-          "maps_to": "record.name"
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Repository variable value.",
+          "maps_to": "record.value",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4765,7 +4868,7 @@
       "flags": [
         {
           "name": "workflow-id",
-          "type": "integer",
+          "type": "string",
           "summary": "workflow_id path parameter",
           "maps_to": "record.workflow_id"
         }
@@ -4789,7 +4892,7 @@
       "flags": [
         {
           "name": "workflow-id",
-          "type": "integer",
+          "type": "string",
           "summary": "workflow_id path parameter",
           "maps_to": "record.workflow_id"
         }
@@ -4946,7 +5049,7 @@
       "flags": [
         {
           "name": "autolink-id",
-          "type": "integer",
+          "type": "string",
           "summary": "autolink_id path parameter",
           "maps_to": "record.autolink_id"
         }

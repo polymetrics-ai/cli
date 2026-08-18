@@ -10884,7 +10884,7 @@
       "input_slots": [
         {
           "path": "record.autolink_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],
@@ -10991,7 +10991,7 @@
       "input_slots": [
         {
           "path": "record.autolink_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],
@@ -17839,8 +17839,22 @@
         ],
         "evidence": "POST or PUT declaration(s) variable create share the derived REST collection \"/repos/{owner}/{repo}/actions/variables\"; URL depth 5 orders parent collections first"
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.value",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--name",
+        "--value"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -17932,7 +17946,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -17975,9 +17991,17 @@
           "path": "record.name",
           "type": "string",
           "required": true
+        },
+        {
+          "path": "record.value",
+          "type": "string",
+          "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--name",
+        "--value"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -27461,7 +27485,7 @@
       "input_slots": [
         {
           "path": "record.workflow_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],
@@ -27507,7 +27531,7 @@
       "input_slots": [
         {
           "path": "record.workflow_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],
@@ -27606,7 +27630,7 @@
       "input_slots": [
         {
           "path": "record.workflow_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],
@@ -27652,7 +27676,7 @@
       "input_slots": [
         {
           "path": "record.workflow_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],

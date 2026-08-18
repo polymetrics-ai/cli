@@ -34,8 +34,9 @@ not evidence.
 - `direct_read` executes fixed REST or GraphQL operation declarations.
 - `direct_write` executes fixed GraphQL mutations through plan → preview → approval → execute.
 - REST mutations execute as declared `reverse_etl` write actions through the same lifecycle.
-- `binary_download` supports one declared, bounded response written to an explicit destination and
-  deliberately performs no archive extraction.
+- `binary_download` supports one declared, bounded response written to an explicit destination,
+  can select one declaration-owned response media type, and deliberately performs no archive
+  extraction.
 - The runtime has no `local_workflow`, `config`, `auth`, `raw_api`, composite-command, raw-upload,
   subprocess, browser-launch, SSH, or cryptographic-verification executor.
 - GitHub's connector hook is the bounded Tier-2 escape hatch for existing irreducible provider
@@ -52,7 +53,7 @@ not have. Final verdicts and observed evidence are recorded in `SUMMARY.md`.
 | ---: | --- | --- | --- |
 | 1 | `issue pin` | promote | Fixed `pinIssue` GraphQL mutation already exists as `github.graphql.mutation.pin-issue`; add a compatibility alias with typed `input`. |
 | 2 | `issue unpin` | promote | Fixed `unpinIssue` mutation already exists; add a typed alias. |
-| 3 | `pr diff` | retain | [Pull request REST media types](https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request) require `Accept: application/vnd.github.diff`; operation declarations cannot set a fixed per-command response media type and JSON direct reads would misreport the body. |
+| 3 | `pr diff` | promote | [Pull request REST media types](https://docs.github.com/en/rest/pulls/pulls#get-a-pull-request) require `Accept: application/vnd.github.diff`; add a declaration-owned media type to the bounded binary downloader and write the diff beneath an explicit destination root. |
 | 4 | `pr ready` | promote | Fixed `markPullRequestReadyForReview` GraphQL mutation already exists; add a typed alias. |
 | 5 | `repo list` | promote | [RepositoryOwner](https://docs.github.com/en/graphql/reference/interfaces#repositoryowner) exposes paged repositories for either a user or organization; add a fixed GraphQL query with a required login. |
 | 6 | `repo autolink create` | promote | [Create an autolink](https://docs.github.com/en/rest/repos/autolinks#create-an-autolink-reference-for-a-repository) maps to the existing declared REST write after completing its schema. |
@@ -70,7 +71,7 @@ not have. Final verdicts and observed evidence are recorded in `SUMMARY.md`.
 | 18 | `variable delete` | promote | [Delete a repository variable](https://docs.github.com/en/rest/actions/variables#delete-a-repository-variable) maps to the existing REST write. |
 | 19 | `org list` | promote | [List organizations for the authenticated user](https://docs.github.com/en/rest/orgs/orgs#list-organizations-for-the-authenticated-user) is fixed `GET /user/orgs`. |
 | 20 | `gist list` | promote | [List gists for the authenticated user](https://docs.github.com/en/rest/gists/gists#list-gists-for-the-authenticated-user) is fixed `GET /gists`. |
-| 21 | `gist create` | retain | [Create a gist](https://docs.github.com/en/rest/gists/gists#create-a-gist) requires a dynamic filename-keyed `files` object. REST structured JSON flags are deliberately refused, and a user-scoped gist violates the authorized repo/org write fixture boundary. |
+| 21 | `gist create` | retain | [Create a gist](https://docs.github.com/en/rest/gists/gists#create-a-gist) requires a dynamic filename-keyed `files` object. The provider endpoint exists, but executing this user-scoped mutation would violate the launch brief's organization/repository-only fixture boundary; it remains declared with the endpoint and exact boundary. |
 | 22 | `codespace list` | promote | [List codespaces for the authenticated user](https://docs.github.com/en/rest/codespaces/codespaces#list-codespaces-for-the-authenticated-user) is fixed `GET /user/codespaces`. |
 | 23 | `codespace create` | promote | [Create a codespace](https://docs.github.com/en/rest/codespaces/codespaces#create-a-codespace-for-the-authenticated-user) maps to the existing repository-ID typed write. |
 | 24 | `gpg-key list` | promote | [List GPG keys for the authenticated user](https://docs.github.com/en/rest/users/gpg-keys#list-gpg-keys-for-the-authenticated-user) is fixed `GET /user/gpg_keys`. |
@@ -85,7 +86,7 @@ not have. Final verdicts and observed evidence are recorded in `SUMMARY.md`.
 | 33 | `release upload` | retain | [Upload a release asset](https://docs.github.com/en/rest/releases/assets#upload-a-release-asset) uses the separate upload host and raw binary request body; `rest_write` only supports typed JSON and no bounded binary-upload executor exists. |
 | 34 | `release download` | promote | [Get a release asset](https://docs.github.com/en/rest/releases/assets#get-a-release-asset) maps to existing bounded `github.release.download_assets`; expose the fixed asset-ID form as `binary_download`. |
 | 35 | `release verify` | retain | [`gh release verify`](https://cli.github.com/manual/gh_release_verify) performs local cryptographic verification of downloaded assets, not merely a provider read; no verification executor exists. |
-| 36 | `run download` | retain | [`gh run download`](https://cli.github.com/manual/gh_run_download) lists/selects multiple run artifacts, downloads, and extracts them. The runtime only supports one fixed bounded binary response and deliberately forbids extraction; `artifact download` remains available. |
+| 36 | `run download` | promote | [Download an artifact](https://docs.github.com/en/rest/actions/artifacts#download-an-artifact) maps to the existing bounded artifact downloader. The implemented form requires one artifact ID and writes the ZIP without extraction. |
 | 37 | `run watch` | retain | [`gh run watch`](https://cli.github.com/manual/gh_run_watch) is a polling/terminal workflow; no watch executor exists. |
 | 38 | `codespace ssh` | retain | [`gh codespace ssh`](https://cli.github.com/manual/gh_codespace_ssh) opens an interactive SSH/process session; no SSH or subprocess executor exists. |
 | 39 | `auth login` | retain | [`gh auth login`](https://cli.github.com/manual/gh_auth_login) is an interactive credential bootstrap workflow; connector credentials are managed by `pm` and no gh-auth executor exists. |
@@ -101,6 +102,5 @@ not have. Final verdicts and observed evidence are recorded in `SUMMARY.md`.
 | 49 | `attestation verify` | retain | [Artifact attestations REST](https://docs.github.com/en/rest/repos/repos#list-attestations) only returns bundles; [`gh attestation verify`](https://cli.github.com/manual/gh_attestation_verify) verifies signatures, identity, subject digest, and policy locally. A provider read is not verification. |
 | 50 | `copilot` | retain | [`gh copilot`](https://cli.github.com/manual/gh_copilot) runs an external interactive extension; no extension/subprocess executor exists. |
 
-Preliminary sum: **23 promote + 27 retain = 50**. The implementation phase may demote a candidate
+Final research sum: **25 promote + 25 retain = 50**. The implementation phase may demote a candidate
 only if the real runtime preflight or safe live certification produces concrete contrary evidence.
-
