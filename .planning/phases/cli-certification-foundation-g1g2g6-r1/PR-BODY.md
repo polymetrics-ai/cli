@@ -112,6 +112,8 @@ scripts/tests/{connector-canon,pinned-build-dependencies,homebrew-release-notify
   `golang-concurrency`, `golang-database`, and `golang-documentation`.
 - Delivery mode: direct PR; no no-mistakes pipeline was run, per the captain
   instruction.
+- Commit checkpoint: `2e215e5a3` (`feat(certification): harden parity
+  projection and evidence publication`).
 
 ## Scope Notes and Follow-up
 
