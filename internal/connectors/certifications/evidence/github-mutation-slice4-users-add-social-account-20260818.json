@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:users_add_social_account_for_authenticated_user",
+  "provider": "github",
+  "executed_at": "2026-08-18T03:34:44Z",
+  "run_id": "github-mutation-slice4-users-add-social-account-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "96afbf0fecf0a72d3a9d55b40ee4365f799840825d02d18f64e3ce294642e424",
+    "pm_command_fingerprint": "{{pmcertfp:v1:4af525fabd1c0c316871985be56d6606dfd94c486f7e35beedfc42a93ed681b6}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:21d04f26d53d68e161baac1dd4420e902dfdb21e90b32633d493810ddba91e3e}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "users_add_social_account_for_authenticated_user_independent_cleanup_readback",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:7c6f8d627c5c22b6ac3fa2cfb735e3ccb85701e1e935f1a6837d568abaafcef0}}",
+          "query": [],
+          "headers": [],
+          "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {"encoding": "json", "value": [], "original_bytes": 4, "truncated": false}
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
