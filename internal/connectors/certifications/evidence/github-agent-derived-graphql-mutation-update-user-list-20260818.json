@@ -1,0 +1,208 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_update_user_list",
+  "provider": "github",
+  "executed_at": "2026-08-18T07:38:34.910Z",
+  "run_id": "rrun_626919e2a36120a9",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:71933e7d78bd7c08c02a00793aa3ab09f30e98d1e4045d906752931821f70be8}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_update_user_list",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:1e06f03f7a59d3604249d20f7f717f762f7a82f358a5c88e8e9a64e9a5e55ab7}}",
+              "variables": {
+                "input": {
+                  "listId": "{{pmcertfp:v1:8773cb5cb0a4cc4c171975c88152a6df06415373d6ef9f61964c39d3ec400632}}",
+                  "name": "{{pmcertfp:v1:fa0acd738ca6243253a8990b1a1687971cda919b5c94f4a8d212d3ccf61b3494}}",
+                  "description": "{{pmcertfp:v1:b9c9fd28cd9a28f60b6b13ab46f611c90252642b493e5080f50ba3cbfe87ced7}}",
+                  "isPrivate": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}"
+                }
+              }
+            },
+            "original_bytes": 186,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "api_version": "{{pmcertfp:v1:115e2da5c14c636730e5d968f312bc6751d6dfbdee0ede0b576db0feae65b6d4}}",
+              "kind": "{{pmcertfp:v1:7fa3c95edcdf37c05cc52ac7d73081b525c26c8ebe90a09e8d0c815116e68108}}",
+              "run": {
+                "id": "{{pmcertfp:v1:63c71effb75e6d4355381060b5128b47bb1aaf57d08999dc728b4f551b96bc97}}",
+                "plan_id": "{{pmcertfp:v1:e51109f95616085f2a85c7a6785add8f28c91ec5beb21ec5f28d9f00e9844547}}",
+                "status": "{{pmcertfp:v1:8ae328c389dd980a18e408a535073608b7b398cd0d24cb9f984ddf1f850d3a19}}",
+                "records_staged": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                "records_succeeded": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                "records_failed": "{{pmcertfp:v1:10b99bf4cebac4343df7bfc3a523fcf64975a5e5e82cea7cc1afc7099fe353b8}}",
+                "operation_direct_write": {
+                  "connector": "{{pmcertfp:v1:858be923a317cf1426b5d07bb435549c5ebdeef10fc0cd4c81a6dcd09e600e0d}}",
+                  "operation": "{{pmcertfp:v1:22ed88c11829e042e9277dac9c7c234757c9bd7ebff6df5b28a4c11bce5f5195}}",
+                  "method": "{{pmcertfp:v1:cb476389832647c1c2ac56ea0a1ba7844074ed323862a1303c798a75cb3e6d1b}}",
+                  "path": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+                  "status": "{{pmcertfp:v1:8aa420187b404889cfc2d044c663915e35d75122b5a56640b5e748d441e30b79}}",
+                  "body": {
+                    "updateUserList": {
+                      "__typename": "{{pmcertfp:v1:45d8c0df3c94d077655e31513b750b70ddba6b4c1f188a8aa8ba5d7c565a61c3}}"
+                    }
+                  },
+                  "graphql": {}
+                },
+                "started_at": "{{pmcertfp:v1:037fa03d3470b89d74b4cf6b2fb2f3802c8ef414c86200681449c93b95c1725e}}",
+                "completed_at": "{{pmcertfp:v1:5985fdab60f6a97b2feed3a8c432718950f80047a4f18ae559a25f3956882d03}}"
+              }
+            },
+            "original_bytes": 524,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_exact_list_fields_wrong_before_rejected",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:82b97c577f667fe24b703fc18f60f3492a2294069585bf1a98cce39990bfddd5}}"
+            },
+            "original_bytes": 25,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": {
+                  "id": "{{pmcertfp:v1:8773cb5cb0a4cc4c171975c88152a6df06415373d6ef9f61964c39d3ec400632}}",
+                  "name": "{{pmcertfp:v1:fa0acd738ca6243253a8990b1a1687971cda919b5c94f4a8d212d3ccf61b3494}}",
+                  "description": "{{pmcertfp:v1:b9c9fd28cd9a28f60b6b13ab46f611c90252642b493e5080f50ba3cbfe87ced7}}",
+                  "isPrivate": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}"
+                }
+              }
+            },
+            "original_bytes": 141,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_user_list",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:659a5477879ca4d51301eb0aba4a75fb7efbf1e9f71422904ff1a2dbbf905a1b}}",
+              "variables": {
+                "input": {
+                  "listId": "{{pmcertfp:v1:8773cb5cb0a4cc4c171975c88152a6df06415373d6ef9f61964c39d3ec400632}}"
+                }
+              }
+            },
+            "original_bytes": 81,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "deleteUserList": {
+                  "__typename": "{{pmcertfp:v1:6783b35696a86cb703cbfbc291c0a1376b92138adeead028b0798e7cbda293bc}}"
+                }
+              }
+            },
+            "original_bytes": 66,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_absent",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:49a984c519dca042efa76efa85bb7c6452f50c314d9b6154be6436ada06cf8ea}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:8773cb5cb0a4cc4c171975c88152a6df06415373d6ef9f61964c39d3ec400632}}"
+              }
+            },
+            "original_bytes": 60,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": null
+              },
+              "errors": [
+                {
+                  "type": "{{pmcertfp:v1:ccdac3ed2051df9a24f3ade57a3866544d56c991c77d980bf185265d35aae674}}",
+                  "path": [
+                    "{{pmcertfp:v1:89e394bfc46a1867469c432711e35bcb664f023b779e295729dab0a2fce0f39c}}"
+                  ],
+                  "locations": [
+                    {
+                      "line": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                      "column": "{{pmcertfp:v1:a2945dcf842da3bdb8b6ac38faee74d120b5779ce69e3490fe95e4df1355978c}}"
+                    }
+                  ],
+                  "message": "{{pmcertfp:v1:1506f6a89a67efd6b91fd0d7265b2c40473031f9256fa7479c1c71eae7715890}}"
+                }
+              ]
+            },
+            "original_bytes": 192,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
