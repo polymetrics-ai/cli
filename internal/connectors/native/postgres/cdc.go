@@ -145,11 +145,8 @@ func validateCDCResume(checkpoint *synccontract.CheckpointEnvelope, source postg
 	if checkpoint == nil {
 		return nil
 	}
-	if checkpoint.Mechanism != cdcChangefeedMechanism {
-		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint mechanism is not PostgreSQL logical replication")
-	}
-	if checkpoint.SchemaVersion != cdcCheckpointSchema || checkpoint.ProtocolVersion != cdcProtocolVersion || checkpoint.SnapshotBarrier == nil || checkpoint.SnapshotBarrier.Kind != cdcSnapshotBarrierKind {
-		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint does not match the PostgreSQL logical replication protocol")
+	if err := validateCDCCheckpointProtocol(checkpoint); err != nil {
+		return err
 	}
 	if err := checkpoint.ValidateResume(synccontract.ResumeExpectation{
 		Source:           source.identity,
@@ -166,6 +163,16 @@ func validateCDCResume(checkpoint *synccontract.CheckpointEnvelope, source postg
 	}
 	if bootstrap.SystemID != source.system.SystemID || bootstrap.Timeline != source.system.Timeline || bootstrap.Publication != source.publication || bootstrap.Relation != source.identity.ObjectScope || bootstrap.SchemaFingerprint != source.schemaFingerprint {
 		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeSourceGenerationChanged, "PostgreSQL bootstrap source, publication, or schema no longer matches the durable checkpoint")
+	}
+	return nil
+}
+
+func validateCDCCheckpointProtocol(checkpoint *synccontract.CheckpointEnvelope) error {
+	if checkpoint.Mechanism != cdcChangefeedMechanism {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint mechanism is not PostgreSQL logical replication")
+	}
+	if checkpoint.SchemaVersion != cdcCheckpointSchema || checkpoint.ProtocolVersion != cdcProtocolVersion || checkpoint.SnapshotBarrier == nil || checkpoint.SnapshotBarrier.Kind != cdcSnapshotBarrierKind {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint does not match the PostgreSQL logical replication protocol")
 	}
 	return nil
 }
