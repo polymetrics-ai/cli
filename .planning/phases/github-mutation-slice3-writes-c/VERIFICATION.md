@@ -147,3 +147,68 @@ Cumulative commands 1–86: `certified=39`, `no_object=11`, `wrong_credential=0`
 Batch 4 totals: `certified=3`, `no_object=3`, `wrong_credential=3`, `entitlement=0`, `not_implemented=0`, `product_defect=5`, `escape_needs_captain=0`; sum `14`.
 
 Cumulative commands 1–100: `certified=42`, `no_object=14`, `wrong_credential=3`, `entitlement=9`, `not_implemented=0`, `product_defect=25`, `escape_needs_captain=7`; sum `100`.
+
+## Live batch 5 — commands 101–146
+
+| # | Command | Outcome | Independent observation |
+| ---: | --- | --- | --- |
+| 101 | `projects delete-item-for-org` | product_defect | `class=integer_id_scientific_notation`; PM reported success while the real item remained `200`. Raw DELETE with exact ID returned `204`, item read-back returned `404`, and `deleteProjectV2` removed the project. |
+| 102 | `projects delete-item-for-user` | product_defect | `class=integer_id_scientific_notation`; PM reported success while the item remained. Exact raw DELETE returned `204`, item read-back returned `404`, and the user project was deleted. |
+| 103 | `projects update-item-for-org` | product_defect | `class=integer_id_scientific_notation`; PM used scientific notation for the item path ID. Exact raw PATCH returned `200`, read-back matched the new title, then direct item DELETE and project deletion proved cleanup. |
+| 104 | `projects update-item-for-user` | product_defect | `class=integer_id_scientific_notation`; PM used scientific notation for the item path ID. Exact raw PATCH returned `200`, read-back matched the new title, then direct item DELETE and project deletion proved cleanup. |
+| 105 | `activity delete-thread-subscription` | product_defect | `class=integer_id_scientific_notation`; PM reported success but the real subscription remained. Exact raw DELETE returned `204` and subscription read-back returned `404`. |
+| 106 | `activity mark-notifications-as-read` | certified | A real in-boundary thread changed from unread to read; direct provider terminal disposal marked it done, and the unread collection independently excluded it. |
+| 107 | `activity mark-thread-as-done` | product_defect | `class=integer_id_scientific_notation`; the large thread ID is malformed in PM's path. Exact raw DELETE returned `204` and unread-collection read-back proved terminal disposal. |
+| 108 | `activity mark-thread-as-read` | product_defect | `class=integer_id_scientific_notation`; PM received `404` on the scientific-notation path. Exact raw PATCH returned `205`, read-back showed `unread=false`, and direct terminal DELETE left no unread thread. |
+| 109 | `activity set-thread-subscription` | product_defect | `class=integer_id_scientific_notation`; PM received `404` on the scientific-notation path. Exact raw PUT returned `200`, followed by direct subscription DELETE and `404`. |
+| 110 | `activity star-repo-for-authenticated-user` | certified | Independent star read-back returned `204`; direct DELETE returned `204` and final read-back returned `404`. |
+| 111 | `activity unstar-repo-for-authenticated-user` | certified | A raw-created star returned `404` after PM unstarred it; idempotent direct DELETE returned `204` and final read-back stayed `404`. |
+| 112 | `environments deployment-branch-policies create` | product_defect | PM exposes no required policy name/type fields and GitHub returned `422`. Raw POST with those fields succeeded, collection read-back matched it, then direct policy and environment DELETEs produced zero matches and `404`. |
+| 113 | `environments deployment-branch-policies delete` | product_defect | `class=integer_id_scientific_notation`; exact raw DELETE returned `204`, collection read-back proved zero, and direct environment DELETE returned `404` on read-back. |
+| 114 | `environments deployment-branch-policies set` | product_defect | `class=integer_id_scientific_notation`; PM used scientific notation and received `404`. The exact-ID provider control reached the resource; the command also exposes no update body fields. Direct policy/environment cleanup returned `404`. |
+| 115 | `environments deployment_protection_rules create` | no_object | Both the rule collection and eligible-App collection were empty. GitHub exposes no API to create an eligible deployment-protection App fixture, so no rule object could be created; the disposable environment was deleted and read back `404`. |
+| 116 | `environments deployment_protection_rules delete` | no_object | The parent collection was empty and no eligible protection-rule App exists or can be created by API, so a deletable rule fixture cannot be created. |
+| 117 | `oidc create-oidc-custom-property-inclusion-for-enterprise` | escape_needs_captain | Enterprise-scoped state leaves the `Polymetrics-Cert` boundary; no provider request was issued. |
+| 118 | `oidc create-oidc-custom-property-inclusion-for-org` | certified | A fresh custom-property definition backed the inclusion; collection read-back matched it, direct inclusion DELETE removed it, and direct definition DELETE returned `404` on read-back. |
+| 119 | `oidc delete-oidc-custom-property-inclusion-for-enterprise` | escape_needs_captain | Enterprise-scoped state leaves the authorized boundary; no provider request was issued. |
+| 120 | `oidc delete-oidc-custom-property-inclusion-for-org` | certified | A raw-created inclusion disappeared after PM deletion; idempotent direct DELETE returned `404`, collection read-back excluded it, and the property definition returned `404` after cleanup. |
+| 121 | `oidc update-oidc-custom-sub-template-for-org` | certified | After an explicit opposite-state fixture, read-back matched `repo`, `context`, and immutable-subject false; raw PUT restored immutable-subject true and read-back proved restoration. |
+| 122 | `enterprise-team-memberships add` | escape_needs_captain | Enterprise membership affects an enterprise outside the authorization boundary; no provider request was issued. |
+| 123 | `enterprise-team-memberships bulk-add` | escape_needs_captain | Enterprise membership affects external scope and people; no provider request was issued. |
+| 124 | `enterprise-team-memberships bulk-remove` | escape_needs_captain | Enterprise membership affects external scope and people; no provider request was issued. |
+| 125 | `enterprise-team-memberships remove` | escape_needs_captain | Enterprise membership affects an enterprise outside the boundary; no provider request was issued. |
+| 126 | `release create` | product_defect | PM reported success but tag lookup found no release. Raw POST created the draft release, read-back matched name/body/draft, and direct DELETE plus `404` cleaned it. |
+| 127 | `release delete` | product_defect | `class=integer_id_scientific_notation`; PM used scientific notation for the real release ID. Exact raw DELETE returned `204` and read-back returned `404`. |
+| 128 | `release delete-asset` | product_defect | `class=integer_id_scientific_notation`; PM reported success while the real asset remained `200`. Exact raw DELETE returned `204`, asset read-back returned `404`, then release DELETE/read-back cleaned the container. |
+| 129 | `release edit` | product_defect | `class=integer_id_scientific_notation`; PM received `404` on the scientific-notation release ID. Exact raw PATCH returned `200`, read-back matched name/body, and direct DELETE plus `404` cleaned the release. |
+| 130 | `billing create-organization-budget` | escape_needs_captain | Organization budget controls affect real-money and metered usage; no provider request was issued. |
+| 131 | `billing delete-budget-org` | escape_needs_captain | Organization budget controls affect real-money and metered usage; no provider request was issued. |
+| 132 | `billing update-budget-org` | escape_needs_captain | Organization budget controls affect real-money and metered usage; no provider request was issued. |
+| 133 | `hosted-compute create-network-configuration-for-org` | escape_needs_captain | Hosted-compute networking requires metered compute and third-party network-setting resources; no provider request was issued. |
+| 134 | `hosted-compute delete-network-configuration-from-org` | escape_needs_captain | Hosted-compute networking crosses the metered/third-party boundary; no provider request was issued. |
+| 135 | `hosted-compute update-network-configuration-for-org` | escape_needs_captain | Hosted-compute networking crosses the metered/third-party boundary; no provider request was issued. |
+| 136 | `run cancel` | escape_needs_captain | The run collection is empty; creating a cancellable run would start metered GitHub Actions compute. No mutation request was issued. |
+| 137 | `run delete` | escape_needs_captain | The run collection is empty; creating a deletable run would start metered GitHub Actions compute. No mutation request was issued. |
+| 138 | `run rerun` | escape_needs_captain | The run collection is empty; creating or rerunning one starts metered GitHub Actions compute. No mutation request was issued. |
+| 139 | `immutable-releases delete` | certified | A raw-enabled repository setting read `enabled=true`; PM disabled it, read-back showed false, and direct idempotent DELETE plus final read-back preserved false. |
+| 140 | `immutable-releases set` | certified | Read-back changed from `enabled=false` to true; direct DELETE returned `204` and final read-back restored false. |
+| 141 | `vulnerability-alerts delete` | certified | A raw-enabled setting returned `204`; PM deletion changed read-back to `404`, and direct idempotent DELETE plus final `404` proved cleanup. |
+| 142 | `vulnerability-alerts set` | certified | Read-back changed from `404` to `204`; direct DELETE returned `204` and final read-back returned `404`. |
+| 143 | `code-quality setup update` | escape_needs_captain | PM's empty-body attempt returned `422` without effect. A valid setup request would enable metered Code Quality analysis, so no valid provider mutation/control was issued. |
+| 144 | `discussion create` | certified | After enabling discussions inside the private fixture, GraphQL read-back matched title/body/category; `deleteDiscussion` made node read-back null, and repository discussions were restored disabled. |
+| 145 | `project create` | certified | Organization project collection read-back matched the unique title; provider-native `deleteProjectV2` followed by null project read-back proved cleanup. |
+| 146 | `workflow run` | escape_needs_captain | The workflow collection is empty and creating/running a fixture workflow would start metered GitHub Actions compute; no mutation request was issued. |
+
+Batch 5 totals: `certified=12`, `no_object=2`, `wrong_credential=0`, `entitlement=0`, `not_implemented=0`, `product_defect=15`, `escape_needs_captain=17`; sum `46`.
+
+Final slice totals: `certified=54`, `no_object=16`, `wrong_credential=3`, `entitlement=9`, `not_implemented=0`, `product_defect=40`, `escape_needs_captain=24`; sum `146`.
+
+## Final verification
+
+- `git diff --check` — passed.
+- `go run ./cmd/connectorgen certification-matrix --check` — passed: certification shards current.
+- `go test -timeout 20m ./cmd/connectorgen -run '^TestCertification' -count=1` — passed in 75.219s.
+- `go test -timeout 20m ./internal/agentcontract -run 'Certification|WorkflowEvidence' -count=1` — passed in 4.855s.
+- Evidence records added over `origin/integration/4015-mvp-flat-r1`: `54`, matching the certified bucket.
+- Verification rows: `146`, sequential and unique from 1 through 146.
+- The full 550+ connector suite and monolithic `make verify` were not run locally because `AGENTS.md` explicitly directs per-command-timeout agents to scope local runs and let CI carry the full suite; this evidence-only change ran the relevant certification and workflow-evidence gates instead.
