@@ -2,8 +2,9 @@
 
 ## Slice 1 — aliases and existing reads
 
-- Red: pending — a focused test will assert the promoted aliases and read commands are not
-  `unsupported_api`, have a fixed typed operation, and pass real runtime preflight.
+- Red: `go test -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestGitHubDeclaredParityVerdicts$' -count=1` failed as intended: all 23 promotion candidates
+  still reported `unsupported_api`/`unsupported_local`.
 - Green: pending.
 - Refactor: pending.
 
@@ -23,8 +24,9 @@
 
 ## Slice 4 — retained-command evidence and exact count
 
-- Red: pending — inventory test will fail for generic/missing unsupported notes and any command not
-  represented in the 50-row verdict ledger.
+- Red: the same focused test asserted 50 unique verdicts and failed on retained rows whose legacy
+  note did not name the actual missing media-type, composite, local, upload, verification, or
+  capability boundary.
 - Green: pending.
 - Refactor: pending.
 
@@ -36,4 +38,3 @@
 
 No test receives a secret literal. Provider credentials are environment-only and are never emitted
 by test output or stored in evidence.
-
