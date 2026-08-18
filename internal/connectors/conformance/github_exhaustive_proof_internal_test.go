@@ -614,7 +614,11 @@ func runGitHubOperationProviderDouble(t *testing.T, b engine.Bundle, operation e
 	}
 	switch operation.Kind {
 	case "graphql_query":
-		if strings.HasPrefix(operation.ID, "github.graphql.query.") {
+		// A declared transport path marks a self-contained fixed query. Source-
+		// generated roots use github.graphql.query.* IDs, but supplemental fixed
+		// documents such as github.repo.list intentionally do not impersonate a
+		// source root and must exercise the same direct-operation executor.
+		if operation.GraphQL != nil && operation.GraphQL.Path != "" {
 			return runGitHubGraphQLQueryProviderDouble(t, b, operation)
 		}
 		for _, stream := range streams {
@@ -675,10 +679,21 @@ func githubGraphQLProviderDoubleResponse(operation engine.OperationSpec) ([]byte
 	root := match[1]
 	value := any(map[string]any{"__typename": "ProviderDouble"})
 	if operation.GraphQL.Pagination != nil {
-		value = map[string]any{
+		connection := any(map[string]any{
 			"__typename": "ProviderDoubleConnection",
 			"nodes":      []any{},
 			"pageInfo":   map[string]any{"hasNextPage": false, "endCursor": nil},
+		})
+		path := strings.Split(operation.GraphQL.Pagination.ConnectionPath, ".")
+		if len(path) == 0 || path[0] != root {
+			return nil, fmt.Errorf("GraphQL pagination connection path %q does not start at document root %q", operation.GraphQL.Pagination.ConnectionPath, root)
+		}
+		value = connection
+		for index := len(path) - 1; index >= 1; index-- {
+			value = map[string]any{
+				"__typename": "ProviderDouble",
+				path[index]:  value,
+			}
 		}
 	}
 	if root == "rateLimit" {

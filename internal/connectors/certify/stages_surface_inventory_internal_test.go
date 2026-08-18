@@ -16,13 +16,26 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.Result != "pass" {
 		t.Fatalf("Result = %q reason=%q", result.Result, result.Reason)
 	}
-	transportEndpoints, transportOperations := githubFixedGraphQLTransportCoverage(t)
+	transportEndpoints, transportOperationIDs := githubFixedGraphQLTransportCoverage(t)
 	if transportEndpoints != 1 {
 		t.Fatalf("Fixed GraphQL transport endpoints = %d, want exactly one shared POST /graphql endpoint", transportEndpoints)
 	}
-	if transportOperations != githubSourceLockedGraphQLRootCount(t) {
-		t.Fatalf("Fixed GraphQL transport operations = %d, want every source-locked GraphQL root %d", transportOperations, githubSourceLockedGraphQLRootCount(t))
+	sourceRootOperations := 0
+	supplementalOperations := make([]string, 0)
+	for _, operation := range transportOperationIDs {
+		if strings.HasPrefix(operation, "github.graphql.query.") || strings.HasPrefix(operation, "github.graphql.mutation.") {
+			sourceRootOperations++
+			continue
+		}
+		supplementalOperations = append(supplementalOperations, operation)
 	}
+	if sourceRootOperations != githubSourceLockedGraphQLRootCount(t) {
+		t.Fatalf("Fixed GraphQL source-root operations = %d, want every source-locked GraphQL root %d", sourceRootOperations, githubSourceLockedGraphQLRootCount(t))
+	}
+	if got, want := strings.Join(supplementalOperations, ","), "github.repo.list"; got != want {
+		t.Fatalf("Fixed GraphQL supplemental operations = %q, want %q", got, want)
+	}
+	transportOperations := len(transportOperationIDs)
 	wantEndpoints := githubSourceLockedRESTCount(t) + githubLegacyGraphQLBindingCount(t) + transportEndpoints
 	if result.Endpoints != wantEndpoints {
 		t.Fatalf("Endpoints = %d, want source-derived REST plus legacy bindings plus fixed GraphQL transport %d", result.Endpoints, wantEndpoints)
@@ -43,14 +56,20 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.CoveredBy["write"] != 607 {
 		t.Fatalf("CoveredBy[write] = %d, want 607", result.CoveredBy["write"])
 	}
-	if result.CoveredBy["direct_read"] != 366 {
-		t.Fatalf("CoveredBy[direct_read] = %d, want 366", result.CoveredBy["direct_read"])
+	// Eight formerly singular provider bindings now expose a source CLI alias
+	// beside the generated provider command, so surface-sync correctly moves
+	// each one from direct_read to direct_reads. The remaining seven promoted
+	// reads add aliases to endpoints that were already plural. This is a net
+	// change of -8 singular bindings and +23 plural targets from the locked
+	// pre-parity inventory (366 singular, 252 plural targets).
+	if result.CoveredBy["direct_read"] != 358 {
+		t.Fatalf("CoveredBy[direct_read] = %d, want 358 after eight alias-backed bindings became plural", result.CoveredBy["direct_read"])
 	}
-	if result.CoveredBy["direct_reads"] != 252 {
-		t.Fatalf("CoveredBy[direct_reads] = %d, want 252", result.CoveredBy["direct_reads"])
+	if result.CoveredBy["direct_reads"] != 275 {
+		t.Fatalf("CoveredBy[direct_reads] = %d, want 275 including all 23 parity alias targets", result.CoveredBy["direct_reads"])
 	}
 	if result.CoveredBy["operation"] != transportOperations {
-		t.Fatalf("CoveredBy[operation] = %d, want every source-locked GraphQL root %d", result.CoveredBy["operation"], transportOperations)
+		t.Fatalf("CoveredBy[operation] = %d, want all fixed GraphQL bindings %d", result.CoveredBy["operation"], transportOperations)
 	}
 	if len(result.BlockedByModel) != 0 || len(result.BlockedByStatus) != 0 {
 		t.Fatalf("blocked classifications = models=%v status=%v, want none after complete parity", result.BlockedByModel, result.BlockedByStatus)

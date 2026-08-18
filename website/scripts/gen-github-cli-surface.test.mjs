@@ -56,7 +56,30 @@ test('current GitHub surface keeps fixed GraphQL transport out of REST counts', 
   assert.match(table, /\| Covered REST endpoints \| 1 \|/u);
   assert.match(table, /\| Blocked REST endpoints \| 1 \|/u);
   assert.match(table, /\| Fixed GraphQL root-operation bindings \| 3 \|/u);
+  assert.match(table, /\| Supplemental fixed GraphQL bindings \| 0 \|/u);
   assert.match(table, /\| Legacy GraphQL compatibility bindings \| 1 \|/u);
+});
+
+test('current GitHub surface accounts for supplemental fixed GraphQL bindings separately', () => {
+  const table = currentSurfaceTable(argumentsFor([
+    { method: 'GET', path: '/user', covered_by: { stream: 'user' } },
+    { method: 'DELETE', path: '/user/resource' },
+    {
+      method: 'POST',
+      path: '/graphql',
+      covered_by: {
+        operations: [
+          'github.repo.list',
+          'github.graphql.query.viewer',
+          'github.graphql.mutation.create-one',
+          'github.graphql.mutation.delete-one',
+        ],
+      },
+    },
+  ]));
+
+  assert.match(table, /\| Fixed GraphQL root-operation bindings \| 3 \|/u);
+  assert.match(table, /\| Supplemental fixed GraphQL bindings \| 1 \|/u);
 });
 
 test('current GitHub surface rejects a missing or incomplete fixed GraphQL transport', () => {

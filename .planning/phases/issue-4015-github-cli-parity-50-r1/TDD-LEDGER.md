@@ -1,0 +1,123 @@
+# TDD ledger — issue #4015 GitHub declared-command parity
+
+## Slice 1 — aliases and existing reads
+
+- Red: `go test -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestGitHubDeclaredParityVerdicts$' -count=1` failed as intended: all 23 promotion candidates
+  still reported `unsupported_api`/`unsupported_local`.
+- Green: `TestGitHubDeclaredParityVerdicts` now passes through the real runtime preflight for 25
+  commands; fixed GraphQL aliases and existing REST read bindings are executable.
+- Refactor: aliases reuse the original operation/write contracts instead of duplicating provider
+  behavior.
+
+## Slice 2 — new fixed reads
+
+- Red: `connectorgen validate` initially rejected aliases not named in `api_surface.covered_by` and
+  the new RepositoryOwner operation was absent from the generated runtime endpoint ledger.
+- Green: the authoritative endpoint coverage now names each alias; `surface-sync` regenerated the
+  ledger and focused runtime/connectorgen tests pass. The fixed `github.repo.list` operation has a
+  closed variables schema and cursor pagination.
+- Refactor: global REST aliases reuse their already-generated provider declarations; only the
+  polymorphic user/organization repository list needed a new fixed GraphQL operation.
+
+## Slice 3 — REST writes and binary download
+
+- Red: validation rejected workflow alias string flags against the existing numeric workflow-ID
+  record schema, and the legacy autolink create action exposed no request fields. Live autolink
+  deletion then proved that persisting provider IDs as numbers changes their spelling to scientific
+  notation. `TestGitHubDeclaredParityWriteContracts` failed until those IDs and the variable request
+  schemas were corrected.
+- Green: workflow and autolink IDs are opaque strings; autolink create and variable writes have
+  closed required schemas; REST aliases enter reverse-ETL planning and downloads enter the bounded
+  binary executor.
+- Refactor: REST mutations reuse existing write actions and downloads reuse fixed operations with
+  extraction disabled.
+
+## Slice 3b — fixed binary representation and two additional promotions
+
+- Red: `TestDoStreamSendsDeclaredAcceptMediaType` did not compile because `StreamOptions` exposed no
+  declaration-owned media type, while `TestGitHubDeclaredParityVerdicts` failed on `pr diff` and
+  `run download` as unsupported.
+- Green: `binary_download` now accepts one schema-validated, declaration-owned media type; `pr diff`
+  sends `application/vnd.github.diff`, and `run download` reuses the single-artifact bounded ZIP
+  operation. Focused connsdk, engine, commandrunner, and bundle validation tests pass.
+- Refactor: no caller-supplied header or archive-extraction capability was introduced.
+
+## Slice 3c — live binary representation and redirect policy
+
+- Red: a real 51-byte release asset initially downloaded as 1,798 bytes of JSON metadata because
+  the operation did not request `application/octet-stream`; after selecting the byte representation,
+  the transport correctly blocked GitHub's undeclared cross-host asset redirect. The focused
+  provider-contract test failed on both missing policies.
+- Green: release assets now select `application/octet-stream` and permit only
+  `release-assets.githubusercontent.com`; the repeated CLI download produced the exact 51-byte
+  fixture and matched it byte-for-byte. Actions artifact downloads declare their provider-generated
+  signed cross-host redirect, while the shared transport strips credential headers on that hop.
+- Cleanup: the draft release and tag were deleted and independent API reads returned 404 for each;
+  the sealed local certification project and downloaded file were removed.
+
+## Slice 4 — retained-command evidence and exact count
+
+- Red: the same focused test asserted 50 unique verdicts and failed on retained rows whose legacy
+  note did not name the actual missing media-type, composite, local, upload, verification, or
+  capability boundary.
+- Green: the 50-row test enforces concrete evidence fragments for all 25 retained declarations and
+  passes with the exact 25 + 25 sum.
+- Refactor: evidence lives with each command and is also explained provider-by-provider in
+  `RESEARCH.md`.
+
+## Live provider proof
+
+- Red: the disposable variable and autolink did not exist; the workflow fixture file returned 404;
+  issue and PR state were recorded before mutation; binary destination roots were empty.
+- Green: safe reads returned their declared shapes; variable get observed the created value;
+  issue pin/unpin and PR draft/ready state were independently queried through fixed GraphQL reads;
+  workflow disable/enable states were independently observed; `pr diff` downloaded 217 bytes whose
+  content began `diff --git`.
+- Cleanup: variable, autolink, issue, workflow file, and temporary PR branch were independently 404;
+  PR #56 was restored to closed/non-draft; all temporary binary destination roots were removed.
+- Fixture limitations: codespace create reached GitHub but the fixture rejected creation and no
+  codespace exists; the fixture has no workflow artifacts, so `run download` was a provider-404
+  check with zero filesystem residue. A gist mutation was not run
+  because it would violate the authorized organization/repository-only fixture boundary.
+
+No test receives a secret literal. Provider credentials are environment-only and are never emitted
+by test output or stored in evidence.
+
+## Gap closure — supplemental fixed GraphQL document accounting
+
+- Red: `go test -timeout 20m ./internal/connectors/certify -run
+  '^TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints$' -count=1` failed with `Fixed
+  GraphQL transport operations = 306, want every source-locked GraphQL root 305`.
+- Diagnosis: the provider source lock remains correct at 31 Query roots plus 274 Mutation roots.
+  The transport's 306th binding is the legitimate `github.repo.list` fixed document, which queries
+  the existing `repositoryOwner` root and therefore must be counted as executable coverage without
+  being misrepresented as a newly source-locked root.
+- Green criterion: classify `/graphql` bindings by the generated root-operation ID contract, require
+  exactly 305 source-root bindings, require the supplemental set to be exactly `github.repo.list`,
+  and require `surfaceInventoryFor("github")` to count all 306 bindings under
+  `CoveredBy["operation"]`.
+- Refactor criterion: keep the classification helper test-local and data-derived; do not change the
+  source lock, its pinned 305 expectation, or production inventory semantics.
+- Green: the focused test and the full `internal/connectors/certify` package pass. The assertion now
+  proves 305 unique source-root bindings, the exact supplemental set `{github.repo.list}`, and 306
+  total operation bindings. The same run exposed and then verified the independently traced parity
+  read-alias delta: eight singular bindings became plural and 23 plural targets were added.
+- Refactor: the source lock, its 305-root expectation, the `github.repo.list` operation, and
+  production inventory counting are unchanged; only the test helper now returns operation IDs so
+  the two declaration classes cannot be conflated again.
+- Verify Red: GitHub Actions Verify run `32119884956` passed the corrected `certify` package, then
+  `TestGitHubExhaustiveProviderDouble` failed only `operation:github.repo.list`. The provider-double
+  dispatcher selected fixed-query execution by the `github.graphql.query.*` generated-ID prefix,
+  so the supplemental fixed operation fell through to the unrelated stream-binding path.
+- Green criterion: select the fixed GraphQL provider-double path from the operation's declared
+  non-empty `graphql.path`; keep legacy stream-backed GraphQL operations on their existing replay
+  path, and require the exhaustive provider-double test to exercise every operation with zero failed
+  rows.
+- Green: `TestGitHubExhaustiveProviderDouble` and the full `internal/connectors/conformance` package
+  pass. The double now routes self-contained fixed queries by `graphql.path` and builds its synthetic
+  connection object at the complete declared `connection_path`, including the nested
+  `repositoryOwner.repositories` shape used by `github.repo.list`.
+- Refactor: legacy GraphQL operations with no fixed transport path still replay their matching ETL
+  streams; generated root queries and supplemental fixed documents share only the direct-operation
+  provider-double path that their declarations actually select at runtime.

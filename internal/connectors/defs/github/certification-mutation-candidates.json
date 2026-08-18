@@ -349,6 +349,110 @@
       "generated": true
     },
     {
+      "command": "codespace create",
+      "command_tokens": [
+        "codespace",
+        "create"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "user_codespaces_create_from_repository",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/user/codespaces"
+      },
+      "fixture": {
+        "strategy": "derived_collection_cycle",
+        "collection": "/user/codespaces",
+        "collection_depth": 2,
+        "provisioner_commands": [
+          "codespace create",
+          "codespaces create-from-pull-request",
+          "codespaces create-from-repository"
+        ],
+        "evidence": "POST or PUT declaration(s) codespace create, codespaces create-from-pull-request, codespaces create-from-repository share the derived REST collection \"/user/codespaces\"; URL depth 2 orders parent collections first"
+      },
+      "input_slots": [
+        {
+          "path": "record.client_ip",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.devcontainer_path",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.display_name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.geo",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.idle_timeout_minutes",
+          "type": "integer",
+          "required": false
+        },
+        {
+          "path": "record.location",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.machine",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.multi_repo_permissions_opt_out",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "path": "record.ref",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.repository_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "path": "record.retention_period_minutes",
+          "type": "integer",
+          "required": false
+        },
+        {
+          "path": "record.working_directory",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "required_flags": [
+        "--repository-id"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
       "command": "codespaces create-from-pull-request",
       "command_tokens": [
         "codespaces",
@@ -374,10 +478,11 @@
         "collection": "/user/codespaces",
         "collection_depth": 2,
         "provisioner_commands": [
+          "codespace create",
           "codespaces create-from-pull-request",
           "codespaces create-from-repository"
         ],
-        "evidence": "POST or PUT declaration(s) codespaces create-from-pull-request, codespaces create-from-repository share the derived REST collection \"/user/codespaces\"; URL depth 2 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) codespace create, codespaces create-from-pull-request, codespaces create-from-repository share the derived REST collection \"/user/codespaces\"; URL depth 2 orders parent collections first"
       },
       "input_slots": [
         {
@@ -452,10 +557,11 @@
         "collection": "/user/codespaces",
         "collection_depth": 2,
         "provisioner_commands": [
+          "codespace create",
           "codespaces create-from-pull-request",
           "codespaces create-from-repository"
         ],
-        "evidence": "POST or PUT declaration(s) codespaces create-from-pull-request, codespaces create-from-repository share the derived REST collection \"/user/codespaces\"; URL depth 2 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) codespace create, codespaces create-from-pull-request, codespaces create-from-repository share the derived REST collection \"/user/codespaces\"; URL depth 2 orders parent collections first"
       },
       "input_slots": [
         {
@@ -555,10 +661,11 @@
         "collection": "/user/codespaces",
         "collection_depth": 2,
         "provisioner_commands": [
+          "codespace create",
           "codespaces create-from-pull-request",
           "codespaces create-from-repository"
         ],
-        "evidence": "POST or PUT declaration(s) codespaces create-from-pull-request, codespaces create-from-repository share the derived REST collection \"/user/codespaces\"; URL depth 2 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) codespace create, codespaces create-from-pull-request, codespaces create-from-repository share the derived REST collection \"/user/codespaces\"; URL depth 2 orders parent collections first"
       },
       "input_slots": [
         {
@@ -603,10 +710,11 @@
         "collection": "/user/codespaces",
         "collection_depth": 2,
         "provisioner_commands": [
+          "codespace create",
           "codespaces create-from-pull-request",
           "codespaces create-from-repository"
         ],
-        "evidence": "POST or PUT declaration(s) codespaces create-from-pull-request, codespaces create-from-repository share the derived REST collection \"/user/codespaces\"; URL depth 2 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) codespace create, codespaces create-from-pull-request, codespaces create-from-repository share the derived REST collection \"/user/codespaces\"; URL depth 2 orders parent collections first"
       },
       "input_slots": [
         {
@@ -10709,12 +10817,32 @@
         "collection": "/repos/{owner}/{repo}/autolinks",
         "collection_depth": 4,
         "provisioner_commands": [
-          "autolinks create"
+          "autolinks create",
+          "repo autolink create"
         ],
-        "evidence": "POST or PUT declaration(s) autolinks create share the derived REST collection \"/repos/{owner}/{repo}/autolinks\"; URL depth 4 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) autolinks create, repo autolink create share the derived REST collection \"/repos/{owner}/{repo}/autolinks\"; URL depth 4 orders parent collections first"
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.is_alphanumeric",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "path": "record.key_prefix",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.url_template",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--key-prefix",
+        "--url-template"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -10748,18 +10876,128 @@
         "collection": "/repos/{owner}/{repo}/autolinks",
         "collection_depth": 4,
         "provisioner_commands": [
-          "autolinks create"
+          "autolinks create",
+          "repo autolink create"
         ],
-        "evidence": "POST or PUT declaration(s) autolinks create share the derived REST collection \"/repos/{owner}/{repo}/autolinks\"; URL depth 4 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) autolinks create, repo autolink create share the derived REST collection \"/repos/{owner}/{repo}/autolinks\"; URL depth 4 orders parent collections first"
       },
       "input_slots": [
         {
           "path": "record.autolink_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],
       "required_flags": [],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "repo autolink create",
+      "command_tokens": [
+        "repo",
+        "autolink",
+        "create"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "autolinks",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/autolinks"
+      },
+      "fixture": {
+        "strategy": "derived_collection_cycle",
+        "collection": "/repos/{owner}/{repo}/autolinks",
+        "collection_depth": 4,
+        "provisioner_commands": [
+          "autolinks create",
+          "repo autolink create"
+        ],
+        "evidence": "POST or PUT declaration(s) autolinks create, repo autolink create share the derived REST collection \"/repos/{owner}/{repo}/autolinks\"; URL depth 4 orders parent collections first"
+      },
+      "input_slots": [
+        {
+          "path": "record.is_alphanumeric",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "path": "record.key_prefix",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.url_template",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--key-prefix",
+        "--url-template"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "repo autolink delete",
+      "command_tokens": [
+        "repo",
+        "autolink",
+        "delete"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "autolinks_autolink_id",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}"
+      },
+      "fixture": {
+        "strategy": "derived_collection_cycle",
+        "collection": "/repos/{owner}/{repo}/autolinks",
+        "collection_depth": 4,
+        "provisioner_commands": [
+          "autolinks create",
+          "repo autolink create"
+        ],
+        "evidence": "POST or PUT declaration(s) autolinks create, repo autolink create share the derived REST collection \"/repos/{owner}/{repo}/autolinks\"; URL depth 4 orders parent collections first"
+      },
+      "input_slots": [
+        {
+          "path": "record.autolink_id",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--autolink-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -17601,8 +17839,69 @@
         ],
         "evidence": "POST or PUT declaration(s) variable create share the derived REST collection \"/repos/{owner}/{repo}/actions/variables\"; URL depth 5 orders parent collections first"
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.value",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--name",
+        "--value"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "variable delete",
+      "command_tokens": [
+        "variable",
+        "delete"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "actions_variables_name",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+      },
+      "fixture": {
+        "strategy": "derived_collection_cycle",
+        "collection": "/repos/{owner}/{repo}/actions/variables",
+        "collection_depth": 5,
+        "provisioner_commands": [
+          "variable create"
+        ],
+        "evidence": "POST or PUT declaration(s) variable create share the derived REST collection \"/repos/{owner}/{repo}/actions/variables\"; URL depth 5 orders parent collections first"
+      },
+      "input_slots": [
+        {
+          "path": "record.name",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -17647,7 +17946,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -17690,9 +17991,17 @@
           "path": "record.name",
           "type": "string",
           "required": true
+        },
+        {
+          "path": "record.value",
+          "type": "string",
+          "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--name",
+        "--value"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -27168,18 +27477,67 @@
         "collection": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
         "collection_depth": 7,
         "provisioner_commands": [
-          "actions disable set"
+          "actions disable set",
+          "workflow disable"
         ],
-        "evidence": "POST or PUT declaration(s) actions disable set share the derived REST collection \"/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable\"; URL depth 7 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) actions disable set, workflow disable share the derived REST collection \"/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable\"; URL depth 7 orders parent collections first"
       },
       "input_slots": [
         {
           "path": "record.workflow_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],
       "required_flags": [],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "workflow disable",
+      "command_tokens": [
+        "workflow",
+        "disable"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "actions_workflows_workflow_id_disable",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"
+      },
+      "fixture": {
+        "strategy": "derived_collection_cycle",
+        "collection": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
+        "collection_depth": 7,
+        "provisioner_commands": [
+          "actions disable set",
+          "workflow disable"
+        ],
+        "evidence": "POST or PUT declaration(s) actions disable set, workflow disable share the derived REST collection \"/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable\"; URL depth 7 orders parent collections first"
+      },
+      "input_slots": [
+        {
+          "path": "record.workflow_id",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--workflow-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -27264,18 +27622,67 @@
         "collection": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
         "collection_depth": 7,
         "provisioner_commands": [
-          "actions enable set"
+          "actions enable set",
+          "workflow enable"
         ],
-        "evidence": "POST or PUT declaration(s) actions enable set share the derived REST collection \"/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable\"; URL depth 7 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) actions enable set, workflow enable share the derived REST collection \"/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable\"; URL depth 7 orders parent collections first"
       },
       "input_slots": [
         {
           "path": "record.workflow_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],
       "required_flags": [],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "workflow enable",
+      "command_tokens": [
+        "workflow",
+        "enable"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "actions_workflows_workflow_id_enable",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"
+      },
+      "fixture": {
+        "strategy": "derived_collection_cycle",
+        "collection": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
+        "collection_depth": 7,
+        "provisioner_commands": [
+          "actions enable set",
+          "workflow enable"
+        ],
+        "evidence": "POST or PUT declaration(s) actions enable set, workflow enable share the derived REST collection \"/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable\"; URL depth 7 orders parent collections first"
+      },
+      "input_slots": [
+        {
+          "path": "record.workflow_id",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--workflow-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -44805,6 +45212,49 @@
       "generated": true
     },
     {
+      "command": "issue pin",
+      "command_tokens": [
+        "issue",
+        "pin"
+      ],
+      "intent": "direct_write",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "operation",
+        "id": "github.graphql.mutation.pin-issue",
+        "executor": "direct_write"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "graphql",
+        "method": "POST",
+        "path": "/graphql"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "graphql_transport_not_collection",
+        "evidence": "the shared GraphQL transport endpoint is not a resource collection, so no REST CRUD fixture cycle can be inferred"
+      },
+      "input_slots": [
+        {
+          "path": "body.input",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--input"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_graphql",
+        "evidence": "the candidate is a fixed GraphQL mutation outside an explicitly escaping family; any future execution must bind every opaque input node to a fresh object inside the disposable certification identity and organisation, then destroy that container"
+      },
+      "generated": true
+    },
+    {
       "command": "issue transfer",
       "command_tokens": [
         "issue",
@@ -44817,6 +45267,92 @@
       "declaration": {
         "kind": "operation",
         "id": "github.graphql.mutation.transfer-issue",
+        "executor": "direct_write"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "graphql",
+        "method": "POST",
+        "path": "/graphql"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "graphql_transport_not_collection",
+        "evidence": "the shared GraphQL transport endpoint is not a resource collection, so no REST CRUD fixture cycle can be inferred"
+      },
+      "input_slots": [
+        {
+          "path": "body.input",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--input"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_graphql",
+        "evidence": "the candidate is a fixed GraphQL mutation outside an explicitly escaping family; any future execution must bind every opaque input node to a fresh object inside the disposable certification identity and organisation, then destroy that container"
+      },
+      "generated": true
+    },
+    {
+      "command": "issue unpin",
+      "command_tokens": [
+        "issue",
+        "unpin"
+      ],
+      "intent": "direct_write",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "operation",
+        "id": "github.graphql.mutation.unpin-issue",
+        "executor": "direct_write"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "graphql",
+        "method": "POST",
+        "path": "/graphql"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "graphql_transport_not_collection",
+        "evidence": "the shared GraphQL transport endpoint is not a resource collection, so no REST CRUD fixture cycle can be inferred"
+      },
+      "input_slots": [
+        {
+          "path": "body.input",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--input"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_graphql",
+        "evidence": "the candidate is a fixed GraphQL mutation outside an explicitly escaping family; any future execution must bind every opaque input node to a fresh object inside the disposable certification identity and organisation, then destroy that container"
+      },
+      "generated": true
+    },
+    {
+      "command": "pr ready",
+      "command_tokens": [
+        "pr",
+        "ready"
+      ],
+      "intent": "direct_write",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "operation",
+        "id": "github.graphql.mutation.mark-pull-request-ready-for-review",
         "executor": "direct_write"
       },
       "address": {
