@@ -46,3 +46,35 @@ after each green slice. A skipped test is not evidence.
   covered by `TestGitHubCorrectedCommandDeclarations` through the existing
   `github.graphql.mutation.add-project-v2-draft-issue` operation.
 - `go test -timeout 20m ./internal/connectors/certify -count=1` passes.
+
+## Full-verify red checkpoint — 2026-08-18
+
+- GitHub Actions run `32122543487` proved `internal/connectors/certify` green,
+  then exposed three stale `cmd/connectorgen` projections of the same transition:
+  mutation intents moved from 279 direct writes / 577 reverse ETL writes to
+  280 / 576, the API ledger now has one blocked duplicate rather than universal
+  executable coverage, and parity completion did not recognize a duplicate
+  whose `duplicate_of` target is an implemented fixed operation.
+- `go test -timeout 20m ./cmd/connectorgen -run '^TestGitHub(FixtureRequiredMutationCohortGeneratesEveryCandidate|APISurfaceOperationLedgerMetrics|CompleteParityHasNoNonterminalCommandRows)$' -count=1`
+  reproduced those three failures locally. The candidate artifact identifies
+  the moved command as `projects create-draft-item-for-authenticated-user`, now
+  a GraphQL `direct_write` bound to
+  `github.graphql.mutation.add-project-v2-draft-issue`.
+- Once the intent assertion was reconciled, the same focused test exposed the
+  corresponding fixture projection: the retired REST collection cycle moved
+  from 489 to 488, while the fixed GraphQL transport's named exception moved
+  from 367 to 368. The candidate itself names
+  `graphql_transport_not_collection`, proving this is the same command rather
+  than an unrelated count change.
+
+## Full-verify green checkpoint — 2026-08-18
+
+- Candidate accounting now asserts the exact user-project command, fixed
+  GraphQL operation, GraphQL address, direct-write executor, and named fixture
+  exception alongside the 280/576 intent and 488/368 fixture totals.
+- API ledger accounting now asserts the exact source REST row as the sole
+  low-risk blocked duplicate and subtracts it from executable POST coverage.
+- Parity completion treats a duplicate as terminal only when its `duplicate_of`
+  string resolves to an operation-backed implemented CLI command; the retired
+  REST row resolves specifically to the user-project command.
+- `go test -timeout 20m ./cmd/connectorgen -count=1` passes (`98.702s`).

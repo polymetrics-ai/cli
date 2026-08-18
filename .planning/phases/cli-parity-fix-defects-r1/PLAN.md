@@ -75,3 +75,6 @@ Gap plan:
    count-only edit cannot conceal an accidental deletion.
 3. Run `go test -timeout 20m ./internal/connectors/certify -count=1` explicitly,
    then push and require PR #4234's `verify` check to pass.
+4. If the full CI run exposes another stale projection of the same transition,
+   reconcile it by identity and semantics before changing its pins, run that
+   package explicitly, and repeat CI until `verify` is green.

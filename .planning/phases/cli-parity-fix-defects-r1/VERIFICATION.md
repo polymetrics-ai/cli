@@ -37,6 +37,8 @@
 
 - [x] The certification tests identify `projects_create_draft_item_for_authenticated_user` as the sole retired REST write action and assert its GraphQL replacement/blocked duplicate accounting.
 - [x] `go test -timeout 20m ./internal/connectors/certify -count=1` passes (`9.458s`).
+- [x] The connectorgen candidate, API ledger, and parity-completion tests reconcile the same REST-to-GraphQL transition by command and operation identity.
+- [x] `go test -timeout 20m ./cmd/connectorgen -count=1` passes (`98.702s`).
 - [ ] PR #4234's `verify` check passes on the pushed gap-fix commit.
 
 ## Verification evidence
@@ -52,6 +54,7 @@
 - `go test -timeout 20m ./internal/connectors/certify -count=1`: PASS (`9.458s`) after the CI inventory reconciliation.
 - `go test -timeout 20m ./internal/connectors/engine -run '^TestGitHub(CorrectedCommandDeclarations|UserDraftCommandBuildsFixedGraphQLMutation)$' -count=1`: PASS.
 - `go run ./cmd/connectorgen certification-matrix --check`, `go run ./cmd/connectorgen validate`, and `go run ./cmd/connectorgen surface-sync --check`: PASS after the CI inventory reconciliation.
+- `go test -timeout 20m ./cmd/connectorgen -count=1`: PASS (`98.702s`) after reconciling the candidate, fixture, API-ledger, and completion projections.
 - The aggregate `go test -timeout 20m ./...` and `make verify` commands were intentionally not run as single commands: repository instructions require changed packages plus `internal/cli` separately and the non-suite Make gates individually because the 550+ connector suite exceeds per-command budgets. The equivalent scoped suites and individual gates above were run.
 
 ## Manual code-review disposition

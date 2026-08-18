@@ -317,7 +317,12 @@ func TestGitHubFixtureRequiredMutationCohortGeneratesEveryCandidate(t *testing.T
 	byIntent := map[string]int{}
 	byClassification := map[string]int{}
 	byFixtureStrategy := map[string]int{}
+	byCommand := map[string]engine.CertificationMutationCandidate{}
 	for _, candidate := range generated {
+		if _, duplicate := byCommand[candidate.Command]; duplicate {
+			t.Fatalf("generated mutation candidate duplicates command %q", candidate.Command)
+		}
+		byCommand[candidate.Command] = candidate
 		byIntent[candidate.Intent]++
 		byClassification[candidate.Classification.Code]++
 		byFixtureStrategy[candidate.Fixture.Strategy]++
@@ -337,13 +342,24 @@ func TestGitHubFixtureRequiredMutationCohortGeneratesEveryCandidate(t *testing.T
 	if got, want := len(generated), 865; got != want {
 		t.Fatalf("generated mutation candidates = %d, want %d", got, want)
 	}
-	if got, want := byIntent, map[string]int{"direct_write": 282, "reverse_etl": 583}; !reflect.DeepEqual(got, want) {
+	if got, want := byIntent, map[string]int{"direct_write": 283, "reverse_etl": 582}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("generated candidates by intent = %#v, want %#v", got, want)
+	}
+	userDraft, ok := byCommand["projects create-draft-item-for-authenticated-user"]
+	if !ok {
+		t.Fatal("generated mutation candidates omit the authenticated-user project draft command")
+	}
+	if userDraft.Intent != "direct_write" || userDraft.Declaration.Kind != "operation" ||
+		userDraft.Declaration.ID != "github.graphql.mutation.add-project-v2-draft-issue" ||
+		userDraft.Declaration.Executor != "direct_write" || userDraft.Address.Transport != "graphql" ||
+		userDraft.Address.Method != "POST" || userDraft.Address.Path != "/graphql" ||
+		userDraft.Fixture.Strategy != "named_exception" || userDraft.Fixture.ExceptionCode != "graphql_transport_not_collection" {
+		t.Fatalf("authenticated-user project draft candidate = %#v, want the fixed GraphQL direct-write operation", userDraft)
 	}
 	if total := sumMutationClassifications(byClassification); total != len(generated) {
 		t.Fatalf("mutation classification buckets total = %d, want %d", total, len(generated))
 	}
-	if got, want := byFixtureStrategy, map[string]int{"derived_collection_cycle": 495, "named_exception": 370}; !reflect.DeepEqual(got, want) {
+	if got, want := byFixtureStrategy, map[string]int{"derived_collection_cycle": 494, "named_exception": 371}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("mutation fixture provenance = %#v, want %#v", got, want)
 	}
 	committed := committedMutationCandidates(t)

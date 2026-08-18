@@ -15,6 +15,12 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
+const (
+	githubRetiredUserDraftRESTPath = "/user/{user_id}/projectsV2/{project_number}/drafts"
+	githubUserDraftGraphQLTarget   = "POST /graphql (github.graphql.mutation.add-project-v2-draft-issue)"
+	githubUserDraftCLICommand      = "projects create-draft-item-for-authenticated-user"
+)
+
 func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	lock := loadGitHubSourceLock(t)
 	raw, err := os.ReadFile("../../internal/connectors/defs/github/api_surface.json")
@@ -47,6 +53,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	risks := map[string]int{}
 	statuses := map[string]int{}
 	covered, excluded, operations, restEndpoints, graphQLBindings, generatedGraphQLTransports := 0, 0, 0, 0, 0, 0
+	sawRetiredUserDraftRESTRoute := false
 
 	for i, ep := range surface.Endpoints {
 		generatedTransport := githubGeneratedGraphQLTransport(ep.Method, ep.Path, ep.CoveredBy)
@@ -87,6 +94,14 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 				t.Fatalf("endpoint %d duplicate operation is missing duplicate_of", i)
 			}
 		}
+		if ep.Method == "POST" && ep.Path == githubRetiredUserDraftRESTPath {
+			sawRetiredUserDraftRESTRoute = true
+			if len(ep.CoveredBy) != 0 || ep.Operation == nil || ep.Operation.Model != "duplicate" ||
+				ep.Operation.Status != "blocked" || ep.Operation.Risk != "low" ||
+				!ep.Operation.BlockedByDefault || ep.Operation.DuplicateOf != githubUserDraftGraphQLTarget {
+				t.Fatalf("retired user-project draft REST route = covered_by:%#v operation:%+v, want the fixed GraphQL command's blocked duplicate", ep.CoveredBy, ep.Operation)
+			}
+		}
 	}
 
 	// api_surface is the bundle's binding layer. Its REST population must match
@@ -101,11 +116,15 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if generatedGraphQLTransports != 1 {
 		t.Fatalf("generated GraphQL transports = %d, want one shared POST /graphql binding", generatedGraphQLTransports)
 	}
-	if covered != restEndpoints+graphQLBindings-generatedGraphQLTransports {
-		t.Fatalf("covered endpoints = %d, want every REST endpoint plus fixed GraphQL bindings (%d)", covered, restEndpoints+graphQLBindings-generatedGraphQLTransports)
+	wantCovered := restEndpoints + graphQLBindings - generatedGraphQLTransports - 1
+	if covered != wantCovered {
+		t.Fatalf("covered endpoints = %d, want %d executable bindings plus one blocked duplicate", covered, wantCovered)
 	}
-	if operations != 0 {
-		t.Fatalf("operation endpoints = %d, want 0 after complete source-pinned closure", operations)
+	if !sawRetiredUserDraftRESTRoute {
+		t.Fatalf("source inventory omits POST %s", githubRetiredUserDraftRESTPath)
+	}
+	if operations != 1 {
+		t.Fatalf("operation endpoints = %d, want the retired user-project draft REST duplicate only", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -113,11 +132,13 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	delete(totalByMethod, "GRAPHQL")
 	assertStringIntMap(t, "totalByMethod", totalByMethod, githubRESTMethodSplit(lock))
 	delete(coveredByMethod, "GRAPHQL")
-	assertStringIntMap(t, "coveredByMethod", coveredByMethod, githubRESTMethodSplit(lock))
-	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{})
-	assertStringIntMap(t, "models", models, map[string]int{})
-	assertStringIntMap(t, "risks", risks, map[string]int{})
-	assertStringIntMap(t, "statuses", statuses, map[string]int{})
+	wantCoveredByMethod := githubRESTMethodSplit(lock)
+	wantCoveredByMethod["POST"]--
+	assertStringIntMap(t, "coveredByMethod", coveredByMethod, wantCoveredByMethod)
+	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{"POST": 1})
+	assertStringIntMap(t, "models", models, map[string]int{"duplicate": 1})
+	assertStringIntMap(t, "risks", risks, map[string]int{"low": 1})
+	assertStringIntMap(t, "statuses", statuses, map[string]int{"blocked": 1})
 }
 
 // TestGitHubStatusAndTextOperationContracts pins the classified endpoints
