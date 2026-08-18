@@ -121,7 +121,8 @@
       "path": "/repos/{owner}/{repo}/actions/caches",
       "covered_by": {
         "direct_reads": [
-          "actions caches view"
+          "actions caches view",
+          "cache list"
         ]
       }
     },
@@ -588,7 +589,8 @@
       "path": "/repos/{owner}/{repo}/actions/secrets",
       "covered_by": {
         "direct_reads": [
-          "actions secrets view"
+          "actions secrets view",
+          "secret list"
         ]
       }
     },
@@ -629,7 +631,8 @@
       "path": "/repos/{owner}/{repo}/actions/variables",
       "covered_by": {
         "direct_reads": [
-          "actions variables view"
+          "actions variables view",
+          "variable list"
         ]
       }
     },
@@ -652,7 +655,8 @@
       "path": "/repos/{owner}/{repo}/actions/variables/{name}",
       "covered_by": {
         "direct_reads": [
-          "actions variables view-2"
+          "actions variables view-2",
+          "variable get"
         ]
       }
     },
@@ -3497,6 +3501,7 @@
       "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
       "covered_by": {
         "direct_reads": [
+          "release download",
           "releases assets view"
         ]
       }
@@ -4051,7 +4056,10 @@
       "method": "GET",
       "path": "/agents/tasks",
       "covered_by": {
-        "direct_read": "agent-tasks list-tasks"
+        "direct_reads": [
+          "agent-task list",
+          "agent-tasks list-tasks"
+        ]
       }
     },
     {
@@ -4345,7 +4353,10 @@
       "method": "GET",
       "path": "/gists",
       "covered_by": {
-        "direct_read": "gists list"
+        "direct_reads": [
+          "gist list",
+          "gists list"
+        ]
       }
     },
     {
@@ -4417,7 +4428,10 @@
       "method": "GET",
       "path": "/gitignore/templates",
       "covered_by": {
-        "direct_read": "gitignore get-all-templates"
+        "direct_reads": [
+          "gitignore get-all-templates",
+          "repo gitignore list"
+        ]
       }
     },
     {
@@ -4445,7 +4459,10 @@
       "method": "GET",
       "path": "/licenses",
       "covered_by": {
-        "direct_read": "licenses get-all-commonly-used"
+        "direct_reads": [
+          "licenses get-all-commonly-used",
+          "repo license list"
+        ]
       }
     },
     {
@@ -6042,7 +6059,10 @@
       "method": "GET",
       "path": "/user/codespaces",
       "covered_by": {
-        "direct_read": "codespaces list-for-authenticated-user"
+        "direct_reads": [
+          "codespace list",
+          "codespaces list-for-authenticated-user"
+        ]
       }
     },
     {
@@ -6135,7 +6155,10 @@
       "method": "GET",
       "path": "/user/gpg_keys",
       "covered_by": {
-        "direct_read": "users list-gpg-keys-for-authenticated-user"
+        "direct_reads": [
+          "gpg-key list",
+          "users list-gpg-keys-for-authenticated-user"
+        ]
       }
     },
     {
@@ -6180,7 +6203,10 @@
       "method": "GET",
       "path": "/user/keys",
       "covered_by": {
-        "direct_read": "users list-public-ssh-keys-for-authenticated-user"
+        "direct_reads": [
+          "ssh-key list",
+          "users list-public-ssh-keys-for-authenticated-user"
+        ]
       }
     },
     {
@@ -6250,7 +6276,10 @@
       "method": "GET",
       "path": "/user/orgs",
       "covered_by": {
-        "direct_read": "orgs list-for-authenticated-user"
+        "direct_reads": [
+          "org list",
+          "orgs list-for-authenticated-user"
+        ]
       }
     },
     {
@@ -9127,6 +9156,7 @@
       "path": "/graphql",
       "covered_by": {
         "operations": [
+          "github.repo.list",
           "github.graphql.query.code-of-conduct",
           "github.graphql.query.codes-of-conduct",
           "github.graphql.query.enterprise",

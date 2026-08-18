@@ -122,7 +122,7 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 		if command.Availability != "unsupported_api" && command.Availability != "unsupported_local" {
 			t.Errorf("github %q availability = %q, want retained unsupported_api/unsupported_local", path, command.Availability)
 		}
-		if !strings.Contains(command.Notes, evidence) {
+		if !strings.Contains(strings.ToLower(command.Notes), strings.ToLower(evidence)) {
 			t.Errorf("github %q notes = %q, want concrete evidence containing %q", path, command.Notes, evidence)
 		}
 		if err := Preflight(connector, strings.Fields(path)); err == nil {

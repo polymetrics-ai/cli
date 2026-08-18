@@ -452,7 +452,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh issue develop",
-      "notes": "Depends on local git branch workflow and checkout state."
+      "notes": "Requires a typed local git composite executor for branch creation and optional checkout; no such executor exists."
     },
     {
       "path": "issue status",
@@ -475,17 +475,55 @@
       "path": "issue pin",
       "summary": "Pin an issue",
       "intent": "direct_write",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "operation": "github.graphql.mutation.pin-issue",
+      "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
+      "flags": [
+        {
+          "name": "input",
+          "maps_to": "body.input",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
       "source_cli_path": "gh issue pin",
-      "notes": "GitHub issue pinning is not modeled in the current REST-backed connector surface."
+      "notes": "Compatibility alias of graphql mutation pin-issue; uses that declaration-owned provider contract."
     },
     {
       "path": "issue unpin",
       "summary": "Unpin an issue",
       "intent": "direct_write",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "operation": "github.graphql.mutation.unpin-issue",
+      "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
+      "flags": [
+        {
+          "name": "input",
+          "maps_to": "body.input",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
       "source_cli_path": "gh issue unpin",
-      "notes": "GitHub issue unpinning is not modeled in the current REST-backed connector surface."
+      "notes": "Compatibility alias of graphql mutation unpin-issue; uses that declaration-owned provider contract."
     },
     {
       "path": "issue transfer",
@@ -963,7 +1001,7 @@
       "intent": "direct_read",
       "availability": "unsupported_api",
       "source_cli_path": "gh pr diff",
-      "notes": "Diff output is a patch/binary-like representation rather than a JSON ETL stream."
+      "notes": "GitHub requires the application/vnd.github.diff response media type; fixed per-command media type declarations are not supported by the current direct-read executor."
     },
     {
       "path": "pr checkout",
@@ -971,15 +1009,34 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh pr checkout",
-      "notes": "Depends on local git checkout state."
+      "notes": "Requires a typed local git executor that can fetch and check out pull-request refs; no such executor exists."
     },
     {
       "path": "pr ready",
       "summary": "Mark a draft pull request ready",
       "intent": "direct_write",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "operation": "github.graphql.mutation.mark-pull-request-ready-for-review",
+      "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
+      "flags": [
+        {
+          "name": "input",
+          "maps_to": "body.input",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
       "source_cli_path": "gh pr ready",
-      "notes": "Not modeled by the current REST write actions."
+      "notes": "Compatibility alias of graphql mutation mark-pull-request-ready-for-review; uses that declaration-owned provider contract."
     },
     {
       "path": "pr update-branch",
@@ -1122,9 +1179,32 @@
       "path": "repo list",
       "summary": "List repositories for an owner",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "operation": "github.repo.list",
+      "source_url": "https://docs.github.com/en/graphql/reference/interfaces#repositoryowner",
+      "flags": [
+        {
+          "name": "login",
+          "maps_to": "body.login",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "first",
+          "maps_to": "body.first",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh repo list",
-      "notes": "The current connector is scoped to one configured repository."
+      "notes": "Fixed RepositoryOwner query supports user and organization owners and returns one cursor-addressable page."
     },
     {
       "path": "repo create",
@@ -1262,7 +1342,7 @@
       "availability": "unsupported_local",
       "source_cli_path": "gh repo clone",
       "operation": "github.repo.clone",
-      "notes": "Depends on local git and filesystem state."
+      "notes": "Requires a typed local git clone executor; github.repo.clone is metadata-only and no local git executor exists."
     },
     {
       "path": "repo sync",
@@ -1270,7 +1350,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh repo sync",
-      "notes": "Depends on local git state."
+      "notes": "Requires a typed local git fetch/branch/reset workflow; no local git executor exists."
     },
     {
       "path": "repo set-default",
@@ -1278,7 +1358,7 @@
       "intent": "config",
       "availability": "unsupported_local",
       "source_cli_path": "gh repo set-default",
-      "notes": "Local gh configuration is outside connector metadata."
+      "notes": "Writes gh-local repository config, but the connector runtime has no gh config executor."
     },
     {
       "path": "repo read-file",
@@ -1365,18 +1445,69 @@
     {
       "path": "repo autolink create",
       "summary": "Create a repository autolink",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "autolinks",
+      "source_url": "https://docs.github.com/en/rest/repos/autolinks#create-an-autolink-reference-for-a-repository",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "key-prefix",
+          "type": "string",
+          "summary": "Prefix that identifies references in repository text.",
+          "maps_to": "record.key_prefix",
+          "required": true
+        },
+        {
+          "name": "url-template",
+          "type": "string",
+          "summary": "Target URL template containing <num>.",
+          "maps_to": "record.url_template",
+          "required": true
+        },
+        {
+          "name": "is-alphanumeric",
+          "type": "boolean",
+          "summary": "Allow alphanumeric reference identifiers.",
+          "maps_to": "record.is_alphanumeric"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/autolinks"
+        }
+      ],
       "source_cli_path": "gh repo autolink create",
-      "notes": "Autolink writes are not modeled by the current write set."
+      "notes": "Compatibility alias of autolinks create; uses that declaration-owned provider contract."
     },
     {
       "path": "repo autolink delete",
       "summary": "Delete a repository autolink",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "autolinks_autolink_id",
+      "source_url": "https://docs.github.com/en/rest/repos/autolinks#delete-an-autolink-reference-from-a-repository",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "autolink-id",
+          "type": "integer",
+          "summary": "Autolink reference ID.",
+          "maps_to": "record.autolink_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}"
+        }
+      ],
       "source_cli_path": "gh repo autolink delete",
-      "notes": "Autolink writes are not modeled by the current write set."
+      "notes": "Compatibility alias of autolinks delete; uses that declaration-owned provider contract."
     },
     {
       "path": "repo deploy-key list",
@@ -1456,17 +1587,35 @@
       "path": "repo license list",
       "summary": "List license templates",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "source_url": "https://docs.github.com/rest/licenses/licenses#get-all-commonly-used-licenses",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/licenses"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh repo license list",
-      "notes": "Global license template APIs are not repository-scoped connector streams."
+      "notes": "Compatibility alias of licenses get-all-commonly-used; uses that declaration-owned provider contract."
     },
     {
       "path": "repo gitignore list",
       "summary": "List gitignore templates",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "source_url": "https://docs.github.com/rest/gitignore/gitignore#get-all-gitignore-templates",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gitignore/templates"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh repo gitignore list",
-      "notes": "Global gitignore template APIs are not repository-scoped connector streams."
+      "notes": "Compatibility alias of gitignore get-all-templates; uses that declaration-owned provider contract."
     },
     {
       "path": "release list",
@@ -1675,16 +1824,32 @@
       "intent": "direct_write",
       "availability": "unsupported_local",
       "source_cli_path": "gh release upload",
-      "notes": "Depends on local files and binary upload semantics."
+      "notes": "GitHub release assets use a separate upload host and raw request body; no bounded binary-upload executor exists."
     },
     {
       "path": "release download",
       "summary": "Download release assets",
-      "intent": "local_workflow",
-      "availability": "unsupported_local",
+      "intent": "binary_download",
+      "availability": "implemented",
       "source_cli_path": "gh release download",
       "operation": "github.release.download_assets",
-      "notes": "Downloads binary assets to the local filesystem."
+      "source_url": "https://docs.github.com/en/rest/releases/assets#get-a-release-asset",
+      "flags": [
+        {
+          "name": "asset-id",
+          "type": "string",
+          "summary": "Release asset ID.",
+          "maps_to": "path.asset_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}"
+        }
+      ],
+      "notes": "Downloads one declared asset by ID with the bounded binary-download policy; archive extraction is disabled."
     },
     {
       "path": "release delete-asset",
@@ -1716,7 +1881,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh release verify",
-      "notes": "Depends on local artifact files and signature verification behavior."
+      "notes": "Requires local cryptographic verification of downloaded release assets; no cryptographic verification executor exists."
     },
     {
       "path": "workflow list",
@@ -1790,18 +1955,56 @@
     {
       "path": "workflow enable",
       "summary": "Enable a workflow",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_workflows_workflow_id_enable",
+      "source_url": "https://docs.github.com/en/rest/actions/workflows#enable-a-workflow",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "integer",
+          "summary": "Numeric workflow ID.",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"
+        }
+      ],
       "source_cli_path": "gh workflow enable",
-      "notes": "Workflow enablement is not modeled by the current write set."
+      "notes": "Compatibility alias of actions enable set; uses that declaration-owned provider contract."
     },
     {
       "path": "workflow disable",
       "summary": "Disable a workflow",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_workflows_workflow_id_disable",
+      "source_url": "https://docs.github.com/en/rest/actions/workflows#disable-a-workflow",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "integer",
+          "summary": "Numeric workflow ID.",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"
+        }
+      ],
       "source_cli_path": "gh workflow disable",
-      "notes": "Workflow disablement is not modeled by the current write set."
+      "notes": "Compatibility alias of actions disable set; uses that declaration-owned provider contract."
     },
     {
       "path": "run list",
@@ -1926,7 +2129,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh run download",
-      "notes": "Downloads artifacts to the local filesystem; artifact metadata is available through the workflow_artifacts stream."
+      "notes": "Selects multiple artifacts for a run, downloads them, and extracts archives; the runtime supports one bounded binary response and deliberately disables extraction."
     },
     {
       "path": "run watch",
@@ -1934,15 +2137,59 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh run watch",
-      "notes": "Interactive watch behavior is outside connector command metadata."
+      "notes": "Requires a polling and terminal-rendering workflow with cancellation; no typed polling/watch executor exists."
     },
     {
       "path": "cache list",
       "summary": "List GitHub Actions caches",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "operation": "github.actions_caches2",
+      "source_url": "https://docs.github.com/en/rest/actions/cache#list-github-actions-caches-for-a-repository",
+      "flags": [
+        {
+          "name": "direction",
+          "type": "enum",
+          "summary": "Direction used to sort results.",
+          "values": [
+            "asc",
+            "desc"
+          ],
+          "maps_to": "query.direction"
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Exact cache key or prefix.",
+          "maps_to": "query.key"
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "Full Git reference used to narrow caches.",
+          "maps_to": "query.ref"
+        },
+        {
+          "name": "sort",
+          "type": "enum",
+          "summary": "Cache property used for sorting.",
+          "values": [
+            "created_at",
+            "last_accessed_at",
+            "size_in_bytes"
+          ],
+          "maps_to": "query.sort"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/caches"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh cache list",
-      "notes": "Actions cache endpoints are tracked but excluded from the current repository connector surface."
+      "notes": "Compatibility alias of actions caches view; uses that declaration-owned provider contract."
     },
     {
       "path": "cache delete",
@@ -2084,7 +2331,7 @@
       "intent": "direct_write",
       "availability": "unsupported_api",
       "source_cli_path": "gh label clone",
-      "notes": "Cross-repository copy is outside the configured repository connector scope."
+      "notes": "GitHub exposes label list/create primitives, but cloning requires a paginated multi-write composite executor with partial-failure handling; no such executor exists."
     },
     {
       "path": "ruleset list",
@@ -2294,9 +2541,19 @@
       "path": "secret list",
       "summary": "List repository secrets",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "operation": "github.actions_secrets",
+      "source_url": "https://docs.github.com/en/rest/actions/secrets#list-repository-secrets",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/secrets"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh secret list",
-      "notes": "Secret metadata endpoints require elevated scopes and are explicitly excluded from the current connector surface."
+      "notes": "Returns secret metadata only; values are never exposed."
     },
     {
       "path": "secret set",
@@ -2350,17 +2607,45 @@
       "path": "variable list",
       "summary": "List repository variables",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "operation": "github.actions_variables",
+      "source_url": "https://docs.github.com/en/rest/actions/variables#list-repository-variables",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/variables"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh variable list",
-      "notes": "Actions variable endpoints require elevated scopes and are excluded from the current connector surface."
+      "notes": "Compatibility alias of actions variables view; uses that declaration-owned provider contract."
     },
     {
       "path": "variable get",
       "summary": "Get a repository variable",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "operation": "github.actions_variables_name2",
+      "source_url": "https://docs.github.com/en/rest/actions/variables#get-a-repository-variable",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Repository variable name.",
+          "maps_to": "path.name",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh variable get",
-      "notes": "Actions variable endpoints require elevated scopes and are excluded from the current connector surface."
+      "notes": "Compatibility alias of actions variables view-2; uses that declaration-owned provider contract."
     },
     {
       "path": "variable set",
@@ -2368,15 +2653,34 @@
       "intent": "direct_write",
       "availability": "unsupported_api",
       "source_cli_path": "gh variable set",
-      "notes": "Actions variable writes are not modeled by the current write set."
+      "notes": "GitHub uses distinct create and update endpoints; set requires a conditional composite executor. The typed variable create and update commands remain available."
     },
     {
       "path": "variable delete",
       "summary": "Delete a repository variable",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_variables_name",
+      "source_url": "https://docs.github.com/en/rest/actions/variables#delete-a-repository-variable",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Repository variable name.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        }
+      ],
       "source_cli_path": "gh variable delete",
-      "notes": "Actions variable deletion is not modeled by the current write set."
+      "notes": "Compatibility alias of variable delete-2; uses that declaration-owned provider contract."
     },
     {
       "path": "project list",
@@ -2528,9 +2832,18 @@
       "path": "org list",
       "summary": "List organizations for the authenticated user",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "source_url": "https://docs.github.com/rest/orgs/orgs#list-organizations-for-the-authenticated-user",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/orgs"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh org list",
-      "notes": "Viewer/org-scoped APIs are outside the configured repository connector."
+      "notes": "Compatibility alias of orgs list-for-authenticated-user; uses that declaration-owned provider contract."
     },
     {
       "path": "search repos",
@@ -2657,9 +2970,18 @@
       "path": "gist list",
       "summary": "List gists",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "source_url": "https://docs.github.com/rest/gists/gists#list-gists-for-the-authenticated-user",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gists"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh gist list",
-      "notes": "Gists are account-scoped, not repository-scoped."
+      "notes": "Compatibility alias of gists list; uses that declaration-owned provider contract."
     },
     {
       "path": "gist create",
@@ -2667,23 +2989,106 @@
       "intent": "direct_write",
       "availability": "unsupported_api",
       "source_cli_path": "gh gist create",
-      "notes": "Gist writes are outside the repository connector scope."
+      "notes": "Create gist requires a dynamic filename-keyed files object, while REST structured JSON input is intentionally refused; user-scoped gist writes are also outside the authorized certification fixture."
     },
     {
       "path": "codespace list",
       "summary": "List codespaces",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "source_url": "https://docs.github.com/rest/codespaces/codespaces#list-codespaces-for-the-authenticated-user",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/codespaces"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh codespace list",
-      "notes": "Codespaces endpoints are tracked but excluded from the current connector surface."
+      "notes": "Compatibility alias of codespaces list-for-authenticated-user; uses that declaration-owned provider contract."
     },
     {
       "path": "codespace create",
       "summary": "Create a codespace",
-      "intent": "direct_write",
-      "availability": "unsupported_api",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_codespaces_create_from_repository",
+      "source_url": "https://docs.github.com/rest/codespaces/codespaces#create-a-codespace-for-the-authenticated-user",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "repository-id",
+          "type": "integer",
+          "summary": "Repository ID used to create the codespace.",
+          "maps_to": "record.repository_id",
+          "required": true
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "maps_to": "record.ref"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "maps_to": "record.location"
+        },
+        {
+          "name": "geo",
+          "type": "string",
+          "maps_to": "record.geo"
+        },
+        {
+          "name": "client-ip",
+          "type": "string",
+          "maps_to": "record.client_ip"
+        },
+        {
+          "name": "machine",
+          "type": "string",
+          "maps_to": "record.machine"
+        },
+        {
+          "name": "devcontainer-path",
+          "type": "string",
+          "maps_to": "record.devcontainer_path"
+        },
+        {
+          "name": "multi-repo-permissions-opt-out",
+          "type": "boolean",
+          "maps_to": "record.multi_repo_permissions_opt_out"
+        },
+        {
+          "name": "working-directory",
+          "type": "string",
+          "maps_to": "record.working_directory"
+        },
+        {
+          "name": "idle-timeout-minutes",
+          "type": "integer",
+          "maps_to": "record.idle_timeout_minutes"
+        },
+        {
+          "name": "display-name",
+          "type": "string",
+          "maps_to": "record.display_name"
+        },
+        {
+          "name": "retention-period-minutes",
+          "type": "integer",
+          "maps_to": "record.retention_period_minutes"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/codespaces"
+        }
+      ],
       "source_cli_path": "gh codespace create",
-      "notes": "Codespaces creation is outside the connector write surface."
+      "notes": "Compatibility alias of codespaces create-from-repository; uses that declaration-owned provider contract."
     },
     {
       "path": "codespace ssh",
@@ -2691,7 +3096,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh codespace ssh",
-      "notes": "Requires local SSH and interactive terminal behavior."
+      "notes": "Requires a local SSH subprocess and interactive terminal session; no SSH or subprocess executor exists."
     },
     {
       "path": "auth login",
@@ -2699,7 +3104,7 @@
       "intent": "auth",
       "availability": "unsupported_local",
       "source_cli_path": "gh auth login",
-      "notes": "Polymetrics uses its own credential vault and does not manage gh sessions."
+      "notes": "Interactive gh credential bootstrap belongs to gh, while pm uses its own credential store; no gh auth executor exists."
     },
     {
       "path": "auth status",
@@ -2707,7 +3112,7 @@
       "intent": "auth",
       "availability": "unsupported_local",
       "source_cli_path": "gh auth status",
-      "notes": "Polymetrics credential inspection is separate from gh session management."
+      "notes": "Inspects gh's local credential store, outside pm's credential abstraction; no gh auth status executor exists."
     },
     {
       "path": "auth token",
@@ -2715,7 +3120,7 @@
       "intent": "auth",
       "availability": "unsupported_local",
       "source_cli_path": "gh auth token",
-      "notes": "Named dependency: a credential-export policy would violate pm's no-secret-disclosure boundary."
+      "notes": "The upstream command prints a credential; pm's no-secret-disclosure boundary prohibits this executor."
     },
     {
       "path": "config get",
@@ -2723,7 +3128,7 @@
       "intent": "config",
       "availability": "unsupported_local",
       "source_cli_path": "gh config get",
-      "notes": "Local gh configuration is outside connector metadata."
+      "notes": "Reads gh-local configuration; the connector runtime has no gh config executor."
     },
     {
       "path": "config set",
@@ -2731,7 +3136,7 @@
       "intent": "config",
       "availability": "unsupported_local",
       "source_cli_path": "gh config set",
-      "notes": "Local gh configuration is outside connector metadata."
+      "notes": "Writes gh-local configuration; the connector runtime has no gh config executor."
     },
     {
       "path": "browse",
@@ -2739,7 +3144,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh browse",
-      "notes": "Browser-opening behavior is local workflow, not connector API behavior."
+      "notes": "Requires a local browser-launch workflow; no browser-launch executor exists."
     },
     {
       "path": "alias list",
@@ -2747,7 +3152,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh alias list",
-      "notes": "gh alias management is local configuration."
+      "notes": "Reads local aliases from gh configuration; no gh-config or local-filesystem executor exists."
     },
     {
       "path": "extension list",
@@ -2755,7 +3160,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh extension list",
-      "notes": "Extension installation and execution are local gh workflows."
+      "notes": "Reads installed local extensions and their manifests; no local extensions executor exists."
     },
     {
       "path": "completion",
@@ -2763,7 +3168,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh completion",
-      "notes": "Completion generation belongs to pm CLI shell integration, not connector metadata."
+      "notes": "Generates gh-specific shell completion, while connector commands bypass Cobra and expose no shell completion executor contract."
     },
     {
       "path": "api",
@@ -2771,7 +3176,7 @@
       "intent": "raw_api",
       "availability": "unsupported_local",
       "source_cli_path": "gh api",
-      "notes": "Named dependency: a constrained declared-operation catalog; generic authenticated API dispatch is intentionally absent."
+      "notes": "Generic authenticated REST/GraphQL dispatch is intentionally prohibited; fixed declared operations are the supported replacement."
     },
     {
       "path": "status",
@@ -2795,17 +3200,35 @@
       "path": "gpg-key list",
       "summary": "List GPG keys",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "source_url": "https://docs.github.com/rest/users/gpg-keys#list-gpg-keys-for-the-authenticated-user",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/gpg_keys"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh gpg-key list",
-      "notes": "Account key APIs are outside repository-scoped connector metadata."
+      "notes": "Compatibility alias of users list-gpg-keys-for-authenticated-user; uses that declaration-owned provider contract."
     },
     {
       "path": "ssh-key list",
       "summary": "List SSH keys",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "source_url": "https://docs.github.com/rest/users/keys#list-public-ssh-keys-for-the-authenticated-user",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/keys"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh ssh-key list",
-      "notes": "Account key APIs are outside repository-scoped connector metadata."
+      "notes": "Compatibility alias of users list-public-ssh-keys-for-authenticated-user; uses that declaration-owned provider contract."
     },
     {
       "path": "attestation verify",
@@ -2813,7 +3236,7 @@
       "intent": "direct_read",
       "availability": "unsupported_local",
       "source_cli_path": "gh attestation verify",
-      "notes": "Attestation verification depends on local artifact files."
+      "notes": "The REST API only lists bundles; signature, identity, subject-digest, and policy verification is local and no cryptographic verifier exists."
     },
     {
       "path": "copilot",
@@ -2821,7 +3244,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh copilot",
-      "notes": "Copilot CLI behavior is not a GitHub connector API surface."
+      "notes": "Runs an external interactive extension; no extension or subprocess executor exists."
     },
     {
       "path": "skill list",
@@ -2829,15 +3252,24 @@
       "intent": "direct_read",
       "availability": "unsupported_api",
       "source_cli_path": "gh skill list",
-      "notes": "GitHub Skills are not modeled by the repository connector surface."
+      "notes": "gh skill list scans the local filesystem for agent-host skill directories; GitHub provides no backing collection and the connector has no local-filesystem workflow executor."
     },
     {
       "path": "agent-task list",
       "summary": "List GitHub agent tasks",
       "intent": "direct_read",
-      "availability": "unsupported_api",
+      "availability": "implemented",
+      "source_url": "https://docs.github.com/rest/agent-tasks/agent-tasks#list-tasks",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents/tasks"
+        }
+      ],
+      "output_policy": "json_redacted",
       "source_cli_path": "gh agent-task list",
-      "notes": "Agent task APIs are not modeled by the repository connector surface."
+      "notes": "Compatibility alias of agent-tasks list-tasks; uses that declaration-owned provider contract."
     },
     {
       "path": "repo delete-2",
@@ -4473,7 +4905,28 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "key-prefix",
+          "type": "string",
+          "summary": "Prefix that identifies references in repository text.",
+          "maps_to": "record.key_prefix",
+          "required": true
+        },
+        {
+          "name": "url-template",
+          "type": "string",
+          "summary": "Target URL template containing <num>.",
+          "maps_to": "record.url_template",
+          "required": true
+        },
+        {
+          "name": "is-alphanumeric",
+          "type": "boolean",
+          "summary": "Allow alphanumeric reference identifiers.",
+          "maps_to": "record.is_alphanumeric"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",

@@ -334,16 +334,16 @@ func TestGitHubFixtureRequiredMutationCohortGeneratesEveryCandidate(t *testing.T
 			t.Fatalf("candidate %q lacks a derived address transport: %#v", candidate.Command, candidate.Address)
 		}
 	}
-	if got, want := len(generated), 856; got != want {
+	if got, want := len(generated), 865; got != want {
 		t.Fatalf("generated mutation candidates = %d, want %d", got, want)
 	}
-	if got, want := byIntent, map[string]int{"direct_write": 279, "reverse_etl": 577}; !reflect.DeepEqual(got, want) {
+	if got, want := byIntent, map[string]int{"direct_write": 282, "reverse_etl": 583}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("generated candidates by intent = %#v, want %#v", got, want)
 	}
 	if total := sumMutationClassifications(byClassification); total != len(generated) {
 		t.Fatalf("mutation classification buckets total = %d, want %d", total, len(generated))
 	}
-	if got, want := byFixtureStrategy, map[string]int{"derived_collection_cycle": 489, "named_exception": 367}; !reflect.DeepEqual(got, want) {
+	if got, want := byFixtureStrategy, map[string]int{"derived_collection_cycle": 495, "named_exception": 370}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("mutation fixture provenance = %#v, want %#v", got, want)
 	}
 	committed := committedMutationCandidates(t)

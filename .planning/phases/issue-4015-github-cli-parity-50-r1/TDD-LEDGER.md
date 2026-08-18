@@ -5,30 +5,39 @@
 - Red: `go test -timeout 20m ./internal/connectors/commandrunner -run
   '^TestGitHubDeclaredParityVerdicts$' -count=1` failed as intended: all 23 promotion candidates
   still reported `unsupported_api`/`unsupported_local`.
-- Green: pending.
-- Refactor: pending.
+- Green: `TestGitHubDeclaredParityVerdicts` now passes through the real runtime preflight for 23
+  commands; fixed GraphQL aliases and existing REST read bindings are executable.
+- Refactor: aliases reuse the original operation/write contracts instead of duplicating provider
+  behavior.
 
 ## Slice 2 — new fixed reads
 
-- Red: pending — operation lookup and direct-read tests will fail while the documented global REST
-  endpoints and paginated RepositoryOwner query are absent.
-- Green: pending.
-- Refactor: pending.
+- Red: `connectorgen validate` initially rejected aliases not named in `api_surface.covered_by` and
+  the new RepositoryOwner operation was absent from the generated runtime endpoint ledger.
+- Green: the authoritative endpoint coverage now names each alias; `surface-sync` regenerated the
+  ledger and focused runtime/connectorgen tests pass. The fixed `github.repo.list` operation has a
+  closed variables schema and cursor pagination.
+- Refactor: global REST aliases reuse their already-generated provider declarations; only the
+  polymorphic user/organization repository list needed a new fixed GraphQL operation.
 
 ## Slice 3 — REST writes and binary download
 
-- Red: pending — tests will assert each command enters the plan lifecycle, rejects missing required
-  flags before any network call, and binds to exactly one declared endpoint.
-- Green: pending.
-- Refactor: pending.
+- Red: validation rejected workflow alias string flags against the existing numeric workflow-ID
+  record schema, and the legacy autolink create action exposed no request fields.
+- Green: workflow aliases now require numeric IDs; autolink create has a closed required schema;
+  REST aliases enter reverse-ETL planning and `release download` enters the bounded binary executor.
+- Refactor: REST mutations reuse existing write actions and the download reuses
+  `github.release.download_assets` with extraction disabled.
 
 ## Slice 4 — retained-command evidence and exact count
 
 - Red: the same focused test asserted 50 unique verdicts and failed on retained rows whose legacy
   note did not name the actual missing media-type, composite, local, upload, verification, or
   capability boundary.
-- Green: pending.
-- Refactor: pending.
+- Green: the 50-row test enforces concrete evidence fragments for all 27 retained declarations and
+  passes with the exact 23 + 27 sum.
+- Refactor: evidence lives with each command and is also explained provider-by-provider in
+  `RESEARCH.md`.
 
 ## Live provider proof
 

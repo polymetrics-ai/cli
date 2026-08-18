@@ -1,6 +1,46 @@
 {
   "operations": [
     {
+      "id": "github.repo.list",
+      "kind": "graphql_query",
+      "summary": "List repositories for a GitHub user or organization owner.",
+      "source_url": "https://docs.github.com/en/graphql/reference/interfaces#repositoryowner",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "GitHubCLIRepoList",
+        "document": "query GitHubCLIRepoList($login: String!, $first: Int!, $after: String) { repositoryOwner(login: $login) { __typename login repositories(first: $first, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}) { nodes { id name nameWithOwner description url isPrivate isArchived isFork createdAt updatedAt pushedAt defaultBranchRef { name } } pageInfo { hasNextPage endCursor } } } rateLimit { limit cost remaining resetAt } }",
+        "path": "/graphql",
+        "max_bytes": 1048576,
+        "variables_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "login": {
+              "type": "string"
+            },
+            "first": {
+              "type": "integer"
+            },
+            "after": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "login",
+            "first"
+          ]
+        },
+        "pagination": {
+          "connection_path": "repositoryOwner.repositories",
+          "cursor_variable": "after",
+          "page_size_variable": "first",
+          "max_page_size": 100
+        }
+      }
+    },
+    {
       "id": "github.projects.list",
       "kind": "graphql_query",
       "summary": "List GitHub Projects using a fixed GraphQL query.",
