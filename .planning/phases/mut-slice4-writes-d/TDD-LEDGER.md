@@ -29,3 +29,11 @@
 - Raw controls: all eleven product defects have a direct `api.github.com` control independent of `pm`; raw controls returned 200/201/202/204 and their effects were read back before cleanup.
 - Cleanup: custom patterns used bulk provider DELETE plus zero-by-ID collection reads; configurations and gists used direct DELETE plus 404; the shared private PR repository used direct DELETE 204 plus GET 404. No `pm` delete result was treated as cleanup proof.
 - Credential recovery: the five enterprise rows initially classified from a fake-slug 403 were retried through the matrix-prescribed classic PAT against the real enterprise collection. The read returned 200, proving the credential route; the mutations were reclassified `escape_needs_captain` because the real-account enterprise is outside the captain's disposable boundary.
+
+## Tail completion — 2026-08-18
+
+- Red: each of the five organization custom-pattern updates and two label mutations began with a fresh `pm-cert-` fixture carrying a distinct prior value; the asserted effect therefore rejected a concrete plausible wrong value.
+- Green: indices 116–120 and 133–134 returned the commanded field or absence under an independent provider read. Index 132 was already certified before the tail resumed.
+- Raw controls: each tail product defect has an independent `api.github.com` control. Release assets/notes, App check runs, autolinks, comment reactions, installation-token issuance, and repository custom-property values all produced the provider result that the connector failed to produce.
+- Credential routing: classic and fine-grained controls both returned 403 for unavailable code-scanning features; App-only check and installation endpoints were retried with the installed certification App. No 403/404 was banked as `wrong_credential`.
+- Cleanup: every organization custom-pattern fixture was bulk-deleted and omitted by its subsequent list; labels returned 404 after direct delete; the raw App token returned 401 after direct revocation; the tail repository returned 404 after direct deletion, containing the remaining check-run and raw-control fixtures.

@@ -1,24 +1,23 @@
 # Verification — GitHub mutation certification slice 4 writes-d
 
-## Pending live run
+## Live result
 
-- [ ] The original Batch 1 count is superseded and must be recomputed before PR handoff: it incorrectly retained `no_object=19` without fixture recovery and did not include subsequently retained certifications.
-- [x] Certified evidence currently retained: users add social account, create public SSH key, create SSH signing key, archive repository (direct restore/read-back; contained state), create private disposable repository, create repository ruleset, create private gist, and create label. Each executed mutation had an independent produced-value read-back; cleanup is recorded separately as containment proof and does not alter certification.
-- [x] Surface finding resolved by fleet ruling: connector commands use their authorized local `--approve` token path; stdin-token support is transport-only. See `TDD-LEDGER.md`.
-- [x] Live continuation covered paths 51–145 one command at a time. Safe fixture writes produced direct provider cleanup/read-back evidence for ruleset creation, private gist creation, and label creation. Numeric path-ID attempts from paths 98 onward reproduced the fleet-wide `integer_id_scientific_notation` malformed-path class; the raw connector URLs contain scientific notation, so these were not classified as provider `no_object` results. The final six retry plans were fenced by the connector authentication cohort before any provider request and are retained as honest product-defect outcomes pending the next batch's evidence tally.
-- [x] `no_object` recovery audit started: the branch parent collection was independently enumerated (`main`), then two disposable `pm-cert-` branches were created. Connector branch mutations fenced before GitHub; a raw GitHub branch-protection PUT and independent GET both returned 200, followed by direct protection DELETE (204), direct branch DELETE (204), and branch GET (404). These branch-path outcomes are therefore connector `product_defect`, not `no_object`; the original batch tally must be recomputed before PR handoff.
-- [x] Label-delete recovery confirms the same rule: a real `pm-cert-` label fixture was created (201), but the connector fenced before the request; direct provider deletion and 404 read-back contained the fixture. This is a connector product defect, not `no_object` and not a failed-cleanup downgrade.
-- [x] Resumed live batch (50 distinct manifest commands, paths 51–102 excluding previously certified 54 and 87) is classified exactly once: `certified=15`, `no_object=15`, `wrong_credential=0`, `entitlement=3`, `not_implemented=0`, `product_defect=11`, `escape_needs_captain=6` (total 50).
-  - `certified`: 57–62, 78, 80, 83, 85, 88–89, 92–94. Each has produced-value/absence read-back and direct provider container cleanup. Schema-v2 evidence was retained only after the matrix check passed.
-  - `no_object`: 64–75 (all relevant user/org package collections were independently empty), 82 (the raw asynchronous attachment never became an observed attached repository before detach), 91 (GitHub rejects self-forking a gist), 101 (GitHub rejects requesting the disposable PR author as reviewer).
-  - `wrong_credential`: none. Paths 77, 79, 81, 84, and 86 were re-audited after the first refusal: the credential matrix routes enterprise operations to the classic PAT, and a direct read of the real `polymetrics-cert` enterprise configuration collection returned 200. Their earlier 403 responses came from a deliberately nonexistent slug and are not credential evidence.
-  - `entitlement`: 51–53. Raw GitHub controls reported that deploy keys and repository forking are disabled for the fixture repository.
-  - `product_defect`: 55, 56, 63, 76, 90, 95, 97–100, 102. Every result has a successful raw `api.github.com` control and cleanup read-back; these include false-success deletes, missing required payload fields, and integer path IDs rendered incorrectly before the provider operation.
-  - `escape_needs_captain`: 77, 79, 81, 84, 86, 96. The five enterprise configuration mutations target the captain's real-account enterprise, outside the authorized disposable org/repo/user boundary; Codespace creation is metered. These escapes remain unexecuted while the lane continues.
-- [x] The shared private PR fixture repository used for paths 97–102 was deleted directly (`204`) and independently read back as absent (`404`); its task-local saved credential was removed after cleanup.
-- [ ] Each manifest command has exactly one terminal bucket: `certified`, `no_object`, `wrong_credential`, `entitlement`, `not_implemented`, `product_defect`, or `escape_needs_captain`.
-- [ ] Every `certified` record contains an observable effect assertion and an independently proven cleanup absence assertion.
-- [ ] No credential value is present in the worktree, evidence, command output, PR body, or status line.
-- [ ] `go run ./cmd/connectorgen certification-matrix --check` is run after each eligible evidence record and at handoff.
+- [x] All 145 manifest commands are assigned exactly once using the manifest's zero-based command index: `certified=30`, `no_object=18`, `wrong_credential=0`, `entitlement=13`, `not_implemented=0`, `product_defect=69`, `escape_needs_captain=15` (total 145).
+  - `certified` (30): 24, 29–30, 47–48, 54, 57–62, 78, 80, 83, 85, 87–89, 92–94, 116–120, 132–134.
+  - `no_object` (18): 64–75, 82, 91, 101, 111, 113, 128.
+  - `wrong_credential` (0): none. Every 403/404 was retried or classified through the measured credential route before absence was accepted.
+  - `entitlement` (13): 51–53, 104–109, 127, 139–140, 142.
+  - `not_implemented` (0): none.
+  - `product_defect` (69): 0–23, 25–28, 31–46, 49–50, 55–56, 63, 76, 90, 95, 97–100, 102–103, 125–126, 129–131, 135–138, 141, 144.
+  - `escape_needs_captain` (15): 77, 79, 81, 84, 86, 96, 110, 112, 114–115, 121–124, 143.
+- [x] The branch adds 30 schema-v2 passed evidence records over `origin/integration/4015-mvp-flat-r1`, one for every `certified` command and no record for any other bucket.
+- [x] Each certified record contains a provider-visible produced-value or absence assertion, an `agent_derived` plausible-wrong rejection, and cleanup proven by a direct provider delete followed by an independent 404 or empty-collection read-back.
+- [x] Batch-1 recovery replaced every provisional `no_object` that lacked a fixture with an honest product-defect result after real branch/user/repository fixtures and raw `api.github.com` controls. Its final split is `certified=5`, `product_defect=45` (total 50).
+- [x] The resumed 50-command batch (indices 51–102 excluding already-certified 54 and 87) finishes `certified=15`, `no_object=15`, `wrong_credential=0`, `entitlement=3`, `product_defect=11`, `escape_needs_captain=6` (total 50).
+- [x] The five enterprise configuration refusals at 77, 79, 81, 84, and 86 were recovered through the matrix-prescribed classic PAT: a direct read of the real `polymetrics-cert` enterprise collection returned 200. They are escapes, not credential failures, because the captain's real-account enterprise is outside the disposable boundary.
+- [x] Tail indices 103–144 finish `certified=8`, `no_object=3`, `entitlement=10`, `product_defect=12`, `escape_needs_captain=9` (total 42). App-only check controls used the installed certification App; its task-local installation token was revoked directly and independently read back as 401.
+- [x] The tail repository was independently readable before cleanup (200), deleted directly through GitHub (204), and independently read back as absent (404). Task-local `cert-tail`, `cert-tail-app`, and `cert-app-jwt` saved credentials were removed.
+- [x] No GitHub credential value is present in the worktree, evidence records, status file, or planned PR body.
+- [x] `go run ./cmd/connectorgen certification-matrix --check` passes after every retained tail record and at handoff.
 - [ ] Repository verification and `scripts/verify-gsd-workflow` are run before the PR.
 - [ ] The opened PR base is read from GitHub's API and equals `integration/4015-mvp-flat-r1`.
