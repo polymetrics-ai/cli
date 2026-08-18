@@ -1,0 +1,188 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_delete_ip_allow_list_entry",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:39:54.201033Z",
+  "run_id": "github-mut-slice1-delete-ip-allow-list-entry-rrun_d26ee4e1c0fd5cf5",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:e5cd8d355d28bd43b52129eb0f141f8e8c1be246bc65227fac14827eb5338b6d}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_delete_ip_allow_list_entry",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:bbd1b33e7b2e3d58f2d2697a1992b895cf9a40db31b592fa207172e8bf4de28e}}",
+              "query": "{{pmcertfp:v1:ebfda9b3955da11b5b476947e50d5edcd1e96d9d4803d404fc062ca3acaa1f64}}",
+              "variables": {
+                "input": {
+                  "ipAllowListEntryId": "{{pmcertfp:v1:f204f01ca86d4171d4bb8ce283df7cbc59f54845eba46b40a881340203ffd0f6}}"
+                }
+              }
+            },
+            "original_bytes": 276,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "deleteIpAllowListEntry": {
+                "__typename": "{{pmcertfp:v1:a72ec9f6b01424e4ac1d6030752af794f3bdd8409ff6e1481eed9c27286d2229}}"
+              }
+            },
+            "original_bytes": 73,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_ip_allow_collection_absent",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:35d0cf07de1e31507018102994d9213c5998830c3ab74dbb17e65101825e1c40}}",
+              "variables": {
+                "login": "{{pmcertfp:v1:bac5d7002becd4a5b1c75882159681556f458d09133de97590fbce9204027bb3}}"
+              }
+            },
+            "original_bytes": 191,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "organization": {
+                  "ipAllowListEntries": {
+                    "nodes": []
+                  }
+                }
+              }
+            },
+            "original_bytes": 61,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_ip_allow_list_entry_terminal_disposal",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:b3d4c28473d36bde6e4d2f8a3b46a88e1168e9d34215c26a0aeb9ab7d3f64bf1}}",
+              "variables": {
+                "input": {
+                  "ipAllowListEntryId": "{{pmcertfp:v1:f204f01ca86d4171d4bb8ce283df7cbc59f54845eba46b40a881340203ffd0f6}}"
+                }
+              }
+            },
+            "original_bytes": 196,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "deleteIpAllowListEntry": null
+              },
+              "errors": [
+                {
+                  "type": "{{pmcertfp:v1:ccdac3ed2051df9a24f3ade57a3866544d56c991c77d980bf185265d35aae674}}",
+                  "path": [
+                    "{{pmcertfp:v1:3a07fec8da53e7f4b58ee6807ac408043aca7ccea4577a56fb7c707b74117f78}}"
+                  ],
+                  "locations": [
+                    {
+                      "line": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                      "column": "{{pmcertfp:v1:a31cfb7f0eba08d1ca32a45397d610c38a53148149c9624a96b73208aeb113ae}}"
+                    }
+                  ],
+                  "message": "{{pmcertfp:v1:b6c2f045183e10b71379ad5afdb2f2cf7f387598696bbf5be2d4a71d70ae86b6}}"
+                }
+              ]
+            },
+            "original_bytes": 230,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_absent",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:35d0cf07de1e31507018102994d9213c5998830c3ab74dbb17e65101825e1c40}}",
+              "variables": {
+                "login": "{{pmcertfp:v1:bac5d7002becd4a5b1c75882159681556f458d09133de97590fbce9204027bb3}}"
+              }
+            },
+            "original_bytes": 191,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "organization": {
+                  "ipAllowListEntries": {
+                    "nodes": []
+                  }
+                }
+              }
+            },
+            "original_bytes": 61,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
