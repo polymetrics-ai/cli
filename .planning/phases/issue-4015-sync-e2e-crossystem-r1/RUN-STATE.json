@@ -1,0 +1,16 @@
+{
+  "phase": "issue-4015-sync-e2e-crossystem-r1",
+  "status": "planned",
+  "delivery": "direct-PR",
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-sync-e2e-crossystem-r1",
+  "current_slice": "live_harness",
+  "product_code_changes_allowed": false,
+  "routes": {
+    "postgres_to_github": "pending",
+    "github_to_postgres": "pending",
+    "github_to_github": "pending",
+    "flow_schedule": "pending"
+  },
+  "inline_gsd_fallback": true
+}
