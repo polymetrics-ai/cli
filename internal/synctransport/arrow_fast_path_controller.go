@@ -81,17 +81,10 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 	}()
 
 	var lastCandidate *synccontract.CheckpointEnvelope
-	// Replacement is a complete new generation, so it must never seek from a
-	// checkpoint left by a prior generation. The eventual checkpoint still
-	// records the final source position after its receipt is reconciled.
-	fastCheckpoint := request.Checkpoint
-	if request.Mode == synccontract.ModeFullOverwrite {
-		fastCheckpoint = nil
-	}
 	segments := make([]FastSegmentReceipt, 0)
 	err = source.ExtractArrowRanges(ctx, cloneArrowExtractRequest(ArrowExtractRequest{
 		Connector: request.Source, Runtime: request.SourceRuntime, Stream: request.Stream, CursorField: request.CursorField,
-		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: fastCheckpoint,
+		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint),
 		BatchSize: request.BatchSize, UnitDeadline: request.unitDeadline(), TransformPlanJSON: request.TransformPlanJSON, TransformHash: request.TransformPlanHash,
 	}), func(batch ArrowSourceBatch) error {
 		if err := validateArrowSourceBatch(batch, request.BatchSize); err != nil {

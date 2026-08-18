@@ -200,6 +200,19 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	if count != 1001 || delivery == "" {
 		t.Fatalf("managed target state = schema %q relation %q rows %d delivery %q, want 1001 durable rows and receipt", schema, relation, count, delivery)
 	}
+	qualified := pgx.Identifier{schema, relation}.Sanitize()
+	var firstSample struct {
+		ID       int64
+		Sequence int64
+		Label    string
+	}
+	if err := target.QueryRow(ctx, "SELECT id, sequence, label FROM "+qualified+" WHERE id = $1", int64(1001)).Scan(&firstSample.ID, &firstSample.Sequence, &firstSample.Label); err != nil {
+		t.Fatalf("independently read managed target sample: %v", err)
+	}
+	if firstSample.ID != 1001 || firstSample.Sequence != 10010 || firstSample.Label != "event-1001" {
+		t.Fatalf("managed target sample = (%d, %d, %q), want (1001, 10010, %q)", firstSample.ID, firstSample.Sequence, firstSample.Label, "event-1001")
+	}
+	t.Logf("independent target read-back: %s.%s rows=%d sample=(%d,%d,%q)", schema, relation, count, firstSample.ID, firstSample.Sequence, firstSample.Label)
 	assertPostgresTransportWarehouse(t, root)
 	checkpointBeforeTokenReplay := postgresTransportStreamStates(t, root)
 	replayOutput, replayErr := runTransportPM(binary, firstApproved.Token+"\n",
@@ -221,13 +234,26 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	}
 
 	secondRun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-to-postgres", "public.events", 1000).Run
-	if secondRun.RecordsRead != 1001 || secondRun.RecordsLoaded != 1001 || secondRun.Status != "completed" {
-		t.Fatalf("replay PostgreSQL binary run = %#v, want exact completed replay", secondRun)
+	if secondRun.RecordsRead != 0 || secondRun.RecordsLoaded != 0 || secondRun.Status != "completed" {
+		t.Fatalf("second incremental PostgreSQL binary run = %#v, want completed checkpoint skip", secondRun)
 	}
+	t.Logf("second incremental run: records_read=%d records_loaded=%d (checkpoint skip)", secondRun.RecordsRead, secondRun.RecordsLoaded)
 	_, _, replayCount, replayDelivery := postgresTransportTargetState(t, ctx, target)
 	if replayCount != count || replayDelivery != delivery {
 		t.Fatalf("acknowledged replay changed target: rows %d->%d delivery %q->%q", count, replayCount, delivery, replayDelivery)
 	}
+	var replaySample struct {
+		ID       int64
+		Sequence int64
+		Label    string
+	}
+	if err := target.QueryRow(ctx, "SELECT id, sequence, label FROM "+qualified+" WHERE id = $1", firstSample.ID).Scan(&replaySample.ID, &replaySample.Sequence, &replaySample.Label); err != nil {
+		t.Fatalf("independently read managed target replay sample: %v", err)
+	}
+	if replaySample != firstSample {
+		t.Fatalf("acknowledged replay changed target sample: before=%+v after=%+v", firstSample, replaySample)
+	}
+	t.Logf("independent replay read-back: %s.%s rows=%d sample=(%d,%d,%q)", schema, relation, replayCount, replaySample.ID, replaySample.Sequence, replaySample.Label)
 
 	schemaDriftApproval := preparePostgresTransportApproval(t, binary, root, "postgres-to-postgres", "public.events")
 	checkpointBeforeSchemaDrift := postgresTransportStreamStates(t, root)
@@ -262,6 +288,10 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 		counts := postgresTransportBusinessCounts(t, ctx, target)
 		return len(counts) == 2 && counts[0] == 1 && counts[1] == 1001 && strings.Contains(postgresTransportStreamStates(t, root), `"logical_replication"`)
 	}, "bootstrap snapshot row and durable logical-replication checkpoint")
+	beforeInterruptionCounts := postgresTransportBusinessCounts(t, ctx, target)
+	if len(beforeInterruptionCounts) != 2 || beforeInterruptionCounts[0] != 1 || beforeInterruptionCounts[1] != 1001 {
+		t.Fatalf("managed target rows before CDC interruption = %v, want CDC/control [1 1001]", beforeInterruptionCounts)
+	}
 	bootstrapBarrierState := postgresTransportStreamStates(t, root)
 	if _, err := admin.Exec(ctx, `BEGIN; UPDATE public.bootstrap_events SET sequence = 20, label = 'post-barrier-update' WHERE id = 1; INSERT INTO public.bootstrap_events VALUES (2, 30, 'post-barrier-insert'); DELETE FROM public.bootstrap_events WHERE id = 1; COMMIT`); err != nil {
 		t.Fatalf("write post-barrier transaction: %v", err)
@@ -270,6 +300,10 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 		return postgresTransportLabelCount(t, ctx, target, "post-barrier-insert") == 1 && postgresTransportLabelCount(t, ctx, target, "bootstrap") == 0 && postgresTransportStreamStates(t, root) != bootstrapBarrierState
 	}, "post-barrier transaction in target and an advanced LSN checkpoint")
 	postBarrierState := postgresTransportStreamStates(t, root)
+	atInterruptionCounts := postgresTransportBusinessCounts(t, ctx, target)
+	if len(atInterruptionCounts) != 2 || atInterruptionCounts[0] != 1 || atInterruptionCounts[1] != 1001 {
+		t.Fatalf("managed target rows at CDC interruption = %v, want CDC/control [1 1001]", atInterruptionCounts)
+	}
 	bootstrapProcess.killAndWait(t)
 
 	resumeApproval := preparePostgresTransportApproval(t, binary, root, "postgres-bootstrap", "public.bootstrap_events")
@@ -282,10 +316,15 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 		return postgresTransportLabelCount(t, ctx, target, "resumed-after-process-death") == 1 && postgresTransportStreamStates(t, root) != postBarrierState
 	}, "resumed CDC row and checkpoint after process restart")
 	resumeProcess.killAndWait(t)
-	counts := postgresTransportBusinessCounts(t, ctx, target)
-	if len(counts) != 2 || counts[0] != 2 || counts[1] != 1001 {
-		t.Fatalf("managed target business row counts after bootstrap/resume = %v, want [2 1001]", counts)
+	afterRestartCounts := postgresTransportBusinessCounts(t, ctx, target)
+	if len(afterRestartCounts) != 2 || afterRestartCounts[0] != 2 || afterRestartCounts[1] != 1001 {
+		t.Fatalf("managed target business row counts after bootstrap/resume = %v, want [2 1001]", afterRestartCounts)
 	}
+	resumedKeyCount := postgresTransportLabelCount(t, ctx, target, "resumed-after-process-death")
+	if resumedKeyCount != 1 {
+		t.Fatalf("post-restart target key multiplicity = %d, want exactly 1", resumedKeyCount)
+	}
+	t.Logf("CDC restart independent target counts: before_interruption=%d at_interruption=%d after_restart=%d resumed_key_count=%d (control_rows=%d)", beforeInterruptionCounts[0], atInterruptionCounts[0], afterRestartCounts[0], resumedKeyCount, afterRestartCounts[1])
 
 	assertPostgresTransportDestinationRefusal(t, ctx, binary, root, target, "postgres-auth-refusal", "pg-target-missing-user", "postgres managed target transport is unavailable")
 	assertPostgresTransportDestinationRefusal(t, ctx, binary, root, target, "postgres-permission-refusal", "pg-target-denied", "database managed target state cannot be proven")
@@ -657,10 +696,10 @@ func TestPMBinaryExecutesPostgresIncrementalDedupeHistory(t *testing.T) {
 }
 
 // TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage characterizes the
-// shipped full-overwrite route with two bounded source pages. Its target query
-// is deliberately the final-content assertion: a per-page TRUNCATE leaves
-// only the second page and must fail this test rather than be mistaken for a
-// successful run.
+// shipped full-overwrite route across two bounded pages and a changed-source
+// rerun. Its target queries are deliberately the final-content assertions: a
+// per-page TRUNCATE, checkpoint skip, or empty/stale publication must fail
+// rather than be mistaken for a successful run.
 func TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage(t *testing.T) {
 	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
 		t.Skip("database integration is opt-in")
@@ -720,6 +759,128 @@ func TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage(t *testing.T) {
 	}
 	if len(ids) != 3 || ids[0] != 1 || ids[1] != 2 || ids[2] != 3 {
 		t.Fatalf("two-page full-overwrite target IDs = %v, want every source page [1 2 3]", ids)
+	}
+	var beforeLabel string
+	if err := target.QueryRow(ctx, "SELECT label FROM "+qualified+" WHERE id = 2").Scan(&beforeLabel); err != nil {
+		t.Fatalf("read first full-overwrite target sample: %v", err)
+	}
+	t.Logf("full-overwrite first run: records_read=%d records_loaded=%d target_rows=%d target_ids=%v target_sample=id=2 label=%q", run.RecordsRead, run.RecordsLoaded, count, ids, beforeLabel)
+
+	if _, err := admin.Exec(ctx, `DELETE FROM public.overwrite_events WHERE id = 1`); err != nil {
+		t.Fatalf("remove stale full-overwrite source row: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `UPDATE public.overwrite_events SET label = 'replacement-two' WHERE id = 2`); err != nil {
+		t.Fatalf("update full-overwrite source sample: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `INSERT INTO public.overwrite_events (id, sequence, label) VALUES (4, 25, 'replacement-four')`); err != nil {
+		t.Fatalf("insert full-overwrite source replacement row: %v", err)
+	}
+	var sourceIDs []int64
+	var sourceLabel string
+	if err := admin.QueryRow(ctx, `SELECT array_agg(id ORDER BY id) FROM public.overwrite_events`).Scan(&sourceIDs); err != nil {
+		t.Fatalf("read changed full-overwrite source IDs: %v", err)
+	}
+	if err := admin.QueryRow(ctx, `SELECT label FROM public.overwrite_events WHERE id = 2`).Scan(&sourceLabel); err != nil {
+		t.Fatalf("read changed full-overwrite source sample: %v", err)
+	}
+
+	rerun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-full-overwrite", "public.overwrite_events", 2).Run
+	if rerun.Status != "completed" || rerun.RecordsRead != 3 || rerun.RecordsLoaded != 3 {
+		t.Errorf("second full-overwrite binary run = %#v, want completed 3-row replacement", rerun)
+	}
+	_, _, replacedCount := postgresTransportTargetRelation(t, ctx, target)
+	var replacedIDs []int64
+	if err := target.QueryRow(ctx, "SELECT array_agg(id ORDER BY id) FROM "+qualified).Scan(&replacedIDs); err != nil {
+		t.Fatalf("read second full-overwrite target IDs: %v", err)
+	}
+	var replacedLabel *string
+	if err := target.QueryRow(ctx, "SELECT (SELECT label FROM "+qualified+" WHERE id = 2)").Scan(&replacedLabel); err != nil {
+		t.Fatalf("read second full-overwrite target sample: %v", err)
+	}
+	var removedIDCount int
+	if err := target.QueryRow(ctx, "SELECT count(*) FROM "+qualified+" WHERE id = 1").Scan(&removedIDCount); err != nil {
+		t.Fatalf("check removed full-overwrite target row: %v", err)
+	}
+	replacedLabelText := "<missing>"
+	if replacedLabel != nil {
+		replacedLabelText = *replacedLabel
+	}
+	t.Logf("full-overwrite rerun: source_rows=%d source_ids=%v source_sample=id=2 label=%q records_read=%d records_loaded=%d target_rows=%d target_ids=%v target_sample=id=2 label=%q removed_id_1_rows=%d", len(sourceIDs), sourceIDs, sourceLabel, rerun.RecordsRead, rerun.RecordsLoaded, replacedCount, replacedIDs, replacedLabelText, removedIDCount)
+	if replacedCount != 3 || !reflect.DeepEqual(replacedIDs, []int64{2, 3, 4}) || replacedLabelText != "replacement-two" || removedIDCount != 0 {
+		t.Errorf("second full-overwrite target rows=%d ids=%v sample=%q removed_id_1_rows=%d, want replacement rows=3 ids=[2 3 4] sample=%q removed row absent", replacedCount, replacedIDs, replacedLabelText, removedIDCount, "replacement-two")
+	}
+}
+
+func TestPMBinaryPostgresIncrementalUpsertStillSkipsUnchangedSource(t *testing.T) {
+	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
+		t.Skip("database integration is opt-in")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+	harness := newPostgresTransportHarness(t)
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Errorf("close incremental-upsert PostgreSQL harness: %v", err)
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatalf("start incremental-upsert PostgreSQL harness: %v", err)
+	}
+	admin := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
+	defer func() { _ = admin.Close(context.Background()) }()
+	if _, err := admin.Exec(ctx, "CREATE DATABASE "+postgresTransportTargetDB); err != nil {
+		t.Fatalf("create incremental-upsert target database: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `CREATE TABLE public.incremental_events (id bigint PRIMARY KEY, sequence bigint NOT NULL, label text NOT NULL)`); err != nil {
+		t.Fatalf("create incremental-upsert source table: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `INSERT INTO public.incremental_events (id, sequence, label) VALUES (1, 10, 'event-one'), (2, 20, 'event-two'), (3, 30, 'event-three')`); err != nil {
+		t.Fatalf("seed incremental-upsert source rows: %v", err)
+	}
+	target := waitForPostgresTransport(t, ctx, endpoint, postgresTransportTargetDB, postgresTransportUser)
+	defer func() { _ = target.Close(context.Background()) }()
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "project")
+	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-source", postgresTransportSourceDB)
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
+	mustPostgresTransportPM(t, binary, "",
+		"connections", "create", "postgres-incremental-upsert",
+		"--source", "postgres:pg-source", "--destination", "postgres:pg-target",
+		"--stream", "public.incremental_events", "--sync-mode", "incremental_upsert",
+		"--cursor", "sequence", "--primary-key", "id", "--table", "incremental_events",
+		"--root", root, "--json")
+
+	first := runApprovedPostgresTransportBinary(t, binary, root, "postgres-incremental-upsert", "public.incremental_events", 2).Run
+	if first.Status != "completed" || first.RecordsRead != 3 || first.RecordsLoaded != 3 {
+		t.Fatalf("first incremental-upsert binary run = %#v, want completed 3-row transfer", first)
+	}
+	schema, relation, count, delivery := postgresTransportTargetState(t, ctx, target)
+	if count != 3 || delivery == "" {
+		t.Fatalf("first incremental-upsert target rows=%d delivery=%q, want three durable rows and a receipt", count, delivery)
+	}
+	qualified := pgx.Identifier{schema, relation}.Sanitize()
+	var beforeLabel string
+	if err := target.QueryRow(ctx, "SELECT label FROM "+qualified+" WHERE id = 2").Scan(&beforeLabel); err != nil {
+		t.Fatalf("read first incremental-upsert target sample: %v", err)
+	}
+
+	rerun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-incremental-upsert", "public.incremental_events", 2).Run
+	if rerun.Status != "completed" || rerun.RecordsRead != 0 || rerun.RecordsLoaded != 0 {
+		t.Fatalf("unchanged incremental-upsert binary run = %#v, want completed checkpoint skip", rerun)
+	}
+	_, _, replayCount, replayDelivery := postgresTransportTargetState(t, ctx, target)
+	var replayLabel string
+	if err := target.QueryRow(ctx, "SELECT label FROM "+qualified+" WHERE id = 2").Scan(&replayLabel); err != nil {
+		t.Fatalf("read replayed incremental-upsert target sample: %v", err)
+	}
+	t.Logf("incremental-upsert replay: first_records_read=%d first_records_loaded=%d rerun_records_read=%d rerun_records_loaded=%d target_rows_before=%d target_rows_after=%d target_sample_before=id=2 label=%q target_sample_after=id=2 label=%q", first.RecordsRead, first.RecordsLoaded, rerun.RecordsRead, rerun.RecordsLoaded, count, replayCount, beforeLabel, replayLabel)
+	if count != 3 || replayCount != count || replayDelivery != delivery || beforeLabel != "event-two" || replayLabel != beforeLabel {
+		t.Fatalf("incremental-upsert replay changed target: rows=%d->%d delivery=%q->%q sample=%q->%q", count, replayCount, delivery, replayDelivery, beforeLabel, replayLabel)
 	}
 }
 

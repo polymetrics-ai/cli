@@ -170,6 +170,67 @@ func TestNativeBootstrapTransportCheckpointRestoresSealedPostgresIdentity(t *tes
 	}
 }
 
+func TestPostgresBootstrapTransportAcceptsOnlyDurableLogicalReplicationCheckpointBeforeIO(t *testing.T) {
+	connector := New()
+	transport := NewPollingTransportSource(connector)
+	request := postgresPollingFixtureRequest()
+	request.Mode = synccontract.ModeIncrementalUpsert
+	request.Runtime.Config["transport_bootstrap"] = "true"
+
+	source := postgresCDCSource{
+		identity: synccontract.SourceIdentity{
+			Engine:           "postgres",
+			AccountOrCluster: "system-one:analytics",
+			ObjectScope:      request.Stream,
+		},
+		generation:        synccontract.OpaqueToken("7\npm_events"),
+		publication:       "pm_events",
+		schemaFingerprint: "schema-one",
+		system: pglogrepl.IdentifySystemResult{
+			SystemID: "system-one",
+			DBName:   "analytics",
+			Timeline: 7,
+		},
+	}
+	barrierLSN := pglogrepl.LSN(0x16B6C50)
+	barrier, err := newPostgresBootstrapBarrier(source, barrierLSN)
+	if err != nil {
+		t.Fatal(err)
+	}
+	source.bootstrap = &barrier
+	candidate := bootstrapTransportCheckpoint(
+		postgresCDCCheckpointForLSNs(source, barrierLSN, barrierLSN, barrierLSN, barrierLSN),
+		request.Resume,
+	)
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement("fixture-warehouse", candidate.ObservedAt.Add(time.Second))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var committed synccontract.CheckpointEnvelope
+	if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
+		committed = checkpoint.Clone()
+		return nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	request.Checkpoint = &committed
+
+	if err := transport.validateRequestBeforeIO(context.Background(), request, func(synctransport.SourcePage) error { return nil }); err != nil {
+		t.Fatalf("durable logical-replication restart checkpoint rejected before CDC resume: %v", err)
+	}
+
+	pollingRequest := postgresPollingFixtureRequest()
+	pollingCheckpoint := validPostgresPollingFixtureCheckpoint(t, transport, pollingRequest)
+	pollingRequest.Mode = synccontract.ModeIncrementalUpsert
+	pollingRequest.Runtime.Config["transport_bootstrap"] = "true"
+	pollingRequest.Checkpoint = &pollingCheckpoint
+	err = transport.validateRequestBeforeIO(context.Background(), pollingRequest, func(synctransport.SourcePage) error { return nil })
+	var recovery *synccontract.RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeInvalidCheckpoint {
+		t.Fatalf("bootstrap polling checkpoint error = %v, want invalid-checkpoint rebootstrap", err)
+	}
+}
+
 func TestPostgresTransportRegistryPreflightRefusesBeforeSourceIO(t *testing.T) {
 	tests := []struct {
 		name       string
