@@ -15,7 +15,7 @@
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
 | Every sweep row has one exact parity projection. | live | Unit tests assert API, CLI intent/reference, CDC/changefeed, and transport rows each emit a legal kind/class; invalid/mismatched rows return an error. |
-| API and managed database under-reporting are eliminated. | live | Zoom/GitLab read operations classify as `rest_read`; PostgreSQL/MySQL managed destinations classify as `reverse_etl` despite generic direct-write metadata. |
+| API and managed database under-reporting are eliminated. | live | Zoom/GitLab `capability:read` projects as `rest_read`; PostgreSQL's declared managed destination projects as `reverse_etl` despite generic direct-write metadata. The classifier applies the same rule to any future MySQL managed-destination descriptor; this base SHA declares no such MySQL descriptor. |
 | Delete can be independently selected. | live | A declared `delete` write row emits `direct_write` plus `write_action=delete`. |
 | Published accepted evidence is complete and immutable. | live | A controlled write failure publishes zero records; a concurrent matrix reader never observes malformed JSON; duplicate deterministic paths refuse replacement. |
 | Live evidence survives its validation/order path. | live | A regression test asserts script-equivalent draft/import/scoped-generation/check order retains evidence; the old publish/check/delete sequence would remove it. |
@@ -24,7 +24,7 @@
 ## Scope and exclusions
 
 - In scope: G1, G2, G6; generated sweep shards as required; GitHub proof; architecture docs and concise AGENTS pointer.
-- Excluded: G3–G5, G7–G14, `certificationallowlist.go`, global `certification-matrix --all` refresh, credentialed live provider execution, and any new certification authority.
+- Excluded: G3–G5, G7–G14, `certificationallowlist.go`, global `certification-matrix --all` refresh, and any new certification authority. A bounded credentialed GitHub direct-read proof is required by the added live-proof requirement.
 
 ## TDD execution slices
 

@@ -8,6 +8,8 @@ import (
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -263,5 +265,216 @@ func TestCertificationSweepArtifactValidationRejectsUnknownFields(t *testing.T) 
 	}
 	if err := validateCertificationSweepArtifact([]byte(`{"schema_version":1,"unexpected":true}`)); err == nil {
 		t.Fatal("validateCertificationSweepArtifact accepted an unknown field")
+	}
+}
+
+func TestCertificationParityClassifierProjectsOnlyTheNormalizedTaxonomy(t *testing.T) {
+	implementedChangefeed := &connectors.ChangefeedDescriptor{Status: connectors.ChangefeedStatusImplemented}
+	managedDestination := &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{}}
+	cases := []struct {
+		name       string
+		input      certificationParityInput
+		wantKind   string
+		wantClass  string
+		wantAction string
+	}{
+		{
+			name: "REST direct read", input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "widgets view", Intent: "direct_read", Operation: "widgets_view"},
+				Operation: &engine.OperationSpec{ID: "widgets_view", Kind: "rest_read"},
+			}, wantKind: certificationParityKindRESTRead, wantClass: certificationParityClassDirectRead,
+		},
+		{
+			name: "GraphQL direct read normalizes to REST read", input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "graphql query", Intent: "direct_read", Operation: "graphql_query"},
+				Operation: &engine.OperationSpec{ID: "graphql_query", Kind: "graphql_query"},
+			}, wantKind: certificationParityKindRESTRead, wantClass: certificationParityClassDirectRead,
+		},
+		{
+			name: "REST direct write", input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "widgets update", Intent: "direct_write", Operation: "widgets_update"},
+				Operation: &engine.OperationSpec{ID: "widgets_update", Kind: "rest_write"},
+			}, wantKind: certificationParityKindRESTWrite, wantClass: certificationParityClassDirectWrite,
+		},
+		{
+			name: "ETL stream", input: certificationParityInput{
+				Command: &engine.CLICommand{Path: "widgets sync", Intent: "etl", Stream: "widgets"},
+				Stream:  &engine.StreamSpec{Name: "widgets"},
+			}, wantKind: certificationParityKindETL, wantClass: certificationParityClassETL,
+		},
+		{
+			name: "direct write delete action", input: certificationParityInput{
+				Command: &engine.CLICommand{Path: "widgets delete", Intent: "direct_write", Write: "delete_widget"},
+				Write:   &engine.WriteAction{Name: "delete_widget", Kind: "delete"},
+			}, wantKind: certificationParityKindRESTWrite, wantClass: certificationParityClassDirectWrite, wantAction: "delete",
+		},
+		{
+			name: "reverse ETL delete is direct write family", input: certificationParityInput{
+				Command: &engine.CLICommand{Path: "widgets delete-through-plan", Intent: "reverse_etl", Write: "delete_widget"},
+				Write:   &engine.WriteAction{Name: "delete_widget", Kind: "delete"},
+			}, wantKind: certificationParityKindRESTWrite, wantClass: certificationParityClassDirectWrite, wantAction: "delete",
+		},
+		{
+			name: "binary download", input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "widgets download", Intent: "binary_download", Operation: "widgets_download"},
+				Operation: &engine.OperationSpec{ID: "widgets_download", Kind: "binary_download"},
+			}, wantKind: certificationParityKindBinaryDownload, wantClass: certificationParityClassBinary,
+		},
+		{
+			name: "file upload remains binary class", input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "widgets upload", Intent: "direct_write", Operation: "widgets_upload"},
+				Operation: &engine.OperationSpec{ID: "widgets_upload", Kind: "file_upload"},
+			}, wantKind: certificationParityKindFileUpload, wantClass: certificationParityClassBinary,
+		},
+		{
+			name: "CDC capability", input: certificationParityInput{Capabilities: &engine.Capabilities{CDC: true}},
+			wantKind: certificationParityKindCDC, wantClass: certificationParityClassETL,
+		},
+		{
+			name: "changefeed transport", input: certificationParityInput{Changefeed: implementedChangefeed},
+			wantKind: certificationParityKindChangefeed, wantClass: certificationParityClassETL,
+		},
+		{
+			name: "managed database destination", input: certificationParityInput{Transport: managedDestination, TransportRole: certificationParityTransportDestination},
+			wantKind: certificationParityKindReverseETL, wantClass: certificationParityClassReverseETL,
+		},
+		{
+			name: "valid non-applicable command", input: certificationParityInput{Command: &engine.CLICommand{Path: "config list", Intent: "config"}},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, err := classifyCertificationParity(tc.input)
+			if err != nil {
+				t.Fatalf("classifyCertificationParity() error = %v", err)
+			}
+			if got.OperationKind != tc.wantKind || got.OpClass != tc.wantClass || got.WriteActionKind != tc.wantAction {
+				t.Fatalf("classification = %#v, want kind=%q class=%q action=%q", got, tc.wantKind, tc.wantClass, tc.wantAction)
+			}
+		})
+	}
+}
+
+func TestCertificationParityClassifierRefusesMismatchedOrUnresolvedReferences(t *testing.T) {
+	cases := []struct {
+		name  string
+		input certificationParityInput
+	}{
+		{
+			name: "direct read references write operation",
+			input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "widgets view", Intent: "direct_read", Operation: "widgets_write"},
+				Operation: &engine.OperationSpec{ID: "widgets_write", Kind: "rest_write"},
+			},
+		},
+		{
+			name:  "ETL command lacks stream",
+			input: certificationParityInput{Command: &engine.CLICommand{Path: "widgets sync", Intent: "etl", Stream: "widgets"}},
+		},
+		{
+			name:  "reverse ETL command lacks declared write action",
+			input: certificationParityInput{Command: &engine.CLICommand{Path: "widgets delete", Intent: "reverse_etl", Write: "delete_widget"}},
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			if _, err := classifyCertificationParity(tc.input); err == nil {
+				t.Fatal("classifyCertificationParity() error = nil, want invalid projection error")
+			}
+		})
+	}
+}
+
+func TestCertificationSweepProjectsGitHubAndLegacyAPIReads(t *testing.T) {
+	root := repoRootForCertificationTest(t)
+	sweep, err := buildCertificationSweep(root, "github")
+	if err != nil {
+		t.Fatalf("buildCertificationSweep(github) error = %v", err)
+	}
+	readRows := 0
+	for _, command := range sweep.Commands {
+		if command.Intent != "direct_read" || command.Availability != "implemented" {
+			continue
+		}
+		readRows++
+		if command.OperationKind == nil || *command.OperationKind != certificationParityKindRESTRead || command.OpClass == nil || *command.OpClass != certificationParityClassDirectRead {
+			t.Fatalf("implemented read %q projection = kind=%v class=%v, want rest_read/direct_read", command.Path, command.OperationKind, command.OpClass)
+		}
+	}
+	if readRows == 0 {
+		t.Fatal("GitHub has no implemented direct-read commands")
+	}
+
+	for _, connector := range []string{"zoom", "gitlab"} {
+		t.Run(connector, func(t *testing.T) {
+			bundle, err := engine.Load(defs.FS, connector)
+			if err != nil {
+				t.Fatalf("load %s: %v", connector, err)
+			}
+			if !bundle.Metadata.Capabilities.Read {
+				t.Fatalf("%s no longer declares capability:read", connector)
+			}
+			got, err := classifyCertificationParity(certificationParityInput{Capabilities: &bundle.Metadata.Capabilities, Capability: "read"})
+			if err != nil {
+				t.Fatalf("classify capability:read: %v", err)
+			}
+			if got.OperationKind != certificationParityKindRESTRead || got.OpClass != certificationParityClassDirectRead {
+				t.Fatalf("capability:read projection = %#v, want rest_read/direct_read", got)
+			}
+		})
+	}
+}
+
+func TestCertificationSweepCarriesDeclaredDeleteActionKind(t *testing.T) {
+	sweep, err := buildCertificationSweep(repoRootForCertificationTest(t), "github")
+	if err != nil {
+		t.Fatalf("buildCertificationSweep(github) error = %v", err)
+	}
+	for _, command := range sweep.Commands {
+		if command.WriteActionKind == "delete" {
+			if command.OperationKind == nil || *command.OperationKind != certificationParityKindRESTWrite || command.OpClass == nil || *command.OpClass != certificationParityClassDirectWrite {
+				t.Fatalf("delete command %q projection = %#v, want rest_write/direct_write with delete action", command.Path, command)
+			}
+			return
+		}
+	}
+	t.Fatal("generated GitHub sweep has no independently classified delete write action")
+}
+
+func TestCertificationParityClassifierTreatsManagedDatabaseDestinationAsReverseETL(t *testing.T) {
+	postgres, err := engine.Load(defs.FS, "postgres")
+	if err != nil {
+		t.Fatalf("load postgres: %v", err)
+	}
+	mysql, err := engine.Load(defs.FS, "mysql")
+	if err != nil {
+		t.Fatalf("load mysql: %v", err)
+	}
+	for _, tc := range []struct {
+		name      string
+		bundle    *engine.Bundle
+		transport *connectors.SyncTransportDescriptor
+	}{
+		{name: "PostgreSQL declared managed destination", bundle: &postgres, transport: postgres.SyncTransport},
+		// This base SHA has no MySQL sync_transport.json. The classifier must
+		// nevertheless preserve the same real managed-destination route when
+		// that descriptor arrives, rather than consulting generic Write.
+		{name: "MySQL managed destination contract", bundle: &mysql, transport: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{}}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if tc.bundle.Metadata.Capabilities.Write {
+				t.Fatalf("%s metadata must keep generic Connector.Write unavailable", tc.name)
+			}
+			got, err := classifyCertificationParity(certificationParityInput{
+				Transport: tc.transport, TransportRole: certificationParityTransportDestination,
+			})
+			if err != nil {
+				t.Fatalf("classify managed destination: %v", err)
+			}
+			if got.OperationKind != certificationParityKindReverseETL || got.OpClass != certificationParityClassReverseETL {
+				t.Fatalf("managed destination projection = %#v, want reverse_etl/reverse_etl despite generic write=false", got)
+			}
+		})
 	}
 }

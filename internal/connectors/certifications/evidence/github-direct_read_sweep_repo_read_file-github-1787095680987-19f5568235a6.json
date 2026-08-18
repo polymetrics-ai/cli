@@ -1,0 +1,66 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:direct_read_sweep_repo_read_file",
+  "provider": "github",
+  "executed_at": "2026-08-18T23:28:05.818Z",
+  "run_id": "github-1787095680987-19f5568235a6-direct_read_sweep_repo_read_file",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "22a8ad26f44dad395cb21bd34d1e7d2a3129c7fe205387755c5e634db78b6ed3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:df9e6bcb94fa0f201b852073b5c2a5be41696f77a9e9607ae85c27de7ff05169}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:232db93aef59bb6c7d000f34f53c4d0bf63bf90749553015318a270b0f2c04f0}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "direct_read_sweep_repo_read_file",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:c81cc015e1eee4282b7f8a7309967dff84f67988479819af9ad61d8bffcd9668}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "{{pmcertfp:v1:a1536c801d6f4e43b823fd2f61f173b56bb38541231dbfaf75c3adb4ee876c48}}": {
+                "git": "{{pmcertfp:v1:bf536025f4bd577ab8dcb6a5c48eabb5181148aa3c9440ef7b4ee4e134050dfb}}",
+                "html": "{{pmcertfp:v1:a87a3f6948cfe7dfe26299e67340e5deed8831207dfe649d9d0f7e596ac21f5a}}",
+                "self": "{{pmcertfp:v1:db3e96636d2c863324df981da7f2cea51d9d2edd90a6f00ef8f69ee50256bfeb}}"
+              },
+              "content_redacted": "{{pmcertfp:v1:a8faa5f706c8814884fdaf7c9633294508b32efb5d647aff3693f4a2e240edca}}",
+              "download_url_redacted": "{{pmcertfp:v1:a8faa5f706c8814884fdaf7c9633294508b32efb5d647aff3693f4a2e240edca}}",
+              "encoding": "{{pmcertfp:v1:ce35b0ae662d0e083699854cdd8266ff6827a9e168635df4a4a58f619133ea12}}",
+              "git_url": "{{pmcertfp:v1:bf536025f4bd577ab8dcb6a5c48eabb5181148aa3c9440ef7b4ee4e134050dfb}}",
+              "html_url": "{{pmcertfp:v1:a87a3f6948cfe7dfe26299e67340e5deed8831207dfe649d9d0f7e596ac21f5a}}",
+              "name": "{{pmcertfp:v1:f350a0bca84b38058226fb689d70a1d8952563057100446f20f7af43e2ce23aa}}",
+              "path": "{{pmcertfp:v1:f350a0bca84b38058226fb689d70a1d8952563057100446f20f7af43e2ce23aa}}",
+              "sha": "{{pmcertfp:v1:0df2ea881a8411b58327c81e848991f4b755c1be141a4c1d46b03f729b9549a9}}",
+              "size": "{{pmcertfp:v1:ed88be6bd70a6c6cc56ff1a97efe96f5d7906bca5be0d44b570a3440b007aa48}}",
+              "type": "{{pmcertfp:v1:c0f9a8f39b0f879eb752185b61384a8d3cf3c2a7984b9f487d3e6f2774347054}}",
+              "url": "{{pmcertfp:v1:db3e96636d2c863324df981da7f2cea51d9d2edd90a6f00ef8f69ee50256bfeb}}"
+            },
+            "original_bytes": 883,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

@@ -309,6 +309,10 @@ Never invent an `api_surface` endpoint to make a command look implemented. If
 the endpoint is not in the connector's own `api_surface.json` and
 `operations.json`, the command is not ready.
 
+For generated certification parity cells, resource-key isolation, and atomic
+evidence fan-in, see
+[`docs/architecture/connector-certification-design.md`](docs/architecture/connector-certification-design.md#generated-parity-projection-cell-identity-and-safe-publication).
+
 ## Command Surface Must Stay Executable
 
 A parity count is a claim about the binary, so prove it with the binary.

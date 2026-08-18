@@ -471,8 +471,24 @@ async function atomicJSON(file, value) {
   await chmod(file, 0o600);
 }
 
-async function matrixCheck() {
-  const result = await runProcess("go", ["run", "./cmd/connectorgen", "certification-matrix", "--check"], repositoryRoot, 120_000);
+async function writeEvidenceDraft(record, recordName) {
+  const draft = path.join(temporaryRoot, "drafts", `${recordName}.json`);
+  await atomicJSON(draft, record);
+  return draft;
+}
+
+async function importEvidenceDraft(draft) {
+  const result = await runProcess("go", ["run", "./cmd/connectorgen", "certification-evidence", "draft", "--draft", draft, "--repo-root", repositoryRoot], repositoryRoot, 120_000);
+  return result.code === 0 && !result.timedOut && !result.overflow ? "" : providerDiagnostic(result, "");
+}
+
+async function generateConnectorMatrix(connector) {
+  const result = await runProcess("go", ["run", "./cmd/connectorgen", "certification-matrix", "--connector", connector], repositoryRoot, 120_000);
+  return result.code === 0 && !result.timedOut && !result.overflow ? "" : providerDiagnostic(result, "");
+}
+
+async function checkConnectorMatrix(connector) {
+  const result = await runProcess("go", ["run", "./cmd/connectorgen", "certification-matrix", "--connector", connector, "--check"], repositoryRoot, 120_000);
   return result.code === 0 && !result.timedOut && !result.overflow ? "" : providerDiagnostic(result, "");
 }
 
@@ -662,20 +678,33 @@ async function main() {
       }
       const evidenceRunID = requireIdentifier(`${runID}-${candidate.stageName}`, "evidence run identifier");
       const record = evidencePayload({ connector: options.connector, stageName: candidate.stageName, binarySHA, invocation, credential, salt, api: candidate.api, envelope, runID: evidenceRunID });
-      const evidencePath = path.join(evidenceRoot, `${requireIdentifier(`${options.connector}-${candidate.stageName}-${runID}`, "evidence file name")}.json`);
+      const evidenceName = requireIdentifier(`${options.connector}-${candidate.stageName}-${runID}`, "evidence file name");
+      const evidencePath = path.join(evidenceRoot, `${evidenceName}.json`);
       if (JSON.stringify(record).includes(credential)) fail("refusing to persist a record containing credential material");
+      let draftPath = "";
+      let importFailure = "";
       try {
-        await writeFile(evidencePath, `${JSON.stringify(record, null, 2)}\n`, { flag: "wx", mode: 0o600 });
-        await chmod(evidencePath, 0o600);
+        draftPath = await writeEvidenceDraft(record, evidenceName);
+        importFailure = await importEvidenceDraft(draftPath);
       } catch (error) {
-        addReceipt(receipt, { stage_name: candidate.stageName, command: candidate.command, invocation, executed: true, outcome: "product_defect", reason: `could not write new accepted evidence: ${error instanceof Error ? error.message : "write failed"}` });
+        importFailure = `could not import drafted accepted evidence: ${error instanceof Error ? error.message : "write failed"}`;
+      } finally {
+        if (draftPath) await unlink(draftPath).catch(() => {});
+      }
+      if (importFailure) {
+        addReceipt(receipt, { stage_name: candidate.stageName, command: candidate.command, invocation, executed: true, outcome: "product_defect", reason: importFailure });
         await persistReceipt(receiptPath, receipt);
         continue;
       }
-      const matrixFailure = await matrixCheck();
+      const generationFailure = await generateConnectorMatrix(options.connector);
+      if (generationFailure) {
+        addReceipt(receipt, { stage_name: candidate.stageName, command: candidate.command, invocation, executed: true, outcome: "product_defect", reason: `accepted evidence remains published because scoped certification-matrix generation failed: ${generationFailure}` });
+        await persistReceipt(receiptPath, receipt);
+        continue;
+      }
+      const matrixFailure = await checkConnectorMatrix(options.connector);
       if (matrixFailure) {
-        await unlink(evidencePath);
-        addReceipt(receipt, { stage_name: candidate.stageName, command: candidate.command, invocation, executed: true, outcome: "product_defect", reason: `accepted evidence was removed because certification-matrix --check failed: ${matrixFailure}` });
+        addReceipt(receipt, { stage_name: candidate.stageName, command: candidate.command, invocation, executed: true, outcome: "product_defect", reason: `accepted evidence remains published because scoped certification-matrix --check failed: ${matrixFailure}` });
         await persistReceipt(receiptPath, receipt);
         continue;
       }

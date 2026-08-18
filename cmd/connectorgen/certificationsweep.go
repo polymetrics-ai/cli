@@ -11,6 +11,7 @@ import (
 	"sort"
 	"strings"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -24,7 +25,216 @@ const (
 	certificationSweepNotApplicable       = "not_applicable"
 	certificationSweepArtifactFile        = "certification-sweep.json"
 	certificationObservationFile          = "certification-observations.json"
+
+	// certificationParityKind* is the entire scheduler-facing operation
+	// vocabulary. Provider-specific operation kinds (for example GraphQL) are
+	// normalized through their executable CLI/transport contract; callers must
+	// never invent a ninth kind in certification.json.
+	certificationParityKindRESTRead       = "rest_read"
+	certificationParityKindRESTWrite      = "rest_write"
+	certificationParityKindETL            = "etl"
+	certificationParityKindReverseETL     = "reverse_etl"
+	certificationParityKindBinaryDownload = "binary_download"
+	certificationParityKindFileUpload     = "file_upload"
+	certificationParityKindCDC            = "cdc"
+	certificationParityKindChangefeed     = "changefeed"
+
+	certificationParityClassDirectRead  = "direct_read"
+	certificationParityClassDirectWrite = "direct_write"
+	certificationParityClassETL         = "etl"
+	certificationParityClassReverseETL  = "reverse_etl"
+	certificationParityClassBinary      = "binary"
 )
+
+type certificationParityTransportRole string
+
+const (
+	certificationParityTransportSource      certificationParityTransportRole = "source"
+	certificationParityTransportDestination certificationParityTransportRole = "destination"
+)
+
+// certificationParityInput is one declaration-owned execution source. A
+// classifier call deliberately accepts one source at a time so a command,
+// capability, changefeed, or managed transport cannot silently borrow a
+// classification from an unrelated declaration.
+type certificationParityInput struct {
+	Command       *engine.CLICommand
+	Operation     *engine.OperationSpec
+	Write         *engine.WriteAction
+	Stream        *engine.StreamSpec
+	Capabilities  *engine.Capabilities
+	Capability    string
+	Changefeed    *connectors.ChangefeedDescriptor
+	Transport     *connectors.SyncTransportDescriptor
+	TransportRole certificationParityTransportRole
+}
+
+// certificationParityProjection is the generated scheduler identity. Empty
+// kind/class is a genuine non-applicable source (such as config/auth), never
+// a spelling for an additional operation kind. A malformed executable source
+// instead returns an error so the sweep records a product defect.
+type certificationParityProjection struct {
+	OperationKind   string
+	OpClass         string
+	WriteActionKind string
+}
+
+func classifyCertificationParity(input certificationParityInput) (certificationParityProjection, error) {
+	sources := 0
+	if input.Command != nil {
+		sources++
+	}
+	if input.Capabilities != nil {
+		sources++
+	}
+	if input.Changefeed != nil {
+		sources++
+	}
+	if input.Transport != nil {
+		sources++
+	}
+	if sources == 0 {
+		return certificationParityProjection{}, errors.New("parity classification requires one declaration source")
+	}
+	if sources != 1 {
+		return certificationParityProjection{}, errors.New("parity classification accepts exactly one declaration source")
+	}
+	if input.Command != nil {
+		return classifyCertificationParityCommand(*input.Command, input.Operation, input.Write, input.Stream)
+	}
+	if input.Capabilities != nil {
+		switch input.Capability {
+		case "read":
+			if input.Capabilities.Read {
+				return certificationParityProjection{OperationKind: certificationParityKindRESTRead, OpClass: certificationParityClassDirectRead}, nil
+			}
+		case "write":
+			if input.Capabilities.Write {
+				return certificationParityProjection{OperationKind: certificationParityKindRESTWrite, OpClass: certificationParityClassDirectWrite}, nil
+			}
+		case "cdc", "":
+			if input.Capabilities.CDC {
+				return certificationParityProjection{OperationKind: certificationParityKindCDC, OpClass: certificationParityClassETL}, nil
+			}
+		default:
+			return certificationParityProjection{}, fmt.Errorf("capability projection has unsupported capability %q", input.Capability)
+		}
+		return certificationParityProjection{}, nil
+	}
+	if input.Changefeed != nil {
+		if input.Changefeed.Status == connectors.ChangefeedStatusImplemented {
+			return certificationParityProjection{OperationKind: certificationParityKindChangefeed, OpClass: certificationParityClassETL}, nil
+		}
+		return certificationParityProjection{}, nil
+	}
+	switch input.TransportRole {
+	case certificationParityTransportSource:
+		if input.Transport.Source == nil {
+			return certificationParityProjection{}, errors.New("source transport projection requires declared source transport")
+		}
+		return certificationParityProjection{OperationKind: certificationParityKindETL, OpClass: certificationParityClassETL}, nil
+	case certificationParityTransportDestination:
+		if input.Transport.Destination == nil {
+			return certificationParityProjection{}, errors.New("destination transport projection requires declared destination transport")
+		}
+		return certificationParityProjection{OperationKind: certificationParityKindReverseETL, OpClass: certificationParityClassReverseETL}, nil
+	default:
+		return certificationParityProjection{}, fmt.Errorf("transport projection has unsupported role %q", input.TransportRole)
+	}
+}
+
+func classifyCertificationParityCommand(command engine.CLICommand, operation *engine.OperationSpec, write *engine.WriteAction, stream *engine.StreamSpec) (certificationParityProjection, error) {
+	operationKind := ""
+	if operation != nil {
+		operationKind = operation.Kind
+	}
+	if command.Operation != "" && operation == nil {
+		return certificationParityProjection{}, fmt.Errorf("command %q references missing operation %q", command.Path, command.Operation)
+	}
+	if command.Write != "" && write == nil {
+		return certificationParityProjection{}, fmt.Errorf("command %q references missing write action %q", command.Path, command.Write)
+	}
+	switch command.Intent {
+	case "direct_read":
+		if operationKind != "" && operationKind != certificationParityKindRESTRead && operationKind != "graphql_query" {
+			return certificationParityProjection{}, fmt.Errorf("direct_read command %q references operation kind %q", command.Path, operationKind)
+		}
+		return certificationParityProjection{OperationKind: certificationParityKindRESTRead, OpClass: certificationParityClassDirectRead}, nil
+	case "direct_write":
+		switch operationKind {
+		case "", certificationParityKindRESTWrite, "graphql_mutation":
+			projection := certificationParityProjection{OperationKind: certificationParityKindRESTWrite, OpClass: certificationParityClassDirectWrite}
+			if write != nil {
+				if !validCertificationWriteActionKind(write.Kind) {
+					return certificationParityProjection{}, fmt.Errorf("direct_write command %q write action %q has unsupported kind %q", command.Path, write.Name, write.Kind)
+				}
+				projection.WriteActionKind = write.Kind
+			}
+			return projection, nil
+		case certificationParityKindFileUpload:
+			return certificationParityProjection{OperationKind: certificationParityKindFileUpload, OpClass: certificationParityClassBinary}, nil
+		default:
+			return certificationParityProjection{}, fmt.Errorf("direct_write command %q references operation kind %q", command.Path, operationKind)
+		}
+	case "etl":
+		if command.Stream == "" || stream == nil || stream.Name != command.Stream {
+			return certificationParityProjection{}, fmt.Errorf("etl command %q requires declared stream %q", command.Path, command.Stream)
+		}
+		return certificationParityProjection{OperationKind: certificationParityKindETL, OpClass: certificationParityClassETL}, nil
+	case "reverse_etl":
+		if command.Write == "" || write == nil || write.Name != command.Write {
+			return certificationParityProjection{}, fmt.Errorf("reverse_etl command %q requires declared write action %q", command.Path, command.Write)
+		}
+		if !validCertificationWriteActionKind(write.Kind) {
+			return certificationParityProjection{}, fmt.Errorf("reverse_etl command %q write action %q has unsupported kind %q", command.Path, write.Name, write.Kind)
+		}
+		// Delete is an independently selectable mutation family inside the
+		// existing direct-write parity cell. It is not a ninth operation kind
+		// or sixth class, even when its command reaches the shared write safety
+		// boundary through a reverse-ETL action declaration.
+		if write.Kind == "delete" {
+			return certificationParityProjection{OperationKind: certificationParityKindRESTWrite, OpClass: certificationParityClassDirectWrite, WriteActionKind: write.Kind}, nil
+		}
+		return certificationParityProjection{OperationKind: certificationParityKindReverseETL, OpClass: certificationParityClassReverseETL, WriteActionKind: write.Kind}, nil
+	case "binary_download":
+		if operationKind != "" && operationKind != certificationParityKindBinaryDownload {
+			return certificationParityProjection{}, fmt.Errorf("binary_download command %q references operation kind %q", command.Path, operationKind)
+		}
+		return certificationParityProjection{OperationKind: certificationParityKindBinaryDownload, OpClass: certificationParityClassBinary}, nil
+	default:
+		return certificationParityProjection{}, nil
+	}
+}
+
+func validCertificationWriteActionKind(kind string) bool {
+	switch kind {
+	case "create", "update", "upsert", "delete", "custom":
+		return true
+	default:
+		return false
+	}
+}
+
+func validCertificationParityKind(kind string) bool {
+	switch kind {
+	case certificationParityKindRESTRead, certificationParityKindRESTWrite, certificationParityKindETL,
+		certificationParityKindReverseETL, certificationParityKindBinaryDownload, certificationParityKindFileUpload,
+		certificationParityKindCDC, certificationParityKindChangefeed:
+		return true
+	default:
+		return false
+	}
+}
+
+func validCertificationParityClass(opClass string) bool {
+	switch opClass {
+	case certificationParityClassDirectRead, certificationParityClassDirectWrite, certificationParityClassETL,
+		certificationParityClassReverseETL, certificationParityClassBinary:
+		return true
+	default:
+		return false
+	}
+}
 
 // certificationSweep is the deterministic, source-derived accounting record
 // for one connector's declared CLI surface. It deliberately holds no provider
@@ -50,6 +260,9 @@ type certificationSweepCommand struct {
 	Path                string                                `json:"path"`
 	Intent              string                                `json:"intent"`
 	Availability        string                                `json:"availability"`
+	OperationKind       *string                               `json:"operation_kind"`
+	OpClass             *string                               `json:"op_class"`
+	WriteActionKind     string                                `json:"write_action_kind,omitempty"`
 	Stream              string                                `json:"stream,omitempty"`
 	Flags               []certificationSweepFlag              `json:"flags"`
 	APISurface          []engine.CLISurfaceEndpointRef        `json:"api_surface"`
@@ -222,6 +435,14 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 	for _, operation := range bundle.Operations {
 		operations[operation.ID] = operation
 	}
+	writes := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, write := range bundle.Writes {
+		writes[write.Name] = write
+	}
+	streams := make(map[string]engine.StreamSpec, len(bundle.Streams))
+	for _, stream := range bundle.Streams {
+		streams[stream.Name] = stream
+	}
 	commands := append([]engine.CLICommand(nil), bundle.CLISurface.Commands...)
 	sort.Slice(commands, func(i, j int) bool { return commands[i].Path < commands[j].Path })
 
@@ -240,7 +461,26 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 			return certificationSweep{}, fmt.Errorf("connector %q cli_surface has missing or duplicate command path %q", connector, command.Path)
 		}
 		seen[command.Path] = true
-		row, defect := classifyCertificationSweepCommand(command, operations[command.Operation], assertions[command.Path], graphql, refusalByCommand[command.Path])
+		var operation *engine.OperationSpec
+		if item, found := operations[command.Operation]; found {
+			operation = &item
+		}
+		var write *engine.WriteAction
+		if item, found := writes[command.Write]; found {
+			write = &item
+		}
+		var stream *engine.StreamSpec
+		if item, found := streams[command.Stream]; found {
+			stream = &item
+		}
+		projection, projectionErr := classifyCertificationParity(certificationParityInput{
+			Command: &command, Operation: operation, Write: write, Stream: stream,
+		})
+		var operationValue engine.OperationSpec
+		if operation != nil {
+			operationValue = *operation
+		}
+		row, defect := classifyCertificationSweepCommand(command, operationValue, projection, projectionErr, assertions[command.Path], graphql, refusalByCommand[command.Path])
 		sweep.Commands = append(sweep.Commands, row)
 		if defect != nil {
 			sweep.ProductDefects = append(sweep.ProductDefects, *defect)
@@ -355,17 +595,25 @@ func certificationSweepGraphQLProfileFor(bundle *engine.Bundle) (certificationSw
 	}, nil
 }
 
-func classifyCertificationSweepCommand(command engine.CLICommand, operation engine.OperationSpec, assertion certificationSweepAssertionOverlay, graphql certificationSweepGraphQLProfile, providerRefusal certificationSweepProviderRefusal) (certificationSweepCommand, *certificationSweepProductDefect) {
+func classifyCertificationSweepCommand(command engine.CLICommand, operation engine.OperationSpec, projection certificationParityProjection, projectionErr error, assertion certificationSweepAssertionOverlay, graphql certificationSweepGraphQLProfile, providerRefusal certificationSweepProviderRefusal) (certificationSweepCommand, *certificationSweepProductDefect) {
 	row := certificationSweepCommand{
 		Summary:             command.Summary,
 		Path:                command.Path,
 		Intent:              command.Intent,
 		Availability:        command.Availability,
+		OperationKind:       certificationSweepParityValue(projection.OperationKind),
+		OpClass:             certificationSweepParityValue(projection.OpClass),
+		WriteActionKind:     projection.WriteActionKind,
 		Stream:              command.Stream,
 		Flags:               certificationSweepFlags(command.Flags),
 		APISurface:          append([]engine.CLISurfaceEndpointRef(nil), command.APISurface...),
 		RequiredFlags:       certificationSweepRequiredFlags(command.Flags),
 		CertificationCohort: assertion.Cohort,
+	}
+	if projectionErr != nil {
+		row.Status = certificationSweepStatusProductDefect
+		row.Reason = "parity projection: " + projectionErr.Error()
+		return row, &certificationSweepProductDefect{Command: command.Path, Flag: "<parity-projection>", PathParameter: "<parity-projection>", Reason: row.Reason}
 	}
 	if command.Availability != "implemented" {
 		row.Status = certificationSweepNotApplicable
@@ -448,6 +696,13 @@ func classifyCertificationSweepCommand(command engine.CLICommand, operation engi
 		row.Reason = fmt.Sprintf("intent %q has no provider certification execution contract", command.Intent)
 	}
 	return row, nil
+}
+
+func certificationSweepParityValue(value string) *string {
+	if value == "" {
+		return nil
+	}
+	return &value
 }
 
 func certificationSweepFlags(flags []engine.CLIFlag) []certificationSweepFlag {
@@ -542,6 +797,9 @@ func validateCertificationSweep(sweep certificationSweep) error {
 		if !validCertificationSweepStatus(command.Status) || command.Status == "pass" {
 			return fmt.Errorf("sweep command %q has invalid affirmative status %q", command.Path, command.Status)
 		}
+		if err := validateCertificationSweepParity(command); err != nil {
+			return err
+		}
 		if command.Status == certificationSweepEligiblePendingLive && (len(command.OutputAssertions) == 0 || command.AssertionSource == "") {
 			return fmt.Errorf("eligible command %q requires produced-value assertions and their source", command.Path)
 		}
@@ -585,6 +843,42 @@ func validateCertificationSweep(sweep certificationSweep) error {
 		}
 	}
 	return nil
+}
+
+func validateCertificationSweepParity(command certificationSweepCommand) error {
+	if (command.OperationKind == nil) != (command.OpClass == nil) {
+		return fmt.Errorf("sweep command %q must carry operation_kind and op_class together", command.Path)
+	}
+	if command.OperationKind == nil {
+		if certificationSweepIntentRequiresParity(command.Intent) && command.Status != certificationSweepStatusProductDefect {
+			return fmt.Errorf("sweep command %q has no valid parity projection and is not a product defect", command.Path)
+		}
+		if command.WriteActionKind != "" {
+			return fmt.Errorf("sweep command %q has write action kind without a parity projection", command.Path)
+		}
+		return nil
+	}
+	if !validCertificationParityKind(*command.OperationKind) || !validCertificationParityClass(*command.OpClass) {
+		return fmt.Errorf("sweep command %q has unsupported parity projection %q/%q", command.Path, *command.OperationKind, *command.OpClass)
+	}
+	if command.WriteActionKind != "" {
+		if !validCertificationWriteActionKind(command.WriteActionKind) {
+			return fmt.Errorf("sweep command %q has unsupported write action kind %q", command.Path, command.WriteActionKind)
+		}
+		if *command.OperationKind != certificationParityKindRESTWrite && *command.OperationKind != certificationParityKindReverseETL {
+			return fmt.Errorf("sweep command %q has write action kind outside a write parity projection", command.Path)
+		}
+	}
+	return nil
+}
+
+func certificationSweepIntentRequiresParity(intent string) bool {
+	switch intent {
+	case "direct_read", "direct_write", "etl", "reverse_etl", "binary_download":
+		return true
+	default:
+		return false
+	}
 }
 
 func validCertificationSweepStatus(status string) bool {

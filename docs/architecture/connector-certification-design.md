@@ -61,6 +61,45 @@ The generator is developer tooling, but its generated status projection is
 embedded in `pm connectors inspect`, which is the point-of-use user warning.
 Capability completion by itself is not a certification claim.
 
+### Generated parity projection, cell identity, and safe publication
+
+`certification-sweep.json` is the generated, exhaustive command inventory for
+one connector. Every row carries `operation_kind` and `op_class`, derived from
+the bundle's `operations.json`, CLI intent and references, capabilities,
+changefeed, or `sync_transport.json` descriptor. The closed operation-kind
+vocabulary is `rest_read`, `rest_write`, `etl`, `reverse_etl`,
+`binary_download`, `file_upload`, `cdc`, and `changefeed`; the closed parity
+classes are `direct_read`, `direct_write`, `etl`, `reverse_etl`, and `binary`.
+These are generated scheduler fields, never `certification.json` authoring.
+An ordinary non-executable declaration is represented by null projection
+fields; an executable declaration whose references cannot produce a valid
+projection is a generated `product_defect`, never a silent `n/a`. Classified
+write rows retain their declared `write_action_kind`, including `delete`, so a
+delete is selectable within its existing write family rather than becoming a
+sixth parity class.
+
+The unit of scheduled work is a `(connector × op_class)` cell, with the exact
+operation kind retained for subordinate contracts such as CDC and changefeed.
+Cells may run independently only when their complete mutable-resource key sets
+are disjoint: provider account/fixture namespace, provider rate-limit scope,
+source watermark or CDC slot, warehouse `(workspace, connector, connection,
+table)` target, run/project root and state, write ledger, report/history path,
+database runtime slot, and connector-owned matrix shard. The global status and
+allowlist are final-reducer resources and are never owned by an individual
+cell. The per-connection warehouse layout is therefore isolation, not a
+convention; do not collapse it to a flat path.
+
+Accepted evidence is immutable and published only after its entire record (or
+batch) validates in memory. Each record is staged and fsynced on the evidence
+directory's filesystem, then hard-linked to its final unique name so the link
+is no-replace and matrix readers see either no record or complete JSON. A
+connector's cell drafts fan in to one connector reducer, which imports the
+validated evidence, regenerates that connector's shard, and runs the scoped
+shard check. Only after all connector reducers finish may a single final owner
+run `certification-matrix --all` and the global check; a per-connector runner
+must never publish evidence, run the global check, and delete that evidence on
+global drift.
+
 ## Load-bearing facts (verified in code)
 
 1. **`cli.Run(args, stdout, stderr) int` is a pure in-process entrypoint** (`internal/cli/cli.go:24`).

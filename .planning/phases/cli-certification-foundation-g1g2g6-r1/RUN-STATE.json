@@ -1,10 +1,17 @@
 {
   "phase": "cli-certification-foundation-g1g2g6-r1",
-  "status": "planned",
+  "status": "verified_pending_pr",
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-certification-foundation-g1g2g6-r1",
   "delivery_mode": "direct_pr_against_integration_base",
   "manual_gsd_fallback": true,
   "scope": ["G1", "G2", "G6", "delete-write-action"],
-  "excluded": ["G3-G5", "G7-G14", "certificationallowlist.go", "global-status-refresh"]
+  "excluded": ["G3-G5", "G7-G14", "certificationallowlist.go", "global-status-refresh"],
+  "verification": {
+    "classification_and_evidence_tests": "passed",
+    "github_sweep_byte_drift": "passed",
+    "github_live_read_proof": "passed",
+    "repository_gates": "passed",
+    "manual_code_review": "clean"
+  }
 }
