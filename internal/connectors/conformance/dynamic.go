@@ -602,7 +602,7 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 
 // checkDeleteSemantics exercises every kind:delete write action's
 // missing_ok_status handling: a status in that allow-list must be treated
-// as written, not failed. The real engine.Write is run against a server
+// as an expected no-op, not a completed write or a failure. The real engine.Write is run against a server
 // that always answers the FIRST allow-listed status, so this check would
 // fail (RecordsFailed>0 / an error) if that handling ever regressed. A
 // bundle with no such delete action, or no fixture for it, is Skipped.
@@ -654,8 +654,8 @@ func checkDeleteSemantics(b engine.Bundle) CheckResult {
 	if err != nil {
 		return CheckResult{Name: name, Error: fmt.Sprintf("delete with missing_ok_status %d returned an error instead of being treated as written: %v", status, err)}
 	}
-	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
-		return CheckResult{Name: name, Error: fmt.Sprintf("delete result = %+v, want RecordsWritten=1 RecordsFailed=0 for an allow-listed missing_ok_status %d", result, status)}
+	if result.RecordsWritten != 0 || result.RecordsFailed != 0 || result.RecordsUnchanged != 1 {
+		return CheckResult{Name: name, Error: fmt.Sprintf("delete result = %+v, want RecordsWritten=0 RecordsFailed=0 RecordsUnchanged=1 for an allow-listed missing_ok_status %d", result, status)}
 	}
 	return CheckResult{Name: name, Passed: true}
 }

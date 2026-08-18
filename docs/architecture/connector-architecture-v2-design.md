@@ -499,8 +499,9 @@ preview digest binds the complete request set, connector/action target, credenti
 identity, batchability, definition, and hook identity. Destructive execution
 re-prepares and compares that digest, then consumes authenticated single-use approval evidence
 through the provider-neutral gate before dispatch. `Write` returns redacted, typed errors.
-`kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete counts as written, not
-failed). Batch semantics stay one-request-per-record (matches github/stripe today);
+`kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete counts as unchanged, not
+written or failed, so command execution cannot claim a provider mutation). Batch semantics stay
+one-request-per-record (matches github/stripe today);
 `metadata.json.batch.write_batch_size` is reserved for future bulk endpoints.
 
 ### B.5.1 Declared multipart operation writes (engine/direct_write.go)

@@ -1236,8 +1236,10 @@ independent. An action can be non-batchable without being destructive (casting a
 destructive without being non-batchable (a bulk delete), so neither one implies the other.
 
 **Delete semantics**: `kind: "delete"` + `delete.missing_ok_status: [404, ...]` means those HTTP
-statuses on the delete request count as **written, not failed** (idempotent delete) — any other
-status, or an unlisted 404, is a genuine per-record failure. `Write`'s overall accounting is
+statuses on the delete request count as **unchanged, not written or failed** (idempotent delete).
+The engine returns `RecordsUnchanged`; a command that promised a provider mutation fails its
+completion check instead of reporting a write that did not happen. Any other status, or an unlisted
+404, is a genuine per-record failure. `Write`'s overall accounting is
 fail-fast, matching legacy (e.g. `stripe/write.go:66`): on the first real failure (validation, a
 per-record request error, or ctx cancellation), the loop stops immediately;
 `RecordsWritten`/`RecordsFailed` reflect exactly what completed, not a best-effort continuation.

@@ -80,8 +80,9 @@ CLOSED ISSUE-LABEL TRANSPORT
   same plan scope use --approval-plan and --confirm destructive without a new
   --approval-token-stdin. Changed, expired, or revoked scope is refused before
   a provider write. Cleanup is a separate typed remove-label plan, preview, and
-  one-time approval. A declared GitHub missing-label DELETE is a successful
-  cleanup; replaying approval is refused.
+  one-time approval. A declared GitHub missing-label DELETE is recorded as
+  already absent rather than as a completed provider write; replaying approval
+  is refused.
 
   A GitHub source selection and every independent target read-back inspect only
   the first GitHub issues page. The transport fails instead of requesting

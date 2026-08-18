@@ -31,9 +31,9 @@
       "percent": 100
     },
     "implementation": {
-      "implemented": 1458,
+      "implemented": 1454,
       "total": 1525,
-      "percent": 95.61
+      "percent": 95.34
     },
     "live_proof": {
       "proven": 0,
@@ -1047,7 +1047,8 @@
       },
       "pm": {
         "commands": [
-          "graphql mutation add-project-v2-draft-issue"
+          "graphql mutation add-project-v2-draft-issue",
+          "projects create-draft-item-for-authenticated-user"
         ],
         "operation_ids": [
           "github.graphql.mutation.add-project-v2-draft-issue"
@@ -28117,7 +28118,8 @@
       },
       "pm": {
         "commands": [
-          "actions set-selected-repos-for-org-secret"
+          "actions set-selected-repos-for-org-secret",
+          "agents set-selected-repos-for-org-secret"
         ],
         "mapping": "declared PM command binding"
       },
@@ -28162,7 +28164,8 @@
       },
       "pm": {
         "commands": [
-          "actions set-selected-repos-for-org-variable"
+          "actions set-selected-repos-for-org-variable",
+          "agents set-selected-repos-for-org-variable"
         ],
         "mapping": "declared PM command binding"
       },
@@ -28522,7 +28525,8 @@
       },
       "pm": {
         "commands": [
-          "actions update-org-variable"
+          "actions update-org-variable",
+          "agents update-org-variable"
         ],
         "mapping": "declared PM command binding"
       },
@@ -31489,13 +31493,11 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [
-          "agents set-selected-repos-for-org-secret"
-        ],
-        "mapping": "declared PM command binding"
+        "commands": [],
+        "mapping": "generic connector binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "implemented_generic_only"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31534,13 +31536,11 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [
-          "agents set-selected-repos-for-org-variable"
-        ],
-        "mapping": "declared PM command binding"
+        "commands": [],
+        "mapping": "generic connector binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "implemented_generic_only"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31579,13 +31579,11 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [
-          "agents update-org-variable"
-        ],
-        "mapping": "declared PM command binding"
+        "commands": [],
+        "mapping": "generic connector binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "implemented_generic_only"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -57666,13 +57664,11 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [
-          "projects create-draft-item-for-authenticated-user"
-        ],
-        "mapping": "declared PM command binding"
+        "commands": [],
+        "mapping": "no typed PM command"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "blocked"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -57694,6 +57690,11 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
+      },
+      "blocker": {
+        "category": "existing_bundle_block",
+        "reason": "The source-lock REST route returned 404 in live certification; the declared projects create-draft-item-for-authenticated-user command covers the same mutation through fixed GraphQL addProjectV2DraftIssue.",
+        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {

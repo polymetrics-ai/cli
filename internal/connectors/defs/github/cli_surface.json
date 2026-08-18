@@ -5173,7 +5173,36 @@
           "name": "branch",
           "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "record.branch"
+          "maps_to": "record.branch",
+          "required": true
+        },
+        {
+          "name": "required-status-checks",
+          "type": "json",
+          "summary": "Required status-check policy object.",
+          "maps_to": "record.required_status_checks",
+          "required": true
+        },
+        {
+          "name": "enforce-admins",
+          "type": "boolean",
+          "summary": "Whether branch protection applies to administrators.",
+          "maps_to": "record.enforce_admins",
+          "required": true
+        },
+        {
+          "name": "required-pull-request-reviews",
+          "type": "json",
+          "summary": "Required pull-request review policy object.",
+          "maps_to": "record.required_pull_request_reviews",
+          "required": true
+        },
+        {
+          "name": "restrictions",
+          "type": "json",
+          "summary": "Push restriction object.",
+          "maps_to": "record.restrictions",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5936,7 +5965,85 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Check-run name.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "head-sha",
+          "type": "string",
+          "summary": "Commit SHA for the check run.",
+          "maps_to": "record.head_sha",
+          "required": true
+        },
+        {
+          "name": "details-url",
+          "type": "string",
+          "summary": "URL with full check details.",
+          "maps_to": "record.details_url"
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "External system identifier.",
+          "maps_to": "record.external_id"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "values": [
+            "queued",
+            "in_progress",
+            "completed"
+          ],
+          "summary": "Current check-run status.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "summary": "RFC 3339 start timestamp.",
+          "maps_to": "record.started_at"
+        },
+        {
+          "name": "conclusion",
+          "type": "enum",
+          "values": [
+            "action_required",
+            "cancelled",
+            "failure",
+            "neutral",
+            "success",
+            "skipped",
+            "stale",
+            "timed_out"
+          ],
+          "summary": "Completed check-run conclusion.",
+          "maps_to": "record.conclusion"
+        },
+        {
+          "name": "completed-at",
+          "type": "string",
+          "summary": "RFC 3339 completion timestamp.",
+          "maps_to": "record.completed_at"
+        },
+        {
+          "name": "output",
+          "type": "json",
+          "summary": "Check-run output object.",
+          "maps_to": "record.output"
+        },
+        {
+          "name": "actions",
+          "type": "json",
+          "summary": "Requested-action button array.",
+          "maps_to": "record.actions"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -8182,7 +8289,25 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Blob content.",
+          "maps_to": "record.content",
+          "required": true
+        },
+        {
+          "name": "encoding",
+          "type": "enum",
+          "values": [
+            "utf-8",
+            "base64"
+          ],
+          "summary": "Blob content encoding.",
+          "maps_to": "record.encoding"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -8223,7 +8348,46 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "message",
+          "type": "string",
+          "summary": "Commit message.",
+          "maps_to": "record.message",
+          "required": true
+        },
+        {
+          "name": "tree",
+          "type": "string",
+          "summary": "Tree object SHA.",
+          "maps_to": "record.tree",
+          "required": true
+        },
+        {
+          "name": "parents",
+          "type": "string_array",
+          "summary": "Parent commit SHAs.",
+          "maps_to": "record.parents"
+        },
+        {
+          "name": "author",
+          "type": "json",
+          "summary": "Commit author object.",
+          "maps_to": "record.author"
+        },
+        {
+          "name": "committer",
+          "type": "json",
+          "summary": "Commit committer object.",
+          "maps_to": "record.committer"
+        },
+        {
+          "name": "signature",
+          "type": "string",
+          "summary": "ASCII-armored detached PGP signature.",
+          "maps_to": "record.signature"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -8288,7 +8452,21 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "tree",
+          "type": "json",
+          "summary": "Array of Git tree entries.",
+          "maps_to": "record.tree",
+          "required": true
+        },
+        {
+          "name": "base-tree",
+          "type": "string",
+          "summary": "Existing base tree SHA.",
+          "maps_to": "record.base_tree"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -10782,7 +10960,39 @@
           "name": "sha",
           "type": "string",
           "summary": "sha path parameter",
-          "maps_to": "record.sha"
+          "maps_to": "record.sha",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "enum",
+          "values": [
+            "error",
+            "failure",
+            "pending",
+            "success"
+          ],
+          "summary": "Commit status state.",
+          "maps_to": "record.state",
+          "required": true
+        },
+        {
+          "name": "target-url",
+          "type": "string",
+          "summary": "URL for status details.",
+          "maps_to": "record.target_url"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Short status description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "context",
+          "type": "string",
+          "summary": "Status context label.",
+          "maps_to": "record.context"
         }
       ],
       "api_surface": [
@@ -25201,9 +25411,9 @@
       "summary": "Set selected repositories for an organization secret",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "write": "agents_set_selected_repos_for_org_secret",
+      "write": "actions_set_selected_repos_for_org_secret",
       "source_cli_path": "",
-      "source_url": "https://docs.github.com/rest/agents/secrets#set-selected-repositories-for-an-organization-secret",
+      "source_url": "https://docs.github.com/rest/actions/secrets#set-selected-repositories-for-an-organization-secret",
       "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
@@ -25232,7 +25442,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/orgs/{org}/agents/secrets/{secret_name}/repositories"
+          "path": "/orgs/{org}/actions/secrets/{secret_name}/repositories"
         }
       ]
     },
@@ -25373,9 +25583,9 @@
       "summary": "Update an organization variable",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "write": "agents_update_org_variable",
+      "write": "actions_update_org_variable",
       "source_cli_path": "",
-      "source_url": "https://docs.github.com/rest/agents/variables#update-an-organization-variable",
+      "source_url": "https://docs.github.com/rest/actions/variables#update-an-organization-variable",
       "risk": "Mutates existing provider-side state: Update an organization variable.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
@@ -25414,7 +25624,7 @@
       "api_surface": [
         {
           "method": "PATCH",
-          "path": "/orgs/{org}/agents/variables/{name}"
+          "path": "/orgs/{org}/actions/variables/{name}"
         }
       ]
     },
@@ -25456,9 +25666,9 @@
       "summary": "Set selected repositories for an organization variable",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "write": "agents_set_selected_repos_for_org_variable",
+      "write": "actions_set_selected_repos_for_org_variable",
       "source_cli_path": "",
-      "source_url": "https://docs.github.com/rest/agents/variables#set-selected-repositories-for-an-organization-variable",
+      "source_url": "https://docs.github.com/rest/actions/variables#set-selected-repositories-for-an-organization-variable",
       "risk": "Mutates existing provider-side state: Set selected repositories for an organization variable.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
@@ -25487,7 +25697,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/orgs/{org}/agents/variables/{name}/repositories"
+          "path": "/orgs/{org}/actions/variables/{name}/repositories"
         }
       ]
     },
@@ -34281,49 +34491,30 @@
     },
     {
       "path": "projects create-draft-item-for-authenticated-user",
-      "summary": "Create draft item for user owned project",
-      "intent": "reverse_etl",
+      "summary": "Create a draft item in a user-owned project through fixed GitHub GraphQL",
+      "intent": "direct_write",
       "availability": "implemented",
-      "write": "projects_create_draft_item_for_authenticated_user",
+      "operation": "github.graphql.mutation.add-project-v2-draft-issue",
       "source_cli_path": "",
-      "source_url": "https://docs.github.com/rest/projects/drafts#create-draft-item-for-user-owned-project",
-      "risk": "Creates provider-side state: Create draft item for user owned project.",
-      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "source_url": "https://docs.github.com/graphql/reference/mutations#addprojectv2draftissue",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
       "flags": [
         {
-          "name": "user-id",
-          "type": "string",
-          "summary": "The unique identifier of the user.",
-          "maps_to": "record.user_id",
+          "name": "input",
+          "type": "json",
+          "summary": "Closed AddProjectV2DraftIssueInput object with projectId and title.",
+          "maps_to": "body.input",
           "required": true
-        },
-        {
-          "name": "project-number",
-          "type": "integer",
-          "summary": "The project's number.",
-          "maps_to": "record.project_number",
-          "required": true
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "summary": "Sets title.",
-          "maps_to": "record.title",
-          "required": true
-        },
-        {
-          "name": "body",
-          "type": "string",
-          "summary": "Sets body.",
-          "maps_to": "record.body"
         }
       ],
       "api_surface": [
         {
           "method": "POST",
-          "path": "/user/{user_id}/projectsV2/{project_number}/drafts"
+          "path": "/graphql"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "projects create-view-for-user",

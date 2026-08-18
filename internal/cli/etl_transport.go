@@ -62,9 +62,9 @@ DESCRIPTION
   there.
 
   Cleanup is a separately planned, previewed, one-time approved typed inverse.
-  A %s missing-label DELETE accepted by the declared missing_ok_status is a
-  successful cleanup; replaying a consumed cleanup approval is rejected before
-  another provider request.
+  A %s missing-label DELETE accepted by the declared missing_ok_status is an
+  already-absent cleanup result, not a completed provider write; replaying a
+  consumed cleanup approval is rejected before another provider request.
 
 SECURITY
   Raw approval tokens are accepted only through --approval-token-stdin. They
@@ -660,7 +660,7 @@ func writeETLTransportCleanupRun(stdout io.Writer, jsonOut bool, plan app.Revers
 			"result":          result,
 		})
 	}
-	_, err := fmt.Fprintf(stdout, "Issue-label transport cleanup %s completed: written=%d failed=%d\n", safe.ID, result.RecordsWritten, result.RecordsFailed)
+	_, err := fmt.Fprintf(stdout, "Issue-label transport cleanup %s completed: written=%d unchanged=%d failed=%d\n", safe.ID, result.RecordsWritten, result.RecordsUnchanged, result.RecordsFailed)
 	return err
 }
 

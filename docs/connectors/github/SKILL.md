@@ -624,7 +624,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: high
 - branches_branch_protection3:
   - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection
-  - required fields: branch
+  - required fields: branch, required_status_checks, enforce_admins, required_pull_request_reviews, restrictions
   - risk: high
 - branches_branch_protection_enforce_admins:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/enforce_admins
@@ -716,6 +716,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: critical
 - check_runs:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/check-runs
+  - required fields: name, head_sha
   - risk: medium
 - check_runs_check_run_id2:
   - endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}/check-runs/{{ record.check_run_id }}
@@ -846,12 +847,15 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: high
 - git_blobs:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/git/blobs
+  - required fields: content
   - risk: medium
 - git_commits:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/git/commits
+  - required fields: message, tree
   - risk: medium
 - git_trees:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/git/trees
+  - required fields: tree
   - risk: medium
 - hooks_hook_id_deliveries_delivery_id_attempts:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts
@@ -1051,7 +1055,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: high
 - statuses_sha:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/statuses/{{ record.sha }}
-  - required fields: sha
+  - required fields: sha, state
   - risk: medium
 - subscription:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/subscription
@@ -2273,10 +2277,6 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 - activity_unstar_repo_for_authenticated_user:
   - endpoint: DELETE /user/starred/{{ config.owner }}/{{ config.repo }}
   - risk: Destructive: Unstar a repository for the authenticated user. Removes provider-side state.
-- projects_create_draft_item_for_authenticated_user:
-  - endpoint: POST /user/{{ record.user_id }}/projectsV2/{{ record.project_number }}/drafts
-  - required fields: user_id, project_number, title
-  - risk: Creates provider-side state: Create draft item for user owned project.
 - projects_create_view_for_user:
   - endpoint: POST /users/{{ record.user_id }}/projectsV2/{{ record.project_number }}/views
   - required fields: user_id, project_number, name, layout
@@ -2854,7 +2854,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - automated-security-fixes set - PUT /repos/{owner}/{repo}/automated-security-fixes [intent=reverse_etl availability=implemented write=automated_security_fixes3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high
   - branches protection delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection [intent=reverse_etl availability=implemented write=branches_branch_protection]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
   - branches protection view - Read /repos/{owner}/{repo}/branches/{branch}/protection [intent=direct_read availability=implemented operation=github.branches_branch_protection2]; flags: --branch (required), --page, --page-cursor
-  - branches protection set - PUT /repos/{owner}/{repo}/branches/{branch}/protection [intent=reverse_etl availability=implemented write=branches_branch_protection3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
+  - branches protection set - PUT /repos/{owner}/{repo}/branches/{branch}/protection [intent=reverse_etl availability=implemented write=branches_branch_protection3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch (required), --required-status-checks (required), --enforce-admins (required), --required-pull-request-reviews (required), --restrictions (required)
   - branches enforce_admins delete - DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins [intent=reverse_etl availability=implemented write=branches_branch_protection_enforce_admins]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high; flags: --branch
   - branches enforce_admins view - Read /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins [intent=direct_read availability=implemented operation=github.branches_branch_protection_enforce_admins2]; flags: --branch (required), --page, --page-cursor
   - branches enforce_admins create - POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins [intent=reverse_etl availability=implemented write=branches_branch_protection_enforce_admins3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
@@ -2886,7 +2886,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - branches users create - POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_users3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
   - branches users set - PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users [intent=reverse_etl availability=implemented write=branches_branch_protection_restrictions_users4]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: high; flags: --branch
   - branches rename create - POST /repos/{owner}/{repo}/branches/{branch}/rename [intent=reverse_etl availability=implemented write=branches_branch_rename]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: critical; flags: --branch
-  - check-runs create - POST /repos/{owner}/{repo}/check-runs [intent=reverse_etl availability=implemented write=check_runs]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - check-runs create - POST /repos/{owner}/{repo}/check-runs [intent=reverse_etl availability=implemented write=check_runs]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --name (required), --head-sha (required), --details-url, --external-id, --status, --started-at, --conclusion, --completed-at, --output, --actions
   - check-runs view - Read /repos/{owner}/{repo}/check-runs/{check_run_id} [intent=direct_read availability=implemented operation=github.check_runs_check_run_id]; flags: --check-run-id (required), --page, --page-cursor
   - check-runs update - PATCH /repos/{owner}/{repo}/check-runs/{check_run_id} [intent=reverse_etl availability=implemented write=check_runs_check_run_id2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --check-run-id
   - check-runs annotations view - Read /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations [intent=direct_read availability=implemented operation=github.check_runs_check_run_id_annotations]; flags: --check-run-id (required), --page, --page-cursor
@@ -2963,12 +2963,12 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - environments secrets view-2 - Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name} [intent=direct_read availability=implemented operation=github.environments_environment_name_secrets_secret_name2]; flags: --environment-name (required), --secret-name (required), --page, --page-cursor
   - environments variables view - Read /repos/{owner}/{repo}/environments/{environment_name}/variables [intent=direct_read availability=implemented operation=github.environments_environment_name_variables]; flags: --environment-name (required), --page, --page-cursor
   - environments variables view-2 - Read /repos/{owner}/{repo}/environments/{environment_name}/variables/{name} [intent=direct_read availability=implemented operation=github.environments_environment_name_variables_name2]; flags: --environment-name (required), --name (required), --page, --page-cursor
-  - git blobs create - POST /repos/{owner}/{repo}/git/blobs [intent=reverse_etl availability=implemented write=git_blobs]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - git blobs create - POST /repos/{owner}/{repo}/git/blobs [intent=reverse_etl availability=implemented write=git_blobs]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --content (required), --encoding
   - git blobs view - Read /repos/{owner}/{repo}/git/blobs/{file_sha} [intent=direct_read availability=implemented operation=github.git_blobs_file_sha]; flags: --file-sha (required), --page, --page-cursor
-  - git commits create - POST /repos/{owner}/{repo}/git/commits [intent=reverse_etl availability=implemented write=git_commits]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - git commits create - POST /repos/{owner}/{repo}/git/commits [intent=reverse_etl availability=implemented write=git_commits]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --message (required), --tree (required), --parents, --author, --committer, --signature
   - git ref view - Read /repos/{owner}/{repo}/git/ref/{ref} [intent=direct_read availability=implemented operation=github.git_ref_ref]; flags: --ref (required), --page, --page-cursor
   - git tags view - Read /repos/{owner}/{repo}/git/tags/{tag_sha} [intent=direct_read availability=implemented operation=github.git_tags_tag_sha]; flags: --tag-sha (required), --page, --page-cursor
-  - git trees create - POST /repos/{owner}/{repo}/git/trees [intent=reverse_etl availability=implemented write=git_trees]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
+  - git trees create - POST /repos/{owner}/{repo}/git/trees [intent=reverse_etl availability=implemented write=git_trees]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --tree (required), --base-tree
   - git trees view - Read /repos/{owner}/{repo}/git/trees/{tree_sha} [intent=direct_read availability=implemented operation=github.git_trees_tree_sha]; flags: --tree-sha (required), --recursive, --page, --page-cursor
   - hash-algorithm view - Read /repos/{owner}/{repo}/hash-algorithm [intent=direct_read availability=implemented operation=github.hash_algorithm]; flags: --page, --page-cursor
   - hooks deliveries view - Read /repos/{owner}/{repo}/hooks/{hook_id}/deliveries [intent=direct_read availability=implemented operation=github.hooks_hook_id_deliveries]; flags: --hook-id (required), --status, --page, --page-cursor
@@ -3077,7 +3077,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - stats contributors view - Read /repos/{owner}/{repo}/stats/contributors [intent=direct_read availability=implemented operation=github.stats_contributors]; flags: --page, --page-cursor
   - stats participation view - Read /repos/{owner}/{repo}/stats/participation [intent=direct_read availability=implemented operation=github.stats_participation]; flags: --page, --page-cursor
   - stats punch_card view - Read /repos/{owner}/{repo}/stats/punch_card [intent=direct_read availability=implemented operation=github.stats_punch_card]; flags: --page, --page-cursor
-  - statuses create - POST /repos/{owner}/{repo}/statuses/{sha} [intent=reverse_etl availability=implemented write=statuses_sha]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --sha
+  - statuses create - POST /repos/{owner}/{repo}/statuses/{sha} [intent=reverse_etl availability=implemented write=statuses_sha]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium; flags: --sha (required), --state (required), --target-url, --description, --context
   - subscription delete - DELETE /repos/{owner}/{repo}/subscription [intent=reverse_etl availability=implemented write=subscription]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: medium
   - subscription view - Read /repos/{owner}/{repo}/subscription [intent=direct_read availability=implemented operation=github.subscription2]; flags: --page, --page-cursor
   - subscription set - PUT /repos/{owner}/{repo}/subscription [intent=reverse_etl availability=implemented write=subscription3]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium
@@ -3535,13 +3535,13 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - actions remove-selected-repo-from-org-variable - Remove selected repository from an organization variable [intent=reverse_etl availability=implemented write=actions_remove_selected_repo_from_org_variable]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove selected repository from an organization variable. Removes provider-side state.; flags: --org (required), --name (required), --repository-id (required)
   - agents create-or-update-org-secret - Create or update an organization secret [intent=reverse_etl availability=implemented write=agents_create_or_update_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Create or update an organization secret.; flags: --org (required), --secret-name (required), --encrypted-value (required), --key-id (required), --visibility (required)
   - agents delete-org-secret - Delete an organization secret [intent=reverse_etl availability=implemented write=agents_delete_org_secret]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization secret. Removes provider-side state.; flags: --org (required), --secret-name (required)
-  - agents set-selected-repos-for-org-secret - Set selected repositories for an organization secret [intent=reverse_etl availability=implemented write=agents_set_selected_repos_for_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for an organization secret.; flags: --org (required), --secret-name (required), --selected-repository-ids (required)
+  - agents set-selected-repos-for-org-secret - Set selected repositories for an organization secret [intent=reverse_etl availability=implemented write=actions_set_selected_repos_for_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for an organization secret.; flags: --org (required), --secret-name (required), --selected-repository-ids (required)
   - agents add-selected-repo-to-org-secret - Add selected repository to an organization secret [intent=reverse_etl availability=implemented write=agents_add_selected_repo_to_org_secret]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add selected repository to an organization secret.; flags: --org (required), --secret-name (required), --repository-id (required)
   - agents remove-selected-repo-from-org-secret - Remove selected repository from an organization secret [intent=reverse_etl availability=implemented write=agents_remove_selected_repo_from_org_secret]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.; flags: --org (required), --secret-name (required), --repository-id (required)
   - agents create-org-variable - Create an organization variable [intent=reverse_etl availability=implemented write=agents_create_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an organization variable.; flags: --org (required), --name (required), --value (required), --visibility (required)
-  - agents update-org-variable - Update an organization variable [intent=reverse_etl availability=implemented write=agents_update_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update an organization variable.; flags: --org (required), --name (required), --value, --visibility
+  - agents update-org-variable - Update an organization variable [intent=reverse_etl availability=implemented write=actions_update_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update an organization variable.; flags: --org (required), --name (required), --value, --visibility
   - agents delete-org-variable - Delete an organization variable [intent=reverse_etl availability=implemented write=agents_delete_org_variable]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization variable. Removes provider-side state.; flags: --org (required), --name (required)
-  - agents set-selected-repos-for-org-variable - Set selected repositories for an organization variable [intent=reverse_etl availability=implemented write=agents_set_selected_repos_for_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for an organization variable.; flags: --name (required), --org (required), --selected-repository-ids (required)
+  - agents set-selected-repos-for-org-variable - Set selected repositories for an organization variable [intent=reverse_etl availability=implemented write=actions_set_selected_repos_for_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Set selected repositories for an organization variable.; flags: --name (required), --org (required), --selected-repository-ids (required)
   - agents add-selected-repo-to-org-variable - Add selected repository to an organization variable [intent=reverse_etl availability=implemented write=agents_add_selected_repo_to_org_variable]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add selected repository to an organization variable.; flags: --org (required), --name (required), --repository-id (required)
   - agents remove-selected-repo-from-org-variable - Remove selected repository from an organization variable [intent=reverse_etl availability=implemented write=agents_remove_selected_repo_from_org_variable]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove selected repository from an organization variable. Removes provider-side state.; flags: --org (required), --name (required), --repository-id (required)
   - orgs create-artifact-deployment-record - Create an artifact deployment record [intent=reverse_etl availability=implemented write=orgs_create_artifact_deployment_record]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an artifact deployment record.; flags: --org (required), --name (required), --digest (required), --status (required), --logical-environment (required), --deployment-name (required), --version, --physical-environment, --cluster, --runtime-risks, --github-repository, --return-records
@@ -3723,7 +3723,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - users delete-ssh-signing-key-for-authenticated-user - Delete an SSH signing key for the authenticated user [intent=reverse_etl availability=implemented write=users_delete_ssh_signing_key_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an SSH signing key for the authenticated user. Removes provider-side state.; flags: --ssh-signing-key-id (required)
   - activity star-repo-for-authenticated-user - Star a repository for the authenticated user [intent=reverse_etl availability=implemented write=activity_star_repo_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Star a repository for the authenticated user.
   - activity unstar-repo-for-authenticated-user - Unstar a repository for the authenticated user [intent=reverse_etl availability=implemented write=activity_unstar_repo_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Unstar a repository for the authenticated user. Removes provider-side state.
-  - projects create-draft-item-for-authenticated-user - Create draft item for user owned project [intent=reverse_etl availability=implemented write=projects_create_draft_item_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create draft item for user owned project.; flags: --user-id (required), --project-number (required), --title (required), --body
+  - projects create-draft-item-for-authenticated-user - Create a draft item in a user-owned project through fixed GitHub GraphQL [intent=direct_write availability=implemented operation=github.graphql.mutation.add-project-v2-draft-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
   - projects create-view-for-user - Create a view for a user-owned project [intent=reverse_etl availability=implemented write=projects_create_view_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a view for a user-owned project.; flags: --user-id (required), --project-number (required), --name (required), --layout (required), --filter
   - users list-attestations-bulk - List attestations by bulk subject digests [intent=direct_read availability=implemented operation=github.users_list_attestations_bulk]; flags: --username (required), --subject-digests (required), --predicate-type, --page, --page-cursor
   - users delete-attestations-by-subject-digest - Delete attestations by subject digest [intent=reverse_etl availability=implemented write=users_delete_attestations_by_subject_digest]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete attestations by subject digest. Removes provider-side state.; flags: --username (required), --subject-digest (required)

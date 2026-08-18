@@ -2095,6 +2095,34 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	}
 }
 
+func TestGitHubUserDraftCommandBuildsFixedGraphQLMutation(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("load GitHub bundle: %v", err)
+	}
+	connector := engine.New(bundle, nil)
+
+	command, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"projects", "create-draft-item-for-authenticated-user"},
+		Flags: map[string][]string{
+			"input": {`{"projectId":"PVT_kwDOBigProject","title":"pm-cert-draft","body":"fixed GraphQL route"}`},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	if got, want := command.Operation, "github.graphql.mutation.add-project-v2-draft-issue"; got != want {
+		t.Fatalf("operation = %q, want %q", got, want)
+	}
+	input, ok := command.Record["input"].(map[string]any)
+	if !ok {
+		t.Fatalf("record input = %#v, want closed GraphQL input object", command.Record["input"])
+	}
+	if input["projectId"] != "PVT_kwDOBigProject" || input["title"] != "pm-cert-draft" || input["body"] != "fixed GraphQL route" {
+		t.Fatalf("GraphQL input = %#v, want exact projectId/title/body", input)
+	}
+}
+
 func TestBuildOperationDirectWriteCommandKeepsCompleteInputError(t *testing.T) {
 	connector := &fakeConnector{
 		directWriteMetadata: connectors.OperationDirectWriteMetadata{

@@ -2800,6 +2800,15 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	}
 	writeRequest.Approval = evidence
 	result, err := writer.Write(ctx, writeRequest, records)
+	if err == nil && (result.RecordsWritten != len(records) || result.RecordsFailed != 0 || result.RecordsUnchanged != 0) {
+		err = fmt.Errorf(
+			"connector command acknowledgement is incomplete: wrote %d, unchanged %d, failed %d of %d records",
+			result.RecordsWritten,
+			result.RecordsUnchanged,
+			result.RecordsFailed,
+			len(records),
+		)
+	}
 	return a.finishReverseWrite(plan.ID, run, result, len(records), err)
 }
 

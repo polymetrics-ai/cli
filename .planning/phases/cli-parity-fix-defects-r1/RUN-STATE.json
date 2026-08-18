@@ -1,0 +1,33 @@
+{
+  "phase": "cli-parity-fix-defects-r1",
+  "issue_refs": [4015, 4221],
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-parity-fix-defects",
+  "status": "pr-open",
+  "census_total": 277,
+  "red": [
+    "persisted exact integer changes payload identity before provider dispatch",
+    "six GitHub mutation actions omit required body schema and CLI flags",
+    "three Actions aliases and the user draft identifier declaration are wrong",
+    "missing_ok_status 404 increments RecordsWritten and returns success"
+  ],
+  "green": [
+    "state JSON numbers preserve exact lexemes and interpolation emits decimal integer paths",
+    "six GitHub mutation commands expose and send provider-required JSON bodies",
+    "three Agent-labelled aliases use Actions writes and the user-project draft command uses the fixed addProjectV2DraftIssue GraphQL operation",
+    "allow-listed missing deletes are accounted as unchanged and command execution cannot report them as writes"
+  ],
+  "live_conversions": [
+    "exact integers: orgs update-webhook, update-webhook-config-for-org, delete-webhook",
+    "required bodies: git blobs create, git trees create, git commits create",
+    "corrected paths: agents update-org-variable, set-selected-repos-for-org-variable, set-selected-repos-for-org-secret",
+    "honest results: orgs create-webhook, orgs delete-webhook, actions delete-org-secret"
+  ],
+  "cleanup": [
+    "tagged organization webhook deleted; independent GET 404",
+    "tagged Actions organization variable deleted; independent GET 404",
+    "tagged Actions organization secret deleted; independent GET 404",
+    "Git object body proofs replayed pre-existing content-addressed SHAs and changed no ref",
+    "local encrypted certification project removed"
+  ]
+}

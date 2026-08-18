@@ -40,11 +40,12 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.Endpoints != wantEndpoints {
 		t.Fatalf("Endpoints = %d, want source-derived REST plus legacy bindings plus fixed GraphQL transport %d", result.Endpoints, wantEndpoints)
 	}
-	if result.Covered != wantEndpoints {
-		t.Fatalf("Covered = %d, want every source-derived endpoint covered %d", result.Covered, wantEndpoints)
+	wantCovered := wantEndpoints - 1
+	if result.Covered != wantCovered {
+		t.Fatalf("Covered = %d, want %d executable endpoints plus one blocked duplicate", result.Covered, wantCovered)
 	}
-	if result.Blocked != 0 {
-		t.Fatalf("Blocked = %d, want 0 after complete parity", result.Blocked)
+	if result.Blocked != 1 {
+		t.Fatalf("Blocked = %d, want the retired user-project draft REST route only", result.Blocked)
 	}
 	if result.CoveredBy["stream"] != 37 {
 		t.Fatalf("CoveredBy[stream] = %d, want 37", result.CoveredBy["stream"])
@@ -53,8 +54,8 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	// several write contracts each, so this count has to come from
 	// WriteTargets(); reading only the singular field leaves those endpoints
 	// looking uncovered and fails the whole inventory.
-	if result.CoveredBy["write"] != 607 {
-		t.Fatalf("CoveredBy[write] = %d, want 607", result.CoveredBy["write"])
+	if result.CoveredBy["write"] != 606 {
+		t.Fatalf("CoveredBy[write] = %d, want 606 after retiring the invalid user-project draft REST write", result.CoveredBy["write"])
 	}
 	// Eight formerly singular provider bindings now expose a source CLI alias
 	// beside the generated provider command, so surface-sync correctly moves
@@ -71,14 +72,53 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.CoveredBy["operation"] != transportOperations {
 		t.Fatalf("CoveredBy[operation] = %d, want all fixed GraphQL bindings %d", result.CoveredBy["operation"], transportOperations)
 	}
-	if len(result.BlockedByModel) != 0 || len(result.BlockedByStatus) != 0 {
-		t.Fatalf("blocked classifications = models=%v status=%v, want none after complete parity", result.BlockedByModel, result.BlockedByStatus)
+	if len(result.BlockedByModel) != 1 || result.BlockedByModel["duplicate"] != 1 ||
+		len(result.BlockedByStatus) != 1 || result.BlockedByStatus["blocked"] != 1 {
+		t.Fatalf("blocked classifications = models=%v status=%v, want one blocked duplicate", result.BlockedByModel, result.BlockedByStatus)
 	}
+	assertGitHubUserDraftRESTRouteIsBlockedDuplicate(t)
 	if result.Provenance == nil {
 		t.Fatal("Provenance = nil, want legacy provenance evidence")
 	}
 	if result.Provenance.Status != "legacy_unverified" || result.Provenance.LedgerVersion != 1 {
 		t.Fatalf("Provenance = %+v, want v1 legacy_unverified evidence", result.Provenance)
+	}
+}
+
+func assertGitHubUserDraftRESTRouteIsBlockedDuplicate(t *testing.T) {
+	t.Helper()
+	path, err := findAPISurfacePath("github")
+	if err != nil {
+		t.Fatalf("findAPISurfacePath(github): %v", err)
+	}
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read github api surface: %v", err)
+	}
+	surface, err := engine.ParseAPISurface(raw)
+	if err != nil {
+		t.Fatalf("parse github api surface: %v", err)
+	}
+
+	const retiredPath = "/user/{user_id}/projectsV2/{project_number}/drafts"
+	matches := 0
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Method != "POST" || endpoint.Path != retiredPath {
+			continue
+		}
+		matches++
+		if endpoint.CoveredBy != nil {
+			t.Fatalf("%s still claims executable coverage: %+v", retiredPath, endpoint.CoveredBy)
+		}
+		operation := endpoint.Operation
+		if operation == nil || operation.Model != "duplicate" || operation.Status != "blocked" ||
+			!operation.BlockedByDefault || operation.Reason == "" ||
+			operation.DuplicateOf != "POST /graphql (github.graphql.mutation.add-project-v2-draft-issue)" {
+			t.Fatalf("%s operation = %+v, want the fixed GraphQL command's blocked duplicate", retiredPath, operation)
+		}
+	}
+	if matches != 1 {
+		t.Fatalf("%s occurrences = %d, want exactly one source-inventory row", retiredPath, matches)
 	}
 }
 

@@ -8246,6 +8246,74 @@
       "generated": true
     },
     {
+      "command": "agents update-org-variable",
+      "command_tokens": [
+        "agents",
+        "update-org-variable"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "actions_update_org_variable",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "PATCH",
+        "path": "/orgs/{org}/actions/variables/{name}"
+      },
+      "fixture": {
+        "strategy": "derived_collection_cycle",
+        "collection": "/orgs/{org}/actions/variables",
+        "collection_depth": 4,
+        "provisioner_commands": [
+          "actions create-org-variable"
+        ],
+        "evidence": "POST or PUT declaration(s) actions create-org-variable share the derived REST collection \"/orgs/{org}/actions/variables\"; URL depth 4 orders parent collections first"
+      },
+      "input_slots": [
+        {
+          "path": "record.name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.org",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.value",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.visibility",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "all",
+            "private",
+            "selected"
+          ]
+        }
+      ],
+      "required_flags": [
+        "--name",
+        "--org"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
       "command": "agents create-or-update-org-secret",
       "command_tokens": [
         "agents",
@@ -8484,74 +8552,6 @@
           "path": "record.org",
           "type": "string",
           "required": true
-        }
-      ],
-      "required_flags": [
-        "--name",
-        "--org"
-      ],
-      "classification": {
-        "code": "contained",
-        "family": "contained_remaining_rest",
-        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
-      },
-      "generated": true
-    },
-    {
-      "command": "agents update-org-variable",
-      "command_tokens": [
-        "agents",
-        "update-org-variable"
-      ],
-      "intent": "reverse_etl",
-      "cohort": "fixture_required_mutations",
-      "credential_flag": "--credential",
-      "json_mode": true,
-      "declaration": {
-        "kind": "write_action",
-        "id": "agents_update_org_variable",
-        "executor": "reverse_plan"
-      },
-      "address": {
-        "source": "cli_surface",
-        "transport": "rest",
-        "method": "PATCH",
-        "path": "/orgs/{org}/agents/variables/{name}"
-      },
-      "fixture": {
-        "strategy": "derived_collection_cycle",
-        "collection": "/orgs/{org}/agents/variables",
-        "collection_depth": 4,
-        "provisioner_commands": [
-          "agents create-org-variable"
-        ],
-        "evidence": "POST or PUT declaration(s) agents create-org-variable share the derived REST collection \"/orgs/{org}/agents/variables\"; URL depth 4 orders parent collections first"
-      },
-      "input_slots": [
-        {
-          "path": "record.name",
-          "type": "string",
-          "required": true
-        },
-        {
-          "path": "record.org",
-          "type": "string",
-          "required": true
-        },
-        {
-          "path": "record.value",
-          "type": "string",
-          "required": false
-        },
-        {
-          "path": "record.visibility",
-          "type": "enum",
-          "required": false,
-          "values": [
-            "all",
-            "private",
-            "selected"
-          ]
         }
       ],
       "required_flags": [
@@ -11113,8 +11113,77 @@
         ],
         "evidence": "POST or PUT declaration(s) check-runs create share the derived REST collection \"/repos/{owner}/{repo}/check-runs\"; URL depth 4 orders parent collections first"
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.actions",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.completed_at",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.conclusion",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "action_required",
+            "cancelled",
+            "failure",
+            "neutral",
+            "success",
+            "skipped",
+            "stale",
+            "timed_out"
+          ]
+        },
+        {
+          "path": "record.details_url",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.external_id",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.head_sha",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.output",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.started_at",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.status",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "queued",
+            "in_progress",
+            "completed"
+          ]
+        }
+      ],
+      "required_flags": [
+        "--head-sha",
+        "--name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -13067,12 +13136,41 @@
       },
       "input_slots": [
         {
+          "path": "record.context",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.description",
+          "type": "string",
+          "required": false
+        },
+        {
           "path": "record.sha",
           "type": "string",
           "required": true
+        },
+        {
+          "path": "record.state",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "error",
+            "failure",
+            "pending",
+            "success"
+          ]
+        },
+        {
+          "path": "record.target_url",
+          "type": "string",
+          "required": false
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--sha",
+        "--state"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -18557,8 +18655,25 @@
         ],
         "evidence": "POST or PUT declaration(s) git blobs create share the derived REST collection \"/repos/{owner}/{repo}/git/blobs\"; URL depth 5 orders parent collections first"
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.content",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.encoding",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "utf-8",
+            "base64"
+          ]
+        }
+      ],
+      "required_flags": [
+        "--content"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -18597,8 +18712,42 @@
         ],
         "evidence": "POST or PUT declaration(s) git commits create share the derived REST collection \"/repos/{owner}/{repo}/git/commits\"; URL depth 5 orders parent collections first"
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.author",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.committer",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.message",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.parents",
+          "type": "string_array",
+          "required": false
+        },
+        {
+          "path": "record.signature",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.tree",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--message",
+        "--tree"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -18713,8 +18862,21 @@
         ],
         "evidence": "POST or PUT declaration(s) git trees create share the derived REST collection \"/repos/{owner}/{repo}/git/trees\"; URL depth 5 orders parent collections first"
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.base_tree",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.tree",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--tree"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -19637,70 +19799,6 @@
       "required_flags": [
         "--package-name",
         "--package-type"
-      ],
-      "classification": {
-        "code": "contained",
-        "family": "contained_remaining_rest",
-        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
-      },
-      "generated": true
-    },
-    {
-      "command": "projects create-draft-item-for-authenticated-user",
-      "command_tokens": [
-        "projects",
-        "create-draft-item-for-authenticated-user"
-      ],
-      "intent": "reverse_etl",
-      "cohort": "fixture_required_mutations",
-      "credential_flag": "--credential",
-      "json_mode": true,
-      "declaration": {
-        "kind": "write_action",
-        "id": "projects_create_draft_item_for_authenticated_user",
-        "executor": "reverse_plan"
-      },
-      "address": {
-        "source": "cli_surface",
-        "transport": "rest",
-        "method": "POST",
-        "path": "/user/{user_id}/projectsV2/{project_number}/drafts"
-      },
-      "fixture": {
-        "strategy": "derived_collection_cycle",
-        "collection": "/user/{user_id}/projectsV2/{project_number}/drafts",
-        "collection_depth": 5,
-        "provisioner_commands": [
-          "projects create-draft-item-for-authenticated-user"
-        ],
-        "evidence": "POST or PUT declaration(s) projects create-draft-item-for-authenticated-user share the derived REST collection \"/user/{user_id}/projectsV2/{project_number}/drafts\"; URL depth 5 orders parent collections first"
-      },
-      "input_slots": [
-        {
-          "path": "record.body",
-          "type": "string",
-          "required": false
-        },
-        {
-          "path": "record.project_number",
-          "type": "integer",
-          "required": true
-        },
-        {
-          "path": "record.title",
-          "type": "string",
-          "required": true
-        },
-        {
-          "path": "record.user_id",
-          "type": "string",
-          "required": true
-        }
-      ],
-      "required_flags": [
-        "--project-number",
-        "--title",
-        "--user-id"
       ],
       "classification": {
         "code": "contained",
@@ -21853,9 +21951,10 @@
         "collection_depth": 6,
         "provisioner_commands": [
           "actions add-selected-repo-to-org-secret",
-          "actions set-selected-repos-for-org-secret"
+          "actions set-selected-repos-for-org-secret",
+          "agents set-selected-repos-for-org-secret"
         ],
-        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-secret, actions set-selected-repos-for-org-secret share the derived REST collection \"/orgs/{org}/actions/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-secret, actions set-selected-repos-for-org-secret, agents set-selected-repos-for-org-secret share the derived REST collection \"/orgs/{org}/actions/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
         {
@@ -21913,9 +22012,10 @@
         "collection_depth": 6,
         "provisioner_commands": [
           "actions add-selected-repo-to-org-secret",
-          "actions set-selected-repos-for-org-secret"
+          "actions set-selected-repos-for-org-secret",
+          "agents set-selected-repos-for-org-secret"
         ],
-        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-secret, actions set-selected-repos-for-org-secret share the derived REST collection \"/orgs/{org}/actions/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-secret, actions set-selected-repos-for-org-secret, agents set-selected-repos-for-org-secret share the derived REST collection \"/orgs/{org}/actions/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
         {
@@ -21973,9 +22073,71 @@
         "collection_depth": 6,
         "provisioner_commands": [
           "actions add-selected-repo-to-org-secret",
-          "actions set-selected-repos-for-org-secret"
+          "actions set-selected-repos-for-org-secret",
+          "agents set-selected-repos-for-org-secret"
         ],
-        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-secret, actions set-selected-repos-for-org-secret share the derived REST collection \"/orgs/{org}/actions/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-secret, actions set-selected-repos-for-org-secret, agents set-selected-repos-for-org-secret share the derived REST collection \"/orgs/{org}/actions/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
+      },
+      "input_slots": [
+        {
+          "path": "record.org",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.secret_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.selected_repository_ids",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--org",
+        "--secret-name",
+        "--selected-repository-ids"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "agents set-selected-repos-for-org-secret",
+      "command_tokens": [
+        "agents",
+        "set-selected-repos-for-org-secret"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "actions_set_selected_repos_for_org_secret",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/orgs/{org}/actions/secrets/{secret_name}/repositories"
+      },
+      "fixture": {
+        "strategy": "derived_collection_cycle",
+        "collection": "/orgs/{org}/actions/secrets/{secret_name}/repositories",
+        "collection_depth": 6,
+        "provisioner_commands": [
+          "actions add-selected-repo-to-org-secret",
+          "actions set-selected-repos-for-org-secret",
+          "agents set-selected-repos-for-org-secret"
+        ],
+        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-secret, actions set-selected-repos-for-org-secret, agents set-selected-repos-for-org-secret share the derived REST collection \"/orgs/{org}/actions/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
         {
@@ -22033,9 +22195,10 @@
         "collection_depth": 6,
         "provisioner_commands": [
           "actions add-selected-repo-to-org-variable",
-          "actions set-selected-repos-for-org-variable"
+          "actions set-selected-repos-for-org-variable",
+          "agents set-selected-repos-for-org-variable"
         ],
-        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-variable, actions set-selected-repos-for-org-variable share the derived REST collection \"/orgs/{org}/actions/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-variable, actions set-selected-repos-for-org-variable, agents set-selected-repos-for-org-variable share the derived REST collection \"/orgs/{org}/actions/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
         {
@@ -22093,9 +22256,10 @@
         "collection_depth": 6,
         "provisioner_commands": [
           "actions add-selected-repo-to-org-variable",
-          "actions set-selected-repos-for-org-variable"
+          "actions set-selected-repos-for-org-variable",
+          "agents set-selected-repos-for-org-variable"
         ],
-        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-variable, actions set-selected-repos-for-org-variable share the derived REST collection \"/orgs/{org}/actions/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-variable, actions set-selected-repos-for-org-variable, agents set-selected-repos-for-org-variable share the derived REST collection \"/orgs/{org}/actions/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
         {
@@ -22153,9 +22317,71 @@
         "collection_depth": 6,
         "provisioner_commands": [
           "actions add-selected-repo-to-org-variable",
-          "actions set-selected-repos-for-org-variable"
+          "actions set-selected-repos-for-org-variable",
+          "agents set-selected-repos-for-org-variable"
         ],
-        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-variable, actions set-selected-repos-for-org-variable share the derived REST collection \"/orgs/{org}/actions/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-variable, actions set-selected-repos-for-org-variable, agents set-selected-repos-for-org-variable share the derived REST collection \"/orgs/{org}/actions/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
+      },
+      "input_slots": [
+        {
+          "path": "record.name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.org",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.selected_repository_ids",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--name",
+        "--org",
+        "--selected-repository-ids"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "agents set-selected-repos-for-org-variable",
+      "command_tokens": [
+        "agents",
+        "set-selected-repos-for-org-variable"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "actions_set_selected_repos_for_org_variable",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/orgs/{org}/actions/variables/{name}/repositories"
+      },
+      "fixture": {
+        "strategy": "derived_collection_cycle",
+        "collection": "/orgs/{org}/actions/variables/{name}/repositories",
+        "collection_depth": 6,
+        "provisioner_commands": [
+          "actions add-selected-repo-to-org-variable",
+          "actions set-selected-repos-for-org-variable",
+          "agents set-selected-repos-for-org-variable"
+        ],
+        "evidence": "POST or PUT declaration(s) actions add-selected-repo-to-org-variable, actions set-selected-repos-for-org-variable, agents set-selected-repos-for-org-variable share the derived REST collection \"/orgs/{org}/actions/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
         {
@@ -22212,10 +22438,9 @@
         "collection": "/orgs/{org}/agents/secrets/{secret_name}/repositories",
         "collection_depth": 6,
         "provisioner_commands": [
-          "agents add-selected-repo-to-org-secret",
-          "agents set-selected-repos-for-org-secret"
+          "agents add-selected-repo-to-org-secret"
         ],
-        "evidence": "POST or PUT declaration(s) agents add-selected-repo-to-org-secret, agents set-selected-repos-for-org-secret share the derived REST collection \"/orgs/{org}/agents/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) agents add-selected-repo-to-org-secret share the derived REST collection \"/orgs/{org}/agents/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
         {
@@ -22272,10 +22497,9 @@
         "collection": "/orgs/{org}/agents/secrets/{secret_name}/repositories",
         "collection_depth": 6,
         "provisioner_commands": [
-          "agents add-selected-repo-to-org-secret",
-          "agents set-selected-repos-for-org-secret"
+          "agents add-selected-repo-to-org-secret"
         ],
-        "evidence": "POST or PUT declaration(s) agents add-selected-repo-to-org-secret, agents set-selected-repos-for-org-secret share the derived REST collection \"/orgs/{org}/agents/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) agents add-selected-repo-to-org-secret share the derived REST collection \"/orgs/{org}/agents/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
         {
@@ -22298,66 +22522,6 @@
         "--org",
         "--repository-id",
         "--secret-name"
-      ],
-      "classification": {
-        "code": "contained",
-        "family": "contained_remaining_rest",
-        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
-      },
-      "generated": true
-    },
-    {
-      "command": "agents set-selected-repos-for-org-secret",
-      "command_tokens": [
-        "agents",
-        "set-selected-repos-for-org-secret"
-      ],
-      "intent": "reverse_etl",
-      "cohort": "fixture_required_mutations",
-      "credential_flag": "--credential",
-      "json_mode": true,
-      "declaration": {
-        "kind": "write_action",
-        "id": "agents_set_selected_repos_for_org_secret",
-        "executor": "reverse_plan"
-      },
-      "address": {
-        "source": "cli_surface",
-        "transport": "rest",
-        "method": "PUT",
-        "path": "/orgs/{org}/agents/secrets/{secret_name}/repositories"
-      },
-      "fixture": {
-        "strategy": "derived_collection_cycle",
-        "collection": "/orgs/{org}/agents/secrets/{secret_name}/repositories",
-        "collection_depth": 6,
-        "provisioner_commands": [
-          "agents add-selected-repo-to-org-secret",
-          "agents set-selected-repos-for-org-secret"
-        ],
-        "evidence": "POST or PUT declaration(s) agents add-selected-repo-to-org-secret, agents set-selected-repos-for-org-secret share the derived REST collection \"/orgs/{org}/agents/secrets/{secret_name}/repositories\"; URL depth 6 orders parent collections first"
-      },
-      "input_slots": [
-        {
-          "path": "record.org",
-          "type": "string",
-          "required": true
-        },
-        {
-          "path": "record.secret_name",
-          "type": "string",
-          "required": true
-        },
-        {
-          "path": "record.selected_repository_ids",
-          "type": "json",
-          "required": true
-        }
-      ],
-      "required_flags": [
-        "--org",
-        "--secret-name",
-        "--selected-repository-ids"
       ],
       "classification": {
         "code": "contained",
@@ -22392,10 +22556,9 @@
         "collection": "/orgs/{org}/agents/variables/{name}/repositories",
         "collection_depth": 6,
         "provisioner_commands": [
-          "agents add-selected-repo-to-org-variable",
-          "agents set-selected-repos-for-org-variable"
+          "agents add-selected-repo-to-org-variable"
         ],
-        "evidence": "POST or PUT declaration(s) agents add-selected-repo-to-org-variable, agents set-selected-repos-for-org-variable share the derived REST collection \"/orgs/{org}/agents/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) agents add-selected-repo-to-org-variable share the derived REST collection \"/orgs/{org}/agents/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
         {
@@ -22452,10 +22615,9 @@
         "collection": "/orgs/{org}/agents/variables/{name}/repositories",
         "collection_depth": 6,
         "provisioner_commands": [
-          "agents add-selected-repo-to-org-variable",
-          "agents set-selected-repos-for-org-variable"
+          "agents add-selected-repo-to-org-variable"
         ],
-        "evidence": "POST or PUT declaration(s) agents add-selected-repo-to-org-variable, agents set-selected-repos-for-org-variable share the derived REST collection \"/orgs/{org}/agents/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) agents add-selected-repo-to-org-variable share the derived REST collection \"/orgs/{org}/agents/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
         {
@@ -22478,66 +22640,6 @@
         "--name",
         "--org",
         "--repository-id"
-      ],
-      "classification": {
-        "code": "contained",
-        "family": "contained_remaining_rest",
-        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
-      },
-      "generated": true
-    },
-    {
-      "command": "agents set-selected-repos-for-org-variable",
-      "command_tokens": [
-        "agents",
-        "set-selected-repos-for-org-variable"
-      ],
-      "intent": "reverse_etl",
-      "cohort": "fixture_required_mutations",
-      "credential_flag": "--credential",
-      "json_mode": true,
-      "declaration": {
-        "kind": "write_action",
-        "id": "agents_set_selected_repos_for_org_variable",
-        "executor": "reverse_plan"
-      },
-      "address": {
-        "source": "cli_surface",
-        "transport": "rest",
-        "method": "PUT",
-        "path": "/orgs/{org}/agents/variables/{name}/repositories"
-      },
-      "fixture": {
-        "strategy": "derived_collection_cycle",
-        "collection": "/orgs/{org}/agents/variables/{name}/repositories",
-        "collection_depth": 6,
-        "provisioner_commands": [
-          "agents add-selected-repo-to-org-variable",
-          "agents set-selected-repos-for-org-variable"
-        ],
-        "evidence": "POST or PUT declaration(s) agents add-selected-repo-to-org-variable, agents set-selected-repos-for-org-variable share the derived REST collection \"/orgs/{org}/agents/variables/{name}/repositories\"; URL depth 6 orders parent collections first"
-      },
-      "input_slots": [
-        {
-          "path": "record.name",
-          "type": "string",
-          "required": true
-        },
-        {
-          "path": "record.org",
-          "type": "string",
-          "required": true
-        },
-        {
-          "path": "record.selected_repository_ids",
-          "type": "json",
-          "required": true
-        }
-      ],
-      "required_flags": [
-        "--name",
-        "--org",
-        "--selected-repository-ids"
       ],
       "classification": {
         "code": "contained",
@@ -24112,9 +24214,35 @@
           "path": "record.branch",
           "type": "string",
           "required": true
+        },
+        {
+          "path": "record.enforce_admins",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "path": "record.required_pull_request_reviews",
+          "type": "json",
+          "required": true
+        },
+        {
+          "path": "record.required_status_checks",
+          "type": "json",
+          "required": true
+        },
+        {
+          "path": "record.restrictions",
+          "type": "json",
+          "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--branch",
+        "--enforce-admins",
+        "--required-pull-request-reviews",
+        "--required-status-checks",
+        "--restrictions"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -45439,6 +45567,49 @@
       "declaration": {
         "kind": "operation",
         "id": "github.graphql.mutation.create-project-v2",
+        "executor": "direct_write"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "graphql",
+        "method": "POST",
+        "path": "/graphql"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "graphql_transport_not_collection",
+        "evidence": "the shared GraphQL transport endpoint is not a resource collection, so no REST CRUD fixture cycle can be inferred"
+      },
+      "input_slots": [
+        {
+          "path": "body.input",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--input"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_graphql",
+        "evidence": "the candidate is a fixed GraphQL mutation outside an explicitly escaping family; any future execution must bind every opaque input node to a fresh object inside the disposable certification identity and organisation, then destroy that container"
+      },
+      "generated": true
+    },
+    {
+      "command": "projects create-draft-item-for-authenticated-user",
+      "command_tokens": [
+        "projects",
+        "create-draft-item-for-authenticated-user"
+      ],
+      "intent": "direct_write",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "operation",
+        "id": "github.graphql.mutation.add-project-v2-draft-issue",
         "executor": "direct_write"
       },
       "address": {

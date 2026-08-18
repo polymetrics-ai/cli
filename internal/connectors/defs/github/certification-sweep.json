@@ -6160,7 +6160,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/orgs/{org}/agents/secrets/{secret_name}/repositories"
+          "path": "/orgs/{org}/actions/secrets/{secret_name}/repositories"
         }
       ],
       "status": "fixture_required",
@@ -6199,7 +6199,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/orgs/{org}/agents/variables/{name}/repositories"
+          "path": "/orgs/{org}/actions/variables/{name}/repositories"
         }
       ],
       "status": "fixture_required",
@@ -6249,7 +6249,7 @@
       "api_surface": [
         {
           "method": "PATCH",
-          "path": "/orgs/{org}/agents/variables/{name}"
+          "path": "/orgs/{org}/actions/variables/{name}"
         }
       ],
       "status": "fixture_required",
@@ -8714,8 +8714,32 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.branch"
+        },
+        {
+          "name": "enforce-admins",
+          "type": "boolean",
+          "required": true,
+          "maps_to": "record.enforce_admins"
+        },
+        {
+          "name": "required-pull-request-reviews",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.required_pull_request_reviews"
+        },
+        {
+          "name": "required-status-checks",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.required_status_checks"
+        },
+        {
+          "name": "restrictions",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.restrictions"
         }
       ],
       "api_surface": [
@@ -8725,7 +8749,14 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --branch, --enforce-admins, --required-pull-request-reviews, --required-status-checks, --restrictions",
+      "required_flags": [
+        "--branch",
+        "--enforce-admins",
+        "--required-pull-request-reviews",
+        "--required-status-checks",
+        "--restrictions"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection",
@@ -9515,7 +9546,83 @@
       "path": "check-runs create",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "flags": [],
+      "flags": [
+        {
+          "name": "actions",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.actions"
+        },
+        {
+          "name": "completed-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.completed_at"
+        },
+        {
+          "name": "conclusion",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "action_required",
+            "cancelled",
+            "failure",
+            "neutral",
+            "success",
+            "skipped",
+            "stale",
+            "timed_out"
+          ],
+          "maps_to": "record.conclusion"
+        },
+        {
+          "name": "details-url",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.details_url"
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.external_id"
+        },
+        {
+          "name": "head-sha",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.head_sha"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "output",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.output"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.started_at"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "queued",
+            "in_progress",
+            "completed"
+          ],
+          "maps_to": "record.status"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -9523,7 +9630,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --head-sha, --name",
+      "required_flags": [
+        "--head-sha",
+        "--name"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest",
@@ -19588,7 +19699,24 @@
       "path": "git blobs create",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "flags": [],
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.content"
+        },
+        {
+          "name": "encoding",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "utf-8",
+            "base64"
+          ],
+          "maps_to": "record.encoding"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -19596,7 +19724,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --content",
+      "required_flags": [
+        "--content"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/git/blobs/{file_sha}",
@@ -19628,7 +19759,44 @@
       "path": "git commits create",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "flags": [],
+      "flags": [
+        {
+          "name": "author",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.author"
+        },
+        {
+          "name": "committer",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.committer"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.message"
+        },
+        {
+          "name": "parents",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "record.parents"
+        },
+        {
+          "name": "signature",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.signature"
+        },
+        {
+          "name": "tree",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.tree"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -19636,7 +19804,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --message, --tree",
+      "required_flags": [
+        "--message",
+        "--tree"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/git/commits/{commit_sha}",
@@ -19807,7 +19979,20 @@
       "path": "git trees create",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "flags": [],
+      "flags": [
+        {
+          "name": "base-tree",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.base_tree"
+        },
+        {
+          "name": "tree",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.tree"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -19815,7 +20000,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --tree",
+      "required_flags": [
+        "--tree"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/git/trees/{tree_sha}",
@@ -38619,48 +38807,28 @@
       "reason": "stream fixture and produced-record assertion are required"
     },
     {
-      "summary": "Create draft item for user owned project",
+      "summary": "Create a draft item in a user-owned project through fixed GitHub GraphQL",
       "path": "projects create-draft-item-for-authenticated-user",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "flags": [
         {
-          "name": "body",
-          "type": "string",
-          "required": false,
-          "maps_to": "record.body"
-        },
-        {
-          "name": "project-number",
-          "type": "integer",
+          "name": "input",
+          "type": "json",
           "required": true,
-          "maps_to": "record.project_number"
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "required": true,
-          "maps_to": "record.title"
-        },
-        {
-          "name": "user-id",
-          "type": "string",
-          "required": true,
-          "maps_to": "record.user_id"
+          "maps_to": "body.input"
         }
       ],
       "api_surface": [
         {
           "method": "POST",
-          "path": "/user/{user_id}/projectsV2/{project_number}/drafts"
+          "path": "/graphql"
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --project-number, --title, --user-id",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --input",
       "required_flags": [
-        "--project-number",
-        "--title",
-        "--user-id"
+        "--input"
       ]
     },
     {
@@ -44476,10 +44644,40 @@
       "availability": "implemented",
       "flags": [
         {
-          "name": "sha",
+          "name": "context",
           "type": "string",
           "required": false,
+          "maps_to": "record.context"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "sha",
+          "type": "string",
+          "required": true,
           "maps_to": "record.sha"
+        },
+        {
+          "name": "state",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "error",
+            "failure",
+            "pending",
+            "success"
+          ],
+          "maps_to": "record.state"
+        },
+        {
+          "name": "target-url",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.target_url"
         }
       ],
       "api_surface": [
@@ -44489,7 +44687,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --sha, --state",
+      "required_flags": [
+        "--sha",
+        "--state"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/subscription",

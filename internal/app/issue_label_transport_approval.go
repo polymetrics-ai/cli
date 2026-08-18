@@ -425,8 +425,8 @@ func (a *App) ApplyIssueLabelTransportCleanup(ctx context.Context, connectionID 
 	if err != nil {
 		return connectors.WriteResult{}, fmt.Errorf("execute approved issue-label transport cleanup: %w", err)
 	}
-	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
-		return connectors.WriteResult{}, fmt.Errorf("approved issue-label cleanup result written=%d failed=%d, want one durable write", result.RecordsWritten, result.RecordsFailed)
+	if result.RecordsFailed != 0 || result.RecordsWritten+result.RecordsUnchanged != 1 {
+		return connectors.WriteResult{}, fmt.Errorf("approved issue-label cleanup result written=%d unchanged=%d failed=%d, want one deleted or already-absent label", result.RecordsWritten, result.RecordsUnchanged, result.RecordsFailed)
 	}
 	if err := a.markIssueLabelTransportPlanExecuted(plan.ID); err != nil {
 		return connectors.WriteResult{}, err
