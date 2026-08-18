@@ -4,9 +4,10 @@
   "base": "integration/4015-mvp-flat-r1",
   "release_target": "0.2.1",
   "lifecycle": "inline-manual-gsd-fallback",
-  "stage": "verification",
+  "stage": "review",
   "red": "recorded: traces/live-red.txt and traces/focused-red.txt",
   "green": "passed: focused checkpoint-family and PostgreSQL package tests",
   "live": "passed: CDC target 1 before, 1 at interruption, 2 after restart; resumed key exactly once",
-  "review": "pending"
+  "verification": "passed: focused, live restart, postgres package, internal/cli, vet, build, GSD, generated, connector, docs, and release gates",
+  "review": "inline review passed; external claude_auto pending PR creation"
 }
