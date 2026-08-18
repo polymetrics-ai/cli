@@ -1,0 +1,27 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:issue_delete",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:20:48Z",
+  "run_id": "github-mutation-slice2-issue-delete-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "dcb76d2068e6b2d043770ad174910fcf5182364a9af3778b1489ae3cc6d45773",
+    "pm_command_fingerprint": "{{pmcertfp:v1:7eae88917d44b5174ed1788af62ef3f621c7fa3f75a3a5193d48dc793c95b2d2}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:713778cd5ee90211aae2d78594d98adb30cb2b40b52b34120d82e7e6b5119407}}"],
+    "http_exchanges": [
+      {
+        "operation": "issue_delete_independent_collection_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:64cbf36d4d783fe8f9c54e8430f37694e1a00fdf75acb6f9b132ab6cec7a518c}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": [], "original_bytes": 2, "truncated": false}}
+      }
+    ],
+    "database_exchanges": []
+  }
+}
