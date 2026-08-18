@@ -6,9 +6,9 @@
 | --- | ---: | ---: |
 | `integer_id_scientific_notation` | 147 | 53.1% |
 | `missing_request_payload` | 56 | 20.2% |
-| `wrong_api_path` | 9 | 3.2% |
+| `wrong_api_path` | 4 | 1.4% |
 | `false_success` | 11 | 4.0% |
-| `other` | 54 | 19.5% |
+| `other` | 59 | 21.3% |
 | **Total** | **277** | **100.0%** |
 
 The measured census does **not** support extrapolating the original 77% sample
@@ -28,10 +28,12 @@ Each command has exactly one primary class. A machine-readable live reason has
 first precedence, then a reasoned slice-ledger class, then a structural check of
 the current command/write declarations. For unreasoned rows, an integer flag
 feeding a write-action path is precision loss; a provider mutation with no
-non-path body field is missing payload; an Actions secret/variable command on
-`/agents/` is wrong path; and a DELETE whose declared missing response is counted
-as written is false success. Rows without one of those independently inspectable
-signatures remain `other`. An overlapping secondary defect does not double-count
+non-path body field is missing payload; and a DELETE whose declared missing
+response is counted as written is false success. `/agents/` alone is not a
+structural signature because GitHub also exposes real Agent secrets/variables;
+only the three commands with direct `/actions/` controls are classed wrong-path.
+Rows without one of those independently inspectable signatures remain `other`.
+An overlapping secondary defect does not double-count
 a command; for example, an integer-ID command on a wrong endpoint remains in its
 recorded live class.
 
@@ -256,18 +258,13 @@ variable update-2
 webhook update
 ```
 
-### `wrong_api_path` (9)
+### `wrong_api_path` (4)
 
 ```text
 agents set-selected-repos-for-org-secret
 agents set-selected-repos-for-org-variable
 agents update-org-variable
 projects create-draft-item-for-authenticated-user
-secret delete-6
-secret set-6
-variable create-3
-variable delete-4
-variable update-3
 ```
 
 ### `false_success` (11)
@@ -286,7 +283,7 @@ users unblock
 users unfollow
 ```
 
-### `other` (54)
+### `other` (59)
 
 ```text
 actions caches delete
@@ -331,8 +328,10 @@ secret delete
 secret delete-2
 secret delete-3
 secret delete-5
+secret delete-6
 secret set
 secret set-2
+secret set-6
 subscription delete
 teams add-or-update-membership-for-user-in-org
 teams add-or-update-repo-permissions-in-org
@@ -343,6 +342,9 @@ users attestations delete-by-subject-digests
 users create-gpg-key-for-authenticated-user
 users set-primary-email-visibility-for-authenticated-user
 users update-authenticated
+variable create-3
+variable delete-4
+variable update-3
 ```
 
 ## Scope statement
