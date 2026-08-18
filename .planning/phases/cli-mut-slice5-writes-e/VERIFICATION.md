@@ -16,4 +16,7 @@
 
 ## Results
 
-Pending execution.
+In progress. `variable delete-2` has one schema-v2 record validated by
+`go run ./cmd/connectorgen certification-matrix --check`. Product defects keep
+their declared commands; their raw controls and cleanup proof are recorded in
+the TDD ledger.
