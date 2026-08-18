@@ -53,3 +53,7 @@ remains.
   singular-to-plural migrations and 23 added plural targets), not an unexplained count bump.
 - `make lint`, focused/full certification tests, source artifact checks, runtime preflight, workflow
   evidence, vet, and whitespace validation all pass.
+- The exhaustive provider double no longer dispatches fixed queries by generated-ID prefix. It uses
+  the non-empty declared `graphql.path`, preserving stream replay for legacy operations, and builds
+  nested synthetic connections from the declared `connection_path`; no operation-specific response
+  exception or source-lock change was introduced.

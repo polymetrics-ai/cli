@@ -106,3 +106,18 @@ by test output or stored in evidence.
 - Refactor: the source lock, its 305-root expectation, the `github.repo.list` operation, and
   production inventory counting are unchanged; only the test helper now returns operation IDs so
   the two declaration classes cannot be conflated again.
+- Verify Red: GitHub Actions Verify run `32119884956` passed the corrected `certify` package, then
+  `TestGitHubExhaustiveProviderDouble` failed only `operation:github.repo.list`. The provider-double
+  dispatcher selected fixed-query execution by the `github.graphql.query.*` generated-ID prefix,
+  so the supplemental fixed operation fell through to the unrelated stream-binding path.
+- Green criterion: select the fixed GraphQL provider-double path from the operation's declared
+  non-empty `graphql.path`; keep legacy stream-backed GraphQL operations on their existing replay
+  path, and require the exhaustive provider-double test to exercise every operation with zero failed
+  rows.
+- Green: `TestGitHubExhaustiveProviderDouble` and the full `internal/connectors/conformance` package
+  pass. The double now routes self-contained fixed queries by `graphql.path` and builds its synthetic
+  connection object at the complete declared `connection_path`, including the nested
+  `repositoryOwner.repositories` shape used by `github.repo.list`.
+- Refactor: legacy GraphQL operations with no fixed transport path still replay their matching ETL
+  streams; generated root queries and supplemental fixed documents share only the direct-operation
+  provider-double path that their declarations actually select at runtime.

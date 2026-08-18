@@ -85,6 +85,10 @@
    count all 306 executable operation bindings.
 4. Run the focused Red/Green test, the full `certify` package, the relevant generated-surface gates,
    and the repository workflow-evidence check before pushing the correction to the existing PR.
+5. If the full Verify suite exposes a downstream consumer that still recognizes fixed GraphQL
+   queries only by the source-generated ID prefix, update that consumer to use the declaration-owned
+   fixed transport marker (`graphql.path`) and exercise the supplemental operation through the same
+   provider-double executor as generated fixed queries.
 
 Gap workflow: `scripts/gsd prompt plan-phase issue-4015-github-cli-parity-50-r1 --gaps` then
 `scripts/gsd prompt execute-phase issue-4015-github-cli-parity-50-r1 --gaps-only`, executed through

@@ -111,3 +111,15 @@ Status: **locally verified** on 2026-08-18; remote Verify confirmation follows t
 | `go vet ./internal/connectors/certify` | pass |
 | `make lint` | pass; zero issues |
 | `git diff --check` | pass |
+
+The first corrective Verify run, `32119884956`, passed both native builds and the corrected
+`internal/connectors/certify` package. It then exposed one downstream exhaustive-proof gap:
+`github.repo.list` was not routed through the fixed-query provider double. The follow-up correction
+uses declaration data rather than an ID allowlist and was verified with:
+
+| Follow-up verification command | Result |
+| --- | --- |
+| `go test -timeout 20m ./internal/connectors/conformance -run '^TestGitHubExhaustiveProviderDouble$' -count=1 -v` | pass; zero failed provider-double rows |
+| `go test -timeout 20m ./internal/connectors/conformance -count=1` | pass |
+| `go test -timeout 20m ./internal/connectors/certify -count=1` | pass |
+| generated-source, certification-sweep, runtime-preflight, surface-sync, certification-matrix, lint, and GSD workflow gates | pass |
