@@ -132,21 +132,21 @@ Cumulative commands 1–86: `certified=39`, `no_object=11`, `wrong_credential=0`
 | 87 | `apps add-repo-to-installation-for-authenticated-user` | product_defect | `class=integer_id_scientific_notation`; PM emitted both the real installation and repository IDs in scientific notation. The organization installation collection independently showed the contained certification App installation and its `all` repository selection. |
 | 88 | `apps create-from-manifest` | no_object | A manifest conversion code can only be minted by GitHub's interactive manifest flow; GitHub exposes no REST fixture-creation API, and no independently deletable one-time code was available. The invalid fixture code reached GitHub and returned `404`. |
 | 89 | `apps delete-installation` | no_object | The parent collection contains only the shared `polymetrics-cert-app` installation. GitHub exposes no API to create a disposable installation, so deleting the shared credential container could not supply an independently replaceable fixture. |
-| 90 | `apps redeliver-webhook-delivery` | wrong_credential | The App webhook delivery collection returned `401` because this endpoint requires a GitHub App JWT; no App-JWT credential is routed for this command. |
+| 90 | `apps redeliver-webhook-delivery` | no_object | Retried with the correct App JWT: `/app` returned `200`, while the parent `/app/hook/deliveries` collection returned `404 Not Found`. This certification App deliberately has webhooks inactive, and GitHub exposes no REST operation to create a delivery without a configured webhook, so no real delivery ID can be created inside the fixture boundary. |
 | 91 | `apps remove-repo-from-installation-for-authenticated-user` | product_defect | `class=integer_id_scientific_notation`; PM used scientific-notation installation and repository path IDs and reported deletion success. Organization installation read-back remained `repository_selection=all`, so no repository selection was removed. |
-| 92 | `apps revoke-installation-access-token` | wrong_credential | PM and the exact raw provider DELETE both returned `403` because the routed classic PAT is not an installation access token; independent `/user` read-back remained `200`. |
+| 92 | `apps revoke-installation-access-token` | certified | Retried with a freshly minted token from App installation `152693166`; PM plan, preview, and destructive run completed one record. An independent `/installation/repositories` read-back with that same token returned `401 Bad credentials`, rejecting the plausible wrong result that the token remained valid. Revocation is the provider-native terminal disposal. |
 | 93 | `apps scope-token` | no_object | The operation requires an OAuth/GitHub App client ID and compatible user token. GitHub exposes no API to create that disposable OAuth client/token fixture; an inert `pm-cert-` placeholder reached the provider and returned `404`. |
 | 94 | `apps suspend-installation` | product_defect | `class=integer_id_scientific_notation`; the real large installation ID is serialized into the path through the known fleet defect. The only available classic credential is also rejected for App-JWT-only installation administration. |
 | 95 | `apps unsuspend-installation` | product_defect | `class=integer_id_scientific_notation`; the real large installation ID is serialized into the path through the known fleet defect. Credential health was independently repaired before the attempt; the App-JWT-only operation still rejected the classic credential. |
-| 96 | `apps update-webhook-config-for-app` | wrong_credential | Raw parent read and PM both rejected the classic PAT because `/app/hook/config` requires an App JWT. The credential was independently repaired and remained healthy for ordinary GitHub reads. |
+| 96 | `apps update-webhook-config-for-app` | no_object | Retried through PM with the correct App JWT: plan and preview succeeded, but PATCH returned `404`. The exact raw PATCH control and independent parent GET also returned `404 Not Found`; `/app` remained `200` and reported no configured events. The deliberately inactive App webhook has no configuration object, and GitHub exposes update/read but no REST create operation for it. |
 | 97 | `projects create-draft-item-for-authenticated-user` | product_defect | PM requested the nonexistent singular `/user/{login}/projectsV2/.../drafts` path and returned `404`. Raw GraphQL `addProjectV2DraftIssue` succeeded, independent node read-back matched the title, and `deleteProjectV2` plus a null project read-back proved cleanup. |
 | 98 | `projects create-draft-item-for-org` | certified | REST collection and GraphQL read-back matched the draft title and body in the fresh organization project; provider-native `deleteProjectV2` followed by a null project read-back proved cleanup. |
 | 99 | `projects create-view-for-org` | certified | GraphQL view read-back matched the unique name, `BOARD_LAYOUT`, and filter; provider-native `deleteProjectV2` followed by a null project read-back proved cleanup. |
 | 100 | `projects create-view-for-user` | certified | GraphQL view read-back matched the unique name, `ROADMAP_LAYOUT`, and filter; provider-native `deleteProjectV2` followed by a null project read-back proved cleanup. |
 
-Batch 4 totals: `certified=3`, `no_object=3`, `wrong_credential=3`, `entitlement=0`, `not_implemented=0`, `product_defect=5`, `escape_needs_captain=0`; sum `14`.
+Batch 4 totals: `certified=4`, `no_object=5`, `wrong_credential=0`, `entitlement=0`, `not_implemented=0`, `product_defect=5`, `escape_needs_captain=0`; sum `14`.
 
-Cumulative commands 1–100: `certified=42`, `no_object=14`, `wrong_credential=3`, `entitlement=9`, `not_implemented=0`, `product_defect=25`, `escape_needs_captain=7`; sum `100`.
+Cumulative commands 1–100: `certified=43`, `no_object=16`, `wrong_credential=0`, `entitlement=9`, `not_implemented=0`, `product_defect=25`, `escape_needs_captain=7`; sum `100`.
 
 ## Live batch 5 — commands 101–146
 
@@ -201,7 +201,7 @@ Cumulative commands 1–100: `certified=42`, `no_object=14`, `wrong_credential=3
 
 Batch 5 totals: `certified=13`, `no_object=2`, `wrong_credential=0`, `entitlement=0`, `not_implemented=0`, `product_defect=14`, `escape_needs_captain=17`; sum `46`.
 
-Final slice totals: `certified=55`, `no_object=16`, `wrong_credential=3`, `entitlement=9`, `not_implemented=0`, `product_defect=39`, `escape_needs_captain=24`; sum `146`.
+Final slice totals: `certified=56`, `no_object=18`, `wrong_credential=0`, `entitlement=9`, `not_implemented=0`, `product_defect=39`, `escape_needs_captain=24`; sum `146`.
 
 ## Final verification
 
@@ -209,6 +209,6 @@ Final slice totals: `certified=55`, `no_object=16`, `wrong_credential=3`, `entit
 - `go run ./cmd/connectorgen certification-matrix --check` — passed: certification shards current.
 - `go test -timeout 20m ./cmd/connectorgen -run '^TestCertification' -count=1` — passed in 75.219s.
 - `go test -timeout 20m ./internal/agentcontract -run 'Certification|WorkflowEvidence' -count=1` — passed in 4.855s.
-- Evidence records added over `origin/integration/4015-mvp-flat-r1`: `55`, matching the certified bucket.
+- Evidence records added over `origin/integration/4015-mvp-flat-r1`: `56`, matching the certified bucket.
 - Verification rows: `146`, sequential and unique from 1 through 146.
 - The full 550+ connector suite and monolithic `make verify` were not run locally because `AGENTS.md` explicitly directs per-command-timeout agents to scope local runs and let CI carry the full suite; this evidence-only change ran the relevant certification and workflow-evidence gates instead.
