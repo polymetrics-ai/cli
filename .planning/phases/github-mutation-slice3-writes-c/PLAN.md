@@ -20,6 +20,7 @@
 
 - Firstmate decision: author schema-v2 evidence directly from each captured live lifecycle; do not wait for an importer.
 - Firstmate decision: where GitHub cannot delete an object, restore the strongest provider-supported benign state, independently verify that state, and record `contained_closed`; the disposable fixture repository is the cleanup container. Never label a surviving object `verified_absent`.
+- Captain ruling: certification only adds evidence records. Never remove, mark unsupported, or otherwise alter a declared GitHub command or its connector definition/surface. A broken or retired provider operation remains declared and is recorded with its specific outcome and provider evidence.
 
 ## TDD ledger
 
