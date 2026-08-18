@@ -1,12 +1,16 @@
 ## Verification Checklist
 
-- [ ] All 146 assigned paths attempted serially and classified exactly once. (Current: 1/146 attempted; `issue create` completed plan → preview → stdin-token run.)
+- [ ] All 146 assigned paths attempted serially and classified exactly once. (Current: 59/146 classified; 58 attempted and command 58 stopped at the required enterprise-boundary escape.)
 - [ ] Every certified result has plan, preview, token-stdin execution, independent produced-value read-back, direct provider DELETE, and independent absence proof.
 - [ ] Every product defect includes a raw GitHub API control.
 - [ ] Every retained schema-v2 record passes `go run ./cmd/connectorgen certification-matrix --check`. (Current validator run: passed; evidence is written directly from captured real traffic under the fleet ruling.)
 - [ ] `git diff --check` passes.
 - [ ] Targeted Go tests pass.
 - [ ] PR is opened against `integration/4015-mvp-flat-r1`, and its API-reported base is recorded.
+
+## Batch 1 checkpoint — 2026-08-18
+
+The per-command receipt and exact bucket split are in `BATCH-1.md`. Three commands are certified, including two new schema-v2 records from this batch. Command 58 is deliberately not executed because its enterprise-scoped effect leaves the captain-authorized disposable boundary.
 
 ## Live attempt receipt — 2026-08-18
 
