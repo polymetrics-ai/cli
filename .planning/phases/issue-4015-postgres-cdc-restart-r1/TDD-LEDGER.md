@@ -2,12 +2,12 @@
 
 | ID | Red behaviour | Green implementation | Status |
 | --- | --- | --- | --- |
-| CDC-R1 | A fresh process rejects the checkpoint emitted by the interrupted PostgreSQL CDC path and the post-interruption row never reaches the target. | Producer, durable envelope, validator, and resume dispatch agree on the canonical logical-replication mechanism and position. | Red — live; `traces/live-red.txt`. |
-| CDC-R2 | A validator-only relaxation could accept a checkpoint while resuming from the wrong LSN. | Focused checkpoint-family test requires the durable logical-replication envelope and still rejects a polling envelope; existing CDC tests assert restored LSN/source identity, and the live restart asserts the delivered transaction. | Red — focused; `traces/focused-red.txt`. |
-| CDC-R3 | Restart can lose a row committed after interruption. | Fresh executor resumes from the last durable LSN and delivers the later row. | Pending red. |
-| CDC-R4 | Restart can replay already-applied rows and duplicate target keys. | Independent target query asserts exact total count and post-interruption key multiplicity `1`; earlier count remains unchanged at the interruption boundary. | Pending live red. |
-| CDC-R5 | A failed receiver/checkpoint commit could advance PostgreSQL acknowledgement beyond durable state. | Existing and new failure-injection tests retain receipt → checkpoint → acknowledgement ordering and resume from the last successful commit. | Pending verification. |
-| CDC-R6 | Capability evidence can read stronger than the fixed implementation. | Inspect the existing artifact and update its result/limitations only from observed live proof. | Pending inspection. |
+| CDC-R1 | A fresh process rejects the checkpoint emitted by the interrupted PostgreSQL CDC path and the post-interruption row never reaches the target. | The transport wrapper identifies bootstrap/CDC requests before applying checkpoint-family validation and dispatches the durable logical-replication envelope to the sealed CDC resume path. | Green — focused and live. |
+| CDC-R2 | A validator-only relaxation could accept a checkpoint while resuming from the wrong LSN. | Focused checkpoint-family test requires the durable logical-replication envelope and still rejects a polling envelope; existing CDC tests assert restored LSN/source identity, and the live restart asserts the delivered transaction. | Green — focused and live. |
+| CDC-R3 | Restart can lose a row committed after interruption. | Fresh executor resumes from the last durable LSN and delivers the later row. | Green — target `1 → 1 → 2`. |
+| CDC-R4 | Restart can replay already-applied rows and duplicate target keys. | Independent target query asserts exact total count and post-interruption key multiplicity `1`; earlier count remains unchanged at the interruption boundary. | Green — resumed key count `1`; control `1001`. |
+| CDC-R5 | A failed receiver/checkpoint commit could advance PostgreSQL acknowledgement beyond durable state. | Existing failure-injection/package tests retain receipt → checkpoint → acknowledgement ordering and resume from the last successful commit. | Green — package and capability live proof. |
+| CDC-R6 | Capability evidence can read stronger than the fixed implementation. | Audit the immutable record's explicit facts against a fresh binary run; document that PostgreSQL CDC remains at-least-once and that exact final multiplicity is route/target proof, not a generic claim. | Green — artifact unchanged with written disposition. |
 
 ## Red:
 
@@ -17,8 +17,8 @@ The focused checkpoint-family test fails for the same reason as live and is reta
 
 ## Green:
 
-Pending. The same focused and live commands will be rerun after the smallest correct fix.
+The focused checkpoint-family regression and full PostgreSQL package pass. The same live pipeline now reports CDC target row counts `1` before interruption, `1` at interruption, and `2` after restart, with the new key exactly once and the 1,001-row control table unchanged. `traces/focused-green.txt` and `traces/live-green.txt` retain the commands and observations.
 
 ## Refactor:
 
-Pending. Any cleanup must preserve the checkpoint wire contract, identity binding, and acknowledgement ordering.
+The shared checkpoint protocol check was extracted from `validateCDCResume` and reused by the transport wrapper. This keeps one logical-replication mechanism/protocol rule and preserves the later live source/generation/publication/schema validation. No checkpoint wire field changed.

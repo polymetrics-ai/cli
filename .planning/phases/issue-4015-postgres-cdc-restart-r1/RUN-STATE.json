@@ -4,9 +4,9 @@
   "base": "integration/4015-mvp-flat-r1",
   "release_target": "0.2.1",
   "lifecycle": "inline-manual-gsd-fallback",
-  "stage": "red",
+  "stage": "verification",
   "red": "recorded: traces/live-red.txt and traces/focused-red.txt",
-  "green": "pending",
-  "live": "pending",
+  "green": "passed: focused checkpoint-family and PostgreSQL package tests",
+  "live": "passed: CDC target 1 before, 1 at interruption, 2 after restart; resumed key exactly once",
   "review": "pending"
 }

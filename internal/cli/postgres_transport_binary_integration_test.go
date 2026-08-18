@@ -288,6 +288,10 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 		counts := postgresTransportBusinessCounts(t, ctx, target)
 		return len(counts) == 2 && counts[0] == 1 && counts[1] == 1001 && strings.Contains(postgresTransportStreamStates(t, root), `"logical_replication"`)
 	}, "bootstrap snapshot row and durable logical-replication checkpoint")
+	beforeInterruptionCounts := postgresTransportBusinessCounts(t, ctx, target)
+	if len(beforeInterruptionCounts) != 2 || beforeInterruptionCounts[0] != 1 || beforeInterruptionCounts[1] != 1001 {
+		t.Fatalf("managed target rows before CDC interruption = %v, want CDC/control [1 1001]", beforeInterruptionCounts)
+	}
 	bootstrapBarrierState := postgresTransportStreamStates(t, root)
 	if _, err := admin.Exec(ctx, `BEGIN; UPDATE public.bootstrap_events SET sequence = 20, label = 'post-barrier-update' WHERE id = 1; INSERT INTO public.bootstrap_events VALUES (2, 30, 'post-barrier-insert'); DELETE FROM public.bootstrap_events WHERE id = 1; COMMIT`); err != nil {
 		t.Fatalf("write post-barrier transaction: %v", err)
@@ -296,6 +300,10 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 		return postgresTransportLabelCount(t, ctx, target, "post-barrier-insert") == 1 && postgresTransportLabelCount(t, ctx, target, "bootstrap") == 0 && postgresTransportStreamStates(t, root) != bootstrapBarrierState
 	}, "post-barrier transaction in target and an advanced LSN checkpoint")
 	postBarrierState := postgresTransportStreamStates(t, root)
+	atInterruptionCounts := postgresTransportBusinessCounts(t, ctx, target)
+	if len(atInterruptionCounts) != 2 || atInterruptionCounts[0] != 1 || atInterruptionCounts[1] != 1001 {
+		t.Fatalf("managed target rows at CDC interruption = %v, want CDC/control [1 1001]", atInterruptionCounts)
+	}
 	bootstrapProcess.killAndWait(t)
 
 	resumeApproval := preparePostgresTransportApproval(t, binary, root, "postgres-bootstrap", "public.bootstrap_events")
@@ -308,10 +316,15 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 		return postgresTransportLabelCount(t, ctx, target, "resumed-after-process-death") == 1 && postgresTransportStreamStates(t, root) != postBarrierState
 	}, "resumed CDC row and checkpoint after process restart")
 	resumeProcess.killAndWait(t)
-	counts := postgresTransportBusinessCounts(t, ctx, target)
-	if len(counts) != 2 || counts[0] != 2 || counts[1] != 1001 {
-		t.Fatalf("managed target business row counts after bootstrap/resume = %v, want [2 1001]", counts)
+	afterRestartCounts := postgresTransportBusinessCounts(t, ctx, target)
+	if len(afterRestartCounts) != 2 || afterRestartCounts[0] != 2 || afterRestartCounts[1] != 1001 {
+		t.Fatalf("managed target business row counts after bootstrap/resume = %v, want [2 1001]", afterRestartCounts)
 	}
+	resumedKeyCount := postgresTransportLabelCount(t, ctx, target, "resumed-after-process-death")
+	if resumedKeyCount != 1 {
+		t.Fatalf("post-restart target key multiplicity = %d, want exactly 1", resumedKeyCount)
+	}
+	t.Logf("CDC restart independent target counts: before_interruption=%d at_interruption=%d after_restart=%d resumed_key_count=%d (control_rows=%d)", beforeInterruptionCounts[0], atInterruptionCounts[0], afterRestartCounts[0], resumedKeyCount, afterRestartCounts[1])
 
 	assertPostgresTransportDestinationRefusal(t, ctx, binary, root, target, "postgres-auth-refusal", "pg-target-missing-user", "postgres managed target transport is unavailable")
 	assertPostgresTransportDestinationRefusal(t, ctx, binary, root, target, "postgres-permission-refusal", "pg-target-denied", "database managed target state cannot be proven")
