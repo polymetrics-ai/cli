@@ -125,7 +125,8 @@ scripts/tests/{connector-canon,pinned-build-dependencies,homebrew-release-notify
 
 ## Automated Review
 
-Pending PR-open automatic Claude review. Route: `claude_auto` if GitHub runs it
-for this stacked, non-draft PR; otherwise record parent-PR fallback or the
-review blocker before integration. No Copilot request is made unless Claude is
-unavailable.
+PR: https://github.com/polymetrics-ai/cli/pull/4259. API base read-back:
+`integration/4015-mvp-flat-r1` (confirmed). Pending PR-open automatic Claude
+review. Route: `claude_auto` if GitHub runs it for this stacked, non-draft PR;
+otherwise record parent-PR fallback or the review blocker before integration.
+No Copilot request is made unless Claude is unavailable.

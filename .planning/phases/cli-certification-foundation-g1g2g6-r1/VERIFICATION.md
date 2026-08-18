@@ -9,7 +9,7 @@
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs`
 - [x] Changed package tests and `internal/cli` in separate timeout-bounded commands.
 - [x] `go vet ./...`, `go build ./cmd/pm`, generated/snapshot checks, and repository verification gates.
-- [x] `git diff --check`; automated review and PR API base read-back remain pending PR opening.
+- [x] `git diff --check`; PR #4259 API base read-back returned `integration/4015-mvp-flat-r1`. Automated review remains pending CI.
 
 ## Results
 
