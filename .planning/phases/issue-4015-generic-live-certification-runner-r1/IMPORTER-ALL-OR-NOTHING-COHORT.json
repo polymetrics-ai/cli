@@ -1,0 +1,16 @@
+{
+  "class": "importer_all_or_nothing_cohort",
+  "connector": "github",
+  "cohort": "direct_read_candidates",
+  "observed_at": "2026-08-18",
+  "red": {
+    "command": "pm connectors certify github --full --direct-read-only --external-proof --config owner=Polymetrics-Cert --config repo=pm-cert-3993-20260810-wz0fru --from-env token=CERT_TOKEN --root . --json",
+    "result": "36 passed / 84 legitimate non-pass / 0 records written",
+    "importer_response": "report is not a completed passing connector certification"
+  },
+  "cause": "The accepted-evidence importer requires report.passed=true for the entire declared direct_read_candidates stage set, so successful stages cannot publish records when an unrelated fixture or entitlement stage legitimately does not pass.",
+  "green": {
+    "remediation_for_this_run": "Each passing stage is independently re-executed with an external proof, written as a schema-v2 observed-operations record, and immediately validated with go run ./cmd/connectorgen certification-matrix --check.",
+    "claim": "Each record contains only fingerprinted protocol exchanges and a bounded credential-scope claim."
+  }
+}
