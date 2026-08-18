@@ -418,6 +418,59 @@ func TestOrchestratorFullOverwritePublishesAllBoundedPagesBeforeOneCheckpoint(t 
 	}
 }
 
+func TestOrchestratorSourceCheckpointFollowsRefreshSemantics(t *testing.T) {
+	tests := []struct {
+		mode           synccontract.Mode
+		strategy       connectors.ApplyStrategy
+		wantCheckpoint bool
+	}{
+		{mode: synccontract.ModeFullAppend, strategy: connectors.ApplyStrategyAppend},
+		{mode: synccontract.ModeFullOverwrite, strategy: connectors.ApplyStrategyReplace},
+		{mode: synccontract.ModeIncrementalAppend, strategy: connectors.ApplyStrategyAppend, wantCheckpoint: true},
+		{mode: synccontract.ModeIncrementalDedupe, strategy: connectors.ApplyStrategyDedupe, wantCheckpoint: true},
+		{mode: synccontract.ModeIncrementalDedupeHistory, strategy: connectors.ApplyStrategyDedupeHistory, wantCheckpoint: true},
+		{mode: synccontract.ModeIncrementalUpsert, strategy: connectors.ApplyStrategyMerge, wantCheckpoint: true},
+	}
+
+	for _, tt := range tests {
+		t.Run(string(tt.mode), func(t *testing.T) {
+			pair := newTestTransportPair("database", "database")
+			action := "stage_" + string(tt.strategy)
+			pair.source.descriptor.Source.Modes = []synccontract.Mode{tt.mode}
+			pair.destination.descriptor.Destination.Modes = []synccontract.Mode{tt.mode}
+			pair.destination.descriptor.Destination.EligibleActions = []string{action}
+			pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{
+				Mode: tt.mode, Strategy: tt.strategy, Action: action,
+			}}
+			if tt.mode == synccontract.ModeFullOverwrite {
+				pair.destinationExecutor.fullOverwrite = &testFullOverwriteRun{sink: pair.destination.Name()}
+			}
+			registry := NewRegistry(pair.verifier)
+			registerTransportPair(t, registry, pair)
+			prior := testCheckpoint(pair.source.Name())
+
+			_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+				Source: pair.source, Destination: pair.destination, Stream: "records", Mode: tt.mode,
+				BatchSize: 1, Stage: &testWarehouseStage{}, Checkpoint: &prior,
+				Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+			})
+			if err != nil {
+				t.Fatalf("Run() = %v", err)
+			}
+			got := pair.sourceExecutor.lastRequest.Checkpoint
+			if tt.wantCheckpoint {
+				if !reflect.DeepEqual(got, &prior) {
+					t.Fatalf("source checkpoint = %+v, want prior checkpoint %+v for incremental mode", got, prior)
+				}
+				return
+			}
+			if got != nil {
+				t.Fatalf("source checkpoint = %+v, want nil for full-refresh mode", got)
+			}
+		})
+	}
+}
+
 func TestOrchestratorArrowFullOverwriteTransformsDurablyBulkAppliesThenCheckpoints(t *testing.T) {
 	pair := newTestTransportPair("database", "database")
 	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
@@ -1394,10 +1447,11 @@ func (*testConnector) Write(context.Context, connectors.WriteRequest, []connecto
 }
 
 type testSourceExecutor struct {
-	reference connectors.TransportExecutorReference
-	pages     []SourcePage
-	readCalls int
-	events    *[]string
+	reference   connectors.TransportExecutorReference
+	pages       []SourcePage
+	readCalls   int
+	events      *[]string
+	lastRequest SourceRequest
 }
 
 type emptyResultTestSource struct {
@@ -1411,6 +1465,7 @@ func (e *testSourceExecutor) TransportExecutorReference() connectors.TransportEx
 }
 func (e *testSourceExecutor) ReadTransport(ctx context.Context, request SourceRequest, emit func(SourcePage) error) error {
 	e.readCalls++
+	e.lastRequest = cloneSourceRequest(request)
 	if e.events != nil {
 		*e.events = append(*e.events, "source-read")
 	}

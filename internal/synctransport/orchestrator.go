@@ -34,6 +34,19 @@ func NewOrchestrator(registry *Registry) *Orchestrator {
 	return &Orchestrator{registry: registry}
 }
 
+// sourceCheckpointForMode separates a saved run position from source refresh
+// semantics. Full-refresh modes begin at the source origin on every run;
+// incremental modes keep their acknowledged position. Resume still carries
+// source identity and generation independently of this position decision.
+func sourceCheckpointForMode(mode synccontract.Mode, checkpoint *synccontract.CheckpointEnvelope) *synccontract.CheckpointEnvelope {
+	switch mode {
+	case synccontract.ModeFullAppend, synccontract.ModeFullOverwrite:
+		return nil
+	default:
+		return checkpoint
+	}
+}
+
 func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, error) {
 	if o == nil || o.registry == nil {
 		return Result{}, fmt.Errorf("transport orchestrator registry is required")
@@ -117,7 +130,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		BatchSize:    request.BatchSize,
 		PrimaryKey:   request.DestinationBinding.PrimaryKey,
 		Resume:       request.Resume,
-		Checkpoint:   request.Checkpoint,
+		Checkpoint:   sourceCheckpointForMode(request.Mode, request.Checkpoint),
 		UnitDeadline: request.unitDeadline(),
 		RecordExtraction: func(elapsed time.Duration) {
 			result.ExtractElapsed += elapsed
@@ -344,7 +357,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		BatchSize:    request.BatchSize,
 		PrimaryKey:   request.DestinationBinding.PrimaryKey,
 		Resume:       request.Resume,
-		Checkpoint:   request.Checkpoint,
+		Checkpoint:   sourceCheckpointForMode(request.Mode, request.Checkpoint),
 		UnitDeadline: request.unitDeadline(),
 		RecordExtraction: func(elapsed time.Duration) {
 			result.ExtractElapsed += elapsed
