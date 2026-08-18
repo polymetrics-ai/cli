@@ -46,6 +46,9 @@ pnpm run build
 ## Release Versioning
 
 Releases are generated from Conventional Commits after changes land on `main`.
+Maintainers cutting a release must follow
+[`docs/releasing.md`](docs/releasing.md); release trust and artifact checks remain
+in [`docs/release-verification.md`](docs/release-verification.md).
 
 - `fix(<connector>): ...` creates a patch release for connector updates, bug fixes, pagination changes, auth fixes, docs that ship with the binary, and other compatible repairs.
 - `feat(connector): add <name>` creates a minor release for a new connector or new user-facing capability.

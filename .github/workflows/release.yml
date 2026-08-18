@@ -257,9 +257,9 @@ jobs:
           version="${TAG_NAME#v}"
           binary=pm
           mkdir -p "binaries/${GOOS}_${GOARCH}"
-          # ldflags match .goreleaser.yaml's build block exactly, so a binary
-          # from this matrix reports the same version, commit and date the
-          # previous single-host build produced.
+          # This native build step is the source of truth for release ldflags;
+          # the asset assembler packages these uploaded binaries without
+          # rebuilding them.
           go build -trimpath \
             -ldflags "-s -w -X polymetrics.ai/internal/cli.version=$version -X polymetrics.ai/internal/cli.commit=$(git rev-parse HEAD) -X polymetrics.ai/internal/cli.buildDate=$(git log -1 --format=%cI)" \
             -o "binaries/${GOOS}_${GOARCH}/$binary" ./cmd/pm
