@@ -19,6 +19,16 @@
       }
     ]
   },
+  "evidence_import": {
+    "provider": "xero_api",
+    "bindings": [
+      {
+        "scope": "capability",
+        "function_kind": "operation:rest_read",
+        "stage_sets": ["direct_read_candidates"]
+      }
+    ]
+  },
   "direct_read_candidates": [
     {
       "stage_name": "direct_read_sweep_reports_list",

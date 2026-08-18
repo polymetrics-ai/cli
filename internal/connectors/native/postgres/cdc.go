@@ -12,50 +12,50 @@ import (
 	"github.com/jackc/pgx/v5/pgproto3"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/synccontract"
 )
 
 var _ connectors.ChangefeedExecutor = Connector{}
-
-var errCDCTransactionStageUnavailable = fmt.Errorf("%w: PostgreSQL CDC requires bounded crash-recoverable streamed transaction staging", connectors.ErrUnsupportedOperation)
 
 // ChangefeedExecutorDescriptor is the runtime half of the PostgreSQL bundle's
 // logical-replication declaration. The existing capability projection compares
 // it exactly with changefeed.json before advertising CDC.
 func (c Connector) ChangefeedExecutorDescriptor() connectors.ChangefeedExecutorDescriptor {
 	return connectors.ChangefeedExecutorDescriptor{
-		Status:    connectors.ChangefeedStatusPlanned,
+		Status:    connectors.ChangefeedStatusImplemented,
 		Mechanism: connectors.ChangefeedMechanismLogicalReplication,
+		Executor:  connectors.ChangefeedExecutorRef{Kind: "native", ID: cdcExecutorID},
+		Checkpoint: connectors.ChangefeedCheckpoint{
+			Kind:        "lsn",
+			Keys:        []string{"lsn"},
+			CommitAfter: "downstream_ack",
+			OnInvalid:   "resnapshot_required",
+		},
 	}
 }
 
-func requireCDCTransactionStage() error {
-	return errCDCTransactionStageUnavailable
-}
-
-// ReadCDC currently fails closed before validating a request or contacting a
-// PostgreSQL source because the retained pgoutput v1 path has no safe streamed
-// transaction boundary. A future runnable path must use PostgreSQL 14+
-// protocol-v2 streaming to stage each transaction under a finite quota,
-// discard StreamAbort, return TransactionStageLimitExceeded without source
-// acknowledgement, and wait for a whole-transaction durable downstream
-// receipt before acknowledging an LSN.
+// ReadCDC uses PostgreSQL 14+ pgoutput protocol v2 with streaming enabled.
+// It delivers a transaction only after StreamCommit has created a durable
+// downstream receipt, then commits and acknowledges its source position.
 func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
+	return executeWithAuthenticationAdmission(ctx, req.Config, func(admitted context.Context) error {
+		return c.readCDC(admitted, req, emit)
+	})
+}
+
+func (c Connector) readCDC(ctx context.Context, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
 	if err := ctx.Err(); err != nil {
-		return err
-	}
-	// pgoutput v1 only presents this executor with a complete transaction at
-	// commit. Do not advertise or invoke it until v2 streaming can stage every
-	// transaction privately, enforce a finite quota, and wait for a durable
-	// whole-transaction downstream receipt before source acknowledgement.
-	if err := requireCDCTransactionStage(); err != nil {
 		return err
 	}
 	if fixtureMode(req.Config) {
 		return errors.New("postgres CDC requires a real PostgreSQL source; fixture mode is not a replication protocol")
 	}
-	if emit == nil {
-		return errors.New("postgres CDC requires an event callback")
+	if _, err := cdcStageProjectRoot(req.Config.ProjectDir); err != nil {
+		return err
+	}
+	if emit == nil && req.TransactionReceiver == nil {
+		return errors.New("postgres CDC requires a committed transaction receiver or event callback")
 	}
 	if req.DurableCheckpointCommitter == nil {
 		return errors.New("postgres CDC requires a durable checkpoint committer")
@@ -85,7 +85,21 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	if err != nil {
 		return err
 	}
+	if bootstrap, ok, err := postgresBootstrapBarrierFromCheckpoint(req.Checkpoint); err != nil {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint bootstrap barrier is invalid")
+	} else if ok {
+		schemaFingerprint, err := postgresCDCSchemaFingerprint(ctx, conn, source, c.databaseDefinition)
+		if err != nil {
+			return err
+		}
+		source.schemaFingerprint = schemaFingerprint
+		source.bootstrap = &bootstrap
+	}
 	if err := validateCDCResume(req.Checkpoint, source); err != nil {
+		return err
+	}
+	stage, err := newPostgresCDCTransactionStage(req.Config.ProjectDir, source)
+	if err != nil {
 		return err
 	}
 	if err := validateCDCPublicationStream(ctx, conn, source, publication); err != nil {
@@ -107,17 +121,11 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 		return err
 	}
 
-	if err := pglogrepl.StartReplication(ctx, replication, source.slotName, start, pglogrepl.StartReplicationOptions{
-		Mode: pglogrepl.LogicalReplication,
-		PluginArgs: []string{
-			"proto_version '1'",
-			"publication_names '" + publication + "'",
-		},
-	}); err != nil {
-		return classifyCDCStartError(req.Checkpoint, err)
+	if err := startPostgresCDCReplication(ctx, replication, source.slotName, start, publication, req.Checkpoint); err != nil {
+		return err
 	}
 
-	return consumeLogicalReplication(ctx, replication, source, snapshotBarrier, start, req, emit)
+	return consumePGOutputV2LogicalReplication(ctx, replication, stage, source, snapshotBarrier, start, req, emit)
 }
 
 func classifyCDCStartError(checkpoint *synccontract.CheckpointEnvelope, err error) error {
@@ -143,10 +151,23 @@ func validateCDCResume(checkpoint *synccontract.CheckpointEnvelope, source postg
 	if checkpoint.SchemaVersion != cdcCheckpointSchema || checkpoint.ProtocolVersion != cdcProtocolVersion || checkpoint.SnapshotBarrier == nil || checkpoint.SnapshotBarrier.Kind != cdcSnapshotBarrierKind {
 		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint does not match the PostgreSQL logical replication protocol")
 	}
-	return checkpoint.ValidateResume(synccontract.ResumeExpectation{
+	if err := checkpoint.ValidateResume(synccontract.ResumeExpectation{
 		Source:           source.identity,
 		SourceGeneration: source.generation,
-	})
+	}); err != nil {
+		return err
+	}
+	bootstrap, ok, err := postgresBootstrapBarrierFromCheckpoint(checkpoint)
+	if err != nil {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint bootstrap barrier is invalid")
+	}
+	if !ok {
+		return nil
+	}
+	if bootstrap.SystemID != source.system.SystemID || bootstrap.Timeline != source.system.Timeline || bootstrap.Publication != source.publication || bootstrap.Relation != source.identity.ObjectScope || bootstrap.SchemaFingerprint != source.schemaFingerprint {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeSourceGenerationChanged, "PostgreSQL bootstrap source, publication, or schema no longer matches the durable checkpoint")
+	}
+	return nil
 }
 
 func cdcStartLSN(checkpoint *synccontract.CheckpointEnvelope, retained pglogrepl.LSN) (pglogrepl.LSN, error) {
@@ -170,20 +191,25 @@ func cdcSnapshotBarrier(checkpoint *synccontract.CheckpointEnvelope, fallback pg
 	if checkpoint == nil {
 		return fallback, nil
 	}
-	barrier, err := pglogrepl.ParseLSN(string(checkpoint.SnapshotBarrier.Token))
+	bootstrap, ok, err := postgresBootstrapBarrierFromCheckpoint(checkpoint)
+	if err != nil {
+		return 0, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint bootstrap barrier is invalid")
+	}
+	token := checkpoint.SnapshotBarrier.Token
+	if ok {
+		token = synccontract.OpaqueToken([]byte(bootstrap.InitialLSN))
+	}
+	barrier, err := pglogrepl.ParseLSN(string(token))
 	if err != nil {
 		return 0, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "checkpoint snapshot barrier is invalid")
 	}
 	return barrier, nil
 }
 
-func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, source postgresCDCSource, snapshotBarrier, start pglogrepl.LSN, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
-	decoder := newPGOutputDecoderForRelation(source.identity.ObjectScope)
-	// A resumed checkpoint or a newly created slot's consistent point is the
-	// only position safe to report before the next transaction is committed.
-	lastDurable := start
-	inTransaction := false
-
+func consumePGOutputV2LogicalReplication(ctx context.Context, replication *pgconn.PgConn, stage *database.CommittedTransactionStage, source postgresCDCSource, snapshotBarrier, start pglogrepl.LSN, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
+	machine := newPGOutputV2TransactionMachine(stage, source, snapshotBarrier, start, req, emit, func(ctx context.Context, position pglogrepl.LSN) error {
+		return sendStandbyStatus(ctx, replication, position)
+	}, nil)
 	for {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -210,7 +236,7 @@ func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, 
 				return fmt.Errorf("postgres CDC: parse primary keepalive: %w", err)
 			}
 			if keepalive.ReplyRequested {
-				if err := sendStandbyStatus(ctx, replication, lastDurable); err != nil {
+				if err := sendStandbyStatus(ctx, replication, machine.lastDurable); err != nil {
 					return err
 				}
 			}
@@ -219,66 +245,8 @@ func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, 
 			if err != nil {
 				return fmt.Errorf("postgres CDC: parse xlog data: %w", err)
 			}
-			logical, err := pglogrepl.Parse(xlog.WALData)
-			if err != nil {
-				return fmt.Errorf("postgres CDC: parse pgoutput message: %w", err)
-			}
-			switch message := logical.(type) {
-			case *pglogrepl.BeginMessage:
-				if inTransaction {
-					return errors.New("postgres CDC: nested pgoutput transaction")
-				}
-				inTransaction = true
-			case *pglogrepl.CommitMessage:
-				if !inTransaction {
-					return errors.New("postgres CDC: commit without a pgoutput transaction")
-				}
-				candidate := postgresCDCCheckpoint(source, snapshotBarrier, lastDurable, message)
-				if err := req.DurableCheckpointCommitter.CommitDurableChangefeedCheckpoint(ctx, candidate); err != nil {
-					return fmt.Errorf("postgres CDC: persist durable checkpoint: %w", err)
-				}
-				if err := sendStandbyStatus(ctx, replication, message.TransactionEndLSN); err != nil {
-					return err
-				}
-				lastDurable = message.TransactionEndLSN
-				inTransaction = false
-			case *pglogrepl.TruncateMessage:
-				if !inTransaction {
-					return errors.New("postgres CDC: pgoutput truncate arrived outside a transaction")
-				}
-				events, err := decoder.truncate(message.RelationIDs, xlog.WALStart.String())
-				if err != nil {
-					return fmt.Errorf("postgres CDC: decode pgoutput truncate: %w", err)
-				}
-				for _, event := range events {
-					if err := emit(event); err != nil {
-						return err
-					}
-				}
-			case *pglogrepl.OriginMessage, *pglogrepl.TypeMessage:
-				// These pgoutput frames carry replication metadata or a
-				// type definition, not a row change for the selected table. Decode
-				// their raw payload as well so invalid UTF-8 is rejected before a
-				// later transaction checkpoint could acknowledge it.
-				if _, err := decoder.decode(xlog.WALData, xlog.WALStart.String()); err != nil {
-					return fmt.Errorf("postgres CDC: decode pgoutput metadata: %w", err)
-				}
-			case *pglogrepl.LogicalDecodingMessage:
-				// Logical messages may intentionally contain arbitrary binary
-				// payloads and are not row changes for this selected relation.
-			default:
-				if !inTransaction {
-					return errors.New("postgres CDC: pgoutput data arrived outside a transaction")
-				}
-				events, err := decoder.decode(xlog.WALData, xlog.WALStart.String())
-				if err != nil {
-					return fmt.Errorf("postgres CDC: decode pgoutput: %w", err)
-				}
-				for _, event := range events {
-					if err := emit(event); err != nil {
-						return err
-					}
-				}
+			if err := machine.Handle(ctx, xlog.WALData, xlog.WALStart); err != nil {
+				return err
 			}
 		default:
 			return fmt.Errorf("postgres CDC: unsupported replication copy data type %q", copyData.Data[0])
@@ -287,22 +255,30 @@ func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, 
 }
 
 func postgresCDCCheckpoint(source postgresCDCSource, barrier, previous pglogrepl.LSN, message *pglogrepl.CommitMessage) synccontract.CheckpointEnvelope {
+	return postgresCDCCheckpointForLSNs(source, barrier, previous, message.CommitLSN, message.TransactionEndLSN)
+}
+
+func postgresCDCCheckpointForLSNs(source postgresCDCSource, barrier, previous, commitLSN, endLSN pglogrepl.LSN) synccontract.CheckpointEnvelope {
 	start := barrier
 	if previous != 0 {
 		start = previous
 	}
-	position := message.TransactionEndLSN.String()
+	position := endLSN.String()
+	barrierToken := synccontract.OpaqueToken([]byte(barrier.String()))
+	if source.bootstrap != nil {
+		barrierToken = source.bootstrap.token()
+	}
 	return synccontract.CheckpointEnvelope{
 		StateVersion: synccontract.StateVersion,
 		Source:       source.identity,
 		Mechanism:    cdcChangefeedMechanism,
 		SnapshotBarrier: &synccontract.SnapshotBarrier{
 			Kind:  cdcSnapshotBarrierKind,
-			Token: synccontract.OpaqueToken([]byte(barrier.String())),
+			Token: barrierToken,
 		},
 		Position: synccontract.CheckpointPosition{
 			Primary:    synccontract.OpaqueToken([]byte(position)),
-			TieBreaker: synccontract.OpaqueToken([]byte(message.CommitLSN.String())),
+			TieBreaker: synccontract.OpaqueToken([]byte(commitLSN.String())),
 		},
 		Partitions:       []synccontract.PartitionState{},
 		SourceGeneration: append(synccontract.OpaqueToken(nil), source.generation...),

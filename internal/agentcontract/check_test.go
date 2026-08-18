@@ -3,6 +3,7 @@ package agentcontract
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"slices"
@@ -49,6 +50,73 @@ func TestCheckProjectionRejectsDivergence(t *testing.T) {
 	}
 }
 
+func TestCertificationFlowKindCatalogSyncAndCheck(t *testing.T) {
+	repository := repositoryRoot(t)
+	contract := loadRepositoryContract(t, repository)
+	root := t.TempDir()
+	statusPath := filepath.Join(repository, filepath.FromSlash(contract.CertificationGate.Inputs.Status))
+	status, err := os.ReadFile(statusPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fixtureStatusPath := filepath.Join(root, filepath.FromSlash(contract.CertificationGate.Inputs.Status))
+	if err := os.MkdirAll(filepath.Dir(fixtureStatusPath), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(fixtureStatusPath, status, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var scope struct {
+		Connectors []struct {
+			Connector string `json:"connector"`
+		} `json:"connectors"`
+	}
+	if err := json.Unmarshal(status, &scope); err != nil {
+		t.Fatal(err)
+	}
+	for _, item := range scope.Connectors {
+		relative := filepath.Join(filepath.FromSlash(contract.CertificationGate.Inputs.CertificationShards), item.Connector, "certification-matrix.json")
+		shard, err := os.ReadFile(filepath.Join(repository, relative))
+		if err != nil {
+			t.Fatal(err)
+		}
+		fixtureShardPath := filepath.Join(root, relative)
+		if err := os.MkdirAll(filepath.Dir(fixtureShardPath), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(fixtureShardPath, shard, 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	updated, err := SyncCertificationFlowKindCatalog(root, contract)
+	if err != nil {
+		t.Fatalf("SyncCertificationFlowKindCatalog: %v", err)
+	}
+	if updated != 1 {
+		t.Fatalf("SyncCertificationFlowKindCatalog updated %d files, want 1", updated)
+	}
+	if err := CheckCertificationFlowKindCatalog(root, contract); err != nil {
+		t.Fatalf("CheckCertificationFlowKindCatalog: %v", err)
+	}
+
+	catalogPath := filepath.Join(root, filepath.FromSlash(certificationFlowKindCatalogPath))
+	catalog, err := os.ReadFile(catalogPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(catalogPath, append(catalog, '\n'), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := CheckCertificationFlowKindCatalog(root, contract); err == nil {
+		t.Fatal("CheckCertificationFlowKindCatalog accepted a drifted generated catalog")
+	}
+	updated, err = SyncCertificationFlowKindCatalog(root, contract)
+	if err != nil || updated != 1 {
+		t.Fatalf("SyncCertificationFlowKindCatalog repairs drift: updated=%d err=%v", updated, err)
+	}
+}
+
 func TestProjectionDriftCheckAndSync(t *testing.T) {
 	repository := repositoryRoot(t)
 	contract := loadRepositoryContract(t, repository)
@@ -58,8 +126,8 @@ func TestProjectionDriftCheckAndSync(t *testing.T) {
 	if err != nil {
 		t.Fatalf("SyncProjections creates required projections: %v", err)
 	}
-	if updated != 6 {
-		t.Fatalf("SyncProjections created %d projections, want 6", updated)
+	if updated != 8 {
+		t.Fatalf("SyncProjections created %d projections, want 8", updated)
 	}
 	if err := CheckProjections(root, contract); err != nil {
 		t.Fatalf("matching projections failed: %v", err)
@@ -188,8 +256,8 @@ func TestSyncCreatesRequiredPiProjections(t *testing.T) {
 	if err != nil {
 		t.Fatalf("SyncProjections must create required Pi projections: %v", err)
 	}
-	if updated != 6 {
-		t.Fatalf("SyncProjections created %d required projections, want 6", updated)
+	if updated != 8 {
+		t.Fatalf("SyncProjections created %d required projections, want 8", updated)
 	}
 	if err := CheckProjections(root, contract); err != nil {
 		t.Fatalf("created Pi projections must pass drift check: %v", err)
@@ -211,7 +279,7 @@ func TestSyncCreatesRequiredPiProjections(t *testing.T) {
 func TestPiProjectionRejectsWholeFileDrift(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	root := t.TempDir()
-	if updated, err := SyncProjections(root, contract); err != nil || updated != 6 {
+	if updated, err := SyncProjections(root, contract); err != nil || updated != 8 {
 		t.Fatalf("create required projections: updated=%d err=%v", updated, err)
 	}
 
@@ -298,8 +366,8 @@ func TestClaudeProjectionCanonicalRepeatedCRIsStable(t *testing.T) {
 	if err != nil {
 		t.Fatalf("SyncProjections creates normalized Claude projections: %v", err)
 	}
-	if updated != 6 {
-		t.Fatalf("SyncProjections created %d normalized harness projections, want 6", updated)
+	if updated != 8 {
+		t.Fatalf("SyncProjections created %d normalized harness projections, want 8", updated)
 	}
 	if err := CheckProjections(root, contract); err != nil {
 		t.Fatalf("CheckProjections rejected normalized canonical CRLF: %v", err)
@@ -360,7 +428,7 @@ func TestFullProjectionIORejectsInRootSymlinks(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			root := t.TempDir()
-			if updated, err := SyncProjections(root, contract); err != nil || updated != 6 {
+			if updated, err := SyncProjections(root, contract); err != nil || updated != 8 {
 				t.Fatalf("create required harness projections: updated=%d err=%v", updated, err)
 			}
 			targetPath := filepath.Join(root, filepath.FromSlash(target.Path))
@@ -505,8 +573,8 @@ func TestRequiredPiProjectionsCannotBeAbsent(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if updated != 6 {
-		t.Fatalf("SyncProjections updated %d files, want six required harness projections", updated)
+	if updated != 8 {
+		t.Fatalf("SyncProjections updated %d files, want eight required harness projections", updated)
 	}
 	for _, target := range contract.Projections {
 		if target.Harness != "pi" {
@@ -593,8 +661,8 @@ func TestCodexProjectionDriftRejectsDelegationRegression(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if updated != 6 {
-		t.Fatalf("SyncProjections created %d projections, want 6", updated)
+	if updated != 8 {
+		t.Fatalf("SyncProjections created %d projections, want 8", updated)
 	}
 
 	var target ProjectionTarget

@@ -1,0 +1,4 @@
+{
+  "status": "planned",
+  "reason": "PostgreSQL binds its cursor type, per-stream cursor column, and unique tie-breaker from the live catalog at run time. The static bundle cannot truthfully name those dynamic fields; the live sync transport constructs and preflights the implemented polling declaration."
+}

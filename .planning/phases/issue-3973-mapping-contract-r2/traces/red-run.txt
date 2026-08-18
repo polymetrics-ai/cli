@@ -1,0 +1,14 @@
+$ go test -timeout 20m ./internal/connectors/database -run 'TestMappingContractV1|TestDatabaseWriteExecutor.*Tombstone|TestDeliveryReceiptV1' -count=1
+# polymetrics.ai/internal/connectors/database_test [polymetrics.ai/internal/connectors/database.test]
+internal/connectors/database/mapping_contract_test.go:24:27: undefined: database.NewMappingContractV1
+internal/connectors/database/mapping_contract_test.go:24:59: undefined: database.MappingColumnV1
+internal/connectors/database/mapping_contract_test.go:33:47: undefined: database.MappingContractVersionV1
+internal/connectors/database/mapping_contract_test.go:34:53: undefined: database.MappingContractVersionV1
+internal/connectors/database/mapping_contract_test.go:68:27: undefined: database.NewMappingContractV1
+internal/connectors/database/mapping_contract_test.go:68:59: undefined: database.MappingColumnV1
+FAIL	polymetrics.ai/internal/connectors/database [build failed]
+FAIL
+
+This is the expected RED state: the integration base contains no V1 mapping
+contract. The tombstone and receipt tests are added with the green slice so
+they exercise the completed sealed-input boundary rather than a compiler stub.

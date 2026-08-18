@@ -10,7 +10,7 @@ Reverse ETL in pm follows a strict four-step gate: **plan, preview, approve, run
 ```bash
 pm reverse plan <name> [flags]                       # generate a typed plan
 pm reverse preview <plan-id> [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]...   # inspect; destructive plans issue their token here
-pm reverse run <plan-id> --approve <token> [--confirm destructive] [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
+pm reverse run <plan-id> --approval-token-stdin [--confirm destructive] [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
 ```
 
 <Callout type="warn">
@@ -92,14 +92,14 @@ Preview and run therefore need those values back on the same invocation. Ordinar
 
 ```bash
 pm reverse preview plan_abc123 --access-token "$PM_OAUTH_TOKEN"
-pm reverse run plan_abc123 --approve tk_xyz789 --access-token "$PM_OAUTH_TOKEN"
+pm reverse run plan_abc123 --approval-token-stdin --access-token "$PM_OAUTH_TOKEN"
 ```
 
 A field declared `env_only` must instead be read from the environment. Name the field and environment variable—not the sensitive value—with `--from-env <flag>=ENV`:
 
 ```bash
 pm reverse preview plan_abc123 --from-env input=GITHUB_MIGRATION_INPUT
-pm reverse run plan_abc123 --approve tk_xyz789 --from-env input=GITHUB_MIGRATION_INPUT
+pm reverse run plan_abc123 --approval-token-stdin --from-env input=GITHUB_MIGRATION_INPUT
 ```
 
 Only fields the plan actually removed are requested — a declared sensitive field you never supplied was never stored and is never demanded back. Where a declared field covers a subtree that several flags fill, those flags re-supply it between them. A re-supplied value that differs from the one the plan was built from fails the plan-hash check before anything is dispatched, and nothing is written back to the state file at preview or run.
@@ -107,11 +107,13 @@ Only fields the plan actually removed are requested — a declared sensitive fie
 ### 3. Execute with an approval token
 
 ```bash
-pm reverse run plan_abc123 --approve tk_xyz789 --json
+pm reverse run plan_abc123 --approval-token-stdin --json
 # Destructive plans additionally require: --confirm destructive
 ```
 
-A failed dispatch is recorded and is not automatically retried.
+Enter the approval token as one line on standard input, then end input. The
+marker accepts no value, so the token never enters the command line, environment,
+or project files. A failed dispatch is recorded and is not automatically retried.
 
 JSON output:
 

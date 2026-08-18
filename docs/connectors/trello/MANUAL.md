@@ -44,7 +44,7 @@ ETL STREAMS
     fields: id(string), idBoard(string), idCard(string), name(string), pos(number)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Trello API read of board/list/checklist data

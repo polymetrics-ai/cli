@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:orgs_projectsv2_items_create_by_repo_number",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:35:38Z",
+  "run_id": "github-mutation-slice3-orgs-projects-items-create-by-repo-number-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "b2af457377be74e2c7b86f6b09ee460b78304a2468815ff009ac1c1bac22ba84",
+    "pm_command_fingerprint": "{{pmcertfp:v1:e086b0b95fd2cb8665a7cab15a2fc8096ec9da135f4f56974225879502434be7}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:baa4cc0033fe7a0fff95bc3611f968da2192e52001a15620b5bc724becd14f42}}"],
+    "http_exchanges": [
+      {
+        "operation": "orgs_project_item_by_repo_number_agent_derived_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:a56021ed24d99349974a05aed4bff6dc7e9217ccebd3316195428eb531a266e4}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"assertion_source": "{{pmcertfp:v1:c90e9daa2b2f412cca488245fa7845cb95f1cec462ea89522f07f0282c8b711a}}", "matched": "{{pmcertfp:v1:c42340b4661e0981dc8ec35f52d7aebb2b39f2acbbe119bab284cc85c3e7a353}}", "wrong_answer_rejected": "{{pmcertfp:v1:1909fc0cff4f7b43f70450f68c7dda8dda3f15ed6ce071034612b89c8c0a85f4}}", "title": "{{pmcertfp:v1:ba136479fc25e81b546430c128b95314eed227af0f218d858e99a628a176342a}}", "content_type": "{{pmcertfp:v1:18adb5f7e10d4a0c94840be48b6e6b0b246eb0fe220f8217b1d84283f99f6767}}"}, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_project_item_by_repo_number_provider_terminal_delete",
+        "request": {"method": "POST", "target": "{{pmcertfp:v1:568f73c88050e95c23c9ace50f263b980b800a9de31a04181713f14232bfcae0}}", "query": [], "headers": [], "body": {"encoding": "json", "value": {"project_id": "{{pmcertfp:v1:297f9beed4d49fa13f69a2116558eeb8d6e0206c6741a199697daa24298e23bb}}"}, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"deleted": "{{pmcertfp:v1:c42340b4661e0981dc8ec35f52d7aebb2b39f2acbbe119bab284cc85c3e7a353}}"}, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_project_item_by_repo_number_project_cleanup_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:9794ea6080b28372ced72d907650eb98edfb8f28a92a76b0ffb28cf956111ae7}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 404, "headers": [], "body": {"encoding": "json", "value": {"cleanup": "{{pmcertfp:v1:50c943824f164114734edada393d47c286f93fe2309128acb63547f332511bc8}}"}, "original_bytes": 0, "truncated": false}}
+      },
+      {
+        "operation": "orgs_project_item_by_repo_number_issue_contained_closed_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:be34beeb1320d3bf77a476e2156123321c8340678621c4358880c727305cd3a6}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": {"cleanup": "{{pmcertfp:v1:cafe8d16b0c7ccb82f9d6a30a7bd1484787b46fb3647562c975f28fc59d5a1b4}}", "state": "{{pmcertfp:v1:07e7b30d0acd4c1842fa83ffbf77610aeefaa6f2a91e86e3ea1e9721a65cbbe0}}", "state_reason": "{{pmcertfp:v1:59cde20cf90640d7a64a25a05aef65532cc3d70b5f8f8bfd03fa63f7533e8f68}}"}, "original_bytes": 0, "truncated": false}}
+      }
+    ],
+    "database_exchanges": []
+  }
+}

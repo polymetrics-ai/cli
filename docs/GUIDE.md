@@ -123,7 +123,7 @@ make verify          # gofmt + go vet + go test ./... + build + end-to-end smoke
 | **Connection** | A configured source → destination pairing with stream/primary-key/cursor/table mapping. |
 | **Catalog** | The set of streams a source exposes (`pm catalog refresh`). |
 | **Warehouse** | Local Parquet tables rebuilt from append-only JSONL write-ahead logs and queried by DuckDB. |
-| **Sync mode** | How a stream is materialized: `full_refresh_overwrite`, `incremental_append`, `incremental_dedupe_history`, `incremental_dedupe_latest_record`. |
+| **Sync mode** | A connection's materialization setting. See [ETL sync modes](cli/etl.md) for accepted names, capability requirements, and typed-compatibility admission. |
 
 ### Adding credentials without leaking secrets
 
@@ -231,8 +231,8 @@ pm reverse plan prs_to_github \
 # 2. PREVIEW — see exactly what would be written (no mutation)
 pm reverse preview <plan-id> --json
 
-# 3. EXECUTE — nothing changes until you replay with the approval token
-pm reverse run <plan-id> --approve <approval-token> --json
+# 3. EXECUTE — enter the approval token as one stdin line; nothing changes until then
+pm reverse run <plan-id> --approval-token-stdin --json
 ```
 
 Approval tokens are **single-use and time-bounded**. A `run` without a valid token

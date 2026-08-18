@@ -9,6 +9,14 @@ description: Local Warehouse connector knowledge and safe action guide.
 
 Local Parquet warehouse destination queried by the embedded DuckDB engine.
 
+## Icon
+
+- id: pm-warehouse
+- asset: icons/pm-warehouse.svg
+- source: polymetrics
+- review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
+
 ## Capabilities
 
 - check=true catalog=true read=true write=true query=true
@@ -40,6 +48,13 @@ Local Parquet warehouse destination queried by the embedded DuckDB engine.
 - approval: not required for ETL destination writes; reverse ETL still requires approval
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Sync Transport
+
+- Source transport: unsupported
+- Destination transport: declared
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Destination executor: native_database/local_parquet_warehouse
+
 ## Commands
 
 ### Inspect as a manual
@@ -66,4 +81,3 @@ pm query run --table sample_customers --limit 5 --json
 - Run pm connectors inspect warehouse before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

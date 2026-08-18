@@ -15,6 +15,8 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"polymetrics.ai/internal/connectors/certify"
 )
 
 const (
@@ -22,9 +24,14 @@ const (
 	fingerprintPrefix      = "{{pmcertfp:v1:"
 	fingerprintSuffix      = "}}"
 
-	credentialScopeFullParity = "full_parity"
-	fullParityCredentialNote  = "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface."
-	localWarehouseMediator    = "local_parquet_warehouse"
+	acceptedEvidenceSchemaVersion         = 2
+	credentialScopeFullParity             = "full_parity"
+	credentialScopeObservedOperations     = "observed_operations"
+	credentialScopeProofFullParityStage   = "full_parity_stage"
+	credentialScopeProofProtocolExchanges = "protocol_exchanges"
+	fullParityCredentialNote              = "Certification used a full-parity credential; a narrower credential exposes a subset of this certified surface."
+	observedOperationsCredentialNote      = "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed."
+	localWarehouseMediator                = "local_parquet_warehouse"
 
 	// repositoryFingerprintSaltPath is intentionally ignored by git.  A clone
 	// creates a new value, while replay on the same checkout uses the same
@@ -162,16 +169,40 @@ type completedLiveEvidence struct {
 	PMBinarySHA256 string
 	PMCommand      string
 	Passed         bool
-	// CredentialFullParity is an explicit attestation from the live-test
-	// runner. A narrow credential can prove a subset of behavior, but it can
-	// never produce a connector certification record.
-	CredentialFullParity bool
 
 	RepositorySalt    []byte
 	PreparedValues    []string
 	HTTPExchanges     []completedHTTPExchange
 	DatabaseExchanges []completedDatabaseExchange
 	Flow              *completedFlowRoundTrip
+}
+
+// credentialScopeClaim is intentionally constructed only from proof-bearing
+// run state. Callers cannot provide arbitrary scope strings, notes, or proof
+// discriminators to an accepted-evidence record.
+type credentialScopeClaim struct {
+	scope string
+	note  string
+	proof string
+}
+
+func observedOperationsCredentialScope() credentialScopeClaim {
+	return credentialScopeClaim{
+		scope: credentialScopeObservedOperations,
+		note:  observedOperationsCredentialNote,
+		proof: credentialScopeProofProtocolExchanges,
+	}
+}
+
+func fullParityCredentialScope(report certify.Report) (credentialScopeClaim, error) {
+	if !report.FullParityVerified() {
+		return credentialScopeClaim{}, errors.New("completed certification report did not pass the full-parity stage")
+	}
+	return credentialScopeClaim{
+		scope: credentialScopeFullParity,
+		note:  fullParityCredentialNote,
+		proof: credentialScopeProofFullParityStage,
+	}, nil
 }
 
 type completedHTTPExchange struct {
@@ -214,6 +245,21 @@ type completedFlowRoundTrip struct {
 // it can be persisted. A caller never receives a serializable type containing
 // a raw credential or response body.
 func newProofBearingEvidence(completed completedLiveEvidence) (acceptedEvidence, error) {
+	return newProofBearingEvidenceForCredentialScope(completed, observedOperationsCredentialScope())
+}
+
+// newFullParityProofBearingEvidence is the sole construction path for a
+// full-parity claim. The claim is derived from the executed report's passing
+// stage, not from a caller attestation or command-line spelling.
+func newFullParityProofBearingEvidence(completed completedLiveEvidence, report certify.Report) (acceptedEvidence, error) {
+	claim, err := fullParityCredentialScope(report)
+	if err != nil {
+		return acceptedEvidence{}, err
+	}
+	return newProofBearingEvidenceForCredentialScope(completed, claim)
+}
+
+func newProofBearingEvidenceForCredentialScope(completed completedLiveEvidence, claim credentialScopeClaim) (acceptedEvidence, error) {
 	if !completed.Passed {
 		return acceptedEvidence{}, errors.New("completed live test did not pass")
 	}
@@ -225,9 +271,6 @@ func newProofBearingEvidence(completed completedLiveEvidence) (acceptedEvidence,
 	}
 	if len(completed.HTTPExchanges)+len(completed.DatabaseExchanges) == 0 {
 		return acceptedEvidence{}, errors.New("completed live test has no protocol exchanges")
-	}
-	if !completed.CredentialFullParity {
-		return acceptedEvidence{}, errors.New("completed live test did not use a full-parity credential")
 	}
 	if strings.TrimSpace(completed.PMCommand) == "" {
 		return acceptedEvidence{}, errors.New("completed live test has no pm command")
@@ -264,23 +307,24 @@ func newProofBearingEvidence(completed completedLiveEvidence) (acceptedEvidence,
 	}
 
 	evidence := acceptedEvidence{
-		SchemaVersion:   completed.SchemaVersion,
-		Scope:           completed.Scope,
-		Status:          evidenceStatusPassed,
-		CredentialScope: credentialScopeFullParity,
-		CredentialNote:  fullParityCredentialNote,
-		Connector:       completed.Connector,
-		FunctionKind:    completed.FunctionKind,
-		WorkflowKind:    completed.WorkflowKind,
-		SyncMode:        completed.SyncMode,
-		Primitive:       completed.Primitive,
-		Source:          completed.Source,
-		Destination:     completed.Destination,
-		FlowKind:        completed.FlowKind,
-		Provider:        completed.Provider,
-		ExecutedAt:      completed.ExecutedAt,
-		RunID:           completed.RunID,
-		Proof:           proof,
+		SchemaVersion:        acceptedEvidenceSchemaVersion,
+		Scope:                completed.Scope,
+		Status:               evidenceStatusPassed,
+		CredentialScope:      claim.scope,
+		CredentialNote:       claim.note,
+		CredentialScopeProof: claim.proof,
+		Connector:            completed.Connector,
+		FunctionKind:         completed.FunctionKind,
+		WorkflowKind:         completed.WorkflowKind,
+		SyncMode:             completed.SyncMode,
+		Primitive:            completed.Primitive,
+		Source:               completed.Source,
+		Destination:          completed.Destination,
+		FlowKind:             completed.FlowKind,
+		Provider:             completed.Provider,
+		ExecutedAt:           completed.ExecutedAt,
+		RunID:                completed.RunID,
+		Proof:                proof,
 	}
 	if err := validateAcceptedEvidence(evidence); err != nil {
 		return acceptedEvidence{}, err
@@ -309,6 +353,98 @@ func writeProofBearingEvidence(repoRoot, path string, completed completedLiveEvi
 	payload, err := marshalGeneratedJSON(evidence)
 	if err != nil {
 		return acceptedEvidence{}, fmt.Errorf("render proof-bearing evidence: %w", err)
+	}
+	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
+		return acceptedEvidence{}, fmt.Errorf("create proof evidence directory: %w", err)
+	}
+	file, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	if err != nil {
+		return acceptedEvidence{}, fmt.Errorf("create proof-bearing evidence: %w", err)
+	}
+	if _, err := file.Write(payload); err != nil {
+		_ = file.Close()
+		return acceptedEvidence{}, fmt.Errorf("write proof-bearing evidence: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return acceptedEvidence{}, fmt.Errorf("close proof-bearing evidence: %w", err)
+	}
+	return evidence, nil
+}
+
+// importedLiveEvidence contains only values that ReadExternalProof has already
+// proved are fingerprints or structural metadata. Unlike completedLiveEvidence
+// it deliberately has no raw credentials, request values, or response bodies.
+type importedLiveEvidence struct {
+	SchemaVersion          int
+	Scope                  string
+	Connector              string
+	FunctionKind           string
+	WorkflowKind           string
+	SyncMode               string
+	Primitive              string
+	Source                 string
+	Destination            string
+	FlowKind               string
+	Provider               string
+	ExecutedAt             string
+	RunID                  string
+	PMBinarySHA256         string
+	PMCommandFingerprint   string
+	CredentialFingerprints []string
+	HTTPExchanges          []certifiedHTTPExchange
+}
+
+// newImportedProofBearingEvidence accepts the safe projection from a completed
+// external proof. It still validates the whole accepted-record contract before
+// a file can be opened, so a future importer cannot turn an unredacted proof
+// field into committed evidence by bypassing the raw-value sanitizer.
+func newImportedProofBearingEvidence(completed importedLiveEvidence) (acceptedEvidence, error) {
+	proof := embeddedEvidenceProof{
+		RedactionStrategy:      proofRedactionStrategy,
+		PMBinarySHA256:         completed.PMBinarySHA256,
+		PMCommandFingerprint:   completed.PMCommandFingerprint,
+		CredentialFingerprints: append([]string(nil), completed.CredentialFingerprints...),
+		HTTPExchanges:          append([]certifiedHTTPExchange(nil), completed.HTTPExchanges...),
+		DatabaseExchanges:      []certifiedDatabaseExchange{},
+	}
+	evidence := acceptedEvidence{
+		SchemaVersion:        acceptedEvidenceSchemaVersion,
+		Scope:                completed.Scope,
+		Status:               evidenceStatusPassed,
+		CredentialScope:      credentialScopeObservedOperations,
+		CredentialNote:       observedOperationsCredentialNote,
+		CredentialScopeProof: credentialScopeProofProtocolExchanges,
+		Connector:            completed.Connector,
+		FunctionKind:         completed.FunctionKind,
+		WorkflowKind:         completed.WorkflowKind,
+		SyncMode:             completed.SyncMode,
+		Primitive:            completed.Primitive,
+		Source:               completed.Source,
+		Destination:          completed.Destination,
+		FlowKind:             completed.FlowKind,
+		Provider:             completed.Provider,
+		ExecutedAt:           completed.ExecutedAt,
+		RunID:                completed.RunID,
+		Proof:                proof,
+	}
+	if err := validateAcceptedEvidence(evidence); err != nil {
+		return acceptedEvidence{}, err
+	}
+	return evidence, nil
+}
+
+func writeImportedProofBearingEvidence(repoRoot, path string, completed importedLiveEvidence) (acceptedEvidence, error) {
+	outputPath, err := acceptedEvidenceOutputPath(repoRoot, path)
+	if err != nil {
+		return acceptedEvidence{}, err
+	}
+	evidence, err := newImportedProofBearingEvidence(completed)
+	if err != nil {
+		return acceptedEvidence{}, err
+	}
+	payload, err := marshalGeneratedJSON(evidence)
+	if err != nil {
+		return acceptedEvidence{}, fmt.Errorf("render imported proof-bearing evidence: %w", err)
 	}
 	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
 		return acceptedEvidence{}, fmt.Errorf("create proof evidence directory: %w", err)
@@ -854,7 +990,7 @@ func validateDeliveryGuarantees(delivery deliveryGuarantees) error {
 
 func validateCertifiedQuery(query []certifiedQuery) error {
 	for _, item := range query {
-		if !isSafeProofFieldName(item.Name) {
+		if !isSafeProofFieldName(item.Name) && !isFingerprintSequence(item.Name) {
 			return errors.New("query name is invalid")
 		}
 		if !isFingerprintSequence(item.Value) {

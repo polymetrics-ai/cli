@@ -1,5 +1,46 @@
 package connsdk
 
+import "fmt"
+
+// RateBudgetRefusalCode is a stable, machine-readable explanation for a
+// request that was refused before provider dispatch.
+type RateBudgetRefusalCode string
+
+const (
+	// RateBudgetRefusalSharedCoordinatorUnavailable means a require_shared
+	// policy could not obtain the shared admission decision it declared.
+	RateBudgetRefusalSharedCoordinatorUnavailable RateBudgetRefusalCode = "shared_coordinator_unavailable"
+	// RateBudgetRefusalReservationDenied means the run-local lifecycle
+	// coordinator did not grant an opaque lease before provider dispatch.
+	RateBudgetRefusalReservationDenied RateBudgetRefusalCode = "reservation_denied"
+)
+
+// RateBudgetRefusalError is the SDK-facing fail-closed contract for rate
+// budget admission. It carries only safe classifications; Err remains
+// reachable for callers that need a more specific internal cause.
+type RateBudgetRefusalError struct {
+	Code   RateBudgetRefusalCode
+	Reason string
+	Err    error
+}
+
+func (e *RateBudgetRefusalError) Error() string {
+	if e == nil {
+		return "rate budget refused"
+	}
+	if e.Reason == "" {
+		return fmt.Sprintf("rate budget refused: %s", e.Code)
+	}
+	return fmt.Sprintf("rate budget refused: %s: %s", e.Code, e.Reason)
+}
+
+func (e *RateBudgetRefusalError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.Err
+}
+
 // RateLimitState records whether a bundle has an enforceable provider policy.
 // Unknown and not_applicable are deliberate, honest states; only declared
 // policies are eligible for engine resolution and pacing.
@@ -24,12 +65,22 @@ type RateLimits struct {
 
 // RateLimitPolicy is one provider-cited rate-limit contract.
 type RateLimitPolicy struct {
-	ID       string            `json:"id"`
-	Source   RateLimitSource   `json:"source"`
-	Selector RateLimitSelector `json:"selector"`
-	Scope    RateLimitScope    `json:"scope"`
-	Budgets  []RateLimitBudget `json:"budgets"`
+	ID           string                      `json:"id"`
+	Source       RateLimitSource             `json:"source"`
+	Selector     RateLimitSelector           `json:"selector"`
+	Scope        RateLimitScope              `json:"scope"`
+	Coordination RateLimitCoordinationPolicy `json:"coordination,omitempty"`
+	Budgets      []RateLimitBudget           `json:"budgets"`
 }
+
+// RateLimitCoordinationPolicy controls where a declared policy coordinates.
+// The zero value intentionally means process-local protection; shared
+// coordination is never selected by endpoint configuration or inheritance.
+type RateLimitCoordinationPolicy string
+
+const (
+	RateLimitCoordinationRequireShared RateLimitCoordinationPolicy = "require_shared"
+)
 
 // RateLimitSource records the provider artifact from which a policy was
 // authored. RetrievedAt is mandatory so a reviewer can judge freshness even
@@ -130,9 +181,12 @@ type RateLimitBudget struct {
 
 // RateLimitCost describes a cost-weighted request budget. DefaultCost applies
 // when the provider gives no per-request observation; ResponseHeader names an
-// optional provider header parsed into a typed scalar. Neither field carries a
-// request value or credential.
+// optional provider header parsed into a typed scalar. ResponseBody is a
+// closed vocabulary for a bounded, provider-declared response selection; it
+// is never a caller-selected JSON path. Neither field carries a request value
+// or credential.
 type RateLimitCost struct {
 	DefaultCost    *float64 `json:"default_cost,omitempty"`
 	ResponseHeader string   `json:"response_header,omitempty"`
+	ResponseBody   string   `json:"response_body,omitempty"`
 }

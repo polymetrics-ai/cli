@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_direct_read_users_list_ssh_signing_keys_for_authenticated_user",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:10:21.859Z",
+  "run_id": "github-slice4-1787001021859-agent_derived_direct_read_users_list_ssh_signing_keys_for_authenticated_user",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "2b8083489042e1b4428480852dc676420ee9a035dc3500832e24730697819316",
+    "pm_command_fingerprint": "{{pmcertfp:v1:23270918e6f53cd1622db8d4dcfd282889d74a54d55011dbbfd0d7584c565a34}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:713778cd5ee90211aae2d78594d98adb30cb2b40b52b34120d82e7e6b5119407}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_direct_read_users_list_ssh_signing_keys_for_authenticated_user",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:6ccff16d036aa9c24e15aaeee9dfc5be6fc2c34ec4b90ace10e32d8c450dcfd5}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [],
+            "original_bytes": 2,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

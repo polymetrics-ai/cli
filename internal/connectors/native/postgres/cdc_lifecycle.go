@@ -21,8 +21,8 @@ import (
 const (
 	cdcSlotPrefix          = "pm_cdc_"
 	cdcSnapshotBarrierKind = "postgres_logical_slot"
-	cdcProtocolVersion     = "pgoutput-v1"
-	cdcCheckpointSchema    = "postgres-cdc-v1"
+	cdcProtocolVersion     = "pgoutput-v2"
+	cdcCheckpointSchema    = "postgres-cdc-v2"
 	cdcChangefeedMechanism = "logical_replication"
 	cdcExecutorID          = "postgres_logical_replication"
 	cdcClientEncoding      = "UTF8"
@@ -39,10 +39,13 @@ var (
 )
 
 type postgresCDCSource struct {
-	identity   synccontract.SourceIdentity
-	generation synccontract.OpaqueToken
-	slotName   string
-	system     pglogrepl.IdentifySystemResult
+	identity          synccontract.SourceIdentity
+	generation        synccontract.OpaqueToken
+	slotName          string
+	system            pglogrepl.IdentifySystemResult
+	publication       string
+	schemaFingerprint string
+	bootstrap         *postgresBootstrapBarrier
 }
 
 type postgresReplicationSlot struct {
@@ -74,6 +77,7 @@ var (
 	errCDCReplicationSlots = errors.New("postgres CDC requires max_replication_slots > 0; increase it in the server parameter group and restart PostgreSQL")
 	errCDCWALSenders       = errors.New("postgres CDC requires max_wal_senders > 0; increase it in the server parameter group and restart PostgreSQL")
 	errCDCReplicationRole  = errors.New("postgres CDC requires the connecting role to have REPLICATION; grant the role REPLICATION or use a dedicated replication role")
+	errCDCServerVersion    = errors.New("postgres CDC requires PostgreSQL 14 or newer for pgoutput streamed transactions")
 )
 
 func preflightReplicationServer(ctx context.Context, conn connConfig) error {
@@ -87,10 +91,14 @@ func preflightReplicationServer(ctx context.Context, conn connConfig) error {
 	}
 	defer func() { _ = db.Close(context.Background()) }()
 	var walLevel string
+	var serverVersion int
 	var slots, senders int
 	var replication bool
-	if err := db.QueryRow(ctx, "SELECT current_setting('wal_level'), current_setting('max_replication_slots')::int, current_setting('max_wal_senders')::int, (SELECT rolreplication FROM pg_roles WHERE rolname = current_user)").Scan(&walLevel, &slots, &senders, &replication); err != nil {
-		return errors.New("postgres CDC server preflight: unable to inspect wal_level, replication slots, WAL senders, and role attributes")
+	if err := db.QueryRow(ctx, "SELECT current_setting('server_version_num')::int, current_setting('wal_level'), current_setting('max_replication_slots')::int, current_setting('max_wal_senders')::int, (SELECT rolreplication FROM pg_roles WHERE rolname = current_user)").Scan(&serverVersion, &walLevel, &slots, &senders, &replication); err != nil {
+		return errors.New("postgres CDC server preflight: unable to inspect version, wal_level, replication slots, WAL senders, and role attributes")
+	}
+	if err := validateCDCServerVersion(serverVersion); err != nil {
+		return err
 	}
 	if !strings.EqualFold(walLevel, "logical") {
 		return fmt.Errorf("%w (server reports %q)", errCDCWALLevel, walLevel)
@@ -103,6 +111,13 @@ func preflightReplicationServer(ctx context.Context, conn connConfig) error {
 	}
 	if !replication {
 		return errCDCReplicationRole
+	}
+	return nil
+}
+
+func validateCDCServerVersion(serverVersion int) error {
+	if serverVersion < 140000 {
+		return fmt.Errorf("%w (server reports %d)", errCDCServerVersion, serverVersion)
 	}
 	return nil
 }
@@ -166,10 +181,11 @@ func identifyCDCSource(ctx context.Context, replication *pgconn.PgConn, database
 	}
 	generation := synccontract.OpaqueToken([]byte(strconv.FormatInt(int64(system.Timeline), 10) + "\n" + publication))
 	return postgresCDCSource{
-		identity:   identity,
-		generation: generation,
-		slotName:   cdcSlotName(identity),
-		system:     system,
+		identity:    identity,
+		generation:  generation,
+		slotName:    cdcSlotName(identity),
+		system:      system,
+		publication: publication,
 	}, nil
 }
 
@@ -402,6 +418,16 @@ func ensureReplicationSlot(ctx context.Context, replication *pgconn.PgConn, conn
 // for a stream. It is provided for lifecycle inspection and never accepts a
 // caller-selected slot name.
 func (c Connector) CDCSlotName(ctx context.Context, cfg connectors.RuntimeConfig, stream string) (string, error) {
+	var result string
+	err := executeWithAuthenticationAdmission(ctx, cfg, func(admitted context.Context) error {
+		var err error
+		result, err = c.cdcSlotName(admitted, cfg, stream)
+		return err
+	})
+	return result, err
+}
+
+func (c Connector) cdcSlotName(ctx context.Context, cfg connectors.RuntimeConfig, stream string) (string, error) {
 	if err := ctx.Err(); err != nil {
 		return "", err
 	}
@@ -429,6 +455,12 @@ func (c Connector) CDCSlotName(ctx context.Context, cfg connectors.RuntimeConfig
 // is an explicit lifecycle operation so a persistent slot survives a normal
 // process restart yet cannot be accidentally left behind after a teardown.
 func (c Connector) TeardownCDC(ctx context.Context, cfg connectors.RuntimeConfig, stream string) error {
+	return executeWithAuthenticationAdmission(ctx, cfg, func(admitted context.Context) error {
+		return c.teardownCDC(admitted, cfg, stream)
+	})
+}
+
+func (c Connector) teardownCDC(ctx context.Context, cfg connectors.RuntimeConfig, stream string) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}

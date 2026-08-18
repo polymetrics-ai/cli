@@ -212,6 +212,7 @@
               "method": { "type": "string" },
               "path": { "type": "string" },
               "max_bytes": { "type": "integer" },
+			  "accept": { "type": "string" },
               "allow_overwrite": { "type": "boolean" },
               "extract_archives": { "type": "boolean" },
               "allow_cross_host": { "type": "boolean" },

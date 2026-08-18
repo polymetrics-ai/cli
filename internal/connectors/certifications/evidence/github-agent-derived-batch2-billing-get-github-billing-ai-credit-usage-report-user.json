@@ -1,0 +1,56 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_batch2_billing_get_github_billing_ai_credit_usage_report_user",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:01:46.676Z",
+  "run_id": "github-slice2-agent_derived_batch2_billing_get_github_billing_ai_credit_usage_report_user",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:3295ace40e74a6187349360da93754c1d9592528371f5e487535b1e377b67ace}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:cdcbfb35c055e83a079c968c8b5a2239af989ab918c9e811ababe73bb68b8d3f}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_batch2_billing_get_github_billing_ai_credit_usage_report_user",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:8267d27892bbd8ea602c6cb4a8bdda32d6bd9e6fb5b7d24d7ed32b0a96f09418}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "timePeriod": {
+                "month": "{{pmcertfp:v1:42629f6df42f28217eac0b2fa8b3e0036115edba746df715bdf41ed7fb4ecbab}}",
+                "year": "{{pmcertfp:v1:c5c1851dedd189a37a349910056a3d338dc69ea6b4879ce0f1072dbd8e3ef72c}}"
+              },
+              "usageItems": [],
+              "user": "{{pmcertfp:v1:fdd9b5c15bab4df2d7460ce1faa3db5de0d8165130442ff6996b097f07339dab}}"
+            },
+            "original_bytes": 92,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

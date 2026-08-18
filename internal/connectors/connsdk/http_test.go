@@ -15,6 +15,7 @@ import (
 	"net/url"
 	"os"
 	"slices"
+	"strconv"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -231,6 +232,80 @@ type rateLimitObserverFunc func(context.Context, RateLimitObservation)
 
 func (f rateLimitObserverFunc) Observe(ctx context.Context, observation RateLimitObservation) {
 	f(ctx, observation)
+}
+
+type rateLimitEventSinkFunc func(RateLimitEvent)
+
+func (f rateLimitEventSinkFunc) RecordRateLimitEvent(event RateLimitEvent) {
+	f(event)
+}
+
+func TestRequesterRateLimitEventsRecordDeadlineCutoffBeforeSend(t *testing.T) {
+	var sends int32
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		atomic.AddInt32(&sends, 1)
+	}))
+	defer srv.Close()
+
+	var events []RateLimitEvent
+	r := &Requester{
+		BaseURL: srv.URL,
+		Admission: rateLimitAdmissionFunc(func(ctx context.Context, _ RateLimitRequest) error {
+			<-ctx.Done()
+			return ctx.Err()
+		}),
+		RateLimitEvents: rateLimitEventSinkFunc(func(event RateLimitEvent) {
+			events = append(events, event)
+		}),
+	}
+	r.RateLimitAdmissionTimeout = 10 * time.Millisecond
+	_, err := r.Do(context.Background(), http.MethodGet, "/deadline", nil, nil)
+	if !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("Do() error = %v, want deadline exceeded", err)
+	}
+	if got, want := atomic.LoadInt32(&sends), int32(0); got != want {
+		t.Fatalf("provider sends = %d, want %d when admission reaches its deadline", got, want)
+	}
+	if got, want := len(events), 2; got != want {
+		t.Fatalf("rate-limit events = %+v, want wait and not_sent", events)
+	}
+	if got := events[0]; got.Type != RateLimitEventWait || got.Method != http.MethodGet || got.Attempt != 1 || got.DurationMS <= 0 {
+		t.Fatalf("wait event = %+v, want first GET wait with positive duration", got)
+	}
+	if got := events[1]; got.Type != RateLimitEventNotSent || got.Method != http.MethodGet || got.Attempt != 1 || got.Reason != "deadline_cutoff" {
+		t.Fatalf("not-sent event = %+v, want first GET deadline cutoff", got)
+	}
+}
+
+func TestRequesterRateLimitEventsRecordAttemptAndProviderReset(t *testing.T) {
+	now := time.Date(2026, time.August, 14, 12, 0, 0, 0, time.UTC)
+	reset := now.Add(time.Hour)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("X-RateLimit-Reset", strconv.FormatInt(reset.Unix(), 10))
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	var events []RateLimitEvent
+	r := &Requester{
+		BaseURL: srv.URL,
+		Now:     func() time.Time { return now },
+		RateLimitEvents: rateLimitEventSinkFunc(func(event RateLimitEvent) {
+			events = append(events, event)
+		}),
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/reset", nil, nil); err != nil {
+		t.Fatalf("Do() error = %v", err)
+	}
+	if got, want := len(events), 2; got != want {
+		t.Fatalf("rate-limit events = %+v, want attempt and reset", events)
+	}
+	if got := events[0]; got.Type != RateLimitEventAttempt || got.Method != http.MethodGet || got.Attempt != 1 {
+		t.Fatalf("attempt event = %+v, want first GET attempt", got)
+	}
+	if got := events[1]; got.Type != RateLimitEventReset || got.Method != http.MethodGet || got.Attempt != 1 || !got.ResetAt.Equal(reset) {
+		t.Fatalf("reset event = %+v, want provider reset %s", got, reset)
+	}
 }
 
 func TestRequesterFallbackRetryUsesBoundedFullJitter(t *testing.T) {

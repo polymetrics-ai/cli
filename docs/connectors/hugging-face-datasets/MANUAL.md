@@ -48,7 +48,7 @@ ETL STREAMS
     fields: config(string), dataset(string), num_bytes_memory(integer), num_bytes_parquet_files(integer), num_columns(integer), num_rows(integer), split(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Hugging Face dataset-viewer API read of dataset split/size metadata; an optional access token unlocks gated/private dataset reads

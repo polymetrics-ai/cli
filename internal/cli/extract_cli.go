@@ -53,7 +53,7 @@ func runExtract(ctx context.Context, a *app.App, cfg config.Config, root string,
 		// explicitly via --sql. Always validated by the query engine.
 		sql := valueOr(flags.first("sql"), decision.SuggestedSQL)
 		if sql != "" {
-			rows, err := a.QuerySQL(ctx, sql, limit)
+			rows, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: sql, Limit: limit})
 			if err != nil {
 				return fmt.Errorf("extract: query: %w", err)
 			}

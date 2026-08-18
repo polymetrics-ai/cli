@@ -1,0 +1,60 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:users_get_context_for_user",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:25:18.561Z",
+  "run_id": "github-direct-users_get_context_for_user-1787005516005",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:6380baa0128722216b88db7eb05867ba3d58adde91271f52fac5014889d847f1}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:users_get_context_for_user",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:004e9c530d88547f9962ef2fb884c217a0cfa936d29261cd43181287784693cb}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "contexts": [
+                {
+                  "message": "{{pmcertfp:v1:832a33c7c07ba26e42cfb510df067560968ba2f41ed5f33c9b00afc508badb72}}",
+                  "octicon": "{{pmcertfp:v1:51ae41b4806928bf14a3890731d77cda02680393b16246bb76c97807e11adf59}}"
+                },
+                {
+                  "message": "{{pmcertfp:v1:fd4e0bf227f58676853f9fa4b2d9259d31c4fbe2d6271277518757f5e8f684bc}}",
+                  "octicon": "{{pmcertfp:v1:df741c6d07c95589f1be12cbe485c8d6cc512d292ed03b7c396803b4e9a24849}}"
+                }
+              ]
+            },
+            "original_bytes": 158,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

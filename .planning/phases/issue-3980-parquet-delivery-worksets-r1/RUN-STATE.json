@@ -1,0 +1,24 @@
+{
+  "issue": 3980,
+  "phase": "issue-3980-parquet-delivery-worksets-r1",
+  "mode": "manual-inline-gsd",
+  "status": "verified",
+  "fallback_reason": "canonical single-worker contract forbids spawning GSD roles",
+  "skills": [
+    "golang-how-to",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing",
+    "golang-database",
+    "golang-lint"
+  ],
+  "red_green": {
+    "identity_red": "traces/workset-identity-red.txt",
+    "artifact_bound_red": "traces/workset-bounds-red.txt",
+    "empty_parquet_red": "traces/workset-empty-parquet-red.txt",
+    "green": "traces/workset-green.txt"
+  }
+}

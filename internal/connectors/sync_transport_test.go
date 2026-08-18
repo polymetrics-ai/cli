@@ -97,6 +97,53 @@ func TestDestinationTransportDescriptorRejectsStrategyOutsideDeclaredModes(t *te
 	}
 }
 
+func TestDestinationTransportDescriptorAllowsChangeCaptureWithClosedApplyStrategy(t *testing.T) {
+	descriptor := DestinationTransportDescriptor{
+		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeDatabase, ID: "fake_database_destination"},
+		EligibleActions: []string{"stage_change_capture"},
+		Modes:           []synccontract.Mode{synccontract.ModeChangeCapture},
+		Delivery:        closedTestDeliveryGuarantees(),
+		Conformance:     closedTestConformanceReference(),
+		Acknowledgement: TransportAcknowledgementDurableWarehouse,
+		ApplyStrategies: []DestinationApplyStrategy{{
+			Mode:     synccontract.ModeChangeCapture,
+			Strategy: ApplyStrategyChangeApply,
+			Action:   "stage_change_capture",
+		}},
+	}
+
+	if err := descriptor.Validate(); err != nil {
+		t.Fatalf("Validate() = %v, want declared change_capture destination to be accepted", err)
+	}
+	strategy, err := descriptor.ApplyStrategyFor(synccontract.ModeChangeCapture)
+	if err != nil {
+		t.Fatalf("ApplyStrategyFor(change_capture) = %v", err)
+	}
+	if strategy.Strategy != ApplyStrategyChangeApply || strategy.Action != "stage_change_capture" {
+		t.Fatalf("change_capture strategy = %#v, want closed change_apply/stage_change_capture binding", strategy)
+	}
+}
+
+func TestDestinationTransportDescriptorRefusesChangeCaptureWithoutChangeApply(t *testing.T) {
+	descriptor := DestinationTransportDescriptor{
+		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeDatabase, ID: "fake_database_destination"},
+		EligibleActions: []string{"stage_change_capture"},
+		Modes:           []synccontract.Mode{synccontract.ModeChangeCapture},
+		Delivery:        closedTestDeliveryGuarantees(),
+		Conformance:     closedTestConformanceReference(),
+		Acknowledgement: TransportAcknowledgementDurableWarehouse,
+		ApplyStrategies: []DestinationApplyStrategy{{
+			Mode:     synccontract.ModeChangeCapture,
+			Strategy: ApplyStrategyAppend,
+			Action:   "stage_change_capture",
+		}},
+	}
+
+	if err := descriptor.Validate(); err == nil || !strings.Contains(err.Error(), "change_apply") {
+		t.Fatalf("Validate() = %v, want change_capture strategy refusal", err)
+	}
+}
+
 func TestSyncTransportGuideProjectsDeclaredRolesWithoutCertificationClaim(t *testing.T) {
 	descriptor := &SyncTransportDescriptor{
 		Source: &SourceTransportDescriptor{

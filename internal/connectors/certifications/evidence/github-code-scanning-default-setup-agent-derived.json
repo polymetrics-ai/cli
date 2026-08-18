@@ -1,0 +1,58 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_code_scanning_default_setup_view",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:24:10.784Z",
+  "run_id": "github-slice2-agent_derived_code_scanning_default_setup_view",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:70d493a08ed4ab1a9122f6029551cb5dd7c7f0549f85031242976882893c515c}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_code_scanning_default_setup_view",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:2364f6f0002998e64ed4f830547df9b91f4af46aa79891c28687f53a070fb993}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "languages": "{{pmcertfp:v1:50d675f5a88a7d872f0d23128e1b30766e5139e7436229e00b434d01279fdf4b}}",
+              "query_suite": "{{pmcertfp:v1:5aa1cdcaa3a0e24823480fcfe0cf7f3681e82491adf4f88d4d355c47fe069e73}}",
+              "runner_label": null,
+              "runner_type": "{{pmcertfp:v1:6fdab0b12e63093db44e8cb3842a8896ca474d99fe6c57eaec6711d46b50f29e}}",
+              "schedule": null,
+              "state": "{{pmcertfp:v1:daed788687dce5632b9c8eaceff7579537ad9b7bedbf0b9c80c2ed44c6f59dd3}}",
+              "threat_model": "{{pmcertfp:v1:183a041915462b5b2cb1f3a3408409c04efc42deb9897d4a3bacdb77a348da31}}",
+              "updated_at": null
+            },
+            "original_bytes": 168,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

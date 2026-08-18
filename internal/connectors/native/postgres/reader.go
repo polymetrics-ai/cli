@@ -28,6 +28,12 @@ func (c Connector) InitialState(ctx context.Context, stream string, cfg connecto
 // lower bound carried in req.State (or the start cursor in config). Fixture
 // mode emits canned rows.
 func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	return executeWithAuthenticationAdmission(ctx, req.Config, func(admitted context.Context) error {
+		return c.read(admitted, req, emit)
+	})
+}
+
+func (c Connector) read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}

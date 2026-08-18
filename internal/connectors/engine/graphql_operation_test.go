@@ -3,13 +3,18 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/coordination"
 )
 
 // graphQLOperationBundle is deliberately an in-memory, loopback-only bundle.
@@ -126,6 +131,218 @@ func graphQLMutationWithSensitiveInput(baseURL string) Bundle {
 	op.SecretSensitive = true
 	op.MutationClass = "secret"
 	return bundle
+}
+
+type rejectingGraphQLRateLimitClock struct {
+	now   time.Time
+	waits []time.Duration
+}
+
+func (c *rejectingGraphQLRateLimitClock) Now() time.Time { return c.now }
+
+func (c *rejectingGraphQLRateLimitClock) Sleep(_ context.Context, wait time.Duration) error {
+	c.waits = append(c.waits, wait)
+	return context.DeadlineExceeded
+}
+
+func graphQLRateLimitPolicy(id string, limit, windowSeconds int, responseBody bool) connsdk.RateLimitPolicy {
+	defaultCost := 1.0
+	cost := &connsdk.RateLimitCost{DefaultCost: &defaultCost}
+	if responseBody {
+		cost.ResponseBody = string(connsdk.RateLimitCostSourceGraphQLRateLimit)
+	}
+	return connsdk.RateLimitPolicy{
+		ID: id,
+		Selector: connsdk.RateLimitSelector{
+			AuthTypes: []string{"oauth"},
+			Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodPost, Path: "/graphql"}},
+		},
+		Scope: connsdk.RateLimitScope{SubjectKind: connsdk.RateLimitScopeAccount, SubjectConfig: "account_id"},
+		Budgets: []connsdk.RateLimitBudget{{
+			Model:         connsdk.RateLimitBudgetFixedWindow,
+			Dimension:     connsdk.RateLimitBudgetSustained,
+			Unit:          connsdk.RateLimitBudgetPoints,
+			Limit:         intPtr(limit),
+			WindowSeconds: intPtr(windowSeconds),
+			Cost:          cost,
+		}},
+	}
+}
+
+func graphQLRateLimitTestConfig(t *testing.T) connectors.RuntimeConfig {
+	t.Helper()
+	identity, err := connectors.NewCoordinationIdentity([]byte("graphql-rate-limit-test-salt"), connectors.CredentialBinding{
+		BindingID:      "graphql-rate-limit-test-binding",
+		ProviderFamily: "github",
+		AuthProfile:    "oauth",
+	})
+	if err != nil {
+		t.Fatalf("NewCoordinationIdentity: %v", err)
+	}
+	return connectors.RuntimeConfig{
+		Config:               map[string]string{"account_id": "account-test-001", "auth_type": "oauth"},
+		CoordinationIdentity: identity,
+	}
+}
+
+func graphQLRateLimitResponse(cost, remaining int, resetAt string) string {
+	return `{"data":{"widget":{"id":"widget-1","items":{"nodes":[],"pageInfo":{"hasNextPage":false}}},"rateLimit":{"cost":` + strconv.Itoa(cost) + `,"remaining":` + strconv.Itoa(remaining) + `,"resetAt":"` + resetAt + `"}}}`
+}
+
+func TestOperationGraphQLRateLimitResponseTightensNextAdmission(t *testing.T) {
+	now := time.Date(2026, time.August, 14, 12, 0, 0, 0, time.UTC)
+	for _, tt := range []struct {
+		name          string
+		primaryLimit  int
+		primaryWindow int
+		cost          int
+		remaining     int
+		resetAt       string
+		wantWait      time.Duration
+	}{
+		{
+			name:          "cost",
+			primaryLimit:  4,
+			primaryWindow: 3600,
+			cost:          4,
+			remaining:     4,
+			wantWait:      time.Hour,
+		},
+		{
+			name:          "remaining and resetAt",
+			primaryLimit:  100,
+			primaryWindow: 1,
+			cost:          1,
+			remaining:     0,
+			resetAt:       now.Add(time.Hour).Format(time.RFC3339),
+			wantWait:      time.Hour,
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				calls++
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(graphQLRateLimitResponse(tt.cost, tt.remaining, tt.resetAt)))
+			}))
+			t.Cleanup(server.Close)
+
+			bundle := graphQLOperationBundle(server.URL, "graphql_query")
+			bundle.RateLimits = &connsdk.RateLimits{
+				State: connsdk.RateLimitStateDeclared,
+				Policies: []connsdk.RateLimitPolicy{
+					graphQLRateLimitPolicy("graphql-primary", tt.primaryLimit, tt.primaryWindow, true),
+				},
+			}
+			clock := &rejectingGraphQLRateLimitClock{now: now}
+			restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
+			t.Cleanup(restore)
+			request := connectors.OperationDirectReadRequest{
+				Operation: "acme.widgets.query",
+				Config:    graphQLRateLimitTestConfig(t),
+				Body:      map[string]any{"id": "widget-1", "first": 1},
+				MaxBytes:  4096,
+			}
+			if _, err := OperationDirectRead(context.Background(), bundle, request, nil); err != nil {
+				t.Fatalf("first GraphQL request: %v", err)
+			}
+			if _, err := OperationDirectRead(context.Background(), bundle, request, nil); !errors.Is(err, context.DeadlineExceeded) {
+				t.Fatalf("second GraphQL request error = %v, want admission deadline", err)
+			}
+			if got, want := calls, 1; got != want {
+				t.Fatalf("blocked GraphQL request reached provider: calls = %d, want %d", got, want)
+			}
+			if len(clock.waits) != 1 || clock.waits[0] != tt.wantWait {
+				t.Fatalf("GraphQL observation wait = %v, want [%s]", clock.waits, tt.wantWait)
+			}
+		})
+	}
+}
+
+func TestOperationGraphQLRateLimitCostDoesNotDoubleChargeSecondaryBudget(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(graphQLRateLimitResponse(4, 100, "")))
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := graphQLOperationBundle(server.URL, "graphql_query")
+	secondary := graphQLRateLimitPolicy("graphql-secondary", 10, 60, false)
+	secondary.Budgets[0].Cost.DefaultCost = func() *float64 { value := 5.0; return &value }()
+	bundle.RateLimits = &connsdk.RateLimits{
+		State: connsdk.RateLimitStateDeclared,
+		Policies: []connsdk.RateLimitPolicy{
+			graphQLRateLimitPolicy("graphql-primary", 100, 3600, true),
+			secondary,
+		},
+	}
+	clock := &rejectingGraphQLRateLimitClock{now: time.Date(2026, time.August, 14, 12, 0, 0, 0, time.UTC)}
+	restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
+	t.Cleanup(restore)
+	request := connectors.OperationDirectReadRequest{
+		Operation: "acme.widgets.query",
+		Config:    graphQLRateLimitTestConfig(t),
+		Body:      map[string]any{"id": "widget-1", "first": 1},
+		MaxBytes:  4096,
+	}
+	for attempt := 1; attempt <= 2; attempt++ {
+		if _, err := OperationDirectRead(context.Background(), bundle, request, nil); err != nil {
+			t.Fatalf("GraphQL request %d: %v", attempt, err)
+		}
+	}
+	if got, want := calls, 2; got != want {
+		t.Fatalf("GraphQL secondary budget was charged by primary cost: calls = %d, want %d", got, want)
+	}
+	if len(clock.waits) != 0 {
+		t.Fatalf("GraphQL secondary budget waited after two 5-point admissions: %v", clock.waits)
+	}
+}
+
+func TestOperationGraphQLRateLimitPrimaryRemainingDoesNotBlockSecondaryBudget(t *testing.T) {
+	now := time.Date(2026, time.August, 14, 12, 0, 0, 0, time.UTC)
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(graphQLRateLimitResponse(1, 0, now.Add(time.Hour).Format(time.RFC3339))))
+	}))
+	t.Cleanup(server.Close)
+
+	primary := graphQLRateLimitPolicy("graphql-primary", 100, 3600, true)
+	secondary := graphQLRateLimitPolicy("graphql-secondary", 10, 60, false)
+	bundle := graphQLOperationBundle(server.URL, "graphql_query")
+	bundle.RateLimits = &connsdk.RateLimits{
+		State:    connsdk.RateLimitStateDeclared,
+		Policies: []connsdk.RateLimitPolicy{primary, secondary},
+	}
+	clock := &rejectingGraphQLRateLimitClock{now: now}
+	restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
+	t.Cleanup(restore)
+	request := connectors.OperationDirectReadRequest{
+		Operation: "acme.widgets.query",
+		Config:    graphQLRateLimitTestConfig(t),
+		Body:      map[string]any{"id": "widget-1", "first": 1},
+		MaxBytes:  4096,
+	}
+	if _, err := OperationDirectRead(context.Background(), bundle, request, nil); err != nil {
+		t.Fatalf("primary GraphQL request: %v", err)
+	}
+
+	// Exercise the same declared secondary policy in a fresh runtime after the
+	// primary response reported zero remaining. It must still reach the
+	// provider: that body field belongs only to the GraphQL primary family.
+	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{secondary}
+	if _, err := OperationDirectRead(context.Background(), bundle, request, nil); err != nil {
+		t.Fatalf("secondary GraphQL request: %v", err)
+	}
+	if got, want := calls, 2; got != want {
+		t.Fatalf("primary remaining/reset blocked secondary provider request: calls = %d, want %d", got, want)
+	}
+	if len(clock.waits) != 0 {
+		t.Fatalf("secondary GraphQL budget waited for primary reset: %v", clock.waits)
+	}
 }
 
 // A structured CLI value is safe for a fixed GraphQL operation only when the
@@ -349,19 +566,28 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 		if got, want := vars["id"], "widget-1"; got != want {
 			t.Fatalf("variables.id = %#v, want %q", got, want)
 		}
-		_, _ = w.Write([]byte(`{"data":{"deleteWidget":{"deletedId":"widget-1"},"rateLimit":{"limit":5000,"cost":1,"remaining":4998,"resetAt":"2026-08-09T00:00:00Z"}}}`))
+		_, _ = w.Write([]byte(`{"data":{"deleteWidget":{"deletedId":"widget-1"},"rateLimit":{"limit":4,"cost":4,"remaining":4,"resetAt":""}}}`))
 	}))
 	defer server.Close()
 
 	bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
+	bundle.RateLimits = &connsdk.RateLimits{
+		State: connsdk.RateLimitStateDeclared,
+		Policies: []connsdk.RateLimitPolicy{
+			graphQLRateLimitPolicy("graphql-mutation-primary", 4, 3600, true),
+		},
+	}
+	clock := &rejectingGraphQLRateLimitClock{now: time.Date(2026, time.August, 14, 12, 0, 0, 0, time.UTC)}
+	restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
+	t.Cleanup(restore)
+	rateConfig := graphQLRateLimitTestConfig(t)
+	rateConfig.CredentialRevision = "fixture-credential-revision"
+	rateConfig.ConfigurationDigest = "fixture-configuration-digest"
+	rateConfig.WriteApprovalScope = connectors.WriteApprovalScopeFixture
 	req := connectors.OperationDirectWriteRequest{
 		Operation: "acme.widgets.mutation",
-		Config: connectors.RuntimeConfig{
-			CredentialRevision:  "fixture-credential-revision",
-			ConfigurationDigest: "fixture-configuration-digest",
-			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
-		},
-		Body: map[string]any{"id": "widget-1"},
+		Config:    rateConfig,
+		Body:      map[string]any{"id": "widget-1"},
 	}
 	untyped := req
 	untyped.Body = map[string]any{"id": "widget-1", "callerSelection": "everything"}
@@ -394,7 +620,7 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 	if calls != 1 {
 		t.Fatalf("approved mutation calls = %d, want 1", calls)
 	}
-	if result.GraphQL == nil || result.GraphQL.RateLimit == nil || result.GraphQL.RateLimit.Remaining != 4998 {
+	if result.GraphQL == nil || result.GraphQL.RateLimit == nil || result.GraphQL.RateLimit.Remaining != 4 {
 		t.Fatalf("mutation GraphQL metadata = %+v, want rate-limit data", result.GraphQL)
 	}
 	body, ok := result.Body.(map[string]any)
@@ -410,6 +636,23 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 	}
 	if calls != 1 {
 		t.Fatalf("replayed mutation reached network; calls = %d", calls)
+	}
+
+	nextPreview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("next PreviewOperationDirectWrite: %v", err)
+	}
+	next := req
+	next.PreviewDigest = nextPreview.Digest
+	next.Approval = approvedEvidenceForPreview(t, nextPreview)
+	if _, err := OperationDirectWrite(context.Background(), bundle, next, nil); !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("second approved GraphQL mutation error = %v, want rate-limit admission deadline", err)
+	}
+	if got, want := calls, 1; got != want {
+		t.Fatalf("rate-limited GraphQL mutation reached provider: calls = %d, want %d", got, want)
+	}
+	if len(clock.waits) != 1 || clock.waits[0] != time.Hour {
+		t.Fatalf("GraphQL mutation cost observation wait = %v, want [1h]", clock.waits)
 	}
 }
 

@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"context"
+	"errors"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -10,7 +11,6 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/synctransport"
 )
 
 func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
@@ -36,15 +36,39 @@ func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
 		{"transport"},
 		{"transport", "github-issue-label"},
 		{"transport", "github-issue-label", "cleanup"},
+		{"transport", "postgres-managed-target"},
 	} {
 		if command, ok := etlTransportManualCommand(args); !ok || command == "" {
 			t.Fatalf("etlTransportManualCommand(%v) = %q, %t; want a project-free transport manual", args, command, ok)
+		}
+	}
+	var postgresStdout bytes.Buffer
+	if err := runETLTransport(context.Background(), nil, []string{"postgres-managed-target"}, &postgresStdout, false); err != nil {
+		t.Fatalf("runPostgresManagedTargetTransport help = %v", err)
+	}
+	for _, want := range []string{"warehouse worksets", "incremental_upsert", "write=false", "--approval-token-stdin", "--authorization-lifetime", "24h through 48h"} {
+		if !strings.Contains(postgresStdout.String(), want) {
+			t.Fatalf("PostgreSQL transport help missing %q", want)
 		}
 	}
 	var stdout, stderr bytes.Buffer
 	code := Run([]string{"etl", "transport", "github-issue-label", "cleanup", "--root", filepath.Join(t.TempDir(), "uninitialized")}, &stdout, &stderr)
 	if code != 0 || !strings.Contains(stdout.String(), "pm etl transport github-issue-label plan") || stderr.Len() != 0 {
 		t.Fatalf("bare cleanup namespace = code %d stdout=%q stderr=%q, want contextual manual without opening a project", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestPostgresManagedTargetPlanRejectsMalformedAuthorizationLifetimeBeforeProjectIO(t *testing.T) {
+	var stdout bytes.Buffer
+	err := runETLTransport(context.Background(), nil, []string{
+		"postgres-managed-target", "plan", "--connection", "transport-demo", "--stream", "commits", "--authorization-lifetime", "tomorrow",
+	}, &stdout, false)
+	var refusal *cliError
+	if !errors.As(err, &refusal) || refusal.category != categoryValidation {
+		t.Fatalf("malformed authorization lifetime error = %T %v, want typed validation refusal", err, err)
+	}
+	if !strings.Contains(refusal.Error(), "invalid --authorization-lifetime") {
+		t.Fatalf("malformed authorization lifetime refusal = %q, want exact flag reason", refusal.Error())
 	}
 }
 
@@ -159,6 +183,40 @@ func TestETLRunTransportApprovalReadsExactlyOneEphemeralStdinLine(t *testing.T) 
 	}
 }
 
+func TestETLRunTransportApprovalAllowsDurablePlanReferenceWithoutTokenCarrier(t *testing.T) {
+	args := []string{
+		"--connection", "transport-demo",
+		"--stream", "issues",
+		"--batch-size", "1",
+		"--approval-plan", "rplan_one",
+		"--confirm", "destructive",
+	}
+	approval, present, flags, err := parseETLRunTransportApproval(args, strings.NewReader(""))
+	if err != nil {
+		t.Fatalf("parseETLRunTransportApproval() = %v, want durable authorization carriage", err)
+	}
+	if !present || approval.PlanID != "rplan_one" || approval.ApprovalToken != "" || approval.Confirmation.Kind != connectors.ConfirmationKindDestructive {
+		t.Fatalf("parseETLRunTransportApproval() = present=%t approval=%+v, want plan-scoped durable authorization", present, approval)
+	}
+	if flags.value("approval-token-stdin") != "" {
+		t.Fatal("durable authorization carriage unexpectedly requested token stdin")
+	}
+}
+
+func TestETLRunTransportApprovalLeavesStreamAndBatchPolicyToTheResolvedRoute(t *testing.T) {
+	approval, present, _, err := parseETLRunTransportApproval([]string{
+		"--connection", "postgres-transport",
+		"--stream", "issues",
+		"--batch-size", "1000",
+		"--approval-plan", "rplan_postgres",
+		"--approval-token-stdin",
+		"--confirm", "destructive",
+	}, strings.NewReader("ephemeral-token\n"))
+	if err != nil || !present || approval.ApprovalToken != "ephemeral-token" {
+		t.Fatalf("generic transport carriage = %#v present=%t err=%v, want route-owned stream and batch policy", approval, present, err)
+	}
+}
+
 func TestETLRunTransportApprovalLeavesLegacyRuntimeAlone(t *testing.T) {
 	approval, present, _, err := parseETLRunTransportApproval([]string{
 		"--connection", "ordinary-connection",
@@ -166,7 +224,7 @@ func TestETLRunTransportApprovalLeavesLegacyRuntimeAlone(t *testing.T) {
 		"--batch-size", "10",
 		"--runtime",
 	}, strings.NewReader(""))
-	if err != nil || present || approval != (synctransport.DestinationApproval{}) {
+	if err != nil || present || approval.PlanID != "" || approval.ApprovalToken != "" || approval.Evidence != nil || approval.AuthorizeNextUnit != nil {
 		t.Fatalf("legacy --runtime carrier = %#v present=%t err=%v, want untouched legacy ETL arguments", approval, present, err)
 	}
 }
@@ -217,6 +275,35 @@ func TestETLTransportSafeOutputOmitsApprovalAndDestinationInternals(t *testing.T
 	for _, want := range []string{"ETLTransportPlan", "ETLTransportPreview", "approval_token_issued", "safe-preview-digest"} {
 		if !strings.Contains(output, want) {
 			t.Fatalf("transport output missing %q", want)
+		}
+	}
+}
+
+func TestETLTransportPlanAndPreviewShowBoundedTargetCopyCapacity(t *testing.T) {
+	plan := transportPlanForOutputTest()
+	plan.TargetCopyWorkers = 2
+	plan.TargetCopyWorkerMaximum = 8
+	var stdout bytes.Buffer
+	if err := writeETLTransportPlan(&stdout, false, plan); err != nil {
+		t.Fatal(err)
+	}
+	if err := writeETLTransportPreview(&stdout, false, plan, connectors.WritePreview{RecordsStaged: 1, Action: plan.Action, Digest: "safe-preview-digest"}); err != nil {
+		t.Fatal(err)
+	}
+	if got, want := strings.Count(stdout.String(), "Target COPY workers: 2 (declared pool maximum 8)"), 2; got != want {
+		t.Fatalf("target COPY capacity lines = %d, want %d in plan and preview:\n%s", got, want, stdout.String())
+	}
+
+	stdout.Reset()
+	if err := writeETLTransportPlan(&stdout, true, plan); err != nil {
+		t.Fatal(err)
+	}
+	if err := writeETLTransportPreview(&stdout, true, plan, connectors.WritePreview{RecordsStaged: 1, Action: plan.Action, Digest: "safe-preview-digest"}); err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{`"target_copy_workers": 2`, `"target_copy_worker_maximum": 8`} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Fatalf("machine-readable target COPY capacity output missing %q:\n%s", want, stdout.String())
 		}
 	}
 }

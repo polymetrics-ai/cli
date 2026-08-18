@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_remove_upvote",
+  "provider": "github",
+  "executed_at": "2026-08-18T06:12:24.956132000Z",
+  "run_id": "rrun_33f2170ae5a043bc",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:d8c8f1f37956ab8e06bee13cca195c0f9839cda82201b5146bea2e9340889140}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_remove_upvote",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:61c1d986391267d1b91ba4034eb818052034951ae97f3f16760a88d4ac2a6545}}",
+              "query": "{{pmcertfp:v1:0a83523129be47b4ba18a9275719aa805a4b2d2c2a054da3a865c502375eec6d}}",
+              "variables": {
+                "input": {
+                  "subjectId": "{{pmcertfp:v1:2b1ccea4d7b23a058b43d22af6781110788a0df7ef6bb646794335c40da9bf63}}"
+                }
+              }
+            },
+            "original_bytes": 224,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "removeUpvote": {
+                "__typename": "{{pmcertfp:v1:205bf6637ee4a14a2d156611ba6d244b83f8ad101a1d1e2f9079f8dd30d24d8b}}"
+              }
+            },
+            "original_bytes": 53,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_no_upvote_wrong_present_rejected",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:82593d48ebc4fb84f35a33eed0b44e6dc84c4a705acea26def1b6d312bbfa9fa}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:2b1ccea4d7b23a058b43d22af6781110788a0df7ef6bb646794335c40da9bf63}}"
+              }
+            },
+            "original_bytes": 132,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": {
+                  "id": "{{pmcertfp:v1:2b1ccea4d7b23a058b43d22af6781110788a0df7ef6bb646794335c40da9bf63}}",
+                  "upvoteCount": "{{pmcertfp:v1:10b99bf4cebac4343df7bfc3a523fcf64975a5e5e82cea7cc1afc7099fe353b8}}",
+                  "viewerHasUpvoted": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}"
+                }
+              }
+            },
+            "original_bytes": 86,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_discussion",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:1a1741defcbca7e8b9b0cffd8133bbc6be5c7a8811f5593538ed8806e7418973}}",
+              "variables": {
+                "input": {
+                  "id": "{{pmcertfp:v1:2b1ccea4d7b23a058b43d22af6781110788a0df7ef6bb646794335c40da9bf63}}"
+                }
+              }
+            },
+            "original_bytes": 145,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "deleteDiscussion": {
+                  "__typename": "{{pmcertfp:v1:ae8f72492d05c8b666ce58b522d8eccc891df7044d67551b1b5771e259223195}}"
+                }
+              }
+            },
+            "original_bytes": 70,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_absent",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:9ce56e269d822e1febd695fd4a63717ce4742aaed801755e28885ae80c127ba3}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:2b1ccea4d7b23a058b43d22af6781110788a0df7ef6bb646794335c40da9bf63}}"
+              }
+            },
+            "original_bytes": 84,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": null
+              },
+              "errors": [
+                {
+                  "type": "{{pmcertfp:v1:ccdac3ed2051df9a24f3ade57a3866544d56c991c77d980bf185265d35aae674}}",
+                  "path": [
+                    "{{pmcertfp:v1:89e394bfc46a1867469c432711e35bcb664f023b779e295729dab0a2fce0f39c}}"
+                  ],
+                  "locations": [
+                    {
+                      "line": "{{pmcertfp:v1:e69d68134f7db5fff2518693a97d9c9513a61451b7642b7dbfeb28b1be4d4601}}",
+                      "column": "{{pmcertfp:v1:a2945dcf842da3bdb8b6ac38faee74d120b5779ce69e3490fe95e4df1355978c}}"
+                    }
+                  ],
+                  "message": "{{pmcertfp:v1:6d24700619811003fd5a6763b96019555b0042bdb48ab1e50f216ae3d0bf2377}}"
+                }
+              ]
+            },
+            "original_bytes": 191,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

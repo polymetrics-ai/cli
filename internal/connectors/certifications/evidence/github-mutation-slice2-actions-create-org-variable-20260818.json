@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:actions_create_org_variable",
+  "provider": "github",
+  "executed_at": "2026-08-18T03:48:24Z",
+  "run_id": "github-mutation-slice2-actions-create-org-variable-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "dcb76d2068e6b2d043770ad174910fcf5182364a9af3778b1489ae3cc6d45773",
+    "pm_command_fingerprint": "{{pmcertfp:v1:88e6fd77d79c8bb0a299a771ff30f56fc81a54023ea0aae54d33abb34c0982a0}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:713778cd5ee90211aae2d78594d98adb30cb2b40b52b34120d82e7e6b5119407}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "actions_create_org_variable_independent_cleanup_readback",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:05eed5c2d602cc075dd3a2a500605be8b525ecc2f83bc1719e2852322b265d27}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [],
+            "original_bytes": 2,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

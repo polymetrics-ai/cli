@@ -1,0 +1,63 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_actions_get_self_hosted_runner_group_for_org___org_Polymetrics_Cert___runner_group_id_3",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:14:00.491Z",
+  "run_id": "github-slice2-agent_derived_actions_get_self_hosted_runner_group_for_org___org_Polymetrics_Cert___runner_group_id_3",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:493f55a4c5cee8effc4f83c827291db81ba27e0984e89a423d64565c469eb6df}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_actions_get_self_hosted_runner_group_for_org___org_Polymetrics_Cert___runner_group_id_3",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:9d607ac62af8a6968a546230105f23ed503f6906faf10543d5a39bd46a610b32}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "allows_public_repositories": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}",
+              "default": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+              "hosted_runners_url": "{{pmcertfp:v1:1389f2bbdee155f60236ce003fb60773ac152a9d3d7d587b47258c5ae649bd2a}}",
+              "id": "{{pmcertfp:v1:817f62503c1131487d4b4e59d375b4332052df2f567db462ebb9943a8113c084}}",
+              "inherited": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+              "inherited_allows_public_repositories": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}",
+              "name": "{{pmcertfp:v1:9e9a40a05bddb7c3823a695213f4a619083f2f7741b6249f2446b5464de1b48b}}",
+              "restricted_to_workflows": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}",
+              "runners_url": "{{pmcertfp:v1:419e3225218937644bd4a7afeb957645557c9dc7b3b3d2f78dec39603ca01bce}}",
+              "selected_repositories_url": "{{pmcertfp:v1:aa784715db5092dab52b67adb5eb80087b0f325dfe2607e66bda53300accf5df}}",
+              "selected_workflows": [],
+              "visibility": "{{pmcertfp:v1:e2b3397dbd6b33c32dbb5944c5e8d1ef625b8cd113a03f401291ebd31eb7f03e}}",
+              "workflow_restrictions_read_only": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}"
+            },
+            "original_bytes": 568,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

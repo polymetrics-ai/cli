@@ -1,0 +1,8 @@
+{
+  "issue": 4089,
+  "phase": "issue-4089-reverse-etl-stdin-approval-r1",
+  "state": "verify_work",
+  "status": "ci_rebased_local_verification_complete_pending_outer_push",
+  "manual_gsd_fallback": true,
+  "reason": "The issue is outside the numeric roadmap and the canonical single-worker contract forbids spawned GSD roles. Prompts were resolved and the required lifecycle is being executed inline."
+}

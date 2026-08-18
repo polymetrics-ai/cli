@@ -108,9 +108,9 @@
       "summary": "Preview a reverse-ETL write command without making a network mutation."
     },
     {
-      "name": "approve",
-      "type": "string",
-      "summary": "Approval token required to execute a reverse-ETL plan."
+      "name": "approval-token-stdin",
+      "type": "boolean",
+      "summary": "Read the approval token as one bounded line from standard input."
     },
     {
       "name": "confirm",

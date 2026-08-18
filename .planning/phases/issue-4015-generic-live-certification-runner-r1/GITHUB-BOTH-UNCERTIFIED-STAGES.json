@@ -1,0 +1,9 @@
+{
+  "connector": "github",
+  "stage_names": [
+    "generated_direct_read_copilot_list_copilot_coding_agent_selected_repositories_for_organization"
+  ],
+  "nonpass_outcomes": {
+    "generated_direct_read_copilot_list_copilot_coding_agent_selected_repositories_for_organization": "product_defect"
+  }
+}

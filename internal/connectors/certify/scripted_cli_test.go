@@ -20,16 +20,18 @@ import (
 type scriptedCLI struct {
 	t *testing.T
 
-	root      string
-	calls     [][]string
-	seen      map[string]int
-	plans     map[string]scriptedPlan
-	previewed map[string]bool
-	consumed  map[string]bool
-	replays   map[string]int
-	nextPlan  int
-	schedule  string
-	protocols []string
+	root         string
+	calls        [][]string
+	seen         map[string]int
+	plans        map[string]scriptedPlan
+	previewed    map[string]bool
+	consumed     map[string]bool
+	replays      map[string]int
+	connections  map[string]string
+	nextPlan     int
+	schedule     string
+	scheduleFlow string
+	protocols    []string
 }
 
 type scriptedPlan struct {
@@ -40,13 +42,14 @@ type scriptedPlan struct {
 func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 	t.Helper()
 	return &scriptedCLI{
-		t:         t,
-		seen:      make(map[string]int),
-		plans:     make(map[string]scriptedPlan),
-		previewed: make(map[string]bool),
-		consumed:  make(map[string]bool),
-		replays:   make(map[string]int),
-		protocols: protocols,
+		t:           t,
+		seen:        make(map[string]int),
+		plans:       make(map[string]scriptedPlan),
+		previewed:   make(map[string]bool),
+		consumed:    make(map[string]bool),
+		replays:     make(map[string]int),
+		connections: make(map[string]string),
+		protocols:   protocols,
 	}
 }
 
@@ -66,7 +69,6 @@ func scriptedProtocols(opts certify.Options) []string {
 		"init",
 		"connectors_list",
 		"connectors_inspect",
-		"credentials_add",
 		"credentials_test",
 		"connections_create",
 		"catalog_refresh",
@@ -79,6 +81,7 @@ func scriptedProtocols(opts certify.Options) []string {
 		"schedule_create",
 		"schedule_list",
 		"schedule_install",
+		"schedule_fire",
 		"schedule_remove",
 	}
 	if opts.Write {
@@ -133,9 +136,10 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		s.seen["credentials_test"]++
 		return writeScriptedEnvelope(stdout, "CredentialTest", nil)
 	case prefix(args, "connections", "create") && hasJSON(args):
-		if !hasFlag(args, "--source") || !hasFlag(args, "--destination") || !hasFlag(args, "--stream") || !hasFlag(args, "--table") || !hasFlag(args, "--sync-mode") {
+		if len(args) < 3 || !hasFlag(args, "--source") || !hasFlag(args, "--destination") || !hasFlag(args, "--stream") || !hasFlag(args, "--table") || !hasFlag(args, "--sync-mode") {
 			return s.protocolError(stderr, "connections create requires source, destination, stream, table, and sync mode")
 		}
+		s.connections[args[2]] = flagValue(args, "--sync-mode")
 		s.seen["connections_create"]++
 		return writeScriptedEnvelope(stdout, "Connection", nil)
 	case prefix(args, "catalog", "refresh") && hasJSON(args) && hasFlag(args, "--connection"):
@@ -148,6 +152,11 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		})
 	case prefix(args, "etl", "run") && hasJSON(args) && hasFlag(args, "--connection") && hasFlag(args, "--stream"):
 		s.seen["etl_run"]++
+		if isTypedCompatibilityRefusal(s.connections[flagValue(args, "--connection")]) {
+			return writeScriptedEnvelopeWithCode(stdout, "Error", map[string]any{
+				"error": map[string]any{"message": "sync mode is not executable"},
+			}, 1)
+		}
 		return writeScriptedEnvelope(stdout, "ETLRun", map[string]any{"run": map[string]any{
 			"records_read":      2,
 			"records_succeeded": 1,
@@ -181,9 +190,13 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 			{"id": "cert_sync", "status": "success"}, {"id": "cert_query", "status": "success"},
 		}})
 	case prefix(args, "schedule", "create") && hasJSON(args) && hasFlag(args, "--name") && hasFlag(args, "--cron") && hasFlag(args, "--flow"):
+		if hasFlag(args, "--authorization") {
+			return s.protocolError(stderr, "schedule create must inherit flow approval without an authorization carrier")
+		}
 		s.schedule = flagValue(args, "--name")
+		s.scheduleFlow = flagValue(args, "--flow")
 		s.seen["schedule_create"]++
-		return writeScriptedEnvelope(stdout, "Schedule", nil)
+		return writeScriptedEnvelope(stdout, "Schedule", map[string]any{"name": s.schedule})
 	case exact(args, "schedule", "list", "--json"):
 		if s.schedule == "" {
 			return s.protocolError(stderr, "schedule list ran before schedule create")
@@ -195,13 +208,20 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 			return s.protocolError(stderr, err.Error())
 		}
 		s.seen["schedule_install"]++
-		return writeScriptedEnvelope(stdout, "ScheduleInstall", map[string]any{"backend": "crontab"})
+		return writeScriptedEnvelope(stdout, "ScheduleInstall", map[string]any{"backend": "crontab", "schedule": map[string]any{"name": s.schedule}})
+	case prefix(args, "schedule", "fire") && hasJSON(args) && len(args) == 4 && args[2] == s.schedule:
+		s.seen["schedule_fire"]++
+		return writeScriptedEnvelope(stdout, "ScheduleFire", map[string]any{
+			"schedule": map[string]any{"name": s.schedule},
+			"status":   map[string]any{"status": "succeeded"},
+			"flow":     map[string]any{"name": s.scheduleFlow, "status": "ok"},
+		})
 	case prefix(args, "schedule", "remove") && hasJSON(args) && hasArg(args, "--crontab"):
 		if err := s.clearCrontab(); err != nil {
 			return s.protocolError(stderr, err.Error())
 		}
 		s.seen["schedule_remove"]++
-		return writeScriptedEnvelope(stdout, "ScheduleRemove", nil)
+		return writeScriptedEnvelope(stdout, "ScheduleRemove", map[string]any{"name": s.schedule})
 	case prefix(args, "reverse", "plan") && !hasJSON(args):
 		if !hasFlag(args, "--source-table") || !hasFlag(args, "--destination") || !hasFlag(args, "--action") {
 			return s.protocolError(stderr, "reverse plan requires source table, destination, and action")
@@ -215,6 +235,10 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		approvalToken := fmt.Sprintf("scripted-approval-%d", s.nextPlan)
 		s.plans[planID] = scriptedPlan{action: action, approvalToken: approvalToken}
 		s.seen["reverse_plan"]++
+		if action == "delete" {
+			_, _ = fmt.Fprintf(stdout, "Created reverse plan %s\nPreview required before an approval token is issued.\n", planID)
+			return 0
+		}
 		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s\nApproval token: %s\n", planID, approvalToken)
 		return 0
 	case prefix(args, "reverse", "preview") && hasJSON(args) && len(args) == 4:
@@ -224,11 +248,24 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		s.previewed[args[2]] = true
 		s.seen["reverse_preview"]++
 		return writeScriptedEnvelope(stdout, "ReversePlanPreview", map[string]any{"plan": map[string]any{"id": args[2], "records": 1}})
-	case prefix(args, "reverse", "run") && hasJSON(args) && hasFlag(args, "--approve"):
+	case prefix(args, "reverse", "preview") && !hasJSON(args) && len(args) == 3:
+		plan, ok := s.plans[args[2]]
+		if !ok {
+			return s.protocolError(stderr, "reverse preview received an unknown plan")
+		}
+		s.previewed[args[2]] = true
+		s.seen["reverse_preview"]++
+		_, _ = fmt.Fprintf(stdout, "Reverse plan %s previewed\nApproval token: %s\n", args[2], plan.approvalToken)
+		return 0
+	case prefix(args, "reverse", "run") && hasJSON(args) && hasFlag(args, "--approval-token-stdin"):
 		return s.runReverse(args, root, stdout, stderr)
 	default:
 		return s.protocolError(stderr, "unexpected command: "+strings.Join(args, " "))
 	}
+}
+
+func isTypedCompatibilityRefusal(mode string) bool {
+	return mode == "full_refresh_overwrite_deduped" || mode == "incremental_append_deduped"
 }
 
 func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.Writer) int {
@@ -240,11 +277,11 @@ func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.W
 	if !ok {
 		return s.protocolError(stderr, "reverse run received an unknown plan")
 	}
-	if approvalToken := flagValue(args, "--approve"); approvalToken != plan.approvalToken {
-		return s.protocolError(stderr, "reverse run received an invalid approval token")
-	}
-	if plan.action == "create" && !s.previewed[planID] {
+	if !s.previewed[planID] {
 		return s.protocolError(stderr, "reverse run occurred before its preview")
+	}
+	if plan.action == "delete" && flagValue(args, "--confirm") != "destructive" {
+		return s.protocolError(stderr, "destructive cleanup requires --confirm destructive")
 	}
 	if s.consumed[planID] {
 		s.replays[planID]++
@@ -319,10 +356,11 @@ func (s *scriptedCLI) appendOutboxAction(root, action string) error {
 
 func (s *scriptedCLI) writeCrontabSentinel() error {
 	path := os.Getenv("PM_CRONTAB_FILE")
-	if path == "" || s.schedule == "" {
-		return fmt.Errorf("scripted schedule install missing crontab path or schedule name")
+	if path == "" || s.schedule == "" || s.scheduleFlow == "" || s.root == "" {
+		return fmt.Errorf("scripted schedule install missing crontab path, schedule name, flow, or root")
 	}
-	return os.WriteFile(path, []byte("# pm-schedule-"+s.schedule+"\n"), 0o600)
+	line := "0 3 * * *  pm --root " + s.root + " flow run " + s.scheduleFlow + " --json  # pm-schedule-" + s.schedule + "\n"
+	return os.WriteFile(path, []byte(line), 0o600)
 }
 
 func (s *scriptedCLI) clearCrontab() error {
@@ -354,6 +392,9 @@ func (s *scriptedCLI) assertProtocol(t *testing.T) {
 		}
 		if got := s.seen["reverse_run"]; got != 2 {
 			t.Errorf("scripted write lifecycle executed %d fresh plans, want exactly create+cleanup", got)
+		}
+		if got := s.seen["reverse_preview"]; got != 2 {
+			t.Errorf("scripted write lifecycle previewed %d plans, want exactly create+cleanup", got)
 		}
 		if got := s.seen["reverse_replay"]; got != 1 {
 			t.Errorf("scripted write lifecycle replayed consumed approval %d times, want exactly one negative replay", got)

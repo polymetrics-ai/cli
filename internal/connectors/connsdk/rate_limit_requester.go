@@ -22,6 +22,17 @@ type RateLimitRequest struct {
 	Attempt int // one-based logical Requester send
 }
 
+type RateLimitRoute struct {
+	Method  string
+	Path    string
+	Attempt int
+}
+
+type RateLimitRouteResolver interface {
+	AdmitRoute(context.Context, RateLimitRoute) (string, error)
+	ObserveRoute(context.Context, RateLimitRoute, RateLimitObservation)
+}
+
 // RateLimitAdmission gates a logical Requester send. Implementations must honor
 // ctx so a rate-limit wait cannot outlive the caller. An admission error
 // prevents the requester from sending that attempt. A successful call permits
@@ -38,6 +49,38 @@ type RateLimitObserver interface {
 	Observe(ctx context.Context, observation RateLimitObservation)
 }
 
+// RateLimitEventType records one auditable state transition in the request
+// admission path. These values intentionally describe only control-flow: no
+// URL, raw header, response body, credential, or scope identity is retained.
+type RateLimitEventType string
+
+const (
+	RateLimitEventAttempt RateLimitEventType = "attempt"
+	RateLimitEventWait    RateLimitEventType = "wait"
+	RateLimitEventReset   RateLimitEventType = "reset"
+	RateLimitEventNotSent RateLimitEventType = "not_sent"
+)
+
+// RateLimitEvent is the bounded event emitted around an admitted logical
+// requester send. A not_sent event is emitted only when admission prevented a
+// provider send; deadline_cutoff distinguishes a caller deadline from another
+// fail-closed admission refusal.
+type RateLimitEvent struct {
+	Type       RateLimitEventType
+	Method     string
+	Attempt    int
+	DurationMS int64
+	ResetAt    time.Time
+	Reason     string
+}
+
+// RateLimitEventSink receives request-admission events synchronously. It is a
+// reporting seam, not a control seam: a sink cannot change whether the
+// request is admitted or observed.
+type RateLimitEventSink interface {
+	RecordRateLimitEvent(RateLimitEvent)
+}
+
 // RateLimitObservationSource identifies the provider signal that made an
 // observation relevant. A response can carry several parsed fields; Source
 // names the most specific timing/status signal without retaining raw headers.
@@ -46,7 +89,20 @@ type RateLimitObservationSource string
 const (
 	RateLimitObservationSourceRetryAfter RateLimitObservationSource = "retry_after"
 	RateLimitObservationSourceHeaders    RateLimitObservationSource = "response_headers"
+	RateLimitObservationSourceBody       RateLimitObservationSource = "response_body"
 	RateLimitObservationSourceHTTP429    RateLimitObservationSource = "http_429"
+)
+
+// RateLimitCostSource is the declaration-approved provider signal that
+// supplied an actual request cost. It lets a limiter apply the cost only to
+// the independently declared resource family that owns it. In particular,
+// GitHub's GraphQL primary query cost must not be mistaken for its separate
+// secondary point budget.
+type RateLimitCostSource string
+
+const (
+	RateLimitCostSourceResponseHeader   RateLimitCostSource = "response_header"
+	RateLimitCostSourceGraphQLRateLimit RateLimitCostSource = "graphql_rate_limit"
 )
 
 // RateLimitObservation is a typed subset of provider rate-limit response
@@ -54,15 +110,17 @@ const (
 // (for example, remaining=0 or Retry-After: 0). It deliberately retains no
 // raw response headers, body, URL, or credential-derived data.
 type RateLimitObservation struct {
-	Source    RateLimitObservationSource
-	Status    int
-	Attempt   int // same logical-send count as RateLimitRequest.Attempt
-	Attempted bool
+	Source     RateLimitObservationSource
+	Status     int
+	Attempt    int // same logical-send count as RateLimitRequest.Attempt
+	Attempted  bool
+	ObservedAt time.Time
 
-	RetryAfter    time.Duration
-	HasRetryAfter bool
-	ResetAt       time.Time
-	HasReset      bool
+	RetryAfter      time.Duration
+	HasRetryAfter   bool
+	ResetAt         time.Time
+	HasReset        bool
+	ResetAtAbsolute bool
 
 	Limit        int64
 	HasLimit     bool
@@ -70,11 +128,11 @@ type RateLimitObservation struct {
 	HasRemaining bool
 
 	// Cost is the provider-reported cost for a request whose selected policy
-	// declared RateLimitCost.ResponseHeader. It is deliberately scalar and
-	// typed: the requester never retains a response header map or body in the
-	// observation.
-	Cost    float64
-	HasCost bool
+	// declared a matching cost source. It is deliberately scalar and typed: the
+	// requester never retains a response header map or body in the observation.
+	Cost       float64
+	HasCost    bool
+	CostSource RateLimitCostSource
 }
 
 // RateLimitError reports a terminal HTTP 429. It preserves the existing
@@ -82,12 +140,13 @@ type RateLimitObservation struct {
 // callers that need to make a safe, contextual decision. A zero ResetAt means
 // the provider did not send a parseable reset signal.
 type RateLimitError struct {
-	HTTPError     *HTTPError
-	Source        RateLimitObservationSource
-	RetryAfter    time.Duration
-	HasRetryAfter bool
-	ResetAt       time.Time
-	HasReset      bool
+	HTTPError       *HTTPError
+	Source          RateLimitObservationSource
+	RetryAfter      time.Duration
+	HasRetryAfter   bool
+	ResetAt         time.Time
+	HasReset        bool
+	ResetAtAbsolute bool
 }
 
 func (e *RateLimitError) Error() string {
@@ -112,17 +171,19 @@ func (e *RateLimitError) Unwrap() error {
 // without turning arbitrary headers into event payloads.
 func rateLimitObservation(status int, header http.Header, attempt int, now time.Time, costHeader string) (RateLimitObservation, bool) {
 	observation := RateLimitObservation{
-		Status:    status,
-		Attempt:   attempt,
-		Attempted: true,
+		Status:     status,
+		Attempt:    attempt,
+		Attempted:  true,
+		ObservedAt: now,
 	}
 
-	if delay, resetAt, ok := parseRetryAfterAt(header.Get("Retry-After"), now); ok {
+	if delay, resetAt, absolute, ok := parseRetryAfterAtWithAbsolute(header.Get("Retry-After"), now); ok {
 		observation.Source = RateLimitObservationSourceRetryAfter
 		observation.RetryAfter = delay
 		observation.HasRetryAfter = true
 		observation.ResetAt = resetAt
 		observation.HasReset = true
+		observation.ResetAtAbsolute = absolute
 	}
 	if limit, ok := parseNonNegativeRateLimitHeader(header, "RateLimit-Limit", "X-RateLimit-Limit", "X-Rate-Limit-Limit"); ok {
 		observation.Limit = limit
@@ -133,14 +194,16 @@ func rateLimitObservation(status int, header http.Header, attempt int, now time.
 		observation.HasRemaining = true
 	}
 	if !observation.HasReset {
-		if resetAt, ok := parseRateLimitReset(header, now); ok {
+		if resetAt, absolute, ok := parseRateLimitResetWithAbsolute(header, now); ok {
 			observation.ResetAt = resetAt
 			observation.HasReset = true
+			observation.ResetAtAbsolute = absolute
 		}
 	}
 	if cost, ok := parsePositiveRateLimitCost(header.Get(costHeader)); ok {
 		observation.Cost = cost
 		observation.HasCost = true
+		observation.CostSource = RateLimitCostSourceResponseHeader
 	}
 
 	switch {
@@ -182,45 +245,46 @@ func parseNonNegativeRateLimitHeader(header http.Header, names ...string) (int64
 	return 0, false
 }
 
-// parseRateLimitReset supports RFC 9333's RateLimit-Reset delta-seconds and
-// the widely used X-RateLimit-Reset Unix-seconds convention. Retry-After is
-// handled separately and wins whenever it is present because it is explicit
-// about the immediate retry.
-func parseRateLimitReset(header http.Header, now time.Time) (time.Time, bool) {
+func parseRateLimitResetWithAbsolute(header http.Header, now time.Time) (time.Time, bool, bool) {
 	if seconds, ok := parseNonNegativeRateLimitHeader(header, "RateLimit-Reset"); ok {
 		if delay, valid := durationFromSeconds(seconds); valid {
-			return now.Add(delay), true
+			return now.Add(delay), false, true
 		}
 	}
 	if epoch, ok := parseNonNegativeRateLimitHeader(header, "X-RateLimit-Reset", "X-Rate-Limit-Reset"); ok {
-		return time.Unix(epoch, 0).UTC(), true
+		return time.Unix(epoch, 0).UTC(), true, true
 	}
-	return time.Time{}, false
+	return time.Time{}, false, false
 }
 
 // parseRetryAfterAt parses Retry-After as either delay-seconds or an HTTP
 // date relative to now. It returns the provider reset time alongside the wait
 // duration so callers do not have to parse the header more than once.
 func parseRetryAfterAt(value string, now time.Time) (time.Duration, time.Time, bool) {
+	delay, resetAt, _, ok := parseRetryAfterAtWithAbsolute(value, now)
+	return delay, resetAt, ok
+}
+
+func parseRetryAfterAtWithAbsolute(value string, now time.Time) (time.Duration, time.Time, bool, bool) {
 	value = strings.TrimSpace(value)
 	if value == "" {
-		return 0, time.Time{}, false
+		return 0, time.Time{}, false, false
 	}
 	if seconds, err := strconv.ParseInt(value, 10, 64); err == nil {
 		delay, ok := durationFromSeconds(seconds)
 		if !ok {
-			return 0, time.Time{}, false
+			return 0, time.Time{}, false, false
 		}
-		return delay, now.Add(delay), true
+		return delay, now.Add(delay), false, true
 	}
 	if resetAt, err := http.ParseTime(value); err == nil {
 		delay := resetAt.Sub(now)
 		if delay < 0 {
 			delay = 0
 		}
-		return delay, resetAt, true
+		return delay, resetAt, true, true
 	}
-	return 0, time.Time{}, false
+	return 0, time.Time{}, false, false
 }
 
 func durationFromSeconds(seconds int64) (time.Duration, bool) {

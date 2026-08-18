@@ -57,7 +57,7 @@ ETL STREAMS
     fields: amount(number), balance(number), client_id(string), created_at(integer), currency_id(string), date(string), due_date(string), id(string), is_deleted(boolean), number(string), status_id(string), updated_at(integer), valid_until(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Invoice Ninja API read of client and billing data

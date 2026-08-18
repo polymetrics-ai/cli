@@ -1,0 +1,99 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_batch2_actions_downloads_view",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:57:23.331Z",
+  "run_id": "github-slice2-agent_derived_batch2_actions_downloads_view",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:c01d802a1204ff4661d8e844d3172ea28f95386dad9e746d50fd7a84101fdd94}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:cdcbfb35c055e83a079c968c8b5a2239af989ab918c9e811ababe73bb68b8d3f}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_batch2_actions_downloads_view",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:1df7d84587d6cf6c49f0378d4dcfc1e477ef84a2c0415b7be26be473c83d531a}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [
+              {
+                "architecture": "{{pmcertfp:v1:6bd03a4ddee13da97a8b63adf03c146213918a45951276152b9e764fd26669ee}}",
+                "download_url_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "filename": "{{pmcertfp:v1:6ec99ea6df517d3c6574dd49a11bb0ff8e383d52e16120a0232e6c09c95e13c5}}",
+                "os": "{{pmcertfp:v1:a999d1a1113d23dc563dc64a553fc957534a38a9e564ab88fedbd0e13c1d77ec}}",
+                "sha256_checksum": "{{pmcertfp:v1:f48f211f41a9eca0df3b42d151f9068517cb9e843d5d4f79fc161111f7fcad55}}"
+              },
+              {
+                "architecture": "{{pmcertfp:v1:6bd03a4ddee13da97a8b63adf03c146213918a45951276152b9e764fd26669ee}}",
+                "download_url_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "filename": "{{pmcertfp:v1:ee058a67376bd0539eb33fe42a04951c6a13c189d24f7c0620561b50e9c914e0}}",
+                "os": "{{pmcertfp:v1:f403b80c9d70d75f700230f39e9888abc896404dc1e92d379c7d82a75e13e370}}",
+                "sha256_checksum": "{{pmcertfp:v1:d9307a029e589ab249c0833a3d064b8531675db2db82b43504d64f8cebba8711}}"
+              },
+              {
+                "architecture": "{{pmcertfp:v1:6bd03a4ddee13da97a8b63adf03c146213918a45951276152b9e764fd26669ee}}",
+                "download_url_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "filename": "{{pmcertfp:v1:6397aa53a023dd3ad860da9156cf1f32c5e4381a9d21f4b3d1c8bce1a109c60c}}",
+                "os": "{{pmcertfp:v1:9f46e2f1ddea42e2ab16de4f4e8581949bfa198fad4d4a1685af924e518eb279}}",
+                "sha256_checksum": "{{pmcertfp:v1:f2e5e22595d6c2a9dad5ed8b5179d0940caf60fa60d2226a8503e3489b823ef9}}"
+              },
+              {
+                "architecture": "{{pmcertfp:v1:6abcf469826424ca179ae420ff39d8fde5334a03295abef3d387afd1707a1b5c}}",
+                "download_url_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "filename": "{{pmcertfp:v1:f91fa49607f4f2af8559c9c379671d9ce550462f75801e41a108133e5f464c49}}",
+                "os": "{{pmcertfp:v1:f403b80c9d70d75f700230f39e9888abc896404dc1e92d379c7d82a75e13e370}}",
+                "sha256_checksum": "{{pmcertfp:v1:7e1b5cee5b900d404250dcd62c131ecb191b633ab3912a5887e557bbfcec6b1c}}"
+              },
+              {
+                "architecture": "{{pmcertfp:v1:082c1e630eb328a2bda3554bd0486084d9f1be1653953d0a2671683bb69b17a4}}",
+                "download_url_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "filename": "{{pmcertfp:v1:c624381a76d3aad6c5e2d306f59ea2da2ba7904eed8d8e9e0fa489eb75e8fbc6}}",
+                "os": "{{pmcertfp:v1:f403b80c9d70d75f700230f39e9888abc896404dc1e92d379c7d82a75e13e370}}",
+                "sha256_checksum": "{{pmcertfp:v1:d918c5c645d4da4d268396008802268018bee87ab05c7daa1be022db8087de9e}}"
+              },
+              {
+                "architecture": "{{pmcertfp:v1:082c1e630eb328a2bda3554bd0486084d9f1be1653953d0a2671683bb69b17a4}}",
+                "download_url_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "filename": "{{pmcertfp:v1:1a88165952aa2918e023d1158724111ca8c5b62ab2ad19db03d922cbd430e9f8}}",
+                "os": "{{pmcertfp:v1:a999d1a1113d23dc563dc64a553fc957534a38a9e564ab88fedbd0e13c1d77ec}}",
+                "sha256_checksum": "{{pmcertfp:v1:e31367be6a2f5dc0552764640117d376065dedca38ad36391eacb435af29a784}}"
+              },
+              {
+                "architecture": "{{pmcertfp:v1:082c1e630eb328a2bda3554bd0486084d9f1be1653953d0a2671683bb69b17a4}}",
+                "download_url_redacted": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                "filename": "{{pmcertfp:v1:915941e927359ff10b43c0a7484fd4ab35ec84fe0709e3ce6f010d832827e5b4}}",
+                "os": "{{pmcertfp:v1:9f46e2f1ddea42e2ab16de4f4e8581949bfa198fad4d4a1685af924e518eb279}}",
+                "sha256_checksum": "{{pmcertfp:v1:8aef242ab548d2d9a11b936f101a70b49206aae14a7cc2f40641725114fc3b97}}"
+              }
+            ],
+            "original_bytes": 1412,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

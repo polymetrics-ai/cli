@@ -89,7 +89,7 @@ ETL STREAMS
     fields: active(boolean), code(string), description(string), developer(object), external_links(array), id(string), name(string), notes(string), release_date(string), started_tracking(string), tags(array), tracked_platforms(array)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   reply_to_review:

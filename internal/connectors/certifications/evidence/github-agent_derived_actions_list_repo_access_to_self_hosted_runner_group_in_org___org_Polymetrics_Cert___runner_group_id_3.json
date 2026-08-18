@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_actions_list_repo_access_to_self_hosted_runner_group_in_org___org_Polymetrics_Cert___runner_group_id_3",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:14:07.687Z",
+  "run_id": "github-slice2-agent_derived_actions_list_repo_access_to_self_hosted_runner_group_in_org___org_Polymetrics_Cert___runner_group_id_3",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:8e092fd2855188df87ac962446650fc03d1b5247971343fd0e533280fbc90aec}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_actions_list_repo_access_to_self_hosted_runner_group_in_org___org_Polymetrics_Cert___runner_group_id_3",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:f37ecec05a3d302b3a4ce15152cd6f9e1a93d4034e19798e7f1240c4860fbc4f}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "repositories": [],
+              "total_count": "{{pmcertfp:v1:10b99bf4cebac4343df7bfc3a523fcf64975a5e5e82cea7cc1afc7099fe353b8}}"
+            },
+            "original_bytes": 35,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

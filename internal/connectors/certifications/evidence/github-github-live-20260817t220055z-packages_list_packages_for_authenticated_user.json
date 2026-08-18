@@ -1,0 +1,49 @@
+{
+  "connector": "github",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope": "observed_operations",
+  "credential_scope_proof": "protocol_exchanges",
+  "executed_at": "2026-08-17T22:00:55Z",
+  "function_kind": "command:direct_read_agent_derived_packages_list_packages_for_authenticated_user",
+  "proof": {
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:232db93aef59bb6c7d000f34f53c4d0bf63bf90749553015318a270b0f2c04f0}}"
+    ],
+    "database_exchanges": [],
+    "http_exchanges": [
+      {
+        "operation": "direct_read_agent_derived_packages_list_packages_for_authenticated_user",
+        "request": {
+          "body": {
+            "encoding": "none",
+            "original_bytes": 0,
+            "truncated": false,
+            "value": null
+          },
+          "headers": [],
+          "method": "GET",
+          "query": [],
+          "target": "{{pmcertfp:v1:728e9b76763918add144bf082c4a7540b87f3dfc3e4757e90b353d1d5a973498}}"
+        },
+        "response": {
+          "body": {
+            "encoding": "json",
+            "original_bytes": 2,
+            "truncated": false,
+            "value": []
+          },
+          "headers": [],
+          "status": 200
+        }
+      }
+    ],
+    "pm_binary_sha256": "5d7e676587d8e62a2b9efed88892f22ef445a3ced30fb344c41bd44ab477b098",
+    "pm_command_fingerprint": "{{pmcertfp:v1:8cff522e5c50755a573050c0bda71e0efbd81e522fb953a71ba9b3581fe3211a}}",
+    "redaction_strategy": "repository_salted_hmac_sha256_v1"
+  },
+  "provider": "github",
+  "run_id": "github-live-20260817t220055z-packages_list_packages_for_authenticated_user",
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed"
+}

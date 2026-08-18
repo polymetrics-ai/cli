@@ -1,0 +1,157 @@
+{
+  "issue": 4069,
+  "parent_issue": 3897,
+  "specification_owner_issue": 4066,
+  "program_parent_issue": 3988,
+  "branch": "fm/cli-4071-collision-scope-fix-r1",
+  "required_base_branch": "fix/4069-flow-case-equivalent-unique-tables-r1",
+  "immutable_start_head": "659efd8a0d69f26b55fcbd3c02150e995c159519",
+  "status": "correction_3_child_pr_delivery_green_with_docs_only_evidence_tip",
+  "correction_budget": {
+    "used_before": 2,
+    "active_correction": 3,
+    "limit": 5,
+    "remaining_after_active_correction": 2,
+    "lineage": "fresh #4069 child; #4066 remains the exhausted specification owner; this is correction 3 of 5"
+  },
+  "issue_gate": {
+    "parent_and_owner_read": true,
+    "bounded_duplicate_search": "no open issue owned the exact two-unique-case-equivalent-table matrix",
+    "created_issue": 4069,
+    "attached_to_parent": 3897
+  },
+  "manual_gsd_fallback": {
+    "used": true,
+    "reason": "The issue is not an active numbered ROADMAP phase, Pi GSD execution is unavailable in this worker, and the canonical contract forbids role delegation.",
+    "resolved_commands": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ],
+    "inline_execution": true
+  },
+  "skills": [
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-database",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-code-style",
+    "golang-lint",
+    "golang-documentation"
+  ],
+  "safety": {
+    "credentials_or_secrets": "none used",
+    "provider_or_reverse_etl": "none",
+    "transport_or_production_wiring": "out of scope",
+    "cpu_coordination": "transport heavy-test gate cleared; broad local validation completed before the next deliberate Firstmate gate"
+  },
+  "results": {
+    "immutable_head_gate": "passed",
+    "no_mistakes_doctor": "passed",
+    "red": "passed: targeted real Parquet/DuckDB test exited 1 with the audited duplicate-view error while selected owner reads passed",
+    "green": "passed: selected owner reads, generic SELECT 1, and omitted flow typed ambiguity/remedy pass in the strict target",
+    "targeted_regression_fence": "passed: #4066 flow alias/case/action selectors, focused app query matrix, and schedule re-entry",
+    "targeted_commit": "committed: strict RED, minimum GREEN, and focused evidence",
+    "affected_package_tests": "passed: internal/app, internal/cli, internal/flow, internal/warehouse, and internal/schedule",
+    "focused_race": "passed: #3897/#4066/#4069 query, flow, and warehouse selectors",
+    "local_quality_and_generators": "passed: gofmt, candidate diff check, go vet, make lint, direct app/cli lint, agent contract, connectorgen validate/surface-sync/certification-matrix, and connectorgen package tests",
+    "docs_help_website": "passed: generated connection/query manuals and golden transcripts, docs validator, built help/manual inspection, website typecheck/lint/build; 13 website lint warnings and the local default-auth build diagnostic are inherited outside changed paths",
+    "manual_verify_work": "passed: correction-1 acceptance evidence satisfied through documented inline/manual GSD fallback",
+    "manual_code_review": "passed: standard inline correction-1 review found no unresolved candidate finding",
+    "pr_issue_guard": "passed locally against the live draft PR title and its Refs #4069/#3897 plus parent #4060 linkage",
+    "inherited_baseline": "seven older #3897 planning-file trailing-whitespace findings remain outside the child range",
+    "website_generated_data_green": "passed: exact one-file aggregate hash, second-generation idempotence, candidate diff check, lint/typecheck/unit/script/build; browser E2E is reserved for natural CI because local browser installation is not authorized",
+    "correction_2_targeted_green": "passed: exact flow manual RED was reproduced, flowHelp plus same-commit connectionsHelp source now generate tracked manuals, transcript generator updated six expected entries and is idempotent, website generator is idempotent with no diff",
+    "correction_2_broad_verification": "passed: focused and full internal/cli tests, vet/lint/build, docs/contract/connectorgen checks, website lint/typecheck/unit/script/build, candidate diff scope, and verify-gsd-workflow; inherited website warnings are separate",
+    "correction_2_manual_verify_work": "passed: resolved verify-work prompt executed inline under the documented single-worker fallback; no acceptance gap",
+    "correction_2_manual_code_review": "passed: resolved code-review prompt executed inline under the documented single-worker fallback; no candidate finding",
+    "correction_3_red": "passed: restored non-local ETL regression exits 1 on exact source head 3b75f4a62 because the unconditional local-inventory preflight returns the legacy same-owner typed error before source or destination execution",
+    "correction_3_green": "passed on verified production commit a49ae952d52a6edf9786cc90e02825e2414f5b44; GSD evidence checkpoint 5a4f3d23645d3046d02055273fedd9a8b9dd67d1 adds evidence only, so the non-local run loads one record, acknowledges one batch, and makes one source request while the local true-positive remains refused before beginRun",
+    "correction_3_broad_verification": "passed: full internal/app package, gofmt, candidate diff check, go vet, direct internal/app lint, go build ./cmd/pm, tidy, configured lint, release-target parity, agent contract, connectorgen surface-sync, and verify-gsd-workflow",
+    "correction_3_manual_verify_work": "passed inline under the documented manual-GSD fallback; RED/GREEN, true-positive, package, quality, and child-PR delivery acceptance are covered",
+    "correction_3_manual_code_review": "passed inline under the documented manual-GSD fallback; the selected-destination guard restores the generic materialization abstraction without connector literals or invariant weakening",
+    "validated_head": "af558aca4c2d77cb66a4329367df5c3b21623775",
+    "validated_head_meaning": "the exact child-PR code head validated by no-mistakes; this RUN-STATE commit is on top of it and contains no behavioural change",
+    "child_pr_delivery": "published: #4101 (https://github.com/polymetrics-ai/cli/pull/4101) from fm/cli-4071-collision-scope-fix-r1 onto fix/4069-flow-case-equivalent-unique-tables-r1",
+    "pr_4071_mutation": "body restored to accuracy only; #4071 was not retargeted, merged, closed, advanced, or readiness-mutated",
+    "next_gate": "completed: publish this documentation-only evidence tip, update #4101's body with both validated_head and final tip, then read back head and base"
+  },
+  "correction_1": {
+    "audit_handoff": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4066-case-equivalent-unique-tables-r1/correction-1-sol-audit-handoff.md",
+    "audit_report": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-4071-final-sol-audit-r1/report.md",
+    "canonical_finish_plan_sha256": "939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408",
+    "audited_head": "d9022359e7b7bc2f7eb262c16177b52010681192",
+    "verdict": "FINDINGS / DO NOT MERGE",
+    "policy": "reject new same-owner ASCII-case-equivalent local-warehouse destination tables; preserve legacy state; fence legacy sync before beginRun; return a typed same-owner SQL collision while unrelated SQL remains available",
+    "no_mistakes_monitor": {
+      "run": "01KZSJG7P7QREZSZ7N52TPBA5F",
+      "status": "running CI monitor",
+      "branch_sync": "monitor remains at d9022359; local correction commits are intentionally unpushed pending Firstmate authorization",
+      "follow_up_authority": "version-matched axi help explicitly permits post-pipeline follow-up commits on top of the existing branch"
+    },
+    "red_status": "committed: focused app and CLI Parquet/DuckDB RED reproduces creation, pre-mutation, SQL, flow, and schedule-re-entry gaps; exact direct resolver control retained",
+    "targeted_green_status": "passed: C1-C5 focused app/CLI tests plus inherited #4066/#3897 query, flow, alias, selector, and schedule fence",
+    "implementation": "one shared ASCII DuckDB key helper; creation admission; credential-free whole local-warehouse inventory preflight before beginRun; declared-inventory plus resolver-snapshot SQL policy; typed warehouse error; exact direct resolver reads unchanged",
+    "docs_parity": "passed: embedded CLI help, generated manuals/goldens, docs validator, website docs/typecheck/lint/build recorded in correction-1 broad trace",
+    "broad_verification": "passed: affected packages, focused race, formatting/diff, vet/lint/tidy/build/smoke, generators/surface-sync/certification/release, docs/help/website, issue guard, and manual GSD verify/review; see traces/correction-1-broad-verification.txt",
+    "website_generated_data_recovery": {
+      "authorized": true,
+      "kind": "deterministic generated aggregate gap; remains correction 1/5",
+      "precondition_head": "9a5b23fe14aba16d04f55b28ff52be0a5940cb68",
+      "red_runs": [31579519649, 31579519744],
+      "owned_output": "website/lib/docs.generated.ts",
+      "expected_sha256": "38c8230504d3b83671c58af11dc3b69bf2eea08cf14fe7d3424dba48e3aa2106",
+      "local_green": "two no-install generator invocations were idempotent; lint/typecheck/unit/script/build passed; 13 untouched lint warnings and non-fatal default-auth build diagnostics remain inherited",
+      "no_mistakes": "start one fresh run without --yes and with --skip=pr,ci after committed GREEN"
+    }
+  },
+  "correction_2": {
+    "decision_key": "flow-manual-golden-drift",
+    "authorized": true,
+    "canonical_finish_plan_sha256": "939f14f61defd993f8ad0335a5aeb617d97083c9f73a6a75259d0e312ae8f408",
+    "exact_head": "678e294568a8a010a460ecb05fe11a42e1eb40f2",
+    "causal_ci_run": 31590254616,
+    "red_selector": "go test -timeout 20m ./internal/cli -run '^TestGoldenDocsGenerateMatchesTrackedCLIManuals$' -count=1",
+    "source_of_truth": "internal/cli/docs.go:flowHelp",
+    "companion_source_drift": "the same pipeline document commit left connectionsHelp at 'its local sync' while tracked connections.md says 'any local sync'; it is corrected only to restore generated-manual parity",
+    "derived_outputs": [
+      "docs/cli/flow.md",
+      "internal/cli/testdata/golden_transcripts.json",
+      "website/lib/docs.generated.ts when its checked-in generator produces a change"
+    ],
+    "scope_fences": "no runtime behavior change, manual docs source edit, CI rerun, PR mutation, new issue, or topology change",
+    "targeted_green": "manual golden, transcript, connector-doc generation selectors and direct help/bare/JSON flow checks pass",
+    "broad_verification": "passed: full internal/cli, Go/docs/generator/lint, no-install website checks, candidate diff scope, and repository GSD-workflow verification",
+    "manual_verify_work": "passed inline under the documented manual-GSD fallback",
+    "manual_code_review": "passed inline under the documented manual-GSD fallback; no candidate finding"
+  },
+  "correction_3": {
+    "source_head": "3b75f4a62fd8d743ec883a5b824164374f661857",
+    "validated_head": "af558aca4c2d77cb66a4329367df5c3b21623775",
+    "validated_head_meaning": "the exact code commit validated by no-mistakes; this evidence record is committed on top of that head with no behavioural change",
+    "child_pr_number": 4101,
+    "child_pr_url": "https://github.com/polymetrics-ai/cli/pull/4101",
+    "required_child_base": "fix/4069-flow-case-equivalent-unique-tables-r1",
+    "delivery_status": "published and CI green; final evidence tip is documentation-only on top of validated_head; #4071 remains unadvanced",
+    "problem": "the global RunETL legacy local-warehouse inventory preflight denies a non-local ETL when any retained local connection has a same-owner case-equivalent destination collision",
+    "implementation": "RunETL calls validateConfiguredLocalWarehouseDestinationTables only when the selected connection satisfies the existing credential-free LocalWarehouseMaterializer abstraction",
+    "portability": "no connector name or warehouse literal in shared code; no path outside internal/connectors/defs/<connector>/ contains connector-specific behavior",
+    "red_selector": "go test -timeout 20m ./internal/app -run '^TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL$' -count=1 -v",
+    "green_selectors": [
+      "go test -timeout 20m ./internal/app -run '^(TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL|TestLegacySameOwnerCaseEquivalentInventorySurvivesOpenAndFailsBeforeMutation)$' -count=1 -v",
+      "go test -timeout 20m ./internal/app -count=1"
+    ],
+    "red_trace": "traces/correction-3-nonlocal-collision-red.txt",
+    "green_trace": "traces/correction-3-destination-scoped-collision-green.txt",
+    "manual_verify_work": "passed inline under the existing no-delegation fallback",
+    "manual_code_review": "passed inline under the existing no-delegation fallback; no candidate finding",
+    "pr_body_trace": "traces/correction-3-pr-body.md"
+  }
+}

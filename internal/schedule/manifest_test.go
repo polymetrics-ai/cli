@@ -39,6 +39,23 @@ func TestManifestSaveLoad(t *testing.T) {
 	}
 }
 
+func TestManifestContainsNoScheduleAuthorizationCarrier(t *testing.T) {
+	root := t.TempDir()
+	m := makeManifest("safe-schedule-state")
+	if err := Save(root, m, false); err != nil {
+		t.Fatalf("Save: %v", err)
+	}
+	data, err := os.ReadFile(manifestPath(root, m.Name))
+	if err != nil {
+		t.Fatalf("ReadFile: %v", err)
+	}
+	for _, forbidden := range []string{"authorization", "approval", "token", "credential"} {
+		if containsStr(string(data), forbidden) {
+			t.Fatalf("schedule manifest contains forbidden authority field %q: %s", forbidden, data)
+		}
+	}
+}
+
 func TestManifestList(t *testing.T) {
 	root := t.TempDir()
 	names := []string{"alpha", "beta", "gamma"}
@@ -53,6 +70,29 @@ func TestManifestList(t *testing.T) {
 	}
 	if len(list) != len(names) {
 		t.Fatalf("List returned %d items, want %d", len(list), len(names))
+	}
+}
+
+func TestManifestListIgnoresFireState(t *testing.T) {
+	root := t.TempDir()
+	manifest := makeManifest("fired")
+	if err := Save(root, manifest, false); err != nil {
+		t.Fatalf("Save: %v", err)
+	}
+	lease, err := BeginFire(root, manifest.Name)
+	if err != nil {
+		t.Fatalf("BeginFire: %v", err)
+	}
+	if err := lease.Complete(FireReceipt{ReceiptIDs: []string{"receipt-safe"}}); err != nil {
+		t.Fatalf("Complete: %v", err)
+	}
+
+	list, err := List(root)
+	if err != nil {
+		t.Fatalf("List: %v", err)
+	}
+	if len(list) != 1 || list[0].Name != manifest.Name {
+		t.Fatalf("List returned %#v, want only %q", list, manifest.Name)
 	}
 }
 

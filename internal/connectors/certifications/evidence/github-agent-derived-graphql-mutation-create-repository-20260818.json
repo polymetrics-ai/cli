@@ -1,0 +1,158 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_create_repository",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:13:55.909098Z",
+  "run_id": "github-mut-slice1-create-repository-rrun_28d486fcce600ebf",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:96432538dfae440c30b6a642b21f411be2da56fb52e18bccd3e48e6952b5e957}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_create_repository",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:616f7a790919a72e9be1b738b5d56dfc2948977521ab8a40dc72015c99a38e15}}",
+              "query": "{{pmcertfp:v1:8d78eb759cd57c19678f405a64ac2cab8b5851a1235b66962862416e2ac2d78e}}",
+              "variables": {
+                "input": {
+                  "name": "{{pmcertfp:v1:ea0f3564ff509832ad49702f1a1044c9315def0add45c5d244fd92a176de92a1}}",
+                  "visibility": "{{pmcertfp:v1:6a2d500d572ef7cfdb4f6813d424f3fb4ee449b39827ffe4713130e04b1b495e}}"
+                }
+              }
+            },
+            "original_bytes": 274,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "createRepository": {
+                "__typename": "{{pmcertfp:v1:6f376f526f7fa31abd9f3dda8f3545e675104afda07e919d79a49f7ca5e3055c}}"
+              }
+            },
+            "original_bytes": 61,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_exact_name_owner_private",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:fb54f6bd35aa5bf37039cd1a05d6078b3b210d96072f55bef834e56b9f3bd33a}}",
+              "variables": {
+                "owner": "{{pmcertfp:v1:fdd9b5c15bab4df2d7460ce1faa3db5de0d8165130442ff6996b097f07339dab}}",
+                "name": "{{pmcertfp:v1:ea0f3564ff509832ad49702f1a1044c9315def0add45c5d244fd92a176de92a1}}"
+              }
+            },
+            "original_bytes": 245,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "repository": {
+                  "name": "{{pmcertfp:v1:ea0f3564ff509832ad49702f1a1044c9315def0add45c5d244fd92a176de92a1}}",
+                  "nameWithOwner": "{{pmcertfp:v1:450b072ad076b25dd4a917c0bff3bc85459c299c0e83faa8da2e62e5afebe6ca}}",
+                  "isPrivate": "{{pmcertfp:v1:eb6affbfe5bc66910377c4d2b9de049a38a8cdb88109aaa7e6bed8da86ce7521}}",
+                  "owner": {
+                    "login": "{{pmcertfp:v1:fdd9b5c15bab4df2d7460ce1faa3db5de0d8165130442ff6996b097f07339dab}}"
+                  }
+                }
+              }
+            },
+            "original_bytes": 217,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_repository",
+        "request": {
+          "method": "DELETE",
+          "target": "{{pmcertfp:v1:a8924eb8c03c0f65676d5e1c5d58dbeafefe4fab5980e3a0f97c0800ab3bf5a5}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 204,
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_absent",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:a8924eb8c03c0f65676d5e1c5d58dbeafefe4fab5980e3a0f97c0800ab3bf5a5}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 404,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "message": "{{pmcertfp:v1:6a3067f2d6f9edfd3b9676b0b2912d89985972655ef576b2fb74b694a9d312fe}}",
+              "documentation_url": "{{pmcertfp:v1:0983496072991d476d5bb308bb9b5eb9dc76f83f68117b62939051a229f59562}}",
+              "status": "{{pmcertfp:v1:ec54eccd7e416dbf455356157b20867a90891690778ea39e369bd0af12f08f0b}}"
+            },
+            "original_bytes": 131,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

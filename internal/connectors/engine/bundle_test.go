@@ -18,11 +18,15 @@ import (
 )
 
 func validMetadata(name string) string {
+	return metadataWithIntegrationType(name, "api")
+}
+
+func metadataWithIntegrationType(name, integrationType string) string {
 	return `{
 		"name": "` + name + `",
 		"display_name": "Test Connector",
 		"description": "a test connector",
-		"integration_type": "api",
+		"integration_type": "` + integrationType + `",
 		"release_stage": "ga",
 		"capabilities": { "check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false }
 	}`
@@ -192,6 +196,116 @@ func TestBundleLoadOptionalFilesAbsent(t *testing.T) {
 	}
 }
 
+func TestBundleLoadSyncTransportProjectsIndependentDefinition(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/sync_transport.json"] = &fstest.MapFile{Data: []byte(`{
+		"schema_version": 1,
+		"source_transport": {
+			"executor": {"family": "native_api", "id": "acme_snapshot_source"},
+			"eligible_streams": ["widgets"],
+			"modes": ["full_append"],
+			"delivery": {"idempotency": "at_least_once", "ordering": "source_ordered", "deletes": "not_available"},
+			"conformance": {"suite": "acme_transport", "run_id": "source_v1"}
+		},
+		"destination_transport": {
+			"executor": {"family": "native_database", "id": "acme_stage_destination"},
+			"eligible_actions": ["stage_append"],
+			"modes": ["full_append"],
+			"delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+			"conformance": {"suite": "acme_transport", "run_id": "destination_v1"},
+			"acknowledgement": "durable_warehouse",
+			"apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "stage_append"}],
+			"source_bindings": [{
+				"executor": {"family": "native_api", "id": "acme_snapshot_source"},
+				"eligible_streams": ["widgets"],
+				"record_mapping": {"kind": "input_fields", "inputs": [{"input": "widget_id", "field": "id"}]}
+			}]
+		}
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load() = %v", err)
+	}
+	connector := New(bundle, nil)
+	first := connector.Definition()
+	if first.SyncTransport == nil || first.SyncTransport.Source == nil || first.SyncTransport.Destination == nil {
+		t.Fatalf("Definition().SyncTransport = %#v, want the loaded source and destination declaration", first.SyncTransport)
+	}
+	if first.SyncTransport.Source.Executor.ID != "acme_snapshot_source" || first.SyncTransport.Destination.Executor.ID != "acme_stage_destination" {
+		t.Fatalf("Definition().SyncTransport = %#v, want loaded executor identities", first.SyncTransport)
+	}
+	if bindings := first.SyncTransport.Destination.SourceBindings; len(bindings) != 1 || bindings[0].Executor.ID != "acme_snapshot_source" || bindings[0].RecordMapping.Kind != connectors.SourceRecordMappingKindInputFields || len(bindings[0].RecordMapping.Inputs) != 1 || bindings[0].RecordMapping.Inputs[0] != (connectors.SourceRecordInputBinding{Input: "widget_id", Field: "id"}) {
+		t.Fatalf("Definition().SyncTransport destination source bindings = %#v, want the loaded closed mapping", bindings)
+	}
+
+	first.SyncTransport.Source.EligibleStreams[0] = "caller-mutated"
+	first.SyncTransport.Destination.SourceBindings[0].RecordMapping.Inputs[0].Field = "caller-mutated"
+	second := connector.Definition()
+	if got := second.SyncTransport.Source.EligibleStreams; len(got) != 1 || got[0] != "widgets" {
+		t.Fatalf("second Definition().SyncTransport source streams = %#v, want independent loaded projection", got)
+	}
+	if got := second.SyncTransport.Destination.SourceBindings[0].RecordMapping.Inputs[0].Field; got != "id" {
+		t.Fatalf("second Definition().SyncTransport source mapping field = %q, want independent loaded projection", got)
+	}
+}
+
+func TestBundleLoadSyncTransportRefusesUnknownOrUnsafeDeclarations(t *testing.T) {
+	valid := `{
+		"schema_version": 1,
+		"destination_transport": {
+			"executor": {"family": "native_database", "id": "acme_stage_destination"},
+			"eligible_actions": ["stage_append"],
+			"modes": ["full_append"],
+			"delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+			"conformance": {"suite": "acme_transport", "run_id": "destination_v1"},
+			"acknowledgement": "durable_warehouse",
+			"apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "stage_append"}]
+		}
+	}`
+
+	tests := []struct {
+		name   string
+		mutate func(string) string
+	}{
+		{
+			name: "unknown member",
+			mutate: func(doc string) string {
+				return strings.Replace(doc, `"schema_version": 1,`, `"schema_version": 1, "untrusted_registration": true,`, 1)
+			},
+		},
+		{
+			name: "missing schema version",
+			mutate: func(doc string) string {
+				return strings.Replace(doc, `"schema_version": 1,`, "", 1)
+			},
+		},
+		{
+			name: "unsupported schema version",
+			mutate: func(doc string) string {
+				return strings.Replace(doc, `"schema_version": 1`, `"schema_version": 2`, 1)
+			},
+		},
+		{
+			name: "change capture destination",
+			mutate: func(doc string) string {
+				return strings.Replace(doc, `"modes": ["full_append"]`, `"modes": ["change_capture"]`, 1)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/sync_transport.json"] = &fstest.MapFile{Data: []byte(tt.mutate(valid))}
+			bundle, err := Load(fsys, "acme")
+			if err == nil {
+				t.Fatalf("Load() bundle = %#v, want declaration refusal", bundle)
+			}
+		})
+	}
+}
+
 func TestBundleLoadParsesUnsupportedChangefeed(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/changefeed.json"] = &fstest.MapFile{Data: []byte(`{
@@ -274,8 +388,33 @@ func TestBundleLoadParsesCertification(t *testing.T) {
 	if got := b.Certification.Source.SourceCredentialDefaults["base_url"]; got != "https://api.example.test" {
 		t.Fatalf("source_credential_defaults.base_url = %q", got)
 	}
+	if b.Certification.Source.RequiredCredentialConfig != nil {
+		t.Fatalf("required_credential_config = %+v, want absent when it was not declared", b.Certification.Source.RequiredCredentialConfig)
+	}
 	if len(b.Certification.DirectReadCandidates) != 1 {
 		t.Fatalf("DirectReadCandidates = %+v", b.Certification.DirectReadCandidates)
+	}
+	assertions := b.Certification.DirectReadCandidates[0].OutputAssertions
+	if len(assertions) != 0 {
+		t.Fatalf("OutputAssertions = %+v, want no assertions when omitted", assertions)
+	}
+}
+
+func TestBundleLoadRejectsInvalidCertificationDirectReadOutputAssertion(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/certification.json"] = &fstest.MapFile{Data: []byte(`{
+		"schema_version": 1,
+		"direct_read_candidates": [{
+			"stage_name": "direct_read_sweep_widget",
+			"command": "widget get",
+			"args": [{"connector": true}],
+			"output_assertions": [{"json_pointer": "/kind", "equals": "ConnectorCommandDirectRead"}]
+		}]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil || !strings.Contains(err.Error(), "output_assertions") || !strings.Contains(err.Error(), "response") {
+		t.Fatalf("Load error = %v, want response-only direct-read assertion rejection", err)
 	}
 }
 
@@ -706,8 +845,27 @@ func TestBundleLoadEmbeddedGitHubCertification(t *testing.T) {
 	if b.Certification.Source.DefaultStream != "issues" {
 		t.Fatalf("GitHub certification default stream = %q", b.Certification.Source.DefaultStream)
 	}
+	if got := b.Certification.Source.RequiredCredentialConfig["tier"]; got != "certification" {
+		t.Fatalf("GitHub certification required tier = %q, want certification", got)
+	}
 	if len(b.Certification.WritePairings) != 3 {
 		t.Fatalf("GitHub certification write pairings = %d, want 3", len(b.Certification.WritePairings))
+	}
+}
+
+func TestBundleLoadEmbeddedPostgresCertification(t *testing.T) {
+	b, err := Load(defs.FS, "postgres")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, postgres): %v", err)
+	}
+	if b.Certification == nil {
+		t.Fatal("PostgreSQL Certification is nil; defs.FS must embed certification.json")
+	}
+	if got := b.Certification.Source.SourceCredentialDefaults["read_limit"]; got != "100" {
+		t.Fatalf("PostgreSQL certification read_limit = %q, want bounded 100", got)
+	}
+	if got := b.Certification.Source.SourceCredentialDefaults["sslmode"]; got != "disabled" {
+		t.Fatalf("PostgreSQL certification sslmode = %q, want disabled for the local container", got)
 	}
 }
 

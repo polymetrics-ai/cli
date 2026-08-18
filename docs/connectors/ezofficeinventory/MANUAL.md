@@ -58,7 +58,7 @@ ETL STREAMS
     fields: approver_type(string), company_id(integer), created_at(string), created_by_id(integer), id(integer), net_amount(string), paid_amount(string), payable_amount(string), po_type(string), requested_by_id(integer), sequence_num(integer), state(string), updated_at(string), vendor_id(integer)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   create_asset:

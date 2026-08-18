@@ -3,6 +3,7 @@
 package engine
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -17,6 +18,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/database"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
@@ -24,30 +26,34 @@ import (
 var namePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 var graphQLNamePattern = regexp.MustCompile(`^[_A-Za-z][_0-9A-Za-z]*$`)
 var httpHeaderNamePattern = regexp.MustCompile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
+var certificationEvidenceIdentifierPattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_.:-]*$`)
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
 	Name               string
 	Metadata           Metadata
-	Changefeed         *connectors.ChangefeedDescriptor // changefeed.json; nil when a connector has not been surveyed
-	Spec               *Schema                          // compiled spec.json; SecretKeys() from x-secret
-	RawSpec            json.RawMessage                  // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
-	HTTP               HTTPBase                         // streams.json "base"; zero value when no streams.json
-	Streams            []StreamSpec                     // streams.json "streams"
-	Writes             []WriteAction                    // writes.json "actions"; nil when writes.json absent
-	Operations         []OperationSpec                  // operations.json "operations"; nil when operations.json absent
-	RawOperations      json.RawMessage                  // verbatim operations.json bytes for validation/audit scanning
-	Schemas            map[string]*StreamSchema         // stream name -> compiled schema + PK/cursor
-	Surface            *APISurface                      // api_surface.json, when available on disk
-	directWriteSurface *APISurface                      // runtime projection from shipped rest_write declarations
-	directReadLedger   *operationEndpointLedger         // generated direct-read endpoint projection
-	CLISurface         *CLISurface                      // cli_surface.json
-	RawCLISurface      json.RawMessage                  // verbatim cli_surface.json bytes; nil when absent
-	Certification      *CertificationSpec               // certification.json; nil when absent
-	RawCertification   json.RawMessage                  // verbatim certification.json bytes; nil when absent
-	RateLimits         *connsdk.RateLimits              // rate_limits.json; nil when absent
-	Docs               string                           // docs.md
-	Fixtures           fs.FS                            // fixtures/ subtree; nil when absent
+	Changefeed         *connectors.ChangefeedDescriptor       // changefeed.json; nil when a connector has not been surveyed
+	PollingWatermark   *connectors.PollingWatermarkDescriptor // polling_watermark.json; nil until a native database declaration exists
+	SyncTransport      *connectors.SyncTransportDescriptor    // sync_transport.json; nil when no closed source/destination role is declared
+	Database           *database.Definition                   // database.json; nil for non-database or unmigrated bundles
+	Spec               *Schema                                // compiled spec.json; SecretKeys() from x-secret
+	RawSpec            json.RawMessage                        // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
+	HTTP               HTTPBase                               // streams.json "base"; zero value when no streams.json
+	Streams            []StreamSpec                           // streams.json "streams"
+	Writes             []WriteAction                          // writes.json "actions"; nil when writes.json absent
+	Operations         []OperationSpec                        // operations.json "operations"; nil when operations.json absent
+	RawOperations      json.RawMessage                        // verbatim operations.json bytes for validation/audit scanning
+	Schemas            map[string]*StreamSchema               // stream name -> compiled schema + PK/cursor
+	Surface            *APISurface                            // api_surface.json, when available on disk
+	directWriteSurface *APISurface                            // runtime projection from shipped rest_write declarations
+	directReadLedger   *operationEndpointLedger               // generated direct-read endpoint projection
+	CLISurface         *CLISurface                            // cli_surface.json
+	RawCLISurface      json.RawMessage                        // verbatim cli_surface.json bytes; nil when absent
+	Certification      *CertificationSpec                     // certification.json; nil when absent
+	RawCertification   json.RawMessage                        // verbatim certification.json bytes; nil when absent
+	RateLimits         *connsdk.RateLimits                    // rate_limits.json; nil when absent
+	Docs               string                                 // docs.md
+	Fixtures           fs.FS                                  // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -886,6 +892,9 @@ type BinaryOperationSpec struct {
 	Method   string `json:"method"`
 	Path     string `json:"path"`
 	MaxBytes int    `json:"max_bytes,omitempty"`
+	// Accept selects one fixed provider-documented response representation.
+	// It is declaration-owned and cannot be overridden by command callers.
+	Accept string `json:"accept,omitempty"`
 	// AllowOverwrite permits replacing an existing destination file.
 	AllowOverwrite bool `json:"allow_overwrite,omitempty"`
 	// ExtractArchives is DECLARED by two existing github operations but is
@@ -1036,11 +1045,184 @@ type CLIHelpTopic struct {
 // write lifecycle pairings next to the connector definition instead of in
 // shared provider-specific Go tables.
 type CertificationSpec struct {
-	SchemaVersion        int                             `json:"schema_version"`
-	Source               CertificationSourceSpec         `json:"source,omitempty"`
-	DirectReadCandidates []CertificationCommandCandidate `json:"direct_read_candidates,omitempty"`
-	BinaryCandidates     []CertificationCommandCandidate `json:"binary_candidates,omitempty"`
-	WritePairings        []CertificationWritePairing     `json:"write_pairings,omitempty"`
+	SchemaVersion        int                                       `json:"schema_version"`
+	Source               CertificationSourceSpec                   `json:"source,omitempty"`
+	DirectReadCandidates []CertificationCommandCandidate           `json:"direct_read_candidates,omitempty"`
+	DirectReadGeneration *CertificationReadCandidateGeneration     `json:"direct_read_generation,omitempty"`
+	MutationCandidates   []CertificationMutationCandidate          `json:"mutation_candidates,omitempty"`
+	MutationGeneration   *CertificationMutationCandidateGeneration `json:"mutation_generation,omitempty"`
+	BinaryCandidates     []CertificationCommandCandidate           `json:"binary_candidates,omitempty"`
+	GraphQL              *CertificationGraphQLSpec                 `json:"graphql,omitempty"`
+	WritePairings        []CertificationWritePairing               `json:"write_pairings,omitempty"`
+	WriteInventory       CertificationWriteInventorySpec           `json:"write_inventory,omitempty"`
+	WriteWave            *CertificationWriteWaveSpec               `json:"write_wave,omitempty"`
+	EvidenceImport       *CertificationEvidenceImportSpec          `json:"evidence_import,omitempty"`
+}
+
+// CertificationEvidenceImportSpec is connector-owned acceptance metadata for
+// completed certification reports. It maps evidence to matrix identities
+// without teaching shared import code about a particular provider.
+type CertificationEvidenceImportSpec struct {
+	Provider string                                  `json:"provider"`
+	Database *CertificationEvidenceDatabaseProofSpec `json:"database,omitempty"`
+	Bindings []CertificationEvidenceImportBinding    `json:"bindings,omitempty"`
+}
+
+// CertificationEvidenceDatabaseProofSpec supplies the provider-owned labels
+// for database exchanges. The shared importer only assembles declared report
+// facts; it never names a database engine or wire protocol.
+type CertificationEvidenceDatabaseProofSpec struct {
+	Protocol               string `json:"protocol"`
+	OperationPrefix        string `json:"operation_prefix"`
+	ChangeCaptureStatement string `json:"change_capture_statement,omitempty"`
+}
+
+// CertificationEvidenceImportBinding selects completed report stages and the
+// accepted-evidence identity they can prove. Candidate sets are derived from
+// the same certification definition that scheduled the live commands.
+type CertificationEvidenceImportBinding struct {
+	Scope        string   `json:"scope"`
+	FunctionKind string   `json:"function_kind,omitempty"`
+	WorkflowKind string   `json:"workflow_kind,omitempty"`
+	SyncMode     string   `json:"sync_mode,omitempty"`
+	Primitive    string   `json:"primitive,omitempty"`
+	Source       string   `json:"source,omitempty"`
+	Destination  string   `json:"destination,omitempty"`
+	FlowKind     string   `json:"flow_kind,omitempty"`
+	StageSets    []string `json:"stage_sets,omitempty"`
+	Stages       []string `json:"stages,omitempty"`
+}
+
+// CertificationReadCandidateGeneration contains connector-owned fixture
+// bindings and cohorts used by connectorgen to derive read candidates from the
+// declared CLI surface. It deliberately carries neither an endpoint nor a
+// connector identifier: the generator reads those from cli_surface.json.
+type CertificationReadCandidateGeneration struct {
+	RequiredFlagDefaults map[string]string                  `json:"required_flag_defaults,omitempty"`
+	Cohorts              []CertificationReadCandidateCohort `json:"cohorts"`
+}
+
+// CertificationReadCandidateCohort is an auditable, connector-owned command
+// membership declaration. Cohorts may include writes so a single entitlement
+// boundary remains complete, while the read generator selects only executable
+// direct_read commands from the declared set.
+type CertificationReadCandidateCohort struct {
+	Name         string   `json:"name"`
+	CommandCount int      `json:"command_count"`
+	Commands     []string `json:"commands"`
+}
+
+// CertificationMutationCandidate is a generated, non-executing inventory
+// record for one mutation command. It derives command and declaration facts;
+// connector-owned metadata supplies only the containment-family assessment.
+type CertificationMutationCandidate struct {
+	Command        string                                   `json:"command"`
+	CommandTokens  []string                                 `json:"command_tokens"`
+	Intent         string                                   `json:"intent"`
+	Cohort         string                                   `json:"cohort"`
+	CredentialFlag string                                   `json:"credential_flag"`
+	JSONMode       *bool                                    `json:"json_mode,omitempty"`
+	Declaration    CertificationMutationDeclaration         `json:"declaration"`
+	Address        CertificationMutationAddress             `json:"address"`
+	Fixture        CertificationMutationFixtureProvisioning `json:"fixture"`
+	InputSlots     []CertificationMutationInputSlot         `json:"input_slots"`
+	RequiredFlags  []string                                 `json:"required_flags"`
+	Classification CertificationMutationClassification      `json:"classification"`
+	Generated      bool                                     `json:"generated,omitempty"`
+	OverrideReason string                                   `json:"override_reason,omitempty"`
+}
+
+// CertificationMutationDeclaration identifies the production executor that a
+// future lifecycle runner must use. Slice 0 only records it; it never invokes
+// the executor.
+type CertificationMutationDeclaration struct {
+	Kind     string `json:"kind"`
+	ID       string `json:"id"`
+	Executor string `json:"executor"`
+}
+
+// CertificationMutationAddress preserves the declaration source for the
+// operation address. A CLI surface address is preferred; an alias falls back
+// to its declared write action rather than inventing an endpoint.
+type CertificationMutationAddress struct {
+	Source    string `json:"source"`
+	Transport string `json:"transport"`
+	Method    string `json:"method"`
+	Path      string `json:"path"`
+}
+
+// CertificationMutationFixtureProvisioning records whether the declared
+// endpoint tree can create a fresh object for this candidate's own collection.
+// It is generated only: no fixture object, credential, or provider contact is
+// involved. A named exception is intentionally explicit so a missing cycle
+// cannot silently reuse a long-lived fixture.
+type CertificationMutationFixtureProvisioning struct {
+	Strategy            string   `json:"strategy"`
+	Collection          string   `json:"collection,omitempty"`
+	CollectionDepth     int      `json:"collection_depth,omitempty"`
+	ProvisionerCommands []string `json:"provisioner_commands,omitempty"`
+	ExceptionCode       string   `json:"exception_code,omitempty"`
+	Evidence            string   `json:"evidence"`
+}
+
+// CertificationMutationInputSlot is one typed user or record value required
+// by the declared mutation contract.
+type CertificationMutationInputSlot struct {
+	Path     string   `json:"path"`
+	Type     string   `json:"type"`
+	Required bool     `json:"required"`
+	Values   []string `json:"values,omitempty"`
+}
+
+// CertificationMutationClassification is the containment-first result for a
+// mutation candidate. It is inventory only, never a certification outcome.
+type CertificationMutationClassification struct {
+	Code     string `json:"code"`
+	Family   string `json:"family,omitempty"`
+	Evidence string `json:"evidence"`
+}
+
+// CertificationMutationCandidateGeneration declares the exhaustive mutation
+// cohort and connector-owned escape families consumed by connectorgen.
+type CertificationMutationCandidateGeneration struct {
+	Cohort     CertificationMutationCandidateCohort        `json:"cohort"`
+	Unassessed CertificationMutationClassification         `json:"unassessed"`
+	Families   []CertificationMutationClassificationFamily `json:"families"`
+}
+
+// CertificationMutationCandidateCohort selects a declared mutation intent
+// set and pins its expected count so surface drift cannot go unnoticed.
+type CertificationMutationCandidateCohort struct {
+	Name         string   `json:"name"`
+	CommandCount int      `json:"command_count"`
+	Intents      []string `json:"intents"`
+}
+
+// CertificationMutationClassificationFamily is a connector-owned semantic
+// family. Positive selectors are ORed; exclusions keep broad containment
+// families disjoint from the explicitly named escape families.
+type CertificationMutationClassificationFamily struct {
+	ID                string                              `json:"id"`
+	Classification    CertificationMutationClassification `json:"classification"`
+	Commands          []string                            `json:"commands,omitempty"`
+	Operations        []string                            `json:"operations,omitempty"`
+	Writes            []string                            `json:"writes,omitempty"`
+	Intents           []string                            `json:"intents,omitempty"`
+	ExcludeCommands   []string                            `json:"exclude_commands,omitempty"`
+	ExcludeOperations []string                            `json:"exclude_operations,omitempty"`
+	ExcludeWrites     []string                            `json:"exclude_writes,omitempty"`
+}
+
+// CertificationGraphQLSpec declares a bounded schema-conformance inventory
+// and the small set of fixed, read-only commands that require live produced-
+// value proof. The source lock and all command names remain connector-owned;
+// the shared certification harness does not name providers or endpoints.
+type CertificationGraphQLSpec struct {
+	SourceLock             string                          `json:"source_lock"`
+	CommandPrefix          string                          `json:"command_prefix"`
+	SchemaConformantReason string                          `json:"schema_conformant_reason"`
+	FixtureRequiredReason  string                          `json:"fixture_required_reason"`
+	LiveCandidates         []CertificationCommandCandidate `json:"live_candidates"`
 }
 
 // CertificationSourceSpec configures source-side certification setup and
@@ -1048,6 +1230,7 @@ type CertificationSpec struct {
 type CertificationSourceSpec struct {
 	DefaultStream            string                                       `json:"default_stream,omitempty"`
 	SourceCredentialDefaults map[string]string                            `json:"source_credential_defaults,omitempty"`
+	RequiredCredentialConfig map[string]string                            `json:"required_credential_config,omitempty"`
 	LiveUnavailable          []CertificationLiveUnavailableClassification `json:"live_unavailable,omitempty"`
 }
 
@@ -1062,9 +1245,22 @@ type CertificationLiveUnavailableClassification struct {
 // CertificationCommandCandidate describes one CLI command candidate for a
 // direct-read or binary certification sweep.
 type CertificationCommandCandidate struct {
-	StageName string                    `json:"stage_name"`
-	Command   string                    `json:"command"`
-	Args      []CertificationCommandArg `json:"args"`
+	StageName        string                         `json:"stage_name"`
+	Command          string                         `json:"command"`
+	Args             []CertificationCommandArg      `json:"args"`
+	OutputAssertions []CertificationOutputAssertion `json:"output_assertions,omitempty"`
+	Cohort           string                         `json:"cohort,omitempty"`
+	Generated        bool                           `json:"generated,omitempty"`
+}
+
+// CertificationOutputAssertion describes one expected value in a sanitized
+// direct-read response envelope. JSONPointer must select a member below
+// /response so a certification cannot pass merely by reasserting transport
+// metadata such as its envelope kind or exit status.
+type CertificationOutputAssertion struct {
+	JSONPointer string `json:"json_pointer"`
+	Equals      any    `json:"equals"`
+	ValueType   string `json:"value_type,omitempty"`
 }
 
 // CertificationCommandArg is a typed command-argument atom. Exactly one source
@@ -1093,11 +1289,67 @@ type CertificationWritePairing struct {
 	Overrides    map[string]any `json:"overrides,omitempty"`
 }
 
+// CertificationWriteInventorySpec classifies every declared write without
+// allowing a shared certification package to name a provider or fixture.
+// Rules are evaluated in declaration order after the bounded live wave.
+type CertificationWriteInventorySpec struct {
+	Rules []CertificationWriteInventoryRule `json:"rules,omitempty"`
+}
+
+// CertificationWriteInventoryRule names an honest non-live boundary for a
+// declared action/path set. Exact paths and path prefixes are declaration
+// owned; at least one selector must be supplied.
+type CertificationWriteInventoryRule struct {
+	Classification string   `json:"classification"`
+	Reason         string   `json:"reason"`
+	Actions        []string `json:"actions,omitempty"`
+	Paths          []string `json:"paths,omitempty"`
+	PathPrefixes   []string `json:"path_prefixes,omitempty"`
+}
+
+// CertificationWriteWaveSpec declares a bounded, resumable live-write wave.
+// It contains every provider-specific fixture, action grouping, ownership tag,
+// and known read-back blocker consumed by the shared harness.
+type CertificationWriteWaveSpec struct {
+	Fixture          CertificationWriteWaveFixture         `json:"fixture"`
+	Actions          []string                              `json:"actions"`
+	ActionBindings   map[string]string                     `json:"action_bindings"`
+	Scenarios        []CertificationWriteWaveScenario      `json:"scenarios"`
+	BlockedActions   []CertificationWriteWaveBlockedAction `json:"blocked_actions,omitempty"`
+	TagPrefix        string                                `json:"tag_prefix"`
+	TagSubjectPrefix string                                `json:"tag_subject_prefix"`
+}
+
+// CertificationWriteWaveFixture confines a live write wave to an exact,
+// connector-owned configuration boundary.
+type CertificationWriteWaveFixture struct {
+	Config      map[string]string `json:"config"`
+	Description string            `json:"description"`
+}
+
+// CertificationWriteWaveScenario pairs a selectable wave name with durable
+// ledger identity, a run-owned tag suffix, and the actions it proves.
+type CertificationWriteWaveScenario struct {
+	Name       string   `json:"name"`
+	LedgerName string   `json:"ledger_name"`
+	TagName    string   `json:"tag_name"`
+	Actions    []string `json:"actions"`
+}
+
+// CertificationWriteWaveBlockedAction records a known, concrete reason that
+// selected actions cannot be certified live until their independent read-back
+// precondition is repaired.
+type CertificationWriteWaveBlockedAction struct {
+	Name    string   `json:"name"`
+	Actions []string `json:"actions"`
+	Reason  string   `json:"reason"`
+}
+
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, spec, streams, writes, apiSurface, operations, cliSurface, certification, rateLimits *Schema
-	err                                                                                                        error
+	metadata, changefeed, pollingWatermark, syncTransport, spec, streams, writes, apiSurface, operations, cliSurface, certification, rateLimits *Schema
+	err                                                                                                                                         error
 }{}
 
 func init() {
@@ -1114,6 +1366,8 @@ func init() {
 	}
 	metaSchemas.metadata = compileMeta(metadataSchemaJSON)
 	metaSchemas.changefeed = compileMeta(changefeedSchemaJSON)
+	metaSchemas.pollingWatermark = compileMeta(pollingWatermarkSchemaJSON)
+	metaSchemas.syncTransport = compileMeta(syncTransportSchemaJSON)
 	metaSchemas.spec = compileMeta(specSchemaJSON)
 	metaSchemas.streams = compileMeta(streamsSchemaJSON)
 	metaSchemas.writes = compileMeta(writesSchemaJSON)
@@ -1266,6 +1520,21 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
+	pollingWatermark, err := loadPollingWatermark(sub, dirName, metadata)
+	if err != nil {
+		return Bundle{}, err
+	}
+	syncTransport, err := loadSyncTransport(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
+	databaseDefinition, err := loadDatabaseDefinition(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
+	if err := validateCopyWorkerMaximum(syncTransport, databaseDefinition); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: sync_transport.json: %w", dirName, err)
+	}
 
 	spec, rawSpec, err := loadSpec(sub, dirName)
 	if err != nil {
@@ -1328,6 +1597,9 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 		Name:               dirName,
 		Metadata:           metadata,
 		Changefeed:         changefeed,
+		PollingWatermark:   pollingWatermark,
+		SyncTransport:      syncTransport,
+		Database:           databaseDefinition,
 		Spec:               spec,
 		RawSpec:            rawSpec,
 		HTTP:               httpBase,
@@ -1437,6 +1709,102 @@ func loadChangefeed(sub fs.FS, dirName string) (*connectors.ChangefeedDescriptor
 		return nil, fmt.Errorf("load bundle %s: changefeed.json: %w", dirName, err)
 	}
 	return changefeed.Clone(), nil
+}
+
+// loadPollingWatermark reads the optional native database polling declaration.
+// It is a separate file from changefeed.json so a bounded watermark scan does
+// not become a CDC claim or an API-surface command.
+func loadPollingWatermark(sub fs.FS, dirName string, metadata Metadata) (*connectors.PollingWatermarkDescriptor, error) {
+	if !fileExists(sub, "polling_watermark.json") {
+		return nil, nil
+	}
+	if metadata.IntegrationType != "database" {
+		return nil, fmt.Errorf("load bundle %s: polling_watermark.json requires metadata integration_type %q", dirName, "database")
+	}
+	raw, err := readFile(sub, "polling_watermark.json")
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.pollingWatermark.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, fmt.Errorf("load bundle %s: polling_watermark.json: %w", dirName, err)
+	}
+	var declaration connectors.PollingWatermarkDescriptor
+	if err := strictDecode(raw, &declaration); err != nil {
+		return nil, fmt.Errorf("load bundle %s: polling_watermark.json: %w", dirName, err)
+	}
+	if err := declaration.Validate(); err != nil {
+		return nil, fmt.Errorf("load bundle %s: polling_watermark.json: %w", dirName, err)
+	}
+	return declaration.Clone(), nil
+}
+
+// syncTransportDocument is a versioned on-disk declaration. Its strict JSON
+// shape keeps an authored role from becoming executable through an unknown
+// field, while the descriptor's own validation preserves the shared closed
+// transport vocabulary.
+type syncTransportDocument struct {
+	SchemaVersion int                                        `json:"schema_version"`
+	Source        *connectors.SourceTransportDescriptor      `json:"source_transport,omitempty"`
+	Destination   *connectors.DestinationTransportDescriptor `json:"destination_transport,omitempty"`
+}
+
+func loadSyncTransport(sub fs.FS, dirName string) (*connectors.SyncTransportDescriptor, error) {
+	if !fileExists(sub, "sync_transport.json") {
+		return nil, nil
+	}
+	raw, err := readFile(sub, "sync_transport.json")
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.syncTransport.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, fmt.Errorf("load bundle %s: sync_transport.json: %w", dirName, err)
+	}
+	var document syncTransportDocument
+	if err := strictDecode(raw, &document); err != nil {
+		return nil, fmt.Errorf("load bundle %s: sync_transport.json: %w", dirName, err)
+	}
+	if document.SchemaVersion != 1 {
+		return nil, fmt.Errorf("load bundle %s: sync_transport.json: unsupported schema version %d", dirName, document.SchemaVersion)
+	}
+	descriptor := connectors.SyncTransportDescriptor{Source: document.Source, Destination: document.Destination}
+	if err := descriptor.Validate(); err != nil {
+		return nil, fmt.Errorf("load bundle %s: sync_transport.json: %w", dirName, err)
+	}
+	return descriptor.Clone(), nil
+}
+
+// loadDatabaseDefinition keeps database.json optional for the existing broad
+// connector fleet, while making every present declaration pass through the
+// shared closed loader during normal engine and connectorgen bundle loading.
+// The definition is policy only; this does not register a database driver or
+// promote any connector capability.
+func loadDatabaseDefinition(sub fs.FS, dirName string) (*database.Definition, error) {
+	if !fileExists(sub, "database.json") {
+		return nil, nil
+	}
+	definition, err := database.Load(context.Background(), sub)
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: database.json: %w", dirName, err)
+	}
+	return &definition, nil
+}
+
+// validateCopyWorkerMaximum makes the optional transport COPY declaration a
+// projection of the destination's own typed database pool policy. A connector
+// may omit it, but it cannot advertise more COPY connections than its
+// database.json declares.
+func validateCopyWorkerMaximum(transport *connectors.SyncTransportDescriptor, definition *database.Definition) error {
+	if transport == nil || transport.Destination == nil || transport.Destination.CopyWorkerMaximum == 0 {
+		return nil
+	}
+	if definition == nil {
+		return fmt.Errorf("copy_worker_maximum requires a database resource declaration")
+	}
+	poolMaximum := definition.Resources().Pool.Maximum
+	if transport.Destination.CopyWorkerMaximum > poolMaximum {
+		return fmt.Errorf("copy_worker_maximum exceeds declared database pool maximum %d", poolMaximum)
+	}
+	return nil
 }
 
 // loadSpec returns both the compiled *Schema (used for runtime interpolation
@@ -2369,6 +2737,11 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if op.Binary.MaxBytes <= 0 {
 			return fmt.Errorf("operation %d (%q) binary_download must declare positive max_bytes", i, op.ID)
 		}
+		if accept := strings.TrimSpace(op.Binary.Accept); accept != "" {
+			if _, _, err := mime.ParseMediaType(accept); err != nil {
+				return fmt.Errorf("operation %d (%q) binary_download accept %q is not a valid media type: %w", i, op.ID, op.Binary.Accept, err)
+			}
+		}
 	case "file_upload":
 		if op.File.Direction != "upload" {
 			return fmt.Errorf("operation %d (%q) file_upload direction must be upload, got %s", i, op.ID, op.File.Direction)
@@ -2535,6 +2908,11 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 	if name := strings.TrimSpace(certification.Source.DefaultStream); name != "" && !streamNames[name] {
 		return fmt.Errorf("source.default_stream %q does not match a declared stream", name)
 	}
+	for key, value := range certification.Source.RequiredCredentialConfig {
+		if strings.TrimSpace(key) == "" || strings.TrimSpace(value) == "" {
+			return fmt.Errorf("source.required_credential_config must not contain empty keys or values")
+		}
+	}
 	for i, classifier := range certification.Source.LiveUnavailable {
 		if len(classifier.Contains) == 0 {
 			return fmt.Errorf("source.live_unavailable[%d] must declare at least one contains pattern", i)
@@ -2550,9 +2928,98 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 			return err
 		}
 	}
+	if generation := certification.DirectReadGeneration; generation != nil {
+		if len(generation.Cohorts) == 0 {
+			return fmt.Errorf("direct_read_generation must declare at least one cohort")
+		}
+		for key, value := range generation.RequiredFlagDefaults {
+			if strings.TrimSpace(key) == "" || strings.TrimSpace(value) == "" {
+				return fmt.Errorf("direct_read_generation.required_flag_defaults must not contain empty keys or values")
+			}
+		}
+		cohortNames := make(map[string]struct{}, len(generation.Cohorts))
+		cohortCommands := make(map[string]string)
+		for i, cohort := range generation.Cohorts {
+			if strings.TrimSpace(cohort.Name) == "" {
+				return fmt.Errorf("direct_read_generation.cohorts[%d].name must not be empty", i)
+			}
+			if _, duplicate := cohortNames[cohort.Name]; duplicate {
+				return fmt.Errorf("direct_read_generation.cohorts[%d].name %q is duplicated", i, cohort.Name)
+			}
+			cohortNames[cohort.Name] = struct{}{}
+			if len(cohort.Commands) == 0 {
+				return fmt.Errorf("direct_read_generation.cohorts[%d].commands must not be empty", i)
+			}
+			if cohort.CommandCount != len(cohort.Commands) {
+				return fmt.Errorf("direct_read_generation.cohorts[%d].command_count = %d, want %d declared commands", i, cohort.CommandCount, len(cohort.Commands))
+			}
+			for j, command := range cohort.Commands {
+				if strings.TrimSpace(command) == "" {
+					return fmt.Errorf("direct_read_generation.cohorts[%d].commands[%d] must not be empty", i, j)
+				}
+				if prior, duplicate := cohortCommands[command]; duplicate {
+					return fmt.Errorf("direct_read_generation command %q appears in cohorts %q and %q", command, prior, cohort.Name)
+				}
+				cohortCommands[command] = cohort.Name
+			}
+		}
+	}
+	for i, candidate := range certification.MutationCandidates {
+		if err := validateCertificationMutationCandidate(i, candidate); err != nil {
+			return err
+		}
+	}
+	if generation := certification.MutationGeneration; generation != nil {
+		if err := validateCertificationMutationGeneration(*generation); err != nil {
+			return err
+		}
+	}
 	for i, candidate := range certification.BinaryCandidates {
 		if err := validateCertificationCommandCandidate("binary_candidates", i, candidate); err != nil {
 			return err
+		}
+	}
+	if graphql := certification.GraphQL; graphql != nil {
+		if !fs.ValidPath(graphql.SourceLock) || !strings.HasPrefix(graphql.SourceLock, "sources/") {
+			return fmt.Errorf("graphql.source_lock must be a connector-owned file beneath sources/")
+		}
+		if strings.TrimSpace(graphql.CommandPrefix) == "" || strings.TrimSpace(graphql.SchemaConformantReason) == "" || strings.TrimSpace(graphql.FixtureRequiredReason) == "" {
+			return fmt.Errorf("graphql must declare command_prefix, schema_conformant_reason, and fixture_required_reason")
+		}
+		if len(graphql.LiveCandidates) == 0 {
+			return fmt.Errorf("graphql.live_candidates must declare at least one read-only produced-value assertion")
+		}
+		for i, candidate := range graphql.LiveCandidates {
+			if err := validateCertificationCommandCandidate("graphql.live_candidates", i, candidate); err != nil {
+				return err
+			}
+			if len(candidate.OutputAssertions) == 0 {
+				return fmt.Errorf("graphql.live_candidates[%d] must declare a produced-value assertion", i)
+			}
+		}
+	}
+	if evidenceImport := certification.EvidenceImport; evidenceImport != nil {
+		if !certificationEvidenceIdentifierPattern.MatchString(evidenceImport.Provider) {
+			return fmt.Errorf("evidence_import.provider must be a safe provider identifier")
+		}
+		if database := evidenceImport.Database; database != nil {
+			if !certificationEvidenceIdentifierPattern.MatchString(database.Protocol) || !certificationEvidenceIdentifierPattern.MatchString(database.OperationPrefix) {
+				return fmt.Errorf("evidence_import.database protocol and operation_prefix must be safe identifiers")
+			}
+			if strings.TrimSpace(database.ChangeCaptureStatement) == "" {
+				return fmt.Errorf("evidence_import.database change_capture_statement must not be empty")
+			}
+		}
+		seenBindings := make(map[string]struct{}, len(evidenceImport.Bindings))
+		for i, binding := range evidenceImport.Bindings {
+			if err := validateCertificationEvidenceImportBinding(binding, certification); err != nil {
+				return fmt.Errorf("evidence_import.bindings[%d]: %w", i, err)
+			}
+			key := strings.Join([]string{binding.Scope, binding.FunctionKind, binding.WorkflowKind, binding.SyncMode, binding.Primitive, binding.Source, binding.Destination, binding.FlowKind}, "\x00")
+			if _, exists := seenBindings[key]; exists {
+				return fmt.Errorf("evidence_import.bindings[%d] duplicates an evidence identity", i)
+			}
+			seenBindings[key] = struct{}{}
 		}
 	}
 	writeActions := make(map[string]bool, len(writes))
@@ -2579,6 +3046,71 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 	return nil
 }
 
+func validateCertificationEvidenceImportBinding(binding CertificationEvidenceImportBinding, certification CertificationSpec) error {
+	if len(binding.StageSets) == 0 && len(binding.Stages) == 0 {
+		return fmt.Errorf("must declare at least one stage_set or stage")
+	}
+	for _, value := range []string{binding.FunctionKind, binding.WorkflowKind, binding.SyncMode, binding.Primitive, binding.Source, binding.Destination, binding.FlowKind} {
+		if value != "" && !certificationEvidenceIdentifierPattern.MatchString(value) {
+			return fmt.Errorf("evidence identity %q is not a safe identifier", value)
+		}
+	}
+	switch binding.Scope {
+	case "capability":
+		if binding.FunctionKind == "" {
+			return fmt.Errorf("capability binding requires function_kind")
+		}
+	case "workflow":
+		if binding.WorkflowKind == "" {
+			return fmt.Errorf("workflow binding requires workflow_kind")
+		}
+	case "sync_mode":
+		if binding.SyncMode == "" || binding.Primitive == "" {
+			return fmt.Errorf("sync_mode binding requires sync_mode and primitive")
+		}
+	case "flow":
+		if binding.Source == "" || binding.Destination == "" || binding.FlowKind == "" {
+			return fmt.Errorf("flow binding requires source, destination, and flow_kind")
+		}
+	default:
+		return fmt.Errorf("scope %q is unsupported", binding.Scope)
+	}
+	seenSets := make(map[string]struct{}, len(binding.StageSets))
+	for _, set := range binding.StageSets {
+		if _, exists := seenSets[set]; exists {
+			return fmt.Errorf("stage_set %q is duplicated", set)
+		}
+		seenSets[set] = struct{}{}
+		switch set {
+		case "direct_read_candidates":
+			if len(certification.DirectReadCandidates) == 0 {
+				return fmt.Errorf("stage_set %q has no declared candidates", set)
+			}
+		case "binary_candidates":
+			if len(certification.BinaryCandidates) == 0 {
+				return fmt.Errorf("stage_set %q has no declared candidates", set)
+			}
+		case "graphql_live_candidates":
+			if certification.GraphQL == nil || len(certification.GraphQL.LiveCandidates) == 0 {
+				return fmt.Errorf("stage_set %q has no declared candidates", set)
+			}
+		default:
+			return fmt.Errorf("stage_set %q is unsupported", set)
+		}
+	}
+	seenStages := make(map[string]struct{}, len(binding.Stages))
+	for _, stage := range binding.Stages {
+		if !certificationEvidenceIdentifierPattern.MatchString(stage) {
+			return fmt.Errorf("stage %q is not a safe identifier", stage)
+		}
+		if _, exists := seenStages[stage]; exists {
+			return fmt.Errorf("stage %q is duplicated", stage)
+		}
+		seenStages[stage] = struct{}{}
+	}
+	return nil
+}
+
 func validateCertificationCommandCandidate(section string, i int, candidate CertificationCommandCandidate) error {
 	if strings.TrimSpace(candidate.StageName) == "" || strings.TrimSpace(candidate.Command) == "" {
 		return fmt.Errorf("%s[%d] must declare stage_name and command", section, i)
@@ -2589,6 +3121,182 @@ func validateCertificationCommandCandidate(section string, i int, candidate Cert
 	for j, arg := range candidate.Args {
 		if err := validateCertificationCommandArg(arg); err != nil {
 			return fmt.Errorf("%s[%d].args[%d]: %w", section, i, j, err)
+		}
+	}
+	seenPointers := make(map[string]struct{}, len(candidate.OutputAssertions))
+	for j, assertion := range candidate.OutputAssertions {
+		if err := validateCertificationOutputAssertion(assertion); err != nil {
+			return fmt.Errorf("%s[%d].output_assertions[%d]: %w", section, i, j, err)
+		}
+		if _, duplicate := seenPointers[assertion.JSONPointer]; duplicate {
+			return fmt.Errorf("%s[%d].output_assertions[%d]: duplicate json_pointer %q", section, i, j, assertion.JSONPointer)
+		}
+		seenPointers[assertion.JSONPointer] = struct{}{}
+	}
+	return nil
+}
+
+func validateCertificationMutationCandidate(i int, candidate CertificationMutationCandidate) error {
+	section := fmt.Sprintf("mutation_candidates[%d]", i)
+	if strings.TrimSpace(candidate.Command) == "" || len(candidate.CommandTokens) == 0 || strings.TrimSpace(candidate.Intent) == "" || strings.TrimSpace(candidate.Cohort) == "" || candidate.CredentialFlag != "--credential" {
+		return fmt.Errorf("%s must declare command, command_tokens, intent, cohort, and the --credential flag", section)
+	}
+	if candidate.Intent != "direct_write" && candidate.Intent != "reverse_etl" {
+		return fmt.Errorf("%s intent %q is not a mutation intent", section, candidate.Intent)
+	}
+	if candidate.Declaration.Kind != "operation" && candidate.Declaration.Kind != "write_action" {
+		return fmt.Errorf("%s declaration.kind %q is invalid", section, candidate.Declaration.Kind)
+	}
+	if strings.TrimSpace(candidate.Declaration.ID) == "" || (candidate.Declaration.Executor != "direct_write" && candidate.Declaration.Executor != "reverse_plan") {
+		return fmt.Errorf("%s declaration must declare id and supported executor", section)
+	}
+	if strings.TrimSpace(candidate.Address.Source) == "" || strings.TrimSpace(candidate.Address.Method) == "" || strings.TrimSpace(candidate.Address.Path) == "" {
+		return fmt.Errorf("%s must declare an address source, method, and path", section)
+	}
+	if candidate.Address.Source != "cli_surface" && candidate.Address.Source != "operation" && candidate.Address.Source != "write_action" {
+		return fmt.Errorf("%s address.source %q is invalid", section, candidate.Address.Source)
+	}
+	if candidate.Address.Transport != "" && candidate.Address.Transport != "rest" && candidate.Address.Transport != "graphql" {
+		return fmt.Errorf("%s address.transport %q is invalid", section, candidate.Address.Transport)
+	}
+	if candidate.Fixture.Strategy != "" {
+		if err := validateCertificationMutationFixture(section+".fixture", candidate.Fixture); err != nil {
+			return err
+		}
+	}
+	if candidate.JSONMode != nil && !*candidate.JSONMode {
+		return fmt.Errorf("%s json_mode must be true when declared", section)
+	}
+	if err := validateCertificationMutationClassification(section+".classification", candidate.Classification, false); err != nil {
+		return err
+	}
+	if candidate.Generated && strings.TrimSpace(candidate.OverrideReason) != "" {
+		return fmt.Errorf("%s generated candidate must not declare override_reason", section)
+	}
+	if !candidate.Generated && strings.TrimSpace(candidate.OverrideReason) == "" {
+		return fmt.Errorf("%s manual candidate must declare override_reason", section)
+	}
+	slots := make(map[string]struct{}, len(candidate.InputSlots))
+	for j, slot := range candidate.InputSlots {
+		if strings.TrimSpace(slot.Path) == "" || strings.TrimSpace(slot.Type) == "" {
+			return fmt.Errorf("%s.input_slots[%d] must declare path and type", section, j)
+		}
+		if _, duplicate := slots[slot.Path]; duplicate {
+			return fmt.Errorf("%s input slot %q is duplicated", section, slot.Path)
+		}
+		slots[slot.Path] = struct{}{}
+	}
+	return nil
+}
+
+func validateCertificationMutationFixture(section string, fixture CertificationMutationFixtureProvisioning) error {
+	if strings.TrimSpace(fixture.Evidence) == "" {
+		return fmt.Errorf("%s must declare concrete evidence", section)
+	}
+	switch fixture.Strategy {
+	case "derived_collection_cycle":
+		if strings.TrimSpace(fixture.Collection) == "" || fixture.CollectionDepth <= 0 || len(fixture.ProvisionerCommands) == 0 {
+			return fmt.Errorf("%s derived_collection_cycle must declare collection, positive collection_depth, and provisioner_commands", section)
+		}
+		if strings.TrimSpace(fixture.ExceptionCode) != "" {
+			return fmt.Errorf("%s derived_collection_cycle must not declare exception_code", section)
+		}
+	case "named_exception":
+		if strings.TrimSpace(fixture.ExceptionCode) == "" {
+			return fmt.Errorf("%s named_exception must declare exception_code", section)
+		}
+		if fixture.Collection != "" || fixture.CollectionDepth != 0 || len(fixture.ProvisionerCommands) != 0 {
+			return fmt.Errorf("%s named_exception must not declare a derived collection", section)
+		}
+	default:
+		return fmt.Errorf("%s strategy %q is invalid", section, fixture.Strategy)
+	}
+	return nil
+}
+
+func validateCertificationMutationGeneration(generation CertificationMutationCandidateGeneration) error {
+	if strings.TrimSpace(generation.Cohort.Name) == "" || generation.Cohort.CommandCount <= 0 || len(generation.Cohort.Intents) == 0 {
+		return fmt.Errorf("mutation_generation.cohort must declare name, positive command_count, and intents")
+	}
+	intents := make(map[string]struct{}, len(generation.Cohort.Intents))
+	for i, intent := range generation.Cohort.Intents {
+		if intent != "direct_write" && intent != "reverse_etl" {
+			return fmt.Errorf("mutation_generation.cohort.intents[%d] %q is not a mutation intent", i, intent)
+		}
+		if _, duplicate := intents[intent]; duplicate {
+			return fmt.Errorf("mutation_generation.cohort intent %q is duplicated", intent)
+		}
+		intents[intent] = struct{}{}
+	}
+	if err := validateCertificationMutationClassification("mutation_generation.unassessed", generation.Unassessed, true); err != nil {
+		return err
+	}
+	if generation.Unassessed.Code != "unassessed" {
+		return fmt.Errorf("mutation_generation.unassessed must use code \"unassessed\"")
+	}
+	families := make(map[string]struct{}, len(generation.Families))
+	for i, family := range generation.Families {
+		section := fmt.Sprintf("mutation_generation.families[%d]", i)
+		if strings.TrimSpace(family.ID) == "" {
+			return fmt.Errorf("%s must declare id", section)
+		}
+		if _, duplicate := families[family.ID]; duplicate {
+			return fmt.Errorf("mutation_generation family %q is duplicated", family.ID)
+		}
+		families[family.ID] = struct{}{}
+		if err := validateCertificationMutationClassification(section+".classification", family.Classification, true); err != nil {
+			return err
+		}
+		if len(family.Commands)+len(family.Operations)+len(family.Writes)+len(family.Intents) == 0 {
+			return fmt.Errorf("%s must declare at least one positive selector", section)
+		}
+	}
+	return nil
+}
+
+func validateCertificationMutationClassification(section string, classification CertificationMutationClassification, allowEmptyFamily bool) error {
+	if !validCertificationMutationClassificationCode(classification.Code) || strings.TrimSpace(classification.Evidence) == "" {
+		return fmt.Errorf("%s must declare a supported code and concrete evidence", section)
+	}
+	if !allowEmptyFamily && strings.TrimSpace(classification.Family) == "" {
+		return fmt.Errorf("%s must declare family", section)
+	}
+	return nil
+}
+
+func validCertificationMutationClassificationCode(code string) bool {
+	switch code {
+	case "contained", "real_money", "real_people", "public_visibility", "third_party_scope", "unassessed":
+		return true
+	default:
+		return false
+	}
+}
+
+func validateCertificationOutputAssertion(assertion CertificationOutputAssertion) error {
+	pointer := assertion.JSONPointer
+	if pointer != "/response" && !strings.HasPrefix(pointer, "/response/") {
+		return fmt.Errorf("json_pointer must address the produced direct-read response or a value below /response")
+	}
+	for _, token := range strings.Split(strings.TrimPrefix(pointer, "/"), "/") {
+		for index := 0; index < len(token); index++ {
+			if token[index] != '~' {
+				continue
+			}
+			if index+1 >= len(token) || (token[index+1] != '0' && token[index+1] != '1') {
+				return fmt.Errorf("json_pointer contains an invalid JSON Pointer escape")
+			}
+			index++
+		}
+	}
+	if assertion.Equals == nil && assertion.ValueType == "" {
+		return fmt.Errorf("must declare equals or value_type")
+	}
+	if assertion.ValueType != "" {
+		switch assertion.ValueType {
+		case "object", "array", "object_or_array", "string", "number", "boolean", "null":
+		default:
+			return fmt.Errorf("value_type must be object, array, object_or_array, string, number, boolean, or null")
 		}
 	}
 	return nil

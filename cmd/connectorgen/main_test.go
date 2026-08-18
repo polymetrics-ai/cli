@@ -1394,6 +1394,78 @@ func TestValidate_RejectsMalformedCertificationMetadata(t *testing.T) {
 	}
 }
 
+func TestValidate_RejectsIncrementalCursorSchemaMismatch(t *testing.T) {
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/widgets" }
+		},
+		"streams": [
+			{
+				"name": "widgets",
+				"path": "/widgets",
+				"records": { "path": "data" },
+				"incremental": { "cursor_field": "updated_at" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+	fsys["cli-surface/schemas/widgets.json"] = &fstest.MapFile{Data: []byte(`{
+		"$schema": "http://json-schema.org/draft-07/schema#",
+		"type": "object",
+		"x-primary-key": ["id"],
+		"x-cursor-field": "created_at",
+		"properties": {
+			"id": { "type": "integer" },
+			"created_at": { "type": "string" },
+			"updated_at": { "type": "string" }
+		}
+	}`)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleIncrementalCursorMismatch)
+}
+
+func TestValidate_AcceptsIncrementalCursorWithoutSchemaCursor(t *testing.T) {
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/widgets" }
+		},
+		"streams": [
+			{
+				"name": "widgets",
+				"path": "/widgets",
+				"records": { "path": "data" },
+				"incremental": { "cursor_field": "updated_at" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+	fsys["cli-surface/schemas/widgets.json"] = &fstest.MapFile{Data: []byte(`{
+		"$schema": "http://json-schema.org/draft-07/schema#",
+		"type": "object",
+		"x-primary-key": ["id"],
+		"properties": {
+			"id": { "type": "integer" },
+			"updated_at": { "type": "string" }
+		}
+	}`)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("validateDir findings = %+v, want none", report.Findings)
+	}
+}
+
 // --- validate: seeded-invalid corpus (>=10 seeded, >=8 distinct classes) ----
 
 func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {

@@ -6,9 +6,9 @@ import (
 
 // stageWriteSweepAllPairings runs only when Options.Full is true. It accounts
 // every declared write action beyond the first live lifecycle that stages
-// 12-17 exercise. Actions with safe pairings are marked untested until the
-// bounded executor can run every lifecycle; blocked actions are recorded with
-// their inventory reason.
+// 12-17 exercise. An action which has not completed a production mutation,
+// independent read-back, and verified cleanup is explicitly not_live. Schema
+// preparation is intentionally not evidence of provider execution.
 func stageWriteSweepAllPairings(rc *runContext, rep *Report) error {
 	if !rc.opts.Full {
 		skipStage(rc, rep, "write_sweep_all_pairings",
@@ -39,31 +39,32 @@ func stageWriteSweepAllPairings(rc *runContext, rep *Report) error {
 	}
 
 	for _, item := range inventory {
-		if _, exists := rep.Capabilities.WriteActions[item.Action]; exists {
-			continue
-		}
+		existing, hasExisting := rep.Capabilities.WriteActions[item.Action]
+		// Presence alone is not coverage: an earlier failed, prepared-only, or
+		// not_live row must be overwritten by the action's concrete non-live
+		// classification. Only a completed mutation with independent read-back
+		// and verified cleanup can suppress this sweep stage.
+		alreadyCoveredLive := hasExisting && existing.Result == "pass" && existing.Verify == "read_back"
 		pairing := item.Pairing
 		stageName := fmt.Sprintf("write_sweep_%s", item.Action)
 		recordStage(rc, rep, stageName, 2, func() (bool, CLIStageInfo, string) {
-			if pairing.Create == "" {
-				rep.Capabilities.WriteActions[item.Action] = WriteActionResult{
-					Result: "blocked",
-					Reason: item.Reason,
-				}
+			if alreadyCoveredLive {
 				return true, CLIStageInfo{}, ""
 			}
-			result := "untested"
 			reason := item.Reason
 			if reason == "" {
-				reason = "sweep pairing registered; live lifecycle requires credential + executor"
+				reason = "no production certification scenario completed a provider mutation, independent read-back, and verified cleanup"
 			}
+			reason = "provider mutation was not run: " + reason
 			rep.Capabilities.WriteActions[item.Action] = WriteActionResult{
-				Result:  result,
+				Result:  "not_live",
+				Path:    item.Path,
+				Risk:    item.Risk,
 				Cleanup: pairing.Cleanup,
 				Verify:  pairing.VerifyStream,
 				Reason:  reason,
 			}
-			return true, CLIStageInfo{}, ""
+			return false, CLIStageInfo{}, "not_live: " + reason
 		})
 	}
 

@@ -1,0 +1,29 @@
+{
+  "issue": 3976,
+  "phase": "issue-3976-postgres-dynamic-catalog",
+  "mode": "manual-inline-gsd-fallback",
+  "status": "verified-live-postgres-proof-committed",
+  "parent_issue": 3972,
+  "parent_branch": "integration/4015-mvp-flat-r1",
+  "parent_pr": 4017,
+  "child_branch": "feat/3976-postgres-dynamic-catalog",
+  "child_pr": 4065,
+  "parent_head": "fbd06e7d7c5c0632182e98cbb3a223ba25b19883",
+  "parent_sync_commit": "0df3d5d4d",
+  "discuss_phase": "recorded",
+  "plan_phase_tdd": "recorded",
+  "execute_phase": "green-implementation-committed-24d0055f5",
+  "verify_work": "manual-inline-pass: automated gates and explicit Docker live catalog/read proof passed; historical CDC remains intentionally excluded",
+  "code_review": "manual-inline-deep-clean: no actionable findings, including the live-proof resumption slice",
+  "integration_hold": "corrected PR #4058 must be green and merged before this child integrates into #4017",
+  "reason": "Issue #3976 is not a numbered roadmap phase and canonical delivery permits one active inline worker; the live Docker proof is recorded as completed acceptance evidence.",
+  "resumable_reads_r2": {
+    "branch": "fm/cli-3976-resumable-reads-r1",
+    "base": "integration/4015-mvp-flat-r1",
+    "dispatch_base_head": "ef3c71caf",
+    "status": "reviewed-local-green-live-proof-pending-pr-ready",
+    "mode": "manual-inline-gsd-fallback",
+    "fallback_reason": "historical issue phase is non-roadmap/executed and canonical delivery prohibits role delegation",
+    "live_postgres_proof": "pending; do not restart shared container runtime"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_batch2_actions_get_github_actions_default_workflow_permissions_organization",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:58:45.342Z",
+  "run_id": "github-slice2-agent_derived_batch2_actions_get_github_actions_default_workflow_permissions_organization",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:828818831a5e9814577822cc3f56fea4f25c14368a86b2bd9a18bb7b3617d09c}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:cdcbfb35c055e83a079c968c8b5a2239af989ab918c9e811ababe73bb68b8d3f}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_batch2_actions_get_github_actions_default_workflow_permissions_organization",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:966e43b1571ca87aba7bd227df5fb21104b36402ebc48257a68417329c8d477b}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "can_approve_pull_request_reviews": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}",
+              "default_workflow_permissions": "{{pmcertfp:v1:114756e20403249fc8731324d0c3404a603711a95ed4e3ea395876324d96951b}}"
+            },
+            "original_bytes": 80,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

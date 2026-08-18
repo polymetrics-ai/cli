@@ -443,9 +443,11 @@ func TestCheckpointConcurrentSets(t *testing.T) {
 
 // stubApp is a test double for AppAdapter.
 type stubApp struct {
-	mu      sync.Mutex
-	calls   []string
-	results map[string]error
+	mu               sync.Mutex
+	calls            []string
+	sqlConnections   []string
+	tableConnections []string
+	results          map[string]error
 }
 
 func (s *stubApp) ETLRun(_ context.Context, connectionID string, _ []string) (ETLResult, error) {
@@ -460,9 +462,18 @@ func (s *stubApp) ETLRun(_ context.Context, connectionID string, _ []string) (ET
 	return ETLResult{RecordsRead: 10, RecordsWritten: 10}, nil
 }
 
-func (s *stubApp) QuerySQL(_ context.Context, sql string, _ int) ([]map[string]any, error) {
+func (s *stubApp) QuerySQL(_ context.Context, sql, connection string, _ int) ([]map[string]any, error) {
 	s.mu.Lock()
 	s.calls = append(s.calls, sql)
+	s.sqlConnections = append(s.sqlConnections, connection)
+	s.mu.Unlock()
+	return nil, nil
+}
+
+func (s *stubApp) ReadActionSource(_ context.Context, table, connection string) ([]map[string]any, error) {
+	s.mu.Lock()
+	s.calls = append(s.calls, table)
+	s.tableConnections = append(s.tableConnections, connection)
 	s.mu.Unlock()
 	return nil, nil
 }
@@ -509,6 +520,51 @@ func newEngineForTest(t *testing.T, m FlowManifest, app AppAdapter, ledger Ledge
 		Checkpoint: cs,
 		LockDir:    t.TempDir(),
 	}
+}
+
+func TestEnginePassesManifestSourceConnectionSelectors(t *testing.T) {
+	appStub := &stubApp{}
+	manifest := FlowManifest{
+		Version: 1,
+		Name:    "scoped-source-reads",
+		Steps: []FlowStep{
+			{
+				ID:         "query-acme",
+				Kind:       KindQuery,
+				Connection: "acme",
+				SQL:        "SELECT * FROM records",
+				In:         []string{},
+				Out:        []string{},
+			},
+			{
+				ID:   "action-globex",
+				Kind: KindAction,
+				ActionCfg: &ActionConfig{
+					SourceTable:           "records",
+					SourceConnection:      "globex",
+					DestinationConnector:  "future-connector",
+					DestinationCredential: "future-credential",
+					Mappings:              map[string]string{"id": "external_id"},
+				},
+				In:  []string{},
+				Out: []string{},
+			},
+		},
+	}
+	e := &Engine{
+		Manifest:     manifest,
+		App:          appStub,
+		Ledger:       &stubLedger{},
+		Checkpoint:   &FileCheckpointStore{Dir: t.TempDir()},
+		LockDir:      t.TempDir(),
+		ActionRunner: &stubActionRunner{},
+	}
+
+	result, err := e.Run(context.Background(), RunOptions{ApprovalToken: "test-only"})
+	require.NoError(t, err)
+	assert.Equal(t, "ok", result.Status)
+	assert.Equal(t, []string{"acme"}, appStub.sqlConnections)
+	assert.Equal(t, []string{"globex"}, appStub.tableConnections)
 }
 
 func TestEngineLockHeldReturnsErrLeaseHeld(t *testing.T) {
@@ -568,10 +624,18 @@ func (s *stepCallTracker) ETLRun(_ context.Context, connectionID string, _ []str
 	return ETLResult{RecordsRead: 1, RecordsWritten: 1}, err
 }
 
-func (s *stepCallTracker) QuerySQL(_ context.Context, sql string, _ int) ([]map[string]any, error) {
+func (s *stepCallTracker) QuerySQL(_ context.Context, sql, _ string, _ int) ([]map[string]any, error) {
 	s.mu.Lock()
 	s.order = append(s.order, sql)
 	err := s.fail[sql]
+	s.mu.Unlock()
+	return nil, err
+}
+
+func (s *stepCallTracker) ReadActionSource(_ context.Context, table, _ string) ([]map[string]any, error) {
+	s.mu.Lock()
+	s.order = append(s.order, table)
+	err := s.fail[table]
 	s.mu.Unlock()
 	return nil, err
 }

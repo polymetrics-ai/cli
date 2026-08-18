@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "integration_type": "api",
+  "run_id": "github-1786996497171-4a71faae028c",
+  "started_at": "2026-08-17T19:54:57.171Z",
+  "credential_scope": "observed_operations",
+  "records": [
+    {
+      "stage_name": "generated_direct_read_code_security_get_repositories_for_enterprise_configuration",
+      "command": "code-security get-repositories-for-enterprise-configuration",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "code-security",
+        "get-repositories-for-enterprise-configuration",
+        "--credential",
+        "github-cert-github-1786996497171-4a71faae028c",
+        "--enterprise",
+        "polymetrics-cert",
+        "--configuration-id",
+        "17",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-H38mAP"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_code_security_get_repositories_for_enterprise_configuration-github-1786996497171-4a71faae028c.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    },
+    {
+      "stage_name": "generated_direct_read_code_security_get_single_configuration_for_enterprise",
+      "command": "code-security get-single-configuration-for-enterprise",
+      "invocation": [
+        ".tmp/pm-live-certification",
+        "github",
+        "code-security",
+        "get-single-configuration-for-enterprise",
+        "--credential",
+        "github-cert-github-1786996497171-4a71faae028c",
+        "--enterprise",
+        "polymetrics-cert",
+        "--configuration-id",
+        "17",
+        "--json",
+        "--root",
+        "/Users/karthiksivadas/.treehouse/cli-83d592/5/cli/.tmp/live-certification/run-H38mAP"
+      ],
+      "executed": true,
+      "outcome": "certified",
+      "asserted_values": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "evidence": "internal/connectors/certifications/evidence/github-generated_direct_read_code_security_get_single_configuration_for_enterprise-github-1786996497171-4a71faae028c.json",
+      "request_shape_source": "cli_surface.json",
+      "provider_status": 200
+    }
+  ],
+  "summary": {
+    "executed": 2,
+    "certified": 2,
+    "no_object": 0,
+    "wrong_credential": 0,
+    "entitlement": 0,
+    "product_defect": 0
+  },
+  "local_cleanup": {
+    "credential_removed": true
+  },
+  "updated_at": "2026-08-17T19:55:08.048Z"
+}

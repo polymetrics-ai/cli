@@ -1,0 +1,7 @@
+Command:
+go test -timeout 20m ./internal/app -run '^TestRunETLChangeCapturePublishesCommittedTransactionToConnectionWarehouse$' -count=1
+
+Observed red failure:
+RunETL(change_capture) error = sync mode "change_capture" is not executable: no matching closed source/destination transport has completed externally verified conformance
+
+The test compiled and reached the intended production dispatch gap. No warehouse assertion could run because the application rejected the mode before invoking the implemented changefeed.

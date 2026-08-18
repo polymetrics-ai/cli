@@ -1,0 +1,914 @@
+=== RUN   TestShowCatalogUsesOneAccountFileForTwoConnections
+--- PASS: TestShowCatalogUsesOneAccountFileForTwoConnections (0.01s)
+=== RUN   TestCatalogFileContainsSchemaOnlyNotAccountKey
+--- PASS: TestCatalogFileContainsSchemaOnlyNotAccountKey (0.03s)
+=== RUN   TestPersistAccountCatalogDoesNotWritePointerBeforeFileSync
+--- PASS: TestPersistAccountCatalogDoesNotWritePointerBeforeFileSync (0.02s)
+=== RUN   TestCatalogStorageSyncsCreatedDirectoryChain
+--- PASS: TestCatalogStorageSyncsCreatedDirectoryChain (0.02s)
+=== RUN   TestRunETLChangeCapturePublishesCommittedTransactionToConnectionWarehouse
+--- PASS: TestRunETLChangeCapturePublishesCommittedTransactionToConnectionWarehouse (1.47s)
+=== RUN   TestRunETLChangeCaptureRestoresWarehouseReceiptBeforeCheckpointAfterRestart
+--- PASS: TestRunETLChangeCaptureRestoresWarehouseReceiptBeforeCheckpointAfterRestart (0.53s)
+=== RUN   TestCredentialCoordination_IdentityDerivationDoesNotReadVault
+--- PASS: TestCredentialCoordination_IdentityDerivationDoesNotReadVault (0.29s)
+=== RUN   TestProductionParkingCompositionSurvivesProcessKill
+--- PASS: TestProductionParkingCompositionSurvivesProcessKill (33.59s)
+=== RUN   TestProductionParkingReplayAndSchemaDriftRecovery
+=== RUN   TestProductionParkingReplayAndSchemaDriftRecovery/already_acknowledged_item_is_not_replayed_after_parking_status_publish_crash
+=== RUN   TestProductionParkingReplayAndSchemaDriftRecovery/schema_drift_retains_parked_work
+--- PASS: TestProductionParkingReplayAndSchemaDriftRecovery (1.37s)
+    --- PASS: TestProductionParkingReplayAndSchemaDriftRecovery/already_acknowledged_item_is_not_replayed_after_parking_status_publish_crash (0.70s)
+    --- PASS: TestProductionParkingReplayAndSchemaDriftRecovery/schema_drift_retains_parked_work (0.67s)
+=== RUN   TestGithubPullRequestsETLSupportsLegacyExecutableModes
+=== RUN   TestGithubPullRequestsETLSupportsLegacyExecutableModes/full_refresh_append_duplicates
+=== RUN   TestGithubPullRequestsETLSupportsLegacyExecutableModes/full_refresh_overwrite_replaces_final
+=== RUN   TestGithubPullRequestsETLSupportsLegacyExecutableModes/incremental_append_filters_older_cursor_and_appends_inclusive_cursor
+--- PASS: TestGithubPullRequestsETLSupportsLegacyExecutableModes (1.36s)
+    --- PASS: TestGithubPullRequestsETLSupportsLegacyExecutableModes/full_refresh_append_duplicates (0.47s)
+    --- PASS: TestGithubPullRequestsETLSupportsLegacyExecutableModes/full_refresh_overwrite_replaces_final (0.46s)
+    --- PASS: TestGithubPullRequestsETLSupportsLegacyExecutableModes/incremental_append_filters_older_cursor_and_appends_inclusive_cursor (0.44s)
+=== RUN   TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite
+=== RUN   TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite/missing_pre-run_approval
+=== RUN   TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite/same_target_and_configuration_with_different_reopened_source_issue
+=== RUN   TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite/expired_pre-run_approval
+=== RUN   TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite/replayed_pre-run_approval
+--- PASS: TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite (2.58s)
+    --- PASS: TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite/missing_pre-run_approval (0.50s)
+    --- PASS: TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite/same_target_and_configuration_with_different_reopened_source_issue (0.67s)
+    --- PASS: TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite/expired_pre-run_approval (0.59s)
+    --- PASS: TestIssueLabelDestinationRejectsUnapprovedOrMismatchedOrExpiredOrReplayedPlanBeforeProviderWrite/replayed_pre-run_approval (0.81s)
+=== RUN   TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent
+=== RUN   TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent/set_replace_is_disabled_by_default
+=== RUN   TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent/set_replace_persists_a_definition-owned_replacement_plan_when_enabled
+=== RUN   TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent/keyed_is_disabled_by_default
+=== RUN   TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent/keyed_persists_a_definition-owned_replacement_plan_when_enabled
+--- PASS: TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent (1.40s)
+    --- PASS: TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent/set_replace_is_disabled_by_default (0.37s)
+    --- PASS: TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent/set_replace_persists_a_definition-owned_replacement_plan_when_enabled (0.35s)
+    --- PASS: TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent/keyed_is_disabled_by_default (0.34s)
+    --- PASS: TestIssueLabelTransportNonAdditiveModesRequireExplicitConnectionConsent/keyed_persists_a_definition-owned_replacement_plan_when_enabled (0.34s)
+=== RUN   TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite
+=== RUN   TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite/set_replace_authorizes_once,_replays_never,_and_allows_identical_scope_unattended
+=== RUN   TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite/set_replace_changed_scope_and_disabled_switch_stop_before_PUT
+=== RUN   TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite/keyed_authorizes_once,_replays_never,_and_allows_identical_scope_unattended
+=== RUN   TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite/keyed_changed_scope_and_disabled_switch_stop_before_PUT
+--- PASS: TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite (2.64s)
+    --- PASS: TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite/set_replace_authorizes_once,_replays_never,_and_allows_identical_scope_unattended (0.72s)
+    --- PASS: TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite/set_replace_changed_scope_and_disabled_switch_stop_before_PUT (0.79s)
+    --- PASS: TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite/keyed_authorizes_once,_replays_never,_and_allows_identical_scope_unattended (0.57s)
+    --- PASS: TestIssueLabelTransportNonAdditiveModesRequirePerConnectionAuthorizationBeforeProviderWrite/keyed_changed_scope_and_disabled_switch_stop_before_PUT (0.56s)
+=== RUN   TestIssueLabelTransportCleanupUsesItsOwnDerivedApproval
+--- PASS: TestIssueLabelTransportCleanupUsesItsOwnDerivedApproval (0.96s)
+=== RUN   TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete
+=== RUN   TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/destination_connector
+=== RUN   TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/destination_credential
+=== RUN   TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/destination_config
+=== RUN   TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/binding
+=== RUN   TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/plan_hash
+=== RUN   TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/plan_seal
+--- PASS: TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete (3.75s)
+    --- PASS: TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/destination_connector (0.53s)
+    --- PASS: TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/destination_credential (0.57s)
+    --- PASS: TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/destination_config (0.68s)
+    --- PASS: TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/binding (0.58s)
+    --- PASS: TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/plan_hash (0.64s)
+    --- PASS: TestIssueLabelTransportCleanupRejectsUnauthenticatedForwardPlanBeforeProviderDelete/plan_seal (0.75s)
+=== RUN   TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete
+=== RUN   TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/destination_connector
+=== RUN   TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/destination_credential
+=== RUN   TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/destination_config
+=== RUN   TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/binding
+=== RUN   TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/plan_hash
+=== RUN   TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/plan_seal
+--- PASS: TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete (4.42s)
+    --- PASS: TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/destination_connector (0.74s)
+    --- PASS: TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/destination_credential (0.78s)
+    --- PASS: TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/destination_config (0.71s)
+    --- PASS: TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/binding (0.80s)
+    --- PASS: TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/plan_hash (0.71s)
+    --- PASS: TestIssueLabelTransportCleanupApplyRejectsTamperedForwardPlanBeforeProviderDelete/plan_seal (0.68s)
+=== RUN   TestIssueLabelTransportCleanupTreatsMissingLabelAsSuccessfulInverse
+--- PASS: TestIssueLabelTransportCleanupTreatsMissingLabelAsSuccessfulInverse (0.79s)
+=== RUN   TestIssueLabelTransportContractUsesDefinitionOwnedActionBindings
+--- PASS: TestIssueLabelTransportContractUsesDefinitionOwnedActionBindings (0.00s)
+=== RUN   TestIssueLabelTransportSourceStopsAfterMatchedFullPage
+--- PASS: TestIssueLabelTransportSourceStopsAfterMatchedFullPage (0.41s)
+=== RUN   TestDeclarativeTransportSourceEmitsWholeProviderPageInBoundedBatches
+--- PASS: TestDeclarativeTransportSourceEmitsWholeProviderPageInBoundedBatches (0.48s)
+=== RUN   TestIssueLabelTransportReadBackStopsAfterMatchedFullPage
+--- PASS: TestIssueLabelTransportReadBackStopsAfterMatchedFullPage (0.40s)
+=== RUN   TestIssueLabelTransportSourceDoesNotReadBeyondFirstPageWhenIssueMissing
+--- PASS: TestIssueLabelTransportSourceDoesNotReadBeyondFirstPageWhenIssueMissing (0.36s)
+=== RUN   TestIssueLabelTransportReadBackDoesNotReadBeyondFirstPageWhenIssueMissing
+--- PASS: TestIssueLabelTransportReadBackDoesNotReadBeyondFirstPageWhenIssueMissing (0.34s)
+=== RUN   TestDeclaredTransportCertificationFailsWhenDeclarationIsMissing
+--- PASS: TestDeclaredTransportCertificationFailsWhenDeclarationIsMissing (0.06s)
+=== RUN   TestPayloadIdentitiesBindFileSizeAndMTimeWithoutPathDisclosure
+--- PASS: TestPayloadIdentitiesBindFileSizeAndMTimeWithoutPathDisclosure (0.00s)
+=== RUN   TestPayloadIdentitiesBindSameSizeContentWhenMTimeIsRestored
+--- PASS: TestPayloadIdentitiesBindSameSizeContentWhenMTimeIsRestored (0.00s)
+=== RUN   TestPayloadIdentitiesRejectPathTraversal
+--- PASS: TestPayloadIdentitiesRejectPathTraversal (0.00s)
+=== RUN   TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning
+=== RUN   TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning/default_is_one_day
+=== RUN   TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning/minimum_one_day
+=== RUN   TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning/maximum_two_days
+=== RUN   TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning/below_minimum_is_refused
+=== RUN   TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning/above_maximum_is_refused
+--- PASS: TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning (0.00s)
+    --- PASS: TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning/default_is_one_day (0.00s)
+    --- PASS: TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning/minimum_one_day (0.00s)
+    --- PASS: TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning/maximum_two_days (0.00s)
+    --- PASS: TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning/below_minimum_is_refused (0.00s)
+    --- PASS: TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeBeforePlanning/above_maximum_is_refused (0.00s)
+=== RUN   TestPostgresManagedTargetMissingAndConsumedApprovalErrorsAreTyped
+--- PASS: TestPostgresManagedTargetMissingAndConsumedApprovalErrorsAreTyped (0.00s)
+=== RUN   TestPostgresManagedTargetStaleApprovalIsTypedAndStateFree
+--- PASS: TestPostgresManagedTargetStaleApprovalIsTypedAndStateFree (0.00s)
+=== RUN   TestPostgresManagedTargetApprovalBindingChangesWithTransformPlanHash
+--- PASS: TestPostgresManagedTargetApprovalBindingChangesWithTransformPlanHash (0.00s)
+=== RUN   TestPostgresManagedTargetDurableAuthorizationValidationDoesNotReusePreviewSealLifetime
+--- PASS: TestPostgresManagedTargetDurableAuthorizationValidationDoesNotReusePreviewSealLifetime (0.27s)
+=== RUN   TestRunReverseETLRecoversCommittedApprovalConsumptionUnlockFailure
+--- PASS: TestRunReverseETLRecoversCommittedApprovalConsumptionUnlockFailure (1.01s)
+=== RUN   TestRunReverseETLRecoversIndeterminateApprovalConsumptionDirectorySyncFailure
+--- PASS: TestRunReverseETLRecoversIndeterminateApprovalConsumptionDirectorySyncFailure (0.97s)
+=== RUN   TestOpenReadsCurrentStateWhileLegacyStateLockIsHeld
+--- PASS: TestOpenReadsCurrentStateWhileLegacyStateLockIsHeld (0.54s)
+=== RUN   TestOpenRejectsMalformedStateBeforeCreatingDurableParkingStore
+--- PASS: TestOpenRejectsMalformedStateBeforeCreatingDurableParkingStore (0.27s)
+=== RUN   TestNewStateStoreMutationsHonorLegacyStateLock
+=== RUN   TestNewStateStoreMutationsHonorLegacyStateLock/save
+=== RUN   TestNewStateStoreMutationsHonorLegacyStateLock/update
+=== RUN   TestNewStateStoreMutationsHonorLegacyStateLock/update_after_preflight
+--- PASS: TestNewStateStoreMutationsHonorLegacyStateLock (0.01s)
+    --- PASS: TestNewStateStoreMutationsHonorLegacyStateLock/save (0.00s)
+    --- PASS: TestNewStateStoreMutationsHonorLegacyStateLock/update (0.00s)
+    --- PASS: TestNewStateStoreMutationsHonorLegacyStateLock/update_after_preflight (0.00s)
+=== RUN   TestRunETLWritesBoundedBatches
+--- PASS: TestRunETLWritesBoundedBatches (0.61s)
+=== RUN   TestRunETLReusesDurableAccountCatalogAcrossProcesses
+--- PASS: TestRunETLReusesDurableAccountCatalogAcrossProcesses (1.19s)
+=== RUN   TestStreamIDIsPersistedAndSurvivesStreamRename
+--- PASS: TestStreamIDIsPersistedAndSurvivesStreamRename (1.14s)
+=== RUN   TestConnectionStreamIdentityDoesNotEscapeAppState
+--- PASS: TestConnectionStreamIdentityDoesNotEscapeAppState (0.95s)
+=== RUN   TestCreateConnectionRejectsCallerAssignedStreamID
+--- PASS: TestCreateConnectionRejectsCallerAssignedStreamID (0.59s)
+=== RUN   TestCreateConnectionSaveFailureLeavesRequestStreamIdentityUnchanged
+--- PASS: TestCreateConnectionSaveFailureLeavesRequestStreamIdentityUnchanged (0.89s)
+=== RUN   TestAllocateUniqueIdentityRetriesCollisions
+--- PASS: TestAllocateUniqueIdentityRetriesCollisions (0.00s)
+=== RUN   TestParseSyncModeMatrix
+=== RUN   TestParseSyncModeMatrix/full_refresh_append
+=== RUN   TestParseSyncModeMatrix/full_refresh_overwrite
+=== RUN   TestParseSyncModeMatrix/full_refresh_overwrite_deduped
+=== RUN   TestParseSyncModeMatrix/incremental_append
+=== RUN   TestParseSyncModeMatrix/incremental_append_deduped
+--- PASS: TestParseSyncModeMatrix (0.00s)
+    --- PASS: TestParseSyncModeMatrix/full_refresh_append (0.00s)
+    --- PASS: TestParseSyncModeMatrix/full_refresh_overwrite (0.00s)
+    --- PASS: TestParseSyncModeMatrix/full_refresh_overwrite_deduped (0.00s)
+    --- PASS: TestParseSyncModeMatrix/incremental_append (0.00s)
+    --- PASS: TestParseSyncModeMatrix/incremental_append_deduped (0.00s)
+=== RUN   TestValidateSyncModeRequirements
+--- PASS: TestValidateSyncModeRequirements (0.00s)
+=== RUN   TestParseSyncModeSeparatesLegacyCompatibilityFromNewNativeAdmission
+--- PASS: TestParseSyncModeSeparatesLegacyCompatibilityFromNewNativeAdmission (0.00s)
+=== RUN   TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO
+=== RUN   TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/full_overwrite
+=== RUN   TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/full_overwrite/legacy_compatibility_false
+=== RUN   TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/full_overwrite/legacy_compatibility_true
+=== RUN   TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/incremental_dedupe
+=== RUN   TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/incremental_dedupe/legacy_compatibility_false
+=== RUN   TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/incremental_dedupe/legacy_compatibility_true
+--- PASS: TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO (2.43s)
+    --- PASS: TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/full_overwrite (1.20s)
+        --- PASS: TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/full_overwrite/legacy_compatibility_false (0.60s)
+        --- PASS: TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/full_overwrite/legacy_compatibility_true (0.60s)
+    --- PASS: TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/incremental_dedupe (1.23s)
+        --- PASS: TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/incremental_dedupe/legacy_compatibility_false (0.60s)
+        --- PASS: TestDedupedLegacyAliasesUseTypedContractsBeforeSourceIO/incremental_dedupe/legacy_compatibility_true (0.63s)
+=== RUN   TestCanonicalSyncModesRetainParsedContracts
+=== RUN   TestCanonicalSyncModesRetainParsedContracts/full_overwrite
+=== RUN   TestCanonicalSyncModesRetainParsedContracts/full_append
+=== RUN   TestCanonicalSyncModesRetainParsedContracts/incremental_append
+=== RUN   TestCanonicalSyncModesRetainParsedContracts/incremental_upsert
+=== RUN   TestCanonicalSyncModesRetainParsedContracts/incremental_dedupe
+=== RUN   TestCanonicalSyncModesRetainParsedContracts/incremental_dedupe_history
+=== RUN   TestCanonicalSyncModesRetainParsedContracts/change_capture
+--- PASS: TestCanonicalSyncModesRetainParsedContracts (4.52s)
+    --- PASS: TestCanonicalSyncModesRetainParsedContracts/full_overwrite (0.66s)
+    --- PASS: TestCanonicalSyncModesRetainParsedContracts/full_append (0.65s)
+    --- PASS: TestCanonicalSyncModesRetainParsedContracts/incremental_append (0.74s)
+    --- PASS: TestCanonicalSyncModesRetainParsedContracts/incremental_upsert (0.62s)
+    --- PASS: TestCanonicalSyncModesRetainParsedContracts/incremental_dedupe (0.61s)
+    --- PASS: TestCanonicalSyncModesRetainParsedContracts/incremental_dedupe_history (0.64s)
+    --- PASS: TestCanonicalSyncModesRetainParsedContracts/change_capture (0.61s)
+=== RUN   TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases
+=== RUN   TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases/full_refresh_append
+=== RUN   TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases/full_refresh_overwrite
+=== RUN   TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases/full_refresh_overwrite_deduped
+=== RUN   TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases/incremental_append
+=== RUN   TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases/incremental_append_deduped
+--- PASS: TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases (3.11s)
+    --- PASS: TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases/full_refresh_append (0.59s)
+    --- PASS: TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases/full_refresh_overwrite (0.64s)
+    --- PASS: TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases/full_refresh_overwrite_deduped (0.63s)
+    --- PASS: TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases/incremental_append (0.60s)
+    --- PASS: TestCreateConnectionRetainsPublicLegacyConfigurationAndAdmitsTypedAliases/incremental_append_deduped (0.65s)
+=== RUN   TestLegacyStateMigrationMarksExistingIncrementalAppendAdapter
+--- PASS: TestLegacyStateMigrationMarksExistingIncrementalAppendAdapter (0.61s)
+=== RUN   TestFullRefreshAppendDuplicatesAcrossRuns
+--- PASS: TestFullRefreshAppendDuplicatesAcrossRuns (0.68s)
+=== RUN   TestFullRefreshOverwriteUsesFailureSafeFinalSwap
+--- PASS: TestFullRefreshOverwriteUsesFailureSafeFinalSwap (0.90s)
+=== RUN   TestIncrementalAppendCommitsCursorOnlyAfterSuccess
+--- PASS: TestIncrementalAppendCommitsCursorOnlyAfterSuccess (0.88s)
+=== RUN   TestRecordCursorPreservesOpaqueEmptyAndWhitespaceValues
+=== RUN   TestRecordCursorPreservesOpaqueEmptyAndWhitespaceValues/cursor_
+=== RUN   TestRecordCursorPreservesOpaqueEmptyAndWhitespaceValues/cursor_spacespace
+--- PASS: TestRecordCursorPreservesOpaqueEmptyAndWhitespaceValues (0.00s)
+    --- PASS: TestRecordCursorPreservesOpaqueEmptyAndWhitespaceValues/cursor_ (0.00s)
+    --- PASS: TestRecordCursorPreservesOpaqueEmptyAndWhitespaceValues/cursor_spacespace (0.00s)
+=== RUN   TestLegacyScalarStreamStateRequiresRebootstrapBeforeRead
+--- PASS: TestLegacyScalarStreamStateRequiresRebootstrapBeforeRead (0.61s)
+=== RUN   TestLegacyStateReloadRetainsSyncModeCompatibilityAfterReversePlanLookup
+--- PASS: TestLegacyStateReloadRetainsSyncModeCompatibilityAfterReversePlanLookup (0.95s)
+=== RUN   TestStreamReadStateDistinguishesAbsentAndExplicitEmptyCursor
+--- PASS: TestStreamReadStateDistinguishesAbsentAndExplicitEmptyCursor (0.00s)
+=== RUN   TestIncrementalRunKeepsNoPositionDistinctFromObservedEmptyCursor
+--- PASS: TestIncrementalRunKeepsNoPositionDistinctFromObservedEmptyCursor (0.76s)
+=== RUN   TestIncrementalRunStoresCommittedStateEnvelopeAfterDownstreamSuccess
+--- PASS: TestIncrementalRunStoresCommittedStateEnvelopeAfterDownstreamSuccess (0.66s)
+=== RUN   TestSourceOrderedOpaqueCursorResumesWithoutLossOrReplayAcrossDestinations
+=== RUN   TestSourceOrderedOpaqueCursorResumesWithoutLossOrReplayAcrossDestinations/warehouse
+=== RUN   TestSourceOrderedOpaqueCursorResumesWithoutLossOrReplayAcrossDestinations/connector
+--- PASS: TestSourceOrderedOpaqueCursorResumesWithoutLossOrReplayAcrossDestinations (1.26s)
+    --- PASS: TestSourceOrderedOpaqueCursorResumesWithoutLossOrReplayAcrossDestinations/warehouse (0.67s)
+    --- PASS: TestSourceOrderedOpaqueCursorResumesWithoutLossOrReplayAcrossDestinations/connector (0.59s)
+=== RUN   TestSourceOrderedCursorFieldMismatchRefusesBothDestinationPaths
+--- PASS: TestSourceOrderedCursorFieldMismatchRefusesBothDestinationPaths (0.60s)
+=== RUN   TestSourceOrderedFullRefreshStartsWithoutResumeAcrossDestinations
+=== RUN   TestSourceOrderedFullRefreshStartsWithoutResumeAcrossDestinations/warehouse
+=== RUN   TestSourceOrderedFullRefreshStartsWithoutResumeAcrossDestinations/connector
+--- PASS: TestSourceOrderedFullRefreshStartsWithoutResumeAcrossDestinations (1.26s)
+    --- PASS: TestSourceOrderedFullRefreshStartsWithoutResumeAcrossDestinations/warehouse (0.67s)
+    --- PASS: TestSourceOrderedFullRefreshStartsWithoutResumeAcrossDestinations/connector (0.59s)
+=== RUN   TestSourceOrderedBinaryCursorResumesIncrementalAppend
+--- PASS: TestSourceOrderedBinaryCursorResumesIncrementalAppend (0.68s)
+=== RUN   TestRunETLStopsWhenInitialRunStateCannotPersist
+--- PASS: TestRunETLStopsWhenInitialRunStateCannotPersist (0.62s)
+=== RUN   TestCompleteRunPublishesPendingStreamStateOnlyAfterStateSave
+--- PASS: TestCompleteRunPublishesPendingStreamStateOnlyAfterStateSave (0.65s)
+=== RUN   TestSyncLocalWarehouseDirectoryUsesDurableCommit
+--- PASS: TestSyncLocalWarehouseDirectoryUsesDurableCommit (0.00s)
+=== RUN   TestSyncLocalWarehouseDirectoryReportsCommitFailure
+--- PASS: TestSyncLocalWarehouseDirectoryReportsCommitFailure (0.00s)
+=== RUN   TestRunWarehouseETLSyncsNewDirectoryParentChainBeforeAcknowledgement
+--- PASS: TestRunWarehouseETLSyncsNewDirectoryParentChainBeforeAcknowledgement (0.64s)
+=== RUN   TestRunWarehouseETLSyncsExternalWarehouseChainForEachWriter
+--- PASS: TestRunWarehouseETLSyncsExternalWarehouseChainForEachWriter (1.28s)
+=== RUN   TestRunWarehouseETLResyncsDirectoryChainAfterSyncFailure
+--- PASS: TestRunWarehouseETLResyncsDirectoryChainAfterSyncFailure (0.68s)
+=== RUN   TestRunETLPublishesCommittedCheckpointAfterStateUnlockFailure
+--- PASS: TestRunETLPublishesCommittedCheckpointAfterStateUnlockFailure (0.95s)
+=== RUN   TestWarehouseETLUsesResolvedDestinationName
+--- PASS: TestWarehouseETLUsesResolvedDestinationName (1.01s)
+=== RUN   TestContractModeCannotReadWithoutNativeExecutor
+--- PASS: TestContractModeCannotReadWithoutNativeExecutor (0.86s)
+=== RUN   TestNewIncrementalAppendCannotReadWithoutNativeExecutor
+--- PASS: TestNewIncrementalAppendCannotReadWithoutNativeExecutor (0.62s)
+=== RUN   TestUncommittedCheckpointRequiresRebootstrapBeforeRead
+--- PASS: TestUncommittedCheckpointRequiresRebootstrapBeforeRead (0.70s)
+=== RUN   TestStreamStateRejectsRecreatedCredentialAliasBeforeRead
+--- PASS: TestStreamStateRejectsRecreatedCredentialAliasBeforeRead (0.76s)
+=== RUN   TestStreamStateAllowsRefreshRotationButRejectsSourceConfigChange
+--- PASS: TestStreamStateAllowsRefreshRotationButRejectsSourceConfigChange (0.84s)
+=== RUN   TestConnectorETLRequiresCompleteDestinationWritesBeforeDurabilityAcknowledgement
+=== RUN   TestConnectorETLRequiresCompleteDestinationWritesBeforeDurabilityAcknowledgement/short_batch_without_reported_failures
+=== RUN   TestConnectorETLRequiresCompleteDestinationWritesBeforeDurabilityAcknowledgement/failed_empty_overwrite_setup
+--- PASS: TestConnectorETLRequiresCompleteDestinationWritesBeforeDurabilityAcknowledgement (1.18s)
+    --- PASS: TestConnectorETLRequiresCompleteDestinationWritesBeforeDurabilityAcknowledgement/short_batch_without_reported_failures (0.59s)
+    --- PASS: TestConnectorETLRequiresCompleteDestinationWritesBeforeDurabilityAcknowledgement/failed_empty_overwrite_setup (0.59s)
+=== RUN   TestConnectorETLRefusesDestinationWithoutDurableAcknowledgementBeforeRead
+--- PASS: TestConnectorETLRefusesDestinationWithoutDurableAcknowledgementBeforeRead (0.58s)
+=== RUN   TestRunETLRefusesOutboxWithoutDurableAcknowledgementBeforeRead
+--- PASS: TestRunETLRefusesOutboxWithoutDurableAcknowledgementBeforeRead (0.63s)
+=== RUN   TestCreateConnectionPersistsValidatedTransformPlan
+--- PASS: TestCreateConnectionPersistsValidatedTransformPlan (0.60s)
+=== RUN   TestCreateConnectionRefusesTransformHashDriftBeforePersistence
+--- PASS: TestCreateConnectionRefusesTransformHashDriftBeforePersistence (0.60s)
+=== RUN   TestCreateConnectionAllowsAbsentTransformPlan
+--- PASS: TestCreateConnectionAllowsAbsentTransformPlan (0.60s)
+=== RUN   TestOpenRegistersDefinitionOwnedProductionTransports
+--- PASS: TestOpenRegistersDefinitionOwnedProductionTransports (0.27s)
+=== RUN   TestOpenPreflightsEveryDeclaredPostgresDestinationMode
+=== RUN   TestOpenPreflightsEveryDeclaredPostgresDestinationMode/full_overwrite
+=== RUN   TestOpenPreflightsEveryDeclaredPostgresDestinationMode/full_append
+=== RUN   TestOpenPreflightsEveryDeclaredPostgresDestinationMode/incremental_append
+=== RUN   TestOpenPreflightsEveryDeclaredPostgresDestinationMode/incremental_upsert
+=== RUN   TestOpenPreflightsEveryDeclaredPostgresDestinationMode/incremental_dedupe
+=== RUN   TestOpenPreflightsEveryDeclaredPostgresDestinationMode/incremental_dedupe_history
+--- PASS: TestOpenPreflightsEveryDeclaredPostgresDestinationMode (0.27s)
+    --- PASS: TestOpenPreflightsEveryDeclaredPostgresDestinationMode/full_overwrite (0.00s)
+    --- PASS: TestOpenPreflightsEveryDeclaredPostgresDestinationMode/full_append (0.00s)
+    --- PASS: TestOpenPreflightsEveryDeclaredPostgresDestinationMode/incremental_append (0.00s)
+    --- PASS: TestOpenPreflightsEveryDeclaredPostgresDestinationMode/incremental_upsert (0.00s)
+    --- PASS: TestOpenPreflightsEveryDeclaredPostgresDestinationMode/incremental_dedupe (0.00s)
+    --- PASS: TestOpenPreflightsEveryDeclaredPostgresDestinationMode/incremental_dedupe_history (0.00s)
+=== RUN   TestOpenPostgresHistoryModeResolvesRegisteredExecutors
+--- PASS: TestOpenPostgresHistoryModeResolvesRegisteredExecutors (0.28s)
+=== RUN   TestOpenPostgresTransportDeclarationsAreExactModeIntersection
+--- PASS: TestOpenPostgresTransportDeclarationsAreExactModeIntersection (0.28s)
+=== RUN   TestOpenComposedGitHubCommitsSourceEmitsEveryUnlimitedPageInBoundedBatches
+--- PASS: TestOpenComposedGitHubCommitsSourceEmitsEveryUnlimitedPageInBoundedBatches (0.29s)
+=== RUN   TestOpenComposedGitHubCommitsHonorsTransportMaxPages
+=== RUN   TestOpenComposedGitHubCommitsHonorsTransportMaxPages/omitted_defaults_to_one_page
+=== RUN   TestOpenComposedGitHubCommitsHonorsTransportMaxPages/positive_cap
+=== RUN   TestOpenComposedGitHubCommitsHonorsTransportMaxPages/zero_is_unlimited
+=== RUN   TestOpenComposedGitHubCommitsHonorsTransportMaxPages/all_is_unlimited
+=== RUN   TestOpenComposedGitHubCommitsHonorsTransportMaxPages/unlimited_is_unlimited
+--- PASS: TestOpenComposedGitHubCommitsHonorsTransportMaxPages (1.43s)
+    --- PASS: TestOpenComposedGitHubCommitsHonorsTransportMaxPages/omitted_defaults_to_one_page (0.28s)
+    --- PASS: TestOpenComposedGitHubCommitsHonorsTransportMaxPages/positive_cap (0.29s)
+    --- PASS: TestOpenComposedGitHubCommitsHonorsTransportMaxPages/zero_is_unlimited (0.29s)
+    --- PASS: TestOpenComposedGitHubCommitsHonorsTransportMaxPages/all_is_unlimited (0.29s)
+    --- PASS: TestOpenComposedGitHubCommitsHonorsTransportMaxPages/unlimited_is_unlimited (0.28s)
+=== RUN   TestOpenComposedGitHubCommitsTimesOutOneProviderPageWithoutCancellingTheRunContext
+--- PASS: TestOpenComposedGitHubCommitsTimesOutOneProviderPageWithoutCancellingTheRunContext (0.30s)
+=== RUN   TestLocalWarehouseDestinationExecutorWritesAndReadBacksConnectionOwnedParquet
+--- PASS: TestLocalWarehouseDestinationExecutorWritesAndReadBacksConnectionOwnedParquet (0.30s)
+=== RUN   TestLocalWarehouseDestinationExecutorAppliesChangeCaptureTombstones
+--- PASS: TestLocalWarehouseDestinationExecutorAppliesChangeCaptureTombstones (0.29s)
+=== RUN   TestOpenInstallsIssueLabelWarehouseMediatedTransport
+--- PASS: TestOpenInstallsIssueLabelWarehouseMediatedTransport (0.28s)
+=== RUN   TestIssueLabelWarehouseStageReopensDurableReceiptAfterSourceReferencesAreDiscarded
+--- PASS: TestIssueLabelWarehouseStageReopensDurableReceiptAfterSourceReferencesAreDiscarded (0.37s)
+=== RUN   TestIssueLabelWarehouseStageRejectsTamperedReceipt
+=== RUN   TestIssueLabelWarehouseStageRejectsTamperedReceipt/owner
+=== RUN   TestIssueLabelWarehouseStageRejectsTamperedReceipt/generation
+=== RUN   TestIssueLabelWarehouseStageRejectsTamperedReceipt/manifest_hash
+=== RUN   TestIssueLabelWarehouseStageRejectsTamperedReceipt/content_hash
+--- PASS: TestIssueLabelWarehouseStageRejectsTamperedReceipt (0.37s)
+    --- PASS: TestIssueLabelWarehouseStageRejectsTamperedReceipt/owner (0.00s)
+    --- PASS: TestIssueLabelWarehouseStageRejectsTamperedReceipt/generation (0.00s)
+    --- PASS: TestIssueLabelWarehouseStageRejectsTamperedReceipt/manifest_hash (0.00s)
+    --- PASS: TestIssueLabelWarehouseStageRejectsTamperedReceipt/content_hash (0.00s)
+=== RUN   TestIssueLabelWarehouseStageFreshOpenPreservesImmutableCheckpointAndTombstones
+--- PASS: TestIssueLabelWarehouseStageFreshOpenPreservesImmutableCheckpointAndTombstones (0.98s)
+=== RUN   TestIssueLabelWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload
+=== RUN   TestIssueLabelWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload/manifest
+=== RUN   TestIssueLabelWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload/wal
+=== RUN   TestIssueLabelWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload/parquet
+--- PASS: TestIssueLabelWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload (2.06s)
+    --- PASS: TestIssueLabelWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload/manifest (0.76s)
+    --- PASS: TestIssueLabelWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload/wal (0.64s)
+    --- PASS: TestIssueLabelWarehouseStageReopenRejectsActualArtifactCorruptionWithoutPayload/parquet (0.66s)
+=== RUN   TestRunETLCanonicalFullAppendUsesRegisteredTransports
+--- PASS: TestRunETLCanonicalFullAppendUsesRegisteredTransports (0.35s)
+=== RUN   TestRunETLTransportPersistsPartialPhaseMeasurementBeforeFailureCleanup
+--- PASS: TestRunETLTransportPersistsPartialPhaseMeasurementBeforeFailureCleanup (0.66s)
+=== RUN   TestRunETLTransportPersistsZeroPhaseMeasurementWhenRefusedBeforeSourceIO
+--- PASS: TestRunETLTransportPersistsZeroPhaseMeasurementWhenRefusedBeforeSourceIO (0.35s)
+=== RUN   TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination
+--- PASS: TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination (0.63s)
+=== RUN   TestRunETLRejectsDestinationApprovalOutsideClosedTransportRoute
+--- PASS: TestRunETLRejectsDestinationApprovalOutsideClosedTransportRoute (0.65s)
+=== RUN   TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume
+=== RUN   TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume/another_credential
+=== RUN   TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume/another_stream
+=== RUN   TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume/generation_mismatch
+=== RUN   TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume/matched_control
+--- PASS: TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume (1.51s)
+    --- PASS: TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume/another_credential (0.39s)
+    --- PASS: TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume/another_stream (0.33s)
+    --- PASS: TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume/generation_mismatch (0.40s)
+    --- PASS: TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume/matched_control (0.38s)
+=== RUN   TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes
+=== RUN   TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/full_append
+=== RUN   TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/incremental_append
+=== RUN   TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/incremental_upsert
+=== RUN   TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/incremental_dedupe
+=== RUN   TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/incremental_dedupe_history
+=== RUN   TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/change_capture
+--- PASS: TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes (3.89s)
+    --- PASS: TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/full_append (0.68s)
+    --- PASS: TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/incremental_append (0.63s)
+    --- PASS: TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/incremental_upsert (0.64s)
+    --- PASS: TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/incremental_dedupe (0.68s)
+    --- PASS: TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/incremental_dedupe_history (0.64s)
+    --- PASS: TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes/change_capture (0.62s)
+=== RUN   TestRunETLTransportFullOverwriteSourceFailureAbortsWithoutCheckpoint
+--- PASS: TestRunETLTransportFullOverwriteSourceFailureAbortsWithoutCheckpoint (0.62s)
+=== RUN   TestRunETLTransportFullOverwriteCancellationBeforePublishAbortsWithoutCheckpoint
+--- PASS: TestRunETLTransportFullOverwriteCancellationBeforePublishAbortsWithoutCheckpoint (0.61s)
+=== RUN   TestRunETLTransportAdvancesInterimCheckpointAcrossPages
+--- PASS: TestRunETLTransportAdvancesInterimCheckpointAcrossPages (0.40s)
+=== RUN   TestRunETLTransportPreservesUnrelatedStateDuringInterimCheckpointCommit
+--- PASS: TestRunETLTransportPreservesUnrelatedStateDuringInterimCheckpointCommit (0.63s)
+=== RUN   TestRunETLTransportRejectsStaleCheckpointWriter
+--- PASS: TestRunETLTransportRejectsStaleCheckpointWriter (0.94s)
+=== RUN   TestRunETLTransportStaleWriterFinalizesLosingRun
+--- PASS: TestRunETLTransportStaleWriterFinalizesLosingRun (0.97s)
+=== RUN   TestRunETLTransportStaleWriterDoesNotReportUncommittedFinalization
+--- PASS: TestRunETLTransportStaleWriterDoesNotReportUncommittedFinalization (0.93s)
+=== RUN   TestRunETLTransportStaleWriterFailureSurvivesReopen
+--- PASS: TestRunETLTransportStaleWriterFailureSurvivesReopen (0.92s)
+=== RUN   TestRunETLTransportStaleWriterFinalizesAfterCancellation
+--- PASS: TestRunETLTransportStaleWriterFinalizesAfterCancellation (0.91s)
+=== RUN   TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes
+=== RUN   TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/full_append
+=== RUN   TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/incremental_append
+=== RUN   TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/incremental_upsert
+=== RUN   TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/incremental_dedupe
+=== RUN   TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/incremental_dedupe_history
+=== RUN   TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/change_capture
+--- PASS: TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes (5.74s)
+    --- PASS: TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/full_append (0.93s)
+    --- PASS: TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/incremental_append (0.96s)
+    --- PASS: TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/incremental_upsert (0.94s)
+    --- PASS: TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/incremental_dedupe (0.99s)
+    --- PASS: TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/incremental_dedupe_history (0.95s)
+    --- PASS: TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes/change_capture (0.97s)
+=== RUN   TestRunETLTransportFullOverwriteStaleWriterAfterReceiptReadBackFinalizesLosingRun
+--- PASS: TestRunETLTransportFullOverwriteStaleWriterAfterReceiptReadBackFinalizesLosingRun (1.07s)
+=== RUN   TestRunETLTransportFullOverwriteReceiptReadBackThenStaleFinalCheckpointFinalizesLosingRun
+--- PASS: TestRunETLTransportFullOverwriteReceiptReadBackThenStaleFinalCheckpointFinalizesLosingRun (0.95s)
+=== RUN   TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes
+=== RUN   TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/full_append
+=== RUN   TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/incremental_append
+=== RUN   TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/incremental_upsert
+=== RUN   TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/incremental_dedupe
+=== RUN   TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/incremental_dedupe_history
+=== RUN   TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/change_capture
+--- PASS: TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes (5.72s)
+    --- PASS: TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/full_append (0.97s)
+    --- PASS: TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/incremental_append (0.93s)
+    --- PASS: TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/incremental_upsert (0.96s)
+    --- PASS: TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/incremental_dedupe (0.93s)
+    --- PASS: TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/incremental_dedupe_history (0.92s)
+    --- PASS: TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes/change_capture (1.00s)
+=== RUN   TestFailRunTransportConflictPreservesLatestConcurrentState
+--- PASS: TestFailRunTransportConflictPreservesLatestConcurrentState (0.90s)
+=== RUN   TestFailRunRetainsRevisionGuardWithoutTransportConflict
+--- PASS: TestFailRunRetainsRevisionGuardWithoutTransportConflict (0.87s)
+=== RUN   TestFailRunTransportConflictRequiresRunningTarget
+--- PASS: TestFailRunTransportConflictRequiresRunningTarget (0.61s)
+=== RUN   TestFailRunTransportConflictReturnsMayHaveCommittedFinalization
+=== RUN   TestFailRunTransportConflictReturnsMayHaveCommittedFinalization/committed_unlock_failure
+=== RUN   TestFailRunTransportConflictReturnsMayHaveCommittedFinalization/indeterminate_directory_sync_failure
+--- PASS: TestFailRunTransportConflictReturnsMayHaveCommittedFinalization (1.20s)
+    --- PASS: TestFailRunTransportConflictReturnsMayHaveCommittedFinalization/committed_unlock_failure (0.60s)
+    --- PASS: TestFailRunTransportConflictReturnsMayHaveCommittedFinalization/indeterminate_directory_sync_failure (0.60s)
+=== RUN   TestRunETLTransportDistinguishesMissingAndPresentStreamState
+--- PASS: TestRunETLTransportDistinguishesMissingAndPresentStreamState (0.88s)
+=== RUN   TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation
+--- PASS: TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation (0.41s)
+=== RUN   TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails
+--- PASS: TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails (0.61s)
+=== RUN   TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure
+--- PASS: TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure (0.60s)
+=== RUN   TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes
+=== RUN   TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/full_append
+=== RUN   TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/incremental_append
+=== RUN   TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/incremental_upsert
+=== RUN   TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/incremental_dedupe
+=== RUN   TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/incremental_dedupe_history
+=== RUN   TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/change_capture
+--- PASS: TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes (5.50s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/full_append (0.96s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/incremental_append (0.90s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/incremental_upsert (0.91s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/incremental_dedupe (0.90s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/incremental_dedupe_history (0.91s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes/change_capture (0.93s)
+=== RUN   TestRunETLTransportFullOverwriteCompletionRebasesUnrelatedStateAfterFinalCheckpoint
+--- PASS: TestRunETLTransportFullOverwriteCompletionRebasesUnrelatedStateAfterFinalCheckpoint (1.18s)
+=== RUN   TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges
+=== RUN   TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges/target_stream_changed
+=== RUN   TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges/target_stream_removed
+=== RUN   TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges/target_run_terminal
+--- PASS: TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges (2.69s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges/target_stream_changed (0.89s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges/target_stream_removed (0.92s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges/target_run_terminal (0.89s)
+=== RUN   TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes
+=== RUN   TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/full_append
+=== RUN   TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/incremental_append
+=== RUN   TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/incremental_upsert
+=== RUN   TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/incremental_dedupe
+=== RUN   TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/incremental_dedupe_history
+=== RUN   TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/change_capture
+--- PASS: TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes (3.74s)
+    --- PASS: TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/full_append (0.62s)
+    --- PASS: TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/incremental_append (0.63s)
+    --- PASS: TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/incremental_upsert (0.63s)
+    --- PASS: TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/incremental_dedupe (0.61s)
+    --- PASS: TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/incremental_dedupe_history (0.62s)
+    --- PASS: TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes/change_capture (0.62s)
+=== RUN   TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes
+=== RUN   TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/full_append
+=== RUN   TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/incremental_append
+=== RUN   TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/incremental_upsert
+=== RUN   TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/incremental_dedupe
+=== RUN   TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/incremental_dedupe_history
+=== RUN   TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/change_capture
+--- PASS: TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes (5.40s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/full_append (0.91s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/incremental_append (0.90s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/incremental_upsert (0.90s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/incremental_dedupe (0.91s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/incremental_dedupe_history (0.90s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes/change_capture (0.89s)
+=== RUN   TestRunETLTransportAcknowledgedFailurePreservesSourceError
+--- PASS: TestRunETLTransportAcknowledgedFailurePreservesSourceError (0.91s)
+=== RUN   TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges
+=== RUN   TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges/target_stream_changed
+=== RUN   TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges/target_stream_removed
+=== RUN   TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges/target_run_terminal
+=== RUN   TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges/target_run_removed
+--- PASS: TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges (3.55s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges/target_stream_changed (0.89s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges/target_stream_removed (0.88s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges/target_run_terminal (0.88s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges/target_run_removed (0.89s)
+=== RUN   TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes
+=== RUN   TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/full_append
+=== RUN   TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/incremental_append
+=== RUN   TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/incremental_upsert
+=== RUN   TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/incremental_dedupe
+=== RUN   TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/incremental_dedupe_history
+=== RUN   TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/change_capture
+--- PASS: TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes (5.45s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/full_append (0.89s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/incremental_append (0.89s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/incremental_upsert (0.95s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/incremental_dedupe (0.94s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/incremental_dedupe_history (0.88s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes/change_capture (0.90s)
+=== RUN   TestRunETLTransportFullOverwriteCompletionMissingRunIsTypedConflictAfterFinalCheckpoint
+--- PASS: TestRunETLTransportFullOverwriteCompletionMissingRunIsTypedConflictAfterFinalCheckpoint (1.15s)
+=== RUN   TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome
+=== RUN   TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome/definite_pre-commit_failure
+=== RUN   TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome/committed_unlock_failure
+=== RUN   TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome/indeterminate_directory_sync_failure
+--- PASS: TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome (4.04s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome/definite_pre-commit_failure (1.15s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome/committed_unlock_failure (1.47s)
+    --- PASS: TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome/indeterminate_directory_sync_failure (1.43s)
+=== RUN   TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome
+=== RUN   TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome/definite_pre-commit_failure
+=== RUN   TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome/committed_unlock_failure
+=== RUN   TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome/indeterminate_directory_sync_failure
+--- PASS: TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome (2.72s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome/definite_pre-commit_failure (0.89s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome/committed_unlock_failure (0.90s)
+    --- PASS: TestRunETLTransportAcknowledgedCompletionReturnsTruthfulPersistenceOutcome/indeterminate_directory_sync_failure (0.93s)
+=== RUN   TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead
+--- PASS: TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead (0.33s)
+=== RUN   TestHasDeclaredSyncTransportRequiresBothEndpoints
+--- PASS: TestHasDeclaredSyncTransportRequiresBothEndpoints (0.00s)
+=== RUN   TestAppTransportDestinationAfterApplyRunsAfterOrdinaryAcknowledgement
+=== RUN   TestAppTransportDestinationAfterApplyRunsAfterOrdinaryAcknowledgement/happy_path_hook_observes_durable_acknowledgement
+=== RUN   TestAppTransportDestinationAfterApplyRunsAfterOrdinaryAcknowledgement/bad_path_apply_refusal_has_no_acknowledgement_hook
+=== RUN   TestAppTransportDestinationAfterApplyRunsAfterOrdinaryAcknowledgement/edge_repeated_applies_keep_acknowledgement_ordering
+--- PASS: TestAppTransportDestinationAfterApplyRunsAfterOrdinaryAcknowledgement (0.00s)
+    --- PASS: TestAppTransportDestinationAfterApplyRunsAfterOrdinaryAcknowledgement/happy_path_hook_observes_durable_acknowledgement (0.00s)
+    --- PASS: TestAppTransportDestinationAfterApplyRunsAfterOrdinaryAcknowledgement/bad_path_apply_refusal_has_no_acknowledgement_hook (0.00s)
+    --- PASS: TestAppTransportDestinationAfterApplyRunsAfterOrdinaryAcknowledgement/edge_repeated_applies_keep_acknowledgement_ordering (0.00s)
+=== RUN   TestAppTransportFullOverwriteRunLifecycleHooks
+=== RUN   TestAppTransportFullOverwriteRunLifecycleHooks/happy_path_exposes_distinct_page_publish_and_read-back_boundaries
+=== RUN   TestAppTransportFullOverwriteRunLifecycleHooks/bad_path_rejects_read-back_before_publication_and_wrong_acknowledgement
+=== RUN   TestAppTransportFullOverwriteRunLifecycleHooks/edge_abort_is_idempotent_and_closes_pre-publication_lifecycle
+--- PASS: TestAppTransportFullOverwriteRunLifecycleHooks (0.00s)
+    --- PASS: TestAppTransportFullOverwriteRunLifecycleHooks/happy_path_exposes_distinct_page_publish_and_read-back_boundaries (0.00s)
+    --- PASS: TestAppTransportFullOverwriteRunLifecycleHooks/bad_path_rejects_read-back_before_publication_and_wrong_acknowledgement (0.00s)
+    --- PASS: TestAppTransportFullOverwriteRunLifecycleHooks/edge_abort_is_idempotent_and_closes_pre-publication_lifecycle (0.00s)
+=== RUN   TestTransportPhaseMeasurementReportsLogicalInputThroughputAndEveryFastPathPhase
+--- PASS: TestTransportPhaseMeasurementReportsLogicalInputThroughputAndEveryFastPathPhase (0.00s)
+=== RUN   TestTransportPhaseMeasurementHasZeroThroughputWithoutCriticalPath
+--- PASS: TestTransportPhaseMeasurementHasZeroThroughputWithoutCriticalPath (0.00s)
+=== RUN   TestSecondConnectionDoesNotDestroyFirstConnectionRows
+--- PASS: TestSecondConnectionDoesNotDestroyFirstConnectionRows (0.75s)
+=== RUN   TestBothConnectionsKeepTheirOwnRowsAndAreReadableByName
+--- PASS: TestBothConnectionsKeepTheirOwnRowsAndAreReadableByName (0.70s)
+=== RUN   TestQuerySQLScopesConnectionOwnedAndUnattributedViews
+=== RUN   TestQuerySQLScopesConnectionOwnedAndUnattributedViews/acme
+=== RUN   TestQuerySQLScopesConnectionOwnedAndUnattributedViews/globex
+=== RUN   TestQuerySQLScopesConnectionOwnedAndUnattributedViews/root
+--- PASS: TestQuerySQLScopesConnectionOwnedAndUnattributedViews (0.70s)
+    --- PASS: TestQuerySQLScopesConnectionOwnedAndUnattributedViews/acme (0.00s)
+    --- PASS: TestQuerySQLScopesConnectionOwnedAndUnattributedViews/globex (0.00s)
+    --- PASS: TestQuerySQLScopesConnectionOwnedAndUnattributedViews/root (0.00s)
+=== RUN   TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept
+--- PASS: TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept (0.69s)
+=== RUN   TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision
+--- PASS: TestQuerySQLRefusesUnscopedHealthyAndUnreadableOwnerCollision (0.64s)
+=== RUN   TestQuerySQLBindsQuotedConnectionScopedWarehouseNames
+=== RUN   TestQuerySQLBindsQuotedConnectionScopedWarehouseNames/1orders
+=== RUN   TestQuerySQLBindsQuotedConnectionScopedWarehouseNames/orders-2026
+=== RUN   TestQuerySQLBindsQuotedConnectionScopedWarehouseNames/orders.2026
+--- PASS: TestQuerySQLBindsQuotedConnectionScopedWarehouseNames (0.67s)
+    --- PASS: TestQuerySQLBindsQuotedConnectionScopedWarehouseNames/1orders (0.01s)
+    --- PASS: TestQuerySQLBindsQuotedConnectionScopedWarehouseNames/orders-2026 (0.01s)
+    --- PASS: TestQuerySQLBindsQuotedConnectionScopedWarehouseNames/orders.2026 (0.01s)
+=== RUN   TestQuerySQLReusesOneWarehouseResolverPerQuery
+--- PASS: TestQuerySQLReusesOneWarehouseResolverPerQuery (0.64s)
+=== RUN   TestQuerySQLReusesWarehouseResolverForReplacementScans
+--- PASS: TestQuerySQLReusesWarehouseResolverForReplacementScans (0.65s)
+=== RUN   TestWarehouseQueryIdentifierQuotingAndIdentityValidation
+--- PASS: TestWarehouseQueryIdentifierQuotingAndIdentityValidation (0.00s)
+=== RUN   TestSyncRefusesWhenAnotherConnectionOwnsTheDirectory
+--- PASS: TestSyncRefusesWhenAnotherConnectionOwnsTheDirectory (0.68s)
+=== RUN   TestSyncRefusesLegacyFlatWarehouse
+--- PASS: TestSyncRefusesLegacyFlatWarehouse (0.63s)
+=== RUN   TestCreateConnectionRejectsAmbiguousNames
+--- PASS: TestCreateConnectionRejectsAmbiguousNames (0.65s)
+=== RUN   TestCreateConnectionRejectsStreamAndTableNamesItCouldNeverMaterialize
+--- PASS: TestCreateConnectionRejectsStreamAndTableNamesItCouldNeverMaterialize (0.64s)
+=== RUN   TestCreateConnectionRejectsSameOwnerCaseEquivalentDestinationTables
+--- PASS: TestCreateConnectionRejectsSameOwnerCaseEquivalentDestinationTables (0.64s)
+=== RUN   TestReversePlanRefusesAnUnwritableWarehouseTableAtPlanTime
+--- PASS: TestReversePlanRefusesAnUnwritableWarehouseTableAtPlanTime (0.72s)
+=== RUN   TestConnectionIdentityIsOpaqueAndNotDerivedFromNameOrCredential
+--- PASS: TestConnectionIdentityIsOpaqueAndNotDerivedFromNameOrCredential (0.66s)
+=== RUN   TestReversePlanPinsItsSourceConnection
+--- PASS: TestReversePlanPinsItsSourceConnection (0.76s)
+=== RUN   TestLegacySameOwnerCaseEquivalentInventorySurvivesOpenAndFailsBeforeMutation
+--- PASS: TestLegacySameOwnerCaseEquivalentInventorySurvivesOpenAndFailsBeforeMutation (0.89s)
+=== RUN   TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL
+--- PASS: TestLegacyLocalWarehouseCollisionDoesNotBlockNonLocalETL (0.67s)
+=== RUN   TestLegacySameOwnerCaseEquivalentDirectReadsUseOnlyPhysicalExactNames
+=== RUN   TestLegacySameOwnerCaseEquivalentDirectReadsUseOnlyPhysicalExactNames/records
+=== RUN   TestLegacySameOwnerCaseEquivalentDirectReadsUseOnlyPhysicalExactNames/RECORDS
+--- PASS: TestLegacySameOwnerCaseEquivalentDirectReadsUseOnlyPhysicalExactNames (0.67s)
+    --- PASS: TestLegacySameOwnerCaseEquivalentDirectReadsUseOnlyPhysicalExactNames/records (0.03s)
+    --- PASS: TestLegacySameOwnerCaseEquivalentDirectReadsUseOnlyPhysicalExactNames/RECORDS (0.00s)
+=== RUN   TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory
+=== RUN   TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory/generic_bare
+=== RUN   TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory/generic_quoted
+=== RUN   TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory/selected_bare
+=== RUN   TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory/selected_quoted
+=== RUN   TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory/generated_alias
+--- PASS: TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory (0.65s)
+    --- PASS: TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory/generic_bare (0.00s)
+    --- PASS: TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory/generic_quoted (0.00s)
+    --- PASS: TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory/selected_bare (0.00s)
+    --- PASS: TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory/selected_quoted (0.00s)
+    --- PASS: TestLegacySameOwnerCaseEquivalentSQLUsesDeclaredInventory/generated_alias (0.00s)
+=== RUN   TestWarehouseMaterializesTablesAsParquet
+--- PASS: TestWarehouseMaterializesTablesAsParquet (0.63s)
+=== RUN   TestTablePathIsASingleParquetFile
+--- PASS: TestTablePathIsASingleParquetFile (0.00s)
+=== RUN   TestAppendModeRebuildsFromWALWithoutDuplicating
+--- PASS: TestAppendModeRebuildsFromWALWithoutDuplicating (0.65s)
+=== RUN   TestZeroRowSyncMaterializesAReadableEmptyTable
+--- PASS: TestZeroRowSyncMaterializesAReadableEmptyTable (0.61s)
+=== RUN   TestPreParquetJSONLTableIsRefusedAndLeftOnDisk
+--- PASS: TestPreParquetJSONLTableIsRefusedAndLeftOnDisk (0.01s)
+=== RUN   TestSyncRefusesAPreParquetWarehouseInsteadOfReportingSuccess
+--- PASS: TestSyncRefusesAPreParquetWarehouseInsteadOfReportingSuccess (0.68s)
+=== RUN   TestProjectWriteApprovalRequiresSealedPlanAndPersistentConsumption
+--- PASS: TestProjectWriteApprovalRequiresSealedPlanAndPersistentConsumption (0.01s)
+=== RUN   TestLocalETLAndReverseETLWorkflow
+--- PASS: TestLocalETLAndReverseETLWorkflow (0.68s)
+=== RUN   TestAddCredentialRejectsInvalidGitHubBaseURLAtConfigurationTime
+--- PASS: TestAddCredentialRejectsInvalidGitHubBaseURLAtConfigurationTime (0.28s)
+=== RUN   TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime
+=== RUN   TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/date-time
+=== RUN   TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/date
+=== RUN   TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/agilecrm_pattern
+=== RUN   TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/docker_hub_pattern
+=== RUN   TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/engine_connector_enum
+=== RUN   TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/tier_three_base_enum
+--- PASS: TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime (0.29s)
+    --- PASS: TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/date-time (0.00s)
+    --- PASS: TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/date (0.00s)
+    --- PASS: TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/agilecrm_pattern (0.00s)
+    --- PASS: TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/docker_hub_pattern (0.00s)
+    --- PASS: TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/engine_connector_enum (0.00s)
+    --- PASS: TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime/tier_three_base_enum (0.00s)
+=== RUN   TestAddCredentialLeavesConstraintFreeConnectorUnconstrained
+--- PASS: TestAddCredentialLeavesConstraintFreeConnectorUnconstrained (0.29s)
+=== RUN   TestBitbucketReverseETLClosedSchemasDoNotReceiveInternalPlanFields
+--- PASS: TestBitbucketReverseETLClosedSchemasDoNotReceiveInternalPlanFields (0.80s)
+=== RUN   TestAuthorizationScopeIdentityIsContentFree
+--- PASS: TestAuthorizationScopeIdentityIsContentFree (0.41s)
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty/source_connection
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty/destination_connection
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty/credential_revision
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty/stream_table_set
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty/field_mappings
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty/write_action
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty/destination_configuration
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty/enabled_operations
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty/confirmation_policy
+=== RUN   TestAuthorizationScopeIdentityChangesForEveryBoundProperty/expiry
+--- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty (0.00s)
+    --- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty/source_connection (0.00s)
+    --- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty/destination_connection (0.00s)
+    --- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty/credential_revision (0.00s)
+    --- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty/stream_table_set (0.00s)
+    --- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty/field_mappings (0.00s)
+    --- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty/write_action (0.00s)
+    --- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty/destination_configuration (0.00s)
+    --- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty/enabled_operations (0.00s)
+    --- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty/confirmation_policy (0.00s)
+    --- PASS: TestAuthorizationScopeIdentityChangesForEveryBoundProperty/expiry (0.00s)
+=== RUN   TestRunReverseETLAllowsIdenticalAuthorizationScopeWithoutToken
+--- PASS: TestRunReverseETLAllowsIdenticalAuthorizationScopeWithoutToken (0.54s)
+=== RUN   TestRunReverseETLRefusesInvalidAuthorizationBeforeProviderWrite
+=== RUN   TestRunReverseETLRefusesInvalidAuthorizationBeforeProviderWrite/changed_scope
+=== RUN   TestRunReverseETLRefusesInvalidAuthorizationBeforeProviderWrite/revocation
+=== RUN   TestRunReverseETLRefusesInvalidAuthorizationBeforeProviderWrite/expiry
+--- PASS: TestRunReverseETLRefusesInvalidAuthorizationBeforeProviderWrite (1.63s)
+    --- PASS: TestRunReverseETLRefusesInvalidAuthorizationBeforeProviderWrite/changed_scope (0.54s)
+    --- PASS: TestRunReverseETLRefusesInvalidAuthorizationBeforeProviderWrite/revocation (0.57s)
+    --- PASS: TestRunReverseETLRefusesInvalidAuthorizationBeforeProviderWrite/expiry (0.52s)
+=== RUN   TestRunReverseETLConsumesAuthorizationTokenOnceAndStoresNoMaterial
+--- PASS: TestRunReverseETLConsumesAuthorizationTokenOnceAndStoresNoMaterial (0.50s)
+=== RUN   TestPlanConnectorCommandPersistsCompleteDeclaredContent
+--- PASS: TestPlanConnectorCommandPersistsCompleteDeclaredContent (0.59s)
+=== RUN   TestPlanConnectorCommandRedactsDeclaredWriteActionFields
+--- PASS: TestPlanConnectorCommandRedactsDeclaredWriteActionFields (0.58s)
+=== RUN   TestWithheldFieldNeverReachesStateJSON
+--- PASS: TestWithheldFieldNeverReachesStateJSON (0.30s)
+=== RUN   TestWithheldRequiredFieldReplaysEndToEnd
+--- PASS: TestWithheldRequiredFieldReplaysEndToEnd (0.32s)
+=== RUN   TestWrongResuppliedValueFailsHashCheck
+--- PASS: TestWrongResuppliedValueFailsHashCheck (0.30s)
+=== RUN   TestDeclaredButUnsuppliedFieldIsNotOwedBack
+=== RUN   TestDeclaredButUnsuppliedFieldIsNotOwedBack/optional_flag_omitted
+=== RUN   TestDeclaredButUnsuppliedFieldIsNotOwedBack/no_flag_maps_to_the_field
+--- PASS: TestDeclaredButUnsuppliedFieldIsNotOwedBack (0.34s)
+    --- PASS: TestDeclaredButUnsuppliedFieldIsNotOwedBack/optional_flag_omitted (0.03s)
+    --- PASS: TestDeclaredButUnsuppliedFieldIsNotOwedBack/no_flag_maps_to_the_field (0.03s)
+=== RUN   TestUndeclaredFieldsRoundTripUnchanged
+--- PASS: TestUndeclaredFieldsRoundTripUnchanged (0.32s)
+=== RUN   TestCredentialCoordination_ExplicitLinkSharesOnlyOpaqueIdentity
+--- PASS: TestCredentialCoordination_ExplicitLinkSharesOnlyOpaqueIdentity (0.36s)
+=== RUN   TestCredentialCoordination_MigratesLegacyMetadataWithoutChangingApprovalLifetime
+--- PASS: TestCredentialCoordination_MigratesLegacyMetadataWithoutChangingApprovalLifetime (0.60s)
+=== RUN   TestCredentialCoordination_EmptyProjectOpenDoesNotRewriteState
+--- PASS: TestCredentialCoordination_EmptyProjectOpenDoesNotRewriteState (0.54s)
+=== RUN   TestCredentialCoordination_RejectsInvalidDeclarationsBeforePersistence
+=== RUN   TestCredentialCoordination_RejectsInvalidDeclarationsBeforePersistence/provider_family
+=== RUN   TestCredentialCoordination_RejectsInvalidDeclarationsBeforePersistence/auth_profile
+--- PASS: TestCredentialCoordination_RejectsInvalidDeclarationsBeforePersistence (0.27s)
+    --- PASS: TestCredentialCoordination_RejectsInvalidDeclarationsBeforePersistence/provider_family (0.00s)
+    --- PASS: TestCredentialCoordination_RejectsInvalidDeclarationsBeforePersistence/auth_profile (0.00s)
+=== RUN   TestCredentialCoordination_CrossConnectorLinksRequireExplicitDeclarations
+--- PASS: TestCredentialCoordination_CrossConnectorLinksRequireExplicitDeclarations (0.33s)
+=== RUN   TestCredentialCoordination_MigrationIsolatesUnverifiedCrossConnectorBindings
+--- PASS: TestCredentialCoordination_MigrationIsolatesUnverifiedCrossConnectorBindings (0.58s)
+=== RUN   TestCertificationEphemeralCredentialsResolveWithoutVaultOrProfile
+--- PASS: TestCertificationEphemeralCredentialsResolveWithoutVaultOrProfile (0.28s)
+=== RUN   TestExecuteAuthorizedFlowActionAcknowledgesReadsBackThenRecordsReceipt
+--- PASS: TestExecuteAuthorizedFlowActionAcknowledgesReadsBackThenRecordsReceipt (0.62s)
+=== RUN   TestExecuteAuthorizedFlowActionScopeDriftRefusesBeforeProviderWrite
+--- PASS: TestExecuteAuthorizedFlowActionScopeDriftRefusesBeforeProviderWrite (0.50s)
+=== RUN   TestExecuteAuthorizedFlowActionReadBackFailurePersistsNoReceipt
+--- PASS: TestExecuteAuthorizedFlowActionReadBackFailurePersistsNoReceipt (0.48s)
+=== RUN   TestAuthorizedFlowActionPreparedIdentityBindsPayloadAndReachesReceipt
+--- PASS: TestAuthorizedFlowActionPreparedIdentityBindsPayloadAndReachesReceipt (0.60s)
+=== RUN   TestAuthorizedFlowActionCancellationReleasesPreparedLeaseAndReplayWritesOnce
+--- PASS: TestAuthorizedFlowActionCancellationReleasesPreparedLeaseAndReplayWritesOnce (0.50s)
+=== RUN   TestAuthorizedFlowActionRevokedAuthorizationRefusesAndReleasesPreparedLease
+--- PASS: TestAuthorizedFlowActionRevokedAuthorizationRefusesAndReleasesPreparedLease (0.51s)
+=== RUN   TestAuthorizedFlowActionTamperedPreparedIdentityRefusesBeforeDispatch
+--- PASS: TestAuthorizedFlowActionTamperedPreparedIdentityRefusesBeforeDispatch (0.47s)
+=== RUN   TestAuthorizedFlowActionConcurrentPreparedExecutionHasOneWinner
+--- PASS: TestAuthorizedFlowActionConcurrentPreparedExecutionHasOneWinner (0.48s)
+=== RUN   TestAuthorizedFlowActionWriteFailureParksPreparedExecutionAndPersistsNoReceipt
+--- PASS: TestAuthorizedFlowActionWriteFailureParksPreparedExecutionAndPersistsNoReceipt (0.75s)
+=== RUN   TestGitHubRepoDeleteRequiresConfirmationAndSingleUseGrant
+--- PASS: TestGitHubRepoDeleteRequiresConfirmationAndSingleUseGrant (0.48s)
+=== RUN   TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField
+=== RUN   TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField/archive
+=== RUN   TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField/unarchive
+--- PASS: TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField (0.90s)
+    --- PASS: TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField/archive (0.44s)
+    --- PASS: TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField/unarchive (0.47s)
+=== RUN   TestGitHubApprovalOnlyCreatesCarryNoTypedChallenge
+=== RUN   TestGitHubApprovalOnlyCreatesCarryNoTypedChallenge/repo_create
+=== RUN   TestGitHubApprovalOnlyCreatesCarryNoTypedChallenge/secret_set
+--- PASS: TestGitHubApprovalOnlyCreatesCarryNoTypedChallenge (0.33s)
+    --- PASS: TestGitHubApprovalOnlyCreatesCarryNoTypedChallenge/repo_create (0.03s)
+    --- PASS: TestGitHubApprovalOnlyCreatesCarryNoTypedChallenge/secret_set (0.02s)
+=== RUN   TestRunETLUsesMaterializationInterfaceInsteadOfWarehouseName
+--- PASS: TestRunETLUsesMaterializationInterfaceInsteadOfWarehouseName (0.36s)
+=== RUN   TestOperationBackedPlanWithholdsDeclaredFields
+--- PASS: TestOperationBackedPlanWithholdsDeclaredFields (0.34s)
+=== RUN   TestOperationBackedPlanIgnoresSameNamedWriteAction
+--- PASS: TestOperationBackedPlanIgnoresSameNamedWriteAction (0.30s)
+=== RUN   TestOperationWithoutSensitivePolicyRoundTrips
+--- PASS: TestOperationWithoutSensitivePolicyRoundTrips (0.33s)
+=== RUN   TestDuckDBJoinAndAggregate
+--- PASS: TestDuckDBJoinAndAggregate (0.30s)
+=== RUN   TestDuckDBSelectOnlyRejectsMutation
+--- PASS: TestDuckDBSelectOnlyRejectsMutation (0.28s)
+=== RUN   TestQuerySQLEngineSeamPreservesSelectAll
+--- PASS: TestQuerySQLEngineSeamPreservesSelectAll (0.29s)
+=== RUN   TestQuerySQLHonorsCanceledContext
+--- PASS: TestQuerySQLHonorsCanceledContext (0.27s)
+=== RUN   TestQueryTableStopsAtLimitBeforeReadingTheRest
+--- PASS: TestQueryTableStopsAtLimitBeforeReadingTheRest (0.28s)
+=== RUN   TestDirectWriteCommandPlanPreviewApprovalAndExecute
+--- PASS: TestDirectWriteCommandPlanPreviewApprovalAndExecute (0.33s)
+=== RUN   TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies
+=== RUN   TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies/json_returns_complete_decoded_body
+    rest_write_command_test.go:378: direct-write command policy="json" status=200 response={"id":"w_1","nested":{"state":"complete"},"updated":true}
+=== RUN   TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies/none_intentionally_suppresses_response_body
+    rest_write_command_test.go:360: direct-write command policy="none" status=200 response=<none>
+--- PASS: TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies (0.66s)
+    --- PASS: TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies/json_returns_complete_decoded_body (0.33s)
+    --- PASS: TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies/none_intentionally_suppresses_response_body (0.33s)
+=== RUN   TestMultipartDirectWriteCommandPreflightPlanPreviewApprovalAndExecute
+--- PASS: TestMultipartDirectWriteCommandPreflightPlanPreviewApprovalAndExecute (0.33s)
+=== RUN   TestMultipartDirectWriteCommandRejectsChangedPayloadBeforeNetwork
+--- PASS: TestMultipartDirectWriteCommandRejectsChangedPayloadBeforeNetwork (0.32s)
+=== RUN   TestMultipartDirectWriteCommandBindsDeclaredUploadField
+--- PASS: TestMultipartDirectWriteCommandBindsDeclaredUploadField (0.33s)
+=== RUN   TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload
+=== RUN   TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload/missing_multipart_contract_remains_blocked
+=== RUN   TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload/missing_api_surface_endpoint_remains_blocked
+=== RUN   TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload/legacy_file_upload_cannot_become_direct_write
+--- PASS: TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload (0.00s)
+    --- PASS: TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload/missing_multipart_contract_remains_blocked (0.00s)
+    --- PASS: TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload/missing_api_surface_endpoint_remains_blocked (0.00s)
+    --- PASS: TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload/legacy_file_upload_cannot_become_direct_write (0.00s)
+=== RUN   TestDirectWriteCommandFailurePreservesErrorContent
+--- PASS: TestDirectWriteCommandFailurePreservesErrorContent (0.33s)
+=== RUN   TestNonDestructiveDirectWriteStillRequiresPreviewAndSingleUseApproval
+--- PASS: TestNonDestructiveDirectWriteStillRequiresPreviewAndSingleUseApproval (0.33s)
+=== RUN   TestRunReverseETLRejectsApprovalTokenReplay
+--- PASS: TestRunReverseETLRejectsApprovalTokenReplay (0.42s)
+=== RUN   TestRunReverseETLRejectsPlanHashMismatchWhenRowsChange
+--- PASS: TestRunReverseETLRejectsPlanHashMismatchWhenRowsChange (0.41s)
+=== RUN   TestPlanReverseETLRefusesNonBatchableAction
+--- PASS: TestPlanReverseETLRefusesNonBatchableAction (0.28s)
+=== RUN   TestRunReverseETLRefusesStoredNonBatchablePlan
+--- PASS: TestRunReverseETLRefusesStoredNonBatchablePlan (0.58s)
+=== RUN   TestNonBatchableActionStillExecutesAsConnectorCommand
+--- PASS: TestNonBatchableActionStillExecutesAsConnectorCommand (0.32s)
+=== RUN   TestBatchableActionStillPlansAndExecutesInBulk
+--- PASS: TestBatchableActionStillPlansAndExecutesInBulk (0.33s)
+=== RUN   TestRunReverseETLRejectsDestructiveConnectorCommandWithoutConfirmation
+--- PASS: TestRunReverseETLRejectsDestructiveConnectorCommandWithoutConfirmation (0.37s)
+=== RUN   TestRunReverseETLRejectsDestructiveConnectorCommandWithoutPreview
+--- PASS: TestRunReverseETLRejectsDestructiveConnectorCommandWithoutPreview (0.32s)
+=== RUN   TestDestructiveConnectorCommandMintsApprovalOnlyAfterPreview
+--- PASS: TestDestructiveConnectorCommandMintsApprovalOnlyAfterPreview (0.35s)
+=== RUN   TestDestructiveCanonicalCommandPreviewProducesApprovablePlan
+--- PASS: TestDestructiveCanonicalCommandPreviewProducesApprovablePlan (0.33s)
+=== RUN   TestGitHubDeployKeyDeleteDoesNotMaskNotFoundForAVisibleBoundFixture
+--- PASS: TestGitHubDeployKeyDeleteDoesNotMaskNotFoundForAVisibleBoundFixture (0.44s)
+=== RUN   TestGitHubLabelDeleteKeepsNotFoundVisibleForTheSameScopedWritePath
+--- PASS: TestGitHubLabelDeleteKeepsNotFoundVisibleForTheSameScopedWritePath (0.44s)
+=== RUN   TestGenericDestructivePlanMintsApprovalOnlyAfterPreview
+--- PASS: TestGenericDestructivePlanMintsApprovalOnlyAfterPreview (0.37s)
+=== RUN   TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice
+--- PASS: TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice (0.50s)
+=== RUN   TestGitHubCreateIssueReversePlanUsesDeclaredEndpoint
+--- PASS: TestGitHubCreateIssueReversePlanUsesDeclaredEndpoint (0.48s)
+=== RUN   TestRunReverseETLAcceptsDestructiveConnectorCommandWithMatchingConfirmation
+--- PASS: TestRunReverseETLAcceptsDestructiveConnectorCommandWithMatchingConfirmation (0.51s)
+=== RUN   TestRunReverseETLRejectsGenericDestructiveActionWithoutConfirmation
+--- PASS: TestRunReverseETLRejectsGenericDestructiveActionWithoutConfirmation (0.39s)
+=== RUN   TestRunReverseETLRejectsPreviewDigestDriftBeforeNativeWrite
+--- PASS: TestRunReverseETLRejectsPreviewDigestDriftBeforeNativeWrite (0.32s)
+=== RUN   TestRunReverseETLRejectsApprovalHashStateTamper
+--- PASS: TestRunReverseETLRejectsApprovalHashStateTamper (0.66s)
+=== RUN   TestRunReverseETLConsumesApprovalAtomicallyAcrossProcesses
+--- PASS: TestRunReverseETLConsumesApprovalAtomicallyAcrossProcesses (1.23s)
+=== RUN   TestRunReverseETLConsumesBulkApprovalAtomicallyAcrossProcesses
+--- PASS: TestRunReverseETLConsumesBulkApprovalAtomicallyAcrossProcesses (1.27s)
+=== RUN   TestReverseExecutionOpenDefersLegacyMigrationUntilApprovalConsumption
+--- PASS: TestReverseExecutionOpenDefersLegacyMigrationUntilApprovalConsumption (1.00s)
+=== RUN   TestConsumedApprovalCannotBeResurrectedByStaleStateSave
+--- PASS: TestConsumedApprovalCannotBeResurrectedByStaleStateSave (1.00s)
+=== RUN   TestConsumedApprovalCannotReplayFromRolledBackStateSnapshot
+--- PASS: TestConsumedApprovalCannotReplayFromRolledBackStateSnapshot (0.80s)
+=== RUN   TestPreviewReversePlanRejectsExpiredGenericPlan
+--- PASS: TestPreviewReversePlanRejectsExpiredGenericPlan (0.62s)
+=== RUN   TestPreviewGrantExpiryIgnoresExtendedMutablePlanDeadline
+--- PASS: TestPreviewGrantExpiryIgnoresExtendedMutablePlanDeadline (0.65s)
+=== RUN   TestRunReverseETLRejectsExpiredUnsignedPlan
+--- PASS: TestRunReverseETLRejectsExpiredUnsignedPlan (0.58s)
+=== RUN   TestExecutedDestructivePlanCannotBeRepreviewedForReplay
+--- PASS: TestExecutedDestructivePlanCannotBeRepreviewedForReplay (0.46s)
+=== RUN   TestRuntimeConfigSecretStorePersistsRotatedSecret
+--- PASS: TestRuntimeConfigSecretStorePersistsRotatedSecret (0.57s)
+=== RUN   TestRuntimeConfigSecretStoreRejectsInvalidKey
+--- PASS: TestRuntimeConfigSecretStoreRejectsInvalidKey (0.29s)
+=== RUN   TestRuntimeConfigSecretStoreErrorsAreRedacted
+--- PASS: TestRuntimeConfigSecretStoreErrorsAreRedacted (0.30s)
+=== RUN   TestQuerySQLAggregatesOverParquetTables
+--- PASS: TestQuerySQLAggregatesOverParquetTables (0.38s)
+=== RUN   TestReverseETLReadsAParquetSourceTable
+--- PASS: TestReverseETLReadsAParquetSourceTable (0.41s)
+PASS
+ok  	polymetrics.ai/internal/app	236.172s

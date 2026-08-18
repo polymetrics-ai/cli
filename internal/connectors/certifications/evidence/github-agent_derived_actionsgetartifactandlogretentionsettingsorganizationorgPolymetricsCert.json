@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_actionsgetartifactandlogretentionsettingsorganizationorgPolymetricsCert",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:10:31.981Z",
+  "run_id": "github-slice2-agent_derived_actionsgetartifactandlogretentionsettingsorganizationorgPolymetricsCert",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:59f59e8b9d8559baa7f80e73938da026f1746ede4e2933a80d6fccaf407c7e7f}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_actionsgetartifactandlogretentionsettingsorganizationorgPolymetricsCert",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:0a7de1b2484770f022e43c2315bc2da48f165ed86c109c9e0edc690f51053044}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "days": "{{pmcertfp:v1:0bd34186b00ddcb3aa5322aa3fc7b07599149c945f138a65ec559306bdc716ea}}",
+              "maximum_allowed_days": "{{pmcertfp:v1:0bd34186b00ddcb3aa5322aa3fc7b07599149c945f138a65ec559306bdc716ea}}"
+            },
+            "original_bytes": 37,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

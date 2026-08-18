@@ -120,6 +120,124 @@ func TestRunETLCanonicalFullAppendUsesRegisteredTransports(t *testing.T) {
 	}
 }
 
+func TestRunETLTransportPersistsPartialPhaseMeasurementBeforeFailureCleanup(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	first := fixture.sourceExecutor.page
+	second := fixture.sourceExecutor.page
+	second.Records = []connectors.Record{{"id": "2", "provider": "second"}}
+	second.CandidateCheckpoint.Position.Primary = synccontract.OpaqueToken("2")
+	second.CandidateCheckpoint.Position.TieBreaker = synccontract.OpaqueToken("2")
+	fixture.sourceExecutor.pages = []synctransport.SourcePage{first, second}
+	fixture.destinationExecutor.failApplyAt = 2
+	fixture.destinationExecutor.applyErr = errors.New("injected destination apply failure")
+
+	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	})
+	if !errors.Is(err, fixture.destinationExecutor.applyErr) {
+		t.Fatalf("RunETL() error = %T %v, want injected destination failure", err, err)
+	}
+	if run.Status != "failed" || run.TransportPhaseMeasurement == nil {
+		t.Fatalf("failed run = %#v, want persisted transport phase measurement", run)
+	}
+	measurement := run.TransportPhaseMeasurement
+	if measurement.ExtractedRecords != 2 || measurement.WarehouseParquetRecords != 2 || measurement.PostgreSQLAppliedRecords != 1 {
+		t.Fatalf("failed measurement counts = %#v, want extracted/warehouse/postgres = 2/2/1", measurement)
+	}
+	if measurement.ExtractElapsedNanos <= 0 || measurement.WarehouseElapsedNanos <= 0 || measurement.PostgreSQLElapsedNanos <= 0 {
+		t.Fatalf("failed measurement durations = %#v, want all three phase durations before deferred caller cleanup", measurement)
+	}
+	reopened, reopenErr := Open(filepath.Dir(fixture.app.ProjectDir()))
+	if reopenErr != nil {
+		t.Fatalf("Open(reopened project) error = %v", reopenErr)
+	}
+	persisted, persistedErr := reopened.GetRun(run.ID)
+	if persistedErr != nil || !reflect.DeepEqual(persisted.TransportPhaseMeasurement, measurement) {
+		t.Fatalf("persisted failed run measurement = (%#v, %v), want %#v before project cleanup", persisted.TransportPhaseMeasurement, persistedErr, measurement)
+	}
+}
+
+func TestRunETLTransportPersistsZeroPhaseMeasurementWhenRefusedBeforeSourceIO(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	fixture.app.transports = nil
+
+	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	})
+	if err == nil || !strings.Contains(err.Error(), "closed transport registry is unavailable") {
+		t.Fatalf("RunETL() error = %v, want closed transport refusal before source I/O", err)
+	}
+	if fixture.sourceExecutor.readCalls != 0 || fixture.destinationExecutor.applyCalls != 0 {
+		t.Fatalf("source/apply calls = %d/%d, want no I/O after pre-source refusal", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls)
+	}
+	if run.Status != "failed" || run.TransportPhaseMeasurement == nil {
+		t.Fatalf("pre-source refused run = %#v, want terminal zero phase measurement", run)
+	}
+	measurement := run.TransportPhaseMeasurement
+	if measurement.ExtractedRecords != 0 || measurement.WarehouseParquetRecords != 0 || measurement.PostgreSQLAppliedRecords != 0 || measurement.ExtractElapsedNanos != 0 || measurement.WarehouseElapsedNanos != 0 || measurement.PostgreSQLElapsedNanos != 0 {
+		t.Fatalf("pre-source refused measurement = %#v, want explicit zero counts and durations", measurement)
+	}
+}
+
+func TestRunETLTransportReconcilesCommittedStagesBeforeSourceIO(t *testing.T) {
+	t.Run("reconciles before the source read", func(t *testing.T) {
+		fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+		stage := &reconcilingAppTransportStage{}
+		fixture.app.transportStage = stage
+
+		if _, err := fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1}); err != nil {
+			t.Fatalf("RunETL() = %v", err)
+		}
+		if stage.reconciliations != 1 || fixture.sourceExecutor.readCalls != 1 {
+			t.Fatalf("reconciliations/source reads = %d/%d, want 1/1", stage.reconciliations, fixture.sourceExecutor.readCalls)
+		}
+	})
+
+	t.Run("reconciliation refusal prevents source io", func(t *testing.T) {
+		fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+		wantErr := errors.New("synthetic transient reconciliation failure")
+		stage := &reconcilingAppTransportStage{err: wantErr}
+		fixture.app.transportStage = stage
+
+		_, err := fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+		if !errors.Is(err, wantErr) {
+			t.Fatalf("RunETL() error = %v, want %v", err, wantErr)
+		}
+		if stage.reconciliations != 1 || fixture.sourceExecutor.readCalls != 0 || fixture.destinationExecutor.applyCalls != 0 {
+			t.Fatalf("reconciliations/source reads/destination applies = %d/%d/%d, want 1/0/0", stage.reconciliations, fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls)
+		}
+	})
+}
+
+func TestRunETLTransportDispatchesDeclaredChangeCaptureToClosedDestination(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeChangeCapture)
+
+	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection,
+		Stream:     "records",
+		BatchSize:  1,
+	})
+	if err != nil {
+		t.Fatalf("RunETL() = %v, want declared change_capture transport dispatch", err)
+	}
+	stage, ok := fixture.app.transportStage.(*appTransportStage)
+	if !ok {
+		t.Fatalf("transport stage = %T, want app transport stage", fixture.app.transportStage)
+	}
+	if fixture.sourceExecutor.readCalls != 1 || stage.calls != 1 || fixture.destinationExecutor.planCalls != 1 || fixture.destinationExecutor.applyCalls != 1 {
+		t.Fatalf("change_capture calls source=%d stage=%d plan=%d apply=%d, want one closed transport pass", fixture.sourceExecutor.readCalls, stage.calls, fixture.destinationExecutor.planCalls, fixture.destinationExecutor.applyCalls)
+	}
+	if fixture.destinationExecutor.plan.ApplyStrategy.Mode != synccontract.ModeChangeCapture || fixture.destinationExecutor.plan.ApplyStrategy.Strategy != connectors.ApplyStrategyChangeApply || fixture.destinationExecutor.plan.ApplyStrategy.Action != "stage_change_capture" {
+		t.Fatalf("change_capture destination plan = %+v, want descriptor-declared change_apply/stage_change_capture", fixture.destinationExecutor.plan.ApplyStrategy)
+	}
+	if fixture.source.legacyReadCalls != 0 || fixture.destination.legacyWriteCalls != 0 {
+		t.Fatalf("change_capture legacy calls read=%d write=%d, want closed transport dispatch only", fixture.source.legacyReadCalls, fixture.destination.legacyWriteCalls)
+	}
+	if run.RecordsRead != 1 || run.RecordsLoaded != 1 || run.BatchCount != 1 {
+		t.Fatalf("change_capture run counts = %+v, want one staged/applied page", run)
+	}
+}
+
 // A DestinationApproval is meaningful only to the exact closed GitHub
 // transport route. App callers must not be able to attach one to an ordinary
 // ETL request and have it silently ignored while legacy execution proceeds.
@@ -223,8 +341,8 @@ func TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume(t *t
 	}
 }
 
-func TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForAllModes(t *testing.T) {
-	for _, contractMode := range synccontract.AllModes() {
+func TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForPerPageAcknowledgementModes(t *testing.T) {
+	for _, contractMode := range appTransportPerPageAcknowledgementModes() {
 		t.Run(string(contractMode), func(t *testing.T) {
 			fixture := setupAppTransportFixture(t, contractMode)
 			stateKey := streamStateKey(fixture.connection, "records")
@@ -291,6 +409,64 @@ func TestRunETLTransportPersistsActiveCheckpointBeforeSourceFailureForAllModes(t
 			assertInterimTransportStateWithMetadata(t, reopened, stateKey, []byte("current"), wantGeneration, "previous_run", 99)
 		})
 	}
+}
+
+func TestRunETLTransportFullOverwriteSourceFailureAbortsWithoutCheckpoint(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullOverwrite)
+	assertFullOverwriteStopsBeforePublish(t, fixture, context.Background(), func() {
+		fixture.sourceExecutor.errAfterPage = errTransportSourceAfterAcknowledgement
+	}, errTransportSourceAfterAcknowledgement)
+}
+
+func TestRunETLTransportFullOverwriteCancellationBeforePublishAbortsWithoutCheckpoint(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullOverwrite)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	assertFullOverwriteStopsBeforePublish(t, fixture, ctx, func() {
+		fixture.sourceExecutor.afterEmit = cancel
+	}, context.Canceled)
+}
+
+func assertFullOverwriteStopsBeforePublish(t *testing.T, fixture appTransportFixture, ctx context.Context, configure func(), wantErr error) {
+	t.Helper()
+	stateKey := streamStateKey(fixture.connection, "records")
+	previous := fixture.sourceExecutor.page.CandidateCheckpoint.Clone()
+	previous.Position.Primary = synccontract.OpaqueToken("previous")
+	previous.Position.TieBreaker = synccontract.OpaqueToken("previous")
+	previousCommittedAt := previous.ObservedAt.Add(time.Second)
+	previous.CommittedAt = &previousCommittedAt
+	if _, err := fixture.app.updateState(func(current state) (state, error) {
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
+		}
+		current.StreamStates[stateKey] = StreamState{
+			Connection: fixture.connection, Stream: "records", Checkpoint: &previous,
+			GenerationID: 9, LastSuccessfulRunID: "previous_run", RecordsLoaded: 99,
+			UpdatedAt: previousCommittedAt,
+		}
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	configure()
+
+	run, err := fixture.app.RunETL(ctx, RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+	if !errors.Is(err, wantErr) {
+		t.Fatalf("RunETL() error = %v, want %v", err, wantErr)
+	}
+	if run.Status != "failed" {
+		t.Fatalf("run status = %q, want failed before full-overwrite publication", run.Status)
+	}
+	assertInterimTransportStateWithMetadata(t, fixture.app, stateKey, []byte("previous"), 9, "previous_run", 99)
+	if fixture.destinationExecutor.applyCalls != 1 || fixture.destinationExecutor.abortCalls != 1 || fixture.destinationExecutor.publishCalls != 0 || fixture.destinationExecutor.readBackCalls != 0 {
+		t.Fatalf("full-overwrite lifecycle apply/abort/publish/read-back = %d/%d/%d/%d, want 1/1/0/0", fixture.destinationExecutor.applyCalls, fixture.destinationExecutor.abortCalls, fixture.destinationExecutor.publishCalls, fixture.destinationExecutor.readBackCalls)
+	}
+
+	reopened, reopenErr := Open(fixture.app.root)
+	if reopenErr != nil {
+		t.Fatal(reopenErr)
+	}
+	assertInterimTransportStateWithMetadata(t, reopened, stateKey, []byte("previous"), 9, "previous_run", 99)
 }
 
 func TestRunETLTransportAdvancesInterimCheckpointAcrossPages(t *testing.T) {
@@ -640,16 +816,25 @@ func TestRunETLTransportStaleWriterDoesNotReportUncommittedFinalization(t *testi
 	}
 }
 
-func assertRunETLTransportStaleWriterFinalization(t *testing.T, mode synccontract.Mode, cancelAfterAcknowledgement bool) {
+func assertRunETLTransportStaleWriterFinalization(t *testing.T, mode synccontract.Mode, cancelAfterAcknowledgement bool, configureSource ...func(*appTransportSourceExecutor)) {
 	t.Helper()
 	fixture := setupAppTransportFixture(t, mode)
 	fixture.sourceExecutor.page.CandidateCheckpoint.Position.Primary = synccontract.OpaqueToken{0xff}
 	fixture.sourceExecutor.page.CandidateCheckpoint.Position.TieBreaker = synccontract.OpaqueToken{0xff}
+	for _, configure := range configureSource {
+		configure(fixture.sourceExecutor)
+	}
 	acknowledgementReached := make(chan struct{})
 	releaseAcknowledgement := make(chan struct{})
-	fixture.destinationExecutor.afterApply = func() {
+	pauseAfterAcknowledgement := func() {
 		close(acknowledgementReached)
 		<-releaseAcknowledgement
+	}
+	if mode == synccontract.ModeFullOverwrite {
+		// A full-overwrite receipt exists only after publication and read-back.
+		fixture.destinationExecutor.afterReadBack = pauseAfterAcknowledgement
+	} else {
+		fixture.destinationExecutor.afterApply = pauseAfterAcknowledgement
 	}
 
 	done := make(chan struct{})
@@ -723,6 +908,18 @@ func assertRunETLTransportStaleWriterFinalization(t *testing.T, mode synccontrac
 	}
 	if winnerRun.Status != "completed" {
 		t.Fatalf("winner run status = %q, want completed", winnerRun.Status)
+	}
+	if mode == synccontract.ModeFullOverwrite {
+		wantApplies := 1
+		if len(fixture.sourceExecutor.pages) != 0 {
+			wantApplies = len(fixture.sourceExecutor.pages)
+		}
+		if fixture.destinationExecutor.applyCalls != wantApplies || fixture.destinationExecutor.publishCalls != 1 || fixture.destinationExecutor.readBackCalls != 1 || fixture.destinationExecutor.abortCalls != 0 {
+			t.Fatalf("loser full-overwrite lifecycle apply/publish/read-back/abort = %d/%d/%d/%d, want %d/1/1/0", fixture.destinationExecutor.applyCalls, fixture.destinationExecutor.publishCalls, fixture.destinationExecutor.readBackCalls, fixture.destinationExecutor.abortCalls, wantApplies)
+		}
+		if winnerDestination.applyCalls != 1 || winnerDestination.publishCalls != 1 || winnerDestination.readBackCalls != 1 || winnerDestination.abortCalls != 0 {
+			t.Fatalf("winner full-overwrite lifecycle apply/publish/read-back/abort = %d/%d/%d/%d, want 1/1/1/0", winnerDestination.applyCalls, winnerDestination.publishCalls, winnerDestination.readBackCalls, winnerDestination.abortCalls)
+		}
 	}
 
 	if cancel != nil {
@@ -808,24 +1005,33 @@ func TestRunETLTransportStaleWriterFinalizesAfterCancellation(t *testing.T) {
 	assertRunETLTransportStaleWriterFinalization(t, synccontract.ModeFullAppend, true)
 }
 
-func TestRunETLTransportStaleWriterFinalizesLosingRunForAllModes(t *testing.T) {
-	for _, mode := range []synccontract.Mode{
-		synccontract.ModeFullOverwrite,
-		synccontract.ModeFullAppend,
-		synccontract.ModeIncrementalAppend,
-		synccontract.ModeIncrementalUpsert,
-		synccontract.ModeIncrementalDedupe,
-		synccontract.ModeIncrementalDedupeHistory,
-		synccontract.ModeChangeCapture,
-	} {
+func TestRunETLTransportStaleWriterFinalizesLosingRunForPerPageAcknowledgementModes(t *testing.T) {
+	for _, mode := range appTransportPerPageAcknowledgementModes() {
 		t.Run(string(mode), func(t *testing.T) {
 			assertRunETLTransportStaleWriterFinalization(t, mode, false)
 		})
 	}
 }
 
-func TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForAllModes(t *testing.T) {
-	for _, mode := range synccontract.AllModes() {
+func TestRunETLTransportFullOverwriteStaleWriterAfterReceiptReadBackFinalizesLosingRun(t *testing.T) {
+	assertRunETLTransportStaleWriterFinalization(t, synccontract.ModeFullOverwrite, false)
+}
+
+func TestRunETLTransportFullOverwriteReceiptReadBackThenStaleFinalCheckpointFinalizesLosingRun(t *testing.T) {
+	assertRunETLTransportStaleWriterFinalization(t, synccontract.ModeFullOverwrite, false, func(source *appTransportSourceExecutor) {
+		first := source.page.CandidateCheckpoint.Clone()
+		second := first.Clone()
+		second.Position.Primary = synccontract.OpaqueToken{0xff, 0x01}
+		second.Position.TieBreaker = synccontract.OpaqueToken{0xff, 0x01}
+		source.pages = []synctransport.SourcePage{
+			{Records: []connectors.Record{{"id": "loser-page-one"}}, CandidateCheckpoint: first},
+			{Records: []connectors.Record{{"id": "loser-page-two"}}, CandidateCheckpoint: second},
+		}
+	})
+}
+
+func TestRunETLTransportAcknowledgedPageThenStaleSecondPageFinalizesLosingRunForPerPageAcknowledgementModes(t *testing.T) {
+	for _, mode := range appTransportPerPageAcknowledgementModes() {
 		t.Run(string(mode), func(t *testing.T) {
 			assertRunETLTransportAcknowledgedPageThenStaleSecondPageFinalization(t, mode)
 		})
@@ -1404,50 +1610,22 @@ func TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure(t *tes
 	assertInterimTransportState(t, reopened, stateKey, "1", 1)
 }
 
-func TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForAllModes(t *testing.T) {
-	for _, mode := range synccontract.AllModes() {
+func TestRunETLTransportAcknowledgedCompletionRebasesUnrelatedStateForPerPageAcknowledgementModes(t *testing.T) {
+	for _, mode := range appTransportPerPageAcknowledgementModes() {
 		t.Run(string(mode), func(t *testing.T) {
 			assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t, mode)
 		})
 	}
 }
 
+func TestRunETLTransportFullOverwriteCompletionRebasesUnrelatedStateAfterFinalCheckpoint(t *testing.T) {
+	assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t, synccontract.ModeFullOverwrite)
+}
+
 func assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t *testing.T, mode synccontract.Mode) {
 	t.Helper()
-	fixture := setupAppTransportFixture(t, mode)
-	checkpointAcknowledged := make(chan struct{})
-	releaseCompletion := make(chan struct{})
-	fixture.sourceExecutor.afterEmit = func() {
-		close(checkpointAcknowledged)
-		<-releaseCompletion
-	}
-
-	done := make(chan struct{})
-	var returned Run
-	var runErr error
-	go func() {
-		returned, runErr = fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
-		close(done)
-	}()
-	waitForTransportSignal(t, checkpointAcknowledged)
-
-	stateKey := streamStateKey(fixture.connection, "records")
-	acknowledged, present := fixture.app.state.StreamStates[stateKey]
-	if !present || acknowledged.Checkpoint == nil || acknowledged.Checkpoint.CommittedAt == nil {
-		t.Fatalf("acknowledged transport state = %#v, want durable checkpoint before unrelated write", acknowledged)
-	}
-	var runID string
-	for _, run := range fixture.app.state.Runs {
-		if run.Type == "etl" && run.Connection == fixture.connection && run.Stream == "records" {
-			runID = run.ID
-			break
-		}
-	}
-	if runID == "" {
-		t.Fatal("acknowledged transport run is missing")
-	}
-
-	writer, err := Open(fixture.app.root)
+	paused := startPausedAcknowledgedTransportCompletion(t, mode, context.Background())
+	writer, err := Open(paused.fixture.app.root)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1482,26 +1660,25 @@ func assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t *testing
 		t.Fatal(err)
 	}
 
-	close(releaseCompletion)
-	waitForTransportSignal(t, done)
-	if runErr != nil {
-		t.Fatalf("RunETL() = %v, want acknowledged completion after unrelated post-checkpoint write", runErr)
+	paused.releaseAndWait(t)
+	if paused.err != nil {
+		t.Fatalf("RunETL() = %v, want acknowledged completion after unrelated post-checkpoint write", paused.err)
 	}
 
-	reopened, err := Open(fixture.app.root)
+	reopened, err := Open(paused.fixture.app.root)
 	if err != nil {
 		t.Fatal(err)
 	}
-	completedState := reopened.state.StreamStates[stateKey]
-	if completedState.Connection != acknowledged.Connection ||
-		completedState.Stream != acknowledged.Stream ||
-		completedState.GenerationID != acknowledged.GenerationID ||
-		!completedState.UpdatedAt.Equal(acknowledged.UpdatedAt) ||
-		!transportCheckpointEqual(completedState.Checkpoint, acknowledged.Checkpoint) {
-		t.Fatalf("acknowledged checkpoint changed during terminal completion: got %#v, want checkpoint-bearing state %#v", completedState, acknowledged)
+	completedState := reopened.state.StreamStates[paused.stateKey]
+	if completedState.Connection != paused.acknowledged.Connection ||
+		completedState.Stream != paused.acknowledged.Stream ||
+		completedState.GenerationID != paused.acknowledged.GenerationID ||
+		!completedState.UpdatedAt.Equal(paused.acknowledged.UpdatedAt) ||
+		!transportCheckpointEqual(completedState.Checkpoint, paused.acknowledged.Checkpoint) {
+		t.Fatalf("acknowledged checkpoint changed during terminal completion: got %#v, want checkpoint-bearing state %#v", completedState, paused.acknowledged)
 	}
-	if completedState.LastSuccessfulRunID != runID || completedState.RecordsLoaded != 1 {
-		t.Fatalf("completed stream metadata = %#v, want run %q with one loaded record", completedState, runID)
+	if completedState.LastSuccessfulRunID != paused.runID || completedState.RecordsLoaded != 1 {
+		t.Fatalf("completed stream metadata = %#v, want run %q with one loaded record", completedState, paused.runID)
 	}
 	unrelated := reopened.state.StreamStates["unrelated:records"]
 	if unrelated.GenerationID != 8 || unrelated.LastSuccessfulRunID != "unrelated_run" || unrelated.RecordsLoaded != 13 || !unrelated.UpdatedAt.Equal(unrelatedUpdatedAt) {
@@ -1514,7 +1691,7 @@ func assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t *testing
 	var durable, unrelatedRun Run
 	for _, run := range reopened.state.Runs {
 		switch run.ID {
-		case runID:
+		case paused.runID:
 			durable = run
 		case "unrelated_run":
 			unrelatedRun = run
@@ -1525,14 +1702,14 @@ func assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t *testing
 	}
 
 	var symptoms []string
-	if returned.ID == "" {
+	if paused.returned.ID == "" {
 		symptoms = append(symptoms, "RunETL returned zero run")
 	}
-	if returned.Status != "completed" {
-		symptoms = append(symptoms, fmt.Sprintf("returned run status=%q", returned.Status))
+	if paused.returned.Status != "completed" {
+		symptoms = append(symptoms, fmt.Sprintf("returned run status=%q", paused.returned.Status))
 	}
-	if durable.ID != runID {
-		symptoms = append(symptoms, fmt.Sprintf("durable run ID=%q, want %q", durable.ID, runID))
+	if durable.ID != paused.runID {
+		symptoms = append(symptoms, fmt.Sprintf("durable run ID=%q, want %q", durable.ID, paused.runID))
 	} else {
 		if durable.Status != "completed" {
 			symptoms = append(symptoms, fmt.Sprintf("durable run status=%q", durable.Status))
@@ -1540,8 +1717,8 @@ func assertRunETLTransportAcknowledgedCompletionRebasesUnrelatedState(t *testing
 		if durable.CompletedAt.IsZero() {
 			symptoms = append(symptoms, "durable run completion timestamp is zero")
 		}
-		if returned.ID != durable.ID {
-			symptoms = append(symptoms, fmt.Sprintf("returned run ID=%q, durable run ID=%q", returned.ID, durable.ID))
+		if paused.returned.ID != durable.ID {
+			symptoms = append(symptoms, fmt.Sprintf("returned run ID=%q, durable run ID=%q", paused.returned.ID, durable.ID))
 		}
 	}
 	if len(symptoms) > 0 {
@@ -1568,6 +1745,46 @@ func startPausedAcknowledgedTransportCompletion(t *testing.T, mode synccontract.
 		done:    make(chan struct{}),
 	}
 	checkpointAcknowledged := make(chan struct{})
+	if mode == synccontract.ModeFullOverwrite {
+		// The wrapper releases the durable state lock before it pauses. A second
+		// App can therefore write a real intervening revision, while the first
+		// App cannot enter terminal completion until the test releases it.
+		paused.fixture.app.store.Locker = &appTransportPostFinalCheckpointLocker{
+			lock:    statestore.FileLock{Path: paused.fixture.app.store.Path + ".lock"},
+			pauseAt: 2,
+			reached: checkpointAcknowledged,
+			release: paused.release,
+		}
+		go func() {
+			paused.returned, paused.err = paused.fixture.app.RunETL(ctx, RunETLRequest{Connection: paused.fixture.connection, Stream: "records", BatchSize: 1})
+			close(paused.done)
+		}()
+		waitForTransportSignal(t, checkpointAcknowledged)
+
+		observed, err := Open(paused.fixture.app.root)
+		if err != nil {
+			t.Fatal(err)
+		}
+		paused.stateKey = streamStateKey(paused.fixture.connection, "records")
+		acknowledged, present := observed.state.StreamStates[paused.stateKey]
+		if !present || acknowledged.Checkpoint == nil || acknowledged.Checkpoint.CommittedAt == nil {
+			t.Fatalf("full-overwrite state = %#v, want durable final checkpoint before completion", acknowledged)
+		}
+		paused.acknowledged = cloneStreamState(acknowledged)
+		for _, run := range observed.state.Runs {
+			if run.Type == "etl" && run.Connection == paused.fixture.connection && run.Stream == "records" {
+				paused.runID = run.ID
+				break
+			}
+		}
+		if paused.runID == "" {
+			t.Fatal("full-overwrite run is missing after final checkpoint")
+		}
+		if paused.fixture.destinationExecutor.applyCalls != 1 || paused.fixture.destinationExecutor.publishCalls != 1 || paused.fixture.destinationExecutor.readBackCalls != 1 || paused.fixture.destinationExecutor.abortCalls != 0 {
+			t.Fatalf("full-overwrite lifecycle apply/publish/read-back/abort = %d/%d/%d/%d, want 1/1/1/0", paused.fixture.destinationExecutor.applyCalls, paused.fixture.destinationExecutor.publishCalls, paused.fixture.destinationExecutor.readBackCalls, paused.fixture.destinationExecutor.abortCalls)
+		}
+		return paused
+	}
 	paused.fixture.sourceExecutor.afterEmit = func() {
 		close(checkpointAcknowledged)
 		<-paused.release
@@ -1600,6 +1817,37 @@ func (p *pausedAcknowledgedTransportCompletion) releaseAndWait(t *testing.T) {
 	t.Helper()
 	close(p.release)
 	waitForTransportSignal(t, p.done)
+}
+
+// appTransportPostFinalCheckpointLocker pauses only after JSONStore has
+// renamed and directory-synced the replacement state file, then released its
+// file lock. That creates the App terminal-completion race without a test hook
+// in production code or a pause at the earlier receipt boundary.
+type appTransportPostFinalCheckpointLocker struct {
+	lock    statestore.FileLock
+	pauseAt int
+	calls   int
+	reached chan<- struct{}
+	release <-chan struct{}
+}
+
+func (l *appTransportPostFinalCheckpointLocker) Lock() (func() error, error) {
+	unlock, err := l.lock.Lock()
+	if err != nil {
+		return nil, err
+	}
+	l.calls++
+	pause := l.calls == l.pauseAt
+	return func() error {
+		if err := unlock(); err != nil {
+			return err
+		}
+		if pause {
+			close(l.reached)
+			<-l.release
+		}
+		return nil
+	}, nil
 }
 
 func TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges(t *testing.T) {
@@ -1693,8 +1941,11 @@ func TestRunETLTransportAcknowledgedCompletionFailsClosedWhenTargetChanges(t *te
 	}
 }
 
-func TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes(t *testing.T) {
-	for _, mode := range synccontract.AllModes() {
+// full_overwrite has no context observation after its sole final checkpoint,
+// so cancellation-after-acknowledgement is intentionally inapplicable here.
+// Its real contract is exercised by TestRunETLTransportFullOverwriteCancellationBeforePublishAbortsWithoutCheckpoint.
+func TestRunETLTransportCancellationAfterAcknowledgedCheckpointForPerPageAcknowledgementModes(t *testing.T) {
+	for _, mode := range appTransportPerPageAcknowledgementModes() {
 		t.Run(string(mode), func(t *testing.T) {
 			ctx, cancel := context.WithCancel(context.Background())
 			defer cancel()
@@ -1732,8 +1983,11 @@ func TestRunETLTransportCancellationAfterAcknowledgedCheckpointForAllModes(t *te
 	}
 }
 
-func TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForAllModes(t *testing.T) {
-	for _, mode := range synccontract.AllModes() {
+// The same inapplicability applies to an end-to-end acknowledged failure for
+// full_overwrite: manufacturing a post-final-checkpoint context check would
+// decide the captain's pending product behavior rather than test it.
+func TestRunETLTransportAcknowledgedFailureAfterUnrelatedRevisionForPerPageAcknowledgementModes(t *testing.T) {
+	for _, mode := range appTransportPerPageAcknowledgementModes() {
 		t.Run(string(mode), func(t *testing.T) {
 			ctx, cancel := context.WithCancel(context.Background())
 			defer cancel()
@@ -1847,58 +2101,70 @@ func TestRunETLTransportAcknowledgedFailureFailsClosedWhenTargetChanges(t *testi
 	}
 }
 
-func TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForAllModes(t *testing.T) {
-	for _, mode := range synccontract.AllModes() {
+func TestRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflictForPerPageAcknowledgementModes(t *testing.T) {
+	for _, mode := range appTransportPerPageAcknowledgementModes() {
 		t.Run(string(mode), func(t *testing.T) {
-			paused := startPausedAcknowledgedTransportCompletion(t, mode, context.Background())
-			writer, err := Open(paused.fixture.app.root)
-			if err != nil {
-				t.Fatal(err)
-			}
-			removed := false
-			if _, err := writer.updateState(func(current state) (state, error) {
-				runs := make([]Run, 0, len(current.Runs))
-				for _, run := range current.Runs {
-					if run.ID == paused.runID {
-						removed = true
-						continue
-					}
-					runs = append(runs, run)
-				}
-				current.Runs = runs
-				return current, nil
-			}); err != nil {
-				t.Fatal(err)
-			}
-			if !removed {
-				t.Fatalf("target run %q was not removed before acknowledged completion", paused.runID)
-			}
-			expected := writer.state
-
-			paused.releaseAndWait(t)
-			if paused.fixture.destinationExecutor.applyCalls != 1 {
-				t.Fatalf("destination apply calls = %d, want exactly one acknowledged apply", paused.fixture.destinationExecutor.applyCalls)
-			}
-			reopened, err := Open(paused.fixture.app.root)
-			if err != nil {
-				t.Fatal(err)
-			}
-			if len(reopened.state.Checkpoints) != 0 || len(expected.Checkpoints) != 0 {
-				t.Fatalf("missing target run changed checkpoints: got %#v, want %#v", reopened.state.Checkpoints, expected.Checkpoints)
-			}
-			actual := reopened.state
-			actual.Checkpoints = nil
-			expected.Checkpoints = nil
-			if !reflect.DeepEqual(actual, expected) {
-				t.Fatalf("missing target run mutated reopened state: got %#v, want %#v", actual, expected)
-			}
-			if !errors.Is(paused.err, errStateRevisionConflict) {
-				t.Fatalf("RunETL() error = %v, want typed acknowledged revision conflict after missing target run", paused.err)
-			}
-			if !reflect.DeepEqual(paused.returned, Run{}) {
-				t.Fatalf("RunETL() returned %#v, want zero run after missing target run", paused.returned)
-			}
+			assertRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflict(t, mode)
 		})
+	}
+}
+
+func TestRunETLTransportFullOverwriteCompletionMissingRunIsTypedConflictAfterFinalCheckpoint(t *testing.T) {
+	assertRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflict(t, synccontract.ModeFullOverwrite)
+}
+
+func assertRunETLTransportAcknowledgedCompletionMissingRunIsTypedConflict(t *testing.T, mode synccontract.Mode) {
+	t.Helper()
+	paused := startPausedAcknowledgedTransportCompletion(t, mode, context.Background())
+	writer, err := Open(paused.fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	removed := false
+	if _, err := writer.updateState(func(current state) (state, error) {
+		runs := make([]Run, 0, len(current.Runs))
+		for _, run := range current.Runs {
+			if run.ID == paused.runID {
+				removed = true
+				continue
+			}
+			runs = append(runs, run)
+		}
+		current.Runs = runs
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if !removed {
+		t.Fatalf("target run %q was not removed before acknowledged completion", paused.runID)
+	}
+	expected := writer.state
+
+	paused.releaseAndWait(t)
+	if paused.fixture.destinationExecutor.applyCalls != 1 {
+		t.Fatalf("destination apply calls = %d, want exactly one acknowledged apply", paused.fixture.destinationExecutor.applyCalls)
+	}
+	if mode == synccontract.ModeFullOverwrite && (paused.fixture.destinationExecutor.publishCalls != 1 || paused.fixture.destinationExecutor.readBackCalls != 1) {
+		t.Fatalf("full-overwrite publish/read-back calls = %d/%d, want 1/1 before final completion", paused.fixture.destinationExecutor.publishCalls, paused.fixture.destinationExecutor.readBackCalls)
+	}
+	reopened, err := Open(paused.fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(reopened.state.Checkpoints) != 0 || len(expected.Checkpoints) != 0 {
+		t.Fatalf("missing target run changed checkpoints: got %#v, want %#v", reopened.state.Checkpoints, expected.Checkpoints)
+	}
+	actual := reopened.state
+	actual.Checkpoints = nil
+	expected.Checkpoints = nil
+	if !reflect.DeepEqual(actual, expected) {
+		t.Fatalf("missing target run mutated reopened state: got %#v, want %#v", actual, expected)
+	}
+	if !errors.Is(paused.err, errStateRevisionConflict) {
+		t.Fatalf("RunETL() error = %v, want typed acknowledged revision conflict after missing target run", paused.err)
+	}
+	if !reflect.DeepEqual(paused.returned, Run{}) {
+		t.Fatalf("RunETL() returned %#v, want zero run after missing target run", paused.returned)
 	}
 }
 
@@ -2258,15 +2524,139 @@ func TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead(t *testi
 	}
 }
 
-func TestHasDeclaredSyncTransportRoutesInvalidDescriptorToPreflight(t *testing.T) {
+func TestHasDeclaredSyncTransportRequiresBothEndpoints(t *testing.T) {
 	source := &appTransportConnector{
 		meta:       connectors.Metadata{Name: "invalid_source", IntegrationType: "api"},
 		descriptor: &connectors.SyncTransportDescriptor{},
 	}
 	destination := &appTransportConnector{meta: connectors.Metadata{Name: "destination", IntegrationType: "database"}}
-	if !hasDeclaredSyncTransport(source, destination) {
-		t.Fatal("empty authored transport descriptor was treated as absent instead of being routed to preflight")
+	if hasDeclaredSyncTransport(source, destination) {
+		t.Fatal("one-sided transport declaration diverted a legacy route to preflight")
 	}
+	destination.descriptor = &connectors.SyncTransportDescriptor{}
+	if !hasDeclaredSyncTransport(source, destination) {
+		t.Fatal("two-sided malformed transport declaration was treated as a legacy route instead of being routed to preflight")
+	}
+}
+
+func TestAppTransportDestinationAfterApplyRunsAfterOrdinaryAcknowledgement(t *testing.T) {
+	t.Run("happy path hook observes durable acknowledgement", func(t *testing.T) {
+		destination := &appTransportDestinationExecutor{sink: "warehouse"}
+		observedAcknowledgements := 0
+		destination.afterApply = func() {
+			observedAcknowledgements = destination.acknowledgementCalls
+		}
+
+		acknowledgement, err := destination.ApplyDestination(context.Background(), synctransport.DestinationApplyRequest{})
+		if err != nil {
+			t.Fatalf("ApplyDestination() error = %v", err)
+		}
+		if acknowledgement.Sink != "warehouse" {
+			t.Fatalf("acknowledgement sink = %q, want warehouse", acknowledgement.Sink)
+		}
+		if observedAcknowledgements != 1 {
+			t.Fatalf("afterApply observed %d acknowledgements, want callback after the first acknowledgement", observedAcknowledgements)
+		}
+	})
+
+	t.Run("bad path apply refusal has no acknowledgement hook", func(t *testing.T) {
+		applyErr := errors.New("destination apply refused")
+		destination := &appTransportDestinationExecutor{sink: "warehouse", failApplyAt: 1, applyErr: applyErr}
+		hookCalls := 0
+		destination.afterApply = func() { hookCalls++ }
+
+		_, err := destination.ApplyDestination(context.Background(), synctransport.DestinationApplyRequest{})
+		if !errors.Is(err, applyErr) {
+			t.Fatalf("ApplyDestination() error = %v, want %v", err, applyErr)
+		}
+		if hookCalls != 0 || destination.acknowledgementCalls != 0 {
+			t.Fatalf("refused apply hook/acknowledgements = %d/%d, want 0/0", hookCalls, destination.acknowledgementCalls)
+		}
+	})
+
+	t.Run("edge repeated applies keep acknowledgement ordering", func(t *testing.T) {
+		destination := &appTransportDestinationExecutor{sink: "warehouse"}
+		observed := []int{}
+		destination.afterApply = func() {
+			observed = append(observed, destination.acknowledgementCalls)
+		}
+
+		for range 2 {
+			if _, err := destination.ApplyDestination(context.Background(), synctransport.DestinationApplyRequest{}); err != nil {
+				t.Fatalf("ApplyDestination() error = %v", err)
+			}
+		}
+		if !reflect.DeepEqual(observed, []int{1, 2}) {
+			t.Fatalf("afterApply acknowledgement observations = %#v, want [1 2]", observed)
+		}
+	})
+}
+
+func TestAppTransportFullOverwriteRunLifecycleHooks(t *testing.T) {
+	t.Run("happy path exposes distinct page publish and read-back boundaries", func(t *testing.T) {
+		destination := &appTransportDestinationExecutor{sink: "warehouse"}
+		boundaries := []string{}
+		destination.afterPageApply = func() { boundaries = append(boundaries, "page") }
+		destination.afterPublish = func() { boundaries = append(boundaries, "publish") }
+		destination.afterReadBack = func() { boundaries = append(boundaries, "read-back") }
+		run := &appTransportFullOverwriteRun{destination: destination}
+
+		if err := run.ApplyFullOverwrite(context.Background(), synctransport.DestinationApplyRequest{}); err != nil {
+			t.Fatalf("ApplyFullOverwrite() error = %v", err)
+		}
+		acknowledgement, err := run.PublishFullOverwrite(context.Background(), synctransport.FullOverwritePublicationRequest{})
+		if err != nil {
+			t.Fatalf("PublishFullOverwrite() error = %v", err)
+		}
+		if err := run.ReadBackFullOverwrite(context.Background(), acknowledgement); err != nil {
+			t.Fatalf("ReadBackFullOverwrite() error = %v", err)
+		}
+		if !reflect.DeepEqual(boundaries, []string{"page", "publish", "read-back"}) {
+			t.Fatalf("full-overwrite lifecycle boundaries = %#v, want page/publish/read-back", boundaries)
+		}
+		if destination.applyCalls != 1 || destination.publishCalls != 1 || destination.readBackCalls != 1 || destination.abortCalls != 0 {
+			t.Fatalf("full-overwrite lifecycle apply/publish/read-back/abort = %d/%d/%d/%d, want 1/1/1/0", destination.applyCalls, destination.publishCalls, destination.readBackCalls, destination.abortCalls)
+		}
+	})
+
+	t.Run("bad path rejects read-back before publication and wrong acknowledgement", func(t *testing.T) {
+		destination := &appTransportDestinationExecutor{sink: "warehouse"}
+		run := &appTransportFullOverwriteRun{destination: destination}
+		if err := run.ReadBackFullOverwrite(context.Background(), synccontract.DownstreamAcknowledgement{}); err == nil || !strings.Contains(err.Error(), "before publication") {
+			t.Fatalf("ReadBackFullOverwrite() error = %v, want pre-publication refusal", err)
+		}
+		acknowledgement, err := run.PublishFullOverwrite(context.Background(), synctransport.FullOverwritePublicationRequest{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		wrongAcknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement("other", acknowledgement.AcknowledgedAt)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := run.ReadBackFullOverwrite(context.Background(), wrongAcknowledgement); err == nil || !strings.Contains(err.Error(), "does not match") {
+			t.Fatalf("ReadBackFullOverwrite() error = %v, want acknowledgement mismatch refusal", err)
+		}
+		if destination.readBackCalls != 0 {
+			t.Fatalf("read-back calls after refused receipts = %d, want 0", destination.readBackCalls)
+		}
+	})
+
+	t.Run("edge abort is idempotent and closes pre-publication lifecycle", func(t *testing.T) {
+		destination := &appTransportDestinationExecutor{sink: "warehouse"}
+		run := &appTransportFullOverwriteRun{destination: destination}
+		if err := run.AbortFullOverwrite(context.Background()); err != nil {
+			t.Fatalf("first AbortFullOverwrite() error = %v", err)
+		}
+		if err := run.AbortFullOverwrite(context.Background()); err != nil {
+			t.Fatalf("second AbortFullOverwrite() error = %v", err)
+		}
+		if _, err := run.PublishFullOverwrite(context.Background(), synctransport.FullOverwritePublicationRequest{}); err == nil || !strings.Contains(err.Error(), "after abort") {
+			t.Fatalf("PublishFullOverwrite() error = %v, want post-abort refusal", err)
+		}
+		if destination.abortCalls != 1 || destination.publishCalls != 0 {
+			t.Fatalf("abort/publish calls = %d/%d, want 1/0", destination.abortCalls, destination.publishCalls)
+		}
+	})
 }
 
 type appTransportConnector struct {
@@ -2306,7 +2696,7 @@ type appTransportSourceExecutor struct {
 func (e *appTransportSourceExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
 	return e.reference
 }
-func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, _ synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
 	e.readCalls++
 	if err := ctx.Err(); err != nil {
 		return err
@@ -2316,6 +2706,9 @@ func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, _ synctr
 		pages = []synctransport.SourcePage{e.page}
 	}
 	for _, page := range pages {
+		if request.RecordExtraction != nil {
+			request.RecordExtraction(time.Nanosecond)
+		}
 		if err := emit(page); err != nil {
 			return err
 		}
@@ -2330,13 +2723,21 @@ func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, _ synctr
 }
 
 type appTransportDestinationExecutor struct {
-	reference     connectors.TransportExecutorReference
-	sink          string
-	plan          synctransport.DestinationPlanRequest
-	planCalls     int
-	applyCalls    int
-	readBackCalls int
-	afterApply    func()
+	reference            connectors.TransportExecutorReference
+	sink                 string
+	plan                 synctransport.DestinationPlanRequest
+	planCalls            int
+	applyCalls           int
+	acknowledgementCalls int
+	publishCalls         int
+	readBackCalls        int
+	abortCalls           int
+	afterApply           func()
+	afterPageApply       func()
+	afterPublish         func()
+	afterReadBack        func()
+	failApplyAt          int
+	applyErr             error
 }
 
 func (e *appTransportDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -2347,12 +2748,26 @@ func (e *appTransportDestinationExecutor) PlanDestination(_ context.Context, req
 	e.plan = request
 	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
 }
-func (e *appTransportDestinationExecutor) ApplyDestination(_ context.Context, _ synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
+func (e *appTransportDestinationExecutor) applyDestination() error {
 	e.applyCalls++
+	if e.failApplyAt == e.applyCalls && e.applyErr != nil {
+		return e.applyErr
+	}
+	if e.afterPageApply != nil {
+		e.afterPageApply()
+	}
+	return nil
+}
+
+func (e *appTransportDestinationExecutor) ApplyDestination(_ context.Context, _ synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
+	if err := e.applyDestination(); err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
 	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(e.sink, time.Now().UTC())
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
+	e.acknowledgementCalls++
 	if e.afterApply != nil {
 		e.afterApply()
 	}
@@ -2364,10 +2779,88 @@ func (e *appTransportDestinationExecutor) ReadBackDestination(_ context.Context,
 	return nil
 }
 
+func (e *appTransportDestinationExecutor) BeginFullOverwrite(_ context.Context, request synctransport.FullOverwriteRunRequest) (synctransport.FullOverwriteRun, error) {
+	if request.Mode != synccontract.ModeFullOverwrite {
+		return nil, fmt.Errorf("test full-overwrite run mode = %q, want %q", request.Mode, synccontract.ModeFullOverwrite)
+	}
+	return &appTransportFullOverwriteRun{destination: e}, nil
+}
+
+type appTransportFullOverwriteRun struct {
+	destination     *appTransportDestinationExecutor
+	published       bool
+	aborted         bool
+	acknowledgement synccontract.DownstreamAcknowledgement
+}
+
+func (r *appTransportFullOverwriteRun) ApplyFullOverwrite(_ context.Context, _ synctransport.DestinationApplyRequest) error {
+	if r.published {
+		return errors.New("test full-overwrite run was applied after publication")
+	}
+	if r.aborted {
+		return errors.New("test full-overwrite run was applied after abort")
+	}
+	return r.destination.applyDestination()
+}
+
+func (r *appTransportFullOverwriteRun) PublishFullOverwrite(_ context.Context, _ synctransport.FullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
+	if r.published {
+		return synccontract.DownstreamAcknowledgement{}, errors.New("test full-overwrite run was published twice")
+	}
+	if r.aborted {
+		return synccontract.DownstreamAcknowledgement{}, errors.New("test full-overwrite run was published after abort")
+	}
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(r.destination.sink, time.Now().UTC())
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	r.destination.publishCalls++
+	r.published = true
+	r.acknowledgement = acknowledgement
+	if r.destination.afterPublish != nil {
+		r.destination.afterPublish()
+	}
+	return acknowledgement, nil
+}
+
+func (r *appTransportFullOverwriteRun) ReadBackFullOverwrite(_ context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
+	if !r.published {
+		return errors.New("test full-overwrite read-back occurred before publication")
+	}
+	if !reflect.DeepEqual(acknowledgement, r.acknowledgement) {
+		return errors.New("test full-overwrite read-back acknowledgement does not match publication")
+	}
+	r.destination.readBackCalls++
+	if r.destination.afterReadBack != nil {
+		r.destination.afterReadBack()
+	}
+	return nil
+}
+
+func (r *appTransportFullOverwriteRun) AbortFullOverwrite(context.Context) error {
+	if r.aborted {
+		return nil
+	}
+	r.aborted = true
+	r.destination.abortCalls++
+	return nil
+}
+
 type appTransportStage struct {
 	calls    int
 	lastPage synctransport.SourcePage
 	worksets map[string]synctransport.WarehouseWorkset
+}
+
+type reconcilingAppTransportStage struct {
+	appTransportStage
+	reconciliations int
+	err             error
+}
+
+func (s *reconcilingAppTransportStage) ReconcileCommitted(context.Context) error {
+	s.reconciliations++
+	return s.err
 }
 
 func (s *appTransportStage) Stage(_ context.Context, request synctransport.WarehouseStageRequest) (synctransport.WarehouseReceipt, error) {
@@ -2556,6 +3049,19 @@ func appTransportStrategies() ([]string, []connectors.DestinationApplyStrategy) 
 		strategies = append(strategies, connectors.DestinationApplyStrategy{Mode: mode, Strategy: strategy, Action: action})
 	}
 	return actions, strategies
+}
+
+// appTransportPerPageAcknowledgementModes is deliberately separate from
+// full_overwrite: those modes mint one acknowledgement per bounded page,
+// whereas full_overwrite mints exactly one receipt for its whole run.
+func appTransportPerPageAcknowledgementModes() []synccontract.Mode {
+	modes := make([]synccontract.Mode, 0, len(synccontract.AllModes())-1)
+	for _, mode := range synccontract.AllModes() {
+		if mode != synccontract.ModeFullOverwrite {
+			modes = append(modes, mode)
+		}
+	}
+	return modes
 }
 
 func assertInterimTransportState(t *testing.T, a *App, stateKey, wantPosition string, wantGeneration int64) {

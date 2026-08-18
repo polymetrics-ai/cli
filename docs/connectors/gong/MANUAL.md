@@ -197,7 +197,7 @@ COMMAND SURFACE
     --max-bytes (integer): Maximum direct-read response bytes; typed operations are capped at 16 MiB and each operation may declare a lower limit.
     --plan (string): Execute an approved reverse-ETL plan by id.
     --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-    --approve (string): Approval token required to execute a reverse-ETL plan.
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
     --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
   Calls
     calls list - List Gong calls as ETL records. [intent=etl availability=implemented stream=calls]; notes: Use --from/--to for provider-side Gong call time bounds. --to is an exclusive upper bound. Global --limit caps PM output records only; Gong request page size remains the connector page_size config for compatibility.; flags: --from, --to

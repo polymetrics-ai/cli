@@ -228,6 +228,17 @@ function rootVariablesSchema(field, indexes, { paginated = false } = {}) {
 
 function outputSelection(field, indexes, { paginated = false } = {}) {
   if (field.root === "Query" && field.name === "rateLimit") return "limit cost remaining resetAt";
+  if (field.root === "Query" && field.name === "node") {
+    const node = requireObject(indexes.interfaces.get("Node"), "GraphQL Node interface");
+    const projections = sorted(requireArray(node.possible_types, "GraphQL Node possible types"))
+      .map((type) => {
+        if (type === "Issue") return "... on Issue { id number title isPinned }";
+        if (type === "PullRequest") return "... on PullRequest { id number title isDraft }";
+        if (type === "Repository") return "... on Repository { id databaseId nameWithOwner }";
+        return "... on " + type + " { __typename }";
+      });
+    return "__typename " + projections.join(" ");
+  }
   if (paginated) return "__typename nodes { __typename } pageInfo { hasNextPage endCursor }";
   const name = namedType(field.return_type);
   if (indexes.objects.has(name) || indexes.interfaces.has(name) || indexes.unions.has(name)) return "__typename";
@@ -597,7 +608,7 @@ export function validateGitHubGraphQLParityArtifacts({ lock, generated }) {
 	}
 }
 
-function mergeArtifacts(bundle, generated) {
+export function mergeGitHubGraphQLParityArtifacts(bundle, generated) {
   const operations = requireObject(bundle.operations, "GitHub operations artifact");
   const cli = requireObject(bundle.cli, "GitHub CLI artifact");
   const surface = requireObject(bundle.surface, "GitHub API surface artifact");
@@ -607,6 +618,21 @@ function mergeArtifacts(bundle, generated) {
     endpoint?.method === GRAPHQL_TRANSPORT.method &&
     endpoint?.path === GRAPHQL_TRANSPORT.path &&
     Array.isArray(endpoint?.covered_by?.operations);
+  const supplementalGraphQLOperations = new Set(
+    requireArray(operations.operations, "GitHub operations")
+      .filter((operation) => !generatedOperation(operation) && /^graphql_(?:query|mutation)$/u.test(String(operation?.kind || "")))
+      .map((operation) => operation.id),
+  );
+  const supplementalTransportOperations = requireArray(surface.endpoints, "GitHub API endpoints")
+    .filter(generatedTransport)
+    .flatMap((endpoint) => endpoint.covered_by.operations)
+    .filter((id) => supplementalGraphQLOperations.has(id));
+  const transport = {
+    ...generated.transport,
+    covered_by: {
+      operations: [...new Set([...supplementalTransportOperations, ...generated.transport.covered_by.operations])],
+    },
+  };
   return {
     operations: {
       ...operations,
@@ -618,7 +644,7 @@ function mergeArtifacts(bundle, generated) {
       ],
     },
     cli: { ...cli, commands: [...requireArray(cli.commands, "GitHub CLI commands").filter((command) => !generatedCommand(command)), ...generated.commands] },
-    surface: { ...surface, endpoints: [...requireArray(surface.endpoints, "GitHub API endpoints").filter((endpoint) => !generatedTransport(endpoint)), generated.transport] },
+    surface: { ...surface, endpoints: [...requireArray(surface.endpoints, "GitHub API endpoints").filter((endpoint) => !generatedTransport(endpoint)), transport] },
   };
 }
 
@@ -643,7 +669,7 @@ async function loadDefaultBundle() {
 async function generatedFiles() {
   const { lock, bundle } = await loadDefaultBundle();
   const generated = buildGitHubGraphQLParityArtifacts({ lock, bundle });
-  return mergeArtifacts(bundle, generated);
+  return mergeGitHubGraphQLParityArtifacts(bundle, generated);
 }
 
 async function checkGeneratedFiles() {

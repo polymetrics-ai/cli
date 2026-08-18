@@ -3,6 +3,7 @@ package connectors
 import (
 	"bufio"
 	"context"
+	"crypto/sha256"
 	"encoding/csv"
 	"encoding/json"
 	"errors"
@@ -16,12 +17,127 @@ import (
 	"sync"
 	"time"
 
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/warehouse"
 )
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
 var ErrOpaqueCursorOrderUnavailable = errors.New("opaque cursor order is unavailable")
+
+// AuthenticationAdmission is the production request boundary installed by
+// app.Open. Implementations admit against durable cohort health before running
+// operation and persist only explicitly verified authentication failures.
+type AuthenticationAdmission interface {
+	Execute(context.Context, func(context.Context) error) error
+}
+
+// AuthenticationFailureClassifier is implemented by a connector that can
+// prove an error is an authentication failure from its declared provider
+// contract or native protocol code. It must never classify by error text.
+type AuthenticationFailureClassifier interface {
+	AuthenticationFailureVerified(error) bool
+}
+
+// RateParkingAdmission rejects a provider scope while durable parked work is
+// waiting to resume. The scope is already an opaque project-local projection.
+type RateParkingAdmission interface {
+	Admit(RateLimitScopeKey) error
+}
+
+// VerifiedAuthenticationError marks a failure classified by a connector's
+// declared error map or native protocol code. Generic 401s and text matching
+// must never construct this type.
+type VerifiedAuthenticationError struct {
+	Err error
+}
+
+func (e *VerifiedAuthenticationError) Error() string {
+	if e == nil || e.Err == nil {
+		return "verified authentication failure"
+	}
+	return e.Err.Error()
+}
+
+func (e *VerifiedAuthenticationError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.Err
+}
+
+func MarkVerifiedAuthenticationFailure(err error) error {
+	if err == nil {
+		return nil
+	}
+	var verified *VerifiedAuthenticationError
+	if errors.As(err, &verified) {
+		return err
+	}
+	return &VerifiedAuthenticationError{Err: err}
+}
+
+func IsVerifiedAuthenticationFailure(err error) bool {
+	var verified *VerifiedAuthenticationError
+	return errors.As(err, &verified)
+}
+
+// MarkConnectorAuthenticationFailure applies only a connector-owned typed
+// classifier. It lets closed transport executors report through the same
+// production admission runtime as ordinary Connector.Read/Write calls.
+func MarkConnectorAuthenticationFailure(connector Connector, err error) error {
+	if err == nil || IsVerifiedAuthenticationFailure(err) {
+		return err
+	}
+	classifier, ok := connector.(AuthenticationFailureClassifier)
+	if ok && classifier.AuthenticationFailureVerified(err) {
+		return MarkVerifiedAuthenticationFailure(err)
+	}
+	return err
+}
+
+// GroupRateLimitScopeKeys returns one opaque admission key for every policy
+// governing a physical request. One-policy routes preserve their existing key;
+// multi-policy routes use a one-way digest so parking blocks the exact group
+// without exposing any member scope.
+func GroupRateLimitScopeKeys(scopes ...RateLimitScopeKey) (RateLimitScopeKey, error) {
+	if len(scopes) == 0 {
+		return "", errors.New("rate-limit scope group is unavailable")
+	}
+	values := make([]string, len(scopes))
+	for index, scope := range scopes {
+		if scope == "" {
+			return "", errors.New("rate-limit scope group contains an empty scope")
+		}
+		values[index] = string(scope)
+	}
+	sort.Strings(values)
+	values = compactStrings(values)
+	if len(values) == 1 {
+		return RateLimitScopeKey(values[0]), nil
+	}
+	digest := sha256.Sum256([]byte(strings.Join(values, "\x00")))
+	return RateLimitScopeKey(fmt.Sprintf("rl-group-v1-%x", digest[:])), nil
+}
+
+func compactStrings(values []string) []string {
+	if len(values) < 2 {
+		return values
+	}
+	out := values[:1]
+	for _, value := range values[1:] {
+		if value != out[len(out)-1] {
+			out = append(out, value)
+		}
+	}
+	return out
+}
+
+// RateLimitParkingScopeResolver converts a terminal typed rate-limit result
+// into the same opaque scope group used at the physical send admission path.
+type RateLimitParkingScopeResolver interface {
+	RateLimitParkingScope(context.Context, RuntimeConfig, string, error) (RateLimitScopeKey, error)
+}
 
 var defaultRegistryBuilder = struct {
 	mu sync.RWMutex
@@ -254,6 +370,14 @@ type RuntimeConfig struct {
 	// SecretStore, when set, persists a provider-rotated secret back to the
 	// caller's encrypted credential store. Optional; see SecretStore.
 	SecretStore SecretStore `json:"-"`
+	// AuthenticationAdmission and RateParkingAdmission are installed only by
+	// the production composition root. They contain no credential material.
+	AuthenticationAdmission AuthenticationAdmission `json:"-"`
+	RateParkingAdmission    RateParkingAdmission    `json:"-"`
+	// BudgetCoordinator owns the opaque lifecycle reservation for a declared
+	// physical request. It receives only declaration-owned policy data and
+	// opaque scopes; it never receives request, response, or credential values.
+	BudgetCoordinator connsdk.BudgetCoordinator `json:"-"`
 }
 
 // PayloadApprovalKey identifies a file field within an approved write batch.
@@ -283,6 +407,12 @@ type ReadRequest struct {
 	// tighten a declared stream limit; zero leaves it unchanged and a negative
 	// value is rejected.
 	MaxPages int
+	// PageDeadline bounds one retryable provider page request. It is used by
+	// closed transports and never represents a deadline for an entire stream.
+	PageDeadline time.Duration
+	// ObservePageFetch receives only an elapsed duration after a provider page
+	// request returns. It carries no route, headers, payload, or credentials.
+	ObservePageFetch func(time.Duration)
 }
 
 type DirectReadRequest struct {
@@ -665,8 +795,9 @@ func ParseWriteConfirmation(raw string) (WriteConfirmation, error) {
 }
 
 type WriteResult struct {
-	RecordsWritten int `json:"records_written"`
-	RecordsFailed  int `json:"records_failed"`
+	RecordsWritten   int `json:"records_written"`
+	RecordsFailed    int `json:"records_failed"`
+	RecordsUnchanged int `json:"records_unchanged,omitempty"`
 }
 
 type QueryRequest struct {
@@ -693,6 +824,11 @@ type CDCReadRequest struct {
 	Config     RuntimeConfig
 	State      map[string]string
 	Checkpoint *synccontract.CheckpointEnvelope
+	// TransactionReceiver is the production whole-transaction boundary. A
+	// changefeed may call the legacy per-event callback for compatibility only
+	// when this receiver is absent; application dispatch supplies it so a
+	// source cannot mistake callback return for a durable downstream receipt.
+	TransactionReceiver CDCTransactionReceiver
 	// CheckpointCommitter receives the next source state only after its page's
 	// emitted events have been durably accepted by the caller.
 	CheckpointCommitter ChangefeedCheckpointCommitter
@@ -706,6 +842,97 @@ type CDCEvent struct {
 	Operation string `json:"operation"`
 	Record    Record `json:"record"`
 	State     Record `json:"state,omitempty"`
+}
+
+// CDCTransaction is one source-committed transaction whose events can be
+// consumed once with bounded memory. Its identity is opaque-safe and contains
+// no provider transaction value.
+type CDCTransaction struct {
+	id      string
+	records int64
+	stream  func(context.Context, func(CDCEvent) error) error
+}
+
+// NewCDCTransaction constructs a committed transaction around a one-shot
+// event stream. Native changefeeds use it only after their own commit boundary.
+func NewCDCTransaction(id string, records int64, stream func(context.Context, func(CDCEvent) error) error) (CDCTransaction, error) {
+	if strings.TrimSpace(id) == "" || len(id) > 1024 {
+		return CDCTransaction{}, errors.New("CDC transaction identity is invalid")
+	}
+	if records < 0 {
+		return CDCTransaction{}, errors.New("CDC transaction record count cannot be negative")
+	}
+	if stream == nil {
+		return CDCTransaction{}, errors.New("CDC transaction event stream is required")
+	}
+	return CDCTransaction{id: id, records: records, stream: stream}, nil
+}
+
+// ID returns the opaque-safe committed transaction identity.
+func (t CDCTransaction) ID() string { return t.id }
+
+// Records returns the source-declared event count.
+func (t CDCTransaction) Records() int64 { return t.records }
+
+// StreamEvents visits the transaction in source order exactly once.
+func (t CDCTransaction) StreamEvents(ctx context.Context, emit func(CDCEvent) error) error {
+	if ctx == nil {
+		return errors.New("CDC transaction stream context is required")
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if emit == nil || t.stream == nil {
+		return errors.New("CDC transaction event callback is required")
+	}
+	return t.stream(ctx, emit)
+}
+
+// CDCTransactionReceipt is durable downstream evidence for one complete CDC
+// transaction. Its acknowledgement is constructible only through the sync
+// contract's durable acknowledgement constructor.
+type CDCTransactionReceipt struct {
+	id              string
+	acknowledgement synccontract.DownstreamAcknowledgement
+	durable         bool
+}
+
+// NewCDCTransactionReceipt constructs a receipt after the named sink has made
+// the complete transaction durable.
+func NewCDCTransactionReceipt(id, sink string, durableAt time.Time) (CDCTransactionReceipt, error) {
+	if strings.TrimSpace(id) == "" || len(id) > 1024 {
+		return CDCTransactionReceipt{}, errors.New("CDC transaction receipt identity is invalid")
+	}
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(sink, durableAt)
+	if err != nil {
+		return CDCTransactionReceipt{}, err
+	}
+	return CDCTransactionReceipt{id: id, acknowledgement: acknowledgement, durable: true}, nil
+}
+
+// ID returns the receiver-owned durable receipt identity.
+func (r CDCTransactionReceipt) ID() string { return r.id }
+
+// Acknowledgement returns the checkpoint admission produced by this receipt.
+func (r CDCTransactionReceipt) Acknowledgement() (synccontract.DownstreamAcknowledgement, error) {
+	if !r.durable || strings.TrimSpace(r.id) == "" {
+		return synccontract.DownstreamAcknowledgement{}, errors.New("durable CDC transaction receipt is unavailable")
+	}
+	return r.acknowledgement, nil
+}
+
+// CDCTransactionReceiver makes one complete source transaction durable and
+// returns its receipt. It is deliberately separate from CDCReader so a
+// per-event callback cannot be promoted into a durability claim.
+type CDCTransactionReceiver interface {
+	ReceiveCDCTransaction(context.Context, CDCTransaction) (CDCTransactionReceipt, error)
+}
+
+// CDCTransactionReceiptRestorer re-attaches a crash-recovered source-stage
+// receipt to the downstream receiver that originally produced it. A source
+// calls it before retrying the receipt's checkpoint; events are not re-emitted.
+type CDCTransactionReceiptRestorer interface {
+	RestoreCDCTransactionReceipt(context.Context, string, CDCTransactionReceipt) error
 }
 
 type WriteValidator interface {
@@ -1443,9 +1670,63 @@ func (File) Write(ctx context.Context, req WriteRequest, records []Record) (Writ
 
 type Warehouse struct{}
 
+// LocalWarehouseDestinationTransportReference is the concrete local Parquet
+// materializer. Its declaration lives with the primitive, rather than being
+// inferred from the legacy Connector.Write capability.
+var LocalWarehouseDestinationTransportReference = TransportExecutorReference{
+	Family: TransportExecutorFamilyNativeDatabase,
+	ID:     "local_parquet_warehouse",
+}
+
+// LocalWarehouseDestinationTransportConformance is admitted only by the
+// production composition's matching factory; a descriptor alone cannot admit
+// an unregistered materializer.
+var LocalWarehouseDestinationTransportConformance = ConformanceEvidenceReference{
+	Suite: "local_parquet_warehouse",
+	RunID: "connection_owned_v1",
+}
+
+const localWarehouseDestinationTransportAction = "materialize_local_parquet"
+
 func (Warehouse) Name() string { return "warehouse" }
 
 func (Warehouse) MaterializesLocalWarehouse() bool { return true }
+
+// SyncTransportDescriptor declares the local warehouse's real, closed
+// destination role. It intentionally does not infer that role from Read or
+// Write: the reference-bound production adapter owns the durable application
+// and read-back contract.
+func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
+	return &SyncTransportDescriptor{Destination: &DestinationTransportDescriptor{
+		Executor: LocalWarehouseDestinationTransportReference,
+		EligibleActions: []string{
+			localWarehouseDestinationTransportAction,
+		},
+		Modes: []synccontract.Mode{
+			synccontract.ModeFullOverwrite,
+			synccontract.ModeFullAppend,
+			synccontract.ModeIncrementalUpsert,
+			synccontract.ModeIncrementalDedupe,
+			synccontract.ModeIncrementalDedupeHistory,
+			synccontract.ModeChangeCapture,
+		},
+		Delivery: DeliveryGuarantees{
+			Idempotency: DeliveryIdempotencyKeyed,
+			Ordering:    DeliveryOrderingSource,
+			Deletes:     DeliveryDeletesTombstone,
+		},
+		Conformance:     LocalWarehouseDestinationTransportConformance,
+		Acknowledgement: TransportAcknowledgementDurableWarehouse,
+		ApplyStrategies: []DestinationApplyStrategy{
+			{Mode: synccontract.ModeFullOverwrite, Strategy: ApplyStrategyReplace, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeIncrementalUpsert, Strategy: ApplyStrategyMerge, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeIncrementalDedupe, Strategy: ApplyStrategyDedupe, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeIncrementalDedupeHistory, Strategy: ApplyStrategyDedupeHistory, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeChangeCapture, Strategy: ApplyStrategyChangeApply, Action: localWarehouseDestinationTransportAction},
+		},
+	}}
+}
 
 func (Warehouse) Metadata() Metadata {
 	return Metadata{

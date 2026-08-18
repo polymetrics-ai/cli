@@ -44,6 +44,12 @@ SECURITY
   approval: not required for ETL destination writes; reverse ETL still requires approval
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+SYNC TRANSPORT
+  Source transport: unsupported
+  Destination transport: declared
+  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  Destination executor: native_database/local_parquet_warehouse
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect warehouse

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "not_applicable",
+  "reason": "PostgreSQL uses its native wire protocol and makes no provider HTTP API requests."
+}

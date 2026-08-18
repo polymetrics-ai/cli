@@ -1,0 +1,7 @@
+{
+  "schema_version": 2, "scope": "capability", "status": "passed", "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.", "credential_scope_proof": "protocol_exchanges",
+  "connector": "github", "function_kind": "command:users_create_ssh_signing_key_for_authenticated_user", "provider": "github", "executed_at": "2026-08-18T03:37:00Z", "run_id": "github-mutation-slice4-users-create-ssh-signing-key-20260818",
+  "proof": {"redaction_strategy": "repository_salted_hmac_sha256_v1", "pm_binary_sha256": "96afbf0fecf0a72d3a9d55b40ee4365f799840825d02d18f64e3ce294642e424", "pm_command_fingerprint": "{{pmcertfp:v1:52bfdee258d34c885ef4acd396c461df9998c5faf399d77d8c5fdaa6e38cc5eb}}", "credential_fingerprints": ["{{pmcertfp:v1:21d04f26d53d68e161baac1dd4420e902dfdb21e90b32633d493810ddba91e3e}}"],
+    "http_exchanges": [{"operation": "users_create_ssh_signing_key_for_authenticated_user_independent_cleanup_readback", "request": {"method": "GET", "target": "{{pmcertfp:v1:3d017539f2c2170959987bbc005c0f6f6424adccdead46afce52d508fd2045e9}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}}, "response": {"status": 200, "headers": [], "body": {"encoding": "json", "value": [], "original_bytes": 4, "truncated": false}}}], "database_exchanges": []}
+}

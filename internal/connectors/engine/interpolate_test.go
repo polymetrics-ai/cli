@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"net/http"
 	"net/url"
 	"strings"
@@ -121,6 +122,28 @@ func TestInterpolatePathDefaultURLEncode(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Fatalf("InterpolatePath(%q) = %q, want %q", tt.template, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestInterpolatePathPreservesIntegerIDsWithoutScientificNotation(t *testing.T) {
+	tests := []struct {
+		name string
+		id   any
+		want string
+	}{
+		{name: "exact integer beyond float precision", id: json.Number("9007199254740993"), want: "/hooks/9007199254740993"},
+		{name: "legacy integral float", id: float64(667233046), want: "/hooks/667233046"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := InterpolatePath("/hooks/{{ record.id }}", Vars{Record: map[string]any{"id": tt.id}})
+			if err != nil {
+				t.Fatalf("InterpolatePath integer ID: %v", err)
+			}
+			if got != tt.want {
+				t.Fatalf("InterpolatePath integer ID = %q, want %q", got, tt.want)
 			}
 		})
 	}

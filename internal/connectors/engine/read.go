@@ -15,6 +15,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/coordination"
 )
 
 // defaultPageSize is used when neither the stream's nor the base pagination
@@ -214,7 +215,12 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 		if err != nil {
 			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
 		}
-		resp, err := requester.Do(ctx, http.MethodGet, reqPath, page.Query, nil)
+		pageCtx, cancelPage := readPageContext(ctx, req.PageDeadline)
+		pageStarted := time.Now()
+		resp, err := requester.Do(pageCtx, http.MethodGet, reqPath, page.Query, nil)
+		elapsed := time.Since(pageStarted)
+		cancelPage()
+		recordReadPageFetch(req, elapsed)
 		if err != nil {
 			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
 		}
@@ -350,7 +356,12 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
-		resp, err := requester.Do(ctx, method, reqPath, query, body)
+		pageCtx, cancelPage := readPageContext(ctx, req.PageDeadline)
+		pageStarted := time.Now()
+		resp, err := requester.Do(pageCtx, method, reqPath, query, body)
+		elapsed := time.Since(pageStarted)
+		cancelPage()
+		recordReadPageFetch(req, elapsed)
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Class: class, Hint: hint, Err: err}
@@ -419,6 +430,19 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 
 	return nil
+}
+
+func readPageContext(ctx context.Context, deadline time.Duration) (context.Context, context.CancelFunc) {
+	if deadline <= 0 {
+		return ctx, func() {}
+	}
+	return context.WithTimeout(ctx, deadline)
+}
+
+func recordReadPageFetch(req connectors.ReadRequest, elapsed time.Duration) {
+	if req.ObservePageFetch != nil {
+		req.ObservePageFetch(elapsed)
+	}
 }
 
 func effectiveReadMaxPages(declared, requested int) int {
@@ -522,6 +546,23 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	if err != nil {
 		return nil, fmt.Errorf("engine: resolve base url: %w", err)
 	}
+	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
+	if err != nil {
+		return nil, err
+	}
+	requester := &connsdk.Requester{
+		BaseURL:                   baseURL,
+		UserAgent:                 b.HTTP.UserAgent,
+		DefaultHeaders:            headers,
+		RateLimitEvents:           rateLimitEventSinkFor(cfg.ProjectDir),
+		RateLimitAdmissionTimeout: rateLimitAdmissionTimeoutFor(cfg.ProjectDir),
+	}
+	resolver := newRateLimitResolverWithContext(ctx, b, rateLimitConfigForSelectedAuth(cfg, b.HTTP.Auth, h))
+	budget := cfg.BudgetCoordinator
+	if budget == nil {
+		budget = coordination.NewRateBudgetCoordinator(nil, coordination.RateBudgetCoordinatorOptions{})
+	}
+	authRuntime := &Runtime{baseRequester: requester, rateLimits: resolver, budget: budget}
 
 	// An empty auth list means the bundle declares no authentication scheme at
 	// all (e.g. a fully public API, or a test double) — selectAuth itself
@@ -529,30 +570,17 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	// rather than forcing every caller to declare a trivial "none" rule.
 	var auth connsdk.Authenticator
 	if len(b.HTTP.Auth) > 0 {
-		auth, err = selectAuth(ctx, cfg, b.HTTP.Auth, h)
+		auth, err = selectAuthWithDeclaredRoute(ctx, cfg, b.HTTP.Auth, h, declaredRouteRequester{runtime: authRuntime})
 		if err != nil {
 			return nil, fmt.Errorf("engine: %w", err)
 		}
 	}
-
-	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
-	if err != nil {
-		return nil, err
-	}
-
-	requester := &connsdk.Requester{
-		BaseURL:        baseURL,
-		Auth:           auth,
-		UserAgent:      b.HTTP.UserAgent,
-		DefaultHeaders: headers,
-	}
-
-	resolver := newRateLimitResolver(b, cfg)
+	requester.Auth = auth
 	defaultRequester, err := resolver.defaultRequester(requester)
 	if err != nil {
 		return nil, err
 	}
-	return &Runtime{Requester: defaultRequester, baseRequester: requester, Bundle: &b, Config: cfg, rateLimits: resolver}, nil
+	return &Runtime{Requester: defaultRequester, baseRequester: requester, Bundle: &b, Config: cfg, rateLimits: resolver, budget: budget}, nil
 }
 
 // NewRuntime builds the bundle-authenticated requester used by a native

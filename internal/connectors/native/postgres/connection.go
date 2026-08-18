@@ -235,6 +235,28 @@ func (c connConfig) openPool(ctx context.Context) (*pgxpool.Pool, error) {
 	if err != nil {
 		return nil, err
 	}
+	return openPostgresPool(ctx, poolConfig)
+}
+
+func (c connConfig) typedCatalogPoolConfig(resources typedCatalogResources) (*pgxpool.Config, error) {
+	poolConfig, err := c.poolConfig()
+	if err != nil {
+		return nil, err
+	}
+	poolConfig.MaxConns = resources.poolSize
+	poolConfig.ConnConfig.ConnectTimeout = resources.policy.ConnectTimeout
+	return poolConfig, nil
+}
+
+func (c connConfig) openTypedCatalogPool(ctx context.Context, resources typedCatalogResources) (*pgxpool.Pool, error) {
+	poolConfig, err := c.typedCatalogPoolConfig(resources)
+	if err != nil {
+		return nil, err
+	}
+	return openPostgresPool(ctx, poolConfig)
+}
+
+func openPostgresPool(ctx context.Context, poolConfig *pgxpool.Config) (*pgxpool.Pool, error) {
 	pool, err := pgxpool.NewWithConfig(ctx, poolConfig)
 	if err != nil {
 		// Keep endpoint and credentials out of user-visible errors.
@@ -422,6 +444,38 @@ func readLimit(cfg connectors.RuntimeConfig) (int, error) {
 // Check verifies connection config and, outside fixture mode, opens a pgx
 // pool and pings. Fixture mode validates config shape only (no network).
 func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
+	return executeWithAuthenticationAdmission(ctx, cfg, func(admitted context.Context) error { return c.check(admitted, cfg) })
+}
+
+func executeWithAuthenticationAdmission(ctx context.Context, cfg connectors.RuntimeConfig, operation func(context.Context) error) error {
+	classified := func(admitted context.Context) error {
+		return markPostgresAuthenticationFailure(operation(admitted))
+	}
+	if cfg.AuthenticationAdmission == nil {
+		return classified(ctx)
+	}
+	return cfg.AuthenticationAdmission.Execute(ctx, classified)
+}
+
+func markPostgresAuthenticationFailure(err error) error {
+	if err == nil || connectors.IsVerifiedAuthenticationFailure(err) {
+		return err
+	}
+	if (Connector{}).AuthenticationFailureVerified(err) {
+		return connectors.MarkVerifiedAuthenticationFailure(err)
+	}
+	return err
+}
+
+// AuthenticationFailureVerified recognizes PostgreSQL's protocol-level
+// invalid-password SQLSTATE and no permission, transport, or text-shaped
+// failure.
+func (Connector) AuthenticationFailureVerified(err error) bool {
+	var postgresError *pgconn.PgError
+	return errors.As(err, &postgresError) && postgresError.Code == "28P01"
+}
+
+func (c Connector) check(ctx context.Context, cfg connectors.RuntimeConfig) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -438,7 +492,8 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 	}
 	defer pool.Close()
 	if err := pool.Ping(ctx); err != nil {
-		return fmt.Errorf("check postgres: ping: %w", err)
+		wrapped := fmt.Errorf("check postgres: ping: %w", err)
+		return wrapped
 	}
 	return nil
 }

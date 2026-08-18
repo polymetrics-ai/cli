@@ -40,7 +40,7 @@ Reads OneSignal account-level applications through the OneSignal REST API. Devic
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 

@@ -115,6 +115,18 @@ func (e *MinimumFlagError) Error() string {
 	return fmt.Sprintf("invalid --%s: value must be at least %s", e.Parameter, strconv.FormatFloat(e.Minimum, 'f', -1, 64))
 }
 
+// MissingRequiredFlagError is a caller-correctable command-input refusal.
+// Its fields let the CLI preserve the usage-error category without parsing an
+// error string, and commandrunner returns it before any executor is called.
+type MissingRequiredFlagError struct {
+	Command string
+	Flag    string
+}
+
+func (e *MissingRequiredFlagError) Error() string {
+	return fmt.Sprintf("missing required flag --%s for command %q", e.Flag, e.Command)
+}
+
 func (e *BlockedCommandError) Error() string {
 	parts := []string{fmt.Sprintf("connector command %q is blocked", e.Command)}
 	if e.Intent != "" {
@@ -1100,7 +1112,7 @@ func commandValueEmpty(value any) bool {
 }
 
 func missingRequiredFlagError(cmd connectors.CommandSurfaceCommand, name string) error {
-	return fmt.Errorf("missing required flag --%s for command %q", name, cmd.Path)
+	return &MissingRequiredFlagError{Command: cmd.Path, Flag: name}
 }
 
 // ReconstituteWithheldFields rebuilds the record fragment for fields a reverse

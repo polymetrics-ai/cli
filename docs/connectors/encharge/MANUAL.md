@@ -48,7 +48,7 @@ ETL STREAMS
     fields: name(string), title(string), type(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Encharge API read of people, segment, field, and tag data

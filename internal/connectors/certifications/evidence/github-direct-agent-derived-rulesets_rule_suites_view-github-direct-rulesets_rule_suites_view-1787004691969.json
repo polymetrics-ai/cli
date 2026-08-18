@@ -1,0 +1,74 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:rulesets_rule_suites_view",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:11:34.749Z",
+  "run_id": "github-direct-rulesets_rule_suites_view-1787004691969",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:ca010c369a098c81f84696a778d2b30a4ed6b6d1a5b51e1c88352371e06c7689}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:rulesets_rule_suites_view",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:e300389b3503d3a942db4acbd8dc48bf4ec8f9335724559a7ce25b48a96882bb}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [
+              {
+                "actor_id": "{{pmcertfp:v1:917fb9282f5fead30a7f5cf0c2a5da527cfdb03eafd7d7755a182fcaec563069}}",
+                "actor_name": "{{pmcertfp:v1:e2cb9dc65e1599781947d323e93f5289277dc203eb50a4630b12eb0fbbd8f52e}}",
+                "after_sha": "{{pmcertfp:v1:fdf702c6506a803e77372f064c5268c2cf586063395ba9a8c5621be7794cea27}}",
+                "before_sha": "{{pmcertfp:v1:1faccfd6df5d1d5bd35e87677aa5da84c928447db069add9d32118b09a2a828a}}",
+                "id": "{{pmcertfp:v1:90a9c04606a34f83d98b2d8caa59a3ab3a7e07b139b1420a27570d64029b6a3b}}",
+                "pushed_at": "{{pmcertfp:v1:e1c6145509f994479fe3683dcf83206ee5314f31e2e6c6fd7085af393383a709}}",
+                "ref": "{{pmcertfp:v1:e52b90fc8f90949ba386d4989f0eee0ed9421bc2cdf36ab6baa247021cf61997}}",
+                "repository_id": "{{pmcertfp:v1:9de40252b070cf6e2f656d2dc6304fd3dd8338b02c7050490b31c4148720d14b}}",
+                "repository_name": "{{pmcertfp:v1:37e3f363c7bd85ff1e4efd4a6e620815a63615ecc541cc30a24bfb168ee0a030}}",
+                "result": "{{pmcertfp:v1:8a558856a23c8921770aadd3253c5870f4fa0c88ebc179d4db287cfbfe6cee9e}}"
+              },
+              {
+                "actor_id": "{{pmcertfp:v1:917fb9282f5fead30a7f5cf0c2a5da527cfdb03eafd7d7755a182fcaec563069}}",
+                "actor_name": "{{pmcertfp:v1:e2cb9dc65e1599781947d323e93f5289277dc203eb50a4630b12eb0fbbd8f52e}}",
+                "after_sha": "{{pmcertfp:v1:1faccfd6df5d1d5bd35e87677aa5da84c928447db069add9d32118b09a2a828a}}",
+                "before_sha": "{{pmcertfp:v1:72e3058c785928c8c45bfcccdb56eefaeacebdb4b29576154219ec9eeca70886}}",
+                "id": "{{pmcertfp:v1:22a783ae62d46bc8c74b35d106f9e5046bbdd986e2456e2e1fda3b172ba19ebe}}",
+                "pushed_at": "{{pmcertfp:v1:18f3282fde725fda9da40a6e701d5f0891f291386203abd249c3d3b9c3e768bc}}",
+                "ref": "{{pmcertfp:v1:e52b90fc8f90949ba386d4989f0eee0ed9421bc2cdf36ab6baa247021cf61997}}",
+                "repository_id": "{{pmcertfp:v1:9de40252b070cf6e2f656d2dc6304fd3dd8338b02c7050490b31c4148720d14b}}",
+                "repository_name": "{{pmcertfp:v1:37e3f363c7bd85ff1e4efd4a6e620815a63615ecc541cc30a24bfb168ee0a030}}",
+                "result": "{{pmcertfp:v1:8a558856a23c8921770aadd3253c5870f4fa0c88ebc179d4db287cfbfe6cee9e}}"
+              }
+            ],
+            "original_bytes": 701,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

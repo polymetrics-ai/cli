@@ -1,0 +1,31 @@
+{
+  "connector": "github",
+  "stage_names": [
+    "generated_direct_read_code_security_get_configurations_for_enterprise",
+    "generated_direct_read_code_security_get_default_configurations_for_enterprise",
+    "generated_direct_read_codespaces_get_public_key_for_authenticated_user",
+    "generated_direct_read_codespaces_list_secrets_for_authenticated_user",
+    "generated_direct_read_copilot_spaces_get_for_org",
+    "generated_direct_read_copilot_spaces_list_collaborators_for_org",
+    "generated_direct_read_copilot_spaces_list_for_user",
+    "generated_direct_read_copilot_spaces_list_resources_for_org",
+    "generated_direct_read_dependabot_list_alerts_for_enterprise",
+    "generated_direct_read_dependabot_repository_access_for_enterprise",
+    "generated_direct_read_enterprise_teams_list",
+    "generated_direct_read_oidc_list_oidc_custom_property_inclusions_for_enterprise"
+  ],
+  "nonpass_outcomes": {
+    "generated_direct_read_code_security_get_configurations_for_enterprise": "product_defect",
+    "generated_direct_read_code_security_get_default_configurations_for_enterprise": "product_defect",
+    "generated_direct_read_codespaces_get_public_key_for_authenticated_user": "product_defect",
+    "generated_direct_read_codespaces_list_secrets_for_authenticated_user": "product_defect",
+    "generated_direct_read_copilot_spaces_get_for_org": "product_defect",
+    "generated_direct_read_copilot_spaces_list_collaborators_for_org": "product_defect",
+    "generated_direct_read_copilot_spaces_list_for_user": "product_defect",
+    "generated_direct_read_copilot_spaces_list_resources_for_org": "product_defect",
+    "generated_direct_read_dependabot_list_alerts_for_enterprise": "product_defect",
+    "generated_direct_read_dependabot_repository_access_for_enterprise": "product_defect",
+    "generated_direct_read_enterprise_teams_list": "product_defect",
+    "generated_direct_read_oidc_list_oidc_custom_property_inclusions_for_enterprise": "product_defect"
+  }
+}

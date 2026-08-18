@@ -60,7 +60,7 @@ ETL STREAMS
     fields: ad_group_id(integer), campaign_id(integer), keyword_id(integer), keyword_text(string), match_type(string), state(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Amazon Ads API read of profile, campaign, ad group, product ad, keyword, negative keyword, and portfolio data

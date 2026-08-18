@@ -6,10 +6,10 @@
 # DuckDB, so every target is a cgo build and cannot be cross-compiled from one
 # host) without a GoReleaser Pro licence for the `prebuilt` builder.
 #
-# The fields below mirror `.goreleaser.yaml`'s `nfpms` block exactly. If one
-# changes, change the other: `scripts/verify-release-assets.sh` checks the
-# resulting file names, and `scripts/test-linux-packages.sh` installs the
-# packages under QEMU on every pull request, so a drift between them fails CI
+# The fields below are the source of truth for the packages assembled by
+# `scripts/assemble-release-assets.sh`. `scripts/verify-release-assets.sh`
+# checks the resulting file names, and `scripts/test-linux-packages.sh`
+# installs the packages under QEMU on every pull request, so drift fails CI
 # rather than shipping.
 name: pm
 arch: ${PM_PACKAGE_ARCH}
