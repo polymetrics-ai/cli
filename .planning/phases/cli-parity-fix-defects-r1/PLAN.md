@@ -78,3 +78,22 @@ Gap plan:
 4. If the full CI run exposes another stale projection of the same transition,
    reconcile it by identity and semantics before changing its pins, run that
    package explicitly, and repeat CI until `verify` is green.
+
+## Authoritative-base rebase — PR #4236
+
+PR #4236 merged into `integration/4015-mvp-flat-r1` during verification and
+raised the authoritative GitHub CLI inventory to 1571 declared commands, of
+which 1546 are implemented. The task branch was rebased onto base commit
+`e06cdfdf7`; conflict resolution preserved every #4236 surface addition and
+then regenerated all overlapping artifacts from the combined source.
+
+The one-command certification transition remains intentional and identifiable:
+the invalid REST write
+`projects_create_draft_item_for_authenticated_user` is absent from the
+606-action executable write inventory, while the declared command remains
+implemented through
+`github.graphql.mutation.add-project-v2-draft-issue`. On the new base this
+produces 865 mutation candidates split 283 direct writes / 582 reverse ETL,
+with fixture strategies split 494 derived collection cycles / 371 named
+exceptions. These totals are derived consequences of the named command move,
+not replacements for its identity assertions.

@@ -32,17 +32,17 @@ wrong branch; see the [connector delivery canon](connector-delivery).
 | Unsupported local workflow entries | 21 |
 | Unsafe or disallowed entries | 0 |
 | GitHub read streams | 37 |
-| GitHub write actions | 607 |
+| GitHub write actions | 606 |
 | Pinned REST operations | 1220 |
 | Pinned GraphQL Query roots | 31 |
 | Pinned GraphQL Mutation roots | 274 |
 | Pinned source operations | 1525 |
 | Source inventory classification | 1525/1525 (100%) |
-| Executable implementation | 1458/1525 (95.61%) |
+| Executable implementation | 1454/1525 (95.34%) |
 | Current-head live proof | 0/1525 (0%) |
 | Tracked REST endpoints | 1220 |
-| Covered REST endpoints | 1220 |
-| Blocked REST endpoints | 0 |
+| Covered REST endpoints | 1219 |
+| Blocked REST endpoints | 1 |
 | Fixed GraphQL transport endpoints | 1 |
 | Fixed GraphQL root-operation bindings | 305 |
 | Supplemental fixed GraphQL bindings | 1 |
@@ -57,10 +57,10 @@ wrong branch; see the [connector delivery canon](connector-delivery).
 | Intent | Current count | Runtime rule |
 |---|---:|---|
 | `etl` | 15 | Reads map to existing streams or planned stream/direct-read coverage. |
-| `reverse_etl` | 583 | Commands with explicit `record.*` flag mappings create stored reverse plans; execution requires preview and approval. |
+| `reverse_etl` | 582 | Commands with explicit `record.*` flag mappings create stored reverse plans; execution requires preview and approval. |
 | `direct_read` | 654 | Constrained read commands that do not naturally fit streams. |
 | `binary_download` | 14 | Bounded GET downloads that write a file to a caller-supplied `--dest-root`; no response body is rendered. |
-| `direct_write` | 286 | Fixed declared writes follow plan → preview → approval → execute; destructive operations also require typed confirmation. |
+| `direct_write` | 287 | Fixed declared writes follow plan → preview → approval → execute; destructive operations also require typed confirmation. |
 | `local_workflow` | 12 | Browser, git, shell, extension, completion, or local config behavior. |
 | `auth` | 3 | Credential lifecycle commands; never print token material. |
 | `config` | 3 | Local config behavior, not connector data extraction. |

@@ -78,3 +78,23 @@ after each green slice. A skipped test is not evidence.
   string resolves to an operation-backed implemented CLI command; the retired
   REST row resolves specifically to the user-project command.
 - `go test -timeout 20m ./cmd/connectorgen -count=1` passes (`98.702s`).
+
+## Authoritative-base rebase checkpoint — 2026-08-18
+
+- Red: after PR #4236 merged, PR #4234 reported `mergeStateStatus: DIRTY` and
+  the overlapping generated GitHub bundle, certification, connectorgen, and
+  CLI transcript files could no longer be merged automatically. The new base
+  independently contained 1571 declared / 1546 implemented commands and 607
+  REST write actions, so resolving by retaining the old branch artifacts would
+  have discarded authoritative parity work.
+- Green: rebase conflict resolution retained #4236's source additions, applied
+  the user-project REST-to-GraphQL correction by identity, and regenerated the
+  CLI/API surface, certification candidates/sweep, combined ledger, docs,
+  website data, and CLI transcript snapshot. The combined surface preserves
+  1571 declared / 1546 implemented commands and derives 606 executable REST
+  writes plus 865 candidates (283 direct write / 582 reverse ETL; 494 derived
+  collection cycle / 371 named exception).
+- Verification: `go test -timeout 20m ./internal/connectors/certify -count=1`
+  passes (`13.826s`); `go test -timeout 20m ./cmd/connectorgen -count=1`
+  passes (`118.571s`); the 1546-command runtime preflight sweep and regenerated
+  CLI transcript checks also pass.
