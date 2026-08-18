@@ -1,0 +1,100 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:copilot_spaces_create_for_org",
+  "provider": "github",
+  "executed_at": "2026-08-18T03:51:39Z",
+  "run_id": "github-manual-slice5-copilot-spaces-create-for-org-rrun-3bb41358830d7492",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "8bc1432d9221ddae637ba96846d94f36ee7f28c6f8a069e22d170ceaea886a7b",
+    "pm_command_fingerprint": "{{pmcertfp:v1:cd3aef1885243e332139ffb0a3f0588bb41207c68446cf91215afa90b1bb03c8}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:128751441278bbe44377cf629fc71b6c53d57201ef46d46bdd794d87544f4f73}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "copilot_spaces_create_for_org_run",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:5918a3fdf552742b0707128f90deca94e1de0d5612eb8b12b01070f8ace47e97}}",
+          "query": [],
+          "headers": [
+            {"name": "authorization", "value": "{{pmcertfp:v1:3d4a4cb09c3f69f5f1bba91db7de358a06018b3434be5f4d4127076cf2725302}}"}
+          ],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "base_role": "{{pmcertfp:v1:d4dcc406501231154f0727b82b99cac8c3eacffac408b8a2258e4fa74a61fb00}}",
+              "description": "{{pmcertfp:v1:f42649a8691235ae67725a9674bb9f7f63c12a1f97202e8ccbf6ee3f98c6feb2}}",
+              "general_instructions": "{{pmcertfp:v1:f42649a8691235ae67725a9674bb9f7f63c12a1f97202e8ccbf6ee3f98c6feb2}}",
+              "name": "{{pmcertfp:v1:1c073737fd0b9b7aa34177edb1743185cadd9fea3de679a114100b5c244089b0}}"
+            },
+            "original_bytes": 120,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 201,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "base_role": "{{pmcertfp:v1:d4dcc406501231154f0727b82b99cac8c3eacffac408b8a2258e4fa74a61fb00}}",
+              "description": "{{pmcertfp:v1:f42649a8691235ae67725a9674bb9f7f63c12a1f97202e8ccbf6ee3f98c6feb2}}",
+              "name": "{{pmcertfp:v1:1c073737fd0b9b7aa34177edb1743185cadd9fea3de679a114100b5c244089b0}}",
+              "number": "{{pmcertfp:v1:a617038e56054ef5101810a65fb3458e1c5c81f8ccc600c117a479d3dca8e763}}"
+            },
+            "original_bytes": 85,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "copilot_spaces_create_for_org_cleanup",
+        "request": {
+          "method": "DELETE",
+          "target": "{{pmcertfp:v1:404c037f02826b06bd8cd0f67dc2088cf50546608b90910f89973d06cf55ca3a}}",
+          "query": [],
+          "headers": [
+            {"name": "authorization", "value": "{{pmcertfp:v1:3d4a4cb09c3f69f5f1bba91db7de358a06018b3434be5f4d4127076cf2725302}}"}
+          ],
+          "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}
+        },
+        "response": {
+          "status": 204,
+          "headers": [],
+          "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}
+        }
+      },
+      {
+        "operation": "copilot_spaces_create_for_org_cleanup_readback",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:404c037f02826b06bd8cd0f67dc2088cf50546608b90910f89973d06cf55ca3a}}",
+          "query": [],
+          "headers": [
+            {"name": "authorization", "value": "{{pmcertfp:v1:3d4a4cb09c3f69f5f1bba91db7de358a06018b3434be5f4d4127076cf2725302}}"}
+          ],
+          "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}
+        },
+        "response": {
+          "status": 404,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {"message": "{{pmcertfp:v1:8de4032477cdb5055a364ce630ef98bedbd5b67bf64b6d6033e835c3f25b8cb0}}"},
+            "original_bytes": 146,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
