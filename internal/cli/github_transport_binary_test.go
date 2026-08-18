@@ -474,14 +474,15 @@ func assertTransportCleanupRunOutput(t *testing.T, output, wantPlanID, wantForwa
 		ConnectionID  string `json:"connection_id"`
 		Action        string `json:"action"`
 		Result        struct {
-			RecordsWritten int `json:"records_written"`
-			RecordsFailed  int `json:"records_failed"`
+			RecordsWritten   int `json:"records_written"`
+			RecordsFailed    int `json:"records_failed"`
+			RecordsUnchanged int `json:"records_unchanged"`
 		} `json:"result"`
 	}
 	if err := json.Unmarshal([]byte(output), &envelope); err != nil {
 		t.Fatalf("decode cleanup JSON: %v", err)
 	}
-	if envelope.APIVersion != apiVersion || envelope.Kind != "ETLTransportCleanupRun" || envelope.Status != "completed" || envelope.PlanID != wantPlanID || envelope.ForwardPlanID != wantForwardPlanID || envelope.ConnectionID != wantConnectionID || envelope.Action != "remove_issue_label" || envelope.Result.RecordsWritten != 1 || envelope.Result.RecordsFailed != 0 {
+	if envelope.APIVersion != apiVersion || envelope.Kind != "ETLTransportCleanupRun" || envelope.Status != "completed" || envelope.PlanID != wantPlanID || envelope.ForwardPlanID != wantForwardPlanID || envelope.ConnectionID != wantConnectionID || envelope.Action != "remove_issue_label" || envelope.Result.RecordsWritten+envelope.Result.RecordsUnchanged != 1 || envelope.Result.RecordsFailed != 0 {
 		t.Fatal("cleanup output is not the completed typed one-record inverse")
 	}
 }

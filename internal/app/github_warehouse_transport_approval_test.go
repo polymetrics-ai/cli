@@ -305,8 +305,12 @@ func TestIssueLabelTransportCleanupTreatsMissingLabelAsSuccessfulInverse(t *test
 		t.Fatalf("forward ApplyDestination() = %v", err)
 	}
 	cleanupPlan, cleanupApproval := fixture.preRunCleanupApproval(t, forwardPlan.ID)
-	if _, err := fixture.app.ApplyIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, cleanupApproval); err != nil {
+	result, err := fixture.app.ApplyIssueLabelTransportCleanup(context.Background(), fixture.connection.ID, cleanupApproval)
+	if err != nil {
 		t.Fatalf("ApplyIssueLabelTransportCleanup() = %v, want missing-label success for %q", err, cleanupPlan.ID)
+	}
+	if result.RecordsWritten != 0 || result.RecordsUnchanged != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("ApplyIssueLabelTransportCleanup() result = %+v, want one already-absent label", result)
 	}
 	fixture.assertProviderDeletes(t, 1)
 }

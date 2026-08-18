@@ -660,7 +660,7 @@ func writeETLTransportCleanupRun(stdout io.Writer, jsonOut bool, plan app.Revers
 			"result":          result,
 		})
 	}
-	_, err := fmt.Fprintf(stdout, "Issue-label transport cleanup %s completed: written=%d failed=%d\n", safe.ID, result.RecordsWritten, result.RecordsFailed)
+	_, err := fmt.Fprintf(stdout, "Issue-label transport cleanup %s completed: written=%d unchanged=%d failed=%d\n", safe.ID, result.RecordsWritten, result.RecordsUnchanged, result.RecordsFailed)
 	return err
 }
 
