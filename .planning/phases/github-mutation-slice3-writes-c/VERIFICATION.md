@@ -177,7 +177,7 @@ Cumulative commands 1–100: `certified=42`, `no_object=14`, `wrong_credential=3
 | 123 | `enterprise-team-memberships bulk-add` | escape_needs_captain | Enterprise membership affects external scope and people; no provider request was issued. |
 | 124 | `enterprise-team-memberships bulk-remove` | escape_needs_captain | Enterprise membership affects external scope and people; no provider request was issued. |
 | 125 | `enterprise-team-memberships remove` | escape_needs_captain | Enterprise membership affects an enterprise outside the boundary; no provider request was issued. |
-| 126 | `release create` | product_defect | PM reported success but tag lookup found no release. Raw POST created the draft release, read-back matched name/body/draft, and direct DELETE plus `404` cleaned it. |
+| 126 | `release create` | certified | The draft release existed in the provider collection; object read-back matched tag/name/body/draft, and direct DELETE plus object `404` and zero collection matches proved cleanup. |
 | 127 | `release delete` | product_defect | `class=integer_id_scientific_notation`; PM used scientific notation for the real release ID. Exact raw DELETE returned `204` and read-back returned `404`. |
 | 128 | `release delete-asset` | product_defect | `class=integer_id_scientific_notation`; PM reported success while the real asset remained `200`. Exact raw DELETE returned `204`, asset read-back returned `404`, then release DELETE/read-back cleaned the container. |
 | 129 | `release edit` | product_defect | `class=integer_id_scientific_notation`; PM received `404` on the scientific-notation release ID. Exact raw PATCH returned `200`, read-back matched name/body, and direct DELETE plus `404` cleaned the release. |
@@ -199,9 +199,9 @@ Cumulative commands 1–100: `certified=42`, `no_object=14`, `wrong_credential=3
 | 145 | `project create` | certified | Organization project collection read-back matched the unique title; provider-native `deleteProjectV2` followed by null project read-back proved cleanup. |
 | 146 | `workflow run` | escape_needs_captain | The workflow collection is empty and creating/running a fixture workflow would start metered GitHub Actions compute; no mutation request was issued. |
 
-Batch 5 totals: `certified=12`, `no_object=2`, `wrong_credential=0`, `entitlement=0`, `not_implemented=0`, `product_defect=15`, `escape_needs_captain=17`; sum `46`.
+Batch 5 totals: `certified=13`, `no_object=2`, `wrong_credential=0`, `entitlement=0`, `not_implemented=0`, `product_defect=14`, `escape_needs_captain=17`; sum `46`.
 
-Final slice totals: `certified=54`, `no_object=16`, `wrong_credential=3`, `entitlement=9`, `not_implemented=0`, `product_defect=40`, `escape_needs_captain=24`; sum `146`.
+Final slice totals: `certified=55`, `no_object=16`, `wrong_credential=3`, `entitlement=9`, `not_implemented=0`, `product_defect=39`, `escape_needs_captain=24`; sum `146`.
 
 ## Final verification
 
@@ -209,6 +209,6 @@ Final slice totals: `certified=54`, `no_object=16`, `wrong_credential=3`, `entit
 - `go run ./cmd/connectorgen certification-matrix --check` — passed: certification shards current.
 - `go test -timeout 20m ./cmd/connectorgen -run '^TestCertification' -count=1` — passed in 75.219s.
 - `go test -timeout 20m ./internal/agentcontract -run 'Certification|WorkflowEvidence' -count=1` — passed in 4.855s.
-- Evidence records added over `origin/integration/4015-mvp-flat-r1`: `54`, matching the certified bucket.
+- Evidence records added over `origin/integration/4015-mvp-flat-r1`: `55`, matching the certified bucket.
 - Verification rows: `146`, sequential and unique from 1 through 146.
 - The full 550+ connector suite and monolithic `make verify` were not run locally because `AGENTS.md` explicitly directs per-command-timeout agents to scope local runs and let CI carry the full suite; this evidence-only change ran the relevant certification and workflow-evidence gates instead.
