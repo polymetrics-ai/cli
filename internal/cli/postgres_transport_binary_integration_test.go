@@ -696,10 +696,10 @@ func TestPMBinaryExecutesPostgresIncrementalDedupeHistory(t *testing.T) {
 }
 
 // TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage characterizes the
-// shipped full-overwrite route with two bounded source pages. Its target query
-// is deliberately the final-content assertion: a per-page TRUNCATE leaves
-// only the second page and must fail this test rather than be mistaken for a
-// successful run.
+// shipped full-overwrite route across two bounded pages and a changed-source
+// rerun. Its target queries are deliberately the final-content assertions: a
+// per-page TRUNCATE, checkpoint skip, or empty/stale publication must fail
+// rather than be mistaken for a successful run.
 func TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage(t *testing.T) {
 	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
 		t.Skip("database integration is opt-in")
@@ -759,6 +759,128 @@ func TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage(t *testing.T) {
 	}
 	if len(ids) != 3 || ids[0] != 1 || ids[1] != 2 || ids[2] != 3 {
 		t.Fatalf("two-page full-overwrite target IDs = %v, want every source page [1 2 3]", ids)
+	}
+	var beforeLabel string
+	if err := target.QueryRow(ctx, "SELECT label FROM "+qualified+" WHERE id = 2").Scan(&beforeLabel); err != nil {
+		t.Fatalf("read first full-overwrite target sample: %v", err)
+	}
+	t.Logf("full-overwrite first run: records_read=%d records_loaded=%d target_rows=%d target_ids=%v target_sample=id=2 label=%q", run.RecordsRead, run.RecordsLoaded, count, ids, beforeLabel)
+
+	if _, err := admin.Exec(ctx, `DELETE FROM public.overwrite_events WHERE id = 1`); err != nil {
+		t.Fatalf("remove stale full-overwrite source row: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `UPDATE public.overwrite_events SET label = 'replacement-two' WHERE id = 2`); err != nil {
+		t.Fatalf("update full-overwrite source sample: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `INSERT INTO public.overwrite_events (id, sequence, label) VALUES (4, 25, 'replacement-four')`); err != nil {
+		t.Fatalf("insert full-overwrite source replacement row: %v", err)
+	}
+	var sourceIDs []int64
+	var sourceLabel string
+	if err := admin.QueryRow(ctx, `SELECT array_agg(id ORDER BY id) FROM public.overwrite_events`).Scan(&sourceIDs); err != nil {
+		t.Fatalf("read changed full-overwrite source IDs: %v", err)
+	}
+	if err := admin.QueryRow(ctx, `SELECT label FROM public.overwrite_events WHERE id = 2`).Scan(&sourceLabel); err != nil {
+		t.Fatalf("read changed full-overwrite source sample: %v", err)
+	}
+
+	rerun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-full-overwrite", "public.overwrite_events", 2).Run
+	if rerun.Status != "completed" || rerun.RecordsRead != 3 || rerun.RecordsLoaded != 3 {
+		t.Errorf("second full-overwrite binary run = %#v, want completed 3-row replacement", rerun)
+	}
+	_, _, replacedCount := postgresTransportTargetRelation(t, ctx, target)
+	var replacedIDs []int64
+	if err := target.QueryRow(ctx, "SELECT array_agg(id ORDER BY id) FROM "+qualified).Scan(&replacedIDs); err != nil {
+		t.Fatalf("read second full-overwrite target IDs: %v", err)
+	}
+	var replacedLabel *string
+	if err := target.QueryRow(ctx, "SELECT (SELECT label FROM "+qualified+" WHERE id = 2)").Scan(&replacedLabel); err != nil {
+		t.Fatalf("read second full-overwrite target sample: %v", err)
+	}
+	var removedIDCount int
+	if err := target.QueryRow(ctx, "SELECT count(*) FROM "+qualified+" WHERE id = 1").Scan(&removedIDCount); err != nil {
+		t.Fatalf("check removed full-overwrite target row: %v", err)
+	}
+	replacedLabelText := "<missing>"
+	if replacedLabel != nil {
+		replacedLabelText = *replacedLabel
+	}
+	t.Logf("full-overwrite rerun: source_rows=%d source_ids=%v source_sample=id=2 label=%q records_read=%d records_loaded=%d target_rows=%d target_ids=%v target_sample=id=2 label=%q removed_id_1_rows=%d", len(sourceIDs), sourceIDs, sourceLabel, rerun.RecordsRead, rerun.RecordsLoaded, replacedCount, replacedIDs, replacedLabelText, removedIDCount)
+	if replacedCount != 3 || !reflect.DeepEqual(replacedIDs, []int64{2, 3, 4}) || replacedLabelText != "replacement-two" || removedIDCount != 0 {
+		t.Errorf("second full-overwrite target rows=%d ids=%v sample=%q removed_id_1_rows=%d, want replacement rows=3 ids=[2 3 4] sample=%q removed row absent", replacedCount, replacedIDs, replacedLabelText, removedIDCount, "replacement-two")
+	}
+}
+
+func TestPMBinaryPostgresIncrementalUpsertStillSkipsUnchangedSource(t *testing.T) {
+	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
+		t.Skip("database integration is opt-in")
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
+	defer cancel()
+	harness := newPostgresTransportHarness(t)
+	defer func() {
+		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cleanupCancel()
+		if err := harness.Close(cleanupCtx); err != nil {
+			t.Errorf("close incremental-upsert PostgreSQL harness: %v", err)
+		}
+	}()
+	endpoint, err := harness.Start(ctx)
+	if err != nil {
+		t.Fatalf("start incremental-upsert PostgreSQL harness: %v", err)
+	}
+	admin := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
+	defer func() { _ = admin.Close(context.Background()) }()
+	if _, err := admin.Exec(ctx, "CREATE DATABASE "+postgresTransportTargetDB); err != nil {
+		t.Fatalf("create incremental-upsert target database: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `CREATE TABLE public.incremental_events (id bigint PRIMARY KEY, sequence bigint NOT NULL, label text NOT NULL)`); err != nil {
+		t.Fatalf("create incremental-upsert source table: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `INSERT INTO public.incremental_events (id, sequence, label) VALUES (1, 10, 'event-one'), (2, 20, 'event-two'), (3, 30, 'event-three')`); err != nil {
+		t.Fatalf("seed incremental-upsert source rows: %v", err)
+	}
+	target := waitForPostgresTransport(t, ctx, endpoint, postgresTransportTargetDB, postgresTransportUser)
+	defer func() { _ = target.Close(context.Background()) }()
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "project")
+	mustPostgresTransportPM(t, binary, "", "init", "--root", root, "--json")
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-source", postgresTransportSourceDB)
+	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
+	mustPostgresTransportPM(t, binary, "",
+		"connections", "create", "postgres-incremental-upsert",
+		"--source", "postgres:pg-source", "--destination", "postgres:pg-target",
+		"--stream", "public.incremental_events", "--sync-mode", "incremental_upsert",
+		"--cursor", "sequence", "--primary-key", "id", "--table", "incremental_events",
+		"--root", root, "--json")
+
+	first := runApprovedPostgresTransportBinary(t, binary, root, "postgres-incremental-upsert", "public.incremental_events", 2).Run
+	if first.Status != "completed" || first.RecordsRead != 3 || first.RecordsLoaded != 3 {
+		t.Fatalf("first incremental-upsert binary run = %#v, want completed 3-row transfer", first)
+	}
+	schema, relation, count, delivery := postgresTransportTargetState(t, ctx, target)
+	if count != 3 || delivery == "" {
+		t.Fatalf("first incremental-upsert target rows=%d delivery=%q, want three durable rows and a receipt", count, delivery)
+	}
+	qualified := pgx.Identifier{schema, relation}.Sanitize()
+	var beforeLabel string
+	if err := target.QueryRow(ctx, "SELECT label FROM "+qualified+" WHERE id = 2").Scan(&beforeLabel); err != nil {
+		t.Fatalf("read first incremental-upsert target sample: %v", err)
+	}
+
+	rerun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-incremental-upsert", "public.incremental_events", 2).Run
+	if rerun.Status != "completed" || rerun.RecordsRead != 0 || rerun.RecordsLoaded != 0 {
+		t.Fatalf("unchanged incremental-upsert binary run = %#v, want completed checkpoint skip", rerun)
+	}
+	_, _, replayCount, replayDelivery := postgresTransportTargetState(t, ctx, target)
+	var replayLabel string
+	if err := target.QueryRow(ctx, "SELECT label FROM "+qualified+" WHERE id = 2").Scan(&replayLabel); err != nil {
+		t.Fatalf("read replayed incremental-upsert target sample: %v", err)
+	}
+	t.Logf("incremental-upsert replay: first_records_read=%d first_records_loaded=%d rerun_records_read=%d rerun_records_loaded=%d target_rows_before=%d target_rows_after=%d target_sample_before=id=2 label=%q target_sample_after=id=2 label=%q", first.RecordsRead, first.RecordsLoaded, rerun.RecordsRead, rerun.RecordsLoaded, count, replayCount, beforeLabel, replayLabel)
+	if count != 3 || replayCount != count || replayDelivery != delivery || beforeLabel != "event-two" || replayLabel != beforeLabel {
+		t.Fatalf("incremental-upsert replay changed target: rows=%d->%d delivery=%q->%q sample=%q->%q", count, replayCount, delivery, replayDelivery, beforeLabel, replayLabel)
 	}
 }
 
