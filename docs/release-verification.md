@@ -134,7 +134,8 @@ Their package metadata uses:
 - upgrade/uninstall behavior: package managers replace the same `pm` package name on upgrade and remove `/usr/bin/pm` plus package-owned doc files on uninstall; there are no maintainer scripts or background services
 
 Release CI exports `SOURCE_DATE_EPOCH` from the checked-out release commit so
-repeated GoReleaser/nFPM builds of the same commit produce stable package bytes.
+repeated archive and nFPM assembly of the same commit produce stable package
+bytes.
 
 These packages are not signed APT or RPM repositories. A signed package
 repository would require repository metadata such as APT `InRelease` or RPM
