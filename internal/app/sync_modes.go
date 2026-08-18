@@ -151,13 +151,13 @@ func parseLegacySyncMode(raw string) (SyncMode, error) {
 	if value == "" {
 		value = DefaultUserFacingSyncMode
 	}
-	mode, public, ok := publicSyncMode(value)
+	_, public, ok := publicSyncMode(value)
 	if !ok {
 		return SyncMode{}, fmt.Errorf("sync mode %q is not an explicit legacy compatibility adapter", raw)
 	}
 	definition, ok := syncModeDefinitions[public.Name]
 	if ok && definition.legacyInput {
-		mode = definition.persistedLegacyMode()
+		mode := definition.persistedLegacyMode()
 		mode.ContractMode = public.ContractMode
 		return mode, nil
 	}
