@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/polymetrics-ai/cli/compare/v0.2.0...v0.2.1) (2026-08-18)
+
+
+### Bug Fixes
+
+* **sync:** correct full-overwrite reruns and CDC restart recovery ([#4257](https://github.com/polymetrics-ai/cli/issues/4257)) ([70239d7](https://github.com/polymetrics-ai/cli/commit/70239d7a322894670a39296df9638b6ac10662d3))
+
 ## [0.2.0](https://github.com/polymetrics-ai/cli/compare/v0.1.1...v0.2.0) (2026-08-18)
 
 
