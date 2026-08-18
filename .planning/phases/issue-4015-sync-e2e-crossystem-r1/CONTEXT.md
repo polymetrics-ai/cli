@@ -48,4 +48,3 @@ No exit code is accepted as route proof. Each passing route requires an independ
 Loaded: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-database`, `golang-design-patterns`, and `golang-structs-interfaces`.
 
 CLI help/docs/website parity is expected to be not applicable because this lane changes certification tests/evidence only. Any discovered command-contract change would require a separately scoped issue.
-

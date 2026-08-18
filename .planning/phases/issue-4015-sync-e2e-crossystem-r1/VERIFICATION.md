@@ -27,8 +27,7 @@ pm connections create postgres-to-warehouse --source postgres:pg-source --destin
 pm etl run --connection postgres-to-warehouse --stream public.label_updates --batch-size 1 --root <root> --json
 pm reverse plan pm-cert-db-api-first-e10940f636b8 --source-table db_api_label --connection postgres-to-warehouse --destination github:github-cross-system --action update_label --map name:name --map new_name:new_name --map color:color --map description:description --root <root>
 pm reverse preview <plan-id> --root <root> --json
-printf '<approval-token>\\n' | pm reverse approve <plan-id> --from-stdin --root <root> --json
-pm reverse run <plan-id> --root <root> --json
+printf '<approval-token>\\n' | pm reverse run <plan-id> --approval-token-stdin --root <root> --json
 ```
 
 - First ETL: read/loaded `1/1`; independent warehouse query: exactly one row named `pm-cert-db-api-e10940f636b8`.
@@ -41,10 +40,9 @@ Commands:
 
 ```text
 pm connections create github-to-postgres --source github:github-cross-system --destination postgres:pg-target --stream labels --sync-mode full_overwrite --primary-key name --table github_labels --root <root> --json
-pm etl transport postgres-managed-target plan --connection github-to-postgres --stream labels --batch-size 100 --root <root> --json
-pm etl transport postgres-managed-target preview <plan-id> --root <root> --json
-printf '<approval-token>\\n' | pm etl transport postgres-managed-target approve <plan-id> --from-stdin --root <root> --json
-pm etl run --connection github-to-postgres --stream labels --batch-size 100 --approval-plan <plan-id> --confirm destructive --root <root> --json
+pm etl transport postgres-managed-target plan --connection github-to-postgres --stream labels --root <root> --json
+pm etl transport postgres-managed-target preview <plan-id> --root <root>
+printf '<approval-token>\\n' | pm etl run --connection github-to-postgres --stream labels --batch-size 100 --approval-plan <plan-id> --approval-token-stdin --confirm destructive --root <root> --json
 ```
 
 - First run: independently counted GitHub source `10`; run read/loaded `10/10`; a separate pgx connection read exactly 10 PostgreSQL rows and matched label `pm-cert-db-api-e10940f636b8`, color `1d76db`, and its description.
@@ -60,8 +58,7 @@ pm connections create github-to-warehouse --source github:github-comment-source 
 pm etl run --connection github-to-warehouse --stream issue_comments --batch-size 10 --root <root> --json
 pm reverse plan pm-cert-api-api-e10940f636b8 --source-table api_api_comments --connection github-to-warehouse --destination github:github-cross-system --action update_issue_comment --limit 1 --map id:comment_id --map repository:body --root <root>
 pm reverse preview <plan-id> --root <root> --json
-printf '<approval-token>\\n' | pm reverse approve <plan-id> --from-stdin --root <root> --json
-pm reverse run <plan-id> --root <root> --json
+printf '<approval-token>\\n' | pm reverse run <plan-id> --approval-token-stdin --root <root> --json
 ```
 
 - The source credential used an exact pre-creation `since` boundary; independent listing found only task comment `5328121289`.
