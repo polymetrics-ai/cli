@@ -1,0 +1,27 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:issue_comment",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:19:15Z",
+  "run_id": "github-mutation-slice2-issue-comment-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "dcb76d2068e6b2d043770ad174910fcf5182364a9af3778b1489ae3cc6d45773",
+    "pm_command_fingerprint": "{{pmcertfp:v1:f531f8bf76e947d96bd64e808e63772cabfc3b9e4e84c9178b052af9f3a2c4f4}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:713778cd5ee90211aae2d78594d98adb30cb2b40b52b34120d82e7e6b5119407}}"],
+    "http_exchanges": [
+      {
+        "operation": "issue_comment_direct_delete_and_container_cleanup_readback",
+        "request": {"method": "GET", "target": "{{pmcertfp:v1:a852407b238ab13c2efdd8481c45250e1419058a6dd0135e1b0da9ce0b7b02dd}}", "query": [], "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}},
+        "response": {"status": 404, "headers": [], "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}}
+      }
+    ],
+    "database_exchanges": []
+  }
+}

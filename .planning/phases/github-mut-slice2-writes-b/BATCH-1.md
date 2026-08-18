@@ -16,7 +16,7 @@ The provider control for `integer_id_scientific_notation` is shared under the fl
 | 8 | `actions caches delete` | `no_object` | Cache collection was empty; pm received 422 and a raw key-scoped DELETE received 404, so no deletable cache existed. |
 | 9 | `actions caches delete-2` | `product_defect` | `class=integer_id_scientific_notation`; request used `9.99999999e+08` for the cache ID. |
 | 10 | `actions create-hosted-runner-for-org` | `entitlement` | GitHub returned 404 for the organization hosted-runner endpoint. |
-| 11 | `actions create-or-update-org-secret` | `no_object` | No valid encrypted secret fixture was available after the bounded retry; GitHub rejected the deliberately non-secret placeholder with 422 and no object was created. |
+| 11 | `actions create-or-update-org-secret` | `certified` | The empty parent collection was followed by a process-local sealed-box fixture value; independent GET matched the unique secret name and `all` visibility, direct DELETE returned 204, and GET returned 404. |
 | 12 | `actions create-org-variable` | `certified` | Independent GET matched the unique name and value; direct DELETE returned 204; independent GET returned 404. Published schema-v2 record validates. |
 | 13 | `actions create-registration-token-for-org` | `product_defect` | pm and raw control both created a correctly shaped ephemeral token, but GitHub exposes no independent read-back or revocation endpoint, so the required produced-value/cleanup proof is impossible. |
 | 14 | `actions create-remove-token-for-org` | `product_defect` | pm and raw control both created a correctly shaped ephemeral token, but GitHub exposes no independent read-back or revocation endpoint. |
@@ -24,8 +24,8 @@ The provider control for `integer_id_scientific_notation` is shared under the fl
 | 16 | `actions delete-custom-image-from-org` | `product_defect` | `class=integer_id_scientific_notation`; GitHub received a scientific-notation image ID and returned 422. |
 | 17 | `actions delete-custom-image-version-from-org` | `product_defect` | `class=integer_id_scientific_notation`; GitHub received a scientific-notation image ID and returned 422. |
 | 18 | `actions delete-hosted-runner-for-org` | `product_defect` | `class=integer_id_scientific_notation`; GitHub received a scientific-notation hosted-runner ID and returned 422. |
-| 19 | `actions delete-org-secret` | `no_object` | Secret collection was empty before and after; the idempotent provider DELETE could not demonstrate a state change. |
-| 20 | `actions delete-org-variable` | `no_object` | Variable collection was empty before and after; the idempotent provider DELETE could not demonstrate a state change. |
+| 19 | `actions delete-org-secret` | `certified` | After the empty collection read-back, a sealed `pm-cert-` org secret fixture was created and read back; pm deletion produced 404, direct provider DELETE was idempotent, and the final GET remained 404. |
+| 20 | `actions delete-org-variable` | `certified` | After the empty collection read-back, a `pm-cert-` org variable fixture was created and read back; pm deletion produced 404, direct provider DELETE was idempotent, and the final GET remained 404. |
 | 21 | `actions delete-self-hosted-runner-from-org` | `product_defect` | `class=integer_id_scientific_notation`; GitHub received a scientific-notation runner ID and returned 422. |
 | 22 | `actions delete-self-hosted-runner-group-from-org` | `product_defect` | `class=integer_id_scientific_notation`; pm reported success for a non-existent scientific-notation group path. |
 | 23 | `actions deployment_protection_rule create` | `product_defect` | `class=integer_id_scientific_notation`; request used a scientific-notation run ID. |
@@ -63,18 +63,18 @@ The provider control for `integer_id_scientific_notation` is shared under the fl
 | 55 | `actions rerun-failed-jobs create` | `product_defect` | `class=integer_id_scientific_notation`; request used a scientific-notation run ID. |
 | 56 | `actions retention-limit set` | `entitlement` | GitHub returned 402 for the repository cache-retention endpoint; no write occurred. |
 | 57 | `actions runners delete` | `product_defect` | `class=integer_id_scientific_notation`; GitHub returned 422 for the malformed runner path. |
-| 58 | `actions set-actions-cache-retention-limit-for-enterprise` | `escape_needs_captain` | Not executed. The endpoint mutates an enterprise outside the authorized disposable org/repo/user boundary and may affect a real enterprise trial. |
+| 58 | `actions set-actions-cache-retention-limit-for-enterprise` | `entitlement` | Supervisor-directed bounded execution used a nonexistent `Polymetrics-Cert` enterprise scope; GitHub returned 402 and no external state could change. |
 | 94 | `issue create` | `certified` | Prior checkpoint: independent title read-back proved creation; provider GraphQL deletion removed the issue after REST DELETE returned 404; collection read-back proved absence. Published schema-v2 record validates. |
 
 ## Batch totals
 
 - Classified: 59 unique commands.
 - Attempted: 58 (`1`–`57` and `94`).
-- `certified`: 3.
-- `no_object`: 4.
-- `entitlement`: 5.
+- `certified`: 6.
+- `no_object`: 1.
+- `entitlement`: 6.
 - `product_defect`: 46.
-- `escape_needs_captain`: 1.
+- `escape_needs_captain`: 0.
 - Remaining unattempted: 87.
 
 The counts above sum to 59 classified commands. No `wrong_credential`, `not_implemented`, or third-party effects were observed in this batch.

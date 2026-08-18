@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:actions_set_repo_access_to_self_hosted_runner_group_in_org",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:10:05Z",
+  "run_id": "github-mutation-slice2-actions-set-runner-group-repo-access-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "dcb76d2068e6b2d043770ad174910fcf5182364a9af3778b1489ae3cc6d45773",
+    "pm_command_fingerprint": "{{pmcertfp:v1:182e94cb770cb3fb17377132a8ae14a5e72622cddc357079a9239a682cb2f487}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:713778cd5ee90211aae2d78594d98adb30cb2b40b52b34120d82e7e6b5119407}}"],
+    "http_exchanges": [
+      {
+        "operation": "actions_set_runner_group_repo_access_independent_cleanup_readback",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:d3036bed22376ced0df25baaf230a6cc34d67163cffc16307cb72f10c289ac75}}",
+          "query": [],
+          "headers": [],
+          "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {"encoding": "json", "value": [], "original_bytes": 2, "truncated": false}
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
