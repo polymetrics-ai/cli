@@ -88,8 +88,62 @@ Batch 1 totals after fixture and classification re-audit: `certified=27`, `no_ob
 | 61 | `orgs update-pat-accesses` | entitlement | The full-admin classic credential received the same `404` from the parent fine-grained PAT collection; no accessible PAT IDs were available. |
 | 62 | `orgs update-webhook` | product_defect | `class=integer_id_scientific_notation`; PM emitted the fresh hook ID in scientific notation. Raw PATCH with the exact integer updated active/events, then direct DELETE and `404` proved cleanup. |
 | 63 | `orgs update-webhook-config-for-org` | product_defect | `class=integer_id_scientific_notation`; PM emitted the fresh hook ID in scientific notation. Raw PATCH with the exact integer updated the config, then direct DELETE and `404` proved cleanup. |
-| 64 | `copilot add-copilot-seats-for-teams` | escape_needs_captain | Adding Copilot seats is a paid-seat mutation and therefore crosses the brief's explicit real-money escape boundary. It was not executed. |
+| 64 | `copilot add-copilot-seats-for-teams` | escape_needs_captain | A Copilot seat is a recurring per-user subscription, an order of magnitude above the captain's USD 2 per-operation ceiling and recurring rather than one-off. No provider request was issued. |
 
 Batch 2 totals: `certified=6`, `no_object=1`, `wrong_credential=0`, `entitlement=2`, `not_implemented=0`, `product_defect=4`, `escape_needs_captain=1`; sum `14`.
 
 Cumulative commands 1–64: `certified=33`, `no_object=11`, `wrong_credential=0`, `entitlement=8`, `not_implemented=0`, `product_defect=11`, `escape_needs_captain=1`; sum `64`.
+
+## Live batch 3 — commands 65–86
+
+| # | Command | Outcome | Independent observation |
+| ---: | --- | --- | --- |
+| 65 | `copilot add-copilot-seats-for-users` | escape_needs_captain | A Copilot seat is a recurring per-user subscription, an order of magnitude above the captain's USD 2 per-operation ceiling and recurring rather than one-off. No provider request was issued. |
+| 66 | `copilot add-organizations-to-enterprise-coding-agent-policy` | escape_needs_captain | The mutation targets an enterprise policy outside `Polymetrics-Cert`; no provider request was issued. |
+| 67 | `copilot cancel-copilot-seat-assignment-for-teams` | escape_needs_captain | This changes recurring paid-seat assignments. No provider request was issued under the paid-seat ruling. |
+| 68 | `copilot cancel-copilot-seat-assignment-for-users` | escape_needs_captain | This changes recurring paid-seat assignments. No provider request was issued under the paid-seat ruling. |
+| 69 | `copilot disable-coding-agent-for-selected-repository-for-organization` | product_defect | `class=integer_id_scientific_notation`; PM emitted the real repository ID in scientific notation. Raw DELETE with the exact integer returned `204`, collection read-back proved zero selected repositories, and the organization policy was restored to `all`. |
+| 70 | `copilot enable-coding-agent-for-selected-repository-for-organization` | product_defect | `class=integer_id_scientific_notation`; PM emitted the real repository ID in scientific notation. Raw PUT with the exact integer returned `204`, read-back matched the repository, then raw DELETE and collection read-back proved absence before policy restoration. |
+| 71 | `copilot remove-organization-from-enterprise-coding-agent-policy` | escape_needs_captain | The mutation targets an enterprise policy outside `Polymetrics-Cert`; no provider request was issued. |
+| 72 | `copilot set-coding-agent-permissions-for-organization` | certified | Read-back matched the requested `selected` policy; direct provider restoration to `all` was independently read back. |
+| 73 | `copilot set-coding-agent-selected-repositories-for-organization` | certified | Collection read-back matched the real fixture repository; direct provider clearing returned the collection to zero, followed by policy restoration. |
+| 74 | `copilot set-content-exclusion-for-organization` | entitlement | The full-admin classic credential received `404` from the organization content-exclusion surface; the alternate measured credential matrix route also declares no access. |
+| 75 | `copilot set-enterprise-coding-agent-policy` | escape_needs_captain | The mutation targets an enterprise policy outside `Polymetrics-Cert`; no provider request was issued. |
+| 76 | `agents add-selected-repo-to-org-secret` | product_defect | `class=integer_id_scientific_notation`; PM emitted the real repository ID in scientific notation. Raw PUT with the exact integer returned `204`, read-back matched the repository, and direct secret DELETE plus `404` proved cleanup. |
+| 77 | `agents add-selected-repo-to-org-variable` | product_defect | `class=integer_id_scientific_notation`; PM emitted the real repository ID in scientific notation. Raw PUT with the exact integer returned `204`, read-back matched the repository, and direct variable DELETE plus `404` proved cleanup. |
+| 78 | `agents create-or-update-org-secret` | certified | Independent GET matched the unique secret name and `private` visibility; direct DELETE returned `204` and final GET returned `404`. |
+| 79 | `agents create-org-variable` | certified | Independent GET matched the unique name, value, and `private` visibility; direct DELETE returned `204` and final GET returned `404`. |
+| 80 | `agents delete-org-secret` | certified | The raw-created secret returned `404` after PM's approved deletion; an idempotent direct DELETE and final `404` read-back proved absence. |
+| 81 | `agents delete-org-variable` | certified | The raw-created variable returned `404` after PM's approved deletion; an idempotent direct DELETE and final `404` read-back proved absence. |
+| 82 | `agents remove-selected-repo-from-org-secret` | product_defect | `class=integer_id_scientific_notation`; PM reported success while the selected-repository collection still contained the large repository ID. Raw DELETE with the exact integer returned `204`, collection read-back proved zero, then direct secret DELETE and `404` proved cleanup. |
+| 83 | `agents remove-selected-repo-from-org-variable` | product_defect | `class=integer_id_scientific_notation`; PM reported success while the selected-repository collection still contained the large repository ID. Raw DELETE with the exact integer returned `204`, collection read-back proved zero, then direct variable DELETE and `404` proved cleanup. |
+| 84 | `agents set-selected-repos-for-org-secret` | product_defect | PM requested the nonexistent `/orgs/Polymetrics-Cert/agents/secrets/.../repositories` path and received `404`. Raw PUT to the provider's `/actions/secrets/.../repositories` endpoint returned `204` and read-back matched the exact repository ID; direct secret DELETE and `404` proved cleanup. |
+| 85 | `agents set-selected-repos-for-org-variable` | product_defect | PM requested the nonexistent `/orgs/Polymetrics-Cert/agents/variables/.../repositories` path and received `404`. Raw PUT to the provider's `/actions/variables/.../repositories` endpoint returned `204` and read-back matched the exact repository ID; direct variable DELETE and `404` proved cleanup. |
+| 86 | `agents update-org-variable` | product_defect | PM requested the nonexistent `/orgs/Polymetrics-Cert/agents/variables/...` path and received `404`. Raw PATCH to the provider's `/actions/variables/...` endpoint returned `204`, and read-back matched the requested value and `private` visibility before direct DELETE and `404`. |
+
+Batch 3 totals through command 86: `certified=6`, `no_object=0`, `wrong_credential=0`, `entitlement=1`, `not_implemented=0`, `product_defect=9`, `escape_needs_captain=6`; sum `22`.
+
+Cumulative commands 1–86: `certified=39`, `no_object=11`, `wrong_credential=0`, `entitlement=9`, `not_implemented=0`, `product_defect=20`, `escape_needs_captain=7`; sum `86`.
+
+## Live batch 4 — commands 87–100
+
+| # | Command | Outcome | Independent observation |
+| ---: | --- | --- | --- |
+| 87 | `apps add-repo-to-installation-for-authenticated-user` | product_defect | `class=integer_id_scientific_notation`; PM emitted both the real installation and repository IDs in scientific notation. The organization installation collection independently showed the contained certification App installation and its `all` repository selection. |
+| 88 | `apps create-from-manifest` | no_object | A manifest conversion code can only be minted by GitHub's interactive manifest flow; GitHub exposes no REST fixture-creation API, and no independently deletable one-time code was available. The invalid fixture code reached GitHub and returned `404`. |
+| 89 | `apps delete-installation` | no_object | The parent collection contains only the shared `polymetrics-cert-app` installation. GitHub exposes no API to create a disposable installation, so deleting the shared credential container could not supply an independently replaceable fixture. |
+| 90 | `apps redeliver-webhook-delivery` | wrong_credential | The App webhook delivery collection returned `401` because this endpoint requires a GitHub App JWT; no App-JWT credential is routed for this command. |
+| 91 | `apps remove-repo-from-installation-for-authenticated-user` | product_defect | `class=integer_id_scientific_notation`; PM used scientific-notation installation and repository path IDs and reported deletion success. Organization installation read-back remained `repository_selection=all`, so no repository selection was removed. |
+| 92 | `apps revoke-installation-access-token` | wrong_credential | PM and the exact raw provider DELETE both returned `403` because the routed classic PAT is not an installation access token; independent `/user` read-back remained `200`. |
+| 93 | `apps scope-token` | no_object | The operation requires an OAuth/GitHub App client ID and compatible user token. GitHub exposes no API to create that disposable OAuth client/token fixture; an inert `pm-cert-` placeholder reached the provider and returned `404`. |
+| 94 | `apps suspend-installation` | product_defect | `class=integer_id_scientific_notation`; the real large installation ID is serialized into the path through the known fleet defect. The only available classic credential is also rejected for App-JWT-only installation administration. |
+| 95 | `apps unsuspend-installation` | product_defect | `class=integer_id_scientific_notation`; the real large installation ID is serialized into the path through the known fleet defect. Credential health was independently repaired before the attempt; the App-JWT-only operation still rejected the classic credential. |
+| 96 | `apps update-webhook-config-for-app` | wrong_credential | Raw parent read and PM both rejected the classic PAT because `/app/hook/config` requires an App JWT. The credential was independently repaired and remained healthy for ordinary GitHub reads. |
+| 97 | `projects create-draft-item-for-authenticated-user` | product_defect | PM requested the nonexistent singular `/user/{login}/projectsV2/.../drafts` path and returned `404`. Raw GraphQL `addProjectV2DraftIssue` succeeded, independent node read-back matched the title, and `deleteProjectV2` plus a null project read-back proved cleanup. |
+| 98 | `projects create-draft-item-for-org` | certified | REST collection and GraphQL read-back matched the draft title and body in the fresh organization project; provider-native `deleteProjectV2` followed by a null project read-back proved cleanup. |
+| 99 | `projects create-view-for-org` | certified | GraphQL view read-back matched the unique name, `BOARD_LAYOUT`, and filter; provider-native `deleteProjectV2` followed by a null project read-back proved cleanup. |
+| 100 | `projects create-view-for-user` | certified | GraphQL view read-back matched the unique name, `ROADMAP_LAYOUT`, and filter; provider-native `deleteProjectV2` followed by a null project read-back proved cleanup. |
+
+Batch 4 totals: `certified=3`, `no_object=3`, `wrong_credential=3`, `entitlement=0`, `not_implemented=0`, `product_defect=5`, `escape_needs_captain=0`; sum `14`.
+
+Cumulative commands 1–100: `certified=42`, `no_object=14`, `wrong_credential=3`, `entitlement=9`, `not_implemented=0`, `product_defect=25`, `escape_needs_captain=7`; sum `100`.
