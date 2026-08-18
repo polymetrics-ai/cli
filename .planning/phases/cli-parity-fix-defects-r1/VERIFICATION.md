@@ -8,14 +8,14 @@
 - [x] False-success red/green tests prove 404 is not counted as a write and 2xx remains successful.
 - [x] `gofmt -w` for changed Go files.
 - [x] Targeted changed-package tests with `-timeout 20m`.
-- [ ] `go test -timeout 20m ./internal/cli` as its own command.
-- [ ] `go vet ./...` and `go build ./cmd/pm`.
+- [x] `go test -timeout 20m ./internal/cli` as its own command.
+- [x] `go vet ./...` and `go build ./cmd/pm`.
 - [x] `go run ./cmd/connectorgen certification-matrix --check`.
 - [x] `go run ./cmd/connectorgen validate`.
 - [x] `go run ./cmd/connectorgen surface-sync --check`.
-- [ ] Repository non-suite verification gates and generated/docs/help checks.
-- [ ] `scripts/verify-gsd-workflow origin/integration/4015-mvp-flat-r1`.
-- [ ] `git diff --check` and credential scan.
+- [x] Repository non-suite verification gates and generated/docs/help checks.
+- [x] `scripts/verify-gsd-workflow origin/integration/4015-mvp-flat-r1`.
+- [x] `git diff --check` and credential scan.
 
 ## Live conversion and containment
 
@@ -28,7 +28,25 @@
 
 ## Delivery
 
-- [ ] Code review completed and every actionable finding dispositioned.
+- [x] Code review completed and every actionable finding dispositioned.
 - [ ] Commits pushed only to `fm/cli-parity-fix-defects`.
 - [ ] Direct PR opened with `Refs #4015`.
 - [ ] GitHub API reports base `integration/4015-mvp-flat-r1`.
+
+## Verification evidence
+
+- `go test -timeout 20m ./internal/state ./internal/connectors ./internal/connectors/engine ./internal/connectors/conformance ./internal/connectors/commandrunner -count=1`: PASS, including all 552 bundles.
+- `go test -timeout 20m ./internal/app -count=1`: PASS (`392.483s`).
+- `go test -timeout 20m ./internal/cli -count=1`: PASS on the final rebased/generated tree (`748.968s`).
+- `go vet ./...`, `go build ./cmd/pm`, `make tidy-check`, and `make lint`: PASS (`0 issues`).
+- `make docs-check-no-build`, `make smoke-no-build`, `make agent-contract-check`, `make connector-runtime-preflight`, `make connectorgen-validate`, `make connectorgen-surface-sync`, `make connectorgen-certification-matrix`, `make connectorgen-certification-candidates`, `make connectorgen-certification-sweep`, `make github-parity-artifacts-check`, `make connector-boundary`, `make connector-canon-check`, and `make release-workflow-check`: PASS.
+- `website: pnpm typecheck`, `pnpm test:unit`, and `pnpm test:scripts`: PASS (80 unit tests and 28 script tests).
+- `./pm help github`, `./pm github`, and `./pm github git blobs create --help`: PASS; the bare namespace exits successfully and generated help exposes the required body flags.
+- `scripts/verify-gsd-workflow origin/integration/4015-mvp-flat-r1`: PASS.
+- The aggregate `go test -timeout 20m ./...` and `make verify` commands were intentionally not run as single commands: repository instructions require changed packages plus `internal/cli` separately and the non-suite Make gates individually because the 550+ connector suite exceeds per-command budgets. The equivalent scoped suites and individual gates above were run.
+
+## Manual code-review disposition
+
+- Finding: the false-success accounting change made the closed issue-label cleanup's already-absent inverse fail its intentional idempotence contract. Fixed by accepting exactly one written-or-unchanged result in that cleanup only, emitting the unchanged count, and covering both app and binary CLI behavior.
+- Finding: the initial user-project correction tightened `user_id` but left the live-proven 404 REST transport in place. Fixed by binding the command to the existing closed `addProjectV2DraftIssue` GraphQL operation, removing the invalid write action, classifying the source-lock REST row as the duplicate, and adding a command-builder regression.
+- No remaining actionable findings after the generated-artifact review, scoped tests, boundary scan, static analysis, and help/docs checks.

@@ -194,25 +194,19 @@ func TestGitHubCorrectedCommandDeclarations(t *testing.T) {
 	if !ok {
 		t.Fatal("GitHub user draft command is missing")
 	}
-	for _, flag := range command.Flags {
-		if flag.Name == "user-id" && flag.Type != "integer" {
-			t.Fatalf("user draft --user-id type = %q, want integer so a login cannot be sent to singular /user/{user_id}", flag.Type)
+	if command.Intent != "direct_write" || command.Operation != "github.graphql.mutation.add-project-v2-draft-issue" || command.Write != "" {
+		t.Fatalf("user draft binding = intent %q operation %q write %q, want fixed GraphQL direct write", command.Intent, command.Operation, command.Write)
+	}
+	if len(command.APISurface) != 1 || command.APISurface[0].Method != "POST" || command.APISurface[0].Path != "/graphql" {
+		t.Fatalf("user draft api_surface = %#v, want POST /graphql", command.APISurface)
+	}
+	if len(command.Flags) != 1 || command.Flags[0].Name != "input" || command.Flags[0].Type != "json" || command.Flags[0].MapsTo != "body.input" || !command.Flags[0].Required {
+		t.Fatalf("user draft flags = %#v, want one required closed --input JSON variable", command.Flags)
+	}
+	for _, action := range bundle.Writes {
+		if action.Name == "projects_create_draft_item_for_authenticated_user" {
+			t.Fatal("user draft still exposes the nonexistent REST write action")
 		}
-	}
-	action, err := findWriteAction(bundle, "projects_create_draft_item_for_authenticated_user")
-	if err != nil {
-		t.Fatalf("find user draft action: %v", err)
-	}
-	var schema struct {
-		Properties map[string]struct {
-			Type string `json:"type"`
-		} `json:"properties"`
-	}
-	if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
-		t.Fatalf("decode user draft record schema: %v", err)
-	}
-	if schema.Properties["user_id"].Type != "integer" {
-		t.Fatalf("user draft record user_id type = %q, want integer", schema.Properties["user_id"].Type)
 	}
 }
 

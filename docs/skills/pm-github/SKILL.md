@@ -2277,10 +2277,6 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 - activity_unstar_repo_for_authenticated_user:
   - endpoint: DELETE /user/starred/{{ config.owner }}/{{ config.repo }}
   - risk: Destructive: Unstar a repository for the authenticated user. Removes provider-side state.
-- projects_create_draft_item_for_authenticated_user:
-  - endpoint: POST /user/{{ record.user_id }}/projectsV2/{{ record.project_number }}/drafts
-  - required fields: user_id, project_number, title
-  - risk: Creates provider-side state: Create draft item for user owned project.
 - projects_create_view_for_user:
   - endpoint: POST /users/{{ record.user_id }}/projectsV2/{{ record.project_number }}/views
   - required fields: user_id, project_number, name, layout
@@ -3727,7 +3723,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - users delete-ssh-signing-key-for-authenticated-user - Delete an SSH signing key for the authenticated user [intent=reverse_etl availability=implemented write=users_delete_ssh_signing_key_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an SSH signing key for the authenticated user. Removes provider-side state.; flags: --ssh-signing-key-id (required)
   - activity star-repo-for-authenticated-user - Star a repository for the authenticated user [intent=reverse_etl availability=implemented write=activity_star_repo_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Star a repository for the authenticated user.
   - activity unstar-repo-for-authenticated-user - Unstar a repository for the authenticated user [intent=reverse_etl availability=implemented write=activity_unstar_repo_for_authenticated_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Unstar a repository for the authenticated user. Removes provider-side state.
-  - projects create-draft-item-for-authenticated-user - Create draft item for user owned project [intent=reverse_etl availability=implemented write=projects_create_draft_item_for_authenticated_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create draft item for user owned project.; flags: --user-id (required), --project-number (required), --title (required), --body
+  - projects create-draft-item-for-authenticated-user - Create a draft item in a user-owned project through fixed GitHub GraphQL [intent=direct_write availability=implemented operation=github.graphql.mutation.add-project-v2-draft-issue]; approval: plan, preview, approval, execute; risk: high; flags: --input (required)
   - projects create-view-for-user - Create a view for a user-owned project [intent=reverse_etl availability=implemented write=projects_create_view_for_user]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a view for a user-owned project.; flags: --user-id (required), --project-number (required), --name (required), --layout (required), --filter
   - users list-attestations-bulk - List attestations by bulk subject digests [intent=direct_read availability=implemented operation=github.users_list_attestations_bulk]; flags: --username (required), --subject-digests (required), --predicate-type, --page, --page-cursor
   - users delete-attestations-by-subject-digest - Delete attestations by subject digest [intent=reverse_etl availability=implemented write=users_delete_attestations_by_subject_digest]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete attestations by subject digest. Removes provider-side state.; flags: --username (required), --subject-digest (required)

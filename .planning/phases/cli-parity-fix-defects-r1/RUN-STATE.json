@@ -3,7 +3,7 @@
   "issue_refs": [4015, 4221],
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-parity-fix-defects",
-  "status": "live-proven",
+  "status": "verified",
   "census_total": 277,
   "red": [
     "persisted exact integer changes payload identity before provider dispatch",
@@ -14,7 +14,7 @@
   "green": [
     "state JSON numbers preserve exact lexemes and interpolation emits decimal integer paths",
     "six GitHub mutation commands expose and send provider-required JSON bodies",
-    "three Agent-labelled aliases use Actions writes and the singular user project route requires a numeric identifier",
+    "three Agent-labelled aliases use Actions writes and the user-project draft command uses the fixed addProjectV2DraftIssue GraphQL operation",
     "allow-listed missing deletes are accounted as unchanged and command execution cannot report them as writes"
   ],
   "live_conversions": [

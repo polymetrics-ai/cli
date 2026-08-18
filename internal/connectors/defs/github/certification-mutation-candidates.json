@@ -19808,70 +19808,6 @@
       "generated": true
     },
     {
-      "command": "projects create-draft-item-for-authenticated-user",
-      "command_tokens": [
-        "projects",
-        "create-draft-item-for-authenticated-user"
-      ],
-      "intent": "reverse_etl",
-      "cohort": "fixture_required_mutations",
-      "credential_flag": "--credential",
-      "json_mode": true,
-      "declaration": {
-        "kind": "write_action",
-        "id": "projects_create_draft_item_for_authenticated_user",
-        "executor": "reverse_plan"
-      },
-      "address": {
-        "source": "cli_surface",
-        "transport": "rest",
-        "method": "POST",
-        "path": "/user/{user_id}/projectsV2/{project_number}/drafts"
-      },
-      "fixture": {
-        "strategy": "derived_collection_cycle",
-        "collection": "/user/{user_id}/projectsV2/{project_number}/drafts",
-        "collection_depth": 5,
-        "provisioner_commands": [
-          "projects create-draft-item-for-authenticated-user"
-        ],
-        "evidence": "POST or PUT declaration(s) projects create-draft-item-for-authenticated-user share the derived REST collection \"/user/{user_id}/projectsV2/{project_number}/drafts\"; URL depth 5 orders parent collections first"
-      },
-      "input_slots": [
-        {
-          "path": "record.body",
-          "type": "string",
-          "required": false
-        },
-        {
-          "path": "record.project_number",
-          "type": "integer",
-          "required": true
-        },
-        {
-          "path": "record.title",
-          "type": "string",
-          "required": true
-        },
-        {
-          "path": "record.user_id",
-          "type": "integer",
-          "required": true
-        }
-      ],
-      "required_flags": [
-        "--project-number",
-        "--title",
-        "--user-id"
-      ],
-      "classification": {
-        "code": "contained",
-        "family": "contained_remaining_rest",
-        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
-      },
-      "generated": true
-    },
-    {
       "command": "projects create-view-for-user",
       "command_tokens": [
         "projects",
@@ -45631,6 +45567,49 @@
       "declaration": {
         "kind": "operation",
         "id": "github.graphql.mutation.create-project-v2",
+        "executor": "direct_write"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "graphql",
+        "method": "POST",
+        "path": "/graphql"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "graphql_transport_not_collection",
+        "evidence": "the shared GraphQL transport endpoint is not a resource collection, so no REST CRUD fixture cycle can be inferred"
+      },
+      "input_slots": [
+        {
+          "path": "body.input",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--input"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_graphql",
+        "evidence": "the candidate is a fixed GraphQL mutation outside an explicitly escaping family; any future execution must bind every opaque input node to a fresh object inside the disposable certification identity and organisation, then destroy that container"
+      },
+      "generated": true
+    },
+    {
+      "command": "projects create-draft-item-for-authenticated-user",
+      "command_tokens": [
+        "projects",
+        "create-draft-item-for-authenticated-user"
+      ],
+      "intent": "direct_write",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "operation",
+        "id": "github.graphql.mutation.add-project-v2-draft-issue",
         "executor": "direct_write"
       },
       "address": {

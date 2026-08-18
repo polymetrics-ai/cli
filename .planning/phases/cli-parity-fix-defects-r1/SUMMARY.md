@@ -25,8 +25,10 @@ was therefore not the population rate. The full inventory classifies 147/277
 - Blob, commit, tree, check-run, branch-protection, and commit-status actions now
   declare provider-required fields and their commands expose typed body flags.
 - Three mislabelled Agent commands reuse the corresponding Actions write actions
-  and `/actions/` paths. The singular user-project draft route now accepts only a
-  numeric user ID, never a login.
+  and `/actions/` paths. The authenticated-user project draft command now reuses
+  the fixed `addProjectV2DraftIssue` operation at `POST /graphql`; its source-lock
+  REST route remains inventoried as the live-proven non-executable duplicate, not
+  as an implemented write.
 - An allow-listed missing delete is accounted as `RecordsUnchanged`, not
   `RecordsWritten`. A connector command that promised a mutation rejects that
   incomplete acknowledgement, exits non-zero, and persists zero succeeded / one
@@ -74,3 +76,21 @@ census bucket is **not fixed** here: its members have individualized causes or
 insufficient evidence for one of the four source fixes, and changing them under
 an inferred shared cause would exceed the measured task. No declared command
 was removed, disabled, or marked unsupported.
+
+## Delivery record
+
+- Delivery mode: direct PR to `integration/4015-mvp-flat-r1`, as authorized by
+  the launch brief because the no-mistakes pipeline cannot target this base.
+- GSD lifecycle: manual/inline `discuss-phase` → `plan-phase --tdd` →
+  `execute-phase` → `verify-work` → `code-review`; the project adapter resolved
+  every command and the repository workflow verifier passed.
+- Required skills: `golang-how-to`, `golang-cli`, `golang-testing`,
+  `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, and `golang-structs-interfaces`.
+- Automated review: opening the direct PR triggers the repository's primary
+  Claude review workflow; findings remain review input and do not bypass the
+  human merge gate.
+
+Refs #4015
+
+Refs #4221

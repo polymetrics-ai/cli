@@ -38807,48 +38807,28 @@
       "reason": "stream fixture and produced-record assertion are required"
     },
     {
-      "summary": "Create draft item for user owned project",
+      "summary": "Create a draft item in a user-owned project through fixed GitHub GraphQL",
       "path": "projects create-draft-item-for-authenticated-user",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "flags": [
         {
-          "name": "body",
-          "type": "string",
-          "required": false,
-          "maps_to": "record.body"
-        },
-        {
-          "name": "project-number",
-          "type": "integer",
+          "name": "input",
+          "type": "json",
           "required": true,
-          "maps_to": "record.project_number"
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "required": true,
-          "maps_to": "record.title"
-        },
-        {
-          "name": "user-id",
-          "type": "integer",
-          "required": true,
-          "maps_to": "record.user_id"
+          "maps_to": "body.input"
         }
       ],
       "api_surface": [
         {
           "method": "POST",
-          "path": "/user/{user_id}/projectsV2/{project_number}/drafts"
+          "path": "/graphql"
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --project-number, --title, --user-id",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --input",
       "required_flags": [
-        "--project-number",
-        "--title",
-        "--user-id"
+        "--input"
       ]
     },
     {

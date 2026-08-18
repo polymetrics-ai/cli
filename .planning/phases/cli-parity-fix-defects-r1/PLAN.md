@@ -5,7 +5,7 @@
 - Issue: Refs #4015 — Production MVP; Refs #4221 — reverse delete false success.
 - Base branch: `integration/4015-mvp-flat-r1`.
 - Merges into: `integration/4015-mvp-flat-r1` → `main`.
-- Delivery: A direct pull request from `fm/cli-parity-fix-defects` is open against the stated base with the census, red/green evidence, live conversion evidence, and repository checks committed.
+- Delivery: Open a direct pull request from `fm/cli-parity-fix-defects` against the stated base with the census, red/green evidence, live conversion evidence, and repository checks committed; then verify the API-reported base.
 - Working branch: `fm/cli-parity-fix-defects`.
 - Task: Classify all 277 supplied GitHub product-defect commands, fix exact integer preservation, provider-required request bodies, invalid GitHub endpoint declarations, and false-success write accounting at their shared sources, then prove at least three real command conversions per fixed class without retaining credentials or fixtures.
 - Verification: Targeted Go tests, GitHub bundle validation and generated-surface checks, executable command preflight, CLI/help/docs parity checks, repository non-suite gates, live provider read-back and cleanup proof, secret scan, automated code review, and API read-back of the pull request base.
@@ -55,4 +55,3 @@ were also reviewed.
 4. Run each narrow test green, then the changed packages, `internal/cli`, bundle validation, surface sync, certification matrix, docs/help parity, and remaining repository gates.
 5. Build `pm`; perform bounded live conversion probes for at least three commands in each fixed class. Assert created/updated/deleted provider state independently, clean every fixture, and assert 404/absence.
 6. Scan the branch for credentials and uncontained `pm-cert-` artifacts, run the code-review lifecycle, disposition findings, commit, push, open the direct PR, and verify `.base.ref` through the GitHub API.
-

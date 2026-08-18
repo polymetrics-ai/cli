@@ -18983,41 +18983,6 @@
       }
     },
     {
-      "name": "projects_create_draft_item_for_authenticated_user",
-      "kind": "create",
-      "method": "POST",
-      "path": "/user/{{ record.user_id }}/projectsV2/{{ record.project_number }}/drafts",
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "user_id",
-          "project_number",
-          "title"
-        ],
-        "properties": {
-          "user_id": {
-            "type": "integer"
-          },
-          "project_number": {
-            "type": "integer"
-          },
-          "title": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Creates provider-side state: Create draft item for user owned project.",
-      "path_fields": [
-        "user_id",
-        "project_number"
-      ]
-    },
-    {
       "name": "projects_create_view_for_user",
       "kind": "create",
       "method": "POST",
