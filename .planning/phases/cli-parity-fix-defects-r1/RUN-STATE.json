@@ -1,0 +1,12 @@
+{
+  "phase": "cli-parity-fix-defects-r1",
+  "issue_refs": [4015, 4221],
+  "base_branch": "integration/4015-mvp-flat-r1",
+  "working_branch": "fm/cli-parity-fix-defects",
+  "status": "planned",
+  "census_total": 277,
+  "red": [],
+  "green": [],
+  "live_conversions": [],
+  "cleanup": []
+}
