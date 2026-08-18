@@ -15,8 +15,11 @@ func TestFullWriteSweepRecordsPreparedOnlyActionsAsNotLive(t *testing.T) {
 	if err := stageWriteSweepAllPairings(rc, &report); err != nil {
 		t.Fatalf("stageWriteSweepAllPairings() error = %v", err)
 	}
-	if got := len(report.Capabilities.WriteActions); got != 607 {
-		t.Fatalf("reported write actions = %d, want 607", got)
+	if got := len(report.Capabilities.WriteActions); got != 606 {
+		t.Fatalf("reported write actions = %d, want 606 after retiring the invalid user-project draft REST write", got)
+	}
+	if _, ok := report.Capabilities.WriteActions[retiredUserDraftRESTWriteAction]; ok {
+		t.Fatalf("write sweep still reports retired invalid REST write %q", retiredUserDraftRESTWriteAction)
 	}
 	for action, result := range report.Capabilities.WriteActions {
 		if result.Result != "not_live" {

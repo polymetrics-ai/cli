@@ -2,13 +2,15 @@ package certify
 
 import "testing"
 
+const retiredUserDraftRESTWriteAction = "projects_create_draft_item_for_authenticated_user"
+
 func TestGithubWriteActionInventoryAccountsForAllDeclaredActions(t *testing.T) {
 	items, err := writeActionInventoryFor("github")
 	if err != nil {
 		t.Fatalf("writeActionInventoryFor(github): %v", err)
 	}
-	if len(items) != 607 {
-		t.Fatalf("len(items) = %d, want 607", len(items))
+	if len(items) != 606 {
+		t.Fatalf("len(items) = %d, want 606 after retiring the invalid user-project draft REST write", len(items))
 	}
 
 	byAction := map[string]writeActionInventoryItem{}
@@ -17,6 +19,9 @@ func TestGithubWriteActionInventoryAccountsForAllDeclaredActions(t *testing.T) {
 			t.Fatalf("inventory item has empty action: %+v", item)
 		}
 		byAction[item.Action] = item
+	}
+	if _, ok := byAction[retiredUserDraftRESTWriteAction]; ok {
+		t.Fatalf("retired invalid REST write %q remains in the executable inventory", retiredUserDraftRESTWriteAction)
 	}
 
 	for _, action := range []string{"create_issue", "create_label", "create_milestone"} {
@@ -63,7 +68,7 @@ func TestGithubWriteActionInventoryClassifiesEveryDeferredActionWithConcretePrer
 		"org_fixture_and_permission_pending":            217,
 		"app_or_oauth_pending":                          14,
 		"enterprise_trial_and_token_pending":            25,
-		"primary_user_fixture_and_permission_pending":   49,
+		"primary_user_fixture_and_permission_pending":   48,
 		"secondary_user_fixture_and_permission_pending": 25,
 		"notification_token_and_fixture_pending":        5,
 		"sacrificial_credential_pending":                1,

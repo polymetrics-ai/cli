@@ -55,3 +55,23 @@ were also reviewed.
 4. Run each narrow test green, then the changed packages, `internal/cli`, bundle validation, surface sync, certification matrix, docs/help parity, and remaining repository gates.
 5. Build `pm`; perform bounded live conversion probes for at least three commands in each fixed class. Assert created/updated/deleted provider state independently, clean every fixture, and assert 404/absence.
 6. Scan the branch for credentials and uncontained `pm-cert-` artifacts, run the code-review lifecycle, disposition findings, commit, push, open the direct PR, and verify `.base.ref` through the GitHub API.
+
+## CI gap closure — GitHub certification inventory
+
+CI exposed a package omitted from the local changed-package list:
+`./internal/connectors/certify`. The four failures share one legitimate inventory
+transition. `projects_create_draft_item_for_authenticated_user` was the sole
+write action removed from `writes.json`; its source-lock REST route is a
+live-proven 404 and is now a typed blocked duplicate, while the still-declared
+CLI command uses the existing fixed GraphQL operation
+`github.graphql.mutation.add-project-v2-draft-issue`.
+
+Gap plan:
+
+1. Preserve the invalid REST route as source inventory, but assert its exact
+   `duplicate`/`blocked` classification rather than pretending it is covered.
+2. Pin the resulting 606-action write inventory and 48-action primary-user
+   prerequisite bucket while asserting the removed action's identity, so a
+   count-only edit cannot conceal an accidental deletion.
+3. Run `go test -timeout 20m ./internal/connectors/certify -count=1` explicitly,
+   then push and require PR #4234's `verify` check to pass.
