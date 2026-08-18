@@ -256,7 +256,7 @@ test("rejects a GraphQL source lock without createEnterpriseOrganization", async
   );
 });
 
-test("records source-wide fixed typename node projections and GraphQL mutation safety from the real GitHub bundle", async () => {
+test("records source-wide fixed node projections and GraphQL mutation safety from the real GitHub bundle", async () => {
   const ledger = await currentGitHubLedger();
   assert.deepEqual(ledger.counts, { rest: 1220, graphql_query: 31, graphql_mutation: 274, total: 1525 });
   const node = ledger.rows.find((row) => row.id === "github.graphql.query.node")?.projection_matrix;
@@ -268,7 +268,7 @@ test("records source-wide fixed typename node projections and GraphQL mutation s
   assert.deepEqual(nodes.possible_object_types, node.possible_object_types);
   assert.equal(node?.policy, "fixed declared documents only; no caller-supplied GraphQL selection");
   assert.equal(nodes?.policy, "fixed declared documents only; no caller-supplied GraphQL selection");
-  assert.equal(node?.state, "fixed_typename_projection");
+  assert.equal(node?.state, "fixed_projection_only");
   assert.equal(nodes?.state, "fixed_typename_projection");
   const deleteIssue = ledger.rows.find((row) => row.id === "github.graphql.mutation.deleteIssue");
   assert.equal(deleteIssue?.implementation.state, "implemented");
