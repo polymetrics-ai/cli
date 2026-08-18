@@ -83,3 +83,26 @@
 
 No test receives a secret literal. Provider credentials are environment-only and are never emitted
 by test output or stored in evidence.
+
+## Gap closure — supplemental fixed GraphQL document accounting
+
+- Red: `go test -timeout 20m ./internal/connectors/certify -run
+  '^TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints$' -count=1` failed with `Fixed
+  GraphQL transport operations = 306, want every source-locked GraphQL root 305`.
+- Diagnosis: the provider source lock remains correct at 31 Query roots plus 274 Mutation roots.
+  The transport's 306th binding is the legitimate `github.repo.list` fixed document, which queries
+  the existing `repositoryOwner` root and therefore must be counted as executable coverage without
+  being misrepresented as a newly source-locked root.
+- Green criterion: classify `/graphql` bindings by the generated root-operation ID contract, require
+  exactly 305 source-root bindings, require the supplemental set to be exactly `github.repo.list`,
+  and require `surfaceInventoryFor("github")` to count all 306 bindings under
+  `CoveredBy["operation"]`.
+- Refactor criterion: keep the classification helper test-local and data-derived; do not change the
+  source lock, its pinned 305 expectation, or production inventory semantics.
+- Green: the focused test and the full `internal/connectors/certify` package pass. The assertion now
+  proves 305 unique source-root bindings, the exact supplemental set `{github.repo.list}`, and 306
+  total operation bindings. The same run exposed and then verified the independently traced parity
+  read-alias delta: eight singular bindings became plural and 23 plural targets were added.
+- Refactor: the source lock, its 305-root expectation, the `github.repo.list` operation, and
+  production inventory counting are unchanged; only the test helper now returns operation IDs so
+  the two declaration classes cannot be conflated again.

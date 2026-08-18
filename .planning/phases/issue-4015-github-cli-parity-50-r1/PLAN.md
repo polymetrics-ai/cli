@@ -72,6 +72,24 @@
    push only `fm/cli-parity-implement-50`, and open a PR against `integration/4015-mvp-flat-r1`.
 4. Read the PR base back from the GitHub API and require exact equality before reporting delivery.
 
+### Gap closure — fixed GraphQL source roots versus supplemental documents
+
+1. Reproduce PR #4236's `surface_inventory` failure locally and preserve its output as the Red
+   evidence in `TDD-LEDGER.md`.
+2. Keep `github-operation-source-lock.json` pinned to the provider-derived 31 Query roots and 274
+   Mutation roots. `github.repo.list` is a legitimate supplemental fixed document over
+   `RepositoryOwner.repositories`; it is not a new provider root and must not change that lock.
+3. Make the certification test classify the shared `/graphql` transport bindings into
+   source-generated roots and supplemental fixed documents. Require all 305 locked roots, require
+   the supplemental set to be exactly `github.repo.list`, and still require the inventory stage to
+   count all 306 executable operation bindings.
+4. Run the focused Red/Green test, the full `certify` package, the relevant generated-surface gates,
+   and the repository workflow-evidence check before pushing the correction to the existing PR.
+
+Gap workflow: `scripts/gsd prompt plan-phase issue-4015-github-cli-parity-50-r1 --gaps` then
+`scripts/gsd prompt execute-phase issue-4015-github-cli-parity-50-r1 --gaps-only`, executed through
+the inline/manual fallback because this connector lane's canonical contract forbids role spawning.
+
 ## Guardrails
 
 - No generic HTTP, caller-supplied GraphQL, generic shell, raw secret output, browser, or subprocess

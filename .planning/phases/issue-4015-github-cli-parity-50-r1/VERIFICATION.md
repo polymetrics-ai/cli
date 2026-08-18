@@ -83,6 +83,31 @@ fixtures, planning artifacts, or git.
 
 ## Review
 
-The inline GSD code review is recorded in `REVIEW.md`; no local finding remains. The direct PR uses
-the repository's primary `claude_auto` route on open. Automated review records and any dispositions
-are PR-hosted because they can only exist after the verified commit is pushed and the PR is opened.
+The inline GSD code review is recorded in `REVIEW.md`; no local finding remains. This direct-PR
+delivery path does not use an automated-review merge gate, so no reviewer action or wait is required.
+
+## PR #4236 GraphQL inventory gap closure
+
+Status: **locally verified** on 2026-08-18; remote Verify confirmation follows the corrective push.
+
+- Provider lock truth: 31 Query roots + 274 Mutation roots = 305 source-generated root operations.
+- Supplemental truth: `github.repo.list` is a fixed `RepositoryOwner.repositories` document over
+  the already locked `repositoryOwner` root, not a new root. The source lock remains unchanged.
+- Transport truth: the shared `POST /graphql` endpoint therefore carries 306 executable operation
+  bindings, all counted by `surface_inventory`.
+- Read-alias truth: comparison with `origin/integration/4015-mvp-flat-r1` identified the exact
+  generated-surface delta behind the next assertion: eight singular bindings moved to plural and
+  23 plural alias targets were added.
+
+| Gap verification command | Result |
+| --- | --- |
+| `go test -timeout 20m ./internal/connectors/certify -run '^TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints$' -count=1` | pass |
+| `go test -timeout 20m ./internal/connectors/certify -count=1` | pass |
+| `go run ./cmd/connectorgen surface-sync --check` | pass; 552 scanned, zero drift |
+| `go run ./cmd/connectorgen certification-matrix --check` | pass; shards current |
+| `make github-parity-artifacts-check connectorgen-certification-sweep connector-runtime-preflight` | pass; 305-root artifacts current, 1,571-command sweep current, runtime preflight green |
+| `scripts/verify-gsd-workflow` | pass |
+| `go run ./cmd/agentcontractgen check` | pass |
+| `go vet ./internal/connectors/certify` | pass |
+| `make lint` | pass; zero issues |
+| `git diff --check` | pass |

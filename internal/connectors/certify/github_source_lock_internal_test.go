@@ -79,10 +79,12 @@ func githubSourceLockedGraphQLRootCount(t *testing.T) int {
 }
 
 // githubFixedGraphQLTransportCoverage reports the physical shared transport
-// and the exact fixed root-operation bindings it carries.  Legacy GRAPHQL
+// and the exact fixed operation bindings it carries. Legacy GRAPHQL
 // pseudo-endpoints are intentionally excluded: they remain compatibility
-// metadata, not the executable POST transport.
-func githubFixedGraphQLTransportCoverage(t *testing.T) (endpoints, operations int) {
+// metadata, not the executable POST transport. Callers retain the operation
+// IDs so source-generated roots can be distinguished from purpose-built fixed
+// documents that reuse an existing root.
+func githubFixedGraphQLTransportCoverage(t *testing.T) (endpoints int, operations []string) {
 	t.Helper()
 	raw, err := os.ReadFile("../defs/github/api_surface.json")
 	if err != nil {
@@ -100,12 +102,19 @@ func githubFixedGraphQLTransportCoverage(t *testing.T) (endpoints, operations in
 	if err := json.Unmarshal(raw, &surface); err != nil {
 		t.Fatalf("unmarshal GitHub api surface: %v", err)
 	}
+	seen := make(map[string]struct{})
 	for _, endpoint := range surface.Endpoints {
 		if endpoint.Method != "POST" || endpoint.Path != "/graphql" || len(endpoint.CoveredBy.Operations) == 0 {
 			continue
 		}
 		endpoints++
-		operations += len(endpoint.CoveredBy.Operations)
+		for _, operation := range endpoint.CoveredBy.Operations {
+			if _, duplicate := seen[operation]; duplicate {
+				t.Fatalf("GitHub fixed GraphQL transport duplicates operation binding %q", operation)
+			}
+			seen[operation] = struct{}{}
+			operations = append(operations, operation)
+		}
 	}
 	return endpoints, operations
 }

@@ -39,3 +39,17 @@ No critical, warning, or informational finding remains.
 - The 1,571-command no-credential reachability sweep reports 1,571 reachable and zero unreachable.
 - Live release download matched the fixture byte-for-byte; release/tag cleanup independently returned 404.
 - `go vet ./...`, `go build ./cmd/pm`, generated-artifact checks, website gates, and `git diff --check` pass.
+
+## PR #4236 gap review
+
+Inline/manual GSD `code-review` was repeated for the GraphQL inventory correction. No finding
+remains.
+
+- The correction does not weaken the source lock or change its 305-root denominator.
+- Duplicate transport bindings fail explicitly, the source-generated prefixes are counted
+  separately, and the only permitted supplemental fixed document is exactly `github.repo.list`.
+- Production surface counting remains unchanged at all 306 executable bindings.
+- The direct-read expectation change is supported by an exact base-to-head declaration diff (eight
+  singular-to-plural migrations and 23 added plural targets), not an unexplained count bump.
+- `make lint`, focused/full certification tests, source artifact checks, runtime preflight, workflow
+  evidence, vet, and whitespace validation all pass.
