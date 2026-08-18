@@ -1,6 +1,6 @@
 # Mutation certification batch 3
 
-Commands `109`–`141` were attempted serially through the full pm lifecycle. Command `142` was reached but not executed because its hosted agent/model effect is a real-money escape.
+Commands `109`–`146` were attempted serially or, for the three captain-bound surfaces, explicitly classified before any provider request. The four public OAuth commands and the hosted-agent command did not stop the slice.
 
 ## Finalized observations
 
@@ -10,12 +10,11 @@ Commands `109`–`141` were attempted serially through the full pm lifecycle. Co
 - `124`–`127`: `entitlement`; pm and the raw provider PUT/GET control returned 405 for the repository interaction-limit surface.
 - `131`: `product_defect`; the pm surface requires `insecure_ssl` to be structured JSON although the provider requires a scalar. Raw PATCH with the scalar succeeded and matched read-back; the hook was directly deleted/read back 404.
 - `132`–`134`: `entitlement`; the enterprise-team endpoints returned 404/403 for the bounded nonexistent enterprise scope, and no object was created.
-
-## Not banked pending fixture or captain decision
-
-- `116`–`119`: the repository import surface returned 404; a contained import fixture/control is still required before classification.
-- `120`–`123`: a valid OAuth-application fixture would create a publicly visible application under the organization and therefore needs captain authority before the invalid-ID observations can be replaced.
-- `136`: the stack create request returned 422 with a fabricated PR ID; a real PR/stack fixture or raw control is required.
-- `142`: `escape_needs_captain` pending decision because executing a hosted agent task can consume metered model service.
-
-Commands `143`–`146` remain unattempted behind the command-142 escape gate.
+- `116`–`119`: `entitlement`; a contained repository control reached GitHub, whose import endpoint returned the documented deprecated/unavailable 404, then the repository was directly deleted/read back 404.
+- `120`–`123`: `escape_needs_captain`; **public visibility under the org's name**. Per captain decision, no fixture was created and no provider request was issued.
+- `136`: `certified`; pm created a stack from two real chained pull requests in a private disposable repository. Independent list read-back returned one stack containing exactly PRs `1` and `2`; that predicate rejects the plausible wrong answer `[1,3]`. Direct repository DELETE returned 204 and independent GET returned 404.
+- `137`–`141` and `143`: `product_defect`, `class=integer_id_scientific_notation`; later instances reuse the fleet-proven raw exact-integer control.
+- `142`: `escape_needs_captain`; GitHub does not expose a preflight cost cap for an autonomous agent task, so the per-operation cost was genuinely unknowable. No provider request was issued.
+- `144`: `entitlement`; GitHub rejected dependency snapshots because the dependency graph remained unavailable even after a contained enable attempt; both temporary repositories were directly deleted/read back 404.
+- `145`: `product_defect`; pm reported success but did not alter the notification subscription, while raw PUT with explicit values changed it and independent read-back proved the change. Direct DELETE plus GET 404 proved cleanup.
+- `146`: `not_implemented`; the command surface cannot supply GitHub's required `new_owner`, so pm sends an empty body and cannot express a valid repository transfer request.
