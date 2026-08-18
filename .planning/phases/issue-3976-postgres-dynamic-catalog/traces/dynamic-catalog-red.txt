@@ -1,0 +1,13 @@
+Command:
+
+go test -tags=databaseintegration -timeout 20m -count=1 ./internal/connectors/native/postgres -run '^TestPostgresDynamicTypedCatalogUsesLiveMetadata$'
+
+Result before implementation (expected failure):
+
+# polymetrics.ai/internal/connectors/native/postgres_test [polymetrics.ai/internal/connectors/native/postgres.test]
+internal/connectors/native/postgres/dynamic_catalog_integration_test.go:92:26: connector.TypedCatalog undefined (type postgres.Connector has no field or method TypedCatalog)
+internal/connectors/native/postgres/dynamic_catalog_integration_test.go:97:25: connector.TypedCatalog undefined (type postgres.Connector has no field or method TypedCatalog)
+internal/connectors/native/postgres/dynamic_catalog_integration_test.go:119:25: connector.TypedCatalog undefined (type postgres.Connector has no field or method TypedCatalog)
+internal/connectors/native/postgres/dynamic_catalog_integration_test.go:119:86: undefined: native.ErrUnsupportedCatalogShape
+FAIL	polymetrics.ai/internal/connectors/native/postgres [build failed]
+FAIL

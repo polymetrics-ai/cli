@@ -1,0 +1,15 @@
+Command:
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -run '^TestPostgresManagedTargetIncrementalDedupeHistoryLive$' -v ./internal/connectors/native/postgres
+
+Result: PASS
+
+=== RUN   TestPostgresManagedTargetIncrementalDedupeHistoryLive
+--- PASS: TestPostgresManagedTargetIncrementalDedupeHistoryLive (6.24s)
+PASS
+ok polymetrics.ai/internal/connectors/native/postgres 6.987s
+
+Observable green assertions performed by the live test:
+- adapter-applied v1 created one open current row and durable delivery evidence;
+- adapter-applied v2 closed v1 exactly at v2's valid-from and changed the durable delivery ID;
+- a freshly constructed driver/ledger/executor replay left the two queried rows unchanged and wrote new replay receipt evidence;
+- the adapter-applied CDC tombstone retained both versions, closed v2, cleared current state, and changed the durable delivery ID.

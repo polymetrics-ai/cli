@@ -147,14 +147,23 @@ export function currentSurfaceTable({ commands, endpoints, streams, writes, sour
     throw new Error(`GitHub fixed GraphQL transport count = ${fixedGraphQLTransports.length}, want 1`);
   }
   const fixedGraphQLOperations = fixedGraphQLTransports[0].covered_by.operations;
-  const expectedGraphQLRoots = source.graphql_query + source.graphql_mutation;
   if (
-    fixedGraphQLOperations.length !== expectedGraphQLRoots
-    || new Set(fixedGraphQLOperations).size !== expectedGraphQLRoots
+    new Set(fixedGraphQLOperations).size !== fixedGraphQLOperations.length
     || fixedGraphQLOperations.some((operation) => typeof operation !== 'string' || operation.trim() === '')
   ) {
+    throw new Error('GitHub fixed GraphQL operation bindings must be unique non-empty strings');
+  }
+  const sourceGraphQLOperations = fixedGraphQLOperations.filter((operation) =>
+    /^github\.graphql\.(?:query|mutation)\./u.test(operation));
+  const supplementalGraphQLOperations = fixedGraphQLOperations.filter((operation) =>
+    !/^github\.graphql\.(?:query|mutation)\./u.test(operation));
+  const expectedGraphQLRoots = source.graphql_query + source.graphql_mutation;
+  if (
+    sourceGraphQLOperations.length !== expectedGraphQLRoots
+    || new Set(sourceGraphQLOperations).size !== expectedGraphQLRoots
+  ) {
     throw new Error(
-      `GitHub fixed GraphQL root-operation bindings = ${fixedGraphQLOperations.length}, source lock declares ${expectedGraphQLRoots}`,
+      `GitHub fixed GraphQL root-operation bindings = ${sourceGraphQLOperations.length}, source lock declares ${expectedGraphQLRoots}`,
     );
   }
 
@@ -177,7 +186,8 @@ export function currentSurfaceTable({ commands, endpoints, streams, writes, sour
     ['Covered REST endpoints', coveredREST],
     ['Blocked REST endpoints', blockedREST],
     ['Fixed GraphQL transport endpoints', fixedGraphQLTransports.length],
-    ['Fixed GraphQL root-operation bindings', fixedGraphQLOperations.length],
+    ['Fixed GraphQL root-operation bindings', sourceGraphQLOperations.length],
+    ['Supplemental fixed GraphQL bindings', supplementalGraphQLOperations.length],
     ['Legacy GraphQL compatibility bindings', legacyGraphQLBindings.length],
   ];
 

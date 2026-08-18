@@ -1,0 +1,12 @@
+Green: local verification gates
+Result: PASS
+
+- go test -timeout 20m ./internal/connectors/native/postgres/... ./internal/connectors/database/...
+- go vet ./...
+- make tidy-check; make build; make docs-check-no-build; make smoke-no-build; make lint
+- make agent-contract-check; make connectorgen-validate;
+  make connectorgen-surface-sync; make connectorgen-certification-matrix;
+  make connector-boundary; make connector-canon-check; make release-workflow-check
+
+The full test suite remains a CI responsibility under the repository's
+per-command timeout policy.

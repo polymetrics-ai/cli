@@ -1,0 +1,118 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:orgs_get",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:07:28.663Z",
+  "run_id": "github-direct-orgs_get-1787004446080",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:abab29d836dd7a9ec5d7a1a96fcc9973de256f3b0c3a64e2b90443827d78dc9e}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:orgs_get",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:202f30614e7252182f55eff4d5642d3e3a9fca83e4dd3d29a0aa444866618786}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "advanced_security_enabled_for_new_repositories": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "archived_at": null,
+              "avatar_url": "{{pmcertfp:v1:c61673d93186d6977b97166deb4ee64981c90c75d17b428afc0c4cec7a2aa346}}",
+              "billing_email": "{{pmcertfp:v1:4c9c4be6931b841f9a28273f559aa4cd917f320c476fe31560225966addc0400}}",
+              "collaborators": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+              "created_at": "{{pmcertfp:v1:50e5af98e62b5ab01be847e899d3d06f0df97e3502e2e21c74dc06e637a3aa52}}",
+              "default_repository_branch": "{{pmcertfp:v1:8024855201449a5d733d4821565cc4f07dd134ab7ebc6972a8e0a5a25bfe2999}}",
+              "default_repository_permission": "{{pmcertfp:v1:360eef713e1d9c94971521a846476afa4f34de5771cfed9566f1e176665220b0}}",
+              "dependabot_alerts_enabled_for_new_repositories": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "dependabot_security_updates_enabled_for_new_repositories": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "dependency_graph_enabled_for_new_repositories": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "deploy_keys_enabled_for_repositories": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "description": null,
+              "disk_usage": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+              "display_commenter_full_name_setting_enabled": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "events_url": "{{pmcertfp:v1:00e59c3108f17899039b465ae8751185e34a7ce153ca13e4495ba7c32a75f11d}}",
+              "followers": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+              "following": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+              "has_organization_projects": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "has_repository_projects": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "hooks_url": "{{pmcertfp:v1:f063a19802f51f892b406830b82fdac6be080c7b7b0e8a6012a47393e17c0ae0}}",
+              "html_url": "{{pmcertfp:v1:a47fc6c74b92a09b40e6fea0dd81c7ae888c715c882bd70045edeb38bc0f247b}}",
+              "id": "{{pmcertfp:v1:c5a5d751e7b839f03cc8f3a856e2d31880eb877e2e705a17799c215dc449a352}}",
+              "is_verified": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "issues_url": "{{pmcertfp:v1:0cb497a43fc1cce839b3d051c589a147c09efabd967b25e6d1a38313d95a8b69}}",
+              "login": "{{pmcertfp:v1:9583b74c88191bf0987d0f2cfa0750e3e4db4c7565629f817390b771dc2aa8cb}}",
+              "members_allowed_repository_creation_type": "{{pmcertfp:v1:285e5b6bff63271efe14bfd91ae523aaef4d42a162c21007fcbddaa8f6f6c0be}}",
+              "members_can_change_repo_visibility": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_create_internal_repositories": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_create_pages": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_create_private_pages": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_create_private_repositories": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_create_public_pages": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_create_public_repositories": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_create_repositories": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_create_teams": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_delete_issues": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_delete_repositories": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_fork_private_repositories": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "members_can_invite_outside_collaborators": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_can_view_dependency_insights": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "members_url": "{{pmcertfp:v1:7d3f9b192e87918659c0b24f41f5fa7ac0210aba08d2e7ab66c924d9509d0673}}",
+              "name": "{{pmcertfp:v1:8c8c1cdd1b2ef323bbe64b76648723c760c067b242af676f86cf81bfb3bce7f8}}",
+              "node_id": "{{pmcertfp:v1:a100e0a0e097d7bb64889885ef02ac88d85aeed0345e074264556eda31e3e874}}",
+              "owned_private_repos": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+              "plan": {
+                "filled_seats": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+                "name": "{{pmcertfp:v1:c3aabe95e0ff3d85d57fa204615dda9bebac9925cc6d0b729c0c84dfb26185a6}}",
+                "private_repos": "{{pmcertfp:v1:d2945ceff3b6febf65ce9d39db1e01dbf808c916b5c48a535524cf081181e975}}",
+                "seats": "{{pmcertfp:v1:4de62ab0351b19d511f6822c9c989530278eb6ed1932616d6e23d30ec6821c6b}}",
+                "space": "{{pmcertfp:v1:bd3a27d8859206d1e2fc09b7382c6c311d86c8c29c77eedf44e002bc720ec090}}"
+              },
+              "private_gists": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+              "public_gists": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+              "public_members_url": "{{pmcertfp:v1:f37cd1fb93ff01c803413aa57046d4dbe2f1da26e3c4c57d2782895614235679}}",
+              "public_repos": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+              "readers_can_create_discussions": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "repos_url": "{{pmcertfp:v1:7d0661c612e3576eeb77a9f06f47bb3108795b1b8af63f1e801858e0b5f71ddb}}",
+              "secret_scanning_enabled_for_new_repositories_redacted": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "secret_scanning_push_protection_custom_link": null,
+              "secret_scanning_push_protection_enabled_for_new_repositories_redacted": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "secret_scanning_validity_checks_enabled_redacted": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "total_private_repos": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+              "two_factor_requirement_enabled": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "type": "{{pmcertfp:v1:8a4d8075cefecb7cb222c40f9bb970e740b143868dea4707603250587fc953d2}}",
+              "updated_at": "{{pmcertfp:v1:50e5af98e62b5ab01be847e899d3d06f0df97e3502e2e21c74dc06e637a3aa52}}",
+              "url": "{{pmcertfp:v1:81a7a6b4242cf0b2fed80d73eb78f85c7ae5b0733343701ea155910b00c43126}}",
+              "web_commit_signoff_required": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}"
+            },
+            "original_bytes": 2602,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

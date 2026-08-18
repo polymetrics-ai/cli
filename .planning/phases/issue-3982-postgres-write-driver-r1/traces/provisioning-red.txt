@@ -1,0 +1,13 @@
+# `go test -timeout 20m -count=1 ./internal/connectors/native/postgres -run 'TestPostgresDatabaseDriver(Reference|Requires)'`
+
+Red before the PostgreSQL provisioning implementation:
+
+```text
+*postgres.DatabaseDriver does not implement database.ManagedTargetProvisioningDriver (missing method AcquireManagedTargetLock)
+*postgres.DatabaseDriver does not implement database.ManagedTargetDeliveryLedgerStore (missing method LoadManagedTargetDelivery)
+undefined: native.NewDatabaseDriver
+FAIL polymetrics.ai/internal/connectors/native/postgres [build failed]
+```
+
+The red failure proves the descriptor-only driver cannot yet enter either typed
+native port and cannot be constructed around a pinned PostgreSQL connection.

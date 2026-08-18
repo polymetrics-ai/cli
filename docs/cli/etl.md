@@ -6,10 +6,13 @@ SYNOPSIS
   pm etl check --connector <name> [--config key=value] [--json]
   pm etl catalog --connector <name> [--config key=value] [--json]
   pm etl read --connector <name> [--stream stream] [--limit n] [--config key=value] [--json]
-  pm etl run --connection <name> --stream <stream> [--batch-size n] [--runtime] [--json]
+  pm etl run --connection <name> --stream <stream> [--batch-size n] [--max-in-flight-batches n] [--runtime] [--json]
   pm etl status <run-id> [--json]
   pm etl transport github-issue-label plan --connection <name> [--json]
   pm etl transport github-issue-label preview <plan-id> [--json]
+  pm etl run --connection <name> --stream <stream> --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
+  pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] [--json]
+  pm etl transport postgres-managed-target preview <plan-id> [--json]
   pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
   pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
@@ -36,35 +39,91 @@ DESCRIPTION
   ETL writes destination records in bounded batches. Use --batch-size for large
   paginated streams when you want tighter memory bounds.
 
+ORDERED PIPELINE
+  --max-in-flight-batches selects a bounded 1..8 producer/consumer depth only
+  for a transformed full_overwrite Arrow transport whose source and destination
+  both declare ordered-pipeline support. Its admitted default is 2; 1 preserves
+  the prior serial callback behavior. The bound covers retained batches as well
+  as the Arrow byte-credit policy, preserves source order, and refuses an
+  undeclared endpoint before source or destination I/O. It is not a generic
+  --workers flag and does not create parallel destination COPY lanes.
+
   With --runtime, ETL also requires healthy PostgreSQL, DragonflyDB, and Temporal
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
 
-CLOSED GITHUB TRANSPORT
-  The github-issue-label transport is a fixed GitHub issue-to-label walking
-  slice. A saved connection owns the repository, source issue, target issue,
-  label, action, and credential configuration; the command accepts none of
-  those provider details directly.
+CLOSED ISSUE-LABEL TRANSPORT
+  The fixed two-action issue-label destination is not a generic writer. Its
+  connector definition declares the admitted source executors, source streams,
+  and bounded record mappings. A saved connection owns the repository, source
+  selection, target issue, label, action, and credential configuration; the
+  command accepts none of those provider details directly.
+
+  An input-fields source supplies only the destination definition's declared
+  inputs: target_issue (a positive integer) and label (a non-empty string).
+  full_append selects add_issue_labels; incremental_upsert selects
+  set_issue_labels and requires transport_allow_keyed=true. The row's derived
+  issue and label must equal the plan-bound destination configuration, so
+  values cannot drift after destructive approval. Null, malformed, mismatched,
+  or delete/tombstone rows are refused before destination write I/O. Use
+  --batch-size 1 for this singleton destination contract.
 
   Create a closed plan, preview it in human output to obtain an ephemeral
   approval token, then pass that token only as one bounded stdin line to:
 
-    pm etl run --connection <name> --stream issues --batch-size 1 \
+    pm etl run --connection <name> --stream <stream> --batch-size 1 \
       --approval-plan <plan-id> --approval-token-stdin --confirm destructive
 
   The run keeps the source -> durable warehouse -> reopen -> typed GitHub
   mutation and durable acknowledgement -> independent read-back -> checkpoint
-  order. Cleanup is a separate typed remove-label plan, preview, and one-time
-  approval. A declared GitHub missing-label DELETE is a successful cleanup;
-  replaying approval is refused.
+  order. After the first approved non-additive run, later runs with the exact
+  same plan scope use --approval-plan and --confirm destructive without a new
+  --approval-token-stdin. Changed, expired, or revoked scope is refused before
+  a provider write. Cleanup is a separate typed remove-label plan, preview, and
+  one-time approval. A declared GitHub missing-label DELETE is recorded as
+  already absent rather than as a completed provider write; replaying approval
+  is refused.
 
-  Source selection and independent read-back each inspect only the first GitHub
-  issues page. The transport fails instead of requesting another page when the
-  configured source or target issue is not there.
+  A GitHub source selection and every independent target read-back inspect only
+  the first GitHub issues page. The transport fails instead of requesting
+  another page when the configured GitHub source or target issue is not there.
 
   Approval tokens are never accepted in argv, environment variables, files,
   JSON output, or persisted project state. Run pm etl transport for the exact
   closed lifecycle and its stdin-only token rule.
+
+CLOSED POSTGRESQL MANAGED-TARGET TRANSPORT
+  postgres-managed-target is a fixed definition-selected source-to-PostgreSQL
+  route, not a generic SQL writer. The saved connection binds both credentials,
+  the source stream and sealed schema, primary key, mode, and immutable managed
+  destination identity. PostgreSQL sources use their typed relation catalog;
+  declared API sources use their authoritative JSON stream schema.
+
+  Create and preview a plan, then pass its one-time token only through stdin to
+  the ordinary ETL run:
+
+    pm etl transport postgres-managed-target plan \
+      --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] --json
+    pm etl transport postgres-managed-target preview <plan-id>
+    pm etl run --connection <name> --stream <stream> --batch-size 1000 \
+      --approval-plan <plan-id> --approval-token-stdin --confirm destructive
+
+  The registered source stages bounded pages in the connection-owned warehouse.
+  The registered destination reopens the sealed Parquet, derives an immutable
+  workset, applies it through the native managed target, reads the receipt back,
+  and advances the source checkpoint only after durable acknowledgement.
+  With transport_bootstrap=true on an incremental_upsert PostgreSQL source
+  credential, a gap-free snapshot barrier continues into committed pgoutput
+  transactions and resumes from the acknowledged LSN after restart.
+
+  Approval binds the live source schema and both credential revisions. The
+  one-time preview token creates a durable, revocable authorization with a
+  24h default lifetime (configurable from 24h through 48h at plan time).
+  Each provider page fetch and staged PostgreSQL apply has its own bounded
+  deadline, so a stalled unit stops without expiring the overall authority.
+  Stale, replayed, authentication-refused, and permission-refused runs stop
+  before a checkpoint advance. The public PostgreSQL connector remains
+  write=false and this route accepts no raw SQL or target identifiers.
 
 DIRECT CONNECTOR COMMANDS
   check
@@ -110,17 +169,41 @@ SYNC MODES
     replaces the final Parquet table only after the run succeeds.
 
   full_refresh_overwrite_deduped
-    Replaces the write-ahead log with this run's records, dedupes by primary key
-    and cursor, then atomically replaces the final Parquet table.
+    Compatibility name for typed full_overwrite admission. pm refuses before
+    source I/O until a matching transport is admitted.
 
   incremental_append
     Reads records at or after the saved cursor and appends accepted records to
     the write-ahead log. Cursor state advances only after successful writes.
 
   incremental_append_deduped
-    Appends accepted records to the write-ahead log and materializes a final
-    Parquet table with one latest row per primary key. Delete/tombstone records
-    remove the row from final output.
+    Compatibility name for typed incremental_dedupe admission. pm refuses
+    before source I/O until a matching transport is admitted.
+
+  incremental_dedupe
+    For an admitted source-to-warehouse transport, retains one current record
+    per declared primary key. It refuses before source I/O for other pairs.
+
+  incremental_dedupe_history
+    For an admitted source-to-warehouse transport, retains deduplicated source versions with _valid_from, _valid_to, and _is_current fields. It requires
+    declared primary-key and cursor fields, and refuses before source I/O for
+    other pairs.
+
+  Incremental modes and deduped compatibility names require --cursor. Deduped
+  modes require --primary-key. Static connector manifests advertise the full
+  deduped compatibility name only with both fields, and incremental modes only
+  with a declared incremental executor.
+
+POLLING-WATERMARK LIMITS
+  polling_watermark is a bounded keyset scan, not CDC or a generic database
+  query. The runtime evaluates every mode against the declared source ordering,
+  discovered object, destination binding, registered executors, and conformance
+  evidence before source I/O. A durable checkpoint records the watermark and
+  unique tie-breaker only after downstream acknowledgement, so accepted records
+  may replay. Hard deletes are not observable unless the declaration supplies
+  a cursor-advancing soft-delete mapping. Incompatible state, source identity
+  mismatch, snapshot expiry, and retention failure require explicit rebootstrap;
+  pm never converts them into an automatic full scan.
 
 SECURITY
   ETL resolves credentials in memory and stores only credential references.

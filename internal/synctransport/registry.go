@@ -80,6 +80,37 @@ type ResolvedTransport struct {
 	ApplyStrategy         connectors.DestinationApplyStrategy
 }
 
+// SourceStreamIneligibleError reports a positive source allowlist refusal.
+// It is returned before executor lookup or provider access, so callers can
+// distinguish an honest declaration exclusion from a missing implementation.
+type SourceStreamIneligibleError struct {
+	Connector string
+	Stream    string
+}
+
+// DestinationSourceIneligibleError reports a destination's positive
+// definition-owned source admission refusal. It is returned before executor
+// lookup or provider access.
+type DestinationSourceIneligibleError struct {
+	Destination    string
+	SourceExecutor connectors.TransportExecutorReference
+	Stream         string
+}
+
+func (e *DestinationSourceIneligibleError) Error() string {
+	if e == nil {
+		return "destination transport does not admit source"
+	}
+	return fmt.Sprintf("destination transport does not admit source executor %q for stream %q", e.SourceExecutor.ID, e.Stream)
+}
+
+func (e *SourceStreamIneligibleError) Error() string {
+	if e == nil {
+		return "source transport does not support stream"
+	}
+	return fmt.Sprintf("source transport does not support stream %q", e.Stream)
+}
+
 // Preflight proves that both endpoint descriptors, closed families, exact
 // registrations, mode, strategy, acknowledgement policy, and independent
 // conformance verifier agree before a source executor can read.
@@ -126,7 +157,12 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 		return ResolvedTransport{}, fmt.Errorf("destination transport does not support sync mode %q", request.Mode)
 	}
 	if !containsName(sourceDescriptor.EligibleStreams, request.Stream) {
-		return ResolvedTransport{}, fmt.Errorf("source transport does not support stream %q", request.Stream)
+		return ResolvedTransport{}, &SourceStreamIneligibleError{Connector: request.Source.Name(), Stream: request.Stream}
+	}
+	if len(destinationDescriptor.SourceBindings) != 0 {
+		if _, admitted := destinationDescriptor.SourceBindingFor(sourceDescriptor.Executor, request.Stream); !admitted {
+			return ResolvedTransport{}, &DestinationSourceIneligibleError{Destination: request.Destination.Name(), SourceExecutor: sourceDescriptor.Executor, Stream: request.Stream}
+		}
 	}
 	if destinationDescriptor.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
 		return ResolvedTransport{}, fmt.Errorf("destination transport requires durable warehouse acknowledgement")
@@ -193,7 +229,7 @@ func containsMode(modes []synccontract.Mode, want synccontract.Mode) bool {
 
 func containsName(values []string, want string) bool {
 	for _, value := range values {
-		if value == want {
+		if value == want || value == "*" {
 			return true
 		}
 	}

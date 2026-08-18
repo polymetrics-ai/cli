@@ -1,0 +1,12 @@
+Command:
+
+    go test ./internal/warehouse -run TestOwnerIdentityUsesTheSharedArtifactTriple -count=1
+
+Result before production implementation:
+
+    internal/warehouse/layout_test.go:81:18: owner.Identity undefined (type Owner has no field or method Identity)
+    FAIL polymetrics.ai/internal/warehouse [build failed]
+
+This Red proof prevents the warehouse from retaining a second hand-written
+owner-equality rule after ArtifactIdentity became the connector-agnostic layer
+one identity.

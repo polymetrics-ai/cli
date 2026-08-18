@@ -1,10 +1,23 @@
 {
-  "status": "planned",
+  "status": "implemented",
   "mechanism": "logical_replication",
   "source": {
     "artifact_url": "https://www.postgresql.org/docs/current/logicaldecoding-explanation.html",
     "artifact_version": "18",
     "retrieved_at": "2026-08-10"
   },
-  "reason": "Requires PostgreSQL 14+ streamed transaction staging with a whole-transaction durable receipt before execution."
+  "executor": { "kind": "native", "id": "postgres_logical_replication" },
+  "checkpoint": {
+    "kind": "lsn",
+    "keys": ["lsn"],
+    "commit_after": "downstream_ack",
+    "on_invalid": "resnapshot_required"
+  },
+  "delivery": {
+    "ordering": "source_transaction_order",
+    "duplicates": "at_least_once",
+    "deletes": "tombstone",
+    "dedupe_key": ["lsn"]
+  },
+  "streams": ["runtime_catalog"]
 }

@@ -20,8 +20,11 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > UNCERTIFIED`; reachability is never gated.
 >
 > Accepted evidence embeds a publishable transcript with repository-salted HMAC
-> fingerprints substituted before persistence. It is full-parity credential
-> evidence only, never contains raw or encrypted credentials, and records every
+> fingerprints substituted before persistence. Its schema-v2 credential scope is
+> explicit: a completed, verified full-parity run may claim `full_parity` with
+> `full_parity_stage` proof; every other completed run may claim only
+> `observed_operations` with `protocol_exchanges` proof. Neither form contains
+> raw or encrypted credentials, and each records every
 > false flow-delivery guarantee with a named limitation. See
 > `data/cli-live-certification-matrix-r1/report.md` for the concrete schema and
 > first baseline. The historical harness remains useful test infrastructure but
@@ -150,7 +153,7 @@ below run-1 checkpoint; in --record mode assert outbound request carried the cur
 etl_incremental_append_deduped (capture) · 11 query_contract.
 
 Write stages: 12 write_plan_preview (text yields plan id + token; `--json` contains NO token) · 13
-write_create (`reverse run --approve`: succeeded=1, failed=0) · 14 write_verify (live read-back
+write_create (`reverse run --approval-token-stdin`: succeeded=1, failed=0) · 14 write_verify (live read-back
 finds tag; else `unverified` warning) · 15 write_cleanup · 16 cleanup_verify (entity gone —
 failure ⇒ `leaked_resource`) · 17 approval_idempotency (consumed plan+token re-run must fail).
 
@@ -177,6 +180,13 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
   "passed": true,
   "leaks": [],
   "budget": {"calls_used": 143, "calls_budget": 500, "rate_limit_rps": 2},
+  "rate_limit_events": [
+    {"type": "attempt", "stage": "catalog_live", "method": "GET"},
+    {"type": "reset", "stage": "catalog_live", "method": "GET", "status_code": 200,
+     "reset_at": "2026-08-14T12:00:00Z"},
+    {"type": "not_sent", "stage": "etl_full_refresh_append", "method": "POST",
+     "reason": "deadline_cutoff"}
+  ],
   "fixture": { "...embedded conformance report...": true },
   "capabilities": {
     "check":   {"live": "pass"},
@@ -218,6 +228,23 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
   ]
 }
 ```
+
+`rate_limit_events` is optional structured execution evidence. It records only the
+stage, HTTP method, outcome, and safe timing/status fields needed to explain
+admission; it never contains a credential, a rendered request, or a rate-scope
+subject. A `not_sent` event proves admission stopped the physical provider
+request. Certification bounds each individual rate-admission wait so a depleted
+shared provider budget becomes an explicit deadline cutoff rather than an
+unbounded run.
+
+### Certification runbook secret rule
+
+Certification runbooks must contain only a secret-store reference, an approved
+environment-variable name, or a protected key path — never the secret value.
+If a raw credential appears in a terminal, report it without repeating the
+value, stop using it, and have the credential owner revoke or rotate it before
+any future use. Evidence, fixtures, status lines, commits, and PR bodies must
+retain only fingerprints or non-secret references.
 
 An `untestable` capability may include `untestable_reason`, an optional serialized
 [`failures.Classification`](../../internal/failures/classification.go). It carries only a safe
@@ -306,7 +333,7 @@ actions are never executed live** (`skipped: no cleanup pairing`) unless a conne
 supplies a safe pairing with read-back fields.
 
 **Mechanics per pair** (all via public CLI): write tagged record to local JSONL → file→warehouse
-ETL → `pm reverse plan --limit 1` → token from text output → `preview --json` → `run --approve` →
+ETL → `pm reverse plan --limit 1` → token from text output → `preview --json` → `run --approval-token-stdin` →
 verify → cleanup plan → verify again.
 
 **Write-ahead leak ledger**: before any live write, append `{action, tag, connector, entity_hint,

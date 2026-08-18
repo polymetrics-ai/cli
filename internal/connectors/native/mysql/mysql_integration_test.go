@@ -34,47 +34,31 @@ const (
 )
 
 const (
-	envEnabled           = "POLYMETRICS_DATABASE_INTEGRATION"
-	envContainerEndpoint = "POLYMETRICS_PODMAN_ENDPOINT"
+	envEnabled                            = "POLYMETRICS_DATABASE_INTEGRATION"
+	envContainerRuntime                   = "POLYMETRICS_CONTAINER_RUNTIME"
+	envContainerEndpoint                  = "POLYMETRICS_CONTAINER_ENDPOINT"
+	containerRuntimeConfigurationGuidance = "database integration requires POLYMETRICS_CONTAINER_RUNTIME=docker or podman and POLYMETRICS_CONTAINER_ENDPOINT=unix:///absolute/path/to/socket; no usable explicit local container runtime is configured"
 )
 
-var errCollectedCDCEvents = errors.New("test collected required mysql change events")
+var (
+	errCollectedCDCEvents            = errors.New("test collected required mysql change events")
+	errContainerRuntimeConfiguration = errors.New(containerRuntimeConfigurationGuidance)
+)
 
 func TestMySQLContainerHarness(t *testing.T) {
 	// A skip here is loud on purpose. This test must never report success
 	// without having connected to a real engine.
 	if os.Getenv(envEnabled) != "1" {
-		t.Skipf("database integration skipped: set %s=1 to run the MySQL Podman proof", envEnabled)
+		t.Skipf("database integration skipped: set %s=1 to run the MySQL Docker or Podman proof", envEnabled)
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
 	defer cancel()
 
-	containerEndpoint := strings.TrimSpace(os.Getenv(envContainerEndpoint))
-	if containerEndpoint == "" {
-		t.Skipf("database integration skipped: set %s to an explicit local Podman API endpoint", envContainerEndpoint)
-	}
-	harness, err := dbtest.New(dbtest.Config{
-		Engine:             "mysql",
-		Image:              mysqlIntegrationImage,
-		ContainerPort:      3306,
-		DataVolumePath:     "/var/lib/mysql",
-		ContainerEndpoint:  containerEndpoint,
-		ExpectedImageBytes: mysqlIntegrationImageBytes,
-		ContainerArgs: []string{
-			"--env", "MYSQL_ALLOW_EMPTY_PASSWORD=yes",
-			"--env", "MYSQL_ROOT_HOST=%",
-			"--env", "MYSQL_DATABASE=" + mysqlIntegrationDatabase,
-		},
-		EngineArgs: []string{
-			"--log-bin=mysql-bin",
-			"--binlog-format=ROW",
-			"--binlog-row-image=FULL",
-			"--binlog-row-metadata=FULL",
-			"--server-id=731000",
-		},
-	})
+	containerRuntime := dbtest.Runtime(os.Getenv(envContainerRuntime))
+	containerEndpoint := os.Getenv(envContainerEndpoint)
+	harness, err := newMySQLContainerHarness(containerRuntime, containerEndpoint)
 	if err != nil {
-		t.Fatal("could not configure the MySQL database test harness")
+		t.Fatal(err)
 	}
 	defer func() {
 		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Minute)
@@ -129,6 +113,76 @@ func TestMySQLContainerHarness(t *testing.T) {
 	}
 	assertTransportSecurityIsEnforced(t, ctx, connector, endpoint, caPath)
 	assertBinaryLogCDC(t, ctx, connector, config, endpoint, stream)
+}
+
+func newMySQLContainerHarness(containerRuntime dbtest.Runtime, containerEndpoint string) (*dbtest.Harness, error) {
+	if containerRuntime == "" || containerEndpoint == "" {
+		return nil, errContainerRuntimeConfiguration
+	}
+	harness, err := dbtest.New(dbtest.Config{
+		Engine:             "mysql",
+		ContainerRuntime:   containerRuntime,
+		Image:              mysqlIntegrationImage,
+		ContainerPort:      3306,
+		DataVolumePath:     "/var/lib/mysql",
+		ContainerEndpoint:  containerEndpoint,
+		ExpectedImageBytes: mysqlIntegrationImageBytes,
+		// Colima and similar local Docker VMs report /var/lib/docker inside
+		// the daemon, not on the client host. dbtest refuses that path unless
+		// this explicitly pre-cached, pinned probe can measure it in-daemon.
+		DockerCapacityProbeImage: "docker.io/library/busybox:1.37.0",
+		ContainerArgs: []string{
+			"--env", "MYSQL_ALLOW_EMPTY_PASSWORD=yes",
+			"--env", "MYSQL_ROOT_HOST=%",
+			"--env", "MYSQL_DATABASE=" + mysqlIntegrationDatabase,
+		},
+		EngineArgs: []string{
+			"--log-bin=mysql-bin",
+			"--binlog-format=ROW",
+			"--binlog-row-image=FULL",
+			"--binlog-row-metadata=FULL",
+			"--server-id=731000",
+		},
+	})
+	if err != nil {
+		return nil, errContainerRuntimeConfiguration
+	}
+	return harness, nil
+}
+
+func TestNewMySQLContainerHarnessConfigurationGuidance(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		runtime  dbtest.Runtime
+		endpoint string
+		secret   string
+	}{
+		{name: "unknown runtime", runtime: "colima", endpoint: "unix:///tmp/mysql-dbtest.sock", secret: "colima"},
+		{name: "unsafe endpoint", runtime: dbtest.RuntimeDocker, endpoint: "tcp://127.0.0.1:2375", secret: "tcp://127.0.0.1:2375"},
+		{name: "runtime control character", runtime: "docker\t", endpoint: "unix:///tmp/mysql-dbtest.sock", secret: "docker\t"},
+		{name: "endpoint trailing newline", runtime: dbtest.RuntimeDocker, endpoint: "unix:///tmp/mysql-dbtest.sock\n", secret: "unix:///tmp/mysql-dbtest.sock\n"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			harness, err := newMySQLContainerHarness(tc.runtime, tc.endpoint)
+			if harness != nil {
+				t.Fatal("newMySQLContainerHarness() returned a harness for invalid runtime configuration")
+			}
+			if !errors.Is(err, errContainerRuntimeConfiguration) {
+				t.Fatalf("newMySQLContainerHarness() error = %v, want runtime configuration guidance", err)
+			}
+			if strings.Contains(err.Error(), tc.secret) {
+				t.Fatalf("configuration guidance exposed supplied runtime input %q", tc.secret)
+			}
+			for _, required := range []string{
+				envContainerRuntime + "=docker or podman",
+				envContainerEndpoint + "=unix:///absolute/path/to/socket",
+			} {
+				if !strings.Contains(err.Error(), required) {
+					t.Fatalf("configuration guidance %q does not name %q", err, required)
+				}
+			}
+		})
+	}
 }
 
 // assertTransportSecurityIsEnforced proves against the live server that the

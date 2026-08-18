@@ -1,0 +1,81 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:agent_derived_actions_list_self_hosted_runner_groups_for_org_83a028fac406",
+  "provider": "github",
+  "executed_at": "2026-08-17T20:56:37.391Z",
+  "run_id": "github-1787000080257-f5cdbc0ddc4d-agent_derived_actions_list_self_hosted_runner_groups_for_org_83a028fac406",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:24812a87448912c0cd7035f5d7640ffe135ea8eda726a35b3315dabfc25d8dbe}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:agent_derived_actions_list_self_hosted_runner_groups_for_org_83a028fac406",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:a9153a6b346dfcf5ce2b703fda7e5bc29fb7c45cf2e3d151a1f8432a2952af63}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "runner_groups": [
+                {
+                  "allows_public_repositories": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                  "default": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+                  "hosted_runners_url": "{{pmcertfp:v1:fa796b4736296278212218aa7d70903803ab261bb68e32827ecabad9079f9d89}}",
+                  "id": "{{pmcertfp:v1:a6ce693ae10fb044bf28af92c19ec4f9511493959c3516834c333683227d4669}}",
+                  "inherited": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                  "name": "{{pmcertfp:v1:034616cf69e3365a8a449427b0eb854530aba24540037b840f2c5a922ef19a23}}",
+                  "restricted_to_workflows": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                  "runners_url": "{{pmcertfp:v1:6c11c6269a3922e4ac78ac984dcf10ed3988f8e43923e4f5a390cbbea221f6dc}}",
+                  "selected_workflows": [],
+                  "visibility": "{{pmcertfp:v1:285e5b6bff63271efe14bfd91ae523aaef4d42a162c21007fcbddaa8f6f6c0be}}",
+                  "workflow_restrictions_read_only": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}"
+                },
+                {
+                  "allows_public_repositories": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                  "default": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+                  "hosted_runners_url": "{{pmcertfp:v1:2edefb0dca164a217f72d101c3c25dc6830862104abd43e8052f4deac9a48af0}}",
+                  "id": "{{pmcertfp:v1:857c63a556b38b92608672df03bddd5ab6c39f241dc1dbdbd80a2a00c6ecd602}}",
+                  "inherited": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+                  "inherited_allows_public_repositories": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                  "name": "{{pmcertfp:v1:034616cf69e3365a8a449427b0eb854530aba24540037b840f2c5a922ef19a23}}",
+                  "restricted_to_workflows": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+                  "runners_url": "{{pmcertfp:v1:36b129131eb51b52bfa5e5c765915a419af458d65ff14d0d6bb1cc7ad2e72675}}",
+                  "selected_repositories_url": "{{pmcertfp:v1:5ad530efbc460f1552abcd76edc559336a5e34f8d639342ef12c5ba7722f4ab4}}",
+                  "selected_workflows": [],
+                  "visibility": "{{pmcertfp:v1:f0dcf2369c5055d7cf75907545e4680beab6b200e341aa81c8602d498b7b9ee3}}",
+                  "workflow_restrictions_read_only": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}"
+                }
+              ],
+              "total_count": "{{pmcertfp:v1:e4035211b6690c9836dcb5668cd768dcb9aa1077fd042798b007dea834a62789}}"
+            },
+            "original_bytes": 1013,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

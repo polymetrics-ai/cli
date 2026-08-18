@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:repos_create_org_ruleset",
+  "provider": "github",
+  "executed_at": "2026-08-18T04:31:30Z",
+  "run_id": "github-mutation-slice2-repos-create-org-ruleset-20260818",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "dcb76d2068e6b2d043770ad174910fcf5182364a9af3778b1489ae3cc6d45773",
+    "pm_command_fingerprint": "{{pmcertfp:v1:51e6759a0ba88c5bcab5c43cc1baf98c281bcd1416066b6e3eac62b1fc65426b}}",
+    "credential_fingerprints": ["{{pmcertfp:v1:713778cd5ee90211aae2d78594d98adb30cb2b40b52b34120d82e7e6b5119407}}"],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_repos_create_org_ruleset_produced_value_readback",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:4b3933eade0791ca6e5c0c96d7cbc0edb6bf79aad746061498fce165efa55bab}}",
+          "query": [], "headers": [],
+          "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "name": "{{pmcertfp:v1:be0c5ee0eec3e532de1436258ece52caf46023da01c81e21b5bc9500b5f71374}}",
+              "target": "{{pmcertfp:v1:53585ab286592d874a5376cb7744a666ab16135518894ac4367f246193183bb2}}",
+              "enforcement": "{{pmcertfp:v1:f2d9ac2da7ddeeb6b94a288fb1b4abfb435a896bce20e664682864627c04af4e}}",
+              "source_type": "{{pmcertfp:v1:708324273037ed6566cdead7cde9dc57bbccb2de17217bafc9981dec86ea761f}}"
+            },
+            "original_bytes": 119,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_repos_create_org_ruleset_cleanup_readback",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:98d177546fac15aab6c466d9e678b005021dcc4b5acbbb2f51fab943b1d9f904}}",
+          "query": [], "headers": [],
+          "body": {"encoding": "none", "value": null, "original_bytes": 0, "truncated": false}
+        },
+        "response": {
+          "status": 200, "headers": [],
+          "body": {"encoding": "json", "value": [], "original_bytes": 2, "truncated": false}
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

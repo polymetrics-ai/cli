@@ -1,0 +1,157 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_orgs_list_issue_fields",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:33:34.340Z",
+  "run_id": "github-1787002414341-agent_derived_orgs_list_issue_fields",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "34237212e88fc3db2aa84fa8e82a2d6862db5632f260be2dc85e9d087197c56a",
+    "pm_command_fingerprint": "{{pmcertfp:v1:ec95f1791a5dd7b07137de81650c052c97abbddc18ee7e0b71f5591acbbe2210}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:3e91b3e7f98955374e9bc12c710075406e8c11f2d3c8e7025b2829126de68191}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_orgs_list_issue_fields",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:9c41328f2ce3c9de7b6502c15aeea08f8a1388ef95709fe97bcc2633017570dc}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [
+              {
+                "created_at": "{{pmcertfp:v1:3e02e9f22d45d9f3a5c8646ca6a49fe11025929e42764c4f4583a4a46b1b5d3e}}",
+                "data_type": "{{pmcertfp:v1:de7b2d1db13e976eb779c39fce844058097a9820b86500b831931d7b8794c8a4}}",
+                "description": "{{pmcertfp:v1:4d6f27acc65a5124b3ad64b7acd09824818f13f94438242372c251cb8bf049a0}}",
+                "id": "{{pmcertfp:v1:29c74c2a0fb9158e6ae2731ae28af18d03f375e13beec8d57d6b4baff7101ca2}}",
+                "name": "{{pmcertfp:v1:20b18b238242c51fa2af5cee235aad3b4ddb451795a43059405f74adb5dfa864}}",
+                "node_id": "{{pmcertfp:v1:1092e377cd0058be8b248506dcbadd31041146775b35b0ef2086af0e922af0e6}}",
+                "options": [
+                  {
+                    "color": "{{pmcertfp:v1:bf6a8f96fe49f727ae9247bb5956069f55ac4bfd934bd15e0fd0d7a0057c0a28}}",
+                    "created_at": "{{pmcertfp:v1:d13a3fe94d1156f491845b565f3f54804811aafc3cdba0747dfd9c287afad329}}",
+                    "description": null,
+                    "id": "{{pmcertfp:v1:57f5ce28fc5cf08ad5ea16b9784bcde04d40ff22f022c6523a1621a5486ffc77}}",
+                    "name": "{{pmcertfp:v1:825aefde7e0157657afebd5362cf325cd4d5334c3fe7c22b56764fa931c9a988}}",
+                    "priority": "{{pmcertfp:v1:ae9dbc0d14d50ab62ca45a433cd430a66d3b5b34f8330b5d9ef954fe924c98cc}}",
+                    "updated_at": "{{pmcertfp:v1:d13a3fe94d1156f491845b565f3f54804811aafc3cdba0747dfd9c287afad329}}"
+                  },
+                  {
+                    "color": "{{pmcertfp:v1:90c6992a47a3bb9fec0aa702b0d096051c64de320fa853970f2640d6a1f7579e}}",
+                    "created_at": "{{pmcertfp:v1:7273964e6d0e1e4165094aa758ee74c95682de3d581dd1b6f8f1d3fd39eb5420}}",
+                    "description": null,
+                    "id": "{{pmcertfp:v1:45a8e9f1bce70a907a90edeeb3e14dc1f4ab3cf1349e5180be356b9c7d58dbc8}}",
+                    "name": "{{pmcertfp:v1:16bd851dcad1499f9e7919e1a4cb19bc5bdb84a259aaa430321688d97850b2d3}}",
+                    "priority": "{{pmcertfp:v1:65b4355a11081aa96d86841e8c0c988be5a1692bb744ce83dbb1e1b3b643dc75}}",
+                    "updated_at": "{{pmcertfp:v1:7273964e6d0e1e4165094aa758ee74c95682de3d581dd1b6f8f1d3fd39eb5420}}"
+                  },
+                  {
+                    "color": "{{pmcertfp:v1:4e02e400b7ace8dac8759859c8b3b43588882be8cefd1dace02636e321506bf7}}",
+                    "created_at": "{{pmcertfp:v1:86fe0f6f8ffaed89012c3ed34fe469f7d7cf296174b5d342c942fd61feee478d}}",
+                    "description": null,
+                    "id": "{{pmcertfp:v1:d144d1d9aa75ebf0868018ccad5f924cdf4528a11a48644bcdd0f0de542c0e7c}}",
+                    "name": "{{pmcertfp:v1:ec0065c147d42cbf4a492fb2246c612cd322c85b5dd6159727bcdc4484e94ee6}}",
+                    "priority": "{{pmcertfp:v1:6eefc887ba2d1bb86f3aecaed495b8d0202107674f9eee59a1f0008048f08548}}",
+                    "updated_at": "{{pmcertfp:v1:86fe0f6f8ffaed89012c3ed34fe469f7d7cf296174b5d342c942fd61feee478d}}"
+                  },
+                  {
+                    "color": "{{pmcertfp:v1:4118c691d672c003ed4a60c53f9e68a51c70b96132ff0fcb76fb0734222c6580}}",
+                    "created_at": "{{pmcertfp:v1:d4bd9ca2fc52018e22893e34d5f7ab774ba64166a44e44b7c10c4cb3b014b7a1}}",
+                    "description": null,
+                    "id": "{{pmcertfp:v1:36cd9287abeccc523e4ba15ad80415167eb96ce7fe4d6906bc43bc07c77100b2}}",
+                    "name": "{{pmcertfp:v1:d811b3bd810270b1ff420df50d2568436abf886933942b1b5f748fd2f9801dc3}}",
+                    "priority": "{{pmcertfp:v1:1066be6a8e32b2516053aae495192cd77046241c6f5d9a77b824f4ca135158d3}}",
+                    "updated_at": "{{pmcertfp:v1:d4bd9ca2fc52018e22893e34d5f7ab774ba64166a44e44b7c10c4cb3b014b7a1}}"
+                  }
+                ],
+                "updated_at": "{{pmcertfp:v1:3e02e9f22d45d9f3a5c8646ca6a49fe11025929e42764c4f4583a4a46b1b5d3e}}",
+                "visibility": "{{pmcertfp:v1:484b14c63411c1d529780ff6c7594bb44063472e6f45d4d9a02b2d67baa5f958}}"
+              },
+              {
+                "created_at": "{{pmcertfp:v1:f2838de65dd1035b2735e006ab55481f49f0562a1748ff29cbd472098f72f251}}",
+                "data_type": "{{pmcertfp:v1:5f7cffc421352cf3c81900e97f8dad4bc8142df976dc2cf199bc4a87d5bfbc62}}",
+                "description": "{{pmcertfp:v1:fe5fad61576df33ddde53e0c593680214e0217d4eacbf0ca830b8dbb371e27e5}}",
+                "id": "{{pmcertfp:v1:3e09ac579bddc60649b8902ef3998cc39cd3b3611a764431db1b5e75e2ac3aff}}",
+                "name": "{{pmcertfp:v1:e387ffb900ddb18d699643e27d28e328469c6aa8b78cb032feaee268589a00c4}}",
+                "node_id": "{{pmcertfp:v1:1290dcafbe5bb6d09ac4db2e72581ec38f9b75323252fe50c95c485b94265644}}",
+                "updated_at": "{{pmcertfp:v1:f2838de65dd1035b2735e006ab55481f49f0562a1748ff29cbd472098f72f251}}",
+                "visibility": "{{pmcertfp:v1:484b14c63411c1d529780ff6c7594bb44063472e6f45d4d9a02b2d67baa5f958}}"
+              },
+              {
+                "created_at": "{{pmcertfp:v1:f31993a9c90139c7451098062416fdf49b42666a10d737a54f3e0573175b1193}}",
+                "data_type": "{{pmcertfp:v1:5f7cffc421352cf3c81900e97f8dad4bc8142df976dc2cf199bc4a87d5bfbc62}}",
+                "description": "{{pmcertfp:v1:e7af6949689b89592b28705abbf97de81793256fe5457ae807faf4556edf8976}}",
+                "id": "{{pmcertfp:v1:d44dd2f9307c3049d77d6db31cb3ac99a033e00ab4f2d167bcfb310ad9b2cd27}}",
+                "name": "{{pmcertfp:v1:65e1adbacb140cb2371e720b2a994a27695206b4e00172e99ab58507fe3d643a}}",
+                "node_id": "{{pmcertfp:v1:09628f47b216ff6c60e050a083a3175af466eed80cd23e1b79faf16755590875}}",
+                "updated_at": "{{pmcertfp:v1:f31993a9c90139c7451098062416fdf49b42666a10d737a54f3e0573175b1193}}",
+                "visibility": "{{pmcertfp:v1:484b14c63411c1d529780ff6c7594bb44063472e6f45d4d9a02b2d67baa5f958}}"
+              },
+              {
+                "created_at": "{{pmcertfp:v1:5539c5e1d5a9732a46511127f5c48b25110454369747d54e9fcee9ef8325dc21}}",
+                "data_type": "{{pmcertfp:v1:de7b2d1db13e976eb779c39fce844058097a9820b86500b831931d7b8794c8a4}}",
+                "description": "{{pmcertfp:v1:ff187695a88e87112cc705edf1934bdf1a9ae2df4095acab6b49975d71cb71bf}}",
+                "id": "{{pmcertfp:v1:6ec88392dab70731d7b2ac8bccac6ae20fa434ae4be8ff3aae5326d83f88a7a1}}",
+                "name": "{{pmcertfp:v1:1a9397fa7e857e9b031d7e20dd942433d9836086b3bdb028092ca06554c9aae0}}",
+                "node_id": "{{pmcertfp:v1:5b47266a169121b620d03a467c4acc3baf4590ebb38f9e2866df59c90dae6dcd}}",
+                "options": [
+                  {
+                    "color": "{{pmcertfp:v1:bf6a8f96fe49f727ae9247bb5956069f55ac4bfd934bd15e0fd0d7a0057c0a28}}",
+                    "created_at": "{{pmcertfp:v1:08b436d8a5798beaf1701289a716e542d5872c8e6ee664f99907adc1b520eb57}}",
+                    "description": null,
+                    "id": "{{pmcertfp:v1:9e5d154f75841a85c97cbb8a46c486010594cc1b01ed97cc7bb3454a253b0424}}",
+                    "name": "{{pmcertfp:v1:825aefde7e0157657afebd5362cf325cd4d5334c3fe7c22b56764fa931c9a988}}",
+                    "priority": "{{pmcertfp:v1:1066be6a8e32b2516053aae495192cd77046241c6f5d9a77b824f4ca135158d3}}",
+                    "updated_at": "{{pmcertfp:v1:08b436d8a5798beaf1701289a716e542d5872c8e6ee664f99907adc1b520eb57}}"
+                  },
+                  {
+                    "color": "{{pmcertfp:v1:90c6992a47a3bb9fec0aa702b0d096051c64de320fa853970f2640d6a1f7579e}}",
+                    "created_at": "{{pmcertfp:v1:c800f9e42f0a03a29aecdfb2fdf19cb5522378cb9340043bcacae5bc561b035a}}",
+                    "description": null,
+                    "id": "{{pmcertfp:v1:cf9a215168a56809c6891706e43efc69258dca2fdab5c65c7fd9cd078ee57aee}}",
+                    "name": "{{pmcertfp:v1:16bd851dcad1499f9e7919e1a4cb19bc5bdb84a259aaa430321688d97850b2d3}}",
+                    "priority": "{{pmcertfp:v1:6eefc887ba2d1bb86f3aecaed495b8d0202107674f9eee59a1f0008048f08548}}",
+                    "updated_at": "{{pmcertfp:v1:c800f9e42f0a03a29aecdfb2fdf19cb5522378cb9340043bcacae5bc561b035a}}"
+                  },
+                  {
+                    "color": "{{pmcertfp:v1:4e02e400b7ace8dac8759859c8b3b43588882be8cefd1dace02636e321506bf7}}",
+                    "created_at": "{{pmcertfp:v1:d43b519cddf748e7e8977165f333ce19a74b8201cce745e7bff6332c00db063c}}",
+                    "description": null,
+                    "id": "{{pmcertfp:v1:926ffd34bc819833f46cfaaf38b8c472baa9bfefa3b2ffc67ef8fdd2fa2452b1}}",
+                    "name": "{{pmcertfp:v1:ec0065c147d42cbf4a492fb2246c612cd322c85b5dd6159727bcdc4484e94ee6}}",
+                    "priority": "{{pmcertfp:v1:ae9dbc0d14d50ab62ca45a433cd430a66d3b5b34f8330b5d9ef954fe924c98cc}}",
+                    "updated_at": "{{pmcertfp:v1:d43b519cddf748e7e8977165f333ce19a74b8201cce745e7bff6332c00db063c}}"
+                  }
+                ],
+                "updated_at": "{{pmcertfp:v1:5539c5e1d5a9732a46511127f5c48b25110454369747d54e9fcee9ef8325dc21}}",
+                "visibility": "{{pmcertfp:v1:484b14c63411c1d529780ff6c7594bb44063472e6f45d4d9a02b2d67baa5f958}}"
+              }
+            ],
+            "original_bytes": 2197,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

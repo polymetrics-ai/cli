@@ -66,6 +66,39 @@ func TestSafePathPartRejectsRatherThanRewrites(t *testing.T) {
 	}
 }
 
+func TestOwnerIdentityUsesTheSharedArtifactTriple(t *testing.T) {
+	owner := Owner{
+		Workspace:   "ws_1",
+		Connector:   "postgres",
+		Connection:  "conn_1",
+		DisplayName: "before-rename",
+	}
+	want := ArtifactIdentity{
+		WorkspaceID:  "ws_1",
+		ConnectorID:  "postgres",
+		ConnectionID: "conn_1",
+	}
+	if got := owner.Identity(); got != want {
+		t.Fatalf("Owner.Identity() = %#v, want %#v", got, want)
+	}
+
+	renamed := owner
+	renamed.DisplayName = "after-rename"
+	if !owner.SameIdentity(renamed) {
+		t.Fatal("Owner.SameIdentity() treated a display-name change as an ownership change")
+	}
+	differentConnection := owner
+	differentConnection.Connection = "conn_2"
+	if owner.SameIdentity(differentConnection) {
+		t.Fatal("Owner.SameIdentity() accepted a different connection ID")
+	}
+	differentConnector := owner
+	differentConnector.Connector = "mysql"
+	if owner.SameIdentity(differentConnector) {
+		t.Fatal("Owner.SameIdentity() accepted a different connector ID")
+	}
+}
+
 func TestLocationForRejectsUnsafeIdentityComponents(t *testing.T) {
 	root := t.TempDir()
 	cases := []struct {
@@ -541,10 +574,20 @@ func TestDamagedRecordCannotDecideWhichConnectionAnUnscopedReadReturns(t *testin
 		t.Fatalf("fault tables = %v, want only the damaged directory's own tables", faults[0].Tables)
 	}
 
-	_, err = FindTable(root, "records", "")
+	resolver, err := NewTableResolver(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	snapshot := resolver.Tables()
+	if len(snapshot) == 0 {
+		t.Fatal("resolver snapshot has no healthy tables")
+	}
+	snapshot[0].Name = "changed"
+
+	_, err = resolver.Find("records", "")
 	var faulted *FaultError
 	if !errors.As(err, &faulted) {
-		t.Fatalf("FindTable(records, unscoped) error = %T %v, want the read refused rather than answered from one tenant", err, err)
+		t.Fatalf("TableResolver.Find(records, unscoped) error = %T %v, want the read refused rather than answered from one tenant", err, err)
 	}
 	if !faulted.Undecided {
 		t.Fatalf("FindTable(records, unscoped) error = %q, want it reported as undecided rather than absent", faulted)
@@ -560,19 +603,22 @@ func TestDamagedRecordCannotDecideWhichConnectionAnUnscopedReadReturns(t *testin
 
 	// Isolation is intact: naming the connection answers, and a table the
 	// damaged directory does not hold is answered unscoped as before.
-	found, err := FindTable(root, "records", "acme")
+	found, err := resolver.Find("records", "acme")
 	if err != nil {
-		t.Fatalf("FindTable(records, acme) error = %v, want the scoped read to succeed", err)
+		t.Fatalf("TableResolver.Find(records, acme) error = %v, want the scoped read to succeed", err)
 	}
 	if found.Path != healthyTable {
 		t.Fatalf("FindTable(records, acme) path = %q, want %q", found.Path, healthyTable)
 	}
-	if _, err := FindTable(root, "acme_only", ""); err != nil {
-		t.Fatalf("FindTable(acme_only, unscoped) error = %v, want a read that does not depend on the damaged directory to succeed", err)
+	if _, err := resolver.Find("acme_only", ""); err != nil {
+		t.Fatalf("TableResolver.Find(acme_only, unscoped) error = %v, want a read that does not depend on the damaged directory to succeed", err)
 	}
 
 	// A root-level file the damaged directory cannot hold stays selectable.
 	writeTableFixture(t, filepath.Join(root, "direct"+TableFileExt), Row{"id": "d1"})
+	if _, err := resolver.Find("direct", UnattributedConnection); err == nil {
+		t.Fatal("TableResolver.Find(direct) error = nil, want the pre-existing snapshot unchanged")
+	}
 	if _, err := FindTable(root, "direct", UnattributedConnection); err != nil {
 		t.Fatalf("FindTable(direct, %q) error = %v, want the unattributed read to succeed", UnattributedConnection, err)
 	}

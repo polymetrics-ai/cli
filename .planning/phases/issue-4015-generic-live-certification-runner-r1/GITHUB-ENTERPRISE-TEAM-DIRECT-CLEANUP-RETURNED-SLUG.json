@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "fixture_cleanup": {
+    "target": "/enterprises/polymetrics-cert/teams/ent:pm-cert-enterprise-consistency-1786997536",
+    "delete_exit_code": 1,
+    "readback_exit_code": 1,
+    "verified_absent": true
+  },
+  "updated_at": "2026-08-17T20:13:54.220Z"
+}

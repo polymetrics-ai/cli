@@ -25,26 +25,27 @@ wrong branch; see the [connector delivery canon](connector-delivery).
 | Metric | Value |
 |---|---:|
 | Declared command entries | 1571 |
-| Implemented command entries | 1521 |
+| Implemented command entries | 1546 |
 | Partial command entries | 0 |
 | Planned command entries | 0 |
-| Unsupported API entries | 27 |
-| Unsupported local workflow entries | 23 |
+| Unsupported API entries | 4 |
+| Unsupported local workflow entries | 21 |
 | Unsafe or disallowed entries | 0 |
 | GitHub read streams | 37 |
-| GitHub write actions | 607 |
+| GitHub write actions | 606 |
 | Pinned REST operations | 1220 |
 | Pinned GraphQL Query roots | 31 |
 | Pinned GraphQL Mutation roots | 274 |
 | Pinned source operations | 1525 |
 | Source inventory classification | 1525/1525 (100%) |
-| Executable implementation | 1464/1525 (96%) |
+| Executable implementation | 1454/1525 (95.34%) |
 | Current-head live proof | 0/1525 (0%) |
 | Tracked REST endpoints | 1220 |
-| Covered REST endpoints | 1220 |
-| Blocked REST endpoints | 0 |
+| Covered REST endpoints | 1219 |
+| Blocked REST endpoints | 1 |
 | Fixed GraphQL transport endpoints | 1 |
 | Fixed GraphQL root-operation bindings | 305 |
+| Supplemental fixed GraphQL bindings | 1 |
 | Legacy GraphQL compatibility bindings | 4 |
 
 {/* /generated:current-surface */}
@@ -56,11 +57,11 @@ wrong branch; see the [connector delivery canon](connector-delivery).
 | Intent | Current count | Runtime rule |
 |---|---:|---|
 | `etl` | 15 | Reads map to existing streams or planned stream/direct-read coverage. |
-| `reverse_etl` | 577 | Commands with explicit `record.*` flag mappings create stored reverse plans; execution requires preview and approval. |
-| `direct_read` | 655 | Constrained read commands that do not naturally fit streams. |
-| `binary_download` | 11 | Bounded GET downloads that write a file to a caller-supplied `--dest-root`; no response body is rendered. |
-| `direct_write` | 292 | Fixed declared writes follow plan → preview → approval → execute; destructive operations also require typed confirmation. |
-| `local_workflow` | 14 | Browser, git, shell, extension, completion, or local config behavior. |
+| `reverse_etl` | 582 | Commands with explicit `record.*` flag mappings create stored reverse plans; execution requires preview and approval. |
+| `direct_read` | 654 | Constrained read commands that do not naturally fit streams. |
+| `binary_download` | 14 | Bounded GET downloads that write a file to a caller-supplied `--dest-root`; no response body is rendered. |
+| `direct_write` | 287 | Fixed declared writes follow plan → preview → approval → execute; destructive operations also require typed confirmation. |
+| `local_workflow` | 12 | Browser, git, shell, extension, completion, or local config behavior. |
 | `auth` | 3 | Credential lifecycle commands; never print token material. |
 | `config` | 3 | Local config behavior, not connector data extraction. |
 | `raw_api` | 1 | Must remain constrained and approval-gated before any implementation. |
@@ -99,7 +100,7 @@ connector-command record handling.
 ```bash
 pm github issue close --issue-number 101 --credential github-token
 pm github issue close --plan <plan-id> --preview --json
-pm github issue close --plan <plan-id> --approve <approval-token> --json
+pm github issue close --plan <plan-id> --approval-token-stdin --json
 ```
 
 Each command needs its own declared input contract; there is no generic raw-input fallback. Sensitive

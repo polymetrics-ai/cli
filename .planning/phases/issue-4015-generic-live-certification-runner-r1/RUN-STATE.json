@@ -1,0 +1,19 @@
+{
+  "phase": "issue-4015-generic-live-certification-runner-r1",
+  "status": "verified_pending_pr",
+  "execution": "inline_manual",
+  "reason": "direct-PR brief forbids spawned roles",
+  "accepted_records": 74,
+  "provider_nonpasses": 81,
+  "missing_fixture_nonpasses": 4,
+  "product_defects": [
+    "dependabot list-alerts-for-org: direct App probe reports 200, but the declaration-owned pm run returned HTTP 400 and redacted the provider body",
+    "classic credential batch initially could not reach GitHub because the runner omitted the required non-secret rate_limit_account; corrected rerun certified 11 of 12",
+    "dependabot list-alerts-for-enterprise: direct classic-PAT probe reports 200, but the declaration-owned pm run returned HTTP 400 and redacted the provider body",
+    "copilot list-copilot-coding-agent-selected-repositories-for-organization: direct probe returns semantic HTTP 409 (cloud agent enabled for all repositories), but pm returns it as a redacted internal error rather than a produced result",
+    "enterprise-teams get: GitHub returns a valid team slug prefixed ent:, but direct-read path validation rejects ':' before request dispatch",
+    "enterprise-teams delete: a controlled create/delete cycle reported exit 0 with records_succeeded=1 and records_failed=0, but six bounded read-back polls never observed absence; this is a false success, not eventual consistency",
+    "copilot-spaces delete-resource-for-org: two reverse-ETL delete runs each reported records_succeeded=1 and records_failed=0, but the resource remained through six bounded polls; direct GitHub API cleanup removed the disposable fixture",
+    "release-blocking false-success destroy path is tracked in issue #4221; fixture setup now records cleanup only from an independent direct-provider 404 read-back"
+  ]
+}

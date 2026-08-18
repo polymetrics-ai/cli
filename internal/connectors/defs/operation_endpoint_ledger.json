@@ -2725,6 +2725,13 @@
     },
     {
       "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.repo.list",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
       "path": "/markdown",
       "kind": "rest_read",
       "max_bytes": 1048576

@@ -129,6 +129,7 @@ type fixtureWriteApprovalConsumptions struct {
 }
 
 type projectWriteApprovalEvidence interface {
+	ValidateProjectWrite(WriteApprovalTarget, string, time.Time) error
 	AuthorizeProjectWrite(WriteApprovalTarget, string, time.Time) error
 }
 
@@ -278,49 +279,60 @@ func (a *WriteApprovalAuthority) IssueWriteGrant(req WriteApprovalGrantRequest) 
 	return grant, nil
 }
 
-func (a *WriteApprovalAuthority) VerifyWriteGrant(grant WriteApprovalGrant, expected WriteApprovalExpectation) (*WriteApprovalEvidence, error) {
+func (a *WriteApprovalAuthority) ValidateWriteGrant(grant WriteApprovalGrant, expected WriteApprovalExpectation) error {
 	if a == nil {
-		return nil, errors.New("write approval authority is required")
+		return errors.New("write approval authority is required")
 	}
 	mac, err := a.grantMAC(grant)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	authorityID, err := a.authorityID()
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if !constantStringEqual(mac, grant.MAC) || !constantStringEqual(authorityID, grant.AuthorityID) {
-		return nil, errors.New("write approval grant authentication failed")
+		return errors.New("write approval grant authentication failed")
 	}
 	if grant.Version != writeApprovalGrantVersion || strings.TrimSpace(grant.Nonce) == "" {
-		return nil, errors.New("write approval grant is invalid")
+		return errors.New("write approval grant is invalid")
 	}
 	now := time.Now().UTC()
 	if grant.IssuedAt.IsZero() || grant.ExpiresAt.IsZero() || !grant.ExpiresAt.After(grant.IssuedAt) || now.Before(grant.IssuedAt) || !now.Before(grant.ExpiresAt) {
-		return nil, errors.New("write approval grant has expired or is not active")
+		return errors.New("write approval grant has expired or is not active")
 	}
 	if !sameGrantBinding(grant, expected) {
-		return nil, errors.New("write approval grant does not match the approved plan")
+		return errors.New("write approval grant does not match the approved plan")
 	}
 	if !constantStringEqual(grant.ApprovalTokenHash, hashApprovalToken(expected.ApprovalToken)) {
-		return nil, errors.New("approval token is invalid")
+		return errors.New("approval token is invalid")
 	}
 	switch a.kind {
 	case writeApprovalAuthorityFixture:
 		if grant.Target.Scope != WriteApprovalScopeFixture {
-			return nil, errors.New("fixture write approval scope is invalid")
+			return errors.New("fixture write approval scope is invalid")
 		}
 		if a.consumed == nil {
-			return nil, errors.New("fixture write approval consumption registry is unavailable")
+			return errors.New("fixture write approval consumption registry is unavailable")
 		}
-		consumptionID := grant.AuthorityID + "\x00" + grant.Nonce + "\x00" + grant.MAC
-		if _, consumed := a.consumed.grants.LoadOrStore(consumptionID, struct{}{}); consumed {
-			return nil, ErrWriteApprovalConsumed
+		if _, consumed := a.consumed.grants.Load(writeApprovalConsumptionID(grant)); consumed {
+			return ErrWriteApprovalConsumed
 		}
 	case writeApprovalAuthorityUntrusted:
 	default:
-		return nil, errors.New("write approval authority is invalid")
+		return errors.New("write approval authority is invalid")
+	}
+	return nil
+}
+
+func (a *WriteApprovalAuthority) VerifyWriteGrant(grant WriteApprovalGrant, expected WriteApprovalExpectation) (*WriteApprovalEvidence, error) {
+	if err := a.ValidateWriteGrant(grant, expected); err != nil {
+		return nil, err
+	}
+	if a.kind == writeApprovalAuthorityFixture {
+		if _, consumed := a.consumed.grants.LoadOrStore(writeApprovalConsumptionID(grant), struct{}{}); consumed {
+			return nil, ErrWriteApprovalConsumed
+		}
 	}
 	return &WriteApprovalEvidence{
 		target:        grant.Target,
@@ -331,12 +343,20 @@ func (a *WriteApprovalAuthority) VerifyWriteGrant(grant WriteApprovalGrant, expe
 	}, nil
 }
 
-func (e *WriteApprovalEvidence) Authorize(target WriteApprovalTarget, previewDigest string, now time.Time) error {
+func writeApprovalConsumptionID(grant WriteApprovalGrant) string {
+	return grant.AuthorityID + "\x00" + grant.Nonce + "\x00" + grant.MAC
+}
+
+// Validate proves that evidence still matches the prepared write and has not
+// expired. It deliberately does not consume the single-use evidence, allowing
+// a destination to recheck the authorization at each mutation boundary after
+// the orchestrator consumed it during planning.
+func (e *WriteApprovalEvidence) Validate(target WriteApprovalTarget, previewDigest string, now time.Time) error {
 	if e == nil {
 		return errors.New("authenticated write approval evidence is required")
 	}
 	if e.project != nil {
-		return e.project.AuthorizeProjectWrite(target, previewDigest, now)
+		return e.project.ValidateProjectWrite(target, previewDigest, now)
 	}
 	if e.use == nil {
 		return errors.New("authenticated write approval evidence is required")
@@ -352,6 +372,19 @@ func (e *WriteApprovalEvidence) Authorize(target WriteApprovalTarget, previewDig
 	}
 	if !now.UTC().Before(e.expiresAt) {
 		return errors.New("write approval evidence has expired")
+	}
+	return nil
+}
+
+func (e *WriteApprovalEvidence) Authorize(target WriteApprovalTarget, previewDigest string, now time.Time) error {
+	if e == nil {
+		return errors.New("authenticated write approval evidence is required")
+	}
+	if e.project != nil {
+		return e.project.AuthorizeProjectWrite(target, previewDigest, now)
+	}
+	if err := e.Validate(target, previewDigest, now); err != nil {
+		return err
 	}
 	if !e.use.consumed.CompareAndSwap(false, true) {
 		return errors.New("write approval evidence has already been consumed")

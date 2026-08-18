@@ -247,6 +247,9 @@ func RunBatch(ctx context.Context, opts BatchOptions) (BatchReport, error) {
 			defer func() { <-sem }()
 
 			runnerOpts := optionsFromCredsEntry(name, opts.CredsFile, entry)
+			if opts.BatchDir != "" {
+				runnerOpts.LedgerRoot = filepath.Join(opts.BatchDir, certificationsDirName, "ledger", name)
+			}
 			runner := opts.RunnerFactory(name, runnerOpts)
 			rep, runErr := runner.Run(ctx)
 

@@ -31,9 +31,9 @@
       "percent": 100
     },
     "implementation": {
-      "implemented": 1464,
+      "implemented": 1454,
       "total": 1525,
-      "percent": 96
+      "percent": 95.34
     },
     "live_proof": {
       "proven": 0,
@@ -1047,7 +1047,8 @@
       },
       "pm": {
         "commands": [
-          "graphql mutation add-project-v2-draft-issue"
+          "graphql mutation add-project-v2-draft-issue",
+          "projects create-draft-item-for-authenticated-user"
         ],
         "operation_ids": [
           "github.graphql.mutation.add-project-v2-draft-issue"
@@ -8248,7 +8249,8 @@
       },
       "pm": {
         "commands": [
-          "graphql mutation mark-pull-request-ready-for-review"
+          "graphql mutation mark-pull-request-ready-for-review",
+          "pr ready"
         ],
         "operation_ids": [
           "github.graphql.mutation.mark-pull-request-ready-for-review"
@@ -8675,7 +8677,8 @@
       },
       "pm": {
         "commands": [
-          "graphql mutation pin-issue"
+          "graphql mutation pin-issue",
+          "issue pin"
         ],
         "operation_ids": [
           "github.graphql.mutation.pin-issue"
@@ -12398,7 +12401,8 @@
       },
       "pm": {
         "commands": [
-          "graphql mutation unpin-issue"
+          "graphql mutation unpin-issue",
+          "issue unpin"
         ],
         "operation_ids": [
           "github.graphql.mutation.unpin-issue"
@@ -18445,7 +18449,7 @@
           "WorkflowRun",
           "WorkflowRunFile"
         ],
-        "state": "fixed_typename_projection"
+        "state": "fixed_projection_only"
       }
     },
     {
@@ -19376,10 +19380,12 @@
       },
       "pm": {
         "commands": [
-          "graphql query repository-owner"
+          "graphql query repository-owner",
+          "repo list"
         ],
         "operation_ids": [
-          "github.graphql.query.repository-owner"
+          "github.graphql.query.repository-owner",
+          "github.repo.list"
         ],
         "mapping": "fixed-document binding"
       },
@@ -21036,12 +21042,13 @@
       },
       "pm": {
         "commands": [
-          "variable create"
+          "variable create",
+          "variable set"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "partially_implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -21668,6 +21675,7 @@
       },
       "pm": {
         "commands": [
+          "variable delete",
           "variable delete-2"
         ],
         "mapping": "declared PM command binding"
@@ -22028,7 +22036,8 @@
       },
       "pm": {
         "commands": [
-          "actions disable set"
+          "actions disable set",
+          "workflow disable"
         ],
         "mapping": "declared PM command binding"
       },
@@ -22073,7 +22082,8 @@
       },
       "pm": {
         "commands": [
-          "artifact download"
+          "artifact download",
+          "run download"
         ],
         "mapping": "declared PM command binding"
       },
@@ -22343,7 +22353,8 @@
       },
       "pm": {
         "commands": [
-          "actions enable set"
+          "actions enable set",
+          "workflow enable"
         ],
         "mapping": "declared PM command binding"
       },
@@ -22523,7 +22534,8 @@
       },
       "pm": {
         "commands": [
-          "actions caches view"
+          "actions caches view",
+          "cache list"
         ],
         "mapping": "declared PM command binding"
       },
@@ -24458,7 +24470,8 @@
       },
       "pm": {
         "commands": [
-          "actions variables view-2"
+          "actions variables view-2",
+          "variable get"
         ],
         "mapping": "declared PM command binding"
       },
@@ -25808,7 +25821,8 @@
       },
       "pm": {
         "commands": [
-          "actions secrets view"
+          "actions secrets view",
+          "secret list"
         ],
         "mapping": "declared PM command binding"
       },
@@ -25853,7 +25867,8 @@
       },
       "pm": {
         "commands": [
-          "actions variables view"
+          "actions variables view",
+          "variable list"
         ],
         "mapping": "declared PM command binding"
       },
@@ -28103,7 +28118,8 @@
       },
       "pm": {
         "commands": [
-          "actions set-selected-repos-for-org-secret"
+          "actions set-selected-repos-for-org-secret",
+          "agents set-selected-repos-for-org-secret"
         ],
         "mapping": "declared PM command binding"
       },
@@ -28148,7 +28164,8 @@
       },
       "pm": {
         "commands": [
-          "actions set-selected-repos-for-org-variable"
+          "actions set-selected-repos-for-org-variable",
+          "agents set-selected-repos-for-org-variable"
         ],
         "mapping": "declared PM command binding"
       },
@@ -28508,7 +28525,8 @@
       },
       "pm": {
         "commands": [
-          "actions update-org-variable"
+          "actions update-org-variable",
+          "agents update-org-variable"
         ],
         "mapping": "declared PM command binding"
       },
@@ -28553,12 +28571,13 @@
       },
       "pm": {
         "commands": [
+          "variable set",
           "variable update"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "partially_implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30214,6 +30233,7 @@
       },
       "pm": {
         "commands": [
+          "agent-task list",
           "agent-tasks list-tasks"
         ],
         "mapping": "declared PM command binding"
@@ -31473,13 +31493,11 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [
-          "agents set-selected-repos-for-org-secret"
-        ],
-        "mapping": "declared PM command binding"
+        "commands": [],
+        "mapping": "generic connector binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "implemented_generic_only"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31518,13 +31536,11 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [
-          "agents set-selected-repos-for-org-variable"
-        ],
-        "mapping": "declared PM command binding"
+        "commands": [],
+        "mapping": "generic connector binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "implemented_generic_only"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31563,13 +31579,11 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [
-          "agents update-org-variable"
-        ],
-        "mapping": "declared PM command binding"
+        "commands": [],
+        "mapping": "generic connector binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "implemented_generic_only"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -37637,6 +37651,7 @@
       },
       "pm": {
         "commands": [
+          "codespace create",
           "codespaces create-from-pull-request",
           "codespaces create-from-repository"
         ],
@@ -38673,6 +38688,7 @@
       },
       "pm": {
         "commands": [
+          "codespace list",
           "codespaces list-for-authenticated-user"
         ],
         "mapping": "declared PM command binding"
@@ -44519,12 +44535,13 @@
       },
       "pm": {
         "commands": [
+          "gist create",
           "gists create"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "partially_implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44879,6 +44896,7 @@
       },
       "pm": {
         "commands": [
+          "gist list",
           "gists list"
         ],
         "mapping": "declared PM command binding"
@@ -45953,7 +45971,8 @@
       },
       "pm": {
         "commands": [
-          "gitignore get-all-templates"
+          "gitignore get-all-templates",
+          "repo gitignore list"
         ],
         "mapping": "declared PM command binding"
       },
@@ -47480,12 +47499,13 @@
       },
       "pm": {
         "commands": [
+          "label clone",
           "label create"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "partially_implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48687,12 +48707,13 @@
       },
       "pm": {
         "commands": [
+          "label clone",
           "label list"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "partially_implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49669,7 +49690,8 @@
       },
       "pm": {
         "commands": [
-          "licenses get-all-commonly-used"
+          "licenses get-all-commonly-used",
+          "repo license list"
         ],
         "mapping": "declared PM command binding"
       },
@@ -53855,6 +53877,7 @@
       },
       "pm": {
         "commands": [
+          "org list",
           "orgs list-for-authenticated-user"
         ],
         "mapping": "declared PM command binding"
@@ -57641,13 +57664,11 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [
-          "projects create-draft-item-for-authenticated-user"
-        ],
-        "mapping": "declared PM command binding"
+        "commands": [],
+        "mapping": "no typed PM command"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "blocked"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -57669,6 +57690,11 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
+      },
+      "blocker": {
+        "category": "existing_bundle_block",
+        "reason": "The source-lock REST route returned 404 in live certification; the declared projects create-draft-item-for-authenticated-user command covers the same mutation through fixed GraphQL addProjectV2DraftIssue.",
+        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -59211,6 +59237,7 @@
       },
       "pm": {
         "commands": [
+          "pr diff",
           "pr view",
           "pulls view"
         ],
@@ -61545,7 +61572,8 @@
       },
       "pm": {
         "commands": [
-          "autolinks create"
+          "autolinks create",
+          "repo autolink create"
         ],
         "mapping": "declared PM command binding"
       },
@@ -62840,7 +62868,8 @@
       },
       "pm": {
         "commands": [
-          "autolinks delete"
+          "autolinks delete",
+          "repo autolink delete"
         ],
         "mapping": "declared PM command binding"
       },
@@ -66165,6 +66194,7 @@
       },
       "pm": {
         "commands": [
+          "release download",
           "releases assets view"
         ],
         "mapping": "declared PM command binding"
@@ -69914,12 +69944,13 @@
       },
       "pm": {
         "commands": [
+          "release upload",
           "releases assets view-3"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented"
+        "state": "partially_implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74465,6 +74496,7 @@
       },
       "pm": {
         "commands": [
+          "gpg-key list",
           "users list-gpg-keys-for-authenticated-user"
         ],
         "mapping": "declared PM command binding"
@@ -74645,6 +74677,7 @@
       },
       "pm": {
         "commands": [
+          "ssh-key list",
           "users list-public-ssh-keys-for-authenticated-user"
         ],
         "mapping": "declared PM command binding"

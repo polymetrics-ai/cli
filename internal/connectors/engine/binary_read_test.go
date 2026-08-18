@@ -515,6 +515,7 @@ func TestOperationsSchemaAcceptsBinaryPolicyFields(t *testing.T) {
 		"output_policy": "binary_file_bounded",
 		"binary": map[string]any{
 			"method": "GET", "path": "/files/{id}", "max_bytes": 1024,
+			"accept":           "application/pdf",
 			"allow_cross_host": true, "allowed_hosts": []any{"cdn.example"},
 			"content_types": []any{"application/pdf"}, "stall_timeout_seconds": 30,
 		},

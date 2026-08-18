@@ -1,0 +1,358 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:graphql_mutation_enable_pull_request_auto_merge",
+  "provider": "github",
+  "executed_at": "2026-08-18T05:25:55.145507Z",
+  "run_id": "github-mut-slice1-enable-pull-request-auto-merge-rrun_bc9410fe497d7869",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "60bb0f4e3e2dd34fb9e6814ae3c55e871f36423a64f797e2f2ff6d157d3baca3",
+    "pm_command_fingerprint": "{{pmcertfp:v1:3cb435497a34f8105dc12cdb0fa8261aaf880f236442bfd6ea993f4ebbbdd630}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c69a0c62efe2447b81626070d54710b33d85105654c968e5a2717c367bc6bb8a}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "graphql_mutation_enable_pull_request_auto_merge",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:26b7389cedd9b087df53b3a0bac0b137a5296b62f9de54ef5b7217bb498ba066}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "operationName": "{{pmcertfp:v1:9be1fc5468774074d74970e916a3aa19cb05859b8b9b009950389806c4bb76be}}",
+              "query": "{{pmcertfp:v1:a1830d83d48fec5cf41deaea29fc395d3a3afaa641ef76086ee4341ec5564e73}}",
+              "variables": {
+                "input": {
+                  "pullRequestId": "{{pmcertfp:v1:e138cdb09a745d8fc6b33215d62246872c951a919d561036fc26b55ebc2f64eb}}",
+                  "expectedHeadOid": "{{pmcertfp:v1:69d90b7e9e9cec6ca5c653aa8aa30fc866d872aa0a2d2748be4d0cdc1a9128b3}}",
+                  "mergeMethod": "{{pmcertfp:v1:3d0d70467cafe0863b13e16a34f950a11a02a03089aad520209c8393cd7652dd}}"
+                }
+              }
+            },
+            "original_bytes": 375,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "enablePullRequestAutoMerge": {
+                "__typename": "{{pmcertfp:v1:f144799edf63ecd020998de812abe4be4ff6c01c7b0b8ef592f46b884b6ff248}}"
+              }
+            },
+            "original_bytes": 81,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "agent_derived_readback_auto_merge_exact_method",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:afc8dfa7ee7845480c6391d17dbe90ba37c3b042bd431944e13c454ae1fcbbc3}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:e138cdb09a745d8fc6b33215d62246872c951a919d561036fc26b55ebc2f64eb}}"
+              }
+            },
+            "original_bytes": 184,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": {
+                  "id": "{{pmcertfp:v1:e138cdb09a745d8fc6b33215d62246872c951a919d561036fc26b55ebc2f64eb}}",
+                  "number": "{{pmcertfp:v1:2d394220747c9b5a87365954497d48cc91bf0a0bb9b7b8678d28718c35b195b9}}",
+                  "state": "{{pmcertfp:v1:66dc6fbb3f73fe00194e74c8ad71106c5c19ee3ee541d31baa1e98385f752dbb}}",
+                  "autoMergeRequest": {
+                    "enabledAt": "{{pmcertfp:v1:3dc562e9e9077b1d4f90e03878548bd7d45ec0c008b4bf558b354bdbf12cfa62}}",
+                    "mergeMethod": "{{pmcertfp:v1:3d0d70467cafe0863b13e16a34f950a11a02a03089aad520209c8393cd7652dd}}"
+                  }
+                }
+              }
+            },
+            "original_bytes": 158,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_disable_pull_request_auto_merge_terminal_disposal",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:cfde2cd64eb9d472fad45e43f2af6b25994c5d321f116e2c1ab2a7fd17f16278}}",
+              "variables": {
+                "input": {
+                  "pullRequestId": "{{pmcertfp:v1:e138cdb09a745d8fc6b33215d62246872c951a919d561036fc26b55ebc2f64eb}}"
+                }
+              }
+            },
+            "original_bytes": 243,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "disablePullRequestAutoMerge": {
+                  "pullRequest": {
+                    "id": "{{pmcertfp:v1:e138cdb09a745d8fc6b33215d62246872c951a919d561036fc26b55ebc2f64eb}}",
+                    "number": "{{pmcertfp:v1:2d394220747c9b5a87365954497d48cc91bf0a0bb9b7b8678d28718c35b195b9}}",
+                    "autoMergeRequest": null
+                  }
+                }
+              }
+            },
+            "original_bytes": 127,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "cleanup_verified_absent",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:afc8dfa7ee7845480c6391d17dbe90ba37c3b042bd431944e13c454ae1fcbbc3}}",
+              "variables": {
+                "id": "{{pmcertfp:v1:e138cdb09a745d8fc6b33215d62246872c951a919d561036fc26b55ebc2f64eb}}"
+              }
+            },
+            "original_bytes": 184,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "node": {
+                  "id": "{{pmcertfp:v1:e138cdb09a745d8fc6b33215d62246872c951a919d561036fc26b55ebc2f64eb}}",
+                  "number": "{{pmcertfp:v1:2d394220747c9b5a87365954497d48cc91bf0a0bb9b7b8678d28718c35b195b9}}",
+                  "state": "{{pmcertfp:v1:66dc6fbb3f73fe00194e74c8ad71106c5c19ee3ee541d31baa1e98385f752dbb}}",
+                  "autoMergeRequest": null
+                }
+              }
+            },
+            "original_bytes": 103,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_close_pull_request_container",
+        "request": {
+          "method": "POST",
+          "target": "{{pmcertfp:v1:ef642338b2fa4e22e038be620eab610d78eb7b8b3a025855796c92d1aeeb9e4c}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "query": "{{pmcertfp:v1:6c75584f62764996fb55dc6e6edf2d1f6b5264bb97f221b84b701b9cea828c79}}",
+              "variables": {
+                "input": {
+                  "pullRequestId": "{{pmcertfp:v1:e138cdb09a745d8fc6b33215d62246872c951a919d561036fc26b55ebc2f64eb}}",
+                  "state": "{{pmcertfp:v1:a87e08e7b07fedee424da4e92b0f21c4c143942b57fb428a4811b288ccf9afd4}}"
+                }
+              }
+            },
+            "original_bytes": 214,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "data": {
+                "updatePullRequest": {
+                  "pullRequest": {
+                    "id": "{{pmcertfp:v1:e138cdb09a745d8fc6b33215d62246872c951a919d561036fc26b55ebc2f64eb}}",
+                    "number": "{{pmcertfp:v1:2d394220747c9b5a87365954497d48cc91bf0a0bb9b7b8678d28718c35b195b9}}",
+                    "state": "{{pmcertfp:v1:a87e08e7b07fedee424da4e92b0f21c4c143942b57fb428a4811b288ccf9afd4}}"
+                  }
+                }
+              }
+            },
+            "original_bytes": 110,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_required_check_ruleset_container",
+        "request": {
+          "method": "DELETE",
+          "target": "{{pmcertfp:v1:aa1bdbdd7443f67941b009a66fc27d1561827a8771e1f8020acb3b6b25962d21}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 204,
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "ruleset_container_cleanup_verified_absent",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:aa1bdbdd7443f67941b009a66fc27d1561827a8771e1f8020acb3b6b25962d21}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 404,
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "direct_provider_delete_pull_request_branch_container",
+        "request": {
+          "method": "DELETE",
+          "target": "{{pmcertfp:v1:05b25cc6d2a643a158b5eff3913df84440fd40b63148b508d946a7a2b69e1e85}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 204,
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "branch_container_cleanup_verified_absent",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:05b25cc6d2a643a158b5eff3913df84440fd40b63148b508d946a7a2b69e1e85}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 404,
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        }
+      },
+      {
+        "operation": "restore_repository_auto_merge_setting",
+        "request": {
+          "method": "PATCH",
+          "target": "{{pmcertfp:v1:0f29ac161107b91febd51fdb73da4d137d20a9083bd6927d06f133178b9774d3}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "allow_auto_merge": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}"
+            },
+            "original_bytes": 26,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "allow_auto_merge": "{{pmcertfp:v1:b8f4596de529272196ebb99aaea774d22ac38d605f056d1761fb150755e5c847}}"
+            },
+            "original_bytes": 26,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

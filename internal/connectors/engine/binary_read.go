@@ -159,6 +159,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		return BinaryDownloadResult{}, err
 	}
 	resp, err := requester.DoStream(ctx, http.MethodGet, requestPath, query, connsdk.StreamOptions{
+		Accept:         spec.Accept,
 		AllowCrossHost: spec.AllowCrossHost,
 		AllowedHosts:   spec.AllowedHosts,
 	})
@@ -171,7 +172,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		if class != "" {
 			msg = class + ": " + msg
 		}
-		return BinaryDownloadResult{}, fmt.Errorf("binary download GET %s: %s", spec.Path, msg)
+		return BinaryDownloadResult{}, formatResponseError(fmt.Sprintf("binary download GET %s: %s", spec.Path, msg), err)
 	}
 	defer func() { _ = resp.Body.Close() }()
 

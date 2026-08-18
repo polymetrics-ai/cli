@@ -1,0 +1,14 @@
+Command:
+
+    go test -timeout 20m -count=1 ./internal/connectors/database -run 'TestIncrementalDedupeHistoryRefusesEachNonPostgresRouteBeforeSessionMutation'
+
+Result before implementation:
+
+    undefined: database.DatabaseWriteHistoryRoute
+    undefined: database.DatabaseWriteHistoryRouteReason
+    unknown field HistoryRoute in struct literal of type database.DatabaseWritePlanRequest
+    undefined: database.DatabaseWriteHistoryRouteError
+
+The failing test defines the missing typed, sealed source/destination route
+gate. It also asserts that no fake driver/session/ledger operation can happen
+while a non-PostgreSQL history route is rejected.

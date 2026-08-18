@@ -127,11 +127,41 @@ func TestRenderScheduleCommandsIncludeRoot(t *testing.T) {
 		"<string>/opt/Poly Metrics/pm</string>",
 		"<string>--root</string>",
 		"<string>/tmp/polymetrics root</string>",
+		"<string>flow</string>",
+		"<string>run</string>",
 		"<string>nightly-flow</string>",
 	} {
 		if !strings.Contains(plist, fragment) {
 			t.Fatalf("launchd plist missing %q\ngot:\n%s", fragment, plist)
 		}
+	}
+}
+
+func TestRenderScheduleCommandsCarryNoAuthorizationMaterial(t *testing.T) {
+	manifest := nightlyManifest
+	const forbiddenReference = "auth_abcdef0123456789"
+	const forbiddenToken = "approval-token-fixture"
+	const forbiddenSecret = "fixture-secret-value"
+
+	for name, render := range map[string]func() (string, error){
+		"crontab": func() (string, error) { return renderCrontabLine(manifest, testPmBin) },
+		"systemd": func() (string, error) { return renderService(manifest, testPmBin) },
+		"launchd": func() (string, error) { return renderPlist(manifest, testPmBin) },
+	} {
+		t.Run(name, func(t *testing.T) {
+			got, err := render()
+			if err != nil {
+				t.Fatalf("render: %v", err)
+			}
+			if !strings.Contains(got, "flow") || !strings.Contains(got, "run") || !strings.Contains(got, manifest.Flow) {
+				t.Fatalf("rendered payload did not invoke the existing flow: %q", got)
+			}
+			for _, forbidden := range []string{forbiddenReference, forbiddenToken, forbiddenSecret, "--authorization"} {
+				if strings.Contains(got, forbidden) {
+					t.Fatalf("rendered payload leaked %q: %q", forbidden, got)
+				}
+			}
+		})
 	}
 }
 

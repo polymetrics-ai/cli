@@ -15,6 +15,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/synccontract"
 )
 
 const (
@@ -407,30 +408,19 @@ func (d *Driver) stream(object Object, fields []Field) (connectors.Stream, error
 }
 
 func supportedSyncModes(hasPrimaryKey, hasCursor bool) []string {
-	modes := []string{"full_refresh_append", "full_refresh_overwrite"}
-	if hasPrimaryKey {
-		modes = append(modes, "full_refresh_overwrite_deduped")
-	}
-	if hasCursor {
-		modes = append(modes, "incremental_append")
-	}
-	if hasPrimaryKey && hasCursor {
-		modes = append(modes, "incremental_append_deduped")
-	}
-	return modes
+	return synccontract.SupportedPublicModeNames(discoveredSyncModeCapabilities(hasPrimaryKey, hasCursor))
 }
 
 func defaultSyncMode(hasPrimaryKey, hasCursor bool) string {
-	if hasPrimaryKey && hasCursor {
-		return "incremental_append_deduped"
+	return synccontract.DefaultPublicModeName(discoveredSyncModeCapabilities(hasPrimaryKey, hasCursor))
+}
+
+func discoveredSyncModeCapabilities(hasPrimaryKey, hasCursor bool) synccontract.PublicModeCapabilities {
+	return synccontract.PublicModeCapabilities{
+		HasPrimaryKey:          hasPrimaryKey,
+		HasCursor:              hasCursor,
+		HasIncrementalExecutor: hasCursor,
 	}
-	if hasCursor {
-		return "incremental_append"
-	}
-	if hasPrimaryKey {
-		return "full_refresh_overwrite_deduped"
-	}
-	return "full_refresh_append"
 }
 
 func (d *Driver) primaryKey(object Object, known map[string]Field) []string {

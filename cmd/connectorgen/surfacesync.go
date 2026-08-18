@@ -15,9 +15,8 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-// surfaceSync derives the command-surface metadata that operation-backed
-// direct_read, direct_write, and binary_download commands need in order to
-// actually execute, from the bundle's own operations.json.
+// surfaceSync derives the command-surface metadata that executable commands
+// need in order to actually execute, from the bundle's own declarations.
 //
 // It exists because the same facts previously had to be hand-copied into
 // cli_surface.json, and hand-copying is what let 174 commands claim
@@ -33,13 +32,17 @@ import (
 // filled, or a hand-edited api_surface would pass --check clean while help,
 // docs and the website advertised an endpoint the executor never calls:
 //
-//   - api_surface  <- the operation's endpoint method + path, taken from the
-//     block its kind declares (rest for direct_read and direct_write, binary
-//     for binary_download). The endpoint is already tracked in
-//     api_surface.json, so this is a join across consistent files, never an
-//     invented endpoint.
+//   - api_surface  <- any command's declared endpoint summary, independent of
+//     its intent. A raw `METHOD /path` summary is an imported address, not a
+//     human description; an optional write-action annotation is ignored. The
+//     parsed endpoint must already appear in api_surface.json, so this is a
+//     join across consistent files, never an invented endpoint. An
+//     operation-backed endpoint remains an authoritative, more specific source
+//     for direct_read, direct_write, and binary_download.
 //   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
 //     that endpoint's path.
+//   - flags[].required <- true when the mapped REST path parameter is declared
+//     required. A caller cannot supply a required path input by another route.
 //
 // DEFAULTED — the bundle author's value wins; only an absent or unusable one is
 // replaced:
@@ -57,9 +60,9 @@ import (
 //     non-positive, matching the direct operation executors' default. A
 //     positive value is the operation's own declaration and is left alone.
 //
-// It never touches a command that is not an implemented operation-backed
-// direct_read, direct_write, or binary_download, and never invents an endpoint
-// for an operation that does not declare one.
+// It never touches a command that is not implemented, and never invents an
+// endpoint: a command must declare a parseable endpoint summary or an
+// operation endpoint before api_surface can be synchronized.
 const (
 	// defaultDirectReadOutputPolicy mirrors engine.directReadPolicyJSONRedacted.
 	defaultDirectReadOutputPolicy = "json_redacted"
@@ -69,28 +72,36 @@ const (
 
 var surfacePathVarRE = regexp.MustCompile(`\{([^}]+)\}`)
 
-// surfaceSyncFields counts one outcome across the four synced fields.
+// surfaceSummaryEndpointRE identifies the source-material form used when a
+// command has an endpoint but no operation-backed transport. The optional
+// annotation names the write action that produced the row; it is not part of
+// the provider address.
+var surfaceSummaryEndpointRE = regexp.MustCompile(`^([A-Z]+) (\/[^[:space:]]+)(?: \([^)]*\))?$`)
+
+// surfaceSyncFields counts one outcome across the synced fields.
 type surfaceSyncFields struct {
 	APISurface   int
 	OutputPolicy int
 	FlagMapsTo   int
+	FlagRequired int
 	FlagDerived  int
 	MaxBytes     int
 }
 
 func (f surfaceSyncFields) total() int {
-	return f.APISurface + f.OutputPolicy + f.FlagMapsTo + f.FlagDerived + f.MaxBytes
+	return f.APISurface + f.OutputPolicy + f.FlagMapsTo + f.FlagRequired + f.FlagDerived + f.MaxBytes
 }
 
 func (f surfaceSyncFields) String() string {
-	return fmt.Sprintf("api_surface=%d output_policy=%d flag_maps_to=%d flag_derived=%d rest.max_bytes=%d",
-		f.APISurface, f.OutputPolicy, f.FlagMapsTo, f.FlagDerived, f.MaxBytes)
+	return fmt.Sprintf("api_surface=%d output_policy=%d flag_maps_to=%d flag_required=%d flag_derived=%d rest.max_bytes=%d",
+		f.APISurface, f.OutputPolicy, f.FlagMapsTo, f.FlagRequired, f.FlagDerived, f.MaxBytes)
 }
 
 func (f *surfaceSyncFields) add(other surfaceSyncFields) {
 	f.APISurface += other.APISurface
 	f.OutputPolicy += other.OutputPolicy
 	f.FlagMapsTo += other.FlagMapsTo
+	f.FlagRequired += other.FlagRequired
 	f.FlagDerived += other.FlagDerived
 	f.MaxBytes += other.MaxBytes
 }
@@ -261,6 +272,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 
 	cliPath := filepath.Join(dir, "cli_surface.json")
 	opsPath := filepath.Join(dir, "operations.json")
+	apiSurfacePath := filepath.Join(dir, "api_surface.json")
 	cliRaw, err := os.ReadFile(cliPath)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -284,6 +296,10 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 	if err := json.Unmarshal(opsRaw, &ops); err != nil {
 		return stats, fmt.Errorf("operations.json: %w", err)
 	}
+	declaredEndpoints, err := declaredAPISurfaceEndpoints(apiSurfacePath)
+	if err != nil {
+		return stats, err
+	}
 
 	opsByID := map[string]*orderedObject{}
 	for _, raw := range arrayField(ops.root, "operations") {
@@ -301,11 +317,16 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		if !ok {
 			continue
 		}
-		intent := stringField(cmd, "intent")
-		if intent != "direct_read" && intent != "direct_write" && intent != "binary_download" {
+		if stringField(cmd, "availability") != "implemented" {
 			continue
 		}
-		if stringField(cmd, "availability") != "implemented" {
+		if method, endpointPath, ok := surfaceEndpointFromSummary(stringField(cmd, "summary")); ok &&
+			declaredEndpoints[surfaceEndpointKey(method, endpointPath)] {
+			synchronizeCommandAPISurface(cmd, method, endpointPath, &stats)
+		}
+
+		intent := stringField(cmd, "intent")
+		if intent != "direct_read" && intent != "direct_write" && intent != "binary_download" {
 			continue
 		}
 		if intent == "direct_read" {
@@ -353,19 +374,9 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			continue
 		}
 
-		// DERIVED: the operation's endpoint is the only source, so a present
-		// api_surface that disagrees with it is drift and gets replaced. The
-		// schema allows exactly method and path on an entry, so replacing the
-		// whole array loses nothing an author could have written.
-		existing := arrayField(cmd, "api_surface")
-		switch {
-		case len(existing) == 0:
-			cmd.set("api_surface", derivedAPISurface(method, endpointPath))
-			stats.Filled.APISurface++
-		case len(existing) != 1 || !endpointMatches(existing[0], method, endpointPath):
-			cmd.set("api_surface", derivedAPISurface(method, endpointPath))
-			stats.Corrected.APISurface++
-		}
+		// DERIVED: the operation endpoint is authoritative for operation-backed
+		// commands, so it corrects an imported summary endpoint if they diverge.
+		synchronizeCommandAPISurface(cmd, method, endpointPath, &stats)
 
 		// A direct write's response policy is part of the operation's own
 		// preview-bound contract, so it must exactly match. Direct reads use a
@@ -431,6 +442,16 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			stats.Filled.FlagDerived += deriveCommandParameterFlags(cmd, block)
 		}
 
+		// DERIVED: a REST path parameter marked required is an executable
+		// command input, not a display preference. Its mapped CLI flag must
+		// therefore be required before commandrunner attempts path
+		// interpolation or creates a provider request. This intentionally
+		// applies to every REST operation kind and every connector, while
+		// leaving query/body requiredness to their own declared contracts.
+		filled, corrected := deriveRequiredPathFlagRequiredness(cmd, block)
+		stats.Filled.FlagRequired += filled
+		stats.Corrected.FlagRequired += corrected
+
 		// DEFAULTED for REST direct operations: a binary_download operation
 		// must declare its own positive max_bytes at bundle load, and a
 		// positive rest.max_bytes is the operation's own declaration rather
@@ -462,6 +483,63 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		}
 	}
 	return stats, nil
+}
+
+// surfaceEndpointFromSummary extracts the declared provider endpoint from the
+// source-material summary form. Friendly human summaries intentionally do not
+// match, so an ergonomic alias with no one-to-one endpoint remains unbound.
+func surfaceEndpointFromSummary(summary string) (method, path string, ok bool) {
+	parts := surfaceSummaryEndpointRE.FindStringSubmatch(strings.TrimSpace(summary))
+	if len(parts) != 3 {
+		return "", "", false
+	}
+	return parts[1], parts[2], true
+}
+
+// declaredAPISurfaceEndpoints records the canonical endpoint set already
+// declared by the bundle. A raw summary with sentence punctuation is not an
+// endpoint declaration, so it cannot silently invent a binding merely because
+// it resembles one.
+func declaredAPISurfaceEndpoints(path string) (map[string]bool, error) {
+	endpoints := map[string]bool{}
+	raw, err := os.ReadFile(path)
+	if os.IsNotExist(err) {
+		return endpoints, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("api_surface.json: %w", err)
+	}
+	var surface orderedJSON
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		return nil, fmt.Errorf("api_surface.json: %w", err)
+	}
+	for _, rawEndpoint := range arrayField(surface.root, "endpoints") {
+		endpoint, ok := rawEndpoint.(*orderedObject)
+		if !ok {
+			continue
+		}
+		method := strings.ToUpper(strings.TrimSpace(stringField(endpoint, "method")))
+		endpointPath := stringField(endpoint, "path")
+		if method != "" && endpointPath != "" {
+			endpoints[surfaceEndpointKey(method, endpointPath)] = true
+		}
+	}
+	return endpoints, nil
+}
+
+// synchronizeCommandAPISurface applies one declaration-owned endpoint to a
+// command. The schema allows exactly method and path on an entry, so replacing
+// a divergent array loses no author-owned field.
+func synchronizeCommandAPISurface(cmd *orderedObject, method, path string, stats *surfaceSyncStats) {
+	existing := arrayField(cmd, "api_surface")
+	switch {
+	case len(existing) == 0:
+		cmd.set("api_surface", derivedAPISurface(method, path))
+		stats.Filled.APISurface++
+	case len(existing) != 1 || !endpointMatches(existing[0], method, path):
+		cmd.set("api_surface", derivedAPISurface(method, path))
+		stats.Corrected.APISurface++
+	}
 }
 
 // removeLegacyDirectReadCursorFlags removes old raw provider-cursor flags from
@@ -652,6 +730,50 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 		cmd.set("flags", flags)
 	}
 	return added
+}
+
+// deriveRequiredPathFlagRequiredness synchronizes requiredness for flags that
+// resolve REST path parameters. A required path cannot be supplied by any
+// other command input, so leaving its mapped flag optional defers a caller
+// mistake until interpolation or provider I/O. Query and body parameters have
+// distinct contracts and are deliberately not changed here.
+func deriveRequiredPathFlagRequiredness(cmd, rest *orderedObject) (filled, corrected int) {
+	requiredPathParameters := map[string]bool{}
+	for _, raw := range arrayField(rest, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok || stringField(parameter, "in") != "path" {
+			continue
+		}
+		required, _ := parameter.get("required")
+		if required == true {
+			requiredPathParameters[stringField(parameter, "name")] = true
+		}
+	}
+	if len(requiredPathParameters) == 0 {
+		return 0, 0
+	}
+
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		parameter, mapped := strings.CutPrefix(strings.TrimSpace(stringField(flag, "maps_to")), "path.")
+		if !mapped || !requiredPathParameters[parameter] {
+			continue
+		}
+		required, present := flag.get("required")
+		if required == true {
+			continue
+		}
+		flag.set("required", true)
+		if present {
+			corrected++
+		} else {
+			filled++
+		}
+	}
+	return filled, corrected
 }
 
 // derivedFlagType maps a provider parameter type onto the command surface's own

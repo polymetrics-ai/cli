@@ -44,7 +44,7 @@ ETL STREAMS
     fields: category_id(string), group(string), hierarchy(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
   read risk: external Plaid API read of institution/category metadata

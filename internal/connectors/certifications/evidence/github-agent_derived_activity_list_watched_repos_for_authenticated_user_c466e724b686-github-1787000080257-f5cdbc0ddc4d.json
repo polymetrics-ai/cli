@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:agent_derived_activity_list_watched_repos_for_authenticated_user_c466e724b686",
+  "provider": "github",
+  "executed_at": "2026-08-17T20:58:26.315Z",
+  "run_id": "github-1787000080257-f5cdbc0ddc4d-agent_derived_activity_list_watched_repos_for_authenticated_user_c466e724b686",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:ff7d90009524019a21c62ff303bcbc7cfdafb2c004aa05acf76a3d315a2faeb6}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:agent_derived_activity_list_watched_repos_for_authenticated_user_c466e724b686",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:f2920cd0c3661780eed8e8b624b978c1fb8fd78f21b932c83d2753d1a33fe627}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [],
+            "original_bytes": 2,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

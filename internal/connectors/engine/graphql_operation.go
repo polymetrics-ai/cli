@@ -11,6 +11,7 @@ import (
 	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -636,12 +637,13 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 		if class != "" {
 			message = class + ": " + message
 		}
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST %s: %s", op.GraphQL.Path, message)
+		return connectors.DirectReadResult{}, formatResponseError(fmt.Sprintf("operation direct read POST %s: %s", op.GraphQL.Path, message), err)
 	}
 	data, metadata, err := graphQLOperationResponse(response.Body, maxBytes)
 	if err != nil {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read GraphQL response: %w", err)
 	}
+	observeGraphQLRateLimit(ctx, requester, response, data)
 	page, err := graphQLOperationPage(data, op.GraphQL.Pagination, metadata.PartialData)
 	if err != nil {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read GraphQL pagination: %w", err)
@@ -803,6 +805,60 @@ func graphQLRateLimit(data map[string]any) *connectors.GraphQLRateLimit {
 		return nil
 	}
 	return &connectors.GraphQLRateLimit{Limit: limit, Cost: cost, Remaining: remaining, ResetAt: resetAt}
+}
+
+// observeGraphQLRateLimit bridges the fixed response selection declared by a
+// GraphQL operation into the requester's typed observation seam. The data map
+// has already passed the operation's bounded JSON parser, and no caller can
+// supply another response path or raw provider body.
+func observeGraphQLRateLimit(ctx context.Context, requester *connsdk.Requester, response *connsdk.Response, data map[string]any) {
+	if requester == nil || response == nil {
+		return
+	}
+	observation, ok := graphQLRateLimitObservation(data)
+	if !ok {
+		return
+	}
+	requester.ObserveRateLimit(ctx, response, observation)
+}
+
+func graphQLRateLimitObservation(data map[string]any) (connsdk.RateLimitObservation, bool) {
+	raw, ok := data["rateLimit"].(map[string]any)
+	if !ok {
+		return connsdk.RateLimitObservation{}, false
+	}
+	limit, hasLimit := graphQLInt(raw["limit"])
+	cost, hasCost := graphQLInt(raw["cost"])
+	remaining, hasRemaining := graphQLInt(raw["remaining"])
+	resetAt, hasReset := raw["resetAt"].(string)
+	var parsedResetAt time.Time
+	if hasReset {
+		var err error
+		parsedResetAt, err = time.Parse(time.RFC3339, resetAt)
+		if err != nil {
+			hasReset = false
+		}
+	}
+	if !hasLimit && !hasCost && !hasRemaining && !hasReset {
+		return connsdk.RateLimitObservation{}, false
+	}
+	observation := connsdk.RateLimitObservation{
+		Source:       connsdk.RateLimitObservationSourceBody,
+		Limit:        int64(limit),
+		HasLimit:     hasLimit,
+		Remaining:    int64(remaining),
+		HasRemaining: hasRemaining,
+		ResetAt:      parsedResetAt,
+		HasReset:     hasReset,
+		// GitHub's resetAt is an absolute timestamp.
+		ResetAtAbsolute: hasReset,
+	}
+	if hasCost {
+		observation.Cost = float64(cost)
+		observation.HasCost = true
+		observation.CostSource = connsdk.RateLimitCostSourceGraphQLRateLimit
+	}
+	return observation, true
 }
 
 func graphQLInt(value any) (int, bool) {

@@ -1,0 +1,35 @@
+# TDD Ledger — Generic Certification Evidence Importer
+
+## Planned red/green slices
+
+| Slice | Red: observable failing check | Green: implementation evidence |
+| --- | --- | --- |
+| Generic report importer | A completed HTTP-proof report cannot be imported to accepted evidence without the PostgreSQL-only command path. | A definition-derived source binding imports the report and the record validates/matches its matrix cell. |
+| Proof redaction | A planted header/query/body secret can be detected in the emitted record or a raw body survives serialization. | The generated record contains only allowed proof metadata/fingerprints and no planted value. |
+| Honest matrix accounting | A valid report with no accepted evidence can read as live-tested, or a corrupted record leaves its cell green. | Missing evidence stays red; corrupted evidence makes the named cell red; restoring the original record returns green. |
+| Connector agnosticism | A differently shaped source definition requires a new command branch. | The same generic importer handles a second definition-owned binding without shared connector identifiers. |
+
+## Red / green execution record
+
+_Append exact commands and results while executing; do not include secrets or provider payloads._
+
+- Red: `go test ./cmd/connectorgen -run TestCertificationEvidenceReportImport -count=1` — importer test not yet present; the existing command only accepts database-shaped `transport` and `change-capture` inputs.
+- Green: `go test -timeout 20m ./cmd/connectorgen -run 'TestCertificationEvidence(Report|Postgres)' -count=1` — pass; a definition-owned GitHub binding and a second Xero binding import the same validated external-proof shape, while the PostgreSQL database records still pass their existing contract tests.
+- Green: `go test -timeout 20m ./internal/connectors/certify -run 'Test(ReadExternalProof|WriteExternalProof)' -count=1` — pass; a deliberately corrupted raw response is rejected at the import boundary.
+- Red: a direct-read-only external-proof invocation was rejected before it could capture an otherwise valid bounded HTTP transcript, and an imported record would have been stamped with the wrong full-parity scope.
+- Green: `TestWriteExternalProofAcceptsObservedOperationsWithoutFullParity` and `TestCertificationEvidenceReportImportsDefinitionBoundHTTPProofWithoutSecrets` pass. The generic path writes schema-v2 `observed_operations` scope with `protocol_exchanges` proof; it does not make a full-parity claim.
+- Green: `TestCertificationEvidenceReportRefusesProofFromDifferentRun` makes a valid redacted proof fail when its fresh-child run ID does not derive from the completed report's start time; a report and its observed exchanges cannot be spliced across runs.
+- Red: `go test -timeout 20m ./cmd/connectorgen -run '^TestCertificationEvidenceReportRefusesIncompleteBindingsWithoutPartialPublication$' -count=1` — failed as expected: a later incomplete binding left the earlier `operation:rest_read` record on disk.
+- Green: the importer now validates every binding and output-path identity before opening a record. The same test leaves zero accepted records when its GraphQL binding is resumed.
+- Red: a synthetic secret-shaped string temporarily added to a valid `github/certification.json` `live_unavailable.contains` entry made `go run ./cmd/connectorgen validate internal/connectors/defs/github` exit 1 with `[secret_literal]`. An earlier placement in `source.default_stream` was rejected by meta-schema first and was immediately moved; it was not counted as the scanner proof.
+- Green: the synthetic value was removed with `apply_patch`; the same validation command returned `0 findings`. No credential value or fixture was committed.
+- Red: after temporarily changing the published PostgreSQL CDC record's `function_kind` from `capability:cdc` to `capability:read`, `go run ./cmd/connectorgen certification-matrix --connector postgres` regenerated the CDC cell as `live_tested=false, records=0`.
+- Green: restoring that one field and regenerating restored the same cell to `live_tested=true, records=1`; `git diff --exit-code db494bc8f -- internal/connectors/certifications/evidence` passed afterward.
+- Green: `go test -timeout 20m ./cmd/connectorgen ./internal/connectors/certify` — pass after the selector correction; the schema-v2 direct-read proof path and declaration-owned stage selector are exercised without connector-specific Go.
+- Green: `go run ./cmd/connectorgen certification-candidates --connector github` twice produced identical SHA-256 `114e9fba8ee7dc63bfd3816c113d131cff09b355ba775c9ef538f841877baab5`.
+- Red: a one-exchange proof was offered for the 120-stage GitHub REST binding.
+- Green: `TestCertificationEvidenceReportRequiresObservedExchangeForEachBoundStage` refuses it before any record is written; the successful fixture carries one redacted exchange per declared stage.
+- Red: CI job `95424260739` ran `make certify-timing` with the harness still at 16 real CLI invocations (within the 25-call budget), but `TestDirectReadCandidatesForGitHubAcceptsDeclaredStageSelection` returned all 120 candidates after it matched the final requested stage. The selection map becoming empty was incorrectly treated as though no selector had been supplied.
+- Green: `go test -timeout 20m ./internal/connectors/certify -run '^TestDirectReadCandidatesForGitHubAcceptsDeclaredStageSelection$' -count=1 -v` passes after retaining the independent selector-present state. `make certify-timing` passes in 21 seconds with 16 real CLI invocations (budget 25); no timing bound changed.
+- Red: newest Verify job `95429332235` completed `internal/cli` in 1082 seconds (under its 1200-second package ceiling) but failed four generated golden transcripts because the schema-v2 external-proof manual text changed without regenerating the fixture.
+- Green: added a validated `POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES` selector for targeted fixture regeneration. It preserves the normal all-transcript test path and rejects unknown/empty names. Regenerating `help_connectors`, `bare_connectors_manual`, `json_connectors_manual`, and `connectors_help_github_known_legacy_namespace_help_intercept` twice produced SHA-256 `ffe235d7ae35274de4de5d61bbf3d01301e25106efbd5d9349a938f76dc79045`; the selected normal validation passed. A full local corpus regeneration still hit its unchanged 20-minute test ceiling, so its complete check remains CI-owned.

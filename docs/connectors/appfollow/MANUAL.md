@@ -72,7 +72,7 @@ ETL STREAMS
     fields: avg_rating(number), country(string), date(string), ext_id(string), period(string), stars(integer), stars1(integer), stars2(integer), stars3(integer), stars4(integer), stars5(integer), store(string), total(integer), version(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   reply_to_review:

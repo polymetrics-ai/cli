@@ -257,9 +257,11 @@ This fact explained a defect nobody could see; do not rediscover it the hard way
 A `direct_read` command's flags come from the connector's own provider
 specification, not from authoring. `connectorgen params-import` writes the
 accepted parameter set into `operations.json` as `rest.parameters`;
-`surface-sync` derives the command flags from it and only ever ADDS, so a
-hand-authored flag is left as written. The split keeps CI hermetic —
-`surface-sync --check` needs no artifact and no network.
+`surface-sync` adds missing command flags and synchronizes their operation-owned
+mapping plus requiredness for a flag mapped to a required REST path parameter.
+It preserves author-owned summaries, types, and optional query/body behavior.
+The split keeps CI hermetic — `surface-sync --check` needs no artifact and no
+network.
 
 Never hand-author an opaque provider cursor (`cursor`, `start_cursor`,
 `page_token`, and equivalents). Navigation is answered by `--page` or
@@ -332,22 +334,27 @@ each parallel worker its own project directory; a shared one produces state-lock
 races that read as failures but are not.
 ## Database Connector Container Harness
 
-`internal/connectors/native/dbtest` is the reusable, Podman-backed live-test
-harness for native database connectors. MySQL's
+`internal/connectors/native/dbtest` is the reusable, Docker- or Podman-backed
+live-test harness for native database connectors. MySQL's
 `internal/connectors/native/mysql/mysql_integration_test.go` is the reference
 caller; add an engine through a `dbtest.Config`, not a copied harness. The
 invocation recipe and environment variables live in
 `internal/connectors/native/dbtest/README.md` — do not restate them here.
 
 - Live tests are build-tagged `databaseintegration` and opt-in: they visibly
-  skip before startup without their opt-in and explicit Podman endpoint, but
-  fail when enabled and the engine cannot be reached.
-- A direct local Unix Podman endpoint is mandatory; named connections and
-  remote endpoints are refused. Every Podman invocation uses that endpoint, so
-  the global default connection is never read or changed.
-- A harness run owns only its uniquely named container, volume, and run-specific
-  image reference. The pulled source image is shared and is never removed. Target
-  identity and image-store capacity must be proven before every Podman command.
+  skip before startup without their opt-in, but fail when enabled without an
+  explicit Docker-or-Podman runtime and matching endpoint or when the engine
+  cannot be reached.
+- A direct local Unix Docker or Podman endpoint is mandatory; named connections
+  and remote endpoints are refused. Every runtime invocation uses that endpoint
+  explicitly, so neither global default connection is ever read or changed.
+- A harness run owns only its uniquely named database container, its
+  container-bound anonymous data volume, run-specific image reference, and
+  (when a Docker VM needs it) its ephemeral
+  capacity probe. The pulled source/probe images are shared and never removed.
+  Target identity must be proven before every runtime command and image-store
+  capacity before the source-image pull. The maintainer guide owns Docker VM
+  probe configuration and safety details.
   Cleanup is unconditional and idempotent, including failure and
   interrupt paths, and stays armed until the last removal returns; keep engines
   sequential unless bounded parallelism is explicitly opted into.

@@ -17,6 +17,10 @@ import (
 // The zero value is the safe default: same-origin only, credentials attached.
 // Every widening is explicit and per-operation.
 type StreamOptions struct {
+	// Accept is a declaration-owned representation selector. It is never
+	// populated from caller input; binary operations use it for endpoints that
+	// require a fixed response media type.
+	Accept string
 	// AllowCrossHost permits a hop to ANY other origin. Credentials are
 	// stripped on such a hop regardless.
 	AllowCrossHost bool
@@ -79,12 +83,14 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 	// synchronously inside client.Do, so there is no sharing across calls.
 	var credKeys []string
 	requesterAttempt := 0
+	route := RateLimitRoute{}
+	costHeader := ""
 	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
 	baseClient := r.streamClient(base, opts, &credKeys)
 	if strictWrite {
 		baseClient = noReplayClient(baseClient)
 	}
-	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt)
+	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt, &route, &costHeader)
 
 	attempts := r.maxRetries() + 1
 	var lastErr error
@@ -98,6 +104,12 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			return nil, fmt.Errorf("build request: %w", err)
 		}
 		r.applyHeaders(req, false, "")
+		if opts.Accept != "" {
+			if strings.ContainsAny(opts.Accept, "\r\n") {
+				return nil, fmt.Errorf("invalid Accept header value")
+			}
+			req.Header.Set("Accept", opts.Accept)
+		}
 		// Snapshot the header keys auth contributes, so the redirect policy
 		// can strip exactly those on a cross-origin hop without having to
 		// know which scheme any given connector uses.
@@ -111,7 +123,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 		if r.DisableRetries {
 			disableTransportReplay(req, strictWrite)
 		}
-		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
+		if err := r.admitRequesterSend(ctx, req, &requesterAttempt, &route, &costHeader); err != nil {
 			return nil, err
 		}
 
@@ -129,13 +141,13 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			}
 			return nil, lastErr
 		}
-		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, requesterAttempt)
+		observation := r.observeRateLimit(ctx, route, resp.StatusCode, resp.Header, costHeader)
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			// Discard this attempt's body entirely; nothing from a failed
 			// attempt may reach the caller.
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
-			resp.Body.Close()
+			_ = resp.Body.Close()
 			lastErr = responseHTTPError(resp.StatusCode, fullURL, body, observation)
 			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
 				return nil, werr
@@ -145,7 +157,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
-			resp.Body.Close()
+			_ = resp.Body.Close()
 			return nil, responseHTTPError(resp.StatusCode, fullURL, body, observation)
 		}
 

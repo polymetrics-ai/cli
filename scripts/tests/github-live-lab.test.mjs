@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { chmod, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -26,6 +26,7 @@ import {
   resolveBoundLabLabel,
   resolveBoundLabIssue,
   resolveBootstrapRepositoryTarget,
+  runPMProcess,
   runPMScopedRead,
   runPMAccountBootstrapProbe,
   runPMPlannedWrite,
@@ -77,27 +78,27 @@ async function loadJSON(relativePath) {
   return JSON.parse(await readFile(path.join(root, relativePath), "utf8"));
 }
 
-test("derives exactly the historical 957 pre-skipped cases into mutually exclusive PM-only cohorts", async () => {
+test("derives every current implemented command into mutually exclusive run-owned lab cohorts", async () => {
   const surface = await loadJSON("internal/connectors/defs/github/cli_surface.json");
   const cases = await loadJSON(".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json");
   const manifest = buildLabManifest({ surface, cases, generatedAt: "2026-08-09T00:00:00.000Z" });
-  const historical = cases.cases
-    .filter((item) => typeof item.untestable_reason === "string")
-    .map((item) => item.command)
+  const implemented = surface.commands
+    .filter((item) => item.availability === "implemented")
+    .map((item) => item.path)
     .sort();
 
-  assert.equal(historical.length, 957);
-  assert.equal(manifest.rows.length, 957);
-  assert.deepEqual(manifest.rows.map((row) => row.command).sort(), historical);
+  assert.equal(manifest.source.implemented_rows, implemented.length);
+  assert.equal(manifest.rows.length, implemented.length);
+  assert.deepEqual(manifest.rows.map((row) => row.command).sort(), implemented);
   assert.deepEqual(
     Object.keys(manifest.class_tally).sort(),
-    ["github_app_or_marketplace", "personal_repo", "sandbox_org_free", "unavailable_entitlement"],
+    ["feature_or_entitlement", "github_app_installation", "run_owned_organization", "run_owned_repository"],
   );
-  assert.equal(Object.values(manifest.class_tally).reduce((sum, count) => sum + count, 0), 957);
+  assert.equal(Object.values(manifest.class_tally).reduce((sum, count) => sum + count, 0), implemented.length);
 
   for (const row of manifest.rows) {
     assert.equal(typeof row.case_id, "string");
-    assert.equal(typeof row.historical_reason, "string");
+    assert.equal(typeof row.baseline_reason, "string");
     assert.equal(typeof row.credential.class, "string");
     assert.equal(typeof row.plan_feature, "string");
     assert.equal(typeof row.target_allowlist_entry, "string");
@@ -105,38 +106,89 @@ test("derives exactly the historical 957 pre-skipped cases into mutually exclusi
     assert.equal(typeof row.residual_state_check, "string");
     assert.equal(typeof row.earliest_divergence, "string");
     assert.equal(typeof row.cleanup_strategy, "string");
-    assert.equal(Array.isArray(row.setup_pm), true);
-    assert.match(row.test_pm, /^pm github /);
-    assert.match(row.assert_pm, /^pm github /);
+    assert.equal(typeof row.lifecycle_status, "string");
+    assert.equal(row.setup_pm, null);
+    if (row.lifecycle_status === "requires_typed_lifecycle") {
+      assert.equal(row.test_pm, null);
+      assert.equal(row.assert_pm, null);
+      assert.equal(row.cleanup_pm, null);
+      assert.equal(row.cleanup_strategy, "explicit_retention_required");
+      assert.match(row.lifecycle_reason || "", /fixture.*read-back.*inverse.cleanup/i);
+    } else if (row.lifecycle_status === "untestable") {
+      assert.equal(row.test_pm, null);
+      assert.equal(row.assert_pm, null);
+      assert.equal(row.cleanup_pm, null);
+      assert.match(row.lifecycle_reason || "", /untestable|boundary|fixture|scope|secret material|credential-safety/i);
+    } else {
+      assert.match(row.test_pm, /^pm github /);
+      assert.match(row.assert_pm, /^pm github /);
+    }
     assert.equal(row.cleanup_pm === null || row.cleanup_pm.startsWith("pm github "), true);
     assert.equal(row.cohort in manifest.class_tally, true);
     assert.equal(/(?:^|\s)(?:gh|curl)(?:\s|$)|https?:\/\/|browser/i.test(JSON.stringify(row)), false);
   }
 
   assert.doesNotThrow(() => validateLabManifest({ manifest, surface, cases }));
+  assert.equal(
+    await readFile(path.join(phaseDir, "GITHUB-LIVE-LAB-MANIFEST.json"), "utf8"),
+    `${JSON.stringify(manifest, null, 2)}\n`,
+  );
 
-  const issueCreate = manifest.rows.find((row) => row.command === "issue create");
-  assert.equal(issueCreate?.cleanup_strategy, "neutralize_and_retain");
-  assert.match(issueCreate?.cleanup_pm || "", /^pm github issue close /);
+  const writes = manifest.rows.filter((row) => row.intent === "reverse_etl" || row.intent === "direct_write");
+  assert.ok(writes.length > 0);
+  assert.equal(writes.every((row) => ["requires_typed_lifecycle", "untestable"].includes(row.lifecycle_status)), true);
+  assert.equal(writes.every((row) => row.cleanup_strategy === "explicit_retention_required"), true);
+  assert.equal(writes.every((row) => row.assert_pm === null && row.cleanup_pm === null), true);
+
+  const fabricated = JSON.parse(JSON.stringify(manifest));
+  const fabricatedWrite = fabricated.rows.find((row) => row.intent === "reverse_etl" || row.intent === "direct_write");
+  fabricatedWrite.test_pm = "pm github orgs attestations delete-by-attestation-ids {{cleanup_flags}} --credential {{credential_name}} --root {{project_root}} --json";
+  assert.throws(
+    () => validateLabManifest({ manifest: fabricated, surface, cases }),
+    /canonical classifier-derived artifact/i,
+  );
 });
 
-test("classifies personal, sandbox organization, App, and unavailable-entitlement rows by provider requirement", () => {
+test("classifies run-owned repository, organization, App, and feature-entitlement rows by provider requirement", () => {
   assert.equal(
     classifyLabCohort({ path: "issue create", intent: "reverse_etl", api_surface: [{ method: "POST", path: "/repos/{owner}/{repo}/issues" }] }).cohort,
-    "personal_repo",
+    "run_owned_repository",
   );
   assert.equal(
     classifyLabCohort({ path: "orgs create-webhook", intent: "direct_write", api_surface: [{ method: "POST", path: "/orgs/{org}/hooks" }] }).cohort,
-    "sandbox_org_free",
+    "run_owned_organization",
   );
   assert.equal(
     classifyLabCohort({ path: "apps get-authenticated", intent: "direct_read", api_surface: [{ method: "GET", path: "/app" }] }).cohort,
-    "github_app_or_marketplace",
+    "github_app_installation",
   );
   assert.equal(
     classifyLabCohort({ path: "codespaces create", intent: "direct_write", api_surface: [{ method: "POST", path: "/user/codespaces" }] }).cohort,
-    "unavailable_entitlement",
+    "feature_or_entitlement",
   );
+});
+
+test("derives manifest readiness from the canonical case classifier", async () => {
+  const [surface, cases] = await Promise.all([
+    loadJSON("internal/connectors/defs/github/cli_surface.json"),
+    loadJSON(".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json"),
+  ]);
+  const manifest = buildLabManifest({ surface, cases });
+  const rows = new Map(manifest.rows.map((row) => [row.command, row]));
+
+  for (const command of ["apps get-authenticated", "rate-limit get"]) {
+    const row = rows.get(command);
+    assert.equal(row?.lifecycle_status, "untestable");
+    assert.equal(row?.setup_pm, null);
+    assert.equal(row?.test_pm, null);
+    assert.equal(row?.assert_pm, null);
+  }
+  const preflight = rows.get("apps list-repos-accessible-to-installation");
+  assert.equal(preflight?.lifecycle_status, "ready_for_provider_result");
+  assert.equal(preflight?.setup_pm, null);
+  assert.match(preflight?.test_pm || "", /apps list-repos-accessible-to-installation/);
+  assert.equal(typeof manifest.source.canonical_case_digest, "string");
+  assert.equal(manifest.source.current_classification.attemptable, 182);
 });
 
 test("lab boundary default-denies protected, working, unresolved, ambiguous, and slug-ID-mismatched writes", () => {
@@ -177,6 +229,27 @@ test("lab boundary default-denies protected, working, unresolved, ambiguous, and
   const ambiguous = structuredClone(boundary);
   ambiguous.allowed_targets.push({ ...boundary.allowed_targets[0], key: "same-target-again" });
   assert.throws(() => validateLabBoundary(ambiguous), /ambiguous/i);
+});
+
+test("rejects unknown, multiline, armored, and malformed boundary scalars without echoing them", () => {
+  const armored = "-----BEGIN PRIVATE KEY-----\nnot-a-key\n-----END PRIVATE KEY-----";
+  for (const candidate of [
+    { ...boundary, unexpected: "field" },
+    { ...boundary, run_id: armored },
+    {
+      ...boundary,
+      allowed_targets: [{ ...boundary.allowed_targets[0], repo_id: "repository id with spaces" }],
+    },
+  ]) {
+    let rejected;
+    try {
+      validateLabBoundary(candidate);
+    } catch (error) {
+      rejected = error;
+    }
+    assert.ok(rejected instanceof Error);
+    assert.equal(rejected.message.includes(armored), false);
+  }
 });
 
 test("a denied target cannot reach the PM fixture executor", async () => {
@@ -421,8 +494,9 @@ test("retains the credential-pinned repo-view control and sanitized owner/repo f
   assert.equal(/pm-live-test-direct-read|github-live-proof|https?:\/\//i.test(JSON.stringify(regression)), false);
 });
 
-test("records personal-repository cohort results only after immutable target binding and independently verified lifecycle state", async () => {
-  const [manifest, boundaryFile, report, probes, entries] = await Promise.all([
+test("keeps archived lab results separate from the regenerated current-surface manifest", async () => {
+  const [surface, manifest, boundaryFile, report, probes, entries] = await Promise.all([
+    loadJSON("internal/connectors/defs/github/cli_surface.json"),
     loadJSON(".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-MANIFEST.json"),
     loadJSON(".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json"),
     loadJSON(".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-REPORT.json"),
@@ -453,10 +527,12 @@ test("records personal-repository cohort results only after immutable target bin
     "repo deploy-key delete",
   ]) {
     const result = results.get(command);
-    const manifestRow = manifest.rows.find((row) => row.case_id === result?.case_id);
+    const currentCommand = surface.commands.find((item) => item.path === command);
+    const manifestRow = manifest.rows.find((row) => row.command === command);
     const expected = command.startsWith("apps ")
-      ? { command, state: command === "apps get-authenticated" ? "credential_blocker" : "proven", cohort: "github_app_or_marketplace" }
-      : { command, state: command === "repo deploy-key delete" ? "failed" : "proven", cohort: "personal_repo" };
+      ? { command, state: command === "apps get-authenticated" ? "credential_blocker" : "proven", cohort: "github_app_installation" }
+      : { command, state: command === "repo deploy-key delete" ? "failed" : "proven", cohort: "run_owned_repository" };
+    assert.equal(manifestRow?.cohort, classifyLabCohort(currentCommand).cohort);
     assert.deepEqual({ command: result?.command, state: result?.state, cohort: manifestRow?.cohort }, expected);
   }
   assert.match(results.get("apps get-authenticated")?.reason || "", /401|App JWT|installation credential/i);
@@ -529,6 +605,35 @@ test("records personal-repository cohort results only after immutable target bin
   assert.doesNotThrow(() => validateCleanupLedger({ entries, boundary: boundaryFile }));
 });
 
+test("PM process runner keeps supplied approval material out of argv", async () => {
+  const temp = await mkdtemp(path.join(os.tmpdir(), "github-live-lab-stdin-"));
+  try {
+    const binary = path.join(temp, "fake-pm");
+    const argvPath = path.join(temp, "argv");
+    const stdinPath = path.join(temp, "stdin");
+    await writeFile(
+      binary,
+      `#!/bin/sh\nprintf '%s\\n' "$@" > ${JSON.stringify(argvPath)}\ncat > ${JSON.stringify(stdinPath)}\nprintf '{"kind":"ok"}\\n'\n`,
+      "utf8",
+    );
+    await chmod(binary, 0o755);
+
+    const result = await runPMProcess(
+      binary,
+      ["reverse", "run", "rplan_test", "--approval-token-stdin"],
+      "transient-grant\n",
+    );
+    assert.equal(result.code, 0);
+    const argv = await readFile(argvPath, "utf8");
+    assert.equal(argv.includes("--approval-token-stdin"), true);
+    assert.equal(argv.includes("--approve"), false);
+    assert.equal(argv.includes("transient-grant"), false);
+    assert.equal(await readFile(stdinPath, "utf8"), "transient-grant\n");
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
 test("bootstrap write lifecycle keeps approval material process-only across plan, preview, and execute", async () => {
   const bootstrapBoundary = structuredClone(boundary);
   bootstrapBoundary.bootstrap_principals = [
@@ -558,10 +663,10 @@ test("bootstrap write lifecycle keeps approval material process-only across plan
     recordArgs: ["--name", "pm-live-lab-001", "--private", "--auto-init"],
     boundary: bootstrapBoundary,
     bootstrapRequest: request,
-    run: async (args) => {
-      calls.push(args);
+    run: async (args, stdin) => {
+      calls.push({ args, stdin });
       if (args.includes("--preview")) return { code: 0, stdout: "Approval token: transient-grant\n", stderr: "" };
-      if (args.includes("--approve")) {
+      if (args.includes("--approval-token-stdin")) {
         return {
           code: 0,
           stdout: JSON.stringify({
@@ -576,9 +681,12 @@ test("bootstrap write lifecycle keeps approval material process-only across plan
   });
 
   assert.equal(calls.length, 3);
-  assert.equal(calls[0].includes("--credential"), true);
-  assert.equal(calls[1].includes("--preview"), true);
-  assert.equal(calls[2].includes("--approve"), true);
+  assert.equal(calls[0].args.includes("--credential"), true);
+  assert.equal(calls[1].args.includes("--preview"), true);
+  assert.equal(calls[2].args.includes("--approval-token-stdin"), true);
+  assert.equal(calls[2].args.includes("--approve"), false);
+  assert.equal(calls[2].args.includes("transient-grant"), false);
+  assert.equal(calls[2].stdin, "transient-grant\n");
   assert.deepEqual(result, { command: "repo create", http_status: 201, records_succeeded: 1, records_failed: 0 });
   assert.equal(JSON.stringify(result).includes("transient-grant"), false);
 });
@@ -601,10 +709,10 @@ test("planned write re-supplies the exact record flags for withheld-field previe
     recordArgs,
     boundary,
     target: boundary.allowed_targets[0],
-    run: async (args) => {
-      calls.push(args);
+    run: async (args, stdin) => {
+      calls.push({ args, stdin });
       if (args.includes("--preview")) return { code: 0, stdout: "Approval token: transient-grant\n", stderr: "" };
-      if (args.includes("--approve")) {
+      if (args.includes("--approval-token-stdin")) {
         return {
           code: 0,
           stdout: JSON.stringify({
@@ -619,13 +727,37 @@ test("planned write re-supplies the exact record flags for withheld-field previe
   });
 
   assert.equal(calls.length, 3);
-  assert.deepEqual(calls[0].slice(3, 3 + recordArgs.length), recordArgs);
-  assert.deepEqual(calls[1].slice(6, 6 + recordArgs.length), recordArgs);
-  assert.deepEqual(calls[2].slice(7, 7 + recordArgs.length), recordArgs);
-  assert.equal(calls[1].includes("--credential"), false);
-  assert.equal(calls[2].includes("--credential"), false);
+  assert.deepEqual(calls[0].args.slice(3, 3 + recordArgs.length), recordArgs);
+  assert.deepEqual(calls[1].args.slice(6, 6 + recordArgs.length), recordArgs);
+  assert.deepEqual(calls[2].args.slice(6, 6 + recordArgs.length), recordArgs);
+  assert.equal(calls[1].args.includes("--credential"), false);
+  assert.equal(calls[2].args.includes("--credential"), false);
+  assert.equal(calls[2].args.includes("--approval-token-stdin"), true);
+  assert.equal(calls[2].args.includes("transient-grant"), false);
+  assert.equal(calls[2].stdin, "transient-grant\n");
   assert.deepEqual(result, { command: "issue edit", http_status: 200, records_succeeded: 1, records_failed: 0 });
   assert.equal(JSON.stringify(result).includes("transient-grant"), false);
+});
+
+test("planned writes reject caller-provided approval stdin markers", async () => {
+  let started = false;
+  await assert.rejects(
+    runPMPlannedWrite({
+      binary: "pm",
+      root: "/tmp/github-live-lab-root",
+      credentialName: "github-live-proof",
+      command: "issue create",
+      recordArgs: ["--approval-token-stdin"],
+      boundary,
+      target: boundary.allowed_targets[0],
+      run: async () => {
+        started = true;
+        throw new Error("PM process must not start");
+      },
+    }),
+    /may not override lifecycle or credential flags/u,
+  );
+  assert.equal(started, false);
 });
 
 test("normal planned writes bind the exact repository target before any PM process starts", async () => {
@@ -1088,24 +1220,20 @@ test("lab terminal accounting requires exactly one safe terminal result per exec
   );
 });
 
-test("external bootstrap probes are fixed PM direct reads and reject writes or repository selectors before dispatch", async () => {
-  assert.deepEqual(
-    authorizeAccountBootstrapProbe({ command: "apps get-authenticated" }),
-    {
-      id: "github_app_authentication",
-      command: "apps get-authenticated",
-      method: "GET",
-      path: "/app",
-      credential_requirement: "GitHub App JWT or installation credential",
-    },
-  );
-  assert.throws(
-    () => authorizeAccountBootstrapProbe({ command: "apps create-from-manifest" }),
-    /bootstrap probe|direct read|not allowed/i,
-  );
+test("targetless account bootstrap probes remain untestable before dispatch", async () => {
+  for (const command of [
+    "apps get-authenticated",
+    "apps list-subscriptions-for-authenticated-user",
+    "apps create-from-manifest",
+  ]) {
+    assert.throws(
+      () => authorizeAccountBootstrapProbe({ command }),
+      /targetless|untestable|installation repository preflight/i,
+    );
+  }
   assert.throws(
     () => assertAccountBootstrapProbeInvocation("pm github apps get-authenticated --credential lab-credential --config owner=lab-owner --root /tmp/lab --json"),
-    /forbids|fixed|bootstrap/i,
+    /targetless|untestable|installation repository preflight/i,
   );
 
   let started = false;
@@ -1117,37 +1245,40 @@ test("external bootstrap probes are fixed PM direct reads and reject writes or r
       probe: { command: "apps create-from-manifest" },
       run: async () => {
         started = true;
-        throw new Error("a write must never reach the PM process");
+        throw new Error("a targetless command must never reach the PM process");
       },
     }),
-    /bootstrap probe|direct read|not allowed/i,
+    /targetless|untestable|installation repository preflight/i,
   );
   assert.equal(started, false);
 
-  const rejected = await runPMAccountBootstrapProbe({
-    binary: "pm",
-    root: "/tmp/github-live-lab-root",
-    credentialName: "lab-credential",
-    probe: { command: "apps get-authenticated" },
-    run: async () => ({ code: 1, stdout: "", stderr: "provider status 401" }),
-  });
-  assert.deepEqual(rejected, {
-    command: "apps get-authenticated",
-    outcome: "credential_or_entitlement_rejected",
-    http_status: 401,
-  });
-  assert.equal(JSON.stringify(rejected).includes("provider status"), false);
+  await assert.rejects(
+    runPMAccountBootstrapProbe({
+      binary: "pm",
+      root: "/tmp/github-live-lab-root",
+      credentialName: "lab-credential",
+      probe: { command: "apps get-authenticated" },
+      run: async () => {
+        started = true;
+      },
+    }),
+    /targetless|untestable|installation repository preflight/i,
+  );
+  assert.equal(started, false);
 });
 
 test("source-derived bootstrap probe inventory proves the organization/App surface boundary and affected case counts", async () => {
   const [surface, apiSurface, manifest] = await Promise.all([
     loadJSON("internal/connectors/defs/github/cli_surface.json"),
     loadJSON("internal/connectors/defs/github/api_surface.json"),
-    loadJSON(".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-MANIFEST.json"),
+    (async () => buildLabManifest({
+      surface: await loadJSON("internal/connectors/defs/github/cli_surface.json"),
+      cases: await loadJSON(".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json"),
+    }))(),
   ]);
   const inventory = buildBootstrapProbeInventory({ surface, apiSurface, manifest });
   assert.deepEqual(inventory.organization, {
-    affected_case_count: 291,
+    affected_case_count: manifest.class_tally.run_owned_organization,
     create_command: null,
     delete_command: {
       command: "orgs delete",
@@ -1158,7 +1289,7 @@ test("source-derived bootstrap probe inventory proves the organization/App surfa
     result: "pm_surface_missing_organization_create",
   });
   assert.deepEqual(inventory.github_app_manifest, {
-    affected_case_count: 33,
+    affected_case_count: manifest.class_tally.github_app_installation,
     conversion_command: {
       command: "apps create-from-manifest",
       method: "POST",
@@ -1168,23 +1299,39 @@ test("source-derived bootstrap probe inventory proves the organization/App surfa
     code_issuer_commands: [],
     result: "pm_surface_missing_manifest_code_issuer",
   });
-  assert.deepEqual(inventory.account_probes, [
-    {
-      id: "github_app_authentication",
-      command: "apps get-authenticated",
-      method: "GET",
-      path: "/app",
-      credential_requirement: "GitHub App JWT or installation credential",
-    },
-    {
-      id: "marketplace_user_subscriptions",
-      command: "apps list-subscriptions-for-authenticated-user",
-      method: "GET",
-      path: "/user/marketplace_purchases",
-      credential_requirement: "GitHub Marketplace user entitlement credential",
-    },
-  ]);
+  assert.deepEqual(inventory.account_probes, []);
   assert.doesNotThrow(() => validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest }));
+});
+
+test("rejects an unsafe bootstrap manifest before inventory hashing", async () => {
+  const [surface, apiSurface, cases] = await Promise.all([
+    loadJSON("internal/connectors/defs/github/cli_surface.json"),
+    loadJSON("internal/connectors/defs/github/api_surface.json"),
+    loadJSON(".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json"),
+  ]);
+  const manifest = buildLabManifest({ surface, cases });
+  manifest.source.canonical_case_digest = "eyJhbGciOiJub25lIn0.eyJzdWIiOiJmaXh0dXJlIn0.signature";
+
+  assert.throws(
+    () => buildBootstrapProbeInventory({ surface, apiSurface, manifest }),
+    /unsafe credential-like material/i,
+  );
+});
+
+test("rejects unsafe supplied bootstrap inventories before drift validation", async () => {
+  const [surface, apiSurface, cases] = await Promise.all([
+    loadJSON("internal/connectors/defs/github/cli_surface.json"),
+    loadJSON("internal/connectors/defs/github/api_surface.json"),
+    loadJSON(".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json"),
+  ]);
+  const manifest = buildLabManifest({ surface, cases });
+  const inventory = buildBootstrapProbeInventory({ surface, apiSurface, manifest });
+  inventory.policy.account_probes = "eyJhbGciOiJub25lIn0.eyJzdWIiOiJmaXh0dXJlIn0.signature";
+
+  assert.throws(
+    () => validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest }),
+    /unsafe credential-like material/i,
+  );
 });
 
 test("records exact PM-surface and GitHub credential divergences without a provider fallback or retained account data", async () => {

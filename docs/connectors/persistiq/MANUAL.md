@@ -75,7 +75,7 @@ ETL STREAMS
     fields: body(string), campaign_id(string), cc_emails(array), from_email(string), id(string), kind(string), lead_id(string), preview(string), sent_at(string), sentiment(string), step_message_id(string), subject(string), to_emails(array)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 REVERSE ETL ACTIONS
   update_lead:

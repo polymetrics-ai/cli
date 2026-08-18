@@ -35,10 +35,10 @@ func TestDuckDBJoinAndAggregate(t *testing.T) {
 		{"order_id": "o3", "customer_id": "c2", "amount": 70},
 	})
 
-	rows, err := a.QuerySQL(ctx, `
+	rows, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: `
 		SELECT c.name AS name, SUM(o.amount) AS total
 		FROM orders o JOIN customers c USING (customer_id)
-		GROUP BY c.name ORDER BY total DESC`, 10)
+		GROUP BY c.name ORDER BY total DESC`, Limit: 10})
 	if err != nil {
 		t.Fatalf("QuerySQL(join+aggregate): %v", err)
 	}
@@ -75,7 +75,7 @@ func TestDuckDBSelectOnlyRejectsMutation(t *testing.T) {
 		"DROP VIEW orders",
 		"select * from orders; drop view orders",
 	} {
-		if _, err := a.QuerySQL(ctx, bad, 10); err == nil {
+		if _, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: bad, Limit: 10}); err == nil {
 			t.Errorf("QuerySQL(%q) = nil error, want rejection", bad)
 		}
 	}

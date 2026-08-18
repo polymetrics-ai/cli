@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:agent_derived_actions_fork_pr_workflows_private_repos_view_5c03960723cc",
+  "provider": "github",
+  "executed_at": "2026-08-17T20:55:06.085Z",
+  "run_id": "github-1787000080257-f5cdbc0ddc4d-agent_derived_actions_fork_pr_workflows_private_repos_view_5c03960723cc",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:7d7186a247ef944b74090add69fa06db62cda598714804a36de8abd9d623b692}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:agent_derived_actions_fork_pr_workflows_private_repos_view_5c03960723cc",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:fcdda25fe2f0b3a7839598ec5d9062db55dd85c95e232f570875fe4dc648f9f6}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "require_approval_for_fork_pr_workflows": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "run_workflows_from_fork_pull_requests": "{{pmcertfp:v1:5d168e902cfe90e8309e359201a03063b3f4589bfa4dbf3508c65ec8df0f445e}}",
+              "send_secrets_and_variables_redacted": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}",
+              "send_write_tokens_to_workflows_redacted": "{{pmcertfp:v1:ed65bf57066b8edcff8cd40b6116c42b61b2fa365efc7a5c2cc55431831dd320}}"
+            },
+            "original_bytes": 184,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived:orgs_get_immutable_releases_settings",
+  "provider": "github",
+  "executed_at": "2026-08-17T22:09:00.783Z",
+  "run_id": "github-direct-orgs_get_immutable_releases_settings-1787004538263",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "995afad31641552f4b734ce677c67123cbe75a5f2b69e1e071737a3c4b3d9f98",
+    "pm_command_fingerprint": "{{pmcertfp:v1:8c8a8a8dc3e2d4d533fabdacea4ddaa3453e43d4dc3ae166a40c30697438e7e1}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived:orgs_get_immutable_releases_settings",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:d44d9145808857744a7b6759917f46fe4314fedd776604653b50addaeb616f35}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "enforced_repositories": "{{pmcertfp:v1:58a047d9df118f1855d90904fc0aaff9d1f9ac4876c9ad72ce9e7f570de8fbde}}"
+            },
+            "original_bytes": 32,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

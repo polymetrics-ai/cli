@@ -192,18 +192,83 @@ func TestDynamicConnectorSharedPassiveFlagRendersHelp(t *testing.T) {
 }
 
 func TestDynamicConnectorInvalidFlagOnlyInvocationsAreUsageErrors(t *testing.T) {
-	for _, args := range [][]string{
-		{"gong", "--bogus"},
-		{"gong", "--plan", "rplan_fixture", "--preview"},
-		{"gong", "--plan="},
-		{"gong", "--approve="},
-		{"gong", "--confirm="},
+	for _, tc := range []struct {
+		args []string
+		want string
+	}{
+		{args: []string{"gong", "--bogus"}, want: "missing connector command path"},
+		{args: []string{"gong", "--plan", "rplan_fixture", "--preview"}, want: "missing connector command path"},
+		{args: []string{"gong", "--plan="}, want: "missing connector command path"},
+		{args: []string{"gong", "--approval-token-stdin=value"}, want: "--approval-token-stdin must be a bare stdin marker"},
+		{args: []string{"gong", "--confirm="}, want: "missing connector command path"},
 	} {
-		t.Run(strings.Join(args[1:], "_"), func(t *testing.T) {
+		t.Run(strings.Join(tc.args[1:], "_"), func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
-			code := cli.Run(args, &stdout, &stderr)
-			if code != 2 || !strings.Contains(stdout.String()+stderr.String(), "missing connector command path") {
-				t.Fatalf("Run(%v) code = %d stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+			code := cli.Run(tc.args, &stdout, &stderr)
+			if code != 2 || !strings.Contains(stdout.String()+stderr.String(), tc.want) {
+				t.Fatalf("Run(%v) code = %d stdout=%s stderr=%s", tc.args, code, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
+func TestDynamicConnectorValuedApprovalStdinMarkerDoesNotRenderGroupHelp(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"gong", "calls", "--approval-token-stdin=value"}, &stdout, &stderr)
+	if code != 2 {
+		t.Fatalf("Run(gong calls --approval-token-stdin=value) code = %d, want usage error; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String()+stderr.String(), "--approval-token-stdin must be a bare stdin marker") {
+		t.Fatalf("valued approval stdin marker did not return its validation error: stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	if strings.Contains(stdout.String(), "pm gong calls - Gong calls commands") {
+		t.Fatalf("valued approval stdin marker rendered passive group help: stdout=%s", stdout.String())
+	}
+}
+
+func TestDynamicConnectorWriteHelpDocumentsApprovalStdinMarker(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"github", "issue", "close", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(github issue close --help) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "--approval-token-stdin") {
+		t.Fatalf("GitHub write help omitted the approval stdin marker: stdout=%s", stdout.String())
+	}
+}
+
+func TestDynamicConnectorHelpRejectsApprovalCarrierArguments(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		args []string
+		want string
+	}{
+		{
+			name: "valued stdin marker",
+			args: []string{"github", "issue", "close", "--help", "--approval-token-stdin=carrier-value"},
+			want: "--approval-token-stdin must be a bare stdin marker",
+		},
+		{
+			name: "retired argv carrier",
+			args: []string{"github", "issue", "close", "--help", "--approve", "carrier-value"},
+			want: "approval tokens must be supplied with --approval-token-stdin",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tc.args, &stdout, &stderr)
+			out := stdout.String() + stderr.String()
+			if code != 2 {
+				t.Fatalf("Run(%v) code = %d, want usage error; stdout=%s stderr=%s", tc.args, code, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(out, tc.want) {
+				t.Fatalf("Run(%v) output = %q, want %q", tc.args, out, tc.want)
+			}
+			if strings.Contains(out, "carrier-value") {
+				t.Fatalf("Run(%v) echoed the approval carrier value: %s", tc.args, out)
+			}
+			if strings.Contains(stdout.String(), "pm github issue close") {
+				t.Fatalf("Run(%v) rendered help before rejecting the approval carrier: %s", tc.args, stdout.String())
 			}
 		})
 	}
@@ -238,7 +303,7 @@ func TestDynamicConnectorUnknownPathIsUsageError(t *testing.T) {
 }
 
 func TestDynamicConnectorEmptyLifecycleFlagsWithCommandAreUsageErrors(t *testing.T) {
-	for _, flag := range []string{"--plan=", "--approve=", "--confirm=", "--plan", "--approve", "--confirm"} {
+	for _, flag := range []string{"--plan=", "--confirm=", "--plan", "--confirm"} {
 		t.Run(flag, func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
 			code := cli.Run([]string{"github", "issue", "create", flag}, &stdout, &stderr)
@@ -416,7 +481,7 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 		"write=true/false",
 		"REVERSE ETL WRITE ACTIONS",
 		"pm connectors catalog --capability write --json",
-		"pm connectors certify <connector> [--full] [--json]",
+		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof] [--full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
 		"legacy_unverified",
 		"provider-artifact",
 		"provenance evidence",
@@ -510,9 +575,14 @@ func TestPerfSyncModesJSON(t *testing.T) {
 		t.Fatalf("Run(perf sync-modes) code = %d stderr = %s", code, stderr.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{`"kind": "SyncModeBenchmark"`, `"full_refresh_append"`, `"incremental_append_deduped"`} {
+	for _, want := range []string{`"kind": "SyncModeBenchmark"`, `"full_refresh_append"`, `"incremental_append"`} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("json output missing %q:\n%s", want, out)
+		}
+	}
+	for _, forbidden := range []string{`"full_refresh_overwrite_deduped"`, `"incremental_append_deduped"`} {
+		if strings.Contains(out, forbidden) {
+			t.Fatalf("json output contains typed-only compatibility name %q:\n%s", forbidden, out)
 		}
 	}
 }
@@ -528,8 +598,13 @@ func TestETLHelpListsAllSyncModes(t *testing.T) {
 		"full_refresh_append",
 		"full_refresh_overwrite",
 		"full_refresh_overwrite_deduped",
+		"Compatibility name for typed full_overwrite admission",
 		"incremental_append",
 		"incremental_append_deduped",
+		"Compatibility name for typed incremental_dedupe admission",
+		"incremental_dedupe",
+		"incremental_dedupe_history",
+		"retains deduplicated source versions with _valid_from, _valid_to, and _is_current fields",
 	} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("etl help missing %q:\n%s", want, out)
@@ -855,14 +930,16 @@ func TestGitHubDirectReadParametersAndPageContextReachWire(t *testing.T) {
 	// Both rejections occur before the handler is reached, and the enum
 	// rejection names every accepted option instead of deferring to GitHub.
 	for _, tc := range []struct {
-		args []string
-		want string
+		args         []string
+		want         string
+		usageRefusal bool
 	}{
-		{[]string{"github", "issue", "list", "--credential", "github-local", "--state", "impossible", "--root", root, "--json"}, "all|closed|open"},
-		{[]string{"github", "pulls", "files", "view", "--credential", "github-local", "--root", root, "--json"}, "missing path variable \"pull_number\""},
+		{args: []string{"github", "issue", "list", "--credential", "github-local", "--state", "impossible", "--root", root, "--json"}, want: "all|closed|open"},
+		{args: []string{"github", "pulls", "files", "view", "--credential", "github-local", "--root", root, "--json"}, want: "missing required flag --pull-number", usageRefusal: true},
 	} {
 		var stdout, stderr bytes.Buffer
-		if code := cli.Run(tc.args, &stdout, &stderr); code == 0 {
+		code := cli.Run(tc.args, &stdout, &stderr)
+		if code == 0 {
 			t.Fatalf("Run(%v) code = 0, want parser refusal", tc.args)
 		}
 		if got := stdout.String() + stderr.String(); !strings.Contains(got, tc.want) {
@@ -870,6 +947,24 @@ func TestGitHubDirectReadParametersAndPageContextReachWire(t *testing.T) {
 		}
 		if len(observed) != 0 {
 			t.Fatalf("Run(%v) reached the provider: %#v", tc.args, observed)
+		}
+		if tc.usageRefusal {
+			if code != 2 {
+				t.Fatalf("Run(%v) exit code = %d, want 2 usage error", tc.args, code)
+			}
+			var envelope struct {
+				Error struct {
+					Category string `json:"category"`
+					Code     string `json:"code"`
+					Message  string `json:"message"`
+				} `json:"error"`
+			}
+			if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil {
+				t.Fatalf("decode usage refusal: %v\nstdout=%s", err, stdout.String())
+			}
+			if envelope.Error.Category != "usage" || envelope.Error.Code != "usage_error" || !strings.Contains(envelope.Error.Message, tc.want) {
+				t.Fatalf("usage refusal = %+v, want category=usage code=usage_error message containing %q", envelope.Error, tc.want)
+			}
 		}
 	}
 

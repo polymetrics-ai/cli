@@ -111,12 +111,115 @@ type DestinationApplyStrategy struct {
 	Action   string            `json:"action"`
 }
 
+// SourceRecordMappingKind is the closed source-record behavior a destination
+// may select for one admitted source executor. It is deliberately a small
+// declaration vocabulary, not a generic expression or record-mapping engine.
+type SourceRecordMappingKind string
+
+const (
+	SourceRecordMappingKindConfigMatch SourceRecordMappingKind = "config_match"
+	SourceRecordMappingKindInputFields SourceRecordMappingKind = "input_fields"
+)
+
+// SourceRecordInputBinding maps one destination action input to a concrete
+// source record field. The destination action still owns its output field and
+// shape; this binding owns only the upstream field it admits.
+type SourceRecordInputBinding struct {
+	Input string `json:"input"`
+	Field string `json:"field"`
+}
+
+// SourceRecordMapping binds an admitted source record to one of the closed
+// mapping forms. config_match compares one source record field with a source
+// endpoint configuration value. input_fields supplies the declared action
+// inputs from named source record fields.
+type SourceRecordMapping struct {
+	Kind        SourceRecordMappingKind    `json:"kind"`
+	ConfigKey   string                     `json:"config_key,omitempty"`
+	RecordField string                     `json:"record_field,omitempty"`
+	Inputs      []SourceRecordInputBinding `json:"inputs,omitempty"`
+}
+
+// DestinationSourceBinding declares one exact source executor and stream
+// allowlist that a destination transport accepts. The source record contract is
+// definition-owned, so adding another connector cannot require shared
+// provider-named routing code.
+type DestinationSourceBinding struct {
+	Executor        TransportExecutorReference `json:"executor"`
+	EligibleStreams []string                   `json:"eligible_streams"`
+	RecordMapping   SourceRecordMapping        `json:"record_mapping"`
+}
+
+func (m SourceRecordMapping) Clone() SourceRecordMapping {
+	clone := m
+	clone.Inputs = append([]SourceRecordInputBinding(nil), m.Inputs...)
+	return clone
+}
+
+func (b DestinationSourceBinding) Clone() DestinationSourceBinding {
+	clone := b
+	clone.EligibleStreams = append([]string(nil), b.EligibleStreams...)
+	clone.RecordMapping = b.RecordMapping.Clone()
+	return clone
+}
+
+func (m SourceRecordMapping) Validate() error {
+	switch m.Kind {
+	case SourceRecordMappingKindConfigMatch:
+		if !isConcreteTransportIdentifier(m.ConfigKey) || !isConcreteTransportIdentifier(m.RecordField) {
+			return fmt.Errorf("config_match source record mapping requires concrete config_key and record_field")
+		}
+		if len(m.Inputs) != 0 {
+			return fmt.Errorf("config_match source record mapping does not accept input fields")
+		}
+	case SourceRecordMappingKindInputFields:
+		if m.ConfigKey != "" || m.RecordField != "" {
+			return fmt.Errorf("input_fields source record mapping does not accept config_match fields")
+		}
+		if len(m.Inputs) == 0 {
+			return fmt.Errorf("input_fields source record mapping requires at least one input field")
+		}
+		seenInputs := make(map[string]struct{}, len(m.Inputs))
+		seenFields := make(map[string]struct{}, len(m.Inputs))
+		for _, input := range m.Inputs {
+			if !isConcreteTransportIdentifier(input.Input) || !isConcreteTransportIdentifier(input.Field) {
+				return fmt.Errorf("input_fields source record mapping requires concrete input and field names")
+			}
+			if _, duplicate := seenInputs[input.Input]; duplicate {
+				return fmt.Errorf("input_fields source record mapping duplicates input %q", input.Input)
+			}
+			if _, duplicate := seenFields[input.Field]; duplicate {
+				return fmt.Errorf("input_fields source record mapping duplicates field %q", input.Field)
+			}
+			seenInputs[input.Input] = struct{}{}
+			seenFields[input.Field] = struct{}{}
+		}
+	default:
+		return fmt.Errorf("unsupported source record mapping kind %q", m.Kind)
+	}
+	return nil
+}
+
+func (b DestinationSourceBinding) Validate() error {
+	if err := b.Executor.Validate(); err != nil {
+		return err
+	}
+	if err := validateSourceTransportStreams(b.EligibleStreams); err != nil {
+		return err
+	}
+	return b.RecordMapping.Validate()
+}
+
 // SourceTransportDescriptor is the source side of a connector's transport
 // declaration. EligibleStreams are the only streams this role may receive.
 type SourceTransportDescriptor struct {
-	Executor        TransportExecutorReference   `json:"executor"`
-	EligibleStreams []string                     `json:"eligible_streams"`
-	Modes           []synccontract.Mode          `json:"modes"`
+	Executor        TransportExecutorReference `json:"executor"`
+	EligibleStreams []string                   `json:"eligible_streams"`
+	Modes           []synccontract.Mode        `json:"modes"`
+	// OrderedPipeline declares that this exact endpoint can safely have its
+	// next bounded extraction overlap a prior ordered destination apply. It
+	// does not declare source partitioning or unordered concurrent reads.
+	OrderedPipeline bool                         `json:"ordered_pipeline,omitempty"`
 	Delivery        DeliveryGuarantees           `json:"delivery"`
 	Conformance     ConformanceEvidenceReference `json:"conformance"`
 }
@@ -125,13 +228,21 @@ type SourceTransportDescriptor struct {
 // transport declaration. Its strategies are resolved from the requested mode
 // before a source can begin reading.
 type DestinationTransportDescriptor struct {
-	Executor        TransportExecutorReference   `json:"executor"`
-	EligibleActions []string                     `json:"eligible_actions"`
-	Modes           []synccontract.Mode          `json:"modes"`
-	Delivery        DeliveryGuarantees           `json:"delivery"`
-	Conformance     ConformanceEvidenceReference `json:"conformance"`
-	Acknowledgement TransportAcknowledgement     `json:"acknowledgement"`
-	ApplyStrategies []DestinationApplyStrategy   `json:"apply_strategies"`
+	Executor        TransportExecutorReference `json:"executor"`
+	EligibleActions []string                   `json:"eligible_actions"`
+	Modes           []synccontract.Mode        `json:"modes"`
+	// OrderedPipeline declares that this exact endpoint can safely consume one
+	// ordered bounded pipeline. It is not a declaration of multi-COPY support.
+	OrderedPipeline bool `json:"ordered_pipeline,omitempty"`
+	// CopyWorkerMaximum is the target-declared connection-pool ceiling that a
+	// future immutable full-overwrite COPY lane may consume. It is a bounded
+	// connection policy, never a generic per-run worker dial.
+	CopyWorkerMaximum int                          `json:"copy_worker_maximum,omitempty"`
+	Delivery          DeliveryGuarantees           `json:"delivery"`
+	Conformance       ConformanceEvidenceReference `json:"conformance"`
+	Acknowledgement   TransportAcknowledgement     `json:"acknowledgement"`
+	ApplyStrategies   []DestinationApplyStrategy   `json:"apply_strategies"`
+	SourceBindings    []DestinationSourceBinding   `json:"source_bindings,omitempty"`
 }
 
 // SyncTransportDescriptor declares one or both roles a connector can perform.
@@ -222,7 +333,7 @@ func (d SourceTransportDescriptor) Validate() error {
 	if err := d.Executor.Validate(); err != nil {
 		return err
 	}
-	if err := validateTransportNames("source eligible stream", d.EligibleStreams); err != nil {
+	if err := validateSourceTransportStreams(d.EligibleStreams); err != nil {
 		return err
 	}
 	if err := validateTransportModes(d.Modes); err != nil {
@@ -234,7 +345,22 @@ func (d SourceTransportDescriptor) Validate() error {
 	return d.Conformance.Validate()
 }
 
+func validateSourceTransportStreams(streams []string) error {
+	if len(streams) == 1 && streams[0] == "*" {
+		return nil
+	}
+	for _, stream := range streams {
+		if stream == "*" {
+			return fmt.Errorf("source eligible stream wildcard must be the only entry")
+		}
+	}
+	return validateTransportNames("source eligible stream", streams)
+}
+
 func (d DestinationTransportDescriptor) Validate() error {
+	if d.CopyWorkerMaximum < 0 || d.CopyWorkerMaximum > 8 {
+		return fmt.Errorf("destination transport copy worker maximum must be zero or between 1 and 8")
+	}
 	if err := d.Executor.Validate(); err != nil {
 		return err
 	}
@@ -248,6 +374,9 @@ func (d DestinationTransportDescriptor) Validate() error {
 		return err
 	}
 	if err := d.Conformance.Validate(); err != nil {
+		return err
+	}
+	if err := validateDestinationSourceBindings(d.SourceBindings); err != nil {
 		return err
 	}
 	switch d.Acknowledgement {
@@ -267,6 +396,12 @@ func (d DestinationTransportDescriptor) Validate() error {
 		if err := strategy.Strategy.Validate(); err != nil {
 			return err
 		}
+		if strategy.Mode == synccontract.ModeChangeCapture && strategy.Strategy != ApplyStrategyChangeApply {
+			return fmt.Errorf("destination change_capture mode requires change_apply strategy, got %q", strategy.Strategy)
+		}
+		if strategy.Mode != synccontract.ModeChangeCapture && strategy.Strategy == ApplyStrategyChangeApply {
+			return fmt.Errorf("destination change_apply strategy is only valid for change_capture mode")
+		}
 		if !containsTransportName(d.EligibleActions, strategy.Action) {
 			return fmt.Errorf("destination apply strategy action %q is not an eligible action", strategy.Action)
 		}
@@ -281,6 +416,43 @@ func (d DestinationTransportDescriptor) Validate() error {
 		}
 	}
 	return nil
+}
+
+func validateDestinationSourceBindings(bindings []DestinationSourceBinding) error {
+	seen := make(map[TransportExecutorReference]struct{}, len(bindings))
+	for _, binding := range bindings {
+		if err := binding.Validate(); err != nil {
+			return fmt.Errorf("destination source binding: %w", err)
+		}
+		if _, duplicate := seen[binding.Executor]; duplicate {
+			return fmt.Errorf("destination source binding duplicates executor %q", binding.Executor.ID)
+		}
+		seen[binding.Executor] = struct{}{}
+	}
+	return nil
+}
+
+// SourceBindingFor returns the definition-owned binding for an exact source
+// executor and source stream. Destinations without bindings retain their
+// existing transport semantics; destinations that declare bindings have a
+// positive source admission allowlist.
+func (d DestinationTransportDescriptor) SourceBindingFor(source TransportExecutorReference, stream string) (DestinationSourceBinding, bool) {
+	for _, binding := range d.SourceBindings {
+		if binding.Executor != source || !containsSourceTransportStream(binding.EligibleStreams, stream) {
+			continue
+		}
+		return binding.Clone(), true
+	}
+	return DestinationSourceBinding{}, false
+}
+
+func containsSourceTransportStream(streams []string, want string) bool {
+	for _, stream := range streams {
+		if stream == want || stream == "*" {
+			return true
+		}
+	}
+	return false
 }
 
 // ApplyStrategyFor resolves the descriptor-owned strategy for mode. It never
@@ -330,6 +502,10 @@ func (d SyncTransportDescriptor) Clone() *SyncTransportDescriptor {
 		destination.EligibleActions = append([]string(nil), d.Destination.EligibleActions...)
 		destination.Modes = append([]synccontract.Mode(nil), d.Destination.Modes...)
 		destination.ApplyStrategies = append([]DestinationApplyStrategy(nil), d.Destination.ApplyStrategies...)
+		destination.SourceBindings = make([]DestinationSourceBinding, len(d.Destination.SourceBindings))
+		for index, binding := range d.Destination.SourceBindings {
+			destination.SourceBindings[index] = binding.Clone()
+		}
 		clone.Destination = &destination
 	}
 	return &clone

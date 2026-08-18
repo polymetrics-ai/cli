@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:generated_direct_read_copilot_spaces_get_resource_for_org",
+  "provider": "github",
+  "executed_at": "2026-08-17T20:08:01.624Z",
+  "run_id": "github-1786997278273-b7b137012a17-generated_direct_read_copilot_spaces_get_resource_for_org",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "3558077d962c8e6861d05b9b97666033d68ab77d9a81e744a94b31c2bf16d73c",
+    "pm_command_fingerprint": "{{pmcertfp:v1:b64255bfe0739aa3943ebe428c889e9c5ba48ae5e657b7d6b8a0bc2b4424aca6}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:5ebf94e9c3221ba03c7eda0c11083f465543d4ab77a661bd08afd64225dfc144}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "generated_direct_read_copilot_spaces_get_resource_for_org",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:d8aad280d908123b444c7677e73482c61f8dad69e161e7bf5756f5f80a99fc36}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "copilot_chat_attachment_id": null,
+              "created_at": "{{pmcertfp:v1:5a7ddb88c1d87809dac2a4464cd94f806a30b995c59073c49e673b7ea9cd0ef1}}",
+              "id": "{{pmcertfp:v1:a8c1e25b76ae0f48e6ae222f2315f35595c236c7f88f214f138b7bd0e36ab7d1}}",
+              "metadata": {
+                "name": "{{pmcertfp:v1:0d59afecadd30a24e8363661678071d4180e71d606c9979a5fc93c542cb85e1d}}",
+                "text": "{{pmcertfp:v1:21d8690387bd60d84db63b1c4dc1574fa9888af7369d11ddf08778e60283f8fc}}"
+              },
+              "resource_type": "{{pmcertfp:v1:aba96ee24bddd243a4592d001addcff0b79d407dde73b0ea32fbca01f3c2a5bb}}",
+              "updated_at": "{{pmcertfp:v1:5a7ddb88c1d87809dac2a4464cd94f806a30b995c59073c49e673b7ea9cd0ef1}}"
+            },
+            "original_bytes": 253,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

@@ -25,6 +25,9 @@ import (
 func TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle(t *testing.T) {
 	server := newFaithfulIssueLabelTransportServer(t)
 	binary := buildTransportPM(t)
+	if repeated := buildTransportPM(t); repeated != binary {
+		t.Fatalf("package pm fixture path changed between callers: first=%q repeated=%q", binary, repeated)
+	}
 	sha, size := transportBinaryIdentity(t, binary)
 	t.Logf("fresh pm binary sha256=%s size_bytes=%d", sha, size)
 	root := filepath.Join(t.TempDir(), "project")
@@ -245,15 +248,43 @@ func emitTransportLifecycleEvidence(t *testing.T, binarySHA256 string, binarySiz
 	t.Logf("transport_evidence=%s", encoded)
 }
 
+var pmTestBinaryFixture struct {
+	sync.Once
+	path string
+	dir  string
+	err  error
+}
+
 func buildTransportPM(t *testing.T) string {
 	t.Helper()
-	binary := filepath.Join(t.TempDir(), "pm")
-	command := exec.Command("go", "build", "-o", binary, "./cmd/pm")
-	command.Dir = transportRepositoryRoot(t)
-	if output, err := command.CombinedOutput(); err != nil {
-		t.Fatalf("build fresh pm: %v\n%s", err, output)
+	pmTestBinaryFixture.Do(func() {
+		dir, err := os.MkdirTemp("", "polymetrics-cli-pm-")
+		if err != nil {
+			pmTestBinaryFixture.err = fmt.Errorf("create temporary pm fixture directory: %w", err)
+			return
+		}
+		pmTestBinaryFixture.dir = dir
+
+		binary := filepath.Join(dir, "pm")
+		command := exec.Command("go", "build", "-o", binary, "./cmd/pm")
+		command.Dir = transportRepositoryRoot(t)
+		if output, err := command.CombinedOutput(); err != nil {
+			pmTestBinaryFixture.err = fmt.Errorf("build fresh pm fixture: %w\n%s", err, output)
+			return
+		}
+		pmTestBinaryFixture.path = binary
+	})
+	if pmTestBinaryFixture.err != nil {
+		t.Fatal(pmTestBinaryFixture.err)
 	}
-	return binary
+	return pmTestBinaryFixture.path
+}
+
+func removePMTestBinaryFixture() error {
+	if pmTestBinaryFixture.dir == "" {
+		return nil
+	}
+	return os.RemoveAll(pmTestBinaryFixture.dir)
 }
 
 func runTransportPM(binary, stdin string, args ...string) (string, error) {
@@ -443,14 +474,15 @@ func assertTransportCleanupRunOutput(t *testing.T, output, wantPlanID, wantForwa
 		ConnectionID  string `json:"connection_id"`
 		Action        string `json:"action"`
 		Result        struct {
-			RecordsWritten int `json:"records_written"`
-			RecordsFailed  int `json:"records_failed"`
+			RecordsWritten   int `json:"records_written"`
+			RecordsFailed    int `json:"records_failed"`
+			RecordsUnchanged int `json:"records_unchanged"`
 		} `json:"result"`
 	}
 	if err := json.Unmarshal([]byte(output), &envelope); err != nil {
 		t.Fatalf("decode cleanup JSON: %v", err)
 	}
-	if envelope.APIVersion != apiVersion || envelope.Kind != "ETLTransportCleanupRun" || envelope.Status != "completed" || envelope.PlanID != wantPlanID || envelope.ForwardPlanID != wantForwardPlanID || envelope.ConnectionID != wantConnectionID || envelope.Action != "remove_issue_label" || envelope.Result.RecordsWritten != 1 || envelope.Result.RecordsFailed != 0 {
+	if envelope.APIVersion != apiVersion || envelope.Kind != "ETLTransportCleanupRun" || envelope.Status != "completed" || envelope.PlanID != wantPlanID || envelope.ForwardPlanID != wantForwardPlanID || envelope.ConnectionID != wantConnectionID || envelope.Action != "remove_issue_label" || envelope.Result.RecordsWritten+envelope.Result.RecordsUnchanged != 1 || envelope.Result.RecordsFailed != 0 {
 		t.Fatal("cleanup output is not the completed typed one-record inverse")
 	}
 }

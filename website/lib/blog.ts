@@ -417,7 +417,7 @@ export const BLOG_POSTS: BlogPost[] = [
         ],
         code: `pm reverse plan candidates_to_github --source-table candidates --destination github:github-local --action create_issue --map title:title
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <approval-token> --json`,
+pm reverse run <plan-id> --approval-token-stdin --json`,
       },
       {
         heading: 'The repository became a harness',
@@ -669,7 +669,7 @@ pm reverse plan sync --source-table stale_issues --destination github:write --js
         ],
         code: `pm reverse plan sync --source-table candidates --destination github:write --json
 pm reverse preview <plan-id> --json
-pm reverse run <plan-id> --approve <token> --json`,
+pm reverse run <plan-id> --approval-token-stdin --json`,
       },
       {
         heading: 'A better default for automation',

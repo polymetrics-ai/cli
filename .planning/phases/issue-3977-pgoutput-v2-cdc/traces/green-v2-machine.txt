@@ -1,0 +1,13 @@
+Command:
+
+    go test -count=1 -timeout 20m ./internal/connectors/native/postgres -run '^Test(PGOutputV2|CDCStageRecovery|CDCServerVersion)'
+
+Result: pass.
+
+The protocol-v2 tests exercise relation, type, origin, non-stream Begin/Commit,
+StreamStart, streamed chunks, StreamStop, StreamCommit, and StreamAbort. They
+assert no delivery/checkpoint/acknowledgement before StreamCommit or after
+StreamAbort, reject a streamed frame whose XID differs from the active stream,
+and record the exact delivery order `emit -> receipt -> checkpoint -> ack`.
+The recovery test verifies a receipt-less private transaction produces the typed
+invalid-checkpoint rebootstrap outcome; the version test rejects PostgreSQL 13.

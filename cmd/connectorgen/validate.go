@@ -17,30 +17,31 @@ import (
 // constants (lowercase, package-private) so tests can assert on them without
 // string literals scattered across the corpus.
 const (
-	ruleMissingFile              = "missing_file"
-	ruleMetaSchema               = "meta_schema"
-	ruleInterpolationUnresolved  = "interpolation_unresolved"
-	ruleSchemaRefMissing         = "schema_ref_missing"
-	rulePrimaryKeyMissing        = "primary_key_missing"
-	ruleCursorFieldMissing       = "cursor_field_missing"
-	ruleWritePathFields          = "write_path_fields"
-	ruleSurfaceCoverage          = "surface_coverage"
-	ruleSurfaceUnknownTarget     = "surface_unknown_target"
-	ruleSurfaceIncomplete        = "surface_incomplete"
-	ruleSurfaceCategory          = "surface_category"
-	ruleSurfaceOperation         = "surface_operation"
-	ruleSurfaceProvenance        = "surface_provenance"
-	ruleSurfaceFailFirstRun      = "surface_fail_first_run"
-	ruleCLISurfaceUnknownTarget  = "cli_surface_unknown_target"
-	ruleCLISurfaceMissingMapping = "cli_surface_missing_mapping"
-	ruleCLISurfaceSafety         = "cli_surface_safety"
-	ruleNameRegex                = "name_regex"
-	ruleSecretLiteral            = "secret_literal"
-	ruleDocsHeading              = "docs_heading"
-	ruleStartDateFreeFormString  = "start_date_free_form_string"
-	ruleConformanceSkipReason    = "conformance_skip_reason"
-	ruleDefaultTypeMismatch      = "default_type_mismatch"
-	ruleIncrementalPolicy        = "incremental_policy"
+	ruleMissingFile               = "missing_file"
+	ruleMetaSchema                = "meta_schema"
+	ruleInterpolationUnresolved   = "interpolation_unresolved"
+	ruleSchemaRefMissing          = "schema_ref_missing"
+	rulePrimaryKeyMissing         = "primary_key_missing"
+	ruleCursorFieldMissing        = "cursor_field_missing"
+	ruleIncrementalCursorMismatch = "incremental_cursor_schema_mismatch"
+	ruleWritePathFields           = "write_path_fields"
+	ruleSurfaceCoverage           = "surface_coverage"
+	ruleSurfaceUnknownTarget      = "surface_unknown_target"
+	ruleSurfaceIncomplete         = "surface_incomplete"
+	ruleSurfaceCategory           = "surface_category"
+	ruleSurfaceOperation          = "surface_operation"
+	ruleSurfaceProvenance         = "surface_provenance"
+	ruleSurfaceFailFirstRun       = "surface_fail_first_run"
+	ruleCLISurfaceUnknownTarget   = "cli_surface_unknown_target"
+	ruleCLISurfaceMissingMapping  = "cli_surface_missing_mapping"
+	ruleCLISurfaceSafety          = "cli_surface_safety"
+	ruleNameRegex                 = "name_regex"
+	ruleSecretLiteral             = "secret_literal"
+	ruleDocsHeading               = "docs_heading"
+	ruleStartDateFreeFormString   = "start_date_free_form_string"
+	ruleConformanceSkipReason     = "conformance_skip_reason"
+	ruleDefaultTypeMismatch       = "default_type_mismatch"
+	ruleIncrementalPolicy         = "incremental_policy"
 )
 
 var supportedParamFormats = map[string]bool{
@@ -538,6 +539,12 @@ func checkPrimaryKeysAndCursors(b engine.Bundle) []Finding {
 				findings = append(findings, Finding{
 					Connector: b.Name, File: "streams.json", Rule: ruleCursorFieldMissing,
 					Message: fmt.Sprintf("stream %q incremental.cursor_field %q not found in schema %q properties", s.Name, s.Incremental.CursorField, s.SchemaRef),
+				})
+			}
+			if sch.CursorField != "" && sch.CursorField != s.Incremental.CursorField {
+				findings = append(findings, Finding{
+					Connector: b.Name, File: s.SchemaRef, Rule: ruleIncrementalCursorMismatch,
+					Message: fmt.Sprintf("stream %q incremental.cursor_field %q does not match schema %q x-cursor-field %q", s.Name, s.Incremental.CursorField, s.SchemaRef, sch.CursorField),
 				})
 			}
 		}

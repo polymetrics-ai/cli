@@ -1,0 +1,7 @@
+Green: go test -timeout 20m ./internal/connectors/database/... ./internal/connectors/native/postgres/...
+Result: PASS
+
+Observable coverage:
+- history route refusal returns a typed source/destination/both reason before
+  fake driver/session/ledger/mutation counters change;
+- history mode requires the managed-table lock.

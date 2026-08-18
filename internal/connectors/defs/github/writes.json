@@ -1450,6 +1450,26 @@
       "body_fields": [
         "labels"
       ],
+      "transport_binding": {
+        "capability": "issue_label",
+        "role": "replace",
+        "modes": [
+          "full_overwrite",
+          "incremental_upsert"
+        ],
+        "inputs": [
+          {
+            "input": "target_issue",
+            "field": "issue_number",
+            "shape": "scalar"
+          },
+          {
+            "input": "label",
+            "field": "labels",
+            "shape": "singleton_array"
+          }
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -1468,7 +1488,10 @@
           }
         }
       },
-      "risk": "replaces every label on an issue or pull request, removing any not listed"
+      "risk": "replaces every label on an issue or pull request, removing any not listed",
+      "confirmation": {
+        "kind": "destructive"
+      }
     },
     {
       "name": "add_issue_labels",
@@ -1485,6 +1508,9 @@
       "transport_binding": {
         "capability": "issue_label",
         "role": "apply",
+        "modes": [
+          "full_append"
+        ],
         "inputs": [
           {
             "input": "target_issue",
@@ -1535,6 +1561,9 @@
       "transport_binding": {
         "capability": "issue_label",
         "role": "cleanup",
+        "modes": [
+          "full_append"
+        ],
         "inputs": [
           {
             "input": "target_issue",
@@ -3069,8 +3098,19 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
       },
       "risk": "high"
     },
@@ -3109,11 +3149,16 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "name"
+          "name",
+          "value"
         ],
         "properties": {
           "name": {
+            "type": "string"
+          },
+          "value": {
             "type": "string"
           }
         }
@@ -3137,7 +3182,7 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -3160,7 +3205,7 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -3191,8 +3236,22 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "additionalProperties": false,
+        "required": [
+          "key_prefix",
+          "url_template"
+        ],
+        "properties": {
+          "key_prefix": {
+            "type": "string"
+          },
+          "url_template": {
+            "type": "string"
+          },
+          "is_alphanumeric": {
+            "type": "boolean"
+          }
+        }
       },
       "risk": "medium"
     },
@@ -3213,7 +3272,7 @@
         ],
         "properties": {
           "autolink_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -3285,11 +3344,27 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "branch"
+          "branch",
+          "required_status_checks",
+          "enforce_admins",
+          "required_pull_request_reviews",
+          "restrictions"
         ],
         "properties": {
           "branch": {
             "type": "string"
+          },
+          "required_status_checks": {
+            "type": "object"
+          },
+          "enforce_admins": {
+            "type": "boolean"
+          },
+          "required_pull_request_reviews": {
+            "type": "object"
+          },
+          "restrictions": {
+            "type": "object"
           }
         }
       },
@@ -3812,8 +3887,60 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "required": [
+          "name",
+          "head_sha"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "head_sha": {
+            "type": "string"
+          },
+          "details_url": {
+            "type": "string"
+          },
+          "external_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "in_progress",
+              "completed"
+            ]
+          },
+          "started_at": {
+            "type": "string"
+          },
+          "conclusion": {
+            "type": "string",
+            "enum": [
+              "action_required",
+              "cancelled",
+              "failure",
+              "neutral",
+              "success",
+              "skipped",
+              "stale",
+              "timed_out"
+            ]
+          },
+          "completed_at": {
+            "type": "string"
+          },
+          "output": {
+            "type": "object"
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
       },
       "risk": "medium"
     },
@@ -4580,8 +4707,21 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "encoding": {
+            "type": "string",
+            "enum": [
+              "utf-8",
+              "base64"
+            ]
+          }
+        }
       },
       "risk": "medium"
     },
@@ -4595,8 +4735,33 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "required": [
+          "message",
+          "tree"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "tree": {
+            "type": "string"
+          },
+          "parents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "author": {
+            "type": "object"
+          },
+          "committer": {
+            "type": "object"
+          },
+          "signature": {
+            "type": "string"
+          }
+        }
       },
       "risk": "medium"
     },
@@ -4610,8 +4775,54 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "required": [
+          "tree"
+        ],
+        "properties": {
+          "tree": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "path",
+                "mode",
+                "type"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "100644",
+                    "100755",
+                    "040000",
+                    "160000",
+                    "120000"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "blob",
+                    "tree",
+                    "commit"
+                  ]
+                },
+                "sha": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "base_tree": {
+            "type": "string"
+          }
+        }
       },
       "risk": "medium"
     },
@@ -5736,10 +5947,29 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "sha"
+          "sha",
+          "state"
         ],
         "properties": {
           "sha": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "error",
+              "failure",
+              "pending",
+              "success"
+            ]
+          },
+          "target_url": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "context": {
             "type": "string"
           }
         }
@@ -18751,41 +18981,6 @@
           404
         ]
       }
-    },
-    {
-      "name": "projects_create_draft_item_for_authenticated_user",
-      "kind": "create",
-      "method": "POST",
-      "path": "/user/{{ record.user_id }}/projectsV2/{{ record.project_number }}/drafts",
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "user_id",
-          "project_number",
-          "title"
-        ],
-        "properties": {
-          "user_id": {
-            "type": "string"
-          },
-          "project_number": {
-            "type": "integer"
-          },
-          "title": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Creates provider-side state: Create draft item for user owned project.",
-      "path_fields": [
-        "user_id",
-        "project_number"
-      ]
     },
     {
       "name": "projects_create_view_for_user",

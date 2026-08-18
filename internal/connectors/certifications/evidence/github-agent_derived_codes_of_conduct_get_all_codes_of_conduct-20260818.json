@@ -1,0 +1,62 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_codes_of_conduct_get_all_codes_of_conduct",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:36:10.962Z",
+  "run_id": "github-1787002570962-agent_derived_codes_of_conduct_get_all_codes_of_conduct",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "34237212e88fc3db2aa84fa8e82a2d6862db5632f260be2dc85e9d087197c56a",
+    "pm_command_fingerprint": "{{pmcertfp:v1:e2bc976e1a2760235b0f4676f97a21ac60e9dbc98c5a47852180adb5a04430b0}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:3e91b3e7f98955374e9bc12c710075406e8c11f2d3c8e7025b2829126de68191}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_codes_of_conduct_get_all_codes_of_conduct",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:c9e68d0293ce5b7302c37dabb0d4ab9e4125e0996c14e4134c4dd09e04a15622}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": [
+              {
+                "html_url": null,
+                "key": "{{pmcertfp:v1:55e7870c1bc3ae8bcb8d8d9b26f4acdeed4214d5860e0ba05287d1f8c77b2912}}",
+                "name": "{{pmcertfp:v1:711ef1984cef9f331b28e00f3fcffb3af5887d654f1ea904663b9e9f663f3ef6}}",
+                "url": "{{pmcertfp:v1:64af1ff3bc3cfe8e23a98378b326d50039ddddbfb5a8f28de49e08f52fc910d7}}"
+              },
+              {
+                "html_url": null,
+                "key": "{{pmcertfp:v1:2f62218cf6ffead7ec80df235395f33a3e80b22cb7890fee29149242ba51f26b}}",
+                "name": "{{pmcertfp:v1:afc2a6bd5e1f2e8547905d54a9700f8e15565ca0079512c7da0ad07a606b6248}}",
+                "url": "{{pmcertfp:v1:31ab5fb1cd3ea1e76e9ec4a879fd96d7fb3f1ace7af3735a561ba9a73cd3cb20}}"
+              }
+            ],
+            "original_bytes": 251,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

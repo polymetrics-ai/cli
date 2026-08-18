@@ -1,0 +1,17 @@
+Command:
+POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_CONTAINER_RUNTIME=docker POLYMETRICS_CONTAINER_ENDPOINT=unix:///Users/karthiksivadas/.colima/default/docker.sock go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/postgres
+
+Observable result excerpt:
+=== RUN   TestPostgresGapFreeBootstrapContainerHarness
+--- PASS: TestPostgresGapFreeBootstrapContainerHarness
+=== RUN   TestPostgresBootstrapSnapshotFailureRequiresExplicitRebootstrap
+--- PASS: TestPostgresBootstrapSnapshotFailureRequiresExplicitRebootstrap
+PASS
+ok   polymetrics.ai/internal/connectors/native/postgres
+
+The concurrent test's keyed oracle equalled the final source rows after a
+blocked snapshot, a committed update/delete/insert, and a later insert. It
+also observed the exact bootstrap checkpoint metadata, acknowledged LSN,
+transaction receipts, and slot teardown. The failure test observed no durable
+checkpoint or streaming after injected receiver/checkpoint failures, then a
+typed rebootstrap refusal on retry.

@@ -1,0 +1,111 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:agent_derived_activity_get_feeds",
+  "provider": "github",
+  "executed_at": "2026-08-17T21:25:35.450Z",
+  "run_id": "github-1787001935450-agent_derived_activity_get_feeds",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "34237212e88fc3db2aa84fa8e82a2d6862db5632f260be2dc85e9d087197c56a",
+    "pm_command_fingerprint": "{{pmcertfp:v1:bf245c2e799a45c0d1876f6058674985ed2a582966fed2b40fb7495a29f5e25c}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:c7f0540a05d7b341f50ff33e2e48106c7b66d080325cb8a732852ef5d446b98b}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "agent_derived_activity_get_feeds",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:900f78554e19a7340a6b5c20b3bb142c9da33d8105028357d56476357a284e8e}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "_links": {
+                "current_user": {
+                  "href": "{{pmcertfp:v1:a3dd34633f1b466c2c6cbd35180637c4c7d4fbe205d30ded2e5fe6f11c26e9cb}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "current_user_actor": {
+                  "href": "{{pmcertfp:v1:ccac93d2d24837d585e0670fbce963bfc1d8531ff58facb969fc5d03000f6af8}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "current_user_organization": {
+                  "href": "{{pmcertfp:v1:ac9a93668b15bb220decc29be2778217062856e78de2e0839fafe640e9077fe1}}",
+                  "type": "{{pmcertfp:v1:ac9a93668b15bb220decc29be2778217062856e78de2e0839fafe640e9077fe1}}"
+                },
+                "current_user_organizations": [
+                  {
+                    "href": "{{pmcertfp:v1:c1379bde20f141988e3bcf9eb2a895de99d3da8f4e3a930d1e69f80a234b7f86}}",
+                    "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                  },
+                  {
+                    "href": "{{pmcertfp:v1:52ce41b147a6d5a8c8fd22eae32a5bfa4421dc6c0b7dbf4f4d38363c470ff2e5}}",
+                    "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                  }
+                ],
+                "current_user_public": {
+                  "href": "{{pmcertfp:v1:e3c50654c508d78d63b956877fc1f02fe311f5a15ab97c8f9695257a225deb14}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "repository_discussions": {
+                  "href": "{{pmcertfp:v1:89150660d8f51a2a63158ee8aa302daeeca0a1b182bbf5389ccaeabea4459fc8}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "repository_discussions_category": {
+                  "href": "{{pmcertfp:v1:2bc89486cbdfbdc7bd61dcad5af88ba0a05ed6a35066ceb1d8c1d1bc09c737b0}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "security_advisories": {
+                  "href": "{{pmcertfp:v1:afceec53e5dad927462c88d059d2fda3e6c4acfd16ea6e8c1a3a9bad0d2acb7f}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "timeline": {
+                  "href": "{{pmcertfp:v1:bfe610745697b9095dfc9e5f3b3a00db116cc2acd6e41151c28d14c4b020b073}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                },
+                "user": {
+                  "href": "{{pmcertfp:v1:0bab6cf482fd3613aedda7348764cf379326ab6dac959287dbe0bf6aa52281dd}}",
+                  "type": "{{pmcertfp:v1:91eec2f26ea803b75b6d184e66a810ef1316acf026d60bd2b16478a640241218}}"
+                }
+              },
+              "current_user_actor_url": "{{pmcertfp:v1:ccac93d2d24837d585e0670fbce963bfc1d8531ff58facb969fc5d03000f6af8}}",
+              "current_user_organization_url": "{{pmcertfp:v1:ac9a93668b15bb220decc29be2778217062856e78de2e0839fafe640e9077fe1}}",
+              "current_user_organization_urls": [
+                "{{pmcertfp:v1:c1379bde20f141988e3bcf9eb2a895de99d3da8f4e3a930d1e69f80a234b7f86}}",
+                "{{pmcertfp:v1:52ce41b147a6d5a8c8fd22eae32a5bfa4421dc6c0b7dbf4f4d38363c470ff2e5}}"
+              ],
+              "current_user_public_url": "{{pmcertfp:v1:e3c50654c508d78d63b956877fc1f02fe311f5a15ab97c8f9695257a225deb14}}",
+              "current_user_url": "{{pmcertfp:v1:a3dd34633f1b466c2c6cbd35180637c4c7d4fbe205d30ded2e5fe6f11c26e9cb}}",
+              "repository_discussions_category_url": "{{pmcertfp:v1:2bc89486cbdfbdc7bd61dcad5af88ba0a05ed6a35066ceb1d8c1d1bc09c737b0}}",
+              "repository_discussions_url": "{{pmcertfp:v1:89150660d8f51a2a63158ee8aa302daeeca0a1b182bbf5389ccaeabea4459fc8}}",
+              "security_advisories_url": "{{pmcertfp:v1:afceec53e5dad927462c88d059d2fda3e6c4acfd16ea6e8c1a3a9bad0d2acb7f}}",
+              "timeline_url": "{{pmcertfp:v1:bfe610745697b9095dfc9e5f3b3a00db116cc2acd6e41151c28d14c4b020b073}}",
+              "user_url": "{{pmcertfp:v1:0bab6cf482fd3613aedda7348764cf379326ab6dac959287dbe0bf6aa52281dd}}"
+            },
+            "original_bytes": 2351,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}

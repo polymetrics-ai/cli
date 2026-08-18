@@ -3,6 +3,7 @@ package certify_test
 import (
 	"context"
 	"os"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/certify"
@@ -115,14 +116,14 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		t.Errorf("SyncModes[full_refresh_overwrite] = %+v, want {pass capture}", froMode)
 	}
 
-	// --- stage 7: etl_full_refresh_overwrite_deduped (capture replay, PK dedup) ---
+	// --- stage 7: etl_full_refresh_overwrite_deduped (typed pre-I/O refusal) ---
 	dedupOverwrite := mustStage(t, rep, "etl_full_refresh_overwrite_deduped")
-	if !dedupOverwrite.Passed {
+	if !dedupOverwrite.Passed || dedupOverwrite.CLI.Kind != "Error" || dedupOverwrite.CLI.ExitCode != 1 {
 		t.Errorf("etl_full_refresh_overwrite_deduped stage failed: %+v", dedupOverwrite)
 	}
 	frodMode, ok := rep.Capabilities.SyncModes["full_refresh_overwrite_deduped"]
-	if !ok || frodMode.Result != "pass" || frodMode.DataSource != "capture" {
-		t.Errorf("SyncModes[full_refresh_overwrite_deduped] = %+v, want {pass capture}", frodMode)
+	if !ok || frodMode.Result != "pass" || frodMode.DataSource != "pre_io_refusal" || frodMode.Reason != "typed pre-I/O refusal confirmed" {
+		t.Errorf("SyncModes[full_refresh_overwrite_deduped] = %+v, want typed pre-I/O refusal", frodMode)
 	}
 
 	// --- stage 8: etl_incremental_append (live) ---
@@ -144,14 +145,14 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		t.Errorf("Capabilities.Resume.Result = %q, want pass", rep.Capabilities.Resume.Result)
 	}
 
-	// --- stage 10: etl_incremental_append_deduped (capture replay) ---
+	// --- stage 10: etl_incremental_append_deduped (typed pre-I/O refusal) ---
 	incDedup := mustStage(t, rep, "etl_incremental_append_deduped")
-	if !incDedup.Passed {
+	if !incDedup.Passed || incDedup.CLI.Kind != "Error" || incDedup.CLI.ExitCode != 1 {
 		t.Errorf("etl_incremental_append_deduped stage failed: %+v", incDedup)
 	}
 	iadMode, ok := rep.Capabilities.SyncModes["incremental_append_deduped"]
-	if !ok || iadMode.Result != "pass" || iadMode.DataSource != "capture" {
-		t.Errorf("SyncModes[incremental_append_deduped] = %+v, want {pass capture}", iadMode)
+	if !ok || iadMode.Result != "pass" || iadMode.DataSource != "" || iadMode.Reason != "typed pre-I/O refusal confirmed" {
+		t.Errorf("SyncModes[incremental_append_deduped] = %+v, want typed pre-I/O refusal", iadMode)
 	}
 
 	// --- stage 11: query_contract ---
@@ -198,16 +199,19 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		// write stages 12-17 (stages_write.go) are skipped entirely in
 		// this test (Options.Write is false) — each records a documented
 		// skip with no CLI call, exactly like fixture_conformance above.
-		"write_plan_preview":       true,
-		"write_create":             true,
-		"write_verify":             true,
-		"write_cleanup":            true,
-		"cleanup_verify":           true,
-		"approval_idempotency":     true,
-		"write_sweep_all_pairings": true,
-		"direct_read_sweep":        true,
-		"binary_download_sweep":    true,
-		"surface_inventory":        true,
+		"write_plan_preview":         true,
+		"write_create":               true,
+		"write_verify":               true,
+		"write_cleanup":              true,
+		"cleanup_verify":             true,
+		"approval_idempotency":       true,
+		"write_sweep_all_pairings":   true,
+		"direct_read_sweep":          true,
+		"graphql_schema_conformance": true,
+		"graphql_inventory_boundary": true,
+		"binary_download_sweep":      true,
+		"surface_inventory":          true,
+		"declared_transport_pair":    true,
 	}
 	for _, stage := range rep.Stages {
 		if metaStagesWithoutDirectCLICall[stage.Name] {
@@ -216,6 +220,79 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		if stage.CLI.ArgvRedacted == "" {
 			t.Errorf("stage %s: CLI.ArgvRedacted empty, want a recorded pm invocation", stage.Name)
 		}
+	}
+}
+
+func TestDirectReadOnlyRetainsCredentialCheckWithoutStreamETL(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+	r, driver := scriptedSampleRunner(t, certify.Options{
+		Connector:      "sample",
+		Full:           true,
+		DirectReadOnly: true,
+		SecretEnv:      map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	})
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	if !mustStage(t, rep, "preflight").Passed || !mustStage(t, rep, "credentials_test").Passed {
+		t.Fatalf("direct-read-only did not retain preflight and credential test: %+v", rep.Stages)
+	}
+	if driver.seen["connections_create"] != 0 || driver.seen["etl_run"] != 0 || driver.seen["catalog_refresh"] != 0 {
+		t.Fatalf("direct-read-only drove stream stages: seen=%+v", driver.seen)
+	}
+	for _, stage := range rep.Stages {
+		if strings.HasPrefix(stage.Name, "etl_") || stage.Name == "catalog" {
+			t.Fatalf("direct-read-only recorded unrelated stream stage %+v", stage)
+		}
+	}
+}
+
+// TestFullCertificationStageSetIsStrictSuperset proves --full cannot silently
+// drop the flow or schedule coverage included in an ordinary run. The full
+// runner intentionally executes both glue stages for every catalog stream;
+// it must also contain an additional full-sweep-only stage.
+func TestFullCertificationStageSetIsStrictSuperset(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+	options := certify.Options{
+		Connector: "sample",
+		Stream:    "customers",
+		Limit:     50,
+		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	}
+
+	partialRunner, partialDriver := scriptedSampleRunner(t, options)
+	partial, err := partialRunner.Run(context.Background())
+	if err != nil {
+		t.Fatalf("ordinary Run() error = %v", err)
+	}
+	partialDriver.assertProtocol(t)
+
+	options.Full = true
+	fullRunner, fullDriver := scriptedSampleRunner(t, options)
+	full, err := fullRunner.Run(context.Background())
+	if err != nil {
+		t.Fatalf("full Run() error = %v", err)
+	}
+	fullDriver.assertProtocol(t)
+
+	partialStages := stageNameSet(partial)
+	fullStages := stageNameSet(full)
+	for name := range partialStages {
+		if !fullStages[name] {
+			t.Errorf("full certification omitted ordinary stage %q", name)
+		}
+	}
+	for _, name := range []string{"flow_roundtrip", "schedule_roundtrip", "schedule_fire"} {
+		if !fullStages[name] {
+			t.Errorf("full certification omitted required glue stage %q", name)
+		}
+	}
+	if !fullStages["full_sweep_connection_create_customers"] {
+		t.Errorf("full certification lacks full-only customer sweep stage; stages=%v", full.Stages)
+	}
+	if len(fullStages) <= len(partialStages) {
+		t.Errorf("full stage set has %d names, ordinary has %d; want strict superset", len(fullStages), len(partialStages))
 	}
 }
 
@@ -353,6 +430,14 @@ func mustStage(t *testing.T, rep certify.Report, name string) certify.StageResul
 	}
 	t.Fatalf("stage %q not found in report; stages=%+v", name, rep.Stages)
 	return certify.StageResult{}
+}
+
+func stageNameSet(rep certify.Report) map[string]bool {
+	names := make(map[string]bool, len(rep.Stages))
+	for _, stage := range rep.Stages {
+		names[stage.Name] = true
+	}
+	return names
 }
 
 func containsAny(s string, subs ...string) bool {

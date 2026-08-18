@@ -4,13 +4,11 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"sort"
-	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
@@ -564,29 +562,6 @@ func resolvePayloadPath(projectDir, raw string) (string, error) {
 		return resolved, nil
 	}
 	return "", fmt.Errorf("payload file path outside the project root is not allowed")
-}
-
-func parseSelectAll(sql string) (string, int, error) {
-	fields := strings.Fields(strings.TrimSpace(strings.TrimSuffix(sql, ";")))
-	if len(fields) < 4 {
-		return "", 0, errors.New("only SELECT * FROM <table> [LIMIT n] is supported in the MVP")
-	}
-	if !strings.EqualFold(fields[0], "select") || fields[1] != "*" || !strings.EqualFold(fields[2], "from") {
-		return "", 0, errors.New("only SELECT * FROM <table> [LIMIT n] is supported in the MVP")
-	}
-	table := fields[3]
-	limit := 100
-	if len(fields) > 4 {
-		if len(fields) != 6 || !strings.EqualFold(fields[4], "limit") {
-			return "", 0, errors.New("only SELECT * FROM <table> [LIMIT n] is supported in the MVP")
-		}
-		n, err := strconv.Atoi(fields[5])
-		if err != nil || n <= 0 {
-			return "", 0, fmt.Errorf("invalid limit %q", fields[5])
-		}
-		limit = n
-	}
-	return table, limit, nil
 }
 
 func min(a, b int) int {

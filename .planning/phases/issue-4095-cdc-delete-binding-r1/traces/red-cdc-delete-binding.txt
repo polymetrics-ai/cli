@@ -1,0 +1,10 @@
+Command:
+
+    go test -timeout 20m -count=1 ./internal/connectors/database ./internal/connectors/native/postgres
+
+Red: compilation failed as expected before production implementation:
+
+- `MappingContractV1` has no `MapTombstone` method.
+- PostgreSQL has no `CDCDeleteTombstone` binding.
+
+The test is deliberately compile-red because neither required behavior exists.

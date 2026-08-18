@@ -79,3 +79,30 @@ func TestFullSweepStreamSpecsFallbackToSelectedStream(t *testing.T) {
 		t.Fatalf("fallback spec = %+v", specs[0])
 	}
 }
+
+func TestPostgresPollingCertificationFullSweepUsesSelectedWatermarkRelation(t *testing.T) {
+	rc := &runContext{
+		opts: Options{Connector: "postgres", Stream: "catalog_alpha.read_events", Config: map[string]string{"cursor_field": "sequence"}},
+		catalogStreamSpecs: []streamSpec{
+			{Name: "catalog_alpha.read_events", PrimaryKey: "id"},
+			{Name: "catalog_alpha.unrelated", PrimaryKey: "id"},
+		},
+	}
+	specs := rc.fullSweepStreamSpecs()
+	if len(specs) != 1 {
+		t.Fatalf("PostgreSQL full sweep streams = %#v, want the selected relation only", specs)
+	}
+	if specs[0] != (streamSpec{Name: "catalog_alpha.read_events", PrimaryKey: "id", CursorField: "sequence"}) {
+		t.Fatalf("PostgreSQL full sweep spec = %#v", specs[0])
+	}
+}
+
+func TestPostgresPollingCertificationRequiresExplicitWatermark(t *testing.T) {
+	rc := &runContext{
+		opts:               Options{Connector: "postgres", Stream: "catalog_alpha.read_events"},
+		catalogStreamSpecs: []streamSpec{{Name: "catalog_alpha.read_events", PrimaryKey: "id"}},
+	}
+	if _, ok := rc.dynamicPollingCertificationStreamSpec(); ok {
+		t.Fatal("PostgreSQL certification accepted a dynamic relation without an explicit cursor_field")
+	}
+}

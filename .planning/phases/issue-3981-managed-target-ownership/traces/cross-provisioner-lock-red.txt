@@ -1,0 +1,19 @@
+# RED — #4038 cross-provisioner lock contract
+
+During required code review, two independent `ManagedTargetProvisioner` values
+could each hold only their own local gate, observe an absent target, and reach a
+shared fake driver's create path. #4038 was created and linked from #3981
+before correction.
+
+The test was strengthened to require the driver-neutral target-scoped lock:
+
+```text
+go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestManagedTargetProvisioningTruthTable$'
+
+undefined: database.ManagedTargetLock
+FAIL polymetrics.ai/internal/connectors/database [build failed]
+```
+
+The RED failure proves that the first implementation had no cross-provisioner
+lock contract. It is not a PostgreSQL or SQL requirement: the test uses the
+same in-memory fake driver as the original truth table.

@@ -1,0 +1,16 @@
+$ go test -timeout 20m ./internal/connectors/database -run 'TestDatabaseWriteExecutorDeletesOnlyExplicitTombstones' -count=1
+# polymetrics.ai/internal/connectors/database_test [polymetrics.ai/internal/connectors/database.test]
+internal/connectors/database/mapping_contract_test.go:87:13: undefined: testDatabaseWriteMapping
+internal/connectors/database/mapping_contract_test.go:88:37: unknown field targetRows in struct literal of type databaseWriteDriverFake
+internal/connectors/database/mapping_contract_test.go:96:3: unknown field Mapping in struct literal of type database.DatabaseWritePlanRequest
+internal/connectors/database/mapping_contract_test.go:99:3: unknown field TombstoneCount in struct literal of type database.DatabaseWritePlanRequest
+internal/connectors/database/mapping_contract_test.go:106:33: undefined: database.NewDatabaseWriteInput
+internal/connectors/database/mapping_contract_test.go:106:110: undefined: database.TombstoneEnvelope
+internal/connectors/database/mapping_contract_test.go:110:24: executor.ExecuteInput undefined (type *database.DatabaseWriteExecutor has no field or method ExecuteInput)
+internal/connectors/database/mapping_contract_test.go:127:28: undefined: database.NewTombstoneEnvelope
+FAIL	polymetrics.ai/internal/connectors/database [build failed]
+FAIL
+
+The base write-session contract has no typed input, tombstone count, or
+session path for an explicit tombstone. The test therefore cannot compile
+until the shared contract is threaded through the sealed plan and `WriteBatch`.

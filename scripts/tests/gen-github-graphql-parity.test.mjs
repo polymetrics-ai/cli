@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { buildSourceLock } from "../github-combined-operation-ledger.mjs";
 import {
   buildGitHubGraphQLParityArtifacts,
+  mergeGitHubGraphQLParityArtifacts,
   validateGitHubGraphQLParityArtifacts,
 } from "../gen-github-graphql-parity.mjs";
 
@@ -59,7 +60,7 @@ test("generates one fixed source-derived contract per GraphQL root", async () =>
   assert.equal(enterprise.graphql.variables_schema.properties.input.properties.login.type, "string");
 
   const node = generated.operations.find((operation) => operation.id === "github.graphql.query.node");
-  assert.match(node.graphql.document, /node\(id: \$id\) \{ __typename \}/u);
+  assert.match(node.graphql.document, /node\(id: \$id\) \{ __typename .* on User \{ __typename \} .* on Widget \{ __typename \}/u);
   assert.doesNotMatch(node.graphql.document, /caller(?:Selection|Document)|\$selection/u);
   assert.deepEqual(node.graphql.variables_schema.required, ["id"]);
 
@@ -69,6 +70,28 @@ test("generates one fixed source-derived contract per GraphQL root", async () =>
   assert.equal(nodes.output_policy, "json_redacted");
 
   assert.doesNotThrow(() => validateGitHubGraphQLParityArtifacts({ lock, generated }));
+});
+
+test("preserves fixed supplemental GraphQL operations on the shared transport", async () => {
+  const lock = await miniLock();
+  const bundle = emptyBundle();
+  bundle.operations.operations.push({ id: "github.repo.list", kind: "graphql_query" });
+  bundle.surface.endpoints.push({
+    method: "POST",
+    path: "/graphql",
+    covered_by: { operations: ["github.repo.list"] },
+  });
+
+  const generated = buildGitHubGraphQLParityArtifacts({ lock, bundle });
+  const merged = mergeGitHubGraphQLParityArtifacts(bundle, generated);
+  const transport = merged.surface.endpoints.find(
+    (endpoint) => endpoint.method === "POST" && endpoint.path === "/graphql",
+  );
+
+  assert.deepEqual(transport.covered_by.operations, [
+    "github.repo.list",
+    ...generated.operations.map((operation) => operation.id),
+  ]);
 });
 
 test("fails closed for a missing canary, duplicate root command, unbounded list, or unclassified deleteIssue", async () => {
@@ -92,6 +115,10 @@ test("uses the declared environment-only secret contract only for source fields 
 	const projectRoot = path.resolve(scriptsDir, "..");
 	const lock = JSON.parse(await readFile(path.join(projectRoot, "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), "utf8"));
 	const generated = buildGitHubGraphQLParityArtifacts({ lock, bundle: emptyBundle() });
+	const node = generated.operations.find((candidate) => candidate.id === "github.graphql.query.node");
+	assert.match(node?.graphql?.document || "", /on Issue \{ id number title isPinned \}/u);
+	assert.match(node?.graphql?.document || "", /on PullRequest \{ id number title isDraft \}/u);
+	assert.match(node?.graphql?.document || "", /on Repository \{ id databaseId nameWithOwner \}/u);
 
 	for (const name of ["createMigrationSource", "startOrganizationMigration", "startRepositoryMigration"]) {
 		const suffix = name.replace(/([a-z0-9])([A-Z])/gu, "$1-$2").toLowerCase();

@@ -1,0 +1,64 @@
+{
+  "schema_version": 2,
+  "scope": "capability",
+  "status": "passed",
+  "credential_scope": "observed_operations",
+  "credential_note": "Only the credential use documented by this record's protocol exchanges was verified; no broader credential scope is claimed.",
+  "credential_scope_proof": "protocol_exchanges",
+  "connector": "github",
+  "function_kind": "command:generated_direct_read_copilot_get_copilot_organization_details",
+  "provider": "github",
+  "executed_at": "2026-08-17T19:26:21.130Z",
+  "run_id": "github-1786994746960-5008155dc4ee-generated_direct_read_copilot_get_copilot_organization_details",
+  "proof": {
+    "redaction_strategy": "repository_salted_hmac_sha256_v1",
+    "pm_binary_sha256": "3558077d962c8e6861d05b9b97666033d68ab77d9a81e744a94b31c2bf16d73c",
+    "pm_command_fingerprint": "{{pmcertfp:v1:c2dc98c5979a484a5b4b2c25d680ff8806d93d6d14ac5b85669ee49b51314653}}",
+    "credential_fingerprints": [
+      "{{pmcertfp:v1:990f9d37b48da437dbf87333179e3e176a42d195c40e9d1de6fd2495c4b3a64e}}"
+    ],
+    "http_exchanges": [
+      {
+        "operation": "generated_direct_read_copilot_get_copilot_organization_details",
+        "request": {
+          "method": "GET",
+          "target": "{{pmcertfp:v1:254009b444c5b98b015950d06c2527e03b5d09cb3156637856ff56f143b544e4}}",
+          "query": [],
+          "headers": [],
+          "body": {
+            "encoding": "none",
+            "value": null,
+            "original_bytes": 0,
+            "truncated": false
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": [],
+          "body": {
+            "encoding": "json",
+            "value": {
+              "cli": "{{pmcertfp:v1:bebbaf5bfb608017f4df9f02625c20002a4a779b31bbba9134a21d6644690cfa}}",
+              "ide_chat": "{{pmcertfp:v1:9b03ccdb2e73fa4d7f4f4a414843298591273d3fdbd2c6f673563435e33240b8}}",
+              "plan_type": "{{pmcertfp:v1:df29f2e52b4a361edc6dedf4d30e62b3f95d549cb5bf82a2ee1e22a58dbb2021}}",
+              "platform_chat": "{{pmcertfp:v1:9b03ccdb2e73fa4d7f4f4a414843298591273d3fdbd2c6f673563435e33240b8}}",
+              "public_code_suggestions": "{{pmcertfp:v1:77edd7872666f6db9be566729451e73a19468bc201e9916da092420ac5bb5c85}}",
+              "seat_breakdown": {
+                "active_this_cycle": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                "added_this_cycle": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                "inactive_this_cycle": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                "pending_cancellation": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                "pending_invitation": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}",
+                "total": "{{pmcertfp:v1:6ba57dcb4328b632811a7f19aba2ebc136d055e985f8dc0750b0760d36f84d6a}}"
+              },
+              "seat_management_setting": "{{pmcertfp:v1:bebbaf5bfb608017f4df9f02625c20002a4a779b31bbba9134a21d6644690cfa}}"
+            },
+            "original_bytes": 311,
+            "truncated": false
+          }
+        }
+      }
+    ],
+    "database_exchanges": []
+  }
+}
