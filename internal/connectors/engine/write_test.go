@@ -1017,7 +1017,7 @@ func TestDryRunWritePreviewResolvedPathPreservesNestedRecordFields(t *testing.T)
 
 // --- delete semantics: missing_ok_status ---
 
-func TestWriteDeleteMissingOkStatusCountsAsWritten(t *testing.T) {
+func TestWriteDeleteMissingOkStatusDoesNotCountAsWritten(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	}))
@@ -1033,11 +1033,11 @@ func TestWriteDeleteMissingOkStatusCountsAsWritten(t *testing.T) {
 
 	records := []connectors.Record{{"name": "bug"}}
 	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
-	if err != nil {
-		t.Fatalf("Write: %v (404 on idempotent delete should count as written, not error)", err)
+	if err == nil {
+		t.Fatal("Write: error = nil, provider 404 must not be reported as a completed mutation")
 	}
-	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
-		t.Fatalf("result = %+v, want 404 counted as written", result)
+	if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
+		t.Fatalf("result = %+v, want provider 404 counted as one failed write", result)
 	}
 }
 

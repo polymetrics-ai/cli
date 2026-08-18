@@ -3,9 +3,14 @@
   "issue_refs": [4015, 4221],
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-parity-fix-defects",
-  "status": "planned",
+  "status": "red",
   "census_total": 277,
-  "red": [],
+  "red": [
+    "persisted exact integer changes payload identity before provider dispatch",
+    "six GitHub mutation actions omit required body schema and CLI flags",
+    "three Actions aliases and the user draft identifier declaration are wrong",
+    "missing_ok_status 404 increments RecordsWritten and returns success"
+  ],
   "green": [],
   "live_conversions": [],
   "cleanup": []

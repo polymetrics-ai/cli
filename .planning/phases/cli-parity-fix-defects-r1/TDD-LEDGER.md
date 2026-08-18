@@ -10,3 +10,9 @@
 Red and Green command outputs are appended here before the production change and
 after each green slice. A skipped test is not evidence.
 
+## Red checkpoint — 2026-08-18
+
+- Exact integer: `go test -timeout 20m ./internal/app -run '^TestGitHubConnectorCommandPreservesExactLargeIntegerPathAfterPlanReload$' -count=1` failed before the request with `reverse plan command payload changed since approval`; persistence had changed `9007199254740993`.
+- Required bodies: `go test -timeout 20m ./internal/connectors/engine -run '^TestGitHubRequiredMutationBodiesReachTheWire$' -count=1` failed for all six commands because the required schema properties/CLI flags were absent.
+- Wrong paths: `go test -timeout 20m ./internal/connectors/engine -run '^TestGitHubCorrectedCommandDeclarations$' -count=1` failed on all three Actions aliases and on the user-project numeric identifier contract.
+- False success: `go test -timeout 20m ./internal/connectors/engine -run '^TestWriteDeleteMissingOkStatusDoesNotCountAsWritten$' -count=1` failed because the 404 returned no error and counted `RecordsWritten=1`. The app-level org webhook test has the same red behavior.
