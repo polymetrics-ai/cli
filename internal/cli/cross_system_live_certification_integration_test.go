@@ -49,18 +49,16 @@ func TestPMBinaryExecutesLiveCrossSystemPipelines(t *testing.T) {
 
 	fixtureID := crossSystemFixtureID(t)
 	labelName := "pm-cert-db-api-" + fixtureID
-	releaseTag := "pm-cert-api-api-" + fixtureID
-	releaseBefore := "pm-cert-api-api-before-" + fixtureID
-	releaseAfter := "pm-cert-api-api-after-" + fixtureID
+	commentBefore := "pm-cert-api-api-before-" + fixtureID
+	commentAfter := crossSystemOwner + "/" + crossSystemRepo
 	github := newCrossSystemGitHubClient(token)
-	var releaseID int64
+	var commentID int64
 	t.Cleanup(func() {
 		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 2*time.Minute)
 		defer cleanupCancel()
-		if releaseID != 0 {
-			github.cleanupRelease(t, cleanupCtx, releaseID)
+		if commentID != 0 {
+			github.cleanupIssueComment(t, cleanupCtx, commentID)
 		}
-		github.cleanupTag(t, cleanupCtx, releaseTag)
 		github.cleanupLabel(t, cleanupCtx, labelName)
 	})
 
@@ -177,51 +175,75 @@ func TestPMBinaryExecutesLiveCrossSystemPipelines(t *testing.T) {
 		"etl", "run", "--connection", "github-to-postgres", "--stream", "labels", "--batch-size", "100",
 		"--approval-plan", firstGitHubPostgres.PlanID, "--confirm", "destructive", "--root", root, "--json")
 	secondGitHubPostgres := decodeCrossSystemETLRun(t, unattendedOutput)
-	assertCrossSystemRun(t, "GitHub to PostgreSQL full overwrite replay", secondGitHubPostgres.Status, secondGitHubPostgres.RecordsRead, secondGitHubPostgres.RecordsLoaded, len(labelsBeforePostgres), len(labelsBeforePostgres))
-	assertCrossSystemPostgresLabel(t, ctx, target, len(labelsBeforePostgres), label)
+	if secondGitHubPostgres.Status != "completed" {
+		t.Fatalf("GitHub to PostgreSQL full overwrite replay status = %q, want completed", secondGitHubPostgres.Status)
+	}
+	if secondGitHubPostgres.RecordsRead != len(labelsBeforePostgres) || secondGitHubPostgres.RecordsLoaded != len(labelsBeforePostgres) {
+		// Keep executing the remaining independent routes after recording this
+		// release finding. full_overwrite promises a complete source read and
+		// replacement on every run; a zero-row checkpoint skip is not that mode.
+		t.Errorf("DEFECT GitHub to PostgreSQL full_overwrite replay read/loaded=%d/%d, want declared full replacement %d/%d",
+			secondGitHubPostgres.RecordsRead, secondGitHubPostgres.RecordsLoaded, len(labelsBeforePostgres), len(labelsBeforePostgres))
+	}
+	replayCount, replaySampleFound := crossSystemPostgresLabelState(t, ctx, target, labelName)
+	if replayCount != len(labelsBeforePostgres) || !replaySampleFound {
+		t.Errorf("DEFECT independent PostgreSQL full_overwrite replay read-back rows=%d sample_present=%t, want rows=%d sample_present=true",
+			replayCount, replaySampleFound, len(labelsBeforePostgres))
+	}
 	t.Logf("ROUTE github->postgres command=pm etl transport postgres-managed-target plan/preview + pm etl run first=%d/%d replay=%d/%d destination_count=%d sample=%s",
 		firstGitHubPostgres.Run.RecordsRead, firstGitHubPostgres.Run.RecordsLoaded,
 		secondGitHubPostgres.RecordsRead, secondGitHubPostgres.RecordsLoaded, len(labelsBeforePostgres), labelName)
 
-	// Route 3: GitHub release -> owned warehouse -> typed GitHub update_release.
-	release := github.createRelease(t, ctx, crossSystemRelease{
-		TagName: releaseTag, Name: releaseBefore, Body: releaseAfter, Prerelease: true,
-	})
-	releaseID = release.ID
-	releasesBeforeAPIReplay := github.listReleases(t, ctx)
-	if len(releasesBeforeAPIReplay) == 0 || releasesBeforeAPIReplay[0].ID != releaseID {
-		t.Fatalf("new pm-cert release is not the first bounded GitHub source record: first=%+v want_id=%d", firstCrossSystemRelease(releasesBeforeAPIReplay), releaseID)
+	// Route 3: GitHub issue comment -> owned warehouse -> typed GitHub
+	// update_issue_comment. The credential's exact since boundary makes this a
+	// one-record source rather than relying on provider list ordering.
+	issueNumber := github.firstIssueNumber(t, ctx)
+	commentSince := time.Now().UTC().Add(-2 * time.Second).Format(time.RFC3339)
+	comment := github.createIssueComment(t, ctx, issueNumber, commentBefore)
+	commentID = comment.ID
+	commentsBeforeAPIReplay := github.listIssueCommentsSince(t, ctx, commentSince)
+	if len(commentsBeforeAPIReplay) != 1 || commentsBeforeAPIReplay[0].ID != commentID {
+		t.Fatalf("bounded GitHub issue-comment source = %+v, want only comment_id=%d", commentsBeforeAPIReplay, commentID)
 	}
 	mustPostgresTransportPM(t, binary, "",
-		"connections", "create", "github-to-warehouse",
-		"--source", "github:github-cross-system", "--destination", "warehouse:warehouse-cross-system",
-		"--stream", "releases", "--sync-mode", "full_refresh_overwrite",
-		"--cursor", "published_at", "--primary-key", "id", "--table", "api_api_releases",
+		"credentials", "add", "github-comment-source", "--connector", "github",
+		"--config", "owner="+crossSystemOwner,
+		"--config", "repo="+crossSystemRepo,
+		"--config", "auth_type=token",
+		"--config", "max_pages=1",
+		"--config", "since="+commentSince,
+		"--config", "rate_limit_account=pm-cert-cross-system-comments",
+		"--from-env", "token="+crossSystemTokenEnv,
 		"--root", root, "--json")
-	firstGitHubExtract := runCrossSystemETL(t, binary, root, "github-to-warehouse", "releases", 100)
-	assertCrossSystemRun(t, "GitHub to warehouse first run", firstGitHubExtract.Status, firstGitHubExtract.RecordsRead, firstGitHubExtract.RecordsLoaded, len(releasesBeforeAPIReplay), len(releasesBeforeAPIReplay))
-	assertCrossSystemWarehouseRows(t, binary, root, "github-to-warehouse", "api_api_releases", len(releasesBeforeAPIReplay), "id", releaseID)
-	releasePlan := prepareCrossSystemReversePlan(t, binary, root, []string{
+	mustPostgresTransportPM(t, binary, "",
+		"connections", "create", "github-to-warehouse",
+		"--source", "github:github-comment-source", "--destination", "warehouse:warehouse-cross-system",
+		"--stream", "issue_comments", "--sync-mode", "full_refresh_overwrite",
+		"--cursor", "updated_at", "--primary-key", "id", "--table", "api_api_comments",
+		"--root", root, "--json")
+	firstGitHubExtract := runCrossSystemETL(t, binary, root, "github-to-warehouse", "issue_comments", 10)
+	assertCrossSystemRun(t, "GitHub to warehouse first run", firstGitHubExtract.Status, firstGitHubExtract.RecordsRead, firstGitHubExtract.RecordsLoaded, 1, 1)
+	assertCrossSystemWarehouseRows(t, binary, root, "github-to-warehouse", "api_api_comments", 1, "id", commentID)
+	commentPlan := prepareCrossSystemReversePlan(t, binary, root, []string{
 		"reverse", "plan", "pm-cert-api-api-" + fixtureID,
-		"--source-table", "api_api_releases", "--connection", "github-to-warehouse",
-		"--destination", "github:github-cross-system", "--action", "update_release", "--limit", "1",
-		"--map", "id:release_id", "--map", "tag_name:tag_name", "--map", "body:name", "--map", "body:body",
-		"--map", "draft:draft", "--map", "prerelease:prerelease",
+		"--source-table", "api_api_comments", "--connection", "github-to-warehouse",
+		"--destination", "github:github-cross-system", "--action", "update_issue_comment", "--limit", "1",
+		"--map", "id:comment_id", "--map", "repository:body",
 	})
-	runCrossSystemReversePlan(t, binary, root, releasePlan)
-	updatedRelease := github.getRelease(t, ctx, releaseID, http.StatusOK)
-	if updatedRelease.ID != releaseID || updatedRelease.Name != releaseAfter || updatedRelease.Body != releaseAfter || updatedRelease.TagName != releaseTag {
-		t.Fatalf("independent API-to-API release read-back = %+v", updatedRelease)
+	runCrossSystemReversePlan(t, binary, root, commentPlan)
+	updatedComment := github.getIssueComment(t, ctx, commentID, http.StatusOK)
+	if updatedComment.ID != commentID || updatedComment.Body != commentAfter {
+		t.Fatalf("independent API-to-API comment read-back = %+v", updatedComment)
 	}
-	if got := crossSystemNamedReleaseCount(github.listReleases(t, ctx), releaseTag); got != 1 {
-		t.Fatalf("API-to-API first run left %d releases tagged %q, want exactly one", got, releaseTag)
+	if got := crossSystemNamedCommentCount(github.listIssueCommentsSince(t, ctx, commentSince), commentID); got != 1 {
+		t.Fatalf("API-to-API first run left %d comments with id %d, want exactly one", got, commentID)
 	}
-	t.Logf("ROUTE github->github command=pm etl run + pm reverse plan/preview/run source_count=%d destination_count=1 sample=%s", len(releasesBeforeAPIReplay), releaseTag)
+	t.Logf("ROUTE github->github command=pm etl run + pm reverse plan/preview/run source_count=1 destination_count=1 sample_comment_id=%d body=%s", commentID, commentAfter)
 
 	// Route 4 and route 3 replay: persisted ETL + approved reverse job through
 	// the exact command installed by the crontab backend.
 	flowName := "pm-cert-cross-system-" + fixtureID
-	flowFile := writeCrossSystemFlow(t, flowName, releasePlan.ID)
+	flowFile := writeCrossSystemFlow(t, flowName, commentPlan.ID)
 	mustPostgresTransportPM(t, binary, "", "flow", "plan", "--file", flowFile, "--root", root, "--json")
 	mustPostgresTransportPM(t, binary, "", "flow", "preview", "--file", flowFile, "--root", root, "--json")
 	mustPostgresTransportPM(t, binary, "", "flow", "create", "--file", flowFile, "--root", root, "--json")
@@ -238,24 +260,24 @@ func TestPMBinaryExecutesLiveCrossSystemPipelines(t *testing.T) {
 	if !strings.Contains(string(installed), wantEntryPoint) {
 		t.Fatalf("installed schedule omitted exact flow entry point %q", wantEntryPoint)
 	}
-	for _, forbidden := range []string{token, releasePlan.Token, "approval_token", "--authorization"} {
+	for _, forbidden := range []string{token, commentPlan.Token, "approval_token", "--authorization"} {
 		if forbidden != "" && strings.Contains(string(installed), forbidden) {
 			t.Fatal("installed schedule retained credential or approval material")
 		}
 	}
 	firedOutput := mustPostgresTransportPM(t, binary, "", "--root", root, "flow", "run", flowName, "--json")
 	flowResult := decodeCrossSystemFlowResult(t, firedOutput)
-	if flowResult.Status != "ok" || len(flowResult.Steps) != 2 || flowResult.Steps[0].RecordsRead != len(releasesBeforeAPIReplay) || flowResult.Steps[1].RecordsWritten != 1 || flowResult.Steps[1].PreparedExecutionIdentity == "" {
+	if flowResult.Status != "ok" || len(flowResult.Steps) != 2 || flowResult.Steps[0].RecordsRead != 1 || flowResult.Steps[1].RecordsWritten != 1 || flowResult.Steps[1].PreparedExecutionIdentity == "" {
 		t.Fatalf("installed scheduled flow result = %+v", flowResult)
 	}
 	scheduleOutput := mustPostgresTransportPM(t, binary, "", "schedule", "inspect", scheduleName, "--root", root, "--json")
 	assertCrossSystemScheduleState(t, scheduleOutput, flowResult.Steps[1].PreparedExecutionIdentity)
-	replayedRelease := github.getRelease(t, ctx, releaseID, http.StatusOK)
-	if replayedRelease.Name != releaseAfter || replayedRelease.Body != releaseAfter || crossSystemNamedReleaseCount(github.listReleases(t, ctx), releaseTag) != 1 {
-		t.Fatalf("scheduled API-to-API replay changed destination incorrectly: %+v", replayedRelease)
+	replayedComment := github.getIssueComment(t, ctx, commentID, http.StatusOK)
+	if replayedComment.Body != commentAfter || crossSystemNamedCommentCount(github.listIssueCommentsSince(t, ctx, commentSince), commentID) != 1 {
+		t.Fatalf("scheduled API-to-API replay changed destination incorrectly: %+v", replayedComment)
 	}
 	assertNoCredentialMaterialInTree(t, filepath.Join(root, ".polymetrics"), token)
-	t.Logf("SCHEDULE entry_point=%q flow=%s status=ok source_full_overwrite=%d action_updated=1 destination_count=1 sample=%s", wantEntryPoint, flowName, flowResult.Steps[0].RecordsRead, releaseTag)
+	t.Logf("SCHEDULE entry_point=%q flow=%s status=ok source_full_overwrite=%d action_updated=1 destination_count=1 sample_comment_id=%d", wantEntryPoint, flowName, flowResult.Steps[0].RecordsRead, commentID)
 }
 
 type crossSystemRun struct {
@@ -333,11 +355,29 @@ func assertCrossSystemWarehouseRows(t *testing.T, binary, root, connection, tabl
 		t.Fatalf("independent warehouse rows for %s/%s = %d/%d, want %d", connection, table, result.Count, len(result.Rows), want)
 	}
 	for _, row := range result.Rows {
-		if fmt.Sprint(row[sampleField]) == fmt.Sprint(sample) {
+		if crossSystemValuesEqual(row[sampleField], sample) {
 			return
 		}
 	}
 	t.Fatalf("independent warehouse rows for %s/%s omitted %s=%v", connection, table, sampleField, sample)
+}
+
+func crossSystemValuesEqual(got, want any) bool {
+	if fmt.Sprint(got) == fmt.Sprint(want) {
+		return true
+	}
+	gotNumber, gotOK := got.(float64)
+	if !gotOK {
+		return false
+	}
+	switch wantNumber := want.(type) {
+	case int64:
+		return gotNumber == float64(wantNumber)
+	case int:
+		return gotNumber == float64(wantNumber)
+	default:
+		return false
+	}
 }
 
 func assertCrossSystemPostgresLabel(t *testing.T, ctx context.Context, target *pgx.Conn, wantCount int, want crossSystemLabel) {
@@ -356,21 +396,32 @@ func assertCrossSystemPostgresLabel(t *testing.T, ctx context.Context, target *p
 	}
 }
 
+func crossSystemPostgresLabelState(t *testing.T, ctx context.Context, target *pgx.Conn, name string) (int, bool) {
+	t.Helper()
+	schema, relation, count := postgresTransportTargetRelation(t, ctx, target)
+	var found bool
+	query := "SELECT EXISTS (SELECT 1 FROM " + pgx.Identifier{schema, relation}.Sanitize() + " WHERE name = $1)"
+	if err := target.QueryRow(ctx, query, name).Scan(&found); err != nil {
+		t.Fatalf("independently inspect replayed PostgreSQL label %q: %v", name, err)
+	}
+	return count, found
+}
+
 func writeCrossSystemFlow(t *testing.T, name, job string) string {
 	t.Helper()
 	manifest := map[string]any{
 		"version":     1,
 		"name":        name,
-		"description": "pm-cert GitHub release warehouse round trip",
+		"description": "pm-cert GitHub issue-comment warehouse round trip",
 		"steps": []any{
 			map[string]any{
-				"id": "extract-release", "kind": "sync", "connection": "github-to-warehouse",
-				"streams": []string{"releases"}, "in": []string{}, "out": []string{"api_api_releases"},
+				"id": "extract-comment", "kind": "sync", "connection": "github-to-warehouse",
+				"streams": []string{"issue_comments"}, "in": []string{}, "out": []string{"api_api_comments"},
 			},
 			map[string]any{
-				"id": "update-release", "kind": "action", "job": job,
-				"in": []string{"api_api_releases"}, "out": []string{},
-				"action_cfg": map[string]any{"read_back_stream": "releases"},
+				"id": "update-comment", "kind": "action", "job": job,
+				"in": []string{"api_api_comments"}, "out": []string{},
+				"action_cfg": map[string]any{"read_back_stream": "issue_comments"},
 			},
 		},
 	}
@@ -443,12 +494,10 @@ type crossSystemLabel struct {
 	Description string `json:"description"`
 }
 
-type crossSystemRelease struct {
-	ID         int64  `json:"id"`
-	TagName    string `json:"tag_name"`
-	Name       string `json:"name"`
-	Body       string `json:"body"`
-	Prerelease bool   `json:"prerelease"`
+type crossSystemIssueComment struct {
+	ID        int64  `json:"id"`
+	Body      string `json:"body"`
+	UpdatedAt string `json:"updated_at"`
 }
 
 func newCrossSystemGitHubClient(token string) *crossSystemGitHubClient {
@@ -533,58 +582,74 @@ func (c *crossSystemGitHubClient) listLabels(t *testing.T, ctx context.Context) 
 	return nil
 }
 
-func (c *crossSystemGitHubClient) createRelease(t *testing.T, ctx context.Context, release crossSystemRelease) crossSystemRelease {
+func (c *crossSystemGitHubClient) firstIssueNumber(t *testing.T, ctx context.Context) int {
 	t.Helper()
-	body := map[string]any{
-		"tag_name": release.TagName, "name": release.Name, "body": release.Body,
-		"draft": false, "prerelease": release.Prerelease,
+	response, payload, err := c.request(ctx, http.MethodGet, crossSystemRepoPath("/issues?state=all&per_page=100"), nil)
+	if err != nil || response.StatusCode != http.StatusOK {
+		t.Fatalf("list pm-cert fixture issues: status=%s err=%v", crossSystemStatus(response), err)
 	}
-	response, payload, err := c.request(ctx, http.MethodPost, crossSystemRepoPath("/releases"), body)
-	if err != nil || response.StatusCode != http.StatusCreated {
-		t.Fatalf("create pm-cert release: status=%s err=%v", crossSystemStatus(response), err)
+	var issues []struct {
+		Number      int             `json:"number"`
+		PullRequest json.RawMessage `json:"pull_request"`
 	}
-	if err := json.Unmarshal(payload, &release); err != nil || release.ID == 0 {
-		t.Fatalf("decode created pm-cert release: %v", err)
+	if err := json.Unmarshal(payload, &issues); err != nil {
+		t.Fatalf("decode pm-cert fixture issues: %v", err)
 	}
-	return release
+	for _, issue := range issues {
+		if issue.Number > 0 && len(issue.PullRequest) == 0 {
+			return issue.Number
+		}
+	}
+	t.Fatal("pm-cert fixture repository has no issue available for a deletable comment")
+	return 0
 }
 
-func (c *crossSystemGitHubClient) getRelease(t *testing.T, ctx context.Context, id int64, wantStatus int) crossSystemRelease {
+func (c *crossSystemGitHubClient) createIssueComment(t *testing.T, ctx context.Context, issue int, body string) crossSystemIssueComment {
 	t.Helper()
-	response, payload, err := c.request(ctx, http.MethodGet, crossSystemRepoPath("/releases/"+strconv.FormatInt(id, 10)), nil)
+	response, payload, err := c.request(ctx, http.MethodPost,
+		crossSystemRepoPath("/issues/"+strconv.Itoa(issue)+"/comments"), map[string]string{"body": body})
+	if err != nil || response.StatusCode != http.StatusCreated {
+		t.Fatalf("create pm-cert issue comment: status=%s err=%v", crossSystemStatus(response), err)
+	}
+	var comment crossSystemIssueComment
+	if err := json.Unmarshal(payload, &comment); err != nil || comment.ID == 0 {
+		t.Fatalf("decode created pm-cert issue comment: %v", err)
+	}
+	return comment
+}
+
+func (c *crossSystemGitHubClient) getIssueComment(t *testing.T, ctx context.Context, id int64, wantStatus int) crossSystemIssueComment {
+	t.Helper()
+	response, payload, err := c.request(ctx, http.MethodGet,
+		crossSystemRepoPath("/issues/comments/"+strconv.FormatInt(id, 10)), nil)
 	if err != nil || response.StatusCode != wantStatus {
-		t.Fatalf("read pm-cert release %d: status=%s err=%v", id, crossSystemStatus(response), err)
+		t.Fatalf("read pm-cert issue comment %d: status=%s err=%v", id, crossSystemStatus(response), err)
 	}
 	if wantStatus == http.StatusNotFound {
-		return crossSystemRelease{}
+		return crossSystemIssueComment{}
 	}
-	var release crossSystemRelease
-	if err := json.Unmarshal(payload, &release); err != nil {
-		t.Fatalf("decode pm-cert release %d: %v", id, err)
+	var comment crossSystemIssueComment
+	if err := json.Unmarshal(payload, &comment); err != nil {
+		t.Fatalf("decode pm-cert issue comment %d: %v", id, err)
 	}
-	return release
+	return comment
 }
 
-func (c *crossSystemGitHubClient) listReleases(t *testing.T, ctx context.Context) []crossSystemRelease {
+func (c *crossSystemGitHubClient) listIssueCommentsSince(t *testing.T, ctx context.Context, since string) []crossSystemIssueComment {
 	t.Helper()
-	var releases []crossSystemRelease
-	for page := 1; page <= 10; page++ {
-		path := crossSystemRepoPath("/releases?per_page=100&page=" + strconv.Itoa(page))
-		response, payload, err := c.request(ctx, http.MethodGet, path, nil)
-		if err != nil || response.StatusCode != http.StatusOK {
-			t.Fatalf("list pm-cert repository releases page %d: status=%s err=%v", page, crossSystemStatus(response), err)
-		}
-		var batch []crossSystemRelease
-		if err := json.Unmarshal(payload, &batch); err != nil {
-			t.Fatalf("decode pm-cert repository releases page %d: %v", page, err)
-		}
-		releases = append(releases, batch...)
-		if len(batch) < 100 {
-			return releases
-		}
+	path := crossSystemRepoPath("/issues/comments?per_page=100&since=" + url.QueryEscape(since))
+	response, payload, err := c.request(ctx, http.MethodGet, path, nil)
+	if err != nil || response.StatusCode != http.StatusOK {
+		t.Fatalf("list bounded pm-cert issue comments: status=%s err=%v", crossSystemStatus(response), err)
 	}
-	t.Fatal("pm-cert repository releases exceed bounded ten-page proof")
-	return nil
+	var comments []crossSystemIssueComment
+	if err := json.Unmarshal(payload, &comments); err != nil {
+		t.Fatalf("decode bounded pm-cert issue comments: %v", err)
+	}
+	if len(comments) == 100 {
+		t.Fatal("bounded pm-cert issue-comment proof reached one full page")
+	}
+	return comments
 }
 
 func (c *crossSystemGitHubClient) cleanupLabel(t *testing.T, ctx context.Context, name string) {
@@ -598,41 +663,16 @@ func (c *crossSystemGitHubClient) cleanupLabel(t *testing.T, ctx context.Context
 	t.Logf("CLEANUP label=%s independent_status=404", name)
 }
 
-func (c *crossSystemGitHubClient) cleanupRelease(t *testing.T, ctx context.Context, id int64) {
+func (c *crossSystemGitHubClient) cleanupIssueComment(t *testing.T, ctx context.Context, id int64) {
 	t.Helper()
-	response, _, err := c.request(ctx, http.MethodDelete, crossSystemRepoPath("/releases/"+strconv.FormatInt(id, 10)), nil)
+	path := crossSystemRepoPath("/issues/comments/" + strconv.FormatInt(id, 10))
+	response, _, err := c.request(ctx, http.MethodDelete, path, nil)
 	if err != nil || (response.StatusCode != http.StatusNoContent && response.StatusCode != http.StatusNotFound) {
-		t.Errorf("delete pm-cert release %d: status=%s err=%v", id, crossSystemStatus(response), err)
+		t.Errorf("delete pm-cert issue comment %d: status=%s err=%v", id, crossSystemStatus(response), err)
 		return
 	}
-	c.getRelease(t, ctx, id, http.StatusNotFound)
-	t.Logf("CLEANUP release_id=%d independent_status=404", id)
-}
-
-func (c *crossSystemGitHubClient) cleanupTag(t *testing.T, ctx context.Context, tag string) {
-	t.Helper()
-	path := crossSystemRepoPath("/git/ref/tags/" + url.PathEscape(tag))
-	response, _, err := c.request(ctx, http.MethodGet, path, nil)
-	if err != nil {
-		t.Errorf("inspect pm-cert tag %q before cleanup: %v", tag, err)
-		return
-	}
-	if response.StatusCode == http.StatusOK {
-		response, _, err = c.request(ctx, http.MethodDelete, crossSystemRepoPath("/git/refs/tags/"+url.PathEscape(tag)), nil)
-		if err != nil || response.StatusCode != http.StatusNoContent {
-			t.Errorf("delete pm-cert tag %q: status=%s err=%v", tag, crossSystemStatus(response), err)
-			return
-		}
-	} else if response.StatusCode != http.StatusNotFound {
-		t.Errorf("inspect pm-cert tag %q: status=%s", tag, response.Status)
-		return
-	}
-	response, _, err = c.request(ctx, http.MethodGet, path, nil)
-	if err != nil || response.StatusCode != http.StatusNotFound {
-		t.Errorf("prove pm-cert tag %q absent: status=%s err=%v", tag, crossSystemStatus(response), err)
-		return
-	}
-	t.Logf("CLEANUP tag=%s independent_status=404", tag)
+	c.getIssueComment(t, ctx, id, http.StatusNotFound)
+	t.Logf("CLEANUP issue_comment_id=%d independent_status=404", id)
 }
 
 func crossSystemRepoPath(suffix string) string {
@@ -656,19 +696,12 @@ func crossSystemNamedLabelCount(labels []crossSystemLabel, name string) int {
 	return count
 }
 
-func crossSystemNamedReleaseCount(releases []crossSystemRelease, tag string) int {
+func crossSystemNamedCommentCount(comments []crossSystemIssueComment, id int64) int {
 	count := 0
-	for _, release := range releases {
-		if release.TagName == tag {
+	for _, comment := range comments {
+		if comment.ID == id {
 			count++
 		}
 	}
 	return count
-}
-
-func firstCrossSystemRelease(releases []crossSystemRelease) crossSystemRelease {
-	if len(releases) == 0 {
-		return crossSystemRelease{}
-	}
-	return releases[0]
 }

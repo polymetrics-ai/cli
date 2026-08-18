@@ -1,16 +1,20 @@
 {
   "phase": "issue-4015-sync-e2e-crossystem-r1",
-  "status": "planned",
+  "status": "verified_with_finding",
   "delivery": "direct-PR",
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-sync-e2e-crossystem-r1",
-  "current_slice": "live_harness",
+  "current_slice": "local_verification",
   "product_code_changes_allowed": false,
   "routes": {
-    "postgres_to_github": "pending",
-    "github_to_postgres": "pending",
-    "github_to_github": "pending",
-    "flow_schedule": "pending"
+    "postgres_to_github": "proven",
+    "github_to_postgres": "broken_with_evidence",
+    "github_to_github": "proven",
+    "flow_schedule": "proven"
   },
-  "inline_gsd_fallback": true
+  "inline_gsd_fallback": true,
+  "live_run_fixture": "e10940f636b8",
+  "live_run_binary_sha256": "c26691fa0925122d61163d5c9a58e56bb62ecbc6e39a18824858cfedacc2e205",
+  "finding": "github_to_postgres full_overwrite replay completed 0/0 and replaced the 10-row target with zero rows",
+  "cleanup": "task label and issue comment independently returned HTTP 404"
 }

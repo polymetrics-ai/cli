@@ -38,10 +38,10 @@ The generated workflows are executed inline because the canonical single-worker 
 
 ## Slice 4 — GitHub → warehouse → GitHub
 
-1. Create one uniquely prefixed draft release whose body carries the intended post-update title; assert it is the first bounded source record before any mutation.
-2. Materialize the `releases` stream through `full_refresh_overwrite` into the warehouse.
-3. Create, preview, approve through stdin, and run a `--limit 1` typed `update_release` plan mapping `id → release_id` and `body → name`.
-4. Independently read the release and assert its exact changed name/body.
+1. Create one uniquely prefixed issue comment after recording an exact `since` boundary; assert the bounded source returns only that comment.
+2. Materialize the `issue_comments` stream through `full_refresh_overwrite` into the warehouse.
+3. Create, preview, approve through stdin, and run a `--limit 1` typed `update_issue_comment` plan mapping `id → comment_id` and `repository → body`.
+4. Independently read the comment and assert its exact changed body and singular ID.
 5. Re-run through the scheduled flow in Slice 5 and verify the update is idempotent.
 
 ## Slice 5 — flow and installed schedule
@@ -50,11 +50,11 @@ The generated workflows are executed inline because the canonical single-worker 
 2. Run `pm flow plan`, `pm flow preview`, and `pm flow create` to prove the stored definition is honored.
 3. Run `pm schedule create` and `pm schedule install --crontab` against a task-local crontab file.
 4. Execute the exact installed entry point: `pm --root <root> flow run <flow> --json`.
-5. Inspect schedule state for terminal success, prepared execution identity, and receipt; independently read the release and assert exactly one object with unchanged desired content.
+5. Inspect schedule state for terminal success, prepared execution identity, and receipt; independently read the comment and assert exactly one object with unchanged desired content.
 
 ## Slice 6 — cleanup, verification, and delivery
 
-1. Delete every task-created label/release through an independent bounded GitHub client in unconditional cleanup.
+1. Delete every task-created label/comment through an independent bounded GitHub client in unconditional cleanup.
 2. Assert each exact resource endpoint returns HTTP 404. Confirm no credential material exists under the project tree.
 3. Confirm task-owned database/container resources are absent after harness cleanup.
 4. Record exact commands, results, route verdicts, incremental semantics, and optional scale disposition in `VERIFICATION.md` and `SUMMARY.md`.
@@ -77,4 +77,3 @@ The generated workflows are executed inline because the canonical single-worker 
 Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-database`, `golang-design-patterns`, and `golang-structs-interfaces`.
 
 CLI help/manual/website parity is not applicable unless the lane unexpectedly changes a command, flag, output contract, connector surface, docs, or website behavior. Such a change is outside this PR and must be split.
-
