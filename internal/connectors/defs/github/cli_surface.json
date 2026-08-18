@@ -5995,7 +5995,11 @@
         {
           "name": "status",
           "type": "enum",
-          "values": ["queued", "in_progress", "completed"],
+          "values": [
+            "queued",
+            "in_progress",
+            "completed"
+          ],
           "summary": "Current check-run status.",
           "maps_to": "record.status"
         },
@@ -6008,7 +6012,16 @@
         {
           "name": "conclusion",
           "type": "enum",
-          "values": ["action_required", "cancelled", "failure", "neutral", "success", "skipped", "stale", "timed_out"],
+          "values": [
+            "action_required",
+            "cancelled",
+            "failure",
+            "neutral",
+            "success",
+            "skipped",
+            "stale",
+            "timed_out"
+          ],
           "summary": "Completed check-run conclusion.",
           "maps_to": "record.conclusion"
         },
@@ -8287,7 +8300,10 @@
         {
           "name": "encoding",
           "type": "enum",
-          "values": ["utf-8", "base64"],
+          "values": [
+            "utf-8",
+            "base64"
+          ],
           "summary": "Blob content encoding.",
           "maps_to": "record.encoding"
         }
@@ -10950,7 +10966,12 @@
         {
           "name": "state",
           "type": "enum",
-          "values": ["error", "failure", "pending", "success"],
+          "values": [
+            "error",
+            "failure",
+            "pending",
+            "success"
+          ],
           "summary": "Commit status state.",
           "maps_to": "record.state",
           "required": true
