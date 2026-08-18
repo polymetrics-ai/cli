@@ -21,3 +21,10 @@
 ## Refactor
 
 - No product code, generated shared certification artifacts, command metadata, or CLI/help/docs surface is changed in this lane. The only committed changes are planning/verification records and valid proof-bearing evidence.
+
+## Resumed 50-command batch — 2026-08-18
+
+- Red: every new `pm-cert-` fixture began without the commanded field/state; delete cases began with an independently read-back object. Package, enterprise, self-fork, unattached-configuration, and self-reviewer cases were classified only after their parent collection or raw provider response proved why no usable object existed.
+- Green: paths 57–62, 78, 80, 83, 85, 88–89, and 92–94 produced the exact expected value or absence. Plausible wrong values were the prior field value, empty array, opposite boolean, missing tagged name, or still-present object as appropriate.
+- Raw controls: all eleven product defects have a direct `api.github.com` control independent of `pm`; raw controls returned 200/201/202/204 and their effects were read back before cleanup.
+- Cleanup: custom patterns used bulk provider DELETE plus zero-by-ID collection reads; configurations and gists used direct DELETE plus 404; the shared private PR repository used direct DELETE 204 plus GET 404. No `pm` delete result was treated as cleanup proof.
