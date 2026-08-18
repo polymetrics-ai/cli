@@ -1,8 +1,9 @@
 {
   "phase": "issue-4015-full-overwrite-rerun-r1",
-  "status": "planned",
-  "current_gate": "red",
+  "status": "in_progress",
+  "current_gate": "green",
   "gsd_runtime": "inline-manual-fallback",
   "tdd": true,
-  "product_code_changed": false
+  "product_code_changed": false,
+  "red_evidence": "traces/red-full-refresh-checkpoint.md"
 }

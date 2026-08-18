@@ -747,6 +747,55 @@ func TestPMBinaryPostgresFullOverwriteRetainsEverySourcePage(t *testing.T) {
 	if len(ids) != 3 || ids[0] != 1 || ids[1] != 2 || ids[2] != 3 {
 		t.Fatalf("two-page full-overwrite target IDs = %v, want every source page [1 2 3]", ids)
 	}
+	var beforeLabel string
+	if err := target.QueryRow(ctx, "SELECT label FROM "+qualified+" WHERE id = 2").Scan(&beforeLabel); err != nil {
+		t.Fatalf("read first full-overwrite target sample: %v", err)
+	}
+	t.Logf("full-overwrite first run: records_read=%d records_loaded=%d target_rows=%d target_ids=%v target_sample=id=2 label=%q", run.RecordsRead, run.RecordsLoaded, count, ids, beforeLabel)
+
+	if _, err := admin.Exec(ctx, `DELETE FROM public.overwrite_events WHERE id = 1`); err != nil {
+		t.Fatalf("remove stale full-overwrite source row: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `UPDATE public.overwrite_events SET label = 'replacement-two' WHERE id = 2`); err != nil {
+		t.Fatalf("update full-overwrite source sample: %v", err)
+	}
+	if _, err := admin.Exec(ctx, `INSERT INTO public.overwrite_events (id, sequence, label) VALUES (4, 25, 'replacement-four')`); err != nil {
+		t.Fatalf("insert full-overwrite source replacement row: %v", err)
+	}
+	var sourceIDs []int64
+	var sourceLabel string
+	if err := admin.QueryRow(ctx, `SELECT array_agg(id ORDER BY id) FROM public.overwrite_events`).Scan(&sourceIDs); err != nil {
+		t.Fatalf("read changed full-overwrite source IDs: %v", err)
+	}
+	if err := admin.QueryRow(ctx, `SELECT label FROM public.overwrite_events WHERE id = 2`).Scan(&sourceLabel); err != nil {
+		t.Fatalf("read changed full-overwrite source sample: %v", err)
+	}
+
+	rerun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-full-overwrite", "public.overwrite_events", 2).Run
+	if rerun.Status != "completed" || rerun.RecordsRead != 3 || rerun.RecordsLoaded != 3 {
+		t.Errorf("second full-overwrite binary run = %#v, want completed 3-row replacement", rerun)
+	}
+	_, _, replacedCount := postgresTransportTargetRelation(t, ctx, target)
+	var replacedIDs []int64
+	if err := target.QueryRow(ctx, "SELECT array_agg(id ORDER BY id) FROM "+qualified).Scan(&replacedIDs); err != nil {
+		t.Fatalf("read second full-overwrite target IDs: %v", err)
+	}
+	var replacedLabel *string
+	if err := target.QueryRow(ctx, "SELECT (SELECT label FROM "+qualified+" WHERE id = 2)").Scan(&replacedLabel); err != nil {
+		t.Fatalf("read second full-overwrite target sample: %v", err)
+	}
+	var removedIDCount int
+	if err := target.QueryRow(ctx, "SELECT count(*) FROM "+qualified+" WHERE id = 1").Scan(&removedIDCount); err != nil {
+		t.Fatalf("check removed full-overwrite target row: %v", err)
+	}
+	replacedLabelText := "<missing>"
+	if replacedLabel != nil {
+		replacedLabelText = *replacedLabel
+	}
+	t.Logf("full-overwrite rerun: source_rows=%d source_ids=%v source_sample=id=2 label=%q records_read=%d records_loaded=%d target_rows=%d target_ids=%v target_sample=id=2 label=%q removed_id_1_rows=%d", len(sourceIDs), sourceIDs, sourceLabel, rerun.RecordsRead, rerun.RecordsLoaded, replacedCount, replacedIDs, replacedLabelText, removedIDCount)
+	if replacedCount != 3 || !reflect.DeepEqual(replacedIDs, []int64{2, 3, 4}) || replacedLabelText != "replacement-two" || removedIDCount != 0 {
+		t.Errorf("second full-overwrite target rows=%d ids=%v sample=%q removed_id_1_rows=%d, want replacement rows=3 ids=[2 3 4] sample=%q removed row absent", replacedCount, replacedIDs, replacedLabelText, removedIDCount, "replacement-two")
+	}
 }
 
 // TestPMBinaryPostgresTransformedFullOverwriteUsesArrowCOPY proves the actual
