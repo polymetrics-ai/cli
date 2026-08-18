@@ -163,7 +163,7 @@ func TestCompareWriteExpectationQuery(t *testing.T) {
 	}
 }
 
-func TestDeleteSemantics_MissingOkStatusHandledAsWritten(t *testing.T) {
+func TestDeleteSemantics_MissingOkStatusHandledAsUnchanged(t *testing.T) {
 	b := loadTestBundle(t, "testdata/good", "acme")
 	result := checkDeleteSemantics(b)
 	if !result.Passed {

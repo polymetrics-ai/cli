@@ -62,9 +62,9 @@ DESCRIPTION
   there.
 
   Cleanup is a separately planned, previewed, one-time approved typed inverse.
-  A %s missing-label DELETE accepted by the declared missing_ok_status is a
-  successful cleanup; replaying a consumed cleanup approval is rejected before
-  another provider request.
+  A %s missing-label DELETE accepted by the declared missing_ok_status is an
+  already-absent cleanup result, not a completed provider write; replaying a
+  consumed cleanup approval is rejected before another provider request.
 
 SECURITY
   Raw approval tokens are accepted only through --approval-token-stdin. They

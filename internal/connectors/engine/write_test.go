@@ -1033,11 +1033,39 @@ func TestWriteDeleteMissingOkStatusDoesNotCountAsWritten(t *testing.T) {
 
 	records := []connectors.Record{{"name": "bug"}}
 	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
-	if err == nil {
-		t.Fatal("Write: error = nil, provider 404 must not be reported as a completed mutation")
+	if err != nil {
+		t.Fatalf("Write: %v (allow-listed missing response should remain an idempotent no-op)", err)
 	}
-	if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
-		t.Fatalf("result = %+v, want provider 404 counted as one failed write", result)
+	if result.RecordsWritten != 0 || result.RecordsFailed != 0 || result.RecordsUnchanged != 1 {
+		t.Fatalf("result = %+v, want provider 404 counted as one unchanged record", result)
+	}
+}
+
+func TestWriteDeleteFailureAccountingExcludesPriorUnchangedRecords(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasSuffix(r.URL.Path, "/absent") {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		w.WriteHeader(http.StatusBadRequest)
+	}))
+	t.Cleanup(srv.Close)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "delete_label",
+		Kind:       "delete",
+		Method:     http.MethodDelete,
+		Path:       "/labels/{{ record.name }}",
+		PathFields: []string{"name"},
+		Delete:     &DeleteSpec{Idempotent: true, MissingOkStatus: []int{404}},
+	})
+
+	records := []connectors.Record{{"name": "absent"}, {"name": "bad"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
+	if err == nil {
+		t.Fatal("Write: want the second delete failure")
+	}
+	if result.RecordsWritten != 0 || result.RecordsUnchanged != 1 || result.RecordsFailed != 1 {
+		t.Fatalf("result = %+v, want 0 written / 1 unchanged / 1 failed", result)
 	}
 }
 

@@ -343,14 +343,14 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 	result := connectors.WriteResult{}
 	for i, rec := range records {
 		if err := ctx.Err(); err != nil {
-			result.RecordsFailed = len(records) - result.RecordsWritten
+			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 			return result, err
 		}
 
 		if wh, ok := h.(WriteHook); ok {
 			handled, err := wh.ExecuteWrite(ctx, action, rec, rt)
 			if err != nil {
-				result.RecordsFailed = len(records) - result.RecordsWritten
+				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 				return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, rec)}
 			}
 			if handled {
@@ -361,15 +361,15 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 
 		pinned, err := applyWriteRecordHook(h, action, []connectors.Record{rec})
 		if err != nil {
-			result.RecordsFailed = len(records) - result.RecordsWritten
+			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, rec)}
 		}
 		if err := executeWriteRecord(ctx, b, action, pinned[0], i, cfg, rt); err != nil {
 			if isMissingOkDelete(action, err) {
-				result.RecordsWritten++
+				result.RecordsUnchanged++
 				continue
 			}
-			result.RecordsFailed = len(records) - result.RecordsWritten
+			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Class: class, Hint: hint, Err: redactWriteActionError(err, action, rec)}
 		}
@@ -1161,9 +1161,9 @@ func toSet(items []string) map[string]bool {
 }
 
 // isMissingOkDelete reports whether err is an HTTP error whose status is
-// listed in action.delete.missing_ok_status — an idempotent delete's 404 (or
-// whatever status the bundle allow-lists) counts as written, not failed
-// (design §B.5).
+// listed in action.delete.missing_ok_status. The response is an expected
+// idempotent no-op, but it is never a write: callers receive it through
+// RecordsUnchanged so a command cannot claim a provider mutation occurred.
 func isMissingOkDelete(action WriteAction, err error) bool {
 	if action.Kind != "delete" || action.Delete == nil || len(action.Delete.MissingOkStatus) == 0 {
 		return false

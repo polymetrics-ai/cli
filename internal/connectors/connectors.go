@@ -795,8 +795,9 @@ func ParseWriteConfirmation(raw string) (WriteConfirmation, error) {
 }
 
 type WriteResult struct {
-	RecordsWritten int `json:"records_written"`
-	RecordsFailed  int `json:"records_failed"`
+	RecordsWritten   int `json:"records_written"`
+	RecordsFailed    int `json:"records_failed"`
+	RecordsUnchanged int `json:"records_unchanged,omitempty"`
 }
 
 type QueryRequest struct {

@@ -3,7 +3,7 @@
   "issue_refs": [4015, 4221],
   "base_branch": "integration/4015-mvp-flat-r1",
   "working_branch": "fm/cli-parity-fix-defects",
-  "status": "red",
+  "status": "green-unit",
   "census_total": 277,
   "red": [
     "persisted exact integer changes payload identity before provider dispatch",
@@ -11,7 +11,12 @@
     "three Actions aliases and the user draft identifier declaration are wrong",
     "missing_ok_status 404 increments RecordsWritten and returns success"
   ],
-  "green": [],
+  "green": [
+    "state JSON numbers preserve exact lexemes and interpolation emits decimal integer paths",
+    "six GitHub mutation commands expose and send provider-required JSON bodies",
+    "three Agent-labelled aliases use Actions writes and the singular user project route requires a numeric identifier",
+    "allow-listed missing deletes are accounted as unchanged and command execution cannot report them as writes"
+  ],
   "live_conversions": [],
   "cleanup": []
 }
