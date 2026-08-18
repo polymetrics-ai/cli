@@ -19,5 +19,6 @@
 - [x] The tail repository was independently readable before cleanup (200), deleted directly through GitHub (204), and independently read back as absent (404). Task-local `cert-tail`, `cert-tail-app`, and `cert-app-jwt` saved credentials were removed.
 - [x] No GitHub credential value is present in the worktree, evidence records, status file, or planned PR body.
 - [x] `go run ./cmd/connectorgen certification-matrix --check` passes after every retained tail record and at handoff.
-- [ ] Repository verification and `scripts/verify-gsd-workflow` are run before the PR.
-- [ ] The opened PR base is read from GitHub's API and equals `integration/4015-mvp-flat-r1`.
+- [x] Repository verification passed: `scripts/gsd doctor`; `scripts/verify-gsd-workflow`; `go test -timeout 20m ./cmd/connectorgen ./internal/agentcontract`; `go run ./cmd/agentcontractgen check`; `go run ./cmd/connectorgen validate internal/connectors/defs`; `go run ./cmd/connectorgen certification-matrix --check`; `go run ./cmd/connectorgen surface-sync --check`; `go run ./cmd/connectorgen boundary . --json`; and the pinned-build, Homebrew-notify, and release-target-parity scripts.
+- [x] Inline/manual `verify-work` and `code-review` fallback found no evidence-schema, secret-handling, classification-coverage, or cleanup-proof gaps in the branch diff.
+- [x] PR #4231 was opened, and an API-filtered `gh-axi pr list` read-back returned it under base `integration/4015-mvp-flat-r1` and head `fm/cli-mut-slice4-writes-d`.
