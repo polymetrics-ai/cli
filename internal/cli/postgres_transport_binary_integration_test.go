@@ -200,6 +200,19 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	if count != 1001 || delivery == "" {
 		t.Fatalf("managed target state = schema %q relation %q rows %d delivery %q, want 1001 durable rows and receipt", schema, relation, count, delivery)
 	}
+	qualified := pgx.Identifier{schema, relation}.Sanitize()
+	var firstSample struct {
+		ID       int64
+		Sequence int64
+		Label    string
+	}
+	if err := target.QueryRow(ctx, "SELECT id, sequence, label FROM "+qualified+" WHERE id = $1", int64(1001)).Scan(&firstSample.ID, &firstSample.Sequence, &firstSample.Label); err != nil {
+		t.Fatalf("independently read managed target sample: %v", err)
+	}
+	if firstSample.ID != 1001 || firstSample.Sequence != 10010 || firstSample.Label != "event-1001" {
+		t.Fatalf("managed target sample = (%d, %d, %q), want (1001, 10010, %q)", firstSample.ID, firstSample.Sequence, firstSample.Label, "event-1001")
+	}
+	t.Logf("independent target read-back: %s.%s rows=%d sample=(%d,%d,%q)", schema, relation, count, firstSample.ID, firstSample.Sequence, firstSample.Label)
 	assertPostgresTransportWarehouse(t, root)
 	checkpointBeforeTokenReplay := postgresTransportStreamStates(t, root)
 	replayOutput, replayErr := runTransportPM(binary, firstApproved.Token+"\n",
@@ -221,13 +234,26 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	}
 
 	secondRun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-to-postgres", "public.events", 1000).Run
-	if secondRun.RecordsRead != 1001 || secondRun.RecordsLoaded != 1001 || secondRun.Status != "completed" {
-		t.Fatalf("replay PostgreSQL binary run = %#v, want exact completed replay", secondRun)
+	if secondRun.RecordsRead != 0 || secondRun.RecordsLoaded != 0 || secondRun.Status != "completed" {
+		t.Fatalf("second incremental PostgreSQL binary run = %#v, want completed checkpoint skip", secondRun)
 	}
+	t.Logf("second incremental run: records_read=%d records_loaded=%d (checkpoint skip)", secondRun.RecordsRead, secondRun.RecordsLoaded)
 	_, _, replayCount, replayDelivery := postgresTransportTargetState(t, ctx, target)
 	if replayCount != count || replayDelivery != delivery {
 		t.Fatalf("acknowledged replay changed target: rows %d->%d delivery %q->%q", count, replayCount, delivery, replayDelivery)
 	}
+	var replaySample struct {
+		ID       int64
+		Sequence int64
+		Label    string
+	}
+	if err := target.QueryRow(ctx, "SELECT id, sequence, label FROM "+qualified+" WHERE id = $1", firstSample.ID).Scan(&replaySample.ID, &replaySample.Sequence, &replaySample.Label); err != nil {
+		t.Fatalf("independently read managed target replay sample: %v", err)
+	}
+	if replaySample != firstSample {
+		t.Fatalf("acknowledged replay changed target sample: before=%+v after=%+v", firstSample, replaySample)
+	}
+	t.Logf("independent replay read-back: %s.%s rows=%d sample=(%d,%d,%q)", schema, relation, replayCount, replaySample.ID, replaySample.Sequence, replaySample.Label)
 
 	schemaDriftApproval := preparePostgresTransportApproval(t, binary, root, "postgres-to-postgres", "public.events")
 	checkpointBeforeSchemaDrift := postgresTransportStreamStates(t, root)
