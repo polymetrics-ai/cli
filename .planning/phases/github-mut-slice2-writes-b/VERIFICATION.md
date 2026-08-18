@@ -6,7 +6,7 @@
 - [x] Every retained schema-v2 record passes `go run ./cmd/connectorgen certification-matrix --check`. Twenty-nine records are added over the integration base and each comes from captured live traffic.
 - [x] `git diff --check` passes.
 - [x] Targeted Go tests pass.
-- [ ] PR is opened against `integration/4015-mvp-flat-r1`, and its API-reported base is recorded.
+- [x] PR [#4230](https://github.com/polymetrics-ai/cli/pull/4230) is open; direct GitHub API read-back reports base `integration/4015-mvp-flat-r1`.
 
 ## Batch 1 checkpoint — 2026-08-18
 
