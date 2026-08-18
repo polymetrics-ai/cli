@@ -161,6 +161,13 @@ func (s *PollingTransportSource) validateRequestBeforeIO(ctx context.Context, re
 		if err := request.Checkpoint.ValidateResume(request.Resume); err != nil {
 			return err
 		}
+		if postgresBootstrapTransportRequested(request) {
+			if err := validateCDCCheckpointProtocol(request.Checkpoint); err != nil {
+				return err
+			}
+			_, err := nativeBootstrapTransportCheckpoint(*request.Checkpoint, request.Runtime)
+			return err
+		}
 		if request.Checkpoint.Mechanism != engine.PollingSourceCheckpointMechanism {
 			return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "PostgreSQL polling checkpoint mechanism is not resumable")
 		}
@@ -178,7 +185,7 @@ func (s *PollingTransportSource) readPollingTransport(ctx context.Context, reque
 	// Logical replication bootstrap is a separate changefeed handover with a
 	// slot barrier, not a polling source. Preserve that sealed CDC path while
 	// ensuring every ordinary PostgreSQL source mode reaches the shared poller.
-	if request.Mode == synccontract.ModeIncrementalUpsert && strings.EqualFold(strings.TrimSpace(request.Runtime.Config["transport_bootstrap"]), "true") {
+	if postgresBootstrapTransportRequested(request) {
 		return (&SnapshotTransportSource{connector: s.connector}).readBootstrapTransport(ctx, request, emit)
 	}
 	runner, declaration, object, closeRunner, err := s.preparePollingRunner(ctx, request)
@@ -203,6 +210,10 @@ func (s *PollingTransportSource) readPollingTransport(ctx context.Context, reque
 		return fmt.Errorf("construct shared postgres polling source: %w", err)
 	}
 	return shared.ReadTransport(ctx, request, emit)
+}
+
+func postgresBootstrapTransportRequested(request synctransport.SourceRequest) bool {
+	return request.Mode == synccontract.ModeIncrementalUpsert && strings.EqualFold(strings.TrimSpace(request.Runtime.Config["transport_bootstrap"]), "true")
 }
 
 func (s *PollingTransportSource) preparePollingRunner(ctx context.Context, request synctransport.SourceRequest) (engine.PollingSourceRunner, *connectors.PollingWatermarkDescriptor, connectors.PollingCatalogObject, func(), error) {
