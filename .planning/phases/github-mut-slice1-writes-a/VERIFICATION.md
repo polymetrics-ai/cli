@@ -118,3 +118,36 @@ The GitHub App retry was performed through the repository's encrypted PM credent
 ## Captain escape
 
 The earlier sponsorship escape is resolved by the captain's later authorization for contained charges below $2 with immediate teardown; the attempted command itself returned GitHub's required-target rejection and did not create, cancel, or charge a sponsorship.
+
+## Final slice ledger — commands 1–274
+
+Every ordinal in the assigned JSON work list appears in exactly one bucket below. `certified` is counted only from schema-v2 evidence files added by this branch over `origin/integration/4015-mvp-flat-r1`; cleanup was independently read back and is not used as a proxy for correctness.
+
+- `certified` (116): 76, 83, 85–97, 102–116, 119–121, 128, 129, 131, 134, 135, 138, 142, 143, 150, 151, 157, 160–169, 172, 173, 175, 179–181, 183, 186, 188, 189, 191, 192, 194, 195, 197–199, 201–210, 230–233, 235–241, 243, 244, 249, 251–266 except 267, 268, 270–273.
+- `no_object` (33): 2, 5, 11, 15, 16, 29, 31, 33, 41, 46, 68, 84, 98–101, 117, 118, 122, 130, 139, 140, 147, 149, 190, 193, 196, 200, 242, 246–248, 274.
+- `wrong_credential` (0): none.
+- `entitlement` (62): 6–10 except 11, 14, 17–28 except 29, 32, 34, 38–40, 42–45, 47–57 except 58, 59–66, 69–75, 77, 78, 124, 132, 133, 136, 137, 141, 144, 234.
+- `not_implemented` (0): none.
+- `product_defect` (3): 1, 159, 177.
+- `escape_needs_captain` (60): 3, 4, 12, 13, 30, 35–37, 50, 58, 67, 79–82, 123, 125–127, 145, 146, 148, 152–156, 158, 170, 171, 174, 176, 178, 182, 184, 185, 187, 211–229, 245, 250, 267, 269.
+
+Total: **116 + 33 + 0 + 62 + 0 + 3 + 60 = 274**.
+
+Command 79 is `escape_needs_captain` for the captain's exact reason: **Public visibility under the org name is a captain escape and stays unexecuted.** No provider request was issued. The other escape rows likewise stop at the boundary: enterprise/third-party targets, real people or notifications, public Sponsors state, or money/metered deployment effects.
+
+The final `no_object` controls included real parent reads plus fixture attempts. In particular, command 242 read the real organization setting and GitHub refused the only opposite-value fixture because no verified/approved domain exists; commands 246–248 listed the Projects Classic parent and attempted `createProject`, both returning GitHub's retirement response; command 274 listed zero domains, created a fresh `pm-cert-*.example.com` domain, received the expected missing-TXT rejection, directly deleted it, and independently read `node: null`.
+
+Command 234 was retried with the GitHub App after the classic credential reached GitHub; the classic identity lacks the setting entitlement and the App credential was rejected, so it is not mislabeled `wrong_credential`. Commands 1, 159, and 177 alone are `product_defect`, each backed by the raw GitHub controls described above.
+
+Final containment audit restored `has_discussions: false` on the fixture repository and independently read it back. It also found no residual `pm-cert-258-repo-*` repository, `pm-cert-270-team-*` team, verifiable domain, repository custom property, ProjectV2, or branch from this lane.
+
+## Final local verification
+
+- `go run ./cmd/connectorgen certification-matrix --check` — passed; all schema-v2 evidence records accepted without regenerating shared certification artifacts.
+- `go test -timeout 20m ./cmd/connectorgen` — passed (`100.258s`).
+- `go vet ./cmd/connectorgen/...` — passed.
+- `go run ./cmd/agentcontractgen check` — passed; canonical contract and projections are current.
+- `scripts/verify-gsd-workflow origin/integration/4015-mvp-flat-r1` — passed with this phase's PLAN/VERIFICATION evidence.
+- `make connectorgen-validate connectorgen-surface-sync` — passed across 552 connectors with zero findings and zero drift.
+- `git diff --check` — passed.
+- The full `go test -timeout 20m ./...`/`make verify` suite was intentionally left to CI: AGENTS.md forbids running the 550+ connector suite as one per-command-timeout invocation. The changed package test plus generated/evidence gates above are the repository-prescribed local scope for this evidence-only lane.
