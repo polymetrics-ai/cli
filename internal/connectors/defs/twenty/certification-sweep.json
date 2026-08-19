@@ -3,8 +3,8 @@
   "connector": "twenty",
   "source": "connector declarations",
   "declared_commands": 168,
-  "declared_rows": 170,
-  "status_total": 170,
+  "declared_rows": 172,
+  "status_total": 172,
   "commands": [
     {
       "summary": "Batch-create Twenty attachments records",
@@ -6072,6 +6072,30 @@
       "api_surface": [],
       "status": "fixture_required",
       "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared managed destination transport",
+      "path": "transport destination",
+      "intent": "transport_destination",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared managed destination transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [],

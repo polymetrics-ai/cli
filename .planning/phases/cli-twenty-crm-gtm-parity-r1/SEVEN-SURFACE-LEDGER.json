@@ -58,16 +58,26 @@
         "delete": 28
       },
       "safety": "Every action uses plan, preview, approval, and execute; all 28 delete actions retain typed destructive confirmation.",
+      "action_eligibility": {
+        "manifest": "internal/connectors/defs/twenty/write_eligibility.json",
+        "coverage": 112,
+        "bound": 1,
+        "eligible_pending_foundation_multiplicity": 55,
+        "semantic_array_envelope_incompatible": 28,
+        "semantic_tombstone_incompatible": 28,
+        "rule": "Every action remains implemented and CLI-reachable. Safety, privilege, and destructive classification govern execution and cannot be an ineligibility reason."
+      },
       "typed_destination": {
-        "status": "declared_pending_application_dispatch",
-        "eligible_actions": ["create_companies"],
+        "status": "one_action_declared_pending_application_dispatch_and_action_multiplicity",
+        "bound_actions": ["create_companies"],
         "strategy": {"mode": "full_append", "strategy": "append", "action": "create_companies"},
         "input_fields": [{"input": "name", "field": "name"}],
         "acknowledgement": "durable_warehouse",
         "delivery": "keyed, source_ordered, no tombstones",
         "conformance": "twenty_typed_destination/companies_name_append_v1",
-        "boundary": "The adapter cannot transport tombstones; this limits transport execution only. It does not remove, disable, or reclassify typed delete CLI commands.",
-        "application_dispatch": "Not deployable until the refreshed #4304 foundation proves persisted App/CLI dispatch selects declarative_typed_destination."
+        "boundary": "The adapter cannot transport tombstones and cannot form a required batch records array from one source record. Those transport semantic limits do not remove, disable, or reclassify any typed delete or batch CLI command.",
+        "application_dispatch": "Not deployable until the refreshed #4304 foundation proves persisted App/CLI dispatch selects declarative_typed_destination.",
+        "multiplicity_dependency": "write_eligibility.json records 55 record-shaped actions that need #4304 to select exact independent action mappings; no connector workaround is present."
       }
     },
     "executable_cli": {
@@ -87,6 +97,6 @@
     "documented_operations_accounted_for": 168,
     "declared_or_disabled": "168 declared, 0 disabled",
     "dependency": "PR #4304 / fm/cli-reverse-etl-destination-r1",
-    "verification_contract": "connector-local red/green destination declaration test; connectorgen validation and surface sync; refreshed #4304 ancestor proof plus installed App/CLI dispatch; certification checks; connector boundary; built-binary read/write/delete proof."
+    "verification_contract": "connector-local red/green destination and all-action eligibility tests; connectorgen validation and surface sync; refreshed #4304 ancestor proof plus installed App/CLI dispatch; certification checks; connector boundary; built-binary read/write/delete proof."
   }
 }

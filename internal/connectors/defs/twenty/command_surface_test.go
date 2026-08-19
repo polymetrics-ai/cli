@@ -189,3 +189,123 @@ func TestTypedDestinationDeclaration(t *testing.T) {
 		}
 	}
 }
+
+// TestEveryTypedWriteHasEligibilityDisposition prevents a transport capability
+// gap from turning into an omitted or silently unreachable Twenty action. A
+// semantic incompatibility must be named; safety and privilege are execution
+// gates, never eligibility reasons.
+func TestEveryTypedWriteHasEligibilityDisposition(t *testing.T) {
+	bundle, err := engine.Load(os.DirFS(".."), twentyBundleName)
+	if err != nil {
+		t.Fatalf("load %s bundle: %v", twentyBundleName, err)
+	}
+	raw, err := os.ReadFile("write_eligibility.json")
+	if err != nil {
+		t.Fatalf("read write eligibility ledger: %v", err)
+	}
+	var ledger struct {
+		Actions []struct {
+			Name         string `json:"name"`
+			Kind         string `json:"kind"`
+			CLIReachable bool   `json:"cli_reachable"`
+			Disposition  string `json:"disposition"`
+			ReasonCode   string `json:"reason_code"`
+			Candidate    *struct {
+				Mode        string `json:"mode"`
+				Strategy    string `json:"strategy"`
+				InputFields []struct {
+					Input string `json:"input"`
+					Field string `json:"field"`
+				} `json:"input_fields"`
+			} `json:"candidate"`
+		} `json:"actions"`
+	}
+	if err := json.Unmarshal(raw, &ledger); err != nil {
+		t.Fatalf("decode write eligibility ledger: %v", err)
+	}
+
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	commandsByWrite := make(map[string]struct {
+		Intent       string
+		Availability string
+	})
+	for _, command := range connector.CommandSurface().Commands {
+		if command.Write != "" {
+			commandsByWrite[command.Write] = struct {
+				Intent       string
+				Availability string
+			}{Intent: command.Intent, Availability: command.Availability}
+		}
+	}
+	entries := make(map[string]struct {
+		Kind         string
+		CLIReachable bool
+		Disposition  string
+		ReasonCode   string
+		Candidate    bool
+	}, len(ledger.Actions))
+	for _, action := range ledger.Actions {
+		if action.Name == "" {
+			t.Fatal("write eligibility ledger has an unnamed action")
+		}
+		if _, duplicate := entries[action.Name]; duplicate {
+			t.Fatalf("write eligibility ledger repeats %q", action.Name)
+		}
+		if strings.Contains(action.ReasonCode, "safety") || strings.Contains(action.ReasonCode, "privilege") || strings.Contains(action.ReasonCode, "destructive") {
+			t.Fatalf("%q reason code = %q, want semantic transport reason", action.Name, action.ReasonCode)
+		}
+		if action.Disposition == "eligible_pending_foundation_multiplicity" || action.Disposition == "bound" {
+			if action.Candidate == nil || action.Candidate.Mode != "full_append" || action.Candidate.Strategy != "append" || len(action.Candidate.InputFields) == 0 {
+				t.Fatalf("%q candidate = %#v, want a closed full_append input mapping", action.Name, action.Candidate)
+			}
+		}
+		entries[action.Name] = struct {
+			Kind         string
+			CLIReachable bool
+			Disposition  string
+			ReasonCode   string
+			Candidate    bool
+		}{action.Kind, action.CLIReachable, action.Disposition, action.ReasonCode, action.Candidate != nil}
+	}
+
+	counts := make(map[string]int)
+	for _, action := range bundle.Writes {
+		entry, found := entries[action.Name]
+		if !found {
+			t.Errorf("write action %q has no eligibility disposition", action.Name)
+			continue
+		}
+		if entry.Kind != action.Kind {
+			t.Errorf("write action %q ledger kind = %q, want %q", action.Name, entry.Kind, action.Kind)
+		}
+		if !entry.CLIReachable {
+			t.Errorf("write action %q is not declared CLI-reachable", action.Name)
+		}
+		command, commandFound := commandsByWrite[action.Name]
+		if !commandFound || command.Intent != "reverse_etl" || command.Availability != "implemented" {
+			t.Errorf("write action %q command = %#v, want implemented reverse_etl command", action.Name, command)
+		}
+		counts[entry.Disposition]++
+		if action.Kind == "delete" && entry.Disposition != "semantic_tombstone_incompatible" {
+			t.Errorf("delete action %q disposition = %q, want tombstone semantic incompatibility", action.Name, entry.Disposition)
+		}
+		if strings.HasPrefix(action.Name, "batch_") && entry.Disposition != "semantic_array_envelope_incompatible" {
+			t.Errorf("batch action %q disposition = %q, want array-envelope semantic incompatibility", action.Name, entry.Disposition)
+		}
+	}
+	if got := len(entries); got != len(bundle.Writes) {
+		t.Fatalf("write eligibility entries = %d, want %d actions", got, len(bundle.Writes))
+	}
+	if got := counts["bound"]; got != 1 {
+		t.Fatalf("bound actions = %d, want one current destination proof", got)
+	}
+	if got := counts["eligible_pending_foundation_multiplicity"]; got != 55 {
+		t.Fatalf("eligible pending actions = %d, want 55", got)
+	}
+	if got := counts["semantic_array_envelope_incompatible"]; got != 28 {
+		t.Fatalf("array-envelope incompatibilities = %d, want 28", got)
+	}
+	if got := counts["semantic_tombstone_incompatible"]; got != 28 {
+		t.Fatalf("tombstone incompatibilities = %d, want 28", got)
+	}
+}

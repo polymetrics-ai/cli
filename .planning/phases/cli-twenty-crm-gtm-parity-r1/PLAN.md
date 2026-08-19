@@ -30,10 +30,15 @@
    `direct_read`, `direct_write`, `etl`, `reverse_etl`, and executable CLI
    commands. The ledger must account for all 168 published REST operations;
    privileged or destructive operations remain reachable and safety-gated.
-3. Bind each eligible action through a connector-owned typed destination with an
-   exact declared strategy, `input_fields`, delivery/acknowledgement facts, and
-   conformance evidence. Do not create a generic HTTP writer or alter engine
-   code.
+3. Bind each record-driven action that the closed destination contract can
+   represent through a connector-owned typed destination with an exact declared
+   strategy, `input_fields`, delivery/acknowledgement facts, and conformance
+   evidence. `write_eligibility.json` must give each of the 112 typed actions
+   an explicit disposition. A batch array envelope or a tombstone workset may
+   be a semantic exclusion; safety, privilege, and destructive classification
+   may not. If #4304 cannot select all independently typed record actions,
+   record its exact multiplicity gap rather than inventing a connector
+   workaround or making a command unreachable.
 4. Add red/green tests for declared destination coverage, an invalid/missing
    input binding, and the binary-file boundary. Regenerate connector-owned
    projections and run focused generator, binary, and live reversible proof.
@@ -57,9 +62,11 @@
    seeded API key directly into the CLI encrypted credential store with
    `--value-stdin`, and use it for bounded live read/write/delete and round-trip
    evidence. Never route the key through Keychain, argv, a file, or a prompt.
-6. Run the required verification and review workflow, rebase on current `main`,
-   push the branch, open a conventional-commit PR with `Refs #277`, then read
-   its base back through the GitHub API.
+6. Run the required verification and review workflow. Before the final push,
+   fetch and merge the latest #4304 head without rewriting history, prove that
+   exact SHA is an ancestor, exercise its installed App/CLI dispatch path, push
+   the stacked branch, and read PR #4298's #4304 base back through the GitHub
+   API.
 
 ## CLI/docs parity checklist
 

@@ -8,8 +8,13 @@
   lint, build, and verification results recorded with exact commands.
 - [x] Built-binary live read, pagination, create, update, round-trip, delete,
   and post-delete absence evidence recorded without secret material.
-- [x] PR base read back through GitHub API equals `main`: PR #4298,
-  `fm/cli-twenty-crm-gtm-parity-r1` → `main`.
+- [x] PR #4298 was retargeted through the GitHub API to
+  `fm/cli-reverse-etl-destination-r1`.
+- [x] Typed-action eligibility red/green evidence is recorded in
+  `TDD-LEDGER.md` and covers every action in `writes.json`.
+- [ ] Final #4304 refresh: fetch, merge without rewriting history, prove the
+  refreshed foundation SHA is an ancestor, and exercise the installed App/CLI
+  generic-destination dispatch path before final push.
 
 ## Live proof — passed
 
@@ -146,6 +151,8 @@ and endpoint configuration are intentionally absent from this evidence.
 ## Pull request
 
 Created non-draft PR [#4298](https://github.com/polymetrics-ai/cli/pull/4298)
-with `Refs #277`. The API read-back returned base `main` and head
-`fm/cli-twenty-crm-gtm-parity-r1`; automatic Claude review is the selected
-primary route.
+with `Refs #277`. The reconciliation API read-back returned base
+`fm/cli-reverse-etl-destination-r1` and head
+`fm/cli-twenty-crm-gtm-parity-r1`. A final API read-back is still required
+after the fresh #4304 merge and before the next push; the generic
+destination's persisted App/CLI dispatch is not yet claimed as deployable.

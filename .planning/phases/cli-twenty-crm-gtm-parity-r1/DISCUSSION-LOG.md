@@ -32,3 +32,12 @@
   the workspace-specific REST contract; no GraphQL or Metadata API operation
   is inferred from its REST counterpart. This boundary is recorded in the
   machine-readable ledger.
+- Completeness decision: `write_eligibility.json` gives all 112 typed actions
+  one explicit disposition. `create_companies` is bound as the reversible
+  declaration proof; 55 create/update actions have schema-intersecting,
+  closed candidate mappings but await #4304's exact-action multiplicity;
+  28 batch actions require a `records` array envelope and 28 deletes require
+  a tombstone workset, neither representable by the current single-record,
+  no-tombstone contract. These are transport semantics, never safety,
+  privilege, or destructive exclusions. Every action remains directly
+  CLI-reachable through its implemented reverse-ETL command.

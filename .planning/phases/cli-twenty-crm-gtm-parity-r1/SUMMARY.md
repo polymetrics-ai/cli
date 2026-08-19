@@ -49,6 +49,16 @@ caller-selected endpoint or body template. This is not yet an
 application-deployable reverse-ETL path: persisted App/CLI dispatch must be
 supplied and exercised from the refreshed #4304 head before final push.
 
+`write_eligibility.json` closes the one-action accounting gap without
+misrepresenting it as complete transport coverage. It records one currently
+bound action, 55 schema-intersecting record actions eligible once #4304 can
+select exact independent action mappings, 28 batch actions whose required
+`records` array cannot be formed by the single-record contract, and 28 deletes
+whose tombstone workset is incompatible with its no-tombstone delivery.
+These dispositions do not alter CLI reachability: all 112 typed actions remain
+implemented. Safety, privilege, and destructive labels remain execution gates,
+not eligibility reasons.
+
 `SEVEN-SURFACE-LEDGER.json` is the machine-readable reconciliation. It records
 all 168 source-locked REST operations as declared with zero exclusions: 28 ETL
 reads, 28 operation-backed direct reads, and 112 typed reverse-ETL actions.
