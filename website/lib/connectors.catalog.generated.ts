@@ -13,7 +13,7 @@ export const CONNECTOR_CATEGORY_COUNTS = {"api":547,"queue":1,"database":3,"acco
 
 export const CONNECTOR_RELEASE_STAGE_COUNTS = {"ga":486,"alpha":39,"beta":27} as Record<string, number>;
 
-export const CONNECTOR_CAPABILITY_COUNTS = {"check":551,"read":552,"write":240,"query":0,"cdc":1,"dynamicSchema":6} as Record<keyof ConnectorCapabilities, number>;
+export const CONNECTOR_CAPABILITY_COUNTS = {"check":551,"read":552,"write":241,"query":0,"cdc":1,"dynamicSchema":6} as Record<keyof ConnectorCapabilities, number>;
 
 const BY_SLUG: Record<string, ConnectorMeta> = Object.fromEntries(
   CONNECTOR_CATALOG.map((c) => [c.slug, c]),

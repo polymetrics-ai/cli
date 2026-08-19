@@ -126,3 +126,13 @@
   `internal/app/issue_label_warehouse_transport.go:85-95`; no destination
   descriptor, acknowledgement, apply strategy, or `transport_binding` action
   was invented.
+
+## Website generated-data follow-up
+
+- [x] PR #4294's `Website Data` CI check identified stale repository-owned
+  output after the source-backed connector declarations changed.
+- [x] `cd website && pnpm run gen:website-data` regenerated
+  `website/data/connectors.generated.json`,
+  `website/lib/connectors.catalog.data.generated.json`, and
+  `website/lib/connectors.catalog.generated.ts`.
+- [x] The generator was run a second time with no further generated-file drift.
