@@ -1,5 +1,30 @@
 # Issue #4292 — parity batches 8–10 context
 
+## Reconciliation decisions — 2026-08-20
+
+These decisions supersede the prior readiness-only transport freeze.
+
+- PR #4301 is a stacked PR against `fm/cli-reverse-etl-destination-r1`, then
+  `main`; its base was updated through the GitHub API after merging foundation
+  SHA `c6f03c937c1f4e516d339b48e8c2143726179fdf`.
+- The thirty named bundles are reconciled across seven surfaces, with a
+  30-row machine ledger and human summary. Existing source locks remain the
+  provider-operation inventory; connector-local declaration work must not
+  invent request schemas or a generic writer.
+- Source and destination transports may be declared only when a bundle's
+  existing streams/actions and schemas establish exact connector-owned inputs.
+  `declarative_typed_destination` is the only generic destination reference;
+  no action using another closed adapter is reclassified or wrapped.
+- The current #4304 head has not yet integrated persisted App/CLI dispatch for
+  generic destinations. This branch can prove structural declaration validity
+  but records application-level reverse-ETL execution as pending until that
+  newer foundation head is merged, proven an ancestor, and exercised through
+  the installed App/CLI path.
+- The immediate red/green repair is Lever Hiring: its source-map generator must
+  name the connector-local declaration dependency, exclude prose-only
+  `GET /profile_forms`, and include the provider-documented
+  `GET /v1/eeo/responses` whose source text omits a leading slash.
+
 ## Locked decisions
 
 - Scope is the thirty connector bundles named in issue #4292, divided into three

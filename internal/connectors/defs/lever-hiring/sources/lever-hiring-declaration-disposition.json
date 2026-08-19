@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "connector": "lever-hiring",
-  "generated_at": "2026-08-19T16:48:06.406Z",
+  "generated_at": "2026-08-19T19:03:09.875Z",
   "source_basis": {
     "source_lock": "sources/lever-hiring-operation-source-lock.json",
     "source_url": "https://hire.lever.co/developer/documentation?output=1",
@@ -260,7 +260,8 @@
           "risk": "high",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -313,7 +314,8 @@
           "risk": "high",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -412,7 +414,8 @@
           "risk": "high",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -603,7 +606,8 @@
           "risk": "high",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -1180,7 +1184,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -1225,7 +1230,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -1270,7 +1276,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -1531,7 +1538,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -1700,7 +1708,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -1745,7 +1754,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -1790,7 +1800,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -1944,51 +1955,6 @@
       "declaration": {
         "status": "enabled; existing etl stream \"posting_users\" binds the pinned provider operation",
         "stream": "posting_users"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/profile_forms",
-      "parity_class": "direct_read",
-      "api_surface": {
-        "method": "GET",
-        "path": "/profile_forms",
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
-        }
-      },
-      "source": {
-        "source_lock": "sources/lever-hiring-operation-source-lock.json",
-        "source_id": "lever-hiring.rendered.get-profile-forms",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1",
-        "source_location": "rendered-document-byte-918026",
-        "operation_id": "get-profile-forms",
-        "deprecated": false
-      },
-      "state": "disabled",
-      "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-lever-hiring",
-          "evidence": "sources/lever-hiring-operation-source-lock.json:rendered-document-byte-918026.",
-          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
-        }
-      },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "sources/lever-hiring-operation-source-lock.json:rendered-document-byte-918026."
-      },
-      "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-lever-hiring",
-        "contract": null
       }
     },
     {
@@ -2335,6 +2301,52 @@
     },
     {
       "method": "GET",
+      "path": "/v1/eeo/responses",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/eeo/responses",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+        }
+      },
+      "source": {
+        "source_lock": "sources/lever-hiring-operation-source-lock.json",
+        "source_id": "lever-hiring.rendered.get-v1-eeo-responses",
+        "source_url": "https://hire.lever.co/developer/documentation?output=1",
+        "source_location": "rendered-document: EEO Responses declaration `GET v1/eeo/responses` (provider omits the leading slash)",
+        "operation_id": "get-v1-eeo-responses",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-lever-hiring",
+          "evidence": "sources/lever-hiring-operation-source-lock.json:rendered-document: EEO Responses declaration `GET v1/eeo/responses` (provider omits the leading slash).",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/lever-hiring-operation-source-lock.json:rendered-document: EEO Responses declaration `GET v1/eeo/responses` (provider omits the leading slash)."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-lever-hiring",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1/eeo/responses/pii",
       "parity_class": "direct_read",
       "api_surface": {
@@ -2378,7 +2390,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -2515,7 +2528,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -2568,7 +2582,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -2621,7 +2636,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -2674,7 +2690,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -2727,7 +2744,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -2780,7 +2798,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -2833,7 +2852,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -2886,7 +2906,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -2939,7 +2960,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -2992,7 +3014,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3045,7 +3068,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3098,7 +3122,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3151,7 +3176,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3204,7 +3230,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3257,7 +3284,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3310,7 +3338,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3363,7 +3392,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3416,7 +3446,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3469,7 +3500,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3522,7 +3554,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3575,7 +3608,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3720,7 +3754,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3773,7 +3808,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -3918,7 +3954,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -4017,7 +4054,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -4070,7 +4108,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -4123,7 +4162,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -4176,7 +4216,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -4229,7 +4270,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -4282,7 +4324,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -4335,7 +4378,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -4388,7 +4432,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {
@@ -4441,7 +4486,8 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
-          "source_url": "https://hire.lever.co/developer/documentation?output=1"
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
         }
       },
       "source": {

@@ -215,6 +215,7 @@ function blockedOperation(sourceOperation) {
       ? "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added."
       : "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
     source_url: sourceOperation.source_url,
+    notes: "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation.",
   };
 }
 

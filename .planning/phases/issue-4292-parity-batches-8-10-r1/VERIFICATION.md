@@ -1,5 +1,24 @@
 # Issue #4292 — verification checklist
 
+## Reconciliation status — 2026-08-20
+
+- [x] Existing PR #4301 retargeted through the GitHub API to
+  `fm/cli-reverse-etl-destination-r1`; API read-back reported that exact base.
+- [x] Foundation SHA `c6f03c937c1f4e516d339b48e8c2143726179fdf` merged as
+  `16c047eaf` without history rewriting.
+- [x] CI Verify failure root-caused to Lever source-map regeneration, then
+  reproduced locally.
+- [x] Lever focused repair: `go test -timeout 20m ./cmd/connectorgen -run
+  '^TestLeverHiringAPISurfaceOperationLedger$'` and Batch 9 source integrity
+  check pass.
+- [ ] Generate and validate the 30-row seven-surface ledger and human summary.
+- [ ] Add only faithful connector-local source/destination declarations and
+  per-increment static evidence; do not claim generic App/CLI dispatch before
+  the foundation integration is merged.
+- [ ] Before final push: fetch and merge the latest foundation branch, prove
+  its exact SHA is an ancestor, and exercise the installed App/CLI dispatch
+  route without credentials.
+
 ## Source-first map checks
 
 - [x] Red: initial maps rejected because their locks lacked complete provider

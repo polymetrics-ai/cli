@@ -1,5 +1,37 @@
 # Issue #4292 — TDD ledger
 
+## Reconciliation red/green evidence — 2026-08-20
+
+### Red
+
+- Verify CI run `32281460555` failed in
+  `TestLeverHiringAPISurfaceOperationLedger`: regenerated blocked rows omitted
+  its required named dependency. Reproducing the focused test after the first
+  metadata-only repair exposed the second source-normalization defect: the
+  document's no-leading-slash `GET /v1/eeo/responses` route had been lost.
+
+### Green
+
+- `generate-parity-maps.mjs` now emits a concrete
+  `Named dependency: connector-local typed operation declaration ...` for a
+  source-derived blocked row.
+- `extract-source-operations.go` records the Lever rendered-reference
+  normalization exceptions: it excludes prose-only `GET /profile_forms` and
+  includes the documented EEO route with a precise explanation of the source's
+  missing leading slash. No request/body schema is created by this exception.
+- `node .../generate-parity-maps.mjs lever-hiring` regenerated only the owned
+  Lever artifacts. `go test -timeout 20m ./cmd/connectorgen -run
+  '^TestLeverHiringAPISurfaceOperationLedger$'` and
+  `node .../verify-parity-maps.mjs 9` pass.
+
+### Pending next red/green slice
+
+- Add a deterministic seven-surface declaration verifier before writing the
+  connector-local source/destination declarations. It must reject absent
+  streams/actions, non-`input_fields` destination mapping, and a false claim
+  that generic App/CLI dispatch is deployed before the newer #4304 foundation
+  head is merged and exercised.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:

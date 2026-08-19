@@ -1,5 +1,80 @@
 # Issue #4292 — complete six-class parity map for batches 8–10
 
+## Reconciliation supersession — 2026-08-20
+
+This section supersedes every conflicting delivery, base, scope, and
+reverse-ETL statement below. It records the captain's authoritative
+reconciliation directive and is the current execution contract.
+
+## Task Delivery Header
+
+- Issue: Refs #4292 — chore(connectors): map parity batches 8, 9 and 10
+- Base branch: `fm/cli-reverse-etl-destination-r1`
+- Merges into: `fm/cli-reverse-etl-destination-r1` → `main`
+- Delivery: Existing PR #4301 is retargeted to the foundation branch and has
+  the complete seven-surface ledger, connector-local declarations, focused
+  tests, and required local gates recorded before its final push. The PR base
+  is read back through the GitHub API after every retarget.
+- Working branch: `fm/cli-map-batch8910-r1`
+- Task: Reconcile the thirty listed connector bundles across `binary_read`,
+  `binary_write`, `direct_read`, `direct_write`, `etl`, `reverse_etl`, and
+  executable CLI-command surfaces. Keep every provider-sourced operation
+  reachable through its faithfully representable connector-owned contract;
+  do not hide privileged, destructive, or unusual operations. Generate the
+  required 30-row machine-readable ledger and human summary. Reverse-ETL
+  declarations are connector-owned and may only select the exact generic typed
+  destination executor, typed action, input fields, acknowledgement, delivery
+  facts, and conformance evidence that the merged foundation admits.
+- Verification: Red/green source-map tests; targeted generator, bundle, and
+  transport declaration checks per increment; `connectorgen validate`,
+  `surface-sync --check`, generated checks, `connector-boundary`, scoped Go
+  tests, and the repository's individual `make verify` gates. Before the final
+  push, fetch and merge the latest foundation head, prove it is an ancestor,
+  then exercise the installed App/CLI route without credentials.
+
+### Reconciliation constraints
+
+- Work is confined to the assigned `internal/connectors/defs/<connector>/`
+  directories and this phase's evidence. No generic HTTP writer, engine edit,
+  or App/CLI workaround is allowed.
+- #4304's current head exposes the generic declarative typed destination to
+  the transport composition layer but has not yet landed persisted App/CLI
+  dispatch integration. Connector declarations may be authored and statically
+  validated, but this branch must not claim application-level reverse ETL is
+  deployable until the updated foundation head is merged and the installed App
+  route is exercised.
+- Safety, scopes, destructive confirmation, and certification limits govern
+  execution; they never remove a faithfully representable command from the
+  provider-sourced reachability inventory.
+- Any operation that lacks a provider-sourced typed request contract remains
+  explicitly `declaration-pending`; `unsupported` is reserved for a concrete
+  refusing engine file/line and minimal hook. No request, response,
+  pagination, or body schema is inferred.
+- Commits cover at most five connector bundles plus their shared phase evidence
+  and each message carries `Refs #4292`.
+
+### Reconciliation TDD slices
+
+1. **Red — current verifier:** retain the failed CI and local
+   `TestLeverHiringAPISurfaceOperationLedger` evidence before changing the
+   generator. The failure demonstrated that source regeneration lost both its
+   named dependency metadata and Lever's provider-formatted EEO route.
+2. **Green — source-map repair:** restore the named connector-local dependency,
+   filter the rendered prose-only `/profile_forms` false positive, preserve the
+   documented no-leading-slash EEO route, regenerate only Lever's source map,
+   and pass the focused ledger test plus Batch 9 integrity check.
+3. **Red/green — seven-surface declarations:** a deterministic ledger checker
+   must fail if a connector declaration names an absent stream/action, leaves a
+   destination mapping without exact `input_fields`, claims an application
+   dispatch route before its foundation evidence, or drops a provider operation
+   from the reachability count. Generate declarations only from existing typed
+   bundle contracts and connector schemas; pass static bundle/transport loading
+   and focused no-I/O transport preflight checks per five-connector increment.
+4. **Foundation handoff:** fetch and merge the latest #4304 head before final
+   verification. Prove that SHA is an ancestor and run the installed App/CLI
+   path. Until that passes, record application deployment as pending rather
+   than adding a local fallback.
+
 ## Task Delivery Header
 
 - Issue: Refs #4292 — chore(connectors): map parity batches 8, 9 and 10

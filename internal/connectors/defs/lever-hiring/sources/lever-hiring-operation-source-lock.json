@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "connector": "lever-hiring",
-  "captured_at": "2026-08-19T16:48:06.406Z",
+  "captured_at": "2026-08-19T19:03:09.875Z",
   "rest": {
     "source_url": "https://hire.lever.co/developer/documentation?output=1",
     "representation": "complete-rendered-reference",
@@ -538,16 +538,6 @@
         "source_url": "https://hire.lever.co/developer/documentation?output=1"
       },
       {
-        "id": "lever-hiring.rendered.get-profile-forms",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/profile_forms",
-        "operation_id": "get-profile-forms",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-918026",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
         "id": "lever-hiring.rendered.get-requisition-fields",
         "protocol": "rest",
         "method": "GET",
@@ -655,6 +645,16 @@
         "operation_id": "get-users-user",
         "deprecated": false,
         "source_location": "rendered-document-byte-1005826",
+        "source_url": "https://hire.lever.co/developer/documentation?output=1"
+      },
+      {
+        "id": "lever-hiring.rendered.get-v1-eeo-responses",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/eeo/responses",
+        "operation_id": "get-v1-eeo-responses",
+        "deprecated": false,
+        "source_location": "rendered-document: EEO Responses declaration `GET v1/eeo/responses` (provider omits the leading slash)",
         "source_url": "https://hire.lever.co/developer/documentation?output=1"
       },
       {

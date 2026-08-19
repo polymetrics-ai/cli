@@ -38,6 +38,18 @@ type sourceConfig struct {
 	ExtractAbsolutePaths bool
 	Confidence           string
 	Basis                string
+	RenderedExclude      map[string]bool
+	RenderedInclude      []renderedOperation
+}
+
+// renderedOperation records a narrowly evidenced normalization exception in
+// an otherwise mechanically extracted rendered reference. It exists only for
+// provider formatting defects (for example, a documented route missing its
+// leading slash), never to supply an invented operation contract.
+type renderedOperation struct {
+	Method         string
+	Path           string
+	SourceLocation string
 }
 
 type document struct {
@@ -160,14 +172,25 @@ var configs = map[string]sourceConfig{
 		"https://docs.dremio.com/25.x/reference/api/user/",
 		"https://docs.dremio.com/25.x/reference/api/wlm/",
 	}, PathStripPrefix: "/api/v3", Confidence: "complete-rendered-reference", Basis: "Dremio's official API Reference index and every linked Reference API category page are retrieved. Their formal /api/v3 method/path declarations are extracted; the version prefix is removed only because this connector's declared base URL owns it."},
-	"clickup-api":  {Kind: "readme-reference", LandingURL: "https://developer.clickup.com/reference", BaseURL: "https://developer.clickup.com/clickup/api-next/v2/branches/2.0", Confidence: "complete-rendered-reference", Basis: "ClickUp's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; each endpoint document supplies its rendered method and path."},
-	"calendly":     {Kind: "openapi", URLs: []string{"https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"}, Confidence: "machine-readable", Basis: "Calendly's official developer site publishes this Scheduling API OpenAPI document through its Stoplight project; every HTTP path item is extracted."},
-	"ashby":        {Kind: "readme-reference", LandingURL: "https://developers.ashbyhq.com/reference", BaseURL: "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0", Confidence: "complete-rendered-reference", Basis: "Ashby's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; webhook callbacks are counted separately and are not REST operations."},
-	"workable":     {Kind: "readme-reference", LandingURL: "https://workable.readme.io/reference", BaseURL: "https://workable.readme.io/workable/api-next/v2/branches/3.21.0", Confidence: "complete-rendered-reference", Basis: "Workable's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; each endpoint document supplies its rendered method and path."},
-	"recruitee":    {Kind: "html-reference", URLs: []string{"https://apidocs.recruitee.com/"}, Confidence: "complete-rendered-reference", Basis: "Recruitee publishes the complete REST reference as one public rendered document; every formal METHOD /path declaration is extracted after stripping presentation markup."},
-	"hibob":        {Kind: "readme-reference", LandingURL: "https://apidocs.hibob.com/", BaseURL: "https://apidocs.hibob.com/hibob/api-next/v2/branches/1", Confidence: "complete-rendered-reference", Basis: "HiBob's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; each endpoint document supplies its rendered method and path."},
-	"factorial":    {Kind: "readme-reference", LandingURL: "https://apidoc.factorialhr.com/", BaseURL: "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0", Confidence: "complete-rendered-reference", Basis: "Factorial's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; each endpoint document supplies its rendered method and path."},
-	"lever-hiring": {Kind: "html-reference", URLs: []string{"https://hire.lever.co/developer/documentation?output=1"}, Confidence: "complete-rendered-reference", Basis: "Lever publishes the complete Hiring API reference as one public rendered document; every formal METHOD /path declaration in that document is extracted and example query strings are not counted as distinct operations."},
+	"clickup-api": {Kind: "readme-reference", LandingURL: "https://developer.clickup.com/reference", BaseURL: "https://developer.clickup.com/clickup/api-next/v2/branches/2.0", Confidence: "complete-rendered-reference", Basis: "ClickUp's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; each endpoint document supplies its rendered method and path."},
+	"calendly":    {Kind: "openapi", URLs: []string{"https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"}, Confidence: "machine-readable", Basis: "Calendly's official developer site publishes this Scheduling API OpenAPI document through its Stoplight project; every HTTP path item is extracted."},
+	"ashby":       {Kind: "readme-reference", LandingURL: "https://developers.ashbyhq.com/reference", BaseURL: "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0", Confidence: "complete-rendered-reference", Basis: "Ashby's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; webhook callbacks are counted separately and are not REST operations."},
+	"workable":    {Kind: "readme-reference", LandingURL: "https://workable.readme.io/reference", BaseURL: "https://workable.readme.io/workable/api-next/v2/branches/3.21.0", Confidence: "complete-rendered-reference", Basis: "Workable's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; each endpoint document supplies its rendered method and path."},
+	"recruitee":   {Kind: "html-reference", URLs: []string{"https://apidocs.recruitee.com/"}, Confidence: "complete-rendered-reference", Basis: "Recruitee publishes the complete REST reference as one public rendered document; every formal METHOD /path declaration is extracted after stripping presentation markup."},
+	"hibob":       {Kind: "readme-reference", LandingURL: "https://apidocs.hibob.com/", BaseURL: "https://apidocs.hibob.com/hibob/api-next/v2/branches/1", Confidence: "complete-rendered-reference", Basis: "HiBob's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; each endpoint document supplies its rendered method and path."},
+	"factorial":   {Kind: "readme-reference", LandingURL: "https://apidoc.factorialhr.com/", BaseURL: "https://apidoc.factorialhr.com/factorial/api-next/v2/branches/1.0", Confidence: "complete-rendered-reference", Basis: "Factorial's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; each endpoint document supplies its rendered method and path."},
+	"lever-hiring": {
+		Kind: "html-reference", URLs: []string{"https://hire.lever.co/developer/documentation?output=1"}, Confidence: "complete-rendered-reference", Basis: "Lever publishes the complete Hiring API reference as one public rendered document; every formal METHOD /path declaration in that document is extracted and example query strings are not counted as distinct operations.",
+		// The reference includes GET /profile_forms only as prose, while the EEO
+		// route is documented as `GET v1/eeo/responses` without its leading
+		// slash. Preserve the documented route and discard the prose example so
+		// the source lock remains the provider's 106-operation surface.
+		RenderedExclude: map[string]bool{"GET /profile_forms": true},
+		RenderedInclude: []renderedOperation{{
+			Method: "GET", Path: "/v1/eeo/responses",
+			SourceLocation: "rendered-document: EEO Responses declaration `GET v1/eeo/responses` (provider omits the leading slash)",
+		}},
+	},
 	"datadog": {Kind: "openapi", URLs: []string{
 		"https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
 		"https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v2/openapi.yaml",
@@ -423,6 +446,26 @@ func extractHTMLReference(connector string, config sourceConfig) (result, error)
 		if config.ExtractAbsolutePaths {
 			appendRenderedOperations(&out, connector, config, content, doc.SourceURL, renderedAbsoluteOperationRE)
 		}
+	}
+	if len(config.RenderedExclude) > 0 {
+		filtered := out.Operations[:0]
+		for _, candidate := range out.Operations {
+			if !config.RenderedExclude[candidate.Method+" "+candidate.Path] {
+				filtered = append(filtered, candidate)
+			}
+		}
+		out.Operations = filtered
+	}
+	for _, included := range config.RenderedInclude {
+		out.Operations = append(out.Operations, operation{
+			ID:             fmt.Sprintf("%s.rendered.%s", connector, slug(included.Method+" "+included.Path)),
+			Protocol:       "rest",
+			Method:         included.Method,
+			Path:           included.Path,
+			OperationID:    slug(included.Method + " " + included.Path),
+			SourceLocation: included.SourceLocation,
+			SourceURL:      out.SourceURL,
+		})
 	}
 	sort.Slice(out.Documents, func(i, j int) bool { return out.Documents[i].SourceURL < out.Documents[j].SourceURL })
 	return finalize(out)
